@@ -2,223 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C9746E172
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B10E46E174
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbhLIEZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 23:25:29 -0500
-Received: from mail-psaapc01on2097.outbound.protection.outlook.com ([40.107.255.97]:54880
-        "EHLO APC01-PSA-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229836AbhLIEZ3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 23:25:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R78TfTea0FFGPnlysTtySm4lo0W7cOqePUCvEfrZrWcp04DzfEYpfW+3blb+hcHvM6prSq/2MpYUog2phzARKKx6tevIyFUBQrkdwxIvVrGjW1/59JehfiK151e8ZNUltSGvVP8SVVevAjuY047lq4ySp8W5tHIeUtM1DTLR0NvAhvw28q0U0jegaKeztagZZDH11QS3LH8ZRrhYZ1eTTCTdF147oUrr7F+Y7CrCN/yRbJwDf29WxOZa73wvWizr5MmUezN3EYKVUpn9EVinBIDSpW5lTlYNQhmXr3pUo4eMy5UH38fKPEigzsEXCoE7efJ1cQpGDJi0BEPMqaB1MQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/xWesOOW9gT0ekxOrdpoE5MsXujjH2+jDz6NCEFg8LA=;
- b=KGEXlcMIeTVorV3c815DWFqsPzofGv5S/ALbd+P7cII/SHBkvCx6BqvERwStLkwY8/4uMG4wWNyo/3m/RTqisgtTZo7A2WrqPL31gAJj0ae04J9Pk1Mj4qW6yBcE1CE2xlQk4cinWjEChLjCN3VTZPSEokYJ7tDx/r1ZCrvbhlJ/rjp2CxfQtXKAdC9goNcJJlJhoQLCX6otlj6Bcs7bQA33N74pzmHRnehyeYxUqaMm7RTstizmGzKhOpFoYHcAMMhn93OC5k6fR89qNbj2G+RzkN85dggQv+D5FMjhSK6RITTT7wkYRZRvVjn2P53VSnsMViTdjrl983+ZS8GjAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quantatw.com; dmarc=pass action=none header.from=quantatw.com;
- dkim=pass header.d=quantatw.com; arc=none
+        id S231862AbhLIE3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 23:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231815AbhLIE3k (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 23:29:40 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CC1C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:26:07 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so4985032otl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 20:26:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/xWesOOW9gT0ekxOrdpoE5MsXujjH2+jDz6NCEFg8LA=;
- b=U0fS7lmIIfMQrCcRQHZkR4KH3poYCLu0f6ZyokFTBlfUeXM4lCLjIwg4Zqp3nwe5dJHx4N+MaTFkJu7xW7zeWnyfu+A8AbgainaZR9oDKH1k3mj1abYr05b0fyaK8ZHqg2HdgK6oFJp3LvarFpmHtQiPAarmTIN0c80KyLYcAoQ=
-Received: from HKAPR04MB4003.apcprd04.prod.outlook.com (2603:1096:203:df::11)
- by HK0PR04MB2308.apcprd04.prod.outlook.com (2603:1096:203:44::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Thu, 9 Dec
- 2021 04:21:52 +0000
-Received: from HKAPR04MB4003.apcprd04.prod.outlook.com
- ([fe80::50ac:5788:d373:7194]) by HKAPR04MB4003.apcprd04.prod.outlook.com
- ([fe80::50ac:5788:d373:7194%5]) with mapi id 15.20.4778.013; Thu, 9 Dec 2021
- 04:21:52 +0000
-From:   =?big5?B?SG93YXJkIENoaXUgKKr0q2G6zSk=?= <Howard.Chiu@quantatw.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "inux-hwmon@vger.kernel.org" <inux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     =?big5?B?UG90aW4gTGFpICi/4Kxmp8op?= <Potin.Lai@quantatw.com>
-Subject: [PATCH v2] hwmon: (pmbus) Add support for MPS Multi-phase mp5023
- controller
-Thread-Topic: [PATCH v2] hwmon: (pmbus) Add support for MPS Multi-phase mp5023
- controller
-Thread-Index: AdfsrPO0S2qEaTRHSpyUAdl4Nbg2oQ==
-Date:   Thu, 9 Dec 2021 04:21:52 +0000
-Message-ID: <HKAPR04MB4003C0E81A4439858AE9E28496709@HKAPR04MB4003.apcprd04.prod.outlook.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quantatw.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f93e67da-ac1b-4463-3770-08d9bacb6d7e
-x-ms-traffictypediagnostic: HK0PR04MB2308:EE_
-x-microsoft-antispam-prvs: <HK0PR04MB2308DBEC483C5C23FACFB65996709@HK0PR04MB2308.apcprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: beWuQPV7IrFOWQZltuLOHa24gdbnFaoi3NlNtNvIL7b15j8Exwn+DRyD6UlsjavST298uA6r4MG4Xd+UShJ1lTcpDwWGEm2HpFfkd7UBxEEdOni8A734X7msticywWQ1O49cvoDAVQtJT3MuZtqyw1rP4lGNqt7ryvqyEt/yFmtLOFMQx5NZtSCGUtgebQCRprDiEFNbttP/vHlPkbb9Etlc1GnQX8dannLAeC2F1i//zvSly/thTC7pKj4UeqeD1F4KLWmtZEV/TstmMpmKrudmgPrBgiEf3ILZryWK1Kc9oQBBKs3XTqQEJbHoRO6fh4prqxKBvuitXVnMs1Gr/3T6Qoxvcro+DUX9TTYtKS7hyZW45FoGtB6BktnRhDhkwnT7eltUOuHwsl7lCmoNl0QyXYcHDfNhtJoH9ki+ySXtwkRVaM6trNZ6pDRoD52VmL6NoYb5riJwSe5Ib6o/gHdLbmX3Bnl4JM+BbJMHF1ruZSuvLt9AFSj5/mdoZevccXRuIbpho1/XU414XNd3SWAtLFQju53EDJKjuOH5KsM1Sm/XzlsuPz1o1MH9sQniFlQyyb47gQzOwAWM+xsKpjxOvP8UfGZijeo77Gr7GyCBg5ae4mcb88Ai46Zi3hu5DnrDl9vPiQmj+WboeKXMt+cNcwmLWAU7X1BL4QmugrtwTyeZad9Ih2FgymZK4TptCOtRSjuHJWoUOHOdMrSwKLunVyoiQ/XVvEIT9gaFrm9g2+2zaydqTPhOiCeFr3WVZzs/S0kl4rpA/2PqW4Aa+xTUCcXWAHTR1xM72zCq7Vo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HKAPR04MB4003.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(8676002)(2906002)(33656002)(86362001)(107886003)(508600001)(83380400001)(45080400002)(5660300002)(38070700005)(316002)(966005)(4326008)(52536014)(110136005)(8936002)(85182001)(186003)(66556008)(76116006)(55016003)(26005)(66446008)(64756008)(7696005)(66946007)(122000001)(66476007)(38100700002)(71200400001)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?big5?B?WmZPQ3gzaFFsYmZEazc4MUFINXBaR3Q5Z0RTZlNLUk82SlIvYXUvSTNTam5Eb2ZO?=
- =?big5?B?b1VJcDBvZEp0RTV2NFhmZnpscU5lOWNENFpESmYyZXYyL2duUWpjWnlnYjdlR2lz?=
- =?big5?B?aE9DdE1OMm9XTzZ4TjBWUWUwYjQxellzcFVrNml5eXcxTUw4VW5IVEt0S3Z5eElr?=
- =?big5?B?SzR4Ulo3eUI5NWZKMEIrUWl2UkF6YkFGZjhKMlNKY2pKRnBKUW03d0hrVXBHcGRn?=
- =?big5?B?aWU1Z2d2d2poa3B5cy9vYkJnVkZ4WUFLQVAxeEFITmZRbU85VUkySmI5OXJ3dXFX?=
- =?big5?B?Z0VKbkg3RURFK052ajhVNlo0Zm9ucGFZZHVtNWdqamVIcFpaNm5iMm4ySGNMQ0NL?=
- =?big5?B?bSt5Tmp6NGF5ODk3RjFoNk15aDhyUjJad3RBbWcrYWF4VE9LZEo5YWxzQ0dmMHpV?=
- =?big5?B?MHdIaUdrV2gxOW5EdFJZTVRDcjFQUlRQa0FwSUNPdzRYd0tzaGMraVJwc3VlcW5p?=
- =?big5?B?SXY4VUtPUkhUZ2NSVmRweGVRcktEaGhadWNxR0Q4KzJsWVRuWk04TCtZSWpGSUY5?=
- =?big5?B?K0xIZjFhSjNKS25iZGJQSisxWWJuU2xnY0V0eWV6NTF0Nk5BYU9NTmtzT0c0ZHBH?=
- =?big5?B?NU5jZE0vaXRlZGRMaEhRN1NnZ29rbXlxU1NFcXBOdklkdlZFSUUxcmVVd1JGQmVu?=
- =?big5?B?S1hSRVZVOTlrVUdQUU41aXZ0UlpTemVEL1BpWHFCSWE5ckZJcW14dnFEbXd6SGFk?=
- =?big5?B?c0xQN3B1L3dKY09FNlNHMndDMEI3OHUzK285aG1XNCt4T3VuYXdia2tCaGFweTJ2?=
- =?big5?B?UFVvQnhsbitpSk1rSWd2dFVUMjZrT211YXVyNXhMbFFqdFN6RG5UK1p4Q3kvZWdm?=
- =?big5?B?dkF3SHpoMHJ5QzdoVnBtNXlicnRwZmZ1cG1OWFlXbFJCYU1jbzhsWHNkMmNJbklO?=
- =?big5?B?ZDAyeVZUT0pCa2k5cTB0UzlmU0tYcGVCVDRMZDQ4c1l1dnl0bHRwaWp6QXJPYU50?=
- =?big5?B?NVkxTmx0aEE0VDcweDZaRFNhUnhIODBjQUIwYnY3MjhlUlNsREhSekowK2NRdlJY?=
- =?big5?B?NjhjN001aXZ2WlcrRzNqMzhkcW9NWUJCMGJNRW1xeWJ2aTl5Rkx4cUxKU2VGZkhL?=
- =?big5?B?N3RIV2dReld0K2FVeS9NeXVOUHJUMi9adFg0Y0JEazRXODdzWkFJUWpoVlhmUkU3?=
- =?big5?B?a3dwb2VtZ1FKNTY1b0ZzOWRaSzlrMlVmSEFVeVpQUzZWWkdmTVRWM044ak9XRDBH?=
- =?big5?B?Mlg3enl6RCswVCtLUWxScTN0amFKTHJxazJveS80YlZzczhENVVNc1l6TzNMVXk4?=
- =?big5?B?TWZQeUN2NFFDZ2ZTTEpxVTJxdlRqeEdldlliS003aUhTYlFBaWxJM05qN2x1VUxt?=
- =?big5?B?c1VBa1dyVVJ5d2lpMWZpODJkcThUaEtEUWhCcE8ydzdJR1JWRFFUSXZtV21sMEVT?=
- =?big5?B?c1lZMTdCN25YRXhFK2hLVTBlRU54UFExYVN0ckNBTTgvWld2M1NkY2hXU1BBN3RV?=
- =?big5?B?VUNrYmJFaTJKazVOM2g1QWR2TWs2QVpYcmY4bElLbXFTdUw5OWVFdjdLVTNxWTdP?=
- =?big5?B?TFNjbXBFYitPVmhCN2xWa0N4YWkydGpScWE3U2svSXZkajIvUFlpRURpUmpFU1dw?=
- =?big5?B?VGViaCt3T0M5SGlZZW1CRVpNcGwrNkIrRHZ3Mk9uM0EwYlNTOFExV2Q2cU1pQ3px?=
- =?big5?B?Nmthcmtjc1Q0ZFNtd1dlVHRzaithclFSR0t3MXU3U090aGNlZ1lpUlk3d21uMW1a?=
- =?big5?B?SVFJa2RBZ3M4N2U2MEpoeCtPRHNDR0d6VDE0UHdzaHYxSkJPR2N6WWZta0ZPOWxO?=
- =?big5?B?MExKZ051YnovNTRzd1JKZFkwLy9VY3FSM052c0YxM0JkNy9uZUo2RU5WTWtsSlJT?=
- =?big5?B?bmJqYVJyZVZvaVE1a0VXNld4TGIxbU5YU012NnlrRW9FcXIrcFJQNE4vYUxlNTgr?=
- =?big5?B?TVM5bkZUand1ai9ML0d1V1l2Z0sxVm5BNGUvV25yNW5RODIyYTlZWnczdUg2aVNq?=
- =?big5?B?NjFBdWxNSjNXVEhmYXlzQTFMN1ovbStrSFgwcEZ1c1ZrRVpvdFY0T0VldmpyM1B4?=
- =?big5?B?ekltTjZPUzlielgrUXpFKzZrR1ZKc3ZDbU1mbWNqM0gwZkM5bkJjRlZFR0tHUnRI?=
- =?big5?B?QVpBV2xOc0Erc0ZkVVBxZFJ1VlBMYXVUMEU1aTRWUE1nREVlc3VOZ1NIUDNtdFdH?=
- =?big5?B?bWV6anRBPT0=?=
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bWjs2GPrjXT4tOxc1yOPDRDEYs2nDs5MMgwRE7nN0ak=;
+        b=MjLkFo+9Fbjy6soRwifNFNeU2H2JvvrqIgc3JZJ3HU18iJ7SPZYHn7Fniwiha+GaAo
+         LFFZcKMNTm/bNRVXMKqjJcjQiV2knRXjHqv6Vq9s2UO48vD4QKstlXeav3WLIihDXBc+
+         JJJVRG0IzF3CXS2m9JP5ArIBKyAwxjFfVeDcbIAIwj95Mhv0GZg9d9manz0ctVFfbb1D
+         VTl86/Lemdjm7XnEggzgn7SMdZbDUj10uM/bu666Cqs3gjbH4Y3Y4ShNsb3sXFVo7ug7
+         L0UXeJGIh7qObfPCj5UkqGatjGzm7hKjjKrOLPstVAPwEscR+8Ubm5zjqy/aSwSFUzhp
+         AfKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bWjs2GPrjXT4tOxc1yOPDRDEYs2nDs5MMgwRE7nN0ak=;
+        b=1narz5rC6e6ZEcxol4k/rXIY9Z9DcquHUSxGu33v7ByVgw8/L6nUr+Np02dea9vKK0
+         TKvxSImMgFoFrjDGlpKIjzDNxltkvYccqT0ZY+0cWTmjKtlJihTSX2CipAczJeXGN6nl
+         dTQovsfyejmt91SEoN6KkUv63wwwZXBe6oXIW0/EeBdC51uVvfShhBuT6V6f/tc2zBeM
+         WzS35eytPPJFB5C9yfV1H+gwuPo4VcFMRgNNBTO2oFACAqycZwAVhKaCZpfxxbI1JEk5
+         riiQujc92mjaOYJ6YWmyuIz2n3m1YhK+iFeGy4qQMgHq6e4o1S/vKiI7ftV3swpzMMJR
+         AuLQ==
+X-Gm-Message-State: AOAM532HaYJvx1+4aaSuI248/tYcueOPYG/j6j4LSAti/VzGPIKZeADg
+        9M0Zm520Yrdu8myXV6j3MJFv2BpceuzC1Tq2HrmRkw==
+X-Google-Smtp-Source: ABdhPJwqQf3MC7OTvxBrKjslpbB7zEcEkngUeRK0z+YIVKW3qu1HCnfiWvW/0n9DomOHqFQgkS/zvJrESG6wKVo5ZEw=
+X-Received: by 2002:a05:6830:601:: with SMTP id w1mr3322717oti.267.1639023966439;
+ Wed, 08 Dec 2021 20:26:06 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: quantatw.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HKAPR04MB4003.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f93e67da-ac1b-4463-3770-08d9bacb6d7e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 04:21:52.6345
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 179b0327-07fc-4973-ac73-8de7313561b2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Q1ayrTGgXpcEioC8a1FeAuDrY/Ndnmt91KT67NKWLQ2zb0yv83JDtt6hAmWyq+/bxT6GI9QlXHqO8vdCQeqGcQVCKu7MdqhSlF4E2ICyGEs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB2308
+References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-5-likexu@tencent.com>
+In-Reply-To: <20211130074221.93635-5-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 8 Dec 2021 20:25:55 -0800
+Message-ID: <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QWRkIHN1cHBvcnQgZm9yIG1wNTAyMyBkZXZpY2UgZnJvbSBNb25vbGl0aGljIFBvd2VyIFN5c3Rl
-bXMsIEluYy4gKE1QUykNCnZlbmRvci4gVGhpcyBpcyBhIEhvdC1Td2FwIENvbnRyb2xsZXIuDQoN
-ClNpZ25lZC1vZmYtYnk6IEhvd2FyZCBDaGl1IDxob3dhcmQuY2hpdUBxdWFudGF0dy5jb20+DQot
-LS0NCkNoYW5nZSBzaW5jZSB2MToNCi0gbXA1MDIzLmMNCiAgLSBTb3J0IGhlYWRlcnMNCi0gbXA1
-MDIzLnJzdA0KICAtIEFkZCBkYXRhc2hlZXQgaW5mb3JtYXRpb24NCiAgLSBDb3JyZWN0IHNlbnRl
-bmNlcw0KDQogRG9jdW1lbnRhdGlvbi9od21vbi9tcDUwMjMucnN0IHwgODQgKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKw0KIGRyaXZlcnMvaHdtb24vcG1idXMvS2NvbmZpZyAgICB8
-ICA5ICsrKysNCiBkcml2ZXJzL2h3bW9uL3BtYnVzL01ha2VmaWxlICAgfCAgMSArDQogZHJpdmVy
-cy9od21vbi9wbWJ1cy9tcDUwMjMuYyAgIHwgNjYgKysrKysrKysrKysrKysrKysrKysrKysrKysN
-CiA0IGZpbGVzIGNoYW5nZWQsIDE2MCBpbnNlcnRpb25zKCspDQogY3JlYXRlIG1vZGUgMTAwNjQ0
-IERvY3VtZW50YXRpb24vaHdtb24vbXA1MDIzLnJzdA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2
-ZXJzL2h3bW9uL3BtYnVzL21wNTAyMy5jDQoNCmRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2h3
-bW9uL21wNTAyMy5yc3QgYi9Eb2N1bWVudGF0aW9uL2h3bW9uL21wNTAyMy5yc3QNCm5ldyBmaWxl
-IG1vZGUgMTAwNjQ0DQppbmRleCAwMDAwMDAwMDAwMDAuLmFmNWFiMTM0NWE5MQ0KLS0tIC9kZXYv
-bnVsbA0KKysrIGIvRG9jdW1lbnRhdGlvbi9od21vbi9tcDUwMjMucnN0DQpAQCAtMCwwICsxLDg0
-IEBADQorLi4gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCisNCitLZXJuZWwgZHJp
-dmVyIG1wNTAyMw0KKz09PT09PT09PT09PT09PT09PT09DQorDQorU3VwcG9ydGVkIGNoaXBzOg0K
-Kw0KKyAgKiBNUFMgTVA1MDIzDQorDQorICAgIFByZWZpeDogJ21wNTAyMycNCisNCisgICogRGF0
-YXNoZWV0DQorDQorICAgIFB1YmxpY2x5IGF2YWlsYWJsZSBhdCB0aGUgTVBTIHdlYnNpdGUgOiBo
-dHRwczovL2FwYzAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMl
-M0ElMkYlMkZ3d3cubW9ub2xpdGhpY3Bvd2VyLmNvbSUyRmVuJTJGbXA1MDIzLmh0bWwmYW1wO2Rh
-dGE9MDQlN0MwMSU3Q2hvd2FyZC5jaGl1JTQwcXVhbnRhdHcuY29tJTdDZTdkODQyNzcxMzBjNDA2
-Y2MyMGMwOGQ5YmFjM2Q4NmQlN0MxNzliMDMyNzA3ZmM0OTczYWM3MzhkZTczMTM1NjFiMiU3QzEl
-N0MwJTdDNjM3NzQ2MTcyNTc5NTAxOTc1JTdDVW5rbm93biU3Q1RXRnBiR1pzYjNkOGV5SldJam9p
-TUM0d0xqQXdNREFpTENKUUlqb2lWMmx1TXpJaUxDSkJUaUk2SWsxaGFXd2lMQ0pYVkNJNk1uMCUz
-RCU3QzMwMDAmYW1wO3NkYXRhPThXbzRzTFU4Wmxaa1dCbnpjUVJiS25XJTJCdnpMMW1uOGpSM0sl
-MkJDajJmRFFzJTNEJmFtcDtyZXNlcnZlZD0wDQorDQorQXV0aG9yOg0KKw0KKwlIb3dhcmQgQ2hp
-dSA8aG93YXJkLmNoaXVAcXVhbnRhdHcuY29tPg0KKw0KK0Rlc2NyaXB0aW9uDQorLS0tLS0tLS0t
-LS0NCisNCitUaGlzIGRyaXZlciBpbXBsZW1lbnRzIHN1cHBvcnQgZm9yIE1vbm9saXRoaWMgUG93
-ZXIgU3lzdGVtcywgSW5jLiAoTVBTKQ0KK01QNTAyMyBIb3QtU3dhcCBDb250cm9sbGVyLg0KKw0K
-K0RldmljZSBjb21wbGFpbnQgd2l0aDoNCisNCistIFBNQnVzIHJldiAxLjMgaW50ZXJmYWNlLg0K
-Kw0KK0RldmljZSBzdXBwb3J0cyBkaXJlY3QgZm9ybWF0IGZvciByZWFkaW5nIGlucHV0IHZvbHRh
-Z2UsIG91dHB1dCB2b2x0YWdlLA0KK291dHB1dCBjdXJyZW50LCBpbnB1dCBwb3dlciBhbmQgdGVt
-cGVyYXR1cmUuDQorDQorVGhlIGRyaXZlciBleHBvcnRzIHRoZSBmb2xsb3dpbmcgYXR0cmlidXRl
-cyB2aWEgdGhlICdzeXNmcycgZmlsZXMNCitmb3IgaW5wdXQgdm9sdGFnZToNCisNCisqKmluMV9p
-bnB1dCoqDQorDQorKippbjFfbGFiZWwqKg0KKw0KKyoqaW4xX21heCoqDQorDQorKippbjFfbWF4
-X2FsYXJtKioNCisNCisqKmluMV9taW4qKg0KKw0KKyoqaW4xX21pbl9hbGFybSoqDQorDQorVGhl
-IGRyaXZlciBwcm92aWRlcyB0aGUgZm9sbG93aW5nIGF0dHJpYnV0ZXMgZm9yIG91dHB1dCB2b2x0
-YWdlOg0KKw0KKyoqaW4yX2lucHV0KioNCisNCisqKmluMl9sYWJlbCoqDQorDQorKippbjJfYWxh
-cm0qKg0KKw0KK1RoZSBkcml2ZXIgcHJvdmlkZXMgdGhlIGZvbGxvd2luZyBhdHRyaWJ1dGVzIGZv
-ciBvdXRwdXQgY3VycmVudDoNCisNCisqKmN1cnIxX2lucHV0KioNCisNCisqKmN1cnIxX2xhYmVs
-KioNCisNCisqKmN1cnIxX2FsYXJtKioNCisNCisqKmN1cnIxX21heCoqDQorDQorVGhlIGRyaXZl
-ciBwcm92aWRlcyB0aGUgZm9sbG93aW5nIGF0dHJpYnV0ZXMgZm9yIGlucHV0IHBvd2VyOg0KKw0K
-KyoqcG93ZXIxX2lucHV0KioNCisNCisqKnBvd2VyMV9sYWJlbCoqDQorDQorKipwb3dlcjFfYWxh
-cm0qKg0KKw0KK1RoZSBkcml2ZXIgcHJvdmlkZXMgdGhlIGZvbGxvd2luZyBhdHRyaWJ1dGVzIGZv
-ciB0ZW1wZXJhdHVyZToNCisNCisqKnRlbXAxX2lucHV0KioNCisNCisqKnRlbXAxX21heCoqDQor
-DQorKip0ZW1wMV9tYXhfYWxhcm0qKg0KKw0KKyoqdGVtcDFfY3JpdCoqDQorDQorKip0ZW1wMV9j
-cml0X2FsYXJtKioNCmRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL3BtYnVzL0tjb25maWcgYi9k
-cml2ZXJzL2h3bW9uL3BtYnVzL0tjb25maWcNCmluZGV4IGZmYjYwOWNlZTNhNC4uYjU2YmQ4NTQy
-ODY0IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9od21vbi9wbWJ1cy9LY29uZmlnDQorKysgYi9kcml2
-ZXJzL2h3bW9uL3BtYnVzL0tjb25maWcNCkBAIC0yNzYsNiArMjc2LDE1IEBAIGNvbmZpZyBTRU5T
-T1JTX01QMjk3NQ0KIAkgIFRoaXMgZHJpdmVyIGNhbiBhbHNvIGJlIGJ1aWx0IGFzIGEgbW9kdWxl
-LiBJZiBzbywgdGhlIG1vZHVsZSB3aWxsDQogCSAgYmUgY2FsbGVkIG1wMjk3NS4NCiANCitjb25m
-aWcgU0VOU09SU19NUDUwMjMNCisJdHJpc3RhdGUgIk1QUyBNUDUwMjMiDQorCWhlbHANCisJICBJ
-ZiB5b3Ugc2F5IHllcyBoZXJlIHlvdSBnZXQgaGFyZHdhcmUgbW9uaXRvcmluZyBzdXBwb3J0IGZv
-ciBNUFMNCisJICBNUDUwMjMuDQorDQorCSAgVGhpcyBkcml2ZXIgY2FuIGFsc28gYmUgYnVpbHQg
-YXMgYSBtb2R1bGUuIElmIHNvLCB0aGUgbW9kdWxlIHdpbGwNCisJICBiZSBjYWxsZWQgbXA1MDIz
-Lg0KKw0KIGNvbmZpZyBTRU5TT1JTX1BJTTQzMjgNCiAJdHJpc3RhdGUgIkZsZXggUElNNDMyOCBh
-bmQgY29tcGF0aWJsZXMiDQogCWhlbHANCmRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL3BtYnVz
-L01ha2VmaWxlIGIvZHJpdmVycy9od21vbi9wbWJ1cy9NYWtlZmlsZQ0KaW5kZXggMGVkNGQ1OTZh
-OTQ4Li42MWNkYzI0YjEzMDkgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2h3bW9uL3BtYnVzL01ha2Vm
-aWxlDQorKysgYi9kcml2ZXJzL2h3bW9uL3BtYnVzL01ha2VmaWxlDQpAQCAtMzEsNiArMzEsNyBA
-QCBvYmotJChDT05GSUdfU0VOU09SU19NQVgzNDQ0MCkJKz0gbWF4MzQ0NDAubw0KIG9iai0kKENP
-TkZJR19TRU5TT1JTX01BWDg2ODgpCSs9IG1heDg2ODgubw0KIG9iai0kKENPTkZJR19TRU5TT1JT
-X01QMjg4OCkJKz0gbXAyODg4Lm8NCiBvYmotJChDT05GSUdfU0VOU09SU19NUDI5NzUpCSs9IG1w
-Mjk3NS5vDQorb2JqLSQoQ09ORklHX1NFTlNPUlNfTVA1MDIzKQkrPSBtcDUwMjMubw0KIG9iai0k
-KENPTkZJR19TRU5TT1JTX1BNNjc2NFRSKQkrPSBwbTY3NjR0ci5vDQogb2JqLSQoQ09ORklHX1NF
-TlNPUlNfUFhFMTYxMCkJKz0gcHhlMTYxMC5vDQogb2JqLSQoQ09ORklHX1NFTlNPUlNfUTU0U0ox
-MDhBMikJKz0gcTU0c2oxMDhhMi5vDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9wbWJ1cy9t
-cDUwMjMuYyBiL2RyaXZlcnMvaHdtb24vcG1idXMvbXA1MDIzLmMNCm5ldyBmaWxlIG1vZGUgMTAw
-NjQ0DQppbmRleCAwMDAwMDAwMDAwMDAuLjE0ZDM5MzRhYTA5OQ0KLS0tIC9kZXYvbnVsbA0KKysr
-IGIvZHJpdmVycy9od21vbi9wbWJ1cy9tcDUwMjMuYw0KQEAgLTAsMCArMSw2NiBAQA0KKy8vIFNQ
-RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9yLWxhdGVyDQorLyoNCisgKiBEcml2ZXIg
-Zm9yIE1QUyBNUDUwMjMgSG90LVN3YXAgQ29udHJvbGxlcg0KKyAqLw0KKw0KKyNpbmNsdWRlIDxs
-aW51eC9pMmMuaD4NCisjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQorI2luY2x1ZGUgPGxpbnV4
-L29mX2RldmljZS5oPg0KKyNpbmNsdWRlICJwbWJ1cy5oIg0KKw0KK3N0YXRpYyBzdHJ1Y3QgcG1i
-dXNfZHJpdmVyX2luZm8gbXA1MDIzX2luZm8gPSB7DQorCS5wYWdlcyA9IDEsDQorDQorCS5mb3Jt
-YXRbUFNDX1ZPTFRBR0VfSU5dID0gZGlyZWN0LA0KKwkuZm9ybWF0W1BTQ19WT0xUQUdFX09VVF0g
-PSBkaXJlY3QsDQorCS5mb3JtYXRbUFNDX0NVUlJFTlRfT1VUXSA9IGRpcmVjdCwNCisJLmZvcm1h
-dFtQU0NfUE9XRVJdID0gZGlyZWN0LA0KKwkuZm9ybWF0W1BTQ19URU1QRVJBVFVSRV0gPSBkaXJl
-Y3QsDQorDQorCS5tW1BTQ19WT0xUQUdFX0lOXSA9IDMyLA0KKwkuYltQU0NfVk9MVEFHRV9JTl0g
-PSAwLA0KKwkuUltQU0NfVk9MVEFHRV9JTl0gPSAwLA0KKwkubVtQU0NfVk9MVEFHRV9PVVRdID0g
-MzIsDQorCS5iW1BTQ19WT0xUQUdFX09VVF0gPSAwLA0KKwkuUltQU0NfVk9MVEFHRV9PVVRdID0g
-MCwNCisJLm1bUFNDX0NVUlJFTlRfT1VUXSA9IDE2LA0KKwkuYltQU0NfQ1VSUkVOVF9PVVRdID0g
-MCwNCisJLlJbUFNDX0NVUlJFTlRfT1VUXSA9IDAsDQorCS5tW1BTQ19QT1dFUl0gPSAxLA0KKwku
-YltQU0NfUE9XRVJdID0gMCwNCisJLlJbUFNDX1BPV0VSXSA9IDAsDQorCS5tW1BTQ19URU1QRVJB
-VFVSRV0gPSAyLA0KKwkuYltQU0NfVEVNUEVSQVRVUkVdID0gMCwNCisJLlJbUFNDX1RFTVBFUkFU
-VVJFXSA9IDAsDQorDQorCS5mdW5jWzBdID0NCisJCVBNQlVTX0hBVkVfVklOIHwgUE1CVVNfSEFW
-RV9WT1VUIHwgUE1CVVNfSEFWRV9QSU4gfA0KKwkJUE1CVVNfSEFWRV9URU1QIHwgUE1CVVNfSEFW
-RV9JT1VUIHwNCisJCVBNQlVTX0hBVkVfU1RBVFVTX0lOUFVUIHwgUE1CVVNfSEFWRV9TVEFUVVNf
-VEVNUCwNCit9Ow0KKw0KK3N0YXRpYyBpbnQgbXA1MDIzX3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50
-ICpjbGllbnQpDQorew0KKwlyZXR1cm4gcG1idXNfZG9fcHJvYmUoY2xpZW50LCAmbXA1MDIzX2lu
-Zm8pOw0KK30NCisNCitzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBfX21heWJlX3Vu
-dXNlZCBtcDUwMjNfb2ZfbWF0Y2hbXSA9IHsNCisJeyAuY29tcGF0aWJsZSA9ICJtcHMsbXA1MDIz
-IiwgfSwNCisJe30NCit9Ow0KKw0KK01PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIG1wNTAyM19vZl9t
-YXRjaCk7DQorDQorc3RhdGljIHN0cnVjdCBpMmNfZHJpdmVyIG1wNTAyM19kcml2ZXIgPSB7DQor
-CS5kcml2ZXIgPSB7DQorCQkgICAubmFtZSA9ICJtcDUwMjMiLA0KKwkJICAgLm9mX21hdGNoX3Rh
-YmxlID0gb2ZfbWF0Y2hfcHRyKG1wNTAyM19vZl9tYXRjaCksDQorCX0sDQorCS5wcm9iZV9uZXcg
-PSBtcDUwMjNfcHJvYmUsDQorfTsNCisNCittb2R1bGVfaTJjX2RyaXZlcihtcDUwMjNfZHJpdmVy
-KTsNCisNCitNT0RVTEVfQVVUSE9SKCJIb3dhcmQgQ2hpdSA8aG93YXJkLmNoaXVAcXVhbnRhdHcu
-Y29tPiIpOw0KK01PRFVMRV9ERVNDUklQVElPTigiUE1CdXMgZHJpdmVyIGZvciBNUFMgTVA1MDIz
-IEhTQyIpOw0KK01PRFVMRV9MSUNFTlNFKCJHUEwiKTsNCi0tIA0KMi4yNS4xDQoNCg==
+On Mon, Nov 29, 2021 at 11:42 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Like Xu <likexu@tencent.com>
+>
+> Depending on whether intr should be triggered or not, KVM registers
+> two different event overflow callbacks in the perf_event context.
+>
+> The code skeleton of these two functions is very similar, so
+> the pmc->intr can be stored into pmc from pmc_reprogram_counter()
+> which provides smaller instructions footprint against the
+> u-architecture branch predictor.
+>
+> The __kvm_perf_overflow() can be called in non-nmi contexts
+> and a flag is needed to distinguish the caller context and thus
+> avoid a check on kvm_is_in_guest(), otherwise we might get
+> warnings from suspicious RCU or check_preemption_disabled().
+>
+> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  1 +
+>  arch/x86/kvm/pmu.c              | 58 ++++++++++++++++-----------------
+>  2 files changed, 29 insertions(+), 30 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index e41ad1ead721..6c2b2331ffeb 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -495,6 +495,7 @@ struct kvm_pmc {
+>          */
+>         u64 current_config;
+>         bool is_paused;
+> +       bool intr;
+>  };
+>
+>  struct kvm_pmu {
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index b7a1ae28ab87..a20207ee4014 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -55,43 +55,41 @@ static void kvm_pmi_trigger_fn(struct irq_work *irq_work)
+>         kvm_pmu_deliver_pmi(vcpu);
+>  }
+>
+> -static void kvm_perf_overflow(struct perf_event *perf_event,
+> -                             struct perf_sample_data *data,
+> -                             struct pt_regs *regs)
+> +static inline void __kvm_perf_overflow(struct kvm_pmc *pmc, bool in_pmi)
+>  {
+> -       struct kvm_pmc *pmc = perf_event->overflow_handler_context;
+>         struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+>
+> -       if (!test_and_set_bit(pmc->idx, pmu->reprogram_pmi)) {
+> -               __set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
+> -               kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+> -       }
+> +       /* Ignore counters that have been reprogrammed already. */
+> +       if (test_and_set_bit(pmc->idx, pmu->reprogram_pmi))
+> +               return;
+> +
+> +       __set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
+> +       kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+> +
+> +       if (!pmc->intr)
+> +               return;
+> +
+> +       /*
+> +        * Inject PMI. If vcpu was in a guest mode during NMI PMI
+> +        * can be ejected on a guest mode re-entry. Otherwise we can't
+> +        * be sure that vcpu wasn't executing hlt instruction at the
+> +        * time of vmexit and is not going to re-enter guest mode until
+> +        * woken up. So we should wake it, but this is impossible from
+> +        * NMI context. Do it from irq work instead.
+> +        */
+> +       if (in_pmi && !kvm_is_in_guest())
+> +               irq_work_queue(&pmc_to_pmu(pmc)->irq_work);
+> +       else
+> +               kvm_make_request(KVM_REQ_PMI, pmc->vcpu);
+>  }
+>
+> -static void kvm_perf_overflow_intr(struct perf_event *perf_event,
+> -                                  struct perf_sample_data *data,
+> -                                  struct pt_regs *regs)
+> +static void kvm_perf_overflow(struct perf_event *perf_event,
+> +                             struct perf_sample_data *data,
+> +                             struct pt_regs *regs)
+>  {
+>         struct kvm_pmc *pmc = perf_event->overflow_handler_context;
+> -       struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+> -
+> -       if (!test_and_set_bit(pmc->idx, pmu->reprogram_pmi)) {
+> -               __set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
+> -               kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+>
+> -               /*
+> -                * Inject PMI. If vcpu was in a guest mode during NMI PMI
+> -                * can be ejected on a guest mode re-entry. Otherwise we can't
+> -                * be sure that vcpu wasn't executing hlt instruction at the
+> -                * time of vmexit and is not going to re-enter guest mode until
+> -                * woken up. So we should wake it, but this is impossible from
+> -                * NMI context. Do it from irq work instead.
+> -                */
+> -               if (!kvm_is_in_guest())
+> -                       irq_work_queue(&pmc_to_pmu(pmc)->irq_work);
+> -               else
+> -                       kvm_make_request(KVM_REQ_PMI, pmc->vcpu);
+> -       }
+> +       __kvm_perf_overflow(pmc, true);
+>  }
+>
+>  static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+> @@ -126,7 +124,6 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+>         }
+>
+>         event = perf_event_create_kernel_counter(&attr, -1, current,
+> -                                                intr ? kvm_perf_overflow_intr :
+>                                                  kvm_perf_overflow, pmc);
+
+Not your change, but if the event is counting anything based on
+cycles, and the guest TSC is scaled to run at a different rate from
+the host TSC, doesn't the initial value of the underlying hardware
+counter have to be adjusted as well, so that the interrupt arrives
+when the guest's counter overflows rather than when the host's counter
+overflows?
+
+Reviewed-by: Jim Mattson <jmattson@google.com>

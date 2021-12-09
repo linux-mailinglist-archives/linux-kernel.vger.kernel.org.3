@@ -2,78 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F1B46E2FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C020846E303
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbhLIHOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:14:36 -0500
-Received: from muru.com ([72.249.23.125]:36326 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231664AbhLIHOf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:14:35 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id BE29C80A3;
-        Thu,  9 Dec 2021 07:11:42 +0000 (UTC)
-Date:   Thu, 9 Dec 2021 09:10:59 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH v1] ARM: dts: elpida_ecb240abacn: Change Elpida compatible
-Message-ID: <YbGsAxOOHHJfDUCT@atomide.com>
-References: <20211019234059.29877-1-digetx@gmail.com>
- <a584428e-99f7-986e-90d5-7e81ca213158@gmail.com>
+        id S233588AbhLIHRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233565AbhLIHQ6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 02:16:58 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A4DC061746;
+        Wed,  8 Dec 2021 23:13:25 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id y68so11607364ybe.1;
+        Wed, 08 Dec 2021 23:13:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s1H5Fq8s1lkVMt8xAiimEnNIbdOCsM4+LYdUzaSA8KU=;
+        b=eggSlNhtp++FcykP4WfNW2NV7ar72ZJj6lBOtcz83kWMo+v2XCDy72Ni3ACsBTCHjH
+         F5NNrHYraJ9GbwkVRw3rQSUdi9b+ZlGblzVNhjNgO/ginvUQRt4/sAAAFAg0dtpoycDZ
+         C64QFh4dEYljaKip0zUKaPSErSeLCdHYQGgA/q9xMmU8J11o7uxlLp55B/oBJzWbGa+M
+         bd+FKiQyNAoUQGHIkp83j0iBjStI4YevtX1ruQZ1X3b4xPxv2gvOMbM1g1u7DYuvOwTg
+         USYDmjHr6yJVZUhhxvZa7YPCwFJsJDapQW4TlRxE1rFu/KXUTWULzxV0aDvAem0o1Bs2
+         M4TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s1H5Fq8s1lkVMt8xAiimEnNIbdOCsM4+LYdUzaSA8KU=;
+        b=Njwk2bNvqWtaVOhQNTibh/MHfk3NOY125TdyycA5R3bXEE8jZfbNOzU6wLYrhKJuc3
+         t8xFMqKiLT29XegG+Thm8P8cASjeGe1PzLlbC9IHX2YkoBjRMm1qESkDt7WtH/djmkBO
+         HP00lVA28VFqaBVFEy35mWLqaj1VLeQeoB4tcykyD6/VLM+s2weGSREpioqDE4leW/BU
+         whRLY59/fNGC4OeFTc2/WQtSHuVM2ag3EGj+0pQ2/16Wuit0r0FmsCBirN6hRc5a+bof
+         uAZvJIghrVTM2Uwo/EI0hVVd8S3YZac72ll4ryP4zm4SXZsESNHnkZZWgCpMAFojt/Qb
+         8NLg==
+X-Gm-Message-State: AOAM5301/IUqnWefJvQ+oVTbugmIeX5OWAjNKbO8XqcIWNx7JO9Q6cCL
+        hRj+YQSkgow+cD0xo0pZQVNuZ5m2y85vdSfeqrDF5Btq+RM=
+X-Google-Smtp-Source: ABdhPJwcbWifF21Yw/QexCx51UJkPVNNDNCyGnA1GH6UoBMd/dLu7uSps3ab016BVoEe8bCoyjQ5/N3ppla5RB4lRnA=
+X-Received: by 2002:a5b:1c2:: with SMTP id f2mr4628549ybp.150.1639034004538;
+ Wed, 08 Dec 2021 23:13:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a584428e-99f7-986e-90d5-7e81ca213158@gmail.com>
+References: <20211209015505.409691-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20211209015505.409691-1-chi.minghao@zte.com.cn>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 8 Dec 2021 23:13:13 -0800
+Message-ID: <CAEf4BzacuM8cR8Xuv5tdg7=KScVi26pZ3CjewAy=UuHouiRZdg@mail.gmail.com>
+Subject: Re: [PATCH] samples:bpf:remove unneeded variable
+To:     cgel.zte@gmail.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cm>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Dec 8, 2021 at 5:55 PM <cgel.zte@gmail.com> wrote:
+>
+> From: chiminghao <chi.minghao@zte.com.cn>
+>
+> return value form directly instead of
+> taking this in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cm>
+> Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
 
-* Dmitry Osipenko <digetx@gmail.com> [211027 12:19]:
-> 20.10.2021 02:40, Dmitry Osipenko пишет:
-> > Vendor prefix shouldn't start with capital letter. The Elpida Memory
-> > compatible was never used in practice, hence just correct the compatible.
-> > 
-> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > ---
-> >  arch/arm/boot/dts/elpida_ecb240abacn.dtsi | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/elpida_ecb240abacn.dtsi b/arch/arm/boot/dts/elpida_ecb240abacn.dtsi
-> > index d87ee4794f83..9698801cbcfb 100644
-> > --- a/arch/arm/boot/dts/elpida_ecb240abacn.dtsi
-> > +++ b/arch/arm/boot/dts/elpida_ecb240abacn.dtsi
-> > @@ -5,7 +5,7 @@
-> >  
-> >  / {
-> >  	elpida_ECB240ABACN: lpddr2 {
-> > -		compatible	= "Elpida,ECB240ABACN","jedec,lpddr2-s4";
-> > +		compatible	= "elpida,ECB240ABACN","jedec,lpddr2-s4";
-> >  		density		= <2048>;
-> >  		io-width	= <32>;
-> >  
-> > 
-> 
-> This patch should go via OMAP tree since there is only OMAP board which
-> uses this dtsi. To make it more clear, "elpida" variant is now
-> documented in the bindings [1][2].
-> 
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=9e17f71e9c334f14ad6a8ec3edc09c7a4244e12f
-> 
-> [2]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=001b8b2594db4ea24fbea4c161e665f858917fce
-> 
-> If there is no interest in taking the patch via OMAP tree, then it may
-> go via the DT git tree. Rob, you should pick it up then.
+Signed-off-by should contain properly capitalized full name, please update.
 
-Applying into omap-for-v5.17/dt thanks.
+Also please use "samples/bpf: " patch prefix and use [PATCH bpf-next]
+to designate the destination kernel tree. Thanks.
 
-Regards,
-
-Tony
+> ---
+>  samples/bpf/xdp_redirect_cpu.bpf.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/samples/bpf/xdp_redirect_cpu.bpf.c b/samples/bpf/xdp_redirect_cpu.bpf.c
+> index f10fe3cf25f6..25e3a405375f 100644
+> --- a/samples/bpf/xdp_redirect_cpu.bpf.c
+> +++ b/samples/bpf/xdp_redirect_cpu.bpf.c
+> @@ -100,7 +100,6 @@ u16 get_dest_port_ipv4_udp(struct xdp_md *ctx, u64 nh_off)
+>         void *data     = (void *)(long)ctx->data;
+>         struct iphdr *iph = data + nh_off;
+>         struct udphdr *udph;
+> -       u16 dport;
+>
+>         if (iph + 1 > data_end)
+>                 return 0;
+> @@ -111,8 +110,7 @@ u16 get_dest_port_ipv4_udp(struct xdp_md *ctx, u64 nh_off)
+>         if (udph + 1 > data_end)
+>                 return 0;
+>
+> -       dport = bpf_ntohs(udph->dest);
+> -       return dport;
+> +       return bpf_ntohs(udph->dest);
+>  }
+>
+>  static __always_inline
+> --
+> 2.25.1
+>

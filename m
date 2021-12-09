@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D6946E193
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE77E46E195
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 05:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbhLIElv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 23:41:51 -0500
-Received: from mail-vk1-f171.google.com ([209.85.221.171]:46957 "EHLO
-        mail-vk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbhLIElu (ORCPT
+        id S230048AbhLIEmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 23:42:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229866AbhLIEmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 23:41:50 -0500
-Received: by mail-vk1-f171.google.com with SMTP id m16so2911082vkl.13;
-        Wed, 08 Dec 2021 20:38:17 -0800 (PST)
+        Wed, 8 Dec 2021 23:42:51 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE33C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:39:18 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id k4so3988263pgb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 20:39:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jCZfo737eIqYymDvP2I0a5WbCi1C4zoedhtPvFUy+O0=;
+        b=N97S/VMMCfDqXQNGlOXuKapXV8DMeCT2OBm2ulgE+iNP8dKiGt2vva0mkRz1GCPaU1
+         Jnud/ZRXYi2MNgP7UJ+uYpqPBUjS8uDSRui8CUn9uVUobKxowV/xCaeY63KOKoJlQ4Kf
+         TbAZ9wLVq6jjQcCex2gjb7nqAswsziNd2jkck=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1BrJIivy5ULsFEw3z8mK7xap0WSge261MqOp/JZDTo8=;
-        b=A0wt1CMda7yMU5cxAC2VIA+LpjGjvpbvhbmVxlkg6F9kG6axwQP7ZFXUGihefp2wOt
-         s5L/QfOK2uCpMqrGW/nKLaaDmNl8+iUf7n6DxH04H3Ftm1rTGpYgsmVeUxA4WJt+NPdU
-         2y0QKNBvHLItg0b+uwMxcAIVhg4LAm2vbOCTjU6lVrP7u/BLU8rERqqaOMnKyUc381f4
-         VwAJcGUME4rqQ5rnIOFPMWrctpNzw6RTgL/wa2mNLE+AMCHZ7YITn1ozucbWBnA32pDq
-         Md9iN9necMmWa218DgwjBUz8Qo9GynJQMuhVPdEkYzdKwSdBYpAfohWYt6pXvrLqgSZn
-         YCpg==
-X-Gm-Message-State: AOAM533tb5VBW4+VAh3Nz22Rr6gAxYMGMbuM4iTRus7/tYyY4cypetFz
-        9+pp4jqTUAMGzg9z0roXkkWTwxTWQEKfg1XgkZY=
-X-Google-Smtp-Source: ABdhPJzSEdRFkQlrsU6LaBJXJV+aoGM05IKnp1wULRAtWmhxiPu+RBIET8ui3f40bJ3D15iquJlaXgHFN/RJYjnJ5Vw=
-X-Received: by 2002:a1f:c193:: with SMTP id r141mr5251257vkf.27.1639024696997;
- Wed, 08 Dec 2021 20:38:16 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jCZfo737eIqYymDvP2I0a5WbCi1C4zoedhtPvFUy+O0=;
+        b=Mmzoo9whFbn/2m6HuEScfmf500yAZn78ok1Z9twAJVI1x+V215fgiFiPIIn1PMW5mX
+         UAJLMNhUXdkbhRdNOKsN03z+VjR4yH4HmJxyQCJ1dCAWBtiv3ZkKFXt82BQv6ERiqx53
+         JyNTKWnp+4J0XUo3BE8pIPx4BRzFMthPuxLB2Y4XYPrn8Ux5kSYICxCWqYWPVfQ9EcCM
+         uYLn4kNv8dwJzbpsuLWWTTLK1YvN2QjrSQhQ9XdZiLcq5mjj/ZM9ouWJPuncBQ7/sLjC
+         WmfSoSyUVwXSmcCWuHzbfyVCxMXLWGFKYPxa4CNF0dXRaxRkQE9DsJXWRUr/l8m6thPN
+         /uQA==
+X-Gm-Message-State: AOAM533XMoXJlgRuOFZOirvI3bp/oV326uQWbiVLAXAKPk9xJPqtecaF
+        BrD9cx2wuIzNBDvIumZUffkcuQ==
+X-Google-Smtp-Source: ABdhPJzYe1fOfNQQBb1cYonbf00InuoSvc6ETHSvTbgQnaWCy/3tiBy9ZBX1+4LZXqDyuX0VjaPskA==
+X-Received: by 2002:a05:6a00:a23:b0:4a4:e9f5:d890 with SMTP id p35-20020a056a000a2300b004a4e9f5d890mr9750599pfh.82.1639024757920;
+        Wed, 08 Dec 2021 20:39:17 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h8sm5566432pfh.10.2021.12.08.20.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 20:39:17 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] rtc: Move variable into switch case statement
+Date:   Wed,  8 Dec 2021 20:39:15 -0800
+Message-Id: <20211209043915.1378393-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
- <YagEai+VPAnjAq4X@robh.at.kernel.org> <CAMuHMdW5Ng9225a6XK0VKd0kj=m8a1xr_oKeazQYxdpvn4Db=g@mail.gmail.com>
- <CAL_JsqJHkL_Asqd5WPc7rfqXkbz1dpYfR0zxp5erVCyLiHaJNQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqJHkL_Asqd5WPc7rfqXkbz1dpYfR0zxp5erVCyLiHaJNQ@mail.gmail.com>
-From:   Harini Katakam <harinik@xilinx.com>
-Date:   Thu, 9 Dec 2021 10:08:06 +0530
-Message-ID: <CAFcVEC++u1DxG+DNa+rpAQZ-LXtyFApiK3wgjZPDdU27Xp0ccg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: cdns,macb: Convert to json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1446; h=from:subject; bh=/Ww8OLLJSU5aHz7DArexGdWzbipcRlVe6LRWYhdbeaw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhsYhyueeQ9MVmpMGYuq8gt1pQqFSIQKjCzzjQUAdP 8E0C8JaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbGIcgAKCRCJcvTf3G3AJikgD/ 9/3GdVzi9NR+fpDE5+GBglcW+YcyEC9++7ry5SzE1bwcWsia8DrCVNV41CTWcPJw3xvnaZ2Svf57rN HuZEEKLXVzpdivG5NuY6l0etIGiRKdxz4ylUOwImJPJbin230ih8QzMryTTMEd8/uH8F+4v+eVCqft jmE9oRTybhhd2FbH9PuFoeNNV7vf2wt6L0Fv6HhvJ4oo9MJ4stF4TVm+8z0Fwo27gFbcPFGcBdDMtQ LWSSJiHfan72yqGcvdlm5ruu7sXjQI8VVPoR0RwFHS2fPj+cM8bbb/a4jhEBk06Tqvre9ilMBXB34g QmC9BiL3ZGrP4GZWU990JjXnZt+9zsluNofrXJO1Yvod+nQBjTRrFEu4SHHKCev3JEpyBJdzgDs8Gv spAMBKeO0xzJpqyVC8JNdkQ5dEvVnWKusGzCTYR6mXPLnxPIczx20LdHS9vvgyYbCcoaVC2AG2yDHx HjULEnhqYG/LlfqdwQYW4e0mdF4+L4ucUxtj8puwKnYOFThWXRrfvfdcMXAIa7JLCSmeYH/h/+RB00 3q+rokaYKKWCEjjyCzxjLRSYIxeXSbGF8zr/d19b3gksEqdTTHU5+b3JXjwzS4wKQIE+HlXgdtmNgh 3ggTF8ziCSAdIYjghZWklOsmSSgxOzbLsySgNzJFWDpF0lWkbSte9BBEaN2g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob, Geert,
+When building with automatic stack variable initialization, GCC 12
+complains about variables defined outside of switch case statements.
+Move the variable into the case that uses it, which silences the warning:
 
-On Mon, Dec 6, 2021 at 6:32 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Dec 2, 2021 at 4:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Rob,
-> >
-> > CC Michal
-> >
-<snip>
-> >
-> > It wasn't clear to me if this is still needed, or legacy. Michal?
->
-> They should update to the iommu binding instead of the legacy smmu
-> one. It's been around for years now.
+drivers/rtc/dev.c: In function 'rtc_dev_ioctl':
+drivers/rtc/dev.c:394:30: warning: statement will never be executed [-Wswitch-unreachable]
+  394 |                         long offset;
+      |                              ^~~~~~
 
-Yes, this is a legacy entry and not used anymore. We'll plan to update our
-devicetree.
+Fixes: 6a8af1b6568a ("rtc: add parameter ioctl")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/rtc/dev.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Harini
+diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
+index e104972a28fd..69325aeede1a 100644
+--- a/drivers/rtc/dev.c
++++ b/drivers/rtc/dev.c
+@@ -391,14 +391,14 @@ static long rtc_dev_ioctl(struct file *file,
+ 		}
+ 
+ 		switch(param.param) {
+-			long offset;
+ 		case RTC_PARAM_FEATURES:
+ 			if (param.index != 0)
+ 				err = -EINVAL;
+ 			param.uvalue = rtc->features[0];
+ 			break;
+ 
+-		case RTC_PARAM_CORRECTION:
++		case RTC_PARAM_CORRECTION: {
++			long offset;
+ 			mutex_unlock(&rtc->ops_lock);
+ 			if (param.index != 0)
+ 				return -EINVAL;
+@@ -407,7 +407,7 @@ static long rtc_dev_ioctl(struct file *file,
+ 			if (err == 0)
+ 				param.svalue = offset;
+ 			break;
+-
++		}
+ 		default:
+ 			if (rtc->ops->param_get)
+ 				err = rtc->ops->param_get(rtc->dev.parent, &param);
+-- 
+2.30.2
+

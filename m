@@ -2,95 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DF046F72A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24AE46F72B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234023AbhLIXHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:07:18 -0500
-Received: from www62.your-server.de ([213.133.104.62]:60744 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbhLIXHR (ORCPT
+        id S234052AbhLIXIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:08:12 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:36665 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232635AbhLIXIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:07:17 -0500
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mvSRw-00065Z-Vc; Fri, 10 Dec 2021 00:03:41 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mvSRw-000LQG-OQ; Fri, 10 Dec 2021 00:03:40 +0100
-Subject: Re: [PATCH] bpf: return EOPNOTSUPP when JIT is needed and not
- possible
-To:     Ido Schimmel <idosch@idosch.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
-        linux-kernel@vger.kernel.org, kuba@kernel.org
-References: <20211209134038.41388-1-cascardo@canonical.com>
- <61b2536e5161d_6bfb2089@john.notmuch> <YbJZoK+qBEiLAxxM@shredder>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b294e66b-0bac-008b-52b4-6f1a90215baa@iogearbox.net>
-Date:   Fri, 10 Dec 2021 00:03:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 9 Dec 2021 18:08:11 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EE8A6580231;
+        Thu,  9 Dec 2021 18:04:36 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 09 Dec 2021 18:04:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
+        :to:cc:subject:date:message-id:reply-to:mime-version
+        :content-transfer-encoding; s=fm2; bh=NSbPeTFmC3VX/ha0W/GXZKCwx7
+        d2S9q3uKceYNqXMuU=; b=Kc7pBU31o8EbMxFXphV9zG6IiT+0lU3sHlVTVDJUhN
+        838c2vFfjgqO41QJ4mrUwBwF0dYW1pR04fr+sFab8ANkVOEBeq2FrG+3B/SpYjXc
+        vrs1yru1XjUF9VtzoCsmTc3YlMaOwP8pd7F8iFWHglZ7uZxIjm7q8dj6KDtaBgYF
+        6MYK/MJS8gRNHY8rDq07wKmdQMAP/SRTwYMb2LI5hOCLQZ9iOWw6Or4uXI6recCV
+        LkphAh+xx7La0uSVlm03JtVOBKs7YjYo19BDsSEWLLr97ZA3YjXYQYYqGlFRfxcb
+        MEKRwha4KpDNRD/fP1U8WBn2UybgF6xuBrCIkCPankfA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:reply-to:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=NSbPeT
+        FmC3VX/ha0W/GXZKCwx7d2S9q3uKceYNqXMuU=; b=iKm2mq+zRARqu6Az24pOud
+        6cYie2iC8A2n77TsKaeKbYjyVdUFbvHGVRB/sy5b38R1fHtkxGTXQ58tgWsW2eOV
+        NBnoRR1sxESACauibFV6K5D7ass+nLZGPdOpPXsoQ5h9kTesYKp94ZOCLsUC0mmK
+        d08HILFUYVE/ExBdrNYAMmNBMN0Mgxvrq0XNr0POOzMZWS0Ht8TDrsw+yMCLqzUK
+        daaeGy+yClJcboe60hfEOdDkm8gZ5lxHRVomoOXs7SbGtQx3cP6sqGc+wXFXjv/z
+        dv064kjkv+5kpRPO4hqP9Yu+SKqDSwKQaPKzrvNeGJo1qFCu2hv91xKoxEirtbLw
+        ==
+X-ME-Sender: <xms:hIuyYW7KJ2VGvmwWyftbYGKwWK5HJvCSFmJcGjK5tF1EAOU1NiOcxw>
+    <xme:hIuyYf4gLhuzV8STMC4PJkvPi2eNA8vecJ4xHCQIisM3hcF3m2zeF1UyvMQdYjLBg
+    Z0szHSqPdFTpxRSUQ>
+X-ME-Received: <xmr:hIuyYVeY0KnyI8D_rgHPH8k1jJQ-_Cj2aDK-HWDCitfV9QvSilgzQcaWfMxPKP3kae2Tu-lh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkedugddtfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggrnhcu
+    oeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeetieeitdejgf
+    fhfeeukeejvdeufedtvddulefhteduffeigfefteehgefhvdegudenucffohhmrghinhep
+    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
+X-ME-Proxy: <xmx:hIuyYTJzxt05EzsOOhpkGX-Qdg3ntRF66l4AebHbDrJ0S27qmDccxQ>
+    <xmx:hIuyYaK8WYPLDvA2xw1NU47aotgeBqzt0NNUNsSTBpe9FRmeXlZTSw>
+    <xmx:hIuyYUx57W7-ctHGwgaG8T3SVd_sb9nShRzXsMRaaOGHnxLfxB8kmA>
+    <xmx:hIuyYcD79eHf97d9tBbwlV2NsHtpEe_KPv6XHDW2Z65FuIIXa_dDcg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 9 Dec 2021 18:04:35 -0500 (EST)
+From:   Zi Yan <zi.yan@sent.com>
+To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>, Zi Yan <ziy@nvidia.com>
+Subject: [RFC PATCH v2 0/7] Use pageblock_order for cma and alloc_contig_range alignment.
+Date:   Thu,  9 Dec 2021 18:04:07 -0500
+Message-Id: <20211209230414.2766515-1-zi.yan@sent.com>
+X-Mailer: git-send-email 2.33.0
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <YbJZoK+qBEiLAxxM@shredder>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26378/Thu Dec  9 10:21:16 2021)
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 8:31 PM, Ido Schimmel wrote:
-> On Thu, Dec 09, 2021 at 11:05:18AM -0800, John Fastabend wrote:
->> Thadeu Lima de Souza Cascardo wrote:
->>> When a CBPF program is JITed and CONFIG_BPF_JIT_ALWAYS_ON is enabled, and
->>> the JIT fails, it would return ENOTSUPP, which is not a valid userspace
->>> error code.  Instead, EOPNOTSUPP should be returned.
->>>
->>> Fixes: 290af86629b2 ("bpf: introduce BPF_JIT_ALWAYS_ON config")
->>> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
->>> ---
->>>   kernel/bpf/core.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->>> index de3e5bc6781f..5c89bae0d6f9 100644
->>> --- a/kernel/bpf/core.c
->>> +++ b/kernel/bpf/core.c
->>> @@ -1931,7 +1931,7 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
->>>   		fp = bpf_int_jit_compile(fp);
->>>   		bpf_prog_jit_attempt_done(fp);
->>>   		if (!fp->jited && jit_needed) {
->>> -			*err = -ENOTSUPP;
->>> +			*err = -EOPNOTSUPP;
->>>   			return fp;
->>>   		}
->>>   	} else {
->>
->> It seems BPF subsys returns ENOTSUPP in multiple places. This fixes one
->> paticular case and is user facing. Not sure we want to one-off fix them
->> here creating user facing changes over multiple kernel versions. On the
->> fence with this one curious to see what others think. Haven't apps
->> already adapted to the current convention or they don't care?
-> 
-> Similar issue was discussed in the past. See:
-> https://lore.kernel.org/netdev/20191204.125135.750458923752225025.davem@davemloft.net/
+From: Zi Yan <ziy@nvidia.com>
 
-With regards to ENOTSUPP exposure, if the consensus is that we should fix all
-occurences over to EOPNOTSUPP even if they've been exposed for quite some time
-(Jakub?), we could give this patch a try maybe via bpf-next and see if anyone
-complains.
+Hi all,
 
-Thadeu, I think you also need to fix up BPF selftests as test_verifier, to mention
-one example (there are also bunch of others under tools/testing/selftests/), is
-checking for ENOTSUPP specifically..
+This patchset tries to remove the MAX_ORDER - 1 alignment requirement for C=
+MA
+and alloc_contig_range(). It prepares for my upcoming changes to make MAX_O=
+RDER
+adjustable at boot time[1].
 
-Thanks,
-Daniel
+The MAX_ORDER - 1 alignment requirement comes from that alloc_contig_range()
+isolates pageblocks to remove free memory from buddy allocator but isolating
+only a subset of pageblocks within a page spanning across multiple pagebloc=
+ks
+causes free page accounting issues. Isolated page might not be put into the
+right free list, since the code assumes the migratetype of the first pagebl=
+ock
+as the whole free page migratetype. This is based on the discussion at [2].
+
+To remove the requirement, this patchset:
+1. still isolates pageblocks at MAX_ORDER - 1 granularity;
+2. but saves the pageblock migratetypes outside the specified range of
+   alloc_contig_range() and restores them after all pages within the range
+   become free after __alloc_contig_migrate_range();
+3. splits free pages spanning multiple pageblocks at the beginning and the =
+end
+   of the range and puts the split pages to the right migratetype free lists
+   based on the pageblock migratetypes;
+4. returns pages not in the range as it did before this patch.
+
+Isolation needs to happen at MAX_ORDER - 1 granularity, because otherwise
+1) extra code is needed to detect pages (free, PageHuge, THP, or PageCompou=
+nd)
+to make sure all pageblocks belonging to a single page are isolated togethe=
+r=20
+and later pageblocks outside the range need to have their migratetypes rest=
+ored;
+or 2) extra logic will need to be added during page free time to split a fr=
+ee
+page with multi-migratetype pageblocks.
+
+Two optimizations might come later:
+1. only check unmovable pages within the range instead of MAX_ORDER - 1 ali=
+gned
+   range during isolation to increase successful rate of alloc_contig_range=
+().
+2. make MIGRATE_ISOLATE a separate bit to avoid saving and restoring existi=
+ng
+   migratetypes before and after isolation respectively.
+
+Feel free to give comments and suggestions. Thanks.
+
+
+[1] https://lore.kernel.org/linux-mm/20210805190253.2795604-1-zi.yan@sent.c=
+om/
+[2] https://lore.kernel.org/linux-mm/d19fb078-cb9b-f60f-e310-fdeea1b947d2@r=
+edhat.com/
+
+
+Zi Yan (7):
+  mm: page_alloc: avoid merging non-fallbackable pageblocks with others.
+  mm: compaction: handle non-lru compound pages properly in
+    isolate_migratepages_block().
+  mm: migrate: allocate the right size of non hugetlb or THP compound
+    pages.
+  mm: make alloc_contig_range work at pageblock granularity
+  mm: cma: use pageblock_order as the single alignment
+  drivers: virtio_mem: use pageblock size as the minimum virtio_mem
+    size.
+  arch: powerpc: adjust fadump alignment to be pageblock aligned.
+
+ arch/powerpc/include/asm/fadump-internal.h |   4 +-
+ drivers/virtio/virtio_mem.c                |   6 +-
+ include/linux/mmzone.h                     |  11 +-
+ kernel/dma/contiguous.c                    |   2 +-
+ mm/cma.c                                   |   6 +-
+ mm/compaction.c                            |  10 +-
+ mm/migrate.c                               |   8 +-
+ mm/page_alloc.c                            | 203 +++++++++++++++++----
+ 8 files changed, 196 insertions(+), 54 deletions(-)
+
+--=20
+2.33.0
+

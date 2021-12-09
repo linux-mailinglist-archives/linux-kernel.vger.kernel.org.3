@@ -2,91 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0779E46EB0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376AB46EB12
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236375AbhLIP00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235923AbhLIP0Y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:26:24 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCF9C061353
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:22:50 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id j14so11314219uan.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:22:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=1J+XmU+DI+E9grUJzbC6kqmpdJljZUH9ERdWF3VqDW4=;
-        b=wdLsu7dxo6JsUsOMFhDQbVF/7k6JWW4SfduROl3lRRispvueS+VzjduoBSJdTfWBEd
-         6WSFxBtUmOKlOmMhQ3z/jkIE7pzpINk0xwSI/SPkCItxTti5tDk/k0IhLQHC+8Px4tjb
-         opJUQAh2haWglvTbBYOWb8wBDboplqK/k1wz7pMdWd6wdnUQ/lntzIFt6iSZTILpnD8i
-         54xvkltZMUQI8d/TgbxN0KHDTzZgDh9qR2+z7YHpzTmSmEOViRiW6faiJb/MrojlY22z
-         iqhnQCWYXF/aRrptPwEpnmuIlyCMxU2JXz5pvmM6Y/9El6BpFI85smH7ropsRnktM+lU
-         pV4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=1J+XmU+DI+E9grUJzbC6kqmpdJljZUH9ERdWF3VqDW4=;
-        b=2U1aQR7QEotqCP16aZlDzX7vKts4hZ4K5iQ8q53M8Y2tPs54faFuZe7FDBUXCDHPmh
-         1mhKM+VkN9hmri5usiGMO853H4D2bFNDO1FNctEceb59Xkvfq7eYpVC4Om7lW2hBk9cK
-         3T7ytNp0FfqZqZG482eqhqmSEq0eg4IPqeDxeFiPgRiXP/MtJXvDlR767ShyjUoFxuMH
-         ACiTQ+hqV9x+Szp5Ul1/abq4i9K+7jsCfjUvaPgGeushuhebNpniyBVVODfV8wvOOZ1t
-         MGH3riDRj6h6cwIcNv7V6kv3aqKzCrmlQdFygHj8+jreu4ufPJ6OYds6UWOrz8EhzlGa
-         XZsQ==
-X-Gm-Message-State: AOAM532NUdHvuK3pDSEXm6bE36pfGD/PrCnpkEy10JvaSgsRPVv91SLV
-        73HJvXJ0yUQVgdnU3iwdjy5Gv14uFcSE6V2kJZ0E/A==
-X-Google-Smtp-Source: ABdhPJzCfp+KpbSMOwI8zmZeJ5bMvIl0+2m+q7morIH15CbHe7sXKx+R0flGIAcP0B04JBjStSt4FQXkkLNvJzN85pA=
-X-Received: by 2002:a67:3382:: with SMTP id z124mr7978137vsz.57.1639063370025;
- Thu, 09 Dec 2021 07:22:50 -0800 (PST)
+        id S235776AbhLIP1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:27:08 -0500
+Received: from mga02.intel.com ([134.134.136.20]:30215 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235389AbhLIP1G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 10:27:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639063413; x=1670599413;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RZFJHBfdP6C7iDLd0NSS3cF1752WbL5csfY2j4kzeYU=;
+  b=M7eGws+PcgMG2UpE3Txp0YOU4DK+K5mUo7UOsDo9B+YwLnehwYTmi9zA
+   XNdl7IX0h1NPhYWG0NN5HRaf3u1W4rqYcVW7v+D4JIvwm9uhbUeO2eSGL
+   R5mp41mZt5g3x2tS2+uevg5sHv9ln6Tn7WjueG6SIvNPjWg4/AuJw99cN
+   LVIXkwTRXSdoS5VyJI4C+10LbhXUHXosva0fBtHEa+s8zDOLkR0cSCIL4
+   Ex3IWBe5vUjYLSGUto2oxzvZbYx/cFLTFt7liuOVCvKyAcWyzWgqBaTEF
+   JIKqMZgG3t76aEKG9cCASSaDoHJutNfe+289ulGG9VobpDUZQuUX7QaRz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="225388270"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="225388270"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 07:23:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="462167236"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2021 07:23:30 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvLGc-00025C-3H; Thu, 09 Dec 2021 15:23:30 +0000
+Date:   Thu, 9 Dec 2021 23:22:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: arch/arm/kernel/traps.c:775:6: warning: no previous prototype for
+ function 'abort'
+Message-ID: <202112092330.MRS9Xygy-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-8-semen.protsenko@linaro.org> <YbIXVw+as1Sj6yDW@ninjato>
-In-Reply-To: <YbIXVw+as1Sj6yDW@ninjato>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 9 Dec 2021 17:22:38 +0200
-Message-ID: <CAPLW+4kOr8NBUpgDXCcALP0BbnQ=w0v_oW24Vsa3e90TBxrHyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 7/8] arm: dts: exynos: Rename hsi2c nodes to i2c
- for Exynos5260
-To:     Wolfram Sang <wsa@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Dec 2021 at 16:49, Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Sat, Dec 04, 2021 at 11:58:19PM +0200, Sam Protsenko wrote:
-> > In Device Tree specification it's recommended to use "i2c" name for I2C
-> > nodes. Now that i2c-exynos5 dt-schema binding was added, it shows some
-> > warnings like this when validating HS-I2C nodes:
-> >
-> >     hsi2c@xxxxxxxxx: $nodename:0: 'hsi2c@xxxxxxxx' does not match
-> >                                   '^i2c(@.*)?'
-> >     From schema: Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-> >
-> > Rename hsi2c@* to i2c@* to fix those warnings.
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
->
-> Applied to for-next, thanks!
->
+Hi Ard,
 
-Just a heads up: Krzysztof has already taken patches #7 and #8 to his
-tree: [1]. Other than that, thanks a lot for handling this series!
+FYI, the error/warning still remains.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-next
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
+commit: 4d576cab16f57e1f87978f6997a725179398341e ARM: 9028/1: disable KASAN in call stack capturing routines
+date:   1 year ago
+config: arm-randconfig-c002-20211209 (https://download.01.org/0day-ci/archive/20211209/202112092330.MRS9Xygy-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4d576cab16f57e1f87978f6997a725179398341e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4d576cab16f57e1f87978f6997a725179398341e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/media/platform/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/arm/kernel/traps.c:82:6: warning: no previous prototype for function 'dump_backtrace_stm' [-Wmissing-prototypes]
+   void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
+        ^
+   arch/arm/kernel/traps.c:82:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
+   ^
+   static 
+   arch/arm/kernel/traps.c:445:17: warning: no previous prototype for function 'do_undefinstr' [-Wmissing-prototypes]
+   asmlinkage void do_undefinstr(struct pt_regs *regs)
+                   ^
+   arch/arm/kernel/traps.c:445:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void do_undefinstr(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/traps.c:510:39: warning: no previous prototype for function 'handle_fiq_as_nmi' [-Wmissing-prototypes]
+   asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
+                                         ^
+   arch/arm/kernel/traps.c:510:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/traps.c:529:17: warning: no previous prototype for function 'bad_mode' [-Wmissing-prototypes]
+   asmlinkage void bad_mode(struct pt_regs *regs, int reason)
+                   ^
+   arch/arm/kernel/traps.c:529:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void bad_mode(struct pt_regs *regs, int reason)
+              ^
+              static 
+   arch/arm/kernel/traps.c:602:16: warning: no previous prototype for function 'arm_syscall' [-Wmissing-prototypes]
+   asmlinkage int arm_syscall(int no, struct pt_regs *regs)
+                  ^
+   arch/arm/kernel/traps.c:602:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int arm_syscall(int no, struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/traps.c:728:1: warning: no previous prototype for function 'baddataabort' [-Wmissing-prototypes]
+   baddataabort(int code, unsigned long instr, struct pt_regs *regs)
+   ^
+   arch/arm/kernel/traps.c:727:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void
+              ^
+              static 
+   arch/arm/kernel/traps.c:768:17: warning: no previous prototype for function '__div0' [-Wmissing-prototypes]
+   asmlinkage void __div0(void)
+                   ^
+   arch/arm/kernel/traps.c:768:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void __div0(void)
+              ^
+              static 
+>> arch/arm/kernel/traps.c:775:6: warning: no previous prototype for function 'abort' [-Wmissing-prototypes]
+   void abort(void)
+        ^
+   arch/arm/kernel/traps.c:775:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void abort(void)
+   ^
+   static 
+   arch/arm/kernel/traps.c:783:13: warning: no previous prototype for function 'trap_init' [-Wmissing-prototypes]
+   void __init trap_init(void)
+               ^
+   arch/arm/kernel/traps.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init trap_init(void)
+   ^
+   static 
+   9 warnings generated.
+
+
+vim +/abort +775 arch/arm/kernel/traps.c
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  767  
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @768  asmlinkage void __div0(void)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  769  {
+4ed89f22280614 Russell King   2014-10-28  770  	pr_err("Division by zero in kernel.\n");
+^1da177e4c3f41 Linus Torvalds 2005-04-16  771  	dump_stack();
+^1da177e4c3f41 Linus Torvalds 2005-04-16  772  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  773  EXPORT_SYMBOL(__div0);
+^1da177e4c3f41 Linus Torvalds 2005-04-16  774  
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @775  void abort(void)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  776  {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  777  	BUG();
+^1da177e4c3f41 Linus Torvalds 2005-04-16  778  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  779  	/* if that doesn't kill us, halt */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  780  	panic("Oops failed to kill thread");
+^1da177e4c3f41 Linus Torvalds 2005-04-16  781  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  782  
+
+:::::: The code at line 775 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

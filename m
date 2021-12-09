@@ -2,295 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B687246EF49
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D495246EF38
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241933AbhLIRD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:03:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54619 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241976AbhLIRDl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:03:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639069207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/9sqDPXMQ17pS7e5uc87n/Mf0pJmYisYsvLS4JXsH+w=;
-        b=RrURuvE4NYdz/XGfeizVOnURj4FnCVpiWB3t/jxJLBW6NzGRD2lKPXyQSLc3E5vw3sRr1+
-        QJy51+q1oBk5AM3M9BicGy5MII5in54eJfGPGJxRWKG5rPcgEDufWCx541bC/DO0yUTdSp
-        8YrCO4pu6yQYjcJ7NTPQOwzKPMR6s28=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-73-ygsXSajaNEK4T4kXQUBPHw-1; Thu, 09 Dec 2021 12:00:02 -0500
-X-MC-Unique: ygsXSajaNEK4T4kXQUBPHw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4FDF086A072;
-        Thu,  9 Dec 2021 16:59:58 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 89A144DA21;
-        Thu,  9 Dec 2021 16:59:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v2 27/67] vfs,
- fscache: Implement pinning of cache usage for writeback
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 09 Dec 2021 16:59:38 +0000
-Message-ID: <163906917856.143852.8224898306177154573.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
-References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        id S241943AbhLIRDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:03:37 -0500
+Received: from mga12.intel.com ([192.55.52.136]:58924 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241821AbhLIRD3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:03:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639069196; x=1670605196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Jb7CwzDxKXr/7UaWgRJtMnceItXgbQOBYj8g3WpneL0=;
+  b=Bn93TAdXTexuKYe1Fjc6RjiMe8sAeOURkhwo2aESHN0MgSfas+4kxq9x
+   HX7u1oWiNhWZ1z6SR1+jWBycvVAwKQE/22smFEpBW+Ir/R1lHYZgcOzWS
+   lqxv2On0TIp/K8XzZ3Kq6v2TNuKgNua5IXSu8kS18P8HggYmfNQyJiVFD
+   rBL2fCpXV7IHMSKSIF4KwFq2fcitHZzg9sYht0cmPxVSVT+bu2rxicsPK
+   GTKtuP7m4y3DwRccc/Jya8wTPZGBjHAeoDFOmOsJtwP76AD027TO/2gO6
+   hM7tGWV8DhKXURS2TSObrvcYkkXK6zk4dz60H3I3wz2Ht782GOQ+PBfpt
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="218175860"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="218175860"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:59:55 -0800
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="503565784"
+Received: from ayushshr-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.115.39])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:59:54 -0800
+Date:   Thu, 9 Dec 2021 08:59:53 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Jessica Yu <jeyu@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: Remove myself as modules maintainer
+Message-ID: <20211209165953.wohokahzh5z6tnw7@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20211209084313.10621-1-jeyu@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20211209084313.10621-1-jeyu@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cachefiles has a problem in that it needs to keep the backing file for a
-cookie open whilst there are local modifications pending that need to be
-written to it.  However, we don't want to keep the file open indefinitely,
-as that causes EMFILE/ENFILE/ENOMEM problems.
-
-Reopening the cache file, however, is a problem if this is being done due
-to writeback triggered by exit().  Some filesystems will oops if we try to
-open a file in that context because they want to access current->fs or
-other resources that have already been dismantled.
-
-To get around this, I added the following:
-
- (1) An inode flag, I_PINNING_FSCACHE_WB, to be set on a network filesystem
-     inode to indicate that we have a usage count on the cookie caching
-     that inode.
-
- (2) A flag in struct writeback_control, unpinned_fscache_wb, that is set
-     when __writeback_single_inode() clears the last dirty page from
-     i_pages - at which point it clears I_PINNING_FSCACHE_WB and sets this
-     flag.
-
-     This has to be done here so that clearing I_PINNING_FSCACHE_WB can be
-     done atomically with the check of PAGECACHE_TAG_DIRTY that clears
-     I_DIRTY_PAGES.
-
- (3) A function, fscache_set_page_dirty(), which if it is not set, sets
-     I_PINNING_FSCACHE_WB and calls fscache_use_cookie() to pin the cache
-     resources.
-
- (4) A function, fscache_unpin_writeback(), to be called by ->write_inode()
-     to unuse the cookie.
-
- (5) A function, fscache_clear_inode_writeback(), to be called when the
-     inode is evicted, before clear_inode() is called.  This cleans up any
-     lingering I_PINNING_FSCACHE_WB.
-
-The network filesystem can then use these tools to make sure that
-fscache_write_to_cache() can write locally modified data to the cache as
-well as to the server.
-
-For the future, I'm working on write helpers for netfs lib that should
-allow this facility to be removed by keeping track of the dirty regions
-separately - but that's incomplete at the moment and is also going to be
-affected by folios, one way or another, since it deals with pages
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/163819615157.215744.17623791756928043114.stgit@warthog.procyon.org.uk/ # v1
----
-
- fs/fs-writeback.c         |    8 ++++++++
- fs/fscache/io.c           |   38 ++++++++++++++++++++++++++++++++++++++
- include/linux/fs.h        |    3 +++
- include/linux/fscache.h   |   41 +++++++++++++++++++++++++++++++++++++++++
- include/linux/writeback.h |    1 +
- 5 files changed, 91 insertions(+)
-
-diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-index 67f0e88eed01..8294a60ce323 100644
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -1666,6 +1666,13 @@ __writeback_single_inode(struct inode *inode, struct writeback_control *wbc)
- 
- 	if (mapping_tagged(mapping, PAGECACHE_TAG_DIRTY))
- 		inode->i_state |= I_DIRTY_PAGES;
-+	else if (unlikely(inode->i_state & I_PINNING_FSCACHE_WB)) {
-+		if (!(inode->i_state & I_DIRTY_PAGES)) {
-+			inode->i_state &= ~I_PINNING_FSCACHE_WB;
-+			wbc->unpinned_fscache_wb = true;
-+			dirty |= I_PINNING_FSCACHE_WB; /* Cause write_inode */
-+		}
-+	}
- 
- 	spin_unlock(&inode->i_lock);
- 
-@@ -1675,6 +1682,7 @@ __writeback_single_inode(struct inode *inode, struct writeback_control *wbc)
- 		if (ret == 0)
- 			ret = err;
- 	}
-+	wbc->unpinned_fscache_wb = false;
- 	trace_writeback_single_inode(inode, wbc, nr_to_write);
- 	return ret;
- }
-diff --git a/fs/fscache/io.c b/fs/fscache/io.c
-index 74cde7acf434..e9e5d6758ea8 100644
---- a/fs/fscache/io.c
-+++ b/fs/fscache/io.c
-@@ -150,6 +150,44 @@ int __fscache_begin_read_operation(struct netfs_cache_resources *cres,
- }
- EXPORT_SYMBOL(__fscache_begin_read_operation);
- 
-+/**
-+ * fscache_set_page_dirty - Mark page dirty and pin a cache object for writeback
-+ * @page: The page being dirtied
-+ * @cookie: The cookie referring to the cache object
-+ *
-+ * Set the dirty flag on a page and pin an in-use cache object in memory when
-+ * dirtying a page so that writeback can later write to it.  This is intended
-+ * to be called from the filesystem's ->set_page_dirty() method.
-+ *
-+ *  Returns 1 if PG_dirty was set on the page, 0 otherwise.
-+ */
-+int fscache_set_page_dirty(struct page *page, struct fscache_cookie *cookie)
-+{
-+	struct inode *inode = page->mapping->host;
-+	bool need_use = false;
-+
-+	_enter("");
-+
-+	if (!__set_page_dirty_nobuffers(page))
-+		return 0;
-+	if (!fscache_cookie_valid(cookie))
-+		return 1;
-+
-+	if (!(inode->i_state & I_PINNING_FSCACHE_WB)) {
-+		spin_lock(&inode->i_lock);
-+		if (!(inode->i_state & I_PINNING_FSCACHE_WB)) {
-+			inode->i_state |= I_PINNING_FSCACHE_WB;
-+			need_use = true;
-+		}
-+		spin_unlock(&inode->i_lock);
-+
-+		if (need_use)
-+			fscache_use_cookie(cookie, true);
-+	}
-+	return 1;
-+}
-+EXPORT_SYMBOL(fscache_set_page_dirty);
-+
- struct fscache_write_request {
- 	struct netfs_cache_resources cache_resources;
- 	struct address_space	*mapping;
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index bbf812ce89a8..2c0b8e77d9ab 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2418,6 +2418,8 @@ static inline void kiocb_clone(struct kiocb *kiocb, struct kiocb *kiocb_src,
-  *			Used to detect that mark_inode_dirty() should not move
-  * 			inode between dirty lists.
-  *
-+ * I_PINNING_FSCACHE_WB	Inode is pinning an fscache object for writeback.
-+ *
-  * Q: What is the difference between I_WILL_FREE and I_FREEING?
-  */
- #define I_DIRTY_SYNC		(1 << 0)
-@@ -2440,6 +2442,7 @@ static inline void kiocb_clone(struct kiocb *kiocb, struct kiocb *kiocb_src,
- #define I_CREATING		(1 << 15)
- #define I_DONTCACHE		(1 << 16)
- #define I_SYNC_QUEUED		(1 << 17)
-+#define I_PINNING_FSCACHE_WB	(1 << 18)
- 
- #define I_DIRTY_INODE (I_DIRTY_SYNC | I_DIRTY_DATASYNC)
- #define I_DIRTY (I_DIRTY_INODE | I_DIRTY_PAGES)
-diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-index 1a018964d418..73942b4e9aee 100644
---- a/include/linux/fscache.h
-+++ b/include/linux/fscache.h
-@@ -16,6 +16,7 @@
- 
- #include <linux/fs.h>
- #include <linux/netfs.h>
-+#include <linux/writeback.h>
- 
- #if defined(CONFIG_FSCACHE) || defined(CONFIG_FSCACHE_MODULE)
- #define __fscache_available (1)
-@@ -562,4 +563,44 @@ static inline void fscache_write_to_cache(struct fscache_cookie *cookie,
- 
- }
- 
-+#if __fscache_available
-+extern int fscache_set_page_dirty(struct page *page, struct fscache_cookie *cookie);
-+#else
-+#define fscache_set_page_dirty(PAGE, COOKIE) (__set_page_dirty_nobuffers((PAGE)))
-+#endif
-+
-+/**
-+ * fscache_unpin_writeback - Unpin writeback resources
-+ * @wbc: The writeback control
-+ * @cookie: The cookie referring to the cache object
-+ *
-+ * Unpin the writeback resources pinned by fscache_set_page_dirty().  This is
-+ * intended to be called by the netfs's ->write_inode() method.
-+ */
-+static inline void fscache_unpin_writeback(struct writeback_control *wbc,
-+					   struct fscache_cookie *cookie)
-+{
-+	if (wbc->unpinned_fscache_wb)
-+		fscache_unuse_cookie(cookie, NULL, NULL);
-+}
-+
-+/**
-+ * fscache_clear_inode_writeback - Clear writeback resources pinned by an inode
-+ * @cookie: The cookie referring to the cache object
-+ * @inode: The inode to clean up
-+ * @aux: Auxiliary data to apply to the inode
-+ *
-+ * Clear any writeback resources held by an inode when the inode is evicted.
-+ * This must be called before clear_inode() is called.
-+ */
-+static inline void fscache_clear_inode_writeback(struct fscache_cookie *cookie,
-+						 struct inode *inode,
-+						 const void *aux)
-+{
-+	if (inode->i_state & I_PINNING_FSCACHE_WB) {
-+		loff_t i_size = i_size_read(inode);
-+		fscache_unuse_cookie(cookie, aux, &i_size);
-+	}
-+}
-+
- #endif /* _LINUX_FSCACHE_H */
-diff --git a/include/linux/writeback.h b/include/linux/writeback.h
-index 3bfd487d1dd2..fec248ab1fec 100644
---- a/include/linux/writeback.h
-+++ b/include/linux/writeback.h
-@@ -68,6 +68,7 @@ struct writeback_control {
- 	unsigned for_reclaim:1;		/* Invoked from the page allocator */
- 	unsigned range_cyclic:1;	/* range_start is cyclic */
- 	unsigned for_sync:1;		/* sync(2) WB_SYNC_ALL writeback */
-+	unsigned unpinned_fscache_wb:1;	/* Cleared I_PINNING_FSCACHE_WB */
- 
- 	/*
- 	 * When writeback IOs are bounced through async layers, only the
+On Thu, Dec 09, 2021 at 09:43:13AM +0100, Jessica Yu wrote:
+>Luis has done a great job maintaining modules so far. As I'm planning to
+>take a break from work soon, I think we're ready to transition over fully.
+>
+>Signed-off-by: Jessica Yu <jeyu@kernel.org>
 
 
+Acked-by: Lucas De Marchi <lucas.demarchi@intel.com>
+
+
+Thanks for your work maintaining the modules! Agreed Luis is already
+doing a great job, also sending patches for kmod userspace.
+
+Lucas De Marchi

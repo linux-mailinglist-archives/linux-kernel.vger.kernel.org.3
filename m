@@ -2,139 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C814846F3B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CBE46F3C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbhLITRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
+        id S230465AbhLITT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbhLITRJ (ORCPT
+        with ESMTP id S229537AbhLITT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:17:09 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77903C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:13:35 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id g25-20020a25b119000000b005c5e52a0574so12240946ybj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:13:35 -0800 (PST)
+        Thu, 9 Dec 2021 14:19:57 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EC5C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:16:23 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id d2so5739210qki.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 11:16:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=TGD1yEXRZ0MgwllUhVvIa/i7an9uYE2v1PNT6apFGJI=;
-        b=SUl8NhsoAJRdz0LQdtW1eB9Xs5Y8fHH763/4wqAqzmTa0ilCvW8QVUyzOZYkmIvsc8
-         R9fE+KAUto0xhgURFJ1S7aQztTkTD6YLsl/Sn88yMKSGsMu2m1IsZsv8xMBP8oeEqIzh
-         XrbU5YGJPTbrlZQ1ky1NDM9uTsXmBpgDmwlo+Nb+DgkYyt8tlDlY3EuwLW/lTbbZBCGZ
-         Effb9bBThbMtFYR79CQ99L7ibUrgjyGl4W62Oq2ZJmUcDYqxW7+sTpZIR3qbIOTzHrFB
-         9xvNqsWwcAv1NC0OO+MOTjmHvnP2iHaUoS9ayqgK6ilvCDnPMH0WbCujZtt7m2LkCKjU
-         kK2g==
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fLGp6ox2PvPjH1m0BC7At85njItgHrM/Ph0UnWbQo+Y=;
+        b=YH6gVYdbe3nE2kGAGwgsT4rmzXTilVq7ECkN/BmMjEmogeOalV3V2gDmD8nRW6InmR
+         6NLqc0inetJ+l3i2qdg6FPYWszQLwLb7eLIY5yeTFiUIoKZTdZ52MpAHFy1mCMgE2UJY
+         N9Pn+MJV4PcEUuzWNLAxW5hPYVFsySIwCoIpNpfUA/tcjqhuZaZiE1SlnGqVkLX223tk
+         14AzRP2bBFiznh/lzgwHoc1c5b3UFQKz1Ghd/7GZZ/PBWDHwJS5yZ0g+j7AVYioXCyCc
+         OPhCmNQQ/U0D8iSI8VF1aOrdhpiSghuOf8zSM1E6NqMWvV2rBZYYZLEK5Ipw59+n7lhd
+         2AZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=TGD1yEXRZ0MgwllUhVvIa/i7an9uYE2v1PNT6apFGJI=;
-        b=m6CBkwEpc+rBKHF6ZfAYVglEmQ5yLvKsFBKCYbvqiZFSiCzTGd9jyd2jkbXwoTuuJR
-         S29TbWAyslqoAYXtKpgeBEV/evVjBcW6EhnEM1MK4VQ8kIManSv3gDVVsxsbxvS7rhN6
-         uauvpnrcBMHJ7hK/pwNkLsrYOHgfazOkBtbpnKMUjfF2orFEfm+WX1IIRFv1kHRXYlIP
-         rojYAtPOQt3ZXhwy7Iwr1X+iQYvNQjzDTxfcduWcOqAU1hzPB6CoyOKN4KETtIeA2/rm
-         GlZX0HFSpUoqDg1/MLNp50aNWsZCAgj2wRx81uMb7ODhcfqHzHDntyBQb68YbFSrgA2W
-         5Afg==
-X-Gm-Message-State: AOAM5320X33V2i7bdumcixRtyYvw6527J8wfzXaXpyoQoaBC6PsiCoxi
-        EhIsboqfLE07pO8Sv5RLIuj7cnwLDzs=
-X-Google-Smtp-Source: ABdhPJzI6MKgxdWBOrBRoG1MLD+oFx/sRDSe7QZtGI0W5qh4PkIQfOOtUwGmoWPwmy/8YdVZhrcexmtxZp8=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:8b23:8fcc:c6e4:3a65])
- (user=surenb job=sendgmr) by 2002:a25:d16:: with SMTP id 22mr8607169ybn.51.1639077214712;
- Thu, 09 Dec 2021 11:13:34 -0800 (PST)
-Date:   Thu,  9 Dec 2021 11:13:25 -0800
-In-Reply-To: <20211209191325.3069345-1-surenb@google.com>
-Message-Id: <20211209191325.3069345-3-surenb@google.com>
-Mime-Version: 1.0
-References: <20211209191325.3069345-1-surenb@google.com>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v5 3/3] mm/oom_kill: allow process_mrelease to run under
- mmap_lock protection
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     mhocko@kernel.org, mhocko@suse.com, rientjes@google.com,
-        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fLGp6ox2PvPjH1m0BC7At85njItgHrM/Ph0UnWbQo+Y=;
+        b=FGpq2q0T9mOaMomsT6SGAh3v5EEM8t61BHI4BXd5hsBhgTuHhT5UMCeZ++s/7RSeaq
+         6M78BJ1/snJsiixWdgmh1T0jFczkeeJfQEBcXkSgaUNuXj339u40msNKg2EDsqBTQRFH
+         oz7btupDGSoRkVQUbJ1NMj0W1zCFT5BH+j+gROyxSD+KWyJCw88aDXK9IbJk732hVfLm
+         apCfSrrfzeZX6CgQOJl+zZSJvF7DDMTe2EXDU3R3jHkayOPQML1bZOiEMRPPk9x/jL0+
+         1Py0cA5PPis2P7scLG1EWky5P7vdjOAqTyZjAvBg//DqZKlaTGV0chMW/Cx0hlZtVm7f
+         O1AA==
+X-Gm-Message-State: AOAM532ZN8Aoyi80wqnhIPNTNTFHoRkGGUADkod956lD7ki0e8Yr2SVr
+        8s8UVvaEUK/DHgcS9XEnnlxHVg==
+X-Google-Smtp-Source: ABdhPJyL+b+axTEPhkSoKR7vwhFCvH+PQDM3xINNcVFRAy2JPRcVMViS3xy/RVTOy8s33NjgOtJRIA==
+X-Received: by 2002:a05:620a:284d:: with SMTP id h13mr15481593qkp.330.1639077382823;
+        Thu, 09 Dec 2021 11:16:22 -0800 (PST)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id v21sm512763qta.0.2021.12.09.11.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 11:16:22 -0800 (PST)
+Date:   Thu, 9 Dec 2021 14:16:20 -0500
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, guro@fb.com, clm@fb.com
+Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance
+ patch
+Message-ID: <YbJWBGaGAW/MenOn@localhost.localdomain>
+References: <YaUH5GFFoLiS4/3/@localhost.localdomain>
+ <87ee6yc00j.mognet@arm.com>
+ <YaUYsUHSKI5P2ulk@localhost.localdomain>
+ <87bl22byq2.mognet@arm.com>
+ <YaUuyN3h07xlEx8j@localhost.localdomain>
+ <878rx6bia5.mognet@arm.com>
+ <87wnklaoa8.mognet@arm.com>
+ <YappSLDS2EvRJmr9@localhost.localdomain>
+ <87lf0y9i8x.mognet@arm.com>
+ <87v8zx8zia.mognet@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8zx8zia.mognet@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With exit_mmap holding mmap_write_lock during free_pgtables call,
-process_mrelease does not need to elevate mm->mm_users in order to
-prevent exit_mmap from destrying pagetables while __oom_reap_task_mm
-is walking the VMA tree. The change prevents process_mrelease from
-calling the last mmput, which can lead to waiting for IO completion
-in exit_aio.
+On Thu, Dec 09, 2021 at 05:22:05PM +0000, Valentin Schneider wrote:
+> On 06/12/21 09:48, Valentin Schneider wrote:
+> > On 03/12/21 14:00, Josef Bacik wrote:
+> >> On Fri, Dec 03, 2021 at 12:03:27PM +0000, Valentin Schneider wrote:
+> >>> Could you give the 4 top patches, i.e. those above
+> >>> 8c92606ab810 ("sched/cpuacct: Make user/system times in cpuacct.stat more precise")
+> >>> a try?
+> >>>
+> >>> https://git.gitlab.arm.com/linux-arm/linux-vs.git -b mainline/sched/nohz-next-update-regression
+> >>>
+> >>> I gave that a quick test on the platform that caused me to write the patch
+> >>> you bisected and looks like it didn't break the original fix. If the above
+> >>> counter-measures aren't sufficient, I'll have to go poke at your
+> >>> reproducers...
+> >>>
+> >>
+> >> It's better but still around 6% regression.  If I compare these patches to the
+> >> average of the last few days worth of runs you're 5% better than before, so
+> >> progress but not completely erased.
+> >>
+> >
+> > Hmph, time for me to reproduce this locally then. Thanks!
+> 
+> I carved out a partition out of an Ampere eMAG's HDD to play with BTRFS
+> via fsperf; this is what I get for the bisected commit (baseline is
+> bisected patchset's immediate parent, aka v5.15-rc4) via a handful of
+> ./fsperf -p before-regression -c btrfs -n 100 -t emptyfiles500k
+> 
+>   write_clat_ns_p99     195395.92     198790.46      4797.01    1.74%
+>   write_iops             17305.79      17471.57       250.66    0.96%
+> 
+>   write_clat_ns_p99     195395.92     197694.06      4797.01    1.18%
+>   write_iops             17305.79      17533.62       250.66    1.32%
+> 
+>   write_clat_ns_p99     195395.92     197903.67      4797.01    1.28%
+>   write_iops             17305.79      17519.71       250.66    1.24%
+> 
+> If I compare against tip/sched/core however:
+> 
+>   write_clat_ns_p99     195395.92     202936.32      4797.01    3.86%
+>   write_iops             17305.79      17065.46       250.66   -1.39%
+> 
+>   write_clat_ns_p99     195395.92     204349.44      4797.01    4.58%
+>   write_iops             17305.79      17097.79       250.66   -1.20%
+> 
+>   write_clat_ns_p99     195395.92     204169.05      4797.01    4.49%
+>   write_iops             17305.79      17112.29       250.66   -1.12%
+> 
+> tip/sched/core + my patches:
+> 
+>   write_clat_ns_p99     195395.92     205721.60      4797.01    5.28%
+>   write_iops             17305.79      16947.59       250.66   -2.07%
+> 
+>   write_clat_ns_p99     195395.92     203358.04      4797.01    4.07%
+>   write_iops             17305.79      16953.24       250.66   -2.04%
+> 
+>   write_clat_ns_p99     195395.92     201830.40      4797.01    3.29%
+>   write_iops             17305.79      17041.18       250.66   -1.53%
+> 
+> So tip/sched/core seems to have a much worse regression, and my patches
+> are making things worse on that system...
+> 
+> I've started a bisection to see where the above leads me, unfortunately
+> this machine needs more babysitting than I thought so it's gonna take a
+> while.
+> 
+> @Josef any chance you could see if the above also applies to you? tip lives
+> at https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git, though from
+> where my bisection is taking me it looks like you should see that against
+> Linus' tree as well.
+> 
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
-changes in v5
-- Removed Fixes: tag, per Michal Hocko
-- Added Acked-by's
-
- mm/oom_kill.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
-
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 1ddabefcfb5a..67780386f478 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -1169,15 +1169,15 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
- 		goto put_task;
- 	}
- 
--	if (mmget_not_zero(p->mm)) {
--		mm = p->mm;
--		if (task_will_free_mem(p))
--			reap = true;
--		else {
--			/* Error only if the work has not been done already */
--			if (!test_bit(MMF_OOM_SKIP, &mm->flags))
--				ret = -EINVAL;
--		}
-+	mm = p->mm;
-+	mmgrab(mm);
-+
-+	if (task_will_free_mem(p))
-+		reap = true;
-+	else {
-+		/* Error only if the work has not been done already */
-+		if (!test_bit(MMF_OOM_SKIP, &mm->flags))
-+			ret = -EINVAL;
- 	}
- 	task_unlock(p);
- 
-@@ -1188,13 +1188,16 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
- 		ret = -EINTR;
- 		goto drop_mm;
- 	}
--	if (!__oom_reap_task_mm(mm))
-+	/*
-+	 * Check MMF_OOM_SKIP again under mmap_read_lock protection to ensure
-+	 * possible change in exit_mmap is seen
-+	 */
-+	if (!test_bit(MMF_OOM_SKIP, &mm->flags) && !__oom_reap_task_mm(mm))
- 		ret = -EAGAIN;
- 	mmap_read_unlock(mm);
- 
- drop_mm:
--	if (mm)
--		mmput(mm);
-+	mmdrop(mm);
- put_task:
- 	put_task_struct(task);
- 	return ret;
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+This has made us all curious, so we're all fucking around with schbench to see
+if we can make it show up without needing to use fsperf.  Maybe that'll help
+with the bisect, because I had to bisect twice to land on your patches, and I
+only emailed when I could see the change right before and right after your
+patch.  It would not surprise me at all if there's something else here that's
+causing us pain.
+> Thanks,
+> Valentin

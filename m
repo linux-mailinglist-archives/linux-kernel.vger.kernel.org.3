@@ -2,103 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF3846EC3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE4646EC3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240514AbhLIPxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240521AbhLIPxm (ORCPT
+        id S240533AbhLIPxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:53:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52086 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240513AbhLIPxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:53:42 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8264DC061B38
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:50:08 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id p13so5796911pfw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:50:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=opll92z9ujZP79gGmlECeOewebbDh/wvZxPmkdeuXT4=;
-        b=rheB96QWK2vg5pjLH0AnVJ3LgtUJc4iwNoQLktg4zUxCIt5jeSPLni54FphDF1KABr
-         bJjtQhqgF0II+TNOqGeH0XWP6ddvYPjg+yBrMdTzeYCgnYmuZLv68eNhq/LJE+uM9TB9
-         Z2Ix8Qyj9auuVsD8bCkvNkUS9Db5NPL3Eo4M8yzYEkXTSbMTrTwv5MXPwZMXqTBrdIWy
-         dKaIC4vrqwtNTM5l3F3wvqv2b0Ap+gzTS+RIEFWOZrqxpX4+kC94RvxzTa3RM613sTaU
-         hqjqLryWQceVqoe+bgonj/NTIrselTLgJQ2HQm4dEiz26qYf981kN3/PL0BYhx5i3WEE
-         aV9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=opll92z9ujZP79gGmlECeOewebbDh/wvZxPmkdeuXT4=;
-        b=N0JgIp4RlfyJNEbWbalHrWM2J49QpO2f5+tQ9Lz/CCUmktBBI5PffTPaU1vwXXD39R
-         fNBekdH3LohfXQ+o82sA22WgcmGuuMssNGKPH/dV8oNuk1WqMU/QfcIMBcqcoKns+d4N
-         //C0IA48X1FPUDLrKABc9nILou3orjYq0VGMpertCp+b3DWhA1iCq7plPXlHUxp8e1Tg
-         DTP/fpc1HynLPGv4rnbz0hi1bympRV7djnqBattLXgCooloX+D+WmPoqrxganmzH/NQd
-         HzTcltk6stt2KOgMklBSkbk+4L7+7Oe4J7CkiGzcCt0Vsv+Vfu3MIUq22cQa+vQ6xTBG
-         dzGg==
-X-Gm-Message-State: AOAM531onFavQ0XA7tkBImew0ArPAQ0OeXtGH5Kax4Hd3JRjA8cmWNlq
-        L6RJObcaZby+R3dR2bjSb3RHiqT1BhgFmw==
-X-Google-Smtp-Source: ABdhPJyeqnC/JhNrKE1UZQ5/PYeMe6yyTckxBZB2WNiBS+sShVoLVkpS1ylEYqibl6fhruQB3eltkA==
-X-Received: by 2002:a65:6251:: with SMTP id q17mr36669117pgv.403.1639065007856;
-        Thu, 09 Dec 2021 07:50:07 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id e14sm148295pfv.18.2021.12.09.07.50.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 07:50:07 -0800 (PST)
-Date:   Thu, 9 Dec 2021 15:50:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] KVM: x86: Rep string I/O WARN removal and test
-Message-ID: <YbIlq+RBx0f/wMiL@google.com>
-References: <20211025201311.1881846-1-seanjc@google.com>
- <YbGYuDgaqcRH/CZo@google.com>
- <57c83b62-675f-d368-e09f-7f97d3a7e3fb@redhat.com>
+        Thu, 9 Dec 2021 10:53:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED3ACB8252A;
+        Thu,  9 Dec 2021 15:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88CA0C341C7;
+        Thu,  9 Dec 2021 15:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639065009;
+        bh=tZ2ZAb/cPyN7CaJfQInb7ZtSfx6eVNe0/0YWt9bYZho=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=q+BojNGGjWbOmhGfCQBOTxjat5KUorhtSxP4hIwxcwWMbcmUbjGNvpnhyDv4DbqrE
+         pbIsvifWOU2/7DDWZcQAvbzerL/XHUCQ/pf920urBrcem+fJDNity1VP77oY5AvgOw
+         6lnijGXQOsBE59WlQslJsz/9RuA/5qBtNJesXaAy7D/JQss/w6LPI4/B5/fV6p+SxO
+         JS0Na+eICx5KNH6pQxg8lLWR2MLDZn6qLDDgsnyJyFhUsTNosfCkr75iAxUPvz4KCa
+         MAP0Vggs/+QxDufie5QikcsLshYbtr+uJHSSU9wpw6silgMme5BODedv3TIVorday/
+         k3gt+dNWMGATQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 559AD60A3C;
+        Thu,  9 Dec 2021 15:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57c83b62-675f-d368-e09f-7f97d3a7e3fb@redhat.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4] net: dsa: mv88e6xxx: error handling for serdes_power
+ functions
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163906500934.10006.3830083843668512578.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Dec 2021 15:50:09 +0000
+References: <20211209041552.9810-1-amhamza.mgc@gmail.com>
+In-Reply-To: <20211209041552.9810-1-amhamza.mgc@gmail.com>
+To:     Ameer Hamza <amhamza.mgc@gmail.com>
+Cc:     kabel@kernel.org, kuba@kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021, Paolo Bonzini wrote:
-> On 12/9/21 06:48, Sean Christopherson wrote:
-> > On Mon, Oct 25, 2021, Sean Christopherson wrote:
-> > > Remove a WARN that was added as part of the recent I/O overhaul to play
-> > > nice with SEV-ES string I/O.
-> > > 
-> > > For the record, my FIXME in lieu of a WARN was deliberate, as I suspected
-> > > userspace could trigger a WARN ;-)
-> > > 
-> > > Based on kvm/master, commit 95e16b4792b0 ("KVM: SEV-ES: go over the
-> > > sev_pio_data buffer in multiple passes if needed").
-> > > 
-> > > Sean Christopherson (2):
-> > >    KVM: x86: Don't WARN if userspace mucks with RCX during string I/O
-> > >      exit
-> > >    KVM: selftests: Add test to verify KVM doesn't explode on "bad" I/O
-> > > 
-> > >   arch/x86/kvm/x86.c                            |   9 +-
-> > >   tools/testing/selftests/kvm/.gitignore        |   1 +
-> > >   tools/testing/selftests/kvm/Makefile          |   1 +
-> > >   .../selftests/kvm/x86_64/userspace_io_test.c  | 114 ++++++++++++++++++
-> > >   4 files changed, 123 insertions(+), 2 deletions(-)
-> > >   create mode 100644 tools/testing/selftests/kvm/x86_64/userspace_io_test.c
-> > 
-> > Ping.  I completely forgot about this too, until I unintentionally ran a
-> > userspace_io_test that was lying around.
-> > 
-> 
-> Queued now, thanks.  I don't know if I want the honor of having KVM singled
-> out again on the -rc release message, but these are bugs nevertheless...
+Hello:
 
-Heh, you could always wait an -rc to send the fixes and hope Linus has a short
-memory :-D
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu,  9 Dec 2021 09:15:52 +0500 you wrote:
+> Added default case to handle undefined cmode scenario in
+> mv88e6393x_serdes_power() and mv88e6393x_serdes_power() methods.
+> 
+> Addresses-Coverity: 1494644 ("Uninitialized scalar variable")
+> Fixes: 21635d9203e1c (net: dsa: mv88e6xxx: Fix application of erratum 4.8 for 88E6393X)
+> Reviewed-by: Marek Behún <kabel@kernel.org>
+> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v4] net: dsa: mv88e6xxx: error handling for serdes_power functions
+    https://git.kernel.org/netdev/net/c/0416e7af2369
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

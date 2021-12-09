@@ -2,69 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 731FB46F753
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C5646F74D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbhLIXVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 18:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIXVO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 18:21:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E108C061746;
-        Thu,  9 Dec 2021 15:17:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 824A8B82713;
-        Thu,  9 Dec 2021 23:17:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE26C004DD;
-        Thu,  9 Dec 2021 23:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639091857;
-        bh=xYxQ2sEUPz3cBudfM1uJvOLpX3qfg8FKPJ7ncBv/TtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VHU8X+dXD8BtY0zE5jqDqzYVde6ql5TbhKMLFS07euizCxxxIp5Y2vUy04ai6RCqU
-         NS+xljLF0ipzmpWPKSqOQVmTpfRV07jKao0YrFAG+nCPwrNQmPGK8BK9iio980+808
-         7gCHf4K5JhULbG2hwkAM9T2EjdzdwqJpPxwt4YUt5JGdEdGUu8Q6MbQ5nxBgr5oqar
-         Y2Lv28JXc7OE3uJcA2dfQa96ezNInVY1EyNlNSJrRgTQIjh3usYy+51xaEMQpg4CPU
-         YOSnejBtCu3uNSopdD46lhOvL1eL/EihNFgh58d+Cc1F/WN1uNbQ2TjBAjWAdmwOhE
-         n6nN01et9uY9Q==
-Date:   Thu, 9 Dec 2021 15:17:35 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
+        id S234023AbhLIXUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 18:20:30 -0500
+Received: from mga14.intel.com ([192.55.52.115]:46974 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229760AbhLIXU3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 18:20:29 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238450446"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="238450446"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:16:55 -0800
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="543771280"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:16:55 -0800
+Date:   Thu, 9 Dec 2021 15:21:13 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Christoph Hellwig" <hch@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v3 2/3] block: don't delete queue kobject before its
- children
-Message-ID: <YbKOj3lBEdJLE8mr@sol.localdomain>
-References: <20211208013534.136590-1-ebiggers@kernel.org>
- <20211208013534.136590-3-ebiggers@kernel.org>
- <2a029611-10da-9114-b66b-345a68a5bd36@acm.org>
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 3/4] iommu/vt-d: Support PASID DMA for in-kernel usage
+Message-ID: <20211209152113.64b817b9@jacob-builder>
+In-Reply-To: <9f724b3a-6028-43d7-b4fc-d8a939e7b2cf@linux.intel.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <1638884834-83028-4-git-send-email-jacob.jun.pan@linux.intel.com>
+        <20211208132255.GS6385@nvidia.com>
+        <20211208111659.6de22e52@jacob-builder>
+        <9f724b3a-6028-43d7-b4fc-d8a939e7b2cf@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a029611-10da-9114-b66b-345a68a5bd36@acm.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 02:38:02PM -0800, Bart Van Assche wrote:
-> On 12/7/21 5:35 PM, Eric Biggers wrote:
-> > +	/* Now that all child objects were deleted, the queue can be deleted. */
+Hi Lu,
+
+On Thu, 9 Dec 2021 10:32:43 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+wrote:
+
+> On 12/9/21 3:16 AM, Jacob Pan wrote:
+> > Hi Jason,
+> > 
+> > On Wed, 8 Dec 2021 09:22:55 -0400, Jason Gunthorpe <jgg@nvidia.com>
+> > wrote: 
+> >> On Tue, Dec 07, 2021 at 05:47:13AM -0800, Jacob Pan wrote:  
+> >>> Between DMA requests with and without PASID (legacy), DMA mapping APIs
+> >>> are used indiscriminately on a device. Therefore, we should always
+> >>> match the addressing mode of the legacy DMA when enabling kernel
+> >>> PASID.
+> >>>
+> >>> This patch adds support for VT-d driver where the kernel PASID is
+> >>> programmed to match RIDPASID. i.e. if the device is in pass-through,
+> >>> the kernel PASID is also in pass-through; if the device is in IOVA
+> >>> mode, the kernel PASID will also be using the same IOVA space.
+> >>>
+> >>> There is additional handling for IOTLB and device TLB flush w.r.t. the
+> >>> kernel PASID. On VT-d, PASID-selective IOTLB flush is also on a
+> >>> per-domain basis; whereas device TLB flush is per device. Note that
+> >>> IOTLBs are used even when devices are in pass-through mode. ATS is
+> >>> enabled device-wide, but the device drivers can choose to manage ATS
+> >>> at per PASID level whenever control is available.
+> >>>
+> >>> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> >>>   drivers/iommu/intel/iommu.c | 105
+> >>> +++++++++++++++++++++++++++++++++++- drivers/iommu/intel/pasid.c |
+> >>> 7 +++ include/linux/intel-iommu.h |   3 +-
+> >>>   3 files changed, 113 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> >>> index 60253bc436bb..a2ef6b9e4bfc 100644
+> >>> +++ b/drivers/iommu/intel/iommu.c
+> >>> @@ -1743,7 +1743,14 @@ static void domain_flush_piotlb(struct
+> >>> intel_iommu *iommu, if (domain->default_pasid)
+> >>>   		qi_flush_piotlb(iommu, did, domain->default_pasid,
+> >>>   				addr, npages, ih);
+> >>> -
+> >>> +	if (domain->kernel_pasid && !domain_type_is_si(domain)) {
+> >>> +		/*
+> >>> +		 * REVISIT: we only do PASID IOTLB inval for FL, we
+> >>> could have SL
+> >>> +		 * for PASID in the future such as vIOMMU PT. this
+> >>> doesn't get hit.
+> >>> +		 */
+> >>> +		qi_flush_piotlb(iommu, did, domain->kernel_pasid,
+> >>> +				addr, npages, ih);
+> >>> +	}
+> >>>   	if (!list_empty(&domain->devices))
+> >>>   		qi_flush_piotlb(iommu, did, PASID_RID2PASID, addr,
+> >>> npages, ih); }
+> >>> @@ -5695,6 +5702,100 @@ static void intel_iommu_iotlb_sync_map(struct
+> >>> iommu_domain *domain, }
+> >>>   }
+> >>>   
+> >>> +static int intel_enable_pasid_dma(struct device *dev, u32 pasid)
+> >>> +{  
+> >>
+> >> This seems like completely the wrong kind of op.
+> >>
+> >> At the level of the iommu driver things should be iommu_domain centric
+> >>
+> >> The op should be
+> >>
+> >> int attach_dev_pasid(struct iommu_domain *domain, struct device *dev,
+> >> ioasid_t pasid)
+> >>
+> >> Where 'dev' purpose is to provide the RID
+> >>
+> >> The iommu_domain passed in should be the 'default domain' ie the table
+> >> used for on-demand mapping, or the passthrough page table.
+> >>  
+> > Makes sense. DMA API is device centric, iommu API is domain centric. It
+> > should be the common IOMMU code to get the default domain then pass to
+> > vendor drivers. Then we can enforce default domain behavior across all
+> > vendor drivers.
+> > i.e. 	
+> > 	dom = iommu_get_dma_domain(dev);
+> > 	attach_dev_pasid(dom, dev, pasid);
+> >   
+> >>> +	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
+> >>> +	struct device_domain_info *info;  
+> >>
+> >> I don't even want to know why an iommu driver is tracking its own
+> >> per-device state. That seems like completely wrong layering.
+> >>  
+> > This is for IOTLB and deTLB flush. IOTLB is flushed at per domain level,
+> > devTLB is per device.
+> > 
+> > For multi-device groups, this is a need to track how many devices are
+> > using the kernel DMA PASID.
+> > 
+> > Are you suggesting we add the tracking info in the generic layer? i.e.
+> > iommu_group.
+> > 
+> > We could also have a generic device domain info to replace what is in
+> > VT-d and FSL IOMMU driver, etc.  
 > 
-> Shouldn't the present tense be used above (were -> are)? Anyway:
+> The store place of per-device iommu driver private data has already been
+> standardized. The iommu core provides below interfaces for this purpose:
 > 
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> void dev_iommu_priv_set(struct device *dev, void *priv);
+> void *dev_iommu_priv_get(struct device *dev);
+> 
+> If we have anything generic among different vendor iommu drivers,
+> perhaps we could move them into dev->iommu.
+> 
+Yes, good suggestion. DMA PASID should be a generic feature, not suitable
+for the opaque private date. Can we agree on adding the following flag for
+devTLB invalidation?
 
-"deleted" is an action here, not a state.  I think it's fine as-is, but maybe
-you would prefer the following?
+@@ -379,6 +379,7 @@ struct dev_iommu {
+        struct iommu_fwspec             *fwspec;
+        struct iommu_device             *iommu_dev;
+        void                            *priv;
++       u32 pasid_dma_enabled           : 1;
+ };
 
-	/* Now that we've deleted all child objects, we can delete the queue. */
+For DMA PASID storage, can we store it in the iommu_domain instead of
+iommu_group? In the end, this PASID is only used for the default domain. It
+will be easier to refcount how many attached devices are using the PASID.
+Destroy the PASID when no devices in the group are using PASID DMA. IOTLB
+flush is per domain also.
 
-- Eric
+Jason, do you have guidance here?
+
+> Best regards,
+> baolu
+
+
+Thanks,
+
+Jacob

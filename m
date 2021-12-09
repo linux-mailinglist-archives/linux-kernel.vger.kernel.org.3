@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9303846EA46
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD8046EA4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238875AbhLIOu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbhLIOu4 (ORCPT
+        id S238889AbhLIOwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:52:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41285 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238887AbhLIOwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:50:56 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702C3C061746;
-        Thu,  9 Dec 2021 06:47:22 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id m6so605409lfu.1;
-        Thu, 09 Dec 2021 06:47:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FB6FkU9Ub0Mnerpu4sSrMAvDQxD5IPFH9I0yMO2mX38=;
-        b=ieFcHWWy/CcJtGSE1jtUOV3ItL81dg7fmRKEZi7xPPzBFVY37Mp6ZMUpOsyem/Wa1L
-         4D4U4oVgSexf+ACjuCpwQ0Qmnznp/8q0+kK3x7FxotxnrxQh/StEHGke17yfozYMT1Mo
-         EAe2tFhpaaQErTzUjYC3d/SKpxXlk0bVlyrACaLWq9/F3p4kdjzpUmoYV6BtL10B1yjF
-         /EHLqO0jr8eiFFMv+SA4FPnh8uKHXom8x2dMpWb73xsOxfqo6kV/QEczMhUhV3AoJ2jz
-         G5XfUKQOKCl5auzTYHyvPYZcYHbw371aVIIDtmGmF+CASWk+4wudcSV5wduxw162QWQq
-         RJ0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FB6FkU9Ub0Mnerpu4sSrMAvDQxD5IPFH9I0yMO2mX38=;
-        b=OescWmml0/x6lSg75O6DufSA0aPay3j8c5zYprNYRI7yahdjLeXq9P0kfEArpJza9K
-         JRx9IfkD33JOJHyincOothqRqFqqNehGC4aRzAqpuXWcIICZTTyVnLh+z8ycIWNTFd6B
-         4fJf71Bo4JR1YI36VhkBXDqcGnt3spuOvdHRX4O3rDutKpKrF6QgRzqU2uhbl7mxzi7l
-         AOIjaqzxiyyf2qdmATTxOdOMcydM0R4IBBH1+sB3T2jR1/bcFc6+oI4Q0sBgkNgq1DLV
-         GjW2/3ITITKfdjIHmG7YNibBKvV3G3RJ6iFOjdij7doLuTwDjiC2mZlEdoNFRIakHq9n
-         sI9Q==
-X-Gm-Message-State: AOAM530MLLmu38+U/2dhTbTGN5cHzrRrG814lDmLO+VQcXtxZSJQ7QXE
-        5AIROTy97MWWBvOYuhWeEQwciG5gf8k=
-X-Google-Smtp-Source: ABdhPJwDEOi37hF+qJvO27fOFsc4jz56KQd1J7cFcn4v7akIUINwKPqpT4s1QxBIu4a9QLxlC8Z74g==
-X-Received: by 2002:a05:6512:31d1:: with SMTP id j17mr6262758lfe.395.1639061240018;
-        Thu, 09 Dec 2021 06:47:20 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id c25sm3292lja.38.2021.12.09.06.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 06:47:19 -0800 (PST)
-Subject: Re: [PATCH v8 6/6] iommu/tegra-smmu: Add pagetable mappings to
- debugfs
-To:     Nicolin Chen <nicolinc@nvidia.com>, thierry.reding@gmail.com,
-        joro@8bytes.org, will@kernel.org
-Cc:     vdumpa@nvidia.com, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Thu, 9 Dec 2021 09:52:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639061315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q9ohOzueGM6Q6CzM/nc70ucDOBZyHf1ga4ugF012GdQ=;
+        b=FGAE+0VwoHpdcyMslmLgggllA5rPWrRgbbyMxXJiu/jlzUpTqmHjs9MD9Aqqy2B3zvL6AA
+        J3/6Z2SAwFIM7tE8AgreKMYhI+5i48hpONxzzFvGLd+6Mt8fjzjz18VVHouLDQSyKUXMt6
+        a7l21l4LwNXDDj0wQl9Zv07Ss/CTam0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-568-bzWYdvgnOhOv5cycTJfqQQ-1; Thu, 09 Dec 2021 09:48:32 -0500
+X-MC-Unique: bzWYdvgnOhOv5cycTJfqQQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2462A343D8;
+        Thu,  9 Dec 2021 14:48:31 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A1B760BF1;
+        Thu,  9 Dec 2021 14:48:26 +0000 (UTC)
+Message-ID: <346f5a5e93077ba20188a9b0e67bb3a44e2cad48.camel@redhat.com>
+Subject: Re: [PATCH v3 00/26] KVM: x86: Halt and APICv overhaul
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-References: <20211209073822.26728-1-nicolinc@nvidia.com>
- <20211209073822.26728-7-nicolinc@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <5713902d-823b-63ca-00c9-aa6c64c1af41@gmail.com>
-Date:   Thu, 9 Dec 2021 17:47:18 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Date:   Thu, 09 Dec 2021 16:48:25 +0200
+In-Reply-To: <3bf8d500-0c1e-92dd-20c8-c3c231d2cbed@redhat.com>
+References: <20211208015236.1616697-1-seanjc@google.com>
+         <39c885fc6455dd0aa2f8643e725422851430f9ec.camel@redhat.com>
+         <8c6c38f3cc201e42629c3b8e5cf8cdb251c9ea8d.camel@redhat.com>
+         <YbFHsYJ5ua3J286o@google.com>
+         <3bf8d500-0c1e-92dd-20c8-c3c231d2cbed@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-In-Reply-To: <20211209073822.26728-7-nicolinc@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-09.12.2021 10:38, Nicolin Chen пишет:
-> @@ -545,6 +719,15 @@ static void tegra_smmu_detach_as(struct tegra_smmu *smmu,
->  		if (group->swgrp != swgrp)
->  			continue;
->  		group->as = NULL;
-> +
-> +		if (smmu->debugfs_mappings) {
+On Thu, 2021-12-09 at 15:29 +0100, Paolo Bonzini wrote:
+> On 12/9/21 01:02, Sean Christopherson wrote:
+> > RDX, a.k.a. ir_data is NULL.  This check in svm_ir_list_add()
+> > 
+> > 	if (pi->ir_data && (pi->prev_ga_tag != 0)) {
+> > 
+> > implies pi->ir_data can be NULL, but neither avic_update_iommu_vcpu_affinity()
+> > nor amd_iommu_update_ga() check ir->data for NULL.
+> > 
+> > amd_ir_set_vcpu_affinity() returns "success" without clearing pi.is_guest_mode
+> > 
+> > 	/* Note:
+> > 	 * This device has never been set up for guest mode.
+> > 	 * we should not modify the IRTE
+> > 	 */
+> > 	if (!dev_data || !dev_data->use_vapic)
+> > 		return 0;
+> > 
+> > so it's plausible svm_ir_list_add() could add to the list with a NULL pi->ir_data.
+> > 
+> > But none of the relevant code has seen any meaningful changes since 5.15, so odds
+> > are good I broke something :-/
 
-Do we really need this check?
+Doesn't reproduce here yet even with my iommu changes :-(
+Oh well.
 
-Looks like all debugfs_create_dir() usages in this driver are incorrect,
-that function never returns NULL. Please fix this.
+Best regards,
+	Maxim Levitsky
 
-> +			struct dentry *d;
 
-The file name is wrong here.
+> > 
+> 
+> Ok, I'll take this.
+> 
+> Paolo
+> 
 
-			if (group->soc)
-				name = group->soc->name;
-			else
-				name = group->swgrp->name;
 
-> +			d = debugfs_lookup(group->swgrp->name,
-> +					   smmu->debugfs_mappings);
-> +			debugfs_remove(d);
-> +		}
-
-This now looks problematic to me. You created debugfs file when the
-first member of the shared group was attached to AS, now you remove this
-file when any device is detached. The shared debugfs file should be
-refcounted or something.

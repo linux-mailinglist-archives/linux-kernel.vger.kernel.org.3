@@ -2,149 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E75F46E234
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354A846E23E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbhLIF5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S232621AbhLIGJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 01:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbhLIF5z (ORCPT
+        with ESMTP id S230223AbhLIGJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:57:55 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515ADC061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:54:22 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id l64so4117881pgl.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:54:22 -0800 (PST)
+        Thu, 9 Dec 2021 01:09:31 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB934C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 22:05:58 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id q2-20020a056a00084200b004a2582fcec1so2994644pfk.15
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 22:05:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VrQSge7TRWDKkJ/NvI+IySV465glHv+ZocrZlO0KKLc=;
-        b=GwxsWc9TXhDApOFEL/JXhjsV9zSbjJeT0oLyTkyB6ZihumuUGdydtg8KBz0U/BPemU
-         PjDBnSYoxW96WhtWCFQwAdCivrglko3agPb3OzbCtWAbWnKytB1JimtDtnP6iU+ujBL+
-         LTT9w4xm2Xv0YXmzAgJZkFs6RDlsEZ3C7BHoc=
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=qwv+MtWdNXPfGgD9RjFjKocfKOgtRSiMi4c3d+DlY6s=;
+        b=KAb5WLPeO2WPBeGDm72DwNt9bn9uz0npWT6Lz2kndBUDP5ioM+Wo3oMPS2FrabijBc
+         ALd5ppM3JvDbBrhgkMaIscZWDOukdMhZ0fW3l4yqp2grICT0fVp1n316XPpGYEUqlOgn
+         i4tB12FIkI1fACJPWt+4XoQE48a3NGbU+mjWnVMGwuhKY2mohaX6QG7sz5497J/D1LBp
+         cv7U8z0HNKpl9yULNRgCKQCVxvK80+3Bo/T53xS4aC+S58+QTzgnqEUaSd9uQ4BAObA5
+         RJ41sjcLmPpuBMqIGgUBAccj3cZ55+e3sU5hvMTQUwVNmknprSQE5qAP+n/T8yUJrMkc
+         Xi4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VrQSge7TRWDKkJ/NvI+IySV465glHv+ZocrZlO0KKLc=;
-        b=6diU1l7cdpnFczFGiCGip3jMQWPnrnEUigk485wNdXbu2zZcg6cYmp+ZxrkyW0HGA0
-         JbBWYqgFNrqfcJBaQhdHw2wPkGdoxDubPT7wPtb/FaLwHlK+0W2TW3/fCctUq/nLOw4M
-         8tvywI8Xqiz1xZboWb85t3Lx5Bgew+hx4ubD8HVOU4g2cvmb8rMkCe2VmvpMVTU37pPt
-         050Miq30apa5FJbO6yXoux10ar6HhZyPCN+2YXSve7tljgPa1YDosLW1YFciRtr8iA4W
-         hz2s1IzPjLjBoSWBdnCD/RfnYRjEAa088SwvI2KgXLKLl64owk6fy//sDsTBUoYZvpuc
-         ddPA==
-X-Gm-Message-State: AOAM532XxXMAlWo3LdE1wwJriLVGCjTvk/r9VAkIf5nlJXRe2SF+ZgzL
-        5Nu7IVwd65ztf58Ol6ICJb0epC0HGBhhDQ==
-X-Google-Smtp-Source: ABdhPJw8fMNaqi867+Q0o7P8PwLjqLLz+a8UL0QwyJXwzAIkjkGfkpnsGWaw+UK72GiByB5F9hC9CQ==
-X-Received: by 2002:a63:2212:: with SMTP id i18mr32303736pgi.586.1639029261855;
-        Wed, 08 Dec 2021 21:54:21 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i185sm5416946pfg.80.2021.12.08.21.54.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 21:54:21 -0800 (PST)
-Date:   Wed, 8 Dec 2021 21:54:20 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2
- register
-Message-ID: <202112082143.3BE8ABAE@keescook>
-References: <20211203084354.3105253-1-keescook@chromium.org>
- <87o85r4a4f.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o85r4a4f.fsf@intel.com>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=qwv+MtWdNXPfGgD9RjFjKocfKOgtRSiMi4c3d+DlY6s=;
+        b=GP0sDMrveVo3o1E5XuT8NjYvksVMKeLuUJZKtBIUfX0jotdmH1n1xalV1/apEaO4Nb
+         OwaHK3CfJnw0VlI77gzsLnmCl8zGwJ7ebU27EcIpR4z9RL9h9hxusmNPE8tyi02ZKGvS
+         8aLvPUHibXf+aPwgOXfs+i3P60zioxpOIzyPZbyM0UUoqrLn0aKMPflJfxg1IicS5ocm
+         jymQFpOxffuiwC22Or7rppmBTNT8SZxa8Nd2OT9IGq59QB+3IWRWki1eZWwYEAkSGh9i
+         +owGeE1Ae9WJshWhxVj5WIxykdmHKc6N/xufKG9DWo0D7UKv1H2MPfu2RgVdPsXyYblK
+         /apw==
+X-Gm-Message-State: AOAM533GsDp2OsVIezhwod9jkYtGZ24uINeeSURk8stcsE0fjVLPhh9K
+        1UFKnzbPFv5na9MpVWG7THAewKmvAWs=
+X-Google-Smtp-Source: ABdhPJx9YUac7XYCh1+9fs9ZzPE/LZaP2GhNXiFEJe6XSs1otNkJDPrim2tRw4TXykCJD6tZVXCK8tPCZIc=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:903:1208:b0:143:e4e9:4ce3 with SMTP id
+ l8-20020a170903120800b00143e4e94ce3mr64543483plh.21.1639029958169; Wed, 08
+ Dec 2021 22:05:58 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu,  9 Dec 2021 06:05:45 +0000
+Message-Id: <20211209060552.2956723-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH 0/7]  KVM: x86/mmu: Obsolete root shadow page fix
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:19:28PM +0200, Jani Nikula wrote:
-> On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
-> > The link_status array was not large enough to read the Adjust Request
-> > Post Cursor2 register. Adjust the size to include it. Found with a
-> > -Warray-bounds build:
-> >
-> > drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
-> > drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
-> >    59 |         return link_status[r - DP_LANE0_1_STATUS];
-> >       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
-> >   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-> >       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
-> published in 2014, and Tegra is the only user of
-> drm_dp_get_adjust_request_post_cursor().
-> 
-> Instead of bumping the link status read size from 6 to 11 for all
-> drivers I'd much rather see some other (maybe Tegra specific) solution
-> to this.
+Patch 01 fixes a complete braino and lack of testing :-(
 
-Hmmm... Well given this is currently non-functional on Tegra (and is an
-OOB memory read), how about just removing it entirely?
+The rest of the series is an enhancement to address a performance issue
+I encountered when implementing the aforementioned fix.  I wanted to WARN
+if KVM_REQ_MMU_LOAD was pending with a valid root shadow page, but it
+fired like crazy because the roots in prev_roots have an elevated
+root_count and thus can trigger KVM_REQ_MMU_LOAD when the guest zaps a
+cached root's corresponding PGD (in the guest).
 
-diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
-index 23f9073bc473..c9528aa62c9c 100644
---- a/drivers/gpu/drm/drm_dp_helper.c
-+++ b/drivers/gpu/drm/drm_dp_helper.c
-@@ -144,16 +144,6 @@ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
- }
- EXPORT_SYMBOL(drm_dp_get_adjust_tx_ffe_preset);
- 
--u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
--					 unsigned int lane)
--{
--	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
--	u8 value = dp_link_status(link_status, offset);
--
--	return (value >> (lane << 1)) & 0x3;
--}
--EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
--
- static int __8b10b_clock_recovery_delay_us(const struct drm_dp_aux *aux, u8 rd_interval)
- {
- 	if (rd_interval > 4)
-diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
-index 70dfb7d1dec5..bb5bfa93950f 100644
---- a/drivers/gpu/drm/tegra/dp.c
-+++ b/drivers/gpu/drm/tegra/dp.c
-@@ -559,8 +559,7 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
- 			drm_dp_get_adjust_request_pre_emphasis(status, i) >>
- 				DP_TRAIN_PRE_EMPHASIS_SHIFT;
- 
--		adjust->post_cursor[i] =
--			drm_dp_get_adjust_request_post_cursor(status, i);
-+		adjust->post_cursor[i] = 0;
- 	}
- }
- 
-diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-index 30359e434c3f..28378db676c8 100644
---- a/include/drm/drm_dp_helper.h
-+++ b/include/drm/drm_dp_helper.h
-@@ -1528,8 +1528,6 @@ u8 drm_dp_get_adjust_request_pre_emphasis(const u8 link_status[DP_LINK_STATUS_SI
- 					  int lane);
- u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
- 				   int lane);
--u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
--					 unsigned int lane);
- 
- #define DP_BRANCH_OUI_HEADER_SIZE	0xc
- #define DP_RECEIVER_CAP_SIZE		0xf
+Patches 2+ haven't been super well tested, I'll beat on 'em more and
+holler if anything pops up.
 
+Sean Christopherson (7):
+  KVM: x86: Retry page fault if MMU reload is pending and root has no sp
+  KVM: x86: Invoke kvm_mmu_unload() directly on CR4.PCIDE change
+  KVM: Drop kvm_reload_remote_mmus(), open code request in x86 users
+  KVM: x86/mmu: Zap only obsolete roots if a root shadow page is zapped
+  KVM: s390: Replace KVM_REQ_MMU_RELOAD usage with arch specific request
+  KVM: Drop KVM_REQ_MMU_RELOAD and update vcpu-requests.rst
+    documentation
+  KVM: WARN if is_unsync_root() is called on a root without a shadow
+    page
 
-Or maybe do a long link status read in Tegra only?
+ Documentation/virt/kvm/vcpu-requests.rst |  7 +-
+ arch/s390/include/asm/kvm_host.h         |  2 +
+ arch/s390/kvm/kvm-s390.c                 |  8 +-
+ arch/s390/kvm/kvm-s390.h                 |  2 +-
+ arch/x86/include/asm/kvm_host.h          |  2 +
+ arch/x86/kvm/mmu.h                       |  1 +
+ arch/x86/kvm/mmu/mmu.c                   | 98 +++++++++++++++++++++---
+ arch/x86/kvm/x86.c                       | 15 ++--
+ include/linux/kvm_host.h                 |  4 +-
+ virt/kvm/kvm_main.c                      |  5 --
+ 10 files changed, 107 insertions(+), 37 deletions(-)
 
 -- 
-Kees Cook
+2.34.1.400.ga245620fadb-goog
+

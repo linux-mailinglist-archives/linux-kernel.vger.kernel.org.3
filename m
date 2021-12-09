@@ -2,90 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EA146EC83
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A2446EC8C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236633AbhLIQIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236647AbhLIQIH (ORCPT
+        id S240773AbhLIQKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:10:33 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:40026 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236712AbhLIQKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:08:07 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CDAC061746;
-        Thu,  9 Dec 2021 08:04:34 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id m12so9711089ljj.6;
-        Thu, 09 Dec 2021 08:04:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=VyNNZFntqq/7S368iziv68PH8JNo+/JFrth8MiQPnN0=;
-        b=IA7AoXxTmmSQDOR+7JKZHyzbrQBtcmUHlvjNOsI6VhwUlOOkWTKICCOXFWDtkJ5+9I
-         zmOVovEwnkRPBJXuZusPYkhCOLHcCgFyE3xc/D0BrQ00tfWhCmYJJmylb1/Y6fqP08r4
-         VtKTR9+q0cQqyn7osxibjswsFTnwV8iUVhUnqyGnYlwBNoMD36ugcWUATRYKTXR+EOBQ
-         9Knz1bXER1N69YwSURq1/WRV9wNnH1jlUXPvem/b6QE7oAMoy997fsL6Z/0qTpEX9nmS
-         INuhBlkVetXa9YG9Rht9GQgAMN1x5HZzyYFVQZm2Ut1XbKhxW0rDJG6vAPYZ3624XIpL
-         vRfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VyNNZFntqq/7S368iziv68PH8JNo+/JFrth8MiQPnN0=;
-        b=BIfp7Z8UIxalEDd5i/jZPGZ5p4pCjFVDONr/UxhCWVwB56+xPXC5tmISEfGwqCQTiu
-         fbn0Fg+C/mxD5MSWXmY6HWQ/xqNV6dWCs9y9Hxx8B3325XoG5UAQW5XjCV/RCSAElVmc
-         m9kWTqZKUvRZkmlb4q9eNKCg+T5sscr3QSc3FkOf3xZCVJeVtt9+J5q5TUSMkmjbEeSx
-         IZqOgt4wOj7huKKWlU81PaSVMp47Lcq8inb4mAzmUCyOdJ00NxYzxiBIpfQ7vS9vRGKa
-         AjYJ6isLyQ/u28fYKNluZ/gMHNg61C6Cq8nh9sUClN3u+TtPJma481MPZ6n8b4GjBMJZ
-         SsHA==
-X-Gm-Message-State: AOAM530gfTJ1Smcz6l5vR1pDzOCZx9JUQr7j76C9h7TUDwAL8wmUChog
-        5BhDLwqvdC6kaF4OZWqL888XBUpghDM=
-X-Google-Smtp-Source: ABdhPJyjIVIwTFb/jRVG1s/HtU+6iq+SlVSeTRgCyq6BgyCqa/f3O4tShJ7SxaDdE4z6Q6IQHg5qYA==
-X-Received: by 2002:a2e:aa14:: with SMTP id bf20mr7025963ljb.376.1639065872006;
-        Thu, 09 Dec 2021 08:04:32 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id a23sm16158ljh.140.2021.12.09.08.04.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 08:04:31 -0800 (PST)
-Subject: Re: [PATCH 0/2] Add SMBus features to Tegra I2C
-To:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
-        sumit.semwal@linaro.org, thierry.reding@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <e3deea6a-3854-e58c-0d27-602413f2a496@gmail.com>
-Date:   Thu, 9 Dec 2021 19:04:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 9 Dec 2021 11:10:32 -0500
+Date:   Thu, 09 Dec 2021 16:06:56 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639066018;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xmvk0aKvcBguPkMWpUCWxNUDlvgz/NGfxn9XQd9DMJo=;
+        b=25dQZSWa9lfmbO/4RZ++TZA8GukREVZQKc+wD2stwlw9o/V2qePOeS21w+tDpGPo3qsifI
+        YTrw/sxWycgPu9qr4Lpqn3ZACm5frcsM9uJ448SmBckbWgoOjwXQ26I4lU6eLbNUNWk7w4
+        b54v8+KLgkcDcJBUpXtqP54D6YcTe+lQZrPv+t0tuVycRw2iDKc0tQ0xqrQ4ns2LpW4d68
+        tle9xBlaoObHd4rBw3647TC/v05EXxjBl2YAPRm8RO75P/3SEMo163sIQcK3uVjP0DW91X
+        FmhE2lS6wQnyIaCIWbgrb9XGDRDU5WwXZ0Ds1L4BgEEcaM9qZ0XGV7zzr2mUtQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639066018;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xmvk0aKvcBguPkMWpUCWxNUDlvgz/NGfxn9XQd9DMJo=;
+        b=QIxMXFKb4+roK6fnL40/8d2ViN6qvA2Ki1yEypSFO4bd1/t1xM0d2LdUUWs5Hhg2eHSC1d
+        jW9CZHAM6NAJ4zBg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/msi] PCI/MSI: Move descriptor counting on allocation fail
+ to the legacy code
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Juergen Gross <jgross@suse.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211206210225.101336873@linutronix.de>
+References: <20211206210225.101336873@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Message-ID: <163906601682.11128.14029351838341914597.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-09.12.2021 18:05, Akhil R пишет:
-> Add support for SMBus Alert and SMBus block read functions to
-> i2c-tegra driver
-> 
-> Akhil R (2):
->   dt-bindings: i2c: tegra: Add SMBus feature properties
->   i2c: tegra: Add SMBus block read and SMBus alert functions
-> 
->  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt |  4 ++
->  drivers/i2c/busses/i2c-tegra.c                     | 54 +++++++++++++++++++++-
->  2 files changed, 57 insertions(+), 1 deletion(-)
-> 
+The following commit has been merged into the irq/msi branch of tip:
 
-How this was tested? This series must include the DT patch. If there is
-no real user in upstream for this feature, then I don't think that we
-should bother at all about it.
+Commit-ID:     60bf9b33c82c0e040a98272d7ff4f5a52e7469d6
+Gitweb:        https://git.kernel.org/tip/60bf9b33c82c0e040a98272d7ff4f5a52e7469d6
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Mon, 06 Dec 2021 23:28:00 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 09 Dec 2021 11:52:23 +01:00
+
+PCI/MSI: Move descriptor counting on allocation fail to the legacy code
+
+The irqdomain code already returns the information. Move the loop to the
+legacy code.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20211206210225.101336873@linutronix.de
+
+---
+ drivers/pci/msi/legacy.c | 20 +++++++++++++++++++-
+ drivers/pci/msi/msi.c    | 19 +------------------
+ 2 files changed, 20 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/pci/msi/legacy.c b/drivers/pci/msi/legacy.c
+index 023de20..d52cff1 100644
+--- a/drivers/pci/msi/legacy.c
++++ b/drivers/pci/msi/legacy.c
+@@ -50,9 +50,27 @@ void __weak arch_teardown_msi_irqs(struct pci_dev *dev)
+ 	}
+ }
+ 
++static int pci_msi_setup_check_result(struct pci_dev *dev, int type, int ret)
++{
++	struct msi_desc *entry;
++	int avail = 0;
++
++	if (type != PCI_CAP_ID_MSIX || ret >= 0)
++		return ret;
++
++	/* Scan the MSI descriptors for successfully allocated ones. */
++	for_each_pci_msi_entry(entry, dev) {
++		if (entry->irq != 0)
++			avail++;
++	}
++	return avail ? avail : ret;
++}
++
+ int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
+ {
+-	return arch_setup_msi_irqs(dev, nvec, type);
++	int ret = arch_setup_msi_irqs(dev, nvec, type);
++
++	return pci_msi_setup_check_result(dev, type, ret);
+ }
+ 
+ void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
+diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+index 443a16c..8b4d529 100644
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -609,7 +609,7 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 
+ 	ret = pci_msi_setup_msi_irqs(dev, nvec, PCI_CAP_ID_MSIX);
+ 	if (ret)
+-		goto out_avail;
++		goto out_free;
+ 
+ 	/* Check if all MSI entries honor device restrictions */
+ 	ret = msi_verify_entries(dev);
+@@ -634,23 +634,6 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 	pcibios_free_irq(dev);
+ 	return 0;
+ 
+-out_avail:
+-	if (ret < 0) {
+-		/*
+-		 * If we had some success, report the number of IRQs
+-		 * we succeeded in setting up.
+-		 */
+-		struct msi_desc *entry;
+-		int avail = 0;
+-
+-		for_each_pci_msi_entry(entry, dev) {
+-			if (entry->irq != 0)
+-				avail++;
+-		}
+-		if (avail != 0)
+-			ret = avail;
+-	}
+-
+ out_free:
+ 	free_msi_irqs(dev);
+ 

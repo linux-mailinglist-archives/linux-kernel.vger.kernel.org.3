@@ -2,92 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AB346F6E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B453046F6E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbhLIWeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:34:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:34878 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232658AbhLIWen (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:34:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E4DBD6E;
-        Thu,  9 Dec 2021 14:31:09 -0800 (PST)
-Received: from bogus (unknown [10.57.33.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 936383F73D;
-        Thu,  9 Dec 2021 14:31:06 -0800 (PST)
-Date:   Thu, 9 Dec 2021 22:31:03 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 3/3] arm64: dts: imx8qxp: add cache info
-Message-ID: <20211209223103.br2scdg2j6gpfnpl@bogus>
-References: <20211112062604.3485365-1-peng.fan@oss.nxp.com>
- <20211112062604.3485365-4-peng.fan@oss.nxp.com>
- <CAL_JsqLD6=a==nx=aXjqRwQ3xTamrPVk8LwmqygC_q0UCrL9iw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqLD6=a==nx=aXjqRwQ3xTamrPVk8LwmqygC_q0UCrL9iw@mail.gmail.com>
+        id S233732AbhLIWfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:35:54 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:58916 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbhLIWfv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 17:35:51 -0500
+Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 63F1520B7179;
+        Thu,  9 Dec 2021 14:32:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 63F1520B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1639089137;
+        bh=o+cGdXXhQuS2I5Y5nz5IKpsKhsK9lllN7BpljpAAaww=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i2WjXWcgNdiXD+UTjZWea3+7prLRtynfIK1BBtPGJJFhq34IrCblUI/UyfMaglYxA
+         5coblM/zFCtuCTP9cge6qI0SqrhC0ouyHbeKguyhSTW3ZfzlncdnJNIltCqHVHbdGA
+         uV0yFO4MHomcroeyTbUjCSkYrgmA2kuimTpiF2k8=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        beaub@linux.microsoft.com
+Subject: [PATCH v7 00/13] user_events: Enable user processes to create and write to trace events
+Date:   Thu,  9 Dec 2021 14:31:57 -0800
+Message-Id: <20211209223210.1818-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 04:15:09PM -0600, Rob Herring wrote:
-> On Fri, Nov 12, 2021 at 12:27 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
-> >
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > i.MX8QXP A35 Cluster has 32KB Icache, 32KB Dcache and 512KB L2 Cache
-> >  - Icache is 2-way set associative
-> >  - Dcache is 4-way set associative
-> >  - L2cache is 8-way set associative
-> >  - Line size are 64bytes
-> >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 28 ++++++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > index 617618edf77e..dbec7c106e0b 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > @@ -58,6 +58,12 @@ A35_0: cpu@0 {
-> >                         compatible = "arm,cortex-a35";
-> >                         reg = <0x0 0x0>;
-> >                         enable-method = "psci";
-> > +                       i-cache-size = <0x8000>;
-> > +                       i-cache-line-size = <64>;
-> > +                       i-cache-sets = <256>;
-> > +                       d-cache-size = <0x8000>;
-> > +                       d-cache-line-size = <64>;
-> > +                       d-cache-sets = <128>;
-> 
-> Why do you need all this for the L1? Isn't it discoverable with cache
-> ID registers?
-> 
+User mode processes that wish to use trace events to get data into
+ftrace, perf, eBPF, etc are limited to uprobes today. The user events
+features enables an ABI for user mode processes to create and write to
+trace events that are isolated from kernel level trace events. This
+enables a faster path for tracing from user mode data as well as opens
+managed code to participate in trace events, where stub locations are
+dynamic.
 
-No, not after the following:
-Commit a8d4636f96ad ("arm64: cacheinfo: Remove CCSIDR-based cache information probing")
+User processes often want to trace only when it's useful. To enable this
+a set of pages are mapped into the user process space that indicate the
+current state of the user events that have been registered. User
+processes can check if their event is hooked to a trace/probe, and if it
+is, emit the event data out via the write() syscall.
 
-which removed ID register based cache probing and we now expect to obtain
-the same via DT/ACPI unfortunately.
+Two new files are introduced into tracefs to accomplish this:
+user_events_status - This file is mmap'd into participating user mode
+processes to indicate event status.
 
+user_events_data - This file is opened and register/delete ioctl's are
+issued to create/open/delete trace events that can be used for tracing.
+
+The typical scenario is on process start to mmap user_events_status. Processes
+then register the events they plan to use via the REG ioctl. The ioctl reads
+and updates the passed in user_reg struct. The status_index of the struct is
+used to know the byte in the status page to check for that event. The
+write_index of the struct is used to describe that event when writing out to
+the fd that was used for the ioctl call. The data must always include this
+index first when writing out data for an event. Data can be written either by
+write() or by writev().
+
+For example, in memory:
+int index;
+char data[];
+
+Psuedo code example of typical usage:
+struct user_reg reg;
+
+int page_fd = open("user_events_status", O_RDWR);
+char *page_data = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, page_fd, 0);
+close(page_fd);
+
+int data_fd = open("user_events_data", O_RDWR);
+
+reg.size = sizeof(reg);
+reg.name_args = (__u64)"test";
+
+ioctl(data_fd, DIAG_IOCSREG, &reg);
+int status_id = reg.status_index;
+int write_id = reg.write_index;
+
+struct iovec io[2];
+io[0].iov_base = &write_id;
+io[0].iov_len = sizeof(write_id);
+io[1].iov_base = payload;
+io[1].iov_len = sizeof(payload);
+
+if (page_data[status_id])
+	writev(data_fd, io, 2);
+
+User events are also exposed via the dynamic_events tracefs file for
+both create and delete. Current status is exposed via the user_events_status
+tracefs file.
+
+Simple example to register a user event via dynamic_events:
+	echo u:test >> dynamic_events
+	cat dynamic_events
+	u:test
+
+If an event is hooked to a probe, the probe hooked shows up:
+	echo 1 > events/user_events/test/enable
+	cat user_events_status
+	1:test # Used by ftrace
+
+	Active: 1
+	Busy: 1
+	Max: 4096
+
+If an event is not hooked to a probe, no probe status shows up:
+	echo 0 > events/user_events/test/enable
+	cat user_events_status
+	1:test
+
+	Active: 1
+	Busy: 0
+	Max: 4096
+
+Users can describe the trace event format via the following format:
+	name[:FLAG1[,FLAG2...] [field1[;field2...]]
+
+Each field has the following format:
+	type name
+
+Example for char array with a size of 20 named msg:
+	echo 'u:detailed char[20] msg' >> dynamic_events
+	cat dynamic_events
+	u:detailed char[20] msg
+
+Data offsets are based on the data written out via write() and will be
+updated to reflect the correct offset in the trace_event fields. For dynamic
+data it is recommended to use the new __rel_loc data type. This type will be
+the same as __data_loc, but the offset is relative to this entry. This allows
+user_events to not worry about what common fields are being inserted before
+the data.
+
+The above format is valid for both the ioctl and the dynamic_events file.
+
+V2:
+Fixed kmalloc vs kzalloc for register_page.
+Renamed user_event_mmap to user_event_status.
+Renamed user_event prefix from ue to u.
+Added seq_* operations to user_event_status to enable cat output.
+Aligned field parsing to synth_events format (+ size specifier for
+custom/user types).
+Added uapi header user_events.h to align kernel and user ABI definitions.
+
+V3:
+Updated ABI to handle single FD into many events via an int header.
+Added iovec/writev support to enable int header without payload changes.
+Updated bpf context to describe if data is coming from user, kernel or
+raw iovec.
+Added flag support for registering event, allows forcing BPF to always
+recieve the direct iovecs for sensitive code paths that do not want
+copies.
+
+V4:
+Moved to struct user_reg for registering events via ioctl.
+Added unit tests for ftrace, dyn_events and perf integration.
+Added print_fmt generation and proper dyn_events matching statements.
+Reduced time in preemption disabled paths.
+Added documentation file.
+Pre-fault in data when preemption is enabled and use no-fault copy in probes.
+Fixed MIPs missing PAGE_READONLY define.
+
+V5:
+Rebase to linux-trace for-next branch.
+Added sample code into samples/user_events.
+Switched to str_has_prefix in various locations.
+Allow hex in array sizes and ensure reasonable sizes are used.
+Moved lifetime of name buffer when parsing to the caller for failure paths.
+Fixed documentation nits and index.
+Ensure event isn't busy before freeing through dyn_events.
+Properly handle failure case for ftrace and perf in fault cases for buffers.
+Ensure write data is over min size and null terminated for dynamic arrays.
+
+V6:
+Fixed endian issue with dyn loc decoding (use u32).
+Fixed size_t conversion warning on hexagon arch (min vs min_t).
+Handle cases for __get_str vs __get_rel_str in print_fmt generation.
+Add additional comments around various event member lifetimes.
+Reduced max field array size to 1K.
+
+V7:
+Acquire reg_mutex during release, ensure refs cannot change under any situation.
+Remove default n from Kconfig.
+Move from static 0644 mode to TRACE_MODE_WRITE.
+
+Beau Belgrave (13):
+  user_events: Add UABI header for user access to user_events
+  user_events: Add minimal support for trace_event into ftrace
+  user_events: Add print_fmt generation support for basic types
+  user_events: Handle matching arguments from dyn_events
+  user_events: Add basic perf and eBPF support
+  user_events: Add self-test for ftrace integration
+  user_events: Add self-test for dynamic_events integration
+  user_events: Add self-test for perf_event integration
+  user_events: Optimize writing events by only copying data once
+  user_events: Add documentation file
+  user_events: Add sample code for typical usage
+  user_events: Validate user payloads for size and null termination
+  user_events: Use __get_rel_str for relative string fields
+
+ Documentation/trace/index.rst                 |    1 +
+ Documentation/trace/user_events.rst           |  195 ++
+ include/uapi/linux/user_events.h              |   71 +
+ kernel/trace/Kconfig                          |   14 +
+ kernel/trace/Makefile                         |    1 +
+ kernel/trace/trace_events_user.c              | 1606 +++++++++++++++++
+ samples/user_events/Makefile                  |    5 +
+ samples/user_events/example.c                 |   91 +
+ tools/testing/selftests/user_events/Makefile  |    9 +
+ .../testing/selftests/user_events/dyn_test.c  |  130 ++
+ .../selftests/user_events/ftrace_test.c       |  454 +++++
+ .../testing/selftests/user_events/perf_test.c |  168 ++
+ tools/testing/selftests/user_events/settings  |    1 +
+ 13 files changed, 2746 insertions(+)
+ create mode 100644 Documentation/trace/user_events.rst
+ create mode 100644 include/uapi/linux/user_events.h
+ create mode 100644 kernel/trace/trace_events_user.c
+ create mode 100644 samples/user_events/Makefile
+ create mode 100644 samples/user_events/example.c
+ create mode 100644 tools/testing/selftests/user_events/Makefile
+ create mode 100644 tools/testing/selftests/user_events/dyn_test.c
+ create mode 100644 tools/testing/selftests/user_events/ftrace_test.c
+ create mode 100644 tools/testing/selftests/user_events/perf_test.c
+ create mode 100644 tools/testing/selftests/user_events/settings
+
+
+base-commit: 67d4f6e3bf5dddced226fbf19704cdbbb0c98847
 -- 
-Regards,
-Sudeep
+2.17.1
+

@@ -2,158 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB5C46EB1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD5946EB37
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239459AbhLIP3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:29:05 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54520 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236184AbhLIP3D (ORCPT
+        id S234606AbhLIPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234403AbhLIPdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:29:03 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FAoxT022635;
-        Thu, 9 Dec 2021 15:25:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=TUQ4MnLXCtO6ENbSrMYjrzLlGKpRBLhMgYqa3YyKwSc=;
- b=BUO9Ppu4XliZg4SKvsNxO7cG976yc8qMmbXDaIseyxe1UWks+MEKtugDQ3GW9s8t7qvn
- Kkrjtcc2Tw9sHTIBciGqnHmkssZ7f3PQJbC9O/D2fRm1Ycvvbm8y8SfS4NSKgtNAIwPD
- vpFLdkK4Rsad85iO7Ph1qfoxmLWq+7393YX0h2tqUnDbvjRBWFX1XF8Hte8C5kaOfomh
- 05ka3MbZ0P7zCORoptG/SYBKQwqXl+mprb9hfFvutWISlwa2piyvTzlKhg0q12sITFSm
- iXrR6HClLMKqEcWytIC/bVSMgOntKFAxWAgTgVx5ffs5TrJMevSshi0XZmOHW7BJDp0p ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cujqktwn2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:25:29 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9DUNVU026618;
-        Thu, 9 Dec 2021 15:25:29 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cujqktwm4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:25:28 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9FBvTJ023340;
-        Thu, 9 Dec 2021 15:25:27 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3cqyyajvw6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 15:25:27 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9FPO9S30998918
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 15:25:24 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E500AA4066;
-        Thu,  9 Dec 2021 15:25:23 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 03912A4060;
-        Thu,  9 Dec 2021 15:25:23 +0000 (GMT)
-Received: from [9.171.49.66] (unknown [9.171.49.66])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 15:25:22 +0000 (GMT)
-Message-ID: <ae22743b-f861-e48a-5e0b-db692d557cca@linux.ibm.com>
-Date:   Thu, 9 Dec 2021 16:25:22 +0100
+        Thu, 9 Dec 2021 10:33:38 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9554C0617A1;
+        Thu,  9 Dec 2021 07:30:04 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id r25so20356332edq.7;
+        Thu, 09 Dec 2021 07:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PnZS/qCVtvAb/gIQeuy7lIAt1isqXbg6Vz2BdZccjhc=;
+        b=C9C8lR2uMSA7rkl+6k/dR+gv15ZCRDtv62G4iBRXaa81eaZiGc75pDxQW9rNqX+2HI
+         tfjp6x257MD0OUy1Hxx6nOX5bWDXLqiz9Jh+UV2gtn6RLvupyz1BpYGFjAzaEpVdiy6i
+         APaWwVNrAvjmMQVYSDOhOn1Cam7OcwY58IPTAiVP+dcmWOZrFNGAhmDsqRhti6HqIdBB
+         ydEOTWNYCyquHEF3aDjVopNnIkuwaOEyph2RUiWdmRA+3ZTTEWBd7GEN/p2VVoqZf9Zo
+         cvWNHDAKkcoV6U+i0dBnkR0GoEZ/sXtwiEXngrAYQA+lHpmrcOZ/irxmocooVlxJaeU0
+         Lkzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PnZS/qCVtvAb/gIQeuy7lIAt1isqXbg6Vz2BdZccjhc=;
+        b=j4M2hi05Co+w566fVvY0C3IBj9vN904xmR7/LQlzAB5B9NOpGSzvImMBS9fCoYwf88
+         L6zDLmyWggTTyaQezf3hAgtPpDhH+zVQCVLhYvjgTUj6uoCXua7+b7/ZZzWN8pOlxgjY
+         9mThJLU7juPeM2bitFoyLfNromj+pEnJ95JJKStgRkWL6zS+EZ9GHBtKW0HfyS2IjvGw
+         eSj4Lf2Ssilc30/IsBz8JDWAJJ4QFOFABNpi3VVuXhWA2jxDA+gYpgroJ4H7lZ0JyVJV
+         nh+ZSB5hn1zMppPOvIKdekUS8BdD5/8zVSF5KSQw7kZDFrEwehJFtoiLAjxINdwv5b54
+         KS6g==
+X-Gm-Message-State: AOAM531n0NeRZ59WoatGTdfSrlnpiAVfEQI6pZnvJBXBsuEd6g+SCDVD
+        lUYuMNxgxV+VSPCtK8VZhY8irStfS+DqxoYTydA=
+X-Google-Smtp-Source: ABdhPJzPH7wt3pebAjmYV1IuugYLMvgtnBpuqmcvwZEl9t1AgA6z//rnO4rB+UbdmCGvGYo2NZNccpjtoyFhufL2lIo=
+X-Received: by 2002:a17:906:ecac:: with SMTP id qh12mr15943103ejb.377.1639063680720;
+ Thu, 09 Dec 2021 07:28:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 10/32] s390/pci: stash dtsm and maxstbl
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-11-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211207205743.150299-11-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SpPEqdPVMdh4J_qs9LBg9tl6jLcUb9WS
-X-Proofpoint-GUID: nwjR9OxqCKdepX4gJBT_ULhJX_D_67N1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_06,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 mlxscore=0 malwarescore=0 adultscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090082
+References: <1639057668-14377-1-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1639057668-14377-1-git-send-email-akhilrajeev@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 9 Dec 2021 17:26:28 +0200
+Message-ID: <CAHp75Vfja0-o49u4tXkrEgE9xKPDD=_eZonwLGYsnRTs69z9og@mail.gmail.com>
+Subject: Re: [PATCH] i2c: tegra: use i2c_timings for bus clock freq
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Christian Koenig <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linaro-mm-sig@lists.linaro.org,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 9, 2021 at 3:48 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+>
+> Use i2c_timings struct and corresponding methods to get bus clock frequency
 
+Thanks!
+A couple of comments below, after addressing them, FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Am 07.12.21 um 21:57 schrieb Matthew Rosato:
-> Store information about what IOAT designation types are supported by
-> underlying hardware as well as the largest store block size allowed.
-> These values will be needed by passthrough.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
-
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 > ---
->   arch/s390/include/asm/pci.h     | 2 ++
->   arch/s390/include/asm/pci_clp.h | 6 ++++--
->   arch/s390/pci/pci_clp.c         | 2 ++
->   3 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index 2474b8d30f2a..1a8f9f42da3a 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -126,9 +126,11 @@ struct zpci_dev {
->   	u32		gd;		/* GISA designation for passthrough */
->   	u16		vfn;		/* virtual function number */
->   	u16		pchid;		/* physical channel ID */
-> +	u16		maxstbl;	/* Maximum store block size */
->   	u8		pfgid;		/* function group ID */
->   	u8		pft;		/* pci function type */
->   	u8		port;
-> +	u8		dtsm;		/* Supported DT mask */
->   	u8		rid_available	: 1;
->   	u8		has_hp_slot	: 1;
->   	u8		has_resources	: 1;
-> diff --git a/arch/s390/include/asm/pci_clp.h b/arch/s390/include/asm/pci_clp.h
-> index 3af8d196da74..124fadfb74b9 100644
-> --- a/arch/s390/include/asm/pci_clp.h
-> +++ b/arch/s390/include/asm/pci_clp.h
-> @@ -153,9 +153,11 @@ struct clp_rsp_query_pci_grp {
->   	u8			:  6;
->   	u8 frame		:  1;
->   	u8 refresh		:  1;	/* TLB refresh mode */
-> -	u16 reserved2;
-> +	u16			:  3;
-> +	u16 maxstbl		: 13;	/* Maximum store block size */
->   	u16 mui;
-> -	u16			: 16;
-> +	u8 dtsm;			/* Supported DT mask */
-> +	u8 reserved3;
->   	u16 maxfaal;
->   	u16			:  4;
->   	u16 dnoi		: 12;
-> diff --git a/arch/s390/pci/pci_clp.c b/arch/s390/pci/pci_clp.c
-> index e9ed0e4a5cf0..bc7446566cbc 100644
-> --- a/arch/s390/pci/pci_clp.c
-> +++ b/arch/s390/pci/pci_clp.c
-> @@ -103,6 +103,8 @@ static void clp_store_query_pci_fngrp(struct zpci_dev *zdev,
->   	zdev->max_msi = response->noi;
->   	zdev->fmb_update = response->mui;
->   	zdev->version = response->version;
-> +	zdev->maxstbl = response->maxstbl;
-> +	zdev->dtsm = response->dtsm;
->   
->   	switch (response->version) {
->   	case 1:
-> 
+>  drivers/i2c/busses/i2c-tegra.c | 19 ++++++++-----------
+>  1 file changed, 8 insertions(+), 11 deletions(-)
+>
+> The patch is in response to the discussion in a previous patch to use
+> i2c_timings struct for bus freq.
+> ref. https://lkml.org/lkml/2021/11/25/767
+
+A-ha.
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+(or @linux.intel.com, I can't see it there)
+
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index a5be8f0..ffd2ad2 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -246,7 +246,7 @@ struct tegra_i2c_hw_feature {
+>   * @msg_buf: pointer to current message data
+>   * @msg_buf_remaining: size of unsent data in the message buffer
+>   * @msg_read: indicates that the transfer is a read access
+> - * @bus_clk_rate: current I2C bus clock rate
+> + * @timings: i2c timings information like bus frequency
+>   * @multimaster_mode: indicates that I2C controller is in multi-master mode
+>   * @tx_dma_chan: DMA transmit channel
+>   * @rx_dma_chan: DMA receive channel
+> @@ -273,7 +273,7 @@ struct tegra_i2c_dev {
+>         unsigned int nclocks;
+>
+>         struct clk *div_clk;
+> -       u32 bus_clk_rate;
+> +       struct i2c_timings timings;
+>
+>         struct completion msg_complete;
+>         size_t msg_buf_remaining;
+> @@ -642,14 +642,14 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+>         if (i2c_dev->is_vi)
+>                 tegra_i2c_vi_init(i2c_dev);
+>
+> -       switch (i2c_dev->bus_clk_rate) {
+> +       switch (i2c_dev->timings.bus_freq_hz) {
+
+It would be easier to have all these to read when you introduce a
+temporary variable:
+
+  struct i2c_timings *t = &i2c_dev->timings;
+  ...
+  switch (t->...) {
+  ...
+
+>         case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
+>         default:
+>                 tlow = i2c_dev->hw->tlow_fast_fastplus_mode;
+>                 thigh = i2c_dev->hw->thigh_fast_fastplus_mode;
+>                 tsu_thd = i2c_dev->hw->setup_hold_time_fast_fast_plus_mode;
+>
+> -               if (i2c_dev->bus_clk_rate > I2C_MAX_FAST_MODE_FREQ)
+> +               if (i2c_dev->timings.bus_freq_hz > I2C_MAX_FAST_MODE_FREQ)
+>                         non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
+>                 else
+>                         non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
+> @@ -685,7 +685,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+>         clk_multiplier = (tlow + thigh + 2) * (non_hs_mode + 1);
+>
+>         err = clk_set_rate(i2c_dev->div_clk,
+> -                          i2c_dev->bus_clk_rate * clk_multiplier);
+> +                          i2c_dev->timings.bus_freq_hz * clk_multiplier);
+>         if (err) {
+>                 dev_err(i2c_dev->dev, "failed to set div-clk rate: %d\n", err);
+>                 return err;
+> @@ -724,7 +724,7 @@ static int tegra_i2c_disable_packet_mode(struct tegra_i2c_dev *i2c_dev)
+>          * before disabling the controller so that the STOP condition has
+>          * been delivered properly.
+>          */
+> -       udelay(DIV_ROUND_UP(2 * 1000000, i2c_dev->bus_clk_rate));
+> +       udelay(DIV_ROUND_UP(2 * 1000000, i2c_dev->timings.bus_freq_hz));
+>
+>         cnfg = i2c_readl(i2c_dev, I2C_CNFG);
+>         if (cnfg & I2C_CNFG_PACKET_MODE_EN)
+> @@ -1254,7 +1254,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+>          * Total bits = 9 bits per byte (including ACK bit) + Start & stop bits
+>          */
+>         xfer_time += DIV_ROUND_CLOSEST(((xfer_size * 9) + 2) * MSEC_PER_SEC,
+> -                                      i2c_dev->bus_clk_rate);
+> +                                      i2c_dev->timings.bus_freq_hz);
+>
+>         int_mask = I2C_INT_NO_ACK | I2C_INT_ARBITRATION_LOST;
+>         tegra_i2c_unmask_irq(i2c_dev, int_mask);
+> @@ -1633,10 +1633,7 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+>         bool multi_mode;
+>         int err;
+>
+> -       err = device_property_read_u32(i2c_dev->dev, "clock-frequency",
+> -                                      &i2c_dev->bus_clk_rate);
+> -       if (err)
+> -               i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ;
+> +       i2c_parse_fw_timings(i2c_dev->dev, &i2c_dev->timings, true);
+>
+>         multi_mode = device_property_read_bool(i2c_dev->dev, "multi-master");
+>         i2c_dev->multimaster_mode = multi_mode;
+> --
+> 2.7.4
+>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

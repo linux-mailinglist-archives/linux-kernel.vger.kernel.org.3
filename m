@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 818C846F699
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1505C46F69A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbhLIWTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:19:17 -0500
-Received: from mga09.intel.com ([134.134.136.24]:34986 "EHLO mga09.intel.com"
+        id S233383AbhLIWTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:19:18 -0500
+Received: from mga05.intel.com ([192.55.52.43]:24392 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231280AbhLIWTQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:19:16 -0500
+        id S231475AbhLIWTR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 17:19:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1639088143; x=1670624143;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NaV9wSZ3O6RZdaSQmiENlsN0LEElS+bJEY+1wBkjRkw=;
-  b=PJRA20TvtKzYCaysSFt2t3QRKT2KOxzitQhqmWR/0cg+5ApNllWE65AW
-   CfjdV0yPdRiZs3u2E4lMG9NN+R83+Q9PAJK+/HRuOy1rB4LWMNHKCWY5e
-   5jInwXbVcraps4eZbqy+t9o/C55IHdYqXs+DH2+n8sMrd3ZQp7i2vw62J
-   sgnCi9kEGiZLKegBWvtvuZTAorg8M0yuAyxyrm59Pv++DQcMW2TImAqSq
-   0fubjS116ucYtlrEQ9YNwF7PFjUf0HtPEBv8hN7QpZD6o0iEXcMmwApCF
-   KKpqvgZEWBUnMffh9KJo8bsUTMvFHVjJxv3F2wjM8UaVvvAqOFsA89cbM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238020322"
+  bh=C2yo2e9AFBkANsAq4JMfQRtGleFDjrMfkGFpJjsNOOg=;
+  b=mvpwlquFyfDoG6lV5OeWPbMFx6ZFWtD2BFA65l49pZrI5Okfy/YFM8WD
+   ZXcN9S0YSOnLvVHgHaGxctYE3Q40+gIniMp3phZuhMLfSEJdbNGYu/qTf
+   uiIgsWbZqFT9bdzNESEqZDLsL9R62iZ6vpFPnLbO1xYcElTR3lSMdE6nS
+   vzmo7cBqKkOSIns9q9+0/wxvJgZGfPO7Q1wDC1p77MuZ0L0ehAE48yZIZ
+   fKGJImmguukoRm4O26PASk7SeA4I/BYN2FRjMUfaIvfluc6jRjIsPTdZJ
+   GLXFXEX+gKSOqqdRkdpez8U/NJ1b3Odv0yfFyfWqudWIr+N2iumMpji+O
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="324478025"
 X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="238020322"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:15:42 -0800
+   d="scan'208";a="324478025"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 14:15:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="463424094"
+   d="scan'208";a="543756698"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2021 14:15:40 -0800
+  by orsmga001.jf.intel.com with ESMTP; 09 Dec 2021 14:15:41 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mvRhU-0002Qj-81; Thu, 09 Dec 2021 22:15:40 +0000
-Date:   Fri, 10 Dec 2021 06:15:28 +0800
+        id 1mvRhU-0002Ql-8P; Thu, 09 Dec 2021 22:15:40 +0000
+Date:   Fri, 10 Dec 2021 06:15:31 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Michal Hocko <mhocko@suse.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>
-Subject: mm/page_alloc.c:8046:33: error: implicit declaration of function
- 'arch_alloc_nodedata'; did you mean 'arch_alloc_page'?
-Message-ID: <202112100657.wrZJcCEG-lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: mm/page_alloc.c:8046:12: error: implicit declaration of function
+ 'arch_alloc_nodedata'
+Message-ID: <202112100636.K5fagHTG-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -56,42 +56,50 @@ tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211209-184929/Alexey-M
 head:   652e780546c1fdbe1adcbbe04106f4020e3bfb56
 commit: 652e780546c1fdbe1adcbbe04106f4020e3bfb56 mm: fix panic in __alloc_pages
 date:   11 hours ago
-config: csky-buildonly-randconfig-r005-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100657.wrZJcCEG-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
+config: arm-randconfig-r004-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100636.K5fagHTG-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
         # https://github.com/0day-ci/linux/commit/652e780546c1fdbe1adcbbe04106f4020e3bfb56
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review UPDATE-20211209-184929/Alexey-Makhalov/mm-fix-panic-in-__alloc_pages/20211102-041405
         git checkout 652e780546c1fdbe1adcbbe04106f4020e3bfb56
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All error/warnings (new ones prefixed by >>):
 
-   mm/page_alloc.c:3804:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
-    3804 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
-         |               ^~~~~~~~~~~~~~~~~~~~~~
-   mm/page_alloc.c: In function 'free_area_init':
->> mm/page_alloc.c:8046:33: error: implicit declaration of function 'arch_alloc_nodedata'; did you mean 'arch_alloc_page'? [-Werror=implicit-function-declaration]
-    8046 |                         pgdat = arch_alloc_nodedata(nid);
-         |                                 ^~~~~~~~~~~~~~~~~~~
-         |                                 arch_alloc_page
->> mm/page_alloc.c:8046:31: warning: assignment to 'pg_data_t *' {aka 'struct pglist_data *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    8046 |                         pgdat = arch_alloc_nodedata(nid);
-         |                               ^
->> mm/page_alloc.c:8052:25: error: implicit declaration of function 'arch_refresh_nodedata' [-Werror=implicit-function-declaration]
-    8052 |                         arch_refresh_nodedata(nid, pgdat);
-         |                         ^~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+   mm/page_alloc.c:3804:15: warning: no previous prototype for function 'should_fail_alloc_page' [-Wmissing-prototypes]
+   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+                 ^
+   mm/page_alloc.c:3804:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+            ^
+            static 
+>> mm/page_alloc.c:8046:12: error: implicit declaration of function 'arch_alloc_nodedata' [-Werror,-Wimplicit-function-declaration]
+                           pgdat = arch_alloc_nodedata(nid);
+                                   ^
+>> mm/page_alloc.c:8046:10: warning: incompatible integer to pointer conversion assigning to 'pg_data_t *' (aka 'struct pglist_data *') from 'int' [-Wint-conversion]
+                           pgdat = arch_alloc_nodedata(nid);
+                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~
+>> mm/page_alloc.c:8052:4: error: implicit declaration of function 'arch_refresh_nodedata' [-Werror,-Wimplicit-function-declaration]
+                           arch_refresh_nodedata(nid, pgdat);
+                           ^
+   mm/page_alloc.c:8052:4: note: did you mean 'arch_alloc_nodedata'?
+   mm/page_alloc.c:8046:12: note: 'arch_alloc_nodedata' declared here
+                           pgdat = arch_alloc_nodedata(nid);
+                                   ^
+   2 warnings and 2 errors generated.
 
 
-vim +8046 mm/page_alloc.c
+vim +/arch_alloc_nodedata +8046 mm/page_alloc.c
 
   7949	
   7950	/**

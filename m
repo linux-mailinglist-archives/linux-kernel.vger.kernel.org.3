@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F14FC46E2D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE42F46E2E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233427AbhLIHD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbhLIHD0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:03:26 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A20C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 22:59:53 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id u11so3200832plf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 22:59:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RW5/PiePPwGEbHeQax2XMoMOzVE/w5j3urPprFU4xj4=;
-        b=JVbv4a01GSr23DKUbNzvViDTbkroOUJ87xix4b42EFQaiFa1zGzPOWqcwlrYW5vgLP
-         2ZGiJfe62HN460Hg51yFQcDuPG0SWbo/67FO3eJ1vwNyPZ+OeUXlPuupEXJAtnsZj0dS
-         i2BZGWKeJrHSy0RM0ZGyNLL+bi05qB3ChyceA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RW5/PiePPwGEbHeQax2XMoMOzVE/w5j3urPprFU4xj4=;
-        b=egy8VRC8IVQchdGF408lY6ywTWoNUx3dL0+ytIpz/kDOojI+7AIn90mQGDwZoqBvvI
-         keHMH8Ja6o7NFnVnUtPcgC9I74ehOIIIKL/5ULYUmi480+ypE+KSjeeEk0CGJTf4IovT
-         5lg/OczLVUepfBseRGVwHsE+FvkSIrRhh9AnlY6jGkRdyfBifDk/Ti0kItiouRZLutxZ
-         I5ySumw0XhhqiXY6X+9RtomUBGPpM3eSSSEVnsaCYEgrLoEymsiZlY65exu0pT+phknA
-         s/jyIfYmMi8WotUKOmSNZGD79C6MswZXrXWKYNxoMZKAwVBMAy3HmtPooDSEyh9Lq5/G
-         oJxQ==
-X-Gm-Message-State: AOAM532wOpeQ8+4RAj5xgNl/hLWDW175tPaz8x/WrBCln8fcKp3/Ym8G
-        LB91MKyak66v0I9EryapUhwgLkIiCsMExg==
-X-Google-Smtp-Source: ABdhPJxslNIMXLet9RCsdKQS4VcDTdk1MoI3qUUFLzT/WUMx1UA0lI3LnVvI7Nvbp4pNWZtW8vIZ2w==
-X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr13483577pjb.7.1639033192843;
-        Wed, 08 Dec 2021 22:59:52 -0800 (PST)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:bc93:a930:2121:8bed])
-        by smtp.gmail.com with ESMTPSA id j4sm4463519pgp.58.2021.12.08.22.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 22:59:52 -0800 (PST)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] mailbox: mtk-cmdq: Silent EPROBE_DEFER errors for clks
-Date:   Thu,  9 Dec 2021 14:59:48 +0800
-Message-Id: <20211209065948.1796663-1-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+        id S233446AbhLIHJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:09:14 -0500
+Received: from mail-bo1ind01olkn0148.outbound.protection.outlook.com ([104.47.101.148]:17184
+        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229919AbhLIHJO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 02:09:14 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hqTlQloEouznbC4tk9B5hL561OF/R/4R926SERqlfelsIx44eAe8kfqwSrkzqhD5dPvgKWoEn19oro5mwlsPuVifFr7T2pBnjBuHwnyPPhOBXNVEBuepphOXj5QC8PNYvhza1bxbejF7lY1b1UWeBkY6jJo99VmHFv5A0qXkUN4EBC356wynwYeFeI0QiuoEVtnrs/OYsDjcg9VLRTB1ZWGM59NqniWi51cSgA+KvJeMI83euw+uttV27efOvfOEU43TwvKFSQC+kihCfiVrZFwSmxY0wugHbDANs2vjiuLHeFqkofw/k3a1q1mYoSPTa2NRKvDoRQrF1vf2WqBbWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k2TDJIl9CP3/J6oJzk5/m3ddink8nTqKkfpBqBubpWk=;
+ b=m/fWARppc5uxugWSgJs2lyVU72sDOYuMzmPliFiiO8ufvjciSUloAvkcfrUY2QGduhGp5uxfSNHltU8iPI2TvCLDbSEcehQYBLD9HRwt4ctqRz33vemKBABWVV9sGUzjG/4lxHdYfWFnr2w0VRFdikjm7fqKDLaSyTawbOC1x/NptgYtKxCqoxbfmgvh/FqJgfjhurZWbWYg02h7gYT0cvcA2/OcGwgla1Fwvh9G165xG3ImP1VdCuWruIAu+Uju99WUSMBIZjWTerejPVuK5j2u1hc/UhQfsdlpoNjkusAZ5hQy0p7B3P/CzUVhfJcXpHNdbUXFUIfZxmga2LPUOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k2TDJIl9CP3/J6oJzk5/m3ddink8nTqKkfpBqBubpWk=;
+ b=hdLzc8nx6y8rEBot6C2F7KcpIC4tQ7w+H4rTzOkXH/TadpPPfB4i7zk1/scYVnSP6u+XBEvEWvkE6DjfjKwB7nKSuB2XXqXBBYstC128ZpdPXHo+3Qmy66oVsK9qHvAdw0vsFR6FIFBggG5qkN+VPv5BvCdHG1fAX1gYBQxLvY0n/YQf2ODSxiGHc7onKWBOOZTABj97qiqRG7bRQOqbjgLmW/VycU/7dmJIOM9332F9/9W21EYRG1sjX/ft80LGUk5vOmsmX+Pzm+NKD1i6jXk7c3nfeVLHjdGtrEMGUx5CRRDYDZrrQ7Kp/XHBjLVzj/1g+gGbJyzbVhSOsALSyg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PNXPR01MB7042.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:c2::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Thu, 9 Dec
+ 2021 07:05:35 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4755.024; Thu, 9 Dec 2021
+ 07:05:35 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
+        "jk@ozlabs.org" <jk@ozlabs.org>,
+        "ardb@kernel.org" <ardb@kernel.org>
+CC:     "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>
+Subject: [BUG] Enabling EFI runtime services causes panics in the T2 security
+ chip on Macs equipped with it.
+Thread-Topic: [BUG] Enabling EFI runtime services causes panics in the T2
+ security chip on Macs equipped with it.
+Thread-Index: AQHX7MspcYEsfKMkhUG2N0HFZhE8EQ==
+Date:   Thu, 9 Dec 2021 07:05:35 +0000
+Message-ID: <74ACDCF3-6996-4CB4-8899-A625D154FB0C@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [4HnK895JPLOmKrZOJ5GQCVytjx7Cu5Fq7Z+pbe+rna84T+W1VfKybu8ToXK/+vmQ]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4de51cd9-891c-4100-ea69-08d9bae24c1d
+x-ms-traffictypediagnostic: PNXPR01MB7042:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lC19JclL2N2MAwIpfTnDEkAfjzFNmwoto56SnVGlrEZdeleK//NcfuTDKMwRKQDJ+6n/o1ZT1iFrqOKdidQH1+loN/XtiGOel0sdYbnThIHseBaSQ51LjCe6msrdfw8lniw23z/WRqCZa1dJhOkIDaW+p7Jea/nehL2hjvjWkvmdypRkvm5o8VHmdatnd0J2AS66X5/0LUlLXcl4cI/xtGKd2ojxRhmXYvou9AerpnsNILz4FIXErdmphppVbV4LgAqyFyzm8FKmuQ5mm0uYHu7q0I65oEM/V9YuiVuR83ZllGklaAi8lT8GPqW28M0X9ovYs1A8f9UJGPwCN6QFkK+By6nPHd/v1KCP7cqVG8KW4MXHY6aakN8PctesLt3Rv6sY535fQJfrKRlGTbwge2ueYoU9TGy08jI4g1pfDEqMC7FoFMIAcGFGwRPw13hdEljeIeB+N/jfrfWiBwMwQc3Dgpd3IvBAyhbPEm60C2IoOhIhKseSQXHwRH4nB0TOpGbeDfEXBDAUGmaQB9QPZoLmz6vIKtTVIj37uDkSaLI/knqCyJzc3aLMh2jTCMAAr2af/df+z1lJfZevcFMvxEQBB0eS4AYyf2ggCNQ4+4OzWzcMM7oigifKEhNQlmTC
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UWwjIX/R1wSbduvdcmm3o/Dxgip0rTVAPLd0h0x803DKKPiS07dN4GVIU6AA?=
+ =?us-ascii?Q?cAvVazPlJiH4HVN4a6gVmhdtIEMyNRPVUJv+tTCuPYXHo22V5mhaEmTe6t1W?=
+ =?us-ascii?Q?6z3CtXmJmHavPSK/kBmlB0IDeTjpRoK7PEgbzOeTUdIbvX/GSusKGtgekmKu?=
+ =?us-ascii?Q?qBico0fwfYmKpnhjeGmiLK1Hor+8d15V8XOW7ksMs9mueRIIu6OBOmaGQRoX?=
+ =?us-ascii?Q?VteBuKhAoLronKf2L02JlnF8o07iYvUb5HMgiEw5HjCHvXeXNcncYOA9vPWM?=
+ =?us-ascii?Q?Z7pCKSS2uX1skzekklhp+WFZp9DfS8E5kbwrGfenrxcLOpb3RXkOakvEb9q8?=
+ =?us-ascii?Q?KWuSDd5//a5dlDk+Mr5dZv9Fnhj7DubRTQCh66wleRTZbV+YDMy3QIRECtPg?=
+ =?us-ascii?Q?zRKk1qhODz7TT+xHJmlKv3jZOAYrRleVT2qXW5Ad4euKlomc71AjdKRz4N45?=
+ =?us-ascii?Q?qtzAO7t1N4XwKHBe9PpehRp71qgknptzmb6ehEy8n3a/phH4O5iBLG83Bjug?=
+ =?us-ascii?Q?Mz5LAbxaH4lhEwC3GJJEqa24mGNPAauxiviZ7O81LXuuseN1xLVYjtQL8bpd?=
+ =?us-ascii?Q?BdBdQgDKQZmz2qc4vggjqZ1zUkObaEu51PtGBrG80ZgMk/LonVC2Nf4c0UVq?=
+ =?us-ascii?Q?IZUsuzc4NHnOdKzkkR9ZjO1AKnhV8yZCsCN8IIUQsULuQyzSeYkfnmxVzj9l?=
+ =?us-ascii?Q?ztq75MeZddpAyHqMiqWwA3YI/SvMd90+U6nMPIycZnD0lqszwFXu97G4rzGv?=
+ =?us-ascii?Q?DE9K2TpjAp1wqgET78AdHF1VhWaICmOUU/BA9GUv07hLG0SHsUvW8uowqqDj?=
+ =?us-ascii?Q?kV1j4mgKbWP20HNRz/pq2/vN/jKn6vFPZHL2C41us9gLZoCO7g4jTgF6MY9X?=
+ =?us-ascii?Q?ELuYcVTRoKVsMUCyBeJsTf9IvwspcY1zkVgDP59Xf/+CGecIlnYDt043/AxF?=
+ =?us-ascii?Q?BZLqESGxntYcy/oULUejU2ykgRTtsuNVV6KLwmbRBOOJ7jxrN2MXZmqaRwjQ?=
+ =?us-ascii?Q?FJZCTqn47ZUrXm/HZAJInfrlwg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2F72F7B8167252498ED7C7A1865CCBF4@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4de51cd9-891c-4100-ea69-08d9bae24c1d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 07:05:35.1492
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNXPR01MB7042
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Silent the error if it's EPROBE_DEFER for clks.
+On enabling EFI runtime services on Macs with the T2 security chip, kernel =
+fails to boot due panics in the T2 security chip. Using efi=3Dnoruntine (or=
+ noefi) as a kernel parameter seems to fix the issue. Also, making NVRAM re=
+ad-only makes kernels boot. A fix for that would be appreciated.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
- drivers/mailbox/mtk-cmdq-mailbox.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index a8845b162dbf..087fb7334166 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -573,7 +573,10 @@ static int cmdq_probe(struct platform_device *pdev)
- 				cmdq->clocks[alias_id].id = clk_names[alias_id];
- 				cmdq->clocks[alias_id].clk = of_clk_get(node, 0);
- 				if (IS_ERR(cmdq->clocks[alias_id].clk)) {
--					dev_err(dev, "failed to get gce clk: %d\n", alias_id);
-+					dev_err_probe(dev,
-+						PTR_ERR(cmdq->clocks[alias_id].clk),
-+						"failed to get gce clk: %d\n",
-+						alias_id);
- 					return PTR_ERR(cmdq->clocks[alias_id].clk);
- 				}
- 			}
-@@ -582,7 +585,8 @@ static int cmdq_probe(struct platform_device *pdev)
- 		cmdq->clocks[alias_id].id = clk_name;
- 		cmdq->clocks[alias_id].clk = devm_clk_get(&pdev->dev, clk_name);
- 		if (IS_ERR(cmdq->clocks[alias_id].clk)) {
--			dev_err(dev, "failed to get gce clk\n");
-+			dev_err_probe(dev, PTR_ERR(cmdq->clocks[alias_id].clk),
-+				"failed to get gce clk\n");
- 			return PTR_ERR(cmdq->clocks[alias_id].clk);
- 		}
- 	}
--- 
-2.34.1.400.ga245620fadb-goog
-
+Link :- https://bugzilla.kernel.org/show_bug.cgi?id=3D215277=

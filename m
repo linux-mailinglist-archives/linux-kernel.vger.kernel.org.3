@@ -2,116 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D702546E872
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C0C46E876
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbhLIMbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:31:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46038 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229919AbhLIMbh (ORCPT
+        id S234499AbhLIMdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:33:18 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:47853 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229919AbhLIMdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:31:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639052883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kCUALssbY0oxqy20XeNiM0IZqaDHE6HLbBTKKFbR5aM=;
-        b=ZTusAF6R62hh9jyVs8XDPVrks6DlnKWLJXg/PpEqNksIf+ZQyPEGuXy5LMAg/otyKLuca+
-        84IhVUQ9/2AgWMPJHoSGUw8hnrRWGGNiD1/Tftr3dFVXaHxdBPcb4/ghlJFJY4+3cClqnd
-        4Inlnt4xi/j2KeOMF5nGjyPpYcWAeIc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-141-JOBOkZNkPfKQYtxIgl3XXg-1; Thu, 09 Dec 2021 07:28:02 -0500
-X-MC-Unique: JOBOkZNkPfKQYtxIgl3XXg-1
-Received: by mail-wr1-f70.google.com with SMTP id q15-20020adfbb8f000000b00191d3d89d09so1349534wrg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 04:28:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kCUALssbY0oxqy20XeNiM0IZqaDHE6HLbBTKKFbR5aM=;
-        b=XM8rzYGOnlISZVysnM6gzVSXicb0EW4WbYrK/o+BhMAmyihhnlTbOgdfPLC0tCbpzq
-         mbC6Uk9ECVQtmVjtEiYV4VvsUPVEMCd+Q96POiW4mZPyr4cQwg9Rd1O+IvG5/KhpSHpx
-         9QvXvGyl0tgigxRC50Rup0ndI6mnc41/1IPdnknIhpgdKWERScvMKHMMONux2itq/EBv
-         St9Q+tuNFyPr/7v8wFGfE8gnXTyts+DXSboN4c3CeB2KEMkeiDMmmNVBcir2ItIQJNMZ
-         QlHrdWGbPgBjoxN7XxN1ZNlSarJK1tX0HY753j5IR0C0Q02z+T4ycFqrfMJYpGemdemX
-         sK3w==
-X-Gm-Message-State: AOAM530yAwvsJZriRsvYF1bZexl4+zzTqLuUn7MMuKK7ThARC3NpMurR
-        fFqNbxkT0RpMZUeaCBuvkrG9kFnNBYd9Vzrw+/UjDFJwyjphwd3vSRnuadUwnFiqYIhAm0gcSIg
-        nh/+hEWcHkxy7XozgEx61yKDy
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr6760490wmi.173.1639052881395;
-        Thu, 09 Dec 2021 04:28:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyL2h9N0KGbtDzZwoPUZ5+FGiLDImgFcG7uRNO/NF0d9BGrzMDui9+5mHA0hYe5k4W8nm+zlQ==
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr6760456wmi.173.1639052881165;
-        Thu, 09 Dec 2021 04:28:01 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m20sm9483469wmq.11.2021.12.09.04.28.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 04:28:00 -0800 (PST)
-Message-ID: <408dd9d0-22bb-f5de-b578-9fd20df89a98@redhat.com>
-Date:   Thu, 9 Dec 2021 13:27:59 +0100
+        Thu, 9 Dec 2021 07:33:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639052985; x=1670588985;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3F3Dz0wUk5ASUSeln9niusk85Melb4USDFCJejNzGpc=;
+  b=ZPFoNj0TiHnG75jomqFACWNIoXem1ul/uh0S891tNGynITIiPmw6TIJb
+   GJYZrvXbxXzDNKHVk0TUDZbZJgp3eG2rUikP3IPNErKTEz+QgGH6CIh54
+   izJzltHjR2echDfLcpNy3PIjaUihYa3+kSvEXRw4nISHZ18Ig7heBmqgO
+   tFmyGCyFsD1gDqSlGy7VSMgalgypRMlRhzaTvjcPzvxpSqlVvTTeleOsL
+   nJpO5hTKe93MTKBcOIR/eARBHmFga0yafjI+6ggmj8HxSnrzlphRxSdme
+   fgpbE1AhVyHeQd6gzMRcFOIFKbCII/+oZjg/GrteU6vSuOcGs2Uyrn+DH
+   w==;
+IronPort-SDR: 4yl1lNcGEN9F2zOdyhi5eu5MX7HndK+hX805lbP7WnI3ZA/vZQQ7No49VCYDiRyjzJqYPF4vGo
+ FzXUQnH+77YA9yX3C/+ZhNArP9W3sAxaf57K5PzUb7yBlscwc/EpuwtBcSMzb8mio+GY5IMEYV
+ 0VLIpikYtLTDi7ANdzcTL8DAacd4EJupqC9MIpdZ06vLnEgOCVg299kSQDxwJ50jyQ/t3iHJB0
+ akAMPGdw1gjq4dJwyOBPJ2hIhoUStOdJF8GNynU0LnLvcTiQSC70q42ZfFVRQnQb214yz7wyF+
+ eJRS0FkPxPpJnL3nD1k5IS9/
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="146076877"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2021 05:29:44 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 9 Dec 2021 05:29:43 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 9 Dec 2021 05:29:41 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>
+CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH 0/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
+Date:   Thu, 9 Dec 2021 14:29:37 +0200
+Message-ID: <20211209122939.339810-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2] Revert "drm/fb-helper: improve DRM fbdev emulation
- device names"
-Content-Language: en-US
-To:     Johannes Stezenbach <js@sig21.net>
-Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-References: <20211020165740.3011927-1-javierm@redhat.com>
- <Yath6T5ET17GbkI7@sig21.net>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Yath6T5ET17GbkI7@sig21.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Johannes,
+Convert the Atmel QuadSPI controller Device Tree binding documentation
+to json-schema. Define sama7g5 QSPI.
 
-Sorry for the late response. I was on holidays for a week and just came back.
+After the conversion to yaml, make dtbs_check reavealed a problem
+that was fixed with:
+https://lore.kernel.org/lkml/20211209102542.254153-1-tudor.ambarus@microchip.com/
 
-On 12/4/21 13:41, Johannes Stezenbach wrote:
-> Hi,
-> 
-> On Wed, Oct 20, 2021 at 06:57:40PM +0200, Javier Martinez Canillas wrote:
->> This reverts commit b3484d2b03e4c940a9598aa841a52d69729c582a.
->>
->> That change attempted to improve the DRM drivers fbdev emulation device
->> names to avoid having confusing names like "simpledrmdrmfb" in /proc/fb.
->>
->> But unfortunately, there are user-space programs such as pm-utils that
->> match against the fbdev names and so broke after the mentioned commit.
->>
->> Since the names in /proc/fb are used by tools that consider it an uAPI,
->> let's restore the old names even when this lead to silly names like the
->> one mentioned above.
-> 
-> I would like to ask about the fate of this patch. It doesn't
-> seem to have been picked up by anyone, does it?
->
+Tudor Ambarus (2):
+  dt-bindings: spi: atmel,quadspi: Convert to json-schema
+  dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
 
-Thanks for the reminder. I've just pushed this to the drm-misc-fixes branch.
- 
-> 
-> Thanks,
-> Johannes
-> 
-Best regards,
+ .../bindings/spi/atmel,quadspi.yaml           | 99 +++++++++++++++++++
+ .../devicetree/bindings/spi/atmel-quadspi.txt | 37 -------
+ 2 files changed, 99 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/atmel-quadspi.txt
+
 -- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.25.1
 

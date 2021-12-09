@@ -2,292 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A04D46F17A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C40846F17C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242686AbhLIRWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242866AbhLIRWN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:22:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B417C061746;
-        Thu,  9 Dec 2021 09:18:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6330DCE276D;
-        Thu,  9 Dec 2021 17:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E00C004DD;
-        Thu,  9 Dec 2021 17:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639070315;
-        bh=6T+elCby+cclVVOmwvR5v3IA3Q/+iZs9ml9nncRr+Gk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JRwkKn3KtZe/S+dT1F9q9QZ+EjZmQEDOUNwxorwKSPkxCmAVpl463VX5Z081g9ImN
-         xOi92St25HtZa9ZraU4JPQwVTSlwWLq4WhM2c8kifrXR83v0dbk2333OJBCAp4vYl7
-         b36wAVBBm5EmVUSIEQtCFLVvxLZpYwEkLZL673isolCsn6wLErCl443KEKpqUOTDmC
-         u73UHkAZFVO6CaOsWhC5OVcMZA3hwVEyNItSXS/+YOqgCozO+uDgBLJdmrYfo83HZo
-         h/mUL0yjq+/i4lU/fBLa6U2jkkAMgzGbx+2ZXe0P0u4Dj9TmTll59+IM21VQ3FPu38
-         8oy3zzPy7InHg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4CFB75C414D; Thu,  9 Dec 2021 09:18:35 -0800 (PST)
-Date:   Thu, 9 Dec 2021 09:18:35 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
-Subject: Re: [PATCH 02/11] rcu: Kill rnp->ofl_seq and use only
- rcu_state.ofl_lock for exclusion
-Message-ID: <20211209171835.GD641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211209150938.3518-1-dwmw2@infradead.org>
- <20211209150938.3518-3-dwmw2@infradead.org>
+        id S242693AbhLIRXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:23:11 -0500
+Received: from mga04.intel.com ([192.55.52.120]:30358 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242472AbhLIRXK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:23:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639070377; x=1670606377;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=p13HYdA78gGYb5YUmGUWNrOvFjqweYjLhA5kxPLO9E0=;
+  b=Xp18dQDJ0SrptRqm863fG4LVOeizAKk8AD0uPitXcLM8s9vc29/15bIA
+   nxTw6YnAQtjP9olfslQIFN3ZPVN2HUGUSvc0hSM85eaRzLgNHLqTN2dnl
+   yE1FuRyrzdWvR9KWP7CxmCW3+BBOlV6yBr2esHJqknwmsYAVIYg8T4JAY
+   2VOwvuhyiOQCdkuOpikQKMlFXfvQSB2DPIi6PW79L+3sn/0/87MC2U+gK
+   kqfrTS8dJSVuhgF8vcaeASnzgf5YmVutRF1roXI3aEHvo4qqIZ/AwTrNg
+   95lC/i5eBRkwQC2hgatFCKB+ijgl0JhLIAKkRmQUWnUlKccr1gTasOuR0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="236896327"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="236896327"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:19:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="564897213"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Dec 2021 09:19:35 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvN4w-0002Cw-G0; Thu, 09 Dec 2021 17:19:34 +0000
+Date:   Fri, 10 Dec 2021 01:19:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Avihai Horon <avihaih@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
+        Mark Zhang <markzhang@nvidia.com>
+Subject: [leon-rdma:rdma-next 24/31] drivers/infiniband/core/cache.c:967:16:
+ error: expected ';' after expression
+Message-ID: <202112100121.3lkxU859-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209150938.3518-3-dwmw2@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 03:09:29PM +0000, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> If we allow architectures to bring APs online in parallel, then we end
-> up requiring rcu_cpu_starting() to be reentrant. But currently, the
-> manipulation of rnp->ofl_seq is not thread-safe.
-> 
-> However, rnp->ofl_seq is also fairly much pointless anyway since both
-> rcu_cpu_starting() and rcu_report_dead() hold rcu_state.ofl_lock for
-> fairly much the whole time that rnp->ofl_seq is set to an odd number
-> to indicate that an operation is in progress.
-> 
-> So drop rnp->ofl_seq completely, and use only rcu_state.ofl_lock.
-> 
-> This has a couple of minor complexities: lockdep will complain when we
-> take rcu_state.ofl_lock, and currently accepts the 'excuse' of having
-> an odd value in rnp->ofl_seq. So switch it to an arch_spinlock_t to
-> avoid that false positive complaint. Since we're killing rnp->ofl_seq
-> of course that 'excuse' has to be changed too, so make it check for
-> arch_spin_is_locked(rcu_state.ofl_lock).
-> 
-> There's no arch_spin_lock_irqsave() so we have to manually save and
-> restore local interrupts around the locking.
-> 
-> At Paul's request, make rcu_gp_init not just wait but *exclude* any
-> CPU online/offline activity, which was fairly much true already by
-> virtue of it holding rcu_state.ofl_lock.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
+head:   3851deadf6de976fe0d2f72ca1084b47a044c2c7
+commit: 1f2b65dfb4d995e74b621e3e21e7c7445d187956 [24/31] RDMA/core: Modify rdma_query_gid() to return accurate error codes
+config: riscv-buildonly-randconfig-r003-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100121.3lkxU859-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git/commit/?id=1f2b65dfb4d995e74b621e3e21e7c7445d187956
+        git remote add leon-rdma https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git
+        git fetch --no-tags leon-rdma rdma-next
+        git checkout 1f2b65dfb4d995e74b621e3e21e7c7445d187956
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/infiniband/core/
 
-Looks good!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Could you please also make the first clause read something like this?
+All errors (new ones prefixed by >>):
 
-	"At Paul's request based on Neeraj's analysis, ..."
+>> drivers/infiniband/core/cache.c:967:16: error: expected ';' after expression
+                   res = -EINVAL
+                                ^
+                                ;
+   1 error generated.
 
-I am going to pull this into -rcu for more intensive testing of this
-code for non-concurrent CPU-online operations (making the above change
-to the commit log).  At some point, rcutorture needs to learn how to
-do concurrent CPU-online operations, but it would be good to bake the
-RCU-specific patches for a bit beforehand.
 
-Depending on timing, you might wish to send this patch with the
-rest of this group, so:
+vim +967 drivers/infiniband/core/cache.c
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+   938	
+   939	/**
+   940	 * rdma_query_gid - Read the GID content from the GID software cache
+   941	 * @device:		Device to query the GID
+   942	 * @port_num:		Port number of the device
+   943	 * @index:		Index of the GID table entry to read
+   944	 * @gid:		Pointer to GID where to store the entry's GID
+   945	 *
+   946	 * rdma_query_gid() only reads the GID entry content for requested device,
+   947	 * port and index. It reads for IB, RoCE and iWarp link layers.  It doesn't
+   948	 * hold any reference to the GID table entry in the HCA or software cache.
+   949	 *
+   950	 * Returns 0 on success or appropriate error code.
+   951	 *
+   952	 */
+   953	int rdma_query_gid(struct ib_device *device, u32 port_num,
+   954			   int index, union ib_gid *gid)
+   955	{
+   956		struct ib_gid_table *table;
+   957		unsigned long flags;
+   958		int res;
+   959	
+   960		if (!rdma_is_port_valid(device, port_num))
+   961			return -EINVAL;
+   962	
+   963		table = rdma_gid_table(device, port_num);
+   964		read_lock_irqsave(&table->rwlock, flags);
+   965	
+   966		if (index < 0 || index >= table->sz) {
+ > 967			res = -EINVAL
+   968			goto done;
+   969		}
+   970	
+   971		if (!is_gid_entry_valid(table->data_vec[index])) {
+   972			res = -ENOENT;
+   973			goto done;
+   974		}
+   975	
+   976		memcpy(gid, &table->data_vec[index]->attr.gid, sizeof(*gid));
+   977		res = 0;
+   978	
+   979	done:
+   980		read_unlock_irqrestore(&table->rwlock, flags);
+   981		return res;
+   982	}
+   983	EXPORT_SYMBOL(rdma_query_gid);
+   984	
 
-If testing goes well and if you don't get it there first, I expect
-to push this during the v5.18 merge window.
-
-							Thanx, Paul
-
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->  kernel/rcu/tree.c | 64 +++++++++++++++++++++++------------------------
->  kernel/rcu/tree.h |  4 +--
->  2 files changed, 32 insertions(+), 36 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index ef8d36f580fc..a1bb0b1229ed 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -91,7 +91,7 @@ static struct rcu_state rcu_state = {
->  	.abbr = RCU_ABBR,
->  	.exp_mutex = __MUTEX_INITIALIZER(rcu_state.exp_mutex),
->  	.exp_wake_mutex = __MUTEX_INITIALIZER(rcu_state.exp_wake_mutex),
-> -	.ofl_lock = __RAW_SPIN_LOCK_UNLOCKED(rcu_state.ofl_lock),
-> +	.ofl_lock = __ARCH_SPIN_LOCK_UNLOCKED,
->  };
->  
->  /* Dump rcu_node combining tree at boot to verify correct setup. */
-> @@ -1168,7 +1168,15 @@ bool rcu_lockdep_current_cpu_online(void)
->  	preempt_disable_notrace();
->  	rdp = this_cpu_ptr(&rcu_data);
->  	rnp = rdp->mynode;
-> -	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) || READ_ONCE(rnp->ofl_seq) & 0x1)
-> +	/*
-> +	 * Strictly, we care here about the case where the current CPU is
-> +	 * in rcu_cpu_starting() and thus has an excuse for rdp->grpmask
-> +	 * not being up to date. So arch_spin_is_locked() might have a
-> +	 * false positive if it's held by some *other* CPU, but that's
-> +	 * OK because that just means a false *negative* on the warning.
-> +	 */
-> +	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) ||
-> +	    arch_spin_is_locked(&rcu_state.ofl_lock))
->  		ret = true;
->  	preempt_enable_notrace();
->  	return ret;
-> @@ -1731,7 +1739,6 @@ static void rcu_strict_gp_boundary(void *unused)
->   */
->  static noinline_for_stack bool rcu_gp_init(void)
->  {
-> -	unsigned long firstseq;
->  	unsigned long flags;
->  	unsigned long oldmask;
->  	unsigned long mask;
-> @@ -1774,22 +1781,17 @@ static noinline_for_stack bool rcu_gp_init(void)
->  	 * of RCU's Requirements documentation.
->  	 */
->  	WRITE_ONCE(rcu_state.gp_state, RCU_GP_ONOFF);
-> +	/* Exclude CPU hotplug operations. */
->  	rcu_for_each_leaf_node(rnp) {
-> -		// Wait for CPU-hotplug operations that might have
-> -		// started before this grace period did.
-> -		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd values.
-> -		firstseq = READ_ONCE(rnp->ofl_seq);
-> -		if (firstseq & 0x1)
-> -			while (firstseq == READ_ONCE(rnp->ofl_seq))
-> -				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
-> -		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even values.
-> -		raw_spin_lock(&rcu_state.ofl_lock);
-> -		raw_spin_lock_irq_rcu_node(rnp);
-> +		local_irq_save(flags);
-> +		arch_spin_lock(&rcu_state.ofl_lock);
-> +		raw_spin_lock_rcu_node(rnp);
->  		if (rnp->qsmaskinit == rnp->qsmaskinitnext &&
->  		    !rnp->wait_blkd_tasks) {
->  			/* Nothing to do on this leaf rcu_node structure. */
-> -			raw_spin_unlock_irq_rcu_node(rnp);
-> -			raw_spin_unlock(&rcu_state.ofl_lock);
-> +			raw_spin_unlock_rcu_node(rnp);
-> +			arch_spin_unlock(&rcu_state.ofl_lock);
-> +			local_irq_restore(flags);
->  			continue;
->  		}
->  
-> @@ -1824,8 +1826,9 @@ static noinline_for_stack bool rcu_gp_init(void)
->  				rcu_cleanup_dead_rnp(rnp);
->  		}
->  
-> -		raw_spin_unlock_irq_rcu_node(rnp);
-> -		raw_spin_unlock(&rcu_state.ofl_lock);
-> +		raw_spin_unlock_rcu_node(rnp);
-> +		arch_spin_unlock(&rcu_state.ofl_lock);
-> +		local_irq_restore(flags);
->  	}
->  	rcu_gp_slow(gp_preinit_delay); /* Races with CPU hotplug. */
->  
-> @@ -4233,7 +4236,7 @@ int rcutree_offline_cpu(unsigned int cpu)
->   */
->  void rcu_cpu_starting(unsigned int cpu)
->  {
-> -	unsigned long flags;
-> +	unsigned long flags, seq_flags;
->  	unsigned long mask;
->  	struct rcu_data *rdp;
->  	struct rcu_node *rnp;
-> @@ -4246,11 +4249,11 @@ void rcu_cpu_starting(unsigned int cpu)
->  
->  	rnp = rdp->mynode;
->  	mask = rdp->grpmask;
-> -	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-> -	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
-> +	local_irq_save(seq_flags);
-> +	arch_spin_lock(&rcu_state.ofl_lock);
->  	rcu_dynticks_eqs_online();
->  	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
-> -	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-> +	raw_spin_lock_rcu_node(rnp);
->  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
->  	newcpu = !(rnp->expmaskinitnext & mask);
->  	rnp->expmaskinitnext |= mask;
-> @@ -4269,9 +4272,8 @@ void rcu_cpu_starting(unsigned int cpu)
->  	} else {
->  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
->  	}
-> -	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
-> -	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-> -	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-> +	arch_spin_unlock(&rcu_state.ofl_lock);
-> +	local_irq_restore(seq_flags);
->  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
->  }
->  
-> @@ -4285,7 +4287,7 @@ void rcu_cpu_starting(unsigned int cpu)
->   */
->  void rcu_report_dead(unsigned int cpu)
->  {
-> -	unsigned long flags;
-> +	unsigned long flags, seq_flags;
->  	unsigned long mask;
->  	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
->  	struct rcu_node *rnp = rdp->mynode;  /* Outgoing CPU's rdp & rnp. */
-> @@ -4299,10 +4301,8 @@ void rcu_report_dead(unsigned int cpu)
->  
->  	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
->  	mask = rdp->grpmask;
-> -	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-> -	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
-> -	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
-> -	raw_spin_lock(&rcu_state.ofl_lock);
-> +	local_irq_save(seq_flags);
-> +	arch_spin_lock(&rcu_state.ofl_lock);
->  	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
->  	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
->  	rdp->rcu_ofl_gp_flags = READ_ONCE(rcu_state.gp_flags);
-> @@ -4313,10 +4313,8 @@ void rcu_report_dead(unsigned int cpu)
->  	}
->  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
->  	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-> -	raw_spin_unlock(&rcu_state.ofl_lock);
-> -	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
-> -	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-> -	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-> +	arch_spin_unlock(&rcu_state.ofl_lock);
-> +	local_irq_restore(seq_flags);
->  
->  	rdp->cpu_started = false;
->  }
-> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-> index 305cf6aeb408..aff4cc9303fb 100644
-> --- a/kernel/rcu/tree.h
-> +++ b/kernel/rcu/tree.h
-> @@ -56,8 +56,6 @@ struct rcu_node {
->  				/*  Initialized from ->qsmaskinitnext at the */
->  				/*  beginning of each grace period. */
->  	unsigned long qsmaskinitnext;
-> -	unsigned long ofl_seq;	/* CPU-hotplug operation sequence count. */
-> -				/* Online CPUs for next grace period. */
->  	unsigned long expmask;	/* CPUs or groups that need to check in */
->  				/*  to allow the current expedited GP */
->  				/*  to complete. */
-> @@ -358,7 +356,7 @@ struct rcu_state {
->  	const char *name;			/* Name of structure. */
->  	char abbr;				/* Abbreviated name. */
->  
-> -	raw_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
-> +	arch_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
->  						/* Synchronize offline with */
->  						/*  GP pre-initialization. */
->  };
-> -- 
-> 2.31.1
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

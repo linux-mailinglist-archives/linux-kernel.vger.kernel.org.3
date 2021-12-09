@@ -2,136 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A41446E8D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA10446E8D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 14:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237584AbhLINMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 08:12:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37089 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233843AbhLINL7 (ORCPT
+        id S237594AbhLINND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 08:13:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233843AbhLINNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:11:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639055305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=igePiCAnnM/E+OTV8/OUnmXoD7Rv+G1QhGP97ZRcaHw=;
-        b=XnGcYHg/p+VB6Z21PcHHkm+qS66kyd4hIOium+GJtM2toTqYeiLhyvUusonm4zMo+L7Ifh
-        RUGu3KWGQiQ3Oax3/uWL1+qxDUxbyugjdz7kmxK0LUXRv512xoT+Kr+E4kTyg9oJMhZtD+
-        IwftvVfjIUx+HN2JbMXmTlWU5uxPCQ0=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-201-1ObY-7omMUicR_QCOOjQSA-1; Thu, 09 Dec 2021 08:08:23 -0500
-X-MC-Unique: 1ObY-7omMUicR_QCOOjQSA-1
-Received: by mail-oi1-f199.google.com with SMTP id bi9-20020a056808188900b002bc4f64083aso3860824oib.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 05:08:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=igePiCAnnM/E+OTV8/OUnmXoD7Rv+G1QhGP97ZRcaHw=;
-        b=xE8IWdLCbqXN1mIDwcNosNqZr5zqjErUsNwF4SQWOPC0Pfwt8dG33K1ikxXORF6PES
-         JJ6wgI0wa/k/02p2JUssYjPpCNvLfg1l3t/w2Dg6qoek5CtkzaMLWFtcXKNS9FgtvL4/
-         RiyxYV+M5yfqJaS5V45B8BMWFJF/y2S8sg6CrH23npHE+Au1rKwn1cXoePJkMW1MaA8x
-         it9kJ9TrPNwxBIbgTavZ09QqsUu4BC7SvWEq1RZQPO1cKliwiEzLGpLtKqIjfYx8I8Qj
-         UjfB5CiUCXhvfTVuczx7px1Ei4/FadbJuLAaadIHyo3FB9T6anidM97a9OIi6WwKQa+n
-         P1Pg==
-X-Gm-Message-State: AOAM533hqVTpDeGIzNEJqfmmxX58qNqA8CCk59pSbSVCnvTDoAqdNbU4
-        8HRgr+o0jwUTYIj8YylKgdp7Lf0NbwYOCpGmYZO6KROfWVZ6vo0nRd9KtvVjdpeAKJMAWqeKabW
-        zW0cN8HbTcjHD+wyDl32Re5qe
-X-Received: by 2002:a05:6830:25c2:: with SMTP id d2mr4992194otu.51.1639055302564;
-        Thu, 09 Dec 2021 05:08:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxOj8FG/2Pi1yxHBQAtiwFCtadHfrnS7LQSpnfphMhrmZpTQZwxCg7xbh8KQssGLtGweF1EXw==
-X-Received: by 2002:a05:6830:25c2:: with SMTP id d2mr4992158otu.51.1639055302337;
-        Thu, 09 Dec 2021 05:08:22 -0800 (PST)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id n6sm1016113otj.78.2021.12.09.05.08.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 05:08:22 -0800 (PST)
-Subject: Re: [PATCH] drivers:ocrdma:remove unneeded variable
-To:     cgel.zte@gmail.com, selvin.xavier@broadcom.com
-Cc:     dledford@redhat.com, jgg@ziepe.ca, leon@kernel.org,
-        dennis.dalessandro@cornelisnetworks.com, galpress@amazon.com,
-        chi.minghao@zte.com.cn, mbloch@nvidia.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cm>
-References: <20211209015206.409528-1-chi.minghao@zte.com.cn>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <260ff018-bf5b-07da-6988-c65c04f5bcb5@redhat.com>
-Date:   Thu, 9 Dec 2021 05:08:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 9 Dec 2021 08:13:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6A2C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 05:09:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S2V4V6NMGVwQrAIV0QOaBKk3FGwCdVOJFA9GJWNNgXw=; b=ZGmdIxZRdXmTz64EfjUbw8C435
+        vP8R1Cu4t+LZ5p9X0XB5vz7rAidvCfcM5Ltb7kQQKSjoUcllsby9+5mkJVlo95JHJBvcmIdft4pud
+        ncYwvprXerzrcFOPQMAE0MGrdRLDeJmc7gGsQESHDOZ/6xHEXZgjJ9+TaYwl5C9xqriE+ZVFVjDeC
+        PX3p1hu2lowd5uHjZ8+EcM+UWlzFCVlFw9xSSVf/Trhw/+PLVeQZ41H6Qyu6Yl7/kdlTGEvwuQOM5
+        U7yxG6B0gpMWakq1DAioc6IcwTAvRapVs5/kX9jLUsWqxKRoWlx2aHwt8tMuA6vWHmM7iRLdHdhke
+        nPCH/VxA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvJAP-009MkL-6G; Thu, 09 Dec 2021 13:08:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5EF0B300079;
+        Thu,  9 Dec 2021 14:08:56 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 496722BB99CC4; Thu,  9 Dec 2021 14:08:56 +0100 (CET)
+Date:   Thu, 9 Dec 2021 14:08:56 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Honglei Wang <wanghonglei@didichuxing.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Huaixin Chang <changhuaixin@linux.alibaba.com>,
+        Honglei Wang <jameshongleiwang@126.com>
+Subject: Re: [PATCH v2 2/3] sched/fair: prevent cpu burst too many periods
+Message-ID: <YbH/6H+QtjFlw+19@hirez.programming.kicks-ass.net>
+References: <20211208145038.64738-1-wanghonglei@didichuxing.com>
 MIME-Version: 1.0
-In-Reply-To: <20211209015206.409528-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208145038.64738-1-wanghonglei@didichuxing.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 08, 2021 at 10:50:38PM +0800, Honglei Wang wrote:
+> Tasks might get more cpu than quota in persistent periods due to the
+> cpu burst introduced by commit f4183717b370 ("sched/fair: Introduce the
+> burstable CFS controller").
 
-On 12/8/21 5:52 PM, cgel.zte@gmail.com wrote:
-> From: chiminghao <chi.minghao@zte.com.cn>
->
-> return value form directly instead of
-form
-> taking this in another redundant variable.
+> For example, one task group whose quota is
+> 100ms per period and can get 100ms burst, and its avg utilization is
+> around 105ms per period.
 
-Clean this message up.
+That would be a mis-configuration, surely..
 
-Maybe just 'Return status directly from function called.'
+> Once this group gets a free period which
+> leaves enough runtime, it has a chance to get computting power more
+> than its quota for 10 periods or more in common bandwidth configuration
+> (say, 100ms as period).
 
-Change itself looks fine.
+Sure, if it, for some miraculous reason, decides to sleep for a whole
+period and then resume, it can indeed consume up to that 100ms extra,
+which, if as per the above, done at 5ms per perios, would be 20 periods
+until depleted.
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+> It means tasks can 'steal' the bursted power to
+> do daily jobs because all tasks could be scheduled out or sleep to help
+> the group get free periods.
 
->
-> Reported-by: Zeal Robot <zealci@zte.com.cm>
-> Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
-> ---
->   drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-> index 735123d0e9ec..3bfbf4ec040d 100644
-> --- a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-> +++ b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-> @@ -1844,12 +1844,10 @@ int ocrdma_modify_srq(struct ib_srq *ibsrq,
->   
->   int ocrdma_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *srq_attr)
->   {
-> -	int status;
->   	struct ocrdma_srq *srq;
->   
->   	srq = get_ocrdma_srq(ibsrq);
-> -	status = ocrdma_mbx_query_srq(srq, srq_attr);
-> -	return status;
-> +	return ocrdma_mbx_query_srq(srq, srq_attr);
->   }
->   
->   int ocrdma_destroy_srq(struct ib_srq *ibsrq, struct ib_udata *udata)
-> @@ -1960,7 +1958,6 @@ static int ocrdma_build_inline_sges(struct ocrdma_qp *qp,
->   static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
->   			     const struct ib_send_wr *wr)
->   {
-> -	int status;
->   	struct ocrdma_sge *sge;
->   	u32 wqe_size = sizeof(*hdr);
->   
-> @@ -1972,8 +1969,7 @@ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
->   		sge = (struct ocrdma_sge *)(hdr + 1);
->   	}
->   
-> -	status = ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
-> -	return status;
-> +	return ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
->   }
->   
->   static int ocrdma_build_write(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+That's the design,,
 
+> I believe the purpose of cpu burst is to help handling bursty worklod.
+> But if one task group can get computting power more than its quota for
+> persistent periods even there is no bursty workload, it's kinda broke.
+
+So if that was were bursty, it could consume that 100ms extra in a
+single go and that would be fine, but spreading that same amount over 20
+periods is somehow a problem? -- even though the interference is less.
+
+> This patch limits the burst to 2 periods so that it won't break the
+> quota limit for long. Permitting 2 periods can help on the scenario that
+> periods refresh lands in the middle of a burst workload. With this, we
+> can give task group more cpu burst power to handle the real burst
+> workload and don't worry about the 'stealing'.
+
+I've yet so see an actual reason for any of this...

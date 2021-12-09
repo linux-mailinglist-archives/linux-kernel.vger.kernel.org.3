@@ -2,76 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9E646E09C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C8D46E09F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhLICCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:02:40 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:33383 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbhLICCj (ORCPT
+        id S229713AbhLICCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:02:48 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29107 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229694AbhLICCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:02:39 -0500
-Received: by mail-io1-f72.google.com with SMTP id 85-20020a6b0258000000b005ed47a95f03so5622839ioc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:59:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=X4FiWxWmye52Y3LrKLRpr7dU5cRyOrBsZmbMNfSo5CY=;
-        b=WQWSdXQQXxZzXXpiVesLUT5uZFb+NeyNgNqWdGikRK5ypGslodSQpR9jrv8j2uoAYx
-         94XcP5VlE21p2A3ZoGRpuhE6hJ9MM3tEvhJq6cePd4Rbh9zA6hkrOE3r92M6Q+PXOnxW
-         h66HnRIIA+D2/P4mhEZMasCaVcy4pWIzU5htsAS6h/7SCuembF3VkCHf8Jq974piwect
-         7J7oIK3PnRsoYnug/gIfLY9a5COyl/x2N9PUZIaDuCxlkaDg/EdQDXGx5asRGAhifunE
-         zt8DSXUapm8dL9ILNISSyCftxvK68LYT5/GIIdQiFpyM+c02XhewnZPA1S8dkH3Fnkhw
-         PWfA==
-X-Gm-Message-State: AOAM5326Qcy0sIBNCEoi1pgrt5hbqBdG3SHmXYDk4axfvem9+tlTG2nv
-        lONMUjfmMFKZETGRNJecGcTnzlaWy+7qKeZnNGRQWsbE6VT9
-X-Google-Smtp-Source: ABdhPJwcKdNMEn0KYdQ1vLDPmmNZxklGqYWl2rCNCIb5QMi3PCt4qHD/Z9l7k31KBbRCAtfLak+fOlkcKYLqu/ng3mHqCptgF8XI
+        Wed, 8 Dec 2021 21:02:48 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J8cZt1sw4z1DK2C;
+        Thu,  9 Dec 2021 09:56:22 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 09:59:13 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 09:59:12 +0800
+Subject: Re: [PATCH v16 10/11] of: fdt: Add memory for devices by DT property
+ "linux,usable-memory-range"
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Frank Rowand" <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+References: <20211123124646.1995-1-thunder.leizhen@huawei.com>
+ <20211123124646.1995-11-thunder.leizhen@huawei.com>
+ <YaaitPTArUZEriob@robh.at.kernel.org>
+ <0dc664f7-65ae-767c-3fe6-d1bcf50d41e1@huawei.com>
+Message-ID: <281c8196-2a5c-28cf-346a-0ae2f7182f1b@huawei.com>
+Date:   Thu, 9 Dec 2021 09:59:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:260d:: with SMTP id m13mr5339337jat.99.1639015146603;
- Wed, 08 Dec 2021 17:59:06 -0800 (PST)
-Date:   Wed, 08 Dec 2021 17:59:06 -0800
-In-Reply-To: <00000000000029e89205d2a8718d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098464c05d2acf3ba@google.com>
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in hci_cmd_sync_cancel
-From:   syzbot <syzbot+485cc00ea7cf41dfdbf1@syzkaller.appspotmail.com>
-To:     Thinh.Nguyen@synopsys.com, bberg@redhat.com, changbin.du@intel.com,
-        christian.brauner@ubuntu.com, davem@davemloft.net,
-        edumazet@google.com, gregkh@linuxfoundation.org,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, luiz.dentz@gmail.com,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        mathias.nyman@linux.intel.com, netdev@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        yajun.deng@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <0dc664f7-65ae-767c-3fe6-d1bcf50d41e1@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
 
-commit c97a747efc93f94a4ad6c707972dfbf8d774edf9
-Author: Benjamin Berg <bberg@redhat.com>
-Date:   Fri Dec 3 14:59:02 2021 +0000
 
-    Bluetooth: btusb: Cancel sync commands for certain URB errors
+On 2021/12/1 10:55, Leizhen (ThunderTown) wrote:
+>>> +	}
+>>>  
+>>> -	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+>>> +	memblock_cap_memory_range(rgn[0].base, rgn[0].size);
+>>> +	for (i = 1; i < MAX_USABLE_RANGES && rgn[i].size; i++)
+>> s/ &&/,/
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10a0fdc5b00000
-start commit:   4eee8d0b64ec Add linux-next specific files for 20211208
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=12a0fdc5b00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=14a0fdc5b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20b74d9da4ce1ef1
-dashboard link: https://syzkaller.appspot.com/bug?extid=485cc00ea7cf41dfdbf1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e7e955b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ed3641b00000
+Hi Rob:
+  I want to keep "&&" unchanged, do you mind? I'm going to post an
+updated version tomorrow, hopefully the last.
 
-Reported-by: syzbot+485cc00ea7cf41dfdbf1@syzkaller.appspotmail.com
-Fixes: c97a747efc93 ("Bluetooth: btusb: Cancel sync commands for certain URB errors")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> Hi Rob:
+> 
+> The comma operator may not be suitable for logical judgment. The logical judgment
+> before commas (,) is ignored.
+> 
+> Here's my test：
+> 
+> C code：
+> int main()
+> {
+>         int i, j;
+> 
+>         printf("&&:\n");
+>         for (i = 0, j = 0; i < 2 && j < 3; i++, j++)
+>                 printf("i=%d, j=%d\n", i, j);
+> 
+>         printf("\ncomma:\n");
+>         for (i = 0, j = 0; i < 2, j < 3; i++, j++)	//(i < 2） before comma is ignored
+>                 printf("i=%d, j=%d\n", i, j);
+> 
+>         return 0;
+> }
+> 
+> Output：
+> &&:
+> i=0, j=0
+> i=1, j=1
+> 
+> comma:
+> i=0, j=0
+> i=1, j=1
+> i=2, j=2
+> 
+> 

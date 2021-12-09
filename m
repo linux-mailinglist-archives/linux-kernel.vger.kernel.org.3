@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A5146ECEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4417C46ECEF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbhLIQXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237216AbhLIQXf (ORCPT
+        id S241014AbhLIQXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:23:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41916 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237216AbhLIQXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:23:35 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30ABC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 08:20:01 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id g16so5540637pgi.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 08:20:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=f8hGB5K46jwmmjk1vocAq85D3TsLo6SGhUQ80nQQ9g8=;
-        b=0M29xfc+ksnPcLbZmJM1vTEK+3hDNs9w1eTA4fXY6XOhrbgfUqEm3LA7M53s3R/mfC
-         mIleihMpxMWJ5h8Ye6is8LjhYOi9MG4qI5PZ7pPM0qOMppElCMX4nOG8xyXUBruui4qg
-         35zT9yuqLibnmgomKYY8toUU2XhkulR+CMV04tv1/Jjell6SPnFREPqlBQ5c+ism4xJr
-         1SHjaf+IPIPQf0TwIShJ/mmxB5xsm2OZXInmuNwSjHTpzzJHCuYNzIDIdORyYV07uFCT
-         wIs2BvCIfgaXHFYDrDcmqSnSwi+qq40f4q3IK136rUs6BHYYj9WZlFOgrELQ37Pz6gYG
-         9k6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=f8hGB5K46jwmmjk1vocAq85D3TsLo6SGhUQ80nQQ9g8=;
-        b=z6PLhShjC/3gvSeKNkObIxpGoGfCO0ZdaNNJhV4Mj4q+suSfYo7aeAWvcNEemk7ckI
-         0xbvddxumqyIPv+boJdvHma8YHAcUljpjDKcbKlWxRf0VOdzgwCH461Rdv7wvy1ZICx/
-         q5TdGNyMBDOwRoWJwaJ9w7M4SClrOTWrxw2wvl3QNnOaLGh/PWsm+yqUQj1VXOlK91Ed
-         rerg0wCL569Le4jAsARXNGzYbcI8ICjeAV/xkoebjv/26Dpj/k5wWPC7F3jFHmCDNVjV
-         LghTD81PZuKSJwRZ1hyRMWasee7kJOhcSXNmn57jLre4K9gdjSPAxrai78ngxx0TlhNf
-         jL4A==
-X-Gm-Message-State: AOAM531KbskapcEXjMgs61wFwpQj2bwGglC6Q9WmhwGqE2Q6LhZMoN8z
-        o/LX61eJuVeNEe3AfkBqySKvBg==
-X-Google-Smtp-Source: ABdhPJwWGi/u+ISQXg4PbRC6U53g8Bvbh2IAvu2YpTm7af+o5DTB/UuNNVFlm751fFbRRP/nyZpDmQ==
-X-Received: by 2002:a63:6c02:: with SMTP id h2mr34508013pgc.327.1639066801488;
-        Thu, 09 Dec 2021 08:20:01 -0800 (PST)
-Received: from [172.20.4.26] ([66.185.175.30])
-        by smtp.gmail.com with ESMTPSA id p15sm187914pjh.1.2021.12.09.08.19.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 08:20:01 -0800 (PST)
-Subject: Re: [RFC][PATCH 0/5] refcount: Improve code-gen
-To:     Peter Zijlstra <peterz@infradead.org>, will@kernel.org,
-        boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, mark.rutland@arm.com,
-        elver@google.com, keescook@chromium.org, hch@infradead.org,
-        torvalds@linux-foundation.org
-References: <20211208183655.251963904@infradead.org>
- <20211209082533.GE16608@worktop.programming.kicks-ass.net>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <2e62f9cd-514f-578b-79cb-180c283f5482@kernel.dk>
-Date:   Thu, 9 Dec 2021 09:19:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 9 Dec 2021 11:23:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01210B82568;
+        Thu,  9 Dec 2021 16:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C410DC341C3;
+        Thu,  9 Dec 2021 16:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639066809;
+        bh=aX/3vLuFjcxCYUWcp4iLTjHuoMCxWqcBUQjFlIFG5ww=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eqKns1CQAQgF/kmpBBI2RixxzJ+0mhLiRoPSkpCuG+YCiF9+Gw3NySrLW/R6cjws1
+         b0sx46GkxnMSCI0saCqeunkDKiD5kfWcZ/H7gEpRVQCaEA8A7l9pe2waU7Fzp3tmLG
+         xfpY4fWCib5y+9Qw/3k6SercSg20++EkFbFU+QlH/4ZOOhlDl9eCf2YiCVipCYFqKL
+         OqDa8wi05D2FEQaYL3WonUsyul8GA+mkOQcOgLj2c3jS2G5MW0POhrALuZLtT5wk++
+         wWF1MNtVjoJrPueOVgFo06MensbwblI91CDt+XRiiqCqSLYQ2m9ZwOCfY+hvnZ1AzZ
+         48ZdX7Ot3VCEw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AC2D7609D7;
+        Thu,  9 Dec 2021 16:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20211209082533.GE16608@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] net: dsa: felix: Fix memory leak in
+ felix_setup_mmio_filtering
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163906680969.23169.11355567482010587770.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Dec 2021 16:20:09 +0000
+References: <20211209110538.11585-1-jose.exposito89@gmail.com>
+In-Reply-To: <20211209110538.11585-1-jose.exposito89@gmail.com>
+To:     =?utf-8?b?Sm9zw6kgRXhww7NzaXRvIDxqb3NlLmV4cG9zaXRvODlAZ21haWwuY29tPg==?=@ci.codeaurora.org
+Cc:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 1:25 AM, Peter Zijlstra wrote:
-> On Wed, Dec 08, 2021 at 07:36:55PM +0100, Peter Zijlstra wrote:
->> Hi,
->>
->> Improves the refcount_t code-gen; I've still got to go through the latest thing
->> Linus suggested, but figured I should get these patches out to see if there's
->> other concerns etc..
->>
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu,  9 Dec 2021 12:05:40 +0100 you wrote:
+> Avoid a memory leak if there is not a CPU port defined.
 > 
-> Bah, I forgot to Cc Jens, let me bounce him the lot.
+> Fixes: 8d5f7954b7c8 ("net: dsa: felix: break at first CPU port during init and teardown")
+> Addresses-Coverity-ID: 1492897 ("Resource leak")
+> Addresses-Coverity-ID: 1492899 ("Resource leak")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> 
+> [...]
 
-Traveling the next few days, just put me on v2 and I should have time to
-look at this start next week. Bouncing only helps for initial messages,
-I'll have to do dig for followups :-)
+Here is the summary with links:
+  - [v2] net: dsa: felix: Fix memory leak in felix_setup_mmio_filtering
+    https://git.kernel.org/netdev/net/c/e8b1d7698038
 
+You are awesome, thank you!
 -- 
-Jens Axboe
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

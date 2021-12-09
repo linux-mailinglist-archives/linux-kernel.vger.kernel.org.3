@@ -2,74 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01F146EB53
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C03F46EB4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbhLIPgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239717AbhLIPgD (ORCPT
+        id S239846AbhLIPgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:36:13 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39954 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239670AbhLIPgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:36:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB04C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:32:28 -0800 (PST)
+        Thu, 9 Dec 2021 10:36:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 283F5CE2689
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:32:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF181C004DD;
-        Thu,  9 Dec 2021 15:32:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C8144CE2686;
+        Thu,  9 Dec 2021 15:32:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E23C341CB;
+        Thu,  9 Dec 2021 15:32:24 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1mvLPD-000SvT-2F;
+        id 1mvLPD-000Sw4-8I;
         Thu, 09 Dec 2021 10:32:23 -0500
-Message-ID: <20211209152908.459494269@goodmis.org>
+Message-ID: <20211209153223.096399871@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 09 Dec 2021 10:29:08 -0500
+Date:   Thu, 09 Dec 2021 10:29:09 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Olsa <jolsa@redhat.com>
-Subject: [for-linus][PATCH 0/5] tracing: Updates for 5.16-rc5
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yabin Cui <yabinc@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        stable@vger.kernel.org, Kalesh Singh <kaleshsingh@google.com>
+Subject: [for-linus][PATCH 1/5] tracefs: Have new files inherit the ownership of their parent
+References: <20211209152908.459494269@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ftrace and tracefs fixes:
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
- - Have tracefs honor the gid mount option
+If directories in tracefs have their ownership changed, then any new files
+and directories that are created under those directories should inherit
+the ownership of the director they are created in.
 
- - Have new files in tracefs inherit the parent ownership
+Link: https://lkml.kernel.org/r/20211208075720.4855d180@gandalf.local.home
 
- - Have direct_ops unregister when it has no more functions
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yabin Cui <yabinc@google.com>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
+Cc: stable@vger.kernel.org
+Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+Reported-by: Kalesh Singh <kaleshsingh@google.com>
+Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ fs/tracefs/inode.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- - Properly clean up the ops when unregistering multi direct ops
-
- - Add a sample module to test the multiple direct ops
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-ftrace/urgent
-
-Head SHA1: 72a86f97053fc70c8cfa6bdef3154bda8a811041
-
-
-Jiri Olsa (3):
-      ftrace: Use direct_ops hash in unregister_ftrace_direct
-      ftrace: Add cleanup to unregister_ftrace_direct_multi
-      ftrace/samples: Add module to test multi direct modify interface
-
-Steven Rostedt (VMware) (2):
-      tracefs: Have new files inherit the ownership of their parent
-      tracefs: Set all files to the same group ownership as the mount option
-
-----
- fs/tracefs/inode.c                          |  76 ++++++++++++++
- kernel/trace/ftrace.c                       |   8 +-
- samples/ftrace/Makefile                     |   1 +
- samples/ftrace/ftrace-direct-multi-modify.c | 152 ++++++++++++++++++++++++++++
- 4 files changed, 236 insertions(+), 1 deletion(-)
- create mode 100644 samples/ftrace/ftrace-direct-multi-modify.c
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index 925a621b432e..06cf0534cc60 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -414,6 +414,8 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
+ 	inode->i_mode = mode;
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
+ 	d_instantiate(dentry, inode);
+ 	fsnotify_create(dentry->d_parent->d_inode, dentry);
+ 	return end_creating(dentry);
+@@ -436,6 +438,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
+ 	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
+ 	inode->i_op = ops;
+ 	inode->i_fop = &simple_dir_operations;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
+ 
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
+-- 
+2.33.0

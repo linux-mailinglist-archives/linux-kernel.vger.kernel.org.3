@@ -2,159 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F241F46E118
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FA046E11A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 04:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbhLIDEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 22:04:33 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:65311 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229446AbhLIDEc (ORCPT
+        id S231237AbhLIDFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 22:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229489AbhLIDFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 22:04:32 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V-.bdvL_1639018857;
-Received: from 30.21.164.175(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0V-.bdvL_1639018857)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 09 Dec 2021 11:00:58 +0800
-Message-ID: <67f08ec2-4121-d025-013d-915ee23ca369@linux.alibaba.com>
-Date:   Thu, 9 Dec 2021 11:00:55 +0800
+        Wed, 8 Dec 2021 22:05:10 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3588C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 19:01:37 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id x1-20020a4aea01000000b002c296d82604so1391085ood.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 19:01:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=ySPyFFqtdyuBIHLLUyShef42vTuQW5UVEw4YMSFTCGs=;
+        b=fcOFBaKN8igGFkv5Hq4B7LT8hZS+vXtlE7scQQo7aB4iwIcYau2OHRYW5Hr8XJtXdY
+         FPxqyzqqLvqLUKNKzo55KbG2bwgwxVsHz5NfdwiuH2UTcoA//BK4vw2rotjNxRBdIYjS
+         tXawiWlofuozRlbcisqruXLxzXU4PeKNd8N7Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=ySPyFFqtdyuBIHLLUyShef42vTuQW5UVEw4YMSFTCGs=;
+        b=Hv8bBK5mmMoqNwJQeG/Yv1hXEd4lRmFgWjYg+Z0H7v+3TK5d0zpVcU0eCbIp+oizNY
+         CAnlZbFT8KTg35HOmv4iLjjAa+AKPPtT6jT5c3fgBWvwW5eZwpn6QPE8EHhbxeCsDJha
+         UtXPfbklRdsVRu43PWkCsp5YPkNqbPUnXR6QWEXOs9k42W53FqAH3O3JjjLC/gUPhPlo
+         VRiD5CGJ9PYlvAE3WbtHF6R/suQB0/CdyDe846/zWEw+XCcIUeaW6mBZCGTXHuQfY+qv
+         SLniTH15JZyiBqX57M5GV7jVQMsOho74AU+F8bg+GCt2E/qnInuWBuF/CJyLOgvbtzTX
+         6M+A==
+X-Gm-Message-State: AOAM532BZe2k6acXpS72nacf/MrLKmQ8nGXFZaLiHi5nd27j49ZEybsV
+        /W2IIj825P7XoHasLLBMWthj5f+btAL7uOy5YZf2fA==
+X-Google-Smtp-Source: ABdhPJzfm1mjganFNfDgL21KPQZnDL2HCeKKT5S1lwgHg6taD+gRMfe1My60dFjkJru25ZQx0pTSz4jer+PE/I2RKY0=
+X-Received: by 2002:a4a:cf12:: with SMTP id l18mr2340150oos.25.1639018897050;
+ Wed, 08 Dec 2021 19:01:37 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 8 Dec 2021 19:01:36 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
- <20211207031217-mutt-send-email-mst@kernel.org>
- <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
- <20211208021947-mutt-send-email-mst@kernel.org>
- <dfb712d7-1186-1496-9fcc-a72e23c3409b@linux.alibaba.com>
- <20211208191239-mutt-send-email-mst@kernel.org>
-From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
-In-Reply-To: <20211208191239-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1638985262-2072-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1638985262-2072-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 8 Dec 2021 19:01:36 -0800
+Message-ID: <CAE-0n51FCOwPeWz=SFaRY58J3=yGnKdE5aHMCGx-tzK_CVEUQQ@mail.gmail.com>
+Subject: Re: [PATCH v5] drm/msm/dp: dp_link_parse_sink_count() return
+ immediately if aux read failed
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
+        vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Kuogee Hsieh (2021-12-08 09:41:02)
+> Add checking aux read/write status at both dp_link_parse_sink_count()
+> and dp_link_parse_sink_status_filed() to avoid long timeout delay if
+> dp aux read/write failed at timeout due to cable unplugged.
+>
+> Changes in V4:
+> -- split this patch as stand alone patch
+>
+> Changes in v5:
+> -- rebase on msm-next branch
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>
 
+Remove this newline please.
 
-在 2021/12/9 上午8:19, Michael S. Tsirkin 写道:
-[snip]
->>>>>>
->>>> Hi, Michael
->>>>
->>>> Thanks for the comment, unfortunately modify device is not an option for us
->>>> :-(
->>>>
->>>> Is there any idea on how to solve this issue properly?
->>>>
->>>> Regards,
->>>> Michael Wang
->>>
->>> By the way, there is a bug in the error message. Want to fix that?
->>
->> Could you please provide more detail about the bug? We'd like to help fixing
->> it :-)
->>
->> Besides, I've checked that patch but it can't address our issue, we actually
->> have this legacy pci device on arm platform, and the memory layout is
->> unfriendly since allocation rarely providing page-address below 44bit, we
->> understand the virtio-iommu case should not do force dma, while we don't
->> have that so it's just working fine.
->>
->> Regards,
->> Michael Wang
-> 
-> BTW is it just the ring that's at issue?
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Tested-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_display.c | 12 +++++++++---
+>  drivers/gpu/drm/msm/dp/dp_link.c    | 19 ++++++++++++++-----
+>  2 files changed, 23 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 3d61459..0766752 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -692,9 +692,15 @@ static int dp_irq_hpd_handle(struct dp_display_private *dp, u32 data)
+>                 return 0;
+>         }
+>
+> -       ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
+> -       if (ret == -ECONNRESET) { /* cable unplugged */
+> -               dp->core_initialized = false;
+> +       /*
+> +        * dp core (ahb/aux clks) must be initialized before
+> +        * irq_hpd be handled
+> +        */
+> +       if (dp->core_initialized) {
 
-Yes, the dma address for ring allocated as page can't fit the requirement.
+This part of the commit isn't described in the commit text. Can you add
+some more details in the commit text about this?
 
-> Figuring out we have this problematic config and then allocating just
-> the ring from coherent memory seems more palatable.
-
-Agree, I'm also wondering why can't we force alloc 44bit-pfn page to fit 
-the requirement? I mean if there are such pages, we should use them 
-firstly as dma address for legacy devices, and only fail when there are 
-no such pages at all, but can't find existing API to alloc page with 
-such requirement... anyway.
-
-> 
-> But please note we still need to detect config with a virtual iommu (can
-> be any kind not just virtio-iommu, smmu, vtd are all affected) and
-> disable the hacks. This is what the new DMA API I suggested would do.
-
-Fair enough, any more details about the design of new API?
-
-Regards,
-Michael Wang
-
-
-> 
-> 
->>>
->>>
->>>>>
->>>>>> ---
->>>>>>     drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
->>>>>>     drivers/virtio/virtio_ring.c       |  3 +++
->>>>>>     include/linux/virtio.h             |  1 +
->>>>>>     3 files changed, 14 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/virtio/virtio_pci_legacy.c
->>>>>> b/drivers/virtio/virtio_pci_legacy.c
->>>>>> index d62e983..11f2ebf 100644
->>>>>> --- a/drivers/virtio/virtio_pci_legacy.c
->>>>>> +++ b/drivers/virtio/virtio_pci_legacy.c
->>>>>> @@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct virtio_pci_device
->>>>>> *vp_dev)
->>>>>>     	vp_dev->setup_vq = setup_vq;
->>>>>>     	vp_dev->del_vq = del_vq;
->>>>>>
->>>>>> +	/*
->>>>>> +	 * The legacy pci device requre 32bit-pfn vq,
->>>>>> +	 * or setup_vq() will failed.
->>>>>> +	 *
->>>>>> +	 * Thus we make sure vring_use_dma_api() will
->>>>>> +	 * return true during the allocation by marking
->>>>>> +	 * force_dma here.
->>>>>> +	 */
->>>>>> +	vp_dev->vdev.force_dma = true;
->>>>>> +
->>>>>>     	return 0;
->>>>>>
->>>>>>     err_iomap:
->>>>>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->>>>>> index 3035bb6..6562e01 100644
->>>>>> --- a/drivers/virtio/virtio_ring.c
->>>>>> +++ b/drivers/virtio/virtio_ring.c
->>>>>> @@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct
->>>>>> virtqueue *_vq,
->>>>>>
->>>>>>     static bool vring_use_dma_api(struct virtio_device *vdev)
->>>>>>     {
->>>>>> +	if (vdev->force_dma)
->>>>>> +		return true;
->>>>>> +
->>>>>>     	if (!virtio_has_dma_quirk(vdev))
->>>>>>     		return true;
->>>>>>
->>>>>> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
->>>>>> index 41edbc0..a4eb29d 100644
->>>>>> --- a/include/linux/virtio.h
->>>>>> +++ b/include/linux/virtio.h
->>>>>> @@ -109,6 +109,7 @@ struct virtio_device {
->>>>>>     	bool failed;
->>>>>>     	bool config_enabled;
->>>>>>     	bool config_change_pending;
->>>>>> +	bool force_dma;
->>>>>>     	spinlock_t config_lock;
->>>>>>     	spinlock_t vqs_list_lock; /* Protects VQs list access */
->>>>>>     	struct device dev;
->>>>>> -- 
->>>>>> 1.8.3.1
+> +               ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
+> +               if (ret == -ECONNRESET) { /* cable unplugged */
+> +                       dp->core_initialized = false;
+> +               }
+>         }
+>         DRM_DEBUG_DP("hpd_state=%d\n", state);
+>

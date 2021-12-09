@@ -2,70 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F23E746E428
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8550F46E42A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbhLII3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:29:46 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54450 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbhLII3n (ORCPT
+        id S234799AbhLIIaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:30:25 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:36817 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234781AbhLIIaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:29:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DCC97CE2504;
-        Thu,  9 Dec 2021 08:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06929C004DD;
-        Thu,  9 Dec 2021 08:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639038367;
-        bh=ZON+4u+q2F+Fa8whstAYeDuG7BMfCupQp2IyL4eIE6A=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=pn439sS9qvx5uBNoFPe9ptDWRL8pbZ9zvyijRzF+POy3u8NrZfMEzY0g3PG6e1iXA
-         VchtdngaJspHdM8nElC8WqGELW0HpONMxF5mXylhM7ODCpex5Jr/09MMUgg3fhkvOp
-         n7yqsceIAFbue9Oi0MbqLCTogu5JFdJrPlYGrOcCj2k4SLIzP2Z7IFYijQd1vCKUB6
-         Etx0kQO21ym622ju5mVusSSGFZEmbOjmPssjC0fCLL4ATL2DYZE4UzajaLJ8gnfYXP
-         L211Z3/ZfZZnCPWo/d6nycJW7yjvSIDMvstqS3zsFcqmrXGwQVDVxS628d5eTed8Tx
-         noCcJjRkYq/ew==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Dec 2021 03:30:23 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V-1yIM8_1639038407;
+Received: from 30.21.164.175(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0V-1yIM8_1639038407)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 09 Dec 2021 16:26:48 +0800
+Message-ID: <22c1f3f1-beab-83cb-c7ce-d61a970d0f0e@linux.alibaba.com>
+Date:   Thu, 9 Dec 2021 16:26:47 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211207114003.100693-3-vkoul@kernel.org>
-References: <20211207114003.100693-1-vkoul@kernel.org> <20211207114003.100693-3-vkoul@kernel.org>
-Subject: Re: [PATCH v2 2/2] clk: qcom: Add clock driver for SM8450
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Date:   Thu, 09 Dec 2021 00:26:05 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20211209082607.06929C004DD@smtp.kernel.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [RFC PATCH] virtio: make sure legacy pci device gain 32bit-pfn vq
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <b50fff4d-9f05-76b3-eba7-91241c351751@linux.alibaba.com>
+ <20211207031217-mutt-send-email-mst@kernel.org>
+ <8bbfd029-d969-4632-cb8e-482481d65a2f@linux.alibaba.com>
+ <20211208021947-mutt-send-email-mst@kernel.org>
+ <dfb712d7-1186-1496-9fcc-a72e23c3409b@linux.alibaba.com>
+ <20211208060115-mutt-send-email-mst@kernel.org>
+ <a5b62e3c-5c24-dc8f-f7a3-027a67ef3bb2@linux.alibaba.com>
+ <20211209013833-mutt-send-email-mst@kernel.org>
+From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
+In-Reply-To: <20211209013833-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Vinod Koul (2021-12-07 03:40:03)
-> diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
-> new file mode 100644
-> index 000000000000..82ac419718d7
-> --- /dev/null
-> +++ b/drivers/clk/qcom/gcc-sm8450.c
-> @@ -0,0 +1,3303 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2021, Linaro Limited
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/regmap.h>
 
-BTW, clk providers need to include clk-provider.h
+
+在 2021/12/9 下午2:40, Michael S. Tsirkin 写道:
+[snip]
+>>>> Besides, I've checked that patch but it can't address our issue, we actually
+>>>> have this legacy pci device on arm platform, and the memory layout is
+>>>> unfriendly since allocation rarely providing page-address below 44bit, we
+>>>> understand the virtio-iommu case should not do force dma, while we don't
+>>>> have that so it's just working fine.
+>>>>
+>>>> Regards,
+>>>> Michael Wang
+>>>
+>>> Hmm wait a sec is it a physical device or a hypervisor?
+>>> If a physical one then doesn't it need VIRTIO_F_ORDER_PLATFORM
+>>> on ARM?
+>>
+>> The PCI device is virtual, I can't see how VIRTIO_F_ORDER_PLATFORM help
+>> address this issue, legacy pci config is 32bit but it's 36, seems like will
+>> never be included?
+>>
+>> Regards,
+>> Michael Wang
+> 
+> Oh, if the device is virtual then I think you should just update it please.
+> virtio 0.X is architecturally limited to small VMs,
+> if your hypervisor supports more it should emulate virtio 1.0.
+
+I see, nice to confirm the proper approach, although we don't have that 
+option on the desk :-P
+
+So as long as we don't have any iommu enabled, the force dma approach 
+could be safe, is this correct?
+
+Regards,
+Michael Wang
+
+> 
+> 
+> 
+>>>
+>>>
+>>>
+>>>>>
+>>>>>
+>>>>>>>
+>>>>>>>> ---
+>>>>>>>>      drivers/virtio/virtio_pci_legacy.c | 10 ++++++++++
+>>>>>>>>      drivers/virtio/virtio_ring.c       |  3 +++
+>>>>>>>>      include/linux/virtio.h             |  1 +
+>>>>>>>>      3 files changed, 14 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/virtio/virtio_pci_legacy.c
+>>>>>>>> b/drivers/virtio/virtio_pci_legacy.c
+>>>>>>>> index d62e983..11f2ebf 100644
+>>>>>>>> --- a/drivers/virtio/virtio_pci_legacy.c
+>>>>>>>> +++ b/drivers/virtio/virtio_pci_legacy.c
+>>>>>>>> @@ -263,6 +263,16 @@ int virtio_pci_legacy_probe(struct virtio_pci_device
+>>>>>>>> *vp_dev)
+>>>>>>>>      	vp_dev->setup_vq = setup_vq;
+>>>>>>>>      	vp_dev->del_vq = del_vq;
+>>>>>>>>
+>>>>>>>> +	/*
+>>>>>>>> +	 * The legacy pci device requre 32bit-pfn vq,
+>>>>>>>> +	 * or setup_vq() will failed.
+>>>>>>>> +	 *
+>>>>>>>> +	 * Thus we make sure vring_use_dma_api() will
+>>>>>>>> +	 * return true during the allocation by marking
+>>>>>>>> +	 * force_dma here.
+>>>>>>>> +	 */
+>>>>>>>> +	vp_dev->vdev.force_dma = true;
+>>>>>>>> +
+>>>>>>>>      	return 0;
+>>>>>>>>
+>>>>>>>>      err_iomap:
+>>>>>>>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+>>>>>>>> index 3035bb6..6562e01 100644
+>>>>>>>> --- a/drivers/virtio/virtio_ring.c
+>>>>>>>> +++ b/drivers/virtio/virtio_ring.c
+>>>>>>>> @@ -245,6 +245,9 @@ static inline bool virtqueue_use_indirect(struct
+>>>>>>>> virtqueue *_vq,
+>>>>>>>>
+>>>>>>>>      static bool vring_use_dma_api(struct virtio_device *vdev)
+>>>>>>>>      {
+>>>>>>>> +	if (vdev->force_dma)
+>>>>>>>> +		return true;
+>>>>>>>> +
+>>>>>>>>      	if (!virtio_has_dma_quirk(vdev))
+>>>>>>>>      		return true;
+>>>>>>>>
+>>>>>>>> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+>>>>>>>> index 41edbc0..a4eb29d 100644
+>>>>>>>> --- a/include/linux/virtio.h
+>>>>>>>> +++ b/include/linux/virtio.h
+>>>>>>>> @@ -109,6 +109,7 @@ struct virtio_device {
+>>>>>>>>      	bool failed;
+>>>>>>>>      	bool config_enabled;
+>>>>>>>>      	bool config_change_pending;
+>>>>>>>> +	bool force_dma;
+>>>>>>>>      	spinlock_t config_lock;
+>>>>>>>>      	spinlock_t vqs_list_lock; /* Protects VQs list access */
+>>>>>>>>      	struct device dev;
+>>>>>>>> -- 
+>>>>>>>> 1.8.3.1

@@ -2,67 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A371546F40B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDE946F411
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbhLITj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:39:26 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47408 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbhLITjX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:39:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9D144CE27F4;
-        Thu,  9 Dec 2021 19:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 113F7C341CB;
-        Thu,  9 Dec 2021 19:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639078546;
-        bh=3Y6sSFhQC6zE/Ent9Dbju/+ZfZjUqmHxioM8+U3W42U=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=f2WlktgMywCTKzyIIcW2CS6FmU8GJMWn1v1ZLvvhkjI8+QgyuBd+KRy2Pc3F/5FSU
-         dRijOqESZz/F08TOgFMipp3kAFFMq6y6boMXd56AqpEgY2595LvI7JrhVEB/DrlWEE
-         5vNKcdWo5BkI6qDzBtAMcgMMID3FmW47fVWjgfhkTz1uHhDFwtqcQowYUqb4sSIgy/
-         PzreDnftvNnvoUVnvFcet9IJeo5JrXb8QYDIihyEtPwMmJqz7PhK+K9QLmbmXsT3zO
-         dR+B3vTc+atkmj3lIb2Lkl7WqFIBRJNqI1oNniHeaHDUVdOCctfJeHIS2ZcR60iPnS
-         BJdDJtbAHMA3Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EDAEB60A37;
-        Thu,  9 Dec 2021 19:35:45 +0000 (UTC)
-Subject: Re: [GIT PULL] Networking for 5.16-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211209172032.610738-1-kuba@kernel.org>
-References: <20211209172032.610738-1-kuba@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211209172032.610738-1-kuba@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc5
-X-PR-Tracked-Commit-Id: 04ec4e6250e5f58b525b08f3dca45c7d7427620e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ded746bfc94398d2ee9de315a187677b207b2004
-Message-Id: <163907854596.11961.15478565326988801668.pr-tracker-bot@kernel.org>
-Date:   Thu, 09 Dec 2021 19:35:45 +0000
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        linux-can@vger.kernel.org
+        id S230055AbhLITkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:40:35 -0500
+Received: from mga18.intel.com ([134.134.136.126]:57581 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229531AbhLITkb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:40:31 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225059503"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="225059503"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:36:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="462263649"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 09 Dec 2021 11:36:55 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D8A92329; Thu,  9 Dec 2021 21:36:59 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>
+Subject: [PATCH v3 1/1] PCI: Introduce pci_bus_*() printing macros when device is not available
+Date:   Thu,  9 Dec 2021 21:36:53 +0200
+Message-Id: <20211209193653.84280-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu,  9 Dec 2021 09:20:32 -0800:
+In some cases PCI device structure is not available and we want to print
+information based on the bus and devfn parameters. For this cases introduce
+pci_bus_*() printing macros and replace in existing users.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc5
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+---
+v3: surrounded 'bus' with parentheses (Joe)
+ drivers/pci/probe.c | 12 +++---------
+ include/linux/pci.h |  8 ++++++++
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ded746bfc94398d2ee9de315a187677b207b2004
-
-Thank you!
-
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 2c91d3509d17..7208901fba70 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2334,16 +2334,12 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
+ 	 */
+ 	while (pci_bus_crs_vendor_id(*l)) {
+ 		if (delay > timeout) {
+-			pr_warn("pci %04x:%02x:%02x.%d: not ready after %dms; giving up\n",
+-				pci_domain_nr(bus), bus->number,
+-				PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++			pci_bus_warn(bus, devfn, "not ready after %dms; giving up\n", delay - 1);
+ 
+ 			return false;
+ 		}
+ 		if (delay >= 1000)
+-			pr_info("pci %04x:%02x:%02x.%d: not ready after %dms; waiting\n",
+-				pci_domain_nr(bus), bus->number,
+-				PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++			pci_bus_info(bus, devfn, "not ready after %dms; waiting\n", delay - 1);
+ 
+ 		msleep(delay);
+ 		delay *= 2;
+@@ -2353,9 +2349,7 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
+ 	}
+ 
+ 	if (delay >= 1000)
+-		pr_info("pci %04x:%02x:%02x.%d: ready after %dms\n",
+-			pci_domain_nr(bus), bus->number,
+-			PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
++		pci_bus_info(bus, devfn, "ready after %dms\n", delay - 1);
+ 
+ 	return true;
+ }
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 0ce26850470e..14ed28e29857 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2482,4 +2482,12 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+ 	WARN_ONCE(condition, "%s %s: " fmt, \
+ 		  dev_driver_string(&(pdev)->dev), pci_name(pdev), ##arg)
+ 
++#define pci_bus_printk(level, bus, devfn, fmt, arg...) \
++	printk(level "pci %04x:%02x:%02x.%d: " fmt, \
++	       pci_domain_nr(bus), (bus)->number, PCI_SLOT(devfn), PCI_FUNC(devfn), ##arg)
++
++#define pci_bus_err(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_ERR, (bus), devfn, fmt, ##arg)
++#define pci_bus_warn(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_WARNING, (bus), devfn, fmt, ##arg)
++#define pci_bus_info(bus, devfn, fmt, arg...)	pci_bus_printk(KERN_INFO, (bus), devfn, fmt, ##arg)
++
+ #endif /* LINUX_PCI_H */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.33.0
+

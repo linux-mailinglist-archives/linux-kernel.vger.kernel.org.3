@@ -2,145 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B5C46E202
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2284646E206
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbhLIFfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:35:45 -0500
-Received: from mga06.intel.com ([134.134.136.31]:54229 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229854AbhLIFfo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:35:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639027931; x=1670563931;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=smr3t5WKC03WkNX9V0Z4U1tv94uetRsSl7sjkPVXnss=;
-  b=B+wGCCJY5/AsPVlbarQScreCwWEZ2FDGsi44Y+8l7UeKdX9aLNzRtnhm
-   xNL/nvxpYfPO5XBDQLnpIQB5WS1LS9w/jUPblL15hLiyv5rLtXYz12TLd
-   z1mNkgALdCYT/8SBgXDketfkPmao/oLmP1QHuANsaHTLlFm6oQDtlPFRD
-   UXlTVnyN8fKNg540k+2jz3YDJyETuiOyNVS0/FVMe8sUHVMDAagS5rZI8
-   bxvNauiT7lndWj2bBhVu3tbSvQ/Wh36iVj78l/PSk2e3ttfKLcxxbDem1
-   AJlanRtMnk6MSphrFkhmeiw8PYZ4DDwf1qBJqUUmp4aBXvmTCZjqsQ8uS
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="298811791"
-X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
-   d="scan'208";a="298811791"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 21:32:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
-   d="scan'208";a="612378061"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Dec 2021 21:32:09 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvC2K-0001Wr-D6; Thu, 09 Dec 2021 05:32:08 +0000
-Date:   Thu, 9 Dec 2021 13:31:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Subject: drivers/pinctrl/bcm/pinctrl-bcm2835.c:413:14: warning: variable
- 'group' is used uninitialized whenever 'for' loop exits because its
- condition is false
-Message-ID: <202112091309.HCSKbMQS-lkp@intel.com>
+        id S232215AbhLIFhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229854AbhLIFhh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 00:37:37 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3A2C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:34:04 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id u80so4400224pfc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:34:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TEdQ7xqbUh9nZ2fpYSrjLmJge99wiwbPJrNcrQ2+9GU=;
+        b=Cglcz+jiZOL3ZlvU9ShHERJBngWOh7gT0onZCe3CJOPB9uQwomxgEX9LHHDI66XdQ6
+         Z83lfA5VDywJFMjFW6ydMk9qeYoNg6DIKR2fAgpK4IOJVILBxPeivDAYcrPonbr3gqou
+         kGI3TbT/w9Y9ERpoCZdXvmAHkpaHSiYjr8n2I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TEdQ7xqbUh9nZ2fpYSrjLmJge99wiwbPJrNcrQ2+9GU=;
+        b=U3x3Zdvof53tFSzr+Eq6gMOT10fNsJxpMPlt3iPcyhkM7IOSNl1GVLYxDuZFtA7XP1
+         lFUYFGCzEz1N7WukirwkySdQ76cgBfteceSYVrRX8SJEaGRkeN1q28YhaGPx04juakok
+         duXPPjWfP184ITAGPiT9nzAGsd8AALnubGNyGWlqsgeYx/oax15rVBgW2wgY9YnXZnyl
+         ioDRvq7vCYCLdQ4fjxyf3qnPR1hY3iSS88kqDpapr9daiiRMaz5PLk8o8McGzWDuyNYv
+         qlC+g6JpTj5ycszQ8mfMmzDxw3N1rWZnu5g1vs1EZ/Xyb3p68rUSdQJI4spg7v9YboH3
+         V5tA==
+X-Gm-Message-State: AOAM533F0F7okvO1T6xXewH6OKMu/gGFBfbiSNYF5ofKkd3+vBpMv8DW
+        7FDV0CVfWPASnef1ZlQ5fcy5aQ==
+X-Google-Smtp-Source: ABdhPJy/gv/9wFDJIqnWANj9Of3Dd3TIdKAwJAzw7FVWsOpzpQGelsoyMuALbUiFVB/qX9tASwUQUw==
+X-Received: by 2002:a05:6a00:2349:b0:4a8:d87:e8ad with SMTP id j9-20020a056a00234900b004a80d87e8admr9860982pfj.15.1639028044328;
+        Wed, 08 Dec 2021 21:34:04 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g7sm5447044pfv.159.2021.12.08.21.34.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 21:34:03 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2] net/mlx5e: Avoid field-overflowing memcpy()
+Date:   Wed,  8 Dec 2021 21:34:02 -0800
+Message-Id: <20211209053402.2202206-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6133; h=from:subject; bh=bv/kclJVqFfpYqF/u9SUVEA+zaU84TcD4WE+rVi9g7I=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhsZVJjU+25rXmRi5WzcuerZqRLJN3iCPc/8qQNiPO Nprb0GeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbGVSQAKCRCJcvTf3G3AJrCfEA CRXNU40blLLe6OTK0SA98KhXyyxeBIQuxWn0vrx/6plzA5pkFJU01hiWbzFzzrK44fIJx9ojwbWob/ 1PvJtG9DRazZ+DH/Tf1UsB1K9ok18bNmsgtep7WCRG3yDXzDX4Pa0u7GCeOm609BmybNZ2Atut04i/ YUVJiAXy4XeFqOYV95lmdprWo1SHHOdggJsYCYqGyvuB195O9jSugqNJc3nHrWcXJ2CWsp4MGPiqrM fd65E6vDnZbFB+pi69pum2aWs7poTUv/BwzBibVQoGlmsOHAyAs3LGEWX/5o/9waEp8UuLfIdC1xq6 jXouklbBXMHT+oIvzXDxFWmOhA/geM7gRNcIG3FAbtOdrpzKw3ztMYcYttAsqtjEEYgBUXgUSldLdR JH80zRFweQQJjOEwyBo33h+UiL8yGslJtqQIEm1c4XgGPg+AxpAivsqIwt+VTyy8GEXvlXrd2yjNpq t0ZMYnSc7obDLnCqETUtrRIDMHB+gSY9HmjGw262XlyT0R0HXTVo2k1j8KrTkykE+B5CWT02V3ZQSX /y3Sdb4trXXDZIioacxpz64YsJDPa9eyrl7xZSrrvJ9YXYEhiVi2t+MZFhKqLDYUQsihqI/pL7QAIm LC/BeDATgM79wa4G5wB9FVkpCMC5Xbue/KLqgoKOvH89a7ngoA72lHt7/JPg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
-commit: 4434f4c50345c84373b7117b5c827a88870f9d36 pinctrl: bcm2835: Allow building driver as a module
-date:   6 weeks ago
-config: mips-randconfig-r001-20211209 (https://download.01.org/0day-ci/archive/20211209/202112091309.HCSKbMQS-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4434f4c50345c84373b7117b5c827a88870f9d36
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4434f4c50345c84373b7117b5c827a88870f9d36
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/bcm/
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memcpy(), memmove(), and memset(), avoid
+intentionally writing across neighboring fields.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Use flexible arrays instead of zero-element arrays (which look like they
+are always overflowing) and split the cross-field memcpy() into two halves
+that can be appropriately bounds-checked by the compiler.
 
-All warnings (new ones prefixed by >>):
+We were doing:
 
->> drivers/pinctrl/bcm/pinctrl-bcm2835.c:413:14: warning: variable 'group' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-           for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-                       ^~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/bcm/pinctrl-bcm2835.c:424:10: note: uninitialized use occurs here
-           switch (group) {
-                   ^~~~~
-   drivers/pinctrl/bcm/pinctrl-bcm2835.c:413:14: note: remove the condition if it is always true
-           for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-                       ^~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/bcm/pinctrl-bcm2835.c:410:11: note: initialize the variable 'group' to silence this warning
-           int group;
-                    ^
-                     = 0
-   1 warning generated.
+	#define ETH_HLEN  14
+	#define VLAN_HLEN  4
+	...
+	#define MLX5E_XDP_MIN_INLINE (ETH_HLEN + VLAN_HLEN)
+	...
+        struct mlx5e_tx_wqe      *wqe  = mlx5_wq_cyc_get_wqe(wq, pi);
+	...
+        struct mlx5_wqe_eth_seg  *eseg = &wqe->eth;
+        struct mlx5_wqe_data_seg *dseg = wqe->data;
+	...
+	memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
 
+target is wqe->eth.inline_hdr.start (which the compiler sees as being
+2 bytes in size), but copying 18, intending to write across start
+(really vlan_tci, 2 bytes). The remaining 16 bytes get written into
+wqe->data[0], covering byte_count (4 bytes), lkey (4 bytes), and addr
+(8 bytes).
 
-vim +413 drivers/pinctrl/bcm/pinctrl-bcm2835.c
+struct mlx5e_tx_wqe {
+        struct mlx5_wqe_ctrl_seg   ctrl;                 /*     0    16 */
+        struct mlx5_wqe_eth_seg    eth;                  /*    16    16 */
+        struct mlx5_wqe_data_seg   data[];               /*    32     0 */
 
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  403  
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  404  static void bcm2835_gpio_irq_handler(struct irq_desc *desc)
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  405  {
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  406  	struct gpio_chip *chip = irq_desc_get_handler_data(desc);
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  407  	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  408  	struct irq_chip *host_chip = irq_desc_get_chip(desc);
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  409  	int irq = irq_desc_get_irq(desc);
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  410  	int group;
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  411  	int i;
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  412  
-73345a18d464b1 drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2019-08-12 @413  	for (i = 0; i < BCM2835_NUM_IRQS; i++) {
-73345a18d464b1 drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2019-08-12  414  		if (chip->irq.parents[i] == irq) {
-0d885e9da176ad drivers/pinctrl/bcm/pinctrl-bcm2835.c Thierry Reding 2017-07-20  415  			group = i;
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  416  			break;
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  417  		}
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  418  	}
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  419  	/* This should not happen, every IRQ has a bank */
-29d45a642d4ea8 drivers/pinctrl/bcm/pinctrl-bcm2835.c Jason Wang     2021-06-24  420  	BUG_ON(i == BCM2835_NUM_IRQS);
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  421  
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  422  	chained_irq_enter(host_chip, desc);
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  423  
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  424  	switch (group) {
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  425  	case 0: /* IRQ0 covers GPIOs 0-27 */
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  426  		bcm2835_gpio_irq_handle_bank(pc, 0, 0x0fffffff);
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  427  		break;
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  428  	case 1: /* IRQ1 covers GPIOs 28-45 */
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  429  		bcm2835_gpio_irq_handle_bank(pc, 0, 0xf0000000);
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  430  		bcm2835_gpio_irq_handle_bank(pc, 1, 0x00003fff);
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  431  		break;
-b1d84a3d0a26c5 drivers/pinctrl/bcm/pinctrl-bcm2835.c Stefan Wahren  2020-02-08  432  	case 2: /* IRQ2 covers GPIOs 46-57 */
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  433  		bcm2835_gpio_irq_handle_bank(pc, 1, 0x003fc000);
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  434  		break;
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  435  	}
-00445b5d5866c7 drivers/pinctrl/bcm/pinctrl-bcm2835.c Phil Elwell    2015-02-24  436  
-85ae9e512f437c drivers/pinctrl/bcm/pinctrl-bcm2835.c Linus Walleij  2016-11-14  437  	chained_irq_exit(host_chip, desc);
-e1b2dc70cd5b00 drivers/pinctrl/pinctrl-bcm2835.c     Simon Arlott   2012-09-27  438  }
-e1b2dc70cd5b00 drivers/pinctrl/pinctrl-bcm2835.c     Simon Arlott   2012-09-27  439  
+        /* size: 32, cachelines: 1, members: 3 */
+        /* last cacheline: 32 bytes */
+};
 
-:::::: The code at line 413 was first introduced by commit
-:::::: 73345a18d464b1b945b29f54f630ace6873344e2 pinctrl: bcm2835: Pass irqchip when adding gpiochip
+struct mlx5_wqe_eth_seg {
+        u8                         swp_outer_l4_offset;  /*     0     1 */
+        u8                         swp_outer_l3_offset;  /*     1     1 */
+        u8                         swp_inner_l4_offset;  /*     2     1 */
+        u8                         swp_inner_l3_offset;  /*     3     1 */
+        u8                         cs_flags;             /*     4     1 */
+        u8                         swp_flags;            /*     5     1 */
+        __be16                     mss;                  /*     6     2 */
+        __be32                     flow_table_metadata;  /*     8     4 */
+        union {
+                struct {
+                        __be16     sz;                   /*    12     2 */
+                        u8         start[2];             /*    14     2 */
+                } inline_hdr;                            /*    12     4 */
+                struct {
+                        __be16     type;                 /*    12     2 */
+                        __be16     vlan_tci;             /*    14     2 */
+                } insert;                                /*    12     4 */
+                __be32             trailer;              /*    12     4 */
+        };                                               /*    12     4 */
 
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+        /* size: 16, cachelines: 1, members: 9 */
+        /* last cacheline: 16 bytes */
+};
+
+struct mlx5_wqe_data_seg {
+        __be32                     byte_count;           /*     0     4 */
+        __be32                     lkey;                 /*     4     4 */
+        __be64                     addr;                 /*     8     8 */
+
+        /* size: 16, cachelines: 1, members: 3 */
+        /* last cacheline: 16 bytes */
+};
+
+So, split the memcpy() so the compiler can reason about the buffer
+sizes.
+
+"pahole" shows no size nor member offset changes to struct mlx5e_tx_wqe
+nor struct mlx5e_umr_wqe. "objdump -d" shows no meaningful object
+code changes (i.e. only source line number induced differences and
+optimizations).
+
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Hi, this is a rebase, and I can now address questions from
+https://lore.kernel.org/lkml/b5f1c558fef468fe8550ebb5e77d36bf1d0971a7.camel@kernel.org/
+
+- performance change? none: there is no executable code differences
+  except that the compiler chooses different temporary registers.
+
+- why aren't the other cases a problem? The others are dynamically sized
+  copies, and the first phase of the memcpy tightening is only handling
+  the constant expression sizes. The runtime size checking will come next,
+  where those other cases will need to be handled as well. But one thing
+  at a time. :)
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/ethernet/mellanox/mlx5/core/en.h     | 6 +++---
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 4 +++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index e77c4159713f..5d8e0a712313 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -225,7 +225,7 @@ static inline int mlx5e_get_max_num_channels(struct mlx5_core_dev *mdev)
+ struct mlx5e_tx_wqe {
+ 	struct mlx5_wqe_ctrl_seg ctrl;
+ 	struct mlx5_wqe_eth_seg  eth;
+-	struct mlx5_wqe_data_seg data[0];
++	struct mlx5_wqe_data_seg data[];
+ };
+ 
+ struct mlx5e_rx_wqe_ll {
+@@ -242,8 +242,8 @@ struct mlx5e_umr_wqe {
+ 	struct mlx5_wqe_umr_ctrl_seg   uctrl;
+ 	struct mlx5_mkey_seg           mkc;
+ 	union {
+-		struct mlx5_mtt inline_mtts[0];
+-		struct mlx5_klm inline_klms[0];
++		DECLARE_FLEX_ARRAY(struct mlx5_mtt, inline_mtts);
++		DECLARE_FLEX_ARRAY(struct mlx5_klm, inline_klms);
+ 	};
+ };
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index 2f0df5cc1a2d..efae2444c26f 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -341,8 +341,10 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
+ 
+ 	/* copy the inline part if required */
+ 	if (sq->min_inline_mode != MLX5_INLINE_MODE_NONE) {
+-		memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
++		memcpy(eseg->inline_hdr.start, xdptxd->data, sizeof(eseg->inline_hdr.start));
+ 		eseg->inline_hdr.sz = cpu_to_be16(MLX5E_XDP_MIN_INLINE);
++		memcpy(dseg, xdptxd->data + sizeof(eseg->inline_hdr.start),
++		       MLX5E_XDP_MIN_INLINE - sizeof(eseg->inline_hdr.start));
+ 		dma_len  -= MLX5E_XDP_MIN_INLINE;
+ 		dma_addr += MLX5E_XDP_MIN_INLINE;
+ 		dseg++;
+-- 
+2.30.2
+

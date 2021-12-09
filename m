@@ -2,120 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA21246F1F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D497446F196
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243001AbhLIRe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235532AbhLIRey (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:34:54 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C607DC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:31:20 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id r25so21398699edq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:31:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iqExJZ9/DphBTKULUzi0rda5Ww/lFJEMJ0HrtECPjTI=;
-        b=CEZX4drLnp80p9b9oVxK0f0qT2WA3YF+B1Tl8CQVWg2uGKK6+gQz0h/GPS2FyiNNJ9
-         gAKRuC48E81Hb/mGX0sY3phjIF/WMv16b9bipyIo+rIOFDAbKwrmyJ7HqNkTia2gkVbu
-         /I1NAgDWldKvVVC+e1z0jNAfGMMlQioj2HEiU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iqExJZ9/DphBTKULUzi0rda5Ww/lFJEMJ0HrtECPjTI=;
-        b=FvEabh9khU3i7twZchPwaNhdUuhMsrRw0014VEkVd/T69vyJ/AHL3mYp9JCaRIUXek
-         10s0gK0L956RI33soFgDLkK6AYeKJAI6pC3ejj+VSIYslSoTtfC5OklFXTYVUtcmf+hO
-         1JEMNr1NVKEh8wPGRePtA/DgWzuC0SsBEdluYaMgAkxtWS0kml8M3D7U9jRO+wOAR8Bc
-         T3n89pvgye5O8Q4r/EAQeFs/OKkOHGLVKzapNVoo1j4KM7mbH8ApeRNewSQOd5O8hdxs
-         Svu4B7T+S8pu25OTlvVrKjL0KD4zl0vk+C/GhGPf1AQUzHVJIRCn3UHY1NrlWFIGiLgs
-         lh7w==
-X-Gm-Message-State: AOAM530fQdWeC5wwu644ZKRrV/cQl78BRUkbkhs0R4quATmSeCdV1WCM
-        x1PAtGQab2AbNK6ExGf937tt/+DE5cGsNEMe
-X-Google-Smtp-Source: ABdhPJwKhD7I2tS2HN2Whtpv+YZj7w3dmcftWFLgsS7UmrrjK8kBs8Bc3dhDoOD+4522R6EfVLbHxg==
-X-Received: by 2002:a17:907:7f9e:: with SMTP id qk30mr17393581ejc.313.1639070886847;
-        Thu, 09 Dec 2021 09:28:06 -0800 (PST)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id og14sm214994ejc.107.2021.12.09.09.28.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 09:28:06 -0800 (PST)
-Received: by mail-wm1-f53.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so7172502wme.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:28:06 -0800 (PST)
-X-Received: by 2002:a05:600c:22ce:: with SMTP id 14mr8659906wmg.152.1639070533785;
- Thu, 09 Dec 2021 09:22:13 -0800 (PST)
+        id S242802AbhLIR0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:26:14 -0500
+Received: from mail-sn1anam02on2083.outbound.protection.outlook.com ([40.107.96.83]:6485
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242783AbhLIR0M (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:26:12 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n4ne2HYRI3jgF7FGXkJ/k4Y2j8EA38qPO+dc5fT2T60br3FCO1DHSeGJ5+eHZBG3wz/A5IINGmn3SpVGiLRopVy+5pxNp8szkAdmnSwDbeZaWVIOZzjYQXBRox1P5RkOcoH7vd9jMHmq6yL+s5JBkbWfYA7L85UfYCQqv/ZpGWP7/dW6gDMQuMyggGZ/Xve12GB9N/FfEzDutS7HemUU6EZZC7GJyCx/Jh5VJd77/HGOHpkj529TSlv6KKzi59vIeZPOgDjRPoahcSPdeSy7R7GeVtJfvM8kXaeCguYk5hXBHtaSKNaldfzhhSMCWHgqPcVgi/HvoO+M9i3Pxk+7NQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/DfxmQDUbvUJ0if1sjrKmZPyqNdIiAHNroWq7NM+qSQ=;
+ b=j35c6DQqimIPDNSXQzQ2NS33Y6byH3Lo3v2g7GK534z0iXc57ScyzyOqPXvPtaHme/LgI8CwUwtO90G8vCUzMRVvM0iNfBTEJdSu+hwUgKiPYBJXkcfeqA7VxTSHmrDYSwyrePW8LHAYlK81LSlzh655ED/awIIOkvFurNv4pWaMC0ax1N7tqf28supioUlBmgf9bJDMOQdb89Ay+A5rf930pGoT55Y3rBCQTg4ucpkfZ6NMCcbrMjabErph/inGUNkCM6yqItSK1yyP62uYBtTOQCb84F0jQJeZYyPfnkjokcIv6/uyTQSmxkwd6tDUg0ahOIA5AWDJq0VEeD8MsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 203.18.50.12) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/DfxmQDUbvUJ0if1sjrKmZPyqNdIiAHNroWq7NM+qSQ=;
+ b=fIc1n2c1LS20IYF7IGdazsA5h6coM3RUM1S1sbap2bRa3Kraf/RCcmGBMAEQaL2lLLxph5q3M4C4cAmMtU0Nf2Yy80Cad0f83duBEuzuOD4XaX5xE8vT23ibUUY146JNzSDHtI3FnBzxT9kuQTWvST4qvZ1PBdoYrdbhzFiJfXj8FwhSTbB9Or/FeVjTXXKxAxIEobL88cA1ccJs3sGdbfPI1ZVXiGoEWjTsdg/wZ9obyAxKhgmc893mxEilGE5HVks39xw3ua4rEidvaC6zwW003OyJAUDprL2hFcY8QgHl00VgMXYk8ufl6c43jvVzm/PcLAEgmHX569mPw7I2LQ==
+Received: from MW4PR04CA0311.namprd04.prod.outlook.com (2603:10b6:303:82::16)
+ by DM6PR12MB4896.namprd12.prod.outlook.com (2603:10b6:5:1b6::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Thu, 9 Dec
+ 2021 17:22:37 +0000
+Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::e6) by MW4PR04CA0311.outlook.office365.com
+ (2603:10b6:303:82::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12 via Frontend
+ Transport; Thu, 9 Dec 2021 17:22:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.12)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 203.18.50.12 as permitted sender) receiver=protection.outlook.com;
+ client-ip=203.18.50.12; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (203.18.50.12) by
+ CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4755.13 via Frontend Transport; Thu, 9 Dec 2021 17:22:37 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HKMAIL101.nvidia.com
+ (10.18.16.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
+ 2021 17:22:15 +0000
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
+ 2021 17:22:13 +0000
+Received: from sumitg-l4t.nvidia.com (172.20.187.6) by mail.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 9 Dec 2021 17:22:10 +0000
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>
+CC:     <sumitg@nvidia.com>, <bbasu@nvidia.com>, <vsethi@nvidia.com>,
+        <jsequeira@nvidia.com>
+Subject: [Patch Resend v1 0/8] CBB driver for Tegra194, Tegra234 & Tegra-Grace 
+Date:   Thu, 9 Dec 2021 22:51:58 +0530
+Message-ID: <20211209172206.17778-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
- <163906891983.143852.6219772337558577395.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163906891983.143852.6219772337558577395.stgit@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 9 Dec 2021 09:21:57 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgejk2DA53dkzs6NquDbQk5_r6Hw8_-RJQ0_njNijKYew@mail.gmail.com>
-Message-ID: <CAHk-=wgejk2DA53dkzs6NquDbQk5_r6Hw8_-RJQ0_njNijKYew@mail.gmail.com>
-Subject: Re: [PATCH v2 10/67] fscache: Implement cookie registration
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        linux-afs@lists.infradead.org,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f4c5f09f-f8e5-46ab-95ea-08d9bb387f53
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4896:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB48961ED0A3DDFBED60C496ADB9709@DM6PR12MB4896.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PMBNKHpkfVRHZAGxxrBq+ltqMROEkt8gyEw/vAh70vlRSyDcE+KrQ28fIdzomNFCaz4wpwdfnvbya0l16X4d+IagaJwxh1BPXjEiHlNyQqfYxp1jFggqoe0k00YR1YfR38wBRarkZd9O1pRQORzEUl/DRgS0MRTEDaF5EGi3GCZtIk5EVvOX3vtDCbQvRL3TFiGPkpW3X23qKfSNB2IXnRMiiCXHFk1gnCIgbjXHhGu4UUVm1NBuS2KATaNLNV5rFftuo/Xt6er6y9hJzu14NDhzpeLFtkMdKGn88fql1LWCjyRBpUwqUaDfQvITruP6WJW87CNmjL1tdVRB3/pzKl3c9AlmH0S+elivLIahOQtXNBhN7iYcEsaljeohrgjle5hh2vJDuXoBrutGkz3+HVujc5miPjQjPFNmwZSH8aLFMTXX0riyQwSxD/M3tGqcvxSaQhbcuejDldV9OOt3ona2vCdpDTaycVW+gz04RjDeWZfo1w7HhYveRa9MdTvxhI7ZSZ/eocmJ72W51yTyRNfUoz8ld490HGeb+uDYV8H1//hvvHLybW6CRILf0JwQa7f9vPJWFd4Enwk95XZBpBQOsK0RZXVBhVx9JpGOhHf5cJilfPHavTwpeWpftPG3V39StnzCweIBFVwRqBF9ZM7lPKDsa3VyK8Ot+ZLPvLtfCydkmAnLG97+LZ/MhCph1O/h7S+n5X76RAZbBvAmTovfDS/IeSiZ0eWQyt2zFUi48K/uCdDey0uDAvRWPNKYz+iQ/taa88QmLkzZwErdgulEV5yK3hLkCHCSy6gUDHA=
+X-Forefront-Antispam-Report: CIP:203.18.50.12;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(40460700001)(5660300002)(36756003)(426003)(70206006)(82310400004)(4326008)(7696005)(508600001)(83380400001)(86362001)(1076003)(107886003)(26005)(47076005)(8936002)(34020700004)(2906002)(186003)(36860700001)(316002)(356005)(2616005)(4743002)(6666004)(7636003)(110136005)(8676002)(336012)(70586007)(54906003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 17:22:37.4945
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4c5f09f-f8e5-46ab-95ea-08d9bb387f53
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.12];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4896
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 8:55 AM David Howells <dhowells@redhat.com> wrote:
->
-> +               buf = (u32 *)cookie->inline_key;
-> +       }
-> +
-> +       memcpy(buf, index_key, index_key_len);
-> +       cookie->key_hash = fscache_hash(cookie->volume->key_hash, buf, bufs);
+The patch series adds Control BackBone(CBB) error handling
+driver for Tegra194, Tegra234 and Tegra-Grace SOC's.
+Tegra194 is using CBB version 1.0. Tegra234 and Tegra-Grace
+are using CBB version 2.0. Both CBB1.0 and CBB2.0 have
+different internal architecture. So, separate drivers are
+required.
+Tegra194 and Tegra234 are using Device Tree. Tegra-Grace is
+using ACPI.
 
-This is actively wrong given the noise about "endianness independence"
-of the fscache_hash() function.
+Sumit Gupta (8):
+  soc: tegra: set ERD bit to mask inband errors
+  dt-bindings: arm: tegra: Add NVIDIA Tegra194 CBB1.0 binding
+  arm64: tegra: Add node for CBB1.0 in Tegra194 SOC
+  soc: tegra: cbb: Add CBB1.0 driver for Tegra194
+  dt-bindings: arm: tegra: Add NVIDIA Tegra234 CBB2.0 binding
+  arm64: tegra: Add node for CBB2.0 in Tegra234 SOC
+  soc: tegra: cbb: Add driver for Tegra234 CBB2.0
+  soc: tegra: cbb: Add support for tegra-grace SOC
 
-There is absolutely nothing endianness-independent in the above.
-You're taking some random data, casting the pointer to a native
-word-order 32-bit entity, and then doing things in that native word
-order.
+ .../arm/tegra/nvidia,tegra194-cbb.yaml        |  121 +
+ .../arm/tegra/nvidia,tegra234-cbb.yaml        |   80 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      |   62 +-
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |   49 +
+ drivers/soc/tegra/Kconfig                     |    9 +
+ drivers/soc/tegra/Makefile                    |    1 +
+ drivers/soc/tegra/cbb/Makefile                |    9 +
+ drivers/soc/tegra/cbb/tegra-cbb.c             |  199 ++
+ drivers/soc/tegra/cbb/tegra194-cbb.c          | 2266 +++++++++++++++++
+ drivers/soc/tegra/cbb/tegra234-cbb.c          |  822 ++++++
+ drivers/soc/tegra/fuse/tegra-apbmisc.c        |   29 +-
+ include/soc/tegra/fuse.h                      |    6 +
+ include/soc/tegra/tegra-cbb.h                 |   43 +
+ include/soc/tegra/tegra-grace-cbb.h           |  219 ++
+ include/soc/tegra/tegra194-cbb.h              |  158 ++
+ include/soc/tegra/tegra234-cbb.h              |  340 +++
+ 16 files changed, 4410 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
+ create mode 100644 drivers/soc/tegra/cbb/Makefile
+ create mode 100644 drivers/soc/tegra/cbb/tegra-cbb.c
+ create mode 100644 drivers/soc/tegra/cbb/tegra194-cbb.c
+ create mode 100644 drivers/soc/tegra/cbb/tegra234-cbb.c
+ create mode 100644 include/soc/tegra/tegra-cbb.h
+ create mode 100644 include/soc/tegra/tegra-grace-cbb.h
+ create mode 100644 include/soc/tegra/tegra194-cbb.h
+ create mode 100644 include/soc/tegra/tegra234-cbb.h
 
-The same data will give different results on different endiannesses.
+-- 
+2.17.1
 
-Maybe some other code has always munged stuff so that it's in some
-"native word format", but if so, the type system should have been made
-to match. And it's not. It explicitly casts what is clearly some other
-pointer type to "u32 *".
-
-There is no way in hell this is properly endianness-independent with
-each word in an array having some actual endianness-independent value
-when you write code like this.
-
-I'd suggest making endianness either explicit (make things explicitly
-"__le32" or whatever) and making sure that you don't just randomly
-cast pointers, you actually have the proper types.
-
-Or, alternatively, just say "nobody cares about BE any more,
-endianness isn't relevant, get over it".
-
-But don't have functions that claim to be endianness-independent and
-then randomly access data like this.
-
-              Linus

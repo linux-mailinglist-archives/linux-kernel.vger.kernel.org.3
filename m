@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A746946E77E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D8346E781
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 12:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236594AbhLILYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 06:24:21 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42308 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbhLILYT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:24:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 67F60CE25AE;
-        Thu,  9 Dec 2021 11:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D622EC004DD;
-        Thu,  9 Dec 2021 11:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639048842;
-        bh=zf758cAypWJos/9Tzs5VqoD7YdNh1AXrtJPYppiiPag=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=TlvohAryJFvg0D6AfDLIZAdyHt33EvyPoIXR+nmlKh+vk6rvMCT9/E8ZZMPBsEVyn
-         mZuVfwiKiiH7wjaPIiMOzHwfVNCSA1i3sQkIYB5W31+y+E/QV4bUt1pwyMHP9E/brz
-         Z1XcbLdyCePy0xnQDGe+95yYTthgpx5efh/n7z8nrCC5jE+KadJlCvTU2H59LDbgAK
-         5/kqoagDmg6X41EvBtAoWQcuLMrLJflcFg3NKL+tIcFW3ZURbHnatNc6C2XrqM2w+d
-         iuzS8xxP/ZGBMher3nhe/zW6Oa6fYyZS22RZZsPq1x9iFkyoK1jZyEkTbUA5sdVNy2
-         j31zieAFuz8ng==
-Message-ID: <2a79206d3472b279079fbef5c9507f8805061c47.camel@kernel.org>
-Subject: Re: [PATCH] libceph, ceph: potential dereference of null pointer
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, idryomov@gmail.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     ceph-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 09 Dec 2021 06:20:40 -0500
-In-Reply-To: <20211209025038.2028112-1-jiasheng@iscas.ac.cn>
-References: <20211209025038.2028112-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+        id S235637AbhLILZj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Dec 2021 06:25:39 -0500
+Received: from aposti.net ([89.234.176.197]:55020 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231765AbhLILZi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:25:38 -0500
+Date:   Thu, 09 Dec 2021 11:21:53 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: config CPU_SUPPORTS_HUGEPAGES refers to the non-existing symbol
+ ARCH_PHYS_ADDR_T_64BIT
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Daniel Silsby <dansilsby@gmail.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-Id: <H8IU3R.H5QVNRA077PT@crapouillou.net>
+In-Reply-To: <CAKXUXMyip-Ojt-uOsjU-LnajM+cV4EcAf6ABNoAus+t2fAizDg@mail.gmail.com>
+References: <CAKXUXMyip-Ojt-uOsjU-LnajM+cV4EcAf6ABNoAus+t2fAizDg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 10:50 +0800, Jiasheng Jiang wrote:
-> The return value of kzalloc() needs to be checked.
-> To avoid use of null pointer in case of the failure of alloc.
-> 
-> Fixes: 3d14c5d2b6e1 ("ceph: factor out libceph from Ceph file system")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  net/ceph/osd_client.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/ceph/osd_client.c b/net/ceph/osd_client.c
-> index ff8624a7c964..3203e8a34370 100644
-> --- a/net/ceph/osd_client.c
-> +++ b/net/ceph/osd_client.c
-> @@ -1234,6 +1234,8 @@ static struct ceph_osd *create_osd(struct ceph_osd_client *osdc, int onum)
->  	WARN_ON(onum == CEPH_HOMELESS_OSD);
->  
->  	osd = kzalloc(sizeof(*osd), GFP_NOIO | __GFP_NOFAIL);
-> +	if (!osd)
-> +		return NULL;
->  	osd_init(osd);
->  	osd->o_osdc = osdc;
->  	osd->o_osd = onum;
+Hi Lukas,
 
-__GFP_NOFAIL should ensure that it never returns NULL, right?
+Le mer., déc. 8 2021 at 12:43:00 +0100, Lukas Bulwahn 
+<lukas.bulwahn@gmail.com> a écrit :
+> Dear Daniel, dear Paul, dear Thomas,
+> 
+> In commit d4a451d5fc84 ("arch: remove the ARCH_PHYS_ADDR_T_64BIT
+> config symbol") from April 2018, the config ARCH_PHYS_ADDR_T_64BIT was
+> removed and all instances of that config were refactored
+> appropriately. Since then, it is recommended to use the config
+> PHYS_ADDR_T_64BIT instead.
+> 
+> Then in June 2019, commit 171543e75272 ("MIPS: Disallow
+> CPU_SUPPORTS_HUGEPAGES for XPA,EVA") introduces the expression
+> "!(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))" for config
+> CPU_SUPPORTS_HUGEPAGES, which refers to the non-existing symbol
+> ARCH_PHYS_ADDR_T_64BIT.
+> 
+> In this expression, the symbol ARCH_PHYS_ADDR_T_64BIT always evaluates
+> to false. So, the expression is effectively "!(32BIT && EVA)" right
+> now.
+> 
+> Now, it is a bit unclear what is intended here, especially since it
+> was not noticed to be wrong for the last two years:
+> 
+> - The commit is buggy, but nobody noticed it so far. It was intended
+> to refer to PHYS_ADDR_T_64BIT. We need to provide a fix that changes
+> the semantics by referring to the intended Kconfig symbol.
 
-Also, if you're going to fix this up to handle that error then you
-probably also need to fix lookup_create_osd to handle a NULL return from
-create_osd as well.
--- 
-Jeff Layton <jlayton@kernel.org>
+It should be PHYS_ADDR_T_64BIT, yes.
+
+> - The commit is just a bit unclean and that is why nobody noticed. The
+> reference to ARCH_PHYS_ADDR_T_64BIT can be dropped. We can provide a
+> clean-up patch that preserves the current semantics.
+
+AFAIK hugepages still don't work as-is on 32-bit as we are running out 
+of available bits in PTEs. I do have hugepages enabled on a kernel 
+build, but I have to manually disable ARCH_HAS_PTE_SPECIAL and 
+CPU_HAS_RIXI to free up space. This is annoying but not something that 
+can be fixed easily.
+
+-Paul
+
+> Once the situation for that commit and its intention is clear, I am
+> happy to provide the suitable patch.
+> 
+> Best regards,
+> 
+> Lukas
+
+

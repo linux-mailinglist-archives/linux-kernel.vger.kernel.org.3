@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4997446F35C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A244046F364
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 19:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbhLISyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 13:54:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhLISyY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 13:54:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D4AC061746;
-        Thu,  9 Dec 2021 10:50:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 696E1CE27D7;
-        Thu,  9 Dec 2021 18:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63EB1C004DD;
-        Thu,  9 Dec 2021 18:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639075846;
-        bh=w7new5tncWvYjVhAOuqtDPgqyOKIbxL/GcszJGXds3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYQwsraAmn+3N5TaeLgpotH78Kz4Dxo7oOgj2tM3kWFAD6vIXsmqmtBE3Xiet4cya
-         P3ra0UkF/4BFH6M12XFdn+maaoMgfqGP3OhlbynY+vibCw+HLraQ7iwyC5X4OgPjQI
-         /qaHs8JJbDqiSLWUc+/5eRdKJhUfckYX6JTE0vAL7JbSlggHgXIzbMpIXIuyfkHAiV
-         r5066xIGcxRtzWulHizT2d19C7NxaT8E0ZkIF1rdXfIaDuIb3cNY+O3k/hOsuhQlqh
-         OeGdzFDrMIqqVcFY+ibLSMSKPnqZm/oGAR0FRskEk2hbjQavGQaA0DO4IwkuHbEXlF
-         Ln3LeOXBomCcQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id AD988405D8; Thu,  9 Dec 2021 15:50:42 -0300 (-03)
-Date:   Thu, 9 Dec 2021 15:50:42 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Sohaib Mohamed <sohaib.amhmd@gmail.com>
-Cc:     irogers@google.com, Riccardo Mancini <rickyman7@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Fabian Hemmer <copy@copy.sh>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Unbuffered output when pipe/tee to a file
-Message-ID: <YbJQAp6/gz4kHdi8@kernel.org>
-References: <20211119061409.78004-1-sohaib.amhmd@gmail.com>
+        id S229801AbhLISzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 13:55:13 -0500
+Received: from mga09.intel.com ([134.134.136.24]:18551 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229625AbhLISzM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 13:55:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639075898; x=1670611898;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4exh6KfZGZJ1kF4PVXOAW+G8CJGkYg0ZxXfAuWQE4DQ=;
+  b=ghgp8vyrAl13F9aKWOb6/U6os3rugtt8LiTyxJKkQqTsO/MjiIBP+6Wa
+   ePSKKiX9rIDBCO3Ld+jtxYT6tSDn4hd8QfrNtL7gdzb4xPs7SA/El/MOF
+   JBK3dYJa9gkckX//S80PFNOZ13idA/cjC4wi64PdGjtpyGKFmtmvuNWlP
+   ChbjkvR4IAlln6MFBie7Ycxze99uNxymqk3RdwEUhE5pQZxmJORvmVrT1
+   N4ApRux5PfGSSleHDX5fkNNSV0CoBtMrgeDIjbPmBUr4xtKVrEvrORq0d
+   QxVKKn7uc35jGcKcHdZ7LAZVz4uaPj5N0HvIMEcUljil882Ko6YTwrFES
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="237987063"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="237987063"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:51:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="463361860"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2021 10:51:36 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvOW0-0002Gv-1c; Thu, 09 Dec 2021 18:51:36 +0000
+Date:   Fri, 10 Dec 2021 02:50:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ardb:for-kernelci 1/1] arch/arm/boot/compressed/head.S:315: Error:
+ invalid constant (408000) after fixup
+Message-ID: <202112100254.0Rw7jLH5-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211119061409.78004-1-sohaib.amhmd@gmail.com>
-X-Url:  http://acmel.wordpress.com
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Nov 19, 2021 at 08:14:08AM +0200, Sohaib Mohamed escreveu:
-> The output of Perf bench gets buffered when I pipe it to a file or to
-> tee, in such a way that I can see it only at the end.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
+head:   3d803745c0cdcca58579eb2654530bf4be3bef72
+commit: 3d803745c0cdcca58579eb2654530bf4be3bef72 [1/1] ARM: set textoffset to 4 MiB unconditionally
+config: arm-randconfig-c002-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100254.0Rw7jLH5-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=3d803745c0cdcca58579eb2654530bf4be3bef72
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb for-kernelci
+        git checkout 3d803745c0cdcca58579eb2654530bf4be3bef72
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-Humm, not at the end, the output is staggered, i.e. only when the buffer
-fills up it is drained and then we have to wait for it to fill up again,
-rinse repeat.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I just tested and applied it, adding a note about this patch fixing the
-previous output bursty behaviour.
+All errors (new ones prefixed by >>):
 
-- Arnaldo
- 
-> E.g.
-> $ perf bench internals synthesize -t
-> < output comes out fine after each test run >
-> 
-> $ perf bench internals synthesize -t | tee file.txt
-> < output comes out only at the end of all tests >
-> 
-> This patch resolves this issue for 'bench' and 'test' subcommands.
-> 
-> See, also:
-> $ perf bench mem all | tee file.txt
-> $ perf bench sched all | tee file.txt
-> $ perf bench internals all -t | tee file.txt
-> $ perf bench internals all | tee file.txt
-> 
-> Suggested-by: Riccardo Mancini <rickyman7@gmail.com>
-> Signed-off-by: Sohaib Mohamed <sohaib.amhmd@gmail.com>
-> ---
-> v1 -> v2:
-> - Use setvbuf(), instead of sprinkling fflush() calls and missing some places.
-> 
-> v1: https://lore.kernel.org/linux-perf-users/20211112215313.108823-1-sohaib.amhmd@gmail.com/
-> ---
->  tools/perf/builtin-bench.c      | 5 +++--
->  tools/perf/tests/builtin-test.c | 3 +++
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-> index d0895162c2ba..d291f3a8af5f 100644
-> --- a/tools/perf/builtin-bench.c
-> +++ b/tools/perf/builtin-bench.c
-> @@ -226,7 +226,6 @@ static void run_collection(struct collection *coll)
->  		if (!bench->fn)
->  			break;
->  		printf("# Running %s/%s benchmark...\n", coll->name, bench->name);
-> -		fflush(stdout);
-> 
->  		argv[1] = bench->name;
->  		run_bench(coll->name, bench->name, bench->fn, 1, argv);
-> @@ -247,6 +246,9 @@ int cmd_bench(int argc, const char **argv)
->  	struct collection *coll;
->  	int ret = 0;
-> 
-> +	/* Unbuffered output */
-> +	setvbuf(stdout, NULL, _IONBF, 0);
-> +
->  	if (argc < 2) {
->  		/* No collection specified. */
->  		print_usage();
-> @@ -300,7 +302,6 @@ int cmd_bench(int argc, const char **argv)
-> 
->  			if (bench_format == BENCH_FORMAT_DEFAULT)
->  				printf("# Running '%s/%s' benchmark:\n", coll->name, bench->name);
-> -			fflush(stdout);
->  			ret = run_bench(coll->name, bench->name, bench->fn, argc-1, argv+1);
->  			goto end;
->  		}
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> index 8cb5a1c3489e..d92ae4efd2e6 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -606,6 +606,9 @@ int cmd_test(int argc, const char **argv)
->          if (ret < 0)
->                  return ret;
-> 
-> +	/* Unbuffered output */
-> +	setvbuf(stdout, NULL, _IONBF, 0);
-> +
->  	argc = parse_options_subcommand(argc, argv, test_options, test_subcommands, test_usage, 0);
->  	if (argc >= 1 && !strcmp(argv[0], "list"))
->  		return perf_test__list(argc - 1, argv + 1);
-> --
-> 2.25.1
+   arch/arm/boot/compressed/head.S: Assembler messages:
+>> arch/arm/boot/compressed/head.S:315: Error: invalid constant (408000) after fixup
 
--- 
 
-- Arnaldo
+vim +315 arch/arm/boot/compressed/head.S
+
+0673cb38951215 Geert Uytterhoeven 2021-01-04  300  
+0673cb38951215 Geert Uytterhoeven 2021-01-04  301  		/*
+0673cb38951215 Geert Uytterhoeven 2021-01-04  302  		 * Make sure we have some stack before calling C code.
+0673cb38951215 Geert Uytterhoeven 2021-01-04  303  		 * No GOT fixup has occurred yet, but none of the code we're
+0673cb38951215 Geert Uytterhoeven 2021-01-04  304  		 * about to call uses any global variables.
+0673cb38951215 Geert Uytterhoeven 2021-01-04  305  		 */
+0673cb38951215 Geert Uytterhoeven 2021-01-04  306  		ldr	sp, [r1]	@ get stack location
+0673cb38951215 Geert Uytterhoeven 2021-01-04  307  		add	sp, sp, r1	@ apply relocation
+0673cb38951215 Geert Uytterhoeven 2021-01-04  308  
+0673cb38951215 Geert Uytterhoeven 2021-01-04  309  		/* Validate calculated start against passed DTB */
+0673cb38951215 Geert Uytterhoeven 2021-01-04  310  		mov	r1, r8
+0673cb38951215 Geert Uytterhoeven 2021-01-04  311  		bl	fdt_check_mem_start
+0673cb38951215 Geert Uytterhoeven 2021-01-04  312  1:
+0673cb38951215 Geert Uytterhoeven 2021-01-04  313  #endif /* CONFIG_USE_OF */
+0a6a78b8b3c1c1 Russell King       2015-03-26  314  		/* Determine final kernel image address. */
+0673cb38951215 Geert Uytterhoeven 2021-01-04 @315  		add	r4, r0, #TEXT_OFFSET
+e69edc7939abda Eric Miao          2010-07-05  316  #else
+9e84ed63dc71e1 Russell King       2010-09-09  317  		ldr	r4, =zreladdr
+e69edc7939abda Eric Miao          2010-07-05  318  #endif
+^1da177e4c3f41 Linus Torvalds     2005-04-16  319  
+2874865c1271cc Nicolas Pitre      2013-06-06  320  		/*
+2874865c1271cc Nicolas Pitre      2013-06-06  321  		 * Set up a page table only if it won't overwrite ourself.
+7d57909bf69f21 Masahiro Yamada    2015-01-20  322  		 * That means r4 < pc || r4 - 16k page directory > &_end.
+2874865c1271cc Nicolas Pitre      2013-06-06  323  		 * Given that r4 > &_end is most unfrequent, we add a rough
+2874865c1271cc Nicolas Pitre      2013-06-06  324  		 * additional 1MB of room for a possible appended DTB.
+2874865c1271cc Nicolas Pitre      2013-06-06  325  		 */
+2874865c1271cc Nicolas Pitre      2013-06-06  326  		mov	r0, pc
+2874865c1271cc Nicolas Pitre      2013-06-06  327  		cmp	r0, r4
+691cbe5ba5f77f Ard Biesheuvel     2020-04-13  328  		ldrcc	r0, .Lheadroom
+2874865c1271cc Nicolas Pitre      2013-06-06  329  		addcc	r0, r0, pc
+2874865c1271cc Nicolas Pitre      2013-06-06  330  		cmpcc	r4, r0
+2874865c1271cc Nicolas Pitre      2013-06-06  331  		orrcc	r4, r4, #1		@ remember we skipped cache_on
+2874865c1271cc Nicolas Pitre      2013-06-06  332  		blcs	cache_on
+6d7d0ae5157494 Nicolas Pitre      2011-02-21  333  
+
+:::::: The code at line 315 was first introduced by commit
+:::::: 0673cb38951215060d7993b43ad3c45cd413c2c3 ARM: 9045/1: uncompress: Validate start of physical memory against passed DTB
+
+:::::: TO: Geert Uytterhoeven <geert+renesas@glider.be>
+:::::: CC: Russell King <rmk+kernel@armlinux.org.uk>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

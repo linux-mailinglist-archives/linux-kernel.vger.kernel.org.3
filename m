@@ -2,121 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3FE46E87D
+	by mail.lfdr.de (Postfix) with ESMTP id DAD3646E87E
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237395AbhLIMd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:33:26 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:52831 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbhLIMdX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:33:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639052990; x=1670588990;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IF3u07Cvca1snD/fcDu2THtejBBY9GEcAPFTH0zMSI4=;
-  b=AJog9hB26nnZZ+c+jxV7ZO9zZmXnASLrOgK4goIfKnpy322V83XIwlrW
-   00NLRAlGJHkVWwsadJnfQC5Rgc+cw0zc6sG8YoP+nAh1XMUW6ANfY2rOX
-   r5W6Q86jpMQNpUBGcGBIKluH7Or8AHAMJULm67u5+9k1eKEfy+TgnQVD+
-   pZ1xwWAOacY+S2exVjnJBbF7JEE5Sg+g7qgxLDsqiQiCanbu/P+iuRmnw
-   YhAvkK8iWISI1QxgASJGOuRrGQ+LpcgSr96Vrtakm0s0tSvy/eAENyWMX
-   3mBD9RJkiQpVDF8o8tjUbugs8DmntojZArOZ661ShYB5YHKgWgFda4vs+
-   w==;
-IronPort-SDR: zpfq2qXK0NpfqfnHXH2olt3AIp44j/AFJp7QER9hBQdU6K+FjrGvHZ5GuxT8m0r/Orm64PiMiD
- MVz+DGcKCvFzZHNaKc2n6m4iho3RQvKMcmu/t2rOL8N/1ruJyM0mDC/zNHhY3luVnOJ53c/H4g
- /BPzFMBlwuP60/WFNEybttKAQ+vHSOW3rpAGxee4+JKubuna+h1E9u4Q3CL6bccRbqnqenNHk8
- BDNKPXIxAeGj46qY1bA6PGF9xCbBFlZs7slv7fbeWJ5wdtzguTraBhQXpS8cYLajX7worBgcqX
- RGLGyuiG57HXEKV0zrSvEDXh
+        id S237372AbhLIMdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:33:44 -0500
+Received: from mga18.intel.com ([134.134.136.126]:17036 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229940AbhLIMdn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:33:43 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="224954002"
 X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="141843400"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2021 05:29:49 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 9 Dec 2021 05:29:49 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 9 Dec 2021 05:29:46 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>
-CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH 2/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
-Date:   Thu, 9 Dec 2021 14:29:39 +0200
-Message-ID: <20211209122939.339810-3-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211209122939.339810-1-tudor.ambarus@microchip.com>
-References: <20211209122939.339810-1-tudor.ambarus@microchip.com>
+   d="scan'208";a="224954002"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:30:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="601541428"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Dec 2021 04:30:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id EECA4329; Thu,  9 Dec 2021 14:30:13 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Tejun Heo <tj@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] kernfs: Replace kernel.h with the necessary inclusions
+Date:   Thu,  9 Dec 2021 14:30:08 +0200
+Message-Id: <20211209123008.3391-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sama7g5 embedds 2 instances of the QSPI controller:
-1/ One Octal Serial Peripheral Interface (QSPI0) Supporting up to
-   200 MHz DDR. Octal, TwinQuad, HyperFlash and OctaFlash Protocols
-   Supported
-2/ One Quad Serial Peripheral Interface (QSPI1) Supporting Up to
-   90 MHz DDR/133 MHz SDR
+When kernel.h is used in the headers it adds a lot into dependency hell,
+especially when there are circular dependencies are involved.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Replace kernel.h inclusion with the list of what is really being used.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../devicetree/bindings/spi/atmel,quadspi.yaml   | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ include/linux/kernfs.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-index 7d0408f53c5f..1d493add4053 100644
---- a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-@@ -17,6 +17,8 @@ properties:
-     enum:
-       - atmel,sama5d2-qspi
-       - microchip,sam9x60-qspi
-+      - microchip,sama7g5-qspi
-+      - microchip,sama7g5-ospi
+diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+index 9f650986a81b..861c4f0f8a29 100644
+--- a/include/linux/kernfs.h
++++ b/include/linux/kernfs.h
+@@ -6,7 +6,6 @@
+ #ifndef __LINUX_KERNFS_H
+ #define __LINUX_KERNFS_H
  
-   reg:
-     items:
-@@ -32,17 +34,27 @@ properties:
-     minItems: 1
-     items:
-       - description: peripheral clock
--      - description: system clock, if available
-+      - description: system clock or generic clock, if available
- 
-   clock-names:
-     minItems: 1
-     items:
-       - const: pclk
--      - const: qspick
-+      - enum: [ qspick, gclk ]
- 
-   interrupts:
-     maxItems: 1
- 
-+  dmas:
-+    items:
-+      - description: tx DMA channel
-+      - description: rx DMA channel
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-   '#address-cells':
-     const: 1
- 
+-#include <linux/kernel.h>
+ #include <linux/err.h>
+ #include <linux/list.h>
+ #include <linux/mutex.h>
+@@ -14,6 +13,8 @@
+ #include <linux/lockdep.h>
+ #include <linux/rbtree.h>
+ #include <linux/atomic.h>
++#include <linux/bug.h>
++#include <linux/types.h>
+ #include <linux/uidgid.h>
+ #include <linux/wait.h>
+ #include <linux/rwsem.h>
+@@ -23,6 +24,7 @@ struct dentry;
+ struct iattr;
+ struct seq_file;
+ struct vm_area_struct;
++struct vm_operations_struct;
+ struct super_block;
+ struct file_system_type;
+ struct poll_table_struct;
 -- 
-2.25.1
+2.33.0
 

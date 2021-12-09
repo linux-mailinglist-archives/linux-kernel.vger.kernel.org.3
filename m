@@ -2,129 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CD246E49E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D63446E4A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbhLIIyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLIIyr (ORCPT
+        id S235281AbhLII5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:57:49 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54718 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231370AbhLII5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:54:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36EBC061746;
-        Thu,  9 Dec 2021 00:51:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85C74B82361;
-        Thu,  9 Dec 2021 08:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8A3C004DD;
-        Thu,  9 Dec 2021 08:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639039871;
-        bh=PFw5JNdpaWY2OuAZ+jMV5B80awe6cfgQIRBi4sl+9qA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cvZfnHgDKCiu3OO4yMcS4Pkp8vqz+JkE8XRat3X7OQN6Ah+KWucrqhkRbqbBpYNCM
-         enrcJME30V+lnDoF7fTJVqfunoRhCavie2MKnnnoXEuieXqNcuTnJ338HN+Jz/f+0m
-         7hPC9nhx3r9XZAuxcGZ+bkMYi5A+oxtyORhpKWsNM07ObAtcMWwoUjnvsrXHc8NPtQ
-         8/BmYB3Z8BbR818mJhIER1m8c4cE+TvdpY+6qe1ZhcIF0jXdl3oZRo0Ba2ZPZiiz52
-         iScZFVXxQFC/4mN3FX8kmJ5rvXxuatvLeuQb0bz6731gYUBxb28ByhZvTAcMHx89Yz
-         LADhKNF/PPokw==
-Date:   Thu, 9 Dec 2021 09:51:07 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Conghui Chen <conghui.chen@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>, kernel@axis.com,
-        Jie Deng <jie.deng@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: virtio: fix completion handling
-Message-ID: <YbHDe+YLH+NZkrC0@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Conghui Chen <conghui.chen@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>, kernel@axis.com,
-        Jie Deng <jie.deng@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20211202153215.31796-1-vincent.whitchurch@axis.com>
+        Thu, 9 Dec 2021 03:57:48 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B98Sn17002214;
+        Thu, 9 Dec 2021 08:54:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=VmKUvcSOlDKYgtvHEH1mC9xCaRoQCxwASXycEo/RWbo=;
+ b=IfM7sNXCZZttwY5C6rKINPJrksVL0qhAq7VKP/v5aZ5QN80fN96v+CrKXLe/Vd2PW/Uk
+ 2Pg/oIbMOiRcj7U2C0o+xy7lrm8oaiUCEWxJRoZ6OLYfYvbmq4JiWnrr1CvpuUzlmTNz
+ T61ptsG1Zpm6a8D2MPdwUEDzPcLVql37Gh6///Y4ZAnRVgySi+FWQ/Cd205gq1iMjOp8
+ +Blbxq/pWjkmPvkG9gVQzikIxlZmYCwvCgkLnNNL0lyqhw5onmNS9F4nvJ5sRyeSFXTv
+ PzyTo+/g/aznAcWUvKmHXIFWNlYUSS6Du1RBdLqKEp4m/+wG9J20CxKiAnpcTh5AjPBE BA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cueax0f1c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 08:54:11 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B98qWMT016144;
+        Thu, 9 Dec 2021 08:54:09 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3cqyy9w666-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 08:54:08 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B98kK8I18350578
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 08:46:20 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B16DAE05D;
+        Thu,  9 Dec 2021 08:54:05 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61A37AE058;
+        Thu,  9 Dec 2021 08:54:05 +0000 (GMT)
+Received: from [9.145.152.236] (unknown [9.145.152.236])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 08:54:05 +0000 (GMT)
+Message-ID: <b6edbf96-4349-c39b-69ee-477b4fdef511@linux.ibm.com>
+Date:   Thu, 9 Dec 2021 09:54:05 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ge0jWUKZVg17/s2k"
-Content-Disposition: inline
-In-Reply-To: <20211202153215.31796-1-vincent.whitchurch@axis.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH v3] powerpc/pseries: read the lpar name from the firmware
+Content-Language: en-US
+To:     Nathan Lynch <nathanl@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20211203154321.13168-1-ldufour@linux.ibm.com>
+ <87bl1so588.fsf@linux.ibm.com>
+ <bbaa0d78-a09f-3ce3-25a9-67434039b741@linux.ibm.com>
+ <878rwwny1l.fsf@linux.ibm.com>
+ <21eb4749-42b1-da78-8833-00d360fa36e5@linux.ibm.com>
+ <874k7jnmva.fsf@linux.ibm.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <874k7jnmva.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nvGaBsQb1vQFqX4oMFyP5Gyw7O2-UVSu
+X-Proofpoint-GUID: nvGaBsQb1vQFqX4oMFyP5Gyw7O2-UVSu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_03,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 malwarescore=0 spamscore=0 priorityscore=1501
+ adultscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090045
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/12/2021, 16:21:29, Nathan Lynch wrote:
+> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>> On 07/12/2021, 18:07:50, Nathan Lynch wrote:
+>>> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>>>> On 07/12/2021, 15:32:39, Nathan Lynch wrote:
+>>>>> Is there a reasonable fallback for VMs where this parameter doesn't
+>>>>> exist? PowerVM partitions should always have it, but what do we want the
+>>>>> behavior to be on other hypervisors?
+>>>>
+>>>> In that case, there is no value displayed in the /proc/powerpc/lparcfg and
+>>>> the lparstat -i command will fall back to the device tree value. I can't
+>>>> see any valid reason to report the value defined in the device tree
+>>>> here.
+>>>
+>>> Here's a valid reason :-)
+>>>
+>>> lparstat isn't the only possible consumer of the interface, and the
+>>> 'ibm,partition-name' property and the dynamic system parameter clearly
+>>> serve a common purpose. 'ibm,partition-name' is provided by qemu.
+>>
+>> If the hypervisor is not providing this value, this is not the goal of this
+>> interface to fetch it from the device tree.
+>>
+>> Any consumer should be able to fall back on the device tree value, and
+>> there is no added value to do such a trick in the kernel when it can be
+>> done in the user space.
+> 
+> There is value in imposing a level of abstraction so that the semantics
+> are:
+> 
+> * Report the name assigned to the guest by the hosting environment, if
+>   available
+> 
+> as opposed to
+> 
+> * Return the string returned by a RTAS call to ibm,get-system-parameter
+>   with token 55, if implemented
+> 
+> The benefit is that consumers of lparcfg do not have to be coded with
+> the knowledge that "if a partition_name= line is absent, the
+> ibm,get-system-parameter RTAS call must have failed, so now I should
+> read /sys/firmware/devicetree/base/ibm,partition_name." That's the sort
+> of esoterica that is appropriate for the kernel to encapsulate.
+> 
+> And I'd say the effort involved (falling back to a root node property
+> lookup) is proportional to the benefit.
+> 
 
---ge0jWUKZVg17/s2k
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't agree.
+From the kernel point of view, I can't see any benefit, this is adding more
+complexity to do in the kernel what can be done easily in user space.
 
-On Thu, Dec 02, 2021 at 04:32:14PM +0100, Vincent Whitchurch wrote:
-> The driver currently assumes that the notify callback is only received
-> when the device is done with all the queued buffers.
->=20
-> However, this is not true, since the notify callback could be called
-> without any of the queued buffers being completed (for example, with
-> virtio-pci and shared interrupts) or with only some of the buffers being
-> completed (since the driver makes them available to the device in
-> multiple separate virtqueue_add_sgs() calls).
->=20
-> This can lead to incorrect data on the I2C bus or memory corruption in
-> the guest if the device operates on buffers which are have been freed by
-> the driver.  (The WARN_ON in the driver is also triggered.)
->=20
->  BUG kmalloc-128 (Tainted: G        W        ): Poison overwritten
->  First byte 0x0 instead of 0x6b
->  Allocated in i2cdev_ioctl_rdwr+0x9d/0x1de age=3D243 cpu=3D0 pid=3D28
->  	memdup_user+0x2e/0xbd
->  	i2cdev_ioctl_rdwr+0x9d/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
->  Freed in i2cdev_ioctl_rdwr+0x1bb/0x1de age=3D68 cpu=3D0 pid=3D28
->  	kfree+0x1bd/0x1cc
->  	i2cdev_ioctl_rdwr+0x1bb/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
->=20
-> Fix this by calling virtio_get_buf() from the notify handler like other
-> virtio drivers and by actually waiting for all the buffers to be
-> completed.
->=20
-> Fixes: 3cfc88380413d20f ("i2c: virtio: add a virtio i2c frontend driver")
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-
-Applied to for-current, thanks!
-
-
---ge0jWUKZVg17/s2k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxw3sACgkQFA3kzBSg
-KbZ56Q//SQjmtTthjdX/3a2BmHjSwbNESk51bmpkZ9Hyfy+niTnbTYs8EK9ED0jq
-T4Z/al1dGBVnqnfs9m28ZNv6YuoxMqBlPfXWFQcpuCbVTMvcgYGW5MR1kYv0txbu
-GM/pTQYmdIS6sTawSfHwyHKl5oAKgFWaTL3j1soih6aeyZ4ha6cfoL8dlt62hwmR
-LzSsMzuocxUws0TBZpaGkzMFsd5eFC7+wgQBpn3/rUxCp3j2IqBc5IS/QF8A8Lft
-0VxOudfwAFdY/hplnYEV3pObTyyAl5Y/8zAGMUF3l19MhLPjT0g5S0yNJCq2o/m/
-yVUqmDg4Il1kjQolTANxLEnlDdbtePPKGwPbY1ldhj2Ry18QXFzmsfZqQB8xwG9I
-YrxMI9oh3chLtqfgyWofYOkHGFMmYvhSO8yFOHT02jsU47k4My0eoOS2i4KyIjfM
-L2Ifug4+x6DdgdAHd3ygdEWfEpi6/5ozGFn4WO6uQS7vnIMtDPjZDABUnwra1guF
-twolE4AADmKiDg+n5AKnY2lQ+Z1eJf46H4QzHK0bmhWJHoF7NiXRu65ynZug+m5x
-XpfBzx3hiuSB1ZdWEzeTgxdWnDgZ8fwsDfVlxWMmzpRVC6sdSDLtG841gWgPVlWS
-hP1cWvVUhsa9/sEmI/iZpUA+FntKNiSuJFR7Xlq/kG1/Jig68qA=
-=pFLx
------END PGP SIGNATURE-----
-
---ge0jWUKZVg17/s2k--
+This is typically what should be implemented in a user space shared library.

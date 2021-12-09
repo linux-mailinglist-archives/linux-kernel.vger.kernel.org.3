@@ -2,147 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43C646F558
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C891146F552
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbhLIU7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:59:50 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:46932 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbhLIU7o (ORCPT
+        id S232429AbhLIU7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:59:42 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:45812 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232384AbhLIU7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:59:44 -0500
-Received: by mail-ot1-f53.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so7486285oto.13;
-        Thu, 09 Dec 2021 12:56:10 -0800 (PST)
+        Thu, 9 Dec 2021 15:59:39 -0500
+Received: by mail-oi1-f176.google.com with SMTP id 7so10370951oip.12;
+        Thu, 09 Dec 2021 12:56:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=xankO6gBp3GIQVGfoW7EkvgG0j2YUNnq+3nk9J8aM3Y=;
-        b=Lvfr31Ir4ToOrOTOil/D++KrmODrCf3+6M26h9rzY6nM4yTc/E3lfaHYgt2VqgY5SV
-         we5AR30VOPTPnHY+KmEQfjfeEjP3ndPoCxpDf7jhS4+gn1ZyAHuT+L7LY3IIDp52a5Fw
-         LDesJf/mpWNizZAjq/rlB4PGpn/C246IRs8D7jwQOl0abA5+Ki3BESuPsyL0Ikt9ixIF
-         DMc8iaqIm8XPy0oOK0SsGA4hJHgjEMXHPap2DjBaNok54pt9RKpkPDj5zw/cIZF8hKeO
-         75XQ0Y0zzzrhI0tYDjsfMwiMhktEn6T5RSPT6Wzuu/zw8ckGvXlI0AVAIdui9T3/ZTl/
-         VUXw==
-X-Gm-Message-State: AOAM533TOyoRjzuDrWTP6oXfLaojLaN75+O6waJAUXC8W/eutYDv2qtC
-        H8ndtfSOf0QpZR6iykusEDjRzzcdrQ==
-X-Google-Smtp-Source: ABdhPJwdiucO7zUXMfidK1yeB7NQIdXOz8owmo+BnV3zHDhRQCqAGR9lTU/GuZ9/jhRAnrnrc0psMg==
-X-Received: by 2002:a05:6830:410a:: with SMTP id w10mr7711368ott.55.1639083369909;
-        Thu, 09 Dec 2021 12:56:09 -0800 (PST)
+        bh=prvfBI9Quc6o5I6vG+M4mn0hhqXgxhBS6i0p8peqrqM=;
+        b=VwRhlF+y0nERUwiinuVrjKlyieeVrLMAtWdTRhXwHBhXQQJDDRAPP3wBS43RW6ZiOQ
+         ehtnjAKq3Fa/C7h+DbE8KF+hZT5zLUw0I7X1qHaR9SFLmmAhwcGIAQ3n0OxYrtamFi7c
+         sMY7Bu6wnwjE3lHfoNfstRoEKJY6Oo1ikQGOEMQ+Vm/ljrrm6+tjelgXClKnTI8yxNiy
+         bypWs+02lg8GyxARDnhfZD5Lnjg78xafSbX6Gc4GAz3h6xrzcWeS9kJWWwNg7nOQhvqC
+         6BSxmzl7BPfwVgQZj2fXuCUsCeWoj2Ysk7+7iY+DK/lF2ox5Vn8VIO6hXn+JFC0A+wlz
+         FVVw==
+X-Gm-Message-State: AOAM531RD6FV5Ez449v7C7JbzgLd7HSbgEoV1lg2MIjIGkShZZ1Jq3rg
+        1b3FXbA9y4hH+jzvFa1W6eqXjwGczw==
+X-Google-Smtp-Source: ABdhPJybhyZk4J9Vxx8G9PJuL02kaDsp5aiZt01nzYkMTqIqjtT7ZQgkq9M4xPkk69/adSOdvZdlIA==
+X-Received: by 2002:a05:6808:485:: with SMTP id z5mr8383709oid.96.1639083364886;
+        Thu, 09 Dec 2021 12:56:04 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w71sm181746oiw.6.2021.12.09.12.56.08
+        by smtp.gmail.com with ESMTPSA id s9sm181423otg.42.2021.12.09.12.56.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 12:56:09 -0800 (PST)
-Received: (nullmailer pid 3925942 invoked by uid 1000);
+        Thu, 09 Dec 2021 12:56:03 -0800 (PST)
+Received: (nullmailer pid 3925944 invoked by uid 1000);
         Thu, 09 Dec 2021 20:55:59 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     robh+dt@kernel.org, vsethi@nvidia.com, jonathanh@nvidia.com,
-        bbasu@nvidia.com, devicetree@vger.kernel.org, jsequeira@nvidia.com,
-        thierry.reding@gmail.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-In-Reply-To: <20211209172206.17778-3-sumitg@nvidia.com>
-References: <20211209172206.17778-1-sumitg@nvidia.com> <20211209172206.17778-3-sumitg@nvidia.com>
-Subject: Re: [Patch Resend v1 2/8] dt-bindings: arm: tegra: Add NVIDIA Tegra194 CBB1.0 binding
+Cc:     linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        thierry.reding@gmail.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, jonathanh@nvidia.com,
+        jsequeira@nvidia.com, bbasu@nvidia.com, vsethi@nvidia.com
+In-Reply-To: <20211209172206.17778-6-sumitg@nvidia.com>
+References: <20211209172206.17778-1-sumitg@nvidia.com> <20211209172206.17778-6-sumitg@nvidia.com>
+Subject: Re: [Patch Resend v1 5/8] dt-bindings: arm: tegra: Add NVIDIA Tegra234 CBB2.0 binding
 Date:   Thu, 09 Dec 2021 14:55:59 -0600
-Message-Id: <1639083359.653823.3925941.nullmailer@robh.at.kernel.org>
+Message-Id: <1639083359.670183.3925943.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Dec 2021 22:52:00 +0530, Sumit Gupta wrote:
-> Add device-tree binding documentation to represent the error handling
-> driver for Control Backbone (CBB) version 1.0 used in Tegra194 SOC.
-> The driver prints debug information about failed transactions due to
-> illegal register accesses on receiving interrupt from CBB.
+On Thu, 09 Dec 2021 22:52:03 +0530, Sumit Gupta wrote:
+> Add device-tree binding documentation to represent CBB2.0 (Control
+> Backbone) error handling driver. The driver prints debug information
+> about failed transaction on receiving interrupt from CBB2.0.
 > 
 > Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 > ---
->  .../arm/tegra/nvidia,tegra194-cbb.yaml        | 121 ++++++++++++++++++
->  1 file changed, 121 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+>  .../arm/tegra/nvidia,tegra234-cbb.yaml        | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml:96:1: [error] duplication of key "properties" in mapping (key-duplicates)
-./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml:109:1: [error] duplication of key "examples" in mapping (key-duplicates)
+./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml:73:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
 dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.example.dts'
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.example.dts'
 Traceback (most recent call last):
   File "/usr/local/bin/dt-extract-example", line 45, in <module>
     binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
   File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
     return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 5, column 1
-found duplicate key "properties" with value "{}" (original value: "{}")
-  in "<unicode string>", line 96, column 1
-
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-
-make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.example.dts] Error 1
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 848, in _ruamel_yaml.CParser._compose_sequence_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: while scanning a block scalar
+  in "<unicode string>", line 71, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 73, column 1
+make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.example.dts] Error 1
 make[1]: *** Waiting for unfinished jobs....
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
-    testtree = dtschema.load(filename, line_number=line_number)
-  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 656, in load
-    return yaml.load(f.read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 121, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 131, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 674, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 445, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 263, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 294, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 5, column 1
-found duplicate key "properties" with value "{}" (original value: "{}")
-  in "<unicode string>", line 96, column 1
-
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 67, in <module>
-    ret = check_doc(f)
-  File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
-    print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
-AttributeError: 'DuplicateKeyError' object has no attribute 'path'
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml: ignoring, error parsing file
-warning: no schema found in file: ./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml:  while scanning a block scalar
+  in "<unicode string>", line 71, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 73, column 1
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml: ignoring, error parsing file
+warning: no schema found in file: ./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
 make: *** [Makefile:1413: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1565943
+See https://patchwork.ozlabs.org/patch/1565951
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

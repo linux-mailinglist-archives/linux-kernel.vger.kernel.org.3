@@ -2,105 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1392A46E523
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4805F46E532
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbhLIJM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:12:28 -0500
-Received: from mail.djicorp.com ([14.21.64.4]:65363 "EHLO mail.djicorp.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229530AbhLIJM0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:12:26 -0500
-IronPort-SDR: hL+plS6Moyziz0ismXmLsmmsj86HxLufbY6EjzzrRNjT6pdem2vOndvQ4t/c/4N58b2XI+h3+6
- x7aLkVLBDGAw==
-X-IronPort-AV: E=Sophos;i="5.88,192,1635177600"; 
-   d="scan'208";a="11816815"
-From:   wigin zeng <wigin.zeng@dji.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        First Light <xiaoguang.chen@dji.com>
-Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IFtQQVRDSF0gc2VyaWFsOiA4MjUwOiBhZGQgbG9j?=
- =?utf-8?Q?k_for_dma_rx?=
-Thread-Topic: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIHNlcmlhbDogODI1MDogYWRkIGxvY2sgZm9yIGRt?=
- =?utf-8?Q?a_rx?=
-Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/D//4YHgIAAiJFw
-Date:   Thu, 9 Dec 2021 09:08:51 +0000
-Message-ID: <f2150f8a7b7242b48227e30e5550da0b@MAIL-MBX-cwP12.dji.com>
-References: <20211209073339.21694-1-wigin.zeng@dji.com>
- <YbGygPtkz6ihyW51@kroah.com>
- <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
- <YbHBb2uB9JRP0tWc@kroah.com>
-In-Reply-To: <YbHBb2uB9JRP0tWc@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [58.34.188.114]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S233614AbhLIJNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:13:51 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:34506 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233612AbhLIJNt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 04:13:49 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 846912243071
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <b77c0732-460f-cf30-c759-d51d37763894@omp.ru>
+Date:   Thu, 9 Dec 2021 12:10:01 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 3/3] usb: mtu3: fix list_head check warning
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        "Yuwen Ng" <yuwen.ng@mediatek.com>
+References: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
+ <20211209031424.17842-3-chunfeng.yun@mediatek.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20211209031424.17842-3-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBXaGF0IGlzc3VlIGV4YWN0bHk/DQpUaGUgaW50ZXJ2YWwgb2YgVUFSVCBpbnB1dCBwYWNrYWdl
-cyBpcyB2ZXJ5IHNtYWxsKDFtc34gMTBtcyksIGFuZCBzb21lIHBhY2thZ2Ugc2l6ZSBsYXJnZXIg
-dGhhbiBjb25maWd1cmVkIERNQSB0cmFuc2ZlciBzaXplLg0KDQo+IEJ1dCB3aGF0IGRhdGEgaXMg
-YmVpbmcgYWNjZXNzZWQgYXQgdGhlIHNhbWUgdGltZSB0byBjYXVzZSBhIGNyYXNoPw0KPiBIb3cg
-aXMgZGF0YSBiZWluZyBhZGRlZCBpbnRvIHRoZSBidWZmZXIgYXQgdGhlIHNhbWUgdGltZSBpbiB0
-d28gZGlmZmVyZW50IHBsYWNlcyBpbnRvIHRoZSBzYW1lIHF1ZXVlPyAgV2hhdCB1c2Vyc3BhY2Ug
-cHJvZ3JhbXMgYXJlIGNhdXNpbmcgdGhpcz8NCkJvdGggcGxhY2VzIHdpbGwgbW9kaWZ5IHR0eV9w
-b3J0ICpwb3J0LT5idWYudGFpbCAoa21hbGxvYyBvcGVyYXRpb24gYW5kIHdyaXRlIHRoZSBkYXRh
-L2ZsYWcgaW50byB0aGlzIGFkZHJlc3MpDQoNCj5TbyBhbGwgdHR5IGJ1ZmZlciBhY2Nlc3NlcyBu
-ZWVkIHRvIGJlIHByb3RlY3RlZCBieSB5b3VyIG5ldyBsb2NrPw0KTmV3IGxvY2sgb25seSBwcm90
-ZWN0ZWQgdGhlIHR0eV9idWZmZXIgYWxsb2MgYW5kIHdyaXRlIG9wZXJhdGlvbiBpbiBzZXJpYWwt
-dHR5IGNhc2UuIA0KDQpCUnMNCldpZ2luDQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bk
-uro6IEdyZWcgS0ggW21haWx0bzpncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZ10gDQrlj5HpgIHm
-l7bpl7Q6IDIwMjHlubQxMuaciDnml6UgMTY6NDINCuaUtuS7tuS6ujogd2lnaW4gemVuZyA8d2ln
-aW4uemVuZ0BkamkuY29tPg0K5oqE6YCBOiBqaXJpc2xhYnlAa2VybmVsLm9yZzsgbGludXgtc2Vy
-aWFsQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0K5Li76aKY
-OiBSZTog562U5aSNOiBbUEFUQ0hdIHNlcmlhbDogODI1MDogYWRkIGxvY2sgZm9yIGRtYSByeA0K
-DQrjgJBFWFRFUk5BTCBFTUFJTOOAkSBETyBOT1QgQ0xJQ0sgYW55IGxpbmtzIG9yIGF0dGFjaG1l
-bnRzIHVubGVzcyB5b3UgY2FuIG1ha2Ugc3VyZSBib3RoIHRoZSBzZW5kZXIgYW5kIHRoZSBjb250
-ZW50IGFyZSB0cnVzdHdvcnRoeS4NCg0KDQrjgJDlpJbpg6jpgq7ku7bmj5DphpLjgJHku6XkuIvp
-gq7ku7bmnaXmupDkuo7lhazlj7jlpJbpg6jvvIzor7fli7/ngrnlh7vpk77mjqXmiJbpmYTku7bv
-vIzpmaTpnZ7mgqjnoa7orqTpgq7ku7blj5Hku7bkurrlkozlhoXlrrnlj6/kv6HjgIINCg0KDQoN
-CkE6IGh0dHA6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvVG9wX3Bvc3QNClE6IFdlcmUgZG8gSSBm
-aW5kIGluZm8gYWJvdXQgdGhpcyB0aGluZyBjYWxsZWQgdG9wLXBvc3Rpbmc/DQpBOiBCZWNhdXNl
-IGl0IG1lc3NlcyB1cCB0aGUgb3JkZXIgaW4gd2hpY2ggcGVvcGxlIG5vcm1hbGx5IHJlYWQgdGV4
-dC4NClE6IFdoeSBpcyB0b3AtcG9zdGluZyBzdWNoIGEgYmFkIHRoaW5nPw0KQTogVG9wLXBvc3Rp
-bmcuDQpROiBXaGF0IGlzIHRoZSBtb3N0IGFubm95aW5nIHRoaW5nIGluIGUtbWFpbD8NCg0KQTog
-Tm8uDQpROiBTaG91bGQgSSBpbmNsdWRlIHF1b3RhdGlvbnMgYWZ0ZXIgbXkgcmVwbHk/DQoNCmh0
-dHA6Ly9kYXJpbmdmaXJlYmFsbC5uZXQvMjAwNy8wNy9vbl90b3ANCg0KT24gVGh1LCBEZWMgMDks
-IDIwMjEgYXQgMDg6MTU6MDBBTSArMDAwMCwgd2lnaW4gemVuZyB3cm90ZToNCj4gV2UgZW5jb3Vu
-dGVyZWQgdGhpcyBpc3N1ZSB3aGVuIFVBUlQgdHJhbnNmZXIgdmVyeSBpbnRlbnNpdmUuDQoNCldo
-YXQgaXNzdWUgZXhhY3RseT8NCg0KPiBETUEgaXJxLXRocmVhZCBwcm9jZXNzZWQgb24gQ1BVMCBh
-bmQgc2VyaWFsIGlycS10aHJlYWQgZXhlY3V0aW5nIG9uIA0KPiBDUFUxLCBJbiBETUEgaXJxLXRo
-cmVhZCB3aWxsIGludm9rZSAidHR5X2luc2VydF9maWxwX3N0cmluZyIgZnVuY3Rpb24gdG8gYWRk
-IHRoZSByeF9idWYgaW50byB0dHlfYnVmZmVyLg0KPiBJbiBzZXJpYWwgaXJxLXRocmVhZCBhbHNv
-IGhhcyBjaGFuY2UgdG8gYWNjZXNzIHR0eV9pbnNlcnRfZmxpcF9jaGFyKGluIHNlcmlhbDgyNTBf
-cnhfY2hhcnMgKSB0byBhY2Nlc3MgdHR5X2J1ZmZlci4NCj4gdGhlcmUgaXMgcmFjZSBjb25kaXRp
-b24sIHNvbWV0aW1lcyB3aWxsIGNhdXNlIHBhbmljLg0KDQpCdXQgd2hhdCBkYXRhIGlzIGJlaW5n
-IGFjY2Vzc2VkIGF0IHRoZSBzYW1lIHRpbWUgdG8gY2F1c2UgYSBjcmFzaD8NCkhvdyBpcyBkYXRh
-IGJlaW5nIGFkZGVkIGludG8gdGhlIGJ1ZmZlciBhdCB0aGUgc2FtZSB0aW1lIGluIHR3byBkaWZm
-ZXJlbnQgcGxhY2VzIGludG8gdGhlIHNhbWUgcXVldWU/ICBXaGF0IHVzZXJzcGFjZSBwcm9ncmFt
-cyBhcmUgY2F1c2luZyB0aGlzPw0KDQo+IFdlIGFkZCB0aGUgc3Bpbl9sb2NrIHRvIHN5bmMgdGhl
-IHR0eV9idWZmZXIgb3BlcmF0aW9uLCBhbmQgdGhlIGlzc3VlIGdvbmUgYWZ0ZXIgYXBwbGllZCB0
-aGUgcGF0Y2guDQoNClNvIGFsbCB0dHkgYnVmZmVyIGFjY2Vzc2VzIG5lZWQgdG8gYmUgcHJvdGVj
-dGVkIGJ5IHlvdXIgbmV3IGxvY2s/DQoNCnRoYW5rcywNCg0KZ3JlZyBrLWgNClRoaXMgZW1haWwg
-YW5kIGFueSBhdHRhY2htZW50cyB0aGVyZXRvIG1heSBjb250YWluIHByaXZhdGUsIGNvbmZpZGVu
-dGlhbCwgYW5kIHByaXZpbGVnZWQgbWF0ZXJpYWwgZm9yIHRoZSBzb2xlIHVzZSBvZiB0aGUgaW50
-ZW5kZWQgcmVjaXBpZW50LiBBbnkgcmV2aWV3LCBjb3B5aW5nLCBvciBkaXN0cmlidXRpb24gb2Yg
-dGhpcyBlbWFpbCAob3IgYW55IGF0dGFjaG1lbnRzIHRoZXJldG8pIGJ5IG90aGVycyBpcyBzdHJp
-Y3RseSBwcm9oaWJpdGVkLiBJZiB5b3UgYXJlIG5vdCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50LCBw
-bGVhc2UgY29udGFjdCB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGFuZCBwZXJtYW5lbnRseSBkZWxl
-dGUgdGhlIG9yaWdpbmFsIGFuZCBhbnkgY29waWVzIG9mIHRoaXMgZW1haWwgYW5kIGFueSBhdHRh
-Y2htZW50cyB0aGVyZXRvLg0KDQrmraTnlLXlrZDpgq7ku7blj4rpmYTku7bmiYDljIXlkKvlhoXl
-rrnlhbfmnInmnLrlr4bmgKfvvIzkuJTku4XpmZDkuo7mjqXmlLbkurrkvb/nlKjjgILmnKrnu4/l
-hYHorrjvvIznpoHmraLnrKzkuInkurrpmIXor7vjgIHlpI3liLbmiJbkvKDmkq3or6XnlLXlrZDp
-gq7ku7bkuK3nmoTku7vkvZXkv6Hmga/jgILlpoLmnpzmgqjkuI3lsZ7kuo7ku6XkuIrnlLXlrZDp
-gq7ku7bnmoTnm67moIfmjqXmlLbogIXvvIzor7fmgqjnq4vljbPpgJrnn6Xlj5HpgIHkurrlubbl
-iKDpmaTljp/nlLXlrZDpgq7ku7blj4rlhbbnm7jlhbPnmoTpmYTku7bjgIINCg==
+Hello!
+
+On 09.12.2021 6:14, Chunfeng Yun wrote:
+
+> This is caused by uninitialization of list_head.
+
+    No such word, suggesting to replace with "not initializing". :-)
+
+> BUG: KASAN: use-after-free in __list_del_entry_valid+0x34/0xe4
+> 
+> Call trace:
+> dump_backtrace+0x0/0x298
+> show_stack+0x24/0x34
+> dump_stack+0x130/0x1a8
+> print_address_description+0x88/0x56c
+> __kasan_report+0x1b8/0x2a0
+> kasan_report+0x14/0x20
+> __asan_load8+0x9c/0xa0
+> __list_del_entry_valid+0x34/0xe4
+> mtu3_req_complete+0x4c/0x300 [mtu3]
+> mtu3_gadget_stop+0x168/0x448 [mtu3]
+> usb_gadget_unregister_driver+0x204/0x3a0
+> unregister_gadget_item+0x44/0xa4
+> 
+> Reported-by: Yuwen Ng <yuwen.ng@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+[...]
+
+MBR, Sergey

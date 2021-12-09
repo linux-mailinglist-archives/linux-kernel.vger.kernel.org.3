@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2FB46F42D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CA546F430
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbhLITqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:46:16 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:41482 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbhLITqO (ORCPT
+        id S230140AbhLITrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:47:47 -0500
+Received: from mail-pg1-f170.google.com ([209.85.215.170]:47079 "EHLO
+        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229517AbhLITrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:46:14 -0500
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E4F7820B7179;
-        Thu,  9 Dec 2021 11:42:39 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E4F7820B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639078960;
-        bh=6PokUtcrP8KaG1TthajLFz7CIoTEDjJzdERcPkSHxGM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m77HHe42K3ru8HroTMydjd5Jbi5EUtmh3VdO182mFkN6lLIjoIx+ZTnEPESWrEy5w
-         i8z+wtwRsLJlSpuxpiDqHq+UkWymvfMitwLe/6L++a6XQK2C1Lr5sLe1+YUJfuZE4A
-         in7D3GFESQXfmIZVaYU2YIJd1bl1P/4meQRZ5mQw=
-Date:   Thu, 9 Dec 2021 11:42:35 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 02/13] user_events: Add minimal support for
- trace_event into ftrace
-Message-ID: <20211209194235.GA21676@kbox>
-References: <20211201182515.2446-1-beaub@linux.microsoft.com>
- <20211201182515.2446-3-beaub@linux.microsoft.com>
- <20211208181905.62f8f999@gandalf.local.home>
- <20211209005823.GA21399@kbox>
- <20211208210336.40c7741b@yoga.local.home>
- <20211209174050.GA21553@kbox>
- <20211209124735.3d1a9707@gandalf.local.home>
+        Thu, 9 Dec 2021 14:47:45 -0500
+Received: by mail-pg1-f170.google.com with SMTP id r138so5974636pgr.13;
+        Thu, 09 Dec 2021 11:44:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VlKj6DMExfzicQ3MgAc+lGSRrWeAFRS2WV0yuzGqAE0=;
+        b=oHWr3FbWc2Jw0rGB+V1tuGCrVUguz9rz0DQTehFLGatwGEiPtjiLZ+ah6T5O/cKYKE
+         Xf5N/SWW7ptxv1AGAHCcPE8oF9uCJ4j3EjnJRIL2cb5qO5JuBsZQzZ+Q6I9xplX5YAo9
+         cjrGonCdE2qanZ7PTzP6AGnumaxu97X+7hON/DbYXGYzr696QHtbtbGIV82MJnxuGjwI
+         v5FVDA6rqBlU/+M9kkSmz0pX+R/nONUp8305SIAacdD3ReLyCHHjq1x+lRqXbvvl+ATA
+         5i/JQi0o2PPsOSHSCDZjyVQqULb8QrrNBgknXbaKfNQwerdCK13+yvkOh9yG/DdSATRf
+         ARHg==
+X-Gm-Message-State: AOAM532UeLZUN5si7MaL3V8aoisZuh5iNtUkev0zrW6cM6+k7TMM56rA
+        n1FfMKfQSJjEJsEg1PVP2ZlI8gAw1vY=
+X-Google-Smtp-Source: ABdhPJyNgXeLlKUNnuJxTFyyEwWGKWORgJneEZ9l6TDb5yYWOSo1QR+SDqZAS6k35bQtQVV9i+qAPQ==
+X-Received: by 2002:a63:6c8a:: with SMTP id h132mr36390886pgc.85.1639079051890;
+        Thu, 09 Dec 2021 11:44:11 -0800 (PST)
+Received: from ?IPv6:2620:0:1000:2514:4f5b:f494:7264:b4d4? ([2620:0:1000:2514:4f5b:f494:7264:b4d4])
+        by smtp.gmail.com with ESMTPSA id f5sm429422pju.15.2021.12.09.11.44.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 11:44:11 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH] scsi: docs: update notes about scsi_times_out
+To:     Khazhismel Kumykov <khazhy@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-doc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+References: <20211208225637.1054164-1-khazhy@google.com>
+Message-ID: <6c50efd9-2987-067a-bc05-0a68ad908a5f@acm.org>
+Date:   Thu, 9 Dec 2021 11:44:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209124735.3d1a9707@gandalf.local.home>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211208225637.1054164-1-khazhy@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 12:47:35PM -0500, Steven Rostedt wrote:
-> On Thu, 9 Dec 2021 09:40:50 -0800
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> 
-> > No, this is not a fast path, and I don't have a problem moving to a
-> > mutex if you feel that is better. I've likely become too close to this
-> > code to know when things are confusing for others.
-> 
-> Yeah. I really dislike the "protection by algorithms" then protection by
-> locking unless it is a fast path.
-> 
-> If this was a fast path then I'd be more concerned. I dislike global locks
-> as well, but unless contention becomes a concern, I don't think we should
-> worry about it.
-
-Sure thing.
-
-> 
-> Also, for this comment:
-> 
-> +static int user_events_release(struct inode *node, struct file *file)
-> +{
-> +	struct user_event_refs *refs;
-> +	struct user_event *user;
-> +	int i;
-> +
-> +	/*
-> +	 * refs is protected by RCU and could in theory change immediately
-> +	 * before this call on another core. To ensure we read the latest
-> +	 * version of refs we acquire the RCU read lock again.
-> +	 */
-> +	rcu_read_lock_sched();
-> +	refs = rcu_dereference_sched(file->private_data);
-> +	rcu_read_unlock_sched();
-> 
-> How do you see refs changing on another core if this can only be called
-> when nothing has a reference to it?
-> 
-> I think this comment and grabbing the rcu locks is what is causing me
-> concern.
-> 
-> -- Steve
-
-User program task:
-CPU0: ioctl(fd, REG)
-CPU1: close(fd)
-
-IE: Some program registers and then immediately calls close on the file.
-If the CPU migrates right between the 2 and the close swaps, it is
-possible this could occur.
-
-This could be attempted in tight loops maliciously as well.
-
-I assume with a mutex there that some barrier is imposed to ensure
-correct reads in this condition? (By virtue of the mutex acquire/check)
+On 12/8/21 2:56 PM, Khazhismel Kumykov wrote:
+> + 2. scsi_abort_command() is invoked to schedule an asynchrous abort. which may
+                                                                       ^^^^^^^
+                                                            Should the dot perhaps be removed?
+> +    issue a retry scmd->allowed + 1 times.  Asynchronous abort are not invoked
+                                                             ^^^^
+                                                        abort -> aborts?
+> +    for commands which the SCSI_EH_ABORT_SCHEDULED flag is set (this indicates
+                     ^^^^^
+                 which -> for which?
+> +    that the command already had been aborted once, and this is a retry which
+> +    failed), when retries are exceeded, or when the EH deadline is expired. In
+> +    these case Step #3 is taken.
+>   
+>    3. scsi_eh_scmd_add(scmd, SCSI_EH_CANCEL_CMD) is invoked for the
+>       command.  See [1-4] for more information.
 
 Thanks,
--Beau
+
+Bart.
+
+

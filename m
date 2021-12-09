@@ -2,99 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A8346E8A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A2C46E8A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 13:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236057AbhLIMyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 07:54:15 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32894 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbhLIMyO (ORCPT
+        id S235323AbhLIM5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 07:57:17 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33066 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230471AbhLIM5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 07:54:14 -0500
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J8v5Z49TnzcbTM;
-        Thu,  9 Dec 2021 20:50:26 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 9 Dec 2021 20:50:39 +0800
-Received: from [10.174.177.173] (10.174.177.173) by
- dggpeml500003.china.huawei.com (7.185.36.200) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 9 Dec 2021 20:50:39 +0800
-Message-ID: <26c3b5d5-c765-1650-568b-d054a92bcba9@huawei.com>
-Date:   Thu, 9 Dec 2021 20:50:38 +0800
+        Thu, 9 Dec 2021 07:57:16 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9D91A210FF;
+        Thu,  9 Dec 2021 12:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639054422; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5vp7wzcFFJjjx5AjDuR1iEkEbCLhDRGFGjElrTWzlrY=;
+        b=vjYRvrzATrl2PnEaQ6PoJZkTPiWqcsLyXM2P4CRJQb6tRUZK0nnmsjevr7wqRlr8YDiLsD
+        tunfBMr/ql7yrC6164oiuqxsykYvqg9+iaDKaDBHY0XD9DFUJmO+TaavdKVYez7xSv/APe
+        37cZhcTXvDmuBhgmN66wpIr0yBFf060=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639054422;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5vp7wzcFFJjjx5AjDuR1iEkEbCLhDRGFGjElrTWzlrY=;
+        b=/Y8QcAbmYiq4U/4Geula95/q+Xx0lw/AYF1NWUYbyvvQMC9qtoX2yLDVTf48+2/NBingfQ
+        4FRkoxSG1mvZ/DCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 80FFF13B2D;
+        Thu,  9 Dec 2021 12:53:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 529qHlb8sWHKcAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 09 Dec 2021 12:53:42 +0000
+Message-ID: <194c4beb-7fb2-bdf8-f203-734e9934644a@suse.de>
+Date:   Thu, 9 Dec 2021 13:53:41 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] time: Normalize timespec64 before timespec64_compare()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v1 1/1] drm: Replace kernel.h with the necessary
+ inclusions
 Content-Language: en-US
-To:     <john.stultz@linaro.org>, <tglx@linutronix.de>, <sboyd@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <wangxiongfeng2@huawei.com>,
-        <liwei391@huawei.com>
-References: <20211202130707.3910459-1-liaoyu15@huawei.com>
-From:   Yu Liao <liaoyu15@huawei.com>
-In-Reply-To: <20211202130707.3910459-1-liaoyu15@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.173]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+References: <20211110102423.54282-1-andriy.shevchenko@linux.intel.com>
+ <887a15cb-3a3b-4ba2-aa0f-a241e70a19fa@suse.de>
+ <CAHp75VdY57xQBLN8vT3RdagQx=4kLx69qAyuzLwqTvNGC2xUbQ@mail.gmail.com>
+ <d536e7d2-891e-e0a8-6abc-6694987a65f7@suse.de>
+ <YZJGEi6Qqh1aGCxa@smile.fi.intel.com> <YZ0Xrus5wZar3QN7@smile.fi.intel.com>
+ <YbH1mBlbuysch15b@smile.fi.intel.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <YbH1mBlbuysch15b@smile.fi.intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------1cCqtZpfp2pa0kxRc4aadloP"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Is there any comments about this patch?
-BTW, is it necessary to add set_normalized_timespec64 to timespec64_compare?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------1cCqtZpfp2pa0kxRc4aadloP
+Content-Type: multipart/mixed; boundary="------------rckR2QJs83MfqaQVpLbynvFR";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: David Airlie <airlied@linux.ie>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>
+Message-ID: <194c4beb-7fb2-bdf8-f203-734e9934644a@suse.de>
+Subject: Re: [PATCH v1 1/1] drm: Replace kernel.h with the necessary
+ inclusions
+References: <20211110102423.54282-1-andriy.shevchenko@linux.intel.com>
+ <887a15cb-3a3b-4ba2-aa0f-a241e70a19fa@suse.de>
+ <CAHp75VdY57xQBLN8vT3RdagQx=4kLx69qAyuzLwqTvNGC2xUbQ@mail.gmail.com>
+ <d536e7d2-891e-e0a8-6abc-6694987a65f7@suse.de>
+ <YZJGEi6Qqh1aGCxa@smile.fi.intel.com> <YZ0Xrus5wZar3QN7@smile.fi.intel.com>
+ <YbH1mBlbuysch15b@smile.fi.intel.com>
+In-Reply-To: <YbH1mBlbuysch15b@smile.fi.intel.com>
 
-Thanks,
-Yu
+--------------rckR2QJs83MfqaQVpLbynvFR
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 2021/12/2 21:07, Yu Liao wrote:
-> Passing unnormalized timespec64 to timespec64_compare() may cause
-> incorrect results.
-> 
-> For example:
->    wall_to_monotonic = {tv_sec = -10, tv_nsec = 900000000}
->    ts_delta = {tv_sec = -9, tv_nsec = -900000000}
-> 
-> timespec64_compare() returns -1, but actually wall_to_monotonic > ts_delta.
-> This will cause wall_to_monotonic to become a positive number.
-> 
-> Use timespec64_sub() instead of direct subtraction to avoid this.
-> 
-> Signed-off-by: Yu Liao <liaoyu15@huawei.com>
-> ---
->   include/linux/time64.h    | 2 ++
->   kernel/time/timekeeping.c | 3 +--
->   2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/time64.h b/include/linux/time64.h
-> index 81b9686a2079..f74a36d253cd 100644
-> --- a/include/linux/time64.h
-> +++ b/include/linux/time64.h
-> @@ -50,6 +50,8 @@ static inline int timespec64_equal(const struct timespec64 *a,
->    * lhs < rhs:  return <0
->    * lhs == rhs: return 0
->    * lhs > rhs:  return >0
-> + *
-> + * Note: Both lhs and rhs must be normalized.
->    */
->   static inline int timespec64_compare(const struct timespec64 *lhs, const struct timespec64 *rhs)
->   {
-> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> index b348749a9fc6..dcdcb85121e4 100644
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -1306,8 +1306,7 @@ int do_settimeofday64(const struct timespec64 *ts)
->   	timekeeping_forward_now(tk);
->   
->   	xt = tk_xtime(tk);
-> -	ts_delta.tv_sec = ts->tv_sec - xt.tv_sec;
-> -	ts_delta.tv_nsec = ts->tv_nsec - xt.tv_nsec;
-> +	ts_delta = timespec64_sub(*ts, xt);
->   
->   	if (timespec64_compare(&tk->wall_to_monotonic, &ts_delta) > 0) {
->   		ret = -EINVAL;
+SGkNCg0KQW0gMDkuMTIuMjEgdW0gMTM6MjQgc2NocmllYiBBbmR5IFNoZXZjaGVua286DQo+
+IE9uIFR1ZSwgTm92IDIzLCAyMDIxIGF0IDA2OjMyOjQ2UE0gKzAyMDAsIEFuZHkgU2hldmNo
+ZW5rbyB3cm90ZToNCj4+IE9uIE1vbiwgTm92IDE1LCAyMDIxIGF0IDAxOjM1OjQ3UE0gKzAy
+MDAsIEFuZHkgU2hldmNoZW5rbyB3cm90ZToNCj4+PiBPbiBXZWQsIE5vdiAxMCwgMjAyMSBh
+dCAwNTozOTozM1BNICswMTAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+Pj4gQW0g
+MTAuMTEuMjEgdW0gMTc6MzQgc2NocmllYiBBbmR5IFNoZXZjaGVua286DQo+Pj4+PiBPbiBX
+ZWQsIE5vdiAxMCwgMjAyMSBhdCAzOjU1IFBNIFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVy
+bWFubkBzdXNlLmRlPiB3cm90ZToNCj4+Pj4+PiBBbSAxMC4xMS4yMSB1bSAxMToyNCBzY2hy
+aWViIEFuZHkgU2hldmNoZW5rbzoNCj4+Pg0KPj4+IC4uLg0KPj4+DQo+Pj4+Pj4+ICsjaW5j
+bHVkZSA8bGludXgvY29udGFpbmVyX29mLmg+DQo+Pj4+Pj4NCj4+Pj4+PiBJIGJ1aWx0IHRo
+aXMgcGF0Y2ggb24gYSByZWNlbnQgZHJtLW1pc2MtbmV4dCwgYnV0IHRoZXJlJ3Mgbm8NCj4+
+Pj4+PiBsaW51eC9jb250YWluZXJfb2YuaA0KPj4+Pj4NCj4+Pj4+IFRoYW5rIHlvdSBmb3Ig
+dHJ5aW5nLiBJdCdzIGluIHRoZSB1cHN0cmVhbSwgd2hlbmV2ZXIgZHJtLW1pc2MtbmV4dA0K
+Pj4+Pj4gc3dpdGNoZXMgdG8gbmV3ZXIvbmV3ZXN0IHVwc3RyZWFtIGl0IHdpbGwgYmUgdGhl
+cmUuIEkgYXNzdW1lIGl0IHdpbGwNCj4+Pj4+IGhhcHBlbiBhZnRlciB2NS4xNi1yYzE/DQo+
+Pj4+DQo+Pj4+IFllcywgd2UnbGwgY2VydGFpbmx5IGJhY2ttZXJnZSBzb29uIGFmdGVyIHJj
+MSBoYXMgYmVlbiByZWxlYXNlZC4gSWYgSSBmb3JnZXQNCj4+Pj4gdG8gYWRkIHRoZSBwYXRj
+aCB0aGVuLCBwbGVhc2Ugc2VuZCBhIHJlbWluZGVyLg0KPj4+Pg0KPj4+PiBPbmNlIHRoZSBu
+ZWNlc3NhcnkgaGVhZGVycyBhcmUgYXZhaWxhYmxlLA0KPj4+DQo+Pj4gJCBnaXQgbG9nIC0t
+b25lbGluZSB2NS4xNi1yYzEgLS0gaW5jbHVkZS9saW51eC9jb250YWluZXJfb2YuaA0KPj4+
+IGUxZWRjMjc3ZTZmNiBsaW51eC9jb250YWluZXJfb2YuaDogc3dpdGNoIHRvIHN0YXRpY19h
+c3NlcnQNCj4+PiBkMmE4ZWJiZjgxOTIga2VybmVsLmg6IHNwbGl0IG91dCBjb250YWluZXJf
+b2YoKSBhbmQgdHlwZW9mX21lbWJlcigpIG1hY3Jvcw0KPj4+DQo+Pj4+IHRoZSBwYXRjaCBp
+cw0KPj4+PiBBY2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2Uu
+ZGU+DQo+Pj4NCj4+PiBUaGFua3MhDQo+Pg0KPj4gTWF5YmUgSSBtaXN1bmRlcnN0b29kIHNv
+bWV0aGluZywgSSB0aG91Z2h0IHRoYXQgRFJNIHBlb3BsZSBtYXkgYXBwbHkgdGhpcywNCj4+
+IGlzIGl0IGluY29ycmVjdCBhc3N1bXB0aW9uPw0KPiANCj4gSXQgc3RpbGwgZG9lcyBub3Qg
+YXBwZWFyIGluIExpbnV4IE5leHQuLi4NCj4gV2hhdCBzaG91bGQgSSBkbyB0byBtb3ZlIHRo
+aXMgZm9yd2FyZCwgcGxlYXNlPw0KPiANCg0KSXQncyBub3cgaW4gZHJtLW1pc2MtbmV4dC4g
+U29ycnkgdGhhdCBpdCBmZWxsIHRocm91Z2ggdGhlIGNyYWNrcy4NCg0KQmVzdCByZWdhcmRz
+DQpUaG9tYXMNCg0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIg
+RGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZl
+bGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8
+cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+
+--------------rckR2QJs83MfqaQVpLbynvFR--
+
+--------------1cCqtZpfp2pa0kxRc4aadloP
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGx/FUFAwAAAAAACgkQlh/E3EQov+CI
+zhAAghUaDo+OmrUxMrwMq18uh00F1tnKtzT3s2FNZn73GZy9ymcVrYsHDcG5LtQJME+1uAUpIMDr
+5PQItFzaCYWgdwztw2KPSQgSzW3nXTUUilb2O+JKSPtMOjMZCNa9zaUx7X5Bk3tk6CgPz46/+Sm0
+NhaHZhFnuoqd6MsM6Wp6DT/1jbnZBJbEdpS0QrHkO/RjAAaCfOujN0Sg7YvWtLzyvTRYyGZBjZtV
++A+Xd+aS9wibJqmXnD1bDXr4Uq/FGYs3282Mv+93sEN5CeHknNjLMeTahSxYi5fBO8bfGsOmHcey
+hI3UqmGCwIwQBXY93bEsNeJglPEieBGx+uch/2p/DbnK9JaqRcrjNz/AP+5fXdJrY0t++NaNea2f
+wUGMyO0sOQKScFGQETzEjfApcXBZlh0qDQ9UBUD0kqHbhKoSSWgZhl3uWod53aa6mZRP3pxHwOvO
+lWq0nWcHY2q0ULmo0g53Yw5m0wk7jXJ6RWaaLqptVLN0hTF1/VvGLnINfJmfw1WPKEIDCHdweW0T
+DTj9xzLNkg+z3M5WAZ9sqK7aeSyUieOkcjN9EdwPrz3dM/nN2pH86Qihl/A/GwYaxlqLRHqldOE1
+DCv3WWUfSGfI3wZnOjPOkH8N0uwu4M584PjCm+jRzLDEheMIG+u6dirGkeHJE0p35niI/8RU33ha
+xRM=
+=U74e
+-----END PGP SIGNATURE-----
+
+--------------1cCqtZpfp2pa0kxRc4aadloP--

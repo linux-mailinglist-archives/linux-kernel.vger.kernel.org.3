@@ -2,309 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB4646F6F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A1946F6FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbhLIWgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:36:41 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:58940 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbhLIWfy (ORCPT
+        id S232499AbhLIWlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:41:40 -0500
+Received: from mail-pg1-f169.google.com ([209.85.215.169]:38518 "EHLO
+        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231149AbhLIWlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:35:54 -0500
-Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2F74C20B7195;
-        Thu,  9 Dec 2021 14:32:20 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2F74C20B7195
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639089140;
-        bh=3cFvX/p3G8eHHqUQGJCxi707sZDpe3Co6fK6npC13mE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c8YlFS6B4V98U/le6H4PXQBNdSk0jMA9cE2/7Z1nZNlMBW03YB9SfPbLaeDrA9eTB
-         F72PEwAn31/spGTPDXTgCJ9+yopN11mRiX5C76+uMkstb/fF4npyxkkuSgsiOIXLoU
-         1Gu/SNk9knwgFOdkSe8L18YuMV7WlCzMzDExoh4Q=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        beaub@linux.microsoft.com
-Subject: [PATCH v7 13/13] user_events: Use __get_rel_str for relative string fields
-Date:   Thu,  9 Dec 2021 14:32:10 -0800
-Message-Id: <20211209223210.1818-14-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211209223210.1818-1-beaub@linux.microsoft.com>
-References: <20211209223210.1818-1-beaub@linux.microsoft.com>
+        Thu, 9 Dec 2021 17:41:39 -0500
+Received: by mail-pg1-f169.google.com with SMTP id s137so6372299pgs.5;
+        Thu, 09 Dec 2021 14:38:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=D+CFe2awBT3gEDhAPefbc8+v7i0Z/5e7DrF49U0Vwz8=;
+        b=1nFC8u8raEjKk0oPRboyTFTSs1mB3pKuErDMAUK8kMOkBHhbWGl2n5USU5bBpwoOWh
+         7PejUxjMc6zi5iEz+zYDWvDKAK/O+/agn/bu5SE5eizvH09Z+fH3o4MciRwYk4w9zGqh
+         iA9vc3ZCDqfsUwxs97U9A2F1FFm7K0Q6vIuTlkOKQGuu5fEceHeBvl0bdFTAgBMrscT5
+         XaUeLv0HyK4wqPzQzHsYl1YwXWo9tuC7mC7pTe/KpjrNCAtTSWojsbXJQ8xsdOjqr7cw
+         f77y6wA3xWRM4/BqXhtNgM2qzm8FGFXaOBS+D3d97AYx1e9jF0sWWTYg5AbitdnwMsWI
+         CtYQ==
+X-Gm-Message-State: AOAM532NGtXQY+3agZhGatFoRBxOBM6aElnGiNGI4QP6eIjH7GbwKWS5
+        +fCNz+zUbZusFKrUeReAOAk3JHaiPeY=
+X-Google-Smtp-Source: ABdhPJytGEjLrNYi/kW04zufjT96p/uTD9pYevJ/2vCx1OWhTYXvO4D8jL09b6yXcg0fKOpx0DJG1Q==
+X-Received: by 2002:a05:6a00:26e3:b0:49f:c0ca:850e with SMTP id p35-20020a056a0026e300b0049fc0ca850emr14439430pfw.4.1639089485540;
+        Thu, 09 Dec 2021 14:38:05 -0800 (PST)
+Received: from ?IPv6:2620:0:1000:2514:4f5b:f494:7264:b4d4? ([2620:0:1000:2514:4f5b:f494:7264:b4d4])
+        by smtp.gmail.com with ESMTPSA id e35sm546735pgm.92.2021.12.09.14.38.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 14:38:04 -0800 (PST)
+Subject: Re: [PATCH v3 2/3] block: don't delete queue kobject before its
+ children
+To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hannes Reinecke <hare@suse.de>
+References: <20211208013534.136590-1-ebiggers@kernel.org>
+ <20211208013534.136590-3-ebiggers@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <2a029611-10da-9114-b66b-345a68a5bd36@acm.org>
+Date:   Thu, 9 Dec 2021 14:38:02 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20211208013534.136590-3-ebiggers@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch between __get_str and __get_rel_str within the print_fmt of
-user_events. Add unit test to ensure print_fmt is correct on known
-types.
+On 12/7/21 5:35 PM, Eric Biggers wrote:
+> +	/* Now that all child objects were deleted, the queue can be deleted. */
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- kernel/trace/trace_events_user.c              |  24 ++-
- .../selftests/user_events/ftrace_test.c       | 166 ++++++++++++++++++
- 2 files changed, 182 insertions(+), 8 deletions(-)
+Shouldn't the present tense be used above (were -> are)? Anyway:
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 56eb58ddb4cf..3779fa2ca14a 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -257,7 +257,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
- 	goto add_field;
- 
- add_validator:
--	if (strstr(type, "char[") != 0)
-+	if (strstr(type, "char") != 0)
- 		validator_flags |= VALIDATOR_ENSURE_NULL;
- 
- 	validator = kmalloc(sizeof(*validator), GFP_KERNEL);
-@@ -456,14 +456,21 @@ static const char *user_field_format(const char *type)
- 	return "%llu";
- }
- 
--static bool user_field_is_dyn_string(const char *type)
-+static bool user_field_is_dyn_string(const char *type, const char **str_func)
- {
--	if (str_has_prefix(type, "__data_loc ") ||
--	    str_has_prefix(type, "__rel_loc "))
--		if (strstr(type, "char[") != 0)
--			return true;
-+	if (str_has_prefix(type, "__data_loc ")) {
-+		*str_func = "__get_str";
-+		goto check;
-+	}
-+
-+	if (str_has_prefix(type, "__rel_loc ")) {
-+		*str_func = "__get_rel_str";
-+		goto check;
-+	}
- 
- 	return false;
-+check:
-+	return strstr(type, "char") != 0;
- }
- 
- #define LEN_OR_ZERO (len ? len - pos : 0)
-@@ -472,6 +479,7 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
- 	struct ftrace_event_field *field, *next;
- 	struct list_head *head = &user->fields;
- 	int pos = 0, depth = 0;
-+	const char *str_func;
- 
- 	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
- 
-@@ -488,9 +496,9 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
- 	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
- 
- 	list_for_each_entry_safe_reverse(field, next, head, link) {
--		if (user_field_is_dyn_string(field->type))
-+		if (user_field_is_dyn_string(field->type, &str_func))
- 			pos += snprintf(buf + pos, LEN_OR_ZERO,
--					", __get_str(%s)", field->name);
-+					", %s(%s)", str_func, field->name);
- 		else
- 			pos += snprintf(buf + pos, LEN_OR_ZERO,
- 					", REC->%s", field->name);
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index 16aff1fb295a..b2e5c0765a68 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -20,6 +20,7 @@ const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
- const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
- const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/enable";
- const char *trace_file = "/sys/kernel/debug/tracing/trace";
-+const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
- 
- static int trace_bytes(void)
- {
-@@ -47,6 +48,61 @@ static int trace_bytes(void)
- 	return bytes;
- }
- 
-+static int get_print_fmt(char *buffer, int len)
-+{
-+	FILE *fp = fopen(fmt_file, "r");
-+	int c, index = 0, last = 0;
-+
-+	if (!fp)
-+		return -1;
-+
-+	/* Read until empty line (Skip Common) */
-+	while (true) {
-+		c = getc(fp);
-+
-+		if (c == EOF)
-+			break;
-+
-+		if (last == '\n' && c == '\n')
-+			break;
-+
-+		last = c;
-+	}
-+
-+	last = 0;
-+
-+	/* Read until empty line (Skip Properties) */
-+	while (true) {
-+		c = getc(fp);
-+
-+		if (c == EOF)
-+			break;
-+
-+		if (last == '\n' && c == '\n')
-+			break;
-+
-+		last = c;
-+	}
-+
-+	/* Read in print_fmt: */
-+	while (len > 1) {
-+		c = getc(fp);
-+
-+		if (c == EOF || c == '\n')
-+			break;
-+
-+		buffer[index++] = c;
-+
-+		len--;
-+	}
-+
-+	buffer[index] = 0;
-+
-+	fclose(fp);
-+
-+	return 0;
-+}
-+
- static int clear(void)
- {
- 	int fd = open(data_file, O_RDWR);
-@@ -63,6 +119,44 @@ static int clear(void)
- 	return 0;
- }
- 
-+static int check_print_fmt(const char *event, const char *expected)
-+{
-+	struct user_reg reg = {0};
-+	char print_fmt[256];
-+	int ret;
-+	int fd;
-+
-+	/* Ensure cleared */
-+	ret = clear();
-+
-+	if (ret != 0)
-+		return ret;
-+
-+	fd = open(data_file, O_RDWR);
-+
-+	if (fd == -1)
-+		return fd;
-+
-+	reg.size = sizeof(reg);
-+	reg.name_args = (__u64)event;
-+
-+	/* Register should work */
-+	ret = ioctl(fd, DIAG_IOCSREG, &reg);
-+
-+	close(fd);
-+
-+	if (ret != 0)
-+		return ret;
-+
-+	/* Ensure correct print_fmt */
-+	ret = get_print_fmt(print_fmt, sizeof(print_fmt));
-+
-+	if (ret != 0)
-+		return ret;
-+
-+	return strcmp(print_fmt, expected);
-+}
-+
- FIXTURE(user) {
- 	int status_fd;
- 	int data_fd;
-@@ -282,6 +376,78 @@ TEST_F(user, write_validator) {
- 	ASSERT_EQ(EFAULT, errno);
- }
- 
-+TEST_F(user, print_fmt) {
-+	int ret;
-+
-+	ret = check_print_fmt("__test_event __rel_loc char[] data",
-+			      "print fmt: \"data=%s\", __get_rel_str(data)");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event __data_loc char[] data",
-+			      "print fmt: \"data=%s\", __get_str(data)");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s64 data",
-+			      "print fmt: \"data=%lld\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u64 data",
-+			      "print fmt: \"data=%llu\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s32 data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u32 data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event int data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event unsigned int data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s16 data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u16 data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event short data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event unsigned short data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s8 data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u8 data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event char data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event unsigned char data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event char[4] data",
-+			      "print fmt: \"data=%s\", REC->data");
-+	ASSERT_EQ(0, ret);
-+}
-+
- int main(int argc, char **argv)
- {
- 	return test_harness_run(argc, argv);
--- 
-2.17.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

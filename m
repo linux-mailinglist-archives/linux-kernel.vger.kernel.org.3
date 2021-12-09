@@ -2,140 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5779F46E9EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E23746E9F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238603AbhLIOab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:30:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38811 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232331AbhLIOaa (ORCPT
+        id S238609AbhLIObu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Dec 2021 09:31:50 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:55037 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232331AbhLIObt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:30:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639060016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=98vHVkgD1zcUMYnaT7kiJnczoMqUf5nBps9d8EoldNI=;
-        b=ExzE2FS60h6iFIAljK0BTVoyIFccWSsnruPdoSz+aEzKaROoSdDF6IejgQLsu43bQPq1Zr
-        SJ07LFfWZl/bP0oSBU499eiqcjfTOD70Ejd1inOM0d0g3+fzHriCdyAzM5DblNLyTUp3Ag
-        bYOIMQq4fI+Bj/0eouv91vqteExADQ4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-0RVno8FaMbODHui7sPdM_w-1; Thu, 09 Dec 2021 09:26:53 -0500
-X-MC-Unique: 0RVno8FaMbODHui7sPdM_w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0505B1023F4D;
-        Thu,  9 Dec 2021 14:26:51 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E7DE5BE0E;
-        Thu,  9 Dec 2021 14:26:31 +0000 (UTC)
-Message-ID: <bcf9f9e5922cce979cc11ced8ccda992e22b290a.camel@redhat.com>
-Subject: Re: [PATCH 3/6] KVM: SVM: fix AVIC race of host->guest IPI delivery
- vs AVIC inhibition
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Thu, 09 Dec 2021 16:26:30 +0200
-In-Reply-To: <4d723b07-e626-190d-63f4-fd0b5497dd9b@redhat.com>
-References: <20211209115440.394441-1-mlevitsk@redhat.com>
-         <20211209115440.394441-4-mlevitsk@redhat.com>
-         <4d723b07-e626-190d-63f4-fd0b5497dd9b@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 9 Dec 2021 09:31:49 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 73DEDE0015;
+        Thu,  9 Dec 2021 14:28:13 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 15:28:11 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v5 3/4] mtd: core: protect access to MTD devices while
+ in suspend
+Message-ID: <20211209152811.318bdf17@xps13>
+In-Reply-To: <20211209140721.6ki7gznvxwyn3cze@skn-laptop.hinnerup>
+References: <20211123125012.ibzqu44ixmykbhkt@skn-laptop>
+        <20211123140715.280b2f70@collabora.com>
+        <20211129101908.6f1aa715@xps13>
+        <20211129094129.xn364czofrgtvfb4@skn-laptop>
+        <63be9121-18c3-1ef2-c448-f99fb861490f@samsung.com>
+        <20211130124131.6pgu7enjgk6y536m@skn-laptop>
+        <20211130141551.400331c8@collabora.com>
+        <20211130132912.v6v45boce2zbnoy3@skn-laptop>
+        <20211130143705.5d0404aa@collabora.com>
+        <20211203143958.40645506@xps13>
+        <20211209140721.6ki7gznvxwyn3cze@skn-laptop.hinnerup>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 15:11 +0100, Paolo Bonzini wrote:
-> On 12/9/21 12:54, Maxim Levitsky wrote:
-> > If svm_deliver_avic_intr is called just after the target vcpu's AVIC got
-> > inhibited, it might read a stale value of vcpu->arch.apicv_active
-> > which can lead to the target vCPU not noticing the interrupt.
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >   arch/x86/kvm/svm/avic.c | 16 +++++++++++++---
-> >   1 file changed, 13 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > index 859ad2dc50f1..8c1b934bfa9b 100644
-> > --- a/arch/x86/kvm/svm/avic.c
-> > +++ b/arch/x86/kvm/svm/avic.c
-> > @@ -691,6 +691,15 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
-> >   	 * automatically process AVIC interrupts at VMRUN.
-> >   	 */
-> >   	if (vcpu->mode == IN_GUEST_MODE) {
-> > +
-> > +		/*
-> > +		 * At this point we had read the vcpu->arch.apicv_active == true
-> > +		 * and the vcpu->mode == IN_GUEST_MODE.
-> > +		 * Since we have a memory barrier after setting IN_GUEST_MODE,
-> > +		 * it ensures that AVIC inhibition is complete and thus
-> > +		 * the target is really running with AVIC enabled.
-> > +		 */
-> > +
-> >   		int cpu = READ_ONCE(vcpu->cpu);
-> 
-> I don't think it's correct.  The vCPU has apicv_active written (in 
-> kvm_vcpu_update_apicv) before vcpu->mode.
+Hi Sean,
 
-I thought that we have a full memory barrier just prior to setting IN_GUEST_MODE
-thus if I see vcpu->mode == IN_GUEST_MODE then I'll see correct apicv_active value.
-But apparently the memory barrier is after setting vcpu->mode.
+sean@geanix.com wrote on Thu, 9 Dec 2021 15:07:21 +0100:
 
-
-> 
-> For the acquire/release pair to work properly you need to 1) read 
-> apicv_active *after* vcpu->mode here 2) use store_release and 
-> load_acquire for vcpu->mode, respectively in vcpu_enter_guest and here.
-
-store_release for vcpu->mode in vcpu_enter_guest means a write barrier just before setting it,
-which I expected to be there.
-
-And yes I see now, I need a read barrier here as well. I am still learning this.
-
-Best regards,
-	Maxim Levitsky
-
-> 
-> Paolo
-> 
-> >   		/*
-> > @@ -706,10 +715,11 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
-> >   		put_cpu();
-> >   	} else {
-> >   		/*
-> > -		 * Wake the vCPU if it was blocking.  KVM will then detect the
-> > -		 * pending IRQ when checking if the vCPU has a wake event.
-> > +		 * Kick the target vCPU otherwise, to make sure
-> > +		 * it processes the interrupt even if its AVIC is inhibited.
-> >   		 */
-> > -		kvm_vcpu_wake_up(vcpu);
-> > +		kvm_make_request(KVM_REQ_EVENT, vcpu);
-> > +		kvm_vcpu_kick(vcpu);
-> >   	}
+> On Fri, Dec 03, 2021 at 02:39:58PM +0100, Miquel Raynal wrote:
+> > Hello,
 > >   
-> >   	return 0;
+> > > > Fine by me, lets drop this series.  
 > > 
+> > FYI I've dropped the entire series from mtd/next. I'm waiting for the
+> > fix discussed below (without abusing the chip mutex ;-) ).  
+> 
+> Cool, looking forward to test a patch series :)
 
+Test? You mean "write"? :)
 
+Cheers,
+Miquèl

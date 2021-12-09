@@ -2,65 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D495246EF38
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CD546EF68
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241943AbhLIRDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:03:37 -0500
-Received: from mga12.intel.com ([192.55.52.136]:58924 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241821AbhLIRD3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:03:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639069196; x=1670605196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jb7CwzDxKXr/7UaWgRJtMnceItXgbQOBYj8g3WpneL0=;
-  b=Bn93TAdXTexuKYe1Fjc6RjiMe8sAeOURkhwo2aESHN0MgSfas+4kxq9x
-   HX7u1oWiNhWZ1z6SR1+jWBycvVAwKQE/22smFEpBW+Ir/R1lHYZgcOzWS
-   lqxv2On0TIp/K8XzZ3Kq6v2TNuKgNua5IXSu8kS18P8HggYmfNQyJiVFD
-   rBL2fCpXV7IHMSKSIF4KwFq2fcitHZzg9sYht0cmPxVSVT+bu2rxicsPK
-   GTKtuP7m4y3DwRccc/Jya8wTPZGBjHAeoDFOmOsJtwP76AD027TO/2gO6
-   hM7tGWV8DhKXURS2TSObrvcYkkXK6zk4dz60H3I3wz2Ht782GOQ+PBfpt
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="218175860"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="218175860"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:59:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="503565784"
-Received: from ayushshr-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.115.39])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:59:54 -0800
-Date:   Thu, 9 Dec 2021 08:59:53 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: Remove myself as modules maintainer
-Message-ID: <20211209165953.wohokahzh5z6tnw7@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20211209084313.10621-1-jeyu@kernel.org>
+        id S241821AbhLIRER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:04:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23095 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241908AbhLIREG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:04:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639069232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5dCbzoP8+tSDo3duENe/pb2R+iIFDYIwHHgvs+KT0bA=;
+        b=E99tagpPLDgP/FzFD1RuyWZyEUVBGjxZRBq0u0KjarvoDfJqb18014hH+r8jkjLm6dvR73
+        ZXut2oS+I8U908CwkMdNwbmufagen1IkcOOZqvzb0zGdNkFv3F7sgmWht4i1ElMW1GujIb
+        s3Ka7OjEOhH3kHOAtkrRHmtqHXEU2Wk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-37--1iPhLwGMYuoiudAXXkNKw-1; Thu, 09 Dec 2021 12:00:28 -0500
+X-MC-Unique: -1iPhLwGMYuoiudAXXkNKw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BEB32824F84;
+        Thu,  9 Dec 2021 17:00:18 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5D0627A22A;
+        Thu,  9 Dec 2021 17:00:04 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v2 28/67] fscache: Provide a function to note the release of a
+ page
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 17:00:03 +0000
+Message-ID: <163906920354.143852.7511819614661372008.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20211209084313.10621-1-jeyu@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 09:43:13AM +0100, Jessica Yu wrote:
->Luis has done a great job maintaining modules so far. As I'm planning to
->take a break from work soon, I think we're ready to transition over fully.
->
->Signed-off-by: Jessica Yu <jeyu@kernel.org>
+Provide a function to be called from a network filesystem's releasepage
+method to indicate that a page has been released that might have been a
+reflection of data upon the server - and now that data must be reloaded
+from the server or the cache.
+
+This is used to end an optimisation for empty files, in particular files
+that have just been created locally, whereby we know there cannot yet be
+any data that we would need to read from the server or the cache.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819617128.215744.4725572296135656508.stgit@warthog.procyon.org.uk/ # v1
+---
+
+ include/linux/fscache.h |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+index 73942b4e9aee..fed7def0fbe0 100644
+--- a/include/linux/fscache.h
++++ b/include/linux/fscache.h
+@@ -603,4 +603,20 @@ static inline void fscache_clear_inode_writeback(struct fscache_cookie *cookie,
+ 	}
+ }
+ 
++/**
++ * fscache_note_page_release - Note that a netfs page got released
++ * @cookie: The cookie corresponding to the file
++ *
++ * Note that a page that has been copied to the cache has been released.  This
++ * means that future reads will need to look in the cache to see if it's there.
++ */
++static inline
++void fscache_note_page_release(struct fscache_cookie *cookie)
++{
++	if (cookie &&
++	    test_bit(FSCACHE_COOKIE_HAVE_DATA, &cookie->flags) &&
++	    test_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags))
++		clear_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags);
++}
++
+ #endif /* _LINUX_FSCACHE_H */
 
 
-Acked-by: Lucas De Marchi <lucas.demarchi@intel.com>
-
-
-Thanks for your work maintaining the modules! Agreed Luis is already
-doing a great job, also sending patches for kmod userspace.
-
-Lucas De Marchi

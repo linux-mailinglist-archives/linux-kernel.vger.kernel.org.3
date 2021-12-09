@@ -2,154 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD56A46EC53
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD7546EC5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240647AbhLIP6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:58:00 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33744 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240624AbhLIP56 (ORCPT
+        id S240652AbhLIQBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:01:18 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:39950 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240192AbhLIQBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:57:58 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 69C74210FF;
-        Thu,  9 Dec 2021 15:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639065264; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 9 Dec 2021 11:01:17 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639065462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=AirTl4zzb+ByVFQqyjWDo2/YusdyzMaM/JV9rnLAGhg=;
-        b=ZmP+VnU+b1W746U8flhMFpjdkMRwi9alKI2iVvMT2FowgOicY90ed0irLm+PGcqpTOC4vy
-        b1HPOF2bJIetNz8ZmIIUbeNugWcQCRujlYrbV7VP6YPpMTu5QHxgnNtgeGtrmmhSjFyRtm
-        UBBHWcWtCYBtugvb/WmwEhKNNqp4Kqs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639065264;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        bh=14WfH/W9sOwaA03mQuVJyudscZd8WKKilKyxkGeP1Hw=;
+        b=HCnrcDa+Sd1Yzr0vMT8kki/nF8ipIgyipTqwXdOzeZinp2yaxN8sm1WNHLP21Gp+swfRpp
+        f29snYGC1/WGXp6pKw/cS6C0tguav4K/7I2vc7jBjSDmBUQuncoO4NcOHKy4rYLgmFrBT3
+        gwtfj2OT0HjurIb/3AKMY0DDZ8ZzFCVMiS/lIQlfFXXJtVZ1038ixvnF8xhu+nJOCX1Okk
+        pRgQnQcbzcy5e2n1eNkl5RXWynG+9UnjsxwO/xzXwpGtrB5p5sQTSbqMZEfIljcqx7FxRi
+        wX6wWYyzc0y5QnZyX+lAFl7jQ6Eork7125vWq/JPWbxTKMSIbJTuvaNlNDItig==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639065462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=AirTl4zzb+ByVFQqyjWDo2/YusdyzMaM/JV9rnLAGhg=;
-        b=MkkCrAJNyfx8FI+8r16J08CYAGBJsJsWZJ8pXT+nSAB9qMRShj/SDFoyA7n9WALRP07hwC
-        D7ROczCSAO4e6PCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1E4A313343;
-        Thu,  9 Dec 2021 15:54:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eF2YBrAmsmHCUAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 09 Dec 2021 15:54:24 +0000
-Message-ID: <ffbb5843-4c5a-99c1-12a6-2ff3ae818e3c@suse.cz>
-Date:   Thu, 9 Dec 2021 16:54:23 +0100
+        bh=14WfH/W9sOwaA03mQuVJyudscZd8WKKilKyxkGeP1Hw=;
+        b=DKDiLSaRvv2XXelF8ez4TJ6EltJjEdm9z7/GJ40dlFn3aKyC+g77C3gyh+cNvJoGbZH7bG
+        iHpBOeolc5jWWsCw==
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Dey, Megha" <megha.dey@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+Subject: RE: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+In-Reply-To: <BN9PR11MB5276BDE2AC58ADA7A66CAFBA8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <87y2548byw.ffs@tglx> <20211201181406.GM4670@nvidia.com>
+ <87mtlk84ae.ffs@tglx> <87r1av7u3d.ffs@tglx>
+ <20211202135502.GP4670@nvidia.com> <87wnkm6c77.ffs@tglx>
+ <20211202200017.GS4670@nvidia.com> <87o85y63m8.ffs@tglx>
+ <20211203003749.GT4670@nvidia.com> <877dcl681d.ffs@tglx>
+ <20211203164104.GX4670@nvidia.com>
+ <BN9PR11MB52766CC46D3D4865308F61D98C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <87pmq6ywu3.ffs@tglx>
+ <BN9PR11MB5276BDE2AC58ADA7A66CAFBA8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+Date:   Thu, 09 Dec 2021 16:57:41 +0100
+Message-ID: <87mtl9zs7e.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-9-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4 08/66] mmap: Use the VMA iterator in
- count_vma_pages_range()
-In-Reply-To: <20211201142918.921493-9-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:29, Liam Howlett wrote:
-> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> 
-> This simplifies the implementation and is faster than using the linked
-> list.
+On Thu, Dec 09 2021 at 12:17, Kevin Tian wrote:
+>> From: Thomas Gleixner <tglx@linutronix.de>
+>> I think you are looking at that from the internal implementation details
+>> of IDXD. But you can just model it in an IDXD implementation agnostic
+>> way:
+>> 
+>>      ENQCMD(PASID, IMS-ENTRY,.....)
+>
+> Not exactly IMS-ENTRY. MSI-ENTRY also works.
 
-You mean faster because more cache friendly?
-OTOH you do max(addr, vma->vm_start) which wasn't the case.
+Sure.
 
-I doubt it matters though and yeah it's much simpler...
+>> 
+>> implies an on demand allocation of a virtual queue, which is deallocated
+>> when the command completes. The PASID and IMS-ENTRY act as the 'queue'
+>> identifier.
+>> 
+>> The implementation detail of IDXD that it executes these computations on
+>> an internal shared workqueue does not change that.
+>> 
+>> Such a workqueue can only execute one enqueued command at a time,
+>> which
+>> means that during the execution of a particular command that IDXD
+>> internal workqueue represents the 'virtual queue' which is identified by
+>> the unique PASID/IMS-ENTRY pair.
+>
+> While it's one way of looking at this model do we want to actually
+> create some objects to represent this 'virtual queue' concept? that
+> implies each ENQCMD must be moderated to create such short-lifespan
+> objects and I'm not sure the benefit of doing so.
 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+You don't have to create anything. The PASID/ENTRY pair represents that
+'virtual queue', right?
 
-Btw, no signed-off-by Liam?
+> If not then from driver p.o.v it's still one queue resource and driver 
+> needs to manage its association with multiple interrupt entries and 
+> PASIDs when it's connected to multiple clients.
 
-I now also notice some other patches (e.g. patch 4) have From: and s-o-b by
-Liam followed by Matthew, despite it's Liam sending them. I guess that's
-less of an issue than the missing one.
+That's correct, but there is nothing problematic with it. It's like
+allocating multiple interrupts for any other hardware device or
+subdevice, right?
 
-Anyway something for you to check and make consistent in the whole series, I
-won't point it out individually.
+What's probably more interresting is how the PASID/interrupt/RID
+relations are managed.
 
-> ---
->  mm/mmap.c | 24 +++++++-----------------
->  1 file changed, 7 insertions(+), 17 deletions(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 9fee6e6b276f..de78fc0ce809 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -669,29 +669,19 @@ munmap_vma_range(struct mm_struct *mm, unsigned long start, unsigned long len,
->  
->  	return 0;
->  }
-> +
->  static unsigned long count_vma_pages_range(struct mm_struct *mm,
->  		unsigned long addr, unsigned long end)
->  {
-> -	unsigned long nr_pages = 0;
-> +	VMA_ITERATOR(vmi, mm, addr);
->  	struct vm_area_struct *vma;
-> +	unsigned long nr_pages = 0;
->  
-> -	/* Find first overlapping mapping */
-> -	vma = find_vma_intersection(mm, addr, end);
-> -	if (!vma)
-> -		return 0;
-> -
-> -	nr_pages = (min(end, vma->vm_end) -
-> -		max(addr, vma->vm_start)) >> PAGE_SHIFT;
-> -
-> -	/* Iterate over the rest of the overlaps */
-> -	for (vma = vma->vm_next; vma; vma = vma->vm_next) {
-> -		unsigned long overlap_len;
-> -
-> -		if (vma->vm_start > end)
-> -			break;
-> +	for_each_vma_range(vmi, vma, end) {
-> +		unsigned long vm_start = max(addr, vma->vm_start);
-> +		unsigned long vm_end = min(end, vma->vm_end);
->  
-> -		overlap_len = min(end, vma->vm_end) - vma->vm_start;
-> -		nr_pages += overlap_len >> PAGE_SHIFT;
-> +		nr_pages += (vm_end - vm_start) / PAGE_SIZE;
->  	}
->  
->  	return nr_pages;
+Thanks,
+
+        tglx
 

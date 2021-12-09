@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D3C46E389
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9037E46E38C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbhLIH72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:59:28 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:45224 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbhLIH71 (ORCPT
+        id S234050AbhLIH7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:59:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60862 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233992AbhLIH7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:59:27 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B97tZMm107101;
-        Thu, 9 Dec 2021 01:55:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639036535;
-        bh=cMgn4zULeSCEApO9TOGbdrs14+ZsXacG70vfjkhTOjA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=iOBcYiqcCDr8lSufp93SM6IzDP3g0i9XrDDCqx+hK4QUYC1egJBjmjvkslnpwL1Pf
-         +JuvMGKFekr3gskSlzRbNgaMUZ79mbP/wNkg+U6jIGXzkmQnA9qiN9Cmf2rezXSQTl
-         V+P9h/2m3DCMhqJCWlfFGiOvb8tWa7sQ3lUK4MMA=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B97tZkj087937
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Dec 2021 01:55:35 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 9
- Dec 2021 01:55:35 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 9 Dec 2021 01:55:35 -0600
-Received: from [10.250.234.105] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B97tUfM126723;
-        Thu, 9 Dec 2021 01:55:31 -0600
-Subject: Re: [PATCH v3 00/15] PHY: Add support for multilink configurations in
- Cadence Sierra PHY driver
-To:     Swapnil Jakhade <sjakhade@cadence.com>, <vkoul@kernel.org>,
-        <robh+dt@kernel.org>, <p.zabel@pengutronix.de>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <mparab@cadence.com>, <a-govindraju@ti.com>
-References: <20211022170236.18839-1-sjakhade@cadence.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <4a9bdad2-9d5a-baf8-5a9c-aa0854505e5d@ti.com>
-Date:   Thu, 9 Dec 2021 13:25:29 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 9 Dec 2021 02:59:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C506B81FBA
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A77C004DD;
+        Thu,  9 Dec 2021 07:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639036571;
+        bh=aIzYtbig5MH7sfOsB9APmmHfEK+RIkIFW4Q7dyAbeoc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=caChZhhr6IrwFcGT968xcIicf9Jvjc/wCV2eamjM3+eadeQ2+ergc4SEdgTIpu78X
+         yPQJlPXk4vf951ycKJ1doDd8juve0H7u+YAe/xTvaHQCnhz3d2PGhdzXvqyFznsxMx
+         rBW39obBHTV14NSx2bU076U7eUOaBN3KkstxDa4I=
+Date:   Thu, 9 Dec 2021 08:56:08 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: fix a memory leak in rtw_mp_pwrtrk()
+Message-ID: <YbG2mDYHqjb5AYGG@kroah.com>
+References: <20211209071905.125440-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-In-Reply-To: <20211022170236.18839-1-sjakhade@cadence.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209071905.125440-1-niejianglei2021@163.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 09, 2021 at 03:19:05PM +0800, Jianglei Nie wrote:
+> Line 5961 (#1) allocates a memory chunk for input by kmalloc().
+> Line 5966 (#2), line 5982 (#4) and line 5987 (#5) free the input
+> before the function returns while line 5979 (#3) forget to free it,
+> which will lead to a memory leak.
+> 
+> We should kfree() input in line 5979 (#3).
+> 
+> 5953 static int rtw_mp_pwrtrk(struct net_device *dev,
+> 5954 			struct iw_request_info *info,
+> 5955 			struct iw_point *wrqu, char *extra)
+> 5956 {
+> 5961 	char	*input = kmalloc(wrqu->length, GFP_KERNEL);
+> 	// #1: kmalloc space
+> 5963 	if (!input)
+> 5964 		return -ENOMEM;
+> 5965 	if (copy_from_user(input, wrqu->pointer, wrqu->length)) {
+> 5966 		kfree(input); // #2: kfree space
+> 5967 		return -EFAULT;
+> 5968	}
+> 
+> 5973	if (strncmp(input, "stop", 4) == 0) {
+> 5974		enable = 0;
+> 5975		sprintf(extra, "mp tx power tracking stop");
+> 5976	} else if (sscanf(input, "ther =%d", &thermal)) {
+> 5977		ret = Hal_SetThermalMeter(padapter, (u8)thermal);
+> 5978		if (ret == _FAIL)
+> 5979			return -EPERM; // #3: missing kfree
+> 5980		sprintf(extra, "mp tx power tracking start,
+> 			target value =%d ok ", thermal);
+> 5981	} else {
+> 5982		kfree(input); // #4: kfree space
+> 5983		return -EINVAL;
+> 5984	}
+> 
+> 5987	kfree(input); // #5: kfree space
+> 
+> 5993	return 0;
+> 5994 }
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> index 1fd375076001..8f9e0f12c51f 100644
+> --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> @@ -5975,8 +5975,10 @@ static int rtw_mp_pwrtrk(struct net_device *dev,
+>  			sprintf(extra, "mp tx power tracking stop");
+>  		} else if (sscanf(input, "ther =%d", &thermal)) {
+>  				ret = Hal_SetThermalMeter(padapter, (u8)thermal);
+> -				if (ret == _FAIL)
+> +				if (ret == _FAIL) {
+> +					kfree(input);
+>  					return -EPERM;
+> +				}
+>  				sprintf(extra, "mp tx power tracking start, target value =%d ok ", thermal);
+>  		} else {
+>  			kfree(input);
 
+What kernel tree and version did you make this patch against?  I do not
+even see this function in Linus's tree, nor in my staging-next
+development branch.
 
-On 22/10/21 10:32 pm, Swapnil Jakhade wrote:
-> Cadence Sierra PHY is a multiprotocol PHY supporting different multilink
-> PHY configurations. This patch series extends functionality of Sierra PHY
-> driver by adding features like support for multilink multiprotocol
-> configurations, derived reference clock etc.
-> 
-> The changes have been validated on TI J721E platform.
-> 
-> Version History:
-> 
-> v3:
->    - Rebased on latest PHY next
->    - Added Reviewed-by and Acked-by tags
-> 
-> v2:
->    - Added a new patch 3/15 to rename the SSC macros for dt-bindings
->      to use generic names. These macros are not yet used in any DTS file.
-> 
-> Swapnil Jakhade (15):
->   phy: cadence: Sierra: Use of_device_get_match_data() to get driver
->     data
->   phy: cadence: Sierra: Prepare driver to add support for multilink
->     configurations
->   dt-bindings: phy: cadence-torrent: Rename SSC macros to use generic
->     names
->   dt-bindings: phy: cadence-sierra: Add binding to specify SSC mode
->   phy: cadence: Sierra: Add support to get SSC type from device tree
->   phy: cadence: Sierra: Rename some regmap variables to be in sync with
->     Sierra documentation
->   phy: cadence: Sierra: Add PHY PCS common register configurations
->   phy: cadence: Sierra: Check cmn_ready assertion during PHY power on
->   phy: cadence: Sierra: Check PIPE mode PHY status to be ready for
->     operation
->   phy: cadence: Sierra: Update single link PCIe register configuration
->   phy: cadence: Sierra: Fix to get correct parent for mux clocks
->   phy: cadence: Sierra: Add support for PHY multilink configurations
->   phy: cadence: Sierra: Add PCIe + QSGMII PHY multilink configuration
->   dt-bindings: phy: cadence-sierra: Add clock ID for derived reference
->     clock
->   phy: cadence: Sierra: Add support for derived reference clock output
-> 
->  .../bindings/phy/phy-cadence-sierra.yaml      |    9 +
->  .../bindings/phy/phy-cadence-torrent.yaml     |    4 +-
->  drivers/phy/cadence/phy-cadence-sierra.c      | 1299 +++++++++++++++--
->  include/dt-bindings/phy/phy-cadence.h         |    9 +-
->  4 files changed, 1226 insertions(+), 95 deletions(-)
+confused,
 
-
-Reviewed-by: Kishon Vijay Abraham I <kishon@ti.com>
-> 
+greg k-h

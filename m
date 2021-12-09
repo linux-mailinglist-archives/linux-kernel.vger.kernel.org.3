@@ -2,125 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039B446E31F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F1546E325
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbhLIH0F convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Dec 2021 02:26:05 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4235 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbhLIH0D (ORCPT
+        id S233756AbhLIH0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233730AbhLIH0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:26:03 -0500
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J8lnm3T3Kz67yRx;
-        Thu,  9 Dec 2021 15:21:16 +0800 (CST)
-Received: from lhreml727-chm.china.huawei.com (10.201.108.78) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 9 Dec 2021 08:22:28 +0100
-Received: from lhreml738-chm.china.huawei.com (10.201.108.188) by
- lhreml727-chm.china.huawei.com (10.201.108.78) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 9 Dec 2021 07:22:27 +0000
-Received: from lhreml738-chm.china.huawei.com ([10.201.108.188]) by
- lhreml738-chm.china.huawei.com ([10.201.108.188]) with mapi id
- 15.01.2308.020; Thu, 9 Dec 2021 07:22:27 +0000
-From:   Denis Semakin <denis.semakin@huawei.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "containers@lists.linux.dev" <containers@lists.linux.dev>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "mpeters@redhat.com" <mpeters@redhat.com>,
-        "lhinds@redhat.com" <lhinds@redhat.com>,
-        "lsturman@redhat.com" <lsturman@redhat.com>,
-        "puiterwi@redhat.com" <puiterwi@redhat.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "jamjoom@us.ibm.com" <jamjoom@us.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "rgb@redhat.com" <rgb@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>
-Subject: RE: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check
- corresponding capability
-Thread-Topic: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check
- corresponding capability
-Thread-Index: AQHX7IGL3eM2VvpvvUagKdVUk4BPk6wpv2mA
-Date:   Thu, 9 Dec 2021 07:22:27 +0000
-Message-ID: <0299fefc764b453a9449b0df2ca06dc7@huawei.com>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-15-stefanb@linux.ibm.com>
-In-Reply-To: <20211208221818.1519628-15-stefanb@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.122.133.14]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 9 Dec 2021 02:26:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068A3C0617A1;
+        Wed,  8 Dec 2021 23:23:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C43C2B823C2;
+        Thu,  9 Dec 2021 07:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C254C341C8;
+        Thu,  9 Dec 2021 07:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639034581;
+        bh=rSW675GEEHzgpyGcUELORk6fFIYbBlwxF84ODxVvsZY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rcXf27U3U4J8SlR1UurnnqzenR8fOOyPTVoFFK0swifEF1THOqt3QJyy+UeOheaaO
+         HtH4fPQ628DAm+sXT8pSNI6/hsqp6ED6eYvLeHGNTEdd1WF7m4cNkoc/gR+HEVXr62
+         Oq88dUmz1fP1/3K3lwsHHdHS5P7L60jW5i1Qgu0N/w4xCuNUmpAJcioCocsDrg4wuC
+         4x2rG8LDBtkM8DoahG8xGQqLPkqNjUmvceoACfenFfDlOqHUmqOJCICim2E1YzFAC1
+         AdQQ/U/mcQdHfWigjHecV8Rm4oah5a0FCYt2WaF6YBE795nuKuKs6PsKYD3yhlCSG6
+         tr2NfItXqXyvg==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>, viveka@codeaurora.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add interconnect support for SM8450
+Date:   Thu,  9 Dec 2021 12:52:49 +0530
+Message-Id: <20211209072251.185634-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi. 
-My question won't be about capabilities. I'm wondering how IMA-ns which is associated with USER-ns and is created during USER-ns creation
-would be used by some namespaces orchestration systems, e.g. Kubernetes?.. It seems that it can be run without any user namespaces... 
-Their community just discuss this opportunity to support User namespaces. (see https://github.com/kubernetes/enhancements/pull/2101)
-Looks like currently IMA-ns will not be applicable for Kubernetes.
+This add device tree binding and driver for interconnect providers found in
+SM8450 SoC.
 
-Br,
-Denis
+Changes in v2:
+ - remove sync state call
+ - Make dt binding dual license
+ - Fix the indexes to start from 0
 
------Original Message-----
-From: Stefan Berger [mailto:stefanb@linux.ibm.com] 
-Sent: Thursday, December 9, 2021 1:18 AM
-To: linux-integrity@vger.kernel.org
-Cc: zohar@linux.ibm.com; serge@hallyn.com; christian.brauner@ubuntu.com; containers@lists.linux.dev; dmitry.kasatkin@gmail.com; ebiederm@xmission.com; Krzysztof Struczynski <krzysztof.struczynski@huawei.com>; Roberto Sassu <roberto.sassu@huawei.com>; mpeters@redhat.com; lhinds@redhat.com; lsturman@redhat.com; puiterwi@redhat.com; jejb@linux.ibm.com; jamjoom@us.ibm.com; linux-kernel@vger.kernel.org; paul@paul-moore.com; rgb@redhat.com; linux-security-module@vger.kernel.org; jmorris@namei.org; Stefan Berger <stefanb@linux.ibm.com>; Denis Semakin <denis.semakin@huawei.com>
-Subject: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check corresponding capability
+Vinod Koul (2):
+  dt-bindings: interconnect: Add Qualcomm SM8450 DT bindings
+  interconnect: qcom: Add SM8450 interconnect provider driver
 
-Use mac_admin_ns_capable() to check corresponding capability to allow read/write IMA policy without CAP_SYS_ADMIN but with CAP_MAC_ADMIN.
+ .../bindings/interconnect/qcom,rpmh.yaml      |   11 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/sm8450.c            | 1987 +++++++++++++++++
+ drivers/interconnect/qcom/sm8450.h            |  169 ++
+ .../dt-bindings/interconnect/qcom,sm8450.h    |  171 ++
+ 6 files changed, 2349 insertions(+)
+ create mode 100644 drivers/interconnect/qcom/sm8450.c
+ create mode 100644 drivers/interconnect/qcom/sm8450.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8450.h
 
-Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- include/linux/capability.h      | 6 ++++++
- security/integrity/ima/ima_fs.c | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/capability.h b/include/linux/capability.h index 65efb74c3585..991579178f32 100644
---- a/include/linux/capability.h
-+++ b/include/linux/capability.h
-@@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
- 		ns_capable(ns, CAP_SYS_ADMIN);
- }
- 
-+static inline bool mac_admin_ns_capable(struct user_namespace *ns) {
-+	return ns_capable(ns, CAP_MAC_ADMIN) ||
-+		ns_capable(ns, CAP_SYS_ADMIN);
-+}
-+
- /* audit system wants to get cap info from files as well */  int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
- 			   const struct dentry *dentry,
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c index 0e582ceecc7f..a749a3e79304 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -394,7 +394,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)  #else
- 		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
- 			return -EACCES;
--		if (!capable(CAP_SYS_ADMIN))
-+		if (!mac_admin_ns_capable(ns->user_ns))
- 			return -EPERM;
- 		return seq_open(filp, &ima_policy_seqops);  #endif
---
+-- 
 2.31.1
 

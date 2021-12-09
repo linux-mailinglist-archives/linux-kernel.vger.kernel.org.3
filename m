@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C3446E1BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D25046E1BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 06:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbhLIFCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 00:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
+        id S229862AbhLIFL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 00:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLIFCM (ORCPT
+        with ESMTP id S229738AbhLIFL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 00:02:12 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F771C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 20:58:39 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id 13so7105796ljj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 20:58:39 -0800 (PST)
+        Thu, 9 Dec 2021 00:11:26 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35395C0617A1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 21:07:53 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id np3so3534073pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 21:07:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JUzwZmVW79PQfIwn4LI60O/qzTJ2A/TwGcmTY9URtCo=;
-        b=KtSxBlNxuWrfhm326HzjLd8CxvfDxye407sy21FHPaEo9JQfvWhGiH1QHOIunMmzZn
-         AN/mVXAtmnlIVVqFaxyErfHi4mbXv46uIt9fltzjMlXgW2roTjzvC4NeUEDW0g6UIaea
-         hjJDt5UXb0/eEiwksiIu+LDTIlCoLZ0tjJoNRUJRQdOhZ22terIWzwur9bFDJqHoOBfh
-         JNfDr+Dzvlt0jHVb32LVa4MmwYc475E3Bb2wDNBuD39njjM49apkyLsbYodTfu0KhC0G
-         /3TtnhjdujT79OdSHQoAJi9z8ZlFwvwSxd5lPgFR9uCVeiCYTUzkCKMx2prLlROK3HSM
-         xzyA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=oAc97uz2Cujqe9KFIgnuc9y5PwmUaHTfcJnGM0LYlTM=;
+        b=hzVw2WlgWT+n2fokbrz+vPrl1Fvko1T4p4j8g82IVa6WBD30MO0Z2ZcNGf0aPqtS9e
+         wIa1wpat9swFKgNduKo1OTZG+DRN3C1v3q3iOOIksw6IgiyFRvTK7wB+V7p7r0pZw82v
+         dsugPtXIUWsFbVrD/keLyM3owwB5OM8sttnqE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JUzwZmVW79PQfIwn4LI60O/qzTJ2A/TwGcmTY9URtCo=;
-        b=TiBq7peMbs73E52Aq20B2VMrSLU4iI1i/G8y+jn5qBaZK3ob6Vy1mN4ylYSp73oE7W
-         Rs1GHHGxjynGxRoA6y1vGZYhpn7BpXfk4LKjOGSVaAR4gHnUveEGHQUaKPFgt5C6inYc
-         gCfEANRXOlEundiLCXCwiae/kY3i+yKtxcGQ2nGbEZj31yM4nZY8SxELHFGPErvzvFbW
-         OAsQc5hcsTNGEkVmAfArhRj3RR1cRXe5oBgk4/62M/fnt9zaMz0J5EgKDPWqNYuOUHYN
-         QRJDJj1KdhCotQGxEA3SYQaWDs6Vkfj6jWqpqOMp+CX2rzXYLt8t2XgqZRKYMpW2AIS+
-         VitQ==
-X-Gm-Message-State: AOAM531BPrrKs5iwP0vdLoYsnXW0kI7/3M+JjAJRPJi59Gh1J9dpxQTP
-        tXuHbpPFAFnSuBN5BVd7udMVWmZTK+wT7/YrMES5DA==
-X-Google-Smtp-Source: ABdhPJz4I5bEAQekx8ajIWDuPktNAOdSwNoIPraWxk1286240rpG8n1J0is6bhpp+6w5szFI4t+nAYF/uRRS14WFE1c=
-X-Received: by 2002:a2e:4a0a:: with SMTP id x10mr4033582lja.322.1639025916967;
- Wed, 08 Dec 2021 20:58:36 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=oAc97uz2Cujqe9KFIgnuc9y5PwmUaHTfcJnGM0LYlTM=;
+        b=byix36mtLQ1ndnIeA4K3ZJEYK/d7RBk2l5NJ6yFjwSMi+F8Rn0YsGaldMZ9urmvx2C
+         a6TNykUFj5ZZEHRQscg4zhb5CLAOkHQF+nBox7Ni4UArK4dzpSl9mEGPdmYi+EXgmBTd
+         qxvOI9HblQUKl12RzsfPRJVcgn/wVJI8Lit760qMeATKOLnE5YaDvgGE9A3+/ayNfQ8E
+         2qiv/IJr8eq5kdRIPd7xWNuoeNZRHiMdVf+NQjEhZSb07LN0i03ctitWjZ/YlImtw5ft
+         3nvNLmAXHwXxN4OgA2kb9mIFIr5eA3L+dQjoiiahR81lnBhuYXNVI+d9JVKAiQu14NZm
+         UdNw==
+X-Gm-Message-State: AOAM530M1tvWxCxq2efRshPIPO8cc/GtO+TuBFMc6wD6zuIEWiifmSIh
+        5IKwjPMLQAFZ1tCQc8/MWQHVFA==
+X-Google-Smtp-Source: ABdhPJzlX3NyyqZi6qmRsJyuu1pf9MJan5+mqXSsAqrMOgSJPV6WtN88xlUoNYPYv7C0HWsHNNPRjA==
+X-Received: by 2002:a17:903:300d:b0:142:744f:c74d with SMTP id o13-20020a170903300d00b00142744fc74dmr66055721pla.26.1639026472470;
+        Wed, 08 Dec 2021 21:07:52 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 59sm4273835pjz.34.2021.12.08.21.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 21:07:52 -0800 (PST)
+Date:   Wed, 8 Dec 2021 21:07:51 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: question about all*config and COMPILE_TEST
+Message-ID: <202112082057.C993DC6881@keescook>
 MIME-Version: 1.0
-References: <20211207225458.622282-1-labbott@kernel.org>
-In-Reply-To: <20211207225458.622282-1-labbott@kernel.org>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Thu, 9 Dec 2021 10:28:25 +0530
-Message-ID: <CAO_48GHxfeC0Kq4j62BiJ7Xk_vQP0vXYBvuK6+bCczXOYJnGzw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Update e-mail addresses for Laura Abbott
-To:     labbott@kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Laura,
+Hi,
 
-On Wed, 8 Dec 2021 at 04:25, <labbott@kernel.org> wrote:
->
-> From: Laura Abbott <labbott@kernel.org>
->
-> Consolodate everything under an @kernel.org address.
->
-> Signed-off-by: Laura Abbott <labbott@kernel.org>
-> ---
-> Sumit, can you take this through your tree?
-Thanks for the patch; sure I will!
-> ---
->  .mailmap    | 3 +++
->  MAINTAINERS | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/.mailmap b/.mailmap
-> index 6277bb27b4bf..e7a5bb0c35ae 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -203,6 +203,9 @@ Koushik <raghavendra.koushik@neterion.com>
->  Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski.k@gmail.com>
->  Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
->  Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> +Laura Abbott <labbott@kernel.org> <lauraa@codeaurora.org>
-> +Laura Abbott <labbott@kernel.org> <labbott@redhat.com>
-> +Laura Abbott <labobtt@kernel.org> <laura@labbott.name>
->  Leonardo Bras <leobras.c@gmail.com> <leonardo@linux.ibm.com>
->  Leonid I Ananiev <leonid.i.ananiev@intel.com>
->  Leon Romanovsky <leon@kernel.org> <leon@leon.nu>
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 43007f2d29e0..21ab7c9d1bee 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5715,7 +5715,7 @@ DMA-BUF HEAPS FRAMEWORK
->  M:     Sumit Semwal <sumit.semwal@linaro.org>
->  R:     Benjamin Gaignard <benjamin.gaignard@linaro.org>
->  R:     Liam Mark <lmark@codeaurora.org>
-> -R:     Laura Abbott <labbott@redhat.com>
-> +R:     Laura Abbott <labbott@kernel.org>
->  R:     Brian Starkey <Brian.Starkey@arm.com>
->  R:     John Stultz <john.stultz@linaro.org>
->  L:     linux-media@vger.kernel.org
-> --
-> 2.33.1
->
+tl;dr: is there a way to force a config default to "off" under
+all*config builds, but still leave it configurable? (i.e. not "depends
+on !COMPILE_TEST")
 
-Best,
-Sumit.
+I'm trying to understand a Kconfig behavior with regard to
+COMPILE_TEST. I'm able to use an "all*config" target, followed by specific
+additional config changes (e.g. turning off KCOV), but I can't enable
+things like DEBUG_INFO because of their "depends on !COMPILE_TEST".
+Whenever I want to examine debug info from all*config build I need to
+patch lib/Kconfig.debug to remove the depends. I was hoping I could,
+instead do:
 
---=20
-Thanks and regards,
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 0e2de4b375f3..e8533ffc92c3 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -212,7 +212,8 @@ menu "Compile-time checks and compiler options"
+ 
+ config DEBUG_INFO
+ 	bool "Compile the kernel with debug info"
+-	depends on DEBUG_KERNEL && !COMPILE_TEST
++	depends on DEBUG_KERNEL
++	default n if COMPILE_TEST
+ 	help
+ 	  If you say Y here the resulting kernel image will include
+ 	  debugging info resulting in a larger kernel image.
 
-Sumit Semwal (he / him)
-Tech Lead - LCG, Vertical Technologies
-Linaro.org =E2=94=82 Open source software for ARM SoCs
+Which would turn this off when COMPILE_TEST was enabled, but I assume it
+doesn't work because an all*config target turns everything on first, and
+therefore this "default" gets ignored since DEBUG_INFO already has a
+value set.
+
+I then thought I could use:
+
+	default !COMPILE_TEST
+
+since this works:
+
+config WERROR
+        bool "Compile the kernel with warnings as errors"
+        default COMPILE_TEST
+
+but I think the above is a no-op: it's the same as not having
+"default COMPILE_TEST" when doing an all*config build: it'll be enabled
+not because of COMPILE_TEST but because of the all*config pass.
+
+How can I make DEBUG_INFO configurable, but default off under
+all*config?
+
+Thanks!
+
+-- 
+Kees Cook

@@ -2,112 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E48346E06A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491BD46E073
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237423AbhLIBxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbhLIBxu (ORCPT
+        id S237837AbhLIBzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:55:20 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62774 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229680AbhLIBzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:53:50 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50ABC061746;
-        Wed,  8 Dec 2021 17:50:17 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id r130so4071634pfc.1;
-        Wed, 08 Dec 2021 17:50:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kAuDSD+w3sTkKTlbYSdBEEprFYW9+pYkzbg13xwXJls=;
-        b=dUAL9AkSUh3LpBe4LKcpksliFNO7JUGW1Ecaqt9ZHQyiajq8mNYFjAdCrAKMLkS0LS
-         vTVVy7hTyfTU9m69Ysy0IN5slKH/qvzuCuiI0YpHwFhk+PU08ecZgq2Zjd2LTlx1gEZZ
-         yoGdSSkSutTZ4L6BeW7HKf2ahtcQznn53rN61Jb8XbFG740N3vVaGDpBfOJsjaqCYlNJ
-         eZ3UF2lo6bn5MIhEgE34gDTJCKS03WEIjoZQM/qVTeoyZj2A9UzPjmlSVHpIMmHKY5A2
-         BnKYYg/BC1rtY4ZCFJgJvzvQn86ocwhaxVmd4zsNl4jTxy8A63G63TmHEOiJtAZKzvaH
-         p4dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kAuDSD+w3sTkKTlbYSdBEEprFYW9+pYkzbg13xwXJls=;
-        b=QkYdzR8VwLuu4h5HPQeO3F1kPOl/0AwEk2Olq9y6BDV8b9O3wRMXkT6V7kaBuiLWmn
-         hHeCMZNrRFch/UKBw7qrFF8GnDM/TEy3TP4dSA+6zyt5bVsVNzlAM4Qx9mA1b3V/CG62
-         iUGcDmwsOlD+j4blrpo3siXWMoTg6O/zyP9HQ3Wl67ThJWlq59WGJ6wCMzdoLPhWg4MJ
-         Lem6h98Lb6sW5+8Aqss8rLv3EgmyZZnf+O9JLyeiZ9EWNXoFHuJwj/HtC/NfsV0+lIKQ
-         +SLWKsvIqdY+2qAVOUDCTKRZzgWSX4GzeHiFSeKKvMdyqk4/diuN6n/ZlI/WEgxdcbZ0
-         3v0w==
-X-Gm-Message-State: AOAM530a5GbUcsWUEtAXaY1QleY4e6o+05cZNQNBD2g0XTFjzkQDUOK0
-        oMHUiijpt5igZ85ksrCjR+k=
-X-Google-Smtp-Source: ABdhPJz5pFExYym/XR69VtAaL40/RnJo068mdQGPY5gVLQR4P34x3yhcHAbf2zB7Sd9QzDVm7uB++g==
-X-Received: by 2002:a63:8ac8:: with SMTP id y191mr32067907pgd.438.1639014617532;
-        Wed, 08 Dec 2021 17:50:17 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g189sm3709081pgc.3.2021.12.08.17.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 17:50:16 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     erik.andren@gmail.com
-Cc:     hverkuil@xs4all.nl, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chiminghao <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cm>
-Subject: [PATCH] drivers:usb:remove unneeded variable
-Date:   Thu,  9 Dec 2021 01:50:09 +0000
-Message-Id: <20211209015009.409428-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Dec 2021 20:55:19 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8NpFij020559;
+        Thu, 9 Dec 2021 01:51:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=lzNkL6HlG8uoD4LD2dknfufOrMTAzaPjmA2GavdwoYk=;
+ b=bGfF52MtqCIan3T31khGXLZ5V9SQmsU4tNjRDTsPk0R+5fMLn2gtnBKPbdfDuVa5s9QK
+ XmTVr0wMHAec3IqMumy0uRK150V/ZkYtf4Px4RsbTrVM9NS2NME5CgfEGqgnV82aUZ00
+ papvyzMMEPdotAsvuLc65+p4/1d6b7TvD2FdY3ubuGHJYgUW4w64dSV5iQqjf1stp22s
+ j91697c2DmCOoxj+0FsETRnoxKIVyspCZ/X0ets/IywZblS6I8ZBW/n5mKd5sRTVMANF
+ C8GODj+RezSazeQblBkrne22Q7MD+gT2+p8iZAbeqaa2y20zWnjaUpcNtyfi0g7Nsbgn 0w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1gk88we-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 01:51:01 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B91k8st023060;
+        Thu, 9 Dec 2021 01:51:00 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1gk88w2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 01:51:00 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B91mA8k014682;
+        Thu, 9 Dec 2021 01:50:59 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04dal.us.ibm.com with ESMTP id 3cqyybtxwq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 01:50:59 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B91ovro28115566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 01:50:57 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 00C6BC6063;
+        Thu,  9 Dec 2021 01:50:57 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F1C6DC6062;
+        Thu,  9 Dec 2021 01:50:54 +0000 (GMT)
+Received: from [9.211.91.166] (unknown [9.211.91.166])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 01:50:54 +0000 (GMT)
+Message-ID: <b5e6ec36-a9ec-22f4-be58-28d48bdc38b4@linux.vnet.ibm.com>
+Date:   Wed, 8 Dec 2021 20:50:54 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
+Content-Language: en-US
+To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org
+Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>, linux-s390@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <cover.1637862358.git.msuchanek@suse.de>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: xrnPnY685HKWDzMtt8FN4mvhzwUwSKub
+X-Proofpoint-ORIG-GUID: PnjZLCiMbUjVAQT56miJWZSqnDdO6KM6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_01,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=984
+ lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0
+ impostorscore=0 adultscore=0 priorityscore=1501 mlxscore=0 clxscore=1011
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090006
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chiminghao <chi.minghao@zte.com.cn>
 
-return value form directly instead of
-taking this in another redundant variable.
+On 11/25/21 13:02, Michal Suchanek wrote:
+> Hello,
 
-Reported-by: Zeal Robot <zealci@zte.com.cm>
-Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
----
- drivers/media/usb/gspca/m5602/m5602_s5k83a.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+Hi Michael,
 
-diff --git a/drivers/media/usb/gspca/m5602/m5602_s5k83a.c b/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
-index bc4008d5d116..6b8f157f0a7d 100644
---- a/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
-+++ b/drivers/media/usb/gspca/m5602/m5602_s5k83a.c
-@@ -408,25 +408,21 @@ static int s5k83a_set_gain(struct gspca_dev *gspca_dev, __s32 val)
- 
- static int s5k83a_set_brightness(struct gspca_dev *gspca_dev, __s32 val)
- {
--	int err;
- 	u8 data[1];
- 	struct sd *sd = (struct sd *) gspca_dev;
- 
- 	data[0] = val;
--	err = m5602_write_sensor(sd, S5K83A_BRIGHTNESS, data, 1);
--	return err;
-+	return m5602_write_sensor(sd, S5K83A_BRIGHTNESS, data, 1);
- }
- 
- static int s5k83a_set_exposure(struct gspca_dev *gspca_dev, __s32 val)
- {
--	int err;
- 	u8 data[2];
- 	struct sd *sd = (struct sd *) gspca_dev;
- 
- 	data[0] = 0;
- 	data[1] = val;
--	err = m5602_write_sensor(sd, S5K83A_EXPOSURE, data, 2);
--	return err;
-+	return m5602_write_sensor(sd, S5K83A_EXPOSURE, data, 2);
- }
- 
- static int s5k83a_set_flip_real(struct gspca_dev *gspca_dev,
--- 
-2.25.1
+>
+> This is resend of the KEXEC_SIG patchset.
+>
+> The first patch is new because it'a a cleanup that does not require any
+> change to the module verification code.
+>
+> The second patch is the only one that is intended to change any
+> functionality.
+>
+> The rest only deduplicates code but I did not receive any review on that
+> part so I don't know if it's desirable as implemented.
+>
+> The first two patches can be applied separately without the rest.
+
+Patch 2 fails to apply on v5.16-rc4. Can you please also include git 
+tree/branch while posting the patches ?
+
+Secondly, I see that you add the powerpc support in Patch 2 and then 
+modify it again in Patch 5 after cleanup. Why not add the support for 
+powerpc after the clean up ? This will reduce some rework and also 
+probably simplify patches.
+
+Thanks & Regards,
+
+      - Nayna
 

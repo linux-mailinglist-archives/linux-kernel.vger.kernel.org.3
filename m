@@ -2,106 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C891146F552
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3046F549
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 21:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbhLIU7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 15:59:42 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:45812 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbhLIU7j (ORCPT
+        id S232373AbhLIU7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 15:59:36 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:43902 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231237AbhLIU7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 15:59:39 -0500
-Received: by mail-oi1-f176.google.com with SMTP id 7so10370951oip.12;
-        Thu, 09 Dec 2021 12:56:05 -0800 (PST)
+        Thu, 9 Dec 2021 15:59:35 -0500
+Received: by mail-ot1-f46.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so7514427otu.10;
+        Thu, 09 Dec 2021 12:56:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=prvfBI9Quc6o5I6vG+M4mn0hhqXgxhBS6i0p8peqrqM=;
-        b=VwRhlF+y0nERUwiinuVrjKlyieeVrLMAtWdTRhXwHBhXQQJDDRAPP3wBS43RW6ZiOQ
-         ehtnjAKq3Fa/C7h+DbE8KF+hZT5zLUw0I7X1qHaR9SFLmmAhwcGIAQ3n0OxYrtamFi7c
-         sMY7Bu6wnwjE3lHfoNfstRoEKJY6Oo1ikQGOEMQ+Vm/ljrrm6+tjelgXClKnTI8yxNiy
-         bypWs+02lg8GyxARDnhfZD5Lnjg78xafSbX6Gc4GAz3h6xrzcWeS9kJWWwNg7nOQhvqC
-         6BSxmzl7BPfwVgQZj2fXuCUsCeWoj2Ysk7+7iY+DK/lF2ox5Vn8VIO6hXn+JFC0A+wlz
-         FVVw==
-X-Gm-Message-State: AOAM531RD6FV5Ez449v7C7JbzgLd7HSbgEoV1lg2MIjIGkShZZ1Jq3rg
-        1b3FXbA9y4hH+jzvFa1W6eqXjwGczw==
-X-Google-Smtp-Source: ABdhPJybhyZk4J9Vxx8G9PJuL02kaDsp5aiZt01nzYkMTqIqjtT7ZQgkq9M4xPkk69/adSOdvZdlIA==
-X-Received: by 2002:a05:6808:485:: with SMTP id z5mr8383709oid.96.1639083364886;
-        Thu, 09 Dec 2021 12:56:04 -0800 (PST)
+        bh=UGHddj+fTMSPCf5h9ElwKaz36LUbyEjOeDU7AiQrxew=;
+        b=A3N17UfPBhHpFnN8GKFYzfszM5PdOw/V1DoX1b+F9feIawMufiik7H6icszq13wldI
+         NdNFNNqTALy54E7ArycMvFs8GE++bRn9uLYmf/A/byxJhwwj+2SXcoGm5Vwn4J4IVUmP
+         L1EB8gO4G8cy+njwfaysGPis22wm4VCQwmNaKWvbz8A2ivPOwkK7W7PhZa51dFxf5BdJ
+         m7oP9851G2fs8um2ZvK/R+7h+hWtxpx0kjMVEavKB0HRwqbhh6I1kq06K1isCiu4WGVz
+         hnQc5HQ6Q+aGax3uKQkmkOuV6od7t75mfZGoIf+p+DUz2KCAm8LeAJB8aahsJybH1PcG
+         PCYQ==
+X-Gm-Message-State: AOAM530+1QFGL+xB3CeZvd3lZa8HSpQgqRvyJnm/UBXDONzB2HIGlTSA
+        DVebf2RlvF8w6WylsqWUyGFpQB3Uow==
+X-Google-Smtp-Source: ABdhPJxBxB2TnQi+NkjobCQwu4jg+eWB3a+XHkZE/sSaPZ2eUvxCNhhDrHRpeaKzAkX3nBtbTK89Fw==
+X-Received: by 2002:a05:6830:2053:: with SMTP id f19mr7352299otp.295.1639083361383;
+        Thu, 09 Dec 2021 12:56:01 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s9sm181423otg.42.2021.12.09.12.56.03
+        by smtp.gmail.com with ESMTPSA id m22sm216445ooj.8.2021.12.09.12.56.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 12:56:03 -0800 (PST)
-Received: (nullmailer pid 3925944 invoked by uid 1000);
+        Thu, 09 Dec 2021 12:56:00 -0800 (PST)
+Received: (nullmailer pid 3925939 invoked by uid 1000);
         Thu, 09 Dec 2021 20:55:59 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
-        thierry.reding@gmail.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, jonathanh@nvidia.com,
-        jsequeira@nvidia.com, bbasu@nvidia.com, vsethi@nvidia.com
-In-Reply-To: <20211209172206.17778-6-sumitg@nvidia.com>
-References: <20211209172206.17778-1-sumitg@nvidia.com> <20211209172206.17778-6-sumitg@nvidia.com>
-Subject: Re: [Patch Resend v1 5/8] dt-bindings: arm: tegra: Add NVIDIA Tegra234 CBB2.0 binding
+To:     Nikita Travkin <nikita@trvn.ru>
+Cc:     sboyd@kernel.org, u.kleine-koenig@pengutronix.de,
+        masneyb@onstation.org, robh+dt@kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, lee.jones@linaro.org,
+        linus.walleij@linaro.org, linux-pwm@vger.kernel.org,
+        thierry.reding@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211209162020.105255-2-nikita@trvn.ru>
+References: <20211209162020.105255-1-nikita@trvn.ru> <20211209162020.105255-2-nikita@trvn.ru>
+Subject: Re: [PATCH 1/2] dt-bindings: pwm: Document clk based PWM controller
 Date:   Thu, 09 Dec 2021 14:55:59 -0600
-Message-Id: <1639083359.670183.3925943.nullmailer@robh.at.kernel.org>
+Message-Id: <1639083359.641868.3925938.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Dec 2021 22:52:03 +0530, Sumit Gupta wrote:
-> Add device-tree binding documentation to represent CBB2.0 (Control
-> Backbone) error handling driver. The driver prints debug information
-> about failed transaction on receiving interrupt from CBB2.0.
+On Thu, 09 Dec 2021 21:20:19 +0500, Nikita Travkin wrote:
+> Add YAML devicetree binding for clk based PWM controller
 > 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 > ---
->  .../arm/tegra/nvidia,tegra234-cbb.yaml        | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
+>  .../devicetree/bindings/pwm/clk-pwm.yaml      | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/clk-pwm.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml:73:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
 dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 45, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
-  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 848, in _ruamel_yaml.CParser._compose_sequence_node
-  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-ruamel.yaml.scanner.ScannerError: while scanning a block scalar
-  in "<unicode string>", line 71, column 5
-found a tab character where an indentation space is expected
-  in "<unicode string>", line 73, column 1
-make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml:  while scanning a block scalar
-  in "<unicode string>", line 71, column 5
-found a tab character where an indentation space is expected
-  in "<unicode string>", line 73, column 1
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml: ignoring, error parsing file
-warning: no schema found in file: ./Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
-make: *** [Makefile:1413: dt_binding_check] Error 2
+./Documentation/devicetree/bindings/pwm/clk-pwm.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/pwm/clk-pwm.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pwm/clk-pwm.example.dt.yaml: pwm-flash: $nodename:0: 'pwm-flash' does not match '^pwm(@.*|-[0-9a-f])*$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pwm/clk-pwm.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1565951
+See https://patchwork.ozlabs.org/patch/1565817
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

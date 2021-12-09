@@ -2,161 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FEF46E631
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B04246E634
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbhLIKKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S232578AbhLIKKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:10:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbhLIKKH (ORCPT
+        with ESMTP id S232566AbhLIKKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:10:07 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FB4C0617A2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:06:33 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id i63so8181810lji.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 02:06:33 -0800 (PST)
+        Thu, 9 Dec 2021 05:10:15 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B8EC061A32
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:06:41 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id m27so10897331lfj.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 02:06:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BKJ6vGqHSwm7BRFptl/55IB7GLQniF1Gw5ceok/cZhg=;
-        b=B5Zp2DulMoGXJqx4vc3B7SZL7xVZhj/W5aL+CzKEd9CHd7Xd2LQ5neYf+MiQI+Utk2
-         61jh6yKtjiLcidAJsE+wQoQLnDVxYU7ZnriuGOzjVlgyvHWed63kQd7pSu79ynK2yjoG
-         2DQz5xLZRdPZdk6dlqB44W8/Q69w/Sfqs9HmAavXYaulF3zTmwYLckFVrlOOTgvUpVVd
-         PpEZVh7b6IQFNsw5W2JI6GPayMWHHtB/J0jpQYqJCzpAdJu2nPEM+N1thQ1fUI8cCWhT
-         ogrvUp1xK0I2EEQ9jCG7WzV3pzzgFjZUP70ZOLXahKWbuybqYXhHgp46xDCFAeXujY1b
-         Pxdw==
+        bh=rR9HkzFTP4grkP6sg2UeJ3/DfSt5b0pBlUV4udB0Wac=;
+        b=IuTimkarfAf0OIwVa8DtZn2VMHFohSoEHB/6rR8h0PyKU00F0LvQfoIg20ew/3Ab7S
+         vZ6BR1Wt8CbkMEEKbToSFvc0EfxZ0YApVqFJBL7U//rCTjqVzxH+16As2m8alXUQcGHM
+         A+meSWcvJZU/BrDFFfomiiuaxu62dAInCU4w5KanxSvQOZiFsC9NbcJv9kFAV6OQ1dxb
+         43iUtyLNmDjKki7sIU9Ex4YftMq1UADsNvNrG496r1vILRaY3paQTwfy4z+nlseLVYpV
+         pSi3kU1pNxf93HbjcWyjQ8NzLfLcK6U492aOsvmt9ca/qen88qeMSBNr84CYQCevrdAq
+         cG1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BKJ6vGqHSwm7BRFptl/55IB7GLQniF1Gw5ceok/cZhg=;
-        b=WpnLG4Mt96vPBh8snoIMN+t6TfRxQsResE96hQwdX6ViyzvbyfTSam5CRSEuSj6ZZM
-         u6iDhQtfDeO1GJtryraR4ahlv74bWkJBKJLa6qs86xhoarL7n9IPJjulp5tZvLpJIn/a
-         dL5YVbAosGZVOi/R0qzPjUpm8GW3xdNp/NlxdjVgpWYr7+ahhSO/mvPW7SdqGBVPoq2+
-         CaCzBrtIgaXu33G8lMYndIKyFilj0kZ9DJFYy0gdSZKE69YuZiZ9f6tcbIQyjDlpbUi1
-         USFk4KFXUk7/n+gmXJK9A70hsv1Iv+mhfxOMS57qGoxiWfBSPzGGzAXQvgnf9aN5+ASz
-         K5uA==
-X-Gm-Message-State: AOAM5306sHEG12Nky3LPNLjLSIDDPSEQhe/PVVzmec5Ang16c7vRFCp8
-        EwnU2z1E71G08f/MISH6s25b4Ejdh6DisNxzQs0YsA==
-X-Google-Smtp-Source: ABdhPJxs4MQnQmfxefpgAy8GaEnwIv5pz3ZpFrg3sPEdkngTkbwJ1UYdI+ITuzs4VkkERX/T9pJjkunsgyGpfGxxQiI=
-X-Received: by 2002:a2e:7114:: with SMTP id m20mr5180210ljc.229.1639044392212;
- Thu, 09 Dec 2021 02:06:32 -0800 (PST)
+        bh=rR9HkzFTP4grkP6sg2UeJ3/DfSt5b0pBlUV4udB0Wac=;
+        b=oP2dQq7sUxp6dJditkPcnrvEqSgh2TTpDFP81KdEvSGtPCG23ADPuZm7aJm7B1HivD
+         dx8ZK72RVhmOfavxPQIcfaeHMjz/vp25FpPMDrXNHaxcWGfF2Qg2++qsROyGjHRrWyzo
+         uATPog0DchI33MWU6vMsgIAqovWcIOOl2EdX7DnVjnBxibvXIQbuN6uQH5gLtxGNjduW
+         XtEv9QzH9FubJZ7Qt0l/Sakn5vV0skXZkSsgnNBSkHo/VSy+/7rsQzmJLG+3yz6uopNe
+         QzTkxGYvUWmO0R4ZyLBZzFCMyE//5vJ2V4HYceg6QCD2/cwM7cUrvZlOjxLIjOYP+5ag
+         r57A==
+X-Gm-Message-State: AOAM530q1ZGhrYYRKhNZpOnaufYDu9X25Vvnt4VYpkHWbL2hnRZX7iVc
+        gicBrxM8EMWmiuspwJ95S88//gK81XhBBtcanMbxbQ==
+X-Google-Smtp-Source: ABdhPJwkdd82JBnjFtUXNmkhka2mBRwmZxvRO/lV8z12CK7y93SxJBpsK1/sKP0IR7oMTYn2fkm07zk+qba6CB2bh1A=
+X-Received: by 2002:ac2:4bc1:: with SMTP id o1mr5146148lfq.254.1639044399304;
+ Thu, 09 Dec 2021 02:06:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211208000948.487820-1-rajatja@google.com>
-In-Reply-To: <20211208000948.487820-1-rajatja@google.com>
+References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-2-f.fainelli@gmail.com>
+In-Reply-To: <20211208003727.3596577-2-f.fainelli@gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 9 Dec 2021 11:05:56 +0100
-Message-ID: <CAPDyKFqW_ttFxyVixWSuYwQa_SPcecRmf=u9KgMScGn0dd+uCg@mail.gmail.com>
-Subject: Re: [PATCH] pci/quirks: Add quirk for Bayhub O2 SD controller
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        rajatxjain@gmail.com, jsbarnes@google.com, gwendal@google.com
+Date:   Thu, 9 Dec 2021 11:06:02 +0100
+Message-ID: <CAPDyKFqHCUcEPOy80x-5Mx9fC-jrfme9B2kaANtapdnzFj7qLw@mail.gmail.com>
+Subject: Re: [PATCH v3 01/15] dt-bindings: mmc: Convert Broadcom STB SDHCI
+ binding to YAML
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 at 01:09, Rajat Jain <rajatja@google.com> wrote:
->
-> This particular SD controller from O2 / Bayhub only allows dword
-> accesses to its LTR max latency registers:
-> https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
->
-> Thus add a quirk that saves and restores these registers
-> manually using dword acesses:
-> LTR Max Snoop Latency Register
-> LTR Max No-Snoop Latency Register
->
-> Signed-off-by: Rajat Jain <rajatja@google.com>
+- trimmed cc list
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+On Wed, 8 Dec 2021 at 01:37, Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> Convert the Broadcom STB SDHCI controller Device Tree binding to YAML.
+>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
 > ---
->  drivers/mmc/host/sdhci-pci.h |  1 -
->  drivers/pci/quirks.c         | 39 ++++++++++++++++++++++++++++++++++++
->  include/linux/pci_ids.h      |  1 +
->  3 files changed, 40 insertions(+), 1 deletion(-)
+>  .../bindings/mmc/brcm,sdhci-brcmstb.txt       |  53 ----------
+>  .../bindings/mmc/brcm,sdhci-brcmstb.yaml      | 100 ++++++++++++++++++
+>  2 files changed, 100 insertions(+), 53 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
 >
-> diff --git a/drivers/mmc/host/sdhci-pci.h b/drivers/mmc/host/sdhci-pci.h
-> index 5e3193278ff9..d47cc0ba7ca4 100644
-> --- a/drivers/mmc/host/sdhci-pci.h
-> +++ b/drivers/mmc/host/sdhci-pci.h
-> @@ -10,7 +10,6 @@
->  #define PCI_DEVICE_ID_O2_SDS1          0x8421
->  #define PCI_DEVICE_ID_O2_FUJIN2                0x8520
->  #define PCI_DEVICE_ID_O2_SEABIRD0      0x8620
-> -#define PCI_DEVICE_ID_O2_SEABIRD1      0x8621
->
->  #define PCI_DEVICE_ID_INTEL_PCH_SDIO0  0x8809
->  #define PCI_DEVICE_ID_INTEL_PCH_SDIO1  0x880a
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 003950c738d2..b7bd19802744 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -5857,3 +5857,42 @@ static void nvidia_ion_ahci_fixup(struct pci_dev *pdev)
->         pdev->dev_flags |= PCI_DEV_FLAGS_HAS_MSI_MASKING;
->  }
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NVIDIA, 0x0ab8, nvidia_ion_ahci_fixup);
+> diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
+> deleted file mode 100644
+> index ae2074184528..000000000000
+> --- a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
+> +++ /dev/null
+> @@ -1,53 +0,0 @@
+> -* BROADCOM BRCMSTB/BMIPS SDHCI Controller
+> -
+> -This file documents differences between the core properties in mmc.txt
+> -and the properties used by the sdhci-brcmstb driver.
+> -
+> -NOTE: The driver disables all UHS speed modes by default and depends
+> -on Device Tree properties to enable them for SoC/Board combinations
+> -that support them.
+> -
+> -Required properties:
+> -- compatible: should be one of the following
+> -  - "brcm,bcm7425-sdhci"
+> -  - "brcm,bcm7445-sdhci"
+> -  - "brcm,bcm7216-sdhci"
+> -
+> -Refer to clocks/clock-bindings.txt for generic clock consumer properties.
+> -
+> -Example:
+> -
+> -       sdhci@84b0000 {
+> -               sd-uhs-sdr50;
+> -               sd-uhs-ddr50;
+> -               sd-uhs-sdr104;
+> -               sdhci,auto-cmd12;
+> -               compatible = "brcm,bcm7216-sdhci",
+> -                          "brcm,bcm7445-sdhci",
+> -                          "brcm,sdhci-brcmstb";
+> -               reg = <0x84b0000 0x260 0x84b0300 0x200>;
+> -               reg-names = "host", "cfg";
+> -               interrupts = <0x0 0x26 0x4>;
+> -               interrupt-names = "sdio0_0";
+> -               clocks = <&scmi_clk 245>;
+> -               clock-names = "sw_sdio";
+> -       };
+> -
+> -       sdhci@84b1000 {
+> -               mmc-ddr-1_8v;
+> -               mmc-hs200-1_8v;
+> -               mmc-hs400-1_8v;
+> -               mmc-hs400-enhanced-strobe;
+> -               supports-cqe;
+> -               non-removable;
+> -               bus-width = <0x8>;
+> -               compatible = "brcm,bcm7216-sdhci",
+> -                          "brcm,bcm7445-sdhci",
+> -                          "brcm,sdhci-brcmstb";
+> -               reg = <0x84b1000 0x260 0x84b1300 0x200>;
+> -               reg-names = "host", "cfg";
+> -               interrupts = <0x0 0x27 0x4>;
+> -               interrupt-names = "sdio1_0";
+> -               clocks = <&scmi_clk 245>;
+> -               clock-names = "sw_sdio";
+> -       };
+> diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+> new file mode 100644
+> index 000000000000..dccd5ad96981
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+> @@ -0,0 +1,100 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/brcm,sdhci-brcmstb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +/*
-> + * Bayhub OZ711LV2 SD controller has an errata that only allows DWORD accesses
-> + * to the LTR max latency registers. Thus need to save and restore these
-> + * registers manually.
-> + */
-> +static void o2_seabird1_save_ltr(struct pci_dev *dev)
-> +{
-> +       struct pci_cap_saved_state *save_state;
-> +       u32 *reg32;
+> +title: Broadcom BRCMSTB/BMIPS SDHCI Controller binding
 > +
-> +       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
-> +       if (save_state) {
-> +               reg32 = &save_state->cap.data[0];
-> +               /* Preserve PCI_LTR_MAX_SNOOP_LAT & PCI_LTR_MAX_NOSNOOP_LAT */
-> +               pci_read_config_dword(dev, 0x234, reg32);
-> +       } else {
-> +               pci_err(dev, "quirk can't save LTR snoop latency\n");
-> +       }
-> +}
+> +maintainers:
+> +  - Al Cooper <alcooperx@gmail.com>
+> +  - Florian Fainelli <f.fainelli@gmail.com>
 > +
-> +static void o2_seabird1_restore_ltr(struct pci_dev *dev)
-> +{
-> +       struct pci_cap_saved_state *save_state;
-> +       u32 *reg32;
+> +allOf:
+> +  - $ref: mmc-controller.yaml#
 > +
-> +       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
-> +       if (save_state) {
-> +               reg32 = &save_state->cap.data[0];
-> +               /* Restore PCI_LTR_MAX_SNOOP_LAT & PCI_LTR_MAX_NOSNOOP_LAT */
-> +               pci_write_config_dword(dev, 0x234, *reg32);
-> +       } else {
-> +               pci_err(dev, "quirk can't restore LTR snoop latency\n");
-> +       }
-> +}
-> +DECLARE_PCI_FIXUP_SUSPEND_LATE(PCI_VENDOR_ID_O2, PCI_DEVICE_ID_O2_SEABIRD1,
-> +                              o2_seabird1_save_ltr);
-> +DECLARE_PCI_FIXUP_RESUME_EARLY(PCI_VENDOR_ID_O2, PCI_DEVICE_ID_O2_SEABIRD1,
-> +                              o2_seabird1_restore_ltr);
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 011f2f1ea5bb..6ed16aa38196 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -1717,6 +1717,7 @@
->  #define PCI_DEVICE_ID_O2_8221          0x8221
->  #define PCI_DEVICE_ID_O2_8320          0x8320
->  #define PCI_DEVICE_ID_O2_8321          0x8321
-> +#define PCI_DEVICE_ID_O2_SEABIRD1      0x8621
->
->  #define PCI_VENDOR_ID_3DFX             0x121a
->  #define PCI_DEVICE_ID_3DFX_VOODOO      0x0001
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7216-sdhci
+> +          - const: brcm,bcm7445-sdhci
+> +          - const: brcm,sdhci-brcmstb
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7445-sdhci
+> +          - const: brcm,sdhci-brcmstb
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7425-sdhci
+> +          - const: brcm,sdhci-brcmstb
+> +
+> +  reg:
+> +    minItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: host
+> +      - const: cfg
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description:
+> +      handle to core clock for the sdhci controller.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: sw_sdio
+> +
+> +  sdhci,auto-cmd12:
+> +    type: boolean
+> +    description: Specifies that controller should use auto CMD12
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    mmc@84b0000 {
+> +      sd-uhs-sdr50;
+> +      sd-uhs-ddr50;
+> +      sd-uhs-sdr104;
+> +      sdhci,auto-cmd12;
+> +      compatible = "brcm,bcm7216-sdhci",
+> +                   "brcm,bcm7445-sdhci",
+> +                   "brcm,sdhci-brcmstb";
+> +      reg = <0x84b0000 0x260>, <0x84b0300 0x200>;
+> +      reg-names = "host", "cfg";
+> +      interrupts = <0x0 0x26 0x4>;
+> +      interrupt-names = "sdio0_0";
+> +      clocks = <&scmi_clk 245>;
+> +      clock-names = "sw_sdio";
+> +    };
+> +
+> +    mmc@84b1000 {
+> +      mmc-ddr-1_8v;
+> +      mmc-hs200-1_8v;
+> +      mmc-hs400-1_8v;
+> +      mmc-hs400-enhanced-strobe;
+> +      supports-cqe;
+> +      non-removable;
+> +      bus-width = <0x8>;
+> +      compatible = "brcm,bcm7216-sdhci",
+> +           "brcm,bcm7445-sdhci",
+> +            "brcm,sdhci-brcmstb";
+> +      reg = <0x84b1000 0x260>, <0x84b1300 0x200>;
+> +      reg-names = "host", "cfg";
+> +      interrupts = <0x0 0x27 0x4>;
+> +      interrupt-names = "sdio1_0";
+> +      clocks = <&scmi_clk 245>;
+> +      clock-names = "sw_sdio";
+> +    };
 > --
-> 2.34.1.400.ga245620fadb-goog
+> 2.25.1
 >

@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8431446ECD0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B23C46ECD4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbhLIQNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 11:13:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34880 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbhLIQNq (ORCPT
+        id S237045AbhLIQNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:13:54 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55908 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230332AbhLIQNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Dec 2021 11:13:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55DB7B82550;
+        by sin.source.kernel.org (Postfix) with ESMTPS id D0B00CE26DA;
         Thu,  9 Dec 2021 16:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 06E19C341D0;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 02DCEC341CD;
         Thu,  9 Dec 2021 16:10:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639066210;
-        bh=zXPRW+vBKvZ6RvimQyuamzBt3dWqn9UHC6LIrTaukrs=;
+        bh=GArFYqa9vglTclhOiJ0GItI+agrBFi41MZa9MyWDgyQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XxQcIzkEADviCjv+oUBm3rcJMNLeStm0f5LC9AZxOHwQQt/d8gNOQkoZfQMEDmhOv
-         FyWuXMho1L03eNNSzsZ/TuEcjlOA81tDXVKRGS69PIGum/g9xfeQlsxmGqwmZRE3nI
-         K0ybR/6YS0oT2JEzWqIcMZwREmQZfMar12rFw7z9CELIbxaowCSq4JNDjbCdOQ91Hs
-         8+vH8jNbUi7U/RN2HCUR6eCWm+ZLcu/hvHuqAonz4B62oPVfEyp/cTKBSte3VD1jUC
-         yvgLbqufra1rKld43e5TMgwqX2maBOEUtv8jEKJK94TUMDjn7xtq5J1Va+WqeI4RiZ
-         viNhcIkpTpEDw==
+        b=r/KMVLKQGo8gHBqB9Yb5/Q+eJNj+w8/5fN7J/+RyskhmQzH1W9Ss/NVns/NbGp65c
+         /5ZuzmsPowg6nXXIioW1mEBmSF1avSfVY+EVblYdNVkBJ3XHMKZs+ZkWdhwGo1XqQ7
+         +fgUyh9mhbohVRh4+sf7hQ7M/ptD3jM2dVxxFibGrwS9xAZwJlzzMOLBulapbvSBkL
+         1XYdvcu2+1zFbvcop6cWa6M9GSwCCtV2OK+6j5QunQWEM9CrpBKM12SIbYt7bPcSqA
+         W1C6VX3ClEIQck+12BcP8jbRmjFT9iLCekGHmA6du1/9Xs6927OYLIjcK5qwzxxkwY
+         ZkYKGOK07R5Lw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D7EB560BE3;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A3EE660A37;
         Thu,  9 Dec 2021 16:10:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: mana: Fix memory leak in mana_hwc_create_wq
+Subject: Re: [PATCH] nfp: Fix memory leak in nfp_cpp_area_cache_add()
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163906620987.18129.15445565524915485016.git-patchwork-notify@kernel.org>
+Message-Id: <163906620966.18129.17437066396344562752.git-patchwork-notify@kernel.org>
 Date:   Thu, 09 Dec 2021 16:10:09 +0000
-References: <20211208223723.18520-1-jose.exposito89@gmail.com>
-In-Reply-To: <20211208223723.18520-1-jose.exposito89@gmail.com>
-To:     =?utf-8?b?Sm9zw6kgRXhww7NzaXRvIDxqb3NlLmV4cG9zaXRvODlAZ21haWwuY29tPg==?=@ci.codeaurora.org
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+References: <20211209061511.122535-1-niejianglei2021@163.com>
+In-Reply-To: <20211209061511.122535-1-niejianglei2021@163.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     simon.horman@corigine.com, kuba@kernel.org, davem@davemloft.net,
+        libaokun1@huawei.com, oss-drivers@corigine.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -57,21 +54,20 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed,  8 Dec 2021 23:37:23 +0100 you wrote:
-> If allocating the DMA buffer fails, mana_hwc_destroy_wq was called
-> without previously storing the pointer to the queue.
+On Thu,  9 Dec 2021 14:15:11 +0800 you wrote:
+> In line 800 (#1), nfp_cpp_area_alloc() allocates and initializes a
+> CPP area structure. But in line 807 (#2), when the cache is allocated
+> failed, this CPP area structure is not freed, which will result in
+> memory leak.
 > 
-> In order to avoid leaking the pointer to the queue, store it as soon as
-> it is allocated.
-> 
-> Addresses-Coverity-ID: 1484720 ("Resource leak")
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> We can fix it by freeing the CPP area when the cache is allocated
+> failed (#2).
 > 
 > [...]
 
 Here is the summary with links:
-  - net: mana: Fix memory leak in mana_hwc_create_wq
-    https://git.kernel.org/netdev/net/c/9acfc57fa2b8
+  - nfp: Fix memory leak in nfp_cpp_area_cache_add()
+    https://git.kernel.org/netdev/net/c/c56c96303e92
 
 You are awesome, thank you!
 -- 

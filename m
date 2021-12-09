@@ -2,135 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BAD46F447
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C5546F44C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbhLITzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:55:23 -0500
-Received: from mail-dm3nam07on2066.outbound.protection.outlook.com ([40.107.95.66]:14304
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229774AbhLITzW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:55:22 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GMNDyNCWf8wD9mappMD1wV1rhMSkafr2urQY91O7ghy3H3FdmTfEjRlPfSrUAzOGSO/xdfK1vn68DtMr+EH1L27lBJjMkT7KT/M6pwi2unPZHnFtnenb9IL8rV/ZQ3RADpX/jb00I8SQYzT5Yegp4Z+AvHwl3ANfg745ld4CcigticNoTyJc9EKYpVg1JTpJYg/grGd+e99pbgleOmz8LYegMXInXWaQqcoKeUFagUoz24RpPQsWuc1YDOhfIV6QDd4pWDtLNUbDjLmZLpvfbCrAVRecskrG3xwPD5jleQ6v/IEIkD6oeda3ZHKz4QdqJ9kO/TI/Sa/0JM+hIF/1bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oRReX6rrC4qe9FgkRERC6R62kVSq4YtfGMwN53WNlx0=;
- b=Tr5lZptIm3yeVinxtbiFLJcxdrBPJqWpwhEceSbeJ3hTx6G9RNQ7H25gLkD8FOV79+o2eZZfjnu2/ApXI4fuQ+3153yqNcp1ZgDtyxMOOgbP7CxG7TBjEZ+b9ECls+pxD+U4tKolLMmg7a/Y1HVqVmZsscxsfQe9Zm8o6OXAlKUkZEQGqp7WntpEEvb3wIsJjdMa4JZrGQP7v2uOMv1wRUJrZMMPgoRm8tCtWFrnBOE76N0PcNj18DDKhC7tAMHmTN8IRDB5vRNkR4i1FApc5ux0ooVV/xA7syR7Bp8YrGL1FYtNX4xQhfgJpT467yvQY0iFTiWLqWjQ6WfOX8J2sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 203.18.50.12) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oRReX6rrC4qe9FgkRERC6R62kVSq4YtfGMwN53WNlx0=;
- b=VxrKPg21ghBuhLEDXIfAxN3YnKVG54dDSRwlzc0GA1NA/B2ZalrhOrUhMV3AlG+3nSEAeTuhcgHcE8OuWBjPcDY7gIM8cpvR8qb+eSz67jTGRQiNCIm1F7+mpTA7gNb+gC66HZtiXOyngDzWR5qw8EQycL062ZjX0Av/Kp1BPwb/C91sx7Yl8LeLkXJkCRfpCma6+NzHwOYklFpPjfQ2EAe1Zy12lSPimF2aQmwxjEOQTn+tgBJ9jwbjp26DPOG7LSliGi7EPqImtiSqYyOWmqZ5tmVoHDFABNywyCh78Y+WxEBTC+973ssPnweP1YnNdOhIltxoEo69nxTmlQjg7Q==
-Received: from BN1PR14CA0018.namprd14.prod.outlook.com (2603:10b6:408:e3::23)
- by CY4PR1201MB2551.namprd12.prod.outlook.com (2603:10b6:903:d9::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.19; Thu, 9 Dec
- 2021 19:51:47 +0000
-Received: from BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e3:cafe::77) by BN1PR14CA0018.outlook.office365.com
- (2603:10b6:408:e3::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21 via Frontend
- Transport; Thu, 9 Dec 2021 19:51:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.12)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 203.18.50.12 as permitted sender) receiver=protection.outlook.com;
- client-ip=203.18.50.12; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (203.18.50.12) by
- BN8NAM11FT053.mail.protection.outlook.com (10.13.177.209) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4755.13 via Frontend Transport; Thu, 9 Dec 2021 19:51:46 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HKMAIL101.nvidia.com
- (10.18.16.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
- 2021 19:51:33 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
- 2021 19:51:31 +0000
-Received: from Asurada-Nvidia (172.20.187.5) by mail.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18 via Frontend
- Transport; Thu, 9 Dec 2021 11:51:30 -0800
-Date:   Thu, 9 Dec 2021 11:51:29 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-CC:     <thierry.reding@gmail.com>, <joro@8bytes.org>, <will@kernel.org>,
-        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 6/6] iommu/tegra-smmu: Add pagetable mappings to
- debugfs
-Message-ID: <20211209195128.GA35526@Asurada-Nvidia>
-References: <20211209073822.26728-1-nicolinc@nvidia.com>
- <20211209073822.26728-7-nicolinc@nvidia.com>
- <5713902d-823b-63ca-00c9-aa6c64c1af41@gmail.com>
- <20211209193253.GB34762@Asurada-Nvidia>
- <97a32c9a-2ec7-6579-7d8d-026d6f820a3e@gmail.com>
+        id S231180AbhLIT4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbhLIT4X (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:56:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52921C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 11:52:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07EFDB82614
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 19:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65511C004DD;
+        Thu,  9 Dec 2021 19:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639079566;
+        bh=teoF46qjaD0R6MVCCZefMM9Xa6ea84rcddEa/DwjD/8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O0vCRKfsaeWmxvf5sG/KzPYTqr7p45gvaWWDqh5a+2N1ifo9ns+iel4UBDdqjRLBP
+         AaSW2hVLPnV97KTxj39jmA6JmC3McQDdGwQc5Kdpy1+zKSdukBdaAvbfvalRAPxp11
+         HVfYcRHTXOvO1yCzldSbCZ9CWrGj4cQaue3XftV16AQHmea3IzzyacxeHj+aN/2NGC
+         4sThzBPH/OepjyMHm+CRrT7HrHgO/2ah9OJen5Fn2to3NkC9n5/ogaKho9h9U6HSYh
+         DNDX2jlLfhq8bRcyPRPVstGtHhVejXv8khXfWgZvmnFEcoZ4GPUqU99YsptsMNPvOX
+         u2mKzNEWPcGHw==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Vaibhav Agarwal <vaibhav.sr@gmail.com>,
+        Mark Greer <mgreer@animalcreek.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2] staging: greybus: fix stack size warning with UBSAN
+Date:   Thu,  9 Dec 2021 12:51:42 -0700
+Message-Id: <20211209195141.1165233-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <97a32c9a-2ec7-6579-7d8d-026d6f820a3e@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cc928aa1-9a6c-4508-97fa-08d9bb4d554a
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB2551:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB2551ED44302D81CC3088FD03AB709@CY4PR1201MB2551.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: chiRlmhCa9cTOjJ2vfxrMhvcYhulhZUCqA2HrwI09BLouzBnb1pdhFF/FrSdRv83u8phOZ0y7uUoAXTNkL0SuOaWqWZzEdt1d5T1JOQ5HPQFJ4dba3W/WvLdT7oYb0CEDWpfOSUOQ/sSkP8BbAEbuebVAQRYNsfH/3zhwcMfztAoDniz14UpfHlyRqephbVJkk/b5w4wFY6Vgj6eCJM+2ZKakHHACX0GIpTV5wpPHLoYxxkJRbNmh27NbkesRH5uT/NJ8JinjCIuNVsOqbN1b6WPhTt81X5/PfQ2DAoiB/UIfeJIZJBuJin80Z/y7eDkNaFHUaNPCgcu6wt6+XAaHg0W4EZzAqBZG9X4ek20MVbjh9ukBXzTuaWtqXZPN1jpidIvGDrfUNcPEvCNiCSculLsQKemaOC1f070jU6CCjHASfiUy9eMNe5cyDyU30SoMQvrXv4UI8+i796pkJY14W4/F1hYpiOeMTA9XQtBHaO1UNSDwSJgjbT8gbIZfh/C7SFjiK2nfwUNiwFeFb3A500xi5fJXkYnbESuRmyY+HyCfrLUbhQ4zUfTIxWs/DOsuU5anqkAXyBnbIVm0J1ZWUijq6B0vGSrN+EsZexGoXNuQgerx3W98HS3OT8haztvbfcebLk9UZqNLupGGYQYN/DSImC7g6JbMw9x1hugxLW/iG3ZsMoeDkm/vmIdiGxoBnV+H1tU2/JCzwhDOLiKfT7roGbtPJzCAcOlEA4/DGQgTF9+qp7vd468wGUV7reoDqves+JuYpusJpge5X5bJoHqZ8cH5i4K9sPvY66RRgw=
-X-Forefront-Antispam-Report: CIP:203.18.50.12;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(54906003)(1076003)(33716001)(9686003)(7636003)(356005)(316002)(5660300002)(33656002)(86362001)(8676002)(4326008)(8936002)(36860700001)(55016003)(70586007)(40460700001)(47076005)(82310400004)(2906002)(426003)(83380400001)(336012)(70206006)(6916009)(186003)(26005)(508600001)(34020700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 19:51:46.2463
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc928aa1-9a6c-4508-97fa-08d9bb4d554a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.12];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2551
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:40:42PM +0300, Dmitry Osipenko wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> 09.12.2021 22:32, Nicolin Chen пишет:
-> > On Thu, Dec 09, 2021 at 05:47:18PM +0300, Dmitry Osipenko wrote:
-> >> External email: Use caution opening links or attachments
-> >>
-> >>
-> >> 09.12.2021 10:38, Nicolin Chen пишет:
-> >>> @@ -545,6 +719,15 @@ static void tegra_smmu_detach_as(struct tegra_smmu *smmu,
-> >>>               if (group->swgrp != swgrp)
-> >>>                       continue;
-> >>>               group->as = NULL;
-> >>> +
-> >>> +             if (smmu->debugfs_mappings) {
-> >> Do we really need this check?
-> >>
-> >> Looks like all debugfs_create_dir() usages in this driver are incorrect,
-> >> that function never returns NULL. Please fix this.
-> > debugfs_create_dir returns ERR_PTR on failure. So here should be
-> > to check !IS_ERR. Thanks for pointing it out!
-> >
-> 
-> All debugfs functions handle IS_ERR(). GregKH removes all such checks
-> all over the kernel. So the check shouldn't be needed at all, please
-> remove it if it's unneeded or prove that it's needed.
+From: Arnd Bergmann <arnd@arndb.de>
 
-debugfs_create_file can handle a NULL parent, but not ERR_PTR one,
-and then it puts the new node under the root. So either passing an
-ERR_PTR parent or creating orphan nodes here doesn't sound good...
+clang warns about excessive stack usage in this driver when
+UBSAN is enabled:
+
+drivers/staging/greybus/audio_topology.c:977:12: error: stack frame size of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-larger-than=]
+
+Rework this code to no longer use compound literals for
+initializing the structure in each case, but instead keep
+the common bits in a preallocated constant array and copy
+them as needed.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1535
+Link: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+[nathan: Address review comments from v1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+v1 -> v2: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
+
+* Use NULL for name field in SND_DOC_DAPM_* in gbaudio_widgets (Alex).
+
+* Do not eliminate *dw assignment within the switch cases, as invalid
+  enum values in-between valid enum values (such as snd_soc_dapm_demux)
+  would not be handled properly by the "if value is greater than the
+  array size" check (Alex). This addresses a few other comments by Alex
+  and Dan because w->type is not checked against the array's size.
+
+Arnd, if you disagree with this approach, please let me know so that we
+can get this fixed in a way that everyone is happy with.
+
+ drivers/staging/greybus/audio_topology.c | 92 ++++++++++++------------
+ 1 file changed, 45 insertions(+), 47 deletions(-)
+
+diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
+index 1e613d42d823..7f7d558b76d0 100644
+--- a/drivers/staging/greybus/audio_topology.c
++++ b/drivers/staging/greybus/audio_topology.c
+@@ -974,6 +974,44 @@ static int gbaudio_widget_event(struct snd_soc_dapm_widget *w,
+ 	return ret;
+ }
+ 
++static const struct snd_soc_dapm_widget gbaudio_widgets[] = {
++	[snd_soc_dapm_spk]	= SND_SOC_DAPM_SPK(NULL, gbcodec_event_spk),
++	[snd_soc_dapm_hp]	= SND_SOC_DAPM_HP(NULL, gbcodec_event_hp),
++	[snd_soc_dapm_mic]	= SND_SOC_DAPM_MIC(NULL, gbcodec_event_int_mic),
++	[snd_soc_dapm_output]	= SND_SOC_DAPM_OUTPUT(NULL),
++	[snd_soc_dapm_input]	= SND_SOC_DAPM_INPUT(NULL),
++	[snd_soc_dapm_switch]	= SND_SOC_DAPM_SWITCH_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_pga]	= SND_SOC_DAPM_PGA_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_mixer]	= SND_SOC_DAPM_MIXER_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_mux]	= SND_SOC_DAPM_MUX_E(NULL, SND_SOC_NOPM,
++					0, 0, NULL,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_aif_in]	= SND_SOC_DAPM_AIF_IN_E(NULL, NULL, 0,
++					SND_SOC_NOPM, 0, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++	[snd_soc_dapm_aif_out]	= SND_SOC_DAPM_AIF_OUT_E(NULL, NULL, 0,
++					SND_SOC_NOPM, 0, 0,
++					gbaudio_widget_event,
++					SND_SOC_DAPM_PRE_PMU |
++					SND_SOC_DAPM_POST_PMD),
++};
++
+ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+ 				      struct snd_soc_dapm_widget *dw,
+ 				      struct gb_audio_widget *w, int *w_size)
+@@ -1052,77 +1090,37 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+ 
+ 	switch (w->type) {
+ 	case snd_soc_dapm_spk:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_SPK(w->name, gbcodec_event_spk);
++		*dw = gbaudio_widgets[w->type];
+ 		module->op_devices |= GBAUDIO_DEVICE_OUT_SPEAKER;
+ 		break;
+ 	case snd_soc_dapm_hp:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_HP(w->name, gbcodec_event_hp);
++		*dw = gbaudio_widgets[w->type];
+ 		module->op_devices |= (GBAUDIO_DEVICE_OUT_WIRED_HEADSET
+ 					| GBAUDIO_DEVICE_OUT_WIRED_HEADPHONE);
+ 		module->ip_devices |= GBAUDIO_DEVICE_IN_WIRED_HEADSET;
+ 		break;
+ 	case snd_soc_dapm_mic:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_MIC(w->name, gbcodec_event_int_mic);
++		*dw = gbaudio_widgets[w->type];
+ 		module->ip_devices |= GBAUDIO_DEVICE_IN_BUILTIN_MIC;
+ 		break;
+ 	case snd_soc_dapm_output:
+-		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_OUTPUT(w->name);
+-		break;
+ 	case snd_soc_dapm_input:
+-		*dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_INPUT(w->name);
+-		break;
+ 	case snd_soc_dapm_switch:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_SWITCH_E(w->name, SND_SOC_NOPM, 0, 0,
+-					      widget_kctls,
+-					      gbaudio_widget_event,
+-					      SND_SOC_DAPM_PRE_PMU |
+-					      SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_pga:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_PGA_E(w->name, SND_SOC_NOPM, 0, 0, NULL, 0,
+-					   gbaudio_widget_event,
+-					   SND_SOC_DAPM_PRE_PMU |
+-					   SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_mixer:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_MIXER_E(w->name, SND_SOC_NOPM, 0, 0, NULL,
+-					     0, gbaudio_widget_event,
+-					     SND_SOC_DAPM_PRE_PMU |
+-					     SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_mux:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_MUX_E(w->name, SND_SOC_NOPM, 0, 0,
+-					   widget_kctls, gbaudio_widget_event,
+-					   SND_SOC_DAPM_PRE_PMU |
+-					   SND_SOC_DAPM_POST_PMD);
++		*dw = gbaudio_widgets[w->type];
+ 		break;
+ 	case snd_soc_dapm_aif_in:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_AIF_IN_E(w->name, w->sname, 0,
+-					      SND_SOC_NOPM,
+-					      0, 0, gbaudio_widget_event,
+-					      SND_SOC_DAPM_PRE_PMU |
+-					      SND_SOC_DAPM_POST_PMD);
+-		break;
+ 	case snd_soc_dapm_aif_out:
+-		*dw = (struct snd_soc_dapm_widget)
+-			SND_SOC_DAPM_AIF_OUT_E(w->name, w->sname, 0,
+-					       SND_SOC_NOPM,
+-					       0, 0, gbaudio_widget_event,
+-					       SND_SOC_DAPM_PRE_PMU |
+-					       SND_SOC_DAPM_POST_PMD);
++		*dw = gbaudio_widgets[w->type];
++		dw->sname = w->sname;
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		goto error;
+ 	}
++	dw->name = w->name;
+ 
+ 	dev_dbg(module->dev, "%s: widget of type %d created\n", dw->name,
+ 		dw->id);
+
+base-commit: 42eb8fdac2fc5d62392dcfcf0253753e821a97b0
+-- 
+2.34.1
+

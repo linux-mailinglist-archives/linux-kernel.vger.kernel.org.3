@@ -2,109 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B782B46E2CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB9C46E29B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 07:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbhLIGzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 01:55:25 -0500
-Received: from mail-m973.mail.163.com ([123.126.97.3]:14297 "EHLO
-        mail-m973.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbhLIGzY (ORCPT
+        id S233195AbhLIGka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 01:40:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32778 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232047AbhLIGk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 01:55:24 -0500
-X-Greylist: delayed 905 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Dec 2021 01:55:24 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=JoVvK
-        DToD3PXJ0AIpygi6y+ynr/fGiQ/SakOwvbqvD8=; b=TAGzuls7r2B/BIVROco77
-        AFgtafDPUuwE2XKEEPy7QPnazcOdRTFJRSqAEdqWtDRAh9pWTzFC4WZOiEflbRKZ
-        FFEXqtllTjWTCIWaJw1uZwp3MLjLg4zTFGiSLvzmNvobs1Wt1YKZVXQPUAKsMwjc
-        GtS9PsRMPdY5x3q5h0nvPc=
-Received: from localhost.localdomain (unknown [218.106.182.227])
-        by smtp3 (Coremail) with SMTP id G9xpCgAnkwHlo7Fhcrc6Aw--.49676S4;
-        Thu, 09 Dec 2021 14:36:29 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, john.clements@amd.com, candice.li@amd.com,
-        lijo.lazar@amd.com, Jinzhou.Su@amd.com, jonathan.kim@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] drm/amdgpu: Fix reference leak in psp_xgmi_reflect_topology_info()
-Date:   Thu,  9 Dec 2021 14:36:18 +0800
-Message-Id: <20211209063618.123473-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Dec 2021 01:40:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639031815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JsK4QJUaSZXa5TJT2c4xQUlL2CmJjpAOfFB8ZXJJNPs=;
+        b=G1xvt2KDoc1Dzbmrvcyj8D/YLEIIlgmnB7b5g1h/HVCL90fkgLAPzh0FoCQhQQw2MMlU+T
+        VQzrIw+a0WslFStQtMvvEi0nJUHNMoT3TNj2igVe3O6ukshVxyrcUqmQu3kWk4WfEIY60m
+        QeKPNYY/WINhJIpI6uD1vCYKdTO5ols=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-578-77QLfWBEOm2RkS8nX1z5Gg-1; Thu, 09 Dec 2021 01:36:50 -0500
+X-MC-Unique: 77QLfWBEOm2RkS8nX1z5Gg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12A86100CC99;
+        Thu,  9 Dec 2021 06:36:49 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BC0D19C59;
+        Thu,  9 Dec 2021 06:36:45 +0000 (UTC)
+Message-ID: <e87ba370fd853452e763cf36c1cf94fa251185de.camel@redhat.com>
+Subject: Re: [PATCH v3 00/26] KVM: x86: Halt and APICv overhaul
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 08:36:44 +0200
+In-Reply-To: <YbFIGSeukbquyoQ5@google.com>
+References: <20211208015236.1616697-1-seanjc@google.com>
+         <39c885fc6455dd0aa2f8643e725422851430f9ec.camel@redhat.com>
+         <8c6c38f3cc201e42629c3b8e5cf8cdb251c9ea8d.camel@redhat.com>
+         <6f0dc26c78c151814317d95d4918ffddabdd2df1.camel@redhat.com>
+         <YbFIGSeukbquyoQ5@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgAnkwHlo7Fhcrc6Aw--.49676S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CFWkZw47XFy7ZryDWrW3ZFb_yoW8ZryrpF
-        4rKwnxurWDZr15G3ykKay8Zr1Yvws2gaySyr47uw1I939xJF95WF1UJr45tryrGrWvkF47
-        tFy5X39rXFWq9rJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jlxRfUUUUU=
-X-Originating-IP: [218.106.182.227]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbi6xFkjFXlyeWT7AABsw
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In line 1138 (#1), amdgpu_get_xgmi_hive() increases the kobject reference
-counter of the hive it returned. The hive returned by
-amdgpu_get_xgmi_hive()should be released with the help of
-amdgpu_put_xgmi_hive() to balance its kobject reference counter properly.
-Forgetting the amdgpu_put_xgmi_hive() operation will result in reference
-leak.
+On Thu, 2021-12-09 at 00:04 +0000, Sean Christopherson wrote:
+> On Thu, Dec 09, 2021, Maxim Levitsky wrote:
+> > Host crash while running 32 bit VM and another 32 bit VM nested in it:
+> > 
+> > [  751.182290] BUG: kernel NULL pointer dereference, address: 0000000000000025
+> > [  751.198234] #PF: supervisor read access in kernel mode
+> > [  751.209982] #PF: error_code(0x0000) - not-present page
+> > [  751.221733] PGD 3720f9067 P4D 3720f9067 PUD 3720f8067 PMD 0 
+> > [  751.234682] Oops: 0000 [#1] SMP
+> > [  751.241857] CPU: 8 PID: 54050 Comm: CPU 8/KVM Tainted: G           O      5.16.0-rc4.unstable #6
+> > [  751.261960] Hardware name: LENOVO 20UF001CUS/20UF001CUS, BIOS R1CET65W(1.34 ) 06/17/2021
+> > [  751.280475] RIP: 0010:is_page_fault_stale.isra.0+0x2a/0xa0 [kvm]
+> 
+> ...
+> 
+> > Oh well, not related to the patch series but just that I don't forget.
+> > I need to do some throughfull testing on all the VMs I use.
+> 
+> This is my goof, I'll post a fix shortly.
+> 
+Thanks!
 
-We can fix it by calling amdgpu_put_xgmi_hive() before the end of the
-function (#2).
-
-1128 static void psp_xgmi_reflect_topology_info(struct psp_context *psp,
-1129 			struct psp_xgmi_node_info node_info)
-1130 {
-
-1138 	hive = amdgpu_get_xgmi_hive(psp->adev);
-	// #1: kzalloc space reference increment
-1139 	list_for_each_entry(mirror_adev, &hive->device_list, gmc.xgmi.head) {
-1140		struct psp_xgmi_topology_info *mirror_top_info;
-1141		int j;
-
-1143		if (mirror_adev->gmc.xgmi.node_id != dst_node_id)
-1144			continue;
-
-1146		mirror_top_info = &mirror_adev->psp.xgmi_context.top_info;
-1147		for (j = 0; j < mirror_top_info->num_nodes; j++) {
-1148			if (mirror_top_info->nodes[j].node_id != src_node_id)
-1149				continue;
-
-1151			mirror_top_info->nodes[j].num_hops = dst_num_hops;
-
-1157			if (dst_num_links)
-1158				mirror_top_info->nodes[j].num_links = dst_num_links;
-
-1160			break;
-1161		}
-
-1163		break;
-1164	}
-	// #2: missing reference decrement
-1165 }
-
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-index c641f84649d6..f6362047ed71 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-@@ -1162,6 +1162,7 @@ static void psp_xgmi_reflect_topology_info(struct psp_context *psp,
- 
- 		break;
- 	}
-+	amdgpu_put_xgmi_hive(hive);
- }
- 
- int psp_xgmi_get_topology_info(struct psp_context *psp,
--- 
-2.25.1
+Best regards,
+	Maxim Levitsky
 

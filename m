@@ -2,224 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA91246EB25
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154AA46EB27
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239533AbhLIPbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:31:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S239566AbhLIPbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234345AbhLIPbT (ORCPT
+        with ESMTP id S239539AbhLIPbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:31:19 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999A4C061746;
-        Thu,  9 Dec 2021 07:27:45 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id 13so9469666ljj.11;
-        Thu, 09 Dec 2021 07:27:45 -0800 (PST)
+        Thu, 9 Dec 2021 10:31:21 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB8C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 07:27:48 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so6337165pjj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 07:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=OD6dYNHp3btewwqvoNpB45FBLhPMDMantLC3BV7Jwf8=;
-        b=ptKqzU0lblnbFQfnFsgXMY56ZMm6hIK+YQHm7mhiCZyk98AA1QuLf+LKWJTzP4iHM5
-         7L4MXYXYRFTel5qGrkB0pkpQRj8k7rrnkN8bYzppq15x284viWL7fwJJAhcGll16XLjd
-         4BXZh+0sPpaGaevNZlSq8LwHolN1rre9Ldwm2wJlUCKoOEa/viJMibpl1KxGbdwG65Ap
-         3+czmC9WaSX3A5EOxWLcZTEZYORCQV1km0PSk85Up8L9DeaJazfvgqgFU9Ag+HMIDczR
-         L1f2WZQSwYJ6rUjs0r9kJDgfp8Bo2n05DkjQp2ap/xJq+CgNvf0aoff8gGao2PnCuP5O
-         6Z4g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KBx+S5GngzaGdJX3AUjJESnSwLSaHTKCh0KKuf7Qe2c=;
+        b=IJoGnRreNblCJ+V0+KgplbieDObvR1W755jrxwS7nFuMS4PPU/TOhKWSRjM6XWDRtw
+         pCQkbaVcWpT2o6JS7UE/qotzn092YPKTpjP7NMEwxAf8zbi9cfsXSdSsU927cku3Ew6y
+         07BdSHG5te9CCiTvq4wjeB7yipIQBQ+RzsryNgV37PDrDXptby0JTp3JZ5AEFGjW5wCO
+         JJ+vNr+NzZ2XiVZsrMdsE2l+anNzpsi9qv4cDZDdkiUtuq0taQ1E6pCS/HX3wyI8auZD
+         egT/Xsa2bD+gBNkTyTsNnArpUmU2iN4nxtv2kqmc1BgHPF7LcKloPLe/53Rwls31+efI
+         OnPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OD6dYNHp3btewwqvoNpB45FBLhPMDMantLC3BV7Jwf8=;
-        b=bSo9ZBcCXw7urM8UMiU3KFPvX71Gy2+Cos3/qMyZmVy4cGbv2qlv2CSc7hJTYn7ZQn
-         +32JLD/DZ2wuAsTUC5dJYRdOJ8/EOstxnyuWETd2NyAgvTxIjDSoTTR8cAPNHljttGZ4
-         +8vNPNuo0pSz+aY2LLYRVplzvuBIvR3InLzq99HQKyAlvCMSNRKUVDoJvyj6PALlc+x+
-         FRbNkuNObztBwH3yfahT3pxwSyErX/DzlMP6NQ3IehTgU9l3HEjEfcwuhEMeR2jyNV9b
-         rAbAUMXugmpufeaBsRC2r+sQYDV9P2npFPTXQx6L+X+GZETw5fMeZcdGe9wDDMNuWQCp
-         UhKg==
-X-Gm-Message-State: AOAM533gw1uO0OFRyAvrNErjvELD/pKzBaNT78Mof2ltu3bZEXJ1hr+p
-        mWOD84//Ic6ClYjnLQYbX+avrrBi2bo=
-X-Google-Smtp-Source: ABdhPJxSeQGBSZJYWjqYDF7X0RJoeNROhixN+DYE4tIatKvSS72CGZCgQCS0z23+R58yd2ZKFmcZkQ==
-X-Received: by 2002:a2e:e09:: with SMTP id 9mr6798621ljo.172.1639063663537;
-        Thu, 09 Dec 2021 07:27:43 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id y7sm21114lfj.90.2021.12.09.07.27.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 07:27:43 -0800 (PST)
-Subject: Re: [PATCH 2/2] i2c: tegra: Add SMBus block read and SMBus alert
- functions
-To:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
-        sumit.semwal@linaro.org, thierry.reding@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
- <1639062321-18840-3-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <72ea6030-5f2d-4f51-3a42-8386c3638c65@gmail.com>
-Date:   Thu, 9 Dec 2021 18:27:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KBx+S5GngzaGdJX3AUjJESnSwLSaHTKCh0KKuf7Qe2c=;
+        b=pEeEYN+E0kTSnI1iZ5F9MSsxJndyIqgr6W+rfiSwhM4M5Z4+6eXPvx+nURzAcri42b
+         jWbEbmOjQwrFpnwcluaiYWzB6A0jC74Qu5Z7tMlBb/Xs5H2jaWDLn6ae0BlXF53MI7b3
+         wHcZG/aGdLFwO7XMFerqmuIvvmjzVAUYvxArLoRFLrkTLSXy7sFj+Sg4RPRhUZmqID1L
+         oAQ9p4a4Lqhb5YnSHjUfurSHV7tGOJro2zeaEV3jDHkhb37MApWbGYPyOq4l65555jTf
+         IxXlKxpHFfQ1uZSOyrUllQyrlOuHbSVLTIQQNqkJy3uoIlXPY/66f3C8undy1R69KfJt
+         h3MQ==
+X-Gm-Message-State: AOAM531JZ8lJ5UIgJMEtjgKpvSqqORESRTx3ORXJRhO32Y/ShB1Dx2OQ
+        jeYnLMxpa00q+ddszIVYZqQobQ==
+X-Google-Smtp-Source: ABdhPJzIuXLkcaquxXTpx2fvwP2yLLgDRMNCp+I52bY+fsCWoHp+7Dz+l4ldzVI+ChCSG0YGpVABpg==
+X-Received: by 2002:a17:903:124e:b0:143:a388:a5de with SMTP id u14-20020a170903124e00b00143a388a5demr68334252plh.73.1639063667744;
+        Thu, 09 Dec 2021 07:27:47 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g19sm71678pgi.10.2021.12.09.07.27.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 07:27:47 -0800 (PST)
+Date:   Thu, 9 Dec 2021 15:27:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH 3/6] KVM: SVM: fix AVIC race of host->guest IPI delivery
+ vs AVIC inhibition
+Message-ID: <YbIgb4V7jcx2tZ0R@google.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+ <20211209115440.394441-4-mlevitsk@redhat.com>
+ <4d723b07-e626-190d-63f4-fd0b5497dd9b@redhat.com>
+ <bcf9f9e5922cce979cc11ced8ccda992e22b290a.camel@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1639062321-18840-3-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bcf9f9e5922cce979cc11ced8ccda992e22b290a.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-09.12.2021 18:05, Akhil R пишет:
-> Emulate the SMBus block read using ContinueXfer and SMBus using GPIO
-> interrupt.
+On Thu, Dec 09, 2021, Maxim Levitsky wrote:
+> On Thu, 2021-12-09 at 15:11 +0100, Paolo Bonzini wrote:
+> > On 12/9/21 12:54, Maxim Levitsky wrote:
+> > > If svm_deliver_avic_intr is called just after the target vcpu's AVIC got
+> > > inhibited, it might read a stale value of vcpu->arch.apicv_active
+> > > which can lead to the target vCPU not noticing the interrupt.
+> > > 
+> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > ---
+> > >   arch/x86/kvm/svm/avic.c | 16 +++++++++++++---
+> > >   1 file changed, 13 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > > index 859ad2dc50f1..8c1b934bfa9b 100644
+> > > --- a/arch/x86/kvm/svm/avic.c
+> > > +++ b/arch/x86/kvm/svm/avic.c
+> > > @@ -691,6 +691,15 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+> > >   	 * automatically process AVIC interrupts at VMRUN.
+> > >   	 */
+> > >   	if (vcpu->mode == IN_GUEST_MODE) {
+> > > +
+> > > +		/*
+> > > +		 * At this point we had read the vcpu->arch.apicv_active == true
+> > > +		 * and the vcpu->mode == IN_GUEST_MODE.
+> > > +		 * Since we have a memory barrier after setting IN_GUEST_MODE,
+> > > +		 * it ensures that AVIC inhibition is complete and thus
+> > > +		 * the target is really running with AVIC enabled.
+> > > +		 */
+> > > +
+> > >   		int cpu = READ_ONCE(vcpu->cpu);
+> > 
+> > I don't think it's correct.  The vCPU has apicv_active written (in 
+> > kvm_vcpu_update_apicv) before vcpu->mode.
 > 
-> For SMBus block read, the driver  reads the first byte with ContinueXfer
-> set which will help to parse the data count and read the remaining bytes
-> without stop condition in between.
-> SMBus alert is implemented using external gpio interrupt.
+> I thought that we have a full memory barrier just prior to setting IN_GUEST_MODE
+> thus if I see vcpu->mode == IN_GUEST_MODE then I'll see correct apicv_active value.
+> But apparently the memory barrier is after setting vcpu->mode.
 > 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 54 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 53 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index a5be8f0..3b70013 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -14,6 +14,7 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/err.h>
->  #include <linux/i2c.h>
-> +#include <linux/i2c-smbus.h>
->  #include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
-> @@ -226,6 +227,11 @@ struct tegra_i2c_hw_feature {
->  	bool has_interface_timing_reg;
->  };
->  
-> +struct tegra_i2c_smbalert {
+> > 
+> > For the acquire/release pair to work properly you need to 1) read 
+> > apicv_active *after* vcpu->mode here 2) use store_release and 
+> > load_acquire for vcpu->mode, respectively in vcpu_enter_guest and here.
+> 
+> store_release for vcpu->mode in vcpu_enter_guest means a write barrier just before setting it,
+> which I expected to be there.
+> 
+> And yes I see now, I need a read barrier here as well. I am still learning this.
 
-smbalert isn't a word, should be smbus_alert. Same for the GPIO name and
-other places.
+Sans barriers and comments, can't this be written as returning an "error" if the
+vCPU is not IN_GUEST_MODE?  Effectively the same thing, but a little more precise
+and it avoids duplicating the lapic.c code.
 
-> +	struct i2c_smbus_alert_setup alert_data;
-> +	struct i2c_client *ara;
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index 26ed5325c593..cddf7a8da3ea 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -671,7 +671,7 @@ void svm_load_eoi_exitmap(struct kvm_vcpu *vcpu, u64 *eoi_exit_bitmap)
 
-What "ara" stands for? Please use meaningful names, like alert_dev for
-example.
+ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+ {
+-       if (!vcpu->arch.apicv_active)
++       if (vcpu->mode != IN_GUEST_MODE || !vcpu->arch.apicv_active)
+                return -1;
 
-I don't see where this member is used at all, please remove it.
+        kvm_lapic_set_irr(vec, vcpu->arch.apic);
+@@ -706,8 +706,9 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+                put_cpu();
+        } else {
+                /*
+-                * Wake the vCPU if it was blocking.  KVM will then detect the
+-                * pending IRQ when checking if the vCPU has a wake event.
++                * Wake the vCPU if it is blocking.  If the vCPU exited the
++                * guest since the previous vcpu->mode check, it's guaranteed
++                * to see the event before re-enterring the guest.
+                 */
+                kvm_vcpu_wake_up(vcpu);
+        }
 
-> +};
-> +
->  /**
->   * struct tegra_i2c_dev - per device I2C context
->   * @dev: device reference for power management
-> @@ -280,6 +286,8 @@ struct tegra_i2c_dev {
->  	int msg_err;
->  	u8 *msg_buf;
->  
-> +	struct tegra_i2c_smbalert smbalert;
-
-All properties must have doc comment.
-
->  	struct completion dma_complete;
->  	struct dma_chan *tx_dma_chan;
->  	struct dma_chan *rx_dma_chan;
-> @@ -1232,6 +1240,11 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
->  		return err;
->  
->  	i2c_dev->msg_buf = msg->buf;
-> +
-> +	/* The condition true implies smbus block read and len is already read*/
-
-Proper SMBus capitalization in comments. Mussing whitespace in the end
-of the comment.
-
-> +	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
-> +		i2c_dev->msg_buf = msg->buf + 1;
-> +
->  	i2c_dev->msg_buf_remaining = msg->len;
->  	i2c_dev->msg_err = I2C_ERR_NONE;
->  	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
-> @@ -1388,6 +1401,15 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
->  			else
->  				end_type = MSG_END_REPEAT_START;
->  		}
-> +		/* If M_RECV_LEN use ContinueXfer to read the first byte */
-> +		if (msgs[i].flags & I2C_M_RECV_LEN) {
-> +			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
-> +			if (ret)
-> +				break;
-> +			/* Set the read byte as msg len */
-> +			msgs[i].len = msgs[i].buf[0];
-> +			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
-> +		}
->  		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
->  		if (ret)
->  			break;
-> @@ -1415,7 +1437,8 @@ static u32 tegra_i2c_func(struct i2c_adapter *adap)
->  {
->  	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
->  	u32 ret = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
-> -		  I2C_FUNC_10BIT_ADDR |	I2C_FUNC_PROTOCOL_MANGLING;
-> +		  I2C_FUNC_SMBUS_READ_BLOCK_DATA | I2C_FUNC_10BIT_ADDR |
-> +		  I2C_FUNC_PROTOCOL_MANGLING;
->  
->  	if (i2c_dev->hw->has_continue_xfer_support)
->  		ret |= I2C_FUNC_NOSTART;
-> @@ -1727,6 +1750,29 @@ static int tegra_i2c_init_hardware(struct tegra_i2c_dev *i2c_dev)
->  	return ret;
->  }
->  
-> +static int tegra_i2c_setup_smbalert(struct tegra_i2c_dev *i2c_dev)
-> +{
-> +	struct tegra_i2c_smbalert *smbalert = &i2c_dev->smbalert;
-> +	struct gpio_desc *alert_gpiod;
-> +	struct i2c_client *ara;
-> +
-> +	alert_gpiod = devm_gpiod_get(i2c_dev->dev, "smbalert", GPIOD_IN);
-> +	if (IS_ERR(alert_gpiod))
-> +		return PTR_ERR(alert_gpiod);
-> +
-> +	smbalert->alert_data.irq = gpiod_to_irq(alert_gpiod);
-> +	if (smbalert->alert_data.irq <= 0)
-> +		return smbalert->alert_data.irq;
-> +
-> +	ara = i2c_new_smbus_alert_device(&i2c_dev->adapter, &smbalert->alert_data);
-> +	if (IS_ERR(ara))
-> +		return PTR_ERR(ara);
-> +
-> +	smbalert->ara = ara;
-> +
-> +	return 0;
-> +}
-> +
->  static int tegra_i2c_probe(struct platform_device *pdev)
->  {
->  	struct tegra_i2c_dev *i2c_dev;
-> @@ -1821,6 +1867,12 @@ static int tegra_i2c_probe(struct platform_device *pdev)
->  	if (err)
->  		goto release_rpm;
->  
-> +	if (device_property_read_bool(i2c_dev->dev, "smbus-alert")) {
-
-I'd move this device_property_read_bool() inside of
-tegra_i2c_setup_smbus_alert(), for consistency with the rest of the code
-in this driver.
-
-Although, you shouldn't need it at all, use devm_gpiod_get_optional().
-
-> +		err = tegra_i2c_setup_smbalert(i2c_dev);
-> +		if (err)
-> +			dev_warn(&pdev->dev, "smbus-alert setup failed: %d\n", err);
-
-GPIO may probe-defer, must be dev_err_probe() here.

@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B31446F243
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377F346F268
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243144AbhLIRni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:43:38 -0500
-Received: from mga07.intel.com ([134.134.136.100]:26441 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243127AbhLIRng (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:43:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="301546983"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="301546983"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:40:02 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="516405372"
-Received: from braj-mobl.gar.corp.intel.com ([10.251.50.179])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:39:57 -0800
-Message-ID: <10f257b0546690983a1ca7d3c3e8842c9fd98308.camel@linux.intel.com>
-Subject: Re: [PATCH 6/7] thermal: netlink: Add a new event to notify CPU
- capabilities change
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-doc@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 09 Dec 2021 09:39:53 -0800
-In-Reply-To: <f31278f5-7d23-b213-0b5b-321a0d7a048a@linaro.org>
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
-         <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
-         <b51c9b2a-40d2-6575-7746-3059eec53519@linaro.org>
-         <20211209160346.GA7692@ranerica-svr.sc.intel.com>
-         <f31278f5-7d23-b213-0b5b-321a0d7a048a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        id S237765AbhLIRrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:47:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235370AbhLIRrs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 12:47:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E253C061746;
+        Thu,  9 Dec 2021 09:44:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C9514CE2788;
+        Thu,  9 Dec 2021 17:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA10FC004DD;
+        Thu,  9 Dec 2021 17:44:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639071851;
+        bh=LrhoCgwHK5aNa/je1bFGkrzamyGORwE0jAi/o+7cq0M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=h+Und83WPf689ACgYKD8KAU8iKmz/AfKjHjnZbrlXN2RPAdq6HHZsBtNtAl3vIon+
+         hp/dLz6qerzservK6Wm3Kr17j+nJY1Z3Y3/Xp59E9tsxOloZsLflMHp+hxm21GOHPv
+         IhnaDeYwOQOkdmrcn23ALacGdGWfnfkiVcyZlgvA5ZpE/5VeHQ34eAycra0wfupezK
+         BbzJmpqD+cxVaQRwIIrzdYDeDyzSPZRcOnbXHFTo+H/a+uOx2dsobBXrHgpUhO/Zp2
+         kECgO8iNdaVXXeFukO/VUOUjcV2G3g+zbKyQ4QZoKljkwFzgfgxtqtMk467H5ofmE+
+         Hrp5g0xyQsA9A==
+Received: by mail-ed1-f53.google.com with SMTP id x10so4736301edd.5;
+        Thu, 09 Dec 2021 09:44:10 -0800 (PST)
+X-Gm-Message-State: AOAM532nfiX0VmU5DmdaIVybZoJtd1nl9gN5waO6N9DW43wX1t1b2H3f
+        WibNy5uJHPeftSw+MOG9xduEAIQGv1OGPLQ9bg==
+X-Google-Smtp-Source: ABdhPJxap0Qok1U7I64dLvD5c+qEPGQ3YzYlUS5GiU4rvfeVx52ezhzIk8JVKlHaoAWcLEY/BvtlX2hLDzjNdj873WE=
+X-Received: by 2002:a17:906:5e14:: with SMTP id n20mr17330757eju.466.1639071644253;
+ Thu, 09 Dec 2021 09:40:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211123124646.1995-1-thunder.leizhen@huawei.com>
+ <20211123124646.1995-11-thunder.leizhen@huawei.com> <YaaitPTArUZEriob@robh.at.kernel.org>
+ <0dc664f7-65ae-767c-3fe6-d1bcf50d41e1@huawei.com> <281c8196-2a5c-28cf-346a-0ae2f7182f1b@huawei.com>
+In-Reply-To: <281c8196-2a5c-28cf-346a-0ae2f7182f1b@huawei.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 9 Dec 2021 11:40:32 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+2nt0Kr9jykq-SELk-6E4BAyFCVrRaNRC01Uz5Jqf-Jw@mail.gmail.com>
+Message-ID: <CAL_Jsq+2nt0Kr9jykq-SELk-6E4BAyFCVrRaNRC01Uz5Jqf-Jw@mail.gmail.com>
+Subject: Re: [PATCH v16 10/11] of: fdt: Add memory for devices by DT property "linux,usable-memory-range"
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 17:57 +0100, Daniel Lezcano wrote:
-> On 09/12/2021 17:03, Ricardo Neri wrote:
-> > On Tue, Nov 30, 2021 at 10:29:46AM +0100, Daniel Lezcano wrote:
-> > > On 06/11/2021 02:33, Ricardo Neri wrote:
-> > > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > > 
-> > > > Add a new netlink event to notify change in CPU capabilities in
-> > > > terms of
-> > > > performance and efficiency.
-> > > > 
-> > > > Firmware may change CPU capabilities as a result of thermal
-> > > > events in the
-> > > > system or to account for changes in the TDP (thermal design
-> > > > power) level.
-> > > > 
-> > > > This notification type will allow user space to avoid running
-> > > > workloads
-> > > > on certain CPUs or proactively adjust power limits to avoid
-> > > > future events.
-> > > > 
-> > > 
-> > > [ ... ]
-> > > 
-> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]   = { .type =
-> > > > NLA_U32 },
-> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERF] = { .type =
-> > > > NLA_U32 },
-> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFF]  = { .type =
-> > > > NLA_U32 },
-> > > >  };
-> > > 
-> > > AFAIU, 0 <= perf < 256 and 0 <= eff < 256, right?
-> > > 
-> > > Is the following true?
-> > > 
-> > >         0 <= perf + eff < 256
-> > 
-> > No, they are not. They are set independently.
-> 
-> I understand they can be set independently but is the constraint
-> above
-> correct? For example, can the system send perf=255 and eff=255 or
-> perf=0
-> and eff=0 ?
-perf = 0 and eff = 0 is already the case in the current processors.
-Both FF is not the case as the current generation use real performance
-which can't be FF. Also it is unlikely that at max performance you have
-max efficiency.
+On Wed, Dec 8, 2021 at 7:59 PM Leizhen (ThunderTown)
+<thunder.leizhen@huawei.com> wrote:
+>
+>
+>
+> On 2021/12/1 10:55, Leizhen (ThunderTown) wrote:
+> >>> +   }
+> >>>
+> >>> -   memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+> >>> +   memblock_cap_memory_range(rgn[0].base, rgn[0].size);
+> >>> +   for (i =3D 1; i < MAX_USABLE_RANGES && rgn[i].size; i++)
+> >> s/ &&/,/
+>
+> Hi Rob:
+>   I want to keep "&&" unchanged, do you mind? I'm going to post an
+> updated version tomorrow, hopefully the last.
 
-Thanks,
-Srinivas
+Looks like that was obviously correct, so no objections.
 
-> 
-> May be I misunderstood but I was expecting at least some kind of
-> connection between perf and eff (when eff is high, perf is low and
-> the
-> opposite).
-> 
-> 
+Rob
 
-
+>
+> > Hi Rob:
+> >
+> > The comma operator may not be suitable for logical judgment. The logica=
+l judgment
+> > before commas (,) is ignored.
+> >
+> > Here's my test=EF=BC=9A
+> >
+> > C code=EF=BC=9A
+> > int main()
+> > {
+> >         int i, j;
+> >
+> >         printf("&&:\n");
+> >         for (i =3D 0, j =3D 0; i < 2 && j < 3; i++, j++)
+> >                 printf("i=3D%d, j=3D%d\n", i, j);
+> >
+> >         printf("\ncomma:\n");
+> >         for (i =3D 0, j =3D 0; i < 2, j < 3; i++, j++)    //(i < 2=EF=
+=BC=89 before comma is ignored
+> >                 printf("i=3D%d, j=3D%d\n", i, j);
+> >
+> >         return 0;
+> > }
+> >
+> > Output=EF=BC=9A
+> > &&:
+> > i=3D0, j=3D0
+> > i=3D1, j=3D1
+> >
+> > comma:
+> > i=3D0, j=3D0
+> > i=3D1, j=3D1
+> > i=3D2, j=3D2
+> >
+> >

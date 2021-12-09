@@ -2,383 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5246D46F3DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA0746F3DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbhLITZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhLITZk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:25:40 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C557C061746;
-        Thu,  9 Dec 2021 11:22:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pU88T4/RSl8s0u2eJGbYKbzqQveJ5xPUAkCA2hdvrD0=; b=SMXHIQuvVhoEsW4O46wwbsr8Sy
-        wvtHUogq/D0WnO1DKjvfP2Ae+GqTfUedXGeyazhJFDpbfbXuifDMGXPD8X1YGo6b0z8koOhxrppbv
-        wFzaEwgTqhET7oYX+9nwC2H4g667HRhfspQbk+og/kLzwPFtsaMThTGvGw+mtq3MHCjGFCNlqo9e2
-        XAQ94+VQLO/gOMLsC1NQy+FtvL58O85K7oE+pZG3vm3VU2knJG8ZtWfu+mbVNqRMtTeRXoqF9UJ1o
-        uVc1GxyzEgLDDpDFsh/tiF8KaTsUMasMULTxeDdZFtI8K3KtWojjmzGh9X+BI28pJzCw2VgovUe2B
-        QI+rG8bQ==;
-Received: from 54-240-197-234.amazon.com ([54.240.197.234] helo=freeip.amazon.com)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvOzI-00HLZ1-KR; Thu, 09 Dec 2021 19:21:53 +0000
-Message-ID: <5b086c9e5a92bb91e6f4c086e6d01e380a7491af.camel@infradead.org>
-Subject: [PATCH v1.1 02/11] rcu: Kill rnp->ofl_seq and use only
- rcu_state.ofl_lock for exclusion
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
-Date:   Thu, 09 Dec 2021 19:21:48 +0000
-In-Reply-To: <dfa110f0-8fd0-0f37-2c37-89eccac1ad08@quicinc.com>
-References: <20211209150938.3518-1-dwmw2@infradead.org>
-         <20211209150938.3518-3-dwmw2@infradead.org>
-         <dfa110f0-8fd0-0f37-2c37-89eccac1ad08@quicinc.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-2roYrSWSjtd7eUJwbGzu"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S229806AbhLIT0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:26:16 -0500
+Received: from mga11.intel.com ([192.55.52.93]:23127 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229379AbhLIT0M (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:26:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639077759; x=1670613759;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PQnj/CU33YRqXMRNvSTFjqzE2Qeg7Bq4XI2Tm5xfpIQ=;
+  b=kp5L99QiaR7xynGlf1QdZw/jRwRJ6wdVbGPFhOFSlxvn68hVCTfOYn1P
+   S9YkLNq9d9CksC39JeW5+vtHy1BnWUJx6ZbbvUPrGQWndRhkjEFLTF4YD
+   CoZIZUk/6jHMwq5XNL30hA50Ob4JVDdUE9h2GyM1b4gKP+oTT9n3vta5U
+   6xJCTprcrPbFMewQHFsKFmjWhpU8TIm/IR0tr/VyupKkBMUBIgrfKLYjj
+   Np+L+NJiwA28bSwfEgP7D6xEduysTbwOu1zAly4UPWbmewgOyrablECZo
+   4w44QbjqE5CGqIEyOcqQ/e5z5DWCeiPym+8hr069KbLKhMyzHIqrEaUjD
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="235702085"
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="235702085"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:22:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
+   d="scan'208";a="612639591"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 09 Dec 2021 11:22:37 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvP00-0002IC-As; Thu, 09 Dec 2021 19:22:36 +0000
+Date:   Fri, 10 Dec 2021 03:22:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: fs/buffer.c:2342:1: warning: the frame size of 2072 bytes is larger
+ than 1024 bytes
+Message-ID: <202112100307.ewo3JMUl-lkp@intel.com>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christophe,
 
---=-2roYrSWSjtd7eUJwbGzu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+FYI, the error/warning still remains.
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2a987e65025e2b79c6d453b78cb5985ac6e5eb26
+commit: 4eeef098b43242ed145c83fba9989d586d707589 powerpc/44x: Remove STDBINUTILS kconfig option
+date:   10 months ago
+config: powerpc-randconfig-r036-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100307.ewo3JMUl-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4eeef098b43242ed145c83fba9989d586d707589
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4eeef098b43242ed145c83fba9989d586d707589
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-If we allow architectures to bring APs online in parallel, then we end
-up requiring rcu_cpu_starting() to be reentrant. But currently, the
-manipulation of rnp->ofl_seq is not thread-safe.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-However, rnp->ofl_seq is also fairly much pointless anyway since both
-rcu_cpu_starting() and rcu_report_dead() hold rcu_state.ofl_lock for
-fairly much the whole time that rnp->ofl_seq is set to an odd number
-to indicate that an operation is in progress.
+All warnings (new ones prefixed by >>):
 
-So drop rnp->ofl_seq completely, and use only rcu_state.ofl_lock.
+   fs/buffer.c: In function 'block_read_full_page':
+>> fs/buffer.c:2342:1: warning: the frame size of 2072 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    2342 | }
+         | ^
+--
+   fs/ext4/move_extent.c: In function 'mext_page_mkuptodate':
+>> fs/ext4/move_extent.c:227:1: warning: the frame size of 2072 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+     227 | }
+         | ^
+--
+   fs/fat/dir.c: In function 'fat_add_new_entries':
+>> fs/fat/dir.c:1279:1: warning: the frame size of 2088 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    1279 | }
+         | ^
+   fs/fat/dir.c: In function 'fat_alloc_new_dir':
+   fs/fat/dir.c:1195:1: warning: the frame size of 2064 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    1195 | }
+         | ^
+--
+   fs/fat/fatent.c: In function 'fat_free_clusters':
+>> fs/fat/fatent.c:632:1: warning: the frame size of 2096 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+     632 | }
+         | ^
+   fs/fat/fatent.c: In function 'fat_alloc_clusters':
+   fs/fat/fatent.c:550:1: warning: the frame size of 2128 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+     550 | }
+         | ^
 
-This has a couple of minor complexities: lockdep will complain when we
-take rcu_state.ofl_lock, and currently accepts the 'excuse' of having
-an odd value in rnp->ofl_seq. So switch it to an arch_spinlock_t to
-avoid that false positive complaint. Since we're killing rnp->ofl_seq
-of course that 'excuse' has to be changed too, so make it check for
-arch_spin_is_locked(rcu_state.ofl_lock).
 
-There's no arch_spin_lock_irqsave() so we have to manually save and
-restore local interrupts around the locking.
+vim +2342 fs/buffer.c
 
-At Paul's request based on Neeraj's analysis, make rcu_gp_init not just=20
-wait but *exclude* any CPU online/offline activity, which was fairly
-much true already by virtue of it holding rcu_state.ofl_lock.
+8ab22b9abb5c55 Hisashi Hifumi     2008-07-28  2251  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2252  /*
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2253   * Generic "read page" function for block devices that have the normal
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2254   * get_block functionality. This is most of the block device filesystems.
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2255   * Reads the page asynchronously --- the unlock_buffer() and
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2256   * set/clear_buffer_uptodate() functions propagate buffer state into the
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2257   * page struct once IO has completed.
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2258   */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2259  int block_read_full_page(struct page *page, get_block_t *get_block)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2260  {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2261  	struct inode *inode = page->mapping->host;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2262  	sector_t iblock, lblock;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2263  	struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
+45bce8f3e3436b Linus Torvalds     2012-11-29  2264  	unsigned int blocksize, bbits;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2265  	int nr, i;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2266  	int fully_mapped = 1;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2267  
+45bce8f3e3436b Linus Torvalds     2012-11-29  2268  	head = create_page_buffers(page, inode, 0);
+45bce8f3e3436b Linus Torvalds     2012-11-29  2269  	blocksize = head->b_size;
+45bce8f3e3436b Linus Torvalds     2012-11-29  2270  	bbits = block_size_bits(blocksize);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2271  
+09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2272  	iblock = (sector_t)page->index << (PAGE_SHIFT - bbits);
+45bce8f3e3436b Linus Torvalds     2012-11-29  2273  	lblock = (i_size_read(inode)+blocksize-1) >> bbits;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2274  	bh = head;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2275  	nr = 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2276  	i = 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2277  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2278  	do {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2279  		if (buffer_uptodate(bh))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2280  			continue;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2281  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2282  		if (!buffer_mapped(bh)) {
+c64610ba585fab Andrew Morton      2005-05-16  2283  			int err = 0;
+c64610ba585fab Andrew Morton      2005-05-16  2284  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2285  			fully_mapped = 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2286  			if (iblock < lblock) {
+b0cf2321c65991 Badari Pulavarty   2006-03-26  2287  				WARN_ON(bh->b_size != blocksize);
+c64610ba585fab Andrew Morton      2005-05-16  2288  				err = get_block(inode, iblock, bh, 0);
+c64610ba585fab Andrew Morton      2005-05-16  2289  				if (err)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2290  					SetPageError(page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2291  			}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2292  			if (!buffer_mapped(bh)) {
+eebd2aa355692a Christoph Lameter  2008-02-04  2293  				zero_user(page, i * blocksize, blocksize);
+c64610ba585fab Andrew Morton      2005-05-16  2294  				if (!err)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2295  					set_buffer_uptodate(bh);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2296  				continue;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2297  			}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2298  			/*
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2299  			 * get_block() might have updated the buffer
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2300  			 * synchronously
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2301  			 */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2302  			if (buffer_uptodate(bh))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2303  				continue;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2304  		}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2305  		arr[nr++] = bh;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2306  	} while (i++, iblock++, (bh = bh->b_this_page) != head);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2307  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2308  	if (fully_mapped)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2309  		SetPageMappedToDisk(page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2310  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2311  	if (!nr) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2312  		/*
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2313  		 * All buffers are uptodate - we can set the page uptodate
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2314  		 * as well. But not if get_block() returned an error.
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2315  		 */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2316  		if (!PageError(page))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2317  			SetPageUptodate(page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2318  		unlock_page(page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2319  		return 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2320  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2321  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2322  	/* Stage two: lock the buffers */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2323  	for (i = 0; i < nr; i++) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2324  		bh = arr[i];
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2325  		lock_buffer(bh);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2326  		mark_buffer_async_read(bh);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2327  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2328  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2329  	/*
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2330  	 * Stage 3: start the IO.  Check for uptodateness
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2331  	 * inside the buffer lock in case another process reading
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2332  	 * the underlying blockdev brought it uptodate (the sct fix).
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2333  	 */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2334  	for (i = 0; i < nr; i++) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2335  		bh = arr[i];
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2336  		if (buffer_uptodate(bh))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2337  			end_buffer_async_read(bh, 1);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2338  		else
+2a222ca992c35a Mike Christie      2016-06-05  2339  			submit_bh(REQ_OP_READ, 0, bh);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2340  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2341  	return 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16 @2342  }
+1fe72eaa0f46a0 H Hartley Sweeten  2009-09-22  2343  EXPORT_SYMBOL(block_read_full_page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2344  
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+:::::: The code at line 2342 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
 ---
-If we're going to split the series up and let the various patches take
-their own paths to Linus, I'll just repost this one alone as 'v1.1'.
-
- kernel/rcu/tree.c | 71 ++++++++++++++++++++++++-----------------------
- kernel/rcu/tree.h |  4 +--
- 2 files changed, 37 insertions(+), 38 deletions(-)
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index ef8d36f580fc..2e1ae611be98 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -91,7 +91,7 @@ static struct rcu_state rcu_state =3D {
- 	.abbr =3D RCU_ABBR,
- 	.exp_mutex =3D __MUTEX_INITIALIZER(rcu_state.exp_mutex),
- 	.exp_wake_mutex =3D __MUTEX_INITIALIZER(rcu_state.exp_wake_mutex),
--	.ofl_lock =3D __RAW_SPIN_LOCK_UNLOCKED(rcu_state.ofl_lock),
-+	.ofl_lock =3D __ARCH_SPIN_LOCK_UNLOCKED,
- };
-=20
- /* Dump rcu_node combining tree at boot to verify correct setup. */
-@@ -1168,7 +1168,15 @@ bool rcu_lockdep_current_cpu_online(void)
- 	preempt_disable_notrace();
- 	rdp =3D this_cpu_ptr(&rcu_data);
- 	rnp =3D rdp->mynode;
--	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) || READ_ONCE(rnp->ofl_seq) & =
-0x1)
-+	/*
-+	 * Strictly, we care here about the case where the current CPU is
-+	 * in rcu_cpu_starting() and thus has an excuse for rdp->grpmask
-+	 * not being up to date. So arch_spin_is_locked() might have a
-+	 * false positive if it's held by some *other* CPU, but that's
-+	 * OK because that just means a false *negative* on the warning.
-+	 */
-+	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) ||
-+	    arch_spin_is_locked(&rcu_state.ofl_lock))
- 		ret =3D true;
- 	preempt_enable_notrace();
- 	return ret;
-@@ -1731,7 +1739,6 @@ static void rcu_strict_gp_boundary(void *unused)
-  */
- static noinline_for_stack bool rcu_gp_init(void)
- {
--	unsigned long firstseq;
- 	unsigned long flags;
- 	unsigned long oldmask;
- 	unsigned long mask;
-@@ -1774,22 +1781,17 @@ static noinline_for_stack bool rcu_gp_init(void)
- 	 * of RCU's Requirements documentation.
- 	 */
- 	WRITE_ONCE(rcu_state.gp_state, RCU_GP_ONOFF);
-+	/* Exclude CPU hotplug operations. */
- 	rcu_for_each_leaf_node(rnp) {
--		// Wait for CPU-hotplug operations that might have
--		// started before this grace period did.
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd valu=
-es.
--		firstseq =3D READ_ONCE(rnp->ofl_seq);
--		if (firstseq & 0x1)
--			while (firstseq =3D=3D READ_ONCE(rnp->ofl_seq))
--				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even val=
-ues.
--		raw_spin_lock(&rcu_state.ofl_lock);
--		raw_spin_lock_irq_rcu_node(rnp);
-+		local_irq_save(flags);
-+		arch_spin_lock(&rcu_state.ofl_lock);
-+		raw_spin_lock_rcu_node(rnp);
- 		if (rnp->qsmaskinit =3D=3D rnp->qsmaskinitnext &&
- 		    !rnp->wait_blkd_tasks) {
- 			/* Nothing to do on this leaf rcu_node structure. */
--			raw_spin_unlock_irq_rcu_node(rnp);
--			raw_spin_unlock(&rcu_state.ofl_lock);
-+			raw_spin_unlock_rcu_node(rnp);
-+			arch_spin_unlock(&rcu_state.ofl_lock);
-+			local_irq_restore(flags);
- 			continue;
- 		}
-=20
-@@ -1824,8 +1826,9 @@ static noinline_for_stack bool rcu_gp_init(void)
- 				rcu_cleanup_dead_rnp(rnp);
- 		}
-=20
--		raw_spin_unlock_irq_rcu_node(rnp);
--		raw_spin_unlock(&rcu_state.ofl_lock);
-+		raw_spin_unlock_rcu_node(rnp);
-+		arch_spin_unlock(&rcu_state.ofl_lock);
-+		local_irq_restore(flags);
- 	}
- 	rcu_gp_slow(gp_preinit_delay); /* Races with CPU hotplug. */
-=20
-@@ -4246,11 +4249,10 @@ void rcu_cpu_starting(unsigned int cpu)
-=20
- 	rnp =3D rdp->mynode;
- 	mask =3D rdp->grpmask;
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
-+	local_irq_save(flags);
-+	arch_spin_lock(&rcu_state.ofl_lock);
- 	rcu_dynticks_eqs_online();
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-+	raw_spin_lock_rcu_node(rnp);
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
- 	newcpu =3D !(rnp->expmaskinitnext & mask);
- 	rnp->expmaskinitnext |=3D mask;
-@@ -4263,15 +4265,18 @@ void rcu_cpu_starting(unsigned int cpu)
-=20
- 	/* An incoming CPU should never be blocking a grace period. */
- 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? *=
-/
-+		/* rcu_report_qs_rnp() *really* wants some flags to restore */
-+		unsigned long flags2;
-+		local_irq_save(flags2);
-+
- 		rcu_disable_urgency_upon_qs(rdp);
- 		/* Report QS -after- changing ->qsmaskinitnext! */
--		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
-+		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags2);
- 	} else {
--		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-+		raw_spin_unlock_rcu_node(rnp);
- 	}
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-+	arch_spin_unlock(&rcu_state.ofl_lock);
-+	local_irq_restore(flags);
- 	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
- }
-=20
-@@ -4285,7 +4290,7 @@ void rcu_cpu_starting(unsigned int cpu)
-  */
- void rcu_report_dead(unsigned int cpu)
- {
--	unsigned long flags;
-+	unsigned long flags, seq_flags;
- 	unsigned long mask;
- 	struct rcu_data *rdp =3D per_cpu_ptr(&rcu_data, cpu);
- 	struct rcu_node *rnp =3D rdp->mynode;  /* Outgoing CPU's rdp & rnp. */
-@@ -4299,10 +4304,8 @@ void rcu_report_dead(unsigned int cpu)
-=20
- 	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
- 	mask =3D rdp->grpmask;
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	raw_spin_lock(&rcu_state.ofl_lock);
-+	local_irq_save(seq_flags);
-+	arch_spin_lock(&rcu_state.ofl_lock);
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order gu=
-arantee. */
- 	rdp->rcu_ofl_gp_seq =3D READ_ONCE(rcu_state.gp_seq);
- 	rdp->rcu_ofl_gp_flags =3D READ_ONCE(rcu_state.gp_flags);
-@@ -4313,10 +4316,8 @@ void rcu_report_dead(unsigned int cpu)
- 	}
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
--	raw_spin_unlock(&rcu_state.ofl_lock);
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-+	arch_spin_unlock(&rcu_state.ofl_lock);
-+	local_irq_restore(seq_flags);
-=20
- 	rdp->cpu_started =3D false;
- }
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 305cf6aeb408..aff4cc9303fb 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -56,8 +56,6 @@ struct rcu_node {
- 				/*  Initialized from ->qsmaskinitnext at the */
- 				/*  beginning of each grace period. */
- 	unsigned long qsmaskinitnext;
--	unsigned long ofl_seq;	/* CPU-hotplug operation sequence count. */
--				/* Online CPUs for next grace period. */
- 	unsigned long expmask;	/* CPUs or groups that need to check in */
- 				/*  to allow the current expedited GP */
- 				/*  to complete. */
-@@ -358,7 +356,7 @@ struct rcu_state {
- 	const char *name;			/* Name of structure. */
- 	char abbr;				/* Abbreviated name. */
-=20
--	raw_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
-+	arch_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
- 						/* Synchronize offline with */
- 						/*  GP pre-initialization. */
- };
---=20
-2.31.1
-
-
---=-2roYrSWSjtd7eUJwbGzu
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
-ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
-OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
-RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
-cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
-uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
-Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
-Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
-xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
-YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
-nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
-PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
-7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
-Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
-MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
-NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
-AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
-/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
-0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
-vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
-ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
-ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
-CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
-BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
-aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
-bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
-bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
-LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
-CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
-W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
-vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
-gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
-RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
-jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
-b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
-AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
-BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
-+bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
-WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
-aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
-CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
-u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
-RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
-QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
-b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
-cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
-SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
-0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
-KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
-E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
-M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
-jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
-yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
-gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
-R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
-ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
-MjA5MTkyMTQ4WjAvBgkqhkiG9w0BCQQxIgQgYTOzWo1Xj9JAYuDWWfoiFsQUSBIB98N10fdCAQSw
-kBgwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
-TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
-PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
-aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBAGBfZvTztDSHCzzaEL/XpRiKer1E3wouhv1A9fa+CrK2DJXJfx9cDqVu6RurDeeI
-DqNxCaqu9wOWHb2TYpipBwPA2eDTV2jSvUaSzKJQ8+lUlmVH43YmQX7DO4UoupX1JDS6WXFaUPrk
-kwL1YFyTCObbxwKU19dNeVNfQTERAZS5glcj1APc2k60aCjIXmSrebSTDT84lV2oIrHYGKLhlzeN
-RvFR92xNqM7AV5X8yWLn9By7ulnw+sy6uCe7qEQ1y6k8F/rP3VYTjiBODcHWtRCIHOFtQqkbZeW4
-iOdKY/PWNjJqanWNRqI++mOJ0mJyANiad0Hd5fBAOHpwkB7JN5YAAAAAAAA=
-
-
---=-2roYrSWSjtd7eUJwbGzu--
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

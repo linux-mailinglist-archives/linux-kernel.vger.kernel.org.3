@@ -2,143 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4FF46DFCB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414EC46DFD1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 01:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241612AbhLIA4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 19:56:02 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:41533 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233448AbhLIA4B (ORCPT
+        id S241641AbhLIA6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 19:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233448AbhLIA6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 19:56:01 -0500
-Received: by mail-io1-f70.google.com with SMTP id k6-20020a0566022d8600b005e6ff1b6bbaso5334766iow.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 16:52:29 -0800 (PST)
+        Wed, 8 Dec 2021 19:58:17 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AA5C0617A2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 16:54:44 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso4596716ota.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 16:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oayw19YcubpFrAM2rcGj+T1Oq/bzfF0MfoBjvEgDhvY=;
+        b=DrC9twi4Lta/weWbKj7I1tdRFQUzvZcDA4bRPMXw/xdzUC5w/r7G4HputChGNvDqDi
+         H761KnA9rgUpg32HJOuMzcbMRLV3n/Dl0ekGuVRBniHdYULujTaZ7DtTn9Y6F5AUZ4cU
+         XPTEIPo7Nssr618Oxgciyvxi1LGYYHvWGJ3yPZR1yvp4aQWx8wm8pn5O6RwwRY/oePTH
+         lUdzs4Xoq+plOyFsgXSXHQv0Ef6BRemc4znW09nkfnZQLRCmX8miDDZQJ0N1XcXXddQM
+         iFY9ss/q7GfZe1N+dB7WdlAS37UecYu5sCRGWGCEM/b7/f3plB8jTT2oK86tWZVGStmA
+         Tb0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=4drw+9tV7Q3M3ATS5/pVs5kxKjCg/GjjI7TwMiC87Bg=;
-        b=BvCtNJyoxm4/RywfLF/Yskc5QHU6XlTI+GawhHiJv0bct12bekYE8xjOkOFHT7ik0d
-         VyNHXSgYnxWfMmylIAh3Bi8OKR+2HSYCKWKinzECzpCv/moXOCd9JOgSXrvIU75IKPAP
-         8Xs4HppenE0yqBZ2awLKiHOws2zuEICgtEgZX4v/vHPC2ZPoryniEKSN5IAZTNpAg+XK
-         B6HW7kXczxx4a+5DnAJ2VZMpXxbAFV1eJXI5Xk8OBVG5uk5YqEGaP9+HCPPBFre14ma9
-         id5I1G02Bw8kstTGuFbZcR20wnZr7+mMYMfwpyiAZ2ulS/WT/OJsG7aAELKUgvXH60Go
-         oSsQ==
-X-Gm-Message-State: AOAM532q7/xi6Jx4dVy19RduJ+5Kiw/0SKR0C7nd0V19bsZbM4i4Jt3M
-        gB9o/IaJas9M5NvPL0fWpXxUXEMAFY3zfFrlguKjAmIkEchl
-X-Google-Smtp-Source: ABdhPJwShJaOe0htukBlHx0fm2q9TEirn7A+BHNmWu9B5A4ltxb/4M0oI7r8T+CCh0Cx3Bdk4FyRgmgwcgd16//8jsRcu5FbqSOc
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oayw19YcubpFrAM2rcGj+T1Oq/bzfF0MfoBjvEgDhvY=;
+        b=ql+d1uFTmqnJS3qn0o/lKXgPCH6l1e1faj1XHg0bQhDWwuLLOj9Ir+h1dogriZnixq
+         +kh5oN08gwnN16YvBQms4uKYzVdd5hi0bsRFDl2IGBDMBxkdgjJPzPjktSMXRLshpXtV
+         K3J3W54ci3W6XnXvc3e+WF8asw6XOdTUUxwIg5Jffu8vvrozoAlEjp1Cjc0Stvi1QyaO
+         rFpdWBbLdqj2s28zyN1NlhFu1b1/5HrkXmLs8QdmS5FSDE3fCJn9eVk5U457CFgUX3Ta
+         uWA+RYs4CYYZGTB6IV8LXv1cjb/SekMTnuZ+3RSTvLfAZVK+MV0RkUI4ObhlP07sGDHa
+         JCjA==
+X-Gm-Message-State: AOAM532W82AmvjXz6BL8GzIW/AvGsMAw+Iau6cDo7qosiFuO+OThBJCZ
+        3ob7mDAobZush9DBfEsc9Vh4Dg1wd5SNs+xzOOcbRA==
+X-Google-Smtp-Source: ABdhPJzGomSzkekQE828bfIUo/WHIX1ZFsfqM14FCi2GjwhNdEgjuJeCXj0n+HSC4lxJQZf70dA/USaOLKrkkQOCskw=
+X-Received: by 2002:a9d:74d0:: with SMTP id a16mr2615930otl.237.1639011283934;
+ Wed, 08 Dec 2021 16:54:43 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:613:: with SMTP id g19mr4451996jar.77.1639011148893;
- Wed, 08 Dec 2021 16:52:28 -0800 (PST)
-Date:   Wed, 08 Dec 2021 16:52:28 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000050185105d2ac05d2@google.com>
-Subject: [syzbot] INFO: task can't die in reclaim_throttle
-From:   syzbot <syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+References: <20211207093412.27833-1-brgl@bgdev.pl>
+In-Reply-To: <20211207093412.27833-1-brgl@bgdev.pl>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 9 Dec 2021 01:54:32 +0100
+Message-ID: <CACRpkdbAs+ZpU_uQziXmz2inPG7VHD=746MmjmR8iY3szfy9+w@mail.gmail.com>
+Subject: Re: [PATCH v13 0/7] gpio-sim: configfs-based GPIO simulator
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Dec 7, 2021 at 10:34 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-syzbot found the following issue on:
+> Hopefully this will be the last iteration of this series. Just some
+> minor changes requested by Andy in this one.
+>
+> Tested both with configfs as well as device-tree.
 
-HEAD commit:    4eee8d0b64ec Add linux-next specific files for 20211208
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=113d8d75b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20b74d9da4ce1ef1
-dashboard link: https://syzkaller.appspot.com/bug?extid=dcea9eda277e1090b35f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+This patch set:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks for your perseverance!!
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com
-
-INFO: task syz-executor.5:925 can't die for more than 143 seconds.
-task:syz-executor.5  state:D
- stack:23840 pid:  925 ppid:   565 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4986 [inline]
- __schedule+0xab2/0x4d90 kernel/sched/core.c:6296
- schedule+0xd2/0x260 kernel/sched/core.c:6369
- schedule_timeout+0x14a/0x2a0 kernel/time/timer.c:1881
- reclaim_throttle+0x1ce/0x5e0 mm/vmscan.c:1072
- consider_reclaim_throttle mm/vmscan.c:3399 [inline]
- shrink_zones mm/vmscan.c:3486 [inline]
- do_try_to_free_pages+0x7cd/0x1620 mm/vmscan.c:3541
- try_to_free_pages+0x29f/0x750 mm/vmscan.c:3776
- __perform_reclaim mm/page_alloc.c:4603 [inline]
- __alloc_pages_direct_reclaim mm/page_alloc.c:4624 [inline]
- __alloc_pages_slowpath.constprop.0+0xa9e/0x2080 mm/page_alloc.c:5014
- __alloc_pages+0x412/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab mm/slub.c:1952 [inline]
- new_slab+0x2a9/0x3a0 mm/slub.c:2004
- ___slab_alloc+0x6be/0xd60 mm/slub.c:3019
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3106
- slab_alloc_node mm/slub.c:3197 [inline]
- slab_alloc mm/slub.c:3239 [inline]
- kmem_cache_alloc+0x35c/0x3a0 mm/slub.c:3244
- mempool_alloc+0x146/0x350 mm/mempool.c:392
- bvec_alloc+0x16b/0x200 block/bio.c:206
- bio_alloc_bioset+0x376/0x4a0 block/bio.c:481
- bio_alloc include/linux/bio.h:371 [inline]
- mpage_alloc+0x2f/0x1b0 fs/mpage.c:79
- do_mpage_readpage+0xfa9/0x2590 fs/mpage.c:306
- mpage_readahead+0x3db/0x920 fs/mpage.c:389
- read_pages+0x1db/0x790 mm/readahead.c:129
- page_cache_ra_unbounded+0x585/0x780 mm/readahead.c:238
- do_page_cache_ra+0xf9/0x140 mm/readahead.c:268
- do_sync_mmap_readahead mm/filemap.c:3058 [inline]
- filemap_fault+0x157f/0x21c0 mm/filemap.c:3151
- __do_fault+0x10d/0x790 mm/memory.c:3846
- do_read_fault mm/memory.c:4161 [inline]
- do_fault mm/memory.c:4290 [inline]
- handle_pte_fault mm/memory.c:4548 [inline]
- __handle_mm_fault+0x2761/0x4160 mm/memory.c:4683
- handle_mm_fault+0x1c8/0x790 mm/memory.c:4781
- faultin_page mm/gup.c:939 [inline]
- __get_user_pages+0x503/0xf80 mm/gup.c:1160
- populate_vma_page_range+0x24d/0x330 mm/gup.c:1492
- __mm_populate+0x1ea/0x3e0 mm/gup.c:1601
- mm_populate include/linux/mm.h:2698 [inline]
- vm_mmap_pgoff+0x20e/0x290 mm/util.c:524
- ksys_mmap_pgoff+0x40d/0x5a0 mm/mmap.c:1630
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fd1c83f6af9
-RSP: 002b:00007fd1c736c188 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
-RAX: ffffffffffffffda RBX: 00007fd1c8509f60 RCX: 00007fd1c83f6af9
-RDX: 0000000001000002 RSI: 0000000000b36000 RDI: 0000000020000000
-RBP: 00007fd1c8450ff7 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000000028011 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff309a431f R14: 00007fd1c736c300 R15: 0000000000022000
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by khungtaskd/26:
- #0: ffffffff8bb828a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6460
-1 lock held by kswapd1/99:
-1 lock held by in:imklog/6230:
- #0: ffff888021d92370 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:994
-1 lock held by syz-executor.5/925:
-
-=============================================
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Yours,
+Linus Walleij

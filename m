@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9BA46F7C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453E946F7C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 00:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbhLJADN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 19:03:13 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:54731 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbhLJADN (ORCPT
+        id S234694AbhLJADV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 19:03:21 -0500
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:29418 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232284AbhLJADU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 19:03:13 -0500
+        Thu, 9 Dec 2021 19:03:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639094380; x=1670630380;
+  t=1639094386; x=1670630386;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SlKhXOYedERl0RnaiJfzDiGiWKuwt2kGz1yDJoQfWVE=;
-  b=dlwXNxrIrjLye8fAA4UQgXZlBmfC6ITtHxTh0ZUqq9P0q2/N1wpU8XCr
-   QgoSTVfGmjX919uEjYycM+KL3arS7U/sQxYsz+H9mRHQzlxvjonz4/UY6
-   5x4FFPVHbqgihqJvP7O7Qt4R7TNtBNWkWJBDVZWBMQTSjD/1MjAI8lpEg
-   HIOhYkgzKAqhxLBkfsl9XCsJtqvmjlOlmU8e3zdslVBrOmxS8OMewtg/8
-   WX6Nr+Bf6Q24a+MgIXTVeqDWXkwTgfRPhI7sUvKnUYCT6NUvb2ErLq2Yj
-   7sKidxFF42DBlkuv12Xa5jJgJosX5nVzGJcMS+HD+/wtUWvQcWXawbeXx
-   w==;
+  bh=aTuTMZR7mHk5WuMQ4CKbLXlaRLZp274pvCDzMBGKakM=;
+  b=mowRx144Tyzs6KnBw5uYp1dRLppJZEC8G5d+U9NjlUj4s3GKk1po6nTa
+   L00ph+CiGHjB5Lzh/R5FvUebYLYl/kX3WeXdrItkC6eCG8PO0ggjRJAeX
+   57lF9EUV1pRJZRH/kKg46e4smJei61Juc/UG8n8v24Nyoc8cA9D4IO9yS
+   ApE9lfeMiD7gfItv0NZlkaxzHk9Zgx/sKmfarcSySCC+arGSRGTrwF3zN
+   SsTKrNctdczk/sknFeNK9xkK5pqUwAxCcV5Sp7zIDVAO8D7lsFXoaSFbp
+   xjDkPjidfZEVTiCfXO4e54eOU8Y0jNETeMzW5va1AjxvJHa2l3q+AZuSi
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.88,194,1635177600"; 
-   d="scan'208";a="188897240"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Dec 2021 07:59:39 +0800
-IronPort-SDR: IayuJhsOJ+uQ73zFzCnkeilepX+oAzzMj4+uS6CXi8w49RSGKqQmqfXxj7fueTFvPcoy4aAlAY
- DjPwAlRRBT50wvE9Ke9rjd40Z/JNOQ74GHgl/XUGq2LNpDpXA/Mqz5crHRIEV/lZuxp0uREAZh
- iNn76k7hDrwVP2QIu1xLOqxIhSFn32bI5ZwzWiMTgWzarSnE6smLKG3RX/XDA5F5w8tGucZN5U
- a2FzN0M7OD2t0zevn19WQbaNxFpk61g4J4mjwbI1uRmnmeon1Ym1C+3Vx34SPO9BbNsVNgAKk3
- z6YAJhLU8lPvK163rg7o87pA
+   d="scan'208";a="187890309"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 10 Dec 2021 07:59:45 +0800
+IronPort-SDR: OtzsPoLZ4xufbaBHYURvgTw75KAMtlanU6bxsi/wX9vUPUwAzigpuC+yX9TTSsgomfYAFf23xw
+ D4PzwKNl49R5VCkv0/Kafo4xkLJ1qLequKFK9QSdSw+wDtNwxQTQZYZ1Zuoxr5M83y7Xp9IeMW
+ QGUUHVGA7HBrc6Ng6yIqNNBaj6zHtAYaJgnjF8uWtOsTIq9V4QJR3RJi9VWXpdwCM+FIwaB1HL
+ yaG8yX6485Jriwb1Sp604TODWwwj445b7g4yFeKYL00+2NiWZvn7ZLcziAa+qrIv6O828OlW8/
+ QqX64we9YozaXtknRbQH2Um3
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:32:40 -0800
-IronPort-SDR: BEpTeet8vBeD9bq85FFIEAKp+EDPIDN6T8CE3whDExG7rBAxC3f2nRR5YzCA+ZFKK0HEbeI422
- 4fRS8tulzHvYBr6qDhbI4cONr2oPLJRnSSsD6xK+EtdyxW7ytUjK2HyJ5moT5mbXhk36Ywc6ff
- E4evezCshD5AeMUk2I1WC3CcW7cki1q1y1iH8oywbg34T4yO2qviv3/mIvhDMg2G+HtcChUOiI
- O4BOOC2voHD0sa43u47yvfPe2ldxe+dGze99EZZrmIiPyndyceBpd759juSQBKXCrtFlfKY9/r
- kl8=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:32:48 -0800
+IronPort-SDR: JYiamMB3tL85SUaztTIyXw5/LjkVAzrwVqifsoJ407rAc/pJpGd+oV6Etsu5Q7CZbEyFs2pv5l
+ gsBUWeT+zJOoEShxalmqBEBPfqkyjkprlpJEbe4DxnZOnqv5149W2BY1W3VH+3rLKugeooryuC
+ obX0NI1nUjBXPONt/XrJXME9+N95eI5GnV1pmhKSetqmCdVA2RCdim+2HpsVOVsZogPxp5T+S0
+ 9zJX6dTpO2JZTHcP4xdGG9KwQdLg158MnE0Wwrlnp/NUi8dnY8Bl2KOrfHWD9ZmmAmo4Iwsal3
+ hMk=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:59:39 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 15:59:47 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J99xk1JdDz1Rwvh
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:59:38 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J99xt2jjXz1Rwvd
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 15:59:46 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1639094376; x=1641686377; bh=SlKhXOYedERl0RnaiJ
-        fzDiGiWKuwt2kGz1yDJoQfWVE=; b=XWNNrYA778qVXx+tzjvNJWzY7Rn+4Sdp+R
-        rrRh+A+RYkLp9pM5p2fpDBN1sb65SUq2Q6JXFMql0qnqBWCQWwTGwoBxPvHP4W+y
-        nj8rC3FrnwfOYFnfi0sfiJ7i+3TpsvJX5xCV3orSFPwqM1lGyIxBjK2Z/Gb7WsNC
-        KbrLjNr+PkRUPcGQyje0GLojeRGK9TtoxMAkCH6OFbYZTUjphqBE8OB2garkhCiY
-        W/RHcO2YSG/NFIrRrwR0jt1YP01qZVFj1mlDiL4b+mYFnJkBkJg2BMr8U7O3dawx
-        sW/8j/pKP/MFY2MRamo7IU4T/d5pqAh9w+1tWetTWTJ+NLVEfwZw==
+        :from; s=dkim; t=1639094385; x=1641686386; bh=aTuTMZR7mHk5WuMQ4C
+        KbLXlaRLZp274pvCDzMBGKakM=; b=naFMWJRgT8HcYrJKe1X6vFz3B6Ic6P3j1c
+        H1CgQemTYBfygs9/5dGRz4ntX1UV/kRLhNdFF2w38pG42XethEJR0RjYJaHXj5Kl
+        bZLb0rMsAD4kQXWO7j2QO4rgksihuv0HzAFeiGLt1TB5Mjs83lwtGKS1bqJyQ1tM
+        iPV6DsgCdr6NcX7ibLhrir0IIw16pd9GE3eqUSqF2zHO2f44Kir0yx6H8/f7ODZh
+        XXgYbKoC8xnEl1Lgv7TSarVD+sg/yga+I0MYyqTsQGef33PnbV4+eSAPgXkG/cMr
+        ghhj1if7D6gxmGZ+RXCLgayjG19Iv0swvG1pJmqgc/cOwvUF20Aw==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9-Ibb8lgRqb3 for <linux-kernel@vger.kernel.org>;
-        Thu,  9 Dec 2021 15:59:36 -0800 (PST)
+        with ESMTP id fsm96QcE-PWA for <linux-kernel@vger.kernel.org>;
+        Thu,  9 Dec 2021 15:59:45 -0800 (PST)
 Received: from localhost.localdomain (unknown [10.225.165.65])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J99xX5Qz6z1RtVG;
-        Thu,  9 Dec 2021 15:59:28 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J99xj4ZGVz1RvTh;
+        Thu,  9 Dec 2021 15:59:37 -0800 (PST)
 From:   Alistair Francis <alistair.francis@opensource.wdc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     dave@stgolabs.net, dvhart@infradead.org, arnd@arndb.de,
@@ -76,9 +76,9 @@ Cc:     dave@stgolabs.net, dvhart@infradead.org, arnd@arndb.de,
         alexander.shishkin@linux.intel.com, mark.rutland@arm.com,
         mingo@redhat.com, peterz@infradead.org, tglx@linutronix.de,
         Alistair Francis <alistair.francis@wdc.com>
-Subject: [PATCH v5 3/6] uapi: futex: Add a futex syscall
-Date:   Fri, 10 Dec 2021 09:58:54 +1000
-Message-Id: <20211209235857.423773-3-alistair.francis@opensource.wdc.com>
+Subject: [PATCH v5 4/6] selftests: futex: Add support for 32-bit systems with 64-bit time_t
+Date:   Fri, 10 Dec 2021 09:58:55 +1000
+Message-Id: <20211209235857.423773-4-alistair.francis@opensource.wdc.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
 References: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
@@ -90,137 +90,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alistair Francis <alistair.francis@wdc.com>
 
-This commit adds two futex syscall wrappers that are exposed to
-userspace.
-
-Neither the kernel or glibc currently expose a futex wrapper, so
-userspace is left performing raw syscalls. This has mostly been because
-the overloading of one of the arguments makes it impossible to provide a
-single type safe function.
-
-Until recently the single syscall has worked fine. With the introduction
-of a 64-bit time_t futex call on 32-bit architectures, this has become
-more complex. The logic of handling the two possible futex syscalls is
-complex and often implemented incorrectly.
-
-This patch adds two futex syscall functions that correctly handle the
-time_t complexity for userspace.
-
-This idea is based on previous discussions:
-https://lore.kernel.org/lkml/CAK8P3a3x_EyCiPDpMK54y=3DRtm-Wb08ym2TNiuAZgX=
-hYrThcWTw@mail.gmail.com/
+Using the new __kernel_futex_syscall*() functions let's add support for
+32-bit systems with a 64-bit time_t. We can just direclty call the
+publically exposed __kernel_futex_syscall_timeout() and
+__kernel_futex_syscall_nr_requeue() functions to do this.
 
 Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
- include/uapi/linux/futex_syscall.h | 92 ++++++++++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 include/uapi/linux/futex_syscall.h
+ tools/testing/selftests/futex/functional/futex_requeue_pi.c | 2 +-
+ tools/testing/selftests/futex/include/futextest.h           | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/futex_syscall.h b/include/uapi/linux/fute=
-x_syscall.h
-new file mode 100644
-index 000000000000..bac621eb319c
---- /dev/null
-+++ b/include/uapi/linux/futex_syscall.h
-@@ -0,0 +1,92 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Futex syscall helper functions
-+ *
-+ * Copyright (C) 2021 Western Digital.  All Rights Reserved.
-+ *
-+ * Author: Alistair Francis <alistair.francis@wdc.com>
-+ */
-+#ifndef _UAPI_LINUX_FUTEX_SYSCALL_H
-+#define _UAPI_LINUX_FUTEX_SYSCALL_H
-+
-+#include <unistd.h>
-+#include <errno.h>
-+#include <linux/futex.h>
-+#include <linux/types.h>
-+#include <linux/time_types.h>
-+#include <stdint.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <time.h>
-+
-+/**
-+ * __kernel_futex_syscall_timeout() - __NR_futex/__NR_futex_time64 sysca=
-ll wrapper
-+ * @uaddr:  address of first futex
-+ * @op:   futex op code
-+ * @val:  typically expected value of uaddr, but varies by op
-+ * @timeout:  an absolute struct timespec
-+ * @uaddr2: address of second futex for some ops
-+ * @val3: varies by op
-+ */
-+static inline int
-+__kernel_futex_syscall_timeout(volatile uint32_t *uaddr, int op, uint32_=
-t val,
-+		      struct timespec *timeout, volatile uint32_t *uaddr2, int val3)
-+{
-+#if defined(__NR_futex_time64)
-+	if (sizeof(*timeout) !=3D sizeof(struct __kernel_old_timespec)) {
-+		int ret =3D syscall(__NR_futex_time64, uaddr, op, val, timeout, uaddr2=
-, val3);
-+
-+		if (ret =3D=3D 0 || errno !=3D ENOSYS)
-+			return ret;
-+	}
-+#endif
-+
-+#if defined(__NR_futex)
-+	if (sizeof(*timeout) =3D=3D sizeof(struct __kernel_old_timespec))
-+		return syscall(__NR_futex, uaddr, op, val, timeout, uaddr2, val3);
-+
-+	if (timeout && timeout->tv_sec =3D=3D (long)timeout->tv_sec) {
-+		struct __kernel_old_timespec ts_old;
-+
-+		ts_old.tv_sec =3D (__kernel_long_t) timeout->tv_sec;
-+		ts_old.tv_nsec =3D (__kernel_long_t) timeout->tv_nsec;
-+
-+		return syscall(__NR_futex, uaddr, op, val, &ts_old, uaddr2, val3);
-+	} else if (!timeout) {
-+		return syscall(__NR_futex, uaddr, op, val, NULL, uaddr2, val3);
-+	}
-+#endif
-+
-+	errno =3D ENOSYS;
-+	return -1;
-+}
-+
-+/**
-+ * __kernel_futex_syscall_nr_requeue() - __NR_futex/__NR_futex_time64 sy=
-scall wrapper
-+ * @uaddr:  address of first futex
-+ * @op:   futex op code
-+ * @val:  typically expected value of uaddr, but varies by op
-+ * @nr_requeue:  an op specific meaning
-+ * @uaddr2: address of second futex for some ops
-+ * @val3: varies by op
-+ */
-+static inline int
-+__kernel_futex_syscall_nr_requeue(volatile uint32_t *uaddr, int op, uint=
-32_t val,
-+			 uint32_t nr_requeue, volatile uint32_t *uaddr2, int val3)
-+{
-+#if defined(__NR_futex_time64)
-+	int ret =3D  syscall(__NR_futex_time64, uaddr, op, val, nr_requeue, uad=
-dr2, val3);
-+
-+	if (ret =3D=3D 0 || errno !=3D ENOSYS)
-+		return ret;
-+#endif
-+
-+#if defined(__NR_futex)
-+	return syscall(__NR_futex, uaddr, op, val, nr_requeue, uaddr2, val3);
-+#endif
-+
-+	errno =3D ENOSYS;
-+	return -1;
-+}
-+
-+#endif /* _UAPI_LINUX_FUTEX_SYSCALL_H */
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi.c =
+b/tools/testing/selftests/futex/functional/futex_requeue_pi.c
+index 1ee5518ee6b7..556bf3e74755 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue_pi.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue_pi.c
+@@ -294,7 +294,7 @@ int unit_test(int broadcast, long lock, int third_par=
+ty_owner, long timeout_ns)
+ 		secs =3D (ts.tv_nsec + timeout_ns) / 1000000000;
+ 		ts.tv_nsec =3D ((int64_t)ts.tv_nsec + timeout_ns) % 1000000000;
+ 		ts.tv_sec +=3D secs;
+-		info("ts.tv_sec  =3D %ld\n", ts.tv_sec);
++		info("ts.tv_sec  =3D %lld\n", (long long) ts.tv_sec);
+ 		info("ts.tv_nsec =3D %ld\n", ts.tv_nsec);
+ 		tsp =3D &ts;
+ 	}
+diff --git a/tools/testing/selftests/futex/include/futextest.h b/tools/te=
+sting/selftests/futex/include/futextest.h
+index c786fffecb8a..1686f94667b1 100644
+--- a/tools/testing/selftests/futex/include/futextest.h
++++ b/tools/testing/selftests/futex/include/futextest.h
+@@ -21,6 +21,7 @@
+ #include <sys/syscall.h>
+ #include <sys/types.h>
+ #include <linux/futex.h>
++#include <linux/futex_syscall.h>
+=20
+ typedef volatile u_int32_t futex_t;
+ #define FUTEX_INITIALIZER 0
+@@ -69,14 +70,14 @@ static inline int
+ futex_syscall(volatile u_int32_t *uaddr, int op, u_int32_t val, struct t=
+imespec *timeout,
+ 	      volatile u_int32_t *uaddr2, int val3, int opflags)
+ {
+-	return syscall(SYS_futex, uaddr, op | opflags, val, timeout, uaddr2, va=
+l3);
++	return __kernel_futex_syscall_timeout(uaddr, op | opflags, val, timeout=
+, uaddr2, val3);
+ }
+=20
+ static inline int
+ futex_syscall_nr_requeue(volatile u_int32_t *uaddr, int op, u_int32_t va=
+l, int nr_requeue,
+ 			 volatile u_int32_t *uaddr2, int val3, int opflags)
+ {
+-	return syscall(SYS_futex, uaddr, op | opflags, val, nr_requeue, uaddr2,=
+ val3);
++	return __kernel_futex_syscall_nr_requeue(uaddr, op | opflags, val, nr_r=
+equeue, uaddr2, val3);
+ }
+=20
+ /**
 --=20
 2.31.1
 

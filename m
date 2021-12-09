@@ -2,236 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E685346F6B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9506646F6BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 23:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbhLIWYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 17:24:36 -0500
-Received: from mail-bn8nam11on2065.outbound.protection.outlook.com ([40.107.236.65]:27517
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232486AbhLIWYe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 17:24:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=liZm2YCTD2dxZtrc5bVoxrBLu35OLKX8jfcOwyWf70vQoAvZCPE+0obCdss1Z8+1/DQ88iHjjX+/Fl1BTlQmLTx1odEi9AN0mnmsxejRUM6DxRbBoQZd2fB00V3JcUkO2GgBPI/0N5nbtbsNBvaUHQiI/ki17YIP4pnDAlzkoZiE0AoNXK4ta1it3XFhWaKSD0B72QrLMD2VlRsq/EB2wkJBd7KDorOLOUQv0nBUNiUOByyFpQ6ENQoFymdXpMLy46FLLyAhoj8Kt51/lkAtshT6R+Hr/eKrlv3mY8AYHGChRmTmFqAC6DDa0dfcHzvmC9qoRRFoA6qYCL75vluP7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NtTQs97RmCSpmRdf/9qF42c26kwaIt6hF6s4q00NLSI=;
- b=ganF7A0l13pxDeLXYXCnNiyIlmuUX75jloyTeiqxEzzHfBkxeJDuHbyynIrMI8rPuCRO/Z75rO2xNnecw6rNsNbYbfVo7Jgk/5nksik2cpRsRbFKwc1/+g0MmvBgNehXYuqYpIXYBjifFNMNxvAlySkIBdkkgQtwdMr4u57DTRYL28iPgNl/82trbZvRowC+ZBuBwO7U0Pn20pW8uKgSiZj0+g4ldA0n7+ENxLI1d4zLTeUbyLnBzd7B9E9zIreLsJF2LpAU5NU8eKIDBWHiNCDnjxojsZuoXWLJk3jyS5OcUaK2hl+XmK0JJqZe3w4gTJ//bk57ZF7V7q3NORZK/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NtTQs97RmCSpmRdf/9qF42c26kwaIt6hF6s4q00NLSI=;
- b=wVBX29/cNgH1pLxX8aYhlKoxfA0iFvgaitHKv2hPQL/JYHUsBT9RXjfNlGwTP9FJF0HuqZIqybarPs5VpkWdhkc1DZFA6YO0xjEJPXOB6NJBl9MOyDhy1/5OQO9Upt6J26uY/g8HMOfnGcuViDySbgRbMpQinKsoHd1xAUoi7Pc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by CO6PR12MB5410.namprd12.prod.outlook.com (2603:10b6:5:35b::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Thu, 9 Dec
- 2021 22:20:59 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::e492:c86b:9906:1b46]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::e492:c86b:9906:1b46%6]) with mapi id 15.20.4755.021; Thu, 9 Dec 2021
- 22:20:59 +0000
-Message-ID: <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
-Date:   Thu, 9 Dec 2021 17:20:45 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2
- register
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <treding@nvidia.com>
-References: <20211203084354.3105253-1-keescook@chromium.org>
- <87o85r4a4f.fsf@intel.com> <202112082220.81ECDC63D@keescook>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <202112082220.81ECDC63D@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YTOPR0101CA0012.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b00:15::25) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        id S233548AbhLIWYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 17:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232813AbhLIWYm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 17:24:42 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB17C061746;
+        Thu,  9 Dec 2021 14:21:08 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id y12so23622247eda.12;
+        Thu, 09 Dec 2021 14:21:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Dlj/WYRY7/ClYkHsGEEcYhdPH9nMRT+214uI4LyQAGc=;
+        b=NnjXVk467jZl/XDZaIpXX0lAlMnwACMmr4dRYlCYIAM0KMcFgdLtzmIjFp0m1Ey0Vd
+         9y40gk49XZO2vD5iq0JC4l5N/PH5TFgFsRHaK1WaI8U8EDiafSA9HV/02LtW/4p0gOPM
+         TWdxmE6/faQIcL205oVb8PMWqzLSkJE3zAWEdjLU/0jl9d2Q5p3jYAhwU649RMj0LyeG
+         oxE6bWZeHfewUWg5o0zrzNxJdeX5xKZL36sdwTDQEK8FnAaWFdt5aoxxTL43wXZtVkWZ
+         WHFRdSHg2aFiitLJipD1Pf19EG7ANqCSwBVywWYxkaK7g8lrSpcOHMYkwCW0fcMN9orq
+         pCBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Dlj/WYRY7/ClYkHsGEEcYhdPH9nMRT+214uI4LyQAGc=;
+        b=5/l/eXnASn3jR0Cp5TuQF9n4pq9Y0dEVhYUb3VYmJFtq3fUlt25yi2Zx0KsW3+RFRe
+         DW/7yBWSlT6MDFFDwffbHmAlN9iaoDo1I/Tx8/HKEZFbjKV1Dn4TnNJo3n/Kc2W9x2JS
+         9xhCpRJsV7SPXnFnno7jUsc0eL+prgb6EJ8L/lwpIQEJZT0TjOc04L+VZkzJZjkeitsT
+         g5Bk/bqenS5MxZwf6IVUtvosq6544YN/emmDMm98f6xPQJ2cO7B/laJ6Hd20jWgucxJF
+         y1zoc+JQEqGOK0aZuRsbwM79IpwaoX2LfGwC4wm1kyjqRxWnauHPkiqVCaDOgaBIyXKr
+         xN8Q==
+X-Gm-Message-State: AOAM532RpxgsFoSIUzUn6XnKNNqsSngKtk8pJgPliBTJ7DGxDxuuKTzK
+        RcYKnypTIw14qRBRyAGuN3E=
+X-Google-Smtp-Source: ABdhPJy1m4SZAg0AX8MXC+xVkvsgyntHVWZpnvIO8U4y6EnryXOs96wIRrrK46NKAe8inacnwZUYZg==
+X-Received: by 2002:a05:6402:3da:: with SMTP id t26mr33649387edw.232.1639088467053;
+        Thu, 09 Dec 2021 14:21:07 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id mp9sm482998ejc.106.2021.12.09.14.21.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 14:21:06 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <a9be23ee-d485-c334-4524-2daa1758cafd@redhat.com>
+Date:   Thu, 9 Dec 2021 23:21:03 +0100
 MIME-Version: 1.0
-Received: from [192.168.50.4] (198.200.67.104) by YTOPR0101CA0012.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b00:15::25) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Thu, 9 Dec 2021 22:20:57 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6558d442-f28e-456f-b271-08d9bb622d17
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5410:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB541064A5D5DEC4A981001D6F8C709@CO6PR12MB5410.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h98iodY0183eHdUMlqtCTYDf7yuIi6TISJJs4/JW/o4EWcU8gkXJdRG25Bcw3YXZRTLQWaMaFlqFYC+y8QvVK4CFjMSwwmhFv//aoB3iyaF19blMkIwecHiXaEcoS320U2JXSKWLdBYVZFWVRBy6KjfDyJgSGhq5R1bIjVvIF4WCgREOqhk+oKSSuMYzcAacONnE7Jb5W+KFskuSHH9URppOr18p92xhsJFUGX3SKTQlW3Sk3XJcanihA6x6xkE5lYFy7N59uqJw9GzOO5TpnyWoolUA7K6M3TvITG4UGy06avNf02HaCkXZznNT3LMk8sMAqT5FpxgfqSrzuDYCDM/pQNaW9nrR+bnx/vMR3F9G0G3sgLQpFKJE4w3E3cWxuLTlqoMuZt7UrI4HRR0FWuD28e4xG6DiWIM6DSJzE3I50xlxBW5EvGvn2SwoyyfQbPha/nt3ohm3KNLeLK9OxiEJMDCPn4zPqM2cbf5/0Bw1L7zp9fgrg4tD5wY8G3hctOfCHh33YArJdcQQuD14fPQqqnltF6CXs7M5fT96IFeo63KecGGlkgaVDa+7BgLHyWEyPfAjC38T8zhU9JDZe/efRY/jeTlMAPMldbYu/06+Lvlng+lQSmhc41NSj6VFIrK51+YonJYft/ZnEdnB67QmyE0DOGEotg49Q/72CFujCf5gOQLOwHeszRw8DZ/N1bl70LYcdUWdwPVWpJBTQ5e86qfLTaaYr1W25ktrgDg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(31696002)(316002)(110136005)(6486002)(66556008)(66476007)(36756003)(8676002)(8936002)(86362001)(66946007)(6666004)(186003)(53546011)(54906003)(83380400001)(2906002)(31686004)(956004)(26005)(16576012)(44832011)(4326008)(2616005)(508600001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bHYzQnduTjBSMXcxWnBZUEZ2R3lBTXdETE1rOWhLWStBcWlmd3Vua3UvSGZ6?=
- =?utf-8?B?Zlp3OWMyT3ZwMUVjK0o2bHA2WE5FNk9tcWtpdDhnQ1REWTVHc3VpUTY5RnVq?=
- =?utf-8?B?WGpQdHRJR1ZYZGFHL1dRK3A1anpCQXU5bFZlTnBqQ3lweFR6aHNTTytUdDJ0?=
- =?utf-8?B?TFJ2Z3ZWeld5Um1PUGFuM2pRNUgzOGdpNHJwcGFDTGFka0NUU1g3NWw5R1VU?=
- =?utf-8?B?Q2diZTArNXYwVFhJL2tPOGlVTFlycmF3d2pSWWJkcDdZSmxGbUU2L1hFS29z?=
- =?utf-8?B?K1Z5UUVHR3pYMjdCOVdpS1pXZVNsOVlQaVpvNlJhcnptci9yek53cVJlSnBB?=
- =?utf-8?B?RktrazJIQ3owT3hYZDhkc2FIaUtTcjdQSUJtb1RNbnM2OFhHUjlvRW5QN0gz?=
- =?utf-8?B?Zyt4UkRpUnRhbVNWbmRub2JWaEcrdGVzWnZTNnFZNFV5VUduMUkvNDVDL291?=
- =?utf-8?B?dWl1dmtmR0RibFlydlhzWHNCeWVVOEZUanlBVzBSaDM5WjZDYktwa0pWSm1F?=
- =?utf-8?B?VW5WUTFZMjg5RGd1c1JqZ1hEaEVmOWVnZnBqdmdRZWwzMzg0d2h6bzBhZDNJ?=
- =?utf-8?B?UHBLU1ZCS0hmU3hrM2dyTG12TzNmOFVqd2ZYT2pYZW1ac1k4TG1ZbzJ0bHdV?=
- =?utf-8?B?dUV3TzhWQ3FtOXNieTYvYlZuTXRtMGRLeXozbUsyWE5wdDVsK1NLc0lXbVp0?=
- =?utf-8?B?S1BEWU9Ibk0yR0RhSmZBQytDZ0hSK3ZKc2llcE5YQkM0NlBJMGFLb0FhOGNl?=
- =?utf-8?B?VVhOKzJ6WnZ6c2owem9ob3RGdzhkRXhBSU02cmVoYk5FbXhOZnl1dEw0bkpE?=
- =?utf-8?B?Sm1kWlJMYTd4WXc0NDF2SllMNFIxdjY3N00rbXluRHpSK1NteW5INHdSQVJ5?=
- =?utf-8?B?Nmt0K05GT0UxVTdtT2xoSzFMS2VBQzYzNEtHbVlIbTZCQnR3QlcvMnBLWlI3?=
- =?utf-8?B?a1NjL3BPQUFxdC9mNGVUL3ZmdTI5bVRBTEMrellab1U1VTdJK3lqNStmbEtv?=
- =?utf-8?B?aFc4UU5TeFZETkNnZU1nR1NnWjdHS3RCUVo2TndrbjJoTUR5T0VVb1kyUkR1?=
- =?utf-8?B?aFZBQUtuZnVEL0hTWTZNQTdsbHdwNGpUYk9laW41cG9OemxINnFVL3plbTdK?=
- =?utf-8?B?cmV0bW13U3Y1SFc0dDQrWXg3QksyS0VHNkNjT1k5OG5HSHkvWWp0TTF6RlFo?=
- =?utf-8?B?SnpyYjVZeC9NckdTMWxpZDFWb1lWYTlkOG9SU0paY042aUovMDMrb3JKZUJO?=
- =?utf-8?B?MGgvUU9WbFc5a2FMRFlZMEtCQWI3MjBQWXhGeG9KZ2ZQOUVjSDM0MGc2dStz?=
- =?utf-8?B?ekh4UzZwcWZvYTFtWDNQSFdETEhrd3ByNmp4MmZNSVVoYW5Na3dSM2ZOb1A4?=
- =?utf-8?B?aUhzajhWMUYwMEdoMjdnbVB1anJIUFBOd3J1bE9TMkZHalg1U2YvK3pVV3ZP?=
- =?utf-8?B?N1VPZjNiRHhtNTU3Z0RxMWx3VUFzdFhmSnhFMDRyNmJHeklhL0lGZDAyK3li?=
- =?utf-8?B?Zm9xZitFRDBBR1pDRlRQQ0RyYWIvWDd0Qm84c0s1aW5HYk1sR0d1ckVveHlF?=
- =?utf-8?B?Z2k4Nlo5bmxzY2VES0JuMitKSjBZcHgwNlFXWFRrNHJRc2x2M0oxL1V2WTB0?=
- =?utf-8?B?UStiYmNJVHA5SVdoWEs2cWdSdi9NVHlUd0JNcWh6aEhVM0Y0RkRpZzlnWVYz?=
- =?utf-8?B?a0Rqb3M1MzRsNmE4QVVCT0E2YWdMN0lKZTlFSk51WGRzM2Y2Wjh4WEtlZitJ?=
- =?utf-8?B?NGZMSHllci9yQk9KOXFhLy9oRGZ0NkcvWUhuVmhWbFplNHRZMnJhWHBHTnFm?=
- =?utf-8?B?OG5JYVlnNDZqNEFJbHo0cU5VdmhaN0R3c3VJWVkrcFhyZHdRenJQNTFLMGtW?=
- =?utf-8?B?ZEthVzBTcXYyaDd4Q1RmelR5cHNHRG83QU5ZWTZqUURsWjJLdU8xd0xQS3M4?=
- =?utf-8?B?dXZSby92Zm1lQk5OSmc3WE5nWkx6MFdORkxITytmRXFUYWNDU2luc1RaOWRk?=
- =?utf-8?B?d2lKNitSTGpXUlFQQjR4L2pxRXUyenJpc3Q0WldLRk5zdk1BN1doOFdrdjcr?=
- =?utf-8?B?TWx6a1RHaElTOEJJdThyQWJZTGY2VC9QS0FOSUFZSCs4NmNPb1duWWtPcUZp?=
- =?utf-8?B?ZDl2VDhqVEVBSzlMR29HMUV2U2hGcmV4V0dxc1d6NUx0bGpFSHpDdmRlSnNP?=
- =?utf-8?Q?TJgJ40dehJIKplnd366q1JU=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6558d442-f28e-456f-b271-08d9bb622d17
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 22:20:58.9523
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tBqNMvKpehxsawnMLdmO84WPYA9vUg2pfMCIviKlPUJxFojJGJ08M9g72fzY1epNgXxyc5sVEnSLyoevajpvSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5410
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2] selftests: KVM: avoid failures due to reserved
+ HyperTransport region
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com,
+        joao.m.martins@oracle.com, stable@vger.kernel.org,
+        David Matlack <dmatlack@google.com>
+References: <20211209205256.301140-1-pbonzini@redhat.com>
+ <YbJ5jyCyqZwZU3uH@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YbJ5jyCyqZwZU3uH@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/9/21 22:47, Sean Christopherson wrote:
+>> +		/*
+>> +		 * Otherwise it's at the top of the physical address
+>> +		 * space, possibly reduced due to SME by bits 11:6 of
+>> +		 * CPUID[0x8000001f].EBX.
+>> +		 */
+>> +		eax = 0x80000008;
+>> +		cpuid(&eax, &ebx, &ecx, &edx);
+>
+> Should't this check 0x80000000.eax >= 0x80000008 first?  Or do we just accept
+> failure if family==0x17 and there's no 0x80000008?  One paranoid option would be
+> to use the pre-fam17 value, e.g.
+> 
+>          /* Before family 17h, the HyperTransport area is just below 1T. */
+>          ht_gfn = (1 << 28) - num_ht_pages;
+>          if (x86_family(eax) < 0x17)
+>                  goto out;
+> 
+>          eax = 0x80000000;
+>          cpuid(&eax, &ebx, &ecx, &edx);
+>          max_ext_leaf = eax;
+> 
+>          /* Use the old, conservative value if MAXPHYADDR isn't enumerated. */
+>          if (max_ext_leaf < 0x80000008)
+>                  goto out;
 
+Yes, this works for me too.  Though in practice I don't think any 64-bit 
+machine ever existed without 0x80000008 (you need it to decide what's a 
+canonical address and what isn't), so that would have to be a 32-bit 
+fam17h machine.
 
-On 2021-12-09 01:23, Kees Cook wrote:
-> On Wed, Dec 08, 2021 at 01:19:28PM +0200, Jani Nikula wrote:
->> On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
->>> The link_status array was not large enough to read the Adjust Request
->>> Post Cursor2 register. Adjust the size to include it. Found with a
->>> -Warray-bounds build:
->>>
->>> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
->>> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
->>>    59 |         return link_status[r - DP_LANE0_1_STATUS];
->>>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
->>>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->>>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>
->>> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
->>> Signed-off-by: Kees Cook <keescook@chromium.org>
->>
->> Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
->> published in 2014, and Tegra is the only user of
->> drm_dp_get_adjust_request_post_cursor().
-> 
-> I see POST_CURSOR2 is used here too:
-> 
-> drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-> 
+Paolo
 
-Looks like we read and parse that in the admgpu driver without
-using drm_dp_get_adjust_request_post_cursor.
-
-I don't have a strong feeling but I liked your original
-patch a bit better. I'm not sure what it means when part
-of a spec is deprecated. Once a spec is written display
-vendors might implement it. We should make sure that
-displays like that are always handled in a sane manner.
-
-Harry
-
-> Here's a version of that for tegra (untested):
+>          /* comment */
+>          eax = 0x80000008;
+>          cpuid(&eax, &ebx, &ecx, &edx);
+>          max_pfn = (1ULL << ((eax & 255) - vm->page_shift)) - 1;
+>          if (max_ext_leaf >= 0x8000001f) {
+>                  <adjust>
+>          }
+>          ht_gfn = max_pfn - num_ht_pages;
+> out:
+>          return min(max_gfn, ht_gfn - 1);
 > 
-> 
-> diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
-> index 23f9073bc473..c9528aa62c9c 100644
-> --- a/drivers/gpu/drm/drm_dp_helper.c
-> +++ b/drivers/gpu/drm/drm_dp_helper.c
-> @@ -144,16 +144,6 @@ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->  }
->  EXPORT_SYMBOL(drm_dp_get_adjust_tx_ffe_preset);
->  
-> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-> -					 unsigned int lane)
-> -{
-> -	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
-> -	u8 value = dp_link_status(link_status, offset);
-> -
-> -	return (value >> (lane << 1)) & 0x3;
-> -}
-> -EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
-> -
->  static int __8b10b_clock_recovery_delay_us(const struct drm_dp_aux *aux, u8 rd_interval)
->  {
->  	if (rd_interval > 4)
-> diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
-> index 70dfb7d1dec5..f5535eb04c6b 100644
-> --- a/drivers/gpu/drm/tegra/dp.c
-> +++ b/drivers/gpu/drm/tegra/dp.c
-> @@ -549,6 +549,15 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->  {
->  	struct drm_dp_link_train_set *adjust = &link->train.adjust;
->  	unsigned int i;
-> +	u8 post_cursor;
-> +	int err;
-> +
-> +	err = drm_dp_dpcd_read(link->aux, DP_ADJUST_REQUEST_POST_CURSOR2,
-> +			       &post_cursor, sizeof(post_cursor));
-> +	if (err < 0) {
-> +		DRM_ERROR("failed to read post_cursor2: %d\n", err);
-> +		post_cursor = 0;
-> +	}
->  
->  	for (i = 0; i < link->lanes; i++) {
->  		adjust->voltage_swing[i] =
-> @@ -560,7 +569,7 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->  				DP_TRAIN_PRE_EMPHASIS_SHIFT;
->  
->  		adjust->post_cursor[i] =
-> -			drm_dp_get_adjust_request_post_cursor(status, i);
-> +			(post_cursor >> (i << 1)) & 0x3;
->  	}
->  }
->  
-> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-> index 30359e434c3f..28378db676c8 100644
-> --- a/include/drm/drm_dp_helper.h
-> +++ b/include/drm/drm_dp_helper.h
-> @@ -1528,8 +1528,6 @@ u8 drm_dp_get_adjust_request_pre_emphasis(const u8 link_status[DP_LINK_STATUS_SI
->  					  int lane);
->  u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->  				   int lane);
-> -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
-> -					 unsigned int lane);
->  
->  #define DP_BRANCH_OUI_HEADER_SIZE	0xc
->  #define DP_RECEIVER_CAP_SIZE		0xf
-> 
-> 
-> Is that the right way to go?
+>> +             max_pfn = (1ULL << ((eax & 255) - vm->page_shift)) - 1;
+> LOL, "& 255", you just couldn't resist, huh?  My version of Rami Code only goes
+> up to 15.:-)
 > 
 

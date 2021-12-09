@@ -2,112 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B1846E056
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3580846E058
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbhLIBps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:45:48 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54064 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229680AbhLIBpr (ORCPT
+        id S236698AbhLIBqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:46:00 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29106 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229680AbhLIBqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:45:47 -0500
-X-UUID: b23cf152a0104789ba9f02164db44517-20211209
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=JEt3XG4GHhG9WFakPdTvxOX/lsmWXLVPAlDuPpzKZro=;
-        b=okq6CjmdpC/VGZ97YGqF9AStRZdzKofxz0leGxwBj+1pfGc/1T67zHe00GHDhNwQQ1fcQokayO6cdMUWbENJcebobO/G3KfH3Re9WNtoX46CWCjl62/XUtodVbu8G51MzWSF0iaGYQjDiK/htxnh0ajm55F446joIriJegqgOLk=;
-X-UUID: b23cf152a0104789ba9f02164db44517-20211209
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1554230953; Thu, 09 Dec 2021 09:42:11 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 9 Dec 2021 09:42:10 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 9 Dec 2021 09:42:09 +0800
-Message-ID: <5713fa6121effde79c19e0b4475d02389d72d2cc.camel@mediatek.com>
-Subject: Re: [PATCH net-next v7 5/6] stmmac: dwmac-mediatek: add support for
- mt8195
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <davem@davemloft.net>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+        Wed, 8 Dec 2021 20:46:00 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J8cCV4ft9z1DK2M;
+        Thu,  9 Dec 2021 09:39:34 +0800 (CST)
+Received: from [10.174.176.231] (10.174.176.231) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 09:42:25 +0800
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <wangkefeng.wang@huawei.com>, <yeyunfeng@huawei.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Date:   Thu, 9 Dec 2021 09:42:08 +0800
-In-Reply-To: <20211208063820.264df62d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20211208054716.603-1-biao.huang@mediatek.com>
-         <20211208054716.603-6-biao.huang@mediatek.com>
-         <20211208063820.264df62d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        <linux-kernel@vger.kernel.org>
+CC:     <wuxu.wu@huawei.com>, Hewenliang <hewenliang4@huawei.com>
+From:   Yunfeng Ye <yeyunfeng@huawei.com>
+Subject: [PATCH v3 1/2] arm64: mm: Rename asid2idx() to ctxid2asid()
+Message-ID: <c31516eb-6d15-94e0-421c-305fc010ea79@huawei.com>
+Date:   Thu, 9 Dec 2021 09:42:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.176.231]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBKYWt1YiwNCg0KQWxsIHRoZXNlIHdhcm5pbmcgbGluZXMgc2hhcmUgYSBzaW1pbGFyIHNl
-bWFudGljczoNCmRlbGF5X3ZhbCB8PSBGSUVMRF9QUkVQKHh4eCwgISF2YWwpOw0KDQphbmQsIHNo
-b3VsZCBjb21lIGZyb20gdGhlIGV4cGFuc2lvbiBvZiBGSUVMRF9QUkVQIGluDQppbmNsdWRlL2xp
-bnV4L2JpdGZpbGVkLmg6DQoNCiAgRklFTEQgX1BSRVAgLS0+IF9fQkZfRklMRURfQ0hFQ0sgLS0+
-ICJ+KChfbWFzaykgPj4gX19iZl9zaGYoX21hc2spKSAmDQooX3ZhbCkgOiAwLCINCg0KPT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-DQpfX0JGX0ZJTEVEX0NIRUNLIHsNCi4uLg0KICBCVUlMRF9CVUdfT05fTVNHKF9fYnVpbHRpbl9j
-b25zdGFudF9wKF92YWwpID8gICAgICAgICAgIFwNCiAgICAgICAgICAgICAgICAgICB+KChfbWFz
-aykgPj4gX19iZl9zaGYoX21hc2spKSAmIChfdmFsKSA6IDAsIFwNCiAgICAgICAgICAgICAgICAg
-ICBfcGZ4ICJ2YWx1ZSB0b28gbGFyZ2UgZm9yIHRoZSBmaWVsZCIpOyBcDQouLi4NCj09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0K
-DQpTaG91bGQgSSBmaXggaXQgYnkgY29udmVydGluZw0KICBkZWxheV92YWwgfD0gRklFTERfUFJF
-UChFVEhfRExZX1RYQ19FTkFCTEUsICEhbWFjX2RlbGF5LT50eF9kZWxheSk7DQp0bw0KICBlbl92
-YWwgPSAhIW1hY19kZWxheS0+dHhfZGVsYXk7DQogIGRlbGF5X3ZhbCB8PSBGSUVMRF9QUkVQKEVU
-SF9ETFlfVFhDX0VOQUJMRSwgISFlbl92YWwpOw0KDQpvciBvdGhlciBzdWdnZXN0aW9ucyBmb3Ig
-dGhlc2Ugd2FybmluZ3M/DQoNClRoYW5rc34NCg0KT24gV2VkLCAyMDIxLTEyLTA4IGF0IDA2OjM4
-IC0wODAwLCBKYWt1YiBLaWNpbnNraSB3cm90ZToNCj4gT24gV2VkLCA4IERlYyAyMDIxIDEzOjQ3
-OjE1ICswODAwIEJpYW8gSHVhbmcgd3JvdGU6DQo+ID4gQWRkIEV0aGVybmV0IHN1cHBvcnQgZm9y
-IE1lZGlhVGVrIFNvQ3MgZnJvbSB0aGUgbXQ4MTk1IGZhbWlseS4NCj4gPiANCj4gPiBTaWduZWQt
-b2ZmLWJ5OiBCaWFvIEh1YW5nIDxiaWFvLmh1YW5nQG1lZGlhdGVrLmNvbT4NCj4gPiBBY2tlZC1i
-eTogQW5nZWxvR2lvYWNjaGlubyBEZWwgUmVnbm8gPA0KPiA+IGFuZ2Vsb2dpb2FjY2hpbm8uZGVs
-cmVnbm9AY29sbGFib3JhLmNvbT4NCj4gDQo+IHNwYXJzZSByZXBvcnRzIHdob2xlIGJ1bmNoIG9m
-IHdhcm5pbmdzIGxpa2UgdGhpczoNCj4gDQo+IGRyaXZlcnMvbmV0L2V0aGVybmV0L3N0bWljcm8v
-c3RtbWFjL2R3bWFjLW1lZGlhdGVrLmM6MjEzOjMwOiB3YXJuaW5nOg0KPiBkdWJpb3VzOiB4ICYg
-IXkNCj4gZHJpdmVycy9uZXQvZXRoZXJuZXQvc3RtaWNyby9zdG1tYWMvZHdtYWMtbWVkaWF0ZWsu
-YzoyMTc6MzA6IHdhcm5pbmc6DQo+IGR1YmlvdXM6IHggJiAheQ0KPiBkcml2ZXJzL25ldC9ldGhl
-cm5ldC9zdG1pY3JvL3N0bW1hYy9kd21hYy1tZWRpYXRlay5jOjIyODozODogd2FybmluZzoNCj4g
-ZHViaW91czogeCAmICF5DQo+IGRyaXZlcnMvbmV0L2V0aGVybmV0L3N0bWljcm8vc3RtbWFjL2R3
-bWFjLW1lZGlhdGVrLmM6MjMyOjM4OiB3YXJuaW5nOg0KPiBkdWJpb3VzOiB4ICYgIXkNCj4gZHJp
-dmVycy9uZXQvZXRoZXJuZXQvc3RtaWNyby9zdG1tYWMvZHdtYWMtbWVkaWF0ZWsuYzoyNDc6NDY6
-IHdhcm5pbmc6DQo+IGR1YmlvdXM6IHggJiAheQ0KPiBkcml2ZXJzL25ldC9ldGhlcm5ldC9zdG1p
-Y3JvL3N0bW1hYy9kd21hYy1tZWRpYXRlay5jOjI1NTo0Njogd2FybmluZzoNCj4gZHViaW91czog
-eCAmICF5DQo+IGRyaXZlcnMvbmV0L2V0aGVybmV0L3N0bWljcm8vc3RtbWFjL2R3bWFjLW1lZGlh
-dGVrLmM6MjczOjMwOiB3YXJuaW5nOg0KPiBkdWJpb3VzOiB4ICYgIXkNCj4gZHJpdmVycy9uZXQv
-ZXRoZXJuZXQvc3RtaWNyby9zdG1tYWMvZHdtYWMtbWVkaWF0ZWsuYzoyNzc6MzA6IHdhcm5pbmc6
-DQo+IGR1YmlvdXM6IHggJiAheQ0KPiBkcml2ZXJzL25ldC9ldGhlcm5ldC9zdG1pY3JvL3N0bW1h
-Yy9kd21hYy1tZWRpYXRlay5jOjM3NTozMDogd2FybmluZzoNCj4gZHViaW91czogeCAmICF5DQo+
-IGRyaXZlcnMvbmV0L2V0aGVybmV0L3N0bWljcm8vc3RtbWFjL2R3bWFjLW1lZGlhdGVrLmM6Mzc5
-OjMwOiB3YXJuaW5nOg0KPiBkdWJpb3VzOiB4ICYgIXkNCj4gZHJpdmVycy9uZXQvZXRoZXJuZXQv
-c3RtaWNyby9zdG1tYWMvZHdtYWMtbWVkaWF0ZWsuYzozOTA6NDM6IHdhcm5pbmc6DQo+IGR1Ymlv
-dXM6IHggJiAheQ0KPiBkcml2ZXJzL25ldC9ldGhlcm5ldC9zdG1pY3JvL3N0bW1hYy9kd21hYy1t
-ZWRpYXRlay5jOjM5Nzo0Mzogd2FybmluZzoNCj4gZHViaW91czogeCAmICF5DQo+IGRyaXZlcnMv
-bmV0L2V0aGVybmV0L3N0bWljcm8vc3RtbWFjL2R3bWFjLW1lZGlhdGVrLmM6NDE1OjQ2OiB3YXJu
-aW5nOg0KPiBkdWJpb3VzOiB4ICYgIXkNCj4gZHJpdmVycy9uZXQvZXRoZXJuZXQvc3RtaWNyby9z
-dG1tYWMvZHdtYWMtbWVkaWF0ZWsuYzo0MjY6NDY6IHdhcm5pbmc6DQo+IGR1YmlvdXM6IHggJiAh
-eQ0KPiBkcml2ZXJzL25ldC9ldGhlcm5ldC9zdG1pY3JvL3N0bW1hYy9kd21hYy1tZWRpYXRlay5j
-OjQzOTozNTogd2FybmluZzoNCj4gZHViaW91czogeCAmICF5DQo+IGRyaXZlcnMvbmV0L2V0aGVy
-bmV0L3N0bWljcm8vc3RtbWFjL2R3bWFjLW1lZGlhdGVrLmM6NDQzOjMwOiB3YXJuaW5nOg0KPiBk
-dWJpb3VzOiB4ICYgIXkNCj4gDQo+IEFueSBpZGVhIG9uIHdoZXJlIHRoZXNlIGNvbWUgZnJvbT8N
-Cg==
+The commit 0c8ea531b774 ("arm64: mm: Allocate ASIDs in pairs") introduce
+the asid2idx and idx2asid macro, but these macros are not really useful
+after the commit f88f42f853a8 ("arm64: context: Free up kernel ASIDs if
+KPTI is not in use").
 
+The code "(asid & ~ASID_MASK)" can be instead by a macro, which is the
+same code with asid2idx(). So rename it to ctxid2asid() for a better
+understanding.
+
+Also we add asid2ctxid() macro, the contextid can be generated based on
+the asid and generation through this macro.
+
+Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+v2 -> v3:
+ - Add "Signed-off-by" and "Reviewed-by"
+
+v1 -> v2:
+ - Split the patch and rename asid2idx() to ctxid2asid()
+
+ arch/arm64/mm/context.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/mm/context.c b/arch/arm64/mm/context.c
+index cd72576ae2b7..bbc2708fe928 100644
+--- a/arch/arm64/mm/context.c
++++ b/arch/arm64/mm/context.c
+@@ -35,8 +35,8 @@ static unsigned long *pinned_asid_map;
+ #define ASID_FIRST_VERSION	(1UL << asid_bits)
+
+ #define NUM_USER_ASIDS		ASID_FIRST_VERSION
+-#define asid2idx(asid)		((asid) & ~ASID_MASK)
+-#define idx2asid(idx)		asid2idx(idx)
++#define ctxid2asid(asid)	((asid) & ~ASID_MASK)
++#define asid2ctxid(asid, genid)	((asid) | (genid))
+
+ /* Get the ASIDBits supported by the current CPU */
+ static u32 get_cpu_asid_bits(void)
+@@ -120,7 +120,7 @@ static void flush_context(void)
+ 		 */
+ 		if (asid == 0)
+ 			asid = per_cpu(reserved_asids, i);
+-		__set_bit(asid2idx(asid), asid_map);
++		__set_bit(ctxid2asid(asid), asid_map);
+ 		per_cpu(reserved_asids, i) = asid;
+ 	}
+
+@@ -162,7 +162,7 @@ static u64 new_context(struct mm_struct *mm)
+ 	u64 generation = atomic64_read(&asid_generation);
+
+ 	if (asid != 0) {
+-		u64 newasid = generation | (asid & ~ASID_MASK);
++		u64 newasid = asid2ctxid(ctxid2asid(asid), generation);
+
+ 		/*
+ 		 * If our current ASID was active during a rollover, we
+@@ -183,7 +183,7 @@ static u64 new_context(struct mm_struct *mm)
+ 		 * We had a valid ASID in a previous life, so try to re-use
+ 		 * it if possible.
+ 		 */
+-		if (!__test_and_set_bit(asid2idx(asid), asid_map))
++		if (!__test_and_set_bit(ctxid2asid(asid), asid_map))
+ 			return newasid;
+ 	}
+
+@@ -209,7 +209,7 @@ static u64 new_context(struct mm_struct *mm)
+ set_asid:
+ 	__set_bit(asid, asid_map);
+ 	cur_idx = asid;
+-	return idx2asid(asid) | generation;
++	return asid2ctxid(asid, generation);
+ }
+
+ void check_and_switch_context(struct mm_struct *mm)
+@@ -300,13 +300,13 @@ unsigned long arm64_mm_context_get(struct mm_struct *mm)
+ 	}
+
+ 	nr_pinned_asids++;
+-	__set_bit(asid2idx(asid), pinned_asid_map);
++	__set_bit(ctxid2asid(asid), pinned_asid_map);
+ 	refcount_set(&mm->context.pinned, 1);
+
+ out_unlock:
+ 	raw_spin_unlock_irqrestore(&cpu_asid_lock, flags);
+
+-	asid &= ~ASID_MASK;
++	asid = ctxid2asid(asid);
+
+ 	/* Set the equivalent of USER_ASID_BIT */
+ 	if (asid && arm64_kernel_unmapped_at_el0())
+@@ -327,7 +327,7 @@ void arm64_mm_context_put(struct mm_struct *mm)
+ 	raw_spin_lock_irqsave(&cpu_asid_lock, flags);
+
+ 	if (refcount_dec_and_test(&mm->context.pinned)) {
+-		__clear_bit(asid2idx(asid), pinned_asid_map);
++		__clear_bit(ctxid2asid(asid), pinned_asid_map);
+ 		nr_pinned_asids--;
+ 	}
+
+-- 
+2.27.0

@@ -2,116 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8084746E9ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5779F46E9EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 15:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbhLIO3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 09:29:32 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:28431 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbhLIO3b (ORCPT
+        id S238603AbhLIOab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 09:30:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38811 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232331AbhLIOaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 09:29:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639059958; x=1670595958;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8zJXc5Po1hNIUwqTo6KbQjK2WwHgfiiLazhchMg1Ubc=;
-  b=Hkt3LG8Gn2YfC1W5PjVx2e9sEcBc7twnXtgpFQ7ewb+Qc3JHUlLSVMNX
-   uHxR6CDXxWDz914VcNvrUIPs9fgn1LQDLK2XpD8CdVbzByXuBgkOQeezZ
-   BoFQ0eiTjkMg8xUGYValbFSHURXpLlhq/hfuavPy645w2awlat7Pu07vv
-   g=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 09 Dec 2021 06:25:56 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 06:25:56 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 06:25:55 -0800
-Received: from [10.253.38.94] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 9 Dec 2021
- 06:25:52 -0800
-Message-ID: <837a087f-fcaa-ece4-c683-1bd36f7cfb2a@quicinc.com>
-Date:   Thu, 9 Dec 2021 22:25:49 +0800
+        Thu, 9 Dec 2021 09:30:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639060016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=98vHVkgD1zcUMYnaT7kiJnczoMqUf5nBps9d8EoldNI=;
+        b=ExzE2FS60h6iFIAljK0BTVoyIFccWSsnruPdoSz+aEzKaROoSdDF6IejgQLsu43bQPq1Zr
+        SJ07LFfWZl/bP0oSBU499eiqcjfTOD70Ejd1inOM0d0g3+fzHriCdyAzM5DblNLyTUp3Ag
+        bYOIMQq4fI+Bj/0eouv91vqteExADQ4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-493-0RVno8FaMbODHui7sPdM_w-1; Thu, 09 Dec 2021 09:26:53 -0500
+X-MC-Unique: 0RVno8FaMbODHui7sPdM_w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0505B1023F4D;
+        Thu,  9 Dec 2021 14:26:51 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E7DE5BE0E;
+        Thu,  9 Dec 2021 14:26:31 +0000 (UTC)
+Message-ID: <bcf9f9e5922cce979cc11ced8ccda992e22b290a.camel@redhat.com>
+Subject: Re: [PATCH 3/6] KVM: SVM: fix AVIC race of host->guest IPI delivery
+ vs AVIC inhibition
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Thu, 09 Dec 2021 16:26:30 +0200
+In-Reply-To: <4d723b07-e626-190d-63f4-fd0b5497dd9b@redhat.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+         <20211209115440.394441-4-mlevitsk@redhat.com>
+         <4d723b07-e626-190d-63f4-fd0b5497dd9b@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 6/9] docs: sysfs: coresight: Add sysfs ABI
- documentation for TPDM
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-CC:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
- <20211209141543.21314-7-quic_jinlmao@quicinc.com>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <20211209141543.21314-7-quic_jinlmao@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2021-12-09 at 15:11 +0100, Paolo Bonzini wrote:
+> On 12/9/21 12:54, Maxim Levitsky wrote:
+> > If svm_deliver_avic_intr is called just after the target vcpu's AVIC got
+> > inhibited, it might read a stale value of vcpu->arch.apicv_active
+> > which can lead to the target vCPU not noticing the interrupt.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >   arch/x86/kvm/svm/avic.c | 16 +++++++++++++---
+> >   1 file changed, 13 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > index 859ad2dc50f1..8c1b934bfa9b 100644
+> > --- a/arch/x86/kvm/svm/avic.c
+> > +++ b/arch/x86/kvm/svm/avic.c
+> > @@ -691,6 +691,15 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+> >   	 * automatically process AVIC interrupts at VMRUN.
+> >   	 */
+> >   	if (vcpu->mode == IN_GUEST_MODE) {
+> > +
+> > +		/*
+> > +		 * At this point we had read the vcpu->arch.apicv_active == true
+> > +		 * and the vcpu->mode == IN_GUEST_MODE.
+> > +		 * Since we have a memory barrier after setting IN_GUEST_MODE,
+> > +		 * it ensures that AVIC inhibition is complete and thus
+> > +		 * the target is really running with AVIC enabled.
+> > +		 */
+> > +
+> >   		int cpu = READ_ONCE(vcpu->cpu);
+> 
+> I don't think it's correct.  The vCPU has apicv_active written (in 
+> kvm_vcpu_update_apicv) before vcpu->mode.
 
-On 12/9/2021 10:15 PM, Mao Jinlong wrote:
-> Add API usage document for sysfs API in TPDM driver.
->
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
->   .../ABI/testing/sysfs-bus-coresight-devices-tpdm     | 12 ++++++++++++
->   MAINTAINERS                                          |  1 +
->   2 files changed, 13 insertions(+)
->   create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> new file mode 100644
-> index 000000000000..fdd0bd0e1c33
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> @@ -0,0 +1,12 @@
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/available_datasets
-> +Date:		December 2021
-> +KernelVersion	5.16
-> +Contact:	Jinlong Mao or Tao Zhang
-> +Description:	(Read) Show available datasets for TPDM.
+I thought that we have a full memory barrier just prior to setting IN_GUEST_MODE
+thus if I see vcpu->mode == IN_GUEST_MODE then I'll see correct apicv_active value.
+But apparently the memory barrier is after setting vcpu->mode.
 
-Sorry, forgot to remove the document of available_datasets.
 
-Please help to review first. I will update in next version.
+> 
+> For the acquire/release pair to work properly you need to 1) read 
+> apicv_active *after* vcpu->mode here 2) use store_release and 
+> load_acquire for vcpu->mode, respectively in vcpu_enter_guest and here.
 
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/integration_test
-> +Date:		December 2020
-> +KernelVersion	5.16
-> +Contact:	Jinlong Mao or Tao Zhang
-> +Description:	(Write) Run integration test for tpdm.
-> +
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d763ba684b99..7e2898f1550b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15566,6 +15566,7 @@ M:	Jinlong Mao <quic_jinlmao@quicinc.com>
->   M:	Mathieu Poirier <mathieu.poirier@linaro.org>
->   M:	Suzuki K Poulose <suzuki.poulose@arm.com>
->   S:	Maintained
-> +F:	Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->   F:	Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
->   F:	drivers/hwtracing/coresight/coresight-tpdm.c
->   
+store_release for vcpu->mode in vcpu_enter_guest means a write barrier just before setting it,
+which I expected to be there.
+
+And yes I see now, I need a read barrier here as well. I am still learning this.
+
+Best regards,
+	Maxim Levitsky
+
+> 
+> Paolo
+> 
+> >   		/*
+> > @@ -706,10 +715,11 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+> >   		put_cpu();
+> >   	} else {
+> >   		/*
+> > -		 * Wake the vCPU if it was blocking.  KVM will then detect the
+> > -		 * pending IRQ when checking if the vCPU has a wake event.
+> > +		 * Kick the target vCPU otherwise, to make sure
+> > +		 * it processes the interrupt even if its AVIC is inhibited.
+> >   		 */
+> > -		kvm_vcpu_wake_up(vcpu);
+> > +		kvm_make_request(KVM_REQ_EVENT, vcpu);
+> > +		kvm_vcpu_kick(vcpu);
+> >   	}
+> >   
+> >   	return 0;
+> > 
+
+

@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1702E46EA8D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C19E46EA97
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 16:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239150AbhLIPHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 10:07:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27954 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239137AbhLIPHh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:07:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639062243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2SVG9ZuQN3oM9T8PEcqFpCVIPxpnKX10T1W9r1ZDvJg=;
-        b=ixyOzw+EQRGkYcOzJ8DZXyO6LSN7aOC4JqNUTvr8SXhLfqdxkM8f6zTs7YA5XZxi/qa1Qh
-        n04qTJoB25lD2rbd4vdTnFovWbWS6yL7DLq82TX7R75LTYrpbsLG0+/J91Gl2WvPASsgvH
-        EiNdvOIelDemU0vIvr0K1sHBZEVnhqs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-429-yOzjxFo4Pumpfs4QagQqRw-1; Thu, 09 Dec 2021 10:04:00 -0500
-X-MC-Unique: yOzjxFo4Pumpfs4QagQqRw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D40EB1B18BD3;
-        Thu,  9 Dec 2021 15:03:55 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 46EA71ABE5;
-        Thu,  9 Dec 2021 15:03:49 +0000 (UTC)
-Message-ID: <be325dd1fbbf9023fb6ce3ceebf0418f631d43c1.camel@redhat.com>
-Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
- kvm_apic_update_apicv
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Thu, 09 Dec 2021 17:03:48 +0200
-In-Reply-To: <350532d2-b01b-1d7c-fff3-c3cb171996e8@redhat.com>
-References: <20211209115440.394441-1-mlevitsk@redhat.com>
-         <20211209115440.394441-6-mlevitsk@redhat.com>
-         <350532d2-b01b-1d7c-fff3-c3cb171996e8@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S239170AbhLIPJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 10:09:31 -0500
+Received: from mail-dm6nam11on2089.outbound.protection.outlook.com ([40.107.223.89]:2369
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231782AbhLIPJ3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 10:09:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I13ieZbBdaoQntlm2FTwNhTd9ceI6nfzOiHrdlKl4qQB7Su+kdZCzVRwJT+Ms4Y8BGnlLj4B6I1Y+f7Gq/XRD+UwGqid1jUYkzMEnO92yMxPBaXowCLpOeUolnO9Y128JOo2bIdg6udbn+4ksF+eVeYkmKda01S93U8wcXziIh/y4vKEguu36hJIg3i2LRj3eqf1mqM/6HgLBOfWSEXnGGO90Xer/+mpng58/HeV356w5I5i3Q32H2ea17pFXmCrlNvfmCh5fE5I3V2leKrc5Uxcblqf8V2uGCOhZSxsbgLAzkgC/NBtmm2nmQ9rKiqMy3jICh4wJJimUiFJpiX1Tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SGbD/ZtNUULihlvi39rVGAJZ5YlqSUUdShSV/Mxte08=;
+ b=P8ZOoh1J2yVlLKXTIsJeqxIPbLqGvFibtvmIhLiE+dyYv5TmETbWuxxcZ3Vu9PQ8+Kr8jVYIQBdhXRpO/VENUG0AzQm0ssafv9HTRC7KZFdmgHiRtpexjV1j4RUzlO6aRheqjykLAj3zp+iTWELEDNIZOG37iKpSNPVV9Df0URNcyH/bK4XkRs8V6wuS7I/jsXmcI1Lmm095/46MNVQdi5pjTPFqjpXPPZtf0bj8jjiHH/ximlk14fkdNSODhu+RzBZdMeoBu2oDjuuYT3v72XqQE6Jbk2K5M6VYwGzsuNBjPKW2B2dJAuSUVobjW9oXIVq1vRNPC4K0EgxkTrXi9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 203.18.50.13) smtp.rcpttodomain=lists.freedesktop.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=quarantine sp=quarantine pct=100)
+ action=none header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SGbD/ZtNUULihlvi39rVGAJZ5YlqSUUdShSV/Mxte08=;
+ b=GlipjfLVflwAXFPQyqQ3qzoHj+Z2ND5naldlLDpli2d2EFLlEofEuazo1RRE0oQnEowzNDBS9zd/pXcdBpNjSqaShgczdFmHlp2hgHj6rOWADBYzoLNqixX+AASJQvZgHgLXkQTsbbtvZXHil5yVEUk0jQrpKlm5zIx1LdMDPj5ZJiG6Z6mKo9S14O/ISpb6iGasb5IjpcZeCHfwFw+uJR4PsokEQ+Lmet/48rzj7JrM3Mz6KvErDAjK1aNpp1arUcSv8bXIf5hmOIw+AT9uW6q1Tb3a+47qz2y1zlPBqKJvv22QqFWYWVfEkxM8fERvbS+S892V5nyMc+T5j4jw5A==
+Received: from DS7PR03CA0184.namprd03.prod.outlook.com (2603:10b6:5:3b6::9) by
+ BN6PR12MB1875.namprd12.prod.outlook.com (2603:10b6:404:103::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Thu, 9 Dec
+ 2021 15:05:52 +0000
+Received: from DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b6:cafe::e3) by DS7PR03CA0184.outlook.office365.com
+ (2603:10b6:5:3b6::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12 via Frontend
+ Transport; Thu, 9 Dec 2021 15:05:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.13)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 203.18.50.13 as permitted sender) receiver=protection.outlook.com;
+ client-ip=203.18.50.13; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (203.18.50.13) by
+ DM6NAM11FT064.mail.protection.outlook.com (10.13.172.234) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4755.13 via Frontend Transport; Thu, 9 Dec 2021 15:05:51 +0000
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HKMAIL102.nvidia.com
+ (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
+ 2021 15:05:38 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
+ 2021 15:05:37 +0000
+Received: from kyarlagadda-linux.nvidia.com (172.20.187.6) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 9 Dec 2021 15:05:32 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <andy.shevchenko@gmail.com>, <christian.koenig@amd.com>,
+        <digetx@gmail.com>, <dri-devel@lists.freedesktop.org>,
+        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <p.zabel@pengutronix.de>,
+        <sumit.semwal@linaro.org>, <thierry.reding@gmail.com>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH 0/2] Add SMBus features to Tegra I2C
+Date:   Thu, 9 Dec 2021 20:35:19 +0530
+Message-ID: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ae97c5f4-d77c-4a84-006c-08d9bb25642c
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1875:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB18756CBCEDD4B4C2C7A826E2C0709@BN6PR12MB1875.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x037NUYQNjwHJXBsyMDU3XDAvf7hyCFEWA07HPWWOnBstGJBGzdzbJNy27KUk0aohzgOt5BGUHIUnddWC/Av1+oLzp76zeVX5WhFnvENp5uhxVrMsNytTQ9ll1kUK9tUcl/1W1u4WWUXJtgZBp9fCjO/2+TqoXL5Y2usLqFSRUg0K8DrZa0Kg++16eyRX7nui9rANRx8Z7UFpSJv/TUf5onCVIetlu1Qq5zV/pmHJD0BKQvPQwTPPJzDG4bdJrIy7dU/qFhwGSFWpHYKEyqupoLEIDlmjDKngHdzEcQRjp3Lzz8egiS0hPNfQzjN0plCgg3zt24pThkH6vDfj2UWh5U/LZuS3AKgXwtGp/VDdRBd97WflOd+cd30pSXYSMYspGt9xcXDDpL8L/6I9YWPqnvqT168v6nRzURj07PxWmKYdVuy66jSQaVw7WS1MSCJoSxnF+Lu5Ow7JtWZ9rmscWvkWKta3T/j/w0GkEjpUnt4lU8CjeGgeAUiONgAE1sdcIA+4GQuZ21KzRGdgJ7TwraRZF5HHEd3SNCKkCspP7lQU5Tjk/UxJxVH2OxmfGNaXO1uF2Lmv+0cLMiVYcGvferNhFvY4oKPiyNVtW91vBgn7WqcFCTR8SzF7uR7BqwTHOb8naHnmkNgJTi8dWnC+LEGdqAjsmVYWu8SHV4bhGGXBxUwWcT57XaSa66FtvfMQlKlHzxkicxnhZjnkdvYne0L71dky479OzmpV78nOoYbFHq2PKIhxqATpfeXPhRlqMJ4FQ1KSHIJqLYVKGnGB2WlQrlo/79mXAMMQj2IdASz9CoZnJ1dtxpXkHaKazVU6wmIzagDLiAQV8wMx8q9B6xlctMHMD/hv3SUp27aTfQ=
+X-Forefront-Antispam-Report: CIP:203.18.50.13;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid02.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(186003)(7636003)(26005)(7696005)(47076005)(921005)(83380400001)(356005)(82310400004)(6666004)(86362001)(4744005)(2906002)(36860700001)(5660300002)(7416002)(34020700004)(40460700001)(36756003)(316002)(336012)(8936002)(110136005)(107886003)(508600001)(70586007)(426003)(8676002)(4326008)(2616005)(70206006)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 15:05:51.4050
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae97c5f4-d77c-4a84-006c-08d9bb25642c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.13];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1875
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 15:12 +0100, Paolo Bonzini wrote:
-> On 12/9/21 12:54, Maxim Levitsky wrote:
-> > Also reorder call to kvm_apic_update_apicv to be after
-> > .refresh_apicv_exec_ctrl, although that doesn't guarantee
-> > that it will see up to date IRR bits.
-> 
-> Can you spell out why do that?
+Add support for SMBus Alert and SMBus block read functions to
+i2c-tegra driver
 
+Akhil R (2):
+  dt-bindings: i2c: tegra: Add SMBus feature properties
+  i2c: tegra: Add SMBus block read and SMBus alert functions
 
-Here is what I seen happening during kvm_vcpu_update_apicv when we about to disable AVIC:
+ .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt |  4 ++
+ drivers/i2c/busses/i2c-tegra.c                     | 54 +++++++++++++++++++++-
+ 2 files changed, 57 insertions(+), 1 deletion(-)
 
-1. we call kvm_apic_update_apicv which sets irr_pending == false,
-because there is nothing in IRR yet.
-
-2. we call kvm_x86_refresh_apicv_exec_ctrl which disables AVIC
-
-If IPI arrives in between 1 and 2, the IRR bits are set, and legit there
-is no VMexit happening so no chance of irr_pending to be set to true.
-
-
-This is why I reordered those calls and added a memory barrier between them
-(but I didn't post it in the series)
-
-However I then found out that even with incomplete IPI handler setting irr_pending,
-I can here observe irr_pending = true but no bits in IRR so the kvm_apic_update_apicv
-would reset it. I expected VM exit to be write barrier but it seems that it isn't.
-
-However I ended up fixing the incomplete IPI handler to just always 
-	- set irr_pending
-	- raise KVM_REQ_EVENT
-	- kick the vcpu
-
-Because kicking a sleeping vCPU is just waking it up,
-and otherwise vcpu kick only sends IPI when the target vCPU
-is in guest mode anyway.
-
-That I think ensures for good that interrupt will be processed by
-this vCPU regardless of order of these calls, and barrier between them.
-
-The only thing I kept is that make kvm_apic_update_apicv never clear
-irr_pending to make sure it doesn't reset it if it sees the writes out of order.
-
-Later the KVM_REQ_EVENT should see writes in order because kvm_make_request
-includes a write barrier, and the kick should ensure that the vCPU will
-process that request.
-
-So in summary this reorder is not needed anymore but it seems more logical
-to scan IRR after we disable AVIC.
-Or on the second though I think we should drop the IRR scan from here at all,
-now that the callers do vcpu kicks.
-
-Best regards,
-	Maxim Levitsky
-
-
-
-
-
-> 
-> Paolo
-> 
-
+-- 
+2.7.4
 

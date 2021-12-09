@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8435846E07E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC2646E080
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238409AbhLIB5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S238873AbhLIB5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbhLIB5I (ORCPT
+        with ESMTP id S235054AbhLIB5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:57:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372B6C061746;
-        Wed,  8 Dec 2021 17:53:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7185ACE246D;
-        Thu,  9 Dec 2021 01:53:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284F0C00446;
-        Thu,  9 Dec 2021 01:53:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639014812;
-        bh=eoHKcQX1NP6K4IqIO6Yqp2zmup/tdKRc0vyIl/OQ5rQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FW/gO/NSXfvkWote6KMkZFkMzKqEB3ouMK8MIYfZv/l2Xmj6GZZabyjC6oVyVLHlp
-         iwjFZvK4hhkl51S3/mGrE1UAA8cWwXyZI9hqQQNQN3QAz9MjBL8rUYfiSMuFo9vCUd
-         Q1QJBRQOO5bX6SCRfuvIMST5GTPyUOp1WQWbFPJ0b8Zg4WJx3xB4ZfGr5Zl9x5b5Ns
-         X20y5ctg5RQdc+sp3jypE9HpeTO36/tGnd+wAUyGri4KnDX2sHH998Ez8WMl8GCT1b
-         yGavDdvqGDJzkqQRXZOM3K2IgUFSjEUELvPX5e7DSjysRVUV1J21aIukHVHjvjg2bl
-         m4tzEVs7Dh2QA==
-Date:   Wed, 8 Dec 2021 17:53:31 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     <xiayu.zhang@mediatek.com>
-Cc:     <loic.poulain@linaro.org>, <ryazanov.s.a@gmail.com>,
-        <davem@davemloft.net>, <johannes@sipsolutions.net>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <haijun.liu@mediatek.com>, <zhaoping.shu@mediatek.com>,
-        <hw.he@mediatek.com>, <srv_heupstream@mediatek.com>
-Subject: Re: [PATCH] Add Multiple TX/RX Queues Support for WWAN Network
- Device
-Message-ID: <20211208175331.35661ccd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211208040414.151960-1-xiayu.zhang@mediatek.com>
-References: <20211208040414.151960-1-xiayu.zhang@mediatek.com>
+        Wed, 8 Dec 2021 20:57:30 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DE2C061746;
+        Wed,  8 Dec 2021 17:53:57 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id x7so3316845pjn.0;
+        Wed, 08 Dec 2021 17:53:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E8BO8VV/6qLXRIvEgLOZY3lZVJmNDElsUWxpp8vW694=;
+        b=S/JqkabhtdsxBzqpHLg5YPOvqUYux8W6PNImFWoIDXET491epw7D18lV7nLulO4XZ+
+         vZOo8rGCvPMXUiEScGKqW3qqOzDoj44pDYequnJOr6ZUbtKFPvnu9PPs94fsZEdrQLCF
+         HDUY583dYYzUOv3k/WQBuMMmd4g0rUSdzRBAB8Pv0vypRCf6xyDfB8fOYJD4g8cwTFnB
+         TZzXGP+pNg8gc9NDnGgSjQSuESjw8/ZfjQJLgLq0Db3yMbCCPuuoOU3qlbER2fjzLPb9
+         z24p+jti34KGyuy6y3T7c0b+TKUT+hHUC5y3q1oqthjjXPMZtEp5+u0NdfpPIcOrc9OY
+         iaEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E8BO8VV/6qLXRIvEgLOZY3lZVJmNDElsUWxpp8vW694=;
+        b=X7temFfIeBMw2jBZgJf6HZGSI4H0jXxl3OyXtFjvhPoW25CC43E7SeqQMpuUx84gPe
+         +OIXaxVv/+VIyLVnCbMoCJ/hIxfgk2dPu7aJoj3YM7mdgvs5pHmjekotfIXLrAhc9P0C
+         /+tFnghjlFq1KDs1CGe0GeDGkLRHui+CDpLAhbMYxc/CFFze87fmCboT5PBNNzcG5tuy
+         mTb8chkOMNCeZwVqcRMKhC9lcoKjtikWaWblHyCw2CTTXc918hllOICGEIuuVWRako+4
+         ayQNyyEpzgdnrv0y/3xVOSXZ+Tysd00WzdAEPpiHLQONzAr7wb3cMpSux47LmS/YhJVX
+         EA5g==
+X-Gm-Message-State: AOAM530teKlNqOomWMufRp3EeHzoWrYi0n7S2Owrmjj0aJcj3AjNMJWx
+        2cEuaC9a0pa/Rf6qQOd/aoSAWaT5xlQ=
+X-Google-Smtp-Source: ABdhPJz97aD7aBSkPAS/LKuqwOLVSetfZ7089L1ro00cytBI60caR4U9yVTsprn+b1Vo4sz8ALDAUA==
+X-Received: by 2002:a17:902:d491:b0:142:892d:a89 with SMTP id c17-20020a170902d49100b00142892d0a89mr62509652plg.20.1639014837114;
+        Wed, 08 Dec 2021 17:53:57 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y8sm4864899pfi.56.2021.12.08.17.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 17:53:56 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     wim@linux-watchdog.org
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chiminghao <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cm>
+Subject: [PATCH] drivers:watchdog:remove unneeded variable
+Date:   Thu,  9 Dec 2021 01:53:53 +0000
+Message-Id: <20211209015353.409612-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 12:04:14 +0800 xiayu.zhang@mediatek.com wrote:
-> From: Xiayu Zhang <Xiayu.Zhang@mediatek.com>
-> 
-> This patch adds 2 callback functions get_num_tx_queues() and
-> get_num_rx_queues() to let WWAN network device driver customize its own
-> TX and RX queue numbers. It gives WWAN driver a chance to implement its
-> own software strategies, such as TX Qos.
-> 
-> Currently, if WWAN device driver creates default bearer interface when
-> calling wwan_register_ops(), there will be only 1 TX queue and 1 RX queue
-> for the WWAN network device. In this case, driver is not able to enlarge
-> the queue numbers by calling netif_set_real_num_tx_queues() or
-> netif_set_real_num_rx_queues() to take advantage of the network device's
-> capability of supporting multiple TX/RX queues.
-> 
-> As for additional interfaces of secondary bearers, if userspace service
-> doesn't specify the num_tx_queues or num_rx_queues in netlink message or
-> iproute2 command, there also will be only 1 TX queue and 1 RX queue for
-> each additional interface. If userspace service specifies the num_tx_queues
-> and num_rx_queues, however, these numbers could be not able to match the
-> capabilities of network device.
-> 
-> Besides, userspace service is hard to learn every WWAN network device's
-> TX/RX queue numbers.
-> 
-> In order to let WWAN driver determine the queue numbers, this patch adds
-> below callback functions in wwan_ops:
->     struct wwan_ops {
->         unsigned int priv_size;
->         ...
->         unsigned int (*get_num_tx_queues)(unsigned int hint_num);
->         unsigned int (*get_num_rx_queues)(unsigned int hint_num);
->     };
-> 
-> WWAN subsystem uses the input parameters num_tx_queues and num_rx_queues of
-> wwan_rtnl_alloc() as hint values, and passes the 2 values to the two
-> callback functions. WWAN device driver should determine the actual numbers
-> of network device's TX and RX queues according to the hint value and
-> device's capabilities.
+From: chiminghao <chi.minghao@zte.com.cn>
 
-I'll mark it as an RFC in patchwork, there needs to be an in-tree user
-for this code to be merged.
+return value form directly instead of
+taking this in another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cm>
+Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
+---
+ drivers/watchdog/pcwd_pci.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/watchdog/pcwd_pci.c b/drivers/watchdog/pcwd_pci.c
+index 54d86fcb1837..edbc0f28d399 100644
+--- a/drivers/watchdog/pcwd_pci.c
++++ b/drivers/watchdog/pcwd_pci.c
+@@ -215,10 +215,7 @@ static inline void pcipcwd_check_temperature_support(void)
+ 
+ static int pcipcwd_get_option_switches(void)
+ {
+-	int option_switches;
+-
+-	option_switches = inb_p(pcipcwd_private.io_addr + 3);
+-	return option_switches;
++	return inb_p(pcipcwd_private.io_addr + 3);
+ }
+ 
+ static void pcipcwd_show_card_info(void)
+-- 
+2.25.1
+

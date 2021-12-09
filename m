@@ -2,104 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AC846E049
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C574C46E04B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233200AbhLIBiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbhLIBiM (ORCPT
+        id S233670AbhLIBjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:39:01 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:29163 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229520AbhLIBjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:38:12 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23508C061746;
-        Wed,  8 Dec 2021 17:34:40 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id k26so3982055pfp.10;
-        Wed, 08 Dec 2021 17:34:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KkK7nQxmGaV48pI97SoJ1i8VEs3J+ka4tCByYFUhf0A=;
-        b=nUKeZQ/v26RfHoagFeils1sBokOZvuCB6ts1jgUdkl+mr/GxiWg3GbKLTzM26PSr3g
-         uxOYb6ms7ace+zbuDGSEzINHgDPsZtKoKp/Rc5ZRbH4bS/HK3yus1zgSZNt/j2YOPZKj
-         WSvZ96yAfZTbvfkFqdWr+XMnVUTD6oi6sAG8Tn41Kddm3gGaiIMK7ZRCwR/r1xwa1wjN
-         vzKi+m52StZX7TslW8SP37ZLBw+6L50G1n9S+Bu+/qwkpNuEOMQISxTWXoNlLP1v2SVO
-         JJfjj/BymKH5Z8NtJfO1HMnkYm4LzdGS8c0XbhGIdW5xSdYKV+pfb49C9nGn0KXxVy5o
-         Zgyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KkK7nQxmGaV48pI97SoJ1i8VEs3J+ka4tCByYFUhf0A=;
-        b=iRV9NG69UfSEnwJxK0sg0Ans3nWfXnk0csNHkqd1/crDHyzdzuLptPNkdteeA/iHZr
-         tciYk8y1E8mLAym6Zob9pkMFXrS9UAw9hahRg9ArF27ibr3Gkj41xa9Rh2ihknkj/0LW
-         0Bi9acKT63ti/JMVdAnLlDP+eTHx00K2hWj8eGMCK1l73PRwML7sLxPl+HwBKoyiyMsF
-         k1VFTsNFrGDM56l4Ub5ZBGeqplleHhaHBEk7TRuLT7F0VbbxeGESPjP4yEoRGNHqPsPY
-         xRkaGsQYQUiUKpOQTezZDgUNw9hXZF+2++Sh08GAOGAQ9jwiS182oWmI558ihW60LpCk
-         6BQg==
-X-Gm-Message-State: AOAM533tJPgn5kcdspvpFxSwyCXysoFg5xwm5VDjMH5yOvIUWv399t7Z
-        HVOwWB0CAJD+MC9xaLREZtSETf8dkFQ=
-X-Google-Smtp-Source: ABdhPJyxAN+IiuXQa5r1o5HgQX7r3bnNOQsQvBfZbaqfzKU5xlXa1b73XmnutDFnAYf1wB+JmoKk0w==
-X-Received: by 2002:a05:6a00:2d1:b0:4af:437c:5f50 with SMTP id b17-20020a056a0002d100b004af437c5f50mr8900570pft.32.1639013679693;
-        Wed, 08 Dec 2021 17:34:39 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id nn4sm4080078pjb.38.2021.12.08.17.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 17:34:37 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     steffen.klassert@secunet.com
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chiminghao <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cm>
-Subject: [PATCH] net:ipv6:remove unneeded variable
-Date:   Thu,  9 Dec 2021 01:34:30 +0000
-Message-Id: <20211209013430.409338-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Dec 2021 20:39:00 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J8c4J1ntfz8vgT;
+        Thu,  9 Dec 2021 09:33:20 +0800 (CST)
+Received: from [10.174.176.231] (10.174.176.231) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 9 Dec 2021 09:35:26 +0800
+Subject: Re: [PATCH v2 1/2] arm64: mm: Rename asid2idx() to ctxid2asid()
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     <will@kernel.org>, <wangkefeng.wang@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <wuxu.wu@huawei.com>,
+        Hewenliang <hewenliang4@huawei.com>
+References: <506863a9-b934-3af3-c70d-3284e14478de@huawei.com>
+ <YbD4hcSWKEXSL1hg@arm.com>
+From:   Yunfeng Ye <yeyunfeng@huawei.com>
+Message-ID: <e71321dc-862d-82e3-8cfb-a67ff2169024@huawei.com>
+Date:   Thu, 9 Dec 2021 09:35:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YbD4hcSWKEXSL1hg@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.176.231]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chiminghao <chi.minghao@zte.com.cn>
 
-return value form directly instead of
-taking this in another redundant variable.
 
-Reported-by: Zeal Robot <zealci@zte.com.cm>
-Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
----
- net/ipv6/esp6.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 2021/12/9 2:25, Catalin Marinas wrote:
+> On Wed, Dec 08, 2021 at 05:16:45PM +0800, Yunfeng Ye wrote:
+>> The commit 0c8ea531b774 ("arm64: mm: Allocate ASIDs in pairs") introduce
+>> the asid2idx and idx2asid macro, but these macros are not really useful
+>> after the commit f88f42f853a8 ("arm64: context: Free up kernel ASIDs if
+>> KPTI is not in use").
+>>
+>> The code "(asid & ~ASID_MASK)" can be instead by a macro, which is the
+>> same code with asid2idx(). So rename it to ctxid2asid() for a better
+>> understanding.
+>>
+>> Also we add asid2ctxid() macro, the contextid can be generated based on
+>> the asid and generation through this macro.
+> 
+> The changes look fine to me but please repost with your Signed-off-by.
+> 
+Ok, thanks.
 
-diff --git a/net/ipv6/esp6.c b/net/ipv6/esp6.c
-index ed2f061b8768..c234e028847b 100644
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -413,7 +413,6 @@ static struct ip_esp_hdr *esp6_output_tcp_encap(struct xfrm_state *x,
- 						struct esp_info *esp)
- {
- 	__be16 *lenp = (void *)esp->esph;
--	struct ip_esp_hdr *esph;
- 	unsigned int len;
- 	struct sock *sk;
- 
-@@ -429,9 +428,8 @@ static struct ip_esp_hdr *esp6_output_tcp_encap(struct xfrm_state *x,
- 		return ERR_CAST(sk);
- 
- 	*lenp = htons(len);
--	esph = (struct ip_esp_hdr *)(lenp + 1);
- 
--	return esph;
-+	return (struct ip_esp_hdr *)(lenp + 1);
- }
- #else
- static struct ip_esp_hdr *esp6_output_tcp_encap(struct xfrm_state *x,
--- 
-2.25.1
-
+> Thanks.
+> 

@@ -2,178 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1845A46E611
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A368B46E619
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 11:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbhLIKDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 05:03:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26764 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230336AbhLIKD3 (ORCPT
+        id S231908AbhLIKFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 05:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229758AbhLIKE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:03:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639043995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pUOR5I53OGqJSsk4CJuJI/xCDSxY8ZttZFgVhslyUfQ=;
-        b=EEoAyeNVJ5f0xttbWNAF3uFBgtHXy/jny1/HINBOpb9xsymkdeurD5mg/B/tJY8Qk7M+NR
-        kLTJ7hnn/JkGHRvOZB3/36YaKvfslNCCY0qoJ2ZNEHjnvD9kZwNtqPme99rQzsyJtSo+WV
-        OxtyXmYLZ0E87NE/VyAtt64gp4EXFuk=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-125-CHAVz73FMc2KS8b1Nmcc5Q-1; Thu, 09 Dec 2021 04:59:52 -0500
-X-MC-Unique: CHAVz73FMc2KS8b1Nmcc5Q-1
-Received: by mail-yb1-f198.google.com with SMTP id l28-20020a25b31c000000b005c27dd4987bso9630227ybj.18
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 01:59:52 -0800 (PST)
+        Thu, 9 Dec 2021 05:04:59 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF05C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 02:01:25 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so5590665otl.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 02:01:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AwZ2q+ht+X4UdZ54dnQJfViFXAccYyFB0RjG6X/nT4g=;
+        b=Ky/1aN74gCrR3pXS2bYGqEQoF4ja5H0lxuwpC8B3clyAJ1ArBBnxap6FkYSqx4EF6w
+         a7Zsv/MfSIZoBnUCQdPJDWYlflLWTIkQcBaPh7sLxU9OvIc66FxM/5ob4S7wlqDJHBto
+         rIr6wsn5M9AS8M6xV36qDOblL8rVqjuSgpAjtajm4HfNK9bmTLinUoNnPkoizHMKPi+Q
+         DRJbIT/T6JW2YgjZlVR5sMpkB3pldk0uJ4WEkwzsTcXL4bbiswSDo4pcT7PIwbUU0xNm
+         7wh0uHoa9uWCnFriuyTEHLZJnpfnRkl7kHYWZInxbOFUQeobjiQXABA/PZGUy//wIVNY
+         SOkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pUOR5I53OGqJSsk4CJuJI/xCDSxY8ZttZFgVhslyUfQ=;
-        b=FVDauWd4XHkO03QISrzoYfgH2vcZLGuaxeLR4GfQ6uzZ8GEGaPycS3Wwtpd/mkoS1c
-         /d0IQ7EAgRYMcHgR6y3gfFwNm8Asz1d9QPCaG0ZNkDbUZiV0FeC34eLz/f2tLgip1Fu8
-         O8M2gPOxEr5hhTbQ54tJ8VYQpmw9UJ2sPJreLxXbCsTl64TPxBYL417PgjVMxY1NJzJp
-         lusBN4h5F4EydqGTBYCiU2Ek1pdCO5/ylEKzzVxV0GnJcyy0xQpwDAghP3b+wjOtVWQc
-         Uvq8FF28xciiMe+ZiEZdY6bbpZ0gqGOL9pW8t8IJoynnhgP17L5SqqF1OvCIUzEdWf6/
-         rPWw==
-X-Gm-Message-State: AOAM533rc99auqZvP8YzPDN1u3U/KmH/skzYfjYomB0RszAPwTyfq64n
-        /FbEI6pvQ0gHWGs0a7w+IdmrDK++c1Bn3mr4LQqvWiXPE7zPQrBaxp2lMyaqV4h2pVoS7NB/b2J
-        d3AXymKF+SlVBBTmdfleUDcbmhT7i2/iY6tHa1CJj
-X-Received: by 2002:a05:6902:703:: with SMTP id k3mr5033688ybt.31.1639043992130;
-        Thu, 09 Dec 2021 01:59:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyrr+vAHKPEZBQaEYYqOfoATRuulMF2VBeZzYmrE7yoOP/TwNriGBB1nhEwEobAQfMqOghOptG3Y2QK2Urm1i0=
-X-Received: by 2002:a05:6902:703:: with SMTP id k3mr5033658ybt.31.1639043991851;
- Thu, 09 Dec 2021 01:59:51 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=AwZ2q+ht+X4UdZ54dnQJfViFXAccYyFB0RjG6X/nT4g=;
+        b=2kCAF6Jo7IyW1Qv4jVWN1HmBHi0+PD3QDZ5rkSEDHvTfAMUlVxKinGQGqLyG4b8lTF
+         0kObboqyGlAmr+DoCQL2WnbJeECemdPLgdBb/5s4p6HsQQKd2NUcBDPMZM1qqO88UVBM
+         riLzKpYF+DYR30JDtqzbf+bs8aUJYQ808KCEGlxsKWmYI1fJKjdoxeKkJoikCDZPxC7M
+         uwM5Wo39N0k5mZvI6VCuR6ku0JOguLfz8DgXm7c10dyqU1rWxuUPhfmMYKCh14B8qu09
+         PRGKrWGSNE4jme+GRCfNyuPWmtY/09A1JBRHcZ3fIDOaP+9GZdcdNrf3oKONzg7uBvry
+         dB3Q==
+X-Gm-Message-State: AOAM532zrfS08Q87jx5xsjGfkxbSlgIoafNcxtgZLEKqZXxHxKfCY94y
+        3CBvcpEDwbXhwZsE0fTx20V9EIhhLKmFJLU3P/NXLw==
+X-Google-Smtp-Source: ABdhPJxZa3GYxRoilR/JLH9hzVT1QQ/EaqVeqSnsU3JR99zq35sqaqG5sQLyySDdxueSZkcU22FFVYWhsFTUKcZws7A=
+X-Received: by 2002:a9d:2ae1:: with SMTP id e88mr4211892otb.157.1639044084792;
+ Thu, 09 Dec 2021 02:01:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20211206071859.324729-1-bernard@vivo.com> <PSAPR06MB4021DF6A6135859C2332E5B9DF6E9@PSAPR06MB4021.apcprd06.prod.outlook.com>
-In-Reply-To: <PSAPR06MB4021DF6A6135859C2332E5B9DF6E9@PSAPR06MB4021.apcprd06.prod.outlook.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Thu, 9 Dec 2021 10:59:41 +0100
-Message-ID: <CAFqZXNsSDFKDJ8PX2bu9p4-pHH+3yAEoy=XZ+uHB=XqM=k5yhQ@mail.gmail.com>
-Subject: Re: [PATCH v2] security/selinux: fix potential memleak in error branch
-To:     =?UTF-8?B?6LW15Yab5aWO?= <bernard@vivo.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+References: <20211201152604.3984495-1-elver@google.com>
+In-Reply-To: <20211201152604.3984495-1-elver@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 9 Dec 2021 11:00:00 +0100
+Message-ID: <CANpmjNPaKMsgfDo5PE_dX794otFXbJvGubxG44C8-QL66UVaUw@mail.gmail.com>
+Subject: Re: [PATCH] kcov: fix generic Kconfig dependencies if ARCH_WANTS_NO_INSTR
+To:     elver@google.com, Andrew Morton <akpm@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 1:05 PM =E8=B5=B5=E5=86=9B=E5=A5=8E <bernard@vivo.co=
-m> wrote:
-> -----=E9=82=AE=E4=BB=B6=E5=8E=9F=E4=BB=B6-----
-> =E5=8F=91=E4=BB=B6=E4=BA=BA: bernard@vivo.com <bernard@vivo.com> =E4=BB=
-=A3=E8=A1=A8 Ondrej Mosnacek
-> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2021=E5=B9=B412=E6=9C=886=E6=97=A5 =
-17:11
-> =E6=94=B6=E4=BB=B6=E4=BA=BA: =E8=B5=B5=E5=86=9B=E5=A5=8E <bernard@vivo.co=
-m>
-> =E6=8A=84=E9=80=81: Paul Moore <paul@paul-moore.com>; Stephen Smalley <st=
-ephen.smalley.work@gmail.com>; Eric Paris <eparis@parisplace.org>; SElinux =
-list <selinux@vger.kernel.org>; Linux kernel mailing list <linux-kernel@vge=
-r.kernel.org>
-> =E4=B8=BB=E9=A2=98: Re: [PATCH v2] security/selinux: fix potential memlea=
-k in error branch
+On Wed, 1 Dec 2021 at 16:26, Marco Elver <elver@google.com> wrote:
+[...]
+> At the time of 0f1441b44e823, we didn't yet have ARCH_WANTS_NO_INSTR,
+> but now we can move the Kconfig dependency checks to the generic KCOV
+> option. KCOV will be available if:
 >
-> On Mon, Dec 6, 2021 at 8:19 AM Bernard Zhao <bernard@vivo.com> wrote:
-> > This patch try to fix potential memleak in error branch.
-> >
-> > Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> > ---
-> >  security/selinux/hooks.c | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c index
-> > 62d30c0a30c2..8dc140399a23 100644
-> > --- a/security/selinux/hooks.c
-> > +++ b/security/selinux/hooks.c
-> > @@ -983,18 +983,22 @@ static int selinux_sb_clone_mnt_opts(const
-> > struct super_block *oldsb,  static int selinux_add_opt(int token,
-> > const char *s, void **mnt_opts)  {
-> >         struct selinux_mnt_opts *opts =3D *mnt_opts;
-> > +       bool is_alloc_opts =3D false;
-> >
-> >         if (token =3D=3D Opt_seclabel)      /* eaten and completely ign=
-ored */
-> >                 return 0;
-> >
-> > +       if (!s)
-> > +               return -ENOMEM;
-> > +
-> >         if (!opts) {
-> >                 opts =3D kzalloc(sizeof(struct selinux_mnt_opts), GFP_K=
-ERNEL);
-> >                 if (!opts)
-> >                         return -ENOMEM;
-> >                 *mnt_opts =3D opts;
-> > +               is_alloc_opts =3D true;
-> >         }
-> > -       if (!s)
-> > -               return -ENOMEM;
-> > +
-> >         switch (token) {
-> >         case Opt_context:
-> >                 if (opts->context || opts->defcontext) @@ -1019,6
-> > +1023,8 @@ static int selinux_add_opt(int token, const char *s, void **=
-mnt_opts)
-> >         }
-> >         return 0;
-> >  Einval:
-> > +       if (is_alloc_opts)
-> > +               kfree(opts);
-> >         pr_warn(SEL_MOUNT_FAIL_MSG);
-> >         return -EINVAL;
-> >  }
-> > --
-> > 2.33.1
+>         - architecture does not care about noinstr, OR
+>         - we have objtool support (like on x86), OR
+>         - GCC is 12.0 or newer, OR
+>         - Clang is 13.0 or newer.
 >
-> >The problem is a bit more tricky... As is, this patch will lead to doubl=
-e frees in some cases. Look at security_sb_eat_lsm_opts() callers, for exam=
-ple - some of them don't do anything when error is returned, some call
-> >security_free_mnt_opts() on the opts regardless, some will let it store =
-the opts in fc->security, where
-> >put_fs_context() will eventually call security_free_mnt_opts() on them.
->
-> >You need to at least *mnt_opts =3D NULL after kfree(opts), but it would =
-be also nice to make the LSM hook callers more consistent in what they do i=
-n the error path and document the fact that *mnt_opts will be NULL
-> >on error in lsm_hooks.h (in case of the sb_eat_lsm_opts hook).
-> Hi Ondrej Mosnacek:
->
-> Thanks for your comments!
-> I am not sure if there is some gap, for this part " it would be also nice=
- to make the LSM hook callers more consistent in what they do in the error =
-path and document the fact that *mnt_opts will be NULL
-> on error in lsm_hooks.h (in case of the sb_eat_lsm_opts hook)"
-> I am not sure if this is OK:
-> 116   * @sb_eat_lsm_opts:
-> 117   *         Eat (scan @orig options) and save them in @mnt_opts.
-> 118   *     If error is returned, then the *mnt_opts will be NULL.
-> Please help to double check, thanks!
+> Signed-off-by: Marco Elver <elver@google.com>
 
-I'd prefer something like:
+I think this is good to pick up. Even though it has an x86 change in
+it, I think kcov changes go through -mm. Andrew, x86 maintainers, any
+preference?
 
-If the hook returns 0, the caller is responsible for destroying the
-returned @mnt_opts using the @sb_free_mnt_opts hook. The LSMs must not
-expect the callers to destroy @mnt_opts if the hook returns an error
-and should always set it to NULL in such case.
+With the conclusion from [1], I think we decided it's better to take
+this now, given we discovered KCOV already appears broken on arm64
+(likely due to noinstr) and e.g. syzbot disables it on arm64.
 
-(You may want to double-check that the other implementations of this
-hook (i.e. security/smack/smack_lsm.c) follow that contract and fix
-them if necessary.)
+[1] https://lkml.kernel.org/r/Yae+6clmwHox7CHN@FVFF77S0Q05N
 
-Thanks for your efforts to improve this!
-
---
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
-
+Thanks,
+-- Marco

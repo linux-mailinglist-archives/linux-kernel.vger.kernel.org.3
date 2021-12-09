@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7095046EE67
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B7B46EDF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 17:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236386AbhLIRAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:00:05 -0500
-Received: from mga04.intel.com ([192.55.52.120]:27927 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241588AbhLIQ7v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 11:59:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="236887011"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="236887011"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:55:19 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="564887994"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 08:55:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvMgS-004Arq-7Q;
-        Thu, 09 Dec 2021 18:54:16 +0200
-Date:   Thu, 9 Dec 2021 18:54:15 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
-        bhelgaas@google.com, srinivas.pandruvada@intel.com,
-        shuah@kernel.org, mgross@linux.intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <YbI0t2D5ute46Ty2@smile.fi.intel.com>
-References: <YbBxPPPaQwlcgz/c@kroah.com>
- <20211209163245.GA245119@bhelgaas>
+        id S241444AbhLIQ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 11:58:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33791 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241561AbhLIQ6A (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 11:58:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639068866;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cpzPqhOkb6bNWztmaWC2bqWrQcw/ICLeyzWLupw/QnQ=;
+        b=dIW6RNT6XG9FvUj4Vl1ywZ3i/WkSaVApES2rlB8jwRa1M6INAX9Du6oVYFZ58CLm+9EOKG
+        RQt1XVRXAZFche2CGOZQPMaUak7D1q6CL3EWAeMH4Dlj8kTW++0ve9oEeINFEgKajvxuE2
+        trjYAOfG4eh01g+Reo4T9RJRcvpv6K0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-I4_FQcCIOdmbsL0XbhIYdQ-1; Thu, 09 Dec 2021 11:54:25 -0500
+X-MC-Unique: I4_FQcCIOdmbsL0XbhIYdQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 210F210247A7;
+        Thu,  9 Dec 2021 16:54:23 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D92075BE07;
+        Thu,  9 Dec 2021 16:54:19 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v2 04/67] netfs: Display the netfs inode number in the
+ netfs_read tracepoint
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 16:54:19 +0000
+Message-ID: <163906885903.143852.12229407815154182247.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209163245.GA245119@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:32:45AM -0600, Bjorn Helgaas wrote:
-> [+cc Rafael, since I used generic PM as an example]
-> On Wed, Dec 08, 2021 at 09:47:56AM +0100, Greg KH wrote:
+Display the netfs inode number in the netfs_read tracepoint so that this
+can be used to correlate with the cachefiles_prep_read tracepoint.
 
-...
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819581097.215744.17476611915583897051.stgit@warthog.procyon.org.uk/ # v1
+---
 
-Okay, more bikeshedding :-)
+ include/trace/events/netfs.h |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> In the very common situation of PCI drivers that use generic power
-> management, authors *do* have to use both (example from [1]):
-> 
->   ioh_gpio_probe(struct pci_dev *pdev)   # pci_driver.probe()
->     pci_set_drvdata(pdev, chip);
-> 
->   ioh_gpio_remove(struct pci_dev *pdev)  # pci_driver.remove()
->     struct ioh_gpio *chip = pci_get_drvdata(pdev);
-> 
->   ioh_gpio_suspend(struct device *dev)   # pci_driver.driver.pm.suspend()
->     struct ioh_gpio *chip = dev_get_drvdata(dev);   <--
-> 
-> The pci_driver methods receive a struct pci_dev and use the
-> pci_get_drvdata() wrapper.
-> 
-> The generic power management methods receive a struct device and use
-> the underlying dev_get_drvdata().
-> 
-> It's kind of ugly that readers have to know that pci_get_drvdata()
-> gives you the same thing as dev_get_drvdata().
-> 
-> I guess the generic PM methods could do something like:
-> 
->   pci_get_drvdata(to_pci_dev(dev));
-> 
-> but that seems a little bit circuitous.  It's slightly wordier, but I
-> might prefer to just use this everywhere and skip the pci_* wrappers:
-> 
->   dev_get_drvdata(&pdev->dev);
-
-Strictly speaking the
-
-   <$BUS)_get_drvdata(<$CONTAINER>) != dev_get_drvdata(dev)
-
-it's completely up to the container handling code what to do.
-In 99% (or 100%?) cases it's equal, but it's not obliged to be so.
-
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpio/gpio-ml-ioh.c?id=v5.15#n505
-
--- 
-With Best Regards,
-Andy Shevchenko
+diff --git a/include/trace/events/netfs.h b/include/trace/events/netfs.h
+index 4d470bffd9f1..e6f4ebbb4c69 100644
+--- a/include/trace/events/netfs.h
++++ b/include/trace/events/netfs.h
+@@ -135,6 +135,7 @@ TRACE_EVENT(netfs_read,
+ 		    __field(loff_t,			start		)
+ 		    __field(size_t,			len		)
+ 		    __field(enum netfs_read_trace,	what		)
++		    __field(unsigned int,		netfs_inode	)
+ 			     ),
+ 
+ 	    TP_fast_assign(
+@@ -143,12 +144,14 @@ TRACE_EVENT(netfs_read,
+ 		    __entry->start	= start;
+ 		    __entry->len	= len;
+ 		    __entry->what	= what;
++		    __entry->netfs_inode = rreq->inode->i_ino;
+ 			   ),
+ 
+-	    TP_printk("R=%08x %s c=%08x s=%llx %zx",
++	    TP_printk("R=%08x %s c=%08x ni=%x s=%llx %zx",
+ 		      __entry->rreq,
+ 		      __print_symbolic(__entry->what, netfs_read_traces),
+ 		      __entry->cookie,
++		      __entry->netfs_inode,
+ 		      __entry->start, __entry->len)
+ 	    );
+ 
 
 

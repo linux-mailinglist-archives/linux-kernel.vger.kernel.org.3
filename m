@@ -2,217 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FB246E091
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7D946E08B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbhLICCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbhLICCH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:02:07 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14077C061746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 17:58:35 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id v19so2793018plo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 17:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=avQ6zouIiN9yCAxnJyjc2BEAENz7yIsL27blUDqPD6s=;
-        b=JGAbRkaYN5fsHQKueBsFMUoELiDEq3dqyTc+SLnHD7g2GuC5TE/6on2JWfRiBJReEo
-         UjRZKMgpBnX7qf7hnfKqjQgnnopjXi3EzIUR0a9pFmVNGWTJaYTk3AlXMJuq5T/xAQmr
-         mixde3nA+yhgweK0TmDp37CUBbTGCI4nHQecucj77SHxUmLBnJR7b1J1zefHdZ05hZee
-         S3lyxSip9BVgqrskDzzCQD1jVGYE3RwMMwHv+hAxBl3Fl6toYaI1aidOdB+Z4naClln6
-         Y1KZShl1SH6lkVp1dyog6MiKvt1T0e5ycFTs4Y1lCT7pCdKQCax6IbrVoOlE1UWzoI/1
-         WU5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=avQ6zouIiN9yCAxnJyjc2BEAENz7yIsL27blUDqPD6s=;
-        b=FZ13vyZbxssUC0CF6DJRvI8o+3m8QYRLk3qbJymQwTmUYkYUhX9/p4u/JSWj+7CxZE
-         REEH0iLoJFg0f1LSd4O26GeRl8ekQrywdOtNbOg8JWe02qSeSRISs+7o9gbIt8ms1Qab
-         MIBhMro2IFQlgCeYkaWYCxXZge1oRBXbmEhf94ovPrGRqdYneoSd2og+mKegLDoTiG+M
-         v8Gv7Je3lrNUDsagfxvH0SpYLQLCTSYSsZhDnbYMKZdEbRMGII1LbVXXIfOz961ill0C
-         6qmHmmYxLz6gqC5g97sgxxC5txmLmsi2XvFj+xPZgJwvYNQYDwz6KRBUrzHUYdmaqvyQ
-         +6aw==
-X-Gm-Message-State: AOAM533lpdLzi/g15DSbCO8IS7f9Rwg3PEsCeU7IWdcmx7Srf5n/lOXt
-        pCePmzPuq04PUsRfrs4e8cs=
-X-Google-Smtp-Source: ABdhPJwlIE1PXQQI/w1u/lQW1i2uiXM5GSlwruVROb0fFETmzi7avVQ3qMGxbFKCo02w2ckhDbTTWA==
-X-Received: by 2002:a17:90b:4b01:: with SMTP id lx1mr12007824pjb.38.1639015114562;
-        Wed, 08 Dec 2021 17:58:34 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id t12sm7189747pjo.44.2021.12.08.17.58.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 08 Dec 2021 17:58:34 -0800 (PST)
-Date:   Thu, 9 Dec 2021 09:56:35 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, huyue2@yulong.com
-Subject: Re: [PATCH v2] erofs: clean up erofs_map_blocks tracepoints
-Message-ID: <20211209095635.000012e8.zbestahu@gmail.com>
-In-Reply-To: <20211209012918.30337-1-hsiangkao@linux.alibaba.com>
-References: <20211209012918.30337-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S229554AbhLICAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:00:20 -0500
+Received: from mga03.intel.com ([134.134.136.65]:20888 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229543AbhLICAT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:00:19 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="237936433"
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="237936433"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 17:56:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
+   d="scan'208";a="516454448"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Dec 2021 17:56:46 -0800
+Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 8 Dec 2021 17:56:45 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Wed, 8 Dec 2021 17:56:45 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Wed, 8 Dec 2021 17:56:45 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T6RVj+NBS1gBKkhpkslNG1wzIUugpB+KLQxO7ZiZQ29TBhNxwgWG2jzaOeANExcWUq7YrdRd+hCKL/10cpFmPmuSLBv/pejiViUkXt+Z/fy4abHabTWVTcT7DCgz6Ada+FFYVbBpRcykxkTBT7d9F+1Cau2hpGNf3nZXEVjYOavSlyQ3y1jRbg6H8P9yppawa5XNLyRKw5jbvDRW/RVX3oEUCH+26F75dM8pEpBu8OTTjhtDdnc5abBUiDsEvMqE2ThCDl2umDenmQq7eUuWYscUvFS4Kv8N1QzVo0MxOYF6TxIwB18ke8wO2tBz7wJuhR1G5y3hAiXGPaq0KS5Hew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=X1KIjXgRREmjap8j5FhMY6R2Cf27LXmn9ueC8mVBD9c=;
+ b=RpETeBsrCOrN0QBj6wBLidX2Ae3pMz4J89X0wx4pcde3KyyobWl73RR8huPXlzNZ5CYoAw2C+z3OfUUaV8+235SIbUy4aRomOGtFnOnXAEKWPV0DZFspCa391GJxy5qr1DpNR9tYA/+IRiBygo1N8WkMab3q/IOXGxvYChjQaxfQA9o2y7NDPTQAwOJ3kKFOJIxA1cIfYpIYpfbOVQ4CcrMRjwNM0bO7pTuZoYmn9weY4Y2unCFSH0hurIlfiTOmohp+/HBjKCs8sdq4175w+ATPz7Uqv3p6WJqQ7iudK6g5Sakuv3XXYnvccTTCAagUql1lkf1Bbsw2bwsANEnmgg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=X1KIjXgRREmjap8j5FhMY6R2Cf27LXmn9ueC8mVBD9c=;
+ b=c3UZt4saODvMOHt7Ob/8MC77Te+LEnjO/JcXLbBW1UaBe3N3vepED2ynZvrMmWkW46s27Sk0AD1/WYu4UiWh8IHZ55R/GrkJMvwnkV8G0jSF98VuaV2xZSXQ/t0XCz+US7fTq6vhBQ+s57O9VrRbjehwy42mt0oI7iaQRTfG60o=
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BN6PR11MB1489.namprd11.prod.outlook.com (2603:10b6:405:c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.15; Thu, 9 Dec
+ 2021 01:56:37 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4755.016; Thu, 9 Dec 2021
+ 01:56:37 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Jason Gunthorpe" <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>, Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: RE: [PATCH 2/4] iommu: Add PASID support for DMA mapping API users
+Thread-Topic: [PATCH 2/4] iommu: Add PASID support for DMA mapping API users
+Thread-Index: AQHX67q0UnEyPcLAH0q1jKWtvfT+gqwn3/wAgAERQ4CAAHVD0A==
+Date:   Thu, 9 Dec 2021 01:56:37 +0000
+Message-ID: <BN9PR11MB5276676474FA6A35016B6BB88C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <1638884834-83028-3-git-send-email-jacob.jun.pan@linux.intel.com>
+        <16408193-c8bc-3046-b32f-9274bf0b415c@linux.intel.com>
+ <20211208104939.732fa5b9@jacob-builder>
+In-Reply-To: <20211208104939.732fa5b9@jacob-builder>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b41fbb28-0dd6-4fd9-4081-08d9bab7230b
+x-ms-traffictypediagnostic: BN6PR11MB1489:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+x-microsoft-antispam-prvs: <BN6PR11MB1489F5667C060C801E31B6B28C709@BN6PR11MB1489.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 08bkWv6e0GNcBP+Lq+DM8Qhc7cXemL7egfaIYpRZ0jYmqN4feU14Rm1I4G1CqZYOdKtPjZvaN6hCRNMriDED/VEXTi5PJeNp+of5vFLhd6cwqYqLIQekaUFWI/4+olXRkeUB1yjxVXlGT0fTZICxmwwHisMfM1auXyTKX3Jl6ZjRA38p32SGocFnLdcXT1H0+8usUPbqtMw6ncUYkwhipc4YfQ3OVz/5fSUJ4iaUBVIqJpoRFQ1zyCO0LmyTpYs42zS+sDiVUljau8zuiC05YrUEQ8WRLCjcfECdL8prR8E66XIhqQ6+rEKGpqHqSGh33Grx3U94NSmaZENg+NbgbZ0q8VXzTsAcXnoVvQSpBzghXtih4cgDYbsswRp6vwhvZKfVDg79Xb/Qshjr29hnPPJtK78xSF1oJmCrUDXRFvaGB+RhFfqfbPME3WVNPaCcfVsPqOKs07z4fERGymphsStBc3l/g4Zfj2mMx6fhFGPCSKjV4QUL0lJCF3qDnGYTBuZ1aQDTS0Wg9WEN6LccXFWlL+MAWSvttCt6QGdKZa/gGC1jRpuyNzFfRt3QnK4mHFnaneqFvJ0fxRfTAAe5L6lzH/NGgPKsuLkqpYk9DAiLtIShHViQbARDRqADkDPnfcSVyXfxEiNyvp6QXdYnS86Jj7x2n3obo8dIhP3LfloHG1C48LpQMGzUdYCtqmgL6KoEZ+O5SxomyICX/NmkX2VHSoiKscaghkNjv4h3VX+Y6Ih/HcasyLBJnystTKaoZ547D9ugChWFInHl99NBbw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(7696005)(4326008)(9686003)(52536014)(6506007)(4744005)(26005)(5660300002)(64756008)(66946007)(66476007)(8936002)(38100700002)(66446008)(33656002)(86362001)(38070700005)(83380400001)(76116006)(54906003)(2906002)(110136005)(66556008)(186003)(8676002)(55016003)(316002)(82960400001)(71200400001)(508600001)(122000001)(7416002)(26730200005)(19860200003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YCSb5p0cZ6H9PC4IWFrqbm3kXB7kmPQ8U6ruLrzA404Akm79i9vXvuo/ReRx?=
+ =?us-ascii?Q?ct0WSn+YuJ67cILzU8II2rd5sCX2PjqbM+BqTPMIaN77B73tXlCBn3Zg5Nyr?=
+ =?us-ascii?Q?30VI2wQmznqWoAIa514ES93c/EUkMu/jP9F01oA5V6NH+zEN/xt++NodIXBO?=
+ =?us-ascii?Q?WZufoU5meNP6tt2Q8yWo1eluTQyoX9SNtXFiQatN0Cx8MS+gDzhXwfDjtlPX?=
+ =?us-ascii?Q?ubCh9Gk6KsCSheIpozr3sbeXFS4GJbzTFTEac0xa+RXHRFgDuNejYJRlmmbj?=
+ =?us-ascii?Q?dSNJ/xGP6NvaveET3B4FGZ90w/EMVNquSbSUqVDX+tmakGcLuUBw+ua72Evl?=
+ =?us-ascii?Q?+IyARkf6ULR7B7iSD8fdIBnr+EfW3F9AtXcOopM80Ir2wYBeGWqqD/kdv+SF?=
+ =?us-ascii?Q?efTIwmxktkpRJP3pJDBylprM9m501SNHOewgDjg+6LktuQQxslb0fWMBcfR3?=
+ =?us-ascii?Q?q6IseUNBPUrpDg7f3HGBZU4LBVG1u1bE8r72RUuFZRG50jhREsrqHfantlMF?=
+ =?us-ascii?Q?3n9L4CWfKpchmOv4nLhFg7IRTooyX4phBIT8VMTbpCOCa8fe6JCJccaRD4gk?=
+ =?us-ascii?Q?MEaRBWrwS7T/rF/4+7RwXtA+db+9/IffBm3T4RfyaPnf4LNmeAD7oEBSMJg3?=
+ =?us-ascii?Q?DlxEICkKHLV0TGa6W1wU+GWW+UhhRD0jygIeyJ5h7zAPEyJ7q5VQSDKNUTYB?=
+ =?us-ascii?Q?aWI/VEtSgdMd6zXAsf7vAkKfEE+kc2DUwJwIbO1iMlBC1zbCvwLs6K+/T/kI?=
+ =?us-ascii?Q?g+1rpfo2Mcc/dQ12jjIMNlIsYQB7BZLizoaimlep9M/NDzaWLGn7eVxfoKIc?=
+ =?us-ascii?Q?kZCt7tDUSSVg8AZHnGC9YZf42R79hWGS/gSpXgKV0Ju5ZXUkP2awHns3EQcD?=
+ =?us-ascii?Q?pgAaJqH1ovoTwpZ4Jw6N4+gusz8K2bn0RKPBmLC2hQtwdvIWxYNTRn1ngY0K?=
+ =?us-ascii?Q?ahw1wT8xdinXnLH1Jv8xPfkrTfDHgUf78LgubWlEkEksAMat0G4kj2nV6L+I?=
+ =?us-ascii?Q?Uf6d1qcdWi+Ki/c4Qs+HfbKBhxSFWWzmNBmt3fxOCFkSNlQXwJvrNkDz47Nd?=
+ =?us-ascii?Q?0r3pRO/eOWWlmHFbA8M/lTMxwa0VScZRvBppCPMEMp/aOUF2LJvmBN32pLxT?=
+ =?us-ascii?Q?vJI35ZdZRzaeZLPwYHrI6UBRJ4BdKmMCXO0q5tf2WtQHlrA0bo+t30Fw9WVv?=
+ =?us-ascii?Q?yhNe2jUXmbba1J3GxXj3L6ZArpDNa7oqn/pHV7BLiRxAE6zxcVpA43GyI3Od?=
+ =?us-ascii?Q?9VyqF45A1+gGrAOM5iD/ylZNRANKnbGWSdUha9KeKUjCDzJUDrkEwNghWbTi?=
+ =?us-ascii?Q?z0Jpe6EdBvo2sIpOdHpQBoA8AFMP2JH5tQCoUuR9rrVz6KYqblonZ/fAUIfZ?=
+ =?us-ascii?Q?C+UhXnsYY5HlD5FqvdUzjd/wl7MAiibKn/+DTgJ7kx3AfgPf1dnm0mR0bf6I?=
+ =?us-ascii?Q?nAnADs1A7EyERU+O+WRpAsEQ5YHBbeNEaG43qRT/I+CwJwZYwVBJrLFAyQ07?=
+ =?us-ascii?Q?1JJflW2h58qah+Or8PKjyh6cGV+dv32E1woS5VQ2EfF0CQ+fr86VGO2ghal/?=
+ =?us-ascii?Q?wh4b7oSsn75Sok/mKRWrZRgYj6lxHdSYzregNsUS/MfSKGYlNyOplWBzGw1j?=
+ =?us-ascii?Q?ybTRIrM6iFhpWAIRBKCMw1E=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b41fbb28-0dd6-4fd9-4081-08d9bab7230b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 01:56:37.7087
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UagS4MzAKelHfNqc1QsIrXQ/NeGMC4IxD06xAkL09IcN8YoyIl/9VOKiim44bgDYqcmS9MKx/0tygjx0OsCwzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1489
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  9 Dec 2021 09:29:18 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Thursday, December 9, 2021 2:50 AM
+>=20
+> > Can a device issue DMA requests with PASID even there's no system
+> IOMMU
+> > or the system IOMMU is disabled?
+> >
+> Good point.
+> If IOMMU is not enabled, device cannot issue DMA requests with PASID. Thi=
+s
+> API will not be available. Forgot to add dummy functions to the header.
+>=20
 
-> Since the new type of chunk-based files is introduced, there is no
-> need to leave flatmode tracepoints.
-> 
-> Rename to erofs_map_blocks instead.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
-> v1: https://lore.kernel.org/r/20210921143531.81356-2-hsiangkao@linux.alibaba.com
-> change since v1:
->  - fix m_llen assignment issue pointed out by Chao;
-> 
->  fs/erofs/data.c              | 39 ++++++++++++++++--------------------
->  include/trace/events/erofs.h |  4 ++--
->  2 files changed, 19 insertions(+), 24 deletions(-)
-> 
-> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-> index 0e35ef3f9f3d..4f98c76ec043 100644
-> --- a/fs/erofs/data.c
-> +++ b/fs/erofs/data.c
-> @@ -26,20 +26,16 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
->  				     struct erofs_map_blocks *map,
->  				     int flags)
->  {
-> -	int err = 0;
->  	erofs_blk_t nblocks, lastblk;
->  	u64 offset = map->m_la;
->  	struct erofs_inode *vi = EROFS_I(inode);
->  	bool tailendpacking = (vi->datalayout == EROFS_INODE_FLAT_INLINE);
->  
-> -	trace_erofs_map_blocks_flatmode_enter(inode, map, flags);
-> -
->  	nblocks = DIV_ROUND_UP(inode->i_size, PAGE_SIZE);
->  	lastblk = nblocks - tailendpacking;
->  
->  	/* there is no hole in flatmode */
->  	map->m_flags = EROFS_MAP_MAPPED;
-> -
->  	if (offset < blknr_to_addr(lastblk)) {
->  		map->m_pa = blknr_to_addr(vi->raw_blkaddr) + map->m_la;
->  		map->m_plen = blknr_to_addr(lastblk) - offset;
-> @@ -51,30 +47,23 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
->  			vi->xattr_isize + erofs_blkoff(map->m_la);
->  		map->m_plen = inode->i_size - offset;
->  
-> -		/* inline data should be located in one meta block */
-> -		if (erofs_blkoff(map->m_pa) + map->m_plen > PAGE_SIZE) {
-> +		/* inline data should be located in the same meta block */
-> +		if (erofs_blkoff(map->m_pa) + map->m_plen > EROFS_BLKSIZ) {
->  			erofs_err(inode->i_sb,
->  				  "inline data cross block boundary @ nid %llu",
->  				  vi->nid);
->  			DBG_BUGON(1);
-> -			err = -EFSCORRUPTED;
-> -			goto err_out;
-> +			return -EFSCORRUPTED;
->  		}
-> -
->  		map->m_flags |= EROFS_MAP_META;
->  	} else {
->  		erofs_err(inode->i_sb,
->  			  "internal error @ nid: %llu (size %llu), m_la 0x%llx",
->  			  vi->nid, inode->i_size, map->m_la);
->  		DBG_BUGON(1);
-> -		err = -EIO;
-> -		goto err_out;
-> +		return -EIO;
->  	}
-> -
-> -	map->m_llen = map->m_plen;
-> -err_out:
-> -	trace_erofs_map_blocks_flatmode_exit(inode, map, flags, 0);
-> -	return err;
-> +	return 0;
->  }
->  
->  static int erofs_map_blocks(struct inode *inode,
-> @@ -89,6 +78,7 @@ static int erofs_map_blocks(struct inode *inode,
->  	erofs_off_t pos;
->  	int err = 0;
->  
-> +	trace_erofs_map_blocks_enter(inode, map, flags);
->  	map->m_deviceid = 0;
->  	if (map->m_la >= inode->i_size) {
->  		/* leave out-of-bound access unmapped */
-> @@ -97,8 +87,10 @@ static int erofs_map_blocks(struct inode *inode,
->  		goto out;
->  	}
->  
-> -	if (vi->datalayout != EROFS_INODE_CHUNK_BASED)
-> -		return erofs_map_blocks_flatmode(inode, map, flags);
-> +	if (vi->datalayout != EROFS_INODE_CHUNK_BASED) {
-> +		err = erofs_map_blocks_flatmode(inode, map, flags);
-> +		goto out;
-> +	}
->  
->  	if (vi->chunkformat & EROFS_CHUNK_FORMAT_INDEXES)
->  		unit = sizeof(*idx);			/* chunk index */
-> @@ -110,9 +102,10 @@ static int erofs_map_blocks(struct inode *inode,
->  		    vi->xattr_isize, unit) + unit * chunknr;
->  
->  	page = erofs_get_meta_page(inode->i_sb, erofs_blknr(pos));
-> -	if (IS_ERR(page))
-> -		return PTR_ERR(page);
-> -
-> +	if (IS_ERR(page)) {
-> +		err = PTR_ERR(page);
-> +		goto out;
-> +	}
->  	map->m_la = chunknr << vi->chunkbits;
->  	map->m_plen = min_t(erofs_off_t, 1UL << vi->chunkbits,
->  			    roundup(inode->i_size - map->m_la, EROFS_BLKSIZ));
-> @@ -146,7 +139,9 @@ static int erofs_map_blocks(struct inode *inode,
->  	unlock_page(page);
->  	put_page(page);
->  out:
-> -	map->m_llen = map->m_plen;
-> +	if (!err)
-> +		map->m_llen = map->m_plen;
-> +	trace_erofs_map_blocks_exit(inode, map, flags, 0);
->  	return err;
->  }
->  
-> diff --git a/include/trace/events/erofs.h b/include/trace/events/erofs.h
-> index 16ae7b666810..57de057bd503 100644
-> --- a/include/trace/events/erofs.h
-> +++ b/include/trace/events/erofs.h
-> @@ -169,7 +169,7 @@ DECLARE_EVENT_CLASS(erofs__map_blocks_enter,
->  		  __entry->flags ? show_map_flags(__entry->flags) : "NULL")
->  );
->  
-> -DEFINE_EVENT(erofs__map_blocks_enter, erofs_map_blocks_flatmode_enter,
-> +DEFINE_EVENT(erofs__map_blocks_enter, erofs_map_blocks_enter,
->  	TP_PROTO(struct inode *inode, struct erofs_map_blocks *map,
->  		 unsigned flags),
->  
-> @@ -221,7 +221,7 @@ DECLARE_EVENT_CLASS(erofs__map_blocks_exit,
->  		  show_mflags(__entry->mflags), __entry->ret)
->  );
->  
-> -DEFINE_EVENT(erofs__map_blocks_exit, erofs_map_blocks_flatmode_exit,
-> +DEFINE_EVENT(erofs__map_blocks_exit, erofs_map_blocks_exit,
->  	TP_PROTO(struct inode *inode, struct erofs_map_blocks *map,
->  		 unsigned flags, int ret),
->  
+PASID is a PCI thing, not defined by IOMMU.
 
-Reviewed-by: Yue Hu <huyue2@yulong.com>
+I think the key is physically if IOMMU is disabled, how will root complex
+handle a PCI memory request including a PASID TLP prefix? Does it block=20
+such request due to no IOMMU to consume PASID or simply ignore PASID
+and continue routing the request to the memory controller?
 
+If block, then having an iommu interface makes sense.
 
+If ignore, possibly a DMA API call makes more sense instead, implying that
+this extension can be used even when iommu is disabled.
+
+I think that is what Baolu wants to point out.
+
+Thanks
+Kevin

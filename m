@@ -2,109 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B3146E341
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA91846E30F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 08:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbhLIHit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 02:38:49 -0500
-Received: from mail-m971.mail.163.com ([123.126.97.1]:50184 "EHLO
-        mail-m971.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbhLIHis (ORCPT
+        id S233617AbhLIHW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 02:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233467AbhLIHWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 02:38:48 -0500
-X-Greylist: delayed 916 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Dec 2021 02:38:48 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hQ/Nc
-        Yr17qXJigIFKgNCs1BuxabXUu1zysX1Fq6jODY=; b=EORs5XONsBY2E6eGikMf6
-        Q6CPXowSsLFRwHXXt/dh5ZOpcvwzBTn0O6Od1aQUlp+poQ9mE0BUC8ww+VItgL+G
-        4r7hfjFF0BcLmtTtSzyiyzxMe15tNZwWI/lI8rXne9fGDqbCytbcURR6EMdcfgxI
-        Nw8KidOHcFG+W5c0CiyW5s=
-Received: from localhost.localdomain (unknown [218.106.182.227])
-        by smtp1 (Coremail) with SMTP id GdxpCgC3CgTqrbFhcjxsAw--.9156S4;
-        Thu, 09 Dec 2021 15:19:27 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, straube.linux@gmail.com,
-        martin@kaiser.cx
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] staging: r8188eu: fix a memory leak in rtw_mp_pwrtrk()
-Date:   Thu,  9 Dec 2021 15:19:05 +0800
-Message-Id: <20211209071905.125440-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Dec 2021 02:22:55 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927A2C061746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Dec 2021 23:19:22 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id a2so4467951qtx.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Dec 2021 23:19:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version;
+        bh=wp7bsIiEGq1v0UzZDarToFJILpj4ru1SGwyQaMb3p4E=;
+        b=n+ugZQ1C7dMkoFU9ez645n+AJqXmFaYJgGVuTfIepCmJyDDnCohuhijGr9jGafo/wy
+         ke5ok+6E3zz7kA5TnbpKDDfzpnH1mUlESdrcsPQX3rQ/5EWkuzqbXbOcU7kKOUckIgth
+         O3HHcGIovw7KB4FOWO0jiUkVl5qccjHYAntQnRbxWffMfENTLHdEbWcJPbTowO9D36lh
+         64hdvosY2W7EEQR7dNWhu7EJiIi92GFTNn8C83HMjh4dkXwoXA66KkTp40tVE3kupDAq
+         JMqxYPzhj9IyRHZAsGhQpuTwy2HT4CE1oPWh6CbJnqiZk+a9EqxqpKmrpdtx6oHOyez0
+         QR3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
+        bh=wp7bsIiEGq1v0UzZDarToFJILpj4ru1SGwyQaMb3p4E=;
+        b=VWvcY+O68j9ggpQC/Vx25hAThtB5V3c8Nq4PopE4i6ast3wR5XdXg6wEYyvKaMTsfi
+         lSNXZxBXUqNEUrg/iiTBrRP7DKWEfysmy136yIUaIca5NAtdTf0gx2lS76IeoS9oiIb1
+         faSu8VY/Z/DdHcme5l8Es+shtjVdsrNjO0Bc834+5/bAiS0Qls9SEG2xh/HUHQYzEboR
+         Q6ZWOg7+CPSxvrO/hWq8Zy3coxwL2U3z5uzOLXTmEEwKrH54x0tTzrftB2bZnNjQnzoJ
+         dcOyVjbDJA7iO/pJhEZ8QmCVRuB5RN17+iGNBubtBi9KD5PbImt/4/HzknP3lSZw6+5P
+         DzwA==
+X-Gm-Message-State: AOAM532ke75gGrH5geHZUBqEgQkgi2hqrkCMo7IQjxIZE3o0EO1yByXS
+        KzRsh4c9NYYXfn5Vh7ztNnkKycEfXZeCCg==
+X-Google-Smtp-Source: ABdhPJyDk5gwcYkseNoR8GrR8PAhZjoMS9Xyrz93qdo0YVs5eDJPx98/mF7EChyYF/5No6CJchsA8g==
+X-Received: by 2002:ac8:580b:: with SMTP id g11mr14831442qtg.268.1639034361429;
+        Wed, 08 Dec 2021 23:19:21 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id z4sm3382336qtj.42.2021.12.08.23.19.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 23:19:20 -0800 (PST)
+Date:   Wed, 8 Dec 2021 23:19:18 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm: delete unsafe BUG from page_cache_add_speculative()
+Message-ID: <8b98fc6f-3439-8614-c3f3-945c659a1aba@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgC3CgTqrbFhcjxsAw--.9156S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr4rAw4DCr17KrW7XF1DKFg_yoW8Zw47pa
-        yfAryUCrWvqw1rKas0kw17WrWF9w40vFWFga4Fkw43uryrurWrZa4UCryjkrs8AryxJF4Y
-        kF45AFWUuw1qkrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jq89tUUUUU=
-X-Originating-IP: [218.106.182.227]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbi6x9kjFXlyeZFbQAAsr
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Line 5961 (#1) allocates a memory chunk for input by kmalloc().
-Line 5966 (#2), line 5982 (#4) and line 5987 (#5) free the input
-before the function returns while line 5979 (#3) forget to free it,
-which will lead to a memory leak.
+It is not easily reproducible, but on 5.16-rc I have several times hit
+the VM_BUG_ON_PAGE(PageTail(page), page) in page_cache_add_speculative():
+usually from filemap_get_read_batch() for an ext4 read, yesterday from
+next_uptodate_page() from filemap_map_pages() for a shmem fault.
 
-We should kfree() input in line 5979 (#3).
+That BUG used to be placed where page_ref_add_unless() had succeeded,
+but now it is placed before folio_ref_add_unless() is attempted: that
+is not safe, since it is only the acquired reference which makes the
+page safe from racing THP collapse or split.
 
-5953 static int rtw_mp_pwrtrk(struct net_device *dev,
-5954 			struct iw_request_info *info,
-5955 			struct iw_point *wrqu, char *extra)
-5956 {
-5961 	char	*input = kmalloc(wrqu->length, GFP_KERNEL);
-	// #1: kmalloc space
-5963 	if (!input)
-5964 		return -ENOMEM;
-5965 	if (copy_from_user(input, wrqu->pointer, wrqu->length)) {
-5966 		kfree(input); // #2: kfree space
-5967 		return -EFAULT;
-5968	}
+We could keep the BUG, checking PageTail only when folio_ref_try_add_rcu()
+has succeeded; but I don't think it adds much value - just delete it.
 
-5973	if (strncmp(input, "stop", 4) == 0) {
-5974		enable = 0;
-5975		sprintf(extra, "mp tx power tracking stop");
-5976	} else if (sscanf(input, "ther =%d", &thermal)) {
-5977		ret = Hal_SetThermalMeter(padapter, (u8)thermal);
-5978		if (ret == _FAIL)
-5979			return -EPERM; // #3: missing kfree
-5980		sprintf(extra, "mp tx power tracking start,
-			target value =%d ok ", thermal);
-5981	} else {
-5982		kfree(input); // #4: kfree space
-5983		return -EINVAL;
-5984	}
-
-5987	kfree(input); // #5: kfree space
-
-5993	return 0;
-5994 }
-
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Fixes: 020853b6f5ea ("mm: Add folio_try_get_rcu()")
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 1fd375076001..8f9e0f12c51f 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -5975,8 +5975,10 @@ static int rtw_mp_pwrtrk(struct net_device *dev,
- 			sprintf(extra, "mp tx power tracking stop");
- 		} else if (sscanf(input, "ther =%d", &thermal)) {
- 				ret = Hal_SetThermalMeter(padapter, (u8)thermal);
--				if (ret == _FAIL)
-+				if (ret == _FAIL) {
-+					kfree(input);
- 					return -EPERM;
-+				}
- 				sprintf(extra, "mp tx power tracking start, target value =%d ok ", thermal);
- 		} else {
- 			kfree(input);
--- 
-2.25.1
+ include/linux/pagemap.h |    1 -
+ 1 file changed, 1 deletion(-)
 
+--- 5.16-rc4/include/linux/pagemap.h
++++ linux/include/linux/pagemap.h
+@@ -285,7 +285,6 @@ static inline struct inode *folio_inode(
+ 
+ static inline bool page_cache_add_speculative(struct page *page, int count)
+ {
+-	VM_BUG_ON_PAGE(PageTail(page), page);
+ 	return folio_ref_try_add_rcu((struct folio *)page, count);
+ }
+ 

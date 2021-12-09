@@ -2,152 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB3846F113
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F203A46F119
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbhLIRNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:13:25 -0500
-Received: from out28-170.mail.aliyun.com ([115.124.28.170]:39368 "EHLO
-        out28-170.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242534AbhLIRNV (ORCPT
+        id S242573AbhLIRN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:13:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30253 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242538AbhLIRNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:13:21 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07438399|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.261443-0.00124629-0.73731;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.M7Y.VxB_1639069785;
-Received: from 192.168.88.129(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.M7Y.VxB_1639069785)
-          by smtp.aliyun-inc.com(10.147.40.44);
-          Fri, 10 Dec 2021 01:09:46 +0800
-Subject: Re: [PATCH v2] MIPS: Ingenic: Add system type for new Ingenic SoCs.
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-To:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <1639068516-5577-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1639068516-5577-4-git-send-email-zhouyanjie@wanyeetech.com>
-Message-ID: <ee8248e4-337c-0da2-471e-f8bbb43c3a2d@wanyeetech.com>
-Date:   Fri, 10 Dec 2021 01:09:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Thu, 9 Dec 2021 12:13:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639069790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p9bAAdsFcjP1eGz10M43wQGs26OrU5fklufbWODBqnA=;
+        b=V+iealMS336yw35EgfDRlSzSWT7t6+V9lxT1lVXglnWg2vVUsMCF0TStWfaSKyxb443Bss
+        FzsvN/FFZsSK13+1k5AqMACD+IFiZ2z1Je/90Gxgdd4ycsRkoA2iJ21qr1fZp0YwBfN4Xx
+        FSt67LbcyZix4JHFhx5C8TzBhKTPhrk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-307-0k5-p4CuOyKkuA9kClgAuA-1; Thu, 09 Dec 2021 12:09:47 -0500
+X-MC-Unique: 0k5-p4CuOyKkuA9kClgAuA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C6CEC1006AA1;
+        Thu,  9 Dec 2021 17:09:44 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 10D7110016FE;
+        Thu,  9 Dec 2021 17:09:40 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v2 61/67] 9p: Copy local writes to the cache when writing to
+ the server
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        v9fs-developer@lists.sourceforge.net, dhowells@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 09 Dec 2021 17:09:40 +0000
+Message-ID: <163906978015.143852.10646669694345706328.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-In-Reply-To: <1639068516-5577-4-git-send-email-zhouyanjie@wanyeetech.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When writing to the server from v9fs_vfs_writepage(), copy the data to the
+cache object too.
 
-Sorry, this was sent by mistake, please ignore it.
+To make this possible, the cookie must have its active users count
+incremented when the page is dirtied and kept incremented until we manage
+to clean up all the pages.  This allows the writeback to take place after
+the last file struct is released.
 
-On 2021/12/10 上午12:48, 周琰杰 (Zhou Yanjie) wrote:
-> Add JZ4730, JZ4750, JZ4755, JZ4760, JZ4760B, X2000H, and X2100 system
-> type for cat /proc/cpuinfo to give out JZ4730, JZ4750, JZ4755, JZ4760,
-> JZ4760B, X2000H, and X2100.
->
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->
-> Notes:
->      v1->v2:
->      1.Add system type for JZ4750 and JZ4755 as Paul Cercueil's suggestion.
->      2.Add Paul Cercueil's Reviewed-by.
->
->   arch/mips/generic/board-ingenic.c | 21 +++++++++++++++++++++
->   arch/mips/include/asm/bootinfo.h  |  3 +++
->   arch/mips/include/asm/cpu.h       |  4 ++--
->   3 files changed, 26 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/generic/board-ingenic.c b/arch/mips/generic/board-ingenic.c
-> index dd855b7..4774636 100644
-> --- a/arch/mips/generic/board-ingenic.c
-> +++ b/arch/mips/generic/board-ingenic.c
-> @@ -21,6 +21,10 @@
->   static __init char *ingenic_get_system_type(unsigned long machtype)
->   {
->   	switch (machtype) {
-> +	case MACH_INGENIC_X2100:
-> +		return "X2100";
-> +	case MACH_INGENIC_X2000H:
-> +		return "X2000H";
->   	case MACH_INGENIC_X2000E:
->   		return "X2000E";
->   	case MACH_INGENIC_X2000:
-> @@ -37,8 +41,18 @@ static __init char *ingenic_get_system_type(unsigned long machtype)
->   		return "JZ4775";
->   	case MACH_INGENIC_JZ4770:
->   		return "JZ4770";
-> +	case MACH_INGENIC_JZ4760B:
-> +		return "JZ4760B";
-> +	case MACH_INGENIC_JZ4760:
-> +		return "JZ4760";
-> +	case MACH_INGENIC_JZ4755:
-> +		return "JZ4755";
-> +	case MACH_INGENIC_JZ4750:
-> +		return "JZ4750";
->   	case MACH_INGENIC_JZ4725B:
->   		return "JZ4725B";
-> +	case MACH_INGENIC_JZ4730:
-> +		return "JZ4730";
->   	default:
->   		return "JZ4740";
->   	}
-> @@ -61,8 +75,13 @@ static __init const void *ingenic_fixup_fdt(const void *fdt, const void *match_d
->   }
->   
->   static const struct of_device_id ingenic_of_match[] __initconst = {
-> +	{ .compatible = "ingenic,jz4730", .data = (void *)MACH_INGENIC_JZ4730 },
->   	{ .compatible = "ingenic,jz4740", .data = (void *)MACH_INGENIC_JZ4740 },
->   	{ .compatible = "ingenic,jz4725b", .data = (void *)MACH_INGENIC_JZ4725B },
-> +	{ .compatible = "ingenic,jz4750", .data = (void *)MACH_INGENIC_JZ4750 },
-> +	{ .compatible = "ingenic,jz4755", .data = (void *)MACH_INGENIC_JZ4755 },
-> +	{ .compatible = "ingenic,jz4760", .data = (void *)MACH_INGENIC_JZ4760 },
-> +	{ .compatible = "ingenic,jz4760b", .data = (void *)MACH_INGENIC_JZ4760B },
->   	{ .compatible = "ingenic,jz4770", .data = (void *)MACH_INGENIC_JZ4770 },
->   	{ .compatible = "ingenic,jz4775", .data = (void *)MACH_INGENIC_JZ4775 },
->   	{ .compatible = "ingenic,jz4780", .data = (void *)MACH_INGENIC_JZ4780 },
-> @@ -71,6 +90,8 @@ static const struct of_device_id ingenic_of_match[] __initconst = {
->   	{ .compatible = "ingenic,x1830", .data = (void *)MACH_INGENIC_X1830 },
->   	{ .compatible = "ingenic,x2000", .data = (void *)MACH_INGENIC_X2000 },
->   	{ .compatible = "ingenic,x2000e", .data = (void *)MACH_INGENIC_X2000E },
-> +	{ .compatible = "ingenic,x2000h", .data = (void *)MACH_INGENIC_X2000H },
-> +	{ .compatible = "ingenic,x2100", .data = (void *)MACH_INGENIC_X2100 },
->   	{}
->   };
->   
-> diff --git a/arch/mips/include/asm/bootinfo.h b/arch/mips/include/asm/bootinfo.h
-> index 4c2e817..2128ba9 100644
-> --- a/arch/mips/include/asm/bootinfo.h
-> +++ b/arch/mips/include/asm/bootinfo.h
-> @@ -75,6 +75,7 @@ enum ingenic_machine_type {
->   	MACH_INGENIC_JZ4750,
->   	MACH_INGENIC_JZ4755,
->   	MACH_INGENIC_JZ4760,
-> +	MACH_INGENIC_JZ4760B,
->   	MACH_INGENIC_JZ4770,
->   	MACH_INGENIC_JZ4775,
->   	MACH_INGENIC_JZ4780,
-> @@ -83,6 +84,8 @@ enum ingenic_machine_type {
->   	MACH_INGENIC_X1830,
->   	MACH_INGENIC_X2000,
->   	MACH_INGENIC_X2000E,
-> +	MACH_INGENIC_X2000H,
-> +	MACH_INGENIC_X2100,
->   };
->   
->   extern char *system_type;
-> diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-> index 35072c4..6ceb5bd 100644
-> --- a/arch/mips/include/asm/cpu.h
-> +++ b/arch/mips/include/asm/cpu.h
-> @@ -46,8 +46,8 @@
->   #define PRID_COMP_NETLOGIC	0x0c0000
->   #define PRID_COMP_CAVIUM	0x0d0000
->   #define PRID_COMP_LOONGSON	0x140000
-> -#define PRID_COMP_INGENIC_13	0x130000	/* X2000 */
-> -#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4740, JZ4750, X1830 */
-> +#define PRID_COMP_INGENIC_13	0x130000	/* X2000, X2100 */
-> +#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4730, JZ4740, JZ4750, JZ4755, JZ4760, X1830 */
->   #define PRID_COMP_INGENIC_D1	0xd10000	/* JZ4770, JZ4775, X1000 */
->   #define PRID_COMP_INGENIC_E1	0xe10000	/* JZ4780 */
->   
+This is done by taking a use on the cookie in v9fs_set_page_dirty() if we
+haven't already done so (controlled by the I_PINNING_FSCACHE_WB flag) and
+dropping the pin in v9fs_write_inode() if __writeback_single_inode() clears
+all the outstanding dirty pages (conveyed by the unpinned_fscache_wb flag
+in the writeback_control struct).
+
+Inode eviction must also clear the flag after truncating away all the
+outstanding pages.
+
+In the future this will be handled more gracefully by netfslib.
+
+Changes
+=======
+ver #2:
+ - Fix an unused-var warning due to CONFIG_9P_FSCACHE=n[1].
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Eric Van Hensbergen <ericvh@gmail.com>
+cc: Latchesar Ionkov <lucho@ionkov.net>
+cc: Dominique Martinet <asmadeus@codewreck.org>
+cc: v9fs-developer@lists.sourceforge.net
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819667027.215744.13815687931204222995.stgit@warthog.procyon.org.uk/ # v1
+---
+
+ fs/9p/vfs_addr.c  |   44 +++++++++++++++++++++++++++++++++++++++++++-
+ fs/9p/vfs_inode.c |    2 ++
+ fs/9p/vfs_super.c |    3 +++
+ 3 files changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+index 4f5ce4aca317..88ccba3be98c 100644
+--- a/fs/9p/vfs_addr.c
++++ b/fs/9p/vfs_addr.c
+@@ -137,6 +137,7 @@ static void v9fs_vfs_readahead(struct readahead_control *ractl)
+ static int v9fs_release_page(struct page *page, gfp_t gfp)
+ {
+ 	struct folio *folio = page_folio(page);
++	struct inode *inode = folio_inode(folio);
+ 
+ 	if (folio_test_private(folio))
+ 		return 0;
+@@ -147,6 +148,7 @@ static int v9fs_release_page(struct page *page, gfp_t gfp)
+ 		folio_wait_fscache(folio);
+ 	}
+ #endif
++	fscache_note_page_release(v9fs_inode_cookie(V9FS_I(inode)));
+ 	return 1;
+ }
+ 
+@@ -165,10 +167,23 @@ static void v9fs_invalidate_page(struct page *page, unsigned int offset,
+ 	folio_wait_fscache(folio);
+ }
+ 
++static void v9fs_write_to_cache_done(void *priv, ssize_t transferred_or_error,
++				     bool was_async)
++{
++	struct v9fs_inode *v9inode = priv;
++
++	if (IS_ERR_VALUE(transferred_or_error) &&
++	    transferred_or_error != -ENOBUFS)
++		fscache_invalidate(v9fs_inode_cookie(v9inode),
++				   &v9inode->qid.version,
++				   i_size_read(&v9inode->vfs_inode), 0);
++}
++
+ static int v9fs_vfs_write_folio_locked(struct folio *folio)
+ {
+ 	struct inode *inode = folio_inode(folio);
+ 	struct v9fs_inode *v9inode = V9FS_I(inode);
++	struct fscache_cookie *cookie = v9fs_inode_cookie(v9inode);
+ 	loff_t start = folio_pos(folio);
+ 	loff_t i_size = i_size_read(inode);
+ 	struct iov_iter from;
+@@ -185,10 +200,21 @@ static int v9fs_vfs_write_folio_locked(struct folio *folio)
+ 	/* We should have writeback_fid always set */
+ 	BUG_ON(!v9inode->writeback_fid);
+ 
++	folio_wait_fscache(folio);
+ 	folio_start_writeback(folio);
+ 
+ 	p9_client_write(v9inode->writeback_fid, start, &from, &err);
+ 
++	if (err == 0 &&
++	    fscache_cookie_enabled(cookie) &&
++	    test_bit(FSCACHE_COOKIE_IS_CACHING, &cookie->flags)) {
++		folio_start_fscache(folio);
++		fscache_write_to_cache(v9fs_inode_cookie(v9inode),
++				       folio_mapping(folio), start, len, i_size,
++				       v9fs_write_to_cache_done, v9inode,
++				       true);
++	}
++
+ 	folio_end_writeback(folio);
+ 	return err;
+ }
+@@ -307,6 +333,7 @@ static int v9fs_write_end(struct file *filp, struct address_space *mapping,
+ 	loff_t last_pos = pos + copied;
+ 	struct folio *folio = page_folio(subpage);
+ 	struct inode *inode = mapping->host;
++	struct v9fs_inode *v9inode = V9FS_I(inode);
+ 
+ 	p9_debug(P9_DEBUG_VFS, "filp %p, mapping %p\n", filp, mapping);
+ 
+@@ -326,6 +353,7 @@ static int v9fs_write_end(struct file *filp, struct address_space *mapping,
+ 	if (last_pos > inode->i_size) {
+ 		inode_add_bytes(inode, last_pos - inode->i_size);
+ 		i_size_write(inode, last_pos);
++		fscache_update_cookie(v9fs_inode_cookie(v9inode), NULL, &last_pos);
+ 	}
+ 	folio_mark_dirty(folio);
+ out:
+@@ -335,11 +363,25 @@ static int v9fs_write_end(struct file *filp, struct address_space *mapping,
+ 	return copied;
+ }
+ 
++#ifdef CONFIG_9P_FSCACHE
++/*
++ * Mark a page as having been made dirty and thus needing writeback.  We also
++ * need to pin the cache object to write back to.
++ */
++static int v9fs_set_page_dirty(struct page *page)
++{
++	struct v9fs_inode *v9inode = V9FS_I(page->mapping->host);
++
++	return fscache_set_page_dirty(page, v9fs_inode_cookie(v9inode));
++}
++#else
++#define v9fs_set_page_dirty __set_page_dirty_nobuffers
++#endif
+ 
+ const struct address_space_operations v9fs_addr_operations = {
+ 	.readpage = v9fs_vfs_readpage,
+ 	.readahead = v9fs_vfs_readahead,
+-	.set_page_dirty = __set_page_dirty_nobuffers,
++	.set_page_dirty = v9fs_set_page_dirty,
+ 	.writepage = v9fs_vfs_writepage,
+ 	.write_begin = v9fs_write_begin,
+ 	.write_end = v9fs_write_end,
+diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+index 00366bf1ac2c..fa7f69ef0852 100644
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@ -382,6 +382,8 @@ void v9fs_evict_inode(struct inode *inode)
+ 	struct v9fs_inode *v9inode = V9FS_I(inode);
+ 
+ 	truncate_inode_pages_final(&inode->i_data);
++	fscache_clear_inode_writeback(v9fs_inode_cookie(v9inode), inode,
++				      &v9inode->qid.version);
+ 	clear_inode(inode);
+ 	filemap_fdatawrite(&inode->i_data);
+ 
+diff --git a/fs/9p/vfs_super.c b/fs/9p/vfs_super.c
+index b739e02f5ef7..97e23b4e6982 100644
+--- a/fs/9p/vfs_super.c
++++ b/fs/9p/vfs_super.c
+@@ -20,6 +20,7 @@
+ #include <linux/slab.h>
+ #include <linux/statfs.h>
+ #include <linux/magic.h>
++#include <linux/fscache.h>
+ #include <net/9p/9p.h>
+ #include <net/9p/client.h>
+ 
+@@ -309,6 +310,7 @@ static int v9fs_write_inode(struct inode *inode,
+ 		__mark_inode_dirty(inode, I_DIRTY_DATASYNC);
+ 		return ret;
+ 	}
++	fscache_unpin_writeback(wbc, v9fs_inode_cookie(v9inode));
+ 	return 0;
+ }
+ 
+@@ -332,6 +334,7 @@ static int v9fs_write_inode_dotl(struct inode *inode,
+ 		__mark_inode_dirty(inode, I_DIRTY_DATASYNC);
+ 		return ret;
+ 	}
++	fscache_unpin_writeback(wbc, v9fs_inode_cookie(v9inode));
+ 	return 0;
+ }
+ 
+
+

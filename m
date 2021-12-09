@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0A646F25D
+	by mail.lfdr.de (Postfix) with ESMTP id B2D6E46F25E
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 18:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238065AbhLIRqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 12:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S238158AbhLIRq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 12:46:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbhLIRqX (ORCPT
+        with ESMTP id S237537AbhLIRqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:46:23 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBF0C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:42:49 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id o29so4862151wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:42:49 -0800 (PST)
+        Thu, 9 Dec 2021 12:46:24 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E384C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 09:42:50 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso4694182wmr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 09:42:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XABwerEJ1r58rLpIXIhr+f5x85U3HpOmXlluc99SprI=;
-        b=N6XGEcHmTVXm+KH8z8BzeuvaTjsIL2caxR1L2sER8pOOj2g01gG8ZoAs8lGCu9zV+e
-         CRVOh9jyr+rK8oOPVd1KlgbB7rOGAxMT4EhorRhoLgYaabH91wSmi1On9UyE7KPoDPaV
-         Llw62/VuEynvGRVznWzgSOTkCeSaw3imnnRP1FnQi3X6uWKCgJo9Cp0iLIPA4KM2syQo
-         JwSxeB29yFGUmvL0BA5VijJPG83KMdwYF0FNm8IiGyC3N8LCMV3IoF1lVmh5UhJFHna3
-         XiAZyzVSM0Yzf/VGcaDQVygXireXGGS9aH0xxYDCbsrlCEsZZXGznYun7PNpPhNswOfd
-         xoiw==
+        bh=PqWJya3SDVpVN32LUNzQ9Fq3bSZ9N3SlFqE6pDKhDDA=;
+        b=hxqcPbm+gyqnYGcO24u37W1ydoIMbW2jza/PvvDGGqrmABjiIzz+v0jgVUMtx4OLfC
+         KcYKg1hfg7LAggGTm0NJ3fdW09EpcCd7wLZ3KEHJ42JiJ0O522W+lSFBCg4QRI+2QR8R
+         2M8oW4rcsz5LhKHqtI60VZr888X7LXeGMJkMHhCnqUzugXlIi3f7hWv0wUo+QszAEija
+         2aDT7UJOW5vKkF/z0XKWiF+4HY2+RCpaY4BUUKOFRB/VKKG0pCVCeCbS1ST/Xp9r+7t6
+         gStT16zZgDtPHCJbnmWryK3lV5k0hin29uCmMSEBD2WVPK6/9zwzMewGbRlNGv0SpE/q
+         AC6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XABwerEJ1r58rLpIXIhr+f5x85U3HpOmXlluc99SprI=;
-        b=rAQf502dkGsnBVj2ap+G9xgvsrTbSZELIjbLQx6G/zS5gmCI1Aj75XgU3TQyWJ+DjT
-         dnyi3yyLLhQG+Ws93BNzc6qfg3q8WmF/H+qJbXiBCNMpKXqIN68Whj13q0LGgtABI8lA
-         L2xeBMD/V4blCFml1DcaTgXuPUo4UbglsJvw+1WmT8/f2q6ThKd67HJWPKriyNXcs255
-         MI2tMfsDjqralxH6uarygWACCjck0NtLpanyIGAsUZZVCVqpPioipK0mg/jycB7VAUm0
-         ILHADRtPPp9c2A9jmYLm7kWfWrObm1QP5/m3wtiNCZG8WNC02N4s44nFnBnUa8ye0pHl
-         z0fQ==
-X-Gm-Message-State: AOAM5322AuKGDr2hNQ5c4SP0fQtoL3uDyS6SMGTnZB68XgSFk4y8pesC
-        /RS1wgPlwi5YHiUtKwY3NK3D2A==
-X-Google-Smtp-Source: ABdhPJyMdWOH9YX1RmqTPsp0cLCuHAx1vReTTQ3Deh/AIf0xp4IhLcbOYFMMvrSGr5U3K9CEqOvxPg==
-X-Received: by 2002:a1c:43c2:: with SMTP id q185mr8929350wma.30.1639071767999;
-        Thu, 09 Dec 2021 09:42:47 -0800 (PST)
+        bh=PqWJya3SDVpVN32LUNzQ9Fq3bSZ9N3SlFqE6pDKhDDA=;
+        b=SFCtokHdkv0fdcJIWoGwEvwnrlaEZVSJAGewARZHK68R+KGbW40NxWnPCdpAsD4ZZk
+         CHGGp+4odQPeORz4A5a1AFewJnNZGY8hdrLL5ebkK15uh8uK6jOXvJtGquu6R9f72NNW
+         TEAaQMgrpB5r+voqY4Sg+Cm/Bd0gFv9+SAtvWupLNsf2xWI3hM9/YJa8b1WPGDe9ukS3
+         U5GPnYQ1u7P8NVqeOrxwg3nnyFfrm7QgkBT+1lMmWAoEU+YPj7UnEa2M9OVFdVIifYXy
+         cDzaHzZJoxUSSk//vPF1/e4YQMYJ59T5Qod64kHhWDA9QGAuahyiCaWueR7OhK9WibCd
+         ruCg==
+X-Gm-Message-State: AOAM5314DCOBYih7LqXGfGSPPv7Pa/LAJ3KzStR/J9nKNQ5m2Bzwt8A2
+        M4YfufP/uRnj2ABc24HCYpkpLg==
+X-Google-Smtp-Source: ABdhPJxk1M63/7OOt1pvU2BnD2KEO7MCWz57OB2IgBbBSReC+AQj4SppqONrRzKvx0yUVXchO0ME7Q==
+X-Received: by 2002:a05:600c:3584:: with SMTP id p4mr9154291wmq.109.1639071769036;
+        Thu, 09 Dec 2021 09:42:49 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id w4sm308666wrs.88.2021.12.09.09.42.46
+        by smtp.gmail.com with ESMTPSA id w4sm308666wrs.88.2021.12.09.09.42.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 09:42:47 -0800 (PST)
+        Thu, 09 Dec 2021 09:42:48 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 2/4] dt-bindings: nvmem: mediatek: add support for mt8195
-Date:   Thu,  9 Dec 2021 17:42:33 +0000
-Message-Id: <20211209174235.14049-3-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 3/4] nvmem: mtk-efuse: support minimum one byte access stride and granularity
+Date:   Thu,  9 Dec 2021 17:42:34 +0000
+Message-Id: <20211209174235.14049-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20211209174235.14049-1-srinivas.kandagatla@linaro.org>
 References: <20211209174235.14049-1-srinivas.kandagatla@linaro.org>
@@ -68,27 +67,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Add compatible for mt8195
+In order to support nvmem bits property, should support minimum 1 byte
+read stride and minimum 1 byte read granularity at the same time.
 
 Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- Documentation/devicetree/bindings/nvmem/mtk-efuse.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/nvmem/mtk-efuse.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-index ec70c5b7a340..39d529599444 100644
---- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-+++ b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-@@ -8,6 +8,7 @@ Required properties:
- 	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
- 	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
- 	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
-+	      "mediatek,mt8195-efuse", "mediatek,efuse": for MT8195
- 	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
- - reg: Should contain registers location and length
- - bits: contain the bits range by offset and size
+diff --git a/drivers/nvmem/mtk-efuse.c b/drivers/nvmem/mtk-efuse.c
+index 6a537d959f14..e9a375dd84af 100644
+--- a/drivers/nvmem/mtk-efuse.c
++++ b/drivers/nvmem/mtk-efuse.c
+@@ -19,11 +19,12 @@ static int mtk_reg_read(void *context,
+ 			unsigned int reg, void *_val, size_t bytes)
+ {
+ 	struct mtk_efuse_priv *priv = context;
+-	u32 *val = _val;
+-	int i = 0, words = bytes / 4;
++	void __iomem *addr = priv->base + reg;
++	u8 *val = _val;
++	int i;
+ 
+-	while (words--)
+-		*val++ = readl(priv->base + reg + (i++ * 4));
++	for (i = 0; i < bytes; i++, val++)
++		*val = readb(addr + i);
+ 
+ 	return 0;
+ }
+@@ -45,8 +46,8 @@ static int mtk_efuse_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+ 
+-	econfig.stride = 4;
+-	econfig.word_size = 4;
++	econfig.stride = 1;
++	econfig.word_size = 1;
+ 	econfig.reg_read = mtk_reg_read;
+ 	econfig.size = resource_size(res);
+ 	econfig.priv = priv;
 -- 
 2.21.0
 

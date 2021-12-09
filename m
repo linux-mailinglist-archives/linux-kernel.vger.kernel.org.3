@@ -2,279 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 985A646E0C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD4046E0C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 03:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbhLICRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 21:17:39 -0500
-Received: from mga12.intel.com ([192.55.52.136]:22739 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229909AbhLICRi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:17:38 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218021727"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="218021727"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:14:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="463033937"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2021 18:14:03 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mv8wc-0001Ki-GK; Thu, 09 Dec 2021 02:14:02 +0000
-Date:   Thu, 09 Dec 2021 10:13:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:locking/core] BUILD SUCCESS
- 77993b595ada5731e513eb06a0f4bf4b9f1e9532
-Message-ID: <61b16637.PoyDH3tUEZsvTqVi%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229976AbhLICRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 21:17:55 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:60668 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229909AbhLICRy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:17:54 -0500
+Received: from localhost.localdomain (unknown [124.16.138.128])
+        by APP-01 (Coremail) with SMTP id qwCowAA3PZ1hZrFhOcjlAQ--.27202S2;
+        Thu, 09 Dec 2021 10:13:55 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] net: sched: gred: potential dereference of null pointer
+Date:   Thu,  9 Dec 2021 10:13:46 +0800
+Message-Id: <20211209021346.2004600-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAA3PZ1hZrFhOcjlAQ--.27202S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtryfXF18GrWxXrWfGrg_yoW3AFcEgw
+        4rKr1kAr97JF1rZrWUAr48Gr9a9F1DWw4v9r9xKrZ3tayUJF93W3y7Crs3Aryxur47CryD
+        ArZFqFy5Jw1akjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpwZ7UUUU
+        U==
+X-Originating-IP: [124.16.138.128]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-branch HEAD: 77993b595ada5731e513eb06a0f4bf4b9f1e9532  locking: Allow to include asm/spinlock_types.h from linux/spinlock_types_raw.h
+The return value of kzalloc() needs to be checked.
+To avoid use of null pointer in gred_change_vq() in case
+of the failure of alloc.
 
-possible Warning in current branch (please contact us if interested):
-
-include/linux/syscalls.h:155:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-include/linux/syscalls.h:242:20: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-include/linux/syscalls.h:243:20: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- mips-allmodconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-allyesconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-ath25_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-bmips_stb_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-cu1000-neo_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-decstation_64_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-gpr_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-jazz_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-jmr3927_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-lemote2f_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-loongson1c_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-maltasmvp_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-maltaup_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-pic32mzda_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-qi_lb60_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-randconfig-r022-20211207
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-randconfig-r023-20211207
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-|-- mips-rs90_defconfig
-|   `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-`-- mips-xway_defconfig
-    `-- include-linux-syscalls.h:warning:ISO-C90-forbids-mixed-declarations-and-code
-
-elapsed time: 2067m
-
-configs tested: 173
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211207
-i386                 randconfig-c001-20211208
-m68k                             alldefconfig
-arc                           tb10x_defconfig
-arm                           tegra_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                        edosk7760_defconfig
-riscv                            alldefconfig
-arm                            xcep_defconfig
-sh                           se7750_defconfig
-arm                        shmobile_defconfig
-powerpc                 mpc832x_rdb_defconfig
-nios2                         3c120_defconfig
-arm                           corgi_defconfig
-arm                       cns3420vb_defconfig
-arm                        cerfcube_defconfig
-powerpc                     mpc512x_defconfig
-h8300                            allyesconfig
-h8300                     edosk2674_defconfig
-sh                        sh7763rdp_defconfig
-csky                             alldefconfig
-arc                        nsim_700_defconfig
-sparc                       sparc64_defconfig
-riscv                    nommu_k210_defconfig
-powerpc                 mpc8272_ads_defconfig
-arc                              alldefconfig
-powerpc                 mpc834x_mds_defconfig
-arc                          axs103_defconfig
-arm                         nhk8815_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                    socrates_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                          iop32x_defconfig
-arm                       versatile_defconfig
-arm                        spear3xx_defconfig
-nios2                               defconfig
-powerpc                      chrp32_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                         lpc18xx_defconfig
-arm                            hisi_defconfig
-powerpc                        icon_defconfig
-arc                     haps_hs_smp_defconfig
-m68k                            q40_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm64                            alldefconfig
-powerpc                       ppc64_defconfig
-arc                        nsimosci_defconfig
-m68k                          atari_defconfig
-sh                           se7780_defconfig
-powerpc                   currituck_defconfig
-sh                           se7343_defconfig
-arm                        neponset_defconfig
-arc                     nsimosci_hs_defconfig
-arm                         shannon_defconfig
-sh                           se7722_defconfig
-arm                         lpc32xx_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                           se7619_defconfig
-powerpc                     stx_gp3_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                            zeus_defconfig
-powerpc                      cm5200_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                     powernv_defconfig
-arc                      axs103_smp_defconfig
-mips                     cu1000-neo_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                     ppa8548_defconfig
-arm                         hackkit_defconfig
-powerpc                      acadia_defconfig
-arm                          badge4_defconfig
-powerpc                  iss476-smp_defconfig
-alpha                               defconfig
-xtensa                          iss_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                  randconfig-c002-20211207
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-csky                                defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                                defconfig
-sparc                               defconfig
-sparc                            allyesconfig
-i386                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211207
-x86_64               randconfig-a005-20211207
-x86_64               randconfig-a001-20211207
-x86_64               randconfig-a002-20211207
-x86_64               randconfig-a004-20211207
-x86_64               randconfig-a003-20211207
-i386                 randconfig-a001-20211207
-i386                 randconfig-a005-20211207
-i386                 randconfig-a002-20211207
-i386                 randconfig-a003-20211207
-i386                 randconfig-a006-20211207
-i386                 randconfig-a004-20211207
-x86_64               randconfig-a016-20211208
-x86_64               randconfig-a011-20211208
-x86_64               randconfig-a013-20211208
-x86_64               randconfig-a012-20211208
-x86_64               randconfig-a015-20211208
-x86_64               randconfig-a014-20211208
-arc                  randconfig-r043-20211207
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-arm                  randconfig-c002-20211209
-x86_64               randconfig-c007-20211209
-riscv                randconfig-c006-20211209
-i386                 randconfig-c001-20211209
-mips                 randconfig-c004-20211209
-powerpc              randconfig-c003-20211209
-s390                 randconfig-c005-20211209
-x86_64               randconfig-a011-20211207
-x86_64               randconfig-a013-20211207
-x86_64               randconfig-a014-20211207
-x86_64               randconfig-a012-20211207
-x86_64               randconfig-a016-20211207
-x86_64               randconfig-a015-20211207
-i386                 randconfig-a016-20211207
-i386                 randconfig-a013-20211207
-i386                 randconfig-a011-20211207
-i386                 randconfig-a014-20211207
-i386                 randconfig-a012-20211207
-i386                 randconfig-a015-20211207
-hexagon              randconfig-r045-20211208
-hexagon              randconfig-r041-20211208
-hexagon              randconfig-r045-20211207
-s390                 randconfig-r044-20211207
-riscv                randconfig-r042-20211207
-hexagon              randconfig-r041-20211207
-
+Fixes: 869aa41044b0 ("sch_gred: prefer GFP_KERNEL allocations")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ net/sched/sch_gred.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/sched/sch_gred.c b/net/sched/sch_gred.c
+index f4132dc25ac0..c0d355281baf 100644
+--- a/net/sched/sch_gred.c
++++ b/net/sched/sch_gred.c
+@@ -697,6 +697,8 @@ static int gred_change(struct Qdisc *sch, struct nlattr *opt,
+ 	}
+ 
+ 	prealloc = kzalloc(sizeof(*prealloc), GFP_KERNEL);
++	if (!prealloc)
++		return -ENOMEM;
+ 	sch_tree_lock(sch);
+ 
+ 	err = gred_change_vq(sch, ctl->DP, ctl, prio, stab, max_P, &prealloc,
+-- 
+2.25.1
+

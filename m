@@ -2,362 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC7046E4AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4F146E4AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235299AbhLII70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:59:26 -0500
-Received: from mga12.intel.com ([192.55.52.136]:28326 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231626AbhLII7Z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:59:25 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218074053"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="txt'?gz'50?scan'50,208,49,50";a="218074053"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 00:55:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="txt'?gz'50?scan'50,208,49,50";a="658688600"
-Received: from imihalc-mobl1.ger.corp.intel.com (HELO [10.252.52.209]) ([10.252.52.209])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 00:55:50 -0800
-Subject: Re: [RFCv2 0/8] USI stylus support series
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
-References: <20211126130141.1811848-1-tero.kristo@linux.intel.com>
- <CAO-hwJLq6Jnvos=CR_-D6FD-7W56q2eYRVyRMbmE5NFaXLHrng@mail.gmail.com>
- <4c87f439-f6d0-97e7-156e-90e9baab4b01@linux.intel.com>
- <CAO-hwJ+Vt81ZKR0Ywa5ffDW1R586dDcPQgOoe8awUOdYWV0Y7Q@mail.gmail.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-Message-ID: <fa6b6276-8afb-521b-889f-1a9c63379b17@linux.intel.com>
-Date:   Thu, 9 Dec 2021 10:55:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S235350AbhLII7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231626AbhLII72 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 03:59:28 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4DC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 00:55:55 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id n12so10714887lfe.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 00:55:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=pMGZyFrm7H/qama6frDDe69lJwdy0pA/LI/N/YiYQ8s=;
+        b=ZkRwmO2PzMRtt1Pf8QjQNJM7n7bSbI8Mk8xEjnzIHJzK88EtPh1VMmEaKqL1Mk2wQ7
+         vFd2jimmlemXFp35RQICTWK7TjU3HJOP8GkBDOlCelDvBZ67j/SgTyewpbivbTDo+IXb
+         3Ccub5r4AFyRuB3aiQP/TBEAMNpFlygDFvd1ujzvq1MaQ8D6DbRPqHx9n0P2hkw2bBW2
+         hvmaBg3bMaGohTuF6+rQgg5RJEKC4sAw29kZKEJzNKHj1EyB3JHqHgYPu3s6gzR78nNe
+         9/SQSZx1+jiOEnZYvwsyYW8fzSEBiiXMcfKJ6lgTF7x7UQ5n/teEnjTDOUNo6Rr9UtR4
+         ycNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=pMGZyFrm7H/qama6frDDe69lJwdy0pA/LI/N/YiYQ8s=;
+        b=MjheZ/UHc8Z/E0iUl/1MV/HxQZVgFQnwjB30TaiRBdNLJ/CKYRqaMqdSQcA5M1b87T
+         BFrYzhK96dTZRePHyAqsDzEZDRPu81CCj4MnSvhaSnQb9WzIHHfMu8GV40mDbZ9i6yCU
+         2Q0is/x6Rg9qd4fdelLogcd3jUO93iSdXyADvbZXghGLGtnWYWGtvKJzyQU+UUAcBx0P
+         M/4zPA3FJxlwu4fK25W1h1kkP2RIU6cXFGcdtN9xYmIB6J9rBCMq9cpzvzFoW2ZAeH/y
+         d+XiT3oyo84LgAS3g01B9Dl7svDIxNBoN+pg085vx2+kct15vRwgl+lAwGbP4fXIFmUT
+         siMQ==
+X-Gm-Message-State: AOAM5328xuwzl50wS2TUr32cZlyHz/MOmmuhas9PrXc/wJI/wTJXFomC
+        Z3UQVhI9gMGwoVYPIQL3lqbCTz3gQlsx553VpU4=
+X-Google-Smtp-Source: ABdhPJwkakLeuqR9zOyGhouHK0nBOMAa0eUvxK09J0+SrnnJK/j+WpL9ltB7eozi4QLiDgh7We/92BUsK7CEuPiePlw=
+X-Received: by 2002:ac2:4d5b:: with SMTP id 27mr4781047lfp.596.1639040153268;
+ Thu, 09 Dec 2021 00:55:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAO-hwJ+Vt81ZKR0Ywa5ffDW1R586dDcPQgOoe8awUOdYWV0Y7Q@mail.gmail.com>
-Content-Type: multipart/mixed;
- boundary="------------F3ABB60F91A5847EC875D22B"
-Content-Language: en-US
+Received: by 2002:a2e:990c:0:0:0:0:0 with HTTP; Thu, 9 Dec 2021 00:55:52 -0800 (PST)
+Reply-To: martindevatta@yandex.com
+In-Reply-To: <CAM1crw6342fkzZVVPx8rQUt2p_i6AaaRJr58MaZF8Lj3YoY3Ew@mail.gmail.com>
+References: <CAM1crw5f5fjZiMNLN-5n4SC9b08wyCsR2ueLFjfXjk_kx9MX0g@mail.gmail.com>
+ <CAM1crw54_nwXnOgP-pLzyarLRMYCpcTrtZ0vnmJ=+_BGs+yL9g@mail.gmail.com>
+ <CAM1crw58uPNFu0SJBzBgHXiFqubk5xrpdEtZjubfu17VR9XKag@mail.gmail.com>
+ <CAM1crw5qhWTtvMVx6A6dERWoA3ctVNQux7NLm4hSa+mdrvZFMA@mail.gmail.com>
+ <CAM1crw7mguckhNXvPP2iY0qWoUDwRzz8R4_rRj5aQ3dDNUmoLg@mail.gmail.com>
+ <CAM1crw7bwjDT9XweSPYK8e8e+YZzAkvzksaedTPf-oLV0tmX1Q@mail.gmail.com>
+ <CAM1crw6+9kYyvRKAydc7PGoHvFSEMgghaT1wXbfE6TceeWc51Q@mail.gmail.com>
+ <CAM1crw7uAc=9hA=sMBt8taWdmh2Db5S=J5o64VpkUs-ndpMn-A@mail.gmail.com>
+ <CAM1crw7qZjf-fx4y8kyrz5pUOS-Eq0fm7CAoM92C0SVfYGxUjg@mail.gmail.com>
+ <CAM1crw6PQ0yi2a7RD_H4m5NDQ36159AKx9hkvf1U281zNFavww@mail.gmail.com>
+ <CAM1crw6WDM+ghJrAdLM226o2GmrOdqhOjV-jOnR4HWf8VeZp=g@mail.gmail.com>
+ <CAM1crw7i2aNkpy0pMs0kXXfVqufSGd7BFCCr1zUCoWcdd7Chjw@mail.gmail.com>
+ <CAM1crw5rLxSqi3_H4JRxZvHHXOWamA3m7e3wrosZ-=-exTic4g@mail.gmail.com>
+ <CAM1crw7uyAR+8E6kVsZpQtxhgpKkjRjiSwjJLmeOHjqNOL7Umw@mail.gmail.com>
+ <CAM1crw678KS8umTJA2htWrPFLPZkiUOsw8TKVpX74zm1bMhShQ@mail.gmail.com>
+ <CAM1crw7ZbN=yiFY2k0LkvRKH+Lp8tuMH1DvpQOthEWuK7Gq1XA@mail.gmail.com>
+ <CAM1crw7USq99SiD4mMejzN6M1EXR-UQVUV=P13zKasvheEasYQ@mail.gmail.com>
+ <CAM1crw6DhictVXLbYwa6fQ6p9B-E12Ewzmp-yjpzWTE-0Tigzw@mail.gmail.com>
+ <CAM1crw5a3ov6dzR4MRgJ8jP81nudzhb4amgxirbhihfNQUf=PQ@mail.gmail.com>
+ <CAM1crw6D65otdnYEaMTr9P1tK4BzdLy63sO3WpG7cJa9Uvn1Tg@mail.gmail.com>
+ <CAM1crw5kR-5Rr=TeOZv-RJ8-Mbm8Lb5Zp1tyHWQczmOX_Evveg@mail.gmail.com>
+ <CAM1crw4+m4Tt0=i6p46ZN8ZT==f9hwSMzdDvK1-h4cR++ZoKoQ@mail.gmail.com>
+ <CAM1crw7PaF0-SSTEf3B1JncpZg+g5b4M43HgtFbSqcnvQAGwLQ@mail.gmail.com>
+ <CAM1crw6qW2Bz-1cTDLE55aocaq4ahwrLpvNQmQsNbd5nXweBbQ@mail.gmail.com>
+ <CAM1crw49Xbss=KWbcuXzDtNTmB2amfpxnUkHWef0Z__NdDKaLA@mail.gmail.com>
+ <CAM1crw6Mxq3yKxoEAKk7-ojHe_NxSVjkR0dXqF1dowNSJzUDZQ@mail.gmail.com>
+ <CAM1crw7bx2p3J+0E+bavADq7wJx+xZk43TJh-NEsnREzf+DVZg@mail.gmail.com>
+ <CAM1crw42adx2QPScJa+zFQFTZHQUhSJ0xg1h46nVn7i9zRNZXQ@mail.gmail.com>
+ <CAM1crw6D10FEdFm-Ky1xJhNVKQuoNBJT==XBXn6ZMkYheZ_2Ug@mail.gmail.com>
+ <CAM1crw5h-np2-F1kcjczYmB4zs6+0Q1bX=4cQGjAm8Q8NwJ8Mg@mail.gmail.com>
+ <CAM1crw7=pNT+d0g_soA+FErB-fEXHjGASnWQ-aU28oRLvpAmDQ@mail.gmail.com>
+ <CAM1crw7GkV3kur_WwAxs_uf4PZeCu6jfrmRQj_c5uDSJ1cjVAw@mail.gmail.com>
+ <CAM1crw5-BAzac8fQWvYDTmRaxt=1PgMUU=cTwrYgB+xKOLYfwg@mail.gmail.com>
+ <CAM1crw6J3NTh4N6565TaF-e_UT3eSP73xeJD7o3LS-J77ULCkw@mail.gmail.com>
+ <CAM1crw5HHKEh25ZiC6bMR6f=AKuuMUyjSK2ubMkHhMe7v4_Q1Q@mail.gmail.com>
+ <CAM1crw4gPv3__kUmhH+XU2A1s8kaHEQbUh+6+MPcff13b7ecWg@mail.gmail.com>
+ <CAM1crw4gU1CAe-rr+OP=1jwnenX9O++tFOJMwsX=mz_cyc_N3g@mail.gmail.com>
+ <CAM1crw4Tntq3sexy4KJ4VV9i1xg2Bb2kF=EY6tp0wDvZj3Hpmg@mail.gmail.com>
+ <CAM1crw4Ar+3dMKvMDSvAjXq6Farx+LJOy2aJexP-qQZrwVdOHA@mail.gmail.com>
+ <CAM1crw4D_ZMjCosfX91HcWAjJ+FCJD=khSEbKA87rLHPn1Zhhw@mail.gmail.com>
+ <CAM1crw7LwrztLjWTFspCQcVj+WMGK8523TDcLuAhDynU6CUejQ@mail.gmail.com>
+ <CAM1crw5+nReyQ7RY01MN-6ScoPwJXkxdhrtybDDDn5WhNLDqOQ@mail.gmail.com>
+ <CAM1crw5YiNdmmsEgfTcUSx2bx7aq9biOu4tcWpB74-p0zbZW9Q@mail.gmail.com>
+ <CAM1crw7LYk3X7HZu81r4usVQXd8uOF78bYXKpE5JnQvhafYxVQ@mail.gmail.com>
+ <CAM1crw4XcuQbX2zF-i1eQnqDgF0+eT_GxMtCyDEVgBxddvHJCA@mail.gmail.com>
+ <CAM1crw40UtiLMwj1X8KVHZjpFo=yg+EcpaF+LBv+nvgTcxn79Q@mail.gmail.com>
+ <CAM1crw4WMOyiCq7WaN8jHKh_ptL5YF28t+wo-iGd8ehPdX2wnw@mail.gmail.com>
+ <CAM1crw7BJY1nmzP2CA7tksn4czfqaw=ZmyaRYemxAQ=O=k0_QA@mail.gmail.com>
+ <CAM1crw7TbJ_vbyvpQECvdxQoKmauoJ2ZCRPCGp4z_VqZyBSZMw@mail.gmail.com>
+ <CAM1crw7MXzakhauQ9prw2UyirLmK11rsD6K41nBv9ixbeBBooA@mail.gmail.com>
+ <CAM1crw6g9PuN+Jf-UsRt02Y7++nk+ytK2XQPTwRrH8O2Cs99Pw@mail.gmail.com>
+ <CAM1crw52tWMOFz9oYXayThWR2qJjFwc5vFs=6+zxp0ddAR3M-A@mail.gmail.com>
+ <CAM1crw7tkTfDNdQfiei3U-eZe=eZzjHF_n0O_obdJqkhU7hmnA@mail.gmail.com>
+ <CAM1crw75bcy5J--0i_mLCJ_9etjmP9Hj6_gdc_9k-M1MhH_Q=A@mail.gmail.com>
+ <CAM1crw4d6ypsPmx8SAruyyK4e0s=1sAtujz4X3d_oKgQ3M=Dhg@mail.gmail.com>
+ <CAM1crw52QFa-fcVDhzH_SRnHOO+q6SJaCv2ZkmN=POwOJwe98w@mail.gmail.com>
+ <CAM1crw6O--rjfHJ-8Hx_rEgdquA+stpp6B-CwteV2w0KfTXE_A@mail.gmail.com>
+ <CAM1crw7_fDPMcPrWWiM-Av09_7vX_HZdRzsr38sH4ysogDra8g@mail.gmail.com>
+ <CAM1crw7X5CeE7sB_617vUTrk7S3Z4-op4cyE9R_-VYDpUS95Jg@mail.gmail.com>
+ <CAM1crw5X+82Omjnm878EJ0EYbUb1sXrnLSODyPBuLF37HmYk1g@mail.gmail.com>
+ <CAM1crw61Q6fhfFPWZ8U1iCkuOPWNtTg7n8QUUsPMRuPchjaihw@mail.gmail.com>
+ <CAM1crw64sykdAhfHqp4SwjJ7yS_26sR8YBONOgMneMowEHUpKw@mail.gmail.com>
+ <CAM1crw6SdhfXu9FsYKw3seUod0FvoNM2YKabg_rmt5eUhSafvA@mail.gmail.com>
+ <CAM1crw4Yy=9Teu-8gh-ShrJpzXtBCouApuX1joupLtrj4Av7QQ@mail.gmail.com>
+ <CAM1crw4dUdT5eAGTcQ9K6hPq0S5fZhCp5TJg+0QA0EUw4Z8Q3g@mail.gmail.com>
+ <CAM1crw7KVStDGrTpxfx4XdVSmwBmhHNLwNshY0ErZRnm=LSYgA@mail.gmail.com>
+ <CAM1crw7RfcOGk5aSeZDPJFdSiyKFm6_sL34yCpwfMrdeMt3P2Q@mail.gmail.com>
+ <CAM1crw4TGug6JMWPF4RsiJXwbBStGpB7TsWJe1G-yUVy=PRs0A@mail.gmail.com>
+ <CAM1crw5w23h89hATOv=kYVyTYsfhi90aqp8j7__Nia=3fBCtfQ@mail.gmail.com>
+ <CAM1crw7AF2NUNuxNuB_dp1okKdLWGv_aKPcWkpOP7idh4cQ+fQ@mail.gmail.com>
+ <CAM1crw4D+_PxG-mFVaqH6PiN2HWjZsujw15nY3if8rXb3erVXg@mail.gmail.com>
+ <CAM1crw76vdh85vPmvKFjgDiNS9cFd0qzty1OLZb77uqSsauzzg@mail.gmail.com>
+ <CAM1crw44BtnedVkeQia9Y3R12zpkqNOF6fCBKcB91WkckYZfHA@mail.gmail.com>
+ <CAM1crw5SbPXzmd461K=N7EdNE1WzAa41-z1QBob3GNDxCNQsAg@mail.gmail.com>
+ <CAM1crw7FsOyDngFh3=P9eeAFXeOvS7RBgiFdjhfx5_RMXZAJsQ@mail.gmail.com>
+ <CAM1crw6ZT-0QpQmsAgJf8oFFKu1qob7h4LJ5nG_xQvZPkpwbjA@mail.gmail.com>
+ <CAM1crw6xAZCWRWovOj3Z=wu3cMcxizo+wjLpTiVOPnSz-hsCxg@mail.gmail.com>
+ <CAM1crw5VmdQPxMo1JN-QFaJjoE1c9fqBn0rgD+7CpSHthXdxYw@mail.gmail.com>
+ <CAM1crw5LSjNeAk+tKPT5zQ+sOaLSx7cZp0wCDgLouC-cCkZ1sA@mail.gmail.com>
+ <CAM1crw6tfUjfGL36_-mOa8GstukOj5mKHqW_gsgzG+46BE2fFw@mail.gmail.com>
+ <CAM1crw60DDEoNEgZKdZrAfmO+1DqDz6Sre8CWz5UB6yQfe-7gw@mail.gmail.com>
+ <CAM1crw43PbFu9e7KZzKZDor4Y+R8FMNpwSYxVjo9pPkzXb6Q=A@mail.gmail.com>
+ <CAM1crw6P67kXy=+v-ji1X8uBiwzwZtD1aMFWUqE=pwfU3wKihw@mail.gmail.com>
+ <CAM1crw4ZiSJhaGTpcM2Re_X7Xt4DCqnWswBTsqm+n2VyVE-erQ@mail.gmail.com>
+ <CAM1crw5EBd3Q8bt2JA=LoG+Sjg0V1YSbmAtPEE7PqdkZ8KdCMQ@mail.gmail.com>
+ <CAM1crw4jCcn68SUH+s8XGnG_L0GntK4NJ7rTpdbd2pkB1HLFSw@mail.gmail.com>
+ <CAM1crw7zngDieNh2N_tpJGLNXqybeaw7+nFnjDqzqbi-TadkBw@mail.gmail.com>
+ <CAM1crw4gXkaxf1SnBTGX2zuGp9SW5=DfjWuyBQjmpBqy07JoOg@mail.gmail.com>
+ <CAM1crw4g9zRT2Z=2q+cuej_C4JqRrTYgKD6pdh6+8HAQjyQMGg@mail.gmail.com>
+ <CAM1crw6a+w-9LDRUmvs3vSHR1jJoet2k48OKS+SBojm8KSPh3g@mail.gmail.com>
+ <CAM1crw5nhNF+2GXMJN+JPOzzu1_j852ZFd-DzXn-SW91Or5u9Q@mail.gmail.com>
+ <CAM1crw40d7gu9DTMHE9EiMVbThfm9=bi5NuTv2eSvdAj9-Do1A@mail.gmail.com>
+ <CAM1crw4_=OUGaGPXFmcOBsBu6Mm-7ZoOqoppWecX3PxjnyVquw@mail.gmail.com>
+ <CAM1crw7AnBR+VhR9a+bANbeC=Gf9DZy2cGS7anwbeen+TyRL3Q@mail.gmail.com>
+ <CAM1crw43kUjDZAOrUmrGSoABCURZx15qfuyBK6jmM0mGVSydoA@mail.gmail.com>
+ <CAM1crw5bvwMOWgq8P-yOSStPrtPUqZ=N7M0=9PdUzM8zjb2bxA@mail.gmail.com>
+ <CAM1crw6t37fU43+x6YW68M4ubFh96kmMUD_nV5_8FTc23EEOeg@mail.gmail.com>
+ <CAM1crw6KOWq1VxUL92MVnYD0ADyxETADvuqhQrnZnCt+6bvUPw@mail.gmail.com>
+ <CAM1crw6DdKw3n3WqosBYJoJuunLMRUVnuy5x8DF5S=x38n2iBg@mail.gmail.com> <CAM1crw6342fkzZVVPx8rQUt2p_i6AaaRJr58MaZF8Lj3YoY3Ew@mail.gmail.com>
+From:   martin devatta <robertstaylor617@gmail.com>
+Date:   Thu, 9 Dec 2021 10:55:52 +0200
+Message-ID: <CAM1crw5ML32gDkCZ+waVzDb2RTYhhG1+WnNQ5c_Hai=zhPFzZA@mail.gmail.com>
+Subject: From Procurement Supervisor
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------F3ABB60F91A5847EC875D22B
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Dear Sir,
 
-Hi Benjamin,
+I greet you with warm regards. I work for Malaysia Oil Refinery Sdn
+Bhd Company as a procurement supervisor, Malaysia Oil Refinery Sdn Bhd
+is an Oil Refining Company located in South East Asia.
 
-On 08/12/2021 16:56, Benjamin Tissoires wrote:
-> Hi Tero,
->
-> On Tue, Nov 30, 2021 at 5:13 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->> Hi Benjamin,
->>
->> On 30/11/2021 16:44, Benjamin Tissoires wrote:
->>> Hi Tero,
->>>
->>> On Fri, Nov 26, 2021 at 2:02 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->>>> Hi,
->>>>
->>>> This series is an update based on comments from Benjamin. What is done
->>>> is this series is to ditch the separate hid-driver for USI, and add the
->>>> generic support to core layers. This part basically brings the support
->>>> for providing USI events, without programmability (patches 1-6).
->>> That part seems to be almost good for now. I have a few things to check:
->>> - patch2: "HID: hid-input: Add suffix also for HID_DG_PEN" I need to
->>> ensure there are no touchscreens affected by this (there used to be a
->>> mess with some vendors where they would not declare things properly)
->>> - patch5: "HID: core: map USI pen style reports directly" this one
->>> feels plain wrong. I would need to have a look at the report
->>> descriptor but this is too specific in a very generic code
->> Relevant part of the report descriptor is here:
->>
->>       Field(8)
->>         Physical(Digitizers.Stylus)
->>         Logical(Digitizers.Preferred Line Style)
->>         Application(Digitizers.Pen)
->>         Usage(6)
->>           Digitizers.Ink
->>           Digitizers.Pencil
->>           Digitizers.Highlighter
->>           Digitizers.Chisel Marker
->>           Digitizers.Brush
->>           Digitizers.No Preference
->>         Logical Minimum(1)
->>         Logical Maximum(6)
->>         Physical Minimum(0)
->>         Physical Maximum(255)
->>         Unit Exponent(-1)
->>         Unit(SI Linear : Centimeter)
->>         Report Size(8)
->>         Report Count(1)
->>         Report Offset(88)
->>         Flags( Variable Absolute NoPreferredState )
->>
->> To me, it looks almost like it is a bug in the report descriptor itself;
->> as you see there are 6 usage values but the report size / count is 1
->> byte. The fact that there are 6 usage values in the field confuses
->> hid-core. Basically the usage values are used as encoded content for the
->> field.
-> It took me a few days but I finally understand that this report
-> descriptor is actually correct.
->
-> The descriptor gives an array of 1 element of size 8, which is enough
-> to give an index within the available values being [Digitizers.Ink,
-> Digitizers.Pencil, Digitizers.Highlighter, Digitizers.Chisel Marker,
-> Digitizers.Brush, Digitizers.No Preference]
->
-> Given that logical min is 1, this index is 1-based.
->
-> So the job of the kernel is to provide the event
-> Digitizers.Highlighter whenever the value here is 3. The mapping 3 <->
-> Digitizers.Highlighter is specific to this report descriptor and
-> should not be forwarded to user space.
+On my desk is a mandate to arrange for a Crude Oil purchase from the
+National Oil Corporation of Libya, from the State of Libya for up to
+2,000,000 (2 Million) barrels on monthly bases for 12 calendar months.
 
-Yes, all this is true. I also see you re-wrote this part a bit in the 
-series to add individual events for all the different line styles. I'll 
-give this a shot and see how it works out. A problem I see is that we 
-need to be able to program the pen line style also somehow, do we just 
-set a single pen style to "enabled" and all the rest get set to 
-"disabled" under the hood?
+The reason for my reaching out to you is because I am in the process
+of establishing a broker / mediator or a middle man structure to
+mediate between the 2 parties involved (our Company and the Company in
+Libya) before the contract is signed.
 
+You may be wondering why I cannot execute this transaction by myself.
+The honest fact is that as an employee working for this company, it is
+against our company operational ethics / policy for an employee to be
+involved or profit in any financial dealings involving our Company,
+hence I am looking for a trustworthy person outside my work circle in
+order to maintain a discreet profile.
 
->
->> Alternatively I think this could be patched up in the BPF program, as I
->> am modifying the content of the raw hid report already; I could just as
->> well modify this one also. Or, maybe I could fix the report descriptor
->> itself to act as a sane variable, as I am parsing the report descriptor
->> already?
-> I couldn't understand the fix you did in the BPF program. Can you
-> explain it by also giving me an example of raw event from the device
-> and the outputs (fixed and not fixed) of the kernel?
+I wish to extend this partnership to your friend to build a broker /
+mediator or a middle man structure with you while I work from the
+background to guide you. Our company pays between $ 2 - $ 3 per barrel
+of Crude Oil as a commission / brokerage amount, if the target of 2
+Million barrels is a monthly we stand to share $ 4 Million - $ 6
+Million every month for a span of 12 months .
 
-The fix in the BPF code is this (under process_tag()):
+Contact me if you are interested in this deal, so that I can give you
+further details.
 
-                         /*
-                          * Force flags for line style. This makes it act
-                          * as a simple variable from HID core point of 
-view.
-                          */
-                         bpf_hid_set_data(ctx, (*idx + 1) << 3, 8, 0x2);
-
-After that, the pen line style gets forwarded as a simple integer value 
-to input-core / userspace also. raw events did not need modification 
-after all, I just modified the report descriptor.
-
->
->
-> Talking about that, I realized that you gave me the report descriptor
-> of the Acer panel in an other version of this RFC. Could you give me:
-> - the bus used (USB or I2C)?
-I have been using I2C in all my testing, the controllers I have access 
-to are behind I2C only.
-> - the vendor ID?
-> - the product ID?
-> - and the same for the other panel, with its report descriptor?
->
-> This way I can add them in the testsuite, and start playing with them.
-Attached a tarball with both descriptors and their corresponding IDs 
-(copied the R+N+I data from hid-recorder.)
->
->>>> Additionally, a HID-BPF based sample is provided which can be used to
->>>> program / query pen parameters in comparison to the old driver level
->>>> implementation (patches 7-8, patch #8 is an incremental change on top of
->>>> patch #7 which just converts the fifo to socket so that the client can
->>>> also get results back from the server.)
->>> After a few more thoughts, I wondered what your input is on this. We
->>> should be able to do the very same with plain hidraw... However, you
->>> added a `hid/raw_event` processing that will still be kept in the
->>> kernel, so maybe bpf would be useful for that at least.
->> Yes, plain hidraw can be sort of used to program the values, however the
->> interface is kind of annoying to use for the USI pens. You need to be
->> touching the display with the pen before anything is accepted. Maybe
->> writing some support code to the libevdev would help.
->>
->> The hidraw hook is needed for processing the cached values also, USI
->> pens report their parameters with a delay of some few hundred ms
->> depending on controller vendor. And in some cases they don't report
->> anything back before forcibly querying the value from the controller,
->> and also the write mechanism acts differently; some controllers report
->> the programmed value back, others keep reporting the old value until the
->> pen leaves the screen and touches it again.
-> Hmm, not sure I follow this entirely. I guess I would need to have one
-> of such devices in my hands :(
-
-Yes, it is kind of confusing, I was also trying to figure out the 
-details with a remote proxy (someone telling me how things behave) until 
-I decided to order a second chromebook that had the same controller. I 
-can try to provide logs of the different cases if you want though. The 
-quirks I know of at the moment:
-
-1) controller does not immediately report "correct" values when pen 
-touches screen (ELAN)
-
-2) controller does never report "correct" values when pen touches screen 
-(must do a force GET_REPORT) (GOODIX)
-
-3) controller does not report "correct" values after SET_REPORT 
-(reporting old value) (ELAN)
-
-4) controller responds with bogus data in GET_REPORT (does not know the 
-correct value yet) (ELAN + GOODIX)
-
-I believe other vendors have different behavior with their controllers 
-also, as the specs are not 100% clear on multiple things.
-
->
->>
->>>> The whole series is based on top of Benjamin's hid-bpf support work, and
->>>> I've pushed a branch at [1] with a series that works and brings in
->>>> the dependency. There are also a few separate patches in this series to
->>>> fix the problems I found from Benjamin's initial work for hid-bpf; I
->>>> wasn't able to get things working without those. The branch is also
->>>> based on top of 5.16-rc2 which required some extra changes to the
->>>> patches from Benjamin.
->>> Yeah, I also rebased on top of 5.16 shortly after sharing that branch
->>> and got roughly the same last fix (HID: bpf: compile fix for
->>> bpf_hid_foreach_rdesc_item). I am *very* interested in your "HID: bpf:
->>> execute BPF programs in proper context" because that is something that
->>> was bothering me a lot :)
->> Right, I think I have plenty of lockdep / scheduler checks enabled in my
->> kernel. They generate plenty of spam with i2c-hid without that patch.
->> The same issue may not be visible with some other low level hid devices
->> though, I don't have testing capability for anything but the i2c-hid
->> right now. I2C is quite notorious for the locking aspects as it is slow
->> and is used to control some pretty low level stuff like power management
->> etc.
-> As a rule of thumb, hid_hw_raw_request() can not and should not be
-> called in IRQ.
-> I tested your patch with a USB device, and got plenty of complaints too.
->
-> I know bpf now has the ability to defer a function call with timers,
-> so maybe that's what we need here.
-That sounds like something that would work yes, I did use workqueue 
-before when this was a separate driver instead of a BPF program.
->
->>> "HID: bpf: add expected_attach_type to bpf prog during detach" is
->>> something I'll need to bring in too
->>>
->>> but "HID: bpf: fix file mapping" is actually wrong. I initially wanted
->>> to attach BPF programs to hidraw, but shortly realized that this is
->>> not working because the `hid/rdesc_fixup` kills the hidraw node and so
->>> releases the BPF programs. The way I am now attaching it is to use the
->>> fd associated with the modalias in the sysfs file (for instance: `sudo
->>> ./hid_surface_dial /sys/bus/hid/devices/0005:045E:091B.*/modalias`).
->>> This way, the reference to the struct hid_device is kept even if we
->>> disconnect the device and reprobe it.
->> Ok I can check this out if it works me also. The samples lead me to
->> /dev/hidraw usage.
->>> Thanks again for your work, and I'd be curious to have your thoughts
->>> on hid-bpf and if you think it is better than hidraw/evdev write/new
->>> ioctls for your use case.
->> The new driver was 777 lines diff, the BPF one is 496 lines so it
->> appears smaller. The driver did support two different vendors though
->> (ELAN+Goodix, with their specific quirks in place), the BPF only a
->> single one right now (ELAN).
->>
->> The vendor specific quirks are a question, do we want to support that
->> somehow in a single BPF binary, or should we attach vendor specific BPF
->> programs?
-> Good question.
-> The plan I had was to basically pre-compile BPF programs for the
-> various devices, but having them separated into generic + vendor
-> specifics seems interesting too.
->
-> I don't have a good answer right now.
-At least for USI purposes, ELAN+GOODIX controllers have pretty different 
-quirks for them and it seems like having separate BPF programs might be 
-better; trying to get the same BPF program to run for both sounds 
-painful (it was rather painful to get this to work for single vendor.)
->
->> Chromium-os devices are one of the main customers for USI pens right
->> now, and I am not sure how well they will take the BPF concept. :) I did
->> ask their feedback though, and I'll come back on this once I have something.
-> Cool thanks.
->
->> Personally, I don't have much preference either way at this moment, both
->> seem like feasible options. I might lean a bit towards evdev/ioctl as it
->> seems a cleaner implementation as of now. The write mechanism I
->> implemented for the USI-BPF is a bit hacky, as it just directly writes
->> to a shared memory buffer and the buffer gets parsed by the kernel part
->> when it processes hidraw event. Anyways, do you have any feedback on
->> that part? BPF is completely new to me again so would love to get some
->> feedback.
-> Yeah, this feels wrong to me too.
-> I guess what we want is to run a BPF call initiated from the
-> userspace. I am not sure if this is doable. I'll need to dig further
-> too (I am relatively new to BPF too as a matter of facts).
-
-I could not find a way to initiate BPF call from userspace, thats the 
-reason I implemented it this way. That said, I don't see any case where 
-this would fail though; we only ever write the values from single source 
-(userspace) and read them from kernel. If we miss a write, we just get 
-the old value and report the change later on.
-
-To initiate a BPF call from userspace we would need some sort of hid-bpf 
-callback to a BPF program, which gets triggered by an ioctl or evdev 
-write or something coming from userspace. Which brings us back to the 
-chicken-egg problem we have with USI right now. :)
-
--Tero
-
-
-> Cheers,
-> Benjamin
->
->> One option is of course to push the write portion of the code to
->> userspace and just use hidraw, but we still need to filter out the bogus
->> events somehow, and do that in vendor specific manner. I don't think
->> this can be done on userspace, as plenty of information that would be
->> needed to do this properly has been lost at the input-event level.
->>
->> -Tero
->>
->>> Cheers,
->>> Benjamin
->>>
->>>> -Tero
->>>>
->>>> [1] https://github.com/t-kristo/linux/tree/usi-5.16-rfc-v2-bpf
->>>>
->>>>
-
---------------F3ABB60F91A5847EC875D22B
-Content-Type: application/gzip;
- name="usi-rdescs.tar.gz"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="usi-rdescs.tar.gz"
-
-H4sIAAAAAAAAA+1YS2/kNgzOOb9Cf6CF3pLntthuiwWKPfTUq+0Zo0UPWyQp0J9fkaIkyuNJ
-JovMFgGsgx8UxZcoiZ8ejqfH+YdxPj38+PTv091NmkzNewtvFZzkb+wKqU9Z5awxPgR3J5XR
-6SXkbczp2z+PT+ODEHd/Pfz5+PT1Mt9L/e+0/XYQSgUrpBPyKOQgpBWjElKJ6OCZKFojRcO3
-1UIluhQaewM+B3xG5An12+C3h1FOAb9ZiEd7sSwgBBiicOm5CO+SIcKgcOuQIamLNAS+h/Zt
-JH1n1RKfowXJ8wLSkmQlO8l5FMn3wLmyPFFCEHKE3tEDGwwpvZMVs2xRajEplD0ye2T2yOyR
-edvIOAsehUUMKKf6kplhix6RzWGgRjEVurUYE0kOzsm2rEuuwzJkuqKxoD0zoC/gbz0O9GUh
-SSM6IkvEspxqQCfHtFFaUu/w4iicYj5WaRqVj61KTzzclzR8Q5otCXbmiDJnjtTDUTMJgWYZ
-ElgiPU9lOSjhaZEy47e7kNKO5ZihlJbl8DWScmwouceTrSZYeqqZ0jirNqolWOqdZqEX6p3Y
-cW+wN/EoyVZWLAmfGCYw2FsmOTJHdFssbm7BbMRT+w6SlrlC4brMaci9GPaAEQMb0jP3BpCQ
-88ShMQuuO7uVac14TTO+msQ0cR5FRdWqmuQR93rTu6iY2WhkzHQ0O2aKI1OTOlCkKCzN6618
-ozhHStpVJBvx2G2DOYummjkBv01RXYLPfeR+ce0Tm6wNvQvp5RrDuUbTTfGleK48rfzXJ8NU
-Igy/6jrb8uzIZklNIR4B4HS0bC/lRvZiWqWxWY8abVv+bqTlD3TT2Z+6XjskEV81hCLg+3wr
-y3+QnafcO+hVtPlQViysS1MAczCnenzjNOmR1NV0qlr0sQnRp7ZRk52BCZm6qmAjf845Uf55
-Dm8oilsHDatAnpn31UAKUQBK1ltVk67holi+NLozq8iP7MxSgR1SWbur+9v9l4P49OuHL4OU
-9gA22J/NQX+ww/3nBPGSt3YxaV7S/z3Hfw+I///4+3bo/2X874Mv+D8YmfiUDl7t+P97NMT/
-zl+F/6HyOHUFtCoFkNUXK/Vcv9ZSRgaqJIbKH6l2r/WHklQAQWliYSNLpcwp13+sKE+9Hm1I
-vcNIe0GtpLNHuVqizQi3qlXRb1nRb4uPeatdXXzsDr53B5+HlJfc5A5y/pWDDQqetqFgdn93
-/KaOO9ucDUt31jbMnOtax452hpyhmFshZ3cdbHZrlCgZMow5mI5Q3GaIqqIcWIcCPSJSDgLb
-9YRqYayBrfcIvObgS5UnA7/pWJV6XEtkubSqOCu4lQh9W3b5TkWGZARuE+eRJYwVxotjFMcZ
-AW2adAMXDZmiC6W6oBi8NAxe2lpOBTEmnplKMQpyT6z5BsByFM5AzH0+1PKVQS1ew1bwR8g0
-admv639D/xv736H7BczDf03/yxXVOZ3aPPpy99FQ9xZO5lmdGAL6vhLLkeda5tsh+fNbnjpx
-vIY+D3t0dIJw9P4NyFxJcrZD5myN3AiW573xIizvtb8JLFf9fG1jjzNPvw8szxdt18ByVYDu
-c7BcvT9Ynky9Fpar/xOWK/8sLF/lzznn1bA8QdxXw3L1jbBcxStgueoshJvxzbvpU7+PlUyu
-N+PtnvoyD0fyv/z0+XfAxgfcFT/6g/wkJSF5Hebk6Sn937+M7/a2t73tbW9729ve1u0/KQEi
-pwAoAAA=
---------------F3ABB60F91A5847EC875D22B--
+Martin  Devatta
+Procurement Supervisor
+Crude Oil & ProductsTrading Division
+Malaysia Oil Refinery Sdn Bhd
+Tel: +60 11 1722 5155
+E-mail:martindevatta@yandex.com

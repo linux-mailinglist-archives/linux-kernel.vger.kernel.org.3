@@ -2,192 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0168B46F616
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB8346F61B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 22:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbhLIVlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 16:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S232503AbhLIVoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 16:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhLIVlm (ORCPT
+        with ESMTP id S231524AbhLIVo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 16:41:42 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE84C061746;
-        Thu,  9 Dec 2021 13:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=P2aQ91d+0Nay119c7Hm3YaZibGVAqClk58OZHKt3Xl4=; b=cnU75D1qm7eep+zg67cBjnjU5u
-        lEicByKXRIZocx5wZq6zz69Ru+PEst/T/YMAfJlX9bjLZTJ8RFLbUZKTb7yq0FGSeTxuxDF318g3Y
-        8bDeqcD4guFJ52AXIO0Ol8Ursu1fyiEL9Fp/krOOOBTH3HOk2GMcRtjxSB5RzR8ZNL9nkRwlqzYVQ
-        J45nCMz4FrZPTnutzDjny73jdO6DYA3AS5OPoFC1bjbRmniOLrddvCkhqnTDaOBBoaMPlby6StiVt
-        aI9kKhleNDxAgoxqQbGxfIEGg2Hmgi85JF43BUH+QueHj7/+g31cgvjKM0v661QxPAY3HpdxM6Xws
-        eNT/Cpag==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvR75-009kVO-PD; Thu, 09 Dec 2021 21:38:04 +0000
-Date:   Thu, 9 Dec 2021 21:38:03 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Darrick J . Wong " <djwong@kernel.org>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v2 19/28] iomap: Convert __iomap_zero_iter to use a folio
-Message-ID: <YbJ3O1qf+9p/HWka@casper.infradead.org>
-References: <20211108040551.1942823-1-willy@infradead.org>
- <20211108040551.1942823-20-willy@infradead.org>
+        Thu, 9 Dec 2021 16:44:29 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50144C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 13:40:55 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so7631909otv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 13:40:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2j4bcO0qWcjtdm6gaythjKIq7TrKLkjf4762fiQLRQ0=;
+        b=n+iW5W03vOmikDQVZSWQcgPuAXsqlpYitFH3tqr1et/5xDWgIOK9kThPpB4jjcss7O
+         ZjKxF3TDq3+qYgAR34dCu9tp7H29+MEY+CKVOT8Cu5nSalC9nry4JRVeQwtb5mFMGxx4
+         0Lrq7s1aA6kfllDO2MYNWDOxtPlfeKSyCNjCmjQQkbinkKepobynjZB6jMFVB7zRu+PI
+         HA3tTIceGbVxrBdplywneV5MEcGEf9V9+aUNX+klezWgHY8yJV2RfQRBLEAWhP+53zaZ
+         SZWl51lhczQ6oKPPd3mHs3KDTspweD+IxPTjc8DLzr1bJEU5iEfGredzBeBHFOV6jMAc
+         Bxxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2j4bcO0qWcjtdm6gaythjKIq7TrKLkjf4762fiQLRQ0=;
+        b=sUGs/3zFTBE/KrKkZrzciSrM6C2Yyx+8H0ksUYtru72NqEtcT34iSUBhjPjsNU0Q3x
+         9qVvJTcDDS50IUCO894ALbPBx94lvTyQfeVUhPc6OQKgT/LD6XeU1/p8uXoTXaNTjpWF
+         GwlSltwGpea/Bu3YOPans3EGkaRUpwi6hU67muZVcnIZAiBMpht10BPodAScII/I1LJd
+         FcV2SlVhOZdfx+S5vgN9ZQhaUe4XgzEsCSRngfpDpSZI8lQ/+GpT5mKdnVAh1zOEfxO/
+         B8i3Iq0+x9Lb+F+LTRFnslZwsp44OF/wwHu04zvE1Pn3Y7VwM90OAFoutdPMjgkxdBNA
+         tt3w==
+X-Gm-Message-State: AOAM531LqHK/qd8gQ1h4s//TPqK5jVuPJVCzezh2rW1JwamsfwfnH3pT
+        JO0mzpyG33p3COHY9ZYgSuVbyr+KzI2QzGmHjDAmKw==
+X-Google-Smtp-Source: ABdhPJwpwysTautUApz45OTaJShVoj3kfQ/D0iI37xiT5amNXd6UQf69KpysDtdv3QZosj8cf/QWH8aL9M87PP25N+M=
+X-Received: by 2002:a9d:7548:: with SMTP id b8mr7757039otl.92.1639086054434;
+ Thu, 09 Dec 2021 13:40:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211108040551.1942823-20-willy@infradead.org>
+References: <YbHTKUjEejZCLyhX@elver.google.com> <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
+In-Reply-To: <CAG48ez0dZwigkLHVWvNS6Cg-7bL4GoCMULyQzWteUv4zZ=OnWQ@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 9 Dec 2021 22:40:42 +0100
+Message-ID: <CANpmjNOA2BKJfPAFH56etdQ70hsoPFb_VJizipKdJMgEgf3jTg@mail.gmail.com>
+Subject: Re: randomize_kstack: To init or not to init?
+To:     Jann Horn <jannh@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 04:05:42AM +0000, Matthew Wilcox (Oracle) wrote:
-> +++ b/fs/iomap/buffered-io.c
-> @@ -881,17 +881,20 @@ EXPORT_SYMBOL_GPL(iomap_file_unshare);
->  
->  static s64 __iomap_zero_iter(struct iomap_iter *iter, loff_t pos, u64 length)
->  {
-> +	struct folio *folio;
->  	struct page *page;
->  	int status;
-> -	unsigned offset = offset_in_page(pos);
-> -	unsigned bytes = min_t(u64, PAGE_SIZE - offset, length);
-> +	size_t offset, bytes;
->  
-> -	status = iomap_write_begin(iter, pos, bytes, &page);
-> +	status = iomap_write_begin(iter, pos, length, &page);
+On Thu, 9 Dec 2021 at 22:16, Jann Horn <jannh@google.com> wrote:
+>
+> On Thu, Dec 9, 2021 at 10:58 AM Marco Elver <elver@google.com> wrote:
+> > Clang supports CONFIG_INIT_STACK_ALL_ZERO, which appears to be the
+> > default since dcb7c0b9461c2, which is why this came on my radar. And
+> > Clang also performs auto-init of allocas when auto-init is on
+> > (https://reviews.llvm.org/D60548), with no way to skip. As far as I'm
+> > aware, GCC 12's upcoming -ftrivial-auto-var-init= doesn't yet auto-init
+> > allocas.
+> >
+> > add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> > enabled, add_random_kstack_offset() will auto-init that unused portion
+> > of the stack used to add an offset.
+> >
+> > There are several problems with this:
+> >
+> >         1. These offsets can be as large as 1023 bytes. Performing
+> >            memset() on them isn't exactly cheap, and this is done on
+> >            every syscall entry.
+> >
+> >         2. Architectures adding add_random_kstack_offset() to syscall
+> >            entry implemented in C require them to be 'noinstr' (e.g. see
+> >            x86 and s390). The potential problem here is that a call to
+> >            memset may occur, which is not noinstr.
+>
+> This doesn't just affect alloca(), right? According to godbolt.org
+> (https://godbolt.org/z/jYrWEx7o8):
+>
+> void bar(char *p);
+> void foo() {
+>   char arr[512];
+>   bar(arr);
+> }
+>
+> when compiled with "-ftrivial-auto-var-init=pattern -O2 -mno-sse"
+> gives this result:
+>
+> foo:                                    # @foo
+>         push    rbx
+>         sub     rsp, 512
+>         mov     rbx, rsp
+>         mov     edx, 512
+>         mov     rdi, rbx
+>         mov     esi, 170
+>         call    memset@PLT
+>         mov     rdi, rbx
+>         call    bar
+>         add     rsp, 512
+>         pop     rbx
+>         ret
+>
+> So I think to fix this properly in a way that doesn't conflict with
+> noinstr validation, I think you'll have to add a compiler flag that
+> lets you specify a noinstr-safe replacement for memset() that should
+> be used here?
 
-This turned out to be buggy.  Darrick and I figured out why his tests
-were failing and mine weren't; this only shows up with a 4kB block
-size filesystem and I was only testing with 1kB block size filesystems.
-(at least on x86; I haven't figured out why it passes with 1kB block size
-filesystems, so I'm not sure what would be true on other filesystems).
-iomap_write_begin() is not prepared to deal with a length that spans a
-page boundary.  So I'm replacing this patch with the following patches
-(whitespace damaged; pick them up from
-https://git.infradead.org/users/willy/linux.git/tag/refs/tags/iomap-folio-5.17c
-if you want to compile them):
+Yeah, this story isn't over with __builtin_alloca().
 
-commit 412212960b72
-Author: Matthew Wilcox (Oracle) <willy@infradead.org>
-Date:   Thu Dec 9 15:47:44 2021 -0500
+A workaround would be to use __attribute__((uninitialized)). Of course
+that implies there are no uninit bugs. ;-)
+To initialize in noinstr, __memset can be used explicitly.
 
-    iomap: Allow iomap_write_begin() to be called with the full length
+Maybe there's some guidance on what is and what isn't ok in noinstr
+code so we can actually decide what is the right thing to do. I found
+this: https://lore.kernel.org/all/878rx5b7i5.ffs@tglx/
 
-    In the future, we want write_begin to know the entire length of the
-    write so that it can choose to allocate large folios.  Pass the full
-    length in from __iomap_zero_iter() and limit it where necessary.
-
-    Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
-index d67108489148..9270db17c435 100644
---- a/fs/gfs2/bmap.c
-+++ b/fs/gfs2/bmap.c
-@@ -968,6 +968,9 @@ static int gfs2_iomap_page_prepare(struct inode *inode, loff_t pos,
-        struct gfs2_sbd *sdp = GFS2_SB(inode);
-        unsigned int blocks;
-
-+       /* gfs2 does not support large folios yet */
-+       if (len > PAGE_SIZE)
-+               len = PAGE_SIZE;
-        blocks = ((pos & blockmask) + len + blockmask) >> inode->i_blkbits;
-        return gfs2_trans_begin(sdp, RES_DINODE + blocks, 0);
- }
-diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-index 8d7a67655b60..67fcd3b9928d 100644
---- a/fs/iomap/buffered-io.c
-+++ b/fs/iomap/buffered-io.c
-@@ -632,6 +632,8 @@ static int iomap_write_begin(const struct iomap_iter *iter, loff_t pos,
-                goto out_no_page;
-        }
-        folio = page_folio(page);
-+       if (pos + len > folio_pos(folio) + folio_size(folio))
-+               len = folio_pos(folio) + folio_size(folio) - pos;
-
-        if (srcmap->type == IOMAP_INLINE)
-                status = iomap_write_begin_inline(iter, page);
-@@ -891,16 +893,19 @@ static s64 __iomap_zero_iter(struct iomap_iter *iter, loff
-_t pos, u64 length)
-        struct page *page;
-        int status;
-        unsigned offset = offset_in_page(pos);
--       unsigned bytes = min_t(u64, PAGE_SIZE - offset, length);
-
--       status = iomap_write_begin(iter, pos, bytes, &page);
-+       if (length > UINT_MAX)
-+               length = UINT_MAX;
-+       status = iomap_write_begin(iter, pos, length, &page);
-        if (status)
-                return status;
-+       if (length > PAGE_SIZE - offset)
-+               length = PAGE_SIZE - offset;
-
--       zero_user(page, offset, bytes);
-+       zero_user(page, offset, length);
-        mark_page_accessed(page);
-
--       return iomap_write_end(iter, pos, bytes, bytes, page);
-+       return iomap_write_end(iter, pos, length, length, page);
- }
-
- static loff_t iomap_zero_iter(struct iomap_iter *iter, bool *did_zero)
-
-
-commit 78c747a1b3a1
-Author: Matthew Wilcox (Oracle) <willy@infradead.org>
-Date:   Fri Nov 5 14:24:09 2021 -0400
-
-    iomap: Convert __iomap_zero_iter to use a folio
-    
-    The zero iterator can work in folio-sized chunks instead of page-sized
-    chunks.  This will save a lot of page cache lookups if the file is cached
-    in large folios.
-    
-    Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-    Reviewed-by: Christoph Hellwig <hch@lst.de>
-    Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-
-diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-index 67fcd3b9928d..bbde6d4f27cd 100644
---- a/fs/iomap/buffered-io.c
-+++ b/fs/iomap/buffered-io.c
-@@ -890,20 +890,23 @@ EXPORT_SYMBOL_GPL(iomap_file_unshare);
- 
- static s64 __iomap_zero_iter(struct iomap_iter *iter, loff_t pos, u64 length)
- {
-+       struct folio *folio;
-        struct page *page;
-        int status;
--       unsigned offset = offset_in_page(pos);
-+       size_t offset;
- 
-        if (length > UINT_MAX)
-                length = UINT_MAX;
-        status = iomap_write_begin(iter, pos, length, &page);
-        if (status)
-                return status;
--       if (length > PAGE_SIZE - offset)
--               length = PAGE_SIZE - offset;
-+       folio = page_folio(page);
- 
--       zero_user(page, offset, length);
--       mark_page_accessed(page);
-+       offset = offset_in_folio(folio, pos);
-+       if (length > folio_size(folio) - offset)
-+               length = folio_size(folio) - offset;
-+       folio_zero_range(folio, offset, length);
-+       folio_mark_accessed(folio);
- 
-        return iomap_write_end(iter, pos, length, length, page);
- }
-
-
-The xfstests that Darrick identified as failing all passed.  Running a
-full sweep now; then I'll re-run with a 1kB filesystem to be sure that
-still passes.  Then I'll send another pull request.
+Thanks,
+-- Marco

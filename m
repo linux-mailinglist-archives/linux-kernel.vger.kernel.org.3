@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8776846F3B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB5546F3D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 20:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbhLITRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 14:17:35 -0500
-Received: from mga18.intel.com ([134.134.136.126]:55659 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229501AbhLITRe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:17:34 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225055274"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="225055274"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:14:00 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="564935042"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 11:13:59 -0800
-Date:   Thu, 9 Dec 2021 11:18:17 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>, Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 4/4] dmaengine: idxd: Use DMA API for in-kernel DMA with
- PASID
-Message-ID: <20211209111817.6a84a55c@jacob-builder>
-In-Reply-To: <BN9PR11MB527617F8CC015E4F15EDCC9F8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-5-git-send-email-jacob.jun.pan@linux.intel.com>
-        <20211208131358.GR6385@nvidia.com>
-        <1ffc1366-2711-3026-fb09-8f60a260f618@intel.com>
-        <20211208175116.GC6385@nvidia.com>
-        <BN9PR11MB527617F8CC015E4F15EDCC9F8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S229578AbhLITYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 14:24:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48040 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhLITYA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:24:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F5BBB8261E;
+        Thu,  9 Dec 2021 19:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE28EC004DD;
+        Thu,  9 Dec 2021 19:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639077624;
+        bh=1CyxqH3Ile4Tu0K1fbYd2p4o6u/8+0oTDj5FQH4uFX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XTORxXtyGdai/WJ3g6ZzWBHAAHwxATXvL/zAznFNZZFPj1NGVVX9gH1LaH3rZjMaZ
+         6F+qzYt95SUr5yDuX8bgT51ztaSm6F7oHISaPA04za11kGyW2pIb/hUu7+oAy0dva3
+         XVSf+GWQ9BeY1fBOgEo2h7KYeWhhBhi0+zwPj/4GaHHEC6L5bNoeNoPVYWpiyHmwYQ
+         KhsbYRx3SsXUKO/g53Ws3gZ9rxX7KRkpzVNctoDAtMabz70RkG7kavU2uAmcTNsIe4
+         9BE/QN2y+pfXhj5vaUGF0hsmaxPK6M6VJoO2CnMzTihqG21uwYuVM+LXuo/lnG/FM4
+         0iZsGyx0hhLSA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5C2F7405D8; Thu,  9 Dec 2021 16:20:22 -0300 (-03)
+Date:   Thu, 9 Dec 2021 16:20:22 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Salvatore Bonaccorso <carnil@debian.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     German Gomez <german.gomez@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf dlfilter: Drop unused variable
+Message-ID: <YbJW9sHObkXC5lcz@kernel.org>
+References: <20211123211821.132924-1-carnil@debian.org>
+ <5603b487-3e42-cfbd-200b-250c46dc0bc6@arm.com>
+ <YbCS/xEis4QKbH6D@eldamar.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YbCS/xEis4QKbH6D@eldamar.lan>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
-
-On Thu, 9 Dec 2021 01:48:09 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
-
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Thursday, December 9, 2021 1:51 AM
-> >   
-> > > > > +	/*
-> > > > > +	 * Try to enable both in-kernel and user DMA request
-> > > > > with PASID.
-> > > > > +	 * PASID is supported unless both user and kernel PASID
-> > > > > are
-> > > > > +	 * supported. Do not fail probe here in that idxd can
-> > > > > still be
-> > > > > +	 * used w/o PASID or IOMMU.
-> > > > > +	 */
-> > > > > +	if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) ||
-> > > > > +		idxd_enable_system_pasid(idxd)) {
-> > > > > +		dev_warn(dev, "Failed to enable PASID\n");
-> > > > > +	} else {
-> > > > > +		set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
-> > > > >   	}  
-> > > > Huh? How can the driver keep going if PASID isn't supported? I
-> > > > thought the whole point of this was because the device cannot do
-> > > > DMA without PASID at all?  
+Em Wed, Dec 08, 2021 at 12:11:59PM +0100, Salvatore Bonaccorso escreveu:
+> Hi German,
+> 
+> On Wed, Dec 08, 2021 at 10:44:01AM +0000, German Gomez wrote:
+> > 
+> > On 23/11/2021 21:18, Salvatore Bonaccorso wrote:
+> > > Compiling tools/perf/dlfilters/dlfilter-test-api-v0.c result in:
 > > >
-> > > There are 2 types of WQ supported with the DSA devices. A dedicated
-> > > WQ  
-> > type  
-> > > and a shared WQ type. The dedicated WQ type can support DMA with and  
-> > without  
-> > > PASID. The shared wq type must have a PASID to operate. The driver can
-> > > support dedicated WQ only without PASID usage when there is no PASID
-> > > support.  
+> > > 	checking for stdlib.h... dlfilters/dlfilter-test-api-v0.c: In function ‘filter_event’:
+> > > 	dlfilters/dlfilter-test-api-v0.c:311:29: warning: unused variable ‘d’ [-Wunused-variable]
+> > > 	  311 |         struct filter_data *d = data;
+> > > 	      |
 > > 
-> > Can you add to the cover letter why does the kernel require to use the
-> > shared WQ?
+> > Did you get this warning when issuing "make"? From my side, it generated
+> > this gcc command so I didn't get it (make DEBUG=1):
 > > 
-> > Jason  
+> >   gcc -c -Iinclude  -o dlfilters/dlfilter-test-api-v0.o -fpic dlfilters/dlfilter-test-api-v0.c
+> > 
+> > Reviewed-by: German Gomez <german.gomez@arm.com>
 > 
-> Two reasons:
+> Only when passing -Wall (this is the case when building the kernel packages in
+> Debian with additional flags, so this is why this was spotted):
 > 
-> On native the shared WQ is useful when the kernel wants to offload
-> some memory operations (e.g. page-zeroing) to DSA. When #CPUs are
-> more than #WQs, this allows per-cpu lock-less submissions using
-> ENQCMD(PASID, payload) instruction.
+> gcc -Wall -c -Iinclude  -o dlfilters/dlfilter-test-api-v0.o -fpic dlfilters/dlfilter-test-api-v0.c
+> dlfilters/dlfilter-test-api-v0.c: In function ‘filter_event’:
+> dlfilters/dlfilter-test-api-v0.c:311:29: warning: unused variable ‘d’ [-Wunused-variable]
+>   311 |         struct filter_data *d = data;
+>       |
 > 
-> In guest the virtual DSA HW may only contain a WQ in shared mode
-> (unchangeable by the guest) when the host admin wants to share
-> the limited WQ resource among many VMs. Then there is no choice
-> in guest regardless whether it's for user or kernel controlled DMA.
-I will add these to the next cover letter.
 
+So I'm applying this, its an obvious cleanup, but please CC the author
+next time, I'm doing it in this reply, Adrian, ok?
 
-Thanks,
-
-Jacob
+- Arnaldo

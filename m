@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CF946E07B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8435846E07E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 02:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238189AbhLIBzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Dec 2021 20:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S238409AbhLIB5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Dec 2021 20:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbhLIBzo (ORCPT
+        with ESMTP id S235054AbhLIB5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:55:44 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63729C061746;
-        Wed,  8 Dec 2021 17:52:12 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso3660439pjb.0;
-        Wed, 08 Dec 2021 17:52:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7GbdjZpxKTr+cBu8MjLxoryaXfwCf7opXnqUnViTzNc=;
-        b=F83septNLKOqgSu+uZdyZjycU+/4KrErD+Ww20pcA8eGWEw1MccyDneFYqExumLgBx
-         8wjpjBOG5V8xXZOQQ1uNfTWL9eu0TibC5RDyd6iNakufUC9kXX+O8g3jc0wlU0iEAxJh
-         LhZaESTCQrVU0Q0/R6MI5zE+gLhWzvQuAAsjkFVCp6DAPSsZBkscbWh23IGVuHNuVoJ2
-         uuZ9aU/TvY3mkGbihTQpLhQBzPlDPTTnYx4fIgB/VW1HlJaLll432RMzj9tdHAhVDSj/
-         Iuq00QXAp5A0nfOaZOLvpdTL2Lrp5OXQ5wBgIXwX83xpo+d6f7zgupLKqlvzH7IEYUcO
-         Tk+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7GbdjZpxKTr+cBu8MjLxoryaXfwCf7opXnqUnViTzNc=;
-        b=ox6nIF8BCa10Rs+k6cqvitmMIjlphWW/dhjN1k24gtgWj0FMn2mz2RCzF1GaR9wNRx
-         AO64pjK8eQiGoQ0SK8Ae+KGWIDi9MkY/tg4d02PZIW6qTucAIKJMQGycZvX0AHqWnUE3
-         yltrOIsAfkM3C7kYWxQAVvS1Pg9s+X3JLMWd2KjZFHliQ6YrdzSpZyxdTgLXQUNQLtMy
-         QTJAX13wA+I0xgXQ+i6oMsvLgTkDYqijBYJIYrCiSqbaJ/rxfrs9d4hJeITlTU+nczPC
-         4SdiFtyCKH/uJZeXF7W6PzllGjAar4h9Na8m9UWIc+nTPDcqNCZ/Y/98Fl/rhow9RmYF
-         mHGw==
-X-Gm-Message-State: AOAM5336P59EA8NEoKiytGLNTcljYUTQgMWPagHtvUVz1++ua5ysywQJ
-        ZcdE1Zav9L4N0RcBAvYA6Tg=
-X-Google-Smtp-Source: ABdhPJw9US6Lq22zRt6rKpWC7bvPIbUiQSmSt99MlTevUlZAnPNwEmh+ahebunj4RfGhrfGp1k8Kvg==
-X-Received: by 2002:a17:90a:17ef:: with SMTP id q102mr11752563pja.116.1639014732013;
-        Wed, 08 Dec 2021 17:52:12 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o124sm4605622pfb.177.2021.12.08.17.52.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 17:52:11 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     selvin.xavier@broadcom.com
-Cc:     dledford@redhat.com, jgg@ziepe.ca, leon@kernel.org,
-        dennis.dalessandro@cornelisnetworks.com, galpress@amazon.com,
-        chi.minghao@zte.com.cn, trix@redhat.com, mbloch@nvidia.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cm>
-Subject: [PATCH] drivers:ocrdma:remove unneeded variable
-Date:   Thu,  9 Dec 2021 01:52:06 +0000
-Message-Id: <20211209015206.409528-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Dec 2021 20:57:08 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372B6C061746;
+        Wed,  8 Dec 2021 17:53:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7185ACE246D;
+        Thu,  9 Dec 2021 01:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284F0C00446;
+        Thu,  9 Dec 2021 01:53:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639014812;
+        bh=eoHKcQX1NP6K4IqIO6Yqp2zmup/tdKRc0vyIl/OQ5rQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FW/gO/NSXfvkWote6KMkZFkMzKqEB3ouMK8MIYfZv/l2Xmj6GZZabyjC6oVyVLHlp
+         iwjFZvK4hhkl51S3/mGrE1UAA8cWwXyZI9hqQQNQN3QAz9MjBL8rUYfiSMuFo9vCUd
+         Q1QJBRQOO5bX6SCRfuvIMST5GTPyUOp1WQWbFPJ0b8Zg4WJx3xB4ZfGr5Zl9x5b5Ns
+         X20y5ctg5RQdc+sp3jypE9HpeTO36/tGnd+wAUyGri4KnDX2sHH998Ez8WMl8GCT1b
+         yGavDdvqGDJzkqQRXZOM3K2IgUFSjEUELvPX5e7DSjysRVUV1J21aIukHVHjvjg2bl
+         m4tzEVs7Dh2QA==
+Date:   Wed, 8 Dec 2021 17:53:31 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     <xiayu.zhang@mediatek.com>
+Cc:     <loic.poulain@linaro.org>, <ryazanov.s.a@gmail.com>,
+        <davem@davemloft.net>, <johannes@sipsolutions.net>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <haijun.liu@mediatek.com>, <zhaoping.shu@mediatek.com>,
+        <hw.he@mediatek.com>, <srv_heupstream@mediatek.com>
+Subject: Re: [PATCH] Add Multiple TX/RX Queues Support for WWAN Network
+ Device
+Message-ID: <20211208175331.35661ccd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211208040414.151960-1-xiayu.zhang@mediatek.com>
+References: <20211208040414.151960-1-xiayu.zhang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chiminghao <chi.minghao@zte.com.cn>
+On Wed, 8 Dec 2021 12:04:14 +0800 xiayu.zhang@mediatek.com wrote:
+> From: Xiayu Zhang <Xiayu.Zhang@mediatek.com>
+> 
+> This patch adds 2 callback functions get_num_tx_queues() and
+> get_num_rx_queues() to let WWAN network device driver customize its own
+> TX and RX queue numbers. It gives WWAN driver a chance to implement its
+> own software strategies, such as TX Qos.
+> 
+> Currently, if WWAN device driver creates default bearer interface when
+> calling wwan_register_ops(), there will be only 1 TX queue and 1 RX queue
+> for the WWAN network device. In this case, driver is not able to enlarge
+> the queue numbers by calling netif_set_real_num_tx_queues() or
+> netif_set_real_num_rx_queues() to take advantage of the network device's
+> capability of supporting multiple TX/RX queues.
+> 
+> As for additional interfaces of secondary bearers, if userspace service
+> doesn't specify the num_tx_queues or num_rx_queues in netlink message or
+> iproute2 command, there also will be only 1 TX queue and 1 RX queue for
+> each additional interface. If userspace service specifies the num_tx_queues
+> and num_rx_queues, however, these numbers could be not able to match the
+> capabilities of network device.
+> 
+> Besides, userspace service is hard to learn every WWAN network device's
+> TX/RX queue numbers.
+> 
+> In order to let WWAN driver determine the queue numbers, this patch adds
+> below callback functions in wwan_ops:
+>     struct wwan_ops {
+>         unsigned int priv_size;
+>         ...
+>         unsigned int (*get_num_tx_queues)(unsigned int hint_num);
+>         unsigned int (*get_num_rx_queues)(unsigned int hint_num);
+>     };
+> 
+> WWAN subsystem uses the input parameters num_tx_queues and num_rx_queues of
+> wwan_rtnl_alloc() as hint values, and passes the 2 values to the two
+> callback functions. WWAN device driver should determine the actual numbers
+> of network device's TX and RX queues according to the hint value and
+> device's capabilities.
 
-return value form directly instead of
-taking this in another redundant variable.
-
-Reported-by: Zeal Robot <zealci@zte.com.cm>
-Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
----
- drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-index 735123d0e9ec..3bfbf4ec040d 100644
---- a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-+++ b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-@@ -1844,12 +1844,10 @@ int ocrdma_modify_srq(struct ib_srq *ibsrq,
- 
- int ocrdma_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *srq_attr)
- {
--	int status;
- 	struct ocrdma_srq *srq;
- 
- 	srq = get_ocrdma_srq(ibsrq);
--	status = ocrdma_mbx_query_srq(srq, srq_attr);
--	return status;
-+	return ocrdma_mbx_query_srq(srq, srq_attr);
- }
- 
- int ocrdma_destroy_srq(struct ib_srq *ibsrq, struct ib_udata *udata)
-@@ -1960,7 +1958,6 @@ static int ocrdma_build_inline_sges(struct ocrdma_qp *qp,
- static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
- 			     const struct ib_send_wr *wr)
- {
--	int status;
- 	struct ocrdma_sge *sge;
- 	u32 wqe_size = sizeof(*hdr);
- 
-@@ -1972,8 +1969,7 @@ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
- 		sge = (struct ocrdma_sge *)(hdr + 1);
- 	}
- 
--	status = ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
--	return status;
-+	return ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
- }
- 
- static int ocrdma_build_write(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
--- 
-2.25.1
-
+I'll mark it as an RFC in patchwork, there needs to be an in-tree user
+for this code to be merged.

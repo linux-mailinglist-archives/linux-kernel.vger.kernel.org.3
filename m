@@ -2,82 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 792F846E583
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB6246E566
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 10:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235879AbhLIJ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 04:29:41 -0500
-Received: from elvis.franken.de ([193.175.24.41]:38009 "EHLO elvis.franken.de"
+        id S234643AbhLIJY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 04:24:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:52196 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233327AbhLIJ3k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 04:29:40 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mvFgg-0001er-00; Thu, 09 Dec 2021 10:26:02 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 05554C4E11; Thu,  9 Dec 2021 10:21:08 +0100 (CET)
-Date:   Thu, 9 Dec 2021 10:21:08 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Do not define pci_remap_iospace() under
- MACH_LOONGSON64
-Message-ID: <20211209092108.GA6981@alpha.franken.de>
-References: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
- <20211207170603.GA20028@alpha.franken.de>
- <CAMhs-H-3FRV2hDKbRR=A2M2fsaengTtTBF7HxCnrtGi=fziK-A@mail.gmail.com>
+        id S232940AbhLIJY5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 04:24:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DF6011FB;
+        Thu,  9 Dec 2021 01:21:24 -0800 (PST)
+Received: from [10.57.82.128] (unknown [10.57.82.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D31C3F73B;
+        Thu,  9 Dec 2021 01:21:22 -0800 (PST)
+Message-ID: <b49450ca-5193-5815-8355-41ef133f3015@arm.com>
+Date:   Thu, 9 Dec 2021 09:21:20 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H-3FRV2hDKbRR=A2M2fsaengTtTBF7HxCnrtGi=fziK-A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH 1/3] coresight: Add config flag to enable branch broadcast
+To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org
+Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+References: <20211208160907.749482-1-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20211208160907.749482-1-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:47:56PM +0100, Sergio Paracuellos wrote:
-> > -#endif
-> > -
-> >  #ifdef CONFIG_PCI_DRIVERS_LEGACY
-> >
-> >  /*
-> > diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
-> > index 18eb8a453a86..d2d68bac3d25 100644
-> > --- a/arch/mips/pci/pci-generic.c
-> > +++ b/arch/mips/pci/pci-generic.c
-> > @@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
-> >         pci_read_bridge_bases(bus);
-> >  }
-> >
-> > +#ifdef pci_remap_iospace
-> >  int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
-> >  {
-> >         unsigned long vaddr;
-> > @@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
-> >         set_io_port_base(vaddr);
-> >         return 0;
-> >  }
-> > +#endif
+On 08/12/2021 16:09, James Clark wrote:
+> When enabled, all taken branch addresses are output, even if the branch
+> was because of a direct branch instruction. This enables reconstruction
+> of the program flow without having access to the memory image of the
+> code being executed.
 > 
-> I agree this is cleaner than the CONFIG_MACH_LOONGSON64 ifdef stuff. I
-> have tested this changes in mt7621 ralink platform and all seem to
-> work, so in case you want to include this, feel free to add my:
-
-thank you for testing.
-
-> Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Use bit 8 for the config option which would be the correct bit for
+> programming ETMv3. Although branch broadcast can't be enabled on ETMv3
+> because it's not in the define ETM3X_SUPPORTED_OPTIONS, using the
+> correct bit might help prevent future collisions or allow it to be
+> enabled if needed.
 > 
-> Thomas, if you prefer me to send this as a more formal PATCH, please
-> let me know.
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-etm-perf.c   | 2 ++
+>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 9 +++++++++
+>   include/linux/coresight-pmu.h                      | 2 ++
+>   3 files changed, 13 insertions(+)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c b/drivers/hwtracing/coresight/coresight-etm-perf.c
+> index c039b6ae206f..43bbd5dc3d3b 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm-perf.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
+> @@ -52,6 +52,7 @@ static DEFINE_PER_CPU(struct coresight_device *, csdev_src);
+>    * The PMU formats were orignally for ETMv3.5/PTM's ETMCR 'config';
+>    * now take them as general formats and apply on all ETMs.
+>    */
+> +PMU_FORMAT_ATTR(branch_broadcast, "config:"__stringify(ETM_OPT_BRANCH_BROADCAST));
+>   PMU_FORMAT_ATTR(cycacc,		"config:" __stringify(ETM_OPT_CYCACC));
+>   /* contextid1 enables tracing CONTEXTIDR_EL1 for ETMv4 */
+>   PMU_FORMAT_ATTR(contextid1,	"config:" __stringify(ETM_OPT_CTXTID));
+> @@ -97,6 +98,7 @@ static struct attribute *etm_config_formats_attr[] = {
+>   	&format_attr_sinkid.attr,
+>   	&format_attr_preset.attr,
+>   	&format_attr_configid.attr,
+> +	&format_attr_branch_broadcast.attr,
+>   	NULL,
+>   };
+>   
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index bf18128cf5de..d2bafb50c66a 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -692,6 +692,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+>   		ret = cscfg_csdev_enable_active_config(csdev, cfg_hash, preset);
+>   	}
+>   
+> +	/* branch broadcast - enable if selected and supported */
+> +	if (attr->config & BIT(ETM_OPT_BRANCH_BROADCAST)) {
+> +		if (!drvdata->trcbb) {
+> +			ret = -EINVAL;
+> +			goto out;
+> +		} else
+> +			config->cfg |= BIT(ETM4_CFG_BIT_BB);
 
-Thiezhu already did, I'll add your tags the new patch.
+nit: For consistent styling, I would recommend to wrap the else case
+also in { }.
 
-Thomas.
+Otherwise looks good to me.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Suzuki

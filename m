@@ -2,145 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C3646E46A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E303846E46E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Dec 2021 09:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbhLIInc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 03:43:32 -0500
-Received: from mout.gmx.net ([212.227.17.21]:34163 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231501AbhLIInb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:43:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1639039183;
-        bh=mZ2mNNFQARTfTu/wMe1jwivH6hysUDFWWSUMvPKc+Ac=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=BaFY20+Lgs1PV1V/CVkw3lmbYnaWinYuwKGhGGytbgCiEQ9uqmHuuAr+CPsb8mohg
-         lxxrHGE7jj/FOOyTew+zG5g85koTpMZvbE/iyK9mtQc8zuaHDS+nprItK7Ler0TatN
-         6+nQmQYYdk7BJSIyZiKZHhY3lx0E0Dpgp6WTIvvA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MYeMt-1mztvR1CHj-00Vg7f; Thu, 09
- Dec 2021 09:39:43 +0100
-Message-ID: <9d299505-a334-b988-2fcd-bc2129207959@gmx.com>
-Date:   Thu, 9 Dec 2021 16:39:37 +0800
+        id S235027AbhLIIoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 03:44:22 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:37766 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231501AbhLIIoV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 03:44:21 -0500
+Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 26E5D800204B;
+        Thu,  9 Dec 2021 11:40:41 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 26E5D800204B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1639039241;
+        bh=rOcoTfjRSCRchgIuYZjTj+60s0rm+FkZVRl2tknoAWw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
+        b=dUau/5goq4H5p5k0bZDgQxrh6FYYQV5uabZl+6ilNUQkBbZ2P8MyZ21b+bAGnthf3
+         beyaM5iIZEQ/+Xud3M11MdOhcVMeglkbD53XFPq1vdzQWkqfd/NSs0rGmS7Ry03CMx
+         X6n4KYAip1FadVZJiSBxITUDH8LnLqreC5yWP4eA=
+Received: from mobilestation (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 9 Dec 2021 11:40:12 +0300
+Date:   Thu, 9 Dec 2021 11:40:40 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     "Srikandan, Nandhini" <nandhini.srikandan@intel.com>
+CC:     - Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "Pan, Kris" <kris.pan@intel.com>,
+        "Demakkanavar, Kenchappa" <kenchappa.demakkanavar@intel.com>,
+        "Zhou, Furong" <furong.zhou@intel.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>,
+        "Vaidya, Mahesh R" <mahesh.r.vaidya@intel.com>,
+        "A, Rashmi" <rashmi.a@intel.com>
+Subject: Re: [PATCH v3 3/5] spi: dw: Add support for master mode selection
+ for DWC SSI controller
+Message-ID: <20211209084040.623u3nqfxxdmsyme@mobilestation>
+References: <20211111065201.10249-1-nandhini.srikandan@intel.com>
+ <20211111065201.10249-4-nandhini.srikandan@intel.com>
+ <YY0lpZkIsJih+g2o@sirena.org.uk>
+ <20211111145246.dj4gogl4rlbem6qc@mobilestation>
+ <YY0zUjjVobtg85o6@sirena.org.uk>
+ <20211111160627.fcgrvj2k7x3lwtkp@mobilestation>
+ <YY1D3tM4fg8h6mmj@sirena.org.uk>
+ <20211116191542.vc42cxvflzn66ien@mobilestation>
+ <BN0PR11MB5727E5AF778F8B504F009554859A9@BN0PR11MB5727.namprd11.prod.outlook.com>
+ <SJ0PR11MB5816530165EEFCE780F1CDB0856F9@SJ0PR11MB5816.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] btrfs: Fix memory leak in __add_inode_ref()
-Content-Language: en-US
-To:     Jianglei Nie <niejianglei2021@163.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211209065631.124586-1-niejianglei2021@163.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <20211209065631.124586-1-niejianglei2021@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:g91V/UPbFzq0vSE8U10kexVzQJn3fLMcvmwIDX9V2qy93MKwt0g
- nZQGQRh8iCPCPqBsguRSs8qP1WVXl4pkRTTOWk+haI34xa7i34OyuLWzhJyFGSc9Nbi1MzP
- fiO/hCFTDdeJkJljfkO+uXv48B732UmZpS6wKwtezA6ZDqBSEAaHfx5PGDFIQJz46M9rytG
- obUbVs0qCCFhl8FTZiO6A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:of9nEe/Zr04=:EuKLyzqSjMDASCiQnE2X9V
- a5KuOmBxa6JOPgpnyfcoxH1UOECrZYcXG/Ne+ZOdCAiVSixVUsJNOx1SQmI2/wPXZbKpf7ZF1
- u8IVD6zQ2nOlYojiKO791Pwe1g6ayVwUEake5a9GxUwW+l33DMMzFJkLaN23XAP4xw1xi7r4Y
- eOsXOusWKi+AS/hc9T+5wtZZb7tW0ZbkVQmEbls4loUbdDphB/n+tee8iFvcJsh+nHW0yL9Vy
- yUhCwJs+PkCkPut+Ui7tEEtG9WD/G9tkAaarNnJERI2nPX3y3s2jRVwey2Avd1HquRTB1QqFk
- saZ0uPGN6DhGVEFILnuadn0eIhycUN+peaFCTgjGhGjYWIEvcGoCOP8rjqrOCjOaCbsLfMEnl
- vi4HisfQZm9l3MFHbK27P5cexfLUYwRk4IKB4E0IGm2O42NIcPWJQhDjSxb7k0xR4a8pxPoXJ
- gRK9sM+NC6iKvLJT1PkFMG/7l4opSOEaHuuBSs7XNwn9Tc0/FSKRWjDtBKazPESOFtx565cV1
- 5o8rfRI7KC/2UON0OkfxXeAk8t4aCq+cgc9Khzh+obVwRl7yVU/g6y9ashU2D3upmtykOIYzi
- CrMTcBHfGqh2kEQR9mj/CDsNnpFv7CiTyuXeR/l+hELBFChX8NBqXOfabC6XW318o0npjba1X
- eVank/Gn9U1e8kultGEdsLrXscvXVhLzWzzENR89vL3JZoGK55mVcU1kl5ZDcdZlAhFVoAfFU
- dUuvOxH/kZ9FeR2UqbNpas4q1RTH4IKBO8za+c1uwUaKAji+EJQ9FMBOaziGEINFdWOhWXHLp
- LLxe2KcpXwCYmgMZ/mQwenkDWbJMFncCALA1LpkGMCcjw4I973yt5o4F5o+xdBwdjTn83wp1P
- kHbHO5FDqRZU5MI/LfgMzfCH9fv/hehb42Pahi/fKU8oZYOJmCBg15LYse7JYhe6NhIzMguuQ
- rF0ytdpsgl3iIYY5QzGt+Ha1FV7l7vHudaGTSOq+Q+JBS2skVOVs34HzX34jGodDKK2vxc0+Z
- jI0seRT9L0sffyB/Te+WNsUzN7jYuV6FSIiCYHkV+lCR61qN++hqZWkQn37tZNjfv3gA0gYtB
- rHbwMMQ2rgdcRg=
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <SJ0PR11MB5816530165EEFCE780F1CDB0856F9@SJ0PR11MB5816.namprd11.prod.outlook.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 08, 2021 at 11:03:03AM +0000, Srikandan, Nandhini wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Srikandan, Nandhini
+> > Sent: Wednesday, November 17, 2021 5:29 PM
+> > To: Serge Semin <fancer.lancer@gmail.com>; Mark Brown
+> > <broonie@kernel.org>
+> > Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>; robh+dt@kernel.org;
+> > linux-spi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > devicetree@vger.kernel.org; mgross@linux.intel.com; Pan, Kris
+> > <kris.pan@intel.com>; Demakkanavar, Kenchappa
+> > <kenchappa.demakkanavar@intel.com>; Zhou, Furong
+> > <furong.zhou@intel.com>; Sangannavar, Mallikarjunappa
+> > <mallikarjunappa.sangannavar@intel.com>; Vaidya, Mahesh R
+> > <mahesh.r.vaidya@intel.com>; A, Rashmi <Rashmi.A@intel.com>
+> > Subject: RE: [PATCH v3 3/5] spi: dw: Add support for master mode selection
+> > for DWC SSI controller
+> > 
+> > 
+> > 
+> > > -----Original Message-----
+> > > From: Serge Semin <fancer.lancer@gmail.com>
+> > > Sent: Wednesday, November 17, 2021 12:46 AM
+> > > To: Mark Brown <broonie@kernel.org>; Srikandan, Nandhini
+> > > <nandhini.srikandan@intel.com>
+> > > Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>;
+> > > robh+dt@kernel.org; linux-spi@vger.kernel.org;
+> > > linux-kernel@vger.kernel.org; devicetree@vger.kernel.org;
+> > > mgross@linux.intel.com; Pan, Kris <kris.pan@intel.com>; Demakkanavar,
+> > > Kenchappa <kenchappa.demakkanavar@intel.com>; Zhou, Furong
+> > > <furong.zhou@intel.com>; Sangannavar, Mallikarjunappa
+> > > <mallikarjunappa.sangannavar@intel.com>; Vaidya, Mahesh R
+> > > <mahesh.r.vaidya@intel.com>; A, Rashmi <rashmi.a@intel.com>
+> > > Subject: Re: [PATCH v3 3/5] spi: dw: Add support for master mode
+> > > selection for DWC SSI controller
+> > >
+> > > On Thu, Nov 11, 2021 at 04:25:02PM +0000, Mark Brown wrote:
+> > > > On Thu, Nov 11, 2021 at 07:06:27PM +0300, Serge Semin wrote:
+> > > > > On Thu, Nov 11, 2021 at 03:14:26PM +0000, Mark Brown wrote:
+> > > >
+> > > > > > Given that people seem to frequently customise these IPs when
+> > > > > > integrating them I wouldn't trust people not to have added some
+> > > > > > other control into that reserved bit doing some magic stuff
+> > > > > > that's useful in their system.
+> > > >
+> > > > > In that case the corresponding platform code would have needed to
+> > > > > have that peculiarity properly handled and not to use a generic
+> > > > > compatibles like "snps,dwc-ssi-1.01a" or "snps,dw-apb-ssi", which
+> > > > > are supposed to be utilized for the default IP-core configs only.
+> > > > > For the sake of the code simplification I'd stick to setting that
+> > > > > flag for each generic DWC SSI-compatible device. That will be also
+> > > > > helpful for DWC SSIs which for some reason have the slave-mode
+> > > enabled by default.
+> > > >
+> > >
+> > > > That's easier right up until the point where it explodes - I'd
+> > > > prefer to be more conservative here.  Fixing things up after the
+> > > > fact gets painful when people end up only finding the bug in
+> > > > released kernels, especially if it's distro end users or similar rather than
+> > developers.
+> > >
+> > > Since IP-core and components versions is now supported that will easy
+> > > to implement. Thanks for merging the corresponding series in BTW.
+> > >
+> > > >
+> > > > > Alternatively the driver could read the IP-core version from the
+> > > > > DW_SPI_VERSION register, parse it (since it's in ASCII) and then
+> > > > > use it in the conditional Master mode activation here. But that
+> > > > > could have been a better solution in case if the older IP-cores
+> > > > > would have used that bit for something special, while Nandhini
+> > > > > claims it was
+> > > reserved.
+> > > > > So in this case I would stick with a simpler approach until we get
+> > > > > to face any problem in this matter, especially seeing we already
+> > > > > pocking the reserved bits of the CTRL0 register in this driver in
+> > > > > the
+> > > > > spi_hw_init() method when it comes to the DFS field width detection.
+> > > >
+> > > > If the device has a version register checking that seems ideal - the
+> > > > infrastructure will most likely be useful in future anyway.  A bit
+> > > > of a shame that it's an ASCII string though.
+> > >
+> > > That's what the patchset has been implemented for in the first place
+> > > https://lore.kernel.org/linux-spi/20211115181917.7521-1-
+> > > Sergey.Semin@baikalelectronics.ru/
+> > >
+> > > Nandhini, Mark has just merged in the series that adds the IP-core
+> > > versions infrastructure support to the DW SSI driver.  So now you can
+> > > easily convert this patch to be using that new interface like this:
+> > > -               if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
+> > > -                       cr0 |= DWC_SSI_CTRLR0_KEEMBAY_MST;
+> > > +               /* CTRLR0[31] MST */
+> > > +		if (dw_spi_ver_is_ge(dws, HSSI, 102A))
+> > > +       	        cr0 |= DWC_HSSI_CTRLR0_MST;
+> > >
+> > > Please don't forget to convert the DWC_SSI_CTRLR0_KEEMBAY_MST name
+> > to
+> > > something like DWC_HSSI_CTRLR0_MST and place it at the top of the DWC
+> > > HSSI CTRLR0 register macros list.
+> > >
+> > > -Sergey
+> > Sure, I will test this patch set on our hardware and then use the IP-core
+> > version infrastructure support and make the changes as mentioned for MST
+> > bit.
+> > 
+> > - Nandhini
 
+> I have tested the patches on our hardware and it is working fine. When would these patches be available in mainline? So that I can start applying the changes on top of these patches and share for review.
+> - Nandhini 
 
-On 2021/12/9 14:56, Jianglei Nie wrote:
-> Line 1169 (#3) allocates a memory chunk for victim_name by kmalloc(),
-> but  when the function returns in line 1184 (#4) victim_name allcoated
-> by line 1169 (#3) is not freed, which will lead to a memory leak.
-> There is a similar snippet of code in this function as allocating a memo=
-ry
-> chunk for victim_name in line 1104 (#1) as well as releasing the memory
-> in line 1116 (#2).
->
-> We should kfree() victim_name when the return value of backref_in_log()
-> is less than zero and before the function returns in line 1184 (#4).
->
-> 1057 static inline int __add_inode_ref(struct btrfs_trans_handle *trans,
-> 1058 				  struct btrfs_root *root,
-> 1059 				  struct btrfs_path *path,
-> 1060 				  struct btrfs_root *log_root,
-> 1061 				  struct btrfs_inode *dir,
-> 1062 				  struct btrfs_inode *inode,
-> 1063 				  u64 inode_objectid, u64 parent_objectid,
-> 1064 				  u64 ref_index, char *name, int namelen,
-> 1065 				  int *search_done)
-> 1066 {
->
-> 1104 	victim_name =3D kmalloc(victim_name_len, GFP_NOFS);
-> 	// #1: kmalloc (victim_name-1)
-> 1105 	if (!victim_name)
-> 1106 		return -ENOMEM;
->
-> 1112	ret =3D backref_in_log(log_root, &search_key,
-> 1113			parent_objectid, victim_name,
-> 1114			victim_name_len);
-> 1115	if (ret < 0) {
-> 1116		kfree(victim_name); // #2: kfree (victim_name-1)
-> 1117		return ret;
-> 1118	} else if (!ret) {
->
-> 1169 	victim_name =3D kmalloc(victim_name_len, GFP_NOFS);
-> 	// #3: kmalloc (victim_name-2)
-> 1170 	if (!victim_name)
-> 1171 		return -ENOMEM;
->
-> 1180 	ret =3D backref_in_log(log_root, &search_key,
-> 1181 			parent_objectid, victim_name,
-> 1182 			victim_name_len);
-> 1183 	if (ret < 0) {
-> 1184 		return ret; // #4: missing kfree (victim_name-2)
-> 1185 	} else if (!ret) {
->
-> 1241 	return 0;
-> 1242 }
->
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+These changes have been merged into the Mark' repo in the spi-next
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-next
+The series together with the rest of the SPI-related changed will get
+into the mainline during the merge window.
+For the time being you can rebase your patches on top of the Mark' repo
+and if it works well for you just post it out for review. If it looks
+good you'll even be able to have your series merged into the kernel in
+the next merge-window.
 
-Reviewed-by: Qu Wenruo <wqu@suse.com>
+-Sergey
 
-BTW, mind to share the way how you exposed the missing kfree()?
-
-Some awesome static analyse tool or just by eyeballing?
-
-Thanks,
-Qu
-> ---
->   fs/btrfs/tree-log.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-> index 8ab33caf016f..d373fec55521 100644
-> --- a/fs/btrfs/tree-log.c
-> +++ b/fs/btrfs/tree-log.c
-> @@ -1181,6 +1181,7 @@ static inline int __add_inode_ref(struct btrfs_tra=
-ns_handle *trans,
->   					     parent_objectid, victim_name,
->   					     victim_name_len);
->   			if (ret < 0) {
-> +				kfree(victim_name);
->   				return ret;
->   			} else if (!ret) {
->   				ret =3D -ENOENT;
->
+> 

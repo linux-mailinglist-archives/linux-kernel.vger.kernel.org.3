@@ -2,154 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 816D247015C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CF947014F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241612AbhLJNR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:17:58 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15724 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbhLJNRz (ORCPT
+        id S241552AbhLJNOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:14:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50038 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241426AbhLJNOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:17:55 -0500
-Received: from kwepemi100009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J9WWK4tBQzZdVx;
-        Fri, 10 Dec 2021 21:11:25 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi100009.china.huawei.com (7.221.188.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 21:14:19 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 21:14:18 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net 2/2] net: hns3: fix race condition in debugfs
-Date:   Fri, 10 Dec 2021 21:09:34 +0800
-Message-ID: <20211210130934.36278-3-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211210130934.36278-1-huangguangbin2@huawei.com>
-References: <20211210130934.36278-1-huangguangbin2@huawei.com>
+        Fri, 10 Dec 2021 08:14:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639141845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g28ogTKeSb2RimVMfdJsC1QVLdKzz3DH/S0ei09yZg8=;
+        b=RWKTbZTwmQD5uiDNGoXyjY/qw+IYKxAVYmt4RvKo02Dmjkabh3Ksk1RhTrEN5Dp9vnXcFh
+        4xy+xAvETCUxuh3zKlKcwDL/F03LexsWiWXjSL3SXZTCxFri8+ftN9X+fdwHGvOi1FupOc
+        Ho7er1Bi7IX1mUkAep/dmWxJzgIMkgY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-rERBtxmIPOShklY63U4Iog-1; Fri, 10 Dec 2021 08:10:42 -0500
+X-MC-Unique: rERBtxmIPOShklY63U4Iog-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9420B802C92;
+        Fri, 10 Dec 2021 13:10:39 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BB9AD19C59;
+        Fri, 10 Dec 2021 13:10:35 +0000 (UTC)
+Message-ID: <8cbc67c742db2c4a66baf669a722a544d892ffb7.camel@redhat.com>
+Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
+ kvm_apic_update_apicv
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Fri, 10 Dec 2021 15:10:34 +0200
+In-Reply-To: <3c30e682-a569-9e91-987d-9e2fc66bb625@redhat.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+         <20211209115440.394441-6-mlevitsk@redhat.com>
+         <636dd644-8160-645a-ce5a-f4eb344f001c@redhat.com>
+         <fbf3e1665357d9517015ad49eee0c9825ed876d4.camel@redhat.com>
+         <0a01229bbbb6d133ba164cb5495ad2300eb8d818.camel@redhat.com>
+         <3c30e682-a569-9e91-987d-9e2fc66bb625@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yufeng Mo <moyufeng@huawei.com>
+On Fri, 2021-12-10 at 14:03 +0100, Paolo Bonzini wrote:
+> On 12/10/21 13:47, Maxim Levitsky wrote:
+> > If we scan vIRR here and see no bits, and*then*  disable AVIC,
+> > there is a window where the they could legit be turned on without any cpu errata,
+> > and we will not have irr_pending == true, and thus the following
+> > KVM_REQ_EVENT will make no difference.
+> 
+> Right.
+> 
+> > Not touching irr_pending and letting just the KVM_REQ_EVENT do the work
+> > will work too,
+> 
+> Yeah, I think that's preferrable.  irr_pending == true is a conservative 
+> setting that works; irr_pending will be evaluated again on the first 
+> call to apic_clear_irr and that's enough.
+> 
+> With that justification, you don't need to reorder the call to 
+> kvm_apic_update_apicv to be after kvm_x86_refresh_apicv_exec_ctrl.
 
-When multiple threads concurrently access the debugfs content, data
-and pointer exceptions may occur. Therefore, mutex lock protection is
-added for debugfs.
+Yes exactly! but no need to scan IRR here since irr_pending is already
+true at that point anyway - it is always true while avic is enabled.
 
-Fixes: 5e69ea7ee2a6 ("net: hns3: refactor the debugfs process")
-Signed-off-by: Yufeng Mo <moyufeng@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/ethernet/hisilicon/hns3/hnae3.h   |  2 ++
- .../ethernet/hisilicon/hns3/hns3_debugfs.c    | 20 +++++++++++++------
- 2 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hnae3.h b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-index 3f7a9a4c59d5..63f5abcc6bf4 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-@@ -839,6 +839,8 @@ struct hnae3_handle {
- 
- 	u8 netdev_flags;
- 	struct dentry *hnae3_dbgfs;
-+	/* protects concurrent contention between debugfs commands */
-+	struct mutex dbgfs_lock;
- 
- 	/* Network interface message level enabled bits */
- 	u32 msg_enable;
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-index 081295bff765..c381f8af67f0 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-@@ -1226,6 +1226,7 @@ static ssize_t hns3_dbg_read(struct file *filp, char __user *buffer,
- 	if (ret)
- 		return ret;
- 
-+	mutex_lock(&handle->dbgfs_lock);
- 	save_buf = &hns3_dbg_cmd[index].buf;
- 
- 	if (!test_bit(HNS3_NIC_STATE_INITED, &priv->state) ||
-@@ -1238,15 +1239,15 @@ static ssize_t hns3_dbg_read(struct file *filp, char __user *buffer,
- 		read_buf = *save_buf;
- 	} else {
- 		read_buf = kvzalloc(hns3_dbg_cmd[index].buf_len, GFP_KERNEL);
--		if (!read_buf)
--			return -ENOMEM;
-+		if (!read_buf) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
- 
- 		/* save the buffer addr until the last read operation */
- 		*save_buf = read_buf;
--	}
- 
--	/* get data ready for the first time to read */
--	if (!*ppos) {
-+		/* get data ready for the first time to read */
- 		ret = hns3_dbg_read_cmd(dbg_data, hns3_dbg_cmd[index].cmd,
- 					read_buf, hns3_dbg_cmd[index].buf_len);
- 		if (ret)
-@@ -1255,8 +1256,10 @@ static ssize_t hns3_dbg_read(struct file *filp, char __user *buffer,
- 
- 	size = simple_read_from_buffer(buffer, count, ppos, read_buf,
- 				       strlen(read_buf));
--	if (size > 0)
-+	if (size > 0) {
-+		mutex_unlock(&handle->dbgfs_lock);
- 		return size;
-+	}
- 
- out:
- 	/* free the buffer for the last read operation */
-@@ -1265,6 +1268,7 @@ static ssize_t hns3_dbg_read(struct file *filp, char __user *buffer,
- 		*save_buf = NULL;
- 	}
- 
-+	mutex_unlock(&handle->dbgfs_lock);
- 	return ret;
- }
- 
-@@ -1337,6 +1341,8 @@ int hns3_dbg_init(struct hnae3_handle *handle)
- 			debugfs_create_dir(hns3_dbg_dentry[i].name,
- 					   handle->hnae3_dbgfs);
- 
-+	mutex_init(&handle->dbgfs_lock);
-+
- 	for (i = 0; i < ARRAY_SIZE(hns3_dbg_cmd); i++) {
- 		if ((hns3_dbg_cmd[i].cmd == HNAE3_DBG_CMD_TM_NODES &&
- 		     ae_dev->dev_version <= HNAE3_DEVICE_VERSION_V2) ||
-@@ -1363,6 +1369,7 @@ int hns3_dbg_init(struct hnae3_handle *handle)
- 	return 0;
- 
- out:
-+	mutex_destroy(&handle->dbgfs_lock);
- 	debugfs_remove_recursive(handle->hnae3_dbgfs);
- 	handle->hnae3_dbgfs = NULL;
- 	return ret;
-@@ -1378,6 +1385,7 @@ void hns3_dbg_uninit(struct hnae3_handle *handle)
- 			hns3_dbg_cmd[i].buf = NULL;
- 		}
- 
-+	mutex_destroy(&handle->dbgfs_lock);
- 	debugfs_remove_recursive(handle->hnae3_dbgfs);
- 	handle->hnae3_dbgfs = NULL;
- }
--- 
-2.33.0
+Best regards,
+	Maxim Levitsky
+> 
+> Paolo
+> 
+>   and if the avic errata is present, reduce slightly
+> > the chances of it happening.
+
 

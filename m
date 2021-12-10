@@ -2,95 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9196647066A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E9E47066F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244230AbhLJQ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244155AbhLJQ4S (ORCPT
+        id S244243AbhLJQ5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:57:05 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:41851 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233469AbhLJQ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:56:18 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103F8C061746;
-        Fri, 10 Dec 2021 08:52:43 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id bf8so14017039oib.6;
-        Fri, 10 Dec 2021 08:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=22649vhBq2+EXGoWXGfR5yBZHrxpcXiBe7SMU6QvJ9E=;
-        b=VftFAwBD3J9MksWNJ5Q0i0pQIydLpWe2AWuYf9hpQ/Ka1F7NoQydT0ZsBgvzcnqTFM
-         7eSKfeBCTKGgjyzPFvXkS+1bGmvSjHVgpptuhuF/bIWT5D9/oZoa+UvPzksq41QYQlik
-         AIMg32rj7fr2HUHp+J34ApUAL/Hgtpufq6jvZnFaB4ieYkpMHUyki2KqcLdg6HX12jX0
-         cOV7ZE0a65Q/jG2Pq145sXlYdVdvVW4u8KbUB7S0MHSdLzRo76Pf4lURvrM1qrqecCfy
-         daAlQlCQOa7tON7rXYVKL3q77PzIptp+nfPEqF9Dv5MHqG/yt+FfJg7CAT1ekh9RLi9x
-         nG8Q==
+        Fri, 10 Dec 2021 11:56:56 -0500
+Received: by mail-ot1-f41.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so10199925otl.8;
+        Fri, 10 Dec 2021 08:53:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=22649vhBq2+EXGoWXGfR5yBZHrxpcXiBe7SMU6QvJ9E=;
-        b=0BFuakcU8BGOZNrRp6ptFOjTmBuJHk/ZGdvI+LTa+DssKyePcuqS1z8t14G+UEVxg2
-         pMpMLA38hj+DPJ0Z7imuxdJdzOxtO+hFkVgn1DQ8Khsg5vv9TomkVCpdz0R4BcRLfWVu
-         beE/7wYFlLRM3usZE1203QQA0zlLV52LXurVYgF1OhsSdOa2Ox4an0sm41JooorbojZo
-         Km2LGJjbuuz2jGfE5LqJI6pnNcnhMuFXPLY7HZlqyKPJBGRZGdLWbmV3XMTTOmt4Xn1E
-         InBI9T145BalUm0w4tURebk+5EyqMyZAnglmWgQQZmp2abz6qjOZjrZcgE6/qoMe3Vcr
-         skQQ==
-X-Gm-Message-State: AOAM531Y26VwVbyDQWtSfoXUGrJ/zyjgtCgjz4uzb2rtlwJ+Dtolqp6X
-        lCJHN3TPaPfdEmeaAUijr9j+JcK7o9s=
-X-Google-Smtp-Source: ABdhPJxW9Ar0jM0wiz/JsNh5FO3yZcq6iyIKA1cdOfyZnTsUsxNwdyAP2uJove/VQzA+HL9k+sLMbA==
-X-Received: by 2002:a05:6808:699:: with SMTP id k25mr13313595oig.135.1639155162438;
-        Fri, 10 Dec 2021 08:52:42 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id s2sm597106otr.69.2021.12.10.08.52.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 08:52:41 -0800 (PST)
-Message-ID: <36bbf0c3-06a9-db35-46f1-320cc502ef75@gmail.com>
-Date:   Fri, 10 Dec 2021 09:52:40 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f2wp1hAWgrRC49VCftrTow4JceyJ/E3jGWRhqUONy3E=;
+        b=wnVZ7aE/7pzWydFTFjv8IPgHP+7V7/g4LZWukrtFscqm8ufs6bsz/HRXdGpDZdUGVG
+         CfN78XYK97ECTZpbkxCdXLnp2j9Qbe+nYyCu+icb/xBM54Xm9to1YKUwfXEfk+/krTX1
+         /rmlIU+mJxnG7Ya+6W8G3y9o4kTfDog3AhjsXZFg5MafDD/tlqfJPTH06qXqmFs3k4/Q
+         u/5Lxns6aXKxjIQ340es7y45ZqOBnqiG9+0KpcsZMHp4BPMMsP4KMMigTDZhku3ZQUJg
+         +U6j8de+oqs08HRLw0MIUwc6fHw87r0RWTcwhIGCqeXqhbTb49zWbKNizAkFwrM24H7W
+         WZBQ==
+X-Gm-Message-State: AOAM530DDPi7fRMw2stmN6LnBDm5hk+3iPQZZ2GLc7qdjz6Ptfiy5SFG
+        yNBEvnKUhSobmQZ6Br2IcQ==
+X-Google-Smtp-Source: ABdhPJxhzRUkJAKFVqmngli/4xluAGV/SNq6SdpzNQU9xFUHh/yAnJa6IWohu6L2xwq0z1bo5kLV7A==
+X-Received: by 2002:a9d:6d98:: with SMTP id x24mr11507597otp.371.1639155200962;
+        Fri, 10 Dec 2021 08:53:20 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f9sm587878oto.56.2021.12.10.08.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 08:53:20 -0800 (PST)
+Received: (nullmailer pid 1513473 invoked by uid 1000);
+        Fri, 10 Dec 2021 16:53:18 -0000
+Date:   Fri, 10 Dec 2021 10:53:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v11 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+Message-ID: <YbOF/pwib/VXoqkx@robh.at.kernel.org>
+References: <cover.1638470392.git.hns@goldelico.com>
+ <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [syzbot] KMSAN: uninit-value in fib_get_nhs
-Content-Language: en-US
-To:     syzbot <syzbot+d4b9a2851cc3ce998741@syzkaller.appspotmail.com>,
-        davem@davemloft.net, dsahern@kernel.org, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        yoshfuji@linux-ipv6.org
-References: <0000000000005a735005d2bb2dff@google.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <0000000000005a735005d2bb2dff@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 11:57 AM, syzbot wrote:
-> Hello,
+On Thu, Dec 02, 2021 at 07:39:48PM +0100, H. Nikolaus Schaller wrote:
+> From: Sam Ravnborg <sam@ravnborg.org>
 > 
-> syzbot found the following issue on:
+> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> Based on .txt binding from Zubair Lutfullah Kakakhel
 > 
-> HEAD commit:    8b936c96768e kmsan: core: remove the accidentally committe..
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1724ebc5b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
-> dashboard link: https://syzkaller.appspot.com/bug?extid=d4b9a2851cc3ce998741
-> compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1225f875b00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=139513c5b00000
+> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+d4b9a2851cc3ce998741@syzkaller.appspotmail.com
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 78 +++++++++++++++++++
+>  .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
+>  2 files changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
 > 
-> =====================================================
-> BUG: KMSAN: uninit-value in fib_get_nhs+0xac4/0x1f80 net/ipv4/fib_semantics.c:708
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> new file mode 100644
+> index 0000000000000..49ae1130efded
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
+> +
+> +maintainers:
+> +  - H. Nikolaus Schaller <hns@goldelico.com>
+> +
+> +description: |
+> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys DesignWare HDMI 1.4
+> +  TX controller IP with accompanying PHY IP.
+> +
+> +allOf:
+> +  - $ref: synopsys,dw-hdmi.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: ingenic,jz4780-dw-hdmi
+> +
+> +  reg-io-width:
+> +    const: 4
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  hdmi-5v-supply:
+> +    description: regulator to provide +5V at the connector
 
+Being part of the connector, that belongs in a connector node.
 
-Most likely lack of length validation on nla like we have in
-fib_gw_from_via for the other attribute (nlav). Will send a patch.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
 
+You need to define what each 'port' node is.
+
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - hdmi-5v-supply
+> +  - ports
+> +  - reg-io-width
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
+> +
+> +    hdmi: hdmi@10180000 {
+> +        compatible = "ingenic,jz4780-dw-hdmi";
+> +        reg = <0x10180000 0x8000>;
+> +        reg-io-width = <4>;
+> +        ddc-i2c-bus = <&i2c4>;
+> +        interrupt-parent = <&intc>;
+> +        interrupts = <3>;
+> +        clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
+> +        clock-names = "iahb", "isfr";
+> +        hdmi-5v-supply = <&hdmi_power>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            hdmi_in: port@0 {
+> +                reg = <0>;
+> +                dw_hdmi_in: endpoint {
+> +                    remote-endpoint = <&jz4780_lcd_out>;
+> +                };
+> +            };
+> +            hdmi_out: port@1 {
+> +                reg = <1>;
+> +                dw_hdmi_out: endpoint {
+> +                    remote-endpoint = <&hdmi_con>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+> index 9be44a682e67a..9cbeabaee0968 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+> @@ -50,6 +50,9 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  ddc-i2c-bus:
+> +    description: An I2C interface if the internal DDC I2C driver is not to be used
+
+That too is already defined to be part of the connector node.
+
+> +
+>  additionalProperties: true
+>  
+>  ...
+> -- 
+> 2.33.0
+> 
+> 

@@ -2,127 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBCB46FDAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E4446FDA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239362AbhLJJ2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:28:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239274AbhLJJ2r (ORCPT
+        id S239281AbhLJJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:28:46 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58720 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239270AbhLJJ2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:28:47 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B41C061746;
-        Fri, 10 Dec 2021 01:25:12 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id g16so7584010pgi.1;
-        Fri, 10 Dec 2021 01:25:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Jvyh985iWE+52Vh0gYXmI7swXmsP4Ob31Ssk6jo1Jmo=;
-        b=JeGYCb8anqRLCaVkwzFfsIaUqPabj6B0+QdcghkTTh6b4A2Dgxh1I24AJvHlRMJ6W6
-         FIqm4n5zCxmUIpPM2VCIaxeVgB/xZedPLYJ2fi3KTcDmdZscIXuBmUlCbPCJiK/c9ttk
-         f5TOOvos8z6l2tz4ZYa2pe8pYGFQG72vpWyycPqtwcuWukegtQgsf6JgaMcoat5MFEXB
-         4jqu453lGNYWr8Z3wko/8aNvZ+dqa7m6T5Y13xpWDSBlzBaHGQ08iz7wxGRU4dVmWM7S
-         cuoFHYXnyQuUnygz1vsctl42d3hxRsdT9PqAKnMfPvuhzJ3y9nhx6jDK5bMRh3BxQoJH
-         kXcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Jvyh985iWE+52Vh0gYXmI7swXmsP4Ob31Ssk6jo1Jmo=;
-        b=gb2vYVzzqpkNjHroRCnBP8xjllmlaCEuzOI0C4/ZeO3Pjw2MRXlUQOradlNLWrjcB2
-         8VgwZghlWUbDvWS9JbbHgdz69SE0wNoRqsotRIJepK0xNnl2vuXBG20YyynBMTz9j8jF
-         uV2FghpgrAUPpooVulDHNjkjjZwDpFbux5WPGzkLNnl0cAR2DEX4/p88aP3aumnIEq6I
-         P9Y1Al7+Amyi/03OKyolK/FOxvHk1cgbnS29O+da0pzOd6NYk4lzxbLfzU8B8kI7C17s
-         nKeS4IrgsQE0IDXYyluWcXXuqxaehodPSchcvK/6yVjPhj6NSoX+H7spcLUMXubI7aMe
-         E+Sw==
-X-Gm-Message-State: AOAM531nIHRM/EXTa57k1IuqpZNvX15a89RVVg6EV58mYpynpwRCMFcG
-        5WObZHYWV2rVDZekKzYY63r04lXgbmo=
-X-Google-Smtp-Source: ABdhPJy40TqoGqMn7su0neDQlDJO8kt3xEmiY0vgHBohqtDu8HrhV6VFlxJNBQQsg08CSoeJmcwGmQ==
-X-Received: by 2002:aa7:98dd:0:b0:49f:bab8:3b67 with SMTP id e29-20020aa798dd000000b0049fbab83b67mr16922004pfm.86.1639128311996;
-        Fri, 10 Dec 2021 01:25:11 -0800 (PST)
-Received: from localhost ([47.251.3.230])
-        by smtp.gmail.com with ESMTPSA id rm10sm2616421pjb.29.2021.12.10.01.25.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Dec 2021 01:25:11 -0800 (PST)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Lai Jiangshan <laijs@linux.alibaba.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [RFC PATCH 3/6] KVM: X86: Add arguement gfn and role to kvm_mmu_alloc_page()
-Date:   Fri, 10 Dec 2021 17:25:05 +0800
-Message-Id: <20211210092508.7185-4-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20211210092508.7185-1-jiangshanlai@gmail.com>
-References: <20211210092508.7185-1-jiangshanlai@gmail.com>
+        Fri, 10 Dec 2021 04:28:42 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9E5821F3A0;
+        Fri, 10 Dec 2021 09:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639128305; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LycgmG/LOJGB73wFgPTNENwjnXJ/W6j/W+2P+mTUqtY=;
+        b=tb2/CiUtZq6CXhb+haQSauUuxJ2aRwXLYj92PZMerEm2Pzwl5U7UeJlBqKoHIKhCSBSiVR
+        rpY2eJZ4InS7utFOpfDp8kXr4P+UqgbleouwxHfPBlGIutdqDH3ndiLMThJZxsT7mWZ4MN
+        /HqEs23frqLuieyu+GAxNU+lcBKbKrE=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6F03CA3B95;
+        Fri, 10 Dec 2021 09:25:05 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 10:25:05 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     linux-doc@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
+        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
+        corbet@lwn.net, yhs@fb.com, songliubraving@fb.com
+Subject: Re: [PATCH] Documentation: livepatch: Add kernel-doc link to
+ klp_enable_patch
+Message-ID: <YbMc8YGIoyRU5nwJ@alley>
+References: <20211209165303.3205464-1-void@manifault.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211209165303.3205464-1-void@manifault.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <laijs@linux.alibaba.com>
+On Thu 2021-12-09 08:53:04, David Vernet wrote:
+> The `klp_enable_patch()` function is the main entrypoint to the livepatch
+> subsystem, and is invoked by a KLP module from the module_init callback
+> when it is ready to be enabled.  The livepatch documentation specifies that
+> `klp_enable_patch()` should be invoked from the `module_init()` callback,
+> but does not actually link the user to the function's kerneldoc comment.
+> 
+> This simple change therefore adds a kernel-doc directive to link the
+> `klp_enable_patch()` function's kerneldoc comment in the livepatch
+> documentation page. With this, kernel/livepatch/core.c no longer comes up
+> as a file containing an unused doc with
+> `scripts/find-unused-docs.sh kernel/livepatch`
+> 
+> --- a/Documentation/livepatch/livepatch.rst
+> +++ b/Documentation/livepatch/livepatch.rst
+> @@ -312,8 +312,15 @@ the patch cannot get enabled.
+>  -------------
+>  
+>  The livepatch gets enabled by calling klp_enable_patch() from
+> -the module_init() callback. The system will start using the new
+> -implementation of the patched functions at this stage.
+> +the module_init() callback:
+> +
+> +.. kernel-doc:: kernel/livepatch/core.c
+> +   :functions: klp_enable_patch
+> +
+> +----
+> +
+> +The system will start using the new implementation of the patched functions at
+> +this stage.
+>  
+>  First, the addresses of the patched functions are found according to their
+>  names. The special relocations, mentioned in the section "New functions",
 
-kvm_mmu_alloc_page() will access to more bits of the role.
+Honestly, I do not like this. It might be acceptable when it converts
+klp_enable_patch() into a link pointing to another page describing the API.
 
-Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
----
- arch/x86/kvm/mmu/mmu.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+But this patch causes the entire documentation of klp_enable_patch()
+inserted into livepatch.html. It does not fit there and breaks
+the text flow.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 846a2e426e0b..54e7cbc15380 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1734,13 +1734,13 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
- 	mmu_spte_clear_no_track(parent_pte);
- }
- 
--static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct)
-+static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, gfn_t gfn, union kvm_mmu_page_role role)
- {
- 	struct kvm_mmu_page *sp;
- 
- 	sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
- 	sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
--	if (!direct)
-+	if (!role.direct)
- 		sp->gfns = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_gfn_array_cache);
- 	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
- 
-@@ -1752,6 +1752,8 @@ static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct
- 	sp->mmu_valid_gen = vcpu->kvm->arch.mmu_valid_gen;
- 	list_add(&sp->link, &vcpu->kvm->arch.active_mmu_pages);
- 	kvm_mod_used_mmu_pages(vcpu->kvm, +1);
-+	sp->gfn = gfn;
-+	sp->role = role;
- 	return sp;
- }
- 
-@@ -2138,10 +2140,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 
- 	++vcpu->kvm->stat.mmu_cache_miss;
- 
--	sp = kvm_mmu_alloc_page(vcpu, direct);
--
--	sp->gfn = gfn;
--	sp->role = role;
-+	sp = kvm_mmu_alloc_page(vcpu, gfn, role);
- 	hlist_add_head(&sp->hash_link, sp_list);
- 	if (!direct) {
- 		account_shadowed(vcpu->kvm, sp);
--- 
-2.19.1.6.gb485710b
 
+Heh, I had hard times to build the documentation (sphinx crashed, ...).
+So, I paste the html output for others here:
+
+<cut&paste>
+5.2. Enabling¶
+The livepatch gets enabled by calling klp_enable_patch() from the module_init() callback:
+
+int klp_enable_patch(struct klp_patch *patch)¶
+enable the livepatch
+
+Parameters
+
+struct klp_patch *patch
+patch to be enabled
+
+Description
+
+Initializes the data structure associated with the patch, creates the sysfs interface, performs the needed symbol lookups and code relocations, registers the patched functions with ftrace.
+
+This function is supposed to be called from the livepatch module_init() callback.
+
+Return
+
+0 on success, otherwise error
+
+The system will start using the new implementation of the patched functions at this stage.
+
+First, the addresses of the patched functions are found according to their names. The special relocations, mentioned in the section “New functions”, are applied. The relevant entries are created under /sys/kernel/livepatch/<name>. The patch is rejected when any above operation fails.
+
+Second, livepatch enters into a transition state where tasks are converging to the patched state. If an original function is patched for the first time, a function specific struct klp_ops is created and an universal ftrace handler is registered1. This stage is indicated by a value of ‘1’ in /sys/kernel/livepatch/<name>/transition. For more information about this process, see the “Consistency model” section.
+
+Finally, once all tasks have been patched, the ‘transition’ value changes to ‘0’.
+
+1
+Note that functions might be patched multiple times. The ftrace handler is registered only once for a given function. Further patches just add an entry to the list (see field func_stack) of the struct klp_ops. The right implementation is selected by the ftrace handler, see the “Consistency model” section.
+
+That said, it is highly recommended to use cumulative livepatches
+because they help keeping the consistency of all changes. In this
+case, functions might be patched two times only during the transition
+period.
+</cut&paste>
+
+
+Best Regards,
+Petr

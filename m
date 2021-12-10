@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BC746FDDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6503846FDEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237904AbhLJJjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
+        id S238364AbhLJJkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbhLJJjM (ORCPT
+        with ESMTP id S230074AbhLJJkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:39:12 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B32CC061746;
-        Fri, 10 Dec 2021 01:35:37 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id t5so27632583edd.0;
-        Fri, 10 Dec 2021 01:35:37 -0800 (PST)
+        Fri, 10 Dec 2021 04:40:09 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F90C0617A1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:36:35 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id g19so7974618pfb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:36:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=J7+bfSl77k8qoKRfxoMaCemHVKj1XiOHFVSzqWLEq1U=;
-        b=IxdtM2RgbgdqXYq+PnABuVIMOt1ff6DKxgFQ4SyincfofYFQ40qErcr1ZLmdDKFMRf
-         MJX+mMcnVf61L2d0dbT5HM0MI9blIf4ZJ73h1rr0o4XoCmpJ0TQStETFGmJ0t5CO74Ot
-         Z8suMAWfhkPu9fBtUN0ZLkKcfKjH1IjwrypVx9tkaS/vnBxFdF1wn42LQc+dz/2csNUA
-         6ZdLwLT8IdPbgok+Q7IhkSwHkC9fJCM8+xDdxlvX/qBaFN9bc7nAP/qZOs/RKPLmTdCh
-         KiX77FAtKC1Pq7980eVWRbWz7PQQM1XQ0/9/+p+xOY5W2OJS1PfFHAJBarkxxr/SjR/C
-         iXVQ==
+        bh=FFsQwjzhgSyKAUENvfBIFY+4uCH9mkGIaj8EHI/MgtM=;
+        b=2HZ8pFJ96JZLj13duu4Zv3yCHVfq4Zvb5DObtluxYN8pRA1VHPgMn5e/SuxAL7/6gs
+         8PP7cNkLq+G0iKZxU+8Nhy8efBi1gVoxsJ8GCrVdrqtlL8oF2tBhAW0PCxrKoV9eGh4K
+         9gNDtwRri8Q8OvRKv/gG/jQ/8HvZiIw4kpMv+DIicaEAfG5RM16QsLKePuKPDQS84AY+
+         lsJbF11WJCzp+Ny9jl1qFWpabfTll6zWZngYHtujZ5WtMYKJMxuHvvU76e3/+gWjYXxy
+         hwKASuGz+uKCPSmOY5DUTGipvxCHMUu5X0gOs98LNqECU1qDq0k0/f3ls+z36jTtmIeA
+         a2LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=J7+bfSl77k8qoKRfxoMaCemHVKj1XiOHFVSzqWLEq1U=;
-        b=sjhNiQkoZDbxHgU1JF8F0AjBhbCBJAM/gmGgAwDCDD7plNMblbsX0XIHyXDwSYr5Kx
-         sYeynvlMGpgpdUlWSmgUgc5pPz5v4do2FmbW41wXRM1iF83T2bekjjLWyRBjYjl7l9nW
-         HyeWzvKUi8dy41W9mJVYMbCMDwn0VVRwTs61d+JzckUv4nNmbXRfu43ePW1PC9br/Ppm
-         cUgr/umn+qU7MZXb51WAt8UafZVdUkMdTdKdHvtsluNsorq6pddAQiqyLYHbcouSp8KF
-         nHRZhJT91VHI8LsHwJIhYanICUdcGAeeH6FDXtYWQT/REmHtEXSOCQdLO5JXI8Yv2/Qk
-         ryig==
-X-Gm-Message-State: AOAM530Npu9FdrF9t8Q4XI8DU/ZfSSF1d2jMM5+E6yU2ZXLjoCiM2/OP
-        c/zRKd9+HgElFYEAIlDDoJM=
-X-Google-Smtp-Source: ABdhPJx6LeQTDODOD8BSaFoJoDbt86J4KIl9CB80zm0rZMvG3trQ0MR1VhZgrlcxSnV5p8ZlauA4gw==
-X-Received: by 2002:a17:906:e28b:: with SMTP id gg11mr22837899ejb.23.1639128935850;
-        Fri, 10 Dec 2021 01:35:35 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::973? ([2001:b07:6468:f312::973])
-        by smtp.googlemail.com with ESMTPSA id m25sm1105752edj.80.2021.12.10.01.35.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 01:35:35 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <b6c1eb18-9237-f604-9a96-9e6ca397121c@redhat.com>
-Date:   Fri, 10 Dec 2021 10:35:32 +0100
+        bh=FFsQwjzhgSyKAUENvfBIFY+4uCH9mkGIaj8EHI/MgtM=;
+        b=aIAnNj3iCNulQkry+oJpD1Bsn2/g8GUaM6XJx7NxUiZGw/p54MIQmen3EPNQSVIJNk
+         M7kpkbO5pohua5YqtRcMBJWK4FzriKJjwLSsZ4N6G5kHtNnSsqWRxidXBt3IZ/QHASNG
+         qvjbr4G63d4Bq82iwxA6AFJrIeWR0qcyK1cTFd2AP6aBYn/DwjIxGAfDZlGPPnfbDkXp
+         /lrUAHvDs1uIFL9fkxuOKd0v18KY6G18+YPI8sNnXO66D5o/ZI1mxzOkKvcOo2z5ud40
+         jGbZwokNjBx1EXppOKzf9H3SaBvvRWcCZjR14283mVF6EPj9jTDNK6i5WZtHUDWgGJg3
+         8TTA==
+X-Gm-Message-State: AOAM533OJ0yxmNtX40ymtkMqqL7T8r6ByZCrw8O8aegO7+X6TtE6QIBR
+        iNYiQ1tdwGJF+XSPWh57oc3Q4Q==
+X-Google-Smtp-Source: ABdhPJxfgd7xqWpUed8nHPtc7th4BGQX/oU3cVlecMdpTmljzsHJb1raImLHfPrW51SVtK7EXikrhA==
+X-Received: by 2002:a05:6a00:1783:b0:49f:c134:c6e2 with SMTP id s3-20020a056a00178300b0049fc134c6e2mr17192053pfg.0.1639128994705;
+        Fri, 10 Dec 2021 01:36:34 -0800 (PST)
+Received: from localhost ([49.7.45.40])
+        by smtp.gmail.com with ESMTPSA id mn15sm2263884pjb.35.2021.12.10.01.36.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 01:36:34 -0800 (PST)
+From:   Lei YU <yulei.sh@bytedance.com>
+To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc <openbmc@lists.ozlabs.org>
+Cc:     Lei YU <yulei.sh@bytedance.com>
+Subject: [PATCH] ARM: dts: aspeed: g220a: Enable secondary flash
+Date:   Fri, 10 Dec 2021 17:36:23 +0800
+Message-Id: <20211210093623.2140640-1-yulei.sh@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor
- kvm_perf_overflow{_intr}()
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>,
-        Like Xu <like.xu.linux@gmail.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-References: <20211130074221.93635-1-likexu@tencent.com>
- <20211130074221.93635-5-likexu@tencent.com>
- <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
- <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com>
- <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 01:54, Jim Mattson wrote:
-> On Thu, Dec 9, 2021 at 12:28 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> On 9/12/2021 12:25 pm, Jim Mattson wrote:
->>>
->>> Not your change, but if the event is counting anything based on
->>> cycles, and the guest TSC is scaled to run at a different rate from
->>> the host TSC, doesn't the initial value of the underlying hardware
->>> counter have to be adjusted as well, so that the interrupt arrives
->>> when the guest's counter overflows rather than when the host's counter
->>> overflows?
->>
->> I've thought about this issue too and at least the Intel Specification
->> did not let me down on this detail:
->>
->>          "The counter changes in the VMX non-root mode will follow
->>          VMM's use of the TSC offset or TSC scaling VMX controls"
-> 
-> Where do you see this? I see similar text regarding TSC packets in the
-> section on Intel Processor Trace, but nothing about PMU counters
-> advancing at a scaled TSC frequency.
+Enable the secondary flash of the g220a's BMC and the wdt2.
 
-Indeed it seems quite unlikely that PMU counters can count fractionally.
+Signed-off-by: Lei YU <yulei.sh@bytedance.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Even for tracing the SDM says "Like the value returned by RDTSC, TSC 
-packets will include these adjustments, but other timing packets (such 
-as MTC, CYC, and CBR) are not impacted".  Considering that "stand-alone 
-TSC packets are typically generated only when generation of other timing 
-packets (MTCs and CYCs) has ceased for a period of time", I'm not even 
-sure it's a good thing that the values in TSC packets are scaled and offset.
+diff --git a/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts b/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
+index 01dace8f5e5f..05f392f42960 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
+@@ -260,6 +260,13 @@ flash@0 {
+ 		spi-max-frequency = <50000000>;
+ #include "openbmc-flash-layout-64.dtsi"
+ 	};
++	flash@1 {
++		status = "okay";
++		label = "alt-bmc";
++		m25p,fast-read;
++		spi-max-frequency = <50000000>;
++#include "openbmc-flash-layout-64-alt.dtsi"
++	};
+ };
+ 
+ &spi1 {
+@@ -278,6 +285,10 @@ &adc {
+ 	status = "okay";
+ };
+ 
++&wdt2 {
++	aspeed,alt-boot;
++};
++
+ &gpio {
+ 	status = "okay";
+ 	gpio-line-names =
+-- 
+2.25.1
 
-Back to the PMU, for non-architectural counters it's not really possible 
-to know if they count in cycles or not.  So it may not be a good idea to 
-special case the architectural counters.
-
-Paolo

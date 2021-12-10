@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EB047059D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40044705A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240017AbhLJQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S243359AbhLJQbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbhLJQay (ORCPT
+        with ESMTP id S240011AbhLJQa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:30:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA06AC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:27:18 -0800 (PST)
+        Fri, 10 Dec 2021 11:30:56 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AB0C061A72
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:27:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=9r4ir9X+LihKrT7hY/BtEz6BMhD5gRGP9c6+8I59KNI=; b=hFzZnnzW+ChEBSXylpyfMWPzWU
-        jyKSX3tjiT1BZbtGvRx6LC0EuA87mEKFIdLfqyypX98/wLC9QDbOv+Z7fi6aOnxtkGeIrnszcROcN
-        QB5CVad/SDuxHn43pfZ/rguN8E3pY7zvpvB/ZsQAt82L5pK8YG5wEBWDcxAzv1dY3HEd0KRIpocxY
-        1vkgagsJGzVAKg+FEe5E4haeOyuVzVrNWEWEXMRw3OEkwtS5UKkpmK1jZ4/LCbsKt/Vrlz9925LoH
-        ck5O+G+T6qt8Q4vP+ZW0ZZYdcL2h5colc4r7IQoTSEHxh+T+iFOg2KnxO3qbkopGh3QkkY0nETZ7v
-        suwmvM9A==;
+        bh=WGzBlx+8ml9YOtGyHtZqoSpamvxos3Ivvay4Kqjh8ok=; b=nymwX3ewP47k0yccAWU4qIAuNS
+        ZXAR48ZPLXd1IC9rL/8GybDbBecTlbXy5/Io0EcNjlxzNqaQt9+4FUzz54Aky4o0BfECNDq2mTsq3
+        5SQjhWQmuMqKb8sbXzm9/WI8vFmultuEzVh7YQS9b6qBqd+AR4UHaWym7Tv5DSoz5P20P7yykhFIa
+        tBRcmUQfmTVLcqJotx2vucwcRJ8Wm9NlgvBcjeqtGOaJDJLhSNQmW66RhtFTrs17/AQ/KkG6Qz/L3
+        x5RhB4WFUfOX2xNN53E0djiA3JW25WP0jVCLhW4Tp7gsFBD6tRhBtGwmeIgSWme0fXBxfZ6njUeN2
+        gIWy0BPQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvijl-00ATwv-S5; Fri, 10 Dec 2021 16:27:10 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvijm-000aWY-Gn; Fri, 10 Dec 2021 16:27:10 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A6397300750;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A635B3006BA;
         Fri, 10 Dec 2021 17:27:09 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 7458D2B3CD730; Fri, 10 Dec 2021 17:27:09 +0100 (CET)
-Message-ID: <20211210162313.774144401@infradead.org>
+        id 799D82BC73552; Fri, 10 Dec 2021 17:27:09 +0100 (CET)
+Message-ID: <20211210162313.857673010@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 10 Dec 2021 17:16:25 +0100
+Date:   Fri, 10 Dec 2021 17:16:26 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     will@kernel.org, boqun.feng@gmail.com
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, peterz@infradead.org,
         mark.rutland@arm.com, elver@google.com, keescook@chromium.org,
         hch@infradead.org, torvalds@linux-foundation.org, axboe@kernel.dk
-Subject: [PATCH v2 7/9] refcount: Prepare for atomic_*_overflow() offsets
+Subject: [PATCH v2 8/9] atomic,x86: Alternative atomic_*_overflow() scheme
 References: <20211210161618.645249719@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,148 +52,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to prepare for atomic_*_overflow() not strictly being in the
-[0,INT_MAX] range, add ATOMIC_OVERFLOW_OFFSET to correct for the 0
-point.
+Shift the overflow range from [0,INT_MIN] to [-1,INT_MIN], this allows
+optimizing atomic_inc_overflow() to use "jle" to detect increment
+from free-or-negative (with -1 being the new free and it's increment
+being 0 which sets ZF).
 
-This makes the uncommon refcount ops a little awkward, but allows for
-faster common ops.
+This then obviously changes atomic_dec*_overflow() since it must now
+detect the 0->-1 transition rather than the 1->0. Luckily this is
+reflected in the carry flag (since we need to borrow to decrement 0).
+However this means decrement must now use the SUB instruction with a
+literal, since DEC doesn't set CF.
 
+This then gives the following primitives:
+
+[-1, INT_MIN]					[0, INT_MIN]
+
+inc()						inc()
+	lock inc %[var]					mov       $-1, %[reg]
+	jle	error-free-or-negative			lock xadd %[reg], %[var]
+							test      %[reg], %[reg]
+							jle	  error-zero-or-negative
+
+dec()                                           dec()
+	lock sub $1, %[var]				lock dec %[var]
+	jc	error-to-free				jle	error-zero-or-negative
+	jl	error-from-negative
+
+dec_and_test()                                  dec_and_test()
+	lock sub $1, %[var]				lock dec %[var]
+	jc	do-free					jl	error-from-negative
+	jl	error-from-negative			je	do-free
+
+Make sure to set ATOMIC_OVERFLOW_OFFSET to 1 such that other code
+interacting with these primitives can re-center 0.
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/atomic.h   |   16 ++++++++++++++++
- include/linux/refcount.h |   16 ++++++++++++----
- lib/refcount.c           |   10 +++++-----
- 3 files changed, 33 insertions(+), 9 deletions(-)
+ arch/x86/include/asm/atomic.h |   20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
---- a/include/linux/atomic.h
-+++ b/include/linux/atomic.h
-@@ -7,6 +7,14 @@
- #include <asm/atomic.h>
- #include <asm/barrier.h>
- 
-+#ifndef ATOMIC_OVERFLOW_OFFSET
-+#define ATOMIC_OVERFLOW_OFFSET 0
-+#endif
-+
-+#ifndef ATOMIC64_OVERFLOW_OFFSET
-+#define ATOMIC64_OVERFLOW_OFFSET 0
-+#endif
-+
- /*
-  * Relaxed variants of xchg, cmpxchg and some atomic operations.
-  *
-@@ -81,4 +89,12 @@
- #include <linux/atomic/atomic-long.h>
- #include <linux/atomic/atomic-instrumented.h>
- 
-+#ifndef ATOMIC_LONG_OVERFLOW_OFFSET
-+#ifdef CONFIG_64BIT
-+#define ATOMIC_LONG_OVERFLOW_OFFSET	ATOMIC64_OVERFLOW_OFFSET
-+#else
-+#define ATOMIC_LONG_OVERFLOW_OFFSET	ATOMIC_OVERFLOW_OFFSET
-+#endif
-+#endif
-+
- #endif /* _LINUX_ATOMIC_H */
---- a/include/linux/refcount.h
-+++ b/include/linux/refcount.h
-@@ -133,7 +133,7 @@ void refcount_warn_saturate(refcount_t *
-  */
- static inline void refcount_set(refcount_t *r, int n)
- {
--	atomic_set(&r->refs, n);
-+	atomic_set(&r->refs, n - ATOMIC_OVERFLOW_OFFSET);
+--- a/arch/x86/include/asm/atomic.h
++++ b/arch/x86/include/asm/atomic.h
+@@ -263,21 +263,31 @@ static __always_inline int arch_atomic_f
  }
+ #define arch_atomic_fetch_xor arch_atomic_fetch_xor
  
- /**
-@@ -144,18 +144,20 @@ static inline void refcount_set(refcount
-  */
- static inline unsigned int refcount_read(const refcount_t *r)
- {
--	return atomic_read(&r->refs);
-+	return atomic_read(&r->refs) + ATOMIC_OVERFLOW_OFFSET;
- }
- 
- static inline __must_check bool __refcount_add_not_zero(int i, refcount_t *r, int *oldp)
- {
--	int old = refcount_read(r);
-+	int old = atomic_read(&r->refs);
- 
- 	do {
--		if (!old)
-+		if (old == -ATOMIC_OVERFLOW_OFFSET)
- 			break;
- 	} while (!atomic_try_cmpxchg_relaxed(&r->refs, &old, old + i));
- 
-+	old += ATOMIC_OVERFLOW_OFFSET;
+-#define arch_atomic_dec_overflow(_v, _label)				\
+-	asm_volatile_goto(LOCK_PREFIX "decl %[var]\n\t"			\
++#define ATOMIC_OVERFLOW_OFFSET	1
 +
- 	if (oldp)
- 		*oldp = old;
++#define arch_atomic_inc_overflow(_v, _label)				\
++	asm_volatile_goto(LOCK_PREFIX "incl %[var]\n\r"			\
+ 			  "jle %l1"					\
+ 			  : : [var] "m" ((_v)->counter)			\
+ 			  : "memory"					\
+ 			  : _label)
  
-@@ -192,6 +194,8 @@ static inline void __refcount_add(int i,
- {
- 	int old = atomic_fetch_add_relaxed(i, &r->refs);
- 
-+	old += ATOMIC_OVERFLOW_OFFSET;
++#define arch_atomic_dec_overflow(_v, _label)				\
++	asm_volatile_goto(LOCK_PREFIX "subl $1, %[var]\n\t"		\
++			  "jc %l1\n\t"					\
++			  "jl %l1"					\
++			  : : [var] "m" ((_v)->counter)			\
++			  : "memory"					\
++			  : _label)
 +
- 	if (oldp)
- 		*oldp = old;
- 
-@@ -274,6 +278,8 @@ static inline __must_check bool __refcou
- {
- 	int old = atomic_fetch_sub_release(i, &r->refs);
- 
-+	old += ATOMIC_OVERFLOW_OFFSET;
-+
- 	if (oldp)
- 		*oldp = old;
- 
-@@ -343,6 +349,8 @@ static inline void __refcount_dec(refcou
- {
- 	int old = atomic_fetch_sub_release(1, &r->refs);
- 
-+	old += ATOMIC_OVERFLOW_OFFSET;
-+
- 	if (oldp)
- 		*oldp = old;
- 
---- a/lib/refcount.c
-+++ b/lib/refcount.c
-@@ -13,7 +13,7 @@
- void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t)
- {
- 	int old = refcount_read(r);
--	refcount_set(r, REFCOUNT_SATURATED);
-+	atomic_set(&r->refs, REFCOUNT_SATURATED);
- 
- 	/* racy; who cares */
- 	if (old == 1 && t == REFCOUNT_ADD_OVF)
-@@ -59,9 +59,9 @@ EXPORT_SYMBOL(refcount_warn_saturate);
-  */
- bool refcount_dec_if_one(refcount_t *r)
- {
--	int val = 1;
-+	int val = 1 - ATOMIC_OVERFLOW_OFFSET;
- 
--	return atomic_try_cmpxchg_release(&r->refs, &val, 0);
-+	return atomic_try_cmpxchg_release(&r->refs, &val, 0 - ATOMIC_OVERFLOW_OFFSET);
- }
- EXPORT_SYMBOL(refcount_dec_if_one);
- 
-@@ -85,11 +85,11 @@ bool refcount_dec_not_one(refcount_t *r)
- 		if (unlikely(val - (REFCOUNT_SATURATED + REFCOUNT_SATURATED/2) < -REFCOUNT_SATURATED))
- 			return true;
- 
--		if (val == 1)
-+		if (val == 1 - ATOMIC_OVERFLOW_OFFSET)
- 			return false;
- 
- 		new = val - 1;
--		if (new > val) {
-+		if (new + ATOMIC_OVERFLOW_OFFSET > val + ATOMIC_OVERFLOW_OFFSET) {
- 			refcount_warn_saturate(r, REFCOUNT_SUB_UAF);
- 			return true;
- 		}
+ #define arch_atomic_dec_and_test_overflow(_v, _label)			\
+ ({									\
+ 	__label__ __zero;						\
+ 	__label__ __out;						\
+ 	bool __ret = false;						\
+-	asm_volatile_goto(LOCK_PREFIX "decl %[var]\n\t"			\
+-			  "jl %l2\n\t"					\
+-			  "je %l[__zero]"				\
++	asm_volatile_goto(LOCK_PREFIX "subl $1, %[var]\n\t"		\
++			  "jc %l[__zero]\n\t"				\
++			  "jl %l2"					\
+ 			  : : [var] "m" ((_v)->counter)			\
+ 			  : "memory"					\
+ 			  : __zero, _label);				\
 
 

@@ -2,101 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAB246FD60
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B36546FDED
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239056AbhLJJKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234276AbhLJJKX (ORCPT
+        id S234354AbhLJJkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:40:31 -0500
+Received: from mail.xenproject.org ([104.130.215.37]:39942 "EHLO
+        mail.xenproject.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231889AbhLJJka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:10:23 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522B0C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:06:48 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id w1so27591590edc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p51Nz29s/4zmZ+EPSD75GUmiIaP5D91+aCSEQZKR7mY=;
-        b=w0/20eIpOstfeq4XyG6SkmuCg0ION+5jLGBpP6vias0+7A0TxUpXOgqgAoOTZ4QTXN
-         wAYFBxEEsCB1XdI237RbMAMOgXiUuIQRB7hnO2KBN3T22RrD0M2HvPKcHqfnxduCWPtL
-         CBFRfUVhrE7VGPWNvtwIHwQkKo/+JblWxwlbflPf8kc8ikqftYje0ih6EYKEBcYnhHlc
-         zw4jkifcFLQ/ohA3A+4FtKNDC2KuYHsaAJ0qudJumUaejaQMja/v/kYOFlhHSnEW28px
-         uFPLpwq9cg9NNnbfvhYKNtMkha7CpwF/2sbn2ST+miB5XzMxb8zF6C9MQRu32KEFjOO3
-         UyBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p51Nz29s/4zmZ+EPSD75GUmiIaP5D91+aCSEQZKR7mY=;
-        b=aT+w5+3RPxCR6NTwGuCb4h2RlgFAX7+vh8U9m1ydIGcpwjC6gdEiz5W5OPKHcN2rcE
-         R6nCAg85jIlSX7p14+fFOlvpIvNQCNDjl01MGr40M5Q9zeTRxet32BJMwB7/lFZtKtS2
-         CkySsJdoeyE3Ab/d5sQVE869q7VQ1U7wTcpZx2aShWis0pR4obE2wkxlhHAIHoDNDW5U
-         HT7P7WObDAaaKMA8JyJblj3WierZlDJuwG+Q+fSNU+XSyRE7pytupRpeMnrvl7GciOS3
-         QFigDN7IPYGa+g0tRvlU7my4NAxy7Ggfmzj0h3JuZh0HnS2vB1QVw5d392oKgRlEWOST
-         VdXQ==
-X-Gm-Message-State: AOAM532zYHe7VgbflDbmBpZ/p/BWTROW0g5XyqyI7vxh/Gijbo2vaARG
-        raHQ5ROp2HelvEEIhYMGyKpv/Q==
-X-Google-Smtp-Source: ABdhPJzzl9GYf5cjF2Z03Bwf6HwuUK34ncwmWm/jaDIJ7LMJxa/P7TYdoO0r7pqId0sfN/uLkPSH1Q==
-X-Received: by 2002:a05:6402:1e93:: with SMTP id f19mr37545678edf.60.1639127206878;
-        Fri, 10 Dec 2021 01:06:46 -0800 (PST)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id mp26sm1135173ejc.61.2021.12.10.01.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 01:06:46 -0800 (PST)
-Date:   Fri, 10 Dec 2021 09:06:24 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 1/4] ioasid: Reserve a global PASID for in-kernel DMA
-Message-ID: <YbMYkKZBktlrB2CR@myrica>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
- <1638884834-83028-2-git-send-email-jacob.jun.pan@linux.intel.com>
- <YbHie/Z4bIXwTInx@myrica>
- <20211209101404.6aefbe1c@jacob-builder>
+        Fri, 10 Dec 2021 04:40:30 -0500
+X-Greylist: delayed 1643 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Dec 2021 04:40:30 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
+        s=20200302mail; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+        bh=XIPmTl0d5WI5yvmsZC68H9GM8X6AE8QmvYsZDuBAoEE=; b=DAsHt0iao8iLhh+rTn9mpAfBR+
+        AlLZ/wBMxCdmwsRKyhB2ak8N1Pesu0q5DVqhjJHM6lzepefJrqh3NcuTpZgRMcoeoWoJ6sKYlGCax
+        KdArgvFYGwopIskFjLPr2NI+KzYJahIpPds+HfgTUK074fsfdXfkzXCnbyUJKmLpOUdU=;
+Received: from xenbits.xenproject.org ([104.239.192.120])
+        by mail.xenproject.org with esmtp (Exim 4.92)
+        (envelope-from <julien@xen.org>)
+        id 1mvbuF-0001k0-U0; Fri, 10 Dec 2021 09:09:31 +0000
+Received: from [54.239.6.184] (helo=[192.168.9.67])
+        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <julien@xen.org>)
+        id 1mvbuF-0001kj-Ns; Fri, 10 Dec 2021 09:09:31 +0000
+Message-ID: <669d3f56-13b8-f159-2053-b39f1ba4222f@xen.org>
+Date:   Fri, 10 Dec 2021 09:09:29 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209101404.6aefbe1c@jacob-builder>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH V4 6/6] dt-bindings: xen: Clarify "reg" purpose
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
+        xen-devel@lists.xenproject.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
+ <1639080336-26573-7-git-send-email-olekstysh@gmail.com>
+From:   Julien Grall <julien@xen.org>
+In-Reply-To: <1639080336-26573-7-git-send-email-olekstysh@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:14:04AM -0800, Jacob Pan wrote:
-> > This looks like we're just one step away from device drivers needing
-> > multiple PASIDs for kernel DMA so I'm trying to figure out how to evolve
-> > the API towards that. It's probably as simple as keeping a kernel IOASID
-> > set at first, but then we'll probably want to optimize by having multiple
-> > overlapping sets for each device driver (all separate from the SVA set).
-> Sounds reasonable to start with a kernel set for in-kernel DMA once we need
-> multiple ones. But I am not sure what *overlapping* sets mean here, could
-> you explain?
+Hi Oleksandr,
 
-Given that each device uses a separate PASID table, we could allocate the
-same set of PASID values for different device drivers. We just need to
-make sure that those values are different from PASIDs allocated for user
-SVA.
+On 09/12/2021 20:05, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> 
+> Xen on Arm has gained new support recently to calculate and report
+> extended regions (unused address space) safe to use for external
+> mappings. These regions are reported via "reg" property under
+> "hypervisor" node in the guest device-tree. As region 0 is reserved
+> for grant table space (always present), the indexes for extended
+> regions are 1...N.
+> 
+> No device-tree bindings update is needed (except clarifying the text)
+> as guest infers the presence of extended regions from the number
+> of regions in "reg" property.
+> 
+> While at it, remove the following sentence:
+> "This property is unnecessary when booting Dom0 using ACPI."
+> for "reg" and "interrupts" properties as the initialization is not
+> done via device-tree "hypervisor" node in that case anyway.
+You sent a similar patch for Xen and have already commented there [1] . 
+In short, the OS will be using the node to discover whether it is 
+running on Xen for both ACPI and DT. The hypervisor node also contain 
+the UEFI information for dom0.
 
-Thanks,
-Jean
+Cheers,
 
+[1] 
+https://lore.kernel.org/xen-devel/9602b019-6c20-cdc7-23f3-9e4f8fd720f6@xen.org/T/#t
+
+-- 
+Julien Grall

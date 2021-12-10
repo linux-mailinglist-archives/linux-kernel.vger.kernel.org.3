@@ -2,94 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE020470BE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D12470BE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344224AbhLJUfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S242933AbhLJUji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:39:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242895AbhLJUfv (ORCPT
+        with ESMTP id S230239AbhLJUjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:35:51 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1B5C061746;
-        Fri, 10 Dec 2021 12:32:16 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id q74so23905441ybq.11;
-        Fri, 10 Dec 2021 12:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u1KIaiWD0RRaY9avsVjWTL7sLAxSTbzMnnLPy0nFeRI=;
-        b=Po34Hq0TwRMgrgkzDyMZXR9dSFMOfcrmrwLMpm8hGiygB4kazsqOTo53uipYq/zck0
-         6iHqR2gETmZMEfFh5Gmtx0MxTlNq1bdfMMe9HiYUWzeniMD48Pk0qVHQKCgJ8LcI36Yw
-         K4XjG+phtdJCvSqD6FS/EdTPEHY+QeTbwjD4OL23/OGPb1SI7Bhn/4i/QlcxAAFrW2Wv
-         YG5KAxvvgOgfPj+3PzmIQgYUQlggtCbi8xymb7lynYqhCkX8tpG1z9ffXEPDRIBsTI5P
-         CbUfJ9HuEGzioxMmWpb+Lg9FXwkEmyNxMhY/ujjSmPBp7kHNDMtjoivwF0BSMuUJJRLK
-         JSYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u1KIaiWD0RRaY9avsVjWTL7sLAxSTbzMnnLPy0nFeRI=;
-        b=myQuWpKAVMTFwk3BTb5DhehP1YF3v7tn11EYDV7GydQCLLJonr1H5D7vseb/ngnNKX
-         9b3hi8Ik29dTGUr1BPUpofOzew6VwmQ8gmIkCq33ATM5t4fYPXqDqOrRCMHFdX75KvCR
-         wL5weyfkMP2l3DyIDP9icA7uNLYhsWjmsBrfKFLVJ+JHUcE135BPDUeIgtQBdGJGPO1M
-         aSbZ3u9LBmoQbydLexU1F8yQKsawkYmoDI93U6GQrJU0UxPkokT4aVIvD+3tWY/njW9E
-         qadlkbaaCNkVN9lLrdpuStpJI+/jF2ytj0Z4hJRgw9zgfkS4pTGk/zd0/0BSexlW90k+
-         /Omw==
-X-Gm-Message-State: AOAM530MJa7Hu546chlT9nqiqpZnAtSgXzaAGy6CLD+ssIcs3cL4iyW+
-        3S79q3VR9Cyo3RDxA9HjKKyIp4lDMiocoa647zI=
-X-Google-Smtp-Source: ABdhPJxr9hBCc750hqsyB5Rr4SyQthNu3A9chQlYqwQgM2pxWLSVZaq/UbPLSGkyrhGH0CDCYR6gjBVfvkuIg/Hyyww=
-X-Received: by 2002:a25:1906:: with SMTP id 6mr16694348ybz.754.1639168335163;
- Fri, 10 Dec 2021 12:32:15 -0800 (PST)
+        Fri, 10 Dec 2021 15:39:37 -0500
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEE6C061746;
+        Fri, 10 Dec 2021 12:36:02 -0800 (PST)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 2D75B6EE1; Fri, 10 Dec 2021 15:36:01 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 2D75B6EE1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1639168561;
+        bh=fYeuxNnieJ4+vcxDmMxR0VJ1U8wBfbSXdFRN8yDizY4=;
+        h=Date:To:Cc:Subject:From:From;
+        b=aYdiSIogZAlCnQPnhU2fPrLHHfnAjM/f2B4p+NmhjhwGnUjUKhe6Y/sfbDEU/yUAS
+         DMQFi2bWoeYaTyZk/bJ0385nHD8fhYPzdQ2yTNJlsUfwG4PFH0UqImE6aRTPaO7vB6
+         9jiws6S1Pj/nhvmnH3Q4Cl7WBmziQ7FYCfBWsJDI=
+Date:   Fri, 10 Dec 2021 15:36:01 -0500
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [GIT PULL] more nfsd bugfixes for 5.16
+Message-ID: <20211210203601.GA4596@fieldses.org>
 MIME-Version: 1.0
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com> <YbIeYIM6JEBgO3tG@zn.tnic>
- <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com> <YbIgsO/7oQW9h6wv@zn.tnic>
- <YbIu55LZKoK3IVaF@kernel.org> <YbIw1nUYJ3KlkjJQ@zn.tnic> <YbM5yR+Hy+kwmMFU@zn.tnic>
-In-Reply-To: <YbM5yR+Hy+kwmMFU@zn.tnic>
-From:   "Patrick J. Volkerding" <volkerdi@gmail.com>
-Date:   Fri, 10 Dec 2021 14:32:38 -0600
-Message-ID: <CANGBn6-sWv81czvi+_pTMm4J4X=TGUR1Jg50k6BOqcCczDwONQ@mail.gmail.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and early
- param parsing
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
-        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
-        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
-        x86@kernel.org, Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.21 (2010-09-15)
+From:   bfields@fieldses.org (J. Bruce Fields)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 5:28 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Dec 09, 2021 at 05:37:42PM +0100, Borislav Petkov wrote:
-> > Whatever we do, it needs to be tested by all folks on Cc who already
-> > reported regressions, i.e., Anjaneya, Hugh, John and Patrick.
->
-> Ok, Mike is busy so here are some patches for testing:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/log/?h=rc4-boot
->
-> I'd appreciate it if folks who reported an issue, verify those.
->
-> The first two are reverts which should address the issues with mem=
-> folks have reported. And the last one should address Anjaneya's issue.
+Please pull nfsd bugfixes for 5.16 from:
 
-I applied the two revert patches to 5.15.7 (the last one won't apply
-so I skipped it) and the resulting x86 32-bit kernel boots fine here
-on the Thinkpad X1E that was having issues previously.
+  git://linux-nfs.org/~bfields/linux.git tags/nfsd-5.16-2
 
-Then I tested an unpatched 5.16-rc4, which (as expected) got the boot
-hang on the affected machine. Applied the three patches, and the
-resulting kernel boots fine.
+Fix a race on startup and another in the delegation code.  The latter
+has been around for years, but I suspect recent changes may have
+widened the race window a little, so I'd like to go ahead and get it in.
 
-Take care,
+--b.
 
-Pat
+Alexander Sverdlin (1):
+      nfsd: Fix nsfd startup race (again)
+
+J. Bruce Fields (1):
+      nfsd: fix use-after-free due to delegation race
+
+ fs/nfsd/nfs4recover.c |  1 +
+ fs/nfsd/nfs4state.c   |  9 +++++++--
+ fs/nfsd/nfsctl.c      | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 9 deletions(-)

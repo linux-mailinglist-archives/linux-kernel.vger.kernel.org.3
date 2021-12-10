@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FF646FC11
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB86746FC16
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235394AbhLJHxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbhLJHxS (ORCPT
+        id S235560AbhLJH4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:56:30 -0500
+Received: from dvalin.narfation.org ([213.160.73.56]:51454 "EHLO
+        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235454AbhLJH43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:53:18 -0500
-Received: from dvalin.narfation.org (dvalin.narfation.org [IPv6:2a00:17d8:100::8b1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F9BC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:49:43 -0800 (PST)
+        Fri, 10 Dec 2021 02:56:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-        s=20121; t=1639122580;
+        s=20121; t=1639122773;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=W5hkCiSsViIQqXmOrX4HGf1e3s3HJVTt0nQiWJRxh6E=;
-        b=xZGYVVavt/jthU15aWmfa+PuSMXJohH54GVugvl77WgmZE7FlbbuEFxYfjix8SkIp1E5dk
-        rwOX21cJnDp/rgbhwkmmbQIHbL9n3eYoRB0MBNFC5yOw70PSh3iqE4i6xSAV+K7QERglft
-        UWpbd9e0wDA81xWRtp0c89jTiQKHkHE=
+        bh=zbggbeIVFXVq1N1T3x23ZrWZqRWaOMq4LLIQcQz7uVQ=;
+        b=tQHDr0N4lHgpLkjFYlfjFJ0DjipI+hLPIAKvgeln8rY0KeJ7fEIlcufo/db9KPlUPrCIFT
+        jgte41ukD+KrGIVftIi6ttle/ZcD77tOCvODJprwhJCik8CMGOmYAq5hAIpy62YG9W5JOd
+        8XSQwKPviRoZTa0UvVyQ+8kDN/LYA0Q=
 From:   Sven Eckelmann <sven@narfation.org>
 To:     mareklindner@neomailbox.ch, cgel.zte@gmail.com
 Cc:     sw@simonwunderlich.de, a@unstable.cc, davem@davemloft.net,
         kuba@kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cm>
+        Minghao Chi <chi.minghao@zte.com.cn>
 Subject: Re: [PATCH] net/batman-adv:remove unneeded variable
-Date:   Fri, 10 Dec 2021 08:49:37 +0100
-Message-ID: <5899543.jjpY9eVhVs@ripper>
+Date:   Fri, 10 Dec 2021 08:52:50 +0100
+Message-ID: <2844186.8fJna1iEf4@ripper>
 In-Reply-To: <20211210021917.423912-1-chi.minghao@zte.com.cn>
 References: <20211210021917.423912-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart6748779.M4W0MkK9z9"; micalg="pgp-sha512"; protocol="application/pgp-signature"
+Content-Type: multipart/signed; boundary="nextPart2270532.c4uxPF5YdD"; micalg="pgp-sha512"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart6748779.M4W0MkK9z9
+--nextPart2270532.c4uxPF5YdD
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
 From: Sven Eckelmann <sven@narfation.org>
 To: mareklindner@neomailbox.ch, cgel.zte@gmail.com
-Cc: sw@simonwunderlich.de, a@unstable.cc, davem@davemloft.net, kuba@kernel.org, b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>, Zeal Robot <zealci@zte.com.cm>
+Cc: sw@simonwunderlich.de, a@unstable.cc, davem@davemloft.net, kuba@kernel.org, b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>
 Subject: Re: [PATCH] net/batman-adv:remove unneeded variable
-Date: Fri, 10 Dec 2021 08:49:37 +0100
-Message-ID: <5899543.jjpY9eVhVs@ripper>
+Date: Fri, 10 Dec 2021 08:52:50 +0100
+Message-ID: <2844186.8fJna1iEf4@ripper>
 In-Reply-To: <20211210021917.423912-1-chi.minghao@zte.com.cn>
 References: <20211210021917.423912-1-chi.minghao@zte.com.cn>
 
@@ -60,37 +56,39 @@ On Friday, 10 December 2021 03:19:17 CET cgel.zte@gmail.com wrote:
 > Return status directly from function called.
 > 
 > Reported-by: Zeal Robot <zealci@zte.com.cm>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Applied after fixing obvious coding style problems.
+And the Reported-by (robot) using a mail address which is bouncing.
 
-Please try to fix the script which creates these automated patch submissions.
+   <zealci@zte.com.cm>: Host or domain name not found. Name service error for
+       name=zte.com.cm type=AAAA: Host not found
+
+Please fix this too in your scripts.
 
 Kind regards,
 	Sven
---nextPart6748779.M4W0MkK9z9
+--nextPart2270532.c4uxPF5YdD
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part.
 Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGzBpEACgkQXYcKB8Em
-e0acZhAA1cmWFrpd8yxGG3wS0K3kSGEyQvHdyDC7hryV0xo+H/2o64b9SjN2C+Sr
-AcgR0xLtvMH9txtRkTyucggIxJVbdRT/cBsRz0v9OK+ULuDFVpJof0jhRD5EOMuM
-mT74HjR9RGLkylfW4qB0qIEa6XwnYG94NlFqqpyeq5P7+WhPnemRJ/YPAl8MescC
-0zRa6rCDnE2LIGnNnXjf7cNAoSvFy6QW685eMIaHzKtq/Pv0dmWhDcM4N8LylpBe
-FzjJAFUKf/0AGmjwzMTpoEFEtxTJOOULV9L7supOdLQIOyK/gM0+gOBx/YwylQAX
-47XeO3BWHvVTye+z0o/fKYXDPDOiohB3OEblt8avDfI6GzQ2JFtaNqJewLPqQKjW
-6GEQOltdB3kFFXr5PsZWVTcB6Yr2fSoUeNiiP8g7yaRx6GcWEOsrOavE9RUmpxzo
-NXQYhu3470YaeYgbJ4FILd4r93I08jfHatdGuF2uziXUfbDevhhGooWDpLDO2H1A
-eKjCdu+6PIxqV5vsXjjsgMxOH56D5Tko4lxTx64qPcK7tChD4HsVS3ElS+Bj9fvC
-OOkm5r58/B4plXbWodEGBNZUTi4u4QiwtTxl1T8gLj4Uzi7tVsITppHy8iB7w7Th
-am9wZsMjNDOY1Ml2y0ds7ZN0K60qJT/gM+au3rewR1n1SsVWgiw=
-=rlgB
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGzB1IACgkQXYcKB8Em
+e0YUag/+PA8FzRLW/Uw2ybainV3OPDxuUbSMmbufA1AaODvg4trJjA7xn7Zq2PnE
+/8hsnXwHxq99To/o5tHkLF3f8xJSA+PmQtzPda90N4GUtiY+P0eQvtD7gFND82t9
+Tl8t9WF208WcfPqH+CH1YzK2YuWB6q2Y8YBzUk1gBfp4jKaiyF/X6Ybz5mqt0zTm
+SDISMa1cx1T+kvehH4p9AJ2/OluR7wGUd3Gw5GseMoYzRkV1UOzTuaGAgPhlA4p5
+iPbLur4bpfZXYb+D13iUQn+2FRueBs267+0X8C13kU22bIVlDWlUwBomTi6kwPxJ
+YZxQ6JOfvbwkTFjnHtet+ioWN9bz1zHE8Gn7f5HE5vrbUg8daduNN+q20bmfiYh0
+uOYlaJ/2PoJd+chjcytq7tOcgN53NevhmCE2N/fUzi4yLo+yg3YeFY5GqvL7GPEP
+qKa8HZYZxXpH4+HB0AV4wZdW+ngGpN/xnettRTt1ialtntDJjur/PDmjuqbS+X3s
+VvNOWvB0MjYRm/ibAYw/rodI/umHV1xYVYD/gDC6K91pQ0k7C68BG7Mm6UkJ2HpW
+IIOoN/TctEXLL3PFz1OxxN3QVjOsX2AAXXBYI6H+JnRIJeKGjzptdJPq/WFXWb72
+eD6l645BH/1vrhBN+7gq1iumXxFBAEhILF41FlbujbeFnwxdK9E=
+=1me2
 -----END PGP SIGNATURE-----
 
---nextPart6748779.M4W0MkK9z9--
+--nextPart2270532.c4uxPF5YdD--
 
 
 

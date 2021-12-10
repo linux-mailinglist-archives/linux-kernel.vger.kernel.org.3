@@ -2,124 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD46C4705CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4084E4705D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243597AbhLJQie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:38:34 -0500
-Received: from mx2.didiglobal.com ([111.202.154.82]:15753 "HELO
-        mailgate01.didichuxing.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S243564AbhLJQid (ORCPT
+        id S243634AbhLJQim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:38:42 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:33725 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S243610AbhLJQik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:38:33 -0500
-Received: from mail.didiglobal.com (unknown [172.20.36.95])
-        by mailgate01.didichuxing.com (Maildata Gateway V2.8) with ESMTP id 26FDCD833101D;
-        Sat, 11 Dec 2021 00:34:54 +0800 (CST)
-Received: from BJSGEXMBX12.didichuxing.com (172.20.15.142) by
- BJSGMBX001.didichuxing.com (172.20.15.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2375.17; Sat, 11 Dec 2021 00:34:54 +0800
-Received: from [172.31.0.211] (172.31.0.211) by BJSGEXMBX12.didichuxing.com
- (172.20.15.142) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 11 Dec
- 2021 00:34:53 +0800
-Message-ID: <c66981ec-ebe9-3678-22a8-a0bdd3f8326b@didichuxing.com>
-Date:   Sat, 11 Dec 2021 00:34:40 +0800
+        Fri, 10 Dec 2021 11:38:40 -0500
+Received: (qmail 644048 invoked by uid 1000); 10 Dec 2021 11:35:05 -0500
+Date:   Fri, 10 Dec 2021 11:35:05 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        mathias.nyman@linux.intel.com, rajatja@google.com,
+        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] usb: core: enable remote wakeup function for usb
+ controller
+Message-ID: <YbOBuZ77BAdoAdew@rowland.harvard.edu>
+References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
+ <1638956391-20149-2-git-send-email-zhuyinbo@loongson.cn>
+ <YbEsCSwYLgQefQxU@rowland.harvard.edu>
+ <fbd46e52-054c-8aea-2f06-3af74c95e5e0@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v2 2/3] sched/fair: prevent cpu burst too many periods
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>,
-        Honglei Wang <jameshongleiwang@126.com>
-X-MD-Sfrom: wanghonglei@didiglobal.com
-X-MD-SrcIP: 172.20.36.95
-From:   Honglei Wang <wanghonglei@didichuxing.com>
-In-Reply-To: <YbH/6H+QtjFlw+19@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.31.0.211]
-X-ClientProxiedBy: BJEXCAS05.didichuxing.com (172.20.36.127) To
- BJSGEXMBX12.didichuxing.com (172.20.15.142)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fbd46e52-054c-8aea-2f06-3af74c95e5e0@loongson.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 10, 2021 at 05:27:30PM +0800, zhuyinbo wrote:
+> 
+> 
+> 在 2021/12/9 上午6:04, Alan Stern 写道:
+> > On Wed, Dec 08, 2021 at 05:39:51PM +0800, Yinbo Zhu wrote:
+> > > The remote wake up function is a regular function on usb device and
+> > > I think keeping it enabled by default will make the usb application
+> > > more convenient and usb device remote wake up function keep enabled
+> > > that ask usb controller remote wake up was enabled at first.
+> > > 
+> > > This patch only enable wake up on usb root hub device, among which,
+> > 
+> > You say the patch only affects root hub devices, but this doesn't appear
+> > to be true.
+> > 
+> > > usb3.0 root hub doesn't be set wakeup node property but use command
+> > > USB_INTRF_FUNC_SUSPEND to enable remote wake up function.
+> > > 
+> > > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> > > ---
+> > >   drivers/usb/core/hub.c | 20 ++++++++++++++++++--
+> > >   include/linux/usb.h    |  4 +++-
+> > >   2 files changed, 21 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > > index 86658a8..cb4b956 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -2509,6 +2509,8 @@ static void set_usb_port_removable(struct usb_device *udev)
+> > >    */
+> > >   int usb_new_device(struct usb_device *udev)
+> > >   {
+> > > +	struct usb_host_config *config;
+> > > +	int ncfg;
+> > >   	int err;
+> > >   	if (udev->parent) {
+> > > @@ -2540,6 +2542,18 @@ int usb_new_device(struct usb_device *udev)
+> > >   	udev->dev.devt = MKDEV(USB_DEVICE_MAJOR,
+> > >   			(((udev->bus->busnum-1) * 128) + (udev->devnum-1)));
+> > > +	for (ncfg = 0; ncfg < udev->descriptor.bNumConfigurations; ncfg++) {
+> > > +		config = &udev->config[ncfg];
+> > > +		if ((config->desc.bmAttributes & (1 << 5)) == 0)
+> > > +			break;
+> > > +		if (ncfg + 1 == udev->descriptor.bNumConfigurations) {
+> > > +			err = usb_enable_remote_wakeup(udev);
+> > > +			if (err)
+> > > +				dev_dbg(&udev->dev,
+> > > +				      "won't remote wakeup, err %d\n", err);
+> > > +		}
+> > > +	}
+> > 
+> > I don't see anything in there which treats root hubs differently from
+> > other devices.
+> > 
+> Hi Alan Stern,
+> 
+> You can find following code, non-root-hub had removed Wakeup sysfs
+> attributes and disabled wakeup and root-hub had added wakeup sysfs attibutes
+> before call usb_new_device, so this patch was only enabled
+> remote wakeup for root-hub device.
+> int usb_new_device(struct usb_device *udev)
+> {
+>         if (udev->parent) {
+>                 /* Initialize non-root-hub device wakeup to disabled;
+>                  * device (un)configuration controls wakeup capable
+>                  * sysfs power/wakeup controls wakeup enabled/disabled
+>                  */
+>                 device_init_wakeup(&udev->dev, 0);
+>         }
 
+Okay.  But in any case, you're doing this in the wrong place.  Remote 
+wakeup capability depends on the configuration, so you must not enable 
+in usb_new_device() before the configuration has been chosen.
 
-On 2021/12/9 21:08, Peter Zijlstra wrote:
-> On Wed, Dec 08, 2021 at 10:50:38PM +0800, Honglei Wang wrote:
->> Tasks might get more cpu than quota in persistent periods due to the
->> cpu burst introduced by commit f4183717b370 ("sched/fair: Introduce the
->> burstable CFS controller").
-> 
->> For example, one task group whose quota is
->> 100ms per period and can get 100ms burst, and its avg utilization is
->> around 105ms per period.
-> 
-> That would be a mis-configuration, surely..
-> 
+Furthermore, remote wakeup gets turned on only at the time when the 
+device is suspended.  We don't leave it on all the time.
 
-Well, it's a lame example to describe the spreading of the burst..
+> > Besides, enabling wakeup for root hubs is generally a bad idea.  Suppose
+> > you closed a laptop's lid and then unplugged a USB device -- with wakeup
+> > enabled, the unplug would cause the laptop to wake up again without your
+> > knowledge.
+> > 
+> > Alan Stern
+> when closed laptop's lid and then unplugged a non-hid usb device it doesn't
+> cause laptop to wakeup. and if that usb device is hid type and cause laptop
+> into wakeup state then system will continue into suspend state becuase
+> system ask that need accepted a acpi lid open event.
 
->> Once this group gets a free period which
->> leaves enough runtime, it has a chance to get computting power more
->> than its quota for 10 periods or more in common bandwidth configuration
->> (say, 100ms as period).
-> 
-> Sure, if it, for some miraculous reason, decides to sleep for a whole
-> period and then resume, it can indeed consume up to that 100ms extra,
-> which, if as per the above, done at 5ms per perios, would be 20 periods
-> until depleted.
-> 
->> It means tasks can 'steal' the bursted power to
->> do daily jobs because all tasks could be scheduled out or sleep to help
->> the group get free periods.
-> 
-> That's the design,,
-> 
->> I believe the purpose of cpu burst is to help handling bursty worklod.
->> But if one task group can get computting power more than its quota for
->> persistent periods even there is no bursty workload, it's kinda broke.
-> 
-> So if that was were bursty, it could consume that 100ms extra in a
-> single go and that would be fine, but spreading that same amount over 20
-> periods is somehow a problem? -- even though the interference is less.
-> 
+Not all laptops have ACPI.
 
-The key thought I make the change is that If the spreading of burst 
-power always happen, it indicates the quota is not comfortable, the 
-better way is to do quota re-config for the container, but not always 
-get extra power from spreading the burst part which is not in the 
-consideration of high level container dispatcher such as k8s scheduler. 
-Container dispatcher might dispatch jobs oversale. The containers get 
-more power from the burst spreading is outside the sense of the 
-dispatcher. It might mislead the estimation of the entire ability of the 
-host.
+> and for laptop usb wakeup that as general ask bios to enable usb wakeup then
+> if need do more things to enable usb wakeup I think this usb wakeup function
+> isn't friendly and inconveient, so enable it by default.
+> after add this patch, if want to use usb wakeup function it only need enable
+> bios configure it think it is appropriate.
 
-IMO, cpu burst should be focus on the real burst workload, sharp and 
-short term.
+The decision about whether or not to enable remote wakeup for a USB 
+device is a matter of policy.  It has to be decided by the user, not by 
+the kernel.
 
-Well, if 2 periods are a bit short for some huge cpu calculation jobs, 
-maybe we can add an option to define the burstable periods to let the 
-user make the decision based on the workload if you think this limit 
-periods idea make sense.
+This is why there are userspace tools, like Powertop, that 
+automatically enable remote wakeup when devices are detected and that 
+allow the user to control which devices get enabled.  Using these tools 
+is easy and convenient -- that's why they exist -- so the kernel's 
+interface does not need to be friendly.
 
-Thanks,
-Honglei
-
->> This patch limits the burst to 2 periods so that it won't break the
->> quota limit for long. Permitting 2 periods can help on the scenario that
->> periods refresh lands in the middle of a burst workload. With this, we
->> can give task group more cpu burst power to handle the real burst
->> workload and don't worry about the 'stealing'.
-> 
-> I've yet so see an actual reason for any of this...
-> 
+Alan Stern

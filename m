@@ -2,301 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 966C44701A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0E14701A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241824AbhLJNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        id S241842AbhLJNeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbhLJNdy (ORCPT
+        with ESMTP id S230262AbhLJNd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:33:54 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A9BC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:30:19 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id i5so14960696wrb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:30:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dTdbuA9hIdKn4BfZbCPlTiSyHXJY337c3HR+lMVDle0=;
-        b=YidYi3Fu8huIr5y4/jlAfPC5nI9PIDEuaSycwThZ8P4eSOoYrOSHDTNGlV8Z58MSq1
-         nLViggv2CJ05+3TJ/iM8LaCSjxFV0xL0r9K1DPQUoZPryr9Daoa3+FYnJHcKrWuGoIf8
-         Q4g7xaSyduPS4GhcYKKPAC60Eu5VSwzkcf8NtUc4GkZkdwWnXtTOnN4LHMJxxpmOvI2V
-         jwUoLT+Y68ymEV/V9+33LhurOGp8YomH3pQb7qdJknEq6q+f/KzuLeMw9HuAvkMhTnl7
-         /y5yZXF6PzIH2ayUQGHLWyJOUOTNtFQJEP5Dno2RQjsChi4DVoLDcXQ7BWszUzeSemnH
-         qYVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dTdbuA9hIdKn4BfZbCPlTiSyHXJY337c3HR+lMVDle0=;
-        b=SQqvoCXkM0Fqrs573cYsBV4/Gti/NVC/yQDH56cOGu/jvV7MA4SWWf/oaWllSxEuvI
-         fSLz6L28szVJc28p9STafAgjCjCtArDC3nH/2pPcjMQ2fhelBN08drbO9Nvm08oaiTai
-         CA4p6XTcn9zhXLtStndptIjSfNkLVVp2AW7zcJotCULKNJdkjrIVDcbfPlv9Ha4abkhB
-         LNVvFv8KW8NIEADvL8bRX5eh8EKk2+9Xzbs+D6NExBxhxJoI1u/B1Fey1sRm/fEBJ5/q
-         sLiAHDDGtpwMpJuK0j2xp1TzewWRxp2W+6vQcW2icJhM5Iyb48MzTpkHhQcxZwMmy17q
-         lAew==
-X-Gm-Message-State: AOAM532/W8m9IIt89VjwOa5DTQZ/cRqm79ZqG6CMy7++EDsRu5cU0iot
-        VChoi0KVYePNTvilzCOhQRRZtw==
-X-Google-Smtp-Source: ABdhPJwCcS9p25EiCqzxhRSk2Pa1gd4yTmwpBUlVZupz6pABIABSyQyupvZFwpKEK3nVmGN2yBv8pg==
-X-Received: by 2002:a5d:6acc:: with SMTP id u12mr13746398wrw.628.1639143017223;
-        Fri, 10 Dec 2021 05:30:17 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:13f9:8295:8923:1942])
-        by smtp.gmail.com with ESMTPSA id m7sm2852886wml.38.2021.12.10.05.30.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 05:30:16 -0800 (PST)
-Date:   Fri, 10 Dec 2021 14:30:09 +0100
-From:   Marco Elver <elver@google.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        David Hildenbrand <david@redhat.com>,
-        Xiaofeng Cao <caoxiaofeng@yulong.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Thomas Cedeno <thomascedeno@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>
-Subject: Re: [PATCH v4 7/7] selftests: test uaccess logging
-Message-ID: <YbNWYSsZ7bpV13jp@elver.google.com>
-References: <20211209221545.2333249-1-pcc@google.com>
- <20211209221545.2333249-8-pcc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209221545.2333249-8-pcc@google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+        Fri, 10 Dec 2021 08:33:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E6CC061746;
+        Fri, 10 Dec 2021 05:30:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC6BEB82800;
+        Fri, 10 Dec 2021 13:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB88C341C6;
+        Fri, 10 Dec 2021 13:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639143020;
+        bh=rY4GvZhp3QslJI/lvWWQnXm3amakuvqiH8kePmTJYmk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Gx0+TWOK2Q52LdIxE8K+qQ0CG7KDnHAJwdjS9+JcUgO9fy/A0v3mEQHtl8QHLVO5U
+         fFKGmoYluIMoonXGhASDWwufAoj+WNlhjxbaO6g5oy9eqWFWRllGllxbCeK3E+x2Tk
+         OCTl0mRpfM9oSgZJe82W+6g1swCZgUfa3g86kOoDmMp+yg+XrYvTHfOh0QuGSstiC5
+         S+7s83tThUO+NNyvfKKGVW6Q9KtAWp2pIOB9e3zGB3YI74nUgbT5Rj0+Wasum7AD7x
+         VahlDWd0xOu9kSxL+iFoOGH9L3IfKeDoPIUfy5r4zREw0bz7wy1K4Z7WzyOsW51HY2
+         4nb2N6/MdAIfg==
+Date:   Fri, 10 Dec 2021 22:30:17 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 01/13] user_events: Add UABI header for user access
+ to user_events
+Message-Id: <20211210223017.2f9254f056e8e1b5404bc409@kernel.org>
+In-Reply-To: <20211209223210.1818-2-beaub@linux.microsoft.com>
+References: <20211209223210.1818-1-beaub@linux.microsoft.com>
+        <20211209223210.1818-2-beaub@linux.microsoft.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 02:15PM -0800, Peter Collingbourne wrote:
-> Add a kselftest for the uaccess logging feature.
+On Thu,  9 Dec 2021 14:31:58 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
+
+> Define the basic structs and ioctl commands that allow user processes to
+> interact with user_events.
 > 
-> Link: https://linux-review.googlesource.com/id/I39e1707fb8aef53747c42bd55b46ecaa67205199
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
 
-It would be good to also test:
+IMHO, a basic part of this should be integrated with the [2/13] and
+other parts are incrementaly added with the patch which actually
+use that data structure or definition, so that it can be bisected
+cleanly.
+(because there is no reason to introduce only this header.)
 
-	- Logging of reads.
+Thank you,
 
-	- Exhausting the uaccess buffer, ideally somehow checking that
-	  the kernel hasn't written out-of-bounds, e.g. by using some
-	  canary.
-
-	- Passing an invalid address to some syscall, for which the
-	  access should not be logged?
-
-	- Passing an invalid address to the
-	  PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR prctl().
-
-	- Passing a valid address to the prctl(), but that address
-	  points to an invalid address.
-
+> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 > ---
->  tools/testing/selftests/Makefile              |   1 +
->  .../testing/selftests/uaccess_buffer/Makefile |   4 +
->  .../uaccess_buffer/uaccess_buffer_test.c      | 126 ++++++++++++++++++
->  3 files changed, 131 insertions(+)
->  create mode 100644 tools/testing/selftests/uaccess_buffer/Makefile
->  create mode 100644 tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
+>  include/uapi/linux/user_events.h | 68 ++++++++++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 include/uapi/linux/user_events.h
 > 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index c852eb40c4f7..291b62430557 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -71,6 +71,7 @@ TARGETS += timers
->  endif
->  TARGETS += tmpfs
->  TARGETS += tpm2
-> +TARGETS += uaccess_buffer
->  TARGETS += user
->  TARGETS += vDSO
->  TARGETS += vm
-> diff --git a/tools/testing/selftests/uaccess_buffer/Makefile b/tools/testing/selftests/uaccess_buffer/Makefile
+> diff --git a/include/uapi/linux/user_events.h b/include/uapi/linux/user_events.h
 > new file mode 100644
-> index 000000000000..e6e5fb43ce29
+> index 000000000000..5bff99418deb
 > --- /dev/null
-> +++ b/tools/testing/selftests/uaccess_buffer/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +TEST_GEN_PROGS := uaccess_buffer_test
+> +++ b/include/uapi/linux/user_events.h
+> @@ -0,0 +1,68 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Copyright (c) 2021, Microsoft Corporation.
+> + *
+> + * Authors:
+> + *   Beau Belgrave <beaub@linux.microsoft.com>
+> + */
+> +#ifndef _UAPI_LINUX_USER_EVENTS_H
+> +#define _UAPI_LINUX_USER_EVENTS_H
 > +
-> +include ../lib.mk
-> diff --git a/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c b/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
-> new file mode 100644
-> index 000000000000..051062e4fbf9
-> --- /dev/null
-> +++ b/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
-> @@ -0,0 +1,126 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/types.h>
+> +#include <linux/ioctl.h>
 > +
-> +#include "../kselftest_harness.h"
+> +#ifdef __KERNEL__
+> +#include <linux/uio.h>
+> +#else
+> +#include <sys/uio.h>
+> +#endif
 > +
-> +#include <linux/uaccess-buffer.h>
-> +#include <sys/prctl.h>
-> +#include <sys/utsname.h>
+> +#define USER_EVENTS_SYSTEM "user_events"
+> +#define USER_EVENTS_PREFIX "u:"
 > +
-> +FIXTURE(uaccess_buffer)
-> +{
-> +	uint64_t addr;
+> +/* Bits 0-6 are for known probe types, Bit 7 is for unknown probes */
+> +#define EVENT_BIT_FTRACE 0
+> +#define EVENT_BIT_PERF 1
+> +#define EVENT_BIT_OTHER 7
+> +
+> +#define EVENT_STATUS_FTRACE (1 << EVENT_BIT_FTRACE)
+> +#define EVENT_STATUS_PERF (1 << EVENT_BIT_PERF)
+> +#define EVENT_STATUS_OTHER (1 << EVENT_BIT_OTHER)
+> +
+> +/* Use raw iterator for attached BPF program(s), no affect on ftrace/perf */
+> +#define FLAG_BPF_ITER (1 << 0)
+> +
+> +struct user_reg {
+> +	__u32 size;
+> +	__u64 name_args;
+> +	__u32 status_index;
+> +	__u32 write_index;
 > +};
 > +
-> +FIXTURE_SETUP(uaccess_buffer)
-> +{
-> +	ASSERT_EQ(0, prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, &self->addr, 0,
-> +			   0, 0));
-> +}
+> +#define DIAG_IOC_MAGIC '*'
+> +#define DIAG_IOCSREG _IOWR(DIAG_IOC_MAGIC, 0, struct user_reg*)
+> +#define DIAG_IOCSDEL _IOW(DIAG_IOC_MAGIC, 1, char*)
 > +
-> +FIXTURE_TEARDOWN(uaccess_buffer)
-> +{
-> +	ASSERT_EQ(0, prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, 0, 0, 0, 0));
-> +}
+> +enum {
+> +	USER_BPF_DATA_KERNEL,
+> +	USER_BPF_DATA_USER,
+> +	USER_BPF_DATA_ITER,
+> +};
 > +
-> +TEST_F(uaccess_buffer, uname)
-> +{
-> +	struct uaccess_descriptor desc;
-> +	struct uaccess_buffer_entry entries[64];
-> +	struct utsname un;
+> +struct user_bpf_iter {
+> +	__u32 iov_offset;
+> +	__u32 nr_segs;
+> +	const struct iovec *iov;
+> +};
 > +
-> +	desc.addr = (uint64_t)(unsigned long)entries;
-> +	desc.size = 64;
-> +	self->addr = (uint64_t)(unsigned long)&desc;
-> +	ASSERT_EQ(0, uname(&un));
-> +	ASSERT_EQ(0, self->addr);
+> +struct user_bpf_context {
+> +	__u32 data_type;
+> +	__u32 data_len;
+> +	union {
+> +		void *kdata;
+> +		void *udata;
+> +		struct user_bpf_iter *iter;
+> +	};
+> +};
 > +
-> +	if (desc.size == 63) {
-> +		ASSERT_EQ((uint64_t)(unsigned long)(entries + 1), desc.addr);
-> +
-> +		ASSERT_EQ((uint64_t)(unsigned long)&un, entries[0].addr);
-> +		ASSERT_EQ(sizeof(struct utsname), entries[0].size);
-> +		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[0].flags);
-> +	} else {
-> +		/* See override_architecture in kernel/sys.c */
-> +		ASSERT_EQ(62, desc.size);
-> +		ASSERT_EQ((uint64_t)(unsigned long)(entries + 2), desc.addr);
-> +
-> +		ASSERT_EQ((uint64_t)(unsigned long)&un, entries[0].addr);
-> +		ASSERT_EQ(sizeof(struct utsname), entries[0].size);
-> +		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[0].flags);
-> +
-> +		ASSERT_EQ((uint64_t)(unsigned long)&un.machine,
-> +			  entries[1].addr);
-> +		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[1].flags);
-> +	}
-> +}
-> +
-> +static bool handled;
-> +
-> +static void usr1_handler(int signo)
-> +{
-> +	handled = true;
-> +}
-> +
-> +TEST_F(uaccess_buffer, blocked_signals)
-> +{
-> +	struct uaccess_descriptor desc;
-> +	struct shared_buf {
-> +		bool ready;
-> +		bool killed;
-> +	} volatile *shared = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE,
-> +				  MAP_ANON | MAP_SHARED, -1, 0);
-
-I know it's a synonym, but to be consistent with other code, MAP_ANONYMOUS?
-
-> +	struct sigaction act = {}, oldact;
-> +	int pid;
-> +
-> +	handled = false;
-> +	act.sa_handler = usr1_handler;
-> +	sigaction(SIGUSR1, &act, &oldact);
-> +
-> +	pid = fork();
-> +	if (pid == 0) {
-> +		/*
-> +		 * Busy loop to synchronize instead of issuing syscalls because
-> +		 * we need to test the behavior in the case where no syscall is
-> +		 * issued by the parent process.
-> +		 */
-> +		while (!shared->ready)
-> +			;
-> +		kill(getppid(), SIGUSR1);
-> +		shared->killed = true;
-> +		_exit(0);
-> +	} else {
-> +		int i;
-> +
-> +		desc.addr = 0;
-> +		desc.size = 0;
-> +		self->addr = (uint64_t)(unsigned long)&desc;
-> +
-> +		shared->ready = true;
-> +		while (!shared->killed)
-> +			;
-> +
-> +		/*
-> +		 * The kernel should have IPI'd us by now, but let's wait a bit
-> +		 * longer just in case.
-
-Is IPI = signalled? Because in the kernel, IPI = inter-processor
-interrupt.
-
-> +		 */
-> +		for (i = 0; i != 1000000; ++i)
-> +			;
-
-This is probably optimized out.  usleep() should work, or add compiler
-barrier if usleep doesn't work.
-
-> +
-> +		ASSERT_FALSE(handled);
-> +
-> +		/*
-> +		 * Returning from the waitpid syscall should trigger the signal
-> +		 * handler. The signal itself may also interrupt waitpid, so
-> +		 * make sure to handle EINTR.
-> +		 */
-> +		while (waitpid(pid, NULL, 0) == -1)
-> +			ASSERT_EQ(EINTR, errno);
-> +		ASSERT_TRUE(handled);
-> +	}
-> +
-> +	munmap((void *)shared, getpagesize());
-> +	sigaction(SIGUSR1, &oldact, NULL);
-> +}
-> +
-> +TEST_HARNESS_MAIN
+> +#endif /* _UAPI_LINUX_USER_EVENTS_H */
 > -- 
-> 2.34.1.173.g76aa8bc2d0-goog
+> 2.17.1
 > 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

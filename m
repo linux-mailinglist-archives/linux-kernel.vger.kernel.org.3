@@ -2,137 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 006BD470BBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D22EB470BBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344168AbhLJUVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:21:14 -0500
-Received: from mga09.intel.com ([134.134.136.24]:52640 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234979AbhLJUUp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:20:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639167430; x=1670703430;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=qlcufQUW7gdsZMSiBDDxV0IWviZXAFDgSbAjc00inmM=;
-  b=I/8k7a1D0F9ZRv2LMQ7i/VJpR2HMhEa1e/Q/T/BrSwdvhPX+3BEzP9Ws
-   i4Rv2cHH4OPQREDWVqwey3PVm8DSX4HVJjKIa3k/q9Kun6FqoxZ4HM6Tg
-   BPmuMKQ3VnXuSKWmDsCW/leEcXhTDgHD79hbtc1sAm0KAcsd0BZQZU7fR
-   IKKymEv+M8rC/3EL9y/YusAxwqbg+uMD6R7VRirWqDXhGAMkka4vViYfJ
-   ZdT2kIsOSMj4lampPexWV9hURm1j9yAwFTeSQRo0SgtKTg06MnX/wpjTW
-   xKYeEe9qv65p/X91eMn6vUSLuzCWind94GoJI/CgAv1C9vHZJNS88N457
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238240116"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="238240116"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 12:17:08 -0800
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="607625856"
-Received: from klarson-mobl.amr.corp.intel.com (HELO [10.251.16.229]) ([10.251.16.229])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 12:17:07 -0800
-Subject: Re: [PATCH v8 00/40] Add AMD Secure Nested Paging (SEV-SNP) Guest
- Support
-To:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <b22e13f3-aaaa-812f-da8f-838da9cd2e92@intel.com>
-Date:   Fri, 10 Dec 2021 12:17:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1344157AbhLJUVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:21:36 -0500
+Received: from mail-mw2nam08on2065.outbound.protection.outlook.com ([40.107.101.65]:2304
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1343671AbhLJUV3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 15:21:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CbYvYc7iTIjsobCpx2S0FgMX38tKyHRVORpEktGjE5np9IZzPSUgm8rU1XHCmGs2Ok+YNfVqu4R5Vwn9dbBL3joVWS+58rwKTyk0KM3+5954pDDftcC1W1B9ondYrctXnx+cRV/A+lQ4FBA9E3VgpqSdqnp6n6la5p5B57UZzHHxsmCJFvXWEVKmfA9oTyH228cOs8TtI0Wgopnvt+4tEpJVVCLlVgNtNpmJxeQV0HSwDQIN16sWlhfsWdUZLIELbzVoDOJ6NkNtSfAv5SKCzVFiArm5Lvd1SREI8FziE1jLsu2oCwcajten7ibAqaycNjSs4aEAsY/4+TdBejXt5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1SokwhU4d7BpKF4vHwXs0YVFnysXC8lVmxK2OwOxIdQ=;
+ b=h4KwYbjU/u2uFhJLpP5a144ya60RqUv7wrhKFmm6rrcF6yVUHL0yRby+PJB72lHLBaHNynnrvsT1PZKB0I9fwF7CdSDNWqXQoO6JT/4JT6cwdXdRMEZ3jUgtYCTzFDS8tjTHrEc/xfeMttOevL7vCSrP1J7HWllmoUp6t7uaTxuVCO+UzNl4NAzDQvzil/QoJv4RnLxyqkEWVdTMf0H6EDMi2jqTWdF9PjvU+Qy/iRRzlW5281y1sOdwBO0LHtXbGpFvA8GwkV2Gnwk7RJy8ZaGfL1kuCHlhmKsJTGBXGRinE4udee3lZeT9lZLy+wt3+7voisHFY8zpyu3DikxshQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1SokwhU4d7BpKF4vHwXs0YVFnysXC8lVmxK2OwOxIdQ=;
+ b=h1L6yf7okLNBulvXiJW78v0VOL0mwvFJxygSmn9HEHZh2IFasD0WS5a5ZvUvQuTncOGIKSj3MEjjAD5L/bNKYlv1/TnqYSt4dyF8ambpqdF7BNiRoCeNz9c3D9MLkmfpcGlrrQ9NO0oQsZBnwXSv+nu8kqZEmD6ziZOoskF4A7c/BKkhSC2BG0pjotYX2Nlp8SLct4/WURBihWzvLHiEqBA2p3jkDA6Rfr1SYvZIGKdzplba3n0vjX9bAwaGbyJ8+kafipz3TAtOfoKrVIK1hjMNuOWogV+SQ/AJgSHyQZ7ApBB0ofbq6lgC8twdFNeaMGxTX2MrNdZ5o7zdh+Hqjg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by MN2PR12MB4256.namprd12.prod.outlook.com (2603:10b6:208:1d2::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.25; Fri, 10 Dec
+ 2021 20:17:53 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4755.026; Fri, 10 Dec 2021
+ 20:17:53 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>
+Subject: Re: [RFC PATCH v2 0/7] Use pageblock_order for cma and alloc_contig_range alignment.
+Date:   Fri, 10 Dec 2021 15:17:51 -0500
+X-Mailer: MailMate (1.14r5852)
+Message-ID: <535079B9-D284-4A6F-9ABE-A85287697921@nvidia.com>
+In-Reply-To: <19404189-3bee-c02a-a596-2e5564e0f8f5@redhat.com>
+References: <20211209230414.2766515-1-zi.yan@sent.com>
+ <19404189-3bee-c02a-a596-2e5564e0f8f5@redhat.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_7DBDBA8D-1217-4A06-8FC2-209CFAFFFA5D_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL1PR13CA0171.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::26) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-In-Reply-To: <20211210154332.11526-1-brijesh.singh@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: from [10.2.54.79] (130.44.175.231) by BL1PR13CA0171.namprd13.prod.outlook.com (2603:10b6:208:2bd::26) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 10 Dec 2021 20:17:52 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9cb3a282-c459-43b1-9d91-08d9bc1a251e
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4256:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB42567758C6EAC135E2ABD332C2719@MN2PR12MB4256.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9e4aijV1JgJLLjMpc7BgldE1hMKUw2okKqgXni9ulUzWa5TTLz6uAyLX9zuOa+yb9ypDVKTOcXTq7XvQiyGUYtw2ZhU2r+Ql4bUajUBSqFjrdVtUCVsQEvss9wVGgYkkxRU/myFmaQfHoT5M+NgAUaa/n2VO5GCSeayZz2wvnlOa9GYFhDgfBVwDpLG1q0p8EZAiTivXsCvYjN/HEX1pOiWGPV21exZ4a8Cb0z6910X8WNwGGJZ9tZqG+52Mz2GacMFvmXewBLZA+dwWC/Ie2RFBeazXH9hj5sJJSdD3d0XUGFT9TX+/ALUpbMvJteHjjtwG96iOzZAo+Y7+1N/9SYg4bopE/XaACLGbOiICRMlsn/dzn+GAXecj9WhP+n9JTexaMqaW0BzDNj5cN4+BM924XscVQQB7iy82EP6NRmjJW3YkR2tfiMOAUP3pDL9BPUZBEFCG40rnlGWgja6EOVpUS2OskMZ0qn04xk44Gaa9C167hAeGigFcIbNQUX/lfXCbmuzpHUBdpRffEgck5VhWOKtvGZzcUBIanX4yjYywy7A9b8R8hf04fus9SfshOnrgSEvmES8bCTVvgnyx3ePF2zngpCGmIvB90SnYr8lbAMEjNFHvQ7h7oefNIupcljNcyftwzpYqQqo4HivZWx9kbTxNrfOGWN2dcbwJm22C5Z1LbKrS82+C93YyjABc6QEksS2x+oHkI9SQu7jgEwnr+0Rnho7VgaqLEJz2ytU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(2906002)(53546011)(86362001)(508600001)(26005)(6916009)(6486002)(7416002)(36756003)(4326008)(38100700002)(33656002)(2616005)(956004)(5660300002)(21480400003)(235185007)(83380400001)(54906003)(66476007)(66556008)(8676002)(66946007)(8936002)(316002)(16576012)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ivDqoONSePtYOBgu9KVJjw2Vn31jf6gsktHKqqustAtBz8dp0xcATdZBRJdd?=
+ =?us-ascii?Q?mkW8ngd9Agw0f6VZKzmudPblKoeCimQIdk0q/9Kpkc0kAM/8S7qeLZicVPis?=
+ =?us-ascii?Q?VCD2lL/GOJ4lXky9/n8jsMFB+mbPw2gOtuSQrAdAf2EEQIdeTU0f2JPgyTeK?=
+ =?us-ascii?Q?J9B8RWTTFuuQdGIl5ZSG9zLU8s6/UjHDP7BSMCgX5eMceA0L+cfBnojd+X0a?=
+ =?us-ascii?Q?0d3UBkiqm05FVjpzK8Bqle6sLPtyfd+UZq6U5NwlTg2UrTiQ0d2mDrP8JOCp?=
+ =?us-ascii?Q?9Mw503fzzsTNWyh6fd3jeP+xijISh4hQwVBO4ADPaj1mLKOZRLLtP2w2ljcH?=
+ =?us-ascii?Q?Iwyzn+RPNFwZNODKi55fKHA9P5TofNlwZqQp1MoXiAV2LC7cvgmay+4uq5Q1?=
+ =?us-ascii?Q?8Zzgp4xtg89wlvoy9Jh5umV5NMDDFDcsl0BwWy8SLFpWIkhCFPrTaZfIAQzR?=
+ =?us-ascii?Q?c/dpFxQgVcPA5bThSXDP+bbuYEABvfPCE/KEPnW3iatGwlELp7KtQlMhQ3jD?=
+ =?us-ascii?Q?4AhjQEhP+VxrhpSPJKHfyPMxYee/lMNnLm0XsXHR0+9gHtoj25/QrupBzRcA?=
+ =?us-ascii?Q?pHRD0U6+utvlQQYRf8xXIybVvopzLQ9Wj2hyaYpBA+mbnWx3zvJJw0JyVKXH?=
+ =?us-ascii?Q?2PQ/B1rzpwCws6+2zvEsUUtw/Z7UxY1/otaHRIUIDh3v4nU2bAh0i5GFWWyv?=
+ =?us-ascii?Q?kcsu6ircvEc+m4F5YjK3/wSl3XFH1RvR3yseQOACkuzn/eIUop4Kl09zu0A5?=
+ =?us-ascii?Q?hG6wOAs4+zvi41Hk0Aq5dVFBIiyod/Ts4WXIhJBrM3Xow2n/vch7FGMIcANO?=
+ =?us-ascii?Q?KzlcjGco3YmZyCMVYWR9Y7dkyWCDjMABTxHneb4tY442bfbONbGUTNo1g9UI?=
+ =?us-ascii?Q?BcvLx7Y0QiEvAveG4ShB+gX6vhxPP4JUEu+rQlEo5g0JC/5BkA1wfLKU7ew+?=
+ =?us-ascii?Q?t2MeLB0qLdlNy092jBpAxLYFLNhoFNKhoTvhwl9Xf/FMo5lVAsvSRH+at2oZ?=
+ =?us-ascii?Q?oaG9N6sLMp+t0LPrZ5Jl++89/01XxvGAy+WicjsMh8TVPG83sJYXMCFmjkzB?=
+ =?us-ascii?Q?Y3GtMkUMh3pyhZNoyOtUfNUnp0D+eS5mvTZTnmRapeyHGuljOPsztWe8txeU?=
+ =?us-ascii?Q?NMWzHdAQ1t4oajEUSwRpnjCD04OAV6e3v5+tJi8eakYkvdSX9G29uwbgYbhl?=
+ =?us-ascii?Q?TB9vbgRH9YpMb+TXa4Oyr9sEp123EBoKZYOeHwkueP2/SL6/WyDYHiRSkvUP?=
+ =?us-ascii?Q?DSCRVP8gX8xyZyMQBN/zaBS+a7FqLGt8Gm82fGNaNXAjqLqGIDnF25pF781Q?=
+ =?us-ascii?Q?VdECV3JEH+629gMeI4b82/bY+9NqV13zooULrfQ9DK2bXG3WZ3pYwhx+mXik?=
+ =?us-ascii?Q?/w3lHSxZHUfUc1wMKdm4CQ9RTyCyCV62qDbZPFth5qNu0ZB/yK3WoD/y01n6?=
+ =?us-ascii?Q?/eVzeMF6+Qt4ARUXt2PWrBESFtt/IBTrwE0NAasmuFWsr16RRBLSS6vRfmPa?=
+ =?us-ascii?Q?9XLf/H/FCIG27ALIl7PTWk3z5nGoicafa2Tb9zH0b17Y5p0r963TBFEqoDAc?=
+ =?us-ascii?Q?7paG1wBFOkHBAGW4kAQ=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cb3a282-c459-43b1-9d91-08d9bc1a251e
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 20:17:52.9758
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PiH9nDK6pEKX9mzRqApD9ksMofkeszEWKYdN2/uZg/eR1CX/6VpTiwAO2s3Sa/YF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 7:42 AM, Brijesh Singh wrote:
-> The series is based on tip/master
->   7f32a31b0a34 (origin/master, origin/HEAD) Merge branch into tip/master: 'core/entry'
+--=_MailMate_7DBDBA8D-1217-4A06-8FC2-209CFAFFFA5D_=
+Content-Type: text/plain
 
-FWIW, this is rather useless since tip/master gets rebased all the time.
- Also, being a merge commit, it's rather impossible to even infer which
-commit this might have been near.
+On 10 Dec 2021, at 13:36, David Hildenbrand wrote:
 
-Personally, I like to take my series', tag them, then throw them out in
-a public git tree somewhere.  That has two advantages.  First, it makes
-it easy for a reviewer to look at the series as a whole in its applied
-state.  Second, it makes it utterly trivial to figure out where the
-series was based because the entire history is there.  The entire
-history will be there even if you based it off some tip branch that got
-rebased away since.
+> On 10.12.21 00:04, Zi Yan wrote:
+>> From: Zi Yan <ziy@nvidia.com>
+>>
+>> Hi all,
+>
+> Hi,
+>
+> thanks for working on that!
+>
+>>
+>> This patchset tries to remove the MAX_ORDER - 1 alignment requirement for CMA
+>> and alloc_contig_range(). It prepares for my upcoming changes to make MAX_ORDER
+>> adjustable at boot time[1].
+>>
+>> The MAX_ORDER - 1 alignment requirement comes from that alloc_contig_range()
+>> isolates pageblocks to remove free memory from buddy allocator but isolating
+>> only a subset of pageblocks within a page spanning across multiple pageblocks
+>> causes free page accounting issues. Isolated page might not be put into the
+>> right free list, since the code assumes the migratetype of the first pageblock
+>> as the whole free page migratetype. This is based on the discussion at [2].
+>>
+>> To remove the requirement, this patchset:
+>> 1. still isolates pageblocks at MAX_ORDER - 1 granularity;
+>> 2. but saves the pageblock migratetypes outside the specified range of
+>>    alloc_contig_range() and restores them after all pages within the range
+>>    become free after __alloc_contig_migrate_range();
+>> 3. splits free pages spanning multiple pageblocks at the beginning and the end
+>>    of the range and puts the split pages to the right migratetype free lists
+>>    based on the pageblock migratetypes;
+>> 4. returns pages not in the range as it did before this patch.
+>>
+>> Isolation needs to happen at MAX_ORDER - 1 granularity, because otherwise
+>> 1) extra code is needed to detect pages (free, PageHuge, THP, or PageCompound)
+>> to make sure all pageblocks belonging to a single page are isolated together
+>> and later pageblocks outside the range need to have their migratetypes restored;
+>> or 2) extra logic will need to be added during page free time to split a free
+>> page with multi-migratetype pageblocks.
+>>
+>> Two optimizations might come later:
+>> 1. only check unmovable pages within the range instead of MAX_ORDER - 1 aligned
+>>    range during isolation to increase successful rate of alloc_contig_range().
+>
+> The issue with virtio-mem is that we'll need that as soon as we change
+> the granularity to pageblocks, because otherwise, you can heavily
+> degrade unplug reliably in sane setups:
+>
+> Previous:
+> * Try unplug free 4M range (2 pageblocks): succeeds
+>
+> Now:
+> * Try unplug 2M range (first pageblock): succeeds.
+> * Try unplug next 2M range (second pageblock): fails because first
+> contains unmovable allcoations.
+>
+
+OK. Make sense. I will add it in the next version.
+
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_7DBDBA8D-1217-4A06-8FC2-209CFAFFFA5D_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmGzte8PHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqKgZMP/3tUjopJZwSAjnbkyluDjYvGsNB3I1qVGH+o
+SfzNETll0wimCsKbrRMUhh0tx3E3TLgF79FuigVaoPLnfbgEdJwPyMRyArQep4ti
+hyZnKN7zhCvYzHpVK/BDiI78JC96GZusKSU1hYOUcaLNtx4EaAttk+EXYyE/TP+D
+Qdtox83CjKX/FtwJH/P0XSn4XhBl52KnHgARC4YDVEJorv+VmImHcQFfO+rxQKEw
+VnpevGuWetgc7m4GrPm+4rCZNzv5/voCOhtriLyn1xlBt4LvmmgSqAIIT8Kk0mWz
+rPVwPSQF9qexiOR8juR7JmO739ODjKpyqFEtG6xpQ7cJdBz0voOXxexZGKJ3X9XM
+aIpgvgWRygJYkiivTRKfcHakjHekQ4ZYcPqeNrVnQ6Feq6j7LChg127YpK0mBsru
+FxWxB9Ekb4mYulDEfeyiMz66CziaDgqQDT/AcilMtNzvpfXN/WmoSU8erBvPvVkl
+ZF2X+bvXdYtinVSSYM/XE9mdltfvlnIZcK8FA60pRVv6xDBKPMyzE9Pzq7+o+Aho
+9Zrfe6VqzsqKTJ3r/Joy6QWlcKmjPkzMRnGyzjO/P+JIyX3pTZ2j6Ae7pmOhwwHT
+fQ6zONI/o2JkUxZEqOTl9yGga6qOgBTchNhbNHX67Ww5HpBZhwKkZbWWo6QgdvSe
+eEnH9Z76
+=k/t4
+-----END PGP SIGNATURE-----
+
+--=_MailMate_7DBDBA8D-1217-4A06-8FC2-209CFAFFFA5D_=--

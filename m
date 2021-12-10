@@ -2,100 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F7B470CA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3DF470CA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344479AbhLJVkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235748AbhLJVkP (ORCPT
+        id S1344503AbhLJVmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:42:31 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34138 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243515AbhLJVmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:40:15 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A03C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r1GOSqF9LX3YAa7tf5XoV1Dfily/re1QRyoWvPyqJ4s=; b=EWi/cCEc8iqOeu3vDyYPmNnOiW
-        U5OPCyLe4kqUZfNOKxGP33iIzq+B+64pFZxJ8EovPawYqDFqgMVJ/KPgQnS1ykluiqHVUWvFXFrzd
-        opabBqWqYfHw/KAc5LGWLycgw4NjkYzWU7xZB9JEtrGhPNkPNC1LPkgtR+0WbzezNU00j6doHOteH
-        TJBNnDBYa35Sqerr8LMlKBYknUrq8eny4/e30nHDYbCh1LSnFIihEen6rLwUa0TOrncDn5WdNTrKv
-        65RUsHh3AJSUrL9d5LLrqZQR3wMa5pjn3+Y/uG3KtpOPYWF7lQ9KRHbBqH3bzQ5SVZp3UdG2ueAsH
-        t0uhjq4w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvnZB-000cwL-Az; Fri, 10 Dec 2021 21:36:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DCFF73002C5;
-        Fri, 10 Dec 2021 22:36:32 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CD2592C555170; Fri, 10 Dec 2021 22:36:32 +0100 (CET)
-Date:   Fri, 10 Dec 2021 22:36:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Manjong Lee <mj0123.lee@samsung.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, seunghwan.hyun@samsung.com,
-        sookwan7.kim@samsung.com, nanich.lee@samsung.com,
-        yt0928.kim@samsung.com, junho89.kim@samsung.com,
-        jisoo2146.oh@samsung.com
-Subject: Re: [PATCH 1/1] mm: bdi: Initialize bdi_min_ratio when bdi unregister
-Message-ID: <YbPIYBsbpO7154id@hirez.programming.kicks-ass.net>
-References: <CGME20211021072307epcas1p4aa4388c13e71a66e3e1d5f7ee68b5a7f@epcas1p4.samsung.com>
- <20211021161942.5983-1-mj0123.lee@samsung.com>
- <YXFMJJ3u+x34iNy0@infradead.org>
- <YXFWmo9v65kJWVWC@casper.infradead.org>
- <20211021194530.1fabf4fa45cfe3bee6598484@linux-foundation.org>
+        Fri, 10 Dec 2021 16:42:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6BAC6CE2D3D;
+        Fri, 10 Dec 2021 21:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45154C00446;
+        Fri, 10 Dec 2021 21:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639172332;
+        bh=LV9ui+LoZ09dCLi3M8fgKyg0G4ZmmnOP+h8yd9lluKY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mRwvYATMjYz4Nm2aLuSC+YipI9kwGzq8XIk2Eg99optMxBRkpbYEGJZUkux+CoAKP
+         Ne5KJxnOLlI63dji3RFtyUq6nPQrVrFFKCIbLuUtZTrE3sS8PhePPg43i/hcXb+lIg
+         mB6WwhLdUCD3eXmdot8Uay92v5aQx1PWJfzR2SxmtTHqzSI8GEBB7nZWE+gh0rW33Q
+         iIBkR9uWSUj4VnJAxiQQwD/i0oHWJUdgh+j8Ke+8DUkZdzZ5M6zkEfZOtOoy+B0HAb
+         bWK5LHIHqEr7zIeUG4bFq5pVkDDpN3hUwapVcO5Zqm2h9k00N+tnPeI3Ph7CV4Tg9/
+         yjmVGOa/i6/pw==
+Date:   Fri, 10 Dec 2021 21:38:48 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org, jeyu@kernel.org,
+        mcgrof@bombadil.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Next/Trees: update the modules tree
+Message-ID: <YbPI6Novz3ikiKEI@sirena.org.uk>
+References: <20211208195931.3369500-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bUaiORlw3qU9OGY1"
 Content-Disposition: inline
-In-Reply-To: <20211021194530.1fabf4fa45cfe3bee6598484@linux-foundation.org>
+In-Reply-To: <20211208195931.3369500-1-mcgrof@kernel.org>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 07:45:30PM -0700, Andrew Morton wrote:
-> On Thu, 21 Oct 2021 13:01:30 +0100 Matthew Wilcox <willy@infradead.org> wrote:
-> 
-> > On Thu, Oct 21, 2021 at 04:16:52AM -0700, Christoph Hellwig wrote:
-> > > On Fri, Oct 22, 2021 at 01:19:43AM +0900, Manjong Lee wrote:
-> > > > Because when sdcard is removed, bdi_min_ratio value will remain.
-> > > > Currently, the only way to reset bdi_ min_ratio is to reboot.
-> > > 
-> > > But bdis that are unregistered are never re-registered.  What is
-> > > the problem you're trying to solve?
-> > 
-> > The global bdi_min_ratio needs to be adjusted.  See
-> > bdi_set_min_ratio() in mm/page-writeback.c.
-> 
-> I added cc:stable to this and tweaked the comment & coding style a bit:
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+--bUaiORlw3qU9OGY1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> --- a/mm/backing-dev.c~mm-bdi-initialize-bdi_min_ratio-when-bdi-unregister-fix
-> +++ a/mm/backing-dev.c
-> @@ -947,10 +947,12 @@ void bdi_unregister(struct backing_dev_i
->  	wb_shutdown(&bdi->wb);
->  	cgwb_bdi_unregister(bdi);
->  
-> -	/* if min ratio doesn't 0, it has to set 0 before unregister */
-> -	if (bdi->min_ratio) {
-> +	/*
-> +	 * If this BDI's min ratio has been set, use bdi_set_min_ratio() to
-> +	 * update the global bdi_min_ratio.
-> +	 */
-> +	if (bdi->min_ratio)
->  		bdi_set_min_ratio(bdi, 0);
-> -	}
->  
->  	if (bdi->dev) {
->  		bdi_debug_unregister(bdi);
-> _
-> 
+On Wed, Dec 08, 2021 at 11:59:31AM -0800, Luis Chamberlain wrote:
+
+> pull request which was merged for v5.16-rc1. I'll queue up fixes
+> on the modules_linus branch.
+
+> those in the modules_next branch to match parity with the same style
+
+Actually, note that your e-mail says the branches are modules_X while
+the diff says modules-X which looks like it's the correct thing:
+
+> -modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-linus
+> +modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-linus
+
+> -modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-next
+> +modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-next
+
+--bUaiORlw3qU9OGY1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzyOcACgkQJNaLcl1U
+h9At9wf/XiQIUoVnn5gjhBAUrkFwuGr8OUFGp+pgYzzr5DdsJmdxpn5zq2v+f1WN
+Nxfbob7TD633b8tLlCoiPh1ucdAFKyAyeTMZHnAuSRu11n6orjgEXhuAv7IgapOi
+MW8nWBJL1Pco4nQspBsLigNyrjxwPrb+NLAGgXcD0F1E80ohcxnGRBjxLW4xwfrO
+zf2PZKvyoZoiULFaA3LykkR1V0c7IPw1s+5KIS46D3/+IYLpEBgUZaKTb5V2Epdc
+hlX9faQH6rgK1JCVuTY9PR+FaCwPdpieMJteEmSEFVe507M81OGvzBsXtSPnFGEB
+lCp+rEZUZpDjVLQs3bSsWeC93UBgew==
+=kUqG
+-----END PGP SIGNATURE-----
+
+--bUaiORlw3qU9OGY1--

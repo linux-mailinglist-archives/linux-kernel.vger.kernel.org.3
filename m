@@ -2,125 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF51E470661
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454B3470666
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240884AbhLJQy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236859AbhLJQyz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:54:55 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F01C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:51:20 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id u80so8942023pfc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:51:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7WxCqvv4ObUVtEOab2u1wdUa6vtacHS/9P1D+Qu3Q4I=;
-        b=Pz7q1yMrprNeLuXSehtn+mjl+OolYIRza+5Q+bVzL5P0PJkqAptjr+rq47XyVZ6A+2
-         CWs4P9jqt34H45D18Jtu3XCmfnX3/fo2tC88wYLD7uyZLJ14trpEUFqQA68hzvjqcoS7
-         TqoOyHlngnRLK9zeiwKDPaXGnvkrSkzAoejZw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7WxCqvv4ObUVtEOab2u1wdUa6vtacHS/9P1D+Qu3Q4I=;
-        b=ZfJgIgz9KOPHnYHMhbOFfeB9EPCm2fmZmzchzERk2CmV+JhXrs6MD/SdPE6eUV0SGz
-         5ouqbB0ztUtRDJ8qam5t8ETCsSJ9SQ8pmcNz3t4yuOjDzFsN/y/O0yYe4jLu6sMddEDh
-         Ta4K2l7AV9eiUK1ipiYkp2h3CqtOHXstVSud7bW6LtzHPQtkG9myLxeiHC+j3rJh+Nnq
-         uG6c7jT6nWEWD+9aVAsWlL0r6FALzPdXyrw6jUaw8Wgi//qgsQIQrT/qy7mIOM6GjCIP
-         DLOvJ+0+ievHmJ0piWIa6bHlMFGY1A9WrPPxV4lEApdAzZLez280RkYdGEwG2MfWck5/
-         pF3A==
-X-Gm-Message-State: AOAM532f7/bJbhWtOVreep3mtFFlYOWZXm8RxxKqZkozWcyJgbicUsuZ
-        Cn/PoHWcN0S/6j5gNz6mWmRbCQ==
-X-Google-Smtp-Source: ABdhPJwrDkvAU1dIOXyjaCC1yzNcBxHY1hnaRtjYvmiv1zAZE1OYcWlBpJH14W2wnL+jMKjPtDtXcA==
-X-Received: by 2002:a63:135a:: with SMTP id 26mr40251046pgt.87.1639155079759;
-        Fri, 10 Dec 2021 08:51:19 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:d386:8bb1:aaa7:a294])
-        by smtp.gmail.com with UTF8SMTPSA id l9sm4030038pfu.55.2021.12.10.08.51.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 08:51:19 -0800 (PST)
-Date:   Fri, 10 Dec 2021 08:51:17 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>
-Subject: Re: [PATCH v17 1/7] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YbOFhcICfrbl6bZV@google.com>
-References: <20211116200739.924401-1-mka@chromium.org>
- <20211116120642.v17.1.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <CAD=FV=VnRQzvgjVzTNgx5kaC6VDvFGvTx2njtdTo27LW1zxWJA@mail.gmail.com>
- <YZaS3NpfUqqg4L+v@google.com>
+        id S244228AbhLJQzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:55:49 -0500
+Received: from mga07.intel.com ([134.134.136.100]:15527 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244062AbhLJQzs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 11:55:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639155133; x=1670691133;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Rtmio2JZdFBgMjVlC4ULf1CSskyTDC6ixBmFQ8JL9MA=;
+  b=XkmAquB3ZQpvc8Eg/FNeUoidHY/jIqxWXuVgfTt016a8B4cX/K+Z5HAs
+   TrNJB1fbTPksNLrXtZ7vfhntLoEXCHfQ5F2kevu65uKlv46rBL9RqbzJd
+   +gqsuyzlAJBxxZKMo1CuerGBNclEYavKpUEGg2CK7mJoeeYhQlZfnGqNb
+   CCMUWM3oBzHJ6xOErIFXrku0btmPGFNJxH+bPJMSDGc70woVmXMyVlfO3
+   GH82OgNWqV896lQaKIbPzOV7A/dRo4GgzJjmWnL9YcQOe7Lh0x/qqZlu1
+   3kZ+wu6t/ZcDsmBWAS0ubdq5O6QVB5UathaKnS4Dvs7TOkP90n58Sz4yv
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="301764125"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="301764125"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 08:52:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="463724230"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Dec 2021 08:52:11 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvj7z-0003Ob-4o; Fri, 10 Dec 2021 16:52:11 +0000
+Date:   Sat, 11 Dec 2021 00:51:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:auth-dh 24/24] drivers/nvme/host/auth.c:11:10:
+ fatal error: crypto/ffdhe.h: No such file or directory
+Message-ID: <202112110052.PK2rNLR2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YZaS3NpfUqqg4L+v@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 09:52:28AM -0800, Matthias Kaehlcke wrote:
-> On Wed, Nov 17, 2021 at 04:11:34PM -0800, Doug Anderson wrote:
-> > Hi,
-> > 
-> > On Tue, Nov 16, 2021 at 12:07 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> > >
-> > > --- a/drivers/usb/misc/Kconfig
-> > > +++ b/drivers/usb/misc/Kconfig
-> > > @@ -284,3 +284,20 @@ config BRCM_USB_PINMAP
-> > >           This option enables support for remapping some USB external
-> > >           signals, which are typically on dedicated pins on the chip,
-> > >           to any gpio.
-> > > +
-> > > +config USB_ONBOARD_HUB
-> > > +       tristate "Onboard USB hub support"
-> > 
-> > Aren't you back to shenanigans now that you're being called straight
-> > from the USB core? What if you're a module and the USB core is
-> > builtin? It can't call you, right? ...or what if you're builtin but
-> > the USB core is a module (yeah, I know that sounds insane but I don't
-> > think anything technically prevents it)?
-> 
-> Indeed, a dependency involving USB host mode is needed, as previously
-> with xhci_plat.
-> 
-> > Can you just add a dependency here such that if the USB core is a
-> > module that you're a module and if the USB core is builtin that you're
-> > builtin?
-> 
-> I couldn't find a way to specify that in the config options of the driver
-> itself. I fear the dependency has to be specified in CONFIG_USB, like it
-> was done previously with USB_XHCI_PLATFORM:
-> 
-> https://patchwork.kernel.org/project/linux-usb/patch/20210813125146.v16.6.I7a3a7d9d2126c34079b1cab87aa0b2ec3030f9b7@changeid/
-> 
-> Hope that isn't controversial.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git auth-dh
+head:   d0619245e5615b7909488f564d7fd992016a2f5b
+commit: d0619245e5615b7909488f564d7fd992016a2f5b [24/24] nvme: Implement In-Band authentication
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211211/202112110052.PK2rNLR2-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=d0619245e5615b7909488f564d7fd992016a2f5b
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel auth-dh
+        git checkout d0619245e5615b7909488f564d7fd992016a2f5b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-Ugh, actually adding
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  depends on USB_ONBOARD_HUB || !USB_ONBOARD_HUB
+All errors (new ones prefixed by >>):
 
-to CONFIG_USB does not work. The problem is that USB_ONBOARD_HUB depends on
-CONFIG_USB (not through an explicit dependency, but the 'misc' directory it
-resides in is only included when CONFIG_USB=y/m), so the above rule would
-introduce a circular dependency.
+>> drivers/nvme/host/auth.c:11:10: fatal error: crypto/ffdhe.h: No such file or directory
+      11 | #include <crypto/ffdhe.h>
+         |          ^~~~~~~~~~~~~~~~
+   compilation terminated.
 
-Unless there is some other way to specify "don't allow building
-USB_ONBOARD_HUB as a module, unless USB is a module" I fear USB_ONBOARD_HUB
-must be bool, which isn't really great :(
+
+vim +11 drivers/nvme/host/auth.c
+
+  > 11	#include <crypto/ffdhe.h>
+    12	#include "nvme.h"
+    13	#include "fabrics.h"
+    14	#include "auth.h"
+    15	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

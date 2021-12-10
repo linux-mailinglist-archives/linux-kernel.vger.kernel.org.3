@@ -2,157 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F564708F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B81C4708F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245443AbhLJSjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236135AbhLJSjf (ORCPT
+        id S245456AbhLJSkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:40:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29356 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242116AbhLJSkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:39:35 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC47EC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:36:00 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id g18so9192410pfk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MpajK8Tn5tjNGaln2aqAYJxcvVkNrmh9QSmaRYTmHqc=;
-        b=pMnSIa5XwLE2PWoi2feQCvUuZXk1mnWNPmtwwBw9W25Vz7EwjSdu0sHoSAigR9IK6f
-         18hccWbEwr2VNoZ5RZITZ0wl6bgnMv7BeXyJvaBK9avxEakXvqoBXFlPHjr3wQbktUJR
-         iqLv2+ixZs853vy6YdSOtnGkcLEAAVkXHVYe1xoMB0HtrgCqhfo9zS3i9H0RncHaDkqB
-         DIJ/pAXWLj1279izR2E8bFZFy3yH7y5MN60WncX6EusUWZF1SmK8Fjo4PTa2E24Y0unO
-         HJS5WnEXEiqgs25bdkQvDVykKqyPnGfmYOYoHIdo7lZI1fJYWXUJh77og2la8GwuMZD4
-         BiBQ==
+        Fri, 10 Dec 2021 13:40:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639161392;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UuZMXUxnRYoJ6fczszwwZGhWUdbXILWisTJH5f1GF3o=;
+        b=h6NhXiAshx8h8AMhcEyh3d83NUqUTc3SmcpEn9D/1fotKZTJDAhrUEBFZcmGXn6gJtY7jh
+        4VQ4adoG4pSeupPe7G/RAT8PRGQgHnzvhDOqQIjGMkSPxM30LQTBlDb7kUrbJpVjbvmEa5
+        1cTohojE+8jZ45ix+/DCBS4+vG0nGNo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-2OpAyktJNyWl9QYUxWXcnw-1; Fri, 10 Dec 2021 13:36:31 -0500
+X-MC-Unique: 2OpAyktJNyWl9QYUxWXcnw-1
+Received: by mail-wm1-f72.google.com with SMTP id j23-20020a05600c1c1700b0033283ea5facso1417001wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:36:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MpajK8Tn5tjNGaln2aqAYJxcvVkNrmh9QSmaRYTmHqc=;
-        b=aIs8WHUwM7jtArfl42RyVpnVhrLyg96di3CfLbTaHPbfYgl25VpT488OnyPqbRnjqn
-         XJdASXSUM+HGIQCr/1Piz5DtpdqXOe+2prjRGsOSRNJjdTEs0O9zHksQAH4ktMThwZ6R
-         uGM/mCDgnfLjtVHIVdegRUl8Fwse01QRBTLAcDIM7QnIVwfc4/rWngg2qQ5zVkcxmcwJ
-         o763XKJQBwAnKzotWI2+XdKUo46E8kZskSXOWYHR1Xu18W4KAIjy2kI4rfvJa2gwJ5px
-         ggQCNSDP5n6sKQkigPD/tMXmIncO5HwQ1xC7dpeW96yImzJxqefUo7C3w0Yr8qn8pkyL
-         Uw6w==
-X-Gm-Message-State: AOAM5330/cRKfqWMJ6hFrty1iM0Rfd7dJ4+VK1HbbsosSPcmMbehqk2p
-        1MsYFdlOkuMMkgP+OzUw5FtIRY/3Nb6Cu5cxyRg=
-X-Google-Smtp-Source: ABdhPJxqmnJVUWpt2txVTFDUxxRXTSammW3xWi9vVIennGMwR7VG1w6GB3Gf+so9YKrkwRgc6Ga7TQZZmUO0DYBR/zs=
-X-Received: by 2002:a63:1217:: with SMTP id h23mr41179936pgl.18.1639161360184;
- Fri, 10 Dec 2021 10:36:00 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=UuZMXUxnRYoJ6fczszwwZGhWUdbXILWisTJH5f1GF3o=;
+        b=FZPKB4N5l5b3ZSovHTTVqiins5/dVX+CNKWNJ8RbuQU0ztnRy1jiXVxSDs3GtGFTD+
+         mkM5VtNh1X6a6BcxILGB0irvPnaKNs7nk+8lzmzkDk3cvyDLDXFdGSbWhj5D+jJl0VGI
+         PK6Hmm/2wo9nFbT/l6yrDPGxB8fGYXPTTKzOyL96YrfNimsWzVHyze7gvl4LTogbNhoh
+         Pf0lxgb0iKDmD+sWiNKSiPmSvSnvo+XOT7UNs1304Rba/D+XdN4Ck905fdhv8ug/L33o
+         Tc+6Jtq7ToHQ/tc+eJQ9Wlnu0mn9qb/PJafmjEbg/7YhSs+9H3wJG1YTI/kc5guwte5b
+         Os2g==
+X-Gm-Message-State: AOAM532zf7BLTiyZvAWgVc1/yww2vjUR19RwQpdcAPCDDegsXPCMfCRZ
+        yG2ZqqZLOeuvcTplNco0ubk3nFGqaVYXystj+weW3L7G77QnpT09xrPn5C7+C0GKPoKTPHhOmoJ
+        7HV06c5H/wEIPFszMovmF3e3c
+X-Received: by 2002:a1c:2397:: with SMTP id j145mr18630562wmj.113.1639161389938;
+        Fri, 10 Dec 2021 10:36:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxnE6mECpT6/x+6acEXXbzAagez4dMgCo4uhwD9w2DwYFQ/4FPaugRFXQx4gh8a1gwW+xf9tQ==
+X-Received: by 2002:a1c:2397:: with SMTP id j145mr18630532wmj.113.1639161389702;
+        Fri, 10 Dec 2021 10:36:29 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c60f8.dip0.t-ipconnect.de. [91.12.96.248])
+        by smtp.gmail.com with ESMTPSA id v8sm3098510wrd.84.2021.12.10.10.36.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 10:36:29 -0800 (PST)
+Message-ID: <19404189-3bee-c02a-a596-2e5564e0f8f5@redhat.com>
+Date:   Fri, 10 Dec 2021 19:36:27 +0100
 MIME-Version: 1.0
-References: <20211101044955.2295495-1-goldstein.w.n@gmail.com>
- <20211117210245.843374-1-goldstein.w.n@gmail.com> <bc0297a1b97a4b129fa3ea1b155f6062@AcuMS.aculab.com>
- <CAFUsyfJTuFjVXHMgYi0uggVNW=1WW1uVYa7avVjW5VBb2cmAkQ@mail.gmail.com>
- <e41913010e61429bbd2980a5c5ccfb39@AcuMS.aculab.com> <CAFUsyfLUQLj5py1AQ+4NptM6htWxV5i0qxkeXDUdFPfAnqRY2w@mail.gmail.com>
-In-Reply-To: <CAFUsyfLUQLj5py1AQ+4NptM6htWxV5i0qxkeXDUdFPfAnqRY2w@mail.gmail.com>
-From:   Noah Goldstein <goldstein.w.n@gmail.com>
-Date:   Fri, 10 Dec 2021 12:35:48 -0600
-Message-ID: <CAFUsyfKrGhTHoC+MXiA3zFY-dT0wqPRxoJwMY=+uPbj0p0dDAg@mail.gmail.com>
-Subject: Re: [PATCH v4] arch/x86: Improve 'rep movs{b|q}' usage in memmove_64.S
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC PATCH v2 0/7] Use pageblock_order for cma and
+ alloc_contig_range alignment.
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>
+References: <20211209230414.2766515-1-zi.yan@sent.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20211209230414.2766515-1-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 6:05 PM Noah Goldstein <goldstein.w.n@gmail.com> wrote:
->
-> On Fri, Nov 19, 2021 at 4:31 PM David Laight <David.Laight@aculab.com> wrote:
-> >
-> > From: Noah Goldstein
-> > > Sent: 17 November 2021 22:45
-> > >
-> > > On Wed, Nov 17, 2021 at 4:31 PM David Laight <David.Laight@aculab.com> wrote:
-> > > >
-> > > > From: Noah Goldstein
-> > > > > Sent: 17 November 2021 21:03
-> > > > >
-> > > > > Add check for "short distance movsb" for forwards FSRM usage and
-> > > > > entirely remove backwards 'rep movsq'. Both of these usages hit "slow
-> > > > > modes" that are an order of magnitude slower than usual.
-> > > > >
-> > > > > 'rep movsb' has some noticeable VERY slow modes that the current
-> > > > > implementation is either 1) not checking for or 2) intentionally
-> > > > > using.
-> > > >
-> > > > How does this relate to the decision that glibc made a few years
-> > > > ago to use backwards 'rep movs' for non-overlapping copies?
-> > >
-> > > GLIBC doesn't use backwards `rep movs`.  Since the regions are
-> > > non-overlapping it just uses forward copy. Backwards `rep movs` is
-> > > from setting the direction flag (`std`) and is a very slow byte
-> > > copy. For overlapping regions where backwards copy is necessary GLIBC
-> > > uses 4x vec copy loop.
-> >
-> > Try to find this commit 6fb8cbcb58a29fff73eb2101b34caa19a7f88eba
-> >
-> > Or follow links from https://www.win.tue.nl/~aeb/linux/misc/gcc-semibug.html
-> > But I can't find the actual patch.
-> >
-> > The claims were a massive performance increase for the reverse copy.
-> >
->
-> I don't think that's referring to optimizations around `rep movs`. It
-> appears to be referring to fallout from this patch:
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=6fb8cbcb58a29fff73eb2101b34caa19a7f88eba
->
-> which broken programs misusing `memcpy` with overlapping regions
-> resulting in this fix:
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=0354e355014b7bfda32622e0255399d859862fcd
->
-> AFAICT support for ERMS was only added around:
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=13efa86ece61bf84daca50cab30db1b0902fe2db
->
-> Either way GLIBC memcpy/memmove moment most certainly does not
-> use backwards `rep movs`:
-> https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S;hb=HEAD#l655
->
-> as it is very slow.
->
-> > The pdf from www.agner.org/optimize may well indicate why some
-> > copies are unexpectedly slow due to cache access aliasing.
->
-> Even in the `4k` aliasing case `rep movsb` seems to stay within a
-> factor of 2 of optimal whereas the `std` backwards `rep movs` loses
-> by a factor of 10.
->
-> Either way, `4k` aliasing detection is mostly a concern of `memcpy` as
-> the direction of copy for `memmove` is a correctness question, not
-> an optimization.
->
->
-> >
-> > I'm pretty sure that Intel cpu (possibly from Ivy bridge onwards)
-> > can be persuaded to copy 8 bytes/clock for in-cache data with
-> > a fairly simple loop that contains 2 reads (maybe misaligned)
-> > and two writes (so 16 bytes per iteration).
-> > Extra unrolling just adds extra code top and bottom.
-> >
-> > You might want a loop like:
-> >         1:      mov     0(%rsi, %rcx),%rax
-> >                 mov     8(%rsi, %rcx),%rdx
-> >                 mov     %rax, 0(%rdi, %rcx)
-> >                 mov     %rdx, 8(%rdi, %rcx)
-> >                 add     $16, %rcx
-> >                 jnz     1b
-> >
-> >         David
->
-> The backwards loop already has 4x unrolled `movq` loop.
-ping.
->
-> >
-> > -
-> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> > Registration No: 1397386 (Wales)
+On 10.12.21 00:04, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> Hi all,
+
+Hi,
+
+thanks for working on that!
+
+> 
+> This patchset tries to remove the MAX_ORDER - 1 alignment requirement for CMA
+> and alloc_contig_range(). It prepares for my upcoming changes to make MAX_ORDER
+> adjustable at boot time[1].
+> 
+> The MAX_ORDER - 1 alignment requirement comes from that alloc_contig_range()
+> isolates pageblocks to remove free memory from buddy allocator but isolating
+> only a subset of pageblocks within a page spanning across multiple pageblocks
+> causes free page accounting issues. Isolated page might not be put into the
+> right free list, since the code assumes the migratetype of the first pageblock
+> as the whole free page migratetype. This is based on the discussion at [2].
+> 
+> To remove the requirement, this patchset:
+> 1. still isolates pageblocks at MAX_ORDER - 1 granularity;
+> 2. but saves the pageblock migratetypes outside the specified range of
+>    alloc_contig_range() and restores them after all pages within the range
+>    become free after __alloc_contig_migrate_range();
+> 3. splits free pages spanning multiple pageblocks at the beginning and the end
+>    of the range and puts the split pages to the right migratetype free lists
+>    based on the pageblock migratetypes;
+> 4. returns pages not in the range as it did before this patch.
+> 
+> Isolation needs to happen at MAX_ORDER - 1 granularity, because otherwise
+> 1) extra code is needed to detect pages (free, PageHuge, THP, or PageCompound)
+> to make sure all pageblocks belonging to a single page are isolated together 
+> and later pageblocks outside the range need to have their migratetypes restored;
+> or 2) extra logic will need to be added during page free time to split a free
+> page with multi-migratetype pageblocks.
+> 
+> Two optimizations might come later:
+> 1. only check unmovable pages within the range instead of MAX_ORDER - 1 aligned
+>    range during isolation to increase successful rate of alloc_contig_range().
+
+The issue with virtio-mem is that we'll need that as soon as we change
+the granularity to pageblocks, because otherwise, you can heavily
+degrade unplug reliably in sane setups:
+
+Previous:
+* Try unplug free 4M range (2 pageblocks): succeeds
+
+Now:
+* Try unplug 2M range (first pageblock): succeeds.
+* Try unplug next 2M range (second pageblock): fails because first
+contains unmovable allcoations.
+
+-- 
+Thanks,
+
+David / dhildenb
+

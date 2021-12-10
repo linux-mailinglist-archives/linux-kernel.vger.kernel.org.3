@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B903470529
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B026470530
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239079AbhLJQGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235710AbhLJQGb (ORCPT
+        id S239707AbhLJQIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:08:54 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25894 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239447AbhLJQIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:06:31 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3A1C061746;
-        Fri, 10 Dec 2021 08:02:55 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id x15so32205579edv.1;
-        Fri, 10 Dec 2021 08:02:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/pkJHvkTfabgrFQXprPevptDQISmN/4EQn4Qrf0/B5w=;
-        b=BYYU8cVJm1bdb6CJZ7f9UU3YrRYGE/5Ba1PAe+LRINvDA9fY6nbxyhy+/M7pjoYleR
-         gcnOvij5CYygQ0X0NXpwySIKB6rpDyg3MJyJaiv1qwnL/p5oEmP1wVu+M6a6NVdgclvO
-         YBnYjTtCIa8A9LHUE1Ho1h5OFJIIDsBdDnfoCrKMcBk/qH3AAvuWUB/0iDgd1dE0AY5d
-         /6TfPwbuLAweLfhX0ci2gxe3vYFpQorYDgfIrqjxmphOKSqGB/Mxz9/ds9wzVsfKq4MN
-         6dCnajj0B3MrmwIcqrZwcGu534j/fYVYND9mSPyxkcx1wY8erlUp9HD/6mQFNPQ1SS5A
-         dA3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/pkJHvkTfabgrFQXprPevptDQISmN/4EQn4Qrf0/B5w=;
-        b=MpgC0XSOjtWaYKKfZg1mN9LcyaJKyW98xPtHOdzfzNOl7MC5pBu6L+zwtrIF70oax5
-         kyBpEUMCgejWAqWj1k1mrUCst7cHAGu6uzamTt3WcTj3VYKX7VtbAlwdz9IPUaDlkEcd
-         xoanaeHypjaHUvm2PYrgJjlskth9QbhMEKJv4rsy6oLZtl8T5wH0AxX+CdzYZpd/1ZQ9
-         SXLOJWTEMpnioi0xTw2wyzwUXwLY5TgEsAEjY7OPWhAMbQ9ZOq7AoyDWBpXbUAb8nbC3
-         bZqtbgJLQaJv5n/jhd4Gf8g2b8EYy3UtF0pK3qSyDDFajEVc9Pb59RiGC0VdSiX09bRR
-         QyHA==
-X-Gm-Message-State: AOAM530uwbvyw1J4EJNyB3/OjYkZg53UTVyGqDqejOB8+XxixrSMRvPk
-        Ow3Nw2/xlClEG9zxcHrYTAg=
-X-Google-Smtp-Source: ABdhPJzssn4S/xQ5V49eHRjMYCrQLa4HgYN/sv8evrMol0f204BZKdptMwGflzm3QIXSjB7iif+2BQ==
-X-Received: by 2002:a17:906:4792:: with SMTP id cw18mr25672327ejc.224.1639152174324;
-        Fri, 10 Dec 2021 08:02:54 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
-        by smtp.googlemail.com with ESMTPSA id gn16sm1672620ejc.67.2021.12.10.08.02.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 08:02:53 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
-Date:   Fri, 10 Dec 2021 17:02:49 +0100
+        Fri, 10 Dec 2021 11:08:53 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAFwXnQ023556;
+        Fri, 10 Dec 2021 16:05:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=0FJK33Ayo3hcdhLtaclH1bs23KNt56Fl+62KbymvUm4=;
+ b=l066FEK5HDzjjx0kLyuTx8zXEkecgW/DpWht5d4se12UdvkH2fDiHq8KxaYcyJBQvFLa
+ uD5p858JnONeu5QCKLSRPoMMHLBeO4Q6e3qeI3CrTQh37JwUmBPSm8+G+kopocw23exj
+ RtNgwosCfwwQ3YPA86aKtiMTTR9v7FspwCwMFx0Rgmi5ATsZj37rCq1ow/yZ+x58RwAi
+ UNnkR9roDrUAjrZtR5vL4PbPmom+j2YpAVKJVayy+5GsJwXuKyGt1qJNC4Dj+1VYe5c7
+ /K9qb7N1umc2RXXxvCOXMWtPnaKs6UDMhcfAixcmqIQDQrFBC75WsNBGp1pBApkVXI2r Vw== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv9jnrs5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 16:05:12 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAG20PV020668;
+        Fri, 10 Dec 2021 16:05:10 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3cqyyaa9e4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 16:05:10 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAG56UI14942466
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Dec 2021 16:05:06 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 68BC952063;
+        Fri, 10 Dec 2021 16:05:06 +0000 (GMT)
+Received: from osiris (unknown [9.145.166.74])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 1CB8252051;
+        Fri, 10 Dec 2021 16:05:06 +0000 (GMT)
+Date:   Fri, 10 Dec 2021 17:05:04 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Yin Xiujiang <yinxiujiang@kylinos.cn>
+Cc:     gor@linux.ibm.com, borntraeger@de.ibm.com, agordeev@linux.ibm.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] s390/3215: fix the array may be out of bounds
+Message-ID: <YbN6sMzBqtF507FE@osiris>
+References: <20211210070217.188697-1-yinxiujiang@kylinos.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
-Content-Language: en-US
-To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-11-yang.zhong@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211208000359.2853257-11-yang.zhong@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210070217.188697-1-yinxiujiang@kylinos.cn>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XdfYCjGe1YqTssUaajkquFlYr6rr0Zrp
+X-Proofpoint-ORIG-GUID: XdfYCjGe1YqTssUaajkquFlYr6rr0Zrp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_06,2021-12-10_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1011 suspectscore=0 phishscore=0
+ mlxscore=0 bulkscore=0 adultscore=0 priorityscore=1501 mlxlogscore=803
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112100092
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First, the MSR should be added to msrs_to_save_all and 
-kvm_cpu_cap_has(X86_FEATURE_XFD) should be checked in kvm_init_msr_list.
-
-It seems that RDMSR support is missing, too.
-
-More important, please include:
-
-- documentation for the new KVM_EXIT_* value
-
-- a selftest that explains how userspace should react to it.
-
-This is a strong requirement for any new API (the first has been for 
-years; but the latter is also almost always respected these days).  This 
-series should not have been submitted without documentation.
-
-Also:
-
-On 12/8/21 01:03, Yang Zhong wrote:
+On Fri, Dec 10, 2021 at 03:02:17PM +0800, Yin Xiujiang wrote:
+> if the variable 'line' is NR_3215,
+> the 'raw3215[line]' will be invalid
 > 
-> +		if (!guest_cpuid_has(vcpu, X86_FEATURE_XFD))
-> +			return 1;
+> Signed-off-by: Yin Xiujiang <yinxiujiang@kylinos.cn>
+> ---
+>  drivers/s390/char/con3215.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/s390/char/con3215.c b/drivers/s390/char/con3215.c
+> index f356607835d8..29409d4ca4d5 100644
+> --- a/drivers/s390/char/con3215.c
+> +++ b/drivers/s390/char/con3215.c
+> @@ -687,7 +687,8 @@ static void raw3215_remove (struct ccw_device *cdev)
+>  		for (line = 0; line < NR_3215; line++)
+>  			if (raw3215[line] == raw)
+>  				break;
+> -		raw3215[line] = NULL;
+> +		if (line < NR_3215)
+> +			raw3215[line] = NULL;
 
-This should allow msr->host_initiated always (even if XFD is not part of 
-CPUID).  However, if XFD is nonzero and kvm_check_guest_realloc_fpstate 
-returns true, then it should return 1.
+This doesn't make sense to me. This could only happen if a device that
+was never probed would be removed. The original code could have been
+written better to make that more obvious, but with this patch the code
+will become even more confusing.
 
-The selftest should also cover using KVM_GET_MSR/KVM_SET_MSR.
-
-> +		/* Setting unsupported bits causes #GP */
-> +		if (~XFEATURE_MASK_USER_DYNAMIC & data) {
-> +			kvm_inject_gp(vcpu, 0);
-> +			break;
-> +		}
-
-This should check
-
-	if (data & ~(XFEATURE_MASK_USER_DYNAMIC &
-		    vcpu->arch.guest_supported_xcr0))
-
-instead.
-
-Paolo
+Therefore not applying.

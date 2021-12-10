@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DA6470C6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54355470C73
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243990AbhLJVWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:22:34 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:36813 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237810AbhLJVWd (ORCPT
+        id S239650AbhLJVZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235802AbhLJVZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:22:33 -0500
-Received: by mail-ot1-f41.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so10923432otl.3;
-        Fri, 10 Dec 2021 13:18:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Our/pN1IyVCtIS8mIewFtFMewda+bHas4rs49FN0p6s=;
-        b=AuD+fk2nosTEh3Czs84hVGel+XuphL6XD0oHAoZvNTMmyuGgYU9ib5o7Xn21WIVLA2
-         O31RA1ulWt9PdwwYSR8wwTlzDDURuIuBry6QAeBcxmXOC2wOCtahCLjzKAD+XlST2c8O
-         BPMoRreQPOmTLApoiRuC//rWZtGaQGZQxTmKov5UCP049NHSMwICKx73V9TSjBs5Z5bU
-         fTrtiOmHv1fIQGgodnAT4OSodD/tC/m+1QtgGSS/XVI2AtAU0gGE2pUsJiKYk5WkOz0v
-         3NH4SjCVIJ+KeC4d+hCmpK0cEEq8FBtvPRShZe2H/XHfIBPlS2voOPcEbEYg6M7q3D8I
-         mUWQ==
-X-Gm-Message-State: AOAM532gW0RqLzV8ooRoJWeLPn3xTUc2GaxXEgvW4PW6LXSUbhzJ66Oo
-        jFyCNzL/XMlnz0JSw9krprvrrh9tjQ==
-X-Google-Smtp-Source: ABdhPJyHmK8KkTYDC8dC39vS4BDv14WHjiA1TtUa3WbDo5zSxnrrirNWYG/gK9DPHglZ1YKjtd2FmQ==
-X-Received: by 2002:a9d:1e1:: with SMTP id e88mr12745468ote.75.1639171137206;
-        Fri, 10 Dec 2021 13:18:57 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x16sm741453otq.47.2021.12.10.13.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 13:18:56 -0800 (PST)
-Received: (nullmailer pid 1916612 invoked by uid 1000);
-        Fri, 10 Dec 2021 21:18:55 -0000
-Date:   Fri, 10 Dec 2021 15:18:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tommy Haung <tommy_huang@aspeedtech.com>
-Cc:     linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        airlied@linux.ie, linux-aspeed@lists.ozlabs.org,
-        devicetree@vger.kernel.org, joel@jms.id.au,
-        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch, andrew@aj.id.au
-Subject: Re: [PATCH v5 7/7] dt-bindings:ast2600-clock Add CRT reset define
-Message-ID: <YbPEP9VoYdDWitez@robh.at.kernel.org>
-References: <20211208013337.13806-1-tommy_huang@aspeedtech.com>
- <20211208013337.13806-8-tommy_huang@aspeedtech.com>
+        Fri, 10 Dec 2021 16:25:12 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9380C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:21:36 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A03011EC036C;
+        Fri, 10 Dec 2021 22:21:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639171290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=DTBeuhnvmwzIHGDmzUdDmJUVR448dpo5zwNE9d94t8Q=;
+        b=OUASN5mkUO40iDLhnVk7Z9iFvStxFyGRQftVDsV8w/P3i+YrUx+lfCppMe163A13KODt+3
+        KfKSqx89QNPX40yjjhjRQHZU4NAJqW59yu9irBQgcaP3zZXfcyzdlFqF5BbIrt3XGCLwz0
+        vwfcrKSM2lvxdL/0Qe412zvJxm09cpo=
+Date:   Fri, 10 Dec 2021 22:21:32 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
+        songliubraving@fb.com, mpe@ellerman.id.au, maddy@linux.ibm.com
+Subject: Re: [PATCH v4 02/14] x86/cpufeatures: add AMD Fam19h Branch Sampling
+ feature
+Message-ID: <YbPE3PDQ6Ro9oVEH@zn.tnic>
+References: <20211210210229.2991238-1-eranian@google.com>
+ <20211210210229.2991238-3-eranian@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211208013337.13806-8-tommy_huang@aspeedtech.com>
+In-Reply-To: <20211210210229.2991238-3-eranian@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Dec 2021 09:33:37 +0800, Tommy Haung wrote:
-> Add new CRT reset define for ast2600.
+On Fri, Dec 10, 2021 at 01:02:17PM -0800, Stephane Eranian wrote:
+> This patch adds a cpu feature for AMD Fam19h Branch Sampling feature as bit
+> 31 of EBX on CPUID leaf function 0x80000008.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Tommy Haung <tommy_huang@aspeedtech.com>
+> Signed-off-by: Stephane Eranian <eranian@google.com>
 > ---
->  include/dt-bindings/clock/ast2600-clock.h | 1 +
+>  arch/x86/include/asm/cpufeatures.h | 1 +
 >  1 file changed, 1 insertion(+)
 > 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index d5b5f2ab87a0..e71443f93f04 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -315,6 +315,7 @@
+>  #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
+>  #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
+>  #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
+> +#define X86_FEATURE_AMD_BRS		(13*32+31) /* Branch Sampling available */
+>  
+>  /* Thermal and Power Management Leaf, CPUID level 0x00000006 (EAX), word 14 */
+>  #define X86_FEATURE_DTHERM		(14*32+ 0) /* Digital Thermal Sensor */
+> -- 
 
-Acked-by: Rob Herring <robh@kernel.org>
+It seems you missed my note from the last time:
+
+https://lore.kernel.org/r/YY0OUNqv1w/ihmHX@zn.tnic
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

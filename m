@@ -2,128 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E26B4703F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CEA4703FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242915AbhLJPjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242904AbhLJPjq (ORCPT
+        id S242928AbhLJPkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:40:02 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:45735 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242917AbhLJPkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:39:46 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8FAC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:36:11 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id g14so30418946edb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:36:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pSCdhRVaqsk4roNXcaGq1tqrFLad6hYGJmVQo7mh3wk=;
-        b=mI8edDprSwsq2jpSeyuaE6JSmyj3g1pjk0vZiJPadBc5WWxuQPFP9e1rdsE9RIPiDQ
-         TwzsYHpXhKKosyFiULwj9z6TxNXOcPhCK4gWlrsOMtST5uRaz/V2e7WTiRbLp1DdM/XE
-         TReTkWXd/MH4X51GVoP7TeN/T+I3LcPtTLNm10vrRlgA4Bc2ZhW01/Wjr5GXVO4SZoqy
-         7LdcU0SBoQxP3shsQrGxiupDHbPiUTGmH+fDEP7r5ClvHFa8jDw45eZvwmeP5ldwj8RY
-         b+AyAXjGb2mcFUyvcXWENLBxQUwDEgS/pSIuiEf/fsRqaLgBwxJHCsisa8Ge6hvkFYEY
-         XNyg==
+        Fri, 10 Dec 2021 10:40:00 -0500
+Received: by mail-oi1-f170.google.com with SMTP id 7so13652468oip.12;
+        Fri, 10 Dec 2021 07:36:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pSCdhRVaqsk4roNXcaGq1tqrFLad6hYGJmVQo7mh3wk=;
-        b=3NmjwdO2gMuUs2GTKvJlZS8bFGSUqAhQNMVPMiU44GC/JpNzFFUjnStPobfIdl59MX
-         MuNLIElxGBS5dytG1l1vTOKq0iGFGbeUz9Gte8r+1wFkzlyI88D8uZwqrUnBdvENb78a
-         IVmMMXTWu4eNLnmgrAMkLxa9TIxpfheEwlvbig/N8owRpxEucYk3eyNZ5oBa5MD8j2nW
-         J0P6x2La0EQGQdqvvw5Rry5v7fP8rDaV8hBJaHoRddTgYyIX/sCwMT0O2bYQJwoZO0TL
-         lEafRBao/gVg6Eh/q++UX78LKSD4+5AYcePQEWUtA1K9bUeIQaEkfSWW2KdtfD46hWpk
-         5JxA==
-X-Gm-Message-State: AOAM533AGS2JxuyfSIhh46M4dn4L/GIVo5pZh0nkCpxDv0pr/sZ6zjK5
-        fiHR5JInUiVQh2s37M9yvlu36w==
-X-Google-Smtp-Source: ABdhPJygZ3W8i16qoncudmp3FcQlV8i4KEF4s5cLPBM/iVDjAfBLgx9x1LTfPyT8pVUWLm67SwHTAw==
-X-Received: by 2002:a17:906:9b92:: with SMTP id dd18mr24774352ejc.290.1639150568293;
-        Fri, 10 Dec 2021 07:36:08 -0800 (PST)
-Received: from [192.168.178.33] (94.105.100.208.dyn.edpnet.net. [94.105.100.208])
-        by smtp.gmail.com with ESMTPSA id ar4sm1588523ejc.52.2021.12.10.07.36.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 07:36:07 -0800 (PST)
-Message-ID: <b6c19c9c-de6c-225c-5899-789dfd8e7ae8@tessares.net>
-Date:   Fri, 10 Dec 2021 16:36:06 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kCCPtwBcvbN1Xz9t9SiQk1iylp71eIv8+Pkz9dWfX/o=;
+        b=5mcXrRK5K7EY3Qd0xMxPM4LbDUs+KPXzUnaHP0IrH0eKVl8hAV58DmC890Sh/BeurZ
+         VHPPzVoVC56KM3UXeKiA5METAiP6f3Lp43xDyqG8BwFNUaxYwZSqgTgIdotwjiOtDfdL
+         PV65XAOpxGuk4U2tWUDaA8qg4qc/gp7TbTqmJazHu54UcGpHALlhTcmsRBX1nwv7R6Mj
+         cjakRp/Wu/2kJFG68dhfr3gLyWe+J4nB7ytjPFhSjyyg9EM1L9BAZoPrrlGazQNOJNVF
+         QHRTCKUmxGJ2dAKhP+V4HvyqRMh7pSXmyffsCghBD3WE5eOJj7ebisgGDWfQkzDJUkni
+         PQ9w==
+X-Gm-Message-State: AOAM531VKQi/7EfBqlfFCxLh1QqNlGkBftkibRxa73yn2GXOb4FK+t0r
+        TRu6TBmVU/wrvMytVNzA9A==
+X-Google-Smtp-Source: ABdhPJy6coMM+bLPVOCY2Fuho8xxQorQekIDB7d7Gxhw3bYyY/I6wGSBwaXEbWSrUY0EBeP0ei+R3w==
+X-Received: by 2002:a05:6808:10ce:: with SMTP id s14mr12444004ois.137.1639150585255;
+        Fri, 10 Dec 2021 07:36:25 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r23sm588332ooj.37.2021.12.10.07.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 07:36:24 -0800 (PST)
+Received: (nullmailer pid 1396912 invoked by uid 1000);
+        Fri, 10 Dec 2021 15:36:23 -0000
+Date:   Fri, 10 Dec 2021 09:36:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        linux-media <linux-media@vger.kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+Subject: Re: [PATCH 04/10] dt-bindings: media: nxp,imx8mq-vpu: Support split
+ G1 and G2 nodes with vpu-blk-ctrl
+Message-ID: <YbNz94G3vwbHCMdB@robh.at.kernel.org>
+References: <20211208225030.2018923-1-aford173@gmail.com>
+ <20211208225030.2018923-5-aford173@gmail.com>
+ <YbHZvysazqYeZ8h3@eze-laptop>
+ <CAHCN7xKrHSSsqS9DNL1tMH1Ctpz16FsSgcVbSHXzUWF98v738Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in mptcp_inq.c
-Content-Language: en-GB
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     cgel.zte@gmail.com, mathew.j.martineau@linux.intel.com,
-        davem@davemloft.net, shuah@kernel.org, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ye Guojin <ye.guojin@zte.com.cn>,
-        ZealRobot <zealci@zte.com.cn>
-References: <20211210071424.425773-1-ye.guojin@zte.com.cn>
- <ab84ca1f-0f43-d50c-c272-81f64ee31ce8@tessares.net>
- <20211210065437.27c8fe23@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20211210065644.192f5159@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20211210065644.192f5159@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHCN7xKrHSSsqS9DNL1tMH1Ctpz16FsSgcVbSHXzUWF98v738Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+On Thu, Dec 09, 2021 at 05:36:04AM -0600, Adam Ford wrote:
+> On Thu, Dec 9, 2021 at 4:26 AM Ezequiel Garcia
+> <ezequiel@vanguardiasur.com.ar> wrote:
+> >
+> > Hi,
+> >
+> > Thanks for the patch.
+> >
+> > On Wed, Dec 08, 2021 at 04:50:23PM -0600, Adam Ford wrote:
+> > > The G1 and G2 are separate decoder blocks that are enabled by the
+> > > vpu-blk-ctrl power-domain controller, which now has a proper driver.
+> > > Update the bindings to support separate nodes for the G1 and G2
+> > > decoders using the proper driver or the older unified node with
+> > > the legacy controls.
+> > >
+> > > To be compatible with older DT the driver, mark certain items as
+> > > deprecated and retain the backwards compatible example.
+> > >
+> > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > ---
+> > >  .../bindings/media/nxp,imx8mq-vpu.yaml        | 83 ++++++++++++++-----
+> > >  1 file changed, 64 insertions(+), 19 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> > > index 762be3f96ce9..eeb7bd6281f9 100644
+> > > --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> > > +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> > > @@ -15,29 +15,39 @@ description:
+> > >
+> > >  properties:
+> > >    compatible:
+> > > -    const: nxp,imx8mq-vpu
+> > > +    oneOf:
+> > > +      - const: nxp,imx8mq-vpu
+> > > +        deprecated: true
+> > > +      - const: nxp,imx8mq-vpu-g1
+> > > +      - const: nxp,imx8mq-vpu-g2
+> > >
+> > >    reg:
+> > > +    minItems: 1
+> > >      maxItems: 3
+> >
+> > Is it really useful to keep the deprecated binding nxp,imx8mq-vpu
+> > as something supported by the binding file?
+> 
+> Since I was told that the driver needed to be backwards compatible, i
+> wanted to make sure that any attempts to build the old device tree
+> would not fail
 
-On 10/12/2021 15:56, Jakub Kicinski wrote:
-> On Fri, 10 Dec 2021 06:54:37 -0800 Jakub Kicinski wrote:
->> On Fri, 10 Dec 2021 10:58:27 +0100 Matthieu Baerts wrote:
->>> Hi Ye,
->>>
->>> On 10/12/2021 08:14, cgel.zte@gmail.com wrote:  
->>>> From: Ye Guojin <ye.guojin@zte.com.cn>
->>>>
->>>> 'sys/ioctl.h' included in 'mptcp_inq.c' is duplicated.    
->>>
->>> Good catch, the modification looks good to me:
->>>
->>> Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
->>>
->>>
->>> This patch is for "net-next" tree as it fixes an issue introduced by a
->>> patch only in this tree:
->>>
->>> Fixes: b51880568f20 ("selftests: mptcp: add inq test case")
->>>
->>> Regarding the commit message, please next time include the Fixes tag and
->>> mention for which tree it is for in the FAQ [1], e.g. [PATCH net-next].
->>>
->>>
->>> @David/Jakub: do you prefer a v2 with these modifications or is it fine
->>> to apply this small patch directly in net-next tree?  
->>
->> v1 is fine. Let me apply it right away and do the edits before I forget
->> they are needed..
+I'm not convinced changing the binding at all is correct. 'The driver 
+structure is changing and I want the binding to align with it' is not a 
+reason. Are G1 and G2 actually separate, independent blocks where we 
+could have 1 or both of them? And what about other platforms using this 
+block?
 
-Thank you!
+Even if the driver handles the old binding, a new dtb with an old kernel 
+is broken. It's up to the platform to care or not, but you have to 
+highlight that.
 
-> Actually, I take that back, let's hear from Mat, he may want to take
-> the patch via his tree.
 
-We "rebase" our tree on top of net-next every night. I think for such
-small patches with no behaviour change and sent directly to netdev ML,
-it is probably best to apply them directly. I can check with Mat if it
-is an issue if you prefer.
+> > In other words, can we drop the deprecated binding from this file,
+> > while keeping the support in the driver for legacy device-trees?
+> 
+> I was trying to represent both the old driver binding and the new one
+> at the same time.  I thought that's what I was told to do.
 
-I would have applied it in our MPTCP tree if we were sending PR, not to
-bother you for such patches but I guess it is best not to have us
-sending this patch a second time later :)
+I don't care so much if we have a schema for old binding. I'd rather 
+have warnings if the binding has not been updated. Eventually I want to 
+be able to test for compatibility by testing DTs with different schema 
+versions. We've got to get to 0 warnings first though...
 
-BTW, if you prefer us sending PR over batches of patches, please tell us!
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Rob

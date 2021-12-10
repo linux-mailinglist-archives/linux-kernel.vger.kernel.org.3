@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A238470858
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB15447085C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241988AbhLJSU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236861AbhLJSU0 (ORCPT
+        id S242131AbhLJSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:21:01 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:44991 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236861AbhLJSVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:20:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594D6C061746;
-        Fri, 10 Dec 2021 10:16:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E5F0B8294F;
-        Fri, 10 Dec 2021 18:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16AB2C00446;
-        Fri, 10 Dec 2021 18:16:46 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 18:16:43 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        gregkh <gregkh@linuxfoundation.org>, quic_psodagud@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCHv6 1/5] arm64: io: Use asm-generic high level MMIO
- accessors
-Message-ID: <YbOZi+akT0+1EIoi@arm.com>
-References: <cover.1638858746.git.quic_saipraka@quicinc.com>
- <a5287f999f7e42e66de0729f367959fdb28462e0.1638858746.git.quic_saipraka@quicinc.com>
+        Fri, 10 Dec 2021 13:21:01 -0500
+Received: by mail-oi1-f179.google.com with SMTP id be32so14272730oib.11;
+        Fri, 10 Dec 2021 10:17:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YU9YCbZbDktrwFwYhXC085Scw8TfNhTNhBZqDcowh58=;
+        b=2LVjZJyHC0bzx2BkJAb0Cm1VRMu1LuzLm69vTEyVoyl28sBTPhrsz4MjkOX1TIriOM
+         UDRa4oyC7Xn84PCypw+esFRELdoUY719T1TOgQKhavbnMRpiI+vhfggsZyPkHu0U9atr
+         PR283SAEBY1bSqBdpeXpIxUBqhN6vCzIAl8yQXlQ9WFTtDWmKZn+9/5vQN1lKVg9tcSh
+         wAMERXlr9AILLVeB+U4G+cUdxJ9BXJIZjWIMSxDkxxMDHEzf3SL8p/7S5s1AEOfsJK3V
+         W2e37I8dX60CU4/A4sTu+9792RnQiy6HawkCS58YX2u+T8O0oA82RCjlg6Eu1iV6mjO2
+         kJ7Q==
+X-Gm-Message-State: AOAM531WBz3H2q+Dc3owQkCIbLYw0oEEGnYhcbHFNY7jBBohKN+Uqszr
+        JGF6S/kQUNcATYRKJv3Dxwktm7jVHA==
+X-Google-Smtp-Source: ABdhPJyvpSgennWM9D8Uf+LQaqbHK2gVSasZ6S9vGBlFwcRSN30Q22MHR58rfH44QR08viRIKDt9jQ==
+X-Received: by 2002:a54:4692:: with SMTP id k18mr13899661oic.93.1639160245462;
+        Fri, 10 Dec 2021 10:17:25 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bq5sm930460oib.55.2021.12.10.10.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 10:17:24 -0800 (PST)
+Received: (nullmailer pid 1641340 invoked by uid 1000);
+        Fri, 10 Dec 2021 18:17:21 -0000
+Date:   Fri, 10 Dec 2021 12:17:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Moudy Ho <moudy.ho@mediatek.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        menghui.lin@mediatek.com, sj.huang@mediatek.com,
+        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
+        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
+        river.cheng@mediatek.com, srv_heupstream@mediatek.com
+Subject: Re: [PATCH v10 1/3] dt-binding: mt8183: add Mediatek MDP3 dt-bindings
+Message-ID: <YbOZsd+zNmwOpB4x@robh.at.kernel.org>
+References: <20211202062733.20338-1-moudy.ho@mediatek.com>
+ <20211202062733.20338-2-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a5287f999f7e42e66de0729f367959fdb28462e0.1638858746.git.quic_saipraka@quicinc.com>
+In-Reply-To: <20211202062733.20338-2-moudy.ho@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 12:24:45PM +0530, Sai Prakash Ranjan wrote:
-> Remove custom arm64 MMIO accessors read{b,w,l,q} and their relaxed
-> versions in support to use asm-generic defined accessors. Also define
-> one set of IO barriers (ar/bw version) used by asm-generic code to
-> override the arm64 specific variants.
+On Thu, Dec 02, 2021 at 02:27:31PM +0800, Moudy Ho wrote:
+> This patch adds DT binding document for Media Data Path 3 (MDP3)
+> a unit in multimedia system used for scaling and color format convert.
 > 
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 > ---
->  arch/arm64/include/asm/io.h | 41 ++++++++-----------------------------
->  1 file changed, 8 insertions(+), 33 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-> index 7fd836bea7eb..1b436810d779 100644
-> --- a/arch/arm64/include/asm/io.h
-> +++ b/arch/arm64/include/asm/io.h
-> @@ -91,7 +91,7 @@ static inline u64 __raw_readq(const volatile void __iomem *addr)
->  }
->  
->  /* IO barriers */
-> -#define __iormb(v)							\
-> +#define __io_ar(v)							\
->  ({									\
->  	unsigned long tmp;						\
->  									\
-> @@ -108,39 +108,14 @@ static inline u64 __raw_readq(const volatile void __iomem *addr)
->  		     : "memory");					\
->  })
->  
-> -#define __io_par(v)		__iormb(v)
-> -#define __iowmb()		dma_wmb()
-> -#define __iomb()		dma_mb()
-> -
-> -/*
-> - * Relaxed I/O memory access primitives. These follow the Device memory
-> - * ordering rules but do not guarantee any ordering relative to Normal memory
-> - * accesses.
-> - */
-> -#define readb_relaxed(c)	({ u8  __r = __raw_readb(c); __r; })
-> -#define readw_relaxed(c)	({ u16 __r = le16_to_cpu((__force __le16)__raw_readw(c)); __r; })
-> -#define readl_relaxed(c)	({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
-> -#define readq_relaxed(c)	({ u64 __r = le64_to_cpu((__force __le64)__raw_readq(c)); __r; })
-> +#define __io_bw()		dma_wmb()
-> +#define __io_br(v)
-> +#define __io_aw(v)
->  
-> -#define writeb_relaxed(v,c)	((void)__raw_writeb((v),(c)))
-> -#define writew_relaxed(v,c)	((void)__raw_writew((__force u16)cpu_to_le16(v),(c)))
-> -#define writel_relaxed(v,c)	((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
-> -#define writeq_relaxed(v,c)	((void)__raw_writeq((__force u64)cpu_to_le64(v),(c)))
-> -
-> -/*
-> - * I/O memory access primitives. Reads are ordered relative to any
-> - * following Normal memory access. Writes are ordered relative to any prior
-> - * Normal memory access.
-> - */
-> -#define readb(c)		({ u8  __v = readb_relaxed(c); __iormb(__v); __v; })
-> -#define readw(c)		({ u16 __v = readw_relaxed(c); __iormb(__v); __v; })
-> -#define readl(c)		({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
-> -#define readq(c)		({ u64 __v = readq_relaxed(c); __iormb(__v); __v; })
-> -
-> -#define writeb(v,c)		({ __iowmb(); writeb_relaxed((v),(c)); })
-> -#define writew(v,c)		({ __iowmb(); writew_relaxed((v),(c)); })
-> -#define writel(v,c)		({ __iowmb(); writel_relaxed((v),(c)); })
-> -#define writeq(v,c)		({ __iowmb(); writeq_relaxed((v),(c)); })
-> +/* arm64-specific, don't use in portable drivers */
-> +#define __iormb(v)		__io_ar(v)
-> +#define __iowmb()		__io_bw()
-> +#define __iomb()		dma_mb()
+>  .../bindings/media/mediatek,mdp3-rsz.yaml     |  65 ++++++
+>  .../bindings/media/mediatek,mdp3-wrot.yaml    |  67 ++++++
+>  .../bindings/soc/mediatek/mediatek,ccorr.yaml |  57 +++++
+>  .../bindings/soc/mediatek/mediatek,rdma.yaml  | 216 ++++++++++++++++++
+>  .../bindings/soc/mediatek/mediatek,wdma.yaml  |  68 ++++++
+>  5 files changed, 473 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
+>  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
+>  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,rdma.yaml
+>  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
 
-More of a nitpick but I'd keep the __iormb()/__iowmb() as they currently
-are and just define the generic __io_ar() etc. in terms of the former.
+I'm not a fan of bindings/soc/ either. Put everything in 
+bindings/media/. What's the difference between these blocks here and 
+the version used for display? If they are the same h/w, then the binding 
+needs to be the same. How they get used is the kernel's problem. 
 
--- 
-Catalin
+It looks like the display ccorr, rdma, and wdma aren't documented. Fix 
+that before you add new stuff.
+
+
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
+> new file mode 100644
+> index 000000000000..d7f104a0f165
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/mediatek,mdp3-rsz.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek Resizer
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description: |
+> +  One of Media Data Path 3 (MDP3) components used to do frame resizing.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt8183-mdp3-rsz
+> +
+> +  mediatek,mdp3-id:
+> +    description: There may be multiple components with the same function but
+> +      different addresses in MDP3. The MDP3 driver can select one or zero of
+> +      them and connect other components in series according to the current
+> +      application to form one or more data paths. This property indicate the
+> +      selection order of the same components.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2, 3]
+
+Again, an index nor an alias is the right approach for this. Use DT 
+graph like others do. 'It's too complicated' is not a reason unless you 
+show how and why it won't work.
+
+Rob

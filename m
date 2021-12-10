@@ -2,147 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 168574702E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18DE4702EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242184AbhLJOh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241946AbhLJOh5 (ORCPT
+        id S242213AbhLJOkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:40:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44570 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242195AbhLJOkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:37:57 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9A0C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:34:22 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id u17so15280488wrt.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:34:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2GRxg5k+GfsTEG/HHuVw87NAnSnT8iO/e9MJjPT+e+o=;
-        b=L1Ulimte4Z0H1umx57noMXuSMT9z2pNYcjaEcRkOmHyohqLlZ+Jry54jxw02IUiQ6b
-         hZIeoWT+jE63R1PqJaesjr0s292gCWiojZhiGY8yrz8EvqzDidcmdx/BscgF2d0Gsw/c
-         z+BcffbPwxmOIHinccz2yA5mfDkPrGDPikdswIP0JX2bHiTzy136GaNEbksFDzmHWkjA
-         mM/uKKrvrs0+ilM7xZ5243GOYfYAZCPRIWdDiVy71XqKOxGNran1gLigBpqsktzZZZJL
-         NTFLY8vXktAMnsiiuZwJXRS+33761Fln7pNz4LY9Gq37455yUWc28PC2BiTuyxFi8OeG
-         LAYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2GRxg5k+GfsTEG/HHuVw87NAnSnT8iO/e9MJjPT+e+o=;
-        b=y62dCwyW9wM8C7H3Kxwt3cd8cfsKQD9yVH1LbOworJymO7vSm/dtb9HZrPe0SmV+Dz
-         xjE68D1ZBGu6z9FDoDfpuQUf8XLdJz8dxDtvq1lQU/dUQ6aNvMOOglho+i9xUWoPXWLp
-         jbSeoJ+PZNOuKDVyou8cZQiBQRSsEF5EHdkTIszkyDBlsCmZ6GBPK8ETGb7gM+UQGaXX
-         ReF0RNuhD7pkgpxzIKgKzwticE+cTDLjEUorKBcn9SjHvXpREqGGOXCld858FFp/jxHv
-         uRDGONcekJe5u4xSIkTJ0qDuZn4RF3YLxegKUhdkQcocv3UYMwxKZoxRwx/MDhX3avYY
-         LNng==
-X-Gm-Message-State: AOAM53058dHL/kcwSxytvOJ8ENJ1zulpkFBp5p8yl4yMdZbD3xBNqr0K
-        KKutgslbuQzPaE6nJ2yhEB7lCQ==
-X-Google-Smtp-Source: ABdhPJxiJpf2C0a+T3mNrYtnyB6jDvTMU3ozNfVS8W1q01Qvfry0eiftJK86AH/NRJNix5u8rcTx0A==
-X-Received: by 2002:a5d:514a:: with SMTP id u10mr14460951wrt.321.1639146860456;
-        Fri, 10 Dec 2021 06:34:20 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:210:76c1:fb36:1e22:8677])
-        by smtp.gmail.com with ESMTPSA id z8sm2918950wrh.54.2021.12.10.06.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 06:34:20 -0800 (PST)
-Date:   Fri, 10 Dec 2021 14:34:16 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 03/15] KVM: arm64: Refcount hyp stage-1 pgtable pages
-Message-ID: <YbNlaIczPLXwSCcZ@google.com>
-References: <20211201170411.1561936-1-qperret@google.com>
- <20211201170411.1561936-4-qperret@google.com>
- <20211209102924.GC1833@willie-the-truck>
+        Fri, 10 Dec 2021 09:40:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639146998;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1jWKu+fTBFJcT/HgMEzu6APh752fKYh1kEvLz4HhKOI=;
+        b=h2a/AU7dxRAd6HqxgT5A+aqxYutbsg6oE3fxvjq5/OWNLUZ3Esona7tjy+hcED3x/THddc
+        7ET90MMuZPmsTCYFUx31yiU+ijMV184eULTNJaGA2tcGVgykR2DyuvHbG9Au1gIF9NSNaP
+        i1DPjEREK8M8SsQEgyGzSfCLFQsMxSg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-330-bJd98xMGPKSZIQ3ttcegtA-1; Fri, 10 Dec 2021 09:36:35 -0500
+X-MC-Unique: bJd98xMGPKSZIQ3ttcegtA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E0B04874993;
+        Fri, 10 Dec 2021 14:36:27 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6223F10016F7;
+        Fri, 10 Dec 2021 14:36:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=whtkzB446+hX0zdLsdcUJsJ=8_-0S1mE_R+YurThfUbLA@mail.gmail.com>
+References: <CAHk-=whtkzB446+hX0zdLsdcUJsJ=8_-0S1mE_R+YurThfUbLA@mail.gmail.com> <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk> <163906888735.143852.10944614318596881429.stgit@warthog.procyon.org.uk> <CAHk-=wiTquFUu-b5ME=rbGEF8r2Vh1TXGfaZZuXyOutVrgRzfw@mail.gmail.com> <159180.1639087053@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        linux-afs@lists.infradead.org,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/67] fscache: Implement a hash function
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209102924.GC1833@willie-the-truck>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <288129.1639146959.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 10 Dec 2021 14:35:59 +0000
+Message-ID: <288130.1639146959@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 09 Dec 2021 at 10:29:24 (+0000), Will Deacon wrote:
-> On Wed, Dec 01, 2021 at 05:03:57PM +0000, Quentin Perret wrote:
-> > To prepare the ground for allowing hyp stage-1 mappings to be removed at
-> > run-time, update the KVM page-table code to maintain a correct refcount
-> > using the ->{get,put}_page() function callbacks.
-> > 
-> > Signed-off-by: Quentin Perret <qperret@google.com>
-> > ---
-> >  arch/arm64/kvm/hyp/pgtable.c | 17 ++++++++++++++---
-> >  1 file changed, 14 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> > index f8ceebe4982e..768a58835153 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -408,8 +408,10 @@ static bool hyp_map_walker_try_leaf(u64 addr, u64 end, u32 level,
-> >  		return false;
-> >  
-> >  	new = kvm_init_valid_leaf_pte(phys, data->attr, level);
-> > -	if (hyp_pte_needs_update(old, new))
-> > +	if (hyp_pte_needs_update(old, new)) {
-> >  		smp_store_release(ptep, new);
-> > +		data->mm_ops->get_page(ptep);
-> 
-> In the case where we're just updating software bits for a valid pte, doesn't
-> this result in us taking a spurious reference to the page?
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Ahem, yes, that is the case. I ended up with the below diff to fix it,
-which I intend to fold in the next version:
+> > What I'm trying to get at is that the hash needs to be consistent, no =
+matter
+> > the endianness of the cpu, for any particular input blob.
+> =
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 6ad4cb2d6947..e2047d3f05a2 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -383,21 +383,6 @@ enum kvm_pgtable_prot kvm_pgtable_hyp_pte_prot(kvm_pte_t pte)
-        return prot;
- }
+> Yeah, if that's the case, then you should probably make that "unsigned
+> int *data" argument probably just be "void *" and then:
+> =
 
--static bool hyp_pte_needs_update(kvm_pte_t old, kvm_pte_t new)
--{
--       /*
--        * Tolerate KVM recreating the exact same mapping, or changing software
--        * bits if the existing mapping was valid.
--        */
--       if (old == new)
--               return false;
--
--       if (!kvm_pte_valid(old))
--               return true;
--
--       return !WARN_ON((old ^ new) & ~KVM_PTE_LEAF_ATTR_HI_SW);
--}
--
- static bool hyp_map_walker_try_leaf(u64 addr, u64 end, u32 level,
-                                    kvm_pte_t *ptep, struct hyp_map_data *data)
+> >                 a =3D *data++;   <<<<<<<
+> >                 HASH_MIX(x, y, a);
+> >         }
+> >         return fold_hash(x, y);
+> > }
+> >
+> > The marked line should probably use something like le/be32_to_cpu().
+> =
+
+> Yes, it should be using a '__le32 *' inside that function and you
+> should use l32_to_cpu(). Obviously, BE would work too, but cause
+> unnecessary work on common hardware.
+
+Okay, how about I make the attached change to make the hashing stable?  Th=
+is
+will make fscache_hash() take an opaque buffer and a length (the length mu=
+st
+be a multiple of four).
+
+David
+---
+diff --git a/fs/fscache/cookie.c b/fs/fscache/cookie.c
+index e287952292c5..65cf2ae22a70 100644
+--- a/fs/fscache/cookie.c
++++ b/fs/fscache/cookie.c
+@@ -269,22 +269,23 @@ EXPORT_SYMBOL(fscache_caching_failed);
+ static int fscache_set_key(struct fscache_cookie *cookie,
+ 			   const void *index_key, size_t index_key_len)
  {
-@@ -407,13 +392,16 @@ static bool hyp_map_walker_try_leaf(u64 addr, u64 end, u32 level,
-        if (!kvm_block_mapping_supported(addr, end, phys, level))
-                return false;
+-	u32 *buf;
+-	int bufs;
++	void *buf;
++	size_t buf_size;
+ =
 
-+       data->phys += granule;
-        new = kvm_init_valid_leaf_pte(phys, data->attr, level);
--       if (hyp_pte_needs_update(old, new)) {
--               smp_store_release(ptep, new);
-+       if (old == new)
-+               return true;
-+       else if (!kvm_pte_valid(old))
-                data->mm_ops->get_page(ptep);
--       }
-+       else if (WARN_ON((old ^ new) & ~KVM_PTE_LEAF_ATTR_HI_SW))
-+               return false;
+-	bufs =3D DIV_ROUND_UP(index_key_len, sizeof(*buf));
++	buf_size =3D round_up(index_key_len, sizeof(__le32));
+ =
 
--       data->phys += granule;
-+       smp_store_release(ptep, new);
-        return true;
+ 	if (index_key_len > sizeof(cookie->inline_key)) {
+-		buf =3D kcalloc(bufs, sizeof(*buf), GFP_KERNEL);
++		buf =3D kzalloc(buf_size, GFP_KERNEL);
+ 		if (!buf)
+ 			return -ENOMEM;
+ 		cookie->key =3D buf;
+ 	} else {
+-		buf =3D (u32 *)cookie->inline_key;
++		buf =3D cookie->inline_key;
+ 	}
+ =
+
+ 	memcpy(buf, index_key, index_key_len);
+-	cookie->key_hash =3D fscache_hash(cookie->volume->key_hash, buf, bufs);
++	cookie->key_hash =3D fscache_hash(cookie->volume->key_hash,
++					buf, buf_size);
+ 	return 0;
  }
+ =
+
+diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
+index 87884f4b34fb..f121c21590dc 100644
+--- a/fs/fscache/internal.h
++++ b/fs/fscache/internal.h
+@@ -86,7 +86,7 @@ static inline void fscache_end_operation(struct netfs_ca=
+che_resources *cres)
+  */
+ extern unsigned fscache_debug;
+ =
+
+-extern unsigned int fscache_hash(unsigned int salt, unsigned int *data, u=
+nsigned int n);
++extern unsigned int fscache_hash(unsigned int salt, const void *data, siz=
+e_t len);
+ =
+
+ /*
+  * proc.c
+diff --git a/fs/fscache/main.c b/fs/fscache/main.c
+index 01d57433702c..dad85fd84f6f 100644
+--- a/fs/fscache/main.c
++++ b/fs/fscache/main.c
+@@ -53,15 +53,16 @@ static inline unsigned int fold_hash(unsigned long x, =
+unsigned long y)
+ /*
+  * Generate a hash.  This is derived from full_name_hash(), but we want t=
+o be
+  * sure it is arch independent and that it doesn't change as bits of the
+- * computed hash value might appear on disk.  The caller also guarantees =
+that
+- * the hashed data will be a series of aligned 32-bit words.
++ * computed hash value might appear on disk.  The caller must guarantee t=
+hat
++ * the source data is a multiple of four bytes in size.
+  */
+-unsigned int fscache_hash(unsigned int salt, unsigned int *data, unsigned=
+ int n)
++unsigned int fscache_hash(unsigned int salt, const void *data, size_t len=
+)
+ {
+-	unsigned int a, x =3D 0, y =3D salt;
++	const __le32 *p =3D data;
++	unsigned int a, x =3D 0, y =3D salt, n =3D len / sizeof(__le32);
+ =
+
+ 	for (; n; n--) {
+-		a =3D *data++;
++		a =3D le32_to_cpu(*p++);
+ 		HASH_MIX(x, y, a);
+ 	}
+ 	return fold_hash(x, y);
+diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
+index edd3c245010e..26a6b8f315e1 100644
+--- a/fs/fscache/volume.c
++++ b/fs/fscache/volume.c
+@@ -131,7 +131,7 @@ static long fscache_compare_volume(const struct fscach=
+e_volume *a,
+ 	if (a->key[0] !=3D b->key[0])
+ 		return (long)a->key[0]   - (long)b->key[0];
+ =
+
+-	klen =3D round_up(a->key[0] + 1, sizeof(unsigned int));
++	klen =3D round_up(a->key[0] + 1, sizeof(__le32));
+ 	return memcmp(a->key, b->key, klen);
+ }
+ =
+
+@@ -225,7 +225,7 @@ static struct fscache_volume *fscache_alloc_volume(con=
+st char *volume_key,
+ 	 * hashing easier.
+ 	 */
+ 	klen =3D strlen(volume_key);
+-	hlen =3D round_up(1 + klen + 1, sizeof(unsigned int));
++	hlen =3D round_up(1 + klen + 1, sizeof(__le32));
+ 	key =3D kzalloc(hlen, GFP_KERNEL);
+ 	if (!key)
+ 		goto err_vol;
+@@ -233,8 +233,7 @@ static struct fscache_volume *fscache_alloc_volume(con=
+st char *volume_key,
+ 	memcpy(key + 1, volume_key, klen);
+ =
+
+ 	volume->key =3D key;
+-	volume->key_hash =3D fscache_hash(0, (unsigned int *)key,
+-					hlen / sizeof(unsigned int));
++	volume->key_hash =3D fscache_hash(0, key, hlen);
+ =
+
+ 	volume->debug_id =3D atomic_inc_return(&fscache_volume_debug_id);
+ 	down_write(&fscache_addremove_sem);
+

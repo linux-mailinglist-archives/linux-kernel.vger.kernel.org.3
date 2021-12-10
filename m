@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AF04702A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDDD4702BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241869AbhLJOYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:24:25 -0500
-Received: from mga17.intel.com ([192.55.52.151]:62032 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229978AbhLJOYW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:24:22 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="219039683"
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="219039683"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 06:20:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="659588424"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Dec 2021 06:20:38 -0800
-Subject: Re: [PATCH] xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI
- from runtime suspending
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     mathias.nyman@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211119092628.677935-1-kai.heng.feng@canonical.com>
- <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
- <b7595524-1041-8b8b-dc61-9ee0acbc8307@linux.intel.com>
- <CAAd53p4OOyrLJYbhYVqJSJ2NukmhM26GEf7rM7cV0=6_djhpxw@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <9e2f77e9-952c-de4d-6efc-3f5c75a6285b@linux.intel.com>
-Date:   Fri, 10 Dec 2021 16:22:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S241946AbhLJO1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:27:35 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:56313 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229761AbhLJO1e (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 09:27:34 -0500
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MNtny-1nB2rm2KTI-00OD1G; Fri, 10 Dec 2021 15:23:58 +0100
+Received: by mail-wr1-f50.google.com with SMTP id o13so15149661wrs.12;
+        Fri, 10 Dec 2021 06:23:58 -0800 (PST)
+X-Gm-Message-State: AOAM533wz7XECtJUX0ESB+KBsca0DDoWI7X1qj4Si7uAZ8jsPildWC2y
+        eMfhbZfbqILDUzDO1HuL6rAfYb1OAHYwVBMebJ0=
+X-Google-Smtp-Source: ABdhPJwpNfkCK35q4J84bet4qsNK0G78Iv/Ey+WuTXxUs4+UKKI6lcSJU/n3x5OpVFEpmYRVEt/ijnGMwe5NdNQgfZA=
+X-Received: by 2002:a5d:4107:: with SMTP id l7mr14337051wrp.209.1639146238200;
+ Fri, 10 Dec 2021 06:23:58 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAAd53p4OOyrLJYbhYVqJSJ2NukmhM26GEf7rM7cV0=6_djhpxw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
+ <YbNX3mRT0A9/N2il@kernel.org> <YbNZw1/cUXJ8up5b@kernel.org>
+In-Reply-To: <YbNZw1/cUXJ8up5b@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 10 Dec 2021 15:23:42 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a05D=fb9stZEL6rUMs7c=S6gJxN5gR7HG_i8RiXAbaB5Q@mail.gmail.com>
+Message-ID: <CAK8P3a05D=fb9stZEL6rUMs7c=S6gJxN5gR7HG_i8RiXAbaB5Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/6] perf bench futex: Add support for 32-bit systems
+ with 64-bit time_t
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Alistair Francis <alistair.francis@opensource.wdc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <alistair23@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-perf-users@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alistair Francis <alistair.francis@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:fHc4RHHMJlxTeV0sv7QOsI/dozLNE2nXidF5V+81PW8jjqqb8YU
+ OHwS3jBq+dqYNcJF4eYcF9dt9P8F7dweGbvaMuQIfOgYCnqVWAJ1OLb6+t5f3al6jbaix0m
+ BBTrsjX4ztFXyox4mFgqIrVuXcqKUFj+bK1MaJt1a/8ziCkblY0z0i7fnazY1ZfIukowJba
+ Nxku9SydqXjS8UOdlCtbQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HYNBLUA0EkQ=:87xE//JIGnXIIGQ+lNti3q
+ aSCxqlDeXddY5j+a+wZsKB+nA8a+2DEvLk+SA0sqkzB6qQ0Ys7Y+PFTky1yXoTav2WM9k5lc/
+ FmcCjBdoPz8XFuaDppnRCZ/vsUasxbxwfuUGLNlTZT5F/rSgiIH6sjrkdi6Sby7sPT4bWZQM0
+ F38nepKtgRLfKKq/fp7x1kAinOLtEkrxxeJDc1ROihNOoJLiekvye2kD/s5iJi20a+CRSH2dJ
+ 1rQhZUCPLKn64h+ZMLtOcqaGo/sjyCy3wvOrN/AluWfjdeL+L6cVTAXJrY+dOgvUVaTnMTlrT
+ ccu1zEko+3B1v19gaPFj4p0O4oIzO3ZvJqQXvjsn1TCMH4FpSveL0AFWbhM9ARYcoGjV86MGi
+ Mp3Pk//pImnDWphTW+I0PieibISh6OFanQ5u9fy01LY33aY00WnagR5f0yzk+ODdEMgDdiBa0
+ NNqfOBOrakYMIzH9kmjEYleTRNRVTkMQj+iuzClLIpWB75un5qedK6lP+RSP7MqLntgO5QlqX
+ 3s2X4oBl+ngn5VwoI+qCsWaYd/mA+wSWEHXsjL85XCHwMJ1An7bS1wRCpt3ygClVdF4r84e12
+ oApGLn1J15g0bqXuN6xYTakddbbPPByBCDwNo9pNOCrKMOn8qdAcLAKwVOVgWNmOcTfqFdo5p
+ +H93VW0rUY6IwGHdSbB3/FfWpo75xNFRpYnvAtYc6khUJ0gSwzzQLU+yD+5GClm0PDuU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9.12.2021 8.42, Kai-Heng Feng wrote:
-> On Wed, Dec 1, 2021 at 5:00 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> On 1.12.2021 2.19, Kai-Heng Feng wrote:
->>> On Fri, Nov 19, 2021 at 5:27 PM Kai-Heng Feng
->>> <kai.heng.feng@canonical.com> wrote:
->>>>
->>>> When the xHCI is quirked with XHCI_RESET_ON_RESUME, runtime resume
->>>> routine also resets the controller.
->>>>
->>>> This is bad for USB drivers without reset_resume callback, because
->>>> there's no subsequent call of usb_dev_complete() ->
->>>> usb_resume_complete() to force rebinding the driver to the device. For
->>>> instance, btusb device stops working after xHCI controller is runtime
->>>> resumed, if the controlled is quirked with XHCI_RESET_ON_RESUME.
->>>>
->>>> So always take XHCI_RESET_ON_RESUME into account to solve the issue.
->>>>
->>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>
->>> A gentle ping...
->>
->> Thanks
->> Adding to queue
-> 
-> I haven't found this patch in your repo. Can you please push it so I
-> can backport it to downstream kernel?
+On Fri, Dec 10, 2021 at 2:44 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+> Em Fri, Dec 10, 2021 at 10:36:30AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Fri, Dec 10, 2021 at 09:58:52AM +1000, Alistair Francis escreveu:
+> > > From: Alistair Francis <alistair.francis@wdc.com>
+> > >
+> > > Some 32-bit architectures (such are 32-bit RISC-V) only have a 64-bit
+> > > time_t and as such don't have the SYS_futex syscall. This patch will
+> > > allow us to use the SYS_futex_time64 syscall on those platforms.
+> > >
+> > > This also converts the futex calls to be y2038 safe (when built for a
+> > > 5.1+ kernel).
+> > >
+> > > This is a revert of commit ba4026b09d83acf56c040b6933eac7916c27e728
+> > > "Revert "perf bench futex: Add support for 32-bit systems with 64-bit time_t"".
+> > >
+> > > The original commit was reverted as including linux/time_types.h would
+> > > fail to compile on older kernels. This commit doesn't include
+> > > linux/time_types.h to avoid this issue.
+> >
+> >   10     9.99 alpine:3.12                   : FAIL gcc version 9.3.0 (Alpine 9.3.0)
+> >     In file included from bench/futex-hash.c:29:
+> >     bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
+> >        37 |  __kernel_old_time_t tv_sec;  /* seconds */
+> >           |  ^~~~~~~~~~~~~~~~~~~
+> >     In file included from bench/futex-wake.c:25:
 
-Patch got shuffled around a bit.
-It's now in my for-usb-linus branch, and sent to Greg
+It looks like we need to add include/uapi/linux/time_types.h to
+tools/include/linux/ and update tools/include/linux/types.h
+in order to address this.
 
-Thanks
--Mathias
-
+         Arnd

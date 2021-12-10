@@ -2,266 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BA2470149
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE2847014C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241503AbhLJNMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:12:44 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.223]:34926 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234820AbhLJNMn (ORCPT
+        id S241539AbhLJNM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:12:56 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:53057 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241426AbhLJNM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:12:43 -0500
-HMM_SOURCE_IP: 172.18.0.48:38770.1632861747
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.39 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id CF6F42800AB;
-        Fri, 10 Dec 2021 21:08:56 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 034aee9fa8a14a58a3e57adfe1067768 for j.vosburgh@gmail.com;
-        Fri, 10 Dec 2021 21:08:59 CST
-X-Transaction-ID: 034aee9fa8a14a58a3e57adfe1067768
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
-To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyd12@chinatelecom.cn
-Subject: [PATCH V2] net: bonding: Add support for IPV6 ns/na
-Date:   Fri, 10 Dec 2021 21:08:11 +0800
-Message-Id: <1639141691-3741-1-git-send-email-sunshouxin@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
+        Fri, 10 Dec 2021 08:12:56 -0500
+Received: by mail-io1-f72.google.com with SMTP id k12-20020a0566022a4c00b005ebe737d989so10124719iov.19
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:09:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Q9dao8PkNdrzaMik8Bp0sVf8aqOYgnuPkHzFSkHqjeo=;
+        b=1mXzCUXTGi9d7nIFOeXNqj/8KfPwGEYVhU2QYvjqjlRn83M6/sEaAmDtD5+LSNokwA
+         Zfz3S3SIlTMIJjVwWGSohY/rBAvxIJD3Is4wzzD/IDCJtK41pOmd/X33u3ILmYydrNBT
+         ux4DD7lsNlpQ/zkHFRZlXONfCsk6ho6f1CEL9NN89ZOAnOfRJIBgp8qwSTw1mUVQOvVl
+         q/Nf8iwXlV4Iiw4xHF/tkizzxYXa3l4ZoQE4cSWfCqTTUtT7EF0T6zCwWh5sU2XuYy2v
+         +p+S13Z9B03VXuu9lC1CV7oTurG59DNAv2nLlQyQ2GjtAh6a5om1YcTdGaZEKPkvTILh
+         SAIQ==
+X-Gm-Message-State: AOAM533UcL09x5Za+9D5boK4IcqIOG6vV8hltPboNMKRz6epTfeLZ7/5
+        gKWddzQpKK2RGzGFRruLYVFK+c41KROU6Y7NWc7+7eAjLas5
+X-Google-Smtp-Source: ABdhPJx44lNFRF0CBDtsQ1nIykpINcfQGzbONln81/iDbRan8DAmUslhvHSx2Jl7+1dw9URlen5rD0yN0+oluhbJP5FDjcHtNa5L
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:4091:: with SMTP id m17mr17155971jam.41.1639141760935;
+ Fri, 10 Dec 2021 05:09:20 -0800 (PST)
+Date:   Fri, 10 Dec 2021 05:09:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000065abfe05d2ca6ea0@google.com>
+Subject: [syzbot] KMSAN: uninit-value in _ieee802_11_parse_elems_crc
+From:   syzbot <syzbot+59bdff68edce82e393b6@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com, johannes@sipsolutions.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since ipv6 neighbor solicitation and advertisement messages
-isn't handled gracefully in bonding6 driver, we can see packet
-drop due to inconsistency bewteen mac address in the option
-message and source MAC .
+Hello,
 
-Another examples is ipv6 neighbor solicitation and advertisement
-messages from VM via tap attached to host brighe, the src mac
-mighe be changed through balance-alb mode, but it is not synced
-with Link-layer address in the option message.
+syzbot found the following issue on:
 
-The patch implements bond6's tx handle for ipv6 neighbor
-solicitation and advertisement messages.
+HEAD commit:    093998ececa3 [PATCH net] tcp: fix another uninit-value (sk..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=110b5395b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=59bdff68edce82e393b6
+compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
 
-			Border-Leaf
-			/        \
-		       /          \
-		    Tunnel1    Tunnel2
-		     /              \
-	            /                \
-		  Leaf-1--Tunnel3--Leaf-2
-		    \                /
-		     \              /
-		      \            /
-		       \          /
-		       NIC1    NIC2
-			\      /
-			server
+Unfortunately, I don't have any reproducer for this issue yet.
 
-We can see in our lab the Border-Leaf receives occasionally
-a NA packet which is assigned to NIC1 mac in ND/NS option
-message, but actaully send out via NIC2 mac due to tx-alb,
-as a result, it will cause inconsistency between MAC table
-and ND Table in Border-Leaf, i.e, NIC1 = Tunnel2 in ND table
-and  NIC1 = Tunnel1 in mac table.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+59bdff68edce82e393b6@syzkaller.appspotmail.com
 
-And then, Border-Leaf starts to forward packet destinated
-to the Server, it will only check the ND table entry in some
-switch to encapsulate the destination MAC of the message as
-NIC1 MAC, and then send it out from Tunnel2 by ND table.
-Then, Leaf-2 receives the packet, it notices the destination
-MAC of message is NIC1 MAC and should forword it to Tunne1
-by Tunnel3.
+=====================================================
+BUG: KMSAN: uninit-value in ieee80211_parse_extension_element net/mac80211/util.c:948 [inline]
+BUG: KMSAN: uninit-value in _ieee802_11_parse_elems_crc+0x3448/0x4310 net/mac80211/util.c:1348
+ ieee80211_parse_extension_element net/mac80211/util.c:948 [inline]
+ _ieee802_11_parse_elems_crc+0x3448/0x4310 net/mac80211/util.c:1348
+ ieee802_11_parse_elems_crc+0x17e3/0x1e30 net/mac80211/util.c:1490
+ ieee802_11_parse_elems net/mac80211/ieee80211_i.h:2208 [inline]
+ ieee80211_rx_mgmt_probe_beacon net/mac80211/ibss.c:1605 [inline]
+ ieee80211_ibss_rx_queued_mgmt+0x7e5/0x4350 net/mac80211/ibss.c:1639
+ ieee80211_iface_process_skb net/mac80211/iface.c:1468 [inline]
+ ieee80211_iface_work+0xeda/0x1990 net/mac80211/iface.c:1522
+ process_one_work+0xdc2/0x1820 kernel/workqueue.c:2298
+ worker_thread+0x10f1/0x2290 kernel/workqueue.c:2445
+ kthread+0x721/0x850 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
 
-However, this traffic forward will be failure due to split
-horizon of VxLAN tunnels.
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ skb_copy+0x191/0xb90 net/core/skbuff.c:1586
+ mac80211_hwsim_tx_frame_no_nl+0x1fcf/0x2c00 drivers/net/wireless/mac80211_hwsim.c:1565
+ mac80211_hwsim_tx+0x10d3/0x1760 drivers/net/wireless/mac80211_hwsim.c:1669
+ drv_tx net/mac80211/driver-ops.h:35 [inline]
+ ieee80211_tx_frags+0x7bf/0x1250 net/mac80211/tx.c:1714
+ __ieee80211_tx+0x5a8/0x7d0 net/mac80211/tx.c:1768
+ ieee80211_tx+0x776/0x790 net/mac80211/tx.c:1948
+ ieee80211_xmit+0x849/0x890 net/mac80211/tx.c:2040
+ __ieee80211_tx_skb_tid_band+0x297/0x3a0 net/mac80211/tx.c:5701
+ ieee80211_tx_skb_tid net/mac80211/ieee80211_i.h:2186 [inline]
+ ieee80211_tx_skb net/mac80211/ieee80211_i.h:2195 [inline]
+ ieee80211_mgmt_tx+0x1721/0x1d00 net/mac80211/offchannel.c:927
+ rdev_mgmt_tx+0x117/0x4e0 net/wireless/rdev-ops.h:742
+ cfg80211_mlme_mgmt_tx+0x910/0x1330 net/wireless/mlme.c:759
+ nl80211_tx_mgmt+0x112a/0x1870 net/wireless/nl80211.c:11708
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
+ genl_rcv_msg+0x157f/0x1660 net/netlink/genetlink.c:792
+ netlink_rcv_skb+0x447/0x800 net/netlink/af_netlink.c:2491
+ genl_rcv+0x63/0x80 net/netlink/genetlink.c:803
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x1095/0x1360 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x16f3/0x1870 net/netlink/af_netlink.c:1916
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
+ ___sys_sendmsg net/socket.c:2463 [inline]
+ __sys_sendmsg+0x4a5/0x640 net/socket.c:2492
+ __do_sys_sendmsg net/socket.c:2501 [inline]
+ __se_sys_sendmsg net/socket.c:2499 [inline]
+ __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2499
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+=====================================================
 
-Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+
 ---
- drivers/net/bonding/bond_alb.c | 131 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 131 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-index 533e476..afa386b 100644
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -22,6 +22,7 @@
- #include <asm/byteorder.h>
- #include <net/bonding.h>
- #include <net/bond_alb.h>
-+#include <net/ndisc.h>
- 
- static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned = {
- 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
-@@ -1269,6 +1270,119 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
- 	return res;
- }
- 
-+/*determine if the packet is NA or NS*/
-+static bool alb_determine_nd(struct icmp6hdr *hdr)
-+{
-+	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
-+	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static void alb_change_nd_option(struct sk_buff *skb, void *data)
-+{
-+	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
-+	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
-+	struct net_device *dev = skb->dev;
-+	struct icmp6hdr *icmp6h = icmp6_hdr(skb);
-+	struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
-+	u8 *lladdr = NULL;
-+	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
-+				offsetof(struct nd_msg, opt));
-+
-+	while (ndoptlen) {
-+		int l;
-+
-+		switch (nd_opt->nd_opt_type) {
-+		case ND_OPT_SOURCE_LL_ADDR:
-+		case ND_OPT_TARGET_LL_ADDR:
-+		lladdr = ndisc_opt_addr_data(nd_opt, dev);
-+		break;
-+
-+		default:
-+		lladdr = NULL;
-+		break;
-+		}
-+
-+		l = nd_opt->nd_opt_len << 3;
-+
-+		if (ndoptlen < l || l == 0)
-+			return;
-+
-+		if (lladdr) {
-+			memcpy(lladdr, data, dev->addr_len);
-+			icmp6h->icmp6_cksum = 0;
-+
-+			icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
-+							      &ip6hdr->daddr,
-+						ntohs(ip6hdr->payload_len),
-+						IPPROTO_ICMPV6,
-+						csum_partial(icmp6h,
-+							     ntohs(ip6hdr->payload_len), 0));
-+		}
-+		ndoptlen -= l;
-+		nd_opt = ((void *)nd_opt) + l;
-+	}
-+}
-+
-+static u8 *alb_get_lladdr(struct sk_buff *skb)
-+{
-+	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
-+	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
-+	struct net_device *dev = skb->dev;
-+	u8 *lladdr = NULL;
-+	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
-+				offsetof(struct nd_msg, opt));
-+
-+	while (ndoptlen) {
-+		int l;
-+
-+		switch (nd_opt->nd_opt_type) {
-+		case ND_OPT_SOURCE_LL_ADDR:
-+		case ND_OPT_TARGET_LL_ADDR:
-+			lladdr = ndisc_opt_addr_data(nd_opt, dev);
-+			break;
-+
-+		default:
-+			break;
-+		}
-+
-+		l = nd_opt->nd_opt_len << 3;
-+
-+		if (ndoptlen < l || l == 0)
-+			return lladdr;
-+
-+		if (lladdr)
-+			return lladdr;
-+
-+		ndoptlen -= l;
-+		nd_opt = ((void *)nd_opt) + l;
-+	}
-+
-+	return lladdr;
-+}
-+
-+static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
-+			      struct slave *tx_slave)
-+{
-+	struct ipv6hdr *ip6hdr;
-+	struct icmp6hdr *hdr = NULL;
-+
-+	if (skb->protocol == htons(ETH_P_IPV6)) {
-+		if (tx_slave && tx_slave !=
-+		    rcu_access_pointer(bond->curr_active_slave)) {
-+			ip6hdr = ipv6_hdr(skb);
-+			if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
-+				hdr = icmp6_hdr(skb);
-+				if (alb_determine_nd(hdr))
-+					alb_change_nd_option(skb, tx_slave->dev->dev_addr);
-+			}
-+		}
-+	}
-+}
-+
- /************************ exported alb functions ************************/
- 
- int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
-@@ -1415,6 +1529,7 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
- 	}
- 	case ETH_P_IPV6: {
- 		const struct ipv6hdr *ip6hdr;
-+		struct icmp6hdr *hdr = NULL;
- 
- 		/* IPv6 doesn't really use broadcast mac address, but leave
- 		 * that here just in case.
-@@ -1446,6 +1561,21 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
- 			break;
- 		}
- 
-+		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
-+			hdr = icmp6_hdr(skb);
-+			if (alb_determine_nd(hdr)) {
-+				u8 *lladdr = NULL;
-+
-+				lladdr = alb_get_lladdr(skb);
-+				if (lladdr) {
-+					if (!bond_slave_has_mac_rx(bond, lladdr)) {
-+						do_tx_balance = false;
-+						break;
-+					}
-+				}
-+			}
-+		}
-+
- 		hash_start = (char *)&ip6hdr->daddr;
- 		hash_size = sizeof(ip6hdr->daddr);
- 		break;
-@@ -1489,6 +1619,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, struct net_device *bond_dev)
- 	struct slave *tx_slave = NULL;
- 
- 	tx_slave = bond_xmit_alb_slave_get(bond, skb);
-+	alb_set_nd_option(skb, bond, tx_slave);
- 	return bond_do_alb_xmit(skb, bond, tx_slave);
- }
- 
--- 
-1.8.3.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

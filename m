@@ -2,120 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A794700E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1684700E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241191AbhLJMpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241211AbhLJMpo (ORCPT
+        id S241215AbhLJMqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:46:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40033 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241060AbhLJMqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:45:44 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C96C061A72
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:42:06 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id a24so7875234qvb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:42:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=eO1oR3bssJVHG9Y26Y6bMlgt2qf5AyUrhg5Krs2dEgs=;
-        b=nDHGUjCVp/Nzed1y5hlgRbG1rB1VpqFejneQkFUgnd/dOKi9xhgwHQdeHAU7UDO7dL
-         LrYc4w9gGDZHDdSVQdmKeccT3bIBJv7XQs872y9Y9XmBMpsEqHghVBMYh1Jti+XjO52O
-         5oG93oP6lP3YQYxXNywJisYGEi+hLH2uCUqTDaIh/Q1JWkkeuNkYpct45+7o7lGV0wEW
-         xOqVnUOjCMIJRJDI3rkolyOSf0l2vFrO32O8YRFCag4oY1wM7wZGDFAM59KpogZqZPpm
-         Iwzd5dUmyO/Y3bq4AshpPEOuX7z2kNyU7O/xsL9Dfv6wYok7wZgOUM+bfh0yRBCNlwSa
-         QzrQ==
+        Fri, 10 Dec 2021 07:46:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639140163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0eMwO2FeUZK43PiWWzA0YbNlSdbfogBVCpSb3T/oYr0=;
+        b=TsypoMhhzRRy9zWLaEGe8ann6Gi6fr2hc4jeZb2kxgexDtg0jQIy6DzgCyfBAH44QzE5Qi
+        Rs8Aom/9CEM49CYD3x3B6TjtrcdeAwqeDsucIryz1tXf7yDq3aFiDa8DDtiOo6vazalE/l
+        yAiXIE9qiiMviR4rYpXCk0HFynC0nJQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-311-Wq7Ogt-ONVqwA1PNkV_KdA-1; Fri, 10 Dec 2021 07:42:42 -0500
+X-MC-Unique: Wq7Ogt-ONVqwA1PNkV_KdA-1
+Received: by mail-ed1-f72.google.com with SMTP id w18-20020a056402071200b003e61cbafdb4so8115080edx.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:42:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=eO1oR3bssJVHG9Y26Y6bMlgt2qf5AyUrhg5Krs2dEgs=;
-        b=0r8URup4a9J1dtaRbhx0C4JAXIFNBy2gajJrh//Jfv7uxbCPGapXXC6EMj8iWXXUPI
-         zrIvYVK7Iu3csHaAegUsMymSQmXWmQfTR+CWIIhtk3aeTcpLo7ViqQMrn3Q7zykBOGyU
-         egyoCVVt4OVqagapX7mNUKqkIY2kC0cIjtOhU77S6tnUiQ4zOKzPkqnXenOVZK5RrCtz
-         8+r0jDaCuG8RhlLhweTBYVSnJIVS5dX6CGrRrem+2NyveYZ2hyPu8c7sFylfB8nlx+vZ
-         0FQajmQNYiRB8ZyHvdpolo3b6dZwIR2IWtzeJP9eTsWpt9rcdfzGGjX9mwisaGjG7pFX
-         WgmQ==
-X-Gm-Message-State: AOAM530o1JY2VvMid1AoNkHxEtCapwC6J4GlzMQFbI2t0IUlDhkE1Xb1
-        C0mOCvo7REmX8jJbhCZykV1Eig==
-X-Google-Smtp-Source: ABdhPJzRWU9mGRPVsRFVZCG14NYr/la8f9ijUEtK7ktXons/NVCP2JFtcdHPZxBHFIA6Sx/+qJ1MWA==
-X-Received: by 2002:a0c:f6c5:: with SMTP id d5mr24246637qvo.111.1639140125710;
-        Fri, 10 Dec 2021 04:42:05 -0800 (PST)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id n6sm1766301qtx.88.2021.12.10.04.42.05
+         :mime-version:content-disposition:in-reply-to;
+        bh=0eMwO2FeUZK43PiWWzA0YbNlSdbfogBVCpSb3T/oYr0=;
+        b=jddOLsLsZtmMfsknV+GqzUglSNQuSRUFQckSgxqM01gc93ynBgvQrbLS3Ie4dkipwi
+         fxESLKwypNmUUWzUIk4TaFDt6QNVMXdE/fsP5/QNGZyZFANbFF+7KthwYMjRQgJKaSId
+         errm6LvIDjioowPMEGQkRYpiRoE+UW/EloiTW/8OsmqyuIg4Xe2td2nkrIpGRqZpTC7L
+         WRq1VNOpp4WBmmDt9iEMNBMk3KghoTTpy18FR2ijq8AsfVe9Bx/Ly9tgTQjTQEPtNrQg
+         CAgt+/hefJl1ViYfihwwJXbfYUbtDKS06A/ADhLX9RlmpCqEUTzzzihpsUYOUe24KPj1
+         8Dzw==
+X-Gm-Message-State: AOAM533mX0U1GjoMJuIGDEfGc/jxhCKdD1E3txc3isfYuPWksWQ7dvfP
+        0cyqnUrn1JkID+bYZCTLpBb3ecd46PweooHCu6bRq1T5tC60iT0vSIUYJQS9lDclCHucbFgHeWc
+        aKCKvHjTb1yAc6d/kniequgFz
+X-Received: by 2002:a05:6402:1287:: with SMTP id w7mr12749755edv.307.1639140160429;
+        Fri, 10 Dec 2021 04:42:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwc8cDmiTg7tKZOSAEXeJhur1jz7vh5IDcfh/sVEG1EDuVTmpLKOAM3AIeQ5exoHfj3e0C58A==
+X-Received: by 2002:a05:6402:1287:: with SMTP id w7mr12749708edv.307.1639140160162;
+        Fri, 10 Dec 2021 04:42:40 -0800 (PST)
+Received: from krava ([83.240.60.218])
+        by smtp.gmail.com with ESMTPSA id e26sm1435148edr.82.2021.12.10.04.42.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 04:42:05 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1mvfDw-001eiM-2r; Fri, 10 Dec 2021 08:42:04 -0400
-Date:   Fri, 10 Dec 2021 08:42:04 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Doug Ledford <dledford@redhat.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Tomohito Esaki <etom@igel.co.jp>
-Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
-Message-ID: <20211210124204.GG6467@ziepe.ca>
-References: <20211122110817.33319-1-mie@igel.co.jp>
- <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
- <20211207171447.GA6467@ziepe.ca>
- <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
+        Fri, 10 Dec 2021 04:42:39 -0800 (PST)
+Date:   Fri, 10 Dec 2021 13:42:37 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: Re: [PATCH 1/8] perf/kprobe: Add support to create multiple probes
+Message-ID: <YbNLPdrA80OMbzdS@krava>
+References: <20211124084119.260239-1-jolsa@kernel.org>
+ <20211124084119.260239-2-jolsa@kernel.org>
+ <CAEf4Bzb5wyW=62fr-BzQsuFL+mt5s=+jGcdxKwZK0+AW18uD_Q@mail.gmail.com>
+ <Yafp193RdskXofbH@krava>
+ <CAEf4BzbmKffmcM3WhCthrgfbWZBZj52hGH0Ju0itXyJ=yD01NA@mail.gmail.com>
+ <YbC4EXS3pyCbh7/i@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
+In-Reply-To: <YbC4EXS3pyCbh7/i@krava>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
-> Hi Jason,
-> Thank you for replying.
-> 
-> 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
-> >
-> > On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
-> > > Hi maintainers,
+On Wed, Dec 08, 2021 at 02:50:09PM +0100, Jiri Olsa wrote:
+> On Mon, Dec 06, 2021 at 07:15:58PM -0800, Andrii Nakryiko wrote:
+> > On Wed, Dec 1, 2021 at 1:32 PM Jiri Olsa <jolsa@redhat.com> wrote:
 > > >
-> > > Could you please review this patch series?
-> >
-> > Why is it RFC?
-> >
-> > I'm confused why this is useful?
-> >
-> > This can't do copy from MMIO memory, so it shouldn't be compatible
-> > with things like Gaudi - does something prevent this?
-> I think if an export of the dma-buf supports vmap, CPU is able to access the
-> mmio memory.
+> > > On Tue, Nov 30, 2021 at 10:53:58PM -0800, Andrii Nakryiko wrote:
+> > > > On Wed, Nov 24, 2021 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > > >
+> > > > > Adding support to create multiple probes within single perf event.
+> > > > > This way we can associate single bpf program with multiple kprobes,
+> > > > > because bpf program gets associated with the perf event.
+> > > > >
+> > > > > The perf_event_attr is not extended, current fields for kprobe
+> > > > > attachment are used for multi attachment.
+> > > >
+> > > > I'm a bit concerned with complicating perf_event_attr further to
+> > > > support this multi-attach. For BPF, at least, we now have
+> > > > bpf_perf_link and corresponding BPF_LINK_CREATE command in bpf()
+> > > > syscall which allows much simpler and cleaner API to do this. Libbpf
+> > > > will actually pick bpf_link-based attachment if kernel supports it. I
+> > > > think we should better do bpf_link-based approach from the get go.
+> > > >
+> > > > Another thing I'd like you to keep in mind and think about is BPF
+> > > > cookie. Currently kprobe/uprobe/tracepoint allow to associate
+> > > > arbitrary user-provided u64 value which will be accessible from BPF
+> > > > program with bpf_get_attach_cookie(). With multi-attach kprobes this
+> > > > because extremely crucial feature to support, otherwise it's both
+> > > > expensive, inconvenient and complicated to be able to distinguish
+> > > > between different instances of the same multi-attach kprobe
+> > > > invocation. So with that, what would be the interface to specify these
+> > > > BPF cookies for this multi-attach kprobe, if we are going through
+> > > > perf_event_attr. Probably picking yet another unused field and
+> > > > union-izing it with a pointer. It will work, but makes the interface
+> > > > even more overloaded. While for LINK_CREATE we can just add another
+> > > > pointer to a u64[] with the same size as number of kfunc names and
+> > > > offsets.
+> > >
+> > > I'm not sure we could bypass perf event easily.. perhaps introduce
+> > > BPF_PROG_TYPE_RAW_KPROBE as we did for tracepoints or just new
+> > > type for multi kprobe attachment like BPF_PROG_TYPE_MULTI_KPROBE
+> > > that might be that way we'd have full control over the API
+> > 
+> > Sure, new type works.
+> > 
+> > >
+> > > >
+> > > > But other than that, I'm super happy that you are working on these
+> > > > complicated multi-attach capabilities! It would be great to benchmark
+> > > > one-by-one attachment vs multi-attach to the same set of kprobes once
+> > > > you arrive at the final implementation.
+> > >
+> > > I have the change for bpftrace to use this and even though there's
+> > > some speed up, it's not as substantial as for trampolines
+> > >
+> > > looks like we 'only' got rid of the multiple perf syscall overheads,
+> > > compared to rcu syncs timeouts like we eliminated for trampolines
+> > 
+> > if it's just eliminating a pretty small overhead of multiple syscalls,
+> > then it would be quite disappointing to add a bunch of complexity just
+> > for that.
 > 
-> Is it wrong? If this is wrong, there is no advantages this changes..
+> I meant it's not as huge save as for trampolines, but I expect some
+> noticeable speedup, I'll make more becnhmarks with current patchset
 
-I don't know what the dmabuf folks did, but yes, it is wrong.
+so with this approach there's noticable speedup, but it's not the
+'instant attachment speed' as for trampolines
 
-IOMEM must be touched using only special accessors, some platforms
-crash if you don't do this. Even x86 will crash if you touch it with
-something like an XMM optimized memcpy.
+as a base I used bpftrace with change that allows to reuse bpf program
+for multiple kprobes
 
-Christian? If the vmap succeeds what rules must the caller use to
-access the memory?
+bpftrace standard attach of 672 kprobes:
 
-Jason
+  Performance counter stats for './src/bpftrace -vv -e kprobe:kvm* { @[kstack] += 1; }  i:ms:10 { printf("KRAVA\n"); exit() }':
+
+      70.548897815 seconds time elapsed
+
+       0.909996000 seconds user
+      50.622834000 seconds sys
+
+
+bpftrace using interface from this patchset attach of 673 kprobes:
+
+  Performance counter stats for './src/bpftrace -vv -e kprobe:kvm* { @[kstack] += 1; }  i:ms:10 { printf("KRAVA\n"); exit() }':
+
+      36.947586803 seconds time elapsed
+
+       0.272585000 seconds user
+      30.900831000 seconds sys
+
+
+so it's noticeable, but I wonder it's not enough ;-)
+
+jirka
+
+> 
+> > Are there any reasons we can't use the same low-level ftrace
+> > batch attach API to speed this up considerably? I assume it's only
+> > possible if kprobe is attached at the beginning of the function (not
+> > sure how kretprobe is treated here), so we can either say that this
+> > new kprobe prog type can only be attached at the beginning of each
+> > function and enforce that (probably would be totally reasonable
+> > assumption as that's what's happening most frequently in practice).
+> > Worst case, should be possible to split all requested attach targets
+> > into two groups, one fast at function entry and all the rest.
+> > 
+> > Am I too far off on this one? There might be some more complications
+> > that I don't see.
+> 
+> I'd need to check more on kprobes internals, but.. ;-)
+> 
+> the new ftrace interface is special for 'direct' trampolines and
+> I think that although kprobes can use ftrace for attaching, they
+> use it in a different way
+> 
+> also this current 'multi attach' approach is on top of current kprobe
+> interface, if we wanted to use the new ftrace API we'd need to add new
+> kprobe interface and change the kprobe attaching to use it (for cases
+> it's attached at the function entry)
+> 
+> jirka
+> 
+> > 
+> > >
+> > > I'll make full benchmarks once we have some final solution
+> > >
+> > > jirka
+> > >
+> > 
+

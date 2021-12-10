@@ -2,81 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A3E47054D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2961470555
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240049AbhLJQKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:10:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35354 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233882AbhLJQKP (ORCPT
+        id S240070AbhLJQNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:13:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43872 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238157AbhLJQNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:10:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13B33B828A8;
-        Fri, 10 Dec 2021 16:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7BFC341CB;
-        Fri, 10 Dec 2021 16:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639152397;
-        bh=FXw+X46FJDb+N51VzNwvo7FkfBLgll06tDuKFIWiAV0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CRRz8zGClKmgOpis4VREWosgQ3KDQ1bMgLt3BMq4djfEXY1Lw29XJjI1TD+3RYW6T
-         DWwEj6g0EQ1A2tMCDn5DEWKY6qaD6ghFREUXDTdcfnFOyvUf3DOE1VTt8zNleCNUvr
-         ckRXVfIJ/ciuy86csJXUUznPt/qu+lIDexEfLHiglefLAf1fgacgh6yWTFCWENdKOl
-         572pSPCJa3n+0A2cJD744xG3USskICgA8fOuLNPrP+KsBEkOfd+sKb/HfeyJBLBNLl
-         SKHZ2Q6wKBMpRB/juSOZNur8AfIZ0os9ca7sZ3XGJUgFka5ItAtaEo1gfMswuaff6t
-         t1I+XBuojp7Bg==
-Date:   Fri, 10 Dec 2021 08:06:36 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "joabreu@synopsys.com" <joabreu@synopsys.com>,
-        Yannick Vignon <yannick.vignon@nxp.com>,
-        "boon.leong.ong@intel.com" <boon.leong.ong@intel.com>,
-        "Jose.Abreu@synopsys.com" <Jose.Abreu@synopsys.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "Joao.Pinto@synopsys.com" <Joao.Pinto@synopsys.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Leo Li <leoyang.li@nxp.com>
-Subject: Re: [EXT] Re: [PATCH net-next] net: stmmac: bump tc when get
- underflow error from DMA descriptor
-Message-ID: <20211210080636.3c1ab98f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <DB8PR04MB57852B80794A0B487167D3A2F0719@DB8PR04MB5785.eurprd04.prod.outlook.com>
-References: <20211208100651.19369-1-xiaoliang.yang_1@nxp.com>
-        <VI1PR04MB68009F16CAA80DCEBFA8F170E6709@VI1PR04MB6800.eurprd04.prod.outlook.com>
-        <20211209184123.63117f42@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <DB8PR04MB57852B80794A0B487167D3A2F0719@DB8PR04MB5785.eurprd04.prod.outlook.com>
+        Fri, 10 Dec 2021 11:13:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639152574;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5dy6L2W5uCrFpdn9m5/x/KjiiOoQlVH+A7/e/EdtZS4=;
+        b=B0hCbIs4wBIELwcFdw73/NUAjYLpgsH7m1CZIVymZqolDGvVC2E15oGi3v+Xe+bSjpIOq8
+        hcCMwLo5I0SNayePxQWd6Y/UrgWIUfGroqyIyplrcdkAEg3WWofej18B0N5Qzy1GVC+ZiR
+        AsYXwzpgE6HWjC/R80oekBeSa7fHVrc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-307-NfZ_GOJ5OGaGjxu0ooti7w-1; Fri, 10 Dec 2021 11:09:33 -0500
+X-MC-Unique: NfZ_GOJ5OGaGjxu0ooti7w-1
+Received: by mail-wr1-f71.google.com with SMTP id p17-20020adff211000000b0017b902a7701so2460331wro.19
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:09:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5dy6L2W5uCrFpdn9m5/x/KjiiOoQlVH+A7/e/EdtZS4=;
+        b=ZNIqSqEdrfwXXlOjPDFV5taHpBXG4ZcGvxTXJjmrn4CgR1d6XR0mh4FWCGugse5/iX
+         V4j5BSbE041cvTi7dZ3KtBThg4jZqz/di+CrPGCwUJkIZMrNqw6lbAaHxBkSj09gq+w/
+         K3GTb4rdXH1JBIQbFwBkLwDZrsfvG2GpqlVqysyrRyxgm44HHsgnMAiD0o83S/frH3oH
+         pB6ggbiJi42NMTO2C1wKSHebE/c4vprAlIZ72T34UUCVff2yzMNTrDFfi3WPxBSB+Kev
+         289BTQpJr98LyFJ7XAMQJjgQ9T6UiZmjoXyPcxr/FXse8KFMMyiBZ2uAr/6BWE/CddDH
+         FESA==
+X-Gm-Message-State: AOAM531eLFCa7BLJfQMU7v/pSkb/AIZtRYk2g8mOy7gnUisjaV29TQTr
+        gZ5y93K6XNyM3tZB1vYZz9qoCiorsRXtCgpUFlbHCIhWvO8xDOkvBoBFVDmIepFttyCWNNnQm8W
+        9MdByDfUJHIn3i/MHgb8RuTk=
+X-Received: by 2002:adf:f542:: with SMTP id j2mr14699074wrp.616.1639152572444;
+        Fri, 10 Dec 2021 08:09:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJytDlkzGiMTuQZ0hcr6c8r/sMsaeYdtukaDdfk5e0Dk6BgLMiCq6Vjvdxlbn+1hz9VQGP9inw==
+X-Received: by 2002:adf:f542:: with SMTP id j2mr14699050wrp.616.1639152572274;
+        Fri, 10 Dec 2021 08:09:32 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id h17sm2820462wrp.34.2021.12.10.08.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 08:09:31 -0800 (PST)
+Date:   Fri, 10 Dec 2021 16:09:31 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com
+Subject: Re: [RFC PATCH] module: Introduce module unload taint tracking
+Message-ID: <20211210160931.ftvxpulno73a2l7c@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20211124173327.3878177-1-atomlin@redhat.com>
+ <YbEZ4HgSYQEPuRmS@bombadil.infradead.org>
+ <20211209153131.a54fdfbci4qnyy6h@ava.usersys.com>
+ <YbKUUJUtjBk/n913@bombadil.infradead.org>
+ <YbMlVFwBiRujKdEX@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YbMlVFwBiRujKdEX@alley>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 03:11:16 +0000 Xiaoliang Yang wrote:
-> > > 5 queues with FIFO cut-through mode can work well after applying this patch.
-> > 
-> > This never worked, correct? It's not a regression fix?  
->
-> Yes, it's never worked when the underflow error is observed in the
-> case of NFS boot on i.mx8mp. I'm not sure if other SoC have same
-> issue in this case, but I think it's necessary to increase the
-> threshold value in case of underflow error.
+On Fri 2021-12-10 11:00 +0100, Petr Mladek wrote:
+> > If someone enables this feature I can't think of a reason why they
+> > would want to limit this to some arbitrary number. So my preference
+> > is to remove that limitation completely. I see no point to it.
+> 
+> I agree with Luis here. We could always add the limit later when
+> people report some real life problems with too long list. It is
+> always good to know that someone did some heavy lifting in
+> the system.
 
-Oh, so NFS boot works for the most part on i.mx8mp but under certain
-conditions (or with certain configuration?) this error can be observed 
-and the boot will fail?
+Fair enough.
 
-> Do you mean that I need to send the patch as a bug fix to net branch?
+> It might be even interesting to remember timestamp of the removal
+> to match it with another events reported in the system log.
 
-Your call, if you would like for the patch to go to stable and LTS
-releases -- then it need to be resent for net with a Fixes tag.
+I'm not so sure about this. We could gather such details already via Ftrace
+(e.g. see load_module()). Personally, I'd prefer to maintain a simple list.
 
-LMK if you prefer net or net-next.
+> > If you just bump the count then its not duplication, it just adds
+> > more information that the same module name with the same taint flag
+> > has been unloaded now more than once.
+> 
+> Please, do not remove records that a module was removed. IMHO, it
+> might be useful to track all removed module, including the non-tainted
+> ones. Module removal is always tricky and not much tested. The tain
+> flags might be just shown as extra information in the output.
+
+This is an interesting suggestion. Albeit, as per the subject, I prefer to
+just keep track of any module that tainted the kernel. That being said,
+Petr, if you'd prefer to track each module unload/or deletion event, then I
+would suggest for instance to remove a module once it has been reintroduced
+or maintain an unload count as suggested by Luis.
+
+Please let me know your thoughts.
+
+
+Kind regards,
+
+-- 
+Aaron Tomlin
+

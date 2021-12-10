@@ -2,92 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7DB470B96
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B183470B99
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344106AbhLJUOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344094AbhLJUOu (ORCPT
+        id S1344114AbhLJUPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:15:08 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:35761 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344094AbhLJUPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:14:50 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA08C0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 12:11:15 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id n66so14690058oia.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 12:11:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=KOuxIJMKNYTeFBZJypgba4fX+/Q0qIYXKhuuL8rsgx0=;
-        b=jVoZIrcMIhcs34MqmEu4ybtJ5mLwAIvoFS0tyZsRHN4vdJAK/w845YZOVWqDs0cTJ9
-         zyZqSqx4fdy9fgwK5vH4S+kbFps3bK2u+/N34wWhw5m9GiKK5/JsNEvB5noC2KjZCY3F
-         Xqb+ha3f/RuGPuLBdlIDA3m2rXEfI0QOkqwmn4Iil6ZoshZlDPnAMQhpGISk2HbeumEX
-         Unit1NJWJd3ryBpOJKu5EMDpLo/4/Cjl3i6TCaOHcWmh0GamQpWIXnzjtmbU89W+c+nt
-         0x68acITGXIkgSXRJkuzZUwV6BTrVCDCYMNJTDKK/9bWdlX+i20vygzsV62Qz14DvYYN
-         Y6ng==
+        Fri, 10 Dec 2021 15:15:06 -0500
+Received: by mail-oi1-f169.google.com with SMTP id m6so14747880oim.2;
+        Fri, 10 Dec 2021 12:11:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=KOuxIJMKNYTeFBZJypgba4fX+/Q0qIYXKhuuL8rsgx0=;
-        b=Kh8yVj3tjcNHKCQNlTrHtZaxvvcE4wBGMyx3EoBGQeKGwjAnTRU+Oj788QrEF2mXlg
-         kE6eL40YOImU3iobDJ1hUCUagNb1FwOx7VPSTDBkRP1axL4EWeZlOdtrYWPmoQjHQdpd
-         nJ5MOUVu8e/RtmRq83cTN3jeZGe9PwNqDCUtMcUt73CrvfdUx/DdeqnWeDIjaf4amBqj
-         SLM9blANI2kh7WIurxq7eEKQ1MAwfVi2omwO/Xxi68VnU3781Tq7nZsIkoIl/2ems/+M
-         ieg+u8bPYe6BE5FFttx8d996LckO40kYS3+eX+WX53phr+zPRTrltUXygYY+aYk7UXab
-         T1wQ==
-X-Gm-Message-State: AOAM5310SRUmQmH8Aevj1HwJpSYP6FENXQEPmVY2n3EpGa9rh+mhUtGP
-        ed3Brjoa02V+efeqhhyhxQzL2g==
-X-Google-Smtp-Source: ABdhPJyii/gnYmnJibARTLGKVefuQ1oitr4zcIVcaAzq7IipapeLfzuP8rfZ9812r9rqo2jWSqft+g==
-X-Received: by 2002:a54:480b:: with SMTP id j11mr14297800oij.102.1639167074440;
-        Fri, 10 Dec 2021 12:11:14 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id f20sm991153oiw.48.2021.12.10.12.11.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AIgIhmMESH4FjIJ34+1ORZDQ3lYypzCaTtbkFwa/xAY=;
+        b=yjchkiDhKDaRMyVMxixe/pta/puwmSpi1NQeiwC935C+o1Acy+4fQBkbQgB7yTHXyR
+         IuRliEN4UO224ZRR2Y6bYCeLjFTvJkCxfmQMfzFT19tu7fi4C8KxjktagjWlbNG63WMk
+         UDt32DpLXL5mxEJw7glnP9W3hAq+qLYdZeYN63KG1F/Cs9l4zEihSJoasV0sP4SGGcVm
+         4FxCDQ8GDuemaju2IvFg/bL+iRY/RQuLQ+2fSAPkyikr2XZw26kg5HGHdsQ9aLOJfGY9
+         N0bLB+zo7tZ17e6q+Lrer2hZeGgrvmS+bhCGo9o1PW1+GrG2tdoJoqaMZWCqqKuszL6K
+         h86A==
+X-Gm-Message-State: AOAM533O9F+1OsEZJJF6eyQIqH8kpzudUSYp6D2R02TPSXjZXb4x5K3+
+        SAJgsyeHMWrZwlC7v7w3eZQ17axQdw==
+X-Google-Smtp-Source: ABdhPJyUF6S3BHq6kagxqU7F/ujngmftOIXv6P1mFAJL840F4X3rpva//gPw21G8+PIAT7r055b85Q==
+X-Received: by 2002:aca:30c5:: with SMTP id w188mr13759572oiw.35.1639167091003;
+        Fri, 10 Dec 2021 12:11:31 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bg38sm972401oib.40.2021.12.10.12.11.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 12:11:14 -0800 (PST)
-Date:   Fri, 10 Dec 2021 12:11:02 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Borislav Petkov <bp@alien8.de>
-cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
-        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
-        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        stable@vger.kernel.org, x86@kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
- early param parsing
-In-Reply-To: <YbM5yR+Hy+kwmMFU@zn.tnic>
-Message-ID: <297f4912-907-bb45-75df-a030b0d88a8e@google.com>
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2> <20211209143810.452527-1-jdorminy@redhat.com> <YbIeYIM6JEBgO3tG@zn.tnic> <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com> <YbIgsO/7oQW9h6wv@zn.tnic> <YbIu55LZKoK3IVaF@kernel.org>
- <YbIw1nUYJ3KlkjJQ@zn.tnic> <YbM5yR+Hy+kwmMFU@zn.tnic>
+        Fri, 10 Dec 2021 12:11:30 -0800 (PST)
+Received: (nullmailer pid 1815088 invoked by uid 1000);
+        Fri, 10 Dec 2021 20:11:29 -0000
+Date:   Fri, 10 Dec 2021 14:11:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org, jic23@kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] dt-bindings:iio:dac: add ad7293 doc
+Message-ID: <YbO0cauDANNaPiGV@robh.at.kernel.org>
+References: <20211202150819.24832-1-antoniu.miclaus@analog.com>
+ <20211202150819.24832-2-antoniu.miclaus@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202150819.24832-2-antoniu.miclaus@analog.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021, Borislav Petkov wrote:
-> On Thu, Dec 09, 2021 at 05:37:42PM +0100, Borislav Petkov wrote:
-> > Whatever we do, it needs to be tested by all folks on Cc who already
-> > reported regressions, i.e., Anjaneya, Hugh, John and Patrick.
+On Thu, 02 Dec 2021 17:08:19 +0200, Antoniu Miclaus wrote:
+> Add device tree bindings for the AD7293 Power Amplifier.
 > 
-> Ok, Mike is busy so here are some patches for testing:
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> ---
+> no changes in v6.
+>  .../bindings/iio/dac/adi,ad7293.yaml          | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/dac/adi,ad7293.yaml
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/log/?h=rc4-boot
-> 
-> I'd appreciate it if folks who reported an issue, verify those.
-> 
-> The first two are reverts which should address the issues with mem=
-> folks have reported. And the last one should address Anjaneya's issue.
-> 
-> I guess doing it the way as Mike suggested is cleaner/better.
 
-Yes, mem= works fine for me, on both machines, 64-bit and 32-bit,
-thanks; but I'm not exercising the troublesome EFI case at all.
-
-Hugh
+Reviewed-by: Rob Herring <robh@kernel.org>

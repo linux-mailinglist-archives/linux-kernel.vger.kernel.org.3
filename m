@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E6946FD70
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E2646FD75
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239079AbhLJJOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:14:51 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56928 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239067AbhLJJOu (ORCPT
+        id S239094AbhLJJP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:15:59 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18386 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229993AbhLJJP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:14:50 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C17DE1F3A1;
-        Fri, 10 Dec 2021 09:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639127474; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KhJyN+cMcqoKCqoaSIJSpiwZgOaAxCPlonD3mfPqH4E=;
-        b=G5eOBon2Po90+B17tlWP3jsU/MZv770GOWoBh0E/ucBzVtxvdhitpVzJyc1fx10IB9vWvJ
-        uzyLK5OJmu3lOgeK2kCNJPPrLrpgvSV43L88QXa95LDXRSbIjir36yYD7+qF30XqmXAbjK
-        0pY0hx9mt8g/6HeXesiwE/JOjt0xsWc=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 65349A3B92;
-        Fri, 10 Dec 2021 09:11:14 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 10:11:13 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Makhalov <amakhalov@vmware.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YbMZsczMGpChaWz0@dhcp22.suse.cz>
-References: <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
- <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <YbBywDwc2bCxWGAQ@dhcp22.suse.cz>
- <77BCF61E-224F-435D-8620-670C9E874A9A@vmware.com>
- <YbHCT1r7NXyIvpsS@dhcp22.suse.cz>
- <2291C572-3B22-4BE5-8C7A-0D6A4609547B@vmware.com>
- <YbHS2qN4wY+1hWZp@dhcp22.suse.cz>
- <B5B3BCE0-853B-444E-BAD8-823CEE8A3E59@vmware.com>
- <YbIEqflrP/vxIsXZ@dhcp22.suse.cz>
- <7D1564FA-5AC6-47F3-BC5A-A11716CD40F2@vmware.com>
+        Fri, 10 Dec 2021 04:15:58 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BA6wdaL040191;
+        Fri, 10 Dec 2021 09:12:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=BsXP9UVCLcAFtZkosEH2P+zvjgKhRwjP/47j/E1kryc=;
+ b=dQRqDCTdAn6niEA9VTfkjJ2jYMOymvFIKPNmcd0gHT2hlldlPkr1Ejs0K5TLRyDjugR5
+ YEy7t10CdBvx5o7V7p0+cbxN4ZpO+7rGfiA83MM2d6+/9ub4YNRygdpUYlVgg0hZdyIU
+ 2/oA1COIoNpdKVrG6U8drQLjjeZn8TR0ln8mBlN9cLiPLYw1dQFHOlvN+Jxz7LNOMxuS
+ wesevpnTYD5KvvC8bBi1b5Y7i+cwDkfSYri5QqwGhxoWewHY1OUspz4qABtcAQesFyt7
+ qhHrva9b1hgR0Csb/7GA++6Kwbtw2FpEVmIhPFMdCXVAvo5pi+G2UFbQFAeyQq6mRzr7 hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv23njg4r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 09:12:06 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BA904AU003331;
+        Fri, 10 Dec 2021 09:12:06 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv23njg45-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 09:12:05 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BA9BYUH031424;
+        Fri, 10 Dec 2021 09:12:03 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3cqyybh8w9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 09:12:03 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BA9C0HC27984320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Dec 2021 09:12:00 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55BC1A405B;
+        Fri, 10 Dec 2021 09:12:00 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7B0FA4066;
+        Fri, 10 Dec 2021 09:11:56 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.86.88])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Dec 2021 09:11:56 +0000 (GMT)
+Subject: Re: [PATCH] tools/perf: remove unneeded variable make code cleaner
+To:     cgel.zte@gmail.com, peterz@infradead.org
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, chi.minghao@zte.com.cn,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cm>
+References: <20211210022911.424512-1-chi.minghao@zte.com.cn>
+From:   kajoljain <kjain@linux.ibm.com>
+Message-ID: <708b524c-2af5-98a1-f56a-4bb4f268de7a@linux.ibm.com>
+Date:   Fri, 10 Dec 2021 14:41:55 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211210022911.424512-1-chi.minghao@zte.com.cn>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7D1564FA-5AC6-47F3-BC5A-A11716CD40F2@vmware.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6ZWxi_GHZuSkWBuqrymKYVn23-hj7AyD
+X-Proofpoint-GUID: 4SEUWh7V6MbxbA7xixaRJdpt6tYvgGVW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_03,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 phishscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 clxscore=1011 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112100049
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09-12-21 19:01:03, Alexey Makhalov wrote:
+
+
+On 12/10/21 7:59 AM, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
+> return value form directly instead of
+> taking this in another redundant variable.
+
+Can we reword the commit message stating what and
+from where we are removing it. Its not too clear.
+Other than that patch looks good to me.
+
+Reviewed-By: Kajol Jain<kjain@linux.ibm.com>
+
+Thanks,
+Kajol Jain
+
 > 
-> > On Dec 9, 2021, at 5:29 AM, Michal Hocko <mhocko@suse.com> wrote:
-> > 
-> > On Thu 09-12-21 10:23:52, Alexey Makhalov wrote:
-> >> 
-> >> 
-> >>> On Dec 9, 2021, at 1:56 AM, Michal Hocko <mhocko@suse.com> wrote:
-> >>> 
-> >>> On Thu 09-12-21 09:28:55, Alexey Makhalov wrote:
-> >>>> 
-> >>>> 
-> >>>> [    0.081777] Node 4 uninitialized by the platform. Please report with boot dmesg.
-> >>>> [    0.081790] Initmem setup node 4 [mem 0x0000000000000000-0x0000000000000000]
-> >>>> ...
-> >>>> [    0.086441] Node 127 uninitialized by the platform. Please report with boot dmesg.
-> >>>> [    0.086454] Initmem setup node 127 [mem 0x0000000000000000-0x0000000000000000]
-> >>> 
-> >>> Interesting that only those two didn't get a proper arch specific
-> >>> initialization. Could you check why? I assume init_cpu_to_node
-> >>> doesn't see any CPU pointing at this node. Wondering why that would be
-> >>> the case but that can be a bug in the affinity tables.
-> >> 
-> >> My bad shrinking. Not just these 2, but all possible and not present nodes from 4 to 127
-> >> are having this message.
-> > 
-> > Does that mean that your possible (but offline) cpus do not set their
-> > affinity?
-> > 
-> Hi Michal,
+> Reported-by: Zeal Robot <zealci@zte.com.cm>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  tools/perf/util/callchain.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
 > 
-> I didn’t quite gut a question here. Do you mean scheduler affinity for offlined/not present CPUs?
-> From the patch, this message should be printed for every possible offlined node:
-> 	for_each_node(nid) {
-> ...
-> 		if (!node_online(nid)) {
-> 			pr_warn("Node %d uninitialized by the platform. Please report with boot dmesg.\n", nid);
-
-Sure, let me expand on this a bit. X86 initialization code
-(init_cpu_to_node) does
-        for_each_possible_cpu(cpu) {
-                int node = numa_cpu_node(cpu);
-
-                if (node == NUMA_NO_NODE)
-                        continue;
-
-                if (!node_online(node))
-                        init_memory_less_node(node);
-
-                numa_set_node(cpu, node);
-        }
-
-which means that a memory less node is not initialized either when
-	- your offline CPUs are not listed in possible cpus for some
-	  reason
-	- or they do not have any node affinity (numa_cpu_node is
-	  NUMA_NO_NODE).
-
-Could you check what is the reason in your particular case please?
-
--- 
-Michal Hocko
-SUSE Labs
+> diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
+> index 8e2777133bd9..ed30da7e14ab 100644
+> --- a/tools/perf/util/callchain.c
+> +++ b/tools/perf/util/callchain.c
+> @@ -1301,24 +1301,16 @@ int callchain_branch_counts(struct callchain_root *root,
+>  
+>  static int count_pri64_printf(int idx, const char *str, u64 value, char *bf, int bfsize)
+>  {
+> -	int printed;
+> -
+> -	printed = scnprintf(bf, bfsize, "%s%s:%" PRId64 "", (idx) ? " " : " (", str, value);
+> -
+> -	return printed;
+> +	return scnprintf(bf, bfsize, "%s%s:%" PRId64 "", (idx) ? " " : " (", str, value);
+>  }
+>  
+>  static int count_float_printf(int idx, const char *str, float value,
+>  			      char *bf, int bfsize, float threshold)
+>  {
+> -	int printed;
+> -
+>  	if (threshold != 0.0 && value < threshold)
+>  		return 0;
+>  
+> -	printed = scnprintf(bf, bfsize, "%s%s:%.1f%%", (idx) ? " " : " (", str, value);
+> -
+> -	return printed;
+> +	return scnprintf(bf, bfsize, "%s%s:%.1f%%", (idx) ? " " : " (", str, value);
+>  }
+>  
+>  static int branch_to_str(char *bf, int bfsize,
+> 

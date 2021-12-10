@@ -2,82 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB0746F959
+	by mail.lfdr.de (Postfix) with ESMTP id 25E9E46F958
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236184AbhLJCvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 21:51:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41030 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236162AbhLJCu7 (ORCPT
+        id S236171AbhLJCvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 21:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236135AbhLJCu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Dec 2021 21:50:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639104445;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2NBrZb9MWEkfnRCq35Z7md/5O5MZ6n/FZXnIl859Do4=;
-        b=JrthALDy4+jIvehJxqVDdJ4rwcVC72HAyEaOB8H9ez9WSrfO0TKt02sb4L1I2fW4Dqq3Mz
-        k70dfFFHZnJf62RMKvU9naECJNyYjdEau9EnllWmYnPrn0Ukl3FdYBNcuJGDP647sNPsgF
-        wEa6OF9p9lUXibqcrYI0voIHsRJtS0g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-448-GZiMF25ONFOVVsm1hljH-w-1; Thu, 09 Dec 2021 21:47:20 -0500
-X-MC-Unique: GZiMF25ONFOVVsm1hljH-w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 60F48102C84E;
-        Fri, 10 Dec 2021 02:47:18 +0000 (UTC)
-Received: from [10.22.32.131] (unknown [10.22.32.131])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 86BD55D740;
-        Fri, 10 Dec 2021 02:47:17 +0000 (UTC)
-Message-ID: <3c06c8b3-c6ed-50c5-79ac-21982a10d417@redhat.com>
-Date:   Thu, 9 Dec 2021 21:47:16 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB27C061746;
+        Thu,  9 Dec 2021 18:47:25 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so6395738pjq.4;
+        Thu, 09 Dec 2021 18:47:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HFjP5yys5IDHQWYAUzGuN/Cv6LM+IWrecQEiC4DzVFU=;
+        b=O1087wv/kihX7s74BGkNcBvX3ArBLzG46naDUvSZLzF1Q7am8XFE0hA7jm+dGQHila
+         Uex59Duj+48yP/NYfaa8AFhu2IjAPRiBpDRSzJJMvjtqnY8BBGp8B5deL0hzUAxpUl24
+         JGBbjIXZOoOKNByInD64BS/fJNCDCLh56yapBNSd0uNH4j/y/LmoSt0HZz3THgPGPLrv
+         DNMe7uELo6PbaYlddHX5UWRpl0Vfc7HJ9p/XLhOdYJ2NUaoZUkkMGTTtMltIOgV81+n4
+         GQ2gFMV93v3UAXPeIEWeVFAtPuaxFck3FYGnNwn+LpwH2sX9tERmhcLF7ZOp0CjMNAxN
+         x1Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HFjP5yys5IDHQWYAUzGuN/Cv6LM+IWrecQEiC4DzVFU=;
+        b=M1kyItp8OsZOrOI7WgImRwROP4kc883dSPJUEzHZ1VPACO/RaaQmORb1Ea6st8c5Np
+         NEyXBfosCJdOCYxhjIEBV20L22c+vYVHCj5zwX5SmW+YFJVp8hmk9uipFEOkz+bOMF6F
+         O+9ulcxewPGDDUZtY783wAX6/P08NBvMlBCoMyELZGRPTamwckpOZ1c9xd1bqckMioFC
+         s86AC4d4oVH8vc5DABH04ah8XRhYQEIOfEWJlFez5SkCXSrvB/y1Cc8l4hkqm5b1uJFM
+         Vo+DeBMR2EVLmBsAUuV6r/REYVGI6b1yvneWAe04ojTvj9v6mPbMbf+ljkYTiIEg196t
+         EVkA==
+X-Gm-Message-State: AOAM53066d5acncYnTqGB0hCmw9uE8ERnke5SWZGkzApVgp9lj53nOoA
+        zzNQO35n1lYHCHof4jszECY=
+X-Google-Smtp-Source: ABdhPJyaVfUp3xVppisHdyvCrx0MGagHrEA5QOR43Ab/35cJQ5/B4IbC4ohc+GDBia5uELf6OnFHYA==
+X-Received: by 2002:a17:90b:17cc:: with SMTP id me12mr20490287pjb.179.1639104444655;
+        Thu, 09 Dec 2021 18:47:24 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y25sm1022220pfa.12.2021.12.09.18.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 18:47:24 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     dwlsalmeida@gmail.com
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cm>
+Subject: [PATCH] media:vidtv: remove unneeded variable make code cleaner
+Date:   Fri, 10 Dec 2021 02:47:21 +0000
+Message-Id: <20211210024721.425145-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] mm/memcg: Properly handle memcg_stock access for
- PREEMPT_RT
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20211210020632.150769-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211210020632.150769-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 21:06, Waiman Long wrote:
-> Direct calls to local_irq_{save/restore}() and preempt_{enable/disable}()
-> are not appropriate for PREEMPT_RT. To provide better PREEMPT_RT support,
-> change local_irq_{save/restore}() to local_lock_irq{save/restore}() and
-> add a local_lock_t to struct memcg_stock_pcp.
->
-> Also disable the task and interrupt context optimization for obj_stock as
-> there will be no performance gain in the case of PREEMPT_RT. In this case,
-> task obj_stock will be there but remain unused.
->
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   mm/memcontrol.c | 41 ++++++++++++++++++++++-------------------
->   1 file changed, 22 insertions(+), 19 deletions(-)
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Sorry, this doesn't apply to linux-next as it conflicts with a previous 
-patch that I sent out. Will send out a v2 soon.
+return value form directly instead of
+taking this in another redundant variable.
 
--Longman
+Reported-by: Zeal Robot <zealci@zte.com.cm>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/media/test-drivers/vidtv/vidtv_psi.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index c11ac8dca73d..a5875380ef40 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -94,34 +94,28 @@ static void vidtv_psi_update_version_num(struct vidtv_psi_table_header *h)
+ static u16 vidtv_psi_get_sec_len(struct vidtv_psi_table_header *h)
+ {
+ 	u16 mask;
+-	u16 ret;
+ 
+ 	mask = GENMASK(11, 0);
+ 
+-	ret = be16_to_cpu(h->bitfield) & mask;
+-	return ret;
++	return be16_to_cpu(h->bitfield) & mask;
+ }
+ 
+ u16 vidtv_psi_get_pat_program_pid(struct vidtv_psi_table_pat_program *p)
+ {
+ 	u16 mask;
+-	u16 ret;
+ 
+ 	mask = GENMASK(12, 0);
+ 
+-	ret = be16_to_cpu(p->bitfield) & mask;
+-	return ret;
++	return be16_to_cpu(p->bitfield) & mask;
+ }
+ 
+ u16 vidtv_psi_pmt_stream_get_elem_pid(struct vidtv_psi_table_pmt_stream *s)
+ {
+ 	u16 mask;
+-	u16 ret;
+ 
+ 	mask = GENMASK(12, 0);
+ 
+-	ret = be16_to_cpu(s->bitfield) & mask;
+-	return ret;
++	return be16_to_cpu(s->bitfield) & mask;
+ }
+ 
+ static void vidtv_psi_set_desc_loop_len(__be16 *bitfield, u16 new_len,
+-- 
+2.25.1
 

@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C6C47027D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAF2470287
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234780AbhLJOS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbhLJOS2 (ORCPT
+        id S238899AbhLJOUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:20:23 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:14071 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238547AbhLJOUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:18:28 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53837C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:14:53 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id l24so17110626uak.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=JqFvIy3ZSW9Ky5r+sS02bYyVtS09v/YMG/eFhnUBW34=;
-        b=ULx74ICeLTB/6eleGBxQUAdkczZR9CHc9U2Jp+guGqAwcmTvFmmp2tqKodDRwxSmtn
-         P8t5h9sKQMSP1D6iYt9bPE52oRSZ5DEmfwqBQ0xAyomAWO7EDkcrbr9fRggsHWxmdPW6
-         rNJLZCQjjSDnvLfAuvZNWPzlOw/ZK0nzRVEDBBNb5ilzuoC9NNuQ4RXlwYd8dm8QVjvb
-         RcdjkzUAdQxZen/5eSx9itXykJmTXhfYkun9Ece7xq1NL2v0lpt2R7yb9s4H0QWC4jep
-         PYgpHlA7bsKm/W2Hg4qjfRfazN1aec8tLaldLbD9MCeG+af9SBi1d1+9hiWP7KoPcl4V
-         VX1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=JqFvIy3ZSW9Ky5r+sS02bYyVtS09v/YMG/eFhnUBW34=;
-        b=p+E9QCEOq8YZneenBT3lr7y07wjF/mYP9K0zuqrODfgI6xo7iTKrrWmTzodz25ABYU
-         5wE6/jYA7+GmA4xznc4zPYTUn0SRFfeCK8E3knToFi4r124bfz27WhFIyYercUnn8GOb
-         dh1zluPHQ5gwwKoN6py2xqKwFR2X3LhN10m+tM6nQTxjhKeiq6jsGG/3XkAWQZNi3Wp9
-         0qTothaWJMuH4aeGIFky2rCM3eZ01Ya5vUjLOqKzP6HV+NRwXdecWZSB4Jw++Ut1FlwB
-         DHQD+D6Mx3QV5S+UxceoxpsZcbQMfvryxa0xA6ePC84uaTYtVaTr5egtKzVPJXcyAjZI
-         Jpiw==
-X-Gm-Message-State: AOAM533S1/JyeT803qkCW5nB/gklWpKtI9H9zw1WkWbQKPsD6HfBFxTW
-        50pc2VyhPqh6ecHzyflf89SggheHtHrqDB9ooWc=
-X-Google-Smtp-Source: ABdhPJzbVbXl86UTdZ7CZlS9q1eyJZUy+m6LJ9tLsm+6BtPycp8xcBQOlzId1FMdximae/RagXFPnnY+A5dEgenA0Ac=
-X-Received: by 2002:a67:e40d:: with SMTP id d13mr16113402vsf.11.1639145692246;
- Fri, 10 Dec 2021 06:14:52 -0800 (PST)
+        Fri, 10 Dec 2021 09:20:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1639145796;
+    s=strato-dkim-0002; d=chronox.de;
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=w0hmisnmVGY9lmZ3mfuG+ug8gAPJA9hY6p1igaGTfq8=;
+    b=pOrRS0pMzopHPLQNnzFrR7O2hPB3kUbKx8RsYz3qA9Uw6IQlJzDBH+vOU+wKXdSRjl
+    tG1i1Z1XteIH48NrRVLJbyGSB0U3kr0Vt/y/9lTsHvKJrsouZ18uFbet92kstTV+m+9I
+    V+2by9eHtKf7jD77RfgsuYB2KipxbyK/QpdLaMyXKs8QF9dOAnFDe6FIeN2PTgjMWudY
+    eUG+0K6hXpTqSS+cUy3UMMB2bNApBAqAeYmxoJ554T6iRm/EWU90jLPQCISWqqn/kA8l
+    ChdfCMY4Kbabtn4Mv3LFA4JGwzGxAcVed8hsrA6CpTC/j1mJMHp/7nWom5H/6lFNpiI3
+    7WlQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXPaI/SfwWp+"
+X-RZG-CLASS-ID: mo00
+Received: from tauon.chronox.de
+    by smtp.strato.de (RZmta 47.35.3 DYNA|AUTH)
+    with ESMTPSA id z09342xBAEGZ7lp
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 10 Dec 2021 15:16:35 +0100 (CET)
+From:   Stephan Mueller <smueller@chronox.de>
+To:     Yujie Liu <yujie.liu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        lkp@lists.01.org, lkp@intel.com,
+        "Sang, Oliver" <oliver.sang@intel.com>
+Subject: Re: [security] d3b04a4398: WARNING:at_crypto/kdf_sp800108.c:#crypto_kdf108_init
+Date:   Fri, 10 Dec 2021 15:16:34 +0100
+Message-ID: <3737408.Lz6Wf2Li4r@tauon.chronox.de>
+In-Reply-To: <766e5415-cc94-1b46-2326-d55343a80388@intel.com>
+References: <20211130080419.GC29514@xsang-OptiPlex-9020> <3438006.aCxCBeP46V@positron.chronox.de> <766e5415-cc94-1b46-2326-d55343a80388@intel.com>
 MIME-Version: 1.0
-Sender: kalueke51@gmail.com
-Received: by 2002:a67:d595:0:0:0:0:0 with HTTP; Fri, 10 Dec 2021 06:14:51
- -0800 (PST)
-From:   Lila Lucas <lila69148@gmail.com>
-Date:   Fri, 10 Dec 2021 15:14:51 +0100
-X-Google-Sender-Auth: 0gF-S1QAyW7l3AOnUxyK63S51J8
-Message-ID: <CAKCfqfg13i5JMNgS=e+WoPAW=LPyR4MAoRk=btNDiJmPTAdjmQ@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dear,
+Am Freitag, 10. Dezember 2021, 03:54:32 CET schrieb Yujie Liu:
 
-It is my pleasure to communicate with you, I know that this message
-will be a surprise to you my name is Mrs. Lila Lucas, I am diagnosed
-with ovarian cancer which my doctor have confirmed that I have only
-some weeks to live so I have decided you handover the sum of( Eleven
-Million Dollars) through I decided handover the money in my account to
-you for help of the orphanage homes and the needy once
+Hi Yujie, Herbert,
 
-Please   kindly reply me here as soon as possible to enable me give
-you more information but before handing over my details to you please
-assure me that you will only take 30%  of the money and share the rest
-to the poor orphanage home and the needy once, thank you am waiting to
-hear from you
+> This table shows that we have tested commit d3b04a4398("security: DH - use
+> KDF implementation from crypto API") for several runs of boot test in qemu
+> but got 100% bad result. We have also tested its parent commit (i.e. commit
+> d792134423 "security: DH - remove dead code for zero padding") and all the
+> runs got 100% good result. So this is not a random issue.
+> 
+> > I am unable to reproduce it with i386 and clang-13. I can also not
+> > reproduce it with GCC.
+> 
+> We have tested the i386 kernel built by gcc-9 or clang-14, and confirmed
+> both of them can reproduce this issue reliably.
+> 
+> Please be sure to follow the reproduce steps in original report mail. The
+> full reproduce log is attached.
 
-Mrs Lila Lucas.
+Thank you for your response. The key log info is:
+
+alg: self-tests for CTR-KDF (hmac(sha256)) failed (rc=-12)
+
+And I finally see what the problem is: you selected SHA-256 as module but the 
+KDF implementation is selected to be statically linked.
+
+So the KDF self test tries to allocate the SHA-256 algorithm and fails which 
+causes the ENOMEM error.
+
+
+Herbert, what is your preference in handling this:
+
+- we could SELECT CRYPTO_SHA256 when the KDF is compiled. This would only be 
+necessary to satisfy the self test. Yet, there is no guarantee that SHA-256 
+would truly be needed because the DH code that calls the KDF obtains the 
+reference to the hash from user space. In the end we could hard compile a 
+crypto algorithm into the kernel that may never be used.
+
+- we could relax the KDF self test a bit and could prevent the self test being 
+executed if we get an ENOENT back during the algorithm allocation. But that 
+would imply that the KDF self test would never be executed. Even when SHA-256 
+is compiled as module and insmod'ed at a later time the KDF self test is not 
+executed as it is only executed from the __init function.
+
+
+I would prefer to consider the first option to also statically compile 
+SHA-256.
+
+Ciao
+Stephan
+
+

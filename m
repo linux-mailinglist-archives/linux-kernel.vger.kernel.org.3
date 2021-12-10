@@ -2,79 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A80C0470C56
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556C1470C57
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243435AbhLJVTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:19:18 -0500
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:45716 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbhLJVTQ (ORCPT
+        id S243504AbhLJVUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:20:09 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57200 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232349AbhLJVUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:19:16 -0500
-Received: by mail-ot1-f50.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso10856390otf.12;
-        Fri, 10 Dec 2021 13:15:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Rz+f4jxcorJhG5xhkcaE/Z8zmcaXPwrM4bIXAQx1u7s=;
-        b=WQaz9phGx0yyEKHvlXSpX4iCuQKuIuGIQ86vTfqgsQFnlzmE+pUxfE5MVISDGC7cYC
-         g47Bg8k2m14dRHG9KV+tCzWtjicnFWDkSLCOLtC6rjvJ+DmjpBcGs0Xua7WxRW+iNtFx
-         czfP+hatcim7ZQdC9601Dxxubk3kIqpS5R/SMxSh9QR0cUGdLC42qUVrAZtxjTBZQOC0
-         kXZbmOqlwH2m4yzV5rdBPDcx+147S7Ps8HUEB2UcfTxjEFQlE5mrv8LI/lXxPFCGpJjG
-         cNfm5uKPqQeI1OULt7AJqzBI8kxmCMjKRffvLJ68cfjIyrGirbnKgZAP38vYJ/pJEuCr
-         Lmew==
-X-Gm-Message-State: AOAM531kBzHqszlz3MLFe2A3AGgcfvxapjuRwMjxKWZxEq62W3Jc1lUW
-        +h6HD8aWq6RfcchUMOPZ0A==
-X-Google-Smtp-Source: ABdhPJyF0GaaJsZV1wR3zOSFn48M6x1bOCOHkCw6T0wcpl8sQFfIcxANMa3TuO+iZUTD231D2SKtUA==
-X-Received: by 2002:a9d:69ce:: with SMTP id v14mr12956753oto.312.1639170940576;
-        Fri, 10 Dec 2021 13:15:40 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o10sm718190oom.32.2021.12.10.13.15.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 13:15:39 -0800 (PST)
-Received: (nullmailer pid 1911427 invoked by uid 1000);
-        Fri, 10 Dec 2021 21:15:38 -0000
-Date:   Fri, 10 Dec 2021 15:15:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     judyhsiao@chromium.org, linux-gpio@vger.kernel.org,
-        broonie@kernel.org, rohitkr@codeaurora.org,
-        alsa-devel@alsa-project.org, robh+dt@kernel.org,
-        plai@codeaurora.org, agross@kernel.org, bgoswami@codeaurora.org,
-        bjorn.andersson@linaro.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
-        tiwai@suse.com, linux-arm-msm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, srinivas.kandagatla@linaro.org, perex@perex.cz
-Subject: Re: [PATCH v5 1/5] dt-bindings: pinctrl: qcom: Update lpass lpi file
- name to SoC specific
-Message-ID: <YbPDesOMfpoiQFIa@robh.at.kernel.org>
-References: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com>
- <1638891339-21806-2-git-send-email-quic_srivasam@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638891339-21806-2-git-send-email-quic_srivasam@quicinc.com>
+        Fri, 10 Dec 2021 16:20:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8D4FCCE2D3F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 21:16:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CB8C00446;
+        Fri, 10 Dec 2021 21:16:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639170989;
+        bh=DOtG6TPvUgWsavv5ESG/olkb5/LNjUM7lSIanjKa+sI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RRxvjK7kAjP7zhgCkrmxiyUPPw5wm9FyKt0/uhH9nWgfC3qbW9N07HaAU/ottDTug
+         w6P3ggreCdlfK+BVAEM/J5h10xGz1PEWhk/+mHe1D2F8gUljfoPStq14t/qUM/JwTb
+         eddUig8FmQTMdc4c4JtXyTzFbDW3adh7sZe/OZcnaA4njwajkO4lVlEKHTlzlh6du6
+         BPZFGOnxqaK304tv0U2nGEokzO8X9itFHg4mVfHzemrQRvUpqqkeC7yWAzXVVWzJvV
+         wntzHDJgwY6h7ZVcCZsfB6RFQwyPWVpEn6a8lDgQEtNutbZ834lHdMWGM3pyseMr/N
+         ZUaJA8sHSGPpg==
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/4] tracing: Add and use event_command parsing func helpers
+Date:   Fri, 10 Dec 2021 15:16:21 -0600
+Message-Id: <cover.1639170140.git.zanussi@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Dec 2021 21:05:35 +0530, Srinivasa Rao Mandadapu wrote:
-> Change generic lpass lpi pincotrol bindings file to SoC specific file,
-> to distinguish and accomadate other SoC specific dt bindings.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> ---
->  .../bindings/pinctrl/qcom,lpass-lpi-pinctrl.yaml   | 130 ---------------------
->  .../pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml     | 130 +++++++++++++++++++++
->  2 files changed, 130 insertions(+), 130 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,lpass-lpi-pinctrl.yaml
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml
-> 
+With more event commands being implemented, it's been pointed out that
+it would make sense to clean up the existing ones and make it easier
+to implement new ones without copying a lot of boilerplate.  The main
+culprit here is the event_command.func() callback - the rest of the
+event_command infrastructure has default implementations that work for
+most implementations.  The func() callback is a little different in
+that every new command needs to customize parsing to some extent.
 
-Acked-by: Rob Herring <robh@kernel.org>
+This patchset attempts to help clean that up and make it easier for
+new users to deal with.
+
+v4: Added two patches changing the names of event_command.func() and
+    event_trigger_ops.func() to make them reflect their functions.
+
+    Added back missing kfree(trigger_data) in event_trigger_callback().
+
+    Changed char *param to const char *param in
+    event_trigger_check_remove() and event_trigger_empty_param().
+
+    Changed event_trigger_separate_filter() to use separate param and
+    filter outparams, and changed the name of the param inparam to
+    param_and_filter to better reflect its contents and avoid the
+    clash with new param outparam.  Changed all parse()
+    implementations to use this new scheme.
+
+    Fixed some typos and added more extensive comments with examples
+    explaining various things that were mentioned as causing confusion
+    and just in general tried to clarify things with respect to the
+    callbacks and parameters.
+
+v3: broke up event_trigger_check() into smaller functions instead of
+    parameterizing it, and added function documentation.
+
+v2: removed unused event_trigger_remove(). No change in functionality.
+
+The following changes since commit a6ed2aee54644cfa2d04ca86308767f5c3a087e8:
+
+  tracing: Switch to kvfree_rcu() API (2021-12-06 17:53:50 -0500)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git ftrace/cleanup-hist-func-v4
+
+Tom Zanussi (4):
+  tracing: Change event_command func() to parse()
+  tracing: Change event_trigger_ops func() to trigger()
+  tracing: Add helper functions to simplify event_command.parse()
+    callback handling
+  tracing: Have existing event_command.parse() implementations use
+    helpers
+
+ kernel/trace/trace.h                |  63 +++-
+ kernel/trace/trace_eprobe.c         |  11 +-
+ kernel/trace/trace_events_hist.c    | 109 +++---
+ kernel/trace/trace_events_trigger.c | 558 ++++++++++++++++++++--------
+ 4 files changed, 515 insertions(+), 226 deletions(-)
+
+-- 
+2.17.1
+

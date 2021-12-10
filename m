@@ -2,95 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 781DD470604
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79794470608
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243822AbhLJQpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:45:30 -0500
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:37645 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbhLJQp3 (ORCPT
+        id S243840AbhLJQp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231180AbhLJQp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:45:29 -0500
-Received: by mail-oi1-f174.google.com with SMTP id bj13so13995991oib.4;
-        Fri, 10 Dec 2021 08:41:54 -0800 (PST)
+        Fri, 10 Dec 2021 11:45:57 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4935EC061746;
+        Fri, 10 Dec 2021 08:42:22 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id l7so14606138lja.2;
+        Fri, 10 Dec 2021 08:42:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BC/L7vVuNDkh73jj1Fuq2gM9M7ljyOtwslTzE8DRGoQ=;
+        b=mvoAyCn9E01//c0/y5s5TBzFGh5kY4+YTNw72sUhsuQiyvb9ZPLBhfwzb/+eTUPcHy
+         QmczqDg/BXfaBBSHhd4RVBU6ff3ZZDe/OeT/yXT9IJB5fBDoCHWLsnmQrmPW1utD95i+
+         LzMfBlRAQ0Nq6OqyX3alhp3YodKSlBQ72pJ7O1yuOOhZmdxpipOYRmoK9vW39PaGpUOe
+         IpLcAyMv1v45CkVFoW+9vT0Yz5746VVjVahxiLWEBe8wByvvdU/iC5Tnr/7mYSApV4W2
+         gTzxbijTE0eIex/MyCx4xG/dnKBlc8g5MwDAatlNDzoPJK2TvX7wcc109pZbxO/YZtl9
+         Bnpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mzRHekSe+1ItE0g/B1/sdKOqQcFEHI9ComSVVLd1nlI=;
-        b=TTEWzUZowR8hAXZcifoY53v6LZGp/anjN7BQ6eVa5ypdPPwVeH6szjYg36BvKRHl3D
-         d5SCIknGTgOFhKCEwhc78XBSiKDPXAmXrIiP/TsrPpIl/0KqUyADalWHOMqGlItyEuNa
-         y//0cYtzSguMxqWoDQRRZSC7hvr9dO8qNxAsnBPkcMpga+s9AWZTinW8vsVLuKSIu3qB
-         Y3Kn3+8O9jfXpuJnZn68BCAOafdBzaRr8n4VSR3zD6mO//HbPydIcikF6heoAmT+5Uk/
-         FsB9qdMTcMWkNHK2Wh7qPu4ATVGvTYetAT7TIsn4CICCNqXz0mzLJE8wzRGw04kIaFai
-         Tf3w==
-X-Gm-Message-State: AOAM532ssIjzgNXG24AAXExx1VNozB6bJcJs4JPel6shKMnnX+MjTygv
-        WeWzqjDPqoJlzEwgSX/4WQ==
-X-Google-Smtp-Source: ABdhPJwRv+kMCf78RcI/EgKRH+ISPL3AxEehRdB9Ai5HD06TXa1RnLKZV2R7Cgi/ZzR5zEXSnPJELw==
-X-Received: by 2002:a05:6808:649:: with SMTP id z9mr12919308oih.125.1639154514388;
-        Fri, 10 Dec 2021 08:41:54 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id m12sm600169ots.59.2021.12.10.08.41.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 08:41:53 -0800 (PST)
-Received: (nullmailer pid 1495271 invoked by uid 1000);
-        Fri, 10 Dec 2021 16:41:52 -0000
-Date:   Fri, 10 Dec 2021 10:41:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-Cc:     devicetree@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        xen-devel@lists.xenproject.org, Julien Grall <julien@xen.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BC/L7vVuNDkh73jj1Fuq2gM9M7ljyOtwslTzE8DRGoQ=;
+        b=M+fOKQ2UDCtpp7yu46akN3Ayp91RYcdwbAMmTuPiwa02c5+NjDx7k1rn5uQFzELXOS
+         +vPzEKGZ9yaSlj7zIEd16WczzwlTLUs4G3ZVvV/6euRmf27pbeYUu8VMfN6lDhRgENOW
+         RHhqh5LZ6ITHtnbg8l3OAX0geePslAJtpkD3tMBpyLZ2Spu4tSYC+oK78ZnaeGH4cby3
+         H3ZLv5Cyy3tqPRl7l4QYjl4nv+K8p2rgTu2QEqAQzw+YXJrFiUhHgaxgcKtSsJYW7+1G
+         LNQa3VnCru0Q9LPYdhML0NbczCD2KGM5Bkil6htKGq/HpGQ0YMxQmHMfafyDA+6nQPYH
+         Qvug==
+X-Gm-Message-State: AOAM530NAomCVOHYjXjt5VpDcITta9Ii7iYEBgyaRZWS9yoj5sz1NTn7
+        I4YJqswy5uI4FgzzqvXNmU7r161rDjw=
+X-Google-Smtp-Source: ABdhPJwu3DcAVYNwIcEKca3KZ2zcyLebU8uEWtzgECrRNCMdAgDG0N0fUJ+XoG9nSjVvzeV+RShtGw==
+X-Received: by 2002:a2e:b5d2:: with SMTP id g18mr13605489ljn.354.1639154540414;
+        Fri, 10 Dec 2021 08:42:20 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id y18sm359551lfk.17.2021.12.10.08.42.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 08:42:20 -0800 (PST)
+Subject: Re: [PATCH v5 05/24] ARM: tegra: Add device-tree for ASUS Transformer
+ EeePad TF101
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        David Heidelberg <david@ixit.cz>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola Milosavljevic <mnidza@outlook.com>,
+        Ion Agorria <ion@agorria.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 6/6] dt-bindings: xen: Clarify "reg" purpose
-Message-ID: <YbODUP7jnSWffumD@robh.at.kernel.org>
-References: <35ee3534-9e24-5a11-0bf1-a5dd0b640186@gmail.com>
- <1639136201-27530-1-git-send-email-olekstysh@gmail.com>
+References: <20211208173609.4064-1-digetx@gmail.com>
+ <20211208173609.4064-6-digetx@gmail.com> <YbN2T5guOfIRLXg1@orome>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <de357dd7-ad4b-758c-f041-b3385d164b98@gmail.com>
+Date:   Fri, 10 Dec 2021 19:42:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639136201-27530-1-git-send-email-olekstysh@gmail.com>
+In-Reply-To: <YbN2T5guOfIRLXg1@orome>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 13:36:41 +0200, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+10.12.2021 18:46, Thierry Reding пишет:
+...
+>> +	gpio@6000d000 {
+>> +		charging-enable-hog {
+>> +			gpio-hog;
+>> +			gpios = <TEGRA_GPIO(R, 6) GPIO_ACTIVE_HIGH>;
+>> +			output-low;
+>> +		};
+>> +	};
 > 
-> Xen on Arm has gained new support recently to calculate and report
-> extended regions (unused address space) safe to use for external
-> mappings. These regions are reported via "reg" property under
-> "hypervisor" node in the guest device-tree. As region 0 is reserved
-> for grant table space (always present), the indexes for extended
-> regions are 1...N.
+> Isn't this something that we may want to change at some point? My
+> understanding is that GPIO hogs are permanent, so it won't be possible
+> to grab GPIO R.6 and change this.
 > 
-> No device-tree bindings update is needed (except clarifying the text)
-> as guest infers the presence of extended regions from the number
-> of regions in "reg" property.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> ---
-> Changes V2 -> V3:
->    - new patch
-> 
-> Changes V3 -> V4:
->    - add Stefano's R-b and Rob's A-b
->    - remove sentence about ACPI for "reg" and "interrupts"
->      properties
-> 
-> Changes V4 -> V4.1
->    - bring the mentioning of ACPI back which, as was pointed out by Julien,
->      fits in the context:
->      https://lore.kernel.org/xen-devel/9602b019-6c20-cdc7-23f3-9e4f8fd720f6@xen.org/T/#t
->      so technically restore V3 state
->    - remove Stefano's R-b and Rob's A-b as I am not 100% sure they are
->      happy with that
-> ---
->  Documentation/devicetree/bindings/arm/xen.txt | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
+> Are there any plans to allow setting this at runtime?
 
-Acked-by: Rob Herring <robh@kernel.org>
+I'm not aware about plans to change that charging hog.
+
+It's not a problem to remove the hog. I don't understand why you're
+saying that it's permanent. We have such hogs in Nexus7 DT for the 3G
+modem pins. If we'll ever have a driver for that modem, then we will
+remove those hogs, not a problem.
+
+> [...]
+>> +	i2c2: i2c@7000c400 {
+>> +		status = "okay";
+>> +		clock-frequency = <100000>;
+>> +	};
+>> +
+>> +	i2cmux {
+> 
+> This doesn't belong here. The ordering is by unit-address and everything
+> without unit-address needs to move after the nodes with unit-addresses
+> and be sorted alphabetically.
+
+Logically it belongs here, since mux uses i2c2. All other DTs do the same.
+
+...
+>> +	memory-controller@7000f400 {
+>> +		nvidia,use-ram-code;
+>> +
+>> +		emc-tables@3 {
+>> +			reg = <0x3>;
+>> +
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			lpddr2 {
+>> +				compatible = "elpida,B8132B2PB-6D-F", "jedec,lpddr2-s4";
+>> +				revision-id1 = <1>;
+>> +				density = <2048>;
+>> +				io-width = <16>;
+>> +			};
+>> +
+>> +			emc-table@25000 {
+> 
+> Ugh... looking at the bindings for this the naming here is rather
+> unfortunate. emc-tables@3 and emc-table@*... the top-level emc-tables
+> are really tables, but the emc-table@* are really entries or rows in
+> that table, not tables themselves. It's also rather unfortunate that we
+> duplicate the frequency in both the "reg" and "clock-frequency"
+> properties. One of them would've been enough.
+
+It's emc-tables@3 here because initially there were other tables that I
+removed during preparation of the DT for upstream. Those tables were
+untested and looked questionable to me.
+
+> Anyway, looks like this has basically been like this since forever, so
+> not much that can be done about it.
+> 
+> Again, the memory-controller node needs to be sorted differently. There
+> are other occurrences of this throughout the file.
+
+Please feel free to reorder it.

@@ -2,124 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF7346F838
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CAB46F83C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235065AbhLJBHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 20:07:17 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:64281 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbhLJBHR (ORCPT
+        id S235104AbhLJBI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 20:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230526AbhLJBI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 20:07:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639098223; x=1670634223;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GX8+2zIdCqzjzOePDlyWE6qkeEZ7FtSm4Y1naB/0RZs=;
-  b=WWUYyXbov6wmZR07G4ZmYkS0/JAeAfsPvkaSHiPl9PFIXq/bRPrQjbIY
-   HUp83Vy1+J2KVhCMgoIMgsqcp+9Z5v5vnLnLkCXbnqubQhkwycFB8161N
-   TV0BnPLBK075/JyY+6UnN3uuKZNMyzSzKwvv2lRSoiAE2qhFLL0w1iY4O
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 09 Dec 2021 17:03:43 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 17:03:42 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 9 Dec 2021 17:03:42 -0800
-Received: from [10.253.38.94] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 9 Dec 2021
- 17:03:37 -0800
-Message-ID: <4701e5d9-24d5-5d63-cf68-8988d6fbe306@quicinc.com>
-Date:   Fri, 10 Dec 2021 09:03:31 +0800
+        Thu, 9 Dec 2021 20:08:57 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20D8C061746;
+        Thu,  9 Dec 2021 17:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ihe3pIT/HCvWCFS26J8tbL2HwT8v/yss1KgbxxM0/KE=; b=iNfuIt6MzxCnF5qWxG1iDHwdMZ
+        tlmnN/eIodp7R/NvgSt1Ia9LJI6NMDjdRuImD8PXs/Z1ovurCRWqvvAkhaqRTUbjofZb8IXDdia2F
+        GGETND5lim/jmjI04vvERRHZ+3EVPXVBojJHp3BLGkxAzsOkp2Lm8fOa6I26Nknpjs17Fk01qMdBL
+        seiWaCjevuerLrrWRCfpJIrz9ovkEpoH8Sa/1RW61salFSpjEIk1H9BilhYZKgLnTEET/17Y5ovJh
+        wRjkk6f8qeGepr7+QfH2WFvcu5hQxEmycutYGKXutLyt5vhryzr1q3rmYYrdvlxLnfUlODw2VOAlZ
+        vzjF76VQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56212)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mvULc-0000bx-Ur; Fri, 10 Dec 2021 01:05:16 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mvULa-0007gx-Ag; Fri, 10 Dec 2021 01:05:14 +0000
+Date:   Fri, 10 Dec 2021 01:05:14 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net-next v3] net: phylink: Add helpers for c22 registers
+ without MDIO
+Message-ID: <YbKnypYPOdhjsywn@shell.armlinux.org.uk>
+References: <20211119155809.2707305-1-sean.anderson@seco.com>
+ <b0b80264-0a1d-f67b-b1ca-204857352b31@seco.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 6/9] docs: sysfs: coresight: Add sysfs ABI
- documentation for TPDM
-Content-Language: en-US
-To:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-CC:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
- <20211209141543.21314-7-quic_jinlmao@quicinc.com>
- <f8553de9-9a28-2624-0257-777f05ef6010@quicinc.com>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <f8553de9-9a28-2624-0257-777f05ef6010@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0b80264-0a1d-f67b-b1ca-204857352b31@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Trilok,
+On Thu, Dec 09, 2021 at 05:26:16PM -0500, Sean Anderson wrote:
+> ping?
 
-Thanks for the review.
+Hi Sean,
 
-On 12/10/2021 2:34 AM, Trilok Soni wrote:
->
-> Hello Jinlong,
->
-> On 12/9/2021 6:15 AM, Mao Jinlong wrote:
->> Add API usage document for sysfs API in TPDM driver.
->>
->> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->> ---
->>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm     | 12 ++++++++++++
->>   MAINTAINERS                                          |  1 +
->>   2 files changed, 13 insertions(+)
->>   create mode 100644 
->> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>
->> diff --git 
->> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> new file mode 100644
->> index 000000000000..fdd0bd0e1c33
->> --- /dev/null
->> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> @@ -0,0 +1,12 @@
->> +What: /sys/bus/coresight/devices/<tpdm-name>/available_datasets
->> +Date:        December 2021
->> +KernelVersion    5.16
->> +Contact:    Jinlong Mao or Tao Zhang
->
-> Just keep one name? I am not sure if we are adding multiple names for 
-> other files.
+There is a version of the patch that is in net-next:
 
-Yes. available_datasets need to be removed here as there is no changes 
-for available_dataset.
+291dcae39bc4 net: phylink: Add helpers for c22 registers without MDIO
 
-I forgot to remove it after removing he available_dataset changes. I 
-will update in next version.
+Looking at the date in that commit, it ties up with the date in your
+v3 patch, but patchwork has been set to "Not applicable" - I think
+someone didn't update patchwork correctly.
 
->
->> +Description:    (Read) Show available datasets for TPDM.
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/integration_test
->> +Date:        December 2020
->>
->
-> December 2021?
+I think we can assume it has been merged, but incorrectly marked in
+patchwork.
 
-I will update it.
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,246 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E4247079A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCD74707B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244691AbhLJRtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:49:43 -0500
-Received: from mga02.intel.com ([134.134.136.20]:57232 "EHLO mga02.intel.com"
+        id S244795AbhLJR4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:56:17 -0500
+Received: from mga17.intel.com ([192.55.52.151]:18455 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240786AbhLJRtm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:49:42 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="225673686"
+        id S244769AbhLJR4L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 12:56:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="219090440"
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="225673686"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:46:06 -0800
+   d="scan'208";a="219090440"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:52:36 -0800
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="613001671"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:46:06 -0800
-Date:   Fri, 10 Dec 2021 09:50:25 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 3/4] iommu/vt-d: Support PASID DMA for in-kernel usage
-Message-ID: <20211210095025.38af67ce@jacob-builder>
-In-Reply-To: <921a766f-d826-2ca4-f739-4d196b32a681@linux.intel.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-4-git-send-email-jacob.jun.pan@linux.intel.com>
-        <20211208132255.GS6385@nvidia.com>
-        <20211208111659.6de22e52@jacob-builder>
-        <9f724b3a-6028-43d7-b4fc-d8a939e7b2cf@linux.intel.com>
-        <20211209152113.64b817b9@jacob-builder>
-        <921a766f-d826-2ca4-f739-4d196b32a681@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+   d="scan'208";a="480801816"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:52:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mvk3T-004b4u-PL;
+        Fri, 10 Dec 2021 19:51:35 +0200
+Date:   Fri, 10 Dec 2021 19:51:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
+ when IRQ can't be retrieved
+Message-ID: <YbOTp2f0WLhPo0bu@smile.fi.intel.com>
+References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
+ <d841bc59-a2a6-27f5-10af-05fe2e24067a@omp.ru>
+ <YbI/6OIKM7qvLQcp@smile.fi.intel.com>
+ <bfd96f5a-94c7-cee6-9546-14dc59cb8542@omp.ru>
+ <YbJXjmsDJWlr3xpB@smile.fi.intel.com>
+ <15cf03b2-8d45-93b1-f0a0-d79c93cee0da@omp.ru>
+ <YbMvfzKsc4CcQzSa@smile.fi.intel.com>
+ <7ffe328f-2ba1-4799-5c6a-d48d88c0459d@omp.ru>
+ <YbM541VXHoOUsM5+@smile.fi.intel.com>
+ <51c0aa6e-e75f-faa7-b9b1-850684da58c8@omp.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51c0aa6e-e75f-faa7-b9b1-850684da58c8@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lu,
-
-On Fri, 10 Dec 2021 14:46:32 +0800, Lu Baolu <baolu.lu@linux.intel.com>
-wrote:
-
-> On 2021/12/10 7:21, Jacob Pan wrote:
-> > On Thu, 9 Dec 2021 10:32:43 +0800, Lu Baolu<baolu.lu@linux.intel.com>
-> > wrote:
-> >   
-> >> On 12/9/21 3:16 AM, Jacob Pan wrote:  
-> >>> Hi Jason,
-> >>>
-> >>> On Wed, 8 Dec 2021 09:22:55 -0400, Jason Gunthorpe<jgg@nvidia.com>
-> >>> wrote:  
-> >>>> On Tue, Dec 07, 2021 at 05:47:13AM -0800, Jacob Pan wrote:  
-> >>>>> Between DMA requests with and without PASID (legacy), DMA mapping
-> >>>>> APIs are used indiscriminately on a device. Therefore, we should
-> >>>>> always match the addressing mode of the legacy DMA when enabling
-> >>>>> kernel PASID.
+On Fri, Dec 10, 2021 at 08:39:38PM +0300, Sergey Shtylyov wrote:
+> On 12/10/21 2:28 PM, Andy Shevchenko wrote:
+> 
+> >>>>>>>>> While at it, drop redundant check for 0 as platform_get_irq() spills
+> >>>>>>>>> out a big WARN() in such case.
+> >>>>>>>>
+> >>>>>>>>    And? IRQ0 is still returned! :-(
+> >>>>>>>
+> >>>>>>> It should not be returned in the first place.
+> >>>>>>
+> >>>>>>    But it still is, despite the WARN(), right?
 > >>>>>
-> >>>>> This patch adds support for VT-d driver where the kernel PASID is
-> >>>>> programmed to match RIDPASID. i.e. if the device is in pass-through,
-> >>>>> the kernel PASID is also in pass-through; if the device is in IOVA
-> >>>>> mode, the kernel PASID will also be using the same IOVA space.
-> >>>>>
-> >>>>> There is additional handling for IOTLB and device TLB flush w.r.t.
-> >>>>> the kernel PASID. On VT-d, PASID-selective IOTLB flush is also on a
-> >>>>> per-domain basis; whereas device TLB flush is per device. Note that
-> >>>>> IOTLBs are used even when devices are in pass-through mode. ATS is
-> >>>>> enabled device-wide, but the device drivers can choose to manage ATS
-> >>>>> at per PASID level whenever control is available.
-> >>>>>
-> >>>>> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
-> >>>>>    drivers/iommu/intel/iommu.c | 105
-> >>>>> +++++++++++++++++++++++++++++++++++- drivers/iommu/intel/pasid.c |
-> >>>>> 7 +++ include/linux/intel-iommu.h |   3 +-
-> >>>>>    3 files changed, 113 insertions(+), 2 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/iommu/intel/iommu.c
-> >>>>> b/drivers/iommu/intel/iommu.c index 60253bc436bb..a2ef6b9e4bfc
-> >>>>> 100644 +++ b/drivers/iommu/intel/iommu.c
-> >>>>> @@ -1743,7 +1743,14 @@ static void domain_flush_piotlb(struct
-> >>>>> intel_iommu *iommu, if (domain->default_pasid)
-> >>>>>    		qi_flush_piotlb(iommu, did,
-> >>>>> domain->default_pasid, addr, npages, ih);
-> >>>>> -
-> >>>>> +	if (domain->kernel_pasid && !domain_type_is_si(domain)) {
-> >>>>> +		/*
-> >>>>> +		 * REVISIT: we only do PASID IOTLB inval for FL, we
-> >>>>> could have SL
-> >>>>> +		 * for PASID in the future such as vIOMMU PT. this
-> >>>>> doesn't get hit.
-> >>>>> +		 */
-> >>>>> +		qi_flush_piotlb(iommu, did, domain->kernel_pasid,
-> >>>>> +				addr, npages, ih);
-> >>>>> +	}
-> >>>>>    	if (!list_empty(&domain->devices))
-> >>>>>    		qi_flush_piotlb(iommu, did, PASID_RID2PASID,
-> >>>>> addr, npages, ih); }
-> >>>>> @@ -5695,6 +5702,100 @@ static void
-> >>>>> intel_iommu_iotlb_sync_map(struct iommu_domain *domain, }
-> >>>>>    }
-> >>>>>    
-> >>>>> +static int intel_enable_pasid_dma(struct device *dev, u32 pasid)
-> >>>>> +{  
-> >>>> This seems like completely the wrong kind of op.
+> >>>>> So, you admit that there is a code which does that?
 > >>>>
-> >>>> At the level of the iommu driver things should be iommu_domain
-> >>>> centric
-> >>>>
-> >>>> The op should be
-> >>>>
-> >>>> int attach_dev_pasid(struct iommu_domain *domain, struct device *dev,
-> >>>> ioasid_t pasid)
-> >>>>
-> >>>> Where 'dev' purpose is to provide the RID
-> >>>>
-> >>>> The iommu_domain passed in should be the 'default domain' ie the
-> >>>> table used for on-demand mapping, or the passthrough page table.
-> >>>>     
-> >>> Makes sense. DMA API is device centric, iommu API is domain centric.
-> >>> It should be the common IOMMU code to get the default domain then
-> >>> pass to vendor drivers. Then we can enforce default domain behavior
-> >>> across all vendor drivers.
-> >>> i.e. 	
-> >>> 	dom = iommu_get_dma_domain(dev);
-> >>> 	attach_dev_pasid(dom, dev, pasid);
-> >>>      
-> >>>>> +	struct intel_iommu *iommu = device_to_iommu(dev, NULL,
-> >>>>> NULL);
-> >>>>> +	struct device_domain_info *info;  
-> >>>> I don't even want to know why an iommu driver is tracking its own
-> >>>> per-device state. That seems like completely wrong layering.
-> >>>>     
-> >>> This is for IOTLB and deTLB flush. IOTLB is flushed at per domain
-> >>> level, devTLB is per device.
+> >>>>    I admit *what*?! That platfrom_get_irq() and its ilk return IRQ0 while they
+> >>>> shouldn't? =)
 > >>>
-> >>> For multi-device groups, this is a need to track how many devices are
-> >>> using the kernel DMA PASID.
-> >>>
-> >>> Are you suggesting we add the tracking info in the generic layer? i.e.
-> >>> iommu_group.
-> >>>
-> >>> We could also have a generic device domain info to replace what is in
-> >>> VT-d and FSL IOMMU driver, etc.  
-> >> The store place of per-device iommu driver private data has already
-> >> been standardized. The iommu core provides below interfaces for this
-> >> purpose:
+> >>> That there is a code beneath platform_get_irq() that returns 0, yes.
 > >>
-> >> void dev_iommu_priv_set(struct device *dev, void *priv);
-> >> void *dev_iommu_priv_get(struct device *dev);
+> >>    Look at the ACPI-specific GpioInt handling code (just above the out_not_found label) --
+> >> I'm not sure the check there is correct -- I'm not very familiar with ACPI, you seem to
+> >> know it much better. :-)
+> > 
+> > And what is your point here exactly?
+> 
+>    You're saying IRQ0 shouldn't be returned (by the ACPI code) -- from this fragment
+> we can see that it may be returned...
+
+Please, provide your analysis, I really don't see how it's possible.
+If you prove that, we must fix the severe bug then.
+
+> > If == 0 case happens, it will be
+> > immediately WARN() and reported (I hope)
+> 
+>    Well, "hope dies last"... :-)
+
+Believe, big WARNs are quite likely to be reported if not by humans, then by
+CIs and fuzzers. So, the hope is rather to word 'immediately'.
+
+> > since it will mean bug in the code.
+> > 
+> >>    Also, 0 can be specified via the normal IRQ resource. I know of e.g. the Alchemy MIPS SoCs
+> >> that have IRQ0 used by UART0; luckily, currently SoC IRQs are mapped starting at Linux IRQ8
+> >> (but it wasn't the case in the 2.6.1x time frame where we had issue with the serial driver)...
+> > 
+> > You mixed up HW IRQ with vIRQ.
+> 
+>    I didn't. Linux expects the vIRQs (I called them Linux IRQs). In the 2.6.1x time frame
+> those corresponded 1:1 on Alchemy. Also, there's 8259 which is always mapped at vIRQ0 (or
+> the legacy drivers won't work).
+> 
+> > The former one may be 0 and it's completely valid case, while
+> > the second one is not.
+> 
+>    Well, request_irq() happilly takes vIRQ0. Moreover, there are 8253 drivers in e.g. the arch/x86/
+> (PPC and MIPS too) which do use vIRQ0.
+
+This is an exception which is not in the scope here. Let me remind that the
+topic here is libahci_platform and platform_get_irq().
+
+> >>>>> That code should be fixed first. Have you sent a patch?
+> >>>>
+> >>>>    Which code?! You got me totally muddled. =)
+> >>>
+> >>> Above mentioned.
 > >>
-> >> If we have anything generic among different vendor iommu drivers,
-> >> perhaps we could move them into dev->iommu.
-> >>  
-> > Yes, good suggestion. DMA PASID should be a generic feature, not
-> > suitable for the opaque private date. Can we agree on adding the
-> > following flag for devTLB invalidation?
+> >>    What needs to be fixed in this case is the interrupt controller driver.
 > > 
-> > @@ -379,6 +379,7 @@ struct dev_iommu {
-> >          struct iommu_fwspec             *fwspec;
-> >          struct iommu_device             *iommu_dev;
-> >          void                            *priv;
-> > +       u32 pasid_dma_enabled           : 1;
-> >   };
+> > What do you mean by that?
+> 
+>    You better ask Linus... ;-)
+
+If you cite somebody you have to understand what they said, right?
+Lemme repeat the question, what do you mean by that? In your own words, please.
+
+> > vIRQ is handled by IRQ core, IRQ controller driver
+> > just a mere provider of the resource. And those exceptions for vIRQ == 0
+> > shouldn't be propagated to the platform code or so.
+> 
+> >> Quoting Linus
+> >> (imprecisely :-)), IRQ #s should be either mapped starting with #1 or IRQ0 remapped at
+> >> the end of the controller's interrupt range... I currently have no information on the
+> >> platforms requiring such kind of fixing (Alchemy don't seem to need it now)...
+> 
+>    Well, actually that Linus' quote predates drivers/irqchip/, so I must confess this
+> argument was wrong... :-)
+> 
+> > Again, do not mix vIRQ (about which Linus ranted) and HW IRQ.
+
+...
+
+> >>>>>>>>> -	if (!irq)
+> >>>>>>>>> -		return -EINVAL;
+> >>>>>>>>
+> >>>>>>>>    This is prermature -- let's wait till my patch that stops returning IRQ0 from
+> >>>>>>>> platform_get_irq() and friends gets merged....
+> >>>>>>>
+> >>>>>>> What patch?
+> >>>>>>
+> >>>>>>    https://marc.info/?l=linux-kernel&m=163623041902285
+> >>>>>>
+> >>>>>>> Does it fix platform_get_irq_optional()?
+> >>>>>>
+> >>>>>>    Of course! :-)
+> >>>>>
+> >>>>> Can you share link to lore.kernel.org, please?
+> >>>>> It will make much easier to try and comment.
+> >>>>
+> >>>>    I don't know how to uise it yet, and I'm a little busy with other IRQ0 issues ATM,
 > > 
-> > For DMA PASID storage, can we store it in the iommu_domain instead of
-> > iommu_group? In the end, this PASID is only used for the default
-> > domain. It will be easier to refcount how many attached devices are
-> > using the PASID. Destroy the PASID when no devices in the group are
-> > using PASID DMA. IOTLB flush is per domain also.  
+> >>    A little bit, I meant to type.
+> > 
+> > No problem. I just haven't got what other IRQ0 issues except fixing
+> > platform_get_irq_optional() et al. could be possibly needed...
 > 
-> Tying pasid to an iommu_domain is not a good idea. An iommu_domain
-> represents an I/O address translation table. It could be attached to a
-> device or a PASID on the device.
-> 
-I don;t think we can avoid storing PASID at domain level or the group's
-default domain. IOTLB flush is per domain. Default domain of DMA type
-is already tying to PASID0, right?
+>    There is other IRQ0 issue which is very old already...
 
-> Perhaps the dev_iommu is a reasonable place for this.
-> 
-> @@ -390,6 +390,8 @@ struct dev_iommu {
->          struct iommu_fwspec             *fwspec;
->          struct iommu_device             *iommu_dev;
->          void                            *priv;
-> +       unsigned int                    pasid_bits;
-> +       u32                             kernel_dma_pasid;
->   };
-> 
-> @pasid_bits is a static attribute of a device which supports PASID
-> feature. It reads the PASID bitwidth that the device could support.
-> The vendor iommu driver could set this when the PASID feature is about
-> to be enabled. Normally, it's the MIN of device and iommu capabilities.
-> 
-> @kernel_dma_pasid is the PASID value used for kernel DMA if it's
-> enabled. It reads INVALID_IOASID if kernel DMA with PASID is not
-> enabled.
-> 
-This essentially goes back to the same layering as struct device.pasid,
-just embedded under device.iommu.pasid. That is fine but we still need a
-per domain PASID info. I see the the following functionalities:
-1. per device PASID info for devTLB flush
-2. per domain PASID info for IOTLB flush for all attached devices
-The PASID info includes PASID value, user/device count, enabled status.
+Is it big secret? What is that issue?
 
-Though both DMA API PASID and RIDPASID (0) are mapped identically, RIDPASID
-TLB flush is implied for all devices attached to a domain. That is why we
-don't need to track it.
-
-For DMA API PASID, it is opt-in by device drivers, therefore we must track
-on a per-domain basis to see how many attached devices are using this PASID.
-This will avoid blindly flushing IOTLBs for DMA API PASID. dma_unmap() does
-not tell you which PASIDs to flush.
-
-In this patchset, I store per domain DMA API PASID info in VT-d only
-dmar_domain. (VT-d is the only user so far). If we were to store it the
-generic layer, this could be simpler.
-
-> Best regards,
-> baolu
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Thanks,
-
-Jacob

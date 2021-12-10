@@ -2,213 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6AF470055
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F9E47005A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240801AbhLJLxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:53:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35272 "EHLO
+        id S240815AbhLJLyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:54:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35862 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240459AbhLJLxV (ORCPT
+        with ESMTP id S240459AbhLJLyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:53:21 -0500
+        Fri, 10 Dec 2021 06:54:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9282EB8275F;
-        Fri, 10 Dec 2021 11:49:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A4DC00446;
-        Fri, 10 Dec 2021 11:49:38 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 12:49:34 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-Message-ID: <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-16-stefanb@linux.ibm.com>
- <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
- <20211209143749.wk4agkynfqdzftbl@wittgenstein>
- <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
- <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 274D3B827EC;
+        Fri, 10 Dec 2021 11:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22FEC00446;
+        Fri, 10 Dec 2021 11:51:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639137073;
+        bh=k6SoHWhosx0qzm2ZpWW1ByceeyzMtPO2w4609dbQnKU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BQvaSVhwExVghGCYl9TyVS/k2l4rDqcfVaZ5yXRPW8vhK61maQPPBNKe28Ugp3EyM
+         5vtvKMIFmitqiiybgFUTW+13bQVAwBg5djldUlyD7i8YEUIWz23Xr7qY2JAj0iL/lO
+         JxaEkH144KM497Mkb+aU9w1TPmrBycKv0jC7FLf4XTeEjFc64NpS/Fd1qSRIrloCr+
+         R3aRQ620NJnUw7uJcYZdZGMd4RdhZSMK99/4Cl+6h2Bide8BnqMHehPyIN5yU8kAY0
+         2RJXTHTsBwobXQTd+eUrYw03VLlptezMrab8FVjCwNuuLFqvdnCCRCeMWyPzrSjWzS
+         wMeoEWypzkFoQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mveQh-000EFs-JX; Fri, 10 Dec 2021 12:51:11 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Robert Schlabbach <robert_s@gmx.net>
+Subject: [PATCH v2] media: si2157: get rid of chiptype data
+Date:   Fri, 10 Dec 2021 12:51:10 +0100
+Message-Id: <08e7a803894687c7706dc974bffd7d8b0c9df53d.1639136930.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 02:38:13PM -0500, James Bottomley wrote:
-> On Thu, 2021-12-09 at 10:30 -0500, James Bottomley wrote:
-> > On Thu, 2021-12-09 at 15:37 +0100, Christian Brauner wrote:
-> > > On Thu, Dec 09, 2021 at 03:34:28PM +0100, Christian Brauner wrote:
-> > > > On Wed, Dec 08, 2021 at 05:18:17PM -0500, Stefan Berger wrote:
-> > > > > Move the dentries into the ima_namespace for reuse by
-> > > > > virtualized
-> > > > > SecurityFS. Implement function freeing the dentries in order of
-> > > > > files and symlinks before directories.
-> > > > > 
-> > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > ---
-> > > > 
-> > > > This doesn't work as implemented, I think.
-> > > > 
-> > > > What I would have preferred and what I tried to explain in the
-> > > > earlier review was:
-> > > > Keep the dentry stashing global since it is only needed for
-> > > > init_ima_ns.
-> > > > Then struct ima_namespace becomes way smaller and simpler.
-> > > > If you do that then it makes sense to remove the additional
-> > > > dget() in securityfs_create_dentry() for non-init_ima_ns.
-> > > > Then you can rely on auto-cleanup in .kill_sb() or on
-> > > > ima_securityfs_init() failure and you only need to call
-> > > > ima_fs_ns_free_dentries() if ns != init_ima_ns.
-> > > > 
-> > > > IIuc, it seems you're currently doing one dput() too many since
-> > > > you're calling securityfs_remove() in the error path for non-
-> > > > init_ima_ns which relies on the previous increased dget() which
-> > > > we removed.
-> > > 
-> > > If you really want to move the dentry stashing into struct
-> > > ima_namespace even though it's really unnecessary then you may as
-> > > well not care about the auto-cleanup and keep that additional
-> > > ima_fs_ns_free_dentries(ns) call in .kill_sb(). But I really think
-> > > not dragging dentry stashing into struct ima_namespace is the
-> > > correct way to go about this.
-> > 
-> > We, unfortunately, do have one case we can't avoid stashing for the
-> > policy file.  It's this code in ima_release_policy:
-> > 
-> > > #if !defined(CONFIG_IMA_WRITE_POLICY) &&
-> > > !defined(CONFIG_IMA_READ_POLICY)
-> > > 	securityfs_remove(ns->dentry[IMAFS_DENTRY_IMA_POLICY]);
-> > > 	ns->dentry[IMAFS_DENTRY_IMA_POLICY] = NULL;
-> > > 
-> > 
-> > What it does is that in certain config options, the policy file entry
-> > gets removed from the securityfs ima directory after you write to it.
-> 
-> This is what I have incremental to v5 that corrects all of this.  It
-> actually keeps every dentry reference (including init_user_ns ones) at
-> 1 so they can be reaped on unmount.  For the remove case it does
-> d_delete and then puts the only reference.  This means
-> securityfs_remove() works for the namespaced policy file as well.
-> 
-> I also got rid of the spurious initialized check in ima_securityfs_init
-> because it prevents you doing a mount;umount;mount on securityfs within
-> a namespace.
-> 
-> There's still the problem that if you write the policy, making the file
-> disappear then unmount and remount securityfs it will come back.  My
-> guess for fixing this is that we only stash the policy file reference,
-> create it if NULL but then set the pointer to PTR_ERR(-EINVAL) or
-> something and refuse to create it for that value.
+The driver should be capable of autodetecting its type, so no
+need to pass it via device driver's data.
 
-Some sort of indicator that gets stashed in struct ima_ns that the file
-does not get recreated on consecutive mounts. That shouldn't be hard to
-fix.
+While here, improve documentation of some of the part_id
+specific code.
 
-> 
-> James
-> 
-> ---
-> 
-> From 7de285a81ff06b6e0eb2c6db24810aeef9f6dd17 Mon Sep 17 00:00:00 2001
-> From: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Date: Thu, 9 Dec 2021 19:33:49 +0000
-> Subject: [PATCH] fix dentry ref counting
-> 
-> ---
->  security/inode.c                | 12 ++----------
->  security/integrity/ima/ima_fs.c |  4 ----
->  2 files changed, 2 insertions(+), 14 deletions(-)
-> 
-> diff --git a/security/inode.c b/security/inode.c
-> index eaccba7017d9..b53152f7a625 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -178,8 +178,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
->  		inode->i_fop = fops;
->  	}
->  	d_instantiate(dentry, inode);
-> -	if (ns == &init_user_ns)
-> -		dget(dentry);
->  	inode_unlock(dir);
->  	return dentry;
->  
-> @@ -317,21 +315,15 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
->  void securityfs_remove(struct dentry *dentry)
->  {
->  	struct user_namespace *ns = dentry->d_sb->s_user_ns;
-> -	struct inode *dir;
->  
->  	if (!dentry || IS_ERR(dentry))
->  		return;
->  
-> -	dir = d_inode(dentry->d_parent);
-> -	inode_lock(dir);
->  	if (simple_positive(dentry)) {
-> -		if (d_is_dir(dentry))
-> -			simple_rmdir(dir, dentry);
-> -		else
-> -			simple_unlink(dir, dentry);
-> +		d_delete(dentry);
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
 
-Not, that doesn't work. You can't just call d_delete() and dput() and
-even if I wouldn't advise it. And you also can't do this without taking
-the inode lock on the directory.
-simple_rmdir()/simple_unlink() take care to update various inode fields
-in the parent dir and handle link counts. This really wants to be sm
-like
+v2:
+   - Checked against the open-sourced manufacturer driver to see if the
+     part_id-dependent parts make sense;
+   - Added a couple of comments for some of those part_id-specific code
 
-	struct inode *parent_inode;
+ drivers/media/tuners/si2157.c      | 44 ++++++++++++++++++------------
+ drivers/media/tuners/si2157_priv.h |  7 +----
+ 2 files changed, 27 insertions(+), 24 deletions(-)
 
-	parent_inode = d_inode(dentry->d_parent);
-	inode_lock(parent_inode);
-	if (simple_positive(dentry)) {
-		dget(dentry);
-		if (d_is_dir(dentry)
-			simple_unlink(parent_inode, dentry);
-		else
-			simple_unlink(parent_inode, dentry);
-		d_delete(dentry);
-		dput(dentry);
-	}
-	inode_unlock(parent_inode);
+diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
+index bb590395e81a..a2f0dfd50e8d 100644
+--- a/drivers/media/tuners/si2157.c
++++ b/drivers/media/tuners/si2157.c
+@@ -185,6 +185,9 @@ static int si2157_find_and_load_firmware(struct dvb_frontend *fe)
+ 		return -EINVAL;
+ 	}
+ 
++	/* Update the part id based on device's report */
++	dev->part_id = part_id;
++
+ 	dev_info(&client->dev,
+ 		 "found a 'Silicon Labs Si21%d-%c%c%c ROM 0x%02x'\n",
+ 		 part_id, cmd.args[1], cmd.args[3], cmd.args[4], rom_id);
+@@ -235,10 +238,12 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	dev->if_frequency = 0; /* we no longer know current tuner state */
+ 
+ 	/* power up */
+-	if (dev->chiptype == SI2157_CHIPTYPE_SI2146) {
++	if (dev->part_id == SI2146) {
++		/* clock_mode = XTAL, clock_freq = 24MHz */
+ 		memcpy(cmd.args, "\xc0\x05\x01\x00\x00\x0b\x00\x00\x01", 9);
+ 		cmd.wlen = 9;
+-	} else if (dev->chiptype == SI2157_CHIPTYPE_SI2141) {
++	} else if (dev->part_id == SI2141) {
++		/* clock_mode: XTAL, xout enabled */
+ 		memcpy(cmd.args, "\xc0\x00\x0d\x0e\x00\x01\x01\x01\x01\x03", 10);
+ 		cmd.wlen = 10;
+ 	} else {
+@@ -247,11 +252,11 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	}
+ 	cmd.rlen = 1;
+ 	ret = si2157_cmd_execute(client, &cmd);
+-	if (ret && (dev->chiptype != SI2157_CHIPTYPE_SI2141 || ret != -EAGAIN))
++	if (ret && (dev->part_id != SI2141 || ret != -EAGAIN))
+ 		goto err;
+ 
+-	/* Si2141 needs a second command before it answers the revision query */
+-	if (dev->chiptype == SI2157_CHIPTYPE_SI2141) {
++	/* Si2141 needs a wake up command */
++	if (dev->part_id == SI2141) {
+ 		memcpy(cmd.args, "\xc0\x08\x01\x02\x00\x00\x01", 7);
+ 		cmd.wlen = 7;
+ 		ret = si2157_cmd_execute(client, &cmd);
+@@ -493,7 +498,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
+ 	if (ret)
+ 		goto err;
+ 
+-	if (dev->chiptype == SI2157_CHIPTYPE_SI2146)
++	if (dev->part_id == SI2146)
+ 		memcpy(cmd.args, "\x14\x00\x02\x07\x00\x01", 6);
+ 	else
+ 		memcpy(cmd.args, "\x14\x00\x02\x07\x00\x00", 6);
+@@ -560,9 +565,9 @@ static int si2157_set_analog_params(struct dvb_frontend *fe,
+ 	u8 color = 0;    /* 0=NTSC/PAL, 0x10=SECAM */
+ 	u8 invert_analog = 1; /* analog tuner spectrum; 0=normal, 1=inverted */
+ 
+-	if (dev->chiptype != SI2157_CHIPTYPE_SI2157) {
+-		dev_info(&client->dev, "Analog tuning not supported for chiptype=%u\n",
+-			 dev->chiptype);
++	if (dev->part_id != SI2157) {
++		dev_info(&client->dev, "Analog tuning not supported on Si21%d\n",
++			 dev->part_id);
+ 		ret = -EINVAL;
+ 		goto err;
+ 	}
+@@ -874,7 +879,7 @@ static int si2157_probe(struct i2c_client *client,
+ 	dev->inversion = cfg->inversion;
+ 	dev->dont_load_firmware = cfg->dont_load_firmware;
+ 	dev->if_port = cfg->if_port;
+-	dev->chiptype = (u8)id->driver_data;
++	dev->part_id = (u8)id->driver_data;
+ 	dev->if_frequency = 5000000; /* default value of property 0x0706 */
+ 	mutex_init(&dev->i2c_mutex);
+ 	INIT_DELAYED_WORK(&dev->stat_work, si2157_stat_work);
+@@ -917,10 +922,8 @@ static int si2157_probe(struct i2c_client *client,
+ 	}
+ #endif
+ 
+-	dev_info(&client->dev, "Silicon Labs %s successfully attached\n",
+-			dev->chiptype == SI2157_CHIPTYPE_SI2141 ?  "Si2141" :
+-			dev->chiptype == SI2157_CHIPTYPE_SI2146 ?
+-			"Si2146" : "Si2147/2148/2157/2158");
++	dev_info(&client->dev, "Silicon Labs Si21%d successfully attached\n",
++		 dev->part_id);
+ 
+ 	return 0;
+ 
+@@ -953,11 +956,16 @@ static int si2157_remove(struct i2c_client *client)
+ 	return 0;
+ }
+ 
++/*
++ * The part_id used here will only be used on buggy devices that don't
++ * accept firmware uploads. Non-buggy devices should just use "si2157" for
++ * all SiLabs TER tuners, as the driver should auto-detect it.
++ */
+ static const struct i2c_device_id si2157_id_table[] = {
+-	{"si2157", SI2157_CHIPTYPE_SI2157},
+-	{"si2146", SI2157_CHIPTYPE_SI2146},
+-	{"si2141", SI2157_CHIPTYPE_SI2141},
+-	{"si2177", SI2157_CHIPTYPE_SI2177},
++	{"si2157", SI2157},
++	{"si2146", SI2146},
++	{"si2141", SI2141},
++	{"si2177", SI2177},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(i2c, si2157_id_table);
+diff --git a/drivers/media/tuners/si2157_priv.h b/drivers/media/tuners/si2157_priv.h
+index 0db21b082ba9..df17a5f03561 100644
+--- a/drivers/media/tuners/si2157_priv.h
++++ b/drivers/media/tuners/si2157_priv.h
+@@ -26,7 +26,7 @@ struct si2157_dev {
+ 	unsigned int active:1;
+ 	unsigned int inversion:1;
+ 	unsigned int dont_load_firmware:1;
+-	u8 chiptype;
++	u8 part_id;
+ 	u8 if_port;
+ 	u32 if_frequency;
+ 	u32 bandwidth;
+@@ -58,11 +58,6 @@ struct si2157_tuner_info {
+ 	const char		*fw_name, *fw_alt_name;
+ };
+ 
+-#define SI2157_CHIPTYPE_SI2157 0
+-#define SI2157_CHIPTYPE_SI2146 1
+-#define SI2157_CHIPTYPE_SI2141 2
+-#define SI2157_CHIPTYPE_SI2177 3
+-
+ /* firmware command struct */
+ #define SI2157_ARGLEN      30
+ struct si2157_cmd {
+-- 
+2.33.1
 
->  		dput(dentry);
->  	}
-> -	inode_unlock(dir);
-> +
->  	if (ns == &init_user_ns)
->  		simple_release_fs(&init_securityfs_mount,
->  				  &init_securityfs_mount_count);
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 778983fd9a73..077a6ff46858 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -466,10 +466,6 @@ int ima_securityfs_init(struct user_namespace *user_ns, struct dentry *root)
->  	struct ima_namespace *ns = user_ns->ima_ns;
->  	struct dentry *ima_dir;
->  
-> -	/* already initialized? */
-> -	if (ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR])
-> -		return 0;
-> -
->  	/* FIXME: update when evm and integrity are namespaced */
->  	if (user_ns != &init_user_ns) {
->  		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] =
-> -- 
-> 2.33.0
-> 
-> 
-> 
+

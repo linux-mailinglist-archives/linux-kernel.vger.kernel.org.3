@@ -2,186 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613C24701C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7864701B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242000AbhLJNjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:39:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
+        id S241895AbhLJNjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238746AbhLJNjn (ORCPT
+        with ESMTP id S238651AbhLJNjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:39:43 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF023C0617A1;
-        Fri, 10 Dec 2021 05:36:07 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id x7so6899398pjn.0;
-        Fri, 10 Dec 2021 05:36:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sT4BTdsaYQnUgB11mSNSzl3RhfDk7KFXXBMaleAwSfQ=;
-        b=qs6BKu+4h4lgivt9jIhjIz/JcEgAk56iItuSli21vFCli0fBF/1O1KPq/SKkVrTYor
-         CsTDib17UOU5ewpBjzP3Lj6dTO1g/yT18umS+3GaukmwRaL5BSZHM2/P06WtTkrNGHq0
-         sqPel+Jpq+xzQC5DgWSX76s7VPt5NVkvENGEN7+xd3GU0EyS83VhYXQC5b55CmYqoInk
-         0MUjfwl6RkjDep88JNP+n3FhTo240rG95pbUmhjckPn0GNVnHD/mQr1uxOaIF8g38JY2
-         Gfx7wNV/BAVoTYUzpOyq1JaDfTzTyPZ3/WvN8IHQS+SRFBpZ1W9W9vXVzczm/xVLJ8rY
-         ef+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sT4BTdsaYQnUgB11mSNSzl3RhfDk7KFXXBMaleAwSfQ=;
-        b=UtRH4ivTpNSYJ1nC3RkAymvWujSAxnG/N+xs02832uhhTYTQhTqfsHMKETSJUzqAeg
-         bZnA/Gmo/Iy7w+438qx7Jc4Lzv6vuTQFFxsaQmZ48SHMeIKS/TEMJCN7gF8z+QE3atFs
-         8e45Ls6YggRfpFaFe/HOiCUY78oMYKl5f+gG3oUKppTqUlUvdeCfrbP94/e0QxZCnn0R
-         GqqfiDMjdzW+lSGelN/iOZ2XpATLgQlTvYwgfYGx1+Wi3rgK+SjGTWvXlLR2ZZuC5HOi
-         80eKPzMi51E8TLqIbPggxOUaYeGLdWT7nUfbuK/TD22hKajeYel/4XdbSaFnTL3/E5HK
-         ZeRA==
-X-Gm-Message-State: AOAM532pS70jDuP4iEKC1SPuG8H97afSkfyJLYXgT56LtUzIJK11SJ4M
-        TVY80LfwH3jW42AuQpsNMsw=
-X-Google-Smtp-Source: ABdhPJyyVLwq11n/T57Bn4o8gD89FG6M+zv3MDwSb1SJOp7Mn0kO+0WIt8uk6oFmKMhjGy+3b9KQfg==
-X-Received: by 2002:a17:90b:3ecc:: with SMTP id rm12mr23839757pjb.75.1639143367463;
-        Fri, 10 Dec 2021 05:36:07 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id t4sm3596068pfj.168.2021.12.10.05.36.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Dec 2021 05:36:07 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <likexu@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v11 08/17] KVM: x86/pmu: Reprogram PEBS event to emulate guest PEBS counter
-Date:   Fri, 10 Dec 2021 21:35:16 +0800
-Message-Id: <20211210133525.46465-9-likexu@tencent.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211210133525.46465-1-likexu@tencent.com>
-References: <20211210133525.46465-1-likexu@tencent.com>
+        Fri, 10 Dec 2021 08:39:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3877C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:35:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA8BEB827EC
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8903CC00446;
+        Fri, 10 Dec 2021 13:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639143337;
+        bh=VhvC0brUwGyRh/apvs6b8MerVzCShEtLhUr5tRJNjKU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wq8RJhfOBLkT4Bx+OhWlJjSPzm4tbqIBmsNd90uaASNEtwWt1JnAFQ9wCPRVXVC59
+         dFg08oB5spkx7PgchjUqEJkfvj1v5ZkP5VkGdnWSdY4tTwYwMDjsj3/G4gyq3q3xMj
+         AZItZ4mODwe5+2U5RbYBhEYUx3w2pC4r84OAiGFkNJuLFCZqjdbx4cFDINP7dBGHF0
+         0ifObGEWGpoQyRMaJT9dy6lXIlRvyNvIh+Y6mlcQPoxdOsYvrv8SpIWBr1WS2QJEc9
+         l2jzUwuaoWHY4+0Ir9gdWkE5OBpUMI0Hqpy1F9wpok8ZzXssAVxDJ/KNaVFSRe6Z6m
+         VosL6kTKAg+MQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mvg3j-00BGRz-Ge; Fri, 10 Dec 2021 13:35:35 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        Donghyeok Kim <dthex5d@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hector Martin <marcan@marcan.st>,
+        Joel Stanley <joel@jms.id.au>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Wudi Wang <wangwudi@hisilicon.com>,
+        Ye Guojin <ye.guojin@zte.com.cn>, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: [GIT PULL] irqchip fixes for 5.16, take #2
+Date:   Fri, 10 Dec 2021 13:35:16 +0000
+Message-Id: <20211210133516.664497-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, billy_tsai@aspeedtech.com, dthex5d@gmail.com, f.fainelli@gmail.com, geert+renesas@glider.be, marcan@marcan.st, joel@jms.id.au, pali@kernel.org, zhangshaokun@hisilicon.com, vladimir.murzin@arm.com, wangwudi@hisilicon.com, ye.guojin@zte.com.cn, linux-kernel@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi Thomas,
 
-When a guest counter is configured as a PEBS counter through
-IA32_PEBS_ENABLE, a guest PEBS event will be reprogrammed by
-configuring a non-zero precision level in the perf_event_attr.
+Here's another set of irqchip fixes for 5.16. The main ones are the
+MSI allocation fixes for an old Marvell system, another for the Aspeed
+SCU driver acking interrupts the wrong way, and one for the ARM NVIC
+having the wrong offset of one of the registers.
 
-The guest PEBS overflow PMI bit would be set in the guest
-GLOBAL_STATUS MSR when PEBS facility generates a PEBS
-overflow PMI based on guest IA32_DS_AREA MSR.
+We also gained a fix for the GICv3 ITS INVALL command, as well as some
+more tidying up (bcm7180-l2, Apple AIC).
 
-Even with the same counter index and the same event code and
-mask, guest PEBS events will not be reused for non-PEBS events.
+Please pull,
 
-Originally-by: Andi Kleen <ak@linux.intel.com>
-Co-developed-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/kvm/pmu.c | 36 +++++++++++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
+	M.
 
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index a20207ee4014..8934261e9563 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -58,15 +58,22 @@ static void kvm_pmi_trigger_fn(struct irq_work *irq_work)
- static inline void __kvm_perf_overflow(struct kvm_pmc *pmc, bool in_pmi)
- {
- 	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-+	bool skip_pmi = false;
- 
- 	/* Ignore counters that have been reprogrammed already. */
- 	if (test_and_set_bit(pmc->idx, pmu->reprogram_pmi))
- 		return;
- 
--	__set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
-+	if (pmc->perf_event && pmc->perf_event->attr.precise_ip) {
-+		/* Indicate PEBS overflow PMI to guest. */
-+		skip_pmi = __test_and_set_bit(GLOBAL_STATUS_BUFFER_OVF_BIT,
-+					      (unsigned long *)&pmu->global_status);
-+	} else {
-+		__set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
-+	}
- 	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
- 
--	if (!pmc->intr)
-+	if (!pmc->intr || skip_pmi)
- 		return;
- 
- 	/*
-@@ -97,6 +104,7 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 				  bool exclude_kernel, bool intr,
- 				  bool in_tx, bool in_tx_cp)
- {
-+	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
- 	struct perf_event *event;
- 	struct perf_event_attr attr = {
- 		.type = type,
-@@ -108,6 +116,7 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 		.exclude_kernel = exclude_kernel,
- 		.config = config,
- 	};
-+	bool pebs = test_bit(pmc->idx, (unsigned long *)&pmu->pebs_enable);
- 
- 	attr.sample_period = get_sample_period(pmc, pmc->counter);
- 
-@@ -122,6 +131,23 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 		attr.sample_period = 0;
- 		attr.config |= HSW_IN_TX_CHECKPOINTED;
- 	}
-+	if (pebs) {
-+		/*
-+		 * The non-zero precision level of guest event makes the ordinary
-+		 * guest event becomes a guest PEBS event and triggers the host
-+		 * PEBS PMI handler to determine whether the PEBS overflow PMI
-+		 * comes from the host counters or the guest.
-+		 *
-+		 * For most PEBS hardware events, the difference in the software
-+		 * precision levels of guest and host PEBS events will not affect
-+		 * the accuracy of the PEBS profiling result, because the "event IP"
-+		 * in the PEBS record is calibrated on the guest side.
-+		 *
-+		 * On Icelake everything is fine. Other hardware (GLC+, TNT+) that
-+		 * could possibly care here is unsupported and needs changes.
-+		 */
-+		attr.precise_ip = 1;
-+	}
- 
- 	event = perf_event_create_kernel_counter(&attr, -1, current,
- 						 kvm_perf_overflow, pmc);
-@@ -135,7 +161,7 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 	pmc_to_pmu(pmc)->event_count++;
- 	clear_bit(pmc->idx, pmc_to_pmu(pmc)->reprogram_pmi);
- 	pmc->is_paused = false;
--	pmc->intr = intr;
-+	pmc->intr = intr || pebs;
- }
- 
- static void pmc_pause_counter(struct kvm_pmc *pmc)
-@@ -161,6 +187,10 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
- 			      get_sample_period(pmc, pmc->counter)))
- 		return false;
- 
-+	if (!test_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->pebs_enable) &&
-+	    pmc->perf_event->attr.precise_ip)
-+		return false;
-+
- 	/* reuse perf_event to serve as pmc_reprogram_counter() does*/
- 	perf_event_enable(pmc->perf_event);
- 	pmc->is_paused = false;
--- 
-2.33.1
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-5.16-2
+
+for you to fetch changes up to c3fbab7767c53397d7b849799474f5a27cf306e6:
+
+  irqchip/irq-bcm7120-l2: Add put_device() after of_find_device_by_node() (2021-12-10 13:23:13 +0000)
+
+----------------------------------------------------------------
+irqchip fixes for Linux 5.16, take #2
+
+- Fix Armada-370-XP Multi-MSi allocation to be aligned on the allocation
+  size, as required by the PCI spec
+
+- Fix aspeed-scu interrupt acknowledgement by directly writing to the
+  register instead of a read-modify-write sequence
+
+- Use standard bitfirl helpers in the MIPS GIC driver instead of custom
+  constructs
+
+- Fix the NVIC driver IPR register offset
+
+- Correctly drop the reference of the device node in the irq-bcm7120-l2
+  driver
+
+- Fix the GICv3 ITS INVALL command by issueing a following SYNC command
+
+- Add a missing __init attribute to the init function of the Apple AIC
+  driver
+
+----------------------------------------------------------------
+Billy Tsai (1):
+      irqchip/aspeed-scu: Replace update_bits with write_bits.
+
+Donghyeok Kim (1):
+      irqchip/apple-aic: Mark aic_init_smp() as __init
+
+Geert Uytterhoeven (1):
+      irqchip/mips-gic: Use bitfield helpers
+
+Pali Rohár (2):
+      irqchip/armada-370-xp: Fix return value of armada_370_xp_msi_alloc()
+      irqchip/armada-370-xp: Fix support for Multi-MSI interrupts
+
+Vladimir Murzin (1):
+      irqchip: nvic: Fix offset for Interrupt Priority Offsets
+
+Wudi Wang (1):
+      irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
+
+Ye Guojin (1):
+      irqchip/irq-bcm7120-l2: Add put_device() after of_find_device_by_node()
+
+ drivers/irqchip/irq-apple-aic.c     |  2 +-
+ drivers/irqchip/irq-armada-370-xp.c | 16 ++++++----------
+ drivers/irqchip/irq-aspeed-scu-ic.c |  4 ++--
+ drivers/irqchip/irq-bcm7120-l2.c    |  1 +
+ drivers/irqchip/irq-gic-v3-its.c    |  2 +-
+ drivers/irqchip/irq-mips-gic.c      |  4 ++--
+ drivers/irqchip/irq-nvic.c          |  2 +-
+ 7 files changed, 14 insertions(+), 17 deletions(-)

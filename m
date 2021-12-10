@@ -2,267 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B08774700F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1640C4700FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241326AbhLJMtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbhLJMtM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:49:12 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16804C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:45:37 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id q3so14725863wru.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9sJ/j648CjFEfYYwmgaJqm9n6E4hQ0hf+GgdNuFCf40=;
-        b=sQ33cLM/SB7/dDXToTvBL6uRbSdkQ7Dv+ReEuw5JZ4N0AYWrCSXvVysI7vatB8NC6n
-         r080596tnsP0VpHOxetN5gLwYR9KuvzItFpnfSnAtIbPq92BXcSArmILNKdMw1GGvosT
-         tD7qDJgsTW4ysjAKkpJLKj1zknbrTkfhU0xApgNbkEBcQbdx8ADpiB/Z1xuvZzcRRuTR
-         9l8RLMxxWdzM2C08C2z9rUy3kFY23KREWnrO/6FLTVuAPraTcuq9XWXpvPlSsuguggZe
-         TsXHYTK2mMaPP3Oa4PZMYvv65A+EtDh0H/xj6p+cj953DhEPK5fr+QCXeDUBn37fizif
-         SqCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9sJ/j648CjFEfYYwmgaJqm9n6E4hQ0hf+GgdNuFCf40=;
-        b=Id7YXe99yRmk6TD+kp1Z/CyyIHRkhErHv6TcvWgYCGdqi5v314E6XwpV6dCrMubAlx
-         62v4vp0UoTBOFhZBJVgrmjEsY7p64sdunminT6rhHgGd6fg7ORhOeOwRpnnG9xAMXYvt
-         eW+xT/Xc9kS46w4ngG5/z8pD0uQ37Tt9sC1avysfBjPvCvFsAdyJP2CZvuhVBHJzisjy
-         9Z6mDxqGQo8d8oiC9OFJJZZ5RxzMQfOUqKD4LPevRvufFpS0JODcmnFWONXbCMY1kawI
-         W1kLR06Y9P7zeCLe0Zy7fEucreWRuLXX/sKJ3XJB0krEJv6VQFUIIvl/abK2xICnbibi
-         aloA==
-X-Gm-Message-State: AOAM532YESUoB6DlfJ5aCQHkKdTOMJZ/Gr/JqkZbGAstk/RX5mpSv0wT
-        pbx1oKAvNZD5n+llFcOiRGhA3w==
-X-Google-Smtp-Source: ABdhPJzgwrU/FmdlgYUrQ/W8IMfKbcwMAFyGKzuIXPCW6S7KdWuS0DbWzGfFTnCRWPoPE2mUxZ5jXA==
-X-Received: by 2002:adf:dd46:: with SMTP id u6mr14235805wrm.280.1639140335457;
-        Fri, 10 Dec 2021 04:45:35 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:13f9:8295:8923:1942])
-        by smtp.gmail.com with ESMTPSA id g4sm2425890wro.12.2021.12.10.04.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 04:45:34 -0800 (PST)
-Date:   Fri, 10 Dec 2021 13:45:27 +0100
-From:   Marco Elver <elver@google.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Chris Hyser <chris.hyser@oracle.com>,
+        id S241344AbhLJMv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:51:28 -0500
+Received: from mail-dm6nam12on2053.outbound.protection.outlook.com ([40.107.243.53]:63968
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229989AbhLJMv1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 07:51:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hFX1z86a6PTVLblldlRH0wMfJGPeG9uccOUcT/vmLbYJRoZA60Zw7iu/NVvP8No8qoL+nzUv2wYVjhvFV/sI1IhvPoFQLSDDVctIJDieWP9526sweBSCgXHbMOP06YJN/ZpeHkC40CAKoeQkJnbfbTWot2oVPopK8aEvmhbaaMnIedTpCeCRsPmTGd3JaHP264Y69EZOMui4zGtmCVUSjxH9QdVcu+RwAAAwD70nyrbsk/N9jsx4lDNTLIDstQMQKg9vPVd/tbvrpCwnGUO7rGhceawKacivpO5nSLVOLGgDtwsnenxwFYoiMeGQ2kQ7KM5RNl2xJ7Lxmxcy2vxP3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SqO5KBE8zl5SR+4rxcsQRVL4bcjPEqIkjw9pqWRNH9s=;
+ b=E/e0W7/vs33Cp24pBJHfzTvCG+08pG6pmOIOqajOa638lXA68k+rfxYCO+MYtKSA46aU1AgR6ko/S/A8Wp/rtMFwjomqTjafxcwWyXzBN4pVU30ZeDm55O7J8L72gPOK6Flrs76yfelqV/xRmHHVpQiGmQQb8Hlt7lU7EVW3IBNHywyN+dyIE+FPi8Hj4HBdKCU9ERYob4k6JMsJXY+sFMXUvlqdzYxxn5JTysIvYNdWPrHovEwTYdv3c5rMeV4wOgR8kmYw7wZ9o4zHIzw73uKXlWzXt9XXKY2XOAyv3tZmSa2PUn/o1LlSMFxrPLOvj3e1/iqza8aZArRM84njvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SqO5KBE8zl5SR+4rxcsQRVL4bcjPEqIkjw9pqWRNH9s=;
+ b=4lESrgzf9YS1paZG13zxmo3DLBgAgC+mC/HbgXvMv9M8njFV1ey5FBa+jxTS398Gt06iBya0GK8Yn/geuIyksEgNC+cb/i47kh8JdWkIaAaJ1BItH7cAoTcK8QZhZ8IdWRqnJiG1bi2S63EtfDLW67HSX+yVZnD+OrMnXE5owYU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14) by MWHPR12MB1776.namprd12.prod.outlook.com
+ (2603:10b6:300:113::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Fri, 10 Dec
+ 2021 12:47:49 +0000
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::d16c:a6d5:5d2e:f9d4]) by MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::d16c:a6d5:5d2e:f9d4%12]) with mapi id 15.20.4755.027; Fri, 10 Dec
+ 2021 12:47:49 +0000
+Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Shunsuke Mie <mie@igel.co.jp>
+Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        David Hildenbrand <david@redhat.com>,
-        Xiaofeng Cao <caoxiaofeng@yulong.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Thomas Cedeno <thomascedeno@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>
-Subject: Re: [PATCH v4 1/7] include: split out uaccess instrumentation into a
- separate header
-Message-ID: <YbNL579AHDIg3PH5@elver.google.com>
-References: <20211209221545.2333249-1-pcc@google.com>
- <20211209221545.2333249-2-pcc@google.com>
+        Doug Ledford <dledford@redhat.com>,
+        Jianxin Xiong <jianxin.xiong@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Sean Hefty <sean.hefty@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>,
+        Tomohito Esaki <etom@igel.co.jp>
+References: <20211122110817.33319-1-mie@igel.co.jp>
+ <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
+ <20211207171447.GA6467@ziepe.ca>
+ <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
+ <20211210124204.GG6467@ziepe.ca>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
+Date:   Fri, 10 Dec 2021 13:47:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20211210124204.GG6467@ziepe.ca>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: AM6P192CA0019.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:209:83::32) To MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209221545.2333249-2-pcc@google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Received: from [192.168.178.21] (87.176.191.248) by AM6P192CA0019.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:83::32) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 10 Dec 2021 12:47:43 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e2cad2fd-5bd3-4e75-1d88-08d9bbdb459c
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1776:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1776EE83ED363A3373B186D783719@MWHPR12MB1776.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mhki8zptHHRm3yHZLhdcaSKAkbhEACbUPgOBuMJd4pEj/nbIFCLfy2F6jn6q8WwV7P3nY+8qArKUzAVJYPZy7RA57ZjtRgbALSSjkQrITxLNzrWiUH7izVUfW8tibiqz7ZuOKgSI8pAmn4y7WhI+gwBGa9mH2/je2gB4H/YIWGFhKLI8l+7HMlm2tXyT6mdmETepTotv4w5Igln0eTPTMl/3njO/dZSMMyMTB0rOnZQDhHQ8Ug0omxLUjDb7BF35YgqIVo0bZ/G7Rk+3nPGHltAki1zPB0vqmJ+psz7UoQ2qGRe0uYhfqrxk27msROv8aVQY5voUoeZ7MwLQsAv8AHeb9xk7seEdxgJRwKKcDIiGzhyeeFQZ9pHH47O+yIpx6kYplLtLG6C+ZviWeF3m+qfSSHzs5X+EdkjJ4cStgRjVW92a64vrTZZbT2LRvgNgzxn4L+0DltoKdmI7smCZjZWMFdqngtnTxSfbo+E3//5Vre+7TSWKGpNKtzmInYBdCx16mD9CfYS34b8uEYiy1tDgj6gEVvnnW61SB9scm97ScxAepOhzMnXy5h3qpAXr2ZM6w9gBgT7L97bPeat5kXlDDjcaxXUZmvgcCalTi8A32Q67MP14r+PONXPpSPo7DPh3T7AmMbvpIkveR4hKfK+fHkVGXQ3x48BzZyxWZFEmYGn/MdeZyqor12ONmPfav+9EDlqy3GN9/+Ryecj+iAiizb6gs2RPatHpCBF8vnWuwH/hj/pLQGtoIfXjxsX/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(110136005)(316002)(31686004)(26005)(16576012)(83380400001)(86362001)(508600001)(7416002)(8676002)(66946007)(8936002)(66556008)(6666004)(66476007)(2616005)(2906002)(36756003)(956004)(38100700002)(31696002)(4326008)(5660300002)(54906003)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGlCYzhNSUV0ejBHQWNtQUw3c2t6RXNGQ1pvb3hrM1BPekJ1cUwxQk42dTBl?=
+ =?utf-8?B?NzVKelQweGhsai8xMWVvUUhMR1hCREZ2VjdIbVdLQjhHVkgxZlVsSTd6bjlM?=
+ =?utf-8?B?WXNTaUltVG9tdklVTXpSeUV6UUpRTTh3QjdXNDVMbHAxTmJKeWh3WFo1V1d3?=
+ =?utf-8?B?WTFSQmlhRGlDNTROS09PTjU3LzRpVG1BRlNPYklOd1o1YlVVUTh5TnpIZU1a?=
+ =?utf-8?B?OSttZmtmaTdVOVVtRlhKRUU1N3NsUC8rc2J1SklkZnFvUzFsV28wZjFMOGp0?=
+ =?utf-8?B?a0xBWGNKV0ttVkIyUWdhSGE4cHhMSUZJV3hCalB6ZTZCdk5nYW54Y1NDMEpR?=
+ =?utf-8?B?ZDFyb21XT2d3UncxNm05UDVCNUIwOFNCQWJjVXFvQ05PNy9ZUUx4UzVmaDNP?=
+ =?utf-8?B?elR3dWd6c3RFajJyaGxhZzJNeExsdEFNMEpFN3lDaFcweXRyUUVyenFhenR0?=
+ =?utf-8?B?YitLRGRDbGxkTHNFcWprUVpITjJCQzdnSEduSkRtUHRHaXRBVW5BaDZyYTkr?=
+ =?utf-8?B?MmNrU1phRjRYVVVTMFN1L2dYSkxuNm1heXk1cjhQcDFMWkFKTjQ0Q2h1SXhs?=
+ =?utf-8?B?VU5mSW0wTGZ6Z0IyNzB0YW1rZG91VHJ4YnYwVFcwaE1Va2hjRStwUXdEb2Jr?=
+ =?utf-8?B?WnRYdUZKbHI3OWFkeUFPa3YrOGgzdms4Y255Wk1KNnNFZjZFY0hMN0Z3R0ZC?=
+ =?utf-8?B?V1Z2MjdpQnlmTW51UXVBNVRLczFJejB0NFFkMU1hM2llbXF4M2xqUzRmQlFG?=
+ =?utf-8?B?YkYwNVRqY0RuNm9FbTdadG0yWTRvREQvM0VWQnV4WE0rZGluanV5cjdFVkcz?=
+ =?utf-8?B?Ry9GNjJxYW8xZXBJckRNMUl3Mlpua2Y2aFA5Z0tGallkSzZVQkdlYzlGejFp?=
+ =?utf-8?B?UDNXNmpGdDZZWk5OK1hDQ2RuQmFNbnR6cHBhNDFmbkJwRllxcUtxSGhkdmJq?=
+ =?utf-8?B?MHlnV2N2dWJIZ2VvaENWN3lSQjJ2R1ZLdm1XM2NKeUZhVGNRaHN3a21hYS9R?=
+ =?utf-8?B?ZUZFT21ORFhwK1FYTFQzbjJhS0gzKzUzVzdoMHROMjIyRE1ZREt1SkNWY2RV?=
+ =?utf-8?B?bkd6RmhqM2pEenozV29nbGhHWWhqbDJGSm1MM3NvYWtyVG1TK3kwTXVUL0Qr?=
+ =?utf-8?B?SS9OYlB2OWJwcVVtVUoybzRBZ2dEbUFoSnd5NmZMb1lmWmNiYXFiTGdJbnM0?=
+ =?utf-8?B?cEVIeUdXZWt2U2Zoc1JITUtuUEg3Z283THZmZ0kvN0plTUwyaWY5cXBCanBU?=
+ =?utf-8?B?Y2JZbVRnbjJ1bUlrTkFabjI1SUpiZGE3THRYb21uSTd6emtMOThjRHdpdnA3?=
+ =?utf-8?B?Y1RCOWY2U0E4U1c0dWs4TnNLQTc2TEVzZHA1TWJiY2FJYUV4ZGM5YmVwWnRw?=
+ =?utf-8?B?czg1NnVPMUVIWXR5c1VJNStGRTZKZVBMNlNFUkRJNG4yYm9SKzkvdXNDcVpl?=
+ =?utf-8?B?WnlvL0tVYkRBa1R5RXZTWlFWWVdHUTkvcWlrY0Z5WUFyNExRRUVTSEFIb244?=
+ =?utf-8?B?dVMxSGhLbU9DNDFSL1dNcytCU1IxRFVma240SmNQMmpCVmVTejJvREZ0UlFX?=
+ =?utf-8?B?a0djRHlXbktPN0JmZ011WHNXUDNmZTE3b1dYTTJGOE5SZjhFOENWZHBXN1Fz?=
+ =?utf-8?B?V0V5MTJNOERzc3lvUk5TZ290L294akVRU3dPQnZvTElyWURyMlNDTkF5cGxN?=
+ =?utf-8?B?SmJwa005WDVzV1cybW5OVUc0UStHeFhoMGxFSmU4UnFDUDIwRkNpWGlDczFC?=
+ =?utf-8?B?bmpEZHRQdnVQMmw2a1lHeFAzNW9ZcUJ1bkEwaklwc2sxNk41Z0xSelh2NFBS?=
+ =?utf-8?B?ZGtrOG1oUnNnbmpBbktrTnNlVHBlK2twSDVVV2pRUWtGTjFlRlM0cVVlcVRF?=
+ =?utf-8?B?YTcwWjhIWWYvRWdkWHdoeGlSOG5FaVhITmFDWStuRTZYTUJxcys5TUZQTml6?=
+ =?utf-8?B?bUk0bDlPQXdmWG15WUc5ZlR1cUY5alVUWUNYRys1bUs1L0JwcndOTjZ5TzND?=
+ =?utf-8?B?UVZzei9rWG5RSHU0YzNXdjIzZmJkZi9JNmhBcWloaHpOMXdpZEE2aTFDaGRs?=
+ =?utf-8?B?SnNiRVVobkZDbFJOb0FBM2llL29Ha3kzV3Z4QnR0TVNCVlI5VGoreE91ek9i?=
+ =?utf-8?Q?p33U=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2cad2fd-5bd3-4e75-1d88-08d9bbdb459c
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 12:47:49.2975
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YWQuidDOvIGPLeBPoh9GgBm51gaFoVk2lXUiso8e/QFU49T3CqzosjeE5tjRK4fd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1776
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 02:15PM -0800, Peter Collingbourne wrote:
-> In an upcoming change we are going to add uaccess instrumentation
-> that uses inline access to struct task_struct from the
-> instrumentation routines. Because instrumentation.h is included
-> from many places including (recursively) from sched.h this would
-> otherwise lead to a circular dependency. Break the dependency by
-> moving uaccess instrumentation routines into a separate header,
-> instrumentation-uaccess.h.
-> 
-> Link: https://linux-review.googlesource.com/id/I625728db0c8db374e13e4ebc54985ac5c79ace7d
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> Acked-by: Dmitry Vyukov <dvyukov@google.com>
+Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
+> On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
+>> Hi Jason,
+>> Thank you for replying.
+>>
+>> 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
+>>> On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
+>>>> Hi maintainers,
+>>>>
+>>>> Could you please review this patch series?
+>>> Why is it RFC?
+>>>
+>>> I'm confused why this is useful?
+>>>
+>>> This can't do copy from MMIO memory, so it shouldn't be compatible
+>>> with things like Gaudi - does something prevent this?
+>> I think if an export of the dma-buf supports vmap, CPU is able to access the
+>> mmio memory.
+>>
+>> Is it wrong? If this is wrong, there is no advantages this changes..
+> I don't know what the dmabuf folks did, but yes, it is wrong.
+>
+> IOMEM must be touched using only special accessors, some platforms
+> crash if you don't do this. Even x86 will crash if you touch it with
+> something like an XMM optimized memcpy.
+>
+> Christian? If the vmap succeeds what rules must the caller use to
+> access the memory?
 
-Reviewed-by: Marco Elver <elver@google.com>
+See dma-buf-map.h and especially struct dma_buf_map.
 
-> ---
->  include/linux/instrumented-uaccess.h | 49 ++++++++++++++++++++++++++++
->  include/linux/instrumented.h         | 34 -------------------
->  include/linux/uaccess.h              |  2 +-
->  lib/iov_iter.c                       |  2 +-
->  lib/usercopy.c                       |  2 +-
->  5 files changed, 52 insertions(+), 37 deletions(-)
->  create mode 100644 include/linux/instrumented-uaccess.h
-> 
-> diff --git a/include/linux/instrumented-uaccess.h b/include/linux/instrumented-uaccess.h
-> new file mode 100644
-> index 000000000000..ece549088e50
-> --- /dev/null
-> +++ b/include/linux/instrumented-uaccess.h
-> @@ -0,0 +1,49 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +/*
-> + * This header provides generic wrappers for memory access instrumentation for
-> + * uaccess routines that the compiler cannot emit for: KASAN, KCSAN.
-> + */
-> +#ifndef _LINUX_INSTRUMENTED_UACCESS_H
-> +#define _LINUX_INSTRUMENTED_UACCESS_H
-> +
-> +#include <linux/compiler.h>
-> +#include <linux/kasan-checks.h>
-> +#include <linux/kcsan-checks.h>
-> +#include <linux/types.h>
-> +
-> +/**
-> + * instrument_copy_to_user - instrument reads of copy_to_user
-> + *
-> + * Instrument reads from kernel memory, that are due to copy_to_user (and
-> + * variants). The instrumentation must be inserted before the accesses.
-> + *
-> + * @to destination address
-> + * @from source address
-> + * @n number of bytes to copy
-> + */
-> +static __always_inline void
-> +instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
-> +{
-> +	kasan_check_read(from, n);
-> +	kcsan_check_read(from, n);
-> +}
-> +
-> +/**
-> + * instrument_copy_from_user - instrument writes of copy_from_user
-> + *
-> + * Instrument writes to kernel memory, that are due to copy_from_user (and
-> + * variants). The instrumentation should be inserted before the accesses.
-> + *
-> + * @to destination address
-> + * @from source address
-> + * @n number of bytes to copy
-> + */
-> +static __always_inline void
-> +instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
-> +{
-> +	kasan_check_write(to, n);
-> +	kcsan_check_write(to, n);
-> +}
-> +
-> +#endif /* _LINUX_INSTRUMENTED_UACCESS_H */
-> diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-> index 42faebbaa202..b68f415510c7 100644
-> --- a/include/linux/instrumented.h
-> +++ b/include/linux/instrumented.h
-> @@ -102,38 +102,4 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
->  	kcsan_check_atomic_read_write(v, size);
->  }
->  
-> -/**
-> - * instrument_copy_to_user - instrument reads of copy_to_user
-> - *
-> - * Instrument reads from kernel memory, that are due to copy_to_user (and
-> - * variants). The instrumentation must be inserted before the accesses.
-> - *
-> - * @to destination address
-> - * @from source address
-> - * @n number of bytes to copy
-> - */
-> -static __always_inline void
-> -instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
-> -{
-> -	kasan_check_read(from, n);
-> -	kcsan_check_read(from, n);
-> -}
-> -
-> -/**
-> - * instrument_copy_from_user - instrument writes of copy_from_user
-> - *
-> - * Instrument writes to kernel memory, that are due to copy_from_user (and
-> - * variants). The instrumentation should be inserted before the accesses.
-> - *
-> - * @to destination address
-> - * @from source address
-> - * @n number of bytes to copy
-> - */
-> -static __always_inline void
-> -instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
-> -{
-> -	kasan_check_write(to, n);
-> -	kcsan_check_write(to, n);
-> -}
-> -
->  #endif /* _LINUX_INSTRUMENTED_H */
-> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-> index ac0394087f7d..c0c467e39657 100644
-> --- a/include/linux/uaccess.h
-> +++ b/include/linux/uaccess.h
-> @@ -3,7 +3,7 @@
->  #define __LINUX_UACCESS_H__
->  
->  #include <linux/fault-inject-usercopy.h>
-> -#include <linux/instrumented.h>
-> +#include <linux/instrumented-uaccess.h>
->  #include <linux/minmax.h>
->  #include <linux/sched.h>
->  #include <linux/thread_info.h>
-> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> index 66a740e6e153..3f9dc6df7102 100644
-> --- a/lib/iov_iter.c
-> +++ b/lib/iov_iter.c
-> @@ -12,7 +12,7 @@
->  #include <linux/compat.h>
->  #include <net/checksum.h>
->  #include <linux/scatterlist.h>
-> -#include <linux/instrumented.h>
-> +#include <linux/instrumented-uaccess.h>
->  
->  #define PIPE_PARANOIA /* for now */
->  
-> diff --git a/lib/usercopy.c b/lib/usercopy.c
-> index 7413dd300516..1cd188e62d06 100644
-> --- a/lib/usercopy.c
-> +++ b/lib/usercopy.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <linux/bitops.h>
->  #include <linux/fault-inject-usercopy.h>
-> -#include <linux/instrumented.h>
-> +#include <linux/instrumented-uaccess.h>
->  #include <linux/uaccess.h>
->  
->  /* out-of-line parts */
-> -- 
-> 2.34.1.173.g76aa8bc2d0-goog
-> 
+MMIO memory is perfectly supported here and actually the most common case.
+
+Christian.
+
+>
+> Jason
+

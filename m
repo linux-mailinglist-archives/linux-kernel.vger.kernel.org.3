@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F3A47012B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62729470142
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240808AbhLJNGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:06:16 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30934 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238148AbhLJNGP (ORCPT
+        id S241539AbhLJNGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241528AbhLJNGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:06:15 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAD1PqS009950;
-        Fri, 10 Dec 2021 13:02:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=7Af6OiZfeZr/MWIUPLN9S9F3O/cq0ozE5pKi902+JhU=;
- b=VIimoFqzwYSemEUvAGLZOgPnFa+6twuv4QVIz9NEIawxVIeqjIlmXxa0oNKxcR6vvB/Y
- m1is076hlzEfYkmgrWr0c/1g/c4HmKeaVaMSlnOUfmmpVm4hTxdfbY1K2CqOt5SEJDYm
- F9pFJx5AUOGc9MAGfCC85pFKhM7YKIbz9wn8Q/vm7B1Zkl3VQJhhxWhNTZkYLggrsGRl
- wNUw4m4cZvoUwDUSaJKjNNbTBa34u59ifqDceMLWwjVEuNYvG0DC+8jnhnN/1Y0EZe8E
- NUheBS7+4MH7OPpTyMHHTi8KrdnRA4qADB5r2TiqB7ni1bUfkhTgwiIdAgCPBdAlD9Nl sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv6g719u0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 13:02:24 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAD1Tl6010423;
-        Fri, 10 Dec 2021 13:02:23 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv6g719sh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 13:02:23 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAD25LM013707;
-        Fri, 10 Dec 2021 13:02:20 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3cqyyagw0j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 13:02:20 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAD2G8Q30474724
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 13:02:16 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 71938A4054;
-        Fri, 10 Dec 2021 13:02:16 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E9856A405C;
-        Fri, 10 Dec 2021 13:02:13 +0000 (GMT)
-Received: from sig-9-65-75-5.ibm.com (unknown [9.65.75.5])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 13:02:13 +0000 (GMT)
-Message-ID: <d8a6a6827da17825c1aa011256b96d195b1ebf13.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        James Bottomley <jejb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Fri, 10 Dec 2021 08:02:13 -0500
-In-Reply-To: <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
-         <20211208221818.1519628-16-stefanb@linux.ibm.com>
-         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
-         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
-         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
-         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
-         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-         <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
-         <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Fri, 10 Dec 2021 08:06:54 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C84C061746;
+        Fri, 10 Dec 2021 05:03:18 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id l25so29963005eda.11;
+        Fri, 10 Dec 2021 05:03:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iJ6XydTl1DbIydGaQLWVFy37t92UARfNxL/FwCEdhWI=;
+        b=MSyIIzkV9ufN9bWhKhojEPyaun3tCtS4/2EcPE4jxWLF9bj9vwNVV3DI2FVn9BCHH9
+         upRX22zLJ1exzHzRJ+idroCz4xWxX363Wt56Gq2h0FQ/XRm3ETen+sH5kfRX0wXaJA7D
+         V9P6DbamjErvNAa3+/kD2Fq6yr3zbUuYxS9sH0SFZ/q7BG1GvqnAcG/soRWHzFBjFGhj
+         BuXaVzXBvGlUUuo2cwws4ck3YtBs/7JIIELTUkIW0NZmXtP06wLPBFaJTf787Pbbvgsp
+         gaHVGcQdV/Fqg+LnNI5yf+/37hn2EqoZvhG3j4V7aDOmIXuPTiBA71tKU0vXlr1nJIKb
+         JSJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iJ6XydTl1DbIydGaQLWVFy37t92UARfNxL/FwCEdhWI=;
+        b=v5GKlIBUZFArKvDsIioSnoqfLStIQqaSfFsjicfGEXjuhckW2z7E6zZHsTvKoSyC3g
+         kn82HfNgnl/wJ01DCfl8LPAVfh37D+WAGt8U+WNCXnecKcN4vTqgg3VoPKClI3QsACPF
+         0HuARCPSHUp1vuVWWETmdOQHWd5kHmLew1yySByDRQkIQtgOBZ0RcvaSfT46xag5AQoR
+         IsOqvcrS22omA5AmJWuTgZilS5WlHFHVfQuX2CB/6kVbSRo+JVIKLYyAaN6yVQG3N5VE
+         o6UDrS2phJqVofS7aUC25pExvZa7pUU4JbqY8jSd3h2vfyNIHoOBDLNCokcqBWWYaVS5
+         yhJA==
+X-Gm-Message-State: AOAM5333YatFf/3c5h0pBaVC3HDc7rrW8+L+VfYYKqpZbN0kpn5bdIqD
+        jFjEeCwghK70FnMjdbAsgwc=
+X-Google-Smtp-Source: ABdhPJyPcXN5D303VMm8JoZQ791rDa4wD8/2NEZL4B+6Ur5SWqIYi2FPLHBpbRICvFCCz+AF0HB0Og==
+X-Received: by 2002:a17:907:3da3:: with SMTP id he35mr23187733ejc.464.1639141396884;
+        Fri, 10 Dec 2021 05:03:16 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id n8sm1498492edy.4.2021.12.10.05.03.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 05:03:16 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <3c30e682-a569-9e91-987d-9e2fc66bb625@redhat.com>
+Date:   Fri, 10 Dec 2021 14:03:13 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
+ kvm_apic_update_apicv
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+ <20211209115440.394441-6-mlevitsk@redhat.com>
+ <636dd644-8160-645a-ce5a-f4eb344f001c@redhat.com>
+ <fbf3e1665357d9517015ad49eee0c9825ed876d4.camel@redhat.com>
+ <0a01229bbbb6d133ba164cb5495ad2300eb8d818.camel@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <0a01229bbbb6d133ba164cb5495ad2300eb8d818.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: u2ZDp_iAvevGhiUByT_N8lL_5jN6cTpM
-X-Proofpoint-GUID: ANty0JWsO92036xgJFMrTIdrfEXb7u7e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_03,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- malwarescore=0 suspectscore=0 adultscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100073
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 07:40 -0500, Stefan Berger wrote:
-> On 12/10/21 07:09, Mimi Zohar wrote:
-> > On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
-> >>> There's still the problem that if you write the policy, making the file
-> >>> disappear then unmount and remount securityfs it will come back.  My
-> >>> guess for fixing this is that we only stash the policy file reference,
-> >>> create it if NULL but then set the pointer to PTR_ERR(-EINVAL) or
-> >>> something and refuse to create it for that value.
-> >> Some sort of indicator that gets stashed in struct ima_ns that the file
-> >> does not get recreated on consecutive mounts. That shouldn't be hard to
-> >> fix.
-> > The policy file disappearing is for backwards compatibility, prior to
-> > being able to extend the custom policy.  For embedded usecases,
-> > allowing the policy to be written exactly once might makes sense.  Do
-> > we really want/need to continue to support removing the policy in
-> > namespaces?
-> 
-> I don't have an answer but should the behavior for the same #define in 
-> this case be different for host and namespaces? Or should we just 
-> 'select IMA_WRITE_POLICY and IMA_READ_POLICY' when IMA_NS is selected?
+On 12/10/21 13:47, Maxim Levitsky wrote:
+> If we scan vIRR here and see no bits, and*then*  disable AVIC,
+> there is a window where the they could legit be turned on without any cpu errata,
+> and we will not have irr_pending == true, and thus the following
+> KVM_REQ_EVENT will make no difference.
 
-The latter option sounds good.  Being able to analyze the namespace
-policy is really important.
+Right.
 
-thanks,
+> Not touching irr_pending and letting just the KVM_REQ_EVENT do the work
+> will work too,
 
-Mimi
+Yeah, I think that's preferrable.  irr_pending == true is a conservative 
+setting that works; irr_pending will be evaluated again on the first 
+call to apic_clear_irr and that's enough.
+
+With that justification, you don't need to reorder the call to 
+kvm_apic_update_apicv to be after kvm_x86_refresh_apicv_exec_ctrl.
+
+Paolo
+
+  and if the avic errata is present, reduce slightly
+> the chances of it happening.
 

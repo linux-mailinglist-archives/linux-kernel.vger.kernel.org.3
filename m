@@ -2,152 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4302246FB93
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBBA46FB94
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234963AbhLJHdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237609AbhLJHds (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:33:48 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7C2C0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:30:13 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id u17so5690987plg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 23:30:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=kqdwZyEU31KaNW+cOFp1dor6RRAOvhH6zrtcJuFenfA=;
-        b=gqnhaZdO12ibnFTEUYTRcyNDsVi4fZjKWuF1d+1IX2QtK+zXEl/CleEzgCXcZCKWk4
-         DeGXeYahXgF25toJDTBvItitvosjjzyrdtCOfzBPXJUv2sNA46FGCrVbWvzev5Gqa7Ak
-         meZ3c5sCNkdjOENTF0nlgXWFhqmZAwIOkT71xtM4OT2BCJb5l3qSGmgij0kaSHc39jlT
-         lz+NQj74lZEDNXhnwDnJm6MBPftfgIEvxzLs37o6722DhjM05TgsyYdxT05vxKbTRo5c
-         paO1XE+hWA5qYswHrUze+qL1vRsNsy/KmrR7y+w/OwTPs4iJXL+3vAPXn7Z6f5NDhlEr
-         bj6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kqdwZyEU31KaNW+cOFp1dor6RRAOvhH6zrtcJuFenfA=;
-        b=1ySWgSFWf84ELVLo962qv15ExN3oacj9ojHXRKqRNkEYrXTSrQC9wKo+BSYju9eF/U
-         s+5QO9OM2beCGgV3H2V3mF+JCG9kLFlxewhUyNhPrK7GFZnKmZk9WpA6pTtDERlnaoYE
-         R5YSMIeB45RXqm6Mxy18hpUWK8L3dDUUw7dVLIyvS0LnixPsTW0Fu3BzMoQpxpEAHhF3
-         AISAGKQb28GZ4B0nhMu4mIPKlKK1yYObElyjKvvttvqdrPCOFLV5gaLw9bMfhs1LH6PB
-         AwQtvmlNvu8W08nWYi7h3T+rJZsDa3h9RWFnhEqXCJBRgL+he/fRA4SDwgun8ZUialsZ
-         IzQg==
-X-Gm-Message-State: AOAM532SJ2t17rWa4Hp79S8n87x8hfzcq+TFhze7PW/Ajlb2pYShux3Q
-        quy5ssC/cic/MwgO2TfEHrc=
-X-Google-Smtp-Source: ABdhPJxRm9ttF7FhbBeprnb6+zsZD1lD+fI51oOUlTadE/AU/yNXP9DA3iOR8FWZWbadxSA9RFDXLw==
-X-Received: by 2002:a17:902:f687:b0:141:cf6b:fee7 with SMTP id l7-20020a170902f68700b00141cf6bfee7mr71919578plg.75.1639121413466;
-        Thu, 09 Dec 2021 23:30:13 -0800 (PST)
-Received: from [30.240.98.4] ([205.204.117.108])
-        by smtp.gmail.com with ESMTPSA id c17sm185764pfc.163.2021.12.09.23.30.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 23:30:13 -0800 (PST)
-Message-ID: <07f11dfc-f491-3b08-a2cb-3c8f5a8102d3@gmail.com>
-Date:   Fri, 10 Dec 2021 15:30:02 +0800
+        id S235043AbhLJHef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:34:35 -0500
+Received: from mga03.intel.com ([134.134.136.65]:49408 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230506AbhLJHee (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 02:34:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639121459; x=1670657459;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6F7J7wB5OupPxBTL1c7gHPRx1aXMilaoOzruQyXy+xQ=;
+  b=n1HzFNq4WjVLPCcJJWoMVX5zAtQ5woGm6mi0PmNr3gY8tdupghLTkZVT
+   wTzHBCv7/xf83GEOYWiaHBDfrm95EI42cieopEugf35L9oqHmmsFxWEvj
+   PiEKJ7XDmejsWSly68DJdfsnYRN0xc6JhFWOQG7/ExvJWrNQYHgd3hSky
+   RHGKMmTcioRk5TZ1Tkdakv7IaGiEqC1ZiScMZYzOeAGhOxvooPorpJeFX
+   jSm4/Hr7OlIx5W4R917th1tx/v1d1qkEOP43VFkcNiD2ISAN86BFAEzxL
+   zx7aYTucUwK3adMiL4Cu2gYgDviTwDFip4xyrrmWeioopflkPqo3ZmcaU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238238690"
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="238238690"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 23:30:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="463577110"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2021 23:30:57 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvaMr-0002uf-0X; Fri, 10 Dec 2021 07:30:57 +0000
+Date:   Fri, 10 Dec 2021 15:30:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Woodhouse <dwmw@amazon.co.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [paulmck-rcu:dev.2021.12.07a 56/57] kernel/rcu/tree.c:4312:45:
+ warning: variable 'flags' is uninitialized when used here
+Message-ID: <202112101543.wHvqhgYk-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [RFC PATCH v2 0/7] Use pageblock_order for cma and
- alloc_contig_range alignment.
-To:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
-        linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20211209230414.2766515-1-zi.yan@sent.com>
-From:   Eric Ren <renzhengeek@gmail.com>
-In-Reply-To: <20211209230414.2766515-1-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zi Yan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.12.07a
+head:   89ddc546d3ad541bc89ec553c92036c98aef57a6
+commit: 342f2d0f88f3c2d7ab2ae206be5846579319e3bf [56/57] rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
+config: hexagon-randconfig-r041-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101543.wHvqhgYk-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu dev.2021.12.07a
+        git checkout 342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-On 2021/12/10 07:04, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
->
-> Hi all,
->
-> This patchset tries to remove the MAX_ORDER - 1 alignment requirement for CMA
-> and alloc_contig_range(). It prepares for my upcoming changes to make MAX_ORDER
-> adjustable at boot time[1].
->
-> The MAX_ORDER - 1 alignment requirement comes from that alloc_contig_range()
-> isolates pageblocks to remove free memory from buddy allocator but isolating
-> only a subset of pageblocks within a page spanning across multiple pageblocks
-> causes free page accounting issues. Isolated page might not be put into the
-> right free list, since the code assumes the migratetype of the first pageblock
-> as the whole free page migratetype. This is based on the discussion at [2].
->
-> To remove the requirement, this patchset:
-> 1. still isolates pageblocks at MAX_ORDER - 1 granularity;
-Then, unplug fails if either pageblock of the  MAX_ORDER - 1 page has 
-unmovable page, right?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Eric
-> 2. but saves the pageblock migratetypes outside the specified range of
->     alloc_contig_range() and restores them after all pages within the range
->     become free after __alloc_contig_migrate_range();
-> 3. splits free pages spanning multiple pageblocks at the beginning and the end
->     of the range and puts the split pages to the right migratetype free lists
->     based on the pageblock migratetypes;
-> 4. returns pages not in the range as it did before this patch.
->
-> Isolation needs to happen at MAX_ORDER - 1 granularity, because otherwise
-> 1) extra code is needed to detect pages (free, PageHuge, THP, or PageCompound)
-> to make sure all pageblocks belonging to a single page are isolated together
-> and later pageblocks outside the range need to have their migratetypes restored;
-> or 2) extra logic will need to be added during page free time to split a free
-> page with multi-migratetype pageblocks.
->
-> Two optimizations might come later:
-> 1. only check unmovable pages within the range instead of MAX_ORDER - 1 aligned
->     range during isolation to increase successful rate of alloc_contig_range().
-> 2. make MIGRATE_ISOLATE a separate bit to avoid saving and restoring existing
->     migratetypes before and after isolation respectively.
->
-> Feel free to give comments and suggestions. Thanks.
->
->
-> [1] https://lore.kernel.org/linux-mm/20210805190253.2795604-1-zi.yan@sent.com/
-> [2] https://lore.kernel.org/linux-mm/d19fb078-cb9b-f60f-e310-fdeea1b947d2@redhat.com/
->
->
-> Zi Yan (7):
->    mm: page_alloc: avoid merging non-fallbackable pageblocks with others.
->    mm: compaction: handle non-lru compound pages properly in
->      isolate_migratepages_block().
->    mm: migrate: allocate the right size of non hugetlb or THP compound
->      pages.
->    mm: make alloc_contig_range work at pageblock granularity
->    mm: cma: use pageblock_order as the single alignment
->    drivers: virtio_mem: use pageblock size as the minimum virtio_mem
->      size.
->    arch: powerpc: adjust fadump alignment to be pageblock aligned.
->
->   arch/powerpc/include/asm/fadump-internal.h |   4 +-
->   drivers/virtio/virtio_mem.c                |   6 +-
->   include/linux/mmzone.h                     |  11 +-
->   kernel/dma/contiguous.c                    |   2 +-
->   mm/cma.c                                   |   6 +-
->   mm/compaction.c                            |  10 +-
->   mm/migrate.c                               |   8 +-
->   mm/page_alloc.c                            | 203 +++++++++++++++++----
->   8 files changed, 196 insertions(+), 54 deletions(-)
->
+All warnings (new ones prefixed by >>):
 
+>> kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
+                   rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+                                                             ^~~~~
+   kernel/rcu/tree.c:4280:21: note: initialize the variable 'flags' to silence this warning
+           unsigned long flags, seq_flags;
+                              ^
+                               = 0
+   1 warning generated.
+
+
+vim +/flags +4312 kernel/rcu/tree.c
+
+4df8374254ea929 Thomas Gleixner         2016-07-13  4266  
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4267  /*
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4268   * Mark the specified CPU as being online so that subsequent grace periods
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4269   * (both expedited and normal) will wait on it.  Note that this means that
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4270   * incoming CPUs are not allowed to use RCU read-side critical sections
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4271   * until this function is called.  Failing to observe this restriction
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4272   * will result in lockdep splats.
+deb34f364398083 Paul E. McKenney        2017-03-23  4273   *
+deb34f364398083 Paul E. McKenney        2017-03-23  4274   * Note that this function is special in that it is invoked directly
+deb34f364398083 Paul E. McKenney        2017-03-23  4275   * from the incoming CPU rather than from the cpuhp_step mechanism.
+deb34f364398083 Paul E. McKenney        2017-03-23  4276   * This is because this function must be invoked at a precise location.
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4277   */
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4278  void rcu_cpu_starting(unsigned int cpu)
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4279  {
+342f2d0f88f3c2d David Woodhouse         2021-12-09  4280  	unsigned long flags, seq_flags;
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4281  	unsigned long mask;
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4282  	struct rcu_data *rdp;
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4283  	struct rcu_node *rnp;
+abfce0414814149 Wei Yang                2020-04-19  4284  	bool newcpu;
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4285  
+c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4286  	rdp = per_cpu_ptr(&rcu_data, cpu);
+c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4287  	if (rdp->cpu_started)
+f64c6013a202931 Peter Zijlstra          2018-05-22  4288  		return;
+c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4289  	rdp->cpu_started = true;
+f64c6013a202931 Peter Zijlstra          2018-05-22  4290  
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4291  	rnp = rdp->mynode;
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4292  	mask = rdp->grpmask;
+342f2d0f88f3c2d David Woodhouse         2021-12-09  4293  	local_irq_save(seq_flags);
+342f2d0f88f3c2d David Woodhouse         2021-12-09  4294  	arch_spin_lock(&rcu_state.ofl_lock);
+2caebefb00f03b5 Paul E. McKenney        2021-07-28  4295  	rcu_dynticks_eqs_online();
+4d60b475f858ebd Paul E. McKenney        2020-10-13  4296  	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+342f2d0f88f3c2d David Woodhouse         2021-12-09  4297  	raw_spin_lock_rcu_node(rnp);
+105abf82b0a6266 Paul E. McKenney        2020-01-03  4298  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+abfce0414814149 Wei Yang                2020-04-19  4299  	newcpu = !(rnp->expmaskinitnext & mask);
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4300  	rnp->expmaskinitnext |= mask;
+313517fc44fb2d8 Paul E. McKenney        2017-06-08  4301  	/* Allow lockless access for expedited grace periods. */
+abfce0414814149 Wei Yang                2020-04-19  4302  	smp_store_release(&rcu_state.ncpus, rcu_state.ncpus + newcpu); /* ^^^ */
+2f08469563550d1 Paul E. McKenney        2020-02-10  4303  	ASSERT_EXCLUSIVE_WRITER(rcu_state.ncpus);
+e05121ba5b81e2f Paul E. McKenney        2018-05-07  4304  	rcu_gpnum_ovf(rnp, rdp); /* Offline-induced counter wrap? */
+eb7a6653887b540 Paul E. McKenney        2018-07-05  4305  	rdp->rcu_onl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+eb7a6653887b540 Paul E. McKenney        2018-07-05  4306  	rdp->rcu_onl_gp_flags = READ_ONCE(rcu_state.gp_flags);
+9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4307) 
+9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4308) 	/* An incoming CPU should never be blocking a grace period. */
+9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4309) 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? */
+516e5ae0c940162 Joel Fernandes (Google  2019-09-05  4310) 		rcu_disable_urgency_upon_qs(rdp);
+99990da1b3c00f6 Paul E. McKenney        2018-05-03  4311  		/* Report QS -after- changing ->qsmaskinitnext! */
+b50912d0b5e03f1 Paul E. McKenney        2018-07-03 @4312  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+99990da1b3c00f6 Paul E. McKenney        2018-05-03  4313  	} else {
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4314  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4315  	}
+342f2d0f88f3c2d David Woodhouse         2021-12-09  4316  	arch_spin_unlock(&rcu_state.ofl_lock);
+342f2d0f88f3c2d David Woodhouse         2021-12-09  4317  	local_irq_restore(seq_flags);
+313517fc44fb2d8 Paul E. McKenney        2017-06-08  4318  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4319  }
+7ec99de36f40261 Paul E. McKenney        2016-06-30  4320  
+
+:::::: The code at line 4312 was first introduced by commit
+:::::: b50912d0b5e03f11004fec1e2b50244de9e2fa41 rcu: Remove rsp parameter from rcu_report_qs_rnp()
+
+:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

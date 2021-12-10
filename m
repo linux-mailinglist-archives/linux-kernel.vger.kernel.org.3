@@ -2,258 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1869C4709A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2944709A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245738AbhLJTHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:07:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48750 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245414AbhLJTHb (ORCPT
+        id S245364AbhLJTHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:07:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58572 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235573AbhLJTHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:07:31 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAJ3rd0009710;
-        Fri, 10 Dec 2021 19:03:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=dnU6ziVX6lNVXmer2OLxhsF26LT6YN4QKuME1rOHxe8=;
- b=ja+vmNbVMVzni+hKKUb4goFN3aqia3ZXzqLaPLVY2C9Mg3zrSJ2oeJDuu2kn/k00LiX/
- YQUVmhNCtpmUo8eTRpQj6Etbrt00bF7OmU/a50j2MD1ysG+Do3BwoflN6LogbJkdlBaL
- qAu+Yy1S6ej/lRqriSBwcbnlp+mYNdftr80vRTsDFzfIkjtsK3teGLNJCxfO1xxMV0q1
- JK32h31gSeiKGeOMnD5u/l5+/gHyq7f1DbPPPLiqGUEcggLApls1yVJC+VsyIF4QqYpx
- 6T31dLF2Em3CiLpbo4umqMOrknR2E7JI5bdL2WE6z2AMpDw7YDdCRsM74CncUitTmjI1 ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cvaep2xym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 19:03:54 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAJ0Ks7023255;
-        Fri, 10 Dec 2021 19:03:54 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cvaep2xvg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 19:03:54 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAIbxck025015;
-        Fri, 10 Dec 2021 19:02:14 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma05wdc.us.ibm.com with ESMTP id 3cqyycn2jf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 19:02:14 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAJ2Di833947992
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 19:02:13 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83091C607B;
-        Fri, 10 Dec 2021 19:02:13 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEE93C6092;
-        Fri, 10 Dec 2021 19:02:11 +0000 (GMT)
-Received: from farman-thinkpad-t470p (unknown [9.211.80.105])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 19:02:11 +0000 (GMT)
-Message-ID: <5ce26bf8c31e79f62db0de996a211afc6c2186d7.camel@linux.ibm.com>
-Subject: Re: [PATCH 08/32] s390/pci: stash associated GISA designation
-From:   Eric Farman <farman@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 10 Dec 2021 14:01:06 -0500
-In-Reply-To: <20211207205743.150299-9-mjrosato@linux.ibm.com>
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-         <20211207205743.150299-9-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: IBr9xMKeDyUwtr4iJjefSQozX-EA5NVb
-X-Proofpoint-GUID: U64KN5XcEmECHfA-RQzgb3N3W16XFsvd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_06,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- spamscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
- clxscore=1015 impostorscore=0 adultscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112100104
+        Fri, 10 Dec 2021 14:07:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B523BB829BB;
+        Fri, 10 Dec 2021 19:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE5BC00446;
+        Fri, 10 Dec 2021 19:03:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639163009;
+        bh=JOiolUAx3L5MxkUAVXE7PyChsErEriCCe8q1eTmoOgU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZRDysF11OdoxdSegspzuBZX3mQ4nnhL0+Mcy62/cAzNdIUmMNl0e/kd5LBce6f+qL
+         dVkljIKl18a4PeLsEi7ItQpYMaKqBpGkWhTctWIaY/A8bnmGvcx7fQr3/Fvo0tuHSh
+         JzeNF6vkO0lL1VwkKG7IgWdc5n+vZ9KXurVtT2/YYAwJ1Gn6Rt8B2y6r2PwfFBvF5L
+         2Zy1W9S3defbLesjC8RtgRvo3yDVlKcYX0GrSGJTjf3/DN2WekW+e2Gfs8/TW5vufd
+         r4njAV1XPLI4ldoFygn6X6xoW+B16c3qKEq8NxnBDp0vBMBoMdc+FI0w3dJFsJmQjC
+         jamuMkXzFx+Qw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5B6DC405D8; Fri, 10 Dec 2021 16:03:27 -0300 (-03)
+Date:   Fri, 10 Dec 2021 16:03:27 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf cs-etm: Remove duplicate and incorrect aux size
+ checks
+Message-ID: <YbOkf5C46OZGEJVM@kernel.org>
+References: <20211208115435.610101-1-james.clark@arm.com>
+ <20211208131753.GC273781@leoy-ThinkPad-X240s>
+ <269d2f14-0594-c73e-97b5-82e72f76e826@arm.com>
+ <20211209134413.GA622826@leoy-ThinkPad-X240s>
+ <6a7fd600-91f3-5feb-d21f-ec7cb704f84c@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a7fd600-91f3-5feb-d21f-ec7cb704f84c@arm.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-07 at 15:57 -0500, Matthew Rosato wrote:
-> For passthrough devices, we will need to know the GISA designation of
-> the
-> guest if interpretation facilities are to be used.  Setup to stash
-> this in
-> the zdev and set a default of 0 (no GISA designation) for now; a
-> subsequent
-> patch will set a valid GISA designation for passthrough devices.
-> Also, extend mpcific routines to specify this stashed designation as
-> part
-> of the mpcific command.
+Em Thu, Dec 09, 2021 at 02:16:43PM +0000, James Clark escreveu:
 > 
-> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-Reviewed-by: Eric Farman <farman@linux.ibm.com>
-
-> ---
->  arch/s390/include/asm/pci.h     | 1 +
->  arch/s390/include/asm/pci_clp.h | 3 ++-
->  arch/s390/pci/pci.c             | 9 +++++++++
->  arch/s390/pci/pci_clp.c         | 1 +
->  arch/s390/pci/pci_irq.c         | 5 +++++
->  5 files changed, 18 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/s390/include/asm/pci.h
-> b/arch/s390/include/asm/pci.h
-> index 90824be5ce9a..2474b8d30f2a 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -123,6 +123,7 @@ struct zpci_dev {
->  	enum zpci_state state;
->  	u32		fid;		/* function ID, used by sclp
-> */
->  	u32		fh;		/* function handle, used by
-> insn's */
-> +	u32		gd;		/* GISA designation for
-> passthrough */
->  	u16		vfn;		/* virtual function number */
->  	u16		pchid;		/* physical channel ID */
->  	u8		pfgid;		/* function group ID */
-> diff --git a/arch/s390/include/asm/pci_clp.h
-> b/arch/s390/include/asm/pci_clp.h
-> index 1f4b666e85ee..3af8d196da74 100644
-> --- a/arch/s390/include/asm/pci_clp.h
-> +++ b/arch/s390/include/asm/pci_clp.h
-> @@ -173,7 +173,8 @@ struct clp_req_set_pci {
->  	u16 reserved2;
->  	u8 oc;				/* operation controls */
->  	u8 ndas;			/* number of dma spaces */
-> -	u64 reserved3;
-> +	u32 reserved3;
-> +	u32 gd;				/* GISA designation */
->  } __packed;
->  
->  /* Set PCI function response */
-> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-> index 2f9b78fa82a5..9b4d3d78b444 100644
-> --- a/arch/s390/pci/pci.c
-> +++ b/arch/s390/pci/pci.c
-> @@ -119,6 +119,7 @@ int zpci_register_ioat(struct zpci_dev *zdev, u8
-> dmaas,
->  	fib.pba = base;
->  	fib.pal = limit;
->  	fib.iota = iota | ZPCI_IOTA_RTTO_FLAG;
-> +	fib.gd = zdev->gd;
->  	cc = zpci_mod_fc(req, &fib, &status);
->  	if (cc)
->  		zpci_dbg(3, "reg ioat fid:%x, cc:%d, status:%d\n",
-> zdev->fid, cc, status);
-> @@ -132,6 +133,8 @@ int zpci_unregister_ioat(struct zpci_dev *zdev,
-> u8 dmaas)
->  	struct zpci_fib fib = {0};
->  	u8 cc, status;
->  
-> +	fib.gd = zdev->gd;
-> +
->  	cc = zpci_mod_fc(req, &fib, &status);
->  	if (cc)
->  		zpci_dbg(3, "unreg ioat fid:%x, cc:%d, status:%d\n",
-> zdev->fid, cc, status);
-> @@ -159,6 +162,7 @@ int zpci_fmb_enable_device(struct zpci_dev *zdev)
->  	atomic64_set(&zdev->unmapped_pages, 0);
->  
->  	fib.fmb_addr = virt_to_phys(zdev->fmb);
-> +	fib.gd = zdev->gd;
->  	cc = zpci_mod_fc(req, &fib, &status);
->  	if (cc) {
->  		kmem_cache_free(zdev_fmb_cache, zdev->fmb);
-> @@ -177,6 +181,8 @@ int zpci_fmb_disable_device(struct zpci_dev
-> *zdev)
->  	if (!zdev->fmb)
->  		return -EINVAL;
->  
-> +	fib.gd = zdev->gd;
-> +
->  	/* Function measurement is disabled if fmb address is zero */
->  	cc = zpci_mod_fc(req, &fib, &status);
->  	if (cc == 3) /* Function already gone. */
-> @@ -807,6 +813,9 @@ struct zpci_dev *zpci_create_device(u32 fid, u32
-> fh, enum zpci_state state)
->  	zdev->fid = fid;
->  	zdev->fh = fh;
->  
-> +	/* For now, assume it is not a passthrough device */
-> +	zdev->gd = 0;
-> +
->  	/* Query function properties and update zdev */
->  	rc = clp_query_pci_fn(zdev);
->  	if (rc)
-> diff --git a/arch/s390/pci/pci_clp.c b/arch/s390/pci/pci_clp.c
-> index be077b39da33..e9ed0e4a5cf0 100644
-> --- a/arch/s390/pci/pci_clp.c
-> +++ b/arch/s390/pci/pci_clp.c
-> @@ -240,6 +240,7 @@ static int clp_set_pci_fn(struct zpci_dev *zdev,
-> u32 *fh, u8 nr_dma_as, u8 comma
->  		rrb->request.fh = zdev->fh;
->  		rrb->request.oc = command;
->  		rrb->request.ndas = nr_dma_as;
-> +		rrb->request.gd = zdev->gd;
->  
->  		rc = clp_req(rrb, CLP_LPS_PCI);
->  		if (rrb->response.hdr.rsp == CLP_RC_SETPCIFN_BUSY) {
-> diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
-> index 6b29e39496d1..9e8b4507234d 100644
-> --- a/arch/s390/pci/pci_irq.c
-> +++ b/arch/s390/pci/pci_irq.c
-> @@ -43,6 +43,7 @@ static int zpci_set_airq(struct zpci_dev *zdev)
->  	fib.fmt0.aibvo = 0;	/* each zdev has its own interrupt
-> vector */
->  	fib.fmt0.aisb = (unsigned long) zpci_sbv->vector + (zdev-
-> >aisb/64)*8;
->  	fib.fmt0.aisbo = zdev->aisb & 63;
-> +	fib.gd = zdev->gd;
->  
->  	return zpci_mod_fc(req, &fib, &status) ? -EIO : 0;
->  }
-> @@ -54,6 +55,8 @@ static int zpci_clear_airq(struct zpci_dev *zdev)
->  	struct zpci_fib fib = {0};
->  	u8 cc, status;
->  
-> +	fib.gd = zdev->gd;
-> +
->  	cc = zpci_mod_fc(req, &fib, &status);
->  	if (cc == 3 || (cc == 1 && status == 24))
->  		/* Function already gone or IRQs already deregistered.
-> */
-> @@ -72,6 +75,7 @@ static int zpci_set_directed_irq(struct zpci_dev
-> *zdev)
->  	fib.fmt = 1;
->  	fib.fmt1.noi = zdev->msi_nr_irqs;
->  	fib.fmt1.dibvo = zdev->msi_first_bit;
-> +	fib.gd = zdev->gd;
->  
->  	return zpci_mod_fc(req, &fib, &status) ? -EIO : 0;
->  }
-> @@ -84,6 +88,7 @@ static int zpci_clear_directed_irq(struct zpci_dev
-> *zdev)
->  	u8 cc, status;
->  
->  	fib.fmt = 1;
-> +	fib.gd = zdev->gd;
->  	cc = zpci_mod_fc(req, &fib, &status);
->  	if (cc == 3 || (cc == 1 && status == 24))
->  		/* Function already gone or IRQs already deregistered.
-> */
+> On 09/12/2021 13:44, Leo Yan wrote:
+> > On Wed, Dec 08, 2021 at 02:08:04PM +0000, James Clark wrote:
+> >> On 08/12/2021 13:17, Leo Yan wrote:
+> >>> Hi James,
+> >>>
+> >>> On Wed, Dec 08, 2021 at 11:54:35AM +0000, James Clark wrote:
+> >>>> There are two checks, one is for size when running without admin, but
+> >>>> this one is covered by the driver and reported on in more detail here
+> >>>> (builtin-record.c):
+> >>>>
+> >>>>   pr_err("Permission error mapping pages.\n"
+> >>>>          "Consider increasing "
+> >>>>          "/proc/sys/kernel/perf_event_mlock_kb,\n"
+> >>>>          "or try again with a smaller value of -m/--mmap_pages.\n"
+> >>>>          "(current value: %u,%u)\n",
+> >>>
+> >>> I looked into the kernel code and found:
+> >>>
+> >>>   sysctl_perf_event_mlock = 512 + (PAGE_SIZE / 1024);  // 512KB + 1 page
+> >>>
+> >>> If the system have multiple cores, let's say 8 cores, then kernel even
+> >>> can relax the limitaion with:
+> >>>
+> >>>   user_lock_limit *= num_online_cpus();
+> >>>
+> >>> So means the memory lock limitation is:
+> >>>
+> >>>   (512KB + 1 page) * 8 = 4MB + 8 pages.
+> >>>
+> >>> Seems to me, it's much relax than the user space's limitaion 128KB.
+> >>> And let's imagine for Arm server, the permitted buffer size can be a
+> >>> huge value (e.g. for a system with 128 cores).
+> >>>
+> >>> Could you confirm if this is right?
+> >>
+> >> Yes that seems to be the case. And the commit message for that addition
+> >> states the reasoning:
+> >>
+> >>   perf_counter: Increase mmap limit
+> >>   
+> >>   In a default 'perf top' run the tool will create a counter for
+> >>   each online CPU. With enough CPUs this will eventually exhaust
+> >>   the default limit.
+> >>
+> >>   So scale it up with the number of online CPUs.
+> >>
+> >> To me that makes sense. Normally the memory installed also scales with the
+> >> number of cores.
+> >>
+> >> Are you saying that we should look into modifying that scaling factor in
+> >> perf_mmap()? Or that we should still add something to userspace for
+> >> coresight to limit user supplied buffer sizes?
+> > 
+> > I don't think we should modify the scaling factor in perf_mmap(), the
+> > logic is not only used by AUX buffer, it's shared by normal event
+> > ring buffer.
+> > 
+> >> I think it makes sense to allow the user to specify any value that will work,
+> >> it's up to them.
+> > 
+> > Understand, I verified this patch with below steps:
+> > 
+> > root@debian:~# echo 0 > /proc/sys/kernel/perf_event_paranoid
+> > 
+> > leoy@debian:~$ perf record -e cs_etm// -m 4M,8M -o perf_test.data -- sleep 1
+> > Permission error mapping pages.
+> > Consider increasing /proc/sys/kernel/perf_event_mlock_kb,
+> > or try again with a smaller value of -m/--mmap_pages.
+> > (current value: 1024,2048)
+> > 
+> > leoy@debian:~$ perf record -e cs_etm// -m 4M,4M -o perf_test.data -- sleep 1
+> > Couldn't synthesize bpf events.
+> > [ perf record: Woken up 1 times to write data ]
+> > [ perf record: Captured and wrote 0.607 MB perf_test.data ]
+> > 
+> > So this patch looks good for me:
+> > 
+> > Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> > 
+> Thanks Leo!
+
+
+Thanks, applied.
+
+- Arnaldo
 

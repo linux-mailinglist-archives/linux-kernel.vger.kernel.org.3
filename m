@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB69B470734
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFED470736
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241215AbhLJRdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:33:20 -0500
-Received: from mail-pf1-f178.google.com ([209.85.210.178]:44975 "EHLO
-        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237989AbhLJRdT (ORCPT
+        id S241246AbhLJRfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:35:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44918 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236018AbhLJRfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:33:19 -0500
-Received: by mail-pf1-f178.google.com with SMTP id k64so9019740pfd.11;
-        Fri, 10 Dec 2021 09:29:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=C29RQmhBlCkkPpuJ/eOeU2rF+9gMdwncIV/icJVqVFM=;
-        b=xTnMw339uMefKqhiBXs0Qbm3Kd3pv1pRZKdlLMegA7b4eEYwG3cJs8aFi/bv4/F6+L
-         Oq0m80eB+ewsVeisNImKuVlZrvrGaOC5+raxl9xmnOT4vUmAQAV5O2IoLrgKUV0Jg+W6
-         zgtY9L5sbMqJg3W82kj4zpwDUCoXSNoTf+CXJ8KO1Qi0eh8jABUJtuntITmh53t2INpI
-         8wFJKxpkSpw4r73k4azz7ENLHftM2IYwpQ7nQGtb08GIYk41uXidVOcHwJLxlorrOpui
-         NwFsvdbf0TUiaBxzJuSBipMfCG/JyMmn1NMUMH0PRHrnMN+Kx7uA8Op2Il2Xt68485A2
-         tn8w==
-X-Gm-Message-State: AOAM533/MRJEJ7V4lGMysqLyb+auggbAG8h+wktGpcXpQl20JdmiJZd/
-        VEVucS80rysxVOfs+tmY5x8=
-X-Google-Smtp-Source: ABdhPJxnPaA1x86sHWiX3QwNKGliVcR0m6wJyrK4PSHjfL6CnHM332Nci95Wz2p6qphK0zmUz2YIAw==
-X-Received: by 2002:a63:5c5f:: with SMTP id n31mr40214965pgm.348.1639157383889;
-        Fri, 10 Dec 2021 09:29:43 -0800 (PST)
-Received: from ?IPv6:2620:0:1000:2514:85ed:ea0b:339:7b11? ([2620:0:1000:2514:85ed:ea0b:339:7b11])
-        by smtp.gmail.com with ESMTPSA id c3sm3926878pfv.67.2021.12.10.09.29.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 09:29:43 -0800 (PST)
-Subject: Re: [PATCH v3 3/3] blk-crypto: show crypto capabilities in sysfs
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-References: <20211208013534.136590-1-ebiggers@kernel.org>
- <20211208013534.136590-4-ebiggers@kernel.org>
- <6ff4d074-7508-4f4c-de06-f36899668168@acm.org>
- <YbKT/lcp6iZ+lD4n@sol.localdomain> <YbL2uUqV0GWFOitE@kroah.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <cb29756b-8b21-5b4d-f107-b5573945d7ab@acm.org>
-Date:   Fri, 10 Dec 2021 09:29:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 10 Dec 2021 12:35:17 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DE32B8291B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 17:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DAFFC00446;
+        Fri, 10 Dec 2021 17:31:39 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 12:31:37 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH v6 0/5] trace: Introduce objtrace trigger to trace
+ the kernel object
+Message-ID: <20211210123137.004df316@gandalf.local.home>
+In-Reply-To: <CAEr6+EDZ5vZyTkA3XCO3u76sY7SpZEV2nhLiY4MPL_BuFQDi0A@mail.gmail.com>
+References: <20211129164951.220511-1-xiehuan09@gmail.com>
+        <CAEr6+EDZ5vZyTkA3XCO3u76sY7SpZEV2nhLiY4MPL_BuFQDi0A@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <YbL2uUqV0GWFOitE@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 10:42 PM, Greg Kroah-Hartman wrote:
-> A single hex value makes sense to me.
+On Sat, 11 Dec 2021 00:55:31 +0800
+Jeff Xie <xiehuan09@gmail.com> wrote:
 
-Hi Greg,
+> hi Steve and Masami,
+> 
+> I really don't know what else I can do to enhance this patchset, if
+> this idea is really valuable and
+> can play its role, it may need the help of you or other developers ;-)
 
-I'm not enthusiast about this approach because:
-(a) A single hex value can be confused with a number. Reporting a bitfield in
-     hex format is not sufficient to prevent confusion with a number.
-(b) No other block layer sysfs attribute follows this encoding scheme.
-(c) This encoding enforces the restriction that data unit sizes are a power of
-     two. Is there anything fundamental in encryption that restricts data unit
-     sizes to a power of two? I don't know the answer myself.
+Hi Jeff,
 
-Thanks,
+I've been very busy with other things, but I may have time soon to look at
+your patch set. After I get a chance to play with it, I'm certain I will be
+coming back with some more comments ;-)
 
-Bart.
+Sorry about the delay, but my day job got in the way :-p
+
+-- Steve

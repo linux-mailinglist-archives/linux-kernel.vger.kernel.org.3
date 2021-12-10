@@ -2,92 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422CC46FE44
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0431046FE4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239736AbhLJKAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:00:37 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:48668 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbhLJKAg (ORCPT
+        id S239786AbhLJKCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239756AbhLJKCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:00:36 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2988A210E7;
-        Fri, 10 Dec 2021 09:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639130221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wyi1tTJVsj009ESy/KKw4c45LiGOomX2n/IstoHHMeU=;
-        b=IJl2zf2baESea6sQAzSAfVfsNRb22XUgqgE5cwSmk9/4iufaqmZHABT6LUi+AwcR1XwpUB
-        M3Qln15tp6TRNB8+MZTSDQ7zf6EpltFoGqveycYyNanXhkHsubvvVTw5U5HwMIXnb9hB2P
-        nL/orM9yFxuvyos6S0iZ8YV1qO7o1J8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639130221;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wyi1tTJVsj009ESy/KKw4c45LiGOomX2n/IstoHHMeU=;
-        b=kYOvDFIzNQ8xrH5hrFhnbBL4Tb1/pCs9SCOxmRXWzZR5FFMM1phGNhnitG2iaAjaTlqW4u
-        +9I0u4vYfhpVmOAA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D8507A3B85;
-        Fri, 10 Dec 2021 09:57:00 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 10:57:00 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Jerome Marchand <jmarchan@redhat.com>
-cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Heiko Carstens <hca@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] recordmcount.pl: look for jgnop instruction as well as
- bcrl on s390
-In-Reply-To: <20211210093827.1623286-1-jmarchan@redhat.com>
-Message-ID: <alpine.LSU.2.21.2112101054070.5704@pobox.suse.cz>
-References: <20211210093827.1623286-1-jmarchan@redhat.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 10 Dec 2021 05:02:05 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8684FC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:58:30 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id g14so27453221edb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:58:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nduhBFxPbxmifYpnO0eOOP3C7nxBPTbeIwjsdCqiSCo=;
+        b=ojvvj0K+k6NKnozWLW2tDWy91766MZb9YsUkZZD84yq8yaH1DnzCgRGc4zW9CR+Z3E
+         2vs+BSinUml6Qjyb0MbBrOgsHOui0a02cPy0cqrIUgGcPho1kK21Vv6AOKU4syfzyGr6
+         ZSM2KKARJ2O3WXBsrc+VrUfgJgi8GAHaVHe2HKB+OvOoTqxMHIykUz6SEjjyVYLDofUT
+         4tkWQHYJ8a7xdoQKOL1TGvS9bCMzyhfSxCNiEPqsSQMJYT0YND2DBanJfy4thrcjQpsv
+         NGVyKnbVO76+lE4LNwOMA8eTPqYUhFTsWhY12krSk4lNc2nU/54euf2N4eePg1MzmHYj
+         PSKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nduhBFxPbxmifYpnO0eOOP3C7nxBPTbeIwjsdCqiSCo=;
+        b=xBFMU4p9IItNQpK23FufD3qWIU77HhXRShX75rB2a+SIQy8uvzVoymSGZ0dpVdkOj9
+         PoChY2jKm48S3z7rfoR69IamhZNTGQxFvHiZZznq4s+3OLLa1tWkk1UPN1eWD6zUR615
+         TJu6zcLWxhNJJ0BUEexmFjqJnrpDksy6v6En+P/Wt1BkidOyaCGGjyKz6ouO3bA8IzQL
+         66+6pSF6KXnENqS3tZVzJCVxWLPXqoOIw33tPhRXnzKalgfqKKL+FVp8Fg9n337lxAPd
+         BSpRkDnmYMKKxsK2iiCHr4TMfgQQ9hxam5X1PXBgsNFmWT2UTA2Qm6JZdXTJrbBttkLf
+         gLEQ==
+X-Gm-Message-State: AOAM532z4H+5t66afnxv9qfs1klS9IuovsoGgV6Wwq5LCcuTJOCZrb9N
+        Zaf8KxP1metnV6mqIl1n4eUeDrw1mHwwo77X66Y=
+X-Google-Smtp-Source: ABdhPJylHws71T7EEEhue6UdCGoV/k4VWRPPxYHA0zXkEHzMN0zoHH6zuGQNrntdBPyvVA4MsSkOUQ==
+X-Received: by 2002:a17:907:7f2a:: with SMTP id qf42mr23268059ejc.388.1639130308873;
+        Fri, 10 Dec 2021 01:58:28 -0800 (PST)
+Received: from [192.168.178.33] (94.105.100.208.dyn.edpnet.net. [94.105.100.208])
+        by smtp.gmail.com with ESMTPSA id co10sm1129754edb.83.2021.12.10.01.58.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 01:58:28 -0800 (PST)
+Message-ID: <ab84ca1f-0f43-d50c-c272-81f64ee31ce8@tessares.net>
+Date:   Fri, 10 Dec 2021 10:58:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in mptcp_inq.c
+Content-Language: en-GB
+To:     cgel.zte@gmail.com, mathew.j.martineau@linux.intel.com
+Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ye Guojin <ye.guojin@zte.com.cn>, ZealRobot <zealci@zte.com.cn>
+References: <20211210071424.425773-1-ye.guojin@zte.com.cn>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20211210071424.425773-1-ye.guojin@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021, Jerome Marchand wrote:
+Hi Ye,
 
-> On s390, recordmcount.pl is looking for "bcrl 0,<xxx>" instructions in
-> the objdump -d outpout. However since binutils 2.37, objdump -d
-> display "jgnop <xxx>" for the same instruction. Update the
-> mcount_regex so that it accepts both.
+On 10/12/2021 08:14, cgel.zte@gmail.com wrote:
+> From: Ye Guojin <ye.guojin@zte.com.cn>
 > 
-> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+> 'sys/ioctl.h' included in 'mptcp_inq.c' is duplicated.
 
-Yes, we ran into exactly this issue too...
+Good catch, the modification looks good to me:
 
-> ---
->  scripts/recordmcount.pl | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/scripts/recordmcount.pl b/scripts/recordmcount.pl
-> index 7d631aaa0ae1..52a000b057a5 100755
-> --- a/scripts/recordmcount.pl
-> +++ b/scripts/recordmcount.pl
-> @@ -219,7 +219,7 @@ if ($arch eq "x86_64") {
->  
->  } elsif ($arch eq "s390" && $bits == 64) {
->      if ($cc =~ /-DCC_USING_HOTPATCH/) {
-> -	$mcount_regex = "^\\s*([0-9a-fA-F]+):\\s*c0 04 00 00 00 00\\s*brcl\\s*0,[0-9a-f]+ <([^\+]*)>\$";
-> +	$mcount_regex = "^\\s*([0-9a-fA-F]+):\\s*c0 04 00 00 00 00\\s*(bcrl\\s*0,|jgnop\\s*)[0-9a-f]+ <([^\+]*)>\$";
->  	$mcount_adjust = 0;
->      }
->      $alignment = 8;
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 
-...and we have exactly the same fix in SLES. I haven't got to submit it 
-to upstream yet :(, many thanks for doing it.
 
-So at least
+This patch is for "net-next" tree as it fixes an issue introduced by a
+patch only in this tree:
 
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
+Fixes: b51880568f20 ("selftests: mptcp: add inq test case")
 
-M
+Regarding the commit message, please next time include the Fixes tag and
+mention for which tree it is for in the FAQ [1], e.g. [PATCH net-next].
+
+
+@David/Jakub: do you prefer a v2 with these modifications or is it fine
+to apply this small patch directly in net-next tree?
+
+
+Cheers,
+Matt
+
+[1] https://www.kernel.org/doc/html/latest/networking/netdev-FAQ.html
+Please check the "How do I indicate which tree (net vs. net-next) my
+patch should be in?" section.
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

@@ -2,141 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB15447085C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E698470836
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242131AbhLJSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:21:01 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:44991 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236861AbhLJSVB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:21:01 -0500
-Received: by mail-oi1-f179.google.com with SMTP id be32so14272730oib.11;
-        Fri, 10 Dec 2021 10:17:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YU9YCbZbDktrwFwYhXC085Scw8TfNhTNhBZqDcowh58=;
-        b=2LVjZJyHC0bzx2BkJAb0Cm1VRMu1LuzLm69vTEyVoyl28sBTPhrsz4MjkOX1TIriOM
-         UDRa4oyC7Xn84PCypw+esFRELdoUY719T1TOgQKhavbnMRpiI+vhfggsZyPkHu0U9atr
-         PR283SAEBY1bSqBdpeXpIxUBqhN6vCzIAl8yQXlQ9WFTtDWmKZn+9/5vQN1lKVg9tcSh
-         wAMERXlr9AILLVeB+U4G+cUdxJ9BXJIZjWIMSxDkxxMDHEzf3SL8p/7S5s1AEOfsJK3V
-         W2e37I8dX60CU4/A4sTu+9792RnQiy6HawkCS58YX2u+T8O0oA82RCjlg6Eu1iV6mjO2
-         kJ7Q==
-X-Gm-Message-State: AOAM531WBz3H2q+Dc3owQkCIbLYw0oEEGnYhcbHFNY7jBBohKN+Uqszr
-        JGF6S/kQUNcATYRKJv3Dxwktm7jVHA==
-X-Google-Smtp-Source: ABdhPJyvpSgennWM9D8Uf+LQaqbHK2gVSasZ6S9vGBlFwcRSN30Q22MHR58rfH44QR08viRIKDt9jQ==
-X-Received: by 2002:a54:4692:: with SMTP id k18mr13899661oic.93.1639160245462;
-        Fri, 10 Dec 2021 10:17:25 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bq5sm930460oib.55.2021.12.10.10.17.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 10:17:24 -0800 (PST)
-Received: (nullmailer pid 1641340 invoked by uid 1000);
-        Fri, 10 Dec 2021 18:17:21 -0000
-Date:   Fri, 10 Dec 2021 12:17:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Moudy Ho <moudy.ho@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        menghui.lin@mediatek.com, sj.huang@mediatek.com,
-        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
-        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
-        river.cheng@mediatek.com, srv_heupstream@mediatek.com
-Subject: Re: [PATCH v10 1/3] dt-binding: mt8183: add Mediatek MDP3 dt-bindings
-Message-ID: <YbOZsd+zNmwOpB4x@robh.at.kernel.org>
-References: <20211202062733.20338-1-moudy.ho@mediatek.com>
- <20211202062733.20338-2-moudy.ho@mediatek.com>
+        id S245200AbhLJSRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:17:43 -0500
+Received: from mga07.intel.com ([134.134.136.100]:23625 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245226AbhLJSRl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:17:41 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="301793916"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="301793916"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:14:03 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="659713475"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:14:01 -0800
+Date:   Fri, 10 Dec 2021 10:18:20 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 3/4] iommu/vt-d: Support PASID DMA for in-kernel usage
+Message-ID: <20211210101820.58b24b77@jacob-builder>
+In-Reply-To: <20211210174848.GH6385@nvidia.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <1638884834-83028-4-git-send-email-jacob.jun.pan@linux.intel.com>
+        <20211208132255.GS6385@nvidia.com>
+        <20211208111659.6de22e52@jacob-builder>
+        <9f724b3a-6028-43d7-b4fc-d8a939e7b2cf@linux.intel.com>
+        <20211209152113.64b817b9@jacob-builder>
+        <921a766f-d826-2ca4-f739-4d196b32a681@linux.intel.com>
+        <20211210095025.38af67ce@jacob-builder>
+        <20211210174848.GH6385@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202062733.20338-2-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 02:27:31PM +0800, Moudy Ho wrote:
-> This patch adds DT binding document for Media Data Path 3 (MDP3)
-> a unit in multimedia system used for scaling and color format convert.
+Hi Jason,
+
+On Fri, 10 Dec 2021 13:48:48 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
+
+> On Fri, Dec 10, 2021 at 09:50:25AM -0800, Jacob Pan wrote:
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> ---
->  .../bindings/media/mediatek,mdp3-rsz.yaml     |  65 ++++++
->  .../bindings/media/mediatek,mdp3-wrot.yaml    |  67 ++++++
->  .../bindings/soc/mediatek/mediatek,ccorr.yaml |  57 +++++
->  .../bindings/soc/mediatek/mediatek,rdma.yaml  | 216 ++++++++++++++++++
->  .../bindings/soc/mediatek/mediatek,wdma.yaml  |  68 ++++++
->  5 files changed, 473 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,rdma.yaml
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
+> > > Tying pasid to an iommu_domain is not a good idea. An iommu_domain
+> > > represents an I/O address translation table. It could be attached to a
+> > > device or a PASID on the device.  
+> > 
+> > I don;t think we can avoid storing PASID at domain level or the group's
+> > default domain. IOTLB flush is per domain. Default domain of DMA type
+> > is already tying to PASID0, right?  
+> 
+> No, it is just wrong.
+> 
+> If the HW requires a list of everything that is connected to the
+> iommu_domain then it's private iommu_domain should have that list.
+> 
+What I have in this patchset is in the private dmar_domain
+struct dmar_domain {
+	...
+	u32		kernel_pasid;	/* for in-kernel DMA w/
+PASID */ atomic_t	kernel_pasid_user; /* count of kernel_pasid users
+*/ struct iommu_domain domain;	/* generic domain data structure for
+					   iommu core */
+};
 
-I'm not a fan of bindings/soc/ either. Put everything in 
-bindings/media/. What's the difference between these blocks here and 
-the version used for display? If they are the same h/w, then the binding 
-needs to be the same. How they get used is the kernel's problem. 
+Perhaps I am missing the point. "private domain" is still "domain level" as
+what I stated. Confused :(
 
-It looks like the display ccorr, rdma, and wdma aren't documented. Fix 
-that before you add new stuff.
+> But it is a *list* not a single PASID.
+> 
+We could have a list when real use case comes.
+
+> If one device has 10 PASID's pointing to this domain you must flush
+> them all if that is what the HW requires.
+> 
+Yes. My point is that other than PASID 0 is a given, we must track the 10
+PASIDs to avoid wasted flush. It also depend on how TLBs are tagged and
+flush granularity available. But at the API level, should we support all the
+cases?
+
+> Jason
 
 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
-> new file mode 100644
-> index 000000000000..d7f104a0f165
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
-> @@ -0,0 +1,65 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/mediatek,mdp3-rsz.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek Resizer
-> +
-> +maintainers:
-> +  - Matthias Brugger <matthias.bgg@gmail.com>
-> +
-> +description: |
-> +  One of Media Data Path 3 (MDP3) components used to do frame resizing.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - mediatek,mt8183-mdp3-rsz
-> +
-> +  mediatek,mdp3-id:
-> +    description: There may be multiple components with the same function but
-> +      different addresses in MDP3. The MDP3 driver can select one or zero of
-> +      them and connect other components in series according to the current
-> +      application to form one or more data paths. This property indicate the
-> +      selection order of the same components.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1, 2, 3]
+Thanks,
 
-Again, an index nor an alias is the right approach for this. Use DT 
-graph like others do. 'It's too complicated' is not a reason unless you 
-show how and why it won't work.
-
-Rob
+Jacob

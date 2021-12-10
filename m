@@ -2,103 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDE34706AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2964706A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243326AbhLJRIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:08:48 -0500
-Received: from mga14.intel.com ([192.55.52.115]:2761 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233725AbhLJRIq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:08:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639155911; x=1670691911;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7PEo9nG4krlh+5L4jdugOqDbqZIQi3a8SstgBedZSiU=;
-  b=f6+2nbNj13u6rcGIkJMagvGlGvo3iezO7XpJghqfU9hSwzTZ5XENl9TJ
-   NHi1ts7bvE/hax9rVWdRS9A+iSKz8OEmyx2QS3jFVqyxggl7SFDoijHXF
-   7JJ6VKnjorCEmpLCoC4ut9We++Ww8SQYhaPdMqhBSOh37FdS+ClUnH5C8
-   /QU3lQPrlgMy7EgF1NeGvbWawodcXl/8ANm27+r3LdVQzb8g20NXkZ0KZ
-   VfJhPivPWpvQEKCI2z0SBcEA5grkKh5ld7lqkRrucG5JWg8B9A0pICoqd
-   Znk9wYiqvbjYaYEA/YqRNrHR65ftLc6g6R4W2dxIIFsL/tWQcUF78HK6n
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238605857"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="238605857"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:02:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="680802436"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 09:02:11 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvjHf-0003Oz-8O; Fri, 10 Dec 2021 17:02:11 +0000
-Date:   Sat, 11 Dec 2021 01:01:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liu Yi L <yi.l.liu@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 32/33]
- include/linux/iommufd.h:30:1: error: expected identifier or '(' before '{'
- token
-Message-ID: <202112110154.soFBjQw6-lkp@intel.com>
+        id S244333AbhLJRFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:05:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237724AbhLJRFy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 12:05:54 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA080C061746;
+        Fri, 10 Dec 2021 09:02:18 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id d10so19207519lfg.6;
+        Fri, 10 Dec 2021 09:02:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=khe42KQd2i39PRZO8NKm3PH3oE5cDTRnrPeaaVcSlKs=;
+        b=aT7O05Ob2F7u0IucdOLOdYhj2Y5eqR5hBxxJrJ8DW/EY7X8rKUpDWeWZ5luBvaIX/r
+         HKJCT2arWXABOgWOO4uI6JhtC1iqZjryMGoSY8cjTMKV1glKXd8ZZNpp8lV79xrxdFBt
+         5TyW6h0DDOu6NwW9eUWmn60BcpqHv0cX2+Db5+HsiBBpWvu9K6GY5i2au3XRWMYlVbn/
+         4n26zfICKYqURTQEkXQKLSTMPJGAHaVX8ypa+WLDcZDi3Iiyt6vWj6gsOAjUMpaHDTBL
+         L2FjQMoH/JczSz3woiDe2+0p5KiAgL/7qB2Yl0SwOY13V2vZzWUCnZdYlloXnHg+1aJ0
+         emKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=khe42KQd2i39PRZO8NKm3PH3oE5cDTRnrPeaaVcSlKs=;
+        b=pU0nTJaKxoAVa6BeR5QAx3RgG7L1j98KV8zMjjaSgkW0YNPUFyfMOfVXL05gPl+FML
+         TFAB11wm6ZuU5b4NdF3ozOV20NuVldkti6CA3tjVVBFUACzhkp0NRUXX8iCMF3fao2di
+         +1SPRUgnVSECvtY4a1txThAgzD9WL61i7CnGYfiBdNTXFjfv+0eYu/7P/t7p2Trgadif
+         jwqkalO0hWrsSicSLTnWMo0yQyTtu8foEhJ2EKcDSQOWuyo/YZ8t3TgvywDkZ+uaB7v2
+         3QnQjJIvHb3uyFf+ueu8+1ON+JiqEho/30PiAivTcvZuOJzxEmmfdCCLGsbbxY8EtJiE
+         1ZTw==
+X-Gm-Message-State: AOAM531D/csV+0k08lfPw/mWKimFHDhhBHNehwffMPAf45Y4GwruHIl5
+        ia2eTRbQISuwOO+iJTUnse3b3yiYNxk=
+X-Google-Smtp-Source: ABdhPJwNyEUsEdqvetBjSnSDOj73MmwzhfsOY76fP8zmlqjVuPrjyf/EFK/lSd61vQzt4HIW6syguw==
+X-Received: by 2002:a05:6512:1506:: with SMTP id bq6mr13705022lfb.444.1639155735845;
+        Fri, 10 Dec 2021 09:02:15 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id b5sm360912lff.278.2021.12.10.09.02.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 09:02:15 -0800 (PST)
+Subject: Re: [PATCH v5 06/24] ARM: tegra: Add common device-tree base for
+ Tegra30 ASUS Transformers
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        David Heidelberg <david@ixit.cz>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola Milosavljevic <mnidza@outlook.com>,
+        Ion Agorria <ion@agorria.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211208173609.4064-1-digetx@gmail.com>
+ <20211208173609.4064-7-digetx@gmail.com> <YbN3OektEKoHY3s1@orome>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <55a397be-a1cd-efaa-28bb-c0291c200295@gmail.com>
+Date:   Fri, 10 Dec 2021 20:02:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YbN3OektEKoHY3s1@orome>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
-head:   44f89b130eec28760e6b655facd4be49c5bcc3f9
-commit: 219a6860a2c8c2c89d71793ce4f9375f3e7bb61f [32/33] vfio/pci: Add VFIO_DEVICE_ATTACH_IOASPT
-config: nios2-buildonly-randconfig-r004-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110154.soFBjQw6-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/219a6860a2c8c2c89d71793ce4f9375f3e7bb61f
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
-        git checkout 219a6860a2c8c2c89d71793ce4f9375f3e7bb61f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/vfio/
+10.12.2021 18:50, Thierry Reding пишет:
+> On Wed, Dec 08, 2021 at 08:35:51PM +0300, Dmitry Osipenko wrote:
+>> From: Svyatoslav Ryhel <clamor95@gmail.com>
+>>
+>> Add common DTSI for Tegra30 ASUS Transformers. It will be used by multiple
+>> device-trees of ASUS devices. The common part initially was born out of
+>> the ASUS TF300T tablet's device-tree that was created by Michał Mirosław.
+>> It was heavily reworked and improved by Svyatoslav Ryhel, Maxim Schwalm,
+>> Ion Agorria et al.
+>>
+>> [digetx@gmail.com: factored out common part into separate patch and wrote commit message]
+>> Co-developed-by: Ion Agorria <ion@agorria.com>
+>> Signed-off-by: Ion Agorria <ion@agorria.com>
+>> Co-developed-by: Maxim Schwalm <maxim.schwalm@gmail.com>
+>> Signed-off-by: Maxim Schwalm <maxim.schwalm@gmail.com>
+>> Co-developed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+>> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  .../dts/tegra30-asus-transformer-common.dtsi  | 1729 +++++++++++++++++
+>>  1 file changed, 1729 insertions(+)
+>>  create mode 100644 arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
+>>
+>> diff --git a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
+>> new file mode 100644
+>> index 000000000000..be77212dd8c7
+>> --- /dev/null
+>> +++ b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
+>> @@ -0,0 +1,1729 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include <dt-bindings/input/gpio-keys.h>
+>> +#include <dt-bindings/input/input.h>
+>> +#include <dt-bindings/thermal/thermal.h>
+>> +
+>> +#include "tegra30.dtsi"
+>> +#include "tegra30-cpu-opp.dtsi"
+>> +#include "tegra30-cpu-opp-microvolt.dtsi"
+>> +
+>> +/ {
+>> +	chassis-type = "convertible";
+>> +
+>> +	aliases {
+>> +		mmc0 = &sdmmc4;	/* eMMC */
+> 
+> Looks like a tab snuck in there... otherwise this also has some nodes
+> sorted in the wrong order.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I was fixing these tabs, but missed that one. Good catch.
 
-All errors (new ones prefixed by >>):
+Apparently I missed to recheck the order after the most recent changes,
+good that you noticed it.
 
-   In file included from drivers/vfio/vfio.c:35:
->> include/linux/iommufd.h:30:1: error: expected identifier or '(' before '{' token
-      30 | {
-         | ^
-   include/linux/iommufd.h:29:1: warning: 'iommufd_bind_pci_device' declared 'static' but never defined [-Wunused-function]
-      29 | iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id, u64 dev_cookie);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
+> [...]
+>> +	pad-keys {
+> 
+> Any specific reason why this is called pad-keys? We call it gpio-keys
+> everywhere else.
 
+Not sure about the name. Perhaps Svyatoslav likes the pad-keys name
+more. I recall it was named gpio-keys at some point in the past.
 
-vim +30 include/linux/iommufd.h
-
-8a81aeff73cead Jason Gunthorpe 2021-11-11  26  
-8a81aeff73cead Jason Gunthorpe 2021-11-11  27  #else /* !CONFIG_IOMMUFD */
-8a81aeff73cead Jason Gunthorpe 2021-11-11  28  static inline struct iommufd_device *
-8a81aeff73cead Jason Gunthorpe 2021-11-11  29  iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id, u64 dev_cookie);
-8a81aeff73cead Jason Gunthorpe 2021-11-11 @30  {
-8a81aeff73cead Jason Gunthorpe 2021-11-11  31  	return ERR_PTR(-EOPNOTSUPP);
-8a81aeff73cead Jason Gunthorpe 2021-11-11  32  }
-8a81aeff73cead Jason Gunthorpe 2021-11-11  33  
-
-:::::: The code at line 30 was first introduced by commit
-:::::: 8a81aeff73cead826a9b7d26e9af4f09c9fd700f iommufd: Add kAPI toward external drivers
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Liu Yi L <yi.l.liu@intel.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Again, will you change it all by yourself or should I make v6?

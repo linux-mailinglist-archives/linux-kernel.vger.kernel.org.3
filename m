@@ -2,146 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DA846FE1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7C446FE20
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239539AbhLJJvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:51:54 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42398 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbhLJJvw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:51:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D60EECE29C8;
-        Fri, 10 Dec 2021 09:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A60C00446;
-        Fri, 10 Dec 2021 09:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639129695;
-        bh=z0x32lqi2Vr4THaqQyDRu27So8dcBhOvF0p05aspnjc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pJlfgXIqZA4DCK99O8Af+ry8dkJ/NO1eGcXS243Yckwgsfn/wJQ06ao7/FUWeViBK
-         TOh+xbOIufYmsun4+y4fprVYG+doZu/p5SeZBGfZl5rAmHSEetsyofUgumX5lqjoZs
-         u/dIAJWkMYXeRfvqaNsJhiEQJwZ8AVu9u0Gj0D8A=
-Date:   Fri, 10 Dec 2021 10:48:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marcelo Henrique Cerri <marcelo.cerri@canonical.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Simo Sorce <simo@redhat.com>,
-        Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Message-ID: <YbMiXOCibTRXYYCo@kroah.com>
-References: <YaYvYdnSaAvS8MAk@kroah.com>
- <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
- <YaZHKHjomEivul6U@kroah.com>
- <YaZqVxI1C8RByq+w@gmail.com>
- <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
- <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
- <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
- <20211210014337.xmin2lu5rhhe3b3t@valinor>
- <YbL3wNBFi2vjyvPj@kroah.com>
- <20211210093003.lp6fexzrga3nijxn@valinor>
+        id S239555AbhLJJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:54:00 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:46654 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230296AbhLJJx7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 04:53:59 -0500
+Received: from [10.180.13.84] (unknown [10.180.13.84])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxysjRIrNhgdIFAA--.12755S2;
+        Fri, 10 Dec 2021 17:50:10 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
+ usbhid device
+To:     Oliver Neukum <oneukum@suse.com>, Jiri Kosina <jikos@kernel.org>,
+        benjamin.tissoires@redhat.com, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
+        stern@rowland.harvard.edu, rajatja@google.com,
+        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuyinbo@loongson.cn,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rajat Jain <rajatja@google.com>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
+ <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <d2e4a97a-b89b-eaf4-5aaf-89af22227746@loongson.cn>
+Date:   Fri, 10 Dec 2021 17:50:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210093003.lp6fexzrga3nijxn@valinor>
+In-Reply-To: <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxysjRIrNhgdIFAA--.12755S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XrykXr1UWF17Cry3tFyxKrg_yoWkGwbEkr
+        4jgrs7Gr13Zrs7K3WftF4UXry7Ww42kF97Xw4xtw1SgF17Aws3G34kur9ak3W5GayxZF9x
+        Krn0qrnayFnxujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbTkFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 06:30:03AM -0300, Marcelo Henrique Cerri wrote:
-> On Fri, Dec 10, 2021 at 07:46:24AM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Dec 09, 2021 at 10:43:37PM -0300, Marcelo Henrique Cerri wrote:
-> > > Hi, Jason. How do you think we could approach that then?
-> > > 
-> > > Are you willing to discuss the FIPS 140-3 requirements that random.c
-> > > doesn't currently meet so we can dive deeper on how we could implement
-> > > them in a way that would improve the kernel other then simply
-> > > providing compliance to FIPS?
-> > 
-> > Discussing things doesn't usually work well.  Let's see some working
-> > patches first, that solve problems that you have with the current random
-> > code, and we can go from there.
-> > 
-> > Again, like any other kernel patch submission, nothing new here at all.
+
+
+在 2021/12/8 下午6:03, Oliver Neukum 写道:
 > 
-> Hi, Greg. I understand your point but we had plenty of patch
-> submissions already from Stephan, Nicolai and others and that didn't
-> work. So I am expecting that anybody taking over as the random.c
-> maintainer can at least provide some direction on that.
-
-Then submit patches to be reviewed!  This patch series was commented on
-why it is not acceptable, so it's done with for now.
-
-We can't go back in time and dig up old patch series to be reviewed now
-unless they are actually refreshed and resubmitted.
-
-Why isn't anyone doing that?
-
-> > > I believe all the distros are interested in making progress on that,
-> > > but without a general guidance it makes very hard for us to
-> > > collaborate and we end up in the current situation in which each
-> > > distro is carrying its own "hack", as Simo mentioned before. Canonical
-> > > is in the same situation as the other distros and we are carrying an
-> > > workaround to wire up the crypto DRBG to random.c in order to archive
-> > > compliance.
-> > 
-> > If everyone seems to think their patches are hacks, and are not worthy
-> > of being submitted, then why do they think that somehow they are viable
-> > for their users that are actually using them?
+> On 08.12.21 10:39, Yinbo Zhu wrote:
+>> The remote wake-up function is a regular function on usb hid device
+>> and I think keeping it enabled by default will make usb application
+>> more convenient. This patch is to enable remote wakeup function for
+>> usb hid device.
+>>
+> Hi,
 > 
-> Because although some people dislike it, FIPS is still a requirement
-> for many users. That's the reality and that will not change just
-> because there are some resistance against it.
+> I am afraid we cannot do this. It will cause regression.
+> Consider for example the case of laptops with touchscreens
+> that will trigger a wake up when the laptop is closed.
 > 
-> The patches that distros are carrying are hacks because they try to
-> minimize risks while keeping the code as close as possible to
-> upstream. But that has several drawbacks, such as performance, limited
-> entropy sources an so on, that to me makes them not suitable for
-> upstream.
+>      Regards
+> 
+>          Oliver
+Hi oliver,
 
-In other words, "the hacks we made to the random code are so bad we do
-not want to submit them upstream for everyone to review as our names
-would be on them and we would have to justify them to the world"?  :)
 
-Given that there are no patches here to review by anyone, why is this
-email thread still persisting?
+system ask that must it must be accped a acpi lid open event then system 
+will always into resume state for laptop, otherwise, eventhough that 
+system be wakeuped by other event then system will continue into suspend.
 
-Again, the only way forward is to submit changes that meet our
-well-documented development process.  There's nothing "special" about
-this very tiny .c file that is any different than the other 30 million
-lines of kernel code we support that warrants a different process at
-all.
+and for laptop usb wakeup that as general ask bios to enable usb wakeup 
+then if need do more things to enable usb wakeup I think this usb wakeup 
+function isn't friendly and inconveient, so enable it by default.
+after add this patch, if want to use usb wakeup function it only need 
+enable bios configure it think it is appropriate.
 
-greg k-h
+BRs,
+Yinbo.
+> 
+

@@ -2,247 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A11A4709B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DAE4709BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343519AbhLJTIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:08:41 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62854 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S244771AbhLJTIk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:08:40 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAIvX3U028646;
-        Fri, 10 Dec 2021 19:05:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=mTc6O31oy03pyueB0ZzmE2BTEFYfLWzisz8ir47qnPE=;
- b=eG6sd8Iw97iOO+94KvU8ID3hjBT/BUp+nL48K/6J/5/mnwa70a1MTDdI/U+keRcnlq9H
- 3idmFgIyzSjCjx3SLqHSxl5SQ8WDDKW9tpfjuYen42GHtvsqDEmNB22L3skIqiFBm0aB
- apb9/fwyMa+RmNBj/VMxEMXpIw5PBNs8i1MpZUevo5K0mrk4pJ3uLAmt7tMNFprKTQlo
- gfx24RDB3S/3eAOJvURhQvyDalqL/nsNu5fxcoQepZiD9RGxY2cJAjWy3YjQ0apbovjt
- jWS9/kvSAjTj+nGfAQvKmyTffHrvu8mrH8TKYTLpIr6scLjJf/f+4mPB3gtxpCppf7RC zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cvcmn842d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 19:05:04 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAJ2qVM018055;
-        Fri, 10 Dec 2021 19:05:04 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cvcmn8421-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 19:05:03 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAIcRfS009598;
-        Fri, 10 Dec 2021 19:05:03 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03wdc.us.ibm.com with ESMTP id 3cqyy9w30n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 19:05:03 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAJ52kA47055216
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 19:05:02 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CF0D2806A;
-        Fri, 10 Dec 2021 19:05:02 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 604522805E;
-        Fri, 10 Dec 2021 19:04:57 +0000 (GMT)
-Received: from farman-thinkpad-t470p (unknown [9.211.80.105])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 19:04:57 +0000 (GMT)
-Message-ID: <8c5a0eadb764cfd7769fdbcd4b060eee40c6a43d.camel@linux.ibm.com>
-Subject: Re: [PATCH 13/32] KVM: s390: pci: add basic kvm_zdev structure
-From:   Eric Farman <farman@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 10 Dec 2021 14:04:55 -0500
-In-Reply-To: <20211207205743.150299-14-mjrosato@linux.ibm.com>
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
-         <20211207205743.150299-14-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MJwru0hY28u-mzsAofYsjX8e18mBUNlI
-X-Proofpoint-GUID: N1NmPQxi88FQTUAArtvypkzHZEnl1d8Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_07,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 adultscore=0 suspectscore=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 impostorscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100104
+        id S1343529AbhLJTIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:08:54 -0500
+Received: from mga14.intel.com ([192.55.52.115]:14661 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343531AbhLJTIx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 14:08:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639163118; x=1670699118;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=baJK7YY4ozI4hWSjcpwk5ZyhlDtINvD+RSPE2T6TfkQ=;
+  b=QAxckX9APg8gDsbVTLJ5AX/lmhJtCXkKbjWDi9XEnIqYUULD54w1uc/P
+   ZKrPxvr9GHH1pqsrSfwMqrlr/8AgZgQomkKzNUoqLdKbeuc85s1frAEW7
+   mkHeNdrqiY08emEb5XFHtPJoxGuu89ImrJAKCs4wtjlJMzmTiqvBJh8E5
+   UpjVF4cnL+JZGx5JkXarEHrFqQJUJIoULEVvprk9MMR1F2LShuvH4FnHT
+   Ujjh/dTxRr+QcU15l4s/Tb8+5XxFNnqKMGZGJbqLAwawWVnFCO7gixPqx
+   /iciZLFT7mMwaPtbQ2HJRzy9JZVfDJLzSDfJfLNZTKIUsxN8FyV/RikJ+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238643442"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="238643442"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:05:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="680849716"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 11:05:16 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvlCl-0003aE-Gg; Fri, 10 Dec 2021 19:05:15 +0000
+Date:   Sat, 11 Dec 2021 03:04:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: fs/ext4/ioctl.c:45:5: sparse: sparse: symbol
+ 'ext4_modify_primary_sb' was not declared. Should it be static?
+Message-ID: <202112110238.laDrEJqZ-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-12-07 at 15:57 -0500, Matthew Rosato wrote:
-> This structure will be used to carry kvm passthrough information
-> related to
-> zPCI devices.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211210-231726/Lukas-Czerner/ext4-implement-support-for-get-set-fs-label/20211112-060030
+head:   3645884240a4d5f00133b71e3a7fbb2070588706
+commit: 3645884240a4d5f00133b71e3a7fbb2070588706 ext4: implement support for get/set fs label
+date:   4 hours ago
+config: i386-randconfig-s001-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110238.laDrEJqZ-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/3645884240a4d5f00133b71e3a7fbb2070588706
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20211210-231726/Lukas-Czerner/ext4-implement-support-for-get-set-fs-label/20211112-060030
+        git checkout 3645884240a4d5f00133b71e3a7fbb2070588706
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/ext4/
 
-Reviewed-by: Eric Farman <farman@linux.ibm.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  arch/s390/include/asm/kvm_pci.h | 29 +++++++++++++++++
->  arch/s390/include/asm/pci.h     |  3 ++
->  arch/s390/kvm/Makefile          |  2 +-
->  arch/s390/kvm/pci.c             | 57
-> +++++++++++++++++++++++++++++++++
->  4 files changed, 90 insertions(+), 1 deletion(-)
->  create mode 100644 arch/s390/include/asm/kvm_pci.h
->  create mode 100644 arch/s390/kvm/pci.c
-> 
-> diff --git a/arch/s390/include/asm/kvm_pci.h
-> b/arch/s390/include/asm/kvm_pci.h
-> new file mode 100644
-> index 000000000000..3e491a39704c
-> --- /dev/null
-> +++ b/arch/s390/include/asm/kvm_pci.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * KVM PCI Passthrough for virtual machines on s390
-> + *
-> + * Copyright IBM Corp. 2021
-> + *
-> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
-> + */
-> +
-> +
-> +#ifndef ASM_KVM_PCI_H
-> +#define ASM_KVM_PCI_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/kvm_types.h>
-> +#include <linux/kvm_host.h>
-> +#include <linux/kvm.h>
-> +#include <linux/pci.h>
-> +
-> +struct kvm_zdev {
-> +	struct zpci_dev *zdev;
-> +	struct kvm *kvm;
-> +};
-> +
-> +extern int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
-> +extern void kvm_s390_pci_dev_release(struct zpci_dev *zdev);
-> +extern int kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm
-> *kvm);
-> +
-> +#endif /* ASM_KVM_PCI_H */
-> diff --git a/arch/s390/include/asm/pci.h
-> b/arch/s390/include/asm/pci.h
-> index 86f43644756d..32810e1ed308 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -97,6 +97,7 @@ struct zpci_bar_struct {
->  };
->  
->  struct s390_domain;
-> +struct kvm_zdev;
->  
->  #define ZPCI_FUNCTIONS_PER_BUS 256
->  struct zpci_bus {
-> @@ -190,6 +191,8 @@ struct zpci_dev {
->  	struct dentry	*debugfs_dev;
->  
->  	struct s390_domain *s390_domain; /* s390 IOMMU domain data */
-> +
-> +	struct kvm_zdev *kzdev; /* passthrough data */
->  };
->  
->  static inline bool zdev_enabled(struct zpci_dev *zdev)
-> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> index b3aaadc60ead..95ea865e5d29 100644
-> --- a/arch/s390/kvm/Makefile
-> +++ b/arch/s390/kvm/Makefile
-> @@ -10,6 +10,6 @@ common-objs = $(KVM)/kvm_main.o
-> $(KVM)/eventfd.o  $(KVM)/async_pf.o \
->  ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
->  
->  kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o
-> sigp.o
-> -kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
-> +kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o pci.o
->  
->  obj-$(CONFIG_KVM) += kvm.o
-> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-> new file mode 100644
-> index 000000000000..ecfc458a5b39
-> --- /dev/null
-> +++ b/arch/s390/kvm/pci.c
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * s390 kvm PCI passthrough support
-> + *
-> + * Copyright IBM Corp. 2021
-> + *
-> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
-> + */
-> +
-> +#include <linux/kvm_host.h>
-> +#include <linux/pci.h>
-> +#include <asm/kvm_pci.h>
-> +
-> +int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
-> +{
-> +	struct kvm_zdev *kzdev;
-> +
-> +	if (zdev == NULL)
-> +		return -ENODEV;
-> +
-> +	kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
-> +	if (!kzdev)
-> +		return -ENOMEM;
-> +
-> +	kzdev->zdev = zdev;
-> +	zdev->kzdev = kzdev;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_open);
-> +
-> +void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
-> +{
-> +	struct kvm_zdev *kzdev;
-> +
-> +	if (!zdev || !zdev->kzdev)
-> +		return;
-> +
-> +	kzdev = zdev->kzdev;
-> +	WARN_ON(kzdev->zdev != zdev);
-> +	zdev->kzdev = 0;
-> +	kfree(kzdev);
-> +
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_release);
-> +
-> +int kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm)
-> +{
-> +	struct kvm_zdev *kzdev = zdev->kzdev;
-> +
-> +	if (!kzdev)
-> +		return -ENODEV;
-> +
-> +	kzdev->kvm = kvm;
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_s390_pci_attach_kvm);
 
+sparse warnings: (new ones prefixed by >>)
+>> fs/ext4/ioctl.c:45:5: sparse: sparse: symbol 'ext4_modify_primary_sb' was not declared. Should it be static?
+>> fs/ext4/ioctl.c:165:5: sparse: sparse: symbol 'ext4_modify_superblocks_fn' was not declared. Should it be static?
+
+Please review and possibly fold the followup patch.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

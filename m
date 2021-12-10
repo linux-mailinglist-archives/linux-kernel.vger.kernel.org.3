@@ -2,183 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 782184708B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53B64708BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245343AbhLJSbn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 13:31:43 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:34439 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244333AbhLJSbn (ORCPT
+        id S245352AbhLJSc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:32:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237062AbhLJSc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:31:43 -0500
-Received: by mail-ot1-f46.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso10500284otj.1;
-        Fri, 10 Dec 2021 10:28:07 -0800 (PST)
+        Fri, 10 Dec 2021 13:32:27 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF261C061746;
+        Fri, 10 Dec 2021 10:28:51 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id f186so23303070ybg.2;
+        Fri, 10 Dec 2021 10:28:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F2fgbC4erWq9UsFudgbaV5qAPl0PQ6tDda7up6K0tTg=;
+        b=IaMoXPj4bsk9XqzlYSLlR81xzprUIJEhici3JOAjOoOQiQD5sIOJzOnTKexinUCnqw
+         fkw04JQNFkyFDXwvRfN0VnLQTU5PQ6ACmXfPOTI9FxQ/wAsTmr7M4zuUGoXKpiaixNh6
+         5LKpiVaJW+SIaEQDuTcIP1902HsjOgtLxd2cgR+uZ20W/Nl5pc5RCqbLDA0/DDiX0RnF
+         //aRahox+JjT8vW+3HhGfAaU0WnO4op03uPp1VklVhkLQ+BvH8xug0jToC9OtY5ie3eC
+         2ma25sB1JmoOq6OVn8ob/lmi6Pa2QCBI4TNjfnf+Hv6uWkxiBjA2798rmZl8pOSei0XZ
+         uoig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=O1tFpICrUp02/Rz91q5M3zJOsfP+AsepTWSxKHsDYko=;
-        b=e4l+vmem4SND0L+G+5Ie3RFxLLrXrvGMyPAJZbzg67/hkNdsI0J8GGtWdoybu64vTO
-         NOD0lUXp6bg1pULIqlbPxcn15HhDegqmP7nO/DzORFIdQJ+6xazYPxXStdfEyP5bP+IY
-         0tw1Y20fymF3QMLTailjTekPbTaVnfXXXCgYUJ8DVO0RTV6XMMlpXfZDGYO8go57Mh1p
-         IhMV2zteDX1s7wGWnAwx1ljAC/0CkvaDXIALZkFDPWH3QnrbJXn6EJFnv+jgFEAWB5Iz
-         ++xp6ICQ0w4BDfUWNwwQY2nD0zwTXE8EaCgecUywvaFwvsf8p9jrPRFBBHE+sjqEyv6+
-         uJtQ==
-X-Gm-Message-State: AOAM531hx3uTngXqUJICMRO2ubqpJ3P0ao+xuVAay/4KZQE+9meZIJPk
-        O9Z+hufVcSObAxbo0/igSBFnTIfDc6Fvi8tY2sM=
-X-Google-Smtp-Source: ABdhPJyYCS/8s4tkJCG4AWTeWKT+d6o4I/cnaoDS1n1/MlonZY2Ew73o7SGhiWkpQrPntkE0d8ozu+9C4WKQVKYTs8M=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr12535470otf.198.1639160886984;
- Fri, 10 Dec 2021 10:28:06 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=F2fgbC4erWq9UsFudgbaV5qAPl0PQ6tDda7up6K0tTg=;
+        b=4d9WIw78qmKpQKRl1oLPmayaHZF15xsqqjhCLZMEg3Kc2HUPd+TQLXemM4SIk04Zr7
+         0lPUvnt1+BNM61k25TVuNoCmP92HTvOvQJhK5neswbTVJ2g/xPNO2PZUJd9uCH3NBUcn
+         YTt3IiuWoSepNq1mgGvuSs0HNnGtNYf0J7vxjHffR+Zh7IVbNg50JPvQzhF243+nAu4d
+         tMm2LI/r1DidQR2OlTRPQOdqYCF5qzyX9QgiTvbbm5FpDdKTyQHD1fXiXnCVtRTnuG1Z
+         ZGqmpNub9jJfzdsMhzXiX5nbKzKKNuyNujHGssLDFJDvxVncSudQzXe9XPoojGPZWt1U
+         NgCQ==
+X-Gm-Message-State: AOAM532PlFK2DE+/ONVM78bAKY5h0Ktr4Xu4W/p2Ak1JfUnAPn1CLv50
+        OfSDAtgOmVMM50QdWnW3zKRKoCq4vUHRTJ/QKDU=
+X-Google-Smtp-Source: ABdhPJxzOmRVdJgVJ8ugMlkwCS3n3QBUZOwr7negMQlIqzto6w6mA4XRk02qNRD2WZui+lMa92nKQxpTauNAJiJGV54=
+X-Received: by 2002:a25:e406:: with SMTP id b6mr16688360ybh.529.1639160930856;
+ Fri, 10 Dec 2021 10:28:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-6-digetx@gmail.com>
- <YaLNOJTM+lVq+YNS@qmqm.qmqm.pl> <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
- <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl> <091321ea-4919-0579-88a8-23d05871575d@gmail.com>
-In-Reply-To: <091321ea-4919-0579-88a8-23d05871575d@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Dec 2021 19:27:55 +0100
-Message-ID: <CAJZ5v0jMvdhfBqjY+V9h_Z6EH1ohuJH+KjuGiOw_Jor1Tnp7vg@mail.gmail.com>
-Subject: Re: [PATCH v4 05/25] reboot: Warn if restart handler has duplicated priority
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20211124084119.260239-1-jolsa@kernel.org> <20211124084119.260239-2-jolsa@kernel.org>
+ <CAEf4Bzb5wyW=62fr-BzQsuFL+mt5s=+jGcdxKwZK0+AW18uD_Q@mail.gmail.com>
+ <Yafp193RdskXofbH@krava> <CAEf4BzbmKffmcM3WhCthrgfbWZBZj52hGH0Ju0itXyJ=yD01NA@mail.gmail.com>
+ <YbC4EXS3pyCbh7/i@krava> <YbNLPdrA80OMbzdS@krava>
+In-Reply-To: <YbNLPdrA80OMbzdS@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 10 Dec 2021 10:28:39 -0800
+Message-ID: <CAEf4Bzb_qBVqCn-A=kP7FNLKQz1mvsr3wQfSMPOJ6_5M4zC+ig@mail.gmail.com>
+Subject: Re: [PATCH 1/8] perf/kprobe: Add support to create multiple probes
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:34 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+On Fri, Dec 10, 2021 at 4:42 AM Jiri Olsa <jolsa@redhat.com> wrote:
 >
-> 29.11.2021 03:26, Michał Mirosław пишет:
-> > On Mon, Nov 29, 2021 at 12:06:19AM +0300, Dmitry Osipenko wrote:
-> >> 28.11.2021 03:28, Michał Mirosław пишет:
-> >>> On Fri, Nov 26, 2021 at 09:00:41PM +0300, Dmitry Osipenko wrote:
-> >>>> Add sanity check which ensures that there are no two restart handlers
-> >>>> registered with the same priority. Normally it's a direct sign of a
-> >>>> problem if two handlers use the same priority.
-> >>>
-> >>> The patch doesn't ensure the property that there are no duplicated-priority
-> >>> entries on the chain.
-> >>
-> >> It's not the exact point of this patch.
-> >>
-> >>> I'd rather see a atomic_notifier_chain_register_unique() that returns
-> >>> -EBUSY or something istead of adding an entry with duplicate priority.
-> >>> That way it would need only one list traversal unless you want to
-> >>> register the duplicate anyway (then you would call the older
-> >>> atomic_notifier_chain_register() after reporting the error).
-> >>
-> >> The point of this patch is to warn developers about the problem that
-> >> needs to be fixed. We already have such troubling drivers in mainline.
-> >>
-> >> It's not critical to register different handlers with a duplicated
-> >> priorities, but such cases really need to be corrected. We shouldn't
-> >> break users' machines during transition to the new API, meanwhile
-> >> developers should take action of fixing theirs drivers.
-> >>
-> >>> (Or you could return > 0 when a duplicate is registered in
-> >>> atomic_notifier_chain_register() if the callers are prepared
-> >>> for that. I don't really like this way, though.)
-> >>
-> >> I had a similar thought at some point before and decided that I'm not in
-> >> favor of this approach. It's nicer to have a dedicated function that
-> >> verifies the uniqueness, IMO.
+> On Wed, Dec 08, 2021 at 02:50:09PM +0100, Jiri Olsa wrote:
+> > On Mon, Dec 06, 2021 at 07:15:58PM -0800, Andrii Nakryiko wrote:
+> > > On Wed, Dec 1, 2021 at 1:32 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > >
+> > > > On Tue, Nov 30, 2021 at 10:53:58PM -0800, Andrii Nakryiko wrote:
+> > > > > On Wed, Nov 24, 2021 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > > > >
+> > > > > > Adding support to create multiple probes within single perf event.
+> > > > > > This way we can associate single bpf program with multiple kprobes,
+> > > > > > because bpf program gets associated with the perf event.
+> > > > > >
+> > > > > > The perf_event_attr is not extended, current fields for kprobe
+> > > > > > attachment are used for multi attachment.
+> > > > >
+> > > > > I'm a bit concerned with complicating perf_event_attr further to
+> > > > > support this multi-attach. For BPF, at least, we now have
+> > > > > bpf_perf_link and corresponding BPF_LINK_CREATE command in bpf()
+> > > > > syscall which allows much simpler and cleaner API to do this. Libbpf
+> > > > > will actually pick bpf_link-based attachment if kernel supports it. I
+> > > > > think we should better do bpf_link-based approach from the get go.
+> > > > >
+> > > > > Another thing I'd like you to keep in mind and think about is BPF
+> > > > > cookie. Currently kprobe/uprobe/tracepoint allow to associate
+> > > > > arbitrary user-provided u64 value which will be accessible from BPF
+> > > > > program with bpf_get_attach_cookie(). With multi-attach kprobes this
+> > > > > because extremely crucial feature to support, otherwise it's both
+> > > > > expensive, inconvenient and complicated to be able to distinguish
+> > > > > between different instances of the same multi-attach kprobe
+> > > > > invocation. So with that, what would be the interface to specify these
+> > > > > BPF cookies for this multi-attach kprobe, if we are going through
+> > > > > perf_event_attr. Probably picking yet another unused field and
+> > > > > union-izing it with a pointer. It will work, but makes the interface
+> > > > > even more overloaded. While for LINK_CREATE we can just add another
+> > > > > pointer to a u64[] with the same size as number of kfunc names and
+> > > > > offsets.
+> > > >
+> > > > I'm not sure we could bypass perf event easily.. perhaps introduce
+> > > > BPF_PROG_TYPE_RAW_KPROBE as we did for tracepoints or just new
+> > > > type for multi kprobe attachment like BPF_PROG_TYPE_MULTI_KPROBE
+> > > > that might be that way we'd have full control over the API
+> > >
+> > > Sure, new type works.
+> > >
+> > > >
+> > > > >
+> > > > > But other than that, I'm super happy that you are working on these
+> > > > > complicated multi-attach capabilities! It would be great to benchmark
+> > > > > one-by-one attachment vs multi-attach to the same set of kprobes once
+> > > > > you arrive at the final implementation.
+> > > >
+> > > > I have the change for bpftrace to use this and even though there's
+> > > > some speed up, it's not as substantial as for trampolines
+> > > >
+> > > > looks like we 'only' got rid of the multiple perf syscall overheads,
+> > > > compared to rcu syncs timeouts like we eliminated for trampolines
+> > >
+> > > if it's just eliminating a pretty small overhead of multiple syscalls,
+> > > then it would be quite disappointing to add a bunch of complexity just
+> > > for that.
 > >
-> > I don't like the part that it traverses the list second time to check
-> > the uniqueness. But actually you could avoid that if
-> > notifier_chain_register() would always add equal-priority entries in
-> > reverse order:
-> >
-> >  static int notifier_chain_register(struct notifier_block **nl,
-> >               struct notifier_block *n)
-> >  {
-> >       while ((*nl) != NULL) {
-> >               if (unlikely((*nl) == n)) {
-> >                       WARN(1, "double register detected");
-> >                       return 0;
-> >               }
-> > -             if (n->priority > (*nl)->priority)
-> > +             if (n->priority >= (*nl)->priority)
-> >                       break;
-> >               nl = &((*nl)->next);
-> >       }
-> >       n->next = *nl;
-> >       rcu_assign_pointer(*nl, n);
-> >       return 0;
-> >  }
-> >
-> > Then the check for uniqueness after adding would be:
-> >
-> >  WARN(nb->next && nb->priority == nb->next->priority);
+> > I meant it's not as huge save as for trampolines, but I expect some
+> > noticeable speedup, I'll make more becnhmarks with current patchset
 >
-> We can't just change the registration order because invocation order of
-> the call chain depends on the registration order
+> so with this approach there's noticable speedup, but it's not the
+> 'instant attachment speed' as for trampolines
+>
+> as a base I used bpftrace with change that allows to reuse bpf program
+> for multiple kprobes
+>
+> bpftrace standard attach of 672 kprobes:
+>
+>   Performance counter stats for './src/bpftrace -vv -e kprobe:kvm* { @[kstack] += 1; }  i:ms:10 { printf("KRAVA\n"); exit() }':
+>
+>       70.548897815 seconds time elapsed
+>
+>        0.909996000 seconds user
+>       50.622834000 seconds sys
+>
+>
+> bpftrace using interface from this patchset attach of 673 kprobes:
+>
+>   Performance counter stats for './src/bpftrace -vv -e kprobe:kvm* { @[kstack] += 1; }  i:ms:10 { printf("KRAVA\n"); exit() }':
+>
+>       36.947586803 seconds time elapsed
+>
+>        0.272585000 seconds user
+>       30.900831000 seconds sys
+>
+>
+> so it's noticeable, but I wonder it's not enough ;-)
 
-It doesn't if unique priorities are required and isn't that what you want?
+Typical retsnoop run for BPF use case is attaching to ~1200 functions.
+Answer for yourself if you think the tool that takes 36 seconds to
+start up is a great user experience? ;)
 
-> and some of current
-> users may rely on that order. I'm pretty sure that changing the order
-> will have unfortunate consequences.
-
-Well, the WARN() doesn't help much then.
-
-Either you can make all of the users register with unique priorities,
-and then you can make the registration reject non-unique ones, or you
-cannot assume them to be unique.
+>
+> jirka
+>
+> >
+> > > Are there any reasons we can't use the same low-level ftrace
+> > > batch attach API to speed this up considerably? I assume it's only
+> > > possible if kprobe is attached at the beginning of the function (not
+> > > sure how kretprobe is treated here), so we can either say that this
+> > > new kprobe prog type can only be attached at the beginning of each
+> > > function and enforce that (probably would be totally reasonable
+> > > assumption as that's what's happening most frequently in practice).
+> > > Worst case, should be possible to split all requested attach targets
+> > > into two groups, one fast at function entry and all the rest.
+> > >
+> > > Am I too far off on this one? There might be some more complications
+> > > that I don't see.
+> >
+> > I'd need to check more on kprobes internals, but.. ;-)
+> >
+> > the new ftrace interface is special for 'direct' trampolines and
+> > I think that although kprobes can use ftrace for attaching, they
+> > use it in a different way
+> >
+> > also this current 'multi attach' approach is on top of current kprobe
+> > interface, if we wanted to use the new ftrace API we'd need to add new
+> > kprobe interface and change the kprobe attaching to use it (for cases
+> > it's attached at the function entry)
+> >
+> > jirka
+> >
+> > >
+> > > >
+> > > > I'll make full benchmarks once we have some final solution
+> > > >
+> > > > jirka
+> > > >
+> > >
+>

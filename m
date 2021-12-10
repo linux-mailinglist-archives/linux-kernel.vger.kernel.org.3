@@ -2,257 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AB446FF2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFADF46FF32
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237023AbhLJK6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:58:14 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61452 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234152AbhLJK6N (ORCPT
+        id S237368AbhLJK73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:59:29 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42046 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233200AbhLJK71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:58:13 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAARRQJ013030;
-        Fri, 10 Dec 2021 10:54:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=kxoiwD+73F5/gWkak1Ha+u2AaAfacQl1MT15ZEXwpeE=;
- b=deTsFbBq5eazwVskE2mgTK3Gs/9ngv3YVnPRmPzF3NYzWloc17eYwTdKYA1IlaxP3/pO
- gtob9i3myAeqbZFac/cRXdcPHHirhHhz49Gj5JO4+rJzg+sqwxgE19S7FD0r5e6KEIZq
- sLe2NMA0zgaQmSWVoIOs7w3I7/NLQmu13B4NNZAz7i/XhyMa0bYzm85BR9im6toUplvS
- TotIewHQw4Y+Y7dR+7FHHbgM9xp86gPVF0Hm+1e0PtBuqNrrDffMhY+xWJd96bOh0wmC
- V/DHLftUAJon/dDoKw0ZVIu8wE0yh5oClAmrKVS+2xxPofB8vwYsKn0udzRWonyTzqZB ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv55j8f4y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 10:54:37 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAAZB0O024276;
-        Fri, 10 Dec 2021 10:54:37 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv55j8f4f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 10:54:37 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAAlX7o010916;
-        Fri, 10 Dec 2021 10:54:34 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3cqyybj3g0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 10:54:34 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAAsU8P18088192
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 10:54:31 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6494AE057;
-        Fri, 10 Dec 2021 10:54:30 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6539AE055;
-        Fri, 10 Dec 2021 10:54:29 +0000 (GMT)
-Received: from [9.171.35.34] (unknown [9.171.35.34])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 10:54:29 +0000 (GMT)
-Message-ID: <d2e6c444-9ff5-6263-471b-96d0805a375e@linux.ibm.com>
-Date:   Fri, 10 Dec 2021 11:55:28 +0100
+        Fri, 10 Dec 2021 05:59:27 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1D5001F3A0;
+        Fri, 10 Dec 2021 10:55:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639133752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tEA8M2dPFCwk0nPW1Jgh85CclY/tEN/U41/6yvfqPdU=;
+        b=phhXFXmIQM+o/8hYQgWa10y2cTXXYd9J89owAaWmokUdydXWOEMchtweLx/llc+K6X7jsD
+        +nLXEJjtCr4pP/yFvZW1ZnY4sxCmAP4cjqLYBe0Ed+eqKmOZ7IItsZt2QhNSinslYMeuB/
+        La6Q7rwlRlRiks08oOjb+N7VNY0hs1c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639133752;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tEA8M2dPFCwk0nPW1Jgh85CclY/tEN/U41/6yvfqPdU=;
+        b=JkQV2R2ik9qUH2TOkkW73sAYqig502hAdHdorannepsDcTEZphJcYcTi1q3aTOo2FE/yrH
+        sX+fSzPxAwg9q+BA==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 2B91EA3B92;
+        Fri, 10 Dec 2021 10:55:51 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 10:55:49 +0000
+From:   Mel Gorman <mgorman@suse.de>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, frederic@kernel.org, tglx@linutronix.de,
+        peterz@infradead.org, nilal@redhat.com,
+        linux-rt-users@vger.kernel.org, vbabka@suse.cz, cl@linux.com,
+        ppandit@redhat.com
+Subject: Re: [PATCH v2 3/3] mm/page_alloc: Remotely drain per-cpu lists
+Message-ID: <20211210105549.GJ3301@suse.de>
+References: <20211103170512.2745765-1-nsaenzju@redhat.com>
+ <20211103170512.2745765-4-nsaenzju@redhat.com>
+ <20211203141306.GG3301@suse.de>
+ <20211209174535.GA70283@fuller.cnet>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 14/32] KVM: s390: pci: do initial setup for AEN
- interpretation
-Content-Language: en-US
-From:   Pierre Morel <pmorel@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-15-mjrosato@linux.ibm.com>
- <1816b176-0866-5f68-d3ea-813fab13d3e3@linux.ibm.com>
-In-Reply-To: <1816b176-0866-5f68-d3ea-813fab13d3e3@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _6cftZhry1li2A6pY73J__xd87ZQepc8
-X-Proofpoint-GUID: mTGSVv4AzONsz4M5CS8vye0sAjolXUIq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_03,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 malwarescore=0 suspectscore=0 adultscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100057
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20211209174535.GA70283@fuller.cnet>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 09, 2021 at 02:45:35PM -0300, Marcelo Tosatti wrote:
+> On Fri, Dec 03, 2021 at 02:13:06PM +0000, Mel Gorman wrote:
+> > On Wed, Nov 03, 2021 at 06:05:12PM +0100, Nicolas Saenz Julienne wrote:
+> > > Some setups, notably NOHZ_FULL CPUs, are too busy to handle the per-cpu
+> > > drain work queued by __drain_all_pages(). So introduce new a mechanism
+> > > to remotely drain the per-cpu lists. It is made possible by remotely
+> > > locking 'struct per_cpu_pages' new per-cpu spinlocks. A benefit of this
+> > > new scheme is that drain operations are now migration safe.
+> > > 
+> > > There was no observed performance degradation vs. the previous scheme.
+> > > Both netperf and hackbench were run in parallel to triggering the
+> > > __drain_all_pages(NULL, true) code path around ~100 times per second.
+> > > The new scheme performs a bit better (~5%), although the important point
+> > > here is there are no performance regressions vs. the previous mechanism.
+> > > Per-cpu lists draining happens only in slow paths.
+> > > 
+> > 
+> > netperf and hackbench are not great indicators of page allocator
+> > performance as IIRC they are more slab-intensive than page allocator
+> > intensive. I ran the series through a few benchmarks and can confirm
+> > that there was negligible difference to netperf and hackbench.
+> > 
+> > However, on Page Fault Test (pft in mmtests), it is noticable. On a
+> > 2-socket cascadelake machine I get
+> > 
+> > pft timings
+> >                                  5.16.0-rc1             5.16.0-rc1
+> >                                     vanilla    mm-remotedrain-v2r1
+> > Amean     system-1         27.48 (   0.00%)       27.85 *  -1.35%*
+> > Amean     system-4         28.65 (   0.00%)       30.84 *  -7.65%*
+> > Amean     system-7         28.70 (   0.00%)       32.43 * -13.00%*
+> > Amean     system-12        30.33 (   0.00%)       34.21 * -12.80%*
+> > Amean     system-21        37.14 (   0.00%)       41.51 * -11.76%*
+> > Amean     system-30        36.79 (   0.00%)       46.15 * -25.43%*
+> > Amean     system-48        58.95 (   0.00%)       65.28 * -10.73%*
+> > Amean     system-79       111.61 (   0.00%)      114.78 *  -2.84%*
+> > Amean     system-80       113.59 (   0.00%)      116.73 *  -2.77%*
+> > Amean     elapsed-1        32.83 (   0.00%)       33.12 *  -0.88%*
+> > Amean     elapsed-4         8.60 (   0.00%)        9.17 *  -6.66%*
+> > Amean     elapsed-7         4.97 (   0.00%)        5.53 * -11.30%*
+> > Amean     elapsed-12        3.08 (   0.00%)        3.43 * -11.41%*
+> > Amean     elapsed-21        2.19 (   0.00%)        2.41 * -10.06%*
+> > Amean     elapsed-30        1.73 (   0.00%)        2.04 * -17.87%*
+> > Amean     elapsed-48        1.73 (   0.00%)        2.03 * -17.77%*
+> > Amean     elapsed-79        1.61 (   0.00%)        1.64 *  -1.90%*
+> > Amean     elapsed-80        1.60 (   0.00%)        1.64 *  -2.50%*
+> > 
+> > It's not specific to cascade lake, I see varying size regressions on
+> > different Intel and AMD chips, some better and worse than this result.
+> > The smallest regression was on a single CPU skylake machine with a 2-6%
+> > hit. Worst was Zen1 with a 3-107% hit.
+> > 
+> > I didn't profile it to establish why but in all cases the system CPU
+> > usage was much higher. It *might* be because the spinlock in
+> > per_cpu_pages crosses a new cache line and it might be cold although the
+> > penalty seems a bit high for that to be the only factor.
+> > 
+> > Code-wise, the patches look fine but the apparent penalty for PFT is
+> > too severe.
+> 
+> Mel,
+> 
+> Have you read Nicolas RCU patches?
+> 
 
+I agree with Vlastimil's review on overhead.
 
-On 12/10/21 10:54, Pierre Morel wrote:
-> 
-> 
-> On 12/7/21 21:57, Matthew Rosato wrote:
->> Initial setup for Adapter Event Notification Interpretation for zPCI
->> passthrough devices.  Specifically, allocate a structure for 
->> forwarding of
->> adapter events and pass the address of this structure to firmware.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/pci_insn.h |  12 ++++
->>   arch/s390/kvm/interrupt.c        |  17 +++++
->>   arch/s390/kvm/kvm-s390.c         |   3 +
->>   arch/s390/kvm/pci.c              | 113 +++++++++++++++++++++++++++++++
->>   arch/s390/kvm/pci.h              |  42 ++++++++++++
->>   5 files changed, 187 insertions(+)
->>   create mode 100644 arch/s390/kvm/pci.h
->>
->> diff --git a/arch/s390/include/asm/pci_insn.h 
->> b/arch/s390/include/asm/pci_insn.h
->> index 5331082fa516..e5f57cfe1d45 100644
->> --- a/arch/s390/include/asm/pci_insn.h
->> +++ b/arch/s390/include/asm/pci_insn.h
->> @@ -101,6 +101,7 @@ struct zpci_fib {
->>   /* Set Interruption Controls Operation Controls  */
->>   #define    SIC_IRQ_MODE_ALL        0
->>   #define    SIC_IRQ_MODE_SINGLE        1
->> +#define    SIC_SET_AENI_CONTROLS        2
->>   #define    SIC_IRQ_MODE_DIRECT        4
->>   #define    SIC_IRQ_MODE_D_ALL        16
->>   #define    SIC_IRQ_MODE_D_SINGLE        17
->> @@ -127,9 +128,20 @@ struct zpci_cdiib {
->>       u64 : 64;
->>   } __packed __aligned(8);
->> +/* adapter interruption parameters block */
->> +struct zpci_aipb {
->> +    u64 faisb;
->> +    u64 gait;
->> +    u16 : 13;
->> +    u16 afi : 3;
->> +    u32 : 32;
->> +    u16 faal;
->> +} __packed __aligned(8);
->> +
->>   union zpci_sic_iib {
->>       struct zpci_diib diib;
->>       struct zpci_cdiib cdiib;
->> +    struct zpci_aipb aipb;
->>   };
->>   DECLARE_STATIC_KEY_FALSE(have_mio);
->> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
->> index f9b872e358c6..4efe0e95a40f 100644
->> --- a/arch/s390/kvm/interrupt.c
->> +++ b/arch/s390/kvm/interrupt.c
->> @@ -32,6 +32,7 @@
->>   #include "kvm-s390.h"
->>   #include "gaccess.h"
->>   #include "trace-s390.h"
->> +#include "pci.h"
->>   #define PFAULT_INIT 0x0600
->>   #define PFAULT_DONE 0x0680
->> @@ -3276,8 +3277,16 @@ static struct airq_struct gib_alert_irq = {
->>   void kvm_s390_gib_destroy(void)
->>   {
->> +    struct zpci_aift *aift;
->> +
->>       if (!gib)
->>           return;
->> +    aift = kvm_s390_pci_get_aift();
->> +    if (aift) {
->> +        mutex_lock(&aift->lock);
->> +        kvm_s390_pci_aen_exit();
-> 
-> Shouldn't we check for CONFIG_PCI and sclp.gas_aeni here as in gib_init ?
-> 
->> +        mutex_unlock(&aift->lock);
->> +    }
->>       chsc_sgib(0);
->>       unregister_adapter_interrupt(&gib_alert_irq);
->>       free_page((unsigned long)gib);
->> @@ -3315,6 +3324,14 @@ int kvm_s390_gib_init(u8 nisc)
->>           goto out_unreg_gal;
->>       }
->> +    if (IS_ENABLED(CONFIG_PCI) && sclp.has_aeni) {
->> +        if (kvm_s390_pci_aen_init(nisc)) {
->> +            pr_err("Initializing AEN for PCI failed\n");
->> +            rc = -EIO;
->> +            goto out_unreg_gal;
->> +        }
->> +    }
->> +
->>       KVM_EVENT(3, "gib 0x%pK (nisc=%d) initialized", gib, gib->nisc);
->>       goto out;
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index 14a18ba5ff2c..9cd3c8eb59e8 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -48,6 +48,7 @@
->>   #include <asm/fpu/api.h>
->>   #include "kvm-s390.h"
->>   #include "gaccess.h"
->> +#include "pci.h"
->>   #define CREATE_TRACE_POINTS
->>   #include "trace.h"
->> @@ -503,6 +504,8 @@ int kvm_arch_init(void *opaque)
->>           goto out;
->>       }
->> +    kvm_s390_pci_init();
->> +
->>       rc = kvm_s390_gib_init(GAL_ISC);
->>       if (rc)
->>           goto out;
->> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
->> index ecfc458a5b39..f0e5386ff943 100644
->> --- a/arch/s390/kvm/pci.c
->> +++ b/arch/s390/kvm/pci.c
->> @@ -10,6 +10,113 @@
->>   #include <linux/kvm_host.h>
->>   #include <linux/pci.h>
->>   #include <asm/kvm_pci.h>
->> +#include "pci.h"
->> +
->> +static struct zpci_aift aift;
->> +
->> +static inline int __set_irq_noiib(u16 ctl, u8 isc)
->> +{
->> +    union zpci_sic_iib iib = {{0}};
->> +
->> +    return zpci_set_irq_ctrl(ctl, isc, &iib);
->> +}
->> +
->> +struct zpci_aift *kvm_s390_pci_get_aift(void)
->> +{
->> +    return &aift;
->> +}
->> +
->> +/* Caller must hold the aift lock before calling this function */
->> +void kvm_s390_pci_aen_exit(void)
->> +{
->> +    struct zpci_gaite *gait;
->> +    unsigned long flags;
->> +    struct airq_iv *sbv;
->> +    struct kvm_zdev **gait_kzdev;
->> +    int size;
->> +
->> +    /* Clear the GAIT and forwarding summary vector */
->> +    __set_irq_noiib(SIC_SET_AENI_CONTROLS, 0);
-> 
-> Why don't we use the PCI ISC here?
-
-hum OK, sorry, isc is ignored for SIC_SET_AENI_CONTROLS
-
-> 
-> ...snip...
-> 
+I think it would be more straight-forward to disable the pcp allocator for
+NOHZ_FULL CPUs like what zone_pcp_disable except for individual CPUs with
+care taken to not accidentally re-enable nohz CPus in zone_pcp_enable. The
+downside is that there will be a performance penalty if an application
+running on a NOHZ_FULL CPU is page allocator intensive for whatever
+reason.  However, I guess this is unlikely because if there was a lot
+of kernel activity for a NOHZ_FULL CPU, the vmstat shepherd would also
+cause interference.
 
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+Mel Gorman
+SUSE Labs

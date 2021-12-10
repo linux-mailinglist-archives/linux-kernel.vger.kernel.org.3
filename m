@@ -2,138 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0EC46FE98
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4770646FE9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239997AbhLJKVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:21:25 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40312 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239631AbhLJKVY (ORCPT
+        id S240025AbhLJKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236599AbhLJKXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:21:24 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 8F6441F4709E
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1639131468; bh=Gjv8pg77wAZyx6FV9xWPNtCyByurMxg6U07KqvM1fqo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ODmsPABiBeHD9ryRiRsKqYvoOLjFkrf37+cM12Q+/qOrTPyAHT5tDzYjzPztfv7h7
-         6ZuxRLiPfUCS/jdP6+D8QZqEp2Tm7Z/mEM7oxGgbN1+mc2ON3/u1dnmbonnifIOpWd
-         GdEkYJq3aE5UosKSAQP2lngcpf2RjejnVSYaYo+RNNGk8FdbxYydCG5MC+PTFf3q7O
-         oNoh1FTPvQWXNcDaPWmtBMzKHpS1GgAa8Z1n75qah1vZzLMIWcyyBrtTaf0SbnreEb
-         SYlI6p/Ful7B/1LgJoDoXcoxeuI3aK5ScEnUvQbitFYzeYzDbEEzN1hE8O9vVcI0yv
-         MxSCAIw7FE6BA==
-Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20211110130623.20553-1-granquet@baylibre.com>
- <20211110130623.20553-8-granquet@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <b307d567-774b-ca9e-d7d7-09846782c988@collabora.com>
-Date:   Fri, 10 Dec 2021 11:17:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Fri, 10 Dec 2021 05:23:45 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFD0C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XBBd0xtptZTc5dgMn1nwM2bSO1CKXboRmpk2Uha3hkU=; b=mBSopujjD5rT9+5vfrtf97EXWp
+        cZtElgsL7IC7b08vPHD4q6QodE21a66HLv+Z5E996EpwDmrpFOD17r/B4rb71Ty/X+5XCJ3MRMOZU
+        brGXZgALSeM07kmd+oXZP8fnJpM2qDlIIYOkMgpkdG+FrKQRYtwHpVyPaPjCOL7tqEM/sqqhPuUWJ
+        qJVWVmSjsI60rAKTt1aSdFNrqWr/gePdPbnTIqCBk2N7TZEsOSzaU1d3izPiDGsOFKgHIN2t5hM7L
+        7J8vF/WEqZ4zZB+P3rzndCRTRqS4e9pEVvzo97RVZ0pS1CADZAybQZGiOka+LEhDTrGeAUVJl8Uex
+        2wfInA4w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvd0K-000XuN-KJ; Fri, 10 Dec 2021 10:19:52 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F26E9984E0B; Fri, 10 Dec 2021 11:19:50 +0100 (CET)
+Date:   Fri, 10 Dec 2021 11:19:50 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events
+ too
+Message-ID: <20211210101950.GR16608@worktop.programming.kicks-ass.net>
+References: <20211205224843.1503081-1-namhyung@kernel.org>
+ <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
+ <YbHp2MXmP1V5WE4B@hirez.programming.kicks-ass.net>
+ <CAM9d7chMn7Gmc4FYn_ZjMiojUCao90e80Zg5+hNXQ7MTeHrK_A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211110130623.20553-8-granquet@baylibre.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7chMn7Gmc4FYn_ZjMiojUCao90e80Zg5+hNXQ7MTeHrK_A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/11/21 14:06, Guillaume Ranquet ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Thu, Dec 09, 2021 at 01:51:42PM -0800, Namhyung Kim wrote:
+> On Thu, Dec 9, 2021 at 3:35 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, Dec 09, 2021 at 12:26:32PM +0100, Peter Zijlstra wrote:
+> > > On Sun, Dec 05, 2021 at 02:48:43PM -0800, Namhyung Kim wrote:
+> > >
+> > > > Actually 18446744069443110306 is 0xffffffff01b345a2 so it seems to
+> > > > have a negative enabled time.  In fact, bperf keeps values returned by
+> > > > bpf_perf_event_read_value() which calls perf_event_read_local(), and
+> > > > accumulates delta between two calls.  When event->shadow_ctx_time is
+> > > > not set, it'd return invalid enabled time which is bigger than normal.
+> > >
+> > > *that*, how does it happen that shadow_time isn't set? It should be last
+> > > set when the event switches to INACTIVE, no? At which point the logic in
+> > > perf_event_read_local() should make @enabled move forward while @running
+> > > stays put.
+> > >
+> > > Let me go rummage around a bit... either I'm missing something obvious
+> > > or something's smelly.
+> >
+> > How's this then?
 > 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC and a
-> according phy driver mediatek-dp-phy.
+> Still the same :(
+
+You're doing that bpf-cgroup crud, right? Where exactly do you hook into
+to do the counter reads?
+
+> Maybe because the event is enabled from the beginning.
+> Then it might miss set_state/update_time at all.
+
+Even then, it's set to INACTIVE and any state change thereafter needs to
+go through perf_event_set_state() and update the relevant timestamps.
+
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index 28aaeacdaea1..20637b7f420c 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -640,6 +640,9 @@ __perf_update_times(struct perf_event *event, u64 now, u64 *enabled, u64 *runnin
+> >                 *running += delta;
+> >  }
+> >
+> > +static void perf_set_shadow_time(struct perf_event *event,
+> > +                                struct perf_event_context *ctx);
+> > +
+> >  static void perf_event_update_time(struct perf_event *event)
+> >  {
+> >         u64 now = perf_event_time(event);
+> > @@ -647,6 +650,7 @@ static void perf_event_update_time(struct perf_event *event)
+> >         __perf_update_times(event, now, &event->total_time_enabled,
+> >                                         &event->total_time_running);
+> >         event->tstamp = now;
+> > +       perf_set_shadow_time(event, event->ctx);
 > 
-> It supports both functional units on the mt8195, the embedded
-> DisplayPort as well as the external DisplayPort units. It offers
-> hot-plug-detection, audio up to 8 channels, and DisplayPort 1.4 with up
-> to 4 lanes.
+> I like this.
+
+Right, it keeps the shadow timestamp thingy in sync. Specifically it was
+missing an update on event sched_out. Although thinking about it more,
+that shouldn't make a difference since the relative displacement of the
+clocks doesn't change at that point. All that changes there is that
+RUNNING should stop advancing.
+
+So in that regards, this not actually changing anything makes sense.
+
+> > @@ -3748,15 +3727,14 @@ static int merge_sched_in(struct perf_event *event, void *data)
+> >         }
+> >
+> >         if (event->state == PERF_EVENT_STATE_INACTIVE) {
+> > -               *can_add_hw = 0;
+> >                 if (event->attr.pinned) {
+> >                         perf_cgroup_event_disable(event, ctx);
+> >                         perf_event_set_state(event, PERF_EVENT_STATE_ERROR);
+> > -               } else {
+> > -                       ctx->rotate_necessary = 1;
+> > -                       perf_mux_hrtimer_restart(cpuctx);
+> > -                       group_update_userpage(event);
+> >                 }
+> > +
+> > +               *can_add_hw = 0;
+> > +               ctx->rotate_necessary = 1;
+> > +               perf_mux_hrtimer_restart(cpuctx);
 > 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so that
-> both can work with the same register range. The phy driver sets device
-> data that is read by the parent to get the phy device that can be used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+> Not sure about this.  We might not want to rotate them
+> if a pinned event failed...?
 
-Hello Markus, Guillaume,
-
-there is a critical issue with this patch. Please check below.
-
-> ---
->   drivers/gpu/drm/drm_edid.c              |    2 +-
->   drivers/gpu/drm/mediatek/Kconfig        |    7 +
->   drivers/gpu/drm/mediatek/Makefile       |    2 +
->   drivers/gpu/drm/mediatek/mtk_dp.c       | 3094 +++++++++++++++++++++++
->   drivers/gpu/drm/mediatek/mtk_dp_reg.h   |  568 +++++
->   drivers/gpu/drm/mediatek/mtk_dpi.c      |  111 +-
->   drivers/gpu/drm/mediatek/mtk_dpi_regs.h |   26 +
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c  |    1 +
->   drivers/gpu/drm/mediatek/mtk_drm_drv.h  |    1 +
->   9 files changed, 3799 insertions(+), 13 deletions(-)
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> 
-
-<snip>
-
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 384074f69111b..e6e88e3cd811d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-
-<snip>
-
-> @@ -979,6 +1051,16 @@ static int mtk_dpi_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> +	dpi->dpi_ck_cg = devm_clk_get(dev, "ck_cg");
-
-mtk_dpi is used on MT2701, MT7183, MT8183, MT8192, but these platforms haven't
-got any "ck_cg" clock defined in their device-trees (regardless of whether these
-can support adding this clock or not, any code change shall be retro-compatible
-hence not breaking compatibility/functionality with older device-trees).
-
-Reminding that:
-- mediatek-drm uses the component framework
-- mtk_drm_drv is the component master
-- mtk_drm_drv bind() won't be called unless all of the components added with
-   match aren't calling component_add()
-
-... this change not only breaks DisplayPort support for *all* of the
-aforementioned SoCs, but also makes the entire mediatek-drm to not finish
-probing, producing a global breakage that also includes DSI and the entire
-stack of components of that master (so, no display on all of them).
-
-To avoid breaking any SoC that's not MT8195, please use devm_clk_get_optional()
-here in the next version.
-
-Thanks,
-- Angelo
-
+It's just a straight revert, but you're right, this stuff needs
+some improvement.

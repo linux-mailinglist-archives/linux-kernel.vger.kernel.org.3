@@ -2,157 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B9646FF49
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FE946FF1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240054AbhLJLFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:05:19 -0500
-Received: from mga04.intel.com ([192.55.52.120]:62189 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234606AbhLJLFS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:05:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639134103; x=1670670103;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EBain5rvAuM0ab2ClY+MBBH0nuRkV+7ToR7QQbmwcnQ=;
-  b=fyHnR0rV98IWI7DyUobpD6PzwYJuPoaXLM34NsO2K4bhRGCwI8ZrZDL+
-   AVZRNWffcZ7H9Hpu4PubFDBc6+dM2CK7IYcJtJuCHvGydHpuQz8wfcquu
-   1ZevKgTxVG7tkFS4RKFGk7r0hEEO8MwMSMTRY4VI5N1JCDWsUy6TSGZIH
-   fHmPZHGCKN2DejZ74m6L+GYHOZtp4b31ChYM7lo/9iyNKXzv9rNoiumtj
-   2kK959X7QxKOdz5FyfnfmwnD5CPFC+5Zk/H3yYIXuLeyErKhNgYpN7dWo
-   Nj8AjzDuYIvV80WfEIK7FeLaL3OIdU/2IyfCki6XtxeZmy03JLMZ8EJjJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="237062193"
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="237062193"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 03:01:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="612893140"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga004.jf.intel.com with ESMTP; 10 Dec 2021 03:01:34 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BAB1WjI016878;
-        Fri, 10 Dec 2021 11:01:32 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions into separate sections
-Date:   Fri, 10 Dec 2021 12:01:02 +0100
-Message-Id: <20211210110102.707759-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
+        id S240075AbhLJK4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:56:41 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:7358 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239216AbhLJK4f (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 05:56:35 -0500
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BA3c4A2022193;
+        Fri, 10 Dec 2021 05:52:28 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3cucqewvc8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 05:52:28 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 1BAAqQ5f021130
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Dec 2021 05:52:27 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 10 Dec
+ 2021 05:52:26 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 10 Dec 2021 05:52:25 -0500
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1BAAqLrA008399;
+        Fri, 10 Dec 2021 05:52:23 -0500
+From:   <alexandru.tachici@analog.com>
+To:     <andrew@lunn.ch>
+CC:     <o.rempel@pengutronix.de>, <alexandru.tachici@analog.com>,
+        <davem@davemloft.net>, <devicetree@vger.kernel.org>,
+        <hkallweit1@gmail.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <robh+dt@kernel.org>
+Subject: [PATCH v4 0/7] net: phy: adin1100: Add initial support for ADIN1100 industrial PHY
+Date:   Fri, 10 Dec 2021 13:05:02 +0200
+Message-ID: <20211210110509.20970-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: Ifl6QP-eF_RvOQmXd9KCkdJpZOpY4Z3u
+X-Proofpoint-GUID: Ifl6QP-eF_RvOQmXd9KCkdJpZOpY4Z3u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_03,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=782 impostorscore=0
+ bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0 phishscore=0
+ spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112100059
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri, 3 Dec 2021 10:44:10 +0100
+From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-> On Thu, Dec 02, 2021 at 11:32:05PM +0100, Alexander Lobakin wrote:
-> > Use the newly introduces macros to create unique separate sections
-> > for (almost) every "regular" ASM function (i.e. for those which
-> > aren't explicitly put into a specific one).
-> > There should be no leftovers as input .text will be size-asserted
-> > in the LD script generated for FG-KASLR.
-> 
-> *groan*...
-> 
-> Please, can't we do something like:
-> 
-> #define SYM_PUSH_SECTION(name)	\
-> .if section == .text		\
-> .push_section .text.##name	\
-> .else				\
-> .push_section .text		\
-> .endif
+The ADIN1100 is a low power single port 10BASE-T1L transceiver designed for
+industrial Ethernet applications and is compliant with the IEEE 802.3cg
+Ethernet standard for long reach 10 Mb/s Single Pair Ethernet.
 
-This condition
+The ADIN1100 uses Auto-Negotiation capability in accordance
+with IEEE 802.3 Clause 98, providing a mechanism for
+exchanging information between PHYs to allow link partners to
+agree to a common mode of operation.
 
-.pushsection .text
-.if section == .text
-# do something
-.endif
-.popsection
+The concluded operating mode is the transmit amplitude mode and
+master/slave preference common across the two devices.
 
-doesn't really works. `do something` doesn't happen.
-This works only when
+Both device and LP advertise their ability and request for
+increased transmit at:
+- BASE-T1 autonegotiation advertisement register [47:32]\
+Clause 45.2.7.21 of Standard 802.3
+- BIT(13) - 10BASE-T1L High Level Transmit Operating Mode Ability
+- BIT(12) - 10BASE-T1L High Level Transmit Operating Mode Request
 
-.pushsection .text
-.equ section, .text
+For 2.4 Vpp (high level transmit) operation, both devices need
+to have the High Level Transmit Operating Mode Ability bit set,
+and only one of them needs to have the High Level Transmit
+Operating Mode Request bit set. Otherwise 1.0 Vpp transmit level
+will be used.
 
-but it's not really okayish I'd say to find all .{,push}section
-occurences and replace them with a macro (which would also do .equ).
+Settings for eth1:
+	Supported ports: [ TP	 MII ]
+	Supported link modes:   10baseT1L/Full
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10baseT1L/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Link partner advertised link modes:  10baseT1L/Full
+	Link partner advertised pause frame use: No
+	Link partner advertised auto-negotiation: Yes
+	Link partner advertised FEC modes: Not reported
+	Speed: 10Mb/s
+	Duplex: Full
+	Auto-negotiation: on
+	master-slave cfg: preferred slave
+	master-slave status: slave
+	Port: Twisted Pair
+	PHYAD: 0
+	Transceiver: external
+	MDI-X: Unknown
+	Link detected: yes
+	SQI: 7/7
 
-I don't really know how %S with --sectname-subst should help me as
+1. Add basic support for ADIN1100.
 
-.if %S == .text
-# do something
-.endif
+Alexandru Ardelean (1):
+  net: phy: adin1100: Add initial support for ADIN1100 industrial PHY
 
-doesn't work at all (syntax error) -- and it shouldn't, %S is
-supposed to work only inside .{,push}section directives.
+1. Added 10baset-T1L link modes.
 
-I could do unconditional
+2. Added 10-BasetT1L registers.
 
-.pushsection %S.##name
-                ^^^^^^ function name
+3. Added Base-T1 auto-negotiation registers. For Base-T1 these
+registers decide master/slave status and TX voltage of the
+device and link partner.
 
-but this would involve changing LDS scripts (and vmlinux.lds.h) to
-let's say replace *(.noinstr.text) with *(.noinstr.text*).
+4. Added 10BASE-T1L support in phy-c45.c. Now genphy functions will call
+Base-T1 functions where registers don't match, like the auto-negotiation ones.
 
-So I hope there is a way to get current section name? If not, then
-the last option is the least harmful I suppose.
-At least not as harmful as current approach with alternative macros,
-far from it lol.
+5. Convert MSE to SQI using a predefined table and allow user access
+through ethtool.
 
-> 
-> #define SYM_POP_SECTION()	\
-> .pop_section
-> 
-> and wrap that inside the existing SYM_FUNC_START*() SYM_FUNC_END()
-> macros.
+6. DT bindings for the 2.4 Vpp transmit mode.
 
-Thanks,
-Al
+Alexandru Ardelean (1):
+  net: phy: adin1100: Add initial support for ADIN1100 industrial PHY
+
+Alexandru Tachici (6):
+  ethtool: Add 10base-T1L link mode entry
+  net: phy: Add 10-BaseT1L registers
+  net: phy: Add BaseT1 auto-negotiation registers
+  net: phy: Add 10BASE-T1L support in phy-c45
+  net: phy: adin1100: Add SQI support
+  dt-bindings: net: phy: Add 10-baseT1L 2.4 Vpp
+
+Changelog: V3 -> V4:
+	- fixed kernel-doc errors
+	- ETHTOOL_LINK_MODE_10baseT1L_Full_BIT of phydev->supported is now set inside
+	in genphy_c45_pma_read_abilities() call if device supports 10BASE-T1L
+	- fix 802.3 reg defines comments (kept documentation wording instead)
+	- fix 0x0010 advertise master preference (T4) (instead of 0x0080)
+	- added genphy_c45_baset1_read_lpa to phy-c45.c, will get called from genphy_c45_read_lpa,
+	if the phy supports BASE-T1 advertisement register
+	- added genphy_c45_baset1_read_link to phy-c45.c, will get called from genphy_c45_read_link,
+	if the phy supports BASE-T1 registers
+	- replaced adin_read_lpa from adin1100.c with genphy_c45_read_lpa
+	- added support for BASE-T1 master/slave status and advertising in phy-c45.c
+	- dropped yaml file (no need for it) no vendor specific properties to be added in the DT
+	- moved most of the BASE-T1 specific code from adin1100.c to gen-phy-c45
+	- changed an-10base-t1l-2.4vpp property name to phy-10base-t1l-2.4vpp
+	- in adin1100.c, when auto-negotiation is disabled, if increased transmit property is set
+	in DT (phy-10base-t1l-2.4vpp = <1>) force Tx PHY level to 2.4 vpp otherwise force
+	to 1.0 vpp.
+	- added 10BASE-T1L PMA control mdio.h
+
+ .../devicetree/bindings/net/ethernet-phy.yaml |   9 +
+ drivers/net/phy/Kconfig                       |   7 +
+ drivers/net/phy/Makefile                      |   1 +
+ drivers/net/phy/adin1100.c                    | 299 ++++++++++++++++++
+ drivers/net/phy/phy-c45.c                     | 283 ++++++++++++++++-
+ drivers/net/phy/phy-core.c                    |   3 +-
+ include/linux/mdio.h                          |  70 ++++
+ include/uapi/linux/ethtool.h                  |   1 +
+ include/uapi/linux/mdio.h                     |  75 +++++
+ net/ethtool/common.c                          |   3 +
+ 10 files changed, 744 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/net/phy/adin1100.c
+
+--
+2.25.1

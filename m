@@ -2,131 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F8747011F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F3A47012B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236018AbhLJNFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbhLJNFK (ORCPT
+        id S240808AbhLJNGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:06:16 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30934 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238148AbhLJNGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:05:10 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897C3C061746;
-        Fri, 10 Dec 2021 05:01:35 -0800 (PST)
-Date:   Fri, 10 Dec 2021 14:01:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639141294;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XNlggrwdxU2IO35iIw34nGX4eaR6cSUi5G5TgF7sVRU=;
-        b=FxdZ93dzBwccssU1Jn4Fw0Q+frnksamu020mgTYBG7dsvQY/AOQX3CzvAjaZLDOD9IMXvb
-        GePbIbeGm45IefXJs6/wz6KizHVylKCTSy5gbmQfof64Tb3cZXOW8qX5zLn4F0+ol5+ZY4
-        Ln9XSVz4Wt/ReZ+81ZNgp933y8hjkuP2zbWyjLlN1Vo+4Pje+1Fn4Z4fSDQElZ5rvKsQ1K
-        wFvJ3KzkgRGj97JuQQPGnEFVLFQIVZPBL2dc3Ewt+7WnHIBRELmdqSrWhayk9K6p2FrV1m
-        BZpP5nAbCv91mpAcPYmGlNBUCTqjFBVtw/02gb8t0uNKS7gqwqRpeRIbZP9KCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639141294;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XNlggrwdxU2IO35iIw34nGX4eaR6cSUi5G5TgF7sVRU=;
-        b=mEULxooEnU4502J3ZNOj8iBBPuXwd1P1XAtsCS5qSs54GrXINbBoe1fOeeYzUdY3JxFmN4
-        TUekS4bmjzb1YQBw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH-next v2] mm/memcg: Properly handle memcg_stock access for
- PREEMPT_RT
-Message-ID: <YbNPrGEjtKjzEjQa@linutronix.de>
-References: <20211210025228.158196-1-longman@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211210025228.158196-1-longman@redhat.com>
+        Fri, 10 Dec 2021 08:06:15 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAD1PqS009950;
+        Fri, 10 Dec 2021 13:02:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7Af6OiZfeZr/MWIUPLN9S9F3O/cq0ozE5pKi902+JhU=;
+ b=VIimoFqzwYSemEUvAGLZOgPnFa+6twuv4QVIz9NEIawxVIeqjIlmXxa0oNKxcR6vvB/Y
+ m1is076hlzEfYkmgrWr0c/1g/c4HmKeaVaMSlnOUfmmpVm4hTxdfbY1K2CqOt5SEJDYm
+ F9pFJx5AUOGc9MAGfCC85pFKhM7YKIbz9wn8Q/vm7B1Zkl3VQJhhxWhNTZkYLggrsGRl
+ wNUw4m4cZvoUwDUSaJKjNNbTBa34u59ifqDceMLWwjVEuNYvG0DC+8jnhnN/1Y0EZe8E
+ NUheBS7+4MH7OPpTyMHHTi8KrdnRA4qADB5r2TiqB7ni1bUfkhTgwiIdAgCPBdAlD9Nl sQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv6g719u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 13:02:24 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAD1Tl6010423;
+        Fri, 10 Dec 2021 13:02:23 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv6g719sh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 13:02:23 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAD25LM013707;
+        Fri, 10 Dec 2021 13:02:20 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3cqyyagw0j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 13:02:20 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAD2G8Q30474724
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Dec 2021 13:02:16 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71938A4054;
+        Fri, 10 Dec 2021 13:02:16 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E9856A405C;
+        Fri, 10 Dec 2021 13:02:13 +0000 (GMT)
+Received: from sig-9-65-75-5.ibm.com (unknown [9.65.75.5])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Dec 2021 13:02:13 +0000 (GMT)
+Message-ID: <d8a6a6827da17825c1aa011256b96d195b1ebf13.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Fri, 10 Dec 2021 08:02:13 -0500
+In-Reply-To: <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+         <20211208221818.1519628-16-stefanb@linux.ibm.com>
+         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
+         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
+         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
+         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
+         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
+         <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
+         <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: u2ZDp_iAvevGhiUByT_N8lL_5jN6cTpM
+X-Proofpoint-GUID: ANty0JWsO92036xgJFMrTIdrfEXb7u7e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_03,2021-12-10_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 suspectscore=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112100073
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-09 21:52:28 [-0500], Waiman Long wrote:
-=E2=80=A6
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-=E2=80=A6
-> @@ -2210,7 +2211,7 @@ static void refill_stock(struct mem_cgroup *memcg, =
-unsigned int nr_pages)
->  	struct memcg_stock_pcp *stock;
->  	unsigned long flags;
-> =20
-> -	local_irq_save(flags);
-> +	local_lock_irqsave(&memcg_stock.lock, flags);
+On Fri, 2021-12-10 at 07:40 -0500, Stefan Berger wrote:
+> On 12/10/21 07:09, Mimi Zohar wrote:
+> > On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
+> >>> There's still the problem that if you write the policy, making the file
+> >>> disappear then unmount and remount securityfs it will come back.  My
+> >>> guess for fixing this is that we only stash the policy file reference,
+> >>> create it if NULL but then set the pointer to PTR_ERR(-EINVAL) or
+> >>> something and refuse to create it for that value.
+> >> Some sort of indicator that gets stashed in struct ima_ns that the file
+> >> does not get recreated on consecutive mounts. That shouldn't be hard to
+> >> fix.
+> > The policy file disappearing is for backwards compatibility, prior to
+> > being able to extend the custom policy.  For embedded usecases,
+> > allowing the policy to be written exactly once might makes sense.  Do
+> > we really want/need to continue to support removing the policy in
+> > namespaces?
+> 
+> I don't have an answer but should the behavior for the same #define in 
+> this case be different for host and namespaces? Or should we just 
+> 'select IMA_WRITE_POLICY and IMA_READ_POLICY' when IMA_NS is selected?
 
-Why is this one using the lock? It isn't accessing irq_obj, right?
+The latter option sounds good.  Being able to analyze the namespace
+policy is really important.
 
->  	stock =3D this_cpu_ptr(&memcg_stock);
->  	if (stock->cached !=3D memcg) { /* reset if necessary */
-> @@ -2779,29 +2780,28 @@ static struct mem_cgroup *get_mem_cgroup_from_obj=
-cg(struct obj_cgroup *objcg)
->   * which is cheap in non-preempt kernel. The interrupt context object st=
-ock
->   * can only be accessed after disabling interrupt. User context code can
->   * access interrupt object stock, but not vice versa.
-> + *
-> + * This task and interrupt context optimization is disabled for PREEMPT_=
-RT
-> + * as there is no performance gain in this case.
->   */
->  static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
->  {
-> -	struct memcg_stock_pcp *stock;
-> -
-> -	if (likely(in_task())) {
-> +	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
->  		*pflags =3D 0UL;
->  		preempt_disable();
-> -		stock =3D this_cpu_ptr(&memcg_stock);
-> -		return &stock->task_obj;
-> +		return this_cpu_ptr(&memcg_stock.task_obj);
->  	}
+thanks,
 
-We usually add the local_lock_t to the object it protects, struct
-obj_stock it this case.
-That would give you two different locks (instead of one) so you wouldn't
-have to use preempt_disable() to avoid lockdep's complains. Also it
-would warn you if you happen to use that obj_stock in !in_task() which
-is isn't possible now.
-The only downside would be that drain_local_stock() needs to acquire two
-locks.
+Mimi
 
-> =20
-> -	local_irq_save(*pflags);
-> -	stock =3D this_cpu_ptr(&memcg_stock);
-> -	return &stock->irq_obj;
-> +	local_lock_irqsave(&memcg_stock.lock, *pflags);
-> +	return this_cpu_ptr(&memcg_stock.irq_obj);
->  }
-> =20
->  static inline void put_obj_stock(unsigned long flags)
->  {
-> -	if (likely(in_task()))
-> +	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT))
->  		preempt_enable();
->  	else
-> -		local_irq_restore(flags);
-> +		local_unlock_irqrestore(&memcg_stock.lock, flags);
->  }
-> =20
->  /*
-
-Sebastian

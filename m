@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2961470555
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00B9470558
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbhLJQNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:13:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43872 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238157AbhLJQNK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:13:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639152574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5dy6L2W5uCrFpdn9m5/x/KjiiOoQlVH+A7/e/EdtZS4=;
-        b=B0hCbIs4wBIELwcFdw73/NUAjYLpgsH7m1CZIVymZqolDGvVC2E15oGi3v+Xe+bSjpIOq8
-        hcCMwLo5I0SNayePxQWd6Y/UrgWIUfGroqyIyplrcdkAEg3WWofej18B0N5Qzy1GVC+ZiR
-        AsYXwzpgE6HWjC/R80oekBeSa7fHVrc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-307-NfZ_GOJ5OGaGjxu0ooti7w-1; Fri, 10 Dec 2021 11:09:33 -0500
-X-MC-Unique: NfZ_GOJ5OGaGjxu0ooti7w-1
-Received: by mail-wr1-f71.google.com with SMTP id p17-20020adff211000000b0017b902a7701so2460331wro.19
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:09:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5dy6L2W5uCrFpdn9m5/x/KjiiOoQlVH+A7/e/EdtZS4=;
-        b=ZNIqSqEdrfwXXlOjPDFV5taHpBXG4ZcGvxTXJjmrn4CgR1d6XR0mh4FWCGugse5/iX
-         V4j5BSbE041cvTi7dZ3KtBThg4jZqz/di+CrPGCwUJkIZMrNqw6lbAaHxBkSj09gq+w/
-         K3GTb4rdXH1JBIQbFwBkLwDZrsfvG2GpqlVqysyrRyxgm44HHsgnMAiD0o83S/frH3oH
-         pB6ggbiJi42NMTO2C1wKSHebE/c4vprAlIZ72T34UUCVff2yzMNTrDFfi3WPxBSB+Kev
-         289BTQpJr98LyFJ7XAMQJjgQ9T6UiZmjoXyPcxr/FXse8KFMMyiBZ2uAr/6BWE/CddDH
-         FESA==
-X-Gm-Message-State: AOAM531eLFCa7BLJfQMU7v/pSkb/AIZtRYk2g8mOy7gnUisjaV29TQTr
-        gZ5y93K6XNyM3tZB1vYZz9qoCiorsRXtCgpUFlbHCIhWvO8xDOkvBoBFVDmIepFttyCWNNnQm8W
-        9MdByDfUJHIn3i/MHgb8RuTk=
-X-Received: by 2002:adf:f542:: with SMTP id j2mr14699074wrp.616.1639152572444;
-        Fri, 10 Dec 2021 08:09:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJytDlkzGiMTuQZ0hcr6c8r/sMsaeYdtukaDdfk5e0Dk6BgLMiCq6Vjvdxlbn+1hz9VQGP9inw==
-X-Received: by 2002:adf:f542:: with SMTP id j2mr14699050wrp.616.1639152572274;
-        Fri, 10 Dec 2021 08:09:32 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id h17sm2820462wrp.34.2021.12.10.08.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 08:09:31 -0800 (PST)
-Date:   Fri, 10 Dec 2021 16:09:31 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, ghalat@redhat.com
-Subject: Re: [RFC PATCH] module: Introduce module unload taint tracking
-Message-ID: <20211210160931.ftvxpulno73a2l7c@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20211124173327.3878177-1-atomlin@redhat.com>
- <YbEZ4HgSYQEPuRmS@bombadil.infradead.org>
- <20211209153131.a54fdfbci4qnyy6h@ava.usersys.com>
- <YbKUUJUtjBk/n913@bombadil.infradead.org>
- <YbMlVFwBiRujKdEX@alley>
+        id S240113AbhLJQNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:13:30 -0500
+Received: from smtp1.axis.com ([195.60.68.17]:18344 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238157AbhLJQN3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 11:13:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1639152594;
+  x=1670688594;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FYBGOA6sC3CRc57FcHrATP9TifdTUJPqbaBfTOEGkCg=;
+  b=VuLhHpVtT9vldkLROxn6akUlTPZN7Ua3gMOni8dfBh8gRPFKHVPj6zh3
+   Pq30hKtAZ1W0GqTurq1QH3+AsArezPhWOtVQ792KRe6jLTARfaaYwAL9d
+   IuPtJrDPbkQHOQu43jiw9jBDxEl1FlMz8z8cRpMbcHJ364oqxmp5Fps5l
+   uo1WhEnuSKVgUf57IirPQQ6AKd0jWYcNwOrVL97Gk0xVtnl199EZQBJW/
+   WUZIwOS+lMS5bz8IHDE2IRiZ3vFnbb26S0OfaC5z3R+NYOhWUItJsswbS
+   K2IiDlnJJJuCXnuIZINn5kcVwGmmdSe0aNrb+MTAwlhR01yn1YCX2WV6b
+   w==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] rtc: fix use-after-free on device removal
+Date:   Fri, 10 Dec 2021 17:09:51 +0100
+Message-ID: <20211210160951.7718-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YbMlVFwBiRujKdEX@alley>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2021-12-10 11:00 +0100, Petr Mladek wrote:
-> > If someone enables this feature I can't think of a reason why they
-> > would want to limit this to some arbitrary number. So my preference
-> > is to remove that limitation completely. I see no point to it.
-> 
-> I agree with Luis here. We could always add the limit later when
-> people report some real life problems with too long list. It is
-> always good to know that someone did some heavy lifting in
-> the system.
+If the irqwork is still scheduled or running while the RTC device is
+removed, a use-after-free occurs in rtc_timer_do_work().  Cleanup the
+timerqueue and ensure the work is stopped to fix this.
 
-Fair enough.
+ BUG: KASAN: use-after-free in mutex_lock+0x94/0x110
+ Write of size 8 at addr ffffff801d846338 by task kworker/3:1/41
 
-> It might be even interesting to remember timestamp of the removal
-> to match it with another events reported in the system log.
+ Workqueue: events rtc_timer_do_work
+ Call trace:
+  mutex_lock+0x94/0x110
+  rtc_timer_do_work+0xec/0x630
+  process_one_work+0x5fc/0x1344
+  ...
 
-I'm not so sure about this. We could gather such details already via Ftrace
-(e.g. see load_module()). Personally, I'd prefer to maintain a simple list.
+ Allocated by task 551:
+  kmem_cache_alloc_trace+0x384/0x6e0
+  devm_rtc_allocate_device+0xf0/0x574
+  devm_rtc_device_register+0x2c/0x12c
+  ...
 
-> > If you just bump the count then its not duplication, it just adds
-> > more information that the same module name with the same taint flag
-> > has been unloaded now more than once.
-> 
-> Please, do not remove records that a module was removed. IMHO, it
-> might be useful to track all removed module, including the non-tainted
-> ones. Module removal is always tricky and not much tested. The tain
-> flags might be just shown as extra information in the output.
+ Freed by task 572:
+  kfree+0x114/0x4d0
+  rtc_device_release+0x64/0x80
+  device_release+0x8c/0x1f4
+  kobject_put+0x1c4/0x4b0
+  put_device+0x20/0x30
+  devm_rtc_release_device+0x1c/0x30
+  devm_action_release+0x54/0x90
+  release_nodes+0x124/0x310
+  devres_release_group+0x170/0x240
+  i2c_device_remove+0xd8/0x314
+  ...
 
-This is an interesting suggestion. Albeit, as per the subject, I prefer to
-just keep track of any module that tainted the kernel. That being said,
-Petr, if you'd prefer to track each module unload/or deletion event, then I
-would suggest for instance to remove a module once it has been reintroduced
-or maintain an unload count as suggested by Luis.
+ Last potentially related work creation:
+  insert_work+0x5c/0x330
+  queue_work_on+0xcc/0x154
+  rtc_set_time+0x188/0x5bc
+  rtc_dev_ioctl+0x2ac/0xbd0
+  ...
 
-Please let me know your thoughts.
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/rtc/class.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-
-Kind regards,
-
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 4b460c61f1d8..40d504dac1a9 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -26,6 +26,15 @@ struct class *rtc_class;
+ static void rtc_device_release(struct device *dev)
+ {
+ 	struct rtc_device *rtc = to_rtc_device(dev);
++	struct timerqueue_head *head = &rtc->timerqueue;
++	struct timerqueue_node *node;
++
++	mutex_lock(&rtc->ops_lock);
++	while ((node = timerqueue_getnext(head)))
++		timerqueue_del(head, node);
++	mutex_unlock(&rtc->ops_lock);
++
++	cancel_work_sync(&rtc->irqwork);
+ 
+ 	ida_simple_remove(&rtc_ida, rtc->id);
+ 	mutex_destroy(&rtc->ops_lock);
 -- 
-Aaron Tomlin
+2.33.1
 

@@ -2,99 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E914E46FB9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E506646FB9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbhLJHje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbhLJHje (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:39:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4649FC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:35:59 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mvaRZ-0002AJ-Nw; Fri, 10 Dec 2021 08:35:49 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-5708-5a2a-1200-a3e0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5708:5a2a:1200:a3e0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0E13F6C1172;
-        Fri, 10 Dec 2021 07:35:46 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 08:35:45 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jimmy Assarsson <extja@kvaser.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Yasushi SHOJI <yashi@spacecubics.com>
-Subject: Re: [PATCH v5 3/5] can: do not copy the payload of RTR frames
-Message-ID: <20211210073545.qdldwmaykts5dr4u@pengutronix.de>
-References: <20211207121531.42941-1-mailhol.vincent@wanadoo.fr>
- <20211207121531.42941-4-mailhol.vincent@wanadoo.fr>
+        id S231280AbhLJHhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:37:09 -0500
+Received: from mga11.intel.com ([192.55.52.93]:61711 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229609AbhLJHhI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 02:37:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639121613; x=1670657613;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3dgij29B/NfHaJNdI2BgpUVz41YB6dQPXaYOWy9NegE=;
+  b=fbxQhkXYtBtleiBD1wPhxx9R1NhRmUms7v5BJMxYID7PT1k9r5OzqiiB
+   8FMrJHgAuLRyXu4LS2Aq7JZAiubM9e38eXGirI2nqoDeSVWzyWotEbesx
+   4ybWscf8lonQHP/fChVQRlW+3+sLrUYLi3BC0XjEUn5aTZjiw2iK8/Y6Y
+   OPGrjsTQyCI6cWkmoPamQsl972IJBrXc/uVvFEW3XD/kumu7/dyuXC11l
+   YPZ7vaB8do5MGdq8t1qBmTvYLk4flbzRtMezu/W0EYs3WzWqNKJn5f2bD
+   wqgFBsXi/3YhS92urlBYBClaArJ8P4HEoembtDfyw9ps0yM7wfsPtECg9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="235808702"
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="235808702"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 23:33:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="612842976"
+Received: from dmi-pnp-i7.sh.intel.com ([10.239.159.101])
+  by orsmga004.jf.intel.com with ESMTP; 09 Dec 2021 23:33:30 -0800
+From:   Dapeng Mi <dapeng1.mi@intel.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Dapeng Mi <dapeng1.mi@intel.com>
+Subject: [PATCH] virtio: fix a typo in function "vp_modern_remove" comments.
+Date:   Fri, 10 Dec 2021 15:35:46 +0800
+Message-Id: <20211210073546.700783-1-dapeng1.mi@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xgu4n4z4axtjgfbb"
-Content-Disposition: inline
-In-Reply-To: <20211207121531.42941-4-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Function name "vp_modern_remove" in comments is written to
+"vp_modern_probe" incorrectly. Change it.
 
---xgu4n4z4axtjgfbb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
+---
+ drivers/virtio/virtio_pci_modern_dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 07.12.2021 21:15:29, Vincent Mailhol wrote:
-> The actual payload length of the CAN Remote Transmission Request (RTR)
-> frames is always 0, i.e. nothing is transmitted on the wire. However,
-                           ^^^^^^^
-I've changed this to "no payload" to make it more unambiguous.
+diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+index e11ed748e661..e8b3ff2b9fbc 100644
+--- a/drivers/virtio/virtio_pci_modern_dev.c
++++ b/drivers/virtio/virtio_pci_modern_dev.c
+@@ -345,7 +345,7 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
+ EXPORT_SYMBOL_GPL(vp_modern_probe);
+ 
+ /*
+- * vp_modern_probe: remove and cleanup the modern virtio pci device
++ * vp_modern_remove: remove and cleanup the modern virtio pci device
+  * @mdev: the modern virtio-pci device
+  */
+ void vp_modern_remove(struct virtio_pci_modern_device *mdev)
+-- 
+2.30.2
 
-> those RTR frames still use the DLC to indicate the length of the
-> requested frame.
->=20
-> For this reason, it is incorrect to copy the payload of RTR frames
-> (the payload buffer would only contain garbage data). This patch
-> encapsulates the payload copy in a check toward the RTR flag.
->=20
-> CC: Yasushi SHOJI <yashi@spacecubics.com>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---xgu4n4z4axtjgfbb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGzA08ACgkQqclaivrt
-76k0wgf/Tt5RLv/yuQOh0Bg1Eim3GqTp91tjekXp/Kx65epni6ViEkdY6/B3bhN2
-8cprQ2aeC7npSQVSGr4AU8OhoX1dAn7Z986ThJOOl0v0JtuFjniNHoXK9FNjKWNJ
-NlpH7wYE3vv5jy9Yy3mSbQPP3Bp539dRfq5puTgFygv3yp2RzRVL0pX8/FK1dal8
-Ziq98LUACZF6Tc+uqIfaj9p2CJq94xQBHrmoOtpN7722ODt9JQjqGB8Bk1Dwe8l7
-XVWWbTrsWkt0SNniKIQAdo4UsigGQ6Ba3+MhEBraR0uZU7Qt6gNCXIYYR9dd7Iu8
-spshptUSQ0EvOSdsXO6MBy0KhT5p5w==
-=Niul
------END PGP SIGNATURE-----
-
---xgu4n4z4axtjgfbb--

@@ -2,121 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 181F846FE23
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A6C46FE29
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239587AbhLJJyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:54:12 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32906 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239558AbhLJJyM (ORCPT
+        id S239593AbhLJJz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:55:27 -0500
+Received: from dvalin.narfation.org ([213.160.73.56]:54134 "EHLO
+        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232457AbhLJJz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:54:12 -0500
-Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J9R3K583Pzcc0V;
-        Fri, 10 Dec 2021 17:50:21 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 17:50:35 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 17:50:34 +0800
-Subject: Re: [PATCH RFC 0/9] support concurrent sync io for bfq on a specail
- occasion
-To:     Paolo Valente <paolo.valente@linaro.org>
-CC:     <tj@kernel.org>, <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20211127101132.486806-1-yukuai3@huawei.com>
- <D3FF0820-6A51-46A1-A363-8FFA8CCD2851@linaro.org>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <809b90cc-20ba-c4fd-8c29-b9e3123c1cef@huawei.com>
-Date:   Fri, 10 Dec 2021 17:50:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 10 Dec 2021 04:55:26 -0500
+X-Greylist: delayed 7328 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Dec 2021 04:55:26 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1639129910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UoVnYVEhK6T2048vTXTUcC+ZvRTghvuGjwu5io1WJRo=;
+        b=Y6tBSGEvHKL1TN3Q0I6CW2o5VHxZcp3fGTSI9tru49ke3w6HwkWfClCvRZxeFU+SVdr8ip
+        UOKI0LdaYsSCcHWn9mLREvPize1JGJunAb5wv2m1qo2nV2HKZf+IfKNSP8/Zl0CUR2NAYs
+        t6N3poffLYqTR2MC+fpgoB2lAaCO110=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     cgel.zte@gmail.com
+Cc:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org, cgel.zte@gmail.com,
+        chi.minghao@zte.com.cn, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch,
+        netdev@vger.kernel.org, sw@simonwunderlich.de,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCHv2] net/batman-adv:remove unneeded variable
+Date:   Fri, 10 Dec 2021 10:51:44 +0100
+Message-ID: <2776551.YYyxiJnSHr@ripper>
+In-Reply-To: <20211210094206.426283-1-chi.minghao@zte.com.cn>
+References: <2844186.8fJna1iEf4@ripper> <20211210094206.426283-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-In-Reply-To: <D3FF0820-6A51-46A1-A363-8FFA8CCD2851@linaro.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; boundary="nextPart3204491.a8kA2qvuHL"; micalg="pgp-sha512"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2021/12/10 17:20, Paolo Valente Ð´µÀ:
-> 
-> 
->> Il giorno 27 nov 2021, alle ore 11:11, Yu Kuai <yukuai3@huawei.com> ha scritto:
->>
->> Bfq can't handle sync io concurrently as long as the io are not issued
->> from root group currently.
->>
->> Previous patch set:
->> https://lore.kernel.org/lkml/20211014014556.3597008-2-yukuai3@huawei.com/t/
->>
->> During implemting the method mentioned by the above patch set, I found
->> more problems that will block implemting concurrent sync io. The
->> modifications of this patch set are as follows:
->>
->> 1) count root group into 'num_groups_with_pending_reqs';
->> 2) don't idle if 'num_groups_with_pending_reqs' is 1;
->> 3) If the group doesn't have pending requests while it's child groups
->> have pending requests, don't count the group.
-> 
-> Why don't yo count the parent group? It seems to me that we should count it.
-Hi, Paolo
+--nextPart3204491.a8kA2qvuHL
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: cgel.zte@gmail.com
+Cc: a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org, cgel.zte@gmail.com, chi.minghao@zte.com.cn, davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch, netdev@vger.kernel.org, sw@simonwunderlich.de, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCHv2] net/batman-adv:remove unneeded variable
+Date: Fri, 10 Dec 2021 10:51:44 +0100
+Message-ID: <2776551.YYyxiJnSHr@ripper>
+In-Reply-To: <20211210094206.426283-1-chi.minghao@zte.com.cn>
+References: <2844186.8fJna1iEf4@ripper> <20211210094206.426283-1-chi.minghao@zte.com.cn>
 
-For example, we only issue io in child group c2(root->c1->c2),
-'num_groups_with_pending_reqs' will end up greater than 1, thus it's
-impossible to handle sync io concurrently. Thus I don't count root and
-c1, only count c2.
+On Friday, 10 December 2021 10:42:06 CET cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
->> 4) Once the group doesn't have pending requests, decrease
->> 'num_groups_with_pending_reqs' immediately. Don't delay to when all
->> it's child groups don't have pending requests.
->>
-> 
-> I guess this action is related to 3).
-Yes, if c1, c2 are both active, and then c1 don't have any pending reqs,
-I want to decrease num_groups_with_pending_reqs to 1 immediately. So
-that sync io on c2 can be handled concurrently.
+> Return status directly from function called.
+> change since v1: zealci@zte.com.cm
+>              v2: zealci@zte.com.cn
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
 
-Thanks,
-Kuai
+This is wrong:
 
-> 
-> Thanks,
-> Paolo
-> 
->> Noted that I just tested basic functionality of this patchset, and I
->> think it's better to see if anyone have suggestions or better
->> solutions.
->>
->> Yu Kuai (9):
->>   block, bfq: add new apis to iterate bfq entities
->>   block, bfq: apply news apis where root group is not expected
->>   block, bfq: handle the case when for_each_entity() access root group
->>   block, bfq: count root group into 'num_groups_with_pending_reqs'
->>   block, bfq: do not idle if only one cgroup is activated
->>   block, bfq: only count group that the bfq_queue belongs to
->>   block, bfq: record how many queues have pending requests in bfq_group
->>   block, bfq: move forward __bfq_weights_tree_remove()
->>   block, bfq: decrease 'num_groups_with_pending_reqs' earlier
->>
->> block/bfq-cgroup.c  |  3 +-
->> block/bfq-iosched.c | 92 +++++++++++++++++++++++----------------------
->> block/bfq-iosched.h | 41 +++++++++++++-------
->> block/bfq-wf2q.c    | 44 +++++++++++++++-------
->> 4 files changed, 106 insertions(+), 74 deletions(-)
->>
->> -- 
->> 2.31.1
->>
-> 
-> .
-> 
+1. the patch was already applied
+2. the patch history doesn't belong in the commit message
+3. there is still an alignment problem
+4. if you use -v in git-format-patch then it should be "PATCH v2" and not 
+   "PATCHv2" (otherwise it will not be parsed correctly by patchwork)
+5. The alignment problem is still there
+6. the subject is also not following the normal formatting style
+
+Kind regards,
+	Sven
+--nextPart3204491.a8kA2qvuHL
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGzIzAACgkQXYcKB8Em
+e0ZijRAAjT1ExR75ttZ02uaY/6uk/CoBLOSPAA+wkchdxBITNGmVRJhCUpVXZVYX
+WfHK7wwg2xsteGyfqA9i/ohYHOMrKisNcUwkw0fxGxLQOKYQMwYTlZWdKEu7Q8kU
+APu3HQ1Kd38It60FW9+nuy+8/JTq0YlTU8Th9YUiUBRr2YWGZAL3+vdKNeF3T9fx
+IAUjEoJoEQwzznmiRW135R43iyu+/gNrj7JG1d4BCog/xmwO7nNDZD8qUHZh+qKt
+UVZg1yPArL5m18ngg9A7RrV8ahb0beOsWjalotOD/jLB2C5kd5VKmEhd0FHEnm6V
+YfKVXzjuaOu8CfS0tMjQJqbV2R0K8cNgJzhB3GlsCiAx79e+rPHja8yrpB1dbztz
+oE/pOBkLbvwM/Qg7LCcFrocDVj7cE92cJQbxEU3516cT02zNZTBbUNUTLY9qPgK8
+oqNel2UEgbYj3UicXINFPl2XbUdTyamI1TSywLven9PnDojg5hvgkq1aU7wVyIAs
+dw2sIruF950Iv5K24IHsE4eXvtYd45KirFb6vhNqnzEiCtEaqLFf9BFqw/ecpgR4
+FJA7y311KwsfoMumveAM3oFcff+35LFkoO6g+rentNRhFQWO0Xe+XUwd5oW9Lb78
+jaO0qlOkssdh+pMai4cNENeU4mtdjFdtTJJy73D9iKDhBZG+ACA=
+=9BtG
+-----END PGP SIGNATURE-----
+
+--nextPart3204491.a8kA2qvuHL--
+
+
+

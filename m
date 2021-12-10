@@ -2,72 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0403647017D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321C1470187
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241734AbhLJN11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:27:27 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41994 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241719AbhLJN1Z (ORCPT
+        id S241665AbhLJN0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:26:55 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56326 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238220AbhLJN0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:27:25 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: adalessandro)
-        with ESMTPSA id 448FE1F4769D
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1639142630; bh=CJhjsCMyqEP65R/Xg2NhSIIrFMgqoU+gWwEZab6mGv0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DaJYnoRuUgKh9JRaCDPUj6voFN40YfhG3kMvpP3Q0/PPESg3y1KS29LinWBpkE+xP
-         n+rAIwQ2a3/IiEYAiB/lVjomvtVdvBe2DY42RcE0iusHgOddM7ZSKG8Dvy4KzxaPW5
-         4mCh2wGl+c4ZJBW3VoS2R3SPCm+wMH89PsSLeotQklQM2jOao+3f9Kq9uhQAvUZKC5
-         G3Js3w0PGDneSHlMbomuA2qx6GgWr9pSSpTUsX8djiv+/mrS6IRrNYyiIgqXWbcmVx
-         JlDwaLMpEwVzsdTaDoS5oFOxENdYb22u3wBXD49rcxNZ6R13Yr+9lTwzIoq7dmnmJR
-         qSU/QpZJM0h7A==
-From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     aisheng.dong@nxp.com, ariel.dalessandro@collabora.com,
-        festevam@gmail.com, ioana.ciornei@nxp.com,
-        jagan@amarulasolutions.com, kernel@pengutronix.de, krzk@kernel.org,
-        linux-imx@nxp.com, matt@traverse.com.au, matteo.lisi@engicam.com,
-        meenakshi.aggarwal@nxp.com, michael@amarulasolutions.com,
-        nathan@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        shawnguo@kernel.org, tharvey@gateworks.com, robh@kernel.org
-Subject: [PATCH v4 2/5] dt-bindings: arm: fsl: Add iMX8MN BSH SMM S2 boards
-Date:   Fri, 10 Dec 2021 10:23:16 -0300
-Message-Id: <20211210132319.61196-3-ariel.dalessandro@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211210132319.61196-1-ariel.dalessandro@collabora.com>
-References: <20211210132319.61196-1-ariel.dalessandro@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 10 Dec 2021 08:26:53 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5BD3A1F3A1;
+        Fri, 10 Dec 2021 13:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639142597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UukKNe8s3kw52iaVXTrsFvvPIdEJe65NFYa97yPi3Vg=;
+        b=ZpBH+BqUvDU5O07JuozPlEbqlqBFL1blX6i4jrdxNO/+0dA0P8eN38WVErrqJpoqUyRB1B
+        O+zJjvBU2fDlKJiQBBw38i0LOh12hBSf4XVNz9UE5M2TmVIlLr4FO1I0U0Uw6BE+ugsIZw
+        hmbq6tvmNSwJURq80BfjBv5gIHnEtf0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639142597;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UukKNe8s3kw52iaVXTrsFvvPIdEJe65NFYa97yPi3Vg=;
+        b=7tFH6a7zRjq11BuAgJGAQR+rlLiFOfSgpnvNVwI4gUSSrLPJ5CgcYz/Ia16f2IulaJluAC
+        0LVu0yg6c2n5aJCA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 18054A3B81;
+        Fri, 10 Dec 2021 13:23:17 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 14:23:17 +0100
+Message-ID: <s5hk0gch9ve.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Fernando Ramos <greenfoo@u92.eu>, Takashi Iwai <tiwai@suse.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Tedd Ho-Jeong An <tedd.an@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-bluetooth@vger.kernel.org
+Subject: Re: [PATCH] Bluetooth: Apply initial command workaround for more Intel chips
+In-Reply-To: <1D49EE9C-42D4-45C9-AE37-F4C508FD2D64@holtmann.org>
+References: <20211202162256.31837-1-tiwai@suse.de>
+        <acc7b5b4-72cc-9f3b-90a6-6fbf6c3a71e7@molgen.mpg.de>
+        <s5h7dcnt0lp.wl-tiwai@suse.de>
+        <YayVYIAi56097Ltl@zacax395.localdomain>
+        <1D49EE9C-42D4-45C9-AE37-F4C508FD2D64@holtmann.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for BSH SystemMaster (SMM) S2 board family, which consists
-of: iMX8MN SMM S2 and iMX8MN SMM S2 PRO boards.
+On Tue, 07 Dec 2021 17:14:02 +0100,
+Marcel Holtmann wrote:
+> 
+> Hi Fernando,
+> 
+> >> Thanks, so this seems depending on the hardware, maybe a subtle
+> >> difference matters.  As far as I read the code changes, the workaround
+> >> was applied in the past unconditionally, so it must be fairly safe
+> >> even if the chip works as is.
+> >> 
+> >> Or, for avoiding the unnecessarily application of the workaround,
+> >> should it be changed as a fallback after the failure at the first
+> >> try...?
+> > 
+> > I don't know if this helps, but I started experiencing this same issue ("hci0:
+> > command 0xfc05 tx timeout") yesterday after a kernel upgrade.
+> > 
+> > My controller is a different one:
+> > 
+> >    8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Adapter
+> >    ^^^^^^^^^
+> > 
+> > I tried with different (older) versions of the v5.15.x kernel but none worked.
+> > 
+> > Now, this is the interesting (?) part: today, when I switched on the computer
+> > to keep testing, the bluetooth was *already* working once again.
+> > 
+> > I have reviewed my bash history to try to figure out what is it that I did, and
+> > the only thing I see is that yesterday, before going to sleep, I did a full
+> > poweroff instead of a reset (which is what I used yesterday to try different
+> > kernels).
+> > 
+> > This does not make any sense... but then I found this [1] post from someone else
+> > who experienced the same.
+> > 
+> > Is there any reasonable explanation for this? Could this be the reason why you
+> > seem to have different results with the same controller (8087:0a2a)?
+> 
+> we trying to figure out what went wrong here. This should be really only an issue on the really early Intel hardware like Wilkens Peak. However it seems it slipped into later parts now as well. We are investigating what happened and see if this can be fixed via a firmware update or if we really have to mark this hardware as having a broken boot loader.
 
-Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/arm/fsl.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+The upstream bugzilla indicates that 8087:0aa7 seems hitting the same
+problem:
+  https://bugzilla.kernel.org/show_bug.cgi?id=215167
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 0b595b26061f..d49c4b786f09 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -758,6 +758,8 @@ properties:
-         items:
-           - enum:
-               - beacon,imx8mn-beacon-kit  # i.MX8MN Beacon Development Kit
-+              - bsh,imx8mn-bsh-smm-s2     # i.MX8MN BSH SystemMaster S2
-+              - bsh,imx8mn-bsh-smm-s2pro  # i.MX8MN BSH SystemMaster S2 PRO
-               - fsl,imx8mn-ddr4-evk       # i.MX8MN DDR4 EVK Board
-               - fsl,imx8mn-evk            # i.MX8MN LPDDR4 EVK Board
-               - gw,imx8mn-gw7902          # i.MX8MM Gateworks Board
--- 
-2.30.2
+OTOH, on openSUSE Bugzilla, there has been a report that applying the
+workaround for 8087:0026 may cause another issue about the reset
+error, so the entry for 8087:0026 should be dropped.
 
+
+Takashi

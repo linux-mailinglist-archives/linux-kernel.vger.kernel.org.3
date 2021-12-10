@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFCD470029
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD2A470030
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240459AbhLJLkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:40:51 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:46980 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbhLJLks (ORCPT
+        id S240715AbhLJLlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:41:23 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33768 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240672AbhLJLlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:40:48 -0500
+        Fri, 10 Dec 2021 06:41:21 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id ED6CB1F3A0;
-        Fri, 10 Dec 2021 11:37:11 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F35F210FE;
+        Fri, 10 Dec 2021 11:37:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639136231; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639136265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lngrIVtYMbZhKQO26V52lBf3QiqSOpE1elMOcFTE+k0=;
-        b=wu6MJ1PDLlL8D0vDxz1UMG4rlI/VuCaNyKcPtyzOWl2Un5WlYuw9NzFIkJ2sJTNOmzvb2O
-        8TOa7HrZx0xQMAkLjCj0rgZT2mPvQDQcIxFYt7H2GjVXTbGJ4Z6PSuBMMnq6lZj8JvrDsR
-        46zaMt+3v8XSpdDF+nZMK820EDPs/68=
+        bh=eb4zaX1qCjL7jijbTZCbjxJPZ9XZbK1lSdAhXFY9ulk=;
+        b=bnwyLDqa55iGL0IUuSSQAYcks2Q2D6YlKHqOI42C/zkVfC8elX7w5vab2lVxpi9RER4lpK
+        owPw+7SfA2N8ocAQfiz0bqEfmrglw9SEOBhLz7MWciT1Uqg5OqU44o3ES8/xZoCOsqeILo
+        pR1fC7rfuyQ5gm/eiM7Bx7uwcYMld0c=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639136231;
+        s=susede2_ed25519; t=1639136265;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lngrIVtYMbZhKQO26V52lBf3QiqSOpE1elMOcFTE+k0=;
-        b=OrAEkTDLveSpD2xMOsrCuGALxmHqxW65gYb2kGkgNRWu1bCa5+N5UFAZWZHzg53dmglrAo
-        HEvUz6A0PCVSjZBA==
+        bh=eb4zaX1qCjL7jijbTZCbjxJPZ9XZbK1lSdAhXFY9ulk=;
+        b=qXaOTvCj7K4a7VUSeE94HhiaadYhcPfjsrL5pG0SdH5GYAMgKTYa+nPmPDkCW0QG20/ctv
+        MDkAeHLsmF/kggDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D936213DDE;
-        Fri, 10 Dec 2021 11:37:11 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D25213DDE;
+        Fri, 10 Dec 2021 11:37:45 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id /Ra+NOc7s2GMcAAAMHmgww
-        (envelope-from <hare@suse.de>); Fri, 10 Dec 2021 11:37:11 +0000
-Subject: Re: [PATCH v2 13/18] crypto: testmgr - add DH test vectors for key
- generation
+        id Z51bHgk8s2EDcQAAMHmgww
+        (envelope-from <hare@suse.de>); Fri, 10 Dec 2021 11:37:45 +0000
+Subject: Re: [PATCH v2 18/18] crypto: dh - accept only approved safe-prime
+ groups in FIPS mode
 To:     Nicolai Stange <nstange@suse.de>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>
@@ -59,14 +59,14 @@ Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         qat-linux@intel.com, keyrings@vger.kernel.org
 References: <20211209090358.28231-1-nstange@suse.de>
- <20211209090358.28231-14-nstange@suse.de>
+ <20211209090358.28231-19-nstange@suse.de>
 From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <dd2af30b-aa5a-616d-f6c8-de49f328f161@suse.de>
-Date:   Fri, 10 Dec 2021 12:37:11 +0100
+Message-ID: <e44987d3-d838-38bc-d744-48d6010e2c59@suse.de>
+Date:   Fri, 10 Dec 2021 12:37:45 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <20211209090358.28231-14-nstange@suse.de>
+In-Reply-To: <20211209090358.28231-19-nstange@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -75,21 +75,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 12/9/21 10:03 AM, Nicolai Stange wrote:
-> Now that all DH implementations support ephemeral key generation triggered
-> by passing a ->key_size of zero to ->set_secret(), it's certainly
-> worthwhile to build upon the testmgr's do_test_kpp() ->genkey facility to
-> test it.
+> SP800-56Arev3, sec. 5.5.2 ("Assurance of Domain-Parameter Validity")
+> asserts that an implementation needs to verify domain paramtere validity,
+> which boils down to either
+> - the domain parameters corresponding to some known safe-prime group
+>   explicitly listed to be approved in the document or
+> - for parameters conforming to a "FIPS 186-type parameter-size set",
+>   that the implementation needs to perform an explicit domain parameter
+>   verification, which would require access to the "seed" and "counter"
+>   values used in their generation.
 > 
-> Add two ->genkey DH test vectors to the testmgr, one for the RFC 7919
-> ffdhe3072 group and another one for the RFC 3526 modp2048 group. For the
-> resp. party B's keypair, just reuse the already available values
-> previously specified for party A in the existing known answer tests. This
-> will enable the compiler to merge these rather large data strings.
+> The latter is not easily feasible and moreover, SP800-56Arev3 states that
+> safe-prime groups are preferred and that FIPS 186-type parameter sets
+> should only be supported for backward compatibility, if it all.
+> 
+> Make the dh implementations reject any domain parameters which don't
+> correspond to any of the approved safe-prime groups in FIPS mode. The
+> approved safe-prime groups are the ones specified in RFC 7919 and RFC 3526,
+> and given that all possible values of enum dh_group_id correspond to
+> either groups from these RFCs or to DH_GROUP_ID_UNKNOWN, it suffices to
+> make crypto_dh_decode_key() to reject any parameter set where
+> ->group_id == DH_GROUP_ID_UNKNOWN.
+> 
+> As this change will effectively render the dh implementation unusable in
+> FIPS mode if neither of the CRYPTO_DH_GROUPS_RFC7919 or
+> CRYPTO_DH_GROUPS_RFC3526 Kconfig options enabled, make CRYPTO_DH imply
+> these two if CRYPTO_FIPS is set.
 > 
 > Signed-off-by: Nicolai Stange <nstange@suse.de>
 > ---
->  crypto/testmgr.h | 164 +++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 164 insertions(+)
+>  crypto/Kconfig     | 2 ++
+>  crypto/dh_helper.c | 4 ++++
+>  2 files changed, 6 insertions(+)
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 

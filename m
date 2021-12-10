@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB94F470C45
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8B5470C48
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240295AbhLJVPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235091AbhLJVPR (ORCPT
+        id S243313AbhLJVP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:15:27 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:56214 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243257AbhLJVP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:15:17 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB7EC0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:11:41 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id 7so14869671oip.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:11:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ddPQVV/tTQRudtCz1wmnWQGVTL4NkdF6U5BGESIoZIk=;
-        b=K612s3Fuy5BAuqxT0vTsPBxg1trDU5wWijgKK96ec/bgtR04y7ecuOlsMuEghseFS+
-         pNtAQMrg4srdkdxkco1ivxHIMZMD2QBOn38kdMVJJehKKNWvuhsnBXvYQzQDc+81wCtC
-         HJmaLOZu1uR46HiFcqALN/70qd3gyZ+e9kMUE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ddPQVV/tTQRudtCz1wmnWQGVTL4NkdF6U5BGESIoZIk=;
-        b=iMM1kEdjrgivOvKRV36maRPWOiKnvVuRx8WxXfLanDWM+KJE9L8OWxd/RdRrK2+qp4
-         YomEbwZ8yznw/a9mTQzFDXP4fTUKB9MRLWvUseeai3qEZ/Cj9EgRVw9Z+hfIBMAtz1fz
-         +h8sgagtpAntaXK6V+lqA1Q95mo2TjGjbG42cnfZ3OpVgqSXzqG0yBZQin2rzzgdBBvl
-         PdU4Rmv+lZQUnyXE1pfx+0uKdEF2INc4TfZ0JuVJocP+xouFLT3D0CJUxKgHuVLEiVEQ
-         6VdC09+rlxsvOFPBgZJKI/Nairjzdb5NiqbfnhsKkUn162mmW3U0atF0XFrjnsHDDp32
-         uYkA==
-X-Gm-Message-State: AOAM53182gyaQGzwGDBvQxvCNH0UQ/WF2tnGXGYjiVKJz9HvR0KMDikN
-        kuL6Oh3G0qc5LBdhuunhVghsCw==
-X-Google-Smtp-Source: ABdhPJyEtgLvk39lK6eB2KFY6omQ+KE/YL4n+zHawDHNL6h0rcXBzDJyAxY+VbrCCsBPr22P0QZYng==
-X-Received: by 2002:aca:1708:: with SMTP id j8mr14346312oii.62.1639170701316;
-        Fri, 10 Dec 2021 13:11:41 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id o14sm702658ote.41.2021.12.10.13.11.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 13:11:41 -0800 (PST)
-Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
-        shuah@kernel.org, rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211207190251.18426-1-davidgow@google.com>
- <202112071358.E8E6812D@keescook>
- <8c06e715-a83e-e8c6-74c3-836831b85cdf@linuxfoundation.org>
- <87mtl8qifu.fsf@meer.lwn.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <41323fe3-3f73-4681-7d75-2301f9982a25@linuxfoundation.org>
-Date:   Fri, 10 Dec 2021 14:11:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 10 Dec 2021 16:15:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5106ACE2D3E;
+        Fri, 10 Dec 2021 21:11:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AC3C00446;
+        Fri, 10 Dec 2021 21:11:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639170707;
+        bh=ehvkwSBzHebalBRfzUXM/eqWv9XlwQOJTFk2risiuEE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sIQZ5/gEbAn+zUpjcHSkFy+JKmxCIFY0DiXKcVGDGvgmpL4vPhx0pWsjIQUh0SY8k
+         XWmzxMxPkYeSoUybJHis6k1wM7ubHJQMS38fduK4sggs7YC/JAsa54tEBFN2vk9jzn
+         syv1e+75/NlIYS3rB0v4Bd4lifdAgKJexb/QtlKqgD5HM2sL/VnZXkdfyxl6QWlzhw
+         /d5fW9vbqVSUF7O44AO3rMkbX9fh5m9dk5VNquV0e8kD2vJkvjNhDXGvPbFzPbxj31
+         2Apwjj93B6CSgXuNC6tfLzeMPHbvQa5Boz4DcxXctzH9knSL+RhGbxx7KCSD8+UMf1
+         bVI71x//VOTGw==
+Date:   Fri, 10 Dec 2021 21:11:41 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     David Collins <quic_collinsd@quicinc.com>
+Cc:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, swboyd@chromium.org,
+        subbaram@codeaurora.org, Das Srinagesh <gurus@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 1/6] dt-bindings: regulator: Add
+ "regulator-min-dropout-voltage-microvolt"
+Message-ID: <YbPCjbnH6cXQqy6S@sirena.org.uk>
+References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1637314953-4215-2-git-send-email-quic_c_skakit@quicinc.com>
+ <YZ+o9sQpECZSrieN@sirena.org.uk>
+ <d828f2a1-03e8-d6ee-4ab7-39bf677093b7@quicinc.com>
+ <Ya5VhkggWdjYyTHL@sirena.org.uk>
+ <6a44cb99-6894-c9ce-4f1e-5dee0939598c@quicinc.com>
+ <Ya97cnuwM+MuNMg3@sirena.org.uk>
+ <23a47965-4ea9-5f6c-7e3c-27f5bd35f5b7@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <87mtl8qifu.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aY21D3MOZ+5AaGhF"
+Content-Disposition: inline
+In-Reply-To: <23a47965-4ea9-5f6c-7e3c-27f5bd35f5b7@quicinc.com>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 2:05 PM, Jonathan Corbet wrote:
-> Shuah Khan <skhan@linuxfoundation.org> writes:
-> 
->> On 12/7/21 3:02 PM, Kees Cook wrote:
->>> On Tue, Dec 07, 2021 at 11:02:51AM -0800, David Gow wrote:
->>>> From: Rae Moar <rmoar@google.com>
->>>>
->>>> It does not make any significant additions or changes other than those
->>>> already in use in the kernel: additional features can be added as they
->>>> become necessary and used.
->>>>
->>>> [1]: https://testanything.org/tap-version-13-specification.html
->>>>
->>>> Signed-off-by: Rae Moar <rmoar@google.com>
->>>> Co-developed-by: David Gow <davidgow@google.com>
->>>> Signed-off-by: David Gow <davidgow@google.com>
->>>
->>> I like it! Thank you so much for suffering through my earlier reviews.
->>> :)
->>>
->>> The only concern I have is wonder what'll be needed to kselftest to
->>> deal with indentation changes. As long as this can be implemented
->>> without a subtest knowing it is a subtest, we're good.
->>>
->>
->> A lot of this TAP output is in the wrappers - hopefully it will be okay.
->> Fingers crossed. :)
->>
->>> Reviewed-by: Kees Cook <keescook@chromium.org>
->>>
->>
->> Looks good to me as well. Thanks for doing this work.
->>
->> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> Would you like me to take this through the docs tree, or do you have
-> other plans for merging?
-> 
 
-Please take this through docs.
+--aY21D3MOZ+5AaGhF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-thanks,
--- Shuah
+On Wed, Dec 08, 2021 at 04:56:48PM -0800, David Collins wrote:
+> On 12/7/21 7:19 AM, Mark Brown wrote:
+> > On Tue, Dec 07, 2021 at 08:36:11PM +0530, Satya Priya Kakitapalli (Temp) wrote:
 
+> > that regulator.  We absolutely can and do expect this to be board
+> > independent, it's a function of the design of the regulator.  Sharing
+> > the input supply has no impact on this, the input voltage that the
+> > regulator needs just get fed into the requiremnts on the supply voltage.
+
+> The PM8008 LDOs are low noise LDOs intended to supply noise sensitive
+> camera sensor hardware.  They can maintain output regulation with a
+> fixed headroom voltage.  However, in order to guarantee high PSRR, the
+> headroom voltage must be scaled according to the peak load expected from
+> the each LDO on a given board.  Thus, we included support for a DT
+> property to specify the headroom per LDO to meet noise requirements
+> across boards.
+
+Interesting...  how much extra headroom are we talking about here?  I'd
+be unsurprised to see this usually just quoted as part of the standard
+headroom requirement and this smells like the sort of thing that's going
+to be frequently misused.  If the gains are something worth writing home
+about I'd think we should consider if it's better to support this
+dynamically at runtime based on load information and provide options for
+configuring the peak load information through DT instead for static
+configurations.  That would fit in with the stuff we have for managing
+modes on DCDCs (which isn't really deployed but is there) and the API we
+have for allowing client drivers to indicate their load requirements at
+runtime that fits in with that.  That'd allow us to only boost the
+headroom when it's really needed.
+
+--aY21D3MOZ+5AaGhF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzwo0ACgkQJNaLcl1U
+h9D5JAf/UH1JxBePimL0+Pp8KDDhkWrq3f8g7S6s1mh2CgcxSnjDVAhmWiFYh22A
+CdS7eEDRRbw9pDfERbScBSjw2NCFKRerD46BS+G/voolysHPatVwe6U/XmayvbJ6
+A8Qkj07rDum73b1g1TmrYA+59rYMgtEFke5167sCmqhfo2XjldWcj89kAmr6+3ej
+YKmkEn5j9ulNqSskq49pY5QdSRAGxnaziUfuLjnbHwuTFQ3Ce59hdYJcmqny8CJp
+gP5pFW4q5Kj4vXHsP+d/Y16qnheo/jaxN4t4z+e8dF+Fdbtg9NIAV58BbsUurGab
+QZHp2ThzZotfK5DdkG17CEvYx5OnDg==
+=3Eej
+-----END PGP SIGNATURE-----
+
+--aY21D3MOZ+5AaGhF--

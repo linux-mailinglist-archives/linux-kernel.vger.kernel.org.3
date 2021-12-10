@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0463470815
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50443470802
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245128AbhLJSJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245121AbhLJSJX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:09:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41DBC061746;
-        Fri, 10 Dec 2021 10:05:47 -0800 (PST)
-Date:   Fri, 10 Dec 2021 18:05:44 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639159545;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D52i6rffDxAdGwjJno0zBuqr5+c3xe4+2s1Z9pitFv8=;
-        b=YyXU1gyNjCwrp+zXmCIVrggmoYjiFfJ2ot1qlbM4TrADgK9HZQvPPAlbw9YRTHpfb7kHAF
-        8ZmQp0AVzeBSbsHETptSBh4c1d6xtH5VARg5pcsJMbsbPWYv97AThrqPuQ2RNDGwVFS1I4
-        oMLPviiNsLAQrYkEW1G1/R2xgdZfyjsTkbfrqHKeaUjO8VXmv0RsBL6HuPMR601GPXbAJx
-        1N7V5cPw4kJCiejd5QiSBrWS7FLlW2JJ3tQ/qW10ORfs9ZAa8iIsYbeUQRnJHZHQoHDNtK
-        ca73KbpsGRKgftEVhyuzEqaboIvFQ6fEysqXwisj2HWPMChdIv0gdUIfT3GgsQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639159545;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D52i6rffDxAdGwjJno0zBuqr5+c3xe4+2s1Z9pitFv8=;
-        b=zXA3ir2nX1fa3iEp/GPsvgfSXMYFapiRL/TkdjAFp1EkulRUKOAbul0eyuBY0QgCLYiNwK
-        rgP5O2Y6npx0JdBw==
-From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/uaccess: Move variable into switch case statement
-Cc:     Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211209043456.1377875-1-keescook@chromium.org>
-References: <20211209043456.1377875-1-keescook@chromium.org>
+        id S245052AbhLJSFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:05:09 -0500
+Received: from mga01.intel.com ([192.55.52.88]:2453 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235392AbhLJSFI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:05:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="262516504"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="262516504"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:01:28 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="463753687"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:01:27 -0800
+Date:   Fri, 10 Dec 2021 10:05:45 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 1/4] ioasid: Reserve a global PASID for in-kernel DMA
+Message-ID: <20211210100545.373c30d1@jacob-builder>
+In-Reply-To: <20211210123109.GE6385@nvidia.com>
+References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <1638884834-83028-2-git-send-email-jacob.jun.pan@linux.intel.com>
+        <YbHie/Z4bIXwTInx@myrica>
+        <20211209101404.6aefbe1c@jacob-builder>
+        <YbMYkKZBktlrB2CR@myrica>
+        <20211210123109.GE6385@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <163915954424.23020.11562895071789645475.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+Hi Jason,
 
-Commit-ID:     7fde7c0d4b5d125b6e6cbb1b22fabed883c7331e
-Gitweb:        https://git.kernel.org/tip/7fde7c0d4b5d125b6e6cbb1b22fabed883c7331e
-Author:        Kees Cook <keescook@chromium.org>
-AuthorDate:    Wed, 08 Dec 2021 20:34:56 -08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 10 Dec 2021 18:04:12 +01:00
+On Fri, 10 Dec 2021 08:31:09 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-x86/uaccess: Move variable into switch case statement
+> On Fri, Dec 10, 2021 at 09:06:24AM +0000, Jean-Philippe Brucker wrote:
+> > On Thu, Dec 09, 2021 at 10:14:04AM -0800, Jacob Pan wrote:  
+> > > > This looks like we're just one step away from device drivers needing
+> > > > multiple PASIDs for kernel DMA so I'm trying to figure out how to
+> > > > evolve the API towards that. It's probably as simple as keeping a
+> > > > kernel IOASID set at first, but then we'll probably want to
+> > > > optimize by having multiple overlapping sets for each device driver
+> > > > (all separate from the SVA set).  
+> > > Sounds reasonable to start with a kernel set for in-kernel DMA once
+> > > we need multiple ones. But I am not sure what *overlapping* sets mean
+> > > here, could you explain?  
+> > 
+> > Given that each device uses a separate PASID table, we could allocate
+> > the same set of PASID values for different device drivers. We just need
+> > to make sure that those values are different from PASIDs allocated for
+> > user SVA.  
+> 
+> Why does user SVA need global values anyhow?
+> 
+Currently, we have mm.pasid for user SVA. mm is global. We could have per
+device PASID for dedicated devices (not shared across mm's), but that would
+make things a lot more complex. I am thinking multiple PASIDs per mm is
+needed, right?
 
-When building with automatic stack variable initialization, GCC 12
-complains about variables defined outside of switch case statements.
-Move the variable into the case that uses it, which silences the warning:
+For VT-d, the shared workqueue (SWQ) requires global PASIDs in that we
+cannot have two processes use the same PASID to submit work on a workqueue
+shared by the two processes. Each process's PASID must be unique to the
+SWQ's PASID table.
 
-./arch/x86/include/asm/uaccess.h:317:23: warning: statement will never be executed [-Wswitch-unreachable]
-  317 |         unsigned char x_u8__; \
-      |                       ^~~~~~
+> Jason
 
-Fixes: 865c50e1d279 ("x86/uaccess: utilize CONFIG_CC_HAS_ASM_GOTO_OUTPUT")
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20211209043456.1377875-1-keescook@chromium.org
----
- arch/x86/include/asm/uaccess.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 33a6840..8ab9e79 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -314,11 +314,12 @@ do {									\
- do {									\
- 	__chk_user_ptr(ptr);						\
- 	switch (size) {							\
--	unsigned char x_u8__;						\
--	case 1:								\
-+	case 1:	{							\
-+		unsigned char x_u8__;					\
- 		__get_user_asm(x_u8__, ptr, "b", "=q", label);		\
- 		(x) = x_u8__;						\
- 		break;							\
-+	}								\
- 	case 2:								\
- 		__get_user_asm(x, ptr, "w", "=r", label);		\
- 		break;							\
+Thanks,
+
+Jacob

@@ -2,92 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1778F46FD50
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BBC46FD54
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239003AbhLJJHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbhLJJHI (ORCPT
+        id S239024AbhLJJHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:07:50 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:54204 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233876AbhLJJHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:07:08 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91F3C061746;
-        Fri, 10 Dec 2021 01:03:32 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id t5so27377081edd.0;
-        Fri, 10 Dec 2021 01:03:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3FhQRn6t8CnGm+vKU1e4eaK8F5RiVgOk+ZEYVd6jVTM=;
-        b=MpTX4LIwGQOk64FZlR6Zm9XEzTqOFKolkPdBF+LiCd75PUsR+0GwBeTagC7UH6vKpn
-         CuePmEhBSfHLPhrPm5mK/CggS4fNvntR+2Qch+lu1rJ1fnRln/yhJYEF5eUV5X2EEEAh
-         LBya7WX/F8E1YTXgYsW8OqF5wwQOq3HgIyFKDlvg7nf9blT1i2i03fFZCJqkI4Hd0dPg
-         ipM4/UqYopjgkhYqloF7xnymsqQzevLiU9L3wAoZ/jis/zkRsT+0+MNUKhto4KEKxcgN
-         pea891DQvu53K2rM0CTrRR0Y1U7n5PcUvLNQdzbTWC8KFUdgjw7n9G4n+GMRNnzChWdp
-         zCTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3FhQRn6t8CnGm+vKU1e4eaK8F5RiVgOk+ZEYVd6jVTM=;
-        b=cKGCNhA8LeC/IwAiy1z55S3Sh49teObg8r9U+aEX2SWrjkgIcCNTXAMBoiTfkeEIXo
-         75vF8PY5Uw99GSizoxOO/aLCmjuZAyzaszNYrgZmqF3o8oCoOpWrjYaFrLUM6AemWwxT
-         6INv9nCtGUCN9XrOQWtCH8sgziAuwXqWWSkesppqzaM5B3y6YwB7Dmt1/Qb6oTGciyoI
-         2UyeteOdd78tpb1VB9NqBrhjwVe8wV3L7wjL7s5rX6ALV/WcdOdTdpp96YKZ/dso/c/b
-         sjyUQl7cKXpaZQSZFVejlR6Zm3iagXOJjYNzEkoJ2UEyMSwPshe23oA/jNSDvcNE0bc8
-         EPoQ==
-X-Gm-Message-State: AOAM533EIXRzeU5STD2+42RdlpTmH357LD34qCchJuEeyNZfcVnqvMzd
-        s70W7NwMqk8sAPakTiRje4M=
-X-Google-Smtp-Source: ABdhPJzbezQ2Rr+2pGhWX7CsmpDgEjqbq16zGPlBm/PJ97py4CtdwygoIL3va5fk2KKHjCfVJxIHSA==
-X-Received: by 2002:a05:6402:2814:: with SMTP id h20mr36690640ede.288.1639127011582;
-        Fri, 10 Dec 2021 01:03:31 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id y19sm1144393edc.17.2021.12.10.01.03.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 01:03:31 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <95bf3dca-c6d1-02c8-40b6-8bb29a3a7a36@redhat.com>
-Date:   Fri, 10 Dec 2021 10:03:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] KVM: x86: avoid out of bounds indices for fixed
- performance counters
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     jmattson@google.com, wanpengli@tencent.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kvm@vger.kernel.org
-References: <20211209191101.288041-1-pbonzini@redhat.com>
- <7a2fc1d7-6ef4-cf4c-5ba0-c0eaefd2c66b@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <7a2fc1d7-6ef4-cf4c-5ba0-c0eaefd2c66b@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Fri, 10 Dec 2021 04:07:49 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6423D1F3A1;
+        Fri, 10 Dec 2021 09:04:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639127054; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=8oGosfmtsBhE4ucZNO9Eshd1EbTR0nF3CaBVGHxV9Ik=;
+        b=J/IAT8H6PPN6TJFkB8uYEmNLkUKxwn/rSvQTLHzJqtyzubIp25IicmAkTSbet6r7RgKXIH
+        +ydYkd7BWUzfCMYe09/dR+sLwsKFO+mBKZIHXJOk+Wix73soVL4AUb9yP+NKPqJmWq0+0Q
+        zalpsMj96wM02rK50pPoGkStNRsWJnA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639127054;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=8oGosfmtsBhE4ucZNO9Eshd1EbTR0nF3CaBVGHxV9Ik=;
+        b=X0Szg4NmJtg9dBJxQCJsnOCeJt1y535/9cTBxe830qWOEffRiO16ChamtQlLertIURYi//
+        z4V9sI7gDCBNFJCA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 585D6A3B92;
+        Fri, 10 Dec 2021 09:04:14 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 10:04:14 +0100
+Message-ID: <s5hzgp8hlv5.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 5.16-rc5
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 09:59, Like Xu wrote:
-> 
-> How about introducing a static "struct x86_pmu_capability" variable [1] 
-> so that we can
-> 
-> (1) setup num_counters_fixed just once in the kvm_init_pmu_capability(), 
-> and
-> (2) avoid repeated calls to perf_get_x86_pmu_capability() ;
+Linus,
 
-Yes, that works.
+please pull sound fixes for v5.16-rc5 from:
 
-> [1] 
-> https://lore.kernel.org/kvm/20210806133802.3528-17-lingshan.zhu@intel.com/
-> By the way, do you need a re-based version of the guest PBES feature ?
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.16-rc5
 
-Sure, please send one.
+The topmost commit is d7f32791a9fcf0dae8b073cdea9b79e29098c5f4
 
-Paolo
+----------------------------------------------------------------
+
+sound fixes for 5.16-rc5
+
+Another collection of small fixes.  It's still not quite calm yet,
+but nothing looks scary.
+
+ALSA core got a few fixes for covering the issues detected by fuzzer
+and the 32bit compat problem of control API, while the rest are all
+device-specific small fixes, including the continued fixes for Tegra.
+
+----------------------------------------------------------------
+
+Alan Young (1):
+      ALSA: ctl: Fix copy of updated id with element read/write
+
+Dan Carpenter (1):
+      ASoC: amd: fix uninitialized variable in snd_acp6x_probe()
+
+David Heidelberg (1):
+      ASoC: dt-bindings: wlf,wm8962: add missing interrupt property
+
+Geraldo Nascimento (1):
+      ALSA: usb-audio: Reorder snd_djm_devices[] entries
+
+Hui Wang (1):
+      ASoC: SOF: Intel: Retry codec probing if it fails
+
+Kailang Yang (1):
+      ALSA: hda/realtek - Add headset Mic support for Lenovo ALC897 platform
+
+Nicolas Frattaroli (1):
+      ASoC: rockchip: i2s_tdm: Dup static DAI template
+
+Rob Clark (2):
+      ASoC: rt5682: Fix crash due to out of scope stack vars
+      ASoC: rt5682s: Fix crash due to out of scope stack vars
+
+Sameer Pujar (6):
+      ASoC: tegra: Balance runtime PM count
+      ASoC: tegra: Use normal system sleep for SFC
+      ASoC: tegra: Use normal system sleep for MVC
+      ASoC: tegra: Use normal system sleep for Mixer
+      ASoC: tegra: Use normal system sleep for AMX
+      ASoC: tegra: Use normal system sleep for ADX
+
+Srinivas Kandagatla (4):
+      ASoC: qdsp6: q6routing: Fix return value from msm_routing_put_audio_mixer
+      ASoC: codecs: wcd934x: handle channel mappping list correctly
+      ASoC: codecs: wcd934x: return correct value from mixer put
+      ASoC: codecs: wsa881x: fix return values from kcontrol put
+
+Takashi Iwai (3):
+      ALSA: pcm: oss: Fix negative period/buffer sizes
+      ALSA: pcm: oss: Limit the period size to 16MB
+      ALSA: pcm: oss: Handle missing errors in snd_pcm_oss_change_params*()
+
+Werner Sembach (1):
+      ALSA: hda/realtek: Fix quirk for TongFang PHxTxX1
+
+---
+ .../devicetree/bindings/sound/wlf,wm8962.yaml      |   3 +
+ sound/core/control_compat.c                        |   3 +
+ sound/core/oss/pcm_oss.c                           |  37 ++++--
+ sound/pci/hda/patch_realtek.c                      |  80 ++++++++++---
+ sound/soc/amd/yc/pci-acp6x.c                       |   3 +-
+ sound/soc/codecs/rt5682.c                          |  10 +-
+ sound/soc/codecs/rt5682s.c                         |  10 +-
+ sound/soc/codecs/wcd934x.c                         | 126 +++++++++++++++------
+ sound/soc/codecs/wsa881x.c                         |  16 ++-
+ sound/soc/qcom/qdsp6/q6routing.c                   |   8 +-
+ sound/soc/rockchip/rockchip_i2s_tdm.c              |  52 +++++----
+ sound/soc/sof/intel/hda-codec.c                    |  14 ++-
+ sound/soc/tegra/tegra210_adx.c                     |   4 +-
+ sound/soc/tegra/tegra210_amx.c                     |   4 +-
+ sound/soc/tegra/tegra210_mixer.c                   |   4 +-
+ sound/soc/tegra/tegra210_mvc.c                     |   8 +-
+ sound/soc/tegra/tegra210_sfc.c                     |   4 +-
+ sound/usb/mixer_quirks.c                           |  10 +-
+ 18 files changed, 274 insertions(+), 122 deletions(-)
+

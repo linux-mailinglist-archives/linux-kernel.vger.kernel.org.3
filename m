@@ -2,187 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE40246FC79
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3094246FC7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238383AbhLJIQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 03:16:12 -0500
-Received: from mga03.intel.com ([134.134.136.65]:52280 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233666AbhLJIQL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 03:16:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639123956; x=1670659956;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=y+UkoDfH++8LvScfQQyFP0eDdb0jrfpLioBALziWpGI=;
-  b=Xzenkg/qhdMiOx7laa7mXVnMcIACTcDMAntAsbOaBaHc3iUW6c4e/PV2
-   Ssc+DuWGKrlM54azvdwX7RbPuMu4Ee70TXgjKSicz/Ul7yjUKOA4iuDZ5
-   KWMvQuErg8ISEShDYlAaRoa/FRaudNdIENUY1nMEPYINMgLSzAxXFv/4O
-   W7+8LMUJqWCAYcpi9b41jgVQmWBKa8kEBebdMAcpjsi+EN/pFIAytzYlS
-   gNN1NwAbkgUyI4NZfN6WO+26G5tT1ZCl7pJImfuaVntxEtY3Cbnze+hOR
-   0bq1wChznJdBIfqaJvxFMpc4CoqpphDIQVN9ePzUuKAG7PQ9bsj9jLHR0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238244435"
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="238244435"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 00:12:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="462460379"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 10 Dec 2021 00:12:36 -0800
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 00:12:35 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Fri, 10 Dec 2021 00:12:35 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Fri, 10 Dec 2021 00:12:35 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jnYJ3QPHVLJK3C+/F3EOuVT5EGuqA62o0WzYfk5/ijMT2FCkq+qFXYYieURN92oiujVRxYneyXRRbYsp7dhsE/MITDDRArDiq/DthVIf2KEEzBvswty7EWFvbLMjt0GOgpvJEKrpXdLjwmg2DBJzq0eB2/ZLaDklj14uy1JQvbQEe/FFBcFajyZ/7Hv+ygHnSq4VezJAdWGo5LSaSqcnQx0XO0TuX6syiooRtaoVyLvUUi4LZdexheAk8FLSskEA+dJP42DzY41MJGbIi3tD6mMjFckf/Y8s2p3lRGgOdCscv5h7JKOYtg2AOCoG7KOg5uClGP2s2PSAcaciscgbhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y+UkoDfH++8LvScfQQyFP0eDdb0jrfpLioBALziWpGI=;
- b=n5lRFdAbZSAXuI5xtQLlOCKvlUadasVU/TlBuv8B0+ZOJYDNJAXNoqMH0pOeNLPu+FNAuYw7275CBUeWDvFh8VqohkU69qUQvZ3DiB7g/Jp/b3HMD+c0dmsDo74CUb9zSny7VZ0C56a9eQLx8ATxsRRE5ze3+j372qYYGLthW4EbNUwdWpUSbJS4+WwHRYfolHRR1naeQeFpuXdWfi7wvr3vPYZlIjXxogfty/cKiSR0xPLhJm1JUDSA7+5nvs5gDjO6fRkYO2zXLejBVYRXNIGSQoDyHsEwjeuBsLkXpyVYZkhQ6GJEOOmZg+4fYaaTyP6I3C2NhedsFkXZ1rSUAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y+UkoDfH++8LvScfQQyFP0eDdb0jrfpLioBALziWpGI=;
- b=ugZosnuEF7ZVN2Hw20AE+HsV63yZ/XljqSxUAsgF3NLNzuER9rzHbPN9wW07OA46i6XbQ0M95r4dm3SHFIixVMtGzIRFcl5pZ0VZKTro++Z+o/xR37/koDJfr8124dQCGBt+7aqdMoVLjkVbZNYYy0OFzvfcJtOG2MaZ2rJ8hGA=
-Received: from BN9PR11MB5545.namprd11.prod.outlook.com (2603:10b6:408:102::19)
- by BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.15; Fri, 10 Dec
- 2021 08:12:34 +0000
-Received: from BN9PR11MB5545.namprd11.prod.outlook.com
- ([fe80::6533:7d95:6f60:aafd]) by BN9PR11MB5545.namprd11.prod.outlook.com
- ([fe80::6533:7d95:6f60:aafd%9]) with mapi id 15.20.4778.015; Fri, 10 Dec 2021
- 08:12:34 +0000
-From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/9] drm/i915/gvt: Constify cmd_interrupt_events
-Thread-Topic: [PATCH 6/9] drm/i915/gvt: Constify cmd_interrupt_events
-Thread-Index: AQHX6P1/nr1Yr7jFgkeB18KlkYt/KqwraWKA
-Date:   Fri, 10 Dec 2021 08:12:33 +0000
-Message-ID: <cf2911d7-dbd0-e38b-4c7d-c197bc4af306@intel.com>
-References: <20211204105527.15741-1-rikard.falkeborn@gmail.com>
- <20211204105527.15741-7-rikard.falkeborn@gmail.com>
-In-Reply-To: <20211204105527.15741-7-rikard.falkeborn@gmail.com>
-Accept-Language: en-FI, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cf609f71-d71b-4f64-ca4b-08d9bbb4d1fa
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN9PR11MB52761EF6A050633F94A30ACECA719@BN9PR11MB5276.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3513;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wZgyVa5uhJzQaM2mSnBkPgzbRFFuLAYnwWmzj6vZbnBJ5tG8mrGNga0FJhnwWLTvaDtnDau9CJPtudBN+d0/jSk5Vu4CiKcMfk0qXxRSXcQQ+e59vCj09pV2aforxF5k8Q1kjkXqQmgQr1srqnmstZXZX40mXDAGOle5mXgKOH+I+h9gv1B6bxO5vg5rIQci5WcfPt4L4fVRG9oIecSXi1YOWg13jk0F3XTNF8wSWm0k5ZAVpC0IVPXarXS4weI1VGWm4YBjFkP4OeICw3EE4oErUS9mxy4CTA+KYLbXhq17YArhxk9BtCeGao7jnnajVJTGf3r8wBhm1Z73IajEVIUFY9r/le50jRRdrYEfleYplUcnmJqFjFIrrS98RkJDbcHEnIz2GKlDTxGEiUApFVMYrOVZGfBFXU/OXEV0fkU4slCzOJZ9WoZf2WGTRUSQrX4W+ay475yQ8O9lBRRgOfD/LIInqgXdQxQbiHR/maKESKqjSrQdlpLp6jcwb1esv5+ExFAau4TAW2fGiLVIvP/n4cTVB0J+82HBDs6Wg2FIrLeG+THKZd8QYlxDGH6rqUuAHD18j9N5aVSkFKxGe6aDuBB/Tbf2gbg1LtvU7MQW5CYB+5o1erJmRuc6qpzecQz0exAsWym6CfYdoKCzmK3lMZthd+p4uiwwUFWRYzwIm0s+KxzeIfZ0KJ/5kkA7ywWSM7P2fDmcMeLTNpFUdtcZdRIepE5LWxHm9JddOaWbaWZLsPrio23SPnWGOmxrLgqyCITv5FyCRdFTjPrCcg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66446008)(66946007)(2616005)(31686004)(36756003)(66556008)(64756008)(91956017)(76116006)(66476007)(6512007)(31696002)(4744005)(83380400001)(7416002)(5660300002)(508600001)(8676002)(8936002)(53546011)(71200400001)(6506007)(38100700002)(186003)(6486002)(38070700005)(4326008)(26005)(122000001)(110136005)(86362001)(82960400001)(316002)(2906002)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WFNNM2Z4Y3Zwa0tJalZ0c2NEOG14eTVJWjNHQ3NPVVhncmtJYUczY2FSRlUr?=
- =?utf-8?B?OW5Tb2NWaUNQOFZKcnZIU1JDaUVlR2JxYmI2YXhsVFlINnpOSnY1RHdNQ3lu?=
- =?utf-8?B?WkZJTk91YkRxRlRtTGNEUzcwWGZlM0FnaEVabitiKzV2L3BpUDNtMHFqWlRw?=
- =?utf-8?B?VzB5eElMNnhzT25TZUpQR1NlV0VTYnYzZUdId245QkhMcU1PUVJwdFlqQzYx?=
- =?utf-8?B?b01JMFVVb3IxK1I1ZXBsdTdTZFhDaTFKWWl0N0RwMXR1bFZjc2lBK3hrbERq?=
- =?utf-8?B?SWRlODgvTzMxbW5aekM2QWNFTGJaOWJqb2xkUVNlTFg3cEg1WUVLT055ajdF?=
- =?utf-8?B?YzFTWTRiRGh0NmdSYkozaklzT1VIZ205VnlNWjF1T3lwZ1FDcktmOUpHZFdF?=
- =?utf-8?B?dU9yMy9wb2daczBaWlR1aFdrbVFQejl4VGh0VkdSZXVJcnVOazQzMVlKL2Rq?=
- =?utf-8?B?eWRGMURNd1dzaUs4dEZ6M3hFVlF2M1A3TVdOTTFhRE8vOE8xYkZEcmJXRE9W?=
- =?utf-8?B?RXE5Z0Q4L0JhbFJsU2V3Z0dWSTBvV2I0WlU1WUl1WTR3UFR3aWJ0bVE4bjl2?=
- =?utf-8?B?SHZvSGZvS2F2UmRCMU9JbDVGV3htalk0OWhIdW5vcWVzQmE5b0EycWtTSVUr?=
- =?utf-8?B?S3oveEswWW5SMEM3ZlB4djZMZUVUQm4xQkcrdDN6SE9UeW1rc3lnQ1pVYWtk?=
- =?utf-8?B?M0g0V0UvVzFCRUgyR09HVWJRcGx1aXdFODFEWFd1QVVTYkVwMmpNbTYzeS9G?=
- =?utf-8?B?dU0zL2k5MFlkZ0paYmVvaVV3TGs4N2R2YmhheG1mOVo0MnlUcGZDYWgzTTU1?=
- =?utf-8?B?QUdKZ1diMWJOVFc2bmpHQy9kSzlVRHJLRDVKY1c0ek1JR1JqalFVeWtmQ0xa?=
- =?utf-8?B?TmxKdzhaR0F4MFJ4OUhoZjk3a1pGNGZJbnRyN29MVlc5RXB0a3FWcWNlS1ds?=
- =?utf-8?B?TjNmWE5KV1ZodWNTUEFNRFRsT0Z0OTBIT2xCU2I3a1hrMmpkTmp4cjV1N29S?=
- =?utf-8?B?OHFQVnhIdnFkSGhwNkE1SUdxN0VFRmJyTTlDOWFuY0luMGprSG50bjN5Z1RM?=
- =?utf-8?B?NmhCQU9xbkhUcTdJWDQ2TzYyc1JCZFU1ZUVablowV3BHLzFBTHU5bEd6cEVC?=
- =?utf-8?B?ZDNQZUtYT2Vtc2wyd0JweXl4ODFRTURudU8xR3ZVdGlwY3JNWFovMnZGOCtB?=
- =?utf-8?B?R3Y2MTZMelZYbTJPUzFjYk1VSFhMNWw3WThlWFl0WktmR2lUM0JQclpmMkF0?=
- =?utf-8?B?Q3FxRzlxRWNUSGtxdnNaZjhCN3hZcDBLY0xNVDlZUGljZnI4TTM4ZEVKTldv?=
- =?utf-8?B?RVZWWU9acGlZRnRkdUoycWphRnBTK1ZlTGhoR0l2aTlOdWJYSWpTZkFTUVRQ?=
- =?utf-8?B?cDdyY3RrK2hmdWpmSFhQRGlVbW5FQjhmc1dqMzgzRzZWSElHR1VobVQxaXly?=
- =?utf-8?B?MFVONjdYTzhFaXFhOWVEQW9kRS8wNndBN21Wa3ZpQURDcTR1N2VVTGpXSFhq?=
- =?utf-8?B?czZVb3M3ZHA5RjVDdERUa3JXeDdyZHFUZkREejBjSWlMRFdNa281MSsreWY4?=
- =?utf-8?B?ak9yTjY0VVJsZWpqUlBMWlhPMnlkZHJ4NGZyOHY5Z1U2NUlPS0RrRlliSU1T?=
- =?utf-8?B?Z29uNExEVWpkV05TZHIxTEFGTHRNcnhIL2F0cTlaa0tMdk1KVTJtV1piUDNw?=
- =?utf-8?B?MEx2RGtlRFZWT3NZZmJhTjFYalRLWGUrOGF6ZXprZGw4VkxsYU5kTllMbE5u?=
- =?utf-8?B?NnB2eWcyc21mL0NpTE5OY29KZkwvRU56aEZBZzd3dmM4SjlEU0M0WTh4dUlR?=
- =?utf-8?B?SlhTcEEvM1hadGZWYkhrRkxhWjhtblFaZ0xPcjVFVmJHSEI2TnJrWGVaL2lI?=
- =?utf-8?B?QTB4R1FGOXAvWmhFaDRaUVgrc1lMbmRKSUlsbGpxTjZxTURzdGNxZXB6U2RZ?=
- =?utf-8?B?eXF5MkJnR0wzN3VjbGlHYWowaDZ5ZXRSaTErM0RRUlFEeVVYaGQvRTFTYy93?=
- =?utf-8?B?WjRvMkVPWVFLYmxpeVdObjVrd2Y5akQxT1RGSldvVzBGMFJCRnZSNnA2Tjhh?=
- =?utf-8?B?TFhEQmRuQU90eVkvQm8veDhHZGhTL0JjTk90NkJFUmhFTGxxMXA5dW11blE3?=
- =?utf-8?B?M1FtQUlXZ29jT3krK2VSUStMQVpnaXlVTVd3NmJGRzV3VGg2cGZsaGdlMVZN?=
- =?utf-8?B?MWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7A3BAD8F3B73A14B8354AA96061DE510@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S233346AbhLJIQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 03:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231716AbhLJIQf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 03:16:35 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955B9C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 00:13:00 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso6876535pjl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 00:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=2UitW/a22qHZy5xKHHYHlOFEb1WRqzGH7Dq8o2PFe2Q=;
+        b=JPzFNwiK2iFaWWHf7bmMKQmQq4SMMySrFIJdUkpi5Qc4ht4RWKF86ObNuwrBI9mGgP
+         j3jJOhnHaJ+LaqotSPZggh5Qp5YnxMI4oYx2RyNibcaBN2506S+1/FXge07DveaGZo/l
+         Hh1MXdW5D53lwAO06m5nX2wPyXCMwW9HjNAILJi/l5yJVW1a4WoKONEJX7iUzRFyTCe/
+         L10PPbubstGcSUmf6Ud49G09QGmTaUV0mVByzjQej9yQ2on7Nj2lbZ1BdBpmBai9dqUl
+         2zEBKZeHFymQoM0SilBGTcUYER4rJzGe1W8xUvfzVjRitL4VN7lOH4XuGjxebopjlIB3
+         +Mzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2UitW/a22qHZy5xKHHYHlOFEb1WRqzGH7Dq8o2PFe2Q=;
+        b=b4sFgokX4kvAhPuYQQoFQqxRrn2kNwvCU6gFqZYM+hyQRnDp21YTsJyhjByAGN2eRo
+         Ys9FX5YHw4/jJhAsQHXZjb4nhxaGLKWRwgbZeJtW46jkME4Wnqy533RPHYXM3aF/CZj5
+         4PgEGblXuLSiNvph6HsXqsZSJEoXzsmUhOVq5t2iL8DFTY5ahdw42TsEiymnk7ThKDmF
+         o6BPiDkPvI+spK5C7W3/JBXN3bzRP+wihU2EHH3BQjJmN1k00QPHmAZL3QDslywO8YDW
+         CQbttusjiW9q0kBL731697abuuFcqkdb18kjDN9rM60OSdbrE7ks0LHkInpDqAObw1Cf
+         mPsw==
+X-Gm-Message-State: AOAM5322tz+F0bueaTv551ivYR8PMdyHRkLSVP4FMwdbDSF+CjFj5NVA
+        /u+VzmhY/Tu2UWY3cilYwGg=
+X-Google-Smtp-Source: ABdhPJxaQ3cxs4XFuaCZRvbdao8/EGWyVW34XMPvxu03qRDAtSQPHRlZIjUP9VNgKOI0LdYXqei/bw==
+X-Received: by 2002:a17:90a:b88d:: with SMTP id o13mr21933558pjr.39.1639123980083;
+        Fri, 10 Dec 2021 00:13:00 -0800 (PST)
+Received: from [30.240.98.4] ([205.204.117.108])
+        by smtp.gmail.com with ESMTPSA id j1sm2218166pfu.47.2021.12.10.00.12.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 00:12:59 -0800 (PST)
+Message-ID: <b0d31df3-c0a2-5c76-ada5-81e2a01ac560@gmail.com>
+Date:   Fri, 10 Dec 2021 16:12:54 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5545.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf609f71-d71b-4f64-ca4b-08d9bbb4d1fa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2021 08:12:34.0131
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hIY6RWCo36MPw4B7YHMWZUHrQXmMdvzaLv96s6GSv9q5RjhNdBvLFbj+pqi9YpNWecHGjOOuVGnhdU0HnM59ZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5276
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [RFC PATCH v2 4/7] mm: make alloc_contig_range work at pageblock
+ granularity
+To:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
+        linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>
+References: <20211209230414.2766515-1-zi.yan@sent.com>
+ <20211209230414.2766515-5-zi.yan@sent.com>
+From:   Eric Ren <renzhengeek@gmail.com>
+In-Reply-To: <20211209230414.2766515-5-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIvNC8yMDIxIDEyOjU1IFBNLCBSaWthcmQgRmFsa2Vib3JuIHdyb3RlOg0KPiBJdCBpcyBu
-ZXZlciBtb2RpZmllZCwgc28gbWFrZSBpdCBjb25zdCB0byBhbGxvdyB0aGUgY29tcGlsZXIgdG8g
-cHV0IGl0DQo+IGluIHJlYWQtb25seSBtZW1vcnkuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IFJpa2Fy
-ZCBGYWxrZWJvcm4gPHJpa2FyZC5mYWxrZWJvcm5AZ21haWwuY29tPg0KPiAtLS0NCj4gICBkcml2
-ZXJzL2dwdS9kcm0vaTkxNS9ndnQvY21kX3BhcnNlci5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFu
-Z2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9ncHUvZHJtL2k5MTUvZ3Z0L2NtZF9wYXJzZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9pOTE1
-L2d2dC9jbWRfcGFyc2VyLmMNCj4gaW5kZXggYzQxMThiODA4MjY4Li5jZTkzMDc1NDZlN2YgMTAw
-NjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9pOTE1L2d2dC9jbWRfcGFyc2VyLmMNCj4gKysr
-IGIvZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3Z0L2NtZF9wYXJzZXIuYw0KPiBAQCAtMTE0NCw3ICsx
-MTQ0LDcgQEAgc3RydWN0IGNtZF9pbnRlcnJ1cHRfZXZlbnQgew0KPiAgIAlpbnQgbWlfdXNlcl9p
-bnRlcnJ1cHQ7DQo+ICAgfTsNCj4gICANCj4gLXN0YXRpYyBzdHJ1Y3QgY21kX2ludGVycnVwdF9l
-dmVudCBjbWRfaW50ZXJydXB0X2V2ZW50c1tdID0gew0KPiArc3RhdGljIGNvbnN0IHN0cnVjdCBj
-bWRfaW50ZXJydXB0X2V2ZW50IGNtZF9pbnRlcnJ1cHRfZXZlbnRzW10gPSB7DQo+ICAgCVtSQ1Mw
-XSA9IHsNCj4gICAJCS5waXBlX2NvbnRyb2xfbm90aWZ5ID0gUkNTX1BJUEVfQ09OVFJPTCwNCj4g
-ICAJCS5taV9mbHVzaF9kdyA9IElOVEVMX0dWVF9FVkVOVF9SRVNFUlZFRCwNCg0KUmV2aWV3ZWQt
-Ynk6IFpoaSBXYW5nIDx6aGkuYS53YW5nQGludGVsLmNvbT4NCg0K
+Hi,
+
+On 2021/12/10 07:04, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+>
+> alloc_contig_range() worked at MAX_ORDER-1 granularity to avoid merging
+> pageblocks with different migratetypes. It might unnecessarily convert
+> extra pageblocks at the beginning and at the end of the range. Change
+> alloc_contig_range() to work at pageblock granularity.
+>
+> It is done by restoring pageblock types and split >pageblock_order free
+> pages after isolating at MAX_ORDER-1 granularity and migrating pages
+> away at pageblock granularity. The reason for this process is that
+> during isolation, some pages, either free or in-use, might have >pageblock
+> sizes and isolating part of them can cause free accounting issues.
+Could you elaborate on how the acconting issue would happen in details?
+
+
+> Restoring the migratetypes of the pageblocks not in the interesting
+> range later is much easier.
+>
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>   mm/page_alloc.c | 169 ++++++++++++++++++++++++++++++++++++++++++------
+>   1 file changed, 149 insertions(+), 20 deletions(-)
+>
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 107a5f186d3b..5ffbeb1b7512 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -8981,8 +8981,8 @@ struct page *has_unmovable_pages(struct zone *zone, struct page *page,
+>   #ifdef CONFIG_CONTIG_ALLOC
+>   static unsigned long pfn_max_align_down(unsigned long pfn)
+>   {
+> -	return pfn & ~(max_t(unsigned long, MAX_ORDER_NR_PAGES,
+> -			     pageblock_nr_pages) - 1);
+> +	return ALIGN_DOWN(pfn, max_t(unsigned long, MAX_ORDER_NR_PAGES,
+> +				     pageblock_nr_pages));
+>   }
+>   
+>   static unsigned long pfn_max_align_up(unsigned long pfn)
+> @@ -9071,6 +9071,52 @@ static int __alloc_contig_migrate_range(struct compact_control *cc,
+>   	return 0;
+>   }
+>   
+> +static inline int save_migratetypes(unsigned char *migratetypes,
+> +				unsigned long start_pfn, unsigned long end_pfn)
+> +{
+> +	unsigned long pfn = start_pfn;
+> +	int num = 0;
+> +
+> +	while (pfn < end_pfn) {
+> +		migratetypes[num] = get_pageblock_migratetype(pfn_to_page(pfn));
+> +		num++;
+> +		pfn += pageblock_nr_pages;
+> +	}
+> +	return num;
+> +}
+> +
+> +static inline int restore_migratetypes(unsigned char *migratetypes,
+> +				unsigned long start_pfn, unsigned long end_pfn)
+> +{
+> +	unsigned long pfn = start_pfn;
+> +	int num = 0;
+> +
+> +	while (pfn < end_pfn) {
+> +		set_pageblock_migratetype(pfn_to_page(pfn), migratetypes[num]);
+> +		num++;
+> +		pfn += pageblock_nr_pages;
+> +	}
+> +	return num;
+> +}
+> +
+> +static inline void split_free_page_into_pageblocks(struct page *free_page,
+> +				int order, struct zone *zone)
+> +{
+> +	unsigned long pfn;
+> +
+> +	spin_lock(&zone->lock);
+> +	del_page_from_free_list(free_page, zone, order);
+> +	for (pfn = page_to_pfn(free_page);
+> +	     pfn < page_to_pfn(free_page) + (1UL << order);
+> +	     pfn += pageblock_nr_pages) {
+> +		int mt = get_pfnblock_migratetype(pfn_to_page(pfn), pfn);
+> +
+> +		__free_one_page(pfn_to_page(pfn), pfn, zone, pageblock_order,
+> +				mt, FPI_NONE);
+> +	}
+> +	spin_unlock(&zone->lock);
+> +}
+> +
+>   /**
+>    * alloc_contig_range() -- tries to allocate given range of pages
+>    * @start:	start PFN to allocate
+> @@ -9096,8 +9142,15 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+>   		       unsigned migratetype, gfp_t gfp_mask)
+>   {
+>   	unsigned long outer_start, outer_end;
+> +	unsigned long isolate_start = pfn_max_align_down(start);
+> +	unsigned long isolate_end = pfn_max_align_up(end);
+> +	unsigned long alloc_start = ALIGN_DOWN(start, pageblock_nr_pages);
+> +	unsigned long alloc_end = ALIGN(end, pageblock_nr_pages);
+What is the differecence between isolate_* and alloc_*?
+> +	unsigned long num_pageblock_to_save;
+>   	unsigned int order;
+>   	int ret = 0;
+> +	unsigned char *saved_mt;
+> +	int num;
+>   
+>   	struct compact_control cc = {
+>   		.nr_migratepages = 0,
+> @@ -9111,11 +9164,30 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+>   	};
+>   	INIT_LIST_HEAD(&cc.migratepages);
+>   
+> +	/*
+> +	 * TODO: make MIGRATE_ISOLATE a standalone bit to avoid overwriting
+> +	 * the exiting migratetype. Then, we will not need the save and restore
+> +	 * process here.
+> +	 */
+> +
+> +	/* Save the migratepages of the pageblocks before start and after end */
+> +	num_pageblock_to_save = (alloc_start - isolate_start) / pageblock_nr_pages
+> +				+ (isolate_end - alloc_end) / pageblock_nr_pages;
+> +	saved_mt =
+> +		kmalloc_array(num_pageblock_to_save,
+> +			      sizeof(unsigned char), GFP_KERNEL);
+> +	if (!saved_mt)
+> +		return -ENOMEM;
+> +
+> +	num = save_migratetypes(saved_mt, isolate_start, alloc_start);
+> +
+> +	num = save_migratetypes(&saved_mt[num], alloc_end, isolate_end);
+the two lines above looks confusing to figure out the logic. Could you 
+help explain a bit?
+
+Thanks,
+Eric
+> +
+>   	/*
+>   	 * What we do here is we mark all pageblocks in range as
+>   	 * MIGRATE_ISOLATE.  Because pageblock and max order pages may
+>   	 * have different sizes, and due to the way page allocator
+> -	 * work, we align the range to biggest of the two pages so
+> +	 * work, we align the isolation range to biggest of the two so
+>   	 * that page allocator won't try to merge buddies from
+>   	 * different pageblocks and change MIGRATE_ISOLATE to some
+>   	 * other migration type.
+> @@ -9125,6 +9197,20 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+>   	 * we are interested in).  This will put all the pages in
+>   	 * range back to page allocator as MIGRATE_ISOLATE.
+>   	 *
+> +	 * Afterwards, we restore the migratetypes of the pageblocks not
+> +	 * in range, split free pages spanning outside the range,
+> +	 * and put split free pages (at pageblock_order) to the right
+> +	 * migratetype list.
+> +	 *
+> +	 * NOTE: the above approach is used because it can cause free
+> +	 * page accounting issues during isolation, if a page, either
+> +	 * free or in-use, contains multiple pageblocks and we only
+> +	 * isolate a subset of them. For example, if only the second
+> +	 * pageblock is isolated from a page with 2 pageblocks, after
+> +	 * the page is free, it will be put in the first pageblock
+> +	 * migratetype list instead of having 2 pageblocks in two
+> +	 * separate migratetype lists.
+> +	 *
+>   	 * When this is done, we take the pages in range from page
+>   	 * allocator removing them from the buddy system.  This way
+>   	 * page allocator will never consider using them.
+> @@ -9135,10 +9221,9 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+>   	 * put back to page allocator so that buddy can use them.
+>   	 */
+>   
+> -	ret = start_isolate_page_range(pfn_max_align_down(start),
+> -				       pfn_max_align_up(end), migratetype, 0);
+> +	ret = start_isolate_page_range(isolate_start, isolate_end, migratetype, 0);
+>   	if (ret)
+> -		return ret;
+> +		goto done;
+>   
+>   	drain_all_pages(cc.zone);
+>   
+> @@ -9174,6 +9259,19 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+>   	 * isolated thus they won't get removed from buddy.
+>   	 */
+>   
+> +	/*
+> +	 * Restore migratetypes of pageblocks outside [start, end)
+> +	 * TODO: remove it when MIGRATE_ISOLATE becomes a standalone bit
+> +	 */
+> +
+> +	num = restore_migratetypes(saved_mt, isolate_start, alloc_start);
+> +
+> +	num = restore_migratetypes(&saved_mt[num], alloc_end, isolate_end);
+> +
+> +	/*
+> +	 * Split free page spanning [isolate_start, alloc_start) and put the
+> +	 * pageblocks in the right migratetype lists.
+> +	 */
+>   	order = 0;
+>   	outer_start = start;
+>   	while (!PageBuddy(pfn_to_page(outer_start))) {
+> @@ -9188,37 +9286,68 @@ int alloc_contig_range(unsigned long start, unsigned long end,
+>   		order = buddy_order(pfn_to_page(outer_start));
+>   
+>   		/*
+> -		 * outer_start page could be small order buddy page and
+> -		 * it doesn't include start page. Adjust outer_start
+> -		 * in this case to report failed page properly
+> -		 * on tracepoint in test_pages_isolated()
+> +		 * split the free page has start page and put the pageblocks
+> +		 * in the right migratetype list
+>   		 */
+> -		if (outer_start + (1UL << order) <= start)
+> -			outer_start = start;
+> +		if (outer_start + (1UL << order) > start) {
+> +			struct page *free_page = pfn_to_page(outer_start);
+> +
+> +			split_free_page_into_pageblocks(free_page, order, cc.zone);
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * Split free page spanning [alloc_end, isolate_end) and put the
+> +	 * pageblocks in the right migratetype list
+> +	 */
+> +	order = 0;
+> +	outer_end = end;
+> +	while (!PageBuddy(pfn_to_page(outer_end))) {
+> +		if (++order >= MAX_ORDER) {
+> +			outer_end = end;
+> +			break;
+> +		}
+> +		outer_end &= ~0UL << order;
+> +	}
+> +
+> +	if (outer_end != end) {
+> +		order = buddy_order(pfn_to_page(outer_end));
+> +
+> +		/*
+> +		 * split the free page has start page and put the pageblocks
+> +		 * in the right migratetype list
+> +		 */
+> +		VM_BUG_ON(outer_end + (1UL << order) <= end);
+> +		{
+> +			struct page *free_page = pfn_to_page(outer_end);
+> +
+> +			split_free_page_into_pageblocks(free_page, order, cc.zone);
+> +		}
+>   	}
+>   
+>   	/* Make sure the range is really isolated. */
+> -	if (test_pages_isolated(outer_start, end, 0)) {
+> +	if (test_pages_isolated(alloc_start, alloc_end, 0)) {
+>   		ret = -EBUSY;
+>   		goto done;
+>   	}
+>   
+>   	/* Grab isolated pages from freelists. */
+> -	outer_end = isolate_freepages_range(&cc, outer_start, end);
+> +	outer_end = isolate_freepages_range(&cc, alloc_start, alloc_end);
+>   	if (!outer_end) {
+>   		ret = -EBUSY;
+>   		goto done;
+>   	}
+>   
+>   	/* Free head and tail (if any) */
+> -	if (start != outer_start)
+> -		free_contig_range(outer_start, start - outer_start);
+> -	if (end != outer_end)
+> -		free_contig_range(end, outer_end - end);
+> +	if (start != alloc_start)
+> +		free_contig_range(alloc_start, start - alloc_start);
+> +	if (end != alloc_end)
+> +		free_contig_range(end, alloc_end - end);
+>   
+>   done:
+> -	undo_isolate_page_range(pfn_max_align_down(start),
+> -				pfn_max_align_up(end), migratetype);
+> +	kfree(saved_mt);
+> +	undo_isolate_page_range(alloc_start,
+> +				alloc_end, migratetype);
+>   	return ret;
+>   }
+>   EXPORT_SYMBOL(alloc_contig_range);
+

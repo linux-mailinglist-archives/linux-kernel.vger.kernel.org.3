@@ -2,145 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E25470826
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF44E470828
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245132AbhLJSOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:14:21 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:18998 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230284AbhLJSOU (ORCPT
+        id S245144AbhLJSPg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 13:15:36 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:41829 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238186AbhLJSPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:14:20 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BAGl270032723;
-        Fri, 10 Dec 2021 12:10:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=6bLw8PV0wGdhrj9qUUUGQ/aTrVjG+S7eK4bUHn3Tqg0=;
- b=iNezJlqF9CtY/fuTW2OpN3XeUvhQXMKZHu1LxS5F1Moh2ztfGItzh6JMJDwjzvBqvakv
- wPMCSrjB1Rm1VUjVRiiF46yKx+HRGgrJ+8qKvYiVeCgykk4etilISlJhi1hmO4npO8YN
- vAEypP41d+QJMHtW00e1iFsIkD8vNbJ8TRa45mclAXCtvfAfsf5k4TRT0azhfwuC3QdR
- MLbs62CQD7zyDKrXBNE4uvg42vaKXtsdPVpBU38AF6u7V8hFBH8lgAdSTpmYDewPRM5u
- u+sK9KoNNYlNDcdd3YXLIXyKG8N9OW+FcAhhEYsQLScy4T3qeQwxnxCnHt2Gv47M1yQv fw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3cvaq6g39j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 10 Dec 2021 12:10:33 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 10 Dec
- 2021 18:10:30 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 10 Dec 2021 18:10:30 +0000
-Received: from [198.61.65.77] (unknown [198.61.65.77])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 070FC7C;
-        Fri, 10 Dec 2021 18:10:29 +0000 (UTC)
-Message-ID: <85e9e11d-a4fc-44a9-55c2-3a4d2de7769d@opensource.cirrus.com>
-Date:   Fri, 10 Dec 2021 18:10:29 +0000
+        Fri, 10 Dec 2021 13:15:33 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-503-g7OqnpiqNHCFDHtPMzzPrA-1; Fri, 10 Dec 2021 13:11:52 -0500
+X-MC-Unique: g7OqnpiqNHCFDHtPMzzPrA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A9C1E344E2;
+        Fri, 10 Dec 2021 18:11:50 +0000 (UTC)
+Received: from x1.com (unknown [10.22.16.188])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CAA1C60CC3;
+        Fri, 10 Dec 2021 18:11:38 +0000 (UTC)
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        John Kacur <jkacur@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
+Subject: [PATCH V9 00/14] RTLA: An interface for osnoise/timerlat tracers
+Date:   Fri, 10 Dec 2021 19:11:19 +0100
+Message-Id: <cover.1639158831.git.bristot@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/3] spi: Revert "spi: Remove unused function
- spi_busnum_to_master()"
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20211202162421.7628-1-sbinding@opensource.cirrus.com>
- <Yan6JVpS50keP2Pl@smile.fi.intel.com>
- <a1f546c2-5c63-573a-c032-603c792f3f7c@redhat.com>
-From:   Lucas tanure <tanureal@opensource.cirrus.com>
-In-Reply-To: <a1f546c2-5c63-573a-c032-603c792f3f7c@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: MglfS8b3EVvK8oP7VMy3cuLPPi0eIGNG
-X-Proofpoint-GUID: MglfS8b3EVvK8oP7VMy3cuLPPi0eIGNG
-X-Proofpoint-Spam-Reason: safe
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bristot@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 11:14, Hans de Goede wrote:
-> Hi,
-> 
-> On 12/3/21 12:06, Andy Shevchenko wrote:
->> On Thu, Dec 02, 2021 at 04:24:19PM +0000, Stefan Binding wrote:
->>> From: Lucas Tanure <tanureal@opensource.cirrus.com>
->>>
->>> Revert commit bdc7ca008e1f ("spi: Remove unused function
->>> spi_busnum_to_master()")
->>> This function is needed for the spi version of i2c multi
->>> instantiate driver.
->>
->> I understand the intention, but I have no clue from this series (it lacks of
->> proper cover letter, it lacks of much better and justified commit message in
->> the patch 3) what is the actual issue. Without these to be provided it's no go
->> for the series. Please, provide much better description what is the actual
->> issue you are trying to solve (from patch 3 my guts telling me that this can
->> be achieved differently without this code being involved).
-> 
-> Yes I assume that eventually there will be a follow-up which will
-> actually add some new ACPI HIDs to the new bus-multi-instantiate.c file ?
-> 
-Yes, we are developing an HDA sound driver for the HID CSC3551,
-which is used for laptops that use SPI or I2C.
-And in that series is where we plan to put a patch to add that HID.
+The rtla(1) is a meta-tool that includes a set of commands that
+aims to analyze the real-time properties of Linux. But instead of
+testing Linux as a black box, rtla leverages kernel tracing
+capabilities to provide precise information about the properties
+and root causes of unexpected results.
 
-> Can we please have (some of) those patches as part of the next
-> version, so that we can see how you will actually use this?
-The series is this one https://lkml.org/lkml/2021/11/23/723, but
-the SPI HID was not ready to be sent in that version, but will be
-part of the next submission.
+To start, it presents an interface to the osnoise and timerlat tracers.
+In the future, it will also serve as home to the rtsl [1] and other
+latency/noise tracers.
 
-> 
-> Also I'm wondering is this actually about ACPI device's having multiple
-> SpiSerialBusV2 resources in a single _CRS resource list ?
-yes, a single _CRS with 2 or 4 SpiSerialBusV2 inside.
+If you just want to run it, you can download the tarball here:
+  - https://bristot.me/files/rtla/tarball/rtla-0.5.tar.bz2
 
-> 
-> Or do you plan to use this for devices with only a single
-> I2cSerialBusV2 or SpiSerialBusV2 resource to e.g. share IRQ lookup
-> code between the 2 cases ?
-No, the minimum number SpiSerialBusV2 or I2cSerialBusV2 inside the
-_CRS is two.
+To compile rtla on fedora you need:
+  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git
+  $ cd libtraceevent/
+  $ make
+  $ sudo make install
+  $ cd ..
+  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git
+  $ cd libtracefs/
+  $ make
+  $ sudo make install
+  $ cd ..
+  $ sudo dnf install python3-docutils procps-devel
+  $ cd $rtla_src
+  $ make
+  $ sudo make install
 
-> 
-> If you plan to use this for devices with only a single
-> I2cSerialBusV2 or SpiSerialBusV2 resource, then I'm going to have to
-> nack this.
-> 
-> Each ACPI HID which needs to be handled in this code also needs an
-> entry in the i2c_multi_instantiate_ids[] list in drivers/acpi/scan.c
-> which is code which ends up loaded on every single ACPI system, so
-> we really only want to add HIDs there for the special case of having
-> multiple I2cSerialBusV2 or SpiSerialBusV2 resources in a single
-> ACPI Device / ACPI fwnode.
-> 
-> If you are looking to use this as a way to share code for other reasons
-> (which is a good goal to strive for!) please find another way, such
-> as e.g. adding some helper functions to drivers/gpio/gpiolib-acpi.c
-> (note there already are a couple of helpers there which you may use).
-No, we only want to multi instantiate SPI or I2C devices from a single _CRS.
+The tracing option (-t) depends some kernel patches that are
+available at [2].
 
-> 
-> Regards,
-> 
-> Hans
-> 
-We sent a request to the laptop vendor about releasing the SPI DSDT, and 
-after that gets cleared, we will send it to you for review. That will 
-likely be next.
+This tool was be discussed at the RT-MC during LPC2021 [3]
 
-Thanks
-Lucas Tanure
+[1] rtsl: https://github.com/bristot/rtsl/
+[2] https://lore.kernel.org/lkml/cover.1635533292.git.bristot@kernel.org/
+[3] https://youtu.be/cZUzc0U1jJ4
+
+Changes from V8:
+  - Fixed usage messages (Tao Zhou)
+  - Fixed some return value check on osnoise.c (Tao Zhou)
+  - Properly delete instances when failing to set priorities (Tao Zhou)
+  - Use tracefs helpers to read/write to files on osnoise.c (Steven)
+Changes from V7:
+  - Add README.txt with information about how to compile the tool
+    (Steven)
+  - Use $$($(PKG_CONFIG) --libs libtracefs) to find libtracefs on
+    Makefile (Steven)
+  - Fix *buffer[4096] (using buffer[4096]) on save_trace_to_file()
+    (Steven)
+Changes from v6:
+  - Revisited osnoise option config functions
+  - Properly handles offline CPUs
+  - Some cleanups
+  - Fixed an histogram allocation problem (Tao Zhou)
+  - Revisited open()/read()/write() (Tao Zhou)
+Changes from v5:
+  - Fix retval check in save_trace_to_file() (Tao Zhou)
+  - Fix goto logic in save_trace_to_file() (Tao Zhou)
+  - Removed unused save_trace_pipe_to_file() function
+  - Correctly handle an error on osnoise_set_* functions during
+    "apply config" for all tools (Tao Zhou)
+Changes from v3:
+  - Add cross-compile support (Ahmed S. Darwish)
+  - Move documentation to Documentation/tools/rtla (Jonathan Corbet)
+  - Use .rst format for documentation (Jonathan Corbet)
+  - Use include option from .rst to group common parts of the documentation
+  - Makefile (main and doc) cleanups
+Changes from v2:
+  - Fix the miss conception of the "size" for kernel histograms (Steven/Tom)
+  - Change the --skip-zeros to --with-zeros option as the former is better
+    for humans (and the latter for computers to plot charts).
+  - A lot of checkpatch fixes for the user-space part.
+Changes from v1:
+  - Fixes -t options on osnoise tracers (-t means --trace for all tools now)
+  - Fixes --bucket-size references (not --bucket_size)
+Daniel Bristot de Oliveira (14):
+  rtla: Real-Time Linux Analysis tool
+  rtla: Helper functions for rtla
+  rtla: Add osnoise tool
+  rtla/osnoise: Add osnoise top mode
+  rtla/osnoise: Add the hist mode
+  rtla: Add timerlat tool and timelart top mode
+  rtla/timerlat: Add timerlat hist mode
+  rtla: Add Documentation
+  rtla: Add rtla osnoise man page
+  rtla: Add rtla osnoise top documentation
+  rtla: Add rtla osnoise hist documentation
+  rtla: Add rtla timerlat documentation
+  rtla: Add rtla timerlat top documentation
+  rtla: Add rtla timerlat hist documentation
+
+ Documentation/tools/rtla/Makefile             |  41 +
+ Documentation/tools/rtla/common_appendix.rst  |  12 +
+ .../tools/rtla/common_hist_options.rst        |  23 +
+ Documentation/tools/rtla/common_options.rst   |  28 +
+ .../tools/rtla/common_osnoise_description.rst |   8 +
+ .../tools/rtla/common_osnoise_options.rst     |  17 +
+ .../rtla/common_timerlat_description.rst      |  10 +
+ .../tools/rtla/common_timerlat_options.rst    |  16 +
+ .../tools/rtla/common_top_options.rst         |   3 +
+ .../tools/rtla/rtla-osnoise-hist.rst          |  66 ++
+ Documentation/tools/rtla/rtla-osnoise-top.rst |  61 ++
+ Documentation/tools/rtla/rtla-osnoise.rst     |  59 ++
+ .../tools/rtla/rtla-timerlat-hist.rst         | 106 +++
+ .../tools/rtla/rtla-timerlat-top.rst          | 145 +++
+ Documentation/tools/rtla/rtla-timerlat.rst    |  57 ++
+ Documentation/tools/rtla/rtla.rst             |  48 +
+ tools/tracing/rtla/Makefile                   | 102 ++
+ tools/tracing/rtla/README.txt                 |  36 +
+ tools/tracing/rtla/src/osnoise.c              | 875 ++++++++++++++++++
+ tools/tracing/rtla/src/osnoise.h              |  91 ++
+ tools/tracing/rtla/src/osnoise_hist.c         | 801 ++++++++++++++++
+ tools/tracing/rtla/src/osnoise_top.c          | 579 ++++++++++++
+ tools/tracing/rtla/src/rtla.c                 |  87 ++
+ tools/tracing/rtla/src/timerlat.c             |  72 ++
+ tools/tracing/rtla/src/timerlat.h             |   4 +
+ tools/tracing/rtla/src/timerlat_hist.c        | 822 ++++++++++++++++
+ tools/tracing/rtla/src/timerlat_top.c         | 618 +++++++++++++
+ tools/tracing/rtla/src/trace.c                | 192 ++++
+ tools/tracing/rtla/src/trace.h                |  27 +
+ tools/tracing/rtla/src/utils.c                | 433 +++++++++
+ tools/tracing/rtla/src/utils.h                |  56 ++
+ 31 files changed, 5495 insertions(+)
+ create mode 100644 Documentation/tools/rtla/Makefile
+ create mode 100644 Documentation/tools/rtla/common_appendix.rst
+ create mode 100644 Documentation/tools/rtla/common_hist_options.rst
+ create mode 100644 Documentation/tools/rtla/common_options.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_description.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_options.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_options.rst
+ create mode 100644 Documentation/tools/rtla/common_top_options.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
+ create mode 100644 Documentation/tools/rtla/rtla.rst
+ create mode 100644 tools/tracing/rtla/Makefile
+ create mode 100644 tools/tracing/rtla/README.txt
+ create mode 100644 tools/tracing/rtla/src/osnoise.c
+ create mode 100644 tools/tracing/rtla/src/osnoise.h
+ create mode 100644 tools/tracing/rtla/src/osnoise_hist.c
+ create mode 100644 tools/tracing/rtla/src/osnoise_top.c
+ create mode 100644 tools/tracing/rtla/src/rtla.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.h
+ create mode 100644 tools/tracing/rtla/src/timerlat_hist.c
+ create mode 100644 tools/tracing/rtla/src/timerlat_top.c
+ create mode 100644 tools/tracing/rtla/src/trace.c
+ create mode 100644 tools/tracing/rtla/src/trace.h
+ create mode 100644 tools/tracing/rtla/src/utils.c
+ create mode 100644 tools/tracing/rtla/src/utils.h
+
+-- 
+2.31.1
 

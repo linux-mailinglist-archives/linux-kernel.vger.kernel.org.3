@@ -2,81 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97669470810
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9301847080F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245102AbhLJSI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:08:57 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4247 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240017AbhLJSI5 (ORCPT
+        id S245107AbhLJSIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:08:45 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:52312 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241522AbhLJSIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:08:57 -0500
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J9f0G3hr0z67mFG;
-        Sat, 11 Dec 2021 02:03:26 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 19:05:20 +0100
-Received: from [10.47.93.58] (10.47.93.58) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 10 Dec
- 2021 18:05:19 +0000
-Subject: Re: [PATCH v2 01/11] iommu/iova: Fix race between FQ timeout and
- teardown
-To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
-        <will@kernel.org>
-CC:     <iommu@lists.linux-foundation.org>,
-        <suravee.suthikulpanit@amd.com>, <baolu.lu@linux.intel.com>,
-        <willy@infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, Xiongfeng Wang <wangxiongfeng2@huawei.com>
-References: <cover.1639157090.git.robin.murphy@arm.com>
- <ecea6835baca75b945bd8ecfaa636ff01dabcc1d.1639157090.git.robin.murphy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <03cbd9c4-0f11-895b-8eb5-1b75bb74d37c@huawei.com>
-Date:   Fri, 10 Dec 2021 18:04:53 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Fri, 10 Dec 2021 13:08:44 -0500
+Received: from callcc.thunk.org (guestnat-104-133-8-106.corp.google.com [104.133.8.106] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BAI54B1001820
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 13:05:05 -0500
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 834714205DB; Fri, 10 Dec 2021 13:05:03 -0500 (EST)
+Date:   Fri, 10 Dec 2021 13:05:03 -0500
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] fs: ext4: possible ABBA deadlock in
+ ext4_inline_data_truncate() and ext4_punch_hole()
+Message-ID: <YbOWz7tvA6DuXcrw@mit.edu>
+References: <03a92134-ce74-f586-59a0-baed436b275a@gmail.com>
+ <YbI2IEzCVo+A6GTi@mit.edu>
+ <c9f25d5a-0963-5b2d-b1f0-e7c7454f7153@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <ecea6835baca75b945bd8ecfaa636ff01dabcc1d.1639157090.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.93.58]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9f25d5a-0963-5b2d-b1f0-e7c7454f7153@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 17:54, Robin Murphy wrote:
-> From: Xiongfeng Wang<wangxiongfeng2@huawei.com>
+On Fri, Dec 10, 2021 at 10:03:37AM +0800, Jia-Ju Bai wrote:
 > 
-> It turns out to be possible for hotplugging out a device to reach the
-> stage of tearing down the device's group and default domain before the
-> domain's flush queue has drained naturally. At this point, it is then
-> possible for the timeout to expire just*before*  the del_timer() call
+> Thank you very much for the detailed explanation!
+> I will improve my static analysis tool for this point.
 
-super nit: "just*before*  the" - needs a whitespace before "before" :)
+I'm not sure it will be possible to programatically detect why the
+ABBA deadlock isn't possible without having the static analyzer having
+a semantic understanding how the code works (so it can understand that
+that code path which leads to the ABBA deadlock won't get executed).
 
-> from free_iova_flush_queue(), such that we then proceed to free the FQ
-> resources while fq_flush_timeout() is still accessing them on another
-> CPU. Crashes due to this have been observed in the wild while removing
-> NVMe devices.
-> 
-> Close the race window by using del_timer_sync() to safely wait for any
-> active timeout handler to finish before we start to free things. We
-> already avoid any locking in free_iova_flush_queue() since the FQ is
-> supposed to be inactive anyway, so the potential deadlock scenario does
-> not apply.
-> 
-> Fixes: 9a005a800ae8 ("iommu/iova: Add flush timer")
-> Signed-off-by: Xiongfeng Wang<wangxiongfeng2@huawei.com>
-> [ rm: rewrite commit message ]
-> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+It may very well be that being able to understand why the ABBA
+deadlock can't happen in that case is equivalent to solving the
+halting problem.  But if you do come up with a clever way of improving
+your static analysis tool, I'll be excited to see it!
 
-FWIW,
+Cheers,
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+					- Ted

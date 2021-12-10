@@ -2,165 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D391846FDB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC2E46FDBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbhLJJaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:30:12 -0500
-Received: from mga17.intel.com ([192.55.52.151]:37032 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236305AbhLJJaL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:30:11 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="219002710"
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="219002710"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 01:26:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="659501299"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 10 Dec 2021 01:26:33 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 10 Dec 2021 11:26:32 +0200
-Date:   Fri, 10 Dec 2021 11:26:32 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        id S236454AbhLJJbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:31:43 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:40784 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232385AbhLJJbl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 04:31:41 -0500
+Received: from [10.180.13.84] (unknown [10.180.13.84])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxqsiDHbNhktAFAA--.12340S2;
+        Fri, 10 Dec 2021 17:27:40 +0800 (CST)
+Subject: Re: [PATCH v1 2/2] usb: core: enable remote wakeup function for usb
+ controller
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        mathias.nyman@linux.intel.com, rajatja@google.com,
+        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuyinbo@loongson.cn,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Rajat Jain <rajatja@google.com>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] acpi: Store _PLD information and convert users
-Message-ID: <YbMdSACYtmH0/UhE@kuha.fi.intel.com>
-References: <20211207143757.21895-1-heikki.krogerus@linux.intel.com>
- <CACeCKaf3_sqGbqh22Qe+7xEcajCTZt=WziqtPuzgGxW=-TPXbg@mail.gmail.com>
- <YbHVDikM6eodP/MR@kuha.fi.intel.com>
- <CACeCKaeYRWxS1kPX6TvQHvn_5H_u-+MKWmdh5XQeCdZ-Wj93Hw@mail.gmail.com>
+References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
+ <1638956391-20149-2-git-send-email-zhuyinbo@loongson.cn>
+ <YbEsCSwYLgQefQxU@rowland.harvard.edu>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <fbd46e52-054c-8aea-2f06-3af74c95e5e0@loongson.cn>
+Date:   Fri, 10 Dec 2021 17:27:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKaeYRWxS1kPX6TvQHvn_5H_u-+MKWmdh5XQeCdZ-Wj93Hw@mail.gmail.com>
+In-Reply-To: <YbEsCSwYLgQefQxU@rowland.harvard.edu>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxqsiDHbNhktAFAA--.12340S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw1UAF4fXr48XrW3tF4ruFg_yoW5uFW7pa
+        y8JF1rKr4UXrWFkrsrur95Gw13Ga1vya4rCas7A34qg3srA340kr95tr43tayDXrZ8uF4F
+        q3y8WFy8W3WUCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 11:45:27AM -0800, Prashant Malani wrote:
-> Hey Heikki,
+
+
+ÔÚ 2021/12/9 ÉÏÎç6:04, Alan Stern Ð´µÀ:
+> On Wed, Dec 08, 2021 at 05:39:51PM +0800, Yinbo Zhu wrote:
+>> The remote wake up function is a regular function on usb device and
+>> I think keeping it enabled by default will make the usb application
+>> more convenient and usb device remote wake up function keep enabled
+>> that ask usb controller remote wake up was enabled at first.
+>>
+>> This patch only enable wake up on usb root hub device, among which,
 > 
-> On Thu, Dec 9, 2021 at 2:06 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > Thanks for testing these..
-> >
-> > On Wed, Dec 08, 2021 at 07:45:26PM -0800, Prashant Malani wrote:
-> > > Hi Heikki,
-> > >
-> > > On Tue, Dec 7, 2021 at 6:37 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > This removes the need for the drivers to always separately evaluate
-> > > > the _PLD. With the USB Type-C connector and USB port mapping this
-> > > > allows us to start using the component framework and remove the custom
-> > > > APIs.
-> > > >
-> > > > So far the only users of the _PLD information have been the USB
-> > > > drivers, but it seems it will be used also at least in some camera
-> > > > drivers later. These nevertheless touch mostly USB drivers.
-> > > >
-> > > > Rafael, is it still OK if Greg takes these?
-> > > >
-> > > > Prashant, can you test these?
-> > >
-> > > I've applied the patches to a system with the requisite _PLD entries
-> > > in firmware, and I'm not sure I can see the connectors getting created
-> > > correctly.
-> > >
-> > > My setup is:
-> > >
-> > > Chromebook ------> Dell WD19TB dock (in USB+DisplayPort Alternate
-> > > Mode) ----> USB Thumb drive.
-> > >
-> > > Here is the lsusb -t output before connecting the dock (omitting
-> > > unrelated busses):
-> > > localhost ~ # lsusb -t
-> > > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
-> > >
-> > > Here is the lsusb -t output (omitting unrelated busses):
-> > > localhost ~ # lsusb -t
-> > > /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/3p, 10000M/x2
-> > >     |__ Port 2: Dev 15, If 0, Class=Hub, Driver=hub/4p, 10000M
-> > >         |__ Port 3: Dev 16, If 0, Class=Hub, Driver=hub/4p, 5000M
-> > >             |__ Port 3: Dev 18, If 0, Class=Mass Storage,
-> > > Driver=usb-storage, 5000M
-> > >         |__ Port 4: Dev 17, If 0, Class=Vendor Specific Class,
-> > > Driver=r8152, 5000M
-> > >
-> > > I see the connector symlink for the root hub:
-> > >
-> > > localhost ~ # cd /sys/bus/usb/devices
-> > > localhost /sys/bus/usb/devices # ls 2-2/port/connector
-> > > data_role  device  firmware_node  port1-cable  port1-partner  power
-> > > power_operation_mode  power_role  preferred_role  subsystem
-> > > supported_accessory_modes  uevent  usb2-port2  usb3-port2
-> > > usb_power_delivery_revision  usb_typec_revision  vconn_source
-> > >
-> > > But for none of the children devices:
-> > >
-> > > localhost /sys/bus/usb/devices # ls 2-2.3/port/connector
-> > > ls: cannot access '2-2.3/port/connector': No such file or directory
-> > > localhost /sys/bus/usb/devices # ls 2-2.3.3/port/connector
-> > > ls: cannot access '2-2.3.3/port/connector': No such file or directory
-> > > localhost /sys/bus/usb/devices # ls 2-2.3\:1.0/port/connector
-> > > ls: cannot access '2-2.3:1.0/port/connector': No such file or directory
-> > > localhost /sys/bus/usb/devices # ls 2-2.3.3\:1.0/port/connector
-> > > ls: cannot access '2-2.3.3:1.0/port/connector': No such file or directory
-> > >
-> > > Is this as you intended with the series? My interpretation was that
-> > > each connected usb device would get a "connector" symlink, but I may
-> > > have misinterpreted this.
-> >
-> > It is as intended. The usb ports on the board will have the connector
-> > symlink, not the devices attached to them - the firmware is only aware
-> > of the connectors on the board of course. It looks like this series is
-> > working as it should.
+> You say the patch only affects root hub devices, but this doesn't appear
+> to be true.
 > 
-> Thanks for clarifying my understanding here.
+>> usb3.0 root hub doesn't be set wakeup node property but use command
+>> USB_INTRF_FUNC_SUSPEND to enable remote wake up function.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   drivers/usb/core/hub.c | 20 ++++++++++++++++++--
+>>   include/linux/usb.h    |  4 +++-
+>>   2 files changed, 21 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index 86658a8..cb4b956 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -2509,6 +2509,8 @@ static void set_usb_port_removable(struct usb_device *udev)
+>>    */
+>>   int usb_new_device(struct usb_device *udev)
+>>   {
+>> +	struct usb_host_config *config;
+>> +	int ncfg;
+>>   	int err;
+>>   
+>>   	if (udev->parent) {
+>> @@ -2540,6 +2542,18 @@ int usb_new_device(struct usb_device *udev)
+>>   	udev->dev.devt = MKDEV(USB_DEVICE_MAJOR,
+>>   			(((udev->bus->busnum-1) * 128) + (udev->devnum-1)));
+>>   
+>> +	for (ncfg = 0; ncfg < udev->descriptor.bNumConfigurations; ncfg++) {
+>> +		config = &udev->config[ncfg];
+>> +		if ((config->desc.bmAttributes & (1 << 5)) == 0)
+>> +			break;
+>> +		if (ncfg + 1 == udev->descriptor.bNumConfigurations) {
+>> +			err = usb_enable_remote_wakeup(udev);
+>> +			if (err)
+>> +				dev_dbg(&udev->dev,
+>> +				      "won't remote wakeup, err %d\n", err);
+>> +		}
+>> +	}
 > 
-> >
-> > If you want to extend this solution so that also every device in the
-> > usb topology will have the link to the connector on board, then that
-> > should be now possible, but that is out side of the scope of this
-> > series. You need to propose that separately.
-> >
-> > But I must ask, why can't you just walk down the topology until you
-> > reach the on-board ports that will have the connector links?
-> >
+> I don't see anything in there which treats root hubs differently from
+> other devices.
 > 
-> Right, we can certainly do that; having it in each device is just
-> convenient. But as you said, that's the subject of another series.
+Hi Alan Stern,
+
+You can find following code, non-root-hub had removed Wakeup sysfs 
+attributes and disabled wakeup and root-hub had added wakeup sysfs 
+attibutes before call usb_new_device, so this patch was only enabled
+remote wakeup for root-hub device.
+int usb_new_device(struct usb_device *udev)
+{
+         if (udev->parent) {
+                 /* Initialize non-root-hub device wakeup to disabled;
+                  * device (un)configuration controls wakeup capable
+                  * sysfs power/wakeup controls wakeup enabled/disabled
+                  */
+                 device_init_wakeup(&udev->dev, 0);
+         }
+
+> Besides, enabling wakeup for root hubs is generally a bad idea.  Suppose
+> you closed a laptop's lid and then unplugged a USB device -- with wakeup
+> enabled, the unplug would cause the laptop to wake up again without your
+> knowledge.
 > 
-> You mentioned there would be a v2, so I'll add my Tested-By then.
+> Alan Stern
+when closed laptop's lid and then unplugged a non-hid usb device it 
+doesn't cause laptop to wakeup. and if that usb device is hid type and 
+cause laptop into wakeup state then system will continue into suspend 
+state becuase system ask that need accepted a acpi lid open event.
+and for laptop usb wakeup that as general ask bios to enable usb wakeup 
+then if need do more things to enable usb wakeup I think this usb wakeup 
+function isn't friendly and inconveient, so enable it by default.
+after add this patch, if want to use usb wakeup function it only need 
+enable bios configure it think it is appropriate.
 
-Great!
+BRs,
+Yinbo.
+> 
 
-I don't know does this help you, or if this is exactly what you had in
-mind, but I am planning to link the USB device attached to the
-connector to the USB Type-C partner device that we have (the USB
-device attached to the connector is the Type-C partner).
-
-So in your example, the Dell dock USB hub will have the symlink to
-the Type-C partner device, but the USB mass storage device attached to
-the dock will not (because it's not our USB Type-C partner - the dock
-is our USB Type-C partner).
-
-But I want to do that separately, as the next step in any case.
-
-thanks,
-
--- 
-heikki

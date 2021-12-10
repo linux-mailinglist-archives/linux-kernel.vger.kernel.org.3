@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391B7470C60
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D402A470C65
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243722AbhLJVUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238034AbhLJVUy (ORCPT
+        id S243435AbhLJVVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:21:31 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:42596 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237428AbhLJVVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:20:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4280C061746;
-        Fri, 10 Dec 2021 13:17:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9DC5EB829D7;
-        Fri, 10 Dec 2021 21:17:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFF3C00446;
-        Fri, 10 Dec 2021 21:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639171036;
-        bh=5IhiPw2RvqrosQfP1NnT+2qXeY8kkmX4/rnA3yxNXyo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZhzDJ3HZt5QVAcDohjJqajvEEjGkbJ94hY/I+WhLVmXvPuq2LvTfKq+D4sPkwMmdb
-         vpU1EzBThIzV1cueMlSIaZ/MN2iXmJSc095okHi1/1OaLQhfgP+n007U1cQixCCWcZ
-         1SUWTIZeBbVpuQt1bjpRrb7NEsFcHpRf6fwncS28w09atrCiEM3qMldV7x7EQ1Yphn
-         S9p1AsNpFV65zwVLjcoEH0HT4QN2DwiRk/K+RXjZZ5WZrrjxTdnyZ0TdHgXA6Dghp4
-         CdM0OItFgy0ryLne5mruYdFGsUNHLWZVTmeGjYDvkfnJPK5Net9lwQOHdIHFz0Z1t1
-         aRlw3dCbwX5UA==
-From:   broonie@kernel.org
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: linux-next: manual merge of the akpm-current tree with the folio tree
-Date:   Fri, 10 Dec 2021 21:17:11 +0000
-Message-Id: <20211210211711.3472866-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 10 Dec 2021 16:21:30 -0500
+Received: by mail-oi1-f174.google.com with SMTP id n66so14914699oia.9;
+        Fri, 10 Dec 2021 13:17:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q0bPerVgAjvBuE/PcLA6saZylIAAwjAD+Ufdm6YbSp0=;
+        b=X24PQiWhvN2BHsiG+gMb5z4ihQ3QemkKzEycQBQAbv+XYmL/2xY1X6pKpUqXJ1hNu4
+         DwiRECEtgAJoge44aPu3DMxpZmEmIQ6ndA1y+F5yU3ou7NDMRemg7u6IVG2uvxFufbNg
+         SkyGeJ8sZmsciVelc+xdPACjVbyApryowRRi2tk/7PXqTEGFrrAVhDPVkuol6WmuRUnz
+         LMwml+0eRKXcrJKqOSB/7jzL8Wu351dtAuH04ROLwX3Nr1rtx+XTAr6HSS+wO/T1LfFu
+         nvHMch+DL1k2z/MPzhV9oxf94eICeX1vdRxEy1M2/S1ej5tuiIOlXhKma9UcoVqO7cok
+         hQYg==
+X-Gm-Message-State: AOAM5337hvzpWa71uJPiiAWBUzvIk2A9xxMHCB16tbhDgTVQ0yxRBvKa
+        BqAMvNAQhJabgxq+AWR+Ag==
+X-Google-Smtp-Source: ABdhPJz2u2x7Bu7qvex+Re/WcUxmkShg6AZtjjoYaPNtDL5dTDsqyPg1NFLveQRPAb4o7r8aYE602g==
+X-Received: by 2002:a05:6808:3c6:: with SMTP id o6mr14779782oie.145.1639171074705;
+        Fri, 10 Dec 2021 13:17:54 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r26sm699244otn.15.2021.12.10.13.17.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 13:17:54 -0800 (PST)
+Received: (nullmailer pid 1914880 invoked by uid 1000);
+        Fri, 10 Dec 2021 21:17:52 -0000
+Date:   Fri, 10 Dec 2021 15:17:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
+        perex@perex.cz, tiwai@suse.com, rohitkr@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v5 2/5] dt-bindings: pinctrl: qcom: Add sc7280 lpass lpi
+ pinctrl bindings
+Message-ID: <YbPEAAeH69Q93Wm9@robh.at.kernel.org>
+References: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com>
+ <1638891339-21806-3-git-send-email-quic_srivasam@quicinc.com>
+ <7ae29aa1-34da-c362-5712-4b787474d7f2@linaro.org>
+ <bde0c8b0-7244-1bd1-84b6-8efab4f01fa2@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bde0c8b0-7244-1bd1-84b6-8efab4f01fa2@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Wed, Dec 08, 2021 at 03:41:25PM +0530, Srinivasa Rao Mandadapu wrote:
+> 
+> On 12/8/2021 2:54 PM, Srinivas Kandagatla wrote:
+> Thanks froYour time Srini!!!
+> > 
+> > On 07/12/2021 15:35, Srinivasa Rao Mandadapu wrote:
+> > > Add device tree binding Documentation details for Qualcomm SC7280
+> > > LPASS LPI pinctrl driver.
+> > > 
+> > > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> > > Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> > > Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> > > ---
+> > 
+> > 
+> > I remember in my previous review that I requested you to use git mv for
+> > renaming this
+> Yes. Created patch with "git mv" and commit. Not sure why diff is not as
+> expected.
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+The 'git mv' is not what matters. You need the -M option for 
+git-format-patch/send-email. There's a config option you can enable that 
+by default.
 
-  mm/migrate.c
-
-between commit:
-
-  2871d169178ba ("filemap: Add folio_put_wait_locked()")
-
-from the folio tree and commit:
-
-  dfbfdd72f50ce ("mm/migrate.c: rework migration_entry_wait() to not take a pageref")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc mm/migrate.c
-index 7079e6b7dbe7d,d487a399253b0..0000000000000
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@@ -302,17 -303,10 +303,9 @@@ void __migration_entry_wait(struct mm_s
-  	if (!is_migration_entry(entry))
-  		goto out;
-  
- -	page = pfn_swap_entry_to_page(entry);
- -	page = compound_head(page);
- +	folio = page_folio(pfn_swap_entry_to_page(entry));
-  
-- 	/*
-- 	 * Once page cache replacement of page migration started, page_count
-- 	 * is zero; but we must not call folio_put_wait_locked() without
-- 	 * a ref. Use folio_try_get(), and just fault again if it fails.
-- 	 */
-- 	if (!folio_try_get(folio))
-- 		goto out;
-- 	pte_unmap_unlock(ptep, ptl);
-- 	folio_put_wait_locked(folio, TASK_UNINTERRUPTIBLE);
- -	migration_entry_wait_on_locked(page_folio(page), ptep, ptl);
-++	migration_entry_wait_on_locked(folio, ptep, ptl);
-  	return;
-  out:
-  	pte_unmap_unlock(ptep, ptl);
+Rob

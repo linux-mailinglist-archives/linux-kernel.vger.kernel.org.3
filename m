@@ -2,103 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7187846F94E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC48146F951
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236114AbhLJCss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 21:48:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbhLJCsr (ORCPT
+        id S236124AbhLJCt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 21:49:59 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:51230 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231175AbhLJCt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 21:48:47 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F70C061746;
-        Thu,  9 Dec 2021 18:45:13 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id m24so5315867pls.10;
-        Thu, 09 Dec 2021 18:45:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CR0Sv/RHFjpYBPdNl9D85z+uzaMDDyhH8oNdgJWoQd8=;
-        b=Q4PHNtHcCw8VjNpbVTcfLE7u89BSRU00VE94oECO4lq7yzUphXulq/IBM4gT8kj60B
-         0LI/VrmDdI40hgkVJUwsncLQftZVSvaMGVtsSaIoiRXyIEB2KelkzYP9t2xjCOGpAYip
-         5IEMBWyQ4XfuHZUQlbEj9qfjhsmCaLkGdeAaJheteAtlOW+lim3UJHH9ytG+s7lw0ge3
-         dbqXbWfQ2aOHhhLQxnce86wJnU26JitpssXIkCH/G8yqdU7koJmgjJxsuHLvWvBux17r
-         wJsWGvvor9O9Hy0z7KL1EU8QAIA9fsqjnaMVTvYTj9lU+n7GuFHKKIRZ24tWJ5JgSPeG
-         Xz/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CR0Sv/RHFjpYBPdNl9D85z+uzaMDDyhH8oNdgJWoQd8=;
-        b=XI6mCHJhUg1RDrpV77sTNpnk2bU8Ka+3LL/qnKJTAW81YmDtylkUAf1frqr2c9Yo4y
-         UeQl3Cp9Ef/E/s9fxUEoekmppsFQNKiQ+GySJqTsq0q1BsGhpEofugHZ0akcb2vQ8UGk
-         xR5Eo5QZ1Yw5/HtIpoJHRkaU4OGsMBiUKwl6hUGA6W4Jlv++/Uafu+pT5lR55tT6GNVK
-         dq165oGJvrwah+TD3BXSXIPEBEqzoSzqTfrMgX/aOEM0haC9oO/EtDJ4oCo0L1GEJgz2
-         XiHaCmxWRBYVDP9ZBI31JMeDSU7DnPm19CHrue4khQ+nzFoSEfSSRdojtV4FIBW3y/kU
-         kS2g==
-X-Gm-Message-State: AOAM530dfrP+H22jEZsVnmc3QUd3D1H47nQApnbEXTev7mLfiYFKggRo
-        vtsjnX/l8Dj11s8Vjg+KvSc=
-X-Google-Smtp-Source: ABdhPJypGBckEw8gWMSmN8AvKaFY2+1GEm9j1UK3AZVois0vmUDOfBeTgWfkwZ7VmWoizq5kRsEvlA==
-X-Received: by 2002:a17:90b:3a85:: with SMTP id om5mr20713643pjb.28.1639104313418;
-        Thu, 09 Dec 2021 18:45:13 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z2sm1066860pfh.188.2021.12.09.18.45.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 18:45:13 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, chi.minghao@zte.com.cn,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cm>
-Subject: [PATCH clk-next] drivers/clk: remove unneeded variable make code cleaner
-Date:   Fri, 10 Dec 2021 02:44:46 +0000
-Message-Id: <20211210024446.425056-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Dec 2021 21:49:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6BC8BCE25DC;
+        Fri, 10 Dec 2021 02:46:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5690FC004DD;
+        Fri, 10 Dec 2021 02:46:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639104381;
+        bh=atO7jbYOHFpTryIkCpFbTf+3j8DZXUNfXnO5Dzs9RuM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X+cAA4AT9eSedVgKPvO2NglqcxMWmSQuYGLS0rifg8oHMdXrkMF4XJ6S4FLDGfIUO
+         kMyf7FvQwPIyV2tE9tsUfc0K5+9DdfKXnKKHO7XLoU58ba2P/oH1pY2aiPKhRY1ACn
+         jUq+3IDldOcfVTe/qFHWSYBR0dq7tORMrQay48NMJEKAWAyl3utUqXusRK4kreUIhF
+         QGV4PlbYg7+WYaj715+ogmr0KjdA8xdvH/11NTikq4wLX5CaIbjoOzu7cLbnJMzDdk
+         UDx0PiJAFvj9UUHVXE2eYKDO78Suc1roWOuFey4TMHVDMFjYSRzK6O5TnJ7W0PJDGB
+         Oi/D0vQ/e9VTA==
+Date:   Thu, 9 Dec 2021 18:46:20 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        skhan@linuxfoundation.org
+Subject: Re: [PATCH] selftests: icmp_redirect: pass xfail=0 to log_test()
+ for non-xfail cases
+Message-ID: <20211209184620.78d02085@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211208071151.63971-1-po-hsu.lin@canonical.com>
+References: <20211208071151.63971-1-po-hsu.lin@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed,  8 Dec 2021 15:11:51 +0800 Po-Hsu Lin wrote:
+> If any sub-test in this icmp_redirect.sh is failing but not expected
+> to fail. The script will complain:
+>     ./icmp_redirect.sh: line 72: [: 1: unary operator expected
+> 
+> This is because when the sub-test is not expected to fail, we won't
+> pass any value for the xfail local variable in log_test() and thus
+> it's empty. Fix this by passing 0 as the 4th variable to log_test()
+> for non-xfail cases.
+> 
+> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
 
-return value form directly instead of
-taking this in another redundant variable.
-
-Reported-by: Zeal Robot <zealci@zte.com.cm>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/clk/mvebu/armada-37xx-tbg.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/clk/mvebu/armada-37xx-tbg.c b/drivers/clk/mvebu/armada-37xx-tbg.c
-index 585a02e0b330..fc403ad735ad 100644
---- a/drivers/clk/mvebu/armada-37xx-tbg.c
-+++ b/drivers/clk/mvebu/armada-37xx-tbg.c
-@@ -87,7 +87,7 @@ static int armada_3700_tbg_clock_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	struct clk *parent;
- 	void __iomem *reg;
--	int i, ret;
-+	int i;
- 
- 	hw_tbg_data = devm_kzalloc(&pdev->dev,
- 				   struct_size(hw_tbg_data, hws, NUM_TBG),
-@@ -123,9 +123,7 @@ static int armada_3700_tbg_clock_probe(struct platform_device *pdev)
- 			dev_err(dev, "Can't register TBG clock %s\n", name);
- 	}
- 
--	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, hw_tbg_data);
--
--	return ret;
-+	return of_clk_add_hw_provider(np, of_clk_hw_onecell_get, hw_tbg_data);
- }
- 
- static int armada_3700_tbg_clock_remove(struct platform_device *pdev)
--- 
-2.25.1
-
+Thanks, could you please add a fixes tag (even if the breakage is only
+present in linux-next) and CC David Ahern on v2?

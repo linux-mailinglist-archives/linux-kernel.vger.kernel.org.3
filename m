@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26581470019
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2CB470072
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240657AbhLJLjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:39:18 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16365 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240600AbhLJLjM (ORCPT
+        id S240881AbhLJMLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbhLJMLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:39:12 -0500
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J9TN01fwWz92ly;
-        Fri, 10 Dec 2021 19:34:56 +0800 (CST)
-Received: from localhost.huawei.com (10.175.124.27) by
- canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 19:35:35 +0800
-From:   Li Jinlin <lijinlin3@huawei.com>
-To:     <song@kernel.org>, <philipp.reisner@linbit.com>,
-        <lars.ellenberg@linbit.com>, <axboe@kernel.dk>, <hare@suse.de>,
-        <jack@suse.cz>, <ming.lei@redhat.com>, <tj@kernel.org>,
-        <mcgrof@kernel.org>
-CC:     <linux-raid@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linfeilong@huawei.com>
-Subject: [PATCH v3 3/3] drbd: Remove useless variable in struct drbd_device
-Date:   Fri, 10 Dec 2021 20:06:31 +0800
-Message-ID: <20211210120631.2578505-4-lijinlin3@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211210120631.2578505-1-lijinlin3@huawei.com>
-References: <20211210120631.2578505-1-lijinlin3@huawei.com>
+        Fri, 10 Dec 2021 07:11:31 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE0C061746;
+        Fri, 10 Dec 2021 04:07:56 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id t5so28916864edd.0;
+        Fri, 10 Dec 2021 04:07:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nj7aP+DT5LdcUR+5nEFGqEHWsnVehVd/fkoHc9nNYc4=;
+        b=PhzM3O1qKcQ6YnFuTodoI7J8Z5uhpIMeuJx8RqlbzOzof2j0B6UdH5KOD+SOTHa0N3
+         PM6y2bII+meR0KzImjli57ZPHMHaamPbDdJ56NIWPXQW4qJ82ZBgUF1rILyur0lf6TGo
+         Nj6OFNLNWLyEzg10MLoZxC3P1TzkpOiDfHu6u2h8YlhzsvZVYl8c4BbV3p463PGqDx15
+         Q8W2b2arNtQ4MDSo75tLzzUg5OaLvUEMF4pTXpoEQZIpkijgvXTk6TJnoeFtcIBRW2uF
+         bhmpXNCDm7Z/G9xVyJMXeb0TGD+iP15y92UaPhIeIYJRqXffDEQUAmhQOR0pzsOZ7Bja
+         kg8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nj7aP+DT5LdcUR+5nEFGqEHWsnVehVd/fkoHc9nNYc4=;
+        b=7U/eVgNcmjKfAlOBnraduYF3rlWSEDU/6yPiLfhqElVsEwlRAthYG0XwDGdjDQ7hWR
+         Te5TGOs5ZemLxCb6egSeq9giINhyzIJUgeB+n/wjVUCcHF86PRdWRqY8FqXKWsTslPDf
+         56BwY2JdYd3N8hydwaH3dHkdXJPlnxl6SexGsfw5rJgZBbfS7+qaVn4GFYsBpnPLG/mp
+         IstNGHbKXIVhE//rivEsEmj4CvqEuWors3nqcYm7I+Fh0LeWZcTW3VGZFRGVW6DEBNmJ
+         4FHwT3dR8PmJUCFisVChAwi1b+6hLmPlRCO3UgXJN84RQAFtbuJoOth4g4xDIEAaWIL0
+         VKJA==
+X-Gm-Message-State: AOAM531qGoxymq4W2ZXZZP6lg9bc69H/5vFwAP+jaZ5qv4PAWnRdAqoZ
+        shP5KoniBoDzdKoVdZDRzOc=
+X-Google-Smtp-Source: ABdhPJxM8AmICWv2HgQ8A1RCPyWqAzT+vD4vNLzvjcG0RW1U58Rr9OllD13q/j4OJf7YTLam2+qihg==
+X-Received: by 2002:a17:906:ff47:: with SMTP id zo7mr23315986ejb.148.1639138074679;
+        Fri, 10 Dec 2021 04:07:54 -0800 (PST)
+Received: from [192.168.10.118] ([93.56.170.1])
+        by smtp.googlemail.com with ESMTPSA id bd12sm1337669edb.11.2021.12.10.04.07.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 04:07:54 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <636dd644-8160-645a-ce5a-f4eb344f001c@redhat.com>
+Date:   Fri, 10 Dec 2021 13:07:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500008.china.huawei.com (7.192.105.151)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
+ kvm_apic_update_apicv
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+ <20211209115440.394441-6-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211209115440.394441-6-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rs_last_sect_ev is unused since added in 1d7734a0df02, so just remove it.
+On 12/9/21 12:54, Maxim Levitsky wrote:
+> It is possible that during the AVIC incomplete IPI vmexit,
+> its handler will set irr_pending to true,
+> but the target vCPU will still see the IRR bit not set,
+> due to the apparent lack of memory ordering between CPU's vIRR write
+> that is supposed to happen prior to the AVIC incomplete IPI
+> vmexit and the write of the irr_pending in that handler.
 
-Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
----
- drivers/block/drbd/drbd_int.h    | 1 -
- drivers/block/drbd/drbd_main.c   | 1 -
- drivers/block/drbd/drbd_state.c  | 1 -
- drivers/block/drbd/drbd_worker.c | 1 -
- 4 files changed, 4 deletions(-)
+Are you sure about this?  Store-to-store ordering should be 
+guaranteed---if not by the architecture---by existing memory barriers 
+between vmrun returning and avic_incomplete_ipi_interception().  For 
+example, srcu_read_lock implies an smp_mb().
 
-diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
-index 1b71adc07e83..a163141aff1b 100644
---- a/drivers/block/drbd/drbd_int.h
-+++ b/drivers/block/drbd/drbd_int.h
-@@ -955,7 +955,6 @@ struct drbd_device {
- 	char congestion_reason;  /* Why we where congested... */
- 	atomic_t rs_sect_in; /* for incoming resync data rate, SyncTarget */
- 	atomic64_t rs_sect_ev; /* for submitted resync data rate, both */
--	int rs_last_sect_ev; /* counter to compare with */
- 	s64 rs_last_events;  /* counter of read or write "events" (unit sectors)
- 			      * on the lower level device when we last looked. */
- 	int c_sync_rate; /* current resync rate after syncer throttle magic */
-diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index ea057bd60541..f1fa03c69809 100644
---- a/drivers/block/drbd/drbd_main.c
-+++ b/drivers/block/drbd/drbd_main.c
-@@ -2046,7 +2046,6 @@ void drbd_device_cleanup(struct drbd_device *device)
- 	device->rs_total     =
- 	device->rs_failed    = 0;
- 	device->rs_last_events = 0;
--	device->rs_last_sect_ev = 0;
- 	for (i = 0; i < DRBD_SYNC_MARKS; i++) {
- 		device->rs_mark_left[i] = 0;
- 		device->rs_mark_time[i] = 0;
-diff --git a/drivers/block/drbd/drbd_state.c b/drivers/block/drbd/drbd_state.c
-index b8a27818ab3f..4a6c69133c62 100644
---- a/drivers/block/drbd/drbd_state.c
-+++ b/drivers/block/drbd/drbd_state.c
-@@ -1389,7 +1389,6 @@ _drbd_set_state(struct drbd_device *device, union drbd_state ns,
- 
- 		set_ov_position(device, ns.conn);
- 		device->rs_start = now;
--		device->rs_last_sect_ev = 0;
- 		device->ov_last_oos_size = 0;
- 		device->ov_last_oos_start = 0;
- 
-diff --git a/drivers/block/drbd/drbd_worker.c b/drivers/block/drbd/drbd_worker.c
-index a4edd0a9c875..45ae4abd355a 100644
---- a/drivers/block/drbd/drbd_worker.c
-+++ b/drivers/block/drbd/drbd_worker.c
-@@ -1829,7 +1829,6 @@ void drbd_start_resync(struct drbd_device *device, enum drbd_conns side)
- 		device->rs_failed    = 0;
- 		device->rs_paused    = 0;
- 		device->rs_same_csum = 0;
--		device->rs_last_sect_ev = 0;
- 		device->rs_total     = tw;
- 		device->rs_start     = now;
- 		for (i = 0; i < DRBD_SYNC_MARKS; i++) {
--- 
-2.27.0
+Even more damning: no matter what internal black magic the processor 
+could be using to write to IRR, the processor needs to order the writes 
+against reads of IsRunning on processors without the erratum.  That 
+would be equivalent to flushing the store buffer, and it would imply 
+that the write of vIRR is ordered before the write to irr_pending.
 
+Paolo

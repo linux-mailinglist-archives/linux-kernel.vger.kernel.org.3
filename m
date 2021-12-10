@@ -2,192 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B3C46FDF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F32246FDF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234478AbhLJJle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:41:34 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:38360 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236751AbhLJJl3 (ORCPT
+        id S236751AbhLJJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234418AbhLJJlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:41:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2FA35CE28A2;
-        Fri, 10 Dec 2021 09:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBDAC341C8;
-        Fri, 10 Dec 2021 09:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639129070;
-        bh=wRKuYYJKuw1ebIvxw48pFuiBZnozL0DgSyvF4pTa46c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dicbruZtf0j2yGls3KVEuV63MM9K5HE+yQuVgJR/4RTlaFVEEP0xOuY2f3fzxQ0gw
-         SrdN9M1ao2t56+3fCA7QQSVgpV5AACHzUZSwr2clvO52EtOfO/ZgtuY5cw/FGaoTuu
-         rcoXgTUxYcsyMUs7c5y6zTWTQbq1ht3xJKQACZNUpmhXne+mo2+B1ynA7eAp4OrNM3
-         GxSbAc+hVon6tJhvccsLCIJIKNUkMNk7IoThvNZhA1JarMbiekCr+JSQVlZ5nUdmbj
-         ryHbpPxLECQATsdSpnz6ifmzUosInDC4vKH6heuAOJX4qN3jlUFvk8oWchmRE2lcvo
-         oK9EJybDWKvjA==
-Message-ID: <c9b64943-a92f-f2f9-b149-33a51a97d7a3@kernel.org>
-Date:   Fri, 10 Dec 2021 11:37:45 +0200
+        Fri, 10 Dec 2021 04:41:50 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2B8C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:38:15 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id y13so27636471edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:38:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lnSC0oPA74xXphqTUrAfWYOjkXGp9TR1WBEge7TYOuk=;
+        b=zpo8Yt3DXY7Aa9C5uHM+HnQg/xmHtWMBE4d+dOsubhAk8OTSg2CHd/Fe5tq5AOWCPM
+         0UEeWmUzCap2pMuVjiT8N7Hr1V9m9YTkHyn7I4FDEPiPPYunoOVUEPIoXRR6QI1rMEhE
+         JBz7Tg8jObxzKsBQqn8+M/lbbVlpiuPJrqoFuD8wQWIk4z57l9Mn9/vGQZj/goLDL73e
+         78PETL2rNOCeJyuXclfx0brTb5KCAEiUKq2Vc9wBIehLhEMPYdgh7NO1miwxrmvsy7Qn
+         +fDWgMsVsUap8cWKZQZhEMTi7J98SfiWcJJV4360L7EK+kA4RYd+WkGPriP4yB5PgBmM
+         EiyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lnSC0oPA74xXphqTUrAfWYOjkXGp9TR1WBEge7TYOuk=;
+        b=6n3oUtal0w5j+ptJ+IA972Gap8ysbG2pYgznVVmSo7iZcj5jf7LsrOI24a6Ggr7iHg
+         9HgfTePzq949xC9MlMQKIK6JX7USgFhNTKcTjoqGsPvsxzfpniiQdFF82lqbvd7bIe0B
+         WzuR0LvPo5CGomrmOeJY6tiLcnZAsmjDfdzdD19F5y5yE8jwb7Ti1k0jPjvLkZqkTZrh
+         8gDuBhK36hh8cZvyrGtzQQaCerltbUZehCVkGovEoHLUPMcjIaAiDLTODxwb+/dTp6/u
+         sh/P6lkegHaem36bVmCna3a7o7nsP34jt6G/8biH5/WZUOEE+hJ87G3/BzTvZkxZH2tk
+         ntLg==
+X-Gm-Message-State: AOAM532wb1cLaSJylcp0zF74nLNHiHQ+XnskSupLoHorRcOfh7OCdP06
+        MPPbPLtmiMvmUAYpvtm7AoJz0SzTLuoHhai/zR4iTw==
+X-Google-Smtp-Source: ABdhPJyPwVyIwSj06w+L4sreBbqtfdfsLZ0+9elsr2R+3MQ74JN0wytEhoWO5Tkuhv3hN+kter53oIgD+4HEMKVf0XQ=
+X-Received: by 2002:a05:6402:5146:: with SMTP id n6mr37298563edd.126.1639129094299;
+ Fri, 10 Dec 2021 01:38:14 -0800 (PST)
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 09/13] arm64: dts: qcom: sm8450: add interconnect nodes
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        viveka@codeaurora.org
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211209103505.197453-1-vkoul@kernel.org>
- <20211209103505.197453-10-vkoul@kernel.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20211209103505.197453-10-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211206120533.602062-1-xiaolei.wang@windriver.com>
+ <CAFA6WYN+0751=feb-O9Drmm5V_Gz-1qsgiHmLsA88=49MoK_dg@mail.gmail.com>
+ <PH0PR11MB507734019F54C2BB24D1456F95719@PH0PR11MB5077.namprd11.prod.outlook.com>
+ <CAFA6WYMOHUEve8cbZdwzsijer3fRsy=50q67ndsC6U2JD6gK5Q@mail.gmail.com> <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org>
+In-Reply-To: <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Fri, 10 Dec 2021 10:38:03 +0100
+Message-ID: <CAN5uoS9xv-kKpC4E6-muYdh59g8XPSDfbquk5=DbQ4GmiVk-PA@mail.gmail.com>
+Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
+To:     Jerome Forissier <jerome@forissier.org>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+Hello all,
 
-On 9.12.21 12:35, Vinod Koul wrote:
-> And the various interconnect nodes found in SM8450 SoC and use it for
-> UFS controller.
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8450.dtsi | 80 ++++++++++++++++++++++++++++
->   1 file changed, 80 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 9556d2fc46e0..f75de777f6ea 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -7,6 +7,7 @@
->   #include <dt-bindings/clock/qcom,gcc-sm8450.h>
->   #include <dt-bindings/clock/qcom,rpmh.h>
->   #include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interconnect/qcom,sm8450.h>
->   #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->   
->   / {
-> @@ -573,6 +574,61 @@ uart7: serial@99c000 {
->   			};
->   		};
->   
-> +		config_noc: interconnect@1500000 {
-> +			compatible = "qcom,sm8450-config-noc";
-> +			reg = <0 0x01500000 0 0x1c000>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		mc_virt: interconnect@1580000 {
-> +			compatible = "qcom,sm8450-mc-virt";
-> +			reg = <0 0x01580000 0 0x1000>;
+On Fri, 10 Dec 2021 at 09:10, Jerome Forissier <jerome@forissier.org> wrote:
+>
+> +CC Jens, Etienne
+>
+> On 12/10/21 06:00, Sumit Garg wrote:
+> > On Fri, 10 Dec 2021 at 09:42, Wang, Xiaolei <Xiaolei.Wang@windriver.com> wrote:
+> >>
+> >> -----Original Message-----
+> >> From: Sumit Garg <sumit.garg@linaro.org>
+> >> Sent: Thursday, December 9, 2021 7:41 PM
+> >> To: Wang, Xiaolei <Xiaolei.Wang@windriver.com>
+> >> Cc: jens.wiklander@linaro.org; op-tee@lists.trustedfirmware.org; linux-kernel@vger.kernel.org
+> >> Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
+> >>
+> >> [Please note: This e-mail is from an EXTERNAL e-mail address]
+> >>
+> >> On Mon, 6 Dec 2021 at 17:35, Xiaolei Wang <xiaolei.wang@windriver.com> wrote:
+> >>>
+> >>> We observed the following kmemleak report:
+> >>> unreferenced object 0xffff000007904500 (size 128):
+> >>>   comm "swapper/0", pid 1, jiffies 4294892671 (age 44.036s)
+> >>>   hex dump (first 32 bytes):
+> >>>     00 47 90 07 00 00 ff ff 60 00 c0 ff 00 00 00 00  .G......`.......
+> >>>     60 00 80 13 00 80 ff ff a0 00 00 00 00 00 00 00  `...............
+> >>>   backtrace:
+> >>>     [<000000004c12b1c7>] kmem_cache_alloc+0x1ac/0x2f4
+> >>>     [<000000005d23eb4f>] tee_shm_alloc+0x78/0x230
+> >>>     [<00000000794dd22c>] optee_handle_rpc+0x60/0x6f0
+> >>>     [<00000000d9f7c52d>] optee_do_call_with_arg+0x17c/0x1dc
+> >>>     [<00000000c35884da>] optee_open_session+0x128/0x1ec
+> >>>     [<000000001748f2ff>] tee_client_open_session+0x28/0x40
+> >>>     [<00000000aecb5389>] optee_enumerate_devices+0x84/0x2a0
+> >>>     [<000000003df18bf1>] optee_probe+0x674/0x6cc
+> >>>     [<000000003a4a534a>] platform_drv_probe+0x54/0xb0
+> >>>     [<000000000c51ce7d>] really_probe+0xe4/0x4d0
+> >>>     [<000000002f04c865>] driver_probe_device+0x58/0xc0
+> >>>     [<00000000b485397d>] device_driver_attach+0xc0/0xd0
+> >>>     [<00000000c835f0df>] __driver_attach+0x84/0x124
+> >>>     [<000000008e5a429c>] bus_for_each_dev+0x70/0xc0
+> >>>     [<000000001735e8a8>] driver_attach+0x24/0x30
+> >>>     [<000000006d94b04f>] bus_add_driver+0x104/0x1ec
+> >>>
+> >>> This is not a memory leak because we pass the share memory pointer to
+> >>> secure world and would get it from secure world before releasing it.
+> >>
+> >>> How about if it's actually a memory leak caused by the secure world?
+> >>> An example being secure world just allocates kernel memory via OPTEE_SMC_RPC_FUNC_ALLOC and doesn't free it via OPTEE_SMC_RPC_FUNC_FREE.
+> >>
+> >>> IMO, we need to cross-check optee-os if it's responsible for leaking kernel memory.
+> >>
+> >> Hi sumit,
+> >>
+> >> You mean we need to check whether there is a real memleak,
+> >> If being secure world just allocate kernel memory via OPTEE_SMC_PRC_FUNC_ALLOC and until the end, there is no free
+> >> It via OPTEE_SMC_PRC_FUNC_FREE, then we should judge it as a memory leak, wo need to judge whether it is caused by secure os?
+> >
+> > Yes. AFAICT, optee-os should allocate shared memory to communicate
+> > with tee-supplicant. So once the communication is done, the underlying
+> > shared memory should be freed. I can't think of any scenario where
+> > optee-os should keep hold-off shared memory indefinitely.
+>
+> I believe it can happen when OP-TEE's CFG_PREALLOC_RPC_CACHE is y. See
+> the config file [1] and the commit which introduced this config [2].
+>
+> [1] https://github.com/OP-TEE/optee_os/blob/3.15.0/mk/config.mk#L709
+> [2] https://github.com/OP-TEE/optee_os/commit/8887663248ad
+>
 
-Is there really a register space for this noc?
+It's been a while since OP-TEE caches some shm buffers to prevent
+re-allocting them on and on.
+OP-TEE does so for 1 shm buffer per "tee threads" OP-TEE has provisioned.
+Each thread can cache a shm reference.
+Note that used RPCs from optee to linux/u-boot/ree do not require such
+message buffer (IMO).
 
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		system_noc: interconnect@1680000 {
-> +			compatible = "qcom,sm8450-system-noc";
-> +			reg = <0 0x01680000 0 0x1e200>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		pcie_noc: interconnect@16c0000 {
-> +			compatible = "qcom,sm8450-pcie-anoc";
-> +			reg = <0 0x016c0000 0 0xe280>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		aggre1_noc: interconnect@16e0000 {
-> +			compatible = "qcom,sm8450-aggre1-noc";
-> +			reg = <0 0x016e0000 0 0x1c080>;
-> +			#interconnect-cells = <1>;
-> +			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		aggre2_noc: interconnect@1700000 {
-> +			compatible = "qcom,sm8450-aggre2-noc";
-> +			reg = <0 0x01700000 0 0x31080>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +			clocks = <&gcc GCC_AGGRE_NOC_PCIE_0_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +				 <&rpmhcc RPMH_IPA_CLK>;
-> +		};
-> +
-> +		mmss_noc: interconnect@1740000 {
-> +			compatible = "qcom,sm8450-mmss-noc";
-> +			reg = <0 0x01740000 0 0x1f080>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
->   		tcsr_mutex: hwlock@1f40000 {
->   			compatible = "qcom,tcsr-mutex";
->   			reg = <0x0 0x01f40000 0x0 0x40000>;
-> @@ -816,6 +872,13 @@ rpmhcc: clock-controller {
->   			};
->   		};
->   
-> +		gem_noc: interconnect@19100000 {
-> +			compatible = "qcom,sm8450-gem-noc";
-> +			reg = <0 0x19100000 0 0xbb800>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
->   		ufs_mem_hc: ufshc@1d84000 {
->   			compatible = "qcom,sm8450-ufshc", "qcom,ufshc",
->   				     "jedec,ufs-2.0";
-> @@ -832,6 +895,9 @@ ufs_mem_hc: ufshc@1d84000 {
->   
->   			iommus = <&apps_smmu 0xe0 0x0>;
->   
-> +			interconnects = <&aggre1_noc MASTER_UFS_MEM &mc_virt SLAVE_EBI1>,
-> +					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_UFS_MEM_CFG>;
-> +			interconnect-names = "ufs-ddr", "cpu-ufs";
->   			clock-names =
->   				"core_clk",
->   				"bus_aggr_clk",
-> @@ -887,6 +953,20 @@ ufs_mem_phy_lanes: lanes@1d87400 {
->   				#clock-cells = <0>;
->   			};
->   		};
-> +
-> +		nsp_noc: interconnect@320c0000 {
-> +			compatible = "qcom,sm8450-nsp-noc";
-> +			reg = <0 0x320c0000 0 0x10000>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		lpass_ag_noc: interconnect@3c40000 {
+The main issue is the shm buffer are allocated per optee thread
+(thread context assigned to client invocation request when entreing
+optee).
+Therefore, if an optee thread caches a shm buffer, it makes the caller
+tee session to have a shm reference with a refcount held, until Optee
+thread releases its cached shm reference.
 
-Nit: This should move up, if we want to order them by node address.
+There are ugly side effects. Linux must disable the cache to release
+all resources.
+We recently saw some tee sessions may be left open because of such shm
+refcount held.
+It can lead to few misbehaviour of the TA service (restarting a
+service, releasing a resource)
 
-> +			compatible = "qcom,sm8450-lpass-ag-noc";
-> +			reg = <0 0x3c40000 0 0x17200>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
->   	};
+Config switch CFG_PREALLOC_RPC_CACHE was introduced [pr4896] to
+disable the feature at boot time.
+There are means to not use it, or to explicitly enable/disable it at
+run time (already used optee smc services for that). Would maybe be a
+better default config.
+Note this discussion thread ending at his comment [issue1918]:
 
-I don't see a DT node for clk_virt, are you planning to add this later?
+Comments are welcome. I may have missed something in the description
+(or understanding :).
 
-Thanks,
-Georgi
+[pr4896] https://github.com/OP-TEE/optee_os/pull/4896
+[issue1918] https://github.com/OP-TEE/optee_os/issues/1918#issuecomment-968747738
 
+Best regards,
+etienne
+
+
+
+> --
+> Jerome

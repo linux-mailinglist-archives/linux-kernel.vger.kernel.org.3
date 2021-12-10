@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A0F4708D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFBB4708DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242063AbhLJSgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:36:16 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:34439 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbhLJSgO (ORCPT
+        id S245416AbhLJSgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245388AbhLJSgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:36:14 -0500
-Received: by mail-ot1-f49.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso10512528otj.1;
-        Fri, 10 Dec 2021 10:32:38 -0800 (PST)
+        Fri, 10 Dec 2021 13:36:43 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25B9C0617A1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:33:07 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id r25so32205522edq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:33:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R+5wfzvY98r911pdlNHS5MRZhjqkHPF9SqDy5RQ+nGs=;
+        b=0FrAeyHRpiQDLNRCH38LGYEW5OlercFk3DROOyI+5MF4Aiw8BvLF+GCTJpv3NKxJy8
+         w6XzrFa0A4VvMMlEU5z/Z298tMnaEJKBq6VeGIjX+thf/iO5KbDMg1BG2s0ux0pQV0XL
+         L0w0pukiLEDpC5eKc8vPyhFf4+3+6sceGamqAVhs5Kn+fhrwpRXew7EnfGZfjV1KOpOo
+         GsbDXtupxwNXVLa7onRj0aOr7ByIMeeLVr8b9i5Ih2ez3BMkuu+Noz8qQcPqLFM956T3
+         mU1cLd9j/5Aeb5XROTdKgsLG6YeZUnyInnb8MjJCX3TEKg+E78spgZbNmQA8jGbD++MV
+         Xm+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XYFeMefDtygzQHG6cGasFJft83PyhMCvIHgML7JQ1W8=;
-        b=BT8rQ4Lwys6f0lHis7r+7jzL1KmTsfZlI2M6WpJdgfDrW3ZbR5zdfZwpIlyp3Hp6RS
-         pk3HfiMPTZPvnPYMsNynL64Vew06v83zWSayDb2GcA2Kv3BmS9uxJuRCg9iBWb9mMErO
-         tNlccmuVurJkG5/Ykst8sU6MiwvbV6Md0TZp5DcCcSlEFyeA51i9kzNaeyEjQBwakkNc
-         Hhldlrgl/1v3LWbWLFmC7fKf6hnNdAECtE7mNXhCwU0p/SIgT2QGrEQswtJ+GrFP3auU
-         oCFP/ayzlf+HGIsoP/YBFB/MWEoZoczZUBvb5HjKLP7kS8lkOVhqPGve8FS96GEK2rws
-         m/Yg==
-X-Gm-Message-State: AOAM532QPLjoi1gQbvHvSzI9O8ifmbE8jvJ0y7c+iB2plRn4xo272OkU
-        TnDYvx/sJYHs/OI68cqHvO7dlLh2t5NpN6wVLp8=
-X-Google-Smtp-Source: ABdhPJy/ApH2I9ley83OfAtDiEoSWuJBoE9Gqun3QKF0IviB+39TRacgd3bR+5yVv4MXsqS5F4aemy99lcaDR84MB0I=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr12642134otu.254.1639161158278;
- Fri, 10 Dec 2021 10:32:38 -0800 (PST)
+        bh=R+5wfzvY98r911pdlNHS5MRZhjqkHPF9SqDy5RQ+nGs=;
+        b=wBG1sM1+SgOMLNfXEqbZdiSWvt7GC2kFD5kXtK0AnNRcQAQJj1GE/5TaxO/CQTz6Tr
+         U8O01zYusMaENH7LkKY/smA30lSiZzfyj5mLpCOo4xgt/ibqYU38IUkEjf5LDgQWuzIB
+         X8SctjQRyWYFydwyJoFH62W46TOMCkEFeQNrTtf55md4fYmP9sMmstMz6pFfdgUYyMMO
+         FwKWzZAzHsGXw8cNLGJNE1bW6WhrqM2opjcfW7Obaaw3couIlFCCOtmsruP4lMlQvSP+
+         D+etYhXIOzI3jRIGQ+ovHuGLzytCEYa62NQ93VvlJn2zCKYiJRZmlzGa0G68wyjk5zsA
+         q4wA==
+X-Gm-Message-State: AOAM531qsmcvcdTHWvb28Iu/UQyJIZE0w6bqq5x7zWpqwgxJHgJRet4s
+        KUs75OMTdtfavQvxteMwirHxQ28sUBQBIOCukgGriQ==
+X-Google-Smtp-Source: ABdhPJw2lS/O2yAfLVTw6WVq78ELyMdt5/AEs5anuvPRPowAgkoa3NmZtsHE2c0DEj0r6fuPtxiB7KX0gypvQotrn6Q=
+X-Received: by 2002:aa7:c30e:: with SMTP id l14mr40506518edq.370.1639161186439;
+ Fri, 10 Dec 2021 10:33:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-7-digetx@gmail.com>
-In-Reply-To: <20211126180101.27818-7-digetx@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Dec 2021 19:32:27 +0100
-Message-ID: <CAJZ5v0ii7tGRDbxw+5GqdyONXvRPznXUqBZd03+pdoAd+pH=JQ@mail.gmail.com>
-Subject: Re: [PATCH v4 06/25] reboot: Warn if unregister_restart_handler() fails
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+References: <20211208225030.2018923-1-aford173@gmail.com> <20211208225030.2018923-5-aford173@gmail.com>
+ <YbHZvysazqYeZ8h3@eze-laptop> <CAHCN7xKrHSSsqS9DNL1tMH1Ctpz16FsSgcVbSHXzUWF98v738Q@mail.gmail.com>
+ <YbNz94G3vwbHCMdB@robh.at.kernel.org> <c88b7a90f7a3bf94fc0cbb9a6f967ce769d5c03b.camel@pengutronix.de>
+ <CAHCN7xLQrYy6H3U_yjCevu7F3AtEJJNbA7gdig=dn08hQfXCUA@mail.gmail.com>
+In-Reply-To: <CAHCN7xLQrYy6H3U_yjCevu7F3AtEJJNbA7gdig=dn08hQfXCUA@mail.gmail.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Fri, 10 Dec 2021 15:32:54 -0300
+Message-ID: <CAAEAJfAuH_cupFkEN=5M3fy-JJ401EB3f2-6yvXFt9zJ4rYW4A@mail.gmail.com>
+Subject: Re: [PATCH 04/10] dt-bindings: media: nxp,imx8mq-vpu: Support split
+ G1 and G2 nodes with vpu-blk-ctrl
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 7:02 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+> >
+> > I'm in favor of dropping the old binding from the schema. New DTs
+> > should clearly use the new binding and old DTs shouldn't change
+> > anymore, so validation is less useful there.
 >
-> Emit warning if unregister_restart_handler() fails since it never should
-> fail. This will ease further API development by catching mistakes early.
+> I wonder if it makes sense to have a more standardized hantro schema
+> for all the users instead of one dedicated to each platform using a
+> hantro driver.  The unified schema could have all the various
+> compatible flags so the driver still knows which features are
+> enabled/disabled and it's very clear who all the users are for it. I
+> would think it could cover both the encoder and decoder variants as
+> well.  We do something similar for 8250 serial ports.
 >
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  kernel/reboot.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> If so, can someone from the media group suggest the best one to
+> follow?  Ezequiel suggested I look at the sama5d4-vdec to help reduce
+> some clutter in the driver.  If that binding is good enough, should I
+> just add the compatible flags to that and potentially rename it.
 >
-> diff --git a/kernel/reboot.c b/kernel/reboot.c
-> index e6659ae329f1..f0e7b9c13f6b 100644
-> --- a/kernel/reboot.c
-> +++ b/kernel/reboot.c
-> @@ -210,7 +210,7 @@ EXPORT_SYMBOL(register_restart_handler);
->   */
->  int unregister_restart_handler(struct notifier_block *nb)
->  {
-> -       return atomic_notifier_chain_unregister(&restart_handler_list, nb);
-> +       return WARN_ON(atomic_notifier_chain_unregister(&restart_handler_list, nb));
 
-The only reason why it can fail is if the object pointed to by nb is
-not in the chain.  Why WARN() about this?  And what about systems with
-panic_on_warn set?
+A unified schema might sound elegant and compelling, but I suspect
+it can bite us down the road, due to differences in the platform integration.
 
->  }
->  EXPORT_SYMBOL(unregister_restart_handler);
->
-> --
-> 2.33.1
->
+Seems we are all on-board going forward with a patch similar to this one,
+but also dropping the deprecated binding from the schema (while of course
+still supporting old DTBs on new kernels).
+
+Rob's suggestion about having a warning in the platform if the binding has
+not been updated, sounds like very useful too.
+
+Keep in mind v5.16-rc5 is near, which means we still have a few weeks to
+discuss this patch, until the next linux-media merge season.
+
+Thanks,
+Ezequiel

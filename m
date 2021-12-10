@@ -2,194 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9493C470845
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E96A47082E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245277AbhLJSSL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 13:18:11 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:55988 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245307AbhLJSR5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:17:57 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-142-TVADgMN7OOiCRWJPG3aGcg-1; Fri, 10 Dec 2021 13:14:21 -0500
-X-MC-Unique: TVADgMN7OOiCRWJPG3aGcg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8D40581EE61;
-        Fri, 10 Dec 2021 18:14:19 +0000 (UTC)
-Received: from x1.com (unknown [10.22.16.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BBC1C60BF4;
-        Fri, 10 Dec 2021 18:14:15 +0000 (UTC)
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: [PATCH V9 14/14] rtla: Add rtla timerlat hist documentation
-Date:   Fri, 10 Dec 2021 19:11:33 +0100
-Message-Id: <4a184003fdb81e23be3fe5ec882b1c89d5a95458.1639158831.git.bristot@kernel.org>
-In-Reply-To: <cover.1639158831.git.bristot@kernel.org>
-References: <cover.1639158831.git.bristot@kernel.org>
+        id S245152AbhLJSQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:16:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:45808 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238333AbhLJSQu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:16:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70F0212FC;
+        Fri, 10 Dec 2021 10:13:15 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3668E3F73D;
+        Fri, 10 Dec 2021 10:13:14 -0800 (PST)
+Message-ID: <80145652-b9ca-57b5-ad95-ca12d6a25eea@arm.com>
+Date:   Fri, 10 Dec 2021 18:13:09 +0000
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bristot@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 01/11] iommu/iova: Fix race between FQ timeout and
+ teardown
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     linux-kernel@vger.kernel.org, willy@infradead.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>
+References: <cover.1639157090.git.robin.murphy@arm.com>
+ <ecea6835baca75b945bd8ecfaa636ff01dabcc1d.1639157090.git.robin.murphy@arm.com>
+ <03cbd9c4-0f11-895b-8eb5-1b75bb74d37c@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <03cbd9c4-0f11-895b-8eb5-1b75bb74d37c@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Man page for rtla timerlat hist mode.
+On 2021-12-10 18:04, John Garry via iommu wrote:
+> On 10/12/2021 17:54, Robin Murphy wrote:
+>> From: Xiongfeng Wang<wangxiongfeng2@huawei.com>
+>>
+>> It turns out to be possible for hotplugging out a device to reach the
+>> stage of tearing down the device's group and default domain before the
+>> domain's flush queue has drained naturally. At this point, it is then
+>> possible for the timeout to expire just*before*  the del_timer() call
+> 
+> super nit: "just*before*  the" - needs a whitespace before "before" :)
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Clark Williams <williams@redhat.com>
-Cc: John Kacur <jkacur@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: linux-rt-users@vger.kernel.org
-Cc: linux-trace-devel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- .../tools/rtla/rtla-timerlat-hist.rst         | 106 ++++++++++++++++++
- 1 file changed, 106 insertions(+)
- create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
+Weird... the original patch file here and the copy received by lore via 
+linux-iommu look fine, gremlins in your MUA or delivery path perhaps?
 
-diff --git a/Documentation/tools/rtla/rtla-timerlat-hist.rst b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-new file mode 100644
-index 000000000000..e12eae1f3301
---- /dev/null
-+++ b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-@@ -0,0 +1,106 @@
-+=====================
-+rtla-timerlat-hist
-+=====================
-+------------------------------------------------
-+Histograms of the operating system timer latency
-+------------------------------------------------
-+
-+:Manual section: 1
-+
-+SYNOPSIS
-+========
-+**rtla timerlat hist** [*OPTIONS*] ...
-+
-+DESCRIPTION
-+===========
-+
-+.. include:: common_timerlat_description.rst
-+
-+The **rtla timerlat hist** displays a histogram of each tracer event
-+occurrence. This tool uses the periodic information, and the
-+**osnoise:** tracepoints are enabled when using the **-T** option.
-+
-+OPTIONS
-+=======
-+
-+.. include:: common_timerlat_options.rst
-+
-+.. include:: common_hist_options.rst
-+
-+.. include:: common_options.rst
-+
-+EXAMPLE
-+=======
-+In the example below, **rtla timerlat hist** is set to run for *10* minutes,
-+in the cpus *0-4*, *skipping zero* only lines. Moreover, **rtla timerlat
-+hist** will change the priority of the *timelat* threads to run under
-+*SCHED_DEADLINE* priority, with a *10us* runtime every *1ms* period. The
-+*1ms* period is also passed to the *timerlat* tracer::
-+
-+  [root@alien ~]# timerlat hist -d 10m -c 0-4 -P d:100us:1ms -p 1ms
-+  # RTLA timerlat histogram
-+  # Time unit is microseconds (us)
-+  # Duration:   0 00:10:00
-+  Index   IRQ-000   Thr-000   IRQ-001   Thr-001   IRQ-002   Thr-002   IRQ-003   Thr-003   IRQ-004   Thr-004
-+  0        276489         0    206089         0    466018         0    481102         0    205546         0
-+  1        318327     35487    388149     30024     94531     48382     83082     71078    388026     55730
-+  2          3282    122584      4019    126527     28231    109012     23311     89309      4568     98739
-+  3           940     11815       837      9863      6209     16227      6895     17196       910      9780
-+  4           444     17287       424     11574      2097     38443      2169     36736       462     13476
-+  5           206     43291       255     25581      1223    101908      1304    101137       236     28913
-+  6           132    101501        96     64584       635    213774       757    215471        99     73453
-+  7            74    169347        65    124758       350     57466       441     53639        69    148573
-+  8            53     85183        31    156751       229      9052       306      9026        39    139907
-+  9            22     10387        12     42762       161      2554       225      2689        19     26192
-+  10           13      1898         8      5770       114      1247       128      1405        13      3772
-+  11            9       560         9       924        71       686        76       765         8       713
-+  12            4       256         2       360        50       411        64       474         3       278
-+  13            2       167         2       172        43       256        53       350         4       180
-+  14            1        88         1       116        15       198        42       223         0       115
-+  15            2        63         3        94        11       139        20       150         0        58
-+  16            2        37         0        56         5        78        10       102         0        39
-+  17            0        18         0        28         4        57         8        80         0        15
-+  18            0         8         0        17         2        50         6        56         0        12
-+  19            0         9         0         5         0        19         0        48         0        18
-+  20            0         4         0         8         0        11         2        27         0         4
-+  21            0         2         0         3         1         9         1        18         0         6
-+  22            0         1         0         3         1         7         0         3         0         5
-+  23            0         2         0         4         0         2         0         7         0         2
-+  24            0         2         0         2         1         3         0         3         0         5
-+  25            0         0         0         1         0         1         0         1         0         3
-+  26            0         1         0         0         0         2         0         2         0         0
-+  27            0         0         0         3         0         1         0         0         0         1
-+  28            0         0         0         3         0         0         0         1         0         0
-+  29            0         0         0         2         0         2         0         1         0         3
-+  30            0         1         0         0         0         0         0         0         0         0
-+  31            0         1         0         0         0         0         0         2         0         2
-+  32            0         0         0         1         0         2         0         0         0         0
-+  33            0         0         0         2         0         0         0         0         0         1
-+  34            0         0         0         0         0         0         0         0         0         2
-+  35            0         1         0         1         0         0         0         0         0         1
-+  36            0         1         0         0         0         1         0         1         0         0
-+  37            0         0         0         1         0         0         0         0         0         0
-+  40            0         0         0         0         0         1         0         1         0         0
-+  41            0         0         0         0         0         0         0         0         0         1
-+  42            0         0         0         0         0         0         0         0         0         1
-+  44            0         0         0         0         0         1         0         0         0         0
-+  46            0         0         0         0         0         0         0         1         0         0
-+  47            0         0         0         0         0         0         0         0         0         1
-+  50            0         0         0         0         0         0         0         0         0         1
-+  54            0         0         0         1         0         0         0         0         0         0
-+  58            0         0         0         1         0         0         0         0         0         0
-+  over:         0         0         0         0         0         0         0         0         0         0
-+  count:   600002    600002    600002    600002    600002    600002    600002    600002    600002    600002
-+  min:          0         1         0         1         0         1         0         1         0         1
-+  avg:          0         5         0         5         0         4         0         4         0         5
-+  max:         16        36        15        58        24        44        21        46        13        50
-+
-+SEE ALSO
-+========
-+**rtla-timerlat**\(1), **rtla-timerlat-top**\(1)
-+
-+*timerlat* tracer documentation: <https://www.kernel.org/doc/html/latest/trace/timerlat-tracer.html>
-+
-+AUTHOR
-+======
-+Written by Daniel Bristot de Oliveira <bristot@kernel.org>
--- 
-2.31.1
+>> from free_iova_flush_queue(), such that we then proceed to free the FQ
+>> resources while fq_flush_timeout() is still accessing them on another
+>> CPU. Crashes due to this have been observed in the wild while removing
+>> NVMe devices.
+>>
+>> Close the race window by using del_timer_sync() to safely wait for any
+>> active timeout handler to finish before we start to free things. We
+>> already avoid any locking in free_iova_flush_queue() since the FQ is
+>> supposed to be inactive anyway, so the potential deadlock scenario does
+>> not apply.
+>>
+>> Fixes: 9a005a800ae8 ("iommu/iova: Add flush timer")
+>> Signed-off-by: Xiongfeng Wang<wangxiongfeng2@huawei.com>
+>> [ rm: rewrite commit message ]
+>> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+> 
+> FWIW,
+> 
+> Reviewed-by: John Garry <john.garry@huawei.com>
 
+Thanks John!
+
+Robin.

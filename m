@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE2C4707F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2594707F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244876AbhLJSCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:02:17 -0500
-Received: from mga03.intel.com ([134.134.136.65]:5780 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235392AbhLJSCQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:02:16 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238347542"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="238347542"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:58:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="544053703"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:58:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1mvk9M-004bBe-TE;
-        Fri, 10 Dec 2021 19:57:40 +0200
-Date:   Fri, 10 Dec 2021 19:57:40 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S244925AbhLJSDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235392AbhLJSDK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:03:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB7DC061746;
+        Fri, 10 Dec 2021 09:59:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 658E6B82914;
+        Fri, 10 Dec 2021 17:59:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D356DC00446;
+        Fri, 10 Dec 2021 17:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639159173;
+        bh=bBSxjH8QSMhD8e8s4DODPS6gWJiodf4WX7lpdz2HSMA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OiKf/ACo3eK481gfwEHBK3uNNsW40hy0NGBNshjiFMHwPpx6FlOehXX/TgmvrkOxQ
+         K4LleamkRphnEtJgu85JApyoeL3gBO3kPypZMGPlFVGRZ2u3O4zgrJ0JW0rK8Hc/Ph
+         sMD8XqcKGiFwGjudkNh2j316R0ZU6jnaew3f+kMxV7SU75i78UA0yaH+I/YbBOk7IF
+         o+JOPtxpNDEV44KEWEOnKbq13+rCR4lrtmQf8xw73nH4i4HJ+ywvv53UaehUJaPW5n
+         bE8oHNK8yNKlbEfGUP1Ka/zsWA3r80WZNnSK08tKkPLDJpvOyPF8SjfC52RnNKCjMx
+         L5HJLmkBfYMEg==
+Date:   Fri, 10 Dec 2021 17:59:27 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
- when IRQ can't be retrieved
-Message-ID: <YbOVFH1B2TDZEcGY@smile.fi.intel.com>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <CAHp75VcdwozpUJVB17VmCDska7euYnx1VjZLnCaZ8DHG+_3vYg@mail.gmail.com>
- <587c35bd-8877-030e-6236-d0d8c2b6811c@omp.ru>
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: Re: [PATCH v2 3/6] platform/x86: i2c-multi-instantiate: Move it to
+ drivers/acpi folder
+Message-ID: <YbOVf5eGwCqJDgvv@sirena.org.uk>
+References: <20211210154050.3713-1-sbinding@opensource.cirrus.com>
+ <20211210154050.3713-4-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qOlWQJXGoEsgX6ji"
 Content-Disposition: inline
-In-Reply-To: <587c35bd-8877-030e-6236-d0d8c2b6811c@omp.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211210154050.3713-4-sbinding@opensource.cirrus.com>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 07:38:40PM +0300, Sergey Shtylyov wrote:
-> On 12/10/21 11:47 AM, Andy Shevchenko wrote:
-> 
-> >>> platform_get_irq() will print a message when it fails.
-> >>> No need to repeat this.
-> >>>
-> >>> While at it, drop redundant check for 0 as platform_get_irq() spills
-> >>> out a big WARN() in such case.
-> >>
-> >> The reason you should be able to remove the "if (!irq)" test is that
-> >> platform_get_irq() never returns 0. At least, that is what the function kdoc
-> >> says. But looking at platform_get_irq_optional(), which is called by
-> >> platform_get_irq(), the out label is:
-> >>
-> >>         WARN(ret == 0, "0 is an invalid IRQ number\n");
-> >>         return ret;
-> >>
-> >> So 0 will be returned as-is. That is rather weird. That should be fixed to
-> >> return -ENXIO:
-> >>
-> >>         if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
-> >>                 return -ENXIO;
-> 
->    -ENXIO seems to me more fitting indeed (than -EINVAL that I used).
-> 
-> > 
-> > No, this is wrong for the same reasons I explained to Sergey.
-> 
->    I fail to understand you, sorry. We're going in circles, it seems... :-/
 
-platform_get_irq_optional() is supposed to return 0 when there is no IRQ found,
-but everything else went alright.
+--qOlWQJXGoEsgX6ji
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm tired to waste my time to go circles.
+On Fri, Dec 10, 2021 at 03:40:47PM +0000, Stefan Binding wrote:
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+>=20
+> Moving I2C multi instantiate driver to drivers/acpi folder for
+> upcoming conversion into a generic bus multi instantiate
+> driver for SPI and I2C
+>=20
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> ---
 
-Again, the problem is that platform_get_irq_optional() has wrong set of output
-values. And your patch doesn't fix that. And it has nothing to do with my code
-here.
+You've not provided a Signed-off-by for this so people can't do anything
+with it, please see Documentation/process/submitting-patches.rst for
+details on what this is and why it's important.
 
-> > The problem is that this is _optional API and it has been misdesigned.
-> > Replacing things like above will increase the mess.
-> 
->    What's wrong with replacing IRQ0 with -ENXIO now? platform_get_irq_optional()
-> (as in your patch) could then happily return 0 ISO -ENXIO. Contrarywise, if we don't
-> replace IRQ0 with -ENXIO, platform_get_irq_optional() will return 0 for both IRQ0
-> and missing IRQ! Am I clear enough? If you don't understand me now, I don't know what
-> to say... :-/
+--qOlWQJXGoEsgX6ji
+Content-Type: application/pgp-signature; name="signature.asc"
 
-See above. Read my messages again, please. I'm really tired to explain again
-and again the same.
+-----BEGIN PGP SIGNATURE-----
 
-TL;DR: You simply try to "fix" in a correct place but in a wrong way.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzlX8ACgkQJNaLcl1U
+h9BVCgf/Q0C7sSyuSXNPjiKUn5rnye0V4Bkv3GXGXSTyI4fbTgAwNTN8b89uE+M/
+yVAyerexUJ9PbtoerGU3mfsCVeVnZCpfDExkTzTGriphmnx+X7QrwAGcWEWiKihk
+hcw1VXZzsxijPqJAPWAC7Vm22X61oB79lT33goMPNQyooklcsGqLVFKtXREx2tGw
+qCWDZEu6OSqgOqJJxX9MiBUAzfRU2s57EXyYPZya8j+vqNdI9yzKuGoUkvWiB0aH
+j1K/luBUzgmhlzj3zPkRdQs4dc8PGc8/tdYNaRaqKAqFbOoDlYO6q+CCkbJBgrNY
+Gqhn32bNKvV9KUZpYGj4IdzHB+mbAQ==
+=a2Q9
+-----END PGP SIGNATURE-----
 
-> >>         return ret;
-> >>
-> >> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
-> > 
-> > No. This is not a business of the caller to workaround implementation
-> > details (bugs) of the core APIs.
-> > If something goes wrong, then it's platform_get_irq() to blame, and
-> > not the libahci_platform.
-> 
->    I'm repeating myself already: we don't work around the bug in platform_get_irq(),
-
-Yes, you do.
-
-> we're working around the driver subsystems that treat 0 specially (and so don't
-> support IRQ0); libata treats 0 as an indication of the polling mode (moreover,
-> it will curse if you pass to it both IRQ == 0 and a pointer to an interrupt handler!
-> Am I clear enough this time? :-)
-
-Yes, and it doesn't contradict to what my patch does.
-Read comment against platform_get_irq(). If it returns 0,
-it's not a business of the callers to work around it.
-
-Am I clear enough this time? :-)
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--qOlWQJXGoEsgX6ji--

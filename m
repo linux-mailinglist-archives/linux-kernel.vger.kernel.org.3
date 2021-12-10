@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2343D470565
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC164705A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240318AbhLJQSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:18:45 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:35390 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240274AbhLJQSo (ORCPT
+        id S238874AbhLJQbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239181AbhLJQaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:18:44 -0500
-Received: by mail-il1-f198.google.com with SMTP id m9-20020a056e021c2900b002a1d679b412so10859848ilh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:15:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=hCvnT54V6dz5hU6SrRLw5pSFpj+AS8Nd4KGYLHFcp0Y=;
-        b=22Qe79zp6VJwI5Nzwk097CwX6UgFKt+u9ouywW084n58wRA3Y8FiqQAs5W/whZDK+5
-         qRKvs+7SYtKu0biRkPZW0ffroe7hD+UGQAs4GqxS2FHbE9Ynk0t4AIL3hZxNu+LMVGRW
-         ynI6FlaLZ/HKUfNY289dWRwygxbTsyq3mdYFjSPWt6103aSz5uRJXD5A+BwwOc4wJey2
-         3kMwNYa5+BCUCVSe5asJkMhU+ejCKcB7AqnQWna9zLm2hKSJX/OTAT5jwZJQh3yX5gEh
-         ZsNor+kRxuObGJN2OxpSKstMiDMbdLw7zFHgx/sY3SX1IArEexNxQo6FKrhv+kvRx20W
-         F+aw==
-X-Gm-Message-State: AOAM5304Cwkath7LwTWAmYFWD2ajg9zt10IVIpSvN/ruylhii5wEveaZ
-        9K3nUuHjqKH0k4zGjAV6V7glntgNq7XGwX8YIsjPei3llFxe
-X-Google-Smtp-Source: ABdhPJy0+1Kzubb2wOyqTwA+WeSKW/Ony0nSbvBW6B2pEY/r1R4dlA0k9FeachkuKy5dZIjLG6abPYZiWcQpTE+gWzMTJVMs9Ewh
-MIME-Version: 1.0
-X-Received: by 2002:a92:d28d:: with SMTP id p13mr24204351ilp.163.1639152908858;
- Fri, 10 Dec 2021 08:15:08 -0800 (PST)
-Date:   Fri, 10 Dec 2021 08:15:08 -0800
-In-Reply-To: <8544854b-226d-befd-bd91-5af182c2b03d@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dd7d7e05d2cd063a@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Write in io_queue_worker_create
-From:   syzbot <syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 10 Dec 2021 11:30:55 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BFDC061353
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:27:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=8QUciRH1wuQHaeRYFWtZi0HAk1519caBXq0KazDuiBc=; b=G9cb2b42mDduzFBil/8H3WkKF+
+        tRSu4csTRDdYllZzgGrl9DKDF0Y+Q+Ec5DG//rxQOuisUZ8/Q9jVQ1+qXFX9AUKUiLD7OLQypaJtE
+        0m5DD7ffs23qIsp4pVEAlY1yp/cwk0ktCvYvltfg/INCyrVh+Ps4psER5T8ogE08L999Z7JdSrZrj
+        YCRfzV7WsuIwRa7PlVvKmt2RQuXBk0dZL4EN0L2DLZYJQCmmRbcdTdYDcrwMswOLNLFD5VVKfv9uJ
+        1wxiSXRHxNq5067tCiP6txv1YZ79StZL8DP/51EL+0eTnHLum2kM6qE1EGtvQd6IYwt07+hU/9egN
+        TVoCvzyQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvijl-00ATwn-9W; Fri, 10 Dec 2021 16:27:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 862D5300491;
+        Fri, 10 Dec 2021 17:27:09 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 588CA2B3C36B4; Fri, 10 Dec 2021 17:27:09 +0100 (CET)
+Message-ID: <20211210161618.645249719@infradead.org>
+User-Agent: quilt/0.66
+Date:   Fri, 10 Dec 2021 17:16:18 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, peterz@infradead.org,
+        mark.rutland@arm.com, elver@google.com, keescook@chromium.org,
+        hch@infradead.org, torvalds@linux-foundation.org, axboe@kernel.dk
+Subject: [PATCH v2 0/9] refcount: Improve code-gen
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Now with Linus' favourite refcount scheme on :-)
 
-Reported-and-tested-by: syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com
+Changes since RFC:
 
-Tested on:
+ - more cleanups in scripts/atomic/
+ - rename atomic_*_ofl() to atomic_*_overflow() (null)
+ - alternative x86 refcount scheme (Linus)
+ - fix for refcount_dec_not_one()
+ - opt __refcount_add_not_zero(.i=1)
 
-commit:         263568d1 io-wq: check for wq exit after adding new wor..
-git tree:       git://git.kernel.dk/linux-block io_uring-5.16
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6c3ab72998e7f1a4
-dashboard link: https://syzkaller.appspot.com/bug?extid=b60c982cb0efc5e05a47
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+Boots x86_64 and builds a kernel.
 
-Note: testing is done by a robot and is best-effort only.

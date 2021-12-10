@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7C446FE20
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 181F846FE23
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239555AbhLJJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:54:00 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:46654 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230296AbhLJJx7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:53:59 -0500
-Received: from [10.180.13.84] (unknown [10.180.13.84])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxysjRIrNhgdIFAA--.12755S2;
-        Fri, 10 Dec 2021 17:50:10 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
- usbhid device
-To:     Oliver Neukum <oneukum@suse.com>, Jiri Kosina <jikos@kernel.org>,
-        benjamin.tissoires@redhat.com, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
-        stern@rowland.harvard.edu, rajatja@google.com,
-        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuyinbo@loongson.cn,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
- <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <d2e4a97a-b89b-eaf4-5aaf-89af22227746@loongson.cn>
-Date:   Fri, 10 Dec 2021 17:50:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S239587AbhLJJyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:54:12 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32906 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239558AbhLJJyM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 04:54:12 -0500
+Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J9R3K583Pzcc0V;
+        Fri, 10 Dec 2021 17:50:21 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 17:50:35 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 17:50:34 +0800
+Subject: Re: [PATCH RFC 0/9] support concurrent sync io for bfq on a specail
+ occasion
+To:     Paolo Valente <paolo.valente@linaro.org>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20211127101132.486806-1-yukuai3@huawei.com>
+ <D3FF0820-6A51-46A1-A363-8FFA8CCD2851@linaro.org>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <809b90cc-20ba-c4fd-8c29-b9e3123c1cef@huawei.com>
+Date:   Fri, 10 Dec 2021 17:50:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <D3FF0820-6A51-46A1-A363-8FFA8CCD2851@linaro.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxysjRIrNhgdIFAA--.12755S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XrykXr1UWF17Cry3tFyxKrg_yoWkGwbEkr
-        4jgrs7Gr13Zrs7K3WftF4UXry7Ww42kF97Xw4xtw1SgF17Aws3G34kur9ak3W5GayxZF9x
-        Krn0qrnayFnxujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbTkFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
-        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2021/12/8 下午6:03, Oliver Neukum 写道:
+�� 2021/12/10 17:20, Paolo Valente д��:
 > 
-> On 08.12.21 10:39, Yinbo Zhu wrote:
->> The remote wake-up function is a regular function on usb hid device
->> and I think keeping it enabled by default will make usb application
->> more convenient. This patch is to enable remote wakeup function for
->> usb hid device.
+> 
+>> Il giorno 27 nov 2021, alle ore 11:11, Yu Kuai <yukuai3@huawei.com> ha scritto:
 >>
-> Hi,
+>> Bfq can't handle sync io concurrently as long as the io are not issued
+>> from root group currently.
+>>
+>> Previous patch set:
+>> https://lore.kernel.org/lkml/20211014014556.3597008-2-yukuai3@huawei.com/t/
+>>
+>> During implemting the method mentioned by the above patch set, I found
+>> more problems that will block implemting concurrent sync io. The
+>> modifications of this patch set are as follows:
+>>
+>> 1) count root group into 'num_groups_with_pending_reqs';
+>> 2) don't idle if 'num_groups_with_pending_reqs' is 1;
+>> 3) If the group doesn't have pending requests while it's child groups
+>> have pending requests, don't count the group.
 > 
-> I am afraid we cannot do this. It will cause regression.
-> Consider for example the case of laptops with touchscreens
-> that will trigger a wake up when the laptop is closed.
+> Why don't yo count the parent group? It seems to me that we should count it.
+Hi, Paolo
+
+For example, we only issue io in child group c2(root->c1->c2),
+'num_groups_with_pending_reqs' will end up greater than 1, thus it's
+impossible to handle sync io concurrently. Thus I don't count root and
+c1, only count c2.
 > 
->      Regards
+>> 4) Once the group doesn't have pending requests, decrease
+>> 'num_groups_with_pending_reqs' immediately. Don't delay to when all
+>> it's child groups don't have pending requests.
+>>
 > 
->          Oliver
-Hi oliver,
+> I guess this action is related to 3).
+Yes, if c1, c2 are both active, and then c1 don't have any pending reqs,
+I want to decrease num_groups_with_pending_reqs to 1 immediately. So
+that sync io on c2 can be handled concurrently.
 
+Thanks,
+Kuai
 
-system ask that must it must be accped a acpi lid open event then system 
-will always into resume state for laptop, otherwise, eventhough that 
-system be wakeuped by other event then system will continue into suspend.
-
-and for laptop usb wakeup that as general ask bios to enable usb wakeup 
-then if need do more things to enable usb wakeup I think this usb wakeup 
-function isn't friendly and inconveient, so enable it by default.
-after add this patch, if want to use usb wakeup function it only need 
-enable bios configure it think it is appropriate.
-
-BRs,
-Yinbo.
 > 
-
+> Thanks,
+> Paolo
+> 
+>> Noted that I just tested basic functionality of this patchset, and I
+>> think it's better to see if anyone have suggestions or better
+>> solutions.
+>>
+>> Yu Kuai (9):
+>>   block, bfq: add new apis to iterate bfq entities
+>>   block, bfq: apply news apis where root group is not expected
+>>   block, bfq: handle the case when for_each_entity() access root group
+>>   block, bfq: count root group into 'num_groups_with_pending_reqs'
+>>   block, bfq: do not idle if only one cgroup is activated
+>>   block, bfq: only count group that the bfq_queue belongs to
+>>   block, bfq: record how many queues have pending requests in bfq_group
+>>   block, bfq: move forward __bfq_weights_tree_remove()
+>>   block, bfq: decrease 'num_groups_with_pending_reqs' earlier
+>>
+>> block/bfq-cgroup.c  |  3 +-
+>> block/bfq-iosched.c | 92 +++++++++++++++++++++++----------------------
+>> block/bfq-iosched.h | 41 +++++++++++++-------
+>> block/bfq-wf2q.c    | 44 +++++++++++++++-------
+>> 4 files changed, 106 insertions(+), 74 deletions(-)
+>>
+>> -- 
+>> 2.31.1
+>>
+> 
+> .
+> 

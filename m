@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 277D34705ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DDB4705F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243779AbhLJQmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:42:21 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:37856 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239270AbhLJQmU (ORCPT
+        id S243243AbhLJQm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234718AbhLJQm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:42:20 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 43106235E65B
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message when
- IRQ can't be retrieved
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        <linux-ide@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Jens Axboe" <axboe@kernel.dk>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <CAHp75VcdwozpUJVB17VmCDska7euYnx1VjZLnCaZ8DHG+_3vYg@mail.gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <587c35bd-8877-030e-6236-d0d8c2b6811c@omp.ru>
-Date:   Fri, 10 Dec 2021 19:38:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 10 Dec 2021 11:42:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD05C061746;
+        Fri, 10 Dec 2021 08:39:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53E05B828D7;
+        Fri, 10 Dec 2021 16:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E644C00446;
+        Fri, 10 Dec 2021 16:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639154359;
+        bh=32AdGksNyXfVNrp8Rvh7BE8TKQa1lauYtfnUpfoLono=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fv2Qkat3XjWJID0EjqzIlO0BfZ+E9JL3VYmE5oh4bSZ+464QnMdzQskb61QQts+vl
+         RJkK5ho2fH38e3/HCn3CPST6R6WPqjsIlJP3H3+86TXQLtv7ZK63QzH3/hF0AcQKzV
+         gyVsq4AZiKSSId4f/pXP9dfkYNee7XDsEndupMUl6slmCgvqcIOd1aNKbpG6qSB1FZ
+         EPIjGJQa2wHuxgqk2gP8i4+RMg4LwHgP6plymL6W4l/A9X131Zmwq3f6MbWDfAznTT
+         nCAx7GCMhsv5GPl0GQK49WhNgvxzMS8QUFgs2TqwdQ/w/zjKjqFScRWceOJ1DTs1BN
+         kPxEyuyMajQ/A==
+Date:   Fri, 10 Dec 2021 16:39:05 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>
+Subject: Re: [PATCH] spi: Fix incorrect cs_setup delay handling
+Message-ID: <YbOCqbah03qdLQhK@sirena.org.uk>
+References: <20211210153634.171580-1-marcan@marcan.st>
+ <YbN+cBQlsLprirxW@sirena.org.uk>
+ <3c94fa29-6c21-9fbd-b1f5-eb6c846054bb@marcan.st>
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VcdwozpUJVB17VmCDska7euYnx1VjZLnCaZ8DHG+_3vYg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n+nKIqKK51EAnd7+"
+Content-Disposition: inline
+In-Reply-To: <3c94fa29-6c21-9fbd-b1f5-eb6c846054bb@marcan.st>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 11:47 AM, Andy Shevchenko wrote:
 
->>> platform_get_irq() will print a message when it fails.
->>> No need to repeat this.
->>>
->>> While at it, drop redundant check for 0 as platform_get_irq() spills
->>> out a big WARN() in such case.
->>
->> The reason you should be able to remove the "if (!irq)" test is that
->> platform_get_irq() never returns 0. At least, that is what the function kdoc
->> says. But looking at platform_get_irq_optional(), which is called by
->> platform_get_irq(), the out label is:
->>
->>         WARN(ret == 0, "0 is an invalid IRQ number\n");
->>         return ret;
->>
->> So 0 will be returned as-is. That is rather weird. That should be fixed to
->> return -ENXIO:
->>
->>         if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
->>                 return -ENXIO;
+--n+nKIqKK51EAnd7+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   -ENXIO seems to me more fitting indeed (than -EINVAL that I used).
+On Sat, Dec 11, 2021 at 01:32:06AM +0900, Hector Martin wrote:
+> On 11/12/2021 01.21, Mark Brown wrote:
 
-> 
-> No, this is wrong for the same reasons I explained to Sergey.
+> > This needs a better changelog, there's multiple delays being handled
+> > here and it's not clear from this which are affected here or what the
+> > problem is.
 
-   I fail to understand you, sorry. We're going in circles, it seems... :-/
+> cs_setup is affected, I thought at least that was clear from the patch
+> summary :-)
 
-> The problem is that this is _optional API and it has been misdesigned.
-> Replacing things like above will increase the mess.
+This should be in the commit message, the subject line of the e-mail
+isn't super visible when people are reviewing - basically, the body of
+the commit message should make sense standalone.
 
-   What's wrong with replacing IRQ0 with -ENXIO now? platform_get_irq_optional()
-(as in your patch) could then happily return 0 ISO -ENXIO. Contrarywise, if we don't
-replace IRQ0 with -ENXIO, platform_get_irq_optional() will return 0 for both IRQ0
-and missing IRQ! Am I clear enough? If you don't understand me now, I don't know what
-to say... :-/
+> If you prefer, I can resend it with a reference to the spi.h comment.
 
-> 
->>         return ret;
->>
->> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
-> 
-> No. This is not a business of the caller to workaround implementation
-> details (bugs) of the core APIs.
-> If something goes wrong, then it's platform_get_irq() to blame, and
-> not the libahci_platform.
+Yes, please resend with a clear commit message.
 
-   I'm repeating myself already: we don't work around the bug in platform_get_irq(),
-we're working around the driver subsystems that treat 0 specially (and so don't
-support IRQ0); libata treats 0 as an indication of the polling mode (moreover,
-it will curse if you pass to it both IRQ == 0 and a pointer to an interrupt handler!
-Am I clear enough this time? :-)
+--n+nKIqKK51EAnd7+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-MBR, Sergey
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzgqgACgkQJNaLcl1U
+h9D8NQf/RH4/0pNggDaJpqCJvUSfbIE6AlkDCulr3IsGAFEAIbhq3OzJjQr4eXLh
+qwj2n8VfvwWc5Wb7iGuS6F4JnQsC2zIpyvjGbo7XcsGTWrka1XNQ0xKzGdDtuYma
+ubLIIVE1ZlRZM2VFJ4KjOdau0LvX+BMTaMLcP4pnSRl/+bGYdiQAZV/o5cw0sNjA
+MQOX9MGy9KapSg3xxa0geijbz9sPeLv10wf2ua7uA9ml32juhcwXEpjB+K/FK+sW
+OSe4fsTZQqqlsPCO9jui470WUOv5SoFA81wZPG+7YQeByGSDbuahZpOg/JZstnsS
+P2LihXEXipvHDD1rTLTCDI2KEki0FQ==
+=9uj2
+-----END PGP SIGNATURE-----
+
+--n+nKIqKK51EAnd7+--

@@ -2,171 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE089470B1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D21470B1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343855AbhLJT6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343786AbhLJT5t (ORCPT
+        id S1343922AbhLJT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:58:15 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:34645 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343809AbhLJT54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:57:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5568CC061A72;
-        Fri, 10 Dec 2021 11:54:12 -0800 (PST)
-Date:   Fri, 10 Dec 2021 19:54:09 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639166050;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0X47jCtW5pjwq36Q//lgYeModKw/MEUHpxHsRt3GKjs=;
-        b=Ocj0aRxe3szM0KD93xVKNnM0Pl9dIOoUXEEeoZ1fWkPPXzo24VpGRblRhjvMcmXGjmBWCI
-        141nWno14mNfYOnhWK5HKmFsTbGDtQpk+irowJIYM94Ixbu+tJDMDLk2ItI9/9n3tcdgl2
-        SS6n0tNERfvSa2RRB9kWfWMVAEVyt3f2veAsdVP67mGHlGgzA+79XpCX24GA3LxUTP8TyV
-        XmtUtBZd6zLt087lGjSaTPmLg1e7xoZziNsPYXUpFmt8kNNf+Xh/qQ9INzJXkMPjUk1nKq
-        a8jAtAehwqn09XyVcTXflZZKe4QBgPEkYElagSL2gOrBXzrYf4SEitaEg1E3Qw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639166050;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0X47jCtW5pjwq36Q//lgYeModKw/MEUHpxHsRt3GKjs=;
-        b=DozSfP1ExHfaFb7GVxNnvkgoYt8Ad6LQoRNUHpffhTC6dytSr3OG5DkyXIFUc88nnaBQvB
-        c/x0TaghDLY64LBg==
-From:   "tip-bot2 for Nitesh Narayan Lal" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] scsi: megaraid_sas: Use irq_set_affinity_and_hint()
-Cc:     Nitesh Narayan Lal <nitesh@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sumit Saxena <sumit.saxena@broadcom.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20210903152430.244937-5-nitesh@redhat.com>
-References: <20210903152430.244937-5-nitesh@redhat.com>
+        Fri, 10 Dec 2021 14:57:56 -0500
+Received: by mail-ot1-f43.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso10721885otj.1;
+        Fri, 10 Dec 2021 11:54:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=y8dMmkuyWBxEw+uQhTxZh8vd7mO4Vqr5QSAk8M5BMAA=;
+        b=uVxJss+/mqfPblCik7IK6igcfJ44u/5s32762oNYjqz46nUozmExku9uqnym8LL911
+         rSe4ppgPmzPT6iTAx/qyt5FaFk3umbtSOG6/8VOTSINAx4WG0cgAs5rvZOg/dyj5xyA1
+         tGVX98EIQEqanHSdmWJaAHxBXXPGyAV0c1T55b0wKudWXz7TwZgDP0AVwL3p4mZK9E64
+         pqabTuE3DOnZAxC4hjzf7euMfq0orXsnL+BLwaodOVXNWhRkFsnTUoES+hkr9dQDCSvN
+         Hqw5CHx2U9ISo2tq58pQtNBmZ1Sl3LARQuzSUe7ja6EM1nafBy+NhzJqMF0//7D/GIks
+         rc3A==
+X-Gm-Message-State: AOAM532zB71HPkIo4cvRtWRtlL7Z6QKSna3xmQjlU6ER3dywLaJzic0K
+        lM9t4eRmlx5MQs4hFK2u73WIV71TrSfT2mocmcP+JB4pVPA=
+X-Google-Smtp-Source: ABdhPJxao1cGmZ4+P4fad/nTr+Q66pNXl14J67d+7ioY5YFM+slNF+siELGwwYlW4kgYku1xqwbq+aQGB4IxI/ax3Wg=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr12849514otf.198.1639166060337;
+ Fri, 10 Dec 2021 11:54:20 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <163916604949.23020.15564762185103133685.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Dec 2021 20:54:09 +0100
+Message-ID: <CAJZ5v0jqjgDHtBsdZuuEZjE=DRKq+5cWv9Eq35V8V1bLH4nscQ@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fix for v5.16-rc5
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+Hi Linus,
 
-Commit-ID:     8049da6f3943d0ac51931b8064b2e4769a69a967
-Gitweb:        https://git.kernel.org/tip/8049da6f3943d0ac51931b8064b2e4769a69a967
-Author:        Nitesh Narayan Lal <nitesh@redhat.com>
-AuthorDate:    Fri, 03 Sep 2021 11:24:20 -04:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 10 Dec 2021 20:47:38 +01:00
+Please pull from the tag
 
-scsi: megaraid_sas: Use irq_set_affinity_and_hint()
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-5.16-rc5
 
-The driver uses irq_set_affinity_hint() specifically for the high IOPS
-queue interrupts for two purposes:
+with top-most commit f872f73601b92c86f3da8bdf3e19abd0f1780eb9
 
- - To set the affinity_hint which is consumed by the userspace for
-   distributing the interrupts
+ thermal: int340x: Fix VCoRefLow MMIO bit offset for TGL
 
- - To apply an affinity that it provides
+on top of commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
 
-The driver enforces its own affinity to bind the high IOPS queue interrupts
-to the local NUMA node. However, irq_set_affinity_hint() applying the
-provided cpumask as an affinity for the interrupt is an undocumented side
-effect.
+ Linux 5.16-rc4
 
-To remove this side effect irq_set_affinity_hint() has been marked
-as deprecated and new interfaces have been introduced. Hence, replace the
-irq_set_affinity_hint() with the new interface irq_set_affinity_and_hint()
-where the provided mask needs to be applied as the affinity and
-affinity_hint pointer needs to be set and replace with
-irq_update_affinity_hint() where only affinity_hint needs to be updated.
+to receive a thermal control fix for 5.16-rc5.
 
-Change the megasas_set_high_iops_queue_affinity_hint function name to
-megasas_set_high_iops_queue_affinity_and_hint to clearly indicate that the
-function is setting both affinity and affinity_hint.
+This fixes the definition of one of the Tiger Lake MMIO registers
+in the int340x thermal driver (Sumeet Pawnikar).
 
-Signed-off-by: Nitesh Narayan Lal <nitesh@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
-Link: https://lore.kernel.org/r/20210903152430.244937-5-nitesh@redhat.com
+Thanks!
 
----
- drivers/scsi/megaraid/megaraid_sas_base.c | 27 ++++++++++++----------
- 1 file changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index aeb95f4..82e1e24 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -5720,7 +5720,7 @@ megasas_setup_irqs_msix(struct megasas_instance *instance, u8 is_probe)
- 				"Failed to register IRQ for vector %d.\n", i);
- 			for (j = 0; j < i; j++) {
- 				if (j < instance->low_latency_index_start)
--					irq_set_affinity_hint(
-+					irq_update_affinity_hint(
- 						pci_irq_vector(pdev, j), NULL);
- 				free_irq(pci_irq_vector(pdev, j),
- 					 &instance->irq_context[j]);
-@@ -5763,7 +5763,7 @@ megasas_destroy_irqs(struct megasas_instance *instance) {
- 	if (instance->msix_vectors)
- 		for (i = 0; i < instance->msix_vectors; i++) {
- 			if (i < instance->low_latency_index_start)
--				irq_set_affinity_hint(
-+				irq_update_affinity_hint(
- 				    pci_irq_vector(instance->pdev, i), NULL);
- 			free_irq(pci_irq_vector(instance->pdev, i),
- 				 &instance->irq_context[i]);
-@@ -5894,22 +5894,25 @@ int megasas_get_device_list(struct megasas_instance *instance)
- }
- 
- /**
-- * megasas_set_high_iops_queue_affinity_hint -	Set affinity hint for high IOPS queues
-- * @instance:					Adapter soft state
-- * return:					void
-+ * megasas_set_high_iops_queue_affinity_and_hint -	Set affinity and hint
-+ *							for high IOPS queues
-+ * @instance:						Adapter soft state
-+ * return:						void
-  */
- static inline void
--megasas_set_high_iops_queue_affinity_hint(struct megasas_instance *instance)
-+megasas_set_high_iops_queue_affinity_and_hint(struct megasas_instance *instance)
- {
- 	int i;
--	int local_numa_node;
-+	unsigned int irq;
-+	const struct cpumask *mask;
- 
- 	if (instance->perf_mode == MR_BALANCED_PERF_MODE) {
--		local_numa_node = dev_to_node(&instance->pdev->dev);
-+		mask = cpumask_of_node(dev_to_node(&instance->pdev->dev));
- 
--		for (i = 0; i < instance->low_latency_index_start; i++)
--			irq_set_affinity_hint(pci_irq_vector(instance->pdev, i),
--				cpumask_of_node(local_numa_node));
-+		for (i = 0; i < instance->low_latency_index_start; i++) {
-+			irq = pci_irq_vector(instance->pdev, i);
-+			irq_set_affinity_and_hint(irq, mask);
-+		}
- 	}
- }
- 
-@@ -5998,7 +6001,7 @@ megasas_alloc_irq_vectors(struct megasas_instance *instance)
- 		instance->msix_vectors = 0;
- 
- 	if (instance->smp_affinity_enable)
--		megasas_set_high_iops_queue_affinity_hint(instance);
-+		megasas_set_high_iops_queue_affinity_and_hint(instance);
- }
- 
- /**
+---------------
+
+Sumeet Pawnikar (1):
+      thermal: int340x: Fix VCoRefLow MMIO bit offset for TGL
+
+---------------
+
+ drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

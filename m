@@ -2,194 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DC846FEC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFB546FEC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237285AbhLJKck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236454AbhLJKci (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:32:38 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFB6C0617A2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:29:03 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id t26so17184865lfk.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:29:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dt2MJS5YdLXAUYs+N/c7bnAR0tNg/BSaeQzn/0deyc0=;
-        b=sDxjb2Km+LLaZn9k8YumQZF1ZG2znh5CAcQDE8LWn9/uonVPxrrxNKLuXsnAR/RRBt
-         DhvqCqBB4nRDALwhiYR8eOhyskKwXfSAzWDCI90VqW49UVsckld0NwyanwUCIy62kweE
-         y5NhphVQ4P6EaUhsoCypmwvMM0lYSs97tle4oVBbvmMTWZ2KI04KBJki9/eDkkDBo4Mx
-         jpedkQRJ7MxErhdnbKHGxLraJPb1npSfsiMsJbDVNfjc6XouZqc3XLDVsmw542zD75ei
-         4kbRloIEEOz4ZQeOwOG6u1tOcmCOpbfZGaUtldXtcgBS4IAqZjyks/OMUDRqfn5otdkd
-         eL6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dt2MJS5YdLXAUYs+N/c7bnAR0tNg/BSaeQzn/0deyc0=;
-        b=lf+bcSdjJnKW2OjsFjwd6IkiwP4xGk9yilWML3/6mziD5AbUBE1NdgrTCMxJlpMQJ6
-         Dr8XK0iVppJqftMlF0c1pFSftOX/Z8sSofG+g5UqiZPtmDF5adI0Gm160yVjvGFEdv/Q
-         JCR2WDfm5OBTENUrX1PnLy9lJEAlFGxn/KLbG6iREEAEf9RCisiISsXwA1x0HpLLZyql
-         YJ9Rstlg0USBSYO5oN1hqXqqo+Qg89WdL7+ecSlWp7LrtbvANldHdIRVuXNvPWhC02kx
-         YqKaSaQaSQyXRQ5m+jrtFeblkhLYhKCwCuf96Hfk5gbgxb7REDmqdjBbx5YlkxU4XnGZ
-         DNJA==
-X-Gm-Message-State: AOAM5308w0OcZHW51pORTDGwlgTesPMzqLw/rqptdb75OWkXuqCRam30
-        0ERYWGZdvamlqHidRet1kEahpU7YRYzDa9FcP0Pvau9mBk0=
-X-Google-Smtp-Source: ABdhPJw/vHH2wqi5cYcUa6+pWIgyLIAnwxB35dGLU3oeqfbj4l313gR/m8y8UvornO4WjcQJGAZUEJmxAfEVErQp/1I=
-X-Received: by 2002:ac2:5930:: with SMTP id v16mr11274690lfi.327.1639132141364;
- Fri, 10 Dec 2021 02:29:01 -0800 (PST)
+        id S237375AbhLJKeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:34:46 -0500
+Received: from mga18.intel.com ([134.134.136.126]:4315 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237928AbhLJKen (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 05:34:43 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225190385"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="225190385"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:31:08 -0800
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="659515095"
+Received: from ccrisan-mobl2.ger.corp.intel.com (HELO [10.251.210.20]) ([10.251.210.20])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:31:06 -0800
+Subject: Re: [RFCv3 3/7] HID: core: Add support for USI style events
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+References: <20211201164301.44653-1-tero.kristo@linux.intel.com>
+ <20211201164301.44653-4-tero.kristo@linux.intel.com>
+ <CAO-hwJ+hzHNZVUrL9vC02t4GMBnaLym_vz7JT6+_cKEK8wEAMA@mail.gmail.com>
+From:   Tero Kristo <tero.kristo@linux.intel.com>
+Message-ID: <c217aab3-a1b4-c94f-13c0-71c848d90d09@linux.intel.com>
+Date:   Fri, 10 Dec 2021 12:31:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211206120533.602062-1-xiaolei.wang@windriver.com>
- <CAFA6WYN+0751=feb-O9Drmm5V_Gz-1qsgiHmLsA88=49MoK_dg@mail.gmail.com>
- <PH0PR11MB507734019F54C2BB24D1456F95719@PH0PR11MB5077.namprd11.prod.outlook.com>
- <CAFA6WYMOHUEve8cbZdwzsijer3fRsy=50q67ndsC6U2JD6gK5Q@mail.gmail.com>
- <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org> <CAN5uoS9xv-kKpC4E6-muYdh59g8XPSDfbquk5=DbQ4GmiVk-PA@mail.gmail.com>
-In-Reply-To: <CAN5uoS9xv-kKpC4E6-muYdh59g8XPSDfbquk5=DbQ4GmiVk-PA@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 10 Dec 2021 15:58:50 +0530
-Message-ID: <CAFA6WYNZAbDpFJVnmNGm7aqCc82ZQEeUXvVW4r1+svm8rfRn7w@mail.gmail.com>
-Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     Jerome Forissier <jerome@forissier.org>,
-        "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAO-hwJ+hzHNZVUrL9vC02t4GMBnaLym_vz7JT6+_cKEK8wEAMA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 at 15:08, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Hello all,
->
-> On Fri, 10 Dec 2021 at 09:10, Jerome Forissier <jerome@forissier.org> wrote:
-> >
-> > +CC Jens, Etienne
-> >
-> > On 12/10/21 06:00, Sumit Garg wrote:
-> > > On Fri, 10 Dec 2021 at 09:42, Wang, Xiaolei <Xiaolei.Wang@windriver.com> wrote:
-> > >>
-> > >> -----Original Message-----
-> > >> From: Sumit Garg <sumit.garg@linaro.org>
-> > >> Sent: Thursday, December 9, 2021 7:41 PM
-> > >> To: Wang, Xiaolei <Xiaolei.Wang@windriver.com>
-> > >> Cc: jens.wiklander@linaro.org; op-tee@lists.trustedfirmware.org; linux-kernel@vger.kernel.org
-> > >> Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
-> > >>
-> > >> [Please note: This e-mail is from an EXTERNAL e-mail address]
-> > >>
-> > >> On Mon, 6 Dec 2021 at 17:35, Xiaolei Wang <xiaolei.wang@windriver.com> wrote:
-> > >>>
-> > >>> We observed the following kmemleak report:
-> > >>> unreferenced object 0xffff000007904500 (size 128):
-> > >>>   comm "swapper/0", pid 1, jiffies 4294892671 (age 44.036s)
-> > >>>   hex dump (first 32 bytes):
-> > >>>     00 47 90 07 00 00 ff ff 60 00 c0 ff 00 00 00 00  .G......`.......
-> > >>>     60 00 80 13 00 80 ff ff a0 00 00 00 00 00 00 00  `...............
-> > >>>   backtrace:
-> > >>>     [<000000004c12b1c7>] kmem_cache_alloc+0x1ac/0x2f4
-> > >>>     [<000000005d23eb4f>] tee_shm_alloc+0x78/0x230
-> > >>>     [<00000000794dd22c>] optee_handle_rpc+0x60/0x6f0
-> > >>>     [<00000000d9f7c52d>] optee_do_call_with_arg+0x17c/0x1dc
-> > >>>     [<00000000c35884da>] optee_open_session+0x128/0x1ec
-> > >>>     [<000000001748f2ff>] tee_client_open_session+0x28/0x40
-> > >>>     [<00000000aecb5389>] optee_enumerate_devices+0x84/0x2a0
-> > >>>     [<000000003df18bf1>] optee_probe+0x674/0x6cc
-> > >>>     [<000000003a4a534a>] platform_drv_probe+0x54/0xb0
-> > >>>     [<000000000c51ce7d>] really_probe+0xe4/0x4d0
-> > >>>     [<000000002f04c865>] driver_probe_device+0x58/0xc0
-> > >>>     [<00000000b485397d>] device_driver_attach+0xc0/0xd0
-> > >>>     [<00000000c835f0df>] __driver_attach+0x84/0x124
-> > >>>     [<000000008e5a429c>] bus_for_each_dev+0x70/0xc0
-> > >>>     [<000000001735e8a8>] driver_attach+0x24/0x30
-> > >>>     [<000000006d94b04f>] bus_add_driver+0x104/0x1ec
-> > >>>
-> > >>> This is not a memory leak because we pass the share memory pointer to
-> > >>> secure world and would get it from secure world before releasing it.
-> > >>
-> > >>> How about if it's actually a memory leak caused by the secure world?
-> > >>> An example being secure world just allocates kernel memory via OPTEE_SMC_RPC_FUNC_ALLOC and doesn't free it via OPTEE_SMC_RPC_FUNC_FREE.
-> > >>
-> > >>> IMO, we need to cross-check optee-os if it's responsible for leaking kernel memory.
-> > >>
-> > >> Hi sumit,
-> > >>
-> > >> You mean we need to check whether there is a real memleak,
-> > >> If being secure world just allocate kernel memory via OPTEE_SMC_PRC_FUNC_ALLOC and until the end, there is no free
-> > >> It via OPTEE_SMC_PRC_FUNC_FREE, then we should judge it as a memory leak, wo need to judge whether it is caused by secure os?
-> > >
-> > > Yes. AFAICT, optee-os should allocate shared memory to communicate
-> > > with tee-supplicant. So once the communication is done, the underlying
-> > > shared memory should be freed. I can't think of any scenario where
-> > > optee-os should keep hold-off shared memory indefinitely.
-> >
-> > I believe it can happen when OP-TEE's CFG_PREALLOC_RPC_CACHE is y. See
-> > the config file [1] and the commit which introduced this config [2].
-> >
-> > [1] https://github.com/OP-TEE/optee_os/blob/3.15.0/mk/config.mk#L709
-> > [2] https://github.com/OP-TEE/optee_os/commit/8887663248ad
-> >
->
-> It's been a while since OP-TEE caches some shm buffers to prevent
-> re-allocting them on and on.
-> OP-TEE does so for 1 shm buffer per "tee threads" OP-TEE has provisioned.
-> Each thread can cache a shm reference.
-> Note that used RPCs from optee to linux/u-boot/ree do not require such
-> message buffer (IMO).
->
-> The main issue is the shm buffer are allocated per optee thread
-> (thread context assigned to client invocation request when entreing
-> optee).
-> Therefore, if an optee thread caches a shm buffer, it makes the caller
-> tee session to have a shm reference with a refcount held, until Optee
-> thread releases its cached shm reference.
->
-> There are ugly side effects. Linux must disable the cache to release
-> all resources.
-> We recently saw some tee sessions may be left open because of such shm
-> refcount held.
-> It can lead to few misbehaviour of the TA service (restarting a
-> service, releasing a resource)
->
-> Config switch CFG_PREALLOC_RPC_CACHE was introduced [pr4896] to
-> disable the feature at boot time.
-> There are means to not use it, or to explicitly enable/disable it at
-> run time (already used optee smc services for that). Would maybe be a
-> better default config.
-> Note this discussion thread ending at his comment [issue1918]:
->
+Hi Benjamin,
 
-Thanks etienne for the detailed description and references. Although,
-we can set CFG_PREALLOC_RPC_CACHE=n by default but it feels like we
-would miss a valuable optimization.
+On 08/12/2021 17:18, Benjamin Tissoires wrote:
+> On Wed, Dec 1, 2021 at 5:43 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
+>> Add support for Universal Stylus Interface (USI) style events to the HID
+>> core and input layers.
+>>
+>> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+>> ---
+>>   drivers/hid/hid-input.c                | 18 ++++++++++++++++++
+>>   include/linux/mod_devicetable.h        |  2 +-
+>>   include/uapi/linux/hid.h               | 10 ++++++++++
+>>   include/uapi/linux/input-event-codes.h | 22 ++++++++++++++--------
+>>   4 files changed, 43 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+>> index 73c2edda742e..b428ee9b4d9b 100644
+>> --- a/drivers/hid/hid-input.c
+>> +++ b/drivers/hid/hid-input.c
+>> @@ -829,6 +829,10 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+>>                          }
+>>                          break;
+>>
+>> +               case 0x38: /* Transducer Index */
+>> +                       map_msc(MSC_PEN_ID);
+> This is the new slot version for pens, I am not sure we really want to
+> blindly introduce that without testing.
+>
+> Do you have a panel that supports multiple values (at once) for this
+> usage (2 pens???). If not, I would simply skip that usage until we get
+> an actual hardware that makes use of it.
+Afaik, current controllers (panels) only support single pen at a time. 
+You can use multiple pens with them and they effectively re-use the same 
+pen-id, but you can't use them at the same time.
+>
+>> +                       break;
+>> +
+>>                  case 0x3b: /* Battery Strength */
+>>                          hidinput_setup_battery(device, HID_INPUT_REPORT, field, false);
+>>                          usage->type = EV_PWR;
+>> @@ -876,6 +880,20 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+>>                          map_msc(MSC_SERIAL);
+>>                          break;
+>>
+>> +               case 0x5c: map_msc(MSC_PEN_COLOR);              break;
+>> +               case 0x5e: map_msc(MSC_PEN_LINE_WIDTH);         break;
+> We already have ABS_TOOL_WIDTH which seems to relate to that very closely.
+Ok, I can switch to use this one.
+>
+>> +
+>> +               case 0x70:
+>> +               case 0x71:
+>> +               case 0x72:
+>> +               case 0x73:
+>> +               case 0x74:
+>> +               case 0x75:
+>> +               case 0x76:
+>> +               case 0x77:
+>> +                       map_msc(MSC_PEN_LINE_STYLE);
+> Nope, this is wrong. It took me a long time to understand the report
+> descriptor (see my last reply to your v2).
+> Basically, we need one input event for each value between 0x72 and
+> 0x77. HID core should translate the array of 1 element into a set of
+> {depressed usage, pressed usage} and from the user-space, we will get
+> "MSC_PEN_STYLE_CHISEL_MARKER 1" for instance.
+>
+> And *maybe* we could even use KEY events there, so we could remap them
+> (but that's a very distant maybe).
+>
+>> +                       break;
+>> +
+>>                  default:  goto unknown;
+>>                  }
+>>                  break;
+>> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+>> index ae2e75d15b21..4ff40be7676b 100644
+>> --- a/include/linux/mod_devicetable.h
+>> +++ b/include/linux/mod_devicetable.h
+>> @@ -322,7 +322,7 @@ struct pcmcia_device_id {
+>>   #define INPUT_DEVICE_ID_KEY_MAX                0x2ff
+>>   #define INPUT_DEVICE_ID_REL_MAX                0x0f
+>>   #define INPUT_DEVICE_ID_ABS_MAX                0x3f
+>> -#define INPUT_DEVICE_ID_MSC_MAX                0x07
+>> +#define INPUT_DEVICE_ID_MSC_MAX                0x09
+>>   #define INPUT_DEVICE_ID_LED_MAX                0x0f
+>>   #define INPUT_DEVICE_ID_SND_MAX                0x07
+>>   #define INPUT_DEVICE_ID_FF_MAX         0x7f
+>> diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
+>> index 861bfbbfc565..60ef9b615a1a 100644
+>> --- a/include/uapi/linux/hid.h
+>> +++ b/include/uapi/linux/hid.h
+>> @@ -255,6 +255,7 @@
+>>   #define HID_DG_TOUCH                           0x000d0033
+>>   #define HID_DG_UNTOUCH                         0x000d0034
+>>   #define HID_DG_TAP                             0x000d0035
+>> +#define HID_DG_TRANSDUCER_INDEX                        0x000d0038
+>>   #define HID_DG_TABLETFUNCTIONKEY               0x000d0039
+>>   #define HID_DG_PROGRAMCHANGEKEY                        0x000d003a
+>>   #define HID_DG_BATTERYSTRENGTH                 0x000d003b
+>> @@ -267,6 +268,15 @@
+>>   #define HID_DG_BARRELSWITCH                    0x000d0044
+>>   #define HID_DG_ERASER                          0x000d0045
+>>   #define HID_DG_TABLETPICK                      0x000d0046
+>> +#define HID_DG_PEN_COLOR                       0x000d005c
+>> +#define HID_DG_PEN_LINE_WIDTH                  0x000d005e
+>> +#define HID_DG_PEN_LINE_STYLE                  0x000d0070
+>> +#define HID_DG_PEN_LINE_STYLE_INK              0x000d0072
+>> +#define HID_DG_PEN_LINE_STYLE_PENCIL           0x000d0073
+>> +#define HID_DG_PEN_LINE_STYLE_HIGHLIGHTER      0x000d0074
+>> +#define HID_DG_PEN_LINE_STYLE_CHISEL_MARKER    0x000d0075
+>> +#define HID_DG_PEN_LINE_STYLE_BRUSH            0x000d0076
+>> +#define HID_DG_PEN_LINE_STYLE_NO_PREFERENCE    0x000d0077
+> Could you integrate that patch before my patch "HID: export the
+> various HID defines from the spec in the uapi"? And also have it as a
+> separate patch from the mapping?
+> This way I can schedule that part earlier before we settle on the
+> actual user space usages.
+>
+>>   #define HID_CP_CONSUMERCONTROL                 0x000c0001
+>>   #define HID_CP_NUMERICKEYPAD                   0x000c0002
+>> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+>> index 225ec87d4f22..98295f71941a 100644
+>> --- a/include/uapi/linux/input-event-codes.h
+>> +++ b/include/uapi/linux/input-event-codes.h
+>> @@ -901,14 +901,20 @@
+>>    * Misc events
+>>    */
+>>
+>> -#define MSC_SERIAL             0x00
+>> -#define MSC_PULSELED           0x01
+>> -#define MSC_GESTURE            0x02
+>> -#define MSC_RAW                        0x03
+>> -#define MSC_SCAN               0x04
+>> -#define MSC_TIMESTAMP          0x05
+>> -#define MSC_MAX                        0x07
+>> -#define MSC_CNT                        (MSC_MAX+1)
+>> +#define MSC_SERIAL                     0x00
+>> +#define MSC_PULSELED                   0x01
+>> +#define MSC_GESTURE                    0x02
+>> +#define MSC_RAW                                0x03
+>> +#define MSC_SCAN                       0x04
+>> +#define MSC_TIMESTAMP                  0x05
+>> +/* USI Pen events */
+>> +#define MSC_PEN_ID                     0x06
+>> +#define MSC_PEN_COLOR                  0x07
+>> +#define MSC_PEN_LINE_WIDTH             0x08
+> PEN_LINE_WIDTH should be dropped.
+>
+>> +#define MSC_PEN_LINE_STYLE             0x09
+> Again, PEN_LINE_STYLE is HID only and we should only map the values,
+> not the title of the array.
 
-How about we just allocate a shared memory page during the OP-TEE
-driver probe and share it with optee-os to use for RPC arguments? And
-later it can be freed during OP-TEE driver removal. This would avoid
-any refconting of this special memory to be associated with TA
-sessions.
+Ok will update this, thanks.
 
--Sumit
+-Tero
 
-> Comments are welcome. I may have missed something in the description
-> (or understanding :).
 >
-> [pr4896] https://github.com/OP-TEE/optee_os/pull/4896
-> [issue1918] https://github.com/OP-TEE/optee_os/issues/1918#issuecomment-968747738
+> Cheers,
+> Benjamin
 >
-> Best regards,
-> etienne
->
->
->
-> > --
-> > Jerome
+>> +/* TODO: Add USI diagnostic & battery events too */
+>> +#define MSC_MAX                                0x09
+>> +#define MSC_CNT                                (MSC_MAX + 1)
+>>
+>>   /*
+>>    * LEDs
+>> --
+>> 2.25.1
+>>

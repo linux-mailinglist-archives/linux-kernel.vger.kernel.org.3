@@ -2,492 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C99664707E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D8E4707E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244909AbhLJR7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:59:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:45530 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244811AbhLJR66 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:58:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3209613D5;
-        Fri, 10 Dec 2021 09:55:23 -0800 (PST)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D3EB93F73B;
-        Fri, 10 Dec 2021 09:55:21 -0800 (PST)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, will@kernel.org
-Cc:     iommu@lists.linux-foundation.org, suravee.suthikulpanit@amd.com,
-        baolu.lu@linux.intel.com, willy@infradead.org,
-        linux-kernel@vger.kernel.org, john.garry@huawei.com,
-        linux-mm@kvack.org
-Subject: [PATCH v2 11/11] iommu: Move flush queue data into iommu_dma_cookie
-Date:   Fri, 10 Dec 2021 17:54:52 +0000
-Message-Id: <e2e24e5f4174a56c725cde3164f86a3e234f6d7f.1639157090.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
-In-Reply-To: <cover.1639157090.git.robin.murphy@arm.com>
-References: <cover.1639157090.git.robin.murphy@arm.com>
+        id S241594AbhLJR7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245073AbhLJR7P (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 12:59:15 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0A8C061746;
+        Fri, 10 Dec 2021 09:55:39 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id a24so8686355qvb.5;
+        Fri, 10 Dec 2021 09:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=1wtvNcOdkbKIyNXdwFNs06IFmsjU6gWbejdXvtZbfgs=;
+        b=R8DUHYY4CEUvoGJf0fYI3YwuKddeDeV1uozdv2ZFKmbSEmbDElBpwJgC4k1KHCPWW2
+         B+1iXji/PkL2aavGlKTyNZd8yLzordol90wmGaE/P0Hcsn3/jfWC5beh4Vl0IgeNxQeN
+         GCgnGpsIDjvrCslI/HF5EBobR3zt7j/MpqJZTH7tfNsCtgwJX0EYWIHC2RUDlpRYP/s1
+         wo8cKKku49yIs/J9/5Yitw86NmmUiavwHGM6JgFn+z9rNfGoRK/4huTHs2k1jYkyFYbo
+         U6IKaQDTDhBIRswQDSn8+ZXS93PBr+fxNLB0SspTLVTlruyY2IAFAzg4K81/07PPEvck
+         kvWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=1wtvNcOdkbKIyNXdwFNs06IFmsjU6gWbejdXvtZbfgs=;
+        b=qiPC29bUu1O4J9s6bgp5xwLIVP3sVyA3ljAHmuXCYNTE0zV/ymwVMZ67Wg/mDS/oVp
+         PsuIEt0/m05t8TqPS6SaIGvwbwfEKfpOrQ1zr6e68LKUrU1CrK4HrEvO8zJPMWvXPmRO
+         iCiFNdsnEpSksTim86wdsR3Tcd8syU+UQL8MHosVKWGbIGkTcovbPbYF6cqwyJiMcLkR
+         0xjD6/4ZyDkn0pmYbuZ9/gFvvWyEZPI/EwoBEMv2/IwzE31dnD0QsuiyzymclXPqAhe9
+         i7Bg1ZUMsIB2+x6ljJ7WIohigAxnwm8YApH+VvLJSNgPrXll9VyCUch54lpxH3XtB1Tg
+         Z6ZQ==
+X-Gm-Message-State: AOAM5331ZCSSf4VwsnUrR5ylpso8wcT/eBG88JIwCX75hfPsQMO6P7sx
+        DqanGXyl4MT97iyljQjXG94=
+X-Google-Smtp-Source: ABdhPJzFnXKUAFn/kChcD4UaKYPmAqPgLJb7FmFJSAxtuVX8JsA6C7iCgJ3Z5dWk+55zp/UjDHKlYg==
+X-Received: by 2002:ad4:5bac:: with SMTP id 12mr27871888qvq.63.1639158938893;
+        Fri, 10 Dec 2021 09:55:38 -0800 (PST)
+Received: from [127.0.0.1] ([179.97.37.151])
+        by smtp.gmail.com with ESMTPSA id i16sm2465161qtx.57.2021.12.10.09.55.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 09:55:38 -0800 (PST)
+Date:   Fri, 10 Dec 2021 14:55:32 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        James Clark <james.clark@arm.com>
+CC:     Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_perf_cs-etm=3A_Remove_dup?= =?US-ASCII?Q?licate_and_incorrect_aux_size_checks?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20211210165436.GA1236662@p14s>
+References: <20211208115435.610101-1-james.clark@arm.com> <20211208131753.GC273781@leoy-ThinkPad-X240s> <269d2f14-0594-c73e-97b5-82e72f76e826@arm.com> <20211209134413.GA622826@leoy-ThinkPad-X240s> <6a7fd600-91f3-5feb-d21f-ec7cb704f84c@arm.com> <20211210165436.GA1236662@p14s>
+Message-ID: <B3677362-D2A0-4341-A6C1-53E50A3B8C49@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Complete the move into iommu-dma by refactoring the flush queues
-themselves to belong to the DMA cookie rather than the IOVA domain.
 
-The refactoring may as well extend to some minor cosmetic aspects
-too, to help us stay one step ahead of the style police.
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+On December 10, 2021 1:54:36 PM GMT-03:00, Mathieu Poirier <mathieu=2Epoir=
+ier@linaro=2Eorg> wrote:
+>On Thu, Dec 09, 2021 at 02:16:43PM +0000, James Clark wrote:
+>>=20
+>>=20
+>> On 09/12/2021 13:44, Leo Yan wrote:
+>> > On Wed, Dec 08, 2021 at 02:08:04PM +0000, James Clark wrote:
+>> >> On 08/12/2021 13:17, Leo Yan wrote:
+>> >>> Hi James,
+>> >>>
+>> >>> On Wed, Dec 08, 2021 at 11:54:35AM +0000, James Clark wrote:
+>> >>>> There are two checks, one is for size when running without admin, =
+but
+>> >>>> this one is covered by the driver and reported on in more detail h=
+ere
+>> >>>> (builtin-record=2Ec):
+>> >>>>
+>> >>>>   pr_err("Permission error mapping pages=2E\n"
+>> >>>>          "Consider increasing "
+>> >>>>          "/proc/sys/kernel/perf_event_mlock_kb,\n"
+>> >>>>          "or try again with a smaller value of -m/--mmap_pages=2E\=
+n"
+>> >>>>          "(current value: %u,%u)\n",
+>> >>>
+>> >>> I looked into the kernel code and found:
+>> >>>
+>> >>>   sysctl_perf_event_mlock =3D 512 + (PAGE_SIZE / 1024);  // 512KB +=
+ 1 page
+>> >>>
+>> >>> If the system have multiple cores, let's say 8 cores, then kernel e=
+ven
+>> >>> can relax the limitaion with:
+>> >>>
+>> >>>   user_lock_limit *=3D num_online_cpus();
+>> >>>
+>> >>> So means the memory lock limitation is:
+>> >>>
+>> >>>   (512KB + 1 page) * 8 =3D 4MB + 8 pages=2E
+>> >>>
+>> >>> Seems to me, it's much relax than the user space's limitaion 128KB=
+=2E
+>> >>> And let's imagine for Arm server, the permitted buffer size can be =
+a
+>> >>> huge value (e=2Eg=2E for a system with 128 cores)=2E
+>> >>>
+>> >>> Could you confirm if this is right?
+>> >>
+>> >> Yes that seems to be the case=2E And the commit message for that add=
+ition
+>> >> states the reasoning:
+>> >>
+>> >>   perf_counter: Increase mmap limit
+>> >>  =20
+>> >>   In a default 'perf top' run the tool will create a counter for
+>> >>   each online CPU=2E With enough CPUs this will eventually exhaust
+>> >>   the default limit=2E
+>> >>
+>> >>   So scale it up with the number of online CPUs=2E
+>> >>
+>> >> To me that makes sense=2E Normally the memory installed also scales =
+with the
+>> >> number of cores=2E
+>> >>
+>> >> Are you saying that we should look into modifying that scaling facto=
+r in
+>> >> perf_mmap()? Or that we should still add something to userspace for
+>> >> coresight to limit user supplied buffer sizes?
+>> >=20
+>> > I don't think we should modify the scaling factor in perf_mmap(), the
+>> > logic is not only used by AUX buffer, it's shared by normal event
+>> > ring buffer=2E
+>> >=20
+>> >> I think it makes sense to allow the user to specify any value that w=
+ill work,
+>> >> it's up to them=2E
+>> >=20
+>> > Understand, I verified this patch with below steps:
+>> >=20
+>> > root@debian:~# echo 0 > /proc/sys/kernel/perf_event_paranoid
+>> >=20
+>> > leoy@debian:~$ perf record -e cs_etm// -m 4M,8M -o perf_test=2Edata -=
+- sleep 1
+>> > Permission error mapping pages=2E
+>> > Consider increasing /proc/sys/kernel/perf_event_mlock_kb,
+>> > or try again with a smaller value of -m/--mmap_pages=2E
+>> > (current value: 1024,2048)
+>> >=20
+>> > leoy@debian:~$ perf record -e cs_etm// -m 4M,4M -o perf_test=2Edata -=
+- sleep 1
+>> > Couldn't synthesize bpf events=2E
+>> > [ perf record: Woken up 1 times to write data ]
+>> > [ perf record: Captured and wrote 0=2E607 MB perf_test=2Edata ]
+>> >=20
+>> > So this patch looks good for me:
+>> >=20
+>> > Reviewed-by: Leo Yan <leo=2Eyan@linaro=2Eorg>
+>> >=20
+>> Thanks Leo!
+>
+>Arnaldo is not on the recipient list and as such he won't see this patch=
+=2E=2E=2E
+>
 
-v2: Rebase with del_timer_sync() change
+I saw it now, can I take this as an acked-by: Matthieu too?
 
- drivers/iommu/dma-iommu.c | 171 +++++++++++++++++++++-----------------
- drivers/iommu/iova.c      |   2 -
- include/linux/iova.h      |  44 +---------
- 3 files changed, 95 insertions(+), 122 deletions(-)
-
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index ab8818965b2f..a7cd3a875481 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -9,9 +9,12 @@
-  */
- 
- #include <linux/acpi_iort.h>
-+#include <linux/atomic.h>
-+#include <linux/crash_dump.h>
- #include <linux/device.h>
--#include <linux/dma-map-ops.h>
-+#include <linux/dma-direct.h>
- #include <linux/dma-iommu.h>
-+#include <linux/dma-map-ops.h>
- #include <linux/gfp.h>
- #include <linux/huge_mm.h>
- #include <linux/iommu.h>
-@@ -20,11 +23,10 @@
- #include <linux/mm.h>
- #include <linux/mutex.h>
- #include <linux/pci.h>
--#include <linux/swiotlb.h>
- #include <linux/scatterlist.h>
-+#include <linux/spinlock.h>
-+#include <linux/swiotlb.h>
- #include <linux/vmalloc.h>
--#include <linux/crash_dump.h>
--#include <linux/dma-direct.h>
- 
- struct iommu_dma_msi_page {
- 	struct list_head	list;
-@@ -41,7 +43,19 @@ struct iommu_dma_cookie {
- 	enum iommu_dma_cookie_type	type;
- 	union {
- 		/* Full allocator for IOMMU_DMA_IOVA_COOKIE */
--		struct iova_domain	iovad;
-+		struct {
-+			struct iova_domain	iovad;
-+
-+			struct iova_fq __percpu *fq;	/* Flush queue */
-+			/* Number of TLB flushes that have been started */
-+			atomic64_t		fq_flush_start_cnt;
-+			/* Number of TLB flushes that have been finished */
-+			atomic64_t		fq_flush_finish_cnt;
-+			/* Timer to regularily empty the flush queues */
-+			struct timer_list	fq_timer;
-+			/* 1 when timer is active, 0 when not */
-+			atomic_t		fq_timer_on;
-+		};
- 		/* Trivial linear page allocator for IOMMU_DMA_MSI_COOKIE */
- 		dma_addr_t		msi_iova;
- 	};
-@@ -65,6 +79,27 @@ static int __init iommu_dma_forcedac_setup(char *str)
- early_param("iommu.forcedac", iommu_dma_forcedac_setup);
- 
- 
-+/* Number of entries per flush queue */
-+#define IOVA_FQ_SIZE	256
-+
-+/* Timeout (in ms) after which entries are flushed from the queue */
-+#define IOVA_FQ_TIMEOUT	10
-+
-+/* Flush queue entry for deferred flushing */
-+struct iova_fq_entry {
-+	unsigned long iova_pfn;
-+	unsigned long pages;
-+	struct list_head freelist;
-+	u64 counter; /* Flush counter when this entry was added */
-+};
-+
-+/* Per-CPU flush queue structure */
-+struct iova_fq {
-+	struct iova_fq_entry entries[IOVA_FQ_SIZE];
-+	unsigned int head, tail;
-+	spinlock_t lock;
-+};
-+
- #define fq_ring_for_each(i, fq) \
- 	for ((i) = (fq)->head; (i) != (fq)->tail; (i) = ((i) + 1) % IOVA_FQ_SIZE)
- 
-@@ -74,9 +109,9 @@ static inline bool fq_full(struct iova_fq *fq)
- 	return (((fq->tail + 1) % IOVA_FQ_SIZE) == fq->head);
- }
- 
--static inline unsigned fq_ring_add(struct iova_fq *fq)
-+static inline unsigned int fq_ring_add(struct iova_fq *fq)
- {
--	unsigned idx = fq->tail;
-+	unsigned int idx = fq->tail;
- 
- 	assert_spin_locked(&fq->lock);
- 
-@@ -85,10 +120,10 @@ static inline unsigned fq_ring_add(struct iova_fq *fq)
- 	return idx;
- }
- 
--static void fq_ring_free(struct iova_domain *iovad, struct iova_fq *fq)
-+static void fq_ring_free(struct iommu_dma_cookie *cookie, struct iova_fq *fq)
- {
--	u64 counter = atomic64_read(&iovad->fq_flush_finish_cnt);
--	unsigned idx;
-+	u64 counter = atomic64_read(&cookie->fq_flush_finish_cnt);
-+	unsigned int idx;
- 
- 	assert_spin_locked(&fq->lock);
- 
-@@ -98,7 +133,7 @@ static void fq_ring_free(struct iova_domain *iovad, struct iova_fq *fq)
- 			break;
- 
- 		put_pages_list(&fq->entries[idx].freelist);
--		free_iova_fast(iovad,
-+		free_iova_fast(&cookie->iovad,
- 			       fq->entries[idx].iova_pfn,
- 			       fq->entries[idx].pages);
- 
-@@ -106,50 +141,50 @@ static void fq_ring_free(struct iova_domain *iovad, struct iova_fq *fq)
- 	}
- }
- 
--static void iova_domain_flush(struct iova_domain *iovad)
-+static void fq_flush_iotlb(struct iommu_dma_cookie *cookie)
- {
--	atomic64_inc(&iovad->fq_flush_start_cnt);
--	iovad->fq_domain->ops->flush_iotlb_all(iovad->fq_domain);
--	atomic64_inc(&iovad->fq_flush_finish_cnt);
-+	atomic64_inc(&cookie->fq_flush_start_cnt);
-+	cookie->fq_domain->ops->flush_iotlb_all(cookie->fq_domain);
-+	atomic64_inc(&cookie->fq_flush_finish_cnt);
- }
- 
- static void fq_flush_timeout(struct timer_list *t)
- {
--	struct iova_domain *iovad = from_timer(iovad, t, fq_timer);
-+	struct iommu_dma_cookie *cookie = from_timer(cookie, t, fq_timer);
- 	int cpu;
- 
--	atomic_set(&iovad->fq_timer_on, 0);
--	iova_domain_flush(iovad);
-+	atomic_set(&cookie->fq_timer_on, 0);
-+	fq_flush_iotlb(cookie);
- 
- 	for_each_possible_cpu(cpu) {
- 		unsigned long flags;
- 		struct iova_fq *fq;
- 
--		fq = per_cpu_ptr(iovad->fq, cpu);
-+		fq = per_cpu_ptr(cookie->fq, cpu);
- 		spin_lock_irqsave(&fq->lock, flags);
--		fq_ring_free(iovad, fq);
-+		fq_ring_free(cookie, fq);
- 		spin_unlock_irqrestore(&fq->lock, flags);
- 	}
- }
- 
--void queue_iova(struct iova_domain *iovad,
-+static void queue_iova(struct iommu_dma_cookie *cookie,
- 		unsigned long pfn, unsigned long pages,
- 		struct list_head *freelist)
- {
- 	struct iova_fq *fq;
- 	unsigned long flags;
--	unsigned idx;
-+	unsigned int idx;
- 
- 	/*
- 	 * Order against the IOMMU driver's pagetable update from unmapping
--	 * @pte, to guarantee that iova_domain_flush() observes that if called
-+	 * @pte, to guarantee that fq_flush_iotlb() observes that if called
- 	 * from a different CPU before we release the lock below. Full barrier
- 	 * so it also pairs with iommu_dma_init_fq() to avoid seeing partially
- 	 * written fq state here.
- 	 */
- 	smp_mb();
- 
--	fq = raw_cpu_ptr(iovad->fq);
-+	fq = raw_cpu_ptr(cookie->fq);
- 	spin_lock_irqsave(&fq->lock, flags);
- 
- 	/*
-@@ -157,65 +192,66 @@ void queue_iova(struct iova_domain *iovad,
- 	 * flushed out on another CPU. This makes the fq_full() check below less
- 	 * likely to be true.
- 	 */
--	fq_ring_free(iovad, fq);
-+	fq_ring_free(cookie, fq);
- 
- 	if (fq_full(fq)) {
--		iova_domain_flush(iovad);
--		fq_ring_free(iovad, fq);
-+		fq_flush_iotlb(cookie);
-+		fq_ring_free(cookie, fq);
- 	}
- 
- 	idx = fq_ring_add(fq);
- 
- 	fq->entries[idx].iova_pfn = pfn;
- 	fq->entries[idx].pages    = pages;
--	fq->entries[idx].counter  = atomic64_read(&iovad->fq_flush_start_cnt);
-+	fq->entries[idx].counter  = atomic64_read(&cookie->fq_flush_start_cnt);
- 	list_splice(freelist, &fq->entries[idx].freelist);
- 
- 	spin_unlock_irqrestore(&fq->lock, flags);
- 
- 	/* Avoid false sharing as much as possible. */
--	if (!atomic_read(&iovad->fq_timer_on) &&
--	    !atomic_xchg(&iovad->fq_timer_on, 1))
--		mod_timer(&iovad->fq_timer,
-+	if (!atomic_read(&cookie->fq_timer_on) &&
-+	    !atomic_xchg(&cookie->fq_timer_on, 1))
-+		mod_timer(&cookie->fq_timer,
- 			  jiffies + msecs_to_jiffies(IOVA_FQ_TIMEOUT));
- }
- 
--static void free_iova_flush_queue(struct iova_domain *iovad)
-+static void iommu_dma_free_fq(struct iommu_dma_cookie *cookie)
- {
- 	int cpu, idx;
- 
--	if (!iovad->fq)
-+	if (!cookie->fq)
- 		return;
- 
--	del_timer_sync(&iovad->fq_timer);
--	/*
--	 * This code runs when the iova_domain is being detroyed, so don't
--	 * bother to free iovas, just free any remaining pagetable pages.
--	 */
-+	del_timer_sync(&cookie->fq_timer);
-+	/* The IOVAs will be torn down separately, so just free our queued pages */
- 	for_each_possible_cpu(cpu) {
--		struct iova_fq *fq = per_cpu_ptr(iovad->fq, cpu);
-+		struct iova_fq *fq = per_cpu_ptr(cookie->fq, cpu);
- 
- 		fq_ring_for_each(idx, fq)
- 			put_pages_list(&fq->entries[idx].freelist);
- 	}
- 
--	free_percpu(iovad->fq);
--
--	iovad->fq = NULL;
--	iovad->fq_domain = NULL;
-+	free_percpu(cookie->fq);
- }
- 
--int init_iova_flush_queue(struct iova_domain *iovad, struct iommu_domain *fq_domain)
-+/* sysfs updates are serialised by the mutex of the group owning @domain */
-+int iommu_dma_init_fq(struct iommu_domain *domain)
- {
-+	struct iommu_dma_cookie *cookie = domain->iova_cookie;
- 	struct iova_fq __percpu *queue;
- 	int i, cpu;
- 
--	atomic64_set(&iovad->fq_flush_start_cnt,  0);
--	atomic64_set(&iovad->fq_flush_finish_cnt, 0);
-+	if (cookie->fq_domain)
-+		return 0;
-+
-+	atomic64_set(&cookie->fq_flush_start_cnt,  0);
-+	atomic64_set(&cookie->fq_flush_finish_cnt, 0);
- 
- 	queue = alloc_percpu(struct iova_fq);
--	if (!queue)
-+	if (!queue) {
-+		pr_warn("iova flush queue initialization failed\n");
- 		return -ENOMEM;
-+	}
- 
- 	for_each_possible_cpu(cpu) {
- 		struct iova_fq *fq = per_cpu_ptr(queue, cpu);
-@@ -229,12 +265,16 @@ int init_iova_flush_queue(struct iova_domain *iovad, struct iommu_domain *fq_dom
- 			INIT_LIST_HEAD(&fq->entries[i].freelist);
- 	}
- 
--	iovad->fq_domain = fq_domain;
--	iovad->fq = queue;
--
--	timer_setup(&iovad->fq_timer, fq_flush_timeout, 0);
--	atomic_set(&iovad->fq_timer_on, 0);
-+	cookie->fq = queue;
- 
-+	timer_setup(&cookie->fq_timer, fq_flush_timeout, 0);
-+	atomic_set(&cookie->fq_timer_on, 0);
-+	/*
-+	 * Prevent incomplete fq state being observable. Pairs with path from
-+	 * __iommu_dma_unmap() through iommu_dma_free_iova() to queue_iova()
-+	 */
-+	smp_wmb();
-+	WRITE_ONCE(cookie->fq_domain, domain);
- 	return 0;
- }
- 
-@@ -320,7 +360,7 @@ void iommu_put_dma_cookie(struct iommu_domain *domain)
- 		return;
- 
- 	if (cookie->type == IOMMU_DMA_IOVA_COOKIE && cookie->iovad.granule) {
--		free_iova_flush_queue(&cookie->iovad);
-+		iommu_dma_free_fq(cookie);
- 		put_iova_domain(&cookie->iovad);
- 	}
- 
-@@ -469,29 +509,6 @@ static bool dev_use_swiotlb(struct device *dev)
- 	return IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev);
- }
- 
--/* sysfs updates are serialised by the mutex of the group owning @domain */
--int iommu_dma_init_fq(struct iommu_domain *domain)
--{
--	struct iommu_dma_cookie *cookie = domain->iova_cookie;
--	int ret;
--
--	if (cookie->fq_domain)
--		return 0;
--
--	ret = init_iova_flush_queue(&cookie->iovad, domain);
--	if (ret) {
--		pr_warn("iova flush queue initialization failed\n");
--		return ret;
--	}
--	/*
--	 * Prevent incomplete iovad->fq being observable. Pairs with path from
--	 * __iommu_dma_unmap() through iommu_dma_free_iova() to queue_iova()
--	 */
--	smp_wmb();
--	WRITE_ONCE(cookie->fq_domain, domain);
--	return 0;
--}
--
- /**
-  * iommu_dma_init_domain - Initialise a DMA mapping domain
-  * @domain: IOMMU domain previously prepared by iommu_get_dma_cookie()
-@@ -630,7 +647,7 @@ static void iommu_dma_free_iova(struct iommu_dma_cookie *cookie,
- 	if (cookie->type == IOMMU_DMA_MSI_COOKIE)
- 		cookie->msi_iova -= size;
- 	else if (gather && gather->queued)
--		queue_iova(iovad, iova_pfn(iovad, iova),
-+		queue_iova(cookie, iova_pfn(iovad, iova),
- 				size >> iova_shift(iovad),
- 				&gather->freelist);
- 	else
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 6673dfa8e7c5..72ac25831584 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -61,8 +61,6 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
- 	iovad->start_pfn = start_pfn;
- 	iovad->dma_32bit_pfn = 1UL << (32 - iova_shift(iovad));
- 	iovad->max32_alloc_size = iovad->dma_32bit_pfn;
--	iovad->fq_domain = NULL;
--	iovad->fq = NULL;
- 	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
- 	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
- 	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
-diff --git a/include/linux/iova.h b/include/linux/iova.h
-index 072a09c06e8a..0abd48c5e622 100644
---- a/include/linux/iova.h
-+++ b/include/linux/iova.h
-@@ -12,9 +12,6 @@
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/rbtree.h>
--#include <linux/atomic.h>
--#include <linux/dma-mapping.h>
--#include <linux/iommu.h>
- 
- /* iova structure */
- struct iova {
-@@ -36,27 +33,6 @@ struct iova_rcache {
- 	struct iova_cpu_rcache __percpu *cpu_rcaches;
- };
- 
--/* Number of entries per Flush Queue */
--#define IOVA_FQ_SIZE	256
--
--/* Timeout (in ms) after which entries are flushed from the Flush-Queue */
--#define IOVA_FQ_TIMEOUT	10
--
--/* Flush Queue entry for defered flushing */
--struct iova_fq_entry {
--	unsigned long iova_pfn;
--	unsigned long pages;
--	struct list_head freelist;
--	u64 counter; /* Flush counter when this entrie was added */
--};
--
--/* Per-CPU Flush Queue structure */
--struct iova_fq {
--	struct iova_fq_entry entries[IOVA_FQ_SIZE];
--	unsigned head, tail;
--	spinlock_t lock;
--};
--
- /* holds all the iova translations for a domain */
- struct iova_domain {
- 	spinlock_t	iova_rbtree_lock; /* Lock to protect update of rbtree */
-@@ -67,23 +43,9 @@ struct iova_domain {
- 	unsigned long	start_pfn;	/* Lower limit for this domain */
- 	unsigned long	dma_32bit_pfn;
- 	unsigned long	max32_alloc_size; /* Size of last failed allocation */
--	struct iova_fq __percpu *fq;	/* Flush Queue */
--
--	atomic64_t	fq_flush_start_cnt;	/* Number of TLB flushes that
--						   have been started */
--
--	atomic64_t	fq_flush_finish_cnt;	/* Number of TLB flushes that
--						   have been finished */
--
- 	struct iova	anchor;		/* rbtree lookup anchor */
-+
- 	struct iova_rcache rcaches[IOVA_RANGE_CACHE_MAX_SIZE];	/* IOVA range caches */
--
--	struct iommu_domain *fq_domain;
--
--	struct timer_list fq_timer;		/* Timer to regularily empty the
--						   flush-queues */
--	atomic_t fq_timer_on;			/* 1 when timer is active, 0
--						   when not */
- 	struct hlist_node	cpuhp_dead;
- };
- 
-@@ -133,16 +95,12 @@ struct iova *alloc_iova(struct iova_domain *iovad, unsigned long size,
- 	bool size_aligned);
- void free_iova_fast(struct iova_domain *iovad, unsigned long pfn,
- 		    unsigned long size);
--void queue_iova(struct iova_domain *iovad,
--		unsigned long pfn, unsigned long pages,
--		struct list_head *freelist);
- unsigned long alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
- 			      unsigned long limit_pfn, bool flush_rcache);
- struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
- 	unsigned long pfn_hi);
- void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
- 	unsigned long start_pfn);
--int init_iova_flush_queue(struct iova_domain *iovad, struct iommu_domain *fq_domain);
- struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
- void put_iova_domain(struct iova_domain *iovad);
- #else
--- 
-2.28.0.dirty
-
+- Arnaldo

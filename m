@@ -2,227 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B29A46FB1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBA646FB1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbhLJHKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S235090AbhLJHLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbhLJHKi (ORCPT
+        with ESMTP id S233193AbhLJHLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:10:38 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46941C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:07:04 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id s137so7274266pgs.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 23:07:04 -0800 (PST)
+        Fri, 10 Dec 2021 02:11:45 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7AAC061746;
+        Thu,  9 Dec 2021 23:08:11 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id o4so7629930pfp.13;
+        Thu, 09 Dec 2021 23:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dQLnEh2Ps1sBa0Skws70D/cK3Q/WSmNsGUWpZrbG/A=;
-        b=XQ6OibmOlk5JlVdQmWNPoO8Ju1Oy1svtjJOCaHrz8s1F/9xiGfRfJVJ+ELBDnIu3I5
-         kWFn8a31Q1XG8njuiW23H/u5Trwz89hub2HHO9RSnSrybA2vmPuPd5m8Ni2VbNfN3wg3
-         d0T/wg5qguqZd1XIM9KTGCSyekIGkxbUHNEsz3jlQ9sezR1yv5nux6b7i1ACAvsla4Z6
-         TZFeWXl1pDDRk90mSwfXN4jkoDj7OuTP5NFsksPjECXYPeFPGG0Qn3ZE6ESxmgV1IRnV
-         wjRmxLyUTXOGNchdlwGYLmmoneyXhajNlMGG4RduHSMkTHfEgdO1bl7zkhobkbt4cZa2
-         7Zpw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=TSkC9LiJWh4XTkaGlPB/rmDBv5Wy05nA//9hmVUPnbY=;
+        b=Rha6XlOas1aOzbODMI4qEvT0B26gjECUdFyIQVqbEX3HEe5LfX6VOIW+DpNvCLPbXb
+         2sHlVLw0dO2a3OqEmy7+Btv9Ov1J21oStxN+JpaaIozzNn3kJ5ncz9COiWc3ogrKEMqq
+         6A0JbqAwJTihmu/P42CkrFOacsakF/U1CVjoy9S1sm9kmMSo38Y3nqJh7axBfK1GQaSZ
+         Mo12hRBLMAiuPRAG8QGUSiOgUBQVM3APxbo1ITOuQOUa7RkjbB2Fzcr7pqjledTL5kZu
+         T6S82GH2/XMWy8uDfPLnqAhvVsOSTvlU+y9BLrry4iYU9Xyeb8W8D7QbzHhKFgF9bTZG
+         +r2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dQLnEh2Ps1sBa0Skws70D/cK3Q/WSmNsGUWpZrbG/A=;
-        b=1+yW3fV92hv4k4sv0BLwxhzMNWG7DHj3AQIuboun4MqR2HMsSQTTPLqo5aPMEU0/z+
-         +qMRZr8rBOdVaof4piIIg/GvxxxfrcTjsmOxWYO70jfjLtA7rC/NfMmDlD2OHuOuq/kM
-         9qHQzZ7Id1pB3anx40Bm+JtbQu/PuJ3y+TZsgI+ZmjGjb2kJHdYy77yKG+Zl2mNydkv/
-         IQXOisp5Zg/cpGqS6JtErnDKRtg9tHjJfNAdkbo9VchnlyM+EO2ERkobfiGpdfMVSy+K
-         QQieTNa56F1Czk02AfB7Mxamk9VJVWXz1GJeaqi2iUJhkeQ68xSZx2k56VwnOvc1Jn7L
-         kYKA==
-X-Gm-Message-State: AOAM532+49EXq9Dt274AYrFp86L2LhouyydXBU4CNfFj4b6Hj5R0jT2S
-        enciN+0bRoVPZhYgTa0XGWoT
-X-Google-Smtp-Source: ABdhPJx96kBOUOEL79P/rFK0J0v3F/7gqFaO9Jxv6fT0nwAfRoxhsTNLDFsercJ0LSOjJm6hPcSrYQ==
-X-Received: by 2002:a65:558c:: with SMTP id j12mr30010773pgs.373.1639120023679;
-        Thu, 09 Dec 2021 23:07:03 -0800 (PST)
-Received: from localhost.localdomain ([202.21.42.75])
-        by smtp.gmail.com with ESMTPSA id b10sm1823849pft.179.2021.12.09.23.06.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=TSkC9LiJWh4XTkaGlPB/rmDBv5Wy05nA//9hmVUPnbY=;
+        b=ISnqJZVPI02iy4ncwisVysCAxu2sjMJlADUx3nrVtP6a0UpST86MQpE94oJnQwyk/s
+         CfOD5PmnB4l7Bl6KSbiWCnA8y/xJqSrrhmRzwHjyb9KPaIHao3L210eF2FSSQo/k58z2
+         KZB+U38LvcrLV7eA2z+5lDX6DBClqTcmKSYV6uvoQv91SG59HMxSKcVIeDdymaEePT9G
+         77cor0c9xCTtmwe7BMYXISB71DMdTUJZC7pRkr7ALpX0LogWFhBCVlsh8w6hfdPLc4Jv
+         DX5RtrDQ3pdSKHo1E2riYDWtqldR4j/fS8L8frmHYuUPd7FovARC6gGj58hk+vJEDmg6
+         qEWw==
+X-Gm-Message-State: AOAM533lIchtWUHDJCH9xiqKYl+qBojh8qApKbh2EZWEMRVabx3aeyR/
+        C1SoeVtSM1q0HN4Y/rbj5hc=
+X-Google-Smtp-Source: ABdhPJytdt0Z+YZYlytcizfNg4H3Sdf3LJPLySbbzVo4T+dn+MQ7fXrlpmoTLFFRBUH/paih85yE3Q==
+X-Received: by 2002:a05:6a00:23c8:b0:49f:e054:84d7 with SMTP id g8-20020a056a0023c800b0049fe05484d7mr16495329pfc.50.1639120091016;
+        Thu, 09 Dec 2021 23:08:11 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id j36sm1620665pgi.8.2021.12.09.23.08.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 23:07:03 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] PCI: qcom-ep: Move enable/disable resources code to common functions
-Date:   Fri, 10 Dec 2021 12:36:56 +0530
-Message-Id: <20211210070656.18988-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 09 Dec 2021 23:08:10 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] platform/mellanox: mlxbf-pmc: Fix an IS_ERR() vs NULL bug in mlxbf_pmc_map_counters
+Date:   Fri, 10 Dec 2021 07:07:53 +0000
+Message-Id: <20211210070753.10761-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The devm_ioremap() function returns NULL on error, it doesn't return
+error pointers. Also according to doc of device_property_read_u64_array,
+values in info array are properties of device or NULL.
 
-Remove code duplication by moving the code related to enabling/disabling
-the resources (PHY, CLK, Reset) to common functions so that they can be
-called from multiple places.
-
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-[mani: renamed the functions and reworded the commit message]
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/pci/controller/dwc/pcie-qcom-ep.c | 86 ++++++++++++-----------
- 1 file changed, 45 insertions(+), 41 deletions(-)
+ drivers/platform/mellanox/mlxbf-pmc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 05fa776615c0..f3f429e3192c 100644
---- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -222,11 +222,8 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
- 	disable_irq(pcie_ep->perst_irq);
- }
+diff --git a/drivers/platform/mellanox/mlxbf-pmc.c b/drivers/platform/mellanox/mlxbf-pmc.c
+index 04bc3b50aa7a..65b4a819f1bd 100644
+--- a/drivers/platform/mellanox/mlxbf-pmc.c
++++ b/drivers/platform/mellanox/mlxbf-pmc.c
+@@ -1374,8 +1374,8 @@ static int mlxbf_pmc_map_counters(struct device *dev)
+ 		pmc->block[i].counters = info[2];
+ 		pmc->block[i].type = info[3];
  
--static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
-+static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
- {
--	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
--	struct device *dev = pci->dev;
--	u32 val, offset;
- 	int ret;
+-		if (IS_ERR(pmc->block[i].mmio_base))
+-			return PTR_ERR(pmc->block[i].mmio_base);
++		if (!pmc->block[i].mmio_base)
++			return -ENOMEM;
  
- 	ret = clk_bulk_prepare_enable(ARRAY_SIZE(qcom_pcie_ep_clks),
-@@ -246,6 +243,38 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
- 	if (ret)
- 		goto err_phy_exit;
- 
-+	return 0;
-+
-+err_phy_exit:
-+	phy_exit(pcie_ep->phy);
-+err_disable_clk:
-+	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
-+				   qcom_pcie_ep_clks);
-+
-+	return ret;
-+}
-+
-+static void qcom_pcie_disable_resources(struct qcom_pcie_ep *pcie_ep)
-+{
-+	phy_power_off(pcie_ep->phy);
-+	phy_exit(pcie_ep->phy);
-+	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
-+				   qcom_pcie_ep_clks);
-+}
-+
-+static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
-+{
-+	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
-+	struct device *dev = pci->dev;
-+	u32 val, offset;
-+	int ret;
-+
-+	ret = qcom_pcie_enable_resources(pcie_ep);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable resources: %d\n", ret);
-+		return ret;
-+	}
-+
- 	/* Assert WAKE# to RC to indicate device is ready */
- 	gpiod_set_value_cansleep(pcie_ep->wake, 1);
- 	usleep_range(WAKE_DELAY_US, WAKE_DELAY_US + 500);
-@@ -334,7 +363,7 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
- 	ret = dw_pcie_ep_init_complete(&pcie_ep->pci.ep);
- 	if (ret) {
- 		dev_err(dev, "Failed to complete initialization: %d\n", ret);
--		goto err_phy_power_off;
-+		goto err_disable_resources;
- 	}
- 
- 	/*
-@@ -354,13 +383,8 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
- 
- 	return 0;
- 
--err_phy_power_off:
--	phy_power_off(pcie_ep->phy);
--err_phy_exit:
--	phy_exit(pcie_ep->phy);
--err_disable_clk:
--	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
--				   qcom_pcie_ep_clks);
-+err_disable_resources:
-+	qcom_pcie_disable_resources(pcie_ep);
- 
- 	return ret;
- }
-@@ -375,10 +399,7 @@ static void qcom_pcie_perst_assert(struct dw_pcie *pci)
- 		return;
- 	}
- 
--	phy_power_off(pcie_ep->phy);
--	phy_exit(pcie_ep->phy);
--	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
--				   qcom_pcie_ep_clks);
-+	qcom_pcie_disable_resources(pcie_ep);
- 	pcie_ep->link_status = QCOM_PCIE_EP_LINK_DISABLED;
- }
- 
-@@ -646,43 +667,26 @@ static int qcom_pcie_ep_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	ret = clk_bulk_prepare_enable(ARRAY_SIZE(qcom_pcie_ep_clks),
--				      qcom_pcie_ep_clks);
--	if (ret)
-+	ret = qcom_pcie_enable_resources(pcie_ep);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable resources: %d\n", ret);
- 		return ret;
--
--	ret = qcom_pcie_ep_core_reset(pcie_ep);
--	if (ret)
--		goto err_disable_clk;
--
--	ret = phy_init(pcie_ep->phy);
--	if (ret)
--		goto err_disable_clk;
--
--	/* PHY needs to be powered on for dw_pcie_ep_init() */
--	ret = phy_power_on(pcie_ep->phy);
--	if (ret)
--		goto err_phy_exit;
-+	}
- 
- 	ret = dw_pcie_ep_init(&pcie_ep->pci.ep);
- 	if (ret) {
- 		dev_err(dev, "Failed to initialize endpoint: %d\n", ret);
--		goto err_phy_power_off;
-+		goto err_disable_resources;
- 	}
- 
- 	ret = qcom_pcie_ep_enable_irq_resources(pdev, pcie_ep);
- 	if (ret)
--		goto err_phy_power_off;
-+		goto err_disable_resources;
- 
- 	return 0;
- 
--err_phy_power_off:
--	phy_power_off(pcie_ep->phy);
--err_phy_exit:
--	phy_exit(pcie_ep->phy);
--err_disable_clk:
--	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
--				   qcom_pcie_ep_clks);
-+err_disable_resources:
-+	qcom_pcie_disable_resources(pcie_ep);
- 
- 	return ret;
- }
+ 		ret = mlxbf_pmc_create_groups(dev, i);
+ 		if (ret)
 -- 
-2.25.1
+2.17.1
 

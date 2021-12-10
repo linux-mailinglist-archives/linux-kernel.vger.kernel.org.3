@@ -2,181 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8DD470764
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96165470777
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241621AbhLJRiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241395AbhLJRiN (ORCPT
+        id S238294AbhLJRl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:41:27 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:33394 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233408AbhLJRl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:38:13 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEBCC0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id bf8so14177932oib.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
-        b=H84W+u8ZuMN5VRT4atnpiZFWjKwGaSqbEQHfol1liXDySnPSsLnLZeqUiIQgXscWrM
-         xC1B49/NW0FYtKotyCwHSl/Nl4z6cHFf6levmetWtX6CoCWhK9T/zDV5sHl8XI+cXGea
-         pkesln0SPt0yZWLC1pN+i0nG5pezdpC2c2oiA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
-        b=FE6I9u4mrPcZnSKHI5aJiPXY+RUkjWqKRQl2nqT8d6h0ySbDlSWvhUQ6Yeeo033AcW
-         Z//Y5aPBoczX4zgjEuOCVaipTkPj3z54fH5eGtnPysx/27yNhidnFt6BBCp037hKjE9t
-         xXbOfAUg8DPhUpZ2DQXRHiVzHKzLxgoJFxXb56ZKexJ7SkV8sAcmw6EZmL9CcNOOqvpq
-         0o5mjm7307DHRACFG2TLNZVFzX0BMKtBX2dJQwcfVu2g3bpvR24mTFTDfEEaGP02NBVF
-         LBe1w8XKQCYfjmwmuh7DUAAS2YBZzwRzKHClrMoXol0pt26XG+eVhegRwSGau5nBPCyP
-         aAZw==
-X-Gm-Message-State: AOAM530KAXs/D99sey21PFR5pSJNvrZ0O9mpsksTdzRoWhSOMPxBI6ao
-        1nS8tm2Z/UW2dJVISchpPT0D0A==
-X-Google-Smtp-Source: ABdhPJy15Gc8S3I8657EioGcfpK4uWVD6XI1GMbZgcAgsTrTw4LKvABQ+oBtRdzT3LF81vLPKkbljg==
-X-Received: by 2002:aca:61c6:: with SMTP id v189mr13118314oib.103.1639157677771;
-        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id ay40sm808342oib.1.2021.12.10.09.34.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
-Date:   Fri, 10 Dec 2021 10:34:33 -0700
-Message-Id: <20211210173433.13247-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 10 Dec 2021 12:41:26 -0500
+X-UUID: 226ffe4d41644091ab32aff198174789-20211211
+X-UUID: 226ffe4d41644091ab32aff198174789-20211211
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <flora.fu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1858846570; Sat, 11 Dec 2021 01:37:48 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 11 Dec 2021 01:37:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 11 Dec 2021 01:37:46 +0800
+From:   Flora Fu <flora.fu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Pi-Cheng Chen <pi-cheng.chen@mediatek.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Flora Fu <flora.fu@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, JB Tsai <jb.tsai@mediatek.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Subject: [PATCH 0/6] Add MT8195 APU Power Domain
+Date:   Sat, 11 Dec 2021 01:37:37 +0800
+Message-ID: <20211210173743.30906-1-flora.fu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARRAY_SIZE is defined in multiple test files. Remove the definitions
-and include header file for the define instead.
+Add MT8195 APU power domain.
+This series is based on drivers implemented in
+MT8192 apu power domain[1] and apu SMC[2].
+[1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=593809
+[2] https://patchwork.kernel.org/patch/12670253
+The device tree depends on MT8195 dts[3] which is under reviewing.
+[3] https://patchwork.kernel.org/patch/12616141
 
-Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
-define.
+Flora Fu (6):
+  dt-bindings: soc: mediatek: apu: Add MT8195 APU power domain
+  dt-bindings: arm: mediatek: Add MT8195 APU bindings
+  soc: mediatek: apu: Add MT8195 apu power domain
+  arm64: dts: mt8195: Add APU nodes
+  arm64: dts: mt8195: Add APU power domain node
+  arm64: dts: mt8195: Set up apu power domain regulators
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
- tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
- tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
- tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
- tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
- 5 files changed, 5 insertions(+), 19 deletions(-)
+ .../arm/mediatek/mediatek,apusys.yaml         |   3 +
+ .../soc/mediatek/mediatek,apu-pm.yaml         |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195-evb.dts   |   8 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  31 +++++
+ drivers/soc/mediatek/apusys/mtk-apu-pm.c      | 124 ++++++++++++++++++
+ 5 files changed, 167 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-index 1d8918dfbd3f..7a5ebd330689 100644
---- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-+++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_util.h>
- 
- #include <errno.h>
- 
-@@ -23,10 +24,6 @@ bool skip = false;
- #define BADPTR			0
- #endif
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
--#endif
--
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(max_entries, 1);
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-index 4896fdf816f7..aad30994ecd7 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -4,6 +4,7 @@
- #include <bpf/bpf_core_read.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_util.h>
- 
- #include "profiler.h"
- 
-@@ -132,10 +133,6 @@ struct {
- 	__uint(max_entries, 16);
- } disallowed_exec_inodes SEC(".maps");
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
--#endif
--
- static INLINE bool IS_ERR(const void* ptr)
- {
- 	return IS_ERR_VALUE((unsigned long)ptr);
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-index 553a282d816a..c7c512e0af79 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-@@ -8,10 +8,7 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
--
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
-+#include <bpf/bpf_util.h>
- 
- /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
- #define TCP_MEM_LOOPS 28  /* because 30 doesn't fit into 512 bytes of stack */
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-index 2b64bc563a12..57cda15d0032 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-@@ -8,10 +8,8 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_util.h>
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
- 
- /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
- #define TCP_MEM_LOOPS 20  /* because 30 doesn't fit into 512 bytes of stack */
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-index 5489823c83fc..6047c39eb457 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-@@ -8,6 +8,7 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_util.h>
- 
- /* Max supported length of a string with unsigned long in base 10 (pow2 - 1). */
- #define MAX_ULONG_STR_LEN 0xF
-@@ -15,10 +16,6 @@
- /* Max supported length of sysctl value string (pow2). */
- #define MAX_VALUE_STR_LEN 0x40
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
--
- const char tcp_mem_name[] = "net/ipv4/tcp_mem";
- static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
- {
 -- 
-2.32.0
+2.18.0
 

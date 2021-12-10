@@ -2,207 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0408246FC00
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFCF46FC0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbhLJHrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S234307AbhLJHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbhLJHrh (ORCPT
+        with ESMTP id S231458AbhLJHtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:47:37 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F042C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:44:03 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id g19so7743164pfb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 23:44:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=FYFBhmavOHQihQEBX9qGXsO80PWaXrVj26hswLpne0s=;
-        b=eG+dAPNpmN++zkv+fyWyJm9db2yzcXdaxWLsIDeNrM9/yL83hTHf9VWSkbOQK7h6hM
-         Wlj/u3dtTGGsr1WM3qnBX5p59ibJ2UWj0/j+XWpG/tEacNWRzkoWytB17nxhlXdNVC2y
-         RnNAYGMHaxEvW5WS7jDhS/fK+O5Gq63015sDuBfT8AfK5aOhuV3Ic3GuiN4JvVgC/x7i
-         eec5AQFzLkkQkv9h4mhe2Rh7QcMiJbAxca73e5nrylXCYayDnebl2aF/Brekj2CjFD0F
-         t1I3tDGsE7w3AKpWWqUALBve87HRS41uV7DfVDpOdl2CYYpeNu0XyfLRmLT0MDs/BoQi
-         Lflw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FYFBhmavOHQihQEBX9qGXsO80PWaXrVj26hswLpne0s=;
-        b=vVMU6O4Ejwr9EuJQI/Vdl6Hp6rS7qdht7AL5XXvZcmIUFppok3+bThaCv8zcjgPfwI
-         8YI4/BGbK//DsTuUWJlHLQo6GRlObG/+URel/b4RkDpnbeMsdSK2ayWgVGLegAY6yoSf
-         b8Dntsm7smfzdwE8sdfQ7SYzuN+wIvytqxAk4nIlIJdEtRszYOJ8c6m49ERHlLvoJHuX
-         rlnYccp/HMl4mc67eBhMWqUp5sbM+Z8SLFb0/Ra8w+5DRkSmJlSmSThRes56VmcQFTST
-         iXWSjz4D/IBgZyLJdsAZoqE2mToVs4l4XWJsLMOvKzjNeYhfKmDKNGE/sx8WmfzhhwNG
-         cSNg==
-X-Gm-Message-State: AOAM531FHleg642ip/eUvQZOLuYblQsbU1mp1aF36MhxjDLFf3fJHNdi
-        QBZ2Y8IpnUYeu4/OWcSA+80=
-X-Google-Smtp-Source: ABdhPJwBPXWYkvIGUGnrjWv+j12lBB8kMdBIkbohxceo7qPeZwVXgp1O9cfcTUiYk9mgFRMURfHLMw==
-X-Received: by 2002:a62:790e:0:b0:4af:e9c0:3322 with SMTP id u14-20020a62790e000000b004afe9c03322mr8145425pfc.86.1639122242728;
-        Thu, 09 Dec 2021 23:44:02 -0800 (PST)
-Received: from [30.240.98.4] ([205.204.117.108])
-        by smtp.gmail.com with ESMTPSA id a26sm1908458pfh.161.2021.12.09.23.43.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 23:44:02 -0800 (PST)
-Message-ID: <2926b360-5204-45f5-e1a0-e260214f8dbf@gmail.com>
-Date:   Fri, 10 Dec 2021 15:43:56 +0800
+        Fri, 10 Dec 2021 02:49:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C105C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:46:08 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mvabM-0003H5-Aw; Fri, 10 Dec 2021 08:45:56 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mvabL-003jMu-Is; Fri, 10 Dec 2021 08:45:54 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mvabK-0002Np-GS; Fri, 10 Dec 2021 08:45:54 +0100
+Date:   Fri, 10 Dec 2021 08:45:36 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: atmel: remove redundant initialization of variable
+ timeout
+Message-ID: <20211210074536.lawpsch2i5bwyew7@pengutronix.de>
+References: <20211210002250.639251-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [RFC PATCH v2 1/7] mm: page_alloc: avoid merging non-fallbackable
- pageblocks with others.
-To:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
-        linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20211209230414.2766515-1-zi.yan@sent.com>
- <20211209230414.2766515-2-zi.yan@sent.com>
-From:   Eric Ren <renzhengeek@gmail.com>
-In-Reply-To: <20211209230414.2766515-2-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="g5yndpvfpnnutbpm"
+Content-Disposition: inline
+In-Reply-To: <20211210002250.639251-1-colin.i.king@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2021/12/10 07:04, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
->
-> This is done in addition to MIGRATE_ISOLATE pageblock merge avoidance.
-> It prepares for the upcoming removal of the MAX_ORDER-1 alignment
-> requirement for CMA and alloc_contig_range().
->
-> MIGRARTE_HIGHATOMIC should not merge with other migratetypes like
-> MIGRATE_ISOLATE and MIGRARTE_CMA[1], so this commit prevents that too.
-> Also add MIGRARTE_HIGHATOMIC to fallbacks array for completeness.
->
-> [1] https://lore.kernel.org/linux-mm/20211130100853.GP3366@techsingularity.net/
->
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+--g5yndpvfpnnutbpm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Dec 10, 2021 at 12:22:50AM +0000, Colin Ian King wrote:
+> The variable timeout is being initialized with a value that is never
+> read, it is being re-assigned the same value later on. Remove the
+> redundant initialization and keep the latter assignment because it's
+> closer to the use of the variable.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
->   include/linux/mmzone.h |  6 ++++++
->   mm/page_alloc.c        | 28 ++++++++++++++++++----------
->   2 files changed, 24 insertions(+), 10 deletions(-)
->
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 58e744b78c2c..b925431b0123 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -83,6 +83,12 @@ static inline bool is_migrate_movable(int mt)
->   	return is_migrate_cma(mt) || mt == MIGRATE_MOVABLE;
->   }
->   
-> +/* See fallbacks[MIGRATE_TYPES][3] in page_alloc.c */
-> +static inline bool migratetype_has_fallback(int mt)
-> +{
-> +	return mt < MIGRATE_PCPTYPES;
-> +}
-> +
+>  drivers/pwm/pwm-atmel.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pwm/pwm-atmel.c b/drivers/pwm/pwm-atmel.c
+> index 98b34ea9f38e..8e00a4286145 100644
+> --- a/drivers/pwm/pwm-atmel.c
+> +++ b/drivers/pwm/pwm-atmel.c
+> @@ -271,7 +271,7 @@ static void atmel_pwm_disable(struct pwm_chip *chip, =
+struct pwm_device *pwm,
+>  			      bool disable_clk)
+>  {
+>  	struct atmel_pwm_chip *atmel_pwm =3D to_atmel_pwm_chip(chip);
+> -	unsigned long timeout =3D jiffies + 2 * HZ;
+> +	unsigned long timeout;
+> =20
+>  	atmel_pwm_wait_nonpending(atmel_pwm, pwm->hwpwm);
 
-I would suggest spliting the patch into 2 parts.  The first part: no 
-functioning change, just introduce migratetype_has_fallback()
-and replace where it applys to.
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
->   #define for_each_migratetype_order(order, type) \
->   	for (order = 0; order < MAX_ORDER; order++) \
->   		for (type = 0; type < MIGRATE_TYPES; type++)
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index edfd6c81af82..107a5f186d3b 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1041,6 +1041,12 @@ buddy_merge_likely(unsigned long pfn, unsigned long buddy_pfn,
->   	return page_is_buddy(higher_page, higher_buddy, order + 1);
->   }
->   
-> +static inline bool has_non_fallback_pageblock(struct zone *zone)
-> +{
-> +	return has_isolate_pageblock(zone) || zone_cma_pages(zone) != 0 ||
-> +		zone->nr_reserved_highatomic != 0;
+Did you spot this by using some static checker? If so, maybe attribute
+it in the commit log?
 
-Make zone->nr_reserved_highatomic != 0 a helper as zone_cma_pages()?
-> +}
-> +
->   /*
->    * Freeing function for a buddy system allocator.
->    *
-> @@ -1116,14 +1122,15 @@ static inline void __free_one_page(struct page *page,
->   	}
->   	if (order < MAX_ORDER - 1) {
->   		/* If we are here, it means order is >= pageblock_order.
-> -		 * We want to prevent merge between freepages on isolate
-> -		 * pageblock and normal pageblock. Without this, pageblock
-> -		 * isolation could cause incorrect freepage or CMA accounting.
-> +		 * We want to prevent merge between freepages on pageblock
-> +		 * without fallbacks and normal pageblock. Without this,
-> +		 * pageblock isolation could cause incorrect freepage or CMA
-> +		 * accounting or HIGHATOMIC accounting.
->   		 *
->   		 * We don't want to hit this code for the more frequent
->   		 * low-order merging.
->   		 */
-> -		if (unlikely(has_isolate_pageblock(zone))) {
-> +		if (unlikely(has_non_fallback_pageblock(zone))) {
-I'm not familiar with the code details, just wondering if this change 
-would has side effects on cma
-pageblock merging as it the condition stronger?
+Thanks
+Uwe
 
-Thanks,
-Eric
->   			int buddy_mt;
->   
->   			buddy_pfn = __find_buddy_pfn(pfn, order);
-> @@ -1131,8 +1138,8 @@ static inline void __free_one_page(struct page *page,
->   			buddy_mt = get_pageblock_migratetype(buddy);
->   
->   			if (migratetype != buddy_mt
-> -					&& (is_migrate_isolate(migratetype) ||
-> -						is_migrate_isolate(buddy_mt)))
-> +					&& (!migratetype_has_fallback(migratetype) ||
-> +						!migratetype_has_fallback(buddy_mt)))
->   				goto done_merging;
->   		}
->   		max_order = order + 1;
-> @@ -2483,6 +2490,7 @@ static int fallbacks[MIGRATE_TYPES][3] = {
->   	[MIGRATE_UNMOVABLE]   = { MIGRATE_RECLAIMABLE, MIGRATE_MOVABLE,   MIGRATE_TYPES },
->   	[MIGRATE_MOVABLE]     = { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE, MIGRATE_TYPES },
->   	[MIGRATE_RECLAIMABLE] = { MIGRATE_UNMOVABLE,   MIGRATE_MOVABLE,   MIGRATE_TYPES },
-> +	[MIGRATE_HIGHATOMIC] = { MIGRATE_TYPES }, /* Never used */
->   #ifdef CONFIG_CMA
->   	[MIGRATE_CMA]         = { MIGRATE_TYPES }, /* Never used */
->   #endif
-> @@ -2794,8 +2802,8 @@ static void reserve_highatomic_pageblock(struct page *page, struct zone *zone,
->   
->   	/* Yoink! */
->   	mt = get_pageblock_migratetype(page);
-> -	if (!is_migrate_highatomic(mt) && !is_migrate_isolate(mt)
-> -	    && !is_migrate_cma(mt)) {
-> +	/* Only reserve normal pageblock */
-> +	if (migratetype_has_fallback(mt)) {
->   		zone->nr_reserved_highatomic += pageblock_nr_pages;
->   		set_pageblock_migratetype(page, MIGRATE_HIGHATOMIC);
->   		move_freepages_block(zone, page, MIGRATE_HIGHATOMIC, NULL);
-> @@ -3544,8 +3552,8 @@ int __isolate_free_page(struct page *page, unsigned int order)
->   		struct page *endpage = page + (1 << order) - 1;
->   		for (; page < endpage; page += pageblock_nr_pages) {
->   			int mt = get_pageblock_migratetype(page);
-> -			if (!is_migrate_isolate(mt) && !is_migrate_cma(mt)
-> -			    && !is_migrate_highatomic(mt))
-> +			/* Only change normal pageblock */
-> +			if (migratetype_has_fallback(mt))
->   				set_pageblock_migratetype(page,
->   							  MIGRATE_MOVABLE);
->   		}
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--g5yndpvfpnnutbpm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGzBZgACgkQwfwUeK3K
+7Ancbwf/Y9NIGfzWvo0izlxUFno6IppPuEmbAsX1KzxbrjwHYR4EPTMvTKZ9uO51
+839xuKr0RrXJ9U6mEns0tdc3AJ9YyFtTvz7eeRJKoTCtOAtJAxunOcAfzG1NY8ad
+6g2T+//11dbuaYWI+lZSNep2+ZYmN5tj2wkfo/ujMOWWHFEbjOw4OyvItvCzJNiw
+GTuuDrDewi+l/hzz9FBxROc7p4Tb6MZ51CvthADMR6z6tpeTyX0A7IOdtXWyMPTe
+1C2JGwEq4cE3u9Wg9ANNMgMdfzcPywdGwkz1cO9qf8r8sA/Sm53F4RLTx9C98E+l
+FbHjlJdKGtehZ9AJRaur6Kbd/gYtFA==
+=kDwy
+-----END PGP SIGNATURE-----
+
+--g5yndpvfpnnutbpm--

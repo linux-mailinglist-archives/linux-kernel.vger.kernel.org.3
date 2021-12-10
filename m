@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FDD470C94
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A4A470C98
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344405AbhLJVdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:33:42 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:33281 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239964AbhLJVdl (ORCPT
+        id S1344429AbhLJVeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344408AbhLJVeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:33:41 -0500
-Received: by mail-oi1-f173.google.com with SMTP id q25so15107854oiw.0;
-        Fri, 10 Dec 2021 13:30:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6v3vN5bs9G7pQvp2EOZLbvwUUvDXnLawwef/8iJSg/0=;
-        b=Ecpc2c2B7WutVfOHpkO/5glFsuZlo5tqgZ5aICqcB5Pf8Bo4FSRhKsLM9NR6eQmg2d
-         6RS47oVChldRNb6yaW54jMHqC9XZRebwY7AA2W/Nl+C25o6sfx4DVNXtwdgywFrmJM4P
-         K7YKf4kMDpFASvUUEUQG74b/8Ypi10Eu/ai2W6tV6A22LBZV1OWzmHx6DW3gv1oKZcMx
-         B7zPPeYjj7Pe0MHVxIHbg6EA0x8IY4dSqTByU8rs0pLeZOvRwnKyba36qDPWlkncMq5A
-         BQ/2ee123k2Pljc3/qTtrVaMHvnNQwnyhW0HdUUu6z1Ram3j6isQ4+NOgaoax/WvdGT9
-         sSVA==
-X-Gm-Message-State: AOAM530jA1zF6loCNi2rKzlXwMrww8rjTrx+WAfrJ665p/JoaOpcnF7x
-        bIVhSAo4m9vbekEgt3VKug==
-X-Google-Smtp-Source: ABdhPJwy/OrkyQw56ZeeKtO0RyeKqKnvGMGF9EFgNo9NjmFHmDgnSGZxC4isABGYcBGzO/56rrJFIw==
-X-Received: by 2002:a05:6808:3c2:: with SMTP id o2mr15202275oie.112.1639171805326;
-        Fri, 10 Dec 2021 13:30:05 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o14sm710550ote.41.2021.12.10.13.30.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 13:30:04 -0800 (PST)
-Received: (nullmailer pid 1944929 invoked by uid 1000);
-        Fri, 10 Dec 2021 21:30:03 -0000
-Date:   Fri, 10 Dec 2021 15:30:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH v4 3/7] dt-bindings: arm: samsung: document jackpotlte
- board binding
-Message-ID: <YbPG27SFtOXa3NOH@robh.at.kernel.org>
-References: <20211206153124.427102-1-virag.david003@gmail.com>
- <20211206153124.427102-4-virag.david003@gmail.com>
+        Fri, 10 Dec 2021 16:34:04 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38701C061746;
+        Fri, 10 Dec 2021 13:30:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 81B6ACE2D32;
+        Fri, 10 Dec 2021 21:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337DEC341C7;
+        Fri, 10 Dec 2021 21:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639171825;
+        bh=mhXONTVugbiKgVpsUASFxSzDBV2TO+pj3CmiHV5IAzo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sR35pgV4Qnzlxq2SW9ma1wxqBhGIWM13b/25sX5mXGEHNLq1ljHGqMzU1CPhD81iS
+         1garM2LwgIsFOEqfbZ7lDnrjLrB0oWQfD8unKB4XsvVEIyHiWVv9c9K5hNQpRyq4CW
+         fdPpiAb1rdEBsM+e9IylXawWHSoe/fJvP4wBGfZpZqZ1WaH+IriD9l3i30tfGwqoyz
+         j8j18jup1Wnm8D3H2zO7tJTc5N7Fo5gwXF+eF4VRHCBWYpW9FR6kTjMOeBaMcFoNKz
+         yPQnTwUABBl05owbg0si+VEk2qd1cnKaJfXQqtuhhf2aYoDUYlXsnvPnzOMFq5nwTG
+         uH1l/P0bHalbg==
+Date:   Fri, 10 Dec 2021 21:30:20 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org, jeyu@kernel.org,
+        mcgrof@bombadil.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Next/Trees: update the modules tree
+Message-ID: <YbPG7IYbHmGrbdG2@sirena.org.uk>
+References: <20211208195931.3369500-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WIo+rdGFG0rmczps"
 Content-Disposition: inline
-In-Reply-To: <20211206153124.427102-4-virag.david003@gmail.com>
+In-Reply-To: <20211208195931.3369500-1-mcgrof@kernel.org>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Dec 2021 16:31:17 +0100, David Virag wrote:
-> Add binding for the jackpotlte board (Samsung Galaxy A8 (2018)).
-> 
-> Signed-off-by: David Virag <virag.david003@gmail.com>
-> ---
-> Changes in v2:
->   - Nothing
-> 
-> Changes in v3:
->   - Nothing
-> 
-> Changes in v4:
->   - Nothing
-> 
->  .../devicetree/bindings/arm/samsung/samsung-boards.yaml     | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--WIo+rdGFG0rmczps
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Dec 08, 2021 at 11:59:31AM -0800, Luis Chamberlain wrote:
+> Upon Jessica's request I'm helping with modules maintenance
+> so this patch reflect this and updates the trees to mine. For
+> the last v5.16 merge window I have already sent my first
+> pull request which was merged for v5.16-rc1. I'll queue up fixes
+> on the modules_linus branch.
+>=20
+> I'm now queuing up changes for the next release and so will be putting
+> those in the modules_next branch to match parity with the same style
+> used by Jessica.
+
+I just saw this - I'll roll this into my -next builds from Monday, but
+you should check that Stephen picks this up when he returns.
+
+--WIo+rdGFG0rmczps
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzxuwACgkQJNaLcl1U
+h9AexAf/eSr6/DnA06lgiGtaz0XLOcUmbrRusH1X1z8LrT/Ol8Fdvxf88ORRPJrR
+OYw6jExzImqaaTg9HmrVMd676ObUFEZ8J0Eyn2VfCJ+uN04S75h5dGcEKUmx9F8e
+uQHgbFwkJRJQkWNRB0KtDoOOd6TpmXpxiXPzgVxK11Mx4WmKRg4I3/zYt7jKuqge
+A8ggTHl0rD+BZSWjX0oKi6PkD1Z7rcakoZ3gLlfvkdbwDXGRrd6w1hHyj70gIN3h
+m0KAM1fgPChDmaEbE0dh3HI5Sfzk6hq+7CXH1yl3MO8x255vXSflOS3ILZRueL+s
+oxAXW4Vy7ncvcdTbQUyrhBk9Hnl2ZA==
+=Get1
+-----END PGP SIGNATURE-----
+
+--WIo+rdGFG0rmczps--

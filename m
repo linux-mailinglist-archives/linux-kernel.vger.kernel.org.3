@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F134F47099A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B27470998
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245714AbhLJTDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:03:55 -0500
-Received: from mga11.intel.com ([192.55.52.93]:54482 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237589AbhLJTDy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:03:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639162819; x=1670698819;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CnTlDxz1/sH4dBADN+Rg7wetQcW+/sxhCFUXF0b01Ys=;
-  b=nmKZSzUxQqjp0+KZUykTK7ca3Rncddil9+YkzLVuxHSO+td/ZcbzjBuA
-   Jl1WZ8VIFYJi57iTXVPA7kZho7DzUeZimLAAG4rg+zi68cB8i7ppdPDvn
-   oJluWUrMeH2m1xtzExVn59SejpS16+X8Q8MtW0ppULf+WDC3L6x4kpyLC
-   BmFgI1toVZw2LFfALITGUoVqiaoJcaipp0KFQ0YjJVECndwNJUP1aiusz
-   IpC4fGwzJeYraW01MIJVQ1iZh2kJZCCDHh4engV3MyTqUrfBU9VDCH0gU
-   ip5amDkJNxYBm2RCHrU6Lbk4sWHHdalX7/QkXgN7N7r+0U3UM9Dz/BgNc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="235931591"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="235931591"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:00:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="462640231"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Dec 2021 11:00:16 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvl7v-0003Zx-EZ; Fri, 10 Dec 2021 19:00:15 +0000
-Date:   Sat, 11 Dec 2021 02:59:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukas Czerner <lczerner@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>
-Subject: [RFC PATCH] ext4: ext4_modify_primary_sb() can be static
-Message-ID: <20211210185943.GA39725@eb09551c7cec>
+        id S237642AbhLJTDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:03:37 -0500
+Received: from mail-lf1-f42.google.com ([209.85.167.42]:42866 "EHLO
+        mail-lf1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237589AbhLJTDh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 14:03:37 -0500
+Received: by mail-lf1-f42.google.com with SMTP id t26so19722978lfk.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:00:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pXqflbyxp07n+LvBpYF3boLC2Cb8iRBI32Vthg/usLU=;
+        b=mv+Yhs3vLopclb8ZIbdT0sFFUTxyHdvr4dnoYnTx+jtzBMmMj5xed1KgLqMOmkfqfH
+         z1MTz6jC3x6TSKgZ7C0BUC6Pg+j+qGODRF/C28V0MbSRvsFdsBSlO7AjtWY1QsHRKRSr
+         rYbHRogALnPSz3xs4PczZ5GuqRmst4SwbwLWIo0Pefs/pDeElm6kUpbn0aQMUL1H9dw9
+         HqOfK9L18MSjIfMpXGFOonQsmOqkouuiQGt+XJqzNj70zCWHek09RJ4Rmk/vrENTXc2j
+         PguDzY7F4vVEYs5HoQMDA344mlHFNWH36tOab2XBaff7UR8bHQ31H8Zmtmi52f1GVBWs
+         x8UQ==
+X-Gm-Message-State: AOAM531ugA097zhfrNBZMTpaaBOM7EdpMx/XP26nJU+7SVMgS61WnWXQ
+        JvDFMK6EV0Hjz0vOgwgbZSvVeaQMYrQVtzib3JA=
+X-Google-Smtp-Source: ABdhPJxQKHVG3TAI61WrDyj5XjtbczdaRq8+VoiLm87XqlncJrypNvcb8ocLAtKxngvEEqktv4Yev78gGBq4EPnPoO0=
+X-Received: by 2002:a05:6512:3d09:: with SMTP id d9mr14534407lfv.481.1639162800591;
+ Fri, 10 Dec 2021 11:00:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211205224843.1503081-1-namhyung@kernel.org> <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
+ <YbHp2MXmP1V5WE4B@hirez.programming.kicks-ass.net> <CAM9d7chMn7Gmc4FYn_ZjMiojUCao90e80Zg5+hNXQ7MTeHrK_A@mail.gmail.com>
+ <20211210101950.GR16608@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211210101950.GR16608@worktop.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 10 Dec 2021 10:59:49 -0800
+Message-ID: <CAM9d7cgugnvrv5CJPe_EP_M8pp8h+GsCCW3-RDmyrd+JDGYJrQ@mail.gmail.com>
+Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events too
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fs/ext4/ioctl.c:45:5: warning: symbol 'ext4_modify_primary_sb' was not declared. Should it be static?
-fs/ext4/ioctl.c:165:5: warning: symbol 'ext4_modify_superblocks_fn' was not declared. Should it be static?
+On Fri, Dec 10, 2021 at 2:20 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Dec 09, 2021 at 01:51:42PM -0800, Namhyung Kim wrote:
+> > On Thu, Dec 9, 2021 at 3:35 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Thu, Dec 09, 2021 at 12:26:32PM +0100, Peter Zijlstra wrote:
+> > > > On Sun, Dec 05, 2021 at 02:48:43PM -0800, Namhyung Kim wrote:
+> > > >
+> > > > > Actually 18446744069443110306 is 0xffffffff01b345a2 so it seems to
+> > > > > have a negative enabled time.  In fact, bperf keeps values returned by
+> > > > > bpf_perf_event_read_value() which calls perf_event_read_local(), and
+> > > > > accumulates delta between two calls.  When event->shadow_ctx_time is
+> > > > > not set, it'd return invalid enabled time which is bigger than normal.
+> > > >
+> > > > *that*, how does it happen that shadow_time isn't set? It should be last
+> > > > set when the event switches to INACTIVE, no? At which point the logic in
+> > > > perf_event_read_local() should make @enabled move forward while @running
+> > > > stays put.
+> > > >
+> > > > Let me go rummage around a bit... either I'm missing something obvious
+> > > > or something's smelly.
+> > >
+> > > How's this then?
+> >
+> > Still the same :(
+>
+> You're doing that bpf-cgroup crud, right? Where exactly do you hook into
+> to do the counter reads?
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- ioctl.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+That's true but it doesn't use cgroup events actually.  They are plain cpu
+events and BPF is called from a separate 'cgroup-switches' event to
+read out the counters.
 
-diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-index 285862288ecb5..5f5c0e62e4d3d 100644
---- a/fs/ext4/ioctl.c
-+++ b/fs/ext4/ioctl.c
-@@ -42,9 +42,9 @@ static void ext4_sb_setlabel(struct ext4_super_block *es, const void *arg)
- 	memcpy(es->s_volume_name, (char *)arg, EXT4_LABEL_MAX);
- }
- 
--int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
--			   ext4_modify_sb_callback func,
--			   const void *arg)
-+static int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
-+				  ext4_modify_sb_callback func,
-+				  const void *arg)
- {
- 	int err = 0;
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
-@@ -162,9 +162,9 @@ static int ext4_update_backup_sb(struct super_block *sb, handle_t *handle,
-  * This is safe because e2fsck will re-write them if there is a problem,
-  * and we're very unlikely to ever need more than two backups.
-  */
--int ext4_modify_superblocks_fn(struct super_block *sb,
--			       ext4_modify_sb_callback func,
--			       const void *arg)
-+static int ext4_modify_superblocks_fn(struct super_block *sb,
-+				      ext4_modify_sb_callback func,
-+				      const void *arg)
- {
- 	handle_t *handle;
- 	ext4_group_t ngroups;
+>
+> > Maybe because the event is enabled from the beginning.
+> > Then it might miss set_state/update_time at all.
+>
+> Even then, it's set to INACTIVE and any state change thereafter needs to
+> go through perf_event_set_state() and update the relevant timestamps.
+
+Right, but the problem happens when you read the event *before*
+any state change.
+
+Thanks,
+Namhyung

@@ -2,104 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDDD4702BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2934702C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241946AbhLJO1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:27:35 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:56313 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbhLJO1e (ORCPT
+        id S242142AbhLJOaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:30:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36998 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242109AbhLJOaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:27:34 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MNtny-1nB2rm2KTI-00OD1G; Fri, 10 Dec 2021 15:23:58 +0100
-Received: by mail-wr1-f50.google.com with SMTP id o13so15149661wrs.12;
-        Fri, 10 Dec 2021 06:23:58 -0800 (PST)
-X-Gm-Message-State: AOAM533wz7XECtJUX0ESB+KBsca0DDoWI7X1qj4Si7uAZ8jsPildWC2y
-        eMfhbZfbqILDUzDO1HuL6rAfYb1OAHYwVBMebJ0=
-X-Google-Smtp-Source: ABdhPJwpNfkCK35q4J84bet4qsNK0G78Iv/Ey+WuTXxUs4+UKKI6lcSJU/n3x5OpVFEpmYRVEt/ijnGMwe5NdNQgfZA=
-X-Received: by 2002:a5d:4107:: with SMTP id l7mr14337051wrp.209.1639146238200;
- Fri, 10 Dec 2021 06:23:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
- <YbNX3mRT0A9/N2il@kernel.org> <YbNZw1/cUXJ8up5b@kernel.org>
-In-Reply-To: <YbNZw1/cUXJ8up5b@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 10 Dec 2021 15:23:42 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a05D=fb9stZEL6rUMs7c=S6gJxN5gR7HG_i8RiXAbaB5Q@mail.gmail.com>
-Message-ID: <CAK8P3a05D=fb9stZEL6rUMs7c=S6gJxN5gR7HG_i8RiXAbaB5Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/6] perf bench futex: Add support for 32-bit systems
- with 64-bit time_t
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Alistair Francis <alistair.francis@opensource.wdc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair23@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-perf-users@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
+        Fri, 10 Dec 2021 09:30:17 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BADtqMt004417;
+        Fri, 10 Dec 2021 14:26:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=Iiu88jiNCaTFcvZMP/mNVUZO9RLCCrcb3DmdMekTq24=;
+ b=UF1c3wFds9I+zGLO/Vldrz0BGZ7VnRpPvoxanMCRccS2TFCGIWBB7q6JTymVnXyI/lXQ
+ 1oDtn7l7frmfkEvoPuc1slIf/4usxZ8S16R6MysdblI81uSshs4QlmGOsainvXecxymL
+ fabAukut3I4I5dBee5YcR1znGzEWpYVtFWnyvUW6u63YoCrSEFUc4o7y2X9PTVfIueHZ
+ b73Ju2DUBAfxBvPk1f0RpfL1kq/lzagMhyEVFqIQLCODm3Cjfeaf3AS1gupjxMdIjIVx
+ pm3jHjMf9T2DcSBg+rQknACN6+FEcFyL213f6U1fFHzvivcvQ3vImAQjysotCyrs1B28 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv8798ky5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 14:26:31 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAEAmck018448;
+        Fri, 10 Dec 2021 14:26:30 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv8798kxt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 14:26:30 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAEGGoj024972;
+        Fri, 10 Dec 2021 14:26:29 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma04wdc.us.ibm.com with ESMTP id 3cqyycg5f0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 14:26:29 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAEQRWG24576342
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Dec 2021 14:26:28 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E23D778068;
+        Fri, 10 Dec 2021 14:26:27 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F15E778064;
+        Fri, 10 Dec 2021 14:26:23 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Dec 2021 14:26:23 +0000 (GMT)
+Message-ID: <d6011a5a40c3c304f386a328385836ba9838baf9.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Fri, 10 Dec 2021 09:26:22 -0500
+In-Reply-To: <66b377f6-40b4-77da-c02b-2650fa72d0b4@linux.ibm.com>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+         <20211208221818.1519628-16-stefanb@linux.ibm.com>
+         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
+         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
+         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
+         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
+         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
+         <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
+         <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
+         <d8a6a6827da17825c1aa011256b96d195b1ebf13.camel@linux.ibm.com>
+         <66b377f6-40b4-77da-c02b-2650fa72d0b4@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fHc4RHHMJlxTeV0sv7QOsI/dozLNE2nXidF5V+81PW8jjqqb8YU
- OHwS3jBq+dqYNcJF4eYcF9dt9P8F7dweGbvaMuQIfOgYCnqVWAJ1OLb6+t5f3al6jbaix0m
- BBTrsjX4ztFXyox4mFgqIrVuXcqKUFj+bK1MaJt1a/8ziCkblY0z0i7fnazY1ZfIukowJba
- Nxku9SydqXjS8UOdlCtbQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HYNBLUA0EkQ=:87xE//JIGnXIIGQ+lNti3q
- aSCxqlDeXddY5j+a+wZsKB+nA8a+2DEvLk+SA0sqkzB6qQ0Ys7Y+PFTky1yXoTav2WM9k5lc/
- FmcCjBdoPz8XFuaDppnRCZ/vsUasxbxwfuUGLNlTZT5F/rSgiIH6sjrkdi6Sby7sPT4bWZQM0
- F38nepKtgRLfKKq/fp7x1kAinOLtEkrxxeJDc1ROihNOoJLiekvye2kD/s5iJi20a+CRSH2dJ
- 1rQhZUCPLKn64h+ZMLtOcqaGo/sjyCy3wvOrN/AluWfjdeL+L6cVTAXJrY+dOgvUVaTnMTlrT
- ccu1zEko+3B1v19gaPFj4p0O4oIzO3ZvJqQXvjsn1TCMH4FpSveL0AFWbhM9ARYcoGjV86MGi
- Mp3Pk//pImnDWphTW+I0PieibISh6OFanQ5u9fy01LY33aY00WnagR5f0yzk+ODdEMgDdiBa0
- NNqfOBOrakYMIzH9kmjEYleTRNRVTkMQj+iuzClLIpWB75un5qedK6lP+RSP7MqLntgO5QlqX
- 3s2X4oBl+ngn5VwoI+qCsWaYd/mA+wSWEHXsjL85XCHwMJ1An7bS1wRCpt3ygClVdF4r84e12
- oApGLn1J15g0bqXuN6xYTakddbbPPByBCDwNo9pNOCrKMOn8qdAcLAKwVOVgWNmOcTfqFdo5p
- +H93VW0rUY6IwGHdSbB3/FfWpo75xNFRpYnvAtYc6khUJ0gSwzzQLU+yD+5GClm0PDuU=
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hndfFc4n6jChqIslSHhgXxf_bLsiHx3u
+X-Proofpoint-GUID: P3lOV3Fq68bOOKeIJWJt7gPCkmFh5Qni
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_04,2021-12-10_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112100081
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 2:44 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
-> Em Fri, Dec 10, 2021 at 10:36:30AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Fri, Dec 10, 2021 at 09:58:52AM +1000, Alistair Francis escreveu:
-> > > From: Alistair Francis <alistair.francis@wdc.com>
-> > >
-> > > Some 32-bit architectures (such are 32-bit RISC-V) only have a 64-bit
-> > > time_t and as such don't have the SYS_futex syscall. This patch will
-> > > allow us to use the SYS_futex_time64 syscall on those platforms.
-> > >
-> > > This also converts the futex calls to be y2038 safe (when built for a
-> > > 5.1+ kernel).
-> > >
-> > > This is a revert of commit ba4026b09d83acf56c040b6933eac7916c27e728
-> > > "Revert "perf bench futex: Add support for 32-bit systems with 64-bit time_t"".
-> > >
-> > > The original commit was reverted as including linux/time_types.h would
-> > > fail to compile on older kernels. This commit doesn't include
-> > > linux/time_types.h to avoid this issue.
-> >
-> >   10     9.99 alpine:3.12                   : FAIL gcc version 9.3.0 (Alpine 9.3.0)
-> >     In file included from bench/futex-hash.c:29:
-> >     bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-> >        37 |  __kernel_old_time_t tv_sec;  /* seconds */
-> >           |  ^~~~~~~~~~~~~~~~~~~
-> >     In file included from bench/futex-wake.c:25:
+On Fri, 2021-12-10 at 09:17 -0500, Stefan Berger wrote:
+> On 12/10/21 08:02, Mimi Zohar wrote:
+> > On Fri, 2021-12-10 at 07:40 -0500, Stefan Berger wrote:
+> > > On 12/10/21 07:09, Mimi Zohar wrote:
+> > > > On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
+> > > > > > There's still the problem that if you write the policy,
+> > > > > > making the file disappear then unmount and remount
+> > > > > > securityfs it will come back.  My guess for fixing this is
+> > > > > > that we only stash the policy file reference,
+> > > > > > create it if NULL but then set the pointer to PTR_ERR(-
+> > > > > > EINVAL) or something and refuse to create it for that
+> > > > > > value.
+> > > > > Some sort of indicator that gets stashed in struct ima_ns
+> > > > > that the file does not get recreated on consecutive mounts.
+> > > > > That shouldn't be hard to fix.
+> > > > The policy file disappearing is for backwards compatibility,
+> > > > prior to being able to extend the custom policy.  For embedded
+> > > > usecases, allowing the policy to be written exactly once might
+> > > > makes sense.  Do we really want/need to continue to support
+> > > > removing the policy in namespaces?
+> > > I don't have an answer but should the behavior for the same
+> > > #define in this case be different for host and namespaces? Or
+> > > should we just 'select IMA_WRITE_POLICY and IMA_READ_POLICY' when
+> > > IMA_NS is selected?
+> > The latter option sounds good.  Being able to analyze the namespace
+> > policy is really important.
+> 
+> Ok, I will adjust the Kconfig for this then. This then warrants the 
+> question whether to move the dentry into the ima_namespace. The
+> current code looks like this.
+> 
+> #if !defined(CONFIG_IMA_WRITE_POLICY) &&
+> !defined(CONFIG_IMA_READ_POLICY)
+>          securityfs_remove(ns->policy_dentry);
+>          ns->policy_dentry = NULL;
+>          ns->policy_dentry_removed = true;
+> #elif defined(CONFIG_IMA_WRITE_POLICY)
+> 
+> With IMA_NS selecting IMA_WRITE_POLICY and IMA_READ_POLICY the above 
+> wouldn't be necessary anymore but I find it 'cleaner' to still have
+> the dentry isolated rather than it being a global static as it was
+> before...
 
-It looks like we need to add include/uapi/linux/time_types.h to
-tools/include/linux/ and update tools/include/linux/types.h
-in order to address this.
+This is really, really why you don't want the semantics inside the
+namespace to differ from those outside, because it creates confusion
+for the people reading the code, especially with magically forced
+config options like this.  I'd strongly suggest you either keep the
+semantic in the namespace or eliminate it entirely.
 
-         Arnd
+If you really, really have to make the namespace behave differently,
+then use global variables and put a big comment on that code saying it
+can never be reached once CONFIG_IMA_NS is enabled.
+
+James
+
+

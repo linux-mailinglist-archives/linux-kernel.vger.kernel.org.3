@@ -2,487 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A2F46FEE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F9446FEE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbhLJKrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbhLJKrj (ORCPT
+        id S238498AbhLJKsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:48:18 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4243 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238383AbhLJKsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:47:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3076FC061746;
-        Fri, 10 Dec 2021 02:44:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6649B82763;
-        Fri, 10 Dec 2021 10:44:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB4EC00446;
-        Fri, 10 Dec 2021 10:44:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639133041;
-        bh=gLwVsj0h7I27KQSagp/X3RmrFEo7I3V//9PuDxqpjXE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rqMB1PiL2v5aU0q51LvJTX8e+ba4u+AE1tQSqPTmG0Ah9ovgvxvD9VDxegLjK2Nkr
-         xhz4TJZFRor/0nSh27NoeYi7a+zIKwIXUbeu+aIOvRKFdxEw63NXho6lspT/+XEYPe
-         blDf+1QlJuThyvhOs8NwIk9tMlTN7v9Wm/Jq2Sx83nlOHpXNsagbiARKOKyXQzYqCt
-         NbLLCQ6g+2FPjTnHbN42jlrUxKDI1ci0yh25DzuVYWTLQLqMXVCAhtZYkpGLsUATVt
-         ROf4XZPWISU8NH3xD+9CjX2YDgr5PCmamgJwUFR55niun/oGjVhaUyfourttEVzFH4
-         SqdmbvUOckelg==
-Date:   Fri, 10 Dec 2021 19:43:58 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 02/13] user_events: Add minimal support for
- trace_event into ftrace
-Message-Id: <20211210194358.e590d49a1620df7345f9f679@kernel.org>
-In-Reply-To: <20211209223210.1818-3-beaub@linux.microsoft.com>
-References: <20211209223210.1818-1-beaub@linux.microsoft.com>
-        <20211209223210.1818-3-beaub@linux.microsoft.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 10 Dec 2021 05:48:17 -0500
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J9SCq6nGXz686Sr;
+        Fri, 10 Dec 2021 18:42:47 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 11:44:41 +0100
+Received: from [10.47.85.63] (10.47.85.63) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 10 Dec
+ 2021 10:44:40 +0000
+Subject: Re: [PATCH] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
+To:     <Ajish.Koshy@microchip.com>, <jinpu.wang@cloud.ionos.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <Viswas.G@microchip.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Vasanthalakshmi.Tharmarajan@microchip.com>
+References: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
+ <a93da7a3-9cbe-b278-36ce-1ac860ad43d6@huawei.com>
+ <PH0PR11MB51122D76F40E164C31AFEE54EC719@PH0PR11MB5112.namprd11.prod.outlook.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <eb82b0ab-912a-4879-f1b2-d5cbef5bfc41@huawei.com>
+Date:   Fri, 10 Dec 2021 10:44:15 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
+MIME-Version: 1.0
+In-Reply-To: <PH0PR11MB51122D76F40E164C31AFEE54EC719@PH0PR11MB5112.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.85.63]
+X-ClientProxiedBy: lhreml716-chm.china.huawei.com (10.201.108.67) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Beau,
+On 10/12/2021 10:23, Ajish.Koshy@microchip.com wrote:
+> Hi John,
 
-Thanks for updating the patch! I have some comments below.
+Please config your editor to wrap at ~72 characters and don't top-post.
 
-On Thu,  9 Dec 2021 14:31:59 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> In my humble opinion what we observed very earlier was with respect smp_request()/response() crash and this patch resolved it. Given that the issue was not only specific to ARM, issue was observed on x86 too with IOMMU enabled. Device discovery went fine post application of this patch on x86.
+> 
+> What we are observing right now on error handling/timeouts for commands on drives will be altogether different issue that needs separate debugging on ARM platform with separate patch since this is a very initial execution of pm80xx driver on ARM platform.
+> 
+> This patch is acceptable. Let me know your further views.
+> 
 
-[..]
-> +#define USER_EVENTS_PREFIX_LEN (sizeof(USER_EVENTS_PREFIX)-1)
-> +
-> +#define FIELD_DEPTH_TYPE 0
-> +#define FIELD_DEPTH_NAME 1
-> +#define FIELD_DEPTH_SIZE 2
-> +
-> +/*
-> + * Limits how many trace_event calls user processes can create:
-> + * Must be multiple of PAGE_SIZE.
-> + */
-> +#define MAX_PAGES 1
-> +#define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
-> +
-> +/* Limit how long of an event name plus args within the subsystem. */
-> +#define MAX_EVENT_DESC 512
-> +#define EVENT_NAME(user_event) ((user_event)->tracepoint.name)
-> +#define MAX_FIELD_ARRAY_SIZE (2 * PAGE_SIZE)
+As I mentioned earlier about this patch, a v2 is needed as we need 
+kmap_atomic() in both cases. But I would rather resolve all issues 
+before getting that merged - it has been broken this way for a long time.
 
-I don't recommend to record the event which size is more than a page size...
-Maybe 256 entries?
-It is also better to limit the total size of the event and the number
-of fields (arguments).
+So I mentioned a new issue in my response to Damien - maxcpus=1 on the 
+command line crashes on boot. I can imagine that x86 also has that issue.
 
-Steve, can we write such a big event data on the trace buffer?
+As for the timeouts, why would the FW not respond in the way I 
+described? I would always expect a completion, even for erroneous 
+commands. Maybe it is an interrupt issue in the driver. Is there some 
+diagnostics I can check - there seems to be a lot of "stuff" in the 
+sysfs scsi_host folder.
 
-[..]
-> +
-> +static int user_field_array_size(const char *type)
-> +{
-> +	const char *start = strchr(type, '[');
-> +	char val[8];
-> +	int size = 0;
-> +
-> +	if (start == NULL)
-> +		return -EINVAL;
-> +
-> +	start++;
-> +
-> +	while (*start != ']' && size < (sizeof(val) - 1))
-> +		val[size++] = *start++;
-> +
-> +	if (*start != ']')
-> +		return -EINVAL;
-> +
-> +	val[size] = 0;
+Thanks,
+John
 
-It's '\0', not 0.
+> Thanks,
+> Ajish
+> 
+> On 26/11/2021 15:35, John Garry wrote:
+>>        /*
+>> @@ -4280,8 +4283,9 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>>                pm8001_ha->smp_exp_mode = SMP_INDIRECT;
+>>
+>>
+>> -     tmp_addr = cpu_to_le64((u64)sg_dma_address(&task->smp_task.smp_req));
+>> -     preq_dma_addr = (char *)phys_to_virt(tmp_addr);
+>> +     smp_req = &task->smp_task.smp_req;
+>> +     to = kmap(sg_page(smp_req));
+> This should be a kmap_atomic() as well, as I see the following for when
+> CONFIG_DEBUG_ATOMIC_SLEEP is enabled:
 
-If I were you, I just use strlcpy(val, start, sizeof(val)), and
-strchr(val, ']'). Sometimes using standard libc function will
-be easer to understand what it does. :)
-
-> +
-> +	if (kstrtouint(val, 0, &size))
-> +		return -EINVAL;
-> +
-> +	if (size > MAX_FIELD_ARRAY_SIZE)
-> +		return -EINVAL;
-> +
-> +	return size;
-> +}
-> +
-> +static int user_field_size(const char *type)
-> +{
-> +	/* long is not allowed from a user, since it's ambigious in size */
-> +	if (strcmp(type, "s64") == 0)
-> +		return sizeof(s64);
-> +	if (strcmp(type, "u64") == 0)
-> +		return sizeof(u64);
-> +	if (strcmp(type, "s32") == 0)
-> +		return sizeof(s32);
-> +	if (strcmp(type, "u32") == 0)
-> +		return sizeof(u32);
-> +	if (strcmp(type, "int") == 0)
-> +		return sizeof(int);
-> +	if (strcmp(type, "unsigned int") == 0)
-> +		return sizeof(unsigned int);
-> +	if (strcmp(type, "s16") == 0)
-> +		return sizeof(s16);
-> +	if (strcmp(type, "u16") == 0)
-> +		return sizeof(u16);
-> +	if (strcmp(type, "short") == 0)
-> +		return sizeof(short);
-> +	if (strcmp(type, "unsigned short") == 0)
-> +		return sizeof(unsigned short);
-> +	if (strcmp(type, "s8") == 0)
-> +		return sizeof(s8);
-> +	if (strcmp(type, "u8") == 0)
-> +		return sizeof(u8);
-> +	if (strcmp(type, "char") == 0)
-> +		return sizeof(char);
-> +	if (strcmp(type, "unsigned char") == 0)
-> +		return sizeof(unsigned char);
-> +	if (str_has_prefix(type, "char["))
-> +		return user_field_array_size(type);
-> +	if (str_has_prefix(type, "unsigned char["))
-> +		return user_field_array_size(type);
-> +	if (str_has_prefix(type, "__data_loc "))
-> +		return sizeof(u32);
-> +	if (str_has_prefix(type, "__rel_loc "))
-> +		return sizeof(u32);
-> +
-> +	/* Uknown basic type, error */
-> +	return -EINVAL;
-> +}
-> +
-> +static void user_event_destroy_fields(struct user_event *user)
-> +{
-> +	struct ftrace_event_field *field, *next;
-> +	struct list_head *head = &user->fields;
-> +
-> +	list_for_each_entry_safe(field, next, head, link) {
-> +		list_del(&field->link);
-> +		kfree(field);
-> +	}
-> +}
-> +
-> +static int user_event_add_field(struct user_event *user, const char *type,
-> +				const char *name, int offset, int size,
-> +				int is_signed, int filter_type)
-> +{
-> +	struct ftrace_event_field *field;
-> +
-> +	field = kmalloc(sizeof(*field), GFP_KERNEL);
-> +
-> +	if (!field)
-> +		return -ENOMEM;
-> +
-> +	field->type = type;
-> +	field->name = name;
-> +	field->offset = offset;
-> +	field->size = size;
-> +	field->is_signed = is_signed;
-> +	field->filter_type = filter_type;
-> +
-> +	list_add(&field->link, &user->fields);
-
-I recommend to use list_add_tail() here so that when accessing the
-list of field without reverse order. (I found this in [4/13])
-
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Parses the values of a field within the description
-> + * Format: type name [size]
-
-Hmm, don't you accept redundant spaces and tabs?
-If this accepts the redundant spaces/tabs, I recommend you to use
-argv_split() instead of strpbrk() etc. e.g.
-
-	int argc, name_idx = 0, size;
-	int ret = -EINVAL;
-	char **argv;
-
-	argv = argv_split(GFP_KERNEL, field, &argc);
-	if (!argv)
-		return -ENOMEM;
-
-	if (!strcmp(argv[pos], "__data_loc") ||
-	    !strcmp(argv[pos], "__rel_loc")) {
-		if (++pos >= argc)
-			goto error;
-	}
-	if (!strcmp(argv[pos], "unsigned")) {
-		if (++pos >= argc)
-			goto error;
-	} else if (!strcmp(argv[pos], "struct")) {
-		is_struct = true;
-		if (++pos >= argc)
-			goto error;
-	}
-	if (++pos >= argc)
-		goto error;
-	name_idx = pos++;
-	if (pos < argc) {	// size
-		if (!is_struct)
-			goto error;
-		if (kstrtou32(argv[pos++], 10, &size))
-			goto error;
-	} else
-		size = user_field_size(argv[name_idx - 1]);
-
-	if (pos != argc)
-		goto error;
-	
-	// note that type index is always 0 and size must be converted.
-	user_event_add_field(user, argv, name_idx, saved_offset, size,
-				    type[0] != 'u', FILTER_OTHER);
-
-	ret = 0;
-error:
-	argv_free(argv);
-	return ret;
-
-(This also requires to simplify user_field_size() and remove FIELD_DEPTH_*)
-What would you think?
-	
-> + */
-> +static int user_event_parse_field(char *field, struct user_event *user,
-> +				  u32 *offset)
-> +{
-> +	char *part, *type, *name;
-> +	u32 depth = 0, saved_offset = *offset;
-> +	int len, size = -EINVAL;
-> +	bool is_struct = false;
-> +
-> +	field = skip_spaces(field);
-> +
-> +	if (*field == 0)
-> +		return 0;
-> +
-> +	/* Handle types that have a space within */
-> +	len = str_has_prefix(field, "unsigned ");
-> +	if (len)
-> +		goto skip_next;
-> +
-> +	len = str_has_prefix(field, "struct ");
-> +	if (len) {
-> +		is_struct = true;
-> +		goto skip_next;
-> +	}
-> +
-> +	len = str_has_prefix(field, "__data_loc unsigned ");
-> +	if (len)
-> +		goto skip_next;
-> +
-> +	len = str_has_prefix(field, "__data_loc ");
-> +	if (len)
-> +		goto skip_next;
-> +
-> +	len = str_has_prefix(field, "__rel_loc unsigned ");
-> +	if (len)
-> +		goto skip_next;
-> +
-> +	len = str_has_prefix(field, "__rel_loc ");
-> +	if (len)
-> +		goto skip_next;
-> +
-> +	goto parse;
-> +skip_next:
-> +	type = field;
-> +	field = strpbrk(field + len, " ");
-> +
-> +	if (field == NULL)
-> +		return -EINVAL;
-> +
-> +	*field++ = 0;
-> +	depth++;
-> +parse:
-> +	while ((part = strsep(&field, " ")) != NULL) {
-> +		switch (depth++) {
-> +		case FIELD_DEPTH_TYPE:
-> +			type = part;
-> +			break;
-> +		case FIELD_DEPTH_NAME:
-> +			name = part;
-> +			break;
-> +		case FIELD_DEPTH_SIZE:
-> +			if (!is_struct)
-> +				return -EINVAL;
-> +
-> +			if (kstrtou32(part, 10, &size))
-> +				return -EINVAL;
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	if (depth < FIELD_DEPTH_SIZE)
-> +		return -EINVAL;
-> +
-> +	if (depth == FIELD_DEPTH_SIZE)
-> +		size = user_field_size(type);
-> +
-> +	if (size == 0)
-> +		return -EINVAL;
-> +
-> +	if (size < 0)
-> +		return size;
-> +
-> +	*offset = saved_offset + size;
-> +
-> +	return user_event_add_field(user, type, name, saved_offset, size,
-> +				    type[0] != 'u', FILTER_OTHER);
-> +}
-
-[..]
-> +
-> +/*
-> + * Register callback for our events from tracing sub-systems.
-> + */
-> +static int user_event_reg(struct trace_event_call *call,
-> +			  enum trace_reg type,
-> +			  void *data)
-> +{
-> +	struct user_event *user = (struct user_event *)call->data;
-> +	int ret = 0;
-> +
-> +	if (!user)
-> +		return -ENOENT;
-> +
-> +	switch (type) {
-> +	case TRACE_REG_REGISTER:
-> +		ret = tracepoint_probe_register(call->tp,
-> +						call->class->probe,
-> +						data);
-> +		if (!ret)
-> +			goto inc;
-> +		break;
-> +
-> +	case TRACE_REG_UNREGISTER:
-> +		tracepoint_probe_unregister(call->tp,
-> +					    call->class->probe,
-> +					    data);
-> +		goto dec;
-> +
-> +#ifdef CONFIG_PERF_EVENTS
-> +	case TRACE_REG_PERF_REGISTER:
-> +	case TRACE_REG_PERF_UNREGISTER:
-> +	case TRACE_REG_PERF_OPEN:
-> +	case TRACE_REG_PERF_CLOSE:
-> +	case TRACE_REG_PERF_ADD:
-> +	case TRACE_REG_PERF_DEL:
-> +		break;
-> +#endif
-
-At this moment (in this patch), you can just add a default case,
-or just ignore it, because it does nothing.
-
-> +	}
-> +
-> +	return ret;
-> +inc:
-> +	atomic_inc(&user->refcnt);
-> +	update_reg_page_for(user);
-> +	return 0;
-> +dec:
-> +	update_reg_page_for(user);
-> +	atomic_dec(&user->refcnt);
-> +	return 0;
-> +}
-> +
-
-[..]
-> +/*
-> + * Validates the user payload and writes via iterator.
-> + */
-> +static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
-> +{
-> +	struct user_event_refs *refs;
-> +	struct user_event *user = NULL;
-> +	struct tracepoint *tp;
-> +	ssize_t ret = i->count;
-> +	int idx;
-> +
-> +	if (unlikely(copy_from_iter(&idx, sizeof(idx), i) != sizeof(idx)))
-> +		return -EFAULT;
-> +
-> +	rcu_read_lock_sched();
-> +
-> +	refs = rcu_dereference_sched(file->private_data);
-> +
-> +	/*
-> +	 * The refs->events array is protected by RCU, and new items may be
-> +	 * added. But the user retrieved from indexing into the events array
-> +	 * shall be immutable while the file is opened.
-> +	 */
-> +	if (likely(refs && idx < refs->count))
-> +		user = refs->events[idx];
-> +
-> +	rcu_read_unlock_sched();
-> +
-> +	if (unlikely(user == NULL))
-> +		return -ENOENT;
-> +
-> +	tp = &user->tracepoint;
-> +
-> +	/*
-> +	 * It's possible key.enabled disables after this check, however
-> +	 * we don't mind if a few events are included in this condition.
-> +	 */
-> +	if (likely(atomic_read(&tp->key.enabled) > 0)) {
-> +		struct tracepoint_func *probe_func_ptr;
-> +		user_event_func_t probe_func;
-> +		void *tpdata;
-> +		void *kdata;
-> +		u32 datalen;
-> +
-> +		kdata = kmalloc(i->count, GFP_KERNEL);
-> +
-> +		if (unlikely(!kdata))
-> +			return -ENOMEM;
-> +
-> +		datalen = copy_from_iter(kdata, i->count, i);
-
-Don't we need to add this datalen to ret?
-
-> +
-> +		rcu_read_lock_sched();
-> +
-> +		probe_func_ptr = rcu_dereference_sched(tp->funcs);
-> +
-> +		if (probe_func_ptr) {
-> +			do {
-> +				probe_func = probe_func_ptr->func;
-> +				tpdata = probe_func_ptr->data;
-> +				probe_func(user, kdata, datalen, tpdata);
-> +			} while ((++probe_func_ptr)->func);
-> +		}
-> +
-> +		rcu_read_unlock_sched();
-> +
-> +		kfree(kdata);
-> +	}
-> +
-> +	return ret;
-> +}
-
-Thank you,
-
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

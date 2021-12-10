@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD2A470030
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D4E470033
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240715AbhLJLlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:41:23 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33768 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240672AbhLJLlV (ORCPT
+        id S240740AbhLJLlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240732AbhLJLld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:41:21 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8F35F210FE;
-        Fri, 10 Dec 2021 11:37:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639136265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eb4zaX1qCjL7jijbTZCbjxJPZ9XZbK1lSdAhXFY9ulk=;
-        b=bnwyLDqa55iGL0IUuSSQAYcks2Q2D6YlKHqOI42C/zkVfC8elX7w5vab2lVxpi9RER4lpK
-        owPw+7SfA2N8ocAQfiz0bqEfmrglw9SEOBhLz7MWciT1Uqg5OqU44o3ES8/xZoCOsqeILo
-        pR1fC7rfuyQ5gm/eiM7Bx7uwcYMld0c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639136265;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eb4zaX1qCjL7jijbTZCbjxJPZ9XZbK1lSdAhXFY9ulk=;
-        b=qXaOTvCj7K4a7VUSeE94HhiaadYhcPfjsrL5pG0SdH5GYAMgKTYa+nPmPDkCW0QG20/ctv
-        MDkAeHLsmF/kggDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D25213DDE;
-        Fri, 10 Dec 2021 11:37:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Z51bHgk8s2EDcQAAMHmgww
-        (envelope-from <hare@suse.de>); Fri, 10 Dec 2021 11:37:45 +0000
-Subject: Re: [PATCH v2 18/18] crypto: dh - accept only approved safe-prime
- groups in FIPS mode
-To:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
-        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org
-References: <20211209090358.28231-1-nstange@suse.de>
- <20211209090358.28231-19-nstange@suse.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <e44987d3-d838-38bc-d744-48d6010e2c59@suse.de>
-Date:   Fri, 10 Dec 2021 12:37:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Fri, 10 Dec 2021 06:41:33 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615CCC0617A1;
+        Fri, 10 Dec 2021 03:37:58 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id t5so28658577edd.0;
+        Fri, 10 Dec 2021 03:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9PGzqzVr2lWR3c2FT6fcegvnLqjE5zdT1FTCSBDISuI=;
+        b=OM3Nsd4ERses81PNwgGaV6Q7lHZ2NrIuizdbzBgNTGK9RHnDCOrAsDnSChO7XKFAZi
+         vLUjMEQcVNFHcGMVfYKcGFH2HBh6Vw3rIMPk91Mzbko3xYPcjWXaD0QhzPgcRCzi/rmz
+         TigzgBdHpHE1kgICxTUm3FPaWKeuU6uYvAJUZCVcvdbmCN0jXN6JZcfN1tyLFT310IQs
+         7O4yK8ofsPkeRg6dtwxD+XD/+2wNTzt9Q0pA3c5hwe74Zk+jsx176dHTG9EnmTmbYPbD
+         tYe4dTjQoFl1jcBSNq1N8m6APJC9eoK8SuIahBSIyDP06/QAkhsmqLyGvpnFOkJO7Mnz
+         G1qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9PGzqzVr2lWR3c2FT6fcegvnLqjE5zdT1FTCSBDISuI=;
+        b=1xwpjRNz4ZZi7ifvhev+HPpGx6TBYxmIMWAW/65diX0fgktnDhQZKSvhQE2lh+HVmZ
+         wzHxhsMULbPWbozbxR5mAoYe/FIY4F2dMN94cHwHymg+uneBarqp5Rd2nCaycVuDa1fd
+         Ot34zuU5EI1T/LKR8irL7GFURP4PEey4k0ewr3bWRZuhKVh/T6AXz8+sPso+aOf0Tcak
+         LUSBF+IqB0lqoY7TlmN4gQnTujRj+AaKlKKrTyz2mxtHcSz9MokIN/GZJwTFUMBG8ARS
+         KqdQCn9akKgpGszmr+x3M0BtrXoM2AwIbKgdzKfZWZREMZ2YPEWBZCwy2LeAhbtTLPGB
+         rhKg==
+X-Gm-Message-State: AOAM531eiMeBSIoBg6Uulw+fI/zu0j7QKfQ2EGxspO5WIcoSQg/wvlT3
+        w7awceM7jOrAyMYyFHqbPjY=
+X-Google-Smtp-Source: ABdhPJx6v0WRp3OGfTassW/62i7NBEybv5+nw9b4oMWyDZPAfmhh2AuYeK9X3ZI4bHRxlhTob2it/g==
+X-Received: by 2002:a50:9ea6:: with SMTP id a35mr37180244edf.400.1639136276255;
+        Fri, 10 Dec 2021 03:37:56 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312::973? ([2001:b07:6468:f312::973])
+        by smtp.googlemail.com with ESMTPSA id sa17sm1389929ejc.123.2021.12.10.03.37.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 03:37:55 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <ad666891-a67e-f126-da14-6de382bf0659@redhat.com>
+Date:   Fri, 10 Dec 2021 12:37:54 +0100
 MIME-Version: 1.0
-In-Reply-To: <20211209090358.28231-19-nstange@suse.de>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 4/6] KVM: SVM: fix races in the AVIC incomplete IPI
+ delivery to vCPUs
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+ <20211209115440.394441-5-mlevitsk@redhat.com> <YbIjCUAECOyIbsYQ@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YbIjCUAECOyIbsYQ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 10:03 AM, Nicolai Stange wrote:
-> SP800-56Arev3, sec. 5.5.2 ("Assurance of Domain-Parameter Validity")
-> asserts that an implementation needs to verify domain paramtere validity,
-> which boils down to either
-> - the domain parameters corresponding to some known safe-prime group
->   explicitly listed to be approved in the document or
-> - for parameters conforming to a "FIPS 186-type parameter-size set",
->   that the implementation needs to perform an explicit domain parameter
->   verification, which would require access to the "seed" and "counter"
->   values used in their generation.
-> 
-> The latter is not easily feasible and moreover, SP800-56Arev3 states that
-> safe-prime groups are preferred and that FIPS 186-type parameter sets
-> should only be supported for backward compatibility, if it all.
-> 
-> Make the dh implementations reject any domain parameters which don't
-> correspond to any of the approved safe-prime groups in FIPS mode. The
-> approved safe-prime groups are the ones specified in RFC 7919 and RFC 3526,
-> and given that all possible values of enum dh_group_id correspond to
-> either groups from these RFCs or to DH_GROUP_ID_UNKNOWN, it suffices to
-> make crypto_dh_decode_key() to reject any parameter set where
-> ->group_id == DH_GROUP_ID_UNKNOWN.
-> 
-> As this change will effectively render the dh implementation unusable in
-> FIPS mode if neither of the CRYPTO_DH_GROUPS_RFC7919 or
-> CRYPTO_DH_GROUPS_RFC3526 Kconfig options enabled, make CRYPTO_DH imply
-> these two if CRYPTO_FIPS is set.
-> 
-> Signed-off-by: Nicolai Stange <nstange@suse.de>
-> ---
->  crypto/Kconfig     | 2 ++
->  crypto/dh_helper.c | 4 ++++
->  2 files changed, 6 insertions(+)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+On 12/9/21 16:38, Sean Christopherson wrote:
+> +                       if (svm_deliver_avic_intr(vcpu, -1) {
+> +                               vcpu->arch.apic->irr_pending = true;
+> +                               kvm_make_request(KVM_REQ_EVENT, vcpu);
+> +                       }
 
-Cheers,
+This is a good idea, but the details depends on patch 3 so I'll send a 
+series of my own.
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Paolo

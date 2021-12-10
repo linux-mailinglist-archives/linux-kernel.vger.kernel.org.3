@@ -2,188 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC4847050F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA69470513
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237686AbhLJQCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbhLJQCV (ORCPT
+        id S237489AbhLJQFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:05:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33230 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231806AbhLJQFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:02:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829D1C061746;
-        Fri, 10 Dec 2021 07:58:46 -0800 (PST)
+        Fri, 10 Dec 2021 11:05:18 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9C775CE211C;
-        Fri, 10 Dec 2021 15:58:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADACAC00446;
-        Fri, 10 Dec 2021 15:58:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639151923;
-        bh=fQc56/zhViuchrUCAIhMuthGwsW47T40WSdgudAQYzc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FHLocjgzqCGzMfx3ib/9WfgUTkC/67WpdAcwTXnKorWJ+TF53W8nVT3nwggCmq+72
-         xzBxG1brd9eOjr5tR6FDs24kChImXLe7Dbpm0k870vQgLTA8A5C3CwergZ9SeivnsI
-         D/YVO8VDLJWCqCR+4r95Tr7vMh6pFyxXil3ZgjJDNvzPtkts68w4fTtj9jhM9jo0yv
-         ALDW8fnMRBps3R3m6EbLZXkkqx+MIW9W2I9Tw9ZwnKAcj5SogVFhwNxLFpTfEeCD4k
-         WYN8LGxyJ7JWdgIoXqJFsR99hewDuXt9SUhSLB4tg8LlInCg+vGkbBoZv1gfzpUFC0
-         DmHknT03C16DQ==
-Date:   Fri, 10 Dec 2021 09:58:41 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vihas Mak <makvihas@gmail.com>
-Cc:     bhelgaas@google.com, lukas@wunner.de, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pci: ibmphp: removed the commented-out functions
-Message-ID: <20211210155841.GA317413@bhelgaas>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C933B827BE;
+        Fri, 10 Dec 2021 16:01:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B51CC00446;
+        Fri, 10 Dec 2021 16:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639152101;
+        bh=mSGFDf1CkIFsGekXfmMO0AqQmx5MaFE6V3Bsm58SZG8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NWXzI+IucunN+dQi05Qnbj5uNQFd3uU/DUc4a/2YoHqqrOl/slpnyrJgKBsLQQ7nr
+         yci3st/7U4uyfkBo8+dtD/hd62iaeORwXk8G6dosrfHJai7pY4PGCbxKF0d4a8w5jU
+         FdZhdQa+N9w08pC44ijbOWmNG8S5rYyp6yXDwaDc=
+Date:   Fri, 10 Dec 2021 17:01:38 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Andrew Scull <ascull@google.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 2/2] misc: dice: Add driver to forward secrets to
+ userspace
+Message-ID: <YbN54u4fEKx54Gvc@kroah.com>
+References: <20211209151123.3759999-1-dbrazdil@google.com>
+ <20211209151123.3759999-3-dbrazdil@google.com>
+ <YbIhaWC8b2DV5C7Y@kroah.com>
+ <YbM29thQ7U4oUmhi@google.com>
+ <YbNmsFAYDVUYopFO@kroah.com>
+ <YbN2tbYZyLBdyEfS@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209213618.20522-1-makvihas@gmail.com>
+In-Reply-To: <YbN2tbYZyLBdyEfS@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 03:06:18AM +0530, Vihas Mak wrote:
-> The functions get_max_adapter_speed() and get_bus_name() in
-> ibmphp_core.c are commented-out and the fields .get_max_adapter_speed
-> and .get_bus_name_status are removed from struct hotplug_slot_ops in
-> pci_hotplug.h. Remove the commented-out functions.
-> 
-> Signed-off-by: Vihas Mak <makvihas@gmail.com>
+On Fri, Dec 10, 2021 at 03:48:05PM +0000, David Brazdil wrote:
+> In your first email you also mentioned removing the check in dice_probe()
+> that only allows a single instance. On a second thought, I think it's
+> simpler to keep it there for now, even if the memory is dynamically
+> allocated, which I agree makes the code cleaner.
 
-I tweaked the subject line to match the history and applied to
-pci/hotplug for v5.17, thanks!
+I don't remember what check you are talking about at all, sorry.
 
-  $ git log --oneline drivers/pci/hotplug/ibmphp_core.c
-  e1a6333e7f89 ("PCI: ibmphp: Remove commented-out functions")
-  2a727f609137 ("PCI: ibmphp: Turn semaphores into completions or mutexes")
-  4051f5ebb11c ("PCI: ibmphp: Fix use-before-set in get_max_bus_speed()")
-  ...
+Remember some of us review hundreds of patches each week :(
 
-> ---
->  drivers/pci/hotplug/TODO          |  5 ---
->  drivers/pci/hotplug/ibmphp_core.c | 74 -------------------------------
->  2 files changed, 79 deletions(-)
-> 
-> diff --git a/drivers/pci/hotplug/TODO b/drivers/pci/hotplug/TODO
-> index cc6194aa2..88f217c82 100644
-> --- a/drivers/pci/hotplug/TODO
-> +++ b/drivers/pci/hotplug/TODO
-> @@ -30,11 +30,6 @@ ibmphp:
->    or ibmphp should store a pointer to its bus in struct slot.  Probably the
->    former.
->  
-> -* The functions get_max_adapter_speed() and get_bus_name() are commented out.
-> -  Can they be deleted?  There are also forward declarations at the top of
-> -  ibmphp_core.c as well as pointers in ibmphp_hotplug_slot_ops, likewise
-> -  commented out.
-> -
->  * ibmphp_init_devno() takes a struct slot **, it could instead take a
->    struct slot *.
->  
-> diff --git a/drivers/pci/hotplug/ibmphp_core.c b/drivers/pci/hotplug/ibmphp_core.c
-> index 17124254d..197997e26 100644
-> --- a/drivers/pci/hotplug/ibmphp_core.c
-> +++ b/drivers/pci/hotplug/ibmphp_core.c
-> @@ -50,14 +50,6 @@ static int irqs[16];    /* PIC mode IRQs we're using so far (in case MPS
->  
->  static int init_flag;
->  
-> -/*
-> -static int get_max_adapter_speed_1 (struct hotplug_slot *, u8 *, u8);
-> -
-> -static inline int get_max_adapter_speed (struct hotplug_slot *hs, u8 *value)
-> -{
-> -	return get_max_adapter_speed_1 (hs, value, 1);
-> -}
-> -*/
->  static inline int get_cur_bus_info(struct slot **sl)
->  {
->  	int rc = 1;
-> @@ -401,69 +393,6 @@ static int get_max_bus_speed(struct slot *slot)
->  	return rc;
->  }
->  
-> -/*
-> -static int get_max_adapter_speed_1(struct hotplug_slot *hotplug_slot, u8 *value, u8 flag)
-> -{
-> -	int rc = -ENODEV;
-> -	struct slot *pslot;
-> -	struct slot myslot;
-> -
-> -	debug("get_max_adapter_speed_1 - Entry hotplug_slot[%lx] pvalue[%lx]\n",
-> -						(ulong)hotplug_slot, (ulong) value);
-> -
-> -	if (flag)
-> -		ibmphp_lock_operations();
-> -
-> -	if (hotplug_slot && value) {
-> -		pslot = hotplug_slot->private;
-> -		if (pslot) {
-> -			memcpy(&myslot, pslot, sizeof(struct slot));
-> -			rc = ibmphp_hpc_readslot(pslot, READ_SLOTSTATUS,
-> -						&(myslot.status));
-> -
-> -			if (!(SLOT_LATCH (myslot.status)) &&
-> -					(SLOT_PRESENT (myslot.status))) {
-> -				rc = ibmphp_hpc_readslot(pslot,
-> -						READ_EXTSLOTSTATUS,
-> -						&(myslot.ext_status));
-> -				if (!rc)
-> -					*value = SLOT_SPEED(myslot.ext_status);
-> -			} else
-> -				*value = MAX_ADAPTER_NONE;
-> -		}
-> -	}
-> -
-> -	if (flag)
-> -		ibmphp_unlock_operations();
-> -
-> -	debug("get_max_adapter_speed_1 - Exit rc[%d] value[%x]\n", rc, *value);
-> -	return rc;
-> -}
-> -
-> -static int get_bus_name(struct hotplug_slot *hotplug_slot, char *value)
-> -{
-> -	int rc = -ENODEV;
-> -	struct slot *pslot = NULL;
-> -
-> -	debug("get_bus_name - Entry hotplug_slot[%lx]\n", (ulong)hotplug_slot);
-> -
-> -	ibmphp_lock_operations();
-> -
-> -	if (hotplug_slot) {
-> -		pslot = hotplug_slot->private;
-> -		if (pslot) {
-> -			rc = 0;
-> -			snprintf(value, 100, "Bus %x", pslot->bus);
-> -		}
-> -	} else
-> -		rc = -ENODEV;
-> -
-> -	ibmphp_unlock_operations();
-> -	debug("get_bus_name - Exit rc[%d] value[%x]\n", rc, *value);
-> -	return rc;
-> -}
-> -*/
-> -
->  /****************************************************************************
->   * This routine will initialize the ops data structure used in the validate
->   * function. It will also power off empty slots that are powered on since BIOS
-> @@ -1231,9 +1160,6 @@ const struct hotplug_slot_ops ibmphp_hotplug_slot_ops = {
->  	.get_attention_status =		get_attention_status,
->  	.get_latch_status =		get_latch_status,
->  	.get_adapter_status =		get_adapter_present,
-> -/*	.get_max_adapter_speed =	get_max_adapter_speed,
-> -	.get_bus_name_status =		get_bus_name,
-> -*/
->  };
->  
->  static void ibmphp_unload(void)
-> -- 
-> 2.30.2
-> 
+> The reason being that if we allowed multiple instances, we'd also need
+> some static unique identifier that ties the cdev filename to the DT entry,
+> same as /dev/disk/by-uuid/. Just adding an index number to the misc
+> device nodename based on DT probe order sounds very fragile, and
+> anything more sophisticated sounds like too much trouble for something
+> we don't have a clear use case for right now.
+
+Just add a number to the device node name like every other device in the
+system has.  Nothing new or special here, right?
+
+thanks,
+
+greg k-h

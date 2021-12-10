@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98351470674
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1A5470673
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244260AbhLJQ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244249AbhLJQ5X (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S237961AbhLJQ5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 10 Dec 2021 11:57:23 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDD4C0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:48 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id t5so31501074edd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:47 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244245AbhLJQ5V (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 11:57:21 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A69C0617A2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:46 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id h24so7257651pjq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8nTOg8rJWU8BdSZlmSj1JbyQAWkIqyTD+0WbjfFOnMk=;
-        b=PCw582JVM5mAG4YE2zRRSnTu65r0baerxHsDk/EtQJkxzIreRmva1a/NRZSKascAcg
-         gMC55Q6Y31pQrS07rXbX9Iw5fR2hLArDYNpwYIYJdnLHbkLdE2xjFjIt0buanxRlxHYl
-         3SULjuLfotmj+FLuWrm/Y4w5DrSyN/tXEJc3s=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LVSQkz5B+7KeAhCjFmGdpHWfCyvLYQVjjI6sRW9JpRw=;
+        b=RkOnCtneuOSJW2iuk1Cm7g5yzWudSU0qS42J4LYEu3Hz2uoIh7aG9koIpHtXnzlkqY
+         vf4J4048EcoKv5nLnS0izFCqlYXZxEJKRiGBcWeZK6fD1ftEYNTH7lMnO4yhOal4k0Pz
+         d1u2PqIIpC/7fNu17zCZa7WFQeQ4dEnEtjXRo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8nTOg8rJWU8BdSZlmSj1JbyQAWkIqyTD+0WbjfFOnMk=;
-        b=I/WpSmXztosEhGGBlAJad414TVGghR3bzJZ4PTEjU0wrumB1V1lcRFj7DUTCBIFmAx
-         LCxekxzcstPx1E9xddEDmfQ3WIt55FANpUBSneH+lqZmphotzB59W826ybGDyQ4qWa7S
-         yc7CX35d0FjStpzQAFJXHTCrn1BmaVltfuTWjsSodELwuUrMTcgcp5SszRgxO9QXfc5r
-         UQdi81vWMZrcMl0vQr5csxGNI4uLcsYMlEvuxS2q1Mz6jlzgaVKGnUSxCQQKOTKGRYqu
-         qWJozqowf0CwKK5/iZ13M53DvS7sepSBK5QUtCxvYhHaDVUyiF+z7Lm2U3w+/btVKDuF
-         NfWg==
-X-Gm-Message-State: AOAM532BKJu1HTjz0FCOgJWbE/K8LIjesqFGJP/jdIuXTr48wuYhOd82
-        NsoT+PrITdGq2NBBX3BzzAasTdpK0XSjACk4Acc=
-X-Google-Smtp-Source: ABdhPJxJonNPnsXLIYw/HFNaG3klqt3iV+R5wto3/25+YmItyHLaLEed99jhxrTQ+1qFdD1+sope0w==
-X-Received: by 2002:a05:6402:1911:: with SMTP id e17mr39760972edz.43.1639155226406;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LVSQkz5B+7KeAhCjFmGdpHWfCyvLYQVjjI6sRW9JpRw=;
+        b=WtC1tUgS8Mqh96zPqZpzvjGjanBp04jjGpJ1DGuOpztbk7XTyoo/yk5C1/S9YPz0BP
+         MF3LUKWbZSJgdGLqBjNFmj4Lki04cy16ga77uEvizvyYSfNdb5jGrSViu0yrpNNbO7Zv
+         opWqVPXTWCDq1XWKqJXI4qk8ONQ4m6WTBKwuToL68kUlZPLDGIYDloqsMOpBTgvnGQem
+         AlHBvmVSpRKFXarWoOO0tF7J/I7KQbX5jH4MzPj/AlULiU3oVqQfFS+R3fnhIwM18Qqd
+         bDmixklM2BPhkPSGgU3uOGyYWU7ClESRZ5HZ0L7AWZ+hu+h2tvyG9FCarLcsNwonO9lC
+         mEsA==
+X-Gm-Message-State: AOAM530Ybe8cnYTJQMLprGVjyjDHkUarxn1u/O0rVbyo5GWk8iip94bq
+        KC/yeFmOIIHkTeyXy+MfgEUXoQ==
+X-Google-Smtp-Source: ABdhPJzSyniFUpawTf97SmHGpFTfTB0FCc6mDMWVupxmHh+f0BcevSZsWPwoq3ya/luBEUOxpW/9BQ==
+X-Received: by 2002:a17:902:e5d1:b0:141:cd4a:f318 with SMTP id u17-20020a170902e5d100b00141cd4af318mr77124757plf.47.1639155226164;
         Fri, 10 Dec 2021 08:53:46 -0800 (PST)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id s16sm1729876edt.30.2021.12.10.08.53.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r76sm3057454pgr.61.2021.12.10.08.53.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 10 Dec 2021 08:53:45 -0800 (PST)
-Received: by mail-wr1-f51.google.com with SMTP id a9so15931381wrr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:45 -0800 (PST)
-X-Received: by 2002:a5d:4575:: with SMTP id a21mr15769110wrc.193.1639155225572;
- Fri, 10 Dec 2021 08:53:45 -0800 (PST)
+Date:   Fri, 10 Dec 2021 08:53:45 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2
+ register
+Message-ID: <202112100853.FDB294B86@keescook>
+References: <20211203084354.3105253-1-keescook@chromium.org>
+ <87o85r4a4f.fsf@intel.com>
+ <202112082220.81ECDC63D@keescook>
+ <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
+ <202112091539.6B349AC@keescook>
+ <87a6h83hb7.fsf@intel.com>
 MIME-Version: 1.0
-References: <20211210161618.645249719@infradead.org> <20211210162313.857673010@infradead.org>
-In-Reply-To: <20211210162313.857673010@infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 10 Dec 2021 08:53:29 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiDXWy8ekFDxVzCbudZv_3CqiWa9w+xO8mxJkk8SNmJCg@mail.gmail.com>
-Message-ID: <CAHk-=wiDXWy8ekFDxVzCbudZv_3CqiWa9w+xO8mxJkk8SNmJCg@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] atomic,x86: Alternative atomic_*_overflow() scheme
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a6h83hb7.fsf@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 8:27 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Shift the overflow range from [0,INT_MIN] to [-1,INT_MIN], this allows
-> optimizing atomic_inc_overflow() to use "jle" to detect increment
-> from free-or-negative (with -1 being the new free and it's increment
-> being 0 which sets ZF).
+On Fri, Dec 10, 2021 at 12:06:20PM +0200, Jani Nikula wrote:
+> On Thu, 09 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
+> > On Thu, Dec 09, 2021 at 05:20:45PM -0500, Harry Wentland wrote:
+> >> 
+> >> 
+> >> On 2021-12-09 01:23, Kees Cook wrote:
+> >> > On Wed, Dec 08, 2021 at 01:19:28PM +0200, Jani Nikula wrote:
+> >> >> On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
+> >> >>> The link_status array was not large enough to read the Adjust Request
+> >> >>> Post Cursor2 register. Adjust the size to include it. Found with a
+> >> >>> -Warray-bounds build:
+> >> >>>
+> >> >>> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+> >> >>> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+> >> >>>    59 |         return link_status[r - DP_LANE0_1_STATUS];
+> >> >>>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+> >> >>> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+> >> >>>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+> >> >>>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >> >>>
+> >> >>> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
+> >> >>> Signed-off-by: Kees Cook <keescook@chromium.org>
+> >> >>
+> >> >> Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
+> >> >> published in 2014, and Tegra is the only user of
+> >> >> drm_dp_get_adjust_request_post_cursor().
+> >> > 
+> >> > I see POST_CURSOR2 is used here too:
+> >> > 
+> >> > drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> >> > 
+> >> 
+> >> Looks like we read and parse that in the admgpu driver without
+> >> using drm_dp_get_adjust_request_post_cursor.
+> >
+> > Right, and probably that could be switched to use it, but I'm not sure
+> > what the impact of the larger link_status read is.
+> >
+> >> 
+> >> I don't have a strong feeling but I liked your original
+> >> patch a bit better. I'm not sure what it means when part
+> >> of a spec is deprecated. Once a spec is written display
+> >> vendors might implement it. We should make sure that
+> >> displays like that are always handled in a sane manner.
+> >
+> > Jani, Dave, any guidance here? I'm fine with whatever, but the current
+> > code is for sure broken. ;)
+> 
+> Post Cursor2 was completely optional for the transmitter even before it
+> was deprecated.
+> 
+> And now we'd be adding 5 bytes extra to all link status reads. To fix
+> the only user of drm_dp_get_adjust_request_post_cursor() that apparently
+> has never worked as intended. I'm just not convinced.
+> 
+> I was trying to look through the implications of DP_LINK_STATUS_SIZE
+> increase, and at least drm_dp_dpcd_read_phy_link_status() comes across
+> as something probably needing attention.
 
-Thanks.
+Okay, it sounds like you'd prefer the "make it tegra-specific" patch I
+proposed. I will work that up as a proper patch and send it.
 
-However, I think you can simplify this further:
+Thanks!
 
-> This then gives the following primitives:
->
-> [-1, INT_MIN]                                   [0, INT_MIN]
->
-> inc()                                           inc()
->         lock inc %[var]                                 mov       $-1, %[reg]
->         jle     error-free-or-negative                  lock xadd %[reg], %[var]
->                                                         test      %[reg], %[reg]
->                                                         jle       error-zero-or-negative
->
-> dec()                                           dec()
->         lock sub $1, %[var]                             lock dec %[var]
->         jc      error-to-free                           jle     error-zero-or-negative
->         jl      error-from-negative
->
-> dec_and_test()                                  dec_and_test()
->         lock sub $1, %[var]                             lock dec %[var]
->         jc      do-free                                 jl      error-from-negative
->         jl      error-from-negative                     je      do-free
-
-That "dec()" case could be just
-
-        lock dec %[var]
-        js error
-
-because an underflow is an underflow - it doesn't matter if it's a "it
-went to free" or "it became some other negative number".
-
-That said - it may not matter - I'm not sure a plain "dec" is even a
-valid operation on a ref in the first place. How could you ever
-validly decrement a ref without checking for it being the last entry?
-
-So I'm not sure "atomic_dec_overflow()" is even worth having as a
-primitive, because I can't see any valid use for it. Is it for some
-legacy case?
-
-                  Linus
+-- 
+Kees Cook

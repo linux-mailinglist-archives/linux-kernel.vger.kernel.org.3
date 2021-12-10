@@ -2,95 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 439ED47055F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1A3470562
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239730AbhLJQP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:15:57 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:52546 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbhLJQP4 (ORCPT
+        id S240235AbhLJQRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235802AbhLJQRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:15:56 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
- id f00c592c3ba2d407; Fri, 10 Dec 2021 17:12:20 +0100
-Received: from kreacher.localnet (unknown [213.134.162.58])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id C5C0666AD3B;
-        Fri, 10 Dec 2021 17:12:19 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Drop redundant intel_pstate_get_hwp_cap() call
-Date:   Fri, 10 Dec 2021 17:12:18 +0100
-Message-ID: <5782812.lOV4Wx5bFT@kreacher>
+        Fri, 10 Dec 2021 11:17:16 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C37C061746;
+        Fri, 10 Dec 2021 08:13:41 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v1so31913804edx.2;
+        Fri, 10 Dec 2021 08:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MeaT6sP369ZHHfFlIktP/ijwsUKGGwQi8Na1ysopui0=;
+        b=awGSNUEdqU3eYue93Og7j1+edp3YABdgj0N9Ga98N5ubOQFsdyrgkZk2BBZ4p513Tq
+         ifeWlcUvxk5atK2BK8Fr7zju6mVQR3Bpgl9jrTaXLGs/epBNkcTn8OKsvy9I4vn6cuGl
+         ALSc+O5jaFLVV6BZKbsvepgRRAzwPh5bWgWsUJ1lGmMMMRmJDB0GaTcDsjZ2V2/b0pQ+
+         gZFb+sG2ZGFnKXURT7S6ZVfFmUcO+7bdJmQJdx29sksBpCJpm5jtBkpZ+QmWsQ2w1aiH
+         66LiLrhQX/cLrxjnQ6Rw7xkzRm4QRk761c/nWg6kDmACGiQSHbwfCeOn4krmIdQjiJLu
+         u4iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MeaT6sP369ZHHfFlIktP/ijwsUKGGwQi8Na1ysopui0=;
+        b=qjB6TF9XoQF1trm2dTWnp+glx+tet2go0Sd1pOkohIi1pr+K6jKWiQMO1PjSqfY4iQ
+         uwJ17Zwbsm2HdhCu8zzWqOaSagLebpDUnX+2HMW3bYQ0psMD2KMnAfWlgY5XqD0tA+re
+         NetV/DKTT5jbp/VvlnhyZrEw4BsEqKPcJy+47nHXHFv3EOUPR+kRaWD03rqHh8zJP6UC
+         2IWXZJcyJOMBtEcTWCeagjYktx/wUbm5z0ddhJ6qL7yN0tUAEWr26BuqIuEnJB/K1Fxt
+         Ym3XuW7ilC2O4c5gD5wG5wusdymM7W3MHWoJdA9w1Fl17NMpGmgys8FY2cjui8oWWcSt
+         EB2A==
+X-Gm-Message-State: AOAM532n63LJG1F8cu08xYTqCeZklE3fiDtMha2bufhbST18YGaNKFjQ
+        jFwpHK30Kwpn6+SIVikO19k=
+X-Google-Smtp-Source: ABdhPJzRiRJoaivdEdM1HH35JPF4ywUVtOqJvo2pTQyXc9KWsiWb7HO9CClNbRJMS6BT0j/CTz+4Kg==
+X-Received: by 2002:a17:907:2454:: with SMTP id yw20mr25180988ejb.428.1639152819557;
+        Fri, 10 Dec 2021 08:13:39 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
+        by smtp.googlemail.com with ESMTPSA id jg32sm1900192ejc.43.2021.12.10.08.13.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 08:13:38 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <8ab8833f-2a89-71ff-98da-2cfbb251736f@redhat.com>
+Date:   Fri, 10 Dec 2021 17:13:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.58
-X-CLIENT-HOSTNAME: 213.134.162.58
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrkedvgdekiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppedvudefrddufeegrdduiedvrdehkeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedvrdehkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/7] KVM: x86: Retry page fault if MMU reload is pending
+ and root has no sp
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <20211209060552.2956723-1-seanjc@google.com>
+ <20211209060552.2956723-2-seanjc@google.com>
+ <c94b3aec-981e-8557-ba29-0094b075b8e4@redhat.com>
+ <YbN58FS67bEBOZZu@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YbN58FS67bEBOZZu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 12/10/21 17:01, Sean Christopherson wrote:
+>> KVM_REQ_MMU_RELOAD is raised after kvm->arch.mmu_valid_gen is fixed (of
+>> course, otherwise the other CPU might just not see any obsoleted page
+>> from the legacy MMU), therefore any check on KVM_REQ_MMU_RELOAD is just
+>> advisory.
+> 
+> I disagree.  IMO, KVM should not be installing SPTEs into obsolete shadow pages,
+> which is what continuing on allows.  I don't _think_ it's problematic, but I do
+> think it's wrong.
+>
+> [...] Eh, for all intents and purposes, KVM_REQ_MMU_RELOAD very much says
+> special roots are obsolete.  The root will be unloaded, i.e. will no
+> longer be used, i.e. is obsolete.
 
-It is not necessary to call intel_pstate_get_hwp_cap() from
-intel_pstate_update_perf_limits(), because it gets called from
-intel_pstate_verify_cpu_policy() which is either invoked directly
-right before intel_pstate_update_perf_limits(), in
-intel_cpufreq_verify_policy() in the passive mode, or called
-from driver callbacks in a sequence that causes it to be followed
-by an immediate intel_pstate_update_perf_limits().
+I understand that---but it takes some unspoken details to understand 
+that.  In particular that both kvm_reload_remote_mmus and 
+is_page_fault_stale are called under mmu_lock write-lock, and that 
+there's no unlock between updating mmu_valid_gen and calling 
+kvm_reload_remote_mmus.
 
-Namely, in the active mode intel_cpufreq_verify_policy() is called
-by intel_pstate_verify_policy() which is the ->verify() callback
-routine of intel_pstate and gets called by the cpufreq core right
-before intel_pstate_set_policy(), which is the driver's ->setoplicy()
-callback routine, where intel_pstate_update_perf_limits() is called.
+(This also suggests, for the other six patches, keeping 
+kvm_reload_remote_mmus and just moving it to arch/x86/kvm/mmu/mmu.c, 
+with an assertion that the MMU lock is held for write).
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |   18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+But since we have a way forward for having no special roots to worry 
+about, it seems an unnecessary overload for 1) a patch that will last 
+one or two releasees at most 2) a case that has been handled in the 
+inefficient way forever.
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -2486,18 +2486,14 @@ static void intel_pstate_update_perf_lim
- 	 * HWP needs some special consideration, because HWP_REQUEST uses
- 	 * abstract values to represent performance rather than pure ratios.
- 	 */
--	if (hwp_active) {
--		intel_pstate_get_hwp_cap(cpu);
-+	if (hwp_active && cpu->pstate.scaling != perf_ctl_scaling) {
-+		int scaling = cpu->pstate.scaling;
-+		int freq;
- 
--		if (cpu->pstate.scaling != perf_ctl_scaling) {
--			int scaling = cpu->pstate.scaling;
--			int freq;
--
--			freq = max_policy_perf * perf_ctl_scaling;
--			max_policy_perf = DIV_ROUND_UP(freq, scaling);
--			freq = min_policy_perf * perf_ctl_scaling;
--			min_policy_perf = DIV_ROUND_UP(freq, scaling);
--		}
-+		freq = max_policy_perf * perf_ctl_scaling;
-+		max_policy_perf = DIV_ROUND_UP(freq, scaling);
-+		freq = min_policy_perf * perf_ctl_scaling;
-+		min_policy_perf = DIV_ROUND_UP(freq, scaling);
- 	}
- 
- 	pr_debug("cpu:%d min_policy_perf:%d max_policy_perf:%d\n",
+Paolo
 
-
+> The other way to check for an invalid special root would be to treat
+> it as obsolete if any of its children in entries 0-3 are present and
+> obsolete.  That would be more precise, but it provides no benefit
+> given KVM's current implementation.
+> 
+> I'm not completely opposed to doing nothing, but I do think it's
+> silly to continue on knowing that the work done by the page fault is
+> all but gauranteed to be useless.
+> 
 

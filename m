@@ -2,171 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1864709C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D3A4709CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241994AbhLJTJZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 14:09:25 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:44617 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbhLJTJU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:09:20 -0500
-Received: by mail-oi1-f178.google.com with SMTP id be32so14445880oib.11;
-        Fri, 10 Dec 2021 11:05:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=c+Gg3IcBrVO+p3DERDiz2wIK2rZh3JBEUqlmxz2Wt9w=;
-        b=KF02GmbhAy9o852cKAkWGRsQiFbgHC75Qjm16bI7ZSmAfyJfROZofbcH5jI8CJ/ve+
-         eHhgitsnexLUIDGw5//Gk3z+Ok9evNj4B9kvpHUljhuupzNnGZFu5aFXSsX81N0DYWnQ
-         IaBXbFwEerwNO3snRUpagshSzYMbeSIiztCbLnK54Zt/2TVaC3wOPO8BVEK8I1B434i9
-         jEc6iUXt9xaEyYM6x5//wTvcOkDy/tLV52Sdv83wiI5s/7cNfq7VeKJ7PH5p5hyHH/1h
-         /CbxkevGDaw6vPTu14r/Zn3poSjqgobQdPA5+G75/glByywxNMFAgRWya2D4H+Hw9B5o
-         Jl1w==
-X-Gm-Message-State: AOAM5333zryiN0f+sbmHmz1C8Wb+kAiv8RDMW2PlfbHCFvYf5HhFNokx
-        4ByWa50hvEfayrUN+aS2O+/98uHRohqSF0ta+/8=
-X-Google-Smtp-Source: ABdhPJyFnxvuCdo/SAuZsTrbeFY0ttrM6VIAZMHiyNGyFieUXOlcjM/63kmCFhhj1nwi5THbS12OxkRKZ5ROskKDe+g=
-X-Received: by 2002:aca:eb0b:: with SMTP id j11mr14151206oih.51.1639163143930;
- Fri, 10 Dec 2021 11:05:43 -0800 (PST)
+        id S1343541AbhLJTJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:09:34 -0500
+Received: from mx-out.tlen.pl ([193.222.135.158]:43080 "EHLO mx-out.tlen.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245697AbhLJTJc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 14:09:32 -0500
+Received: (wp-smtpd smtp.tlen.pl 36088 invoked from network); 10 Dec 2021 20:05:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1639163151; bh=XlxCGbBCaxE7x41aV4Afh/rZ2qOx8kmOLzHrK+2sw5Q=;
+          h=Subject:To:Cc:From;
+          b=fCiwlsDadw8GKJjLL15QfPeP+pcSYHChot/2emwu+LCoQXlIxAAGCGUpfcFjurX2k
+           BfR3DUVR7hhJIxUbEUD3eunGXKbNb7AHcSAodCs2Pt/pdlpCHx/Ok3O+D3nvZIa2lN
+           0uxP1tDY33gmHHQJo1orHfYJmZxgaadqsRQxZe1M=
+Received: from aaff136.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.135.136])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <alexandre.belloni@bootlin.com>; 10 Dec 2021 20:05:51 +0100
+Message-ID: <5efcbdad-972d-2159-34ea-97eb6e29c613@o2.pl>
+Date:   Fri, 10 Dec 2021 20:05:38 +0100
 MIME-Version: 1.0
-References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-4-digetx@gmail.com>
- <CAJZ5v0jTJ3f7oUUR690PGaPJsxA8yzua9XDa8MONBHMzHnDfOQ@mail.gmail.com> <e6ff1cea-a168-1cb0-25c5-fb16c681cf4a@gmail.com>
-In-Reply-To: <e6ff1cea-a168-1cb0-25c5-fb16c681cf4a@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Dec 2021 20:05:32 +0100
-Message-ID: <CAJZ5v0gwnY07vg71_NB8RDWyv84FtMsmx7UTDd8TkUd7vFzc6A@mail.gmail.com>
-Subject: Re: [PATCH v4 03/25] notifier: Add atomic/blocking_notifier_has_unique_priority()
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH RESEND v3 2/7] rtc-mc146818-lib: fix RTC presence check
+Content-Language: en-GB
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Alessandro Zummo <a.zummo@towertech.it>
+References: <20211119204221.66918-1-mat.jonczyk@o2.pl>
+ <20211119204221.66918-3-mat.jonczyk@o2.pl> <YZ69RB0ePgaHcqVm@piout.net>
+ <277177e7-46a0-522c-297c-ad3ee0c15793@o2.pl> <YbNxum2SgyW97dyB@piout.net>
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+In-Reply-To: <YbNxum2SgyW97dyB@piout.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: d1c25c1f610b53f62f5903bfd35bf89c
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000A [8SOU]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 7:52 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+W dniu 10.12.2021 o 16:26, Alexandre Belloni pisze:
+> Hi,
 >
-> 10.12.2021 21:19, Rafael J. Wysocki пишет:
-> ...
-> >> +bool atomic_notifier_has_unique_priority(struct atomic_notifier_head *nh,
-> >> +               struct notifier_block *n)
-> >> +{
-> >> +       unsigned long flags;
-> >> +       bool ret;
-> >> +
-> >> +       spin_lock_irqsave(&nh->lock, flags);
-> >> +       ret = notifier_has_unique_priority(&nh->head, n);
-> >> +       spin_unlock_irqrestore(&nh->lock, flags);
-> >
-> > This only works if the caller can prevent new entries from being added
-> > to the list at this point or if the caller knows that they cannot be
-> > added for some reason, but the kerneldoc doesn't mention this
-> > limitation.
+> On 25/11/2021 23:12:42+0100, Mateusz Jończyk wrote:
+>> W dniu 24.11.2021 o 23:31, Alexandre Belloni pisze:
+>>> Hello,
+>>>
+>>> By moving this patch later on in the series, you'd avoid the subsequent
+>>> refactor. I think this would be better for bisection later on.
+>> Hi,
+>>
+>> There are three issues I'm trying to fix in this series:
+>>
+>> 1. (less important) Insufficient locking in cmos_set_alarm()
+>> 2. misdetection of the RTC CMOS as broken on some motherboards,
+>> 3. reading / writing of the RTC alarm time during RTC update-in-progress.
+>>
+>> Do you mean I should drop the patch
+>>     nr 2. ("rtc-mc146818-lib: fix RTC presence check")
+>> and instead straight away introduce mc146818_avoid_UIP() with the new approach (as in patch 3 in the series),
+>> then modify mc146818_get_time() to use it (as in patch 4 - fixing issue nr 2),
+>> then modify cmos_read_alarm / cmos_set_alarm to use mc146818_avoid_UIP() (patches 5-6, fixing issue no. 3)?
+>>
+>> I was afraid this risks some confusion what is being fixed when.
+> I realize I never replied to this. This is fine, I'm planning to apply
+> the whole series once the few comments are fixed.
+
+Great!
+
+I've got other things mostly sorted out and tested, so I'll send a v4 shortly after some last-minute checks.
+
+> We'll probably get some breakage later on because many RTCs using this
+> driver are not adhering to the spec.
 >
-> I'll update the comment.
->
-> ..
-> >> +bool blocking_notifier_has_unique_priority(struct blocking_notifier_head *nh,
-> >> +               struct notifier_block *n)
-> >> +{
-> >> +       bool ret;
-> >> +
-> >> +       /*
-> >> +        * This code gets used during boot-up, when task switching is
-> >> +        * not yet working and interrupts must remain disabled. At such
-> >> +        * times we must not call down_read().
-> >> +        */
-> >> +       if (system_state != SYSTEM_BOOTING)
-> >
-> > No, please don't do this, it makes the whole thing error-prone.
->
-> What should I do then?
+Thanks,
 
-First of all, do you know of any users who may want to call this
-during early initialization?  If so, then why may they want to do
-that?
-
-Depending on the above, I would consider adding a special mechanism for them.
-
-> >> +               down_read(&nh->rwsem);
-> >> +
-> >> +       ret = notifier_has_unique_priority(&nh->head, n);
-> >> +
-> >> +       if (system_state != SYSTEM_BOOTING)
-> >> +               up_read(&nh->rwsem);
-> >
-> > And still what if a new entry with a non-unique priority is added to
-> > the chain at this point?
->
-> If entry with a non-unique priority is added after the check, then
-> obviously it won't be detected.
-
-Why isn't this a problem?
-
-> I don't understand the question. These
-> down/up_read() are the locks that prevent the race, if that's the question.
-
-Not really, they only prevent the race from occurring while
-notifier_has_unique_priority() is running.
-
-If anyone depends on this check for correctness, they need to lock the
-rwsem, do the check, do the thing depending on the check while holding
-the rwsem and then release the rwsem.  Otherwise it is racy.
+Mateusz

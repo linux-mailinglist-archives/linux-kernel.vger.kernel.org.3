@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E894708F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4DD4708FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245462AbhLJSkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:40:32 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:40952 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242116AbhLJSkc (ORCPT
+        id S245466AbhLJSll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242061AbhLJSlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:40:32 -0500
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A9D0520B7179;
-        Fri, 10 Dec 2021 10:36:56 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A9D0520B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639161416;
-        bh=OpqQ41JyVafBp3DvkBZxII60kxNqelzO+DyYetDXZig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m8JpLIBgM7vdGBNKWQk/u54y5CMiIulv0ATrzoEsmjldxXM5wPBaJmMIRKbrSkhQ+
-         mIr/4bQqImtL8hKKsMNYQgYmJzRIASZqfoo0PnZi0Wt6PbnSmcwBl5aijyn/0DQqJ3
-         XdetyP2NgDOaa6xw+idK5BJ0HsfVhxILnCzf+OUE=
-Date:   Fri, 10 Dec 2021 10:36:51 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 09/13] user_events: Optimize writing events by only
- copying data once
-Message-ID: <20211210183651.GA2242@kbox>
-References: <20211209223210.1818-1-beaub@linux.microsoft.com>
- <20211209223210.1818-10-beaub@linux.microsoft.com>
- <20211210235110.f674dd81e27bdedb231826a2@kernel.org>
+        Fri, 10 Dec 2021 13:41:40 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F983C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:38:05 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id m24so8758359pgn.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:38:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ykP11dG828/Ovx8hCrFHY1auii5uZTVhWgmhjxyUXaA=;
+        b=p783Et1gwS90tGpkB5iL24yLEqnGBO5K8Fszs1jtZGkFO7Y0GmUW5aANnbQWrC1aQa
+         I4E+5bA5ENC4OP0yuoQVRz2S+hgUFINNvIpJoGOcUyJfanC9J1T72i9OhQ3cWk4SnB7R
+         EZlOu89/MnQ3mxOUAyTnx9qm5HXLMDpg72XDBpYhnuXaO3DwsVoyF3mp0PcmPr9wUnrf
+         S8OgivmTqQAwqKLpiOxkO/dOiY0KM1yExAKb4FGz/gOPM6eyWhgkXK2FvqBN7m8Bj3dW
+         kWkEc5hCzQygfLkSOYjM8vumG2rFKyBMvwWs16ixk3yyx5mzHtHCBUWKqydXh9Q3cxmB
+         8Qfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ykP11dG828/Ovx8hCrFHY1auii5uZTVhWgmhjxyUXaA=;
+        b=pRnk/+Q5+CcaRTTXMgXCD9LQLSHRDxksHixneUnrCUznaTGKLY+wizURtxApwJeB62
+         WhPzZpKUgUGLGDGsb9mIfb/ZoBgYwj7DAFdW8JbBD3utAk85bMsWY4YRLDe7qEXdus3f
+         v/DGjso60k+cLE6s/csz9/JCfQVRmM9gjNXcLsfga/srlo4NzgT0KA1yf7gXV+dW/8J5
+         9gHnG0bBklZtp7XSIJWTCu9UkwF2TtwMeLecxvQaSRb7HSZBX6C+HSG2As9fvdWcx1dF
+         FOZBcclYkt2+sNP45aPOJQVVSOCXqhOZvBDTAwsGFgPEMhiARB9zvTmKcUOA0xhHPNBv
+         GPpQ==
+X-Gm-Message-State: AOAM531JSbpHWS9kNXIGbVVi88t22+i63xTAIMUu+Rg9IR43c2Zf220J
+        P7CBJQld5bllmh57TPfNpwM=
+X-Google-Smtp-Source: ABdhPJyHc62D24ikiuK+khW2/KWqKzEalLnhn752anXZOpAS3cl9uZqhi8XFOYkQm5sdkLwVqRyXWQ==
+X-Received: by 2002:a05:6a00:88b:b0:4a2:9c62:8865 with SMTP id q11-20020a056a00088b00b004a29c628865mr19837582pfj.46.1639161484770;
+        Fri, 10 Dec 2021 10:38:04 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id m13sm3268255pgt.22.2021.12.10.10.38.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 10:38:04 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 10 Dec 2021 08:38:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Michal Koutny <mkoutny@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Newsome <jnewsome@torproject.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Jann Horn <jannh@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Security Officers <security@kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH 2/6] cgroup: Allocate cgroup_file_ctx for
+ kernfs_open_file->priv
+Message-ID: <YbOeiu5+DZQsJbm8@slm.duckdns.org>
+References: <20211209214707.805617-1-tj@kernel.org>
+ <20211209214707.805617-3-tj@kernel.org>
+ <CAHk-=wgiYkECT=hZRKj8ZwfBPw2Uz=gpOGBGd4ny0KYhSsjC0w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210235110.f674dd81e27bdedb231826a2@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAHk-=wgiYkECT=hZRKj8ZwfBPw2Uz=gpOGBGd4ny0KYhSsjC0w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:51:10PM +0900, Masami Hiramatsu wrote:
-> Hi Beau,
-> 
-> On Thu,  9 Dec 2021 14:32:06 -0800
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> 
-> > Pass iterator through to probes to allow copying data directly to the
-> > probe buffers instead of taking multiple copies. Enables eBPF user and
-> > raw iterator types out to programs for no-copy scenarios.
-> > 
-> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> > ---
+Hello,
 
-[..]
-
-> > @@ -1009,32 +1059,28 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
-> >  	if (likely(atomic_read(&tp->key.enabled) > 0)) {
-> >  		struct tracepoint_func *probe_func_ptr;
-> >  		user_event_func_t probe_func;
-> > +		struct iov_iter copy;
-> >  		void *tpdata;
-> > -		void *kdata;
-> > -		u32 datalen;
-> >  
-> > -		kdata = kmalloc(i->count, GFP_KERNEL);
-> > -
-> > -		if (unlikely(!kdata))
-> > -			return -ENOMEM;
-> > -
-> > -		datalen = copy_from_iter(kdata, i->count, i);
-> > +		if (unlikely(iov_iter_fault_in_readable(i, i->count)))
-> > +			return -EFAULT;
-> >  
-> >  		rcu_read_lock_sched();
-> > +		pagefault_disable();
+On Fri, Dec 10, 2021 at 09:53:41AM -0800, Linus Torvalds wrote:
+> On Thu, Dec 9, 2021 at 1:47 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > of->priv is currently used by each interface file implementation to store
+> > private information. This patch collects the current two private data usages
+> > into struct cgroup_file_ctx which is allocated and freed by the common path.
+> > This allows generic private data which applies to multiple files, which will
+> > be used to in the following patch.
 > 
-> Since the pagefault_disable() may have unexpected side effect,
-> I think it should be used really limited area, e.g. around
-> actual memory access function.
-> Can we move this around the copy_nofault()?
-> 
+> I'm not sure if it's worth it having that union just to make the
+> struct be 8 bytes instead of 16 (and later 16 bytes instead of 24),
+> when the real cost is that dynamic allocation overhead, and there's
+> likely only one or two active actual allocations at a time.
 
-Sure thing.
+Yeah, I was initially doing ctx->procs_it and ->psi_trigger which looked
+kinda silly so then nested structs and then why not the union which is kinda
+logical in semantic sense.
 
-> Thank you,
-> >  
-> >  		probe_func_ptr = rcu_dereference_sched(tp->funcs);
-> >  
-> >  		if (probe_func_ptr) {
-> >  			do {
-> > +				copy = *i;
-> >  				probe_func = probe_func_ptr->func;
-> >  				tpdata = probe_func_ptr->data;
-> > -				probe_func(user, kdata, datalen, tpdata);
-> > +				probe_func(user, &copy, tpdata);
-> >  			} while ((++probe_func_ptr)->func);
-> >  		}
-> >  
-> > +		pagefault_enable();
-> >  		rcu_read_unlock_sched();
-> > -
-> > -		kfree(kdata);
-> >  	}
-> >  
-> >  	return ret;
-> > -- 
-> > 2.17.1
-> > 
-> 
-> 
-> -- 
-> Masami Hiramatsu <mhiramat@kernel.org>
+> Wouldn't that simplify things? And might there not be some cgroup
+> pressure user that also wants to use the iterator interfaces? Maybe
+> not, my point is more that once we have an explicit struct allocation
+> for cgroup proc files, we might as well clarify and simplify the
+> code..
 
-Thanks,
--Beau
+It's a bit of bikeshedding but I wanna explicitly denote who at currently
+uses the fields, so how about nested structs w/ embedded iterator? If other
+files ever want to share fields, we can shift those fields to the common
+area together with ->ns.
+
+Thanks.
+
+-- 
+tejun

@@ -2,96 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F9446FEE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FDF46FEE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238498AbhLJKsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:48:18 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4243 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238383AbhLJKsR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:48:17 -0500
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J9SCq6nGXz686Sr;
-        Fri, 10 Dec 2021 18:42:47 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 11:44:41 +0100
-Received: from [10.47.85.63] (10.47.85.63) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 10 Dec
- 2021 10:44:40 +0000
-Subject: Re: [PATCH] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
-To:     <Ajish.Koshy@microchip.com>, <jinpu.wang@cloud.ionos.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <Viswas.G@microchip.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>
-References: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
- <a93da7a3-9cbe-b278-36ce-1ac860ad43d6@huawei.com>
- <PH0PR11MB51122D76F40E164C31AFEE54EC719@PH0PR11MB5112.namprd11.prod.outlook.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <eb82b0ab-912a-4879-f1b2-d5cbef5bfc41@huawei.com>
-Date:   Fri, 10 Dec 2021 10:44:15 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S238452AbhLJKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:48:53 -0500
+Received: from mga05.intel.com ([192.55.52.43]:33143 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233090AbhLJKsv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 05:48:51 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="324588169"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="324588169"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:45:16 -0800
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="480693137"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:45:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mvdNv-004SNS-TD;
+        Fri, 10 Dec 2021 12:44:15 +0200
+Date:   Fri, 10 Dec 2021 12:44:15 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
+ when IRQ can't be retrieved
+Message-ID: <YbMvfzKsc4CcQzSa@smile.fi.intel.com>
+References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
+ <d841bc59-a2a6-27f5-10af-05fe2e24067a@omp.ru>
+ <YbI/6OIKM7qvLQcp@smile.fi.intel.com>
+ <bfd96f5a-94c7-cee6-9546-14dc59cb8542@omp.ru>
+ <YbJXjmsDJWlr3xpB@smile.fi.intel.com>
+ <15cf03b2-8d45-93b1-f0a0-d79c93cee0da@omp.ru>
 MIME-Version: 1.0
-In-Reply-To: <PH0PR11MB51122D76F40E164C31AFEE54EC719@PH0PR11MB5112.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.85.63]
-X-ClientProxiedBy: lhreml716-chm.china.huawei.com (10.201.108.67) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15cf03b2-8d45-93b1-f0a0-d79c93cee0da@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 10:23, Ajish.Koshy@microchip.com wrote:
-> Hi John,
+On Thu, Dec 09, 2021 at 11:29:07PM +0300, Sergey Shtylyov wrote:
+> On 12/9/21 10:22 PM, Andy Shevchenko wrote:
 
-Please config your editor to wrap at ~72 characters and don't top-post.
+...
 
+> >>>>> While at it, drop redundant check for 0 as platform_get_irq() spills
+> >>>>> out a big WARN() in such case.
+> >>>>
+> >>>>    And? IRQ0 is still returned! :-(
+> >>>
+> >>> It should not be returned in the first place.
+> >>
+> >>    But it still is, despite the WARN(), right?
+> > 
+> > So, you admit that there is a code which does that?
 > 
-> In my humble opinion what we observed very earlier was with respect smp_request()/response() crash and this patch resolved it. Given that the issue was not only specific to ARM, issue was observed on x86 too with IOMMU enabled. Device discovery went fine post application of this patch on x86.
+>    I admit *what*?! That platfrom_get_irq() and its ilk return IRQ0 while they
+> shouldn't? =)
+
+That there is a code beneath platform_get_irq() that returns 0, yes.
+
+> > That code should be fixed first. Have you sent a patch?
 > 
-> What we are observing right now on error handling/timeouts for commands on drives will be altogether different issue that needs separate debugging on ARM platform with separate patch since this is a very initial execution of pm80xx driver on ARM platform.
+>    Which code?! You got me totally muddled. =)
+
+Above mentioned.
+
+...
+
+> >>>>> -	if (!irq)
+> >>>>> -		return -EINVAL;
+> >>>>
+> >>>>    This is prermature -- let's wait till my patch that stops returning IRQ0 from
+> >>>> platform_get_irq() and friends gets merged....
+> >>>
+> >>> What patch?
+> >>
+> >>    https://marc.info/?l=linux-kernel&m=163623041902285
+> >>
+> >>> Does it fix platform_get_irq_optional()?
+> >>
+> >>    Of course! :-)
+> > 
+> > Can you share link to lore.kernel.org, please?
+> > It will make much easier to try and comment.
 > 
-> This patch is acceptable. Let me know your further views.
-> 
+>    I don't know how to uise it yet, and I'm a little busy with other IRQ0 issues ATM,
+> so I'm afraid you're on your own here...
 
-As I mentioned earlier about this patch, a v2 is needed as we need 
-kmap_atomic() in both cases. But I would rather resolve all issues 
-before getting that merged - it has been broken this way for a long time.
+lore.kernel.org is the official mailing list archive for Linux kernel work
+AFAIU. Other sites may do whatever they want with that information, so -->
+they are unreliable. If you wish to follow the better process, use
+lore.kernel.org. Understanding how it works takes no more than 5 minutes
+by engineer with your kind of experience with Linux kernel development.
 
-So I mentioned a new issue in my response to Damien - maxcpus=1 on the 
-command line crashes on boot. I can imagine that x86 also has that issue.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-As for the timeouts, why would the FW not respond in the way I 
-described? I would always expect a completion, even for erroneous 
-commands. Maybe it is an interrupt issue in the driver. Is there some 
-diagnostics I can check - there seems to be a lot of "stuff" in the 
-sysfs scsi_host folder.
-
-Thanks,
-John
-
-> Thanks,
-> Ajish
-> 
-> On 26/11/2021 15:35, John Garry wrote:
->>        /*
->> @@ -4280,8 +4283,9 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
->>                pm8001_ha->smp_exp_mode = SMP_INDIRECT;
->>
->>
->> -     tmp_addr = cpu_to_le64((u64)sg_dma_address(&task->smp_task.smp_req));
->> -     preq_dma_addr = (char *)phys_to_virt(tmp_addr);
->> +     smp_req = &task->smp_task.smp_req;
->> +     to = kmap(sg_page(smp_req));
-> This should be a kmap_atomic() as well, as I see the following for when
-> CONFIG_DEBUG_ATOMIC_SLEEP is enabled:
 

@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5600470A57
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B23470A59
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242830AbhLJT3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234441AbhLJT3E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:29:04 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81C5C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:25:28 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso2623357ood.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:25:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2O/k+0WJjv36z9ljqaNmunhvSO3XD5bqz1h3tYoPxRY=;
-        b=QjUG+ueAqVzUrkK61BmuZKUhyPFdYuTG08nwJtv0O04h6TCDcG8WoBBrV578HnVBUp
-         12Wqg4pKnlXVYKgbkfPkBHbIg0DYw+IaGRmLIAXA0X11AUX499qwVMiuJCFLmUslSWw4
-         BJsAWGbl57SN0XzFo8U4L9gWco6vSIOv8SR6Fy3J6UBz6EtK+LCNDouMdKZUYSjc6MDO
-         AymiEhiRxIF8dlkEgB/iq2zdURKSYJMchthlIwOtwns0CofbY5qvwqbf8+hybK0IXwok
-         cxqLAD4EvN+8HtzaEFuEKcCA1Mb2ddnP/KCeGJ2uRPDpCy1vCG6qEF5Nr09Re2b9jqmN
-         2R2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2O/k+0WJjv36z9ljqaNmunhvSO3XD5bqz1h3tYoPxRY=;
-        b=NoCJKDD3OLjnutYQm+I/gIfHYrCE0GFv0iBJcURNyyW7p4pP4ELOJAIlb0WGinIooK
-         ZPRxhYSkMiPxXXl4OwLSgsuuvbUJwvVvwvB/YeA5LAzZbMVAQwn4mO8gqX+tgJTLWgAJ
-         HNX2qvqEkIyJC5k/OgpKk84nj+lsjCarbrP8co8lPlzIE7c5AaY++YtBqurlko817YAj
-         tRfdGLQwo5CkSL5M3I/VFaY2X1w1cJCfy8cUu0EifH5rod9fthA6QKEHotaKqjsWRcU1
-         CHUHgwQdxz3i3HkFVyJ7H+ra4uZBJziyEObz819U+tMrm/UOvBUf9McGlQOu7Dh5+iS1
-         t6Hg==
-X-Gm-Message-State: AOAM531XRhkCc1zJCiw0TAVJQNbMlp8xeD7l0SrJ4XZZjzdv5Kf9ckol
-        XLZ7/BLaEuk5WKBgC5JoxLGw1Sh07UhRQJkcEw83ow==
-X-Google-Smtp-Source: ABdhPJz/b54e9nJbJ5xI/FnYU6tWOhDugbvhk07RZSn0BQ6FmckTR52Hi5ZxW7/JCtRBdlflAX2DB/ODsLypeqrGTXk=
-X-Received: by 2002:a4a:3042:: with SMTP id z2mr9506922ooz.47.1639164327855;
- Fri, 10 Dec 2021 11:25:27 -0800 (PST)
+        id S242834AbhLJTam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:30:42 -0500
+Received: from mga06.intel.com ([134.134.136.31]:39184 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234441AbhLJTak (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 14:30:40 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="299212247"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="299212247"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:27:05 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="462649633"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:26:49 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mvlWd-004coT-DK;
+        Fri, 10 Dec 2021 21:25:47 +0200
+Date:   Fri, 10 Dec 2021 21:25:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
+ when IRQ can't be retrieved
+Message-ID: <YbOpu2whB5NaXbNa@smile.fi.intel.com>
+References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
+ <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
+ <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
+ <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
+ <9e6b2e9a-e958-0c14-6570-135607041978@omp.ru>
+ <YbM7xkTazM76CVvD@smile.fi.intel.com>
+ <6c03ffef-b2e0-16ba-35f3-206af2a611d2@gmail.com>
+ <YbOVmGw7ys6U51z3@smile.fi.intel.com>
+ <9d688cd8-99e3-0265-06aa-d44597e7686c@omp.ru>
 MIME-Version: 1.0
-References: <20211117080304.38989-1-likexu@tencent.com> <c840f1fe-5000-fb45-b5f6-eac15e205995@redhat.com>
-In-Reply-To: <c840f1fe-5000-fb45-b5f6-eac15e205995@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 10 Dec 2021 11:25:16 -0800
-Message-ID: <CALMp9eRA8hw9zVEwnZEX56Gao-MibX5A+XXYS-n-+X0BkhrSvQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/svm: Add module param to control PMU virtualization
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d688cd8-99e3-0265-06aa-d44597e7686c@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 5:25 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 11/17/21 09:03, Like Xu wrote:
-> > From: Like Xu <likexu@tencent.com>
-> >
-> > For Intel, the guest PMU can be disabled via clearing the PMU CPUID.
-> > For AMD, all hw implementations support the base set of four
-> > performance counters, with current mainstream hardware indicating
-> > the presence of two additional counters via X86_FEATURE_PERFCTR_CORE.
-> >
-> > In the virtualized world, the AMD guest driver may detect
-> > the presence of at least one counter MSR. Most hypervisor
-> > vendors would introduce a module param (like lbrv for svm)
-> > to disable PMU for all guests.
-> >
-> > Another control proposal per-VM is to pass PMU disable information
-> > via MSR_IA32_PERF_CAPABILITIES or one bit in CPUID Fn4000_00[FF:00].
-> > Both of methods require some guest-side changes, so a module
-> > parameter may not be sufficiently granular, but practical enough.
-> >
-> > Signed-off-by: Like Xu <likexu@tencent.com>
-> > ---
-Thanks for this patch. It saves us from upstreaming our equivalent patch.
+On Fri, Dec 10, 2021 at 10:01:04PM +0300, Sergey Shtylyov wrote:
+> On 12/10/21 8:59 PM, Andy Shevchenko wrote:
+> 
+> >>>>>>>> platform_get_irq() will print a message when it fails.
+> >>>>>>>> No need to repeat this.
+> >>>>>>>>
+> >>>>>>>> While at it, drop redundant check for 0 as platform_get_irq() spills
+> >>>>>>>> out a big WARN() in such case.
+> >>>>>>>
+> >>>>>>> The reason you should be able to remove the "if (!irq)" test is that
+> >>>>>>> platform_get_irq() never returns 0. At least, that is what the function kdoc
+> >>>>>>> says. But looking at platform_get_irq_optional(), which is called by
+> >>>>>>> platform_get_irq(), the out label is:
+> >>>>>>>
+> >>>>>>> 	WARN(ret == 0, "0 is an invalid IRQ number\n");
+> >>>>>>> 	return ret;
+> >>>>>>>
+> >>>>>>> So 0 will be returned as-is. That is rather weird. That should be fixed to
+> >>>>>>> return -ENXIO:
+> >>>>>>>
+> >>>>>>> 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
+> >>>>>>> 		return -ENXIO;
+> >>>>>>> 	return ret;
+> >>>>>>
+> >>>>>>    My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
+> >>>>>> but returns -EINVAL instead.
+> >>>>>>
+> >>>>>>> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
+> >>>>>>
+> >>>>>>    Of course it isn't...
+> >>>>>
+> >>>>> It's unsubstantiated statement. The vIRQ 0 shouldn't be returned by any of
+> >>>>> those API calls.
+> >>>>
+> >>>>    We do _not_ know what needs to be fixed, that's the problem, and that's why the WARN()
+> >>>> is there...
+> >>>
+> >>> So, have you seen this warning (being reported) related to libahci_platform?
+> >>
+> >>    No (as if you need to really see this while it's obvious from the code review).
+> >>
+> >>> If no, what we are discussing about then? The workaround is redundant and
+> >>
+> >>    I don't know. :-) Your arguments so far seem bogus (sorry! :-))...
+> > 
+> > It seems you haven't got them at all. The problems of platform_get_irq() et al
+> > shouldn't be worked around in the callers.
+> 
+>    I have clearly explained to you what I'm working around there. If that wasn't clear
+> enough, I don't want to continue this talk anymore. Good luck with your patch (not this
+> one).
 
-In the long run, I'd like to be able to override this system-wide
-setting on a per-VM basis, for VMs that I trust. (Of course, this
-implies that I trust the userspace process as well.)
+Good luck with yours, not the one that touches platform_get_irq_optional() though!
 
-How would you feel if we were to add a kvm ioctl to override this
-setting, for a particular VM, guarded by an appropriate permissions
-check, like capable(CAP_SYS_ADMIN) or capable(CAP_SYS_MODULE)?
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

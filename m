@@ -2,107 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80064470639
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A594E470633
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244054AbhLJQvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244119AbhLJQvh (ORCPT
+        id S244104AbhLJQvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:51:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53310 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244015AbhLJQv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:51:37 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752B1C061B38;
-        Fri, 10 Dec 2021 08:48:01 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso7074489wmr.5;
-        Fri, 10 Dec 2021 08:48:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RRq0hfApreiHtzHlp8RLgD5AXAfijxXr2DgGdf8mphw=;
-        b=A7YASKCtSZmjH5AHUo9Lguft22JcHtL05v4NWtrGm1sEX4ENI3TZNVhNtleiEOgLv7
-         OcsiWZLrj4OjjHL9x3vlcE9XfB+Dk9sIei3lC8LcgiI/bpYbY64UBM0PtnKWDUz3NCh6
-         0sEcywbHnDARQT+OXSwZPoW79g/m6/30FzaveZbgierDJWHVYdpkWSpAFOQzKfJvjKqY
-         khjptbK4qOHhLQ8ihQfGGegKDxwHWMb4xbWtzLbjWm1OoNCEbfrYQdbpRXpw3+nZix0F
-         ghoBlsatowWFoJfN4bMTRfJhgsjn/u11299dgxSGRzdYMvSf1Wua2s7LCLEYBOO22REo
-         1rWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RRq0hfApreiHtzHlp8RLgD5AXAfijxXr2DgGdf8mphw=;
-        b=53d8u2lsHvGg8CV0UytdAWFoeXXgPIYBjZCVVDyjv7vJ60F5VPwTpEEC+n35eE/BBQ
-         vQfE3Cq93U8yyrvYHc/k+UK8sFn6L0wpMBRXZsGTVChHxy/MRWnUiWKpmblGbjVzZrRm
-         Cm/zTMRABjWfMqKNSDwICW0AXIOJ9GedE1fBty7F55VNTmv7Q8StqdqyeFfREYjOZwq5
-         A+88lwnAFqV92xjsw3jwi8w3uA1R4BE32WQv6u1agFNQKrFg2IKMTect9WOlSY+TWcYi
-         4tvc6zpyw2hQMtnE2orUapf6eJzK8+i1MquJh74OVjRrqrcXwpGonK4K6sGBrtsxGo+N
-         bQ5g==
-X-Gm-Message-State: AOAM531Gdc74B/UNU3jw8HFQBt1z5PIF+O1Lh/Edi/F/cf6D8IgIZcZO
-        rKYkdTGr939gAihMF+UzBlc=
-X-Google-Smtp-Source: ABdhPJySgQ8B+evQLwgajoXSdSDmIbVYgiz32CGDuiiffF8C/H8TuQ4BuH59Vat1aCW7PaZFdPGKkA==
-X-Received: by 2002:a7b:c310:: with SMTP id k16mr17906114wmj.169.1639154880025;
-        Fri, 10 Dec 2021 08:48:00 -0800 (PST)
-Received: from localhost ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id f3sm2984522wrm.96.2021.12.10.08.47.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 08:47:59 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] arm64: tegra: Hook up MMC and BPMP to memory controller
-Date:   Fri, 10 Dec 2021 17:47:41 +0100
-Message-Id: <20211210164741.881161-7-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211210164741.881161-1-thierry.reding@gmail.com>
-References: <20211210164741.881161-1-thierry.reding@gmail.com>
+        Fri, 10 Dec 2021 11:51:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC6CDB828D7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:47:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F41C341C5;
+        Fri, 10 Dec 2021 16:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639154871;
+        bh=6ULRFlF6ggAUebNwOsW20mMAGwZd17GitGH1nC/qLc0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S86sY7tCtmaIad9AR7OGz+bxVwKLFTNZr/3GJs5jBRVv+nc/sx/7x6ySIqhVjSfZm
+         Ng3QoJfjsey7EeJ3Q/k3s2slWZmePliSrV5yI2rAbjZfHtVuoiyA1rSau0tXBA9O4y
+         mD4/vN0vfpvOJ6WmzyR7iofd6YWoHyVcWuXIL4ykgKYtwgn9gJbHg5rBMzNY0RjgvY
+         3tXtUhcitAmwbEPnSpg1PJNxc+2X4ZjvqFM+210itrQBzKoErD1tru2Ko899QRt/mt
+         +D4G6vWmTtSH7zR8mD2lhkIqIHjk5EwLwlzO0+Q3UIZF8CD4z2aFP+OuS1/LvqvPYm
+         srqPUpYR3dGzg==
+Date:   Fri, 10 Dec 2021 16:47:47 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Shumin Chen <chenshumin86@sina.com>
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 2/2] ASoC: convert Everest ES8156 binding to yaml
+Message-ID: <YbOEs4HCdJYA3j/1@sirena.org.uk>
+References: <20211210151041.108751-1-chenshumin86@sina.com>
+ <20211210151041.108751-3-chenshumin86@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sZ83QS/cFF5Ofdsn"
+Content-Disposition: inline
+In-Reply-To: <20211210151041.108751-3-chenshumin86@sina.com>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
 
-Use the interconnects property to hook up the MMC and BPMP to the memory
-controller. This is needed to set the correct bus-level DMA mask, which
-is a prerequisite for adding IOMMU support.
+--sZ83QS/cFF5Ofdsn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Fri, Dec 10, 2021 at 11:10:41PM +0800, Shumin Chen wrote:
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index a75b21c6a521..fafbd9a819a4 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -157,6 +157,9 @@ mmc@3460000 {
- 			assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLC4>;
- 			resets = <&bpmp TEGRA234_RESET_SDMMC4>;
- 			reset-names = "sdhci";
-+			interconnects = <&mc TEGRA234_MEMORY_CLIENT_SDMMCRAB &emc>,
-+					<&mc TEGRA234_MEMORY_CLIENT_SDMMCWAB &emc>;
-+			interconnect-names = "dma-mem", "write";
- 			nvidia,pad-autocal-pull-up-offset-hs400 = <0x00>;
- 			nvidia,pad-autocal-pull-down-offset-hs400 = <0x00>;
- 			nvidia,pad-autocal-pull-up-offset-1v8-timeout = <0x0a>;
-@@ -289,6 +292,11 @@ bpmp: bpmp {
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
- 		#power-domain-cells = <1>;
-+		interconnects = <&mc TEGRA234_MEMORY_CLIENT_BPMPR &emc>,
-+				<&mc TEGRA234_MEMORY_CLIENT_BPMPW &emc>,
-+				<&mc TEGRA234_MEMORY_CLIENT_BPMPDMAR &emc>,
-+				<&mc TEGRA234_MEMORY_CLIENT_BPMPDMAW &emc>;
-+		interconnect-names = "read", "write", "dma-mem", "dma-write";
- 
- 		bpmp_i2c: i2c {
- 			compatible = "nvidia,tegra186-bpmp-i2c";
--- 
-2.34.1
+> +properties:
+> +  compatible:
+> +    const: everest,es8156
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock for master clock (MCLK)
 
+This was optional in the code but is mandatory in the binding.
+
+--sZ83QS/cFF5Ofdsn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzhLIACgkQJNaLcl1U
+h9Aywwf/bCaMMeg4FUrNaO8S3/ctSVTmAVyydCmnsYgPm74lkejOxnCZld4ngSK7
+oE+sJqtPCCWgv0N4MFkJmjHZqmDQZGUDiLHhcmPnlNxoZcpH/hVGz9wk5EIEPn0I
+xC7vilb8j6ps7H5g/y4E7JrcMt7Smb6t9l9WbcreLp7EWPGr342wW+ZJH7yNwbnR
+nWvhSWlBgpRWfgywA52ZHNvEav44GA6UVJzamV2jAn3JRUrsEFI4sYBsMlxGv4Sh
+/2wQiGJQA4hErHQAQIXR3P22YeSzQN2Q5jVmASJi3DRVqB6yLdWp3MNl6LQ4wgN2
+Xb+mSBqCgZliigQPnFNdwPqSNjKHnw==
+=o+40
+-----END PGP SIGNATURE-----
+
+--sZ83QS/cFF5Ofdsn--

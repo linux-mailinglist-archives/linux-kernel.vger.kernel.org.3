@@ -2,174 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF4D46FE66
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBC346FE69
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239913AbhLJKJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236504AbhLJKJt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:09:49 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65266C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:06:14 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id y12so27658532eda.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:06:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=lC142Yo8coIpvvVUqN6aAJckxOOmW7Kkcqr32G1U5wQ=;
-        b=YirHdbJ/8fHvaGzvPOOudtZaOKZcTRdBFtDjdO1hmXL9O4K9D87KqrQ1Ap9pd9QlFP
-         H3sUgfmdP2N4yKurHlVRbhkt5gZOg0lM+e19Y3svTo/dvTfX6H36xgUyHme2dxly4Gvk
-         w9bgVjEmNv8Mue0+0e7ZiZ+SKI2vPfHq5MEvSsb5A40po863heD6Duoq/Kqg6IfY0dHf
-         2cp8hDtCRBl3YghjzvvpvYcnS7RNI1WHooBWkC2uBCFd13WNSyUdCmraD0T24rJ8kFZu
-         5EphrR/MLO6IE/aRHdF4mGAWtPr68E27D/1JFsdrU40aCsr1fUkN1JQAvI/qkCNE97Ll
-         PECg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=lC142Yo8coIpvvVUqN6aAJckxOOmW7Kkcqr32G1U5wQ=;
-        b=47h/XO8sSSUp4C3ZofHm+hfuW6sP5Q5EgfEV+/OzUcoTmawplQCHav6zKOG6JN+XI6
-         0HRCzcpkiLz64pqxJz26RI3ScQ7E3Cs7lGg04PtCI33y/e2ZplOe+f4Z0TkMeSo2J4v0
-         m3oeidc9TaIGorwzBoTkxq8wwFAoIqdWdZFJ/hjcpt7UmEShijppM++Ggddstj2HHQoJ
-         Ru40fR3obEowks8kGo7KUDd/1u/UftCaHullMrbvcMsjOAtkoFOpF+3U+G6kLuIPNUpI
-         PEUboLGgsPSmBiwIfRab3JiiShdysABpHqyQtHswjoVsy891EbN7SyXPXRggOy8kxkDy
-         jhMg==
-X-Gm-Message-State: AOAM531peGsxuEgss+CKXR/uQF+DYtrn/qMZeFd4a+q3d85m0I32juC5
-        z0HpVpQh60oloaQ3SJBrTWroNg==
-X-Google-Smtp-Source: ABdhPJzogiO1NzTpvwYLW1ZNFCxCS9CKr9ffg97FkXtE+uP8BYAkzNgef5FE3TFs5mdlwrLo4x6g7w==
-X-Received: by 2002:a17:906:3647:: with SMTP id r7mr23404107ejb.124.1639130772299;
-        Fri, 10 Dec 2021 02:06:12 -0800 (PST)
-Received: from [192.168.1.8] (net-93-70-85-65.cust.vodafonedsl.it. [93.70.85.65])
-        by smtp.gmail.com with ESMTPSA id ht7sm1251619ejc.27.2021.12.10.02.06.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Dec 2021 02:06:11 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH RFC 3/9] block, bfq: handle the case when
- for_each_entity() access root group
-From:   Paolo Valente <paolo.valente@linaro.org>
-In-Reply-To: <20211127101132.486806-4-yukuai3@huawei.com>
-Date:   Fri, 10 Dec 2021 11:06:10 +0100
-Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4C1444A3-8268-4F4E-99D0-76704E69C43E@linaro.org>
-References: <20211127101132.486806-1-yukuai3@huawei.com>
- <20211127101132.486806-4-yukuai3@huawei.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S239929AbhLJKKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:10:07 -0500
+Received: from mga05.intel.com ([192.55.52.43]:30553 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236504AbhLJKKF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 05:10:05 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="324582779"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="324582779"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:06:30 -0800
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="602070300"
+Received: from mpcorrig-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.4.173])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:06:27 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Harry Wentland <harry.wentland@amd.com>
+Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2 register
+In-Reply-To: <202112091539.6B349AC@keescook>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211203084354.3105253-1-keescook@chromium.org>
+ <87o85r4a4f.fsf@intel.com> <202112082220.81ECDC63D@keescook>
+ <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
+ <202112091539.6B349AC@keescook>
+Date:   Fri, 10 Dec 2021 12:06:20 +0200
+Message-ID: <87a6h83hb7.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 09 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
+> On Thu, Dec 09, 2021 at 05:20:45PM -0500, Harry Wentland wrote:
+>> 
+>> 
+>> On 2021-12-09 01:23, Kees Cook wrote:
+>> > On Wed, Dec 08, 2021 at 01:19:28PM +0200, Jani Nikula wrote:
+>> >> On Fri, 03 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
+>> >>> The link_status array was not large enough to read the Adjust Request
+>> >>> Post Cursor2 register. Adjust the size to include it. Found with a
+>> >>> -Warray-bounds build:
+>> >>>
+>> >>> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+>> >>> drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+>> >>>    59 |         return link_status[r - DP_LANE0_1_STATUS];
+>> >>>       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+>> >>> drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+>> >>>   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+>> >>>       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> >>>
+>> >>> Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
+>> >>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>> >>
+>> >> Using DP_ADJUST_REQUEST_POST_CURSOR2 has been deprecated since DP 1.3
+>> >> published in 2014, and Tegra is the only user of
+>> >> drm_dp_get_adjust_request_post_cursor().
+>> > 
+>> > I see POST_CURSOR2 is used here too:
+>> > 
+>> > drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+>> > 
+>> 
+>> Looks like we read and parse that in the admgpu driver without
+>> using drm_dp_get_adjust_request_post_cursor.
+>
+> Right, and probably that could be switched to use it, but I'm not sure
+> what the impact of the larger link_status read is.
+>
+>> 
+>> I don't have a strong feeling but I liked your original
+>> patch a bit better. I'm not sure what it means when part
+>> of a spec is deprecated. Once a spec is written display
+>> vendors might implement it. We should make sure that
+>> displays like that are always handled in a sane manner.
+>
+> Jani, Dave, any guidance here? I'm fine with whatever, but the current
+> code is for sure broken. ;)
+
+Post Cursor2 was completely optional for the transmitter even before it
+was deprecated.
+
+And now we'd be adding 5 bytes extra to all link status reads. To fix
+the only user of drm_dp_get_adjust_request_post_cursor() that apparently
+has never worked as intended. I'm just not convinced.
+
+I was trying to look through the implications of DP_LINK_STATUS_SIZE
+increase, and at least drm_dp_dpcd_read_phy_link_status() comes across
+as something probably needing attention.
 
 
-> Il giorno 27 nov 2021, alle ore 11:11, Yu Kuai <yukuai3@huawei.com> ha =
-scritto:
->=20
-> Prevent null-ptr-deref after counting root group into
-> 'num_groups_with_pending_reqs'.
->=20
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
-> block/bfq-iosched.c |  2 +-
-> block/bfq-wf2q.c    | 17 +++++++++++++----
-> 2 files changed, 14 insertions(+), 5 deletions(-)
->=20
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 3262d062e21f..47722f931ee3 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -864,7 +864,7 @@ void bfq_weights_tree_remove(struct bfq_data =
-*bfqd,
-> 	for_each_entity(entity) {
-> 		struct bfq_sched_data *sd =3D entity->my_sched_data;
->=20
-> -		if (sd->next_in_service || sd->in_service_entity) {
-> +		if (sd && (sd->next_in_service || =
-sd->in_service_entity)) {
+BR,
+Jani.
 
-Explain with some comment this additional check.
-
-Paolo
-
-> 			/*
-> 			 * entity is still active, because either
-> 			 * next_in_service or in_service_entity is not
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index 67e32481e455..6693765ff3a0 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -965,6 +965,13 @@ static void __bfq_activate_entity(struct =
-bfq_entity *entity,
-> 	bool backshifted =3D false;
-> 	unsigned long long min_vstart;
->=20
-> +	if (is_root_entity(entity))
-> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
-> +		goto update;
-> +#else
-> +		return;
-> +#endif
-> +
-> 	/* See comments on bfq_fqq_update_budg_for_activation */
-> 	if (non_blocking_wait_rq && bfq_gt(st->vtime, entity->finish)) {
-> 		backshifted =3D true;
-> @@ -999,7 +1006,10 @@ static void __bfq_activate_entity(struct =
-bfq_entity *entity,
-> 		entity->on_st_or_in_serv =3D true;
-> 	}
->=20
-> +	bfq_update_fin_time_enqueue(entity, st, backshifted);
-> +
-> #ifdef CONFIG_BFQ_GROUP_IOSCHED
-> +update:
-> 	if (!bfq_entity_to_bfqq(entity)) { /* bfq_group */
-> 		struct bfq_group *bfqg =3D
-> 			container_of(entity, struct bfq_group, entity);
-> @@ -1011,8 +1021,6 @@ static void __bfq_activate_entity(struct =
-bfq_entity *entity,
-> 		}
-> 	}
-> #endif
-> -
-> -	bfq_update_fin_time_enqueue(entity, st, backshifted);
-> }
->=20
-> /**
-> @@ -1102,7 +1110,8 @@ static void __bfq_activate_requeue_entity(struct =
-bfq_entity *entity,
-> {
-> 	struct bfq_service_tree *st =3D bfq_entity_service_tree(entity);
->=20
-> -	if (sd->in_service_entity =3D=3D entity || entity->tree =3D=3D =
-&st->active)
-> +	if (sd && (sd->in_service_entity =3D=3D entity ||
-> +		   entity->tree =3D=3D &st->active))
-> 		 /*
-> 		  * in service or already queued on the active tree,
-> 		  * requeue or reposition
-> @@ -1140,7 +1149,7 @@ static void bfq_activate_requeue_entity(struct =
-bfq_entity *entity,
-> 		sd =3D entity->sched_data;
-> 		__bfq_activate_requeue_entity(entity, sd, =
-non_blocking_wait_rq);
->=20
-> -		if (!bfq_update_next_in_service(sd, entity, expiration) =
-&&
-> +		if (sd && !bfq_update_next_in_service(sd, entity, =
-expiration) &&
-> 		    !requeue)
-> 			break;
-> 	}
-> --=20
-> 2.31.1
->=20
-
+-- 
+Jani Nikula, Intel Open Source Graphics Center

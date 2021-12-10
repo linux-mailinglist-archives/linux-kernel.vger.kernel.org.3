@@ -2,97 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C731546FEA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA47C46FEA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240038AbhLJKYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
+        id S240052AbhLJKZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbhLJKYW (ORCPT
+        with ESMTP id S234462AbhLJKZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:24:22 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99542C061746;
-        Fri, 10 Dec 2021 02:20:47 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id h24so6526454pjq.2;
-        Fri, 10 Dec 2021 02:20:47 -0800 (PST)
+        Fri, 10 Dec 2021 05:25:04 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE99C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:21:29 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id o20so28680129eds.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:21:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:organization:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=xpuvc+9Hl9NOllZ3htk7q/dYvdJaqcq3/ayg7ngaxwI=;
-        b=o7dfCqVFokBdFn5RTMIZncQkgRoWwGOhIF4XcgTN8WdqM22C1kOuGobMG4C8vBIK/L
-         6VEKa0AQXihE+Omi11daz1bxLayXaBUgGnk6VCcbItEEm/5jgCRMsL/tzxDLRi33gHJ5
-         9KRdsWjIHoMDqzvuqmsT8NIHQ2dUIWG+hCtGb9A0TumsUtj6wZHBi2dU5AdpMcHbDxE2
-         cv47EBg12yejCF6DmuWYzwI2EyDVf1lKIhoMhEbnrrqgHd7ky1H9y5Qvr8aW/RNUEVa4
-         pOMTYvzsNTn4YzKZVKZ8A23avOhXszCTBjKp13hC+qzYv9nen+CpsLVkOOsDNFJIGJhW
-         eKBA==
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=9sCOFfVXKOb72pzCs42FTZ/cd5XaBleh+IQy0MaKkyI=;
+        b=RZvN1zdXgjnJPYh2pBxHDRdgCKI0D7oHr0yrYysET1rY8G/67b/coHgj3VZndRUJTm
+         c8xYdIaYYrgAszVsTSJ/RkVS5thuseN83YYdINUG04wOsTrjyN3nG3rI8BBhrbAKqMdL
+         /fZILYMCwFN4Cf1m7eOWOO48m50vYsGaMHmb2uVTCowLNgRkfBr3k76bZvzNoi5MwH3B
+         YkyLpSqBFONu3YRZRsCYAOz0u/lFQzw7ciAQlkuAVD5RqKZIceM5Wy88DJDP2WNW1R1h
+         7af3OmbHmDrCt/Wg9nwmq59t0CfBZllRzeYVWDMBcgFftpsS+OHU9ci4ypVjqciWundh
+         QuEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=xpuvc+9Hl9NOllZ3htk7q/dYvdJaqcq3/ayg7ngaxwI=;
-        b=xJb3o+6LIthyNI5pZOU6g2ZNlcNYk13OnCp3h4XG7dCzpGQO3KvrbAwRezbq4elUvA
-         NQh84iBmMHY36bnRJO9SvU1qYsXF1W1WDxwj7RWcV3AIKRcR86zVGYNbDqNAJ0m2Flrh
-         pdITd0wF+lA6DYHCoD+4ZX9ePfqx1I8SHtLHL8gvLDYjqaLQttzZgBjPggYZ8IvO/4iu
-         guff1sztD50GgncGDyE5wqRC/v1kXWwSGxnvW7oiEUcKykwHwVtNnda14v4Q72pF+WTn
-         16nvxPP0AvHEGPG1AoRNxLnVrNc/wt7f347EQpz1RIP7o2YIjsb7t0zwaNDDQxLayCkf
-         zimw==
-X-Gm-Message-State: AOAM532yJS+sIZ619jKClmfA/591DJxhr10qv9CaTjZval73tiVLuYBZ
-        2Mnk0KVkS7dOz29NVIooFxA=
-X-Google-Smtp-Source: ABdhPJwK3FptORjh/RyUz1zT7RXxi5ivrHDnyM1UhbTDZ7dJnN7sMP51cmGp9iQfoI/NErikh0lWbg==
-X-Received: by 2002:a17:902:d50e:b0:142:1b2a:144 with SMTP id b14-20020a170902d50e00b001421b2a0144mr74757099plg.51.1639131647228;
-        Fri, 10 Dec 2021 02:20:47 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id w7sm2292559pgo.56.2021.12.10.02.20.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 02:20:46 -0800 (PST)
-Message-ID: <0815b30f-c0e5-4261-df03-bd82d69b05c7@gmail.com>
-Date:   Fri, 10 Dec 2021 18:20:36 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
-        linux-perf-users@vger.kernel.org
-References: <20211130074221.93635-1-likexu@tencent.com>
- <20211130074221.93635-2-likexu@tencent.com>
- <CALMp9eT05nb56b16KkybvGSTYMhkRusQnNL4aWFU8tsets0O2w@mail.gmail.com>
- <8ca78cd6-12ad-56c4-ad73-e88757364ba9@redhat.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-Subject: Re: [PATCH v2 1/6] KVM: x86/pmu: Setup pmc->eventsel for fixed PMCs
-In-Reply-To: <8ca78cd6-12ad-56c4-ad73-e88757364ba9@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=9sCOFfVXKOb72pzCs42FTZ/cd5XaBleh+IQy0MaKkyI=;
+        b=DF1M3wgCIm5PMBvBK8NlkNJAz6kQ6VboSBRMlygluA+gRNQRpx4eP4xplcnqoJtSZX
+         vzNWtaQffrhfH2lrTqWqmkz8o05q1Eyh7BR8vFGhWAgihlfszLkp5/mouVso6tGpbX33
+         JVAQtwrIc6sMnJHK2tIrMMXahDtG+4LBxE5NHKr5uIOfq+EKIeSwH4QJbk8961kEsOQ8
+         Ds79x288cXrNePmEiwBRbSQ1SCCO4bdeNfjUXxsaQOw2rB2fPkkmwzOUzuI6L9r3rTZ/
+         FpKaLEfHvYeGCxdqBp/YZJiISTtcdd4BNdheMqIZQSZLNeoKZRgtBP8WIapkc73mv7tB
+         6eaw==
+X-Gm-Message-State: AOAM530fVtDOUWwI5BITnXL0aKm4TTd+eNoLOKhxx7N/36RVOovoVM+4
+        LAGR0tNHnOF76b4p7cci1C4ULQ==
+X-Google-Smtp-Source: ABdhPJz7sF43UpQzErjsFVZmXgfYQhT00lzuEPfqx7WCfBKoaQ3MLyw2l+Gq//5YVzmcx6RRAZ3h+Q==
+X-Received: by 2002:a17:907:72d4:: with SMTP id du20mr23995269ejc.419.1639131685429;
+        Fri, 10 Dec 2021 02:21:25 -0800 (PST)
+Received: from [192.168.1.8] (net-93-70-85-65.cust.vodafonedsl.it. [93.70.85.65])
+        by smtp.gmail.com with ESMTPSA id o8sm1256011edc.25.2021.12.10.02.21.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 Dec 2021 02:21:24 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH RFC 9/9] block, bfq: decrease
+ 'num_groups_with_pending_reqs' earlier
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <20211127101132.486806-10-yukuai3@huawei.com>
+Date:   Fri, 10 Dec 2021 11:21:23 +0100
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AA66019E-FD14-4821-B53D-0C56EEC38828@linaro.org>
+References: <20211127101132.486806-1-yukuai3@huawei.com>
+ <20211127101132.486806-10-yukuai3@huawei.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 2:49 am, Paolo Bonzini wrote:
-> 
-> or we modify find_fixed_event and its caller to support PERF_TYPE_RAW
-> counters, and then add support for the IceLake TOPDOWN.SLOTS fixed
-> counter.
 
-It looks like the TOPDOWN approach from "Yasin Ahmad"
-has recently been widely advertised among developers.
 
-But I still need bandwidth to clean up some perf driver stuff
-in order to enable topdown counter smoothly in the guest.
+> Il giorno 27 nov 2021, alle ore 11:11, Yu Kuai <yukuai3@huawei.com> ha =
+scritto:
+>=20
+> Currently 'num_groups_with_pending_reqs' won't be decreased when
+> the group doesn't have any pending requests, while any child group
+> have any pending requests. The decrement is delayed to when all the
+> child groups doesn't have any pending requests.
+>=20
+> For example:
+> 1) t1 issue sync io on root group, t2 and t3 issue sync io on the same
+> child group. num_groups_with_pending_reqs is 2 now.
+> 2) t1 stopped, num_groups_with_pending_reqs is still 2. io from t2 and
+> t3 still can't be handled concurrently.
+>=20
+> Fix the problem by decreasing 'num_groups_with_pending_reqs'
+> immediately upon the deactivation of last entity of the group.
+>=20
 
-cc linux-perf-users@vger.kernel.org for user voices.
+I don't understand this patch clearly.
 
-> 
-> What's your preference?
-> 
-> Paolo
+I understand your proposal not to count a group as with pending =
+requests, in case no child process of the group has IO, but only its =
+child groups have pending requests.
+
+So, entities here are only queues for this patch?
+
+If they are only queues, I think it is still incorrect to remove the =
+group from the count of groups with pending IO when all its child queues =
+are deactivated, because there may still be unfinished IO for those =
+queues.
+
+Am I missing something?
+
+Thanks,
+Paolo
+
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+> block/bfq-iosched.c | 58 ++++++++++++++++-----------------------------
+> block/bfq-iosched.h | 16 ++++++-------
+> 2 files changed, 29 insertions(+), 45 deletions(-)
+>=20
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 4239b3996e23..55925e1ee85d 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -873,6 +873,26 @@ void __bfq_weights_tree_remove(struct bfq_data =
+*bfqd,
+> 	bfq_put_queue(bfqq);
+> }
+>=20
+> +static void decrease_groups_with_pending_reqs(struct bfq_data *bfqd,
+> +					      struct bfq_queue *bfqq)
+> +{
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> +	struct bfq_entity *entity =3D bfqq->entity.parent;
+> +	struct bfq_group *bfqg =3D container_of(entity, struct =
+bfq_group, entity);
+> +
+> +	/*
+> +	 * The decrement of num_groups_with_pending_reqs is performed
+> +	 * immediately upon the deactivation of last entity that have =
+pending
+> +	 * requests
+> +	 */
+> +	if (!bfqg->num_entities_with_pending_reqs &&
+> +	    entity->in_groups_with_pending_reqs) {
+> +		entity->in_groups_with_pending_reqs =3D false;
+> +		bfqd->num_groups_with_pending_reqs--;
+> +	}
+> +#endif
+> +}
+> +
+> /*
+>  * Invoke __bfq_weights_tree_remove on bfqq and decrement the number
+>  * of active groups for each queue's inactive parent entity.
+> @@ -880,46 +900,10 @@ void __bfq_weights_tree_remove(struct bfq_data =
+*bfqd,
+> void bfq_weights_tree_remove(struct bfq_data *bfqd,
+> 			     struct bfq_queue *bfqq)
+> {
+> -	struct bfq_entity *entity =3D bfqq->entity.parent;
+> -
+> 	bfqq->ref++;
+> 	__bfq_weights_tree_remove(bfqd, bfqq,
+> 				  &bfqd->queue_weights_tree);
+> -
+> -	for_each_entity(entity) {
+> -		struct bfq_sched_data *sd =3D entity->my_sched_data;
+> -
+> -		if (sd && (sd->next_in_service || =
+sd->in_service_entity)) {
+> -			/*
+> -			 * entity is still active, because either
+> -			 * next_in_service or in_service_entity is not
+> -			 * NULL (see the comments on the definition of
+> -			 * next_in_service for details on why
+> -			 * in_service_entity must be checked too).
+> -			 *
+> -			 * As a consequence, its parent entities are
+> -			 * active as well, and thus this loop must
+> -			 * stop here.
+> -			 */
+> -			break;
+> -		}
+> -
+> -		/*
+> -		 * The decrement of num_groups_with_pending_reqs is
+> -		 * not performed immediately upon the deactivation of
+> -		 * entity, but it is delayed to when it also happens
+> -		 * that the first leaf descendant bfqq of entity gets
+> -		 * all its pending requests completed. The following
+> -		 * instructions perform this delayed decrement, if
+> -		 * needed. See the comments on
+> -		 * num_groups_with_pending_reqs for details.
+> -		 */
+> -		if (entity->in_groups_with_pending_reqs) {
+> -			entity->in_groups_with_pending_reqs =3D false;
+> -			bfqd->num_groups_with_pending_reqs--;
+> -		}
+> -	}
+> -
+> +	decrease_groups_with_pending_reqs(bfqd, bfqq);
+> 	bfq_put_queue(bfqq);
+> }
+>=20
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index df08bff89a70..7ae11f62900b 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -493,7 +493,7 @@ struct bfq_data {
+> 	struct rb_root_cached queue_weights_tree;
+>=20
+> 	/*
+> -	 * Number of groups with at least one descendant process that
+> +	 * Number of groups with at least one process that
+> 	 * has at least one request waiting for completion. Note that
+> 	 * this accounts for also requests already dispatched, but not
+> 	 * yet completed. Therefore this number of groups may differ
+> @@ -506,14 +506,14 @@ struct bfq_data {
+> 	 * bfq_better_to_idle().
+> 	 *
+> 	 * However, it is hard to compute this number exactly, for
+> -	 * groups with multiple descendant processes. Consider a group
+> -	 * that is inactive, i.e., that has no descendant process with
+> +	 * groups with multiple processes. Consider a group
+> +	 * that is inactive, i.e., that has no process with
+> 	 * pending I/O inside BFQ queues. Then suppose that
+> 	 * num_groups_with_pending_reqs is still accounting for this
+> -	 * group, because the group has descendant processes with some
+> +	 * group, because the group has processes with some
+> 	 * I/O request still in flight. num_groups_with_pending_reqs
+> 	 * should be decremented when the in-flight request of the
+> -	 * last descendant process is finally completed (assuming that
+> +	 * last process is finally completed (assuming that
+> 	 * nothing else has changed for the group in the meantime, in
+> 	 * terms of composition of the group and active/inactive state =
+of child
+> 	 * groups and processes). To accomplish this, an additional
+> @@ -522,7 +522,7 @@ struct bfq_data {
+> 	 * we resort to the following tradeoff between simplicity and
+> 	 * accuracy: for an inactive group that is still counted in
+> 	 * num_groups_with_pending_reqs, we decrement
+> -	 * num_groups_with_pending_reqs when the first descendant
+> +	 * num_groups_with_pending_reqs when the last
+> 	 * process of the group remains with no request waiting for
+> 	 * completion.
+> 	 *
+> @@ -530,12 +530,12 @@ struct bfq_data {
+> 	 * carefulness: to avoid multiple decrements, we flag a group,
+> 	 * more precisely an entity representing a group, as still
+> 	 * counted in num_groups_with_pending_reqs when it becomes
+> -	 * inactive. Then, when the first descendant queue of the
+> +	 * inactive. Then, when the last queue of the
+> 	 * entity remains with no request waiting for completion,
+> 	 * num_groups_with_pending_reqs is decremented, and this flag
+> 	 * is reset. After this flag is reset for the entity,
+> 	 * num_groups_with_pending_reqs won't be decremented any
+> -	 * longer in case a new descendant queue of the entity remains
+> +	 * longer in case a new queue of the entity remains
+> 	 * with no request waiting for completion.
+> 	 */
+> 	unsigned int num_groups_with_pending_reqs;
+> --=20
+> 2.31.1
+>=20
+

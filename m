@@ -2,89 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C2D470E24
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCB9470E26
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344698AbhLJWqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 17:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344675AbhLJWql (ORCPT
+        id S1344715AbhLJWsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 17:48:04 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:51380 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239783AbhLJWsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 17:46:41 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029FFC0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 14:43:06 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id z5so35036108edd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 14:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uNvZHe6DHRkF+xFR2MjDNEoC+neS0KSxMQQUcva/BLo=;
-        b=grQgQcg5MH+iX7Jw2TpSklrJNA/RSRHJETmDcYrXbXsk3YGdRDRXXoXauSP5q327/M
-         xnSxXPjy36NvjVKp/+pXBFy44pq100Dyqgg4i1t+JBgHycd6Pm2Pscz/QIMcHcnjx4Tg
-         1fVwhoeVi7wK76k1Y6Oypx+EYeaQ8bJnJMo3g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uNvZHe6DHRkF+xFR2MjDNEoC+neS0KSxMQQUcva/BLo=;
-        b=6mhDwgsvW2OSieakjiTOQk25rACxAnnSCk2ClTgP8DrgH+HfxBjVMlx0RjQqu3JVG4
-         I2IR9M6xLKGP5+KymNim0kT3GxrOtvmgjUlHJg37/HlO0X+1dk20lALFwnUBNIJhAzOg
-         2+C2b455KYDtRhGwIFP14E1xTKSx4iLBfCrbHz3o3zw4g9AWU11AT9YKNMazbZIK2LQw
-         0gRRItpjjqskGIVh8FosN5dqdiaDA6yDePc+LjupjxRgBJYCZ28+7kBSjgVz288DA6IX
-         Jti26Iv4JIL36Ruhz/hGKCYM8mCBnjysv5eduoQsWN0wZBhnWtXo/i9pMlBJZn9O8GqF
-         e11A==
-X-Gm-Message-State: AOAM533R2/fS1VYlwVulBrDuM1vsJSSkItW3ph48AzHIZwVbOoT8O9C7
-        A2VQCtvoL7cBdU3J7n9aKh693bdptYCsY5hSI+M=
-X-Google-Smtp-Source: ABdhPJzBOQLiwKEVnQh+/EEnxQiUjfKFDeFZOzXSbIGto+9z9IqvORBCRPOn271NFUbDFk9ZMax8Hg==
-X-Received: by 2002:a05:6402:35ce:: with SMTP id z14mr42363470edc.197.1639176184400;
-        Fri, 10 Dec 2021 14:43:04 -0800 (PST)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id og38sm2060044ejc.5.2021.12.10.14.43.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 14:43:03 -0800 (PST)
-Received: by mail-wr1-f43.google.com with SMTP id u1so17255113wru.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 14:43:02 -0800 (PST)
-X-Received: by 2002:adf:cc8d:: with SMTP id p13mr17138267wrj.274.1639176181996;
- Fri, 10 Dec 2021 14:43:01 -0800 (PST)
+        Fri, 10 Dec 2021 17:48:03 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639176266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sCD67XmQfgY8eyF5DZcnmqHIPLmPlcqEXhs2oDwpWCg=;
+        b=ctjp83lJ0t5QRjhSmgNytxwBVaFdLPzVATqaVRk0SmbeGdG+g+YMd9SNG5kaVgczOOhD1g
+        06GayrOEfvSpZUYsKM+OX/lJ1D4kGdVZmTa7Icco9W9edAL5yP1Xx4FvKVKkcI/YgsmaZB
+        l+Tjp49NY359JqJk/56lF1EWqPZyUAGXITBRyR+6m2ZroaNLAf3t4WPKl1mYWxvdeIZBRh
+        I/5a6rvarEayPX6R9OXP/KuEyEUGQPYc/RAb8a8l33Se43IDpyZdoAiq6rLWf20jS9U3Ns
+        yD+Z0OYEZu6OAyzW/e1LsL3LT1NMb2a6r5tF1fmMdm2h7tsygwCX+SH9TizSFQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639176266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sCD67XmQfgY8eyF5DZcnmqHIPLmPlcqEXhs2oDwpWCg=;
+        b=OU3jl0IQfp2L2rQsO2mronFCWcYYmWoPyLDNmqYrH1+BkgR2SQR3Gi8gQ/kh7Qj+B3JXgN
+        y+3sxUVnVm7ARVBg==
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        pbonzini@redhat.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        yang.zhong@intel.com
+Subject: Re: [PATCH 08/19] x86/fpu: Move xfd_update_state() to xstate.c and
+ export symbol
+In-Reply-To: <20211208000359.2853257-9-yang.zhong@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-9-yang.zhong@intel.com>
+Date:   Fri, 10 Dec 2021 23:44:25 +0100
+Message-ID: <874k7gxepi.ffs@tglx>
 MIME-Version: 1.0
-References: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 10 Dec 2021 14:42:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
-Message-ID: <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
-Subject: Re: [GIT PULL] Thermal control fix for v5.16-rc5
-To:     =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 12:11 PM Rafa=C5=82 Wysocki <rjwysocki@gmail.com> w=
-rote:
+On Tue, Dec 07 2021 at 19:03, Yang Zhong wrote:
+> From: Jing Liu <jing2.liu@intel.com>
 >
-> This fixes the definition of one of the Tiger Lake MMIO registers
-> in the int340x thermal driver (Sumeet Pawnikar).
+> xfd_update_state() is the interface to update IA32_XFD and its per-cpu
+> cache. All callers of this interface are currently in fpu core. KVM only
+> indirectly triggers IA32_XFD update via a helper function
+> (fpu_swap_kvm_fpstate()) when switching between user fpu and guest fpu.
+>
+> Supporting AMX in guest now requires KVM to directly update IA32_XFD
+> with the guest value (when emulating WRMSR) so XSAVE/XRSTOR can manage
+> XSTATE components correctly inside guest.
+>
+> This patch moves xfd_update_state() from fpu/xstate.h to fpu/xstate.c
 
-Funky.
+s/This patch moves/Move/
 
-You sent me three pull requests, and two of them came with your normal
-address, and now the third from a new gmail one that I've never seen
-before.
+please. See Documentation/process/submitting-patches.rst and search for
+'This patch'
 
-I also note that this one uses the proper utf-8 "Rafa=C5=82" rather than
-"Rafael" - is that your preferred spelling?
+> and export it for reference outside of fpu core.
+>
+> Signed-off-by: Jing Liu <jing2.liu@intel.com>
+> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+> ---
+>  arch/x86/include/asm/fpu/api.h |  2 ++
+>  arch/x86/kernel/fpu/xstate.c   | 12 ++++++++++++
+>  arch/x86/kernel/fpu/xstate.h   | 14 +-------------
+>  3 files changed, 15 insertions(+), 13 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
+> index 7532f73c82a6..999d89026be9 100644
+> --- a/arch/x86/include/asm/fpu/api.h
+> +++ b/arch/x86/include/asm/fpu/api.h
+> @@ -131,8 +131,10 @@ DECLARE_PER_CPU(struct fpu *, fpu_fpregs_owner_ctx);
+>  /* Process cleanup */
+>  #ifdef CONFIG_X86_64
+>  extern void fpstate_free(struct fpu *fpu);
+> +extern void xfd_update_state(struct fpstate *fpstate);
+>  #else
+>  static inline void fpstate_free(struct fpu *fpu) { }
+> +static void xfd_update_state(struct fpstate *fpstate) { }
 
-I see the signed tag, and I notice that you do have this gmail address
-in your key, so this is all fine, but now I'm not sure how to spell
-your name any more ;)
+Try a 32bit build to see the warnings this causes. That wants to be
+'static inline void' obviously.
 
-              Linus
+>  #ifdef CONFIG_X86_64
+> -static inline void xfd_update_state(struct fpstate *fpstate)
+> -{
+> -	if (fpu_state_size_dynamic()) {
+> -		u64 xfd = fpstate->xfd;
+> -
+> -		if (__this_cpu_read(xfd_state) != xfd) {
+> -			wrmsrl(MSR_IA32_XFD, xfd);
+> -			__this_cpu_write(xfd_state, xfd);
+> -		}
+> -	}
+> -}
+> -#else
+> -static inline void xfd_update_state(struct fpstate *fpstate) { }
+> +extern void xfd_update_state(struct fpstate *fpstate);
+
+Why? It's already declared in the global header. So all of this has to
+be simply removed, no?
+
+Thanks,
+
+        tglx
+
+

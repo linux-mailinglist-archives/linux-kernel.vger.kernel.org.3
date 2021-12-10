@@ -2,101 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF72D4700AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AFB4700B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbhLJMcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbhLJMcO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:32:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E90AC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:28:39 -0800 (PST)
-Date:   Fri, 10 Dec 2021 12:28:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639139318;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XWvvPeefb5wAVdBUaSFitXfdtUJM/SKMRLLOdOzVdwk=;
-        b=V9fMlNGV09XtVWkCC5EbIp4xIYV5g+CHx47/Mt7kWNumfcpnG7DSE4GVa6NH1Oc1xYvVay
-        QJ6coH39x7B8zJ5FDKzSoSkAjlhgh8718Y9s4aEHydNQEh6HPNvUQ0Wcc21x+8ZnmRk+zC
-        WC4yXc4jFOkr25hw66KgUD09SHklPfF5KUG56DVkTwLbD8wUS1bwk0txq+1dJMxuNcFaNO
-        Nw5H6vQ2Xx3CgbHi5zJRd+/gERc/Zt/aWp8dNxbylRULV8o7WPV65Dh7EVSvmdnH3N9/b0
-        LWiPsogrjLHkShZioYEr07M0E1HnC1YiLkZRarA7GxsI8ghrQqe8RqPx6dROaw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639139318;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XWvvPeefb5wAVdBUaSFitXfdtUJM/SKMRLLOdOzVdwk=;
-        b=91wyoW4u5Bso98dfj1BGAVqO+a6/+cJ9ZavDiGr9Lms5jAkkv96KbJDPhCSnAOX3GCYP5+
-        xPF5wlzSWFRdAnAQ==
-From:   "irqchip-bot for Ye Guojin" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/irq-bcm7120-l2: add put_device()
- after of_find_device_by_node()
-Cc:     Zeal Robot <zealci@zte.com.cn>, Ye Guojin <ye.guojin@zte.com.cn>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20211109055958.130287-1-ye.guojin@zte.com.cn>
-References: <20211109055958.130287-1-ye.guojin@zte.com.cn>
+        id S238212AbhLJMeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:34:07 -0500
+Received: from mail-dm6nam11on2081.outbound.protection.outlook.com ([40.107.223.81]:63520
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233393AbhLJMeG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 07:34:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gu5CMrxngDS1yy5MVXtdwk4zrlKIU40ZMoa7LgJblZQVQlzIAoprE/q6l5XugkYmoDjLEUyPl6xcV4fCmZf3y/tl+Dj9J4CQL2cE5AmfGIsK/J5ASAJILqRI8hf5nD1GV7V1XGiFxnFLdEP0hqXyhc81a9Mlto+0OYNhlgvDdDfz9FWxIQ3TpFWIOpAH0lGdgdz09qoCP0DhkTe9PmmyWRHSwPHE0KJSzmbSRw7w/sRV0Rx+sYieqJmj1zI/vMOWN1lNP/6yLrw3wQyCqM9JlAGacp+CaFiBhI3Ime91VTkXjbkrdtWtXt0/Nlvj7LBQB/UQ4sT7ZQFPPTHDBYDwnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5Vc9XEu/HF/mw+9vjsMr0xpXkkWqJbrTDGPuUppisAU=;
+ b=YmxN6OdoPaPpBzw6eLY5gBRRDVRS52k7llqEPGZ0N9TLEg6A/mLJbeoWxgM15FpLsDRS5CPMDOLayzIZ2MU0Wj4a8yVH2bJtkMCoj64l+Bc3whOom5W2594tnJv2CP05gB5mSS6OlM08ZVIEv0lhM+3OBTbPvTA2LQ2UqoX9k3tMob3WJEcAjb2DBSMC3I7UQ4iCJoC+unqKdH71G0hD/hC61VPPTQMccFyqZJd+dqTin3XL/oXD6sbkodHtY7SkeIgihaOnWeho/6JbLc5zh3MZ5OHJNBlj0fjjTOMjr0+fSapAxWrk9HaaN/fT7miK7xU7ju1o7ISP6kIwM1mYWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5Vc9XEu/HF/mw+9vjsMr0xpXkkWqJbrTDGPuUppisAU=;
+ b=R71nXRaSL7lxUeD1pjbZb5u4HsvwTFsUkaNsKof9man/fVO6XdY5WEOXl5diKAZOUoNPLQ4FLie47Zs8G7eaIHmzp5agjMVus+3rnCBTinSzV+0ChSuTCW18C61BsWZY1OPcvMhpYVs1oIzcK8qYZ9GQgLcqauZ7hRSrlXMKTpQbohPptBRMlhWGak/gGrOFGiuqT/mKhgqTIX4N8/0dkw4Z0Dx1hiiX1rECFQxUrsYf5gANd3S4kg5uOb9wr9qFBPqJVRndYngsGc8F0+DPE86/JIVGQ4N3VlnYH4DwfP8C/N1+BhxbCc33yB0lLYwIHrv6SM7xMfsjOj8mdStxXw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5285.namprd12.prod.outlook.com (2603:10b6:208:31f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Fri, 10 Dec
+ 2021 12:30:30 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.015; Fri, 10 Dec 2021
+ 12:30:29 +0000
+Date:   Fri, 10 Dec 2021 08:30:28 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Dey, Megha" <megha.dey@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+Message-ID: <20211210123028.GD6385@nvidia.com>
+References: <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com>
+ <87k0go8432.ffs@tglx>
+ <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com>
+ <878rx480fk.ffs@tglx>
+ <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <87sfv2yy19.ffs@tglx>
+ <20211209162129.GS6385@nvidia.com>
+ <878rwtzfh1.ffs@tglx>
+ <20211209205835.GZ6385@nvidia.com>
+ <BN9PR11MB5276599F467AD5EAC935A79E8C719@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276599F467AD5EAC935A79E8C719@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: YTXPR0101CA0047.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b00:1::24) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-Message-ID: <163913931655.23020.9945692348507871507.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 44481053-c0ae-4ed3-710e-08d9bbd8da0b
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5285:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB52856E3D1700E2EC13AE69EFC2719@BL1PR12MB5285.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MJ/WO+GHjPUc20CElGuMaL7GcuvH7TJ5Xlx9LINUHgG2cI4kzZW/mW5eZmyCuT34tdVAd/BszOQWvUzVTKahhkmR66fxPnMDGGXhyIVaqmlAj9qO4ItYD2eMGHD7sRhU+kOHlhHOeOGpw/uWrGHSuMsSTAy2/Y6q6tvi9uFTWs4JhzAxCN84ueOqRZPYXmu+R7MgAv6nSvHZxwQQlEf7i2exR8pHzTTVrQadng/j2VI7MzdtF7w9S9RmTgr7Cua6OQxKNLdyseoIvKQYOkoUlPg/nl2Ih0BprWY9W0tiG/L70wLIjlnz/X+FtNa8uX64bFXxV4/R0cKhsrx/7eB6Mr7MFB7OXKGAzvOdPMSGZzXLeiCrxW4dq2CPSIRlL8kSkszplyg8Kzups79kqdcRljytCz4VO7StVNAwXLdLJ3aOOqy0UC3tItGuuKYtKLwyb0ZLJCblwN4LarXHFFRrFhgOWPu+/fAMbH1JSAbQ8gBxwyaIHRhSccW8gCimWwsDawhl+jnTsF5kuXnzCtkJoADFeC9NWND3IaCKlqYPQJk7DwZmp88xBxUZquOp3NB437aB7bQkv/K+tK9DIXGETLjqSg0mVNucJMAg2Wi5LznotMPjOmI/JtjnYb889AJ5IrBRIF86M2wwDBn+ObCw2w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(33656002)(83380400001)(2616005)(86362001)(186003)(26005)(4326008)(5660300002)(38100700002)(7416002)(1076003)(4744005)(508600001)(316002)(8676002)(8936002)(2906002)(54906003)(6506007)(66946007)(6916009)(6486002)(66476007)(66556008)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/AQi6wOzUMnEgpm51M5pU936BFk4jC1x1SRFWSzHLVfYZ6tk+AO7GlpFUduh?=
+ =?us-ascii?Q?t3CQpCSDpWk7UsgUXywpHKkAbjmW/867ZjvIc0STh6awn9YB/yLmsOixkXGh?=
+ =?us-ascii?Q?GIcyk5NLVwAfGhDqOaynY71cyXIAnTsNtL9lGEs1rqrM9XXyS1EKXGF4GYW3?=
+ =?us-ascii?Q?xy/l3R1GOZOVL3Dn5tVqs1IoagzQddjt6aewaJ4KXUC2OZeYZXYf709cJJRa?=
+ =?us-ascii?Q?OB3ttAhzeMfyaA5ILGuwBqZ6Er9zwJuMuwzTY8rG4q0SG7YmAOfu9hl6VHOR?=
+ =?us-ascii?Q?tejPpWEk67pgqyilHaPOlQ29VNrqK9iq3ztfpShmISumNbafp0nAXNhgD1+G?=
+ =?us-ascii?Q?UQEuOqX83MoSX0yv0ykoFoR/LGd4Q10aJ36KmHgQzAwgdh2su0IWjiT0l7Ww?=
+ =?us-ascii?Q?6FtNUFxjdjY9r25qwy0gfxWnetwZAv5lQ6SRZ9C/hiofpMcsw/HXa7Hnl/0D?=
+ =?us-ascii?Q?Dx3FhAysiVgYoQS2rqnsoIiAZNjPgxxVImBGxAPKJk6dasld7n5uLGRYrVts?=
+ =?us-ascii?Q?uEZY6PtVZgtq2t2BpbjJrQYtm/k0jKpIXZjNpn6zLkP1O8yRd39oZZOvhoge?=
+ =?us-ascii?Q?BXphBnAEwyAySltHDSYT91XZQIzCRAl6V5StIM+l2LLSMwRbpIvxED96q4pn?=
+ =?us-ascii?Q?FySwGFXdHFdlwokQoJBWDc4loW+HNiiUl/wMBx9Tv+SY572eSG3/biuJf4pL?=
+ =?us-ascii?Q?jOOdp8y4AAfFAjkatek43p8A9fEgjYK8XOWnM3uJ2GoMI2LrF0TEj76RJs38?=
+ =?us-ascii?Q?vra4evdDHfqrYX0eJ0zeh9svl/23OJCSuHf57MyUA5uvOHECeNuN4RiXhRSl?=
+ =?us-ascii?Q?qMBzcjRPbMnvPvHHUykIixW7nsDlKGQf/WlBJpgBMTmQS/F6p+vlZH8gzuZA?=
+ =?us-ascii?Q?5D26Yiwk93OWT8nbxOxQMCPPBseSk8hlNuUT+AQYzvSurw3MqkmG8KhQzT1o?=
+ =?us-ascii?Q?NVsewcxSLicCH6jYozJqIryVBbYDMT9Wl87k9jTvi2RQvwsvBCMnqicD7i/X?=
+ =?us-ascii?Q?8OVzjZJ41IampGzW3vGbRnU/6qeRlGE/O/UEmuWLJU99Xj1NSMUmu5sb3oKC?=
+ =?us-ascii?Q?yvekQ2oZoPRQj1QL4eatr1XaxKnKHhsh6YrbXvI7q6mKmL4n2iwrF3hCKNeT?=
+ =?us-ascii?Q?W+Agru9vs6ajDUWzaR+EeEY+UNpf7ucqdNszQli1YGwMCbdmnleJR3gS6DHd?=
+ =?us-ascii?Q?JI1lmrjZAen97u5WozSaGx90TrZecHmWgxiPPSCcHag5co+bW7EYzyhs8dV7?=
+ =?us-ascii?Q?HLd012x0v0CHUZ+XAbZUeccTolkWL/YGNI5dG3AhVvkhZQJPqcqtoR75a5SV?=
+ =?us-ascii?Q?7UCU6gT5OlavlDBt2rmssZrvtQtMO7TtcE0+6s5X+qTGj+6WOmICRFBu6r0f?=
+ =?us-ascii?Q?ZUfoShv5aZBiL7MgNGtCPtNmZlz+AjgGqCeOuk3XTDJVueem2RD/fxdukjnw?=
+ =?us-ascii?Q?Gcse1FM+qOGxphVs4wl9XmvkLOozeCvf72mtHXhtnSJEqALRC7O/LAEiwhWP?=
+ =?us-ascii?Q?V7gd0gXDTjct5EwG7UIPnQs0oBzUuQ48mx3enwD1N1hCZKKvt+qz3C2htwqf?=
+ =?us-ascii?Q?vbda9FpA6qKdIbkdkWQ=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44481053-c0ae-4ed3-710e-08d9bbd8da0b
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 12:30:29.8898
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lYFVc3o7rAi0qCemi0BIdqgOeFI/2gbUrPbdPyCJAcfHD0eZO9WWhYnimevRZXir
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5285
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+On Fri, Dec 10, 2021 at 07:36:12AM +0000, Tian, Kevin wrote:
 
-Commit-ID:     5c19cd0a9ed9f7a067a7d9c444ff0590d1dce73f
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/5c19cd0a9ed9f7a067a7d9c444ff0590d1dce73f
-Author:        Ye Guojin <ye.guojin@zte.com.cn>
-AuthorDate:    Tue, 09 Nov 2021 05:59:58 
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 10 Dec 2021 12:25:00 
+> /*
+>  * The MSIX mappable capability informs that MSIX data of a BAR can be mmapped
+>  * which allows direct access to non-MSIX registers which happened to be within
+>  * the same system page.
+>  *
+>  * Even though the userspace gets direct access to the MSIX data, the existing
+>  * VFIO_DEVICE_SET_IRQS interface must still be used for MSIX configuration.
+     ^^^^^^^^^^^^^^^^^^^^^
 
-irqchip/irq-bcm7120-l2: add put_device() after of_find_device_by_node()
+It is this I think we don't want, there should be no hypervisor
+involvment on installing the addr/data pair
 
-This was found by coccicheck:
-./drivers/irqchip/irq-bcm7120-l2.c,328,1-7,ERROR  missing put_device;
-call of_find_device_by_node on line 234, but without a corresponding
-object release within this function.
-./drivers/irqchip/irq-bcm7120-l2.c,341,1-7,ERROR  missing put_device;
-call of_find_device_by_node on line 234, but without a corresponding
-object release within this function.
+Guessing by what I saw in PPC there is a hypercall to install a MSI
+and the guest never touches the page even though it is
+mapped. Presumably there is some IR like thing making this secured
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211109055958.130287-1-ye.guojin@zte.com.cn
----
- drivers/irqchip/irq-bcm7120-l2.c | 1 +
- 1 file changed, 1 insertion(+)
+PPC has the same basic problem, I think they have a hypercall to
+install a MSI, not a hypercall to provision a generic addr/data pair.
 
-diff --git a/drivers/irqchip/irq-bcm7120-l2.c b/drivers/irqchip/irq-bcm7120-l2.c
-index d80e67a..bb6609c 100644
---- a/drivers/irqchip/irq-bcm7120-l2.c
-+++ b/drivers/irqchip/irq-bcm7120-l2.c
-@@ -238,6 +238,7 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
- 	}
- 
- 	data->num_parent_irqs = platform_irq_count(pdev);
-+	put_device(&pdev->dev);
- 	if (data->num_parent_irqs <= 0) {
- 		pr_err("invalid number of parent interrupts\n");
- 		ret = -ENOMEM;
+Jason

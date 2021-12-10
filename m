@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F37470840
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B6E470854
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245294AbhLJSRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:17:53 -0500
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:41580 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245272AbhLJSRt (ORCPT
+        id S241830AbhLJSTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236984AbhLJSTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:17:49 -0500
-Received: by mail-ot1-f50.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so10431064otl.8;
-        Fri, 10 Dec 2021 10:14:13 -0800 (PST)
+        Fri, 10 Dec 2021 13:19:37 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B752C061746;
+        Fri, 10 Dec 2021 10:16:01 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id k37so19614350lfv.3;
+        Fri, 10 Dec 2021 10:16:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bcvtGiLbR5hJWeiVCch89vaOnPBEjfgkGhnDVgGToIE=;
+        b=G0qTQ3KGFrwps8qADsCL0qK6agYLp7ivalOB/mF7ukTMqKqODRUNPClBA+tjj958iZ
+         zDP5ALcBXKrVg0xx9H2ws3hyb3r6CIVdqsbS/GVCsvrWbnNO0HGlLBE864udH5VLQpzA
+         E4ZCGQvWrQ3sm3YxkToWB7AGuZSE/qHZ86M8KsEpcZTMCU4IFoRlulk9U2f7fjt0DgcE
+         dievaYp3/3GIUU6nMVScS6FhLqdlOsaTCJ8+eRNM/gp2aIGsGid35kag1Oq9XwyLJEZe
+         Lsdj6NoONSIfbrp21Zrfz1ZI08pSDTMKtV8ZG3ySXOqe/j3lBC+KMsiD//GTJ5tyuvfx
+         eTTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RaOuCzlDrEGoU3kCCyjiPh5ZIczFbf2cAVp5IUpr62Q=;
-        b=aYs7LMndxGQpF02d4DZkmc86npx27c98t9FUhb00GPqmlpfzrDoHJSQAdPtHMLb4ZT
-         sBgEFGPVqlxMhz9CL8d6NEjNXDJ00/Dn+GVsVJQWoB6F3WnWtzX04Oc1yVZTCPjqFaDn
-         pg7aBS6C5RgxjWnO3mqThntNTG0GPO/p6/NL9Gc+VpFmnYOCxJu+Kup89a7HZaI2mZPi
-         pY3YahmWNV1qPpsWlk4sUc1PiBEAk3/QXfVxMNfiYxlFHiZyqqjebHVL+t4YaI2tG2+8
-         LZ/8XdpAAqs6XlO/Okhl+gqgoHLaz5SH2vBprAB4/uQhVPdD0zLNey6keZpW+EXJRU6x
-         smpg==
-X-Gm-Message-State: AOAM532adB4yICiE7ElTW/1QWw2JxmvASw1hXzicLGSu5KzReFzRJSn1
-        +uwiJ1itRFIqsnUsofHij1+XUFlMjNykQavrK8w=
-X-Google-Smtp-Source: ABdhPJx5VEl25dlL8StyZ7/vR+sIp4uhzbZQ+4jxftcUhgC3Wucypp0Twl9yCOfT1qw70j5+PgOSc5gj4QOVrzsPiE4=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr12483219otf.198.1639160053505;
- Fri, 10 Dec 2021 10:14:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-3-digetx@gmail.com>
-In-Reply-To: <20211126180101.27818-3-digetx@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Dec 2021 19:14:02 +0100
-Message-ID: <CAJZ5v0gy5M5yYT7k5CY0JtW4MvsgKq4psBEw81UKz=pjGo0xPw@mail.gmail.com>
-Subject: Re: [PATCH v4 02/25] notifier: Add blocking_notifier_call_chain_is_empty()
-To:     Dmitry Osipenko <digetx@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bcvtGiLbR5hJWeiVCch89vaOnPBEjfgkGhnDVgGToIE=;
+        b=B2YaX8YchuIOTbrMehsC8kvH1WDukRXWmKM/NjZzZf2bG7U0CtW8eQFXVK3/7uvgWg
+         qEK8RGw3yDV9SJkp4TD/joABG62bY9gzvjgblarNqYbYPpegazx1kOGEwa7JVaz2IiuY
+         1wirpF5/gH91VKw9uV4CL/uPMdEHMHESfu7gGipU7nvJQiP5FJJ0+EroS3DV1ssYZ39f
+         dFA9XuSPZcHi3+mfLPEN1zbcTIwhZtzmxhYPKCX4JWjMAO7C9PcpdR5LPg2PFB9QxRqE
+         B36HdnvymmZbyyJb3v3ALJbLqWkUj2OB9XQgF/DIp0WL0PdojBU/J44dGQ60VHrWKo/C
+         aKUg==
+X-Gm-Message-State: AOAM530/TtTLYYq0CMMDvbzTaHhY/owTeaOZ3C4fSWYH8NVm6WlU3wFH
+        /SB/CiCM6eA1+sFTwcXXVAZZZCYDAHg=
+X-Google-Smtp-Source: ABdhPJwR/4XeF0n78EyaU8daj5gqPU1YI5WhyixXiCZ/1XxnYO6fYoSxPShwkvEp5UZp5BYd303wDQ==
+X-Received: by 2002:a05:6512:40b:: with SMTP id u11mr13847699lfk.377.1639160159550;
+        Fri, 10 Dec 2021 10:15:59 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id q15sm379095lfp.32.2021.12.10.10.15.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 10:15:59 -0800 (PST)
+Subject: Re: [PATCH v4 07/25] reboot: Remove extern annotation from function
+ prototypes
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -65,12 +79,11 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Juergen Gross <jgross@suse.com>,
         Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>,
         Santosh Shilimkar <ssantosh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -95,58 +108,40 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20211126180101.27818-1-digetx@gmail.com>
+ <20211126180101.27818-8-digetx@gmail.com>
+ <CAJZ5v0i=zgubEtF5-Wnaqa5FMnfVUdSnEmD11-LAuYCH8ZCwrA@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <acf8289e-6ab8-6eda-ec06-e9044ddd9a92@gmail.com>
+Date:   Fri, 10 Dec 2021 21:15:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0i=zgubEtF5-Wnaqa5FMnfVUdSnEmD11-LAuYCH8ZCwrA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 7:01 PM Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> Add blocking_notifier_call_chain_is_empty() that returns true if call
-> chain is empty.
->
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  include/linux/notifier.h |  2 ++
->  kernel/notifier.c        | 14 ++++++++++++++
->  2 files changed, 16 insertions(+)
->
-> diff --git a/include/linux/notifier.h b/include/linux/notifier.h
-> index 4b80a815b666..924c9d7c8e73 100644
-> --- a/include/linux/notifier.h
-> +++ b/include/linux/notifier.h
-> @@ -173,6 +173,8 @@ int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh,
->  int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
->                 unsigned long val_up, unsigned long val_down, void *v);
->
-> +bool blocking_notifier_call_chain_is_empty(struct blocking_notifier_head *nh);
-> +
->  #define NOTIFY_DONE            0x0000          /* Don't care */
->  #define NOTIFY_OK              0x0001          /* Suits me */
->  #define NOTIFY_STOP_MASK       0x8000          /* Don't call further */
-> diff --git a/kernel/notifier.c b/kernel/notifier.c
-> index b8251dc0bc0f..b20cb7b9b1f0 100644
-> --- a/kernel/notifier.c
-> +++ b/kernel/notifier.c
-> @@ -322,6 +322,20 @@ int blocking_notifier_call_chain(struct blocking_notifier_head *nh,
->  }
->  EXPORT_SYMBOL_GPL(blocking_notifier_call_chain);
->
-> +/**
-> + *     blocking_notifier_call_chain_is_empty - Check whether notifier chain is empty
-> + *     @nh: Pointer to head of the blocking notifier chain
-> + *
-> + *     Checks whether notifier chain is empty.
-> + *
-> + *     Returns true is notifier chain is empty, false otherwise.
-> + */
-> +bool blocking_notifier_call_chain_is_empty(struct blocking_notifier_head *nh)
-> +{
-> +       return !rcu_access_pointer(nh->head);
-> +}
-> +EXPORT_SYMBOL_GPL(blocking_notifier_call_chain_is_empty);
+10.12.2021 21:09, Rafael J. Wysocki пишет:
+> On Fri, Nov 26, 2021 at 7:02 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> There is no need to annotate function prototypes with 'extern', it makes
+>> code less readable. Remove unnecessary annotations from <reboot.h>.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> 
+> I'm not sure that this is really useful.
+> 
+> Personally, I tend to respect the existing conventions like this.
+> 
+> Surely, this change is not required for the rest of the series to work.
 
-The check is not reliable (racy) without locking, so I wouldn't export
-anything like this to modules.
+Problem that such things start to spread all over the kernel with a
+copy-paste approach if there is nobody to clean up the code.
 
-At least IMO it should be added along with a user.
+This is not a common convention and sometimes it's getting corrected [1].
+
+[1] https://git.kernel.org/linus/6d7434931

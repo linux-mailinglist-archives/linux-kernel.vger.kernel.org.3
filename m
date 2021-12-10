@@ -2,208 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F9E47005A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3588C47005F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240815AbhLJLyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:54:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35862 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240459AbhLJLyv (ORCPT
+        id S235026AbhLJMBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:01:09 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:47924 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229664AbhLJMBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:54:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 10 Dec 2021 07:01:08 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 274D3B827EC;
-        Fri, 10 Dec 2021 11:51:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22FEC00446;
-        Fri, 10 Dec 2021 11:51:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639137073;
-        bh=k6SoHWhosx0qzm2ZpWW1ByceeyzMtPO2w4609dbQnKU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BQvaSVhwExVghGCYl9TyVS/k2l4rDqcfVaZ5yXRPW8vhK61maQPPBNKe28Ugp3EyM
-         5vtvKMIFmitqiiybgFUTW+13bQVAwBg5djldUlyD7i8YEUIWz23Xr7qY2JAj0iL/lO
-         JxaEkH144KM497Mkb+aU9w1TPmrBycKv0jC7FLf4XTeEjFc64NpS/Fd1qSRIrloCr+
-         R3aRQ620NJnUw7uJcYZdZGMd4RdhZSMK99/4Cl+6h2Bide8BnqMHehPyIN5yU8kAY0
-         2RJXTHTsBwobXQTd+eUrYw03VLlptezMrab8FVjCwNuuLFqvdnCCRCeMWyPzrSjWzS
-         wMeoEWypzkFoQ==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mveQh-000EFs-JX; Fri, 10 Dec 2021 12:51:11 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Robert Schlabbach <robert_s@gmx.net>
-Subject: [PATCH v2] media: si2157: get rid of chiptype data
-Date:   Fri, 10 Dec 2021 12:51:10 +0100
-Message-Id: <08e7a803894687c7706dc974bffd7d8b0c9df53d.1639136930.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2777C1F3A0;
+        Fri, 10 Dec 2021 11:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639137452; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UGqTpPfwCs8oR8Xk7BbaQyH4TxPdYCJW+wRAyjcb1jA=;
+        b=GxujRQKr8kTHW6BgLKXN7cesdcK5g4mrvAjy2ijTC8S5o45G3NDAoNbj52b6dKYukmfgGj
+        I3BbsNBbq9/IYSVZM23rmB60lrmsJvphwGPTW+CzEzYJ0dNu1hWh9qtxyjcF7R3P3SV2qL
+        8DLfVGWxoLc2VdDTWqMsU5HZiQ7LP24=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639137452;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UGqTpPfwCs8oR8Xk7BbaQyH4TxPdYCJW+wRAyjcb1jA=;
+        b=fYFBwEd9CeYR605E1fzzGEqZpAMN0R+tt0vmupkEFsl59zNCKFlIAYKqnn/pJfKfTjg5tl
+        9fRknwhnez8BnSAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE3B413C1D;
+        Fri, 10 Dec 2021 11:57:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SX0zOatAs2HqeQAAMHmgww
+        (envelope-from <hare@suse.de>); Fri, 10 Dec 2021 11:57:31 +0000
+To:     Li Jinlin <lijinlin3@huawei.com>, song@kernel.org,
+        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        axboe@kernel.dk, jack@suse.cz, ming.lei@redhat.com, tj@kernel.org,
+        mcgrof@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linfeilong@huawei.com
+References: <20211210120631.2578505-1-lijinlin3@huawei.com>
+ <20211210120631.2578505-2-lijinlin3@huawei.com>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v3 1/3] md: Fix undefined behaviour in is_mddev_idle
+Message-ID: <65d045bc-45d2-9e02-f0f7-7a0f51504eb9@suse.de>
+Date:   Fri, 10 Dec 2021 12:57:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <20211210120631.2578505-2-lijinlin3@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver should be capable of autodetecting its type, so no
-need to pass it via device driver's data.
+On 12/10/21 1:06 PM, Li Jinlin wrote:
+> UBSAN reports this problem:
+> 
+> [ 5984.281385] UBSAN: Undefined behaviour in drivers/md/md.c:8175:15
+> [ 5984.281390] signed integer overflow:
+> [ 5984.281393] -2147483291 - 2072033152 cannot be represented in type 'int'
+> [ 5984.281400] CPU: 25 PID: 1854 Comm: md101_resync Kdump: loaded Not tainted 4.19.90
+> [ 5984.281404] Hardware name: Huawei TaiShan 200 (Model 5280)/BC82AMDDA
+> [ 5984.281406] Call trace:
+> [ 5984.281415]  dump_backtrace+0x0/0x310
+> [ 5984.281418]  show_stack+0x28/0x38
+> [ 5984.281425]  dump_stack+0xec/0x15c
+> [ 5984.281430]  ubsan_epilogue+0x18/0x84
+> [ 5984.281434]  handle_overflow+0x14c/0x19c
+> [ 5984.281439]  __ubsan_handle_sub_overflow+0x34/0x44
+> [ 5984.281445]  is_mddev_idle+0x338/0x3d8
+> [ 5984.281449]  md_do_sync+0x1bb8/0x1cf8
+> [ 5984.281452]  md_thread+0x220/0x288
+> [ 5984.281457]  kthread+0x1d8/0x1e0
+> [ 5984.281461]  ret_from_fork+0x10/0x18
+> 
+> When the stat aacum of the disk is greater than INT_MAX, its
+> value becomes negative after casting to 'int', which may lead
+> to overflow after subtracting a positive number. In the same
+> way, when the value of sync_io is greater than INT_MAX,
+> overflow may also occur. These situations will lead to
+> undefined behavior.
+> 
+> Otherwise, if the stat accum of the disk is close to INT_MAX
+> when creating raid arrays, the initial value of last_events
+> would be set close to INT_MAX when mddev initializes IO
+> event counters. 'curr_events - rdev->last_events > 64' will
+> always false during synchronization. If all the disks of mddev
+> are in this case, is_mddev_idle() will always return 1, which
+> may cause non-sync IO is very slow.
+> 
+> Fix by using atomic64_t type for sync_io, and using s64 type
+> for curr_events/last_events.
+> 
+> Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
+> ---
+>  drivers/md/md.c       | 6 +++---
+>  drivers/md/md.h       | 4 ++--
+>  include/linux/genhd.h | 2 +-
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 5111ed966947..be73a5ae6864 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -8429,14 +8429,14 @@ static int is_mddev_idle(struct mddev *mddev, int init)
+>  {
+>  	struct md_rdev *rdev;
+>  	int idle;
+> -	int curr_events;
+> +	s64 curr_events;
+>  
+>  	idle = 1;
+>  	rcu_read_lock();
+>  	rdev_for_each_rcu(rdev, mddev) {
+>  		struct gendisk *disk = rdev->bdev->bd_disk;
+> -		curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
+> -			      atomic_read(&disk->sync_io);
+> +		curr_events = (s64)part_stat_read_accum(disk->part0, sectors) -
+> +			      atomic64_read(&disk->sync_io);
+>  		/* sync IO will cause sync_io to increase before the disk_stats
+>  		 * as sync_io is counted when a request starts, and
+>  		 * disk_stats is counted when it completes.
+> diff --git a/drivers/md/md.h b/drivers/md/md.h
+> index 53ea7a6961de..e00d6730da13 100644
+> --- a/drivers/md/md.h
+> +++ b/drivers/md/md.h
+> @@ -50,7 +50,7 @@ struct md_rdev {
+>  
+>  	sector_t sectors;		/* Device size (in 512bytes sectors) */
+>  	struct mddev *mddev;		/* RAID array if running */
+> -	int last_events;		/* IO event timestamp */
+> +	s64 last_events;		/* IO event timestamp */
+>  
+>  	/*
+>  	 * If meta_bdev is non-NULL, it means that a separate device is
+> @@ -551,7 +551,7 @@ extern void mddev_unlock(struct mddev *mddev);
+>  
+>  static inline void md_sync_acct(struct block_device *bdev, unsigned long nr_sectors)
+>  {
+> -	atomic_add(nr_sectors, &bdev->bd_disk->sync_io);
+> +	atomic64_add(nr_sectors, &bdev->bd_disk->sync_io);
+>  }
+>  
+>  static inline void md_sync_acct_bio(struct bio *bio, unsigned long nr_sectors)
+> diff --git a/include/linux/genhd.h b/include/linux/genhd.h
+> index 74c410263113..efa7884de11b 100644
+> --- a/include/linux/genhd.h
+> +++ b/include/linux/genhd.h
+> @@ -150,7 +150,7 @@ struct gendisk {
+>  	struct list_head slave_bdevs;
+>  #endif
+>  	struct timer_rand_state *random;
+> -	atomic_t sync_io;		/* RAID */
+> +	atomic64_t sync_io;		/* RAID */
+>  	struct disk_events *ev;
+>  #ifdef  CONFIG_BLK_DEV_INTEGRITY
+>  	struct kobject integrity_kobj;
+> 
+You haven't answered my question.
+This patch has exactly the same problem than the original, only shifted
+to LONG_MAX instead of INT_MAX.
 
-While here, improve documentation of some of the part_id
-specific code.
+Have you considered decreasing 'sync_io' in the endio handler, and then
+just using the 'sync_io' value to figure out if sync_io is active?
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+Cheers,
 
-v2:
-   - Checked against the open-sourced manufacturer driver to see if the
-     part_id-dependent parts make sense;
-   - Added a couple of comments for some of those part_id-specific code
-
- drivers/media/tuners/si2157.c      | 44 ++++++++++++++++++------------
- drivers/media/tuners/si2157_priv.h |  7 +----
- 2 files changed, 27 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-index bb590395e81a..a2f0dfd50e8d 100644
---- a/drivers/media/tuners/si2157.c
-+++ b/drivers/media/tuners/si2157.c
-@@ -185,6 +185,9 @@ static int si2157_find_and_load_firmware(struct dvb_frontend *fe)
- 		return -EINVAL;
- 	}
- 
-+	/* Update the part id based on device's report */
-+	dev->part_id = part_id;
-+
- 	dev_info(&client->dev,
- 		 "found a 'Silicon Labs Si21%d-%c%c%c ROM 0x%02x'\n",
- 		 part_id, cmd.args[1], cmd.args[3], cmd.args[4], rom_id);
-@@ -235,10 +238,12 @@ static int si2157_init(struct dvb_frontend *fe)
- 	dev->if_frequency = 0; /* we no longer know current tuner state */
- 
- 	/* power up */
--	if (dev->chiptype == SI2157_CHIPTYPE_SI2146) {
-+	if (dev->part_id == SI2146) {
-+		/* clock_mode = XTAL, clock_freq = 24MHz */
- 		memcpy(cmd.args, "\xc0\x05\x01\x00\x00\x0b\x00\x00\x01", 9);
- 		cmd.wlen = 9;
--	} else if (dev->chiptype == SI2157_CHIPTYPE_SI2141) {
-+	} else if (dev->part_id == SI2141) {
-+		/* clock_mode: XTAL, xout enabled */
- 		memcpy(cmd.args, "\xc0\x00\x0d\x0e\x00\x01\x01\x01\x01\x03", 10);
- 		cmd.wlen = 10;
- 	} else {
-@@ -247,11 +252,11 @@ static int si2157_init(struct dvb_frontend *fe)
- 	}
- 	cmd.rlen = 1;
- 	ret = si2157_cmd_execute(client, &cmd);
--	if (ret && (dev->chiptype != SI2157_CHIPTYPE_SI2141 || ret != -EAGAIN))
-+	if (ret && (dev->part_id != SI2141 || ret != -EAGAIN))
- 		goto err;
- 
--	/* Si2141 needs a second command before it answers the revision query */
--	if (dev->chiptype == SI2157_CHIPTYPE_SI2141) {
-+	/* Si2141 needs a wake up command */
-+	if (dev->part_id == SI2141) {
- 		memcpy(cmd.args, "\xc0\x08\x01\x02\x00\x00\x01", 7);
- 		cmd.wlen = 7;
- 		ret = si2157_cmd_execute(client, &cmd);
-@@ -493,7 +498,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
- 	if (ret)
- 		goto err;
- 
--	if (dev->chiptype == SI2157_CHIPTYPE_SI2146)
-+	if (dev->part_id == SI2146)
- 		memcpy(cmd.args, "\x14\x00\x02\x07\x00\x01", 6);
- 	else
- 		memcpy(cmd.args, "\x14\x00\x02\x07\x00\x00", 6);
-@@ -560,9 +565,9 @@ static int si2157_set_analog_params(struct dvb_frontend *fe,
- 	u8 color = 0;    /* 0=NTSC/PAL, 0x10=SECAM */
- 	u8 invert_analog = 1; /* analog tuner spectrum; 0=normal, 1=inverted */
- 
--	if (dev->chiptype != SI2157_CHIPTYPE_SI2157) {
--		dev_info(&client->dev, "Analog tuning not supported for chiptype=%u\n",
--			 dev->chiptype);
-+	if (dev->part_id != SI2157) {
-+		dev_info(&client->dev, "Analog tuning not supported on Si21%d\n",
-+			 dev->part_id);
- 		ret = -EINVAL;
- 		goto err;
- 	}
-@@ -874,7 +879,7 @@ static int si2157_probe(struct i2c_client *client,
- 	dev->inversion = cfg->inversion;
- 	dev->dont_load_firmware = cfg->dont_load_firmware;
- 	dev->if_port = cfg->if_port;
--	dev->chiptype = (u8)id->driver_data;
-+	dev->part_id = (u8)id->driver_data;
- 	dev->if_frequency = 5000000; /* default value of property 0x0706 */
- 	mutex_init(&dev->i2c_mutex);
- 	INIT_DELAYED_WORK(&dev->stat_work, si2157_stat_work);
-@@ -917,10 +922,8 @@ static int si2157_probe(struct i2c_client *client,
- 	}
- #endif
- 
--	dev_info(&client->dev, "Silicon Labs %s successfully attached\n",
--			dev->chiptype == SI2157_CHIPTYPE_SI2141 ?  "Si2141" :
--			dev->chiptype == SI2157_CHIPTYPE_SI2146 ?
--			"Si2146" : "Si2147/2148/2157/2158");
-+	dev_info(&client->dev, "Silicon Labs Si21%d successfully attached\n",
-+		 dev->part_id);
- 
- 	return 0;
- 
-@@ -953,11 +956,16 @@ static int si2157_remove(struct i2c_client *client)
- 	return 0;
- }
- 
-+/*
-+ * The part_id used here will only be used on buggy devices that don't
-+ * accept firmware uploads. Non-buggy devices should just use "si2157" for
-+ * all SiLabs TER tuners, as the driver should auto-detect it.
-+ */
- static const struct i2c_device_id si2157_id_table[] = {
--	{"si2157", SI2157_CHIPTYPE_SI2157},
--	{"si2146", SI2157_CHIPTYPE_SI2146},
--	{"si2141", SI2157_CHIPTYPE_SI2141},
--	{"si2177", SI2157_CHIPTYPE_SI2177},
-+	{"si2157", SI2157},
-+	{"si2146", SI2146},
-+	{"si2141", SI2141},
-+	{"si2177", SI2177},
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, si2157_id_table);
-diff --git a/drivers/media/tuners/si2157_priv.h b/drivers/media/tuners/si2157_priv.h
-index 0db21b082ba9..df17a5f03561 100644
---- a/drivers/media/tuners/si2157_priv.h
-+++ b/drivers/media/tuners/si2157_priv.h
-@@ -26,7 +26,7 @@ struct si2157_dev {
- 	unsigned int active:1;
- 	unsigned int inversion:1;
- 	unsigned int dont_load_firmware:1;
--	u8 chiptype;
-+	u8 part_id;
- 	u8 if_port;
- 	u32 if_frequency;
- 	u32 bandwidth;
-@@ -58,11 +58,6 @@ struct si2157_tuner_info {
- 	const char		*fw_name, *fw_alt_name;
- };
- 
--#define SI2157_CHIPTYPE_SI2157 0
--#define SI2157_CHIPTYPE_SI2146 1
--#define SI2157_CHIPTYPE_SI2141 2
--#define SI2157_CHIPTYPE_SI2177 3
--
- /* firmware command struct */
- #define SI2157_ARGLEN      30
- struct si2157_cmd {
+Hannes
 -- 
-2.33.1
-
-
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

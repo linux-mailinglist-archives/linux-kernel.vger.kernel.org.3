@@ -2,179 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2D24704E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E280B4704E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbhLJPxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:53:15 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:65156 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240348AbhLJPwh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:52:37 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAFhwgP002344;
-        Fri, 10 Dec 2021 15:48:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=CrjMQkLYkk8ex/dff8hOR3nKpVuHESm2QwXGYiLjoks=;
- b=q0M3nnDGawGlmoxjnJ+lZyWiXQqGE5u9DZCs3mxe+d6mCx242y4BRAhjatDNdHFx51XN
- AvpiQiUDD+zxetwA8Vb2Ml691vEiNc2q3KjmqH9sDoOlFuh9ECxcWiAcV4brvfOFVQqd
- V/WXte+BygfIJ8Z32XME1NRicUyQnG9PJePBylSyYbDST+d60hnx46QFV682bgGI8SY+
- FiFd4uQN824TFH3kYHbbKm/i0T23M7JURcA7N6okQaPhUUkRKwo22lNHi4y9hFDeyJ8u
- SvwwZB9WzqDjxFo20ZaNgc8Fxkzy1ztgQsJaswPQU7dawl4IAWE954NZLiAlzGFxR/nE 7w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv55je9gv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 15:48:44 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAFhCnE015087;
-        Fri, 10 Dec 2021 15:48:43 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv55je9g3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 15:48:43 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAFlBdN003746;
-        Fri, 10 Dec 2021 15:48:40 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3cqyyaa4th-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 15:48:40 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAFmakb29622716
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 15:48:36 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A374211C04A;
-        Fri, 10 Dec 2021 15:48:36 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 408C911C052;
-        Fri, 10 Dec 2021 15:48:34 +0000 (GMT)
-Received: from sig-9-65-75-5.ibm.com (unknown [9.65.75.5])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 15:48:34 +0000 (GMT)
-Message-ID: <70e68bb6fd8e70b32fa2404768a6240791546496.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>, jejb@linux.ibm.com,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Fri, 10 Dec 2021 10:48:33 -0500
-In-Reply-To: <9806a2ba-8b45-3bb8-22c5-797ab2affaac@linux.ibm.com>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
-         <20211208221818.1519628-16-stefanb@linux.ibm.com>
-         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
-         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
-         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
-         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
-         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-         <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
-         <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
-         <d8a6a6827da17825c1aa011256b96d195b1ebf13.camel@linux.ibm.com>
-         <66b377f6-40b4-77da-c02b-2650fa72d0b4@linux.ibm.com>
-         <d6011a5a40c3c304f386a328385836ba9838baf9.camel@linux.ibm.com>
-         <b8f3fe8de8788da92c3822912c11404a46531ac2.camel@linux.ibm.com>
-         <9806a2ba-8b45-3bb8-22c5-797ab2affaac@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7TekR7o2b9Y_ID2BftZGhYCzPA7kHc__
-X-Proofpoint-GUID: X-yYDes_XyijSdbg5BnK4ErQPL8TQQ64
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_05,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 malwarescore=0 suspectscore=0 adultscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100088
+        id S238080AbhLJPw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:52:56 -0500
+Received: from mail-dm6nam11on2072.outbound.protection.outlook.com ([40.107.223.72]:29075
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238024AbhLJPwP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 10:52:15 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Hf/Y6W+eLe/KfhlEKIazHRFCJ8V8/UBihZOZNjXNETfULOlevroSSFLP/7LMlcgwQfnkE6LXSdaM10P6V295G8IUCgeXjVPvbcK6yiuhttHDKo0DiDoC+PmmjUWqAvaEqwf4VEVCvxqe71Ze5OpDaUF667wNnnVhmKdSB0W3Zhy2ZyVoMyyqPux3llRw8xnH2iYcEkG41lzTEqan4/eHqWRobUOJjc99XoRwvr/ZkFSjIqC9zur5sxB52n7lpEZ/bql1wlqNJUPIBMP7MLzhF2+DhcLoTlZF8QGu/MUbCTtniG6QMHPj0wqLe+dunQdNCJL9CkL0x1CAVu38XuFjAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=98oitruaBplIIVyYIjlSgufwgNMByXS6Xqu/76OfvTA=;
+ b=Zx8MkXpyUEWD6QZ4ghHnq65IS6u+S5OG/SX6VwGEJ4W6DaAjV1q3oMboIIylDPcfpvlee+GQU62C31Wn982BrvZdcMUwxIXU0W2bLSH+mMn0a/ErxnkuLRL7Dkn4kX/HEKkYHJugpkbdYVz4TvGLJvXeqJDtWTYFyVtovQi2Tkc1UYjwbhZ0uLu3clLpeqrWGToQN6OBtfkW7XvugvAQbMnxE6RpgaDm0uICrai9dR8eHUmeAUnBfaR4wPNJvahXnGHEoT/BUfW0MCETzvfECG49hrWoelpIqvGL4WRyAXNSWMPaGBweJ3NIR8j1cQYYR22nGghd+4y0EXgPJH2FIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=98oitruaBplIIVyYIjlSgufwgNMByXS6Xqu/76OfvTA=;
+ b=ldHTNeWK5avieqAy5ISEJZBnJWTcqUdStoxkwrGLmE3DkohaqPbwEHZ90QS4/IIO4qa3Hm9qi+UjQHmuYmeBVC+GsxzzbarMX80IXdOl3hBHm7/f0QntonZqDBwPAyPGxXnkA6Wvm5Rxo2J2W6QLmlwOG1csIuLLTNxm8+NMeUhvB5DIrPX+0dVpx5I4dyXsBMrcJWhjKqAhyTWLj4vNUY7QJulrrTaNpE303Un/Cu02snLXLZBFRrX/7QIFiHjFUH3AWIfoicdf00I6YMurxNEYD8J4E+5BngUA/gcTtcM+CA2rpWQskeEyImqZkfRLkpqk8LoCT26TnT4gx9ez0w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by MN2PR12MB4272.namprd12.prod.outlook.com (2603:10b6:208:1de::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.25; Fri, 10 Dec
+ 2021 15:48:37 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4755.026; Fri, 10 Dec 2021
+ 15:48:37 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Eric Ren <renzhengeek@gmail.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: Re: [RFC PATCH v2 3/7] mm: migrate: allocate the right size of non hugetlb or THP compound pages.
+Date:   Fri, 10 Dec 2021 10:48:36 -0500
+X-Mailer: MailMate (1.14r5852)
+Message-ID: <971750C3-DAEC-4EE8-B838-2DD3CBC29781@nvidia.com>
+In-Reply-To: <84807a03-f7d1-83cb-16df-bacc58de4529@gmail.com>
+References: <20211209230414.2766515-1-zi.yan@sent.com>
+ <20211209230414.2766515-4-zi.yan@sent.com>
+ <84807a03-f7d1-83cb-16df-bacc58de4529@gmail.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: MN2PR02CA0009.namprd02.prod.outlook.com
+ (2603:10b6:208:fc::22) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
+MIME-Version: 1.0
+Received: from [10.2.53.3] (130.44.175.231) by MN2PR02CA0009.namprd02.prod.outlook.com (2603:10b6:208:fc::22) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 10 Dec 2021 15:48:37 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 34be2c4d-9bbd-4806-f254-08d9bbf487e5
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4272:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB427285BA9C2E536B5A77CB17C2719@MN2PR12MB4272.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Aq61mUsVCJkw5IJBZUoPh4FWXMVC3kQUv1GLfZOZ+fh342MOOmTeSxnMVVLSaoVJmMB3m3tomyvw2PZ7Esf0wphybWfR0Y9tV+gnJM843/piND1v8ArjWudpqE2sgD0A8lEjwaOexm9SoL4jsaaC5mQtlZeO6PWxwbgc0OlC0RfkgRSItEAh/D5tG25LBprMYip9nzp0S/5LXZULKxvZzpVQvKZH85wUFoe/MQiFQUA3uRdO3fkUSMd3wuSm/f5YnFt2hgPW2g0g2YaEM50xHZin9/rLVB0Eew0r5ScVB3w1vKaZJlCPnuPU0M/fLEPpbQgleVAaEe7mzw6XIPyBIu5OMsGMz6DIfkOo6aRHkXEwg9hOKCogCjW3NnxBQeBgo/Nm4Zfw/VZn8auDefhsOI5Rk5GE1T+ZxXKjGxs7Vh8O3ax0GEnMJqwWsMD+JB/G0kyhB1RJWmuXYaND1GY/jhXSaKMD3lTlC9rIqve8uPbFeJH0+8gfb1be2DDFMGTQc3nslNaYqb343euF+14iGhWZd8LNbj26s6hVJZQB9CLg8zFmihliKAJjDpvxLUQT2FuQQsPw5/VMxo24NTAKQrXGQ1AyBx/RbtzP11+tr0I9GdIFRPNjapLcPZtGgb7sZtQbV7HNDFKsPzFWto2S97AYIRFHnirGW1mdrovdgyz1x6JTOzAqGfeJCiTPqF0fMov4KvuoAtKJVoASPt8PbA9Ya56uT8rynv6cnTzLSq8I8pw3TZEgquQTmD90ebRk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(8676002)(54906003)(235185007)(6486002)(38100700002)(316002)(16576012)(7416002)(83380400001)(5660300002)(66556008)(66476007)(66946007)(86362001)(6916009)(53546011)(2906002)(33656002)(956004)(21480400003)(2616005)(4326008)(186003)(508600001)(33964004)(36756003)(26005)(185883001)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OWJnRjU2alRvTFhZb1ZUOFVqaDFRdVE3dFRRTm1FQTE3bm00Yy9nd3NQbktY?=
+ =?utf-8?B?bGptMGRlUDBFQ3NLVWluZDdkWVdRVkhoK0NpL3MzbG1ySzIvY1JCbjlBQXph?=
+ =?utf-8?B?VEU0UEpLRVlyRmkyc21TZEJxZ0crRnNSckpsUjI3bXN5ZTZrdFVESm5CaHU4?=
+ =?utf-8?B?L3kzMTdmaStmVGc0Z1V0RGtGY3krUkVWT29yZTdtTTB0MTRMem1BdC9xK3VG?=
+ =?utf-8?B?Q1JXaC9WSndGdkdmWVZCdDF3NktubjRtaEwrOFQ3aVo1R0hNYXdVbm9aU2E5?=
+ =?utf-8?B?T1NZSHp4c3Y0WWVOaitvZGRnMjZhKzU1eU1hdy96NVNhemhXOXd6OE9vSi8y?=
+ =?utf-8?B?ckk1TjFLbFRkVm5TbkdKcHhQajFmaVJ5U0hBTzZaMFY3NnZWcmdKVnhmdEFB?=
+ =?utf-8?B?bG5USS8xMWUvbkVJSFNHeDJhVllLck5haC8wSndWZE1nMkpQQ2pIOHprSm8y?=
+ =?utf-8?B?K1lOZmczNm9HOTlLd0JmMENmRGpWYjRIaXdVeGlRSXVKMlNmRFhJc3Izb0k2?=
+ =?utf-8?B?Zm00dm1XTHNNZmlhRkxTSWRhMjJUdEZNN1c3aTBYRjNuQy9qYmpiZWcxdDdG?=
+ =?utf-8?B?eGs3OWpSMWpwRW1iRHBic2dPL3FDUk85Rjl5S0R6andGVlhRaU4ySHlvODFO?=
+ =?utf-8?B?d0oxVVMzK2o1eS9TaFpPNjlKYXVBVWJ0OU16Slh1cCtWcnprVHRpUEFGa3hM?=
+ =?utf-8?B?U3FYc0oxUFNYVGZramVFSXc2ZDN5UHZMbGN0aTNNczhzZ0wrMEgwamNCV2Qy?=
+ =?utf-8?B?V2M0ZFI4bHBvVlRybkxVb1ZlTitrM3QyQTIzR0hzdFRDR0xabDB0OGRhdlRF?=
+ =?utf-8?B?MVoxOTdJZnJzR0V3eDVVMy9XWWRseFlOQWVTakxyUXR5bXFvVWlwREplcysx?=
+ =?utf-8?B?aGI3NFhnNk56T1NCSFJWcmdCblJDY0FMVWcxWVZPd1dlbXVDdWFKWUh5c2lK?=
+ =?utf-8?B?QVQ0MWlrVDhSZHJzalpBWjB4eHN3UGFJOHdSYWlhU1RFM1FSbUcwR0hVdHJP?=
+ =?utf-8?B?ZWZZOWJxaUVRMEdTd2V0RjZFd1FMaDYrSU5mRmhyZmgzaUpIYlNiOWZzRkVu?=
+ =?utf-8?B?ZDd1QThlZkEyYTZpZ25hbk5SMFJXTkFXdkljNzFWVm9JVGk5WEwzTmtyRUN1?=
+ =?utf-8?B?bTI5ZEd3Nnp1RHRmVmpLNk5VYytSSGNLSDBpcjJaY05pZnFGK2tvMThrT000?=
+ =?utf-8?B?czJYSDk4QjZZY0dNTWtKSk4wbjk4a1FlRXlJa1FyY3Z3YjhORG9HdUpIYU9F?=
+ =?utf-8?B?U2VaSXBvWXZhT1ZxMmJ5aVFvKzRQNVdsckg4M21VdDU3NnRiQmhCK2EwM0th?=
+ =?utf-8?B?WTNFSCtBcEhGWTV5TFZ0T0kvVU5RbVgySGh1RTFKU0hNMG5EVyt2SWJLYzBT?=
+ =?utf-8?B?QUV5OFMyU0hsOC9DWXZXbTA3cWV1OUdsblgvRG5JREtyM3VycDBkdnkzMVZF?=
+ =?utf-8?B?S0tlSkJyR3UyWmhvaVg3Z0tCb1AzNEhyd2p6NGtwMDdpb1l6WlFHL21VQWgz?=
+ =?utf-8?B?VHZrSzlEQnBseFA5azVka2Q2RmdxU2hMdDF6NnpiN01TU1hLQ0VLbWZMNTFV?=
+ =?utf-8?B?Wmg2Z3BmRGNIYjZFc2VxUGhtM2VHNFE4UmFzR3NSaFVoakFRUTFSRUlDNE9l?=
+ =?utf-8?B?WGlqK1c4aER5Q1NFdU1UbXdEWGFQUFF6LzZJem5BSDVBZGo4Slk4ODNtTGdU?=
+ =?utf-8?B?dSt1MzVWRmxqQWlJN1kwQVFLdENaaUpCV2NEWFR2WHF4TUgyZmN4NFpnNlBh?=
+ =?utf-8?B?REpzdGxOdjN5Y3ZwcWFRbG5LUk01dlVUL2lOTXRFOUd4UmFySHU1d0hvOGpZ?=
+ =?utf-8?B?ZW1Sa3lBTU1QV1E5VnNxTGdVUHJ3cTRJbTNVZ0RDbHFUYnFBZVlpQW4wQ1Ns?=
+ =?utf-8?B?NUNzMVpIQmd5YittL0dJcTZzUlZ2TmxiRTBYSkNDMW80UWVNN2wyMTNQNUJQ?=
+ =?utf-8?B?dm55VHZPRUxsV3FVZStTb2xhd0xvTXJnS0RWNCtobUYrRkJLUUxCS21uUy91?=
+ =?utf-8?B?b2V4ZTdWUHl6c0FKWGMvNUp0dEpyb0MyZnFGMnFGU0Q3djNJNlBHbWVhU0hh?=
+ =?utf-8?B?YTNCaGFkaG90WkJjZ3lJRjVrTzl1a3RtbVExb3E5ZUUreTVMK3RHa2NrV3Bj?=
+ =?utf-8?Q?zUUw=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34be2c4d-9bbd-4806-f254-08d9bbf487e5
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 15:48:37.7762
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AWMkjnyq1BG5WEPhoUnhP7fimMQY31VWwIzqVeX1v7K4xrMbWFixGc+TBR8UrAlV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4272
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 10:32 -0500, Stefan Berger wrote:
-> On 12/10/21 10:26, Mimi Zohar wrote:
-> > On Fri, 2021-12-10 at 09:26 -0500, James Bottomley wrote:
-> >> On Fri, 2021-12-10 at 09:17 -0500, Stefan Berger wrote:
-> >>> On 12/10/21 08:02, Mimi Zohar wrote:
-> >>>> On Fri, 2021-12-10 at 07:40 -0500, Stefan Berger wrote:
-> >>>>> On 12/10/21 07:09, Mimi Zohar wrote:
-> >>>>>> On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
-> >>>>>>>> There's still the problem that if you write the policy,
-> >>>>>>>> making the file disappear then unmount and remount
-> >>>>>>>> securityfs it will come back.  My guess for fixing this is
-> >>>>>>>> that we only stash the policy file reference,
-> >>>>>>>> create it if NULL but then set the pointer to PTR_ERR(-
-> >>>>>>>> EINVAL) or something and refuse to create it for that
-> >>>>>>>> value.
-> >>>>>>> Some sort of indicator that gets stashed in struct ima_ns
-> >>>>>>> that the file does not get recreated on consecutive mounts.
-> >>>>>>> That shouldn't be hard to fix.
-> >>>>>> The policy file disappearing is for backwards compatibility,
-> >>>>>> prior to being able to extend the custom policy.  For embedded
-> >>>>>> usecases, allowing the policy to be written exactly once might
-> >>>>>> makes sense.  Do we really want/need to continue to support
-> >>>>>> removing the policy in namespaces?
-> >>>>> I don't have an answer but should the behavior for the same
-> >>>>> #define in this case be different for host and namespaces? Or
-> >>>>> should we just 'select IMA_WRITE_POLICY and IMA_READ_POLICY' when
-> >>>>> IMA_NS is selected?
-> >>>> The latter option sounds good.  Being able to analyze the namespace
-> >>>> policy is really important.
-> >>> Ok, I will adjust the Kconfig for this then. This then warrants the
-> >>> question whether to move the dentry into the ima_namespace. The
-> >>> current code looks like this.
-> >>>
-> >>> #if !defined(CONFIG_IMA_WRITE_POLICY) &&
-> >>> !defined(CONFIG_IMA_READ_POLICY)
-> >>>           securityfs_remove(ns->policy_dentry);
-> >>>           ns->policy_dentry = NULL;
-> >>>           ns->policy_dentry_removed = true;
-> >>> #elif defined(CONFIG_IMA_WRITE_POLICY)
-> >>>
-> >>> With IMA_NS selecting IMA_WRITE_POLICY and IMA_READ_POLICY the above
-> >>> wouldn't be necessary anymore but I find it 'cleaner' to still have
-> >>> the dentry isolated rather than it being a global static as it was
-> >>> before...
-> >> This is really, really why you don't want the semantics inside the
-> >> namespace to differ from those outside, because it creates confusion
-> >> for the people reading the code, especially with magically forced
-> >> config options like this.  I'd strongly suggest you either keep the
-> >> semantic in the namespace or eliminate it entirely.
-> >>
-> >> If you really, really have to make the namespace behave differently,
-> >> then use global variables and put a big comment on that code saying it
-> >> can never be reached once CONFIG_IMA_NS is enabled.
-> > The problem seems to be with removing the securityfs policy file.
-> > Instead of removing it, just make it inacessible for the "if
-> > !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)"
-> > case.
-> 
-> So we would then leave it up to the one building the kernel to select 
-> the proper compile time options (suggested ones being IMA_WRITE_POLICY 
-> and IMA_READ_POLICY being enabled?) and behavior of host and IMA 
-> namespace is then the same per those options? Removing the file didn't 
-> seem the problem to me but more like whether the host should ever behave 
-> differently from the namespace.
+--=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-You proposed "select IMA_WRITE_POLICY and IMA_READ_POLICY'" when IMA_NS
-is selected.  At least IMA_READ_POLICY should be enabled for
-namespaces.
+On 10 Dec 2021, at 2:53, Eric Ren wrote:
 
-In addition, if removing the securityfs file after a custom policy is
-loaded complicates namespacing, then don't remove it.
+> Hi,
+>
+> On 2021/12/10 07:04, Zi Yan wrote:
+>> From: Zi Yan <ziy@nvidia.com>
+>>
+>> alloc_migration_target() is used by alloc_contig_range() and non-LRU
+>> movable compound pages can be migrated. Current code does not allocate=
+ the
+>> right page size for such pages. Check THP precisely using
+>> is_transparent_huge() and add allocation support for non-LRU compound
+>> pages.
+> Could you elaborate on why the current code doesn't get the right size?=
+=C2=A0 how this patch fixes it.
 
-thanks,
+The current code only check PageHuge() and PageTransHuge(). Non-LRU compo=
+und
+pages will be regarded as PageTransHuge() and an order-9 page is always a=
+llocated
+regardless of the actual page order. This patch makes the exact check for=
 
-Mimi
+THPs using is_transparent_huge() instead of PageTransHuge() and checks Pa=
+geCompound()
+after PageHuge() and is_transparent_huge() for non-LRU compound pages.
 
+>
+> The description sounds like it's an existing bug, if so, the patch subj=
+ect should be changed to
+> "Fixes ..."?
+
+I have not seen any related bug report.
+
+>
+>>
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> ---
+>>   mm/migrate.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index d487a399253b..2ce3c771b1de 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1563,7 +1563,7 @@ struct page *alloc_migration_target(struct page =
+*page, unsigned long private)
+>>   		return alloc_huge_page_nodemask(h, nid, mtc->nmask, gfp_mask);
+>>   	}
+>>  -	if (PageTransHuge(page)) {
+>> +	if (is_transparent_hugepage(page)) {
+>>   		/*
+>>   		 * clear __GFP_RECLAIM to make the migration callback
+>>   		 * consistent with regular THP allocations.
+>> @@ -1572,13 +1572,17 @@ struct page *alloc_migration_target(struct pag=
+e *page, unsigned long private)
+> if (PageTransHuge(page)) {=C2=A0 // just give more code context
+> ...
+>>   		gfp_mask |=3D GFP_TRANSHUGE;
+>>   		order =3D HPAGE_PMD_ORDER;
+> order assigned here
+>>   	}
+>> +	if (PageCompound(page)) {
+>> +		gfp_mask |=3D __GFP_COMP;
+>> +		order =3D compound_order(page);
+> re-assinged again as THP is a compound page?
+
+Ah, you are right. Will use else if instead. Thanks.
+
+> Thanks,
+> Eric
+>> +	}
+>>   	zidx =3D zone_idx(page_zone(page));
+>>   	if (is_highmem_idx(zidx) || zidx =3D=3D ZONE_MOVABLE)
+>>   		gfp_mask |=3D __GFP_HIGHMEM;
+>>    	new_page =3D __alloc_pages(gfp_mask, order, nid, mtc->nmask);
+>>  -	if (new_page && PageTransHuge(new_page))
+>> +	if (new_page && is_transparent_hugepage(page))
+>>   		prep_transhuge_page(new_page);
+>>    	return new_page;
+
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmGzdtQPHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqK0G8QAI7CY6NLXAee8CtKYL7dPjE77HLRaD9uQJL+
+4dgP4xOrredgYJixZOKx7XzZTHMoonzVTFF7px+w8zRClPASuOg5GGSVzuZ9M3ns
+MLfyqjF4TCpJO/P2L28raGfxzsBcfnMEbEA54G7i6Axysjhy8UU6SLEipPGRc4xz
+jG8P+YM6ZS9guoz6vwLsT3jxZ7JKb0D1B7uWP+PSfR06wMrb8/xXGlhkazCqohLy
+/whb2RAxh8wLnX1Ks4iidKrrSerxBgXvna/MjicD96TV56x5UlwQwTCWfqFzqiXx
+Ynz3l2iM4ogwdC6uGyqhNSEk0PEo371F6ZZi02xg6gRFkpJvFeY6n+/K/1hAv6ch
+DF/E3kbl59akOUd4O4wdJVp6NWfSa19nTKnvMSqtkQiscf+ehdMMD4tn0EeTHPK9
+YJijB4HVMSJdh7KWNwKNvFxORIMLl72IyJ473fHlWl0ibBtfimi4O3dHYmNrgc5Y
+pscA4twxZ/FeIJPQlMfrEGC3hCfDxwYNqSKoI3L1+CZRF390uiK06lZG23gVAKtm
+hf2oX8Wf/j4IbXtZC4J4hnY2y76QLG5dbhUsFM8XsQaKOcuq1UGcfoYXfPZ8AYvP
+eQHluN+7TIsNDRAihyzwiiMtZiaB7s6t+QTh8olEm5ussvAxDiMSun598Po23Ub4
+gHCyxr/d
+=S+9o
+-----END PGP SIGNATURE-----
+
+--=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=--

@@ -2,112 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFF346F8B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C20A46F8BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbhLJBsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 20:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S233747AbhLJBt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 20:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbhLJBsX (ORCPT
+        with ESMTP id S231731AbhLJBtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 20:48:23 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A863C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 17:44:49 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso8156144otf.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 17:44:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+eO70K6UpvUWOOZ26eI9byqpsVA1ZqLATKw9Ubqfa08=;
-        b=vwyKOTWHjgLrit+GLm9IJ66Zn1fCOfM1L+YBmfjIKF1WCwaK3dzS3Olklz2j83VtRo
-         T4jlfQ0ubaLPKehFAlrC5ij37ETxxxsBxSQnoBTcj8pr2AENLzTyfqQps4Lke9spO05l
-         xk4vf9rHG9Ijo3AkNslw7pY7KKVDKQ5kmk/XOcky9KW+dCp1njcukQO+fH1g5yqUNVkm
-         eq2GwY8m1SEXsiDwtX55G9M3F0XmWaufzrVVBA9fIbADOXtbBGVaLVD7JUHJhraR9vAY
-         ClB67OR58t4WytNRPFup+KydBuZ0oEjeceswc8C+g4c3wFfNF5RQoLM+yd69ac1wWbi1
-         nugg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+eO70K6UpvUWOOZ26eI9byqpsVA1ZqLATKw9Ubqfa08=;
-        b=KSh1HIVY41Uf2GRTD0pnc6YLqvidIDD+uAdHeC70OWjiAA6fNZ6HINgl0kbFNAstzc
-         Pqan0cHQ4TbZNvAsgaNLAnHXmwKPBWwPEP+PdxrIywTJ2zivRyt9/AN7zFI5+TMQtcum
-         BDSi4Rt+8dt8XiJCkW6jC+dC6a93F28OG2+E2xsW+WgJeTmVpekXYRnyk1fqtdgeUbRu
-         iLsFxo5qpUuxPCeD17gIe+26SqeHm3yJjJlSAD/Kg7SwygYdej0Mgc5a+RYKmq40WiQb
-         zZfhmpRWzTFsya2qHAXn3xfcOIqFes5FQN2+EwEzuza8tsc3xLbjeTwOwGOp2fCDESwg
-         cuAg==
-X-Gm-Message-State: AOAM531OFI0hBul5Dx8vwt/4BDetYP6aD0Vl7xNudIVcWW42DhmNTj85
-        ILjAG30YWWF8XuNl+koWzgHG2+AuTTvujnpHt64JGw==
-X-Google-Smtp-Source: ABdhPJwGGn/Iig24LM6iz+DDamWnJx6uVjLFPjLZrobVVHzAlLnv6hIu3SxbsvwG+AZSo3Ul47rGkcksDTGd/v0hlu4=
-X-Received: by 2002:a9d:74d0:: with SMTP id a16mr8654576otl.237.1639100688280;
- Thu, 09 Dec 2021 17:44:48 -0800 (PST)
+        Thu, 9 Dec 2021 20:49:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67344C061746;
+        Thu,  9 Dec 2021 17:45:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B2BC9CE2994;
+        Fri, 10 Dec 2021 01:45:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE24C004DD;
+        Fri, 10 Dec 2021 01:45:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639100747;
+        bh=e5iag6oxRvsbajNyLuY5BOF7cshdNJ5/JbbgYMMr8eQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Z5RRVhKtQ85QuE+Rn21KTVMMN85Y4zkILn0Cohmj8XaRMkkZk+EHFlomSMvX1bZfz
+         cf8Q+vf/o6qHL9ofi/yOQ7CgwFGIsxBUinaGRLQFn8ab7FlDsXFHhCjH7TGkvK+Hyd
+         7uDwT2nXy9dLzRJkHImKzWRDGhT6NuyP/u2LdkKqiDB8aucyVXCUzJ91gkcRIMZtk7
+         c0G8pbTR2nH2dEo3jt0MEAqw9Ii5S6IFOdrysTLbD1sPRWTQbY7qtU68o5ZWDVhXWV
+         XOpM5XMIaKoXTzUxsl9LnOHxQYkY025fYLZCg7qzz5KTlvN2Gj/jVrHefa79DpwZR8
+         RPIEykuWlsiPA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-6-f.fainelli@gmail.com>
-In-Reply-To: <20211208003727.3596577-6-f.fainelli@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Dec 2021 02:44:36 +0100
-Message-ID: <CACRpkdYmCT9imMFY_0ZHebAYj40D3m48X+DZnjPUGgAqHEpZqg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/15] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org, Gregory Fong <gregory.0xf0@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <a7b9fbfc-c7e6-983e-1f79-189ce6dc983a@amd.com>
+References: <20211125110447.1188073-1-AjitKumar.Pandey@amd.com> <20211125110447.1188073-2-AjitKumar.Pandey@amd.com> <a7b9fbfc-c7e6-983e-1f79-189ce6dc983a@amd.com>
+Subject: Re: [PATCH v4 1/7] x86: clk: clk-fch: Add support for newer family of AMD's SOC
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Vijendar.Mukunda@amd.com, Alexander.Deucher@amd.com,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        open list <linux-kernel@vger.kernel.org>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        linux-clk@vger.kernel.org, rafael@kernel.org
+Date:   Thu, 09 Dec 2021 17:45:46 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211210014547.CAE24C004DD@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 1:37 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+Quoting Limonciello, Mario (2021-11-30 11:41:30)
+> On 11/25/2021 05:04, Ajit Kumar Pandey wrote:
+> > @@ -26,22 +27,37 @@
+> >   #define ST_CLK_GATE 3
+> >   #define ST_MAX_CLKS 4
+> >  =20
+> > -#define RV_CLK_48M   0
+> > -#define RV_CLK_GATE  1
+> > -#define RV_MAX_CLKS  2
+> > +#define CLK_48M_FIXED        0
+> > +#define CLK_GATE_FIXED       1
+> > +#define CLK_MAX_FIXED        2
+> > +
+> > +/* List of supported CPU ids for fixed clk */
+> > +#define AMD_CPU_ID_RV                        0x15D0
+> >  =20
+> >   static const char * const clk_oscout1_parents[] =3D { "clk48MHz", "cl=
+k25MHz" };
+> >   static struct clk_hw *hws[ST_MAX_CLKS];
+> >  =20
+> > +static const struct pci_device_id soc_pci_ids[] =3D {
+> > +     { PCI_DEVICE(PCI_VENDOR_ID_AMD, AMD_CPU_ID_RV) },
+> > +     { }
+> > +};
+> > +
+>=20
+> Have you considered inverting it?  The number of ASICs using the "older" =
 
-> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
-> validation.
->
-> Acked-by: Gregory Fong <gregory.0xf0@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> design with the mux and multiple clock sources is a fixed value, but=20
+> we'll keep adding new ASICs in the "new" design of just 48Mhz.
+>=20
+> Notably; I see that this series is missing the Yellow Carp ID for=20
+> example.  We'll keep having more designs with the 48Mhz that need to be=20
+> added to this list.
 
-Looks good to me.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
++1 Let's not keep adding to a list.

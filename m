@@ -2,196 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9BC470BD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAE8470BDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344009AbhLJUdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234738AbhLJUdi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:33:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439DFC061746;
-        Fri, 10 Dec 2021 12:30:02 -0800 (PST)
-Date:   Fri, 10 Dec 2021 21:29:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639168200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=wPN+XRGlttXQr842Y5fUhZgvaYSbPwRGAglIQKEtKmY=;
-        b=RBT+FkM9ExGg4qN/hACB/eQnuavpOvYQ/FAhMWC76u5gxHGqYQgTD1VjPTFFRU14jwT2Ur
-        epqHBFSpcry1DgHLFzNqDteJ/o7LzG51FM1vo9KJK7aIxh6WF4NdoFDzQERdvIB7cWdHtM
-        3UrHooSPLdbueCN/Hlzm02lfUzvI8Uq9f7feVGlQIu14hl5BCC1YRlSx4M10FO774aNvlg
-        FdSr3CIojMhw3D1vhwkMQ/WSQfiflzy4PhZIYH31aNfBQdMrcQfVqQXv9Z8kfxZmRekkHu
-        ixRL75Nxllcj9M/LlrRhdNHT9pod2LOjMCond3vqmZJAJXB1r2M3B3WY9golvw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639168200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=wPN+XRGlttXQr842Y5fUhZgvaYSbPwRGAglIQKEtKmY=;
-        b=vjmrJhHXmWpSoVHXzLQ7bfYd0tWOdXeXhWwBObUJEkb8meHYExEhCrVuj9Hk7YIZISbHaX
-        YVBVqJv3hgG8WdCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH net-next] u64_stats: Disable preemption on 32bit UP+SMP
- PREEMPT_RT during updates.
-Message-ID: <YbO4x7vRoDGUWxrv@linutronix.de>
+        id S1344205AbhLJUel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:34:41 -0500
+Received: from mga04.intel.com ([192.55.52.120]:46752 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344184AbhLJUek (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 15:34:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639168265; x=1670704265;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=/TxMjglwcIrbFMUfkDQBobQZc4R/Xxx3e0Ioikv42jk=;
+  b=X1k/GZkKv+ASuekq52W/jGnW/T8/tG9IGSzSHIkAzj8ezVDyOIg6uIGM
+   JieuxCP+S0FNLYjlYlCV/s4KQAAtDqyEceUVY+y6itouisauC5mOlyfLd
+   gXRaMP7NlgxUp6/3YOVGsH57SI3ZgigHzIR+k08Rpn8TlJpOe+k/WOPlT
+   gRdnxYzYw1rD8JfBHCLAcwUr5aiQxamIM/lz8MBnnvPmGsbFkJjK7ky3h
+   Xo/vTagFIsxZLgMEBhi/L9wShd4nk3jM2m0RI0CKAk3nwbWJOkjNvHPsT
+   +Yc1/ikIhJw4/PkRCI9f6SsrL9mI28rA+ueVWOvRh/x56ZcxDxAIB/Ztv
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237173377"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="237173377"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 12:31:03 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="607628736"
+Received: from klarson-mobl.amr.corp.intel.com (HELO [10.251.16.229]) ([10.251.16.229])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 12:31:01 -0800
+Subject: Re: [PATCH v8 27/40] x86/boot: Add Confidential Computing type to
+ setup_data
+To:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-28-brijesh.singh@amd.com>
+ <1fdaca61-884a-ac13-fb33-a47db198f050@intel.com>
+ <ba485a09-9c35-4115-decc-1b9c25519358@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <2a5cfbd0-865c-2a8b-b70b-f8f64aba5575@intel.com>
+Date:   Fri, 10 Dec 2021 12:30:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <ba485a09-9c35-4115-decc-1b9c25519358@amd.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PREEMPT_RT the seqcount_t for synchronisation is required on 32bit
-architectures even on UP because the softirq (and the threaded IRQ handler) can
-be preempted.
+On 12/10/21 12:18 PM, Brijesh Singh wrote:
+> On 12/10/21 1:12 PM, Dave Hansen wrote:
+>> On 12/10/21 7:43 AM, Brijesh Singh wrote:
+>>> +/* AMD SEV Confidential computing blob structure */
+>>> +#define CC_BLOB_SEV_HDR_MAGIC	0x45444d41
+>>> +struct cc_blob_sev_info {
+>>> +	u32 magic;
+>>> +	u16 version;
+>>> +	u16 reserved;
+>>> +	u64 secrets_phys;
+>>> +	u32 secrets_len;
+>>> +	u64 cpuid_phys;
+>>> +	u32 cpuid_len;
+>>> +};
+>> This is an ABI structure rather than some purely kernel construct, right?
+> 
+> This is ABI between the guest BIOS and Guest OS. It is defined in the OVMF.
+> 
+> https://github.com/tianocore/edk2/blob/master/OvmfPkg/Include/Guid/ConfidentialComputingSevSnpBlob.h
+> 
+> SEV-SNP FW spec does not have it documented; it's up to the guest BIOS
+> on how it wants to communicate the Secrets and CPUID page location to
+> guest OS.
 
-With the seqcount_t for synchronisation, a reader with higher priority can
-preempt the writer and then spin endlessly in read_seqcount_begin() while the
-writer can't make progress.
+Well, no matter where it is defined, could we please make it a bit
+easier for folks to find it in the future?
 
-To avoid such a lock up on PREEMPT_RT the writer must disable preemption during
-the update. There is no need to disable interrupts because no writer is using
-this API in hard-IRQ context on PREEMPT_RT.
+>> I searched through all of the specs to which you linked in the cover
+>> letter.  I looked for "blob", "guid", the magic and part of the GUID
+>> itself trying to find where this is defined to see if the struct is correct.
+>>
+>> I couldn't find anything.
+>>
+>> Where is the spec for this blob?  How large is it?  Did you mean to
+>> leave a 4-byte hole after secrets_len and before cpuid_phys?
+> Yes, the length is never going to be > 4GB.
 
-Disable preemption on 32bit-RT within the u64_stats write section.
+I was more concerned that this structure could change sizes if it were
+compiled on 32-bit versus 64-bit code.  For kernel ABIs, we try not to
+do that.
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- include/linux/u64_stats_sync.h |   42 +++++++++++++++++++++++++++--------------
- 1 file changed, 28 insertions(+), 14 deletions(-)
-
---- a/include/linux/u64_stats_sync.h
-+++ b/include/linux/u64_stats_sync.h
-@@ -66,7 +66,7 @@
- #include <linux/seqlock.h>
- 
- struct u64_stats_sync {
--#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
- 	seqcount_t	seq;
- #endif
- };
-@@ -125,7 +125,7 @@ static inline void u64_stats_inc(u64_sta
- }
- #endif
- 
--#if BITS_PER_LONG == 32 && defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
- #define u64_stats_init(syncp)	seqcount_init(&(syncp)->seq)
- #else
- static inline void u64_stats_init(struct u64_stats_sync *syncp)
-@@ -135,15 +135,19 @@ static inline void u64_stats_init(struct
- 
- static inline void u64_stats_update_begin(struct u64_stats_sync *syncp)
- {
--#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_disable();
- 	write_seqcount_begin(&syncp->seq);
- #endif
- }
- 
- static inline void u64_stats_update_end(struct u64_stats_sync *syncp)
- {
--#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
- 	write_seqcount_end(&syncp->seq);
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_enable();
- #endif
- }
- 
-@@ -152,8 +156,11 @@ u64_stats_update_begin_irqsave(struct u6
- {
- 	unsigned long flags = 0;
- 
--#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
--	local_irq_save(flags);
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_disable();
-+	else
-+		local_irq_save(flags);
- 	write_seqcount_begin(&syncp->seq);
- #endif
- 	return flags;
-@@ -163,15 +170,18 @@ static inline void
- u64_stats_update_end_irqrestore(struct u64_stats_sync *syncp,
- 				unsigned long flags)
- {
--#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
- 	write_seqcount_end(&syncp->seq);
--	local_irq_restore(flags);
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_enable();
-+	else
-+		local_irq_restore(flags);
- #endif
- }
- 
- static inline unsigned int __u64_stats_fetch_begin(const struct u64_stats_sync *syncp)
- {
--#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
- 	return read_seqcount_begin(&syncp->seq);
- #else
- 	return 0;
-@@ -180,7 +190,7 @@ static inline unsigned int __u64_stats_f
- 
- static inline unsigned int u64_stats_fetch_begin(const struct u64_stats_sync *syncp)
- {
--#if BITS_PER_LONG==32 && !defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (!defined(CONFIG_SMP) && !defined(CONFIG_PREEMPT_RT))
- 	preempt_disable();
- #endif
- 	return __u64_stats_fetch_begin(syncp);
-@@ -189,7 +199,7 @@ static inline unsigned int u64_stats_fet
- static inline bool __u64_stats_fetch_retry(const struct u64_stats_sync *syncp,
- 					 unsigned int start)
- {
--#if BITS_PER_LONG==32 && defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
- 	return read_seqcount_retry(&syncp->seq, start);
- #else
- 	return false;
-@@ -199,7 +209,7 @@ static inline bool __u64_stats_fetch_ret
- static inline bool u64_stats_fetch_retry(const struct u64_stats_sync *syncp,
- 					 unsigned int start)
- {
--#if BITS_PER_LONG==32 && !defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && (!defined(CONFIG_SMP) && !defined(CONFIG_PREEMPT_RT))
- 	preempt_enable();
- #endif
- 	return __u64_stats_fetch_retry(syncp, start);
-@@ -213,7 +223,9 @@ static inline bool u64_stats_fetch_retry
-  */
- static inline unsigned int u64_stats_fetch_begin_irq(const struct u64_stats_sync *syncp)
- {
--#if BITS_PER_LONG==32 && !defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && defined(CONFIG_PREEMPT_RT)
-+	preempt_disable();
-+#elif BITS_PER_LONG == 32 && !defined(CONFIG_SMP)
- 	local_irq_disable();
- #endif
- 	return __u64_stats_fetch_begin(syncp);
-@@ -222,7 +234,9 @@ static inline unsigned int u64_stats_fet
- static inline bool u64_stats_fetch_retry_irq(const struct u64_stats_sync *syncp,
- 					     unsigned int start)
- {
--#if BITS_PER_LONG==32 && !defined(CONFIG_SMP)
-+#if BITS_PER_LONG == 32 && defined(CONFIG_PREEMPT_RT)
-+	preempt_enable();
-+#elif BITS_PER_LONG == 32 && !defined(CONFIG_SMP)
- 	local_irq_enable();
- #endif
- 	return __u64_stats_fetch_retry(syncp, start);
+Is this somehow OK when talking to firmware?  Or can a 32-bit OS and
+64-bit firmware never interact?

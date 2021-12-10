@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3021470995
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F134F47099A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245697AbhLJTAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:00:49 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:48392 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241978AbhLJTAm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:00:42 -0500
-Date:   Fri, 10 Dec 2021 18:57:04 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639162626;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yoDBKNhuk0czCNC+uZIIKsoOrQ9oupxrKIthRZRU/6Y=;
-        b=ssB8xzD0GBEZZY5Fo6GTyoouLa1jO2NjRt8xZ2KkTXNTATjF4lHRUibSOWDgq7G6utPKs+
-        kZD7hGpbbPzOCGq7J7IAQpMGea8Lj1ecXpNXg4xNklSmbd0hd2JkjKoATFZW0ENlzp3UnF
-        c5C55/20exO/xWnTMBbi5gYCcq/orl7xE5KAZOEGQrb+HloYkwStmfAareVTiSKtEllE2J
-        bsRAiV6xkcDGI6Ew5H6PBH51xZShK9K88kV4v0z3pkaGYmxak98NURhm2rAQ5wU5nGbmT7
-        s5fffZQvUA21RUkw+CITeK+zH45cuGvmDcubjy1CIXfOS7UDVyMM1KsrSkUebQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639162626;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yoDBKNhuk0czCNC+uZIIKsoOrQ9oupxrKIthRZRU/6Y=;
-        b=OYR7Al5i7W4jlDpS60RXim0rU/I9jBiZ64FDEju/jqV94VV6X7YJQ5S6As266c3oKStLn3
-        WR3AhjhR40N5uGCg==
-From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/boot/string: Add missing function prototypes
-Cc:     Kees Cook <keescook@chromium.org>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211119175325.3668419-1-keescook@chromium.org>
-References: <20211119175325.3668419-1-keescook@chromium.org>
+        id S245714AbhLJTDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:03:55 -0500
+Received: from mga11.intel.com ([192.55.52.93]:54482 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237589AbhLJTDy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 14:03:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639162819; x=1670698819;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CnTlDxz1/sH4dBADN+Rg7wetQcW+/sxhCFUXF0b01Ys=;
+  b=nmKZSzUxQqjp0+KZUykTK7ca3Rncddil9+YkzLVuxHSO+td/ZcbzjBuA
+   Jl1WZ8VIFYJi57iTXVPA7kZho7DzUeZimLAAG4rg+zi68cB8i7ppdPDvn
+   oJluWUrMeH2m1xtzExVn59SejpS16+X8Q8MtW0ppULf+WDC3L6x4kpyLC
+   BmFgI1toVZw2LFfALITGUoVqiaoJcaipp0KFQ0YjJVECndwNJUP1aiusz
+   IpC4fGwzJeYraW01MIJVQ1iZh2kJZCCDHh4engV3MyTqUrfBU9VDCH0gU
+   ip5amDkJNxYBm2RCHrU6Lbk4sWHHdalX7/QkXgN7N7r+0U3UM9Dz/BgNc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="235931591"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="235931591"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:00:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="462640231"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 10 Dec 2021 11:00:16 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvl7v-0003Zx-EZ; Fri, 10 Dec 2021 19:00:15 +0000
+Date:   Sat, 11 Dec 2021 02:59:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: [RFC PATCH] ext4: ext4_modify_primary_sb() can be static
+Message-ID: <20211210185943.GA39725@eb09551c7cec>
 MIME-Version: 1.0
-Message-ID: <163916262480.23020.13492329769891837055.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+fs/ext4/ioctl.c:45:5: warning: symbol 'ext4_modify_primary_sb' was not declared. Should it be static?
+fs/ext4/ioctl.c:165:5: warning: symbol 'ext4_modify_superblocks_fn' was not declared. Should it be static?
 
-Commit-ID:     bc7aaf52f963674690510e6c1f3710cd0394b25e
-Gitweb:        https://git.kernel.org/tip/bc7aaf52f963674690510e6c1f3710cd0394b25e
-Author:        Kees Cook <keescook@chromium.org>
-AuthorDate:    Fri, 19 Nov 2021 09:53:25 -08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 10 Dec 2021 19:49:06 +01:00
-
-x86/boot/string: Add missing function prototypes
-
-Silence "warning: no previous prototype for ... [-Wmissing-prototypes]"
-warnings from string.h when building under W=1.
-
- [ bp: Clarify commit message. ]
-
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211119175325.3668419-1-keescook@chromium.org
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- arch/x86/boot/string.h | 3 +++
- 1 file changed, 3 insertions(+)
+ ioctl.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/boot/string.h b/arch/x86/boot/string.h
-index a232da4..e5d2c6b 100644
---- a/arch/x86/boot/string.h
-+++ b/arch/x86/boot/string.h
-@@ -8,8 +8,10 @@
- #undef memcmp
+diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
+index 285862288ecb5..5f5c0e62e4d3d 100644
+--- a/fs/ext4/ioctl.c
++++ b/fs/ext4/ioctl.c
+@@ -42,9 +42,9 @@ static void ext4_sb_setlabel(struct ext4_super_block *es, const void *arg)
+ 	memcpy(es->s_volume_name, (char *)arg, EXT4_LABEL_MAX);
+ }
  
- void *memcpy(void *dst, const void *src, size_t len);
-+void *memmove(void *dst, const void *src, size_t len);
- void *memset(void *dst, int c, size_t len);
- int memcmp(const void *s1, const void *s2, size_t len);
-+int bcmp(const void *s1, const void *s2, size_t len);
- 
- /* Access builtin version by default. */
- #define memcpy(d,s,l) __builtin_memcpy(d,s,l)
-@@ -25,6 +27,7 @@ extern size_t strnlen(const char *s, size_t maxlen);
- extern unsigned int atou(const char *s);
- extern unsigned long long simple_strtoull(const char *cp, char **endp,
- 					  unsigned int base);
-+long simple_strtol(const char *cp, char **endp, unsigned int base);
- 
- int kstrtoull(const char *s, unsigned int base, unsigned long long *res);
- int boot_kstrtoul(const char *s, unsigned int base, unsigned long *res);
+-int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
+-			   ext4_modify_sb_callback func,
+-			   const void *arg)
++static int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
++				  ext4_modify_sb_callback func,
++				  const void *arg)
+ {
+ 	int err = 0;
+ 	struct ext4_sb_info *sbi = EXT4_SB(sb);
+@@ -162,9 +162,9 @@ static int ext4_update_backup_sb(struct super_block *sb, handle_t *handle,
+  * This is safe because e2fsck will re-write them if there is a problem,
+  * and we're very unlikely to ever need more than two backups.
+  */
+-int ext4_modify_superblocks_fn(struct super_block *sb,
+-			       ext4_modify_sb_callback func,
+-			       const void *arg)
++static int ext4_modify_superblocks_fn(struct super_block *sb,
++				      ext4_modify_sb_callback func,
++				      const void *arg)
+ {
+ 	handle_t *handle;
+ 	ext4_group_t ngroups;

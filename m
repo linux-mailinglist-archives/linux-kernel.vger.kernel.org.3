@@ -2,146 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7864701B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2642F4701C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241895AbhLJNjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S242183AbhLJNkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238651AbhLJNjP (ORCPT
+        with ESMTP id S242094AbhLJNjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:39:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3877C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:35:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA8BEB827EC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:35:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8903CC00446;
-        Fri, 10 Dec 2021 13:35:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639143337;
-        bh=VhvC0brUwGyRh/apvs6b8MerVzCShEtLhUr5tRJNjKU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Wq8RJhfOBLkT4Bx+OhWlJjSPzm4tbqIBmsNd90uaASNEtwWt1JnAFQ9wCPRVXVC59
-         dFg08oB5spkx7PgchjUqEJkfvj1v5ZkP5VkGdnWSdY4tTwYwMDjsj3/G4gyq3q3xMj
-         AZItZ4mODwe5+2U5RbYBhEYUx3w2pC4r84OAiGFkNJuLFCZqjdbx4cFDINP7dBGHF0
-         0ifObGEWGpoQyRMaJT9dy6lXIlRvyNvIh+Y6mlcQPoxdOsYvrv8SpIWBr1WS2QJEc9
-         l2jzUwuaoWHY4+0Ir9gdWkE5OBpUMI0Hqpy1F9wpok8ZzXssAVxDJ/KNaVFSRe6Z6m
-         VosL6kTKAg+MQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mvg3j-00BGRz-Ge; Fri, 10 Dec 2021 13:35:35 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        Donghyeok Kim <dthex5d@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Hector Martin <marcan@marcan.st>,
-        Joel Stanley <joel@jms.id.au>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Wudi Wang <wangwudi@hisilicon.com>,
-        Ye Guojin <ye.guojin@zte.com.cn>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: [GIT PULL] irqchip fixes for 5.16, take #2
-Date:   Fri, 10 Dec 2021 13:35:16 +0000
-Message-Id: <20211210133516.664497-1-maz@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 10 Dec 2021 08:39:46 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC33C061B38;
+        Fri, 10 Dec 2021 05:36:11 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id y7so6343660plp.0;
+        Fri, 10 Dec 2021 05:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AMl7iCyjWVC2UjWSkbmB6H7VL1m/OAQQFLOxg2FdNS8=;
+        b=k1KuzysRNSDujbGEXpjxfMV2SJXKNmZnM/BUaNJmCEt7W0BI+0hqymohQq7k583F1y
+         0N+SDsf9BmSv0rQDzv6jEs7DZbfpgw5Ae3hf4uauTDEtV0ELPyACLiPEIBdShlyLqhGy
+         4Hf0fYaXuRWI5X6yag/5yxFxQrh4FCvEkDRR/ozC5aRCE8C3AevFtG+l8HVfsX9qeuui
+         07s2bdom1HJnRJKBPWAp9+mOFb1oVrFSwQGQzzmcGVOcBcoqTBetvwJKYPORWpnJKPlL
+         sgQsW1ioC3qjpM0jyHsD70IVjDEzVMOiZIGCOljDbFyQGLsAhIcqt5sssHfmq4lxNpuU
+         F1xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AMl7iCyjWVC2UjWSkbmB6H7VL1m/OAQQFLOxg2FdNS8=;
+        b=pk0m7Yk0I9tBhzfJaf8awEdYKukQA/8DPSK3Iix2AoqWp2D7fQvQDsX/liyWrhF6SQ
+         2Z+5YZYDbVu1djLQtfBFDFL+rD66NUzH5nS1VqdL+udmOjIIZ7ALswtN/KtR9PccEdpM
+         /awUum42iGVsx9Ou4fq85rH99a+TvZjboew5ibH9hE/s4M+rYulcC99cSUcRGqQ++4Lk
+         z3oIbyQ0F/eG9OIww5duPHs67cHW5ObP5/hWDjFx8waY81cZ+BKKQK6mmPFvzE82VEqh
+         cfmTt2LoetUcTPM/CRzqLfu6+Yab0XQ3/Ymspj3dBuuVYJxkrtUaL/99CciBC6Ju6t2p
+         Wgdg==
+X-Gm-Message-State: AOAM5329UiMADNXs/QbnT+V+nKE48m4NGTG4a40iXgcwhLSQluNi9UD+
+        DsNvxvniWYutdXQCSQdTpeg=
+X-Google-Smtp-Source: ABdhPJwr78E/QebMD/vaAln5DmloXkH5THmZnNpdenNSAyge9wMJaCiBE1GMqMEJE1VWp2tQyxS7Qg==
+X-Received: by 2002:a17:902:8a93:b0:142:30fe:dd20 with SMTP id p19-20020a1709028a9300b0014230fedd20mr75925945plo.29.1639143371005;
+        Fri, 10 Dec 2021 05:36:11 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id t4sm3596068pfj.168.2021.12.10.05.36.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 Dec 2021 05:36:10 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Like Xu <likexu@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v11 09/17] KVM: x86/pmu: Adjust precise_ip to emulate Ice Lake guest PDIR counter
+Date:   Fri, 10 Dec 2021 21:35:17 +0800
+Message-Id: <20211210133525.46465-10-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211210133525.46465-1-likexu@tencent.com>
+References: <20211210133525.46465-1-likexu@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tglx@linutronix.de, billy_tsai@aspeedtech.com, dthex5d@gmail.com, f.fainelli@gmail.com, geert+renesas@glider.be, marcan@marcan.st, joel@jms.id.au, pali@kernel.org, zhangshaokun@hisilicon.com, vladimir.murzin@arm.com, wangwudi@hisilicon.com, ye.guojin@zte.com.cn, linux-kernel@vger.kernel.org, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+From: Like Xu <like.xu@linux.intel.com>
 
-Here's another set of irqchip fixes for 5.16. The main ones are the
-MSI allocation fixes for an old Marvell system, another for the Aspeed
-SCU driver acking interrupts the wrong way, and one for the ARM NVIC
-having the wrong offset of one of the registers.
+From: Like Xu <like.xu@linux.intel.com>
 
-We also gained a fix for the GICv3 ITS INVALL command, as well as some
-more tidying up (bcm7180-l2, Apple AIC).
+The PEBS-PDIR facility on Ice Lake server is supported on IA31_FIXED0 only.
+If the guest configures counter 32 and PEBS is enabled, the PEBS-PDIR
+facility is supposed to be used, in which case KVM adjusts attr.precise_ip
+to 3 and request host perf to assign the exactly requested counter or fail.
 
-Please pull,
+The CPU model check is also required since some platforms may place the
+PEBS-PDIR facility in another counter index.
 
-	M.
+Signed-off-by: Like Xu <like.xu@linux.intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/events/intel/core.c | 2 +-
+ arch/x86/kvm/pmu.c           | 2 ++
+ arch/x86/kvm/pmu.h           | 7 +++++++
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 2860be9f3887..67ff6823dd62 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -4006,8 +4006,8 @@ static struct perf_guest_switch_msr *intel_guest_get_msrs(int *nr, void *data)
+ 
+ 	if (!x86_pmu.pebs_vmx)
+ 		return arr;
+-	pebs_enable = (*nr)++;
+ 
++	pebs_enable = (*nr)++;
+ 	arr[pebs_enable] = (struct perf_guest_switch_msr){
+ 		.msr = MSR_IA32_PEBS_ENABLE,
+ 		.host = cpuc->pebs_enabled & ~cpuc->intel_ctrl_guest_mask,
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 8934261e9563..a780b84b431d 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -147,6 +147,8 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+ 		 * could possibly care here is unsupported and needs changes.
+ 		 */
+ 		attr.precise_ip = 1;
++		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
++			attr.precise_ip = 3;
+ 	}
+ 
+ 	event = perf_event_create_kernel_counter(&attr, -1, current,
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index c91d9725aafd..267be4f5d9d5 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -4,6 +4,8 @@
+ 
+ #include <linux/nospec.h>
+ 
++#include <asm/cpu_device_id.h>
++
+ #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
+ #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
+ #define pmc_to_pmu(pmc)   (&(pmc)->vcpu->arch.pmu)
+@@ -16,6 +18,11 @@
+ #define VMWARE_BACKDOOR_PMC_APPARENT_TIME	0x10002
+ 
+ #define MAX_FIXED_COUNTERS	3
++static const struct x86_cpu_id vmx_icl_pebs_cpu[] = {
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, NULL),
++	{}
++};
+ 
+ struct kvm_event_hw_type_mapping {
+ 	u8 eventsel;
+-- 
+2.33.1
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-5.16-2
-
-for you to fetch changes up to c3fbab7767c53397d7b849799474f5a27cf306e6:
-
-  irqchip/irq-bcm7120-l2: Add put_device() after of_find_device_by_node() (2021-12-10 13:23:13 +0000)
-
-----------------------------------------------------------------
-irqchip fixes for Linux 5.16, take #2
-
-- Fix Armada-370-XP Multi-MSi allocation to be aligned on the allocation
-  size, as required by the PCI spec
-
-- Fix aspeed-scu interrupt acknowledgement by directly writing to the
-  register instead of a read-modify-write sequence
-
-- Use standard bitfirl helpers in the MIPS GIC driver instead of custom
-  constructs
-
-- Fix the NVIC driver IPR register offset
-
-- Correctly drop the reference of the device node in the irq-bcm7120-l2
-  driver
-
-- Fix the GICv3 ITS INVALL command by issueing a following SYNC command
-
-- Add a missing __init attribute to the init function of the Apple AIC
-  driver
-
-----------------------------------------------------------------
-Billy Tsai (1):
-      irqchip/aspeed-scu: Replace update_bits with write_bits.
-
-Donghyeok Kim (1):
-      irqchip/apple-aic: Mark aic_init_smp() as __init
-
-Geert Uytterhoeven (1):
-      irqchip/mips-gic: Use bitfield helpers
-
-Pali Rohár (2):
-      irqchip/armada-370-xp: Fix return value of armada_370_xp_msi_alloc()
-      irqchip/armada-370-xp: Fix support for Multi-MSI interrupts
-
-Vladimir Murzin (1):
-      irqchip: nvic: Fix offset for Interrupt Priority Offsets
-
-Wudi Wang (1):
-      irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
-
-Ye Guojin (1):
-      irqchip/irq-bcm7120-l2: Add put_device() after of_find_device_by_node()
-
- drivers/irqchip/irq-apple-aic.c     |  2 +-
- drivers/irqchip/irq-armada-370-xp.c | 16 ++++++----------
- drivers/irqchip/irq-aspeed-scu-ic.c |  4 ++--
- drivers/irqchip/irq-bcm7120-l2.c    |  1 +
- drivers/irqchip/irq-gic-v3-its.c    |  2 +-
- drivers/irqchip/irq-mips-gic.c      |  4 ++--
- drivers/irqchip/irq-nvic.c          |  2 +-
- 7 files changed, 14 insertions(+), 17 deletions(-)

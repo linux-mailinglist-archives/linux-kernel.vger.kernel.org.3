@@ -2,114 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E80C46FF79
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A22046FF80
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234860AbhLJLMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbhLJLMP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:12:15 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF73C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 03:08:40 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id 8so8189793pfo.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 03:08:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pU4E4zp0dRJ3YBMsEmrIPGmx+mLfVwfK9mROOGJDvWA=;
-        b=Jt4oYTeyxBg8buM1RGHlmib7mvCk5/VN2M7oVQD8Wg5hGlAhm/MF/Byv9RyvKnooj0
-         FT+40KIm8MBfCzOp9P30WYvrZNmjHcHuMWEG0bSg2tGjJ/yUKtfUiTM5Plf0mkTjxoLb
-         tB55L4A2P1L2hI76YJFD5YtyAPB3sxWu/1x/LgGwS/g9nYQiNQuj7kY+DpbaZTkNxL3j
-         8iwhBeTMRaMb6Xrllnof9hvnEVuzW4kJuF1lQDQOxj5yzxapXsoAdcZ4Iyh75Kj0Pkld
-         aDSqP/VxIzs6zmhpXt7+xXLItCvjmDCzOC02aH6xtYn2NaSC7s/G4mE7shwb7V+FmXP9
-         c1lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pU4E4zp0dRJ3YBMsEmrIPGmx+mLfVwfK9mROOGJDvWA=;
-        b=3O6QfmBx4pxA/LtgyghLsHqjsTvkrweoLHV8+6Kqa1dwG6Y1k2o6suoSFoaVuLO2M7
-         SzWvq0ElMhOpafbCuOGmFy9uE9eQ71NNUpHjUSlZmfSpEaV7+PALQYs/J1xHZZIiU5Ah
-         feVfLAFZRyjTDzkkATN6qqpIGmpXeusUzIwR5Ek5jo8B5h6JNEJDTOd6l/GNvxy8DSN2
-         7X5zLemd0NVYIMTscc9K9y8TSI2v5JAzIslCfskc9qkulsiGtaB0d9cOGtN8ZKLFOjsk
-         cnntUNfRalmKAXIV2EbcniU9Pv32N+jUaL2a8gBX9zJbMNY6Ojt51SdNNBl93pWsGCNc
-         oL0g==
-X-Gm-Message-State: AOAM533O2rwmi0jqxzoz1lufqgoSH2ujjZIgmtdn8C3LERVj1TVUpiaV
-        3NavD+vJ2abyAUUrLA0oKus=
-X-Google-Smtp-Source: ABdhPJy4p9Tjog8bYyjnPuaEeGDFRLBgu6djwMci2nDg1J21enoDbHxGk+02svxHPyB6PGP/daqaeg==
-X-Received: by 2002:aa7:93c4:0:b0:49f:a7f5:7f5a with SMTP id y4-20020aa793c4000000b0049fa7f57f5amr17478818pff.8.1639134520207;
-        Fri, 10 Dec 2021 03:08:40 -0800 (PST)
-Received: from odroid ([114.29.23.242])
-        by smtp.gmail.com with ESMTPSA id h13sm2891300pfv.84.2021.12.10.03.08.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 03:08:39 -0800 (PST)
-Date:   Fri, 10 Dec 2021 11:08:35 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Lameter <cl@gentwo.de>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: Do we really need SLOB nowdays?
-Message-ID: <20211210110835.GA632811@odroid>
-References: <20211017042852.GA3050@kvm.asia-northeast3-a.c.our-ratio-313919.internal>
- <20211017133618.GA7989@kvm.asia-northeast3-a.c.our-ratio-313919.internal>
- <20211017135708.GA8442@kvm.asia-northeast3-a.c.our-ratio-313919.internal>
- <YWw1n6y/AGED14HD@casper.infradead.org>
- <CAB=+i9Tor-tmZuB8YjATT_rv68nnF2W_TvMvyGp55AGaSyKynw@mail.gmail.com>
- <alpine.DEB.2.22.394.2110251016260.3145@gentwo.de>
- <20211028100414.GA2928@kvm.asia-northeast3-a.c.our-ratio-313919.internal>
- <YXqSoo+b9RTclW/2@casper.infradead.org>
+        id S237259AbhLJLNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:13:06 -0500
+Received: from mga02.intel.com ([134.134.136.20]:26585 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235145AbhLJLNF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 06:13:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639134570; x=1670670570;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FS4PnEFqktsl74QFl1oKDjvNGiKlWxYmMopnz/XDZoM=;
+  b=N83DaSWX+6TS0WWrbwaCUN73j+kKsVslDx6HIvqE1XDIEIxTMk0XQ/O1
+   EYABI4WpYPfSaVbo3u9CSBU1/tTqI9LeQXuPVpf8WcP+kDjwh9btjf6N9
+   vzNzv3b6ri0WGLHGcnUFxk5qeRa8UzSleUUgdhOnpv6GS4XWV9Gl7b7h7
+   sIAyhdsCNvfBObRb4yDuK4R9gQKeCNHpJVlzvuny0S6iNftC1ekUf7Kg8
+   KtkyBL7MmjtKoczNMumQqd+m+CsK7ag0dLgI7s9yu7fYoHLx8ztWc8INm
+   MENgWp38e2Qqy7bRB4/jdN5tDagld8HUqyAvZ/0Lkyuba3sOVLy/GKN7M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225600958"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="225600958"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 03:09:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="602082497"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Dec 2021 03:09:24 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BAB9MOF018070;
+        Fri, 10 Dec 2021 11:09:22 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "jbrouer@redhat.com" <jbrouer@redhat.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "hawk@kernel.org" <hawk@kernel.org>, "kafai@fb.com" <kafai@fb.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "brouer@redhat.com" <brouer@redhat.com>, "yhs@fb.com" <yhs@fb.com>,
+        Jith Joseph <jithu.joseph@intel.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "bjorn@kernel.org" <bjorn@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [PATCH v4 net-next 2/9] i40e: respect metadata on XSK Rx to skb
+Date:   Fri, 10 Dec 2021 12:08:48 +0100
+Message-Id: <20211210110848.708046-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <11db2426b85eb8cedd5e2d66d6399143cb382b49.camel@intel.com>
+References: <20211208140702.642741-1-alexandr.lobakin@intel.com> <20211208140702.642741-3-alexandr.lobakin@intel.com> <2811b35a-9179-88ce-d87a-e1f824851494@redhat.com> <20211209173816.5157-1-alexandr.lobakin@intel.com> <11db2426b85eb8cedd5e2d66d6399143cb382b49.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXqSoo+b9RTclW/2@casper.infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 01:08:02PM +0100, Matthew Wilcox wrote:
-> On Thu, Oct 28, 2021 at 10:04:14AM +0000, Hyeonggon Yoo wrote:
-> > On Mon, Oct 25, 2021 at 10:17:08AM +0200, Christoph Lameter wrote:
-> > > On Mon, 18 Oct 2021, Hyeonggon Yoo wrote:
-> > > 
-> > > > > Better for what use case?  SLOB is for machines with 1-16MB of RAM.
-> > > > >
-> > > >
-> > > > 1~16M is smaller than I thought. Hmm... I'm going to see how it works on
-> > > > tiny configuration. Thank you Matthew!
-> > > 
-> > > Is there any reference where we can see such a configuration? Sure it does
-> > > not work with SLUB too?
+From: Tony Nguyen <anthony.l.nguyen@intel.com>
+Date: Thu, 9 Dec 2021 18:50:07 +0000
+
+> On Thu, 2021-12-09 at 18:38 +0100, Alexander Lobakin wrote:
+> > From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+> > Date: Thu, 9 Dec 2021 09:27:37 +0100
 > > 
-> > I thought why Matthew said "SLOB is for machines with 1-16MB of RAM"
-> > is because if memory is so low, then it is sensitive to memory usage.
+> > > On 08/12/2021 15.06, Alexander Lobakin wrote:
+> > > > For now, if the XDP prog returns XDP_PASS on XSK, the metadata
+> > > > will
+> > > > be lost as it doesn't get copied to the skb.
+> > > 
+> > > I have an urge to add a newline here, when reading this, as IMHO it
+> > > is a 
+> > > paragraph with the problem statement.
+> > > 
+> > > > Copy it along with the frame headers. Account its size on skb
+> > > > allocation, and when copying just treat it as a part of the frame
+> > > > and do a pull after to "move" it to the "reserved" zone.
+> > > 
+> > > Also newline here, as next paragraph are some extra details, you
+> > > felt a 
+> > > need to explain to the reader.
+> > > 
+> > > > net_prefetch() xdp->data_meta and align the copy size to speed-up
+> > > > memcpy() a little and better match i40e_costruct_skb().
+> > >                                       ^^^^^^xx^^^^^^^^^
+> > > 
+> > > commit messages.
 > > 
-> > (But I still have doubt if we can run linux on machines like that.)
+> > Oh gosh, I thought I don't have attention deficit. Thanks, maybe
+> > Tony will fix it for me or I could send a follow-up (or resend if
+> > needed, I saw those were already applied to dev-queue).
 > 
-> I sent you a series of articles about making Linux run in 1MB.
+> If there's no need for follow-ups beyond this change, I'll fix it up.
 
-After some time playing with the size of kernel,
-I was able to run linux in 6.6MiB of RAM. and the SLOB used
-around 300KiB of memory.
+The rest is fine, thank you!
 
-Running linux in 1MiB seems almost impossible without introducing
-XIP (eXecute In Place) which executes binary directly from ROM or Flash.
-(and that's actually not reducing kernel size, it's reducing RAM required to boot)
+> Thanks,
+> Tony
+> 
+> > > --Jesper
+> > 
+> > Al
 
-SLOB seems to be useful when the machine has really really tiny memory.
-because the slab allocator can use most of memory when the memory is so
-small. But if the machine has some megabytes of RAM,
-I think SLUB is right allocator to choose.
-
-Thank you for sending that link.
-it was so nice article.
+Al

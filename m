@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B384709CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC59D4709CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238583AbhLJTKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbhLJTJ7 (ORCPT
+        id S242169AbhLJTKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:10:12 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57576 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229761AbhLJTKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:09:59 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFFDC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:06:24 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id r5so8828020pgi.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:06:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZMjqd61KOFOzqKxqVCYZcFhh+AEgXiRDekZvsMc4HD8=;
-        b=DwN56LnVniDb8xU8V/fE3ACrHDyNi2nAljz8rrjh3ZTuYCJ76R4ce6xGBZhP2/BGpU
-         GQIChpRFr1q4uJCt9S7r6MBp0aKAe8EAc2IyTwidMywvNfL3PlbuAcVmRBRu9pFfhnmG
-         wCKOn6YRkQ4D2kkzeWEmbvKi5wWHFZd71nPUQ3J8uZQFA5ayA31yhuMsD5UKguvo7xNY
-         wUJv0C4QGSndo68WjCp8YpsR2WC29bdmqNinBsftQcbwi6qiMpTClV6Ng1E9w1dvemPv
-         CGui79whDn3gEAY32t/qK7qQAWZj1c/YGABcHRHINzfqdYERruRE/5oQ1H/LTmGGmf+w
-         m30Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ZMjqd61KOFOzqKxqVCYZcFhh+AEgXiRDekZvsMc4HD8=;
-        b=wo9IBQSbvXsL+TX3Ax2P+3mdIuDBsQvd2yWlO33i+kX9eaDALre3CimTIcBHgCqQ+y
-         qwhAix3mMroTOTx+MARVaWnuh9XlHtdVf6da+ZAT+eizpy46pQ1Zj/ES6ywrhPW/iUXd
-         37DloZferHqEsnyi2tvXGG4CgUg+lnn8Z9Rr3woXNWQ+kTDHidJtGHae3u1O8P/smKMr
-         EkHbSL4tg7GOPw1KdaUEElvvXhPbkMknECeHSLi5L9wX9UfTq+xewWUwV8tnUZ7ItEIh
-         LUiArSJ5ZoZN55UMe+lX/leymVK/h4EOJl7HWEKXvG1ErWihnCGQkOhjJr2O6nomgBbW
-         fgTg==
-X-Gm-Message-State: AOAM532Z6f43m/+iPajpS6/MpuGr6oLvaJYlD/fcnpa9cz15VnpnrKfY
-        7l4sAFvfayPqhWG7DKUQ9+4=
-X-Google-Smtp-Source: ABdhPJxURYPQPQ2u2pwXbUdLksq/11ey5rTDWLQOaxeANw+hU9ZwCcm0CNnlnuqWmk93ZD2INeB31g==
-X-Received: by 2002:a62:1813:0:b0:494:5d7b:864d with SMTP id 19-20020a621813000000b004945d7b864dmr19564332pfy.23.1639163183487;
-        Fri, 10 Dec 2021 11:06:23 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id y31sm4240198pfa.92.2021.12.10.11.06.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 11:06:22 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 10 Dec 2021 09:06:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linuxfoundation.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Michal Koutny <mkoutny@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Newsome <jnewsome@torproject.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Jann Horn <jannh@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Security Officers <security@kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH 2/6] cgroup: Allocate cgroup_file_ctx for
- kernfs_open_file->priv
-Message-ID: <YbOlLawFDdS0hkpd@slm.duckdns.org>
-References: <20211209214707.805617-1-tj@kernel.org>
- <20211209214707.805617-3-tj@kernel.org>
- <CAHk-=wgiYkECT=hZRKj8ZwfBPw2Uz=gpOGBGd4ny0KYhSsjC0w@mail.gmail.com>
- <YbOeiu5+DZQsJbm8@slm.duckdns.org>
- <CAHk-=wgVUBc+9UVYp=uhyqTTw-QTHNrJow1Av+1jB4_Va93m1A@mail.gmail.com>
+        Fri, 10 Dec 2021 14:10:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51551CE2D10;
+        Fri, 10 Dec 2021 19:06:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F23C00446;
+        Fri, 10 Dec 2021 19:06:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639163192;
+        bh=a/eOKH9jFHnWsEPS7CpsX8vzNK7X917Ezfg3GYiV0zY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=as5br9jZ1hNRbJKnPfhz5/64PfYz3Pevbna7XhaZxnMZT1bKKSDgkrF58xqS75otx
+         hBekW7imCkqTpMPlU3frScUWscSyPaiPFT1VmuUusv3IPfvuFYnbVZSTwkVS88Re4j
+         rFPvqxPiWw4xVieHBDgptNtoB/7xW+Dzu7K+REAApLeuf/SajD2Iu3ivIInJcBEspu
+         L/vk8KS3tka7Xll6EAQc9AShPtA+qRPvUg3vsXJ/gl2goxh6yC+8pPrQp94Cvgo4r/
+         Gh6pgd+IF//r1znw/oDUpnlRnp6qlh1vAo7MOCatCXWRbCPunM7dvaf2naCANtBIw4
+         DJwVbpgzypT8g==
+Date:   Fri, 10 Dec 2021 19:06:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        robh+dt@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [RESEND, v9 06/10] ASoC: qcom: Add regmap config support for
+ codec dma driver
+Message-ID: <YbOlMdiRc0Xirajz@sirena.org.uk>
+References: <1638800567-27222-1-git-send-email-quic_srivasam@quicinc.com>
+ <1638800567-27222-7-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WSzyGP1U7OF5nLGs"
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgVUBc+9UVYp=uhyqTTw-QTHNrJow1Av+1jB4_Va93m1A@mail.gmail.com>
+In-Reply-To: <1638800567-27222-7-git-send-email-quic_srivasam@quicinc.com>
+X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 10:45:33AM -0800, Linus Torvalds wrote:
-> But if it then ever becomes a possible source of confusion and it's
-> not obvious from the context who uses what, I'd rather use the extra 8
-> bytes in the allocation.
-> 
-> Ok?
 
-Just so that I'm understanding you correctly. The following is what I was
-suggesting. ie. just dropping the union and making the iterator embedded:
+--WSzyGP1U7OF5nLGs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  struct cgroup_file_ctx {
-          struct cgroup_namespace         ns;
+On Mon, Dec 06, 2021 at 07:52:43PM +0530, Srinivasa Rao Mandadapu wrote:
 
-          struct {
-                  struct css_task_iter    it;
-          } procs;
+> +static bool __lpass_rxtx_regmap_accessible(struct device *dev, unsigned int reg, bool rw)
+> +{
+> +	struct lpass_data *drvdata = dev_get_drvdata(dev);
+> +	struct lpass_variant *v = drvdata->variant;
+> +	int i;
+> +
+> +	for (i = 0; i < v->rxtx_irq_ports; ++i) {
 
-          struct {
-                  void                    *trigger;
-          } psi;
-  };
+> +	for (i = 0; i < v->rxtx_rdma_channels; ++i) {
 
-and I was wondering whether you wanted something like the following:
+This is looking relatively expensive to run with all these loops -
+there's a reason these are normally written as switch statements, the
+theory being that the compiler will generate something at least as good
+as any data structure we're likely to code.  It's not a *problem*
+exactly, but if you're doing anything that ends up querying properties a
+lot it might be an issue.
 
-  struct cgroup_file_ctx {
-          struct cgroup_namespace         ns;
-          struct css_task_iter            it;
-          void                            *trigger;
-  };
+--WSzyGP1U7OF5nLGs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-tejun
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzpTAACgkQJNaLcl1U
+h9BOWAf+MVXmAYTXdCSSLIWm9urbvgPo+9iMFnLJXtBKu9dWuX1r3zSzZP9eO4dJ
+MGGQvq0wylkBP+CxyNf8IrJX0YN/KUnh/C3pE21qQj6VQkBjUlIs6MWkGqXsob7r
+zICYs1btoqDSkkOsnlvpjoWLROOX6egusSYw7p02SaA2hKfSQfoCcGLP5GSZiiF6
+2TwHuFDB2Iu9qT+hf7BBHNAHDFU9BJJZB5EJwXdjC538fI/QlCKk4ARDllzVMk8H
+oy3Enodc2t+Xgg3E7r4Ea/7BE8sSex8zFHaoyNMlYpYelFzBFIPuiAw1SH5sN3I1
+Sh9cfGTfvBJ1VVRedUc0Ly4ssXuj0g==
+=inw7
+-----END PGP SIGNATURE-----
+
+--WSzyGP1U7OF5nLGs--

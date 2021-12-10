@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4AF470B04
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BCB470B0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242964AbhLJT5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:57:41 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:48746 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242861AbhLJT5j (ORCPT
+        id S1343773AbhLJT5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242977AbhLJT5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:57:39 -0500
-Date:   Fri, 10 Dec 2021 19:54:02 -0000
+        Fri, 10 Dec 2021 14:57:41 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A3EC061746;
+        Fri, 10 Dec 2021 11:54:06 -0800 (PST)
+Date:   Fri, 10 Dec 2021 19:54:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639166043;
+        s=2020; t=1639166044;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f54kEYtdTnf14yhEifHqMgC0mj0OkMFAF1RXhsPUl6M=;
-        b=iKb8kHL43mvW6E6h00tzvFq4zg1YhFPCVX1b9Xfwg26j8fkZN7KMJ5cX0kvANdBJGhXtY0
-        zqeQa0p987fv6cYuVa47pmdtpAMD+HXPOy+AC+VfKCi5FVjHMDHySYkoB3J6Fdx6OVNsIB
-        jjHWQjbj27Uauw8nf+wg7p8LOxqsaeMjlgJFdBrjhryLrhKMHD2o9+GXFJr9s12sKK8C6x
-        xi0guHuZEfixqimqBExE6pquoqwCIqIr32bBjzV9EWmSCyUa6f8jmhAYgVSmEniVpymk9a
-        Iid7TUQcFtPNntvO0UL7jGiAH39obpi51TfbvPl3T8hwb2ppSFWFfTwe5+Ks1Q==
+        bh=4gQ4m556HjoKHwLhkdHkFUABIDnZBvZUuEzZhIcOsjM=;
+        b=JTpxlCso00HWoKYwAQnh4coLDpYcLvqeJeMNy1fOhiEDwBetx1tHHS3w+Qb5U5OMnQgvQp
+        jCgSf2gsgqQodmSDvHMT0QW4470ywMDskJmItxXxyZJby/V8hOTJnsGFSx80X0768dpazq
+        29AkWzfNBXuJqjGrSUrmXqd/ILU15F1MCu4k9ewTUhsUzUlMbVtFS7lv9bnT1OtUwju9xO
+        KRhVYmaSVO4EtLBfl9S5CVblvD36H0jCGwpQI683XDJjBeM2mpQUlOuKVv9HrP8tqLDxvW
+        yDmtXVt+tpeql4041ssUp/desKJwFP75MaTyF1Ka7b06tc4E7+al/oAWcp0a+A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639166043;
+        s=2020e; t=1639166044;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f54kEYtdTnf14yhEifHqMgC0mj0OkMFAF1RXhsPUl6M=;
-        b=M98J7wgXneAy2r94owon1tdFOZEL/CKWgH1HWu7PNSSOma6CspNU1a68BArhyLwqXkoWpz
-        QJYSIRXSoM18AyDA==
+        bh=4gQ4m556HjoKHwLhkdHkFUABIDnZBvZUuEzZhIcOsjM=;
+        b=vLbaNji2p3UFwbGuH+5gxAkWRe49SLOrlaPr+rdXSXcHuvWE6bThZjBQGMuikD5yKtnV5U
+        dT+wIR8nQPsXvrAw==
 From:   "tip-bot2 for Nitesh Narayan Lal" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] net/mlx5: Use irq_set_affinity_and_hint()
+Subject: [tip: irq/core] scsi: lpfc: Use irq_set_affinity()
 Cc:     Nitesh Narayan Lal <nitesh@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Leon Romanovsky <leonro@nvidia.com>, x86@kernel.org,
+        James Smart <jsmart2021@gmail.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20210903152430.244937-14-nitesh@redhat.com>
-References: <20210903152430.244937-14-nitesh@redhat.com>
+In-Reply-To: <20210903152430.244937-12-nitesh@redhat.com>
+References: <20210903152430.244937-12-nitesh@redhat.com>
 MIME-Version: 1.0
-Message-ID: <163916604220.23020.2152112272681001749.tip-bot2@tip-bot2>
+Message-ID: <163916604383.23020.16524606796134796447.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,70 +62,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/core branch of tip:
 
-Commit-ID:     7451e9ea8e2055af39afe7ff39a5f68d8ec6b98d
-Gitweb:        https://git.kernel.org/tip/7451e9ea8e2055af39afe7ff39a5f68d8ec6b98d
+Commit-ID:     ce5a58a96ccc241c6e5cbb3360494ddfaf118afe
+Gitweb:        https://git.kernel.org/tip/ce5a58a96ccc241c6e5cbb3360494ddfaf118afe
 Author:        Nitesh Narayan Lal <nitesh@redhat.com>
-AuthorDate:    Fri, 03 Sep 2021 11:24:29 -04:00
+AuthorDate:    Fri, 03 Sep 2021 11:24:27 -04:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Fri, 10 Dec 2021 20:47:39 +01:00
 
-net/mlx5: Use irq_set_affinity_and_hint()
+scsi: lpfc: Use irq_set_affinity()
 
-The driver uses irq_set_affinity_hint() to update the affinity_hint mask
-that is consumed by the userspace to distribute the interrupts and to apply
-the provided mask as the affinity for the mlx5 interrupts. However,
-irq_set_affinity_hint() applying the provided cpumask as an affinity for
-the interrupt is an undocumented side effect.
+The driver uses irq_set_affinity_hint to set the affinity for the lpfc
+interrupts to a mask corresponding to the local NUMA node to avoid
+performance overhead on AMD architectures.
 
-To remove this side effect irq_set_affinity_hint() has been marked
-as deprecated and new interfaces have been introduced. Hence, replace the
-irq_set_affinity_hint() with the new interface irq_set_affinity_and_hint()
-where the provided mask needs to be applied as the affinity and
-affinity_hint pointer needs to be set and replace with
-irq_update_affinity_hint() where only affinity_hint needs to be updated.
+However, irq_set_affinity_hint() setting the affinity is an undocumented
+side effect that this function also sets the affinity under the hood.
+To remove this side effect irq_set_affinity_hint() has been marked as
+deprecated and new interfaces have been introduced.
+
+Also, as per the commit dcaa21367938 ("scsi: lpfc: Change default IRQ model
+on AMD architectures"):
+"On AMD architecture, revert the irq allocation to the normal style
+(non-managed) and then use irq_set_affinity_hint() to set the cpu affinity
+and disable user-space rebalancing."
+we don't really need to set the affinity_hint as user-space rebalancing for
+the lpfc interrupts is not desired.
+
+Hence, replace the irq_set_affinity_hint() with irq_set_affinity() which
+only applies the affinity for the interrupts.
 
 Signed-off-by: Nitesh Narayan Lal <nitesh@redhat.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Link: https://lore.kernel.org/r/20210903152430.244937-14-nitesh@redhat.com
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+Link: https://lore.kernel.org/r/20210903152430.244937-12-nitesh@redhat.com
 
 ---
- drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-index 830444f..54fb67c 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-@@ -143,11 +143,11 @@ static void irq_release(struct mlx5_irq *irq)
- 	struct mlx5_irq_pool *pool = irq->pool;
- 
- 	xa_erase(&pool->irqs, irq->index);
--	/* free_irq requires that affinity and rmap will be cleared
-+	/* free_irq requires that affinity_hint and rmap will be cleared
- 	 * before calling it. This is why there is asymmetry with set_rmap
- 	 * which should be called after alloc_irq but before request_irq.
- 	 */
--	irq_set_affinity_hint(irq->irqn, NULL);
-+	irq_update_affinity_hint(irq->irqn, NULL);
- 	free_cpumask_var(irq->mask);
- 	free_irq(irq->irqn, &irq->nh);
- 	kfree(irq);
-@@ -316,7 +316,7 @@ static struct mlx5_irq *irq_pool_create_irq(struct mlx5_irq_pool *pool,
- 	if (IS_ERR(irq))
- 		return irq;
- 	cpumask_copy(irq->mask, affinity);
--	irq_set_affinity_hint(irq->irqn, irq->mask);
-+	irq_set_affinity_and_hint(irq->irqn, irq->mask);
- 	return irq;
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index ba17a8f..9457552 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -12709,7 +12709,7 @@ lpfc_irq_set_aff(struct lpfc_hba_eq_hdl *eqhdl, unsigned int cpu)
+ 	cpumask_clear(&eqhdl->aff_mask);
+ 	cpumask_set_cpu(cpu, &eqhdl->aff_mask);
+ 	irq_set_status_flags(eqhdl->irq, IRQ_NO_BALANCING);
+-	irq_set_affinity_hint(eqhdl->irq, &eqhdl->aff_mask);
++	irq_set_affinity(eqhdl->irq, &eqhdl->aff_mask);
  }
  
-@@ -399,7 +399,7 @@ irq_pool_request_vector(struct mlx5_irq_pool *pool, int vecidx,
- 	if (!irq_pool_is_sf_pool(pool) && !pool->xa_num_irqs.max &&
- 	    cpumask_empty(irq->mask))
- 		cpumask_set_cpu(0, irq->mask);
--	irq_set_affinity_hint(irq->irqn, irq->mask);
-+	irq_set_affinity_and_hint(irq->irqn, irq->mask);
- unlock:
- 	mutex_unlock(&pool->lock);
- 	return irq;
+ /**
+@@ -12998,7 +12998,6 @@ cfg_fail_out:
+ 	for (--index; index >= 0; index--) {
+ 		eqhdl = lpfc_get_eq_hdl(index);
+ 		lpfc_irq_clear_aff(eqhdl);
+-		irq_set_affinity_hint(eqhdl->irq, NULL);
+ 		free_irq(eqhdl->irq, eqhdl);
+ 	}
+ 
+@@ -13159,7 +13158,6 @@ lpfc_sli4_disable_intr(struct lpfc_hba *phba)
+ 		for (index = 0; index < phba->cfg_irq_chann; index++) {
+ 			eqhdl = lpfc_get_eq_hdl(index);
+ 			lpfc_irq_clear_aff(eqhdl);
+-			irq_set_affinity_hint(eqhdl->irq, NULL);
+ 			free_irq(eqhdl->irq, eqhdl);
+ 		}
+ 	} else {

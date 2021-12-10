@@ -2,61 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D12470BE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38ED3470C04
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242933AbhLJUji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbhLJUjh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:39:37 -0500
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEE6C061746;
-        Fri, 10 Dec 2021 12:36:02 -0800 (PST)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 2D75B6EE1; Fri, 10 Dec 2021 15:36:01 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 2D75B6EE1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1639168561;
-        bh=fYeuxNnieJ4+vcxDmMxR0VJ1U8wBfbSXdFRN8yDizY4=;
-        h=Date:To:Cc:Subject:From:From;
-        b=aYdiSIogZAlCnQPnhU2fPrLHHfnAjM/f2B4p+NmhjhwGnUjUKhe6Y/sfbDEU/yUAS
-         DMQFi2bWoeYaTyZk/bJ0385nHD8fhYPzdQ2yTNJlsUfwG4PFH0UqImE6aRTPaO7vB6
-         9jiws6S1Pj/nhvmnH3Q4Cl7WBmziQ7FYCfBWsJDI=
-Date:   Fri, 10 Dec 2021 15:36:01 -0500
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [GIT PULL] more nfsd bugfixes for 5.16
-Message-ID: <20211210203601.GA4596@fieldses.org>
+        id S234680AbhLJUtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:49:45 -0500
+Received: from ns.iliad.fr ([212.27.33.1]:48300 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231685AbhLJUtn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 15:49:43 -0500
+X-Greylist: delayed 504 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Dec 2021 15:49:43 EST
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 8D87E200D4;
+        Fri, 10 Dec 2021 21:37:42 +0100 (CET)
+Received: from sakura (freebox.vlq16.iliad.fr [213.36.7.13])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ns.iliad.fr (Postfix) with ESMTPS id 7F7F91FF54;
+        Fri, 10 Dec 2021 21:37:42 +0100 (CET)
+Date:   Fri, 10 Dec 2021 21:37:41 +0100
+From:   Maxime Bizon <mbizon@freebox.fr>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: Add set_memory_{p/np}() and remove
+ set_memory_attr()
+Message-ID: <20211210203741.GA9550@sakura>
+References: <715cc0c2f801ef3b39b91233be44d328a91c30bc.1639123757.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <715cc0c2f801ef3b39b91233be44d328a91c30bc.1639123757.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Fri Dec 10 21:37:42 2021 +0100 (CET)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull nfsd bugfixes for 5.16 from:
 
-  git://linux-nfs.org/~bfields/linux.git tags/nfsd-5.16-2
+On Friday 10 Dec 2021 à 08:09:42 (+0000), Christophe Leroy wrote:
 
-Fix a race on startup and another in the delegation code.  The latter
-has been around for years, but I suspect recent changes may have
-widened the race window a little, so I'd like to go ahead and get it in.
+Tested-by: Maxime Bizon <mbizon@freebox.fr>
 
---b.
-
-Alexander Sverdlin (1):
-      nfsd: Fix nsfd startup race (again)
-
-J. Bruce Fields (1):
-      nfsd: fix use-after-free due to delegation race
-
- fs/nfsd/nfs4recover.c |  1 +
- fs/nfsd/nfs4state.c   |  9 +++++++--
- fs/nfsd/nfsctl.c      | 14 +++++++-------
- 3 files changed, 15 insertions(+), 9 deletions(-)
+-- 
+Maxime

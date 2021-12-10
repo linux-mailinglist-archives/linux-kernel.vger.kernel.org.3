@@ -2,155 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 256F047031E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D66C470320
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242369AbhLJOwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242332AbhLJOwe (ORCPT
+        id S242379AbhLJOyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:54:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45726 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242332AbhLJOyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:52:34 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA24C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:48:58 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id t18so15287634wrg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:48:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XSGjwIt9RpPIjkr6liBZIwGzdNBMMcqErsUs7NKqs3g=;
-        b=eFa+/5A+zfMKqzOSVMBePCnsVCvDiruKqK0HXpczVW9xdUh2bI5XBpZykeV00eoyn0
-         Ps0U7SIG3EJbM2kI0skWEcTnH6lkua7grTJTjDqX4T8jIuSkNqfqNddprnKjZOHHCBOr
-         lAxx8avwGZkdKqJIhrNTAB+UHYQ2NTf1l05If80e5qPJhuhh8x/UU89YQ2EJiE8cor6K
-         O1TOpAxYAh0Omdk6QzNXX51mJBiVH5OGAK5U+h85oIkduoyeNxLMk7CK7/LlxQAb6DOz
-         9IZqTT8YSfKXYrk4aMHLmYOXa1wCvpRvUVnfICn8/QIi6iSE6JjmwvPvYentz7mJzyTz
-         084g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XSGjwIt9RpPIjkr6liBZIwGzdNBMMcqErsUs7NKqs3g=;
-        b=NG37Bi404MJU1UW8Aex4fR3YFSCeRqkfbCb5n+mL0L6A3foqCFADQPW8f8OG9cdYRH
-         vvYU6ZLttWQOqIEP6yV3Cv1I04LmzVgbfTLvTYySKklAGIND7F4rnuJuOgKIFTlhNvBj
-         zrRm/1wufJHIDlzUcnmnoGgrsIWd/4ZehdmI8qCyUJaMk6WcH9wEWVVw0Spt59WEb09Z
-         52m0woGAohGzcncZZ3q22IPchriwctKHYVLQ39lY+w9t+KaHnRMUc1zdP6/XzNsdh+qQ
-         PIfjLPPdVbRTMvurylZhCzuMlpsS+xtZp+FLkfxK7yxUQHxS1utI8Y5xkrprF9oPHtcx
-         t2vQ==
-X-Gm-Message-State: AOAM530hynT5+Le1qxQS3MkScT3dtSwLtEJ8JPrdDBIlKV5Ak/pTDa83
-        3NUappg9BQODXkKgP0feD0NjsA==
-X-Google-Smtp-Source: ABdhPJwvEUvtytgXDIUTqN1i7hPX5BX/gnJ9OxL+n5KP+mAtXq7F0bdSrTa2ut2djOds2sajpum1GA==
-X-Received: by 2002:adf:a412:: with SMTP id d18mr14714578wra.529.1639147736805;
-        Fri, 10 Dec 2021 06:48:56 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:210:76c1:fb36:1e22:8677])
-        by smtp.gmail.com with ESMTPSA id c4sm2669899wrr.37.2021.12.10.06.48.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 06:48:56 -0800 (PST)
-Date:   Fri, 10 Dec 2021 14:48:53 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 15/15] KVM: arm64: pkvm: Unshare guest structs during
- teardown
-Message-ID: <YbNo1SBn7ZNf89qL@google.com>
-References: <20211201170411.1561936-1-qperret@google.com>
- <20211201170411.1561936-16-qperret@google.com>
- <20211209112233.GD1912@willie-the-truck>
+        Fri, 10 Dec 2021 09:54:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639147840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Z35jirA25UiblnwV/sjy+/qYeLAmZOVR3MPTVKs+MzA=;
+        b=a0jSZTUstMmnJ7aQoyIOMZyRhpzVdT+Ajy7Qy7k13wjvw7VhO68bx5So64gq6eeh+n5tvM
+        1fiYE0tc65CilkvTm0H5D+546tjLKvBKeqXg0sFVkdEo3WafbLr31cGteGeCARVjbL4eF9
+        EBEusUj8Dr0lTsnAxuQvdxAAwprD1B0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-301-dZ7NQYCuOgayRqfGaRfxdw-1; Fri, 10 Dec 2021 09:50:39 -0500
+X-MC-Unique: dZ7NQYCuOgayRqfGaRfxdw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 27665101F02A;
+        Fri, 10 Dec 2021 14:50:38 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D88F56D034;
+        Fri, 10 Dec 2021 14:50:37 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 5.16-rc5
+Date:   Fri, 10 Dec 2021 09:50:37 -0500
+Message-Id: <20211210145037.28568-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209112233.GD1912@willie-the-truck>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 09 Dec 2021 at 11:22:33 (+0000), Will Deacon wrote:
-> On Wed, Dec 01, 2021 at 05:04:09PM +0000, Quentin Perret wrote:
-> > Make use of the newly introduced unshare hypercall during guest teardown
-> > to unmap guest-related data structures from the hyp stage-1.
-> > 
-> > Signed-off-by: Quentin Perret <qperret@google.com>
-> > ---
-> >  arch/arm64/include/asm/kvm_host.h |  2 ++
-> >  arch/arm64/include/asm/kvm_mmu.h  |  1 +
-> >  arch/arm64/kvm/arm.c              |  2 ++
-> >  arch/arm64/kvm/fpsimd.c           | 34 ++++++++++++++++++++++---
-> >  arch/arm64/kvm/mmu.c              | 42 +++++++++++++++++++++++++++++++
-> >  arch/arm64/kvm/reset.c            |  8 +++++-
-> >  6 files changed, 85 insertions(+), 4 deletions(-)
-> 
-> [...]
-> 
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index d72566896755..8e506ba8988e 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
-> > @@ -344,6 +344,32 @@ static int share_pfn_hyp(u64 pfn)
-> >  	return ret;
-> >  }
-> >  
-> > +static int unshare_pfn_hyp(u64 pfn)
-> > +{
-> > +	struct rb_node **node, *parent;
-> > +	struct hyp_shared_pfn *this;
-> > +	int ret = 0;
-> > +
-> > +	mutex_lock(&hyp_shared_pfns_lock);
-> > +	this = find_shared_pfn(pfn, &node, &parent);
-> > +	if (WARN_ON(!this)) {
-> > +		ret = -EINVAL;
-> 
-> -ENOENT?
+Linus,
 
-Sure.
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 
-> > +		goto unlock;
-> > +	}
-> > +
-> > +	this->count--;
-> > +	if (this->count)
-> > +		goto unlock;
-> 
-> Again, if we did an RCU lookup then this could be converted to a refcount_t
-> to take the mutex only when it hits zero. But for now I think it's fine.
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
 
-No objection to do this in the future, but yeah I think we might as well
-start simple :)
+are available in the Git repository at:
 
-> > +
-> > +	rb_erase(&this->node, &hyp_shared_pfns);
-> > +	kfree(this);
-> > +	ret = kvm_call_hyp_nvhe(__pkvm_host_unshare_hyp, pfn, 1);
-> > +unlock:
-> > +	mutex_unlock(&hyp_shared_pfns_lock);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> >  int kvm_share_hyp(void *from, void *to)
-> >  {
-> >  	phys_addr_t start, end, cur;
-> > @@ -376,6 +402,22 @@ int kvm_share_hyp(void *from, void *to)
-> >  	return 0;
-> >  }
-> >  
-> > +void kvm_unshare_hyp(void *from, void *to)
-> > +{
-> > +	phys_addr_t start, end, cur;
-> > +	u64 pfn;
-> > +
-> > +	if (is_kernel_in_hyp_mode() || kvm_host_owns_hyp_mappings() || !from)
-> 
-> I don't think you need the is_kernel_in_hyp_mode() check any more not that
-> you've moved that into kvm_host_owns_hyp_mappings().
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-The logic is a little odd, but I think I still do as
-kvm_host_owns_hyp_mappings() will return false if is_kernel_in_hyp_mode()
-is true.
+for you to fetch changes up to 10e7a099bfd860a2b77ea8aaac661f52c16dd865:
+
+  selftests: KVM: Add test to verify KVM doesn't explode on "bad" I/O (2021-12-10 09:38:02 -0500)
+
+----------------------------------------------------------------
+More x86 fixes:
+* Logic bugs in CR0 writes and Hyper-V hypercalls
+* Don't use Enlightened MSR Bitmap for L3
+* Remove user-triggerable WARN
+
+Plus a few selftest fixes and a regression test for the
+user-triggerable WARN.
+
+----------------------------------------------------------------
+So I am not sure if this counts as "the kvm side calming down"; but the
+larger scale bugfixes are all in-tree now, and what I've got here looks
+(at least on the arch/ side) like a fairly normal pull request for
+middle RCs.
+
+Thanks,
+
+Paolo
+
+Lai Jiangshan (1):
+      KVM: X86: Raise #GP when clearing CR0_PG in 64 bit mode
+
+Maciej S. Szmigiero (1):
+      KVM: x86: selftests: svm_int_ctl_test: fix intercept calculation
+
+Paolo Bonzini (1):
+      selftests: KVM: avoid failures due to reserved HyperTransport region
+
+Sean Christopherson (3):
+      KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
+      KVM: x86: Don't WARN if userspace mucks with RCX during string I/O exit
+      selftests: KVM: Add test to verify KVM doesn't explode on "bad" I/O
+
+Vitaly Kuznetsov (2):
+      KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
+      KVM: x86: Wait for IPIs to be delivered when handling Hyper-V TLB flush hypercall
+
+ arch/x86/include/asm/kvm_host.h                    |   2 +-
+ arch/x86/kvm/hyperv.c                              |   7 +-
+ arch/x86/kvm/vmx/vmx.c                             |  22 ++--
+ arch/x86/kvm/x86.c                                 |  12 ++-
+ tools/testing/selftests/kvm/.gitignore             |   1 +
+ tools/testing/selftests/kvm/Makefile               |   1 +
+ tools/testing/selftests/kvm/include/kvm_util.h     |   9 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c         |   2 +-
+ tools/testing/selftests/kvm/lib/x86_64/processor.c |  68 ++++++++++++
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c        |   2 +-
+ .../selftests/kvm/x86_64/userspace_io_test.c       | 114 +++++++++++++++++++++
+ 11 files changed, 223 insertions(+), 17 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/userspace_io_test.c
+

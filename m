@@ -2,251 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754A4470A61
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E57470A6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343603AbhLJTgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S1343630AbhLJThP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245684AbhLJTgc (ORCPT
+        with ESMTP id S1343617AbhLJThM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:36:32 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1329C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:32:56 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b40so19830324lfv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:32:56 -0800 (PST)
+        Fri, 10 Dec 2021 14:37:12 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167CBC061746;
+        Fri, 10 Dec 2021 11:33:37 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id cf39so7768297lfb.8;
+        Fri, 10 Dec 2021 11:33:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=16vBrnrnLm/KrdSkDqkkNxS0xymKNayV9NN0QHH9Fsc=;
-        b=Fc16dXw7QrcrWym6s0uO3FUlkAd4uNZUZrWupNfe7G2/CR/8Yl570W2sz91fC34oEo
-         A7iSCYIityuJlPftUpYO1kCLgwJpyP8uR0AoZdJxVM1AUwsAuQB2fZii12OInz4H5e+X
-         soS/WQ6Pfl6KwacAVi9hiM9vJsOBiheOBKkNBFz3hpIQSpYRqz7a2Kt65q6oxfcFFmFo
-         dIitB01qrAc1hS4i5DJuLYgrRIBlNg7c6POSBsYCTGByiarvRQEEJccD3c901j+vS4wA
-         ffF/lNG9tDuAPV9taCSFHXSUnkuRHSNpDotI+gbNd2ruK02Vax+OLd6B7mzg22FyN1hD
-         StAA==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=f67p7hle6233nGxb6/xc+P0FVeEPFRJiI9iN2B4WT58=;
+        b=kS8TNlYiN6vyIeYsSnRv3CIueRF7pdxQ8UZE6mOB14p99gTRdCMFnHOR44Z3ji5MiJ
+         D03uWCT5igggIgLk+p2yc39IbVlARk1+JEGaNZDdXQzNupiaX8nvnDwM3tNyc59SP0HR
+         COvxv+cjl6P+TY6I1M8f+NUOUD7TJTgjbz/0uJ+yLcxHdNhreTMQklx4JM+7jiYJuUv/
+         resLJQRarl+ZtO8U6+PT9CFznfJa6MhK2xrna+jAtgpFDFUXFJ1z/3ZkYUzHdjAlQrRG
+         I07USXxffxsEm/0A0PVKkY0duuTB1Y6XKt0r4xjJRFk8H0T/57tNUYmytuaRwqLJ7SMF
+         vNYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=16vBrnrnLm/KrdSkDqkkNxS0xymKNayV9NN0QHH9Fsc=;
-        b=bui5WiVECKhSfNVlQY1WzXepdj3hSItCYCwTlVnPKP96eWBwXEkyfnf7d9idtrl4uA
-         ZuNcbfKVqE5TMHyyAsyc9mIdY+GuK6q5MeFAEeOWFGGCv0lf2ySH4J3FHIq4FHJDO88k
-         Yy7MXDBK2nXYs0l7DCla+JpQ5xDyd73n0VXLsR0oyOAsB7INIGzhrSkBbYl83LZ3jCoj
-         vXxu6QQTUTtGeaATv3/wMBG6aiG9IYfWuuwiEF9aCeTPmRSsoQ98EOPoUIN1gU+4A5ak
-         9A5A1bHMon0Xmzo+yljt+P37LMjBTcjvMPqU1C+vxfl0z+6t5F5MMYx1d1UHO8EQJ/og
-         awFA==
-X-Gm-Message-State: AOAM531VphXbHvGqLbKMyPE4ylv4gv8ddmyYxMthnCcIZFMK+Wq489m7
-        26fGDrCOWhoFNk9alL/h+wdq7Ybjdp3YDUIblc20aQ==
-X-Google-Smtp-Source: ABdhPJxF3+fnmbuK2XdBNyM0bI0+qKHJ0qxHxOEv72SG10GFXigVk57qhPNNilvsV+RXMaejOkWh09XKp2X17SEkv20=
-X-Received: by 2002:ac2:4d19:: with SMTP id r25mr13865559lfi.82.1639164774486;
- Fri, 10 Dec 2021 11:32:54 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f67p7hle6233nGxb6/xc+P0FVeEPFRJiI9iN2B4WT58=;
+        b=QHdUwvjOEfaFiiNw9or7vnXSBRTXBGyvhnWxGdNIrtFQRvu29+A+4biv3QGZTij2bi
+         1gmvA6J/tLxwdFA0Fn6ZYZ9J221rWwhsfbwoSJ3S3kEnTFgIk0dg/W/El1RiiaA/BC7b
+         FwCg9jJ5TiNRMO7W+WOGvNtWIjfHq3w9bUohNN2BsSHJDUHrisZp2l9M5I57QRcP1o2R
+         Of554yB1ugOgp0w/D+nkX6ZWn767ySO2D+wyAsAEF9/+9EcBMixItPsX305QJaKOjvHy
+         MehL/9ggeaxZjOJQqimIceocaD8p/lN+Rm/L5mY/JmGC/AFK4ilDFfB5Nd4O6HAwzCoW
+         G/Jg==
+X-Gm-Message-State: AOAM530+71MhY8NFm+0u7dhn1Kr+spPk1/vU5O6P4Dq8ddeCduduqdIg
+        dVE4FFQdmdiB5czs0r+57WdyHj8IIjU=
+X-Google-Smtp-Source: ABdhPJw47o96fQpbRseSJ19MnRQSW7xcHQNSX+uqiAcRJr+V49fJkk5gdmPL9j60fMnbKKwiMUD2ZA==
+X-Received: by 2002:a05:6512:6e:: with SMTP id i14mr15149045lfo.488.1639164814789;
+        Fri, 10 Dec 2021 11:33:34 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id v23sm394184lji.79.2021.12.10.11.33.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 11:33:34 -0800 (PST)
+Subject: Re: [PATCH v4 03/25] notifier: Add
+ atomic/blocking_notifier_has_unique_priority()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20211126180101.27818-1-digetx@gmail.com>
+ <20211126180101.27818-4-digetx@gmail.com>
+ <CAJZ5v0jTJ3f7oUUR690PGaPJsxA8yzua9XDa8MONBHMzHnDfOQ@mail.gmail.com>
+ <e6ff1cea-a168-1cb0-25c5-fb16c681cf4a@gmail.com>
+ <CAJZ5v0gwnY07vg71_NB8RDWyv84FtMsmx7UTDd8TkUd7vFzc6A@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <fd158245-aa9a-2e48-0145-004f30005a66@gmail.com>
+Date:   Fri, 10 Dec 2021 22:33:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211209195141.1165233-1-nathan@kernel.org>
-In-Reply-To: <20211209195141.1165233-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 10 Dec 2021 11:32:42 -0800
-Message-ID: <CAKwvOdmKUsQc7UoxzqPvsH+FqxvxHGd43N9dDiYn1T31gZ94Sg@mail.gmail.com>
-Subject: Re: [PATCH v2] staging: greybus: fix stack size warning with UBSAN
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Vaibhav Agarwal <vaibhav.sr@gmail.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0gwnY07vg71_NB8RDWyv84FtMsmx7UTDd8TkUd7vFzc6A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 11:52 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> clang warns about excessive stack usage in this driver when
-> UBSAN is enabled:
->
-> drivers/staging/greybus/audio_topology.c:977:12: error: stack frame size of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-larger-than=]
->
-> Rework this code to no longer use compound literals for
-> initializing the structure in each case, but instead keep
-> the common bits in a preallocated constant array and copy
-> them as needed.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1535
-> Link: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> [nathan: Address review comments from v1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+10.12.2021 22:05, Rafael J. Wysocki пишет:
+> On Fri, Dec 10, 2021 at 7:52 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 10.12.2021 21:19, Rafael J. Wysocki пишет:
+>> ...
+>>>> +bool atomic_notifier_has_unique_priority(struct atomic_notifier_head *nh,
+>>>> +               struct notifier_block *n)
+>>>> +{
+>>>> +       unsigned long flags;
+>>>> +       bool ret;
+>>>> +
+>>>> +       spin_lock_irqsave(&nh->lock, flags);
+>>>> +       ret = notifier_has_unique_priority(&nh->head, n);
+>>>> +       spin_unlock_irqrestore(&nh->lock, flags);
+>>>
+>>> This only works if the caller can prevent new entries from being added
+>>> to the list at this point or if the caller knows that they cannot be
+>>> added for some reason, but the kerneldoc doesn't mention this
+>>> limitation.
+>>
+>> I'll update the comment.
+>>
+>> ..
+>>>> +bool blocking_notifier_has_unique_priority(struct blocking_notifier_head *nh,
+>>>> +               struct notifier_block *n)
+>>>> +{
+>>>> +       bool ret;
+>>>> +
+>>>> +       /*
+>>>> +        * This code gets used during boot-up, when task switching is
+>>>> +        * not yet working and interrupts must remain disabled. At such
+>>>> +        * times we must not call down_read().
+>>>> +        */
+>>>> +       if (system_state != SYSTEM_BOOTING)
+>>>
+>>> No, please don't do this, it makes the whole thing error-prone.
+>>
+>> What should I do then?
+> 
+> First of all, do you know of any users who may want to call this
+> during early initialization?  If so, then why may they want to do
+> that?
 
-Thanks for helping to get this across the finish line.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+I'll need to carefully review all those dozens of platform restart
+handlers to answer this question.
 
-> ---
->
-> v1 -> v2: https://lore.kernel.org/r/20210103223541.2790855-1-arnd@kernel.org/
->
-> * Use NULL for name field in SND_DOC_DAPM_* in gbaudio_widgets (Alex).
->
-> * Do not eliminate *dw assignment within the switch cases, as invalid
->   enum values in-between valid enum values (such as snd_soc_dapm_demux)
->   would not be handled properly by the "if value is greater than the
->   array size" check (Alex). This addresses a few other comments by Alex
->   and Dan because w->type is not checked against the array's size.
->
-> Arnd, if you disagree with this approach, please let me know so that we
-> can get this fixed in a way that everyone is happy with.
->
->  drivers/staging/greybus/audio_topology.c | 92 ++++++++++++------------
->  1 file changed, 45 insertions(+), 47 deletions(-)
->
-> diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
-> index 1e613d42d823..7f7d558b76d0 100644
-> --- a/drivers/staging/greybus/audio_topology.c
-> +++ b/drivers/staging/greybus/audio_topology.c
-> @@ -974,6 +974,44 @@ static int gbaudio_widget_event(struct snd_soc_dapm_widget *w,
->         return ret;
->  }
->
-> +static const struct snd_soc_dapm_widget gbaudio_widgets[] = {
-> +       [snd_soc_dapm_spk]      = SND_SOC_DAPM_SPK(NULL, gbcodec_event_spk),
-> +       [snd_soc_dapm_hp]       = SND_SOC_DAPM_HP(NULL, gbcodec_event_hp),
-> +       [snd_soc_dapm_mic]      = SND_SOC_DAPM_MIC(NULL, gbcodec_event_int_mic),
-> +       [snd_soc_dapm_output]   = SND_SOC_DAPM_OUTPUT(NULL),
-> +       [snd_soc_dapm_input]    = SND_SOC_DAPM_INPUT(NULL),
-> +       [snd_soc_dapm_switch]   = SND_SOC_DAPM_SWITCH_E(NULL, SND_SOC_NOPM,
-> +                                       0, 0, NULL,
-> +                                       gbaudio_widget_event,
-> +                                       SND_SOC_DAPM_PRE_PMU |
-> +                                       SND_SOC_DAPM_POST_PMD),
-> +       [snd_soc_dapm_pga]      = SND_SOC_DAPM_PGA_E(NULL, SND_SOC_NOPM,
-> +                                       0, 0, NULL, 0,
-> +                                       gbaudio_widget_event,
-> +                                       SND_SOC_DAPM_PRE_PMU |
-> +                                       SND_SOC_DAPM_POST_PMD),
-> +       [snd_soc_dapm_mixer]    = SND_SOC_DAPM_MIXER_E(NULL, SND_SOC_NOPM,
-> +                                       0, 0, NULL, 0,
-> +                                       gbaudio_widget_event,
-> +                                       SND_SOC_DAPM_PRE_PMU |
-> +                                       SND_SOC_DAPM_POST_PMD),
-> +       [snd_soc_dapm_mux]      = SND_SOC_DAPM_MUX_E(NULL, SND_SOC_NOPM,
-> +                                       0, 0, NULL,
-> +                                       gbaudio_widget_event,
-> +                                       SND_SOC_DAPM_PRE_PMU |
-> +                                       SND_SOC_DAPM_POST_PMD),
-> +       [snd_soc_dapm_aif_in]   = SND_SOC_DAPM_AIF_IN_E(NULL, NULL, 0,
-> +                                       SND_SOC_NOPM, 0, 0,
-> +                                       gbaudio_widget_event,
-> +                                       SND_SOC_DAPM_PRE_PMU |
-> +                                       SND_SOC_DAPM_POST_PMD),
-> +       [snd_soc_dapm_aif_out]  = SND_SOC_DAPM_AIF_OUT_E(NULL, NULL, 0,
-> +                                       SND_SOC_NOPM, 0, 0,
-> +                                       gbaudio_widget_event,
-> +                                       SND_SOC_DAPM_PRE_PMU |
-> +                                       SND_SOC_DAPM_POST_PMD),
-> +};
-> +
->  static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
->                                       struct snd_soc_dapm_widget *dw,
->                                       struct gb_audio_widget *w, int *w_size)
-> @@ -1052,77 +1090,37 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
->
->         switch (w->type) {
->         case snd_soc_dapm_spk:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_SPK(w->name, gbcodec_event_spk);
-> +               *dw = gbaudio_widgets[w->type];
->                 module->op_devices |= GBAUDIO_DEVICE_OUT_SPEAKER;
->                 break;
->         case snd_soc_dapm_hp:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_HP(w->name, gbcodec_event_hp);
-> +               *dw = gbaudio_widgets[w->type];
->                 module->op_devices |= (GBAUDIO_DEVICE_OUT_WIRED_HEADSET
->                                         | GBAUDIO_DEVICE_OUT_WIRED_HEADPHONE);
->                 module->ip_devices |= GBAUDIO_DEVICE_IN_WIRED_HEADSET;
->                 break;
->         case snd_soc_dapm_mic:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_MIC(w->name, gbcodec_event_int_mic);
-> +               *dw = gbaudio_widgets[w->type];
->                 module->ip_devices |= GBAUDIO_DEVICE_IN_BUILTIN_MIC;
->                 break;
->         case snd_soc_dapm_output:
-> -               *dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_OUTPUT(w->name);
-> -               break;
->         case snd_soc_dapm_input:
-> -               *dw = (struct snd_soc_dapm_widget)SND_SOC_DAPM_INPUT(w->name);
-> -               break;
->         case snd_soc_dapm_switch:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_SWITCH_E(w->name, SND_SOC_NOPM, 0, 0,
-> -                                             widget_kctls,
-> -                                             gbaudio_widget_event,
-> -                                             SND_SOC_DAPM_PRE_PMU |
-> -                                             SND_SOC_DAPM_POST_PMD);
-> -               break;
->         case snd_soc_dapm_pga:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_PGA_E(w->name, SND_SOC_NOPM, 0, 0, NULL, 0,
-> -                                          gbaudio_widget_event,
-> -                                          SND_SOC_DAPM_PRE_PMU |
-> -                                          SND_SOC_DAPM_POST_PMD);
-> -               break;
->         case snd_soc_dapm_mixer:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_MIXER_E(w->name, SND_SOC_NOPM, 0, 0, NULL,
-> -                                            0, gbaudio_widget_event,
-> -                                            SND_SOC_DAPM_PRE_PMU |
-> -                                            SND_SOC_DAPM_POST_PMD);
-> -               break;
->         case snd_soc_dapm_mux:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_MUX_E(w->name, SND_SOC_NOPM, 0, 0,
-> -                                          widget_kctls, gbaudio_widget_event,
-> -                                          SND_SOC_DAPM_PRE_PMU |
-> -                                          SND_SOC_DAPM_POST_PMD);
-> +               *dw = gbaudio_widgets[w->type];
->                 break;
->         case snd_soc_dapm_aif_in:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_AIF_IN_E(w->name, w->sname, 0,
-> -                                             SND_SOC_NOPM,
-> -                                             0, 0, gbaudio_widget_event,
-> -                                             SND_SOC_DAPM_PRE_PMU |
-> -                                             SND_SOC_DAPM_POST_PMD);
-> -               break;
->         case snd_soc_dapm_aif_out:
-> -               *dw = (struct snd_soc_dapm_widget)
-> -                       SND_SOC_DAPM_AIF_OUT_E(w->name, w->sname, 0,
-> -                                              SND_SOC_NOPM,
-> -                                              0, 0, gbaudio_widget_event,
-> -                                              SND_SOC_DAPM_PRE_PMU |
-> -                                              SND_SOC_DAPM_POST_PMD);
-> +               *dw = gbaudio_widgets[w->type];
-> +               dw->sname = w->sname;
->                 break;
->         default:
->                 ret = -EINVAL;
->                 goto error;
->         }
-> +       dw->name = w->name;
->
->         dev_dbg(module->dev, "%s: widget of type %d created\n", dw->name,
->                 dw->id);
->
-> base-commit: 42eb8fdac2fc5d62392dcfcf0253753e821a97b0
-> --
-> 2.34.1
->
->
+> Depending on the above, I would consider adding a special mechanism for them.
 
+Please notice that every blocking_notifier_*() function has this
+SYSTEM_BOOTING check, it's not my invention. Notifier API needs to be
+generic.
 
--- 
-Thanks,
-~Nick Desaulniers
+>>>> +               down_read(&nh->rwsem);
+>>>> +
+>>>> +       ret = notifier_has_unique_priority(&nh->head, n);
+>>>> +
+>>>> +       if (system_state != SYSTEM_BOOTING)
+>>>> +               up_read(&nh->rwsem);
+>>>
+>>> And still what if a new entry with a non-unique priority is added to
+>>> the chain at this point?
+>>
+>> If entry with a non-unique priority is added after the check, then
+>> obviously it won't be detected.
+> 
+> Why isn't this a problem?>> I don't understand the question. These
+>> down/up_read() are the locks that prevent the race, if that's the question.
+> 
+> Not really, they only prevent the race from occurring while
+> notifier_has_unique_priority() is running.
+> 
+> If anyone depends on this check for correctness, they need to lock the
+> rwsem, do the check, do the thing depending on the check while holding
+> the rwsem and then release the rwsem.  Otherwise it is racy.
+> 
+
+It's fine that it's a bit "racy" since in the context of this series. We
+always do the check after adding new entry, so it's not a problem.
+
+There are two options:
+
+1. Use blocking_notifier_has_unique_priority() like it's done in this
+patchset. Remove it after all drivers are converted to the new API and
+add blocking_notifier_chain_register_unique().
+
+2. Add blocking_notifier_chain_register_unique(), but don't let it fail
+the registration of non-unique entries until all drivers are converted
+to the new API.

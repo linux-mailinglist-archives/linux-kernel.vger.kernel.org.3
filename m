@@ -2,120 +2,494 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 471884702F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCFF4702F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242232AbhLJOlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238814AbhLJOlB (ORCPT
+        id S242245AbhLJOlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:41:31 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34844 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242184AbhLJOla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:41:01 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A402BC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:37:26 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id i12so6976101wmq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iT+nRlkqP8ujdkhR1yHcmqTSB9Hb9nBGvw1m1PwYrU4=;
-        b=LJW+Qg/MN2vlQ4hC5d84O4HWpmjzzbl+hwt4dYAELPT880hHpRFAZikcPqMVDWcaW5
-         JtAe4D8wz5kZWyjyAB/+4xUZrgpNpozYFtRRLLKkMoU6/EmouGTvY6FPkA77kQoyvs/v
-         aFr3sL11apWy0rCQjdfNzXf7eDGBYaG1f36x9tlciYdd8W99tguVUtOddHdFZoXklmgR
-         9YEkIUxD3OWUv4I+T0ggbI7kTKXI2RtL7uOBPtbJhCb7AGimn/5ScmHknajg8CHl0fKD
-         arVUYOpYX5UgcPQV8y9cCLcRZwdZQQrt5Sny0Bc2WwyHMnHoqBa3R++EnZ4LEG0SoY/p
-         xrXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iT+nRlkqP8ujdkhR1yHcmqTSB9Hb9nBGvw1m1PwYrU4=;
-        b=c0lPH0vd5j738rI2Y3u0X7fbrKnLMAn2pIbfV60i+cc9bJcT9rI9KjcdmZXzIxremJ
-         EW1vsIQ5SWVfl5dNdm0XWzVOai5YtjVdpSkD+VlBOhkIYvssqLdYAhStjY5EGA3cgycJ
-         gMymheBPUwpkyBOpCdIo2zDuez3kg3gRil+JNHxtOJU42hXKNO/j5jYONEB7cb8ZKi9+
-         KOfydVi6TdyGhFC/ojSULzE8lOsHU0TTahWhanyx960Cwwod3obT74Xx/F5o8OImw+e8
-         a0wf13VFA/SlnCWYdJRuJ2AuDtaonv64PN5WlQYRH2Ri/qUD8dK0gYkgkK1EfsaWga2+
-         qI+A==
-X-Gm-Message-State: AOAM531CM/knrmiYbo5NHo2NRA3TNlh4znsCQPng2TPX6Fja97UNRgG6
-        tG/avxDIh/ZHtfV0yZ6MBi/dog==
-X-Google-Smtp-Source: ABdhPJzpmKQ+A4NRlPF6u1SVizDawCpgts4j/A6org/QHTlhW19yx/bTp0VUSDuxuLTJUFIurktC1A==
-X-Received: by 2002:a05:600c:296:: with SMTP id 22mr17315115wmk.135.1639147044652;
-        Fri, 10 Dec 2021 06:37:24 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:210:76c1:fb36:1e22:8677])
-        by smtp.gmail.com with ESMTPSA id g5sm3758412wri.45.2021.12.10.06.37.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 06:37:24 -0800 (PST)
-Date:   Fri, 10 Dec 2021 14:37:21 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 07/15] KVM: arm64: Introduce kvm_share_hyp()
-Message-ID: <YbNmIfeRdgaQNf+l@google.com>
-References: <20211201170411.1561936-1-qperret@google.com>
- <20211201170411.1561936-8-qperret@google.com>
- <20211209111309.GB1912@willie-the-truck>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209111309.GB1912@willie-the-truck>
+        Fri, 10 Dec 2021 09:41:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5736FCE2AF7;
+        Fri, 10 Dec 2021 14:37:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A73C00446;
+        Fri, 10 Dec 2021 14:37:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639147070;
+        bh=32C8g9UjzUmtvuQkQpVAGscD/lITnV0kdoBtsBgrpms=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pjXA+9y8z1aY/MQZbouPSjCcGL9CsBdO9o03o6bNR5L++rKRwXr2OPeJ3JFvHAZdK
+         AoBietD7a3M7PrveZheoWEYacyXoImXwAcEfpr9GQ86g3RJjU8ST9KYdO7fMgnhx05
+         fZIRbjypxBRljC+vh0cc0fdBIS1b2wjcgRhg6g9x3gpN84x/7Gce4LF3sk2I9moqQy
+         azrhV4LRJ5x64UoDs5Z5pmVG6NRIfTHGjCpJvn3U21Sw7el0OPohiRdAvgGFFtO4Cj
+         pDauaQnH6RHHZzuPoxA+NZjpWg5wgKYZJlfl2+jUTNnMY89ni0taDp6TnRCqK8sM85
+         JzuBQIusblsTw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mvh1w-00BHDM-G9; Fri, 10 Dec 2021 14:37:48 +0000
+Date:   Fri, 10 Dec 2021 14:37:44 +0000
+Message-ID: <87v8zwjzk7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [RFC PATCH v3 2/7] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+In-Reply-To: <20211110225808.16388-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211110225808.16388-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20211110225808.16388-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.mahadev-lad.rj@bp.renesas.com, tglx@linutronix.de, robh+dt@kernel.org, linus.walleij@linaro.org, geert+renesas@glider.be, magnus.damm@gmail.com, bgolaszewski@baylibre.com, p.zabel@pengutronix.de, devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, prabhakar.csengg@gmail.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 09 Dec 2021 at 11:13:10 (+0000), Will Deacon wrote:
-> On Wed, Dec 01, 2021 at 05:04:01PM +0000, Quentin Perret wrote:
-> > The create_hyp_mappings() function can currently be called at any point
-> > in time. However, its behaviour in protected mode changes widely
-> > depending on when it is being called. Prior to KVM init, it is used to
-> > create the temporary page-table used to bring-up the hypervisor, and
-> > later on it is transparently turned into a 'share' hypercall when the
-> > kernel has lost control over the hypervisor stage-1. In order to prepare
-> > the ground for also unsharing pages with the hypervisor during guest
-> > teardown, introduce a kvm_share_hyp() function to make it clear in which
-> > places a share hypercall should be expected, as we will soon need a
-> > matching unshare hypercall in all those places.
-> > 
-> > Signed-off-by: Quentin Perret <qperret@google.com>
-> > ---
-> >  arch/arm64/include/asm/kvm_mmu.h |  1 +
-> >  arch/arm64/kvm/arm.c             |  4 ++--
-> >  arch/arm64/kvm/fpsimd.c          |  2 +-
-> >  arch/arm64/kvm/mmu.c             | 27 +++++++++++++++++++++------
-> >  arch/arm64/kvm/reset.c           |  2 +-
-> >  5 files changed, 26 insertions(+), 10 deletions(-)
+On Wed, 10 Nov 2021 22:58:03 +0000,
+Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > 
-> [...]
+> Add a driver for the Renesas RZ/G2L Interrupt Controller.
 > 
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index f8f1096a297f..fd868fb9d922 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
-> > @@ -299,6 +299,25 @@ static int pkvm_share_hyp(phys_addr_t start, phys_addr_t end)
-> >  	return 0;
-> >  }
-> >  
-> > +int kvm_share_hyp(void *from, void *to)
-> > +{
-> > +	if (is_kernel_in_hyp_mode())
-> > +		return 0;
-> > +
-> > +	/*
-> > +	 * The share hcall maps things in the 'fixed-offset' region of the hyp
-> > +	 * VA space, so we can only share physically contiguous data-structures
-> > +	 * for now.
-> > +	 */
-> > +	if (is_vmalloc_addr(from) || is_vmalloc_addr(to))
-> > +		return -EINVAL;
+> This supports external pins being used as interrupts. It supports
+> one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
+> to be used as IRQ lines.
 > 
-> If we're adding these sanity checks, perhaps is_vmalloc_or_module_addr()
-> would be worth using instead?
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/irqchip/Kconfig             |   8 +
+>  drivers/irqchip/Makefile            |   1 +
+>  drivers/irqchip/irq-renesas-rzg2l.c | 465 ++++++++++++++++++++++++++++
+>  3 files changed, 474 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
+> 
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 4d5924e9f766..79b8c9274fd7 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -236,6 +236,14 @@ config RENESAS_RZA1_IRQC
+>  	  Enable support for the Renesas RZ/A1 Interrupt Controller, to use up
+>  	  to 8 external interrupts with configurable sense select.
+>  
+> +config RENESAS_RZG2L_IRQC
+> +	bool "Renesas RZ/G2L IRQC support" if COMPILE_TEST
+> +	select GENERIC_IRQ_CHIP
+> +	select IRQ_DOMAIN_HIERARCHY
+> +	help
+> +	  Enable support for the Renesas RZ/G2L Interrupt Controller for external
+> +	  devices.
+> +
+>  config SL28CPLD_INTC
+>  	bool "Kontron sl28cpld IRQ controller"
+>  	depends on MFD_SL28CPLD=y || COMPILE_TEST
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index f88cbf36a9d2..8017786fbdac 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -51,6 +51,7 @@ obj-$(CONFIG_RDA_INTC)			+= irq-rda-intc.o
+>  obj-$(CONFIG_RENESAS_INTC_IRQPIN)	+= irq-renesas-intc-irqpin.o
+>  obj-$(CONFIG_RENESAS_IRQC)		+= irq-renesas-irqc.o
+>  obj-$(CONFIG_RENESAS_RZA1_IRQC)		+= irq-renesas-rza1.o
+> +obj-$(CONFIG_RENESAS_RZG2L_IRQC)	+= irq-renesas-rzg2l.o
+>  obj-$(CONFIG_VERSATILE_FPGA_IRQ)	+= irq-versatile-fpga.o
+>  obj-$(CONFIG_ARCH_NSPIRE)		+= irq-zevio.o
+>  obj-$(CONFIG_ARCH_VT8500)		+= irq-vt8500.o
+> diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> new file mode 100644
+> index 000000000000..4258b9752c3b
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> @@ -0,0 +1,465 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Renesas RZ/G2L IRQC Driver
+> + *
+> + * Copyright (C) 2021 Renesas Electronics Corporation.
+> + *
+> + * Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/of_address.h>
+> +#include <linux/reset.h>
+> +
+> +#define IRQC_IRQ_START			1
+> +#define IRQC_IRQ_COUNT			8
+> +#define IRQC_TINT_START			9
+> +#define IRQC_TINT_COUNT			32
+> +#define IRQC_NUM_IRQ			41
+> +
+> +#define ISCR				0x10
+> +#define IITSR				0x14
+> +#define TSCR				0x20
+> +#define TITSR0				0x24
+> +#define TITSR1				0x28
+> +#define TITSR0_MAX_INT			16
+> +#define TITSEL_WIDTH			0x2
+> +#define TSSR(n)				(0x30 + ((n) * 4))
+> +#define TIEN				BIT(7)
+> +#define TSSEL_SHIFT(n)			(8 * (n))
+> +#define TSSEL_MASK			GENMASK(7, 0)
+> +#define IRQ_MASK			0x3
+> +
+> +#define TSSR_OFFSET(n)			((n) % 4)
+> +#define TSSR_INDEX(n)			((n) / 4)
+> +
+> +#define TITSR_TITSEL_EDGE_RISING	0
+> +#define TITSR_TITSEL_EDGE_FALLING	1
+> +#define TITSR_TITSEL_LEVEL_HIGH		2
+> +#define TITSR_TITSEL_LEVEL_LOW		3
+> +
+> +#define IITSR_IITSEL(n, sense)		((sense) << ((n) * 2))
+> +#define IITSR_IITSEL_LEVEL_LOW		0
+> +#define IITSR_IITSEL_EDGE_FALLING	1
+> +#define IITSR_IITSEL_EDGE_RISING	2
+> +#define IITSR_IITSEL_EDGE_BOTH		3
+> +#define IITSR_IITSEL_MASK(n)		IITSR_IITSEL((n), 3)
+> +
+> +#define TINT_EXTRACT_HWIRQ(x)		((x) & ~GENMASK(31, 16))
+> +#define TINT_EXTRACT_GPIOINT(x)		((x) >> 16)
+> +
+> +struct rzg2l_irqc_priv {
+> +	void __iomem *base;
+> +	struct of_phandle_args map[IRQC_NUM_IRQ];
+> +};
+> +
+> +struct rzg2l_irqc_chip_data {
+> +	int tint;
+> +};
+> +
+> +static struct rzg2l_irqc_priv *irq_data_to_priv(struct irq_data *data)
+> +{
+> +	return data->domain->host_data;
+> +}
+> +
+> +static void rzg2l_irq_eoi(struct irq_data *d)
+> +{
+> +	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> +	unsigned int hw_irq = irqd_to_hwirq(d) - IRQC_IRQ_START;
+> +	u16 bit = BIT(hw_irq);
+> +	u32 reg;
+> +
+> +	reg = readl_relaxed(priv->base + ISCR);
+> +	if (reg & bit)
+> +		writel_relaxed(GENMASK(IRQC_IRQ_COUNT - 1, 0) & ~bit,
+> +			       priv->base + ISCR);
 
-Ack, I'll fix that up.
+RMW of a shared register without locking. Is it safe?
+
+> +
+> +	irq_chip_eoi_parent(d);
+> +}
+> +
+> +static void rzg2l_tint_eoi(struct irq_data *d)
+> +{
+> +	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> +	unsigned int hw_irq = irqd_to_hwirq(d);
+> +	u32 bit = BIT(hw_irq - IRQC_TINT_START);
+> +	u32 reg;
+> +
+> +	reg = readl_relaxed(priv->base + TSCR);
+> +	if (reg & bit)
+> +		writel_relaxed(GENMASK(IRQC_TINT_COUNT - 1, 0) & ~bit,
+> +			       priv->base + TSCR);
+
+Same question.
+
+> +
+> +	irq_chip_eoi_parent(d);
+> +}
+> +
+> +static void rzg2l_irqc_eoi(struct irq_data *d)
+> +{
+> +	unsigned int hw_irq = irqd_to_hwirq(d);
+> +
+> +	if (hw_irq >= IRQC_IRQ_START && hw_irq <= IRQC_IRQ_COUNT)
+> +		return rzg2l_irq_eoi(d);
+> +	else if (hw_irq >= IRQC_TINT_START && hw_irq <= IRQC_TINT_COUNT)
+> +		return rzg2l_tint_eoi(d);
+> +}
+> +
+> +static void rzg2l_irqc_irq_disable(struct irq_data *d)
+> +{
+> +	unsigned int hw_irq = irqd_to_hwirq(d);
+> +
+> +	if (hw_irq >= IRQC_TINT_START && hw_irq <= IRQC_TINT_COUNT) {
+> +		struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> +		u32 offset = hw_irq - IRQC_TINT_START;
+> +		u32 tssr_offset = TSSR_OFFSET(offset);
+> +		u8 tssr_index = TSSR_INDEX(offset);
+> +		u32 reg;
+> +
+> +		reg = readl_relaxed(priv->base + TSSR(tssr_index));
+> +		reg &= ~(TSSEL_MASK << tssr_offset);
+> +		writel_relaxed(reg, priv->base + TSSR(tssr_index));
+
+And again.
+
+> +	}
+> +	irq_chip_disable_parent(d);
+> +}
+> +
+> +static void rzg2l_irqc_irq_enable(struct irq_data *d)
+> +{
+> +	unsigned int hw_irq = irqd_to_hwirq(d);
+> +
+> +	if (hw_irq >= IRQC_TINT_START && hw_irq <= IRQC_TINT_COUNT) {
+> +		struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> +		struct rzg2l_irqc_chip_data *chip_data = d->chip_data;
+> +		u32 offset = hw_irq - IRQC_TINT_START;
+> +		u32 tssr_offset = TSSR_OFFSET(offset);
+> +		u8 tssr_index = TSSR_INDEX(offset);
+> +		u32 reg;
+> +
+> +		reg = readl_relaxed(priv->base + TSSR(tssr_index));
+> +		reg |= (TIEN | chip_data->tint) << TSSEL_SHIFT(tssr_offset);
+> +		writel_relaxed(reg, priv->base + TSSR(tssr_index));
+
+And here.
+
+> +	}
+> +	irq_chip_enable_parent(d);
+> +}
+> +
+> +static int rzg2l_irq_set_type(struct irq_data *d, unsigned int type)
+> +{
+> +	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> +	unsigned int hw_irq = irqd_to_hwirq(d) - IRQC_IRQ_START;
+> +	u16 sense, tmp;
+> +
+> +	switch (type & IRQ_TYPE_SENSE_MASK) {
+> +	case IRQ_TYPE_LEVEL_LOW:
+> +		sense = IITSR_IITSEL_LEVEL_LOW;
+> +		break;
+> +
+> +	case IRQ_TYPE_EDGE_FALLING:
+> +		sense = IITSR_IITSEL_EDGE_FALLING;
+> +		break;
+> +
+> +	case IRQ_TYPE_EDGE_RISING:
+> +		sense = IITSR_IITSEL_EDGE_RISING;
+> +		break;
+> +
+> +	case IRQ_TYPE_EDGE_BOTH:
+> +		sense = IITSR_IITSEL_EDGE_BOTH;
+> +		break;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	tmp = readl_relaxed(priv->base + IITSR);
+> +	tmp &= ~IITSR_IITSEL_MASK(hw_irq);
+> +	tmp |= IITSR_IITSEL(hw_irq, sense);
+> +	writel_relaxed(tmp, priv->base + IITSR);
+
+It's everywhere. I'll stop mentioning it, but this driver is racy as
+hell.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int rzg2l_tint_set_edge(struct irq_data *d, unsigned int type)
+> +{
+> +	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> +	unsigned int hwirq = irqd_to_hwirq(d);
+> +	u32 titseln = hwirq - IRQC_TINT_START;
+> +	u8 sense;
+> +	u32 reg;
+> +
+> +	switch (type & IRQ_TYPE_SENSE_MASK) {
+> +	case IRQ_TYPE_EDGE_RISING:
+> +		sense = TITSR_TITSEL_EDGE_RISING;
+> +		break;
+> +
+> +	case IRQ_TYPE_EDGE_FALLING:
+> +		sense = TITSR_TITSEL_EDGE_FALLING;
+> +		break;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (titseln < TITSR0_MAX_INT) {
+> +		reg = readl_relaxed(priv->base + TITSR0);
+> +		reg &= ~(IRQ_MASK << (titseln * TITSEL_WIDTH));
+> +		reg |= sense << (titseln * TITSEL_WIDTH);
+> +		writel_relaxed(reg, priv->base + TITSR0);
+> +	} else {
+> +		titseln = titseln / TITSEL_WIDTH;
+> +		reg = readl_relaxed(priv->base + TITSR1);
+> +		reg &= ~(IRQ_MASK << (titseln * TITSEL_WIDTH));
+> +		reg |= sense << (titseln * TITSEL_WIDTH);
+> +		writel_relaxed(reg, priv->base + TITSR1);
+> +	}
+
+Sight:
+
+	if (titseln < TITSR0_MAX_INT) {
+		r = TITSR0;
+	} else {
+		titseln /= TITSEL_WIDTH;
+		r  = TITSR1;
+	}
+
+	reg = readl_relaxed(priv->base + r);
+	reg &= ~(IRQ_MASK << (titseln * TITSEL_WIDTH));
+	reg |= sense << (titseln * TITSEL_WIDTH);
+	writel_relaxed(reg, priv->base + r);
+
+plus the missing locking.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int rzg2l_irqc_set_type(struct irq_data *d, unsigned int type)
+> +{
+> +	unsigned int hw_irq = irqd_to_hwirq(d);
+> +
+> +	if (hw_irq >= IRQC_IRQ_START && hw_irq <= IRQC_IRQ_COUNT)
+> +		return rzg2l_irq_set_type(d, type);
+> +	else if (hw_irq >= IRQC_TINT_START && hw_irq <= IRQC_TINT_COUNT)
+> +		return rzg2l_tint_set_edge(d, type);
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static struct irq_chip irqc_chip = {
+> +	.name			= "rzg2l-irqc",
+> +	.irq_eoi		= rzg2l_irqc_eoi,
+> +	.irq_mask		= irq_chip_mask_parent,
+> +	.irq_unmask		= irq_chip_unmask_parent,
+> +	.irq_disable		= rzg2l_irqc_irq_disable,
+> +	.irq_enable		= rzg2l_irqc_irq_enable,
+> +	.irq_get_irqchip_state	= irq_chip_get_parent_state,
+> +	.irq_set_irqchip_state	= irq_chip_set_parent_state,
+> +	.irq_retrigger		= irq_chip_retrigger_hierarchy,
+> +	.irq_set_type		= rzg2l_irqc_set_type,
+> +	.flags			= IRQCHIP_MASK_ON_SUSPEND |
+> +				  IRQCHIP_SET_TYPE_MASKED |
+> +				  IRQCHIP_SKIP_SET_WAKE,
+> +};
+> +
+> +static int rzg2l_irqc_alloc(struct irq_domain *domain, unsigned int virq,
+> +			    unsigned int nr_irqs, void *arg)
+> +{
+> +	struct rzg2l_irqc_priv *priv = domain->host_data;
+> +	struct rzg2l_irqc_chip_data *chip_data = NULL;
+> +	struct irq_fwspec spec;
+> +	irq_hw_number_t hwirq;
+> +	int tint = -EINVAL;
+> +	unsigned int type;
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	ret = irq_domain_translate_twocell(domain, arg, &hwirq, &type);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * For TINIT interrupts ie where pinctrl driver is child of irqc domain
+> +	 * the hwirq and TINT are encoded in fwspec->param[0].
+> +	 * hwirq for TINIT range from 9-40, hwirq is embedded 0-15 bits and TINT
+> +	 * from 16-31 bits. TINIT from the pinctrl drivers needs to be programmed
+> +	 * in IRQC registers to enable a given gpio pin as interrupt.
+> +	 */
+> +	if (hwirq > IRQC_IRQ_COUNT) {
+> +		tint = TINT_EXTRACT_GPIOINT(hwirq);
+> +		hwirq = TINT_EXTRACT_HWIRQ(hwirq);
+> +	}
+> +
+> +	if (hwirq > (IRQC_NUM_IRQ - 1))
+> +		return -EINVAL;
+> +
+> +	if (tint != -EINVAL && (hwirq < IRQC_TINT_START || hwirq > (IRQC_NUM_IRQ - 1)))
+> +		return -EINVAL;
+> +
+> +	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> +	if (!chip_data)
+> +		return -ENOMEM;
+> +	chip_data->tint = tint;
+> +
+> +	ret = irq_domain_set_hwirq_and_chip(domain, virq, hwirq, &irqc_chip,
+> +					    chip_data);
+> +	if (ret) {
+> +		kfree(chip_data);
+> +		return ret;
+> +	}
+> +
+> +	spec.fwnode = domain->parent->fwnode;
+> +	spec.param_count = priv->map[hwirq].args_count;
+> +	for (i = 0; i < spec.param_count; i++)
+> +		spec.param[i] = priv->map[hwirq].args[i];
+> +
+> +	ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &spec);
+> +	if (ret)
+> +		kfree(chip_data);
+> +
+> +	return ret;
+> +}
+> +
+> +static void rzg2l_irqc_domain_free(struct irq_domain *domain, unsigned int virq,
+> +				   unsigned int nr_irqs)
+> +{
+> +	struct irq_data *d;
+> +
+> +	d = irq_domain_get_irq_data(domain, virq);
+> +	if (d) {
+> +		struct rzg2l_irqc_chip_data *chip_data = d->chip_data;
+> +
+> +		kfree(chip_data);
+> +	}
+> +	irq_domain_free_irqs_common(domain, virq, nr_irqs);
+> +}
+> +
+> +static const struct irq_domain_ops rzg2l_irqc_domain_ops = {
+> +	.alloc = rzg2l_irqc_alloc,
+> +	.free = rzg2l_irqc_domain_free,
+> +	.translate = irq_domain_translate_twocell,
+> +};
+> +
+> +static int rzg2l_irqc_parse_map(struct rzg2l_irqc_priv *priv,
+> +				struct device_node *np,
+> +				struct device_node *parent)
+> +{
+> +	unsigned int imaplen, i, j, ret;
+> +	struct device_node *ipar;
+> +	const __be32 *imap;
+> +	u32 intsize;
+> +
+> +	imap = of_get_property(np, "interrupt-map", &imaplen);
+
+We talked about this one already.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

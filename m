@@ -2,209 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E7746F95F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF09346F963
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbhLJCyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 21:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbhLJCyX (ORCPT
+        id S236188AbhLJC43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 21:56:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46236 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233693AbhLJC42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 21:54:23 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DDEC061746;
-        Thu,  9 Dec 2021 18:50:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Dec 2021 21:56:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639104772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OvObI7nEXeJiZonfZvXDNg0asabJh1D86F98Up+TTk8=;
+        b=gdfLq9AZsYIyyKj7u7fDsylnlX+xz8IKakibCWCT+E0ow0LYAsIzQ43NBNz3ZKk4Eb77yE
+        1EIghGOJ9aG7T7EAAMXTjXdtQkHkwjxqKIY4332Aitmx1jeoZSGEDb1gSVXhgh0lLwnOSe
+        Yviz4voDl+qqN8HcDEFsW0DvcUTTl1k=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-orEd3y_JP3aOQL36R6lfDw-1; Thu, 09 Dec 2021 21:52:47 -0500
+X-MC-Unique: orEd3y_JP3aOQL36R6lfDw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D2C25CE2990;
-        Fri, 10 Dec 2021 02:50:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFBCC004DD;
-        Fri, 10 Dec 2021 02:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639104645;
-        bh=p1MVXm5rcwcPGjiBQBmXfjmi70oSih/kX9P4dxQZmUY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eNZMWb6KMET0ifhBX9KsXgI5K8EQXrVL/dj5K0sUcw4ObwCwBd4LM66BeeUJFxumk
-         vP3pGSfle5UfyEG76lWsayVDqpQmtD/LXm2rgjo56Z5G+sXOdDIzKFfWhpVuDG3ZlX
-         sjheyt3kiVxPMTu5qrrWb0ceo5nO2DZskSwjb3vaKQS+O/QeebKI36zOg2fbmf+Ns4
-         pgC4Z6EkSJheI4ojbyqj9viQeeQ/JagmDELCi2gYgfxxMP37fhyM0+rICy1FlJOvrN
-         H6UzC8jjyoYXl6HfGENXsfMvRqlUUaLx4NcZH985kRbY11qiuMcJy0YQO01KJcIVaL
-         otQdsX7yXhmBg==
-Date:   Fri, 10 Dec 2021 11:50:41 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 03/13] user_events: Add print_fmt generation support
- for basic types
-Message-Id: <20211210115041.02aeb300333639cc12ffef56@kernel.org>
-In-Reply-To: <20211209223210.1818-4-beaub@linux.microsoft.com>
-References: <20211209223210.1818-1-beaub@linux.microsoft.com>
-        <20211209223210.1818-4-beaub@linux.microsoft.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED35E190B2CA;
+        Fri, 10 Dec 2021 02:52:45 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.131])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3C00F100AE22;
+        Fri, 10 Dec 2021 02:52:39 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-next v2] mm/memcg: Properly handle memcg_stock access for PREEMPT_RT
+Date:   Thu,  9 Dec 2021 21:52:28 -0500
+Message-Id: <20211210025228.158196-1-longman@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  9 Dec 2021 14:32:00 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+Direct calls to local_irq_{save/restore}() and preempt_{enable/disable}()
+are not appropriate for PREEMPT_RT. To provide better PREEMPT_RT support,
+change local_irq_{save/restore}() to local_lock_irq{save/restore}() and
+add a local_lock_t to struct memcg_stock_pcp.
 
-> Addes print_fmt format generation for basic types that are supported for
-> user processes. Only supports sizes that are the same on 32 and 64 bit.
-> 
+Also disable the task and interrupt context optimization for obj_stock as
+there will be no performance gain in the case of PREEMPT_RT. In this case,
+task obj_stock will be there but remain unused.
 
-This looks good to me.
+Note that preempt_enable() and preempt_disable() in get_obj_stock() and
+put_obj_stock() are not replaced by local_lock() and local_unlock() as it
+is possible that a task accessing task_obj may get interrupted and then
+access irq_obj concurrently. So using local_lock for task_obj access
+may cause lockdep splat.
 
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ mm/memcontrol.c | 41 ++++++++++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 19 deletions(-)
 
-Thank you,
-
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> ---
->  kernel/trace/trace_events_user.c | 107 ++++++++++++++++++++++++++++++-
->  1 file changed, 105 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 1d96d1c85147..bd8ac46fddb1 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -357,6 +357,106 @@ static int user_event_parse_fields(struct user_event *user, char *args)
->  
->  static struct trace_event_fields user_event_fields_array[1];
->  
-> +static const char *user_field_format(const char *type)
-> +{
-> +	if (strcmp(type, "s64") == 0)
-> +		return "%lld";
-> +	if (strcmp(type, "u64") == 0)
-> +		return "%llu";
-> +	if (strcmp(type, "s32") == 0)
-> +		return "%d";
-> +	if (strcmp(type, "u32") == 0)
-> +		return "%u";
-> +	if (strcmp(type, "int") == 0)
-> +		return "%d";
-> +	if (strcmp(type, "unsigned int") == 0)
-> +		return "%u";
-> +	if (strcmp(type, "s16") == 0)
-> +		return "%d";
-> +	if (strcmp(type, "u16") == 0)
-> +		return "%u";
-> +	if (strcmp(type, "short") == 0)
-> +		return "%d";
-> +	if (strcmp(type, "unsigned short") == 0)
-> +		return "%u";
-> +	if (strcmp(type, "s8") == 0)
-> +		return "%d";
-> +	if (strcmp(type, "u8") == 0)
-> +		return "%u";
-> +	if (strcmp(type, "char") == 0)
-> +		return "%d";
-> +	if (strcmp(type, "unsigned char") == 0)
-> +		return "%u";
-> +	if (strstr(type, "char[") != 0)
-> +		return "%s";
-> +
-> +	/* Unknown, likely struct, allowed treat as 64-bit */
-> +	return "%llu";
-> +}
-> +
-> +static bool user_field_is_dyn_string(const char *type)
-> +{
-> +	if (str_has_prefix(type, "__data_loc ") ||
-> +	    str_has_prefix(type, "__rel_loc "))
-> +		if (strstr(type, "char[") != 0)
-> +			return true;
-> +
-> +	return false;
-> +}
-> +
-> +#define LEN_OR_ZERO (len ? len - pos : 0)
-> +static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
-> +{
-> +	struct ftrace_event_field *field, *next;
-> +	struct list_head *head = &user->fields;
-> +	int pos = 0, depth = 0;
-> +
-> +	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
-> +
-> +	list_for_each_entry_safe_reverse(field, next, head, link) {
-> +		if (depth != 0)
-> +			pos += snprintf(buf + pos, LEN_OR_ZERO, " ");
-> +
-> +		pos += snprintf(buf + pos, LEN_OR_ZERO, "%s=%s",
-> +				field->name, user_field_format(field->type));
-> +
-> +		depth++;
-> +	}
-> +
-> +	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
-> +
-> +	list_for_each_entry_safe_reverse(field, next, head, link) {
-> +		if (user_field_is_dyn_string(field->type))
-> +			pos += snprintf(buf + pos, LEN_OR_ZERO,
-> +					", __get_str(%s)", field->name);
-> +		else
-> +			pos += snprintf(buf + pos, LEN_OR_ZERO,
-> +					", REC->%s", field->name);
-> +	}
-> +
-> +	return pos + 1;
-> +}
-> +#undef LEN_OR_ZERO
-> +
-> +static int user_event_create_print_fmt(struct user_event *user)
-> +{
-> +	char *print_fmt;
-> +	int len;
-> +
-> +	len = user_event_set_print_fmt(user, NULL, 0);
-> +
-> +	print_fmt = kmalloc(len, GFP_KERNEL);
-> +
-> +	if (!print_fmt)
-> +		return -ENOMEM;
-> +
-> +	user_event_set_print_fmt(user, print_fmt, len);
-> +
-> +	user->call.print_fmt = print_fmt;
-> +
-> +	return 0;
-> +}
-> +
->  static enum print_line_t user_event_print_trace(struct trace_iterator *iter,
->  						int flags,
->  						struct trace_event *event)
-> @@ -390,6 +490,7 @@ static int destroy_user_event(struct user_event *user)
->  	clear_bit(user->index, page_bitmap);
->  	hash_del(&user->node);
->  
-> +	kfree(user->call.print_fmt);
->  	kfree(EVENT_NAME(user));
->  	kfree(user);
->  
-> @@ -669,8 +770,10 @@ static int user_event_parse(char *name, char *args, char *flags,
->  	if (ret)
->  		goto put_user;
->  
-> -	/* Minimal print format */
-> -	user->call.print_fmt = "\"\"";
-> +	ret = user_event_create_print_fmt(user);
-> +
-> +	if (ret)
-> +		goto put_user;
->  
->  	user->call.data = user;
->  	user->call.class = &user->class;
-> -- 
-> 2.17.1
-> 
-
-
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index a09a7d2e0b1b..8bed8e2993e4 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2097,6 +2097,7 @@ struct obj_stock {
+ };
+ 
+ struct memcg_stock_pcp {
++	local_lock_t lock;
+ 	struct mem_cgroup *cached; /* this never be root cgroup */
+ 	unsigned int nr_pages;
+ 	struct obj_stock task_obj;
+@@ -2145,7 +2146,7 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 	if (nr_pages > MEMCG_CHARGE_BATCH)
+ 		return ret;
+ 
+-	local_irq_save(flags);
++	local_lock_irqsave(&memcg_stock.lock, flags);
+ 
+ 	stock = this_cpu_ptr(&memcg_stock);
+ 	if (memcg == stock->cached && stock->nr_pages >= nr_pages) {
+@@ -2153,7 +2154,7 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 		ret = true;
+ 	}
+ 
+-	local_irq_restore(flags);
++	local_unlock_irqrestore(&memcg_stock.lock, flags);
+ 
+ 	return ret;
+ }
+@@ -2189,7 +2190,7 @@ static void drain_local_stock(struct work_struct *dummy)
+ 	 * drain_stock races is that we always operate on local CPU stock
+ 	 * here with IRQ disabled
+ 	 */
+-	local_irq_save(flags);
++	local_lock_irqsave(&memcg_stock.lock, flags);
+ 
+ 	stock = this_cpu_ptr(&memcg_stock);
+ 	drain_obj_stock(&stock->irq_obj);
+@@ -2198,7 +2199,7 @@ static void drain_local_stock(struct work_struct *dummy)
+ 	drain_stock(stock);
+ 	clear_bit(FLUSHING_CACHED_CHARGE, &stock->flags);
+ 
+-	local_irq_restore(flags);
++	local_unlock_irqrestore(&memcg_stock.lock, flags);
+ }
+ 
+ /*
+@@ -2210,7 +2211,7 @@ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 	struct memcg_stock_pcp *stock;
+ 	unsigned long flags;
+ 
+-	local_irq_save(flags);
++	local_lock_irqsave(&memcg_stock.lock, flags);
+ 
+ 	stock = this_cpu_ptr(&memcg_stock);
+ 	if (stock->cached != memcg) { /* reset if necessary */
+@@ -2223,7 +2224,7 @@ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 	if (stock->nr_pages > MEMCG_CHARGE_BATCH)
+ 		drain_stock(stock);
+ 
+-	local_irq_restore(flags);
++	local_unlock_irqrestore(&memcg_stock.lock, flags);
+ }
+ 
+ /*
+@@ -2779,29 +2780,28 @@ static struct mem_cgroup *get_mem_cgroup_from_objcg(struct obj_cgroup *objcg)
+  * which is cheap in non-preempt kernel. The interrupt context object stock
+  * can only be accessed after disabling interrupt. User context code can
+  * access interrupt object stock, but not vice versa.
++ *
++ * This task and interrupt context optimization is disabled for PREEMPT_RT
++ * as there is no performance gain in this case.
+  */
+ static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
+ {
+-	struct memcg_stock_pcp *stock;
+-
+-	if (likely(in_task())) {
++	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
+ 		*pflags = 0UL;
+ 		preempt_disable();
+-		stock = this_cpu_ptr(&memcg_stock);
+-		return &stock->task_obj;
++		return this_cpu_ptr(&memcg_stock.task_obj);
+ 	}
+ 
+-	local_irq_save(*pflags);
+-	stock = this_cpu_ptr(&memcg_stock);
+-	return &stock->irq_obj;
++	local_lock_irqsave(&memcg_stock.lock, *pflags);
++	return this_cpu_ptr(&memcg_stock.irq_obj);
+ }
+ 
+ static inline void put_obj_stock(unsigned long flags)
+ {
+-	if (likely(in_task()))
++	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		preempt_enable();
+ 	else
+-		local_irq_restore(flags);
++		local_unlock_irqrestore(&memcg_stock.lock, flags);
+ }
+ 
+ /*
+@@ -7088,9 +7088,12 @@ static int __init mem_cgroup_init(void)
+ 	cpuhp_setup_state_nocalls(CPUHP_MM_MEMCQ_DEAD, "mm/memctrl:dead", NULL,
+ 				  memcg_hotplug_cpu_dead);
+ 
+-	for_each_possible_cpu(cpu)
+-		INIT_WORK(&per_cpu_ptr(&memcg_stock, cpu)->work,
+-			  drain_local_stock);
++	for_each_possible_cpu(cpu) {
++		struct memcg_stock_pcp *stock = per_cpu_ptr(&memcg_stock, cpu);
++
++		INIT_WORK(&stock->work, drain_local_stock);
++		local_lock_init(&stock->lock);
++	}
+ 
+ 	for_each_node(node) {
+ 		struct mem_cgroup_tree_per_node *rtpn;
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.27.0
+

@@ -2,152 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2944709A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451034709A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245364AbhLJTHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:07:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58572 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235573AbhLJTHH (ORCPT
+        id S245414AbhLJTHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235573AbhLJTHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:07:07 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B523BB829BB;
-        Fri, 10 Dec 2021 19:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE5BC00446;
-        Fri, 10 Dec 2021 19:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639163009;
-        bh=JOiolUAx3L5MxkUAVXE7PyChsErEriCCe8q1eTmoOgU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZRDysF11OdoxdSegspzuBZX3mQ4nnhL0+Mcy62/cAzNdIUmMNl0e/kd5LBce6f+qL
-         dVkljIKl18a4PeLsEi7ItQpYMaKqBpGkWhTctWIaY/A8bnmGvcx7fQr3/Fvo0tuHSh
-         JzeNF6vkO0lL1VwkKG7IgWdc5n+vZ9KXurVtT2/YYAwJ1Gn6Rt8B2y6r2PwfFBvF5L
-         2Zy1W9S3defbLesjC8RtgRvo3yDVlKcYX0GrSGJTjf3/DN2WekW+e2Gfs8/TW5vufd
-         r4njAV1XPLI4ldoFygn6X6xoW+B16c3qKEq8NxnBDp0vBMBoMdc+FI0w3dJFsJmQjC
-         jamuMkXzFx+Qw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5B6DC405D8; Fri, 10 Dec 2021 16:03:27 -0300 (-03)
-Date:   Fri, 10 Dec 2021 16:03:27 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Leo Yan <leo.yan@linaro.org>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org, suzuki.poulose@arm.com,
-        Mike Leach <mike.leach@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf cs-etm: Remove duplicate and incorrect aux size
- checks
-Message-ID: <YbOkf5C46OZGEJVM@kernel.org>
-References: <20211208115435.610101-1-james.clark@arm.com>
- <20211208131753.GC273781@leoy-ThinkPad-X240s>
- <269d2f14-0594-c73e-97b5-82e72f76e826@arm.com>
- <20211209134413.GA622826@leoy-ThinkPad-X240s>
- <6a7fd600-91f3-5feb-d21f-ec7cb704f84c@arm.com>
+        Fri, 10 Dec 2021 14:07:33 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2995EC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:03:57 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id b40so19703914lfv.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YRIlmq1+iZrjFvchtZLa2XEWbp2/+L1kaW6ixwhNcKk=;
+        b=dC55T7NVec8zDfqI25DC4orPrU+YljERqdmhvP8BSBfOEWGs7/rj+vdItXMhXXpORv
+         eqMpdz/v19NnizJpYYgCcjJRlV+J6XYem0gws42YVfFsXBJmlqrGGE344hZBH/SVGQro
+         ZWBUDmPBDw4rOgQ57hZJSHhW9QwTw39/ALNiRcI2h8V8YfSlfCdsVyd3Nza14RKySlsH
+         /tvXJPmp8AaLbq6w0IZIbr3IBqhe0TZyHifZFrVa0z4PldqmMPPOkjqUzT2l0qK21eAI
+         Tr0Khghv2uXuSopdQZ6ruVbeDM3Ymgu8WJnj+/lUgLWY285GHGHm3Ejo8K4fF6rO2qD2
+         u3TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YRIlmq1+iZrjFvchtZLa2XEWbp2/+L1kaW6ixwhNcKk=;
+        b=5Iwc12KbpWGIQEiNLodwcT7f/XLcRO84AMWNQrPjnHdvnKHrcIRi0TXevQVF/UtnbH
+         q4R0E0ArFDskVyPM2ukr17bfiQ3fCVdo68t84dWPQ+m/xPb9wRWERs83wmpd41BBZ0Lz
+         U9z3NCSiTu8EmdFjr6npNiZI6LbRx/tQ2Si/ESPJ6PeaJ5PVof2c9XT7qgCP8L3ztfJ7
+         BZec/2eaQhfqzD3uxfD7crdmbHD90hntDVgtNz4x7FxIk4mwqJMGRUCv5ajsqRGKIzUj
+         LUkd/KhG62YHLXgue338SkODodoIFazmCifMPBuxCk3Ji89HEJmhhYUiUrUzxM+bovzO
+         EfvQ==
+X-Gm-Message-State: AOAM532FFK3yWFX+w4m/H7kOruwy7XWrZ9XsoIwbbJc43+y+OCpumH/C
+        uG0cmgc/UcZnOOi5MlQtDpAXbVx6sr3VCaubQI6Jnw==
+X-Google-Smtp-Source: ABdhPJyoOVN7O/8fGgT5BJ/zKJF8IlTUbgLWM2OtohJe4qNABNx3FzVkhf8SEU9GV7/dxhmyOUNT4D+MIizWI79sKB4=
+X-Received: by 2002:ac2:4d19:: with SMTP id r25mr13734844lfi.82.1639163035097;
+ Fri, 10 Dec 2021 11:03:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a7fd600-91f3-5feb-d21f-ec7cb704f84c@arm.com>
-X-Url:  http://acmel.wordpress.com
+References: <20211210165528.3232292-1-nathan@kernel.org>
+In-Reply-To: <20211210165528.3232292-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 10 Dec 2021 11:03:43 -0800
+Message-ID: <CAKwvOdktm1p-ZxdOmQnGvdeq1zbPd1C5c7Mp0Co55=prccdcrg@mail.gmail.com>
+Subject: Re: [PATCH v2] soc/tegra: fuse: Fix bitwise vs. logical OR warning
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Dec 09, 2021 at 02:16:43PM +0000, James Clark escreveu:
-> 
-> 
-> On 09/12/2021 13:44, Leo Yan wrote:
-> > On Wed, Dec 08, 2021 at 02:08:04PM +0000, James Clark wrote:
-> >> On 08/12/2021 13:17, Leo Yan wrote:
-> >>> Hi James,
-> >>>
-> >>> On Wed, Dec 08, 2021 at 11:54:35AM +0000, James Clark wrote:
-> >>>> There are two checks, one is for size when running without admin, but
-> >>>> this one is covered by the driver and reported on in more detail here
-> >>>> (builtin-record.c):
-> >>>>
-> >>>>   pr_err("Permission error mapping pages.\n"
-> >>>>          "Consider increasing "
-> >>>>          "/proc/sys/kernel/perf_event_mlock_kb,\n"
-> >>>>          "or try again with a smaller value of -m/--mmap_pages.\n"
-> >>>>          "(current value: %u,%u)\n",
-> >>>
-> >>> I looked into the kernel code and found:
-> >>>
-> >>>   sysctl_perf_event_mlock = 512 + (PAGE_SIZE / 1024);  // 512KB + 1 page
-> >>>
-> >>> If the system have multiple cores, let's say 8 cores, then kernel even
-> >>> can relax the limitaion with:
-> >>>
-> >>>   user_lock_limit *= num_online_cpus();
-> >>>
-> >>> So means the memory lock limitation is:
-> >>>
-> >>>   (512KB + 1 page) * 8 = 4MB + 8 pages.
-> >>>
-> >>> Seems to me, it's much relax than the user space's limitaion 128KB.
-> >>> And let's imagine for Arm server, the permitted buffer size can be a
-> >>> huge value (e.g. for a system with 128 cores).
-> >>>
-> >>> Could you confirm if this is right?
-> >>
-> >> Yes that seems to be the case. And the commit message for that addition
-> >> states the reasoning:
-> >>
-> >>   perf_counter: Increase mmap limit
-> >>   
-> >>   In a default 'perf top' run the tool will create a counter for
-> >>   each online CPU. With enough CPUs this will eventually exhaust
-> >>   the default limit.
-> >>
-> >>   So scale it up with the number of online CPUs.
-> >>
-> >> To me that makes sense. Normally the memory installed also scales with the
-> >> number of cores.
-> >>
-> >> Are you saying that we should look into modifying that scaling factor in
-> >> perf_mmap()? Or that we should still add something to userspace for
-> >> coresight to limit user supplied buffer sizes?
-> > 
-> > I don't think we should modify the scaling factor in perf_mmap(), the
-> > logic is not only used by AUX buffer, it's shared by normal event
-> > ring buffer.
-> > 
-> >> I think it makes sense to allow the user to specify any value that will work,
-> >> it's up to them.
-> > 
-> > Understand, I verified this patch with below steps:
-> > 
-> > root@debian:~# echo 0 > /proc/sys/kernel/perf_event_paranoid
-> > 
-> > leoy@debian:~$ perf record -e cs_etm// -m 4M,8M -o perf_test.data -- sleep 1
-> > Permission error mapping pages.
-> > Consider increasing /proc/sys/kernel/perf_event_mlock_kb,
-> > or try again with a smaller value of -m/--mmap_pages.
-> > (current value: 1024,2048)
-> > 
-> > leoy@debian:~$ perf record -e cs_etm// -m 4M,4M -o perf_test.data -- sleep 1
-> > Couldn't synthesize bpf events.
-> > [ perf record: Woken up 1 times to write data ]
-> > [ perf record: Captured and wrote 0.607 MB perf_test.data ]
-> > 
-> > So this patch looks good for me:
-> > 
-> > Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> > 
-> Thanks Leo!
+On Fri, Dec 10, 2021 at 8:57 AM Nathan Chancellor <nathan@kernel.org> wrote=
+:
+>
+> A new warning in clang points out two instances where boolean
+> expressions are being used with a bitwise OR instead of logical OR:
+>
+> drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: warning: use of bitwise '|'=
+ with boolean operands [-Wbitwise-instead-of-logical]
+>                 reg =3D tegra_fuse_read_spare(i) |
+>                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>                                                ||
+> drivers/soc/tegra/fuse/speedo-tegra20.c:72:9: note: cast one or both oper=
+ands to int to silence this warning
+> drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: warning: use of bitwise '|'=
+ with boolean operands [-Wbitwise-instead-of-logical]
+>                 reg =3D tegra_fuse_read_spare(i) |
+>                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>                                                ||
+> drivers/soc/tegra/fuse/speedo-tegra20.c:87:9: note: cast one or both oper=
+ands to int to silence this warning
+> 2 warnings generated.
+>
+> The motivation for the warning is that logical operations short circuit
+> while bitwise operations do not.
+>
+> In this instance, tegra_fuse_read_spare() is not semantically returning
+> a boolean, it is returning a bit value. Use u32 for its return type so
+> that it can be used with either bitwise or boolean operators without any
+> warnings.
+>
+> Fixes: 25cd5a391478 ("ARM: tegra: Add speedo-based process identification=
+")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1488
+> Suggested-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Thanks for the revised patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>
+> v1 -> v2: https://lore.kernel.org/r/20211021214500.2388146-1-nathan@kerne=
+l.org/
+>
+> * Change return type of tegra_fuse_read_spare(), instead of changing
+>   bitwise OR to logical OR in tegra20_init_speedo_data() (Micha=C5=82).
+>
+> It would be nice to get this fixed sooner rather than later, as ARCH=3Dar=
+m
+> allmodconfig is broken due to -Werror.
+
+Yes please let's try to get this into 5.16-rc5 if possible!
+
+>
+>  drivers/soc/tegra/fuse/fuse-tegra.c | 2 +-
+>  drivers/soc/tegra/fuse/fuse.h       | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse=
+/fuse-tegra.c
+> index f2151815db58..e714ed3b61bc 100644
+> --- a/drivers/soc/tegra/fuse/fuse-tegra.c
+> +++ b/drivers/soc/tegra/fuse/fuse-tegra.c
+> @@ -320,7 +320,7 @@ static struct platform_driver tegra_fuse_driver =3D {
+>  };
+>  builtin_platform_driver(tegra_fuse_driver);
+>
+> -bool __init tegra_fuse_read_spare(unsigned int spare)
+> +u32 __init tegra_fuse_read_spare(unsigned int spare)
+>  {
+>         unsigned int offset =3D fuse->soc->info->spare + spare * 4;
+>
+> diff --git a/drivers/soc/tegra/fuse/fuse.h b/drivers/soc/tegra/fuse/fuse.=
+h
+> index de58feba0435..ecff0c08e959 100644
+> --- a/drivers/soc/tegra/fuse/fuse.h
+> +++ b/drivers/soc/tegra/fuse/fuse.h
+> @@ -65,7 +65,7 @@ struct tegra_fuse {
+>  void tegra_init_revision(void);
+>  void tegra_init_apbmisc(void);
+>
+> -bool __init tegra_fuse_read_spare(unsigned int spare);
+> +u32 __init tegra_fuse_read_spare(unsigned int spare);
+>  u32 __init tegra_fuse_read_early(unsigned int offset);
+>
+>  u8 tegra_get_major_rev(void);
+>
+> base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+> --
+> 2.34.1
+>
+>
 
 
-Thanks, applied.
-
-- Arnaldo
-
+--=20
+Thanks,
+~Nick Desaulniers

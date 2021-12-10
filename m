@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1EE47080C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97669470810
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245097AbhLJSHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245092AbhLJSHr (ORCPT
+        id S245102AbhLJSI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:08:57 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4247 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240017AbhLJSI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:07:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBA6C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:04:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E4AEB8294F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 18:04:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF83C00446;
-        Fri, 10 Dec 2021 18:04:06 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 18:04:03 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH v2 32/34] arm64: select KASAN_VMALLOC for SW/HW_TAGS modes
-Message-ID: <YbOWk2ywaZpgpmeW@arm.com>
-References: <cover.1638825394.git.andreyknvl@google.com>
- <4f56dd2bfaf945032a226f90141bb4f8e73959b7.1638825394.git.andreyknvl@google.com>
+        Fri, 10 Dec 2021 13:08:57 -0500
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J9f0G3hr0z67mFG;
+        Sat, 11 Dec 2021 02:03:26 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 19:05:20 +0100
+Received: from [10.47.93.58] (10.47.93.58) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 10 Dec
+ 2021 18:05:19 +0000
+Subject: Re: [PATCH v2 01/11] iommu/iova: Fix race between FQ timeout and
+ teardown
+To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
+        <will@kernel.org>
+CC:     <iommu@lists.linux-foundation.org>,
+        <suravee.suthikulpanit@amd.com>, <baolu.lu@linux.intel.com>,
+        <willy@infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, Xiongfeng Wang <wangxiongfeng2@huawei.com>
+References: <cover.1639157090.git.robin.murphy@arm.com>
+ <ecea6835baca75b945bd8ecfaa636ff01dabcc1d.1639157090.git.robin.murphy@arm.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <03cbd9c4-0f11-895b-8eb5-1b75bb74d37c@huawei.com>
+Date:   Fri, 10 Dec 2021 18:04:53 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4f56dd2bfaf945032a226f90141bb4f8e73959b7.1638825394.git.andreyknvl@google.com>
+In-Reply-To: <ecea6835baca75b945bd8ecfaa636ff01dabcc1d.1639157090.git.robin.murphy@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.93.58]
+X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 10:44:09PM +0100, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
+On 10/12/2021 17:54, Robin Murphy wrote:
+> From: Xiongfeng Wang<wangxiongfeng2@huawei.com>
 > 
-> Generic KASAN already selects KASAN_VMALLOC to allow VMAP_STACK to be
-> selected unconditionally, see commit acc3042d62cb9 ("arm64: Kconfig:
-> select KASAN_VMALLOC if KANSAN_GENERIC is enabled").
-> 
-> The same change is needed for SW_TAGS KASAN.
-> 
-> HW_TAGS KASAN does not require enabling KASAN_VMALLOC for VMAP_STACK,
-> they already work together as is. Still, selecting KASAN_VMALLOC still
-> makes sense to make vmalloc() always protected. In case any bugs in
-> KASAN's vmalloc() support are discovered, the command line kasan.vmalloc
-> flag can be used to disable vmalloc() checking.
-> 
-> This patch selects KASAN_VMALLOC for all KASAN modes for arm64.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> It turns out to be possible for hotplugging out a device to reach the
+> stage of tearing down the device's group and default domain before the
+> domain's flush queue has drained naturally. At this point, it is then
+> possible for the timeout to expire just*before*  the del_timer() call
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+super nit: "just*before*  the" - needs a whitespace before "before" :)
 
-I also had a look at the rest of the patches and they look fine to me
-(even the init_tags comment, feel free to ignore it). I'll poke Vincenzo
-next week to look at the patches with his co-developed-by tag.
+> from free_iova_flush_queue(), such that we then proceed to free the FQ
+> resources while fq_flush_timeout() is still accessing them on another
+> CPU. Crashes due to this have been observed in the wild while removing
+> NVMe devices.
+> 
+> Close the race window by using del_timer_sync() to safely wait for any
+> active timeout handler to finish before we start to free things. We
+> already avoid any locking in free_iova_flush_queue() since the FQ is
+> supposed to be inactive anyway, so the potential deadlock scenario does
+> not apply.
+> 
+> Fixes: 9a005a800ae8 ("iommu/iova: Add flush timer")
+> Signed-off-by: Xiongfeng Wang<wangxiongfeng2@huawei.com>
+> [ rm: rewrite commit message ]
+> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
 
--- 
-Catalin
+FWIW,
+
+Reviewed-by: John Garry <john.garry@huawei.com>

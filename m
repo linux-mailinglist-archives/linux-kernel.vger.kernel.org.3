@@ -2,125 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1A3470562
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2343D470565
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240235AbhLJQRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235802AbhLJQRQ (ORCPT
+        id S240318AbhLJQSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:18:45 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:35390 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240274AbhLJQSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:17:16 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C37C061746;
-        Fri, 10 Dec 2021 08:13:41 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v1so31913804edx.2;
-        Fri, 10 Dec 2021 08:13:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MeaT6sP369ZHHfFlIktP/ijwsUKGGwQi8Na1ysopui0=;
-        b=awGSNUEdqU3eYue93Og7j1+edp3YABdgj0N9Ga98N5ubOQFsdyrgkZk2BBZ4p513Tq
-         ifeWlcUvxk5atK2BK8Fr7zju6mVQR3Bpgl9jrTaXLGs/epBNkcTn8OKsvy9I4vn6cuGl
-         ALSc+O5jaFLVV6BZKbsvepgRRAzwPh5bWgWsUJ1lGmMMMRmJDB0GaTcDsjZ2V2/b0pQ+
-         gZFb+sG2ZGFnKXURT7S6ZVfFmUcO+7bdJmQJdx29sksBpCJpm5jtBkpZ+QmWsQ2w1aiH
-         66LiLrhQX/cLrxjnQ6Rw7xkzRm4QRk761c/nWg6kDmACGiQSHbwfCeOn4krmIdQjiJLu
-         u4iA==
+        Fri, 10 Dec 2021 11:18:44 -0500
+Received: by mail-il1-f198.google.com with SMTP id m9-20020a056e021c2900b002a1d679b412so10859848ilh.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:15:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MeaT6sP369ZHHfFlIktP/ijwsUKGGwQi8Na1ysopui0=;
-        b=qjB6TF9XoQF1trm2dTWnp+glx+tet2go0Sd1pOkohIi1pr+K6jKWiQMO1PjSqfY4iQ
-         uwJ17Zwbsm2HdhCu8zzWqOaSagLebpDUnX+2HMW3bYQ0psMD2KMnAfWlgY5XqD0tA+re
-         NetV/DKTT5jbp/VvlnhyZrEw4BsEqKPcJy+47nHXHFv3EOUPR+kRaWD03rqHh8zJP6UC
-         2IWXZJcyJOMBtEcTWCeagjYktx/wUbm5z0ddhJ6qL7yN0tUAEWr26BuqIuEnJB/K1Fxt
-         Ym3XuW7ilC2O4c5gD5wG5wusdymM7W3MHWoJdA9w1Fl17NMpGmgys8FY2cjui8oWWcSt
-         EB2A==
-X-Gm-Message-State: AOAM532n63LJG1F8cu08xYTqCeZklE3fiDtMha2bufhbST18YGaNKFjQ
-        jFwpHK30Kwpn6+SIVikO19k=
-X-Google-Smtp-Source: ABdhPJzRiRJoaivdEdM1HH35JPF4ywUVtOqJvo2pTQyXc9KWsiWb7HO9CClNbRJMS6BT0j/CTz+4Kg==
-X-Received: by 2002:a17:907:2454:: with SMTP id yw20mr25180988ejb.428.1639152819557;
-        Fri, 10 Dec 2021 08:13:39 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
-        by smtp.googlemail.com with ESMTPSA id jg32sm1900192ejc.43.2021.12.10.08.13.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 08:13:38 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <8ab8833f-2a89-71ff-98da-2cfbb251736f@redhat.com>
-Date:   Fri, 10 Dec 2021 17:13:29 +0100
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=hCvnT54V6dz5hU6SrRLw5pSFpj+AS8Nd4KGYLHFcp0Y=;
+        b=22Qe79zp6VJwI5Nzwk097CwX6UgFKt+u9ouywW084n58wRA3Y8FiqQAs5W/whZDK+5
+         qRKvs+7SYtKu0biRkPZW0ffroe7hD+UGQAs4GqxS2FHbE9Ynk0t4AIL3hZxNu+LMVGRW
+         ynI6FlaLZ/HKUfNY289dWRwygxbTsyq3mdYFjSPWt6103aSz5uRJXD5A+BwwOc4wJey2
+         3kMwNYa5+BCUCVSe5asJkMhU+ejCKcB7AqnQWna9zLm2hKSJX/OTAT5jwZJQh3yX5gEh
+         ZsNor+kRxuObGJN2OxpSKstMiDMbdLw7zFHgx/sY3SX1IArEexNxQo6FKrhv+kvRx20W
+         F+aw==
+X-Gm-Message-State: AOAM5304Cwkath7LwTWAmYFWD2ajg9zt10IVIpSvN/ruylhii5wEveaZ
+        9K3nUuHjqKH0k4zGjAV6V7glntgNq7XGwX8YIsjPei3llFxe
+X-Google-Smtp-Source: ABdhPJy0+1Kzubb2wOyqTwA+WeSKW/Ony0nSbvBW6B2pEY/r1R4dlA0k9FeachkuKy5dZIjLG6abPYZiWcQpTE+gWzMTJVMs9Ewh
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/7] KVM: x86: Retry page fault if MMU reload is pending
- and root has no sp
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20211209060552.2956723-1-seanjc@google.com>
- <20211209060552.2956723-2-seanjc@google.com>
- <c94b3aec-981e-8557-ba29-0094b075b8e4@redhat.com>
- <YbN58FS67bEBOZZu@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YbN58FS67bEBOZZu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a92:d28d:: with SMTP id p13mr24204351ilp.163.1639152908858;
+ Fri, 10 Dec 2021 08:15:08 -0800 (PST)
+Date:   Fri, 10 Dec 2021 08:15:08 -0800
+In-Reply-To: <8544854b-226d-befd-bd91-5af182c2b03d@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dd7d7e05d2cd063a@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Write in io_queue_worker_create
+From:   syzbot <syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 17:01, Sean Christopherson wrote:
->> KVM_REQ_MMU_RELOAD is raised after kvm->arch.mmu_valid_gen is fixed (of
->> course, otherwise the other CPU might just not see any obsoleted page
->> from the legacy MMU), therefore any check on KVM_REQ_MMU_RELOAD is just
->> advisory.
-> 
-> I disagree.  IMO, KVM should not be installing SPTEs into obsolete shadow pages,
-> which is what continuing on allows.  I don't _think_ it's problematic, but I do
-> think it's wrong.
->
-> [...] Eh, for all intents and purposes, KVM_REQ_MMU_RELOAD very much says
-> special roots are obsolete.  The root will be unloaded, i.e. will no
-> longer be used, i.e. is obsolete.
+Hello,
 
-I understand that---but it takes some unspoken details to understand 
-that.  In particular that both kvm_reload_remote_mmus and 
-is_page_fault_stale are called under mmu_lock write-lock, and that 
-there's no unlock between updating mmu_valid_gen and calling 
-kvm_reload_remote_mmus.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-(This also suggests, for the other six patches, keeping 
-kvm_reload_remote_mmus and just moving it to arch/x86/kvm/mmu/mmu.c, 
-with an assertion that the MMU lock is held for write).
+Reported-and-tested-by: syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com
 
-But since we have a way forward for having no special roots to worry 
-about, it seems an unnecessary overload for 1) a patch that will last 
-one or two releasees at most 2) a case that has been handled in the 
-inefficient way forever.
+Tested on:
 
-Paolo
+commit:         263568d1 io-wq: check for wq exit after adding new wor..
+git tree:       git://git.kernel.dk/linux-block io_uring-5.16
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6c3ab72998e7f1a4
+dashboard link: https://syzkaller.appspot.com/bug?extid=b60c982cb0efc5e05a47
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> The other way to check for an invalid special root would be to treat
-> it as obsolete if any of its children in entries 0-3 are present and
-> obsolete.  That would be more precise, but it provides no benefit
-> given KVM's current implementation.
-> 
-> I'm not completely opposed to doing nothing, but I do think it's
-> silly to continue on knowing that the work done by the page fault is
-> all but gauranteed to be useless.
-> 
-
+Note: testing is done by a robot and is best-effort only.

@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3DF470CA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE8E470CAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344503AbhLJVmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:42:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34138 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243515AbhLJVmb (ORCPT
+        id S1344509AbhLJVmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344301AbhLJVme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:42:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 10 Dec 2021 16:42:34 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C628C061746;
+        Fri, 10 Dec 2021 13:38:59 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6BAC6CE2D3D;
-        Fri, 10 Dec 2021 21:38:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45154C00446;
-        Fri, 10 Dec 2021 21:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639172332;
-        bh=LV9ui+LoZ09dCLi3M8fgKyg0G4ZmmnOP+h8yd9lluKY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mRwvYATMjYz4Nm2aLuSC+YipI9kwGzq8XIk2Eg99optMxBRkpbYEGJZUkux+CoAKP
-         Ne5KJxnOLlI63dji3RFtyUq6nPQrVrFFKCIbLuUtZTrE3sS8PhePPg43i/hcXb+lIg
-         mB6WwhLdUCD3eXmdot8Uay92v5aQx1PWJfzR2SxmtTHqzSI8GEBB7nZWE+gh0rW33Q
-         iIBkR9uWSUj4VnJAxiQQwD/i0oHWJUdgh+j8Ke+8DUkZdzZ5M6zkEfZOtOoy+B0HAb
-         bWK5LHIHqEr7zIeUG4bFq5pVkDDpN3hUwapVcO5Zqm2h9k00N+tnPeI3Ph7CV4Tg9/
-         yjmVGOa/i6/pw==
-Date:   Fri, 10 Dec 2021 21:38:48 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org, jeyu@kernel.org,
-        mcgrof@bombadil.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Next/Trees: update the modules tree
-Message-ID: <YbPI6Novz3ikiKEI@sirena.org.uk>
-References: <20211208195931.3369500-1-mcgrof@kernel.org>
+        by ms.lwn.net (Postfix) with ESMTPSA id CF48A2CC;
+        Fri, 10 Dec 2021 21:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CF48A2CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1639172339; bh=GkTPyMdU37Yf9DEqk90Dfhc6gc5RhcnhAIN6wRj3kzI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=J7V3CbS2jwuy0F/6/2aG5q6hUoySFPBDqe210B9y16hZqDhEpOm9tvs2u86cxbgNQ
+         stWK+TN+OVIn3OMIacZXR3oOLphSGPrEyP62OeiBbAnPgoKLp/Se/TVygLqaJqod+v
+         mfIzTiJENBpxL4mEmjRoYkhFbNlJAFsVg73i3PYcbAHNPz58XHEBd+VH42raWMJfnY
+         R6tR5QBKMK70m3a+GVbaErU9z0JcYk9HS1RRaETcprJltSWW5YgEB5mJLHhhRa8Snr
+         5zpSamvZKTq5++6yJNOCweoTw97HPbr9q4pLJBcKdV6IDM29+X53LpxFWDoukC0QAQ
+         DzwtW2UJExDgA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
+        shuah@kernel.org, rmr167@gmail.com, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
+In-Reply-To: <41323fe3-3f73-4681-7d75-2301f9982a25@linuxfoundation.org>
+References: <20211207190251.18426-1-davidgow@google.com>
+ <202112071358.E8E6812D@keescook>
+ <8c06e715-a83e-e8c6-74c3-836831b85cdf@linuxfoundation.org>
+ <87mtl8qifu.fsf@meer.lwn.net>
+ <41323fe3-3f73-4681-7d75-2301f9982a25@linuxfoundation.org>
+Date:   Fri, 10 Dec 2021 14:38:58 -0700
+Message-ID: <8735n0qgwd.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bUaiORlw3qU9OGY1"
-Content-Disposition: inline
-In-Reply-To: <20211208195931.3369500-1-mcgrof@kernel.org>
-X-Cookie: One picture is worth 128K words.
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
---bUaiORlw3qU9OGY1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>> Would you like me to take this through the docs tree, or do you have
+>> other plans for merging?
+>
+> Please take this through docs.
 
-On Wed, Dec 08, 2021 at 11:59:31AM -0800, Luis Chamberlain wrote:
+Done.
 
-> pull request which was merged for v5.16-rc1. I'll queue up fixes
-> on the modules_linus branch.
+Thanks,
 
-> those in the modules_next branch to match parity with the same style
-
-Actually, note that your e-mail says the branches are modules_X while
-the diff says modules-X which looks like it's the correct thing:
-
-> -modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-linus
-> +modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-linus
-
-> -modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-next
-> +modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-next
-
---bUaiORlw3qU9OGY1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzyOcACgkQJNaLcl1U
-h9At9wf/XiQIUoVnn5gjhBAUrkFwuGr8OUFGp+pgYzzr5DdsJmdxpn5zq2v+f1WN
-Nxfbob7TD633b8tLlCoiPh1ucdAFKyAyeTMZHnAuSRu11n6orjgEXhuAv7IgapOi
-MW8nWBJL1Pco4nQspBsLigNyrjxwPrb+NLAGgXcD0F1E80ohcxnGRBjxLW4xwfrO
-zf2PZKvyoZoiULFaA3LykkR1V0c7IPw1s+5KIS46D3/+IYLpEBgUZaKTb5V2Epdc
-hlX9faQH6rgK1JCVuTY9PR+FaCwPdpieMJteEmSEFVe507M81OGvzBsXtSPnFGEB
-lCp+rEZUZpDjVLQs3bSsWeC93UBgew==
-=kUqG
------END PGP SIGNATURE-----
-
---bUaiORlw3qU9OGY1--
+jon

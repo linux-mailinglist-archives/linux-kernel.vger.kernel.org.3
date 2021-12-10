@@ -2,133 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D480470B7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6269470B85
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237391AbhLJUMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:12:18 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16496 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232906AbhLJUMR (ORCPT
+        id S1344066AbhLJUNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344039AbhLJUNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:12:17 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAJRiBp021062;
-        Fri, 10 Dec 2021 20:08:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ogkJ3lXGwhQIYiOFOEOgjHKquhZLwTAW9+pxfmkSEpk=;
- b=nXm75KoUj8iHLIq2FHWzO3/3h9nuJuYWl9ET2b1Am9imf5X71KbGXEcYHeerw3a3GjLk
- fiOdJPAzO+sPhQohGGY1xNOY2zusHZGTjXDl9ZN22nJzSGJ2ou0k+safFRdb9Gxs/h/R
- hXNAi874WQFZk5Ea8jOczORFFOdpUMkn11iIXsdllAcMdAZcZ0YfWIp3fD0SJc9RTjQ3
- RMiAqvx78queE7zShA4qR/tAIn0X/h5E0F8ufnuKnaxjkbQ+R/swSkABUCQjFgbOS5vk
- XD6i9cF6rYhwMkl11AgJ164HLsharZEi6FVKQCbzaqEkrTxpeXZGp9jQUwxsgCU7631y mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cvd2u8p0e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 20:08:32 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAJifMF026703;
-        Fri, 10 Dec 2021 20:08:31 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cvd2u8p05-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 20:08:31 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAK3wSx006265;
-        Fri, 10 Dec 2021 20:08:30 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma05wdc.us.ibm.com with ESMTP id 3cqyycp6q2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 20:08:30 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAK8TMe32440758
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 20:08:29 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42B336A051;
-        Fri, 10 Dec 2021 20:08:29 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA7B26A054;
-        Fri, 10 Dec 2021 20:08:27 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 20:08:27 +0000 (GMT)
-Message-ID: <8b5eaf38-2e7b-1c82-a715-50f0ffd4d1ff@linux.ibm.com>
-Date:   Fri, 10 Dec 2021 15:08:27 -0500
+        Fri, 10 Dec 2021 15:13:18 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E28C061353;
+        Fri, 10 Dec 2021 12:09:42 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id b19so13509824ljr.12;
+        Fri, 10 Dec 2021 12:09:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=xrpHd8kVftwQX0I0zoEuaQuKXl5F7Q3cALZMkQUcmHk=;
+        b=aXwiv4aNsDR1u7FmPD3ogtTBd1tW5jfK7FKHdPgvVqaqMSVqfGMoYSitMAc4/pkwEu
+         T9OmPgcq9eFNlQHpjtDz6oUKgvB+9jQ7yPR3rSmo0hjFy+gQdx7zthCW1xtFLdZTgPnG
+         yMjFoDp0jScSI7gns058QlM+5gzaUTlSvny9Z29pTV0TMWppvisVWdS0eN9EUAw1W9or
+         Br6QqU+eVeELvmhR5AmU/npFWpiIwizHVccIyU8FGliSSMXAd3wwK9LkRvgoQzyHNW52
+         eFxv9AjRfSSjC7vhJuv7dOKw+fYh7061nK7xzJc5DXmWn6VTeQFV3wBcWWpgwND20/Jw
+         BHfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=xrpHd8kVftwQX0I0zoEuaQuKXl5F7Q3cALZMkQUcmHk=;
+        b=KK/lacGlBhuOWYq4HAiJV6ba62M7WANKyIespEzL7tTKQskcFcbgdqmwSltuSEcHpg
+         Mh1H+27NDm7Pg+K5lpVN8/a5yg8Vro7HExuwHC020+NxmnCrnwVkOTmPPjLVeApu9wuj
+         NgFBf2VVKlOlR7BqsjhEwmdMjRVZqj/cxLzjNzqpSNxHuEkR0C+mJ2iX0bUG9lRJHwxT
+         uQLRgdRN1BqZRUqZmcS3p10WxqUAN8HYf2Plx/Uy/S1zf8L2Gke3jiCss+dtu9nvh286
+         metUuXpGwLwMNM86WV5L7M8+QXp+BHMmr3vm09vQVxk340122gPsCUE8mh4plDUF+rHe
+         d7uA==
+X-Gm-Message-State: AOAM5300RvPd45BPVV3/hUldM0B+Nj9yn3FyfWN1nzF4NgqT3H07HhJK
+        kOyyF3XDgWQ8Y5t8ZYLYdlYR502yiz9d4g==
+X-Google-Smtp-Source: ABdhPJzuxRBtHvLFDqkd06VF7tPxPunAxlfO0DpazAj61e+BCB/5DQqs51m47uJpIAwW58yZej2lxQ==
+X-Received: by 2002:a05:651c:1036:: with SMTP id w22mr14122630ljm.356.1639166981113;
+        Fri, 10 Dec 2021 12:09:41 -0800 (PST)
+Received: from [10.0.0.115] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
+        by smtp.gmail.com with ESMTPSA id v198sm402095lfa.89.2021.12.10.12.09.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 12:09:40 -0800 (PST)
+Message-ID: <8ae3b70e-3697-2d3f-9a62-378f1a3748d7@gmail.com>
+Date:   Fri, 10 Dec 2021 22:10:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem related
- variables into ima_namespace
+ Thunderbird/91.3.2
 Content-Language: en-US
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-14-stefanb@linux.ibm.com>
- <20211209191109.o3x7nynnm52zhygz@wittgenstein>
- <0ab33fbc-8438-27b6-ff4c-0321bfc73855@linux.ibm.com>
- <20211210113244.odv2ibrifz2jzft5@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211210113244.odv2ibrifz2jzft5@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CIZ0onRIN-GaxJLQEESf7-o55-uuOpHn
-X-Proofpoint-ORIG-GUID: hWpn7xvf4NgfNIlu6iOyhji_I49YfGYG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_08,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- phishscore=0 priorityscore=1501 spamscore=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112100110
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Nishanth Menon <nm@ti.com>
+References: <20211209180957.29036-1-vigneshr@ti.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH] dma: ti: k3-udma: Fix smatch warnings
+In-Reply-To: <20211209180957.29036-1-vigneshr@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/10/21 06:32, Christian Brauner wrote:
->  From ecf25d6b2b5895005d4103169bdb55d970e7a865 Mon Sep 17 00:00:00 2001
-> From: Christian Brauner<christian.brauner@ubuntu.com>
-> Date: Fri, 10 Dec 2021 11:56:25 +0100
-> Subject: [PATCH 2/2] !!!! HERE BE DRAGONS - COMPLETELY UNTESTED !!!!
->
-> securityfs: don't allow mounting from outside the filesystem's userns
->
-> If we ever need to allow that we should revisit the semantics.
+
+On 09/12/2021 20:09, Vignesh Raghavendra wrote:
+> Smatch reports below warnings [1] wrt dereferencing rm_res when it can
+> potentially be ERR_PTR(). This is possible when entire range is
+> allocated to Linux
+> Fix this case by making sure, there is no deference of rm_res when its
+> ERR_PTR().
+
+Valid, early sysfs did not had rm ranges, thus we assumed all channels
+are for Linux, then we got support for one range per channel type and
+then the sets got introduced for supporting the differnt throughput
+levels of channles in the types.
+This surely got overlooked.
+
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+
+> 
+> [1]:
+>  drivers/dma/ti/k3-udma.c:4524 udma_setup_resources() error: 'rm_res' dereferencing possible ERR_PTR()
+>  drivers/dma/ti/k3-udma.c:4537 udma_setup_resources() error: 'rm_res' dereferencing possible ERR_PTR()
+>  drivers/dma/ti/k3-udma.c:4681 bcdma_setup_resources() error: 'rm_res' dereferencing possible ERR_PTR()
+>  drivers/dma/ti/k3-udma.c:4696 bcdma_setup_resources() error: 'rm_res' dereferencing possible ERR_PTR()
+>  drivers/dma/ti/k3-udma.c:4711 bcdma_setup_resources() error: 'rm_res' dereferencing possible ERR_PTR()
+>  drivers/dma/ti/k3-udma.c:4848 pktdma_setup_resources() error: 'rm_res' dereferencing possible ERR_PTR()
+>  drivers/dma/ti/k3-udma.c:4861 pktdma_setup_resources() error: 'rm_res' dereferencing possible ERR_PTR()
+> 
+> Reported-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 > ---
->   security/inode.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/security/inode.c b/security/inode.c
-> index eaccba7017d9..71f9634228f3 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -43,7 +43,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
->   {
->   	static const struct tree_descr files[] = {{""}};
->   	struct user_namespace *ns = fc->user_ns;
-> -	int error;
-> +	int error = -EINVAL;
+>  drivers/dma/ti/k3-udma.c | 157 ++++++++++++++++++++++++++-------------
+>  1 file changed, 107 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+> index 041d8e32d630..6e56d1cef5ee 100644
+> --- a/drivers/dma/ti/k3-udma.c
+> +++ b/drivers/dma/ti/k3-udma.c
+> @@ -4534,45 +4534,60 @@ static int udma_setup_resources(struct udma_dev *ud)
+>  	rm_res = tisci_rm->rm_ranges[RM_RANGE_TCHAN];
+>  	if (IS_ERR(rm_res)) {
+>  		bitmap_zero(ud->tchan_map, ud->tchan_cnt);
+> +		irq_res.sets = 1;
+>  	} else {
+>  		bitmap_fill(ud->tchan_map, ud->tchan_cnt);
+>  		for (i = 0; i < rm_res->sets; i++)
+>  			udma_mark_resource_ranges(ud, ud->tchan_map,
+>  						  &rm_res->desc[i], "tchan");
+> +		irq_res.sets = rm_res->sets;
+>  	}
+> -	irq_res.sets = rm_res->sets;
+>  
+>  	/* rchan and matching default flow ranges */
+>  	rm_res = tisci_rm->rm_ranges[RM_RANGE_RCHAN];
+>  	if (IS_ERR(rm_res)) {
+>  		bitmap_zero(ud->rchan_map, ud->rchan_cnt);
+> +		irq_res.sets++;
+>  	} else {
+>  		bitmap_fill(ud->rchan_map, ud->rchan_cnt);
+>  		for (i = 0; i < rm_res->sets; i++)
+>  			udma_mark_resource_ranges(ud, ud->rchan_map,
+>  						  &rm_res->desc[i], "rchan");
+> +		irq_res.sets += rm_res->sets;
+>  	}
+>  
+> -	irq_res.sets += rm_res->sets;
+>  	irq_res.desc = kcalloc(irq_res.sets, sizeof(*irq_res.desc), GFP_KERNEL);
+> +	if (!irq_res.desc)
+> +		return -ENOMEM;
+>  	rm_res = tisci_rm->rm_ranges[RM_RANGE_TCHAN];
+> -	for (i = 0; i < rm_res->sets; i++) {
+> -		irq_res.desc[i].start = rm_res->desc[i].start;
+> -		irq_res.desc[i].num = rm_res->desc[i].num;
+> -		irq_res.desc[i].start_sec = rm_res->desc[i].start_sec;
+> -		irq_res.desc[i].num_sec = rm_res->desc[i].num_sec;
+> +	if (IS_ERR(rm_res)) {
+> +		irq_res.desc[0].start = 0;
+> +		irq_res.desc[0].num = ud->tchan_cnt;
+> +		i = 1;
+> +	} else {
+> +		for (i = 0; i < rm_res->sets; i++) {
+> +			irq_res.desc[i].start = rm_res->desc[i].start;
+> +			irq_res.desc[i].num = rm_res->desc[i].num;
+> +			irq_res.desc[i].start_sec = rm_res->desc[i].start_sec;
+> +			irq_res.desc[i].num_sec = rm_res->desc[i].num_sec;
+> +		}
+>  	}
+>  	rm_res = tisci_rm->rm_ranges[RM_RANGE_RCHAN];
+> -	for (j = 0; j < rm_res->sets; j++, i++) {
+> -		if (rm_res->desc[j].num) {
+> -			irq_res.desc[i].start = rm_res->desc[j].start +
+> -					ud->soc_data->oes.udma_rchan;
+> -			irq_res.desc[i].num = rm_res->desc[j].num;
+> -		}
+> -		if (rm_res->desc[j].num_sec) {
+> -			irq_res.desc[i].start_sec = rm_res->desc[j].start_sec +
+> -					ud->soc_data->oes.udma_rchan;
+> -			irq_res.desc[i].num_sec = rm_res->desc[j].num_sec;
+> +	if (IS_ERR(rm_res)) {
+> +		irq_res.desc[i].start = 0;
+> +		irq_res.desc[i].num = ud->rchan_cnt;
+> +	} else {
+> +		for (j = 0; j < rm_res->sets; j++, i++) {
+> +			if (rm_res->desc[j].num) {
+> +				irq_res.desc[i].start = rm_res->desc[j].start +
+> +						ud->soc_data->oes.udma_rchan;
+> +				irq_res.desc[i].num = rm_res->desc[j].num;
+> +			}
+> +			if (rm_res->desc[j].num_sec) {
+> +				irq_res.desc[i].start_sec = rm_res->desc[j].start_sec +
+> +						ud->soc_data->oes.udma_rchan;
+> +				irq_res.desc[i].num_sec = rm_res->desc[j].num_sec;
+> +			}
+>  		}
+>  	}
+>  	ret = ti_sci_inta_msi_domain_alloc_irqs(ud->dev, &irq_res);
+> @@ -4690,14 +4705,15 @@ static int bcdma_setup_resources(struct udma_dev *ud)
+>  		rm_res = tisci_rm->rm_ranges[RM_RANGE_BCHAN];
+>  		if (IS_ERR(rm_res)) {
+>  			bitmap_zero(ud->bchan_map, ud->bchan_cnt);
+> +			irq_res.sets++;
+>  		} else {
+>  			bitmap_fill(ud->bchan_map, ud->bchan_cnt);
+>  			for (i = 0; i < rm_res->sets; i++)
+>  				udma_mark_resource_ranges(ud, ud->bchan_map,
+>  							  &rm_res->desc[i],
+>  							  "bchan");
+> +			irq_res.sets += rm_res->sets;
+>  		}
+> -		irq_res.sets += rm_res->sets;
+>  	}
+>  
+>  	/* tchan ranges */
+> @@ -4705,14 +4721,15 @@ static int bcdma_setup_resources(struct udma_dev *ud)
+>  		rm_res = tisci_rm->rm_ranges[RM_RANGE_TCHAN];
+>  		if (IS_ERR(rm_res)) {
+>  			bitmap_zero(ud->tchan_map, ud->tchan_cnt);
+> +			irq_res.sets += 2;
+>  		} else {
+>  			bitmap_fill(ud->tchan_map, ud->tchan_cnt);
+>  			for (i = 0; i < rm_res->sets; i++)
+>  				udma_mark_resource_ranges(ud, ud->tchan_map,
+>  							  &rm_res->desc[i],
+>  							  "tchan");
+> +			irq_res.sets += rm_res->sets * 2;
+>  		}
+> -		irq_res.sets += rm_res->sets * 2;
+>  	}
+>  
+>  	/* rchan ranges */
+> @@ -4720,47 +4737,72 @@ static int bcdma_setup_resources(struct udma_dev *ud)
+>  		rm_res = tisci_rm->rm_ranges[RM_RANGE_RCHAN];
+>  		if (IS_ERR(rm_res)) {
+>  			bitmap_zero(ud->rchan_map, ud->rchan_cnt);
+> +			irq_res.sets += 2;
+>  		} else {
+>  			bitmap_fill(ud->rchan_map, ud->rchan_cnt);
+>  			for (i = 0; i < rm_res->sets; i++)
+>  				udma_mark_resource_ranges(ud, ud->rchan_map,
+>  							  &rm_res->desc[i],
+>  							  "rchan");
+> +			irq_res.sets += rm_res->sets * 2;
+>  		}
+> -		irq_res.sets += rm_res->sets * 2;
+>  	}
+>  
+>  	irq_res.desc = kcalloc(irq_res.sets, sizeof(*irq_res.desc), GFP_KERNEL);
+> +	if (!irq_res.desc)
+> +		return -ENOMEM;
+>  	if (ud->bchan_cnt) {
+>  		rm_res = tisci_rm->rm_ranges[RM_RANGE_BCHAN];
+> -		for (i = 0; i < rm_res->sets; i++) {
+> -			irq_res.desc[i].start = rm_res->desc[i].start +
+> -						oes->bcdma_bchan_ring;
+> -			irq_res.desc[i].num = rm_res->desc[i].num;
+> +		if (IS_ERR(rm_res)) {
+> +			irq_res.desc[0].start = oes->bcdma_bchan_ring;
+> +			irq_res.desc[0].num = ud->bchan_cnt;
+> +			i = 1;
+> +		} else {
+> +			for (i = 0; i < rm_res->sets; i++) {
+> +				irq_res.desc[i].start = rm_res->desc[i].start +
+> +							oes->bcdma_bchan_ring;
+> +				irq_res.desc[i].num = rm_res->desc[i].num;
+> +			}
+>  		}
+>  	}
+>  	if (ud->tchan_cnt) {
+>  		rm_res = tisci_rm->rm_ranges[RM_RANGE_TCHAN];
+> -		for (j = 0; j < rm_res->sets; j++, i += 2) {
+> -			irq_res.desc[i].start = rm_res->desc[j].start +
+> -						oes->bcdma_tchan_data;
+> -			irq_res.desc[i].num = rm_res->desc[j].num;
+> -
+> -			irq_res.desc[i + 1].start = rm_res->desc[j].start +
+> -						oes->bcdma_tchan_ring;
+> -			irq_res.desc[i + 1].num = rm_res->desc[j].num;
+> +		if (IS_ERR(rm_res)) {
+> +			irq_res.desc[i].start = oes->bcdma_tchan_data;
+> +			irq_res.desc[i].num = ud->tchan_cnt;
+> +			irq_res.desc[i + 1].start = oes->bcdma_tchan_ring;
+> +			irq_res.desc[i + 1].num = ud->tchan_cnt;
+> +			i += 2;
+> +		} else {
+> +			for (j = 0; j < rm_res->sets; j++, i += 2) {
+> +				irq_res.desc[i].start = rm_res->desc[j].start +
+> +							oes->bcdma_tchan_data;
+> +				irq_res.desc[i].num = rm_res->desc[j].num;
 > +
-> +	if (WARN_ON(ns != current_user_ns()))
-> +		return error;
->   
->   	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
->   	if (error)
+> +				irq_res.desc[i + 1].start = rm_res->desc[j].start +
+> +							oes->bcdma_tchan_ring;
+> +				irq_res.desc[i + 1].num = rm_res->desc[j].num;
+> +			}
+>  		}
+>  	}
+>  	if (ud->rchan_cnt) {
+>  		rm_res = tisci_rm->rm_ranges[RM_RANGE_RCHAN];
+> -		for (j = 0; j < rm_res->sets; j++, i += 2) {
+> -			irq_res.desc[i].start = rm_res->desc[j].start +
+> -						oes->bcdma_rchan_data;
+> -			irq_res.desc[i].num = rm_res->desc[j].num;
+> -
+> -			irq_res.desc[i + 1].start = rm_res->desc[j].start +
+> -						oes->bcdma_rchan_ring;
+> -			irq_res.desc[i + 1].num = rm_res->desc[j].num;
+> +		if (IS_ERR(rm_res)) {
+> +			irq_res.desc[i].start = oes->bcdma_rchan_data;
+> +			irq_res.desc[i].num = ud->rchan_cnt;
+> +			irq_res.desc[i + 1].start = oes->bcdma_rchan_ring;
+> +			irq_res.desc[i + 1].num = ud->rchan_cnt;
+> +			i += 2;
+> +		} else {
+> +			for (j = 0; j < rm_res->sets; j++, i += 2) {
+> +				irq_res.desc[i].start = rm_res->desc[j].start +
+> +							oes->bcdma_rchan_data;
+> +				irq_res.desc[i].num = rm_res->desc[j].num;
+> +
+> +				irq_res.desc[i + 1].start = rm_res->desc[j].start +
+> +							oes->bcdma_rchan_ring;
+> +				irq_res.desc[i + 1].num = rm_res->desc[j].num;
+> +			}
+>  		}
+>  	}
+>  
+> @@ -4858,39 +4900,54 @@ static int pktdma_setup_resources(struct udma_dev *ud)
+>  	if (IS_ERR(rm_res)) {
+>  		/* all rflows are assigned exclusively to Linux */
+>  		bitmap_zero(ud->rflow_in_use, ud->rflow_cnt);
+> +		irq_res.sets = 1;
+>  	} else {
+>  		bitmap_fill(ud->rflow_in_use, ud->rflow_cnt);
+>  		for (i = 0; i < rm_res->sets; i++)
+>  			udma_mark_resource_ranges(ud, ud->rflow_in_use,
+>  						  &rm_res->desc[i], "rflow");
+> +		irq_res.sets = rm_res->sets;
+>  	}
+> -	irq_res.sets = rm_res->sets;
+>  
+>  	/* tflow ranges */
+>  	rm_res = tisci_rm->rm_ranges[RM_RANGE_TFLOW];
+>  	if (IS_ERR(rm_res)) {
+>  		/* all tflows are assigned exclusively to Linux */
+>  		bitmap_zero(ud->tflow_map, ud->tflow_cnt);
+> +		irq_res.sets++;
+>  	} else {
+>  		bitmap_fill(ud->tflow_map, ud->tflow_cnt);
+>  		for (i = 0; i < rm_res->sets; i++)
+>  			udma_mark_resource_ranges(ud, ud->tflow_map,
+>  						  &rm_res->desc[i], "tflow");
+> +		irq_res.sets += rm_res->sets;
+>  	}
+> -	irq_res.sets += rm_res->sets;
+>  
+>  	irq_res.desc = kcalloc(irq_res.sets, sizeof(*irq_res.desc), GFP_KERNEL);
+> +	if (!irq_res.desc)
+> +		return -ENOMEM;
+>  	rm_res = tisci_rm->rm_ranges[RM_RANGE_TFLOW];
+> -	for (i = 0; i < rm_res->sets; i++) {
+> -		irq_res.desc[i].start = rm_res->desc[i].start +
+> -					oes->pktdma_tchan_flow;
+> -		irq_res.desc[i].num = rm_res->desc[i].num;
+> +	if (IS_ERR(rm_res)) {
+> +		irq_res.desc[0].start = oes->pktdma_tchan_flow;
+> +		irq_res.desc[0].num = ud->tflow_cnt;
+> +		i = 1;
+> +	} else {
+> +		for (i = 0; i < rm_res->sets; i++) {
+> +			irq_res.desc[i].start = rm_res->desc[i].start +
+> +						oes->pktdma_tchan_flow;
+> +			irq_res.desc[i].num = rm_res->desc[i].num;
+> +		}
+>  	}
+>  	rm_res = tisci_rm->rm_ranges[RM_RANGE_RFLOW];
+> -	for (j = 0; j < rm_res->sets; j++, i++) {
+> -		irq_res.desc[i].start = rm_res->desc[j].start +
+> -					oes->pktdma_rchan_flow;
+> -		irq_res.desc[i].num = rm_res->desc[j].num;
+> +	if (IS_ERR(rm_res)) {
+> +		irq_res.desc[i].start = oes->pktdma_rchan_flow;
+> +		irq_res.desc[i].num = ud->rflow_cnt;
+> +	} else {
+> +		for (j = 0; j < rm_res->sets; j++, i++) {
+> +			irq_res.desc[i].start = rm_res->desc[j].start +
+> +						oes->pktdma_rchan_flow;
+> +			irq_res.desc[i].num = rm_res->desc[j].num;
+> +		}
+>  	}
+>  	ret = ti_sci_inta_msi_domain_alloc_irqs(ud->dev, &irq_res);
+>  	kfree(irq_res.desc);
+> 
 
-
-Oops, I hadn't seen this patch. How can one 'mount from outside the 
-filesystem's userns'?
-
-
+-- 
+Péter

@@ -2,133 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D41346FD19
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DEC46FD1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238808AbhLJJAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238778AbhLJJAJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:00:09 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061E9C061746;
-        Fri, 10 Dec 2021 00:56:35 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 137so6257016wma.1;
-        Fri, 10 Dec 2021 00:56:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ugWZHzEIl/ed3UDm2nkNMQGNSpbu5KKxXnSYP4z8tmE=;
-        b=V1Hc554AnCsotFmE/SYmLUYY13GxEa0a/+6yg6iYQxXVQooWp4UIl1EXOR/ohWtaoh
-         SSDSNJHt4bNUl/dJwy0wej4Ep8UARUR21gHDlk+x663IHiyy4a/NgKCRovFDYw/X0GqK
-         B0GvmtraFjTWvvl8t8r0RLTXTsXkqXtW8LJlkQ+OKgUTPFT8X4K/hmLXYq6iNBIRHRDE
-         5fEAb3Dz3vp1/xo0UjoVyow4VJpvk8nnqABG1vfT3GWt/VPgf3y2fDFVg0N08aw/nD4M
-         9oCdjVfig+4ewNy8Vv94fP+lE9ZFAlF1cWVDMK/Bm2xCoBxzeXAVuJWqn4ALjpPKRpg0
-         0oAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ugWZHzEIl/ed3UDm2nkNMQGNSpbu5KKxXnSYP4z8tmE=;
-        b=l6EXYA/wM2UiddIMUCSQmpRhx/f7KcHM6rtEFKRqioHPqC+HHcfikGa4rW5Jd+/AqX
-         MTpVjA3BqQDzqQKiC2keOu9FdyKS+mxuWXH5YQkPpXfWbYClnoSRBcEhPohDP0owmDws
-         VHtdmv3ALrqfbYV95Z6iqa36FeXgvXTMAcHxJv/HLurY+TUgwVwsbRjyZJztFdn1qKPy
-         fNQ97xkBAOL9RFD2L3qD7QKdT5TmvE4OxVJV4oRZut49hnzs56EvR/m3pfgXWi/f/rnd
-         eYKcrzKnFEyDoX+R5SWxxXojkYRF/CKhgTQyZGTrUn4yXrOJT4T98Ry1e4XoWtDD6Pkp
-         spcA==
-X-Gm-Message-State: AOAM532INNuYhk6r36cVY12fdNjhAU5cPiay8wpzAwGRwIOWu5oluY3l
-        fjJ5+2gOPLavV/ryLtfIz5U=
-X-Google-Smtp-Source: ABdhPJzpGB9V66upS/EkyZnBy/vCflZB/b4r7xftEE8qItQGNebjwjNFs3haPcemiq8JZjpXgnqFTw==
-X-Received: by 2002:a05:600c:3489:: with SMTP id a9mr14966701wmq.53.1639126593509;
-        Fri, 10 Dec 2021 00:56:33 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id w17sm2333809wmc.14.2021.12.10.00.56.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 00:56:32 -0800 (PST)
-Date:   Fri, 10 Dec 2021 09:56:28 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
-        sumit.semwal@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/2] Add SMBus features to Tegra I2C
-Message-ID: <YbMWPGMcHEQXGkHf@orome>
-References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
- <e3deea6a-3854-e58c-0d27-602413f2a496@gmail.com>
+        id S238830AbhLJJAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:00:38 -0500
+Received: from mga06.intel.com ([134.134.136.31]:51853 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238778AbhLJJAg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 04:00:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639126622; x=1670662622;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=j3xryo8ffPsbr17Qjp7uQ+qanAoDQlwh/kU+v36J8jQ=;
+  b=BLIeRJ66PWckCCXfW39jZiXNFgkJVttXoBB5HC5C32A93mttie6Q661Q
+   ZyyfZb1bkhkZwPgtjGEiqlUIKC+mV9WX+zhUgg4+8WIHjpskq80CrMK3X
+   ybd787UTLiS++WfwHFS/MMW7/i7g0oKlh6lPnFr7tRqbFYpW+Cxd4WtDm
+   +ojuBE9oc3Kcrtojk3hq6jg/x3Y222bWj2xQI36xa9x69zOzWHhtN8CY5
+   DcMi1Y+zJUbCTQICL2w5XFZJf4+DLM2/cSb01PcoeKU4owrjHfTqLF9Aw
+   RY+B1PIxfbEOBraI3TPWygZY1XFxhIS4df2HI6DXs/5Pcuo83iYmiKYpB
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="299097811"
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="299097811"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 00:56:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="607304827"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Dec 2021 00:56:59 -0800
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 00:56:59 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 00:56:58 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Fri, 10 Dec 2021 00:56:58 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Fri, 10 Dec 2021 00:56:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qol5DZybsj9xXi2+yckwNMherWBG8HTDxKLaSEjCAsC/HoilR79s5MXDcKXAsowRVvHiaZ41HPXxtJ1++A/Abv5kTjO9Jhk29iQIx0c1mPDgvhE+Jzc0CVLCFIzvmIJGUAHrDy39/vg5kjtezFzOLHLqfwvhdADgqBGjVXgtQ8xBA1fuJ6sKIrGGEr7dyEOFILrnUKENJFQa3wtyobl2HovWKJN4gFxq0ENyxllSXklrJQztFYpLAkfhznA5jbVT8vmjazFLfa5+EsPn0WPOy4W7JR3RhaQ7aPRjqxvw92pKXz/M1TFicCOuvyTl/OMKBnx7WQum6P+LUIUUzwiwtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ndRaidgbhJ17rilQw40w+rLhSBLDmFF81c07dfEyW8A=;
+ b=AAibNF5vCbtxJpvjx8wKfZMGfxEWE0J9M+O4q2MxcK6g3x/19XwRjwDS1UDfYdFBM6l0GTM61Z5jkyHxT0/UXGhsrM2SiKt4RU1OSXTSIwZ47qRctvu2p/KbqvaP72urf3iyiwAuAA44Jna7QdWLLmDyGIyflcwibpdqy5w+5UTZkQEnogUDbIE0nyS9lxMHsbbj2cmiueTJHRAqJZftqQ+1SQhdAnWbETw8z6AQ23o8eXemqpKhsPxVnKnkE2X0iGznmkO7pELVjUlXx9lBV8rv0dVEl1xW2zWiPb+hN2K75nZIQZP6kL8PIY9oeqU+TR7cwXJ9iFMn/heM4O2e/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ndRaidgbhJ17rilQw40w+rLhSBLDmFF81c07dfEyW8A=;
+ b=PYZLi5jDL/K8vsr9C/OnZJGHWdsYDTFbL7JYSsMX3pPlK/DjmhlaYORmfTjeeKQcqi5W0QINH4yp5s0kcuI7+v3FzNsnyDJI3VSZ4TiDR65JUSQu2rvlL+7H7RzwJXW5lUoCd6FvEsnHrpSm8fbT6AAv4npeQQFU2vNddGseQgA=
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BN6PR11MB1652.namprd11.prod.outlook.com (2603:10b6:405:10::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11; Fri, 10 Dec
+ 2021 08:56:56 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4755.016; Fri, 10 Dec 2021
+ 08:56:56 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "peter.maydell@linaro.org" <peter.maydell@linaro.org>,
+        "lushenming@huawei.com" <lushenming@huawei.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vsethi@nvidia.com" <vsethi@nvidia.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "wangxingang5@huawei.com" <wangxingang5@huawei.com>,
+        "vivek.gautam@arm.com" <vivek.gautam@arm.com>,
+        "zhangfei.gao@linaro.org" <zhangfei.gao@linaro.org>,
+        "eric.auger.pro@gmail.com" <eric.auger.pro@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>
+Subject: RE: [RFC v16 1/9] iommu: Introduce attach/detach_pasid_table API
+Thread-Topic: [RFC v16 1/9] iommu: Introduce attach/detach_pasid_table API
+Thread-Index: AQHXyx+9zoVf6ec36EaoAw6mFm2RjKwlh1WAgAGLFwCAARJNAIAAUNaAgABaKgCAAEnegIAAE6oAgACHsjCAABVZoIAAzVeAgAED4rA=
+Date:   Fri, 10 Dec 2021 08:56:56 +0000
+Message-ID: <BN9PR11MB527612D1B4E0DC85A442D87D8C719@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20211027104428.1059740-2-eric.auger@redhat.com>
+ <Ya3qd6mT/DpceSm8@8bytes.org>
+ <c7e26722-f78c-a93f-c425-63413aa33dde@redhat.com>
+ <e6733c59-ffcb-74d4-af26-273c1ae8ce68@linux.intel.com>
+ <fbeabcff-a6d4-dcc5-6687-7b32d6358fe3@redhat.com>
+ <20211208125616.GN6385@nvidia.com> <YbDpZ0pf7XeZcc7z@myrica>
+ <20211208183102.GD6385@nvidia.com>
+ <BN9PR11MB527624080CB9302481B74C7A8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <BN9PR11MB5276D3B4B181F73A1D62361C8C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20211209160803.GR6385@nvidia.com>
+In-Reply-To: <20211209160803.GR6385@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 44878884-d19a-4ceb-ccab-08d9bbbb0500
+x-ms-traffictypediagnostic: BN6PR11MB1652:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <BN6PR11MB1652036C26FD085486BC47768C719@BN6PR11MB1652.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QmERhxq7AJI4BTpGjhwyIOZ1VyiLzXHLFIUiYiAIyajvFR2iKQHIEq7AJ8COw6EIh58lZTGX4lODO2QKFV/Y9ku35IM0sm2PR3I20MI4BiUae6NofFglSa6sPrqG+k21QbTZJmoz6ERmUunjFkLuFKMO9VoBWGhQKQKsgQd0rGB5MOW1cX+Lv291OtIOGN9L16JpRBtnNXz4Z6V8GqFVAl9va6xidxERLOwfwqqHx0OAzL7WfqLoy7XiqgOHdJKK+xMLQb5+mIyqGQrSDNnfR1q5cBk189qoC+D0sKaKESfkP/4sF8ZczDKY+/mbIk0ZXmwGz8IiiuUoHOBec2qS8xxemUdnRFLatbMsaQuD/NNmTabbMasehbLEAtkYW7+fYlXKumgiycdivtPeSlxWZLM/fcMHDWdHTLy8p18iV6J8w3vzUghpgdwZSpVUr3RQQxM35JmQtLbZmK4Qvx/DK3uBCDx5miIuQu1JEqP+iGY9gzaz/2rVAzzmVp2pIuvHm5aigrgBqsK2unLf7sfupdMA5YbW8cKrQoaq6lQG+zSJpig/qPJn/GiloWOdzBPVSrrNQDUyENXpGV5Ol9pmSnSIUQ7r33SJcvSe/K0AA7RRityI9g3H/MrniRXFB7i0NLZBuJ+qWcPt6DnNly1ZxiCvZoj0I4DFWD4gHyx7gTrVPiHj26oOVB7dHnRngLUqPxexEzxD7G9qwQe+qTrEooC9PmdAuO94ukgD1YAaRWQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(52536014)(66446008)(26005)(83380400001)(4326008)(2906002)(6916009)(33656002)(82960400001)(71200400001)(316002)(7416002)(66476007)(8676002)(38100700002)(64756008)(66556008)(186003)(122000001)(8936002)(6506007)(9686003)(86362001)(54906003)(508600001)(55016003)(66946007)(76116006)(5660300002)(7696005)(38070700005)(21314003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LvGEBvzqIpYDFaO7vy0ogmz4glXqWIqyNXp9h+LAZCNOKQeVVAPy6Zc8xW+f?=
+ =?us-ascii?Q?nfOrEB4oMq5pRNoSG1Y6+9GsXHIenYwmeRp2xNM2OvEacvGP0Zjz7yNuODvp?=
+ =?us-ascii?Q?R9+XK0qHNA86/fX8KmK2qsqAbwfRNC1ABHnSEq3ktFXqpnl0ScRlJtrTj6kx?=
+ =?us-ascii?Q?6spvaRdfniS3MyeN6DrTUQZSoLmUQlwrVp/oFhHRV94SqUTblSHCeOcBJ9L6?=
+ =?us-ascii?Q?+XFhwzMD3wOdTYNgTAe86gudmjXUdDqyZDQ4ZeZhQZ3SliADxx6HW1Luzx4n?=
+ =?us-ascii?Q?WuFrsW2PbBlbEuFyc83RU6RLezW2Oom2GD52oBsK6ND4KxBaODLTL357DvMX?=
+ =?us-ascii?Q?UQSs0Gep4I85SYPJ/v2/x/74O6JrQhIdinql1ra1/n5Jw4TUm6TOQfbVTb1f?=
+ =?us-ascii?Q?oVa434RDBfUMeEeQBAhxBGGqErGHyqwuN+VeDpWdUqznpn2l2K9WWS+eAkbi?=
+ =?us-ascii?Q?tBPGynFFRdR4QoR9ttaA+IS5HNhr4n8lAZIaHMBavRoU0y6R9byjmkhkCMZm?=
+ =?us-ascii?Q?hRjxAq7YIJIxqeWVkmfh29aW1fU/g4vrmw7AvAOngBwH1+g66eNuEuM7Z71C?=
+ =?us-ascii?Q?3AIQC6eCWFImGiJ57WOOS05W8LWE+5Ib6liap1sq5vuiK/GlRciA+MY/iCiG?=
+ =?us-ascii?Q?FvCjIpLifCUQafD/V/peNedEQIrxSeFia2Driftn3A9voroo03TnPg8p8KPz?=
+ =?us-ascii?Q?xwBDXO+pufwhK03hw65zgrM/TEoADoVsUQSQLP6cOs19rEvOA/Q8hSQKQ+Ks?=
+ =?us-ascii?Q?KJAOnRwsBf1k89AI9tdHM/tqY9VRkxCaubcoHHpQ90UKoh/N0bIy6NqD65ZJ?=
+ =?us-ascii?Q?9reNZ2Cyo+bHxJgkmavXxqrHMXKJXf9M31ZAIw99XkCUTIBYQE7E50XzJhVM?=
+ =?us-ascii?Q?grinXXD2ZM3KWsXUqmpN74nR0/tqThxoV9W4rQUJ63X9CcMT14k2Ue/SLRU8?=
+ =?us-ascii?Q?QF3qhnuc06iGULZay2fRCpLWZt1NCR3E/9ALctNz/h8NU2yJdrzNUxWtPXcw?=
+ =?us-ascii?Q?b3mvjCgOReun2xQePVPfdBaqiyk9QuaP9mh6ZHDDYIj2pGxUcTXXGOz96CyW?=
+ =?us-ascii?Q?Zk250lGsJBNggTQp53vEz/63LJIvCUQMp3XQrXXhfzN5aCFndhE2vdC/lXYQ?=
+ =?us-ascii?Q?NntybhDHI1TbOJi/WBxDD5+e0tkvcf14NNwv7hwBnvvK6TVaVxgDrPOzQIdf?=
+ =?us-ascii?Q?dt+7ezTGvI4Tr5iuTGQHSU6sTJON4RX8AWRT+ipaYQQkPFya1detZjUejFN1?=
+ =?us-ascii?Q?t77i/E0W2OCxXvJ4C2rsxg29Ul14Tj7zXGITAVuatWy8ApAHgn01yXHglqaa?=
+ =?us-ascii?Q?zfLD92k5iQmk8El4Uvf0XDoki6jaUk3bxVS0stZLZXiXOhVmJ7Gaa8kx88ly?=
+ =?us-ascii?Q?/dai/i1nj0bu72VxQZ32SK1nOBdhnDH8Y9n4RvIz0gMY7Z6kyszMkRO1djX+?=
+ =?us-ascii?Q?otXt2POoRFLeFTqE0DnMwe4tJ6mdwWqjBN5RBQ15YNPE2hzKlNZvazU5099E?=
+ =?us-ascii?Q?wlyUxDkET3zbZmTEysKygSisC7KjjWMgB6BMaqT2MOloo+qnKy3MuytD+yTC?=
+ =?us-ascii?Q?bEJXZXqOFdXWrfL9pikGMLm8r9z0aIXqXqi/M45d2I9w0jDsG2bah61eGPoG?=
+ =?us-ascii?Q?20HHR02GTQDm1Ms5//JBu6M=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2IhQJxqBxhd1xrh2"
-Content-Disposition: inline
-In-Reply-To: <e3deea6a-3854-e58c-0d27-602413f2a496@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44878884-d19a-4ceb-ccab-08d9bbbb0500
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2021 08:56:56.5020
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9WZ1e5RIZQ7tbXVb+t7hFGHhsgbOx1eDNK0CmOuv3K9TRu8fWT5CtKXrqG7Sbu/YILChYekrHKMzQ6cvASLYbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1652
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---2IhQJxqBxhd1xrh2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Dec 09, 2021 at 07:04:30PM +0300, Dmitry Osipenko wrote:
-> 09.12.2021 18:05, Akhil R =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Add support for SMBus Alert and SMBus block read functions to
-> > i2c-tegra driver
-> >=20
-> > Akhil R (2):
-> >   dt-bindings: i2c: tegra: Add SMBus feature properties
-> >   i2c: tegra: Add SMBus block read and SMBus alert functions
-> >=20
-> >  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt |  4 ++
-> >  drivers/i2c/busses/i2c-tegra.c                     | 54 ++++++++++++++=
-+++++++-
-> >  2 files changed, 57 insertions(+), 1 deletion(-)
-> >=20
+> From: Jason Gunthorpe via iommu
+> Sent: Friday, December 10, 2021 12:08 AM
 >=20
-> How this was tested? This series must include the DT patch. If there is
-> no real user in upstream for this feature, then I don't think that we
-> should bother at all about it.
+> On Thu, Dec 09, 2021 at 03:59:57AM +0000, Tian, Kevin wrote:
+> > > From: Tian, Kevin
+> > > Sent: Thursday, December 9, 2021 10:58 AM
+> > >
+> > > For ARM it's SMMU's PASID table format. There is no step-2 since PASI=
+D
+> > > is already within the address space covered by the user PASID table.
+> > >
+> >
+> > One correction here. 'no step-2' is definitely wrong here as it means
+> > more than user page table in your plan (e.g. dpdk).
+> >
+> > To simplify it what I meant is:
+> >
+> > iommufd reports how many 'user page tables' are supported given a devic=
+e.
+> >
+> > ARM always reports only one can be supported, and it must be created in
+> > PASID table format. tagged by RID.
+> >
+> > Intel reports one in step1 (tagged by RID), and N in step2 (tagged by
+> > RID+PASID). A special flag in attach call allows the user to specify th=
+e
+> > additional PASID routing info for a 'user page table'.
+>=20
+> I don't think 'number of user page tables' makes sense
+>=20
+> It really is 'attach to the whole device' vs 'attach to the RID' as a
+> semantic that should exist
+>=20
+> If we imagine a userspace using kernel page tables it certainly makes
+> sense to assign page table A to the RID and page table B to a PASID
+> even in simple cases like vfio-pci.
+>=20
+> The only case where userspace would want to capture the entire RID and
+> all PASIDs is something like this ARM situation - but userspace just
+> created a device specific object and already knows exactly what kind
+> of behavior it has.
+>=20
+> So, something like vfio pci would implement three uAPI operations:
+>  - Attach page table to RID
+>  - Attach page table to PASID
+>  - Attach page table to RID and all PASIDs
+>    And here 'page table' is everything below the STE in SMMUv3
+>=20
+> While mdev can only support:
+>  - Access emulated page table
+>  - Attach page table to PASID
 
-This is primarily used by a device that uses ACPI and the driver uses
-the firmware-agnostic APIs to get at this. However, it also means that
-the driver effectively provides this same support for DT via those APIs
-and therefore it makes sense to document that part even if there are no
-current users of the DT bits.
+mdev is a pci device from user p.o.v, having its vRID and vPASID. From
+this angle the uAPI is no different from vfio-pci (except the ARM one):
 
-One big advantage of this is that it helps keep the ACPI and DT bindings
-in sync, and document this on the DT side also allows us to document the
-ACPI side of things where no formal documentation exists, as far as I
-know.
+  - (sw mdev) Attach emulated page table to vRID (no iommu domain)
+  - (hw mdev) Attach page table to vRID (mapped to mdev PASID)
+  - (hw mdev) Attach page table to vPASID (mapped to a fungible PASID)
 
-Thierry
+>=20
+> It is what I've said a couple of times, the API the driver calls
+> toward iommufd to attach a page table must be unambiguous as to the
+> intention, which also means userspace must be unambiguous too.
+>=20
 
---2IhQJxqBxhd1xrh2
-Content-Type: application/pgp-signature; name="signature.asc"
+No question on the unambiguous part. But we also need to consider
+the common semantics that can be abstracted.
 
------BEGIN PGP SIGNATURE-----
+From user p.o.v a vRID can be attached to at most two page tables (if
+nesting is enabled). This just requires the basic attaching form for=20
+either one page table or two page tables:
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGzFjwACgkQ3SOs138+
-s6F8mQ/9Fc5fNDbeJjUOJvaNOnGBiFoOwLTvUU5rJe09sJUQNqqXte8PM4BhTxGm
-rnqsAjSmfY3Hgw9XbdIad4hEj3GAtKavsAdK5oyDcqmCyyIcP2k2DxcPSP+LsOCN
-MnH6Byzm6HeMPX+FunjtCXxuJT1Htsb+Uy5iUkGctqZeW13f60qMSfmyKlcX6uxJ
-b4///ebppLbU9u989KnLx6WDQX9tfppHzCqYR8K9yYH25nidvmr5uu8EHUBYq0s2
-t+CyKM+IXbpCsk6ZS1eIPuKIkKntvl8DHkIiEMUX3Vs45DGWc6oYYF/Wa9GSZn3q
-xBI1B2nUfQCvumi0cyTwjJBSpkSjnBFLon3KAoqs20LygKF6XLjcHJZDtltuLKXB
-XqXCOoR2qoH6JwxdpXgYAr+pXEz1XJeKfQCZ61RDWI34I/nt2SYUxmEJIzFUXhmJ
-VgrugrKVa3yeGz8H6oni8YvQLufMPn+MrInuvAy24ndt0ICnB9f970tZwEngFacp
-YlxjV63f+KvH78B2KWjxtTTzqExZi393GHoxLjahWWx+EYXrYIdh2F+7DDwHN+NI
-6Ac+uWK3ZJZuoLADboTmoc45ShoN0NTkFjIiIGzmzU2cgcxG0D8d33+kT6GBNNPi
-z2ZODA/uePOon1EdVR6lbdAFMTA/8RnKQbK5BtuNEZ+YcRnRFqY=
-=eLpi
------END PGP SIGNATURE-----
+	at_data =3D {
+		.iommufd	=3D xxx;
+		.pgtable_id	=3D yyy;
+	};
+	ioctl(device_fd, VFIO_DEVICE_ATTACH_PGTABLE, &at_data);
 
---2IhQJxqBxhd1xrh2--
+This can already cover ARM's requirement. The user page table
+attached to vRID is in vendor specific format, e.g. either ARM pasid=20
+table format or Intel stage-1 format. For ARM pasid_table + underlying=20
+stage-1 page tables can be considered as a single big paging structure.
+
+From this angle I'm not sure the benefit of making a separate uAPI=20
+just because it's a pasid table for ARM.
+
+Then when PASID needs to be explicitly specified (e.g. in Intel case):
+
+	at_data =3D {
+		.iommufd	=3D xxx;
+		.pgtable_id	=3D yyy;
+		.flags 		=3D VFIO_ATTACH_FLAGS_PASID;
+		.pasid		=3D zzz;
+	};
+	ioctl(device_fd, VFIO_DEVICE_ATTACH_PGTABLE, &at_data);
+
+Again, I don't think what a simple flag can solve needs to be made
+into a separate uAPI.
+
+Is modeling like above considered ambiguous?
+
+Thanks
+Kevin

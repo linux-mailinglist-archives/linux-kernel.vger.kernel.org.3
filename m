@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9D246FE37
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CA446FE38
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239669AbhLJJ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239653AbhLJJ6J (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:58:09 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937E8C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:54:34 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id cf39so4940482lfb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m8N1QoomSDHcA8D1T8Tv1TTr0YRk/oLQcu27sC+kmuc=;
-        b=XkCisJCEtNeNlUcARJfgK8lAUuGTX8V0RgWLLmy3rHtYvOWlNVSS7bF29eAp/RCADg
-         SD9iDqH2813CT+2j0foeTTgPFKqpQgcHrUsViWgXSnI755Uki2fIkHlyjAX0BBXNYtxG
-         PaN+zPU1HH7o92dXwLpFfFUMKlqdDV9cpEoBeRZ8DkwP4O2yatG0eC7y3kS5BOvlW1yy
-         XlfEnD1pPgg1fsO5KDPLoe3BAGSxtX5oZKbS2989ELBN1cyN9eTpU2PwL2lr3IeYyeeP
-         brzbRriIg+nyxCRjQAF4qIExrLAJK+8ISr8tPsuKD/OubSz+jAbbORv3oYQ9YGjTmzP0
-         UKYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m8N1QoomSDHcA8D1T8Tv1TTr0YRk/oLQcu27sC+kmuc=;
-        b=j5JH0xfkWP3H6xDfVUuHwAtK9q4FcanbUM0V92nOw5yWDL9bqMGWk1cdVs6SLVE/2I
-         8D7FpoekPybmL4wUhB1nNRqnXyJ69UKShDwvn6jSF0Hjaaqcw3ojzAzpgM4NUpHLXwbs
-         WcGLwnXhFsOhyfilYCBOW0DM7911vB94pGCQYNhRI6VKFb/gaSNnq7GYReOlegyle6YZ
-         z37f0Y5ZU2EUgSLaRWTE3C36pNSYu1zzgg8h8RJu9Dj3QhsKLFXRdDm1xeqSMiTeDoE5
-         rls5Yi+rHEILLMaIMvWvuawYVj+ejvAReOuaP0sGFb/WgAlB/nFnbu5XOAgBMOLhMrXI
-         2PMA==
-X-Gm-Message-State: AOAM530Ixi3SidnK2i5OdxTXvumR8AtBgQkx3LmtwfQG0eimMFUoH0fc
-        khb/UjgL+dF+7rkoXUehoGhMCI8gSLqs5A==
-X-Google-Smtp-Source: ABdhPJxMtCRcg2pLipCeOwRT+EWiXBB1vSlr3YCbOx9Y3LWEahEOmkN4UttF75CaFKwSXPdc/8bb4A==
-X-Received: by 2002:a19:c352:: with SMTP id t79mr11305464lff.251.1639130072797;
-        Fri, 10 Dec 2021 01:54:32 -0800 (PST)
-Received: from localhost.localdomain (h-155-4-129-21.NA.cust.bahnhof.se. [155.4.129.21])
-        by smtp.gmail.com with ESMTPSA id h17sm262875lfv.62.2021.12.10.01.54.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 01:54:32 -0800 (PST)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v5.16-rc5
-Date:   Fri, 10 Dec 2021 10:54:31 +0100
-Message-Id: <20211210095431.63667-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S239680AbhLJJ6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:58:18 -0500
+Received: from foss.arm.com ([217.140.110.172]:39922 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239671AbhLJJ6R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 04:58:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E84BB1FB;
+        Fri, 10 Dec 2021 01:54:42 -0800 (PST)
+Received: from entos-thunderx2-desktop.shanghai.arm.com (entos-thunderx2-desktop.shanghai.arm.com [10.169.212.208])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 138643F73B;
+        Fri, 10 Dec 2021 01:54:38 -0800 (PST)
+From:   Jianyong Wu <jianyong.wu@arm.com>
+To:     catalin.marinas@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, akpm@linux-foundation.org
+Cc:     ardb@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, david@redhat.com,
+        gshan@redhat.com, justin.he@arm.com, jianyong.wu@arm.com,
+        nd@arm.com
+Subject: [PATCH v2] arm64/mm: avoid fixmap race condition when create pud mapping
+Date:   Fri, 10 Dec 2021 17:54:32 +0800
+Message-Id: <20211210095432.51798-1-jianyong.wu@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+fixmap is a global resource and is used recursively in create pud mapping.
+It may lead to race condition when alloc_init_pud is called concurrently.
 
-Here's a PR with a couple of MMC fixes intended for v5.16-rc5. Details about the
-highlights are as usual found in the signed tag.
+Fox example:
+alloc_init_pud is called when kernel_init. If memory hotplug
+thread, which will also call alloc_init_pud, happens during
+kernel_init, the race for fixmap occurs.
 
-Please pull this in!
+The race condition flow can be:
 
-Kind regards
-Ulf Hansson
+*************** begin **************
 
+kerenl_init thread                          virtio-mem workqueue thread
+==================                          ======== ==================
+alloc_init_pud(...)
+  pudp = pud_set_fixmap_offset(..)          alloc_init_pud(...)
+...                                         ...
+    READ_ONCE(*pudp) //OK!                    pudp = pud_set_fixmap_offset(
+...                                         ...
+  pud_clear_fixmap() //fixmap break
+                                              READ_ONCE(*pudp) //CRASH!
 
-The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+**************** end ***************
 
-  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+Hence, a spin lock is introduced to protect the fixmap during create pdg
+mapping.
 
-are available in the Git repository at:
+Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
+---
+ arch/arm64/mm/mmu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.16-rc3
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index acfae9b41cc8..98ac09ae9588 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -63,6 +63,7 @@ static pmd_t bm_pmd[PTRS_PER_PMD] __page_aligned_bss __maybe_unused;
+ static pud_t bm_pud[PTRS_PER_PUD] __page_aligned_bss __maybe_unused;
+ 
+ static DEFINE_SPINLOCK(swapper_pgdir_lock);
++static DEFINE_SPINLOCK(fixmap_lock);
+ 
+ void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
+ {
+@@ -329,6 +330,11 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 	}
+ 	BUG_ON(p4d_bad(p4d));
+ 
++	/*
++	 * fixmap is global resource, thus it needs to be protected by a lock
++	 * in case of race condition.
++	 */
++	spin_lock(&fixmap_lock);
+ 	pudp = pud_set_fixmap_offset(p4dp, addr);
+ 	do {
+ 		pud_t old_pud = READ_ONCE(*pudp);
+@@ -359,6 +365,7 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+ 	} while (pudp++, addr = next, addr != end);
+ 
+ 	pud_clear_fixmap();
++	spin_unlock(&fixmap_lock);
+ }
+ 
+ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
+-- 
+2.17.1
 
-for you to fetch changes up to d594b35d3b31bc04b6ef36589f38135d3acb8df5:
-
-  mmc: mediatek: free the ext_csd when mmc_get_ext_csd success (2021-12-09 10:30:11 +0100)
-
-----------------------------------------------------------------
-MMC host:
- - mtk-sd: Fix memory leak during tuning
- - renesas_sdhi: Initialize variable properly when tuning
-
-----------------------------------------------------------------
-Wenbin Mei (1):
-      mmc: mediatek: free the ext_csd when mmc_get_ext_csd success
-
-Wolfram Sang (1):
-      mmc: renesas_sdhi: initialize variable properly when tuning
-
- drivers/mmc/host/mtk-sd.c            | 4 +++-
- drivers/mmc/host/renesas_sdhi_core.c | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)

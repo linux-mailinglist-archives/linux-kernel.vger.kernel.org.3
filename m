@@ -2,101 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0576646F862
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EAA46F861
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235334AbhLJBXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 20:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbhLJBXp (ORCPT
+        id S235299AbhLJBXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 20:23:35 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41090 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231239AbhLJBXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 20:23:45 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC6FC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 17:20:11 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id m192so6544532qke.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 17:20:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E21fiaL89lo4s80Dd5ii4XZUAZScAir+7D/5kVfVX38=;
-        b=LNX/aZ8MpB6J7/SH0awcpQ3mUnZJ9LVZ7LxNG8qIa4wbdAXRqhjWIrAJ3CNRaXcMLv
-         4/Uw0sXHITT5Oq2mEA/F6ky0tvfXkmj8IFWDoC1V1B7skWaPW727zZO0IZvUnvcc5cho
-         SOjK4FBeaiuc85xy2inM4RU9XMIVqVDjoA9oGui8K5Yj7JXaUkOTa8a6fDzeSaWJQ6Rb
-         3+k3N02RdZpZtylNb+v+IweudAjBE0uE/pfJhLvbz/gHp6KYZCvOa5VhBlxaF45hrt+R
-         rcLiaJ7z3Ma5yCcG6e/RlNFinkTXj2EBK6e3f8TxNDKoO3exoOL9qJHlkwKh6DACfnyg
-         7U9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E21fiaL89lo4s80Dd5ii4XZUAZScAir+7D/5kVfVX38=;
-        b=jly3eJkbP9gd84H47l1Pih0ZCPZMgDltkyKE5q9kKN9a0fd5iJTxa01wRlVG/7Ol3d
-         ENDiE0zY0nqerrWWjh1q2YH5SXvFNLYVF9aQefQCmosnW1Rod1OZjEpZBE0AKVQZAqps
-         +ZjFjncmfq/5v3WpGRs0UpF5UUWBqjpbuJlLdHd8OU51huRHv6lvROUCmfg/Zlh6rQ9L
-         AfiHLEB2f9vZeK5+Pwp937JK4hlX/zI6aAEgwTzPznInbftDe24kGUtSal6zjEEXteab
-         MwbRsjpJcdIIQt/9P7N+VmKfIl4/fAJAYvfQ2exDdwrjNokuzi30Awx+jgRt531D78yD
-         uX9w==
-X-Gm-Message-State: AOAM533rapBikw+tZz5xwThupfKVUj0aqvHpaBc6abCZwF4OV3g/GSM0
-        Kj0/jRJXvL8siX9ajO5t39NobreLpzU2QphhARs2wCTX786J3w==
-X-Google-Smtp-Source: ABdhPJy7V2QnpcJ3Eb+OTiWtoQ0lK7fyfojgG2YB6/22nOPTv6HTzhiVYf8DDFCMK0a5h2JW/6pXECWsJHf1m+I5uNM=
-X-Received: by 2002:a05:620a:1924:: with SMTP id bj36mr17821101qkb.476.1639099210545;
- Thu, 09 Dec 2021 17:20:10 -0800 (PST)
-MIME-Version: 1.0
-References: <1638952658-20285-1-git-send-email-huangzhaoyang@gmail.com> <2868725.1638995206@warthog.procyon.org.uk>
-In-Reply-To: <2868725.1638995206@warthog.procyon.org.uk>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Fri, 10 Dec 2021 09:19:50 +0800
-Message-ID: <CAGWkznHcuiwPPMZE95nYG=EFkM8NmLUQZooS5+a+GigP50qksg@mail.gmail.com>
-Subject: Re: [PATCH] fs: judging context via current_is_kswapd instead of gfp_flag
-To:     David Howells <dhowells@redhat.com>
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        linux-cachefs@redhat.com, LKML <linux-kernel@vger.kernel.org>
+        Thu, 9 Dec 2021 20:23:34 -0500
+X-UUID: 9a336d24d0074c3b83b4b2734464980f-20211210
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=1ZZO+ETOhfDa+Z01cdd25TwcHTHZC47+w8uPmJpLwqs=;
+        b=iRRcQh+SEOFPdzh0m0f4Ik6IffPiuHF+IvOwARYMCtkrU79k0NSu4nXgoLxMATLkD86WvkiscbPvF0fnzF4YVk1BHk7wVgAQQV2ycESORFr5KBWvelnRlgUoEgJ9xp7P5Gj3mLpvMuXsU73YX0bMOlq0tA7yblUy/e04sgLJNgI=;
+X-UUID: 9a336d24d0074c3b83b4b2734464980f-20211210
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1755670767; Fri, 10 Dec 2021 09:19:56 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 10 Dec 2021 09:19:55 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 10 Dec 2021 09:19:54 +0800
+Message-ID: <37f9979ef59c84525faaa66c40c094a72751c8cb.camel@mediatek.com>
+Subject: Re: [PATCH net-next v7 1/6] stmmac: dwmac-mediatek: add platform
+ level clocks management
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <dkirjanov@suse.de>
+Date:   Fri, 10 Dec 2021 09:19:55 +0800
+In-Reply-To: <2e8ccd43-bba0-9695-8d6d-d37e0b71fa7d@collabora.com>
+References: <20211208054716.603-1-biao.huang@mediatek.com>
+         <20211208054716.603-2-biao.huang@mediatek.com>
+         <2e8ccd43-bba0-9695-8d6d-d37e0b71fa7d@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 4:26 AM David Howells <dhowells@redhat.com> wrote:
->
-> Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
->
-> [adding linux-cachefs to the cc list]
->
-> > Kswapd uses GFP_KERNEL as gfp_flag which make the judgment of
-> > context is unexpected. fix it by using current_is_kswapd.
-> >
-> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > ---
-> >  fs/afs/file.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/afs/file.c b/fs/afs/file.c
-> > index eb11d04..6c199d5 100644
-> > --- a/fs/afs/file.c
-> > +++ b/fs/afs/file.c
-> > @@ -485,7 +485,7 @@ static int afs_releasepage(struct page *page, gfp_t gfp_flags)
-> >        * elected to wait */
-> >  #ifdef CONFIG_AFS_FSCACHE
-> >       if (PageFsCache(page)) {
-> > -             if (!(gfp_flags & __GFP_DIRECT_RECLAIM) || !(gfp_flags & __GFP_FS))
-> > +             if (current_is_kswapd() || !(gfp_flags & __GFP_FS))
-> >                       return false;
-> >               wait_on_page_fscache(page);
-> >       }
->
-> I have several of these in my fscache-rewrite branch, spread across a number
-> of filesystems.  Should I fix all of them the same way?
->
-> fs/9p/vfs_addr.c:               if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-> fs/afs/file.c:          if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-> fs/nfs/file.c:          if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
-> fs/nfs/fscache.h:               if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
->
-> David
-If the gfp flag here is used for judging kswapd context, I think the
-answer is yes as kswapd applied __GFP_DIRECT_RECLAIM.
->
+RGVhciBBbmdlbG8sDQoJVGhhbmtzIGZvciB5b3VyIGNvbW1lbnRzfg0KT24gVGh1LCAyMDIxLTEy
+LTA5IGF0IDExOjUxICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBSZWdubyB3cm90ZToNCj4g
+SWwgMDgvMTIvMjEgMDY6NDcsIEJpYW8gSHVhbmcgaGEgc2NyaXR0bzoNCj4gPiBUaGlzIHBhdGNo
+IGltcGxlbWVudHMgY2xrc19jb25maWcgY2FsbGJhY2sgZm9yIGR3bWFjLW1lZGlhdGVrDQo+ID4g
+cGxhdGZvcm0sDQo+ID4gd2hpY2ggY291bGQgc3VwcG9ydCBwbGF0Zm9ybSBsZXZlbCBjbG9ja3Mg
+bWFuYWdlbWVudC4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBCaWFvIEh1YW5nIDxiaWFvLmh1
+YW5nQG1lZGlhdGVrLmNvbT4NCj4gDQo+IFNvcnJ5LCBJJ3ZlIHNlbnQgbXkgYWNrIG9uIHY2LiBT
+ZW5kaW5nIGl0IG9uIHY3Lg0KPiANCj4gQWNrZWQtYnk6IEFuZ2Vsb0dpb2FjY2hpbm8gRGVsIFJl
+Z25vIDwNCj4gYW5nZWxvZ2lvYWNjaGluby5kZWxyZWdub0Bjb2xsYWJvcmEuY29tPg0KSSdsbCBh
+ZGQgImFja2VkLWJ5IiBpbiBuZXh0IHNlbmQuDQo=
+

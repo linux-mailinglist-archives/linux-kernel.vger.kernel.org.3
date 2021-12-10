@@ -2,83 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E4D47069E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDE34706AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244332AbhLJRFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:05:31 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:49780 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244306AbhLJRFY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:05:24 -0500
-X-UUID: b62e682c810045e3a790dbf4086541d6-20211211
-X-UUID: b62e682c810045e3a790dbf4086541d6-20211211
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <flora.fu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 94017460; Sat, 11 Dec 2021 01:01:47 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 11 Dec 2021 01:01:46 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 11 Dec
- 2021 01:01:45 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 11 Dec 2021 01:01:45 +0800
-From:   Flora Fu <flora.fu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Flora Fu <flora.fu@mediatek.com>,
-        "Yong Wu" <yong.wu@mediatek.com>, JB Tsai <jb.tsai@mediatek.com>,
-        Pi-Cheng Chen <pi-cheng.chen@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Subject: [PATCH v4 8/8] arm64: dts: mt8192: Set up apu power domain regulators
-Date:   Sat, 11 Dec 2021 01:01:13 +0800
-Message-ID: <20211210170113.30063-9-flora.fu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20211210170113.30063-1-flora.fu@mediatek.com>
-References: <20211210170113.30063-1-flora.fu@mediatek.com>
+        id S243326AbhLJRIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:08:48 -0500
+Received: from mga14.intel.com ([192.55.52.115]:2761 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233725AbhLJRIq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 12:08:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639155911; x=1670691911;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7PEo9nG4krlh+5L4jdugOqDbqZIQi3a8SstgBedZSiU=;
+  b=f6+2nbNj13u6rcGIkJMagvGlGvo3iezO7XpJghqfU9hSwzTZ5XENl9TJ
+   NHi1ts7bvE/hax9rVWdRS9A+iSKz8OEmyx2QS3jFVqyxggl7SFDoijHXF
+   7JJ6VKnjorCEmpLCoC4ut9We++Ww8SQYhaPdMqhBSOh37FdS+ClUnH5C8
+   /QU3lQPrlgMy7EgF1NeGvbWawodcXl/8ANm27+r3LdVQzb8g20NXkZ0KZ
+   VfJhPivPWpvQEKCI2z0SBcEA5grkKh5ld7lqkRrucG5JWg8B9A0pICoqd
+   Znk9wYiqvbjYaYEA/YqRNrHR65ftLc6g6R4W2dxIIFsL/tWQcUF78HK6n
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238605857"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="238605857"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 09:02:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="680802436"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 09:02:11 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvjHf-0003Oz-8O; Fri, 10 Dec 2021 17:02:11 +0000
+Date:   Sat, 11 Dec 2021 01:01:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Yi L <yi.l.liu@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 32/33]
+ include/linux/iommufd.h:30:1: error: expected identifier or '(' before '{'
+ token
+Message-ID: <202112110154.soFBjQw6-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set up apu power domain related regulators.
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
+head:   44f89b130eec28760e6b655facd4be49c5bcc3f9
+commit: 219a6860a2c8c2c89d71793ce4f9375f3e7bb61f [32/33] vfio/pci: Add VFIO_DEVICE_ATTACH_IOASPT
+config: nios2-buildonly-randconfig-r004-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110154.soFBjQw6-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/219a6860a2c8c2c89d71793ce4f9375f3e7bb61f
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
+        git checkout 219a6860a2c8c2c89d71793ce4f9375f3e7bb61f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/vfio/
 
-Signed-off-by: Flora Fu <flora.fu@mediatek.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/vfio/vfio.c:35:
+>> include/linux/iommufd.h:30:1: error: expected identifier or '(' before '{' token
+      30 | {
+         | ^
+   include/linux/iommufd.h:29:1: warning: 'iommufd_bind_pci_device' declared 'static' but never defined [-Wunused-function]
+      29 | iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id, u64 dev_cookie);
+         | ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +30 include/linux/iommufd.h
+
+8a81aeff73cead Jason Gunthorpe 2021-11-11  26  
+8a81aeff73cead Jason Gunthorpe 2021-11-11  27  #else /* !CONFIG_IOMMUFD */
+8a81aeff73cead Jason Gunthorpe 2021-11-11  28  static inline struct iommufd_device *
+8a81aeff73cead Jason Gunthorpe 2021-11-11  29  iommufd_bind_pci_device(int fd, struct pci_dev *pdev, u32 *id, u64 dev_cookie);
+8a81aeff73cead Jason Gunthorpe 2021-11-11 @30  {
+8a81aeff73cead Jason Gunthorpe 2021-11-11  31  	return ERR_PTR(-EOPNOTSUPP);
+8a81aeff73cead Jason Gunthorpe 2021-11-11  32  }
+8a81aeff73cead Jason Gunthorpe 2021-11-11  33  
+
+:::::: The code at line 30 was first introduced by commit
+:::::: 8a81aeff73cead826a9b7d26e9af4f09c9fd700f iommufd: Add kAPI toward external drivers
+
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Liu Yi L <yi.l.liu@intel.com>
 
 ---
-Note:
-This patch depends on mt6359[3] dts patches which haven't yet been accepted.
-[1] https://patchwork.kernel.org/patch/12140237
-
----
- arch/arm64/boot/dts/mediatek/mt8192-evb.dts | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-index 808be492e970..5d9e108e41f5 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-@@ -28,3 +28,10 @@
- &uart0 {
- 	status = "okay";
- };
-+
-+&apuspm {
-+	vsram-supply = <&mt6359_vsram_md_ldo_reg>;
-+	apu_top: power-domain@0 {
-+		domain-supply = <&mt6359_vproc1_buck_reg>;
-+	};
-+};
--- 
-2.18.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 210F746FEF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1041646FF03
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238695AbhLJKvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:51:06 -0500
-Received: from mga07.intel.com ([134.134.136.100]:33181 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233090AbhLJKvF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:51:05 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="301708807"
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="301708807"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:47:29 -0800
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="612890744"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 02:47:27 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvdQ4-004SQQ-Ph;
-        Fri, 10 Dec 2021 12:46:28 +0200
-Date:   Fri, 10 Dec 2021 12:46:28 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
- when IRQ can't be retrieved
-Message-ID: <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
+        id S238959AbhLJKxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:53:38 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36390 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236819AbhLJKxi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 05:53:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B19A8CE2A78;
+        Fri, 10 Dec 2021 10:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04D47C341CA;
+        Fri, 10 Dec 2021 10:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639133400;
+        bh=UihNu6COUMxpwtIho6XydfuI5rt6RIkfKQZSbPH2tXM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VwJVFAMM08SEUuV2rTSpBu3T+tMM9x5PDHZH5SdQ0vo+BWGZZWdEYgwmRtZZsPOAN
+         tnOYgBG8/kmmKEEHc6At7xbpuWqP5l4Wgu5uUbCYW808nxnEyRUeYxzoKoqftoXSCG
+         Alc8dLWGTAuNWdakOCLs8zqiDrAb8kD0Sb6/B1DBODVE2n6CTDf1xQKMw6+LWdJIp7
+         lPiSQLbzevIhI3QoqURapxvt8QYb+5feKEMdJr2lgjw7TyxtLY9q/I8RyqjqIvFCIS
+         khVD+PAa721uQ4xjqV6ey31NNM8tdT0l9bCmt7fNINKHuH1qNVGnySt0VbfC976fBh
+         VTNL+pRUxn1fg==
+Received: by mail-wr1-f41.google.com with SMTP id u1so14133369wru.13;
+        Fri, 10 Dec 2021 02:49:59 -0800 (PST)
+X-Gm-Message-State: AOAM532Hfo6c8YBEAqwPNgjKVQDMer1SE4oCDtWSAIYy8Ytp7xPGGSih
+        o1BWDq2MYLIm9o+DapxV5fQqFef+SoswvdqzHok=
+X-Google-Smtp-Source: ABdhPJyZGgQtOe+9a3VMoC6FsmMk7PBQfc6X6IcZo5cHZZyqsyM1wdwTH5ecyFajtYl/RdstFR1ZxOxYvw6Q53aMxF8=
+X-Received: by 2002:adf:d091:: with SMTP id y17mr13756102wrh.418.1639133398302;
+ Fri, 10 Dec 2021 02:49:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211126095852.455492-1-arnd@kernel.org> <YbMuYlTwaedpI6iz@gmail.com>
+In-Reply-To: <YbMuYlTwaedpI6iz@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 10 Dec 2021 11:49:42 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3tqg2eewMA1jvg==hV-XfK4kMGimx9-oD8A1P69-K6ew@mail.gmail.com>
+Message-ID: <CAK8P3a3tqg2eewMA1jvg==hV-XfK4kMGimx9-oD8A1P69-K6ew@mail.gmail.com>
+Subject: Re: [PATCH] futex: Fix sparc32/m68k/nds32 build regression
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Rich Felker <dalias@libc.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:59:00AM +0300, Sergey Shtylyov wrote:
-> On 12/10/21 1:49 AM, Damien Le Moal wrote:
-> 
-> >> platform_get_irq() will print a message when it fails.
-> >> No need to repeat this.
-> >>
-> >> While at it, drop redundant check for 0 as platform_get_irq() spills
-> >> out a big WARN() in such case.
-> > 
-> > The reason you should be able to remove the "if (!irq)" test is that
-> > platform_get_irq() never returns 0. At least, that is what the function kdoc
-> > says. But looking at platform_get_irq_optional(), which is called by
-> > platform_get_irq(), the out label is:
-> > 
-> > 	WARN(ret == 0, "0 is an invalid IRQ number\n");
-> > 	return ret;
-> > 
-> > So 0 will be returned as-is. That is rather weird. That should be fixed to
-> > return -ENXIO:
-> > 
-> > 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
-> > 		return -ENXIO;
-> > 	return ret;
-> 
->    My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
-> but returns -EINVAL instead.
-> 
-> > Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
-> 
->    Of course it isn't...
+On Fri, Dec 10, 2021 at 11:39 AM Ingo Molnar <mingo@kernel.org> wrote:
+> * Arnd Bergmann <arnd@kernel.org> wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
 
-It's unsubstantiated statement. The vIRQ 0 shouldn't be returned by any of
-those API calls. If it is the case, go and fix them, no need to workaround
-in each of the callers.
+> Doesn't solve the regression on MIPS defconfig:
+> ./arch/mips/include/asm/futex.h: In function 'arch_futex_atomic_op_inuser':
+> ./arch/mips/include/asm/futex.h:89:23: error: implicit declaration of function 'arch_futex_atomic_op_inuser_local'; did you mean 'futex_atomic_op_inuser_local'? [-Werror=implicit-function-declaration]
+>    89 |                 ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
 
--- 
-With Best Regards,
-Andy Shevchenko
+Right, mips and xtensa still have the same problem that I fixed for
+the others, I posted
+another fix after the 0day bot reported it. I think
 
+https://lore.kernel.org/lkml/20211203080823.2938839-1-arnd@kernel.org/
 
+should address the remaining regression.
+
+       Arnd

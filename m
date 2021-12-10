@@ -2,118 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A38D46FB01
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCB546FB06
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbhLJHCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:02:04 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:29170 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbhLJHCE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:02:04 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J9MBX3m8vz8vgK;
-        Fri, 10 Dec 2021 14:56:20 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 14:58:28 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 14:58:27 +0800
-Message-ID: <a8110df9-2cfd-17a2-0550-454834367826@huawei.com>
-Date:   Fri, 10 Dec 2021 14:58:27 +0800
+        id S231983AbhLJHEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:04:35 -0500
+Received: from mga04.intel.com ([192.55.52.120]:34801 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231180AbhLJHEe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 02:04:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639119660; x=1670655660;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tr5EOaWvlUf27ucVpIIS7uK+94W2W9Ype3JMpQUHQ6w=;
+  b=K/70QGEIyV3mfFRFMEWpbftiZ0rTg/PCDeHUsFm/NMmxk/WtmJpd6bum
+   W/8wWwcWBYVO2FNu8MbI0bS0ogYR9d8R5QpvcUGYlB059enNVIFMo+gNI
+   63AgXFJMmjP0sjrqGxINSKPcxea/YEO/Ujpyna/uiGzV+/OB1Mey/mQgp
+   IOEMfOxRfBIesez+/nvey3CMQkepjJMmKzE1wIiBrzTqO03w3ZpELyBXz
+   aZNbB+FpGZZxWVOrVEHsIovtqRATThAdgQENcUCCILI7pnwr1yjdXmDXg
+   5IdWMwDIVK00aadLy/q3IW/RPM8SZ7gfdHvanRTKcL71JcD2o++GeLuth
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="237026328"
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="237026328"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 23:00:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="463567863"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2021 23:00:57 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvZto-0002tN-HS; Fri, 10 Dec 2021 07:00:56 +0000
+Date:   Fri, 10 Dec 2021 15:00:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sgx] BUILD SUCCESS
+ 50468e4313355b161cac8a5155a45832995b7f25
+Message-ID: <61b2fb07.RE9DZAJH0BQOYAXI%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3] arm64: Enable KCSAN
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <joey.gouly@arm.com>
-References: <20211202143331.15259-1-wangkefeng.wang@huawei.com>
- <CANpmjNO5DUk=biDkfP9iepKYBeROO8wL58n8HziOTXuRMOXpvQ@mail.gmail.com>
- <Yajb4w6R4nqPpELq@lakrids> <4cd6d815-aaf2-2d62-cff9-8fb4fae3781d@huawei.com>
- <Yan0PnVmRvGr/0p7@FVFF77S0Q05N>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <Yan0PnVmRvGr/0p7@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme701-chm.china.huawei.com (10.1.199.97) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sgx
+branch HEAD: 50468e4313355b161cac8a5155a45832995b7f25  x86/sgx: Add an attribute for the amount of SGX memory in a NUMA node
 
-On 2021/12/3 18:41, Mark Rutland wrote:
-> On Fri, Dec 03, 2021 at 10:29:22AM +0800, Kefeng Wang wrote:
->> On 2021/12/2 22:44, Mark Rutland wrote:
->>> On Thu, Dec 02, 2021 at 03:36:06PM +0100, Marco Elver wrote:
->>>> On Thu, 2 Dec 2021 at 15:23, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->>>>> This patch enables KCSAN for arm64, with updates to build rules
->>>>> to not use KCSAN for several incompatible compilation units.
->>>>>
->>>>> Resent GCC version(at least GCC10) made outline-atomics as the
->>>> s/Resent/Recent/
->>>>
->>>>> default option(unlike Clang), which will cause linker errors
->>>>> for kernel/kcsan/core.o. Disables the out-of-line atomics by
->>>>> no-outline-atomics to fix the linker errors.
->>>>>
->>>>> Meanwhile, as Mark said[1], there is a specific issue on arm64
->>>>> about ARM64_BTI with Clang 11 if KCSAN enabled, which is fixed
->>>>> by Clang 12, add CLANG_VERSION check. And also some latent issues
->>>>> are need to be fixed which isn't just a KCSAN problem, we make
->>>>> the KCSAN depends on EXPERT for now.
->>>>>
->>>>> Tested selftest and kcsan_test(built with GCC11 and Clang 13),
->>>>> and all passed.
->>>>>
->>>>> [1] https://lkml.org/lkml/2021/12/1/354
->>>> Please use lore/kernel.org permalinks. For this one it'd be:
->>>> https://lkml.kernel.org/r/YadiUPpJ0gADbiHQ@FVFF77S0Q05N
->>>>
->>>> (But I think if this is the final version of the patch, hopefully a
->>>> maintainer can amend the commit message.)
->>>>
->>>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->>>> Acked-by: Marco Elver <elver@google.com> # kernel/kcsan
->>>>
->>>> is still valid, given nothing changed there. I leave the rest to Mark.
->>> I want to do some compiler / config testing before I ack this (just to
->>> make sure there isn't some latent issue I've forgotten about), but
->>> otherwise I think this should be fine.
->>>
->>> I'll try to have that done in the next few days.
->> I will wait for some time, thanks Marco/Mark.
+elapsed time: 881m
 
-Hi Mark,  I will send v4 to address the comments in v3, is there new 
-update about this?
+configs tested: 137
+configs skipped: 3
 
->>
->>> Any other review/testing would be appreciated!
->> As Nathan points, commit 8cdd23c23c3d ("arm64: Restrict ARM64_BTI_KERNEL
->>
->> to clang 12.0.0 and newer"), so need to add Clang version check, which is v2
->> does.
->>
->> is there some other requirement that we need this check, what's your option,
-> I'm not immediately aware of another reason, so I'm fine with not checking that
-> for KCSAN -- If I discover another reason I will let you know.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Ok, will drop the Clang version check in v4.
+gcc tested configs:
+arm                                 defconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20211210
+powerpc                    sam440ep_defconfig
+powerpc                      tqm8xx_defconfig
+m68k                        m5307c3_defconfig
+arm                             mxs_defconfig
+sh                        apsh4ad0a_defconfig
+alpha                            allyesconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc                     kilauea_defconfig
+powerpc                      makalu_defconfig
+sh                          lboxre2_defconfig
+sh                           se7712_defconfig
+arm                             rpc_defconfig
+sparc                       sparc32_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                 xes_mpc85xx_defconfig
+powerpc                    socrates_defconfig
+nds32                             allnoconfig
+powerpc                     redwood_defconfig
+sh                          rsk7269_defconfig
+arm                           sama5_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                     rainier_defconfig
+arm                            dove_defconfig
+nds32                               defconfig
+m68k                         apollo_defconfig
+arm                     am200epdkit_defconfig
+mips                         mpc30x_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                      pcm030_defconfig
+arm                        keystone_defconfig
+xtensa                              defconfig
+powerpc                     ppa8548_defconfig
+arm                             pxa_defconfig
+m68k                        m5407c3_defconfig
+powerpc                        warp_defconfig
+riscv             nommu_k210_sdcard_defconfig
+arm                           tegra_defconfig
+powerpc                 mpc836x_mds_defconfig
+arm                     davinci_all_defconfig
+powerpc                     taishan_defconfig
+sh                             shx3_defconfig
+powerpc                      chrp32_defconfig
+um                           x86_64_defconfig
+arm                       spear13xx_defconfig
+arm                          pxa168_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                      ppc44x_defconfig
+arm                  randconfig-c002-20211210
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20211210
+i386                 randconfig-a002-20211210
+i386                 randconfig-a005-20211210
+i386                 randconfig-a003-20211210
+i386                 randconfig-a006-20211210
+i386                 randconfig-a004-20211210
+i386                 randconfig-a001-20211209
+i386                 randconfig-a005-20211209
+i386                 randconfig-a003-20211209
+i386                 randconfig-a002-20211209
+i386                 randconfig-a006-20211209
+i386                 randconfig-a004-20211209
+x86_64               randconfig-a006-20211209
+x86_64               randconfig-a005-20211209
+x86_64               randconfig-a001-20211209
+x86_64               randconfig-a002-20211209
+x86_64               randconfig-a004-20211209
+x86_64               randconfig-a003-20211209
+x86_64               randconfig-a006-20211210
+x86_64               randconfig-a005-20211210
+x86_64               randconfig-a001-20211210
+x86_64               randconfig-a002-20211210
+x86_64               randconfig-a003-20211210
+x86_64               randconfig-a004-20211210
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-Thanks.
+clang tested configs:
+x86_64               randconfig-a011-20211210
+x86_64               randconfig-a012-20211210
+x86_64               randconfig-a014-20211210
+x86_64               randconfig-a013-20211210
+x86_64               randconfig-a016-20211210
+x86_64               randconfig-a015-20211210
+hexagon              randconfig-r045-20211209
+s390                 randconfig-r044-20211209
+hexagon              randconfig-r041-20211209
+riscv                randconfig-r042-20211209
+hexagon              randconfig-r045-20211210
+riscv                randconfig-r042-20211210
+s390                 randconfig-r044-20211210
+hexagon              randconfig-r041-20211210
 
->
-> Thanks,
-> Mark.
-> .
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

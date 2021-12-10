@@ -2,142 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AED46FC87
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CD046FC99
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbhLJIWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 03:22:41 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34322 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhLJIWk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 03:22:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 97926CE2997
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:19:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48197C00446;
-        Fri, 10 Dec 2021 08:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639124342;
-        bh=bjObNgj4Nu4UfmjzJWW93lpqo6GTGtFbMeFqZRgFtVk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=nG+FimgdAXraTKzVFWBvGloNqYyYm5/af2oO2jKqieA1f8/WCR2PVzL2mju307LvP
-         w2dqYLOMr9D6to90a6vby+toq2cbvmcskhaYQ3nKmeF1YKnrnCfWuUtfYffi6g8ls6
-         ilyxUGK05Z8LTINHgfo5xN20++EGWuCY1Ts1XfAKTgZ34MwQ5Autkhg9yrRfGm7fb8
-         iSObEYuvxCsub9rMmMF3SnHD8aFu2KdobQfLilaZAnkuBWuopXgdbPpvAPAgVvtxje
-         H6I2R53OrpkSEsOCQjLdtAgswMM83W4TXnz8nikKC7F5+5MTtMhQ0TJW8i6zZCE3WJ
-         OW+TyaeIgoxsQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Xin Hao <xhao@linux.alibaba.com>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1 2/2] mm/damon: Modify the display form of damon tracepoint
-Date:   Fri, 10 Dec 2021 08:18:59 +0000
-Message-Id: <20211210081859.33599-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S238452AbhLJIYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 03:24:01 -0500
+Received: from mga03.intel.com ([134.134.136.65]:52789 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235488AbhLJIX7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 03:23:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639124424; x=1670660424;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=E9wOWPT78BqkZyObG5QP8CzzxAxkhD1p0QlFBVe3Btg=;
+  b=LayoQZ8+yICfHUSuL1MfzhWsIsNBo0w6LRf2abZm9L8fv+JLn5eJVxfW
+   YEX/jw45OnDuWNZDpI2s3C2g/4TPvxqr78GDAK1Wzjvxvw8BlSroosA3J
+   Ud8W91cCHl8/NjaTmVmPqLJv2JOT+ZOPOV/R89DyA1ntLbEFf8aDUnDTf
+   tBEKM/AyvWhHCAXVlcYxP24kevrDh5iE0R+W5ZVpK1JRFBhn37ZPjSbuH
+   GkB6+jOWsflY5anYMWCqo0rx/bMoToyZ0spv8AUdDa3UtsDa93aO9dksk
+   d1bt/q1kHNO9Yi3H6UXkUigj83ecZFrw+YvfQ4oFaHQ3lbgE5zBaZH7hb
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238245454"
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="238245454"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 00:20:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
+   d="scan'208";a="503843480"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2021 00:20:24 -0800
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 00:20:23 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Fri, 10 Dec 2021 00:20:23 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Fri, 10 Dec 2021 00:20:23 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ev7o6muM01oGkgzir3sLrwLLO7ZNHEUlFXo1GSuC6Bc0jTCZ4DuZ8fEnhThHwJiEqWi7zvNJi4METH1EfVX0RCWpyW9atm4x233gZvpGLsqoeETxRBTdmDOFHinYTiiDMiogwjjN7Ue/93tsE9FDeTc/VGZBLt9irXtFhYEqegDT/m0VVsfKpklGbIQ5TNxbpKJzqaEFtLnO2sD62WKvSTgKogsesUGM+32MZjUFwugbREH8LHQbdxTANQzigJ0r3r6KJIU/gwsdp3lTwF/Oz4eWl541IVHPWtRr7itSr4yrSL9UzW1L9GnXP29TsEiFFed2Tk9nIUi1l4FUJKPOEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E9wOWPT78BqkZyObG5QP8CzzxAxkhD1p0QlFBVe3Btg=;
+ b=Zq9mwQFv6+PZiZphpQAEyxRWBZuSQ4CMyDEQOFrqE2LHL5Z8/5j+i3Ww8j7fXdns9mMoeeAeqaCxo9cWa3Ejsdpmk1UHOg5cgeh07UTUEtB/hC++aVJq3T0aDIkjZFcAMS5E6QIsid2yG49+Kpyia9Gth0yRKnMwLkoFeec+gbQFVWy72UE7mXA/phwIFhfufAhg3tAWs2gh0t74LWTLeJ0Q5indQ5aeTS7++uySi+kW1pxpcbyof8WSCjwQCAuBTGfXvIWUQ3jgFrepCQX6StiS1CWwCztlUCilVYW+NKnjdEVAhh7LR6vYxUvqqTKIM071K7uAir2Xt3+/RKtXVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E9wOWPT78BqkZyObG5QP8CzzxAxkhD1p0QlFBVe3Btg=;
+ b=uFKdG4xElgD2nagESWndcbL7o4mr0EcnV8UMCyuga7Ejjsxm3oKud++htYCdAeThvSQYNfTY9pepIujhDJNClCfm/QC865xL495Z3YUAQWHKarqdYN+c+C6HJ7UZT+L19q5tRhQdKJzjJd0oEhtOtW9Bw2VIpoMayFgSLXftafw=
+Received: from BN9PR11MB5545.namprd11.prod.outlook.com (2603:10b6:408:102::19)
+ by BN6PR11MB4178.namprd11.prod.outlook.com (2603:10b6:405:84::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Fri, 10 Dec
+ 2021 08:20:22 +0000
+Received: from BN9PR11MB5545.namprd11.prod.outlook.com
+ ([fe80::6533:7d95:6f60:aafd]) by BN9PR11MB5545.namprd11.prod.outlook.com
+ ([fe80::6533:7d95:6f60:aafd%9]) with mapi id 15.20.4778.015; Fri, 10 Dec 2021
+ 08:20:22 +0000
+From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 7/9] drm/i915/gvt: Constify formats
+Thread-Topic: [PATCH 7/9] drm/i915/gvt: Constify formats
+Thread-Index: AQHX6P2AeFvbtLy2F0WFSvUB689fGKwra5EA
+Date:   Fri, 10 Dec 2021 08:20:22 +0000
+Message-ID: <6e73f014-730c-3334-c0e6-7e0665f47fec@intel.com>
+References: <20211204105527.15741-1-rikard.falkeborn@gmail.com>
+ <20211204105527.15741-8-rikard.falkeborn@gmail.com>
+In-Reply-To: <20211204105527.15741-8-rikard.falkeborn@gmail.com>
+Accept-Language: en-FI, en-US
+Content-Language: aa
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e33f7c9d-6981-4229-d4ea-08d9bbb5e941
+x-ms-traffictypediagnostic: BN6PR11MB4178:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <BN6PR11MB4178CE3E7D654FFD7CDB10E5CA719@BN6PR11MB4178.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: le3s9yZTRKFl6nFmyxUo+dtaopeXf2nGWOjidniGr7zxuruZmdOUkxfr++7hEvPB16zNg+4iTWiUxXXvha55QHo5UQc4KMOw7iyeMWAxDqaVmfGw0UNWksI7XV3fSvvxNVkRaxrmIVnbB3tg6TwoTt8VDTUY9k9724Xpjc/nfFR5ROi2uzkhJdzkoHmTHWDHq7x/txafnCZEBqu5/p/9ZpfL7xdMUDJMvazKmkTJDFqkgQILC7UZrdyHPpUyWArcAAyZZISAApYx61AIG4rD9LJ6sCQQws1RhdHTObcq1K4bbZcL20oLbzLlzfssrTMWjFDt2DzKGivsqiGFKP9FNMZgfamuU6oJ6OS99UDO96IUb6aO2vSxfIkL7me/Grv3t8+jzXV0SsGaa8fec+jiPQXF2xsrW/72mV2/qqEEkg2AF+X1HAo957NBPKmnZ3DIZ9wtyXXUfPIlpjvG6Ijo6afmyjq6CocOHnN9bcg7UqgvJipcqSCJP0+fH95FZxHmAbvbCp9afhK+QWl4d1JqKPY/1fj4O42V0qcRTr6sTtO0vzk/74J+1fgtjB0/GBJjEk0TfGUq3N9TW1cpQgmJmvzU0R3rXfZuX6X1Hyw9gFBkOHvhezTQeheXRu2EH0zCp2iHCNUkclIa7iUDiXrArKfmVhpaaYPtK/sKq7H4ne0oRxH/mRPfYQtNRZxMcjLBpX3iD+0sNrXYjRpB0OvEJhY8fuS/FpB1o7msmgeEAdbjNGdvts/K1F+1XBLf6zOfQSKPytBlOFHxOX71QQduhg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8936002)(83380400001)(38070700005)(31686004)(2906002)(36756003)(7416002)(64756008)(186003)(54906003)(86362001)(316002)(31696002)(8676002)(66476007)(71200400001)(91956017)(76116006)(110136005)(508600001)(66946007)(66556008)(38100700002)(26005)(2616005)(82960400001)(53546011)(6512007)(6506007)(5660300002)(4326008)(122000001)(6486002)(66446008)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OXBBS1QraklyZWFFc0xKM2lsY3M4VkJoaEowdXRTNms5OUR5VCtBS3pMUjdQ?=
+ =?utf-8?B?VkUyNHQxZU5Eeng3WTNGRmg2RU45UFZCemdGNTZQK2ZxQzhMb0R6WDdSL2FD?=
+ =?utf-8?B?ZkFid2pZUTcwcS8ra0tJMFpXaWJidEJEYXZtMWpXTkxoeVFxODNLMlBCSisx?=
+ =?utf-8?B?NUJhL1NWKzhUY21WYVlIV1QxR3lYYnlEd1VYYnNtbUxPdzJVVE9zQTZTYjUr?=
+ =?utf-8?B?cng3eHQ1a0hKS1hlL2ViSVo4bCt6RERwWWp2YVBySHBYMytUb09QV1AvbTQx?=
+ =?utf-8?B?dlZOaVprZWJyeWt4VnVDeE1MYWFUdFNvRWh4S0JvNTAvUThJcGN3eHlKZTRy?=
+ =?utf-8?B?UnIzU21JaHU4azh5ME9nbkFCV0tEUW9MSWhZTVUyL1h0cjFrd05kQ2JKSUtD?=
+ =?utf-8?B?TEx0ci9XMlV1TjlwZ1JSUVJaVVpocmdZR2h0REFlR1IyOEZkU0V6QUNpSCtR?=
+ =?utf-8?B?cHNKeDJlYzVtdDBQQnBudWlRdStwSUpYNUFnZnJHa1Q0bTNlODllMTM2akVM?=
+ =?utf-8?B?a3BQWWFRN282RU9MWWJna0hoQmlLZnV3amFQSVNoVnB3cGMyWStxME9CeFgz?=
+ =?utf-8?B?eVdsS1o2V0E3WENtSE10TlY1TDBDSStYWVBUbUFSK2V1UlpnenV4UEdFVCtV?=
+ =?utf-8?B?Ly94ckVtcEVrQm55M3ZJU2xTbmpvdmZrQndCRVh1R0pZSVFTZVpuTXNGei93?=
+ =?utf-8?B?VWhabitkbitDbW82My8rYkdpeVd6bUp4MExoY3ZybTJWZVNoY01aN3RRMlI3?=
+ =?utf-8?B?cGttNlRaNFZ0YkhtZmtLMExjMHRCdFc1R3p2VzNVN1BTTlBuL0NrdGRIV0do?=
+ =?utf-8?B?VmI5dk13aUJYeGtsUitLOFJrUjBFQWRsQTVwcS9lRVliMDJFWXM1Q2F3eDM1?=
+ =?utf-8?B?NzBFL3JZMysrbVVtVFdjSEsxR3lYOTdQS01zcmNvTTJmN3BpTUdHSjZyWnVk?=
+ =?utf-8?B?emhSWHNTYlhXTXZONTRjYU9DbXdyTkhCVitlb2dsL0p1UkRjR2xGblNKYzY4?=
+ =?utf-8?B?aE5Xa01LVGh1eksxczQ0RGt5d21HQ2g0eDdUZHNmSHIxRm9tWC85djByWDVt?=
+ =?utf-8?B?dElOM205YSs4b1owNkZlUjdHVEIvNWZqZmliK1IwcklTV3F4NHFCSndQODYw?=
+ =?utf-8?B?QThNL1BaWlBIWi96bU1Wa0k0YUIyYldZTVo1UlJZLzdIK1phSkRpNHg4U1Bz?=
+ =?utf-8?B?cVgybUxDRzgwWkhodFlCYkszd1ZPVHkraURlU2hxcmpvS2ZIbjU2aCt3VkRP?=
+ =?utf-8?B?dDkxMm5QZFp6WTdzKzBwVVdYL09iWlk3OFVmMEdhaGk5TllBdUpCNU1DZHU5?=
+ =?utf-8?B?L2NzbFdNQmtqckJvMG93RTJaNVdWL1NHNXBmNVIwMzdIeHp5eldRTi9jTFJS?=
+ =?utf-8?B?QURXbDRMaE01RmhESHBPRFd4V3R1WWxUWkhQamY3ODVmOGJwOXFLUkxlclpI?=
+ =?utf-8?B?anZuVXlRclM0V1F3eVAwbjl0Wkg5ajZ5QzI4MFk2VERHaVpLZXNXUEpoUVAv?=
+ =?utf-8?B?QjNjdU42eUtjeUU2UUQ5dGdzVXhlSWQrN21YZEVBT25RKzhLOHdDSFhzdldV?=
+ =?utf-8?B?aStzaUhoNVc2NE9ZUVBWbWhGbFBJVGcxOUZWUHJDR3JSZXZnbVQ3RGlsTTRm?=
+ =?utf-8?B?cFQzSlBCTHFQa254OWZBU1E1a0hVdUlVMTUzTUVURkViTksyckdlUGJzWFJz?=
+ =?utf-8?B?bStqamZNRDJqUUdlcGFuaWg1WnNJQUU0bTNJZHM0L2tMMDRabXE0MHBkaXo1?=
+ =?utf-8?B?WVU2ZU15RHNMTFBpb0NLUXF3UWhqQmIwUW1kMDRzOHFzeTlSYSs3WmVsbHAz?=
+ =?utf-8?B?WDR4VlI0dm5kNlhYZFo0V05QOHZVUUNSZk41cjZEUktvcjZ2TDM4SU1lRVZy?=
+ =?utf-8?B?VjdYRWFKQUpnakkvb1hrekhRNzZVZzVCc3pCYW5hcHAwdFpKZE9ubW0yU0lD?=
+ =?utf-8?B?U09zakFkVkc3dGFRVnF6WkJNWG9RUGFUd1NzVHMyaXdyMm00by9aWHN0N2VP?=
+ =?utf-8?B?NVFaNjlYQkJhK3d5ak9WVUpXTmNiSHk3TFRUK2FvZ0EzMmYyYzdPTWF4R3BJ?=
+ =?utf-8?B?aFhTQys0YnlySHRnTUxjSXI1QWFuSkc0NW1lbk5Na2tXMmFSSFBIYzVSU2pE?=
+ =?utf-8?B?SGhYZEJ0S0hLUktoeHNwU3NBQXkzS1pwNU55c29acElBdlhVNitrQ1ZQVzRP?=
+ =?utf-8?B?R1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4DA274F4C6B6914F8ABACF7F600EB681@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <b6142e6f-266d-1dec-a3b6-83e622280462@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5545.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e33f7c9d-6981-4229-d4ea-08d9bbb5e941
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2021 08:20:22.5072
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ypPOkagIw+GMeSdmwS/VXwAN+xq1Kp9/BP9V0W0nB1P6dWW9u5YBhei9nLQHRqwOdZVidiDggvXbPG3PQo1rTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB4178
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
-
-On Fri, 10 Dec 2021 11:36:23 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
-
-> [-- Attachment #1: Type: text/plain, Size: 4038 bytes --]
-> 
-> Hi SeongJae：
-> 
-> On 12/10/21 12:46 AM, SeongJae Park wrote:
-> > On Fri, 10 Dec 2021 00:33:17 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
-> >
-> >> When I use the perf command to record damon monitor data, like below.
-> >>      # perf record -e damon:damon_aggregated
-> >>      # perf script
-> >>      ...target_id=18446462667479739520 nr_regions=13 281472805928960-281472942936064...
-> >>      ...target_id=18446462667479739520 nr_regions=13 281472942936064-281473080008704...
-> >>      ...target_id=18446462667479739520 nr_regions=13 281473080008704-281473216634880...
-> >>
-> >>  From a user's point of view, the 'target_id' and 'damon_region' which displays in decimal
-> >> are not very friendly, So there do some changes, keep the 'target_id' display consistent
-> >> with 'dbgfs/target_ids' interface and 'damon_region' is displayed in hexadecimal, just like
-> >> below.
-> >>      # perf record -e damon:damon_aggregated
-> >>      # perf script
-> >>      ...target_id=5522 nr_regions=14 ffff716a3000-ffff79893000...
-> >>      ...target_id=5522 nr_regions=14 ffff79893000-ffff819dc000...
-> >>      ...target_id=5522 nr_regions=14 ffff819dc000-ffff89bd9000...
-> >>
-> >> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> >> ---
-> >>   include/trace/events/damon.h | 6 +++---
-> >>   1 file changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/include/trace/events/damon.h b/include/trace/events/damon.h
-> >> index 99ffa601e351..67de51814f4c 100644
-> >> --- a/include/trace/events/damon.h
-> >> +++ b/include/trace/events/damon.h
-[...]
-> >>   	TP_fast_assign(
-> >> -		__entry->target_id = t->id;
-> >> +		__entry->target_id = (int)pid_vnr((struct pid *)t->id);
-> > I think this would break physical address space monitoring.  Have you tested
-> > this change for that?
-> 
-> Yes, you are right,  But I encountered some problems while testing 
-> physical address, it seems that my operation did not work
-> 
-> I did some test like this:
-> 
->      # echo "42 0x0000000840000000 0x000000103fffffff" > init_regions
-> 
->      # echo paddr > target_ids
-> 
->      # echo on > monitor_on
-> 
-> i get the physical address from my kernel startup log.
-> 
-> 15 [ 0.000000] Early memory node ranges
-> 16 [ 0.000000] node 0: [mem 0x0000000040000000-0x000000083bc7ffff]
-> 17 [ 0.000000] node 0: [mem 0x000000083bc80000-0x000000083bffffff]
-> 18 [ 0.000000] node 0: [mem 0x000000083c000000-0x000000083c03ffff]
-> 19 [ 0.000000] node 0: [mem 0x000000083c040000-0x000000083c0fffff]
-> 20 [ 0.000000] node 0: [mem 0x000000083c100000-0x000000083f3dffff]
-> 21 [ 0.000000] node 0: [mem 0x000000083f3e0000-0x000000083f46ffff]
-> 22 [ 0.000000] node 0: [mem 0x000000083f470000-0x000000083f47ffff]
-> 23 [ 0.000000] node 0: [mem 0x000000083f480000-0x000000083f59ffff]
-> 24 [ 0.000000] node 0: [mem 0x000000083f5a0000-0x000000083fffffff]
-> 25 [ 0.000000] node 1: [mem 0x0000000840000000-0x000000103fffffff]
-> 26 [ 0.000000] node 2: [mem 0x0000001040000000-0x000000183fffffff]
-> 27 [ 0.000000] node 3: [mem 0x0000001840000000-0x000000203fffffff]
-> 28 [ 0.000000] Initmem setup node 0 [mem 
-> 0x0000000040000000-0x000000083fffffff]
-> 29 [ 0.000000] On node 0 totalpages: 8388608
-> 
-> Is there anything wrong ?
-
-"The target id should already in target_ids file"[1].
-
-For proper use of DAMON, I'd like to recommend you to refer to, or use the
-official DAMON user space tool[2] instead of the debugfs interface.  As the
-document[3] says "DAMON user space tool. This is for privileged people such as
-system administrators who want a just-working human-friendly interface".
-
-Also, some of your patches including this break the user space tool.  As it is
-an important part of DAMON echosystem, it would be great if you could consider
-taking care in keeping it unbroken, too.
-
-[1] https://docs.kernel.org/admin-guide/mm/damon/usage.html#initial-monitoring-target-regions
-[2] https://github.com/awslabs/damo
-[3] https://docs.kernel.org/admin-guide/mm/damon/usage.html#detailed-usages
-
-
-Thanks,
-SJ
-
-[...]
+T24gMTIvNC8yMDIxIDEyOjU1IFBNLCBSaWthcmQgRmFsa2Vib3JuIHdyb3RlOg0KPiBUaGVzZSBh
+cmUgbmV2ZXIgbW9kaWZpZWQsIHNvIG1ha2UgdGhlbSBjb25zdCB0byBhbGxvdyB0aGUgY29tcGls
+ZXIgdG8NCj4gcHV0IHRoZW0gaW4gcmVhZC1vbmx5IG1lbW9yeS4gV0hpbGUgYXQgaXQsIG1ha2Ug
+dGhlIGRlc2NyaXB0aW9uIGNvbnN0DQo+IGNoYXIqIHNpbmNlIGl0IGlzIG5ldmVyIG1vZGlmaWVk
+Lg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBSaWthcmQgRmFsa2Vib3JuIDxyaWthcmQuZmFsa2Vib3Ju
+QGdtYWlsLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3Z0L2ZiX2RlY29k
+ZXIuYyB8IDI0ICsrKysrKysrKysrKy0tLS0tLS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAx
+MiBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvZ3B1L2RybS9pOTE1L2d2dC9mYl9kZWNvZGVyLmMgYi9kcml2ZXJzL2dwdS9kcm0vaTkxNS9n
+dnQvZmJfZGVjb2Rlci5jDQo+IGluZGV4IDExYThiYWJhNjgyMi4uM2M4NzM2YWU4ZmVkIDEwMDY0
+NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vaTkxNS9ndnQvZmJfZGVjb2Rlci5jDQo+ICsrKyBi
+L2RyaXZlcnMvZ3B1L2RybS9pOTE1L2d2dC9mYl9kZWNvZGVyLmMNCj4gQEAgLTQwLDEyICs0MCwx
+MiBAQA0KPiAgIA0KPiAgICNkZWZpbmUgUFJJTUFSWV9GT1JNQVRfTlVNCTE2DQo+ICAgc3RydWN0
+IHBpeGVsX2Zvcm1hdCB7DQo+IC0JaW50CWRybV9mb3JtYXQ7CS8qIFBpeGVsIGZvcm1hdCBpbiBE
+Uk0gZGVmaW5pdGlvbiAqLw0KPiAtCWludAlicHA7CQkvKiBCaXRzIHBlciBwaXhlbCwgMCBpbmRp
+Y2F0ZXMgaW52YWxpZCAqLw0KPiAtCWNoYXIJKmRlc2M7CQkvKiBUaGUgZGVzY3JpcHRpb24gKi8N
+Cj4gKwlpbnQJCWRybV9mb3JtYXQ7CS8qIFBpeGVsIGZvcm1hdCBpbiBEUk0gZGVmaW5pdGlvbiAq
+Lw0KPiArCWludAkJYnBwOwkJLyogQml0cyBwZXIgcGl4ZWwsIDAgaW5kaWNhdGVzIGludmFsaWQg
+Ki8NCj4gKwljb25zdCBjaGFyCSpkZXNjOwkJLyogVGhlIGRlc2NyaXB0aW9uICovDQo+ICAgfTsN
+ClRoYW5rcyBzbyBtdWNoIGZvciB0aGlzLiBBY2NvcmRpbmcgdG8gdGhlIGNvZGUgb2YgaTkxNSwg
+d2UgcHJlZmVyIHVzaW5nIA0Kb25lIHNwYWNlIGFzIHNlcGVyYXRvci4NCj4gICANCj4gLXN0YXRp
+YyBzdHJ1Y3QgcGl4ZWxfZm9ybWF0IGJkd19waXhlbF9mb3JtYXRzW10gPSB7DQo+ICtzdGF0aWMg
+Y29uc3Qgc3RydWN0IHBpeGVsX2Zvcm1hdCBiZHdfcGl4ZWxfZm9ybWF0c1tdID0gew0KPiAgIAl7
+RFJNX0ZPUk1BVF9DOCwgOCwgIjgtYml0IEluZGV4ZWQifSwNCj4gICAJe0RSTV9GT1JNQVRfUkdC
+NTY1LCAxNiwgIjE2LWJpdCBCR1JYICg1OjY6NSBNU0ItUjpHOkIpIn0sDQo+ICAgCXtEUk1fRk9S
+TUFUX1hSR0I4ODg4LCAzMiwgIjMyLWJpdCBCR1JYICg4Ojg6ODo4IE1TQi1YOlI6RzpCKSJ9LA0K
+PiBAQCAtNTgsNyArNTgsNyBAQCBzdGF0aWMgc3RydWN0IHBpeGVsX2Zvcm1hdCBiZHdfcGl4ZWxf
+Zm9ybWF0c1tdID0gew0KPiAgIAl7MCwgMCwgTlVMTH0sDQo+ICAgfTsNCj4gICANCj4gLXN0YXRp
+YyBzdHJ1Y3QgcGl4ZWxfZm9ybWF0IHNrbF9waXhlbF9mb3JtYXRzW10gPSB7DQo+ICtzdGF0aWMg
+Y29uc3Qgc3RydWN0IHBpeGVsX2Zvcm1hdCBza2xfcGl4ZWxfZm9ybWF0c1tdID0gew0KPiAgIAl7
+RFJNX0ZPUk1BVF9ZVVlWLCAxNiwgIjE2LWJpdCBwYWNrZWQgWVVZViAoODo4Ojg6OCBNU0ItVjpZ
+MjpVOlkxKSJ9LA0KPiAgIAl7RFJNX0ZPUk1BVF9VWVZZLCAxNiwgIjE2LWJpdCBwYWNrZWQgVVlW
+WSAoODo4Ojg6OCBNU0ItWTI6VjpZMTpVKSJ9LA0KPiAgIAl7RFJNX0ZPUk1BVF9ZVllVLCAxNiwg
+IjE2LWJpdCBwYWNrZWQgWVZZVSAoODo4Ojg6OCBNU0ItVTpZMjpWOlkxKSJ9LA0KPiBAQCAtMjc4
+LDE0ICsyNzgsMTQgQEAgaW50IGludGVsX3ZncHVfZGVjb2RlX3ByaW1hcnlfcGxhbmUoc3RydWN0
+IGludGVsX3ZncHUgKnZncHUsDQo+ICAgDQo+ICAgI2RlZmluZSBDVVJTT1JfRk9STUFUX05VTQko
+MSA8PCA2KQ0KPiAgIHN0cnVjdCBjdXJzb3JfbW9kZV9mb3JtYXQgew0KPiAtCWludAlkcm1fZm9y
+bWF0OwkvKiBQaXhlbCBmb3JtYXQgaW4gRFJNIGRlZmluaXRpb24gKi8NCj4gLQl1OAlicHA7CQkv
+KiBCaXRzIHBlciBwaXhlbDsgMCBpbmRpY2F0ZXMgaW52YWxpZCAqLw0KPiAtCXUzMgl3aWR0aDsJ
+CS8qIEluIHBpeGVsICovDQo+IC0JdTMyCWhlaWdodDsJCS8qIEluIGxpbmVzICovDQo+IC0JY2hh
+cgkqZGVzYzsJCS8qIFRoZSBkZXNjcmlwdGlvbiAqLw0KPiArCWludAkJZHJtX2Zvcm1hdDsJLyog
+UGl4ZWwgZm9ybWF0IGluIERSTSBkZWZpbml0aW9uICovDQo+ICsJdTgJCWJwcDsJCS8qIEJpdHMg
+cGVyIHBpeGVsOyAwIGluZGljYXRlcyBpbnZhbGlkICovDQo+ICsJdTMyCQl3aWR0aDsJCS8qIElu
+IHBpeGVsICovDQo+ICsJdTMyCQloZWlnaHQ7CQkvKiBJbiBsaW5lcyAqLw0KPiArCWNvbnN0IGNo
+YXIJKmRlc2M7CQkvKiBUaGUgZGVzY3JpcHRpb24gKi8NCj4gICB9Ow0KVGhlIHNhbWUgY29tbWVu
+dCBhcyBhYm92ZS4NCj4gLXN0YXRpYyBzdHJ1Y3QgY3Vyc29yX21vZGVfZm9ybWF0IGN1cnNvcl9w
+aXhlbF9mb3JtYXRzW10gPSB7DQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGN1cnNvcl9tb2RlX2Zv
+cm1hdCBjdXJzb3JfcGl4ZWxfZm9ybWF0c1tdID0gew0KPiAgIAl7RFJNX0ZPUk1BVF9BUkdCODg4
+OCwgMzIsIDEyOCwgMTI4LCAiMTI4eDEyOCAzMmJwcCBBUkdCIn0sDQo+ICAgCXtEUk1fRk9STUFU
+X0FSR0I4ODg4LCAzMiwgMjU2LCAyNTYsICIyNTZ4MjU2IDMyYnBwIEFSR0IifSwNCj4gICAJe0RS
+TV9GT1JNQVRfQVJHQjg4ODgsIDMyLCA2NCwgNjQsICI2NHg2NCAzMmJwcCBBUkdCIn0sDQo+IEBA
+IC0zOTEsNyArMzkxLDcgQEAgaW50IGludGVsX3ZncHVfZGVjb2RlX2N1cnNvcl9wbGFuZShzdHJ1
+Y3QgaW50ZWxfdmdwdSAqdmdwdSwNCj4gICANCj4gICAjZGVmaW5lIFNQUklURV9GT1JNQVRfTlVN
+CSgxIDw8IDMpDQo+ICAgDQo+IC1zdGF0aWMgc3RydWN0IHBpeGVsX2Zvcm1hdCBzcHJpdGVfcGl4
+ZWxfZm9ybWF0c1tTUFJJVEVfRk9STUFUX05VTV0gPSB7DQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0
+IHBpeGVsX2Zvcm1hdCBzcHJpdGVfcGl4ZWxfZm9ybWF0c1tTUFJJVEVfRk9STUFUX05VTV0gPSB7
+DQo+ICAgCVsweDBdID0ge0RSTV9GT1JNQVRfWVVWNDIyLCAxNiwgIllVViAxNi1iaXQgNDoyOjIg
+cGFja2VkIn0sDQo+ICAgCVsweDFdID0ge0RSTV9GT1JNQVRfWFJHQjIxMDEwMTAsIDMyLCAiUkdC
+IDMyLWJpdCAyOjEwOjEwOjEwIn0sDQo+ICAgCVsweDJdID0ge0RSTV9GT1JNQVRfWFJHQjg4ODgs
+IDMyLCAiUkdCIDMyLWJpdCA4Ojg6ODo4In0sDQoNClRoZSByZXN0IG9mIHRoZSBwYXRjaCBsb29r
+cyBnb29kIHRvIG1lLg0KDQo=

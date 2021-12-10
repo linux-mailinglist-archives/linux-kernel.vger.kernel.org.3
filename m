@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9233347089F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D32F4708A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244895AbhLJS2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:28:38 -0500
-Received: from mail-qt1-f171.google.com ([209.85.160.171]:34353 "EHLO
-        mail-qt1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239276AbhLJS2h (ORCPT
+        id S245308AbhLJS3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245107AbhLJS3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:28:37 -0500
-Received: by mail-qt1-f171.google.com with SMTP id o17so9231071qtk.1;
-        Fri, 10 Dec 2021 10:25:01 -0800 (PST)
+        Fri, 10 Dec 2021 13:29:51 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F107C0617A1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:26:16 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id a23so4148345pgm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:26:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=5ZWHsHrPXRi2wsn383Uu/1pd+rYDunvKkawYraa0NUU=;
+        b=z0fHip/MZwxDe4vHYomeTzwFJb3U1F6jmwmgr3rsirUf0tChAE9PzrAEZsHbsKImCf
+         xS6IWdNUa3EYz58mawdCaReNw+O8oHfgl9j2dl29xc3YGvOtK99laelFIU5V9aoAVDhE
+         meb/xRVCcR+yg9zzngV5tDxT2SbF1K+GThAZNbbtCkoY61bZN+rChuSGCAPN5BwME6Jm
+         4WroOOpahZaNSNUxLyRsCFD/sOE+9GdNsXOc8mpZ0N+uoP+NELn+gQjbL45l7EVOQZfx
+         YSZ6oHZW49PgergROwi7NGAYk8kNMMqaBiW4jKiDwnVQqrdPWjCG5Vj+XjZ6IJSIKEaN
+         d07w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3ncRAC5NMmHYdYgIiX+rV/e8ReKPYkC25NOZUAGrVHg=;
-        b=rDewzmHVvHF6d3osQeiQBdTi8SJgBVcH7NjW4wZPx8TJSSzT52US0OwKCqCsQ65DbN
-         Myfbn49+uY5X4PZackbxNEmBsZS9w2emjiOc46WCUzgGbE9FmSnYbsE9rF0dcg8FPMwu
-         6K2atFhlNZDZ84mD1gD8CDh8nzux3p26E7P94vR7S2j3jkP5eGNuHkTWHScYNUmXK/JY
-         d5WBMBcej38KYf9NKHsm2wVF0gYcNhX2lEmnF8kVOXrqEOcQf4GwdqzEUN9nCcVNVMVV
-         gCaUw/8W76oUL8oN5m/1EZrqAuwRIHK/w2UBkozaB2X9HlMJbRuGrf9GCTpXUnSP64Tp
-         rPLw==
-X-Gm-Message-State: AOAM532CZpO86T+8m58IkCF+XvjYeahTZzd4JDJXtafUbCdWea7PnFC2
-        IXAeImGByo+uogeS/QdsTSM=
-X-Google-Smtp-Source: ABdhPJxYVZ/SvxezzuNIV7iBJ1zbboQXukAzXTVTGWoGA3nKX/NqayjQPgoPMjKK3KSF9tSlgaq8ug==
-X-Received: by 2002:a05:622a:92:: with SMTP id o18mr28895047qtw.570.1639160701158;
-        Fri, 10 Dec 2021 10:25:01 -0800 (PST)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-118.fbsv.net. [2a03:2880:20ff:76::face:b00c])
-        by smtp.gmail.com with ESMTPSA id s7sm2633583qta.31.2021.12.10.10.25.00
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=5ZWHsHrPXRi2wsn383Uu/1pd+rYDunvKkawYraa0NUU=;
+        b=63y13Oz/TCMyhcaJPh/JJp3r3LjiWQ+50ZMh+01ol/hjll+J/9+wMPgc1kDHrpGgxJ
+         NkOlfufDvnTp6SYxUHMQ4kzsETRbFkLNKTOTdm21t2CTWyJHjQKZlEFWDV7xCIseEAwP
+         ObTtlO8rtn2Pmn7KFkuoK1t/gOVbjOTybC1BAL8DFH10N8NOldOf8yi4EOwCYZiAnXEY
+         oy+eoGhRfl11JimLFhABiuJ1FLFOIP8WB4NJLM+iq46GufHdkCoNy156ZZDweTVMue8M
+         fzGE950brme7CKujXq2kblyF8KflDiIKgpUUDN+XW8ZZsnNIS/F01OpxadsLwJwcM6Y7
+         tU5w==
+X-Gm-Message-State: AOAM530JcNb21vVkhjQr0edcgJGM8V1XDdApWHvAUsp4x6dPNrDC3kyh
+        Vx/+Aj9Cr1IV14D2oQAoFmuDoQkAHdz6sg==
+X-Google-Smtp-Source: ABdhPJwSJasp5TOKzYWPb4Na+8MBZ6lVt9UPw0kNn5DPvNdYwiUA3S0wvCDRN19sohb737MFHivkIA==
+X-Received: by 2002:a62:c541:0:b0:4ad:561a:5b6c with SMTP id j62-20020a62c541000000b004ad561a5b6cmr19546309pfg.48.1639160775461;
+        Fri, 10 Dec 2021 10:26:15 -0800 (PST)
+Received: from [172.20.4.26] ([66.185.175.30])
+        by smtp.gmail.com with ESMTPSA id mz7sm13410388pjb.7.2021.12.10.10.26.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 10:25:00 -0800 (PST)
-Date:   Fri, 10 Dec 2021 10:24:58 -0800
-From:   David Vernet <void@manifault.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-doc@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
-        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-        corbet@lwn.net, yhs@fb.com, songliubraving@fb.com
-Subject: Re: [PATCH] Documentation: livepatch: Add kernel-doc link to
- klp_enable_patch
-Message-ID: <YbObeiWbLxO8MwrD@dev0025.ash9.facebook.com>
-References: <20211209165303.3205464-1-void@manifault.com>
- <YbMc8YGIoyRU5nwJ@alley>
+        Fri, 10 Dec 2021 10:26:15 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     linux-kernel@vger.kernel.org, Davidlohr Bueso <dbueso@suse.de>,
+        oleg@redhat.com, linux-block@vger.kernel.org
+In-Reply-To: <20211210182058.43417-1-dave@stgolabs.net>
+References: <20211210182058.43417-1-dave@stgolabs.net>
+Subject: Re: [PATCH] block: fix ioprio_get(IOPRIO_WHO_PGRP) vs setuid(2)
+Message-Id: <163916077449.627295.16747606305851596098.b4-ty@kernel.dk>
+Date:   Fri, 10 Dec 2021 11:26:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbMc8YGIoyRU5nwJ@alley>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek <pmladek@suse.com> wrote on Fri [2021-Dec-10 10:25:05 +0100]:
+On Fri, 10 Dec 2021 10:20:58 -0800, Davidlohr Bueso wrote:
+> do_each_pid_thread(PIDTYPE_PGID) can race with a concurrent
+> change_pid(PIDTYPE_PGID) that can move the task from one hlist
+> to another while iterating. Serialize ioprio_get to take
+> the tasklist_lock in this case, just like it's set counterpart.
 > 
-> Honestly, I do not like this. It might be acceptable when it converts
-> klp_enable_patch() into a link pointing to another page describing the API.
 > 
-> But this patch causes the entire documentation of klp_enable_patch()
-> inserted into livepatch.html. It does not fit there and breaks
-> the text flow.
 
-Thank you for taking a look at the patch, Petr.
+Applied, thanks!
 
-I'm happy to revise the patch to instead add a new `api.rst` file that
-contains the `kernel-doc` directive, which would cause `klp_enable_patch()`
-in `livepatch.rst` to automatically link to the separate page as you
-suggested.
+[1/1] block: fix ioprio_get(IOPRIO_WHO_PGRP) vs setuid(2)
+      commit: e6a59aac8a8713f335a37d762db0dbe80e7f6d38
 
-Just to check though -- I see that `shadow-vars.rst` and `system-state.rst`
-have their own "API" sections. Is it preferable to add such a section
-directly to `livepatch.rst`, rather than creating a separate file?
+Best regards,
+-- 
+Jens Axboe
 
-Let me know either way and I'll send a v2 patch with your preference.
 
-Kind regards,
-David

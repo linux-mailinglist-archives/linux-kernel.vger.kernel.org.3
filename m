@@ -2,205 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E9E47066F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98351470674
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244243AbhLJQ5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:57:05 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:41851 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbhLJQ44 (ORCPT
+        id S244260AbhLJQ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244249AbhLJQ5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:56:56 -0500
-Received: by mail-ot1-f41.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so10199925otl.8;
-        Fri, 10 Dec 2021 08:53:21 -0800 (PST)
+        Fri, 10 Dec 2021 11:57:23 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDD4C0617A1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:48 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id t5so31501074edd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8nTOg8rJWU8BdSZlmSj1JbyQAWkIqyTD+0WbjfFOnMk=;
+        b=PCw582JVM5mAG4YE2zRRSnTu65r0baerxHsDk/EtQJkxzIreRmva1a/NRZSKascAcg
+         gMC55Q6Y31pQrS07rXbX9Iw5fR2hLArDYNpwYIYJdnLHbkLdE2xjFjIt0buanxRlxHYl
+         3SULjuLfotmj+FLuWrm/Y4w5DrSyN/tXEJc3s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f2wp1hAWgrRC49VCftrTow4JceyJ/E3jGWRhqUONy3E=;
-        b=wnVZ7aE/7pzWydFTFjv8IPgHP+7V7/g4LZWukrtFscqm8ufs6bsz/HRXdGpDZdUGVG
-         CfN78XYK97ECTZpbkxCdXLnp2j9Qbe+nYyCu+icb/xBM54Xm9to1YKUwfXEfk+/krTX1
-         /rmlIU+mJxnG7Ya+6W8G3y9o4kTfDog3AhjsXZFg5MafDD/tlqfJPTH06qXqmFs3k4/Q
-         u/5Lxns6aXKxjIQ340es7y45ZqOBnqiG9+0KpcsZMHp4BPMMsP4KMMigTDZhku3ZQUJg
-         +U6j8de+oqs08HRLw0MIUwc6fHw87r0RWTcwhIGCqeXqhbTb49zWbKNizAkFwrM24H7W
-         WZBQ==
-X-Gm-Message-State: AOAM530DDPi7fRMw2stmN6LnBDm5hk+3iPQZZ2GLc7qdjz6Ptfiy5SFG
-        yNBEvnKUhSobmQZ6Br2IcQ==
-X-Google-Smtp-Source: ABdhPJxhzRUkJAKFVqmngli/4xluAGV/SNq6SdpzNQU9xFUHh/yAnJa6IWohu6L2xwq0z1bo5kLV7A==
-X-Received: by 2002:a9d:6d98:: with SMTP id x24mr11507597otp.371.1639155200962;
-        Fri, 10 Dec 2021 08:53:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f9sm587878oto.56.2021.12.10.08.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 08:53:20 -0800 (PST)
-Received: (nullmailer pid 1513473 invoked by uid 1000);
-        Fri, 10 Dec 2021 16:53:18 -0000
-Date:   Fri, 10 Dec 2021 10:53:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v11 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-Message-ID: <YbOF/pwib/VXoqkx@robh.at.kernel.org>
-References: <cover.1638470392.git.hns@goldelico.com>
- <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8nTOg8rJWU8BdSZlmSj1JbyQAWkIqyTD+0WbjfFOnMk=;
+        b=I/WpSmXztosEhGGBlAJad414TVGghR3bzJZ4PTEjU0wrumB1V1lcRFj7DUTCBIFmAx
+         LCxekxzcstPx1E9xddEDmfQ3WIt55FANpUBSneH+lqZmphotzB59W826ybGDyQ4qWa7S
+         yc7CX35d0FjStpzQAFJXHTCrn1BmaVltfuTWjsSodELwuUrMTcgcp5SszRgxO9QXfc5r
+         UQdi81vWMZrcMl0vQr5csxGNI4uLcsYMlEvuxS2q1Mz6jlzgaVKGnUSxCQQKOTKGRYqu
+         qWJozqowf0CwKK5/iZ13M53DvS7sepSBK5QUtCxvYhHaDVUyiF+z7Lm2U3w+/btVKDuF
+         NfWg==
+X-Gm-Message-State: AOAM532BKJu1HTjz0FCOgJWbE/K8LIjesqFGJP/jdIuXTr48wuYhOd82
+        NsoT+PrITdGq2NBBX3BzzAasTdpK0XSjACk4Acc=
+X-Google-Smtp-Source: ABdhPJxJonNPnsXLIYw/HFNaG3klqt3iV+R5wto3/25+YmItyHLaLEed99jhxrTQ+1qFdD1+sope0w==
+X-Received: by 2002:a05:6402:1911:: with SMTP id e17mr39760972edz.43.1639155226406;
+        Fri, 10 Dec 2021 08:53:46 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id s16sm1729876edt.30.2021.12.10.08.53.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 08:53:45 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id a9so15931381wrr.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:53:45 -0800 (PST)
+X-Received: by 2002:a5d:4575:: with SMTP id a21mr15769110wrc.193.1639155225572;
+ Fri, 10 Dec 2021 08:53:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
+References: <20211210161618.645249719@infradead.org> <20211210162313.857673010@infradead.org>
+In-Reply-To: <20211210162313.857673010@infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 Dec 2021 08:53:29 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiDXWy8ekFDxVzCbudZv_3CqiWa9w+xO8mxJkk8SNmJCg@mail.gmail.com>
+Message-ID: <CAHk-=wiDXWy8ekFDxVzCbudZv_3CqiWa9w+xO8mxJkk8SNmJCg@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] atomic,x86: Alternative atomic_*_overflow() scheme
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 07:39:48PM +0100, H. Nikolaus Schaller wrote:
-> From: Sam Ravnborg <sam@ravnborg.org>
-> 
-> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-> Based on .txt binding from Zubair Lutfullah Kakakhel
-> 
-> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
-> 
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
->  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 78 +++++++++++++++++++
->  .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
->  2 files changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> new file mode 100644
-> index 0000000000000..49ae1130efded
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
-> +
-> +maintainers:
-> +  - H. Nikolaus Schaller <hns@goldelico.com>
-> +
-> +description: |
-> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys DesignWare HDMI 1.4
-> +  TX controller IP with accompanying PHY IP.
-> +
-> +allOf:
-> +  - $ref: synopsys,dw-hdmi.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ingenic,jz4780-dw-hdmi
-> +
-> +  reg-io-width:
-> +    const: 4
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  hdmi-5v-supply:
-> +    description: regulator to provide +5V at the connector
+On Fri, Dec 10, 2021 at 8:27 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Shift the overflow range from [0,INT_MIN] to [-1,INT_MIN], this allows
+> optimizing atomic_inc_overflow() to use "jle" to detect increment
+> from free-or-negative (with -1 being the new free and it's increment
+> being 0 which sets ZF).
 
-Being part of the connector, that belongs in a connector node.
+Thanks.
 
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
+However, I think you can simplify this further:
 
-You need to define what each 'port' node is.
+> This then gives the following primitives:
+>
+> [-1, INT_MIN]                                   [0, INT_MIN]
+>
+> inc()                                           inc()
+>         lock inc %[var]                                 mov       $-1, %[reg]
+>         jle     error-free-or-negative                  lock xadd %[reg], %[var]
+>                                                         test      %[reg], %[reg]
+>                                                         jle       error-zero-or-negative
+>
+> dec()                                           dec()
+>         lock sub $1, %[var]                             lock dec %[var]
+>         jc      error-to-free                           jle     error-zero-or-negative
+>         jl      error-from-negative
+>
+> dec_and_test()                                  dec_and_test()
+>         lock sub $1, %[var]                             lock dec %[var]
+>         jc      do-free                                 jl      error-from-negative
+>         jl      error-from-negative                     je      do-free
 
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - hdmi-5v-supply
-> +  - ports
-> +  - reg-io-width
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
-> +
-> +    hdmi: hdmi@10180000 {
-> +        compatible = "ingenic,jz4780-dw-hdmi";
-> +        reg = <0x10180000 0x8000>;
-> +        reg-io-width = <4>;
-> +        ddc-i2c-bus = <&i2c4>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <3>;
-> +        clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
-> +        clock-names = "iahb", "isfr";
-> +        hdmi-5v-supply = <&hdmi_power>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            hdmi_in: port@0 {
-> +                reg = <0>;
-> +                dw_hdmi_in: endpoint {
-> +                    remote-endpoint = <&jz4780_lcd_out>;
-> +                };
-> +            };
-> +            hdmi_out: port@1 {
-> +                reg = <1>;
-> +                dw_hdmi_out: endpoint {
-> +                    remote-endpoint = <&hdmi_con>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> index 9be44a682e67a..9cbeabaee0968 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> @@ -50,6 +50,9 @@ properties:
->    interrupts:
->      maxItems: 1
->  
-> +  ddc-i2c-bus:
-> +    description: An I2C interface if the internal DDC I2C driver is not to be used
+That "dec()" case could be just
 
-That too is already defined to be part of the connector node.
+        lock dec %[var]
+        js error
 
-> +
->  additionalProperties: true
->  
->  ...
-> -- 
-> 2.33.0
-> 
-> 
+because an underflow is an underflow - it doesn't matter if it's a "it
+went to free" or "it became some other negative number".
+
+That said - it may not matter - I'm not sure a plain "dec" is even a
+valid operation on a ref in the first place. How could you ever
+validly decrement a ref without checking for it being the last entry?
+
+So I'm not sure "atomic_dec_overflow()" is even worth having as a
+primitive, because I can't see any valid use for it. Is it for some
+legacy case?
+
+                  Linus

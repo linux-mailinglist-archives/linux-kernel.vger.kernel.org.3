@@ -2,195 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0B346F893
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A4446F899
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbhLJBfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 20:35:22 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:57594 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235417AbhLJBfP (ORCPT
+        id S232384AbhLJBga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 20:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229596AbhLJBga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 20:35:15 -0500
-X-UUID: 462e05f69d384d0ebb2827ec8467352e-20211210
-X-UUID: 462e05f69d384d0ebb2827ec8467352e-20211210
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1063278691; Fri, 10 Dec 2021 09:31:39 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 10 Dec 2021 09:31:37 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Fri, 10 Dec 2021 09:31:36 +0800
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Subject: [PATCH net-next v8 6/6] net: dt-bindings: dwmac: add support for mt8195
-Date:   Fri, 10 Dec 2021 09:31:29 +0800
-Message-ID: <20211210013129.811-7-biao.huang@mediatek.com>
+        Thu, 9 Dec 2021 20:36:30 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363D1C061746;
+        Thu,  9 Dec 2021 17:32:56 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso6362107pjb.0;
+        Thu, 09 Dec 2021 17:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5RHfxZQHw+AdOCOtGDwVgCeqNnneg9aRHNwz/Fzj1wg=;
+        b=luZfHAUUvVW9mswdpUzRn7G5S4P7l06u+V5i2APzF0wXPbO8vaI5y/qRlPEIdwnsDe
+         sdPXDnkfYNSIuLdO3tCocqPxF14Tg31ze2TeZfD7DnNLKYUU3sTb0LurhTNUnf3HZOiL
+         2p10xWYewyNDoGkIINt3laIvyHFXZrDmXDLzAGlJhMoWC0B6R0NqQAOUSFxk5wHqAT2J
+         mUf6Od4Vh2CqEcEHDiBgV+K13m8fmARPCjPv2+vYPSzg2XmiGyM8ZJ9Oxlorj51uBH1t
+         M7vhPCQZCVbfdnH3ak159Esxj07oVGi1DaXUTgj/pMvZmNF6dYGyt1Prg4k4Lh9/PR8A
+         i+VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5RHfxZQHw+AdOCOtGDwVgCeqNnneg9aRHNwz/Fzj1wg=;
+        b=jSc4Kn1Pu5VyW/OoW3uliULHFn6/QKZ7maoMm0CC99ONXhGCka8QyWbVtxDtH82asO
+         GNSAEiz1mtdEKRH9tFtu0VOyK8FYSDA0xDlu0exDXhca/EIaKO0U41P5oOxfjODMlpWl
+         UamtgsgB7rUPJo3B3Zw4Ae78TpjkSXJdvL2bhuQtdZU5m4MU0DPGcjA7j4HCSTxDF3+g
+         cM9xK2uYAyPMfuBeFdaKTFsMG4qA4vXljwUL8/CVZiWeS2nfpUm8k0+W9yu9g+0oCeZU
+         jY90BVI0AqjJgQk0fXugl8T3JdzfvBPihPkGo2hUsfquz/BGojscKkXHcWIriuCxKXin
+         iCKw==
+X-Gm-Message-State: AOAM533dYdFnyBwXy9c4RsBbhZ4ESWTXTbxoLVSuGoE7735YVXuYaLOs
+        5Ua0s6jOqY6gK0t05gDYHlY=
+X-Google-Smtp-Source: ABdhPJxaCntVMzov0NFSeV797YDHcQ8NJ3/U0+rVV4sTttoDptbzBT4ywCuOpKvcrsA6FsyROTWtpA==
+X-Received: by 2002:a17:902:ec04:b0:143:b9b8:827e with SMTP id l4-20020a170902ec0400b00143b9b8827emr70884804pld.54.1639099975795;
+        Thu, 09 Dec 2021 17:32:55 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y28sm875656pfa.208.2021.12.09.17.32.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 17:32:54 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     trix@redhat.com
+Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn,
+        dennis.dalessandro@cornelisnetworks.com, dledford@redhat.com,
+        galpress@amazon.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        mbloch@nvidia.com, selvin.xavier@broadcom.com, zealci@zte.com.cm
+Subject: [PATCHv2] drivers:ocrdma:remove unneeded variable
+Date:   Fri, 10 Dec 2021 01:32:47 +0000
+Message-Id: <20211210013247.423430-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211210013129.811-1-biao.huang@mediatek.com>
-References: <20211210013129.811-1-biao.huang@mediatek.com>
+In-Reply-To: <260ff018-bf5b-07da-6988-c65c04f5bcb5@redhat.com>
+References: <260ff018-bf5b-07da-6988-c65c04f5bcb5@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding document for the ethernet on mt8195.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+Return status directly from function called.
+
+Reported-by: Zeal Robot <zealci@zte.com.cm>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- .../bindings/net/mediatek-dwmac.yaml          | 86 +++++++++++++++----
- 1 file changed, 70 insertions(+), 16 deletions(-)
+ drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-index 9207266a6e69..fb04166404d8 100644
---- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-@@ -19,11 +19,67 @@ select:
-       contains:
-         enum:
-           - mediatek,mt2712-gmac
-+          - mediatek,mt8195-gmac
-   required:
-     - compatible
+diff --git a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+index 735123d0e9ec..3bfbf4ec040d 100644
+--- a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
++++ b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+@@ -1844,12 +1844,10 @@ int ocrdma_modify_srq(struct ib_srq *ibsrq,
  
- allOf:
-   - $ref: "snps,dwmac.yaml#"
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt2712-gmac
-+
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 5
-+          items:
-+            - description: AXI clock
-+            - description: APB clock
-+            - description: MAC Main clock
-+            - description: PTP clock
-+            - description: RMII reference clock provided by MAC
-+
-+        clock-names:
-+          minItems: 5
-+          items:
-+            - const: axi
-+            - const: apb
-+            - const: mac_main
-+            - const: ptp_ref
-+            - const: rmii_internal
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt8195-gmac
-+
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 6
-+          items:
-+            - description: AXI clock
-+            - description: APB clock
-+            - description: MAC clock gate
-+            - description: MAC Main clock
-+            - description: PTP clock
-+            - description: RMII reference clock provided by MAC
-+
-+        clock-names:
-+          minItems: 6
-+          items:
-+            - const: axi
-+            - const: apb
-+            - const: mac_cg
-+            - const: mac_main
-+            - const: ptp_ref
-+            - const: rmii_internal
+ int ocrdma_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *srq_attr)
+ {
+-	int status;
+ 	struct ocrdma_srq *srq;
  
- properties:
-   compatible:
-@@ -32,22 +88,10 @@ properties:
-           - enum:
-               - mediatek,mt2712-gmac
-           - const: snps,dwmac-4.20a
--
--  clocks:
--    items:
--      - description: AXI clock
--      - description: APB clock
--      - description: MAC Main clock
--      - description: PTP clock
--      - description: RMII reference clock provided by MAC
--
--  clock-names:
--    items:
--      - const: axi
--      - const: apb
--      - const: mac_main
--      - const: ptp_ref
--      - const: rmii_internal
-+      - items:
-+          - enum:
-+              - mediatek,mt8195-gmac
-+          - const: snps,dwmac-5.10a
+ 	srq = get_ocrdma_srq(ibsrq);
+-	status = ocrdma_mbx_query_srq(srq, srq_attr);
+-	return status;
++	return ocrdma_mbx_query_srq(srq, srq_attr);
+ }
  
-   mediatek,pericfg:
-     $ref: /schemas/types.yaml#/definitions/phandle
-@@ -62,6 +106,8 @@ properties:
-       or will round down. Range 0~31*170.
-       For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
-       or will round down. Range 0~31*550.
-+      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple of 290,
-+      or will round down. Range 0~31*290.
+ int ocrdma_destroy_srq(struct ib_srq *ibsrq, struct ib_udata *udata)
+@@ -1960,7 +1958,6 @@ static int ocrdma_build_inline_sges(struct ocrdma_qp *qp,
+ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+ 			     const struct ib_send_wr *wr)
+ {
+-	int status;
+ 	struct ocrdma_sge *sge;
+ 	u32 wqe_size = sizeof(*hdr);
  
-   mediatek,rx-delay-ps:
-     description:
-@@ -70,6 +116,8 @@ properties:
-       or will round down. Range 0~31*170.
-       For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
-       or will round down. Range 0~31*550.
-+      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple
-+      of 290, or will round down. Range 0~31*290.
+@@ -1972,8 +1969,7 @@ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+ 		sge = (struct ocrdma_sge *)(hdr + 1);
+ 	}
  
-   mediatek,rmii-rxc:
-     type: boolean
-@@ -103,6 +151,12 @@ properties:
-       3. the inside clock, which be sent to MAC, will be inversed in RMII case when
-          the reference clock is from MAC.
+-	status = ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
+-	return status;
++	return ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
+ }
  
-+  mediatek,mac-wol:
-+    type: boolean
-+    description:
-+      If present, indicates that MAC supports WOL(Wake-On-LAN), and MAC WOL will be enabled.
-+      Otherwise, PHY WOL is perferred.
-+
- required:
-   - compatible
-   - reg
+ static int ocrdma_build_write(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
 -- 
 2.25.1
 

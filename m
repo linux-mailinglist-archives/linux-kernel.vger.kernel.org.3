@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6A8470592
+	by mail.lfdr.de (Postfix) with ESMTP id 949A8470593
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243175AbhLJQ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:27:16 -0500
-Received: from mga02.intel.com ([134.134.136.20]:49136 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241335AbhLJQ07 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:26:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639153404; x=1670689404;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XqLJIz8c71+YvC2YH4KRal9m9EbmegHmjSIoyBG5nsA=;
-  b=F3//BExPBXra+ZIEKlVlKpKwdNgyY4l4h/Z4kNI2fWFqm+G8PGTGaNk5
-   EAGkOnkINQ4fYSaxyebDdZSpF1rw1kQoE11LDx+ov82/dtoS3+ZiUT2IF
-   DefzxtjER9azl/rnT+kYfNlsv5wcmY2DBtd2giMeGd1D1q0KtWxbyyRxn
-   hG/sWDDHaZTmf0PClZDWBKpySeJoVhqmYLaaAh9q5pqRvaP6lkVB5GxLu
-   5dTkbpViMX9NR4ytS4Wy9RKkSmLgk6Z2SwzM5jCYnOrimyTewSP722HlK
-   pyg5zpUsZ1SwL4928GdxYRBgaN0AJu7ALjheesncU6NudNIXbi/CpsH/X
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="225647136"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="225647136"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 08:23:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="503981899"
-Received: from ahunter-desktop.fi.intel.com ([10.237.72.76])
-  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2021 08:23:16 -0800
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] perf intel-pt: Fix error timestamp
-Date:   Fri, 10 Dec 2021 18:23:03 +0200
-Message-Id: <20211210162303.2288710-8-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211210162303.2288710-1-adrian.hunter@intel.com>
-References: <20211210162303.2288710-1-adrian.hunter@intel.com>
+        id S243273AbhLJQ1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241418AbhLJQ1G (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 11:27:06 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2C5C0617A1;
+        Fri, 10 Dec 2021 08:23:30 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id o20so32013726eds.10;
+        Fri, 10 Dec 2021 08:23:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jru1WtZAAl1v87srU8rHvIkDe0HcCeKGzsDJdVp8o6s=;
+        b=fBN9N1xUKuyv1pl5VLRbqrfdTGOQWHGsMkMqeSwexMhFhgFeYPBp546U9GCXrgYLQT
+         zr/CyErCRV32MziAhW8a7puLaVyer3HewWLZZMgAKMkCS1L2f+NrhyidaFZkd9J/dhDN
+         2M/CMo9XDmD4jbF77WPI/PAVhii9ldPXP15ju+aBU9phpNic6IBcvVAmq8ogbOJUgQNB
+         7rHiyswiwCxsFfZxtDA3qWT01Q/wXxq9slX5wo/nUCz2FHJdJSstwDJoVN621mhXOrTs
+         dZ2io6a/F8qcuRFkzKSVxx1bYzSrguRnNU5EiL+XMlhuS9NMrTSgJgbhbdPKrIHYMLDo
+         UmYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jru1WtZAAl1v87srU8rHvIkDe0HcCeKGzsDJdVp8o6s=;
+        b=fRY3G3+a5qXF3YyxdeUK1TxuSKhJACtbHk6bYyX0KKJhkqmFhuxt/NL1istEsqaGWf
+         uarkarg1Dwxz8v1oaTz2SlAqvCbBMcr4yGvpKLxZJK1O/Kd0egIZycvzTi1jFEzc+jdi
+         LKYGDiQdhPY++cja9C5OQJpTgG20XUAEmsAFuZ+k8E+GoSS/T84pMrWOLB+3XghpxTbO
+         GvAQgIGQbQJEs0rTRUZsN8dDMJTsJNHwxUT+uw1r3HS83cKyyrOP/4HRaZfrYt0JFQXn
+         JXOFIYiFw8VT+38S4b73vnm+qromEsY8iM8gLnOwBeBdBC8eDBsul5rsocJwC4RBtEeM
+         PMVQ==
+X-Gm-Message-State: AOAM532TQTi/tQVH2U6NreSfPSUFUtfcQ7te4wjzHAAirQpZ93nE3V0C
+        2ZhQJu55tbHl4vOA0UPtTsA=
+X-Google-Smtp-Source: ABdhPJxnTQZ6SeIm11KFhuVTjmU6bFDXfkPz1UECBGG0Glgq74LmC78V01j/zfsEJCWEiDInPLsLoQ==
+X-Received: by 2002:a05:6402:100e:: with SMTP id c14mr40678595edu.196.1639153407714;
+        Fri, 10 Dec 2021 08:23:27 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
+        by smtp.googlemail.com with ESMTPSA id s16sm1685046edt.30.2021.12.10.08.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 08:23:27 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <fbfb1377-a6e7-a0c0-2001-606c6529ce0f@redhat.com>
+Date:   Fri, 10 Dec 2021 17:23:22 +0100
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 15/19] kvm: x86: Save and restore guest XFD_ERR properly
+Content-Language: en-US
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-16-yang.zhong@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211208000359.2853257-16-yang.zhong@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An error timestamp shows the last known timestamp for the queue, but this
-is not updated on the error path. Fix by setting it.
+On 12/8/21 01:03, Yang Zhong wrote:
+>   		kvm_steal_time_set_preempted(vcpu);
+>   	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+>   
+> +	if (vcpu->preempted)
+> +		fpu_save_guest_xfd_err(&vcpu->arch.guest_fpu);
+> +
 
-Fixes: f4aa081949e7b6 ("perf tools: Add Intel PT decoder")
-Cc: stable@vger.kernel.org # v5.15+
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/util/intel-pt.c | 1 +
- 1 file changed, 1 insertion(+)
+Instead of checking vcpu->preempted, can you instead check if the active 
+FPU is the guest FPU?  That is, save if 
+current->thread.fpu->fpstate->is_guest?
 
-diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
-index 556a893508da..10c3187e4c5a 100644
---- a/tools/perf/util/intel-pt.c
-+++ b/tools/perf/util/intel-pt.c
-@@ -2565,6 +2565,7 @@ static int intel_pt_run_decoder(struct intel_pt_queue *ptq, u64 *timestamp)
- 				ptq->sync_switch = false;
- 				intel_pt_next_tid(pt, ptq);
- 			}
-+			ptq->timestamp = state->est_timestamp;
- 			if (pt->synth_opts.errors) {
- 				err = intel_ptq_synth_error(ptq, state);
- 				if (err)
--- 
-2.25.1
-
+Paolo

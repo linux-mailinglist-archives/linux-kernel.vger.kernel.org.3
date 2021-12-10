@@ -2,74 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D21470B1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCD0470B18
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343922AbhLJT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:58:15 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:34645 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343809AbhLJT54 (ORCPT
+        id S1343812AbhLJT6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:58:01 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48844 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343775AbhLJT5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:57:56 -0500
-Received: by mail-ot1-f43.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso10721885otj.1;
-        Fri, 10 Dec 2021 11:54:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=y8dMmkuyWBxEw+uQhTxZh8vd7mO4Vqr5QSAk8M5BMAA=;
-        b=uVxJss+/mqfPblCik7IK6igcfJ44u/5s32762oNYjqz46nUozmExku9uqnym8LL911
-         rSe4ppgPmzPT6iTAx/qyt5FaFk3umbtSOG6/8VOTSINAx4WG0cgAs5rvZOg/dyj5xyA1
-         tGVX98EIQEqanHSdmWJaAHxBXXPGyAV0c1T55b0wKudWXz7TwZgDP0AVwL3p4mZK9E64
-         pqabTuE3DOnZAxC4hjzf7euMfq0orXsnL+BLwaodOVXNWhRkFsnTUoES+hkr9dQDCSvN
-         Hqw5CHx2U9ISo2tq58pQtNBmZ1Sl3LARQuzSUe7ja6EM1nafBy+NhzJqMF0//7D/GIks
-         rc3A==
-X-Gm-Message-State: AOAM532zB71HPkIo4cvRtWRtlL7Z6QKSna3xmQjlU6ER3dywLaJzic0K
-        lM9t4eRmlx5MQs4hFK2u73WIV71TrSfT2mocmcP+JB4pVPA=
-X-Google-Smtp-Source: ABdhPJxao1cGmZ4+P4fad/nTr+Q66pNXl14J67d+7ioY5YFM+slNF+siELGwwYlW4kgYku1xqwbq+aQGB4IxI/ax3Wg=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr12849514otf.198.1639166060337;
- Fri, 10 Dec 2021 11:54:20 -0800 (PST)
+        Fri, 10 Dec 2021 14:57:48 -0500
+Date:   Fri, 10 Dec 2021 19:54:10 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639166052;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y8B5d9/EXY91ILom1/cpxSvNo7yd/4TfcQf6FFH0R+M=;
+        b=hYnWQItkTruBfz/OxI+ImXIOyY78biBkqqzd5Zcm1zFcR2dOMbHIw1KaesgcrR+O31YmGh
+        wx85SPxazuIVneeEciOtwYMEl7eStedbFIVivVQXzjwPCjpIfevFejNSD5WlxcuPuBR8G8
+        8QIONo9FvB4O5vTNYuK/XNNSHMi9W8ezkPU+DIiQSFDyiWp4BWhjk7wpUTgjzD9MsLPBxv
+        69I55PQN1YrHLGCO7N+lknWPJruaw0cwQuMtPpw+SDpyxT4+B8WYf+9V4PsOO1xK8r8pak
+        NV8hBMlOpjycXIpghUIveiEbstB+/I1JhLxGY0R6qzIvldb6I87Y2l6ZehdS7Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639166052;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y8B5d9/EXY91ILom1/cpxSvNo7yd/4TfcQf6FFH0R+M=;
+        b=Y8XX4Msa+FIZPC0sNs4ccIyKyD2WMNYONai/zy0nujAvy7uA5wng3VJibDz5gHyd+CtsMr
+        kT82Nbl5nl7e7JAA==
+From:   "tip-bot2 for Nitesh Narayan Lal" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] iavf: Use irq_update_affinity_hint()
+Cc:     Nitesh Narayan Lal <nitesh@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20210903152430.244937-3-nitesh@redhat.com>
+References: <20210903152430.244937-3-nitesh@redhat.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Dec 2021 20:54:09 +0100
-Message-ID: <CAJZ5v0jqjgDHtBsdZuuEZjE=DRKq+5cWv9Eq35V8V1bLH4nscQ@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fix for v5.16-rc5
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <163916605096.23020.14587161369898352612.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+The following commit has been merged into the irq/core branch of tip:
 
-Please pull from the tag
+Commit-ID:     0f9744f4ed539f2e847d7ed41993b243e3ba5cff
+Gitweb:        https://git.kernel.org/tip/0f9744f4ed539f2e847d7ed41993b243e3ba5cff
+Author:        Nitesh Narayan Lal <nitesh@redhat.com>
+AuthorDate:    Fri, 03 Sep 2021 11:24:18 -04:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Fri, 10 Dec 2021 20:47:38 +01:00
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-5.16-rc5
+iavf: Use irq_update_affinity_hint()
 
-with top-most commit f872f73601b92c86f3da8bdf3e19abd0f1780eb9
+The driver uses irq_set_affinity_hint() for two purposes:
 
- thermal: int340x: Fix VCoRefLow MMIO bit offset for TGL
+- To set the affinity_hint which is consumed by the userspace for
+  distributing the interrupts
 
-on top of commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+- To apply an affinity that it provides for the iavf interrupts
 
- Linux 5.16-rc4
+The latter is done to ensure that all the interrupts are evenly spread
+across all available CPUs. However, since commit a0c9259dc4e1 ("irq/matrix:
+Spread interrupts on allocation") the spreading of interrupts is
+dynamically performed at the time of allocation. Hence, there is no need
+for the drivers to enforce their own affinity for the spreading of
+interrupts.
 
-to receive a thermal control fix for 5.16-rc5.
+Also, irq_set_affinity_hint() applying the provided cpumask as an affinity
+for the interrupt is an undocumented side effect. To remove this side
+effect irq_set_affinity_hint() has been marked as deprecated and new
+interfaces have been introduced. Hence, replace the irq_set_affinity_hint()
+with the new interface irq_update_affinity_hint() that only sets the
+pointer for the affinity_hint.
 
-This fixes the definition of one of the Tiger Lake MMIO registers
-in the int340x thermal driver (Sumeet Pawnikar).
+Signed-off-by: Nitesh Narayan Lal <nitesh@redhat.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Link: https://lore.kernel.org/r/20210903152430.244937-3-nitesh@redhat.com
 
-Thanks!
+---
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-
----------------
-
-Sumeet Pawnikar (1):
-      thermal: int340x: Fix VCoRefLow MMIO bit offset for TGL
-
----------------
-
- drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 14934a7..1980e62 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -492,10 +492,10 @@ iavf_request_traffic_irqs(struct iavf_adapter *adapter, char *basename)
+ 		irq_set_affinity_notifier(irq_num, &q_vector->affinity_notify);
+ 		/* Spread the IRQ affinity hints across online CPUs. Note that
+ 		 * get_cpu_mask returns a mask with a permanent lifetime so
+-		 * it's safe to use as a hint for irq_set_affinity_hint.
++		 * it's safe to use as a hint for irq_update_affinity_hint.
+ 		 */
+ 		cpu = cpumask_local_spread(q_vector->v_idx, -1);
+-		irq_set_affinity_hint(irq_num, get_cpu_mask(cpu));
++		irq_update_affinity_hint(irq_num, get_cpu_mask(cpu));
+ 	}
+ 
+ 	return 0;
+@@ -505,7 +505,7 @@ free_queue_irqs:
+ 		vector--;
+ 		irq_num = adapter->msix_entries[vector + NONQ_VECS].vector;
+ 		irq_set_affinity_notifier(irq_num, NULL);
+-		irq_set_affinity_hint(irq_num, NULL);
++		irq_update_affinity_hint(irq_num, NULL);
+ 		free_irq(irq_num, &adapter->q_vectors[vector]);
+ 	}
+ 	return err;
+@@ -557,7 +557,7 @@ static void iavf_free_traffic_irqs(struct iavf_adapter *adapter)
+ 	for (vector = 0; vector < q_vectors; vector++) {
+ 		irq_num = adapter->msix_entries[vector + NONQ_VECS].vector;
+ 		irq_set_affinity_notifier(irq_num, NULL);
+-		irq_set_affinity_hint(irq_num, NULL);
++		irq_update_affinity_hint(irq_num, NULL);
+ 		free_irq(irq_num, &adapter->q_vectors[vector]);
+ 	}
+ }

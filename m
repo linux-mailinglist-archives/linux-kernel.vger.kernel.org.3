@@ -2,175 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1640C4700FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB6C470100
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241344AbhLJMv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:51:28 -0500
-Received: from mail-dm6nam12on2053.outbound.protection.outlook.com ([40.107.243.53]:63968
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229989AbhLJMv1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:51:27 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hFX1z86a6PTVLblldlRH0wMfJGPeG9uccOUcT/vmLbYJRoZA60Zw7iu/NVvP8No8qoL+nzUv2wYVjhvFV/sI1IhvPoFQLSDDVctIJDieWP9526sweBSCgXHbMOP06YJN/ZpeHkC40CAKoeQkJnbfbTWot2oVPopK8aEvmhbaaMnIedTpCeCRsPmTGd3JaHP264Y69EZOMui4zGtmCVUSjxH9QdVcu+RwAAAwD70nyrbsk/N9jsx4lDNTLIDstQMQKg9vPVd/tbvrpCwnGUO7rGhceawKacivpO5nSLVOLGgDtwsnenxwFYoiMeGQ2kQ7KM5RNl2xJ7Lxmxcy2vxP3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SqO5KBE8zl5SR+4rxcsQRVL4bcjPEqIkjw9pqWRNH9s=;
- b=E/e0W7/vs33Cp24pBJHfzTvCG+08pG6pmOIOqajOa638lXA68k+rfxYCO+MYtKSA46aU1AgR6ko/S/A8Wp/rtMFwjomqTjafxcwWyXzBN4pVU30ZeDm55O7J8L72gPOK6Flrs76yfelqV/xRmHHVpQiGmQQb8Hlt7lU7EVW3IBNHywyN+dyIE+FPi8Hj4HBdKCU9ERYob4k6JMsJXY+sFMXUvlqdzYxxn5JTysIvYNdWPrHovEwTYdv3c5rMeV4wOgR8kmYw7wZ9o4zHIzw73uKXlWzXt9XXKY2XOAyv3tZmSa2PUn/o1LlSMFxrPLOvj3e1/iqza8aZArRM84njvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SqO5KBE8zl5SR+4rxcsQRVL4bcjPEqIkjw9pqWRNH9s=;
- b=4lESrgzf9YS1paZG13zxmo3DLBgAgC+mC/HbgXvMv9M8njFV1ey5FBa+jxTS398Gt06iBya0GK8Yn/geuIyksEgNC+cb/i47kh8JdWkIaAaJ1BItH7cAoTcK8QZhZ8IdWRqnJiG1bi2S63EtfDLW67HSX+yVZnD+OrMnXE5owYU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14) by MWHPR12MB1776.namprd12.prod.outlook.com
- (2603:10b6:300:113::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Fri, 10 Dec
- 2021 12:47:49 +0000
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::d16c:a6d5:5d2e:f9d4]) by MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::d16c:a6d5:5d2e:f9d4%12]) with mapi id 15.20.4755.027; Fri, 10 Dec
- 2021 12:47:49 +0000
-Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Shunsuke Mie <mie@igel.co.jp>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Doug Ledford <dledford@redhat.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Tomohito Esaki <etom@igel.co.jp>
-References: <20211122110817.33319-1-mie@igel.co.jp>
- <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
- <20211207171447.GA6467@ziepe.ca>
- <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
- <20211210124204.GG6467@ziepe.ca>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
-Date:   Fri, 10 Dec 2021 13:47:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20211210124204.GG6467@ziepe.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: AM6P192CA0019.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:209:83::32) To MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14)
+        id S241372AbhLJMvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:51:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59667 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229989AbhLJMvj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 07:51:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639140481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XibU1YeiowITRz8F0f4/fhhN1glj/7BfBonKVyWguhI=;
+        b=fa5TBV0oBDdQcOcYdOtb7iRl/t5/3yVOOyIwuRwUMz+MUysUypI9UsPEE+5TySRf+lXmFC
+        PyHd/eKO/cF1xK03HiuPPO8mlncfNBbWisZO2rkHaRO8DhXwNjo4+vpTTaTkNm4crVqMSR
+        caLv85t4vo8SAH15JoLR2uYXqJCVyW0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-206-UDuJzXZ5MUuMUzGpQoK4hw-1; Fri, 10 Dec 2021 07:47:58 -0500
+X-MC-Unique: UDuJzXZ5MUuMUzGpQoK4hw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 16A51100C661;
+        Fri, 10 Dec 2021 12:47:56 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 01E8260C82;
+        Fri, 10 Dec 2021 12:47:45 +0000 (UTC)
+Message-ID: <0a01229bbbb6d133ba164cb5495ad2300eb8d818.camel@redhat.com>
+Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
+ kvm_apic_update_apicv
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Fri, 10 Dec 2021 14:47:44 +0200
+In-Reply-To: <fbf3e1665357d9517015ad49eee0c9825ed876d4.camel@redhat.com>
+References: <20211209115440.394441-1-mlevitsk@redhat.com>
+         <20211209115440.394441-6-mlevitsk@redhat.com>
+         <636dd644-8160-645a-ce5a-f4eb344f001c@redhat.com>
+         <fbf3e1665357d9517015ad49eee0c9825ed876d4.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Received: from [192.168.178.21] (87.176.191.248) by AM6P192CA0019.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:83::32) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 10 Dec 2021 12:47:43 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e2cad2fd-5bd3-4e75-1d88-08d9bbdb459c
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1776:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1776EE83ED363A3373B186D783719@MWHPR12MB1776.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mhki8zptHHRm3yHZLhdcaSKAkbhEACbUPgOBuMJd4pEj/nbIFCLfy2F6jn6q8WwV7P3nY+8qArKUzAVJYPZy7RA57ZjtRgbALSSjkQrITxLNzrWiUH7izVUfW8tibiqz7ZuOKgSI8pAmn4y7WhI+gwBGa9mH2/je2gB4H/YIWGFhKLI8l+7HMlm2tXyT6mdmETepTotv4w5Igln0eTPTMl/3njO/dZSMMyMTB0rOnZQDhHQ8Ug0omxLUjDb7BF35YgqIVo0bZ/G7Rk+3nPGHltAki1zPB0vqmJ+psz7UoQ2qGRe0uYhfqrxk27msROv8aVQY5voUoeZ7MwLQsAv8AHeb9xk7seEdxgJRwKKcDIiGzhyeeFQZ9pHH47O+yIpx6kYplLtLG6C+ZviWeF3m+qfSSHzs5X+EdkjJ4cStgRjVW92a64vrTZZbT2LRvgNgzxn4L+0DltoKdmI7smCZjZWMFdqngtnTxSfbo+E3//5Vre+7TSWKGpNKtzmInYBdCx16mD9CfYS34b8uEYiy1tDgj6gEVvnnW61SB9scm97ScxAepOhzMnXy5h3qpAXr2ZM6w9gBgT7L97bPeat5kXlDDjcaxXUZmvgcCalTi8A32Q67MP14r+PONXPpSPo7DPh3T7AmMbvpIkveR4hKfK+fHkVGXQ3x48BzZyxWZFEmYGn/MdeZyqor12ONmPfav+9EDlqy3GN9/+Ryecj+iAiizb6gs2RPatHpCBF8vnWuwH/hj/pLQGtoIfXjxsX/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(110136005)(316002)(31686004)(26005)(16576012)(83380400001)(86362001)(508600001)(7416002)(8676002)(66946007)(8936002)(66556008)(6666004)(66476007)(2616005)(2906002)(36756003)(956004)(38100700002)(31696002)(4326008)(5660300002)(54906003)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGlCYzhNSUV0ejBHQWNtQUw3c2t6RXNGQ1pvb3hrM1BPekJ1cUwxQk42dTBl?=
- =?utf-8?B?NzVKelQweGhsai8xMWVvUUhMR1hCREZ2VjdIbVdLQjhHVkgxZlVsSTd6bjlM?=
- =?utf-8?B?WXNTaUltVG9tdklVTXpSeUV6UUpRTTh3QjdXNDVMbHAxTmJKeWh3WFo1V1d3?=
- =?utf-8?B?WTFSQmlhRGlDNTROS09PTjU3LzRpVG1BRlNPYklOd1o1YlVVUTh5TnpIZU1a?=
- =?utf-8?B?OSttZmtmaTdVOVVtRlhKRUU1N3NsUC8rc2J1SklkZnFvUzFsV28wZjFMOGp0?=
- =?utf-8?B?a0xBWGNKV0ttVkIyUWdhSGE4cHhMSUZJV3hCalB6ZTZCdk5nYW54Y1NDMEpR?=
- =?utf-8?B?ZDFyb21XT2d3UncxNm05UDVCNUIwOFNCQWJjVXFvQ05PNy9ZUUx4UzVmaDNP?=
- =?utf-8?B?elR3dWd6c3RFajJyaGxhZzJNeExsdEFNMEpFN3lDaFcweXRyUUVyenFhenR0?=
- =?utf-8?B?YitLRGRDbGxkTHNFcWprUVpITjJCQzdnSEduSkRtUHRHaXRBVW5BaDZyYTkr?=
- =?utf-8?B?MmNrU1phRjRYVVVTMFN1L2dYSkxuNm1heXk1cjhQcDFMWkFKTjQ0Q2h1SXhs?=
- =?utf-8?B?VU5mSW0wTGZ6Z0IyNzB0YW1rZG91VHJ4YnYwVFcwaE1Va2hjRStwUXdEb2Jr?=
- =?utf-8?B?WnRYdUZKbHI3OWFkeUFPa3YrOGgzdms4Y255Wk1KNnNFZjZFY0hMN0Z3R0ZC?=
- =?utf-8?B?V1Z2MjdpQnlmTW51UXVBNVRLczFJejB0NFFkMU1hM2llbXF4M2xqUzRmQlFG?=
- =?utf-8?B?YkYwNVRqY0RuNm9FbTdadG0yWTRvREQvM0VWQnV4WE0rZGluanV5cjdFVkcz?=
- =?utf-8?B?Ry9GNjJxYW8xZXBJckRNMUl3Mlpua2Y2aFA5Z0tGallkSzZVQkdlYzlGejFp?=
- =?utf-8?B?UDNXNmpGdDZZWk5OK1hDQ2RuQmFNbnR6cHBhNDFmbkJwRllxcUtxSGhkdmJq?=
- =?utf-8?B?MHlnV2N2dWJIZ2VvaENWN3lSQjJ2R1ZLdm1XM2NKeUZhVGNRaHN3a21hYS9R?=
- =?utf-8?B?ZUZFT21ORFhwK1FYTFQzbjJhS0gzKzUzVzdoMHROMjIyRE1ZREt1SkNWY2RV?=
- =?utf-8?B?bkd6RmhqM2pEenozV29nbGhHWWhqbDJGSm1MM3NvYWtyVG1TK3kwTXVUL0Qr?=
- =?utf-8?B?SS9OYlB2OWJwcVVtVUoybzRBZ2dEbUFoSnd5NmZMb1lmWmNiYXFiTGdJbnM0?=
- =?utf-8?B?cEVIeUdXZWt2U2Zoc1JITUtuUEg3Z283THZmZ0kvN0plTUwyaWY5cXBCanBU?=
- =?utf-8?B?Y2JZbVRnbjJ1bUlrTkFabjI1SUpiZGE3THRYb21uSTd6emtMOThjRHdpdnA3?=
- =?utf-8?B?Y1RCOWY2U0E4U1c0dWs4TnNLQTc2TEVzZHA1TWJiY2FJYUV4ZGM5YmVwWnRw?=
- =?utf-8?B?czg1NnVPMUVIWXR5c1VJNStGRTZKZVBMNlNFUkRJNG4yYm9SKzkvdXNDcVpl?=
- =?utf-8?B?WnlvL0tVYkRBa1R5RXZTWlFWWVdHUTkvcWlrY0Z5WUFyNExRRUVTSEFIb244?=
- =?utf-8?B?dVMxSGhLbU9DNDFSL1dNcytCU1IxRFVma240SmNQMmpCVmVTejJvREZ0UlFX?=
- =?utf-8?B?a0djRHlXbktPN0JmZ011WHNXUDNmZTE3b1dYTTJGOE5SZjhFOENWZHBXN1Fz?=
- =?utf-8?B?V0V5MTJNOERzc3lvUk5TZ290L294akVRU3dPQnZvTElyWURyMlNDTkF5cGxN?=
- =?utf-8?B?SmJwa005WDVzV1cybW5OVUc0UStHeFhoMGxFSmU4UnFDUDIwRkNpWGlDczFC?=
- =?utf-8?B?bmpEZHRQdnVQMmw2a1lHeFAzNW9ZcUJ1bkEwaklwc2sxNk41Z0xSelh2NFBS?=
- =?utf-8?B?ZGtrOG1oUnNnbmpBbktrTnNlVHBlK2twSDVVV2pRUWtGTjFlRlM0cVVlcVRF?=
- =?utf-8?B?YTcwWjhIWWYvRWdkWHdoeGlSOG5FaVhITmFDWStuRTZYTUJxcys5TUZQTml6?=
- =?utf-8?B?bUk0bDlPQXdmWG15WUc5ZlR1cUY5alVUWUNYRys1bUs1L0JwcndOTjZ5TzND?=
- =?utf-8?B?UVZzei9rWG5RSHU0YzNXdjIzZmJkZi9JNmhBcWloaHpOMXdpZEE2aTFDaGRs?=
- =?utf-8?B?SnNiRVVobkZDbFJOb0FBM2llL29Ha3kzV3Z4QnR0TVNCVlI5VGoreE91ek9i?=
- =?utf-8?Q?p33U=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2cad2fd-5bd3-4e75-1d88-08d9bbdb459c
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 12:47:49.2975
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YWQuidDOvIGPLeBPoh9GgBm51gaFoVk2lXUiso8e/QFU49T3CqzosjeE5tjRK4fd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1776
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
-> On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
->> Hi Jason,
->> Thank you for replying.
->>
->> 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
->>> On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
->>>> Hi maintainers,
->>>>
->>>> Could you please review this patch series?
->>> Why is it RFC?
->>>
->>> I'm confused why this is useful?
->>>
->>> This can't do copy from MMIO memory, so it shouldn't be compatible
->>> with things like Gaudi - does something prevent this?
->> I think if an export of the dma-buf supports vmap, CPU is able to access the
->> mmio memory.
->>
->> Is it wrong? If this is wrong, there is no advantages this changes..
-> I don't know what the dmabuf folks did, but yes, it is wrong.
->
-> IOMEM must be touched using only special accessors, some platforms
-> crash if you don't do this. Even x86 will crash if you touch it with
-> something like an XMM optimized memcpy.
->
-> Christian? If the vmap succeeds what rules must the caller use to
-> access the memory?
+On Fri, 2021-12-10 at 14:20 +0200, Maxim Levitsky wrote:
+> On Fri, 2021-12-10 at 13:07 +0100, Paolo Bonzini wrote:
+> > On 12/9/21 12:54, Maxim Levitsky wrote:
+> > > It is possible that during the AVIC incomplete IPI vmexit,
+> > > its handler will set irr_pending to true,
+> > > but the target vCPU will still see the IRR bit not set,
+> > > due to the apparent lack of memory ordering between CPU's vIRR write
+> > > that is supposed to happen prior to the AVIC incomplete IPI
+> > > vmexit and the write of the irr_pending in that handler.
+> > 
+> > Are you sure about this?  Store-to-store ordering should be 
+> > guaranteed---if not by the architecture---by existing memory barriers 
+> > between vmrun returning and avic_incomplete_ipi_interception().  For 
+> > example, srcu_read_lock implies an smp_mb().
+> > 
+> > Even more damning: no matter what internal black magic the processor 
+> > could be using to write to IRR, the processor needs to order the writes 
+> > against reads of IsRunning on processors without the erratum.  That 
+> > would be equivalent to flushing the store buffer, and it would imply 
+> > that the write of vIRR is ordered before the write to irr_pending.
+> > 
+> > Paolo
+> > 
+> Yes I almost 100% sure now that this patch is wrong.
+> the code was just seeing irr_pending true because it is set
+> to true while APICv/AVIC is use, and was not seeing yet the vIRR bits,
+> because they didn't arrive yet. This this patch isn't needed.
+> 
+> Thanks again for help!
+> I am testing your version of fixes to avic inhibition races,
+> and then I'll send a new version of these patches.
+> 
+> Best regards,
+> 	Maxim Levitsky
 
-See dma-buf-map.h and especially struct dma_buf_map.
+And yet that patch is needed for a differnt reason.
 
-MMIO memory is perfectly supported here and actually the most common case.
+If the sender has AVIC enabled, it can turn on vIRR bits at any moment
+without setting irr_pending = true - there are no VMexits happeing
+on the sender side.
 
-Christian.
+If we scan vIRR here and see no bits, and *then* disable AVIC,
+there is a window where the they could legit be turned on without any cpu errata,
+and we will not have irr_pending == true, and thus the following 
+KVM_REQ_EVENT will make no difference.
 
->
-> Jason
+Not touching irr_pending and letting just the KVM_REQ_EVENT do the work
+will work too, and if the avic errata is present, reduce slightly
+the chances of it happening.
+
+Best regards,
+	Maxim Levitsky
 

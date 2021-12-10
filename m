@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 910424709A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F217F4709A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245734AbhLJTE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238887AbhLJTEv (ORCPT
+        id S245751AbhLJTFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:05:02 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:57176 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237589AbhLJTEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Dec 2021 14:04:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D0C061746;
-        Fri, 10 Dec 2021 11:01:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4EE9B829B8;
-        Fri, 10 Dec 2021 19:01:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A67E7C00446;
-        Fri, 10 Dec 2021 19:01:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639162872;
-        bh=zgB+bjKPrWYZ2x6sT/TcpMl0LVsdv1gHVr5Ek+A2J4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gjOV1anw7DP7Jb5NvNf8NlFpKkhej9aEG41NheqqLfrIuGJj6hoSQcIVqN5RmZbZ4
-         ioc0/SdQ3GrPRJgQL8c72LZmjgPCdGS+/LDi8sNLEkobhFS/2W5avsNjR7MMu+lKjV
-         X7hfM5qSRgjTq6ajuzne8HN3yN45tOfCHakUd8VG1+Gm01smZJLI3ZgAMZT0o+eNFh
-         WfK7osNfiHxRuJsjzG7QFUbO12LbE8cARtu/59dZHwP7WmEdnUG2+bd1HJJZVDQbvO
-         Kpz8Lt7n4DXI0lz4CbPWfuUXIGtAi2dJ6m+oJ8CjrKOu9g/sdW5q2zeymt0DMecNTa
-         KAzWslgV3WMfw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7A3E4405D8; Fri, 10 Dec 2021 16:01:02 -0300 (-03)
-Date:   Fri, 10 Dec 2021 16:01:02 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] perf vendor events: Rename arm64 arch std event
- files
-Message-ID: <YbOj7q+OIM8crbpY@kernel.org>
-References: <20211210123706.7490-1-andrew.kilroy@arm.com>
- <20211210123706.7490-3-andrew.kilroy@arm.com>
- <292d3ee6-c8f8-8155-9c90-e05026ea1f76@huawei.com>
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru F2B7020A73F8
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message when
+ IRQ can't be retrieved
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
+ <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
+ <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
+ <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
+ <9e6b2e9a-e958-0c14-6570-135607041978@omp.ru>
+ <YbM7xkTazM76CVvD@smile.fi.intel.com>
+ <6c03ffef-b2e0-16ba-35f3-206af2a611d2@gmail.com>
+ <YbOVmGw7ys6U51z3@smile.fi.intel.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <9d688cd8-99e3-0265-06aa-d44597e7686c@omp.ru>
+Date:   Fri, 10 Dec 2021 22:01:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <292d3ee6-c8f8-8155-9c90-e05026ea1f76@huawei.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <YbOVmGw7ys6U51z3@smile.fi.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Dec 10, 2021 at 01:46:48PM +0000, John Garry escreveu:
-> On 10/12/2021 12:37, Andrew Kilroy wrote:
-> > A previous commit adds pmu events into the files
-> > 
-> >    armv8-common-and-microarch.json
-> >    armv8-recommended.json
-> > 
-> > that are actually specified in an armv9 reference supplement, not armv8.
-> > As such, naming the files with the armv8 prefix seems artificial.
-> > 
-> > This patch renames the files to reflect that these two files are for
-> > arch std events regardless of whether they are defined in armv8 or
-> > armv9.
-> > 
-> > Signed-off-by: Andrew Kilroy<andrew.kilroy@arm.com>
+On 12/10/21 8:59 PM, Andy Shevchenko wrote:
+
+>>>>>>>> platform_get_irq() will print a message when it fails.
+>>>>>>>> No need to repeat this.
+>>>>>>>>
+>>>>>>>> While at it, drop redundant check for 0 as platform_get_irq() spills
+>>>>>>>> out a big WARN() in such case.
+>>>>>>>
+>>>>>>> The reason you should be able to remove the "if (!irq)" test is that
+>>>>>>> platform_get_irq() never returns 0. At least, that is what the function kdoc
+>>>>>>> says. But looking at platform_get_irq_optional(), which is called by
+>>>>>>> platform_get_irq(), the out label is:
+>>>>>>>
+>>>>>>> 	WARN(ret == 0, "0 is an invalid IRQ number\n");
+>>>>>>> 	return ret;
+>>>>>>>
+>>>>>>> So 0 will be returned as-is. That is rather weird. That should be fixed to
+>>>>>>> return -ENXIO:
+>>>>>>>
+>>>>>>> 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
+>>>>>>> 		return -ENXIO;
+>>>>>>> 	return ret;
+>>>>>>
+>>>>>>    My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
+>>>>>> but returns -EINVAL instead.
+>>>>>>
+>>>>>>> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
+>>>>>>
+>>>>>>    Of course it isn't...
+>>>>>
+>>>>> It's unsubstantiated statement. The vIRQ 0 shouldn't be returned by any of
+>>>>> those API calls.
+>>>>
+>>>>    We do _not_ know what needs to be fixed, that's the problem, and that's why the WARN()
+>>>> is there...
+>>>
+>>> So, have you seen this warning (being reported) related to libahci_platform?
+>>
+>>    No (as if you need to really see this while it's obvious from the code review).
+>>
+>>> If no, what we are discussing about then? The workaround is redundant and
+>>
+>>    I don't know. :-) Your arguments so far seem bogus (sorry! :-))...
 > 
-> Reviewed-by: John Garry <john.garry@huawei.com>
+> It seems you haven't got them at all. The problems of platform_get_irq() et al
+> shouldn't be worked around in the callers.
 
+   I have clearly explained to you what I'm working around there. If that wasn't clear
+enough, I don't want to continue this talk anymore. Good luck with your patch (not this
+one).
 
-Thanks, applied both patches.
+[...]
 
-- Arnaldo
-
+MBR, Sergey

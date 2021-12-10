@@ -2,65 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C835147016E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA981470172
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241622AbhLJNYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:24:07 -0500
-Received: from mga09.intel.com ([134.134.136.24]:16005 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241521AbhLJNYG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:24:06 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238146111"
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="238146111"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 05:20:31 -0800
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="463663341"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 05:20:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mvfoB-004VJe-30;
-        Fri, 10 Dec 2021 15:19:31 +0200
-Date:   Fri, 10 Dec 2021 15:19:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        id S241640AbhLJNYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:24:32 -0500
+Received: from pb-sasl-trial3.pobox.com ([64.147.108.87]:61129 "EHLO
+        pb-sasl-trial3.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241521AbhLJNYa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 08:24:30 -0500
+Received: from pb-sasl-trial3.pobox.com (localhost.local [127.0.0.1])
+        by pb-sasl-trial3.pobox.com (Postfix) with ESMTP id A2E342E1EC;
+        Fri, 10 Dec 2021 08:20:49 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=E68Man9i8uGbUzpPImAfkcG0qQQ=; b=M3i/hG
+        +azN6LUuLTqwmsHeWkGG7FXoUTNLjKlcghu0jP1JL7tMcr1g3DLKr0EwVhjeBZ/L
+        y8icsjLdxH0UvesHgER6DOoFGERVbG5wJCPvby524NWd/jljcQFS250sFKI/vS4w
+        tPkXHLp5Tqj+0NTd4s++EeeXGODc+op0P7iZ8=
+Received: from pb-smtp1.nyi.icgroup.com (pb-smtp1.pobox.com [10.90.30.53])
+        by pb-sasl-trial3.pobox.com (Postfix) with ESMTP id 7B5532E1E9;
+        Fri, 10 Dec 2021 08:20:49 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=t/i4EcgilqHL2J/A6MZhr8Rb0kiWWXpYExUCO+guzKc=; b=wl6ECYHXf3DMmbJe3rjaV3PHwRQeyftEtMeaXX/tLxVUyMNdWluOEpCkL6gCK68AGUCs3Qpr5a/bOUni3SRDm7odrxxtfU+++aqtjURc2s+DqWbqYpQ+/IlgADslc0PIS+iauEYxKrzGgFVDccc1X5aVWjPyjohZIr9jY6hiZmc=
+Received: from yoda.home (unknown [96.21.170.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id D48B2101024;
+        Fri, 10 Dec 2021 08:20:48 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 5172A2DA003C;
+        Fri, 10 Dec 2021 08:20:47 -0500 (EST)
+Date:   Fri, 10 Dec 2021 08:20:47 -0500 (EST)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v1 1/1] can: mcp251x: Get rid of duplicate of_node
- assignment
-Message-ID: <YbNT4iOj+jfMiIDu@smile.fi.intel.com>
-References: <20211202205855.76946-1-andriy.shevchenko@linux.intel.com>
- <YbHvcDhtZFTyfThT@smile.fi.intel.com>
- <20211210130607.rajkkzr7lf6l4tok@pengutronix.de>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
+ into separate sections
+In-Reply-To: <20211210110102.707759-1-alexandr.lobakin@intel.com>
+Message-ID: <2onsnq80-p1s8-00-roo9-n02q74319ro@syhkavp.arg>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net> <20211210110102.707759-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210130607.rajkkzr7lf6l4tok@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: FD891D6C-59BB-11EC-A1FA-E10CCAD8090B-78420484!pb-smtp1.pobox.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 02:06:07PM +0100, Marc Kleine-Budde wrote:
-> On 09.12.2021 13:58:40, Andy Shevchenko wrote:
-> > On Thu, Dec 02, 2021 at 10:58:55PM +0200, Andy Shevchenko wrote:
+On Fri, 10 Dec 2021, Alexander Lobakin wrote:
 
-...
-
-> > Marc, what do you think about this change?
+> I could do unconditional
 > 
-> LGTM, added to linux-can-next/testing.
+> .pushsection %S.##name
+>                 ^^^^^^ function name
+> 
+> but this would involve changing LDS scripts (and vmlinux.lds.h) to
+> let's say replace *(.noinstr.text) with *(.noinstr.text*).
 
-Thanks for applying this and hi311x patches!
-
--- 
-With Best Regards,
-Andy Shevchenko
+Yes, this is meant to be used with a linker script that expects the new 
+name.
 
 
+Nicolas

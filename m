@@ -2,318 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 341354703A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFD74703AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242730AbhLJPVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:21:41 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:36675 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239297AbhLJPVj (ORCPT
+        id S242757AbhLJPWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239316AbhLJPWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:21:39 -0500
-Received: by mail-oi1-f172.google.com with SMTP id t23so13676025oiw.3;
-        Fri, 10 Dec 2021 07:18:04 -0800 (PST)
+        Fri, 10 Dec 2021 10:22:37 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2C7C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:19:02 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id a11so8722632ilj.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:19:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hEmjbMo0ZsJ3TjBk5kcSaZtBAj1+iwJQz9LpuHVA9P8=;
+        b=adjHU3j7rH8I3KZ7nA9tqZjFgCdOCuNz8zU1VrxrHl/Dw0n5x3fQTFQk1Hn2IHGHv6
+         VU0/pYHuBm8zCiPP61OLvv8YobfjZo3g9FzZNOztHOuHY0HAiOBWQd1eskYf6PYC3rJm
+         p3CfbfsVfXevd7OFsjWr7SL29ZbjFW8u14n+TGlEUKk51l2Z53WO1oC3BVW3hQkOkyrr
+         0A+T50X0a60nlpG73r3zaUYIJ+MSOzm8IgDfJiH2JSb+3R7ZVIlS1PUuveKw19oGbEgY
+         FRie4WYQYA55XOW2dhggRoaKJYzGmctKKqplAQzgMHVffM62jgpvk6S3dzWHMpTmVSmP
+         E1mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=yuPCekkOWDlJ1MkC1Zy+AvR5oDVDh4ZK69iNogA8Tfo=;
-        b=IhjDFbDpIvt9+SR1em4CaggL16zDJxKTQFCRGrsu3EE7UD5XHazCZm5aYZEyN2+wgR
-         eAoosjh1ODtSZ50ej7LKlpHukfCkdFtIT2l3TExdAKdgF+o3VyxQ9Yv9k+X8KtOTEIc3
-         loNoZ6fNyJNBcbL+GLnBwDZ6/DGlAuhZ7tQ60Yc8T9BU/Ls6d8+DpjTZ9/D5BMTHXXla
-         FFCtoDzanr5UrRFo4QDVjJUatRvfekxqvPtnIittPm7ZzjtRkKbPwYX/TUam0HFKc/1x
-         75qtAwZDdm18XoaZAZTXyWx1tOIstCKtwmfxYeeuu2Rl5VpPbtXnBEqjZf0nBJNa0vlB
-         ByDA==
-X-Gm-Message-State: AOAM533QYkaCDKrUY3lEIqZx6FqHSOH1l9rW/zJuxTYRE7inO6tFdjWI
-        cyLO5T/Dmt5ZLz9AJU1H7A==
-X-Google-Smtp-Source: ABdhPJwm2C55O4kr1vksBbBfjQryuN8MgvCMdjox/jFfSWOe880aTZkvbmYWPFdGBzfjuxv8rdNzRg==
-X-Received: by 2002:aca:ab84:: with SMTP id u126mr12619639oie.41.1639149483561;
-        Fri, 10 Dec 2021 07:18:03 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f20sm775565oiw.48.2021.12.10.07.18.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 07:18:02 -0800 (PST)
-Received: (nullmailer pid 1368897 invoked by uid 1000);
-        Fri, 10 Dec 2021 15:18:01 -0000
-Date:   Fri, 10 Dec 2021 09:18:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/8] dt-bindings: pinctrl: Add Nuvoton WPCM450
-Message-ID: <YbNvqTUwi1jzff4D@robh.at.kernel.org>
-References: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
- <20211207210823.1975632-5-j.neuschaefer@gmx.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hEmjbMo0ZsJ3TjBk5kcSaZtBAj1+iwJQz9LpuHVA9P8=;
+        b=kS1ElxUJwgZc2Ol/kHvsdNAd0Vbekc7vOs/g0Cr3hxFvEuq4WkdK01AgF3WA+lXvss
+         R8Dd8x3z0vdOzuW2Enk1CCSFBICNtG8Yh0rReMVtHLlYR75YxVfWUSECqdwWVdKu6sAG
+         Z6D4mJ46KU09EzGOSm9Ax4CLUab47AsSTqPk+oo9rC+Q8H/Hk+GcRH3F2TJx6z5MR+IT
+         7yYwuIaos+XOT83uBVYmiBAePbCXWH+sdNE/xOBvVkytfOVnbFdoSJvmpxU0edujuUOa
+         INjTY5+CzQ32Mp4qE3Ozpq6u+nmG/JtLTEsC9+IZRrMdVTMHds+ZKBiaPxDyes2M5FyT
+         pl9g==
+X-Gm-Message-State: AOAM531uMGMashDkgYSdzGvKJaWcO446qczbogaSEB3MpLhJ5PKwOkg5
+        urWBKQ0cMx9D7uL+EKwOMa2TqI+oIiYbdG7j1j+nyg==
+X-Google-Smtp-Source: ABdhPJzfs0RYsbtxr+hNbrS5EFgoPyGeyMd247aeDfYO1cdIpTQebvlNzQ3dtI+jNUaj2c61s2HVOL8MndEGlGtfLxE=
+X-Received: by 2002:a92:cd8e:: with SMTP id r14mr19222736ilb.277.1639149541371;
+ Fri, 10 Dec 2021 07:19:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211207210823.1975632-5-j.neuschaefer@gmx.net>
+References: <20211201170411.1561936-1-qperret@google.com> <20211201170411.1561936-12-qperret@google.com>
+In-Reply-To: <20211201170411.1561936-12-qperret@google.com>
+From:   Andrew Walbran <qwandor@google.com>
+Date:   Fri, 10 Dec 2021 15:18:50 +0000
+Message-ID: <CA+_y_2FMrc=XqAPK-WVtb5No9xYXOXmaLbVE+AEGZL668YhKGQ@mail.gmail.com>
+Subject: Re: [PATCH v3 11/15] KVM: arm64: Implement do_share() helper for
+ sharing memory
+To:     Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 10:08:19PM +0100, Jonathan Neuschäfer wrote:
-> This binding is heavily based on the one for NPCM7xx, because the
-> hardware is similar. There are some notable differences, however:
-> 
-> - The addresses of GPIO banks are not physical addresses but simple
->   indices (0 to 7), because the GPIO registers are not laid out in
->   convenient blocks.
-> - Pinmux settings can explicitly specify that the GPIO mode is used.
-> 
-> Certain pins support blink patterns in hardware. This is currently not
-> modelled in the DT binding.
-> 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> 
-> 
+Reviewed-by: Andrew Walbran <qwandor@google.com>
+
+On Wed, 1 Dec 2021 at 17:04, 'Quentin Perret' via kernel-team
+<kernel-team@android.com> wrote:
+>
+> From: Will Deacon <will@kernel.org>
+>
+> By default, protected KVM isolates memory pages so that they are
+> accessible only to their owner: be it the host kernel, the hypervisor
+> at EL2 or (in future) the guest. Establishing shared-memory regions
+> between these components therefore involves a transition for each page
+> so that the owner can share memory with a borrower under a certain set
+> of permissions.
+>
+> Introduce a do_share() helper for safely sharing a memory region between
+> two components. Currently, only host-to-hyp sharing is implemented, but
+> the code is easily extended to handle other combinations and the
+> permission checks for each component are reusable.
+>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Quentin Perret <qperret@google.com>
 > ---
-> v2:
-> - Move GPIO into subnodes
-> - Improve use of quotes
-> - Remove unnecessary minItems/maxItems lines
-> - Remove "phandle: true"
-> - Use separate prefixes for pinmux and pincfg nodes
-> - Add nuvoton,interrupt-map property
-> - Make it possible to set pinmux to GPIO explicitly
-> 
-> v1:
-> - https://lore.kernel.org/lkml/20210602120329.2444672-5-j.neuschaefer@gmx.net/
-> ---
->  .../pinctrl/nuvoton,wpcm450-pinctrl.yaml      | 190 ++++++++++++++++++
->  1 file changed, 190 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
-> new file mode 100644
-> index 0000000000000..2b783597794d7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
-> @@ -0,0 +1,190 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/nuvoton,wpcm450-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  arch/arm64/kvm/hyp/nvhe/mem_protect.c | 237 ++++++++++++++++++++++++++
+>  1 file changed, 237 insertions(+)
+>
+> diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> index 757dfefe3aeb..74ca4043b08a 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> @@ -471,3 +471,240 @@ void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt)
+>         ret = host_stage2_idmap(addr);
+>         BUG_ON(ret && ret != -EAGAIN);
+>  }
 > +
-> +title: Nuvoton WPCM450 pin control and GPIO
+> +/* This corresponds to locking order */
+> +enum pkvm_component_id {
+> +       PKVM_ID_HOST,
+> +       PKVM_ID_HYP,
+> +};
 > +
-> +maintainers:
-> +  - Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> +struct pkvm_mem_transition {
+> +       u64                             nr_pages;
 > +
-> +properties:
-> +  compatible:
-> +    const: nuvoton,wpcm450-pinctrl
+> +       struct {
+> +               enum pkvm_component_id  id;
+> +               /* Address in the initiator's address space */
+> +               u64                     addr;
 > +
-> +  reg:
-> +    maxItems: 1
+> +               union {
+> +                       struct {
+> +                               /* Address in the completer's address space */
+> +                               u64     completer_addr;
+> +                       } host;
+> +               };
+> +       } initiator;
 > +
-> +patternProperties:
-> +  # There are three kinds of subnodes:
-> +  # 1. a GPIO controller node for each GPIO bank
-> +  # 2. a pinmux node configures pin muxing for a group of pins (e.g. rmii2)
-> +  # 3. a pinconf node configures properties of a single pin
+> +       struct {
+> +               enum pkvm_component_id  id;
+> +       } completer;
+> +};
 > +
-> +  "^gpio@.*$":
-> +    if:
+> +struct pkvm_mem_share {
+> +       const struct pkvm_mem_transition        tx;
+> +       const enum kvm_pgtable_prot             prot;
+It would be helpful to add a comment documenting what this is used for
+(i.e. whether it is for the initiator or completer). Or even rename it
+to something like completer_prot to make that clear.
 
-Not necessary because you can't have a property with '@' in it.
-
-> +      type: object
-> +    then:
-> +      description:
-> +        Eight GPIO banks (gpio@0 to gpio@7), that each contain between 14 and 18
-> +        GPIOs. Some GPIOs support interrupts.
+> +};
 > +
-> +      allOf:
-> +        - $ref: pinmux-node.yaml#
+> +struct check_walk_data {
+> +       enum pkvm_page_state    desired;
+> +       enum pkvm_page_state    (*get_page_state)(kvm_pte_t pte);
+> +};
 > +
-> +      properties:
-> +        reg:
-> +          description: GPIO bank number (0-7)
+> +static int __check_page_state_visitor(u64 addr, u64 end, u32 level,
+> +                                     kvm_pte_t *ptep,
+> +                                     enum kvm_pgtable_walk_flags flag,
+> +                                     void * const arg)
+> +{
+> +       struct check_walk_data *d = arg;
+> +       kvm_pte_t pte = *ptep;
 > +
-> +        gpio-controller: true
+> +       if (kvm_pte_valid(pte) && !addr_is_memory(kvm_pte_to_phys(pte)))
+> +               return -EINVAL;
 > +
-> +        "#gpio-cells":
-> +          const: 2
+> +       return d->get_page_state(pte) == d->desired ? 0 : -EPERM;
+> +}
 > +
-> +        interrupt-controller: true
+> +static int check_page_state_range(struct kvm_pgtable *pgt, u64 addr, u64 size,
+> +                                 struct check_walk_data *data)
+> +{
+> +       struct kvm_pgtable_walker walker = {
+> +               .cb     = __check_page_state_visitor,
+> +               .arg    = data,
+> +               .flags  = KVM_PGTABLE_WALK_LEAF,
+> +       };
 > +
-> +        "#interrupt-cells":
-> +          const: 2
+> +       return kvm_pgtable_walk(pgt, addr, size, &walker);
+> +}
 > +
-> +        interrupts:
-> +          maxItems: 4
-
-Need to define what each interrupt is.
-
+> +static enum pkvm_page_state host_get_page_state(kvm_pte_t pte)
+> +{
+> +       if (!kvm_pte_valid(pte) && pte)
+> +               return PKVM_NOPAGE;
 > +
-> +        nuvoton,interrupt-map:
-
-Reusing 'interrupt-map' with a different definition bothers me... 
-
-> +          description:
-> +            This property defines which bits in the interrupt registers
-> +            correspond to which GPIOs.
-> +          $ref: /schemas/types.yaml#/definitions/uint32-array
-> +          items:
-> +            - description: First interrupt bit
-> +            - description: Number of interrupt bits
-> +            - description: First GPIO associated with an interrupt
+> +       return pkvm_getstate(kvm_pgtable_stage2_pte_prot(pte));
+> +}
 > +
-> +      required:
-> +        - reg
-> +        - gpio-controller
-> +        - '#gpio-cells'
+> +static int __host_check_page_state_range(u64 addr, u64 size,
+> +                                        enum pkvm_page_state state)
+> +{
+> +       struct check_walk_data d = {
+> +               .desired        = state,
+> +               .get_page_state = host_get_page_state,
+> +       };
 > +
-> +  "^mux_.*$":
-
-Use '-' rather than '_' and the '.*' is not necessary.
-
-"^mux-"
-
-> +    if:
-
-Don't need this.
-
-> +      type: object
-> +    then:
-> +      allOf:
-> +        - $ref: pinmux-node.yaml#
-> +      properties:
-> +        groups:
-> +          description:
-> +            One or more groups of pins to mux to a certain function
-> +          items:
-> +            enum: [ smb3, smb4, smb5, scs1, scs2, scs3, smb0, smb1, smb2, bsp,
-> +                    hsp1, hsp2, r1err, r1md, rmii2, r2err, r2md, kbcc, dvo,
-> +                    clko, smi, uinc, gspi, mben, xcs2, xcs1, sdio, sspi, fi0,
-> +                    fi1, fi2, fi3, fi4, fi5, fi6, fi7, fi8, fi9, fi10, fi11,
-> +                    fi12, fi13, fi14, fi15, pwm0, pwm1, pwm2, pwm3, pwm4, pwm5,
-> +                    pwm6, pwm7, hg0, hg1, hg2, hg3, hg4, hg5, hg6, hg7 ]
-> +        function:
-> +          description:
-> +            The function that a group of pins is muxed to
-> +          enum: [ smb3, smb4, smb5, scs1, scs2, scs3, smb0, smb1, smb2, bsp,
-> +                  hsp1, hsp2, r1err, r1md, rmii2, r2err, r2md, kbcc, dvo0,
-> +                  dvo1, dvo2, dvo3, dvo4, dvo5, dvo6, dvo7, clko, smi, uinc,
-> +                  gspi, mben, xcs2, xcs1, sdio, sspi, fi0, fi1, fi2, fi3, fi4,
-> +                  fi5, fi6, fi7, fi8, fi9, fi10, fi11, fi12, fi13, fi14, fi15,
-> +                  pwm0, pwm1, pwm2, pwm3, pwm4, pwm5, pwm6, pwm7, hg0, hg1,
-> +                  hg2, hg3, hg4, hg5, hg6, hg7, gpio ]
+> +       hyp_assert_lock_held(&host_kvm.lock);
+> +       return check_page_state_range(&host_kvm.pgt, addr, size, &d);
+> +}
 > +
-> +      dependencies:
-> +        groups: [ function ]
-> +        function: [ groups ]
+> +static int __host_set_page_state_range(u64 addr, u64 size,
+> +                                      enum pkvm_page_state state)
+> +{
+> +       enum kvm_pgtable_prot prot = pkvm_mkstate(PKVM_HOST_MEM_PROT, state);
 > +
-> +      additionalProperties: false
+> +       return host_stage2_idmap_locked(addr, size, prot);
+> +}
 > +
-> +  "^cfg_.*$":
-> +    if:
-
-Same comments here
-
-> +      type: object
-> +    then:
-> +      allOf:
-> +        - $ref: pincfg-node.yaml#
-> +      properties:
-> +        pins:
-> +          description:
-> +            A list of pins to configure in certain ways, such as enabling
-> +            debouncing
-> +          items:
-> +            enum: [ gpio0, gpio1, gpio2, gpio3, gpio4, gpio5, gpio6, gpio7,
-> +                    gpio8, gpio9, gpio10, gpio11, gpio12, gpio13, gpio14,
-> +                    gpio15, gpio16, gpio17, gpio18, gpio19, gpio20, gpio21,
-> +                    gpio22, gpio23, gpio24, gpio25, gpio26, gpio27, gpio28,
-> +                    gpio29, gpio30, gpio31, gpio32, gpio33, gpio34, gpio35,
-> +                    gpio36, gpio37, gpio38, gpio39, gpio40, gpio41, gpio42,
-> +                    gpio43, gpio44, gpio45, gpio46, gpio47, gpio48, gpio49,
-> +                    gpio50, gpio51, gpio52, gpio53, gpio54, gpio55, gpio56,
-> +                    gpio57, gpio58, gpio59, gpio60, gpio61, gpio62, gpio63,
-> +                    gpio64, gpio65, gpio66, gpio67, gpio68, gpio69, gpio70,
-> +                    gpio71, gpio72, gpio73, gpio74, gpio75, gpio76, gpio77,
-> +                    gpio78, gpio79, gpio80, gpio81, gpio82, gpio83, gpio84,
-> +                    gpio85, gpio86, gpio87, gpio88, gpio89, gpio90, gpio91,
-> +                    gpio92, gpio93, gpio94, gpio95, gpio96, gpio97, gpio98,
-> +                    gpio99, gpio100, gpio101, gpio102, gpio103, gpio104,
-> +                    gpio105, gpio106, gpio107, gpio108, gpio109, gpio110,
-> +                    gpio111, gpio112, gpio113, gpio114, gpio115, gpio116,
-> +                    gpio117, gpio118, gpio119, gpio120, gpio121, gpio122,
-> +                    gpio123, gpio124, gpio125, gpio126, gpio127 ]
-
-pattern: '^gpio1?[0-9]{1,2}$'
-
-Feel free to tweak it more to limit to 127 if you want.
-
+> +static int host_request_owned_transition(u64 *completer_addr,
+> +                                        const struct pkvm_mem_transition *tx)
+> +{
+> +       u64 size = tx->nr_pages * PAGE_SIZE;
+> +       u64 addr = tx->initiator.addr;
 > +
-> +        input-debounce: true
+> +       *completer_addr = tx->initiator.host.completer_addr;
+> +       return __host_check_page_state_range(addr, size, PKVM_PAGE_OWNED);
+> +}
 > +
-> +      additionalProperties: false
+> +static int host_initiate_share(u64 *completer_addr,
+> +                              const struct pkvm_mem_transition *tx)
+> +{
+> +       u64 size = tx->nr_pages * PAGE_SIZE;
+> +       u64 addr = tx->initiator.addr;
 > +
-> +required:
-> +  - compatible
-> +  - reg
+> +       *completer_addr = tx->initiator.host.completer_addr;
+> +       return __host_set_page_state_range(addr, size, PKVM_PAGE_SHARED_OWNED);
+> +}
 > +
-> +additionalProperties: false
+> +static enum pkvm_page_state hyp_get_page_state(kvm_pte_t pte)
+> +{
+> +       if (!kvm_pte_valid(pte))
+> +               return PKVM_NOPAGE;
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    pinctrl: pinctrl@b8003000 {
-> +      compatible = "nuvoton,wpcm450-pinctrl";
-> +      reg = <0xb8003000 0x1000>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
+> +       return pkvm_getstate(kvm_pgtable_stage2_pte_prot(pte));
+> +}
 > +
-> +      gpio0: gpio@0 {
-> +        reg = <0>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +        interrupts = <2 IRQ_TYPE_LEVEL_HIGH
-> +                      3 IRQ_TYPE_LEVEL_HIGH
-> +                      4 IRQ_TYPE_LEVEL_HIGH>;
-> +        nuvoton,interrupt-map = <0 16 0>;
-
-Based on the example, you don't need this as it is 1:1.
-
-> +      };
+> +static int __hyp_check_page_state_range(u64 addr, u64 size,
+> +                                       enum pkvm_page_state state)
+> +{
+> +       struct check_walk_data d = {
+> +               .desired        = state,
+> +               .get_page_state = hyp_get_page_state,
+> +       };
 > +
-> +      mux_rmii2 {
-> +        groups = "rmii2";
-> +        function = "rmii2";
-> +      };
+> +       hyp_assert_lock_held(&pkvm_pgd_lock);
+> +       return check_page_state_range(&pkvm_pgtable, addr, size, &d);
+> +}
 > +
-> +      pinmux_uid: mux_uid {
-> +        groups = "gspi", "sspi";
-> +        function = "gpio";
-> +      };
+> +static bool __hyp_ack_skip_pgtable_check(const struct pkvm_mem_transition *tx)
+> +{
+> +       return !(IS_ENABLED(CONFIG_NVHE_EL2_DEBUG) ||
+> +                tx->initiator.id != PKVM_ID_HOST);
+> +}
 > +
-> +      pinctrl_uid: cfg_uid {
-> +        pins = "gpio14";
-> +        input-debounce = <1>;
-> +      };
-> +    };
+> +static int hyp_ack_share(u64 addr, const struct pkvm_mem_transition *tx,
+> +                        enum kvm_pgtable_prot perms)
+> +{
+> +       u64 size = tx->nr_pages * PAGE_SIZE;
 > +
-> +    gpio-keys {
-> +      compatible = "gpio-keys";
-> +      pinctrl-names = "default";
-> +      pinctrl-0 = <&pinctrl_uid>, <&pinmux_uid>;
+> +       if (perms != PAGE_HYP)
+> +               return -EPERM;
 > +
-> +      uid {
-> +        label = "UID";
-> +        linux,code = <102>;
-> +        gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
-> +      };
-> +    };
+> +       if (__hyp_ack_skip_pgtable_check(tx))
+> +               return 0;
+> +
+> +       return __hyp_check_page_state_range(addr, size, PKVM_NOPAGE);
+> +}
+> +
+> +static int hyp_complete_share(u64 addr, const struct pkvm_mem_transition *tx,
+> +                             enum kvm_pgtable_prot perms)
+> +{
+> +       void *start = (void *)addr, *end = start + (tx->nr_pages * PAGE_SIZE);
+> +       enum kvm_pgtable_prot prot;
+> +
+> +       prot = pkvm_mkstate(perms, PKVM_PAGE_SHARED_BORROWED);
+> +       return pkvm_create_mappings_locked(start, end, prot);
+> +}
+> +
+> +static int check_share(struct pkvm_mem_share *share)
+> +{
+> +       const struct pkvm_mem_transition *tx = &share->tx;
+> +       u64 completer_addr;
+> +       int ret;
+> +
+> +       switch (tx->initiator.id) {
+> +       case PKVM_ID_HOST:
+> +               ret = host_request_owned_transition(&completer_addr, tx);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (tx->completer.id) {
+> +       case PKVM_ID_HYP:
+> +               ret = hyp_ack_share(completer_addr, tx, share->prot);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static int __do_share(struct pkvm_mem_share *share)
+> +{
+> +       const struct pkvm_mem_transition *tx = &share->tx;
+> +       u64 completer_addr;
+> +       int ret;
+> +
+> +       switch (tx->initiator.id) {
+> +       case PKVM_ID_HOST:
+> +               ret = host_initiate_share(&completer_addr, tx);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (tx->completer.id) {
+> +       case PKVM_ID_HYP:
+> +               ret = hyp_complete_share(completer_addr, tx, share->prot);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +/*
+> + * do_share():
+> + *
+> + * The page owner grants access to another component with a given set
+> + * of permissions.
+> + *
+> + * Initiator: OWNED    => SHARED_OWNED
+> + * Completer: NOPAGE   => SHARED_BORROWED
+> + */
+> +static int do_share(struct pkvm_mem_share *share)
+> +{
+> +       int ret;
+> +
+> +       ret = check_share(share);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return WARN_ON(__do_share(share));
+> +}
 > --
-> 2.30.2
-> 
-> 
+> 2.34.0.rc2.393.gf8c9666880-goog
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

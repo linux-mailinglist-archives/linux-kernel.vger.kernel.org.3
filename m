@@ -2,76 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4EB46FFC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E0946FFCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240379AbhLJLbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:31:44 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:45570 "EHLO mail.skyhub.de"
+        id S240283AbhLJLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:33:12 -0500
+Received: from mga09.intel.com ([134.134.136.24]:9170 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231759AbhLJLbn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:31:43 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 213C01EC052C;
-        Fri, 10 Dec 2021 12:28:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639135683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ZTPxc2UEeIcV5K/RSphIZCHZ0+2hghQppvwUwyj7b7M=;
-        b=OXXnzYb0zK4HD7FGir5tB0/GaIQ0zz/eHeP4xrVfzwUftvg+gv0sEptdSFz3GhEEyZbPkT
-        V756xQVUvI8mKfZACeLicj+TzS3F0VflyUMyiGXL1XNDtq89tZono44Yf/8jMKfLl4LNLK
-        vcE1hKw/xalL6t7SFkJEyhp5jzaQhIk=
-Date:   Fri, 10 Dec 2021 12:28:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>,
-        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
-        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        stable@vger.kernel.org, x86@kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
- early param parsing
-Message-ID: <YbM5yR+Hy+kwmMFU@zn.tnic>
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com>
- <YbIeYIM6JEBgO3tG@zn.tnic>
- <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
- <YbIgsO/7oQW9h6wv@zn.tnic>
- <YbIu55LZKoK3IVaF@kernel.org>
- <YbIw1nUYJ3KlkjJQ@zn.tnic>
+        id S231759AbhLJLdL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 06:33:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238132239"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="238132239"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 03:29:36 -0800
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="612898820"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 03:29:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mve4p-004TGO-T0;
+        Fri, 10 Dec 2021 13:28:35 +0200
+Date:   Fri, 10 Dec 2021 13:28:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
+ when IRQ can't be retrieved
+Message-ID: <YbM541VXHoOUsM5+@smile.fi.intel.com>
+References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
+ <d841bc59-a2a6-27f5-10af-05fe2e24067a@omp.ru>
+ <YbI/6OIKM7qvLQcp@smile.fi.intel.com>
+ <bfd96f5a-94c7-cee6-9546-14dc59cb8542@omp.ru>
+ <YbJXjmsDJWlr3xpB@smile.fi.intel.com>
+ <15cf03b2-8d45-93b1-f0a0-d79c93cee0da@omp.ru>
+ <YbMvfzKsc4CcQzSa@smile.fi.intel.com>
+ <7ffe328f-2ba1-4799-5c6a-d48d88c0459d@omp.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbIw1nUYJ3KlkjJQ@zn.tnic>
+In-Reply-To: <7ffe328f-2ba1-4799-5c6a-d48d88c0459d@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 05:37:42PM +0100, Borislav Petkov wrote:
-> Whatever we do, it needs to be tested by all folks on Cc who already
-> reported regressions, i.e., Anjaneya, Hugh, John and Patrick.
+On Fri, Dec 10, 2021 at 02:14:15PM +0300, Sergey Shtylyov wrote:
+> On 12/10/21 1:44 PM, Andy Shevchenko wrote:
+> 
+> >>>>>>> While at it, drop redundant check for 0 as platform_get_irq() spills
+> >>>>>>> out a big WARN() in such case.
+> >>>>>>
+> >>>>>>    And? IRQ0 is still returned! :-(
+> >>>>>
+> >>>>> It should not be returned in the first place.
+> >>>>
+> >>>>    But it still is, despite the WARN(), right?
+> >>>
+> >>> So, you admit that there is a code which does that?
+> >>
+> >>    I admit *what*?! That platfrom_get_irq() and its ilk return IRQ0 while they
+> >> shouldn't? =)
+> > 
+> > That there is a code beneath platform_get_irq() that returns 0, yes.
+> 
+>    Look at the ACPI-specific GpioInt handling code (just above the out_not_found label) --
+> I'm not sure the check there is correct -- I'm not very familiar with ACPI, you seem to
+> know it much better. :-)
 
-Ok, Mike is busy so here are some patches for testing:
+And what is your point here exactly? If == 0 case happens, it will be
+immediately WARN() and reported (I hope) since it will mean bug in the code.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/log/?h=rc4-boot
+>    Also, 0 can be specified via the normal IRQ resource. I know of e.g. the Alchemy MIPS SoCs
+> that have IRQ0 used by UART0; luckily, currently SoC IRQs are mapped starting at Linux IRQ8
+> (but it wasn't the case in the 2.6.1x time frame where we had issue with the serial driver)...
 
-I'd appreciate it if folks who reported an issue, verify those.
+You mixed up HW IRQ with vIRQ. The former one may be 0 and it's completely valid case, while
+the second one is not.
 
-The first two are reverts which should address the issues with mem=
-folks have reported. And the last one should address Anjaneya's issue.
+> >>> That code should be fixed first. Have you sent a patch?
+> >>
+> >>    Which code?! You got me totally muddled. =)
+> > 
+> > Above mentioned.
+> 
+>    What needs to be fixed in this case is the interrupt controller driver.
 
-I guess doing it the way as Mike suggested is cleaner/better.
+What do you mean by that? vIRQ is handled by IRQ core, IRQ controller driver
+just a mere provider of the resource. And those exceptions for vIRQ == 0
+shouldn't be propagated to the platform code or so.
 
-Thx!
+> Quoting Linus
+> (imprecisely :-)), IRQ #s should be either mapped starting with #1 or IRQ0 remapped at
+> the end of the controller's interrupt range... I currently have no information on the
+> platforms requiring such kind of fixing (Alchemy don't seem to need it now)...
+
+Again, do not mix vIRQ (about which Linus ranted) and HW IRQ.
+
+...
+
+> >>>>>>> -	if (!irq)
+> >>>>>>> -		return -EINVAL;
+> >>>>>>
+> >>>>>>    This is prermature -- let's wait till my patch that stops returning IRQ0 from
+> >>>>>> platform_get_irq() and friends gets merged....
+> >>>>>
+> >>>>> What patch?
+> >>>>
+> >>>>    https://marc.info/?l=linux-kernel&m=163623041902285
+> >>>>
+> >>>>> Does it fix platform_get_irq_optional()?
+> >>>>
+> >>>>    Of course! :-)
+> >>>
+> >>> Can you share link to lore.kernel.org, please?
+> >>> It will make much easier to try and comment.
+> >>
+> >>    I don't know how to uise it yet, and I'm a little busy with other IRQ0 issues ATM,
+
+>    A little bit, I meant to type.
+
+No problem. I just haven't got what other IRQ0 issues except fixing
+platform_get_irq_optional() et al. could be possibly needed...
+
+> >> so I'm afraid you're on your own here...
+> > 
+> > lore.kernel.org is the official mailing list archive for Linux kernel work
+> > AFAIU. Other sites may do whatever they want with that information, so -->
+> > they are unreliable. If you wish to follow the better process, use
+> > lore.kernel.org. Understanding how it works takes no more than 5 minutes
+> > by engineer with your kind of experience with Linux kernel development.
+> 
+>    OK, I'll explore this archive when I have time. BTW, does it keep the messages not
+> posted to LKML (I tend to only CC LKML if there's no other mailing lists to post to)?
+
+TL;DR: yes.
 
 -- 
-Regards/Gruss,
-    Boris.
+With Best Regards,
+Andy Shevchenko
 
-https://people.kernel.org/tglx/notes-about-netiquette
+

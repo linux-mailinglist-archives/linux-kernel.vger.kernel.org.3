@@ -2,215 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE71146FED3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F176746FED7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbhLJKj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:39:59 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4242 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbhLJKj6 (ORCPT
+        id S237990AbhLJKnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:43:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229619AbhLJKnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:39:58 -0500
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J9S2D5S0tz67j3H;
-        Fri, 10 Dec 2021 18:34:28 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 11:36:21 +0100
-Received: from [10.47.85.63] (10.47.85.63) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 10 Dec
- 2021 10:36:20 +0000
-Subject: Re: [PATCH] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <Ajish.Koshy@microchip.com>
-CC:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <Viswas.G@microchip.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Niklas.Cassel@wdc.com>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>
-References: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
- <PH0PR11MB51123148E4932FE1C64F8052EC669@PH0PR11MB5112.namprd11.prod.outlook.com>
- <a60318ef-dc19-a146-5ac3-16eae38b8c37@huawei.com>
- <Ya4PAu4Xj8UGHEV7@x1-carbon>
- <PH0PR11MB5112E2E7D00D95F32C86677AEC6E9@PH0PR11MB5112.namprd11.prod.outlook.com>
- <6ee6fe1b-e811-cada-0c18-78149c313358@huawei.com>
- <PH0PR11MB51120361EB6F6931CCE023D6EC709@PH0PR11MB5112.namprd11.prod.outlook.com>
- <f41d2bed-f320-1b70-7d63-fe77caa2534d@huawei.com>
- <6ed96184-6291-ad37-0241-00a5389293e6@opensource.wdc.com>
- <24a9ac51-ce60-b883-2284-023c703a7885@huawei.com>
- <5dfd6c4b-dd10-c9b5-7efb-82a11613fdd4@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <a4b2bf44-ef21-6cc8-f79f-d0e41c8f037f@huawei.com>
-Date:   Fri, 10 Dec 2021 10:35:56 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Fri, 10 Dec 2021 05:43:06 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8CFC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:39:31 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z5so29021958edd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:39:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A2GK84jv3d06DivKHd9b6IRlVr6Kymg2fmKF4lOysC4=;
+        b=DPEKLQYprJk/MoToLrqu4SCkpfUXINmWBHHO8nwAdypPGO/4Z2dCd7xoAnLsxG82Lg
+         otacecCzT00sv+el1rPf7wUzHAY/X2YkipUfxhuN1PP17PV2KTWVMrFSE//qZd+E1rNZ
+         3u9uRFr/y2PnpgdGMzF92MfvIo0M2jnigDz23G42QTD7rIWoExHrb5/lzhbpRBLY5hY3
+         CK5Dy/CptVHx70pM9wpqCqiToBbLj+fouE9iyaUWk8CnvV7zpbaVLwsvJ7d+/uBE9iM/
+         DoEwZTnhYSokNzsZXpyLMkKQCuJQBiBOZLzqD018vAvHacLehMRAqZ1mxb+MAz3bVFlQ
+         6BCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A2GK84jv3d06DivKHd9b6IRlVr6Kymg2fmKF4lOysC4=;
+        b=CPFScxiBwMSDSUq2ii63xjGF/MNr8rKeio/2/k5HHx0Rd2H6fIhHzl6dbt5wMFIOak
+         w/pqnX2s0NMLeG3aCSSijjDOjEFcmSnfMOgdSMiBK7HOq+Lho90JakSPMvqnvfW+xvQm
+         9DgnCIyQKp4KXmcVoDBa4cgD5HH7CfcmZffViP9e6+i9v2Pclt0H0VCxCCf2p1Tvwbnz
+         mRr5LkIG2KzSybWRSLyoTBeRfqewORrj1vpovMKINkBNRlC178K0PUb9U4Ad0aOZKMND
+         hDupQv/4W0ahFcLsfacguVTWyqZfs0VkrPZzeLdzU6BD8dHxgMqy/PIWUtPkVIfQ5+Wv
+         Uuvg==
+X-Gm-Message-State: AOAM532C2IGoMEvsWbA/fIrobeIsQEQgxy+d8QpKiLWP1eKnn3pqzdYf
+        Yyi7QkXDfKk/AZD1+quzXKpuES0+2gHmIUo+TJmT7g==
+X-Google-Smtp-Source: ABdhPJzrbc16hICIIye/UsEMvjuj0ioPIW3Ql65DPA9/53xMoaUCwj1Wtjy3+Hkmj2VpOpvQHMe6J66CkGCySGdHFLE=
+X-Received: by 2002:a17:907:3f8e:: with SMTP id hr14mr2556575ejc.202.1639132767732;
+ Fri, 10 Dec 2021 02:39:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <5dfd6c4b-dd10-c9b5-7efb-82a11613fdd4@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.85.63]
-X-ClientProxiedBy: lhreml716-chm.china.huawei.com (10.201.108.67) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <20211206120533.602062-1-xiaolei.wang@windriver.com>
+ <CAFA6WYN+0751=feb-O9Drmm5V_Gz-1qsgiHmLsA88=49MoK_dg@mail.gmail.com>
+ <PH0PR11MB507734019F54C2BB24D1456F95719@PH0PR11MB5077.namprd11.prod.outlook.com>
+ <CAFA6WYMOHUEve8cbZdwzsijer3fRsy=50q67ndsC6U2JD6gK5Q@mail.gmail.com>
+ <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org> <CAN5uoS9xv-kKpC4E6-muYdh59g8XPSDfbquk5=DbQ4GmiVk-PA@mail.gmail.com>
+ <CAFA6WYNZAbDpFJVnmNGm7aqCc82ZQEeUXvVW4r1+svm8rfRn7w@mail.gmail.com>
+In-Reply-To: <CAFA6WYNZAbDpFJVnmNGm7aqCc82ZQEeUXvVW4r1+svm8rfRn7w@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Fri, 10 Dec 2021 11:39:16 +0100
+Message-ID: <CAN5uoS8E7TGZYDyk=+2ZuUC_TnV0u3ezRNLsVxUZZXwFOQK1QQ@mail.gmail.com>
+Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jerome Forissier <jerome@forissier.org>,
+        "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2021 23:55, Damien Le Moal wrote:
->> Earlier today it was the mount command which was hanging. From debugging
->> that, I found that the very first SSP command when mounting is sent the
->> HW successfully but no completion interrupt ever occurs there - I really
->> don't know why. Other SSP commands complete successfully before this and
->> after (TMFs in the error handling), including ones which have sgls.
->>
->> sda is a SAS drive, but I think SATA has the same issue - I was just
->> looking at sda.
->>
->> One thing I noticed in the driver is that it uses mb() in between
->> writing to the DMA memory and initiating the HW - I don't think mb is
->> strong enough. However I don't think that is my issue - it wouldn't fail
->> reliably if it was.
-> Weird. 
+On Fri, 10 Dec 2021 at 11:29, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Fri, 10 Dec 2021 at 15:08, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > Hello all,
+> >
+> > On Fri, 10 Dec 2021 at 09:10, Jerome Forissier <jerome@forissier.org> wrote:
+> > >
+> > > +CC Jens, Etienne
+> > >
+> > > On 12/10/21 06:00, Sumit Garg wrote:
+> > > > On Fri, 10 Dec 2021 at 09:42, Wang, Xiaolei <Xiaolei.Wang@windriver.com> wrote:
+> > > >>
+> > > >> -----Original Message-----
+> > > >> From: Sumit Garg <sumit.garg@linaro.org>
+> > > >> Sent: Thursday, December 9, 2021 7:41 PM
+> > > >> To: Wang, Xiaolei <Xiaolei.Wang@windriver.com>
+> > > >> Cc: jens.wiklander@linaro.org; op-tee@lists.trustedfirmware.org; linux-kernel@vger.kernel.org
+> > > >> Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
+> > > >>
+> > > >> [Please note: This e-mail is from an EXTERNAL e-mail address]
+> > > >>
+> > > >> On Mon, 6 Dec 2021 at 17:35, Xiaolei Wang <xiaolei.wang@windriver.com> wrote:
+> > > >>>
+> > > >>> We observed the following kmemleak report:
+> > > >>> unreferenced object 0xffff000007904500 (size 128):
+> > > >>>   comm "swapper/0", pid 1, jiffies 4294892671 (age 44.036s)
+> > > >>>   hex dump (first 32 bytes):
+> > > >>>     00 47 90 07 00 00 ff ff 60 00 c0 ff 00 00 00 00  .G......`.......
+> > > >>>     60 00 80 13 00 80 ff ff a0 00 00 00 00 00 00 00  `...............
+> > > >>>   backtrace:
+> > > >>>     [<000000004c12b1c7>] kmem_cache_alloc+0x1ac/0x2f4
+> > > >>>     [<000000005d23eb4f>] tee_shm_alloc+0x78/0x230
+> > > >>>     [<00000000794dd22c>] optee_handle_rpc+0x60/0x6f0
+> > > >>>     [<00000000d9f7c52d>] optee_do_call_with_arg+0x17c/0x1dc
+> > > >>>     [<00000000c35884da>] optee_open_session+0x128/0x1ec
+> > > >>>     [<000000001748f2ff>] tee_client_open_session+0x28/0x40
+> > > >>>     [<00000000aecb5389>] optee_enumerate_devices+0x84/0x2a0
+> > > >>>     [<000000003df18bf1>] optee_probe+0x674/0x6cc
+> > > >>>     [<000000003a4a534a>] platform_drv_probe+0x54/0xb0
+> > > >>>     [<000000000c51ce7d>] really_probe+0xe4/0x4d0
+> > > >>>     [<000000002f04c865>] driver_probe_device+0x58/0xc0
+> > > >>>     [<00000000b485397d>] device_driver_attach+0xc0/0xd0
+> > > >>>     [<00000000c835f0df>] __driver_attach+0x84/0x124
+> > > >>>     [<000000008e5a429c>] bus_for_each_dev+0x70/0xc0
+> > > >>>     [<000000001735e8a8>] driver_attach+0x24/0x30
+> > > >>>     [<000000006d94b04f>] bus_add_driver+0x104/0x1ec
+> > > >>>
+> > > >>> This is not a memory leak because we pass the share memory pointer to
+> > > >>> secure world and would get it from secure world before releasing it.
+> > > >>
+> > > >>> How about if it's actually a memory leak caused by the secure world?
+> > > >>> An example being secure world just allocates kernel memory via OPTEE_SMC_RPC_FUNC_ALLOC and doesn't free it via OPTEE_SMC_RPC_FUNC_FREE.
+> > > >>
+> > > >>> IMO, we need to cross-check optee-os if it's responsible for leaking kernel memory.
+> > > >>
+> > > >> Hi sumit,
+> > > >>
+> > > >> You mean we need to check whether there is a real memleak,
+> > > >> If being secure world just allocate kernel memory via OPTEE_SMC_PRC_FUNC_ALLOC and until the end, there is no free
+> > > >> It via OPTEE_SMC_PRC_FUNC_FREE, then we should judge it as a memory leak, wo need to judge whether it is caused by secure os?
+> > > >
+> > > > Yes. AFAICT, optee-os should allocate shared memory to communicate
+> > > > with tee-supplicant. So once the communication is done, the underlying
+> > > > shared memory should be freed. I can't think of any scenario where
+> > > > optee-os should keep hold-off shared memory indefinitely.
+> > >
+> > > I believe it can happen when OP-TEE's CFG_PREALLOC_RPC_CACHE is y. See
+> > > the config file [1] and the commit which introduced this config [2].
+> > >
+> > > [1] https://github.com/OP-TEE/optee_os/blob/3.15.0/mk/config.mk#L709
+> > > [2] https://github.com/OP-TEE/optee_os/commit/8887663248ad
+> > >
+> >
+> > It's been a while since OP-TEE caches some shm buffers to prevent
+> > re-allocting them on and on.
+> > OP-TEE does so for 1 shm buffer per "tee threads" OP-TEE has provisioned.
+> > Each thread can cache a shm reference.
+> > Note that used RPCs from optee to linux/u-boot/ree do not require such
+> > message buffer (IMO).
+> >
+> > The main issue is the shm buffer are allocated per optee thread
+> > (thread context assigned to client invocation request when entreing
+> > optee).
+> > Therefore, if an optee thread caches a shm buffer, it makes the caller
+> > tee session to have a shm reference with a refcount held, until Optee
+> > thread releases its cached shm reference.
+> >
+> > There are ugly side effects. Linux must disable the cache to release
+> > all resources.
+> > We recently saw some tee sessions may be left open because of such shm
+> > refcount held.
+> > It can lead to few misbehaviour of the TA service (restarting a
+> > service, releasing a resource)
+> >
+> > Config switch CFG_PREALLOC_RPC_CACHE was introduced [pr4896] to
+> > disable the feature at boot time.
+> > There are means to not use it, or to explicitly enable/disable it at
+> > run time (already used optee smc services for that). Would maybe be a
+> > better default config.
+> > Note this discussion thread ending at his comment [issue1918]:
+> >
+>
+> Thanks etienne for the detailed description and references. Although,
+> we can set CFG_PREALLOC_RPC_CACHE=n by default but it feels like we
+> would miss a valuable optimization.
+>
+> How about we just allocate a shared memory page during the OP-TEE
+> driver probe and share it with optee-os to use for RPC arguments? And
+> later it can be freed during OP-TEE driver removal. This would avoid
+> any refconting of this special memory to be associated with TA
+> sessions.
 
-Yeah, quite strange.
+True. The driver currently invokes OPTEE_SMC_ENABLE_SHM_CACHE
+to start caching some shm allocations. The optee_os part of that command
+could be changed to preallocate the required small rpc message buffer per
+provisioned tee thread.
 
-I will also note that these earlier logs are also red flags, which I 
-have not investigated:
+Existing OPTEE_SMC_DISABLE_SHM_CACHE should behave accordingly.
 
-[87.288239] sas: target proto 0x0 at 500e004aaaaaaa1f:0x10 not handled
-[87.294793] sas: ex 500e004aaaaaaa1f phy16 failed to discover
+etienne
 
-> I do not have an arm host to test. Could it be that the card FW is
-> crashing ?
-
-But the later TMFs seem to succeed, so I doubt it's crashing. I did 
-wonder if it's going into some low-power/idle mode and just not 
-responding, but not sure on that.
-
-> Can you recover from the above ? 
-
-It never really recovers and is always caught up in some error handling.
-
-> Or do you have to power cycle for
-> the HDD to be accessible again ?
-
-Power cycle is necessary to recover as we can't remove the driver when 
-it is in error handling
-
-> 
-> Other possibility may be an IRQ controller issue with the platform ?
-> 
-
-Highly unlikely. I did wonder if the interrupts are properly allocated 
-and requested, and they look ok from /proc/interrupts
-
-I also tried limiting the CPUs we bring up to a single CPU and so that 
-we only use a single MSIx and a single HW queue, and now get this crash:
-
-[7.775168] loop: module loaded
-[7.783226] pm80xx 0000:04:00.0: Adding to iommu group 0
-[7.795787] pm80xx 0000:04:00.0: pm80xx: driver version 0.1.40
-[7.806789] pm80xx 0000:04:00.0: enabling device (0140 -> 0142)
-[7.818910] :: pm8001_pci_alloc  530:Setting link rate to default value
-[8.866618] scsi host0: pm80xx
-[8.879056] pm80xx0:: process_oq  4169:Firmware Fatal error! Regval:0xc0f
-[8.885842] pm80xx0:: print_scratchpad_registers 
-4130:MSGU_SCRATCH_PAD_0: 0x40002000
-[8.893661] pm80xx0:: print_scratchpad_registers 
-4132:MSGU_SCRATCH_PAD_1:0xc0f
-[8.900958] pm80xx0:: print_scratchpad_registers 
-4134:MSGU_SCRATCH_PAD_2: 0x0
-[8.908169] pm80xx0:: print_scratchpad_registers 
-4136:MSGU_SCRATCH_PAD_3: 0x30000000
-[8.915986] pm80xx0:: print_scratchpad_registers 
-4138:MSGU_HOST_SCRATCH_PAD_0: 0x0
-[8.923630] pm80xx0:: print_scratchpad_registers 
-4140:MSGU_HOST_SCRATCH_PAD_1: 0x0
-[8.931274] pm80xx0:: print_scratchpad_registers 
-4142:MSGU_HOST_SCRATCH_PAD_2: 0x0
-[8.938917] pm80xx0:: print_scratchpad_registers 
-4144:MSGU_HOST_SCRATCH_PAD_3: 0x0
-[8.946561] pm80xx0:: print_scratchpad_registers 
-4146:MSGU_HOST_SCRATCH_PAD_4: 0x0
-[8.954205] pm80xx0:: print_scratchpad_registers 
-4148:MSGU_HOST_SCRATCH_PAD_5: 0x0
-[8.961849] pm80xx0:: print_scratchpad_registers 
-4150:MSGU_RSVD_SCRATCH_PAD_0: 0x0
-[8.969493] pm80xx0:: print_scratchpad_registers 
-4152:MSGU_RSVD_SCRATCH_PAD_1: 0x0
-[8.977143] Unable to handle kernel NULL pointer dereference at virtual 
-address 0000000000000018
-[8.994782] Mem abort info:
-[8.997565]   ESR = 0x96000004
-[9.006782]   EC = 0x25: DABT (current EL), IL = 32 bits
-[9.018781]   SET = 0, FnV = 0
-[9.021824]   EA = 0, S1PTW = 0
-[9.030797]   FSC = 0x04: level 0 translation fault
-[9.038794] Data abort info:
-[9.041662]   ISV = 0, ISS = 0x00000004
-[9.050781]   CM = 0, WnR = 0
-[9.053737] [0000000000000018] user address but active_mm is swapper
-[9.070782] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[9.076343] Modules linked in:
-[9.079387] CPU: 0 PID: 20 Comm: kworker/0:2 Not tainted 
-5.16.0-rc4-00002-ge23d68774178-dirty #328
-[9.088333] Hardware name: Huawei D06 /D06, BIOS Hisilicon D06 UEFI RC0 - 
-V1.16.01 03/15/2019
-[9.096844] Workqueue: pm80xx pm8001_work_fn
-[9.101108] pstate: 00400009 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[9.108057] pc : pm8001_work_fn+0x298/0x690
-[9.112229] lr : process_one_work+0x1d0/0x354
-[9.116574] sp : ffff800012d23d50
-[9.119876] x29: ffff800012d23d50 x28: 0000000000000000 x27: 0000000000000000
-[9.127000] x26: ffff8000117e8bc0 x25: ffff8000113aaeb0 x24: ffff00209d4b0000
-[9.134124] x23: ffff0020ad23b280 x22: ffff00209d4b8000 x21: 0000000000000001
-[9.141249] x20: 0000000000000000 x19: 0000000000000038 x18: 0000000000000000
-[9.148373] x17: 4441505f48435441 x16: 5243535f44565352 x15: 000000052ff6b548
-[9.155496] x14: 0000000000000018 x13: 0000000000000018 x12: 0000000000000000
-[9.162620] x11: 0000000000000014 x10: 00000000000009a0 x9 : ffff002086ef6074
-[9.169743] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffff002086ef6074
-[9.176867] x5 : 0000787830386d70 x4 : ffff00209d5e0000 x3 : 0000000000000000
-[9.183990] x2 : ffff00209d5e0038 x1 : ffff800010a20120 x0 : 0000000000000051
-[9.191114] Call trace:
-[9.193547]  pm8001_work_fn+0x298/0x690
-[9.197372]  process_one_work+0x1d0/0x354
-[9.201369]  worker_thread+0x13c/0x470
-[9.205105]  kthread+0x17c/0x190
-[9.208321]  ret_from_fork+0x10/0x20
-[9.211886] Code: 17fffff1 310006bf 54fffde0 f9400c54 (f9400e80)
-[9.217968] ---[ end trace de649a9be2843866 ]---
-[9.339812] pm80xx0:: process_oq  4169:Firmware Fatal error! Regval:0xc0f
-[9.346602] pm80xx0:: print_scratchpad_registers 
-4130:MSGU_SCRATCH_PAD_0: 0x40002000
-[9.354420] pm80xx0:: print_scratchpad_registers 
-4132:MSGU_SCRATCH_PAD_1:0xc0f
-[9.361717] pm80xx0:: print_scratchpad_registers 
-4134:MSGU_SCRATCH_PAD_2: 0x0
-[9.368927] pm80xx0:: print_scratchpad_registers 
-4136:MSGU_SCRATCH_PAD_3: 0x30000000
-[9.376744] pm80xx0:: print_scratchpad_registers 
-4138:MSGU_HOST_SCRATCH_PAD_0: 0x0
-[9.384388] pm80xx0:: print_scratchpad_registers 
-4140:MSGU_HOST_SCRATCH_PAD_1: 0x0
-[9.392032] pm80xx0:: print_scratchpad_registers 
-4142:MSGU_HOST_SCRATCH_PAD_2: 0x0
-[9.399676] pm80xx0:: print_scratchpad_registers 
-4144:MSGU_HOST_SCRATCH_PAD_3: 0x0
-[9.407319] pm80xx0:: print_scratchpad_registers 
-4146:MSGU_HOST_SCRATCH_PAD_4: 0x0
-[9.414963] pm80xx0:: print_scratchpad_registers 
-4148:MSGU_HOST_SCRATCH_PAD_5: 0x0
-[9.422607] pm80xx0:: print_scratchpad_registers 
-4150:MSGU_RSVD_SCRATCH_PAD_0: 0x0
-[9.430251] pm80xx0:: print_scratchpad_registers 
-4152:MSGU_RSVD_SCRATCH_PAD_1: 0x0
-[   10.028906] Freeing initrd memory: 413456K
-
-...
-
-Thanks,
-John
+>
+> -Sumit
+>
+> > Comments are welcome. I may have missed something in the description
+> > (or understanding :).
+> >
+> > [pr4896] https://github.com/OP-TEE/optee_os/pull/4896
+> > [issue1918] https://github.com/OP-TEE/optee_os/issues/1918#issuecomment-968747738
+> >
+> > Best regards,
+> > etienne
+> >
+> >
+> >
+> > > --
+> > > Jerome

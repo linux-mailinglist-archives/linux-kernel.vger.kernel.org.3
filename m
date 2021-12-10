@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF44E470828
+	by mail.lfdr.de (Postfix) with ESMTP id 96067470827
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245144AbhLJSPg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 13:15:36 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:41829 "EHLO
+        id S245134AbhLJSPe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 13:15:34 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:37751 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238186AbhLJSPd (ORCPT
+        by vger.kernel.org with ESMTP id S230284AbhLJSPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Dec 2021 13:15:33 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-503-g7OqnpiqNHCFDHtPMzzPrA-1; Fri, 10 Dec 2021 13:11:52 -0500
-X-MC-Unique: g7OqnpiqNHCFDHtPMzzPrA-1
+ us-mta-600-rlOUTebZNEGmIkV0hRdgSw-1; Fri, 10 Dec 2021 13:11:56 -0500
+X-MC-Unique: rlOUTebZNEGmIkV0hRdgSw-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A9C1E344E2;
-        Fri, 10 Dec 2021 18:11:50 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F2F47801962;
+        Fri, 10 Dec 2021 18:11:54 +0000 (UTC)
 Received: from x1.com (unknown [10.22.16.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CAA1C60CC3;
-        Fri, 10 Dec 2021 18:11:38 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BB876107F;
+        Fri, 10 Dec 2021 18:11:50 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -39,9 +39,11 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: [PATCH V9 00/14] RTLA: An interface for osnoise/timerlat tracers
-Date:   Fri, 10 Dec 2021 19:11:19 +0100
-Message-Id: <cover.1639158831.git.bristot@kernel.org>
+Subject: [PATCH V9 01/14] rtla: Real-Time Linux Analysis tool
+Date:   Fri, 10 Dec 2021 19:11:20 +0100
+Message-Id: <bf9118ed43a09e6c054c9a491cbe7411ad1acd89.1639158831.git.bristot@kernel.org>
+In-Reply-To: <cover.1639158831.git.bristot@kernel.org>
+References: <cover.1639158831.git.bristot@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Authentication-Results: relay.mimecast.com;
@@ -54,162 +56,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rtla(1) is a meta-tool that includes a set of commands that
-aims to analyze the real-time properties of Linux. But instead of
-testing Linux as a black box, rtla leverages kernel tracing
-capabilities to provide precise information about the properties
-and root causes of unexpected results.
+The rtla is a meta-tool that includes a set of commands that aims
+to analyze the real-time properties of Linux. But instead of testing
+Linux as a black box, rtla leverages kernel tracing capabilities to
+provide precise information about the properties and root causes of
+unexpected results.
 
-To start, it presents an interface to the osnoise and timerlat tracers.
-In the future, it will also serve as home to the rtsl [1] and other
-latency/noise tracers.
+rtla --help works and provide information about the available options.
 
-If you just want to run it, you can download the tarball here:
-  - https://bristot.me/files/rtla/tarball/rtla-0.5.tar.bz2
+This is just the "main" and the Makefile, no function yet.
 
-To compile rtla on fedora you need:
-  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git
-  $ cd libtraceevent/
-  $ make
-  $ sudo make install
-  $ cd ..
-  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git
-  $ cd libtracefs/
-  $ make
-  $ sudo make install
-  $ cd ..
-  $ sudo dnf install python3-docutils procps-devel
-  $ cd $rtla_src
-  $ make
-  $ sudo make install
-
-The tracing option (-t) depends some kernel patches that are
-available at [2].
-
-This tool was be discussed at the RT-MC during LPC2021 [3]
-
-[1] rtsl: https://github.com/bristot/rtsl/
-[2] https://lore.kernel.org/lkml/cover.1635533292.git.bristot@kernel.org/
-[3] https://youtu.be/cZUzc0U1jJ4
-
-Changes from V8:
-  - Fixed usage messages (Tao Zhou)
-  - Fixed some return value check on osnoise.c (Tao Zhou)
-  - Properly delete instances when failing to set priorities (Tao Zhou)
-  - Use tracefs helpers to read/write to files on osnoise.c (Steven)
-Changes from V7:
-  - Add README.txt with information about how to compile the tool
-    (Steven)
-  - Use $$($(PKG_CONFIG) --libs libtracefs) to find libtracefs on
-    Makefile (Steven)
-  - Fix *buffer[4096] (using buffer[4096]) on save_trace_to_file()
-    (Steven)
-Changes from v6:
-  - Revisited osnoise option config functions
-  - Properly handles offline CPUs
-  - Some cleanups
-  - Fixed an histogram allocation problem (Tao Zhou)
-  - Revisited open()/read()/write() (Tao Zhou)
-Changes from v5:
-  - Fix retval check in save_trace_to_file() (Tao Zhou)
-  - Fix goto logic in save_trace_to_file() (Tao Zhou)
-  - Removed unused save_trace_pipe_to_file() function
-  - Correctly handle an error on osnoise_set_* functions during
-    "apply config" for all tools (Tao Zhou)
-Changes from v3:
-  - Add cross-compile support (Ahmed S. Darwish)
-  - Move documentation to Documentation/tools/rtla (Jonathan Corbet)
-  - Use .rst format for documentation (Jonathan Corbet)
-  - Use include option from .rst to group common parts of the documentation
-  - Makefile (main and doc) cleanups
-Changes from v2:
-  - Fix the miss conception of the "size" for kernel histograms (Steven/Tom)
-  - Change the --skip-zeros to --with-zeros option as the former is better
-    for humans (and the latter for computers to plot charts).
-  - A lot of checkpatch fixes for the user-space part.
-Changes from v1:
-  - Fixes -t options on osnoise tracers (-t means --trace for all tools now)
-  - Fixes --bucket-size references (not --bucket_size)
-Daniel Bristot de Oliveira (14):
-  rtla: Real-Time Linux Analysis tool
-  rtla: Helper functions for rtla
-  rtla: Add osnoise tool
-  rtla/osnoise: Add osnoise top mode
-  rtla/osnoise: Add the hist mode
-  rtla: Add timerlat tool and timelart top mode
-  rtla/timerlat: Add timerlat hist mode
-  rtla: Add Documentation
-  rtla: Add rtla osnoise man page
-  rtla: Add rtla osnoise top documentation
-  rtla: Add rtla osnoise hist documentation
-  rtla: Add rtla timerlat documentation
-  rtla: Add rtla timerlat top documentation
-  rtla: Add rtla timerlat hist documentation
-
- Documentation/tools/rtla/Makefile             |  41 +
- Documentation/tools/rtla/common_appendix.rst  |  12 +
- .../tools/rtla/common_hist_options.rst        |  23 +
- Documentation/tools/rtla/common_options.rst   |  28 +
- .../tools/rtla/common_osnoise_description.rst |   8 +
- .../tools/rtla/common_osnoise_options.rst     |  17 +
- .../rtla/common_timerlat_description.rst      |  10 +
- .../tools/rtla/common_timerlat_options.rst    |  16 +
- .../tools/rtla/common_top_options.rst         |   3 +
- .../tools/rtla/rtla-osnoise-hist.rst          |  66 ++
- Documentation/tools/rtla/rtla-osnoise-top.rst |  61 ++
- Documentation/tools/rtla/rtla-osnoise.rst     |  59 ++
- .../tools/rtla/rtla-timerlat-hist.rst         | 106 +++
- .../tools/rtla/rtla-timerlat-top.rst          | 145 +++
- Documentation/tools/rtla/rtla-timerlat.rst    |  57 ++
- Documentation/tools/rtla/rtla.rst             |  48 +
- tools/tracing/rtla/Makefile                   | 102 ++
- tools/tracing/rtla/README.txt                 |  36 +
- tools/tracing/rtla/src/osnoise.c              | 875 ++++++++++++++++++
- tools/tracing/rtla/src/osnoise.h              |  91 ++
- tools/tracing/rtla/src/osnoise_hist.c         | 801 ++++++++++++++++
- tools/tracing/rtla/src/osnoise_top.c          | 579 ++++++++++++
- tools/tracing/rtla/src/rtla.c                 |  87 ++
- tools/tracing/rtla/src/timerlat.c             |  72 ++
- tools/tracing/rtla/src/timerlat.h             |   4 +
- tools/tracing/rtla/src/timerlat_hist.c        | 822 ++++++++++++++++
- tools/tracing/rtla/src/timerlat_top.c         | 618 +++++++++++++
- tools/tracing/rtla/src/trace.c                | 192 ++++
- tools/tracing/rtla/src/trace.h                |  27 +
- tools/tracing/rtla/src/utils.c                | 433 +++++++++
- tools/tracing/rtla/src/utils.h                |  56 ++
- 31 files changed, 5495 insertions(+)
- create mode 100644 Documentation/tools/rtla/Makefile
- create mode 100644 Documentation/tools/rtla/common_appendix.rst
- create mode 100644 Documentation/tools/rtla/common_hist_options.rst
- create mode 100644 Documentation/tools/rtla/common_options.rst
- create mode 100644 Documentation/tools/rtla/common_osnoise_description.rst
- create mode 100644 Documentation/tools/rtla/common_osnoise_options.rst
- create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
- create mode 100644 Documentation/tools/rtla/common_timerlat_options.rst
- create mode 100644 Documentation/tools/rtla/common_top_options.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise-top.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise.rst
- create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
- create mode 100644 Documentation/tools/rtla/rtla-timerlat-top.rst
- create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
- create mode 100644 Documentation/tools/rtla/rtla.rst
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Clark Williams <williams@redhat.com>
+Cc: John Kacur <jkacur@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: linux-rt-users@vger.kernel.org
+Cc: linux-trace-devel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+---
+ tools/tracing/rtla/Makefile   | 76 +++++++++++++++++++++++++++++++++++
+ tools/tracing/rtla/README.txt | 36 +++++++++++++++++
+ tools/tracing/rtla/src/rtla.c | 72 +++++++++++++++++++++++++++++++++
+ 3 files changed, 184 insertions(+)
  create mode 100644 tools/tracing/rtla/Makefile
  create mode 100644 tools/tracing/rtla/README.txt
- create mode 100644 tools/tracing/rtla/src/osnoise.c
- create mode 100644 tools/tracing/rtla/src/osnoise.h
- create mode 100644 tools/tracing/rtla/src/osnoise_hist.c
- create mode 100644 tools/tracing/rtla/src/osnoise_top.c
  create mode 100644 tools/tracing/rtla/src/rtla.c
- create mode 100644 tools/tracing/rtla/src/timerlat.c
- create mode 100644 tools/tracing/rtla/src/timerlat.h
- create mode 100644 tools/tracing/rtla/src/timerlat_hist.c
- create mode 100644 tools/tracing/rtla/src/timerlat_top.c
- create mode 100644 tools/tracing/rtla/src/trace.c
- create mode 100644 tools/tracing/rtla/src/trace.h
- create mode 100644 tools/tracing/rtla/src/utils.c
- create mode 100644 tools/tracing/rtla/src/utils.h
 
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+new file mode 100644
+index 000000000000..56b1bdd60c96
+--- /dev/null
++++ b/tools/tracing/rtla/Makefile
+@@ -0,0 +1,76 @@
++NAME	:=	rtla
++VERSION	:=	0.5
++
++# From libtracefs:
++# Makefiles suck: This macro sets a default value of $(2) for the
++# variable named by $(1), unless the variable has been set by
++# environment or command line. This is necessary for CC and AR
++# because make sets default values, so the simpler ?= approach
++# won't work as expected.
++define allow-override
++  $(if $(or $(findstring environment,$(origin $(1))),\
++            $(findstring command line,$(origin $(1)))),,\
++    $(eval $(1) = $(2)))
++endef
++
++# Allow setting CC and AR, or setting CROSS_COMPILE as a prefix.
++$(call allow-override,CC,$(CROSS_COMPILE)gcc)
++$(call allow-override,AR,$(CROSS_COMPILE)ar)
++$(call allow-override,STRIP,$(CROSS_COMPILE)strip)
++$(call allow-override,PKG_CONFIG,pkg-config)
++$(call allow-override,LD_SO_CONF_PATH,/etc/ld.so.conf.d/)
++$(call allow-override,LDCONFIG,ldconfig)
++
++INSTALL	=	install
++FOPTS	:=	-flto=auto -ffat-lto-objects -fexceptions -fstack-protector-strong \
++		-fasynchronous-unwind-tables -fstack-clash-protection
++WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
++
++TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
++
++CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS)
++LDFLAGS	:=	-ggdb
++LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs) -lprocps
++
++SRC	:=	$(wildcard src/*.c)
++HDR	:=	$(wildcard src/*.h)
++OBJ	:=	$(SRC:.c=.o)
++DIRS	:=	src
++FILES	:=	Makefile README.txt
++CEXT	:=	bz2
++TARBALL	:=	$(NAME)-$(VERSION).tar.$(CEXT)
++TAROPTS	:=	-cvjf $(TARBALL)
++BINDIR	:=	/usr/bin
++DATADIR	:=	/usr/share
++DOCDIR	:=	$(DATADIR)/doc
++MANDIR	:=	$(DATADIR)/man
++LICDIR	:=	$(DATADIR)/licenses
++
++.PHONY:	all
++all:	rtla
++
++rtla: $(OBJ)
++	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)
++
++static: $(OBJ)
++	$(CC) -o rtla-static $(LDFLAGS) --static $(OBJ) $(LIBS) -lpthread -ldl
++
++.PHONY: install
++install:
++	$(INSTALL) -d -m 755 $(DESTDIR)$(BINDIR)
++	$(INSTALL) rtla -m 755 $(DESTDIR)$(BINDIR)
++	$(STRIP) $(DESTDIR)$(BINDIR)/rtla
++
++.PHONY: clean tarball
++clean:
++	@test ! -f rtla || rm rtla
++	@test ! -f rtla-static || rm rtla-static
++	@test ! -f src/rtla.o || rm src/rtla.o
++	@test ! -f $(TARBALL) || rm -f $(TARBALL)
++	@rm -rf *~ $(OBJ) *.tar.$(CEXT)
++
++tarball:  clean
++	rm -rf $(NAME)-$(VERSION) && mkdir $(NAME)-$(VERSION)
++	cp -r $(DIRS) $(FILES) $(NAME)-$(VERSION)
++	tar $(TAROPTS) --exclude='*~' $(NAME)-$(VERSION)
++	rm -rf $(NAME)-$(VERSION)
+diff --git a/tools/tracing/rtla/README.txt b/tools/tracing/rtla/README.txt
+new file mode 100644
+index 000000000000..6c88446f7e74
+--- /dev/null
++++ b/tools/tracing/rtla/README.txt
+@@ -0,0 +1,36 @@
++RTLA: Real-Time Linux Analysis tools
++
++The rtla is a meta-tool that includes a set of commands that
++aims to analyze the real-time properties of Linux. But, instead of
++testing Linux as a black box, rtla leverages kernel tracing
++capabilities to provide precise information about the properties
++and root causes of unexpected results.
++
++Installing RTLA
++
++RTLA depends on some libraries and tools. More precisely, it depends on the
++following libraries:
++
++ - libtracefs
++ - libtraceevent
++ - procps
++
++It also depends on python3-docutils to compile man pages.
++
++For development, we suggest the following steps for compiling rtla:
++
++  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git
++  $ cd libtraceevent/
++  $ make
++  $ sudo make install
++  $ cd ..
++  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git
++  $ cd libtracefs/
++  $ make
++  $ sudo make install
++  $ cd ..
++  $ cd $rtla_src
++  $ make
++  $ sudo make install
++
++For further information, please refer to the rtla man page.
+diff --git a/tools/tracing/rtla/src/rtla.c b/tools/tracing/rtla/src/rtla.c
+new file mode 100644
+index 000000000000..5ae2664ed47d
+--- /dev/null
++++ b/tools/tracing/rtla/src/rtla.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
++ */
++
++#include <getopt.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stdio.h>
++
++/*
++ * rtla_usage - print rtla usage
++ */
++static void rtla_usage(void)
++{
++	int i;
++
++	static const char *msg[] = {
++		"",
++		"rtla version " VERSION,
++		"",
++		"  usage: rtla COMMAND ...",
++		"",
++		"  commands:",
++		"",
++		NULL,
++	};
++
++	for (i = 0; msg[i]; i++)
++		fprintf(stderr, "%s\n", msg[i]);
++	exit(1);
++}
++
++/*
++ * run_command - try to run a rtla tool command
++ *
++ * It returns 0 if it fails. The tool's main will generally not
++ * return as they should call exit().
++ */
++int run_command(int argc, char **argv, int start_position)
++{
++	return 0;
++}
++
++int main(int argc, char *argv[])
++{
++	int retval;
++
++	/* is it an alias? */
++	retval = run_command(argc, argv, 0);
++	if (retval)
++		exit(0);
++
++	if (argc < 2)
++		goto usage;
++
++	if (strcmp(argv[1], "-h") == 0) {
++		rtla_usage();
++		exit(0);
++	} else if (strcmp(argv[1], "--help") == 0) {
++		rtla_usage();
++		exit(0);
++	}
++
++	retval = run_command(argc, argv, 1);
++	if (retval)
++		exit(0);
++
++usage:
++	rtla_usage();
++	exit(1);
++}
 -- 
 2.31.1
 

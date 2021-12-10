@@ -2,87 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64037470C2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A933470C27
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344309AbhLJVG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243297AbhLJVG1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:06:27 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BC4C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:02:52 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id y17-20020a2586d1000000b005f6596e8760so18446901ybm.17
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:02:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=zt4KB3dafqgTHRLA9U//R+IbzCQEPW5t7yq7SGqr+Xo=;
-        b=GfezHHA2+faKrb9R8Fqmri7nt/RbHNc54wPwo5bzmu6kHVIQtqav3NWqKu9Hl9GbRO
-         b7W9bohr0fEBqFITWZDDhiyg6rqynnQztLk8au98QHL7FjwBXekPqUMrrHM+Ma+FyAb9
-         uiFL4OujUj4h2vh3j1rYMThMaeM0SOVJ/KUXOFnjlKJa2V30X1mPXS0+CQncWdA1N4so
-         uuXjjPQn5D9N/E3Yf0PYFQdFQwTbmmrVOvhROtXddYQh0jr3/Wl+feBhUrwXbER8X/cA
-         aSPMjLdELtUtvXZInUZj38Ht4pZaPS+Opy4+Py4GH/kyIe+KKzv+SiLtjX8ApVtjWZBP
-         4Pmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=zt4KB3dafqgTHRLA9U//R+IbzCQEPW5t7yq7SGqr+Xo=;
-        b=5SyYSma548t0l0fwASeal/AnSnnvCHlS61Lh4yKBlyi8TtNnJ5FkmW8wSlCtxfCwzv
-         gGVyojHRfoAqD0WQ2JLSlhF09oj9EZMYg2Ld6+J63vqRJY3f5u248feHrUWlceNgchW+
-         zxs7A0tGhqGvyio/e/Ny7PCECccOhNQ/hA3bA9PNL3XnqCCB9FxM4mJlPNZCe2vvmyBV
-         t52FOZg+Fn8Ry+RWd54YrAmQH2XO4zHthGfOCqyOj17TDdbtp+Hrn05w9zUuluM1xwX3
-         NJYwqtlo0xMYwL3FMsnzPpdslV5B/QUTQpagC/qoAEOSCP3SGcnQLAkm2yAFSX0DwdaB
-         ePgQ==
-X-Gm-Message-State: AOAM5300Zx7/CUbcGQW+01troxsK6GErsEj2UIgsNzpcQOuqjCD3bDLa
-        OgaCZ06gkGFBm7tDqcnW8OTsWZ8x7Xh8ImTUB/UZKD9h19LwtAVAtOr3vg+51Wy/uUASkNxlwte
-        oZyWW9AAkmCwK81N14Bsc2bDCD95QJH2yvOZWcTXNLK/eMBemFuPdGO5np0XvXMma10e6QK7t
-X-Google-Smtp-Source: ABdhPJwuEb+MghLJgtscOay7YvBpInPhrnq4pIBNGrmRFmsty8+eScHlz2JNpgg2GaJF/ciwkfLBFnhU0jGp
-X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:7416:17a6:6678:d4d5])
- (user=eranian job=sendgmr) by 2002:a25:bf8d:: with SMTP id
- l13mr17039947ybk.713.1639170171401; Fri, 10 Dec 2021 13:02:51 -0800 (PST)
-Date:   Fri, 10 Dec 2021 13:02:17 -0800
-In-Reply-To: <20211210210229.2991238-1-eranian@google.com>
-Message-Id: <20211210210229.2991238-3-eranian@google.com>
-Mime-Version: 1.0
-References: <20211210210229.2991238-1-eranian@google.com>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v4 02/14] x86/cpufeatures: add AMD Fam19h Branch Sampling feature
-From:   Stephane Eranian <eranian@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
-        jolsa@redhat.com, songliubraving@fb.com, mpe@ellerman.id.au,
-        maddy@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1344287AbhLJVFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:05:55 -0500
+Received: from ms.lwn.net ([45.79.88.28]:53646 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243297AbhLJVFy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 16:05:54 -0500
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 4580D2CC;
+        Fri, 10 Dec 2021 21:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4580D2CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1639170139; bh=GvSX/ZCZPs8U5XQqMREhp8iTFJQHrxzaFtmJBzs3WBk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=RnAiA/uyNENHqLJBfKZOsInq156XxL6m9FQWmUBz4EOHEm9nh/h0OGam7Wq9aOYzl
+         tspnUcE5J0UWOHdLMCAqTfa4UYf1DPIM0sQyh+7T1x/Fo4xHnEo+5M48zgUgxMZpZa
+         uDMunCWWORl4bEBid740T/CEXeZqbA04lwO/EHepb7Lolg26fNmtkg7knc5o8PMOBn
+         HxZKAFaXoCLEkH+xkOhrVYv1RR600+7mak2a2/nncWlXYtmRWBTl3f0xk/0ZvwzG/l
+         1J7/GtOs1pZJQMwp0STYT66J+RTObiA9hsl9jDw+VRDyM1U4BpcKUuXpCAddpAzN8T
+         ezL0nD0JqWX6w==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs: update self-protection __ro_after_init status
+In-Reply-To: <20211208164051.8783-1-skhan@linuxfoundation.org>
+References: <20211208164051.8783-1-skhan@linuxfoundation.org>
+Date:   Fri, 10 Dec 2021 14:02:18 -0700
+Message-ID: <87r1akqilh.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a cpu feature for AMD Fam19h Branch Sampling feature as bit
-31 of EBX on CPUID leaf function 0x80000008.
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
-Signed-off-by: Stephane Eranian <eranian@google.com>
----
- arch/x86/include/asm/cpufeatures.h | 1 +
- 1 file changed, 1 insertion(+)
+> __ro_after_init is no longer new and under development. Update the
+> document to reflect the correct status.
+>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  Documentation/security/self-protection.rst | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/Documentation/security/self-protection.rst b/Documentation/security/self-protection.rst
+> index f584fb74b4ff..910668e665cb 100644
+> --- a/Documentation/security/self-protection.rst
+> +++ b/Documentation/security/self-protection.rst
+> @@ -81,8 +81,7 @@ of the kernel, gaining the protection of the kernel's strict memory
+>  permissions as described above.
+>  
+>  For variables that are initialized once at ``__init`` time, these can
+> -be marked with the (new and under development) ``__ro_after_init``
+> -attribute.
+> +be marked with the ``__ro_after_init`` attribute.
+>  
+Applied, thanks.
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index d5b5f2ab87a0..e71443f93f04 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -315,6 +315,7 @@
- #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
- #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
- #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
-+#define X86_FEATURE_AMD_BRS		(13*32+31) /* Branch Sampling available */
- 
- /* Thermal and Power Management Leaf, CPUID level 0x00000006 (EAX), word 14 */
- #define X86_FEATURE_DTHERM		(14*32+ 0) /* Digital Thermal Sensor */
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+jon

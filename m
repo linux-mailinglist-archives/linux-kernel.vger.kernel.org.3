@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E2646FD75
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4841346FD88
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239094AbhLJJP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:15:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18386 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229993AbhLJJP6 (ORCPT
+        id S236543AbhLJJU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229605AbhLJJU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:15:58 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BA6wdaL040191;
-        Fri, 10 Dec 2021 09:12:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=BsXP9UVCLcAFtZkosEH2P+zvjgKhRwjP/47j/E1kryc=;
- b=dQRqDCTdAn6niEA9VTfkjJ2jYMOymvFIKPNmcd0gHT2hlldlPkr1Ejs0K5TLRyDjugR5
- YEy7t10CdBvx5o7V7p0+cbxN4ZpO+7rGfiA83MM2d6+/9ub4YNRygdpUYlVgg0hZdyIU
- 2/oA1COIoNpdKVrG6U8drQLjjeZn8TR0ln8mBlN9cLiPLYw1dQFHOlvN+Jxz7LNOMxuS
- wesevpnTYD5KvvC8bBi1b5Y7i+cwDkfSYri5QqwGhxoWewHY1OUspz4qABtcAQesFyt7
- qhHrva9b1hgR0Csb/7GA++6Kwbtw2FpEVmIhPFMdCXVAvo5pi+G2UFbQFAeyQq6mRzr7 hQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv23njg4r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 09:12:06 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BA904AU003331;
-        Fri, 10 Dec 2021 09:12:06 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv23njg45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 09:12:05 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BA9BYUH031424;
-        Fri, 10 Dec 2021 09:12:03 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3cqyybh8w9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 09:12:03 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BA9C0HC27984320
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 09:12:00 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55BC1A405B;
-        Fri, 10 Dec 2021 09:12:00 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7B0FA4066;
-        Fri, 10 Dec 2021 09:11:56 +0000 (GMT)
-Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.86.88])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 09:11:56 +0000 (GMT)
-Subject: Re: [PATCH] tools/perf: remove unneeded variable make code cleaner
-To:     cgel.zte@gmail.com, peterz@infradead.org
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, chi.minghao@zte.com.cn,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cm>
-References: <20211210022911.424512-1-chi.minghao@zte.com.cn>
-From:   kajoljain <kjain@linux.ibm.com>
-Message-ID: <708b524c-2af5-98a1-f56a-4bb4f268de7a@linux.ibm.com>
-Date:   Fri, 10 Dec 2021 14:41:55 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 10 Dec 2021 04:20:28 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986F8C061746;
+        Fri, 10 Dec 2021 01:16:53 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1mvc1K-0001df-T4; Fri, 10 Dec 2021 10:16:50 +0100
+Message-ID: <e3e7147e-dd4c-59a9-5dba-5ddcd2e3130f@leemhuis.info>
+Date:   Fri, 10 Dec 2021 10:16:50 +0100
 MIME-Version: 1.0
-In-Reply-To: <20211210022911.424512-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6ZWxi_GHZuSkWBuqrymKYVn23-hj7AyD
-X-Proofpoint-GUID: 4SEUWh7V6MbxbA7xixaRJdpt6tYvgGVW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_03,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- mlxscore=0 priorityscore=1501 phishscore=0 bulkscore=0 malwarescore=0
- impostorscore=0 clxscore=1011 mlxlogscore=999 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100049
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-BS
+To:     "An, Tedd" <tedd.an@intel.com>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "andypalmadi@gmail.com" <andypalmadi@gmail.com>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <CAJvGw+AJ5dHSb50RtJHnjbhMVQa+rJgYznFV4t-iaO0qx+W-jw@mail.gmail.com>
+ <fbc36e8ebdd9222f84322d54d9114f58c225547e.camel@intel.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [REGRESSION] Bluetooth not working on 5.15+ since "Bluetooth:
+ Move shutdown callback before flushing tx and rx queue"
+In-Reply-To: <fbc36e8ebdd9222f84322d54d9114f58c225547e.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639127813;281fdd00;
+X-HE-SMSGID: 1mvc1K-0001df-T4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, this is your Linux kernel regression tracker speaking.
 
+On 10.12.21 02:10, An, Tedd wrote:
+> On Fri, 2021-12-10 at 01:36 +0200, coldolt wrote:
+>> After a restart, bluetooth doesn't work since commit 0ea53674d07f
+>> "Bluetooth: Move shutdown callback before flushing tx and rx queue"
+>>
+>> bluetoothctl doesn't list any controllers and I get the following in
+>> dmesg | grep -i bluetooth
+>>
+>> [    2.634812] Bluetooth: Core ver 2.22
+>> [    2.634843] NET: Registered PF_BLUETOOTH protocol family
+>> [    2.634845] Bluetooth: HCI device and connection manager initialized
+>> [    2.634850] Bluetooth: HCI socket layer initialized
+>> [    2.634853] Bluetooth: L2CAP socket layer initialized
+>> [    2.634858] Bluetooth: SCO socket layer initialized
+>> [    4.077788] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+>> [    4.077794] Bluetooth: BNEP filters: protocol multicast
+>> [    4.077799] Bluetooth: BNEP socket layer initialized
+>> [    4.078219] random: bluetoothd: uninitialized urandom read (4 bytes read)
+>> [    4.852835] Bluetooth: hci0: Reading Intel version command failed (-110)
+>> [    4.852838] Bluetooth: hci0: command 0xfc05 tx timeout
+>>
+>> However, it works after a cold start or after putting the computer to sleep.
+>>
+>> Before 83f2dafe2a62 "Bluetooth: btintel: Refactoring setup routine for
+>> legacy ROM sku", it always works after a restart, but from that commit
+>> up until before 0ea53674d07f it either works or doesn't work after a
+>> restart depending on if before restart it was working or not, meaning
+>> it stays working or stays not working.
+>>
+>> Also on the first restart from before 83f2dafe2a62 into 0ea53674d07f
+>> or later it works, but then restarting again into 0ea53674d07f or
+>> later it no longer works. So it seems that 0ea53674d07f and later puts
+>> the bluetooth in a nonworking state if you restart from it, but before
+>> 83f2dafe2a62 it puts it back into a working state at startup, and in
+>> between it doesn't do either, i.e. it stays the way it was.
+>>
+>> I have a Dell Latitude E5550 laptop with an Intel 7265 wifi/bluetooth
+>> card REV=0x210 firmware version 29.4063824552.0 7265D-29. I'm on Arch
+>> Linux, the problem is still there on 5.16-rc4.
+>>
+>> Here is a thread on the Arch Linux forums with several people with the
+>> same problem, for some of them it got fixed with a kernel update or by
+>> reloading modules, but not for everybody, including me
+>> https://bbs.archlinux.org/viewtopic.php?id=271459
+>>
+>> #regzbot introduced 0ea53674d07f
 
-On 12/10/21 7:59 AM, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> return value form directly instead of
-> taking this in another redundant variable.
+Many thx for directly getting regzbot involved! :-D
 
-Can we reword the commit message stating what and
-from where we are removing it. Its not too clear.
-Other than that patch looks good to me.
+> This issue is under investigation to find the root cause and proper solution.
 
-Reviewed-By: Kajol Jain<kjain@linux.ibm.com>
+Only internally? Or are there any other related public discussions that
+are relevant to this and thus good to be aware of?
 
-Thanks,
-Kajol Jain
+> The downloaded firmware breaks the behavior though, we need to investigate
+> further to see if it can be fixed in firmware or fix in the driver.
 
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cm>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  tools/perf/util/callchain.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
-> index 8e2777133bd9..ed30da7e14ab 100644
-> --- a/tools/perf/util/callchain.c
-> +++ b/tools/perf/util/callchain.c
-> @@ -1301,24 +1301,16 @@ int callchain_branch_counts(struct callchain_root *root,
->  
->  static int count_pri64_printf(int idx, const char *str, u64 value, char *bf, int bfsize)
->  {
-> -	int printed;
-> -
-> -	printed = scnprintf(bf, bfsize, "%s%s:%" PRId64 "", (idx) ? " " : " (", str, value);
-> -
-> -	return printed;
-> +	return scnprintf(bf, bfsize, "%s%s:%" PRId64 "", (idx) ? " " : " (", str, value);
->  }
->  
->  static int count_float_printf(int idx, const char *str, float value,
->  			      char *bf, int bfsize, float threshold)
->  {
-> -	int printed;
-> -
->  	if (threshold != 0.0 && value < threshold)
->  		return 0;
->  
-> -	printed = scnprintf(bf, bfsize, "%s%s:%.1f%%", (idx) ? " " : " (", str, value);
-> -
-> -	return printed;
-> +	return scnprintf(bf, bfsize, "%s%s:%.1f%%", (idx) ? " " : " (", str, value);
->  }
->  
->  static int branch_to_str(char *bf, int bfsize,
-> 
+The answer from my point is simple: it needs to be fixed in the kernel,
+not just in the firmware, otherwise people that update the kernel
+without updating the firmware at the same time will run into a
+regression -- and that is not acceptable by kernel development standards.
+
+Ciao, Thorsten
+
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply. That's in everyone's interest, as
+what I wrote above might be misleading to everyone reading this; any
+suggestion I gave they thus might sent someone reading this down the
+wrong rabbit hole, which none of us wants.
+
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.

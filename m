@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30867470C1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13AC470C1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243161AbhLJVAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S243262AbhLJVCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239666AbhLJVAn (ORCPT
+        with ESMTP id S238910AbhLJVCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:00:43 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FC7C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 12:57:07 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so10837616otg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 12:57:07 -0800 (PST)
+        Fri, 10 Dec 2021 16:02:08 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EACC061746;
+        Fri, 10 Dec 2021 12:58:32 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id o4so14874911oia.10;
+        Fri, 10 Dec 2021 12:58:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wobD4Jbzi5ufjdCOWA/nVYk8n1ISd9Z61aPS0wQf5zE=;
-        b=JdY2WDN2p461FkGvsxWWgssB5bJvFhZYhUHH63DdzZaOS/BF8ZQTp0ZRohildNIGfX
-         alWei8hF/dOiYXd1Z9hS5CEigliRsXzQO8xzs+kxd+ajDHK3eNMRM87q4Ju4rj6fd/gv
-         lYsbndjN7dSsbgrIBFXGjMTA4PdACS//XRVN3ZbYkoy1n3FT5jlT/d0jDR4IQCv9A+Uy
-         KByWYGgTkvVMxsGsOL2XYtQWqLYAPwOihXIJCui3XCZ95CJhgQCB1P4mw+mNY823BKGt
-         0I8P5dypvRWs2TbprRkp1owmaruN+NMkRC5sjMK6j3MfLzBbi2qubfSIZVBUZhE9ccKN
-         zL7A==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jhY+dourX5ruR9IyecXR72j1TU2NMOd+79sNBJUZl78=;
+        b=QmDJFUD5gpJVROtjphiTGTHzLhQvOPP+RjquTBBO0O90mmEq+hnfmwcuBrCTPPMxbz
+         RnBSZ5kxrIugWoEc7v1PPUHb3d3HFWbnv3scMN0IOONniG0CI1tJ7iIN4jQnUiRYJ/da
+         cJYTQ9gbV9kNYvwn2WAHvDC0WWtAdtzfbxQCyD7d+QGXEDrWV3zkNxJnM+L2yyHlYbj/
+         k8A1G1DmH13aAcxRTPz3BBzCQEkkFhH1hxWh6CTWGOvpiZ48RGX09qiZeCGqOm6yWMXG
+         f41mFgdxaMYXHF5G4FpnkdSAWxsgCfe/3lyaTlpE2S2hqcrAJTxZiWX2MH3+f358vT//
+         gPRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=wobD4Jbzi5ufjdCOWA/nVYk8n1ISd9Z61aPS0wQf5zE=;
-        b=5BznyHjcwhcSLlgAfgYpwQrJL23xM+t3Ot8EkVXozbUpT1g6+xprOVfFmKDs1pDQtp
-         TIILDhp0TmtMP9Evsa2UmDkW1QQe5mZKvGO3EqmejPNlP1zsmnC0uBlibVfgqYyq+DW9
-         xscUwgWQQdvRtCMBbkHM12f9F0o17EWbReqhQXvB5IiWuNgrgUc4Pvct13OSv2v9wuyj
-         hr/Bm7gzAlDtvgFUS58RbNRFqGh0SFhd6/cOkjHwhOZrXbIgKOozOqUdn7TEeuK3PRS7
-         pmJXZ33s5glXPRJ63QiNu5vaPBHAMvjA7W6eUAZoYV1UbHBGZ88uza2PgdM5iUsnOg8X
-         1EPQ==
-X-Gm-Message-State: AOAM531zeLRYQpzCh3A+bXuKrDndTY1nP/Rl4vRnDu+iS1LI+6zLSJe3
-        Ot7tzdgmqTRm91FYgbRTwiE=
-X-Google-Smtp-Source: ABdhPJwjZrKA3qk3BYYk+5CCrYVxJPalsMFrhHqeEmEj9Q654spZxrRQ5lvqR74363+dwnEBfK8Nyg==
-X-Received: by 2002:a05:6830:314b:: with SMTP id c11mr12958654ots.224.1639169827221;
-        Fri, 10 Dec 2021 12:57:07 -0800 (PST)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jhY+dourX5ruR9IyecXR72j1TU2NMOd+79sNBJUZl78=;
+        b=MfD4zRAacp5p26/nfwvuXe7XQsAgxgXn2ZUM9Hqe35WOqodJc2i9B05y/IAXAjvauP
+         RWOyln+OzabcxVReFSqC4gvWJQt8GL32svCRo/DkGbg9XEwBamq03OOK0aLqrWg9qUXx
+         XkRsyLjgPyIL0lb2GDwkzFwlSdKKhL7A3QkyErWiC0gOPRKttPalMhsq8nDru5aQCpmW
+         RpLxA/vYCIciFdmptE5qwELrHvaNhFS1EHTZSJAkN1CcWbs/Wz9nlqhy2CbK/KvvUoEU
+         /7twahZMAHwrI45hqp4WBZsCFIzKhS/ytG83DJmgiSJGjQvP7KVuzGVh6ix+bYX8c+TG
+         N2Tg==
+X-Gm-Message-State: AOAM530lwQOAiLspJDSrm/NSD8OuOWtGgvky3SdH7XECz0C/IPOq2pQg
+        Suw+JWbu8SmGFMgKvHYVsX9dvMo+xl0=
+X-Google-Smtp-Source: ABdhPJwS24r3ZrF1dV13Za2VT2sBfyu2qj5BbnBJI0rtm7x2ZYb3QPIAU6vSAc6V1EXr1txgs27FmQ==
+X-Received: by 2002:a05:6808:3d2:: with SMTP id o18mr14689493oie.14.1639169911905;
+        Fri, 10 Dec 2021 12:58:31 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t13sm926128oiw.30.2021.12.10.12.57.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 12:57:06 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id o2sm1037365oik.11.2021.12.10.12.58.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 12:58:31 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] hwmon: (nct6775) add support for TSI temperature
+ registers
+To:     Zev Weiss <zev@bewilderbeest.net>, linux-hwmon@vger.kernel.org
+Cc:     Renze Nicolai <renze@rnplus.nl>, Jean Delvare <jdelvare@suse.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Bernhard Seibold <mail@bernhard-seibold.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        linux-kernel@vger.kernel.org
+References: <20211110231440.17309-1-zev@bewilderbeest.net>
+ <YbMM63VKYBTmZYiX@hatter.bewilderbeest.net>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Tomasz Figa <tfiga@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH] iommu/mediatek: Validate number of phandles associated with "mediatek,larbs"
-Date:   Fri, 10 Dec 2021 12:57:04 -0800
-Message-Id: <20211210205704.1664928-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+Message-ID: <50008074-7dbf-2521-8e75-caf97a85b38e@roeck-us.net>
+Date:   Fri, 10 Dec 2021 12:58:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YbMM63VKYBTmZYiX@hatter.bewilderbeest.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit baf94e6ebff9 ("iommu/mediatek: Add device link for smi-common
-and m4u"), the driver assumes that at least one phandle associated with
-"mediatek,larbs" exists. If that is not the case, for example if reason
-"mediatek,larbs" is provided as boolean property, the code will use an
-uninitialized pointer and may crash. To fix the problem, ensure that the
-number of phandles associated with "mediatek,larbs" is at least 1 and
-bail out immediately if that is not the case.
+On 12/10/21 12:16 AM, Zev Weiss wrote:
+> On Wed, Nov 10, 2021 at 03:14:39PM PST, Zev Weiss wrote:
+>> These registers report CPU temperatures (and, depending on the system,
+>> sometimes chipset temperatures) via the TSI interface on AMD systems.
+>> They're distinct from most of the other Super-IO temperature readings
+>> (CPUTIN, SYSTIN, etc.) in that they're not a selectable source for
+>> monitoring and are in a different (higher resolution) format, but can
+>> still provide useful temperature data.
+>>
+>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> Tested-by: Renze Nicolai <renze@rnplus.nl>
+>> ---
+>>
+>> This patch has been tested on NCT6779 and NCT6798[1] hardware on
+>> (respectively) ASRock Rack ROMED8HM3 and X570D4U boards, and seems to
+>> work as expected; the implementation for the other chips supported by
+>> the driver is purely based on the datasheets and has not been tested
+>> (for lack of available hardware).
+>>
+>> [1] Or at least, its chip ID registers identify it as an NCT6798 and
+>> it seems to behave consistently with that, though it's actually
+>> physically labeled as an NCT6796.
+>>
+>> drivers/hwmon/nct6775.c | 136 ++++++++++++++++++++++++++++++++++++++--
+>> 1 file changed, 130 insertions(+), 6 deletions(-)
+>>
+> 
+> Ping...any thoughts/feedback on this patch?
+> 
 
-Cc: Yong Wu <yong.wu@mediatek.com>
-Cc: Tomasz Figa <tfiga@chromium.org>
-Fixes: baf94e6ebff9 ("iommu/mediatek: Add device link for smi-common and m4u")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/iommu/mtk_iommu.c | 2 ++
- 1 file changed, 2 insertions(+)
+I don't want to apply the patch without testing it first, and I did
+not find the time to do that.
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 25b834104790..0bbe32d0a2a6 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -828,6 +828,8 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 					     "mediatek,larbs", NULL);
- 	if (larb_nr < 0)
- 		return larb_nr;
-+	if (larb_nr == 0)
-+		return -EINVAL;
- 
- 	for (i = 0; i < larb_nr; i++) {
- 		u32 id;
--- 
-2.33.0
+Guenter
 

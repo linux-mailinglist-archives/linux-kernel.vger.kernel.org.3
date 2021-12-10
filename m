@@ -2,157 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8914700DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A794700E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241166AbhLJMpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S241191AbhLJMpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235838AbhLJMpf (ORCPT
+        with ESMTP id S241211AbhLJMpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:45:35 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C5DC061746;
-        Fri, 10 Dec 2021 04:42:00 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w1so29385322edc.6;
-        Fri, 10 Dec 2021 04:42:00 -0800 (PST)
+        Fri, 10 Dec 2021 07:45:44 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C96C061A72
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:42:06 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id a24so7875234qvb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:42:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e+3kBKYd0gs8YdT/Y0LV1C8OqhIxbxJP+Wplk4g6xBE=;
-        b=cO6r/sVyNXoUzeji7uong2FcLYTZxKa5aNR6uGV6MjIc0UprO3UlEijIrStbVSR0tj
-         u1eY9j6/B/+8DWng0IzeutmNQIULYQqWh5296yK6iANqRhFkgaVpb7lfp2iof5gIpYBD
-         ptX9BEwcB9C44B5cEEwwsNXwyN0HKGmdU2YV9d6iATkG6xZ5FJKb/zECZVo553UETtgN
-         mbz9HIb67AFkS2a+8wp1t+SXhUY8BaMH8yPnm0DebD8zLb/QXJS7kxvz/9JPuTACTgUt
-         5FrxJ8/dHCwI+YSRDr0Jp3Q8LnW7s9FP9FCA/nUYFBqY2PVy6jFcEbtLzhCllt6LFo9A
-         2U1w==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=eO1oR3bssJVHG9Y26Y6bMlgt2qf5AyUrhg5Krs2dEgs=;
+        b=nDHGUjCVp/Nzed1y5hlgRbG1rB1VpqFejneQkFUgnd/dOKi9xhgwHQdeHAU7UDO7dL
+         LrYc4w9gGDZHDdSVQdmKeccT3bIBJv7XQs872y9Y9XmBMpsEqHghVBMYh1Jti+XjO52O
+         5oG93oP6lP3YQYxXNywJisYGEi+hLH2uCUqTDaIh/Q1JWkkeuNkYpct45+7o7lGV0wEW
+         xOqVnUOjCMIJRJDI3rkolyOSf0l2vFrO32O8YRFCag4oY1wM7wZGDFAM59KpogZqZPpm
+         Iwzd5dUmyO/Y3bq4AshpPEOuX7z2kNyU7O/xsL9Dfv6wYok7wZgOUM+bfh0yRBCNlwSa
+         QzrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e+3kBKYd0gs8YdT/Y0LV1C8OqhIxbxJP+Wplk4g6xBE=;
-        b=aJpTYQGaNyebrI4nqnjHTOrntdyASkSCw6gkjUWHEEN7HUqE2T86w8QS5sm13qFBCm
-         +qdZu7NMgsiazKpsdtlJfzIhWpED2xzmhU7b7gUUqQ04H6Hkd8u2TM/0k3Nzk+I4a6XT
-         PQ0XE4RUtOcS1tPuyg1fK9qBzcMCjQLs8vAW7/l/rGaVCHm2taZ/v1kqqcWEJMLJ3JG8
-         7ECekHNt53/MxTujApgSyqOc7/7X+o+IQhD+dIo+4QWZP2moOS2ORkx3LwOk6jdFlB4O
-         hFzUyYb2VhmsfYYwQVYMKzBSqEc5FJni/BMGF8t+9PGJF3oHAPLEuMXjNBO1d+16+mud
-         o8+g==
-X-Gm-Message-State: AOAM532qcO5iEVqifxAGorxDm36B6Lv1PQNkdeDh0NyfgyUziw7Ma5OD
-        WMIQWo9sDx6yfbcRbvM2Me2XLeN9UV8=
-X-Google-Smtp-Source: ABdhPJxFH9UXDm/WjBpC0VjnpTeUtlGTtiT3mJa7S2K8w5HUCflcNaSGfIfUOMtaGnrY+zVJuWQuJQ==
-X-Received: by 2002:a05:6402:254f:: with SMTP id l15mr36668875edb.12.1639140118979;
-        Fri, 10 Dec 2021 04:41:58 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id g15sm1440029ejt.10.2021.12.10.04.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 04:41:58 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <c94b3aec-981e-8557-ba29-0094b075b8e4@redhat.com>
-Date:   Fri, 10 Dec 2021 13:41:56 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=eO1oR3bssJVHG9Y26Y6bMlgt2qf5AyUrhg5Krs2dEgs=;
+        b=0r8URup4a9J1dtaRbhx0C4JAXIFNBy2gajJrh//Jfv7uxbCPGapXXC6EMj8iWXXUPI
+         zrIvYVK7Iu3csHaAegUsMymSQmXWmQfTR+CWIIhtk3aeTcpLo7ViqQMrn3Q7zykBOGyU
+         egyoCVVt4OVqagapX7mNUKqkIY2kC0cIjtOhU77S6tnUiQ4zOKzPkqnXenOVZK5RrCtz
+         8+r0jDaCuG8RhlLhweTBYVSnJIVS5dX6CGrRrem+2NyveYZ2hyPu8c7sFylfB8nlx+vZ
+         0FQajmQNYiRB8ZyHvdpolo3b6dZwIR2IWtzeJP9eTsWpt9rcdfzGGjX9mwisaGjG7pFX
+         WgmQ==
+X-Gm-Message-State: AOAM530o1JY2VvMid1AoNkHxEtCapwC6J4GlzMQFbI2t0IUlDhkE1Xb1
+        C0mOCvo7REmX8jJbhCZykV1Eig==
+X-Google-Smtp-Source: ABdhPJzRWU9mGRPVsRFVZCG14NYr/la8f9ijUEtK7ktXons/NVCP2JFtcdHPZxBHFIA6Sx/+qJ1MWA==
+X-Received: by 2002:a0c:f6c5:: with SMTP id d5mr24246637qvo.111.1639140125710;
+        Fri, 10 Dec 2021 04:42:05 -0800 (PST)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id n6sm1766301qtx.88.2021.12.10.04.42.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 04:42:05 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1mvfDw-001eiM-2r; Fri, 10 Dec 2021 08:42:04 -0400
+Date:   Fri, 10 Dec 2021 08:42:04 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Doug Ledford <dledford@redhat.com>,
+        Jianxin Xiong <jianxin.xiong@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Sean Hefty <sean.hefty@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>,
+        Tomohito Esaki <etom@igel.co.jp>
+Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
+Message-ID: <20211210124204.GG6467@ziepe.ca>
+References: <20211122110817.33319-1-mie@igel.co.jp>
+ <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
+ <20211207171447.GA6467@ziepe.ca>
+ <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/7] KVM: x86: Retry page fault if MMU reload is pending
- and root has no sp
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20211209060552.2956723-1-seanjc@google.com>
- <20211209060552.2956723-2-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211209060552.2956723-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 07:05, Sean Christopherson wrote:
-> +	/* Special roots, e.g. pae_root, are not backed by shadow pages. */
-> +	if (sp && is_obsolete_sp(vcpu->kvm, sp))
-> +		return true;
-> +
-> +	/*
-> +	 * Roots without an associated shadow page are considered invalid if
-> +	 * there is a pending request to free obsolete roots.  The request is
-> +	 * only a hint that the current root_may_  be obsolete and needs to be
-> +	 * reloaded, e.g. if the guest frees a PGD that KVM is tracking as a
-> +	 * previous root, then __kvm_mmu_prepare_zap_page() signals all vCPUs
-> +	 * to reload even if no vCPU is actively using the root.
-> +	 */
-> +	if (!sp && kvm_test_request(KVM_REQ_MMU_RELOAD, vcpu))
->   		return true;
+On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
+> Hi Jason,
+> Thank you for replying.
+> 
+> 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
+> >
+> > On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
+> > > Hi maintainers,
+> > >
+> > > Could you please review this patch series?
+> >
+> > Why is it RFC?
+> >
+> > I'm confused why this is useful?
+> >
+> > This can't do copy from MMIO memory, so it shouldn't be compatible
+> > with things like Gaudi - does something prevent this?
+> I think if an export of the dma-buf supports vmap, CPU is able to access the
+> mmio memory.
+> 
+> Is it wrong? If this is wrong, there is no advantages this changes..
 
-Hmm I don't understand this (or maybe I do and I just don't like what I
-understand).
+I don't know what the dmabuf folks did, but yes, it is wrong.
 
-KVM_REQ_MMU_RELOAD is raised after kvm->arch.mmu_valid_gen is fixed (of
-course, otherwise the other CPU might just not see any obsoleted page
-from the legacy MMU), therefore any check on KVM_REQ_MMU_RELOAD is just
-advisory.
+IOMEM must be touched using only special accessors, some platforms
+crash if you don't do this. Even x86 will crash if you touch it with
+something like an XMM optimized memcpy.
 
-This is not a problem per se; in the other commit message you said,
+Christian? If the vmap succeeds what rules must the caller use to
+access the memory?
 
-     For other MMUs, the resulting behavior is far more convoluted,
-     though unlikely to be truly problematic.
-
-but it's unnecessarily complicating the logic.  I'm more inclined to
-just play it simple and make the special roots process the page fault;
-Jiangshan's work should clean things up a bit:
-
---------- 8< -------------
- From 0c1e30d4e7e17692668d960452107f983dd2c9a9 Mon Sep 17 00:00:00 2001
-From: Paolo Bonzini <pbonzini@redhat.com>
-Date: Fri, 10 Dec 2021 07:41:02 -0500
-Subject: [PATCH] KVM: x86: Do not check obsoleteness of roots that have no sp
-  attached
-
-The "special" roots, e.g. pae_root when KVM uses PAE paging, are not
-backed by a shadow page.  Running with TDP disabled or with nested NPT
-explodes spectaculary due to dereferencing a NULL shadow page pointer.
-Play nice with a NULL shadow page when checking for an obsolete root in
-is_page_fault_stale().
-
-Fixes: a955cad84cda ("KVM: x86/mmu: Retry page fault if root is invalidated by memslot update")
-Cc: stable@vger.kernel.org
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Analyzed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index e2e1d012df22..4a3bcdd3cfe7 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3987,7 +3987,17 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-  static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
-  				struct kvm_page_fault *fault, int mmu_seq)
-  {
--	if (is_obsolete_sp(vcpu->kvm, to_shadow_page(vcpu->arch.mmu->root_hpa)))
-+	struct kvm_mmu_page *sp = to_shadow_page(vcpu->arch.mmu->root_hpa);
-+
-+	/*
-+	 * Special roots, e.g. pae_root, are not backed by shadow pages
-+	 * so there isn't an easy way to detect if they're obsolete.
-+	 * If they are, any child SPTE created by the fault will be useless
-+	 * (they will instantly be treated as obsolete because they don't
-+	 * match the mmu_valid_gen); but they will not leak, so just play
-+	 * it simple.
-+	 */
-+	if (sp && is_obsolete_sp(vcpu->kvm, sp))
-  		return true;
-  
-  	return fault->slot &&
+Jason

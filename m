@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F32246FDF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A66C046FDFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236751AbhLJJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        id S239216AbhLJJmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbhLJJlu (ORCPT
+        with ESMTP id S234418AbhLJJmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:41:50 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2B8C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:38:15 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id y13so27636471edd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:38:15 -0800 (PST)
+        Fri, 10 Dec 2021 04:42:09 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95A0C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:38:34 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id i63so12910337lji.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:38:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lnSC0oPA74xXphqTUrAfWYOjkXGp9TR1WBEge7TYOuk=;
-        b=zpo8Yt3DXY7Aa9C5uHM+HnQg/xmHtWMBE4d+dOsubhAk8OTSg2CHd/Fe5tq5AOWCPM
-         0UEeWmUzCap2pMuVjiT8N7Hr1V9m9YTkHyn7I4FDEPiPPYunoOVUEPIoXRR6QI1rMEhE
-         JBz7Tg8jObxzKsBQqn8+M/lbbVlpiuPJrqoFuD8wQWIk4z57l9Mn9/vGQZj/goLDL73e
-         78PETL2rNOCeJyuXclfx0brTb5KCAEiUKq2Vc9wBIehLhEMPYdgh7NO1miwxrmvsy7Qn
-         +fDWgMsVsUap8cWKZQZhEMTi7J98SfiWcJJV4360L7EK+kA4RYd+WkGPriP4yB5PgBmM
-         EiyA==
+        bh=j0fXbz31L/uAeja+1Vs+qmIjQ7kVlgqZf30R7/3Qhro=;
+        b=sG6ZXK2rM8IeukfJxSqIN0Kx2Rpc65fI9Llyk1bSKPQePXtToY3Yl1pYUBPnzPTsKT
+         2MZK59tryae2YiRQY2pCEEkD6egpPfvh6iGZMdlVEUN3qWb0bXePj4BUZxEqHS6bw6bN
+         fKQYcrLRv30PidazfGKVQK2IYnXU1xpHwqtTY0yVKhO7fiGi5LZi7rikbbNbBPtS9SOf
+         zwgsJOrGAuTsbF4Bvb8NHsHAABSFs9RXvfjaA13FDRx4vpWMCqjlB9bNVZLiLOcu0All
+         F0l07SfcEcCxqLw2ywOR0qU33HxXVBN3dNh+VgCzaCj1aSkvY4QLOCia9vrdPQioCNRb
+         hKqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lnSC0oPA74xXphqTUrAfWYOjkXGp9TR1WBEge7TYOuk=;
-        b=6n3oUtal0w5j+ptJ+IA972Gap8ysbG2pYgznVVmSo7iZcj5jf7LsrOI24a6Ggr7iHg
-         9HgfTePzq949xC9MlMQKIK6JX7USgFhNTKcTjoqGsPvsxzfpniiQdFF82lqbvd7bIe0B
-         WzuR0LvPo5CGomrmOeJY6tiLcnZAsmjDfdzdD19F5y5yE8jwb7Ti1k0jPjvLkZqkTZrh
-         8gDuBhK36hh8cZvyrGtzQQaCerltbUZehCVkGovEoHLUPMcjIaAiDLTODxwb+/dTp6/u
-         sh/P6lkegHaem36bVmCna3a7o7nsP34jt6G/8biH5/WZUOEE+hJ87G3/BzTvZkxZH2tk
-         ntLg==
-X-Gm-Message-State: AOAM532wb1cLaSJylcp0zF74nLNHiHQ+XnskSupLoHorRcOfh7OCdP06
-        MPPbPLtmiMvmUAYpvtm7AoJz0SzTLuoHhai/zR4iTw==
-X-Google-Smtp-Source: ABdhPJyPwVyIwSj06w+L4sreBbqtfdfsLZ0+9elsr2R+3MQ74JN0wytEhoWO5Tkuhv3hN+kter53oIgD+4HEMKVf0XQ=
-X-Received: by 2002:a05:6402:5146:: with SMTP id n6mr37298563edd.126.1639129094299;
- Fri, 10 Dec 2021 01:38:14 -0800 (PST)
+        bh=j0fXbz31L/uAeja+1Vs+qmIjQ7kVlgqZf30R7/3Qhro=;
+        b=TegLyPPvHrUSqMQ8ZDOFHzX9ga+p8nQXbt4aDnlvUbCDdmFLeEGOU+W2uRdDjDZYZZ
+         xL6Lrz42VfEmUETcM/OWTyL8M+sqnnnNjg/+UBgna8EkwQtZbM79/UCGO/t7izvmpKi2
+         CknF+uE9b+bmOQVeb2g1Pixa7K5XQF35CR0/i5eNec342p2l6lpJ4EPGzAgJh48QUcim
+         gapLk4EtTruB+ARMS1KUt6vJ+eM2TcZ0mr0j7w85TO6GhTK4Y+81W++zd+yJONspYz2V
+         NoBtaD7tGsLrx8nc3Ul7iUvF6aUcWTaGjxwzeu2CD66HwfpR6tujVOLSd/rqDgrIufqo
+         SflA==
+X-Gm-Message-State: AOAM532sJUF6z+7GumEog9NmiCX6S/dWEFW2uCzUsrqSM8viDIbtgvdd
+        1tzZYfEA0Ge82fnzjt1IZv3Uv3qVCb8bMHVpD/KCiw==
+X-Google-Smtp-Source: ABdhPJzXLOAaUKkp0mPoBggkdJ5k/qJi5+hzotn3vGBLn0FXL1EDaLvgWtCFp9/qwBhz0D5m742zRufwGo4+n297Mgw=
+X-Received: by 2002:a05:651c:504:: with SMTP id o4mr12110769ljp.242.1639129113171;
+ Fri, 10 Dec 2021 01:38:33 -0800 (PST)
 MIME-Version: 1.0
 References: <20211206120533.602062-1-xiaolei.wang@windriver.com>
  <CAFA6WYN+0751=feb-O9Drmm5V_Gz-1qsgiHmLsA88=49MoK_dg@mail.gmail.com>
  <PH0PR11MB507734019F54C2BB24D1456F95719@PH0PR11MB5077.namprd11.prod.outlook.com>
  <CAFA6WYMOHUEve8cbZdwzsijer3fRsy=50q67ndsC6U2JD6gK5Q@mail.gmail.com> <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org>
 In-Reply-To: <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Fri, 10 Dec 2021 10:38:03 +0100
-Message-ID: <CAN5uoS9xv-kKpC4E6-muYdh59g8XPSDfbquk5=DbQ4GmiVk-PA@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 10 Dec 2021 15:08:21 +0530
+Message-ID: <CAFA6WYM1oCs9gE4b5DaRez+jhCXPb_c25ausj0yWdS5tawX0MA@mail.gmail.com>
 Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
 To:     Jerome Forissier <jerome@forissier.org>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
+Cc:     "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
         "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Etienne Carriere <etienne.carriere@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello all,
-
-On Fri, 10 Dec 2021 at 09:10, Jerome Forissier <jerome@forissier.org> wrote:
+On Fri, 10 Dec 2021 at 13:40, Jerome Forissier <jerome@forissier.org> wrote:
 >
 > +CC Jens, Etienne
 >
@@ -130,49 +128,24 @@ On Fri, 10 Dec 2021 at 09:10, Jerome Forissier <jerome@forissier.org> wrote:
 >
 > I believe it can happen when OP-TEE's CFG_PREALLOC_RPC_CACHE is y. See
 > the config file [1] and the commit which introduced this config [2].
+
+Okay, I see the reasoning. So during the OP-TEE driver's lifetime, the
+RPC shared memory remains allocated. I guess that is done primarily
+for performance reasons.
+
+But still it doesn't feel appropriate that we term all RPC shm
+allocations as not leaking memory as we might miss obvious ones.
+
+Xiaolei,
+
+Can you once test with CFG_PREALLOC_RPC_CACHE=n while compiling
+optee-os and see if the observed memory leak disappears or not?
+
+-Sumit
+
 >
 > [1] https://github.com/OP-TEE/optee_os/blob/3.15.0/mk/config.mk#L709
 > [2] https://github.com/OP-TEE/optee_os/commit/8887663248ad
 >
-
-It's been a while since OP-TEE caches some shm buffers to prevent
-re-allocting them on and on.
-OP-TEE does so for 1 shm buffer per "tee threads" OP-TEE has provisioned.
-Each thread can cache a shm reference.
-Note that used RPCs from optee to linux/u-boot/ree do not require such
-message buffer (IMO).
-
-The main issue is the shm buffer are allocated per optee thread
-(thread context assigned to client invocation request when entreing
-optee).
-Therefore, if an optee thread caches a shm buffer, it makes the caller
-tee session to have a shm reference with a refcount held, until Optee
-thread releases its cached shm reference.
-
-There are ugly side effects. Linux must disable the cache to release
-all resources.
-We recently saw some tee sessions may be left open because of such shm
-refcount held.
-It can lead to few misbehaviour of the TA service (restarting a
-service, releasing a resource)
-
-Config switch CFG_PREALLOC_RPC_CACHE was introduced [pr4896] to
-disable the feature at boot time.
-There are means to not use it, or to explicitly enable/disable it at
-run time (already used optee smc services for that). Would maybe be a
-better default config.
-Note this discussion thread ending at his comment [issue1918]:
-
-Comments are welcome. I may have missed something in the description
-(or understanding :).
-
-[pr4896] https://github.com/OP-TEE/optee_os/pull/4896
-[issue1918] https://github.com/OP-TEE/optee_os/issues/1918#issuecomment-968747738
-
-Best regards,
-etienne
-
-
-
 > --
 > Jerome

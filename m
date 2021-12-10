@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5788046F8DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDDB46F8E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbhLJCAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 21:00:25 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:60248 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232642AbhLJCAZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 21:00:25 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-01 (Coremail) with SMTP id qwCowACHj1fFs7JhU_EOAg--.23696S2;
-        Fri, 10 Dec 2021 09:56:21 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     narmstrong@baylibre.com, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        p.zabel@pengutronix.de
-Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] media: meson: vdec: potential dereference of null pointer
-Date:   Fri, 10 Dec 2021 09:56:20 +0800
-Message-Id: <20211210015620.2143555-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S235649AbhLJCF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 21:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231148AbhLJCF0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 21:05:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717DEC061746;
+        Thu,  9 Dec 2021 18:01:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 975D7CE2832;
+        Fri, 10 Dec 2021 02:01:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2EA6C004DD;
+        Fri, 10 Dec 2021 02:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639101708;
+        bh=0/QEsc6oFsMgq2zkSyb2IGxgS1BlU/Yso8DEj/Z4yno=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=XI3DioNwF432jswb1OPdH2Ws8xHqwfgQpGXtXN73lv6JVM9SfiTBe3Tda/esQ9Z0Z
+         bqEGgoK/h0pgU8RTpuprrzN0p4xMXDCk9Tf7ginICuiT94M/IQi5VQPRslNAfFjLrO
+         9r1dgUAMdp3ozCvCK5jnn59fSq5h97zxVGh34xS/W5Z6C/yKPerOy5F3mrdvi8PWCX
+         lselrF5WVsUZhVp5105CFZLqxZWOesR9PNNB6STJMz1mYjLGYPL7Ag64+6GgsLBu0e
+         fhh4w9QMKlOQ5t3hSZXgEscwM+nvnsu4gZin7avmpnpICalOimojlD0hM2Y5fKbI+G
+         fslSRNRX2/mIA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACHj1fFs7JhU_EOAg--.23696S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFWkWF1fZF1rZr4rKr43GFg_yoW5tryxpF
-        10v342gFyUtFyUAr4UJr1kWFWSq348GFyI9a97Xw1fZry7tF17XFnayFWjgr98Jr1S9a18
-        CFyrWw1Uuw4jqrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUbLiSPUUUUU==
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Ya9K/sF1YDCYCp2Y@matsya>
+References: <20211201072718.3969011-1-vkoul@kernel.org> <20211202230624.C05F3C00446@smtp.kernel.org> <9161450a-40e0-c84f-f529-c903d6f1d722@quicinc.com> <20211203031323.211E5C00446@smtp.kernel.org> <1fb0553b-eca5-a537-4dc3-77437feffc69@quicinc.com> <Ya9K/sF1YDCYCp2Y@matsya>
+Subject: Re: [PATCH] spmi: pmic-arb: Add support for PMIC v7
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+To:     David Collins <quic_collinsd@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Date:   Thu, 09 Dec 2021 18:01:47 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211210020148.B2EA6C004DD@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kzalloc() needs to be checked.
-To avoid use of null pointer in case of the failure of alloc.
+Quoting Vinod Koul (2021-12-07 03:52:30)
+> On 03-12-21, 16:45, David Collins wrote:
+> > On 12/2/21 7:13 PM, Stephen Boyd wrote:
+> > > Quoting David Collins (2021-12-02 15:51:18)
+> > >> On 12/2/21 3:06 PM, Stephen Boyd wrote:
+> > >>> Quoting Vinod Koul (2021-11-30 23:27:18)
+>=20
+> > > It feels like we should make a parent node that holds the core, chnls,
+> > > obsrvr reg properties with a new compatible string and then have two
+> > > child nodes for each bus. Then the various PMICs can hang off those t=
+wo
+> > > different bus nodes. Of course, it needs DT review to make sure nothi=
+ng
+> > > else goes wrong.
+> >=20
+> > We considered this alternative DT layout when implementing PMIC arbiter
+> > v7 support downstream.  The benefit is allowing common register ranges
+> > to be specified once instead of in both SPMI bus nodes.  However, this
+> > approach has several downsides.
+> >=20
+> > It results in substantially more complex device tree binding
+> > documentation that requires a different layout for SPMI buses for PMIC
+> > arbiter v7 (and above) vs early versions even though support can be
+> > provided with only a minimal modification (i.e. "qcom,bus-id").
+> > Complexity is also increased inside of the spmi-pmic-arb driver.  There,
+> > special data structures and logic would be needed to handle the shared
+> > vs independent register addresses and data.
+> >=20
+> > The SPMI framework currently uses a one-to-one mapping between SPMI
+> > buses and struct device pointers.  This would not work if the new
+> > top-level node represents the true struct device and the per-bus
+> > subnodes are not true devices.  Also, platform_get_resource_byname()
+> > (used in the spmi-pmic-arb probe function) needs a struct
+> > platform_device pointer to read address ranges using "reg" +
+> > "reg-names".  That wouldn't work for the subnodes.
+> >=20
+> > I suppose that "compatible" could be specified for the top-level node
+> > and the per bus subnodes so that all three get probed as struct devices.
+> >  However, that makes things even more complicated and convoluted in the
+> > driver (and DT).
+> >=20
+> > I would prefer to stay with the approach of the two bus instances being
+> > specified independently in DT.
 
-Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+The driver is already pretty hard to read because it combines so many
+generations of spmi arbiter hardware from qcom into one file. It would
+probably be better to start over and simplify the new version of the
+driver, possibly sharing code between the two files if possible, but
+otherwise dropping lots of cruft along the way and simplifying review
+burden.
 
-v1 -> v2
+>=20
+> Steve, David,
+>=20
+> Is this the way we are recommending for this to be move forward with?
+>=20
 
-*Change 1. Change the return type of amvdec_add_ts from void to int.
-*Change 2. Return -ENOMEN if alloc fail and return 0 if not.
-*Change 3. Modify the caller to deal with the error.
----
- drivers/staging/media/meson/vdec/esparser.c     | 6 +++++-
- drivers/staging/media/meson/vdec/vdec_helpers.c | 5 ++++-
- drivers/staging/media/meson/vdec/vdec_helpers.h | 2 +-
- 3 files changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
-index db7022707ff8..7e78288cc551 100644
---- a/drivers/staging/media/meson/vdec/esparser.c
-+++ b/drivers/staging/media/meson/vdec/esparser.c
-@@ -328,9 +328,13 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
- 
- 	offset = esparser_get_offset(sess);
- 
--	amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
-+	ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
- 	dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
- 		vb->timestamp, payload_size, offset, vbuf->flags);
-+	if (ret) {
-+		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
-+		return ret;
-+	}
- 
- 	vbuf->flags = 0;
- 	vbuf->field = V4L2_FIELD_NONE;
-diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
-index 7f07a9175815..972a1d1a12a5 100644
---- a/drivers/staging/media/meson/vdec/vdec_helpers.c
-+++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
-@@ -227,13 +227,15 @@ int amvdec_set_canvases(struct amvdec_session *sess,
- }
- EXPORT_SYMBOL_GPL(amvdec_set_canvases);
- 
--void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-+int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-+		  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
- {
- 	struct amvdec_timestamp *new_ts;
- 	unsigned long flags;
- 
- 	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
-+	if (!new_ts)
-+		return -ENOMEM;
- 	new_ts->ts = ts;
- 	new_ts->tc = tc;
- 	new_ts->offset = offset;
-@@ -242,6 +244,7 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
- 	spin_lock_irqsave(&sess->ts_spinlock, flags);
- 	list_add_tail(&new_ts->list, &sess->timestamps);
- 	spin_unlock_irqrestore(&sess->ts_spinlock, flags);
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(amvdec_add_ts);
- 
-diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
-index cfaed52ab526..1bcb697290de 100644
---- a/drivers/staging/media/meson/vdec/vdec_helpers.h
-+++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
-@@ -55,7 +55,7 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
-  * @offset: offset in the VIFIFO where the associated packet was written
-  * @flags the vb2_v4l2_buffer flags
-  */
--void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-+int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-+		  struct v4l2_timecode tc, u32 offset, u32 flags);
- void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
- 
--- 
-2.25.1
-
+Please send the yamlification or update to the yamlification of the
+binding.

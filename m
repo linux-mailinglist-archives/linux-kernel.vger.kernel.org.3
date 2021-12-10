@@ -2,102 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9F946FA10
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 06:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192B246FA18
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 06:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbhLJFNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 00:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S230452AbhLJFX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 00:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbhLJFNt (ORCPT
+        with ESMTP id S229736AbhLJFXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 00:13:49 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A73BC061746;
-        Thu,  9 Dec 2021 21:10:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9CDDCE286A;
-        Fri, 10 Dec 2021 05:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE98C00446;
-        Fri, 10 Dec 2021 05:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639113009;
-        bh=IgjHdU+h7nd8/berFuQhpL+cs2oDMn2YcL/bPfyzWok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B2TG9kmab4DZlJ2MF5L2WKYdVF6RM8bfEBOCg4YxOB+r7JrxOFLz7G7vAZ0pI70SN
-         hptxu+I94Vh3XAYd08epfaMm/Ejbhc+2kKaIBVQi4VMjTfc2o7hP15rVk71TWuFY30
-         XLjVWnWbmlHUn5PKy8TdevkO3dQYdZYBGIKp9F4CTRZtAJ09RD7OQWqbto0yKmW3uy
-         2orNoe83QdM/VEcf1mgvQpSkFobI6OdXJQ3oqKx9ViHthY5pjMIANAxmsOfb+6drgz
-         OqkF85itWlEy8hRgr7O2hZek94RC3ymseFyzBSGrG603Zw9bCCQ3Ef2HLuLqGGXeD5
-         H6xKPdc8M3Fjw==
-Date:   Thu, 9 Dec 2021 21:10:07 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ramji Jiyani <ramjiyani@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Martijn Coenen <maco@android.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v3 0/5] aio: fix use-after-free and missing wakeups
-Message-ID: <YbLhL8y/TR5H0MLe@sol.localdomain>
-References: <20211209010455.42744-1-ebiggers@kernel.org>
- <CAHk-=wjkXez+ugCbF3YpODQQS-g=-4poCwXaisLW4p2ZN_=hxw@mail.gmail.com>
- <4a472e72-d527-db79-d46e-efa9d4cad5bb@kernel.dk>
+        Fri, 10 Dec 2021 00:23:25 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71846C061746;
+        Thu,  9 Dec 2021 21:19:51 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so6592837pjb.5;
+        Thu, 09 Dec 2021 21:19:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=w4eB1WBggo/oaafdzywqGy6NQmIvYM0/Td6oIEwf71s=;
+        b=pKyrojy2EgaNWfEvK9tE4zuG9V5m+nlDfigfZLX54oVKgevxtebmueG0W+CAvpA4no
+         9t3yoFGZ0RHAoSZM0P9Z85wBveLzR9DUKDoHwCRHqECphSNhpwTT1/ClM/nZDbhyDKBl
+         Fpyyg0r9L3DtQaN1fizI0kfLWJ6FiauaCtbk5tvlP+Xn7e04k+hgNmJQh5iVaBWucIsv
+         Ste2KRYsD7Hz2I8q67ZglFYnPT0tWTLdi3oOnsQmy9MvfhYVV9H/yhGW30svLMaldNJG
+         DyYUClpFs5luk/enGtgFdygQuw1i2rzu8c7rsNNpBmdHVEPzWvOjwWQ/DvzEmjaaKpKk
+         WDug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=w4eB1WBggo/oaafdzywqGy6NQmIvYM0/Td6oIEwf71s=;
+        b=d8ACI0GJgzv/Ab540hVkO7sX253/F29jlC7N2E2CawoNONYr4dD6QJlt8QtsQ0EwxA
+         9Gpo4f/bAT9lWQkI1TaXjJ/3y+YCU9MXDM7NAyf9AHSTK50uL7eA1p72ClEUtoqHQfgX
+         TyCyUxY6muN5LnrS2sjRJ0K333XihmG5iaDsLBgHQMKvxPdIYGdzTlAXveCCgwdsLTqi
+         T9s5EL8tQpMufEDjQBXCvs/WhlLHcuGT9+ApGsTAt2T0XiAIIVkqFFxpQ4QU0Pi1Yq4B
+         TdeteqJ0kAFkq1dmgQbxNMRqJUHYH/vsrrTUa5W/bMWAWjg0bymIM+9TEFHyUApu46YA
+         QXDA==
+X-Gm-Message-State: AOAM5329NK/NbZE2W2dWEr4SEywSS/tuRC9N3KS+nbYAXvq56f1nWLtD
+        ty/3zuvMSP7rsB7/yF/iY0gdwpzT76w=
+X-Google-Smtp-Source: ABdhPJxVbpENBYHo7w7HohceKdVP/SSVK5nUlB+BNu90OgD2OTFaq804s4n3jxoEN/Nm6nnOs6pHkQ==
+X-Received: by 2002:a17:90a:1919:: with SMTP id 25mr21674910pjg.154.1639113590882;
+        Thu, 09 Dec 2021 21:19:50 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:8a3d:b2f2:42a0:335a])
+        by smtp.gmail.com with ESMTPSA id q8sm1477215pfk.152.2021.12.09.21.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 21:19:49 -0800 (PST)
+Date:   Thu, 9 Dec 2021 21:19:46 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Cc:     hdegoede@redhat.com, hadess@hadess.net,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: goodix - Fix memory leak in goodix_firmware_upload
+Message-ID: <YbLjcm6tJnqbVfpi@google.com>
+References: <20211208173321.26659-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <4a472e72-d527-db79-d46e-efa9d4cad5bb@kernel.dk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211208173321.26659-1-jose.exposito89@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 02:46:45PM -0700, Jens Axboe wrote:
-> On 12/9/21 11:00 AM, Linus Torvalds wrote:
-> > On Wed, Dec 8, 2021 at 5:06 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> >>
-> >> Careful review is appreciated; the aio poll code is very hard to work
-> >> with, and it doesn't appear to have many tests.  I've verified that it
-> >> passes the libaio test suite, which provides some coverage of poll.
-> >>
-> >> Note, it looks like io_uring has the same bugs as aio poll.  I haven't
-> >> tried to fix io_uring.
-> > 
-> > I'm hoping Jens is looking at the io_ring case, but I'm also assuming
-> > that I'll just get a pull request for this at some point.
-> 
-> Yes, when I saw this original posting I did discuss it with Pavel as
-> well, and we agree that the same issue exists there. Which isn't too
-> surprising, as that's where the io_uring poll code from originally.
-> 
-> Eric, do you have a test case for this? aio is fine, we can convert it
-> to io_uring as well. Would be nice for both verifying the fix, but also
-> to carry in the io_uring regression tests for the future.
+On Wed, Dec 08, 2021 at 06:33:21PM +0100, José Expósito wrote:
+> Addresses-Coverity-ID: 1493934 ("Resource leak")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 
-Well, the use-after-free bug is pretty hard to test for.  It only affects
-polling a binder fd or signalfd, so one of those has to be used.  Also, I
-haven't found a way to detect it other than the use-after-free itself, so
-effectively a kernel with KASAN enabled is needed.  But KASAN doesn't work with
-signalfd because the signalfd waitqueues are in an SLAB_TYPESAFE_BY_RCU slab, so
-binder is the only way to detect it without working around SLAB_TYPESAFE_BY_RCU,
-or patching the kernel to add log messages.  Also, aio supports inline
-completion which avoids the bug, so that needs to be worked around.
+Applied, thank you.
 
-So the best I can do is provide a program that's pretty specific to aio, which
-causes KASAN to report a use-after-free if the kernel has CONFIG_KASAN and
-CONFIG_ANDROID_BINDER_IPC enabled.  Note, "normal" Linux distros don't have
-either option enabled.  I'm not sure that would be useful for you.
-
-If you're also asking about the other bug (missed wakeups), i.e. the one that
-patch 4 in this series fixes, in theory that would be detectable without those
-dependencies.  It's still a race condition that depends on kernel implementation
-details, so it will be hard to test for too.  But I might have a go at writing a
-test for it anyway.
-
-- Eric
+-- 
+Dmitry

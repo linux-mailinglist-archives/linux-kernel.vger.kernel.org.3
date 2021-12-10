@@ -2,92 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CA447096D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E78470977
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245637AbhLJS53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
+        id S245663AbhLJS56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbhLJS51 (ORCPT
+        with ESMTP id S245647AbhLJS55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:57:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A287CC061746;
-        Fri, 10 Dec 2021 10:53:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65EAEB82989;
-        Fri, 10 Dec 2021 18:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9AEC341C7;
-        Fri, 10 Dec 2021 18:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639162429;
-        bh=bO7Eu3iI1mbIHn+UhTqDFncjxb1MxBZo/63BiidDSgg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=enP6e6yrBJzzWDZVNBZMeRr8z53jVofjrs9af14ggw4htEIAwoC2OKdhCMYJAnTq/
-         6+dBQR3aRThEKUIb/meXolz7WPZMxLZFkhLV2zAo72Fg92tSDT3HihuWleytrsX93t
-         WnJD4TeG43i66YbrYPHZ7e3QYUZP/CDmcsvpqpwf7L261Ib/CS6fJCv2ztx7x8UhJO
-         v/cpmC+vteyr5ozj5ti1yqp9YppP56FADZw6SJgpMr+muTn84Pocl1pj6820ugWxZw
-         HjTZqNo8z+iqEoMUp3VVqiJeJD8RS4+NnBd1A4wW7+VbC0P1G21Pf24DS7CmwYqfeo
-         LnKKiWzblD1Kw==
-Date:   Fri, 10 Dec 2021 10:53:47 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     bcrl@kvack.org, viro@zeniv.linux.org.uk, tglx@linutronix.de,
-        axboe@kernel.dk, linux-aio@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] aio: Fix incorrect usage of eventfd_signal_allowed()
-Message-ID: <YbOiO7xlOL0kkuYF@sol.localdomain>
-References: <20210913111928.98-1-xieyongji@bytedance.com>
- <Ya/vW/eGXCzbmvAC@sol.localdomain>
+        Fri, 10 Dec 2021 13:57:57 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0E3C0617A1;
+        Fri, 10 Dec 2021 10:54:21 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id u3so19759874lfl.2;
+        Fri, 10 Dec 2021 10:54:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IKf1m11e2CmLOphgB5tXRwG67Tf75LBrlnq5Vg7yJZw=;
+        b=IxhbpvG2CFXB3xmkjVMdWRMntYmHOq8xg7eP7zr/AbSS5vu1B9sdxo5o91nGOD2995
+         QQ3KG6tw48EY7IhOrAyb30j6v2PDl8KJF+jKSnPayvNkG1XmqZAU+fLfW7OnlwsZZOnn
+         0A9elkL050dIg2mh2nAMxrCkv1StUF1LjCWn+NlhosKjCmIUCMa0MKcmxWQ+/W+IgKI6
+         i8CNkkus5bglRUlOxac8XP3LVuSzA40MUvRiA2U0B7IAsHpJ1AsKj9N6snoJl+u70szG
+         pZzPqoOnQIc/elfvbeQCxFa9JUiQLy0NMI8wwjD0fM288MJ0ySJSpfHIgwDyPyb7i3mv
+         C2Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IKf1m11e2CmLOphgB5tXRwG67Tf75LBrlnq5Vg7yJZw=;
+        b=ATBGtFOO9lS2ZkdI/AuSuu9PS+Inp2r31yRXHU5hBPIbkJraYoSCJQiS5QSFJSHd4l
+         RE/1wrOzGq8p62AsHN47zvzncKuqJSSr8b2quBV3WTC7vNHfFFTCmSdbGACDoxVpqbXV
+         gE1a/W6xHU0FprSZVOBV3Ra5eFwJGj5GOrDzAGFC/BPbvrOmqinJlRrT/ike9x1BJ3Ba
+         47CAoEPGLwk69X7nJOdmh1GtOAJMpTlpTif21ZP9IlfQWPC6TdBl7febG80bQoaPVqE4
+         ++Bp6JfwnjKLKAeMmsVcObJ+fhmIG4rR5oUHU6xu5f9V+4UA0hAoNlTZvd5jl8dnASz+
+         VbgA==
+X-Gm-Message-State: AOAM532GRf235Gc/nZSzObeM/gPYVNzr/bw39oK3E5iqx7wj0vVcCfJF
+        rs6WcM7pUziox9KLl2aduEJjuJBVTwg=
+X-Google-Smtp-Source: ABdhPJyNtPZVq+j4jRpVe2vNWn4eVPA/mLyRKU7MjcAV9J6qXLR8NEClMh21SuEPG0vCBnH7Acz/0w==
+X-Received: by 2002:ac2:4c4d:: with SMTP id o13mr13668768lfk.196.1639162460068;
+        Fri, 10 Dec 2021 10:54:20 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id v15sm390403ljj.5.2021.12.10.10.54.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 10:54:19 -0800 (PST)
+Subject: Re: [PATCH v4 06/25] reboot: Warn if unregister_restart_handler()
+ fails
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20211126180101.27818-1-digetx@gmail.com>
+ <20211126180101.27818-7-digetx@gmail.com>
+ <CAJZ5v0ii7tGRDbxw+5GqdyONXvRPznXUqBZd03+pdoAd+pH=JQ@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <c518ce36-09d2-16a3-cec2-6bab8260e3cf@gmail.com>
+Date:   Fri, 10 Dec 2021 21:54:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya/vW/eGXCzbmvAC@sol.localdomain>
+In-Reply-To: <CAJZ5v0ii7tGRDbxw+5GqdyONXvRPznXUqBZd03+pdoAd+pH=JQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:33:47PM -0800, Eric Biggers wrote:
-> On Mon, Sep 13, 2021 at 07:19:28PM +0800, Xie Yongji wrote:
-> > We should defer eventfd_signal() to the workqueue when
-> > eventfd_signal_allowed() return false rather than return
-> > true.
-> > 
-> > Fixes: b542e383d8c0 ("eventfd: Make signal recursion protection a task bit")
-> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > ---
-> >  fs/aio.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/aio.c b/fs/aio.c
-> > index 51b08ab01dff..8822e3ed4566 100644
-> > --- a/fs/aio.c
-> > +++ b/fs/aio.c
-> > @@ -1695,7 +1695,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
-> >  		list_del(&iocb->ki_list);
-> >  		iocb->ki_res.res = mangle_poll(mask);
-> >  		req->done = true;
-> > -		if (iocb->ki_eventfd && eventfd_signal_allowed()) {
-> > +		if (iocb->ki_eventfd && !eventfd_signal_allowed()) {
-> >  			iocb = NULL;
-> >  			INIT_WORK(&req->work, aio_poll_put_work);
-> >  			schedule_work(&req->work);
-> > -- 
-> > 2.11.0
-> > 
+10.12.2021 21:32, Rafael J. Wysocki пишет:
+> On Fri, Nov 26, 2021 at 7:02 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> Emit warning if unregister_restart_handler() fails since it never should
+>> fail. This will ease further API development by catching mistakes early.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  kernel/reboot.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/reboot.c b/kernel/reboot.c
+>> index e6659ae329f1..f0e7b9c13f6b 100644
+>> --- a/kernel/reboot.c
+>> +++ b/kernel/reboot.c
+>> @@ -210,7 +210,7 @@ EXPORT_SYMBOL(register_restart_handler);
+>>   */
+>>  int unregister_restart_handler(struct notifier_block *nb)
+>>  {
+>> -       return atomic_notifier_chain_unregister(&restart_handler_list, nb);
+>> +       return WARN_ON(atomic_notifier_chain_unregister(&restart_handler_list, nb));
 > 
-> Since I was just working with this file...:
-> 
-> Reviewed-by: Eric Biggers <ebiggers@google.com>
-> 
-> I don't know who is taking aio fixes these days, but whoever does so probably
-> should take this one at the same time as mine
-> (https://lore.kernel.org/linux-fsdevel/20211207095726.169766-1-ebiggers@kernel.org).
+> The only reason why it can fail is if the object pointed to by nb is
+> not in the chain.
 
-Apparently no one is, so I've included this patch in the pull request I've sent
-(https://lore.kernel.org/r/YbOdV8CPbyPAF234@sol.localdomain).
+I had exactly this case where object wasn't in the chain due to a bug
+and this warning was very helpful.
 
-- Eric
+>  Why WARN() about this?  And what about systems with
+> panic_on_warn set?
+
+That warning condition will never happen normally, only when something
+is seriously wrong.
+
+Those systems with panic_on_warn will get what was they asked for.

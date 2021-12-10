@@ -2,154 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A90E470847
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F37470840
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245331AbhLJSSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:18:38 -0500
-Received: from mga04.intel.com ([192.55.52.120]:33871 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241528AbhLJSSY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:18:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639160089; x=1670696089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vmpQh9ClAs0N1BFmhaM0KGq2ssljRnw0FnY+my++upU=;
-  b=DLqVnwOUcmoOJrq6ztFz8f5viUF1lcTCvrsjMaV4l3fuxYAarxlpJnbR
-   xqx41WCfesomZQUFifEJwau7YmHH7hjkjH3jCUOOZnVyv8lLjaivn0TKH
-   TgwASl0kYIl4J/ZKIwkUn7Q7nHecJ8UcGe0hb+VJuMy1/I/AZo/jOd1Jy
-   Rsi4n3kspkg5A0mUCBp539XDeY45WluWSbXz7lns1N9FwrsibgJOegLHL
-   rsT42+TWMI6WaZ6t2MXqBVaLCyE4hPDG8PaBFg70qeSwr3cq1fx1i5wfc
-   kxdWTsOSWSy4GwTuUZkNvjxV59DywT0mFg7vd2UQ5kPwJHK0d5go93FzA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237142813"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="237142813"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:14:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="565316282"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Dec 2021 10:14:14 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvkPO-0003W1-6c; Fri, 10 Dec 2021 18:14:14 +0000
-Date:   Sat, 11 Dec 2021 02:13:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
-        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyd12@chinatelecom.cn
-Subject: Re: [PATCH V2] net: bonding: Add support for IPV6 ns/na
-Message-ID: <202112110234.hkzxELcK-lkp@intel.com>
-References: <1639141691-3741-1-git-send-email-sunshouxin@chinatelecom.cn>
+        id S245294AbhLJSRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:17:53 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:41580 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245272AbhLJSRt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:17:49 -0500
+Received: by mail-ot1-f50.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so10431064otl.8;
+        Fri, 10 Dec 2021 10:14:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RaOuCzlDrEGoU3kCCyjiPh5ZIczFbf2cAVp5IUpr62Q=;
+        b=aYs7LMndxGQpF02d4DZkmc86npx27c98t9FUhb00GPqmlpfzrDoHJSQAdPtHMLb4ZT
+         sBgEFGPVqlxMhz9CL8d6NEjNXDJ00/Dn+GVsVJQWoB6F3WnWtzX04Oc1yVZTCPjqFaDn
+         pg7aBS6C5RgxjWnO3mqThntNTG0GPO/p6/NL9Gc+VpFmnYOCxJu+Kup89a7HZaI2mZPi
+         pY3YahmWNV1qPpsWlk4sUc1PiBEAk3/QXfVxMNfiYxlFHiZyqqjebHVL+t4YaI2tG2+8
+         LZ/8XdpAAqs6XlO/Okhl+gqgoHLaz5SH2vBprAB4/uQhVPdD0zLNey6keZpW+EXJRU6x
+         smpg==
+X-Gm-Message-State: AOAM532adB4yICiE7ElTW/1QWw2JxmvASw1hXzicLGSu5KzReFzRJSn1
+        +uwiJ1itRFIqsnUsofHij1+XUFlMjNykQavrK8w=
+X-Google-Smtp-Source: ABdhPJx5VEl25dlL8StyZ7/vR+sIp4uhzbZQ+4jxftcUhgC3Wucypp0Twl9yCOfT1qw70j5+PgOSc5gj4QOVrzsPiE4=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr12483219otf.198.1639160053505;
+ Fri, 10 Dec 2021 10:14:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639141691-3741-1-git-send-email-sunshouxin@chinatelecom.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-3-digetx@gmail.com>
+In-Reply-To: <20211126180101.27818-3-digetx@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Dec 2021 19:14:02 +0100
+Message-ID: <CAJZ5v0gy5M5yYT7k5CY0JtW4MvsgKq4psBEw81UKz=pjGo0xPw@mail.gmail.com>
+Subject: Re: [PATCH v4 02/25] notifier: Add blocking_notifier_call_chain_is_empty()
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sun,
+On Fri, Nov 26, 2021 at 7:01 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> Add blocking_notifier_call_chain_is_empty() that returns true if call
+> chain is empty.
+>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  include/linux/notifier.h |  2 ++
+>  kernel/notifier.c        | 14 ++++++++++++++
+>  2 files changed, 16 insertions(+)
+>
+> diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+> index 4b80a815b666..924c9d7c8e73 100644
+> --- a/include/linux/notifier.h
+> +++ b/include/linux/notifier.h
+> @@ -173,6 +173,8 @@ int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh,
+>  int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
+>                 unsigned long val_up, unsigned long val_down, void *v);
+>
+> +bool blocking_notifier_call_chain_is_empty(struct blocking_notifier_head *nh);
+> +
+>  #define NOTIFY_DONE            0x0000          /* Don't care */
+>  #define NOTIFY_OK              0x0001          /* Suits me */
+>  #define NOTIFY_STOP_MASK       0x8000          /* Don't call further */
+> diff --git a/kernel/notifier.c b/kernel/notifier.c
+> index b8251dc0bc0f..b20cb7b9b1f0 100644
+> --- a/kernel/notifier.c
+> +++ b/kernel/notifier.c
+> @@ -322,6 +322,20 @@ int blocking_notifier_call_chain(struct blocking_notifier_head *nh,
+>  }
+>  EXPORT_SYMBOL_GPL(blocking_notifier_call_chain);
+>
+> +/**
+> + *     blocking_notifier_call_chain_is_empty - Check whether notifier chain is empty
+> + *     @nh: Pointer to head of the blocking notifier chain
+> + *
+> + *     Checks whether notifier chain is empty.
+> + *
+> + *     Returns true is notifier chain is empty, false otherwise.
+> + */
+> +bool blocking_notifier_call_chain_is_empty(struct blocking_notifier_head *nh)
+> +{
+> +       return !rcu_access_pointer(nh->head);
+> +}
+> +EXPORT_SYMBOL_GPL(blocking_notifier_call_chain_is_empty);
 
-Thank you for the patch! Yet something to improve:
+The check is not reliable (racy) without locking, so I wouldn't export
+anything like this to modules.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.16-rc4 next-20211208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211210-210940
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c741e49150dbb0c0aebe234389f4aa8b47958fa8
-config: hexagon-randconfig-r006-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110234.hkzxELcK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f86d634c3ced7ec9b5af72e4b92bca681be033f7
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sun-Shouxin/net-bonding-Add-support-for-IPV6-ns-na/20211210-210940
-        git checkout f86d634c3ced7ec9b5af72e4b92bca681be033f7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/bonding/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/bonding/bond_alb.c:1318:26: error: implicit declaration of function 'csum_ipv6_magic' [-Werror,-Wimplicit-function-declaration]
-                           icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
-                                                 ^
-   drivers/net/bonding/bond_alb.c:1318:26: note: did you mean 'csum_tcpudp_magic'?
-   arch/hexagon/include/asm/checksum.h:21:9: note: 'csum_tcpudp_magic' declared here
-   __sum16 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
-           ^
-   arch/hexagon/include/asm/checksum.h:20:27: note: expanded from macro 'csum_tcpudp_magic'
-   #define csum_tcpudp_magic csum_tcpudp_magic
-                             ^
-   1 error generated.
-
-
-vim +/csum_ipv6_magic +1318 drivers/net/bonding/bond_alb.c
-
-  1283	
-  1284	static void alb_change_nd_option(struct sk_buff *skb, void *data)
-  1285	{
-  1286		struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
-  1287		struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
-  1288		struct net_device *dev = skb->dev;
-  1289		struct icmp6hdr *icmp6h = icmp6_hdr(skb);
-  1290		struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
-  1291		u8 *lladdr = NULL;
-  1292		u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
-  1293					offsetof(struct nd_msg, opt));
-  1294	
-  1295		while (ndoptlen) {
-  1296			int l;
-  1297	
-  1298			switch (nd_opt->nd_opt_type) {
-  1299			case ND_OPT_SOURCE_LL_ADDR:
-  1300			case ND_OPT_TARGET_LL_ADDR:
-  1301			lladdr = ndisc_opt_addr_data(nd_opt, dev);
-  1302			break;
-  1303	
-  1304			default:
-  1305			lladdr = NULL;
-  1306			break;
-  1307			}
-  1308	
-  1309			l = nd_opt->nd_opt_len << 3;
-  1310	
-  1311			if (ndoptlen < l || l == 0)
-  1312				return;
-  1313	
-  1314			if (lladdr) {
-  1315				memcpy(lladdr, data, dev->addr_len);
-  1316				icmp6h->icmp6_cksum = 0;
-  1317	
-> 1318				icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
-  1319								      &ip6hdr->daddr,
-  1320							ntohs(ip6hdr->payload_len),
-  1321							IPPROTO_ICMPV6,
-  1322							csum_partial(icmp6h,
-  1323								     ntohs(ip6hdr->payload_len), 0));
-  1324			}
-  1325			ndoptlen -= l;
-  1326			nd_opt = ((void *)nd_opt) + l;
-  1327		}
-  1328	}
-  1329	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+At least IMO it should be added along with a user.

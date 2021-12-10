@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF10D470838
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3A0470842
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245265AbhLJSRs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 13:17:48 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:60998 "EHLO
+        id S245274AbhLJSSC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 13:18:02 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:35623 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245231AbhLJSRo (ORCPT
+        by vger.kernel.org with ESMTP id S245251AbhLJSRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:17:44 -0500
+        Fri, 10 Dec 2021 13:17:51 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-404-RSxmVJhWMA-8trxp2fol0w-1; Fri, 10 Dec 2021 13:14:08 -0500
-X-MC-Unique: RSxmVJhWMA-8trxp2fol0w-1
+ us-mta-426-Az7YC6fuO6iEpALkR6pXxw-1; Fri, 10 Dec 2021 13:14:12 -0500
+X-MC-Unique: Az7YC6fuO6iEpALkR6pXxw-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 416421006AA1;
-        Fri, 10 Dec 2021 18:14:06 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2CAE981EE62;
+        Fri, 10 Dec 2021 18:14:11 +0000 (UTC)
 Received: from x1.com (unknown [10.22.16.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DC3060BF4;
-        Fri, 10 Dec 2021 18:14:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B8A9760BF4;
+        Fri, 10 Dec 2021 18:14:06 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -39,9 +39,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: [PATCH V9 11/14] rtla: Add rtla osnoise hist documentation
-Date:   Fri, 10 Dec 2021 19:11:30 +0100
-Message-Id: <d43cc5d516b8db180575c4b66c4aa67c6a724a8d.1639158831.git.bristot@kernel.org>
+Subject: [PATCH V9 12/14] rtla: Add rtla timerlat documentation
+Date:   Fri, 10 Dec 2021 19:11:31 +0100
+Message-Id: <78678b8d024bf5a3a79f831ac9441b96e8d2f56e.1639158831.git.bristot@kernel.org>
 In-Reply-To: <cover.1639158831.git.bristot@kernel.org>
 References: <cover.1639158831.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -56,7 +56,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Man page for rtla osnoise hist mode.
+Man page for rtla timerlat tool.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Ingo Molnar <mingo@redhat.com>
@@ -74,107 +74,85 @@ Cc: linux-trace-devel@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- .../tools/rtla/common_hist_options.rst        | 23 +++++++
- .../tools/rtla/rtla-osnoise-hist.rst          | 66 +++++++++++++++++++
- 2 files changed, 89 insertions(+)
- create mode 100644 Documentation/tools/rtla/common_hist_options.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
+ .../rtla/common_timerlat_description.rst      | 10 ++++
+ Documentation/tools/rtla/rtla-timerlat.rst    | 57 +++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
 
-diff --git a/Documentation/tools/rtla/common_hist_options.rst b/Documentation/tools/rtla/common_hist_options.rst
+diff --git a/Documentation/tools/rtla/common_timerlat_description.rst b/Documentation/tools/rtla/common_timerlat_description.rst
 new file mode 100644
-index 000000000000..0266cd08a6c9
+index 000000000000..321201cb8597
 --- /dev/null
-+++ b/Documentation/tools/rtla/common_hist_options.rst
-@@ -0,0 +1,23 @@
-+**-b**, **--bucket-size** *N*
++++ b/Documentation/tools/rtla/common_timerlat_description.rst
+@@ -0,0 +1,10 @@
++The **rtla timerlat** tool is an interface for the *timerlat* tracer. The
++*timerlat* tracer dispatches a kernel thread per-cpu. These threads
++set a periodic timer to wake themselves up and go back to sleep. After
++the wakeup, they collect and generate useful information for the
++debugging of operating system timer latency.
 +
-+        Set the histogram bucket size (default *1*).
-+
-+**-e**, **--entries** *N*
-+
-+        Set the number of entries of the histogram (default 256).
-+
-+**--no-header**
-+
-+        Do not print header.
-+
-+**--no-summary**
-+
-+        Do not print summary.
-+
-+**--no-index**
-+
-+        Do not print index.
-+
-+**--with-zeros**
-+
-+        Print zero only entries.
-diff --git a/Documentation/tools/rtla/rtla-osnoise-hist.rst b/Documentation/tools/rtla/rtla-osnoise-hist.rst
++The *timerlat* tracer outputs information in two ways. It periodically
++prints the timer latency at the timer *IRQ* handler and the *Thread*
++handler. It also enable the trace of the most relevant information via
++**osnoise:** tracepoints.
+diff --git a/Documentation/tools/rtla/rtla-timerlat.rst b/Documentation/tools/rtla/rtla-timerlat.rst
 new file mode 100644
-index 000000000000..52298ddd8701
+index 000000000000..44a49e6f302b
 --- /dev/null
-+++ b/Documentation/tools/rtla/rtla-osnoise-hist.rst
-@@ -0,0 +1,66 @@
-+===================
-+rtla-osnoise-hist
-+===================
-+------------------------------------------------------
-+Display a histogram of the osnoise tracer samples
-+------------------------------------------------------
++++ b/Documentation/tools/rtla/rtla-timerlat.rst
+@@ -0,0 +1,57 @@
++================
++rtla-timerlat
++================
++-------------------------------------------
++Measures the operating system timer latency
++-------------------------------------------
 +
 +:Manual section: 1
 +
 +SYNOPSIS
 +========
-+**rtla osnoise hist** [*OPTIONS*]
++**rtla timerlat** [*MODE*] ...
 +
 +DESCRIPTION
 +===========
-+.. include:: common_osnoise_description.rst
 +
-+The **rtla osnoise hist** tool collects all **osnoise:sample_threshold**
-+occurrence in a histogram, displaying the results in a user-friendly way.
-+The tool also allows many configurations of the *osnoise* tracer and the
-+collection of the tracer output.
++.. include:: common_timerlat_description.rst
++
++The *timerlat* tracer outputs information in two ways. It periodically
++prints the timer latency at the timer *IRQ* handler and the *Thread* handler.
++It also provides information for each noise via the **osnoise:** tracepoints.
++The **rtla timerlat top** mode displays a summary of the periodic output
++from the *timerlat* tracer. The **rtla hist hist** mode displays a histogram
++of each tracer event occurrence. For further details, please refer to the
++respective man page.
++
++MODES
++=====
++**top**
++
++        Prints the summary from *timerlat* tracer.
++
++**hist**
++
++        Prints a histogram of timerlat samples.
++
++If no *MODE* is given, the top mode is called, passing the arguments.
 +
 +OPTIONS
 +=======
-+.. include:: common_osnoise_options.rst
++**-h**, **--help**
 +
-+.. include:: common_hist_options.rst
++        Display the help text.
 +
-+.. include:: common_options.rst
-+
-+EXAMPLE
-+=======
-+In the example below, *osnoise* tracer threads are set to run with real-time
-+priority *FIFO:1*, on CPUs *0-11*, for *900ms* at each period (*1s* by
-+default). The reason for reducing the runtime is to avoid starving the
-+**rtla** tool. The tool is also set to run for *one minute*. The output
-+histogram is set to group outputs in buckets of *10us* and *25* entries::
-+
-+  [root@f34 ~/]# rtla osnoise hist -P F:1 -c 0-11 -r 900000 -d 1M -b 10 -e 25
-+  # RTLA osnoise histogram
-+  # Time unit is microseconds (us)
-+  # Duration:   0 00:01:00
-+  Index   CPU-000   CPU-001   CPU-002   CPU-003   CPU-004   CPU-005   CPU-006   CPU-007   CPU-008   CPU-009   CPU-010   CPU-011
-+  0         42982     46287     51779     53740     52024     44817     49898     36500     50408     50128     49523     52377
-+  10        12224      8356      2912       878      2667     10155      4573     18894      4214      4836      5708      2413
-+  20            8         5        12         2        13        24        20        41        29        53        39        39
-+  30            1         1         0         0        10         3         6        19        15        31        30        38
-+  40            0         0         0         0         0         4         2         7         2         3         8        11
-+  50            0         0         0         0         0         0         0         0         0         1         1         2
-+  over:         0         0         0         0         0         0         0         0         0         0         0         0
-+  count:    55215     54649     54703     54620     54714     55003     54499     55461     54668     55052     55309     54880
-+  min:          0         0         0         0         0         0         0         0         0         0         0         0
-+  avg:          0         0         0         0         0         0         0         0         0         0         0         0
-+  max:         30        30        20        20        30        40        40        40        40        50        50        50
++For other options, see the man page for the corresponding mode.
 +
 +SEE ALSO
 +========
-+**rtla-osnoise**\(1), **rtla-osnoise-top**\(1)
++**rtla-timerlat-top**\(1), **rtla-timerlat-hist**\(1)
 +
-+*osnoise* tracer documentation: <https://www.kernel.org/doc/html/latest/trace/osnoise-tracer.html>
++*timerlat* tracer documentation: <https://www.kernel.org/doc/html/latest/trace/timerlat-tracer.html>
 +
 +AUTHOR
 +======

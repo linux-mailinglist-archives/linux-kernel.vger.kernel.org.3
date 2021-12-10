@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C9B4707D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBE54707DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244944AbhLJR6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:58:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:45410 "EHLO foss.arm.com"
+        id S245007AbhLJR6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:58:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:45428 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244837AbhLJR6r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:58:47 -0500
+        id S244937AbhLJR6s (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 12:58:48 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90BF513D5;
-        Fri, 10 Dec 2021 09:55:11 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 089A5142F;
+        Fri, 10 Dec 2021 09:55:13 -0800 (PST)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 59D073F73B;
-        Fri, 10 Dec 2021 09:55:10 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C3F863F73B;
+        Fri, 10 Dec 2021 09:55:11 -0800 (PST)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org, will@kernel.org
 Cc:     iommu@lists.linux-foundation.org, suravee.suthikulpanit@amd.com,
         baolu.lu@linux.intel.com, willy@infradead.org,
         linux-kernel@vger.kernel.org, john.garry@huawei.com,
         linux-mm@kvack.org
-Subject: [PATCH v2 05/11] iommu/iova: Squash flush_cb abstraction
-Date:   Fri, 10 Dec 2021 17:54:46 +0000
-Message-Id: <6326303c396e28fd3b9ed89d82673dfcf159b8c6.1639157090.git.robin.murphy@arm.com>
+Subject: [PATCH v2 06/11] iommu/amd: Simplify pagetable freeing
+Date:   Fri, 10 Dec 2021 17:54:47 +0000
+Message-Id: <b9a65dccb0b3335fd639567592fa1d73bcf71a77.1639157090.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.28.0.dirty
 In-Reply-To: <cover.1639157090.git.robin.murphy@arm.com>
 References: <cover.1639157090.git.robin.murphy@arm.com>
@@ -35,146 +35,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Once again, with iommu-dma now being the only flush queue user, we no
-longer need the extra level of indirection through flush_cb. Squash that
-and let the flush queue code call the domain method directly.
+For reasons unclear, pagetable freeing is an effectively recursive
+method implemented via an elaborate system of templated functions that
+turns out to account for 25% of the object file size. Implementing it
+using regular straightforward recursion makes the code simpler, and
+seems like a good thing to do before we work on it further. As part of
+that, also fix the types to avoid all the needless casting back and
+forth which just gets in the way.
 
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
 
-v2: No change
+v2: Comment the (pre-existing) level 2 optimisation logic
 
- drivers/iommu/dma-iommu.c | 13 +------------
- drivers/iommu/iova.c      | 11 +++++------
- include/linux/iova.h      | 11 +++--------
- 3 files changed, 9 insertions(+), 26 deletions(-)
+ drivers/iommu/amd/io_pgtable.c | 82 ++++++++++++++--------------------
+ 1 file changed, 34 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index fa21b9141b71..cde887530549 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -282,17 +282,6 @@ static int iova_reserve_iommu_regions(struct device *dev,
- 	return ret;
- }
- 
--static void iommu_dma_flush_iotlb_all(struct iova_domain *iovad)
--{
--	struct iommu_dma_cookie *cookie;
--	struct iommu_domain *domain;
--
--	cookie = container_of(iovad, struct iommu_dma_cookie, iovad);
--	domain = cookie->fq_domain;
--
--	domain->ops->flush_iotlb_all(domain);
--}
--
- static bool dev_is_untrusted(struct device *dev)
- {
- 	return dev_is_pci(dev) && to_pci_dev(dev)->untrusted;
-@@ -312,7 +301,7 @@ int iommu_dma_init_fq(struct iommu_domain *domain)
- 	if (cookie->fq_domain)
- 		return 0;
- 
--	ret = init_iova_flush_queue(&cookie->iovad, iommu_dma_flush_iotlb_all);
-+	ret = init_iova_flush_queue(&cookie->iovad, domain);
- 	if (ret) {
- 		pr_warn("iova flush queue initialization failed\n");
- 		return ret;
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 280dd0c7fe1b..76bc6f39fac7 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -63,7 +63,7 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
- 	iovad->start_pfn = start_pfn;
- 	iovad->dma_32bit_pfn = 1UL << (32 - iova_shift(iovad));
- 	iovad->max32_alloc_size = iovad->dma_32bit_pfn;
--	iovad->flush_cb = NULL;
-+	iovad->fq_domain = NULL;
- 	iovad->fq = NULL;
- 	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
- 	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
-@@ -90,10 +90,10 @@ static void free_iova_flush_queue(struct iova_domain *iovad)
- 	free_percpu(iovad->fq);
- 
- 	iovad->fq         = NULL;
--	iovad->flush_cb   = NULL;
-+	iovad->fq_domain  = NULL;
- }
- 
--int init_iova_flush_queue(struct iova_domain *iovad, iova_flush_cb flush_cb)
-+int init_iova_flush_queue(struct iova_domain *iovad, struct iommu_domain *fq_domain)
- {
- 	struct iova_fq __percpu *queue;
- 	int cpu;
-@@ -105,8 +105,6 @@ int init_iova_flush_queue(struct iova_domain *iovad, iova_flush_cb flush_cb)
- 	if (!queue)
- 		return -ENOMEM;
- 
--	iovad->flush_cb   = flush_cb;
--
- 	for_each_possible_cpu(cpu) {
- 		struct iova_fq *fq;
- 
-@@ -117,6 +115,7 @@ int init_iova_flush_queue(struct iova_domain *iovad, iova_flush_cb flush_cb)
- 		spin_lock_init(&fq->lock);
+diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
+index 182c93a43efd..4165e1372b6e 100644
+--- a/drivers/iommu/amd/io_pgtable.c
++++ b/drivers/iommu/amd/io_pgtable.c
+@@ -84,49 +84,45 @@ static void free_page_list(struct page *freelist)
  	}
- 
-+	iovad->fq_domain = fq_domain;
- 	iovad->fq = queue;
- 
- 	timer_setup(&iovad->fq_timer, fq_flush_timeout, 0);
-@@ -589,7 +588,7 @@ static void fq_ring_free(struct iova_domain *iovad, struct iova_fq *fq)
- static void iova_domain_flush(struct iova_domain *iovad)
- {
- 	atomic64_inc(&iovad->fq_flush_start_cnt);
--	iovad->flush_cb(iovad);
-+	iovad->fq_domain->ops->flush_iotlb_all(iovad->fq_domain);
- 	atomic64_inc(&iovad->fq_flush_finish_cnt);
  }
  
-diff --git a/include/linux/iova.h b/include/linux/iova.h
-index e746d8e41449..99be4fcea4f3 100644
---- a/include/linux/iova.h
-+++ b/include/linux/iova.h
-@@ -14,6 +14,7 @@
- #include <linux/rbtree.h>
- #include <linux/atomic.h>
- #include <linux/dma-mapping.h>
-+#include <linux/iommu.h>
+-static struct page *free_pt_page(unsigned long pt, struct page *freelist)
++static struct page *free_pt_page(u64 *pt, struct page *freelist)
+ {
+-	struct page *p = virt_to_page((void *)pt);
++	struct page *p = virt_to_page(pt);
  
- /* iova structure */
- struct iova {
-@@ -35,11 +36,6 @@ struct iova_rcache {
- 	struct iova_cpu_rcache __percpu *cpu_rcaches;
- };
+ 	p->freelist = freelist;
  
--struct iova_domain;
+ 	return p;
+ }
+ 
+-#define DEFINE_FREE_PT_FN(LVL, FN)						\
+-static struct page *free_pt_##LVL (unsigned long __pt, struct page *freelist)	\
+-{										\
+-	unsigned long p;							\
+-	u64 *pt;								\
+-	int i;									\
+-										\
+-	pt = (u64 *)__pt;							\
+-										\
+-	for (i = 0; i < 512; ++i) {						\
+-		/* PTE present? */						\
+-		if (!IOMMU_PTE_PRESENT(pt[i]))					\
+-			continue;						\
+-										\
+-		/* Large PTE? */						\
+-		if (PM_PTE_LEVEL(pt[i]) == 0 ||					\
+-		    PM_PTE_LEVEL(pt[i]) == 7)					\
+-			continue;						\
+-										\
+-		p = (unsigned long)IOMMU_PTE_PAGE(pt[i]);			\
+-		freelist = FN(p, freelist);					\
+-	}									\
+-										\
+-	return free_pt_page((unsigned long)pt, freelist);			\
++static struct page *free_pt_lvl(u64 *pt, struct page *freelist, int lvl)
++{
++	u64 *p;
++	int i;
++
++	for (i = 0; i < 512; ++i) {
++		/* PTE present? */
++		if (!IOMMU_PTE_PRESENT(pt[i]))
++			continue;
++
++		/* Large PTE? */
++		if (PM_PTE_LEVEL(pt[i]) == 0 ||
++		    PM_PTE_LEVEL(pt[i]) == 7)
++			continue;
++
++		/*
++		 * Free the next level. No need to look at l1 tables here since
++		 * they can only contain leaf PTEs; just free them directly.
++		 */
++		p = IOMMU_PTE_PAGE(pt[i]);
++		if (lvl > 2)
++			freelist = free_pt_lvl(p, freelist, lvl - 1);
++		else
++			freelist = free_pt_page(p, freelist);
++	}
++
++	return free_pt_page(pt, freelist);
+ }
+ 
+-DEFINE_FREE_PT_FN(l2, free_pt_page)
+-DEFINE_FREE_PT_FN(l3, free_pt_l2)
+-DEFINE_FREE_PT_FN(l4, free_pt_l3)
+-DEFINE_FREE_PT_FN(l5, free_pt_l4)
+-DEFINE_FREE_PT_FN(l6, free_pt_l5)
 -
--/* Call-Back from IOVA code into IOMMU drivers */
--typedef void (* iova_flush_cb)(struct iova_domain *domain);
--
- /* Number of entries per Flush Queue */
- #define IOVA_FQ_SIZE	256
+-static struct page *free_sub_pt(unsigned long root, int mode,
+-				struct page *freelist)
++static struct page *free_sub_pt(u64 *root, int mode, struct page *freelist)
+ {
+ 	switch (mode) {
+ 	case PAGE_MODE_NONE:
+@@ -136,19 +132,11 @@ static struct page *free_sub_pt(unsigned long root, int mode,
+ 		freelist = free_pt_page(root, freelist);
+ 		break;
+ 	case PAGE_MODE_2_LEVEL:
+-		freelist = free_pt_l2(root, freelist);
+-		break;
+ 	case PAGE_MODE_3_LEVEL:
+-		freelist = free_pt_l3(root, freelist);
+-		break;
+ 	case PAGE_MODE_4_LEVEL:
+-		freelist = free_pt_l4(root, freelist);
+-		break;
+ 	case PAGE_MODE_5_LEVEL:
+-		freelist = free_pt_l5(root, freelist);
+-		break;
+ 	case PAGE_MODE_6_LEVEL:
+-		freelist = free_pt_l6(root, freelist);
++		free_pt_lvl(root, freelist, mode);
+ 		break;
+ 	default:
+ 		BUG();
+@@ -364,7 +352,7 @@ static u64 *fetch_pte(struct amd_io_pgtable *pgtable,
  
-@@ -82,8 +78,7 @@ struct iova_domain {
- 	struct iova	anchor;		/* rbtree lookup anchor */
- 	struct iova_rcache rcaches[IOVA_RANGE_CACHE_MAX_SIZE];	/* IOVA range caches */
+ static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
+ {
+-	unsigned long pt;
++	u64 *pt;
+ 	int mode;
  
--	iova_flush_cb	flush_cb;	/* Call-Back function to flush IOMMU
--					   TLBs */
-+	struct iommu_domain *fq_domain;
+ 	while (cmpxchg64(pte, pteval, 0) != pteval) {
+@@ -375,7 +363,7 @@ static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
+ 	if (!IOMMU_PTE_PRESENT(pteval))
+ 		return freelist;
  
- 	struct timer_list fq_timer;		/* Timer to regularily empty the
- 						   flush-queues */
-@@ -147,7 +142,7 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
- 	unsigned long pfn_hi);
- void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
- 	unsigned long start_pfn);
--int init_iova_flush_queue(struct iova_domain *iovad, iova_flush_cb flush_cb);
-+int init_iova_flush_queue(struct iova_domain *iovad, struct iommu_domain *fq_domain);
- struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
- void put_iova_domain(struct iova_domain *iovad);
- #else
+-	pt   = (unsigned long)IOMMU_PTE_PAGE(pteval);
++	pt   = IOMMU_PTE_PAGE(pteval);
+ 	mode = IOMMU_PTE_MODE(pteval);
+ 
+ 	return free_sub_pt(pt, mode, freelist);
+@@ -512,7 +500,6 @@ static void v1_free_pgtable(struct io_pgtable *iop)
+ 	struct amd_io_pgtable *pgtable = container_of(iop, struct amd_io_pgtable, iop);
+ 	struct protection_domain *dom;
+ 	struct page *freelist = NULL;
+-	unsigned long root;
+ 
+ 	if (pgtable->mode == PAGE_MODE_NONE)
+ 		return;
+@@ -529,8 +516,7 @@ static void v1_free_pgtable(struct io_pgtable *iop)
+ 	BUG_ON(pgtable->mode < PAGE_MODE_NONE ||
+ 	       pgtable->mode > PAGE_MODE_6_LEVEL);
+ 
+-	root = (unsigned long)pgtable->root;
+-	freelist = free_sub_pt(root, pgtable->mode, freelist);
++	freelist = free_sub_pt(pgtable->root, pgtable->mode, freelist);
+ 
+ 	free_page_list(freelist);
+ }
 -- 
 2.28.0.dirty
 

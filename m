@@ -2,99 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50443470802
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE80470821
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245052AbhLJSFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:05:09 -0500
-Received: from mga01.intel.com ([192.55.52.88]:2453 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235392AbhLJSFI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:05:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="262516504"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="262516504"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:01:28 -0800
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="463753687"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:01:27 -0800
-Date:   Fri, 10 Dec 2021 10:05:45 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 1/4] ioasid: Reserve a global PASID for in-kernel DMA
-Message-ID: <20211210100545.373c30d1@jacob-builder>
-In-Reply-To: <20211210123109.GE6385@nvidia.com>
-References: <1638884834-83028-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <1638884834-83028-2-git-send-email-jacob.jun.pan@linux.intel.com>
-        <YbHie/Z4bIXwTInx@myrica>
-        <20211209101404.6aefbe1c@jacob-builder>
-        <YbMYkKZBktlrB2CR@myrica>
-        <20211210123109.GE6385@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S241854AbhLJSNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:13:08 -0500
+Received: from mail-oo1-f45.google.com ([209.85.161.45]:44884 "EHLO
+        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230284AbhLJSNI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:13:08 -0500
+Received: by mail-oo1-f45.google.com with SMTP id t9-20020a4a8589000000b002c5c4d19723so2576190ooh.11;
+        Fri, 10 Dec 2021 10:09:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bnSiIIEAxVbWb5ME0b4EjQTIeMlzMMlMKVBEVEKFmvo=;
+        b=YI1kQA1tXM8B0BX24su8AbH2RzLXy9vgc9pDId6WATq1J6nWZdFuqMyXfmiybyrhgS
+         T/9Bx98nvJDR2c/KIDCHqf7gLnpfT7gxpQhAnZf6X6aPLiUpN+zVNupoefmXZjjYCP4c
+         k8K5tTzJGsrknUJQ6DYoKi2wVL/5VHLSSBDqNPj/BuQmcE7vL39ESatxNbsddEcxWmdL
+         BOWdBHckq54xn28VHK5H2N6FwUCrHm4eYMQ4HMlF5dNZv2RDcSle1EBlXYXuEe0BNCkz
+         iULn2CYkGgAGFaLJ8BcZ1P2ZFkbyPJz6FnAa/OQn/eKOSqVVGqFCQm/MbA3j9YBVYlvp
+         iz/Q==
+X-Gm-Message-State: AOAM530zi3fsHOqr0XImH1ZyQnV63iw1997YtO2H/W5mTSb8hBbmGG8Z
+        a/lwzK/qXhnTGZMXWUm06pAMQEvRoXx3B0dDAYc=
+X-Google-Smtp-Source: ABdhPJylQaHxxBjvxLDdejK26dmax8gF5GO2emXKWarqrtdmHFUWV4Injg4wQQswc1tWUgMSYyPwJPfech+QMe2lThI=
+X-Received: by 2002:a05:6820:388:: with SMTP id r8mr9365162ooj.0.1639159771506;
+ Fri, 10 Dec 2021 10:09:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-8-digetx@gmail.com>
+In-Reply-To: <20211126180101.27818-8-digetx@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Dec 2021 19:09:20 +0100
+Message-ID: <CAJZ5v0i=zgubEtF5-Wnaqa5FMnfVUdSnEmD11-LAuYCH8ZCwrA@mail.gmail.com>
+Subject: Re: [PATCH v4 07/25] reboot: Remove extern annotation from function prototypes
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Fri, Nov 26, 2021 at 7:02 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> There is no need to annotate function prototypes with 'extern', it makes
+> code less readable. Remove unnecessary annotations from <reboot.h>.
+>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-On Fri, 10 Dec 2021 08:31:09 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
+I'm not sure that this is really useful.
 
-> On Fri, Dec 10, 2021 at 09:06:24AM +0000, Jean-Philippe Brucker wrote:
-> > On Thu, Dec 09, 2021 at 10:14:04AM -0800, Jacob Pan wrote:  
-> > > > This looks like we're just one step away from device drivers needing
-> > > > multiple PASIDs for kernel DMA so I'm trying to figure out how to
-> > > > evolve the API towards that. It's probably as simple as keeping a
-> > > > kernel IOASID set at first, but then we'll probably want to
-> > > > optimize by having multiple overlapping sets for each device driver
-> > > > (all separate from the SVA set).  
-> > > Sounds reasonable to start with a kernel set for in-kernel DMA once
-> > > we need multiple ones. But I am not sure what *overlapping* sets mean
-> > > here, could you explain?  
-> > 
-> > Given that each device uses a separate PASID table, we could allocate
-> > the same set of PASID values for different device drivers. We just need
-> > to make sure that those values are different from PASIDs allocated for
-> > user SVA.  
-> 
-> Why does user SVA need global values anyhow?
-> 
-Currently, we have mm.pasid for user SVA. mm is global. We could have per
-device PASID for dedicated devices (not shared across mm's), but that would
-make things a lot more complex. I am thinking multiple PASIDs per mm is
-needed, right?
+Personally, I tend to respect the existing conventions like this.
 
-For VT-d, the shared workqueue (SWQ) requires global PASIDs in that we
-cannot have two processes use the same PASID to submit work on a workqueue
-shared by the two processes. Each process's PASID must be unique to the
-SWQ's PASID table.
+Surely, this change is not required for the rest of the series to work.
 
-> Jason
-
-
-Thanks,
-
-Jacob
+> ---
+>  include/linux/reboot.h | 38 +++++++++++++++++++-------------------
+>  1 file changed, 19 insertions(+), 19 deletions(-)
+>
+> diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+> index 7c288013a3ca..b7fa25726323 100644
+> --- a/include/linux/reboot.h
+> +++ b/include/linux/reboot.h
+> @@ -40,36 +40,36 @@ extern int reboot_cpu;
+>  extern int reboot_force;
+>
+>
+> -extern int register_reboot_notifier(struct notifier_block *);
+> -extern int unregister_reboot_notifier(struct notifier_block *);
+> +int register_reboot_notifier(struct notifier_block *);
+> +int unregister_reboot_notifier(struct notifier_block *);
+>
+> -extern int devm_register_reboot_notifier(struct device *, struct notifier_block *);
+> +int devm_register_reboot_notifier(struct device *, struct notifier_block *);
+>
+> -extern int register_restart_handler(struct notifier_block *);
+> -extern int unregister_restart_handler(struct notifier_block *);
+> -extern void do_kernel_restart(char *cmd);
+> +int register_restart_handler(struct notifier_block *);
+> +int unregister_restart_handler(struct notifier_block *);
+> +void do_kernel_restart(char *cmd);
+>
+>  /*
+>   * Architecture-specific implementations of sys_reboot commands.
+>   */
+>
+> -extern void migrate_to_reboot_cpu(void);
+> -extern void machine_restart(char *cmd);
+> -extern void machine_halt(void);
+> -extern void machine_power_off(void);
+> +void migrate_to_reboot_cpu(void);
+> +void machine_restart(char *cmd);
+> +void machine_halt(void);
+> +void machine_power_off(void);
+>
+> -extern void machine_shutdown(void);
+> +void machine_shutdown(void);
+>  struct pt_regs;
+> -extern void machine_crash_shutdown(struct pt_regs *);
+> +void machine_crash_shutdown(struct pt_regs *);
+>
+>  /*
+>   * Architecture independent implementations of sys_reboot commands.
+>   */
+>
+> -extern void kernel_restart_prepare(char *cmd);
+> -extern void kernel_restart(char *cmd);
+> -extern void kernel_halt(void);
+> -extern void kernel_power_off(void);
+> +void kernel_restart_prepare(char *cmd);
+> +void kernel_restart(char *cmd);
+> +void kernel_halt(void);
+> +void kernel_power_off(void);
+>
+>  extern int C_A_D; /* for sysctl */
+>  void ctrl_alt_del(void);
+> @@ -77,15 +77,15 @@ void ctrl_alt_del(void);
+>  #define POWEROFF_CMD_PATH_LEN  256
+>  extern char poweroff_cmd[POWEROFF_CMD_PATH_LEN];
+>
+> -extern void orderly_poweroff(bool force);
+> -extern void orderly_reboot(void);
+> +void orderly_poweroff(bool force);
+> +void orderly_reboot(void);
+>  void hw_protection_shutdown(const char *reason, int ms_until_forced);
+>
+>  /*
+>   * Emergency restart, callable from an interrupt handler.
+>   */
+>
+> -extern void emergency_restart(void);
+> +void emergency_restart(void);
+>  #include <asm/emergency-restart.h>
+>
+>  #endif /* _LINUX_REBOOT_H */
+> --
+> 2.33.1
+>

@@ -2,89 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD45746FE95
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0EC46FE98
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbhLJKUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:20:01 -0500
-Received: from www.zeus03.de ([194.117.254.33]:44866 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239943AbhLJKT7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:19:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=s3LeDggvmW3ag8cnOWdEwafwGfd1
-        5LxqD+plVt2oWuc=; b=bMTZHzdtIroFgIdg7n9H9Fll+PZt2rbXeRnKElX4ph3o
-        4xCVNxwA9i5KmOynOai8rDatR1gsF3BZ/0T5NxNlNvKCOBruYi3981qIfueLP0hs
-        AuJ9oDCHm97tipcfoQM0nptYAoMcSjNTU53rL/U2rIHHHj168/1OSMaXRdDgoqI=
-Received: (qmail 1422109 invoked from network); 10 Dec 2021 11:16:23 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Dec 2021 11:16:23 +0100
-X-UD-Smtp-Session: l3s3148p1@g8GpA8jS1JAgAQnoAEPjAJzPXF1eIEK3
-Date:   Fri, 10 Dec 2021 11:16:19 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v5 1/1] gpio: add sloppy logic analyzer using polling
-Message-ID: <YbMo8+1N2BKAE63Z@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20211123164902.35370-1-wsa+renesas@sang-engineering.com>
- <20211123164902.35370-2-wsa+renesas@sang-engineering.com>
- <CAMuHMdUGOEmB8QeHufXVHifYpvZxNpu_kku05eGKk=+YRf+PsQ@mail.gmail.com>
+        id S239997AbhLJKVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:21:25 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40312 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239631AbhLJKVY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 05:21:24 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 8F6441F4709E
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1639131468; bh=Gjv8pg77wAZyx6FV9xWPNtCyByurMxg6U07KqvM1fqo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ODmsPABiBeHD9ryRiRsKqYvoOLjFkrf37+cM12Q+/qOrTPyAHT5tDzYjzPztfv7h7
+         6ZuxRLiPfUCS/jdP6+D8QZqEp2Tm7Z/mEM7oxGgbN1+mc2ON3/u1dnmbonnifIOpWd
+         GdEkYJq3aE5UosKSAQP2lngcpf2RjejnVSYaYo+RNNGk8FdbxYydCG5MC+PTFf3q7O
+         oNoh1FTPvQWXNcDaPWmtBMzKHpS1GgAa8Z1n75qah1vZzLMIWcyyBrtTaf0SbnreEb
+         SYlI6p/Ful7B/1LgJoDoXcoxeuI3aK5ScEnUvQbitFYzeYzDbEEzN1hE8O9vVcI0yv
+         MxSCAIw7FE6BA==
+Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211110130623.20553-1-granquet@baylibre.com>
+ <20211110130623.20553-8-granquet@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <b307d567-774b-ca9e-d7d7-09846782c988@collabora.com>
+Date:   Fri, 10 Dec 2021 11:17:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="teEgrqnjjop4BLE1"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUGOEmB8QeHufXVHifYpvZxNpu_kku05eGKk=+YRf+PsQ@mail.gmail.com>
+In-Reply-To: <20211110130623.20553-8-granquet@baylibre.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 10/11/21 14:06, Guillaume Ranquet ha scritto:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC and a
+> according phy driver mediatek-dp-phy.
+> 
+> It supports both functional units on the mt8195, the embedded
+> DisplayPort as well as the external DisplayPort units. It offers
+> hot-plug-detection, audio up to 8 channels, and DisplayPort 1.4 with up
+> to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so that
+> both can work with the same register range. The phy driver sets device
+> data that is read by the parent to get the phy device that can be used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
---teEgrqnjjop4BLE1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hello Markus, Guillaume,
 
+there is a critical issue with this patch. Please check below.
 
-> Please preserve sort order, cfr. the (hilarious?) comment at the top
-> of the list:
+> ---
+>   drivers/gpu/drm/drm_edid.c              |    2 +-
+>   drivers/gpu/drm/mediatek/Kconfig        |    7 +
+>   drivers/gpu/drm/mediatek/Makefile       |    2 +
+>   drivers/gpu/drm/mediatek/mtk_dp.c       | 3094 +++++++++++++++++++++++
+>   drivers/gpu/drm/mediatek/mtk_dp_reg.h   |  568 +++++
+>   drivers/gpu/drm/mediatek/mtk_dpi.c      |  111 +-
+>   drivers/gpu/drm/mediatek/mtk_dpi_regs.h |   26 +
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c  |    1 +
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.h  |    1 +
+>   9 files changed, 3799 insertions(+), 13 deletions(-)
+>   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
+>   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
+> 
 
-Ouch, yes. That's what you get for a last minute rename. Fixed in v6!
+<snip>
 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 384074f69111b..e6e88e3cd811d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
 
---teEgrqnjjop4BLE1
-Content-Type: application/pgp-signature; name="signature.asc"
+<snip>
 
------BEGIN PGP SIGNATURE-----
+> @@ -979,6 +1051,16 @@ static int mtk_dpi_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	dpi->dpi_ck_cg = devm_clk_get(dev, "ck_cg");
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGzKO8ACgkQFA3kzBSg
-KbbT+xAAhcReZsn4U8iPxnddjusiCldpFdsenBANy9yQw/eFAXNLVEab8jm4xjst
-vwy9csA9ETm3MfysPvMfXItJHuah9bi+vC6uWfqoW2NcDEPxDFLx/EqSbF6qv2qu
-UKJQzhIBX6OvOqVYJ4eFE6z0Mey+1X8TijclmtIUfsDwEkXxRTsSs7gsmB4SawFD
-z1vC3sL+0XOKofIhUbH5ki79g7eLYfFrWTvyeI8lovc6xVPqIySFV/xSNTOPByzF
-mHVHxw5xjeYdEPiMjloCIgGqZi/N3f6ncKJsJBJKfq0tNLfO5lH+aldp29vpj33u
-V2ttVhucM31H8/jBi9GiJWC3ajwAEbmcfsPu49GYlR8u5oKeBj6Z6/aQUhHfw1yK
-jKwTS7KpCQw605PJ/UjNHuRDPBxn6IVujlnt419l58lfXZmbEq5pWTp2LqBO6GZD
-+1V6G7MzHD4WyK2bQNiWbrolx3Dm+7Jsv7W1ubxelRfEGDXw6WYP568tgzsQVACg
-V/n+4ZJsBKoHkennIDFyJeCvTnkqLOQgcHYlWM5KO0zjgJjoYaRqm89/6NqzkBEG
-wnTgXZCAqT6Z/OxI/nXfRR91SrycSB5EbW6xnOJZMQxrIYyRxk25fewlPQSjZdu3
-7T2doM5XS7jWXN+KUCN1L/f+G+CZvFS4wsGFLrHWfvPBmwEXsz0=
-=OZgG
------END PGP SIGNATURE-----
+mtk_dpi is used on MT2701, MT7183, MT8183, MT8192, but these platforms haven't
+got any "ck_cg" clock defined in their device-trees (regardless of whether these
+can support adding this clock or not, any code change shall be retro-compatible
+hence not breaking compatibility/functionality with older device-trees).
 
---teEgrqnjjop4BLE1--
+Reminding that:
+- mediatek-drm uses the component framework
+- mtk_drm_drv is the component master
+- mtk_drm_drv bind() won't be called unless all of the components added with
+   match aren't calling component_add()
+
+... this change not only breaks DisplayPort support for *all* of the
+aforementioned SoCs, but also makes the entire mediatek-drm to not finish
+probing, producing a global breakage that also includes DSI and the entire
+stack of components of that master (so, no display on all of them).
+
+To avoid breaking any SoC that's not MT8195, please use devm_clk_get_optional()
+here in the next version.
+
+Thanks,
+- Angelo
+

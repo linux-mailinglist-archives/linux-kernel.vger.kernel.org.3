@@ -2,482 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E784700F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B08774700F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241303AbhLJMsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:48:30 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:53756 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241161AbhLJMs1 (ORCPT
+        id S241326AbhLJMtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229989AbhLJMtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:48:27 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DF93C1F3A1;
-        Fri, 10 Dec 2021 12:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639140290; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZSdh1gU5+gv5s2SwWyfKYGVCnMibI3IcD2jbR4Olt5U=;
-        b=o0L4K8r19DIv4SKTa+ol0udxMOxOM9LPec1nUiUvFQn8uUzXrxK/uUEGTdZXuir+Mp5k+0
-        m4YJKMZfIwzo2TNqYLwICSJXba+jnD6mred/pOZznjK5tjOUEZD64xIFcTZTHl3ZULGumC
-        M1nRAEGh9iBOYpsIM6bUOW/X3jfs4RY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639140290;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZSdh1gU5+gv5s2SwWyfKYGVCnMibI3IcD2jbR4Olt5U=;
-        b=ipIo9A67s6Jpt57dSa3A+UUNoeZaB4aQ9TYaMYaxC6+ReD1DwBxQjJ3wWGz3YA3kQGVYno
-        D0mfSWwk0UjFwaDw==
-Received: from san.suse.cz (san.suse.cz [10.100.12.79])
-        by relay2.suse.de (Postfix) with ESMTP id C6C61A3B91;
-        Fri, 10 Dec 2021 12:44:50 +0000 (UTC)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
-        joe.lawrence@redhat.com
-Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v2 2/2] selftests/livepatch: Test of the API for specifying functions to search for on a stack
-Date:   Fri, 10 Dec 2021 13:44:49 +0100
-Message-Id: <20211210124449.21537-3-mbenes@suse.cz>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211210124449.21537-1-mbenes@suse.cz>
-References: <20211210124449.21537-1-mbenes@suse.cz>
+        Fri, 10 Dec 2021 07:49:12 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16804C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:45:37 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id q3so14725863wru.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:45:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9sJ/j648CjFEfYYwmgaJqm9n6E4hQ0hf+GgdNuFCf40=;
+        b=sQ33cLM/SB7/dDXToTvBL6uRbSdkQ7Dv+ReEuw5JZ4N0AYWrCSXvVysI7vatB8NC6n
+         r080596tnsP0VpHOxetN5gLwYR9KuvzItFpnfSnAtIbPq92BXcSArmILNKdMw1GGvosT
+         tD7qDJgsTW4ysjAKkpJLKj1zknbrTkfhU0xApgNbkEBcQbdx8ADpiB/Z1xuvZzcRRuTR
+         9l8RLMxxWdzM2C08C2z9rUy3kFY23KREWnrO/6FLTVuAPraTcuq9XWXpvPlSsuguggZe
+         TsXHYTK2mMaPP3Oa4PZMYvv65A+EtDh0H/xj6p+cj953DhEPK5fr+QCXeDUBn37fizif
+         SqCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9sJ/j648CjFEfYYwmgaJqm9n6E4hQ0hf+GgdNuFCf40=;
+        b=Id7YXe99yRmk6TD+kp1Z/CyyIHRkhErHv6TcvWgYCGdqi5v314E6XwpV6dCrMubAlx
+         62v4vp0UoTBOFhZBJVgrmjEsY7p64sdunminT6rhHgGd6fg7ORhOeOwRpnnG9xAMXYvt
+         eW+xT/Xc9kS46w4ngG5/z8pD0uQ37Tt9sC1avysfBjPvCvFsAdyJP2CZvuhVBHJzisjy
+         9Z6mDxqGQo8d8oiC9OFJJZZ5RxzMQfOUqKD4LPevRvufFpS0JODcmnFWONXbCMY1kawI
+         W1kLR06Y9P7zeCLe0Zy7fEucreWRuLXX/sKJ3XJB0krEJv6VQFUIIvl/abK2xICnbibi
+         aloA==
+X-Gm-Message-State: AOAM532YESUoB6DlfJ5aCQHkKdTOMJZ/Gr/JqkZbGAstk/RX5mpSv0wT
+        pbx1oKAvNZD5n+llFcOiRGhA3w==
+X-Google-Smtp-Source: ABdhPJzgwrU/FmdlgYUrQ/W8IMfKbcwMAFyGKzuIXPCW6S7KdWuS0DbWzGfFTnCRWPoPE2mUxZ5jXA==
+X-Received: by 2002:adf:dd46:: with SMTP id u6mr14235805wrm.280.1639140335457;
+        Fri, 10 Dec 2021 04:45:35 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:13f9:8295:8923:1942])
+        by smtp.gmail.com with ESMTPSA id g4sm2425890wro.12.2021.12.10.04.45.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 04:45:34 -0800 (PST)
+Date:   Fri, 10 Dec 2021 13:45:27 +0100
+From:   Marco Elver <elver@google.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        David Hildenbrand <david@redhat.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>
+Subject: Re: [PATCH v4 1/7] include: split out uaccess instrumentation into a
+ separate header
+Message-ID: <YbNL579AHDIg3PH5@elver.google.com>
+References: <20211209221545.2333249-1-pcc@google.com>
+ <20211209221545.2333249-2-pcc@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209221545.2333249-2-pcc@google.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for the API which allows the user to specify functions which
-are then searched for on any tasks's stack during a transition process.
+On Thu, Dec 09, 2021 at 02:15PM -0800, Peter Collingbourne wrote:
+> In an upcoming change we are going to add uaccess instrumentation
+> that uses inline access to struct task_struct from the
+> instrumentation routines. Because instrumentation.h is included
+> from many places including (recursively) from sched.h this would
+> otherwise lead to a circular dependency. Break the dependency by
+> moving uaccess instrumentation routines into a separate header,
+> instrumentation-uaccess.h.
+> 
+> Link: https://linux-review.googlesource.com/id/I625728db0c8db374e13e4ebc54985ac5c79ace7d
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
+> Acked-by: Dmitry Vyukov <dvyukov@google.com>
 
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
----
- lib/livepatch/Makefile                        |   5 +-
- lib/livepatch/test_klp_func_stack_only_demo.c |  66 ++++++++
- .../test_klp_func_stack_only_demo2.c          |  61 +++++++
- lib/livepatch/test_klp_func_stack_only_mod.c  |  70 ++++++++
- tools/testing/selftests/livepatch/Makefile    |   3 +-
- .../livepatch/test-func-stack-only.sh         | 159 ++++++++++++++++++
- 6 files changed, 362 insertions(+), 2 deletions(-)
- create mode 100644 lib/livepatch/test_klp_func_stack_only_demo.c
- create mode 100644 lib/livepatch/test_klp_func_stack_only_demo2.c
- create mode 100644 lib/livepatch/test_klp_func_stack_only_mod.c
- create mode 100755 tools/testing/selftests/livepatch/test-func-stack-only.sh
+Reviewed-by: Marco Elver <elver@google.com>
 
-diff --git a/lib/livepatch/Makefile b/lib/livepatch/Makefile
-index dcc912b3478f..ee149b74b20d 100644
---- a/lib/livepatch/Makefile
-+++ b/lib/livepatch/Makefile
-@@ -11,4 +11,7 @@ obj-$(CONFIG_TEST_LIVEPATCH) += test_klp_atomic_replace.o \
- 				test_klp_shadow_vars.o \
- 				test_klp_state.o \
- 				test_klp_state2.o \
--				test_klp_state3.o
-+				test_klp_state3.o \
-+				test_klp_func_stack_only_mod.o \
-+				test_klp_func_stack_only_demo.o \
-+				test_klp_func_stack_only_demo2.o
-diff --git a/lib/livepatch/test_klp_func_stack_only_demo.c b/lib/livepatch/test_klp_func_stack_only_demo.c
-new file mode 100644
-index 000000000000..db0a85d57f2e
---- /dev/null
-+++ b/lib/livepatch/test_klp_func_stack_only_demo.c
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2021 Miroslav Benes <mbenes@suse.cz>
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/livepatch.h>
-+
-+static int func_stack_only;
-+module_param(func_stack_only, int, 0644);
-+MODULE_PARM_DESC(func_stack_only, "func_stack_only (default=0)");
-+
-+static void livepatch_child_function(void)
-+{
-+	pr_info("%s\n", __func__);
-+}
-+
-+static struct klp_func funcs[] = {
-+	{
-+		.old_name = "child_function",
-+		.new_func = livepatch_child_function,
-+	}, {}
-+};
-+
-+/* Used if func_stack_only module parameter is true */
-+static struct klp_func funcs_stack_only[] = {
-+	{
-+		.old_name = "child_function",
-+		.new_func = livepatch_child_function,
-+	}, {
-+		.old_name = "parent_function",
-+		.stack_only = true,
-+	}, {}
-+};
-+
-+static struct klp_object objs[] = {
-+	{
-+		.name = "test_klp_func_stack_only_mod",
-+		.funcs = funcs,
-+	}, {}
-+};
-+
-+static struct klp_patch patch = {
-+	.mod = THIS_MODULE,
-+	.objs = objs,
-+};
-+
-+static int test_klp_func_stack_only_demo_init(void)
-+{
-+	if (func_stack_only)
-+		objs[0].funcs = funcs_stack_only;
-+
-+	return klp_enable_patch(&patch);
-+}
-+
-+static void test_klp_func_stack_only_demo_exit(void)
-+{
-+}
-+
-+module_init(test_klp_func_stack_only_demo_init);
-+module_exit(test_klp_func_stack_only_demo_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_INFO(livepatch, "Y");
-+MODULE_AUTHOR("Miroslav Benes <mbenes@suse.cz>");
-+MODULE_DESCRIPTION("Livepatch test: func_stack_only demo");
-diff --git a/lib/livepatch/test_klp_func_stack_only_demo2.c b/lib/livepatch/test_klp_func_stack_only_demo2.c
-new file mode 100644
-index 000000000000..e1e166db73e6
---- /dev/null
-+++ b/lib/livepatch/test_klp_func_stack_only_demo2.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2021 Miroslav Benes <mbenes@suse.cz>
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/livepatch.h>
-+
-+static void livepatch_child_function(void)
-+{
-+	pr_info("%s\n", __func__);
-+}
-+
-+static struct klp_func funcs_stack_only[] = {
-+	{
-+		.old_name = "child_function",
-+		.new_func = livepatch_child_function,
-+	}, {
-+		.old_name = "parent_function",
-+		.stack_only = true,
-+	}, {}
-+};
-+
-+static struct klp_func busymod_funcs[] = {
-+	{
-+		.old_name = "busymod_work_func",
-+		.stack_only = true,
-+	}, {}
-+};
-+
-+static struct klp_object objs[] = {
-+	{
-+		.name = "test_klp_func_stack_only_mod",
-+		.funcs = funcs_stack_only,
-+	}, {
-+		.name = "test_klp_callback_busy",
-+		.funcs = busymod_funcs,
-+	}, {}
-+};
-+
-+static struct klp_patch patch = {
-+	.mod = THIS_MODULE,
-+	.objs = objs,
-+};
-+
-+static int test_klp_func_stack_only_demo2_init(void)
-+{
-+	return klp_enable_patch(&patch);
-+}
-+
-+static void test_klp_func_stack_only_demo2_exit(void)
-+{
-+}
-+
-+module_init(test_klp_func_stack_only_demo2_init);
-+module_exit(test_klp_func_stack_only_demo2_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_INFO(livepatch, "Y");
-+MODULE_AUTHOR("Miroslav Benes <mbenes@suse.cz>");
-+MODULE_DESCRIPTION("Livepatch test: func_stack_only demo 2");
-diff --git a/lib/livepatch/test_klp_func_stack_only_mod.c b/lib/livepatch/test_klp_func_stack_only_mod.c
-new file mode 100644
-index 000000000000..0876c7bcc671
---- /dev/null
-+++ b/lib/livepatch/test_klp_func_stack_only_mod.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2021 Miroslav Benes <mbenes@suse.cz>
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/completion.h>
-+#include <linux/workqueue.h>
-+
-+/* Controls whether parent_function() waits for completion */
-+static bool block_transition;
-+module_param(block_transition, bool, 0644);
-+MODULE_PARM_DESC(block_transition, "block_transition (default=false)");
-+
-+/*
-+ * work_started completion allows the _init function to make sure that the work
-+ *              (parent_function() is really scheduled and executed before
-+ *              returning. It solves a possible race.
-+ * finish completion causes parent_function() to wait (if block_transition is
-+ *        true) and thus it might block the live patching transition if
-+ *        parent_function() is specified as stack_only function.
-+ */
-+static DECLARE_COMPLETION(work_started);
-+static DECLARE_COMPLETION(finish);
-+
-+static noinline void child_function(void)
-+{
-+	pr_info("%s\n", __func__);
-+}
-+
-+static void parent_function(struct work_struct *work)
-+{
-+	pr_info("%s enter\n", __func__);
-+
-+	complete(&work_started);
-+
-+	child_function();
-+
-+	if (block_transition)
-+		wait_for_completion(&finish);
-+
-+	pr_info("%s exit\n", __func__);
-+}
-+
-+static DECLARE_WORK(work, parent_function);
-+
-+static int test_klp_func_stack_only_mod_init(void)
-+{
-+	pr_info("%s\n", __func__);
-+
-+	schedule_work(&work);
-+	wait_for_completion(&work_started);
-+
-+	return 0;
-+}
-+
-+static void test_klp_func_stack_only_mod_exit(void)
-+{
-+	pr_info("%s\n", __func__);
-+
-+	complete(&finish);
-+	flush_work(&work);
-+}
-+
-+module_init(test_klp_func_stack_only_mod_init);
-+module_exit(test_klp_func_stack_only_mod_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Miroslav Benes <mbenes@suse.cz>");
-+MODULE_DESCRIPTION("Livepatch test: func_stack_only module");
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index 1acc9e1fa3fb..1223e90d9f05 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -6,7 +6,8 @@ TEST_PROGS := \
- 	test-callbacks.sh \
- 	test-shadow-vars.sh \
- 	test-state.sh \
--	test-ftrace.sh
-+	test-ftrace.sh \
-+	test-func-stack-only.sh
- 
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/livepatch/test-func-stack-only.sh b/tools/testing/selftests/livepatch/test-func-stack-only.sh
-new file mode 100755
-index 000000000000..326b002f9297
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-func-stack-only.sh
-@@ -0,0 +1,159 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2021 Miroslav Benes <mbenes@suse.cz>
-+
-+# The tests for stack_only API which allows users to specify functions to be
-+# search for on a stack.
-+
-+. $(dirname $0)/functions.sh
-+
-+MOD_TARGET=test_klp_func_stack_only_mod
-+MOD_TARGET_BUSY=test_klp_callbacks_busy
-+MOD_LIVEPATCH=test_klp_func_stack_only_demo
-+MOD_LIVEPATCH2=test_klp_func_stack_only_demo2
-+MOD_REPLACE=test_klp_atomic_replace
-+
-+setup_config
-+
-+# Non-blocking test. parent_function() calls child_function() and sleeps. The
-+# live patch patches child_function(). The test does not use stack_only API and
-+# the live patching transition finishes immediately.
-+#
-+# - load a target module and let its parent_function() sleep
-+# - load a live patch which patches child_function()
-+# - the transition does not block, because parent_function() is not checked for
-+#   its presence on a stack
-+# - clean up afterwards
-+
-+start_test "non-blocking patching without the function on a stack"
-+
-+load_mod $MOD_TARGET block_transition=1
-+load_lp $MOD_LIVEPATCH
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+unload_mod $MOD_TARGET
-+
-+check_result "% modprobe $MOD_TARGET block_transition=1
-+$MOD_TARGET: ${MOD_TARGET}_init
-+$MOD_TARGET: parent_function enter
-+$MOD_TARGET: child_function
-+% modprobe $MOD_LIVEPATCH
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH
-+% rmmod $MOD_TARGET
-+$MOD_TARGET: ${MOD_TARGET}_exit
-+$MOD_TARGET: parent_function exit"
-+
-+# Blocking version of the previous test. stack_only is now set for
-+# parent_function(). The transition is blocked.
-+#
-+# - load a target module and let its parent_function() sleep
-+# - load a live patch which patches child_function() and specifies
-+#   parent_function() as a stack_only function
-+# - the transition blocks, because parent_function() is present on a stack
-+#   while sleeping there
-+# - clean up afterwards
-+
-+start_test "patching blocked due to the function on a stack"
-+
-+load_mod $MOD_TARGET block_transition=1
-+load_lp_nowait $MOD_LIVEPATCH func_stack_only=1
-+
-+# Wait until the livepatch reports in-transition state, i.e. that it's
-+# stalled on $MOD_TARGET::parent_function()
-+loop_until 'grep -q '^1$' /sys/kernel/livepatch/$MOD_LIVEPATCH/transition' ||
-+	die "failed to stall transition"
-+
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+unload_mod $MOD_TARGET
-+
-+check_result "% modprobe $MOD_TARGET block_transition=1
-+$MOD_TARGET: ${MOD_TARGET}_init
-+$MOD_TARGET: parent_function enter
-+$MOD_TARGET: child_function
-+% modprobe $MOD_LIVEPATCH func_stack_only=1
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': reversing transition from patching to unpatching
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH
-+% rmmod $MOD_TARGET
-+$MOD_TARGET: ${MOD_TARGET}_exit
-+$MOD_TARGET: parent_function exit"
-+
-+# Test an atomic replace live patch on top of stack_only live patch. The aim is
-+# to test the correct handling of nop functions in stack_only environment.
-+#
-+# - load a target module and do not let its parent_function() sleep
-+# - load a busy target module but do not let its busymod_work_func() sleep.
-+#   This is only to have another target module loaded for the next steps.
-+# - load a stack_only live patch. It patches the first target module and
-+#   defines parent_function() to be stack_only. So there is a klp_object with
-+#   both !stack_only and stack_only functions. The live patch also has another
-+#   klp_object with busymod_work_func() as stack_only function (and nothing
-+#   else). The live patch is smoothly applied because there is no blocking
-+#   involved.
-+# - load atomic replace live patch which patches a function in vmlinux. No nop
-+#   function should be created for stack_only functions
-+# - clean up afterwards
-+
-+start_test "atomic replace on top of a stack_only live patch"
-+
-+load_mod $MOD_TARGET
-+load_mod $MOD_TARGET_BUSY
-+load_lp $MOD_LIVEPATCH2
-+load_lp $MOD_REPLACE replace=1
-+disable_lp $MOD_REPLACE
-+unload_lp $MOD_REPLACE
-+unload_lp $MOD_LIVEPATCH2
-+unload_mod $MOD_TARGET_BUSY
-+unload_mod $MOD_TARGET
-+
-+check_result "% modprobe $MOD_TARGET
-+$MOD_TARGET: ${MOD_TARGET}_init
-+$MOD_TARGET: parent_function enter
-+$MOD_TARGET: child_function
-+$MOD_TARGET: parent_function exit
-+% modprobe $MOD_TARGET_BUSY
-+$MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
-+$MOD_TARGET_BUSY: busymod_work_func enter
-+$MOD_TARGET_BUSY: busymod_work_func exit
-+% modprobe $MOD_LIVEPATCH2
-+livepatch: enabling patch '$MOD_LIVEPATCH2'
-+livepatch: '$MOD_LIVEPATCH2': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH2': starting patching transition
-+livepatch: '$MOD_LIVEPATCH2': completing patching transition
-+livepatch: '$MOD_LIVEPATCH2': patching complete
-+% modprobe $MOD_REPLACE replace=1
-+livepatch: enabling patch '$MOD_REPLACE'
-+livepatch: '$MOD_REPLACE': initializing patching transition
-+livepatch: '$MOD_REPLACE': starting patching transition
-+livepatch: '$MOD_REPLACE': completing patching transition
-+livepatch: '$MOD_REPLACE': patching complete
-+% echo 0 > /sys/kernel/livepatch/$MOD_REPLACE/enabled
-+livepatch: '$MOD_REPLACE': initializing unpatching transition
-+livepatch: '$MOD_REPLACE': starting unpatching transition
-+livepatch: '$MOD_REPLACE': completing unpatching transition
-+livepatch: '$MOD_REPLACE': unpatching complete
-+% rmmod $MOD_REPLACE
-+% rmmod $MOD_LIVEPATCH2
-+% rmmod $MOD_TARGET_BUSY
-+$MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit
-+% rmmod $MOD_TARGET
-+$MOD_TARGET: ${MOD_TARGET}_exit"
-+
-+exit 0
--- 
-2.34.1
-
+> ---
+>  include/linux/instrumented-uaccess.h | 49 ++++++++++++++++++++++++++++
+>  include/linux/instrumented.h         | 34 -------------------
+>  include/linux/uaccess.h              |  2 +-
+>  lib/iov_iter.c                       |  2 +-
+>  lib/usercopy.c                       |  2 +-
+>  5 files changed, 52 insertions(+), 37 deletions(-)
+>  create mode 100644 include/linux/instrumented-uaccess.h
+> 
+> diff --git a/include/linux/instrumented-uaccess.h b/include/linux/instrumented-uaccess.h
+> new file mode 100644
+> index 000000000000..ece549088e50
+> --- /dev/null
+> +++ b/include/linux/instrumented-uaccess.h
+> @@ -0,0 +1,49 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * This header provides generic wrappers for memory access instrumentation for
+> + * uaccess routines that the compiler cannot emit for: KASAN, KCSAN.
+> + */
+> +#ifndef _LINUX_INSTRUMENTED_UACCESS_H
+> +#define _LINUX_INSTRUMENTED_UACCESS_H
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/kasan-checks.h>
+> +#include <linux/kcsan-checks.h>
+> +#include <linux/types.h>
+> +
+> +/**
+> + * instrument_copy_to_user - instrument reads of copy_to_user
+> + *
+> + * Instrument reads from kernel memory, that are due to copy_to_user (and
+> + * variants). The instrumentation must be inserted before the accesses.
+> + *
+> + * @to destination address
+> + * @from source address
+> + * @n number of bytes to copy
+> + */
+> +static __always_inline void
+> +instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+> +{
+> +	kasan_check_read(from, n);
+> +	kcsan_check_read(from, n);
+> +}
+> +
+> +/**
+> + * instrument_copy_from_user - instrument writes of copy_from_user
+> + *
+> + * Instrument writes to kernel memory, that are due to copy_from_user (and
+> + * variants). The instrumentation should be inserted before the accesses.
+> + *
+> + * @to destination address
+> + * @from source address
+> + * @n number of bytes to copy
+> + */
+> +static __always_inline void
+> +instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
+> +{
+> +	kasan_check_write(to, n);
+> +	kcsan_check_write(to, n);
+> +}
+> +
+> +#endif /* _LINUX_INSTRUMENTED_UACCESS_H */
+> diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+> index 42faebbaa202..b68f415510c7 100644
+> --- a/include/linux/instrumented.h
+> +++ b/include/linux/instrumented.h
+> @@ -102,38 +102,4 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
+>  	kcsan_check_atomic_read_write(v, size);
+>  }
+>  
+> -/**
+> - * instrument_copy_to_user - instrument reads of copy_to_user
+> - *
+> - * Instrument reads from kernel memory, that are due to copy_to_user (and
+> - * variants). The instrumentation must be inserted before the accesses.
+> - *
+> - * @to destination address
+> - * @from source address
+> - * @n number of bytes to copy
+> - */
+> -static __always_inline void
+> -instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+> -{
+> -	kasan_check_read(from, n);
+> -	kcsan_check_read(from, n);
+> -}
+> -
+> -/**
+> - * instrument_copy_from_user - instrument writes of copy_from_user
+> - *
+> - * Instrument writes to kernel memory, that are due to copy_from_user (and
+> - * variants). The instrumentation should be inserted before the accesses.
+> - *
+> - * @to destination address
+> - * @from source address
+> - * @n number of bytes to copy
+> - */
+> -static __always_inline void
+> -instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
+> -{
+> -	kasan_check_write(to, n);
+> -	kcsan_check_write(to, n);
+> -}
+> -
+>  #endif /* _LINUX_INSTRUMENTED_H */
+> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> index ac0394087f7d..c0c467e39657 100644
+> --- a/include/linux/uaccess.h
+> +++ b/include/linux/uaccess.h
+> @@ -3,7 +3,7 @@
+>  #define __LINUX_UACCESS_H__
+>  
+>  #include <linux/fault-inject-usercopy.h>
+> -#include <linux/instrumented.h>
+> +#include <linux/instrumented-uaccess.h>
+>  #include <linux/minmax.h>
+>  #include <linux/sched.h>
+>  #include <linux/thread_info.h>
+> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> index 66a740e6e153..3f9dc6df7102 100644
+> --- a/lib/iov_iter.c
+> +++ b/lib/iov_iter.c
+> @@ -12,7 +12,7 @@
+>  #include <linux/compat.h>
+>  #include <net/checksum.h>
+>  #include <linux/scatterlist.h>
+> -#include <linux/instrumented.h>
+> +#include <linux/instrumented-uaccess.h>
+>  
+>  #define PIPE_PARANOIA /* for now */
+>  
+> diff --git a/lib/usercopy.c b/lib/usercopy.c
+> index 7413dd300516..1cd188e62d06 100644
+> --- a/lib/usercopy.c
+> +++ b/lib/usercopy.c
+> @@ -1,7 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <linux/bitops.h>
+>  #include <linux/fault-inject-usercopy.h>
+> -#include <linux/instrumented.h>
+> +#include <linux/instrumented-uaccess.h>
+>  #include <linux/uaccess.h>
+>  
+>  /* out-of-line parts */
+> -- 
+> 2.34.1.173.g76aa8bc2d0-goog
+> 

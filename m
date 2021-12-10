@@ -2,98 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4474702DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168574702E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbhLJOgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S242184AbhLJOh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234805AbhLJOgW (ORCPT
+        with ESMTP id S241946AbhLJOh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:36:22 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBBBC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:32:47 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso9814617otr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:32:47 -0800 (PST)
+        Fri, 10 Dec 2021 09:37:57 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9A0C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:34:22 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id u17so15280488wrt.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:34:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=r4FyDNa+h/XJPABGXhOunndvFnUDZeBld+usgYdr7RQ=;
-        b=qOZg0g6zV2W5UYRQi1rVY7GTxMmJpKb0c/SWFNTFvygNXe6H9WVEiLHumUupvZz9bO
-         iTzxprO1m9+5fz2lmYX1db9AtTg56cpbA5c7RMqy2OVvxt1k03gN5l9p0uM8V3N1OP7S
-         sEz7AdPNiQEe/+n6igg82zdC4T4ivIPgFavxiDT63wRYkcy463Vsx+npEWbe8C+1fJu2
-         kCnz7Sy3olPuL1usLQPwFuDw5FPaIyXqQwWaIMTzlCxaS5TNkMtt60VZ+7YXHbuVcXMD
-         9D7Hstn/w5lHb2FdzGLQhIk7xji5zXC1ard6Uxl5QC3yVFTGmMtR4dsNxbrf7bT8x0Lq
-         imEA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2GRxg5k+GfsTEG/HHuVw87NAnSnT8iO/e9MJjPT+e+o=;
+        b=L1Ulimte4Z0H1umx57noMXuSMT9z2pNYcjaEcRkOmHyohqLlZ+Jry54jxw02IUiQ6b
+         hZIeoWT+jE63R1PqJaesjr0s292gCWiojZhiGY8yrz8EvqzDidcmdx/BscgF2d0Gsw/c
+         z+BcffbPwxmOIHinccz2yA5mfDkPrGDPikdswIP0JX2bHiTzy136GaNEbksFDzmHWkjA
+         mM/uKKrvrs0+ilM7xZ5243GOYfYAZCPRIWdDiVy71XqKOxGNran1gLigBpqsktzZZZJL
+         NTFLY8vXktAMnsiiuZwJXRS+33761Fln7pNz4LY9Gq37455yUWc28PC2BiTuyxFi8OeG
+         LAYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=r4FyDNa+h/XJPABGXhOunndvFnUDZeBld+usgYdr7RQ=;
-        b=Fa8QYSxS3f8MWxcAFFaXYzHPB9+ueSVweKKFH/CKsqIhBXiHExNkgrhxqf1vCRbw3m
-         peE7x0HlDm9V3O9KNLDyoxo7fzhRFUHWfqcLkzTxk6T4FcYdGcALnGb2cy7qUuKlMq79
-         wh9oS8XB3EzzgY7XA7b4YYRTcIGhPn0BI5aoP8c+ONPWIQFnDerwa5D6EnXmK/YwZdAY
-         flNjGReVQJexCsoKASMXkKHPFx5W7j7ys0zZSuAGJbAS130vd/U3jntGXaxJ0z/Y5UuQ
-         BwK3tfZwCVKpfEhtBMvc2iUKQNd814OVQQSGO++g9YosrKBrXOC7PByyHPwRQMAsvWjz
-         IH+A==
-X-Gm-Message-State: AOAM530ZWH90DvhAgA9XGXC9kMfdSuvJ513Cpslx+/4lUpJXjZW8BW+8
-        aJTsw/3/mKMkPCpsXOQrU7WEzndsg6g4Or0+0g==
-X-Google-Smtp-Source: ABdhPJwAv/Lfhsr23TPh2XQI1Yt52qMD67P5ITgbpO/EGWM40yH1KqUQlzWeCOPVKbxack8tQDJZBec2aiKv03rGoNg=
-X-Received: by 2002:a9d:2206:: with SMTP id o6mr11259362ota.148.1639146766398;
- Fri, 10 Dec 2021 06:32:46 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2GRxg5k+GfsTEG/HHuVw87NAnSnT8iO/e9MJjPT+e+o=;
+        b=y62dCwyW9wM8C7H3Kxwt3cd8cfsKQD9yVH1LbOworJymO7vSm/dtb9HZrPe0SmV+Dz
+         xjE68D1ZBGu6z9FDoDfpuQUf8XLdJz8dxDtvq1lQU/dUQ6aNvMOOglho+i9xUWoPXWLp
+         jbSeoJ+PZNOuKDVyou8cZQiBQRSsEF5EHdkTIszkyDBlsCmZ6GBPK8ETGb7gM+UQGaXX
+         ReF0RNuhD7pkgpxzIKgKzwticE+cTDLjEUorKBcn9SjHvXpREqGGOXCld858FFp/jxHv
+         uRDGONcekJe5u4xSIkTJ0qDuZn4RF3YLxegKUhdkQcocv3UYMwxKZoxRwx/MDhX3avYY
+         LNng==
+X-Gm-Message-State: AOAM53058dHL/kcwSxytvOJ8ENJ1zulpkFBp5p8yl4yMdZbD3xBNqr0K
+        KKutgslbuQzPaE6nJ2yhEB7lCQ==
+X-Google-Smtp-Source: ABdhPJxiJpf2C0a+T3mNrYtnyB6jDvTMU3ozNfVS8W1q01Qvfry0eiftJK86AH/NRJNix5u8rcTx0A==
+X-Received: by 2002:a5d:514a:: with SMTP id u10mr14460951wrt.321.1639146860456;
+        Fri, 10 Dec 2021 06:34:20 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:210:76c1:fb36:1e22:8677])
+        by smtp.gmail.com with ESMTPSA id z8sm2918950wrh.54.2021.12.10.06.34.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 06:34:20 -0800 (PST)
+Date:   Fri, 10 Dec 2021 14:34:16 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 03/15] KVM: arm64: Refcount hyp stage-1 pgtable pages
+Message-ID: <YbNlaIczPLXwSCcZ@google.com>
+References: <20211201170411.1561936-1-qperret@google.com>
+ <20211201170411.1561936-4-qperret@google.com>
+ <20211209102924.GC1833@willie-the-truck>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:4390:0:0:0:0 with HTTP; Fri, 10 Dec 2021 06:32:45
- -0800 (PST)
-Reply-To: Jg@serverrackequip.ca
-From:   Server Rack Equipment <johnson3382@gmail.com>
-Date:   Fri, 10 Dec 2021 20:02:45 +0530
-Message-ID: <CAB=1HnWFRRYBzmtF6FUbFysy5P6WP2d=zj8-MS0rJ4a=0MOF-g@mail.gmail.com>
-Subject: WTS: Dell Laptop Latitude E6430u
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209102924.GC1833@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thursday 09 Dec 2021 at 10:29:24 (+0000), Will Deacon wrote:
+> On Wed, Dec 01, 2021 at 05:03:57PM +0000, Quentin Perret wrote:
+> > To prepare the ground for allowing hyp stage-1 mappings to be removed at
+> > run-time, update the KVM page-table code to maintain a correct refcount
+> > using the ->{get,put}_page() function callbacks.
+> > 
+> > Signed-off-by: Quentin Perret <qperret@google.com>
+> > ---
+> >  arch/arm64/kvm/hyp/pgtable.c | 17 ++++++++++++++---
+> >  1 file changed, 14 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > index f8ceebe4982e..768a58835153 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -408,8 +408,10 @@ static bool hyp_map_walker_try_leaf(u64 addr, u64 end, u32 level,
+> >  		return false;
+> >  
+> >  	new = kvm_init_valid_leaf_pte(phys, data->attr, level);
+> > -	if (hyp_pte_needs_update(old, new))
+> > +	if (hyp_pte_needs_update(old, new)) {
+> >  		smp_store_release(ptep, new);
+> > +		data->mm_ops->get_page(ptep);
+> 
+> In the case where we're just updating software bits for a valid pte, doesn't
+> this result in us taking a spurious reference to the page?
 
-Looking for a buyer to move any of the following Items located in USA.
+Ahem, yes, that is the case. I ended up with the below diff to fix it,
+which I intend to fold in the next version:
 
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 6ad4cb2d6947..e2047d3f05a2 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -383,21 +383,6 @@ enum kvm_pgtable_prot kvm_pgtable_hyp_pte_prot(kvm_pte_t pte)
+        return prot;
+ }
 
-Dell Laptop Latitude E6430u Core I7 3687u @ 2.10GHz, 256GB SSD, 16GB,
-WIN 7 PRO Quantity 20 $100 each
+-static bool hyp_pte_needs_update(kvm_pte_t old, kvm_pte_t new)
+-{
+-       /*
+-        * Tolerate KVM recreating the exact same mapping, or changing software
+-        * bits if the existing mapping was valid.
+-        */
+-       if (old == new)
+-               return false;
+-
+-       if (!kvm_pte_valid(old))
+-               return true;
+-
+-       return !WARN_ON((old ^ new) & ~KVM_PTE_LEAF_ATTR_HI_SW);
+-}
+-
+ static bool hyp_map_walker_try_leaf(u64 addr, u64 end, u32 level,
+                                    kvm_pte_t *ptep, struct hyp_map_data *data)
+ {
+@@ -407,13 +392,16 @@ static bool hyp_map_walker_try_leaf(u64 addr, u64 end, u32 level,
+        if (!kvm_block_mapping_supported(addr, end, phys, level))
+                return false;
 
++       data->phys += granule;
+        new = kvm_init_valid_leaf_pte(phys, data->attr, level);
+-       if (hyp_pte_needs_update(old, new)) {
+-               smp_store_release(ptep, new);
++       if (old == new)
++               return true;
++       else if (!kvm_pte_valid(old))
+                data->mm_ops->get_page(ptep);
+-       }
++       else if (WARN_ON((old ^ new) & ~KVM_PTE_LEAF_ATTR_HI_SW))
++               return false;
 
-
-Dell Latitude E6540 i5 4th Gen 8GB RAM 256GB SSD 15,6 Screen - Business Laptop
-Quantity 20 $100 each
-
-
-DELL Latitude E6440 Laptop 14" i7-4600M 8GBRAM 256GBSSD FHD Win10 DVD HDMI
-
-Quantity 20 $100 each
-
-
-16GB 2RX8 PC4-3200AA-UB1-11 Qty 85
-8GB 1RX8 PC4-2666V RD1 -12- MA0 Qty 190
-We are looking for a buyer to move all @ $ 1,000 USD
-
-
-
-If you are Interested and kindly contact Justin Gates Email.
-jg@serverrackequip.ca
-
-
-
-Regards,
-
-Justin Gates
-
-Server Rack Equipment
-1343 No. 5 Road, Richmond,
-British Columbia
-V7A 4G1 Canada
-Phone: 778 308 3547 | Fax: 778 308 4563
-https://www.serverrackequip.ca/
+-       data->phys += granule;
++       smp_store_release(ptep, new);
+        return true;
+ }

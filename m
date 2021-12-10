@@ -2,101 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF962470099
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B96D47009B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240952AbhLJM1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:27:47 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:55734
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237629AbhLJM1r (ORCPT
+        id S240966AbhLJM2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:28:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47791 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237629AbhLJM2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:27:47 -0500
-Received: from mussarela (1.general.cascardo.us.vpn [10.172.70.58])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EB79E40078;
-        Fri, 10 Dec 2021 12:24:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639139050;
-        bh=oAEuyXSS+FfBE7IbC9Qm9bPmNR/CHY86PuhFfkuo8Ak=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=lHxFDgr55MI0m1wV2nQ4dpY/zmLA1P/LAcOtm6Mm55I4KYV7zYc+IzULPjY+vDZAC
-         6VYrll6fjoQ7hrkYBw+BQHESJLZqulswRcCTZX99WYpybGrLW7UTGcbDT1HmvCxQp+
-         l4OhYNBmupNm6DiR+bwXRkMa8RRJL/xTrc+6bAJMqsCIe1+dPyO9QU7MxP46vDvrbo
-         AT4z24d0Lmx6VK+KdG1qUaJx7V1LgQLPRmqTwFdqIBgf6xQg1IOG2yqyvr8CLk1B/q
-         MjsjuRm5Yc/cmgj1nYKqEprPIZKvnNIu9szc0lADAvIGbUGfRchb4YSkdI/SHYNwtH
-         yT3+6IO5qVbtA==
-Date:   Fri, 10 Dec 2021 09:24:04 -0300
-From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@idosch.org>,
-        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ast@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf: return EOPNOTSUPP when JIT is needed and not
- possible
-Message-ID: <YbNG5BliqnCyhs4J@mussarela>
-References: <20211209134038.41388-1-cascardo@canonical.com>
- <61b2536e5161d_6bfb2089@john.notmuch>
- <YbJZoK+qBEiLAxxM@shredder>
- <b294e66b-0bac-008b-52b4-6f1a90215baa@iogearbox.net>
- <20211209182349.038ac2b8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Fri, 10 Dec 2021 07:28:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639139085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W1x23hw8Xh2bIEhikdCCyTMnhqzuBopMfEMkyDyfoF0=;
+        b=fgH8LLx/wIkycWXTNxauACy5p89icJUSSVquoKZQ+u7boD4gIxQg7nwsBwKCyAWuGMfZBK
+        htuH4am/6cxHZ39E2f/uewFbpszjAfaRFZLc4Gdh5XvfR2cRcunDSfkNC7hIGCE8ILdTZp
+        PFnWeXiJsHoeVjhvIQiMzan18S7R6uc=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-16-GUr1gDBhODS-BDUnT8pWTA-1; Fri, 10 Dec 2021 07:24:44 -0500
+X-MC-Unique: GUr1gDBhODS-BDUnT8pWTA-1
+Received: by mail-wr1-f69.google.com with SMTP id v18-20020a5d5912000000b001815910d2c0so2218310wrd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:24:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W1x23hw8Xh2bIEhikdCCyTMnhqzuBopMfEMkyDyfoF0=;
+        b=dPl7MIN5NdO97IY98/Ofmm46A4UPoSCvmWdy9Psohes82NoxUVeOPBZXNcYo1B5VN9
+         h7gk92dTgGVMuvuvxeQ2QBi1FBtiqdrZlo7WOuHasJeXLiQx6PcyawOHW0EskPF7MANz
+         b1FkTU/Fk3zEjAAO3JXQaUq44OZnbsp67KUeNvxd0fooEvlqgqD1Zz9fuhLLBtn+fOOQ
+         kBsI1rRnmZloiylmLUNEGvxMx+B86U79D3+mVG1LhDtym/u4r0jil4xMEQlp3UnjywaH
+         0D9ViXnW0CaZLnnv0NUbwyGGJKzrgA94gYYQWjMoQ0RX/ePw2MaQjv/Qgzm+E1byqUig
+         MgOQ==
+X-Gm-Message-State: AOAM533Q7mvYptCYDbDxR54WAePlRO2dulC68LV6kxi9OGDfywx10gxX
+        qi6kTNrZSi6ep2hXpF7Ea+tj9KgkUQO38v21k43lqnXZ4y9TnHqCp4g+SfYsYRyPYuQvrQ6eYsa
+        hz8SPOOW+AIQQbuZ7PptGvY/Z
+X-Received: by 2002:a1c:2053:: with SMTP id g80mr16630143wmg.3.1639139083320;
+        Fri, 10 Dec 2021 04:24:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzRVslVuiU5VXV/8j0iX5UH7RwA4T5QNGKaFMPJ1ATyp3FM6RrhNd+8o3glX+gXHyj/MH6FxA==
+X-Received: by 2002:a1c:2053:: with SMTP id g80mr16630115wmg.3.1639139083091;
+        Fri, 10 Dec 2021 04:24:43 -0800 (PST)
+Received: from krava ([83.240.60.218])
+        by smtp.gmail.com with ESMTPSA id r17sm13135665wmq.5.2021.12.10.04.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 04:24:42 -0800 (PST)
+Date:   Fri, 10 Dec 2021 13:24:40 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        "Frank Ch. Eigler" <fche@redhat.com>
+Subject: Re: [RFC] perf record: Disable debuginfod by default
+Message-ID: <YbNHCLi/OdMUfgI0@krava>
+References: <20211209200425.303561-1-jolsa@kernel.org>
+ <20211210080425.GO16608@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209182349.038ac2b8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211210080425.GO16608@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 06:23:49PM -0800, Jakub Kicinski wrote:
-> On Fri, 10 Dec 2021 00:03:40 +0100 Daniel Borkmann wrote:
-> > > Similar issue was discussed in the past. See:
-> > > https://lore.kernel.org/netdev/20191204.125135.750458923752225025.davem@davemloft.net/  
+On Fri, Dec 10, 2021 at 09:04:25AM +0100, Peter Zijlstra wrote:
+> On Thu, Dec 09, 2021 at 09:04:25PM +0100, Jiri Olsa wrote:
+> > hi,
+> > after migrating to fedora 35 I found perf record hanging on exit
+> > and it's because fedora 35 sets DEBUGINFOD_URLS that triggers
+> > debuginfod query which might take long time to process.
 > > 
-> > With regards to ENOTSUPP exposure, if the consensus is that we should fix all
-> > occurences over to EOPNOTSUPP even if they've been exposed for quite some time
-> > (Jakub?), 
-> 
-> Did you mean me? :) In case you did - I think we should avoid it 
-> for new code but changing existing now seems risky. Alexei and Andrii
-> would know best but quick search of code bases at work reveals some
-> scripts looking for ENOTSUPP.
-> 
-> Thadeu, what motivated the change?
-> 
-> If we're getting those changes fixes based on checkpatch output maybe 
-> there is a way to mute the checkpatch warnings when it's not run on a 
-> diff?
-> 
-
-It was not checkpatch that motivated me.
-
-I was looking into the following commits as we hit a failed test.
-
-be08815c5d3b ("bpf: add also cbpf long jump test cases with heavy expansion")
-050fad7c4534 ("bpf: fix truncated jump targets on heavy expansions") 
-
-Then, I realized that if given the right number of BPF_LDX | BPF_B | BPF_MSH
-instructions, it will pass the bpf_convert_filter stage, but fail at blinding.
-And if you have CONFIG_BPF_JIT_ALWAYS_ON, setting the filter will fail with
-ENOTSUPP, which should not be sent to userspace.
-
-I noticed other ENOTSUPP, but they seemed to be returned by helpers, and I was
-not sure this would be relayed to userspace. So, I went for fixing the observed
-case.
-
-I will see if any of the tests I can run is broken by this change and submit it
-again with the tests fixed as well.
-
-Cascardo.
-
-> > we could give this patch a try maybe via bpf-next and see if anyone complains.
+> > I discussed this briefly with Frank and I'm sending the change
+> > to disable debuginfod by default in perf record.
 > > 
-> > Thadeu, I think you also need to fix up BPF selftests as test_verifier, to mention
-> > one example (there are also bunch of others under tools/testing/selftests/), is
-> > checking for ENOTSUPP specifically..
+> > Frank had other idea we could discuss here to fork or just spawn
+> > "/usr/bin/debuginfod-find ...." into background after perf record.
+> > 
+> > Perhaps there are other ways as well, hence this is RFC ;-)
+> > 
+> > thanks,
+> > jirka
+> > 
+> > 
+> > ---
+> > Fedora 35 sets by default DEBUGINFOD_URLS, which might lead
+> > to unexpected stalls in perf record exit path, when we try
+> > to cache profiled binaries.
+> > 
+> >   # DEBUGINFOD_PROGRESS=1 ./perf record -a
+> >   ^C[ perf record: Woken up 1 times to write data ]
+> >   Downloading from https://debuginfod.fedoraproject.org/ 447069
+> >   Downloading from https://debuginfod.fedoraproject.org/ 1502175
+> >   Downloading \^Z
+> > 
+> > Disabling DEBUGINFOD_URLS by default in perf record and adding
+> > debuginfod option and .perfconfig variable support to enable id.
+> > 
+> >   Default without debuginfo processing:
+> >   # perf record -a
+> > 
+> >   Using system debuginfod setup:
+> >   # perf record -a --debuginfod
+> > 
+> >   Using custom debuginfd url:
+> >   # perf record -a --debuginfod='https://evenbetterdebuginfodserver.krava'
+> > 
+> > Adding single perf_debuginfod_setup function and using
+> > it also in perf buildid-cache command.
+> 
+> I'm still running with --no-buildid --no-buildid-cache or something like
+> that by default. As long as that remains working I'm good.
+
+you're good ;-) that will bypass the problem completely
+
+jirka
+

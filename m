@@ -2,103 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2CB470072
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B29DE470075
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240881AbhLJMLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbhLJMLb (ORCPT
+        id S240887AbhLJMNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:13:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12428 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229762AbhLJMNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:11:31 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE0C061746;
-        Fri, 10 Dec 2021 04:07:56 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id t5so28916864edd.0;
-        Fri, 10 Dec 2021 04:07:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nj7aP+DT5LdcUR+5nEFGqEHWsnVehVd/fkoHc9nNYc4=;
-        b=PhzM3O1qKcQ6YnFuTodoI7J8Z5uhpIMeuJx8RqlbzOzof2j0B6UdH5KOD+SOTHa0N3
-         PM6y2bII+meR0KzImjli57ZPHMHaamPbDdJ56NIWPXQW4qJ82ZBgUF1rILyur0lf6TGo
-         Nj6OFNLNWLyEzg10MLoZxC3P1TzkpOiDfHu6u2h8YlhzsvZVYl8c4BbV3p463PGqDx15
-         Q8W2b2arNtQ4MDSo75tLzzUg5OaLvUEMF4pTXpoEQZIpkijgvXTk6TJnoeFtcIBRW2uF
-         bhmpXNCDm7Z/G9xVyJMXeb0TGD+iP15y92UaPhIeIYJRqXffDEQUAmhQOR0pzsOZ7Bja
-         kg8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nj7aP+DT5LdcUR+5nEFGqEHWsnVehVd/fkoHc9nNYc4=;
-        b=7U/eVgNcmjKfAlOBnraduYF3rlWSEDU/6yPiLfhqElVsEwlRAthYG0XwDGdjDQ7hWR
-         Te5TGOs5ZemLxCb6egSeq9giINhyzIJUgeB+n/wjVUCcHF86PRdWRqY8FqXKWsTslPDf
-         56BwY2JdYd3N8hydwaH3dHkdXJPlnxl6SexGsfw5rJgZBbfS7+qaVn4GFYsBpnPLG/mp
-         IstNGHbKXIVhE//rivEsEmj4CvqEuWors3nqcYm7I+Fh0LeWZcTW3VGZFRGVW6DEBNmJ
-         4FHwT3dR8PmJUCFisVChAwi1b+6hLmPlRCO3UgXJN84RQAFtbuJoOth4g4xDIEAaWIL0
-         VKJA==
-X-Gm-Message-State: AOAM531qGoxymq4W2ZXZZP6lg9bc69H/5vFwAP+jaZ5qv4PAWnRdAqoZ
-        shP5KoniBoDzdKoVdZDRzOc=
-X-Google-Smtp-Source: ABdhPJxM8AmICWv2HgQ8A1RCPyWqAzT+vD4vNLzvjcG0RW1U58Rr9OllD13q/j4OJf7YTLam2+qihg==
-X-Received: by 2002:a17:906:ff47:: with SMTP id zo7mr23315986ejb.148.1639138074679;
-        Fri, 10 Dec 2021 04:07:54 -0800 (PST)
-Received: from [192.168.10.118] ([93.56.170.1])
-        by smtp.googlemail.com with ESMTPSA id bd12sm1337669edb.11.2021.12.10.04.07.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 04:07:54 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <636dd644-8160-645a-ce5a-f4eb344f001c@redhat.com>
-Date:   Fri, 10 Dec 2021 13:07:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
- kvm_apic_update_apicv
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <20211209115440.394441-1-mlevitsk@redhat.com>
- <20211209115440.394441-6-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211209115440.394441-6-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 10 Dec 2021 07:13:46 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BABGmGa002942;
+        Fri, 10 Dec 2021 12:09:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=F2WS9VtJA0aucYunapKFUmvd+bZ0GHr7cx1VKk5z434=;
+ b=f4OAfSiiZMyzEgEJr3jDykSf3kLeMprJ7lcc3OGUtsZLUY3HiL7ISNir78Mfxcqkcn0/
+ IKPSzl7izfymtJlcc6lOE54h2ZqzJy4pbXLsZ/izNmw8M8YSwvLjH4YtldzZZ1MwgSJ5
+ BeTqi2MkAdHyqPGHlSab8VgorWGlXnbe+nrU0lk/Nw6FuRXWdoyQB99XZZqPd1m0NO9V
+ JL0IZ3RRz1rZOxUIAROsGazmrsnmKElcfTf7BakQKuyP18Om4/HXy7FFMoIB83CmJfUH
+ /lnl5U1E9cV2hfT9B4z+nlxAxA592KkAF9IxoE6TyjlCKgrG/M07SNZgoN/NF5+JaHVi 6A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cv49nb0a6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 12:09:44 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BABVP1a023125;
+        Fri, 10 Dec 2021 12:09:44 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cv49nb09e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 12:09:43 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAC81Qu028702;
+        Fri, 10 Dec 2021 12:09:42 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3cqyya8fwa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 12:09:41 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAC9c6h22675966
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Dec 2021 12:09:38 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62534AE057;
+        Fri, 10 Dec 2021 12:09:38 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC0BAAE055;
+        Fri, 10 Dec 2021 12:09:35 +0000 (GMT)
+Received: from sig-9-65-75-5.ibm.com (unknown [9.65.75.5])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Dec 2021 12:09:35 +0000 (GMT)
+Message-ID: <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, serge@hallyn.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Fri, 10 Dec 2021 07:09:30 -0500
+In-Reply-To: <20211210114934.tacjnwryihrsx6ln@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+         <20211208221818.1519628-16-stefanb@linux.ibm.com>
+         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
+         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
+         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
+         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
+         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xnGPL45WhVZ1Km2GXrzRaWYa2YGm2dRg
+X-Proofpoint-GUID: C6zE09KP1KKnqSwpslC7fo3qDWzdjTqy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_03,2021-12-10_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 spamscore=0 clxscore=1011 mlxscore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112100067
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 12:54, Maxim Levitsky wrote:
-> It is possible that during the AVIC incomplete IPI vmexit,
-> its handler will set irr_pending to true,
-> but the target vCPU will still see the IRR bit not set,
-> due to the apparent lack of memory ordering between CPU's vIRR write
-> that is supposed to happen prior to the AVIC incomplete IPI
-> vmexit and the write of the irr_pending in that handler.
+On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
+> > There's still the problem that if you write the policy, making the file
+> > disappear then unmount and remount securityfs it will come back.  My
+> > guess for fixing this is that we only stash the policy file reference,
+> > create it if NULL but then set the pointer to PTR_ERR(-EINVAL) or
+> > something and refuse to create it for that value.
+> 
+> Some sort of indicator that gets stashed in struct ima_ns that the file
+> does not get recreated on consecutive mounts. That shouldn't be hard to
+> fix.
 
-Are you sure about this?  Store-to-store ordering should be 
-guaranteed---if not by the architecture---by existing memory barriers 
-between vmrun returning and avic_incomplete_ipi_interception().  For 
-example, srcu_read_lock implies an smp_mb().
+The policy file disappearing is for backwards compatibility, prior to
+being able to extend the custom policy.  For embedded usecases,
+allowing the policy to be written exactly once might makes sense.  Do
+we really want/need to continue to support removing the policy in
+namespaces?
 
-Even more damning: no matter what internal black magic the processor 
-could be using to write to IRR, the processor needs to order the writes 
-against reads of IsRunning on processors without the erratum.  That 
-would be equivalent to flushing the store buffer, and it would imply 
-that the write of vIRR is ordered before the write to irr_pending.
+thanks,
 
-Paolo
+Mimi
+

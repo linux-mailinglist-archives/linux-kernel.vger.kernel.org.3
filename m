@@ -2,67 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D08470B33
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DB7470B3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243713AbhLJUCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:02:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56704 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbhLJUCX (ORCPT
+        id S244165AbhLJUDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240266AbhLJUDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:02:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44D33B829BC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 19:58:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18769C341CA;
-        Fri, 10 Dec 2021 19:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639166326;
-        bh=fnNZwD/qJ/E4/7TN8VbxUfN5A4foEOaZ9nLOwDEkmYA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lwAlZxDJfSRgiustOkBE5GUoNcNz6kB68ZQUoLFeuU5OFDu682Pk4P601FFvi6nC6
-         NJ/4PGB6Ny33ar4nRjCTPG7ZuA9FTgaZgOn1TT8df7eiE6H2J1G46CNUB8RL1OEkgN
-         Z5oxZQO5tQPc5gImcV9duk7tYbzJTiAvzl5NYxq0FH0HY8iRtAqb11CC1yVSgBgl4d
-         6PwQ3Vz9kW8AN4v5AB/08YvXr6zpvQDp7TtpMj+8zDa1vsfVKKIbeuFk4cqP4IfqlW
-         GR22MQC6jNgQ/T4DTM4/kz4V+3vF1srrB+1D77RqOWicGMsOHhwE1RBxf8l/PMInip
-         q9DfdZj77G+kw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 08D2660A39;
-        Fri, 10 Dec 2021 19:58:46 +0000 (UTC)
-Subject: Re: [git pull] drm fixes for 5.16-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAPM=9twm_TjmNrr7VELofghf58qpo=-1VmFf_pNr6tBNKZL-aw@mail.gmail.com>
-References: <CAPM=9twm_TjmNrr7VELofghf58qpo=-1VmFf_pNr6tBNKZL-aw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAPM=9twm_TjmNrr7VELofghf58qpo=-1VmFf_pNr6tBNKZL-aw@mail.gmail.com>
-X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2021-12-10
-X-PR-Tracked-Commit-Id: 675a095789a2663fe02fdebd6023e29d7f1f51ac
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9b302ffe4e8d7e62f3170aa0097ff979880ba61d
-Message-Id: <163916632603.27955.13646553226998147096.pr-tracker-bot@kernel.org>
-Date:   Fri, 10 Dec 2021 19:58:46 +0000
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Fri, 10 Dec 2021 15:03:46 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC30DC061746;
+        Fri, 10 Dec 2021 12:00:10 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id m192so8812709qke.2;
+        Fri, 10 Dec 2021 12:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yLZJvjoofMd+xeF11awcZvcV4Nn3U+z+fMY0sp4o/sA=;
+        b=BjS8Vig6e8gQ4F0ZwsS3QThNYRE1ejxTIXemMKWA/aHL8GjyLyTAhPf/Yn4mdskwdf
+         aGk3YFZk3sckvjvH/XRMg6GqWCMnutMR9SLLbsDTP1CWCGbMFyuGWDDSQPaHvMh5uDPY
+         z3K0J/UJ88uHGHrSEaJG1bGYB13RPUe6ug+5eyDprQAY+8kISqRD/Kokt2j8/3EEjF+w
+         Ij8EsV1Mq18LEA8wgQtDhSBN+KwwoFXMxKkv0Z2fiFWa5YOwIw2jy2ERGW9Ua+or7G2V
+         K+1YH+vLDsvdwnJNUccX+KEsh3seflpRZHOnjBrh8z4QksUW5Fl5x9DJB9B0f+zojjUf
+         OS7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yLZJvjoofMd+xeF11awcZvcV4Nn3U+z+fMY0sp4o/sA=;
+        b=Dx+NJm6x/C3CHoQepItXqF4lsIPRIZd/9oL3LugMo7WZOZSfFuw/BACPPfX8f+XAyY
+         geiV4x4SfO7gr4BzOlaM2Tf0/A1vG5Ne6MwYwTAMDvGisQREwS9Ioh9BAh9GvmaYoZqM
+         /gAnWWuL3KYipsaiV00SAGjxGhbEqGiHWilt1RyLMAB4OvHRkXAxoWXvyw+A2yS6eFjB
+         WzfEQZgzA9GL3+LxKZSRutZeKRhgh/r+0xy/BJpxa7qzpBD+713s/MlWsBc0yAE9d98D
+         /lraNNCdaV/Olb7b62mpigCnRq/l3qfrrZLfl0lOcjAH8ARCcHVrA5B06pBEDABYsBHA
+         Vwbg==
+X-Gm-Message-State: AOAM5304Lol54WaJk3+sSjzl32oTmfSur9NuPHCAML6d8aJhn2RZ6Fhb
+        bl4moShumQ9aIKATIZSfH8I=
+X-Google-Smtp-Source: ABdhPJxcyt16X640iWzcAvnwZWhPX3Xnns70Dp67SogNqM2UhY/oywrxq/hOGQnDCQLuwDoSew/1nA==
+X-Received: by 2002:a37:e105:: with SMTP id c5mr22591377qkm.777.1639166409684;
+        Fri, 10 Dec 2021 12:00:09 -0800 (PST)
+Received: from dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com ([2620:10d:c091:500::1:a9d6])
+        by smtp.gmail.com with ESMTPSA id v4sm1734537qkp.118.2021.12.10.12.00.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 12:00:09 -0800 (PST)
+Date:   Fri, 10 Dec 2021 15:00:06 -0500
+From:   Dan Schatzberg <schatzberg.dan@gmail.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <guro@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm: add group_oom_kill memory event
+Message-ID: <YbOxxhuQ3a1Myd6v@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
+References: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
+ <CALvZod6y+_O49jzuD9wLXncCEGCgun4f-uf_yBzYcsfEiH1WOQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod6y+_O49jzuD9wLXncCEGCgun4f-uf_yBzYcsfEiH1WOQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 10 Dec 2021 14:28:53 +1000:
+On Fri, Dec 03, 2021 at 04:45:54PM -0800, Shakeel Butt wrote:
+> On Fri, Dec 3, 2021 at 8:24 AM Dan Schatzberg <schatzberg.dan@gmail.com> wrote:
+> >
+> > Our container agent wants to know when a container exits if it was OOM
+> > killed or not to report to the user. We use memory.oom.group = 1 to
+> > ensure that OOM kills within the container's cgroup kill
+> > everything. Existing memory.events are insufficient for knowing if
+> > this triggered:
+> >
+> > 1) Our current approach reads memory.events oom_kill and reports the
+> > container was killed if the value is non-zero. This is erroneous in
+> > some cases where containers create their children cgroups with
+> > memory.oom.group=1 as such OOM kills will get counted against the
+> > container cgroup's oom_kill counter despite not actually OOM killing
+> > the entire container.
+> >
+> > 2) Reading memory.events.local will fail to identify OOM kills in leaf
+> > cgroups (that don't set memory.oom.group) within the container cgroup.
+> >
+> > This patch adds a new oom_group_kill event when memory.oom.group
+> > triggers to allow userspace to cleanly identify when an entire cgroup
+> > is oom killed.
+> >
+> > Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
+> 
+> So, with this patch, will you be watching oom_group_kill from
+> memory.events or memory.events.local file for your use-case?
+> 
+> Reviewed-by: Shakeel Butt <shakeelb@google.com>
 
-> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2021-12-10
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9b302ffe4e8d7e62f3170aa0097ff979880ba61d
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+We will watch from memory.events.local. If containers want to
+construct their own child cgroups and allow for group oom to occur
+inside, that's fine - a future container exit should not result in us
+claiming the container was OOM killed. If the container exits and
+memory.event.local shows oom_group_kill > 0 then we know the container
+was OOM killed.

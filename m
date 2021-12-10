@@ -2,167 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F8946FEAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B9D46FEBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbhLJK1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbhLJK1S (ORCPT
+        id S235560AbhLJKbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 05:31:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36610 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229664AbhLJKbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:27:18 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B44EC0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:23:43 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id l25so28575602eda.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 02:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=RhcNME8TKvIC091+E24ipgQ5jFFJHEZIioS3/i94A5g=;
-        b=kEqCxBLp0pqz7dfAy1XCRSof85ZGCTYONFa/fsiyuXgzpTTPNVCktFtmb8KnJZbgGS
-         ZKKlecZz0D9P2mux41wenBzPhLv+o64L3zqNieN7xdWyZEwyaQo1JRkx8p6Snuwc9MJ5
-         M1t2m6BKGwRHC58CgBxQlptDEuQ/+W/7VNvKE0lWSnfdvLAFiqUy/mQgWbN491oCTt89
-         b/0YzB8vygER+4TFEg8xNftOYJhRcU+LzJ5riekqX0e78UNWQprxxi9gpIEO093rljWZ
-         cNtWusFHtgeRhL5BeS+YtzGPMSU1UUcYHV/lJY86zJ8j/gbkje7WBAH967OX2gZ2naTm
-         9aKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=RhcNME8TKvIC091+E24ipgQ5jFFJHEZIioS3/i94A5g=;
-        b=aTloPgekJdiFdn2rrzTYEZ+WctHMgFanE1g6pthFBQ708ZapkrgrYtZ1fsddHnUcHz
-         Q+a+KUF0RUrgQrN57knknNH9gBNTkohfs7bTSq9ztuAm7vJdt3eSEk6r4CJJHhZI9Km5
-         +ku5/Y9i8TvPvGqpfbcSYBUDQR1VxDD8f6qgh3nPJzUwIxOb0OiDmq9M4ChI/hZJ3piH
-         dmAvY9bAP02F++tl3tOiZh0FqzRsjzbSxDUpUAWgJy9pUghVANv9QdqVgPtSycebUWiW
-         CM7kKkQey5YhngBeLWHDpU/yCc2Jm73J8C2ehKx+jLaMXzIhHYIhIN9G6RZq3lthtGtX
-         NI1A==
-X-Gm-Message-State: AOAM531wJiLQ3yDXf9iEr2I5EeAnaEKSMzhUSuO//N6tmBLXl1RTDDOE
-        wLCbzVdSQsuHLQ6PF0s/9lS+Bg==
-X-Google-Smtp-Source: ABdhPJxNfvUrlfghsa7j6MH2qZEdLiTNPzA5t1H66pFeQgizIuDaKpX047Lu4EglWFUBwgyiWAYX9Q==
-X-Received: by 2002:a50:9ea6:: with SMTP id a35mr36702766edf.400.1639131821500;
-        Fri, 10 Dec 2021 02:23:41 -0800 (PST)
-Received: from [192.168.1.8] (net-93-70-85-65.cust.vodafonedsl.it. [93.70.85.65])
-        by smtp.gmail.com with ESMTPSA id j4sm1194278edk.64.2021.12.10.02.23.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Dec 2021 02:23:41 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH RFC 0/9] support concurrent sync io for bfq on a specail
- occasion
-From:   Paolo Valente <paolo.valente@linaro.org>
-In-Reply-To: <809b90cc-20ba-c4fd-8c29-b9e3123c1cef@huawei.com>
-Date:   Fri, 10 Dec 2021 11:23:39 +0100
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block <linux-block@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F9F1D3F7-2C76-4301-944B-0BD1A2A5FE83@linaro.org>
-References: <20211127101132.486806-1-yukuai3@huawei.com>
- <D3FF0820-6A51-46A1-A363-8FFA8CCD2851@linaro.org>
- <809b90cc-20ba-c4fd-8c29-b9e3123c1cef@huawei.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-X-Mailer: Apple Mail (2.3445.104.11)
+        Fri, 10 Dec 2021 05:31:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639132059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jVG9S7QFXKQmXdxA4E0LVfPojr/jyMhDEBcJlsGRzV4=;
+        b=bp1VoEB1XBxHHGpxLUf02bZqjRO2KwRaaqpdS04WTVWum9YbuzSmcQX36fDvrwWR6Z+vSD
+        IM86ZklpCckeF5D3UC179PQLXFTnkb+Ka1Tg7Pa8p5GvbBGGubN2wIQMAi74UPdRj/JI3D
+        7nI4mJzRLWlZyqabxozHUZGloT7aJtI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-334-K3jfAX1sO-W25NkmoL-Vww-1; Fri, 10 Dec 2021 05:27:36 -0500
+X-MC-Unique: K3jfAX1sO-W25NkmoL-Vww-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 784391B2C980;
+        Fri, 10 Dec 2021 10:27:35 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7839245D77;
+        Fri, 10 Dec 2021 10:27:33 +0000 (UTC)
+Message-ID: <e62a3f5f55159bc941360d489d8bffb2b0b716f9.camel@redhat.com>
+Subject: Re: [RFC PATCH 0/6] KVM: X86: Add and use shadow page with level
+ promoted or acting as pae_root
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Lai Jiangshan <laijs@linux.alibaba.com>
+Date:   Fri, 10 Dec 2021 12:27:32 +0200
+In-Reply-To: <20211210092508.7185-1-jiangshanlai@gmail.com>
+References: <20211210092508.7185-1-jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2021-12-10 at 17:25 +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
+> 
+> (Request For Help for testing on AMD machine with 32 bit L1 hypervisor,
+> see information below)
+> 
+> KVM handles root pages specially for these cases:
+> 
+> direct mmu (nonpaping for 32 bit guest):
+> 	gCR0_PG=0
+> shadow mmu (shadow paping for 32 bit guest):
+> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0
+> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1
+> direct mmu (NPT for 32bit host):
+> 	hEFER_LMA=0
+> shadow nested NPT (for 32bit L1 hypervisor):
+> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0,hEFER_LMA=0
+> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1,hEFER_LMA=0
+> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE={0|1},hEFER_LMA=1,hCR4_LA57={0|1}
+> Shadow nested NPT for 64bit L1 hypervisor:
+> 	gEFER_LMA=1,gCR4_LA57=0,hEFER_LMA=1,hCR4_LA57=1
+> 
+> They are either using special roots or matched the condition 
+> ((mmu->shadow_root_level > mmu->root_level) && !mm->direct_map)
+> (refered as level promotion) or both.
+> 
+> All the cases are using special roots except the last one.
+> Many cases are doing level promotion including the last one.
+> 
+> When special roots are used, the root page will not be backed by
+> kvm_mmu_page.  So they must be treated specially, but not all places
+> is considering this problem, and Sean is adding some code to check
+> this special roots.
+> 
+> When level promotion, the kvm treats them silently always.
+> 
+> These treaments incur problems or complication, see the changelog
+> of every patch.
+> 
+> These patches were made when I reviewed all the usage of shadow_root_level
+> and root_level.  Some of them are sent and accepted.  Patch3-6 are too
+> complicated so they had been held back.  Patch1 and patch2 were sent.
+> Patch1 was rejected, but I think it is good.  Patch2 is said to be
+> accepted, but it is not shown in the kvm/queue.  Patch3-6 conflicts
+> with patch1,2 so patch1,2 are included here too.
+> 
+> Other reason that patch 3-6 were held back is that the patch 3-6 are
+> not tested with shadow NPT cases listed above.  Because I don't have
+> guest images can act as 32 bit L1 hypervisor, nor I can access to
+> AMD machine with 5 level paging.  I'm a bit reluctant to ask for the
+> resource, so I send the patches and wish someone test them and modify
+> them.  At least, it provides some thinking and reveals problems of the
+> existing code and of the AMD cases.
+> ( *Request For Help* here.)
+> 
+> These patches have been tested with the all cases except the shadow-NPT
+> cases, the code coverage is believed to be more than 95% (hundreds of
+> code related to shadow-NPT are shoved, and be replaced with common
+> role.pae_root and role.level_promoted code with only 8 line of code is
+> added for shadow-NPT, only 2 line of code is not covered in my tests).
+> 
+> And Sean also found the problem of the last case listed above and asked
+> questions in a reply[1] to one of my emails, I hope this patchset can
+> be my reply to his questions about such complicated case.
+> 
+> If special roots are removed and PAE page is write-protected, there
+> can be some more cleanups.
+> 
+> [1]: https://lore.kernel.org/lkml/YbFY533IT3XSIqAK@google.com/
+> 
+> Lai Jiangshan (6):
+>   KVM: X86: Check root_level only in fast_pgd_switch()
+>   KVM: X86: Walk shadow page starting with shadow_root_level
+>   KVM: X86: Add arguement gfn and role to kvm_mmu_alloc_page()
+>   KVM: X86: Introduce role.level_promoted
+>   KVM: X86: Alloc pae_root shadow page
+>   KVM: X86: Use level_promoted and pae_root shadow page for 32bit guests
+> 
+>  arch/x86/include/asm/kvm_host.h |   9 +-
+>  arch/x86/kvm/mmu/mmu.c          | 440 ++++++++++----------------------
+>  arch/x86/kvm/mmu/mmu_audit.c    |  26 +-
+>  arch/x86/kvm/mmu/paging_tmpl.h  |  15 +-
+>  arch/x86/kvm/mmu/tdp_mmu.h      |   7 +-
+>  5 files changed, 164 insertions(+), 333 deletions(-)
+> 
 
 
-> Il giorno 10 dic 2021, alle ore 10:50, yukuai (C) <yukuai3@huawei.com> =
-ha scritto:
->=20
-> =E5=9C=A8 2021/12/10 17:20, Paolo Valente =E5=86=99=E9=81=93:
->>> Il giorno 27 nov 2021, alle ore 11:11, Yu Kuai <yukuai3@huawei.com> =
-ha scritto:
->>>=20
->>> Bfq can't handle sync io concurrently as long as the io are not =
-issued
->>> from root group currently.
->>>=20
->>> Previous patch set:
->>> =
-https://lore.kernel.org/lkml/20211014014556.3597008-2-yukuai3@huawei.com/t=
-/
->>>=20
->>> During implemting the method mentioned by the above patch set, I =
-found
->>> more problems that will block implemting concurrent sync io. The
->>> modifications of this patch set are as follows:
->>>=20
->>> 1) count root group into 'num_groups_with_pending_reqs';
->>> 2) don't idle if 'num_groups_with_pending_reqs' is 1;
->>> 3) If the group doesn't have pending requests while it's child =
-groups
->>> have pending requests, don't count the group.
->> Why don't yo count the parent group? It seems to me that we should =
-count it.
-> Hi, Paolo
->=20
-> For example, we only issue io in child group c2(root->c1->c2),
-> 'num_groups_with_pending_reqs' will end up greater than 1, thus it's
-> impossible to handle sync io concurrently. Thus I don't count root and
-> c1, only count c2.
+I have 32 bit VM which can run an other 32 bit VM, and both it and the nested VM are using the mainline kernel).
+I'll test this patch series soon.
 
-Right!
+I also have seabios hacked to use PAE instead of no paging, which I usually use for my 32 bit guests,
+so I can make it switch to SMM+PAE paging mode to test it.
 
-Please explain this clearly in comments.
-
-
->>> 4) Once the group doesn't have pending requests, decrease
->>> 'num_groups_with_pending_reqs' immediately. Don't delay to when all
->>> it's child groups don't have pending requests.
->>>=20
->> I guess this action is related to 3).
-> Yes, if c1, c2 are both active, and then c1 don't have any pending =
-reqs,
-> I want to decrease num_groups_with_pending_reqs to 1 immediately.
-
-I'll check this point directly on the patch that does this decrement,
-because something is not clear to me.
-
-Thanks,
-Paolo
-
->  So
-> that sync io on c2 can be handled concurrently.
->=20
-
-
-> Thanks,
-> Kuai
->=20
->> Thanks,
->> Paolo
->>> Noted that I just tested basic functionality of this patchset, and I
->>> think it's better to see if anyone have suggestions or better
->>> solutions.
->>>=20
->>> Yu Kuai (9):
->>>  block, bfq: add new apis to iterate bfq entities
->>>  block, bfq: apply news apis where root group is not expected
->>>  block, bfq: handle the case when for_each_entity() access root =
-group
->>>  block, bfq: count root group into 'num_groups_with_pending_reqs'
->>>  block, bfq: do not idle if only one cgroup is activated
->>>  block, bfq: only count group that the bfq_queue belongs to
->>>  block, bfq: record how many queues have pending requests in =
-bfq_group
->>>  block, bfq: move forward __bfq_weights_tree_remove()
->>>  block, bfq: decrease 'num_groups_with_pending_reqs' earlier
->>>=20
->>> block/bfq-cgroup.c  |  3 +-
->>> block/bfq-iosched.c | 92 =
-+++++++++++++++++++++++----------------------
->>> block/bfq-iosched.h | 41 +++++++++++++-------
->>> block/bfq-wf2q.c    | 44 +++++++++++++++-------
->>> 4 files changed, 106 insertions(+), 74 deletions(-)
->>>=20
->>> --=20
->>> 2.31.1
->>>=20
->> .
+Best regards,
+	Maxim Levitsky
 

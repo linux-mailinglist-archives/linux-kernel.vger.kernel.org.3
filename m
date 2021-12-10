@@ -2,75 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A5246F9A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 04:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ECD46F9AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 04:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbhLJDoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 22:44:06 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:40384 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231314AbhLJDoF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 22:44:05 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSskizLJhOrkFAA--.12951S2;
-        Fri, 10 Dec 2021 11:40:18 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jason Self <jason@bluehome.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Makefile: Remove "ifdef need-compiler" for Kbuild.platforms
-Date:   Fri, 10 Dec 2021 11:40:18 +0800
-Message-Id: <1639107618-31672-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxSskizLJhOrkFAA--.12951S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFWkXF4UJF13ZryDXw4DXFb_yoW3trX_K3
-        9Fk3W0kw1rXrn3W3y2qw45Wryqy398Crn5CwnxXrnxXa45ta1kGFWkKa48JF4rXr4v9r4r
-        tFyfZFnrCr92gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb2kYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8GwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU0FdgtUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S236451AbhLJDvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 22:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231314AbhLJDvP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 22:51:15 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8204C061746;
+        Thu,  9 Dec 2021 19:47:40 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so8480163pjb.5;
+        Thu, 09 Dec 2021 19:47:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=LkBn5Bx2Q2ONdCf/RNLZYtkOm/cR6MUuUu1fyMhdgZQ=;
+        b=ZA/6mTXeWxYNyuDf3PEBcaIxgZxDmf6QdiI2Wc6uemKVQNd3RTKQ7YyHp0UnQC1Li2
+         rEzPjduEUeFa45cxu1NqXz5t9EJkQnqddvRgMAZ1PXgpAzqHY3+X9GjJsoiCwXMpfCmi
+         +QDjgRd/UBWRTkh3xlx6duYFSxJVfJtp1BCz5aiXrrLw0FBbwsufK+CcyMS3tyWVmg9g
+         nASyFu0NtlM3Xrf+RIRhtXIPzVT0A86866hkfUdoDoIDNw4q20WUb79Knx6N+4gKYJJM
+         k7TBUkYlaIy3I9gUloj7Zk1wVeMs5tn8ez7heM17W56/Xz+9X1aTKGYK4ZyTVcUEMBw0
+         tciA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=LkBn5Bx2Q2ONdCf/RNLZYtkOm/cR6MUuUu1fyMhdgZQ=;
+        b=5esYQYw359K1FaP1/mVB/X5FaQZ+iNbBDtWvU1I4X71ft1CYauIPS7CzaaeGCT8QnB
+         f65aKn/reUQfBmQW9SBDWzmar6kLrISRMCa4ihuZKksPk/ctBFG5mtbE+mI7ak4Xy1g+
+         +xUwg3PN+qTCsHhQaRReYV0DUl8TDdN21TVaoHrEIsKaA0PTDUprOaXdl5Fjmrcu08X3
+         uF014vGpmhAWnZ/C+ym5dgzJ/C2BR73Sp7BVpIXJijD1czPk5KqmqgIDIJ8GGRcdj+So
+         438XwHL5G4k5a09ZwB5rdmZRI9BxVFVMSCJUBSKBtJUgxPC29CiLnKlSvKZcrzNGSzx3
+         qRRQ==
+X-Gm-Message-State: AOAM531o1jJyEE5i+evUYGYEENXTSEaE1LSBtanX4+7R5vStBMfygcxi
+        IUVKl36euvcsM/lef03hrdsP1u3q+mJIcMo7OMY=
+X-Google-Smtp-Source: ABdhPJz9yIe+Z9e6/r74rQeYTTI3+Zkjq8tcmjGKbgAetJYVNaMtw2LKSZQ2/Td1ohhYrrUg2V+iNQ==
+X-Received: by 2002:a17:90b:1c0b:: with SMTP id oc11mr20927651pjb.237.1639108060105;
+        Thu, 09 Dec 2021 19:47:40 -0800 (PST)
+Received: from localhost.localdomain ([43.128.78.144])
+        by smtp.gmail.com with ESMTPSA id g189sm1007210pgc.3.2021.12.09.19.47.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 19:47:39 -0800 (PST)
+Date:   Fri, 10 Dec 2021 11:47:28 +0800
+From:   Aili Yao <yaoaili126@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yaoaili@kingsoft.com
+Subject: Re: [PATCH v2] KVM: LAPIC: Per vCPU control over
+ kvm_can_post_timer_interrupt
+Message-ID: <20211210114728.043f9437@gmail.com>
+In-Reply-To: <YbJJCf20VdHNnpzY@google.com>
+References: <20211124125409.6eec3938@gmail.com>
+        <Ya/s17QDlGZi9COR@google.com>
+        <20211208182158.571fcdee@gmail.com>
+        <YbJJCf20VdHNnpzY@google.com>
+Organization: ksyun
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 13ceb48bc19c ("MIPS: Loongson2ef: Remove unnecessary
-{as,cc}-option calls"), no need to use "ifdef need-compiler" for
-Kbuild.platforms, because the casue of the build issue mentioned
-in commit 0706f74f719e ("MIPS: fix *-pkg builds for loongson2ef
-platform") has been disappeared, so just remove it.
+On Thu, 9 Dec 2021 18:20:57 +0000
+Sean Christopherson <seanjc@google.com> wrote:
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/Makefile | 2 --
- 1 file changed, 2 deletions(-)
+> On Wed, Dec 08, 2021, Aili Yao wrote:
+> > On Tue, 7 Dec 2021 23:23:03 +0000
+> > Sean Christopherson <seanjc@google.com> wrote:
+> >   
+> > > 
+> > >  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+> > >  {
+> > > -       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
+> > > +       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
+> > > +              (kvm_mwait_in_guest(vcpu) || kvm_hlt_in_guest(vcpu));
+> > >  }
+> > > 
+> > >  bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
+> > >  {
+> > > -       return kvm_x86_ops.set_hv_timer
+> > > -              && !(kvm_mwait_in_guest(vcpu->kvm) ||
+> > > -                   kvm_can_post_timer_interrupt(vcpu));
+> > > +       /*
+> > > +        * Don't use the hypervisor timer, a.k.a. VMX Preemption Timer, if the
+> > > +        * guest can execute MWAIT without exiting as the timer will stop
+> > > +        * counting if the core enters C3 or lower.  HLT in the guest is ok as
+> > > +        * HLT is effectively C1 and the timer counts in C0, C1, and C2.
+> > > +        *
+> > > +        * Don't use the hypervisor timer if KVM can post a timer interrupt to
+> > > +        * the guest since posted the timer avoids taking an extra a VM-Exit
+> > > +        * when the timer expires.
+> > > +        */
+> > > +       return kvm_x86_ops.set_hv_timer &&
+> > > +              !kvm_mwait_in_guest(vcpu->kvm) &&
+> > > +              !kvm_can_post_timer_interrupt(vcpu));
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(kvm_can_use_hv_timer);
+> > >   
+> > 
+> > Sorry, I am little confused here now:
+> > if kvm_can_post_timer_interrupt(vcpu) return true(cpu-pm enabled), then the kvm_can_use_hv_timer will always be false;
+> > if kvm_can_post_timer_interrupt(vcpu) return false(cpu-pm disable),then kvm_mwait_in_guest(vcpu->kvm) can't be true ether;
+> > It seems we don't need kvm_mwait_in_guest(vcpu->kvm) here?  
+> 
+> We do, it's to prevent the guest from enter C3+ and stopping the VMX preemption
+> timer, e.g. if either kvm_vcpu_apicv_active() or pi_inject_timer evaluates false.
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index ace7f03..e036fc0 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -253,9 +253,7 @@ endif
- #
- # Board-dependent options and extra files
- #
--ifdef need-compiler
- include $(srctree)/arch/mips/Kbuild.platforms
--endif
- 
- ifdef CONFIG_PHYSICAL_START
- load-y					= $(CONFIG_PHYSICAL_START)
--- 
-2.1.0
+Great thanks for your explanation!
+Now i am clear!
 
+--Aili Yao

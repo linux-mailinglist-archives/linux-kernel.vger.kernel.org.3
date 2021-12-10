@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB14646FFB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF2F46FFB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238113AbhLJLXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:23:31 -0500
-Received: from mxout01.lancloud.ru ([45.84.86.81]:59736 "EHLO
-        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237710AbhLJLXa (ORCPT
+        id S240143AbhLJLZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:25:53 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:48976 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237570AbhLJLZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:23:30 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru B67E920E6B12
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message when
- IRQ can't be retrieved
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
- <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <9e6b2e9a-e958-0c14-6570-135607041978@omp.ru>
-Date:   Fri, 10 Dec 2021 14:19:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 10 Dec 2021 06:25:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 75F4ECE2AB7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:22:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C061C00446;
+        Fri, 10 Dec 2021 11:22:12 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 11:22:09 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jianyong Wu <jianyong.wu@arm.com>
+Cc:     will@kernel.org, anshuman.khandual@arm.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        david@redhat.com, gshan@redhat.com, justin.he@arm.com, nd@arm.com,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v2] arm64/mm: avoid fixmap race condition when create pud
+ mapping
+Message-ID: <YbM4YTgXryp45ufk@arm.com>
+References: <20211210095432.51798-1-jianyong.wu@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210095432.51798-1-jianyong.wu@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 1:46 PM, Andy Shevchenko wrote:
-
->>>> platform_get_irq() will print a message when it fails.
->>>> No need to repeat this.
->>>>
->>>> While at it, drop redundant check for 0 as platform_get_irq() spills
->>>> out a big WARN() in such case.
->>>
->>> The reason you should be able to remove the "if (!irq)" test is that
->>> platform_get_irq() never returns 0. At least, that is what the function kdoc
->>> says. But looking at platform_get_irq_optional(), which is called by
->>> platform_get_irq(), the out label is:
->>>
->>> 	WARN(ret == 0, "0 is an invalid IRQ number\n");
->>> 	return ret;
->>>
->>> So 0 will be returned as-is. That is rather weird. That should be fixed to
->>> return -ENXIO:
->>>
->>> 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
->>> 		return -ENXIO;
->>> 	return ret;
->>
->>    My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
->> but returns -EINVAL instead.
->>
->>> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
->>
->>    Of course it isn't...
+On Fri, Dec 10, 2021 at 05:54:32PM +0800, Jianyong Wu wrote:
+> fixmap is a global resource and is used recursively in create pud mapping.
+> It may lead to race condition when alloc_init_pud is called concurrently.
 > 
-> It's unsubstantiated statement. The vIRQ 0 shouldn't be returned by any of
-> those API calls.
+> Fox example:
+> alloc_init_pud is called when kernel_init. If memory hotplug
+> thread, which will also call alloc_init_pud, happens during
+> kernel_init, the race for fixmap occurs.
+> 
+> The race condition flow can be:
+> 
+> *************** begin **************
+> 
+> kerenl_init thread                          virtio-mem workqueue thread
+> ==================                          ======== ==================
+> alloc_init_pud(...)
+>   pudp = pud_set_fixmap_offset(..)          alloc_init_pud(...)
+> ...                                         ...
+>     READ_ONCE(*pudp) //OK!                    pudp = pud_set_fixmap_offset(
+> ...                                         ...
+>   pud_clear_fixmap() //fixmap break
+>                                               READ_ONCE(*pudp) //CRASH!
+> 
+> **************** end ***************
+> 
+> Hence, a spin lock is introduced to protect the fixmap during create pdg
+> mapping.
+> 
+> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
 
-   We do _not_ know what needs to be fixed, that's the problem, and that's why the WARN()
-is there...
+It looks fine to me:
 
-> If it is the case, go and fix them, no need to workaround
-> in each of the callers.
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
-   There's a need to work around as long as IRQ0 ican be returned, otherwise we get
-partly functioning or non-functioning drivers...
+Do we need a cc stable? Fixmap was introduced in 4.6, so usually:
 
-MBR, Sergey
+Fixes: f4710445458c ("arm64: mm: use fixmap when creating page tables")
+Cc: <stable@vger.kernel.org> # 4.6.x
+
+but I haven't checked when memory hotplug was added to be able to
+trigger the race. It may not need to go back that far.
+
+-- 
+Catalin

@@ -2,104 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B89546F8D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5788046F8DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbhLJB7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 20:59:35 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15715 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232642AbhLJB7f (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 20:59:35 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J9DSf2zBkzZdSk;
-        Fri, 10 Dec 2021 09:53:06 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 09:55:59 +0800
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 10 Dec
- 2021 09:55:58 +0800
-Subject: Re: [PATCH] iommu/iova: wait 'fq_timer' handler to finish before
- destroying 'fq'
-To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
-CC:     <yaohongbo@huawei.com>, <huawei.libin@huawei.com>
-References: <1564219269-14346-1-git-send-email-wangxiongfeng2@huawei.com>
- <ef2c9b27-a644-928d-5bae-1ae4d2f2c099@arm.com>
- <ebfebc58-10b5-c12e-edbe-a22181721c2d@arm.com>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <c414965e-16cf-32a4-14c3-4f3793086695@huawei.com>
-Date:   Fri, 10 Dec 2021 09:55:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S235649AbhLJCAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 21:00:25 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:60248 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232642AbhLJCAZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 21:00:25 -0500
+Received: from localhost.localdomain (unknown [124.16.138.128])
+        by APP-01 (Coremail) with SMTP id qwCowACHj1fFs7JhU_EOAg--.23696S2;
+        Fri, 10 Dec 2021 09:56:21 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     narmstrong@baylibre.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        p.zabel@pengutronix.de
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] media: meson: vdec: potential dereference of null pointer
+Date:   Fri, 10 Dec 2021 09:56:20 +0800
+Message-Id: <20211210015620.2143555-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <ebfebc58-10b5-c12e-edbe-a22181721c2d@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACHj1fFs7JhU_EOAg--.23696S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFWkWF1fZF1rZr4rKr43GFg_yoW5tryxpF
+        10v342gFyUtFyUAr4UJr1kWFWSq348GFyI9a97Xw1fZry7tF17XFnayFWjgr98Jr1S9a18
+        CFyrWw1Uuw4jqrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUbLiSPUUUUU==
+X-Originating-IP: [124.16.138.128]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The return value of kzalloc() needs to be checked.
+To avoid use of null pointer in case of the failure of alloc.
 
+Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-On 2021/12/10 1:48, Robin Murphy wrote:
-> On 2021-12-09 13:17, Robin Murphy wrote:
->> Sorry I missed this before...
->>
->> On 2019-07-27 10:21, Xiongfeng Wang wrote:
->>> Fix following crash that occurs when 'fq_flush_timeout()' access
->>> 'fq->lock' while 'iovad->fq' has been cleared. This happens when the
->>> 'fq_timer' handler is being executed and we call
->>> 'free_iova_flush_queue()'. When the timer handler is being executed,
->>> its pending state is cleared and it is detached. This patch use
->>> 'del_timer_sync()' to wait for the timer handler 'fq_flush_timeout()' to
->>> finish before destroying the flush queue.
->>
->> So if I understand correctly, you shut down the device - which naturally frees
->> some DMA mappings into the FQ - then hotplug it out, such that tearing down
->> its group and default domain can end up racing with the timeout firing on a
->> different CPU? It would help if the commit message actually explained that -
->> I've just reverse-engineered it from the given symptom - rather than focusing
->> on details that aren't really important. fq->lock is hardly significant, since
->> *any* access to the FQ while it's being destroyed is fundamentally unsound. I
->> also spent way too long trying to understand the significance of the full
->> stack trace below before realising that it is in fact just irrelevant -
->> there's only one way fq_flush_timeout() ever gets called, and it's the obvious
->> one.
->>
->> The fix itself seems reasonable - the kerneldoc for del_timer_sync() is
->> slightly scary, but since free_iova_flush_queue() doesn't touch any of the
->> locks and definitely shouldn't run in IRQ context I believe we're OK.
+v1 -> v2
 
-Our internal version has merged this modification for about two years and didn't
-cause any problems. So I think we're OK.
+*Change 1. Change the return type of amvdec_add_ts from void to int.
+*Change 2. Return -ENOMEN if alloc fail and return 0 if not.
+*Change 3. Modify the caller to deal with the error.
+---
+ drivers/staging/media/meson/vdec/esparser.c     | 6 +++++-
+ drivers/staging/media/meson/vdec/vdec_helpers.c | 5 ++++-
+ drivers/staging/media/meson/vdec/vdec_helpers.h | 2 +-
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
->>
->> This will affect my IOVA refactoring series a little, so I'm happy to help
->> improve the writeup if you like - provided that my understanding is actually
->> correct - and include it in a v2 of that.
-> 
-> FWIW, this is what I came up with:
-> 
-> https://gitlab.arm.com/linux-arm/linux-rm/-/commit/ecea6835baca75b945bd8ecfaa636ff01dabcc1d
-> 
-> 
-> Let me know what you think.
+diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+index db7022707ff8..7e78288cc551 100644
+--- a/drivers/staging/media/meson/vdec/esparser.c
++++ b/drivers/staging/media/meson/vdec/esparser.c
+@@ -328,9 +328,13 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+ 
+ 	offset = esparser_get_offset(sess);
+ 
+-	amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
++	ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
+ 	dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
+ 		vb->timestamp, payload_size, offset, vbuf->flags);
++	if (ret) {
++		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
++		return ret;
++	}
+ 
+ 	vbuf->flags = 0;
+ 	vbuf->field = V4L2_FIELD_NONE;
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+index 7f07a9175815..972a1d1a12a5 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.c
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+@@ -227,13 +227,15 @@ int amvdec_set_canvases(struct amvdec_session *sess,
+ }
+ EXPORT_SYMBOL_GPL(amvdec_set_canvases);
+ 
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++		  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
+ {
+ 	struct amvdec_timestamp *new_ts;
+ 	unsigned long flags;
+ 
+ 	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
++	if (!new_ts)
++		return -ENOMEM;
+ 	new_ts->ts = ts;
+ 	new_ts->tc = tc;
+ 	new_ts->offset = offset;
+@@ -242,6 +244,7 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+ 	spin_lock_irqsave(&sess->ts_spinlock, flags);
+ 	list_add_tail(&new_ts->list, &sess->timestamps);
+ 	spin_unlock_irqrestore(&sess->ts_spinlock, flags);
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(amvdec_add_ts);
+ 
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+index cfaed52ab526..1bcb697290de 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.h
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+@@ -55,7 +55,7 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
+  * @offset: offset in the VIFIFO where the associated packet was written
+  * @flags the vb2_v4l2_buffer flags
+  */
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++		  struct v4l2_timecode tc, u32 offset, u32 flags);
+ void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
+ 
+-- 
+2.25.1
 
-Thanks for the writeup. It is exactly the situation I came across.
-
-Thanks,
-Xiongfeng
-
-> 
-> Thanks,
-> Robin.
-> .

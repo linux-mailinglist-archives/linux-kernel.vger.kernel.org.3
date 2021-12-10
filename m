@@ -2,443 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AA0470342
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D69470335
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239302AbhLJO64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:58:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58248 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbhLJO6z (ORCPT
+        id S242438AbhLJO6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242434AbhLJO6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:58:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED4F9B8074E;
-        Fri, 10 Dec 2021 14:55:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A985C00446;
-        Fri, 10 Dec 2021 14:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639148117;
-        bh=T8XnNg+PEfF3JdHViHykqkAT4rTdeAJUzuyXoAcyDAw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fg34dquZE/fXf+mWpGqthwZSjMqNfdFCNODfgXmU8sdkpTJkVFmk6jwUJXgQoVjMv
-         4dsT/oiIEdJCXcMqnLdjhuKRxhDTzeQjnECE32f0eJyN5HtoQUjOEuWaFEfELUVhcI
-         H47W11FS5mdyqz34ZhX1KD22F93JZ5gntwYFPrR/VSUsEeUSH45QrFMGyXBobqJmdX
-         DaQ8ZzRB/6wYag0fe/84Qw+XZ3fi3MEzp28Mw7hvqOIyD0UfMQq0fMy85Tpku70AKx
-         R6gu/7wu0VYRdO22nm5S7Jmg90axdF+t0uDlC71qqRybP/d55vkugpQ+dXrKBU+fOT
-         zY48UOCTz3lFA==
-Received: by pali.im (Postfix)
-        id ECA84761; Fri, 10 Dec 2021 15:55:14 +0100 (CET)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: Add defines for normal and subtractive PCI bridges
-Date:   Fri, 10 Dec 2021 15:53:52 +0100
-Message-Id: <20211210145352.16323-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Fri, 10 Dec 2021 09:58:13 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792B0C0617A1;
+        Fri, 10 Dec 2021 06:54:38 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id s9so8134707qvk.12;
+        Fri, 10 Dec 2021 06:54:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wf4BKyY2V/pYVycdF/iVPuxJUBo+0n5Ukb8K0eQFB9k=;
+        b=O9jMv+DstPd3YNF26JQDDo67u8zqEd2XnFDpn1ktGI+Xb5ZhccxA1VRgCeLpy+3i+q
+         Vfq2tVQFGLY2YqJGjvwYrSztXsPjVNSVb9szMcOH0ilZxHYc0vcNxiRnvEzmrHpVAuqY
+         mRpdERRm1vyioWpxaAcCjeS1yAfjTJm9Ep68JMBJOliNlmtzUrz47yvGY3cKX84DQ22C
+         qCOiJb6bSO7qgKvcgdi41vpTe3ffHVHDgbwMtSo/O9b5IG5yYZ92mARCfFGclJy7ZNeL
+         lMDQynyDd7FcHsIwRTuB+Oet2JjCoRukKyDN0+EDz2bRyPjJTL6UPaXOkExDdumOE+eA
+         yfmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wf4BKyY2V/pYVycdF/iVPuxJUBo+0n5Ukb8K0eQFB9k=;
+        b=D/OFIsxCRrxWLV9L6aYQwYea+Yuxm/WeUjQTqYuDmest8DLuoxv6ckg3yA2wlzohIY
+         1PZ9rPAySkTbxQFMtLjM135FlbaP4sp5F+yUgntaLLSWE/yCIQ7EH7BTkEux5AJYeVS8
+         i279bDPREG1lKv9m23aVd6rq012lrPGqGhkia6FF7n+E1HNtGzYU2973TvMVCoVfY2Op
+         dV+LwwW5pg0prbjl++Xzf4+K5PMkcjL9P3DjcsZts/+Jmp300AQeVDV8rBddwlaYAZVC
+         IhQglyGBj/hNqUi4n6HZyTnLcqEo4/LmYY0qfJ5hY7EOopHW0YcyjMHrWvisXSqQVEtg
+         G20w==
+X-Gm-Message-State: AOAM531s8b9cpFwSVPL+00pcQ9aCWWukMrFoPD/4NF1nieyKNwtqrDLX
+        NSXp8HYvtR0sioIPJFdp+DYIgWTVGSqjJQ==
+X-Google-Smtp-Source: ABdhPJxYBPATqlm2AedtfAOqYyiUmxASWxP4cwy6gkN25/SShjIaSq39miYc93hPB8rjQZ7154Jo6w==
+X-Received: by 2002:a05:6214:1c85:: with SMTP id ib5mr26507493qvb.72.1639148077376;
+        Fri, 10 Dec 2021 06:54:37 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id a3sm2054681qtx.59.2021.12.10.06.54.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 06:54:36 -0800 (PST)
+From:   Gabriel Somlo <gsomlo@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        kgugala@antmicro.com, mholenko@antmicro.com, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
+        shorne@gmail.com, geert@linux-m68k.org,
+        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
+        rdunlap@infradead.org
+Subject: [PATCH v4 0/3] mmc: Add LiteSDCard mmc driver
+Date:   Fri, 10 Dec 2021 09:54:27 -0500
+Message-Id: <20211210145430.3707463-1-gsomlo@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add following two new PCI class codes defines into pci_ids.h include file:
+Add support for the LiteX SD-Card device, LiteSDCard.
 
-  PCI_CLASS_BRIDGE_PCI_NORMAL
-  PCI_CLASS_BRIDGE_PCI_SUBTRACTIVE
+LiteSDCard is a simple SD-Card interface available as part of the LiteX
+environment, used with various RISC-V and other FPGA based SoCs.
 
-And use these defines in all kernel code for describing PCI class codes for
-normal and subtractive PCI bridges.
+New in v4:
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- .../mips/include/asm/mach-bcm63xx/bcm63xx_regs.h |  2 --
- arch/mips/pci/fixup-sb1250.c                     |  2 +-
- arch/mips/pci/pci-bcm63xx.c                      |  2 +-
- arch/powerpc/platforms/powernv/pci.c             |  2 +-
- arch/powerpc/sysdev/fsl_pci.c                    |  2 +-
- arch/sh/drivers/pci/pcie-sh7786.c                |  2 +-
- drivers/pci/controller/dwc/pci-keystone.c        |  8 ++++----
- drivers/pci/controller/dwc/pci-meson.c           | 16 ++++++++--------
- drivers/pci/controller/dwc/pcie-qcom.c           |  2 +-
- .../pci/controller/mobiveil/pcie-mobiveil-host.c |  2 +-
- drivers/pci/controller/pci-aardvark.c            |  2 +-
- drivers/pci/controller/pci-loongson.c            |  2 +-
- drivers/pci/controller/pci-mvebu.c               |  2 +-
- drivers/pci/controller/pci-tegra.c               |  2 +-
- drivers/pci/controller/pcie-iproc-bcma.c         |  2 +-
- drivers/pci/controller/pcie-iproc.c              |  9 ++++-----
- drivers/pci/controller/pcie-mediatek-gen3.c      |  2 +-
- drivers/pci/controller/pcie-rcar-host.c          |  2 +-
- drivers/pci/controller/pcie-rockchip-host.c      |  2 +-
- drivers/pci/controller/pcie-rockchip.h           |  1 -
- drivers/pci/hotplug/shpchp_core.c                |  2 +-
- drivers/pci/pci-bridge-emul.c                    |  2 +-
- drivers/pci/pcie/portdrv_pci.c                   |  4 ++--
- include/linux/pci_ids.h                          |  2 ++
- 24 files changed, 37 insertions(+), 39 deletions(-)
+Doc/dt/bindings/mmc/litex,mmc.yaml:
 
-diff --git a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h
-index 9ceb5e72889f..d3f397dcab6e 100644
---- a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h
-+++ b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_regs.h
-@@ -1380,8 +1380,6 @@
- 
- #define PCIE_IDVAL3_REG			0x43c
- #define IDVAL3_CLASS_CODE_MASK		0xffffff
--#define IDVAL3_SUBCLASS_SHIFT		8
--#define IDVAL3_CLASS_SHIFT		16
- 
- #define PCIE_DLSTATUS_REG		0x1048
- #define DLSTATUS_PHYLINKUP		(1 << 13)
-diff --git a/arch/mips/pci/fixup-sb1250.c b/arch/mips/pci/fixup-sb1250.c
-index 40efc990cdce..3f914c33b7de 100644
---- a/arch/mips/pci/fixup-sb1250.c
-+++ b/arch/mips/pci/fixup-sb1250.c
-@@ -75,7 +75,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_SIBYTE, PCI_DEVICE_ID_BCM1250_PCI,
-  */
- static void quirk_sb1250_ht(struct pci_dev *dev)
- {
--	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- }
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_SIBYTE, PCI_DEVICE_ID_BCM1250_HT,
- 			quirk_sb1250_ht);
-diff --git a/arch/mips/pci/pci-bcm63xx.c b/arch/mips/pci/pci-bcm63xx.c
-index 5548365605c0..ac83243772d2 100644
---- a/arch/mips/pci/pci-bcm63xx.c
-+++ b/arch/mips/pci/pci-bcm63xx.c
-@@ -186,7 +186,7 @@ static int __init bcm63xx_register_pcie(void)
- 	/* setup class code as bridge */
- 	val = bcm_pcie_readl(PCIE_IDVAL3_REG);
- 	val &= ~IDVAL3_CLASS_CODE_MASK;
--	val |= (PCI_CLASS_BRIDGE_PCI << IDVAL3_SUBCLASS_SHIFT);
-+	val |= PCI_CLASS_BRIDGE_PCI_NORMAL;
- 	bcm_pcie_writel(val, PCIE_IDVAL3_REG);
- 
- 	/* disable bar1 size */
-diff --git a/arch/powerpc/platforms/powernv/pci.c b/arch/powerpc/platforms/powernv/pci.c
-index 9a8391b983d1..f7054879ecd4 100644
---- a/arch/powerpc/platforms/powernv/pci.c
-+++ b/arch/powerpc/platforms/powernv/pci.c
-@@ -815,7 +815,7 @@ void pnv_pci_shutdown(void)
- /* Fixup wrong class code in p7ioc and p8 root complex */
- static void pnv_p7ioc_rc_quirk(struct pci_dev *dev)
- {
--	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- }
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_IBM, 0x3b9, pnv_p7ioc_rc_quirk);
- 
-diff --git a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
-index b8f76f3fd994..8ef2a7525e2c 100644
---- a/arch/powerpc/sysdev/fsl_pci.c
-+++ b/arch/powerpc/sysdev/fsl_pci.c
-@@ -55,7 +55,7 @@ static void quirk_fsl_pcie_early(struct pci_dev *dev)
- 	if ((hdr_type & 0x7f) != PCI_HEADER_TYPE_BRIDGE)
- 		return;
- 
--	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- 	fsl_pcie_bus_fixup = 1;
- 	return;
- }
-diff --git a/arch/sh/drivers/pci/pcie-sh7786.c b/arch/sh/drivers/pci/pcie-sh7786.c
-index 4d499476c33a..b0c2a5238d04 100644
---- a/arch/sh/drivers/pci/pcie-sh7786.c
-+++ b/arch/sh/drivers/pci/pcie-sh7786.c
-@@ -314,7 +314,7 @@ static int __init pcie_init(struct sh7786_pcie_port *port)
- 	 * class to match. Hardware takes care of propagating the IDSETR
- 	 * settings, so there is no need to bother with a quirk.
- 	 */
--	pci_write_reg(chan, PCI_CLASS_BRIDGE_PCI << 16, SH4A_PCIEIDSETR1);
-+	pci_write_reg(chan, PCI_CLASS_BRIDGE_PCI_NORMAL << 8, SH4A_PCIEIDSETR1);
- 
- 	/* Initialize default capabilities. */
- 	data = pci_read_reg(chan, SH4A_PCIEEXPCAP0);
-diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
-index 865258d8c53c..7d0965c8a9b4 100644
---- a/drivers/pci/controller/dwc/pci-keystone.c
-+++ b/drivers/pci/controller/dwc/pci-keystone.c
-@@ -531,13 +531,13 @@ static void ks_pcie_quirk(struct pci_dev *dev)
- 	struct pci_dev *bridge;
- 	static const struct pci_device_id rc_pci_devids[] = {
- 		{ PCI_DEVICE(PCI_VENDOR_ID_TI, PCIE_RC_K2HK),
--		 .class = PCI_CLASS_BRIDGE_PCI << 8, .class_mask = ~0, },
-+		 .class = PCI_CLASS_BRIDGE_PCI_NORMAL, .class_mask = ~0, },
- 		{ PCI_DEVICE(PCI_VENDOR_ID_TI, PCIE_RC_K2E),
--		 .class = PCI_CLASS_BRIDGE_PCI << 8, .class_mask = ~0, },
-+		 .class = PCI_CLASS_BRIDGE_PCI_NORMAL, .class_mask = ~0, },
- 		{ PCI_DEVICE(PCI_VENDOR_ID_TI, PCIE_RC_K2L),
--		 .class = PCI_CLASS_BRIDGE_PCI << 8, .class_mask = ~0, },
-+		 .class = PCI_CLASS_BRIDGE_PCI_NORMAL, .class_mask = ~0, },
- 		{ PCI_DEVICE(PCI_VENDOR_ID_TI, PCIE_RC_K2G),
--		 .class = PCI_CLASS_BRIDGE_PCI << 8, .class_mask = ~0, },
-+		 .class = PCI_CLASS_BRIDGE_PCI_NORMAL, .class_mask = ~0, },
- 		{ 0, },
- 	};
- 
-diff --git a/drivers/pci/controller/dwc/pci-meson.c b/drivers/pci/controller/dwc/pci-meson.c
-index 686ded034f22..f44bf347904a 100644
---- a/drivers/pci/controller/dwc/pci-meson.c
-+++ b/drivers/pci/controller/dwc/pci-meson.c
-@@ -313,14 +313,14 @@ static int meson_pcie_rd_own_conf(struct pci_bus *bus, u32 devfn,
- 	 * cannot program the PCI_CLASS_DEVICE register, so we must fabricate
- 	 * the return value in the config accessors.
- 	 */
--	if (where == PCI_CLASS_REVISION && size == 4)
--		*val = (PCI_CLASS_BRIDGE_PCI << 16) | (*val & 0xffff);
--	else if (where == PCI_CLASS_DEVICE && size == 2)
--		*val = PCI_CLASS_BRIDGE_PCI;
--	else if (where == PCI_CLASS_DEVICE && size == 1)
--		*val = PCI_CLASS_BRIDGE_PCI & 0xff;
--	else if (where == PCI_CLASS_DEVICE + 1 && size == 1)
--		*val = (PCI_CLASS_BRIDGE_PCI >> 8) & 0xff;
-+	if ((where & ~3) == PCI_CLASS_REVISION) {
-+		if (size <= 2)
-+			*val = (*val & ((1 << (size * 8)) - 1)) << (8 * (where & 3));
-+		*val &= ~0xffffff00;
-+		*val |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
-+		if (size <= 2)
-+			*val = (*val >> (8 * (where & 3))) & ((1 << (size * 8)) - 1);
-+	}
- 
- 	return PCIBIOS_SUCCESSFUL;
- }
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 1c3d1116bb60..d8ebb24c57b8 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1634,7 +1634,7 @@ static const struct of_device_id qcom_pcie_match[] = {
- 
- static void qcom_fixup_class(struct pci_dev *dev)
- {
--	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- }
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0101, qcom_fixup_class);
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0104, qcom_fixup_class);
-diff --git a/drivers/pci/controller/mobiveil/pcie-mobiveil-host.c b/drivers/pci/controller/mobiveil/pcie-mobiveil-host.c
-index f3547aa60140..31a7bdebe540 100644
---- a/drivers/pci/controller/mobiveil/pcie-mobiveil-host.c
-+++ b/drivers/pci/controller/mobiveil/pcie-mobiveil-host.c
-@@ -295,7 +295,7 @@ int mobiveil_host_init(struct mobiveil_pcie *pcie, bool reinit)
- 	/* fixup for PCIe class register */
- 	value = mobiveil_csr_readl(pcie, PAB_INTP_AXI_PIO_CLASS);
- 	value &= 0xff;
--	value |= (PCI_CLASS_BRIDGE_PCI << 16);
-+	value |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
- 	mobiveil_csr_writel(pcie, value, PAB_INTP_AXI_PIO_CLASS);
- 
- 	return 0;
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index a629c4b703e3..fde96eff3d41 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -528,7 +528,7 @@ static void advk_pcie_setup_hw(struct advk_pcie *pcie)
- 	 */
- 	reg = advk_readl(pcie, PCIE_CORE_DEV_REV_REG);
- 	reg &= ~0xffffff00;
--	reg |= (PCI_CLASS_BRIDGE_PCI << 8) << 8;
-+	reg |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
- 	advk_writel(pcie, reg, PCIE_CORE_DEV_REV_REG);
- 
- 	/* Disable Root Bridge I/O space, memory space and bus mastering */
-diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-index 48169b1e3817..50a8e1d6f70a 100644
---- a/drivers/pci/controller/pci-loongson.c
-+++ b/drivers/pci/controller/pci-loongson.c
-@@ -35,7 +35,7 @@ struct loongson_pci {
- /* Fixup wrong class code in PCIe bridges */
- static void bridge_class_quirk(struct pci_dev *dev)
- {
--	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- }
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
- 			DEV_PCIE_PORT_0, bridge_class_quirk);
-diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-index 0af1c01043c4..fa04644aa658 100644
---- a/drivers/pci/controller/pci-mvebu.c
-+++ b/drivers/pci/controller/pci-mvebu.c
-@@ -339,7 +339,7 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
- 	 */
- 	dev_rev = mvebu_readl(port, PCIE_DEV_REV_OFF);
- 	dev_rev &= ~0xffffff00;
--	dev_rev |= (PCI_CLASS_BRIDGE_PCI << 8) << 8;
-+	dev_rev |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
- 	mvebu_writel(port, dev_rev, PCIE_DEV_REV_OFF);
- 
- 	/* Point PCIe unit MBUS decode windows to DRAM space. */
-diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-index cb0aa65d6934..0457ec02ab70 100644
---- a/drivers/pci/controller/pci-tegra.c
-+++ b/drivers/pci/controller/pci-tegra.c
-@@ -726,7 +726,7 @@ static void tegra_pcie_port_free(struct tegra_pcie_port *port)
- /* Tegra PCIE root complex wrongly reports device class */
- static void tegra_pcie_fixup_class(struct pci_dev *dev)
- {
--	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- }
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_NVIDIA, 0x0bf0, tegra_pcie_fixup_class);
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_NVIDIA, 0x0bf1, tegra_pcie_fixup_class);
-diff --git a/drivers/pci/controller/pcie-iproc-bcma.c b/drivers/pci/controller/pcie-iproc-bcma.c
-index f918c713afb0..8eb17817e5cd 100644
---- a/drivers/pci/controller/pcie-iproc-bcma.c
-+++ b/drivers/pci/controller/pcie-iproc-bcma.c
-@@ -18,7 +18,7 @@
- /* NS: CLASS field is R/O, and set to wrong 0x200 value */
- static void bcma_pcie2_fixup_class(struct pci_dev *dev)
- {
--	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- }
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8011, bcma_pcie2_fixup_class);
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8012, bcma_pcie2_fixup_class);
-diff --git a/drivers/pci/controller/pcie-iproc.c b/drivers/pci/controller/pcie-iproc.c
-index 36b9d2c46cfa..4afd5c1bdfe3 100644
---- a/drivers/pci/controller/pcie-iproc.c
-+++ b/drivers/pci/controller/pcie-iproc.c
-@@ -791,14 +791,13 @@ static int iproc_pcie_check_link(struct iproc_pcie *pcie)
- 		return -EFAULT;
- 	}
- 
--	/* force class to PCI_CLASS_BRIDGE_PCI (0x0604) */
-+	/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
- #define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
--#define PCI_CLASS_BRIDGE_MASK		0xffff00
--#define PCI_CLASS_BRIDGE_SHIFT		8
-+#define PCI_CLASS_BRIDGE_MASK		0xffffff
- 	iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
- 				    4, &class);
- 	class &= ~PCI_CLASS_BRIDGE_MASK;
--	class |= (PCI_CLASS_BRIDGE_PCI << PCI_CLASS_BRIDGE_SHIFT);
-+	class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
- 	iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
- 				     4, class);
- 
-@@ -1583,7 +1582,7 @@ static void quirk_paxc_bridge(struct pci_dev *pdev)
- 	 * code that the bridge is not an Ethernet device.
- 	 */
- 	if (pdev->hdr_type == PCI_HEADER_TYPE_BRIDGE)
--		pdev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+		pdev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
- 
- 	/*
- 	 * MPSS is not being set properly (as it is currently 0).  This is
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index 17c59b0d6978..441642664dfa 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -289,7 +289,7 @@ static int mtk_pcie_startup_port(struct mtk_pcie_port *port)
- 	/* Set class code */
- 	val = readl_relaxed(port->base + PCIE_PCI_IDS_1);
- 	val &= ~GENMASK(31, 8);
--	val |= PCI_CLASS(PCI_CLASS_BRIDGE_PCI << 8);
-+	val |= PCI_CLASS(PCI_CLASS_BRIDGE_PCI_NORMAL);
- 	writel_relaxed(val, port->base + PCIE_PCI_IDS_1);
- 
- 	/* Mask all INTx interrupts */
-diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-index e12c2d8be05a..8e20432c9944 100644
---- a/drivers/pci/controller/pcie-rcar-host.c
-+++ b/drivers/pci/controller/pcie-rcar-host.c
-@@ -372,7 +372,7 @@ static int rcar_pcie_hw_init(struct rcar_pcie *pcie)
- 	 * class to match. Hardware takes care of propagating the IDSETR
- 	 * settings, so there is no need to bother with a quirk.
- 	 */
--	rcar_pci_write_reg(pcie, PCI_CLASS_BRIDGE_PCI << 16, IDSETR1);
-+	rcar_pci_write_reg(pcie, PCI_CLASS_BRIDGE_PCI_NORMAL << 8, IDSETR1);
- 
- 	/*
- 	 * Setup Secondary Bus Number & Subordinate Bus Number, even though
-diff --git a/drivers/pci/controller/pcie-rockchip-host.c b/drivers/pci/controller/pcie-rockchip-host.c
-index c52316d0bfd2..f9b88d208fea 100644
---- a/drivers/pci/controller/pcie-rockchip-host.c
-+++ b/drivers/pci/controller/pcie-rockchip-host.c
-@@ -372,7 +372,7 @@ static int rockchip_pcie_host_init_port(struct rockchip_pcie *rockchip)
- 	rockchip_pcie_write(rockchip, ROCKCHIP_VENDOR_ID,
- 			    PCIE_CORE_CONFIG_VENDOR);
- 	rockchip_pcie_write(rockchip,
--			    PCI_CLASS_BRIDGE_PCI << PCIE_RC_CONFIG_SCC_SHIFT,
-+			    PCI_CLASS_BRIDGE_PCI_NORMAL << 8,
- 			    PCIE_RC_CONFIG_RID_CCR);
- 
- 	/* Clear THP cap's next cap pointer to remove L1 substate cap */
-diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
-index 1650a5087450..32c3a859c26b 100644
---- a/drivers/pci/controller/pcie-rockchip.h
-+++ b/drivers/pci/controller/pcie-rockchip.h
-@@ -134,7 +134,6 @@
- #define PCIE_RC_CONFIG_NORMAL_BASE	0x800000
- #define PCIE_RC_CONFIG_BASE		0xa00000
- #define PCIE_RC_CONFIG_RID_CCR		(PCIE_RC_CONFIG_BASE + 0x08)
--#define   PCIE_RC_CONFIG_SCC_SHIFT		16
- #define PCIE_RC_CONFIG_DCR		(PCIE_RC_CONFIG_BASE + 0xc4)
- #define   PCIE_RC_CONFIG_DCR_CSPL_SHIFT		18
- #define   PCIE_RC_CONFIG_DCR_CSPL_LIMIT		0xff
-diff --git a/drivers/pci/hotplug/shpchp_core.c b/drivers/pci/hotplug/shpchp_core.c
-index 81a918d47895..53692b048301 100644
---- a/drivers/pci/hotplug/shpchp_core.c
-+++ b/drivers/pci/hotplug/shpchp_core.c
-@@ -312,7 +312,7 @@ static void shpc_remove(struct pci_dev *dev)
- }
- 
- static const struct pci_device_id shpcd_pci_tbl[] = {
--	{PCI_DEVICE_CLASS(((PCI_CLASS_BRIDGE_PCI << 8) | 0x00), ~0)},
-+	{PCI_DEVICE_CLASS(PCI_CLASS_BRIDGE_PCI_NORMAL, ~0)},
- 	{ /* end: all zeroes */ }
- };
- MODULE_DEVICE_TABLE(pci, shpcd_pci_tbl);
-diff --git a/drivers/pci/pci-bridge-emul.c b/drivers/pci/pci-bridge-emul.c
-index c84f423a5893..fae672d114db 100644
---- a/drivers/pci/pci-bridge-emul.c
-+++ b/drivers/pci/pci-bridge-emul.c
-@@ -349,7 +349,7 @@ int pci_bridge_emul_init(struct pci_bridge_emul *bridge,
- {
- 	BUILD_BUG_ON(sizeof(bridge->conf) != PCI_BRIDGE_CONF_END);
- 
--	bridge->conf.class_revision |= cpu_to_le32(PCI_CLASS_BRIDGE_PCI << 16);
-+	bridge->conf.class_revision |= cpu_to_le32(PCI_CLASS_BRIDGE_PCI_NORMAL << 8);
- 	bridge->conf.header_type = PCI_HEADER_TYPE_BRIDGE;
- 	bridge->conf.cache_line_size = 0x10;
- 	bridge->conf.status = cpu_to_le16(PCI_STATUS_CAP_LIST);
-diff --git a/drivers/pci/pcie/portdrv_pci.c b/drivers/pci/pcie/portdrv_pci.c
-index 35eca6277a96..4b8801656ffb 100644
---- a/drivers/pci/pcie/portdrv_pci.c
-+++ b/drivers/pci/pcie/portdrv_pci.c
-@@ -178,9 +178,9 @@ static pci_ers_result_t pcie_portdrv_mmio_enabled(struct pci_dev *dev)
-  */
- static const struct pci_device_id port_pci_ids[] = {
- 	/* handle any PCI-Express port */
--	{ PCI_DEVICE_CLASS(((PCI_CLASS_BRIDGE_PCI << 8) | 0x00), ~0) },
-+	{ PCI_DEVICE_CLASS(PCI_CLASS_BRIDGE_PCI_NORMAL, ~0) },
- 	/* subtractive decode PCI-to-PCI bridge, class type is 060401h */
--	{ PCI_DEVICE_CLASS(((PCI_CLASS_BRIDGE_PCI << 8) | 0x01), ~0) },
-+	{ PCI_DEVICE_CLASS(PCI_CLASS_BRIDGE_PCI_SUBTRACTIVE, ~0) },
- 	/* handle any Root Complex Event Collector */
- 	{ PCI_DEVICE_CLASS(((PCI_CLASS_SYSTEM_RCEC << 8) | 0x00), ~0) },
- 	{ },
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 011f2f1ea5bb..04f44a4694a2 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -60,6 +60,8 @@
- #define PCI_CLASS_BRIDGE_EISA		0x0602
- #define PCI_CLASS_BRIDGE_MC		0x0603
- #define PCI_CLASS_BRIDGE_PCI		0x0604
-+#define PCI_CLASS_BRIDGE_PCI_NORMAL		0x060400
-+#define PCI_CLASS_BRIDGE_PCI_SUBTRACTIVE	0x060401
- #define PCI_CLASS_BRIDGE_PCMCIA		0x0605
- #define PCI_CLASS_BRIDGE_NUBUS		0x0606
- #define PCI_CLASS_BRIDGE_CARDBUS	0x0607
+  - fixed `dt_binding_check` errors uncovered by Rob's script
+
+drivers/mmc/host/litex_mmc.c:
+
+  - struct litex_mmc_host fields re-ordered so that `pahole` reports
+    no holes in either 32- or 64-bit builds
+  - litex_mmc_set_bus_width() now encapsulates check for
+    host->is_bus_width_set
+  - litex_mmc_request() - factor out dma data setup into separate
+    helper function: litex_mmc_do_dma()
+
+>New in v3:
+>
+>  MAINTAINERS:
+>
+>  - picked up acked-by Joel
+>  - added listing for liteeth driver
+>  - added Joel as additional co-maintainer (thanks!)
+>
+>  Doc/dt/bindings/mmc/litex,mmc.yaml:
+>
+>  - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
+>    bindings document (please let me know if that was premature, and
+>    happy to take further review if needed :)
+>  - add dedicated DT property for source clock frequency
+>
+>  drivers/mmc/host/litex_mmc.c:
+>
+>  - fixed function signature (no line split), and naming (litex_mmc_*)
+>  - more informative MODULE_AUTHOR() entries
+>    - also added matching "Copyright" entries in file header
+>  - fixed description in Kconfig
+>  - fixed DT documentation
+>  - removed magic constants
+>  - removed litex_map_status(), have sdcard_wait_done() return *real*
+>    error codes directly instead.
+>  - streamlined litex_mmc_reponse_len()
+>  - call litex_mmc_set_bus_width() only once, and ensure it returns
+>    correct error code(s)
+>  - use readx_poll_timeout() -- more concise -- instead of
+>    read_poll_timeout()
+>  - use dev_err() in litex_mmc_send_cmd() (instead of pr_err())
+>  - litex_mmc_setclk() will update host->clock before returning
+>  - separate irq initialization into its own function,
+>    litex_mmc_irq_init()
+>  - document rationale for f_min, f_max
+>  - use dmam_alloc_coherent(), which simplifies cleanup significantly
+>  - large `if (data) { ... }` block in litex_mmc_request() left as-is,
+>    there are too many variables shared with the rest of the parent
+>    function body to easily separate (e.g., `len`, `transfer`, `direct`).
+>    If this is indeed a blocker, I can take another shot at refactoring
+>    it in a future revision!
+>  - bump dma_set_mask_and_coherent() to 64-bits on suitable
+>    architectures
+>  - clock source picked up from dedicated DT clock reference property
+>  - remove gpio card-detect logic (needs testing and a dt binding
+>    example before being eligible for upstream inclusion)
+>
+>> New in v2:
+>>   - reword info message in litex_set_clk()
+>>   - streamline code in litex_map_status()
+>>   - fix typos in Kconfig (thanks Randy Dunlap <rdunlap@infradead.org>)
+>>   - improvements suggested by Stafford Horne <shorne@gmail.com>
+>>     - allow COMPILE_TEST in Kconfig
+>>     - use read_poll_timeout() when waiting for cmd/data/DMA
+>>       xfer completion
+>>   - include interrupt.h (thanks kernel test robot <lkp@intel.com>)
+
+Gabriel Somlo (3):
+  MAINTAINERS: co-maintain LiteX platform
+  dt-bindings: mmc: Add bindings for LiteSDCard
+  mmc: Add driver for LiteX's LiteSDCard interface
+
+ .../devicetree/bindings/mmc/litex,mmc.yaml    |  72 ++
+ MAINTAINERS                                   |   9 +-
+ drivers/mmc/host/Kconfig                      |   9 +
+ drivers/mmc/host/Makefile                     |   1 +
+ drivers/mmc/host/litex_mmc.c                  | 654 ++++++++++++++++++
+ 5 files changed, 743 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+ create mode 100644 drivers/mmc/host/litex_mmc.c
+
 -- 
-2.20.1
+2.31.1
 

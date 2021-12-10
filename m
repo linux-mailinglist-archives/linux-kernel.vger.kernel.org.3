@@ -2,91 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D70470378
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF21947037F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242635AbhLJPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S242675AbhLJPMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235073AbhLJPIa (ORCPT
+        with ESMTP id S235073AbhLJPMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:08:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B4DC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:04:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1CA76CE2B82
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 15:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB2CC00446;
-        Fri, 10 Dec 2021 15:04:48 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 15:04:45 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, ardb@kernel.org,
-        broonie@kernel.org, dave.hansen@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, maz@kernel.org,
-        mingo@redhat.com, tabba@google.com, tglx@linutronix.de,
-        will@kernel.org
-Subject: Re: [RFC PATCH 0/6] linkage: better symbol aliasing
-Message-ID: <YbNsjU2n2uXlg3fc@arm.com>
-References: <20211206124715.4101571-1-mark.rutland@arm.com>
+        Fri, 10 Dec 2021 10:12:22 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2EAC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:08:47 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id 15so8711377ilq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:08:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IqGfMFMGzZuu2Hv/uD9rOzDxJvikzGWBAyGek2h55DE=;
+        b=lW1C+rDjLspw7SVQAt0vSMM28+yVbcX5DDOIAMj81eboyg8FUcvBswACi9kzsCZ1H9
+         5LYkmAl+ripLpLeA1JYjDfRVYOfnjhZ6POVxyIYR4Lum49RLzZ5RWdIcix2V6olLEP/9
+         gzbS+aFMeFov/O7/Ut1NTNm3Ha9UNky/dDQ9C4caEsTOP7NocNO5oh3X+wrXcgjMnJZQ
+         T81e6QY9941LqW4DIbK2SAlUbGXIxVpWGWtuWKb/QIycyTmpcjNGtegCxvoq4MRi7lL+
+         cGcQirooM0N9R5XJPxNK6aimO3w+ibnOuRqK/8HTRPz7XKrzXhGUhqnTxmOH+0yVdhsE
+         Nd4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IqGfMFMGzZuu2Hv/uD9rOzDxJvikzGWBAyGek2h55DE=;
+        b=F3yCsHjKL9m/fDr47qTOHVz3OLhaFrkBF5Ed/aplA6mymLmPR1GFYF/cWDEQ8yoL8g
+         LXTLbYiFZdBSXd9BaKSg65o0EhOyYoaO33tKzXNCy7pvMM75hP5raX920qh1fxwluu0f
+         9BbH6aQBIPqziXiQ3MmAd6r7M8HPCujrGcfNkF/RYfJTtcOwsT5JcM3r2DYNuuuJarR8
+         A+/JHVhL3EWULA2ckCX11f89xUZPRmAS1AtQmHNku7TSgj0ZD3L3b3hra9ExHAiS1N4q
+         p/2rXhJRapHHqBh9f5NYkRfyUjLtGgfBcX4gRIkD12Ps2VuSJ2LRv45IKyl6tnNd1Sa4
+         0J8w==
+X-Gm-Message-State: AOAM530RF9UmCbdussrQbsW7utwmevR4wFAwUMaLWpYrQODXD0JXy63n
+        8d6ooubyM8Tiyv0ZzzVfvxRp4VoFcdORft4G/jfDnjpEvmI=
+X-Google-Smtp-Source: ABdhPJzVz6WZmrdfRJ0Qz3kVSX2BxRgBQX2vMBYg/p29dzxXYwaz2Oo90oQFzDWBPjHZ1KZSzvLtG/aQF2JhEXs/8M4=
+X-Received: by 2002:a05:6e02:1a2c:: with SMTP id g12mr23925538ile.22.1639148926706;
+ Fri, 10 Dec 2021 07:08:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206124715.4101571-1-mark.rutland@arm.com>
+References: <20211201170411.1561936-1-qperret@google.com> <20211201170411.1561936-14-qperret@google.com>
+In-Reply-To: <20211201170411.1561936-14-qperret@google.com>
+From:   Andrew Walbran <qwandor@google.com>
+Date:   Fri, 10 Dec 2021 15:08:31 +0000
+Message-ID: <CA+_y_2F0KF6WH+uTa4k3p72mCqeDuN1uzPKTx2u2E4bGUGaPJA@mail.gmail.com>
+Subject: Re: [PATCH v3 13/15] KVM: arm64: Implement do_unshare() helper for
+ unsharing memory
+To:     Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 12:47:09PM +0000, Mark Rutland wrote:
-> This series aims to make symbol aliasing simpler and more consistent.
-> The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
-> SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
-> that e.g.
-> 
->     SYM_FUNC_START(func)
->     SYM_FUNC_START_ALIAS(alias1)
->     SYM_FUNC_START_ALIAS(alias2)
->         ... asm insns ...
->     SYM_FUNC_END(func)
->     SYM_FUNC_END_ALIAS(alias1)
->     SYM_FUNC_END_ALIAS(alias2)
->     EXPORT_SYMBOL(alias1)
->     EXPORT_SYMBOL(alias2)
-> 
-> ... can become:
-> 
->     SYM_FUNC_START(name)
->         ... asm insns ...
->     SYM_FUNC_END(name)
-> 
->     SYM_FUNC_ALIAS(alias1, func)
->     EXPORT_SYMBOL(alias1)
-> 
->     SYM_FUNC_ALIAS(alias2, func)
->     EXPORT_SYMBOL(alias2)
-> 
-> This avoids repetition and hopefully make it easier to ensure
-> consistency (e.g. so each function has a single canonical name and
-> associated metadata).
-> 
-> I'm sending this as an RFC since I want to check:
-> 
-> a) People are happy with the idea in principle.
-> 
-> b) People are happy with the implementation within <linux/linkage.h>.
-> 
-> ... and I haven't yet converted the headers under tools/, which is
-> largely a copy+paste job.
+Reviewed-by: Andrew Walbran <qwandor@google.com>
 
-I'm happy with the approach and acked the arm64 patches for the record.
-Not sure how/when this series will get into mainline.
 
--- 
-Catalin
+On Wed, 1 Dec 2021 at 17:05, 'Quentin Perret' via kernel-team
+<kernel-team@android.com> wrote:
+>
+> From: Will Deacon <will@kernel.org>
+>
+> Tearing down a previously shared memory region results in the borrower
+> losing access to the underlying pages and returning them to the "owned"
+> state in the owner.
+>
+> Implement a do_unshare() helper, along the same lines as do_share(), to
+> provide this functionality for the host-to-hyp case.
+>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> ---
+>  arch/arm64/kvm/hyp/nvhe/mem_protect.c | 115 ++++++++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>
+> diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> index 1282cbd6b9b3..43b25e2de780 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+> @@ -485,6 +485,16 @@ static int host_request_owned_transition(u64 *completer_addr,
+>         return __host_check_page_state_range(addr, size, PKVM_PAGE_OWNED);
+>  }
+>
+> +static int host_request_unshare(u64 *completer_addr,
+> +                               const struct pkvm_mem_transition *tx)
+> +{
+> +       u64 size = tx->nr_pages * PAGE_SIZE;
+> +       u64 addr = tx->initiator.addr;
+> +
+> +       *completer_addr = tx->initiator.host.completer_addr;
+> +       return __host_check_page_state_range(addr, size, PKVM_PAGE_SHARED_OWNED);
+> +}
+> +
+>  static int host_initiate_share(u64 *completer_addr,
+>                                const struct pkvm_mem_transition *tx)
+>  {
+> @@ -495,6 +505,16 @@ static int host_initiate_share(u64 *completer_addr,
+>         return __host_set_page_state_range(addr, size, PKVM_PAGE_SHARED_OWNED);
+>  }
+>
+> +static int host_initiate_unshare(u64 *completer_addr,
+> +                                const struct pkvm_mem_transition *tx)
+> +{
+> +       u64 size = tx->nr_pages * PAGE_SIZE;
+> +       u64 addr = tx->initiator.addr;
+> +
+> +       *completer_addr = tx->initiator.host.completer_addr;
+> +       return __host_set_page_state_range(addr, size, PKVM_PAGE_OWNED);
+> +}
+> +
+>  static enum pkvm_page_state hyp_get_page_state(kvm_pte_t pte)
+>  {
+>         if (!kvm_pte_valid(pte))
+> @@ -535,6 +555,17 @@ static int hyp_ack_share(u64 addr, const struct pkvm_mem_transition *tx,
+>         return __hyp_check_page_state_range(addr, size, PKVM_NOPAGE);
+>  }
+>
+> +static int hyp_ack_unshare(u64 addr, const struct pkvm_mem_transition *tx)
+> +{
+> +       u64 size = tx->nr_pages * PAGE_SIZE;
+> +
+> +       if (__hyp_ack_skip_pgtable_check(tx))
+> +               return 0;
+> +
+> +       return __hyp_check_page_state_range(addr, size,
+> +                                           PKVM_PAGE_SHARED_BORROWED);
+> +}
+> +
+>  static int hyp_complete_share(u64 addr, const struct pkvm_mem_transition *tx,
+>                               enum kvm_pgtable_prot perms)
+>  {
+> @@ -545,6 +576,14 @@ static int hyp_complete_share(u64 addr, const struct pkvm_mem_transition *tx,
+>         return pkvm_create_mappings_locked(start, end, prot);
+>  }
+>
+> +static int hyp_complete_unshare(u64 addr, const struct pkvm_mem_transition *tx)
+> +{
+> +       u64 size = tx->nr_pages * PAGE_SIZE;
+> +       int ret = kvm_pgtable_hyp_unmap(&pkvm_pgtable, addr, size);
+> +
+> +       return (ret != size) ? -EFAULT : 0;
+> +}
+> +
+>  static int check_share(struct pkvm_mem_share *share)
+>  {
+>         const struct pkvm_mem_transition *tx = &share->tx;
+> @@ -621,6 +660,82 @@ static int do_share(struct pkvm_mem_share *share)
+>         return WARN_ON(__do_share(share));
+>  }
+>
+> +static int check_unshare(struct pkvm_mem_share *share)
+> +{
+> +       const struct pkvm_mem_transition *tx = &share->tx;
+> +       u64 completer_addr;
+> +       int ret;
+> +
+> +       switch (tx->initiator.id) {
+> +       case PKVM_ID_HOST:
+> +               ret = host_request_unshare(&completer_addr, tx);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (tx->completer.id) {
+> +       case PKVM_ID_HYP:
+> +               ret = hyp_ack_unshare(completer_addr, tx);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static int __do_unshare(struct pkvm_mem_share *share)
+> +{
+> +       const struct pkvm_mem_transition *tx = &share->tx;
+> +       u64 completer_addr;
+> +       int ret;
+> +
+> +       switch (tx->initiator.id) {
+> +       case PKVM_ID_HOST:
+> +               ret = host_initiate_unshare(&completer_addr, tx);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (tx->completer.id) {
+> +       case PKVM_ID_HYP:
+> +               ret = hyp_complete_unshare(completer_addr, tx);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +/*
+> + * do_unshare():
+> + *
+> + * The page owner revokes access from another component for a range of
+> + * pages which were previously shared using do_share().
+> + *
+> + * Initiator: SHARED_OWNED     => OWNED
+> + * Completer: SHARED_BORROWED  => NOPAGE
+> + */
+> +static int do_unshare(struct pkvm_mem_share *share)
+> +{
+> +       int ret;
+> +
+> +       ret = check_unshare(share);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return WARN_ON(__do_unshare(share));
+> +}
+> +
+>  int __pkvm_host_share_hyp(u64 pfn)
+>  {
+>         int ret;
+> --
+> 2.34.0.rc2.393.gf8c9666880-goog
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

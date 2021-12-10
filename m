@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCD4470AED
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9735B470AF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242593AbhLJTx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:53:58 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45408 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbhLJTx4 (ORCPT
+        id S239503AbhLJTzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:55:09 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:41670 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230014AbhLJTzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:53:56 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id EAE491F47AE9
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1639165820; bh=+JjpwsA0iv+3XffZuyV/VazyWAtMyRYIaD9EZA5fc6Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=D/MG1D7XvnvG+d73Yw42hFJJZMy9MXG6wTEX3qYEwpq0s8r/ZJw+4U3huBvcDLKWx
-         o4c1v6430kr96fPsAv5Nkhmhz4SMsGGfqpwBHj/yBK8kGAcbQLZf+Tl9CBoIxysgNT
-         +2ChF7X6DXkcnXoKjm9oSHh393aFZ5fVkHZJlsNTZgCnETR7EESZbPpzCnB7J2o0us
-         zP3oujweUWDZ8n2BctTzOvvku07DIHTiNiUWLRvhtx+7shEN7MuKHMMTjsXG2UTSaU
-         tFHmslLdYcJhVOfF8S1ZOQDnKO9mY7p5tyeFAY2ck0Nx/BY1gRv5Ml8FI+944NnuLD
-         W7lCptV/V8/pQ==
-From:   Robert Beckett <bob.beckett@collabora.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>, Oak Zeng <oak.zeng@intel.com>
-Cc:     Robert Beckett <bob.beckett@collabora.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/i915/ttm: fix large buffer population trucation
-Date:   Fri, 10 Dec 2021 19:50:05 +0000
-Message-Id: <20211210195005.2582884-1-bob.beckett@collabora.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 10 Dec 2021 14:55:08 -0500
+Received: by mail-ot1-f43.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so10686488otl.8;
+        Fri, 10 Dec 2021 11:51:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Cy8xqEajHKVTrrDEEHj37zl/xSZfr+ukXq8qSQmWZy4=;
+        b=k099Ej33haKlAPvOiOgJrWknwQrNitFaJ6qyix/8+iuy7arq2YXGTLLkCwuF5c4CBO
+         VnL10twVi9okX6uRRYHpcYFb51CjzNYZlJkadiJmR7Gcw1HzKFakW5wlRDBgAdmY/Y4x
+         aNxJ59y5RPhOYdd+o7r3T061kgcSrGOTTtogZBZzjrEjUF0rlEwTz/aSEb5Z7AycQ5Sp
+         XAaAOXPWsUmoqqNhg6XfvH+46N924rDrMDSh/CKfakMEyw97f9MLG+1w3xlFbJug5bxU
+         M78aGm1dpx32AFZLrtTBiCknUVwirz8V6z8Rne2kjmv8gitjCapcmApvyr24MclrTs5P
+         p7TA==
+X-Gm-Message-State: AOAM531BZgiZ9ciwP0hcNRKOSoka6MbT1+MHFfMaWkjcieoS3kRdiaat
+        zEhSEQCFGBAOOiMZwFADdQU6b/3nRwjSlRJOE4r68rwEVoE=
+X-Google-Smtp-Source: ABdhPJwWCTQxyhrfh4okbPpLv+QjqanHA+H+CS8qQOCWhzElNZlaNRYY3eowXHHopYyxmR0B43TOHQomaG07RYa5uKQ=
+X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr12927095otu.254.1639165892996;
+ Fri, 10 Dec 2021 11:51:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Dec 2021 20:51:22 +0100
+Message-ID: <CAJZ5v0j+7Kz6n_WfjJuVaxt+MNVo77KikSPKQDB-4iT8ozGfww@mail.gmail.com>
+Subject: [GIT PULL] Power management fix for v5.16-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ttm->num_pages is uint32_t which was causing very large buffers to
-only populate a truncated size.
+Hi Linus,
 
-This fixes gem_create@create-clear igt test on large memory systems.
+Please pull from the tag
 
-Fixes: 7ae034590cea ("drm/i915/ttm: add tt shmem backend")
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.16-rc5
+
+with top-most commit 444dd878e85fb33fcfb2682cfdab4c236f33ea3e
+
+ PM: runtime: Fix pm_runtime_active() kerneldoc comment
+
+on top of commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
+
+ Linux 5.16-rc4
+
+to receive a power management fix for 5.16-rc5.
+
+This fixes a kernedoc comment that doesn't match the behavior of the
+function documented by it.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (1):
+      PM: runtime: Fix pm_runtime_active() kerneldoc comment
+
+---------------
+
+ include/linux/pm_runtime.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-index 218a9b3037c7..923cc7ad8d70 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-@@ -166,7 +166,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
- 	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
- 	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
- 	const unsigned int max_segment = i915_sg_segment_size();
--	const size_t size = ttm->num_pages << PAGE_SHIFT;
-+	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
- 	struct file *filp = i915_tt->filp;
- 	struct sgt_iter sgt_iter;
- 	struct sg_table *st;
--- 
-2.25.1
-

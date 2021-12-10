@@ -2,227 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A07746FC64
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2AE46FC69
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238297AbhLJIP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 03:15:26 -0500
-Received: from mga01.intel.com ([192.55.52.88]:41021 "EHLO mga01.intel.com"
+        id S230078AbhLJIPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 03:15:37 -0500
+Received: from mga12.intel.com ([192.55.52.136]:4194 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230205AbhLJIPZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 03:15:25 -0500
+        id S230205AbhLJIPf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 03:15:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639123911; x=1670659911;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=AZOHBoxF6MnB9CnKyodFZs+g76ZNOMdqHNqlX9YQg9s=;
-  b=OakjLSmlJSqT/nLqtyEYbI+LhDD/hgruRFbbccpjeBydp/R5ZL2ayxdi
-   kV5jrGKmUpGYNIEq70sgmLvd3Rrj2qo7ln5wyNd47UIr7tjNX2GAfNPkE
-   crr2FcpYjAdrlNtVEsJ7MOkPet5E4m1w3HS8Ol6y3Xfoi7+Nq1nIDH6bk
-   zujh3BKeuuEbrVdnbywNUsVJ60gkBHo6Wr3VdkoYsPLa3/Cv8mYVopbGM
-   vFLNwaZNpMY9JSs08ZsoEjMy1YFF+0mDilvaeBmWhVZQBFgXqIHIDI/lW
-   dz8tyoh1yw73s+k6Clenk/7wfvW+faqsriA6CQZPmZu2vEFMHPaTYvZay
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="262410431"
+  t=1639123921; x=1670659921;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZP84rRNV8kIAEoQp8NeSWuxxSG5ROIfE4yZl49EkSaM=;
+  b=PiFnS2Q/OmAj7e6EUSWSKTlU2enPDElAGB+v6jrxFOh2+/PSYAzRNkv3
+   twTYHN82rEfTEWmvtM/L5xvi5UBF0kHHUOEo3NrhsBWZocNfNDt3BpfTM
+   4nh18nYzKnbp4aUmMeoGiarzhytCCNHn43X7eLpaR6dqm8LqS9/Am/+tx
+   fUUnhhi1UIwwMK7hdRLCPfUhNsLLzBrW0bqx/oQkc0r6IGANfXKkmr18o
+   5dzQ2E+xKmU2vjNuc1oW/fyPjOBCLI2Okgf+CzkTRbh0ioLaCPDhrBN3j
+   kJEIORVCzshGHu2oM9nU99RMKgvbiC8KmG/vLEKvlLBRn9HCE6ctm3bE3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="218323381"
 X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="262410431"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 00:11:48 -0800
+   d="scan'208";a="218323381"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 00:12:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="503841302"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2021 00:11:47 -0800
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 00:11:47 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Fri, 10 Dec 2021 00:11:47 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Fri, 10 Dec 2021 00:11:44 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=llfy+ezpkH27+TLjibcP1uI8Mj4jH1apyRbOulSgW/nMSfWeyz/RV4hrIwaJCJccL5wGCg/teSljYOuJGJmZ6flOPGLCojTpj+9bnyBg+mnx3DBDCxiBKF8cKSlhq9o4IJy8jjd1T8FqWcaIZ2OGEcUDPDra6ITRX2Vk94KOSU155L+J9U359RSjlerLpo9ap+Y4wSENMV2VY7I8kiYaID/fY0FuXjFClLpZihZdThFFK8UOyX+9KUwhp4cFaOotS3zU0CuTXcCpkgr4wNokBXm6BCj3JBCNVDc2MfiSORvrNJKij6Gvw4UxmmibbBibrBQiMP5ehE3BTOOKxMhoCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AZOHBoxF6MnB9CnKyodFZs+g76ZNOMdqHNqlX9YQg9s=;
- b=M3XwxR2QYhxu/LN4icUyj+LA3erevdTR3tkSdYnmQYf/ZgcrAdveqBkVDSjEnNtyotckjvLNDkt1Lw+eF3uWS0As3eRYALs2H78yqv7O+EDnOIEcVti8VYZEex6nuGqfpMu+t7Vm5V5bom93R708H5bqt5fJ1bJTAzL33R41c01MNvaUozmZ9dhJZdceA4iKB3Yn9dXK4zFdxMAzqvdmhQVir+jZf5kuvi5cfQiO9BeSqSY7Lk8nUPSuTXsmhg8AAInePenQ2Fz/k+Jauq99bNEjQAETUdC0WpQYEd7TiONJ6FkJrZYKN0kKjDB2dwOCHjz35zfZsRWBrci4ystmPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AZOHBoxF6MnB9CnKyodFZs+g76ZNOMdqHNqlX9YQg9s=;
- b=Yb9n2w8VgEY86E3IB39aaQTnRqJ4TR9Mg4FXweBB9PIoI+6VmGyfJ0I3/mW+lQLiWMgS6SUOOpuRwhQPqAU/Pj8LIDeqC/Uk9AbfkaR+MITwHAdDuDkcOtNAh8LAGXTTQ0rrFeKUB8pJfsKuser82sAYcM5d95/SfacZtW9O6z8=
-Received: from BN9PR11MB5545.namprd11.prod.outlook.com (2603:10b6:408:102::19)
- by BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.15; Fri, 10 Dec
- 2021 08:11:37 +0000
-Received: from BN9PR11MB5545.namprd11.prod.outlook.com
- ([fe80::6533:7d95:6f60:aafd]) by BN9PR11MB5545.namprd11.prod.outlook.com
- ([fe80::6533:7d95:6f60:aafd%9]) with mapi id 15.20.4778.015; Fri, 10 Dec 2021
- 08:11:37 +0000
-From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/9] drm/i915/gvt: Constify intel_gvt_irq_ops
-Thread-Topic: [PATCH 3/9] drm/i915/gvt: Constify intel_gvt_irq_ops
-Thread-Index: AQHX6P187Ped6GlXbEiFFlrycq/qgqwraR+A
-Date:   Fri, 10 Dec 2021 08:11:37 +0000
-Message-ID: <fa39dbb5-3e88-3536-d22d-f748861a8268@intel.com>
-References: <20211204105527.15741-1-rikard.falkeborn@gmail.com>
- <20211204105527.15741-4-rikard.falkeborn@gmail.com>
-In-Reply-To: <20211204105527.15741-4-rikard.falkeborn@gmail.com>
-Accept-Language: en-FI, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 548e1857-e28b-47b9-4bac-08d9bbb4b03e
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN9PR11MB5276E3CB45222997595DABA5CA719@BN9PR11MB5276.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tvslbHR3G2B7HqeGpiaCy91cbyEe72LAdfTav4lMKvuSfSLXN1wcab3dlkOq7gJkWOEE/Uaoja7bjV9b+Eg6I8VL3hH75Rm1cO2om/hllqNpwE1js9/iPoMKOi2mzHbKTeWAXsU1xmsT3M5BGcc5PmSwtAisJYPvvCLYz388HTL/fnIyA8/xCLlyhaG33Z7IVjdhx/pV3MJAVuf6KHxUOSrGl/Y08G+XkTE7yjDxpLbAXJlintxFVWdQZ7SuUveNgJEpG4CAR5acAm1AR7x2KhbgOGQJHifxRbNPIPcHWB2cQRjI6p5ZKkM2VE1zblH1kvcc9bxzbkWcLkHdcXiWK+kKkrD9n2cJ4lvzm5nTZokeO1yLs2+ExYFIWywl3MEbeHtllizAIuljJkijSqrj6nG0iK60zFHYypU3zaaw+KAUPbHEAREF6GPvzEDtJ6Gt3qQvOD7sCxyuwNd3jtbMOYRFThvJ/fgonzlx97UJu8lgfNjiXHaawGs0DkjgaCV2MbGQ89SO8KzkNYKTOB7XBoEvbH8lsYKUFCof4lKKVTjQ4IaqHS0P5YEC0J+ZXlCfgCMiYKTeSOHp/BhWbbaIit3xSXRHLsIG2CxrhOp7WQxoj8HT9nYM424hSmkwIzWcIbr5+u+zIrjCfPbZ3zy8EvP41TxqPXIFpuaT+b03x/BUzRt0bwAZhNjHLZ1pUzn9xxrM6s6oACLl79eG8BQ2FNmO+IsMQiZl+z/+N+CjNNxilHntL4Urs5LgTNuM897RsR7uYGi3beY0h7e8/rd/xQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66446008)(66946007)(2616005)(31686004)(36756003)(66556008)(64756008)(91956017)(76116006)(66476007)(6512007)(31696002)(83380400001)(7416002)(5660300002)(508600001)(8676002)(8936002)(53546011)(71200400001)(6506007)(38100700002)(186003)(6486002)(38070700005)(4326008)(26005)(122000001)(110136005)(86362001)(82960400001)(316002)(2906002)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VGJVeHpEMXFXMk9OMWNZRkQ0QzNnWTJKbWhFWU1uNkdtR0hqaEdXbTFQcjFm?=
- =?utf-8?B?NFRSd05tc0UyWVpLUHhXN1JtcGdLb2lmRHpCM1Q1UjB6OFVwV2IwMitraXJM?=
- =?utf-8?B?NC9rMDFFR1JldFQ3MWxCeHZrS01KeXhzbEZwaWsvYmYvOUZ0ZHJJNlhrQVNa?=
- =?utf-8?B?VTRHYlVQTVFKcm5qdWpzS2ZTdms3UFBsT1d3KzgzM2ZuY2RNWE9DbFVMdVdB?=
- =?utf-8?B?MVU4SjJOeFRUeTlKV2FRREdCK2h6Q003KzBSeEtSNGxWZ2o4NHlFdmJVWDNI?=
- =?utf-8?B?WngzN1FIa0ZjTTJIMW45RU0zY25ldVJNYmJXMWhodm5TQUp5a1ZDOXpFZ211?=
- =?utf-8?B?a3YrZmpvMFZEOGgvOWcreURmUms4cktkV3Z3ZzZJSE1IQlBneUg3S2VGazNP?=
- =?utf-8?B?YittSW50Q05KNkQvczhqRzg0OW9jeHZnbDQxTjJzd3A0YlZKakRwYWtpSUtD?=
- =?utf-8?B?STlGUUpsUjljcWpSa0lraVlpaFBOYjl0bTRmcUlQRzdXdnJyZDM1WVpoK3NI?=
- =?utf-8?B?Y25CbmNFUlF4YldxNkNPdENFbUduT3dCSkwrRm1GWnMrS3JwcXFwRWJWZ29Z?=
- =?utf-8?B?VmtOWFdoV0YyK0Z3YVZlZnJ4elFHdndFWkFrZUc2YW1hYmIzUDNmU0lybEFo?=
- =?utf-8?B?SVo4RzVvUTl1VmViYXY4V2ZpaGx3alYrYUJLT2RkTkVTaFBidytsZFF1bWRi?=
- =?utf-8?B?UW9DMEtMeHdMYXZBK2tiVHBuQVNrWUxpWkZOamdMcGtTalNyeDhLcWlWbFQ3?=
- =?utf-8?B?RWhaNUl4KzRKc2JXV1ljamxWVkNZekNDbEVLM29mcDFTem1pREZlaG9Gc3RF?=
- =?utf-8?B?czlQZm5keThlMXBxT0ZvSHBLOWtBdHcyUHNJSSs1NEJPV015c2hDVlNEVlRp?=
- =?utf-8?B?WlhEZnQ2cVdsYitOTGk4Nks4TmNGd0JoMHFTeit4U1ZlY0JvWlJNRkhlR0xF?=
- =?utf-8?B?QXhWbFM2eVRXZlpzNWh3bDRUa01FRE53ZWpodE5nM1I1RUs0REYyYUg3RmZK?=
- =?utf-8?B?NE5CTjZtYlk5SE1jdFNMVnhvdkNoTzJDR0lZaVJKWlE2bkN5eW5sQzIrUkYx?=
- =?utf-8?B?Y0JENGxFbXEzWWdDR3R2U2k3Y1ZLMHh5UnhnYVdsL1dtTmlucmhlT01HUEVv?=
- =?utf-8?B?TzEwWTZnQml1c1BWSUFhYWNFV1Fia0ZkTTdOQlZEZTdkYzBubFJ3NGpQVHY3?=
- =?utf-8?B?VkNHTXpXQkdjRXBubEgyVWVwUldLbVhMV2JJbm5RSXdkQ2VyQnFKMXlyZWpD?=
- =?utf-8?B?andYQmZQelE5Yy9vUjhVeUJlUmJ4dTZBU0RMTDI4MUNSM3N1RXE3ZmdyeEZq?=
- =?utf-8?B?WGVZM3VwWXM2QTlBR2dzN0NZa2x2TkFRU1d3VGthdTNKb0N1bXc2SDVNL2pv?=
- =?utf-8?B?c1J0ZGZ4TkhWNTRVVnRzc1M0V2RYZWdjTURNMFpzcTJSTkkzZkFacjBaaVZR?=
- =?utf-8?B?cHg5aUQyajFibCs2NzhxVGN6c3d6M1VqQ0F1TUJtYXBlZ0kxbjFzdEpzU3dj?=
- =?utf-8?B?T1Z5VFZaNTBlSG1NV0QxZzF1VlJuWXMxcEZGU0E1R0kxQkY3S0FjQ1RYSldz?=
- =?utf-8?B?RTJyU244MEI3dWNHbmlVNXlGMzJ1bkxvVmdjN3VLR1Z2MlFINUR5REZOVW42?=
- =?utf-8?B?R2V4RldkODQxYmh4akxBRG95RnZjRkQranphdUpEUUZ3eGRjb3d1NkhYSlZr?=
- =?utf-8?B?UktZZmIwOWp5d1htSWU5cHFNRnc3ellWSjFKUFVrRkhWbE1Jc2kyNlp0bFAv?=
- =?utf-8?B?dTIyejZ0SUxjYkhpdWNoRzJKL1JvM1U3dFFRVTJSdFF1T0lmWEc0ajZVdG55?=
- =?utf-8?B?eitJUDRZcHNiRmpqVVFhYUNuRU5POS90RjNMeDhvZTBXcGRwanBpTGhmUlZD?=
- =?utf-8?B?REZ5bE1CcG1WbVJNV0RYYzZjcmZpNStjdmwvLzEzTS9kS2J2ZTJOcHlUeVFw?=
- =?utf-8?B?R0Rxcy9oTG5WOE1SUks2TmlzMXpXd3lrelJBbDBRZFpaZ3A5ZTRUTS8yZ2hV?=
- =?utf-8?B?ZDJxcGJuZ0tWTkE1Ungyakw5R2xtckcwWEhqTUcxUDZrMWlSbVBRcUhRTkti?=
- =?utf-8?B?WlNsTXA3akxiZUYzY3d2eEx6TmhKakZud21GSTI4YURVdlJiaXJKYnh1eEZR?=
- =?utf-8?B?dWQ3ZDBmbWRMYW41RFJVb2cxWlc3N3J3Nld4V1FFcXhMbVQwVmcxamVoWEVp?=
- =?utf-8?B?ZEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6A73670757EFEF45B3AD42B30A45BA55@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="680666584"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 00:11:58 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvb0Y-0002xE-9p; Fri, 10 Dec 2021 08:11:58 +0000
+Date:   Fri, 10 Dec 2021 16:11:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [superna9999:amlogic/v5.17/g12-dsi 5/7]
+ drivers/gpu/drm/meson/meson_encoder_dsi.c:72:2: error: implicit declaration
+ of function 'meson_vclk_setup'
+Message-ID: <202112101636.y17bk2Zb-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5545.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 548e1857-e28b-47b9-4bac-08d9bbb4b03e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2021 08:11:37.3761
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bbohqRGceQLrq8ZXD50qjTi9euS7+QjFPZx5kS0lmo94ghot+wFthLT27wHYp1/x7j4RgbBCP/pofL2wCpKY4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5276
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIvNC8yMDIxIDEyOjU1IFBNLCBSaWthcmQgRmFsa2Vib3JuIHdyb3RlOg0KPiBUaGVzZSBh
-cmUgbmV2ZXIgbW9kaWZpZWQsIHNvIG1ha2UgdGhlbSBjb25zdCB0byBhbGxvdyB0aGUgY29tcGls
-ZXIgdG8NCj4gcHV0IHRoZW0gaW4gcmVhZC1vbmx5IG1lbW9yeS4NCj4NCj4gU2lnbmVkLW9mZi1i
-eTogUmlrYXJkIEZhbGtlYm9ybiA8cmlrYXJkLmZhbGtlYm9ybkBnbWFpbC5jb20+DQo+IC0tLQ0K
-PiAgIGRyaXZlcnMvZ3B1L2RybS9pOTE1L2d2dC9pbnRlcnJ1cHQuYyB8IDEwICsrKysrLS0tLS0N
-Cj4gICBkcml2ZXJzL2dwdS9kcm0vaTkxNS9ndnQvaW50ZXJydXB0LmggfCAgMiArLQ0KPiAgIDIg
-ZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3Z0L2ludGVycnVwdC5jIGIvZHJpdmVycy9n
-cHUvZHJtL2k5MTUvZ3Z0L2ludGVycnVwdC5jDQo+IGluZGV4IDYxNGI5NTFkOTE5Zi4uOWNjYzZi
-MWVjYzI4IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vaTkxNS9ndnQvaW50ZXJydXB0
-LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3Z0L2ludGVycnVwdC5jDQo+IEBAIC0x
-NzYsNyArMTc2LDcgQEAgaW50IGludGVsX3ZncHVfcmVnX2ltcl9oYW5kbGVyKHN0cnVjdCBpbnRl
-bF92Z3B1ICp2Z3B1LA0KPiAgIAl1bnNpZ25lZCBpbnQgcmVnLCB2b2lkICpwX2RhdGEsIHVuc2ln
-bmVkIGludCBieXRlcykNCj4gICB7DQo+ICAgCXN0cnVjdCBpbnRlbF9ndnQgKmd2dCA9IHZncHUt
-Pmd2dDsNCj4gLQlzdHJ1Y3QgaW50ZWxfZ3Z0X2lycV9vcHMgKm9wcyA9IGd2dC0+aXJxLm9wczsN
-Cj4gKwljb25zdCBzdHJ1Y3QgaW50ZWxfZ3Z0X2lycV9vcHMgKm9wcyA9IGd2dC0+aXJxLm9wczsN
-Cj4gICAJdTMyIGltciA9ICoodTMyICopcF9kYXRhOw0KPiAgIA0KPiAgIAl0cmFjZV93cml0ZV9p
-cih2Z3B1LT5pZCwgIklNUiIsIHJlZywgaW1yLCB2Z3B1X3ZyZWcodmdwdSwgcmVnKSwNCj4gQEAg
-LTIwNiw3ICsyMDYsNyBAQCBpbnQgaW50ZWxfdmdwdV9yZWdfbWFzdGVyX2lycV9oYW5kbGVyKHN0
-cnVjdCBpbnRlbF92Z3B1ICp2Z3B1LA0KPiAgIAl1bnNpZ25lZCBpbnQgcmVnLCB2b2lkICpwX2Rh
-dGEsIHVuc2lnbmVkIGludCBieXRlcykNCj4gICB7DQo+ICAgCXN0cnVjdCBpbnRlbF9ndnQgKmd2
-dCA9IHZncHUtPmd2dDsNCj4gLQlzdHJ1Y3QgaW50ZWxfZ3Z0X2lycV9vcHMgKm9wcyA9IGd2dC0+
-aXJxLm9wczsNCj4gKwljb25zdCBzdHJ1Y3QgaW50ZWxfZ3Z0X2lycV9vcHMgKm9wcyA9IGd2dC0+
-aXJxLm9wczsNCj4gICAJdTMyIGllciA9ICoodTMyICopcF9kYXRhOw0KPiAgIAl1MzIgdmlydHVh
-bF9pZXIgPSB2Z3B1X3ZyZWcodmdwdSwgcmVnKTsNCj4gICANCj4gQEAgLTI0Niw3ICsyNDYsNyBA
-QCBpbnQgaW50ZWxfdmdwdV9yZWdfaWVyX2hhbmRsZXIoc3RydWN0IGludGVsX3ZncHUgKnZncHUs
-DQo+ICAgew0KPiAgIAlzdHJ1Y3QgaW50ZWxfZ3Z0ICpndnQgPSB2Z3B1LT5ndnQ7DQo+ICAgCXN0
-cnVjdCBkcm1faTkxNV9wcml2YXRlICppOTE1ID0gZ3Z0LT5ndC0+aTkxNTsNCj4gLQlzdHJ1Y3Qg
-aW50ZWxfZ3Z0X2lycV9vcHMgKm9wcyA9IGd2dC0+aXJxLm9wczsNCj4gKwljb25zdCBzdHJ1Y3Qg
-aW50ZWxfZ3Z0X2lycV9vcHMgKm9wcyA9IGd2dC0+aXJxLm9wczsNCj4gICAJc3RydWN0IGludGVs
-X2d2dF9pcnFfaW5mbyAqaW5mbzsNCj4gICAJdTMyIGllciA9ICoodTMyICopcF9kYXRhOw0KPiAg
-IA0KPiBAQCAtNjA0LDcgKzYwNCw3IEBAIHN0YXRpYyB2b2lkIGdlbjhfaW5pdF9pcnEoDQo+ICAg
-CVNFVF9CSVRfSU5GTyhpcnEsIDI1LCBQQ1VfUENPREUyRFJJVkVSX01BSUxCT1gsIElOVEVMX0dW
-VF9JUlFfSU5GT19QQ1UpOw0KPiAgIH0NCj4gICANCj4gLXN0YXRpYyBzdHJ1Y3QgaW50ZWxfZ3Z0
-X2lycV9vcHMgZ2VuOF9pcnFfb3BzID0gew0KPiArc3RhdGljIGNvbnN0IHN0cnVjdCBpbnRlbF9n
-dnRfaXJxX29wcyBnZW44X2lycV9vcHMgPSB7DQo+ICAgCS5pbml0X2lycSA9IGdlbjhfaW5pdF9p
-cnEsDQo+ICAgCS5jaGVja19wZW5kaW5nX2lycSA9IGdlbjhfY2hlY2tfcGVuZGluZ19pcnEsDQo+
-ICAgfTsNCj4gQEAgLTYyNiw3ICs2MjYsNyBAQCB2b2lkIGludGVsX3ZncHVfdHJpZ2dlcl92aXJ0
-dWFsX2V2ZW50KHN0cnVjdCBpbnRlbF92Z3B1ICp2Z3B1LA0KPiAgIAlzdHJ1Y3QgaW50ZWxfZ3Z0
-ICpndnQgPSB2Z3B1LT5ndnQ7DQo+ICAgCXN0cnVjdCBpbnRlbF9ndnRfaXJxICppcnEgPSAmZ3Z0
-LT5pcnE7DQo+ICAgCWd2dF9ldmVudF92aXJ0X2hhbmRsZXJfdCBoYW5kbGVyOw0KPiAtCXN0cnVj
-dCBpbnRlbF9ndnRfaXJxX29wcyAqb3BzID0gZ3Z0LT5pcnEub3BzOw0KPiArCWNvbnN0IHN0cnVj
-dCBpbnRlbF9ndnRfaXJxX29wcyAqb3BzID0gZ3Z0LT5pcnEub3BzOw0KPiAgIA0KPiAgIAloYW5k
-bGVyID0gZ2V0X2V2ZW50X3ZpcnRfaGFuZGxlcihpcnEsIGV2ZW50KTsNCj4gICAJZHJtX1dBUk5f
-T04oJmk5MTUtPmRybSwgIWhhbmRsZXIpOw0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
-L2k5MTUvZ3Z0L2ludGVycnVwdC5oIGIvZHJpdmVycy9ncHUvZHJtL2k5MTUvZ3Z0L2ludGVycnVw
-dC5oDQo+IGluZGV4IDZjNDdkM2UzMzE2MS4uMDk4OWUxODBlZDU0IDEwMDY0NA0KPiAtLS0gYS9k
-cml2ZXJzL2dwdS9kcm0vaTkxNS9ndnQvaW50ZXJydXB0LmgNCj4gKysrIGIvZHJpdmVycy9ncHUv
-ZHJtL2k5MTUvZ3Z0L2ludGVycnVwdC5oDQo+IEBAIC0yMDMsNyArMjAzLDcgQEAgc3RydWN0IGlu
-dGVsX2d2dF9pcnFfbWFwIHsNCj4gICANCj4gICAvKiBzdHJ1Y3R1cmUgY29udGFpbmluZyBkZXZp
-Y2Ugc3BlY2lmaWMgSVJRIHN0YXRlICovDQo+ICAgc3RydWN0IGludGVsX2d2dF9pcnEgew0KPiAt
-CXN0cnVjdCBpbnRlbF9ndnRfaXJxX29wcyAqb3BzOw0KPiArCWNvbnN0IHN0cnVjdCBpbnRlbF9n
-dnRfaXJxX29wcyAqb3BzOw0KPiAgIAlzdHJ1Y3QgaW50ZWxfZ3Z0X2lycV9pbmZvICppbmZvW0lO
-VEVMX0dWVF9JUlFfSU5GT19NQVhdOw0KPiAgIAlERUNMQVJFX0JJVE1BUChpcnFfaW5mb19iaXRt
-YXAsIElOVEVMX0dWVF9JUlFfSU5GT19NQVgpOw0KPiAgIAlzdHJ1Y3QgaW50ZWxfZ3Z0X2V2ZW50
-X2luZm8gZXZlbnRzW0lOVEVMX0dWVF9FVkVOVF9NQVhdOw0KDQpSZXZpZXdlZC1ieTogWmhpIFdh
-bmcgPHpoaS5hLndhbmdAaW50ZWwuY29tPg0KDQo=
+tree:   https://github.com/superna9999/linux amlogic/v5.17/g12-dsi
+head:   cc44c3ce92a63f2c59a3f0ac03e6defd41542940
+commit: e1e87e576f5befbf752a2c7b9c019328f1742d71 [5/7] fixup! WIP: drm/meson: add DSI encoder
+config: arm-randconfig-r034-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101636.y17bk2Zb-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/superna9999/linux/commit/e1e87e576f5befbf752a2c7b9c019328f1742d71
+        git remote add superna9999 https://github.com/superna9999/linux
+        git fetch --no-tags superna9999 amlogic/v5.17/g12-dsi
+        git checkout e1e87e576f5befbf752a2c7b9c019328f1742d71
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/meson/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/meson/meson_encoder_dsi.c:72:2: error: implicit declaration of function 'meson_vclk_setup' [-Werror,-Wimplicit-function-declaration]
+           meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock * 1000, 0, 0, 0, false);
+           ^
+>> drivers/gpu/drm/meson/meson_encoder_dsi.c:72:25: error: use of undeclared identifier 'MESON_VCLK_TARGET_DSI'
+           meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock * 1000, 0, 0, 0, false);
+                                  ^
+>> drivers/gpu/drm/meson/meson_encoder_dsi.c:74:2: error: implicit declaration of function 'meson_venc_encoder_dsi_mode_set' [-Werror,-Wimplicit-function-declaration]
+           meson_venc_encoder_dsi_mode_set(priv, mode);
+           ^
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:74:2: note: did you mean 'meson_venc_mipi_dsi_mode_set'?
+   drivers/gpu/drm/meson/meson_venc.h:70:6: note: 'meson_venc_mipi_dsi_mode_set' declared here
+   void meson_venc_mipi_dsi_mode_set(struct meson_drm *priv,
+        ^
+>> drivers/gpu/drm/meson/meson_encoder_dsi.c:96:18: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
+           .atomic_check   = meson_encoder_dsi_atomic_check,
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             meson_encoder_dsi_atomic_enable
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
+   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
+               ^
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:97:19: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
+           .atomic_enable  = meson_encoder_dsi_atomic_check,
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             meson_encoder_dsi_atomic_enable
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
+   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
+               ^
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:98:20: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
+           .atomic_disable = meson_encoder_dsi_atomic_check,
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             meson_encoder_dsi_atomic_enable
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
+   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
+               ^
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:99:18: error: use of undeclared identifier 'meson_encoder_dsi_atomic_check'; did you mean 'meson_encoder_dsi_atomic_enable'?
+           .atomic_check = meson_encoder_dsi_atomic_check,
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           meson_encoder_dsi_atomic_enable
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:45:13: note: 'meson_encoder_dsi_atomic_enable' declared here
+   static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
+               ^
+>> drivers/gpu/drm/meson/meson_encoder_dsi.c:96:18: error: incompatible function pointer types initializing 'int (*)(struct drm_bridge *, struct drm_bridge_state *, struct drm_crtc_state *, struct drm_connector_state *)' with an expression of type 'void (struct drm_bridge *, struct drm_bridge_state *)' [-Werror,-Wincompatible-function-pointer-types]
+           .atomic_check   = meson_encoder_dsi_atomic_check,
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:99:18: error: incompatible function pointer types initializing 'int (*)(struct drm_bridge *, struct drm_bridge_state *, struct drm_crtc_state *, struct drm_connector_state *)' with an expression of type 'void (struct drm_bridge *, struct drm_bridge_state *)' [-Werror,-Wincompatible-function-pointer-types]
+           .atomic_check = meson_encoder_dsi_atomic_check,
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:99:18: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           .atomic_check = meson_encoder_dsi_atomic_check,
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_encoder_dsi.c:96:18: note: previous initialization is here
+           .atomic_check   = meson_encoder_dsi_atomic_check,
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 9 errors generated.
+
+
+vim +/meson_vclk_setup +72 drivers/gpu/drm/meson/meson_encoder_dsi.c
+
+    44	
+    45	static void meson_encoder_dsi_atomic_enable(struct drm_bridge *bridge,
+    46						     struct drm_bridge_state *bridge_state)
+    47	{
+    48		struct meson_encoder_dsi *encoder_dsi = bridge_to_meson_encoder_dsi(bridge);
+    49		struct drm_atomic_state *state = bridge_state->base.state;
+    50		struct meson_drm *priv = encoder_dsi->priv;
+    51		struct drm_connector_state *conn_state;
+    52		struct drm_crtc_state *crtc_state;
+    53		struct drm_connector *connector;
+    54		struct drm_display_mode *mode;
+    55	
+    56		connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
+    57		if (WARN_ON(!connector))
+    58			return;
+    59	
+    60		conn_state = drm_atomic_get_new_connector_state(state, connector);
+    61		if (WARN_ON(!conn_state))
+    62			return;
+    63	
+    64		crtc_state = drm_atomic_get_new_crtc_state(state, conn_state->crtc);
+    65		if (WARN_ON(!crtc_state))
+    66			return;
+    67	
+    68		mode = &crtc_state->adjusted_mode;
+    69		if (WARN_ON(!mode))
+    70			return;
+    71	
+  > 72		meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock * 1000, 0, 0, 0, false);
+    73	
+  > 74		meson_venc_encoder_dsi_mode_set(priv, mode);
+    75	
+    76		meson_encl_load_gamma(priv);
+    77	
+    78		writel_bits_relaxed(BIT(3), BIT(3), priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
+    79		writel_relaxed(0, priv->io_base + _REG(ENCL_TST_EN));
+    80	
+    81		writel_relaxed(1, priv->io_base + _REG(ENCL_VIDEO_EN));
+    82	}
+    83	
+    84	static void meson_encoder_dsi_atomic_disable(struct drm_bridge *bridge,
+    85						      struct drm_bridge_state *bridge_state)
+    86	{
+    87		struct meson_encoder_dsi *meson_encoder_dsi =
+    88						bridge_to_meson_encoder_dsi(bridge);
+    89		struct meson_drm *priv = meson_encoder_dsi->priv;
+    90	
+    91		writel_relaxed(0, priv->io_base + _REG(ENCL_VIDEO_EN));
+    92	}
+    93	
+    94	static const struct drm_bridge_funcs meson_encoder_dsi_bridge_funcs = {
+    95		.attach		= meson_encoder_dsi_attach,
+  > 96		.atomic_check	= meson_encoder_dsi_atomic_check,
+    97		.atomic_enable	= meson_encoder_dsi_atomic_check,
+    98		.atomic_disable	= meson_encoder_dsi_atomic_check,
+  > 99		.atomic_check = meson_encoder_dsi_atomic_check,
+   100		.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+   101		.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+   102		.atomic_reset = drm_atomic_helper_bridge_reset,
+   103	};
+   104	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

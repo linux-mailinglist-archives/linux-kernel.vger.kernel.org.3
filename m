@@ -2,158 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2934702C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 957494702C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbhLJOaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:30:21 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36998 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242109AbhLJOaR (ORCPT
+        id S242099AbhLJOaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:30:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33790 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229761AbhLJOaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:30:17 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BADtqMt004417;
-        Fri, 10 Dec 2021 14:26:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=Iiu88jiNCaTFcvZMP/mNVUZO9RLCCrcb3DmdMekTq24=;
- b=UF1c3wFds9I+zGLO/Vldrz0BGZ7VnRpPvoxanMCRccS2TFCGIWBB7q6JTymVnXyI/lXQ
- 1oDtn7l7frmfkEvoPuc1slIf/4usxZ8S16R6MysdblI81uSshs4QlmGOsainvXecxymL
- fabAukut3I4I5dBee5YcR1znGzEWpYVtFWnyvUW6u63YoCrSEFUc4o7y2X9PTVfIueHZ
- b73Ju2DUBAfxBvPk1f0RpfL1kq/lzagMhyEVFqIQLCODm3Cjfeaf3AS1gupjxMdIjIVx
- pm3jHjMf9T2DcSBg+rQknACN6+FEcFyL213f6U1fFHzvivcvQ3vImAQjysotCyrs1B28 4A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv8798ky5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 14:26:31 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAEAmck018448;
-        Fri, 10 Dec 2021 14:26:30 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv8798kxt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 14:26:30 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAEGGoj024972;
-        Fri, 10 Dec 2021 14:26:29 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04wdc.us.ibm.com with ESMTP id 3cqyycg5f0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 14:26:29 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAEQRWG24576342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 14:26:28 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E23D778068;
-        Fri, 10 Dec 2021 14:26:27 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F15E778064;
-        Fri, 10 Dec 2021 14:26:23 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 14:26:23 +0000 (GMT)
-Message-ID: <d6011a5a40c3c304f386a328385836ba9838baf9.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Fri, 10 Dec 2021 09:26:22 -0500
-In-Reply-To: <66b377f6-40b4-77da-c02b-2650fa72d0b4@linux.ibm.com>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
-         <20211208221818.1519628-16-stefanb@linux.ibm.com>
-         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
-         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
-         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
-         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
-         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-         <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
-         <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
-         <d8a6a6827da17825c1aa011256b96d195b1ebf13.camel@linux.ibm.com>
-         <66b377f6-40b4-77da-c02b-2650fa72d0b4@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 10 Dec 2021 09:30:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639146394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=noxZ/W/0Xblh7NLRVhPVVF1MXLgMaduXPJ/ayJxQT44=;
+        b=YSFJnZ1kfyt10dXunST5dxeGarAzCxjJO3nfVsgevh6IVkTVyBHhXG284tGj4ug8sAxmcv
+        95uEj3Sej2vf0bH3gYUhAV6NKtVKQuOT4NXA5DouWlvqWsKm+NmL0zMjB9FY2GI3IL1Iue
+        kRYXuL/XRHRvZM/VpZZMJheyln/WEao=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-Y2Hq9c0dPneu7VGA9L9BCw-1; Fri, 10 Dec 2021 09:26:33 -0500
+X-MC-Unique: Y2Hq9c0dPneu7VGA9L9BCw-1
+Received: by mail-ed1-f71.google.com with SMTP id bx28-20020a0564020b5c00b003e7c42443dbso8285074edb.15
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:26:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=noxZ/W/0Xblh7NLRVhPVVF1MXLgMaduXPJ/ayJxQT44=;
+        b=8CZN4y0hX4CZlEoM8ptHrlE/z73hFytW9jAUj6d6tj+gvIrhvnC2wevZ22cAkGrJDV
+         OYIsQ1A2ySBjEPnM/YQBExEpjFKSXXLSr5vcTUcrj7TvVyPFDOrpHBqqWnB7I7Lr64hm
+         URstaeL3Ce2OSPS5U2+AY3vqs4cHYCY242FMu3Nl3aDkvnRZ8dpgn5xqLYDTPvdzLUk/
+         301mrMQx/0Hyg22uMBLHL/mtoGEhtrHgY/xttZ4rlVEOiCJ9AFbFs7OGxQ4YCPdN0jYq
+         ngv1xl3k90KFxTuZQBKdFWc19/Lm2Lzn53SgkbwBtIL2gy3mJjZefT8I8Q3A4Ohi0LJd
+         W9Aw==
+X-Gm-Message-State: AOAM5319TEf4mgRnpxbHGqWC/Wd28dXlpRPIaHQlpXVAR2WLZkIT2DvO
+        hdPPqDCyCUGORdxrdhtsPN81Ib8g1XycQkxQ5ojfZJb8Kn/KOvQzdmbY+2MV3kovJuUDyzij5pP
+        OjQhoDu+bCCVr87ppqy5MOWO4
+X-Received: by 2002:a05:6402:50ca:: with SMTP id h10mr37679203edb.70.1639146391874;
+        Fri, 10 Dec 2021 06:26:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyTXnanOiDzBPfrU73QKrpktq3WDMTp3GvxqnQWsi3ADVa6J+V1WYizuPyjjSzVXe0txRMJtA==
+X-Received: by 2002:a05:6402:50ca:: with SMTP id h10mr37679166edb.70.1639146391541;
+        Fri, 10 Dec 2021 06:26:31 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id z22sm1567067edd.78.2021.12.10.06.26.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 06:26:30 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 52BAF180471; Fri, 10 Dec 2021 15:26:30 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Yihao Han <hanyihao@vivo.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: Re: [PATCH v2] samples/bpf: xdpsock: fix swap.cocci warning
+In-Reply-To: <20211209092250.56430-1-hanyihao@vivo.com>
+References: <20211209092250.56430-1-hanyihao@vivo.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 10 Dec 2021 15:26:30 +0100
+Message-ID: <877dccwn6x.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hndfFc4n6jChqIslSHhgXxf_bLsiHx3u
-X-Proofpoint-GUID: P3lOV3Fq68bOOKeIJWJt7gPCkmFh5Qni
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_04,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
- adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100081
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 09:17 -0500, Stefan Berger wrote:
-> On 12/10/21 08:02, Mimi Zohar wrote:
-> > On Fri, 2021-12-10 at 07:40 -0500, Stefan Berger wrote:
-> > > On 12/10/21 07:09, Mimi Zohar wrote:
-> > > > On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
-> > > > > > There's still the problem that if you write the policy,
-> > > > > > making the file disappear then unmount and remount
-> > > > > > securityfs it will come back.  My guess for fixing this is
-> > > > > > that we only stash the policy file reference,
-> > > > > > create it if NULL but then set the pointer to PTR_ERR(-
-> > > > > > EINVAL) or something and refuse to create it for that
-> > > > > > value.
-> > > > > Some sort of indicator that gets stashed in struct ima_ns
-> > > > > that the file does not get recreated on consecutive mounts.
-> > > > > That shouldn't be hard to fix.
-> > > > The policy file disappearing is for backwards compatibility,
-> > > > prior to being able to extend the custom policy.  For embedded
-> > > > usecases, allowing the policy to be written exactly once might
-> > > > makes sense.  Do we really want/need to continue to support
-> > > > removing the policy in namespaces?
-> > > I don't have an answer but should the behavior for the same
-> > > #define in this case be different for host and namespaces? Or
-> > > should we just 'select IMA_WRITE_POLICY and IMA_READ_POLICY' when
-> > > IMA_NS is selected?
-> > The latter option sounds good.  Being able to analyze the namespace
-> > policy is really important.
-> 
-> Ok, I will adjust the Kconfig for this then. This then warrants the 
-> question whether to move the dentry into the ima_namespace. The
-> current code looks like this.
-> 
-> #if !defined(CONFIG_IMA_WRITE_POLICY) &&
-> !defined(CONFIG_IMA_READ_POLICY)
->          securityfs_remove(ns->policy_dentry);
->          ns->policy_dentry = NULL;
->          ns->policy_dentry_removed = true;
-> #elif defined(CONFIG_IMA_WRITE_POLICY)
-> 
-> With IMA_NS selecting IMA_WRITE_POLICY and IMA_READ_POLICY the above 
-> wouldn't be necessary anymore but I find it 'cleaner' to still have
-> the dentry isolated rather than it being a global static as it was
-> before...
+Yihao Han <hanyihao@vivo.com> writes:
 
-This is really, really why you don't want the semantics inside the
-namespace to differ from those outside, because it creates confusion
-for the people reading the code, especially with magically forced
-config options like this.  I'd strongly suggest you either keep the
-semantic in the namespace or eliminate it entirely.
+> Fix following swap.cocci warning:
+> ./samples/bpf/xdpsock_user.c:528:22-23:
+> WARNING opportunity for swap()
+>
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
 
-If you really, really have to make the namespace behave differently,
-then use global variables and put a big comment on that code saying it
-can never be reached once CONFIG_IMA_NS is enabled.
+Erm, did this get applied without anyone actually trying to compile
+samples? I'm getting build errors as:
 
-James
+  CC  /home/build/linux/samples/bpf/xsk_fwd.o
+/home/build/linux/samples/bpf/xsk_fwd.c: In function =E2=80=98swap_mac_addr=
+esses=E2=80=99:
+/home/build/linux/samples/bpf/xsk_fwd.c:658:9: warning: implicit declaratio=
+n of function =E2=80=98swap=E2=80=99; did you mean =E2=80=98swab=E2=80=99? =
+[-Wimplicit-function-declaration]
+  658 |         swap(*src_addr, *dst_addr);
+      |         ^~~~
+      |         swab
 
+/usr/bin/ld: /home/build/linux/samples/bpf/xsk_fwd.o: in function `thread_f=
+unc':
+xsk_fwd.c:(.text+0x440): undefined reference to `swap'
+collect2: error: ld returned 1 exit status
+
+
+Could we maybe get samples/bpf added to the BPF CI builds? :)
+
+-Toke
 

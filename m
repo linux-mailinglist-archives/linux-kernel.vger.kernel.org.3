@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CE246FD91
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F005B46FD94
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239181AbhLJJWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:22:53 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:50628 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239158AbhLJJWw (ORCPT
+        id S239195AbhLJJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:23:44 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58096 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239188AbhLJJXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:22:52 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BA8MGn8003616;
-        Fri, 10 Dec 2021 10:19:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=GD0iSo1NTLYV7EasCiFxi5eaAvDCn7ZEjTnRKBW5Tus=;
- b=o+UG4VnFhk8QXeC4zOjkOKWogeHRU3Z49ToFV7PUu9ytngitiQHAadYAlf99xc2O1YdJ
- qTsHtmt5/IJuo9XUrDKDXonZLIgQ3nAaWjqgKK9UGo/B3WskCewOIog7i1kP60wFh+CO
- CBxothr50iptMW4QZHaa6Pt2gcgFj4n3z84/b0A4jw92e5qIwUEt0BPFDvdCigK2nKIS
- +ybTaM05cU/Noc8fj6cubz71EmnWzvf7rByGX8hZ98aE0izLJ6s22OCrjlOhtgLqcrP3
- sQqnX4PWqkAd/MjpdQIl+d23FdpcUS8r/JT0AxRmgs8g99sZ1yo+gxZX9EF7GEQOAURZ FQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cv3asrbk0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 10:19:05 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 324E310002A;
-        Fri, 10 Dec 2021 10:19:04 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 26DCC2224BC;
-        Fri, 10 Dec 2021 10:19:04 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 10 Dec 2021 10:19:03
- +0100
-From:   Yann Gautier <yann.gautier@foss.st.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <loic.pallardy@foss.st.com>
-CC:     <yann.gautier@foss.st.com>
-Subject: [PATCH] mmc: mmci: add st,stm32-sdmmc2 compatible
-Date:   Fri, 10 Dec 2021 10:18:34 +0100
-Message-ID: <20211210091834.28958-1-yann.gautier@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 10 Dec 2021 04:23:44 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9D8811F3A1;
+        Fri, 10 Dec 2021 09:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639128008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gDjp6nHahr/gQejvxC0DydQpWXBPwmoZeSh1rjN3KPY=;
+        b=Xa3gad8UdHYNjT6v8zs4Y+hmpmuy5AAQRylzfTUZ97yLKl3e8/6Uc3H0b/Pj9aySJZr9Zl
+        QJYAt76fByzuNLu0GJ/OnqSqip4UxCWLM+hVqnAN7VIleVPWiXzuMtXhG543XgtlZ1X2N0
+        9vuKHxfPvnC7D7sao8ATRYxK8vQSz6Y=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7EA75A3B9A;
+        Fri, 10 Dec 2021 09:20:07 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 10:20:06 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 1/3] mm: protect free_pgtables with mmap_lock write
+ lock in exit_mmap
+Message-ID: <YbMbxh0RaKkykHHT@dhcp22.suse.cz>
+References: <20211208212211.2860249-1-surenb@google.com>
+ <YbHEgLi1g1XtsOgh@dhcp22.suse.cz>
+ <CAJuCfpE4CWMAAFGPjvEz=a6_2kpMSY8hhUMWJ5GtfDv7uD8jng@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_03,2021-12-08_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpE4CWMAAFGPjvEz=a6_2kpMSY8hhUMWJ5GtfDv7uD8jng@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although this compatible is not used in kernel, as we use the common
-MMCI driver, it is used by bootloaders. The U-Boot driver was merged
-before the kernel driver and uses this compatible.
-To avoid issues when aligning device tree files between kernel and
-boot loader, the ST dedicated compatible is added to bindings file.
+On Thu 09-12-21 11:03:11, Suren Baghdasaryan wrote:
+> On Thu, Dec 9, 2021 at 12:55 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Wed 08-12-21 13:22:09, Suren Baghdasaryan wrote:
+> > > oom-reaper and process_mrelease system call should protect against
+> > > races with exit_mmap which can destroy page tables while they
+> > > walk the VMA tree. oom-reaper protects from that race by setting
+> > > MMF_OOM_VICTIM and by relying on exit_mmap to set MMF_OOM_SKIP
+> > > before taking and releasing mmap_write_lock. process_mrelease has
+> > > to elevate mm->mm_users to prevent such race. Both oom-reaper and
+> > > process_mrelease hold mmap_read_lock when walking the VMA tree.
+> > > The locking rules and mechanisms could be simpler if exit_mmap takes
+> > > mmap_write_lock while executing destructive operations such as
+> > > free_pgtables.
+> > > Change exit_mmap to hold the mmap_write_lock when calling
+> > > free_pgtables and remove_vma. Operations like unmap_vmas and
+> > > unlock_range are not destructive and could run under mmap_read_lock
+> > > but for simplicity we take one mmap_write_lock during almost the entire
+> > > operation.
+> >
+> > unlock_range is not safe to be called under read lock. See 27ae357fa82b
+> > ("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
+> 
+> Ok, I'll remove the sentence above.
+> Is my understanding correct that it is unsafe only because oom-reaper
+> can't deal with VM_LOCKED, otherwise it would be fine?
 
-Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
----
- Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-index 47595cb483be..eed54bee7665 100644
---- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-+++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-@@ -53,6 +53,12 @@ properties:
-         items:
-           - const: arm,pl18x
-           - const: arm,primecell
-+      - description: Entry for STMicroelectronics variant of PL18x.
-+          This dedicated compatible is used by bootloaders.
-+        items:
-+          - const: st,stm32-sdmmc2
-+          - const: arm,pl18x
-+          - const: arm,primecell
- 
-   clocks:
-     description: One or two clocks, the "apb_pclk" and the "MCLK"
+The commit message (27ae357fa82b) goes into details that I have forgot already. 
 -- 
-2.17.1
-
+Michal Hocko
+SUSE Labs

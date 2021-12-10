@@ -2,168 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAE8470BDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71C7470BDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344205AbhLJUel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:34:41 -0500
-Received: from mga04.intel.com ([192.55.52.120]:46752 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344184AbhLJUek (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:34:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639168265; x=1670704265;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=/TxMjglwcIrbFMUfkDQBobQZc4R/Xxx3e0Ioikv42jk=;
-  b=X1k/GZkKv+ASuekq52W/jGnW/T8/tG9IGSzSHIkAzj8ezVDyOIg6uIGM
-   JieuxCP+S0FNLYjlYlCV/s4KQAAtDqyEceUVY+y6itouisauC5mOlyfLd
-   gXRaMP7NlgxUp6/3YOVGsH57SI3ZgigHzIR+k08Rpn8TlJpOe+k/WOPlT
-   gRdnxYzYw1rD8JfBHCLAcwUr5aiQxamIM/lz8MBnnvPmGsbFkJjK7ky3h
-   Xo/vTagFIsxZLgMEBhi/L9wShd4nk3jM2m0RI0CKAk3nwbWJOkjNvHPsT
-   +Yc1/ikIhJw4/PkRCI9f6SsrL9mI28rA+ueVWOvRh/x56ZcxDxAIB/Ztv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237173377"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="237173377"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 12:31:03 -0800
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="607628736"
-Received: from klarson-mobl.amr.corp.intel.com (HELO [10.251.16.229]) ([10.251.16.229])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 12:31:01 -0800
-Subject: Re: [PATCH v8 27/40] x86/boot: Add Confidential Computing type to
- setup_data
-To:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-28-brijesh.singh@amd.com>
- <1fdaca61-884a-ac13-fb33-a47db198f050@intel.com>
- <ba485a09-9c35-4115-decc-1b9c25519358@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <2a5cfbd0-865c-2a8b-b70b-f8f64aba5575@intel.com>
-Date:   Fri, 10 Dec 2021 12:30:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230288AbhLJUey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344211AbhLJUew (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 15:34:52 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37E9C0617A1;
+        Fri, 10 Dec 2021 12:31:16 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id k4so7003371plx.8;
+        Fri, 10 Dec 2021 12:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jw1R+y/hcHxw2PT0p++dPCEF0COGjgzOAfMrHqXYnmM=;
+        b=Bj+eXpOd8SzmrJr7YedQ/prWz5Nhb/UwYzn4LYbYC36INmkJgXTghx2tdmOgL51KpZ
+         /NMu5KRvGw6V/m3A81JqHlgtdx0VwVYcS1qmRcwsxnxxQ1mctQXAHoAIGvp5cplvrgLu
+         oGsDF+VTRyiY7OIaz/t2SwS32w4Ab/92XtjcZ8UgvbUQIUjp9d2JJa0h1oQDDpVg0SnS
+         5WcE6IcGXwGx3JcCw4uuBDKQoJ1FDnoNeYvK1/D7i5mp3wCbZIMdFTM5JrZCkKMJWavw
+         v6Ig7kgp4cQxi9sQs4wAAf/gEPRhgqNdInYf9Hw6F6bEGgAPnNV8KBREpolxKgqZe2gv
+         8E/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jw1R+y/hcHxw2PT0p++dPCEF0COGjgzOAfMrHqXYnmM=;
+        b=HTCoyHaNSrnNgV4VO0+qe6bJynT+0tRFwgSTmb+C6NRHUKPsj6uI0O6mSzekUOpHhf
+         wGoj001YXmOtQorFnJuazZMZGMIj+3w7xNrxnmbC9KQjgGzBprYl5hARqTPsUN01hU/R
+         iPCTMpHj1ahx32jYRMNmcMtR/t0i6eTxB4XyblKQYhvA8WLbrrI3jROrZ4Rf558NT5TR
+         IVNniGg5yac51DL1pmdWQPMA6PM2VMb8qfwPr3UneyVPqyQfmeI/+ONQ3XyEQCj7qk+t
+         7umirB8Ap9BRRVNjUKDWRn5sEn7FOzU9TX4AX5ksUsP0Pv7QHsJNdeo6qBrl0Sss84gh
+         3yHw==
+X-Gm-Message-State: AOAM531k3nSqmID+DUYV/K2NWUF9JsZvcWQVQEoZGsM5/dTTIHhgWHBd
+        doLKZk43kHunWRp2KpqMkkM=
+X-Google-Smtp-Source: ABdhPJxTn8cdjm0nDrmj3G2/X5TV7UORnvYHQW3Jxaa+vjIKePL9ujp9yEQXIZ3Pnlrd8hZuQYmxdw==
+X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr26302078pjb.185.1639168276271;
+        Fri, 10 Dec 2021 12:31:16 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id s19sm4434823pfu.137.2021.12.10.12.31.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 12:31:15 -0800 (PST)
+Subject: Re: [PATCH v10 0/7] PCI: brcmstb: root port turns on sub-device power
+To:     Rob Herring <robh@kernel.org>, Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Saenz Julienne <nsaenzjulienne@suse.de>
+References: <20211209211407.8102-1-jim2101024@gmail.com>
+ <YbOf836C58fUSmCO@robh.at.kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d659ec6c-ddf8-87b9-ebf1-b32c3730d038@gmail.com>
+Date:   Fri, 10 Dec 2021 12:31:10 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <ba485a09-9c35-4115-decc-1b9c25519358@amd.com>
+In-Reply-To: <YbOf836C58fUSmCO@robh.at.kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 12:18 PM, Brijesh Singh wrote:
-> On 12/10/21 1:12 PM, Dave Hansen wrote:
->> On 12/10/21 7:43 AM, Brijesh Singh wrote:
->>> +/* AMD SEV Confidential computing blob structure */
->>> +#define CC_BLOB_SEV_HDR_MAGIC	0x45444d41
->>> +struct cc_blob_sev_info {
->>> +	u32 magic;
->>> +	u16 version;
->>> +	u16 reserved;
->>> +	u64 secrets_phys;
->>> +	u32 secrets_len;
->>> +	u64 cpuid_phys;
->>> +	u32 cpuid_len;
->>> +};
->> This is an ABI structure rather than some purely kernel construct, right?
-> 
-> This is ABI between the guest BIOS and Guest OS. It is defined in the OVMF.
-> 
-> https://github.com/tianocore/edk2/blob/master/OvmfPkg/Include/Guid/ConfidentialComputingSevSnpBlob.h
-> 
-> SEV-SNP FW spec does not have it documented; it's up to the guest BIOS
-> on how it wants to communicate the Secrets and CPUID page location to
-> guest OS.
-
-Well, no matter where it is defined, could we please make it a bit
-easier for folks to find it in the future?
-
->> I searched through all of the specs to which you linked in the cover
->> letter.  I looked for "blob", "guid", the magic and part of the GUID
->> itself trying to find where this is defined to see if the struct is correct.
+On 12/10/21 10:44 AM, Rob Herring wrote:
+> On Thu, Dec 09, 2021 at 04:13:58PM -0500, Jim Quinlan wrote:
+>> v10 -- Bindings commit example: in comment, refer to bridge under
+>>        controller node as a root port. (Pali)
+>>     -- Bindings commit example: remove three properties that are not
+>>        appropriate for a PCIe endpoint node. (Rob)
 >>
->> I couldn't find anything.
->>
->> Where is the spec for this blob?  How large is it?  Did you mean to
->> leave a 4-byte hole after secrets_len and before cpuid_phys?
-> Yes, the length is never going to be > 4GB.
+>> v9  -- Simplify where this mechanism works: instead of looking for
+>>        regulators below every bridge, just look for them at the
+>>        bridge under the root bus (root port).  Now there is no
+>>        modification of portdrv_{pci,core}.c in this submission.
+>>     -- Although Pali is working on support for probing native
+>>        PCIe controller drivers, this work may take some time to
+>>        implement and it still might not be able to accomodate
+>>        our driver's requirements (e.g. vreg suspend/resume control).
+>>     -- Move regulator suspend/resume control to Brcm RC driver.  It
+>>        must reside there because (a) in order to know when to
+>>        initiate linkup during resume and (b) to turn on the
+>>        regulators before any config-space accesses occur.
+> 
+> You now have a mixture of 'generic' add/remove_bus hooks and the host 
+> controller suspend/resume managing the regulators. I think long term, 
+> the portdrv is going to be the right place for all of this with some 
+> interface defined for link control. So I think this solution moves 
+> sideways rather than towards anything common.
+> 
+> Unfortunately, the only leverage maintainers have to get folks to care 
+> about any refactoring is to reject features. We're lucky to find anyone 
+> to test refactoring when posted if done independently. There's a long 
+> list of commits of PCI hosts that I've broken to prove that. So it's 
+> up to Lorenzo and Bjorn on what they want to do here.
 
-I was more concerned that this structure could change sizes if it were
-compiled on 32-bit versus 64-bit code.  For kernel ABIs, we try not to
-do that.
+After version 10, it would seem pretty clear that we are still very much
+committed to and interested in getting that set merged and do it the
+most acceptable way possible. Common code with a single user is always a
+little bit of a grey area to me as it tends to be developed to cater for
+the specific needs of that single user, so the entire common aspect is
+debatable. I suppose as long as we have the binding right, the code can
+change at will.
 
-Is this somehow OK when talking to firmware?  Or can a 32-bit OS and
-64-bit firmware never interact?
+Not trying to coerce Bjorn and Lorenzo into accepting these patches if
+they don't feel comfortable, but what about getting it included so we
+can sort of move on from that topic for a little bit (as we have other
+PCIe changes coming in, supporting additional chips etc.) and we work
+with Pali on a common solution and ensure it works on our pcie-brcmstb.c
+based devices? We are not going to vanish and not come back looking at this.
+-- 
+Florian

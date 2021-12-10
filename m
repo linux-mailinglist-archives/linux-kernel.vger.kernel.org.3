@@ -2,136 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BDB470E1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9FD470E21
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243829AbhLJWpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 17:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243624AbhLJWpA (ORCPT
+        id S1344681AbhLJWqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 17:46:05 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:43598 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344621AbhLJWp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 17:45:00 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398CDC061746;
-        Fri, 10 Dec 2021 14:41:25 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id g14so33525342edb.8;
-        Fri, 10 Dec 2021 14:41:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Iy4z+x4q0lS2+KD8bMNwWvDh4rqiXsqu5MkQhFPmH/k=;
-        b=D+Tn27EEZ5zGwVhnuvYSATR3GRvWVhP7BbYJkscXHgdLrbO9n+gmdpEp4UDN81XyFz
-         1/VfyjvCxBuC/0dlfduEPfDloIQkVERp3EKzR+LKFBPh+LPO11MajvyBB6FPXZz3u3lB
-         4N7MiPtzHrCgqdUyp38MZBu24HAsVLAiSxAC/OruOlV0u3s97BbbukG5b5LyYwvvxYCy
-         WYHCNCOSJFPVkkbJIgfaBpZkZielqWELbwcXZziMzNUf22Feg8KYQOFyCK5OqdDbFC27
-         fp8UrRGsCOZSiyi1biiQk7EwNWYQVypabvq/nKZQaYS81GFOHW88PJetO6cToOioCvQK
-         F6TA==
+        Fri, 10 Dec 2021 17:45:59 -0500
+Received: by mail-il1-f198.google.com with SMTP id j1-20020a056e02154100b002a181a1ce89so11484190ilu.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 14:42:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Iy4z+x4q0lS2+KD8bMNwWvDh4rqiXsqu5MkQhFPmH/k=;
-        b=gfwGU/0E5oOVi5IwuEeOCjYXkMXSkt93jY82qaevvkaHSj74ex1akN73Jo3M9r80U7
-         8NH252EG5PEHze1unLuHpv8Y7eAanhl73vZC3W1UcjN9jEbb0WY6cXGepesxdJ2ZFHWD
-         Kl/mtHqcYJZmm8SJeUV6VkbtrHrAHd7D+iI5OShuLL6H91ezJPy8fvFxk1Hiz2vtWnnk
-         gR6DoeEOlYqWWEaS4ekbRZvnG/UuROhd2acPcMbfJ2JRlpT05vmE9EOoC8ojOEIRyeEN
-         pELI1wgtEnXBuNhWYe6CESnfql15YI5unSLEhShfkD7rI7KOPQrAifGmx3R/I0vIHY6z
-         6Mng==
-X-Gm-Message-State: AOAM533N1k+Y0GfhVzmJAKmCkvkVmhTtz0FaXm1AIcFvpAXSAFBQkloV
-        IQq4o+NO5VQE3M6junDQMuw=
-X-Google-Smtp-Source: ABdhPJwr+Zb7BGljYVeH6SG133VT4K2TCRkFcdaEgwOfxJYMhT1eJs1KT/Cy3F6Y6TAA4gHNgRGmJA==
-X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr27868660ejc.503.1639176083813;
-        Fri, 10 Dec 2021 14:41:23 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id p19sm2007846ejn.97.2021.12.10.14.41.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 14:41:23 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <57313f38-5b2b-e352-7502-1a3a70fa4ef1@redhat.com>
-Date:   Fri, 10 Dec 2021 23:41:14 +0100
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=+nLEIx/oSwuRrhbldXoQ8zxIyK/FT2+DYaTSxHxfl4w=;
+        b=7kgmXObplYygsrJ7UtFQBZbmWWZ7+usq5FwS9iskD1KP4aXgDVBaRo67Eiq12TWs3Y
+         hDgKiY/eING4XjELIqrfWbC8d2dpDcMPXsgD7wDbvkSApeEGdqg2L/Q9pDseKcSg1ZSH
+         Cp8HDKWBIxkjtRRHFADWpBTo2+cocc8E+BerR6LoL0B3hWvoeyZYUStj7yUjE5Ez8rRx
+         0kIDF+Nj/9K9T9iYPvGx9xXqs4xbF0do5gpWhmYYdnmN5SlEKKgYg0YVL+TADlVEGpb6
+         2l8E7Hk7wgCGIPyzTqG7ixN1LOnChZLGW7lUNnqp6hgcBLWi+eHxm1kfmtQnFqw4Kaiw
+         sffg==
+X-Gm-Message-State: AOAM532NvDH++KbB/RINuNNXJI+0+oWYVRCciHKbBFflEP/6NDjl4ru+
+        aaaPNrNZDJuKxggMAK8l1hAgE52L8aMNiiukJoJETJ+IgE85
+X-Google-Smtp-Source: ABdhPJwIa9UDzWvKdGI/Va64F8ruFz6MU6mHLMTXuj4eFyAyFlmTOaDP4tyqV7JHk/sj6Q9N+D7BGv9wZqPB/PG0Ba/em1ZKibJn
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] KVM: x86: Inject #UD on "unsupported" hypercall if
- patching fails
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hou Wenlong <houwenlong93@linux.alibaba.com>
-References: <20211210222903.3417968-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211210222903.3417968-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6638:4113:: with SMTP id ay19mr21117300jab.149.1639176142756;
+ Fri, 10 Dec 2021 14:42:22 -0800 (PST)
+Date:   Fri, 10 Dec 2021 14:42:22 -0800
+In-Reply-To: <000000000000e8f8f505d0e479a5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b6a03505d2d26fcd@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in remove_wait_queue (3)
+From:   syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 23:29, Sean Christopherson wrote:
-> Inject a #UD if patching in the correct hypercall fails, e.g. due to
-> emulator_write_emulated() failing because RIP is mapped not-writable by
-> the guest.  The guest is likely doomed in any case, but observing a #UD
-> in the guest is far friendlier to debug/triage than a !WRITABLE #PF with
-> CR2 pointing at the RIP of the faulting instruction.
-> 
-> Ideally, KVM wouldn't patch at all; it's the guest's responsibility to
-> identify and use the correct hypercall instruction (VMCALL vs. VMMCALL).
-> Sadly, older Linux kernels prior to commit c1118b3602c2 ("x86: kvm: use
-> alternatives for VMCALL vs. VMMCALL if kernel text is read-only") do the
-> wrong thing and blindly use VMCALL, i.e. removing the patching would
-> break running VMs with older kernels.
-> 
-> One could argue that KVM should be "fixed" to ignore guest paging
-> protections instead of injecting #UD, but patching in the first place was
-> a mistake as it was a hack-a-fix for a guest bug.
+syzbot has found a reproducer for the following issue on:
 
-Sort of.  I agree that patching is awful, but I'm not sure about 
-injecting #UD vs. just doing the hypercall; the original reason for the 
-patching was to allow Intel<->AMD cross-vendor migration to work somewhat.
+HEAD commit:    e5d75fc20b92 sh_eth: Use dev_err_probe() helper
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1540cdceb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=24fd48984584829b
+dashboard link: https://syzkaller.appspot.com/bug?extid=cdb5dd11c97cc532efad
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15de00bab00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ad646db00000
 
-That in turn promoted Linux's ill-conceived sloppiness of just using 
-vmcall, which lasted until commit c1118b3602c2.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
 
-> There are myriad fatal
-> issues with KVM's patching:
-> 
->    1. Patches using an emulated guest write, which will fail if RIP is not
->       mapped writable.  This is the issue being mitigated.
-> 
->    2. Doesn't ensure the write is "atomic", e.g. a hypercall that splits a
->       page boundary will be handled as two separate writes, which means
->       that a partial, corrupted instruction can be observed by a vCPU.
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x3d86/0x54a0 kernel/locking/lockdep.c:4897
+Read of size 8 at addr ffff888015be3740 by task syz-executor161/3598
 
-Only the third bytes differs between VMCALL and VMMCALL so that's not 
-really a problem.  (Apparently what happened is that Microsoft asked 
-Intel to use 0xc1 like AMD, and VMware asked AMD to use 0xd9 like Intel, 
-or something like that; and they ended up swapping opcodes.  But this 
-may be an urban legend, no matter how plausible).
+CPU: 1 PID: 3598 Comm: syz-executor161 Not tainted 5.16.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x320 mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+ __lock_acquire+0x3d86/0x54a0 kernel/locking/lockdep.c:4897
+ lock_acquire kernel/locking/lockdep.c:5637 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+ remove_wait_queue+0x1d/0x180 kernel/sched/wait.c:55
+ ep_remove_wait_queue+0x88/0x1a0 fs/eventpoll.c:545
+ ep_unregister_pollwait fs/eventpoll.c:561 [inline]
+ ep_remove+0x106/0x9c0 fs/eventpoll.c:690
+ eventpoll_release_file+0xe1/0x130 fs/eventpoll.c:923
+ eventpoll_release include/linux/eventpoll.h:53 [inline]
+ __fput+0x87b/0x9f0 fs/file_table.c:271
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3167c0def3
+Code: c7 c2 c0 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb ba 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+RSP: 002b:00007ffddef2e488 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f3167c0def3
+RDX: 000000000000002f RSI: 0000000020001340 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 0000000000000014 R09: 00007ffddef2e4b0
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffddef2e4ac
+R13: 00007ffddef2e4c0 R14: 00007ffddef2e500 R15: 0000000000000000
+ </TASK>
 
-The big ones are 1 and 4.
+Allocated by task 3598:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:46 [inline]
+ set_alloc_info mm/kasan/common.c:434 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:513 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:472 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:522
+ kmalloc include/linux/slab.h:590 [inline]
+ psi_trigger_create.part.0+0x15e/0x7f0 kernel/sched/psi.c:1141
+ cgroup_pressure_write+0x15d/0x6b0 kernel/cgroup/cgroup.c:3645
+ cgroup_file_write+0x1ec/0x780 kernel/cgroup/cgroup.c:3852
+ kernfs_fop_write_iter+0x342/0x500 fs/kernfs/file.c:296
+ call_write_iter include/linux/fs.h:2162 [inline]
+ new_sync_write+0x429/0x660 fs/read_write.c:503
+ vfs_write+0x7cd/0xae0 fs/read_write.c:590
+ ksys_write+0x12d/0x250 fs/read_write.c:643
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Thanks,
+Freed by task 3598:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:46
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free mm/kasan/common.c:328 [inline]
+ __kasan_slab_free+0xff/0x130 mm/kasan/common.c:374
+ kasan_slab_free include/linux/kasan.h:235 [inline]
+ slab_free_hook mm/slub.c:1723 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1749
+ slab_free mm/slub.c:3513 [inline]
+ kfree+0xf6/0x560 mm/slub.c:4561
+ cgroup_pressure_write+0x18d/0x6b0 kernel/cgroup/cgroup.c:3651
+ cgroup_file_write+0x1ec/0x780 kernel/cgroup/cgroup.c:3852
+ kernfs_fop_write_iter+0x342/0x500 fs/kernfs/file.c:296
+ call_write_iter include/linux/fs.h:2162 [inline]
+ new_sync_write+0x429/0x660 fs/read_write.c:503
+ vfs_write+0x7cd/0xae0 fs/read_write.c:590
+ ksys_write+0x12d/0x250 fs/read_write.c:643
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Paolo
+The buggy address belongs to the object at ffff888015be3700
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 64 bytes inside of
+ 192-byte region [ffff888015be3700, ffff888015be37c0)
+The buggy address belongs to the page:
+page:ffffea000056f8c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x15be3
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 0000000000000000 dead000000000001 ffff888010c41a00
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, ts 1983850449, free_ts 0
+ prep_new_page mm/page_alloc.c:2418 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4149
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5369
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2036
+ alloc_pages+0x29f/0x300 mm/mempolicy.c:2186
+ alloc_slab_page mm/slub.c:1793 [inline]
+ allocate_slab mm/slub.c:1930 [inline]
+ new_slab+0x32d/0x4a0 mm/slub.c:1993
+ ___slab_alloc+0x918/0xfe0 mm/slub.c:3022
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3109
+ slab_alloc_node mm/slub.c:3200 [inline]
+ slab_alloc mm/slub.c:3242 [inline]
+ kmem_cache_alloc_trace+0x289/0x2c0 mm/slub.c:3259
+ kmalloc include/linux/slab.h:590 [inline]
+ kzalloc include/linux/slab.h:724 [inline]
+ call_usermodehelper_setup+0x97/0x340 kernel/umh.c:365
+ kobject_uevent_env+0xf73/0x1650 lib/kobject_uevent.c:614
+ version_sysfs_builtin kernel/params.c:878 [inline]
+ param_sysfs_init+0x146/0x43b kernel/params.c:969
+ do_one_initcall+0x103/0x650 init/main.c:1297
+ do_initcall_level init/main.c:1370 [inline]
+ do_initcalls init/main.c:1386 [inline]
+ do_basic_setup init/main.c:1405 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1610
+ kernel_init+0x1a/0x1d0 init/main.c:1499
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+page_owner free stack trace missing
 
->    3. Doesn't serialize other CPU cores after updating the code stream.
-> 
->    4. Completely fails to account for the case where KVM is emulating due
->       to invalid guest state with unrestricted_guest=0.  Patching and
->       retrying the instruction will result in vCPU getting stuck in an
->       infinite loop.
-> 
-> But, the "support" _so_ awful, especially #1, that there's practically
-> zero chance that a modern guest kernel can rely on KVM to patch the guest.
-> So, rather than proliferate KVM's bad behavior any further than the
-> absolute minimum needed for backwards compatibility, just try to make it
-> suck a little less.
+Memory state around the buggy address:
+ ffff888015be3600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888015be3680: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+>ffff888015be3700: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                           ^
+ ffff888015be3780: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff888015be3800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 

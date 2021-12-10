@@ -2,78 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFF3470C5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 391B7470C60
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243612AbhLJVUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:20:36 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:32992 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237869AbhLJVUf (ORCPT
+        id S243722AbhLJVUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238034AbhLJVUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:20:35 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
+        Fri, 10 Dec 2021 16:20:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4280C061746;
+        Fri, 10 Dec 2021 13:17:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 506BAB829E6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 21:16:59 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6DF23603E2;
-        Fri, 10 Dec 2021 21:16:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1639171017;
-        bh=d1V6wRVScf+jsw78DRcRPbbdKMPCEh+HKtjrtN35Qvw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PhINp8swlK1qZGyc/ijbWUgmg7fn8c4nBHzg/7Ut/yiS/ucbdnR2HnbKne+Lxrgvr
-         KZNbXd81eOi9+VcS75Z7dSerrObfdtEved9N/9ceLksmpta6SMA28XS2MMcJhruiw/
-         aVVUW9YuAUh3AfiSTGwzLN6f/+k4s+beZPJ9qlQ8=
-Date:   Fri, 10 Dec 2021 13:16:55 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     pmladek@suse.com, valentin.schneider@arm.com, peterz@infradead.org,
-        keescook@chromium.org, robdclark@chromium.org,
-        samitolvanen@google.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kthread: potential dereference of null pointer
-Message-Id: <20211210131655.2eeb8f866382c324b605a6ce@linux-foundation.org>
-In-Reply-To: <20211209064314.2074885-1-jiasheng@iscas.ac.cn>
-References: <20211209064314.2074885-1-jiasheng@iscas.ac.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DC5EB829D7;
+        Fri, 10 Dec 2021 21:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFF3C00446;
+        Fri, 10 Dec 2021 21:17:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639171036;
+        bh=5IhiPw2RvqrosQfP1NnT+2qXeY8kkmX4/rnA3yxNXyo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZhzDJ3HZt5QVAcDohjJqajvEEjGkbJ94hY/I+WhLVmXvPuq2LvTfKq+D4sPkwMmdb
+         vpU1EzBThIzV1cueMlSIaZ/MN2iXmJSc095okHi1/1OaLQhfgP+n007U1cQixCCWcZ
+         1SUWTIZeBbVpuQt1bjpRrb7NEsFcHpRf6fwncS28w09atrCiEM3qMldV7x7EQ1Yphn
+         S9p1AsNpFV65zwVLjcoEH0HT4QN2DwiRk/K+RXjZZ5WZrrjxTdnyZ0TdHgXA6Dghp4
+         CdM0OItFgy0ryLne5mruYdFGsUNHLWZVTmeGjYDvkfnJPK5Net9lwQOHdIHFz0Z1t1
+         aRlw3dCbwX5UA==
+From:   broonie@kernel.org
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: linux-next: manual merge of the akpm-current tree with the folio tree
+Date:   Fri, 10 Dec 2021 21:17:11 +0000
+Message-Id: <20211210211711.3472866-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  9 Dec 2021 14:43:14 +0800 Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+Hi all,
 
-> The return value of kzalloc() needs to be checked.
-> To avoid use of null pointer in case of the failure of alloc.
-> 
-> ...
->
-> --- a/kernel/kthread.c
-> +++ b/kernel/kthread.c
-> @@ -101,6 +101,8 @@ void set_kthread_struct(struct task_struct *p)
->  		return;
->  
->  	kthread = kzalloc(sizeof(*kthread), GFP_KERNEL);
-> +	if (!kthread)
-> +		return;
->  	/*
->  	 * We abuse ->set_child_tid to avoid the new member and because it
->  	 * can't be wrongly copied by copy_process(). We also rely on fact
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-No, we shouldn't simply leave ->set_child_tid uninitialized if kmalloc
-failed.
+  mm/migrate.c
 
-set_ktread_struct() appears to be designed so that callers must check
-that to_kthread() returns non-zero after having called
-set_kthread_struct().
+between commit:
 
-Which is a quite weird interface, but I'm not seeing any bugs here.  If
-kthread() sees to_kthread()==NULL then this kthread won't be created
-and all the other unchecked calls to to_kthread() will never execute,
-because this kthread doesn't exist.
+  2871d169178ba ("filemap: Add folio_put_wait_locked()")
 
-The exception is in init_idle(), but that's __init code, executed at
-boot time when we assume that allocations will always succeed.
+from the folio tree and commit:
+
+  dfbfdd72f50ce ("mm/migrate.c: rework migration_entry_wait() to not take a pageref")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc mm/migrate.c
+index 7079e6b7dbe7d,d487a399253b0..0000000000000
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@@ -302,17 -303,10 +303,9 @@@ void __migration_entry_wait(struct mm_s
+  	if (!is_migration_entry(entry))
+  		goto out;
+  
+ -	page = pfn_swap_entry_to_page(entry);
+ -	page = compound_head(page);
+ +	folio = page_folio(pfn_swap_entry_to_page(entry));
+  
+- 	/*
+- 	 * Once page cache replacement of page migration started, page_count
+- 	 * is zero; but we must not call folio_put_wait_locked() without
+- 	 * a ref. Use folio_try_get(), and just fault again if it fails.
+- 	 */
+- 	if (!folio_try_get(folio))
+- 		goto out;
+- 	pte_unmap_unlock(ptep, ptl);
+- 	folio_put_wait_locked(folio, TASK_UNINTERRUPTIBLE);
+ -	migration_entry_wait_on_locked(page_folio(page), ptep, ptl);
+++	migration_entry_wait_on_locked(folio, ptep, ptl);
+  	return;
+  out:
+  	pte_unmap_unlock(ptep, ptl);

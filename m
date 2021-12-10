@@ -2,149 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEC94709F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE2A4709FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236433AbhLJTQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbhLJTQg (ORCPT
+        id S238273AbhLJTSW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Dec 2021 14:18:22 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:36352 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231135AbhLJTSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:16:36 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FF4C061746;
-        Fri, 10 Dec 2021 11:13:00 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4A0F71EC0464;
-        Fri, 10 Dec 2021 20:12:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639163574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=zOvqZDAuThO0Gse+ltEBq8F8HgtMzjgZ0zyBb5o7Cmw=;
-        b=K2Yi5I1zv9x1SKbZJ3yEuFX3WRb96DgwIr4qpeAFA/gtlsLEOMsfCc9y9kDFQjjWQUeTx+
-        hJTZXjLmWUhLnoeRTxRzPngUhy0MJVAgFMbwH0DOSSBPUgbONDRn0ERqBKKO6J6TLUtut7
-        gwEU6EMZerCB1D/6Z/SBun/3zSdrKEs=
-Date:   Fri, 10 Dec 2021 20:12:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 01/40] x86/compressed/64: detect/setup SEV/SME
- features earlier in boot
-Message-ID: <YbOmt+tYvzAqOiTY@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-2-brijesh.singh@amd.com>
+        Fri, 10 Dec 2021 14:18:21 -0500
+Received: by mail-ot1-f54.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so10607332otl.3;
+        Fri, 10 Dec 2021 11:14:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=StDkoZeh1lHUw1DDm/KpSH6johK86ICDiu5dChogaP8=;
+        b=8RVAJpIyNs4Dba7Od5GgfN2aEtWz2FBM6CbC2ZBZQe7Sbyp/bZFJINfXbj8q0V3lb0
+         iWuq+JAcSTr/r3hfTTW18xc0aJ8sacN3j7JUswGQ4cWu9glG5gWQRPmU0uVEwu3ESIrO
+         wfPzQvoPi+wgsMyolB5VY3FCfZ0iy0HHUXiKmU1/MuF8Jh5GY2NNG7zwbeAPuQzPrOjb
+         831NkzP9H/l0Oey3jpcg53MnOFXO0BMTZLdDaPe0CWrooLhvj9VV6VClntbHuiZhZLiU
+         JAGmAex1rHn2yofKlBA3gxj5zYBQExyKAidO9j1QTLHEf6ICgdRb5sl1sFiLPXCJM1ZL
+         d/Xw==
+X-Gm-Message-State: AOAM531Ul0m2YoPCR25bw+CkKm7y5Rv5fmzoHrqxIP4u0lEicPIA6Eqk
+        GNPdni0XPikcr9N+KhaPxwKmuo0ducvNExbaNkE=
+X-Google-Smtp-Source: ABdhPJwI6PbHk846M9cWi0KvS3EvMhQYMsgwdseNjfmW3x73dR5HGBiuvU5f7TYKM/YR00y87Pqhei6Yd6KAs40K6Eo=
+X-Received: by 2002:a05:6830:1e57:: with SMTP id e23mr12575530otj.16.1639163685443;
+ Fri, 10 Dec 2021 11:14:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-2-brijesh.singh@amd.com>
+References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-6-digetx@gmail.com>
+ <YaLNOJTM+lVq+YNS@qmqm.qmqm.pl> <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
+ <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl> <091321ea-4919-0579-88a8-23d05871575d@gmail.com>
+ <CAJZ5v0jMvdhfBqjY+V9h_Z6EH1ohuJH+KjuGiOw_Jor1Tnp7vg@mail.gmail.com> <45025b2d-4be1-f694-be61-31903795cf5d@gmail.com>
+In-Reply-To: <45025b2d-4be1-f694-be61-31903795cf5d@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Dec 2021 20:14:34 +0100
+Message-ID: <CAJZ5v0ieTwnBVjW8R_VTdPFH3yr5AwLc+ZEG5N3KrpTH+j8qZw@mail.gmail.com>
+Subject: Re: [PATCH v4 05/25] reboot: Warn if restart handler has duplicated priority
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:42:53AM -0600, Brijesh Singh wrote:
-> @@ -447,6 +446,23 @@ SYM_CODE_START(startup_64)
->  	call	load_stage1_idt
->  	popq	%rsi
->  
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+On Fri, Dec 10, 2021 at 8:04 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 10.12.2021 21:27, Rafael J. Wysocki пишет:
+> > On Mon, Nov 29, 2021 at 12:34 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+> >>
+> >> 29.11.2021 03:26, Michał Mirosław пишет:
+> >>> On Mon, Nov 29, 2021 at 12:06:19AM +0300, Dmitry Osipenko wrote:
+> >>>> 28.11.2021 03:28, Michał Mirosław пишет:
+> >>>>> On Fri, Nov 26, 2021 at 09:00:41PM +0300, Dmitry Osipenko wrote:
+> >>>>>> Add sanity check which ensures that there are no two restart handlers
+> >>>>>> registered with the same priority. Normally it's a direct sign of a
+> >>>>>> problem if two handlers use the same priority.
+> >>>>>
+> >>>>> The patch doesn't ensure the property that there are no duplicated-priority
+> >>>>> entries on the chain.
+> >>>>
+> >>>> It's not the exact point of this patch.
+> >>>>
+> >>>>> I'd rather see a atomic_notifier_chain_register_unique() that returns
+> >>>>> -EBUSY or something istead of adding an entry with duplicate priority.
+> >>>>> That way it would need only one list traversal unless you want to
+> >>>>> register the duplicate anyway (then you would call the older
+> >>>>> atomic_notifier_chain_register() after reporting the error).
+> >>>>
+> >>>> The point of this patch is to warn developers about the problem that
+> >>>> needs to be fixed. We already have such troubling drivers in mainline.
+> >>>>
+> >>>> It's not critical to register different handlers with a duplicated
+> >>>> priorities, but such cases really need to be corrected. We shouldn't
+> >>>> break users' machines during transition to the new API, meanwhile
+> >>>> developers should take action of fixing theirs drivers.
+> >>>>
+> >>>>> (Or you could return > 0 when a duplicate is registered in
+> >>>>> atomic_notifier_chain_register() if the callers are prepared
+> >>>>> for that. I don't really like this way, though.)
+> >>>>
+> >>>> I had a similar thought at some point before and decided that I'm not in
+> >>>> favor of this approach. It's nicer to have a dedicated function that
+> >>>> verifies the uniqueness, IMO.
+> >>>
+> >>> I don't like the part that it traverses the list second time to check
+> >>> the uniqueness. But actually you could avoid that if
+> >>> notifier_chain_register() would always add equal-priority entries in
+> >>> reverse order:
+> >>>
+> >>>  static int notifier_chain_register(struct notifier_block **nl,
+> >>>               struct notifier_block *n)
+> >>>  {
+> >>>       while ((*nl) != NULL) {
+> >>>               if (unlikely((*nl) == n)) {
+> >>>                       WARN(1, "double register detected");
+> >>>                       return 0;
+> >>>               }
+> >>> -             if (n->priority > (*nl)->priority)
+> >>> +             if (n->priority >= (*nl)->priority)
+> >>>                       break;
+> >>>               nl = &((*nl)->next);
+> >>>       }
+> >>>       n->next = *nl;
+> >>>       rcu_assign_pointer(*nl, n);
+> >>>       return 0;
+> >>>  }
+> >>>
+> >>> Then the check for uniqueness after adding would be:
+> >>>
+> >>>  WARN(nb->next && nb->priority == nb->next->priority);
+> >>
+> >> We can't just change the registration order because invocation order of
+> >> the call chain depends on the registration order
+> >
+> > It doesn't if unique priorities are required and isn't that what you want?
+> >
+> >> and some of current
+> >> users may rely on that order. I'm pretty sure that changing the order
+> >> will have unfortunate consequences.
+> >
+> > Well, the WARN() doesn't help much then.
+> >
+> > Either you can make all of the users register with unique priorities,
+> > and then you can make the registration reject non-unique ones, or you
+> > cannot assume them to be unique.
+>
+> There is no strong requirement for priorities to be unique, the reboot.c
+> code will work properly.
 
-I guess that ifdeffery is not needed.
+In which case adding the WARN() is not appropriate IMV.
 
-> +	/*
-> +	 * Now that the stage1 interrupt handlers are set up, #VC exceptions from
-> +	 * CPUID instructions can be properly handled for SEV-ES guests.
-> +	 *
-> +	 * For SEV-SNP, the CPUID table also needs to be set up in advance of any
-> +	 * CPUID instructions being issued, so go ahead and do that now via
-> +	 * sev_enable(), which will also handle the rest of the SEV-related
-> +	 * detection/setup to ensure that has been done in advance of any dependent
-> +	 * code.
-> +	 */
-> +	pushq	%rsi
-> +	movq	%rsi, %rdi		/* real mode address */
-> +	call	sev_enable
-> +	popq	%rsi
-> +#endif
-> +
->  	/*
->  	 * paging_prepare() sets up the trampoline and checks if we need to
->  	 * enable 5-level paging.
+Also I've looked at the existing code and at least in some cases the
+order in which the notifiers run doesn't matter.  I'm not sure what
+the purpose of this patch is TBH.
 
-...
+> The potential problem is on the user's side and the warning is intended
+> to aid the user.
 
-> +void sev_enable(struct boot_params *bp)
-> +{
-> +	unsigned int eax, ebx, ecx, edx;
-> +
-> +	/* Check for the SME/SEV support leaf */
-> +	eax = 0x80000000;
-> +	ecx = 0;
-> +	native_cpuid(&eax, &ebx, &ecx, &edx);
-> +	if (eax < 0x8000001f)
-> +		return;
-> +
-> +	/*
-> +	 * Check for the SME/SEV feature:
-> +	 *   CPUID Fn8000_001F[EAX]
-> +	 *   - Bit 0 - Secure Memory Encryption support
-> +	 *   - Bit 1 - Secure Encrypted Virtualization support
-> +	 *   CPUID Fn8000_001F[EBX]
-> +	 *   - Bits 5:0 - Pagetable bit position used to indicate encryption
-> +	 */
-> +	eax = 0x8000001f;
-> +	ecx = 0;
-> +	native_cpuid(&eax, &ebx, &ecx, &edx);
-> +	/* Check whether SEV is supported */
-> +	if (!(eax & BIT(1)))
-> +		return;
-> +
-> +	/* Set the SME mask if this is an SEV guest. */
-> +	sev_status   = rd_sev_status_msr();
-> +
+Unless somebody has the panic_on_warn mentioned previously set and
+really the user need not understand what the WARN() is about.  IOW,
+WARN() helps developers, not users.
 
-^ Superfluous newline.
+> We can make it a strong requirement, but only after converting and
+> testing all kernel drivers.
 
-> +	if (!(sev_status & MSR_AMD64_SEV_ENABLED))
-> +		return;
-> +
-> +	sme_me_mask = BIT_ULL(ebx & 0x3f);
-> +}
-> -- 
+Right.
 
-Thx.
+> I'll consider to add patches for that.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+But can you avoid adding more patches to this series?

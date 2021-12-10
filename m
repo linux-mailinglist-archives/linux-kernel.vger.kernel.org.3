@@ -2,139 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A78F546FDD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0C846FDD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236140AbhLJJhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbhLJJhv (ORCPT
+        id S237660AbhLJJiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:38:17 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:40596 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230296AbhLJJiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:37:51 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47A4C0617A2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:34:16 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id o4so12453965oia.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:34:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessos.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=C5610rni1qA1S97ONM74fivbTCLDtdb0GPqD2NdK+Cs=;
-        b=KkpK0QwaC6Orez1MdmfJEhK+fZ0PtseO4yARtqs/MT4jnwN4cR9i47T8yjqlyOJiqF
-         V3m132XCN8FY9dbmXxbvRl0fPTXmQOwN+gvRdhd8h3O8krS2wrw+u5xHnrxmZeyaZbQG
-         7aVom0yR3Leu3tSDXbxG0LZkkPq+0SYJcghV27BLyTIl4f8fjxykp9qPfMFCGlfX4hra
-         1lt6z4jMvyVrlQicJFiglNpDL3ehxqBV0PYTRW4yPsX11cSOy0tjUzO6VE1na9RpUZpy
-         3lr18UAqVSIxSGbNDimw6a46CHMY0aiUu7qlYGVsti++Q6DP97BP6J9XCGBCOLBBaNRe
-         AXLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=C5610rni1qA1S97ONM74fivbTCLDtdb0GPqD2NdK+Cs=;
-        b=JI6HnQl+tMHzib0oPnTruCzjLBOI1t86tP0zXgX7hKdH+1UMsRNwQOM8iNtXFuFY1l
-         zgxsIHAynnSK8Lna6n2756OksAkq33uN/51qiG6Jnnx2Y8EPzcIewYpHsKhC4xb770+b
-         qMmx7EIX5UYAgTzGHSWGufVku+Ei1RgclzXGcvLHIm+leRedcp6ossZ74opX42eu2qLM
-         tc053/ccabxTy0TS0U1SjO65IbGD+HKoSDYef0UHrnmT9w2nUIBZSqIRziHj3goCPLBe
-         jt2VycxzmUuwGlLCeM2iWJV6rlRoN8nHEFGUd6hsKIHr23x74vSZuHPfzIi5ufh7PrAV
-         9GjA==
-X-Gm-Message-State: AOAM533sRslbdtQ5WgCKjToqz7NCSrF7jtBWPGRyVTl4SRIBQUO8iUUz
-        P5ibBwTTMAT6brP/BSzQwqPf606xouUYyCkiGjIkMQ==
-X-Google-Smtp-Source: ABdhPJwWBPx5Mqb40vNS33Uax+Ly8JSKNY9dFiEueiwRbh+hF0Yi79HGw5RU3xmsDwt7KtlUAyANOQExJKVLVFcNgQk=
-X-Received: by 2002:a05:6808:14:: with SMTP id u20mr11260168oic.69.1639128855984;
- Fri, 10 Dec 2021 01:34:15 -0800 (PST)
+        Fri, 10 Dec 2021 04:38:16 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V-93KLN_1639128875;
+Received: from 30.22.113.127(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0V-93KLN_1639128875)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 10 Dec 2021 17:34:37 +0800
+Message-ID: <9dcd7f1d-609d-c9f4-bcb1-c5e465383722@linux.alibaba.com>
+Date:   Fri, 10 Dec 2021 17:34:35 +0800
 MIME-Version: 1.0
-References: <20211210081659.4621-1-jhp@endlessos.org> <6b0fcc8cf3bd4a77ad190dc6f72eb66f@realtek.com>
- <CAAd53p66HPH9v0_hzOaQAydberd8JA4HthNVwpQ86xb-dSuUEA@mail.gmail.com>
-In-Reply-To: <CAAd53p66HPH9v0_hzOaQAydberd8JA4HthNVwpQ86xb-dSuUEA@mail.gmail.com>
-From:   Jian-Hong Pan <jhp@endlessos.org>
-Date:   Fri, 10 Dec 2021 17:33:40 +0800
-Message-ID: <CAPpJ_efvmPWsCFsff35GHV8Q52YvQcFr_Hs=q3RtvbfVohY+4Q@mail.gmail.com>
-Subject: Re: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Pkshih <pkshih@realtek.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux@endlessos.org" <linux@endlessos.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+From:   Lai Jiangshan <laijs@linux.alibaba.com>
+Subject: Re: [PATCH 1/12] KVM: X86: Fix when shadow_root_level=5 && guest
+ root_level<4
+To:     Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+References: <20211124122055.64424-1-jiangshanlai@gmail.com>
+ <20211124122055.64424-2-jiangshanlai@gmail.com> <YbFY533IT3XSIqAK@google.com>
+Content-Language: en-US
+In-Reply-To: <YbFY533IT3XSIqAK@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kai-Heng Feng <kai.heng.feng@canonical.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=
-=8810=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:24=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Fri, Dec 10, 2021 at 5:00 PM Pkshih <pkshih@realtek.com> wrote:
-> >
-> > +Kai-Heng
-> >
-> > > -----Original Message-----
-> > > From: Jian-Hong Pan <jhp@endlessos.org>
-> > > Sent: Friday, December 10, 2021 4:17 PM
-> > > To: Pkshih <pkshih@realtek.com>; Yan-Hsuan Chuang <tony0620emma@gmail=
-.com>; Kalle Valo
-> > > <kvalo@codeaurora.org>
-> > > Cc: linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-ker=
-nel@vger.kernel.org;
-> > > linux@endlessos.org; Jian-Hong Pan <jhp@endlessos.org>
-> > > Subject: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
-> > >
-> > > More and more laptops become frozen, due to the equipped RTL8821CE.
-> > >
-> > > This patch follows the idea mentioned in commits 956c6d4f20c5 ("rtw88=
-:
-> > > add quirks to disable pci capabilities") and 1d4dcaf3db9bd ("rtw88: a=
-dd
-> > > quirk to disable pci caps on HP Pavilion 14-ce0xxx"), but disables it=
-s
-> > > PCI ASPM capability of RTL8821CE directly, instead of checking DMI.
-> > >
-> > > Buglink:https://bugzilla.kernel.org/show_bug.cgi?id=3D215239
-> > > Fixes: 1d4dcaf3db9bd ("rtw88: add quirk to disable pci caps on HP Pav=
-ilion 14-ce0xxx")
-> > > Signed-off-by: Jian-Hong Pan <jhp@endlessos.org>
-> >
-> > We also discuss similar thing in this thread:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=3D215131
-> >
-> > Since we still want to turn on ASPM to save more power, I would like to
-> > enumerate the blacklist. Does it work to you?
->
-> Too many platforms are affected, the blacklist method won't scale.
 
-Exactly!
 
-> Right now it seems like only Intel platforms are affected, so can I
-> propose a patch to disable ASPM when its upstream port is Intel?
+On 2021/12/9 09:16, Sean Christopherson wrote:
+> On Wed, Nov 24, 2021, Lai Jiangshan wrote:
+>> From: Lai Jiangshan <laijs@linux.alibaba.com>
+>>
+>> If the is an L1 with nNPT in 32bit, the shadow walk starts with
+>> pae_root.
+>>
+>> Fixes: a717a780fc4e ("KVM: x86/mmu: Support shadowing NPT when 5-level paging is enabled in host)
+> 
+> Have you actually run with 5-level nNPT?  I don't have access to hardware, at least
+> not that I know of :-)
 
-I only have laptops with Intel chip now.  So, I am not sure the status
-with AMD platforms.
-If this is true, then "disable ASPM when its upstream port is Intel"
-might be a good idea.
+The code is just obvious incorrect for shadow_root_level=5 && guest root_level<4.
 
-Jian-Hong Pan
+> 
+> I'm staring at kvm_mmu_sync_roots() and don't see how it can possibly work for
+> 5-level nNPT with a 4-level NPT guest.
+> 
 
-> > If so, please help to add one quirk entry of your platform.
-> >
-> > Another thing is that "attachment 299735" is another workaround for cer=
-tain
-> > platform. And, we plan to add quirk to enable this workaround.
-> > Could you try if it works to you?
->
-> When the hardware is doing DMA, it should initiate leaving ASPM L1,
-> correct? So in theory my workaround should be benign enough for most
-> platforms.
->
-> Kai-Heng
->
-> >
-> > Thank you
-> > --
-> > Ping-Ke
-> >
+It doesn't use pml5_root for 5-level nNPT with a 4-level NPT guest, so
+kvm_mmu_sync_roots() can work in a silence way with an "unexpected" root shadow
+page.  It has problems for 5-level nNPT with a 4-level NPT guest.
+
+See:
+https://lore.kernel.org/lkml/20211210092508.7185-1-jiangshanlai@gmail.com/
+
+especially patch4.
+
+Your this reply motivated me to complete the changelog of a patchset and send
+it, thanks!
+
+Although the patchset is immature, it would be better than losing it.
+

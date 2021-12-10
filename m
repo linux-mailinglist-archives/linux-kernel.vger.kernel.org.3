@@ -2,122 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF20470E7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF25F470E81
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345016AbhLJXXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 18:23:46 -0500
-Received: from mail-lf1-f49.google.com ([209.85.167.49]:37635 "EHLO
-        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239950AbhLJXXn (ORCPT
+        id S1345057AbhLJXYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 18:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239950AbhLJXYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 18:23:43 -0500
-Received: by mail-lf1-f49.google.com with SMTP id c32so20761429lfv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 15:20:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9d3hE4yr4pfg3m6CMn9gJl0jmuaMwv1gKC7I/q9Crgw=;
-        b=hIRk910NUOt5OhGPBlB2kB3UXvjg9N34f1/Xkk88lpOFIc6pBeBHsQrkuXFGjlkHgZ
-         /1W/wC5bAJBmETu+/mB90CZ/ctv369YvCo910RPUcTfOFO6oED0Nmi6Myx4snX40Jsvf
-         /WthkaU3ZGtLZK0J1UhZuO5pz0RdDGdXhbdHhrkSyMAifFJPRyCEiOD1CcsliWFZPqzS
-         W1e5RLlD9+WCGUss95E94+lutla6iyVd9bYoKcEVoTmrxmMuZiglDuNq/xpNko1Tafsh
-         GPAWPdwIDUcbtpfyCSN5N+bstvbUO9QoliCZgtnIjOmZzNgKfQXb43KRJT8kVuWI4azP
-         DJTg==
-X-Gm-Message-State: AOAM533glXTOo0543Ai0J11p/DQvQUnpZ0x7AVTZTBOEpBwZjUr3Rqu2
-        8PTDtvnHyMd6Jnl9Px2cmyvOWCNmXRDvqaOFCbV8yOG8
-X-Google-Smtp-Source: ABdhPJxdiaZW3XY4qh1HbipCCTp9QF8ns20EKKmgDSIxP8htZetSXbBw3fA6ekpwW+mM7IVfTKx5uzyKJGHABGFHAFc=
-X-Received: by 2002:a05:6512:b8c:: with SMTP id b12mr14854609lfv.99.1639178405977;
- Fri, 10 Dec 2021 15:20:05 -0800 (PST)
+        Fri, 10 Dec 2021 18:24:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78FEC061746;
+        Fri, 10 Dec 2021 15:20:24 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639178422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m0vojIwzSpEf1MPwLMXE64NmDKMUcglA6n43GrBYVRk=;
+        b=WxFPS2TM1yuVQmnWrviQssRI0IwVNLZ87EUYPaGKgZVZOVQN46mWW9zO1W+FfK4ap6RkaZ
+        qzDxUOE6N3LPBf6Yr+JP/Z3JZ9+RAW16Dkaj5+FB+su85aEduZh9fIGZ/Ez4LsmrYdvSvD
+        yngM79twcVnL1QsDq0wG3BOj3Lxq7Px3Ouc/iPNYc1hlNBG22XsXaz9TzqBo9UxN5c2QTi
+        YhClgvzYmq6r4dYi3C0WFmPgnmW5tzOMlPkGhO+/3YKhvLLHNHvwIdqHg2zDZQEyP0XLVk
+        LUzhTIqqqBaZoDtEAMBsDvXGTaAdK8fymWJUJYJKUKbp5hKnwacZLp5ZEaHs2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639178422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m0vojIwzSpEf1MPwLMXE64NmDKMUcglA6n43GrBYVRk=;
+        b=wB3vvPDPrph8S/L4nsM2nk9JD3ORPD0NAzYhu9Io3nh1O5PLIq+sbkCUXHs6ScTw8qrKwV
+        XHXmiUpPU3AD/lBA==
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        pbonzini@redhat.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        yang.zhong@intel.com
+Subject: Re: [PATCH 14/19] x86/fpu: Prepare for KVM XFD_ERR handling
+In-Reply-To: <20211208000359.2853257-15-yang.zhong@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-15-yang.zhong@intel.com>
+Date:   Sat, 11 Dec 2021 00:20:22 +0100
+Message-ID: <87tufgvyh5.ffs@tglx>
 MIME-Version: 1.0
-References: <20211205224843.1503081-1-namhyung@kernel.org> <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
- <CAM9d7ciJTJB1rumzmxGeJrAdeE9R4eXhtJRUQGj9y6DBN-ovig@mail.gmail.com> <20211210103341.GS16608@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211210103341.GS16608@worktop.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 10 Dec 2021 15:19:53 -0800
-Message-ID: <CAM9d7cg6Dmojccw1kCxHoK9Kt_k3+4ojWaE1qq+NWmkCNjuFhw@mail.gmail.com>
-Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events too
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 2:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Dec 09, 2021 at 01:35:11PM -0800, Namhyung Kim wrote:
-> > On Thu, Dec 9, 2021 at 3:26 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Sun, Dec 05, 2021 at 02:48:43PM -0800, Namhyung Kim wrote:
-> > >
-> > > > Actually 18446744069443110306 is 0xffffffff01b345a2 so it seems to
-> > > > have a negative enabled time.  In fact, bperf keeps values returned by
-> > > > bpf_perf_event_read_value() which calls perf_event_read_local(), and
-> > > > accumulates delta between two calls.  When event->shadow_ctx_time is
-> > > > not set, it'd return invalid enabled time which is bigger than normal.
-> > >
-> > > *that*, how does it happen that shadow_time isn't set? It should be last
-> > > set when the event switches to INACTIVE, no?
-> >
-> > As you can see, perf_event_set_state() doesn't set the shadow time.
-> > It's called from event_sched_in() which might result in ACTIVE or
-> > INACTIVE.  But the problem is that there's a case that event_sched_in
-> > was not called at all - when group_can_go_on() returns false.
-> >
-> > > At which point the logic in
-> > > perf_event_read_local() should make @enabled move forward while @running
-> > > stays put.
-> >
-> > It's not about updating event->total_time_enabled, it only
-> > afftects the returned value of @enabled.
-> >
-> > I'd say the time calculation is broken so it'd break @running
-> > as well.  But this case can only happen on INACTIVE -
-> > otherwise it'd call event_sched_in() and update the shadow
-> > time properly, so no issue there.  And then we can see
-> > the broken value of enabled time only.
->
-> I'm thinking this is a cgroup specific thing. Normally the shadow_time
-> thing is simply a relative displacement between event-time and the
-> global clock. That displacement never changes, except when you do
-> IOC_DISABLE/IOC_ENABLE.
+On Tue, Dec 07 2021 at 19:03, Yang Zhong wrote:
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -322,6 +322,55 @@ int fpu_swap_kvm_fpstate(struct fpu_guest *guest_fpu, bool enter_guest)
+>  }
+>  EXPORT_SYMBOL_GPL(fpu_swap_kvm_fpstate);
+>  
+> +#ifdef CONFIG_X86_64
+> +void fpu_save_guest_xfd_err(struct fpu_guest *guest_fpu)
+> +{
+> +	if (guest_fpu->xfd_err & XFD_ERR_GUEST_DISABLED)
+> +		return;
+> +
+> +	/* A non-zero value indicates guest XFD_ERR already saved */
+> +	if (guest_fpu->xfd_err)
+> +		return;
+> +
+> +	/* Guest XFD_ERR must be saved before switching to host fpstate */
+> +	WARN_ON_ONCE(!current->thread.fpu.fpstate->is_guest);
 
-I think it changes when the events are scheduled in and out.
-The global clock (ctx->timestamp) is constantly changing
-when any event in the context is scheduled while event-
-time might not change if the event is not scheduled, no?
+Warn and proceed?
 
-Anyway, as I told you this is not a cgroup event.
-The point of the BPF work was not to use cgroup events
-and my example in the commit message was not about
-cgroups at all.
+> +	rdmsrl(MSR_IA32_XFD_ERR, guest_fpu->xfd_err);
+> +
+> +	/*
+> +	 * Restore to the host value if guest xfd_err is non-zero.
+> +	 * Except in #NM handler, all other places in the kernel
+> +	 * should just see xfd_err=0. So just restore to 0.
+> +	 */
+> +	if (guest_fpu->xfd_err)
+> +		wrmsrl(MSR_IA32_XFD_ERR, 0);
+> +
+> +	guest_fpu->xfd_err |= XFD_ERR_GUEST_SAVED;
+> +}
+> +EXPORT_SYMBOL_GPL(fpu_save_guest_xfd_err);
+> +
+> +void fpu_restore_guest_xfd_err(struct fpu_guest *guest_fpu)
+> +{
+> +	u64 xfd_err = guest_fpu->xfd_err;
+> +
+> +	if (xfd_err & XFD_ERR_GUEST_DISABLED)
+> +		return;
+> +
+> +	xfd_err &= ~XFD_ERR_GUEST_SAVED;
+> +
+> +	/*
+> +	 * No need to restore a zero value since XFD_ERR
+> +	 * is always zero outside of #NM handler in the host.
+> +	 */
+> +	if (!xfd_err)
+> +		return;
+> +
+> +	wrmsrl(MSR_IA32_XFD_ERR, xfd_err);
+> +	guest_fpu->xfd_err = 0;
+> +}
 
-The cgroup event has its own set of problems.. sigh.
-I'll post one that I hit recently.
+Why should any pf this be in the FPU core?
 
->
-> However, for cgroup things are different, since the cgroup events aren't
-> unconditionally runnable, that is, the enabled time should only count
-> when the cgroup is active, right?
-
-Yeah, that's my understanding.
-
->
-> So perhaps perf_event_read_local() should use a cgroup clock instead of
-> perf_clock() for cgroup events.
->
-> Let me think about that some more...
+It's a pure guest issue as all of this is related to struct fpu_guest
+and not struct fpu or any other core FPU state.
 
 Thanks,
-Namhyung
+
+        tglx
+

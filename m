@@ -2,62 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC48146F951
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB0746F959
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 03:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236124AbhLJCt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 21:49:59 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:51230 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbhLJCt7 (ORCPT
+        id S236184AbhLJCvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 21:51:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41030 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236162AbhLJCu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 21:49:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Dec 2021 21:50:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639104445;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2NBrZb9MWEkfnRCq35Z7md/5O5MZ6n/FZXnIl859Do4=;
+        b=JrthALDy4+jIvehJxqVDdJ4rwcVC72HAyEaOB8H9ez9WSrfO0TKt02sb4L1I2fW4Dqq3Mz
+        k70dfFFHZnJf62RMKvU9naECJNyYjdEau9EnllWmYnPrn0Ukl3FdYBNcuJGDP647sNPsgF
+        wEa6OF9p9lUXibqcrYI0voIHsRJtS0g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-448-GZiMF25ONFOVVsm1hljH-w-1; Thu, 09 Dec 2021 21:47:20 -0500
+X-MC-Unique: GZiMF25ONFOVVsm1hljH-w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6BC8BCE25DC;
-        Fri, 10 Dec 2021 02:46:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5690FC004DD;
-        Fri, 10 Dec 2021 02:46:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639104381;
-        bh=atO7jbYOHFpTryIkCpFbTf+3j8DZXUNfXnO5Dzs9RuM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X+cAA4AT9eSedVgKPvO2NglqcxMWmSQuYGLS0rifg8oHMdXrkMF4XJ6S4FLDGfIUO
-         kMyf7FvQwPIyV2tE9tsUfc0K5+9DdfKXnKKHO7XLoU58ba2P/oH1pY2aiPKhRY1ACn
-         jUq+3IDldOcfVTe/qFHWSYBR0dq7tORMrQay48NMJEKAWAyl3utUqXusRK4kreUIhF
-         QGV4PlbYg7+WYaj715+ogmr0KjdA8xdvH/11NTikq4wLX5CaIbjoOzu7cLbnJMzDdk
-         UDx0PiJAFvj9UUHVXE2eYKDO78Suc1roWOuFey4TMHVDMFjYSRzK6O5TnJ7W0PJDGB
-         Oi/D0vQ/e9VTA==
-Date:   Thu, 9 Dec 2021 18:46:20 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests: icmp_redirect: pass xfail=0 to log_test()
- for non-xfail cases
-Message-ID: <20211209184620.78d02085@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211208071151.63971-1-po-hsu.lin@canonical.com>
-References: <20211208071151.63971-1-po-hsu.lin@canonical.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 60F48102C84E;
+        Fri, 10 Dec 2021 02:47:18 +0000 (UTC)
+Received: from [10.22.32.131] (unknown [10.22.32.131])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 86BD55D740;
+        Fri, 10 Dec 2021 02:47:17 +0000 (UTC)
+Message-ID: <3c06c8b3-c6ed-50c5-79ac-21982a10d417@redhat.com>
+Date:   Thu, 9 Dec 2021 21:47:16 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] mm/memcg: Properly handle memcg_stock access for
+ PREEMPT_RT
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20211210020632.150769-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20211210020632.150769-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  8 Dec 2021 15:11:51 +0800 Po-Hsu Lin wrote:
-> If any sub-test in this icmp_redirect.sh is failing but not expected
-> to fail. The script will complain:
->     ./icmp_redirect.sh: line 72: [: 1: unary operator expected
-> 
-> This is because when the sub-test is not expected to fail, we won't
-> pass any value for the xfail local variable in log_test() and thus
-> it's empty. Fix this by passing 0 as the 4th variable to log_test()
-> for non-xfail cases.
-> 
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+On 12/9/21 21:06, Waiman Long wrote:
+> Direct calls to local_irq_{save/restore}() and preempt_{enable/disable}()
+> are not appropriate for PREEMPT_RT. To provide better PREEMPT_RT support,
+> change local_irq_{save/restore}() to local_lock_irq{save/restore}() and
+> add a local_lock_t to struct memcg_stock_pcp.
+>
+> Also disable the task and interrupt context optimization for obj_stock as
+> there will be no performance gain in the case of PREEMPT_RT. In this case,
+> task obj_stock will be there but remain unused.
+>
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   mm/memcontrol.c | 41 ++++++++++++++++++++++-------------------
+>   1 file changed, 22 insertions(+), 19 deletions(-)
 
-Thanks, could you please add a fixes tag (even if the breakage is only
-present in linux-next) and CC David Ahern on v2?
+Sorry, this doesn't apply to linux-next as it conflicts with a previous 
+patch that I sent out. Will send out a v2 soon.
+
+-Longman
+

@@ -2,242 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E280B4704E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C544704ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238080AbhLJPw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:52:56 -0500
-Received: from mail-dm6nam11on2072.outbound.protection.outlook.com ([40.107.223.72]:29075
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238024AbhLJPwP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:52:15 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hf/Y6W+eLe/KfhlEKIazHRFCJ8V8/UBihZOZNjXNETfULOlevroSSFLP/7LMlcgwQfnkE6LXSdaM10P6V295G8IUCgeXjVPvbcK6yiuhttHDKo0DiDoC+PmmjUWqAvaEqwf4VEVCvxqe71Ze5OpDaUF667wNnnVhmKdSB0W3Zhy2ZyVoMyyqPux3llRw8xnH2iYcEkG41lzTEqan4/eHqWRobUOJjc99XoRwvr/ZkFSjIqC9zur5sxB52n7lpEZ/bql1wlqNJUPIBMP7MLzhF2+DhcLoTlZF8QGu/MUbCTtniG6QMHPj0wqLe+dunQdNCJL9CkL0x1CAVu38XuFjAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=98oitruaBplIIVyYIjlSgufwgNMByXS6Xqu/76OfvTA=;
- b=Zx8MkXpyUEWD6QZ4ghHnq65IS6u+S5OG/SX6VwGEJ4W6DaAjV1q3oMboIIylDPcfpvlee+GQU62C31Wn982BrvZdcMUwxIXU0W2bLSH+mMn0a/ErxnkuLRL7Dkn4kX/HEKkYHJugpkbdYVz4TvGLJvXeqJDtWTYFyVtovQi2Tkc1UYjwbhZ0uLu3clLpeqrWGToQN6OBtfkW7XvugvAQbMnxE6RpgaDm0uICrai9dR8eHUmeAUnBfaR4wPNJvahXnGHEoT/BUfW0MCETzvfECG49hrWoelpIqvGL4WRyAXNSWMPaGBweJ3NIR8j1cQYYR22nGghd+4y0EXgPJH2FIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=98oitruaBplIIVyYIjlSgufwgNMByXS6Xqu/76OfvTA=;
- b=ldHTNeWK5avieqAy5ISEJZBnJWTcqUdStoxkwrGLmE3DkohaqPbwEHZ90QS4/IIO4qa3Hm9qi+UjQHmuYmeBVC+GsxzzbarMX80IXdOl3hBHm7/f0QntonZqDBwPAyPGxXnkA6Wvm5Rxo2J2W6QLmlwOG1csIuLLTNxm8+NMeUhvB5DIrPX+0dVpx5I4dyXsBMrcJWhjKqAhyTWLj4vNUY7QJulrrTaNpE303Un/Cu02snLXLZBFRrX/7QIFiHjFUH3AWIfoicdf00I6YMurxNEYD8J4E+5BngUA/gcTtcM+CA2rpWQskeEyImqZkfRLkpqk8LoCT26TnT4gx9ez0w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by MN2PR12MB4272.namprd12.prod.outlook.com (2603:10b6:208:1de::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.25; Fri, 10 Dec
- 2021 15:48:37 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4755.026; Fri, 10 Dec 2021
- 15:48:37 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Eric Ren <renzhengeek@gmail.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: Re: [RFC PATCH v2 3/7] mm: migrate: allocate the right size of non hugetlb or THP compound pages.
-Date:   Fri, 10 Dec 2021 10:48:36 -0500
-X-Mailer: MailMate (1.14r5852)
-Message-ID: <971750C3-DAEC-4EE8-B838-2DD3CBC29781@nvidia.com>
-In-Reply-To: <84807a03-f7d1-83cb-16df-bacc58de4529@gmail.com>
-References: <20211209230414.2766515-1-zi.yan@sent.com>
- <20211209230414.2766515-4-zi.yan@sent.com>
- <84807a03-f7d1-83cb-16df-bacc58de4529@gmail.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR02CA0009.namprd02.prod.outlook.com
- (2603:10b6:208:fc::22) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+        id S235194AbhLJPx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239791AbhLJPxf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 10:53:35 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB3CC0698C8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:49:19 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 137so7152049wma.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:49:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=m2XTc9iMBeQXABoVYg3OLHH7J0d8VZo7TwL0+hrpD3U=;
+        b=RyKt8lg+/Hqq2hSK6Fl/AmA7Vch8WEeipWAYG84InWJGjcfe8zQH8hFZKwb63iFl9U
+         4id7khNCuBkhOaw1wQLGilKpnDFCDyixLGOMzctduki3sYyMymdk2/lSp24T/7WS+gkk
+         TwEl3SDhN6ECnQJUSXPdWEwiK2XzWwFcRhdTaU0hWAxCOw2YYZ9mnPnFa8ItNUSzxwvJ
+         gSoxBx5/52vIxyMcVArRnG2v46bVDkxfnp1FaZs6xdLppFHaApFEA6+qV8R/nHHKn4+g
+         gmQW+6764CE/uktQS0EX7KVvVmPN5//JoQKqMN8YpycjWC0kXTbDMpcxUdSn+f50GiyW
+         ULaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m2XTc9iMBeQXABoVYg3OLHH7J0d8VZo7TwL0+hrpD3U=;
+        b=FUGXdL6WMTULwK/aTB4VUHHQ7tOzV8FeLo3N+rHo/TBZK/LWM68erwuXUt90d7UGEb
+         EiMaLR6zlViOx2339nVo9j4Plqe2tPAQ6pLBLsyEXwRKyprcOXNrhhM3+qIk4eGFl/u+
+         8HybJjOWX91eyL9hktO43WFF4WG9JxtJiKAUpSXXtThjzcOXDVIkQKt4oPmQAtLaaYNw
+         lh+jubdGPOz67RYEAuPMZB4a2/rjOeQ6w5QlJCM4RFNO00f3Y4TxbhcOfnCDuKxE16Q8
+         7PMqTM/6d7IBmTIaj3JY5QglIlS4meLgexvm3OUel3bLCGyo8qH0fBqH1P8WKuLxy3U2
+         QUIg==
+X-Gm-Message-State: AOAM533zv3bW/2msNXdgGi8RyuiTQkuzr0BA8uOf1hRIrB+15ThAJoLn
+        47aTmQM03Fza8BI7HdUhPb9D1A==
+X-Google-Smtp-Source: ABdhPJwygBkPQIVcmcc5vlSoy3fKPJHrWQJqWcwr45GwsC213r7T580wmwYyt5jdB128ItrmE67bCg==
+X-Received: by 2002:a05:600c:3506:: with SMTP id h6mr17461416wmq.122.1639151357985;
+        Fri, 10 Dec 2021 07:49:17 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id p12sm2876675wro.33.2021.12.10.07.49.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 07:49:17 -0800 (PST)
+Date:   Fri, 10 Dec 2021 15:49:15 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jerome Forissier <jerome@forissier.org>,
+        "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in
+ optee_handle_rpc()
+Message-ID: <20211210154915.hjbgrnvtitmwluhz@maple.lan>
+References: <20211206120533.602062-1-xiaolei.wang@windriver.com>
+ <CAFA6WYN+0751=feb-O9Drmm5V_Gz-1qsgiHmLsA88=49MoK_dg@mail.gmail.com>
+ <PH0PR11MB507734019F54C2BB24D1456F95719@PH0PR11MB5077.namprd11.prod.outlook.com>
+ <CAFA6WYMOHUEve8cbZdwzsijer3fRsy=50q67ndsC6U2JD6gK5Q@mail.gmail.com>
+ <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org>
+ <CAFA6WYM1oCs9gE4b5DaRez+jhCXPb_c25ausj0yWdS5tawX0MA@mail.gmail.com>
 MIME-Version: 1.0
-Received: from [10.2.53.3] (130.44.175.231) by MN2PR02CA0009.namprd02.prod.outlook.com (2603:10b6:208:fc::22) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 10 Dec 2021 15:48:37 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 34be2c4d-9bbd-4806-f254-08d9bbf487e5
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4272:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB427285BA9C2E536B5A77CB17C2719@MN2PR12MB4272.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Aq61mUsVCJkw5IJBZUoPh4FWXMVC3kQUv1GLfZOZ+fh342MOOmTeSxnMVVLSaoVJmMB3m3tomyvw2PZ7Esf0wphybWfR0Y9tV+gnJM843/piND1v8ArjWudpqE2sgD0A8lEjwaOexm9SoL4jsaaC5mQtlZeO6PWxwbgc0OlC0RfkgRSItEAh/D5tG25LBprMYip9nzp0S/5LXZULKxvZzpVQvKZH85wUFoe/MQiFQUA3uRdO3fkUSMd3wuSm/f5YnFt2hgPW2g0g2YaEM50xHZin9/rLVB0Eew0r5ScVB3w1vKaZJlCPnuPU0M/fLEPpbQgleVAaEe7mzw6XIPyBIu5OMsGMz6DIfkOo6aRHkXEwg9hOKCogCjW3NnxBQeBgo/Nm4Zfw/VZn8auDefhsOI5Rk5GE1T+ZxXKjGxs7Vh8O3ax0GEnMJqwWsMD+JB/G0kyhB1RJWmuXYaND1GY/jhXSaKMD3lTlC9rIqve8uPbFeJH0+8gfb1be2DDFMGTQc3nslNaYqb343euF+14iGhWZd8LNbj26s6hVJZQB9CLg8zFmihliKAJjDpvxLUQT2FuQQsPw5/VMxo24NTAKQrXGQ1AyBx/RbtzP11+tr0I9GdIFRPNjapLcPZtGgb7sZtQbV7HNDFKsPzFWto2S97AYIRFHnirGW1mdrovdgyz1x6JTOzAqGfeJCiTPqF0fMov4KvuoAtKJVoASPt8PbA9Ya56uT8rynv6cnTzLSq8I8pw3TZEgquQTmD90ebRk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(8676002)(54906003)(235185007)(6486002)(38100700002)(316002)(16576012)(7416002)(83380400001)(5660300002)(66556008)(66476007)(66946007)(86362001)(6916009)(53546011)(2906002)(33656002)(956004)(21480400003)(2616005)(4326008)(186003)(508600001)(33964004)(36756003)(26005)(185883001)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OWJnRjU2alRvTFhZb1ZUOFVqaDFRdVE3dFRRTm1FQTE3bm00Yy9nd3NQbktY?=
- =?utf-8?B?bGptMGRlUDBFQ3NLVWluZDdkWVdRVkhoK0NpL3MzbG1ySzIvY1JCbjlBQXph?=
- =?utf-8?B?VEU0UEpLRVlyRmkyc21TZEJxZ0crRnNSckpsUjI3bXN5ZTZrdFVESm5CaHU4?=
- =?utf-8?B?L3kzMTdmaStmVGc0Z1V0RGtGY3krUkVWT29yZTdtTTB0MTRMem1BdC9xK3VG?=
- =?utf-8?B?Q1JXaC9WSndGdkdmWVZCdDF3NktubjRtaEwrOFQ3aVo1R0hNYXdVbm9aU2E5?=
- =?utf-8?B?T1NZSHp4c3Y0WWVOaitvZGRnMjZhKzU1eU1hdy96NVNhemhXOXd6OE9vSi8y?=
- =?utf-8?B?ckk1TjFLbFRkVm5TbkdKcHhQajFmaVJ5U0hBTzZaMFY3NnZWcmdKVnhmdEFB?=
- =?utf-8?B?bG5USS8xMWUvbkVJSFNHeDJhVllLck5haC8wSndWZE1nMkpQQ2pIOHprSm8y?=
- =?utf-8?B?K1lOZmczNm9HOTlLd0JmMENmRGpWYjRIaXdVeGlRSXVKMlNmRFhJc3Izb0k2?=
- =?utf-8?B?Zm00dm1XTHNNZmlhRkxTSWRhMjJUdEZNN1c3aTBYRjNuQy9qYmpiZWcxdDdG?=
- =?utf-8?B?eGs3OWpSMWpwRW1iRHBic2dPL3FDUk85Rjl5S0R6andGVlhRaU4ySHlvODFO?=
- =?utf-8?B?d0oxVVMzK2o1eS9TaFpPNjlKYXVBVWJ0OU16Slh1cCtWcnprVHRpUEFGa3hM?=
- =?utf-8?B?U3FYc0oxUFNYVGZramVFSXc2ZDN5UHZMbGN0aTNNczhzZ0wrMEgwamNCV2Qy?=
- =?utf-8?B?V2M0ZFI4bHBvVlRybkxVb1ZlTitrM3QyQTIzR0hzdFRDR0xabDB0OGRhdlRF?=
- =?utf-8?B?MVoxOTdJZnJzR0V3eDVVMy9XWWRseFlOQWVTakxyUXR5bXFvVWlwREplcysx?=
- =?utf-8?B?aGI3NFhnNk56T1NCSFJWcmdCblJDY0FMVWcxWVZPd1dlbXVDdWFKWUh5c2lK?=
- =?utf-8?B?QVQ0MWlrVDhSZHJzalpBWjB4eHN3UGFJOHdSYWlhU1RFM1FSbUcwR0hVdHJP?=
- =?utf-8?B?ZWZZOWJxaUVRMEdTd2V0RjZFd1FMaDYrSU5mRmhyZmgzaUpIYlNiOWZzRkVu?=
- =?utf-8?B?ZDd1QThlZkEyYTZpZ25hbk5SMFJXTkFXdkljNzFWVm9JVGk5WEwzTmtyRUN1?=
- =?utf-8?B?bTI5ZEd3Nnp1RHRmVmpLNk5VYytSSGNLSDBpcjJaY05pZnFGK2tvMThrT000?=
- =?utf-8?B?czJYSDk4QjZZY0dNTWtKSk4wbjk4a1FlRXlJa1FyY3Z3YjhORG9HdUpIYU9F?=
- =?utf-8?B?U2VaSXBvWXZhT1ZxMmJ5aVFvKzRQNVdsckg4M21VdDU3NnRiQmhCK2EwM0th?=
- =?utf-8?B?WTNFSCtBcEhGWTV5TFZ0T0kvVU5RbVgySGh1RTFKU0hNMG5EVyt2SWJLYzBT?=
- =?utf-8?B?QUV5OFMyU0hsOC9DWXZXbTA3cWV1OUdsblgvRG5JREtyM3VycDBkdnkzMVZF?=
- =?utf-8?B?S0tlSkJyR3UyWmhvaVg3Z0tCb1AzNEhyd2p6NGtwMDdpb1l6WlFHL21VQWgz?=
- =?utf-8?B?VHZrSzlEQnBseFA5azVka2Q2RmdxU2hMdDF6NnpiN01TU1hLQ0VLbWZMNTFV?=
- =?utf-8?B?Wmg2Z3BmRGNIYjZFc2VxUGhtM2VHNFE4UmFzR3NSaFVoakFRUTFSRUlDNE9l?=
- =?utf-8?B?WGlqK1c4aER5Q1NFdU1UbXdEWGFQUFF6LzZJem5BSDVBZGo4Slk4ODNtTGdU?=
- =?utf-8?B?dSt1MzVWRmxqQWlJN1kwQVFLdENaaUpCV2NEWFR2WHF4TUgyZmN4NFpnNlBh?=
- =?utf-8?B?REpzdGxOdjN5Y3ZwcWFRbG5LUk01dlVUL2lOTXRFOUd4UmFySHU1d0hvOGpZ?=
- =?utf-8?B?ZW1Sa3lBTU1QV1E5VnNxTGdVUHJ3cTRJbTNVZ0RDbHFUYnFBZVlpQW4wQ1Ns?=
- =?utf-8?B?NUNzMVpIQmd5YittL0dJcTZzUlZ2TmxiRTBYSkNDMW80UWVNN2wyMTNQNUJQ?=
- =?utf-8?B?dm55VHZPRUxsV3FVZStTb2xhd0xvTXJnS0RWNCtobUYrRkJLUUxCS21uUy91?=
- =?utf-8?B?b2V4ZTdWUHl6c0FKWGMvNUp0dEpyb0MyZnFGMnFGU0Q3djNJNlBHbWVhU0hh?=
- =?utf-8?B?YTNCaGFkaG90WkJjZ3lJRjVrTzl1a3RtbVExb3E5ZUUreTVMK3RHa2NrV3Bj?=
- =?utf-8?Q?zUUw=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34be2c4d-9bbd-4806-f254-08d9bbf487e5
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 15:48:37.7762
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AWMkjnyq1BG5WEPhoUnhP7fimMQY31VWwIzqVeX1v7K4xrMbWFixGc+TBR8UrAlV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4272
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYM1oCs9gE4b5DaRez+jhCXPb_c25ausj0yWdS5tawX0MA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Fri, Dec 10, 2021 at 03:08:21PM +0530, Sumit Garg wrote:
+> On Fri, 10 Dec 2021 at 13:40, Jerome Forissier <jerome@forissier.org> wrote:
+> >
+> > +CC Jens, Etienne
+> >
+> > On 12/10/21 06:00, Sumit Garg wrote:
+> > > On Fri, 10 Dec 2021 at 09:42, Wang, Xiaolei <Xiaolei.Wang@windriver.com> wrote:
+> > >>
+> > >> -----Original Message-----
+> > >> From: Sumit Garg <sumit.garg@linaro.org>
+> > >> Sent: Thursday, December 9, 2021 7:41 PM
+> > >> To: Wang, Xiaolei <Xiaolei.Wang@windriver.com>
+> > >> Cc: jens.wiklander@linaro.org; op-tee@lists.trustedfirmware.org; linux-kernel@vger.kernel.org
+> > >> Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in optee_handle_rpc()
+> > >>
+> > >> [Please note: This e-mail is from an EXTERNAL e-mail address]
+> > >>
+> > >> On Mon, 6 Dec 2021 at 17:35, Xiaolei Wang <xiaolei.wang@windriver.com> wrote:
+> > >>>
+> > >>> We observed the following kmemleak report:
+> > >>> unreferenced object 0xffff000007904500 (size 128):
+> > >>>   comm "swapper/0", pid 1, jiffies 4294892671 (age 44.036s)
+> > >>>   hex dump (first 32 bytes):
+> > >>>     00 47 90 07 00 00 ff ff 60 00 c0 ff 00 00 00 00  .G......`.......
+> > >>>     60 00 80 13 00 80 ff ff a0 00 00 00 00 00 00 00  `...............
+> > >>>   backtrace:
+> > >>>     [<000000004c12b1c7>] kmem_cache_alloc+0x1ac/0x2f4
+> > >>>     [<000000005d23eb4f>] tee_shm_alloc+0x78/0x230
+> > >>>     [<00000000794dd22c>] optee_handle_rpc+0x60/0x6f0
+> > >>>     [<00000000d9f7c52d>] optee_do_call_with_arg+0x17c/0x1dc
+> > >>>     [<00000000c35884da>] optee_open_session+0x128/0x1ec
+> > >>>     [<000000001748f2ff>] tee_client_open_session+0x28/0x40
+> > >>>     [<00000000aecb5389>] optee_enumerate_devices+0x84/0x2a0
+> > >>>     [<000000003df18bf1>] optee_probe+0x674/0x6cc
+> > >>>     [<000000003a4a534a>] platform_drv_probe+0x54/0xb0
+> > >>>     [<000000000c51ce7d>] really_probe+0xe4/0x4d0
+> > >>>     [<000000002f04c865>] driver_probe_device+0x58/0xc0
+> > >>>     [<00000000b485397d>] device_driver_attach+0xc0/0xd0
+> > >>>     [<00000000c835f0df>] __driver_attach+0x84/0x124
+> > >>>     [<000000008e5a429c>] bus_for_each_dev+0x70/0xc0
+> > >>>     [<000000001735e8a8>] driver_attach+0x24/0x30
+> > >>>     [<000000006d94b04f>] bus_add_driver+0x104/0x1ec
+> > >>>
+> > >>> This is not a memory leak because we pass the share memory pointer to
+> > >>> secure world and would get it from secure world before releasing it.
+> > >>
+> > >>> How about if it's actually a memory leak caused by the secure world?
+> > >>> An example being secure world just allocates kernel memory via OPTEE_SMC_RPC_FUNC_ALLOC and doesn't free it via OPTEE_SMC_RPC_FUNC_FREE.
+> > >>
+> > >>> IMO, we need to cross-check optee-os if it's responsible for leaking kernel memory.
+> > >>
+> > >> Hi sumit,
+> > >>
+> > >> You mean we need to check whether there is a real memleak,
+> > >> If being secure world just allocate kernel memory via OPTEE_SMC_PRC_FUNC_ALLOC and until the end, there is no free
+> > >> It via OPTEE_SMC_PRC_FUNC_FREE, then we should judge it as a memory leak, wo need to judge whether it is caused by secure os?
+> > >
+> > > Yes. AFAICT, optee-os should allocate shared memory to communicate
+> > > with tee-supplicant. So once the communication is done, the underlying
+> > > shared memory should be freed. I can't think of any scenario where
+> > > optee-os should keep hold-off shared memory indefinitely.
+> >
+> > I believe it can happen when OP-TEE's CFG_PREALLOC_RPC_CACHE is y. See
+> > the config file [1] and the commit which introduced this config [2].
+> 
+> Okay, I see the reasoning. So during the OP-TEE driver's lifetime, the
+> RPC shared memory remains allocated. I guess that is done primarily
+> for performance reasons.
+> 
+> But still it doesn't feel appropriate that we term all RPC shm
+> allocations as not leaking memory as we might miss obvious ones.
 
-On 10 Dec 2021, at 2:53, Eric Ren wrote:
+IIUC this patch adds kmemleak_not_leak() at (pretty much) the last
+possible point before *ownership* of the SHM block is passed from kernel
+to OP-TEE.
 
-> Hi,
->
-> On 2021/12/10 07:04, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> alloc_migration_target() is used by alloc_contig_range() and non-LRU
->> movable compound pages can be migrated. Current code does not allocate=
- the
->> right page size for such pages. Check THP precisely using
->> is_transparent_huge() and add allocation support for non-LRU compound
->> pages.
-> Could you elaborate on why the current code doesn't get the right size?=
-=C2=A0 how this patch fixes it.
+Sure, after we change ownership it could still be leaked... but it can
+no longer be leaked by the kernel because the kernel no longer owns it!
+More importantly, it makes no sense to run the kernel memory detector on the
+buffer because it simply can't work.
 
-The current code only check PageHuge() and PageTransHuge(). Non-LRU compo=
-und
-pages will be regarded as PageTransHuge() and an order-9 page is always a=
-llocated
-regardless of the actual page order. This patch makes the exact check for=
+After the RPC completes, doesn't it become impossible for kmemleak to
+scan to see if the pointer is lost[1]? kmemleak is essentially a tracing
+garbage collector and needs to be able to scan all memory that could
+hold a pointer to leakable memory. After the RPC completes the
+only copy of the pointer will be stored in a memory region that the
+kernel is prohibited from reading. How could kmemleak possibly give you
+a useful answer in this circumstance?
 
-THPs using is_transparent_huge() instead of PageTransHuge() and checks Pa=
-geCompound()
-after PageHuge() and is_transparent_huge() for non-LRU compound pages.
-
->
-> The description sounds like it's an existing bug, if so, the patch subj=
-ect should be changed to
-> "Fixes ..."?
-
-I have not seen any related bug report.
-
->
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
->>   mm/migrate.c | 8 ++++++--
->>   1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index d487a399253b..2ce3c771b1de 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1563,7 +1563,7 @@ struct page *alloc_migration_target(struct page =
-*page, unsigned long private)
->>   		return alloc_huge_page_nodemask(h, nid, mtc->nmask, gfp_mask);
->>   	}
->>  -	if (PageTransHuge(page)) {
->> +	if (is_transparent_hugepage(page)) {
->>   		/*
->>   		 * clear __GFP_RECLAIM to make the migration callback
->>   		 * consistent with regular THP allocations.
->> @@ -1572,13 +1572,17 @@ struct page *alloc_migration_target(struct pag=
-e *page, unsigned long private)
-> if (PageTransHuge(page)) {=C2=A0 // just give more code context
-> ...
->>   		gfp_mask |=3D GFP_TRANSHUGE;
->>   		order =3D HPAGE_PMD_ORDER;
-> order assigned here
->>   	}
->> +	if (PageCompound(page)) {
->> +		gfp_mask |=3D __GFP_COMP;
->> +		order =3D compound_order(page);
-> re-assinged again as THP is a compound page?
-
-Ah, you are right. Will use else if instead. Thanks.
-
-> Thanks,
-> Eric
->> +	}
->>   	zidx =3D zone_idx(page_zone(page));
->>   	if (is_highmem_idx(zidx) || zidx =3D=3D ZONE_MOVABLE)
->>   		gfp_mask |=3D __GFP_HIGHMEM;
->>    	new_page =3D __alloc_pages(gfp_mask, order, nid, mtc->nmask);
->>  -	if (new_page && PageTransHuge(new_page))
->> +	if (new_page && is_transparent_hugepage(page))
->>   		prep_transhuge_page(new_page);
->>    	return new_page;
+In other words if there's nothing kmemleak could do to fix this
+situation then marking the memory as kmemleak_not_leak() seems entirely
+appropriate (although it should be prefaced with a big comment
+explaining the change of ownerhship and why kmemleak cannot work).
 
 
---
-Best Regards,
-Yan, Zi
+Daniel.
 
---=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmGzdtQPHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqK0G8QAI7CY6NLXAee8CtKYL7dPjE77HLRaD9uQJL+
-4dgP4xOrredgYJixZOKx7XzZTHMoonzVTFF7px+w8zRClPASuOg5GGSVzuZ9M3ns
-MLfyqjF4TCpJO/P2L28raGfxzsBcfnMEbEA54G7i6Axysjhy8UU6SLEipPGRc4xz
-jG8P+YM6ZS9guoz6vwLsT3jxZ7JKb0D1B7uWP+PSfR06wMrb8/xXGlhkazCqohLy
-/whb2RAxh8wLnX1Ks4iidKrrSerxBgXvna/MjicD96TV56x5UlwQwTCWfqFzqiXx
-Ynz3l2iM4ogwdC6uGyqhNSEk0PEo371F6ZZi02xg6gRFkpJvFeY6n+/K/1hAv6ch
-DF/E3kbl59akOUd4O4wdJVp6NWfSa19nTKnvMSqtkQiscf+ehdMMD4tn0EeTHPK9
-YJijB4HVMSJdh7KWNwKNvFxORIMLl72IyJ473fHlWl0ibBtfimi4O3dHYmNrgc5Y
-pscA4twxZ/FeIJPQlMfrEGC3hCfDxwYNqSKoI3L1+CZRF390uiK06lZG23gVAKtm
-hf2oX8Wf/j4IbXtZC4J4hnY2y76QLG5dbhUsFM8XsQaKOcuq1UGcfoYXfPZ8AYvP
-eQHluN+7TIsNDRAihyzwiiMtZiaB7s6t+QTh8olEm5ussvAxDiMSun598Po23Ub4
-gHCyxr/d
-=S+9o
------END PGP SIGNATURE-----
-
---=_MailMate_BA365FBB-6E3D-4C74-AD07-06D52C16CD4C_=--
+[1] Everything I've said here hinges on this being true... so if I've
+    made a mistake about where OP-TEE stores this pointer then most of
+    the rest of this post is junk ;-)

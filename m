@@ -2,144 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAF846FABE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981BD46FAC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237074AbhLJGr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 01:47:27 -0500
-Received: from mail-dm6nam11on2058.outbound.protection.outlook.com ([40.107.223.58]:47969
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236723AbhLJGr0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 01:47:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TtFQJJyxF9WITzlpx/QYRH7+9U9HFOP2H779r4PXKCPUQGuE+vyTShSjvVRZzD1ZioK+pQehff+pgnOTXrJfgYMFpz2OI6wBrvxxIkMAqGwuKoErsE3yuPDombdEiswigWBKe3YuG7dT3sP8iy50f35zt58mgCXN/KXwNQhsd4P3IUYdWrLskp4mmovj5ilb59+sbQzBG7TCBWODbW85HzbY/eobolxKTKr0AOGZYSAzl3qAI11HLUZCf6paC5oxSoKYQOXzNGBZGTlKkeJ655Tt94+c8XjpKq9OKNcVFZucCYZaup4VHj3f5RwdK8h7R0JaquR2QM06v8F8h6ucnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xQv+ZVoV2XQfTYYZUoBcizguDDM8P99uG7n9ik+HUPE=;
- b=nJjK/91vf0hoQbX9m/vN4CBcS8kJ19/CkudineWjgRVp/O541HkQCwIuhVkjL5/N10PwKntW2lgS4FsJ/dAu5gtUfci9HPY1qXyMUpfE9lpok/Hzo03ND13YimSUKaPryEn5TSLLULxmMtr09PqUi05HBjcX6Te5AIOghyxxBz4Zrsb59vAvrLluOhItHoaGP9X/z7ZjdnZ+kna7MBa6SYp0erzZUwOjurSAW60VFP35Kru2+NtZvuMBvaQcIRm+1NbrKv1gwsCkryucv+98thz0SQOq/x9oMk8lOTLrC+i8YMZ2eY/Sa1mHs6oXTHdDPGuSM8UTZwyORlr75ic0zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xQv+ZVoV2XQfTYYZUoBcizguDDM8P99uG7n9ik+HUPE=;
- b=SSA+zPuCCO7DXflAQp9usal08mFwYZ3mN/p+jfQEJu9CBKxm14t29e4Q73AksULeIXOUFk5JBw7pAqVdn7s1CPAcOCQbDDKIi4Y2ldd9oeE3qPoRQ6IJXezADbVbaihGZc+Rry3fkzEdxaohkjiTzJu9v2CfvOE6S1Zic9cJAqsXATjb2KBu7J/Fzggp8/582cRX03zJo0clH0PSnB7CkbnM6n6ziBdTISQagKE4SDrwn5HOJ4pxdtrqum8Vb3gfRMy7m59kc7X8rDBvA5N9+5GGM9k7XaKzEV2pU3q4PxkAN8/24Y+qd/Q36npp0oLjVBqhjZniSKNEVRBEGbGNSQ==
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
- by BN9PR12MB5306.namprd12.prod.outlook.com (2603:10b6:408:103::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Fri, 10 Dec
- 2021 06:43:50 +0000
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::18e7:e0b1:5caf:b4b5]) by BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::18e7:e0b1:5caf:b4b5%6]) with mapi id 15.20.4755.022; Fri, 10 Dec 2021
- 06:43:50 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
-Subject: RE: [PATCH v2] i2c: tegra: use i2c_timings for bus clock freq
-Thread-Topic: [PATCH v2] i2c: tegra: use i2c_timings for bus clock freq
-Thread-Index: AQHX7RnfsU0kwMZA6UCM7iIywP8mGawqvdGAgACCvqA=
-Date:   Fri, 10 Dec 2021 06:43:49 +0000
-Message-ID: <BN9PR12MB52739E656160D234F5694C54C0719@BN9PR12MB5273.namprd12.prod.outlook.com>
-References: <1639067318-29014-1-git-send-email-akhilrajeev@nvidia.com>
- <c9eceaba-df4e-0e75-d6a7-87cfdf45fced@gmail.com>
-In-Reply-To: <c9eceaba-df4e-0e75-d6a7-87cfdf45fced@gmail.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 59e17acc-0aee-4734-85b2-08d9bba86ca7
-x-ms-traffictypediagnostic: BN9PR12MB5306:EE_
-x-microsoft-antispam-prvs: <BN9PR12MB53060BCC21EA6D198860EF72C0719@BN9PR12MB5306.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oZtZIVn4CBvVaKVYtN53KvOHxYlJ3bJY8OpxIRCeDFZdw7XqHGo288aPfnHpgXbTq7d+oxKEGF6aUpy+EwihqpUjXYWsp6R3JwP4IqhWddHJngbG/L1oPoN6uDaANB3s3t1s4OCpDDOxFTQAzWnCqO9SbSEcAurlrj52+ZDUvUwiduqkMIrdkus5e+RwJwn0/rQ0AnJ9KBOrVv9BerHvDD6p1Jj/aMJuORRmDSLatsa8eT6EzOCQRAfN738kAZMEJaIRMktqP5TD+fCl0sIk1NauDvWhPqfjrb+b2JIrbwYkC6V9hqvooeMkxsZN1MnxqboouY97La5QxEmQFyWsBh/v3WMPtb7bteUC0eA4ta6wrHeA1Tgu31HdItKBU+34lYux49wY6eetHXOiCM/FEN0p0LtsYTGr0x1oDbyUGApEZxYYJuYDHr5Q4sk55SNSthC2/olI3OV5Ko7D3eRGqbHkGb57J5bEJuEJnlsf9zWCNzdjnLoFqk5dxNMTldprVRW1P5KV97bOHtqVAXlfIrBQJMJlpTiUaVLkMOIDnQca8oh1aKu36GWMBtQ7UosRuEbD8PY0ddFD36qwQ/QWL6MhvBejJfRU+KlTza6kWIsdguDA0fZSlMnqCv5munNrRSy/bJ1xItWR0baVGrlYD8WAWEf/vinTyCvtRHvXvwWqSgqeNFoQPKgpTG4WvIiNJ05O2xoP7Io0o8u8thzu9g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(508600001)(38070700005)(2906002)(110136005)(8676002)(66946007)(55016003)(66476007)(4744005)(86362001)(52536014)(64756008)(26005)(76116006)(186003)(5660300002)(7696005)(9686003)(316002)(71200400001)(66446008)(122000001)(8936002)(38100700002)(6506007)(83380400001)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bytlSkF5L1ZyRGVBL1BDK25SbXlBbDlaUHJnM2F5YkgrNThySThKaytFb1Ni?=
- =?utf-8?B?WThkbzVJdDRvOGorTHlYWWJHWXJTOHlPbjkySGNIeGRHN0diZU5maFlKTG1O?=
- =?utf-8?B?UWZ4ZXhMdVN3TjJMUWpPNlZCWERSaFhnLzVLZFVYM2hGK1ErWk5pSEdpMTd1?=
- =?utf-8?B?WTNOMm5WNWJleis2c3kxZk5xZUJLbGlpNHJnZ25FQW9zOG1HeVlxcFVJRlJU?=
- =?utf-8?B?Y2xLcGlJeFNPa3FPMHVpcnloZW4ra0tLU0t1NGRMNTVVUDNmSUFQWmtSaFBT?=
- =?utf-8?B?MkxOeWdESGd3V3E4TXlFaktxWXpoaGt6bkNFQlh3OElFam9yemxWeEN0b0RD?=
- =?utf-8?B?UWdwanM1bGtRNWVMbXhUUDlpdGVtWE1iOTBIKzJBUmU2bS8yZFZ3b01pc0Fx?=
- =?utf-8?B?amp4TWpFWWFqLzRQSS8rajdWOGFLTnh5a1oxNVgwYVRSQjRhVzF4YWl5ZE45?=
- =?utf-8?B?eHZZR1VMSG1iYy9PMjZ3OU04dFVPbGEvTmVRU0J0QnU2SlRDYUgzd3FYZ3lG?=
- =?utf-8?B?ODdzaEkrbmdlTlRTaHIzVWFyNVVwdmxFTUhUK3RsQkZNTUpqTXlMNU9BdTdS?=
- =?utf-8?B?VGFBSDA4RzgyRVEycFpXd3RQUkFyVHBwc2NoNUJsKzhlQnlaUUlsK3dHN1lK?=
- =?utf-8?B?emlUV0VkMTNVT3NWMXpvZVRJQng0Zm1jZGJqYkJ0UUsvTGZEekFCYUJDcDVr?=
- =?utf-8?B?R2dEcTR1dDBCZXZYQWFTWXVqMGs3YWZHbTJ6WURrNUtHWjFNVCtRU0VUMlNY?=
- =?utf-8?B?MFc1NXVJb3JwYkxlK09oT2dPZnRkbm1nNDRvWG5BVVRyU0UxaTZVNU5zZDJC?=
- =?utf-8?B?SHU0amhwdGRLZWtSV0M1c09Uc3JhaXBKTm14TThWWkJ4WDlnZ0NDL2JlK05V?=
- =?utf-8?B?eE43SG5DRUlWbC8wemZmdGpibHJPWFhXQjR3OUoyV1p1bkpDbUNyemZ2Rk91?=
- =?utf-8?B?SFlsMTRmSzNhTmVSekFjM2U3Uk0yZkRrTkc1SXZSVzg0dndUSkkrbFVYSyt3?=
- =?utf-8?B?Tm5jOVJoOFBWb3c3T2ovMnlQMUlOVmNVcUV1V1BZdnJSSTlkNWkvWFRCcHBo?=
- =?utf-8?B?QlROV0xxRTBKcUIzZ1IwNkYvMWtQNjcwZ3Bmb09ncVY4V2VtRVFrc0JYV1Va?=
- =?utf-8?B?U2szYUlxQURlbVc0VzYvM1RJdDBsWlkwU2ZOUlRFNk94MGVrNHp4TFlRZi81?=
- =?utf-8?B?cWNWSEY5ZFFyMmM3OHh2R1AwREJJYjFOanNHRi8wd2JIeUZNZEE1OGhDTzJl?=
- =?utf-8?B?UnRlL1B2TWNVMTh4endwSGVldktRNmk2c3JNTXh1YjMyVWUwV2poS3lwOGUw?=
- =?utf-8?B?Y2FpNW9kT2RseU9FWGdkd3hVVEp4U0tIWmRxalNNTXFwMm9rMkwya3hyTUcy?=
- =?utf-8?B?K0x5K2pSWE5iL3psZkU0dmpQU3NmSWN4cjJlbkRqZ0hIUTdhaWNTR2lUcjQ1?=
- =?utf-8?B?dDN6TFN0Q3BITzZnNE5oVTNOVDlQeDZKdUEya1d1RFUzZ2hOcHo5QlRDSEpv?=
- =?utf-8?B?Rk9VV2xETHBReXhuWnBYeUZzblpwMXJTQUhvazljWXVxS1k4K1l4MmhNc1NS?=
- =?utf-8?B?WWp4cWZxVzFVN1ltb0ttbGRlWis4aUpYS0R6UGx3eWhQMWR1RURsSGc0MVdq?=
- =?utf-8?B?TUtPUWN4S1d5T0xCbEFiOHBlNjdzYlJpV2s0T1VaZzFvakNKaTJDc3dEaXpO?=
- =?utf-8?B?Q1dHenJScitSSzRMV0ZKNlZka0dCWXhEQVVPcFhDSFFucXVBMi9wY1diVTVC?=
- =?utf-8?B?MDBQSnZIdEtXQ1lsZnU1NDVNUURVdmVzZGlEbzRLNU5kR2VlQ2M4STZZSGV6?=
- =?utf-8?B?QjRVSW8vY3o5Q1RGVlc1Q1p3SGNqVmlReUpWN08wczFFK1pzRGlHbmtRVHAy?=
- =?utf-8?B?R2Ircko4SVVLSmhYNm9GM2d1ZU1acVl0cjR6dDR0YS8vdk9kUnBXb0NzNzNP?=
- =?utf-8?B?TmJSeklmWFZCVlU3WVJSSUl0cnNYZ09kR1ptMG5xeXVWQnJaSzh4bmdwSG9x?=
- =?utf-8?B?anN4SG9kRlF1NzhmQ2c0OCtMK05yRlV2VHA3MzgvUDVidHI0WlFHcEFaT3pZ?=
- =?utf-8?B?Q2RMcTF0aTFrK0twTkdrVUlYREQ0NFlXWTRNRGxOVXVPU3ZGT0RQTG1nSFlh?=
- =?utf-8?B?bEU5LzkzTjFOT1pseHczMHN3ay9HNTlYVjV3MmFLc21XaTRaTitFQWppdTda?=
- =?utf-8?B?b0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S237103AbhLJGt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 01:49:29 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60442 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236723AbhLJGt2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 01:49:28 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A927B210FE;
+        Fri, 10 Dec 2021 06:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639118752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vzMyr3hZXMhFii0NdlyR51oUhrIHzizEfZxSIlIaIOo=;
+        b=ZnQINEf8VIOOmSFIhi4UXAQy294MvueGBu8St0E2ulu1HaiMjazbTWvSCMi9SCdY8EpbDk
+        FDnShXqF7YdV8pffpVKMGMey4i4wV+DtJweqM6EvHkt+WVjvLaoSOaazmgJ3IcpUV+n+Qq
+        DPMX/I+h1n2SsccHkJFfDRJLktsSugc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639118752;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vzMyr3hZXMhFii0NdlyR51oUhrIHzizEfZxSIlIaIOo=;
+        b=JKBaGDNy/pjyYeUYFFebaEh987eZdLpxTPiX/4MxQ+smu5VTjkgzOyVO1d7HYu10YN0MZO
+        qVJm9SyRMM6SXlBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E26913DD7;
+        Fri, 10 Dec 2021 06:45:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4l00FaD3smFDcwAAMHmgww
+        (envelope-from <hare@suse.de>); Fri, 10 Dec 2021 06:45:52 +0000
+Subject: Re: [PATCH v2 1/3] md: Fix undefined behaviour in is_mddev_idle
+To:     Li Jinlin <lijinlin3@huawei.com>, song@kernel.org,
+        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        axboe@kernel.dk, jack@suse.cz, ming.lei@redhat.com, tj@kernel.org,
+        mcgrof@kernel.org, mcroce@microsoft.com
+Cc:     linux-raid@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linfeilong@huawei.com
+References: <20211210051707.2202646-1-lijinlin3@huawei.com>
+ <20211210051707.2202646-2-lijinlin3@huawei.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <e9b03c2a-b1f6-e083-3a2b-bf1478628f31@suse.de>
+Date:   Fri, 10 Dec 2021 07:45:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59e17acc-0aee-4734-85b2-08d9bba86ca7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2021 06:43:49.9273
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hAECDULynHtFwF7HEaO2p8i1NB/MGppkrLvzOpV1O5Zs0bN7abaQfIic9vyVEmsbOxbr8U8d/a7VVG7uOR338g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5306
+In-Reply-To: <20211210051707.2202646-2-lijinlin3@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAwOS4xMi4yMDIxIDE5OjI4LCBBa2hpbCBSINC/0LjRiNC10YI6DQo+ID4gLSAgICAgZXJyID0g
-ZGV2aWNlX3Byb3BlcnR5X3JlYWRfdTMyKGkyY19kZXYtPmRldiwgImNsb2NrLWZyZXF1ZW5jeSIs
-DQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICZpMmNfZGV2LT5idXNf
-Y2xrX3JhdGUpOw0KPiA+IC0gICAgIGlmIChlcnIpDQo+ID4gLSAgICAgICAgICAgICBpMmNfZGV2
-LT5idXNfY2xrX3JhdGUgPSBJMkNfTUFYX1NUQU5EQVJEX01PREVfRlJFUTsNCj4gPiArICAgICBp
-MmNfcGFyc2VfZndfdGltaW5ncyhpMmNfZGV2LT5kZXYsICZpMmNfZGV2LT50aW1pbmdzLCB0cnVl
-KTsNCj4gDQo+IFdhcyB0aGlzIHBhdGNoIHRlc3RlZCBhdCBhbGw/IEFwcGFyZW50bHksIGl0IHdh
-c24ndCBjb21waWxlLXRlc3RlZC4NClNvcnJ5LCBpdCBnb3Qgc29tZWhvdyBtaXNzZWQgYXMgdGhl
-IGJ1aWxkIGRpZCBub3QgZmFpbCB3aGVuIHByZXBhcmVkDQp0aGUgaW1hZ2UgZm9yIHRlc3Rpbmcu
-IFRoYW5rcyBmb3IgcG9pbnRpbmcgdGhpcyBvdXQuDQpXb3VsZCBmaXggYW5kIHVwZGF0ZS4NCg0K
-PiANCj4gZHJpdmVycy9pMmMvYnVzc2VzL2kyYy10ZWdyYS5jOiBJbiBmdW5jdGlvbiDigJh0ZWdy
-YV9pMmNfcGFyc2VfZHTigJk6DQo+IGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtdGVncmEuYzoxNjM1
-OjEzOiB3YXJuaW5nOiB1bnVzZWQgdmFyaWFibGUg4oCYZXJy4oCZIFstDQo+IFd1bnVzZWQtdmFy
-aWFibGVdDQo+ICAxNjM1IHwgICAgICAgICBpbnQgZXJyOw0KPiANCj4gQlRXLCBNTSwgRFJJIGFu
-ZCBtZWRpYSBtYWlsaW5nIGxpc3RzIGhhdmUgbm90aGluZyB0byBkbyB3aXRoIHRoaXMgcGF0Y2gN
-CkV2ZW4gSSB3YXMgd29uZGVyaW5nIG9uIHRoaXMsIGJ1dCBhcHBhcmVudGx5IHRob3NlIGxpc3Rz
-IGFyZSBzaG93biBpZiBnZXRfbWFpbnRhaW5lci5wbA0KaXMgcnVuLiBXb3VsZCByZW1vdmUgdGhl
-IG1haWxpbmcgbGlzdHMgZ29pbmcgZnVydGhlci4NCg0KVGhhbmtzLA0KQWtoaWwNCg==
+On 12/10/21 6:17 AM, Li Jinlin wrote:
+> UBSAN reports this problem:
+> 
+> [ 5984.281385] UBSAN: Undefined behaviour in drivers/md/md.c:8175:15
+> [ 5984.281390] signed integer overflow:
+> [ 5984.281393] -2147483291 - 2072033152 cannot be represented in type 'int'
+> [ 5984.281400] CPU: 25 PID: 1854 Comm: md101_resync Kdump: loaded Not tainted 4.19.90
+> [ 5984.281404] Hardware name: Huawei TaiShan 200 (Model 5280)/BC82AMDDA
+> [ 5984.281406] Call trace:
+> [ 5984.281415]  dump_backtrace+0x0/0x310
+> [ 5984.281418]  show_stack+0x28/0x38
+> [ 5984.281425]  dump_stack+0xec/0x15c
+> [ 5984.281430]  ubsan_epilogue+0x18/0x84
+> [ 5984.281434]  handle_overflow+0x14c/0x19c
+> [ 5984.281439]  __ubsan_handle_sub_overflow+0x34/0x44
+> [ 5984.281445]  is_mddev_idle+0x338/0x3d8
+> [ 5984.281449]  md_do_sync+0x1bb8/0x1cf8
+> [ 5984.281452]  md_thread+0x220/0x288
+> [ 5984.281457]  kthread+0x1d8/0x1e0
+> [ 5984.281461]  ret_from_fork+0x10/0x18
+> 
+> When the stat aacum of the disk is greater than INT_MAX, its
+> value becomes negative after casting to 'int', which may lead
+> to overflow after subtracting a positive number. In the same
+> way, when the value of sync_io is greater than INT_MAX,
+> overflow may also occur. These situations will lead to
+> undefined behavior.
+> 
+> Otherwise, if the stat accum of the disk is close to INT_MAX
+> when creating raid arrays, the initial value of last_events
+> would be set close to INT_MAX when mddev initializes IO
+> event counters. 'curr_events - rdev->last_events > 64' will
+> always false during synchronization. If all the disks of mddev
+> are in this case, is_mddev_idle() will always return 1, which
+> may cause non-sync IO is very slow.
+> 
+> To address these problems, need to use 64bit signed integer
+> type for sync_io, last_events, and curr_events.
+> 
+> In all the drivers that come with the kernel, the sync_io
+> variable in struct gendisk is only used for the md driver
+> currently. It should be more suitable in struct md_rdev, so
+> add the sync_io variable in struct md_rdev, and use it to
+> replace. We modify md_sync_acct() and md_sync_acct_bio()
+> to fit for this change as well. md_sync_acct_bio() need
+> access to the rdev, so we set bio->bi_bdev to rdev before
+> calling it, and reset bio->bi_bdev to bdev in this function.
+> 
+Please make that two patches, one for moving sync_io and one for
+fixing the undefined behaviour.
+
+> Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
+> ---
+>   drivers/md/md.c       |  6 +++---
+>   drivers/md/md.h       | 13 +++++++++----
+>   drivers/md/raid1.c    |  4 ++--
+>   drivers/md/raid10.c   | 24 ++++++++++++------------
+>   drivers/md/raid5.c    |  4 ++--
+>   include/linux/genhd.h |  1 -
+>   6 files changed, 28 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 5111ed966947..f1b71a92801e 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -8429,14 +8429,14 @@ static int is_mddev_idle(struct mddev *mddev, int init)
+>   {
+>   	struct md_rdev *rdev;
+>   	int idle;
+> -	int curr_events;
+> +	s64 curr_events;
+>   
+>   	idle = 1;
+>   	rcu_read_lock();
+>   	rdev_for_each_rcu(rdev, mddev) {
+>   		struct gendisk *disk = rdev->bdev->bd_disk;
+> -		curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
+> -			      atomic_read(&disk->sync_io);
+> +		curr_events = (s64)part_stat_read_accum(disk->part0, sectors) -
+> +			      atomic64_read(&rdev->sync_io);
+
+So you are replacing a 'signed integer' (ie 32bit) calculation with a 
+'signed 64-bit integer' calculation.
+IE you just shifted the overflow from INT_MAX to LONG_MAX, without 
+actually fixing it, or?
+
+>   		/* sync IO will cause sync_io to increase before the disk_stats
+>   		 * as sync_io is counted when a request starts, and
+>   		 * disk_stats is counted when it completes.
+> diff --git a/drivers/md/md.h b/drivers/md/md.h
+> index 53ea7a6961de..584e357e0940 100644
+> --- a/drivers/md/md.h
+> +++ b/drivers/md/md.h
+> @@ -50,7 +50,7 @@ struct md_rdev {
+>   
+>   	sector_t sectors;		/* Device size (in 512bytes sectors) */
+>   	struct mddev *mddev;		/* RAID array if running */
+> -	int last_events;		/* IO event timestamp */
+> +	s64 last_events;		/* IO event timestamp */
+>   
+>   	/*
+>   	 * If meta_bdev is non-NULL, it means that a separate device is
+> @@ -138,6 +138,8 @@ struct md_rdev {
+>   		unsigned int size;	/* Size in sectors of the PPL space */
+>   		sector_t sector;	/* First sector of the PPL space */
+>   	} ppl;
+> +
+> +	atomic64_t sync_io;		/* counter of sync IO (unit sectors) */
+>   };
+>   enum flag_bits {
+>   	Faulty,			/* device is known to have a fault */
+> @@ -549,14 +551,17 @@ static inline int mddev_trylock(struct mddev *mddev)
+>   }
+>   extern void mddev_unlock(struct mddev *mddev);
+>   
+> -static inline void md_sync_acct(struct block_device *bdev, unsigned long nr_sectors)
+> +static inline void md_sync_acct(struct md_rdev *rdev, unsigned long nr_sectors)
+>   {
+> -	atomic_add(nr_sectors, &bdev->bd_disk->sync_io);
+> +	atomic64_add(nr_sectors, &rdev->sync_io);
+>   }
+>   
+>   static inline void md_sync_acct_bio(struct bio *bio, unsigned long nr_sectors)
+>   {
+> -	md_sync_acct(bio->bi_bdev, nr_sectors);
+> +	struct md_rdev *rdev = (void *)bio->bi_bdev;
+
+That look weird. bio->bi_bdev should be a 'struct gendisk', not a MD 
+internal data structure.
+
+> +
+> +	bio_set_dev(bio, rdev->bdev);
+> +	md_sync_acct(rdev, nr_sectors);
+>   }
+>   
+>   struct md_personality
+> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+> index 7dc8026cf6ee..74c42dabe57c 100644
+> --- a/drivers/md/raid1.c
+> +++ b/drivers/md/raid1.c
+> @@ -2232,7 +2232,7 @@ static void sync_request_write(struct mddev *mddev, struct r1bio *r1_bio)
+>   
+>   		wbio->bi_end_io = end_sync_write;
+>   		atomic_inc(&r1_bio->remaining);
+> -		md_sync_acct(conf->mirrors[i].rdev->bdev, bio_sectors(wbio));
+> +		md_sync_acct(conf->mirrors[i].rdev, bio_sectors(wbio));
+>   
+>   		submit_bio_noacct(wbio);
+>   	}
+> @@ -2791,7 +2791,7 @@ static sector_t raid1_sync_request(struct mddev *mddev, sector_t sector_nr,
+>   		if (rdev && bio->bi_end_io) {
+>   			atomic_inc(&rdev->nr_pending);
+>   			bio->bi_iter.bi_sector = sector_nr + rdev->data_offset;
+> -			bio_set_dev(bio, rdev->bdev);
+> +			bio->bi_bdev = (void *)rdev;
+>   			if (test_bit(FailFast, &rdev->flags))
+>   				bio->bi_opf |= MD_FAILFAST;
+>   		}
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index dde98f65bd04..fc1e6c0996de 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -2407,7 +2407,7 @@ static void sync_request_write(struct mddev *mddev, struct r10bio *r10_bio)
+>   
+>   		atomic_inc(&conf->mirrors[d].rdev->nr_pending);
+>   		atomic_inc(&r10_bio->remaining);
+> -		md_sync_acct(conf->mirrors[d].rdev->bdev, bio_sectors(tbio));
+> +		md_sync_acct(conf->mirrors[d].rdev, bio_sectors(tbio));
+>   
+>   		if (test_bit(FailFast, &conf->mirrors[d].rdev->flags))
+>   			tbio->bi_opf |= MD_FAILFAST;
+> @@ -2430,7 +2430,7 @@ static void sync_request_write(struct mddev *mddev, struct r10bio *r10_bio)
+>   			bio_copy_data(tbio, fbio);
+>   		d = r10_bio->devs[i].devnum;
+>   		atomic_inc(&r10_bio->remaining);
+> -		md_sync_acct(conf->mirrors[d].replacement->bdev,
+> +		md_sync_acct(conf->mirrors[d].replacement,
+>   			     bio_sectors(tbio));
+>   		submit_bio_noacct(tbio);
+>   	}
+> @@ -2562,12 +2562,12 @@ static void recovery_request_write(struct mddev *mddev, struct r10bio *r10_bio)
+>   		wbio2 = NULL;
+>   	if (wbio->bi_end_io) {
+>   		atomic_inc(&conf->mirrors[d].rdev->nr_pending);
+> -		md_sync_acct(conf->mirrors[d].rdev->bdev, bio_sectors(wbio));
+> +		md_sync_acct(conf->mirrors[d].rdev, bio_sectors(wbio));
+>   		submit_bio_noacct(wbio);
+>   	}
+>   	if (wbio2) {
+>   		atomic_inc(&conf->mirrors[d].replacement->nr_pending);
+> -		md_sync_acct(conf->mirrors[d].replacement->bdev,
+> +		md_sync_acct(conf->mirrors[d].replacement,
+>   			     bio_sectors(wbio2));
+>   		submit_bio_noacct(wbio2);
+>   	}
+> @@ -3486,7 +3486,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>   				from_addr = r10_bio->devs[j].addr;
+>   				bio->bi_iter.bi_sector = from_addr +
+>   					rdev->data_offset;
+> -				bio_set_dev(bio, rdev->bdev);
+> +				bio->bi_bdev = (void *)rdev;
+>   				atomic_inc(&rdev->nr_pending);
+>   				/* and we write to 'i' (if not in_sync) */
+>   
+> @@ -3508,7 +3508,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>   					bio_set_op_attrs(bio, REQ_OP_WRITE, 0);
+>   					bio->bi_iter.bi_sector = to_addr
+>   						+ mrdev->data_offset;
+> -					bio_set_dev(bio, mrdev->bdev);
+> +					bio->bi_bdev = (void *)mrdev;
+>   					atomic_inc(&r10_bio->remaining);
+>   				} else
+>   					r10_bio->devs[1].bio->bi_end_io = NULL;
+> @@ -3529,7 +3529,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>   				bio_set_op_attrs(bio, REQ_OP_WRITE, 0);
+>   				bio->bi_iter.bi_sector = to_addr +
+>   					mreplace->data_offset;
+> -				bio_set_dev(bio, mreplace->bdev);
+> +				bio->bi_bdev = (void *)mreplace;
+>   				atomic_inc(&r10_bio->remaining);
+>   				break;
+>   			}
+> @@ -3684,7 +3684,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>   			if (test_bit(FailFast, &rdev->flags))
+>   				bio->bi_opf |= MD_FAILFAST;
+>   			bio->bi_iter.bi_sector = sector + rdev->data_offset;
+> -			bio_set_dev(bio, rdev->bdev);
+> +			bio->bi_bdev = (void *)rdev;
+>   			count++;
+>   
+>   			rdev = rcu_dereference(conf->mirrors[d].replacement);
+> @@ -3706,7 +3706,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>   			if (test_bit(FailFast, &rdev->flags))
+>   				bio->bi_opf |= MD_FAILFAST;
+>   			bio->bi_iter.bi_sector = sector + rdev->data_offset;
+> -			bio_set_dev(bio, rdev->bdev);
+> +			bio->bi_bdev = (void *)rdev;
+>   			count++;
+>   			rcu_read_unlock();
+>   		}
+> @@ -4865,7 +4865,7 @@ static sector_t reshape_request(struct mddev *mddev, sector_t sector_nr,
+>   
+>   	read_bio = bio_alloc_bioset(GFP_KERNEL, RESYNC_PAGES, &mddev->bio_set);
+>   
+> -	bio_set_dev(read_bio, rdev->bdev);
+> +	read_bio->bi_bdev = (void *)rdev;
+>   	read_bio->bi_iter.bi_sector = (r10_bio->devs[r10_bio->read_slot].addr
+>   			       + rdev->data_offset);
+>   	read_bio->bi_private = r10_bio;
+> @@ -4921,7 +4921,7 @@ static sector_t reshape_request(struct mddev *mddev, sector_t sector_nr,
+>   		if (!rdev2 || test_bit(Faulty, &rdev2->flags))
+>   			continue;
+>   
+> -		bio_set_dev(b, rdev2->bdev);
+> +		b->bi_bdev = (void *)rdev2;
+>   		b->bi_iter.bi_sector = r10_bio->devs[s/2].addr +
+>   			rdev2->new_data_offset;
+>   		b->bi_end_io = end_reshape_write;
+> @@ -5016,7 +5016,7 @@ static void reshape_request_write(struct mddev *mddev, struct r10bio *r10_bio)
+>   		}
+>   		atomic_inc(&rdev->nr_pending);
+>   		rcu_read_unlock();
+> -		md_sync_acct_bio(b, r10_bio->sectors);
+> +		md_sync_acct(rdev, r10_bio->sectors);
+>   		atomic_inc(&r10_bio->remaining);
+>   		b->bi_next = NULL;
+>   		submit_bio_noacct(b);
+> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> index 9c1a5877cf9f..b932282ff50a 100644
+> --- a/drivers/md/raid5.c
+> +++ b/drivers/md/raid5.c
+> @@ -1167,7 +1167,7 @@ static void ops_run_io(struct stripe_head *sh, struct stripe_head_state *s)
+>   		if (rdev) {
+>   			if (s->syncing || s->expanding || s->expanded
+>   			    || s->replacing)
+> -				md_sync_acct(rdev->bdev, RAID5_STRIPE_SECTORS(conf));
+> +				md_sync_acct(rdev, RAID5_STRIPE_SECTORS(conf));
+>   
+>   			set_bit(STRIPE_IO_STARTED, &sh->state);
+>   
+> @@ -1234,7 +1234,7 @@ static void ops_run_io(struct stripe_head *sh, struct stripe_head_state *s)
+>   		if (rrdev) {
+>   			if (s->syncing || s->expanding || s->expanded
+>   			    || s->replacing)
+> -				md_sync_acct(rrdev->bdev, RAID5_STRIPE_SECTORS(conf));
+> +				md_sync_acct(rrdev, RAID5_STRIPE_SECTORS(conf));
+>   
+>   			set_bit(STRIPE_IO_STARTED, &sh->state);
+>   
+> diff --git a/include/linux/genhd.h b/include/linux/genhd.h
+> index 74c410263113..6b84444111e4 100644
+> --- a/include/linux/genhd.h
+> +++ b/include/linux/genhd.h
+> @@ -150,7 +150,6 @@ struct gendisk {
+>   	struct list_head slave_bdevs;
+>   #endif
+>   	struct timer_rand_state *random;
+> -	atomic_t sync_io;		/* RAID */
+>   	struct disk_events *ev;
+>   #ifdef  CONFIG_BLK_DEV_INTEGRITY
+>   	struct kobject integrity_kobj;
+> 
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

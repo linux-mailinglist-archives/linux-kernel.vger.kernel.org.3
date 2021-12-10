@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CD2470E8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4A9470E92
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345129AbhLJX1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 18:27:49 -0500
+        id S1345151AbhLJX1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 18:27:52 -0500
 Received: from mga04.intel.com ([192.55.52.120]:19150 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345093AbhLJX1q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1345096AbhLJX1q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Dec 2021 18:27:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639178650; x=1670714650;
+  t=1639178651; x=1670714651;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aqh3fjrZFwZQdyV8F2E3MUV9jSvhWsBpM7NLkE5MlFc=;
-  b=WK1WgV+BjOi5AxdBqyD5xr1zW6ydTlU6aseusa04SfAnUkFHX7nJGWfL
-   gho1kBlRkTwqTsrNCWcPsLzbu8Av8b3rNp65gvdkW8zPhnH1lt4dFiUeF
-   h86DHcwdLa17/Xlg1UfX/kIPBaeHsvzsPPZtrrDFngoWZmyn8q0HARhZV
-   oUWbjcJ/MLN4CqXi3BFW56QWvI1v44uAPZsVI1K7zjIgZcIKTh32hpNox
-   ey1PfHF+URwGumBNpzxBQtE94k/6atI6f7suy4AGdA3BkWf30DpROA3UP
-   HRz4mrAbwoTZK6ePrSS0GkPRxrv7n4tvKlZEt5G2eLyJ0v49FdY/ZATQY
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237212364"
+  bh=jCKk2csSz0SQx21NAsEF7Oy/PZTrkEvuuAP1e36rVeQ=;
+  b=Z8fPwvAMJd2XbMmTTZWsGxLasR1abgd5B9LLG1F8MiWJZGQTF8Loca36
+   VfFLULbGtDTH4XO+ozUCV4JDH+J/dMbKvohYKUSxFmCkRFyCiQMPl0/7E
+   AKkpA3e3bms1hpBc10zOaYrQDsGljJxlmYFb3ZSGC6BWvcZQplTC5Yi2U
+   aWuKDn86cZKUFWaFLb1CNDgk262QTnuKemTWITo34yjPqTc5Js88vyKlb
+   CiGLiKaHNhY+v1zRa6NxQ32ZFdWHrfvncgkxXgZtjeHkMAtn4PUShcRkd
+   Ugz2biNQiX8+Xzyl6oEQdIaxppnjcA0x6FFMXcw4bzPXp+8fGQIbpqHUj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237212369"
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="237212364"
+   d="scan'208";a="237212369"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:24:10 -0800
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="463861444"
+   d="scan'208";a="463861449"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:24:09 -0800
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:24:10 -0800
 From:   ira.weiny@intel.com
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
@@ -40,9 +40,9 @@ To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
 Cc:     Ira Weiny <ira.weiny@intel.com>, amd-gfx@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH 2/7] drm/amd: Replace kmap() with kmap_local_page()
-Date:   Fri, 10 Dec 2021 15:23:59 -0800
-Message-Id: <20211210232404.4098157-3-ira.weiny@intel.com>
+Subject: [PATCH 3/7] drm/gma: Remove calls to kmap()
+Date:   Fri, 10 Dec 2021 15:24:00 -0800
+Message-Id: <20211210232404.4098157-4-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211210232404.4098157-1-ira.weiny@intel.com>
 References: <20211210232404.4098157-1-ira.weiny@intel.com>
@@ -54,44 +54,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-kmap() is being deprecated.  These maps are thread local and can be
-replaced with kmap_local_page().
+kmap() is being deprecated and these instances are easy to convert to
+kmap_local_page().
 
-Replace kmap() with kmap_local_page()
+Furthermore, in gma_crtc_cursor_set() use the memcpy_from_page() helper
+instead of an open coded use of kmap_local_page().
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/gma500/gma_display.c | 6 ++----
+ drivers/gpu/drm/gma500/mmu.c         | 8 ++++----
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index c875f1cdd2af..a3a2c73a44bb 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -2281,9 +2281,9 @@ static ssize_t amdgpu_iomem_read(struct file *f, char __user *buf,
- 		if (p->mapping != adev->mman.bdev.dev_mapping)
- 			return -EPERM;
+diff --git a/drivers/gpu/drm/gma500/gma_display.c b/drivers/gpu/drm/gma500/gma_display.c
+index cbcecbaa041b..caf7c7b321a9 100644
+--- a/drivers/gpu/drm/gma500/gma_display.c
++++ b/drivers/gpu/drm/gma500/gma_display.c
+@@ -334,7 +334,7 @@ int gma_crtc_cursor_set(struct drm_crtc *crtc,
+ 	struct gtt_range *gt;
+ 	struct gtt_range *cursor_gt = gma_crtc->cursor_gt;
+ 	struct drm_gem_object *obj;
+-	void *tmp_dst, *tmp_src;
++	void *tmp_dst;
+ 	int ret = 0, i, cursor_pages;
  
--		ptr = kmap(p);
-+		ptr = kmap_local_page(p);
- 		r = copy_to_user(buf, ptr + off, bytes);
--		kunmap(p);
-+		kunmap_local(ptr);
- 		if (r)
- 			return -EFAULT;
+ 	/* If we didn't get a handle then turn the cursor off */
+@@ -400,9 +400,7 @@ int gma_crtc_cursor_set(struct drm_crtc *crtc,
+ 		/* Copy the cursor to cursor mem */
+ 		tmp_dst = dev_priv->vram_addr + cursor_gt->offset;
+ 		for (i = 0; i < cursor_pages; i++) {
+-			tmp_src = kmap(gt->pages[i]);
+-			memcpy(tmp_dst, tmp_src, PAGE_SIZE);
+-			kunmap(gt->pages[i]);
++			memcpy_from_page(tmp_dst, gt->pages[i], 0, PAGE_SIZE);
+ 			tmp_dst += PAGE_SIZE;
+ 		}
  
-@@ -2332,9 +2332,9 @@ static ssize_t amdgpu_iomem_write(struct file *f, const char __user *buf,
- 		if (p->mapping != adev->mman.bdev.dev_mapping)
- 			return -EPERM;
+diff --git a/drivers/gpu/drm/gma500/mmu.c b/drivers/gpu/drm/gma500/mmu.c
+index fe9ace2a7967..a70b01ccdf70 100644
+--- a/drivers/gpu/drm/gma500/mmu.c
++++ b/drivers/gpu/drm/gma500/mmu.c
+@@ -184,17 +184,17 @@ struct psb_mmu_pd *psb_mmu_alloc_pd(struct psb_mmu_driver *driver,
+ 		pd->invalid_pte = 0;
+ 	}
  
--		ptr = kmap(p);
-+		ptr = kmap_local_page(p);
- 		r = copy_from_user(ptr + off, buf, bytes);
--		kunmap(p);
-+		kunmap_local(ptr);
- 		if (r)
- 			return -EFAULT;
+-	v = kmap(pd->dummy_pt);
++	v = kmap_local_page(pd->dummy_pt);
+ 	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
+ 		v[i] = pd->invalid_pte;
  
+-	kunmap(pd->dummy_pt);
++	kunmap_local(v);
+ 
+-	v = kmap(pd->p);
++	v = kmap_local_page(pd->p);
+ 	for (i = 0; i < (PAGE_SIZE / sizeof(uint32_t)); ++i)
+ 		v[i] = pd->invalid_pde;
+ 
+-	kunmap(pd->p);
++	kunmap_local(v);
+ 
+ 	clear_page(kmap(pd->dummy_page));
+ 	kunmap(pd->dummy_page);
 -- 
 2.31.1
 

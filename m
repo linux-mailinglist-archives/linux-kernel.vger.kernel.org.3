@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F64C470665
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9196647066A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244043AbhLJQzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S244230AbhLJQ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244062AbhLJQzj (ORCPT
+        with ESMTP id S244155AbhLJQ4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:55:39 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81AEC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:52:03 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id d9so15964700wrw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 08:52:03 -0800 (PST)
+        Fri, 10 Dec 2021 11:56:18 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103F8C061746;
+        Fri, 10 Dec 2021 08:52:43 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id bf8so14017039oib.6;
+        Fri, 10 Dec 2021 08:52:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=6jkSpMJfNd9r7LQT0uy72Yz4mfeYDUDC0fjOscd0N1k=;
-        b=iGOgj1fbQ/drGb+TwOyMPQ6UCT2JquvNvFSm0fvlxxFEsy3Zokh9fkkH0QsCqGFUkE
-         WUe3IwkI65wAvckFw/q46KHc/inTzRct5e/Xpdq3V4s4jG2DKAyIQlmuV+iBu7bGAbCZ
-         PoBsGd386keBNCL0HDCA4AJTofGVB8hCfRg0LZz9PlEoSl7V9bh8VZohI0Lkm4Uc0J2/
-         23wnEKsVK39s0SZg8sv9aD3r/TgDZ/Pi9Gx27GSTQXnLLBHbhG388vl++Z7jBrxXxcLx
-         SyhIXc28XolaOKfgW51tyOGyOWrrOtZBZpeButdqrviOPYvsBaXK9bpbtFoPl1Nwx5OG
-         Aiqg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=22649vhBq2+EXGoWXGfR5yBZHrxpcXiBe7SMU6QvJ9E=;
+        b=VftFAwBD3J9MksWNJ5Q0i0pQIydLpWe2AWuYf9hpQ/Ka1F7NoQydT0ZsBgvzcnqTFM
+         7eSKfeBCTKGgjyzPFvXkS+1bGmvSjHVgpptuhuF/bIWT5D9/oZoa+UvPzksq41QYQlik
+         AIMg32rj7fr2HUHp+J34ApUAL/Hgtpufq6jvZnFaB4ieYkpMHUyki2KqcLdg6HX12jX0
+         cOV7ZE0a65Q/jG2Pq145sXlYdVdvVW4u8KbUB7S0MHSdLzRo76Pf4lURvrM1qrqecCfy
+         daAlQlCQOa7tON7rXYVKL3q77PzIptp+nfPEqF9Dv5MHqG/yt+FfJg7CAT1ekh9RLi9x
+         nG8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=6jkSpMJfNd9r7LQT0uy72Yz4mfeYDUDC0fjOscd0N1k=;
-        b=nwK/Jrn2DtvvijOwluqPLj2W3lOsJO8K3USHtgoZAqRThO4nX/nMlvNgz62pk1jFv6
-         7GTMV6bV9VEXfS+MBUE9ynzuL2SV3aNYhODxImY5ZlsEQeVXUPuBa5Yz127vP5tnabIJ
-         8Vq0IRzWpkN5bjypYCBzCbKPSxEJd8Pt3NAEzmdD4xG2IbfPVhPsUrDlesCnBWNPX24x
-         U5DXNbuWuQakMoybTUAr9r9ofQCq4q3lZXxBxr8uesWWlLGO37vgmXDqFHV1XtRafhkf
-         U5NKwQtkAz5Te23ya0CRgO/gT12tJBk+GWpTjKC1AmR91XrZF2nTfFNi3chROvTOtmOm
-         IQ9g==
-X-Gm-Message-State: AOAM531BwNoZVbvJHT83hUPsc0AzNXZPypH7C9a3lQgkEHKRrtVxWmAc
-        zm7B0wIKdUqUQV1h7+TDTqv/zA==
-X-Google-Smtp-Source: ABdhPJzl/J6fZ3lGBbjTsxxHPp8t6CqEj8H0Um6sUnxvtWI6peWaKYJiK1uGvPBnhLLDWP5PyUxwLA==
-X-Received: by 2002:a5d:6d88:: with SMTP id l8mr15155530wrs.270.1639155122163;
-        Fri, 10 Dec 2021 08:52:02 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:82f4:6d90:a1e5:21c9? ([2a01:e34:ed2f:f020:82f4:6d90:a1e5:21c9])
-        by smtp.googlemail.com with ESMTPSA id p5sm3316650wrd.13.2021.12.10.08.52.00
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=22649vhBq2+EXGoWXGfR5yBZHrxpcXiBe7SMU6QvJ9E=;
+        b=0BFuakcU8BGOZNrRp6ptFOjTmBuJHk/ZGdvI+LTa+DssKyePcuqS1z8t14G+UEVxg2
+         pMpMLA38hj+DPJ0Z7imuxdJdzOxtO+hFkVgn1DQ8Khsg5vv9TomkVCpdz0R4BcRLfWVu
+         beE/7wYFlLRM3usZE1203QQA0zlLV52LXurVYgF1OhsSdOa2Ox4an0sm41JooorbojZo
+         Km2LGJjbuuz2jGfE5LqJI6pnNcnhMuFXPLY7HZlqyKPJBGRZGdLWbmV3XMTTOmt4Xn1E
+         InBI9T145BalUm0w4tURebk+5EyqMyZAnglmWgQQZmp2abz6qjOZjrZcgE6/qoMe3Vcr
+         skQQ==
+X-Gm-Message-State: AOAM531Y26VwVbyDQWtSfoXUGrJ/zyjgtCgjz4uzb2rtlwJ+Dtolqp6X
+        lCJHN3TPaPfdEmeaAUijr9j+JcK7o9s=
+X-Google-Smtp-Source: ABdhPJxW9Ar0jM0wiz/JsNh5FO3yZcq6iyIKA1cdOfyZnTsUsxNwdyAP2uJove/VQzA+HL9k+sLMbA==
+X-Received: by 2002:a05:6808:699:: with SMTP id k25mr13313595oig.135.1639155162438;
+        Fri, 10 Dec 2021 08:52:42 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id s2sm597106otr.69.2021.12.10.08.52.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 08:52:01 -0800 (PST)
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Marc Zyngier <Marc.Zyngier@arm.com>,
-        Alexey Sheplyakov <asheplyakov@basealt.ru>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "Vadim V . Vlasov" <vadim.vlasov@elpitech.ru>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] timer drivers fixes for v5.16-rc5
-Message-ID: <429b796d-9395-4ca8-81f3-30911f80a9a9@linaro.org>
-Date:   Fri, 10 Dec 2021 17:51:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 10 Dec 2021 08:52:41 -0800 (PST)
+Message-ID: <36bbf0c3-06a9-db35-46f1-320cc502ef75@gmail.com>
+Date:   Fri, 10 Dec 2021 09:52:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [syzbot] KMSAN: uninit-value in fib_get_nhs
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     syzbot <syzbot+d4b9a2851cc3ce998741@syzkaller.appspotmail.com>,
+        davem@davemloft.net, dsahern@kernel.org, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        yoshfuji@linux-ipv6.org
+References: <0000000000005a735005d2bb2dff@google.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <0000000000005a735005d2bb2dff@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/9/21 11:57 AM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    8b936c96768e kmsan: core: remove the accidentally committe..
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1724ebc5b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d4b9a2851cc3ce998741
+> compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1225f875b00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=139513c5b00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+d4b9a2851cc3ce998741@syzkaller.appspotmail.com
+> 
+> =====================================================
+> BUG: KMSAN: uninit-value in fib_get_nhs+0xac4/0x1f80 net/ipv4/fib_semantics.c:708
 
-Hi Thomas,
 
-The following changes since commit 53e87e3cdc155f20c3417b689df8d2ac88d79576:
+Most likely lack of length validation on nla like we have in
+fib_gw_from_via for the other attribute (nlav). Will send a patch.
 
-  timers/nohz: Last resort update jiffies on nohz_full IRQ entry
-(2021-12-02 15:07:22 +0100)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/daniel.lezcano/linux.git
-tags/timers-v5.16-rc4
-
-for you to fetch changes up to 1edb7e74a7d3d64dc4e69e7059b4eea526d19a10:
-
-  clocksource/drivers/arm_arch_timer: Force inlining of
-erratum_set_next_event_generic() (2021-12-10 17:47:00 +0100)
-
-----------------------------------------------------------------
-- Fix build error with clang and some kernel configuration on the
-  arm64 architected timer by inlining the
-  erratum_set_next_event_generic() function (Marc Zyngier)
-
-- Fix probe error on the dw_apb_timer_of driver by fixing the
-  incorrect condition previously introduced (Alexey Sheplyakov)
-
-----------------------------------------------------------------
-Alexey Sheplyakov (1):
-      clocksource/drivers/dw_apb_timer_of: Fix probe failure
-
-Marc Zyngier (1):
-      clocksource/drivers/arm_arch_timer: Force inlining of
-erratum_set_next_event_generic()
-
- drivers/clocksource/arm_arch_timer.c  | 9 +++++++--
- drivers/clocksource/dw_apb_timer_of.c | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

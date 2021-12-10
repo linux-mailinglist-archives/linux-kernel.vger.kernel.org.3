@@ -2,150 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFE3470EE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA119470EE1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345209AbhLJXtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 18:49:32 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:4136 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345189AbhLJXtb (ORCPT
+        id S1345217AbhLJXvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 18:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243667AbhLJXvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 18:49:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639179955; x=1670715955;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9yME3JRsAyo+LsxuqMyQDSwtN+9Xk8ZdysoZA4GjAIA=;
-  b=GJoxBy9kiVUwWdlLWLA/Se2jsV+5i3zSvF2nqv6SMhTXQWIRT1F4pBq8
-   wrqje7U3fFpX13PCvEUc9O5uj+cgHzsXgvJyoo0S0KvDLabAHRtGa86f6
-   fE2+hwyAXdTo33LeVGo6DBVcuv/mrsHOXINZQJHoFXf7Z/wX49zcFPQyb
-   eb27NUk/QuWX/21DqNZtsH5mkPnnuXqCxvh4UvD7l3g2NvjxvENUK0Zy2
-   51ets04obfnVl9GWyoH32xidbgP0wgFPGEbmLZaiMKKcBfZHSPm7UkH62
-   c0E+f+YdiXNE9f6pnjXJDweNTDCpnJKR13/1AbLwxK6Ngs6cnXJkQ9EHB
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,196,1635177600"; 
-   d="scan'208";a="187979385"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Dec 2021 07:45:54 +0800
-IronPort-SDR: 09gwIkakBX+lEysYBNNpo763D5Rj9RaWwh4GccZ2ML/Ku5RaL5wugkwwOGDJV8E2f8SVcjBdOw
- LmL9lxjVXzriXG6Bpv5H5/PdjbtsHxITNyaqyqH5RwCiGN/3g2u65V3RQXiKSmadppZ/v5729j
- nUy5+2mUrxWo/RiWZ9WdTOQ3orVWWLoQScTgRPOI5h1njGAQBHPF0pC0K2Spg/Ifoumc/pva47
- siAafPLhID0zUImiO35SVTn5g1x6XyQFeyd0y49+iOkCjKL3rrTQgjC6jPHjh9zoOyrTjUZagY
- y3GAFMuqyOiyrTmgqX284B7S
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:18:56 -0800
-IronPort-SDR: FpapL9tbRh6Kl1bYz2C8IeZliD2r8nTq9xoxD3xArp0klal296+HijBiyEN0FumOyXWSUyHCLQ
- A9Spgg6FxsACWxN2wHwFT9i7uizEFOIRdEjqGtOLuUOYdCSTRWP1m5oW2awjF5bCcehRaP8aaR
- MqMOub6bu+5iEs0AufW3Dv9WkhvyrFI6bXz1xN0FhuT/2Gk/iR01R5XYrK/ah5MhN5t1ypT792
- /gHhPtpOctK7eEq+oRH1h48oBZpmizwENw61bro6YgZdTe585f8nrxnUow5zPRysWYCeETFDHS
- Tik=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:45:56 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J9nbR1SZDz1RvTh
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 15:45:55 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1639179954; x=1641771955; bh=9yME3JRsAyo+LsxuqMyQDSwtN+9Xk8Zdyso
-        ZA4GjAIA=; b=XIAlJ05M8/qC9zoPznkf7ZUBgJQN5s2AN1bSQylw2fCIwDAYX7Z
-        xnlQNT82qDY7/wod6te0mI7Bs/EPHB6UudNSWU94s8RtagRH8VV5+0/fOTMVOVlk
-        C7XUIvpCzrReM5ba3XFOepRAS/FdL6IhpZ0SI7nkJwU3umlCBPHI9OKFCM4O0Xj2
-        5MSMt0yjnkDlf1VwG3rXiMpqT9m5xl25d0zkv1K2u5VLLmladrwfPAKmvEKncgBK
-        9lPIw8lgX1vewfvv9B8KtKLIGdA5tNx/tAJakMRqWv8OfqlhhH7KecLwO2J6BCDg
-        8O+QEqiM9r6kuDO+IzXpVRZYx/ajyp7sIKA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SeqrIQecpDXS for <linux-kernel@vger.kernel.org>;
-        Fri, 10 Dec 2021 15:45:54 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J9nbP3P1Kz1RtVG;
-        Fri, 10 Dec 2021 15:45:53 -0800 (PST)
-Message-ID: <549c1825-56e6-de9e-e109-77f0d06cfd0f@opensource.wdc.com>
-Date:   Sat, 11 Dec 2021 08:45:51 +0900
+        Fri, 10 Dec 2021 18:51:02 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF37FC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 15:47:26 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id u80so9786377pfc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 15:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gZ3UUEeR3r2CYMV62vys3lIdUhFL/NSBOP1h/K9fB0k=;
+        b=Ye2XQZZxk+QOrSduykDfdBcwrLjg5fqKAtSYEL2r6R1c4UT2lEUt0HOicfrjtPHvCs
+         0LxkugibjPZATfZAQziTov6CPfkOsIqazC/PAlfdrAdRUMrBgH1WKcwhwh3mHk/2z6JU
+         Dm7vkD6LCEpfttd6EpXQGAKzUb3qyJ2qi/RnlQt1QOZJCRvynxsuYOYNUTACFPvaZjxV
+         6ZoStw+XQ02x95ljtEWP/6T9LmH2YAiF4KnYbjJ5g6ShR7lIyqph1/2Ao7LCnOQgJ6QM
+         sXYoeLLxPTvoIKaGrMXFDg/LtBEW0CKcM4B4gItHFmL1a3gttwefhgj9yK8iyFPHNdiJ
+         /UIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gZ3UUEeR3r2CYMV62vys3lIdUhFL/NSBOP1h/K9fB0k=;
+        b=MGJfQH8i0Yp4w+ChdF4d6yCoA35iJV9dqn3R8BswZnTMTHyk0MTKLs+RsEdytkJyH1
+         jTNbF6Y63XEJR4osUMKKO08sXORjRd5j3ohQpyemyF8ec1R17BSsSyT3orcxx+QuiWNM
+         ypUf1kZ017nnvCB7r2Gk5U+D0EJLvjl+lqNKQEfPmmCSjhJBKOBsxZ5FO47NUCHC+kyh
+         9Q9xeC/3Bth7flDxxDMHwxWFoTg0Etm6MAud0gb8jCUItfkEdUEdSyjkIfwAa3VQx6MM
+         Y6z8BENKNjTY9re4Og4/voOVgjtECkpF9S78QlalBFki/10rImfpBgxsqbRjxDW77PmK
+         qEIw==
+X-Gm-Message-State: AOAM530w+blGdk4QYeOkC7cJgaMRiJ+/Fgk00+JE15A/xilGY3e52cRH
+        60IfwI+i9nDvUdR1myWDidY=
+X-Google-Smtp-Source: ABdhPJzaux6lygKeW+lWsSFMZqT7VFZ+JX0aqe1kNwxRlrvcoRsiJoVe6mgQoTzo0GfLPJwuLNk2NQ==
+X-Received: by 2002:a65:6458:: with SMTP id s24mr41894683pgv.271.1639180046261;
+        Fri, 10 Dec 2021 15:47:26 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:749:db5e:6dc8:be24])
+        by smtp.gmail.com with ESMTPSA id j36sm3614396pgi.8.2021.12.10.15.47.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 15:47:25 -0800 (PST)
+Date:   Fri, 10 Dec 2021 15:47:22 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Jessica Yu <jeyu@kernel.org>, Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] module: add in-kernel support for decompressing
+Message-ID: <YbPnCo8ZZ6vrMASe@google.com>
+References: <YbLvDWdyFivlj7pP@google.com>
+ <YbPPHTO3URnz+tFy@bombadil.infradead.org>
+ <YbPg32ceRfwxIgqK@google.com>
+ <YbPkQrg4CRWkESFL@bombadil.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message when
- IRQ can't be retrieved
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbPkQrg4CRWkESFL@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/10 17:59, Sergey Shtylyov wrote:
-> On 12/10/21 1:49 AM, Damien Le Moal wrote:
+On Fri, Dec 10, 2021 at 03:35:30PM -0800, Luis Chamberlain wrote:
+> On Fri, Dec 10, 2021 at 03:21:03PM -0800, Dmitry Torokhov wrote:
+> > On Fri, Dec 10, 2021 at 02:05:17PM -0800, Luis Chamberlain wrote:
+> > > On Thu, Dec 09, 2021 at 10:09:17PM -0800, Dmitry Torokhov wrote:
+> > > > +static ssize_t module_xz_decompress(struct load_info *info,
+> > > > +				    const void *buf, size_t size)
+> > > > +{
+> > > > +	static const u8 signature[] = { 0xfd, '7', 'z', 'X', 'Z', 0 };
+> > > > +	struct xz_dec *xz_dec;
+> > > > +	struct xz_buf xz_buf;
+> > > > +	enum xz_ret xz_ret;
+> > > > +	size_t new_size = 0;
+> > > > +	ssize_t retval;
+> > > > +
+> > > > +	if (size < sizeof(signature) ||
+> > > > +	    memcmp(buf, signature, sizeof(signature))) {
+> > > > +		pr_err("not an xz compressed module\n");
+> > > > +		return -EINVAL;
+> > > > +	}
+> > > > +
+> > > > +	xz_dec = xz_dec_init(XZ_DYNALLOC, (u32)-1);
+> > > > +	if (!xz_dec)
+> > > > +		return -ENOMEM;
+> > > > +
+> > > > +	xz_buf.in_size = size;
+> > > > +	xz_buf.in = buf;
+> > > > +	xz_buf.in_pos = 0;
+> > > > +
+> > > > +	do {
+> > > > +		struct page *page = module_get_next_page(info);
+> > > > +		if (!page) {
+> > > > +			retval = -ENOMEM;
+> > > > +			goto out;
+> > > > +		}
+> > > 
+> > > This looks very similar to fw_decompress_xz_pages() on
+> > > drivers/base/firmware_loader/main.c
+> > > 
+> > > Is there any sharing possible with decompression between the two?
+> > 
+> > Ideally we'd get proper crypto API allowing this (page by page)
+> > decompression and then we can switch to it in both places and stop
+> > calling into particular algorithms directly. Unfortunately this is not
+> > something I can sign up for at this time.
+> > 
+> > As it is I am not sure if it worth to try to split out XZ code and share
+> > it between module and firmware loader.
 > 
->>> platform_get_irq() will print a message when it fails.
->>> No need to repeat this.
->>>
->>> While at it, drop redundant check for 0 as platform_get_irq() spills
->>> out a big WARN() in such case.
->>
->> The reason you should be able to remove the "if (!irq)" test is that
->> platform_get_irq() never returns 0. At least, that is what the function kdoc
->> says. But looking at platform_get_irq_optional(), which is called by
->> platform_get_irq(), the out label is:
->>
->> 	WARN(ret == 0, "0 is an invalid IRQ number\n");
->> 	return ret;
->>
->> So 0 will be returned as-is. That is rather weird. That should be fixed to
->> return -ENXIO:
->>
->> 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
->> 		return -ENXIO;
->> 	return ret;
+> Got it, makes sense.
 > 
->    My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
-> but returns -EINVAL instead.
+> What type of tests have you implemented for this ? kmod has quite a bit
+> of tests. Can you add some for this?
 
-Thinking more about this, shouldn't this change go into platform_get_irq()
-instead of platform_get_irq_optional() ?
+OK, will do.
 
-The way I see it, I think that the intended behavior for
-platform_get_irq_optional() is:
-1) If have IRQ, return it, always > 0
-2) If no IRQ, return 0
-3) If error, return < 0
-no ?
-
-And for platform_get_irq(), case (2) becomes an error.
-Is this the intended semantic ?
-I am really not sure here as the functions kdoc description and the code do not
-match. Which one is correct ?
-
-> 
->> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
-> 
->    Of course it isn't...
-> 
->>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> [...]
-> 
-> MBR, Sergey
-
+Thanks.
 
 -- 
-Damien Le Moal
-Western Digital Research
+Dmitry

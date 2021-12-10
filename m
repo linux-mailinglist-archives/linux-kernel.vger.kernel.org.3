@@ -2,176 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8674703ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C3E4703F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236745AbhLJPgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:36:31 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44242 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230230AbhLJPga (ORCPT
+        id S242888AbhLJPhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242885AbhLJPg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:36:30 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BAESlDF028803;
-        Fri, 10 Dec 2021 15:32:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=QXkAoGRUSqajWh2lh1ecNPfcB8fABmXkCu9QlMXkY14=;
- b=AFZs/JECV6KAXBM0NNeXsDeri8EOsIyJR0kd8U1reYsllbAY5qmjCxJJH3ksdU9e7pTw
- uskOqWvwaAZE/3Ue0VPQ6gmLHQC7yCqBNUmdtm/Uw7Nj4omUaFA9DzY3VdcSXXXnwMBw
- rv2K/vpMwmTorjeFY88HSc1PgXlF9vWzdGupdS5QdykUCM2ZF1esDH8cBaYfp0v2nLTv
- pReQ45NhW1n4YEuBOTZRGN8V52TAEYnKPu2n8pUeYjjylivvpC+ckq22W+12YHMTP1Uc
- hBCvbUbFUiyGo0sSBCiq6oTksBRpvevPwc8PkeZcFyIvjTI7W4Eo3SgrtOHXdErKOrHB 6g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv8pq9cfx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 15:32:39 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BAFNpjT021877;
-        Fri, 10 Dec 2021 15:32:38 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv8pq9cfd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 15:32:38 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAFI4BU006492;
-        Fri, 10 Dec 2021 15:32:37 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma01dal.us.ibm.com with ESMTP id 3cqyyeegft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 15:32:37 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAFWZVK46334348
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 15:32:35 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B2F8E28060;
-        Fri, 10 Dec 2021 15:32:35 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6556E28058;
-        Fri, 10 Dec 2021 15:32:35 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 15:32:35 +0000 (GMT)
-Message-ID: <9806a2ba-8b45-3bb8-22c5-797ab2affaac@linux.ibm.com>
-Date:   Fri, 10 Dec 2021 10:32:35 -0500
+        Fri, 10 Dec 2021 10:36:57 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9062BC0617A2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:33:22 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso9738138pji.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:33:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=+Esq0sZPdw3CUxbw90CaKjttg63CC/0FtTnNLHVgmwI=;
+        b=Xp2aY5/mUAdqIk01AyFEyxgsVqFLG+FbOiR7C9BxjePy79yFkIuwRNLaeHlSuzJITw
+         MZ+zJ0V+kJE24ZF2MKGlQUv4YMlLvcCxcm4M0q5NNCMHXLDOel1Xr+nqXqJm/NMZpv2E
+         m8wvlPxzaduZyLQso4P2xi2nTJHiRZ9UsuHzgRntHV+w5QxRS1Y2pyiKCVKEA2LwdqPB
+         IdUD73haKh+vGZE5/3bo9GUW3u2MuRIB99j4CK0wZCW8nVxAfvM3WC1lT7WtZwh+Bka6
+         UWCjbCntvub27qGRhZjer9XfedW4QJUn7jdK+dGGf6Qar8+vOL03yaR6YvmPWyy5m97r
+         XxKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+Esq0sZPdw3CUxbw90CaKjttg63CC/0FtTnNLHVgmwI=;
+        b=rbSNMOIq8ebiIsuLHS1F9zhZlI5d1XLoQZ/eq4lBLzpllPaOrjKFJnfML9WgCI+JDM
+         ZVDtMdzPRGNZ0b8gbj9XW11rCgAEM6XilH+Uwl9dpJO1fT0yoCHpDpG72nCpIZQhPgJW
+         PashZ1OYoWhZK8FkoHMtD07qxxqEo+JO3NZpIupOrLzya/HLV6SFPAmrn38OYNm+uvfy
+         I8aDTkfs9mjjhemNvVjoF7UaSWvuWZfLvAJlKLkk68o+U39hQxsFXYHNqgNzno3PHgrS
+         KF1/SD4V6b0vX1RTPzdCNG/iEHiHFN+gyYDQaddYlrgTpXkjA6KUWRd4bZaNQ1vSoPbk
+         CN8Q==
+X-Gm-Message-State: AOAM531X7CG2m1YYjcqpZROiASfHFiLjxegAxA7gA6aUSdJGC23VcfJD
+        yipX2tK8P7mXQhH/lSiYciy2Og==
+X-Google-Smtp-Source: ABdhPJx5r6aZDrgRAjs5N8RFRVvklLrmHTgFw9ZGeuUK0e3eo9H/ga+H5kpiwNSB0MZFyWYriQEOFw==
+X-Received: by 2002:a17:90b:1d81:: with SMTP id pf1mr25132213pjb.134.1639150401989;
+        Fri, 10 Dec 2021 07:33:21 -0800 (PST)
+Received: from [172.20.4.26] ([66.185.175.30])
+        by smtp.gmail.com with ESMTPSA id fw21sm12546666pjb.25.2021.12.10.07.33.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 07:33:21 -0800 (PST)
+Subject: Re: [syzbot] KASAN: use-after-free Write in io_queue_worker_create
+To:     syzbot <syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <0000000000003cd27305d2c8a028@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <8544854b-226d-befd-bd91-5af182c2b03d@kernel.dk>
+Date:   Fri, 10 Dec 2021 08:33:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
+In-Reply-To: <0000000000003cd27305d2c8a028@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, jejb@linux.ibm.com,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-16-stefanb@linux.ibm.com>
- <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
- <20211209143749.wk4agkynfqdzftbl@wittgenstein>
- <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
- <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
- <20211210114934.tacjnwryihrsx6ln@wittgenstein>
- <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
- <6de8d349-74f8-7be4-3854-5c4ac72860ad@linux.ibm.com>
- <d8a6a6827da17825c1aa011256b96d195b1ebf13.camel@linux.ibm.com>
- <66b377f6-40b4-77da-c02b-2650fa72d0b4@linux.ibm.com>
- <d6011a5a40c3c304f386a328385836ba9838baf9.camel@linux.ibm.com>
- <b8f3fe8de8788da92c3822912c11404a46531ac2.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <b8f3fe8de8788da92c3822912c11404a46531ac2.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ruUhLg4XjurIuQ6uHu_8smb255bCF1G0
-X-Proofpoint-ORIG-GUID: i_DHK2dEWAuWGRHiD4vx6NeSNhlyuRjB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_05,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- spamscore=0 suspectscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999
- bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112100088
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/10/21 4:00 AM, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> INFO: task hung in io_wq_put_and_exit
+> 
+> INFO: task syz-executor.2:8594 blocked for more than 143 seconds.
+>       Not tainted 5.16.0-rc1-syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz-executor.2  state:D stack:26928 pid: 8594 ppid:  3894 flags:0x00024004
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:4972 [inline]
+>  __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
+>  schedule+0xd2/0x260 kernel/sched/core.c:6326
+>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1857
+>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>  __wait_for_common kernel/sched/completion.c:106 [inline]
+>  wait_for_common kernel/sched/completion.c:117 [inline]
+>  wait_for_completion+0x174/0x270 kernel/sched/completion.c:138
+>  io_wq_exit_workers fs/io-wq.c:1222 [inline]
+>  io_wq_put_and_exit+0x33a/0xb70 fs/io-wq.c:1257
+>  io_uring_clean_tctx fs/io_uring.c:9803 [inline]
+>  io_uring_cancel_generic+0x622/0x695 fs/io_uring.c:9886
+>  io_uring_files_cancel include/linux/io_uring.h:16 [inline]
+>  do_exit+0x60c/0x2b40 kernel/exit.c:787
+>  do_group_exit+0x125/0x310 kernel/exit.c:929
+>  get_signal+0x47d/0x2220 kernel/signal.c:2830
+>  arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+>  handle_signal_work kernel/entry/common.c:148 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+>  exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+>  syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+>  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7fe940cbfb49
+> RSP: 002b:00007fe940435218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+> RAX: fffffffffffffe00 RBX: 00007fe940dd2f68 RCX: 00007fe940cbfb49
+> RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fe940dd2f68
+> RBP: 00007fe940dd2f60 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe940dd2f6c
+> R13: 00007ffc1b1af90f R14: 00007fe940435300 R15: 0000000000022000
+>  </TASK>
 
-On 12/10/21 10:26, Mimi Zohar wrote:
-> On Fri, 2021-12-10 at 09:26 -0500, James Bottomley wrote:
->> On Fri, 2021-12-10 at 09:17 -0500, Stefan Berger wrote:
->>> On 12/10/21 08:02, Mimi Zohar wrote:
->>>> On Fri, 2021-12-10 at 07:40 -0500, Stefan Berger wrote:
->>>>> On 12/10/21 07:09, Mimi Zohar wrote:
->>>>>> On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
->>>>>>>> There's still the problem that if you write the policy,
->>>>>>>> making the file disappear then unmount and remount
->>>>>>>> securityfs it will come back.  My guess for fixing this is
->>>>>>>> that we only stash the policy file reference,
->>>>>>>> create it if NULL but then set the pointer to PTR_ERR(-
->>>>>>>> EINVAL) or something and refuse to create it for that
->>>>>>>> value.
->>>>>>> Some sort of indicator that gets stashed in struct ima_ns
->>>>>>> that the file does not get recreated on consecutive mounts.
->>>>>>> That shouldn't be hard to fix.
->>>>>> The policy file disappearing is for backwards compatibility,
->>>>>> prior to being able to extend the custom policy.  For embedded
->>>>>> usecases, allowing the policy to be written exactly once might
->>>>>> makes sense.  Do we really want/need to continue to support
->>>>>> removing the policy in namespaces?
->>>>> I don't have an answer but should the behavior for the same
->>>>> #define in this case be different for host and namespaces? Or
->>>>> should we just 'select IMA_WRITE_POLICY and IMA_READ_POLICY' when
->>>>> IMA_NS is selected?
->>>> The latter option sounds good.  Being able to analyze the namespace
->>>> policy is really important.
->>> Ok, I will adjust the Kconfig for this then. This then warrants the
->>> question whether to move the dentry into the ima_namespace. The
->>> current code looks like this.
->>>
->>> #if !defined(CONFIG_IMA_WRITE_POLICY) &&
->>> !defined(CONFIG_IMA_READ_POLICY)
->>>           securityfs_remove(ns->policy_dentry);
->>>           ns->policy_dentry = NULL;
->>>           ns->policy_dentry_removed = true;
->>> #elif defined(CONFIG_IMA_WRITE_POLICY)
->>>
->>> With IMA_NS selecting IMA_WRITE_POLICY and IMA_READ_POLICY the above
->>> wouldn't be necessary anymore but I find it 'cleaner' to still have
->>> the dentry isolated rather than it being a global static as it was
->>> before...
->> This is really, really why you don't want the semantics inside the
->> namespace to differ from those outside, because it creates confusion
->> for the people reading the code, especially with magically forced
->> config options like this.  I'd strongly suggest you either keep the
->> semantic in the namespace or eliminate it entirely.
->>
->> If you really, really have to make the namespace behave differently,
->> then use global variables and put a big comment on that code saying it
->> can never be reached once CONFIG_IMA_NS is enabled.
-> The problem seems to be with removing the securityfs policy file.
-> Instead of removing it, just make it inacessible for the "if
-> !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)"
-> case.
+#syz test git://git.kernel.dk/linux-block io_uring-5.16
 
-So we would then leave it up to the one building the kernel to select 
-the proper compile time options (suggested ones being IMA_WRITE_POLICY 
-and IMA_READ_POLICY being enabled?) and behavior of host and IMA 
-namespace is then the same per those options? Removing the file didn't 
-seem the problem to me but more like whether the host should ever behave 
-differently from the namespace.
+-- 
+Jens Axboe
 
-    Stefan
-
->
-> thanks,
->
-> Mimi
->

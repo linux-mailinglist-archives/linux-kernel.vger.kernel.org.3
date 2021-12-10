@@ -2,69 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9296D470CCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E01470CCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344583AbhLJWIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 17:08:48 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:38897 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239516AbhLJWIr (ORCPT
+        id S1344585AbhLJWIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 17:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344573AbhLJWIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 17:08:47 -0500
-Received: by mail-ot1-f45.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso11029473ota.5;
-        Fri, 10 Dec 2021 14:05:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2dMy2ccSXUiOxzp17oR0X17bV5Nb5Y8Jh1nQyTboayI=;
-        b=tjT/2XmO87yqQLY9Flh0cGaSpPvG2FUe/DzL7pdKToTeNe5R/84ejc/aiFNBFJPYxj
-         bj58mNgMyAGSYUciG0VA744Rx/tQNj2JUSE7TSD+l2/gQ3dAi5Xkz+V2QtUNMVGMBJEi
-         bqRG+Xk6HpH7FzXqihDsKTVzO8XkwGrSRlCtrH6YcxxMfhAF8U3dol0wdxNon0MfQatl
-         UCoxhVkqBB6No/rxxldtHzNspOnvVVB/t+DG1n2iMH76erJNpkVF128EQcdYLo+U0CN+
-         8YFPl1GK/4OQjrsYmmggP8WQMdgNvAFwqVIpH3WeX20CHIprj1OoSFEViahW+TrkR1EV
-         lBEA==
-X-Gm-Message-State: AOAM530GFwG/DT23V7gJj2F6u6WfRvjZVLZYuOak4nsyh/H3o2F7o5ki
-        N1c3RE890YtUcN+sPkcKyw==
-X-Google-Smtp-Source: ABdhPJw6EI08juHFtgZ2csESYGanxWcDqf3j87/bCR7OcZ5rHj4ctMPqpY5EOZaNwtLTfJAWzoib9g==
-X-Received: by 2002:a9d:2085:: with SMTP id x5mr13353687ota.228.1639173911869;
-        Fri, 10 Dec 2021 14:05:11 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k1sm722390otj.61.2021.12.10.14.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 14:05:11 -0800 (PST)
-Received: (nullmailer pid 2009158 invoked by uid 1000);
-        Fri, 10 Dec 2021 22:05:10 -0000
-Date:   Fri, 10 Dec 2021 16:05:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     p.zabel@pengutronix.de, robh+dt@kernel.org,
-        kever.yang@rock-chips.com, heiko@sntech.de,
-        yifeng.zhao@rock-chips.com, devicetree@vger.kernel.org,
-        kishon@ti.com, linux-kernel@vger.kernel.org, vkoul@kernel.org,
-        linux-rockchip@lists.infradead.org, cl@rock-chips.com,
-        linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org
-Subject: Re: [RFC PATCH v4 1/4] dt-bindings: mfd: syscon: add naneng combo
- phy register compatible
-Message-ID: <YbPPFkWDByS3jmEM@robh.at.kernel.org>
-References: <20211208185449.16763-1-jbx6244@gmail.com>
- <20211208185449.16763-2-jbx6244@gmail.com>
+        Fri, 10 Dec 2021 17:08:54 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7CCC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 14:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hy+SQdosn84mdM2jPMgG1/WVzgxfL3QTjKyO5cTZVWA=; b=pJtMmYbRn/x90/bqZIlJyzaYJ7
+        oDWT+hoGrQ0zPGEPDXY0wwejani1+ytlJrUR0kCV8K8lWHGVLrEq+QBi3jiZwrKfWPncvg9Bjy2jQ
+        2F2dOx3hP2eHqjVMoJ+d9HyEOigBUjVnZREpk8RIC0fA6ln6IHMZsIkbWxSzXCmByZhW7EdTnXbPE
+        BVnTOWlYoI1cC9FeIxtboFOHAaWECAFDgH6JbPklguTIjbH8xQECglmM1gYTx/z2ISFRZA+PLZXEq
+        YDJk1QRFxG5SD9CXZUufXZfIfbh84IFLhYWbi5+9XImxS+pohBEdJhBIaTO6B8lQPaqSW/sYdiPvR
+        wbMXVS0g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvo0z-003vF0-6g; Fri, 10 Dec 2021 22:05:17 +0000
+Date:   Fri, 10 Dec 2021 14:05:17 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jessica Yu <jeyu@kernel.org>, Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] module: add in-kernel support for decompressing
+Message-ID: <YbPPHTO3URnz+tFy@bombadil.infradead.org>
+References: <YbLvDWdyFivlj7pP@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208185449.16763-2-jbx6244@gmail.com>
+In-Reply-To: <YbLvDWdyFivlj7pP@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Dec 2021 19:54:46 +0100, Johan Jonker wrote:
-> Add naneng combo phy register compatible.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+On Thu, Dec 09, 2021 at 10:09:17PM -0800, Dmitry Torokhov wrote:
+> +static ssize_t module_xz_decompress(struct load_info *info,
+> +				    const void *buf, size_t size)
+> +{
+> +	static const u8 signature[] = { 0xfd, '7', 'z', 'X', 'Z', 0 };
+> +	struct xz_dec *xz_dec;
+> +	struct xz_buf xz_buf;
+> +	enum xz_ret xz_ret;
+> +	size_t new_size = 0;
+> +	ssize_t retval;
+> +
+> +	if (size < sizeof(signature) ||
+> +	    memcmp(buf, signature, sizeof(signature))) {
+> +		pr_err("not an xz compressed module\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	xz_dec = xz_dec_init(XZ_DYNALLOC, (u32)-1);
+> +	if (!xz_dec)
+> +		return -ENOMEM;
+> +
+> +	xz_buf.in_size = size;
+> +	xz_buf.in = buf;
+> +	xz_buf.in_pos = 0;
+> +
+> +	do {
+> +		struct page *page = module_get_next_page(info);
+> +		if (!page) {
+> +			retval = -ENOMEM;
+> +			goto out;
+> +		}
 
-Acked-by: Rob Herring <robh@kernel.org>
+This looks very similar to fw_decompress_xz_pages() on
+drivers/base/firmware_loader/main.c
+
+Is there any sharing possible with decompression between the two?
+
+  Luis

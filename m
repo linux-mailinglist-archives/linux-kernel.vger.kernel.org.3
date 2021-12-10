@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 900E446FA84
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 06:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6555846FA88
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 06:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234605AbhLJF6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 00:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbhLJF6B (ORCPT
+        id S236837AbhLJGAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 01:00:51 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:33840 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232524AbhLJGAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 00:58:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939EDC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 21:54:26 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1mvYrQ-0003Bq-Le; Fri, 10 Dec 2021 06:54:24 +0100
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH] drivers/i2c/busses/i2c-imx.c: Use with resource
- management to register interrupts
-To:     lizhe <sensor1010@163.com>, linux@rempel-privat.de,
-        kernel@pengutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20211210025701.7316-1-sensor1010@163.com>
-Message-ID: <0e71319e-226f-286a-cfd9-b6b94ffba2d8@pengutronix.de>
-Date:   Fri, 10 Dec 2021 06:54:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 10 Dec 2021 01:00:51 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V-8.hYj_1639115834;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V-8.hYj_1639115834)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 10 Dec 2021 13:57:14 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     john.johansen@canonical.com
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] lsm: Fix kernel-doc
+Date:   Fri, 10 Dec 2021 13:57:12 +0800
+Message-Id: <20211210055712.16949-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-In-Reply-To: <20211210025701.7316-1-sensor1010@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello lizhe,
+Fix function name in lsm.c kernel-doc comment
+to remove some warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
 
-On 10.12.21 03:57, lizhe wrote:
-> In the probe function, used devm_request_threaded_irq instead of
-> request_threaded_irq, make full use of the resource management
-> function provided by the kernel
+security/apparmor/lsm.c:819: warning: expecting prototype for
+apparmor_clone_security(). Prototype was for
+apparmor_sk_clone_security() instead
+security/apparmor/lsm.c:923: warning: expecting prototype for
+apparmor_socket_list(). Prototype was for apparmor_socket_listen()
+instead
+security/apparmor/lsm.c:1028: warning: expecting prototype for
+apparmor_getsockopt(). Prototype was for apparmor_socket_getsockopt()
+instead
+security/apparmor/lsm.c:1038: warning: expecting prototype for
+apparmor_setsockopt(). Prototype was for apparmor_socket_setsockopt()
+instead
+ecurity/apparmor/lsm.c:1061: warning: expecting prototype for
+apparmor_socket_sock_recv_skb(). Prototype was for
+apparmor_socket_sock_rcv_skb() instead
 
-See e50e4f0b85be ("i2c: imx: Fix external abort on interrupt in exit paths")
-for why this isn't a safe thing to do here. Given that this is the third time,
-I think, this was suggested, you may want to instead patch in a comment
-explaining why we _don't_ use devm_request_threaded_irq here..
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ security/apparmor/lsm.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Cheers,
-Ahmad
-
-> 
-> Signed-off-by: lizhe <sensor1010@163.com>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 3576b63a6c03..3e99827b2720 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1426,7 +1426,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  		goto rpm_disable;
->  
->  	/* Request IRQ */
-> -	ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
-> +	ret = devm_request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
->  				   pdev->name, i2c_imx);
->  	if (ret) {
->  		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
-> @@ -1472,7 +1472,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  
->  clk_notifier_unregister:
->  	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
-> -	free_irq(irq, i2c_imx);
->  rpm_disable:
->  	pm_runtime_put_noidle(&pdev->dev);
->  	pm_runtime_disable(&pdev->dev);
-> 
-
-
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index 4f0eecb67dde..ce7d96627810 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -812,7 +812,7 @@ static void apparmor_sk_free_security(struct sock *sk)
+ }
+ 
+ /**
+- * apparmor_clone_security - clone the sk_security field
++ * apparmor_sk_clone_security - clone the sk_security field
+  */
+ static void apparmor_sk_clone_security(const struct sock *sk,
+ 				       struct sock *newsk)
+@@ -917,7 +917,7 @@ static int apparmor_socket_connect(struct socket *sock,
+ }
+ 
+ /**
+- * apparmor_socket_list - check perms before allowing listen
++ * apparmor_socket_listen - check perms before allowing listen
+  */
+ static int apparmor_socket_listen(struct socket *sock, int backlog)
+ {
+@@ -1021,7 +1021,7 @@ static int aa_sock_opt_perm(const char *op, u32 request, struct socket *sock,
+ }
+ 
+ /**
+- * apparmor_getsockopt - check perms before getting socket options
++ * apparmor_socket_getsockopt - check perms before getting socket options
+  */
+ static int apparmor_socket_getsockopt(struct socket *sock, int level,
+ 				      int optname)
+@@ -1031,7 +1031,7 @@ static int apparmor_socket_getsockopt(struct socket *sock, int level,
+ }
+ 
+ /**
+- * apparmor_setsockopt - check perms before setting socket options
++ * apparmor_socket_setsockopt - check perms before setting socket options
+  */
+ static int apparmor_socket_setsockopt(struct socket *sock, int level,
+ 				      int optname)
+@@ -1050,7 +1050,7 @@ static int apparmor_socket_shutdown(struct socket *sock, int how)
+ 
+ #ifdef CONFIG_NETWORK_SECMARK
+ /**
+- * apparmor_socket_sock_recv_skb - check perms before associating skb to sk
++ * apparmor_socket_sock_rcv_skb - check perms before associating skb to sk
+  *
+  * Note: can not sleep may be called with locks held
+  *
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.20.1.7.g153144c
+

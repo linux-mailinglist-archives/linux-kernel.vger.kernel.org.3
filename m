@@ -2,229 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D7C46F805
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 01:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283E546F818
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 01:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234874AbhLJA34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 19:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S234921AbhLJAd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 19:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234849AbhLJA3y (ORCPT
+        with ESMTP id S234904AbhLJAd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 19:29:54 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BC8C061746;
-        Thu,  9 Dec 2021 16:26:20 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639095977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oyRD+ut1wwQO4SYEZeVrK3aZY2EypBixx+iW/lkFS4g=;
-        b=SGuP3jiErQ98J7HDSGUIX8rDX9888+GB8LHUDw6h/Wvhfnk24FU7UD854H8TZCZlitOIbC
-        /VBG/amubqvGbBLOctbw7FifJsbxNgdG2N1F81Vsj1c154aE0hfzDNsot32T25tRAMi7KS
-        yzu4Uwp/Ip0ebzzC1aIGSh/bVxKieeoyfi4WcHYUkyhNjIf2WRUz7csxz8NdfWgfDQv5AF
-        GxureoGLp7/dRPpAVSOuy3UmxmpBOn+KH/qZED3rba+mBhJSs5fzzOL1NTL4tGsbYkt/d7
-        LIa1xm23tREl7w8hubxNLwtDgIAX/nr8NAQ/SXDXAJ0EfZI8KvhQ+lzIa6qwdw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639095977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oyRD+ut1wwQO4SYEZeVrK3aZY2EypBixx+iW/lkFS4g=;
-        b=7AvNtbOokh8VZBBRmmnzW2IZUOSlz4rYyL79qDJjxujomOTaW52xfFBu37qbnWJytFlDWO
-        CqmJc/9fUfXi95BQ==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
+        Thu, 9 Dec 2021 19:33:58 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EF3C061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 16:30:23 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id iq11so5669243pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 16:30:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rdvJHl0i5fz0K7jqw1DWezy/+uZJvXUTbxjwuYlGzxY=;
+        b=Bv5M2obfVTHY9fhNlOO+2TNvG7pBRtHMBlsY+0Hf04M3OiAxOnTdSQx+Woev4PX1pJ
+         tnpOYNolht9TygsbqizHJjmjSzqf8YrHPGPpJiEPqozEhTB//r5yOEageeaVYLb5c9zP
+         vINoeuM+pIuW90zRmTEX3I2uzBZUb2YaoXJ71tWACoLOOL+ps5Yti1HqQigrzD2818Kg
+         wvdKAArcmxrFK9mUINR9iEyQojd6fwJuMiANFUBMobSebuTWkW1DY/Pk+y5+4pczRfzi
+         dEL/NUsSkZQiLBhdW5kc9qXE+RfOd9GHBfU4loc1arzjJOwwrGCXjNROwsBqq8Mqk/9q
+         iVcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=rdvJHl0i5fz0K7jqw1DWezy/+uZJvXUTbxjwuYlGzxY=;
+        b=Rjft5GrQA07G/Iry9Pc9FitxTcOrxcfOMUEzfeZFI85PgYyTWxjxDmt5n1zVwlFSGA
+         4gIOneDR1KJbrEvt+W8ALVdU+jnrFVXGpcBxfQ03VdZ4aO4WtF8ES7EBDtVC8GZHPZ+0
+         EcQBwLOst3hCBdozMiBvT0UAtaRta9hJZklpfQa5wBAZWVg44H48ivyvntPrasWwYl1w
+         FgsJ6XvghMns/4e4W7dIYrf1wtDBan+UBC7hg2umWcIWyRab8IhzIb4SEhyir1p2ZN/t
+         XMM/mu4M2Ykdttq55zjKmx1RWNeDagGrJ9tuA2mRspVlkvfmWd2B/srEC9VImza4DZhV
+         avHQ==
+X-Gm-Message-State: AOAM531fZpBYTj1xHi7q3ijyVCRMFIQpS42jXInaDTtoRVPwT5bmbkdB
+        2gu3Dwzgrly+H+bD23xp70RHHDcjaSk=
+X-Google-Smtp-Source: ABdhPJxltfyhSOR+7pzxI138l0a84xLSD7ieiPi2r6U8CTmbE48TU5YjOfNdpK1pxQQ1M5tFtJvQPw==
+X-Received: by 2002:a17:902:b615:b0:143:bbf0:aad0 with SMTP id b21-20020a170902b61500b00143bbf0aad0mr71880019pls.12.1639096223184;
+        Thu, 09 Dec 2021 16:30:23 -0800 (PST)
+Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:85e0:23ee:fbe7:282b])
+        by smtp.gmail.com with ESMTPSA id i10sm764029pjd.3.2021.12.09.16.30.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 16:30:22 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-mm <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Dey, Megha" <megha.dey@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-In-Reply-To: <8735n1zaz3.ffs@tglx>
-References: <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com>
- <87pmqg88xq.ffs@tglx> <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com>
- <87k0go8432.ffs@tglx> <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com>
- <878rx480fk.ffs@tglx>
- <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
- <87sfv2yy19.ffs@tglx> <20211209162129.GS6385@nvidia.com>
- <878rwtzfh1.ffs@tglx> <20211209205835.GZ6385@nvidia.com>
- <8735n1zaz3.ffs@tglx>
-Date:   Fri, 10 Dec 2021 01:26:16 +0100
-Message-ID: <87sfv1xq3b.ffs@tglx>
+        Suren Baghdasaryan <surenb@google.com>,
+        John Dias <joaodias@google.com>,
+        Minchan Kim <minchan@kernel.org>
+Subject: [PATCH] mm/madvise: pageout under plugging
+Date:   Thu,  9 Dec 2021 16:30:19 -0800
+Message-Id: <20211210003019.1481269-1-minchan@kernel.org>
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09 2021 at 23:09, Thomas Gleixner wrote:
-> On Thu, Dec 09 2021 at 16:58, Jason Gunthorpe wrote:
->> Okay, I think I get it. Would be nice to have someone from intel
->> familiar with the vIOMMU protocols and qemu code remark what the
->> hypervisor side can look like.
->>
->> There is a bit more work here, we'd have to change VFIO to somehow
->> entirely disconnect the kernel IRQ logic from the MSI table and
->> directly pass control of it to the guest after the hypervisor IOMMU IR
->> secures it. ie directly mmap the msi-x table into the guest
->
-> That makes everything consistent and a clear cut on all levels, right?
+Likewise shrink_lruvec[1], madvise_pageout could get the benefit
+from per-task block plug.
 
-Let me give a bit more rationale here, why I think this is the right
-thing to do. There are several problems with IMS both on the host and on
-the guest side:
+[1] 3da367c3e5fc, vmscan: add block plug for page reclaim
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+---
+ mm/vmscan.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-  1) Contrary to MSI/MSI-X the address/data pair is not completely
-     managed by the core. It's handed off to driver writers in the
-     hope they get it right.
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index fb9584641ac7..cf11113f6adb 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2556,6 +2556,7 @@ unsigned long reclaim_pages(struct list_head *page_list)
+ 	struct reclaim_stat dummy_stat;
+ 	struct page *page;
+ 	unsigned int noreclaim_flag;
++	struct blk_plug plug;
+ 	struct scan_control sc = {
+ 		.gfp_mask = GFP_KERNEL,
+ 		.may_writepage = 1,
+@@ -2564,6 +2565,7 @@ unsigned long reclaim_pages(struct list_head *page_list)
+ 		.no_demotion = 1,
+ 	};
+ 
++	blk_start_plug(&plug);
+ 	noreclaim_flag = memalloc_noreclaim_save();
+ 
+ 	while (!list_empty(page_list)) {
+@@ -2603,6 +2605,8 @@ unsigned long reclaim_pages(struct list_head *page_list)
+ 	}
+ 
+ 	memalloc_noreclaim_restore(noreclaim_flag);
++	blk_finish_plug(&plug);
++
+ 
+ 	return nr_reclaimed;
+ }
+-- 
+2.34.1.173.g76aa8bc2d0-goog
 
-  2) Without interrupt remapping there is a fundamental issue on x86
-     for the affinity setting case, as there is no guarantee that
-     the magic protocol which we came up with (see msi_set_affinity()
-     in the x86 code) is correctly implemented at the driver level or
-     that the update is truly atomic so that the problem does not
-     arise. My interrest in chasing these things is exactly zero.
-
-     With interrupt remapping the affinity change happens at the IRTE
-     level and not at the device level. It's a one time setup for the
-     device.
-
-     Just for the record:
-
-     The ATH11 thing does not have that problem by pure luck because
-     multi-vector MSI is not supported on X86 unless interrupt
-     remapping is enabled. 
-
-     The switchtec NTB thing will fall apart w/o remapping AFAICT.
-
-  3) With remapping the message for the device is constructed at
-     allocation time. It does not change after that because the affinity
-     change happens at the remapping level, which eliminates #2 above.
-
-     That has another advantage for IMS because it does not require any
-     synchronization with the queue or whatever is involved. The next
-     interrupt after the change at the remapping level ends up on the
-     new target.
-
-  4) For the guest side we agreed that we need an hypercall because the
-     host can't trap the write to the MSI[-X] entry anymore.
-
-     Aside of the fact that this creates a special case for IMS which is
-     undesirable in my opinion, it's not really obvious where the
-     hypercall should be placed to work for all scenarios so that it can
-     also solve the existing issue of silent failures.
-
-  5) It's not possible for the kernel to reliably detect whether it is
-     running on bare metal or not. Yes we talked about heuristics, but
-     that's something I really want to avoid.
-
-When looking at the above I came to the conclusion that the consistent
-way is to make IMS depend on IR both on the host and the guest as this
-solves all of the above in one go.
-
-How would that work? With IR the irqdomain hierarchy looks like this:
-
-                   |--IO/APIC
-                   |--MSI
-    vector -- IR --|--MIX-X
-                   |--IMS
-
-There are several context where this matters:
-
-  1) Allocation of an interrupt, e.g. pci_alloc_irq_vectors().
-
-  2) Activation of an interrupt which happens during allocation and/or
-     at request_irq() time
-
-  3) Interrupt affinity setting
-
-#1 Allocation
-
-   That allocates an IRTE, which can fail
-
-#2 Activation
-
-   That's the step where actually a CPU vector is allocated, where the
-   IRTE is updated and where the device message is composed to target
-   the IRTE.
-
-   On X86 activation is happening twice:
-
-   1) During allocation it allocates a special CPU vector which is
-      handed out to all allocated interrupts. That's called reservation
-      mode. This was introduced to prevent vector exhaustion for two
-      cases:
-      
-       - Devices allocating tons of MSI-X vectors without using
-         them. That obviously needs to be fixed at the device driver
-         level, but due to the fact that post probe() allocation is not
-         supported, that's not always possible
-
-       - CPU hotunplug
-
-         All vectors targeting the outgoing CPU need to be migrated to a
-         new target CPU, which can result in exhaustion of the vector
-         space.
-
-         Reservation mode avoids that because it just uses a unique
-         vector for all interrupts which are allocated but not
-         requested.
-
-    2) On request_irq()
-
-       As the vector assigned during allocation is just a place holder
-       to make the MSI hardware happy it needs to be replaced by a
-       real vector.
-
-   Both can fail and the error is propagated through the call chain
-
-#3 Changing the interrupt affinity
-
-   This obviously needs to allocate a new target CPU vector and update
-   the IRTE.
-
-   Allocating a new target CPU vector can fail.
-
-When looking at it from the host side, then the host needs to do the
-same things:
-
-  1) Allocate an IRTE for #1
-
-  2) Update the IRTE for #2 and #3
-
-But that does not necessarily mean that we need two hypercalls. We can
-get away with one in the code which updates the IRTE and that would be
-the point where the host side has to allocate the backing host
-interrupt, which would replace that allocate on unmask mechanism which
-is used today.
-
-It might look awkward on first sight that an IRTE update can fail, but
-it's not that awkward when put into context:
-
-  The first update happens during activation and activation can fail for
-  various reasons.
-  
-The charm is that his works for everything from INTx to IMS because all
-of them go through the same procedure, except that INTx (IO/APIC) does
-not support the reservation mode dance.
-
-Thoughts?
-
-Thanks,
-
-        tglx

@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EBB46FF27
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 11:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9398F46FF4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240143AbhLJK5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 05:57:03 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:8124 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239436AbhLJK4f (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:56:35 -0500
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BA6co2b026427;
-        Fri, 10 Dec 2021 05:52:41 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3cv1tbrw1p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 05:52:41 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 1BAAqe03021159
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 10 Dec 2021 05:52:40 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 10 Dec
- 2021 05:52:39 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Fri, 10 Dec 2021 05:52:39 -0500
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1BAAqLrH008399;
-        Fri, 10 Dec 2021 05:52:36 -0500
-From:   <alexandru.tachici@analog.com>
-To:     <andrew@lunn.ch>
-CC:     <o.rempel@pengutronix.de>, <alexandru.tachici@analog.com>,
-        <davem@davemloft.net>, <devicetree@vger.kernel.org>,
-        <hkallweit1@gmail.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
-        <netdev@vger.kernel.org>, <robh+dt@kernel.org>
-Subject: [PATCH v4 7/7] dt-bindings: net: phy: Add 10-baseT1L 2.4 Vpp
-Date:   Fri, 10 Dec 2021 13:05:09 +0200
-Message-ID: <20211210110509.20970-8-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211210110509.20970-1-alexandru.tachici@analog.com>
-References: <20211210110509.20970-1-alexandru.tachici@analog.com>
+        id S240172AbhLJLGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:06:20 -0500
+Received: from out0.migadu.com ([94.23.1.103]:59313 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234606AbhLJLGT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 06:06:19 -0500
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1639134163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=crOYlgjr6TJQi4fWo9njLpi/uZBGieqA7+/rnQHOBK8=;
+        b=TlsQaoW0afvqpwqbG9OMB38r8CsUgGwszyRJfd2I0pZk+9qAaNVT/oiWmS0IoI3regwT1L
+        gdSVcoPFOT1ldGVqlcettgUBRjqMQaTNq5Tp7OMsZgosc03owNZ4tsc6j1D1Bha9kZKHtP
+        aGEns7ikvMpyTpUqlcWLMxH/Umwi1l0=
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>, luofei@unicloud.com,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] mm, hwpoison: fix condition in free hugetlb page path
+Date:   Fri, 10 Dec 2021 20:02:08 +0900
+Message-Id: <20211210110208.879740-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: SNQGpbfIqGxjCdRU8_c-HQEL8pgOr3FJ
-X-Proofpoint-ORIG-GUID: SNQGpbfIqGxjCdRU8_c-HQEL8pgOr3FJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_03,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 phishscore=0 mlxlogscore=744 clxscore=1015 impostorscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 adultscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100059
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: naoya.horiguchi@linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandru Tachici <alexandru.tachici@analog.com>
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Add a tristate property to advertise desired transmit level.
+When a memory error hits a tail page of a free hugepage,
+__page_handle_poison() is expected to be called to isolate the error in
+4kB unit, but it's not called due to the outdated if-condition in
+memory_failure_hugetlb().  This loses the chance to isolate the error in
+the finer unit, so it's not optimal.  Drop the condition.
 
-If the device supports the 2.4 Vpp operating mode for 10BASE-T1L,
-as defined in 802.3gc, and the 2.4 Vpp transmit voltage operation
-is desired, property should be set to 1. This property is used
-to select whether Auto-Negotiation advertises a request to
-operate the 10BASE-T1L PHY in increased transmit level mode.
+This "(p != head && TestSetPageHWPoison(head)" condition is based on the
+old semantics of PageHWPoison on hugepage (where PG_hwpoison flag was
+set on the subpage), so it's not necessray any more.  By getting to set
+PG_hwpoison on head page for hugepages, concurrent error events on
+different subpages in a single hugepage can be prevented by
+TestSetPageHWPoison(head) at the beginning of memory_failure_hugetlb().
+So dropping the condition should not reopen the race window originally
+mentioned in commit b985194c8c0a ("hwpoison, hugetlb:
+lock_page/unlock_page does not match for handling a free hugepage")
 
-If property is set to 1, the PHY shall advertise a request
-to operate the 10BASE-T1L PHY in increased transmit level mode.
-If property is set to zero, the PHY shall not advertise
-a request to operate the 10BASE-T1L PHY in increased transmit level mode.
-
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+Reported-by: Fei Luo <luofei@unicloud.com>
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: <stable@vger.kernel.org> # v5.14+
 ---
- Documentation/devicetree/bindings/net/ethernet-phy.yaml | 9 +++++++++
- 1 file changed, 9 insertions(+)
+I set v5.14+ for stable trees because the base code was greatly changed
+by commit 0ed950d1f281 ("mm,hwpoison: make get_hwpoison_page() call
+get_any_page()"), and this patch is not cleanly applicable, although the
+original issue was introduced more previously.
+---
+ mm/memory-failure.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-index 2766fe45bb98..c1615ea63b1f 100644
---- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-+++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-@@ -77,6 +77,15 @@ properties:
-     description:
-       Maximum PHY supported speed in Mbits / seconds.
- 
-+  phy-10base-t1l-2.4vpp:
-+    description: |
-+      tristate, request/disable 2.4 Vpp operating mode. The values are:
-+      0: Disable 2.4 Vpp operating mode.
-+      1: Request 2.4 Vpp operating mode from link partner.
-+      Absence of this property will leave configuration to default values.
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    enum: [0, 1]
-+
-   broken-turn-around:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 8f0ee5b08696..68d9a35f8908 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1521,24 +1521,17 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+ 	if (!(flags & MF_COUNT_INCREASED)) {
+ 		res = get_hwpoison_page(p, flags);
+ 		if (!res) {
+-			/*
+-			 * Check "filter hit" and "race with other subpage."
+-			 */
+ 			lock_page(head);
+-			if (PageHWPoison(head)) {
+-				if ((hwpoison_filter(p) && TestClearPageHWPoison(p))
+-				    || (p != head && TestSetPageHWPoison(head))) {
++			if (hwpoison_filter(p)) {
++				if (TestClearPageHWPoison(head))
+ 					num_poisoned_pages_dec();
+-					unlock_page(head);
+-					return 0;
+-				}
++				unlock_page(head);
++				return 0;
+ 			}
+ 			unlock_page(head);
+-			res = MF_FAILED;
+-			if (__page_handle_poison(p)) {
+-				page_ref_inc(p);
+-				res = MF_RECOVERED;
+-			}
++			res = MF_RECOVERED;
++			if (!page_handle_poison(p, true, false))
++				res = MF_FAILED;
+ 			action_result(pfn, MF_MSG_FREE_HUGE, res);
+ 			return res == MF_RECOVERED ? 0 : -EBUSY;
+ 		} else if (res < 0) {
 -- 
 2.25.1
 

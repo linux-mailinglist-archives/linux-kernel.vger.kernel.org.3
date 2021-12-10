@@ -2,103 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACE546F8CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A406D46F8D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbhLJB42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 20:56:28 -0500
-Received: from mga01.intel.com ([192.55.52.88]:58411 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235446AbhLJB41 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 20:56:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639101173; x=1670637173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kmM1tgd8FYTYKIj9BXxysODAFcJI92I6TFR5cf1a1VA=;
-  b=OoFitY+Kp8XkQTXrpJih51p4hpB7iZoKESN4YmkJL4FB8/1bLVZpc0fZ
-   XoxDjHPngxtD3nauf5//td/mBcsL5h+HXszTXVlBL8X9+dXRFVPJyYnDC
-   aWJNlQqlDi9rtS6H//A2f/PPeNel9lkS5yew6erOhsO0zLC+jC5i5rMis
-   YwAYinMBRAgIQfhWPPtKSA+7g6fzDpBnjZ5Qsgxtb6Kvk0CHzqkBL5wSo
-   aiw7+J7BHKIYdYwfSL+d+UTTx6EL6dF0cg/LSfO4Jc3sIe+DhRNRYL2pA
-   uJd8SArYd9xvL1nb8Rm3FqYLi9TGXyRQyErQWuXau6p6mvc85tWD5BQzP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="262359149"
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="262359149"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 17:52:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="503741239"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 09 Dec 2021 17:52:49 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvV5d-0002cD-An; Fri, 10 Dec 2021 01:52:49 +0000
-Date:   Fri, 10 Dec 2021 09:51:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dave Wysochanski <dwysocha@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: [dhowells-fs:fscache-rewrite 64/69] fs/nfs/file.c:87:2: error:
- implicit declaration of function 'nfs_fscache_release_file'
-Message-ID: <202112100931.6qc8V8T4-lkp@intel.com>
+        id S235573AbhLJB6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 20:58:49 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:45209 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230172AbhLJB6s (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 20:58:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639101314; x=1670637314;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=muJislQo56JK8jPw5RkQCrGtoGCd3t6/rtkh2XIwz6w=;
+  b=AuOBczOGLpULJGb4QetP9lnQBPli724acNSH0ojv7Ead4lfbbsPPWmyv
+   NG0/5VUxZXOD7pWMA+GFZwjjSFmJTlJ/ywaRNsykTzdtan9aEYoteY3vC
+   3Vi4ElsJjVPrGU0VtfqiH/5d/IcUICo+6D5b0dXnlRMppZxXqUJqKBldU
+   Y=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Dec 2021 17:55:14 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 17:55:13 -0800
+Received: from collinsd-linux.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 9 Dec 2021 17:55:13 -0800
+From:   David Collins <quic_collinsd@quicinc.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        <devicetree@vger.kernel.org>
+CC:     David Collins <quic_collinsd@quicinc.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>
+Subject: [PATCH 0/2] regulator: scmi: add support for registering SCMI regulators by name
+Date:   Thu, 9 Dec 2021 17:54:40 -0800
+Message-ID: <cover.1639099631.git.quic_collinsd@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git fscache-rewrite
-head:   82abe23a0865faea23cf06ac51f2303f26b9bb53
-commit: 57858b0feb9a11f6d9b5720cdd13222098f9e59f [64/69] nfs: Convert to new fscache volume/cookie API
-config: x86_64-randconfig-a011-20211209 (https://download.01.org/0day-ci/archive/20211210/202112100931.6qc8V8T4-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=57858b0feb9a11f6d9b5720cdd13222098f9e59f
-        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
-        git fetch --no-tags dhowells-fs fscache-rewrite
-        git checkout 57858b0feb9a11f6d9b5720cdd13222098f9e59f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfs/
+Add support to register SCMI regulator subnodes based on an SCMI
+Voltage Domain name specified via the 'regulator-name' device tree
+property.  In doing so, make the 'reg' property optional with the
+constraint that at least one of 'reg' or 'regulator-name' must be
+specified.  If both are specified, then both must match the
+Voltage Domain data exposed by the SCMI platform.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Name based SCMI regulator registration helps ensure that an SCMI
+agent doesn't need to be aware of the numbering scheme used for
+Voltage Domains by the SCMI platform.  It also ensures that the
+correct Voltage Domain is selected for a given physical regulator.
+This cannot be guaranteed with numeric Voltage Domain IDs alone.
 
-All errors (new ones prefixed by >>):
+David Collins (2):
+  dt-bindings: firmware: arm,scmi: define support for name based
+    regulators
+  regulator: scmi: add support for registering SCMI regulators by name
 
->> fs/nfs/file.c:87:2: error: implicit declaration of function 'nfs_fscache_release_file' [-Werror,-Wimplicit-function-declaration]
-           nfs_fscache_release_file(inode, filp);
-           ^
-   fs/nfs/file.c:87:2: note: did you mean 'nfs_fscache_release_page'?
-   fs/nfs/fscache.h:154:19: note: 'nfs_fscache_release_page' declared here
-   static inline int nfs_fscache_release_page(struct page *page, gfp_t gfp)
-                     ^
-   1 error generated.
+ .../bindings/firmware/arm,scmi.yaml           | 11 +++-
+ drivers/regulator/scmi-regulator.c            | 57 ++++++++++++++++++-
+ 2 files changed, 62 insertions(+), 6 deletions(-)
 
+-- 
+2.17.1
 
-vim +/nfs_fscache_release_file +87 fs/nfs/file.c
-
-    79	
-    80	int
-    81	nfs_file_release(struct inode *inode, struct file *filp)
-    82	{
-    83		dprintk("NFS: release(%pD2)\n", filp);
-    84	
-    85		nfs_inc_stats(inode, NFSIOS_VFSRELEASE);
-    86		nfs_file_clear_open_context(filp);
-  > 87		nfs_fscache_release_file(inode, filp);
-    88		return 0;
-    89	}
-    90	EXPORT_SYMBOL_GPL(nfs_file_release);
-    91	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

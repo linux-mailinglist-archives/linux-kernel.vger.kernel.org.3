@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB86746FC16
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B6446FC19
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbhLJH4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:56:30 -0500
-Received: from dvalin.narfation.org ([213.160.73.56]:51454 "EHLO
-        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235454AbhLJH43 (ORCPT
+        id S235829AbhLJH5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235687AbhLJH5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:56:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-        s=20121; t=1639122773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zbggbeIVFXVq1N1T3x23ZrWZqRWaOMq4LLIQcQz7uVQ=;
-        b=tQHDr0N4lHgpLkjFYlfjFJ0DjipI+hLPIAKvgeln8rY0KeJ7fEIlcufo/db9KPlUPrCIFT
-        jgte41ukD+KrGIVftIi6ttle/ZcD77tOCvODJprwhJCik8CMGOmYAq5hAIpy62YG9W5JOd
-        8XSQwKPviRoZTa0UvVyQ+8kDN/LYA0Q=
-From:   Sven Eckelmann <sven@narfation.org>
-To:     mareklindner@neomailbox.ch, cgel.zte@gmail.com
-Cc:     sw@simonwunderlich.de, a@unstable.cc, davem@davemloft.net,
-        kuba@kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>
-Subject: Re: [PATCH] net/batman-adv:remove unneeded variable
-Date:   Fri, 10 Dec 2021 08:52:50 +0100
-Message-ID: <2844186.8fJna1iEf4@ripper>
-In-Reply-To: <20211210021917.423912-1-chi.minghao@zte.com.cn>
-References: <20211210021917.423912-1-chi.minghao@zte.com.cn>
+        Fri, 10 Dec 2021 02:57:18 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A0FC0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:53:43 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id g18so7754148pfk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 23:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mJmmV17V4GqEpcKpliLXYPaRRnl952JuoJAtDoU5wX8=;
+        b=KpGsh35qG074zspucC5/tttr2xImfhgK6xeclO/jIK+uh8oGcuMlU0gctYClhQsyR6
+         RHkQne0c7wtceo51mXJZoVZhv55fcYG2K5cXhK51LJc5GBELhcCkkIVftmGwuE3TAG/4
+         nWxmgi66cLT6ngZ18NHZLTg9N8Hn7Jtj9ShR8YLPSivpRzpNAHnpymDR1SpdnPGbl/4+
+         mYlh5RrAnebcAYHdqGU7kZwCuA4pdlb1+fbpK0hLBzdnlp/w89dI/sNq/9YtJ4tkvksL
+         PXHvjva3lYtxFm3lL4vBlpS+SPzyG7VCDqR8k19wrbo3aIUkmgz70YUhaGnwCPxwMyf9
+         Yjvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mJmmV17V4GqEpcKpliLXYPaRRnl952JuoJAtDoU5wX8=;
+        b=bUbpCY0CaljVzPfm1A5cht2IrV5tS8ZtQJfWVih9bfreJQOHwgGUUUraDbeOudu88I
+         6+fVOjUp8Gn5mfSULjmtldEWVZN9r8TR6NZXFvaSb+Cwv8TvGZTTuf8GqFuk1pkTol8X
+         UhwaLejRi//elth6b9xpHi8sFVFNMK88y40PhGVUNWbm3zXpEZmnlRoYZ5Bb7AJqsl+A
+         q/wkNCmI7JRhi+KoH5/K1h6+RRUPi5dDl/j7l3plqOCvVhOLHBT6MjsTTmljiBMR3J/q
+         LzUTI/YmXOfCsdHj4LNTfbQBUbxQLR++nyIgkRGzBh9pxpta/i1JrZnzfIh6jrBCEbzU
+         cPzg==
+X-Gm-Message-State: AOAM5329miClM71yattNEfDTiikHiDRrWYyKZmtP6+IiBTXiZ5oGxtq4
+        rMvMQV2Sj40H3+5bN6DZXOnw6Q==
+X-Google-Smtp-Source: ABdhPJyFZ5NC0bEPoezW7x/sYUWkU2IvA/4QqqzZpR7AeY1ioHFOCiUytzlpI/kl0W13hFp9IqqMiw==
+X-Received: by 2002:a63:d354:: with SMTP id u20mr38051850pgi.366.1639122822857;
+        Thu, 09 Dec 2021 23:53:42 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:7fdb:7edf:3c09:a8eb])
+        by smtp.gmail.com with ESMTPSA id m6sm1446947pfh.87.2021.12.09.23.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 23:53:42 -0800 (PST)
+Date:   Fri, 10 Dec 2021 15:53:38 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, nancy.lin@mediatek.com,
+        singo.chang@mediatek.com
+Subject: Re: [PATCH] mailbox: add control_by_sw for mt8195
+Message-ID: <YbMHgkG/MwKNu0v1@google.com>
+References: <20211210061138.9943-1-jason-jh.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2270532.c4uxPF5YdD"; micalg="pgp-sha512"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210061138.9943-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart2270532.c4uxPF5YdD
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Sven Eckelmann <sven@narfation.org>
-To: mareklindner@neomailbox.ch, cgel.zte@gmail.com
-Cc: sw@simonwunderlich.de, a@unstable.cc, davem@davemloft.net, kuba@kernel.org, b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>
-Subject: Re: [PATCH] net/batman-adv:remove unneeded variable
-Date: Fri, 10 Dec 2021 08:52:50 +0100
-Message-ID: <2844186.8fJna1iEf4@ripper>
-In-Reply-To: <20211210021917.423912-1-chi.minghao@zte.com.cn>
-References: <20211210021917.423912-1-chi.minghao@zte.com.cn>
-
-On Friday, 10 December 2021 03:19:17 CET cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Fri, Dec 10, 2021 at 02:11:38PM +0800, jason-jh.lin wrote:
+> To make sure the GCE request signal to SPM is not trigger by
+> other HW modules and cause suspend premature wake.
 > 
-> Return status directly from function called.
+> Set 0x7 (the bit 0~2 as 1) to GCE_GCTL_VALUE, to configure the
+> request signal control by SW and release the request to SPM.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cm>
+> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
 
-And the Reported-by (robot) using a mail address which is bouncing.
-
-   <zealci@zte.com.cm>: Host or domain name not found. Name service error for
-       name=zte.com.cm type=AAAA: Host not found
-
-Please fix this too in your scripts.
-
-Kind regards,
-	Sven
---nextPart2270532.c4uxPF5YdD
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGzB1IACgkQXYcKB8Em
-e0YUag/+PA8FzRLW/Uw2ybainV3OPDxuUbSMmbufA1AaODvg4trJjA7xn7Zq2PnE
-/8hsnXwHxq99To/o5tHkLF3f8xJSA+PmQtzPda90N4GUtiY+P0eQvtD7gFND82t9
-Tl8t9WF208WcfPqH+CH1YzK2YuWB6q2Y8YBzUk1gBfp4jKaiyF/X6Ybz5mqt0zTm
-SDISMa1cx1T+kvehH4p9AJ2/OluR7wGUd3Gw5GseMoYzRkV1UOzTuaGAgPhlA4p5
-iPbLur4bpfZXYb+D13iUQn+2FRueBs267+0X8C13kU22bIVlDWlUwBomTi6kwPxJ
-YZxQ6JOfvbwkTFjnHtet+ioWN9bz1zHE8Gn7f5HE5vrbUg8daduNN+q20bmfiYh0
-uOYlaJ/2PoJd+chjcytq7tOcgN53NevhmCE2N/fUzi4yLo+yg3YeFY5GqvL7GPEP
-qKa8HZYZxXpH4+HB0AV4wZdW+ngGpN/xnettRTt1ialtntDJjur/PDmjuqbS+X3s
-VvNOWvB0MjYRm/ibAYw/rodI/umHV1xYVYD/gDC6K91pQ0k7C68BG7Mm6UkJ2HpW
-IIOoN/TctEXLL3PFz1OxxN3QVjOsX2AAXXBYI6H+JnRIJeKGjzptdJPq/WFXWb72
-eD6l645BH/1vrhBN+7gq1iumXxFBAEhILF41FlbujbeFnwxdK9E=
-=1me2
------END PGP SIGNATURE-----
-
---nextPart2270532.c4uxPF5YdD--
-
-
-
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>

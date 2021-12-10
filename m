@@ -2,131 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F5247029F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABAB4702B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239604AbhLJOXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:23:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43002 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbhLJOXx (ORCPT
+        id S242080AbhLJOZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:25:36 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10782 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232310AbhLJOZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:23:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCE1FB8281A;
-        Fri, 10 Dec 2021 14:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A69CC00446;
-        Fri, 10 Dec 2021 14:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639146015;
-        bh=OfD1bwhUCRhdGG4qwjkqG1Z4nuGfYEuNGjW+M53Aq2o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=S87YIK4gn3loT9LgN9GoEZnbH/gV2l5Nno7kMs3MSMcjvlMqe0BjqQsgP7cjA1mwQ
-         CU7AY4EUd5DEwfVITdXZNE0/UfWFulNhbfR7QQhrsKJxaob3DXOpDAOY+F5tCyVo1z
-         6PrlrL0jH+TCN+ElrokfPrkbbUbCYKy35HOaBHZC4hDbXg2bfQfItsmQboJ4W1vF+a
-         5gbn53DVQvKeyJF26U0C2IDGHAUPbQ45iWBLc2BNYeX5w0a+JUblwOL3VgA1gVaPjb
-         fBZ/r5+dsAVXqX2+XCkcAJpRNcRXdNjxNiV1T0c8aE+wzhWQ9mHZTVRhBdTupRaZEA
-         cPJpuZuvJ3lQA==
-Received: by mail-ed1-f50.google.com with SMTP id r11so29953103edd.9;
-        Fri, 10 Dec 2021 06:20:15 -0800 (PST)
-X-Gm-Message-State: AOAM532tyZvNl4H6Uz61O4JK4+AA/aoYtW08+1bKTsQp417lr0BwBjxB
-        7j78NSDFHACX6o1Z0Cm0WvEZPro6utlUNUWZZw==
-X-Google-Smtp-Source: ABdhPJwlX3Y0JajtJITVeG8yQcVy5/Ih1tDAFptuNFnlrG9NxFmfWWCyqf8KrMFgKkEjVaCJ4q9nYjRbaJZ+3MIn8uE=
-X-Received: by 2002:a17:906:fcbb:: with SMTP id qw27mr23796249ejb.320.1639146010345;
- Fri, 10 Dec 2021 06:20:10 -0800 (PST)
+        Fri, 10 Dec 2021 09:25:35 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BADvm8x008389;
+        Fri, 10 Dec 2021 14:22:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=VVeR8QBvzs2y1tQH21iTGgNnpjv/MTLz/B/Yt0LNyvY=;
+ b=b/7lzJ+EZPRr1vCp1Iq81KAgvYU+f6sPLQoJaRy4f6Rq4VT+Zs1esi14gsWmBgRm80Wt
+ JDs7+BUOcq9xmSxSZB05GAgfJUb/N00Cr8ihUa+m/CuZ2aFWsTcJUqSFFNSu3cL4gvNk
+ e+mgJAWuX//dbz3XcApWJF+0zXKPUvA5GHY58r0DoeC0rVYNQ3f77aYcNmZijq67fHbb
+ JdsorSZMPBpYU7YqAdOYsZgFLyCA9nlw9w9h2v1SrbcuBO0vH0Um1nofMSmwlvXJGBIR
+ Vt3dp70WJ1hkXBuBTccs49Vuw+qo+LqUCnLv84f4Q21TnX7xCS+YN7AvmG7QuGqzf8vH 0A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv886gf6x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 14:21:59 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BADwWZc010186;
+        Fri, 10 Dec 2021 14:21:59 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv886gf6h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 14:21:59 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAEG4EC024535;
+        Fri, 10 Dec 2021 14:21:58 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma05wdc.us.ibm.com with ESMTP id 3cqyycg5gb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 14:21:58 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAELvRi35455456
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Dec 2021 14:21:57 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 23A8B2806D;
+        Fri, 10 Dec 2021 14:21:57 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4401128058;
+        Fri, 10 Dec 2021 14:21:49 +0000 (GMT)
+Received: from [9.211.51.40] (unknown [9.211.51.40])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Dec 2021 14:21:48 +0000 (GMT)
+Message-ID: <6127b774-1042-0057-6b5b-29471554149b@linux.ibm.com>
+Date:   Fri, 10 Dec 2021 09:21:47 -0500
 MIME-Version: 1.0
-References: <20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <d290850bf95f4bdf0c329f278db458c7@kernel.org> <CA+V-a8vUCXQa38NmYu9znakcq4A=Uedyn8w5+hXQ_WKf58oHRQ@mail.gmail.com>
- <875yry1316.wl-maz@kernel.org> <CA+V-a8vNUhVBFNf-M6s1BmXbdCpdyJOx2g=t=QJf1jQzUA3xow@mail.gmail.com>
- <CAL_Jsq+H54oX8GCHcwPVaUC3brjJa+5+OTU21D-3d7QUqM+jcg@mail.gmail.com> <CA+V-a8sifb8zpMB=VwBn6qXob=3JRQdMTh1PWD-M7SquP9S9+g@mail.gmail.com>
-In-Reply-To: <CA+V-a8sifb8zpMB=VwBn6qXob=3JRQdMTh1PWD-M7SquP9S9+g@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 10 Dec 2021 08:19:58 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+jyqbhA1jpgZ+yTwWGvCMRu9VmgoDq8MDM9SMqJ-XSBw@mail.gmail.com>
-Message-ID: <CAL_Jsq+jyqbhA1jpgZ+yTwWGvCMRu9VmgoDq8MDM9SMqJ-XSBw@mail.gmail.com>
-Subject: Re: [RFC PATCH] of: platform: Skip mapping of interrupts in of_device_alloc()
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 19/32] KVM: s390: mechanism to enable guest zPCI
+ Interpretation
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-20-mjrosato@linux.ibm.com>
+ <7df88bde-2b63-4a91-036c-28527f56e22d@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <7df88bde-2b63-4a91-036c-28527f56e22d@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rMBuYAGuVOTHq6Pq4s-1AtIQ7GhoM3aJ
+X-Proofpoint-ORIG-GUID: sUdoKL0ACDD2ok_bQf5fxtr_eavOwNQ5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_04,2021-12-10_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=999 malwarescore=0 phishscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112100081
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 7:16 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> On Thu, Dec 9, 2021 at 8:34 PM Rob Herring <robh+dt@kernel.org> wrote:
-> >
-> > On Thu, Dec 9, 2021 at 5:35 AM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> > >
-> > > Hi Rob and Marc,
-> > >
-> > > On Thu, Dec 9, 2021 at 10:33 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > >
-> > > > On Thu, 09 Dec 2021 10:00:44 +0000,
-> > > > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> > > > >
-> > > > > > The root of the issue is that all the resource allocation is done
-> > > > > > upfront, way before we even have a driver that could potentially
-> > > > > > deal with this device. This is a potential waste of resource, and
-> > > > > > it triggers the issue you noticed.
-> > > > > >
-> > > > > > If you delay the resource allocation until there is an actual
-> > > > > > match with a driver, you could have a per-driver flag telling you
-> > > > > > whether the IRQ allocation should be performed before the probe()
-> > > > > > function is called.
-> > > > > >
-> > > > > As suggested by Rob, if we switch the drivers to use
-> > > > > platform_get_resource(pdev, IORESOURCE_IRQ, n) call with
-> > > > > platform_get_irq() this code should go away and with this switch the
-> > > > > resource allocation will happen demand. Is this approach OK?
-> > > >
-> > > > If you get rid of of_irq_to_resource_table() altogether, then yes,
-> > > > this has a fighting chance to work.
-> > > >
-> > > Yes, switching to platform_get_irq() will eventually cause
-> > > of_irq_to_resource_table() to go away.
-> > >
-> > > On second thought, instead of touching all the drivers, if we update
-> > > platform_get_resource/platform_get_resource_byname to internally call
-> > > platform_get_irq() internally if it's a IORESOURCE_IRQ resource. Does
-> > > that sound good or should I just get on changing all the drivers to
-> > > use platform_get_irq() instead?
-> >
-> > Except that platform_get_irq() already internally calls
-> > platform_get_resource()... I think changing the drivers is the right
-> > way. Happy to do some if you want to divide it up.
-> >
-> Thank you, I think I'll manage.
->
-> > Using coccigrep, I think I've found all the places using
-> > platform_device.resource directly. A large swath are Sparc drivers
-> > which don't matter. The few that do matter I've prepared patches for
-> > here[1]. Most of what I found were DT based drivers that copy
-> > resources to a child platform device. That case will not work with
-> > platform_get_irq() callers either unless the child device has it's DT
-> > node set to the parent node which is the change I made.
-> >
-> Thank you for getting this done. Do you want me to include those along
-> with my conversion patches?
+On 12/10/21 8:27 AM, Christian Borntraeger wrote:
+> 
+> 
+> Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+>> The guest must have access to certain facilities in order to allow
+>> interpretive execution of zPCI instructions and adapter event
+>> notifications.  However, there are some cases where a guest might
+>> disable interpretation -- provide a mechanism via which we can defer
+>> enabling the associated zPCI interpretation facilities until the guest
+>> indicates it wishes to use them.
+>>
+>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>> ---
+>>   arch/s390/include/asm/kvm_host.h |  4 +++
+>>   arch/s390/kvm/kvm-s390.c         | 43 ++++++++++++++++++++++++++++++++
+>>   arch/s390/kvm/kvm-s390.h         | 10 ++++++++
+>>   3 files changed, 57 insertions(+)
+>>
+>> diff --git a/arch/s390/include/asm/kvm_host.h 
+>> b/arch/s390/include/asm/kvm_host.h
+>> index 3f147b8d050b..38982c1de413 100644
+>> --- a/arch/s390/include/asm/kvm_host.h
+>> +++ b/arch/s390/include/asm/kvm_host.h
+>> @@ -252,7 +252,10 @@ struct kvm_s390_sie_block {
+>>   #define ECB2_IEP    0x20
+>>   #define ECB2_PFMFI    0x08
+>>   #define ECB2_ESCA    0x04
+>> +#define ECB2_ZPCI_LSI    0x02
+>>       __u8    ecb2;                   /* 0x0062 */
+>> +#define ECB3_AISI    0x20
+>> +#define ECB3_AISII    0x10
+>>   #define ECB3_DEA 0x08
+>>   #define ECB3_AES 0x04
+>>   #define ECB3_RI  0x01
+>> @@ -938,6 +941,7 @@ struct kvm_arch{
+>>       int use_cmma;
+>>       int use_pfmfi;
+>>       int use_skf;
+>> +    int use_zpci_interp;
+>>       int user_cpu_state_ctrl;
+>>       int user_sigp;
+>>       int user_stsi;
+>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>> index a680f2a02b67..361d742cdf0d 100644
+>> --- a/arch/s390/kvm/kvm-s390.c
+>> +++ b/arch/s390/kvm/kvm-s390.c
+>> @@ -1023,6 +1023,47 @@ static int kvm_s390_vm_set_crypto(struct kvm 
+>> *kvm, struct kvm_device_attr *attr)
+>>       return 0;
+>>   }
+>> +static void kvm_s390_vcpu_pci_setup(struct kvm_vcpu *vcpu)
+>> +{
+>> +    /*
+>> +     * If the facilities aren't available for PCI interpretation and
+>> +     * interrupt forwarding, we shouldn't be here.
+>> +     */
+> 
+> This reads like we want a WARN_ON or BUG_ON, but as we call this 
+> uncoditionally this is
+> actually a valid check. So instead of "shouldn't be here" say something 
+> like "bail out
+> if interpretion is not active".  ?
 
-No, I'll send them out.
+Right, this comment block is plain wrong.  We expect to get here under 
+multiple circumstances and its OK for this bit to be off:
+- initial vcpu setup (use_zpci_interp is off)
+- Right after we set use_zpci_interp=1 (turn on ECB for all vcpu)
+- hotplug vcpu setup (use_zpci_interp might be on or off)
 
-> Any reason why we dont care for Sparc drivers?
+Will re-word.
 
-Sparc does its own thing and doesn't use drivers/of/platform.c to
-create devices. I'm sure we could modernize a bunch of them, but
-that's not a blocker.
+> 
+>> +    if (!vcpu->kvm->arch.use_zpci_interp)
+>> +        return;
+>> +
+>> +    vcpu->arch.sie_block->ecb2 |= ECB2_ZPCI_LSI;
+>> +    vcpu->arch.sie_block->ecb3 |= ECB3_AISII + ECB3_AISI;
+>> +}
+>> +
+>> +void kvm_s390_vcpu_pci_enable_interp(struct kvm *kvm)
+>> +{
+>> +    struct kvm_vcpu *vcpu;
+>> +    int i;
+>> +
+>> +    /*
+>> +     * If host facilities are available, turn on interpretation for the
+>> +     * life of this guest
+>> +     */
+>> +    if (!test_facility(69) || !test_facility(70) || 
+>> !test_facility(71) ||
+>> +        !test_facility(72))
+>> +        return;
+> 
+> Wouldnt that also enable interpretion for VSIE? I guess we should check 
+> for the
+> sclp facilities from patches 1,2,3, and 4 instead.
+> 
 
-Rob
+Good point -- will change.
+
+

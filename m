@@ -2,328 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC216470EEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE1B470F02
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243667AbhLJXwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 18:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345257AbhLJXwV (ORCPT
+        id S1345265AbhLJXza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 18:55:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40264 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243927AbhLJXzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 18:52:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E27AC061746;
-        Fri, 10 Dec 2021 15:48:45 -0800 (PST)
+        Fri, 10 Dec 2021 18:55:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 70494CE2DAD;
-        Fri, 10 Dec 2021 23:48:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11346C341CC;
-        Fri, 10 Dec 2021 23:48:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 665EDB82A13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 23:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD33AC341CA;
+        Fri, 10 Dec 2021 23:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639180121;
-        bh=R+UOQDjESadCBWlOYxkjn8QR8cU6LdZX+26VoHWGC0g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OKbW3Nvjt+0WsTAurTVgkorLE+MkaO6FHlvp+tnmErS/t0sLmhcK3ybyWLZ66bp/f
-         dunm44xarwL0697axK79gV0SmVOeFIi9qGLajGFVCF27JsdLrEbrl2oOjd1sUPndmH
-         IzBK1tBa0sXAa4Vk7HCf/TQid/hbaIzKI6U5keNeVt2wNCQoLD61clk7rMEOx7Wr/K
-         UbHik8jPyDJWxf1BS17+/OxrMuPrniDWIxhvp2fa16/4eyw137xFsFuSE4PrjYhpvy
-         OFef53Y6eM/iz0c0H1TnK0XpqeHEJFMA9mwupdJbxEyRI+9JIpWGPAHaCOacL7nbSt
-         zzw+LPOOkywtQ==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 5.10 5/5] aio: fix use-after-free due to missing POLLFREE handling
-Date:   Fri, 10 Dec 2021 15:48:05 -0800
-Message-Id: <20211210234805.39861-6-ebiggers@kernel.org>
+        s=k20201202; t=1639180306;
+        bh=H54hX6Y+M0l4q1tVGcaVg3FQsEWlleKRCHcnPIccLFU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Sixt37nKjFxPhMTfPiR2gFlBkzdVgtmZbWli6uL8rI2NXFXxNzdY2xYyBa4wifdpw
+         2N0UBCB+KoS21K0WcS/1MnMnCTH5K4ndvqK33gxB53/PQ2wNJSHm7YoKA1y25kJAWf
+         z001Yh1rnlBG5PqwWq7fRlS5FpldKghuNegmDMbJOVvI981XLERcaPk66xZOOdG3eJ
+         xeddRh6IXM7RhyO/a8IkI02qRvS2Oo9PYp0vyV/iNkebJytC/991DbfrL5oc4YPfbL
+         3UWSLVr5NB1k2TGPhGRhveH5qEJdd7ZfzOrOpuUuYtk+ACI+TRCGcFHy+yQmgzsBQL
+         BNx5I7pPUqxkw==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] x86/extable: Fix extable_type_reg macro with Clang LTO
+Date:   Fri, 10 Dec 2021 16:49:54 -0700
+Message-Id: <20211210234953.3420108-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211210234805.39861-1-ebiggers@kernel.org>
-References: <20211210234805.39861-1-ebiggers@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+When building x86_64_defconfig + CONFIG_LTO_CLANG_FULL=y after
+commit a90a845d94b4 ("x86/extable: Extend extable functionality"), the
+build fails during linking:
 
-commit 50252e4b5e989ce64555c7aef7516bdefc2fea72 upstream.
+ld.lld: error: <inline asm>:64:2: macro 'extable_type_reg' is already defined
+        .macro extable_type_reg type:req reg:req
+        ^
 
-signalfd_poll() and binder_poll() are special in that they use a
-waitqueue whose lifetime is the current task, rather than the struct
-file as is normally the case.  This is okay for blocking polls, since a
-blocking poll occurs within one task; however, non-blocking polls
-require another solution.  This solution is for the queue to be cleared
-before it is freed, by sending a POLLFREE notification to all waiters.
+The build failures happens because the definition of extable_type_reg
+happens in every source file that includes asm.h, which all get combined
+together during LTO.
 
-Unfortunately, only eventpoll handles POLLFREE.  A second type of
-non-blocking poll, aio poll, was added in kernel v4.18, and it doesn't
-handle POLLFREE.  This allows a use-after-free to occur if a signalfd or
-binder fd is polled with aio poll, and the waitqueue gets freed.
+Commit be604c616ca7 ("arm64: sysreg: Make mrs_s and msr_s macros work
+with Clang and LTO") ran into a similar issue and the solution was to
+define, use, then undefine the macro within each inline asm block it was
+needed in.
 
-Fix this by making aio poll handle POLLFREE.
+Break apart the inline asm macro definition into two macros
+({,UN}DEFINE_EXTABLE_TYPE_REG) and use them in _ASM_EXTABLE_TYPE so
+there is no more error with LTO.
 
-A patch by Ramji Jiyani <ramjiyani@google.com>
-(https://lore.kernel.org/r/20211027011834.2497484-1-ramjiyani@google.com)
-tried to do this by making aio_poll_wake() always complete the request
-inline if POLLFREE is seen.  However, that solution had two bugs.
-First, it introduced a deadlock, as it unconditionally locked the aio
-context while holding the waitqueue lock, which inverts the normal
-locking order.  Second, it didn't consider that POLLFREE notifications
-are missed while the request has been temporarily de-queued.
-
-The second problem was solved by my previous patch.  This patch then
-properly fixes the use-after-free by handling POLLFREE in a
-deadlock-free way.  It does this by taking advantage of the fact that
-freeing of the waitqueue is RCU-delayed, similar to what eventpoll does.
-
-Fixes: 2c14fa838cbe ("aio: implement IOCB_CMD_POLL")
-Cc: <stable@vger.kernel.org> # v4.18+
-Link: https://lore.kernel.org/r/20211209010455.42744-6-ebiggers@kernel.org
-Signed-off-by: Eric Biggers <ebiggers@google.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1513
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- fs/aio.c                        | 137 ++++++++++++++++++++++++--------
- include/uapi/asm-generic/poll.h |   2 +-
- 2 files changed, 107 insertions(+), 32 deletions(-)
 
-diff --git a/fs/aio.c b/fs/aio.c
-index 37c5f450d1596..2a9dfa58ec3ab 100644
---- a/fs/aio.c
-+++ b/fs/aio.c
-@@ -1622,6 +1622,51 @@ static void aio_poll_put_work(struct work_struct *work)
- 	iocb_put(iocb);
- }
+I expect this to be squashed into commit a90a845d94b4 ("x86/extable:
+Extend extable functionality") in Peter's x86/wip.extable branch to
+avoid bisect issues. The description and link are there for archaeology.
+
+ arch/x86/include/asm/asm.h | 52 ++++++++++++++++++++------------------
+ 1 file changed, 28 insertions(+), 24 deletions(-)
+
+diff --git a/arch/x86/include/asm/asm.h b/arch/x86/include/asm/asm.h
+index 95bb23082b87..c878fed3056f 100644
+--- a/arch/x86/include/asm/asm.h
++++ b/arch/x86/include/asm/asm.h
+@@ -152,30 +152,32 @@
  
-+/*
-+ * Safely lock the waitqueue which the request is on, synchronizing with the
-+ * case where the ->poll() provider decides to free its waitqueue early.
-+ *
-+ * Returns true on success, meaning that req->head->lock was locked, req->wait
-+ * is on req->head, and an RCU read lock was taken.  Returns false if the
-+ * request was already removed from its waitqueue (which might no longer exist).
-+ */
-+static bool poll_iocb_lock_wq(struct poll_iocb *req)
-+{
-+	wait_queue_head_t *head;
+ #else /* ! __ASSEMBLY__ */
+ 
+-asm(
+-"	.macro extable_type_reg type:req reg:req\n"
+-"	.set found, 0\n"
+-"	.set regnr, 0\n"
+-"	.irp rs,rax,rcx,rdx,rbx,rsp,rbp,rsi,rdi,r8,r9,r10,r11,r12,r13,r14,r15\n"
+-"	.ifc \\reg, %\\rs\n"
+-"	.set found, found+1\n"
+-"	.long \\type + (regnr << 8)\n"
+-"	.endif\n"
+-"	.set regnr, regnr+1\n"
+-"	.endr\n"
+-"	.set regnr, 0\n"
+-"	.irp rs,eax,ecx,edx,ebx,esp,ebp,esi,edi,r8d,r9d,r10d,r11d,r12d,r13d,r14d,r15d\n"
+-"	.ifc \\reg, %\\rs\n"
+-"	.set found, found+1\n"
+-"	.long \\type + (regnr << 8)\n"
+-"	.endif\n"
+-"	.set regnr, regnr+1\n"
+-"	.endr\n"
+-"	.if (found != 1)\n"
+-"	.error \"extable_type_reg: bad register argument\"\n"
+-"	.endif\n"
+-"	.endm\n"
+-);
++# define DEFINE_EXTABLE_TYPE_REG \
++	".macro extable_type_reg type:req reg:req\n"						\
++	".set found, 0\n"									\
++	".set regnr, 0\n"									\
++	".irp rs,rax,rcx,rdx,rbx,rsp,rbp,rsi,rdi,r8,r9,r10,r11,r12,r13,r14,r15\n"		\
++	".ifc \\reg, %%\\rs\n"									\
++	".set found, found+1\n"									\
++	".long \\type + (regnr << 8)\n"								\
++	".endif\n"										\
++	".set regnr, regnr+1\n"									\
++	".endr\n"										\
++	".set regnr, 0\n"									\
++	".irp rs,eax,ecx,edx,ebx,esp,ebp,esi,edi,r8d,r9d,r10d,r11d,r12d,r13d,r14d,r15d\n"	\
++	".ifc \\reg, %%\\rs\n"									\
++	".set found, found+1\n"									\
++	".long \\type + (regnr << 8)\n"								\
++	".endif\n"										\
++	".set regnr, regnr+1\n"									\
++	".endr\n"										\
++	".if (found != 1)\n"									\
++	".error \"extable_type_reg: bad register argument\"\n"					\
++	".endif\n"										\
++	".endm\n"
 +
-+	/*
-+	 * While we hold the waitqueue lock and the waitqueue is nonempty,
-+	 * wake_up_pollfree() will wait for us.  However, taking the waitqueue
-+	 * lock in the first place can race with the waitqueue being freed.
-+	 *
-+	 * We solve this as eventpoll does: by taking advantage of the fact that
-+	 * all users of wake_up_pollfree() will RCU-delay the actual free.  If
-+	 * we enter rcu_read_lock() and see that the pointer to the queue is
-+	 * non-NULL, we can then lock it without the memory being freed out from
-+	 * under us, then check whether the request is still on the queue.
-+	 *
-+	 * Keep holding rcu_read_lock() as long as we hold the queue lock, in
-+	 * case the caller deletes the entry from the queue, leaving it empty.
-+	 * In that case, only RCU prevents the queue memory from being freed.
-+	 */
-+	rcu_read_lock();
-+	head = smp_load_acquire(&req->head);
-+	if (head) {
-+		spin_lock(&head->lock);
-+		if (!list_empty(&req->wait.entry))
-+			return true;
-+		spin_unlock(&head->lock);
-+	}
-+	rcu_read_unlock();
-+	return false;
-+}
-+
-+static void poll_iocb_unlock_wq(struct poll_iocb *req)
-+{
-+	spin_unlock(&req->head->lock);
-+	rcu_read_unlock();
-+}
-+
- static void aio_poll_complete_work(struct work_struct *work)
- {
- 	struct poll_iocb *req = container_of(work, struct poll_iocb, work);
-@@ -1641,24 +1686,25 @@ static void aio_poll_complete_work(struct work_struct *work)
- 	 * avoid further branches in the fast path.
- 	 */
- 	spin_lock_irq(&ctx->ctx_lock);
--	spin_lock(&req->head->lock);
--	if (!mask && !READ_ONCE(req->cancelled)) {
--		/*
--		 * The request isn't actually ready to be completed yet.
--		 * Reschedule completion if another wakeup came in.
--		 */
--		if (req->work_need_resched) {
--			schedule_work(&req->work);
--			req->work_need_resched = false;
--		} else {
--			req->work_scheduled = false;
-+	if (poll_iocb_lock_wq(req)) {
-+		if (!mask && !READ_ONCE(req->cancelled)) {
-+			/*
-+			 * The request isn't actually ready to be completed yet.
-+			 * Reschedule completion if another wakeup came in.
-+			 */
-+			if (req->work_need_resched) {
-+				schedule_work(&req->work);
-+				req->work_need_resched = false;
-+			} else {
-+				req->work_scheduled = false;
-+			}
-+			poll_iocb_unlock_wq(req);
-+			spin_unlock_irq(&ctx->ctx_lock);
-+			return;
- 		}
--		spin_unlock(&req->head->lock);
--		spin_unlock_irq(&ctx->ctx_lock);
--		return;
--	}
--	list_del_init(&req->wait.entry);
--	spin_unlock(&req->head->lock);
-+		list_del_init(&req->wait.entry);
-+		poll_iocb_unlock_wq(req);
-+	} /* else, POLLFREE has freed the waitqueue, so we must complete */
- 	list_del_init(&iocb->ki_list);
- 	iocb->ki_res.res = mangle_poll(mask);
- 	spin_unlock_irq(&ctx->ctx_lock);
-@@ -1672,13 +1718,14 @@ static int aio_poll_cancel(struct kiocb *iocb)
- 	struct aio_kiocb *aiocb = container_of(iocb, struct aio_kiocb, rw);
- 	struct poll_iocb *req = &aiocb->poll;
++# define UNDEFINE_EXTABLE_TYPE_REG \
++	".purgem extable_type_reg\n"
  
--	spin_lock(&req->head->lock);
--	WRITE_ONCE(req->cancelled, true);
--	if (!req->work_scheduled) {
--		schedule_work(&aiocb->poll.work);
--		req->work_scheduled = true;
--	}
--	spin_unlock(&req->head->lock);
-+	if (poll_iocb_lock_wq(req)) {
-+		WRITE_ONCE(req->cancelled, true);
-+		if (!req->work_scheduled) {
-+			schedule_work(&aiocb->poll.work);
-+			req->work_scheduled = true;
-+		}
-+		poll_iocb_unlock_wq(req);
-+	} /* else, the request was force-cancelled by POLLFREE already */
+ # define _ASM_EXTABLE_TYPE(from, to, type)			\
+ 	" .pushsection \"__ex_table\",\"a\"\n"			\
+@@ -190,7 +192,9 @@ asm(
+ 	" .balign 4\n"								\
+ 	" .long (" #from ") - .\n"						\
+ 	" .long (" #to ") - .\n"						\
++	DEFINE_EXTABLE_TYPE_REG							\
+ 	"extable_type_reg reg=" __stringify(reg) ", type=" __stringify(type) " \n"\
++	UNDEFINE_EXTABLE_TYPE_REG						\
+ 	" .popsection\n"
  
- 	return 0;
- }
-@@ -1730,7 +1777,8 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- 		 *
- 		 * Don't remove the request from the waitqueue here, as it might
- 		 * not actually be complete yet (we won't know until vfs_poll()
--		 * is called), and we must not miss any wakeups.
-+		 * is called), and we must not miss any wakeups.  POLLFREE is an
-+		 * exception to this; see below.
- 		 */
- 		if (req->work_scheduled) {
- 			req->work_need_resched = true;
-@@ -1738,6 +1786,28 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- 			schedule_work(&req->work);
- 			req->work_scheduled = true;
- 		}
-+
-+		/*
-+		 * If the waitqueue is being freed early but we can't complete
-+		 * the request inline, we have to tear down the request as best
-+		 * we can.  That means immediately removing the request from its
-+		 * waitqueue and preventing all further accesses to the
-+		 * waitqueue via the request.  We also need to schedule the
-+		 * completion work (done above).  Also mark the request as
-+		 * cancelled, to potentially skip an unneeded call to ->poll().
-+		 */
-+		if (mask & POLLFREE) {
-+			WRITE_ONCE(req->cancelled, true);
-+			list_del_init(&req->wait.entry);
-+
-+			/*
-+			 * Careful: this *must* be the last step, since as soon
-+			 * as req->head is NULL'ed out, the request can be
-+			 * completed and freed, since aio_poll_complete_work()
-+			 * will no longer need to take the waitqueue lock.
-+			 */
-+			smp_store_release(&req->head, NULL);
-+		}
- 	}
- 	return 1;
- }
-@@ -1745,6 +1815,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- struct aio_poll_table {
- 	struct poll_table_struct	pt;
- 	struct aio_kiocb		*iocb;
-+	bool				queued;
- 	int				error;
- };
- 
-@@ -1755,11 +1826,12 @@ aio_poll_queue_proc(struct file *file, struct wait_queue_head *head,
- 	struct aio_poll_table *pt = container_of(p, struct aio_poll_table, pt);
- 
- 	/* multiple wait queues per file are not supported */
--	if (unlikely(pt->iocb->poll.head)) {
-+	if (unlikely(pt->queued)) {
- 		pt->error = -EINVAL;
- 		return;
- 	}
- 
-+	pt->queued = true;
- 	pt->error = 0;
- 	pt->iocb->poll.head = head;
- 	add_wait_queue(head, &pt->iocb->poll.wait);
-@@ -1791,6 +1863,7 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 	apt.pt._qproc = aio_poll_queue_proc;
- 	apt.pt._key = req->events;
- 	apt.iocb = aiocb;
-+	apt.queued = false;
- 	apt.error = -EINVAL; /* same as no support for IOCB_CMD_POLL */
- 
- 	/* initialized the list so that we can do list_empty checks */
-@@ -1799,9 +1872,10 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 
- 	mask = vfs_poll(req->file, &apt.pt) & req->events;
- 	spin_lock_irq(&ctx->ctx_lock);
--	if (likely(req->head)) {
--		spin_lock(&req->head->lock);
--		if (list_empty(&req->wait.entry) || req->work_scheduled) {
-+	if (likely(apt.queued)) {
-+		bool on_queue = poll_iocb_lock_wq(req);
-+
-+		if (!on_queue || req->work_scheduled) {
- 			/*
- 			 * aio_poll_wake() already either scheduled the async
- 			 * completion work, or completed the request inline.
-@@ -1817,7 +1891,7 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 		} else if (cancel) {
- 			/* Cancel if possible (may be too late though). */
- 			WRITE_ONCE(req->cancelled, true);
--		} else if (!list_empty(&req->wait.entry)) {
-+		} else if (on_queue) {
- 			/*
- 			 * Actually waiting for an event, so add the request to
- 			 * active_reqs so that it can be cancelled if needed.
-@@ -1825,7 +1899,8 @@ static int aio_poll(struct aio_kiocb *aiocb, const struct iocb *iocb)
- 			list_add_tail(&aiocb->ki_list, &ctx->active_reqs);
- 			aiocb->ki_cancel = aio_poll_cancel;
- 		}
--		spin_unlock(&req->head->lock);
-+		if (on_queue)
-+			poll_iocb_unlock_wq(req);
- 	}
- 	if (mask) { /* no async, we'd stolen it */
- 		aiocb->ki_res.res = mangle_poll(mask);
-diff --git a/include/uapi/asm-generic/poll.h b/include/uapi/asm-generic/poll.h
-index 41b509f410bf9..f9c520ce4bf4e 100644
---- a/include/uapi/asm-generic/poll.h
-+++ b/include/uapi/asm-generic/poll.h
-@@ -29,7 +29,7 @@
- #define POLLRDHUP       0x2000
- #endif
- 
--#define POLLFREE	(__force __poll_t)0x4000	/* currently only for epoll */
-+#define POLLFREE	(__force __poll_t)0x4000
- 
- #define POLL_BUSY_LOOP	(__force __poll_t)0x8000
- 
+ /* For C file, we already have NOKPROBE_SYMBOL macro */
+
+base-commit: fa04e38818aeac177f730cfeadfbdb6f7c25f5b4
 -- 
 2.34.1
 

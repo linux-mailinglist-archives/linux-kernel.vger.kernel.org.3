@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7374705B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1164705BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239181AbhLJQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 11:33:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33299 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235860AbhLJQdN (ORCPT
+        id S243500AbhLJQdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 11:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243485AbhLJQds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:33:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639153778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5El+Q3eIgzJBovVYIEGNnx5wIrj3Zs25homqjZk9cI=;
-        b=Zswuym1IO5b51GyFnOONZEVSOBK+Wo6yStoxjaY0+5g6IAvsBISNesLXv+1RDdXzJEx34e
-        2sllmq1dvB8+Dq2O4SnOS/gEdxYKNNpY85pbL68WyxA570Ud1mqn7RsiZoTWHjNlHIwIXL
-        16r6d1M3RaYBWk0TYJxIpTmZHRLWiG4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-280-YLOBJioWPJSSEzJxl9TEmQ-1; Fri, 10 Dec 2021 11:29:35 -0500
-X-MC-Unique: YLOBJioWPJSSEzJxl9TEmQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9B770192CC41;
-        Fri, 10 Dec 2021 16:29:33 +0000 (UTC)
-Received: from [10.22.33.49] (unknown [10.22.33.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 423E85DF4B;
-        Fri, 10 Dec 2021 16:29:32 +0000 (UTC)
-Message-ID: <80ee87bb-f36c-4a16-9095-43ea84818375@redhat.com>
-Date:   Fri, 10 Dec 2021 11:29:31 -0500
+        Fri, 10 Dec 2021 11:33:48 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CA1C0617A1;
+        Fri, 10 Dec 2021 08:30:13 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id w1so31476298edc.6;
+        Fri, 10 Dec 2021 08:30:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HpfDAT6WvpTP7gmAXKoP3MZTEZPgr1lYsw5PpU8yOc0=;
+        b=JzyfTWDQn69yfucWjLc1cZichz725kMJ2TGgUbPRFpfBEmRhg4XIN5pn7HQwQPEy3E
+         cOz6+uo7m7bOdUcTHHv/XnCURvoifRmdJ+833LJOB8eIiyL6Nr8SYQ2Ddb4G1cZ7uPSM
+         NVN44FPhbzHuWg6Lif67dQ8G6vw1F9mNrT3jTuBhBnpy1qIyeAvnZubVM6qXrQbyvxIX
+         8Ne2riDY2IvEX97HxyubPDk8bfjWki+CIcRizbntK9IsxNVOVtAdLRoxFFZl/a/xGtla
+         PRvCAl2AWpUAWHJfoHzhrDDorZ93OipcBOJzw7wzNgEzaIucuN64kDFBm6D1X0PC59To
+         2F9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HpfDAT6WvpTP7gmAXKoP3MZTEZPgr1lYsw5PpU8yOc0=;
+        b=LpYkxG1dKqVIkgh5tK58yb2mwf3s7PzQo7WecLlPNFq72kcNCUZxaJm3rPj9KOS/v8
+         CCaqijIrzzF8ENEZeDaWrxJQhBZrEN7wH4y452gDBlOD2sP1AlmFlwsuxRlj69fdL6Hz
+         8p+BFOSj0LsTIwBWsgKKDlDgwDAsL6itsZMvJZv52Ja5mD86LVgPJ5ZgqCBY3GHpWItk
+         8/QT9RLYvuOX/8RKrftu7RrPiEHEaD6XGnyxz74U+SZ53NsaomJf9IJ1QOYY0kdV6Clr
+         91lHCC3yAcBSMOrUe71N+Sos46RkNypY4UneqwJRM5KHoBMVrWQ2yWo6/CR/Z3wZ2qcO
+         m+QA==
+X-Gm-Message-State: AOAM5313A+hFTHT7dyL5hHrKz0eJaCswQ4f9RLj268Wk2xQV1t7SeZ72
+        TvrTCeR8zylJGLwUiKFHrnw=
+X-Google-Smtp-Source: ABdhPJy6Ku7kFWtOND31ALTRNyVN3SlfFf/oJTIsfZCTNq0UowdA1z7e9ut7ZSKnFag0HFLy2JUTOw==
+X-Received: by 2002:a17:906:c297:: with SMTP id r23mr24426129ejz.528.1639153810966;
+        Fri, 10 Dec 2021 08:30:10 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
+        by smtp.googlemail.com with ESMTPSA id nb4sm1713429ejc.21.2021.12.10.08.30.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 08:30:10 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
+Date:   Fri, 10 Dec 2021 17:30:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH-next v2] mm/memcg: Properly handle memcg_stock access for
- PREEMPT_RT
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
 Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20211210025228.158196-1-longman@redhat.com>
- <YbNPrGEjtKjzEjQa@linutronix.de>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YbNPrGEjtKjzEjQa@linutronix.de>
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-17-yang.zhong@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211208000359.2853257-17-yang.zhong@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/8/21 01:03, Yang Zhong wrote:
+> +static void kvm_vcpu_ioctl_x86_get_xsave2(struct kvm_vcpu *vcpu,
+> +					  u8 *state, u32 size)
+> +{
+> +	if (fpstate_is_confidential(&vcpu->arch.guest_fpu))
+> +		return;
+> +
+> +	fpu_copy_guest_fpstate_to_uabi(&vcpu->arch.guest_fpu,
+> +				       state, size,
+> +				       vcpu->arch.pkru);
+> +}
+> +
+>   static int kvm_vcpu_ioctl_x86_set_xsave(struct kvm_vcpu *vcpu,
+>   					struct kvm_xsave *guest_xsave)
+>   {
+> @@ -4951,6 +4963,15 @@ static int kvm_vcpu_ioctl_x86_set_xsave(struct kvm_vcpu *vcpu,
+>   					      supported_xcr0, &vcpu->arch.pkru);
+>   }
+>   
+> +static int kvm_vcpu_ioctl_x86_set_xsave2(struct kvm_vcpu *vcpu, u8 *state)
+> +{
+> +	if (fpstate_is_confidential(&vcpu->arch.guest_fpu))
+> +		return 0;
+> +
+> +	return fpu_copy_uabi_to_guest_fpstate(&vcpu->arch.guest_fpu, state,
+> +					      supported_xcr0, &vcpu->arch.pkru);
+> +}
+> +
 
-On 12/10/21 08:01, Sebastian Andrzej Siewior wrote:
-> On 2021-12-09 21:52:28 [-0500], Waiman Long wrote:
-> …
->> --- a/mm/memcontrol.c
->> +++ b/mm/memcontrol.c
-> …
->> @@ -2210,7 +2211,7 @@ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
->>   	struct memcg_stock_pcp *stock;
->>   	unsigned long flags;
->>   
->> -	local_irq_save(flags);
->> +	local_lock_irqsave(&memcg_stock.lock, flags);
-> Why is this one using the lock? It isn't accessing irq_obj, right?
-Well, the lock isn't just for irq_obj. It protects the whole memcg_stock 
-structure which include irq_obj. Sometimes, data in irq_obj (or 
-task_obj) will get transfer to nr_pages and vice versa. So it is easier 
-to use one single lock for the whole thing.
->
->>   	stock = this_cpu_ptr(&memcg_stock);
->>   	if (stock->cached != memcg) { /* reset if necessary */
->> @@ -2779,29 +2780,28 @@ static struct mem_cgroup *get_mem_cgroup_from_objcg(struct obj_cgroup *objcg)
->>    * which is cheap in non-preempt kernel. The interrupt context object stock
->>    * can only be accessed after disabling interrupt. User context code can
->>    * access interrupt object stock, but not vice versa.
->> + *
->> + * This task and interrupt context optimization is disabled for PREEMPT_RT
->> + * as there is no performance gain in this case.
->>    */
->>   static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
->>   {
->> -	struct memcg_stock_pcp *stock;
->> -
->> -	if (likely(in_task())) {
->> +	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
->>   		*pflags = 0UL;
->>   		preempt_disable();
->> -		stock = this_cpu_ptr(&memcg_stock);
->> -		return &stock->task_obj;
->> +		return this_cpu_ptr(&memcg_stock.task_obj);
->>   	}
-> We usually add the local_lock_t to the object it protects, struct
-> obj_stock it this case.
-> That would give you two different locks (instead of one) so you wouldn't
-> have to use preempt_disable() to avoid lockdep's complains. Also it
-> would warn you if you happen to use that obj_stock in !in_task() which
-> is isn't possible now.
-> The only downside would be that drain_local_stock() needs to acquire two
-> locks.
->
-As said above, having separate locks will complicate the interaction 
-between irq_obj and the broader memcg_stock fields. Besides throughput 
-is a less important matrix for PREEMPT_RT, so I am not trying to 
-optimize throughput performance for PREEMPT_RT here.
+I think fpu_copy_uabi_to_guest_fpstate (and therefore 
+copy_uabi_from_kernel_to_xstate) needs to check that the size is 
+compatible with the components in the input.
 
-Cheers,
-Longman
+Also, IIUC the size of the AMX state will vary in different processors. 
+  Is this correct?  If so, this should be handled already by 
+KVM_GET/SET_XSAVE2 and therefore should be part of the 
+arch/x86/kernel/fpu APIs.  In the future we want to support migrating a 
+"small AMX" host to a "large AMX" host; and also migrating from a "large 
+AMX" host to a "small AMX" host if the guest CPUID is compatible with 
+the destination of the migration.
 
+Paolo

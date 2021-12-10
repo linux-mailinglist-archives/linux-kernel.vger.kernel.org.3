@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EABAB4702B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4814702BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242080AbhLJOZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:25:36 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10782 "EHLO
+        id S242096AbhLJOZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:25:59 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26118 "EHLO
         mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232310AbhLJOZf (ORCPT
+        by vger.kernel.org with ESMTP id S232310AbhLJOZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:25:35 -0500
+        Fri, 10 Dec 2021 09:25:58 -0500
 Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BADvm8x008389;
-        Fri, 10 Dec 2021 14:22:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=VVeR8QBvzs2y1tQH21iTGgNnpjv/MTLz/B/Yt0LNyvY=;
- b=b/7lzJ+EZPRr1vCp1Iq81KAgvYU+f6sPLQoJaRy4f6Rq4VT+Zs1esi14gsWmBgRm80Wt
- JDs7+BUOcq9xmSxSZB05GAgfJUb/N00Cr8ihUa+m/CuZ2aFWsTcJUqSFFNSu3cL4gvNk
- e+mgJAWuX//dbz3XcApWJF+0zXKPUvA5GHY58r0DoeC0rVYNQ3f77aYcNmZijq67fHbb
- JdsorSZMPBpYU7YqAdOYsZgFLyCA9nlw9w9h2v1SrbcuBO0vH0Um1nofMSmwlvXJGBIR
- Vt3dp70WJ1hkXBuBTccs49Vuw+qo+LqUCnLv84f4Q21TnX7xCS+YN7AvmG7QuGqzf8vH 0A== 
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BADvqjW008448;
+        Fri, 10 Dec 2021 14:22:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=N5gp9F+NAdQIftk6RmNjXqmLEqsrhHuCWY9IvU4rvo0=;
+ b=QBM1Q5SJP/60yNh3woD+GvR4qBfDvFOmKtwgKXdjCuKyjJawQc65bIAqsJ2LVfTDyCUT
+ K3dpDDztpA4RFjYVtarvWX9MfuNUZZLrwm3PRPpiiU60HQEvH9/eNxaED9288HgetDhZ
+ Bm0GrsEMoX5UPtSWerl1L3+M4IFTfDvs2WnmV2qgevbcj3pF3uwdO0xnbxv6uyKwZU/e
+ +gxzwoddbEZnnliEOOR1aK5z7Ey/R9aVmY7sb2z+Q2c9pswzW3Cc5pty3X+rdNL1iWAZ
+ NPy6aRfPAf7/Gq2czeGcOa2FMrEWXHV1yTGW+FIaVK8grwAgfhwc1euRRalMQNdkZpjs dg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv886gf6x-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv886gfab-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 14:21:59 +0000
+        Fri, 10 Dec 2021 14:22:08 +0000
 Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BADwWZc010186;
-        Fri, 10 Dec 2021 14:21:59 GMT
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BADw8ke008759;
+        Fri, 10 Dec 2021 14:22:07 GMT
 Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv886gf6h-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv886gfa1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 14:21:59 +0000
+        Fri, 10 Dec 2021 14:22:07 +0000
 Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAEG4EC024535;
-        Fri, 10 Dec 2021 14:21:58 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma05wdc.us.ibm.com with ESMTP id 3cqyycg5gb-1
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BAEG38h024099;
+        Fri, 10 Dec 2021 14:22:07 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma05wdc.us.ibm.com with ESMTP id 3cqyycg5jq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 14:21:58 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAELvRi35455456
+        Fri, 10 Dec 2021 14:22:06 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BAEM5e228508554
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 14:21:57 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 23A8B2806D;
-        Fri, 10 Dec 2021 14:21:57 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4401128058;
-        Fri, 10 Dec 2021 14:21:49 +0000 (GMT)
-Received: from [9.211.51.40] (unknown [9.211.51.40])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 14:21:48 +0000 (GMT)
-Message-ID: <6127b774-1042-0057-6b5b-29471554149b@linux.ibm.com>
-Date:   Fri, 10 Dec 2021 09:21:47 -0500
+        Fri, 10 Dec 2021 14:22:05 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3045B78064;
+        Fri, 10 Dec 2021 14:22:05 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D38447805C;
+        Fri, 10 Dec 2021 14:22:00 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Dec 2021 14:22:00 +0000 (GMT)
+Message-ID: <915aa1173be6d73c63f17e7e170da4fe20ed36f3.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem
+ related variables into ima_namespace
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Fri, 10 Dec 2021 09:21:59 -0500
+In-Reply-To: <dca4e7c9-87a7-9a9e-b1f2-df16f1a45019@linux.ibm.com>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+         <20211208221818.1519628-14-stefanb@linux.ibm.com>
+         <20211209191109.o3x7nynnm52zhygz@wittgenstein>
+         <0ab33fbc-8438-27b6-ff4c-0321bfc73855@linux.ibm.com>
+         <20211210113244.odv2ibrifz2jzft5@wittgenstein>
+         <dca4e7c9-87a7-9a9e-b1f2-df16f1a45019@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 19/32] KVM: s390: mechanism to enable guest zPCI
- Interpretation
-Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-20-mjrosato@linux.ibm.com>
- <7df88bde-2b63-4a91-036c-28527f56e22d@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <7df88bde-2b63-4a91-036c-28527f56e22d@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rMBuYAGuVOTHq6Pq4s-1AtIQ7GhoM3aJ
-X-Proofpoint-ORIG-GUID: sUdoKL0ACDD2ok_bQf5fxtr_eavOwNQ5
+X-Proofpoint-GUID: zCgL4rsL_kAUO7EruqgnCV4s8qE_8tNu
+X-Proofpoint-ORIG-GUID: dcvsPHraaPARlH9Po_EMIdo0hLkmu4xi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-10_04,2021-12-10_01,2021-12-02_01
@@ -95,104 +97,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 8:27 AM, Christian Borntraeger wrote:
+On Fri, 2021-12-10 at 08:57 -0500, Stefan Berger wrote:
+> On 12/10/21 06:32, Christian Brauner wrote:
+> > On Thu, Dec 09, 2021 at 07:57:02PM -0500, Stefan Berger wrote:
+> > > On 12/9/21 14:11, Christian Brauner wrote:
+> > > >   From 1f03dc427c583d5e9ebc9ebe9de77c3c535bbebe Mon Sep 17
+> > > > 00:00:00 2001
+> > > > From: Christian Brauner <christian.brauner@ubuntu.com>
+> > > > Date: Thu, 9 Dec 2021 20:07:02 +0100
+> > > > Subject: [PATCH] !!!! HERE BE DRAGONS - UNTESTED !!!!
+> > > > 
+> > > > ---
+> > > >    security/integrity/ima/ima_fs.c | 43
+> > > > +++++++++++++++++++++++++++++----
+> > > >    1 file changed, 38 insertions(+), 5 deletions(-)
+> > > > 
+> > > > diff --git a/security/integrity/ima/ima_fs.c
+> > > > b/security/integrity/ima/ima_fs.c
+> > > > index 583462b29cb5..d5b302b925b8 100644
+> > > > --- a/security/integrity/ima/ima_fs.c
+> > > > +++ b/security/integrity/ima/ima_fs.c
+> > > > @@ -317,10 +317,14 @@ static ssize_t ima_read_policy(char
+> > > > *path)
+> > > >    static ssize_t ima_write_policy(struct file *file, const
+> > > > char __user *buf,
+> > > >    				size_t datalen, loff_t *ppos)
+> > > >    {
+> > > > -	struct ima_namespace *ns = get_current_ns();
+> > > > +	struct ima_namespace *ns;
+> > > > +	struct user_namespace *user_ns;
+> > > >    	char *data;
+> > > >    	ssize_t result;
+> > > > +	user_ns = ima_filp_private(filp);
+> > > > +	ns = user_ns->ima_ns
+> > > > +
+> > > >    	if (datalen >= PAGE_SIZE)
+> > > >    		datalen = PAGE_SIZE - 1;
+> > > > @@ -373,26 +377,51 @@ static const struct seq_operations
+> > > > ima_policy_seqops = {
+> > > >    };
+> > > >    #endif
+> > > > +static struct user_namespace *ima_filp_private(struct file
+> > > > *filp)
+> > > > +{
+> > > > +	if (!(filp->f_flags & O_WRONLY)) {
+> > > > +#ifdef CONFIG_IMA_READ_POLICY
+> > > > +		struct seq_file *seq;
+> > > > +
+> > > > +		seq = filp->private_data;
+> > > > +		return seq->private;
+> > > > +#endif
+> > > > +	}
+> > > > +	return filp->private_data;
+> > > > +}
+> > > > +
+> > > >    /*
+> > > >     * ima_open_policy: sequentialize access to the policy file
+> > > >     */
+> > > >    static int ima_open_policy(struct inode *inode, struct file
+> > > > *filp)
+> > > >    {
+> > > > -	struct ima_namespace *ns = get_current_ns();
+> > > > +	struct user_namespace *user_ns = current_user_ns();
+> > > 
+> > > Do we have to take a reference on the user namespace assuming one
+> > > can open
+> > > the file, pass the fd down the hierarchy, and then the user
+> > > namespace with
+> > > the opened file goes away? Or is there anything else that keeps
+> > > the user
+> > > namespace alive?
+> > No, we don't. When ima_policy_open() is called we do
+> > current_user_ns() but that will be guaranteed to be identical to
+> > filp->f_cred->user_ns. And f_cred is a reference that has been
+> > taken when the vfs allocated a struct file for this .open call so
+> > won't go away until the last fput.
+> > 
+> > My proposal is also too complicated, I think.
+> > (The booster is giving me the same side-effects as my second shot
+> > so this looks like two good days of fever and headache. So I'll use
+> > that as an excuse. :))
+> > 
+> > Your patch series as it stands has a bit of a security issue with
+> > those get_current_ns() calls across differnet file/seq_file
+> > operations. 
+> > You have to make an architectural decision, I think. I see two
+> > sensible options:
+> > 1. The relevant ima_ns that .open/.read/.write operate on is always
+> > taken to be the ima_ns of the filesystem's userns, i.e. sb-
+> > >s_user_ns->ima_ns.
+> >     This - but I'm not an ima person - makes the most sense to me
+> > and the semantics are straightforward. If I write to a file to
+> > alter some policy then I expect the ima namespace of the user
+> > namespace to be affected that the securityfs instance was mounted
+> > in.
+> > 2. The relevant ima_ns that .open/.read/.write operate on is always
+> > taken to be the one of the opener. I don't really like that as that
+> > gets weird if for some complicated reason the caller is not located
+> > in the userns the filesystem was mounted in (weird mount
+> > propagation scenario or sm). It also feels strange to operate on an
+> > ima_ns that's different from s_user_ns->ima_ns in a securityfs
+> > instance.
 > 
-> 
-> Am 07.12.21 um 21:57 schrieb Matthew Rosato:
->> The guest must have access to certain facilities in order to allow
->> interpretive execution of zPCI instructions and adapter event
->> notifications.  However, there are some cases where a guest might
->> disable interpretation -- provide a mechanism via which we can defer
->> enabling the associated zPCI interpretation facilities until the guest
->> indicates it wishes to use them.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/kvm_host.h |  4 +++
->>   arch/s390/kvm/kvm-s390.c         | 43 ++++++++++++++++++++++++++++++++
->>   arch/s390/kvm/kvm-s390.h         | 10 ++++++++
->>   3 files changed, 57 insertions(+)
->>
->> diff --git a/arch/s390/include/asm/kvm_host.h 
->> b/arch/s390/include/asm/kvm_host.h
->> index 3f147b8d050b..38982c1de413 100644
->> --- a/arch/s390/include/asm/kvm_host.h
->> +++ b/arch/s390/include/asm/kvm_host.h
->> @@ -252,7 +252,10 @@ struct kvm_s390_sie_block {
->>   #define ECB2_IEP    0x20
->>   #define ECB2_PFMFI    0x08
->>   #define ECB2_ESCA    0x04
->> +#define ECB2_ZPCI_LSI    0x02
->>       __u8    ecb2;                   /* 0x0062 */
->> +#define ECB3_AISI    0x20
->> +#define ECB3_AISII    0x10
->>   #define ECB3_DEA 0x08
->>   #define ECB3_AES 0x04
->>   #define ECB3_RI  0x01
->> @@ -938,6 +941,7 @@ struct kvm_arch{
->>       int use_cmma;
->>       int use_pfmfi;
->>       int use_skf;
->> +    int use_zpci_interp;
->>       int user_cpu_state_ctrl;
->>       int user_sigp;
->>       int user_stsi;
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index a680f2a02b67..361d742cdf0d 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -1023,6 +1023,47 @@ static int kvm_s390_vm_set_crypto(struct kvm 
->> *kvm, struct kvm_device_attr *attr)
->>       return 0;
->>   }
->> +static void kvm_s390_vcpu_pci_setup(struct kvm_vcpu *vcpu)
->> +{
->> +    /*
->> +     * If the facilities aren't available for PCI interpretation and
->> +     * interrupt forwarding, we shouldn't be here.
->> +     */
-> 
-> This reads like we want a WARN_ON or BUG_ON, but as we call this 
-> uncoditionally this is
-> actually a valid check. So instead of "shouldn't be here" say something 
-> like "bail out
-> if interpretion is not active".  ?
+> We have this situation because one can setns() to another mount 
+> namespaces but the data shown by SecurityFS lives in a user
+> namespace,  right?
 
-Right, this comment block is plain wrong.  We expect to get here under 
-multiple circumstances and its OK for this bit to be off:
-- initial vcpu setup (use_zpci_interp is off)
-- Right after we set use_zpci_interp=1 (turn on ECB for all vcpu)
-- hotplug vcpu setup (use_zpci_interp might be on or off)
+Well, not necessarily.  There is another case where only the userns is
+unshared and securityfs is never mounted inside the container.  If the
+process has the capability to open the securityfs files (kubernetes
+privileged container, say), what should it see? The analogue with the
+pid namespace says it should see the contents of the what the parent
+had mounted because if it wanted to see its own it would have done a
+mount of securityfs inside the userns.  This argues for sb->s_user_ns-
+>ima_ns.
 
-Will re-word.
+for the setns mount namespace case, the vfsmnt tree is duplicated, so
+if the securityfs sb->s_user_ns is your user namespace in the prior
+mount namespace, it will end up being so in the new one.  sb->s_user_ns 
+only changes on actual mount.
 
-> 
->> +    if (!vcpu->kvm->arch.use_zpci_interp)
->> +        return;
->> +
->> +    vcpu->arch.sie_block->ecb2 |= ECB2_ZPCI_LSI;
->> +    vcpu->arch.sie_block->ecb3 |= ECB3_AISII + ECB3_AISI;
->> +}
->> +
->> +void kvm_s390_vcpu_pci_enable_interp(struct kvm *kvm)
->> +{
->> +    struct kvm_vcpu *vcpu;
->> +    int i;
->> +
->> +    /*
->> +     * If host facilities are available, turn on interpretation for the
->> +     * life of this guest
->> +     */
->> +    if (!test_facility(69) || !test_facility(70) || 
->> !test_facility(71) ||
->> +        !test_facility(72))
->> +        return;
-> 
-> Wouldnt that also enable interpretion for VSIE? I guess we should check 
-> for the
-> sclp facilities from patches 1,2,3, and 4 instead.
-> 
+>  And now we need to decide whether to affect the data in the
+> user namespace  that did the open (option 2) or to which the
+> SecurityFS  belongs to (option 1). If we were to open a regular file
+> it would be option 1, so we should probably not break that existing
+> semantic and also choose option 1 unless there one wasn't allowed to
+> choose the user namespace the SecurityFS files belonged to then it
+> should be option 2 
 
-Good point -- will change.
+Once the userns is unshared, IMA accounting is done inside the
+namespace.  However, in order to see the results, the container must
+mount securityfs in the userns.  I can't think of a good reason why a
+privileged container should want to be accounted separately but see the
+results of its parents, but similarly I can't see why a pid namespace
+should want to see /proc of its parent either ... yet that's the
+semantic we have today.
+
+> but then we have file descriptor passing where 'being allowed' can 
+> change depending on who is reading/writing a file... Is there
+> anything that would prevent us from setns()'ing to that target user
+> namespace so that we would now see that of a user namespace that we
+> are not allowed to see?
+
+If you're able to setns to a user namespace, you logically have all its
+privileges, so that problem shouldn't arise.
+
+Option 2 is basically sliding back towards securityfs magically
+changing properties depending on which userns is asking.  If we're
+going to support that, I don't see what was wrong with the owner/guid
+magically changing as well like I first propsed.  If we're going to
+insist on a new mount of securityfs, I think it has to function cleanly
+like the pid namespace, so option 1 is required.
+
+James
 
 

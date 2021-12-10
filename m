@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C3E4703F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E26B4703F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242888AbhLJPhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S242915AbhLJPjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:39:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242885AbhLJPg5 (ORCPT
+        with ESMTP id S242904AbhLJPjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:36:57 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9062BC0617A2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:33:22 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso9738138pji.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:33:22 -0800 (PST)
+        Fri, 10 Dec 2021 10:39:46 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8FAC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:36:11 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id g14so30418946edb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:36:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=+Esq0sZPdw3CUxbw90CaKjttg63CC/0FtTnNLHVgmwI=;
-        b=Xp2aY5/mUAdqIk01AyFEyxgsVqFLG+FbOiR7C9BxjePy79yFkIuwRNLaeHlSuzJITw
-         MZ+zJ0V+kJE24ZF2MKGlQUv4YMlLvcCxcm4M0q5NNCMHXLDOel1Xr+nqXqJm/NMZpv2E
-         m8wvlPxzaduZyLQso4P2xi2nTJHiRZ9UsuHzgRntHV+w5QxRS1Y2pyiKCVKEA2LwdqPB
-         IdUD73haKh+vGZE5/3bo9GUW3u2MuRIB99j4CK0wZCW8nVxAfvM3WC1lT7WtZwh+Bka6
-         UWCjbCntvub27qGRhZjer9XfedW4QJUn7jdK+dGGf6Qar8+vOL03yaR6YvmPWyy5m97r
-         XxKw==
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pSCdhRVaqsk4roNXcaGq1tqrFLad6hYGJmVQo7mh3wk=;
+        b=mI8edDprSwsq2jpSeyuaE6JSmyj3g1pjk0vZiJPadBc5WWxuQPFP9e1rdsE9RIPiDQ
+         TwzsYHpXhKKosyFiULwj9z6TxNXOcPhCK4gWlrsOMtST5uRaz/V2e7WTiRbLp1DdM/XE
+         TReTkWXd/MH4X51GVoP7TeN/T+I3LcPtTLNm10vrRlgA4Bc2ZhW01/Wjr5GXVO4SZoqy
+         7LdcU0SBoQxP3shsQrGxiupDHbPiUTGmH+fDEP7r5ClvHFa8jDw45eZvwmeP5ldwj8RY
+         b+AyAXjGb2mcFUyvcXWENLBxQUwDEgS/pSIuiEf/fsRqaLgBwxJHCsisa8Ge6hvkFYEY
+         XNyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+Esq0sZPdw3CUxbw90CaKjttg63CC/0FtTnNLHVgmwI=;
-        b=rbSNMOIq8ebiIsuLHS1F9zhZlI5d1XLoQZ/eq4lBLzpllPaOrjKFJnfML9WgCI+JDM
-         ZVDtMdzPRGNZ0b8gbj9XW11rCgAEM6XilH+Uwl9dpJO1fT0yoCHpDpG72nCpIZQhPgJW
-         PashZ1OYoWhZK8FkoHMtD07qxxqEo+JO3NZpIupOrLzya/HLV6SFPAmrn38OYNm+uvfy
-         I8aDTkfs9mjjhemNvVjoF7UaSWvuWZfLvAJlKLkk68o+U39hQxsFXYHNqgNzno3PHgrS
-         KF1/SD4V6b0vX1RTPzdCNG/iEHiHFN+gyYDQaddYlrgTpXkjA6KUWRd4bZaNQ1vSoPbk
-         CN8Q==
-X-Gm-Message-State: AOAM531X7CG2m1YYjcqpZROiASfHFiLjxegAxA7gA6aUSdJGC23VcfJD
-        yipX2tK8P7mXQhH/lSiYciy2Og==
-X-Google-Smtp-Source: ABdhPJx5r6aZDrgRAjs5N8RFRVvklLrmHTgFw9ZGeuUK0e3eo9H/ga+H5kpiwNSB0MZFyWYriQEOFw==
-X-Received: by 2002:a17:90b:1d81:: with SMTP id pf1mr25132213pjb.134.1639150401989;
-        Fri, 10 Dec 2021 07:33:21 -0800 (PST)
-Received: from [172.20.4.26] ([66.185.175.30])
-        by smtp.gmail.com with ESMTPSA id fw21sm12546666pjb.25.2021.12.10.07.33.20
+        bh=pSCdhRVaqsk4roNXcaGq1tqrFLad6hYGJmVQo7mh3wk=;
+        b=3NmjwdO2gMuUs2GTKvJlZS8bFGSUqAhQNMVPMiU44GC/JpNzFFUjnStPobfIdl59MX
+         MuNLIElxGBS5dytG1l1vTOKq0iGFGbeUz9Gte8r+1wFkzlyI88D8uZwqrUnBdvENb78a
+         IVmMMXTWu4eNLnmgrAMkLxa9TIxpfheEwlvbig/N8owRpxEucYk3eyNZ5oBa5MD8j2nW
+         J0P6x2La0EQGQdqvvw5Rry5v7fP8rDaV8hBJaHoRddTgYyIX/sCwMT0O2bYQJwoZO0TL
+         lEafRBao/gVg6Eh/q++UX78LKSD4+5AYcePQEWUtA1K9bUeIQaEkfSWW2KdtfD46hWpk
+         5JxA==
+X-Gm-Message-State: AOAM533AGS2JxuyfSIhh46M4dn4L/GIVo5pZh0nkCpxDv0pr/sZ6zjK5
+        fiHR5JInUiVQh2s37M9yvlu36w==
+X-Google-Smtp-Source: ABdhPJygZ3W8i16qoncudmp3FcQlV8i4KEF4s5cLPBM/iVDjAfBLgx9x1LTfPyT8pVUWLm67SwHTAw==
+X-Received: by 2002:a17:906:9b92:: with SMTP id dd18mr24774352ejc.290.1639150568293;
+        Fri, 10 Dec 2021 07:36:08 -0800 (PST)
+Received: from [192.168.178.33] (94.105.100.208.dyn.edpnet.net. [94.105.100.208])
+        by smtp.gmail.com with ESMTPSA id ar4sm1588523ejc.52.2021.12.10.07.36.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 07:33:21 -0800 (PST)
-Subject: Re: [syzbot] KASAN: use-after-free Write in io_queue_worker_create
-To:     syzbot <syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <0000000000003cd27305d2c8a028@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <8544854b-226d-befd-bd91-5af182c2b03d@kernel.dk>
-Date:   Fri, 10 Dec 2021 08:33:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 10 Dec 2021 07:36:07 -0800 (PST)
+Message-ID: <b6c19c9c-de6c-225c-5899-789dfd8e7ae8@tessares.net>
+Date:   Fri, 10 Dec 2021 16:36:06 +0100
 MIME-Version: 1.0
-In-Reply-To: <0000000000003cd27305d2c8a028@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in mptcp_inq.c
+Content-Language: en-GB
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     cgel.zte@gmail.com, mathew.j.martineau@linux.intel.com,
+        davem@davemloft.net, shuah@kernel.org, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ye Guojin <ye.guojin@zte.com.cn>,
+        ZealRobot <zealci@zte.com.cn>
+References: <20211210071424.425773-1-ye.guojin@zte.com.cn>
+ <ab84ca1f-0f43-d50c-c272-81f64ee31ce8@tessares.net>
+ <20211210065437.27c8fe23@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20211210065644.192f5159@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20211210065644.192f5159@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 4:00 AM, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> INFO: task hung in io_wq_put_and_exit
-> 
-> INFO: task syz-executor.2:8594 blocked for more than 143 seconds.
->       Not tainted 5.16.0-rc1-syzkaller #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:syz-executor.2  state:D stack:26928 pid: 8594 ppid:  3894 flags:0x00024004
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:4972 [inline]
->  __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
->  schedule+0xd2/0x260 kernel/sched/core.c:6326
->  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1857
->  do_wait_for_common kernel/sched/completion.c:85 [inline]
->  __wait_for_common kernel/sched/completion.c:106 [inline]
->  wait_for_common kernel/sched/completion.c:117 [inline]
->  wait_for_completion+0x174/0x270 kernel/sched/completion.c:138
->  io_wq_exit_workers fs/io-wq.c:1222 [inline]
->  io_wq_put_and_exit+0x33a/0xb70 fs/io-wq.c:1257
->  io_uring_clean_tctx fs/io_uring.c:9803 [inline]
->  io_uring_cancel_generic+0x622/0x695 fs/io_uring.c:9886
->  io_uring_files_cancel include/linux/io_uring.h:16 [inline]
->  do_exit+0x60c/0x2b40 kernel/exit.c:787
->  do_group_exit+0x125/0x310 kernel/exit.c:929
->  get_signal+0x47d/0x2220 kernel/signal.c:2830
->  arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
->  handle_signal_work kernel/entry/common.c:148 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
->  exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
->  syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
->  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fe940cbfb49
-> RSP: 002b:00007fe940435218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-> RAX: fffffffffffffe00 RBX: 00007fe940dd2f68 RCX: 00007fe940cbfb49
-> RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fe940dd2f68
-> RBP: 00007fe940dd2f60 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe940dd2f6c
-> R13: 00007ffc1b1af90f R14: 00007fe940435300 R15: 0000000000022000
->  </TASK>
+Hi Jakub,
 
-#syz test git://git.kernel.dk/linux-block io_uring-5.16
+On 10/12/2021 15:56, Jakub Kicinski wrote:
+> On Fri, 10 Dec 2021 06:54:37 -0800 Jakub Kicinski wrote:
+>> On Fri, 10 Dec 2021 10:58:27 +0100 Matthieu Baerts wrote:
+>>> Hi Ye,
+>>>
+>>> On 10/12/2021 08:14, cgel.zte@gmail.com wrote:  
+>>>> From: Ye Guojin <ye.guojin@zte.com.cn>
+>>>>
+>>>> 'sys/ioctl.h' included in 'mptcp_inq.c' is duplicated.    
+>>>
+>>> Good catch, the modification looks good to me:
+>>>
+>>> Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+>>>
+>>>
+>>> This patch is for "net-next" tree as it fixes an issue introduced by a
+>>> patch only in this tree:
+>>>
+>>> Fixes: b51880568f20 ("selftests: mptcp: add inq test case")
+>>>
+>>> Regarding the commit message, please next time include the Fixes tag and
+>>> mention for which tree it is for in the FAQ [1], e.g. [PATCH net-next].
+>>>
+>>>
+>>> @David/Jakub: do you prefer a v2 with these modifications or is it fine
+>>> to apply this small patch directly in net-next tree?  
+>>
+>> v1 is fine. Let me apply it right away and do the edits before I forget
+>> they are needed..
 
+Thank you!
+
+> Actually, I take that back, let's hear from Mat, he may want to take
+> the patch via his tree.
+
+We "rebase" our tree on top of net-next every night. I think for such
+small patches with no behaviour change and sent directly to netdev ML,
+it is probably best to apply them directly. I can check with Mat if it
+is an issue if you prefer.
+
+I would have applied it in our MPTCP tree if we were sending PR, not to
+bother you for such patches but I guess it is best not to have us
+sending this patch a second time later :)
+
+BTW, if you prefer us sending PR over batches of patches, please tell us!
+
+Cheers,
+Matt
 -- 
-Jens Axboe
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

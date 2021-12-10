@@ -2,98 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B530A4703B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060064703BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242779AbhLJPY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:24:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:43176 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239316AbhLJPY4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:24:56 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07B9712FC;
-        Fri, 10 Dec 2021 07:21:21 -0800 (PST)
-Received: from [10.57.6.190] (unknown [10.57.6.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15F073F5A1;
-        Fri, 10 Dec 2021 07:21:17 -0800 (PST)
-Subject: Re: [PATCH v2 3/3] perf tools: Support register names from all archs
-From:   German Gomez <german.gomez@arm.com>
-To:     John Garry <john.garry@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org
-Cc:     Alexandre Truong <alexandre.truong@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20211207180653.1147374-1-german.gomez@arm.com>
- <20211207180653.1147374-4-german.gomez@arm.com>
- <90bcce69-9585-3fb4-de89-bbf2bd6def05@huawei.com>
- <aee0c3b8-4d8c-6f1e-24ed-5539a7c1a7b5@arm.com>
-Message-ID: <9828a385-acde-145a-33db-76043e799344@arm.com>
-Date:   Fri, 10 Dec 2021 15:21:09 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S242819AbhLJPZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:25:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242805AbhLJPZz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 10:25:55 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B04C061746;
+        Fri, 10 Dec 2021 07:22:19 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id j3so15551485wrp.1;
+        Fri, 10 Dec 2021 07:22:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Jnwba4bZjLq5RdhOQVSpoiV3VIIFnQHgzq6yln7hbIM=;
+        b=ipFuXk59Dbzxv+IW1pqe3zwl2tPFuRdtGzbi2GkerIVVR5YEUtK6VhO11qqcECuezO
+         BxCc1PLVya1tw6yxoJWafKOag64FcjhVA8Do8a/AfI80Napz3R6tH67rgZT5cCR+gTIo
+         LPkdIYHBhkw59s7633lktVm1mNSr4SEW1jLHHTOe81bBJMD2bl45ixAC2UVUYWYnt0Nt
+         aC9R7Tl3p6aSeAWQ3i3N0cIvjqJi8JanNGecB2W49UtVj9aF5efFHVxHcxXI21bgdyQ7
+         YYgJILE1tsXuFtEq7e9EH5hPyGfytKaa3dvUPYFCpzXpovzAA6bvp/yR/zQ1YACjZ/Xz
+         J5RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Jnwba4bZjLq5RdhOQVSpoiV3VIIFnQHgzq6yln7hbIM=;
+        b=hpfDBdhI9qZAk9C/M1wCBM3F+Kasfmkb/wZDbsnpWQlpqbHXRLc2MC6dFDoebptASD
+         Q9M3ncXzCBMLE1DrP705xYGYxHeKeRLUw6iI7eWTrhYQbGlQbRFAlz+Mm/qaUS4SDebB
+         XqzOmYHVrymEWHPG/0kDuGhN7OR/uu2VQgxhcWHdxwgg2OPSXaFl+uyxV4tk47bfcLO/
+         PDQ3JiVzFgyOW1dOWoKq7K+Rjg3lWGOAfhWWVD9I+NGJuwsa4U5OLIsQ5m62NP6gssCo
+         j716HRpZXBZKWX4axNisf77nmMn2LmNXVlAwlcGXZ1xu60NJu7aPUNOxMRff3Wh366GG
+         6ddg==
+X-Gm-Message-State: AOAM532NatNfILUB7nhKwk6McRFfPDRjg9QyIYbd0+VDnhmy/773PMBm
+        URPlIJhRO6fIf8ri/HQXPgU=
+X-Google-Smtp-Source: ABdhPJxzXqCHZ5Qv9ATTXNRDO6EVE3SyE7fZi3Qxy3ZhjwIYvc/zez/pO+TuwILJQi6/dxfae5AkxA==
+X-Received: by 2002:adf:cd06:: with SMTP id w6mr15078105wrm.431.1639149737976;
+        Fri, 10 Dec 2021 07:22:17 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id t127sm12355478wma.9.2021.12.10.07.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 07:22:16 -0800 (PST)
+Date:   Fri, 10 Dec 2021 16:22:13 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        David Heidelberg <david@ixit.cz>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola Milosavljevic <mnidza@outlook.com>,
+        Ion Agorria <ion@agorria.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 03/24] ARM: tegra: Add labels to tegra30.dtsi
+Message-ID: <YbNwpWpEW4EKHd2R@orome>
+References: <20211208173609.4064-1-digetx@gmail.com>
+ <20211208173609.4064-4-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <aee0c3b8-4d8c-6f1e-24ed-5539a7c1a7b5@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RFgBf0dxqJCnzj+c"
+Content-Disposition: inline
+In-Reply-To: <20211208173609.4064-4-digetx@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 08/12/2021 13:55, German Gomez wrote:
-> Hi John,
->
-> On 08/12/2021 11:51, John Garry wrote:
->> On 07/12/2021 18:06, German Gomez wrote:
->>>   tools/perf/arch/arm/include/perf_regs.h       |  42 --
->>>   tools/perf/arch/arm64/include/perf_regs.h     |  76 --
->>>   tools/perf/arch/csky/include/perf_regs.h      |  82 ---
->>>   tools/perf/arch/mips/include/perf_regs.h      |  69 --
->>>   tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
->>>   tools/perf/arch/riscv/include/perf_regs.h     |  74 --
->>>   tools/perf/arch/s390/include/perf_regs.h      |  78 --
->>>   tools/perf/arch/x86/include/perf_regs.h       |  82 ---
->>>   tools/perf/builtin-script.c                   |  18 +-
->>>   tools/perf/util/perf_regs.c                   | 666 ++++++++++++++++++
->>>   tools/perf/util/perf_regs.h                   |  10 +-
->>>   .../scripting-engines/trace-event-python.c    |  10 +-
->>>   tools/perf/util/session.c                     |  25 +-
->>>   13 files changed, 697 insertions(+), 601 deletions(-)
->> Did you consider leaving the register structures where they are while
->> renaming to include the arch name and then having as externs or similar? I see an example of that idea for arm64_unwind_libunwind_ops.
->>
-> If by register structures you are referring to "__perf_reg_name(int)", I
-> can't leave them where they are. Only one of them would be included in
-> the build.
+--RFgBf0dxqJCnzj+c
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think I need to elaborate a bit more on this since some of the files
-involved share the same name but are serving different purposes and it
-could lead to confusion.
+On Wed, Dec 08, 2021 at 08:35:48PM +0300, Dmitry Osipenko wrote:
+> From: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+>=20
+> Add phandle names for memory/I2C/SPI/USB/SDMMC controller nodes to allow
+> for cleaner device descriptions.
+>=20
+> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> ---
+>  arch/arm/boot/dts/tegra30.dtsi | 36 +++++++++++++++++-----------------
+>  1 file changed, 18 insertions(+), 18 deletions(-)
 
-The linux repo has "perf_regs.h" for each architecture enumerating the
-registers from each architecture. These are the files I #include'd in
-"/tools/perf/util/perf_regs.c".
+We typically only add those when they are really needed. These are
+technically harmless because without a reference, DTC won't actually
+create a phandle property, but dangling labels are the kind of thing
+that some janitor may at some point want to remove with some scripts,
+so I'm hesitant to apply this because it'll likely cause churn in the
+future.
 
-The other "perf_regs.h" affected by this patch are local only to perf.
-Likewise there is one file for each architecture, but contrary to the
-linux ones, they are mutually exclusive, so I can't #include them all:
+Thierry
 
-#ifndef ARCH_PERF_REGS_H
-#define ARCH_PERF_REGS_H
-//...
-#undef ARCH_PERF_REGS_H
+--RFgBf0dxqJCnzj+c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Before the patch, the functions "__perf_reg_name" were declared &
-implemented in these headers, so I had to take them out.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-German
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGzcKUACgkQ3SOs138+
+s6GftA/+KbVHvJu3VYIbmIUpoJYVbJBgJIylYA73m5ii010cLhvZb8ojspNZLof6
+VaHjhKCUqfYy3BabVIbMqLleHzCIBZPSw9SWGkP/yp8SajHZxKrT3ZGqzTnl+QAF
+OZVDjO65wWx81upZHinaysN3tEPJaRjrJhaq0QoiNVnyO8AYvvgq7E8SyfBYBd6B
+mp+gomXAjzn2I/TxP2xpIJesaYnUURATdbu/Sb4S/r1x4eoIH7tELC8LSgAqNfZy
+GPUPFJ6Fd4TS4YCFuC2/5oJt5Cfsw4wz/uA2AlGhWiI9zoHcKj2B4D0sOVwnn0AZ
+Wso4V9kfiZ1+eeALg5q14CU3YFfb/CmsyFrwEdQKV4V+Kvg5VMHIYHOhMgBtO+AR
+jS6cGt4NrgfRNq2PELeT3ns9/nUR7vyW+faJ9r6vXcH/HyB5JcF0ZSDQusVlO+3V
+GTmiIQ0NWwHCckD0l3Ha5tZhfG6X124fV4nX4R7JcP4sMxX8+GtX985Ab/Xusmnt
+VKgUytPXJ3Mj2eOHEca9WgvtNxESOc1Ki7qDbq2bAI7RxxZcND4JwSqE7dLfy1RA
+3+9KTAi4+MrK26QUv1FDSLIDNtwu1cOJx7Rjzg1UswoZuVZY8MxzYiz5qzLSvsIr
+ddK9gDNE1V+4S2H8gc6yF5+NwdrQADORfe4/N6P1+4ww+1nrVhc=
+=WGJZ
+-----END PGP SIGNATURE-----
+
+--RFgBf0dxqJCnzj+c--

@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB2146FDA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB4646FDA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239237AbhLJJ1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:27:45 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:49038
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239221AbhLJJ1p (ORCPT
+        id S239265AbhLJJ2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:28:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239221AbhLJJ23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:27:45 -0500
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 459353F1BA
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 09:24:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639128249;
-        bh=PhONVokzqhlQ6awh8S6WKaNUvrEjNYZlrDmnaqqI4qU=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=J9XfyT7zxh8NyzAH6kA4Qx2hxfc1IudTp6y9WKPBDzvdkrANGji5YBcf/yYUL4oHS
-         2xtV2R/ofdqCDnKmCTNKMGTO+bJpHELH+xpmU2u+ar+TQ1l8DuOafpnUXbAXBtgrQL
-         Ha5p0ivNbkApuqoYo6K93hWkBC8nSwha+ZTFmK1DWCBcabIrJ5EE/WW3lPM87rYAFE
-         HWcGg69KMPRRRhsHk4xYcDNK2flmE3b9uODOfAyKR6Ok8svjSwZnJHojwhGKk/4cGp
-         kiEHhN9KYsp919l7PRuz8whkMvFrmYq5wvGxicXl0nh+2JYKk3eCSlu5aIoxytpbJu
-         AP50Hh2OEPNAg==
-Received: by mail-ot1-f69.google.com with SMTP id g32-20020a9d12a3000000b0056f8e5396a1so3070371otg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:24:09 -0800 (PST)
+        Fri, 10 Dec 2021 04:28:29 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB1EC061746;
+        Fri, 10 Dec 2021 01:24:55 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id b13so5897436plg.2;
+        Fri, 10 Dec 2021 01:24:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U9sjQ0LVi+c/FnmWkRnAoaxUOuPMFYk0TuS1ZtFOiZ8=;
+        b=ht0GfF0IrzJFefoTUceb6eCZEXLW/G/DdjrUcQ43HNHoHG1HzuohONK4Cw1uEqGBMO
+         P8ra/EovUaz+lLkK/ZLtgaI28JIRU0qsxzXWLckFFIhsKe/qlgxEAoEm8eygHS9j09j1
+         vApKaarixaOLVCa2jAXdhJuVn45Jf5+GNRk70b0GJxlNveH0WYnSVVzaPlJFBqYWNLBv
+         NNwUnznXMV9md7fbqoEGLcnrWmn7jMEkEz/TXsjPi/mgcW28wsPFoDhxU+cy3AGw6bfb
+         2D6PAikYAAnuX/Samx4ojhVt0vVQmE5aDQEdLQczIqHgkQMjnCnJjlXKYXTt2EsdvH9H
+         B93Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PhONVokzqhlQ6awh8S6WKaNUvrEjNYZlrDmnaqqI4qU=;
-        b=yzIR64CAASw+SporIgPP3JdpCaYCUhG2UvREXXSn+dS6cdXFnFbFec37nHo/kHiD77
-         +Ou45llTApxwowWHpLspeD5s67hqIuBQg8XsPQ+QvyS/ehabqaZzMcXM0xYoW+ar1w2m
-         os38aBCt2UkvQMXNAP23CqwJJc2Sv8+k510n8tJjANTzLEN8AzYM8OffFrH8+BNLGJ5V
-         ilTSaYIyxkasARpzdjWDHvl5QBo1S8PBSWOLiR3RNCHXZAdEHEypEKoD+7AQ+dMeknE3
-         TgJxXRRlmB6HXzJfrW5KpCExmywk8WELwg5UKz0Ai6QYQ7tM70dYS/6gsBtP+wtf/Xmx
-         cHxg==
-X-Gm-Message-State: AOAM532pM4egmtT/Oot5UkSd5AwNN2Lp3lTWSPwHqgrtaENEKMNLLHfK
-        NlrHP4w0qERrUctDix67vcoBVpU87zgsrIoK4BTwhuN5WFlvJqZUL0W37mkgChizBrQPviqW8fG
-        mySAS/VlEl71DrE9Qw9C6N7wUvcNNj9m+4vlpsYakBrHLjoj7aEJDjrHtEA==
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr10386018oth.233.1639128246807;
-        Fri, 10 Dec 2021 01:24:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwFWMljnaxg0rbYulWWkC+p3vg8bNr5G9zKia3405F7FuRTmG5YE+bJKfQ0sJq4v0XazbboxKkICzh1Ry+LLFQ=
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr10385935oth.233.1639128245144;
- Fri, 10 Dec 2021 01:24:05 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U9sjQ0LVi+c/FnmWkRnAoaxUOuPMFYk0TuS1ZtFOiZ8=;
+        b=sZF305p8+0UjiVdvE9GF7IFn5qgkLlIrIv3ThMI2zyZlpNKvGs2F8kpv2X9bTRxjpv
+         OzLrr2Uj3xB4K7R8YkcC8dXLRNCK7DiMmv51N04S4mEDXS7t5u5nkbDp6KxC6jG5gh4K
+         Vc3tuGvIL73Uaouxq466qavFLpQ88icNuoMX7jZcx/1sjF0eBD8WGmbZocRzAfzzr9DY
+         +ubdWqV2cWpxhfjw0wtWPcJacSUz69xXmmY3Buxd8RNMK0jHVNM3BxiZsMV0eKp092yP
+         WRrU2/rt/FH4dSsmUNtbWzuPAR13FBNP25K5mzPfSN7vMB1/ps2sl2wpYhUFc9hn0CuJ
+         Fauw==
+X-Gm-Message-State: AOAM530/8tPtWbSrnZw4jUGVpKFyn8sjstwkL+TlokbTQrKzAYBt71S2
+        XUMi9kHuoYY0m4uNjQrUbEXB8jIogME=
+X-Google-Smtp-Source: ABdhPJwcOuUoaLJy+1VEpZWC7AuWOGwsBhzjkd4idFvaQFFBAnRv3ViI+NgPpGpbA6/MMlMe+Z9+BQ==
+X-Received: by 2002:a17:902:d28a:b0:142:61ce:ae4c with SMTP id t10-20020a170902d28a00b0014261ceae4cmr73913028plc.35.1639128294553;
+        Fri, 10 Dec 2021 01:24:54 -0800 (PST)
+Received: from localhost ([47.251.3.230])
+        by smtp.gmail.com with ESMTPSA id j36sm2120829pgi.8.2021.12.10.01.24.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 Dec 2021 01:24:54 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Lai Jiangshan <laijs@linux.alibaba.com>
+Subject: [RFC PATCH 0/6] KVM: X86: Add and use shadow page with level promoted or acting as pae_root
+Date:   Fri, 10 Dec 2021 17:25:02 +0800
+Message-Id: <20211210092508.7185-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-References: <20211210081659.4621-1-jhp@endlessos.org> <6b0fcc8cf3bd4a77ad190dc6f72eb66f@realtek.com>
-In-Reply-To: <6b0fcc8cf3bd4a77ad190dc6f72eb66f@realtek.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 10 Dec 2021 17:23:53 +0800
-Message-ID: <CAAd53p66HPH9v0_hzOaQAydberd8JA4HthNVwpQ86xb-dSuUEA@mail.gmail.com>
-Subject: Re: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
-To:     Pkshih <pkshih@realtek.com>
-Cc:     Jian-Hong Pan <jhp@endlessos.org>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux@endlessos.org" <linux@endlessos.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 5:00 PM Pkshih <pkshih@realtek.com> wrote:
->
-> +Kai-Heng
->
-> > -----Original Message-----
-> > From: Jian-Hong Pan <jhp@endlessos.org>
-> > Sent: Friday, December 10, 2021 4:17 PM
-> > To: Pkshih <pkshih@realtek.com>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo
-> > <kvalo@codeaurora.org>
-> > Cc: linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux@endlessos.org; Jian-Hong Pan <jhp@endlessos.org>
-> > Subject: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
-> >
-> > More and more laptops become frozen, due to the equipped RTL8821CE.
-> >
-> > This patch follows the idea mentioned in commits 956c6d4f20c5 ("rtw88:
-> > add quirks to disable pci capabilities") and 1d4dcaf3db9bd ("rtw88: add
-> > quirk to disable pci caps on HP Pavilion 14-ce0xxx"), but disables its
-> > PCI ASPM capability of RTL8821CE directly, instead of checking DMI.
-> >
-> > Buglink:https://bugzilla.kernel.org/show_bug.cgi?id=215239
-> > Fixes: 1d4dcaf3db9bd ("rtw88: add quirk to disable pci caps on HP Pavilion 14-ce0xxx")
-> > Signed-off-by: Jian-Hong Pan <jhp@endlessos.org>
->
-> We also discuss similar thing in this thread:
-> https://bugzilla.kernel.org/show_bug.cgi?id=215131
->
-> Since we still want to turn on ASPM to save more power, I would like to
-> enumerate the blacklist. Does it work to you?
+From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-Too many platforms are affected, the blacklist method won't scale.
-Right now it seems like only Intel platforms are affected, so can I
-propose a patch to disable ASPM when its upstream port is Intel?
+(Request For Help for testing on AMD machine with 32 bit L1 hypervisor,
+see information below)
 
-> If so, please help to add one quirk entry of your platform.
->
-> Another thing is that "attachment 299735" is another workaround for certain
-> platform. And, we plan to add quirk to enable this workaround.
-> Could you try if it works to you?
+KVM handles root pages specially for these cases:
 
-When the hardware is doing DMA, it should initiate leaving ASPM L1,
-correct? So in theory my workaround should be benign enough for most
-platforms.
+direct mmu (nonpaping for 32 bit guest):
+	gCR0_PG=0
+shadow mmu (shadow paping for 32 bit guest):
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1
+direct mmu (NPT for 32bit host):
+	hEFER_LMA=0
+shadow nested NPT (for 32bit L1 hypervisor):
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0,hEFER_LMA=0
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1,hEFER_LMA=0
+	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE={0|1},hEFER_LMA=1,hCR4_LA57={0|1}
+Shadow nested NPT for 64bit L1 hypervisor:
+	gEFER_LMA=1,gCR4_LA57=0,hEFER_LMA=1,hCR4_LA57=1
 
-Kai-Heng
+They are either using special roots or matched the condition 
+((mmu->shadow_root_level > mmu->root_level) && !mm->direct_map)
+(refered as level promotion) or both.
 
->
-> Thank you
-> --
-> Ping-Ke
->
+All the cases are using special roots except the last one.
+Many cases are doing level promotion including the last one.
+
+When special roots are used, the root page will not be backed by
+kvm_mmu_page.  So they must be treated specially, but not all places
+is considering this problem, and Sean is adding some code to check
+this special roots.
+
+When level promotion, the kvm treats them silently always.
+
+These treaments incur problems or complication, see the changelog
+of every patch.
+
+These patches were made when I reviewed all the usage of shadow_root_level
+and root_level.  Some of them are sent and accepted.  Patch3-6 are too
+complicated so they had been held back.  Patch1 and patch2 were sent.
+Patch1 was rejected, but I think it is good.  Patch2 is said to be
+accepted, but it is not shown in the kvm/queue.  Patch3-6 conflicts
+with patch1,2 so patch1,2 are included here too.
+
+Other reason that patch 3-6 were held back is that the patch 3-6 are
+not tested with shadow NPT cases listed above.  Because I don't have
+guest images can act as 32 bit L1 hypervisor, nor I can access to
+AMD machine with 5 level paging.  I'm a bit reluctant to ask for the
+resource, so I send the patches and wish someone test them and modify
+them.  At least, it provides some thinking and reveals problems of the
+existing code and of the AMD cases.
+( *Request For Help* here.)
+
+These patches have been tested with the all cases except the shadow-NPT
+cases, the code coverage is believed to be more than 95% (hundreds of
+code related to shadow-NPT are shoved, and be replaced with common
+role.pae_root and role.level_promoted code with only 8 line of code is
+added for shadow-NPT, only 2 line of code is not covered in my tests).
+
+And Sean also found the problem of the last case listed above and asked
+questions in a reply[1] to one of my emails, I hope this patchset can
+be my reply to his questions about such complicated case.
+
+If special roots are removed and PAE page is write-protected, there
+can be some more cleanups.
+
+[1]: https://lore.kernel.org/lkml/YbFY533IT3XSIqAK@google.com/
+
+Lai Jiangshan (6):
+  KVM: X86: Check root_level only in fast_pgd_switch()
+  KVM: X86: Walk shadow page starting with shadow_root_level
+  KVM: X86: Add arguement gfn and role to kvm_mmu_alloc_page()
+  KVM: X86: Introduce role.level_promoted
+  KVM: X86: Alloc pae_root shadow page
+  KVM: X86: Use level_promoted and pae_root shadow page for 32bit guests
+
+ arch/x86/include/asm/kvm_host.h |   9 +-
+ arch/x86/kvm/mmu/mmu.c          | 440 ++++++++++----------------------
+ arch/x86/kvm/mmu/mmu_audit.c    |  26 +-
+ arch/x86/kvm/mmu/paging_tmpl.h  |  15 +-
+ arch/x86/kvm/mmu/tdp_mmu.h      |   7 +-
+ 5 files changed, 164 insertions(+), 333 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
+

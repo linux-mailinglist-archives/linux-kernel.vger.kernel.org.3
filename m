@@ -2,193 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1883D4701A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB00D4701AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238539AbhLJNeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:34:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:42024 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241830AbhLJNd7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:33:59 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3B5B2B;
-        Fri, 10 Dec 2021 05:30:23 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 154F33F5A1;
-        Fri, 10 Dec 2021 05:30:21 -0800 (PST)
-Date:   Fri, 10 Dec 2021 13:30:19 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        jonathan.cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, Souvik.Chakravarty@arm.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v7 16/16] clk: scmi: Support atomic clock enable/disable
- API
-Message-ID: <20211210133019.GA6207@e120937-lin>
-References: <20211129191156.29322-1-cristian.marussi@arm.com>
- <20211129191156.29322-17-cristian.marussi@arm.com>
- <CAKfTPtCDostniAStK2zNnFa+dtd1mHJ8zywyGXX9HZYf4u6z+w@mail.gmail.com>
+        id S241881AbhLJNf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:35:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57026 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235759AbhLJNf1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 08:35:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639143112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l5sAoIuRwrqpOLkTWcO38tx+jvlOvty7121ooryZ460=;
+        b=hTOGfF9oSDi5Q8e+5fHqaILQ9ArV4t1iM+TvT/F0JuVg8DwcmzmY7eNHaCuTn+ugTGCn/k
+        UqmH37Mo99kJwwmuyALvceJoDLdkSp36PeGIy/Yh/NRFKv9bTb5ny9OEJZNvvmt92C8WZN
+        C389KdYOss4rON4/LsS8L2bJo5CFUMg=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-332-BD4eNyJLMr6zHCJWJfCIiw-1; Fri, 10 Dec 2021 08:31:51 -0500
+X-MC-Unique: BD4eNyJLMr6zHCJWJfCIiw-1
+Received: by mail-lj1-f199.google.com with SMTP id o15-20020a2e90cf000000b00218dfebebdeso2914420ljg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:31:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=l5sAoIuRwrqpOLkTWcO38tx+jvlOvty7121ooryZ460=;
+        b=P87yY1pASNNM4NnnUokkbGU0vTQ9ea1HwS7khBYIeBox2BpfUF/4eHnSCrD26OqCHL
+         QN1IGG1ljAe/H3/2npuFZbEMNOFt/VwwlhlFQuLK1rC4PLPjWNQfdQ8b+zqVipm9GRu2
+         kvas2BpQx6+/PZSfPnhpgWDM6/HE5uh92j9e5h3v191xPnf3RcGOV6HdAbq91EnOP4ZV
+         pIMVPkJPg2psLXDuJ5rzyR35po8SG8k1U1Cf76hqJ92ebrp9Zi2ECo1HosSwWjdL8BHo
+         Dy+/66Qbzb325oj3Iut8PSSii73qwghx0tiBCSQijnSE8l2RoDt+5KfNNQ4ScSZ35Ynp
+         b2MA==
+X-Gm-Message-State: AOAM532hWboGDSxuFfB0bMCikzCDImEIxuALIObHLZvmZjOqDqNggXXP
+        KbOBm181A2Kmo5ng90yNRFXzMj2g5JVBv+1ItvTU8wfOwHTpHzUR9ITw32fKDsEkzBdk+ssMnHG
+        B6+BKPi2o+JsViaDshxC1Yt2I
+X-Received: by 2002:a05:6512:2111:: with SMTP id q17mr12277311lfr.371.1639143109658;
+        Fri, 10 Dec 2021 05:31:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJysW1eZdvHlg7c/OsYcsKZD7z8jtHRQrASeKFQqWi/mEk65sVMMaWjbUnS35YwKQwYM7xjjAQ==
+X-Received: by 2002:a05:6512:2111:: with SMTP id q17mr12277281lfr.371.1639143109438;
+        Fri, 10 Dec 2021 05:31:49 -0800 (PST)
+Received: from [192.168.0.50] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
+        by smtp.gmail.com with ESMTPSA id k3sm313809ljn.55.2021.12.10.05.31.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 05:31:48 -0800 (PST)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <ccd27f5f-31c4-603f-ea36-ad32b16325b9@redhat.com>
+Date:   Fri, 10 Dec 2021 14:31:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCDostniAStK2zNnFa+dtd1mHJ8zywyGXX9HZYf4u6z+w@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Cc:     brouer@redhat.com, intel-wired-lan@lists.osuosl.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 1/9] i40e: don't reserve excessive
+ XDP_PACKET_HEADROOM on XSK Rx to skb
+Content-Language: en-US
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>
+References: <20211208140702.642741-1-alexandr.lobakin@intel.com>
+ <20211208140702.642741-2-alexandr.lobakin@intel.com>
+ <da317f39-8679-96f7-ec6f-309216b02f33@redhat.com>
+ <20211209173307.5003-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20211209173307.5003-1-alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:52:39AM +0100, Vincent Guittot wrote:
-> Hi Cristian,
+
+
+On 09/12/2021 18.33, Alexander Lobakin wrote:
+> From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+> Date: Thu, 9 Dec 2021 09:19:46 +0100
 > 
-
-Hi Vincent,
-
-thanks for the feedback, my replies below.
-
-> On Mon, 29 Nov 2021 at 20:13, Cristian Marussi <cristian.marussi@arm.com> wrote:
-> >
-> > Support also atomic enable/disable clk_ops beside the bare non-atomic one
-> > (prepare/unprepare) when the underlying SCMI transport is configured to
-> > support atomic transactions for synchronous commands.
-> >
-> > Cc: Michael Turquette <mturquette@baylibre.com>
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Cc: linux-clk@vger.kernel.org
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> > V5 --> V6
-> > - add concurrent availability of atomic and non atomic reqs
-> > ---
-> >  drivers/clk/clk-scmi.c | 56 +++++++++++++++++++++++++++++++++++-------
-> >  1 file changed, 47 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
-> > index 1e357d364ca2..50033d873dde 100644
-> > --- a/drivers/clk/clk-scmi.c
-> > +++ b/drivers/clk/clk-scmi.c
-> > @@ -88,21 +88,53 @@ static void scmi_clk_disable(struct clk_hw *hw)
-> >         scmi_proto_clk_ops->disable(clk->ph, clk->id);
-> >  }
-> >
-> > +static int scmi_clk_atomic_enable(struct clk_hw *hw)
-> > +{
-> > +       struct scmi_clk *clk = to_scmi_clk(hw);
-> > +
-> > +       return scmi_proto_clk_ops->enable_atomic(clk->ph, clk->id);
-> > +}
-> > +
-> > +static void scmi_clk_atomic_disable(struct clk_hw *hw)
-> > +{
-> > +       struct scmi_clk *clk = to_scmi_clk(hw);
-> > +
-> > +       scmi_proto_clk_ops->disable_atomic(clk->ph, clk->id);
-> > +}
-> > +
-> > +/*
-> > + * We can provide enable/disable atomic callbacks only if the underlying SCMI
-> > + * transport for an SCMI instance is configured to handle SCMI commands in an
-> > + * atomic manner.
-> > + *
-> > + * When no SCMI atomic transport support is available we instead provide only
-> > + * the prepare/unprepare API, as allowed by the clock framework when atomic
-> > + * calls are not available.
-> > + *
-> > + * Two distinct sets of clk_ops are provided since we could have multiple SCMI
-> > + * instances with different underlying transport quality, so they cannot be
-> > + * shared.
-> > + */
-> >  static const struct clk_ops scmi_clk_ops = {
-> >         .recalc_rate = scmi_clk_recalc_rate,
-> >         .round_rate = scmi_clk_round_rate,
-> >         .set_rate = scmi_clk_set_rate,
-> > -       /*
-> > -        * We can't provide enable/disable callback as we can't perform the same
-> > -        * in atomic context. Since the clock framework provides standard API
-> > -        * clk_prepare_enable that helps cases using clk_enable in non-atomic
-> > -        * context, it should be fine providing prepare/unprepare.
-> > -        */
-> >         .prepare = scmi_clk_enable,
-> >         .unprepare = scmi_clk_disable,
-> >  };
-> >
-> > -static int scmi_clk_ops_init(struct device *dev, struct scmi_clk *sclk)
-> > +static const struct clk_ops scmi_atomic_clk_ops = {
-> > +       .recalc_rate = scmi_clk_recalc_rate,
-> > +       .round_rate = scmi_clk_round_rate,
-> > +       .set_rate = scmi_clk_set_rate,
-> > +       .prepare = scmi_clk_enable,
-> > +       .unprepare = scmi_clk_disable,
-> > +       .enable = scmi_clk_atomic_enable,
+>> On 08/12/2021 15.06, Alexander Lobakin wrote:
+>>> {__,}napi_alloc_skb() allocates and reserves additional NET_SKB_PAD
+>>> + NET_IP_ALIGN for any skb.
+>>> OTOH, i40e_construct_skb_zc() currently allocates and reserves
+>>> additional `xdp->data - xdp->data_hard_start`, which is
+>>> XDP_PACKET_HEADROOM for XSK frames.
+>>> There's no need for that at all as the frame is post-XDP and will
+>>> go only to the networking stack core.
+>>
+>> I disagree with this assumption, that headroom is not needed by netstack.
+>> Why "no need for that at all" for netstack?
 > 
-> For  each clock, we have to start with  clk_prepare and then clk_enable
-> this means that for scmi clk we will do
-> scmi_clk_enable
-> then
-> scmi_clk_atomic_enable
-> 
-> scmi_clk_enable and scmi_clk_atomic_enable ends up doing the same
-> thing: scmi_clock_config_set but the atomic version doesn't sleep
-> 
-> So you will set enable twice the clock.
-> 
-> This is confirmed when testing your series with virtio scmi backend as
-> I can see to consecutive scmi clk set enable request for the same
-> clock
-> 
+> napi_alloc_skb() in our particular case will reserve 64 bytes, it is
+> sufficient for {TCP,UDP,SCTP,...}/IPv{4,6} etc.
 
-Yes, I saw that double enable while testing with CLK debugfs entry BUT I
-thought that was due to the design of the debugfs entries (that calls
-prepare_enable and so prepare and enable in sequence) also becauase, a few
-versions ago, this series WAS indeed providing (beside bugs :P) the
-sleeping prepare XOR the atomic enable depending on the SCMI atomic support
-state (as you are suggesting now), BUT, after a few offline chats with you,
-my (probably faulty) understanding was that some partners, even on a system
-supporting atomic SCMI transfers, would have liked to be able to call the
-atomic .enable selectively only on some (tipically quickly to setup) clocks
-while keep calling the sleeping .prepare on some other (slower ones to
-settle). (while keeping all the other slower clk_rate setup ops non-atomic)
+My bad, I misunderstood you. I now see (looking at code) that (as you 
+say) 64 bytes of headroom *is* reserved (in bottom of __napi_alloc_skb).
+Thus, the SKB *do* have headroom, so this patch should be fine.
 
-So in v6/v7 I changed the API to provide both sleepable and atomic clk APIs
-when the underlying SCMI stack support atomic mode: this way, though, it is
-clearly up to the caller to decide what to do and if, generally, the
-clock framework just calls everytime both, it will result in a double
-enable.
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
 
-Was my understanding of the reqs about being able to selectively choose
-the sleep_vs_atomic mode in this way wrong ?
+Do watch out that 64 bytes is not always enough. Notice the define 
+LL_MAX_HEADER and MAX_HEADER in include/linux/netdevice.h (that tries to 
+determine worst-case header length) which is above 64 bytes. It is also 
+affected by HyperV and WiFi configs.
 
-> In case of atomic mode, the clk_prepare should  be a nop
-> 
-
-I can certainly revert to use the old exclusive approach, not providing
-a .prepare when atomic is supported, but then all clock enable ops on any
-clock defined on the system will be operated atomically withot any choice
-when atomic SCMI transactions are available.
-
-Ideally, we could like, on a SCMI system supporting atomic, to be able to
-'tag' a specific clock something like 'prefer-non-atomic' and so selectively
-'noppify' the .prepare or the .enable at the SCMI clk-driver level depending
-on such tag, but I cannot see any way to expose this from the CLK framework
-API or DT, nor it seems suitable for a per-clock DT config option AND it
-would break the current logic of clk_is_enabled_when_prepared().
-
-Indeed clk_is_enabled_when_prepared() logic is ALREADY broken also by this V7
-since when providing also .enable/.disable on atomic transports, the core CLK
-framework would return clk_is_enabled_when_prepared() --> False which does
-NOT fit reality since our SCMI prepare/unprepare DO enable/disable clks even
-if .disable/.enable are provided too.
-
-Probably this last observation on clk_is_enabled_when_prepared() is enough
-to revert to the exclusive atomic/non-atomic approach and just ignore the
-customer wish to be able to selectively choose which clock to operate in
-atomic mode.
-
-Any thoughs before a V8 ?
-
-Thanks,
-Cristian
- 

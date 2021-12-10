@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E435946FC48
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1BE46FC82
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238150AbhLJIIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 03:08:25 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32901 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238135AbhLJIIY (ORCPT
+        id S234098AbhLJIUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 03:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229596AbhLJIUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 03:08:24 -0500
-Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J9NjG4pVgzcdVk;
-        Fri, 10 Dec 2021 16:04:34 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 16:04:48 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 10 Dec
- 2021 16:04:47 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>
-CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH RFC] block, bfq: update pos_root for idle bfq_queue in bfq_bfqq_move()
-Date:   Fri, 10 Dec 2021 16:16:41 +0800
-Message-ID: <20211210081641.3025060-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 10 Dec 2021 03:20:24 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FBEC061746;
+        Fri, 10 Dec 2021 00:16:49 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-184-96.tukw.qwest.net [174.21.184.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 7C46446D;
+        Fri, 10 Dec 2021 00:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1639124208;
+        bh=aCwwobdpEi3sNsLc8ASXHTj3fg8LMPfWjPCABMYSkuQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oBbfNOrHQPA7wsLz8VKiLNZN1oBPFlpmETyg8N5SuOiNy+d7ndEkU6jC1z8IfvjqK
+         Lhpmjft4Flh//zcn+KuiXCC9b2rVNoOuwtverSUIo3J+2NRMhv7AxDFTMEjhOE/Fxl
+         CsQiVmc4LfgJfeRpFV9SyvbdRwCEFQzznK/7TVEs=
+Date:   Fri, 10 Dec 2021 00:16:43 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Renze Nicolai <renze@rnplus.nl>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Bernhard Seibold <mail@bernhard-seibold.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (nct6775) add support for TSI temperature
+ registers
+Message-ID: <YbMM63VKYBTmZYiX@hatter.bewilderbeest.net>
+References: <20211110231440.17309-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20211110231440.17309-1-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During code review, we found that if bfqq is not busy in
-bfq_bfqq_move(), bfq_pos_tree_add_move() won't be called for the bfqq,
-thus bfqq->pos_root still points to the old bfqg. However, the ref
-that bfqq hold for the old bfqg will be released, so it's possible
-that the old bfqg can be freed. This is problematic because the freed
-bfqg can still be accessed by bfqq->pos_root.
+On Wed, Nov 10, 2021 at 03:14:39PM PST, Zev Weiss wrote:
+>These registers report CPU temperatures (and, depending on the system,
+>sometimes chipset temperatures) via the TSI interface on AMD systems.
+>They're distinct from most of the other Super-IO temperature readings
+>(CPUTIN, SYSTIN, etc.) in that they're not a selectable source for
+>monitoring and are in a different (higher resolution) format, but can
+>still provide useful temperature data.
+>
+>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>Tested-by: Renze Nicolai <renze@rnplus.nl>
+>---
+>
+>This patch has been tested on NCT6779 and NCT6798[1] hardware on
+>(respectively) ASRock Rack ROMED8HM3 and X570D4U boards, and seems to
+>work as expected; the implementation for the other chips supported by
+>the driver is purely based on the datasheets and has not been tested
+>(for lack of available hardware).
+>
+>[1] Or at least, its chip ID registers identify it as an NCT6798 and
+>it seems to behave consistently with that, though it's actually
+>physically labeled as an NCT6796.
+>
+> drivers/hwmon/nct6775.c | 136 ++++++++++++++++++++++++++++++++++++++--
+> 1 file changed, 130 insertions(+), 6 deletions(-)
+>
 
-Fix the problem by calling bfq_pos_tree_add_move() for idle bfqq
-as well.
+Ping...any thoughts/feedback on this patch?
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/bfq-cgroup.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index 24a5c5329bcd..85f34c29b909 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -645,6 +645,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 		   struct bfq_group *bfqg)
- {
- 	struct bfq_entity *entity = &bfqq->entity;
-+	struct bfq_group *old_parent = bfqq_group(bfqq);
- 
- 	/*
- 	 * Get extra reference to prevent bfqq from being freed in
-@@ -666,7 +667,6 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 		bfq_deactivate_bfqq(bfqd, bfqq, false, false);
- 	else if (entity->on_st_or_in_serv)
- 		bfq_put_idle_entity(bfq_entity_service_tree(entity), entity);
--	bfqg_and_blkg_put(bfqq_group(bfqq));
- 
- 	if (entity->parent &&
- 	    entity->parent->last_bfqq_created == bfqq)
-@@ -679,11 +679,16 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 	/* pin down bfqg and its associated blkg  */
- 	bfqg_and_blkg_get(bfqg);
- 
--	if (bfq_bfqq_busy(bfqq)) {
--		if (unlikely(!bfqd->nonrot_with_queueing))
--			bfq_pos_tree_add_move(bfqd, bfqq);
-+	/*
-+	 * Don't leave the pos_root to old bfqg, since the ref to old bfqg will
-+	 * be released and the bfqg might be freed.
-+	 */
-+	if (unlikely(!bfqd->nonrot_with_queueing))
-+		bfq_pos_tree_add_move(bfqd, bfqq);
-+	bfqg_and_blkg_put(old_parent);
-+
-+	if (bfq_bfqq_busy(bfqq))
- 		bfq_activate_bfqq(bfqd, bfqq);
--	}
- 
- 	if (!bfqd->in_service_queue && !bfqd->rq_in_driver)
- 		bfq_schedule_dispatch(bfqd);
--- 
-2.31.1
+Thanks,
+Zev
 

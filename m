@@ -2,107 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9398F46FF4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F10946FF53
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240172AbhLJLGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:06:20 -0500
-Received: from out0.migadu.com ([94.23.1.103]:59313 "EHLO out0.migadu.com"
+        id S240248AbhLJLIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:08:43 -0500
+Received: from mga14.intel.com ([192.55.52.115]:37836 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234606AbhLJLGT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:06:19 -0500
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639134163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=crOYlgjr6TJQi4fWo9njLpi/uZBGieqA7+/rnQHOBK8=;
-        b=TlsQaoW0afvqpwqbG9OMB38r8CsUgGwszyRJfd2I0pZk+9qAaNVT/oiWmS0IoI3regwT1L
-        gdSVcoPFOT1ldGVqlcettgUBRjqMQaTNq5Tp7OMsZgosc03owNZ4tsc6j1D1Bha9kZKHtP
-        aGEns7ikvMpyTpUqlcWLMxH/Umwi1l0=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>, luofei@unicloud.com,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] mm, hwpoison: fix condition in free hugetlb page path
-Date:   Fri, 10 Dec 2021 20:02:08 +0900
-Message-Id: <20211210110208.879740-1-naoya.horiguchi@linux.dev>
+        id S240222AbhLJLIj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 06:08:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639134304; x=1670670304;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OCtlo1/u12cSiXxx4Xk5G19SzumSXoevgSdfy27WHbg=;
+  b=gnbcY2izE5XDu/eXxAY14r9IHvq4/gl+tiQBmak2iYCEqAPHhMdtphtD
+   9XvXXz1EC1USYmrSkDpU4paeRCaJbci9BLVFHSphGSRwRWURDYCmE5ttm
+   TFkmA3cjxLeKIm+BQB/TvcVnVeLi4gPKTbS0FBqI3IOz1nYuxjeP5tf7N
+   7EWcxW4gSDqRuIQzRmmL1SSYxnO4sFslSNo7dMpPz4o8QyWvlB0r1kYbq
+   GloClElPEp06vRb/4jFEyFBcM2PjzFkRYEkdP1lJQqxdKnVKjCri8Ybez
+   CjzGgwawwIJiJaLudZD4TtTgf41jtHenhyxhV2xXmtVQ6Pwhj7sKop2T1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238551319"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="238551319"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 03:05:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="463630838"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Dec 2021 03:05:02 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvdi1-00036Z-HL; Fri, 10 Dec 2021 11:05:01 +0000
+Date:   Fri, 10 Dec 2021 19:04:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/mm/ptdump/hashpagetable.c:264:29: sparse: sparse:
+ restricted __be64 degrades to integer
+Message-ID: <202112101832.rZbrZJ1u-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: naoya.horiguchi@linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Hi Christophe,
 
-When a memory error hits a tail page of a free hugepage,
-__page_handle_poison() is expected to be called to isolate the error in
-4kB unit, but it's not called due to the outdated if-condition in
-memory_failure_hugetlb().  This loses the chance to isolate the error in
-the finer unit, so it's not optimal.  Drop the condition.
+First bad commit (maybe != root cause):
 
-This "(p != head && TestSetPageHWPoison(head)" condition is based on the
-old semantics of PageHWPoison on hugepage (where PG_hwpoison flag was
-set on the subpage), so it's not necessray any more.  By getting to set
-PG_hwpoison on head page for hugepages, concurrent error events on
-different subpages in a single hugepage can be prevented by
-TestSetPageHWPoison(head) at the beginning of memory_failure_hugetlb().
-So dropping the condition should not reopen the race window originally
-mentioned in commit b985194c8c0a ("hwpoison, hugetlb:
-lock_page/unlock_page does not match for handling a free hugepage")
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c741e49150dbb0c0aebe234389f4aa8b47958fa8
+commit: e084728393a58e7fdafeee2e6b20e0faff09b557 powerpc/ptdump: Convert powerpc to GENERIC_PTDUMP
+date:   4 months ago
+config: powerpc64-randconfig-s031-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101832.rZbrZJ1u-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e084728393a58e7fdafeee2e6b20e0faff09b557
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e084728393a58e7fdafeee2e6b20e0faff09b557
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/ptdump/ kernel/
 
-Reported-by: Fei Luo <luofei@unicloud.com>
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: <stable@vger.kernel.org> # v5.14+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/powerpc/mm/ptdump/hashpagetable.c:264:29: sparse: sparse: restricted __be64 degrades to integer
+   arch/powerpc/mm/ptdump/hashpagetable.c:265:49: sparse: sparse: restricted __be64 degrades to integer
+>> arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __be64 [usertype] v @@
+   arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse:     expected unsigned long long [usertype]
+   arch/powerpc/mm/ptdump/hashpagetable.c:267:36: sparse:     got restricted __be64 [usertype] v
+>> arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] @@     got restricted __be64 [usertype] r @@
+   arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse:     expected unsigned long long [usertype]
+   arch/powerpc/mm/ptdump/hashpagetable.c:268:36: sparse:     got restricted __be64 [usertype] r
+
+vim +264 arch/powerpc/mm/ptdump/hashpagetable.c
+
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  238  
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  239  static int pseries_find(unsigned long ea, int psize, bool primary, u64 *v, u64 *r)
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  240  {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  241  	struct hash_pte ptes[4];
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  242  	unsigned long vsid, vpn, hash, hpte_group, want_v;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  243  	int i, j, ssize = mmu_kernel_ssize;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  244  	long lpar_rc = 0;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  245  	unsigned long shift = mmu_psize_defs[psize].shift;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  246  
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  247  	/* calculate hash */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  248  	vsid = get_kernel_vsid(ea, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  249  	vpn  = hpt_vpn(ea, vsid, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  250  	hash = hpt_hash(vpn, shift, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  251  	want_v = hpte_encode_avpn(vpn, psize, ssize);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  252  
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  253  	/* to check in the secondary hash table, we invert the hash */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  254  	if (!primary)
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  255  		hash = ~hash;
+1531cff44b5bb3 arch/powerpc/mm/dump_hashpagetable.c   Aneesh Kumar K.V 2018-06-29  256  	hpte_group = (hash & htab_hash_mask) * HPTES_PER_GROUP;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  257  	/* see if we can find an entry in the hpte with this hash */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  258  	for (i = 0; i < HPTES_PER_GROUP; i += 4, hpte_group += 4) {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  259  		lpar_rc = plpar_pte_read_4(0, hpte_group, (void *)ptes);
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  260  
+7c466b0807960e arch/powerpc/mm/ptdump/hashpagetable.c Christophe Leroy 2020-06-15  261  		if (lpar_rc)
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  262  			continue;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  263  		for (j = 0; j < 4; j++) {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @264  			if (HPTE_V_COMPARE(ptes[j].v, want_v) &&
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  265  					(ptes[j].v & HPTE_V_VALID)) {
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  266  				/* HPTE matches */
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @267  				*v = ptes[j].v;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27 @268  				*r = ptes[j].r;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  269  				return 0;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  270  			}
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  271  		}
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  272  	}
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  273  	return -1;
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  274  }
+1515ab93215625 arch/powerpc/mm/dump_hashpagetable.c   Rashmica Gupta   2016-05-27  275  
+
+:::::: The code at line 264 was first introduced by commit
+:::::: 1515ab932156257afd8a5864506dab80f63ff38b powerpc/mm: Dump hash table
+
+:::::: TO: Rashmica Gupta <rashmicy@gmail.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
 ---
-I set v5.14+ for stable trees because the base code was greatly changed
-by commit 0ed950d1f281 ("mm,hwpoison: make get_hwpoison_page() call
-get_any_page()"), and this patch is not cleanly applicable, although the
-original issue was introduced more previously.
----
- mm/memory-failure.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
-
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 8f0ee5b08696..68d9a35f8908 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1521,24 +1521,17 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 	if (!(flags & MF_COUNT_INCREASED)) {
- 		res = get_hwpoison_page(p, flags);
- 		if (!res) {
--			/*
--			 * Check "filter hit" and "race with other subpage."
--			 */
- 			lock_page(head);
--			if (PageHWPoison(head)) {
--				if ((hwpoison_filter(p) && TestClearPageHWPoison(p))
--				    || (p != head && TestSetPageHWPoison(head))) {
-+			if (hwpoison_filter(p)) {
-+				if (TestClearPageHWPoison(head))
- 					num_poisoned_pages_dec();
--					unlock_page(head);
--					return 0;
--				}
-+				unlock_page(head);
-+				return 0;
- 			}
- 			unlock_page(head);
--			res = MF_FAILED;
--			if (__page_handle_poison(p)) {
--				page_ref_inc(p);
--				res = MF_RECOVERED;
--			}
-+			res = MF_RECOVERED;
-+			if (!page_handle_poison(p, true, false))
-+				res = MF_FAILED;
- 			action_result(pfn, MF_MSG_FREE_HUGE, res);
- 			return res == MF_RECOVERED ? 0 : -EBUSY;
- 		} else if (res < 0) {
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

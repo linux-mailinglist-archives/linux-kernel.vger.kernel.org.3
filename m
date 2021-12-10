@@ -2,225 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A82F4702DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4474702DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238732AbhLJOdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:33:46 -0500
-Received: from mga03.intel.com ([134.134.136.65]:51293 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234805AbhLJOdp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:33:45 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238296854"
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="238296854"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 06:30:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
-   d="scan'208";a="463680787"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Dec 2021 06:30:07 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1B29E329; Fri, 10 Dec 2021 16:30:14 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH v1 1/1] crypto: Replace kernel.h with the necessary inclusions
-Date:   Fri, 10 Dec 2021 16:30:09 +0200
-Message-Id: <20211210143009.4770-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
+        id S242169AbhLJOgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234805AbhLJOgW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 09:36:22 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBBBC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:32:47 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso9814617otr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 06:32:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=r4FyDNa+h/XJPABGXhOunndvFnUDZeBld+usgYdr7RQ=;
+        b=qOZg0g6zV2W5UYRQi1rVY7GTxMmJpKb0c/SWFNTFvygNXe6H9WVEiLHumUupvZz9bO
+         iTzxprO1m9+5fz2lmYX1db9AtTg56cpbA5c7RMqy2OVvxt1k03gN5l9p0uM8V3N1OP7S
+         sEz7AdPNiQEe/+n6igg82zdC4T4ivIPgFavxiDT63wRYkcy463Vsx+npEWbe8C+1fJu2
+         kCnz7Sy3olPuL1usLQPwFuDw5FPaIyXqQwWaIMTzlCxaS5TNkMtt60VZ+7YXHbuVcXMD
+         9D7Hstn/w5lHb2FdzGLQhIk7xji5zXC1ard6Uxl5QC3yVFTGmMtR4dsNxbrf7bT8x0Lq
+         imEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=r4FyDNa+h/XJPABGXhOunndvFnUDZeBld+usgYdr7RQ=;
+        b=Fa8QYSxS3f8MWxcAFFaXYzHPB9+ueSVweKKFH/CKsqIhBXiHExNkgrhxqf1vCRbw3m
+         peE7x0HlDm9V3O9KNLDyoxo7fzhRFUHWfqcLkzTxk6T4FcYdGcALnGb2cy7qUuKlMq79
+         wh9oS8XB3EzzgY7XA7b4YYRTcIGhPn0BI5aoP8c+ONPWIQFnDerwa5D6EnXmK/YwZdAY
+         flNjGReVQJexCsoKASMXkKHPFx5W7j7ys0zZSuAGJbAS130vd/U3jntGXaxJ0z/Y5UuQ
+         BwK3tfZwCVKpfEhtBMvc2iUKQNd814OVQQSGO++g9YosrKBrXOC7PByyHPwRQMAsvWjz
+         IH+A==
+X-Gm-Message-State: AOAM530ZWH90DvhAgA9XGXC9kMfdSuvJ513Cpslx+/4lUpJXjZW8BW+8
+        aJTsw/3/mKMkPCpsXOQrU7WEzndsg6g4Or0+0g==
+X-Google-Smtp-Source: ABdhPJwAv/Lfhsr23TPh2XQI1Yt52qMD67P5ITgbpO/EGWM40yH1KqUQlzWeCOPVKbxack8tQDJZBec2aiKv03rGoNg=
+X-Received: by 2002:a9d:2206:: with SMTP id o6mr11259362ota.148.1639146766398;
+ Fri, 10 Dec 2021 06:32:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6830:4390:0:0:0:0 with HTTP; Fri, 10 Dec 2021 06:32:45
+ -0800 (PST)
+Reply-To: Jg@serverrackequip.ca
+From:   Server Rack Equipment <johnson3382@gmail.com>
+Date:   Fri, 10 Dec 2021 20:02:45 +0530
+Message-ID: <CAB=1HnWFRRYBzmtF6FUbFysy5P6WP2d=zj8-MS0rJ4a=0MOF-g@mail.gmail.com>
+Subject: WTS: Dell Laptop Latitude E6430u
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
+Hello,
 
-Replace kernel.h inclusion with the list of what is really being used.
+Looking for a buyer to move any of the following Items located in USA.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/crypto/aead.h        | 4 +++-
- include/crypto/algapi.h      | 5 ++++-
- include/crypto/blake2b.h     | 1 -
- include/crypto/blake2s.h     | 2 +-
- include/crypto/cryptd.h      | 3 ++-
- include/crypto/engine.h      | 6 +++++-
- include/crypto/pcrypt.h      | 2 +-
- include/crypto/scatterwalk.h | 3 ++-
- include/crypto/skcipher.h    | 6 +++++-
- 9 files changed, 23 insertions(+), 9 deletions(-)
 
-diff --git a/include/crypto/aead.h b/include/crypto/aead.h
-index 5af914c1ab8e..14db3bee0519 100644
---- a/include/crypto/aead.h
-+++ b/include/crypto/aead.h
-@@ -8,9 +8,10 @@
- #ifndef _CRYPTO_AEAD_H
- #define _CRYPTO_AEAD_H
- 
-+#include <linux/container_of.h>
- #include <linux/crypto.h>
--#include <linux/kernel.h>
- #include <linux/slab.h>
-+#include <linux/types.h>
- 
- /**
-  * DOC: Authenticated Encryption With Associated Data (AEAD) Cipher API
-@@ -73,6 +74,7 @@
-  */
- 
- struct crypto_aead;
-+struct scatterlist;
- 
- /**
-  *	struct aead_request - AEAD request
-diff --git a/include/crypto/algapi.h b/include/crypto/algapi.h
-index 5f6841c73e5a..f76ec723ceae 100644
---- a/include/crypto/algapi.h
-+++ b/include/crypto/algapi.h
-@@ -7,9 +7,11 @@
- #ifndef _CRYPTO_ALGAPI_H
- #define _CRYPTO_ALGAPI_H
- 
-+#include <linux/align.h>
- #include <linux/crypto.h>
-+#include <linux/kconfig.h>
- #include <linux/list.h>
--#include <linux/kernel.h>
-+#include <linux/types.h>
- 
- /*
-  * Maximum values for blocksize and alignmask, used to allocate
-@@ -24,6 +26,7 @@
- struct crypto_aead;
- struct crypto_instance;
- struct module;
-+struct notifier_block;
- struct rtattr;
- struct seq_file;
- struct sk_buff;
-diff --git a/include/crypto/blake2b.h b/include/crypto/blake2b.h
-index 18875f16f8ca..0c0176285349 100644
---- a/include/crypto/blake2b.h
-+++ b/include/crypto/blake2b.h
-@@ -5,7 +5,6 @@
- 
- #include <linux/bug.h>
- #include <linux/types.h>
--#include <linux/kernel.h>
- #include <linux/string.h>
- 
- enum blake2b_lengths {
-diff --git a/include/crypto/blake2s.h b/include/crypto/blake2s.h
-index bc3fb59442ce..df3c6c2f9553 100644
---- a/include/crypto/blake2s.h
-+++ b/include/crypto/blake2s.h
-@@ -7,8 +7,8 @@
- #define _CRYPTO_BLAKE2S_H
- 
- #include <linux/bug.h>
-+#include <linux/kconfig.h>
- #include <linux/types.h>
--#include <linux/kernel.h>
- #include <linux/string.h>
- 
- enum blake2s_lengths {
-diff --git a/include/crypto/cryptd.h b/include/crypto/cryptd.h
-index 23169f4d87e6..796d986e58e1 100644
---- a/include/crypto/cryptd.h
-+++ b/include/crypto/cryptd.h
-@@ -13,7 +13,8 @@
- #ifndef _CRYPTO_CRYPT_H
- #define _CRYPTO_CRYPT_H
- 
--#include <linux/kernel.h>
-+#include <linux/types.h>
-+
- #include <crypto/aead.h>
- #include <crypto/hash.h>
- #include <crypto/skcipher.h>
-diff --git a/include/crypto/engine.h b/include/crypto/engine.h
-index fd4f2fa23f51..ae133e98d813 100644
---- a/include/crypto/engine.h
-+++ b/include/crypto/engine.h
-@@ -9,8 +9,10 @@
- 
- #include <linux/crypto.h>
- #include <linux/list.h>
--#include <linux/kernel.h>
- #include <linux/kthread.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
-+
- #include <crypto/algapi.h>
- #include <crypto/aead.h>
- #include <crypto/akcipher.h>
-@@ -18,6 +20,8 @@
- #include <crypto/skcipher.h>
- #include <crypto/kpp.h>
- 
-+struct device;
-+
- #define ENGINE_NAME_LEN	30
- /*
-  * struct crypto_engine - crypto hardware engine
-diff --git a/include/crypto/pcrypt.h b/include/crypto/pcrypt.h
-index b9bc3436196a..234d7cf3cf5e 100644
---- a/include/crypto/pcrypt.h
-+++ b/include/crypto/pcrypt.h
-@@ -9,8 +9,8 @@
- #ifndef _CRYPTO_PCRYPT_H
- #define _CRYPTO_PCRYPT_H
- 
-+#include <linux/container_of.h>
- #include <linux/crypto.h>
--#include <linux/kernel.h>
- #include <linux/padata.h>
- 
- struct pcrypt_request {
-diff --git a/include/crypto/scatterwalk.h b/include/crypto/scatterwalk.h
-index 7af08174a721..6407b4b61350 100644
---- a/include/crypto/scatterwalk.h
-+++ b/include/crypto/scatterwalk.h
-@@ -12,8 +12,9 @@
- #define _CRYPTO_SCATTERWALK_H
- 
- #include <crypto/algapi.h>
-+
- #include <linux/highmem.h>
--#include <linux/kernel.h>
-+#include <linux/mm.h>
- #include <linux/scatterlist.h>
- 
- static inline void scatterwalk_crypto_chain(struct scatterlist *head,
-diff --git a/include/crypto/skcipher.h b/include/crypto/skcipher.h
-index ef0fc9ed4342..39f5b67c3069 100644
---- a/include/crypto/skcipher.h
-+++ b/include/crypto/skcipher.h
-@@ -8,9 +8,13 @@
- #ifndef _CRYPTO_SKCIPHER_H
- #define _CRYPTO_SKCIPHER_H
- 
-+#include <linux/container_of.h>
- #include <linux/crypto.h>
--#include <linux/kernel.h>
- #include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/types.h>
-+
-+struct scatterlist;
- 
- /**
-  *	struct skcipher_request - Symmetric key cipher request
--- 
-2.33.0
+Dell Laptop Latitude E6430u Core I7 3687u @ 2.10GHz, 256GB SSD, 16GB,
+WIN 7 PRO Quantity 20 $100 each
 
+
+
+Dell Latitude E6540 i5 4th Gen 8GB RAM 256GB SSD 15,6 Screen - Business Laptop
+Quantity 20 $100 each
+
+
+DELL Latitude E6440 Laptop 14" i7-4600M 8GBRAM 256GBSSD FHD Win10 DVD HDMI
+
+Quantity 20 $100 each
+
+
+16GB 2RX8 PC4-3200AA-UB1-11 Qty 85
+8GB 1RX8 PC4-2666V RD1 -12- MA0 Qty 190
+We are looking for a buyer to move all @ $ 1,000 USD
+
+
+
+If you are Interested and kindly contact Justin Gates Email.
+jg@serverrackequip.ca
+
+
+
+Regards,
+
+Justin Gates
+
+Server Rack Equipment
+1343 No. 5 Road, Richmond,
+British Columbia
+V7A 4G1 Canada
+Phone: 778 308 3547 | Fax: 778 308 4563
+https://www.serverrackequip.ca/

@@ -2,81 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B6446FC19
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50ECA46FC1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 08:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbhLJH5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S234981AbhLJH5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbhLJH5S (ORCPT
+        with ESMTP id S235979AbhLJH5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:57:18 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A0FC0617A1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:53:43 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id g18so7754148pfk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 23:53:43 -0800 (PST)
+        Fri, 10 Dec 2021 02:57:31 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC0BC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 23:53:53 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id 8so7777215pfo.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 23:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mJmmV17V4GqEpcKpliLXYPaRRnl952JuoJAtDoU5wX8=;
-        b=KpGsh35qG074zspucC5/tttr2xImfhgK6xeclO/jIK+uh8oGcuMlU0gctYClhQsyR6
-         RHkQne0c7wtceo51mXJZoVZhv55fcYG2K5cXhK51LJc5GBELhcCkkIVftmGwuE3TAG/4
-         nWxmgi66cLT6ngZ18NHZLTg9N8Hn7Jtj9ShR8YLPSivpRzpNAHnpymDR1SpdnPGbl/4+
-         mYlh5RrAnebcAYHdqGU7kZwCuA4pdlb1+fbpK0hLBzdnlp/w89dI/sNq/9YtJ4tkvksL
-         PXHvjva3lYtxFm3lL4vBlpS+SPzyG7VCDqR8k19wrbo3aIUkmgz70YUhaGnwCPxwMyf9
-         Yjvg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=ijVBfG1KG/aW/R5+/Gi9cb70eNCVtOkQHVClSlu2XwQ=;
+        b=f9zXHqflj7w8rm18C9SRhCSZ0h8uljnpXHk4Vjg37Ib9U6eihTWF8OGGbBbjwovGIt
+         WdIAiNb9SNj9vX3/WkE92YG6UOQugvY0wWCTFxfzKL15NKrL4ZQ0uOJvhbWqYEwCfDb+
+         G8NUmHY1ychu8qM/0vvRjYBeLSJ92mS9HJ+K6eFJUgLaoCZeHFNNzpVRLU20oxHAz7oL
+         6XRb0fJAxHVDdAaUw2xEE3YbeilVIptXXXfmGnzvQKXqOs4PEgYz5Y26V3rag1Fz5q70
+         NwCHGKIS6EwduXaYhhahvciWp9RERZCsFd5bJ93Wmf7yqZ3CPDLzKlK7t5ozokyrtfAg
+         Jh6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mJmmV17V4GqEpcKpliLXYPaRRnl952JuoJAtDoU5wX8=;
-        b=bUbpCY0CaljVzPfm1A5cht2IrV5tS8ZtQJfWVih9bfreJQOHwgGUUUraDbeOudu88I
-         6+fVOjUp8Gn5mfSULjmtldEWVZN9r8TR6NZXFvaSb+Cwv8TvGZTTuf8GqFuk1pkTol8X
-         UhwaLejRi//elth6b9xpHi8sFVFNMK88y40PhGVUNWbm3zXpEZmnlRoYZ5Bb7AJqsl+A
-         q/wkNCmI7JRhi+KoH5/K1h6+RRUPi5dDl/j7l3plqOCvVhOLHBT6MjsTTmljiBMR3J/q
-         LzUTI/YmXOfCsdHj4LNTfbQBUbxQLR++nyIgkRGzBh9pxpta/i1JrZnzfIh6jrBCEbzU
-         cPzg==
-X-Gm-Message-State: AOAM5329miClM71yattNEfDTiikHiDRrWYyKZmtP6+IiBTXiZ5oGxtq4
-        rMvMQV2Sj40H3+5bN6DZXOnw6Q==
-X-Google-Smtp-Source: ABdhPJyFZ5NC0bEPoezW7x/sYUWkU2IvA/4QqqzZpR7AeY1ioHFOCiUytzlpI/kl0W13hFp9IqqMiw==
-X-Received: by 2002:a63:d354:: with SMTP id u20mr38051850pgi.366.1639122822857;
-        Thu, 09 Dec 2021 23:53:42 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:7fdb:7edf:3c09:a8eb])
-        by smtp.gmail.com with ESMTPSA id m6sm1446947pfh.87.2021.12.09.23.53.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 23:53:42 -0800 (PST)
-Date:   Fri, 10 Dec 2021 15:53:38 +0800
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, nancy.lin@mediatek.com,
-        singo.chang@mediatek.com
-Subject: Re: [PATCH] mailbox: add control_by_sw for mt8195
-Message-ID: <YbMHgkG/MwKNu0v1@google.com>
-References: <20211210061138.9943-1-jason-jh.lin@mediatek.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ijVBfG1KG/aW/R5+/Gi9cb70eNCVtOkQHVClSlu2XwQ=;
+        b=6c/eW4fORTEbRqPnhUg5lJaxVagyaz8mVii3b4J/iyxXEaWMDZlbeeiGqJ9eJ0crXb
+         eLQZvyrHC01yOCT3F5U4Rkswy9trMg9kJOGbCbbN4b+RjhC7smEDBIEBjaRglGIQlfFP
+         dfPvT5XfDy3ghTIHjCpKN0usaFxRiQi+nhU7cN1Wpgt0RFTa7Frg0sTxYIV9Sx7MaVuk
+         /oSGtWTQL8PQ34ztKAIXMiY3UcP752L/YVaM0LXW5Jwiv1jTn56xzIFlz6OvqJg2VBWQ
+         yHNVMlLw0WPU3DXyyxkTrBKfbbx4ZjvGXfJbbx5k34txj2vWD+APbBCeAK5Eua+I/xzI
+         OCLw==
+X-Gm-Message-State: AOAM533KUHJNEcZcuQ3fUYrhPtb0c2GQNCYGC669xmYt7YXIZAnvXjai
+        DJK+CqUf98+/ooxHiTHuPb0=
+X-Google-Smtp-Source: ABdhPJwiYQdsfZBv/0L8jEVNhWHsAYR27PUBucnpzzQOeWrnW8MMFcsmzH8CePs6w6mAE1aeqGTsGw==
+X-Received: by 2002:a65:5c82:: with SMTP id a2mr39036759pgt.370.1639122833431;
+        Thu, 09 Dec 2021 23:53:53 -0800 (PST)
+Received: from [30.240.98.4] ([205.204.117.108])
+        by smtp.gmail.com with ESMTPSA id bt2sm1733596pjb.57.2021.12.09.23.53.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 23:53:52 -0800 (PST)
+Message-ID: <84807a03-f7d1-83cb-16df-bacc58de4529@gmail.com>
+Date:   Fri, 10 Dec 2021 15:53:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210061138.9943-1-jason-jh.lin@mediatek.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [RFC PATCH v2 3/7] mm: migrate: allocate the right size of non
+ hugetlb or THP compound pages.
+To:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
+        linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>
+References: <20211209230414.2766515-1-zi.yan@sent.com>
+ <20211209230414.2766515-4-zi.yan@sent.com>
+From:   Eric Ren <renzhengeek@gmail.com>
+In-Reply-To: <20211209230414.2766515-4-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 02:11:38PM +0800, jason-jh.lin wrote:
-> To make sure the GCE request signal to SPM is not trigger by
-> other HW modules and cause suspend premature wake.
-> 
-> Set 0x7 (the bit 0~2 as 1) to GCE_GCTL_VALUE, to configure the
-> request signal control by SW and release the request to SPM.
-> 
-> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+Hi,
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+On 2021/12/10 07:04, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+>
+> alloc_migration_target() is used by alloc_contig_range() and non-LRU
+> movable compound pages can be migrated. Current code does not allocate the
+> right page size for such pages. Check THP precisely using
+> is_transparent_huge() and add allocation support for non-LRU compound
+> pages.
+Could you elaborate on why the current code doesn't get the right size?  
+how this patch fixes it.
+
+The description sounds like it's an existing bug, if so, the patch 
+subject should be changed to
+"Fixes ..."?
+
+>
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>   mm/migrate.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index d487a399253b..2ce3c771b1de 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1563,7 +1563,7 @@ struct page *alloc_migration_target(struct page *page, unsigned long private)
+>   		return alloc_huge_page_nodemask(h, nid, mtc->nmask, gfp_mask);
+>   	}
+>   
+> -	if (PageTransHuge(page)) {
+> +	if (is_transparent_hugepage(page)) {
+>   		/*
+>   		 * clear __GFP_RECLAIM to make the migration callback
+>   		 * consistent with regular THP allocations.
+> @@ -1572,13 +1572,17 @@ struct page *alloc_migration_target(struct page *page, unsigned long private)
+if (PageTransHuge(page)) {  // just give more code context
+...
+>   		gfp_mask |= GFP_TRANSHUGE;
+>   		order = HPAGE_PMD_ORDER;
+order assigned here
+>   	}
+> +	if (PageCompound(page)) {
+> +		gfp_mask |= __GFP_COMP;
+> +		order = compound_order(page);
+re-assinged again as THP is a compound page?
+
+Thanks,
+Eric
+> +	}
+>   	zidx = zone_idx(page_zone(page));
+>   	if (is_highmem_idx(zidx) || zidx == ZONE_MOVABLE)
+>   		gfp_mask |= __GFP_HIGHMEM;
+>   
+>   	new_page = __alloc_pages(gfp_mask, order, nid, mtc->nmask);
+>   
+> -	if (new_page && PageTransHuge(new_page))
+> +	if (new_page && is_transparent_hugepage(page))
+>   		prep_transhuge_page(new_page);
+>   
+>   	return new_page;
+

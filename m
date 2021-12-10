@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D66C470320
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D903470323
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242379AbhLJOyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:54:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45726 "EHLO
+        id S242403AbhLJOyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:54:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25743 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242332AbhLJOyP (ORCPT
+        by vger.kernel.org with ESMTP id S242390AbhLJOyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:54:15 -0500
+        Fri, 10 Dec 2021 09:54:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639147840;
+        s=mimecast20190719; t=1639147847;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
         bh=Z35jirA25UiblnwV/sjy+/qYeLAmZOVR3MPTVKs+MzA=;
-        b=a0jSZTUstMmnJ7aQoyIOMZyRhpzVdT+Ajy7Qy7k13wjvw7VhO68bx5So64gq6eeh+n5tvM
-        1fiYE0tc65CilkvTm0H5D+546tjLKvBKeqXg0sFVkdEo3WafbLr31cGteGeCARVjbL4eF9
-        EBEusUj8Dr0lTsnAxuQvdxAAwprD1B0=
+        b=DAsPLgodaLh0nOePdUWYzzQvdoIhhk5zgQ63PNaOZP8Ihhu9J76tuQ79TP1in//8l/FJ2/
+        RBbKbMdlOUbk/PIuBLdRM6UNn7DZgInI+EO3ClZnkSFx5TVBWp/m6ic+b/m67BdwQqHnP5
+        S3hs+2ap3DqxLuEJR7q/hUqvxWepCx8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-301-dZ7NQYCuOgayRqfGaRfxdw-1; Fri, 10 Dec 2021 09:50:39 -0500
-X-MC-Unique: dZ7NQYCuOgayRqfGaRfxdw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-465-O3pw-CUzMROkMpmPihl7EQ-1; Fri, 10 Dec 2021 09:50:46 -0500
+X-MC-Unique: O3pw-CUzMROkMpmPihl7EQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 27665101F02A;
-        Fri, 10 Dec 2021 14:50:38 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EBED51044A81;
+        Fri, 10 Dec 2021 14:50:44 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D88F56D034;
-        Fri, 10 Dec 2021 14:50:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C7C160622;
+        Fri, 10 Dec 2021 14:50:44 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Subject: [GIT PULL] KVM fixes for Linux 5.16-rc5
-Date:   Fri, 10 Dec 2021 09:50:37 -0500
-Message-Id: <20211210145037.28568-1-pbonzini@redhat.com>
+Date:   Fri, 10 Dec 2021 09:50:44 -0500
+Message-Id: <20211210145044.28699-1-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org

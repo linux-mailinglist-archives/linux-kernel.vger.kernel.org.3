@@ -2,133 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DF147099D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910424709A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245725AbhLJTD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S245734AbhLJTE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237589AbhLJTDz (ORCPT
+        with ESMTP id S238887AbhLJTEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:03:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962CFC061746;
-        Fri, 10 Dec 2021 11:00:20 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639162819;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0BeH0Kn3WigadkhEUoB01iDiT99PSY041SAX6KkeNTw=;
-        b=4xfvC4nabHIrP128E7J3+ba2aohYO0zDXeNPk+xDnNx7Z2NZyrxL2Oe9Gh1Lch5CK7l0QO
-        +45W1CLIx7HFeiPsQkgJVk0x/Qq3Cz5yUikSIO9x3qkqyLbHkptlY5WxYMsz2RNk27nUys
-        Akjf2x2mwW+weMYa8w36SiS8vEvaB1FjizaSljDaxN+XAuAd0U9YZc1/KnqwvF3csRSDHS
-        oZibDVLb9Fs67KpVVAJDgreCUAKD/F6+bxTo2O8pQLqBFmkPNKy94+HKEqEw1rCWDl3bBu
-        EYA1E2GcDvYsOAtjGe0m3kJQb7sX0rtmaOl5lkjvc0DBhARAoiaoNtEls8gfMQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639162819;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0BeH0Kn3WigadkhEUoB01iDiT99PSY041SAX6KkeNTw=;
-        b=6Dm1RTza5oJL5j7gcbgZrAwSYr6Qrei6L2Aw/pJtG3lIhtudTxPHkn/HtZp13oVAVakIkV
-        lG/H1wTRd9DQnhDw==
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Jiang, Dave" <dave.jiang@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Dey, Megha" <megha.dey@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-In-Reply-To: <20211210123938.GF6385@nvidia.com>
-References: <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com>
- <878rx480fk.ffs@tglx>
- <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
- <87sfv2yy19.ffs@tglx> <20211209162129.GS6385@nvidia.com>
- <878rwtzfh1.ffs@tglx> <20211209205835.GZ6385@nvidia.com>
- <8735n1zaz3.ffs@tglx> <87sfv1xq3b.ffs@tglx>
- <BN9PR11MB527619B099061B3814EB40408C719@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20211210123938.GF6385@nvidia.com>
-Date:   Fri, 10 Dec 2021 20:00:18 +0100
-Message-ID: <87fsr0xp31.ffs@tglx>
+        Fri, 10 Dec 2021 14:04:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D0C061746;
+        Fri, 10 Dec 2021 11:01:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4EE9B829B8;
+        Fri, 10 Dec 2021 19:01:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A67E7C00446;
+        Fri, 10 Dec 2021 19:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639162872;
+        bh=zgB+bjKPrWYZ2x6sT/TcpMl0LVsdv1gHVr5Ek+A2J4g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gjOV1anw7DP7Jb5NvNf8NlFpKkhej9aEG41NheqqLfrIuGJj6hoSQcIVqN5RmZbZ4
+         ioc0/SdQ3GrPRJgQL8c72LZmjgPCdGS+/LDi8sNLEkobhFS/2W5avsNjR7MMu+lKjV
+         X7hfM5qSRgjTq6ajuzne8HN3yN45tOfCHakUd8VG1+Gm01smZJLI3ZgAMZT0o+eNFh
+         WfK7osNfiHxRuJsjzG7QFUbO12LbE8cARtu/59dZHwP7WmEdnUG2+bd1HJJZVDQbvO
+         Kpz8Lt7n4DXI0lz4CbPWfuUXIGtAi2dJ6m+oJ8CjrKOu9g/sdW5q2zeymt0DMecNTa
+         KAzWslgV3WMfw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7A3E4405D8; Fri, 10 Dec 2021 16:01:02 -0300 (-03)
+Date:   Fri, 10 Dec 2021 16:01:02 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Andrew Kilroy <andrew.kilroy@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] perf vendor events: Rename arm64 arch std event
+ files
+Message-ID: <YbOj7q+OIM8crbpY@kernel.org>
+References: <20211210123706.7490-1-andrew.kilroy@arm.com>
+ <20211210123706.7490-3-andrew.kilroy@arm.com>
+ <292d3ee6-c8f8-8155-9c90-e05026ea1f76@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <292d3ee6-c8f8-8155-9c90-e05026ea1f76@huawei.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason,
+Em Fri, Dec 10, 2021 at 01:46:48PM +0000, John Garry escreveu:
+> On 10/12/2021 12:37, Andrew Kilroy wrote:
+> > A previous commit adds pmu events into the files
+> > 
+> >    armv8-common-and-microarch.json
+> >    armv8-recommended.json
+> > 
+> > that are actually specified in an armv9 reference supplement, not armv8.
+> > As such, naming the files with the armv8 prefix seems artificial.
+> > 
+> > This patch renames the files to reflect that these two files are for
+> > arch std events regardless of whether they are defined in armv8 or
+> > armv9.
+> > 
+> > Signed-off-by: Andrew Kilroy<andrew.kilroy@arm.com>
+> 
+> Reviewed-by: John Garry <john.garry@huawei.com>
 
-On Fri, Dec 10 2021 at 08:39, Jason Gunthorpe wrote:
 
-> On Fri, Dec 10, 2021 at 07:29:01AM +0000, Tian, Kevin wrote:
->> >   5) It's not possible for the kernel to reliably detect whether it is
->> >      running on bare metal or not. Yes we talked about heuristics, but
->> >      that's something I really want to avoid.
->> 
->> How would the hypercall mechanism avoid such heuristics?
->
-> It is clever, we don't have an vIOMMU that supplies vIR today, so by
-> definition all guests are excluded and only bare metal works.
+Thanks, applied both patches.
 
-Dammit. Now you spilled the beans. :)
+- Arnaldo
 
->> > The charm is that his works for everything from INTx to IMS because all
->> > of them go through the same procedure, except that INTx (IO/APIC) does
->> > not support the reservation mode dance.
->
-> Do we even have vIOAPIC?
-
-It does not matter much. INTx via IOAPIC is different anyway because
-INTx is shared so it's unclear from which device it originates.
-
-> It seems reasonable - do you have any idea how this all would work on
-> ARM too? IMS on baremetal ARM is surely interesting. I assume they
-> have a similar issue with trapping the MSI
-
-On baremetal it should just work once ARM is converted over. No idea
-about guests. Marc should know.
-
->> Then Qemu needs to find out the GSI number for the vIRTE handle. 
->> Again Qemu doesn't have such information since it doesn't know 
->> which MSI[-X] entry points to this handle due to no trap.
->
-> No this is already going wrong. qemu *cannot* know the MSI information
-> because there is no MSI information for IMS.
->
-> All qemu should get is the origin device information and data about
-> how the guest wants the interrupt setup.
->
-> Forget about guests and all of this complexity, design how to make
-> VFIO work with IMS in pure userspace like DPDK.
->
-> We must have a VFIO ioctl to acquire a addr/data pair and link it to
-> an event fd.
->
-> I'm not sure exactly how this should be done, it is 90% of what IMS
-> is, except the VFIO irq_chip cannot touch any real HW and certainly
-> cannot do mask/unmask..
->
-> Maybe that is OK now that it requires IR?
-
-IR unfortunately does not allow masking, but we surely can come up some
-emergency button to press when e.g. an interrupt storm is detected.
-
-Thanks,
-
-        tglx

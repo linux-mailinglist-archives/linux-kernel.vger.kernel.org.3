@@ -2,89 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E288F46FA54
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 06:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7A446FA57
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 06:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbhLJF36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 00:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S233288AbhLJFb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 00:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbhLJF35 (ORCPT
+        with ESMTP id S234402AbhLJFb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 00:29:57 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1FCC061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 21:26:23 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id x131so7441023pfc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 21:26:23 -0800 (PST)
+        Fri, 10 Dec 2021 00:31:58 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3709C0617A2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 21:28:23 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id v20-20020a25fc14000000b005c2109e5ad1so14723057ybd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 21:28:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=9HaCr403HoDBRC5zt6/TcAYhY0RvCo+TqoHKsMM6+Zg=;
-        b=XGGwhTb5e6gXGmVldeHS9UQWDNv/lgCXlDuqZlzFTzCisYJsxCbK2LP9R9slKt2fyh
-         aTLPkH/Ggt09eHgCjtnfOg7HPVlBccrU3bO5ejAwZImmawIB8OEPLJ2RuAkcu4aj8B3u
-         KyNPgvjy4aNnxH0DBszqz0kT4XsKaHvTofXgiWLgXSSdNg41RXRgMTGZz7Nk+CpeU//L
-         D9rDEB+YZoCG+yObJWOh+osczpRd+K7rSAKpJIVRy6uslBrT8AmU7oqHX7/lrWsMj4T8
-         iYlC3J4EuFg/TePjSKzj/HwCJBs0GxMivlX39xptJg9KSGU3jELnSHGamqctmD5/NQVD
-         8WLQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Q/yA9sPgnWZ7PZbSTSePDzl+2+LX/jsSZ2aJXrNG7YE=;
+        b=TyccKEm3KSuGGOeEFgiVhOkL1pOVjfDQvofDbMlnAnCOJdWaGXViu5kWfpDBQ24B9d
+         8Jc0fNwAY2JZXQW4OFuZ8jhOT9IhQjzA58AGav3y1zAVzc7uJij8gkCcE3M1KgWLL/iH
+         SZlOEokoqDmgIIUXFsuUGuCpjrCYJDGnT3oMajPp+/rrqP1dhSh1+04mP+wOtr6nMskU
+         s0S2IMpf1Btxye0f3YN/cQEBHcahXE98NMUUgXppXRIwL6kWRkDXC+DLx358mTJhlcMk
+         YPek4C5P5y2sU4A7uOBQgjn44DVnsXuQC1H/naiu2UtvY/ALgsdiwOwKvLF++27yoq5+
+         hjwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9HaCr403HoDBRC5zt6/TcAYhY0RvCo+TqoHKsMM6+Zg=;
-        b=T8pcOGCa0fa1lYK7+YK53OY8UQY4x4FVzeTMED6NMqHqB6i7z6RWOthpYsBpfotCJn
-         PYo+jafyZrbRhRRKONgrWnWjoGHEUQqA6PdYsoMowtBav2vJFyWdMUcnJEiVEZbvbQYf
-         Fx6p67oTpMr8MTLxSx4+svqAdHCNW8PITckRMUnx68brKqbuor+3/awXyHwoe7uEy2Ro
-         POdDyFJQ6zoJE7AHsTh5RZXdsX2+5M10/+TBO1cxnRegFJjKt5LkQYYm72wuZMT2ZXmw
-         fbyUT8o2VS8sHahhBd0NjsBt6IEQvaM1MkXNm8sVg2CWBaWTRXreW+SlkL0v8LNN5WFq
-         +lTA==
-X-Gm-Message-State: AOAM533b3yab1IeJ4gZGRVzMleaLw7Y8QLh5RtcuYidXMun5O2U9kHPw
-        eA5lZgvcT3XcNCjTANypwvuBeA==
-X-Google-Smtp-Source: ABdhPJyaLUBIHXu2rZzkWm3g4aXnlEdx8xWgQP6fYPG8wWDyXI4dqfSDOtp/2akL00w47mZyOesYIQ==
-X-Received: by 2002:a63:d217:: with SMTP id a23mr2083973pgg.143.1639113980852;
-        Thu, 09 Dec 2021 21:26:20 -0800 (PST)
-Received: from [172.20.4.26] ([66.185.175.30])
-        by smtp.gmail.com with ESMTPSA id g1sm1571813pfv.19.2021.12.09.21.26.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 21:26:20 -0800 (PST)
-Subject: Re: [syzbot] KASAN: use-after-free Write in io_queue_worker_create
-To:     syzbot <syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <0000000000007b4e3605d2c3e4f1@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <9db849c7-f998-dec6-5553-1d2670389204@kernel.dk>
-Date:   Thu, 9 Dec 2021 22:26:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <0000000000007b4e3605d2c3e4f1@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Q/yA9sPgnWZ7PZbSTSePDzl+2+LX/jsSZ2aJXrNG7YE=;
+        b=ePoWYPCKOrthQS53uoXRGcE4vpJmp0YZUe8Xck5+YN0nQau6Y4tC+znj7Ab7Tsedip
+         Tymnl/34adxQUpKIAJ9aBIu6tYqu/iCoYSLbizX9pXmvK7Jq96/qexwaRJ5iGbrs+XCI
+         ysd+177RJeoTWCKpWyD2KXv1TuW2fl3vEmcTtkERYjtL0wwRQPkkMUcAGu7w+obseOXq
+         3CdFaAvjOkfidsxTyu4RtW9MPaLbp0Yi4+JHWpCvt6yYFkEEwTi5FjfS/8XpYtMIrRBy
+         xftnjrQsb8mA6PAj7TGFBHneVe6PXLTmfKvFAcxt/mq6ebyjixERZeEik2ZUWFvCw1FX
+         W8Cg==
+X-Gm-Message-State: AOAM5300/xqVCYuGuOEOpz5rGVu4xOQX1mFZ6lAwU3H+a0O6ypc43hGS
+        VkSq19bsudxAx/h7LgFwQiDy2O5/+PjvKio=
+X-Google-Smtp-Source: ABdhPJzJHY6T8LWZYV4isxoZfxQaYtrnF/GAQA9UxnQcmeKS8QUcynJHtWWElWdJ+EnPcKpgh/pt1H1Wi+mmlMc=
+X-Received: from sharinder.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:c73])
+ (user=sharinder job=sendgmr) by 2002:a25:38f:: with SMTP id
+ 137mr12365855ybd.11.1639114102849; Thu, 09 Dec 2021 21:28:22 -0800 (PST)
+Date:   Fri, 10 Dec 2021 05:28:05 +0000
+Message-Id: <20211210052812.1998578-1-sharinder@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v3 0/7] Documentation: KUnit: Rework KUnit documentation
+From:   Harinder Singh <sharinder@google.com>
+To:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
+        corbet@lwn.net
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tim.bird@sony.com, Harinder Singh <sharinder@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/21 10:21 PM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    c741e49150db Merge tag 'for-linus' of git://git.kernel.org..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=125600bab00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=221ffc09e39ebbd1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b60c982cb0efc5e05a47
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1686906db00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1539a9b9b00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com
+The KUnit documentation was not very organized. There was little
+information related to KUnit architecture and the importance of unit
+testing.
 
-#syz test git://git.kernel.dk/linux-block io_uring-5.16
+Add some new pages, expand and reorganize the existing documentation.
+Reword pages to make information and style more consistent.
 
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20211207054019.1455054-1-sharinder@google.com/T/
+
+--Reworded sentences as per comments
+--Expanded the explaination in usage.rst for accessing the current test example
+--Standardized on US english in style.rst
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20211203042437.740255-1-sharinder@google.com/
+
+--Fixed spelling mistakes
+--Restored paragraph about kunit_tool introduction
+--Added note about CONFIG_KUNIT_ALL_TESTS (Thanks Tim Bird for review
+comments)
+-- Miscellaneous changes
+
+Harinder Singh (7):
+  Documentation: KUnit: Rewrite main page
+  Documentation: KUnit: Rewrite getting started
+  Documentation: KUnit: Added KUnit Architecture
+  Documentation: kunit: Reorganize documentation related to running
+    tests
+  Documentation: KUnit: Rework writing page to focus on writing tests
+  Documentation: KUnit: Restyle Test Style and Nomenclature page
+  Documentation: KUnit: Restyled Frequently Asked Questions
+
+ .../dev-tools/kunit/architecture.rst          | 206 +++++++
+ Documentation/dev-tools/kunit/faq.rst         |  73 ++-
+ Documentation/dev-tools/kunit/index.rst       | 172 +++---
+ .../kunit/kunit_suitememorydiagram.png        | Bin 0 -> 24174 bytes
+ Documentation/dev-tools/kunit/run_manual.rst  |  57 ++
+ Documentation/dev-tools/kunit/run_wrapper.rst | 247 ++++++++
+ Documentation/dev-tools/kunit/start.rst       | 198 +++---
+ Documentation/dev-tools/kunit/style.rst       | 105 ++--
+ Documentation/dev-tools/kunit/usage.rst       | 578 ++++++++----------
+ 9 files changed, 1049 insertions(+), 587 deletions(-)
+ create mode 100644 Documentation/dev-tools/kunit/architecture.rst
+ create mode 100644 Documentation/dev-tools/kunit/kunit_suitememorydiagram.png
+ create mode 100644 Documentation/dev-tools/kunit/run_manual.rst
+ create mode 100644 Documentation/dev-tools/kunit/run_wrapper.rst
+
+
+base-commit: 4c388a8e740d3235a194f330c8ef327deef710f6
 -- 
-Jens Axboe
+2.34.1.173.g76aa8bc2d0-goog
 

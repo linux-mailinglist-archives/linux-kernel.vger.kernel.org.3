@@ -2,96 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012F447004F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6AF470055
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240786AbhLJLv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240459AbhLJLv1 (ORCPT
+        id S240801AbhLJLxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:53:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35272 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240459AbhLJLxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:51:27 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6B9C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 03:47:52 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso8800993wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 03:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DdPRnVGVlNPycJ9DTbcky3GEfi1/qO6rilh8GdIfKm8=;
-        b=PwbcylkTeZEeIL6UBJi3g6ypNrRUQOcj0MzGxICst0UQEnZGD4GKrXqHNcF7ANjdmz
-         vcmzuEXie0jFhjkU50uMLPZx6wD/EX4AO122aPqsRw/ErgXh5bj4MEuGcRJquZwtWLld
-         RmMHDtepCxyMpFJ1SukqoshAu9d2PJ08+4z+c+Qppqio2PrJoOVATfZdryPw+62m+gBY
-         94hVO607KSg2weyTuWrVxqgZlEFkMQPp+dSdJ1HRxJJDX8wGvzycs9q93gQW7biMr8y2
-         f1J5CSeyx72WhuVgnHn+NExrRUZzfll0H86ltWXcgZLh1q+jtbb5Qdpjw+NfGPRUgaHy
-         eGcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DdPRnVGVlNPycJ9DTbcky3GEfi1/qO6rilh8GdIfKm8=;
-        b=qGgJmiuak8k3Xbzyjgfq2A/TMB/WzXFrdwx01vvcxN7JUkNMTDKtfGf/o2SssZYmOk
-         Go6cAna1oIQZeiC+YsIy9b+Gb4WNs1A5OYruJk5bA5F14/8fUCmbOxy1DJo9fgeTntRP
-         ai+do258uMiXnsD0cVSUPzlPTCE1xYHHuzrN8mU4s85wm7OhhgwOG+ncn5J9abxIBtQt
-         Wgt5tqEHLjf6d5uqSwVCrM/Bu/N6oG377uazb+JGTcD37HOFdpQfPrrWnH43c9S3O16Q
-         TsO4+cn2RnOk9yRLARBAudJILnXykb2+G3lS9y1ezByV3z/AhJcj11C/JCtDAe4B4y+1
-         mD9w==
-X-Gm-Message-State: AOAM532LreeB7+tFpsWbmtbNVw/Vb08obzHQNc6fXMKiGL9w+JKRh8C6
-        3NfYORA4gA7Zb/gfyaRb8mhhqi19l2Fz2g==
-X-Google-Smtp-Source: ABdhPJx7yY3Fqo+dlZ2ZI3y6N+B/3ysazcxkVn8RR8G3dVto96Ljv5epauhXEivULr6OwbtUvuqHKA==
-X-Received: by 2002:a7b:c257:: with SMTP id b23mr15907315wmj.67.1639136870916;
-        Fri, 10 Dec 2021 03:47:50 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id a9sm2412753wrt.66.2021.12.10.03.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 03:47:50 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     srinivas.kandagatla@linaro.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mfd: wcd934x: fix typo and a duplicate register define
-Date:   Fri, 10 Dec 2021 11:47:47 +0000
-Message-Id: <20211210114747.1485-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Fri, 10 Dec 2021 06:53:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9282EB8275F;
+        Fri, 10 Dec 2021 11:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A4DC00446;
+        Fri, 10 Dec 2021 11:49:38 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 12:49:34 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
+Message-ID: <20211210114934.tacjnwryihrsx6ln@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-16-stefanb@linux.ibm.com>
+ <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
+ <20211209143749.wk4agkynfqdzftbl@wittgenstein>
+ <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
+ <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks like we ended up with a typo and a duplicate in WCD register defines.
-Fix these.
+On Thu, Dec 09, 2021 at 02:38:13PM -0500, James Bottomley wrote:
+> On Thu, 2021-12-09 at 10:30 -0500, James Bottomley wrote:
+> > On Thu, 2021-12-09 at 15:37 +0100, Christian Brauner wrote:
+> > > On Thu, Dec 09, 2021 at 03:34:28PM +0100, Christian Brauner wrote:
+> > > > On Wed, Dec 08, 2021 at 05:18:17PM -0500, Stefan Berger wrote:
+> > > > > Move the dentries into the ima_namespace for reuse by
+> > > > > virtualized
+> > > > > SecurityFS. Implement function freeing the dentries in order of
+> > > > > files and symlinks before directories.
+> > > > > 
+> > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > ---
+> > > > 
+> > > > This doesn't work as implemented, I think.
+> > > > 
+> > > > What I would have preferred and what I tried to explain in the
+> > > > earlier review was:
+> > > > Keep the dentry stashing global since it is only needed for
+> > > > init_ima_ns.
+> > > > Then struct ima_namespace becomes way smaller and simpler.
+> > > > If you do that then it makes sense to remove the additional
+> > > > dget() in securityfs_create_dentry() for non-init_ima_ns.
+> > > > Then you can rely on auto-cleanup in .kill_sb() or on
+> > > > ima_securityfs_init() failure and you only need to call
+> > > > ima_fs_ns_free_dentries() if ns != init_ima_ns.
+> > > > 
+> > > > IIuc, it seems you're currently doing one dput() too many since
+> > > > you're calling securityfs_remove() in the error path for non-
+> > > > init_ima_ns which relies on the previous increased dget() which
+> > > > we removed.
+> > > 
+> > > If you really want to move the dentry stashing into struct
+> > > ima_namespace even though it's really unnecessary then you may as
+> > > well not care about the auto-cleanup and keep that additional
+> > > ima_fs_ns_free_dentries(ns) call in .kill_sb(). But I really think
+> > > not dragging dentry stashing into struct ima_namespace is the
+> > > correct way to go about this.
+> > 
+> > We, unfortunately, do have one case we can't avoid stashing for the
+> > policy file.  It's this code in ima_release_policy:
+> > 
+> > > #if !defined(CONFIG_IMA_WRITE_POLICY) &&
+> > > !defined(CONFIG_IMA_READ_POLICY)
+> > > 	securityfs_remove(ns->dentry[IMAFS_DENTRY_IMA_POLICY]);
+> > > 	ns->dentry[IMAFS_DENTRY_IMA_POLICY] = NULL;
+> > > 
+> > 
+> > What it does is that in certain config options, the policy file entry
+> > gets removed from the securityfs ima directory after you write to it.
+> 
+> This is what I have incremental to v5 that corrects all of this.  It
+> actually keeps every dentry reference (including init_user_ns ones) at
+> 1 so they can be reaped on unmount.  For the remove case it does
+> d_delete and then puts the only reference.  This means
+> securityfs_remove() works for the namespaced policy file as well.
+> 
+> I also got rid of the spurious initialized check in ima_securityfs_init
+> because it prevents you doing a mount;umount;mount on securityfs within
+> a namespace.
+> 
+> There's still the problem that if you write the policy, making the file
+> disappear then unmount and remount securityfs it will come back.  My
+> guess for fixing this is that we only stash the policy file reference,
+> create it if NULL but then set the pointer to PTR_ERR(-EINVAL) or
+> something and refuse to create it for that value.
 
-Fixes: 6ac7e4d7ad70 ("mfd: wcd934x: Add support to wcd9340/wcd9341 codec")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- include/linux/mfd/wcd934x/registers.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Some sort of indicator that gets stashed in struct ima_ns that the file
+does not get recreated on consecutive mounts. That shouldn't be hard to
+fix.
 
-diff --git a/include/linux/mfd/wcd934x/registers.h b/include/linux/mfd/wcd934x/registers.h
-index 76a943c83c63..bcec70a66fff 100644
---- a/include/linux/mfd/wcd934x/registers.h
-+++ b/include/linux/mfd/wcd934x/registers.h
-@@ -34,7 +34,6 @@
- #define WCD934X_DMIC_RATE_MASK					GENMASK(3, 1)
- #define WCD934X_CPE_SS_DMIC2_CTL				0x021a
- #define WCD934X_CPE_SS_DMIC_CFG					0x021b
--#define WCD934X_CPE_SS_DMIC_CFG					0x021b
- #define WCD934X_CPE_SS_CPAR_CFG					0x021c
- #define WCD934X_INTR_PIN1_MASK0					0x0409
- #define WCD934X_INTR_PIN1_STATUS0				0x0411
-@@ -375,7 +374,7 @@
- #define WCD934X_CDC_RX2_RX_PATH_SEC3				0x0b74
- #define WCD934X_CDC_RX2_RX_PATH_DSMDEM_CTL			0x0b7b
- #define WCD934X_CDC_RX3_RX_PATH_CTL				0x0b7d
--#define WCD934X_CDC_RX3_RX_PATH_CFG0				0x0b6e
-+#define WCD934X_CDC_RX3_RX_PATH_CFG0				0x0b7e
- #define WCD934X_CDC_RX3_RX_PATH_CFG2				0x0b80
- #define WCD934X_CDC_RX3_RX_VOL_CTL				0x0b81
- #define WCD934X_CDC_RX3_RX_PATH_MIX_CTL				0x0b82
--- 
-2.21.0
+> 
+> James
+> 
+> ---
+> 
+> From 7de285a81ff06b6e0eb2c6db24810aeef9f6dd17 Mon Sep 17 00:00:00 2001
+> From: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Date: Thu, 9 Dec 2021 19:33:49 +0000
+> Subject: [PATCH] fix dentry ref counting
+> 
+> ---
+>  security/inode.c                | 12 ++----------
+>  security/integrity/ima/ima_fs.c |  4 ----
+>  2 files changed, 2 insertions(+), 14 deletions(-)
+> 
+> diff --git a/security/inode.c b/security/inode.c
+> index eaccba7017d9..b53152f7a625 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -178,8 +178,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>  		inode->i_fop = fops;
+>  	}
+>  	d_instantiate(dentry, inode);
+> -	if (ns == &init_user_ns)
+> -		dget(dentry);
+>  	inode_unlock(dir);
+>  	return dentry;
+>  
+> @@ -317,21 +315,15 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
+>  void securityfs_remove(struct dentry *dentry)
+>  {
+>  	struct user_namespace *ns = dentry->d_sb->s_user_ns;
+> -	struct inode *dir;
+>  
+>  	if (!dentry || IS_ERR(dentry))
+>  		return;
+>  
+> -	dir = d_inode(dentry->d_parent);
+> -	inode_lock(dir);
+>  	if (simple_positive(dentry)) {
+> -		if (d_is_dir(dentry))
+> -			simple_rmdir(dir, dentry);
+> -		else
+> -			simple_unlink(dir, dentry);
+> +		d_delete(dentry);
 
+Not, that doesn't work. You can't just call d_delete() and dput() and
+even if I wouldn't advise it. And you also can't do this without taking
+the inode lock on the directory.
+simple_rmdir()/simple_unlink() take care to update various inode fields
+in the parent dir and handle link counts. This really wants to be sm
+like
+
+	struct inode *parent_inode;
+
+	parent_inode = d_inode(dentry->d_parent);
+	inode_lock(parent_inode);
+	if (simple_positive(dentry)) {
+		dget(dentry);
+		if (d_is_dir(dentry)
+			simple_unlink(parent_inode, dentry);
+		else
+			simple_unlink(parent_inode, dentry);
+		d_delete(dentry);
+		dput(dentry);
+	}
+	inode_unlock(parent_inode);
+
+>  		dput(dentry);
+>  	}
+> -	inode_unlock(dir);
+> +
+>  	if (ns == &init_user_ns)
+>  		simple_release_fs(&init_securityfs_mount,
+>  				  &init_securityfs_mount_count);
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index 778983fd9a73..077a6ff46858 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -466,10 +466,6 @@ int ima_securityfs_init(struct user_namespace *user_ns, struct dentry *root)
+>  	struct ima_namespace *ns = user_ns->ima_ns;
+>  	struct dentry *ima_dir;
+>  
+> -	/* already initialized? */
+> -	if (ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR])
+> -		return 0;
+> -
+>  	/* FIXME: update when evm and integrity are namespaced */
+>  	if (user_ns != &init_user_ns) {
+>  		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] =
+> -- 
+> 2.33.0
+> 
+> 
+> 

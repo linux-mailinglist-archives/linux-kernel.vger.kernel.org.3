@@ -2,350 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 931594704EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBAF4704E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237563AbhLJPyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237978AbhLJPxc (ORCPT
+        id S238528AbhLJPwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:52:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32325 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237200AbhLJPvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:53:32 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942A1C079797
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:48:12 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id a18so15630437wrn.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+UUvbvuMZPOqlQpZWeBbm3TDw3kOQX9+TRyBJ0yDtoI=;
-        b=KG1yvNo14xK86yJCM6PFEs70zrCh/Arfmk+NKv9atXoHJyRQQunvZbuEqD0j6lHn4I
-         Sncf/9wFUd65+hRRTgSEkKrlUzQQqC1cvpUusON241ZpIG7hEXhzWLFqkFcdDyLFHKfF
-         CUmJQSpcnNg6USAbJ0zrbp9wCQCaonTqhW1OBHW7WdG3ejlXdzmoOhV1K0bpAnxUZeXf
-         Wckji1JyAb8eFl4nuvBaiNzCxzhYSRImp0WxlODN3WHEGUjgtNaNrsFZMv02JJPFhIzi
-         Zxbr3Irvic6VPixqh5OzHb1InXrJoiJiq5xvcDXu8IqmDpdcA2DOaj2EiVVKXoH/SlRR
-         8DxQ==
+        Fri, 10 Dec 2021 10:51:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639151288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pda/qc1prCCb2qrpGLUGKr4eMjz1JOr+GUpfjD/UcSk=;
+        b=ODyp7XcjESGHZkOhZCelBcHLR26hrO5T7xgX5WxngcxDtEZB7Tmr2p5CL6TEB5Sy8OyiAN
+        FL4lPqNQourEOQA1sJb+ruwOgW/0RSZrMocbNxst9a5FZQvnonH5br1cdSu2+ph7cYn2eb
+        mH34oZwACw6b7cftntRTc8+NjTgDZdc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-295-TVophE6MP5GV_be_dfRSsg-1; Fri, 10 Dec 2021 10:48:07 -0500
+X-MC-Unique: TVophE6MP5GV_be_dfRSsg-1
+Received: by mail-wm1-f70.google.com with SMTP id 145-20020a1c0197000000b0032efc3eb9bcso6887439wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 07:48:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+UUvbvuMZPOqlQpZWeBbm3TDw3kOQX9+TRyBJ0yDtoI=;
-        b=tjS4Pmc26yBFZaNl3UDQ1NkcFtzbshHCYBqpNyhH5tCBhyxxd8fowqSkEfQ5yVUj3H
-         /FvFt6F25EnJn/hInkueCF5UdC0b+KtN17qvlctOi2ynmP49QQqy7sEPRqRY7itQzdG9
-         vaNhvfpkFnEBy8i2A2Z8hW3zlLgO/CRF+sdRJYx8RlKPejd5E3MhgcUKj7IV+kRGB92+
-         T6p3b8abXaLe4ekZUgNzavLs9bPuHq8h4bkUTpoJCattWRYQEZXVYmVfaErDALLbtF/r
-         r7rpVc9c29wa+Yvbb6SsdhBd8uSiWJqJck0Xkrup4g3/Zaa9wJOOe+2ajl0DxhuJoMI3
-         srgw==
-X-Gm-Message-State: AOAM532pr+9qxo2BUphHUDg9fY4AFfOsoFneb/0gLjCDHOUd9FuF3i7b
-        EwL8LAir/M/zU+xllZ4h84TOOJ+pIc6f9+RRUPs8rbXYNtYPOw==
-X-Google-Smtp-Source: ABdhPJxEzAGAqNPXrjYUWzAx34i+JOLzC0qX4zf6VatPaiXE0BxIjmx1Gx4095HOfd4qjuhpvmwnej46uMmCQlz5Onk=
-X-Received: by 2002:adf:f88f:: with SMTP id u15mr15141500wrp.18.1639151291061;
- Fri, 10 Dec 2021 07:48:11 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pda/qc1prCCb2qrpGLUGKr4eMjz1JOr+GUpfjD/UcSk=;
+        b=6GVIoBamtlrjVn91t88LBMlk6r3BvCglUlLGV7jLDlwGHY5WtsOdFEfeHiZ2jtzBs7
+         ACTcBMXXanewCIMxpKG8tLkehT12Wb0GDV+XESRtEku7ZP2sNiR+GZDGT0qb4PHPnnyz
+         pNLnrAMFWGAjjh5HynmnF8gEAKBK60lyPUeJS91gWVWFOx4hOLa3M8ql1nvl31tA+fjU
+         rj5Zinlnp1fN7t5UZ9VXRTT93r9M1LdAEbYj9+Lro7ulZeZ5dUYsQC8J43mA2Uh6OznO
+         JrDJyK3ZT4u3ieswPCckSXwNTtWUTctrcnSg9IrO6HJBw9mJStf2VBhU8Pookm96ce8W
+         cKww==
+X-Gm-Message-State: AOAM530CSEIGzKi/JrlgftUqW9FOnIBAeJtRY/JdFadNZ6Wz8iXxaY1z
+        iabvUYUhEtE9UPUfm5V16max08JveMVOmShZbcdInpMMfSQ8hdc7Bs3hFjQS0sKo37I+0a9XwVI
+        uLd4jfE4L8zuCD1y4UIjFJFo=
+X-Received: by 2002:a05:6000:188c:: with SMTP id a12mr14348832wri.92.1639151285946;
+        Fri, 10 Dec 2021 07:48:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzVu7oc8TaeSUZ83BJetcvkRic9YzIu2tc5o9kQ2GOMJ3ScWZikKavI9pNdv1/MK9TeP0GLsg==
+X-Received: by 2002:a05:6000:188c:: with SMTP id a12mr14348799wri.92.1639151285712;
+        Fri, 10 Dec 2021 07:48:05 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id w22sm3130257wmi.27.2021.12.10.07.48.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 07:48:05 -0800 (PST)
+Date:   Fri, 10 Dec 2021 15:48:04 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Christoph Lameter <cl@linux.com>, Petr Mladek <pmladek@suse.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com
+Subject: Re: [RFC PATCH] module: Introduce module unload taint tracking
+Message-ID: <20211210154804.zq4dyycwd4jlb3bg@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20211124173327.3878177-1-atomlin@redhat.com>
+ <YbEZ4HgSYQEPuRmS@bombadil.infradead.org>
+ <20211209153131.a54fdfbci4qnyy6h@ava.usersys.com>
+ <YbKUUJUtjBk/n913@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20211016145827.586870-1-michael@amarulasolutions.com>
- <CAOf5uw=DffhS=WAh-OFXOCO+4kd5ey=2Eqf0Zhyrgd_d5D8meA@mail.gmail.com>
- <CAPY8ntCvAnu9HS1WxWRkveXnQ_vD8EOdshX-ob8vGuGqOKp+RA@mail.gmail.com>
- <CAOf5uwmGjwXsQdVm-tyvkcPY0bJ++KFbewvrQ-esU=9FStmg+A@mail.gmail.com> <CAOf5uwmn4UM8iE71DjcGpX+pQU_wkU6bBNV-=b6kT-x-LtsnMg@mail.gmail.com>
-In-Reply-To: <CAOf5uwmn4UM8iE71DjcGpX+pQU_wkU6bBNV-=b6kT-x-LtsnMg@mail.gmail.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Fri, 10 Dec 2021 15:47:54 +0000
-Message-ID: <CAPY8ntB9J7uiygXXmyxXiUxNyNOYhQ3b8zGZtOLNE9auXYFepA@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: ilitek-ili9881c: Avoid unbalance prepare/unprepare
-To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YbKUUJUtjBk/n913@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael
+On Thu 2021-12-09 15:42 -0800, Luis Chamberlain wrote:
+> > Indeed - is this acceptable to you? I prefer this approach rather than
+> > remove it from the aforementioned list solely based on the module name.
+> 
+> Sure, it makes sense to keep all the stupid ways we are harming the
+> kernel. Makes sense. The other point I made about count though would
+> be good, in case the taint was the same.
 
-On Fri, 10 Dec 2021 at 09:05, Michael Nazzareno Trimarchi
-<michael@amarulasolutions.com> wrote:
->
-> Hi Dave
->
-> some questions below
->
-> On Thu, Dec 9, 2021 at 7:10 PM Michael Nazzareno Trimarchi
-> <michael@amarulasolutions.com> wrote:
-> >
-> > Hi Dave
-> >
-> > On Thu, Dec 9, 2021 at 6:58 PM Dave Stevenson
-> > <dave.stevenson@raspberrypi.com> wrote:
-> > >
-> > > Hi Michael
-> > >
-> > > On Thu, 9 Dec 2021 at 16:58, Michael Nazzareno Trimarchi
-> > > <michael@amarulasolutions.com> wrote:
-> > > >
-> > > > Hi all
-> > > >
-> > > > On Sat, Oct 16, 2021 at 4:58 PM Michael Trimarchi
-> > > > <michael@amarulasolutions.com> wrote:
-> > > > >
-> > > > > All the panel driver check the fact that their prepare/unprepare
-> > > > > call was already called. It's not an ideal solution but fix
-> > > > > for now the problem on ili9881c
-> > > > >
-> > > > > [ 9862.283296] ------------[ cut here ]------------
-> > > > > [ 9862.288490] unbalanced disables for vcc3v3_lcd
-> > > > > [ 9862.293555] WARNING: CPU: 0 PID: 1 at drivers/regulator/core.c:2851
-> > > > > _regulator_disable+0xd4/0x190
-> > > > >
-> > > > > from:
-> > > > >
-> > > > > [ 9862.038619]  drm_panel_unprepare+0x2c/0x4c
-> > > > > [ 9862.043212]  panel_bridge_post_disable+0x18/0x24
-> > > > > [ 9862.048390]  dw_mipi_dsi_bridge_post_disable+0x3c/0xf0
-> > > > > [ 9862.054153]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
-> > > > >
-> > > > > and:
-> > > > >
-> > > > > [ 9862.183103]  drm_panel_unprepare+0x2c/0x4c
-> > > > > [ 9862.187695]  panel_bridge_post_disable+0x18/0x24
-> > > > > [ 9862.192872]  drm_atomic_bridge_chain_post_disable+0x8c/0xd0
-> > > > > [ 9862.199117]  disable_outputs+0x120/0x31c
-> > >
-> > > This is down to the dw-mipi-dsi driver calling the post_disable hook
-> > > explicitly at [1], but then also allowing the framework to call it.
-> > > The explicit call is down to limitations in the DSI support, so we
-> > > can't control the DSI host state to a fine enough degree (an ongoing
-> > > discussion [2] [3]). There shouldn't be a need to handle mismatched
-> > > calling in individual panel drivers.
-> > >
-> > >   Dave
-> > >
-> > > [1] https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c#L894
-> > > [2] https://lists.freedesktop.org/archives/dri-devel/2021-November/332060.html
-> > > [3] https://lists.freedesktop.org/archives/dri-devel/2021-December/334007.html
-> >
-> > I'm in the second case. I need to enable HS mode after the panel is
-> > initialized. Time to time I have timeout
-> > on dsi command or I have wrong panel initialization. So I explicit call from
-> > the bridge but I understand that is not correct in the design point of view.
-> >
-> > So this patch can not be queued because it's a known problem that
-> > people are discussing
-> >
-> Author: Michael Trimarchi <michael@amarulasolutions.com>
-> Date:   Thu Dec 9 15:45:48 2021 +0100
->
->     drm: bridge: samsung-dsim: Enable panel/bridge before exist from standby
->
->     We need to exist from standby as last operation to have a proper video
->     working. This code implement the same code was before the bridge
->     migration
->
->     Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
->
-> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c
-> b/drivers/gpu/drm/bridge/samsung-dsim.c
-> index 654851edbd9b..21265ae80022 100644
-> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> @@ -1838,6 +1838,7 @@ static void samsung_dsim_atomic_enable(struct
-> drm_bridge *bridge,
->                                        struct drm_bridge_state
-> *old_bridge_state)
->  {
->         struct samsung_dsim *dsi = bridge_to_dsi(bridge);
-> +       struct drm_atomic_state old_state;
->         int ret;
->
->         if (dsi->state & DSIM_STATE_ENABLED)
-> @@ -1859,6 +1860,9 @@ static void samsung_dsim_atomic_enable(struct
-> drm_bridge *bridge,
->         }
->
->         samsung_dsim_set_display_mode(dsi);
-> +
-> +       drm_atomic_bridge_chain_enable(dsi->out_bridge, &old_state);
+Agreed. So, just to confirm you'd prefer not remove any module that tainted
+the kernel from the aforementioned list when the same module and taints
+bitmask is reintroduced? If I understand correctly, we'd simply maintain a
+list of modules that tainted the kernel during module deletion/or unload
+and their respective unload count? If so then this was not my original
+objective yet I'm happy with this approach too - I'll take on this
+implementation in the next iteration.
 
-Calling this is contrary to the documentation [1]
+> > It can be, once set to 0. Indeed, the limit specified above is arbitrary.
+> > Personally, I prefer to have some limit that can be controlled by the user.
+> > In fact, if agreed, I can incorporate the limit [when specified] into the
+> > output generated via print_modules().
+> 
+> If someone enables this feature I can't think of a reason why they
+> would want to limit this to some arbitrary number. So my preference
+> is to remove that limitation completely. I see no point to it.
 
-"Note: the bridge passed should be the one closest to the encoder"
+Fair enough. If necessary we could introduce the above later.
 
-You're passing in a bridge that is half way down the chain, from a
-bridge atomic_enable that is already being called by
-drm_atomic_bridge_chain_enable
+> > > > @@ -3703,6 +3778,16 @@ static noinline int do_init_module(struct module *mod)
+> > > >  	mod->state = MODULE_STATE_LIVE;
+> > > >  	blocking_notifier_call_chain(&module_notify_list,
+> > > >  				     MODULE_STATE_LIVE, mod);
+> > > > +#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
+> > > > +	mutex_lock(&module_mutex);
+> > > > +	old = find_mod_unload_taint(mod->name, strlen(mod->name),
+> > > > +				mod->taints);
+> > > > +	if (old) {
+> > > > +		list_del_rcu(&old->list);
+> > > > +		synchronize_rcu();
+> > > > +	}
+> > > > +	mutex_unlock(&module_mutex);
+> > > 
+> > > But here we seem to delete an old instance of the module taint
+> > > history if it is loaded again and has the same taint properties.
+> > > Why?
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_bridge.c#L695
+Yes, this was my original approach. Once the same module [with the same
+taints bitmask] is reintroduced it will be listed on the 'modules' list
+thus no need to track it on the unloaded list anymore. That being said, as
+per the above, let's now keep track of each removal and maintain an unload
+count.
 
-> +
->         samsung_dsim_set_display_enable(dsi, true);
->
->         dsi->state |= DSIM_STATE_VIDOUT_AVAILABLE;
->
-> Right now I'm doing this to enable the change. I must change the panel
-> to avoid double enabled
->
-> I have some questions:
->
-> - the chain is an element (bridge/panel) linked together via some
-> connector (I hope I understand) when I enable
-> a bridge chain, all the elements should move from some status to
-> another. If we mark them already this should
-> not avoid that one element can be enabled two times? An element that
-> sources two other elements should for instance
-> receive the enable from two times before switching on.
+> > At first glance, in this particular case, I believe this makes sense to
+> > avoid duplication
+> 
+> If you just bump the count then its not duplication, it just adds
+> more information that the same module name with the same taint flag
+> has been unloaded now more than once.
 
-I don't claim to be an expert, just that I've been trying to get DSI
-working on a number of devices.
+Agreed.
 
-The bridge chain is meant to be managed by the framework via
-drm_atomic_helper_commit_modeset_enables and
-drm_atomic_helper_commit_modeset_disables calling the
-drm_atomic_bridge_chain_* functions.
-
-As documented, the framework calls the bridge pre_enable hooks
-following the chain from connector towards the encoder, enables the
-encoder, and then calls the enable hooks from bridge closest to the
-encoder towards the connector. A similar approach applies for bridge
-disable hooks, disable the encoder, and then bridge post_disable
-hooks.
-There should be no need to make any calls outside of that framework.
-Doing so is what is causing these problems.
-
-As Laurent summarised it in [2]:
-"I can't agree more with Dave about the need for documentation, DSI
-drivers (both on the TX and RX side) are very creative these days,
-causing lots of interoperability issues. This wild west situation really
-needs some policing."
-
-I acknowledge that there is a failing in the framework for DSI, and
-I've previously raised the question of how to best address this, but
-all suggestions have largely been shot down with no alternatives
-suggested.
-I won't say that this patch can't be merged, but merging it and
-ignoring the cause is admitting defeat.
-
-  Dave
-
-[2] https://lists.freedesktop.org/archives/dri-devel/2021-December/334007.html
+> > All right. I will make the required changes. Thanks once again.
+> 
+> Sure, so hey just one more thing. Can you add a simple selftest
+> lib/test_taint.c which can be used to test tainting and you new
+> tracker ? You can add a new selftest on
+> 
+> tools/testing/selftests/module/
+> 
+> I had already written some module based testing on
+> tools/testing/selftests/kmod/kmod.sh so you can borrow stuff
+> from there if you find it useful. But I think we need to start
+> doing basic testing for module. I know Lucas has tons of test
+> on kmod, so we should also look at what is there and what needs
+> testing outside of that.
+> 
+> Then there is the question of what should be tested using kunit and
+> or selftests. From my experience, if you need a shell, use selftests.
+> Also, if you need parallelization, use selftests, given kunit by
+> default uses a uniprocessor architecture, user-mode-linux. I'll let
+> you figure out what is the best place to add the test for this. It
+> could just be its a better place to add these tests to kmod upstream
+> as there are tons of tests there already. But kunit test can't be
+> added there.
+> 
+> Live patching already has its own set of selftests.
 
 
-> Michael
->
-> > Michael
-> >
-> > >
-> > >
-> > > > > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > > > ---
-> > > > >  drivers/gpu/drm/panel/panel-ilitek-ili9881c.c | 14 ++++++++++++++
-> > > > >  1 file changed, 14 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> > > > > index 103a16018975..f75eecb0e65c 100644
-> > > > > --- a/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> > > > > +++ b/drivers/gpu/drm/panel/panel-ilitek-ili9881c.c
-> > > > > @@ -52,6 +52,8 @@ struct ili9881c {
-> > > > >
-> > > > >         struct regulator        *power;
-> > > > >         struct gpio_desc        *reset;
-> > > > > +
-> > > > > +       bool                    prepared;
-> > > > >  };
-> > > > >
-> > > >
-> > > > I found that this can be a general problem. Should not mandatory to
-> > > > track panel status
-> > > >
-> > > > DRM_PANEL_PREPARED
-> > > > DRM_PANEL_ENABLED
-> > > >
-> > > > Michael
-> > > > >  #define ILI9881C_SWITCH_PAGE_INSTR(_page)      \
-> > > > > @@ -707,6 +709,10 @@ static int ili9881c_prepare(struct drm_panel *panel)
-> > > > >         unsigned int i;
-> > > > >         int ret;
-> > > > >
-> > > > > +       /* Preparing when already prepared is a no-op */
-> > > > > +       if (ctx->prepared)
-> > > > > +               return 0;
-> > > > > +
-> > > > >         /* Power the panel */
-> > > > >         ret = regulator_enable(ctx->power);
-> > > > >         if (ret)
-> > > > > @@ -745,6 +751,8 @@ static int ili9881c_prepare(struct drm_panel *panel)
-> > > > >         if (ret)
-> > > > >                 return ret;
-> > > > >
-> > > > > +       ctx->prepared = true;
-> > > > > +
-> > > > >         return 0;
-> > > > >  }
-> > > > >
-> > > > > @@ -770,10 +778,16 @@ static int ili9881c_unprepare(struct drm_panel *panel)
-> > > > >  {
-> > > > >         struct ili9881c *ctx = panel_to_ili9881c(panel);
-> > > > >
-> > > > > +       /* Unpreparing when already unprepared is a no-op */
-> > > > > +       if (!ctx->prepared)
-> > > > > +               return 0;
-> > > > > +
-> > > > >         mipi_dsi_dcs_enter_sleep_mode(ctx->dsi);
-> > > > >         regulator_disable(ctx->power);
-> > > > >         gpiod_set_value(ctx->reset, 1);
-> > > > >
-> > > > > +       ctx->prepared = false;
-> > > > > +
-> > > > >         return 0;
-> > > > >  }
-> > > > >
-> > > > > --
-> > > > > 2.25.1
-> > > > >
-> > > >
-> > > >
-> > > > --
-> > > > Michael Nazzareno Trimarchi
-> > > > Co-Founder & Chief Executive Officer
-> > > > M. +39 347 913 2170
-> > > > michael@amarulasolutions.com
-> > > > __________________________________
-> > > >
-> > > > Amarula Solutions BV
-> > > > Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-> > > > T. +31 (0)85 111 9172
-> > > > info@amarulasolutions.com
-> > > > www.amarulasolutions.com
-> >
-> >
-> >
-> > --
-> > Michael Nazzareno Trimarchi
-> > Co-Founder & Chief Executive Officer
-> > M. +39 347 913 2170
-> > michael@amarulasolutions.com
-> > __________________________________
-> >
-> > Amarula Solutions BV
-> > Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-> > T. +31 (0)85 111 9172
-> > info@amarulasolutions.com
-> > www.amarulasolutions.com
->
->
->
-> --
-> Michael Nazzareno Trimarchi
-> Co-Founder & Chief Executive Officer
-> M. +39 347 913 2170
-> michael@amarulasolutions.com
-> __________________________________
->
-> Amarula Solutions BV
-> Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-> T. +31 (0)85 111 9172
-> info@amarulasolutions.com
-> www.amarulasolutions.com
+Sure - will do. Thanks once again!
+
+-- 
+Aaron Tomlin
+

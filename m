@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA7D46FA9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD2446FA9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236942AbhLJGZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 01:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
+        id S236974AbhLJG0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 01:26:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbhLJGZ0 (ORCPT
+        with ESMTP id S236965AbhLJG0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 01:25:26 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43821C061746;
-        Thu,  9 Dec 2021 22:21:52 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso6712178pjb.2;
-        Thu, 09 Dec 2021 22:21:52 -0800 (PST)
+        Fri, 10 Dec 2021 01:26:10 -0500
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA201C0617A1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 22:22:35 -0800 (PST)
+Received: by mail-oi1-x244.google.com with SMTP id 7so11891967oip.12
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 22:22:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C8BS4uByosa1EDbI+XGv6haeJe9mKfz064lJbpyXMW0=;
-        b=FwClcQDkEU9X7OFujzMIPmJTlWmTv1SY8rAq9BAt+hM3xvn5eVfEA/cgsvgDKXFL8t
-         pjibn3ahS3RmREuZuLqsfyTHWUn7+CIv9aqdhRpljFbmlCgn3MR8J11/BUirhF1rAMsL
-         iO2FaHLzQd/vEOR8MmbxWZoPWkiZ6v7fPyv8sMwetPT9Zf5ALCJnbfjctbQodJ0wjb30
-         Skl244ccJRj+dcMeJ4qAYPU5BpZv5oifH7bR5mRFjywbINaxc4KX6RXK4gCiREVJGO5B
-         ZEUw54RiUfy/dXcnDsi62FnYhHzR5AP0GxSBpDAPNPByy206/x3+5ipIvpj6DnWSZtFA
-         2a0g==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=Qdp0SHs3xmfRjgLIyqNwEa9EGz3sQom2u8TOqtBT/Zc=;
+        b=BINd5ihQauoTRw1FfczeOcFLbeilC3DzI8PZkIqXnKcr22+WaoRBOj/1BF2MyQ8O3O
+         6mQfTOMr5jdTwhwANvNzFIRW+qz0YalenECOn44CGYn2LaQbyoUM8RMFJDKBN8NAKOPp
+         7H02jGNNAQutalcJMXUtpLSJmajZscoxr5UFrudTh4DidF/dP6r6xlM3GMV90wZn1Btm
+         BSDR+FzbtxnzVi3fckhNupvk7TjMqBlc/OoT+0Z/BTc64cBN5yGx/2DUnhlvPzMZpzXd
+         LZm+Q/Kt2MlmFVYH3mm8nFI1iXnceppNbRLK32ON/VAEZt8RhiGh1XnsnA1/VN/KH6Sp
+         CMfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C8BS4uByosa1EDbI+XGv6haeJe9mKfz064lJbpyXMW0=;
-        b=0VPzqYGwnKESrWjk74Kq5KMxhHlMwRjI+nI2pA2o0T+K5/gTCZr6PmS9IZEdmHBdFt
-         P13FLf63N5K1jTmOIt32YffcJxxoNtPU2cwTh1ktPNTOe+UIZGUqWXeOGlshGuOowXGP
-         Dr6a1t6T7blTDGTb+kLHQWu6KXt8dKy471D94CWQnKeHBhjFvdX+BSnG5sRNAlJi9c6w
-         XzmcdcZ28kIPt1EsGhkwkLXc1OnzrWur7oK9zarGSj2VUdzFdC8MocRfQ1tc3fUlHlL5
-         uBGId3pAoXzyB/T9iqregZ4hvQi7vwab2t/nSrnbOM4kyaqvQyWzsZ9251EC/6/tNmjl
-         E4YQ==
-X-Gm-Message-State: AOAM533fSZBd3Smdf2B3gRiW9RxBgfPA6gf3ZjDua88LiusZ8hbZQgfU
-        rNqHv1pXqZ3irJMZQ64/QXI=
-X-Google-Smtp-Source: ABdhPJzy5rbBLOUngt3qODtQFd8ir8VEGJYe/T8wk5P4O/RORLP8qAX5desVtyVew0K4N2o+gZbFXA==
-X-Received: by 2002:a17:90b:1a87:: with SMTP id ng7mr21609604pjb.86.1639117311576;
-        Thu, 09 Dec 2021 22:21:51 -0800 (PST)
-Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id v13sm1832031pfu.38.2021.12.09.22.21.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 22:21:50 -0800 (PST)
-From:   davidcomponentone@gmail.com
-To:     agross@kernel.org
-Cc:     bjorn.andersson@linaro.org, davidcomponentone@gmail.com,
-        kishon@ti.com, vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] pyh: qcom: fix the application of sizeof to pointer
-Date:   Fri, 10 Dec 2021 14:21:19 +0800
-Message-Id: <8d75af8e322a7e5839d2dd4320b696ee09ec0843.1639100549.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=Qdp0SHs3xmfRjgLIyqNwEa9EGz3sQom2u8TOqtBT/Zc=;
+        b=Ggus87TugMkoPsQ2bAnJ8hZ2Z/rGWOQL0h58SjJO3+KAZuf/atYEqW4PbpxPfb/g8w
+         1vp3lLtfOIPHGRSxphIO2SQuFNFUI+RqypwmEJJ7n5hj3DC1sKRLWWhKTylpXgnCWqAM
+         s3S60KaB/sbYDKNzRxAKHYkUrjqL7EfMCAfnuF/ApuSoG1Yc77L9xyYIqSbos3p9B9UJ
+         A0cvlQe57UlfwSaiRZr5b0qasrkrRkIMdYLHJePDVmpZUZlsaP7rC7JHWJKlFq+T3AhW
+         Ug7Tm3YgnGilflP1aaRQQjR7CIcimSbz3jCATI2G5n8Gs8RiKR70WPYtJ1sJVpKenHDU
+         NWkQ==
+X-Gm-Message-State: AOAM530xwu1wxEIsNL6+wdHemO0eebgib9w4ROH4zQK1eDVcwfCe9hXt
+        VND4h/6cl83I2aMcoWqxHp2yWi1ehPwaohjh/lI=
+X-Google-Smtp-Source: ABdhPJyMMnMnIbDnTN9bhBVQH9nBUP65Iy4tmgO1h7f+xB56kwT+OTm/Jf6lzL45NKkfVAuxHgb5m6M9461QEYicKp8=
+X-Received: by 2002:aca:de07:: with SMTP id v7mr10396225oig.28.1639117354890;
+ Thu, 09 Dec 2021 22:22:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: nadeemammar11@gmail.com
+Received: by 2002:a4a:b142:0:0:0:0:0 with HTTP; Thu, 9 Dec 2021 22:22:34 -0800 (PST)
+From:   "Mrs.Nicole  Marois" <nicole1563marois@gmail.com>
+Date:   Fri, 10 Dec 2021 06:22:34 +0000
+X-Google-Sender-Auth: 7XjvXzGim3nDK036U2Gw6CCeebo
+Message-ID: <CAB3fMApvA+FDrGifQjTHOOFUf7QjFsaBJDU81beUuJW=op-Ufg@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+Hello Dear,
 
-The coccinelle check report:
-./drivers/phy/qualcomm/phy-qcom-edp.c:574:31-37:
-ERROR: application of sizeof to pointer
+Please do not feel disturbed for contacting you, based on the critical
+condition I find mine self though, it's not financial problem, but my
+health you might have know that cancer is not what to talk home about,
+I am married to Mr.Duclos Marois who worked with Tunisia embassy in
+Burkina Faso for nine years before he died in the year 2012.We were
+married for eleven years without a child. He died after a brief
+illness that lasted for five days.
 
-Using the real size to fix it.
+Since his death I decided not to remarry, When my late husband was
+alive he deposited the sum of US$ 9.2m (Nine million two hundred
+thousand dollars) in a bank in Burkina Faso, Presently this money is
+still in bank. And My Doctor told me that I don't have much time to
+live because of the cancer problem, Having known my condition I
+decided to hand you over this fond to take care of the less-privileged
+people, you will utilize this money the way I am going to instruct
+herein. I want you to take 30 Percent of the total money for your
+personal use While 70% of the money will go to charity" people and
+helping the orphanage.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
----
- drivers/phy/qualcomm/phy-qcom-edp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't want my husband's efforts to be used by the Government. I grew
+up as an Orphan and I don't have anybody as my family member,
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
-index 17d5653b661d..a8ecd2e8442d 100644
---- a/drivers/phy/qualcomm/phy-qcom-edp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-edp.c
-@@ -571,7 +571,7 @@ static int qcom_edp_clks_register(struct qcom_edp *edp, struct device_node *np)
- 	struct clk_init_data init = { };
- 	int ret;
- 
--	data = devm_kzalloc(edp->dev, sizeof(data), GFP_KERNEL);
-+	data = devm_kzalloc(edp->dev, struct_size(data, hws, 2), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
--- 
-2.30.2
+Regards,
 
+Mrs.Nicole Marois.
+written from Hospital.

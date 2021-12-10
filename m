@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3055D4707C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B654B4707D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245059AbhLJR44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:56:56 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:44636 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244858AbhLJR4V (ORCPT
+        id S245072AbhLJR45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:56:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53704 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244897AbhLJR41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:56:21 -0500
-X-UUID: 7cf72667e2404af1994bce5c81c8091b-20211211
-X-UUID: 7cf72667e2404af1994bce5c81c8091b-20211211
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <flora.fu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1787331640; Sat, 11 Dec 2021 01:52:40 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 11 Dec 2021 01:52:38 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 11 Dec 2021 01:52:38 +0800
-From:   Flora Fu <flora.fu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Pi-Cheng Chen <pi-cheng.chen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Flora Fu <flora.fu@mediatek.com>,
-        JB Tsai <jb.tsai@mediatek.com>
-Subject: [PATCH 12/12] arm64: dts: mt8195: Set up regulators for APU subsys
-Date:   Sat, 11 Dec 2021 01:52:23 +0800
-Message-ID: <20211210175223.31131-13-flora.fu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20211210175223.31131-1-flora.fu@mediatek.com>
-References: <20211210175223.31131-1-flora.fu@mediatek.com>
+        Fri, 10 Dec 2021 12:56:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2616B82920
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 17:52:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16443C341C5;
+        Fri, 10 Dec 2021 17:52:49 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 12:52:48 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH] trace: Account bottom half disabled sections.
+Message-ID: <20211210125248.3d047603@gandalf.local.home>
+In-Reply-To: <20211210125155.27e910f4@gandalf.local.home>
+References: <YbN0In1NLVLMLpMj@linutronix.de>
+        <20211210125155.27e910f4@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set up APU regulators for mdla and vvpu.
+On Fri, 10 Dec 2021 12:51:55 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Signed-off-by: Flora Fu <flora.fu@mediatek.com>
+> Looks good to me. Care to resend without the RFC attached, and that will
+> make sure it gets into my scripts.
 
----
- arch/arm64/boot/dts/mediatek/mt8195-evb.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+Also, please fix the subject. Precedence has, "tracing:" over "trace:", and
+remove the ending period.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-index 6333cab7929f..f49a460a8767 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-@@ -44,6 +44,11 @@
- 	};
- };
- 
-+&apusys_power {
-+	vvpu-supply = <&mt6359_vproc1_buck_reg>;
-+	vmdla-supply = <&mt6359_vproc2_buck_reg>;
-+};
-+
- &i2c0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c0_pin>;
--- 
-2.18.0
+Thanks!
 
+-- Steve

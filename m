@@ -2,136 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40729470E82
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF20470E7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345060AbhLJXYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 18:24:07 -0500
-Received: from mga04.intel.com ([192.55.52.120]:18831 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345046AbhLJXYF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 18:24:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639178430; x=1670714430;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y1RtvOPO5+DIS8Tgbu5czGCC3D3b2Ks7SPiZaM11Q20=;
-  b=fifGKPsQpOLDfZBr7PDqCPVEAt4odssBkPbiS3iYtYZP48F1QknygfP9
-   f4XgDvNHXp6aBZ5DVZjg/It1bm51VKUZVMdYnNKQmHcfpjIy7DW8MftPW
-   at8Q84tlf3wsBYGw3Y79Uc9eP+yQmsIA/ffDZi1kytZPLEoRqA54fc9/Y
-   Y2rhZBilfmF3kBHwHAm730MA5JI/qTzh77OLyqhAib3yur8hnZjvrgWsG
-   //03j6ktF9d2GKfaV2IvxiEbRcVKgaMw2aANBHiaXBzyU5gjUgGaKz/lW
-   RKT/FdUmCGwJM2O6Ta8EP7qk32smqqy/0F654fuNff4rbqICDXRLrfI3J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237211468"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="237211468"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:20:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="504135333"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 10 Dec 2021 15:20:21 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvpBc-0003nD-Jm; Fri, 10 Dec 2021 23:20:20 +0000
-Date:   Sat, 11 Dec 2021 07:19:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liu Yi L <yi.l.liu@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 31/33] ld.lld: error: undefined
- symbol: interval_tree_span_iter_first
-Message-ID: <202112110730.YDz5VfLg-lkp@intel.com>
+        id S1345016AbhLJXXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 18:23:46 -0500
+Received: from mail-lf1-f49.google.com ([209.85.167.49]:37635 "EHLO
+        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239950AbhLJXXn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 18:23:43 -0500
+Received: by mail-lf1-f49.google.com with SMTP id c32so20761429lfv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 15:20:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9d3hE4yr4pfg3m6CMn9gJl0jmuaMwv1gKC7I/q9Crgw=;
+        b=hIRk910NUOt5OhGPBlB2kB3UXvjg9N34f1/Xkk88lpOFIc6pBeBHsQrkuXFGjlkHgZ
+         /1W/wC5bAJBmETu+/mB90CZ/ctv369YvCo910RPUcTfOFO6oED0Nmi6Myx4snX40Jsvf
+         /WthkaU3ZGtLZK0J1UhZuO5pz0RdDGdXhbdHhrkSyMAifFJPRyCEiOD1CcsliWFZPqzS
+         W1e5RLlD9+WCGUss95E94+lutla6iyVd9bYoKcEVoTmrxmMuZiglDuNq/xpNko1Tafsh
+         GPAWPdwIDUcbtpfyCSN5N+bstvbUO9QoliCZgtnIjOmZzNgKfQXb43KRJT8kVuWI4azP
+         DJTg==
+X-Gm-Message-State: AOAM533glXTOo0543Ai0J11p/DQvQUnpZ0x7AVTZTBOEpBwZjUr3Rqu2
+        8PTDtvnHyMd6Jnl9Px2cmyvOWCNmXRDvqaOFCbV8yOG8
+X-Google-Smtp-Source: ABdhPJxdiaZW3XY4qh1HbipCCTp9QF8ns20EKKmgDSIxP8htZetSXbBw3fA6ekpwW+mM7IVfTKx5uzyKJGHABGFHAFc=
+X-Received: by 2002:a05:6512:b8c:: with SMTP id b12mr14854609lfv.99.1639178405977;
+ Fri, 10 Dec 2021 15:20:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211205224843.1503081-1-namhyung@kernel.org> <YbHn6JaaOo3b5GLO@hirez.programming.kicks-ass.net>
+ <CAM9d7ciJTJB1rumzmxGeJrAdeE9R4eXhtJRUQGj9y6DBN-ovig@mail.gmail.com> <20211210103341.GS16608@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211210103341.GS16608@worktop.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 10 Dec 2021 15:19:53 -0800
+Message-ID: <CAM9d7cg6Dmojccw1kCxHoK9Kt_k3+4ojWaE1qq+NWmkCNjuFhw@mail.gmail.com>
+Subject: Re: [PATCH v3] perf/core: Set event shadow time for inactive events too
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
-head:   44f89b130eec28760e6b655facd4be49c5bcc3f9
-commit: 74814fdbefe2fb370111a0ce00641c64376447cb [31/33] vfio/pci: Add bind_iommufd() support
-config: arm64-randconfig-r014-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110730.YDz5VfLg-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/luxis1999/iommufd/commit/74814fdbefe2fb370111a0ce00641c64376447cb
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
-        git checkout 74814fdbefe2fb370111a0ce00641c64376447cb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Fri, Dec 10, 2021 at 2:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Dec 09, 2021 at 01:35:11PM -0800, Namhyung Kim wrote:
+> > On Thu, Dec 9, 2021 at 3:26 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Sun, Dec 05, 2021 at 02:48:43PM -0800, Namhyung Kim wrote:
+> > >
+> > > > Actually 18446744069443110306 is 0xffffffff01b345a2 so it seems to
+> > > > have a negative enabled time.  In fact, bperf keeps values returned by
+> > > > bpf_perf_event_read_value() which calls perf_event_read_local(), and
+> > > > accumulates delta between two calls.  When event->shadow_ctx_time is
+> > > > not set, it'd return invalid enabled time which is bigger than normal.
+> > >
+> > > *that*, how does it happen that shadow_time isn't set? It should be last
+> > > set when the event switches to INACTIVE, no?
+> >
+> > As you can see, perf_event_set_state() doesn't set the shadow time.
+> > It's called from event_sched_in() which might result in ACTIVE or
+> > INACTIVE.  But the problem is that there's a case that event_sched_in
+> > was not called at all - when group_can_go_on() returns false.
+> >
+> > > At which point the logic in
+> > > perf_event_read_local() should make @enabled move forward while @running
+> > > stays put.
+> >
+> > It's not about updating event->total_time_enabled, it only
+> > afftects the returned value of @enabled.
+> >
+> > I'd say the time calculation is broken so it'd break @running
+> > as well.  But this case can only happen on INACTIVE -
+> > otherwise it'd call event_sched_in() and update the shadow
+> > time properly, so no issue there.  And then we can see
+> > the broken value of enabled time only.
+>
+> I'm thinking this is a cgroup specific thing. Normally the shadow_time
+> thing is simply a relative displacement between event-time and the
+> global clock. That displacement never changes, except when you do
+> IOC_DISABLE/IOC_ENABLE.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think it changes when the events are scheduled in and out.
+The global clock (ctx->timestamp) is constantly changing
+when any event in the context is scheduled while event-
+time might not change if the event is not scheduled, no?
 
-All errors (new ones prefixed by >>):
+Anyway, as I told you this is not a cgroup event.
+The point of the BPF work was not to use cgroup events
+and my example in the commit message was not about
+cgroups at all.
 
->> ld.lld: error: undefined symbol: interval_tree_span_iter_first
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced 7 more times
---
->> ld.lld: error: undefined symbol: interval_tree_span_iter_next
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced 7 more times
---
->> ld.lld: error: undefined symbol: interval_tree_iter_first
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_area) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_alloc_area) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_area_find_exact) in archive drivers/built-in.a
-   >>> referenced 12 more times
---
->> ld.lld: error: undefined symbol: interval_tree_insert
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_area_finalize) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_reserve_iova) in archive drivers/built-in.a
-   >>> referenced 2 more times
---
->> ld.lld: error: undefined symbol: interval_tree_remove
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(__iopt_unmap_iova) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: interval_tree_iter_next
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_access_pages) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_unaccess_pages) in archive drivers/built-in.a
-   >>> referenced by io_pagetable.c
-   >>> iommu/iommufd/io_pagetable.o:(iopt_remove_reserved_iova) in archive drivers/built-in.a
-   >>> referenced 5 more times
+The cgroup event has its own set of problems.. sigh.
+I'll post one that I hit recently.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMUFD
-   Depends on IOMMU_SUPPORT
-   Selected by
-   - VFIO_PCI_CORE && VFIO && PCI && MMU
+>
+> However, for cgroup things are different, since the cgroup events aren't
+> unconditionally runnable, that is, the enabled time should only count
+> when the cgroup is active, right?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yeah, that's my understanding.
+
+>
+> So perhaps perf_event_read_local() should use a cgroup clock instead of
+> perf_clock() for cgroup events.
+>
+> Let me think about that some more...
+
+Thanks,
+Namhyung

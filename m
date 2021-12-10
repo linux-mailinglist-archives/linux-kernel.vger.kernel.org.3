@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF2F46FFB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C904F46FFBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240143AbhLJLZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:25:53 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:48976 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237570AbhLJLZw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:25:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 75F4ECE2AB7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 11:22:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C061C00446;
-        Fri, 10 Dec 2021 11:22:12 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 11:22:09 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jianyong Wu <jianyong.wu@arm.com>
-Cc:     will@kernel.org, anshuman.khandual@arm.com,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        david@redhat.com, gshan@redhat.com, justin.he@arm.com, nd@arm.com,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Message-ID: <YbM4YTgXryp45ufk@arm.com>
-References: <20211210095432.51798-1-jianyong.wu@arm.com>
+        id S240283AbhLJL3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:29:39 -0500
+Received: from mga07.intel.com ([134.134.136.100]:55233 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234694AbhLJL3i (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 06:29:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639135564; x=1670671564;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Fl1v1NReSXeZzc0ak70fqcBYA6DzW+LJpXVRza0dBKo=;
+  b=ERiS/sHYlHsCiGzBzMlg/XTBuTd32BrQAz9lq77JwY2bDDj8n33FSkeJ
+   Ecrot/rnpIPPTjSUXqmKGDKFkb46zo55SZ0yzVnQdgHK5XkR5PeTcM/ES
+   m1P49eaNyRyvjmDyDVdBcY6+fbWtt+mnv97IpaJT66zwzOHhJfiXh5ByR
+   15mN1PQIp/GLDKWi9A2fZJaXKozsarc7KADQdK8Hp2OqBs01ZEb3qSnzP
+   BNoRF71VNlFeSM6tDy0gPJJgdFOxLli8YIrhVlqMhf6IqKon1SK3jop6v
+   C5xbh0KTtRb54hc7e1Uj2Hn08R0dcE8HpunigZ0vJR/ztqEdxxFOZnDmG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="301712989"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="301712989"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 03:26:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="680713165"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 03:26:02 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mve2L-00037V-OQ; Fri, 10 Dec 2021 11:26:01 +0000
+Date:   Fri, 10 Dec 2021 19:25:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: [drm-msm:msm-next-plus-fixes 69/72]
+ drivers/gpu/drm/msm/dp/dp_drm.c:246:2-7: WARNING: invalid free of devm_
+ allocated data
+Message-ID: <202112101918.adnak8vR-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210095432.51798-1-jianyong.wu@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 05:54:32PM +0800, Jianyong Wu wrote:
-> fixmap is a global resource and is used recursively in create pud mapping.
-> It may lead to race condition when alloc_init_pud is called concurrently.
-> 
-> Fox example:
-> alloc_init_pud is called when kernel_init. If memory hotplug
-> thread, which will also call alloc_init_pud, happens during
-> kernel_init, the race for fixmap occurs.
-> 
-> The race condition flow can be:
-> 
-> *************** begin **************
-> 
-> kerenl_init thread                          virtio-mem workqueue thread
-> ==================                          ======== ==================
-> alloc_init_pud(...)
->   pudp = pud_set_fixmap_offset(..)          alloc_init_pud(...)
-> ...                                         ...
->     READ_ONCE(*pudp) //OK!                    pudp = pud_set_fixmap_offset(
-> ...                                         ...
->   pud_clear_fixmap() //fixmap break
->                                               READ_ONCE(*pudp) //CRASH!
-> 
-> **************** end ***************
-> 
-> Hence, a spin lock is introduced to protect the fixmap during create pdg
-> mapping.
-> 
-> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
+tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next-plus-fixes
+head:   1c1dcb9d8883f42ea116d99f78e42a7c399f8278
+commit: 8a3b4c17f863cde8e8743edd8faffe916c49b960 [69/72] drm/msm/dp: employ bridge mechanism for display enable and disable
+config: nds32-randconfig-c004-20211208 (https://download.01.org/0day-ci/archive/20211210/202112101918.adnak8vR-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
 
-It looks fine to me:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
-Do we need a cc stable? Fixmap was introduced in 4.6, so usually:
+cocci warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/msm/dp/dp_drm.c:246:2-7: WARNING: invalid free of devm_ allocated data
 
-Fixes: f4710445458c ("arm64: mm: use fixmap when creating page tables")
-Cc: <stable@vger.kernel.org> # 4.6.x
+vim +246 drivers/gpu/drm/msm/dp/dp_drm.c
 
-but I haven't checked when memory hotplug was added to be able to
-trigger the race. It may not need to go back that far.
+   225	
+   226	struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
+   227				struct drm_encoder *encoder)
+   228	{
+   229		int rc;
+   230		struct msm_dp_bridge *dp_bridge;
+   231		struct drm_bridge *bridge;
+   232	
+   233		dp_bridge = devm_kzalloc(dev->dev, sizeof(*dp_bridge), GFP_KERNEL);
+   234		if (!dp_bridge)
+   235			return ERR_PTR(-ENOMEM);
+   236	
+   237		dp_bridge->dp_display = dp_display;
+   238	
+   239		bridge = &dp_bridge->bridge;
+   240		bridge->funcs = &dp_bridge_ops;
+   241		bridge->encoder = encoder;
+   242	
+   243		rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+   244		if (rc) {
+   245			DRM_ERROR("failed to attach bridge, rc=%d\n", rc);
+ > 246			kfree(dp_bridge);
 
--- 
-Catalin
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

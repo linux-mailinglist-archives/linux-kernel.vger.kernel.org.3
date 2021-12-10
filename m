@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 283E546F818
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 01:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944E646F82D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 01:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbhLJAd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 19:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S234989AbhLJA6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 19:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbhLJAd6 (ORCPT
+        with ESMTP id S230506AbhLJA6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 19:33:58 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EF3C061746
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 16:30:23 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id iq11so5669243pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 16:30:23 -0800 (PST)
+        Thu, 9 Dec 2021 19:58:15 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C307DC061746
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Dec 2021 16:54:41 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so2079950oof.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Dec 2021 16:54:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rdvJHl0i5fz0K7jqw1DWezy/+uZJvXUTbxjwuYlGzxY=;
-        b=Bv5M2obfVTHY9fhNlOO+2TNvG7pBRtHMBlsY+0Hf04M3OiAxOnTdSQx+Woev4PX1pJ
-         tnpOYNolht9TygsbqizHJjmjSzqf8YrHPGPpJiEPqozEhTB//r5yOEageeaVYLb5c9zP
-         vINoeuM+pIuW90zRmTEX3I2uzBZUb2YaoXJ71tWACoLOOL+ps5Yti1HqQigrzD2818Kg
-         wvdKAArcmxrFK9mUINR9iEyQojd6fwJuMiANFUBMobSebuTWkW1DY/Pk+y5+4pczRfzi
-         dEL/NUsSkZQiLBhdW5kc9qXE+RfOd9GHBfU4loc1arzjJOwwrGCXjNROwsBqq8Mqk/9q
-         iVcQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PWSk6caqvw2Au0Kq7gSkUUH//LBYrIaVkaVjdQPwyR4=;
+        b=IOlMdKeYy196r8n0PAcOxjUB0ETIqkl1nL3Cw5mVz/oH8PLyC/QoJL5cFV5a0lo6P6
+         jKIuocs2zxpr/Dwi1v3XG0qChzeCU+yKZgwlGV0mLk7I2RKrsf61AIHSOUPgN5aDrZmn
+         KnjTcG98KkfZIMw99M3eIlx0IOZqg+vO1ffaOSrESbDCv3ZDK62DMLgWwxZJ6QDFihK5
+         imbt51xWySK0Z5w7O42BaxpANJhTuwspB43Eb3nG4BeZL+Nlgq6zLzfBOwcXPhvc9TCW
+         6QKP6Mjd7ABkOxZMJyu+Ag2tkWTpY6jDpUHfX4CqAXdiS4ZojngbazxSgOFtWV1+6fyN
+         nrQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=rdvJHl0i5fz0K7jqw1DWezy/+uZJvXUTbxjwuYlGzxY=;
-        b=Rjft5GrQA07G/Iry9Pc9FitxTcOrxcfOMUEzfeZFI85PgYyTWxjxDmt5n1zVwlFSGA
-         4gIOneDR1KJbrEvt+W8ALVdU+jnrFVXGpcBxfQ03VdZ4aO4WtF8ES7EBDtVC8GZHPZ+0
-         EcQBwLOst3hCBdozMiBvT0UAtaRta9hJZklpfQa5wBAZWVg44H48ivyvntPrasWwYl1w
-         FgsJ6XvghMns/4e4W7dIYrf1wtDBan+UBC7hg2umWcIWyRab8IhzIb4SEhyir1p2ZN/t
-         XMM/mu4M2Ykdttq55zjKmx1RWNeDagGrJ9tuA2mRspVlkvfmWd2B/srEC9VImza4DZhV
-         avHQ==
-X-Gm-Message-State: AOAM531fZpBYTj1xHi7q3ijyVCRMFIQpS42jXInaDTtoRVPwT5bmbkdB
-        2gu3Dwzgrly+H+bD23xp70RHHDcjaSk=
-X-Google-Smtp-Source: ABdhPJxltfyhSOR+7pzxI138l0a84xLSD7ieiPi2r6U8CTmbE48TU5YjOfNdpK1pxQQ1M5tFtJvQPw==
-X-Received: by 2002:a17:902:b615:b0:143:bbf0:aad0 with SMTP id b21-20020a170902b61500b00143bbf0aad0mr71880019pls.12.1639096223184;
-        Thu, 09 Dec 2021 16:30:23 -0800 (PST)
-Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:85e0:23ee:fbe7:282b])
-        by smtp.gmail.com with ESMTPSA id i10sm764029pjd.3.2021.12.09.16.30.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 16:30:22 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        John Dias <joaodias@google.com>,
-        Minchan Kim <minchan@kernel.org>
-Subject: [PATCH] mm/madvise: pageout under plugging
-Date:   Thu,  9 Dec 2021 16:30:19 -0800
-Message-Id: <20211210003019.1481269-1-minchan@kernel.org>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PWSk6caqvw2Au0Kq7gSkUUH//LBYrIaVkaVjdQPwyR4=;
+        b=hL+pd7uzRnIZR/cnQ05r7BGIC+GjrurBgojgSzsNjyBTSfqZ6Dr1oow+orih80bODM
+         w2meA1GpgZF1EzohB2JSo44pspL7KWnbevxsA20MsAnP66tYQe2YSkP1/Pb0ZVihEqZk
+         MNEhCvgHgKvUPP7jjrw99r/octimvYL0ViaoZAqM3KsqTMyoEUhbZcfcghJX1IApbBaC
+         PVtuMuV2JQfP75oQUQy3rLaK5+Ec31pDP9pXD4mdLqtWn5EsGoRjge+KqoRJZ/RrvAmt
+         mkIdTVbKORCk/vxtRvPRm7uDAe7Gq0CehE6n1v5HVicDNhsFkmOuTxNuaAgsnCMX/Fhy
+         tBVg==
+X-Gm-Message-State: AOAM530Bzu9+mjBnNhRXKCoPCuByo17fSaXCm/CBO3vlh4BCVYjpwA+e
+        XnvHOF9zV/0Ys0YUbrN8iU0M8+uyIQQ7lU76IkpCRQ==
+X-Google-Smtp-Source: ABdhPJy3fxlViF5YsiaUrlmQ7lDKoLcWRAbIkuAC5QKtqf9Pu6c2RqE4NKgnir0c/u09WjzeRYQlcZ2YcGfsPnO1sbs=
+X-Received: by 2002:a4a:d284:: with SMTP id h4mr6427005oos.31.1639097680669;
+ Thu, 09 Dec 2021 16:54:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-5-likexu@tencent.com>
+ <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com> <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com>
+In-Reply-To: <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 9 Dec 2021 16:54:29 -0800
+Message-ID: <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Likewise shrink_lruvec[1], madvise_pageout could get the benefit
-from per-task block plug.
+On Thu, Dec 9, 2021 at 12:28 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> On 9/12/2021 12:25 pm, Jim Mattson wrote:
+> >
+> > Not your change, but if the event is counting anything based on
+> > cycles, and the guest TSC is scaled to run at a different rate from
+> > the host TSC, doesn't the initial value of the underlying hardware
+> > counter have to be adjusted as well, so that the interrupt arrives
+> > when the guest's counter overflows rather than when the host's counter
+> > overflows?
+>
+> I've thought about this issue too and at least the Intel Specification
+> did not let me down on this detail:
+>
+>         "The counter changes in the VMX non-root mode will follow
+>         VMM's use of the TSC offset or TSC scaling VMX controls"
 
-[1] 3da367c3e5fc, vmscan: add block plug for page reclaim
-Signed-off-by: Minchan Kim <minchan@kernel.org>
----
- mm/vmscan.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Where do you see this? I see similar text regarding TSC packets in the
+section on Intel Processor Trace, but nothing about PMU counters
+advancing at a scaled TSC frequency.
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index fb9584641ac7..cf11113f6adb 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2556,6 +2556,7 @@ unsigned long reclaim_pages(struct list_head *page_list)
- 	struct reclaim_stat dummy_stat;
- 	struct page *page;
- 	unsigned int noreclaim_flag;
-+	struct blk_plug plug;
- 	struct scan_control sc = {
- 		.gfp_mask = GFP_KERNEL,
- 		.may_writepage = 1,
-@@ -2564,6 +2565,7 @@ unsigned long reclaim_pages(struct list_head *page_list)
- 		.no_demotion = 1,
- 	};
- 
-+	blk_start_plug(&plug);
- 	noreclaim_flag = memalloc_noreclaim_save();
- 
- 	while (!list_empty(page_list)) {
-@@ -2603,6 +2605,8 @@ unsigned long reclaim_pages(struct list_head *page_list)
- 	}
- 
- 	memalloc_noreclaim_restore(noreclaim_flag);
-+	blk_finish_plug(&plug);
-+
- 
- 	return nr_reclaimed;
- }
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+> Not knowing if AMD or the real world hardware
+> will live up to this expectation and I'm pessimistic.
+>
+> cc Andi and Kim.
+>

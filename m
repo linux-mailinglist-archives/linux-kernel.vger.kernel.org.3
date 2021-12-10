@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA714703B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B530A4703B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 16:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242745AbhLJPXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 10:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242765AbhLJPW4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 10:22:56 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8D5C0617A1;
-        Fri, 10 Dec 2021 07:19:20 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a18so15489901wrn.6;
-        Fri, 10 Dec 2021 07:19:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=8+y55MuKw2WtmHih8yLdWggAVXQsu4nFITssGPO+OeQ=;
-        b=QohqBXUphLxcw/Tyiz63NuiKIHQEcshmTTGrE/JsqTZiz8aWMMJyZwSfHw+yVyu3b0
-         x9DlZPTYlN5DNeu4XhrXQklO9P6PyNsCbbMPa5ZtUsrZB/Ru1tezDlj+qblLXi32RA0K
-         apVZR1dWaQwxm8UgRKAfMSIeeF7GHWUlScScPO1yNxpdMn5tHOScmOv9zBsB5Tx5GVzg
-         Ed1W5WJsReoppMy8e/qwH5qDdkseLtKz+c+1rVZfyUk1uvDA1AaDCUPQlGtwnu3pLpQw
-         SPpcGzuySusF9rS9FMq+KXkrjG/JgxCifexuD6NRw/z79bubHk4Auw5eoURMfbGn8fzT
-         Z+mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8+y55MuKw2WtmHih8yLdWggAVXQsu4nFITssGPO+OeQ=;
-        b=HIL8skLpT3iNfQlF58EUXk+o3Cc2IXzqXq8QROQkQMi6pRT4ga9cEZEFlGSamGzcdZ
-         XawpZOxAkC5STOX20yK64pHOQIdk4to9SP3n6CxeL2jvEgXmbpHK88avLB6y29nVntTi
-         0pUJwxQhbQelCX3ZOOifgI14YUvFw2saiyHqyPBBmZQ8vPj+YmlXksBBV2iL46b1+08W
-         SOqwX/BV2QcZBBv1PWMk99B4ukiZxyYvcMTje2NcZyHSWkKvNaUSS9b8JnCGOjr45zef
-         67SX1pR9UqSSRjJn3JWShA/cknZtsRoii/K02W1kt4umDTIGhWByoeHTKyEy69Brc2a0
-         fKFA==
-X-Gm-Message-State: AOAM533HtgI7iyacCEkBKaCcO/mq/XJS2PceLHc7jcWe88/Vs3FFQvgn
-        DdSZp8UYbaJsZ2bkOhYyKZY=
-X-Google-Smtp-Source: ABdhPJwdDolBzpySgD389vxXio7XqOEk27T3r6Dwzqugv4e7W4M9SxAcdX7T4K/i+gt6/ZFCUAmz+Q==
-X-Received: by 2002:a5d:4575:: with SMTP id a21mr15175787wrc.193.1639149559577;
-        Fri, 10 Dec 2021 07:19:19 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id e18sm2826833wrs.48.2021.12.10.07.19.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 07:19:17 -0800 (PST)
-Date:   Fri, 10 Dec 2021 16:19:13 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        David Heidelberg <david@ixit.cz>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        Nikola Milosavljevic <mnidza@outlook.com>,
-        Ion Agorria <ion@agorria.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        Thomas Graichen <thomas.graichen@gmail.com>,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/24] dt-bindings: ARM: tegra: Document Pegatron
- Chagall
-Message-ID: <YbNv8fBpMRTIGZQh@orome>
-References: <20211208173609.4064-1-digetx@gmail.com>
- <20211208173609.4064-3-digetx@gmail.com>
+        id S242779AbhLJPY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 10:24:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:43176 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239316AbhLJPY4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 10:24:56 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07B9712FC;
+        Fri, 10 Dec 2021 07:21:21 -0800 (PST)
+Received: from [10.57.6.190] (unknown [10.57.6.190])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15F073F5A1;
+        Fri, 10 Dec 2021 07:21:17 -0800 (PST)
+Subject: Re: [PATCH v2 3/3] perf tools: Support register names from all archs
+From:   German Gomez <german.gomez@arm.com>
+To:     John Garry <john.garry@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     Alexandre Truong <alexandre.truong@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20211207180653.1147374-1-german.gomez@arm.com>
+ <20211207180653.1147374-4-german.gomez@arm.com>
+ <90bcce69-9585-3fb4-de89-bbf2bd6def05@huawei.com>
+ <aee0c3b8-4d8c-6f1e-24ed-5539a7c1a7b5@arm.com>
+Message-ID: <9828a385-acde-145a-33db-76043e799344@arm.com>
+Date:   Fri, 10 Dec 2021 15:21:09 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MnySrT6ZM7gmN80D"
-Content-Disposition: inline
-In-Reply-To: <20211208173609.4064-3-digetx@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+In-Reply-To: <aee0c3b8-4d8c-6f1e-24ed-5539a7c1a7b5@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---MnySrT6ZM7gmN80D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 08/12/2021 13:55, German Gomez wrote:
+> Hi John,
+>
+> On 08/12/2021 11:51, John Garry wrote:
+>> On 07/12/2021 18:06, German Gomez wrote:
+>>>   tools/perf/arch/arm/include/perf_regs.h       |  42 --
+>>>   tools/perf/arch/arm64/include/perf_regs.h     |  76 --
+>>>   tools/perf/arch/csky/include/perf_regs.h      |  82 ---
+>>>   tools/perf/arch/mips/include/perf_regs.h      |  69 --
+>>>   tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
+>>>   tools/perf/arch/riscv/include/perf_regs.h     |  74 --
+>>>   tools/perf/arch/s390/include/perf_regs.h      |  78 --
+>>>   tools/perf/arch/x86/include/perf_regs.h       |  82 ---
+>>>   tools/perf/builtin-script.c                   |  18 +-
+>>>   tools/perf/util/perf_regs.c                   | 666 ++++++++++++++++++
+>>>   tools/perf/util/perf_regs.h                   |  10 +-
+>>>   .../scripting-engines/trace-event-python.c    |  10 +-
+>>>   tools/perf/util/session.c                     |  25 +-
+>>>   13 files changed, 697 insertions(+), 601 deletions(-)
+>> Did you consider leaving the register structures where they are while
+>> renaming to include the arch name and then having as externs or similar? I see an example of that idea for arm64_unwind_libunwind_ops.
+>>
+> If by register structures you are referring to "__perf_reg_name(int)", I
+> can't leave them where they are. Only one of them would be included in
+> the build.
 
-On Wed, Dec 08, 2021 at 08:35:47PM +0300, Dmitry Osipenko wrote:
-> From: David Heidelberg <david@ixit.cz>
->=20
-> Document Pegatron Chagall, which is Tegra30-based tablet device.
->=20
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  Documentation/devicetree/bindings/arm/tegra.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+I think I need to elaborate a bit more on this since some of the files
+involved share the same name but are serving different purposes and it
+could lead to confusion.
 
-This and many others in the set are missing your Signed-off-by. See
-"Developer's Certificate of Origin 1.1" in
-Documentation/process/submitting-patches.rst for a rationale why that's
-important.
+The linux repo has "perf_regs.h" for each architecture enumerating the
+registers from each architecture. These are the files I #include'd in
+"/tools/perf/util/perf_regs.c".
 
-Thierry
+The other "perf_regs.h" affected by this patch are local only to perf.
+Likewise there is one file for each architecture, but contrary to the
+linux ones, they are mutually exclusive, so I can't #include them all:
 
---MnySrT6ZM7gmN80D
-Content-Type: application/pgp-signature; name="signature.asc"
+#ifndef ARCH_PERF_REGS_H
+#define ARCH_PERF_REGS_H
+//...
+#undef ARCH_PERF_REGS_H
 
------BEGIN PGP SIGNATURE-----
+Before the patch, the functions "__perf_reg_name" were declared &
+implemented in these headers, so I had to take them out.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGzb+8ACgkQ3SOs138+
-s6EdhQ/+M5idtwWnfm/tB5H+ArBlzNLkbOLg9/BIcjdA0uS/B6HLuCrkCjj5uI3k
-ohj68ROuGQjCl7b2BKNe1amC+EDzecHFsnZMB2rYUzYYNb6vdr7msZqDlaad0PPV
-iOKy4eZYUnSh+iVIDintpmk+nIpr1W2vjnTWYX2V8/fq62W6zj2QSn1vpFSdzvDu
-hUdnvh4xqc0in37hWa1VikThJx5nj122udTxUlaOYTUEOfSQwpdSmpSl9jjw7viG
-DabGmqamMLwS+89JSRnWlSVbaNcldLXMgYJOZFWPuJApifP/4LEDqu+2r7KCUS+6
-zfmBUEdFd6CKecBY74YAmC2RBqPWynIK8PlpWzEDFvvgzXmrYZsrR/bSN8J37CY8
-0LaSGigNT5UiXc2iGuwrYg59Pz2qoXnWMk6d7+j9dOKK5RkmY73TsutsS4bar275
-3GG2evyEg2S98wNLZFAAqnh3O/qhxHlhdliGTTocaEOFMfbg9ew+dEWK25rJEHo0
-bhSrgmCd10ztUpuOtRK05EoVoB/uwnLgDRHgCn+q5oE4e+Y/Exgn4fPeg2v/cJXA
-ZatdFYop4RMLS2n2Vv2hpzh+5qXltDSjvcEpIinRi4p5p58gYJPVEac9D7Plz2+K
-bIZ9j+Hj2+gfJrvNsidkAgtK6nZ8XgXFFzv3T9KpFz1CIlwDD20=
-=qJpv
------END PGP SIGNATURE-----
-
---MnySrT6ZM7gmN80D--
+Thanks,
+German

@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8FE46FAF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3961146FAE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237332AbhLJHAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:00:37 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16356 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbhLJHAP (ORCPT
+        id S237335AbhLJHA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:00:29 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:29168 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237181AbhLJHAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:00:15 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J9MB72zBlz92jX;
-        Fri, 10 Dec 2021 14:55:59 +0800 (CST)
+        Fri, 10 Dec 2021 02:00:16 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J9M8S5Zz5z8wh6;
+        Fri, 10 Dec 2021 14:54:32 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 14:56:39 +0800
+ 15.1.2308.20; Fri, 10 Dec 2021 14:56:40 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 14:56:38 +0800
+ 15.1.2308.20; Fri, 10 Dec 2021 14:56:39 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -43,9 +43,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Feng Zhou <zhoufeng.zf@bytedance.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>
-Subject: [PATCH v17 08/10] of: fdt: Aggregate the processing of "linux,usable-memory-range"
-Date:   Fri, 10 Dec 2021 14:55:31 +0800
-Message-ID: <20211210065533.2023-9-thunder.leizhen@huawei.com>
+Subject: [PATCH v17 09/10] of: fdt: Add memory for devices by DT property "linux,usable-memory-range"
+Date:   Fri, 10 Dec 2021 14:55:32 +0800
+Message-ID: <20211210065533.2023-10-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20211210065533.2023-1-thunder.leizhen@huawei.com>
 References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
@@ -60,76 +60,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we parse the "linux,usable-memory-range" property in
-early_init_dt_scan_chosen(), to obtain the specified memory range of the
-crash kernel. We then reserve the required memory after
-early_init_dt_scan_memory() has identified all available physical memory.
-Because the two pieces of code are separated far, the readability and
-maintainability are reduced. So bring them together.
+From: Chen Zhou <chenzhou10@huawei.com>
 
-Suggested-by: Rob Herring <robh@kernel.org>
+When reserving crashkernel in high memory, some low memory is reserved
+for crash dump kernel devices and never mapped by the first kernel.
+This memory range is advertised to crash dump kernel via DT property
+under /chosen,
+        linux,usable-memory-range = <BASE1 SIZE1 [BASE2 SIZE2]>
+
+We reused the DT property linux,usable-memory-range and made the low
+memory region as the second range "BASE2 SIZE2", which keeps compatibility
+with existing user-space and older kdump kernels.
+
+Crash dump kernel reads this property at boot time and call memblock_add()
+to add the low memory region after memblock_cap_memory_range() has been
+called.
+
+Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 ---
- drivers/of/fdt.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/of/fdt.c | 33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index bdca35284cebd56..37b477a51175359 100644
+index 37b477a51175359..f7b72fa773250ad 100644
 --- a/drivers/of/fdt.c
 +++ b/drivers/of/fdt.c
-@@ -965,8 +965,7 @@ static void __init early_init_dt_check_for_elfcorehdr(unsigned long node)
- 		 elfcorehdr_addr, elfcorehdr_size);
- }
+@@ -967,6 +967,15 @@ static void __init early_init_dt_check_for_elfcorehdr(unsigned long node)
  
--static phys_addr_t cap_mem_addr;
--static phys_addr_t cap_mem_size;
-+static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
+ static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
  
++/*
++ * The main usage of linux,usable-memory-range is for crash dump kernel.
++ * Originally, the number of usable-memory regions is one. Now there may
++ * be two regions, low region and high region.
++ * To make compatibility with existing user-space and older kdump, the low
++ * region is always the last range of linux,usable-memory-range if exist.
++ */
++#define MAX_USABLE_RANGES		2
++
  /**
   * early_init_dt_check_for_usable_mem_range - Decode usable memory range
-@@ -977,6 +976,11 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
+  * location from flat tree
+@@ -974,10 +983,9 @@ static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
+  */
+ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
  {
- 	const __be32 *prop;
- 	int len;
-+	phys_addr_t cap_mem_addr;
-+	phys_addr_t cap_mem_size;
-+
-+	if ((long)node < 0)
-+		return;
+-	const __be32 *prop;
+-	int len;
+-	phys_addr_t cap_mem_addr;
+-	phys_addr_t cap_mem_size;
++	struct memblock_region rgn[MAX_USABLE_RANGES] = {0};
++	const __be32 *prop, *endp;
++	int len, i;
  
+ 	if ((long)node < 0)
+ 		return;
+@@ -985,16 +993,21 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
  	pr_debug("Looking for usable-memory-range property... ");
  
-@@ -989,6 +993,8 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
+ 	prop = of_get_flat_dt_prop(node, "linux,usable-memory-range", &len);
+-	if (!prop || (len < (dt_root_addr_cells + dt_root_size_cells)))
++	if (!prop || (len % (dt_root_addr_cells + dt_root_size_cells)))
+ 		return;
  
- 	pr_debug("cap_mem_start=%pa cap_mem_size=%pa\n", &cap_mem_addr,
- 		 &cap_mem_size);
-+
-+	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+-	cap_mem_addr = dt_mem_next_cell(dt_root_addr_cells, &prop);
+-	cap_mem_size = dt_mem_next_cell(dt_root_size_cells, &prop);
++	endp = prop + (len / sizeof(__be32));
++	for (i = 0; i < MAX_USABLE_RANGES && prop < endp; i++) {
++		rgn[i].base = dt_mem_next_cell(dt_root_addr_cells, &prop);
++		rgn[i].size = dt_mem_next_cell(dt_root_size_cells, &prop);
+ 
+-	pr_debug("cap_mem_start=%pa cap_mem_size=%pa\n", &cap_mem_addr,
+-		 &cap_mem_size);
++		pr_debug("cap_mem_regions[%d]: base=%pa, size=%pa\n",
++			 i, &rgn[i].base, &rgn[i].size);
++	}
+ 
+-	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
++	memblock_cap_memory_range(rgn[0].base, rgn[0].size);
++	for (i = 1; i < MAX_USABLE_RANGES && rgn[i].size; i++)
++		memblock_add(rgn[i].base, rgn[i].size);
  }
  
  #ifdef CONFIG_SERIAL_EARLYCON
-@@ -1137,9 +1143,10 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
- 	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
- 		return 0;
- 
-+	chosen_node_offset = node;
-+
- 	early_init_dt_check_for_initrd(node);
- 	early_init_dt_check_for_elfcorehdr(node);
--	early_init_dt_check_for_usable_mem_range(node);
- 
- 	/* Retrieve command line */
- 	p = of_get_flat_dt_prop(node, "bootargs", &l);
-@@ -1275,7 +1282,7 @@ void __init early_init_dt_scan_nodes(void)
- 	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
- 
- 	/* Handle linux,usable-memory-range property */
--	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
-+	early_init_dt_check_for_usable_mem_range(chosen_node_offset);
- }
- 
- bool __init early_init_dt_scan(void *params)
 -- 
 2.25.1
 

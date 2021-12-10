@@ -2,144 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2764706D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B69A4706D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244408AbhLJRTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S244438AbhLJRTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240541AbhLJRTW (ORCPT
+        with ESMTP id S244422AbhLJRT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:19:22 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F239C061746;
-        Fri, 10 Dec 2021 09:15:47 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id m12so14717353ljj.6;
-        Fri, 10 Dec 2021 09:15:47 -0800 (PST)
+        Fri, 10 Dec 2021 12:19:28 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F67C0617A1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 09:15:53 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id k64so8985527pfd.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 09:15:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J13OympFdoRAqUE6TRZ9GucjYjrLdPVDzqg/euxca8U=;
-        b=nK7tp/OlI3lHeVcHXb2WDKFqQEd2De/oG5vKSxDVTxyQJt0nTyfjmqPNo5GW5O0SYs
-         K9Q8lNRLxYrr/wGhnghVLkXaqb0IskH57JXa1EG4wdrG4CeJB5RW0GlWpNzxrNjw92Jw
-         S41wHEE/ZOKe7aF2baEdtTHhvjQOksy3PvybEoHonkr4eGiMMqzrnqUV8YgQwFU8xuvJ
-         IoZeK+FbHBM0wLiKOTRajnWsVDqxhtXqo2K7ISP1n6nrfp3Hb7Qu1eBID2SNzNV1Ew6Y
-         wJEXsK8/D2B5RvxhSyQqGq8qjtYayh92gXuTdOvskohiAkxHVuX1YDeLvbTXvkyLMOX1
-         +EuA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UMrzB2tdu6/xx/d1uQQ6wQQLAITMIeubpud/gYna4to=;
+        b=i2zf9phpRnges3aEO7Diyhs1nKOw8VKTrbbCYgbFzd1baWaHz0IuhEhf1KNVZ0QWOQ
+         UL/LDQ5hBk0H6evJltP87hDp/kj58MPuJ+v7IOyTuLCoOSNpVIQMoVMy5mDkqPReGYYP
+         guDN4k4gHfLgdhI1Ml0k7HkdOfUY3PYWFepjLjT//ogNpTrQjk+SRcv2onIKpD87HZLn
+         IjtwSQaeRjk6YpL6HceEaX7+TVGYwIPurv35m9BAzk16mtiHNtiBVsKxzm9lDLurisyE
+         WvW0Y2YnhNShD/pJhGm/16YKyACH6nciiAC2IqMG6E6gJ/pMn1VeDIy4bQhzvaeQgcXP
+         0Fnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J13OympFdoRAqUE6TRZ9GucjYjrLdPVDzqg/euxca8U=;
-        b=wVFlfWM4b0UCfx1Fy8Fin/lYQdGYtUse0KndSKWk1saOa1mE1YFCuj0xyJWEAxMGDr
-         /KJDGMr42fMUdmBL8TeWswbgLR0nUVqq+6wTtPvgwdH3ybi5BVVQKuxXCnCNUTKslg4g
-         hCs28MvcOI8jHxklRNlZnD3hHhpzbBHHrwjOb04SBAZPE3Niiqk2w9GufhyViGrwZ2pC
-         pXQOy67rc8Y+rmEmjtbA1SLUxSRZfo8+jwGadDQV8hNd81GCFiHTVHydXpss1z+sS0Db
-         T7LRL58FSShjEwW8cOKPvMJzpRWltxRW6FU9rGdcCaShUplVQ6Bi8OfBwtjQNhPkW7iK
-         JFRQ==
-X-Gm-Message-State: AOAM532OdFXH8SUrBYp11wmsEB8WJaQ6NKaXbJ6+AT22ZUPJ7U3JbA11
-        txEAYYy1kfvn/d5+6tl+zMZpClo14KM=
-X-Google-Smtp-Source: ABdhPJzmhFKnfGz0NoL8egcPxCcB+IfcHYfWlu5Y0Atg2t6T/78YjFf4NEE4tJEYS8Ph8QRHdD1+Dw==
-X-Received: by 2002:a05:651c:545:: with SMTP id q5mr13541972ljp.202.1639156545538;
-        Fri, 10 Dec 2021 09:15:45 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.72.189])
-        by smtp.gmail.com with ESMTPSA id w8sm364070lfa.206.2021.12.10.09.15.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 09:15:44 -0800 (PST)
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message when
- IRQ can't be retrieved
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
- <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
- <9e6b2e9a-e958-0c14-6570-135607041978@omp.ru>
- <YbM7xkTazM76CVvD@smile.fi.intel.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <6c03ffef-b2e0-16ba-35f3-206af2a611d2@gmail.com>
-Date:   Fri, 10 Dec 2021 20:15:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UMrzB2tdu6/xx/d1uQQ6wQQLAITMIeubpud/gYna4to=;
+        b=103qfCqK4mp7FE/Xtl0ef7Cpvg0pfif29M9iLZdua+0yRtooC7s5q5bCjnfNYEWyBK
+         URfrQ2CYyC6y+1JGHFYDHfKHi1fi2Sy3/z2Bzevc0w8QiKhBF7p/w9nDCUrLxU4DLz/Y
+         91woCkNBr3NvLuc/MOKgA0orokgc0CNE671iF3MvZysVw0NeGN2LzCajsXHxiQoCt+UZ
+         cekWUIR3J1p3vWmcszuqbwy/7J8fwX9ZdofE6wqujfY3vVE52gNCDRGYz68y5gWSFRhk
+         JcQu/qOhY8aoM3MxpvN3lPULp3z3K60FhBSrP0UxFBm/ZN369FIRm4i04V1hY7jmTKgu
+         XdPA==
+X-Gm-Message-State: AOAM531vKriq+8XZdRUGzqzl46DkJS4StVkXhcNUWYP82wqPwsx2kgqZ
+        dNA7d+E4Q2B0HcqlhQAQaty0nw==
+X-Google-Smtp-Source: ABdhPJzF3nvXT/AaT07Jxwm0Zi8wGnHag5H/JWznkFCDD3izvMG8NkoU7eJTWyvx2x+Sdxqe9DqjIw==
+X-Received: by 2002:a05:6a00:1c56:b0:4a4:f8cb:2604 with SMTP id s22-20020a056a001c5600b004a4f8cb2604mr19377491pfw.34.1639156552569;
+        Fri, 10 Dec 2021 09:15:52 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id w6sm4184989pfu.172.2021.12.10.09.15.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 09:15:52 -0800 (PST)
+Date:   Fri, 10 Dec 2021 17:15:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH 1/7] KVM: x86: Retry page fault if MMU reload is pending
+ and root has no sp
+Message-ID: <YbOLRLEdfpl51QLS@google.com>
+References: <20211209060552.2956723-1-seanjc@google.com>
+ <20211209060552.2956723-2-seanjc@google.com>
+ <c94b3aec-981e-8557-ba29-0094b075b8e4@redhat.com>
+ <YbN58FS67bEBOZZu@google.com>
+ <8ab8833f-2a89-71ff-98da-2cfbb251736f@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YbM7xkTazM76CVvD@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ab8833f-2a89-71ff-98da-2cfbb251736f@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 2:36 PM, Andy Shevchenko wrote:
-
->>>>>> platform_get_irq() will print a message when it fails.
->>>>>> No need to repeat this.
->>>>>>
->>>>>> While at it, drop redundant check for 0 as platform_get_irq() spills
->>>>>> out a big WARN() in such case.
->>>>>
->>>>> The reason you should be able to remove the "if (!irq)" test is that
->>>>> platform_get_irq() never returns 0. At least, that is what the function kdoc
->>>>> says. But looking at platform_get_irq_optional(), which is called by
->>>>> platform_get_irq(), the out label is:
->>>>>
->>>>> 	WARN(ret == 0, "0 is an invalid IRQ number\n");
->>>>> 	return ret;
->>>>>
->>>>> So 0 will be returned as-is. That is rather weird. That should be fixed to
->>>>> return -ENXIO:
->>>>>
->>>>> 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
->>>>> 		return -ENXIO;
->>>>> 	return ret;
->>>>
->>>>    My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
->>>> but returns -EINVAL instead.
->>>>
->>>>> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
->>>>
->>>>    Of course it isn't...
->>>
->>> It's unsubstantiated statement. The vIRQ 0 shouldn't be returned by any of
->>> those API calls.
->>
->>    We do _not_ know what needs to be fixed, that's the problem, and that's why the WARN()
->> is there...
+On Fri, Dec 10, 2021, Paolo Bonzini wrote:
+> On 12/10/21 17:01, Sean Christopherson wrote:
+> > > KVM_REQ_MMU_RELOAD is raised after kvm->arch.mmu_valid_gen is fixed (of
+> > > course, otherwise the other CPU might just not see any obsoleted page
+> > > from the legacy MMU), therefore any check on KVM_REQ_MMU_RELOAD is just
+> > > advisory.
+> > 
+> > I disagree.  IMO, KVM should not be installing SPTEs into obsolete shadow pages,
+> > which is what continuing on allows.  I don't _think_ it's problematic, but I do
+> > think it's wrong.
+> > 
+> > [...] Eh, for all intents and purposes, KVM_REQ_MMU_RELOAD very much says
+> > special roots are obsolete.  The root will be unloaded, i.e. will no
+> > longer be used, i.e. is obsolete.
 > 
-> So, have you seen this warning (being reported) related to libahci_platform?
+> I understand that---but it takes some unspoken details to understand that.
 
-   No (as if you need to really see this while it's obvious from the code review).
+Eh, it takes just as many unspoken details to understand why it's safe-ish to
+install SPTEs into an obsolete shadow page.
 
-> If no, what we are discussing about then? The workaround is redundant and
-
-   I don't know. :-) Your arguments so far seem bogus (sorry! :-))...
-
-> no need to have a dead code in the driver, really.
-
-  "Jazz isn't dead, it just smells funny". :-)
-
->>> If it is the case, go and fix them, no need to workaround
->>> in each of the callers.
->>
->>    There's a need to work around as long as IRQ0 ican be returned, otherwise
->>    we get partly functioning or non-functioning drivers...
+> In particular that both kvm_reload_remote_mmus and is_page_fault_stale are
+> called under mmu_lock write-lock, and that there's no unlock between
+> updating mmu_valid_gen and calling kvm_reload_remote_mmus.
 > 
-> You get them unfunctioning anyways
+> (This also suggests, for the other six patches, keeping
+> kvm_reload_remote_mmus and just moving it to arch/x86/kvm/mmu/mmu.c, with an
+> assertion that the MMU lock is held for write).
+> 
+> But since we have a way forward for having no special roots to worry about,
+> it seems an unnecessary overload for 1) a patch that will last one or two
+> releasees at most 
 
-   The drivers would be broken in not quite obvious ways. With IRQ0 check, they just
-don't probe anymore. See the explanation of the IRQ0 check (in the drivers) in my
-previous mail...
+Yeah, I don't disagree, which is why I'm not totally opposed to punting this and
+naturally fixing it by allocating shadow pages for the special roots.  But this
+code needs to be modified by Jiangshan's series either way, so it's not like we're
+saving anything meaningful.
 
-> and you get the big WARN() even before this patch.
+> 2) a case that has been handled in the inefficient way forever.
 
-   As if that was enough...
-   The IRQ0 problem exists for at least 15 (if not 20) years...
+I don't care about inefficiency, I'm worried about correctness.  It's extremely
+unlikely this fixes a true bug in the legacy MMU, but there's also no real
+downside to adding the check.
 
-MBR, Sergey
+Anyways, either way is fine.

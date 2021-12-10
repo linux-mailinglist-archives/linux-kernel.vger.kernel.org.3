@@ -2,108 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1EA47008C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49461470095
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240926AbhLJMYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240916AbhLJMYc (ORCPT
+        id S240937AbhLJM1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:27:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26975 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237629AbhLJM1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:24:32 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4B9C0617A2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:20:57 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id t18so14577020wrg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:20:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dyQr2ti9ilz8ECo57KSkq4lKgtmyn1SiEY3nHitXJS0=;
-        b=kKlHf5ufFGS3lqJB0CYLdtxRM/+Zd2tF1TIonrt1jLM+uzJlRXxND1cQdMa32DXTuO
-         PzTGfW9C1I3/pc0hVC20gfSSv4NVqqyRBjtjWZ6xN2e4WRN/Jcyr/zEOSLQmVA7njKdP
-         bbzHxOzNuuE90WMuTIpCk+QzC08zm6Kl8x6wVbkI0vIQH/EkiBWjVZ4KZUgQ6VaaLjLj
-         x7AhE+bd9XDLpJLrmUUEUgJYVZ77YOSLERwlB+A+V0laaJPbnRnEbBMFURiwHl73QnyF
-         WyC+HTA2khTn7xXjZZlpQTZdiiJHYsj6LNwEN3ipEtxvvleQIxbefQPQ4y3wJxxy1VAv
-         rbmg==
+        Fri, 10 Dec 2021 07:27:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639139017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KioUMvWRyu6MZM3/L8Y/jHqD4lh7+63A4Z1HNFMR0vs=;
+        b=ZyIse436iYxUfu9pcmMFojUfgCR6exzMGUBs81GPP9khsfGQija1gYI6sxxDz2cpQoWnu5
+        mz2fqMzHrmX2eQnIrN+d+FSC1/xbl7c3OE2QdB1TNhRaktzgCCW6BjwnBgBeCyL4mgITtH
+        QJQQOTWnjs7Ogwxm1bA6+zlIlrsgxQ8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-329-Ze0m8L11OsqzmBj-jNW2qA-1; Fri, 10 Dec 2021 07:23:35 -0500
+X-MC-Unique: Ze0m8L11OsqzmBj-jNW2qA-1
+Received: by mail-wr1-f70.google.com with SMTP id q5-20020a5d5745000000b00178abb72486so2212997wrw.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:23:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dyQr2ti9ilz8ECo57KSkq4lKgtmyn1SiEY3nHitXJS0=;
-        b=Hgy5CgAj/VpnW97fdtuj0UlUTYzihpcauaAujBiQqsB2C64Q/uXOjvaNW6yfhgy0nj
-         kxdxjbXUEdWpcAkK0v+P1p89mURSyIfLhqpvHhA9uXjHTl6Ay7D4p2+0f5HvUv0ANzNN
-         9VRkjiPx+bZEtP31DfUqx54Ep18tAJ0px+OE+PKtAmaCVTuwEUcKrI/hC/ZIlsvjJOm1
-         WPYaV7i3JWj6sodrt0ZFBP7NquqR5WyfoZl0uJ+tmwLVVKg3QQ19Kc8CqQx+V+dSjPP0
-         Byba1tCFa0aNRNlU4OBKio+cUQ1jKFPK+Fm+x8sG+Q9qgc++xo2SDCYVhZNcX5c/gGwS
-         pU9A==
-X-Gm-Message-State: AOAM532QFBlXAwlyuxEdgCn//ioT6TtdwucGuxNwxLPTj0wHk4Jp2XSz
-        M9/Mm7rU5VtYnQpP8biyGZSTEw==
-X-Google-Smtp-Source: ABdhPJzECZyx1gn+Wvql4o7TK0rM8yLNSUmec05SdRZaiWptYAmqVraN+IU+1m90aCiisoO//e59oQ==
-X-Received: by 2002:adf:cd02:: with SMTP id w2mr13812551wrm.269.1639138855743;
-        Fri, 10 Dec 2021 04:20:55 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:209:57bd:f79b:724a:8b02])
-        by smtp.gmail.com with ESMTPSA id b14sm3164792wrd.24.2021.12.10.04.20.54
+        bh=KioUMvWRyu6MZM3/L8Y/jHqD4lh7+63A4Z1HNFMR0vs=;
+        b=dI+yK0rXoU9XNSC58jzqhprLPMkxB8bks9Bd15svJSY0+WX/Rizt4o9WMHnfVLePVW
+         m8/05YHYOiLXlONYE95bLZsbqzC1xV0k7VIIeFRvK4oJHAukVqiN4tx+Zgwa+1lBd1Ax
+         cweyme0tiYsP/mQqECY5A0YoFIKSUYjhPT+o2cHvvymdxH7xSgxyjLTS18WFSN2eSUPH
+         x1LypXoinUSIOOJMqqbx4RpMCne6WthHRcJx+IYsWQndlybRq9loMRkl9HdZVNvDiEpQ
+         8JqJBYYgopjwoddsY6q1N1eu1A5LzNgY4CbDAVktDl8RarF7mbfLtumRNpwmyV0x4UPG
+         tR8g==
+X-Gm-Message-State: AOAM532GvlWO8T3DMZLlrlPANbukFo7F/CVTGf9c9dEPX5ECyV/QDZer
+        tpYdMVV8hXlED4eLZhkKkyPlqEjVU7svzembiQI0pkqvK+zW8dRBT3/ycIghhAregnmTDuHnsMi
+        S02Bd1uNdEYPuYPjNESkmTPbB
+X-Received: by 2002:adf:f352:: with SMTP id e18mr13953160wrp.39.1639139014736;
+        Fri, 10 Dec 2021 04:23:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyZdAIQO1BeoJ43lLB5AhJ1t+/ESbqQBresHP3hRbQSRzO+zkD1RIkj4eHCsDEjipAo3EGUGA==
+X-Received: by 2002:adf:f352:: with SMTP id e18mr13953136wrp.39.1639139014568;
+        Fri, 10 Dec 2021 04:23:34 -0800 (PST)
+Received: from krava ([83.240.60.218])
+        by smtp.gmail.com with ESMTPSA id l5sm3298402wrs.59.2021.12.10.04.23.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 04:20:54 -0800 (PST)
-Date:   Fri, 10 Dec 2021 12:20:50 +0000
-From:   David Brazdil <dbrazdil@google.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Andrew Scull <ascull@google.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: DRM? Re: [PATCH v2 2/2] misc: dice: Add driver to forward
- secrets to userspace
-Message-ID: <YbNGIimUI7Cagvwe@google.com>
-References: <20211209151123.3759999-1-dbrazdil@google.com>
- <20211209151123.3759999-3-dbrazdil@google.com>
- <20211209194807.GB28088@duo.ucw.cz>
+        Fri, 10 Dec 2021 04:23:34 -0800 (PST)
+Date:   Fri, 10 Dec 2021 13:23:32 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        "Frank Ch. Eigler" <fche@redhat.com>
+Subject: Re: [RFC] perf record: Disable debuginfod by default
+Message-ID: <YbNGxMAu5LYvqtpq@krava>
+References: <20211209200425.303561-1-jolsa@kernel.org>
+ <CAM9d7cjyN_sxMe9yajgnuDRy5234NZQ5sd0e4ynBmCnQSv=WFQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209194807.GB28088@duo.ucw.cz>
+In-Reply-To: <CAM9d7cjyN_sxMe9yajgnuDRy5234NZQ5sd0e4ynBmCnQSv=WFQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
-
-On Thu, Dec 09, 2021 at 08:48:07PM +0100, Pavel Machek wrote:
-> Hi!
+On Thu, Dec 09, 2021 at 03:39:20PM -0800, Namhyung Kim wrote:
+> Hi Jiri,
 > 
-> > +config DICE
-> > +	tristate "Open Profile for DICE driver"
-> > +	depends on OF_RESERVED_MEM
-> > +	help
-> > +	  This driver allows to ownership of a reserved memory region
-> > +	  containing DICE secrets and expose them to userspace via
-> > +	  a character device.
-> > +
+> On Thu, Dec 9, 2021 at 12:04 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > hi,
+> > after migrating to fedora 35 I found perf record hanging on exit
+> > and it's because fedora 35 sets DEBUGINFOD_URLS that triggers
+> > debuginfod query which might take long time to process.
+> >
+> > I discussed this briefly with Frank and I'm sending the change
+> > to disable debuginfod by default in perf record.
+> >
+> > Frank had other idea we could discuss here to fork or just spawn
+> > "/usr/bin/debuginfod-find ...." into background after perf record.
+> >
+> > Perhaps there are other ways as well, hence this is RFC ;-)
 > 
-> Explaining what DICE is (and what Open Profile is) would be useful.
-Sure, I'll expand the description.
+> I thought the debuginfod was for perf report, not record.
+> Maybe I'm missing something but how about moving it to
+> report?  We can talk to debuginfod after checking the local
+> build-id cache and binary on the system.
 
-> I see it is for some kind of DRM? Why is in non-evil and why do we
-> want it in Linux?
-Best to think of this as an extension to verified boot where each boot
-stage signs the hashes of the software it loaded. The certificate is
-what's passed in this reserved memory region. It is used in the context
-of confidential computing for remote attestation, and it is very similar
-to the EFI-based approach from IBM for SEV:
-https://lore.kernel.org/all/20211007061838.1381129-1-dovmurik@linux.ibm.com/
+at the end of the perf record we populate buildid cache
+with profiled binaries for the current perf.data
 
-There's a link to the project's documentation in the cover letter with
-much more technical detail if you're interested.
+**IF** there's DEBUGINFOD_URLS defined, that code will
+also ask debuginfod for binaries it could not find on
+the system
 
--David
+> 
+> Still, we can have perf buildid-cache to move it from the
+> debuginfod to local cache.
 
+yep, we have that already
+
+jirka
 

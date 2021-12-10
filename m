@@ -2,128 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2C0470E12
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BDB470E1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243618AbhLJWnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 17:43:00 -0500
-Received: from mga09.intel.com ([134.134.136.24]:63234 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243801AbhLJWl5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 17:41:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639175902; x=1670711902;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rFcz27gpg3qsJSGB0uVAYFYRtvPj3RtwT1v3avMoNRo=;
-  b=Ym8xWsZvnpnO4thEgRviZjwOgIKzlu8sUEq5cqaNQkUAYeUOeEw5Iedr
-   DYIQLdTK8IomuB92eghRscLNpes38YbkMf+ANjIOkiyGOfESWR7mg7Pkf
-   GN9YiXzpYSERVLT5JzF8LbM8aUg+9MHRxr840JDfjp78ajqanj2KMmWUr
-   KdW7htAoqbvjrMeenzBEKjqqwdoIpfZ9q+66CSKs1DnZwB4oMywipVgNB
-   f8PUUkyPz+t6LhUnaPFeDoMZ0k+khPr1Rx+1/6szkjuuZ5zmFXv/V56YK
-   M+uh7JMUwRtmDyeoNlrFOJqzVPBOwkH35n+LqyBeav2SSZuGgp9E0xs8p
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238263040"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="238263040"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 14:38:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="480885890"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 10 Dec 2021 14:38:20 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvoWx-0003l4-N3; Fri, 10 Dec 2021 22:38:19 +0000
-Date:   Sat, 11 Dec 2021 06:38:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [superna9999:amlogic/v5.17/g12-dsi 10/23]
- drivers/gpu/drm/meson/meson_encoder_dsi.c:125:69: warning: variable 'ret' is
- uninitialized when used here
-Message-ID: <202112110644.NcoPvA8p-lkp@intel.com>
+        id S243829AbhLJWpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 17:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243624AbhLJWpA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 17:45:00 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398CDC061746;
+        Fri, 10 Dec 2021 14:41:25 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id g14so33525342edb.8;
+        Fri, 10 Dec 2021 14:41:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Iy4z+x4q0lS2+KD8bMNwWvDh4rqiXsqu5MkQhFPmH/k=;
+        b=D+Tn27EEZ5zGwVhnuvYSATR3GRvWVhP7BbYJkscXHgdLrbO9n+gmdpEp4UDN81XyFz
+         1/VfyjvCxBuC/0dlfduEPfDloIQkVERp3EKzR+LKFBPh+LPO11MajvyBB6FPXZz3u3lB
+         4N7MiPtzHrCgqdUyp38MZBu24HAsVLAiSxAC/OruOlV0u3s97BbbukG5b5LyYwvvxYCy
+         WYHCNCOSJFPVkkbJIgfaBpZkZielqWELbwcXZziMzNUf22Feg8KYQOFyCK5OqdDbFC27
+         fp8UrRGsCOZSiyi1biiQk7EwNWYQVypabvq/nKZQaYS81GFOHW88PJetO6cToOioCvQK
+         F6TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Iy4z+x4q0lS2+KD8bMNwWvDh4rqiXsqu5MkQhFPmH/k=;
+        b=gfwGU/0E5oOVi5IwuEeOCjYXkMXSkt93jY82qaevvkaHSj74ex1akN73Jo3M9r80U7
+         8NH252EG5PEHze1unLuHpv8Y7eAanhl73vZC3W1UcjN9jEbb0WY6cXGepesxdJ2ZFHWD
+         Kl/mtHqcYJZmm8SJeUV6VkbtrHrAHd7D+iI5OShuLL6H91ezJPy8fvFxk1Hiz2vtWnnk
+         gR6DoeEOlYqWWEaS4ekbRZvnG/UuROhd2acPcMbfJ2JRlpT05vmE9EOoC8ojOEIRyeEN
+         pELI1wgtEnXBuNhWYe6CESnfql15YI5unSLEhShfkD7rI7KOPQrAifGmx3R/I0vIHY6z
+         6Mng==
+X-Gm-Message-State: AOAM533N1k+Y0GfhVzmJAKmCkvkVmhTtz0FaXm1AIcFvpAXSAFBQkloV
+        IQq4o+NO5VQE3M6junDQMuw=
+X-Google-Smtp-Source: ABdhPJwr+Zb7BGljYVeH6SG133VT4K2TCRkFcdaEgwOfxJYMhT1eJs1KT/Cy3F6Y6TAA4gHNgRGmJA==
+X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr27868660ejc.503.1639176083813;
+        Fri, 10 Dec 2021 14:41:23 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id p19sm2007846ejn.97.2021.12.10.14.41.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 14:41:23 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <57313f38-5b2b-e352-7502-1a3a70fa4ef1@redhat.com>
+Date:   Fri, 10 Dec 2021 23:41:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] KVM: x86: Inject #UD on "unsupported" hypercall if
+ patching fails
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>
+References: <20211210222903.3417968-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211210222903.3417968-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/superna9999/linux amlogic/v5.17/g12-dsi
-head:   62dac9179f2937dc08bffe08d15c6846bc4aedb4
-commit: d521159dd8a996678230b50e4ecafcdf50648c52 [10/23] fixup! WIP: drm/meson: add DSI encoder
-config: arm-randconfig-r033-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110644.NcoPvA8p-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/superna9999/linux/commit/d521159dd8a996678230b50e4ecafcdf50648c52
-        git remote add superna9999 https://github.com/superna9999/linux
-        git fetch --no-tags superna9999 amlogic/v5.17/g12-dsi
-        git checkout d521159dd8a996678230b50e4ecafcdf50648c52
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/meson/
+On 12/10/21 23:29, Sean Christopherson wrote:
+> Inject a #UD if patching in the correct hypercall fails, e.g. due to
+> emulator_write_emulated() failing because RIP is mapped not-writable by
+> the guest.  The guest is likely doomed in any case, but observing a #UD
+> in the guest is far friendlier to debug/triage than a !WRITABLE #PF with
+> CR2 pointing at the RIP of the faulting instruction.
+> 
+> Ideally, KVM wouldn't patch at all; it's the guest's responsibility to
+> identify and use the correct hypercall instruction (VMCALL vs. VMMCALL).
+> Sadly, older Linux kernels prior to commit c1118b3602c2 ("x86: kvm: use
+> alternatives for VMCALL vs. VMMCALL if kernel text is read-only") do the
+> wrong thing and blindly use VMCALL, i.e. removing the patching would
+> break running VMs with older kernels.
+> 
+> One could argue that KVM should be "fixed" to ignore guest paging
+> protections instead of injecting #UD, but patching in the first place was
+> a mistake as it was a hack-a-fix for a guest bug.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sort of.  I agree that patching is awful, but I'm not sure about 
+injecting #UD vs. just doing the hypercall; the original reason for the 
+patching was to allow Intel<->AMD cross-vendor migration to work somewhat.
 
-All warnings (new ones prefixed by >>):
+That in turn promoted Linux's ill-conceived sloppiness of just using 
+vmcall, which lasted until commit c1118b3602c2.
 
->> drivers/gpu/drm/meson/meson_encoder_dsi.c:125:69: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   dev_err(priv->dev, "Failed to find DSI transceiver bridge: %d\n", ret);
-                                                                                     ^~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:108:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+> There are myriad fatal
+> issues with KVM's patching:
+> 
+>    1. Patches using an emulated guest write, which will fail if RIP is not
+>       mapped writable.  This is the issue being mitigated.
+> 
+>    2. Doesn't ensure the write is "atomic", e.g. a hypercall that splits a
+>       page boundary will be handled as two separate writes, which means
+>       that a partial, corrupted instruction can be observed by a vCPU.
 
+Only the third bytes differs between VMCALL and VMMCALL so that's not 
+really a problem.  (Apparently what happened is that Microsoft asked 
+Intel to use 0xc1 like AMD, and VMware asked AMD to use 0xd9 like Intel, 
+or something like that; and they ended up swapping opcodes.  But this 
+may be an urban legend, no matter how plausible).
 
-vim +/ret +125 drivers/gpu/drm/meson/meson_encoder_dsi.c
+The big ones are 1 and 4.
 
-6b197be782e0410 Neil Armstrong 2021-12-09  103  
-6b197be782e0410 Neil Armstrong 2021-12-09  104  int meson_encoder_dsi_init(struct meson_drm *priv)
-6b197be782e0410 Neil Armstrong 2021-12-09  105  {
-6b197be782e0410 Neil Armstrong 2021-12-09  106  	struct meson_encoder_dsi *meson_encoder_dsi;
-6b197be782e0410 Neil Armstrong 2021-12-09  107  	struct device_node *remote;
-6b197be782e0410 Neil Armstrong 2021-12-09  108  	int ret;
-6b197be782e0410 Neil Armstrong 2021-12-09  109  
-6b197be782e0410 Neil Armstrong 2021-12-09  110  	DRM_DEBUG_DRIVER("\n");
-6b197be782e0410 Neil Armstrong 2021-12-09  111  
-6b197be782e0410 Neil Armstrong 2021-12-09  112  	meson_encoder_dsi = devm_kzalloc(priv->dev, sizeof(*meson_encoder_dsi), GFP_KERNEL);
-6b197be782e0410 Neil Armstrong 2021-12-09  113  	if (!meson_encoder_dsi)
-6b197be782e0410 Neil Armstrong 2021-12-09  114  		return -ENOMEM;
-6b197be782e0410 Neil Armstrong 2021-12-09  115  
-6b197be782e0410 Neil Armstrong 2021-12-09  116  	/* DSI Transceiver Bridge */
-6b197be782e0410 Neil Armstrong 2021-12-09  117  	remote = of_graph_get_remote_node(priv->dev->of_node, 1, 0);
-6b197be782e0410 Neil Armstrong 2021-12-09  118  	if (!remote) {
-6b197be782e0410 Neil Armstrong 2021-12-09  119  		dev_err(priv->dev, "DSI transceiver device is disabled");
-6b197be782e0410 Neil Armstrong 2021-12-09  120  		return 0;
-6b197be782e0410 Neil Armstrong 2021-12-09  121  	}
-6b197be782e0410 Neil Armstrong 2021-12-09  122  
-6b197be782e0410 Neil Armstrong 2021-12-09  123  	meson_encoder_dsi->next_bridge = of_drm_find_bridge(remote);
-6b197be782e0410 Neil Armstrong 2021-12-09  124  	if (!meson_encoder_dsi->next_bridge) {
-6b197be782e0410 Neil Armstrong 2021-12-09 @125  		dev_err(priv->dev, "Failed to find DSI transceiver bridge: %d\n", ret);
+Thanks,
 
-:::::: The code at line 125 was first introduced by commit
-:::::: 6b197be782e0410bb911b74fb152daefccce6a29 WIP: drm/meson: add DSI encoder
+Paolo
 
-:::::: TO: Neil Armstrong <narmstrong@baylibre.com>
-:::::: CC: Neil Armstrong <narmstrong@baylibre.com>
+>    3. Doesn't serialize other CPU cores after updating the code stream.
+> 
+>    4. Completely fails to account for the case where KVM is emulating due
+>       to invalid guest state with unrestricted_guest=0.  Patching and
+>       retrying the instruction will result in vCPU getting stuck in an
+>       infinite loop.
+> 
+> But, the "support" _so_ awful, especially #1, that there's practically
+> zero chance that a modern guest kernel can rely on KVM to patch the guest.
+> So, rather than proliferate KVM's bad behavior any further than the
+> absolute minimum needed for backwards compatibility, just try to make it
+> suck a little less.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

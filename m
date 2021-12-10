@@ -2,291 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944154708CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A0F4708D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245414AbhLJSeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245416AbhLJSeP (ORCPT
+        id S242063AbhLJSgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:36:16 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:34439 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232658AbhLJSgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:34:15 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995C0C061A72
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:30:40 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id 8so9207142pfo.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 10:30:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1vbLoZFeX18k2i89+E/2LJ8CE62fO5bOF5Z5zzeYz9Y=;
-        b=dKjcu0tSgEQnn3G+sesO429TiEEhC/e1BrpV9ViYAGZdZ4k5O1J8aU0z7bvuS8I6WT
-         09Ocdk7P7+1DuCwmEyBcnPPfaKsrqAw19nwOA1w/BjpZCmvph6lkuK4sTlIFWqshyrM3
-         wiJLdbXRK+RcikjIeHOudRG4Vr4JxSNeV/xQ4=
+        Fri, 10 Dec 2021 13:36:14 -0500
+Received: by mail-ot1-f49.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso10512528otj.1;
+        Fri, 10 Dec 2021 10:32:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1vbLoZFeX18k2i89+E/2LJ8CE62fO5bOF5Z5zzeYz9Y=;
-        b=h9miHgxqv/+xtMY6y1hlYHL/bswoFashln4Avxgf3WWsH7ncpCe7TnFSjRRZhZc2g+
-         yTfaPftnfckKzCGb8fO3E/T7yUHzzMikDU55V3DZJDE2LKJzYtOSLYdtfQbCCgIgTQEy
-         ZQ49An7snRaIDTU8sMUtH9rh1LsPWYA78q60ZCMDY0Nx28ehw6MvDhXnu2+P2x5+tQ6S
-         jTwu15Hg2Ovm/S0qBaMdZg+utkiKhHuUL6oUL0voyYTXSxpAXCJ7mMNoPahKjuKLXz4w
-         3PaU4jImqJkBnY1lIXwDFIWcy3iikBx4kDXO1yH0gbql4DgrOm1m8Jfxge78414ehfNV
-         eGXQ==
-X-Gm-Message-State: AOAM531uU0YNepL32EXbDUYC2dLTvkkDvY6i1qLAvJ2qViE+kaQOVXsJ
-        zlxQ424b1VY2m3cM9jFGKnnpvw==
-X-Google-Smtp-Source: ABdhPJzKbfNUfNrvfamlxPPEgL0lRrazYIHnF+DpjN4vzrxLbzynSp7vd4fDyHEOFVxq3CmBdp2fwQ==
-X-Received: by 2002:a63:6e0c:: with SMTP id j12mr28816807pgc.117.1639161040018;
-        Fri, 10 Dec 2021 10:30:40 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:d386:8bb1:aaa7:a294])
-        by smtp.gmail.com with UTF8SMTPSA id u17sm1811909pfk.179.2021.12.10.10.30.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 10:30:39 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Peter Chen <peter.chen@kernel.org>, linux-kernel@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v18 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Fri, 10 Dec 2021 10:30:21 -0800
-Message-Id: <20211210102923.v18.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-In-Reply-To: <20211210183021.3500376-1-mka@chromium.org>
-References: <20211210183021.3500376-1-mka@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XYFeMefDtygzQHG6cGasFJft83PyhMCvIHgML7JQ1W8=;
+        b=BT8rQ4Lwys6f0lHis7r+7jzL1KmTsfZlI2M6WpJdgfDrW3ZbR5zdfZwpIlyp3Hp6RS
+         pk3HfiMPTZPvnPYMsNynL64Vew06v83zWSayDb2GcA2Kv3BmS9uxJuRCg9iBWb9mMErO
+         tNlccmuVurJkG5/Ykst8sU6MiwvbV6Md0TZp5DcCcSlEFyeA51i9kzNaeyEjQBwakkNc
+         Hhldlrgl/1v3LWbWLFmC7fKf6hnNdAECtE7mNXhCwU0p/SIgT2QGrEQswtJ+GrFP3auU
+         oCFP/ayzlf+HGIsoP/YBFB/MWEoZoczZUBvb5HjKLP7kS8lkOVhqPGve8FS96GEK2rws
+         m/Yg==
+X-Gm-Message-State: AOAM532QPLjoi1gQbvHvSzI9O8ifmbE8jvJ0y7c+iB2plRn4xo272OkU
+        TnDYvx/sJYHs/OI68cqHvO7dlLh2t5NpN6wVLp8=
+X-Google-Smtp-Source: ABdhPJy/ApH2I9ley83OfAtDiEoSWuJBoE9Gqun3QKF0IviB+39TRacgd3bR+5yVv4MXsqS5F4aemy99lcaDR84MB0I=
+X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr12642134otu.254.1639161158278;
+ Fri, 10 Dec 2021 10:32:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-7-digetx@gmail.com>
+In-Reply-To: <20211126180101.27818-7-digetx@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 10 Dec 2021 19:32:27 +0100
+Message-ID: <CAJZ5v0ii7tGRDbxw+5GqdyONXvRPznXUqBZd03+pdoAd+pH=JQ@mail.gmail.com>
+Subject: Re: [PATCH v4 06/25] reboot: Warn if unregister_restart_handler() fails
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+On Fri, Nov 26, 2021 at 7:02 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> Emit warning if unregister_restart_handler() fails since it never should
+> fail. This will ease further API development by catching mistakes early.
+>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  kernel/reboot.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index e6659ae329f1..f0e7b9c13f6b 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -210,7 +210,7 @@ EXPORT_SYMBOL(register_restart_handler);
+>   */
+>  int unregister_restart_handler(struct notifier_block *nb)
+>  {
+> -       return atomic_notifier_chain_unregister(&restart_handler_list, nb);
+> +       return WARN_ON(atomic_notifier_chain_unregister(&restart_handler_list, nb));
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+The only reason why it can fail is if the object pointed to by nb is
+not in the chain.  Why WARN() about this?  And what about systems with
+panic_on_warn set?
 
-Changes in v18:
-- also adjust config for pompom rev1
-
-Changes in v17:
-- none
-
-Changes in v16:
-- none
-
-Changes in v15:
-- none
-
-Changes in v14:
-- none
-
-Changes in v13:
-- none
-
-Changes in v12:
-- none
-
-Changes in v11:
-- rebased on qcom/arm64-for-5.14 (with the rest of the series)
-
-Changes in v10:
-- keep 'regulator-boot-on' property
-- updated commit message
-
-Changes in v9:
-- none
-
-Changes in v8:
-- none
-
-Changes in v7:
-- rebased on qcom/arm64-for-5.13 (with the rest of the series)
-
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
-
-Changes in v5:
-- patch added to the series
-
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++-----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++-------
- .../dts/qcom/sc7180-trogdor-pompom-r1.dts     | 11 ++++-------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++-----------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 19 ++++++++++++++++++-
- 5 files changed, 43 insertions(+), 37 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 30e3e769d2b4..5fb8e12af1a0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -14,17 +14,6 @@ / {
- 	compatible = "google,lazor-rev0", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -33,3 +22,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index c2ef06367baf..1dae714250f5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -14,13 +14,11 @@ / {
- 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-index 76a130bad60a..c913bb5677e5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
-@@ -34,13 +34,10 @@ &pm6150_adc_tm {
- 	/delete-node/ charger-thermistor@0;
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 457c25499863..8477c82c410a 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -43,17 +43,6 @@ &panel {
- 	compatible = "auo,b116xa01";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sdhc_2 {
- 	status = "okay";
- };
-@@ -62,6 +51,14 @@ &trackpad {
- 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
- };
- 
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &trackpad_int_1v8_odl {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index d4f4441179fc..cd31460b3bd6 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -202,7 +202,6 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
- 		regulator-boot-on;
- 
- 		vin-supply = <&pp3300_a>;
-@@ -839,6 +838,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	usb_hub_2_0: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_0>;
-+	};
-+
-+	/* 3.0 hub on port 2 */
-+	usb_hub_3_0: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_0>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+>  }
+>  EXPORT_SYMBOL(unregister_restart_handler);
+>
+> --
+> 2.33.1
+>

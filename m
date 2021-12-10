@@ -2,309 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B260470806
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E903C470807
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245002AbhLJSHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:07:20 -0500
-Received: from mga17.intel.com ([192.55.52.151]:19589 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235392AbhLJSHT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:07:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639159424; x=1670695424;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LAHwgZ9mmMRfEXXYxpHctVnwaqoW94BRjWxXAVA/q9g=;
-  b=aA7QCT0rqHgxD50VVIhkZhAm74jjQF/a8QoNkJnx6DiQ8Obtfvrvvfqu
-   iEJRZBv0DOjh82g6vHShUBZ0WA5nbgkvfKo42Rib6pmDNq9YlHdDzMb5v
-   v9OolDB+lTzIll12sqYnj5FNdA3o9jJ4ALqYqKQMnaeHTiNvQU2uKu1W9
-   9/Mb82/SImADaIBdJWPbPU1IC3wfHMxnj+RWj7p4GwRxPe+V7BbZTQfe0
-   I0BMphxZFnVIfJvST7NVXi+JNpeKcHGDcXeku3F4kaMn5TCHmE5d/ndfA
-   RmiB5eaOb3AY2l5dPAVtgXbswms/AhZlEYU6naVSqbmoBSrG2riCxLuxd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="219094077"
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="219094077"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:03:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="680827116"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 10:03:14 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvkEj-0003Up-EO; Fri, 10 Dec 2021 18:03:13 +0000
-Date:   Sat, 11 Dec 2021 02:03:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukas Czerner <lczerner@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: fs/ext4/ioctl.c:45:5: warning: no previous prototype for function
- 'ext4_modify_primary_sb'
-Message-ID: <202112110115.5HqRcRHH-lkp@intel.com>
+        id S245079AbhLJSHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:07:32 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:37512 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245071AbhLJSHb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:07:31 -0500
+Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0CDCE20B717A;
+        Fri, 10 Dec 2021 10:03:56 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0CDCE20B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1639159436;
+        bh=OaHMFQmPJpG/dqW0wHAtvBdJkEwYBKMkEh8ljXqiJKU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PTd2u1XVEynL3EppoYxN/7eU87QMRa2OCtElPMJL7JUevouhadRUfqqh338OtzKb3
+         1oqXg3Ulz3t4DnGjPChgu1U8lPexDGAx+fSwH4sMV3fAL7TUNwEFRCFb1SkieuSY4n
+         2Osl7ldmCn5EPzkwnUTWz//TYfayUUfwuw6nyUPQ=
+Date:   Fri, 10 Dec 2021 10:03:54 -0800
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 02/13] user_events: Add minimal support for
+ trace_event into ftrace
+Message-ID: <20211210180354.GB2131@kbox>
+References: <20211209223210.1818-1-beaub@linux.microsoft.com>
+ <20211209223210.1818-3-beaub@linux.microsoft.com>
+ <20211210194358.e590d49a1620df7345f9f679@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211210194358.e590d49a1620df7345f9f679@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211210-231726/Lukas-Czerner/ext4-implement-support-for-get-set-fs-label/20211112-060030
-head:   3645884240a4d5f00133b71e3a7fbb2070588706
-commit: 3645884240a4d5f00133b71e3a7fbb2070588706 ext4: implement support for get/set fs label
-date:   3 hours ago
-config: hexagon-randconfig-r016-20211210 (https://download.01.org/0day-ci/archive/20211211/202112110115.5HqRcRHH-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/3645884240a4d5f00133b71e3a7fbb2070588706
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20211210-231726/Lukas-Czerner/ext4-implement-support-for-get-set-fs-label/20211112-060030
-        git checkout 3645884240a4d5f00133b71e3a7fbb2070588706
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
+On Fri, Dec 10, 2021 at 07:43:58PM +0900, Masami Hiramatsu wrote:
+> Hi Beau,
+> 
+> Thanks for updating the patch! I have some comments below.
+> 
+> On Thu,  9 Dec 2021 14:31:59 -0800
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> [..]
+> > +#define USER_EVENTS_PREFIX_LEN (sizeof(USER_EVENTS_PREFIX)-1)
+> > +
+> > +#define FIELD_DEPTH_TYPE 0
+> > +#define FIELD_DEPTH_NAME 1
+> > +#define FIELD_DEPTH_SIZE 2
+> > +
+> > +/*
+> > + * Limits how many trace_event calls user processes can create:
+> > + * Must be multiple of PAGE_SIZE.
+> > + */
+> > +#define MAX_PAGES 1
+> > +#define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
+> > +
+> > +/* Limit how long of an event name plus args within the subsystem. */
+> > +#define MAX_EVENT_DESC 512
+> > +#define EVENT_NAME(user_event) ((user_event)->tracepoint.name)
+> > +#define MAX_FIELD_ARRAY_SIZE (2 * PAGE_SIZE)
+> 
+> I don't recommend to record the event which size is more than a page size...
+> Maybe 256 entries?
+> It is also better to limit the total size of the event and the number
+> of fields (arguments).
+> 
+> Steve, can we write such a big event data on the trace buffer?
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This moved to 1024 in part 12 when validation was added.
 
-All warnings (new ones prefixed by >>):
+> [..]
+> > +
+> > +static int user_field_array_size(const char *type)
+> > +{
+> > +	const char *start = strchr(type, '[');
+> > +	char val[8];
+> > +	int size = 0;
+> > +
+> > +	if (start == NULL)
+> > +		return -EINVAL;
+> > +
+> > +	start++;
+> > +
+> > +	while (*start != ']' && size < (sizeof(val) - 1))
+> > +		val[size++] = *start++;
+> > +
+> > +	if (*start != ']')
+> > +		return -EINVAL;
+> > +
+> > +	val[size] = 0;
+> 
+> It's '\0', not 0.
 
->> fs/ext4/ioctl.c:45:5: warning: no previous prototype for function 'ext4_modify_primary_sb' [-Wmissing-prototypes]
-   int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
-       ^
-   fs/ext4/ioctl.c:45:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
-   ^
-   static 
->> fs/ext4/ioctl.c:165:5: warning: no previous prototype for function 'ext4_modify_superblocks_fn' [-Wmissing-prototypes]
-   int ext4_modify_superblocks_fn(struct super_block *sb,
-       ^
-   fs/ext4/ioctl.c:165:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ext4_modify_superblocks_fn(struct super_block *sb,
-   ^
-   static 
-   2 warnings generated.
+Both evaluate to 0, is this a style thing?
 
+For example, argv_split does this same thing ;)
 
-vim +/ext4_modify_primary_sb +45 fs/ext4/ioctl.c
+> 
+> If I were you, I just use strlcpy(val, start, sizeof(val)), and
+> strchr(val, ']'). Sometimes using standard libc function will
+> be easer to understand what it does. :)
+> 
 
-    44	
-  > 45	int ext4_modify_primary_sb(struct super_block *sb, handle_t *handle,
-    46				   ext4_modify_sb_callback func,
-    47				   const void *arg)
-    48	{
-    49		int err = 0;
-    50		struct ext4_sb_info *sbi = EXT4_SB(sb);
-    51		struct buffer_head *bh = sbi->s_sbh;
-    52		struct ext4_super_block *es = sbi->s_es;
-    53	
-    54		trace_ext4_modify_sb(sb, bh->b_blocknr, 1);
-    55	
-    56		BUFFER_TRACE(bh, "get_write_access");
-    57		err = ext4_journal_get_write_access(handle, sb,
-    58						    bh,
-    59						    EXT4_JTR_NONE);
-    60		if (err)
-    61			goto out_err;
-    62	
-    63		lock_buffer(bh);
-    64		func(es, arg);
-    65		ext4_superblock_csum_set(sb);
-    66		unlock_buffer(bh);
-    67	
-    68		if (buffer_write_io_error(bh) || !buffer_uptodate(bh)) {
-    69			ext4_msg(sbi->s_sb, KERN_ERR, "previous I/O error to "
-    70				 "superblock detected");
-    71			clear_buffer_write_io_error(bh);
-    72			set_buffer_uptodate(bh);
-    73		}
-    74	
-    75		err = ext4_handle_dirty_metadata(handle, NULL, bh);
-    76		if (err)
-    77			goto out_err;
-    78		err = sync_dirty_buffer(bh);
-    79	out_err:
-    80		ext4_std_error(sb, err);
-    81		return err;
-    82	}
-    83	
-    84	/*
-    85	 * Update one backup superblcok in the group 'grp' using the primary
-    86	 * superblock data. If the handle is NULL the modification is not
-    87	 * journalled.
-    88	 *
-    89	 * Returns: 0 when no modification was done (no superblock in the group)
-    90	 *	    1 when the modification was successful
-    91	 *	   <0 on error
-    92	 */
-    93	static int ext4_update_backup_sb(struct super_block *sb, handle_t *handle,
-    94					 ext4_group_t grp)
-    95	{
-    96		int err = 0;
-    97		ext4_fsblk_t sb_block;
-    98		struct buffer_head *bh;
-    99		unsigned long offset = 0;
-   100	
-   101		if (!ext4_bg_has_super(sb, grp))
-   102			return 0;
-   103	
-   104		/*
-   105		 * For the group 0 there is always 1k padding, so we have
-   106		 * either adjust offset, or sb_block depending on blocksize
-   107		 */
-   108		if (grp == 0) {
-   109			sb_block = 1 * EXT4_MIN_BLOCK_SIZE;
-   110			offset = do_div(sb_block, sb->s_blocksize);
-   111		} else {
-   112			sb_block = ext4_group_first_block_no(sb, grp);
-   113			offset = 0;
-   114		}
-   115	
-   116		trace_ext4_modify_sb(sb, sb_block, handle ? 1 : 0);
-   117	
-   118		bh = sb_getblk(sb, sb_block);
-   119		if (IS_ERR(bh))
-   120			return PTR_ERR(bh);
-   121	
-   122		if (handle) {
-   123			BUFFER_TRACE(bh, "get_write_access");
-   124			err = ext4_journal_get_write_access(handle, sb,
-   125							    bh,
-   126							    EXT4_JTR_NONE);
-   127			if (err)
-   128				goto out_bh;
-   129		}
-   130	
-   131		lock_buffer(bh);
-   132		memcpy(bh->b_data + offset, EXT4_SB(sb)->s_es,
-   133		       sizeof(struct ext4_super_block));
-   134		set_buffer_uptodate(bh);
-   135		unlock_buffer(bh);
-   136	
-   137		if (err)
-   138			goto out_bh;
-   139	
-   140		if (handle) {
-   141			err = ext4_handle_dirty_metadata(handle, NULL, bh);
-   142			if (err)
-   143				goto out_bh;
-   144		} else {
-   145			BUFFER_TRACE(bh, "marking dirty");
-   146			mark_buffer_dirty(bh);
-   147		}
-   148		err = sync_dirty_buffer(bh);
-   149	
-   150	out_bh:
-   151		brelse(bh);
-   152		ext4_std_error(sb, err);
-   153		return (err) ? err : 1;
-   154	}
-   155	
-   156	/*
-   157	 * Modify primary and backup superblocks using the provided function
-   158	 * func and argument arg.
-   159	 *
-   160	 * Only the primary superblock and at most two backup superblock
-   161	 * modifications are journalled; the rest is modified without journal.
-   162	 * This is safe because e2fsck will re-write them if there is a problem,
-   163	 * and we're very unlikely to ever need more than two backups.
-   164	 */
- > 165	int ext4_modify_superblocks_fn(struct super_block *sb,
-   166				       ext4_modify_sb_callback func,
-   167				       const void *arg)
-   168	{
-   169		handle_t *handle;
-   170		ext4_group_t ngroups;
-   171		unsigned int three = 1;
-   172		unsigned int five = 5;
-   173		unsigned int seven = 7;
-   174		int err = 0, ret, i;
-   175		ext4_group_t grp, primary_grp;
-   176		struct ext4_sb_info *sbi = EXT4_SB(sb);
-   177	
-   178		/*
-   179		 * We can't modify superblocks while the online resize is running
-   180		 */
-   181		if (test_and_set_bit_lock(EXT4_FLAGS_RESIZING,
-   182					  &sbi->s_ext4_flags)) {
-   183			ext4_msg(sb, KERN_ERR, "Can't modify superblock while"
-   184				 "performing online resize");
-   185			return -EBUSY;
-   186		}
-   187	
-   188		/*
-   189		 * We're only going to modify primary superblock and two
-   190		 * backup superblocks in this transaction.
-   191		 */
-   192		handle = ext4_journal_start_sb(sb, EXT4_HT_MISC, 3);
-   193		if (IS_ERR(handle)) {
-   194			err = PTR_ERR(handle);
-   195			goto out;
-   196		}
-   197	
-   198		/* Modify primary superblock */
-   199		err = ext4_modify_primary_sb(sb, handle, func, arg);
-   200		if (err) {
-   201			ext4_msg(sb, KERN_ERR, "Failed to modify primary "
-   202				 "superblock");
-   203			goto out_journal;
-   204		}
-   205	
-   206		primary_grp = ext4_get_group_number(sb, sbi->s_sbh->b_blocknr);
-   207		ngroups = ext4_get_groups_count(sb);
-   208	
-   209		/*
-   210		 * Update backup superblocks. We have to start from group 0
-   211		 * because it might not be where the primary superblock is
-   212		 * if the fs is mounted with -o sb=<backup_sb_block>
-   213		 */
-   214		i = 0;
-   215		grp = 0;
-   216		while (grp < ngroups) {
-   217			/* Skip primary superblock */
-   218			if (grp == primary_grp)
-   219				goto next_grp;
-   220	
-   221			ret = ext4_update_backup_sb(sb, handle, grp);
-   222			if (ret < 0) {
-   223				err = ret;
-   224				goto out_journal;
-   225			}
-   226	
-   227			i += ret;
-   228			if (handle && i > 1) {
-   229				/*
-   230				 * We're only journalling primary superblock and
-   231				 * two backup superblocks; the rest is not
-   232				 * journalled.
-   233				 */
-   234				err = ext4_journal_stop(handle);
-   235				if (err)
-   236					goto out;
-   237				handle = NULL;
-   238			}
-   239	next_grp:
-   240			grp = ext4_list_backups(sb, &three, &five, &seven);
-   241		}
-   242	
-   243	out_journal:
-   244		if (handle) {
-   245			ret = ext4_journal_stop(handle);
-   246			if (ret && !err)
-   247				err = ret;
-   248		}
-   249	out:
-   250		clear_bit_unlock(EXT4_FLAGS_RESIZING, &sbi->s_ext4_flags);
-   251		smp_mb__after_atomic();
-   252		return err ? err : 0;
-   253	}
-   254	
+Sure good idea.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[..]
+
+> > +static int user_event_add_field(struct user_event *user, const char *type,
+> > +				const char *name, int offset, int size,
+> > +				int is_signed, int filter_type)
+> > +{
+> > +	struct ftrace_event_field *field;
+> > +
+> > +	field = kmalloc(sizeof(*field), GFP_KERNEL);
+> > +
+> > +	if (!field)
+> > +		return -ENOMEM;
+> > +
+> > +	field->type = type;
+> > +	field->name = name;
+> > +	field->offset = offset;
+> > +	field->size = size;
+> > +	field->is_signed = is_signed;
+> > +	field->filter_type = filter_type;
+> > +
+> > +	list_add(&field->link, &user->fields);
+> 
+> I recommend to use list_add_tail() here so that when accessing the
+> list of field without reverse order. (I found this in [4/13])
+> 
+
+If I did that, wouldn't that mean the format file in tracefs now has the
+arguments printed in reverse order they were added?
+
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/*
+> > + * Parses the values of a field within the description
+> > + * Format: type name [size]
+> 
+> Hmm, don't you accept redundant spaces and tabs?
+> If this accepts the redundant spaces/tabs, I recommend you to use
+> argv_split() instead of strpbrk() etc. e.g.
+> 
+> 	int argc, name_idx = 0, size;
+> 	int ret = -EINVAL;
+> 	char **argv;
+> 
+> 	argv = argv_split(GFP_KERNEL, field, &argc);
+> 	if (!argv)
+> 		return -ENOMEM;
+> 
+> 	if (!strcmp(argv[pos], "__data_loc") ||
+> 	    !strcmp(argv[pos], "__rel_loc")) {
+> 		if (++pos >= argc)
+> 			goto error;
+> 	}
+> 	if (!strcmp(argv[pos], "unsigned")) {
+> 		if (++pos >= argc)
+> 			goto error;
+> 	} else if (!strcmp(argv[pos], "struct")) {
+> 		is_struct = true;
+> 		if (++pos >= argc)
+> 			goto error;
+> 	}
+> 	if (++pos >= argc)
+> 		goto error;
+> 	name_idx = pos++;
+> 	if (pos < argc) {	// size
+> 		if (!is_struct)
+> 			goto error;
+> 		if (kstrtou32(argv[pos++], 10, &size))
+> 			goto error;
+> 	} else
+> 		size = user_field_size(argv[name_idx - 1]);
+> 
+> 	if (pos != argc)
+> 		goto error;
+> 	
+> 	// note that type index is always 0 and size must be converted.
+> 	user_event_add_field(user, argv, name_idx, saved_offset, size,
+> 				    type[0] != 'u', FILTER_OTHER);
+> 
+> 	ret = 0;
+> error:
+> 	argv_free(argv);
+> 	return ret;
+> 
+> (This also requires to simplify user_field_size() and remove FIELD_DEPTH_*)
+> What would you think?
+> 	
+
+The code currently does not support duplicate spaces after the first
+non-whitespace.
+
+We do copy the string before this, so how this is written would do a
+double allocation. If the argv_split was moved higher in the callchain
+then I could move to this.
+
+If you feel strongly about this, I don't have a problem moving to this
+pattern. Let me know if you feel strongly about it.
+
+> > +
+> > +/*
+> > + * Register callback for our events from tracing sub-systems.
+> > + */
+> > +static int user_event_reg(struct trace_event_call *call,
+> > +			  enum trace_reg type,
+> > +			  void *data)
+> > +{
+> > +	struct user_event *user = (struct user_event *)call->data;
+> > +	int ret = 0;
+> > +
+> > +	if (!user)
+> > +		return -ENOENT;
+> > +
+> > +	switch (type) {
+> > +	case TRACE_REG_REGISTER:
+> > +		ret = tracepoint_probe_register(call->tp,
+> > +						call->class->probe,
+> > +						data);
+> > +		if (!ret)
+> > +			goto inc;
+> > +		break;
+> > +
+> > +	case TRACE_REG_UNREGISTER:
+> > +		tracepoint_probe_unregister(call->tp,
+> > +					    call->class->probe,
+> > +					    data);
+> > +		goto dec;
+> > +
+> > +#ifdef CONFIG_PERF_EVENTS
+> > +	case TRACE_REG_PERF_REGISTER:
+> > +	case TRACE_REG_PERF_UNREGISTER:
+> > +	case TRACE_REG_PERF_OPEN:
+> > +	case TRACE_REG_PERF_CLOSE:
+> > +	case TRACE_REG_PERF_ADD:
+> > +	case TRACE_REG_PERF_DEL:
+> > +		break;
+> > +#endif
+> 
+> At this moment (in this patch), you can just add a default case,
+> or just ignore it, because it does nothing.
+> 
+
+Yeah, I was trying to avoid the warning that resulted if I just ignored
+them.
+
+> > +	}
+> > +
+> > +	return ret;
+> > +inc:
+> > +	atomic_inc(&user->refcnt);
+> > +	update_reg_page_for(user);
+> > +	return 0;
+> > +dec:
+> > +	update_reg_page_for(user);
+> > +	atomic_dec(&user->refcnt);
+> > +	return 0;
+> > +}
+> > +
+> 
+> [..]
+> > +/*
+> > + * Validates the user payload and writes via iterator.
+> > + */
+> > +static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+> > +{
+> > +	struct user_event_refs *refs;
+> > +	struct user_event *user = NULL;
+> > +	struct tracepoint *tp;
+> > +	ssize_t ret = i->count;
+> > +	int idx;
+> > +
+> > +	if (unlikely(copy_from_iter(&idx, sizeof(idx), i) != sizeof(idx)))
+> > +		return -EFAULT;
+> > +
+> > +	rcu_read_lock_sched();
+> > +
+> > +	refs = rcu_dereference_sched(file->private_data);
+> > +
+> > +	/*
+> > +	 * The refs->events array is protected by RCU, and new items may be
+> > +	 * added. But the user retrieved from indexing into the events array
+> > +	 * shall be immutable while the file is opened.
+> > +	 */
+> > +	if (likely(refs && idx < refs->count))
+> > +		user = refs->events[idx];
+> > +
+> > +	rcu_read_unlock_sched();
+> > +
+> > +	if (unlikely(user == NULL))
+> > +		return -ENOENT;
+> > +
+> > +	tp = &user->tracepoint;
+> > +
+> > +	/*
+> > +	 * It's possible key.enabled disables after this check, however
+> > +	 * we don't mind if a few events are included in this condition.
+> > +	 */
+> > +	if (likely(atomic_read(&tp->key.enabled) > 0)) {
+> > +		struct tracepoint_func *probe_func_ptr;
+> > +		user_event_func_t probe_func;
+> > +		void *tpdata;
+> > +		void *kdata;
+> > +		u32 datalen;
+> > +
+> > +		kdata = kmalloc(i->count, GFP_KERNEL);
+> > +
+> > +		if (unlikely(!kdata))
+> > +			return -ENOMEM;
+> > +
+> > +		datalen = copy_from_iter(kdata, i->count, i);
+> 
+> Don't we need to add this datalen to ret?
+> 
+
+ret is set to the bytes that were given by the user to avoid multiple
+writes from occuring for the same data if the data was paged out (or if
+the event isn't enabled at that time for whatever reason).
+
+Since seek/partial writes are not supported, I don't believe we want to
+do that.
+
+> > +
+> > +		rcu_read_lock_sched();
+> > +
+> > +		probe_func_ptr = rcu_dereference_sched(tp->funcs);
+> > +
+> > +		if (probe_func_ptr) {
+> > +			do {
+> > +				probe_func = probe_func_ptr->func;
+> > +				tpdata = probe_func_ptr->data;
+> > +				probe_func(user, kdata, datalen, tpdata);
+> > +			} while ((++probe_func_ptr)->func);
+> > +		}
+> > +
+> > +		rcu_read_unlock_sched();
+> > +
+> > +		kfree(kdata);
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> 
+> Thank you,
+> 
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>

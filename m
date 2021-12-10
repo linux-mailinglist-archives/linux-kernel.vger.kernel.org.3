@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28981470692
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 17:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32671470697
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 18:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243822AbhLJRCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 12:02:44 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34994 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235987AbhLJRCo (ORCPT
+        id S241059AbhLJRFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 12:05:10 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:49426 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235987AbhLJRFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:02:44 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 141D5CE2C1E;
-        Fri, 10 Dec 2021 16:59:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0827A60C4B;
-        Fri, 10 Dec 2021 16:59:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1639155545;
-        bh=kRdyzfTbRlA8Q6o9ozYIflNqTTqb1/yyQ+Zhl1bc2hI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qehFagygXXv8bbpl27U/7B/DcP1tIA/U/cWnuj39slg4mxEcbhuXFsss1NddlzBIE
-         6PkBZYce8BgviUP9YWNtqY/WCPQTLOyw84eVboaBBjEOQla5+S27wj9ObPzqFGeOTI
-         VhCCu+m1sjz5CsY/rSDNoqZ/fnHwKR72obNaOkn8=
-Date:   Fri, 10 Dec 2021 08:59:03 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] kdump: vmcore: move copy_to() from vmcore.c to
- uaccess.h
-Message-Id: <20211210085903.e7820815e738d7dc6da06050@linux-foundation.org>
-In-Reply-To: <1639143361-17773-2-git-send-email-yangtiezhu@loongson.cn>
-References: <1639143361-17773-1-git-send-email-yangtiezhu@loongson.cn>
-        <1639143361-17773-2-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Fri, 10 Dec 2021 12:05:09 -0500
+X-UUID: 72d2782b45164d26b7af5cbbeb102d9b-20211211
+X-UUID: 72d2782b45164d26b7af5cbbeb102d9b-20211211
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <flora.fu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 659292089; Sat, 11 Dec 2021 01:01:31 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 11 Dec 2021 01:01:30 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 11 Dec 2021 01:01:30 +0800
+From:   Flora Fu <flora.fu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Flora Fu <flora.fu@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, JB Tsai <jb.tsai@mediatek.com>,
+        Pi-Cheng Chen <pi-cheng.chen@mediatek.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Subject: [PATCH v4 0/8] Add Support for MediaTek MT8192 APU Power Domain
+Date:   Sat, 11 Dec 2021 01:01:05 +0800
+Message-ID: <20211210170113.30063-1-flora.fu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 21:36:00 +0800 Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+The MediaTek AI Processing Unit (APU) is a proprietary hardware
+in the SoC to support AI operations.
+The series is to create apusys in the SoC folder for developing
+the related drivers. Add the apu clocks, basic apu nodes and the
+power domain to provide the power controller of APU subsystem.
 
-> In arch/*/kernel/crash_dump*.c, there exist similar code about
-> copy_oldmem_page(), move copy_to() from vmcore.c to uaccess.h,
-> and then we can use copy_to() to simplify the related code.
-> 
-> ...
->
-> --- a/fs/proc/vmcore.c
-> +++ b/fs/proc/vmcore.c
-> @@ -238,20 +238,6 @@ copy_oldmem_page_encrypted(unsigned long pfn, char *buf, size_t csize,
->  	return copy_oldmem_page(pfn, buf, csize, offset, userbuf);
->  }
->  
-> -/*
-> - * Copy to either kernel or user space
-> - */
-> -static int copy_to(void *target, void *src, size_t size, int userbuf)
-> -{
-> -	if (userbuf) {
-> -		if (copy_to_user((char __user *) target, src, size))
-> -			return -EFAULT;
-> -	} else {
-> -		memcpy(target, src, size);
-> -	}
-> -	return 0;
-> -}
-> -
->  #ifdef CONFIG_PROC_VMCORE_DEVICE_DUMP
->  static int vmcoredd_copy_dumps(void *dst, u64 start, size_t size, int userbuf)
->  {
-> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-> index ac03940..4a6c3e4 100644
-> --- a/include/linux/uaccess.h
-> +++ b/include/linux/uaccess.h
-> @@ -201,6 +201,20 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
->  	return n;
->  }
->  
-> +/*
-> + * Copy to either kernel or user space
-> + */
-> +static inline int copy_to(void *target, void *src, size_t size, int userbuf)
-> +{
-> +	if (userbuf) {
-> +		if (copy_to_user((char __user *) target, src, size))
-> +			return -EFAULT;
-> +	} else {
-> +		memcpy(target, src, size);
-> +	}
-> +	return 0;
-> +}
-> +
+This series is based on MT8192 power domain[1], PWRAP[2]
+and PMIC MT6359[3] patches.
+[1] https://patchwork.kernel.org/patch/12456165
+[2] https://patchwork.kernel.org/patch/12134935
+[3] https://patchwork.kernel.org/patch/12140237
 
-Ordinarily I'd say "this is too large to be inlined".  But the function
-has only a single callsite per architecture so inlining it won't cause
-bloat at present.
+Change notes:
+v3->v4:
+  1) Rebase to 5.16-rc1
+  2) Update mtk-apu-pm driver to be a module or a buildin driver.
+  3) Fix coding defects and typo in mtk-apu-pm.c and update
+     copyright in dt-bindins.
+  4) Split the mt8192 EVB device tree "mt8192-evb.dts" to a new patch
+     file in the series.
 
-But hopefully copy_to() will get additional callers in the future, in
-which case it shouldn't be inlined.  So I'm thinking it would be best
-to start out with this as a regular non-inlined function, in
-lib/usercopy.c.
+v2->v3:
+  1) Rebase to 5.15-rc1
+  2) remove the apu-mbox registers from syscon.
+  3) update mtk-apu-pm to fix clock flow and move power status bit into
+     platform data to support different hardware settings.
 
-Also, copy_to() is a very poor name for a globally-visible helper
-function.  Better would be copy_to_user_or_kernel(), although that's
-perhaps a bit long.
+v1->v2:
+  1) update expression "s/_/-/" in dt-bindings documents.
+  2) drop apu power domain header file for mt8192.
 
-And the `userbuf' arg should have type bool, yes?
+v1: https://patchwork.kernel.org/project/linux-mediatek/list/?series=461999
+
+Flora Fu (8):
+  dt-bindings: clock: Add MT8192 APU clock bindings
+  clk: mediatek: mt8192: Add APU clocks support
+  dt-bindings: arm: mediatek: Add new document bindings for APU
+  dt-bindings: soc: mediatek: apusys: Add new document for APU power
+    domain
+  soc: mediatek: apu: Add apusys and add apu power domain driver
+  arm64: dts: mt8192: Add APU node
+  arm64: dts: mt8192: Add APU power domain node
+  arm64: dts: mt8192: Set up apu power domain regulators
+
+ .../arm/mediatek/mediatek,apusys.yaml         |  50 ++
+ .../soc/mediatek/mediatek,apu-pm.yaml         | 144 ++++
+ arch/arm64/boot/dts/mediatek/mt8192-evb.dts   |   7 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |  39 +
+ drivers/clk/mediatek/clk-mt8192.c             |  91 +++
+ drivers/soc/mediatek/Kconfig                  |  12 +
+ drivers/soc/mediatek/Makefile                 |   1 +
+ drivers/soc/mediatek/apusys/Kconfig           |  14 +
+ drivers/soc/mediatek/apusys/Makefile          |   2 +
+ drivers/soc/mediatek/apusys/mtk-apu-pm.c      | 727 ++++++++++++++++++
+ include/dt-bindings/clock/mt8192-clk.h        |  14 +-
+ 11 files changed, 1099 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,apusys.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,apu-pm.yaml
+ create mode 100644 drivers/soc/mediatek/apusys/Kconfig
+ create mode 100644 drivers/soc/mediatek/apusys/Makefile
+ create mode 100644 drivers/soc/mediatek/apusys/mtk-apu-pm.c
+
+-- 
+2.18.0
 

@@ -2,146 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B6E470854
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A238470858
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241830AbhLJSTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S241988AbhLJSU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236984AbhLJSTh (ORCPT
+        with ESMTP id S236861AbhLJSU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:19:37 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B752C061746;
-        Fri, 10 Dec 2021 10:16:01 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id k37so19614350lfv.3;
-        Fri, 10 Dec 2021 10:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bcvtGiLbR5hJWeiVCch89vaOnPBEjfgkGhnDVgGToIE=;
-        b=G0qTQ3KGFrwps8qADsCL0qK6agYLp7ivalOB/mF7ukTMqKqODRUNPClBA+tjj958iZ
-         zDP5ALcBXKrVg0xx9H2ws3hyb3r6CIVdqsbS/GVCsvrWbnNO0HGlLBE864udH5VLQpzA
-         E4ZCGQvWrQ3sm3YxkToWB7AGuZSE/qHZ86M8KsEpcZTMCU4IFoRlulk9U2f7fjt0DgcE
-         dievaYp3/3GIUU6nMVScS6FhLqdlOsaTCJ8+eRNM/gp2aIGsGid35kag1Oq9XwyLJEZe
-         Lsdj6NoONSIfbrp21Zrfz1ZI08pSDTMKtV8ZG3ySXOqe/j3lBC+KMsiD//GTJ5tyuvfx
-         eTTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bcvtGiLbR5hJWeiVCch89vaOnPBEjfgkGhnDVgGToIE=;
-        b=B2YaX8YchuIOTbrMehsC8kvH1WDukRXWmKM/NjZzZf2bG7U0CtW8eQFXVK3/7uvgWg
-         qEK8RGw3yDV9SJkp4TD/joABG62bY9gzvjgblarNqYbYPpegazx1kOGEwa7JVaz2IiuY
-         1wirpF5/gH91VKw9uV4CL/uPMdEHMHESfu7gGipU7nvJQiP5FJJ0+EroS3DV1ssYZ39f
-         dFA9XuSPZcHi3+mfLPEN1zbcTIwhZtzmxhYPKCX4JWjMAO7C9PcpdR5LPg2PFB9QxRqE
-         B36HdnvymmZbyyJb3v3ALJbLqWkUj2OB9XQgF/DIp0WL0PdojBU/J44dGQ60VHrWKo/C
-         aKUg==
-X-Gm-Message-State: AOAM530/TtTLYYq0CMMDvbzTaHhY/owTeaOZ3C4fSWYH8NVm6WlU3wFH
-        /SB/CiCM6eA1+sFTwcXXVAZZZCYDAHg=
-X-Google-Smtp-Source: ABdhPJwR/4XeF0n78EyaU8daj5gqPU1YI5WhyixXiCZ/1XxnYO6fYoSxPShwkvEp5UZp5BYd303wDQ==
-X-Received: by 2002:a05:6512:40b:: with SMTP id u11mr13847699lfk.377.1639160159550;
-        Fri, 10 Dec 2021 10:15:59 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id q15sm379095lfp.32.2021.12.10.10.15.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 10:15:59 -0800 (PST)
-Subject: Re: [PATCH v4 07/25] reboot: Remove extern annotation from function
- prototypes
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20211126180101.27818-1-digetx@gmail.com>
- <20211126180101.27818-8-digetx@gmail.com>
- <CAJZ5v0i=zgubEtF5-Wnaqa5FMnfVUdSnEmD11-LAuYCH8ZCwrA@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <acf8289e-6ab8-6eda-ec06-e9044ddd9a92@gmail.com>
-Date:   Fri, 10 Dec 2021 21:15:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 10 Dec 2021 13:20:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594D6C061746;
+        Fri, 10 Dec 2021 10:16:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E5F0B8294F;
+        Fri, 10 Dec 2021 18:16:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16AB2C00446;
+        Fri, 10 Dec 2021 18:16:46 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 18:16:43 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        gregkh <gregkh@linuxfoundation.org>, quic_psodagud@quicinc.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCHv6 1/5] arm64: io: Use asm-generic high level MMIO
+ accessors
+Message-ID: <YbOZi+akT0+1EIoi@arm.com>
+References: <cover.1638858746.git.quic_saipraka@quicinc.com>
+ <a5287f999f7e42e66de0729f367959fdb28462e0.1638858746.git.quic_saipraka@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0i=zgubEtF5-Wnaqa5FMnfVUdSnEmD11-LAuYCH8ZCwrA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a5287f999f7e42e66de0729f367959fdb28462e0.1638858746.git.quic_saipraka@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-10.12.2021 21:09, Rafael J. Wysocki пишет:
-> On Fri, Nov 26, 2021 at 7:02 PM Dmitry Osipenko <digetx@gmail.com> wrote:
->>
->> There is no need to annotate function prototypes with 'extern', it makes
->> code less readable. Remove unnecessary annotations from <reboot.h>.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+On Tue, Dec 07, 2021 at 12:24:45PM +0530, Sai Prakash Ranjan wrote:
+> Remove custom arm64 MMIO accessors read{b,w,l,q} and their relaxed
+> versions in support to use asm-generic defined accessors. Also define
+> one set of IO barriers (ar/bw version) used by asm-generic code to
+> override the arm64 specific variants.
 > 
-> I'm not sure that this is really useful.
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> ---
+>  arch/arm64/include/asm/io.h | 41 ++++++++-----------------------------
+>  1 file changed, 8 insertions(+), 33 deletions(-)
 > 
-> Personally, I tend to respect the existing conventions like this.
-> 
-> Surely, this change is not required for the rest of the series to work.
+> diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
+> index 7fd836bea7eb..1b436810d779 100644
+> --- a/arch/arm64/include/asm/io.h
+> +++ b/arch/arm64/include/asm/io.h
+> @@ -91,7 +91,7 @@ static inline u64 __raw_readq(const volatile void __iomem *addr)
+>  }
+>  
+>  /* IO barriers */
+> -#define __iormb(v)							\
+> +#define __io_ar(v)							\
+>  ({									\
+>  	unsigned long tmp;						\
+>  									\
+> @@ -108,39 +108,14 @@ static inline u64 __raw_readq(const volatile void __iomem *addr)
+>  		     : "memory");					\
+>  })
+>  
+> -#define __io_par(v)		__iormb(v)
+> -#define __iowmb()		dma_wmb()
+> -#define __iomb()		dma_mb()
+> -
+> -/*
+> - * Relaxed I/O memory access primitives. These follow the Device memory
+> - * ordering rules but do not guarantee any ordering relative to Normal memory
+> - * accesses.
+> - */
+> -#define readb_relaxed(c)	({ u8  __r = __raw_readb(c); __r; })
+> -#define readw_relaxed(c)	({ u16 __r = le16_to_cpu((__force __le16)__raw_readw(c)); __r; })
+> -#define readl_relaxed(c)	({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+> -#define readq_relaxed(c)	({ u64 __r = le64_to_cpu((__force __le64)__raw_readq(c)); __r; })
+> +#define __io_bw()		dma_wmb()
+> +#define __io_br(v)
+> +#define __io_aw(v)
+>  
+> -#define writeb_relaxed(v,c)	((void)__raw_writeb((v),(c)))
+> -#define writew_relaxed(v,c)	((void)__raw_writew((__force u16)cpu_to_le16(v),(c)))
+> -#define writel_relaxed(v,c)	((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+> -#define writeq_relaxed(v,c)	((void)__raw_writeq((__force u64)cpu_to_le64(v),(c)))
+> -
+> -/*
+> - * I/O memory access primitives. Reads are ordered relative to any
+> - * following Normal memory access. Writes are ordered relative to any prior
+> - * Normal memory access.
+> - */
+> -#define readb(c)		({ u8  __v = readb_relaxed(c); __iormb(__v); __v; })
+> -#define readw(c)		({ u16 __v = readw_relaxed(c); __iormb(__v); __v; })
+> -#define readl(c)		({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
+> -#define readq(c)		({ u64 __v = readq_relaxed(c); __iormb(__v); __v; })
+> -
+> -#define writeb(v,c)		({ __iowmb(); writeb_relaxed((v),(c)); })
+> -#define writew(v,c)		({ __iowmb(); writew_relaxed((v),(c)); })
+> -#define writel(v,c)		({ __iowmb(); writel_relaxed((v),(c)); })
+> -#define writeq(v,c)		({ __iowmb(); writeq_relaxed((v),(c)); })
+> +/* arm64-specific, don't use in portable drivers */
+> +#define __iormb(v)		__io_ar(v)
+> +#define __iowmb()		__io_bw()
+> +#define __iomb()		dma_mb()
 
-Problem that such things start to spread all over the kernel with a
-copy-paste approach if there is nobody to clean up the code.
+More of a nitpick but I'd keep the __iormb()/__iowmb() as they currently
+are and just define the generic __io_ar() etc. in terms of the former.
 
-This is not a common convention and sometimes it's getting corrected [1].
-
-[1] https://git.kernel.org/linus/6d7434931
+-- 
+Catalin

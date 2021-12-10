@@ -2,122 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA24470E46
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD1C470E4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243586AbhLJXD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 18:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239946AbhLJXDZ (ORCPT
+        id S1344715AbhLJXER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 18:04:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48782 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239946AbhLJXEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 18:03:25 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8BC061746;
-        Fri, 10 Dec 2021 14:59:49 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id l25so34804003eda.11;
-        Fri, 10 Dec 2021 14:59:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T2puOokeCNV8xWAxhgz6YPlQa9F/yVQdmT6GpYFr/Zc=;
-        b=CCL811133lml5fd6U1ueyd3Fxrn45u9zqPDFGfCdpB/EXRG6oRsNsMDuyE8XFpDFnA
-         4V2noEE0PHrv0wyttvk2BRV2Q1ES7+OXiAAenzWydEFyOXiEAcFH8o0mzCXHzeDYNfJN
-         JkzViCvaGid5GI/ve3nYCm8wANkiYNziU39tud7fDjTNWxLQVMmnE0hXfjiVLZG/HaRi
-         0aql2OVCN0CZ5rT7OFz80abW5d+oQAtz3ATZuugl8XyUG7gThjP+bWB7js7NkpBX6+JK
-         y2LBvwYPpqoaMhuv29/y8hU0XcZhdlX4p3cPBXqQCj1BKJsc6EzhySIeqdy8geOAyo9a
-         NJxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T2puOokeCNV8xWAxhgz6YPlQa9F/yVQdmT6GpYFr/Zc=;
-        b=6+A39iTAaI9rcna9HSsNPuIhh7SU6deiceqk3FbzKm7RHgzPmZNaXDNY/zSW/5oI6g
-         S0CLjJgr9pbAi2Vb7FozbU+EvSAbRAA6S4o8Dl2ctZrwkheaD9wVJ7Eb6Co5Sj1MqOMz
-         QzwAtoUFSzts68G70YrXDjFFyG3idcuFMDMsZhuEE2SW7TOKiAMyNMMlxWR81YVPdh0h
-         MgrKsGNr/c2pcZKNXg1iEPb7zDs0ra2FC4qHSCpSM/Tee73IWND1z/0hxhYZE/yens7b
-         Nixy0RTjOfkrWwELC+AJ4vNeIuUrUZstEAgVLfIsMXCwoG4HH8Y/y3ENoTj8UeOUC1vn
-         vQmQ==
-X-Gm-Message-State: AOAM533VugPtSD5IzUe8HSI7FQsQf3btAns4oNTzGrxjqdmbXFtlSNzg
-        K3yWaOSjAGWnl4QzmiTmYYI=
-X-Google-Smtp-Source: ABdhPJwZw8dSkutBgvsjnnlCtJC5aztTokriuEiyFlFXjYartfxcC9JMZ/9I4QWDbVzqZf+BkDizYw==
-X-Received: by 2002:a05:6402:40d3:: with SMTP id z19mr43198775edb.185.1639177187825;
-        Fri, 10 Dec 2021 14:59:47 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id w5sm2214182edc.58.2021.12.10.14.59.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 14:59:47 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <c381aa2c-beb5-480f-1f24-a14de693e78f@redhat.com>
-Date:   Fri, 10 Dec 2021 23:59:42 +0100
+        Fri, 10 Dec 2021 18:04:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66864B82A0E;
+        Fri, 10 Dec 2021 23:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5501C00446;
+        Fri, 10 Dec 2021 23:00:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639177238;
+        bh=Xf3wfuPLYn/SESXVwB3nh4TuzPlgFih4NYbO3gmcg18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PqmEu0kVkT+hrHBkWwXw69EzEtYbWKYEMBbLX9z/lY5lK0gUztiNcJSbeRhtGHmJt
+         vuyopJNHT0DXXA0GPDRKONnHjScc+xvb9mqzaa3/KMvH9pm8xnqdvlhv4EQBAEnIdT
+         TYgG2u+Kk43a8VbIB+bTxRg3YcT2MEapslbychbtPs2F72BnyKX1Rc4ZfdmeggvIuo
+         WBEeQl7h6mziPSx0TGidWC4ClwJNVHOjH4JNpc4nceKYIy6PzXcw04cEgSDrDbS9ya
+         s9Gl5gplIAtOxth+h+dVp0qrMCEmzduYdv2kgkMkFbU75r7YBw/ubk6klANRb9ukXA
+         rWVsX4vFjeATQ==
+Date:   Fri, 10 Dec 2021 15:00:36 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Martijn Coenen <maco@android.com>,
+        Xie Yongji <xieyongji@bytedance.com>
+Subject: Re: [GIT PULL] aio poll fixes for 5.16-rc5
+Message-ID: <YbPcFIUFYmEueuXX@sol.localdomain>
+References: <YbOdV8CPbyPAF234@sol.localdomain>
+ <CAHk-=wh5X0iQ7dDY1joBj0eoZ65rbMb4-v0ewirN1teY8VD=8A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor
- kvm_perf_overflow{_intr}()
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>, Andi Kleen <ak@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-References: <20211130074221.93635-1-likexu@tencent.com>
- <20211130074221.93635-5-likexu@tencent.com>
- <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
- <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com>
- <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
- <b6c1eb18-9237-f604-9a96-9e6ca397121c@redhat.com>
- <CALMp9eRy==yu1uQriqbeezeQ+mtFyfyP_iy9HdDiSZ27SnEfFg@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CALMp9eRy==yu1uQriqbeezeQ+mtFyfyP_iy9HdDiSZ27SnEfFg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wh5X0iQ7dDY1joBj0eoZ65rbMb4-v0ewirN1teY8VD=8A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 23:55, Jim Mattson wrote:
->>
->> Even for tracing the SDM says "Like the value returned by RDTSC, TSC
->> packets will include these adjustments, but other timing packets (such
->> as MTC, CYC, and CBR) are not impacted".  Considering that "stand-alone
->> TSC packets are typically generated only when generation of other timing
->> packets (MTCs and CYCs) has ceased for a period of time", I'm not even
->> sure it's a good thing that the values in TSC packets are scaled and offset.
->>
->> Back to the PMU, for non-architectural counters it's not really possible
->> to know if they count in cycles or not.  So it may not be a good idea to
->> special case the architectural counters.
->
-> In that case, what we're doing with the guest PMU is not
-> virtualization. I don't know what it is, but it's not virtualization.
-
-It is virtualization even if it is incompatible with live migration to a 
-different SKU (where, as you point out below, multiple TSC frequencies 
-might also count as multiple SKUs).  But yeah, it's virtualization with 
-more caveats than usual.
-
-> Exposing non-architectural events is questionable with live migration,
-> and TSC scaling is unnecessary without live migration. I suppose you
-> could have a migration pool with different SKUs of the same generation
-> with 'seemingly compatible' PMU events but different TSC frequencies,
-> in which case it might be reasonable to expose non-architectural
-> events, but I would argue that any of those 'seemingly compatible'
-> events are actually not compatible if they count in cycles.
-
-I agree.  Support for marshaling/unmarshaling PMU state exists but it's 
-more useful for intra-host updates than for actual live migration, since 
-these days most live migration will use TSC scaling on the destination.
-
-Paolo
-
+On Fri, Dec 10, 2021 at 02:18:12PM -0800, Linus Torvalds wrote:
+> On Fri, Dec 10, 2021 at 10:33 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> >
+> > This has been tested with the libaio test suite, as well as with test
+> > programs I wrote that reproduce the first two bugs.  I am sending this
+> > pull request myself as no one seems to be maintaining this code.
 > 
-> Unless, of course, Like is right, and the PMU counters do count fractionally.
+> Pulled.
 > 
+> The "nobody really maintains or cares about epoll/aio" makes me wonder
+> if we should just remove the "if EXPERT" from the config options we
+> have on them, and start encouraging people to perhaps not even build
+> that code any more?
+> 
+> Because I'm sure we have users of it, but maybe they are few enough
+> that saying "don't enable this feature unless you need it" is the
+> right thing to do...
 
+Isn't epoll more commonly used than aio?  Either way, removing 'if EXPERT' from
+both would make sense, so that they aren't forced on just because someone didn't
+set CONFIG_EXPERT.  I think that a lot of people have these options enabled but
+don't need them.  Android used to be in that boat for CONFIG_AIO (i.e. it wasn't
+needed but was sometimes enabled anyway, maybe due to !CONFIG_EXPERT).
+Unfortunately Android has started depending on CONFIG_AIO, so it seems Android
+will need to keep it set, but I think most other Linux systems don't need it.
+
+- Eric

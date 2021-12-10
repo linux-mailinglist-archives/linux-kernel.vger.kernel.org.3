@@ -2,140 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A031C470108
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE23C470114
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241243AbhLJM6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:58:42 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49838 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241067AbhLJM6l (ORCPT
+        id S241422AbhLJNCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:02:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36726 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233777AbhLJNCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:58:41 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BACRpuu028782;
-        Fri, 10 Dec 2021 12:54:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=P8NxtWpypggT43TiPhPCjS93PqOOrE9plYGcwIADtkY=;
- b=OOz357Gsmrh8KLUXbEdXeMLR9f3nQfLJqSScScU3s8KJ+hsqzCLkqPGwBHIfusQGy2uO
- SzwS4SR4dqHMGpfhlE8hj0D82j2kj1tIGurcnPhUYzW27tlE+hv8hsG2tWUBMo58B3Cb
- tC/2Mac4HbZfV8c3CuEfhAj8yICYeaNqZePWDloUIKKzl4LmYB72S3lOUHMjTj9HcXvf
- 3JtwlHYv83MmFVedV1ZgkG5iI2ox7+WvDR44w8w8JuOkfiHvZ5eiXHZMEbY82ddTlDfW
- EaEAYoVh0FN33mD2hBocfrCszdvKSBjqPPc2di8EQ62uJdYhIsiBlzQzXwq0+y4x9hxB cQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cv6ww0g2b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 12:54:55 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BACRiYw028654;
-        Fri, 10 Dec 2021 12:54:55 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cv6ww0g1v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 12:54:54 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BACq6HQ031550;
-        Fri, 10 Dec 2021 12:54:52 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3cqyyagtw7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 12:54:52 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BACsl4R21233954
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 12:54:47 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A776A4054;
-        Fri, 10 Dec 2021 12:54:47 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D118A405C;
-        Fri, 10 Dec 2021 12:54:45 +0000 (GMT)
-Received: from sig-9-65-75-5.ibm.com (unknown [9.65.75.5])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 12:54:45 +0000 (GMT)
-Message-ID: <d72550d9690d563e4c43220111b39d2d55ea10ff.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     jejb@linux.ibm.com,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Fri, 10 Dec 2021 07:54:44 -0500
-In-Reply-To: <d321f676a5ba54ae1704f5e23f0b134e70dfea3f.camel@linux.ibm.com>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
-         <20211208221818.1519628-16-stefanb@linux.ibm.com>
-         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
-         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
-         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
-         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
-         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-         <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
-         <d321f676a5ba54ae1704f5e23f0b134e70dfea3f.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XRyjxnJ0BmzTdVjLISQpGgMEcKw-kMNx
-X-Proofpoint-ORIG-GUID: Lrhpzyr38RYmizTFmcMlH758q0V0LBUv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_03,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
- malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100070
+        Fri, 10 Dec 2021 08:02:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 549E5B827F5;
+        Fri, 10 Dec 2021 12:59:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BFFC341C6;
+        Fri, 10 Dec 2021 12:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639141154;
+        bh=CUnM6j3bfj/xWpGWZipfwOsGfxf4k2eiApr8tWcJ5n8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GKWi8yL3wa7VE//U7h9MyDVXW9cl/DO1K+J0bgj7rFwu88MCOmln/1RBwXeE1rUSh
+         AB/8LPPvfJ2aNtxlO8i+Lp20RUwwAp/TMXpBDrGTM0t/JBSvrslL5DlKLNg6ztVznO
+         kpdjPtXVMDQiSyH9tJmhUpXL8gtpuEaOCrfQ+jAj8mPdQwLU7xYmV9EtynJx/oICWB
+         3YWMerGvyW4KHPRyo4c79eVIz9+65ZBWj4saTqOU2NpKZh04zmMLJ8jZn1dVQl+017
+         8hbZfjLdRb3fHbnXdAW4V/3wKEbSnpepIxA0/yfCEQGha0HGiTLqYCHe0ixZRqQdQn
+         UIlxSWWXpyKDQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mvfUV-000GDW-Sb; Fri, 10 Dec 2021 13:59:11 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 0/3] media: si2157: do some minor improvements at the driver
+Date:   Fri, 10 Dec 2021 13:59:07 +0100
+Message-Id: <cover.1639140967.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 07:40 -0500, James Bottomley wrote:
-> On Fri, 2021-12-10 at 07:09 -0500, Mimi Zohar wrote:
-> > On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
-> > > > There's still the problem that if you write the policy, making
-> > > > the file disappear then unmount and remount securityfs it will
-> > > > come back.  My guess for fixing this is that we only stash the
-> > > > policy file reference, create it if NULL but then set the pointer
-> > > > to PTR_ERR(-EINVAL) or something and refuse to create it for that
-> > > > value.
-> > > 
-> > > Some sort of indicator that gets stashed in struct ima_ns that the
-> > > file does not get recreated on consecutive mounts. That shouldn't
-> > > be hard to fix.
-> 
-> Yes, Stefan said he was doing that.
-> 
-> > The policy file disappearing is for backwards compatibility, prior to
-> > being able to extend the custom policy.  For embedded usecases,
-> > allowing the policy to be written exactly once might makes sense.  Do
-> > we really want/need to continue to support removing the policy in
-> > namespaces?
-> 
-> The embedded world tends also to be a big consumer of namespaces, so if
-> this semantic is for them, likely it should remain in the namespaced
-> IMA.
+The si21xx terrestrial tuners can support ISDB-T and DTMB (as it is really
+just a tuner, and not a demod), but the missing settings are missing.
 
-Think of a simple device that loads a custom IMA policy, which never
-changes once loaded.
-> 
-> But how necessary is the semantic?  If we got rid of it from the whole
-> of IMA, what would break? If we can't think of anything it could likely
-> be removed from both namespaced and non-namespaced IMA.
+Some of the devices on this family also support bandwidth filters for 1.7 and 6.1.
 
-The question isn't an issue of "breaking", but of leaking info.  If
-this isn't a real concern, then the ability of removing the securityfs
-isn't needed.
+Finally, si2158 and si2157 have identical APIs for analog TV. So, it makes
+sense to also enable it for si2158.
 
-thanks,
+Compile-tested only.
 
-Mimi
+Mauro Carvalho Chehab (3):
+  media: si2157: add support for ISDB-T and DTMB
+  media: si2157: add support for 1.7MHz and 6.1 MHz
+  media: si2157: add ATV support for si2158
+
+ drivers/media/tuners/si2157.c      | 12 +++++++++++-
+ drivers/media/tuners/si2157_priv.h |  8 ++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+-- 
+2.33.1
+
 

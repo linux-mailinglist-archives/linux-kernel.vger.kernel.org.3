@@ -2,131 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 207B44700D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416AD4700DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241141AbhLJMog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:44:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39700 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235838AbhLJMof (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:44:35 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BACT2Cg029161;
-        Fri, 10 Dec 2021 12:40:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=mcvB4ZKrTPS+PcRdTZblXwUsuW4rFbow5N/jDPyjKf0=;
- b=XtTFbJQWmbsz4FQmd5tG+2ATuSdUWozI+wZ8xt11DrMbhQq6mKLC15fUu7xpL+8IU97f
- 5T6D9eFJscluwgSSG6vKrWzUZNzJjPX31njy3KdCyvt3rl+OmEgW5KkPAWZrC9LnXVbi
- 6VcZ7cROisLgcc95OMBzCok4DvI4B1DfqdgmYhwBI3VjJmBkhOl7F91t7geHzGqiYs1h
- 2VHc95RCgL7osFhxkod16qg/NLCF+O/FjNMWsKypBT7omvnOIED91+BjhUA3R1gdPGiW
- MzdBn1htceXhPsrpK55mxLJJF/HPZyDZaIfUztRmNJ5aCqXUlB7LbNWZdiKRK+D8GMyH SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv6xar6vm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 12:40:49 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BACWSoI010321;
-        Fri, 10 Dec 2021 12:40:48 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv6xar6v5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 12:40:48 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BACcdIm029788;
-        Fri, 10 Dec 2021 12:40:47 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01wdc.us.ibm.com with ESMTP id 3cqyyceddr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 12:40:47 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BACejAS27197762
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Dec 2021 12:40:45 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A922B78068;
-        Fri, 10 Dec 2021 12:40:45 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D03137806D;
-        Fri, 10 Dec 2021 12:40:42 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Dec 2021 12:40:42 +0000 (GMT)
-Message-ID: <d321f676a5ba54ae1704f5e23f0b134e70dfea3f.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Fri, 10 Dec 2021 07:40:41 -0500
-In-Reply-To: <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
-         <20211208221818.1519628-16-stefanb@linux.ibm.com>
-         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
-         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
-         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
-         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
-         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-         <2587716d7d021c35e3b6ef22b6e30f44c2b3f98e.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S241151AbhLJMpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:45:02 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:55274 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235838AbhLJMpA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 07:45:00 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 307351EC054F;
+        Fri, 10 Dec 2021 13:41:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639140080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ay4t+Rta+j2Pv6WskGypmlIpnaxwRU3/Qx68CnUF9ek=;
+        b=QqWIeVFT+KqogRru2TCdIdINaoSzHXqcmspWvlZG1lJOYD/JQLBakqJ4YISr8zjmLMvaTd
+        /gnsF/ADfEkEGpRAjaixcmVPe3hQLD3g0V2UGj1C4nf0gi8I8RKnVVSpwXZwaoLYRVC/2C
+        D72xRMVxN+I0T3x3ATDKGeOWK6ZJH6k=
+Date:   Fri, 10 Dec 2021 13:41:26 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
+        william.roche@oracle.com
+Subject: Re: [PATCH 4/4] EDAC/amd64: Add DDR5 support and related register
+ changes
+Message-ID: <YbNK9jV06al93XDN@zn.tnic>
+References: <20211208174356.1997855-1-yazen.ghannam@amd.com>
+ <20211208174356.1997855-5-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Jpn_R-ynv9PZrE1JedW0HfWD4UlMpACb
-X-Proofpoint-ORIG-GUID: mkbRS4mEuAp1y0MVzgtIhJEGKQkApGle
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_03,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
- impostorscore=0 suspectscore=0 clxscore=1015 mlxscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112100070
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211208174356.1997855-5-yazen.ghannam@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 07:09 -0500, Mimi Zohar wrote:
-> On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
-> > > There's still the problem that if you write the policy, making
-> > > the file disappear then unmount and remount securityfs it will
-> > > come back.  My guess for fixing this is that we only stash the
-> > > policy file reference, create it if NULL but then set the pointer
-> > > to PTR_ERR(-EINVAL) or something and refuse to create it for that
-> > > value.
-> > 
-> > Some sort of indicator that gets stashed in struct ima_ns that the
-> > file does not get recreated on consecutive mounts. That shouldn't
-> > be hard to fix.
+On Wed, Dec 08, 2021 at 05:43:56PM +0000, Yazen Ghannam wrote:
+> Future AMD systems will support DDR5.
+> 
+> Add support for changes in register addresses for these systems.
+> 
+> Introduce a "family flags" bitmask that can be used to indicate any
+> special behavior needed on a per-family basis.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>  drivers/edac/amd64_edac.c | 61 +++++++++++++++++++++++++++++++++++----
+>  drivers/edac/amd64_edac.h | 11 +++++++
+>  2 files changed, 66 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> index 1df763128483..e37a8e0cef7e 100644
+> --- a/drivers/edac/amd64_edac.c
+> +++ b/drivers/edac/amd64_edac.c
+> @@ -15,6 +15,36 @@ static struct msr __percpu *msrs;
+>  
+>  static struct amd64_family_type *fam_type;
+>  
+> +/* Family flag helpers */
+> +static inline bool has_ddr5(void)
+> +{
+> +	return fam_type->flags.has_ddr5;
 
-Yes, Stefan said he was doing that.
+A flag about ddr5 *and* a function of the same name. Kinda too much,
+don't ya think?
 
-> The policy file disappearing is for backwards compatibility, prior to
-> being able to extend the custom policy.  For embedded usecases,
-> allowing the policy to be written exactly once might makes sense.  Do
-> we really want/need to continue to support removing the policy in
-> namespaces?
+> @@ -1628,6 +1660,17 @@ static void determine_memory_type(struct amd64_pvt *pvt)
+>  			dimm_cfg |= pvt->umc[i].dimm_cfg;
+>  		}
+>  
+> +		/* Check if system supports DDR5 and has DDR5 DIMMs in use. */
+> +		if (has_ddr5() && (umc_cfg & BIT(0))) {
+> +			if (dimm_cfg & BIT(5))
+> +				pvt->dram_type = MEM_LRDDR5;
+> +			else if (dimm_cfg & BIT(4))
+> +				pvt->dram_type = MEM_RDDR5;
+> +			else
+> +				pvt->dram_type = MEM_DDR5;
+> +			return;
+> +		}
+> +
+>  		if (dimm_cfg & BIT(5))
+>  			pvt->dram_type = MEM_LRDDR4;
+>  		else if (dimm_cfg & BIT(4))
+> @@ -2174,8 +2217,13 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
+>  	 * There is one mask per DIMM, and two Chip Selects per DIMM.
+>  	 *	CS0 and CS1 -> DIMM0
+>  	 *	CS2 and CS3 -> DIMM1
+> +	 *
+> +	 *	Systems with DDR5 support have one mask per Chip Select.
+>  	 */
+> -	dimm = csrow_nr >> 1;
+> +	if (has_ddr5())
+> +		dimm = csrow_nr;
+> +	else
+> +		dimm = csrow_nr >> 1;
+>  
+>  	/* Asymmetric dual-rank DIMM support. */
+>  	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
+> @@ -2937,6 +2985,7 @@ static struct amd64_family_type family_types[] = {
+>  		.f0_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F0,
+>  		.f6_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F6,
+>  		.max_mcs = 12,
+> +		.flags.has_ddr5 = 1,
 
-The embedded world tends also to be a big consumer of namespaces, so if
-this semantic is for them, likely it should remain in the namespaced
-IMA.
+So judging by the name, this means that model 0x10 has DDR5. But I think
+you wanna say whether it supports DDR5 or not?
 
-But how necessary is the semantic?  If we got rid of it from the whole
-of IMA, what would break? If we can't think of anything it could likely
-be removed from both namespaced and non-namespaced IMA.
+Or does M10 support DDR5 only?
 
-James
+But it doesn't look like it from the comment above:
 
+	"Check if system supports DDR5 and has DDR5 DIMMs in use."
 
+So why is this thing set statically only for this model instead of
+detecting from the hw whether there are ddr5 or ddr5 DIMMs and what it
+supports?
+
+And then you can use the defines you just added in patch 1.
+
+I'm confused.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

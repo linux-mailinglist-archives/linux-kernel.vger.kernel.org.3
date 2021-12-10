@@ -2,253 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 548B04709E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1793470A38
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 20:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343535AbhLJTN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 14:13:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33684 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbhLJTN5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:13:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7749EB829BE;
-        Fri, 10 Dec 2021 19:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF196C00446;
-        Fri, 10 Dec 2021 19:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639163419;
-        bh=MjW1Fpjxl/djfZyI0SFVyxDpWQY7QPvsplp+v8eHKWE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ACMXnaKtN/7NtK3bR1qiAB/GomO+x70mlr9jJTIh+uFVhDPs3LBveOldxk2YV7/XZ
-         0YaFJ/6no+l2/7k7rX8uwYWCaOVdDjdpyFjdz8McUmwLeZtBaNRd6/1pUxyjAqHq9F
-         3qPn/w5itIv2Cpk9oWdgq0/duPXqH8wv3F46U82SYv+jyTt2OKaIA1yY/dMEHZSr3w
-         RyD+jZ8uh2yk0GPSGDmC7TAmsTS3rDwJCR6NiTVn/Y+Dz2guGFKHjmc8mFmWmqMqU8
-         QDUPD9fNZlt3iwoG+OhGbM/d/ESiY3Og0ul+cG6Fu1nJnDQe3yllUJQmZDUY8ZOTQL
-         wFTwdrJ/Xxc8Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 68B80405D8; Fri, 10 Dec 2021 16:10:17 -0300 (-03)
-Date:   Fri, 10 Dec 2021 16:10:17 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
+        id S1343549AbhLJTV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 14:21:29 -0500
+Received: from mga14.intel.com ([192.55.52.115]:15844 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235292AbhLJTV2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 14:21:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639163873; x=1670699873;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=3EHValpJ29nH+vMGckzz7nU/Iej7vZerlJ9zwjcABL8=;
+  b=ONP4pCSm5AIU1NtbdRZgIJkqi3f8dgfBu17u+csxeza40d3v4NEq5Y+u
+   cidU+lK4Q3rKmLWNlVSDwgJxbpx+R59qmkuDh5/bB7F19eZBZXttGl0cc
+   S1UH/ktK0cKij2bqool5/KVNtdIfrVo3s1/bMUiS4q7TIwwzoDD50faC8
+   sn7/tmuFT+t6Ez32WyI2jJbBm/0i/h1Dx2w6DGec9apgPYxFGFInWewq/
+   npQDQKgPSqko9cUkGbYZfrm9aSrHPrdEjuLBJGyStYiT8n8yPmAzdsMUx
+   mt27uQu9VfGRJ9IPMA2q8Vhoi8NMjRkLIQhlbk37bj8zNwS5A9GWwwIVb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238646741"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="238646741"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:13:01 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="607606386"
+Received: from klarson-mobl.amr.corp.intel.com (HELO [10.251.16.229]) ([10.251.16.229])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 11:12:57 -0800
+Subject: Re: [PATCH v8 27/40] x86/boot: Add Confidential Computing type to
+ setup_data
+To:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, eranian@google.com
-Subject: Re: [PATCH 02/22] perf stat: Add aggr creators that are passed a cpu.
-Message-ID: <YbOmGdzZAJ8q8Lz6@kernel.org>
-References: <20211208024607.1784932-1-irogers@google.com>
- <20211208024607.1784932-3-irogers@google.com>
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-28-brijesh.singh@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <1fdaca61-884a-ac13-fb33-a47db198f050@intel.com>
+Date:   Fri, 10 Dec 2021 11:12:54 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208024607.1784932-3-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20211210154332.11526-28-brijesh.singh@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 07, 2021 at 06:45:47PM -0800, Ian Rogers escreveu:
-> The cpu_map and index can get confused. Add variants of the cpu_map__get
-> routines that are passed a cpu. Make the existing cpu_map__get routines
-> use the new functions with a view to remove them when no longer used.
+On 12/10/21 7:43 AM, Brijesh Singh wrote:
+> +/* AMD SEV Confidential computing blob structure */
+> +#define CC_BLOB_SEV_HDR_MAGIC	0x45444d41
+> +struct cc_blob_sev_info {
+> +	u32 magic;
+> +	u16 version;
+> +	u16 reserved;
+> +	u64 secrets_phys;
+> +	u32 secrets_len;
+> +	u64 cpuid_phys;
+> +	u32 cpuid_len;
+> +};
 
-Looks ok from a quick lock
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/cpumap.c | 79 +++++++++++++++++++++++-----------------
->  tools/perf/util/cpumap.h |  6 ++-
->  2 files changed, 51 insertions(+), 34 deletions(-)
-> 
-> diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-> index 87d3eca9b872..49fba2c53822 100644
-> --- a/tools/perf/util/cpumap.c
-> +++ b/tools/perf/util/cpumap.c
-> @@ -128,21 +128,23 @@ int cpu_map__get_socket_id(int cpu)
->  	return ret ?: value;
->  }
->  
-> -struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
-> -					void *data __maybe_unused)
-> +struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data __maybe_unused)
->  {
-> -	int cpu;
->  	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
->  
-> -	if (idx > map->nr)
-> -		return id;
-> -
-> -	cpu = map->map[idx];
-> -
->  	id.socket = cpu_map__get_socket_id(cpu);
->  	return id;
->  }
->  
-> +struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
-> +				       void *data)
-> +{
-> +	if (idx < 0 || idx > map->nr)
-> +		return cpu_map__empty_aggr_cpu_id();
-> +
-> +	return cpu_map__get_socket_aggr_by_cpu(map->map[idx], data);
-> +}
-> +
->  static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
->  {
->  	struct aggr_cpu_id *a = (struct aggr_cpu_id *)a_pointer;
-> @@ -200,15 +202,10 @@ int cpu_map__get_die_id(int cpu)
->  	return ret ?: value;
->  }
->  
-> -struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data)
-> +struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data)
->  {
-> -	int cpu, die;
-> -	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
-> -
-> -	if (idx > map->nr)
-> -		return id;
-> -
-> -	cpu = map->map[idx];
-> +	struct aggr_cpu_id id;
-> +	int die;
->  
->  	die = cpu_map__get_die_id(cpu);
->  	/* There is no die_id on legacy system. */
-> @@ -220,7 +217,7 @@ struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *dat
->  	 * with the socket ID and then add die to
->  	 * make a unique ID.
->  	 */
-> -	id = cpu_map__get_socket(map, idx, data);
-> +	id = cpu_map__get_socket_aggr_by_cpu(cpu, data);
->  	if (cpu_map__aggr_cpu_id_is_empty(id))
->  		return id;
->  
-> @@ -228,6 +225,15 @@ struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *dat
->  	return id;
->  }
->  
-> +struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx,
-> +				    void *data)
-> +{
-> +	if (idx < 0 || idx > map->nr)
-> +		return cpu_map__empty_aggr_cpu_id();
-> +
-> +	return cpu_map__get_die_aggr_by_cpu(map->map[idx], data);
-> +}
-> +
->  int cpu_map__get_core_id(int cpu)
->  {
->  	int value, ret = cpu__get_topology_int(cpu, "core_id", &value);
-> @@ -239,20 +245,13 @@ int cpu_map__get_node_id(int cpu)
->  	return cpu__get_node(cpu);
->  }
->  
-> -struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data)
-> +struct aggr_cpu_id cpu_map__get_core_aggr_by_cpu(int cpu, void *data)
->  {
-> -	int cpu;
-> -	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
-> -
-> -	if (idx > map->nr)
-> -		return id;
-> -
-> -	cpu = map->map[idx];
-> -
-> -	cpu = cpu_map__get_core_id(cpu);
-> +	struct aggr_cpu_id id;
-> +	int core = cpu_map__get_core_id(cpu);
->  
->  	/* cpu_map__get_die returns a struct with socket and die set*/
-> -	id = cpu_map__get_die(map, idx, data);
-> +	id = cpu_map__get_die_aggr_by_cpu(cpu, data);
->  	if (cpu_map__aggr_cpu_id_is_empty(id))
->  		return id;
->  
-> @@ -260,19 +259,33 @@ struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *da
->  	 * core_id is relative to socket and die, we need a global id.
->  	 * So we combine the result from cpu_map__get_die with the core id
->  	 */
-> -	id.core = cpu;
-> +	id.core = core;
->  	return id;
-> +
->  }
->  
-> -struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data __maybe_unused)
-> +struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data)
-> +{
-> +	if (idx < 0 || idx > map->nr)
-> +		return cpu_map__empty_aggr_cpu_id();
-> +
-> +	return cpu_map__get_core_aggr_by_cpu(map->map[idx], data);
-> +}
-> +
-> +struct aggr_cpu_id cpu_map__get_node_aggr_by_cpu(int cpu, void *data __maybe_unused)
->  {
->  	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
->  
-> +	id.node = cpu_map__get_node_id(cpu);
-> +	return id;
-> +}
-> +
-> +struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data)
-> +{
->  	if (idx < 0 || idx >= map->nr)
-> -		return id;
-> +		return cpu_map__empty_aggr_cpu_id();
->  
-> -	id.node = cpu_map__get_node_id(map->map[idx]);
-> -	return id;
-> +	return cpu_map__get_node_aggr_by_cpu(map->map[idx], data);
->  }
->  
->  int cpu_map__build_socket_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **sockp)
-> diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-> index a27eeaf086e8..c62d67704425 100644
-> --- a/tools/perf/util/cpumap.h
-> +++ b/tools/perf/util/cpumap.h
-> @@ -31,13 +31,17 @@ size_t cpu_map__snprint(struct perf_cpu_map *map, char *buf, size_t size);
->  size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size);
->  size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp);
->  int cpu_map__get_socket_id(int cpu);
-> +struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data);
->  struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx, void *data);
->  int cpu_map__get_die_id(int cpu);
-> +struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data);
->  struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data);
->  int cpu_map__get_core_id(int cpu);
-> +struct aggr_cpu_id cpu_map__get_core_aggr_by_cpu(int cpu, void *data);
->  struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data);
->  int cpu_map__get_node_id(int cpu);
-> -struct aggr_cpu_id  cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data);
-> +struct aggr_cpu_id cpu_map__get_node_aggr_by_cpu(int cpu, void *data);
-> +struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data);
->  int cpu_map__build_socket_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **sockp);
->  int cpu_map__build_die_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **diep);
->  int cpu_map__build_core_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **corep);
-> -- 
-> 2.34.1.400.ga245620fadb-goog
+This is an ABI structure rather than some purely kernel construct, right?
 
--- 
+I searched through all of the specs to which you linked in the cover
+letter.  I looked for "blob", "guid", the magic and part of the GUID
+itself trying to find where this is defined to see if the struct is correct.
 
-- Arnaldo
+I couldn't find anything.
+
+Where is the spec for this blob?  How large is it?  Did you mean to
+leave a 4-byte hole after secrets_len and before cpuid_phys?

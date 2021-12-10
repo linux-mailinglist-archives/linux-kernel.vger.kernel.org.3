@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 551D7470E89
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CD2470E8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 00:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345110AbhLJX1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 18:27:48 -0500
+        id S1345129AbhLJX1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 18:27:49 -0500
 Received: from mga04.intel.com ([192.55.52.120]:19150 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243479AbhLJX1p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 18:27:45 -0500
+        id S1345093AbhLJX1q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 18:27:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1639178650; x=1670714650;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SOPMVTs5Hlkg0tFd/BAzmjmZm2U52sWmpbiZ1hRSr8E=;
-  b=e54Fwbi9rrYa06IVSk4Q96XJNe1bVX5mZzBIerjg29mDfatEQdWOz9/4
-   mHKsoOW4OXCXKlhlUselFDwknN0JhOtZyRBoPu3f8Nye5JfntddJQZuKD
-   F2hMr/xBFptZ9K78EdTINHMFkS1u9MXxp6KhpspkZ/A843e0MfxilDQZs
-   9YDgk47MzQxdF+V0bum0qBHV1velHMztaoZkd2Sp/fQ7m6A6TUlUwXi8r
-   ELLI7GrLFIMDLDQ+4tboEkT4nOy+W6k2j84sg1sFlZusLN1xcxpei4mhz
-   0yz3uago8Fj3vHSxQoBTJ17X5i1V726Uxv5Ek1IhfXyN+kHONOK2a1sXh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237212361"
+  bh=aqh3fjrZFwZQdyV8F2E3MUV9jSvhWsBpM7NLkE5MlFc=;
+  b=WK1WgV+BjOi5AxdBqyD5xr1zW6ydTlU6aseusa04SfAnUkFHX7nJGWfL
+   gho1kBlRkTwqTsrNCWcPsLzbu8Av8b3rNp65gvdkW8zPhnH1lt4dFiUeF
+   h86DHcwdLa17/Xlg1UfX/kIPBaeHsvzsPPZtrrDFngoWZmyn8q0HARhZV
+   oUWbjcJ/MLN4CqXi3BFW56QWvI1v44uAPZsVI1K7zjIgZcIKTh32hpNox
+   ey1PfHF+URwGumBNpzxBQtE94k/6atI6f7suy4AGdA3BkWf30DpROA3UP
+   HRz4mrAbwoTZK6ePrSS0GkPRxrv7n4tvKlZEt5G2eLyJ0v49FdY/ZATQY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="237212364"
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="237212361"
+   d="scan'208";a="237212364"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:24:09 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:24:10 -0800
 X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
-   d="scan'208";a="463861437"
+   d="scan'208";a="463861444"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
   by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:24:09 -0800
 From:   ira.weiny@intel.com
@@ -40,9 +40,9 @@ To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
 Cc:     Ira Weiny <ira.weiny@intel.com>, amd-gfx@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH 1/7] drm/i915: Replace kmap() with kmap_local_page()
-Date:   Fri, 10 Dec 2021 15:23:58 -0800
-Message-Id: <20211210232404.4098157-2-ira.weiny@intel.com>
+Subject: [PATCH 2/7] drm/amd: Replace kmap() with kmap_local_page()
+Date:   Fri, 10 Dec 2021 15:23:59 -0800
+Message-Id: <20211210232404.4098157-3-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211210232404.4098157-1-ira.weiny@intel.com>
 References: <20211210232404.4098157-1-ira.weiny@intel.com>
@@ -54,175 +54,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-kmap() is being deprecated and these usages are all local to the thread
-so there is no reason kmap_local_page() can't be used.
+kmap() is being deprecated.  These maps are thread local and can be
+replaced with kmap_local_page().
 
-Replace kmap() calls with kmap_local_page().
+Replace kmap() with kmap_local_page()
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_shmem.c          | 4 ++--
- drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 8 ++++----
- drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c       | 4 ++--
- drivers/gpu/drm/i915/gt/shmem_utils.c              | 4 ++--
- drivers/gpu/drm/i915/i915_gem.c                    | 8 ++++----
- drivers/gpu/drm/i915/i915_gpu_error.c              | 4 ++--
- 6 files changed, 16 insertions(+), 16 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-index d77da59fae04..fa8b820e14aa 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-@@ -597,9 +597,9 @@ i915_gem_object_create_shmem_from_data(struct drm_i915_private *dev_priv,
- 		if (err < 0)
- 			goto fail;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index c875f1cdd2af..a3a2c73a44bb 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -2281,9 +2281,9 @@ static ssize_t amdgpu_iomem_read(struct file *f, char __user *buf,
+ 		if (p->mapping != adev->mman.bdev.dev_mapping)
+ 			return -EPERM;
  
--		vaddr = kmap(page);
-+		vaddr = kmap_local_page(page);
- 		memcpy(vaddr, data, len);
--		kunmap(page);
-+		kunmap_local(vaddr);
- 
- 		err = pagecache_write_end(file, file->f_mapping,
- 					  offset, len, len,
-diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-index 6d30cdfa80f3..e59e1725e29d 100644
---- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-@@ -144,7 +144,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
- 	intel_gt_flush_ggtt_writes(&to_i915(obj->base.dev)->gt);
- 
- 	p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
--	cpu = kmap(p) + offset_in_page(offset);
-+	cpu = kmap_local_page(p) + offset_in_page(offset);
- 	drm_clflush_virt_range(cpu, sizeof(*cpu));
- 	if (*cpu != (u32)page) {
- 		pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
-@@ -162,7 +162,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
- 	}
- 	*cpu = 0;
- 	drm_clflush_virt_range(cpu, sizeof(*cpu));
--	kunmap(p);
-+	kunmap_local(cpu);
- 
- out:
- 	__i915_vma_put(vma);
-@@ -237,7 +237,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
- 		intel_gt_flush_ggtt_writes(&to_i915(obj->base.dev)->gt);
- 
- 		p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
--		cpu = kmap(p) + offset_in_page(offset);
-+		cpu = kmap_local_page(p) + offset_in_page(offset);
- 		drm_clflush_virt_range(cpu, sizeof(*cpu));
- 		if (*cpu != (u32)page) {
- 			pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
-@@ -255,7 +255,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
- 		}
- 		*cpu = 0;
- 		drm_clflush_virt_range(cpu, sizeof(*cpu));
+-		ptr = kmap(p);
++		ptr = kmap_local_page(p);
+ 		r = copy_to_user(buf, ptr + off, bytes);
 -		kunmap(p);
-+		kunmap_local(cpu);
- 		if (err)
- 			return err;
++		kunmap_local(ptr);
+ 		if (r)
+ 			return -EFAULT;
  
-diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c b/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c
-index f8948de72036..743a414f86f3 100644
---- a/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c
-+++ b/drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c
-@@ -743,7 +743,7 @@ static void swizzle_page(struct page *page)
- 	char *vaddr;
- 	int i;
+@@ -2332,9 +2332,9 @@ static ssize_t amdgpu_iomem_write(struct file *f, const char __user *buf,
+ 		if (p->mapping != adev->mman.bdev.dev_mapping)
+ 			return -EPERM;
  
--	vaddr = kmap(page);
-+	vaddr = kmap_local_page(page);
- 
- 	for (i = 0; i < PAGE_SIZE; i += 128) {
- 		memcpy(temp, &vaddr[i], 64);
-@@ -751,7 +751,7 @@ static void swizzle_page(struct page *page)
- 		memcpy(&vaddr[i + 64], temp, 64);
- 	}
- 
--	kunmap(page);
-+	kunmap_local(vaddr);
- }
- 
- /**
-diff --git a/drivers/gpu/drm/i915/gt/shmem_utils.c b/drivers/gpu/drm/i915/gt/shmem_utils.c
-index 0683b27a3890..cba4f210d093 100644
---- a/drivers/gpu/drm/i915/gt/shmem_utils.c
-+++ b/drivers/gpu/drm/i915/gt/shmem_utils.c
-@@ -104,7 +104,7 @@ static int __shmem_rw(struct file *file, loff_t off,
- 		if (IS_ERR(page))
- 			return PTR_ERR(page);
- 
--		vaddr = kmap(page);
-+		vaddr = kmap_local_page(page);
- 		if (write) {
- 			memcpy(vaddr + offset_in_page(off), ptr, this);
- 			set_page_dirty(page);
-@@ -112,7 +112,7 @@ static int __shmem_rw(struct file *file, loff_t off,
- 			memcpy(ptr, vaddr + offset_in_page(off), this);
- 		}
- 		mark_page_accessed(page);
--		kunmap(page);
-+		kunmap_local(vaddr);
- 		put_page(page);
- 
- 		len -= this;
-diff --git a/drivers/gpu/drm/i915/i915_gem.c b/drivers/gpu/drm/i915/i915_gem.c
-index 981e383d1a5d..af5adb187ca4 100644
---- a/drivers/gpu/drm/i915/i915_gem.c
-+++ b/drivers/gpu/drm/i915/i915_gem.c
-@@ -196,14 +196,14 @@ shmem_pread(struct page *page, int offset, int len, char __user *user_data,
- 	char *vaddr;
- 	int ret;
- 
--	vaddr = kmap(page);
-+	vaddr = kmap_local_page(page);
- 
- 	if (needs_clflush)
- 		drm_clflush_virt_range(vaddr + offset, len);
- 
- 	ret = __copy_to_user(user_data, vaddr + offset, len);
- 
--	kunmap(page);
-+	kunmap_local(vaddr);
- 
- 	return ret ? -EFAULT : 0;
- }
-@@ -618,7 +618,7 @@ shmem_pwrite(struct page *page, int offset, int len, char __user *user_data,
- 	char *vaddr;
- 	int ret;
- 
--	vaddr = kmap(page);
-+	vaddr = kmap_local_page(page);
- 
- 	if (needs_clflush_before)
- 		drm_clflush_virt_range(vaddr + offset, len);
-@@ -627,7 +627,7 @@ shmem_pwrite(struct page *page, int offset, int len, char __user *user_data,
- 	if (!ret && needs_clflush_after)
- 		drm_clflush_virt_range(vaddr + offset, len);
- 
--	kunmap(page);
-+	kunmap_local(vaddr);
- 
- 	return ret ? -EFAULT : 0;
- }
-diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-index 2a2d7643b551..c526d7892081 100644
---- a/drivers/gpu/drm/i915/i915_gpu_error.c
-+++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-@@ -1094,9 +1094,9 @@ i915_vma_coredump_create(const struct intel_gt *gt,
- 
- 			drm_clflush_pages(&page, 1);
- 
--			s = kmap(page);
-+			s = kmap_local_page(page);
- 			ret = compress_page(compress, s, dst, false);
--			kunmap(page);
-+			kunmap_local(s);
- 
- 			drm_clflush_pages(&page, 1);
+-		ptr = kmap(p);
++		ptr = kmap_local_page(p);
+ 		r = copy_from_user(ptr + off, buf, bytes);
+-		kunmap(p);
++		kunmap_local(ptr);
+ 		if (r)
+ 			return -EFAULT;
  
 -- 
 2.31.1

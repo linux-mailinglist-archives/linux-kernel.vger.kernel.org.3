@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0107147090B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86C9470919
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 19:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242344AbhLJSpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 13:45:38 -0500
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:44928 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242028AbhLJSph (ORCPT
+        id S245517AbhLJSrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 13:47:46 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:35601 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237207AbhLJSrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:45:37 -0500
-Received: by mail-lf1-f54.google.com with SMTP id z7so19599455lfi.11;
-        Fri, 10 Dec 2021 10:42:01 -0800 (PST)
+        Fri, 10 Dec 2021 13:47:40 -0500
+Received: by mail-oi1-f170.google.com with SMTP id m6so14436078oim.2;
+        Fri, 10 Dec 2021 10:44:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7/vZFfyyGbtD8bnHKJffHn0egoSdbRjyGjsJBHQqKr8=;
-        b=4t3D4KnQtNe0e8m2yj+Ke9lWji8fQ6sEIbq1hsHiHw7dQDDrphsWCUVCZMGsZ0Z8E4
-         cBqkLGV6xNjeIauAgfB5ARa5EefabYKsPEuuRd5gidnQyV2x84/pfBF1jyyBXCafPJu0
-         ZhBXOtRcCUqdG33+GDuhOsoTLKx32+f+iSdD59hrfrx0CHPvSLc5mm9pzhMANUQCDKhF
-         G09OGFFMMiLdjyMjuwAmJxBgo56GkSZ5k/GEZIUjgv8rzuqJziIghzHVri3/cyPXufqF
-         3tsKlcbAF6C9bKQAfpMx0iZfWL4+tv9/H13qG/AOZ5A9Fzwf93XBSgouNtpUp9/r4Ekc
-         g1WA==
-X-Gm-Message-State: AOAM531ijSZAGikZvOdi+Nwcndj3Uwq3YGm+T/jPejA2xxPdWZtUepIV
-        gpT8wiP9ZfRVfIHYDQyCt0vWeg/1qNwt9jmfdu4=
-X-Google-Smtp-Source: ABdhPJzSirnbrYv9rYoyj9m7S/o4CrKa5bGDf0xNi1iC5x1U8HaTeAfyjlyTD8zPTC5izteDBuj/fwXR4s7T4JgWNNo=
-X-Received: by 2002:a05:6512:3d09:: with SMTP id d9mr14452961lfv.481.1639161720961;
- Fri, 10 Dec 2021 10:42:00 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rlreThK0Sey0EGMizq9uyfo3hzBqI9k/YwHzDsxWXlI=;
+        b=JX8FmQ0/oji75PDjnepH4JDLUydc2JUj1HUUBMpdMQlPARTEpuWKRLTOr4sD5sKbxz
+         u4MSAFMGXhia582DqPv2M7OAl/XFdrWq/KzqHs49xtBj3Uf6l7KM3NkTtfkzctmFOm96
+         DnqtH5cFAKeHUc6bfVjLMQzU7evK4NmGwbr5M1oG6Yqa6H0d3lBB6qdSCtOlg6gEh3lu
+         GiTqpHLCy0rBpjUFKkZVWBdPsmN3MIa0D/Bro9l/tnG2nZp0SNvFa8NLclJSGH1xTCdV
+         dRsK7UbLR91op4gZhpGIs+gRJHvvzyPYF+qhCUbCbivyldNCwDZuE0ddDPZ9bHmfC5dI
+         rNSA==
+X-Gm-Message-State: AOAM533RWbaNz6pUO4ERFave3uKvReFoN2lGTyqfrWb7TEGEXAJroOL9
+        bElBs0BnDo6wHfPrEOE7j+PoTiis5Q==
+X-Google-Smtp-Source: ABdhPJyp/UbVF+mB50ua6SkSEbILc6yqej1hsUMidJLzHaqYNUkPeNuWk9tk1mgGwLLU2y+Yg7NaCQ==
+X-Received: by 2002:a05:6808:15a:: with SMTP id h26mr13549366oie.36.1639161845115;
+        Fri, 10 Dec 2021 10:44:05 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id m22sm768027ooj.8.2021.12.10.10.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 10:44:04 -0800 (PST)
+Received: (nullmailer pid 1681795 invoked by uid 1000);
+        Fri, 10 Dec 2021 18:44:03 -0000
+Date:   Fri, 10 Dec 2021 12:44:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: Re: [PATCH v10 0/7] PCI: brcmstb: root port turns on sub-device power
+Message-ID: <YbOf836C58fUSmCO@robh.at.kernel.org>
+References: <20211209211407.8102-1-jim2101024@gmail.com>
 MIME-Version: 1.0
-References: <20211209200425.303561-1-jolsa@kernel.org> <CAM9d7cjyN_sxMe9yajgnuDRy5234NZQ5sd0e4ynBmCnQSv=WFQ@mail.gmail.com>
- <YbNGxMAu5LYvqtpq@krava>
-In-Reply-To: <YbNGxMAu5LYvqtpq@krava>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 10 Dec 2021 10:41:49 -0800
-Message-ID: <CAM9d7cit-GKyDcVp435np7WSe_KW-+NYD7rHSC10EEoW1EpTSA@mail.gmail.com>
-Subject: Re: [RFC] perf record: Disable debuginfod by default
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        "Frank Ch. Eigler" <fche@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209211407.8102-1-jim2101024@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 4:23 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Thu, Dec 09, 2021 at 03:39:20PM -0800, Namhyung Kim wrote:
-> > Hi Jiri,
-> >
-> > On Thu, Dec 9, 2021 at 12:04 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> > >
-> > > hi,
-> > > after migrating to fedora 35 I found perf record hanging on exit
-> > > and it's because fedora 35 sets DEBUGINFOD_URLS that triggers
-> > > debuginfod query which might take long time to process.
-> > >
-> > > I discussed this briefly with Frank and I'm sending the change
-> > > to disable debuginfod by default in perf record.
-> > >
-> > > Frank had other idea we could discuss here to fork or just spawn
-> > > "/usr/bin/debuginfod-find ...." into background after perf record.
-> > >
-> > > Perhaps there are other ways as well, hence this is RFC ;-)
-> >
-> > I thought the debuginfod was for perf report, not record.
-> > Maybe I'm missing something but how about moving it to
-> > report?  We can talk to debuginfod after checking the local
-> > build-id cache and binary on the system.
->
-> at the end of the perf record we populate buildid cache
-> with profiled binaries for the current perf.data
->
-> **IF** there's DEBUGINFOD_URLS defined, that code will
-> also ask debuginfod for binaries it could not find on
-> the system
+On Thu, Dec 09, 2021 at 04:13:58PM -0500, Jim Quinlan wrote:
+> v10 -- Bindings commit example: in comment, refer to bridge under
+>        controller node as a root port. (Pali)
+>     -- Bindings commit example: remove three properties that are not
+>        appropriate for a PCIe endpoint node. (Rob)
+> 
+> v9  -- Simplify where this mechanism works: instead of looking for
+>        regulators below every bridge, just look for them at the
+>        bridge under the root bus (root port).  Now there is no
+>        modification of portdrv_{pci,core}.c in this submission.
+>     -- Although Pali is working on support for probing native
+>        PCIe controller drivers, this work may take some time to
+>        implement and it still might not be able to accomodate
+>        our driver's requirements (e.g. vreg suspend/resume control).
+>     -- Move regulator suspend/resume control to Brcm RC driver.  It
+>        must reside there because (a) in order to know when to
+>        initiate linkup during resume and (b) to turn on the
+>        regulators before any config-space accesses occur.
 
-Yeah, I know what you're doing.  But I guess debuginfod
-contains binaries for the distro and they'd be available for
-a while.  Then I think we don't need to do it at perf record.
+You now have a mixture of 'generic' add/remove_bus hooks and the host 
+controller suspend/resume managing the regulators. I think long term, 
+the portdrv is going to be the right place for all of this with some 
+interface defined for link control. So I think this solution moves 
+sideways rather than towards anything common.
 
-Thanks,
-Namhyung
+Unfortunately, the only leverage maintainers have to get folks to care 
+about any refactoring is to reject features. We're lucky to find anyone 
+to test refactoring when posted if done independently. There's a long 
+list of commits of PCI hosts that I've broken to prove that. So it's 
+up to Lorenzo and Bjorn on what they want to do here.
+
+Rob

@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A6C46FE29
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413DF46FE2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239593AbhLJJz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:55:27 -0500
-Received: from dvalin.narfation.org ([213.160.73.56]:54134 "EHLO
-        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232457AbhLJJz0 (ORCPT
+        id S239614AbhLJJ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:56:08 -0500
+Received: from outbound-smtp45.blacknight.com ([46.22.136.57]:34521 "EHLO
+        outbound-smtp45.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230255AbhLJJ4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:55:26 -0500
-X-Greylist: delayed 7328 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Dec 2021 04:55:26 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-        s=20121; t=1639129910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UoVnYVEhK6T2048vTXTUcC+ZvRTghvuGjwu5io1WJRo=;
-        b=Y6tBSGEvHKL1TN3Q0I6CW2o5VHxZcp3fGTSI9tru49ke3w6HwkWfClCvRZxeFU+SVdr8ip
-        UOKI0LdaYsSCcHWn9mLREvPize1JGJunAb5wv2m1qo2nV2HKZf+IfKNSP8/Zl0CUR2NAYs
-        t6N3poffLYqTR2MC+fpgoB2lAaCO110=
-From:   Sven Eckelmann <sven@narfation.org>
-To:     cgel.zte@gmail.com
-Cc:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org, cgel.zte@gmail.com,
-        chi.minghao@zte.com.cn, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch,
-        netdev@vger.kernel.org, sw@simonwunderlich.de,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCHv2] net/batman-adv:remove unneeded variable
-Date:   Fri, 10 Dec 2021 10:51:44 +0100
-Message-ID: <2776551.YYyxiJnSHr@ripper>
-In-Reply-To: <20211210094206.426283-1-chi.minghao@zte.com.cn>
-References: <2844186.8fJna1iEf4@ripper> <20211210094206.426283-1-chi.minghao@zte.com.cn>
+        Fri, 10 Dec 2021 04:56:02 -0500
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp45.blacknight.com (Postfix) with ESMTPS id D8381FAD9F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 09:52:26 +0000 (GMT)
+Received: (qmail 28236 invoked from network); 10 Dec 2021 09:52:26 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 10 Dec 2021 09:52:26 -0000
+Date:   Fri, 10 Dec 2021 09:52:25 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrey Ryabinin <arbn@yandex-team.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yc-core@yandex-team.ru,
+        stable@vger.kernel.org, Andrea Arcangeli <aarcange@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH] mm: mempolicy: fix THP allocations escaping mempolicy
+ restrictions
+Message-ID: <20211210095225.GP3366@techsingularity.net>
+References: <20211208165343.22349-1-arbn@yandex-team.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart3204491.a8kA2qvuHL"; micalg="pgp-sha512"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20211208165343.22349-1-arbn@yandex-team.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart3204491.a8kA2qvuHL
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Sven Eckelmann <sven@narfation.org>
-To: cgel.zte@gmail.com
-Cc: a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org, cgel.zte@gmail.com, chi.minghao@zte.com.cn, davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch, netdev@vger.kernel.org, sw@simonwunderlich.de, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCHv2] net/batman-adv:remove unneeded variable
-Date: Fri, 10 Dec 2021 10:51:44 +0100
-Message-ID: <2776551.YYyxiJnSHr@ripper>
-In-Reply-To: <20211210094206.426283-1-chi.minghao@zte.com.cn>
-References: <2844186.8fJna1iEf4@ripper> <20211210094206.426283-1-chi.minghao@zte.com.cn>
-
-On Friday, 10 December 2021 10:42:06 CET cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed, Dec 08, 2021 at 07:53:43PM +0300, Andrey Ryabinin wrote:
+> alloc_pages_vma() may try to allocate THP page on the local
+> NUMA node first:
+> 	page = __alloc_pages_node(hpage_node,
+> 		gfp | __GFP_THISNODE | __GFP_NORETRY, order);
 > 
-> Return status directly from function called.
-> change since v1: zealci@zte.com.cm
->              v2: zealci@zte.com.cn
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
+> And if the allocation fails it retries allowing remote memory:
+> 
+> 	if (!page && (gfp & __GFP_DIRECT_RECLAIM))
+>     		page = __alloc_pages_node(hpage_node,
+> 					gfp, order);
+> 
+> However, this retry allocation completely ignores memory policy
+> nodemask allowing allocation to escape restrictions.
+> 
+> The first appearance of this bug seems to be the commit ac5b2c18911f
+>  ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
+> The bug disappeared later in the commit 89c83fb539f9
+>  ("mm, thp: consolidate THP gfp handling into alloc_hugepage_direct_gfpmask")
+> and reappeared again in slightly different form in the commit 76e654cc91bb
+>  ("mm, page_alloc: allow hugepage fallback to remote nodes when madvised")
+> 
+> Fix this by passing correct nodemask to the __alloc_pages() call.
+> 
+> The demonstration/reproducer of the problem:
+>  $ mount -oremount,size=4G,huge=always /dev/shm/
+>  $ echo always > /sys/kernel/mm/transparent_hugepage/defrag
+>  $ cat mbind_thp.c
+>  #include <unistd.h>
+>  #include <sys/mman.h>
+>  #include <sys/stat.h>
+>  #include <fcntl.h>
+>  #include <assert.h>
+>  #include <stdlib.h>
+>  #include <stdio.h>
+>  #include <numaif.h>
+> 
+>  #define SIZE 2ULL << 30
+>  int main(int argc, char **argv)
+>  {
+>    int fd;
+>    unsigned long long i;
+>    char *addr;
+>    pid_t pid;
+>    char buf[100];
+>    unsigned long nodemask = 1;
+> 
+>    fd = open("/dev/shm/test", O_RDWR|O_CREAT);
+>    assert(fd > 0);
+>    assert(ftruncate(fd, SIZE) == 0);
+> 
+>    addr = mmap(NULL, SIZE, PROT_READ|PROT_WRITE,
+>                         MAP_SHARED, fd, 0);
+> 
+>    assert(mbind(addr, SIZE, MPOL_BIND, &nodemask, 2, MPOL_MF_STRICT|MPOL_MF_MOVE)==0);
+>    for (i = 0; i < SIZE; i+=4096) {
+>      addr[i] = 1;
+>    }
+>    pid = getpid();
+>    snprintf(buf, sizeof(buf), "grep shm /proc/%d/numa_maps", pid);
+>    system(buf);
+>    sleep(10000);
+> 
+>    return 0;
+>  }
+>  $ gcc mbind_thp.c -o mbind_thp -lnuma
+>  $ numactl -H
+>  available: 2 nodes (0-1)
+>  node 0 cpus: 0 2
+>  node 0 size: 1918 MB
+>  node 0 free: 1595 MB
+>  node 1 cpus: 1 3
+>  node 1 size: 2014 MB
+>  node 1 free: 1731 MB
+>  node distances:
+>  node   0   1
+>    0:  10  20
+>    1:  20  10
+>  $ rm -f /dev/shm/test; taskset -c 0 ./mbind_thp
+>  7fd970a00000 bind:0 file=/dev/shm/test dirty=524288 active=0 N0=396800 N1=127488 kernelpagesize_kB=4
+> 
+> Fixes: ac5b2c18911f ("mm: thp: relax __GFP_THISNODE for MADV_HUGEPAGE mappings")
+> Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
+> Cc: <stable@vger.kernel.org>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: David Rientjes <rientjes@google.com>
 
-This is wrong:
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
 
-1. the patch was already applied
-2. the patch history doesn't belong in the commit message
-3. there is still an alignment problem
-4. if you use -v in git-format-patch then it should be "PATCH v2" and not 
-   "PATCHv2" (otherwise it will not be parsed correctly by patchwork)
-5. The alignment problem is still there
-6. the subject is also not following the normal formatting style
-
-Kind regards,
-	Sven
---nextPart3204491.a8kA2qvuHL
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmGzIzAACgkQXYcKB8Em
-e0ZijRAAjT1ExR75ttZ02uaY/6uk/CoBLOSPAA+wkchdxBITNGmVRJhCUpVXZVYX
-WfHK7wwg2xsteGyfqA9i/ohYHOMrKisNcUwkw0fxGxLQOKYQMwYTlZWdKEu7Q8kU
-APu3HQ1Kd38It60FW9+nuy+8/JTq0YlTU8Th9YUiUBRr2YWGZAL3+vdKNeF3T9fx
-IAUjEoJoEQwzznmiRW135R43iyu+/gNrj7JG1d4BCog/xmwO7nNDZD8qUHZh+qKt
-UVZg1yPArL5m18ngg9A7RrV8ahb0beOsWjalotOD/jLB2C5kd5VKmEhd0FHEnm6V
-YfKVXzjuaOu8CfS0tMjQJqbV2R0K8cNgJzhB3GlsCiAx79e+rPHja8yrpB1dbztz
-oE/pOBkLbvwM/Qg7LCcFrocDVj7cE92cJQbxEU3516cT02zNZTBbUNUTLY9qPgK8
-oqNel2UEgbYj3UicXINFPl2XbUdTyamI1TSywLven9PnDojg5hvgkq1aU7wVyIAs
-dw2sIruF950Iv5K24IHsE4eXvtYd45KirFb6vhNqnzEiCtEaqLFf9BFqw/ecpgR4
-FJA7y311KwsfoMumveAM3oFcff+35LFkoO6g+rentNRhFQWO0Xe+XUwd5oW9Lb78
-jaO0qlOkssdh+pMai4cNENeU4mtdjFdtTJJy73D9iKDhBZG+ACA=
-=9BtG
------END PGP SIGNATURE-----
-
---nextPart3204491.a8kA2qvuHL--
-
-
-
+-- 
+Mel Gorman
+SUSE Labs

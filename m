@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 054F5470089
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1EA47008C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 13:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240908AbhLJMYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 07:24:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31296 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229483AbhLJMYE (ORCPT
+        id S240926AbhLJMYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 07:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240916AbhLJMYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:24:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639138827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N26BmA1vYVEuwqLYHjNIdZO/TeOGLhcQdBsl+AM0SLw=;
-        b=Fo3N7f0jt1uDfYcf2Y7KbU06eCSB833YTcJgoJgSkVradtIU5pH0kGuFXTXe3goiFvOVns
-        7255m0BwqTE3dNYqyIj0llOP+lFJBiV10A+IuCIwi7WZRvmpbv/5A0BvyjQYv5l+mXqauH
-        PJT+7QC5WHBKohfcS0upG/uiROiJ5x8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-106-NCmuOd9LMPmQASw2Ca5UiA-1; Fri, 10 Dec 2021 07:20:22 -0500
-X-MC-Unique: NCmuOd9LMPmQASw2Ca5UiA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3CAF01006AA0;
-        Fri, 10 Dec 2021 12:20:20 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C60176B8EE;
-        Fri, 10 Dec 2021 12:20:01 +0000 (UTC)
-Message-ID: <fbf3e1665357d9517015ad49eee0c9825ed876d4.camel@redhat.com>
-Subject: Re: [PATCH 5/6] KVM: x86: never clear irr_pending in
- kvm_apic_update_apicv
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, Wanpeng Li <wanpengli@tencent.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Dec 2021 14:20:00 +0200
-In-Reply-To: <636dd644-8160-645a-ce5a-f4eb344f001c@redhat.com>
-References: <20211209115440.394441-1-mlevitsk@redhat.com>
-         <20211209115440.394441-6-mlevitsk@redhat.com>
-         <636dd644-8160-645a-ce5a-f4eb344f001c@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Fri, 10 Dec 2021 07:24:32 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4B9C0617A2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:20:57 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id t18so14577020wrg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 04:20:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dyQr2ti9ilz8ECo57KSkq4lKgtmyn1SiEY3nHitXJS0=;
+        b=kKlHf5ufFGS3lqJB0CYLdtxRM/+Zd2tF1TIonrt1jLM+uzJlRXxND1cQdMa32DXTuO
+         PzTGfW9C1I3/pc0hVC20gfSSv4NVqqyRBjtjWZ6xN2e4WRN/Jcyr/zEOSLQmVA7njKdP
+         bbzHxOzNuuE90WMuTIpCk+QzC08zm6Kl8x6wVbkI0vIQH/EkiBWjVZ4KZUgQ6VaaLjLj
+         x7AhE+bd9XDLpJLrmUUEUgJYVZ77YOSLERwlB+A+V0laaJPbnRnEbBMFURiwHl73QnyF
+         WyC+HTA2khTn7xXjZZlpQTZdiiJHYsj6LNwEN3ipEtxvvleQIxbefQPQ4y3wJxxy1VAv
+         rbmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dyQr2ti9ilz8ECo57KSkq4lKgtmyn1SiEY3nHitXJS0=;
+        b=Hgy5CgAj/VpnW97fdtuj0UlUTYzihpcauaAujBiQqsB2C64Q/uXOjvaNW6yfhgy0nj
+         kxdxjbXUEdWpcAkK0v+P1p89mURSyIfLhqpvHhA9uXjHTl6Ay7D4p2+0f5HvUv0ANzNN
+         9VRkjiPx+bZEtP31DfUqx54Ep18tAJ0px+OE+PKtAmaCVTuwEUcKrI/hC/ZIlsvjJOm1
+         WPYaV7i3JWj6sodrt0ZFBP7NquqR5WyfoZl0uJ+tmwLVVKg3QQ19Kc8CqQx+V+dSjPP0
+         Byba1tCFa0aNRNlU4OBKio+cUQ1jKFPK+Fm+x8sG+Q9qgc++xo2SDCYVhZNcX5c/gGwS
+         pU9A==
+X-Gm-Message-State: AOAM532QFBlXAwlyuxEdgCn//ioT6TtdwucGuxNwxLPTj0wHk4Jp2XSz
+        M9/Mm7rU5VtYnQpP8biyGZSTEw==
+X-Google-Smtp-Source: ABdhPJzECZyx1gn+Wvql4o7TK0rM8yLNSUmec05SdRZaiWptYAmqVraN+IU+1m90aCiisoO//e59oQ==
+X-Received: by 2002:adf:cd02:: with SMTP id w2mr13812551wrm.269.1639138855743;
+        Fri, 10 Dec 2021 04:20:55 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:57bd:f79b:724a:8b02])
+        by smtp.gmail.com with ESMTPSA id b14sm3164792wrd.24.2021.12.10.04.20.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 04:20:54 -0800 (PST)
+Date:   Fri, 10 Dec 2021 12:20:50 +0000
+From:   David Brazdil <dbrazdil@google.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Andrew Scull <ascull@google.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: DRM? Re: [PATCH v2 2/2] misc: dice: Add driver to forward
+ secrets to userspace
+Message-ID: <YbNGIimUI7Cagvwe@google.com>
+References: <20211209151123.3759999-1-dbrazdil@google.com>
+ <20211209151123.3759999-3-dbrazdil@google.com>
+ <20211209194807.GB28088@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209194807.GB28088@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 13:07 +0100, Paolo Bonzini wrote:
-> On 12/9/21 12:54, Maxim Levitsky wrote:
-> > It is possible that during the AVIC incomplete IPI vmexit,
-> > its handler will set irr_pending to true,
-> > but the target vCPU will still see the IRR bit not set,
-> > due to the apparent lack of memory ordering between CPU's vIRR write
-> > that is supposed to happen prior to the AVIC incomplete IPI
-> > vmexit and the write of the irr_pending in that handler.
-> 
-> Are you sure about this?  Store-to-store ordering should be 
-> guaranteed---if not by the architecture---by existing memory barriers 
-> between vmrun returning and avic_incomplete_ipi_interception().  For 
-> example, srcu_read_lock implies an smp_mb().
-> 
-> Even more damning: no matter what internal black magic the processor 
-> could be using to write to IRR, the processor needs to order the writes 
-> against reads of IsRunning on processors without the erratum.  That 
-> would be equivalent to flushing the store buffer, and it would imply 
-> that the write of vIRR is ordered before the write to irr_pending.
-> 
-> Paolo
-> 
-Yes I almost 100% sure now that this patch is wrong.
-the code was just seeing irr_pending true because it is set
-to true while APICv/AVIC is use, and was not seeing yet the vIRR bits,
-because they didn't arrive yet. This this patch isn't needed.
+Hi Pavel,
 
-Thanks again for help!
-I am testing your version of fixes to avic inhibition races,
-and then I'll send a new version of these patches.
+On Thu, Dec 09, 2021 at 08:48:07PM +0100, Pavel Machek wrote:
+> Hi!
+> 
+> > +config DICE
+> > +	tristate "Open Profile for DICE driver"
+> > +	depends on OF_RESERVED_MEM
+> > +	help
+> > +	  This driver allows to ownership of a reserved memory region
+> > +	  containing DICE secrets and expose them to userspace via
+> > +	  a character device.
+> > +
+> 
+> Explaining what DICE is (and what Open Profile is) would be useful.
+Sure, I'll expand the description.
 
-Best regards,
-	Maxim Levitsky
+> I see it is for some kind of DRM? Why is in non-evil and why do we
+> want it in Linux?
+Best to think of this as an extension to verified boot where each boot
+stage signs the hashes of the software it loaded. The certificate is
+what's passed in this reserved memory region. It is used in the context
+of confidential computing for remote attestation, and it is very similar
+to the EFI-based approach from IBM for SEV:
+https://lore.kernel.org/all/20211007061838.1381129-1-dovmurik@linux.ibm.com/
+
+There's a link to the project's documentation in the cover letter with
+much more technical detail if you're interested.
+
+-David
+
 

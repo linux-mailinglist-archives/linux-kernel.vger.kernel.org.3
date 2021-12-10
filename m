@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C389E470015
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9540547001A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240626AbhLJLjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:39:13 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28305 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235378AbhLJLjM (ORCPT
+        id S240688AbhLJLjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:39:22 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29121 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240592AbhLJLjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Dec 2021 06:39:12 -0500
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J9TNS6ZRFzbk9Z;
-        Fri, 10 Dec 2021 19:35:20 +0800 (CST)
+Received: from canpemm500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J9TKQ4wB0z1DLgl;
+        Fri, 10 Dec 2021 19:32:42 +0800 (CST)
 Received: from localhost.huawei.com (10.175.124.27) by
  canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 19:35:34 +0800
+ 15.1.2308.20; Fri, 10 Dec 2021 19:35:35 +0800
 From:   Li Jinlin <lijinlin3@huawei.com>
 To:     <song@kernel.org>, <philipp.reisner@linbit.com>,
         <lars.ellenberg@linbit.com>, <axboe@kernel.dk>, <hare@suse.de>,
@@ -26,9 +26,9 @@ To:     <song@kernel.org>, <philipp.reisner@linbit.com>,
         <mcgrof@kernel.org>
 CC:     <linux-raid@vger.kernel.org>, <linux-block@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linfeilong@huawei.com>
-Subject: [PATCH v3 1/3] md: Fix undefined behaviour in is_mddev_idle
-Date:   Fri, 10 Dec 2021 20:06:29 +0800
-Message-ID: <20211210120631.2578505-2-lijinlin3@huawei.com>
+Subject: [PATCH v3 2/3] drbd: Fix undefined behaviour in drbd_rs_c_min_rate_throttle
+Date:   Fri, 10 Dec 2021 20:06:30 +0800
+Message-ID: <20211210120631.2578505-3-lijinlin3@huawei.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211210120631.2578505-1-lijinlin3@huawei.com>
 References: <20211210120631.2578505-1-lijinlin3@huawei.com>
@@ -43,108 +43,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBSAN reports this problem:
-
-[ 5984.281385] UBSAN: Undefined behaviour in drivers/md/md.c:8175:15
-[ 5984.281390] signed integer overflow:
-[ 5984.281393] -2147483291 - 2072033152 cannot be represented in type 'int'
-[ 5984.281400] CPU: 25 PID: 1854 Comm: md101_resync Kdump: loaded Not tainted 4.19.90
-[ 5984.281404] Hardware name: Huawei TaiShan 200 (Model 5280)/BC82AMDDA
-[ 5984.281406] Call trace:
-[ 5984.281415]  dump_backtrace+0x0/0x310
-[ 5984.281418]  show_stack+0x28/0x38
-[ 5984.281425]  dump_stack+0xec/0x15c
-[ 5984.281430]  ubsan_epilogue+0x18/0x84
-[ 5984.281434]  handle_overflow+0x14c/0x19c
-[ 5984.281439]  __ubsan_handle_sub_overflow+0x34/0x44
-[ 5984.281445]  is_mddev_idle+0x338/0x3d8
-[ 5984.281449]  md_do_sync+0x1bb8/0x1cf8
-[ 5984.281452]  md_thread+0x220/0x288
-[ 5984.281457]  kthread+0x1d8/0x1e0
-[ 5984.281461]  ret_from_fork+0x10/0x18
-
 When the stat aacum of the disk is greater than INT_MAX, its
 value becomes negative after casting to 'int', which may lead
 to overflow after subtracting a positive number. In the same
-way, when the value of sync_io is greater than INT_MAX,
+way, when the value of rs_sect_ev is greater than INT_MAX,
 overflow may also occur. These situations will lead to
 undefined behavior.
 
 Otherwise, if the stat accum of the disk is close to INT_MAX
-when creating raid arrays, the initial value of last_events
-would be set close to INT_MAX when mddev initializes IO
-event counters. 'curr_events - rdev->last_events > 64' will
-always false during synchronization. If all the disks of mddev
-are in this case, is_mddev_idle() will always return 1, which
-may cause non-sync IO is very slow.
+when creating md, the value of rs_last_events would be set
+close to INT_MAX. 'curr_events - device->rs_last_events > 64'
+will always false during synchronization, which may cause
+resync is not throttled even if the lower device is busy.
 
-Fix by using atomic64_t type for sync_io, and using s64 type
-for curr_events/last_events.
+Fix by using atomic64_t type for rs_sect_ev, and using s64 type
+for curr_events/rs_last_events.
 
 Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
 ---
- drivers/md/md.c       | 6 +++---
- drivers/md/md.h       | 4 ++--
- include/linux/genhd.h | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/block/drbd/drbd_bitmap.c   |  2 +-
+ drivers/block/drbd/drbd_int.h      |  4 ++--
+ drivers/block/drbd/drbd_main.c     |  2 +-
+ drivers/block/drbd/drbd_receiver.c | 12 ++++++------
+ drivers/block/drbd/drbd_worker.c   |  4 ++--
+ 5 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 5111ed966947..be73a5ae6864 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -8429,14 +8429,14 @@ static int is_mddev_idle(struct mddev *mddev, int init)
- {
- 	struct md_rdev *rdev;
- 	int idle;
+diff --git a/drivers/block/drbd/drbd_bitmap.c b/drivers/block/drbd/drbd_bitmap.c
+index c1f816f896a8..d580f4071622 100644
+--- a/drivers/block/drbd/drbd_bitmap.c
++++ b/drivers/block/drbd/drbd_bitmap.c
+@@ -1021,7 +1021,7 @@ static void bm_page_io_async(struct drbd_bm_aio_ctx *ctx, int page_nr) __must_ho
+ 		submit_bio(bio);
+ 		/* this should not count as user activity and cause the
+ 		 * resync to throttle -- see drbd_rs_should_slow_down(). */
+-		atomic_add(len >> 9, &device->rs_sect_ev);
++		atomic64_add(len >> 9, &device->rs_sect_ev);
+ 	}
+ }
+ 
+diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
+index f27d5b0f9a0b..1b71adc07e83 100644
+--- a/drivers/block/drbd/drbd_int.h
++++ b/drivers/block/drbd/drbd_int.h
+@@ -954,9 +954,9 @@ struct drbd_device {
+ 	struct mutex *state_mutex; /* either own_state_mutex or first_peer_device(device)->connection->cstate_mutex */
+ 	char congestion_reason;  /* Why we where congested... */
+ 	atomic_t rs_sect_in; /* for incoming resync data rate, SyncTarget */
+-	atomic_t rs_sect_ev; /* for submitted resync data rate, both */
++	atomic64_t rs_sect_ev; /* for submitted resync data rate, both */
+ 	int rs_last_sect_ev; /* counter to compare with */
+-	int rs_last_events;  /* counter of read or write "events" (unit sectors)
++	s64 rs_last_events;  /* counter of read or write "events" (unit sectors)
+ 			      * on the lower level device when we last looked. */
+ 	int c_sync_rate; /* current resync rate after syncer throttle magic */
+ 	struct fifo_buffer *rs_plan_s; /* correction values of resync planer (RCU, connection->conn_update) */
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index 53ba2dddba6e..ea057bd60541 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -1974,7 +1974,7 @@ void drbd_init_set_defaults(struct drbd_device *device)
+ 	atomic_set(&device->local_cnt, 0);
+ 	atomic_set(&device->pp_in_use_by_net, 0);
+ 	atomic_set(&device->rs_sect_in, 0);
+-	atomic_set(&device->rs_sect_ev, 0);
++	atomic64_set(&device->rs_sect_ev, 0);
+ 	atomic_set(&device->ap_in_flight, 0);
+ 	atomic_set(&device->md_io.in_use, 0);
+ 
+diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
+index 1f740e42e457..4b75ad3dd0cd 100644
+--- a/drivers/block/drbd/drbd_receiver.c
++++ b/drivers/block/drbd/drbd_receiver.c
+@@ -2106,7 +2106,7 @@ static int recv_resync_read(struct drbd_peer_device *peer_device, sector_t secto
+ 	list_add_tail(&peer_req->w.list, &device->sync_ee);
+ 	spin_unlock_irq(&device->resource->req_lock);
+ 
+-	atomic_add(pi->size >> 9, &device->rs_sect_ev);
++	atomic64_add(pi->size >> 9, &device->rs_sect_ev);
+ 	if (drbd_submit_peer_request(device, peer_req, REQ_OP_WRITE, 0,
+ 				     DRBD_FAULT_RS_WR) == 0)
+ 		return 0;
+@@ -2792,7 +2792,7 @@ bool drbd_rs_c_min_rate_throttle(struct drbd_device *device)
+ 	struct gendisk *disk = device->ldev->backing_bdev->bd_disk;
+ 	unsigned long db, dt, dbdt;
+ 	unsigned int c_min_rate;
 -	int curr_events;
 +	s64 curr_events;
  
- 	idle = 1;
  	rcu_read_lock();
- 	rdev_for_each_rcu(rdev, mddev) {
- 		struct gendisk *disk = rdev->bdev->bd_disk;
--		curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
--			      atomic_read(&disk->sync_io);
-+		curr_events = (s64)part_stat_read_accum(disk->part0, sectors) -
-+			      atomic64_read(&disk->sync_io);
- 		/* sync IO will cause sync_io to increase before the disk_stats
- 		 * as sync_io is counted when a request starts, and
- 		 * disk_stats is counted when it completes.
-diff --git a/drivers/md/md.h b/drivers/md/md.h
-index 53ea7a6961de..e00d6730da13 100644
---- a/drivers/md/md.h
-+++ b/drivers/md/md.h
-@@ -50,7 +50,7 @@ struct md_rdev {
+ 	c_min_rate = rcu_dereference(device->ldev->disk_conf)->c_min_rate;
+@@ -2802,8 +2802,8 @@ bool drbd_rs_c_min_rate_throttle(struct drbd_device *device)
+ 	if (c_min_rate == 0)
+ 		return false;
  
- 	sector_t sectors;		/* Device size (in 512bytes sectors) */
- 	struct mddev *mddev;		/* RAID array if running */
--	int last_events;		/* IO event timestamp */
-+	s64 last_events;		/* IO event timestamp */
+-	curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
+-			atomic_read(&device->rs_sect_ev);
++	curr_events = (s64)part_stat_read_accum(disk->part0, sectors) -
++			atomic64_read(&device->rs_sect_ev);
  
- 	/*
- 	 * If meta_bdev is non-NULL, it means that a separate device is
-@@ -551,7 +551,7 @@ extern void mddev_unlock(struct mddev *mddev);
+ 	if (atomic_read(&device->ap_actlog_cnt)
+ 	    || curr_events - device->rs_last_events > 64) {
+@@ -3023,7 +3023,7 @@ static int receive_DataRequest(struct drbd_connection *connection, struct packet
+ 		goto out_free_e;
  
- static inline void md_sync_acct(struct block_device *bdev, unsigned long nr_sectors)
- {
--	atomic_add(nr_sectors, &bdev->bd_disk->sync_io);
-+	atomic64_add(nr_sectors, &bdev->bd_disk->sync_io);
- }
+ submit_for_resync:
+-	atomic_add(size >> 9, &device->rs_sect_ev);
++	atomic64_add(size >> 9, &device->rs_sect_ev);
  
- static inline void md_sync_acct_bio(struct bio *bio, unsigned long nr_sectors)
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 74c410263113..efa7884de11b 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -150,7 +150,7 @@ struct gendisk {
- 	struct list_head slave_bdevs;
- #endif
- 	struct timer_rand_state *random;
--	atomic_t sync_io;		/* RAID */
-+	atomic64_t sync_io;		/* RAID */
- 	struct disk_events *ev;
- #ifdef  CONFIG_BLK_DEV_INTEGRITY
- 	struct kobject integrity_kobj;
+ submit:
+ 	update_receiver_timing_details(connection, drbd_submit_peer_request);
+@@ -5019,7 +5019,7 @@ static int receive_rs_deallocated(struct drbd_connection *connection, struct pac
+ 		list_add_tail(&peer_req->w.list, &device->sync_ee);
+ 		spin_unlock_irq(&device->resource->req_lock);
+ 
+-		atomic_add(pi->size >> 9, &device->rs_sect_ev);
++		atomic64_add(pi->size >> 9, &device->rs_sect_ev);
+ 		err = drbd_submit_peer_request(device, peer_req, op, 0, DRBD_FAULT_RS_WR);
+ 
+ 		if (err) {
+diff --git a/drivers/block/drbd/drbd_worker.c b/drivers/block/drbd/drbd_worker.c
+index 64563bfdf0da..a4edd0a9c875 100644
+--- a/drivers/block/drbd/drbd_worker.c
++++ b/drivers/block/drbd/drbd_worker.c
+@@ -409,7 +409,7 @@ static int read_for_csum(struct drbd_peer_device *peer_device, sector_t sector,
+ 	list_add_tail(&peer_req->w.list, &device->read_ee);
+ 	spin_unlock_irq(&device->resource->req_lock);
+ 
+-	atomic_add(size >> 9, &device->rs_sect_ev);
++	atomic64_add(size >> 9, &device->rs_sect_ev);
+ 	if (drbd_submit_peer_request(device, peer_req, REQ_OP_READ, 0,
+ 				     DRBD_FAULT_RS_RD) == 0)
+ 		return 0;
+@@ -1679,7 +1679,7 @@ void drbd_rs_controller_reset(struct drbd_device *device)
+ 	struct fifo_buffer *plan;
+ 
+ 	atomic_set(&device->rs_sect_in, 0);
+-	atomic_set(&device->rs_sect_ev, 0);
++	atomic64_set(&device->rs_sect_ev, 0);
+ 	device->rs_in_flight = 0;
+ 	device->rs_last_events =
+ 		(int)part_stat_read_accum(disk->part0, sectors);
 -- 
 2.27.0
 

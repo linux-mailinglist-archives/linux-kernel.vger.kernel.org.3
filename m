@@ -2,71 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AA1470E34
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D52B470E39
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 23:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344959AbhLJWui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 17:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344860AbhLJWu3 (ORCPT
+        id S241221AbhLJWyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 17:54:10 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:36508 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235394AbhLJWyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 17:50:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21105C0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 14:46:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E081CB82A12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 22:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99B1AC341CD;
-        Fri, 10 Dec 2021 22:46:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639176411;
-        bh=g1Mi3fOZNd41EZPqYx4KoCP7+0kEfwIjBoredO+AIhY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lvXlN8fo34bD5lW/IfwJxXs9cJFW4DWDQcdO4XQO+wzsU4usJ4fgJupNSo9ZuRLY/
-         L5GXpS+2iu3Pmk6sLw99QmoQx5rk8yq8KFg5yvKhFwUCp3WOcsgH3vt2+SAthXAMlp
-         Ox78eaaxB9tOtM4q4n3mwJwJa62Sd9DTeNAj0WIuDZstx+3DV4fdCXzBe6h8Z50+Xh
-         3NxZmAMv+KtbWJnN5g97S1xaFaZLcGj3kfexH2V2GnsaIHhkYzX+/uEZ14/VUpPsiZ
-         oc4BZxm7YEvXRbUSVAA5gZU68axOyaE7T2idsn8s6dQFYq7UU17b+RqJBuF6xiJrs9
-         2hnPGmTEmoytA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8535D60A39;
-        Fri, 10 Dec 2021 22:46:51 +0000 (UTC)
-Subject: Re: [GIT PULL] tracing/tracefs: Updates for 5.16-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211210134801.56e26614@gandalf.local.home>
-References: <20211210134801.56e26614@gandalf.local.home>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211210134801.56e26614@gandalf.local.home>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc4
-X-PR-Tracked-Commit-Id: c24be24aed405d64ebcf04526614c13b2adfb1d2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 257dcf29232becbbd9bab68e3dc1ed7bbe654efb
-Message-Id: <163917641153.4787.14964273165900153203.pr-tracker-bot@kernel.org>
-Date:   Fri, 10 Dec 2021 22:46:51 +0000
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Olsa <jolsa@redhat.com>, Miaoqian Lin <linmq006@gmail.com>
+        Fri, 10 Dec 2021 17:54:10 -0500
+Received: by mail-ot1-f46.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so11133133otl.3;
+        Fri, 10 Dec 2021 14:50:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Zv2SJEG7dxMT51xWLzKdjvzE+4GfXvYq6wZ2VXGzv9A=;
+        b=uo7fcPL/+Zasn78MQZZt5zjyGkN2y0vcj4IWg7KsPEpnidUVbmJegRh60roARgq/D7
+         XWKWYcX97C3Njq37S+QpaYA3ZBc3V42k9NjazLeHwM1uCMltFmekfdWqC0JTK2XNeElR
+         b8JGnb6zj41e0H5wzrDL/gXloeSybxPXr7vkj5Gv5S9bSydD2kveQbOIiFslDnUidEBZ
+         0GnMrQ23OhCrvzghenlHh2566a5j7rap4Qt9/YXIHDRkRImD7qYBU6BEGFeutE+RTkfY
+         pzu9VqniVSiaBg+jPHIrBXaEd133a4z9Zm61P+Tp7zX8cRZ86qOM1UxZ3Z2FBYisEOdd
+         0Klw==
+X-Gm-Message-State: AOAM530nLYpmri04JyCl+vbRqBURpdsXbl4jxNXtm1PCmGPooflgWFu+
+        r17PgeTe5vOKxtkHf1UbRhmTuzGsUQ==
+X-Google-Smtp-Source: ABdhPJx0YTX39U6qxWVSVn8sYrAZymigT2bu+Oc2vgoThaoj7OWiZr9KcK5fFUw1763UCfk6BZQNsw==
+X-Received: by 2002:a05:6830:1d68:: with SMTP id l8mr13679456oti.21.1639176634128;
+        Fri, 10 Dec 2021 14:50:34 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j20sm998396oig.52.2021.12.10.14.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 14:50:33 -0800 (PST)
+Received: (nullmailer pid 2077795 invoked by uid 1000);
+        Fri, 10 Dec 2021 22:50:32 -0000
+Date:   Fri, 10 Dec 2021 16:50:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: [GIT PULL] Devicetree fixes for v5.16, take 2
+Message-ID: <YbPZuCq+xIc6tqaZ@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 10 Dec 2021 13:48:01 -0500:
+Linus,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc4
+Please pull a few more DT fixes.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/257dcf29232becbbd9bab68e3dc1ed7bbe654efb
+Rob
 
-Thank you!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-5.16-2
+
+for you to fetch changes up to 75e895343d5a2fcbdf4cb3d31ab7492bd65925f0:
+
+  Revert "kbuild: Enable DT schema checks for %.dtb targets" (2021-12-08 15:41:19 -0600)
+
+----------------------------------------------------------------
+Devicetree fixes for v5.16-rc, take 2:
+
+- Revert schema checks on %.dtb targets. This was problematic for some
+  external build tools.
+
+- A few DT binding example fixes
+
+- Add back dropped 'enet-phy-lane-no-swap' Ethernet PHY property
+
+- Drop erroneous if/then schema in nxp,imx7-mipi-csi2
+
+- Add a quirk to fix some interrupt controllers use of 'interrupt-map'
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      dt-bindings: net: Reintroduce PHY no lane swap binding
+
+Geert Uytterhoeven (2):
+      dt-bindings: iio: adc: exynos-adc: Fix node name in example
+      dt-bindings: input: gpio-keys: Fix interrupts in example
+
+Marc Zyngier (1):
+      of/irq: Add a quirk for controllers with their own definition of interrupt-map
+
+Rob Herring (2):
+      dt-bindings: media: nxp,imx7-mipi-csi2: Drop bad if/then schema
+      Revert "kbuild: Enable DT schema checks for %.dtb targets"
+
+Thierry Reding (1):
+      dt-bindings: bq25980: Fixup the example
+
+ .../bindings/iio/adc/samsung,exynos-adc.yaml       |  2 +-
+ .../devicetree/bindings/input/gpio-keys.yaml       |  2 +-
+ .../bindings/media/nxp,imx7-mipi-csi2.yaml         | 14 ++---------
+ .../devicetree/bindings/net/ethernet-phy.yaml      |  8 +++++++
+ .../devicetree/bindings/power/supply/bq25980.yaml  |  2 +-
+ Makefile                                           | 10 ++++----
+ drivers/of/irq.c                                   | 27 ++++++++++++++++++++--
+ 7 files changed, 43 insertions(+), 22 deletions(-)

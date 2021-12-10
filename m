@@ -2,144 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E78446FA03
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 05:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78AC46FA05
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 05:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbhLJEuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 23:50:22 -0500
-Received: from mga09.intel.com ([134.134.136.24]:61553 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231842AbhLJEuR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 23:50:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639111602; x=1670647602;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pYXkxQBkXerI1IL9jyXU6VvxSJJeLlDg2n1TNUUzekU=;
-  b=hDlVJUpSmChgl31f7EeozTyJN7jAii+OnFWnRZJBVHcmFg+/pKwmYI3r
-   JC/3CKK3GQ9ZIdohFyhvxYMPzDFPid/7dnwRmGJKE6iBGOIe2QCw8Q1LD
-   +JFLG2ZwDPdufEFomYA5kehhz9G+DPyjgkpdI4xA3zUWsATNSYawnK/40
-   DeccZ8Kio4DRPSsO/eHM5SonksItWfUU1dIUOqSBKfcCFTGFmJZFTYDRV
-   Sq71phNLCgk6VMhovIlTiOpHsie6s1erlUi2mzb4o48lF4p/Had36wWRO
-   v6TBX9nawXY6fm2gk1fuPhMCPrBhR7rYq3qGpUtKnvSZA7PUZPfiBnF4A
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238075526"
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="238075526"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 20:46:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="516609277"
-Received: from xpf.sh.intel.com ([10.239.182.112])
-  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2021 20:46:39 -0800
-Date:   Fri, 10 Dec 2021 12:47:30 +0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Heng Su <heng.su@intel.com>, Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [RFC PATCH v5 1/2] selftests/x86: add xsave test during and
- after signal handling
-Message-ID: <YbLb4k3KKYD2TE/6@xpf.sh.intel.com>
-References: <cover.1638513720.git.pengfei.xu@intel.com>
- <3f02d300118abfb581d85519b733a2db2bb44b10.1638513720.git.pengfei.xu@intel.com>
- <3f59a9d9-27e6-e6b2-98ff-c18924979cc4@intel.com>
+        id S234402AbhLJEwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 23:52:08 -0500
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:7806 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231842AbhLJEwH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 23:52:07 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xuyu@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0V-7NqY1_1639111700;
+Received: from 30.225.28.134(mailfrom:xuyu@linux.alibaba.com fp:SMTPD_---0V-7NqY1_1639111700)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 10 Dec 2021 12:48:21 +0800
+Message-ID: <acc75c62-b919-12da-25b4-2b65ecf89ab6@linux.alibaba.com>
+Date:   Fri, 10 Dec 2021 12:48:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3f59a9d9-27e6-e6b2-98ff-c18924979cc4@intel.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH v2 07/14] x86/clear_page: add clear_page_uncached()
+Content-Language: en-US
+To:     Ankur Arora <ankur.a.arora@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+        mingo@kernel.org, bp@alien8.de, luto@kernel.org,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        jon.grimm@amd.com, kvm@vger.kernel.org, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+References: <20211020170305.376118-1-ankur.a.arora@oracle.com>
+ <20211020170305.376118-8-ankur.a.arora@oracle.com>
+ <b955c5c4-bc4b-9f43-be1c-3a45973de259@linux.alibaba.com>
+ <87czm5ulcc.fsf@oracle.com>
+From:   Yu Xu <xuyu@linux.alibaba.com>
+In-Reply-To: <87czm5ulcc.fsf@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-
-On 2021-12-09 at 10:22:42 -0800, Dave Hansen wrote:
-> On 12/2/21 11:32 PM, Pengfei Xu wrote:
-> > +void populate_xstate_regs(void)
-> > +{
-> > +	set_fpu_reg();
-> > +	set_avx2_ymm();
-> > +	set_avx512_opmask();
-> > +	set_pkru_xstate();
-> > +}
+On 12/10/21 12:37 PM, Ankur Arora wrote:
 > 
-> Pengfei, as I mentioned several times, XMM and YMM registers are not
-> preserved across function calls.  This only works by chance.  The
-> compiler is free to clobber them at basically any time between when they
-> are populated and the XSAVE happens.
+> Yu Xu <xuyu@linux.alibaba.com> writes:
+> 
+>> On 10/21/21 1:02 AM, Ankur Arora wrote:
+>>> Expose the low-level uncached primitives (clear_page_movnt(),
+>>> clear_page_clzero()) as alternatives via clear_page_uncached().
+>>> Also fallback to clear_page(), if X86_FEATURE_MOVNT_SLOW is set
+>>> and the CPU does not have X86_FEATURE_CLZERO.
+>>> Both the uncached primitives use stores which are weakly ordered
+>>> with respect to other instructions accessing the memory hierarchy.
+>>> To ensure that callers don't mix accesses to different types of
+>>> address_spaces, annotate clear_user_page_uncached(), and
+>>> clear_page_uncached() as taking __incoherent pointers as arguments.
+>>> Also add clear_page_uncached_make_coherent() which provides the
+>>> necessary store fence to flush out the uncached regions.
+>>> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+>>> ---
+>>> Notes:
+>>>       This patch adds the fallback definitions of clear_user_page_uncached()
+>>>       etc in include/linux/mm.h which is likely not the right place for it.
+>>>       I'm guessing these should be moved to include/asm-generic/page.h
+>>>       (or maybe a new include/asm-generic/page_uncached.h) and for
+>>>       architectures that do have arch/$arch/include/asm/page.h (which
+>>>       seems like all of them), also replicate there?
+>>>       Anyway, wanted to first check if that's the way to do it, before
+>>>       doing that.
+>>>    arch/x86/include/asm/page.h    | 10 ++++++++++
+>>>    arch/x86/include/asm/page_32.h |  9 +++++++++
+>>>    arch/x86/include/asm/page_64.h | 32 ++++++++++++++++++++++++++++++++
+>>>    include/linux/mm.h             | 14 ++++++++++++++
+>>>    4 files changed, 65 insertions(+)
+>>> diff --git a/arch/x86/include/asm/page_32.h b/arch/x86/include/asm/page_32.h
+>>> index 94dbd51df58f..163be03ac422 100644
+>>> --- a/arch/x86/include/asm/page_32.h
+>>> +++ b/arch/x86/include/asm/page_32.h
+>>> @@ -39,6 +39,15 @@ static inline void clear_page(void *page)
+>>>    	memset(page, 0, PAGE_SIZE);
+>>>    }
+>>>    +static inline void clear_page_uncached(__incoherent void *page)
+>>> +{
+>>> +	clear_page((__force void *) page);
+>>> +}
+>>> +
+>>> +static inline void clear_page_uncached_make_coherent(void)
+>>> +{
+>>> +}
+>>> +
+>>>    static inline void copy_page(void *to, void *from)
+>>>    {
+>>>    	memcpy(to, from, PAGE_SIZE);
+>>> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+>>> index 3c53f8ef8818..d7946047c70f 100644
+>>> --- a/arch/x86/include/asm/page_64.h
+>>> +++ b/arch/x86/include/asm/page_64.h
+>>> @@ -56,6 +56,38 @@ static inline void clear_page(void *page)
+>>>    			   : "cc", "memory", "rax", "rcx");
+>>>    }
+>>>    +/*
+>>> + * clear_page_uncached: only allowed on __incoherent memory regions.
+>>> + */
+>>> +static inline void clear_page_uncached(__incoherent void *page)
+>>> +{
+>>> +	alternative_call_2(clear_page_movnt,
+>>> +			   clear_page, X86_FEATURE_MOVNT_SLOW,
+>>> +			   clear_page_clzero, X86_FEATURE_CLZERO,
+>>> +			   "=D" (page),
+>>> +			   "0" (page)
+>>> +			   : "cc", "memory", "rax", "rcx");
+>>> +}
+>>> +
+>>> +/*
+>>> + * clear_page_uncached_make_coherent: executes the necessary store
+>>> + * fence after which __incoherent regions can be safely accessed.
+>>> + */
+>>> +static inline void clear_page_uncached_make_coherent(void)
+>>> +{
+>>> +	/*
+>>> +	 * Keep the sfence for oldinstr and clzero separate to guard against
+>>> +	 * the possibility that a cpu-model both has X86_FEATURE_MOVNT_SLOW
+>>> +	 * and X86_FEATURE_CLZERO.
+>>> +	 *
+>>> +	 * The alternatives need to be in the same order as the ones
+>>> +	 * in clear_page_uncached().
+>>> +	 */
+>>> +	alternative_2("sfence",
+>>> +		      "", X86_FEATURE_MOVNT_SLOW,
+>>> +		      "sfence", X86_FEATURE_CLZERO);
+>>> +}
+>>> +
+>>>    void copy_page(void *to, void *from);
+>>>      #ifdef CONFIG_X86_5LEVEL
+>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>> index 73a52aba448f..b88069d1116c 100644
+>>> --- a/include/linux/mm.h
+>>> +++ b/include/linux/mm.h
+>>> @@ -3192,6 +3192,20 @@ static inline bool vma_is_special_huge(const struct vm_area_struct *vma)
+>>>      #endif /* CONFIG_TRANSPARENT_HUGEPAGE || CONFIG_HUGETLBFS */
+>>>    +#ifndef clear_user_page_uncached
+>>
+>> Hi Ankur Arora,
+>>
+>> I've been looking for where clear_user_page_uncached is defined in this
+>> patchset, but failed.
+>>
+>> There should be something like follows in arch/x86, right?
+>>
+>> static inline void clear_user_page_uncached(__incoherent void *page,
+>>                                 unsigned long vaddr, struct page *pg)
+>> {
+>>          clear_page_uncached(page);
+>> }
+>>
+>>
+>> Did I miss something?
+>>
+> Hi Yu Xu,
+> 
+> Defined in include/linux/mm.h. Just below :).
 
-Thanks for suggestions!
-Sorry, I read the link https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf
-I have removed the XMM registers check as XMM registers are not preserved
-across function calls in above doc mentioned:
-"
-Register     | Usage                       | Preserved across function calls
-%xmm0–%xmm1  | used to pass and return floating point arguments | No
-%xmm2–%xmm7  | used to pass floating point arguments | No
-%xmm8–%xmm15 | temporary registers | No
-%mmx0–%mmx7  | temporary registers | No
-"
+Thanks for your reply :)
 
-It seems that the reason why the contents of the XMM register changed by chance
-is:
-As printf for example, after "printf" Glibc function:
-do_lookup_x is triggered by printf:
-"
-0x00007ffff7fd5538 in do_lookup_x () from /lib64/ld-linux-x86-64.so.2  ->
-   0x00007ffff7fd55d7 <+1367>:  e8 94 7b 01 00  callq  0x7ffff7fed170 <strcmp>
-...
-   0x00007ffff7fee1af <+4159>:  90      nop
-   0x00007ffff7fee1b0 <+4160>:  66 0f ef c0     pxor   %xmm0,%xmm0
-   0x00007ffff7fee1b4 <+4164>:  66 0f 6f 17     movdqa (%rdi),%xmm2
-=> 0x00007ffff7fee1b8 <+4168>:  66 0f 6f 0e     movdqa (%rsi),%xmm1
-   0x00007ffff7fee1bc <+4172>:  66 0f 74 c1     pcmpeqb %xmm1,%xmm0
-"  And after printf, xmm1 and xmm2 value was changed.
-And seems some other glibc function will use XMM registers also.
+This is the version when #ifndef clear_user_page_uncached, i.e., fall
+back to standard clear_user_page.
 
-YMM will not be preserved across function calls, but I'm not sure whether
-some Glibc will use YMM.
-I will remove YMM xstates check until there is some other better way for YMM
-test or it's confirmed YMM will not be used by Glibc.
+But where is the uncached version of clear_user_page? I am looking for
+this.
 
-I think PKRU and AVX512 opmask will not be affected in the test.
-PKRU xstate will not be affected by registers, and Glibc will not use AVX512
-instructions.
+> 
+>>> +/*
+>>> + * clear_user_page_uncached: fallback to the standard clear_user_page().
+>>> + */
+>>> +static inline void clear_user_page_uncached(__incoherent void *page,
+>>> +					unsigned long vaddr, struct page *pg)
+>>> +{
+>>> +	clear_user_page((__force void *)page, vaddr, pg);
+>>> +}
+> 
+> That said, as this note in the patch mentions, this isn't really a great
+> place for this definition. As you also mention, the right place for this
+> would be somewhere in the arch/.../include and include/asm-generic hierarchy.
+> 
+>>>       This patch adds the fallback definitions of clear_user_page_uncached()
+>>>       etc in include/linux/mm.h which is likely not the right place for it.
+>>>       I'm guessing these should be moved to include/asm-generic/page.h
+>>>       (or maybe a new include/asm-generic/page_uncached.h) and for
+>>>       architectures that do have arch/$arch/include/asm/page.h (which
+>>>       seems like all of them), also replicate there?
+>>>       Anyway, wanted to first check if that's the way to do it, before
+>>>       doing that.
+> 
+> Recommendations on how to handle this, welcome.
+> 
+> Thanks
+> 
+> --
+> ankur
+> 
 
-How about the following changes:
-Will remove set_avx2_ymm() and will only check XSAVE_MASK_FP, XSAVE_MASK_OPMASK
-and XSAVE_MASK_PKRU xstates after signal handling and process switch,
-xstates will be controlled by XSAVE_TEST_MASK:
-"
-#define XSAVE_TEST_MASK (XSAVE_MASK_FP | XSAVE_MASK_YMM | XSAVE_MASK_OPMASK \
-			| XSAVE_MASK_PKRU)
-"
-will change to
-"
-#define XSAVE_TEST_MASK (XSAVE_MASK_FP | XSAVE_MASK_OPMASK | XSAVE_MASK_PKRU)
-"
-
-FP will be used only by user space, and seems Glibc will not use FP in general.
-This is the xstates position for FP, XMM, Header, YMM, AVX512 opmask and PKRU:
-It could be saved by xsave instruction, and mask could control which part
-will be saved(Header will be saved as mandatory):
-FP               (0-159 bytes)
-XMM              (160-415 bytes)
-Reserved         (416-511 bytes  SDM vol1 13.4.1)
-Header_used      (512-527 bytes)
-Headed_reserved  (528-575 bytes must 00, otherwise xrstor will #GP)
-
-YMM           (Offset:CPUID.(EAX=0D,ECX=2).EBX  Size:CPUID(EAX=0D,ECX=2).EAX)
-AVX512 opmask (Offset:CPUID.(EAX=0D,ECX=5).EBX  Size:CPUID(EAX=0D,ECX=5).EAX)
-PKRU          (Offset:CPUID.(EAX=0D,ECX=9).EBX  Size:CPUID(EAX=0D,ECX=9).EAX)
-
-
-Thanks!
-BR.
+-- 
+Thanks,
+Yu

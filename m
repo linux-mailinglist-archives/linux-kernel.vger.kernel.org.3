@@ -2,85 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF4A46FD21
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0741B46FD24
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 09:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238858AbhLJJBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238835AbhLJJBV (ORCPT
+        id S238854AbhLJJCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:02:33 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:29172 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236109AbhLJJCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:01:21 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A78C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 00:57:47 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id n8so5844878plf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 00:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=spacecubics-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o78r8oCqesWT7jqTVPoth6IM19LStgzO1ZNNWGxpAcg=;
-        b=vPd16In+A27Rtsr9JY+O/2Hhe6R2WbhGgeymIxYHdMog/u8sC6FA+A0AYVoLk8xwMA
-         iDtr43nagI2JOPL5sk04xRMumKM2+C07uZI8HTbJjJZYO9NAjbuIFc+56B0kue+bMtJe
-         G8JJbVJ8LmbR1w1tfl0lBJEXDZfid+5OXvO5GNNDE8U/uAN+kdpvRp7jRBFf6Q4oOUmh
-         7h4Z5cwDvC8EdQOMUOGB0GNgQkU5mVVs8Y50vIRQV0gWVxVzGRsWJpXWGmdl0GGo4lis
-         mb6+Ezxjoj4G28UsTlCPq2Jq0orWzGVTXEA47Ch7TO8IlC1+Euhf61FdP2jz/DPL3LZz
-         aFnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o78r8oCqesWT7jqTVPoth6IM19LStgzO1ZNNWGxpAcg=;
-        b=tRBK6DABK6YYhvaOZcKpYG87GdhZDFUaCAlsUgx37rAUzloatlSWAPv1aZkz2moB0O
-         ZE+1zSVtDKjEQ+OJB3KQtWTV/QyW8qh2/c2Mntd/bhv4sNW8KdEP+peCG6UJWzKeZT6Z
-         i3sv9Q6MguZ6EZB/v2Jtv6rxfG41yMZOyJR5qEJf9Wfh1O4YVqQRi5jQq0bIOoN7pmuP
-         OClRpnLfKZOAnz5p7LtRJ8Jfx+iFflxiCgZAdD1r0lHYY4GH492oHVi+EMACSzhyFV4j
-         byUrIMLnyXcUAPq+aWrVsgke7LRFuILadtMcKaRfADFqrC3E4FoeZ9/EF6sVxDcCZxWC
-         2Rbg==
-X-Gm-Message-State: AOAM532+KeBWHaGd6Ccejpr5my4PCSR9Su7ankGHgw2sHT4epsUGsUNH
-        qolDqkckNYqHWel2af6psvpPysVzUjv0lRMYr64DYg==
-X-Google-Smtp-Source: ABdhPJyStS5NlCVO8vdDsg26SLoOFytFOZeSf1AZFKF4jXizeNkyXoXGEeLcX55fgZCj2gqpe0wshFUG6BWMGgUQ+t0=
-X-Received: by 2002:a17:90a:d515:: with SMTP id t21mr22452866pju.123.1639126666591;
- Fri, 10 Dec 2021 00:57:46 -0800 (PST)
+        Fri, 10 Dec 2021 04:02:30 -0500
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J9PsT6tWLz8whN;
+        Fri, 10 Dec 2021 16:56:45 +0800 (CST)
+Received: from use12-sp2.huawei.com (10.67.189.174) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 10 Dec 2021 16:58:53 +0800
+From:   Xiaoming Ni <nixiaoming@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <viro@zeniv.linux.org.uk>,
+        <ebiederm@xmission.com>, <keescook@chromium.org>,
+        <jlayton@kernel.org>, <bfields@fieldses.org>, <mcgrof@kernel.org>,
+        <yzaikin@google.com>, <apw@canonical.com>, <joe@perches.com>,
+        <dwaipayanray1@gmail.com>, <lukas.bulwahn@gmail.com>,
+        <julia.lawall@inria.fr>, <akpm@linux-foundation.org>
+CC:     <nixiaoming@huawei.com>, <wangle6@huawei.com>
+Subject: [PATCH v2] sysctl: Add a group of macro functions to initcall the sysctl table of each feature
+Date:   Fri, 10 Dec 2021 16:58:49 +0800
+Message-ID: <20211210085849.66169-1-nixiaoming@huawei.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <YbEQG1MrjHreKFmw@bombadil.infradead.org>
+References: <YbEQG1MrjHreKFmw@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20211207121531.42941-1-mailhol.vincent@wanadoo.fr> <20211207121531.42941-4-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20211207121531.42941-4-mailhol.vincent@wanadoo.fr>
-From:   Yasushi SHOJI <yashi@spacecubics.com>
-Date:   Fri, 10 Dec 2021 17:57:35 +0900
-Message-ID: <CAGLTpnJp_v3Eev61gPWRi6fzj400mUR7hLmezXGc2RmA7XDcoA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] can: do not copy the payload of RTR frames
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jimmy Assarsson <extja@kvaser.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.189.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+To avoid duplicated code, add a set of macro functions to initialize the
+sysctl table for each feature.
 
-On Tue, Dec 7, 2021 at 9:16 PM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> The actual payload length of the CAN Remote Transmission Request (RTR)
-> frames is always 0, i.e. nothing is transmitted on the wire. However,
-> those RTR frames still use the DLC to indicate the length of the
-> requested frame.
->
-> For this reason, it is incorrect to copy the payload of RTR frames
-> (the payload buffer would only contain garbage data). This patch
-> encapsulates the payload copy in a check toward the RTR flag.
->
-> CC: Yasushi SHOJI <yashi@spacecubics.com>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+The system initialization process is as follows:
 
-It works and LGTM.
+	start_kernel () {
+		...
+		/* init proc and sysctl base,
+		 * proc_root_init()-->proc_sys_init()-->sysctl_init_bases()
+		 */
+		proc_root_init(); /* init proc and sysctl base */
+		...
+		arch_call_rest_init();
+	}
 
-Tested-by: Yasushi SHOJI <yashi@spacecubics.com>
+	arch_call_rest_init()-->rest_init()-->kernel_init()
+	kernel_init() {
+		...
+		kernel_init_freeable(); /* do all initcalls */
+		...
+		do_sysctl_args(); /* Process the sysctl parameter: sysctl.*= */
+	}
+
+	kernel_init_freeable()--->do_basic_setup()-->do_initcalls()
+	do_initcalls() {
+		for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++) {
+			do_initcall_level
+	}
+
+The sysctl interface of each subfeature should be registered after
+sysctl_init_bases() and before do_sysctl_args(). It seems that the sysctl
+interface does not depend on initcall_levels. To prevent the sysctl
+interface from being initialized before the feature itself. The
+lowest-level late_initcall() is used as the common sysctl interface
+registration level.
+
+Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
+
+---
+v2:
+  Add a simple checkpatch check.
+  Add code comment.
+v1:
+  https://lore.kernel.org/lkml/20211207011320.100102-1-nixiaoming@huawei.com/
+---
+ fs/coredump.c          |  7 +------
+ fs/dcache.c            |  7 +------
+ fs/exec.c              |  8 +-------
+ fs/file_table.c        |  7 +------
+ fs/inode.c             |  7 +------
+ fs/locks.c             |  7 +------
+ fs/namei.c             |  8 +-------
+ fs/namespace.c         |  7 +------
+ include/linux/sysctl.h | 19 +++++++++++++++++++
+ kernel/stackleak.c     |  7 +------
+ scripts/checkpatch.pl  |  6 ++++++
+ 11 files changed, 34 insertions(+), 56 deletions(-)
+
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 570d98398668..8f6c6322651d 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -943,12 +943,7 @@ static struct ctl_table coredump_sysctls[] = {
+ 	{ }
+ };
+ 
+-static int __init init_fs_coredump_sysctls(void)
+-{
+-	register_sysctl_init("kernel", coredump_sysctls);
+-	return 0;
+-}
+-fs_initcall(init_fs_coredump_sysctls);
++kernel_sysctl_initcall(coredump_sysctls);
+ #endif /* CONFIG_SYSCTL */
+ 
+ /*
+diff --git a/fs/dcache.c b/fs/dcache.c
+index 0eef1102f460..c1570243aaee 100644
+--- a/fs/dcache.c
++++ b/fs/dcache.c
+@@ -195,12 +195,7 @@ static struct ctl_table fs_dcache_sysctls[] = {
+ 	{ }
+ };
+ 
+-static int __init init_fs_dcache_sysctls(void)
+-{
+-	register_sysctl_init("fs", fs_dcache_sysctls);
+-	return 0;
+-}
+-fs_initcall(init_fs_dcache_sysctls);
++fs_sysctl_initcall(fs_dcache_sysctls);
+ #endif
+ 
+ /*
+diff --git a/fs/exec.c b/fs/exec.c
+index cc5ec43df028..3c30e686af79 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -2124,11 +2124,5 @@ static struct ctl_table fs_exec_sysctls[] = {
+ 	{ }
+ };
+ 
+-static int __init init_fs_exec_sysctls(void)
+-{
+-	register_sysctl_init("fs", fs_exec_sysctls);
+-	return 0;
+-}
+-
+-fs_initcall(init_fs_exec_sysctls);
++fs_sysctl_initcall(fs_exec_sysctls);
+ #endif /* CONFIG_SYSCTL */
+diff --git a/fs/file_table.c b/fs/file_table.c
+index 57edef16dce4..52b60e9378a7 100644
+--- a/fs/file_table.c
++++ b/fs/file_table.c
+@@ -116,12 +116,7 @@ static struct ctl_table fs_stat_sysctls[] = {
+ 	{ }
+ };
+ 
+-static int __init init_fs_stat_sysctls(void)
+-{
+-	register_sysctl_init("fs", fs_stat_sysctls);
+-	return 0;
+-}
+-fs_initcall(init_fs_stat_sysctls);
++fs_sysctl_initcall(fs_stat_sysctls);
+ #endif
+ 
+ static struct file *__alloc_file(int flags, const struct cred *cred)
+diff --git a/fs/inode.c b/fs/inode.c
+index bef6ba9b8eb4..cd20d6dd8ffa 100644
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -132,12 +132,7 @@ static struct ctl_table inodes_sysctls[] = {
+ 	{ }
+ };
+ 
+-static int __init init_fs_inode_sysctls(void)
+-{
+-	register_sysctl_init("fs", inodes_sysctls);
+-	return 0;
+-}
+-early_initcall(init_fs_inode_sysctls);
++fs_sysctl_initcall(inodes_sysctls);
+ #endif
+ 
+ static int no_open(struct inode *inode, struct file *file)
+diff --git a/fs/locks.c b/fs/locks.c
+index 8c6df10cd9ed..d86a74d19ed3 100644
+--- a/fs/locks.c
++++ b/fs/locks.c
+@@ -113,12 +113,7 @@ static struct ctl_table locks_sysctls[] = {
+ 	{}
+ };
+ 
+-static int __init init_fs_locks_sysctls(void)
+-{
+-	register_sysctl_init("fs", locks_sysctls);
+-	return 0;
+-}
+-early_initcall(init_fs_locks_sysctls);
++fs_sysctl_initcall(locks_sysctls);
+ #endif /* CONFIG_SYSCTL */
+ 
+ /*
+diff --git a/fs/namei.c b/fs/namei.c
+index 8d4f832f94aa..7eb636796fd4 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -1066,13 +1066,7 @@ static struct ctl_table namei_sysctls[] = {
+ 	{ }
+ };
+ 
+-static int __init init_fs_namei_sysctls(void)
+-{
+-	register_sysctl_init("fs", namei_sysctls);
+-	return 0;
+-}
+-fs_initcall(init_fs_namei_sysctls);
+-
++fs_sysctl_initcall(namei_sysctls);
+ #endif /* CONFIG_SYSCTL */
+ 
+ /**
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 647af66f313d..7117214b7a85 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -4626,11 +4626,6 @@ static struct ctl_table fs_namespace_sysctls[] = {
+ 	{ }
+ };
+ 
+-static int __init init_fs_namespace_sysctls(void)
+-{
+-	register_sysctl_init("fs", fs_namespace_sysctls);
+-	return 0;
+-}
+-fs_initcall(init_fs_namespace_sysctls);
++fs_sysctl_initcall(fs_namespace_sysctls);
+ 
+ #endif /* CONFIG_SYSCTL */
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index acf0805cf3a0..ce33e61a8287 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -231,6 +231,25 @@ extern int sysctl_init_bases(void);
+ extern void __register_sysctl_init(const char *path, struct ctl_table *table,
+ 				 const char *table_name);
+ #define register_sysctl_init(path, table) __register_sysctl_init(path, table, #table)
++
++#define sysctl_initcall(path, table) \
++	static int __init init_##table(void) \
++	{ \
++		register_sysctl_init(path, table); \
++		return  0;\
++	} \
++	late_initcall(init_##table)
++
++/*
++ * Use xxx_sysctl_initcall() to initialize your sysctl interface unless you want
++ * to register the sysctl directory and share it with other features.
++ */
++#define kernel_sysctl_initcall(table) sysctl_initcall("kernel", table)
++#define fs_sysctl_initcall(table) sysctl_initcall("fs", table)
++#define vm_sysctl_initcall(table) sysctl_initcall("vm", table)
++#define debug_sysctl_initcall(table) sysctl_initcall("debug", table)
++#define dev_sysctl_initcall(table) sysctl_initcall("dev", table)
++
+ extern struct ctl_table_header *register_sysctl_mount_point(const char *path);
+ 
+ void do_sysctl_args(void);
+diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+index 66b8af394e58..f084c1c787ba 100644
+--- a/kernel/stackleak.c
++++ b/kernel/stackleak.c
+@@ -57,12 +57,7 @@ static struct ctl_table stackleak_sysctls[] = {
+ 	{}
+ };
+ 
+-static int __init stackleak_sysctls_init(void)
+-{
+-	register_sysctl_init("kernel", stackleak_sysctls);
+-	return 0;
+-}
+-late_initcall(stackleak_sysctls_init);
++kernel_sysctl_initcall(stackleak_sysctls);
+ #endif /* CONFIG_SYSCTL */
+ 
+ #define skip_erasing()	static_branch_unlikely(&stack_erasing_bypass)
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index b01c36a15d9d..e8701d54b458 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -7212,6 +7212,12 @@ sub process {
+ 			     "Deprecated use of '$deprecated_api', prefer '$new_api' instead\n" . $herecurr);
+ 		}
+ 
++# check register_sysctl_init
++		if ($prevline =~ /{/ && $rawline =~ /\sregister_sysctl_init\(\"(kernel|fs|vm|debug|dev)\",\s+(.*)\)\;/) {
++			WARN("DEPRECATED_API",
++			     "Deprecated use of 'register_sysctl_init(\"$1\", $2);', prefer '$1_sysctl_initcall($2);' instead\n".$herecurr);
++		}
++
+ # check for various structs that are normally const (ops, kgdb, device_tree)
+ # and avoid what seem like struct definitions 'struct foo {'
+ 		if (defined($const_structs) &&
 -- 
-              yashi
+2.12.3
+

@@ -2,147 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7EBB46FAEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC91946FAF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 07:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237377AbhLJHAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 02:00:33 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:29169 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237203AbhLJHAR (ORCPT
+        id S237452AbhLJHA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 02:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237409AbhLJHAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:00:17 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J9M8T5KjXz8vnT;
-        Fri, 10 Dec 2021 14:54:33 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 14:56:41 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 10 Dec 2021 14:56:40 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: [PATCH v17 10/10] kdump: update Documentation about crashkernel
-Date:   Fri, 10 Dec 2021 14:55:33 +0800
-Message-ID: <20211210065533.2023-11-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20211210065533.2023-1-thunder.leizhen@huawei.com>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+        Fri, 10 Dec 2021 02:00:50 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ABCC0698CD;
+        Thu,  9 Dec 2021 22:57:07 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id y8so5674944plg.1;
+        Thu, 09 Dec 2021 22:57:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kR78Vf9G/BpR7pM6V254GxdHt+F2Tbo/465DsK1qwKE=;
+        b=IFsqpF0iQ2yOjzbxp5S4JHaKVkeqOG4VTmlNuqN+jfmsljTZbfrMD/cJxRhBLvxi2a
+         9K+6vhZRqofHqd7+ko6vYbnQABBIhEykYsTJ4olKQsu2gnm03Jd9Qb2WSG1Pj0fdeVh4
+         ZIBAhnX0oC5/47PiOn4yuvxDXUrRNXvYI1Wheg7aveZD2YD/cQUArZvvQOZYUNq+XrkS
+         3Hhkixu+Ugb+FuXK7kDYBrhOAsCMj5ybstU0moOAUeGO2LuEJ06nHEHgEbsBMWTe0sh1
+         xLdNnvMVa7Sstb9nctQerCvPj2Z191aZFTfN91ywKuaEZRzF088NOe1Mjrsok476dDcZ
+         dOIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kR78Vf9G/BpR7pM6V254GxdHt+F2Tbo/465DsK1qwKE=;
+        b=VU/LdqW7Hmn3SJxmUJqmHdjDXSza5KxKwELvWifzBk/vk/uq/1+sDvFP0T8ZoUn+ZU
+         YU35LQk7xf3d/5TCbp1eKPbOjE50+35vSG3UtiJ04+im1A2VdX+GFWBIHxAXNzUUloNd
+         xxA26ct3oauYgBU7g5lR1NE9QbnorB/7+tsjCrtKwbYxydSlLaiVbEn+HyP8GvpmlKxM
+         z25PHUL0h/J5ucvxDxg4zPOtW/aiG+iSdjZ/0FRVp5XgnJIyhZKa9CfIlvSNGnfeKRDt
+         qsoObEv6XwkuJklEqFoBbLB6QA+UsZnPDh2p37+SSbXjZXsOzcQt+CMjGEAbhhX7UzkS
+         kLAQ==
+X-Gm-Message-State: AOAM530qpD9mtiFOfSplOfbPbTT0U3Mu4wq+c10cEGRHnBs7FimakjUQ
+        ZpIhVPdBlqsltGPGJR/bQTPHDhnYz5U=
+X-Google-Smtp-Source: ABdhPJzQqiZpOZPRrLmfyUo+pIckIWEO48+EG7ury7tg1kbEr0hT0s/WZydwAB+KsAjlmhJlrwMUgA==
+X-Received: by 2002:a17:902:e0d4:b0:142:8897:94e2 with SMTP id e20-20020a170902e0d400b00142889794e2mr73277767pla.58.1639119426164;
+        Thu, 09 Dec 2021 22:57:06 -0800 (PST)
+Received: from [172.30.1.18] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id i191sm1571372pgd.90.2021.12.09.22.57.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 22:57:05 -0800 (PST)
+Subject: Re: [PATCH v3 6/6] PM / devfreq: Add a driver for the sun8i/sun50i
+ MBUS
+To:     Samuel Holland <samuel@sholland.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20211118031841.42315-1-samuel@sholland.org>
+ <20211118031841.42315-7-samuel@sholland.org>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Message-ID: <21922806-e64c-1c41-1373-55603604cf34@gmail.com>
+Date:   Fri, 10 Dec 2021 15:57:00 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20211118031841.42315-7-samuel@sholland.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Zhou <chenzhou10@huawei.com>
+On 21. 11. 18. 오후 12:18, Samuel Holland wrote:
+> This driver works by adjusting the divider on the DRAM controller's
+> module clock. Thus there is no fixed set of OPPs, only "full speed" down
+> to "quarter speed" (or whatever the maximum divider is on that variant).
+> 
+> It makes use of the MDFS hardware in the MBUS, in "DFS" mode, which
+> takes care of updating registers during the critical section while DRAM
+> is inaccessible.
+> 
+> This driver should support several sunxi SoCs, starting with the A33,
+> which have a DesignWare DDR3 controller with merged PHY register space
+> and the matching MBUS register layout (so not A63 or later). However,
+> the driver has only been tested on the A64/H5, so those are the only
+> compatibles enabled for now.
+> 
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>   drivers/devfreq/Kconfig          |   8 +
+>   drivers/devfreq/Makefile         |   1 +
+>   drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++
+>   3 files changed, 520 insertions(+)
+>   create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
+> 
 
-For arm64, the behavior of crashkernel=X has been changed, which
-tries low allocation in DMA zone and fall back to high allocation
-if it fails.
+(snip)
 
-We can also use "crashkernel=X,high" to select a high region above
-DMA zone, which also tries to allocate at least 256M low memory in
-DMA zone automatically and "crashkernel=Y,low" can be used to allocate
-specified size low memory.
+Applied it. Thanks.
 
-So update the Documentation.
 
-Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- Documentation/admin-guide/kdump/kdump.rst       | 11 +++++++++--
- Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++--
- 2 files changed, 18 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/admin-guide/kdump/kdump.rst b/Documentation/admin-guide/kdump/kdump.rst
-index cb30ca3df27c9b2..d4c287044be0c70 100644
---- a/Documentation/admin-guide/kdump/kdump.rst
-+++ b/Documentation/admin-guide/kdump/kdump.rst
-@@ -361,8 +361,15 @@ Boot into System Kernel
-    kernel will automatically locate the crash kernel image within the
-    first 512MB of RAM if X is not given.
- 
--   On arm64, use "crashkernel=Y[@X]".  Note that the start address of
--   the kernel, X if explicitly specified, must be aligned to 2MiB (0x200000).
-+   On arm64, use "crashkernel=X" to try low allocation in DMA zone and
-+   fall back to high allocation if it fails.
-+   We can also use "crashkernel=X,high" to select a high region above
-+   DMA zone, which also tries to allocate at least 256M low memory in
-+   DMA zone automatically.
-+   "crashkernel=Y,low" can be used to allocate specified size low memory.
-+   Use "crashkernel=Y@X" if you really have to reserve memory from
-+   specified start address X. Note that the start address of the kernel,
-+   X if explicitly specified, must be aligned to 2MiB (0x200000).
- 
- Load the Dump-capture Kernel
- ============================
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9725c546a0d46db..91f3a8dc537d404 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -783,6 +783,9 @@
- 			[KNL, X86-64] Select a region under 4G first, and
- 			fall back to reserve region above 4G when '@offset'
- 			hasn't been specified.
-+			[KNL, ARM64] Try low allocation in DMA zone and fall back
-+			to high allocation if it fails when '@offset' hasn't been
-+			specified.
- 			See Documentation/admin-guide/kdump/kdump.rst for further details.
- 
- 	crashkernel=range1:size1[,range2:size2,...][@offset]
-@@ -799,6 +802,8 @@
- 			Otherwise memory region will be allocated below 4G, if
- 			available.
- 			It will be ignored if crashkernel=X is specified.
-+			[KNL, ARM64] range in high memory.
-+			Allow kernel to allocate physical memory region from top.
- 	crashkernel=size[KMG],low
- 			[KNL, X86-64] range under 4G. When crashkernel=X,high
- 			is passed, kernel could allocate physical memory region
-@@ -807,13 +812,15 @@
- 			requires at least 64M+32K low memory, also enough extra
- 			low memory is needed to make sure DMA buffers for 32-bit
- 			devices won't run out. Kernel would try to allocate at
--			at least 256M below 4G automatically.
-+			least 256M below 4G automatically.
- 			This one let user to specify own low range under 4G
- 			for second kernel instead.
- 			0: to disable low allocation.
- 			It will be ignored when crashkernel=X,high is not used
- 			or memory reserved is below 4G.
--
-+			[KNL, ARM64] range in low memory.
-+			This one let user to specify a low range in DMA zone for
-+			crash dump kernel.
- 	cryptomgr.notests
- 			[KNL] Disable crypto self-tests
- 
 -- 
-2.25.1
-
+Best Regards,
+Samsung Electronics
+Chanwoo Choi

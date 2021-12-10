@@ -2,187 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 745BC4701A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966C44701A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241680AbhLJNco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:32:44 -0500
-Received: from mail-dm6nam11on2084.outbound.protection.outlook.com ([40.107.223.84]:3968
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230262AbhLJNco (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:32:44 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=El8PBOmxOXC3UW30XW8D7oWgEc6NpfqM9rLkuD8puOcb8XR+1k6RdMZRZUHmTmdPR7lF5KMtG7II/T8R+gJd06nnCeLc4yAsdACbAkB63npxnhoV54zlBwBXr4NF/Cq8mQxdCpPIAlwB70Fh91eczP74dh5EDSB4L01gI46FXu31qLXLv4wkfrSvzhW8haCsEPaR+/LMqBe9+gqMqLW9xxyNwV+iyAX2pRA5mxPOhqbQhjktRtKjXLXPNlOcLK6ki88vF2jK8CCWBb/aAvgo/vNI3HfH5cD7CF+IBiyn1FLUWUNZjaGfjM1a5JcrFOWvsdRMnuPl/0QCt94ZOCuVzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ed4XKMmoN/Q85E8p3Djd4G4KfV8Of7d5gFGbWZMdCkY=;
- b=YDeIEJLR/UV7O77Rj1RJn9ChH6TXnozvNuJL0dXq4jCDLNdDzOhwUHkb6WTOlacIhE853k7WG7TfbOQQgYDwvkSPgcvunNVoQJ77udKES6g15xP1Ay2F4V3RZHWqkrtwyY3w/tXnO8hJBRGABq81GLcwkDAMVgXHiVJMzTZYQ2mNyt5yEEnl+dOcWJbKAAeL0LA01/QGxoGUPT8h5bhZNhztkfX6QTVVoX1nxke3SkKBhkrxpL/LnZlBYYMFm0c8S143z9f3Le6uTEkDT8G6kHyGcz4/dx2vS5pnvlNSGM25DcNidcCe13c6WO69CBmVLePParHI9IJ93H1K/UTEmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ed4XKMmoN/Q85E8p3Djd4G4KfV8Of7d5gFGbWZMdCkY=;
- b=5dfb6lJhezWBRMWcEWav3m8uT3hhHZKVo3RuA2AEnEGaBLSidYh+SR6+s6nQ87IRD7H+q3qMs3Rr/WwoyPYGFyMHDZ2ac/ONQtsUOwHHeS4e17BoDimD4WAsgiKoLW1EY8TZoKSfYEGIJppd2LtJG2ndtdmdvMibxFbp6RZ/MXo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14) by MWHPR12MB1453.namprd12.prod.outlook.com
- (2603:10b6:301:e::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Fri, 10 Dec
- 2021 13:29:00 +0000
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::d16c:a6d5:5d2e:f9d4]) by MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::d16c:a6d5:5d2e:f9d4%12]) with mapi id 15.20.4755.027; Fri, 10 Dec
- 2021 13:29:00 +0000
-Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Shunsuke Mie <mie@igel.co.jp>, Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        id S241824AbhLJNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230262AbhLJNdy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 08:33:54 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A9BC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:30:19 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id i5so14960696wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dTdbuA9hIdKn4BfZbCPlTiSyHXJY337c3HR+lMVDle0=;
+        b=YidYi3Fu8huIr5y4/jlAfPC5nI9PIDEuaSycwThZ8P4eSOoYrOSHDTNGlV8Z58MSq1
+         nLViggv2CJ05+3TJ/iM8LaCSjxFV0xL0r9K1DPQUoZPryr9Daoa3+FYnJHcKrWuGoIf8
+         Q4g7xaSyduPS4GhcYKKPAC60Eu5VSwzkcf8NtUc4GkZkdwWnXtTOnN4LHMJxxpmOvI2V
+         jwUoLT+Y68ymEV/V9+33LhurOGp8YomH3pQb7qdJknEq6q+f/KzuLeMw9HuAvkMhTnl7
+         /y5yZXF6PzIH2ayUQGHLWyJOUOTNtFQJEP5Dno2RQjsChi4DVoLDcXQ7BWszUzeSemnH
+         qYVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dTdbuA9hIdKn4BfZbCPlTiSyHXJY337c3HR+lMVDle0=;
+        b=SQqvoCXkM0Fqrs573cYsBV4/Gti/NVC/yQDH56cOGu/jvV7MA4SWWf/oaWllSxEuvI
+         fSLz6L28szVJc28p9STafAgjCjCtArDC3nH/2pPcjMQ2fhelBN08drbO9Nvm08oaiTai
+         CA4p6XTcn9zhXLtStndptIjSfNkLVVp2AW7zcJotCULKNJdkjrIVDcbfPlv9Ha4abkhB
+         LNVvFv8KW8NIEADvL8bRX5eh8EKk2+9Xzbs+D6NExBxhxJoI1u/B1Fey1sRm/fEBJ5/q
+         sLiAHDDGtpwMpJuK0j2xp1TzewWRxp2W+6vQcW2icJhM5Iyb48MzTpkHhQcxZwMmy17q
+         lAew==
+X-Gm-Message-State: AOAM532/W8m9IIt89VjwOa5DTQZ/cRqm79ZqG6CMy7++EDsRu5cU0iot
+        VChoi0KVYePNTvilzCOhQRRZtw==
+X-Google-Smtp-Source: ABdhPJwCcS9p25EiCqzxhRSk2Pa1gd4yTmwpBUlVZupz6pABIABSyQyupvZFwpKEK3nVmGN2yBv8pg==
+X-Received: by 2002:a5d:6acc:: with SMTP id u12mr13746398wrw.628.1639143017223;
+        Fri, 10 Dec 2021 05:30:17 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:13f9:8295:8923:1942])
+        by smtp.gmail.com with ESMTPSA id m7sm2852886wml.38.2021.12.10.05.30.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 05:30:16 -0800 (PST)
+Date:   Fri, 10 Dec 2021 14:30:09 +0100
+From:   Marco Elver <elver@google.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Doug Ledford <dledford@redhat.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Tomohito Esaki <etom@igel.co.jp>
-References: <20211122110817.33319-1-mie@igel.co.jp>
- <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
- <20211207171447.GA6467@ziepe.ca>
- <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
- <20211210124204.GG6467@ziepe.ca>
- <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
- <20211210132656.GH6467@ziepe.ca>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <d25b2895-63b6-158d-ff73-f05e437e0f91@amd.com>
-Date:   Fri, 10 Dec 2021 14:28:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20211210132656.GH6467@ziepe.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: AM0PR04CA0068.eurprd04.prod.outlook.com
- (2603:10a6:208:1::45) To MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14)
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        David Hildenbrand <david@redhat.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>
+Subject: Re: [PATCH v4 7/7] selftests: test uaccess logging
+Message-ID: <YbNWYSsZ7bpV13jp@elver.google.com>
+References: <20211209221545.2333249-1-pcc@google.com>
+ <20211209221545.2333249-8-pcc@google.com>
 MIME-Version: 1.0
-Received: from [192.168.178.21] (87.176.191.248) by AM0PR04CA0068.eurprd04.prod.outlook.com (2603:10a6:208:1::45) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 10 Dec 2021 13:28:54 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ce5a0807-81ec-4c11-c06c-08d9bbe10659
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1453:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1453AAB6017B424E3A7FA13A83719@MWHPR12MB1453.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wSbKDZifX0+R3H4cS4B0J3P6HcdF6TVJZEc1DH6jFp7bFjLgcFWVQQOuwdroxKSCE79czzvlWioHdsZlfnuw8WzdPcbUyiYXeVyyQyGScI1FaxpuXVlwYf/QtcbIxq3ibdg/IViXHffC+xBB5sG5tYI+XKT2VIeXmanB3dCftL+7296lr/EiYrCg3HYAGjrZ+IAv/9cMk2t8hTBrl4GjC+rQBv6Sj4WgVY3QM07dFhBZv/VuIQrkoQmQMIefLxlBtGLeeSCBCxAMHfyhUlHDkWRuBRamq624xge1ZYGq2FwtOoTMxEs8fkuA4HGLh3OdyLYpk0sOu2CxljKhh1fT28G2v8iZhWtv/r4IHwlejETbGuDTyU4Yh+iEHLheZe6D3eJbMkBTZ/oSLrNLeGatkL7Pxwn5FcoTOq2A3vLdtqw6a5Bfwig1BDUl16Ck53gZWGgdxoy6gNObraek2M/Ep7hZBuXYKmojBL120nXmEQm/SV0DROgpPOmz8wbnlKrb/X4wzqjR8Kt0OEMDijaubWRcK3j6w8ss7z77CSMX0N4Eux6vuYpb+nrQYBOgS4h0aWZXzeJGwYnk38i/OG0J3TtQvvttSe3JTYfdaCsKuk/BiOMR4xIm2LkJUvuRkh0qH4AzPOnVmntoFdtfHy4gExN24YdOSIeityANaInTaYjJZ5Vs/VRzhsinnZDncGRWuuk8lHlCmMfMS6rfwI6qlsJJNTlFidcmqWccSYtLg3CAkvOEVHcthRYlaytUsdlg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(83380400001)(86362001)(8936002)(66476007)(66556008)(66946007)(508600001)(6486002)(6916009)(2906002)(31696002)(66574015)(26005)(54906003)(5660300002)(36756003)(8676002)(7416002)(956004)(31686004)(16576012)(38100700002)(2616005)(4326008)(6666004)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?STZhK0pLRzQxOHphT1RBQzRLZGZLKzJHbU92UkpMNFJSOWhQQUx0UVNmRVRS?=
- =?utf-8?B?MHZRaktIT1FGRW5jM0lESHpLbVhOK01KZDBVRlZwSFZoVGV6K0lCTmp1L2dE?=
- =?utf-8?B?bGNHNWdZWEdrbXZ6eFJTZmtLMzE4SDdWS0tKZmg5KytBMEVzbzlPeTRZM05R?=
- =?utf-8?B?TlB1R3hwYUVUSEY3S1FZK0NOdXZwUU9EMCt3R3ozSlVSWGdHQlFvLzNueFE4?=
- =?utf-8?B?WnZBMXJnOCtqZWNnb0E1a2p0a2pYTXoxdmtGM04wZXN4UHd6aTdOaFhzVUZq?=
- =?utf-8?B?WUpmbG51WkViR2FaZk9pOENnSXBkVy9zM3NCZU5CZ0lJTEpFTEhiRnlHMm5V?=
- =?utf-8?B?NzhVRlA5cDZ0ZVRZcFNEc0JnSHlqdU1HdWpYaE1PbTRiZndLQ2pVQ2I1Ujlu?=
- =?utf-8?B?b21jbUlkM0JIQUorVGkrNzFyRDh0ck91WXFEbjlVSTFxSzQ2MVZaaUROOFY2?=
- =?utf-8?B?a3RVeDQvVXdzNElHdDBNWWFrMHgwUC9Ib2xJem1ZWksxdlpVUG0zUDE3cTdB?=
- =?utf-8?B?ZVNhQmdBR09uN1lVSWh5WlNJRkhFYXUwbDJ1SExhZkpvbVBqR1VjcnpTS3VS?=
- =?utf-8?B?MVFRTXg3NTdIRUEwYWhoWWxDa28vRzJZSWF1MEw5TjlmK1V4cGEwcktsSlkw?=
- =?utf-8?B?Um52cERwM0s4eHI2bGg0MDlPQW9ESmNwK0JMTWJ2MjVncDFYbWd1YmVBYnhz?=
- =?utf-8?B?R1kzbUx3bXM4OWJGQjREM3N1bWFFa3lndVMyajZWSzJzZzB1VTljcVluRExi?=
- =?utf-8?B?NFp0cDlWRzNmczFoZXAraTZYWGtwWGlhTWNGeXQybXh1c2dDS3ZRSE9ndmFo?=
- =?utf-8?B?OCtIZkxGMEdtejRaVDdKakx6ZTNjTFMzdTNWN1YyaHl1YldJVmthSFZYOVN1?=
- =?utf-8?B?Y3BITkRxdk03dFpmRnVyZTNSQlpGSUxOaVRrOW1NU01PWjNNelZYYTIwT1lG?=
- =?utf-8?B?SW5pczBEdjFmN0FGRE43dG84SnluOUJDaVduNFh2dFQwT0RQSkRtVUtCc3Na?=
- =?utf-8?B?OUc5WEw5cXV3L3NyYzI3ZVZRVkRBTExXWU01bVdPblRzS3NSZHJPckh5Wis0?=
- =?utf-8?B?c1hTWTZWNUNFYkdQMHNtWUlCcytVY2tDcGlWaG5vREJ0M1QzWnJLbm5jcXI1?=
- =?utf-8?B?SmxmaGdmWGRpL0tFS0lNckdsdlJYVDk1aXhiV1U4SE0wY2VnWngzT2VGM0pQ?=
- =?utf-8?B?Y3FUbkd3TWV5VEUwVU9yVGplcVZIYm5BTmpuYy85Z01mWFB6b211T2ZCRWJM?=
- =?utf-8?B?WlNxZis3ajkyQVFhcWtKSHFLUkVtalZOUkJ4bFFaYm9lRGltandkV2drMkFS?=
- =?utf-8?B?T2R2U1ZHQWNyUzFCd2RzZTlqQk8wcFlxN01rSk1mMk9UVmErczh3Tzk4d2sy?=
- =?utf-8?B?UXVBOGFaRi9Va055NXdabmtuM3o4aDdZLzBJNm9ObHFSVlRnWHhSdFozRTlW?=
- =?utf-8?B?ZHd0NTF4UzR0ckFkdkh4dnpiRWRGeFNUZmJtZ0V1SWNIWnFac3ZZQlBNQnlX?=
- =?utf-8?B?RVRxZHJkRjNEOGp0WlF6cmRFZk9rK3FMdjNDRzc1cmVoQ0dScEtKdEp0cUxv?=
- =?utf-8?B?RGRHYmUySTRBalhVUVBiTGlSalNOdHdDZ0Mxd0xmTGxNaTVnVjJmZE40ZVFC?=
- =?utf-8?B?Q3owZnQ4dGJOZnNFclVwSmtSZEJDdzVZSzlJMW5DQlJEdkR1RzYxY2dBN1hL?=
- =?utf-8?B?NFJPdUM1YVVnRXFmcTZQYkN4RWF3d1JIUWozTXBRUm42eHFUWDRYdmFVVXYw?=
- =?utf-8?B?M0sxSDFSSHpkeE5SYldDZnZmb2hLZnB5UEFmZXZ0MFBIVThwN1dackxqM3Za?=
- =?utf-8?B?Z2ZLeXNXNG1pZm5zbnUxeHQrUi9MbmtPVjMxQzJOTnJPdHBhY2FvaEx3bUNP?=
- =?utf-8?B?MFEreDlMSHRsQmp0Y1BneFdBdERvTVREcjNDQjVsVzdFUG9DWkVxMnl3Wk1E?=
- =?utf-8?B?Q3FNSyt0d1dmdkVna0taQUR5cnV6UVM3aDE2UjJVdkpyK3VLZDdYOGVlRDIw?=
- =?utf-8?B?ZUpCZ08vb2VhcjFha0VCdk1DTFQ1a2poWlhGQVB2akp0b0N0NUdwUE5NekVV?=
- =?utf-8?B?WUhwOXBlV290bno2WUY0UWs1Q3VIVERReU1JMFVpRXArSFNHTmxhSWFsSy9Z?=
- =?utf-8?Q?62pM=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce5a0807-81ec-4c11-c06c-08d9bbe10659
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 13:29:00.0115
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A1NxZbcorJG8kg59IHpcHok0oppB6cJPSruZk/VGZYV5iaElLheYfpGlFA1WNCkk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1453
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209221545.2333249-8-pcc@google.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 10.12.21 um 14:26 schrieb Jason Gunthorpe:
-> On Fri, Dec 10, 2021 at 01:47:37PM +0100, Christian König wrote:
->> Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
->>> On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
->>>> Hi Jason,
->>>> Thank you for replying.
->>>>
->>>> 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
->>>>> On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
->>>>>> Hi maintainers,
->>>>>>
->>>>>> Could you please review this patch series?
->>>>> Why is it RFC?
->>>>>
->>>>> I'm confused why this is useful?
->>>>>
->>>>> This can't do copy from MMIO memory, so it shouldn't be compatible
->>>>> with things like Gaudi - does something prevent this?
->>>> I think if an export of the dma-buf supports vmap, CPU is able to access the
->>>> mmio memory.
->>>>
->>>> Is it wrong? If this is wrong, there is no advantages this changes..
->>> I don't know what the dmabuf folks did, but yes, it is wrong.
->>>
->>> IOMEM must be touched using only special accessors, some platforms
->>> crash if you don't do this. Even x86 will crash if you touch it with
->>> something like an XMM optimized memcpy.
->>>
->>> Christian? If the vmap succeeds what rules must the caller use to
->>> access the memory?
->> See dma-buf-map.h and especially struct dma_buf_map.
->>
->> MMIO memory is perfectly supported here and actually the most common case.
-> Okay that looks sane, but this rxe RFC seems to ignore this
-> completely. It stuffs the vaddr directly into a umem which goes to all
-> manner of places in the driver.
->
-> ??
+On Thu, Dec 09, 2021 at 02:15PM -0800, Peter Collingbourne wrote:
+> Add a kselftest for the uaccess logging feature.
+> 
+> Link: https://linux-review.googlesource.com/id/I39e1707fb8aef53747c42bd55b46ecaa67205199
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
 
-Well, yes that can go boom pretty quickly.
+It would be good to also test:
 
-Not sure what they want to use this for.
+	- Logging of reads.
 
-Christian.
+	- Exhausting the uaccess buffer, ideally somehow checking that
+	  the kernel hasn't written out-of-bounds, e.g. by using some
+	  canary.
 
->
-> Jason
+	- Passing an invalid address to some syscall, for which the
+	  access should not be logged?
 
+	- Passing an invalid address to the
+	  PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR prctl().
+
+	- Passing a valid address to the prctl(), but that address
+	  points to an invalid address.
+
+> ---
+>  tools/testing/selftests/Makefile              |   1 +
+>  .../testing/selftests/uaccess_buffer/Makefile |   4 +
+>  .../uaccess_buffer/uaccess_buffer_test.c      | 126 ++++++++++++++++++
+>  3 files changed, 131 insertions(+)
+>  create mode 100644 tools/testing/selftests/uaccess_buffer/Makefile
+>  create mode 100644 tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index c852eb40c4f7..291b62430557 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -71,6 +71,7 @@ TARGETS += timers
+>  endif
+>  TARGETS += tmpfs
+>  TARGETS += tpm2
+> +TARGETS += uaccess_buffer
+>  TARGETS += user
+>  TARGETS += vDSO
+>  TARGETS += vm
+> diff --git a/tools/testing/selftests/uaccess_buffer/Makefile b/tools/testing/selftests/uaccess_buffer/Makefile
+> new file mode 100644
+> index 000000000000..e6e5fb43ce29
+> --- /dev/null
+> +++ b/tools/testing/selftests/uaccess_buffer/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +TEST_GEN_PROGS := uaccess_buffer_test
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c b/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
+> new file mode 100644
+> index 000000000000..051062e4fbf9
+> --- /dev/null
+> +++ b/tools/testing/selftests/uaccess_buffer/uaccess_buffer_test.c
+> @@ -0,0 +1,126 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +#include <linux/uaccess-buffer.h>
+> +#include <sys/prctl.h>
+> +#include <sys/utsname.h>
+> +
+> +FIXTURE(uaccess_buffer)
+> +{
+> +	uint64_t addr;
+> +};
+> +
+> +FIXTURE_SETUP(uaccess_buffer)
+> +{
+> +	ASSERT_EQ(0, prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, &self->addr, 0,
+> +			   0, 0));
+> +}
+> +
+> +FIXTURE_TEARDOWN(uaccess_buffer)
+> +{
+> +	ASSERT_EQ(0, prctl(PR_SET_UACCESS_DESCRIPTOR_ADDR_ADDR, 0, 0, 0, 0));
+> +}
+> +
+> +TEST_F(uaccess_buffer, uname)
+> +{
+> +	struct uaccess_descriptor desc;
+> +	struct uaccess_buffer_entry entries[64];
+> +	struct utsname un;
+> +
+> +	desc.addr = (uint64_t)(unsigned long)entries;
+> +	desc.size = 64;
+> +	self->addr = (uint64_t)(unsigned long)&desc;
+> +	ASSERT_EQ(0, uname(&un));
+> +	ASSERT_EQ(0, self->addr);
+> +
+> +	if (desc.size == 63) {
+> +		ASSERT_EQ((uint64_t)(unsigned long)(entries + 1), desc.addr);
+> +
+> +		ASSERT_EQ((uint64_t)(unsigned long)&un, entries[0].addr);
+> +		ASSERT_EQ(sizeof(struct utsname), entries[0].size);
+> +		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[0].flags);
+> +	} else {
+> +		/* See override_architecture in kernel/sys.c */
+> +		ASSERT_EQ(62, desc.size);
+> +		ASSERT_EQ((uint64_t)(unsigned long)(entries + 2), desc.addr);
+> +
+> +		ASSERT_EQ((uint64_t)(unsigned long)&un, entries[0].addr);
+> +		ASSERT_EQ(sizeof(struct utsname), entries[0].size);
+> +		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[0].flags);
+> +
+> +		ASSERT_EQ((uint64_t)(unsigned long)&un.machine,
+> +			  entries[1].addr);
+> +		ASSERT_EQ(UACCESS_BUFFER_FLAG_WRITE, entries[1].flags);
+> +	}
+> +}
+> +
+> +static bool handled;
+> +
+> +static void usr1_handler(int signo)
+> +{
+> +	handled = true;
+> +}
+> +
+> +TEST_F(uaccess_buffer, blocked_signals)
+> +{
+> +	struct uaccess_descriptor desc;
+> +	struct shared_buf {
+> +		bool ready;
+> +		bool killed;
+> +	} volatile *shared = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE,
+> +				  MAP_ANON | MAP_SHARED, -1, 0);
+
+I know it's a synonym, but to be consistent with other code, MAP_ANONYMOUS?
+
+> +	struct sigaction act = {}, oldact;
+> +	int pid;
+> +
+> +	handled = false;
+> +	act.sa_handler = usr1_handler;
+> +	sigaction(SIGUSR1, &act, &oldact);
+> +
+> +	pid = fork();
+> +	if (pid == 0) {
+> +		/*
+> +		 * Busy loop to synchronize instead of issuing syscalls because
+> +		 * we need to test the behavior in the case where no syscall is
+> +		 * issued by the parent process.
+> +		 */
+> +		while (!shared->ready)
+> +			;
+> +		kill(getppid(), SIGUSR1);
+> +		shared->killed = true;
+> +		_exit(0);
+> +	} else {
+> +		int i;
+> +
+> +		desc.addr = 0;
+> +		desc.size = 0;
+> +		self->addr = (uint64_t)(unsigned long)&desc;
+> +
+> +		shared->ready = true;
+> +		while (!shared->killed)
+> +			;
+> +
+> +		/*
+> +		 * The kernel should have IPI'd us by now, but let's wait a bit
+> +		 * longer just in case.
+
+Is IPI = signalled? Because in the kernel, IPI = inter-processor
+interrupt.
+
+> +		 */
+> +		for (i = 0; i != 1000000; ++i)
+> +			;
+
+This is probably optimized out.  usleep() should work, or add compiler
+barrier if usleep doesn't work.
+
+> +
+> +		ASSERT_FALSE(handled);
+> +
+> +		/*
+> +		 * Returning from the waitpid syscall should trigger the signal
+> +		 * handler. The signal itself may also interrupt waitpid, so
+> +		 * make sure to handle EINTR.
+> +		 */
+> +		while (waitpid(pid, NULL, 0) == -1)
+> +			ASSERT_EQ(EINTR, errno);
+> +		ASSERT_TRUE(handled);
+> +	}
+> +
+> +	munmap((void *)shared, getpagesize());
+> +	sigaction(SIGUSR1, &oldact, NULL);
+> +}
+> +
+> +TEST_HARNESS_MAIN
+> -- 
+> 2.34.1.173.g76aa8bc2d0-goog
+> 

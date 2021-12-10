@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FB746FDCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78F546FDD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 10:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239447AbhLJJgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 04:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
+        id S236140AbhLJJhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 04:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbhLJJgu (ORCPT
+        with ESMTP id S230517AbhLJJhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:36:50 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D332FC061746;
-        Fri, 10 Dec 2021 01:33:15 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id t26so16938725lfk.9;
-        Fri, 10 Dec 2021 01:33:15 -0800 (PST)
+        Fri, 10 Dec 2021 04:37:51 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47A4C0617A2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:34:16 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id o4so12453965oia.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 01:34:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=1sKsqu13f1fJ8ZVjtTiFIs7M6/v2yiKCto4Y2goIhtY=;
-        b=gegr37rT1wvk5/wIHoT3HG7CbFisDJJ4qe7XzDTdtRmUZejW6aDzDd79UpHl8InFNC
-         Aav2ZhWN7fwu3X0v/aE89Aw3XSuHOBWjTUXuS08G6a53BhERGxk+ge/9uOOtbkqHNmgb
-         MoJZlh7AwjhHDayjdbsuG/3Q0h1neeOtb+eNY+EgK6GT9rHBwt8YAyq6IvVCDr3pO26l
-         HAnOi+dsKwsTag1DeO8AbaabSQ2CLSMuvxJeKT04xZCkvOu+Z3PXKa6G9dWDMSK8DId3
-         4B3MJliyAYL16Dmvpz/AGxNLYDhl40rwyQIQcyt7MD1w5vB8GcKk1scbGe0WZI0ZOvzP
-         XpBw==
+        d=endlessos.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=C5610rni1qA1S97ONM74fivbTCLDtdb0GPqD2NdK+Cs=;
+        b=KkpK0QwaC6Orez1MdmfJEhK+fZ0PtseO4yARtqs/MT4jnwN4cR9i47T8yjqlyOJiqF
+         V3m132XCN8FY9dbmXxbvRl0fPTXmQOwN+gvRdhd8h3O8krS2wrw+u5xHnrxmZeyaZbQG
+         7aVom0yR3Leu3tSDXbxG0LZkkPq+0SYJcghV27BLyTIl4f8fjxykp9qPfMFCGlfX4hra
+         1lt6z4jMvyVrlQicJFiglNpDL3ehxqBV0PYTRW4yPsX11cSOy0tjUzO6VE1na9RpUZpy
+         3lr18UAqVSIxSGbNDimw6a46CHMY0aiUu7qlYGVsti++Q6DP97BP6J9XCGBCOLBBaNRe
+         AXLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=1sKsqu13f1fJ8ZVjtTiFIs7M6/v2yiKCto4Y2goIhtY=;
-        b=NguCNx1zV30Hb5rtZ8kB48SsdTxBzENrytlAzS5ImUEuoXZBazVJldryo+bqzCh0gc
-         MEbhsHwKumUR9OQNu8hfDf+eJgbxvkENYomjMGuhMnTPIt39Pdq3tqNNjY9XUczBJyBC
-         l3ZJqI5Kbd5RzTrR2AJTJUnGDqD4C7G8r5QHhp4AGeg88FFTv01rIU6JbiCunzH7NCCB
-         Ttr7N1nnB0bT23pAv8nrqZnxd6CKj+vKemJkxzoKpCO8n9DQYdZv9D/ovmQ7U1HC66Uc
-         q/n4Jn48E+10X+rFlJ5B+910t5ex6rMbsyvycaLaJKFIWI8i9wX2pmhdPMZxLyPpOQeB
-         geZg==
-X-Gm-Message-State: AOAM532gKncsFVShysEiWrWgdMhT4kIQJjgVeBg6HWtGKTR13fovqdv7
-        TmPp/wiGrdrsJ7rE8NqTXveurRpsAGRRqg==
-X-Google-Smtp-Source: ABdhPJy0jBvkn2hW116jh/1FKkNOWkwWVSWrraWcHOTZPFv9s8mfwd+5sJqH2upmSWbUncVjhxEwpQ==
-X-Received: by 2002:a05:6512:1047:: with SMTP id c7mr11615784lfb.26.1639128794039;
-        Fri, 10 Dec 2021 01:33:14 -0800 (PST)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id c13sm254687lfv.293.2021.12.10.01.33.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 01:33:13 -0800 (PST)
-Subject: Re: [PATCH V4 6/6] dt-bindings: xen: Clarify "reg" purpose
-To:     Julien Grall <julien@xen.org>
-Cc:     xen-devel@lists.xenproject.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
- <1639080336-26573-7-git-send-email-olekstysh@gmail.com>
- <669d3f56-13b8-f159-2053-b39f1ba4222f@xen.org>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <35ee3534-9e24-5a11-0bf1-a5dd0b640186@gmail.com>
-Date:   Fri, 10 Dec 2021 11:33:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=C5610rni1qA1S97ONM74fivbTCLDtdb0GPqD2NdK+Cs=;
+        b=JI6HnQl+tMHzib0oPnTruCzjLBOI1t86tP0zXgX7hKdH+1UMsRNwQOM8iNtXFuFY1l
+         zgxsIHAynnSK8Lna6n2756OksAkq33uN/51qiG6Jnnx2Y8EPzcIewYpHsKhC4xb770+b
+         qMmx7EIX5UYAgTzGHSWGufVku+Ei1RgclzXGcvLHIm+leRedcp6ossZ74opX42eu2qLM
+         tc053/ccabxTy0TS0U1SjO65IbGD+HKoSDYef0UHrnmT9w2nUIBZSqIRziHj3goCPLBe
+         jt2VycxzmUuwGlLCeM2iWJV6rlRoN8nHEFGUd6hsKIHr23x74vSZuHPfzIi5ufh7PrAV
+         9GjA==
+X-Gm-Message-State: AOAM533sRslbdtQ5WgCKjToqz7NCSrF7jtBWPGRyVTl4SRIBQUO8iUUz
+        P5ibBwTTMAT6brP/BSzQwqPf606xouUYyCkiGjIkMQ==
+X-Google-Smtp-Source: ABdhPJwWBPx5Mqb40vNS33Uax+Ly8JSKNY9dFiEueiwRbh+hF0Yi79HGw5RU3xmsDwt7KtlUAyANOQExJKVLVFcNgQk=
+X-Received: by 2002:a05:6808:14:: with SMTP id u20mr11260168oic.69.1639128855984;
+ Fri, 10 Dec 2021 01:34:15 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <669d3f56-13b8-f159-2053-b39f1ba4222f@xen.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20211210081659.4621-1-jhp@endlessos.org> <6b0fcc8cf3bd4a77ad190dc6f72eb66f@realtek.com>
+ <CAAd53p66HPH9v0_hzOaQAydberd8JA4HthNVwpQ86xb-dSuUEA@mail.gmail.com>
+In-Reply-To: <CAAd53p66HPH9v0_hzOaQAydberd8JA4HthNVwpQ86xb-dSuUEA@mail.gmail.com>
+From:   Jian-Hong Pan <jhp@endlessos.org>
+Date:   Fri, 10 Dec 2021 17:33:40 +0800
+Message-ID: <CAPpJ_efvmPWsCFsff35GHV8Q52YvQcFr_Hs=q3RtvbfVohY+4Q@mail.gmail.com>
+Subject: Re: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Pkshih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux@endlessos.org" <linux@endlessos.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 10.12.21 11:09, Julien Grall wrote:
-> Hi Oleksandr,
-
-
-Hi Julien
-
-
+Kai-Heng Feng <kai.heng.feng@canonical.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=
+=8810=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:24=E5=AF=AB=E9=81=93=
+=EF=BC=9A
 >
-> On 09/12/2021 20:05, Oleksandr Tyshchenko wrote:
->> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>
->> Xen on Arm has gained new support recently to calculate and report
->> extended regions (unused address space) safe to use for external
->> mappings. These regions are reported via "reg" property under
->> "hypervisor" node in the guest device-tree. As region 0 is reserved
->> for grant table space (always present), the indexes for extended
->> regions are 1...N.
->>
->> No device-tree bindings update is needed (except clarifying the text)
->> as guest infers the presence of extended regions from the number
->> of regions in "reg" property.
->>
->> While at it, remove the following sentence:
->> "This property is unnecessary when booting Dom0 using ACPI."
->> for "reg" and "interrupts" properties as the initialization is not
->> done via device-tree "hypervisor" node in that case anyway.
-> You sent a similar patch for Xen and have already commented there [1] 
-> . In short, the OS will be using the node to discover whether it is 
-> running on Xen for both ACPI and DT. The hypervisor node also contain 
-> the UEFI information for dom0.
-
-I agree with your comments. The sentence should remain in this case. 
-Thank you for pointing this out.
-
-
+> On Fri, Dec 10, 2021 at 5:00 PM Pkshih <pkshih@realtek.com> wrote:
+> >
+> > +Kai-Heng
+> >
+> > > -----Original Message-----
+> > > From: Jian-Hong Pan <jhp@endlessos.org>
+> > > Sent: Friday, December 10, 2021 4:17 PM
+> > > To: Pkshih <pkshih@realtek.com>; Yan-Hsuan Chuang <tony0620emma@gmail=
+.com>; Kalle Valo
+> > > <kvalo@codeaurora.org>
+> > > Cc: linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-ker=
+nel@vger.kernel.org;
+> > > linux@endlessos.org; Jian-Hong Pan <jhp@endlessos.org>
+> > > Subject: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
+> > >
+> > > More and more laptops become frozen, due to the equipped RTL8821CE.
+> > >
+> > > This patch follows the idea mentioned in commits 956c6d4f20c5 ("rtw88=
+:
+> > > add quirks to disable pci capabilities") and 1d4dcaf3db9bd ("rtw88: a=
+dd
+> > > quirk to disable pci caps on HP Pavilion 14-ce0xxx"), but disables it=
+s
+> > > PCI ASPM capability of RTL8821CE directly, instead of checking DMI.
+> > >
+> > > Buglink:https://bugzilla.kernel.org/show_bug.cgi?id=3D215239
+> > > Fixes: 1d4dcaf3db9bd ("rtw88: add quirk to disable pci caps on HP Pav=
+ilion 14-ce0xxx")
+> > > Signed-off-by: Jian-Hong Pan <jhp@endlessos.org>
+> >
+> > We also discuss similar thing in this thread:
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D215131
+> >
+> > Since we still want to turn on ASPM to save more power, I would like to
+> > enumerate the blacklist. Does it work to you?
 >
->
-> Cheers,
->
-> [1] 
-> https://lore.kernel.org/xen-devel/9602b019-6c20-cdc7-23f3-9e4f8fd720f6@xen.org/T/#t
->
--- 
-Regards,
+> Too many platforms are affected, the blacklist method won't scale.
 
-Oleksandr Tyshchenko
+Exactly!
 
+> Right now it seems like only Intel platforms are affected, so can I
+> propose a patch to disable ASPM when its upstream port is Intel?
+
+I only have laptops with Intel chip now.  So, I am not sure the status
+with AMD platforms.
+If this is true, then "disable ASPM when its upstream port is Intel"
+might be a good idea.
+
+Jian-Hong Pan
+
+> > If so, please help to add one quirk entry of your platform.
+> >
+> > Another thing is that "attachment 299735" is another workaround for cer=
+tain
+> > platform. And, we plan to add quirk to enable this workaround.
+> > Could you try if it works to you?
+>
+> When the hardware is doing DMA, it should initiate leaving ASPM L1,
+> correct? So in theory my workaround should be benign enough for most
+> platforms.
+>
+> Kai-Heng
+>
+> >
+> > Thank you
+> > --
+> > Ping-Ke
+> >

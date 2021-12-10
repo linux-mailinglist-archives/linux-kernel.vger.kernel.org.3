@@ -2,127 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED834701E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7374701EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242326AbhLJNkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:40:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53186 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242267AbhLJNkK (ORCPT
+        id S236032AbhLJNl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242354AbhLJNkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:40:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4886CB82805;
-        Fri, 10 Dec 2021 13:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC381C00446;
-        Fri, 10 Dec 2021 13:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639143393;
-        bh=BIgzNKwn5a+Qf2+x0BULu3MOaPmkyzwvIzGH5LceSnk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vMT4fLCeHiMkKcm5rumE4SU+A+lvFD+KiquycxqekyalPOnWsNiRjX+ALZ+/N+3hE
-         DKShBfGT2F/QPwnjmQp6Q8i/ZVcbyyW//fhQQc4WdkHTIujlp72GQDgKOfPr/n60is
-         jpSNJ4HF0oRPj6OGXIELJK9EPrIysVr1CXHAtkR7sYEu0oWpo75Dn1RtqSlT16Irke
-         w7i1wuBABmXJsRllft4xQfbo3hZTsW8cov8kY+xX6x8DdKlDGHwKASVNZLiUUnhJ8D
-         BqsA0pZX8dOGykwx8Ya+Qyq1ABL3nNt7Y/NQemgkBuFvFgYicDahWSghtBC9ek17zK
-         l0H7LVCxqoGBw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EADD5405D8; Fri, 10 Dec 2021 10:36:30 -0300 (-03)
-Date:   Fri, 10 Dec 2021 10:36:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alistair Francis <alistair.francis@opensource.wdc.com>
-Cc:     linux-kernel@vger.kernel.org, dave@stgolabs.net,
-        dvhart@infradead.org, arnd@arndb.de, alistair23@gmail.com,
-        namhyung@kernel.org, jolsa@redhat.com,
-        linux-perf-users@vger.kernel.org,
-        alexander.shishkin@linux.intel.com, mark.rutland@arm.com,
-        mingo@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        linux-riscv@lists.infradead.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: [PATCH v5 1/6] perf bench futex: Add support for 32-bit systems
- with 64-bit time_t
-Message-ID: <YbNX3mRT0A9/N2il@kernel.org>
-References: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
+        Fri, 10 Dec 2021 08:40:53 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C718C061D7E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:37:18 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id u1so14884072wru.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UMyDDswc1FZItAV+NSBPgTMyKyf2+D9Oge1wredtc7c=;
+        b=Hd1kuvSf5n0DrJQqp7698lcVKXaMe/TLA/TGhOMfEQB+SDBrEZSfhys+1IT/Y9TNyo
+         FL8OV6pI6tCoxkvRHdGU1Yb0vpUYv9NpLbrYPsFAhL0emDoOlMJ8koYvMmkU1N1c+g/o
+         a+6RuJ+GeMiN9MGhCLm4Xe5H2oksD2RfUEfIT0cDRa47DtJrc6B/2rirhTiqEnjLknZg
+         Edm9SBItDyelahvSPfyZd7mfbz0+0T4ipL34oS5YwSFmZOS+jm+2AstTmdnupYqn7yS4
+         bXnwlWddpKU7TKBOqNuxT+m/f+GADIey098ZH+N1FWcJiCWqUTlDRfdOZ5imoUiEH2mt
+         F4hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UMyDDswc1FZItAV+NSBPgTMyKyf2+D9Oge1wredtc7c=;
+        b=P+I6wo0tA//l/72r0OKcQdyRmmneqxv8b800BQ+l8yXYKKpq2gkhZZ4ljBh+uLKOg1
+         n+38/QjzDFwjmJ+SkQTH0oIFx3psVyJ+FNyy0PIbjE8RyPM2mxsed3B3wqqnZxJgumKV
+         TtNfX+niyH85N0BCKmnlrsZng/zm0O4mDYwChNOqTJ+7sfANffi2PAozwlj5BtgTsQxQ
+         uNSlGuPMLiUiNXysCmQsBvk8jsvItY6GZyBVPw1zbHkSQDALGWNkKnS4E+UA6YRsrk1p
+         MJepGykLhIZXyfuNmSZ1CZnZtBCGynJ1qYuFSt2tWmFC6YJr0AAhKNlsm19/C/IpnedI
+         6ytQ==
+X-Gm-Message-State: AOAM530K8qdYHn815uB4xHz9lvlnU0G+V3oMHiLTli+ND82rFdLMk9xB
+        R5IkFlHhGV5QKHn+hB0iv023Cw==
+X-Google-Smtp-Source: ABdhPJyK1FJ33ENKdaCNwdVJ8F5MUTfJNljKx5SySODi49ZDvjnWhgaYlWH5OSJlvG5ocohi1ih2Ow==
+X-Received: by 2002:adf:d1e3:: with SMTP id g3mr14499141wrd.3.1639143436764;
+        Fri, 10 Dec 2021 05:37:16 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:210:76c1:fb36:1e22:8677])
+        by smtp.gmail.com with ESMTPSA id a1sm3408752wri.89.2021.12.10.05.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 05:37:16 -0800 (PST)
+Date:   Fri, 10 Dec 2021 13:37:12 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 01/15] KVM: arm64: Check if running in VHE from
+ kvm_host_owns_hyp_mappings()
+Message-ID: <YbNYCJOOARfUPKq1@google.com>
+References: <20211201170411.1561936-1-qperret@google.com>
+ <20211201170411.1561936-2-qperret@google.com>
+ <20211209101053.GA1833@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20211209101053.GA1833@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Dec 10, 2021 at 09:58:52AM +1000, Alistair Francis escreveu:
-> From: Alistair Francis <alistair.francis@wdc.com>
+On Thursday 09 Dec 2021 at 10:10:54 (+0000), Will Deacon wrote:
+> On Wed, Dec 01, 2021 at 05:03:55PM +0000, Quentin Perret wrote:
+> > The kvm_host_owns_hyp_mappings() function should return true if and only
+> > if the host kernel is responsible for creating the hypervisor stage-1
+> > mappings. That is only possible in standard non-VHE mode, or during boot
+> > in protected nVHE mode. But either way, non of this makes sense in VHE,
+> > so make sure to catch this case as well, hence making the function
+> > return sensible values in any context (VHE or not).
+> > 
+> > Suggested-by: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Quentin Perret <qperret@google.com>
+> > ---
+> >  arch/arm64/kvm/mmu.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index 326cdfec74a1..f8f1096a297f 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -239,6 +239,9 @@ void free_hyp_pgds(void)
+> >  
+> >  static bool kvm_host_owns_hyp_mappings(void)
+> >  {
+> > +	if (is_kernel_in_hyp_mode())
+> > +		return false;
 > 
-> Some 32-bit architectures (such are 32-bit RISC-V) only have a 64-bit
-> time_t and as such don't have the SYS_futex syscall. This patch will
-> allow us to use the SYS_futex_time64 syscall on those platforms.
+> This looks identical to:
 > 
-> This also converts the futex calls to be y2038 safe (when built for a
-> 5.1+ kernel).
-> 
-> This is a revert of commit ba4026b09d83acf56c040b6933eac7916c27e728
-> "Revert "perf bench futex: Add support for 32-bit systems with 64-bit time_t"".
-> 
-> The original commit was reverted as including linux/time_types.h would
-> fail to compile on older kernels. This commit doesn't include
-> linux/time_types.h to avoid this issue.
+> https://lore.kernel.org/r/20211208152300.2478542-7-qperret@google.com
 
-  10     9.99 alpine:3.12                   : FAIL gcc version 9.3.0 (Alpine 9.3.0)
-    In file included from bench/futex-hash.c:29:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-       37 |  __kernel_old_time_t tv_sec;  /* seconds */
-          |  ^~~~~~~~~~~~~~~~~~~
-    In file included from bench/futex-wake.c:25:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-       37 |  __kernel_old_time_t tv_sec;  /* seconds */
-          |  ^~~~~~~~~~~~~~~~~~~
-    make[3]: *** [/git/perf-5.16.0-rc4/tools/build/Makefile.build:139: bench] Error 2
-  11   114.27 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
-  12   100.12 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
-  13   101.06 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
-  14   101.96 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20211128) 11.2.1 20211128 , Alpine clang version 12.0.1
-  15     6.98 alt:p8                        : FAIL gcc version 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) (GCC)
-    In file included from bench/futex-hash.c:29:0:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-      __kernel_old_time_t tv_sec;  /* seconds */
-      ^
-    In file included from bench/futex-wake.c:25:0:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-      __kernel_old_time_t tv_sec;  /* seconds */
-      ^
-    In file included from bench/futex-wake-parallel.c:31:0:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-      __kernel_old_time_t tv_sec;  /* seconds */
-      ^
-    make[3]: *** [bench] Error 2
-  16    73.65 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
-  17    72.34 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 11.2.1 20210911 (ALT Sisyphus 11.2.1-alt1) , ALT Linux Team clang version 12.0.1
-  18     7.58 amazonlinux:1                 : FAIL gcc version 7.2.1 20170915 (Red Hat 7.2.1-2) (GCC)
-    In file included from bench/futex-hash.c:29:0:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-      __kernel_old_time_t tv_sec;  /* seconds */
-      ^~~~~~~~~~~~~~~~~~~
-    In file included from bench/futex-wake.c:25:0:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-      __kernel_old_time_t tv_sec;  /* seconds */
-      ^~~~~~~~~~~~~~~~~~~
-    make[3]: *** [bench] Error 2
-  19     8.28 amazonlinux:2                 : FAIL gcc version 7.3.1 20180712 (Red Hat 7.3.1-13) (GCC)
-    In file included from bench/futex-hash.c:29:0:
-    bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-      __kernel_old_time_t tv_sec;  /* seconds */
-      ^~~~~~~~~~~~~~~~~~~
-    make[3]: *** [bench] Error 2
-  20    79.16 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
+Yep, I figured it made more sense in the other series as it's not
+strictly related to this one, so ... :)
 
-
-Still building on the other containers.
-
-- Arnaldo
+Cheers,
+Quentin

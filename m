@@ -2,129 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71C7470BDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45A6470BDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 21:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbhLJUey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 15:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
+        id S1344220AbhLJUfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 15:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344211AbhLJUew (ORCPT
+        with ESMTP id S1344213AbhLJUfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:34:52 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37E9C0617A1;
-        Fri, 10 Dec 2021 12:31:16 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id k4so7003371plx.8;
-        Fri, 10 Dec 2021 12:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jw1R+y/hcHxw2PT0p++dPCEF0COGjgzOAfMrHqXYnmM=;
-        b=Bj+eXpOd8SzmrJr7YedQ/prWz5Nhb/UwYzn4LYbYC36INmkJgXTghx2tdmOgL51KpZ
-         /NMu5KRvGw6V/m3A81JqHlgtdx0VwVYcS1qmRcwsxnxxQ1mctQXAHoAIGvp5cplvrgLu
-         oGsDF+VTRyiY7OIaz/t2SwS32w4Ab/92XtjcZ8UgvbUQIUjp9d2JJa0h1oQDDpVg0SnS
-         5WcE6IcGXwGx3JcCw4uuBDKQoJ1FDnoNeYvK1/D7i5mp3wCbZIMdFTM5JrZCkKMJWavw
-         v6Ig7kgp4cQxi9sQs4wAAf/gEPRhgqNdInYf9Hw6F6bEGgAPnNV8KBREpolxKgqZe2gv
-         8E/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jw1R+y/hcHxw2PT0p++dPCEF0COGjgzOAfMrHqXYnmM=;
-        b=HTCoyHaNSrnNgV4VO0+qe6bJynT+0tRFwgSTmb+C6NRHUKPsj6uI0O6mSzekUOpHhf
-         wGoj001YXmOtQorFnJuazZMZGMIj+3w7xNrxnmbC9KQjgGzBprYl5hARqTPsUN01hU/R
-         iPCTMpHj1ahx32jYRMNmcMtR/t0i6eTxB4XyblKQYhvA8WLbrrI3jROrZ4Rf558NT5TR
-         IVNniGg5yac51DL1pmdWQPMA6PM2VMb8qfwPr3UneyVPqyQfmeI/+ONQ3XyEQCj7qk+t
-         7umirB8Ap9BRRVNjUKDWRn5sEn7FOzU9TX4AX5ksUsP0Pv7QHsJNdeo6qBrl0Sss84gh
-         3yHw==
-X-Gm-Message-State: AOAM531k3nSqmID+DUYV/K2NWUF9JsZvcWQVQEoZGsM5/dTTIHhgWHBd
-        doLKZk43kHunWRp2KpqMkkM=
-X-Google-Smtp-Source: ABdhPJxTn8cdjm0nDrmj3G2/X5TV7UORnvYHQW3Jxaa+vjIKePL9ujp9yEQXIZ3Pnlrd8hZuQYmxdw==
-X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr26302078pjb.185.1639168276271;
-        Fri, 10 Dec 2021 12:31:16 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id s19sm4434823pfu.137.2021.12.10.12.31.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 12:31:15 -0800 (PST)
-Subject: Re: [PATCH v10 0/7] PCI: brcmstb: root port turns on sub-device power
-To:     Rob Herring <robh@kernel.org>, Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Saenz Julienne <nsaenzjulienne@suse.de>
-References: <20211209211407.8102-1-jim2101024@gmail.com>
- <YbOf836C58fUSmCO@robh.at.kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <d659ec6c-ddf8-87b9-ebf1-b32c3730d038@gmail.com>
-Date:   Fri, 10 Dec 2021 12:31:10 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 10 Dec 2021 15:35:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F8FC061746
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 12:31:30 -0800 (PST)
+Date:   Fri, 10 Dec 2021 21:31:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639168288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=5EPlnYMzpExB+0lU6K1ksB1QMami8uvBEUfMAE2WmuY=;
+        b=WeY1vvZy2Q9L3tzYhWzsoMeu4K6C5wGLaLbIlEJSFMN1SuIYj3iz9RRKMk0iFSGbyaXo/G
+        gD/zsIXwCKQHsm+evuW1t3TX1AeZL9U70tK+rbEqafX8VmqFavkfGS1MY6arSya9zncU7R
+        L15zRuaiGXL/HuS/bUfKZYWYJmO0gFqZsRek+jwHQoXVMVw477ulc7ZfUoUWylU1WjJnCr
+        iSWs445XOP9MJggC++jvSca4/3rJtunLbrgRaXmvXAEliUva/QnV+pWvZGkegRl14w4yzn
+        +Ud+VCjQXV5+mm+nKMyWv9tLHp/MbrgF7f0GkZ31QFpnq2aefNQr3LnLiQdxQw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639168288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=5EPlnYMzpExB+0lU6K1ksB1QMami8uvBEUfMAE2WmuY=;
+        b=/KLC006qXRA+hDJ38M8xWkT6+TqfNdI7ZFo+PsrzCR00iv9s34JpjnAokllr7How5+yRGi
+        KcZdOpf+bB/EE7CQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] tracing: Account bottom half disabled sections.
+Message-ID: <YbO5H+H3dwLoIVka@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <YbOf836C58fUSmCO@robh.at.kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 10:44 AM, Rob Herring wrote:
-> On Thu, Dec 09, 2021 at 04:13:58PM -0500, Jim Quinlan wrote:
->> v10 -- Bindings commit example: in comment, refer to bridge under
->>        controller node as a root port. (Pali)
->>     -- Bindings commit example: remove three properties that are not
->>        appropriate for a PCIe endpoint node. (Rob)
->>
->> v9  -- Simplify where this mechanism works: instead of looking for
->>        regulators below every bridge, just look for them at the
->>        bridge under the root bus (root port).  Now there is no
->>        modification of portdrv_{pci,core}.c in this submission.
->>     -- Although Pali is working on support for probing native
->>        PCIe controller drivers, this work may take some time to
->>        implement and it still might not be able to accomodate
->>        our driver's requirements (e.g. vreg suspend/resume control).
->>     -- Move regulator suspend/resume control to Brcm RC driver.  It
->>        must reside there because (a) in order to know when to
->>        initiate linkup during resume and (b) to turn on the
->>        regulators before any config-space accesses occur.
-> 
-> You now have a mixture of 'generic' add/remove_bus hooks and the host 
-> controller suspend/resume managing the regulators. I think long term, 
-> the portdrv is going to be the right place for all of this with some 
-> interface defined for link control. So I think this solution moves 
-> sideways rather than towards anything common.
-> 
-> Unfortunately, the only leverage maintainers have to get folks to care 
-> about any refactoring is to reject features. We're lucky to find anyone 
-> to test refactoring when posted if done independently. There's a long 
-> list of commits of PCI hosts that I've broken to prove that. So it's 
-> up to Lorenzo and Bjorn on what they want to do here.
+Disabling only bottom halves via local_bh_disable() disables also
+preemption but this remains invisible to tracing. On a CONFIG_PREEMPT
+kernel one might wonder why there is no scheduling happening despite the
+N flag in the trace. The reason might be the a rcu_read_lock_bh()
+section.
 
-After version 10, it would seem pretty clear that we are still very much
-committed to and interested in getting that set merged and do it the
-most acceptable way possible. Common code with a single user is always a
-little bit of a grey area to me as it tends to be developed to cater for
-the specific needs of that single user, so the entire common aspect is
-debatable. I suppose as long as we have the binding right, the code can
-change at will.
+Add a 'b' to the tracing output if in task context with disabled bottom
+halves.
 
-Not trying to coerce Bjorn and Lorenzo into accepting these patches if
-they don't feel comfortable, but what about getting it included so we
-can sort of move on from that topic for a little bit (as we have other
-PCIe changes coming in, supporting additional chips etc.) and we work
-with Pali on a common solution and ensure it works on our pcie-brcmstb.c
-based devices? We are not going to vanish and not come back looking at this.
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ include/linux/trace_events.h | 1 +
+ kernel/trace/trace.c         | 6 ++++--
+ kernel/trace/trace_output.c  | 3 +++
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 2d167ac3452c5..a2af7e1156eac 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -172,6 +172,7 @@ enum trace_flag_type {
+ 	TRACE_FLAG_SOFTIRQ		= 0x10,
+ 	TRACE_FLAG_PREEMPT_RESCHED	= 0x20,
+ 	TRACE_FLAG_NMI			= 0x40,
++	TRACE_FLAG_BH_OFF		= 0x80,
+ };
+ 
+ #ifdef CONFIG_TRACE_IRQFLAGS_SUPPORT
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 88de94da596b1..dca48d556ee5a 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -2601,6 +2601,8 @@ unsigned int tracing_gen_ctx_irq_test(unsigned int irqs_status)
+ 		trace_flags |= TRACE_FLAG_HARDIRQ;
+ 	if (in_serving_softirq())
+ 		trace_flags |= TRACE_FLAG_SOFTIRQ;
++	if (softirq_count() >> (SOFTIRQ_SHIFT + 1))
++		trace_flags |= TRACE_FLAG_BH_OFF;
+ 
+ 	if (tif_need_resched())
+ 		trace_flags |= TRACE_FLAG_NEED_RESCHED;
+@@ -4185,7 +4187,7 @@ static void print_lat_help_header(struct seq_file *m)
+ 	seq_puts(m, "#                    _------=> CPU#            \n"
+ 		    "#                   / _-----=> irqs-off        \n"
+ 		    "#                  | / _----=> need-resched    \n"
+-		    "#                  || / _---=> hardirq/softirq \n"
++		    "#                  || / _---=> hardirq/softirq/BH-disables\n"
+ 		    "#                  ||| / _--=> preempt-depth   \n"
+ 		    "#                  |||| / _-=> migrate-disable \n"
+ 		    "#                  ||||| /     delay           \n"
+@@ -4226,7 +4228,7 @@ static void print_func_help_header_irq(struct array_buffer *buf, struct seq_file
+ 
+ 	seq_printf(m, "#                            %.*s  _-----=> irqs-off\n", prec, space);
+ 	seq_printf(m, "#                            %.*s / _----=> need-resched\n", prec, space);
+-	seq_printf(m, "#                            %.*s| / _---=> hardirq/softirq\n", prec, space);
++	seq_printf(m, "#                            %.*s| / _---=> hardirq/softirq/BH-disabled\n", prec, space);
+ 	seq_printf(m, "#                            %.*s|| / _--=> preempt-depth\n", prec, space);
+ 	seq_printf(m, "#                            %.*s||| / _-=> migrate-disable\n", prec, space);
+ 	seq_printf(m, "#                            %.*s|||| /     delay\n", prec, space);
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 3547e7176ff79..6be644d35ec30 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -445,11 +445,13 @@ int trace_print_lat_fmt(struct trace_seq *s, struct trace_entry *entry)
+ 	char irqs_off;
+ 	int hardirq;
+ 	int softirq;
++	int bh_off;
+ 	int nmi;
+ 
+ 	nmi = entry->flags & TRACE_FLAG_NMI;
+ 	hardirq = entry->flags & TRACE_FLAG_HARDIRQ;
+ 	softirq = entry->flags & TRACE_FLAG_SOFTIRQ;
++	bh_off = entry->flags & TRACE_FLAG_BH_OFF;
+ 
+ 	irqs_off =
+ 		(entry->flags & TRACE_FLAG_IRQS_OFF) ? 'd' :
+@@ -478,6 +480,7 @@ int trace_print_lat_fmt(struct trace_seq *s, struct trace_entry *entry)
+ 		(hardirq && softirq) ? 'H' :
+ 		hardirq              ? 'h' :
+ 		softirq              ? 's' :
++		bh_off		     ? 'b' :
+ 		                       '.' ;
+ 
+ 	trace_seq_printf(s, "%c%c%c",
 -- 
-Florian
+2.34.1
+

@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 895D246FF61
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB3B46FF66
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 12:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240407AbhLJLJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 06:09:05 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:45770 "EHLO
+        id S240400AbhLJLJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 06:09:15 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:45792 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240271AbhLJLI4 (ORCPT
+        with ESMTP id S240295AbhLJLI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 06:08:56 -0500
-Date:   Fri, 10 Dec 2021 11:05:19 -0000
+        Fri, 10 Dec 2021 06:08:58 -0500
+Date:   Fri, 10 Dec 2021 11:05:20 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639134320;
+        s=2020; t=1639134321;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zwnLeJfHwdJRNHEYeNbBsJuiLSU6PlZ5Q7YUKK4wPJ4=;
-        b=qhWokm3qNsP9Q+Mejr2uUD7XqpB4jJ4I7+MCTmfwUL9lj6lApcYhdK+OkqUNNE7iBKWICO
-        QZUmTTevpykntyjCGCAlSy+DANl/MZ434OUtEjZzGu9Gx7iA+b+GQ9yYVgLFJn8gLlWSDM
-        XaCPhD/Sji+plWygINK3RRLOCD9at/Yfc/eQJr7vu7Q7M+b/8YLvKiaggBqCkiGej8u9I7
-        +O6ox/u0q7OML0o4D+TfOtJk1ySwnLKWSYn75NYQFnVUH0k5F2Ai4655jRL0S9qyZFBepa
-        yehMsieOd4p5O23mVTQIxkdEPSFSvCcN4R2BIWddTJYTBAlwFhtZyD2TxjAdWQ==
+        bh=DVlDFOW24XJ6bkcLC8DsFpdLwlCu4BLQ4fnuUqgDOnU=;
+        b=3YpzOPoRMf3ItRPvn3fqveDyYjhLgEjlPl/eqR4BHFyEtJNwyhnobRhQkpvbmDg2xEkUgE
+        XJFOpdGQ/0ca9qZrKq56cKSdbMtCPpTvxQWkmPx/kg6iCYGe62QHojls4f4cIAnTzj4ggg
+        nSlQVnvi7lQ4EJpIMdCxQFmVmEcB9Ko/YXIFoEBgZ6IMKzLTd4s0WWOTfbT3/GE1r54s7M
+        FC3PieTizr5Ptw7e1r6v9s57fImNh1rwZOvLTJyyjmespdvLIHPZHVDW+vGP3VP+pJYq54
+        nyuoQWUi5ndlflDJMcdxuCiFvvIJw3SCoCYoUvOEKDLpXHul3Rbh2yDKVJuPhQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639134320;
+        s=2020e; t=1639134321;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zwnLeJfHwdJRNHEYeNbBsJuiLSU6PlZ5Q7YUKK4wPJ4=;
-        b=alfs/8Ez9QiVuXPZrpsVhD5bpDbnbzv4VvB3Uz/8/CUOPXp7TzgWZUyinxiwtLa9+wlFre
-        5WOIpvgJSVNCIADg==
+        bh=DVlDFOW24XJ6bkcLC8DsFpdLwlCu4BLQ4fnuUqgDOnU=;
+        b=QoZTREpX4Mce0erLhOmB2ZtyzBA4qbnfPGjBjUvo/t6cq9hPbF6Rz3QCayT0Q7FSq3a9v7
+        zc1KKdrFQnmZrTAw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/lib/atomic64_386_32: Rename things
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+Subject: [tip: x86/core] x86: Move RETPOLINE*_CFLAGS to arch Makefile
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211204134907.841623970@infradead.org>
-References: <20211204134907.841623970@infradead.org>
+In-Reply-To: <20211119165630.219152765@infradead.org>
+References: <20211119165630.219152765@infradead.org>
 MIME-Version: 1.0
-Message-ID: <163913431912.23020.252828531596067663.tip-bot2@tip-bot2>
+Message-ID: <163913432083.23020.8355879993745940811.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,249 +60,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     22da5a07c75e1104caf6a42f189c97b83d070073
-Gitweb:        https://git.kernel.org/tip/22da5a07c75e1104caf6a42f189c97b83d070073
+Commit-ID:     b2f825bfeda884f9d40386cc7d089d023017d2dd
+Gitweb:        https://git.kernel.org/tip/b2f825bfeda884f9d40386cc7d089d023017d2dd
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Sat, 04 Dec 2021 14:43:39 +01:00
+AuthorDate:    Fri, 19 Nov 2021 17:50:24 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 08 Dec 2021 11:57:08 +01:00
+CommitterDate: Wed, 08 Dec 2021 11:39:42 +01:00
 
-x86/lib/atomic64_386_32: Rename things
+x86: Move RETPOLINE*_CFLAGS to arch Makefile
 
-Principally, in order to get rid of #define RET in this code to make
-place for a new RET, but also to clarify the code, rename a bunch of
-things:
+Currently, RETPOLINE*_CFLAGS are defined in the top-level Makefile
+but only x86 makes use of them. Move them there. If ever another
+architecture finds the need, it can be reconsidered.
 
-  s/UNLOCK/IRQ_RESTORE/
-  s/LOCK/IRQ_SAVE/
-  s/BEGIN/BEGIN_IRQ_SAVE/
-  s/\<RET\>/RET_IRQ_RESTORE/
-  s/RET_ENDP/\tRET_IRQ_RESTORE\rENDP/
+  [ bp: Massage a bit. ]
 
-which then leaves RET unused so it can be removed.
-
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211204134907.841623970@infradead.org
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lkml.kernel.org/r/20211119165630.219152765@infradead.org
 ---
- arch/x86/lib/atomic64_386_32.S | 84 ++++++++++++++++++---------------
- 1 file changed, 46 insertions(+), 38 deletions(-)
+ Makefile          | 11 -----------
+ arch/x86/Makefile | 11 +++++++++++
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/lib/atomic64_386_32.S b/arch/x86/lib/atomic64_386_32.S
-index 16bc913..4ad6b97 100644
---- a/arch/x86/lib/atomic64_386_32.S
-+++ b/arch/x86/lib/atomic64_386_32.S
-@@ -9,81 +9,83 @@
- #include <asm/alternative.h>
+diff --git a/Makefile b/Makefile
+index 8e35d78..b9ee63d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -688,17 +688,6 @@ ifdef CONFIG_FUNCTION_TRACER
+   CC_FLAGS_FTRACE := -pg
+ endif
  
- /* if you want SMP support, implement these with real spinlocks */
--.macro LOCK reg
-+.macro IRQ_SAVE reg
- 	pushfl
- 	cli
- .endm
- 
--.macro UNLOCK reg
-+.macro IRQ_RESTORE reg
- 	popfl
- .endm
- 
--#define BEGIN(op) \
-+#define BEGIN_IRQ_SAVE(op) \
- .macro endp; \
- SYM_FUNC_END(atomic64_##op##_386); \
- .purgem endp; \
- .endm; \
- SYM_FUNC_START(atomic64_##op##_386); \
--	LOCK v;
-+	IRQ_SAVE v;
- 
- #define ENDP endp
- 
--#define RET \
--	UNLOCK v; \
-+#define RET_IRQ_RESTORE \
-+	IRQ_RESTORE v; \
- 	ret
- 
--#define RET_ENDP \
--	RET; \
--	ENDP
+-ifdef CONFIG_CC_IS_GCC
+-RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
+-RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
+-endif
+-ifdef CONFIG_CC_IS_CLANG
+-RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
+-RETPOLINE_VDSO_CFLAGS	:= -mretpoline
+-endif
+-export RETPOLINE_CFLAGS
+-export RETPOLINE_VDSO_CFLAGS
 -
- #define v %ecx
--BEGIN(read)
-+BEGIN_IRQ_SAVE(read)
- 	movl  (v), %eax
- 	movl 4(v), %edx
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
+ include $(srctree)/arch/$(SRCARCH)/Makefile
  
- #define v %esi
--BEGIN(set)
-+BEGIN_IRQ_SAVE(set)
- 	movl %ebx,  (v)
- 	movl %ecx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
+ ifdef need-config
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 4224386..2f40de5 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -12,6 +12,17 @@ else
+         KBUILD_DEFCONFIG := $(ARCH)_defconfig
+ endif
  
- #define v  %esi
--BEGIN(xchg)
-+BEGIN_IRQ_SAVE(xchg)
- 	movl  (v), %eax
- 	movl 4(v), %edx
- 	movl %ebx,  (v)
- 	movl %ecx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %ecx
--BEGIN(add)
-+BEGIN_IRQ_SAVE(add)
- 	addl %eax,  (v)
- 	adcl %edx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %ecx
--BEGIN(add_return)
-+BEGIN_IRQ_SAVE(add_return)
- 	addl  (v), %eax
- 	adcl 4(v), %edx
- 	movl %eax,  (v)
- 	movl %edx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %ecx
--BEGIN(sub)
-+BEGIN_IRQ_SAVE(sub)
- 	subl %eax,  (v)
- 	sbbl %edx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %ecx
--BEGIN(sub_return)
-+BEGIN_IRQ_SAVE(sub_return)
- 	negl %edx
- 	negl %eax
- 	sbbl $0, %edx
-@@ -91,47 +93,52 @@ BEGIN(sub_return)
- 	adcl 4(v), %edx
- 	movl %eax,  (v)
- 	movl %edx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %esi
--BEGIN(inc)
-+BEGIN_IRQ_SAVE(inc)
- 	addl $1,  (v)
- 	adcl $0, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %esi
--BEGIN(inc_return)
-+BEGIN_IRQ_SAVE(inc_return)
- 	movl  (v), %eax
- 	movl 4(v), %edx
- 	addl $1, %eax
- 	adcl $0, %edx
- 	movl %eax,  (v)
- 	movl %edx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %esi
--BEGIN(dec)
-+BEGIN_IRQ_SAVE(dec)
- 	subl $1,  (v)
- 	sbbl $0, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %esi
--BEGIN(dec_return)
-+BEGIN_IRQ_SAVE(dec_return)
- 	movl  (v), %eax
- 	movl 4(v), %edx
- 	subl $1, %eax
- 	sbbl $0, %edx
- 	movl %eax,  (v)
- 	movl %edx, 4(v)
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
- 
- #define v %esi
--BEGIN(add_unless)
-+BEGIN_IRQ_SAVE(add_unless)
- 	addl %eax, %ecx
- 	adcl %edx, %edi
- 	addl  (v), %eax
-@@ -143,7 +150,7 @@ BEGIN(add_unless)
- 	movl %edx, 4(v)
- 	movl $1, %eax
- 2:
--	RET
-+	RET_IRQ_RESTORE
- 3:
- 	cmpl %edx, %edi
- 	jne 1b
-@@ -153,7 +160,7 @@ ENDP
- #undef v
- 
- #define v %esi
--BEGIN(inc_not_zero)
-+BEGIN_IRQ_SAVE(inc_not_zero)
- 	movl  (v), %eax
- 	movl 4(v), %edx
- 	testl %eax, %eax
-@@ -165,7 +172,7 @@ BEGIN(inc_not_zero)
- 	movl %edx, 4(v)
- 	movl $1, %eax
- 2:
--	RET
-+	RET_IRQ_RESTORE
- 3:
- 	testl %edx, %edx
- 	jne 1b
-@@ -174,7 +181,7 @@ ENDP
- #undef v
- 
- #define v %esi
--BEGIN(dec_if_positive)
-+BEGIN_IRQ_SAVE(dec_if_positive)
- 	movl  (v), %eax
- 	movl 4(v), %edx
- 	subl $1, %eax
-@@ -183,5 +190,6 @@ BEGIN(dec_if_positive)
- 	movl %eax,  (v)
- 	movl %edx, 4(v)
- 1:
--RET_ENDP
-+	RET_IRQ_RESTORE
-+ENDP
- #undef v
++ifdef CONFIG_CC_IS_GCC
++RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
++RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
++endif
++ifdef CONFIG_CC_IS_CLANG
++RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
++RETPOLINE_VDSO_CFLAGS	:= -mretpoline
++endif
++export RETPOLINE_CFLAGS
++export RETPOLINE_VDSO_CFLAGS
++
+ # For gcc stack alignment is specified with -mpreferred-stack-boundary,
+ # clang has the option -mstack-alignment for that purpose.
+ ifneq ($(call cc-option, -mpreferred-stack-boundary=4),)

@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A81FC470CC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730AA470CC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344554AbhLJV5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S1344559AbhLJWAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 17:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344539AbhLJV5Q (ORCPT
+        with ESMTP id S1344517AbhLJWAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:57:16 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B09C061746;
-        Fri, 10 Dec 2021 13:53:41 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639173218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
-        bh=FS3wlVwOwRWAaINXlttn8DXkX1i9/TPWcXiWxrUtLVE=;
-        b=IFSH1FPIZNHmd3CIkzNDQpS8V9+63fcLmE5bnXludIlnCnSHeKDwJd4RlmlVumciL/EYN7
-        medkWpZWPI5hGJg4s9Q73IYz8G8Dgn4FmgfYZBSElZ1efxMHXKSJOpDJwJT8u5vDXZK7Oo
-        dXLbwsPU968cCKl12jZaqTl9oZ+oh5ut9CeGA3Vs2C3kqpoDxIkAVHQWCxVib17/xmMaec
-        /bOSRzS1a3Rl2QbE2YW/JXjtCpppTaG62OwKyfsXdvZkMXGXctRSGgsEpEkl6iCSEBhIPk
-        Xti26BLhLtkRudFDuVI4zMvBO+E1XwDjE7KSqUOjrkR4WLUz2UcU++BqxrmOnA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639173218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
-        bh=FS3wlVwOwRWAaINXlttn8DXkX1i9/TPWcXiWxrUtLVE=;
-        b=6xSO9NCtT6zRNacDqmnS9biTnTT4yvev+awkHt6pGEmWPiazTh2Ergs15MNj+UmyRf/lTJ
-        frHeA2ijSviyNaBA==
-To:     "Nakajima, Jun" <jun.nakajima@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Jing Liu <jing2.liu@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>
-Subject: Re: Rewording of Setting IA32_XFD[18] (Re: Thoughts of AMX KVM
- support based on latest kernel)
-In-Reply-To: <9F8F8297-E70F-427C-BEDA-9FAB86877DBD@intel.com>
-Date:   Fri, 10 Dec 2021 22:53:37 +0100
-Message-ID: <87bl1oxh26.ffs@tglx>
+        Fri, 10 Dec 2021 17:00:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA904C061746;
+        Fri, 10 Dec 2021 13:56:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=e3xzUnh6wNzIQ9NXm8Wz0BvP/CH5ssrris4KaAbFFzQ=; b=Ecxexbsaq0KNwo77zdVegRmDbC
+        jpV7N92m8p/vQqdXCSAfRsUrPVkKbIfsvZu7pRdgrEvCOl9GhSbvQimFuumyyvuUGJ9qGX9aQMwF4
+        qAUNFKHEq9feNhhVS8YCKogjQ8P9x7SFwAD+V4XwAIfXB4DLVqYxfW7YeIjcWkXdW3zLRMHDRilpi
+        V+tomK72xlogQ86qzb+MvB2i16WFmGXpgInJC1wCaZckW/Vo7eh9wTQtiONgcveZcJEeq/+oMVH72
+        9FLueKzFsabcu7IZG2RCpsUgzQhJ1yETl7dV9UAFqlqWAy9mYEXe8dr3jSuDl8vDFD7QCgvG/zsC+
+        NT90zY5A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvnsj-003v3f-M9; Fri, 10 Dec 2021 21:56:45 +0000
+Date:   Fri, 10 Dec 2021 13:56:45 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Next/Trees: update the modules tree
+Message-ID: <YbPNHcF9UrvrR5jb@bombadil.infradead.org>
+References: <20211208195931.3369500-1-mcgrof@kernel.org>
+ <YbPI6Novz3ikiKEI@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YbPI6Novz3ikiKEI@sirena.org.uk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jun,
+On Fri, Dec 10, 2021 at 09:38:48PM +0000, Mark Brown wrote:
+> On Wed, Dec 08, 2021 at 11:59:31AM -0800, Luis Chamberlain wrote:
+>=20
+> > pull request which was merged for v5.16-rc1. I'll queue up fixes
+> > on the modules_linus branch.
+>=20
+> > those in the modules_next branch to match parity with the same style
+>=20
+> Actually, note that your e-mail says the branches are modules_X while
+> the diff says modules-X which looks like it's the correct thing:
 
-On Wed, Dec 08 2021 at 00:50, Jun Nakajima wrote:
->> On Nov 19, 2021, at 7:41 AM, Nakajima, Jun <jun.nakajima@intel.com> wrot=
-e:
->> I=E2=80=99ll work with the H/W team on those (i.e. rewording and the com=
-ponent 17 issue).
->>=20
->
-> The following is a possible documentation update that may convey the
-> rewording you requested.  Does this (the last sentence, =E2=80=9CIn addit=
-ion,
-> =E2=80=9C) work for you?
->
-> 3.3 RECOMMENDATIONS FOR SYSTEM SOFTWARE
->
-> System software may disable use of Intel AMX by clearing XCR0[18:17],
-> by clearing CR4.OSXSAVE, or by setting IA32_XFD[18]. System software
-> should initialize AMX state (e.g., by executing TILERELEASE) when
-> doing so because maintaining AMX state in a non-initialized state may
-> have negative power and performance implications. In addition,
-> software should not rely on the state of the tile data after setting
-> IA32_XFD[18]; software should always reload or reinitialize the tile
-> data after clearing IA32_XFD[18].
+modules-linus and modules-next are the correct ones indeed.
 
-looks good to me.
+Sorry about the confusion.
 
-Thanks,
+  Luis
 
-        tglx
+>=20
+> > -modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/l=
+inux.git#modules-linus
+> > +modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof=
+/linux.git#modules-linus
+>=20
+> > -modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.=
+git#modules-next
+> > +modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linu=
+x.git#modules-next
+
 

@@ -2,113 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D903470323
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42261470324
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 15:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242403AbhLJOyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 09:54:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25743 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242390AbhLJOyW (ORCPT
+        id S242424AbhLJOyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 09:54:52 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38962 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242390AbhLJOyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:54:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639147847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Z35jirA25UiblnwV/sjy+/qYeLAmZOVR3MPTVKs+MzA=;
-        b=DAsPLgodaLh0nOePdUWYzzQvdoIhhk5zgQ63PNaOZP8Ihhu9J76tuQ79TP1in//8l/FJ2/
-        RBbKbMdlOUbk/PIuBLdRM6UNn7DZgInI+EO3ClZnkSFx5TVBWp/m6ic+b/m67BdwQqHnP5
-        S3hs+2ap3DqxLuEJR7q/hUqvxWepCx8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-O3pw-CUzMROkMpmPihl7EQ-1; Fri, 10 Dec 2021 09:50:46 -0500
-X-MC-Unique: O3pw-CUzMROkMpmPihl7EQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 10 Dec 2021 09:54:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EBED51044A81;
-        Fri, 10 Dec 2021 14:50:44 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C7C160622;
-        Fri, 10 Dec 2021 14:50:44 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 5.16-rc5
-Date:   Fri, 10 Dec 2021 09:50:44 -0500
-Message-Id: <20211210145044.28699-1-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F955CE2B72;
+        Fri, 10 Dec 2021 14:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1281DC00446;
+        Fri, 10 Dec 2021 14:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639147873;
+        bh=chBWh/Xd3Bt3/c17zjYLEg77CE7lBlfktiHYiBFYyu4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E0946bzqlPP3PJN7nLMrO3GB3zgHibERcdeMt19HFw2H4UbsKeObRGpn1ccF8EgpX
+         QxeJtIeAvm66cTsENJduadLGDWfJ+abqn9YKEmQIw7WIFl3qho6M8rJ/X8Ml+6E1g1
+         FowB1veIPf7ya8ahcXdkUXp7RWcnqatTHOB66ulowqWXG4xJF1DIDpUFWe0V3tHG3h
+         SUmp5Uupj+5wbUPQP1YTCaGAoQ3e7ILWxj97QmiRG5QJCxxB7zkcPgR2HVMG8LB6Gx
+         X7ZTwTkzr+jWwHgdDQ8NXUS2oq5jXmYueNrPFOOiuj+uzEYhxSFWcfLgXiojliWYCd
+         ntEpo2jbT9rXg==
+Date:   Fri, 10 Dec 2021 23:51:10 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 09/13] user_events: Optimize writing events by only
+ copying data once
+Message-Id: <20211210235110.f674dd81e27bdedb231826a2@kernel.org>
+In-Reply-To: <20211209223210.1818-10-beaub@linux.microsoft.com>
+References: <20211209223210.1818-1-beaub@linux.microsoft.com>
+        <20211209223210.1818-10-beaub@linux.microsoft.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Beau,
 
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+On Thu,  9 Dec 2021 14:32:06 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
+> Pass iterator through to probes to allow copying data directly to the
+> probe buffers instead of taking multiple copies. Enables eBPF user and
+> raw iterator types out to programs for no-copy scenarios.
+> 
+> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> ---
+>  kernel/trace/trace_events_user.c | 102 ++++++++++++++++++++++---------
+>  1 file changed, 74 insertions(+), 28 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 807db0af74fb..1d29f6ec907d 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -41,6 +41,10 @@
+>  #define MAX_FIELD_ARRAY_SIZE (2 * PAGE_SIZE)
+>  #define MAX_FIELD_ARG_NAME 256
+>  
+> +#define MAX_BPF_COPY_SIZE PAGE_SIZE
+> +#define MAX_STACK_BPF_DATA 512
+> +#define copy_nofault copy_from_iter_nocache
+> +
+>  static char *register_page_data;
+>  
+>  static DEFINE_MUTEX(reg_mutex);
+> @@ -78,8 +82,7 @@ struct user_event_refs {
+>  	struct user_event *events[];
+>  };
+>  
+> -typedef void (*user_event_func_t) (struct user_event *user,
+> -				   void *data, u32 datalen,
+> +typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
+>  				   void *tpdata);
+>  
+>  static int user_event_parse(char *name, char *args, char *flags,
+> @@ -515,7 +518,7 @@ static struct user_event *find_user_event(char *name, u32 *outkey)
+>  /*
+>   * Writes the user supplied payload out to a trace file.
+>   */
+> -static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
+> +static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
+>  			      void *tpdata)
+>  {
+>  	struct trace_event_file *file;
+> @@ -531,41 +534,85 @@ static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
+>  
+>  	/* Allocates and fills trace_entry, + 1 of this is data payload */
+>  	entry = trace_event_buffer_reserve(&event_buffer, file,
+> -					   sizeof(*entry) + datalen);
+> +					   sizeof(*entry) + i->count);
+>  
+>  	if (unlikely(!entry))
+>  		return;
+>  
+> -	memcpy(entry + 1, data, datalen);
+> +	if (unlikely(!copy_nofault(entry + 1, i->count, i))) {
+> +		__trace_event_discard_commit(event_buffer.buffer,
+> +					     event_buffer.event);
+> +		return;
+> +	}
+>  
+>  	trace_event_buffer_commit(&event_buffer);
+>  }
+>  
+>  #ifdef CONFIG_PERF_EVENTS
+> +static void user_event_bpf(struct user_event *user, struct iov_iter *i)
+> +{
+> +	struct user_bpf_context context;
+> +	struct user_bpf_iter bpf_i;
+> +	char fast_data[MAX_STACK_BPF_DATA];
+> +	void *temp = NULL;
+> +
+> +	if ((user->flags & FLAG_BPF_ITER) && iter_is_iovec(i)) {
+> +		/* Raw iterator */
+> +		context.data_type = USER_BPF_DATA_ITER;
+> +		context.data_len = i->count;
+> +		context.iter = &bpf_i;
+> +
+> +		bpf_i.iov_offset = i->iov_offset;
+> +		bpf_i.iov = i->iov;
+> +		bpf_i.nr_segs = i->nr_segs;
+> +	} else if (i->nr_segs == 1 && iter_is_iovec(i)) {
+> +		/* Single buffer from user */
+> +		context.data_type = USER_BPF_DATA_USER;
+> +		context.data_len = i->count;
+> +		context.udata = i->iov->iov_base + i->iov_offset;
+> +	} else {
+> +		/* Multi buffer from user */
+> +		struct iov_iter copy = *i;
+> +		size_t copy_size = min(i->count, (size_t)MAX_BPF_COPY_SIZE);
+> +
+> +		context.data_type = USER_BPF_DATA_KERNEL;
+> +		context.kdata = fast_data;
+> +
+> +		if (unlikely(copy_size > sizeof(fast_data))) {
+> +			temp = kmalloc(copy_size, GFP_NOWAIT);
+> +
+> +			if (temp)
+> +				context.kdata = temp;
+> +			else
+> +				copy_size = sizeof(fast_data);
+> +		}
+> +
+> +		context.data_len = copy_nofault(context.kdata,
+> +						copy_size, &copy);
+> +	}
+> +
+> +	trace_call_bpf(&user->call, &context);
+> +
+> +	kfree(temp);
+> +}
+> +
+>  /*
+>   * Writes the user supplied payload out to perf ring buffer or eBPF program.
+>   */
+> -static void user_event_perf(struct user_event *user, void *data, u32 datalen,
+> +static void user_event_perf(struct user_event *user, struct iov_iter *i,
+>  			    void *tpdata)
+>  {
+>  	struct hlist_head *perf_head;
+>  
+> -	if (bpf_prog_array_valid(&user->call)) {
+> -		struct user_bpf_context context = {0};
+> -
+> -		context.data_len = datalen;
+> -		context.data_type = USER_BPF_DATA_KERNEL;
+> -		context.kdata = data;
+> -
+> -		trace_call_bpf(&user->call, &context);
+> -	}
+> +	if (bpf_prog_array_valid(&user->call))
+> +		user_event_bpf(user, i);
+>  
+>  	perf_head = this_cpu_ptr(user->call.perf_events);
+>  
+>  	if (perf_head && !hlist_empty(perf_head)) {
+>  		struct trace_entry *perf_entry;
+>  		struct pt_regs *regs;
+> -		size_t size = sizeof(*perf_entry) + datalen;
+> +		size_t size = sizeof(*perf_entry) + i->count;
+>  		int context;
+>  
+>  		perf_entry = perf_trace_buf_alloc(ALIGN(size, 8),
+> @@ -576,7 +623,10 @@ static void user_event_perf(struct user_event *user, void *data, u32 datalen,
+>  
+>  		perf_fetch_caller_regs(regs);
+>  
+> -		memcpy(perf_entry + 1, data, datalen);
+> +		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i))) {
+> +			perf_swevent_put_recursion_context(context);
+> +			return;
+> +		}
+>  
+>  		perf_trace_buf_submit(perf_entry, size, context,
+>  				      user->call.event.type, 1, regs,
+> @@ -1009,32 +1059,28 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+>  	if (likely(atomic_read(&tp->key.enabled) > 0)) {
+>  		struct tracepoint_func *probe_func_ptr;
+>  		user_event_func_t probe_func;
+> +		struct iov_iter copy;
+>  		void *tpdata;
+> -		void *kdata;
+> -		u32 datalen;
+>  
+> -		kdata = kmalloc(i->count, GFP_KERNEL);
+> -
+> -		if (unlikely(!kdata))
+> -			return -ENOMEM;
+> -
+> -		datalen = copy_from_iter(kdata, i->count, i);
+> +		if (unlikely(iov_iter_fault_in_readable(i, i->count)))
+> +			return -EFAULT;
+>  
+>  		rcu_read_lock_sched();
+> +		pagefault_disable();
 
-are available in the Git repository at:
+Since the pagefault_disable() may have unexpected side effect,
+I think it should be used really limited area, e.g. around
+actual memory access function.
+Can we move this around the copy_nofault()?
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+Thank you,
+>  
+>  		probe_func_ptr = rcu_dereference_sched(tp->funcs);
+>  
+>  		if (probe_func_ptr) {
+>  			do {
+> +				copy = *i;
+>  				probe_func = probe_func_ptr->func;
+>  				tpdata = probe_func_ptr->data;
+> -				probe_func(user, kdata, datalen, tpdata);
+> +				probe_func(user, &copy, tpdata);
+>  			} while ((++probe_func_ptr)->func);
+>  		}
+>  
+> +		pagefault_enable();
+>  		rcu_read_unlock_sched();
+> -
+> -		kfree(kdata);
+>  	}
+>  
+>  	return ret;
+> -- 
+> 2.17.1
+> 
 
-for you to fetch changes up to 10e7a099bfd860a2b77ea8aaac661f52c16dd865:
 
-  selftests: KVM: Add test to verify KVM doesn't explode on "bad" I/O (2021-12-10 09:38:02 -0500)
-
-----------------------------------------------------------------
-More x86 fixes:
-* Logic bugs in CR0 writes and Hyper-V hypercalls
-* Don't use Enlightened MSR Bitmap for L3
-* Remove user-triggerable WARN
-
-Plus a few selftest fixes and a regression test for the
-user-triggerable WARN.
-
-----------------------------------------------------------------
-So I am not sure if this counts as "the kvm side calming down"; but the
-larger scale bugfixes are all in-tree now, and what I've got here looks
-(at least on the arch/ side) like a fairly normal pull request for
-middle RCs.
-
-Thanks,
-
-Paolo
-
-Lai Jiangshan (1):
-      KVM: X86: Raise #GP when clearing CR0_PG in 64 bit mode
-
-Maciej S. Szmigiero (1):
-      KVM: x86: selftests: svm_int_ctl_test: fix intercept calculation
-
-Paolo Bonzini (1):
-      selftests: KVM: avoid failures due to reserved HyperTransport region
-
-Sean Christopherson (3):
-      KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
-      KVM: x86: Don't WARN if userspace mucks with RCX during string I/O exit
-      selftests: KVM: Add test to verify KVM doesn't explode on "bad" I/O
-
-Vitaly Kuznetsov (2):
-      KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
-      KVM: x86: Wait for IPIs to be delivered when handling Hyper-V TLB flush hypercall
-
- arch/x86/include/asm/kvm_host.h                    |   2 +-
- arch/x86/kvm/hyperv.c                              |   7 +-
- arch/x86/kvm/vmx/vmx.c                             |  22 ++--
- arch/x86/kvm/x86.c                                 |  12 ++-
- tools/testing/selftests/kvm/.gitignore             |   1 +
- tools/testing/selftests/kvm/Makefile               |   1 +
- tools/testing/selftests/kvm/include/kvm_util.h     |   9 ++
- tools/testing/selftests/kvm/lib/kvm_util.c         |   2 +-
- tools/testing/selftests/kvm/lib/x86_64/processor.c |  68 ++++++++++++
- .../selftests/kvm/x86_64/svm_int_ctl_test.c        |   2 +-
- .../selftests/kvm/x86_64/userspace_io_test.c       | 114 +++++++++++++++++++++
- 11 files changed, 223 insertions(+), 17 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86_64/userspace_io_test.c
-
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

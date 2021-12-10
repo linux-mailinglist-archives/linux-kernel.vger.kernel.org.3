@@ -2,186 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C39546F86A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB3246F866
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 02:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235390AbhLJB1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Dec 2021 20:27:12 -0500
-Received: from mga04.intel.com ([192.55.52.120]:35897 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235357AbhLJB1L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Dec 2021 20:27:11 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="236982194"
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="236982194"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 17:23:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,194,1635231600"; 
-   d="scan'208";a="516558392"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2021 17:23:29 -0800
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/18] driver core: platform: Add driver dma ownership
- management
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-5-baolu.lu@linux.intel.com>
- <Ya4f662Af+8kE2F/@infradead.org> <20211206150647.GE4670@nvidia.com>
- <56a63776-48ca-0d6e-c25c-016dc016e0d5@linux.intel.com>
- <20211207131627.GA6385@nvidia.com>
- <c170d215-6aef-ff21-8733-1bae4478e39c@linux.intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <b42ffaee-bb96-6db4-8540-b399214f6881@linux.intel.com>
-Date:   Fri, 10 Dec 2021 09:23:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <c170d215-6aef-ff21-8733-1bae4478e39c@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S235354AbhLJB1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Dec 2021 20:27:08 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:51842 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230387AbhLJB1H (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 9 Dec 2021 20:27:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 47D62CE25DC;
+        Fri, 10 Dec 2021 01:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D20EC004DD;
+        Fri, 10 Dec 2021 01:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639099410;
+        bh=m+LAvWo3dIWq/3odGCreFX5XeaF+M662syX5Hp3Tc2g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H3VQ0GKd4dlbw972MPPRxFmMtzP5DDy2sUHrm7FQuH+MQkvz85MH7NIpomC2GtrXl
+         NwWWfd7GzQywQTR+wPMeLk5hqiaXkLKVxrnNhT/CobHS5Y8Cubyohn8zAzo2dYPU9T
+         64ZXOM7itYzOq27Yxp7zVhqNkoKSqgdVcUTPvi9gORLLVDhk5nRziEy/Lu8eumutrP
+         frChZhLXpeCVGHrHN4z6tlk51noRSXIztJQzeozMGu32+mqHSOd9YxZM1Y5eOSHMRH
+         1hLTTZdLJDFC0UA91/D2ar1rGJMQFBzosmnTNFpxvsKieF69BE9zJVIm65Ia+h8GgX
+         ir6oGZTgrt2zA==
+Date:   Fri, 10 Dec 2021 10:23:27 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 13/13] user_events: Use __get_rel_str for relative
+ string fields
+Message-Id: <20211210102327.ab971d529613271ab1bf0073@kernel.org>
+In-Reply-To: <20211209223210.1818-14-beaub@linux.microsoft.com>
+References: <20211209223210.1818-1-beaub@linux.microsoft.com>
+        <20211209223210.1818-14-beaub@linux.microsoft.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg, Jason and Christoph,
+Hi Beau,
 
-On 12/9/21 9:20 AM, Lu Baolu wrote:
-> On 12/7/21 9:16 PM, Jason Gunthorpe wrote:
->> On Tue, Dec 07, 2021 at 10:57:25AM +0800, Lu Baolu wrote:
->>> On 12/6/21 11:06 PM, Jason Gunthorpe wrote:
->>>> On Mon, Dec 06, 2021 at 06:36:27AM -0800, Christoph Hellwig wrote:
->>>>> I really hate the amount of boilerplate code that having this in each
->>>>> bus type causes.
->>>> +1
->>>>
->>>> I liked the first version of this series better with the code near
->>>> really_probe().
->>>>
->>>> Can we go back to that with some device_configure_dma() wrapper
->>>> condtionally called by really_probe as we discussed?
+On Thu,  9 Dec 2021 14:32:10 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-[...]
-
+> Switch between __get_str and __get_rel_str within the print_fmt of
+> user_events. Add unit test to ensure print_fmt is correct on known
+> types.
 > 
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 68ea1f949daa..68ca5a579eb1 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -538,6 +538,32 @@ static int call_driver_probe(struct device *dev, 
-> struct device_driver *drv)
->          return ret;
->   }
+> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> ---
+>  kernel/trace/trace_events_user.c              |  24 ++-
+>  .../selftests/user_events/ftrace_test.c       | 166 ++++++++++++++++++
+>  2 files changed, 182 insertions(+), 8 deletions(-)
 > 
-> +static int device_dma_configure(struct device *dev, struct 
-> device_driver *drv)
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 56eb58ddb4cf..3779fa2ca14a 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -257,7 +257,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
+>  	goto add_field;
+>  
+>  add_validator:
+> -	if (strstr(type, "char[") != 0)
+> +	if (strstr(type, "char") != 0)
+>  		validator_flags |= VALIDATOR_ENSURE_NULL;
+
+What is this change for? This seems not related to the other changes.
+(Also, what happen if it is a single char type?)
+
+>  
+>  	validator = kmalloc(sizeof(*validator), GFP_KERNEL);
+> @@ -456,14 +456,21 @@ static const char *user_field_format(const char *type)
+>  	return "%llu";
+>  }
+>  
+> -static bool user_field_is_dyn_string(const char *type)
+> +static bool user_field_is_dyn_string(const char *type, const char **str_func)
+>  {
+> -	if (str_has_prefix(type, "__data_loc ") ||
+> -	    str_has_prefix(type, "__rel_loc "))
+> -		if (strstr(type, "char[") != 0)
+> -			return true;
+> +	if (str_has_prefix(type, "__data_loc ")) {
+> +		*str_func = "__get_str";
+> +		goto check;
+> +	}
+> +
+> +	if (str_has_prefix(type, "__rel_loc ")) {
+> +		*str_func = "__get_rel_str";
+> +		goto check;
+> +	}
+>  
+>  	return false;
+> +check:
+> +	return strstr(type, "char") != 0;
+>  }
+>  
+>  #define LEN_OR_ZERO (len ? len - pos : 0)
+> @@ -472,6 +479,7 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
+>  	struct ftrace_event_field *field, *next;
+>  	struct list_head *head = &user->fields;
+>  	int pos = 0, depth = 0;
+> +	const char *str_func;
+>  
+>  	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
+>  
+> @@ -488,9 +496,9 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
+>  	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
+>  
+>  	list_for_each_entry_safe_reverse(field, next, head, link) {
+> -		if (user_field_is_dyn_string(field->type))
+> +		if (user_field_is_dyn_string(field->type, &str_func))
+>  			pos += snprintf(buf + pos, LEN_OR_ZERO,
+> -					", __get_str(%s)", field->name);
+> +					", %s(%s)", str_func, field->name);
+>  		else
+>  			pos += snprintf(buf + pos, LEN_OR_ZERO,
+>  					", REC->%s", field->name);
+> diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+
+Just a nitpick, if possible, please split this part from the kernel update.
+
+> index 16aff1fb295a..b2e5c0765a68 100644
+> --- a/tools/testing/selftests/user_events/ftrace_test.c
+> +++ b/tools/testing/selftests/user_events/ftrace_test.c
+> @@ -20,6 +20,7 @@ const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+>  const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+>  const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/enable";
+>  const char *trace_file = "/sys/kernel/debug/tracing/trace";
+> +const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
+>  
+>  static int trace_bytes(void)
+>  {
+> @@ -47,6 +48,61 @@ static int trace_bytes(void)
+>  	return bytes;
+>  }
+>  
+> +static int get_print_fmt(char *buffer, int len)
 > +{
-> +       int ret;
+> +	FILE *fp = fopen(fmt_file, "r");
+> +	int c, index = 0, last = 0;
 > +
-> +       if (!dev->bus->dma_configure)
-> +               return 0;
+> +	if (!fp)
+> +		return -1;
 > +
-> +       ret = dev->bus->dma_configure(dev);
-> +       if (ret)
-> +               return ret;
+> +	/* Read until empty line (Skip Common) */
+> +	while (true) {
+> +		c = getc(fp);
 > +
-> +       if (!drv->suppress_auto_claim_dma_owner)
-> +               ret = iommu_device_set_dma_owner(dev, DMA_OWNER_DMA_API, 
-> NULL);
+> +		if (c == EOF)
+> +			break;
 > +
-> +       return ret;
+> +		if (last == '\n' && c == '\n')
+> +			break;
+> +
+> +		last = c;
+> +	}
+
+Another nitpick, maybe you need a function like skip_until_empty_line(fp)
+and repeat it like this.
+
+	if (skip_until_empty_line(fp) < 0)
+		goto out;
+	if (skip_until_empty_line(fp) < 0)
+		goto out;
+
+> +
+> +	last = 0;
+> +
+> +	/* Read until empty line (Skip Properties) */
+> +	while (true) {
+> +		c = getc(fp);
+> +
+> +		if (c == EOF)
+> +			break;
+> +
+> +		if (last == '\n' && c == '\n')
+> +			break;
+> +
+> +		last = c;
+> +	}
+> +
+> +	/* Read in print_fmt: */
+> +	while (len > 1) {
+> +		c = getc(fp);
+> +
+> +		if (c == EOF || c == '\n')
+> +			break;
+> +
+> +		buffer[index++] = c;
+> +
+> +		len--;
+> +	}
+
+And here you can use fgets(buffer, len, fp).
+
+
+Thank you,
+
+> +
+> +	buffer[index] = 0;
+> +
+> +	fclose(fp);
+> +
+> +	return 0;
 > +}
 > +
-> +static void device_dma_cleanup(struct device *dev, struct device_driver 
-> *drv)
+>  static int clear(void)
+>  {
+>  	int fd = open(data_file, O_RDWR);
+> @@ -63,6 +119,44 @@ static int clear(void)
+>  	return 0;
+>  }
+>  
+> +static int check_print_fmt(const char *event, const char *expected)
 > +{
-> +       if (!dev->bus->dma_configure)
-> +               return;
+> +	struct user_reg reg = {0};
+> +	char print_fmt[256];
+> +	int ret;
+> +	int fd;
 > +
-> +       if (!drv->suppress_auto_claim_dma_owner)
-> +               iommu_device_release_dma_owner(dev, DMA_OWNER_DMA_API, 
-> NULL);
+> +	/* Ensure cleared */
+> +	ret = clear();
+> +
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	fd = open(data_file, O_RDWR);
+> +
+> +	if (fd == -1)
+> +		return fd;
+> +
+> +	reg.size = sizeof(reg);
+> +	reg.name_args = (__u64)event;
+> +
+> +	/* Register should work */
+> +	ret = ioctl(fd, DIAG_IOCSREG, &reg);
+> +
+> +	close(fd);
+> +
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	/* Ensure correct print_fmt */
+> +	ret = get_print_fmt(print_fmt, sizeof(print_fmt));
+> +
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	return strcmp(print_fmt, expected);
 > +}
 > +
->   static int really_probe(struct device *dev, struct device_driver *drv)
->   {
->          bool test_remove = IS_ENABLED(CONFIG_DEBUG_TEST_DRIVER_REMOVE) &&
-> @@ -574,11 +600,8 @@ static int really_probe(struct device *dev, struct 
-> device_driver *drv)
->          if (ret)
->                  goto pinctrl_bind_failed;
-> 
-> -       if (dev->bus->dma_configure) {
-> -               ret = dev->bus->dma_configure(dev);
-> -               if (ret)
-> -                       goto probe_failed;
-> -       }
-> +       if (device_dma_configure(dev, drv))
-> +               goto pinctrl_bind_failed;
-> 
->          ret = driver_sysfs_add(dev);
->          if (ret) {
-> @@ -660,6 +683,8 @@ static int really_probe(struct device *dev, struct 
-> device_driver *drv)
->          if (dev->bus)
->                  blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
-> 
-> BUS_NOTIFY_DRIVER_NOT_BOUND, dev);
+>  FIXTURE(user) {
+>  	int status_fd;
+>  	int data_fd;
+> @@ -282,6 +376,78 @@ TEST_F(user, write_validator) {
+>  	ASSERT_EQ(EFAULT, errno);
+>  }
+>  
+> +TEST_F(user, print_fmt) {
+> +	int ret;
 > +
-> +       device_dma_cleanup(dev, drv);
->   pinctrl_bind_failed:
->          device_links_no_driver(dev);
->          devres_release_all(dev);
-> @@ -1204,6 +1229,7 @@ static void __device_release_driver(struct device 
-> *dev, struct device *parent)
->                  else if (drv->remove)
->                          drv->remove(dev);
+> +	ret = check_print_fmt("__test_event __rel_loc char[] data",
+> +			      "print fmt: \"data=%s\", __get_rel_str(data)");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event __data_loc char[] data",
+> +			      "print fmt: \"data=%s\", __get_str(data)");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event s64 data",
+> +			      "print fmt: \"data=%lld\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event u64 data",
+> +			      "print fmt: \"data=%llu\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event s32 data",
+> +			      "print fmt: \"data=%d\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event u32 data",
+> +			      "print fmt: \"data=%u\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event int data",
+> +			      "print fmt: \"data=%d\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event unsigned int data",
+> +			      "print fmt: \"data=%u\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event s16 data",
+> +			      "print fmt: \"data=%d\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event u16 data",
+> +			      "print fmt: \"data=%u\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event short data",
+> +			      "print fmt: \"data=%d\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event unsigned short data",
+> +			      "print fmt: \"data=%u\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event s8 data",
+> +			      "print fmt: \"data=%d\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event u8 data",
+> +			      "print fmt: \"data=%u\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event char data",
+> +			      "print fmt: \"data=%d\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event unsigned char data",
+> +			      "print fmt: \"data=%u\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +
+> +	ret = check_print_fmt("__test_event char[4] data",
+> +			      "print fmt: \"data=%s\", REC->data");
+> +	ASSERT_EQ(0, ret);
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+>  	return test_harness_run(argc, argv);
+> -- 
+> 2.17.1
 > 
-> +               device_dma_cleanup(dev, drv);
->                  device_links_driver_cleanup(dev);
-> 
->                  devres_release_all(dev);
-> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
-> index a498ebcf4993..374a3c2cc10d 100644
-> --- a/include/linux/device/driver.h
-> +++ b/include/linux/device/driver.h
-> @@ -100,6 +100,7 @@ struct device_driver {
->          const char              *mod_name;      /* used for built-in 
-> modules */
-> 
->          bool suppress_bind_attrs;       /* disables bind/unbind via 
-> sysfs */
-> +       bool suppress_auto_claim_dma_owner;
->          enum probe_type probe_type;
-> 
->          const struct of_device_id       *of_match_table;
 
-Does this work for you? Can I work towards this in the next version?
 
-Best regards,
-baolu
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

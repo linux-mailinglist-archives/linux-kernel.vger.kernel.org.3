@@ -2,101 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C080E470191
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06218470196
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 14:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241798AbhLJNaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 08:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S241745AbhLJNaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 08:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbhLJNaA (ORCPT
+        with ESMTP id S235759AbhLJNae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:30:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2499C0617A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:26:25 -0800 (PST)
-Date:   Fri, 10 Dec 2021 13:26:22 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639142783;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kcxl4RIkW/vo9JKrgkENoh4O9C13QIYXVGjh31yTZ2E=;
-        b=fjiPs0NtSvY0DSdXltOa2Oi+GUVMgPf1O81DqPMuVvqqx6sg2ubQ6fjN3p5ZUNX0KoB5Hc
-        V1wLCa6i3NxY0C8kVyJKbfah1P+ccV+bZPKVuUjIifcleTTKX7lNNV+V2oUu+QFjNl06VY
-        2xJ+0keWe+aSuCuqrFgddCjAqz+YGMWlBwIgaq93xf9Lzl7KYHXsiIcWo5gkR/nc3S5gL/
-        LpXrO8AmJQId6MbqcAq0XMJkbEDHz4F2Lj1FyIt+ADJ8puhlVBMToZ0TUcoQDoM6yCNyQK
-        etiCWK8Qh1yvUdmA4yOVyMHeJrLslW8i6RG0Fr2uz7Fq6LMg+9CxaUUTH9JfqA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639142783;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kcxl4RIkW/vo9JKrgkENoh4O9C13QIYXVGjh31yTZ2E=;
-        b=HLzHGIsVlUa9hBBX/dbueJTrpWL/F0GkBVeBHDja0zjxYB15c1neTmItJ82fdhdQMXfMEk
-        +NU/GsH58C0/FfAw==
-From:   "irqchip-bot for Ye Guojin" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/irq-bcm7120-l2: Add put_device()
- after of_find_device_by_node()
-Cc:     Zeal Robot <zealci@zte.com.cn>, Ye Guojin <ye.guojin@zte.com.cn>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20211109055958.130287-1-ye.guojin@zte.com.cn>
-References: <20211109055958.130287-1-ye.guojin@zte.com.cn>
+        Fri, 10 Dec 2021 08:30:34 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143B8C0617A2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:26:59 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id n15so8396385qta.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 05:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1UYh94T9ayr7ysirWpvvFTZZFGzB6tr1mHpOwSD9y4s=;
+        b=FiKJemIB2KPeLKoECRE6rGJYjv4hRdstnEroyo0FScAIfTVyX59gJElxLx877NPlYm
+         PGFbBVh/8q1JC5yRjmmgvx1Jt6jcMl+SMzAeQH2jJMkiI4bpIezFCcHWm+e1EM2XxMpj
+         IIokm8OzQ5UbI829syl2gTig/MQZVxTID2rB8nfDlNldoliEX7y0vsjjaQJKFBteILVF
+         ZDK1LwZ0Cn1Ypt35t4Ws+HSeYRO/7hXvBT+B9OJLnzfVm6VCPDMWlXuWkmMtUnvX1sZv
+         GABTFazWX6FxJ6piDOVari9DDuQ3CZ2xhygcHSLkRVSrej53bH/eYlLl3MnXhG2tLjxo
+         1yCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1UYh94T9ayr7ysirWpvvFTZZFGzB6tr1mHpOwSD9y4s=;
+        b=50HTswweTzacDPoFD1jFCWmte+w15eWZC/pbv/4kEFlRKVL0L4zfrwinU6PoEU29V7
+         omnkGCtMjIc3y8tQk46rXco93UvRdaIkiNTE2SE4mKTStOmeNEiagrxWZ8k6TWEPm+52
+         hHaUTJcYBMsGwAW+0GLLRGI1VEbqSw5EQBxHKpKqiUmha2vasBoU++fCM67dHdpkye0b
+         4WkDvSOJGZu985OVRQKe0JCnCRvbSAIo4hcx2deovACr2XSHZYO6oYKz1UlASYTn/7OX
+         nWuV3UhvwB+ZPlzl4KQ7NhS7Vlo9irHhRXGh8kG6DgyKpfa2+J8/EVqDxliCas8PqZNu
+         fRfQ==
+X-Gm-Message-State: AOAM530i2C7iAehC10xSeHbjtAswBFaLK0TRTqojHIN2NK8aieIs4Ohs
+        pq7tRUlSlmWG/Cjy5Ss/+u4lfw==
+X-Google-Smtp-Source: ABdhPJxbYEz5peMcGtph84C4nZca8EtKaKkJc+FDRjPqXZgIuFlQNdM0TU3m9QWUAhZY7R/hSUo/KQ==
+X-Received: by 2002:ac8:5a53:: with SMTP id o19mr27107538qta.4.1639142818227;
+        Fri, 10 Dec 2021 05:26:58 -0800 (PST)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id t15sm2031405qta.45.2021.12.10.05.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 05:26:57 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1mvfvM-001fZP-B4; Fri, 10 Dec 2021 09:26:56 -0400
+Date:   Fri, 10 Dec 2021 09:26:56 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     Shunsuke Mie <mie@igel.co.jp>, Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Doug Ledford <dledford@redhat.com>,
+        Jianxin Xiong <jianxin.xiong@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Sean Hefty <sean.hefty@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>,
+        Tomohito Esaki <etom@igel.co.jp>
+Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
+Message-ID: <20211210132656.GH6467@ziepe.ca>
+References: <20211122110817.33319-1-mie@igel.co.jp>
+ <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
+ <20211207171447.GA6467@ziepe.ca>
+ <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
+ <20211210124204.GG6467@ziepe.ca>
+ <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
 MIME-Version: 1.0
-Message-ID: <163914278213.23020.634415261822719928.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+On Fri, Dec 10, 2021 at 01:47:37PM +0100, Christian König wrote:
+> Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
+> > On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
+> > > Hi Jason,
+> > > Thank you for replying.
+> > > 
+> > > 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
+> > > > On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
+> > > > > Hi maintainers,
+> > > > > 
+> > > > > Could you please review this patch series?
+> > > > Why is it RFC?
+> > > > 
+> > > > I'm confused why this is useful?
+> > > > 
+> > > > This can't do copy from MMIO memory, so it shouldn't be compatible
+> > > > with things like Gaudi - does something prevent this?
+> > > I think if an export of the dma-buf supports vmap, CPU is able to access the
+> > > mmio memory.
+> > > 
+> > > Is it wrong? If this is wrong, there is no advantages this changes..
+> > I don't know what the dmabuf folks did, but yes, it is wrong.
+> > 
+> > IOMEM must be touched using only special accessors, some platforms
+> > crash if you don't do this. Even x86 will crash if you touch it with
+> > something like an XMM optimized memcpy.
+> > 
+> > Christian? If the vmap succeeds what rules must the caller use to
+> > access the memory?
+> 
+> See dma-buf-map.h and especially struct dma_buf_map.
+> 
+> MMIO memory is perfectly supported here and actually the most common case.
 
-Commit-ID:     c3fbab7767c53397d7b849799474f5a27cf306e6
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c3fbab7767c53397d7b849799474f5a27cf306e6
-Author:        Ye Guojin <ye.guojin@zte.com.cn>
-AuthorDate:    Tue, 09 Nov 2021 05:59:58 
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 10 Dec 2021 13:23:13 
+Okay that looks sane, but this rxe RFC seems to ignore this
+completely. It stuffs the vaddr directly into a umem which goes to all
+manner of places in the driver.
 
-irqchip/irq-bcm7120-l2: Add put_device() after of_find_device_by_node()
+??
 
-This was found by coccicheck:
-./drivers/irqchip/irq-bcm7120-l2.c,328,1-7,ERROR  missing put_device;
-call of_find_device_by_node on line 234, but without a corresponding
-object release within this function.
-./drivers/irqchip/irq-bcm7120-l2.c,341,1-7,ERROR  missing put_device;
-call of_find_device_by_node on line 234, but without a corresponding
-object release within this function.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211109055958.130287-1-ye.guojin@zte.com.cn
----
- drivers/irqchip/irq-bcm7120-l2.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/irqchip/irq-bcm7120-l2.c b/drivers/irqchip/irq-bcm7120-l2.c
-index d80e67a..bb6609c 100644
---- a/drivers/irqchip/irq-bcm7120-l2.c
-+++ b/drivers/irqchip/irq-bcm7120-l2.c
-@@ -238,6 +238,7 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
- 	}
- 
- 	data->num_parent_irqs = platform_irq_count(pdev);
-+	put_device(&pdev->dev);
- 	if (data->num_parent_irqs <= 0) {
- 		pr_err("invalid number of parent interrupts\n");
- 		ret = -ENOMEM;
+Jason

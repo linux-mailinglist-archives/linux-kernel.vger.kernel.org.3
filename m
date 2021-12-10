@@ -2,94 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E20B3470C3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1276470C40
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Dec 2021 22:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbhLJVJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 16:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S239764AbhLJVLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 16:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbhLJVJS (ORCPT
+        with ESMTP id S231983AbhLJVLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:09:18 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3080DC061746;
-        Fri, 10 Dec 2021 13:05:43 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 07F072CC;
-        Fri, 10 Dec 2021 21:05:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 07F072CC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1639170342; bh=ah7X2p+x7eNXWfUxiAvcbLc+vL4B4rK2KSitJdGSWbg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Fai/J8PJVDqw32kJ4cgP/LATbXRW+UiaCL+9qJPIwrP5RmYT0b5ePsEipAPcCGQXk
-         /7Hvl20oYYmuubX92kmN4qoTogIK3HXj98Xrosm/8LWjSa33MmPIO57YDW+97ajJAf
-         FMnapIP5MoM+jCyoN+Kg3x9gmwnT6KCUX00L6zW0i20tnOMEUo29zEXNxGNQ+ji2pl
-         2h3pTmjZH+aT98NjkfEsTMnbUOC/SScLW6VRoFTjIytBCmDTazm9OZr1qW0dyTP0d4
-         W44NEIk/6oCFQKqOsiuFg5cZnhgfTNLarJN5+thlnWwi0kU3Fil2B895w719rBIGjP
-         xhnwmNblr8gQA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
-        shuah@kernel.org, rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
-In-Reply-To: <8c06e715-a83e-e8c6-74c3-836831b85cdf@linuxfoundation.org>
-References: <20211207190251.18426-1-davidgow@google.com>
- <202112071358.E8E6812D@keescook>
- <8c06e715-a83e-e8c6-74c3-836831b85cdf@linuxfoundation.org>
-Date:   Fri, 10 Dec 2021 14:05:41 -0700
-Message-ID: <87mtl8qifu.fsf@meer.lwn.net>
+        Fri, 10 Dec 2021 16:11:06 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19FCC0617A1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:07:30 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id k26so9492278pfp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 13:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1id2dwp2UGNFo7TxwGmxT4tvaojsrPJsLZ5gLoZYjqw=;
+        b=C+7Th8AsMFmn3FKfJFpaLFJ031vb60eh9MBKAUnwjoiasDEDJUVkmEiEqQt4WI2AYe
+         RofC6IVMcM7Y9ffgcHw3kITAx8GPNZ4GTQvuCD38mEbWFi+1knvfDK0IFVbMfa9ywJlg
+         btmvvIds8ISbKcBeg3Eywh5ghJgX9uP6BJ5WAg99XNpl2bNdGzEIq1L88FDUipe3WIBs
+         VpKxeOcXUjIt9+UP9zynUghSblYrl9pgHjgpMKJJo8+VMpXaNB+AzHqRt3+Qg/r/SjEU
+         2UTgXYJVOR/YzqnVi/1pDIApEwSL1KCn3V6DaiBksnDYACnLCxnpZkUb4nqDYXjDaU5e
+         Z2AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1id2dwp2UGNFo7TxwGmxT4tvaojsrPJsLZ5gLoZYjqw=;
+        b=GJHQeSty+PUgOgEZxf5QUPpT/c7iDLuFlC07GJC74LHCp6of32GG3nDdFF2WKbnXka
+         WZ7JuAdFv9BnFzrqYpZERDjYwJh1Mu4vM9lBwYXE6vJigQXhp7XfXJKgaEG4ykG2lFrG
+         mxwccQ558eU6EMOyLgPfeVSLEmBvJCbN+aZzpF8gr0UPlEAqWtyyTmDVKFw6Eg7pocIK
+         VhmGmMdyIqj8Uv8GT2aiP9a92PhDS+Aq96vf0uDHxLnn1qBUyM5c5VzC4iNvG+bl0Rc4
+         vERveuYKP5dz5w21atimfBmJgg78I5nME7VvEkqAN54XARc7iBtJpQIWTxLNBxL+2I3C
+         qWgA==
+X-Gm-Message-State: AOAM5321adJ86Jeix0heWAFAXTdzIcQr7xYnNcWgDSL0Lc9AGKw8KB3Q
+        cSNs2jyGMiV0fDGUBmr7QWZBGA3I06cXRA==
+X-Google-Smtp-Source: ABdhPJzyAuEscIXhSTZc4Pgw0eQTzwWTV+8SFuYgHZgJ3niz0e3h11m8TG8z53s9Xc4xeKU8dhcEpw==
+X-Received: by 2002:a05:6a00:10d3:b0:4a4:e516:826f with SMTP id d19-20020a056a0010d300b004a4e516826fmr20293737pfu.70.1639170450089;
+        Fri, 10 Dec 2021 13:07:30 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id o62sm3617404pfb.211.2021.12.10.13.07.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 13:07:29 -0800 (PST)
+Date:   Fri, 10 Dec 2021 21:07:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Xiao Guangrong <guangrong.xiao@linux.intel.com>
+Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
+ shadow paging if the guest PDPTEs is changed
+Message-ID: <YbPBjdAz1GQGr8DT@google.com>
+References: <20211108124407.12187-1-jiangshanlai@gmail.com>
+ <20211111144634.88972-1-jiangshanlai@gmail.com>
+ <Ya/5MOYef4L4UUAb@google.com>
+ <11219bdb-669c-cf6f-2a70-f4e5f909a2ad@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11219bdb-669c-cf6f-2a70-f4e5f909a2ad@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shuah Khan <skhan@linuxfoundation.org> writes:
+On Thu, Dec 09, 2021, Paolo Bonzini wrote:
+> On 12/8/21 01:15, Sean Christopherson wrote:
+> > > @@ -832,8 +832,14 @@ int load_pdptrs(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu, unsigned long cr3)
+> > >   	if (memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs))) {
+> > >   		memcpy(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs));
+> > >   		kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
+> > > -		/* Ensure the dirty PDPTEs to be loaded. */
+> > > -		kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
+> > > +		/*
+> > > +		 * Ensure the dirty PDPTEs to be loaded for VMX with EPT
+> > > +		 * enabled or pae_root to be reconstructed for shadow paging.
+> > > +		 */
+> > > +		if (tdp_enabled)
+> > > +			kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
+> > > +		else
+> > > +			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+> > Shouldn't matter since it's legacy shadow paging, but @mmu should be used instead
+> > of vcpu->arch.mmuvcpu->arch.mmu.
+> 
+> In kvm/next actually there's no mmu parameter to load_pdptrs, so it's okay
+> to keep vcpu->arch.mmu.
+> 
+> > To avoid a dependency on the previous patch, I think it makes sense to have this be:
+> > 
+> > 	if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
+> > 		kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOT_CURRENT);
+> > 
+> > before the memcpy().
+> > 
+> > Then we can decide independently if skipping the KVM_REQ_LOAD_MMU_PGD if the
+> > PDPTRs are unchanged with respect to the MMU is safe.
+> 
+> Do you disagree that there's already an invariant that the PDPTRs can only
+> be dirty if KVM_REQ_LOAD_MMU_PGD---and therefore a previous change to the
+> PDPTRs would have triggered KVM_REQ_LOAD_MMU_PGD?
 
-> On 12/7/21 3:02 PM, Kees Cook wrote:
->> On Tue, Dec 07, 2021 at 11:02:51AM -0800, David Gow wrote:
->>> From: Rae Moar <rmoar@google.com>
->>>
->>> It does not make any significant additions or changes other than those
->>> already in use in the kernel: additional features can be added as they
->>> become necessary and used.
->>>
->>> [1]: https://testanything.org/tap-version-13-specification.html
->>>
->>> Signed-off-by: Rae Moar <rmoar@google.com>
->>> Co-developed-by: David Gow <davidgow@google.com>
->>> Signed-off-by: David Gow <davidgow@google.com>
->> 
->> I like it! Thank you so much for suffering through my earlier reviews.
->> :)
->> 
->> The only concern I have is wonder what'll be needed to kselftest to
->> deal with indentation changes. As long as this can be implemented
->> without a subtest knowing it is a subtest, we're good.
->> 
->
-> A lot of this TAP output is in the wrappers - hopefully it will be okay.
-> Fingers crossed. :)
->
->> Reviewed-by: Kees Cook <keescook@chromium.org>
->> 
->
-> Looks good to me as well. Thanks for doing this work.
->
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+What I think is moot, because commit 24cd19a28cb7 ("KVM: X86: Update mmu->pdptrs
+only when it is changed") breaks nested VMs with EPT in L0 and PAE shadow paging
+in L2.  Reproducing is trivial, just disable EPT in L1 and run a VM.  I haven't
+investigating how it breaks things, because why it's broken is secondary for me.
 
-Would you like me to take this through the docs tree, or do you have
-other plans for merging?
-
-Thanks,
-
-jon
+My primary concern is that we would even consider optimizing the PDPTR logic without
+a mountain of evidence that any patch is correct for all scenarios.  We had to add
+an entire ioctl() just to get PDPTRs functional.  This apparently wasn't validated
+against a simple use case, let alone against things like migration with nested VMs,
+multliple L2s, etc...

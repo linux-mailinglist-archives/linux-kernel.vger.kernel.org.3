@@ -2,137 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA632471342
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 11:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D01471345
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 11:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbhLKKN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 05:13:57 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:56150 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbhLKKN4 (ORCPT
+        id S230309AbhLKKOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 05:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbhLKKOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 05:13:56 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 5EB4D20EBC8C
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <8ec4a971-29ba-77f7-7c48-ad88decea70f@omp.ru>
-Date:   Sat, 11 Dec 2021 13:13:52 +0300
+        Sat, 11 Dec 2021 05:14:52 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC00C061714;
+        Sat, 11 Dec 2021 02:14:52 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A66031EC04E4;
+        Sat, 11 Dec 2021 11:14:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639217686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=2iIoi3GbjEvxGrP+g9gYZi7LJf2Z+uyl9CUzlFsM1mI=;
+        b=NC7JdP6mkvLQBpd4eGHEb6l2BMEr3U7UqpRyDsYvH43zUiJ1UPiXGo97dsYW5XP7bhiy7z
+        1HRChiIiOwpPB7v9uWR91VJ5mLNIFM1GehlcGs8fJKMMcLeOJSO3QyZpTPovh+mD9tbywe
+        oVsT8eYLS4doMLEdP4ZmAgodrWq0TFI=
+Date:   Sat, 11 Dec 2021 11:14:47 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
+        John Dorminy <jdorminy@redhat.com>, tip-bot2@linutronix.de,
+        anjaneya.chagam@intel.com, dan.j.williams@intel.com,
+        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        stable@vger.kernel.org, x86@kernel.org,
+        "Patrick J. Volkerding" <volkerdi@gmail.com>
+Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and
+ early param parsing
+Message-ID: <YbR6FzLIp2GjeOQi@zn.tnic>
+References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
+ <20211209143810.452527-1-jdorminy@redhat.com>
+ <YbIeYIM6JEBgO3tG@zn.tnic>
+ <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com>
+ <YbIgsO/7oQW9h6wv@zn.tnic>
+ <YbIu55LZKoK3IVaF@kernel.org>
+ <YbIw1nUYJ3KlkjJQ@zn.tnic>
+ <YbM5yR+Hy+kwmMFU@zn.tnic>
+ <297f4912-907-bb45-75df-a030b0d88a8e@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message when
- IRQ can't be retrieved
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
- <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
- <9e6b2e9a-e958-0c14-6570-135607041978@omp.ru>
- <YbM7xkTazM76CVvD@smile.fi.intel.com>
- <6c03ffef-b2e0-16ba-35f3-206af2a611d2@gmail.com>
- <YbOVmGw7ys6U51z3@smile.fi.intel.com>
- <9d688cd8-99e3-0265-06aa-d44597e7686c@omp.ru>
- <YbOpu2whB5NaXbNa@smile.fi.intel.com>
- <a0bf3377-21ed-7244-7c73-ebb50dbc44c4@omp.ru>
- <448ce97b-699d-bdab-b4e9-c9439fd81a85@gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <448ce97b-699d-bdab-b4e9-c9439fd81a85@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <297f4912-907-bb45-75df-a030b0d88a8e@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.12.2021 22:35, Sergei Shtylyov wrote:
+On Fri, Dec 10, 2021 at 12:11:02PM -0800, Hugh Dickins wrote:
+> Yes, mem= works fine for me, on both machines, 64-bit and 32-bit,
+> thanks;
 
-[...]
->>>>>>>>>>>> platform_get_irq() will print a message when it fails.
->>>>>>>>>>>> No need to repeat this.
->>>>>>>>>>>>
->>>>>>>>>>>> While at it, drop redundant check for 0 as platform_get_irq() spills
->>>>>>>>>>>> out a big WARN() in such case.
->>>>>>>>>>>
->>>>>>>>>>> The reason you should be able to remove the "if (!irq)" test is that
->>>>>>>>>>> platform_get_irq() never returns 0. At least, that is what the function kdoc
->>>>>>>>>>> says. But looking at platform_get_irq_optional(), which is called by
->>>>>>>>>>> platform_get_irq(), the out label is:
->>>>>>>>>>>
->>>>>>>>>>> 	WARN(ret == 0, "0 is an invalid IRQ number\n");
->>>>>>>>>>> 	return ret;
->>>>>>>>>>>
->>>>>>>>>>> So 0 will be returned as-is. That is rather weird. That should be fixed to
->>>>>>>>>>> return -ENXIO:
->>>>>>>>>>>
->>>>>>>>>>> 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
->>>>>>>>>>> 		return -ENXIO;
->>>>>>>>>>> 	return ret;
->>>>>>>>>>
->>>>>>>>>>     My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
->>>>>>>>>> but returns -EINVAL instead.
->>>>>>>>>>
->>>>>>>>>>> Otherwise, I do not think that removing the "if (!irq)" hunk is safe. no ?
->>>>>>>>>>
->>>>>>>>>>     Of course it isn't...
->>>>>>>>>
->>>>>>>>> It's unsubstantiated statement. The vIRQ 0 shouldn't be returned by any of
->>>>>>>>> those API calls.
->>>>>>>>
->>>>>>>>     We do _not_ know what needs to be fixed, that's the problem, and that's why the WARN()
->>>>>>>> is there...
->>>>>>>
->>>>>>> So, have you seen this warning (being reported) related to libahci_platform?
->>>>>>
->>>>>>     No (as if you need to really see this while it's obvious from the code review).
->>>>>>
->>>>>>> If no, what we are discussing about then? The workaround is redundant and
->>>>>>
->>>>>>     I don't know. :-) Your arguments so far seem bogus (sorry! :-))...
->>>>>
->>>>> It seems you haven't got them at all. The problems of platform_get_irq() et al
->>>>> shouldn't be worked around in the callers.
->>>>
->>>>     I have clearly explained to you what I'm working around there. If that wasn't clear
->>>> enough, I don't want to continue this talk anymore. Good luck with your patch (not this
->>>> one).
->>>
->>> Good luck with yours, not the one that touches platform_get_irq_optional() though!
->>
->>     Mmh, I'm not touching it any way that would break what your patch was trying to do,
->> unless you've re-thopught that. It also shoudn't matter whose patch gets merged 1st
->> other than some small adaptation).
-> 
->     BTW, looking at [1], this comment is wrong:
-> 
-> + * Return: non-zero IRQ number on success, negative error number on failure.
-> 
-> It doesn't mention 0 which you return from this function.
+Thanks!
 
-    Also, your commit log is wrong in the description of how to handle the result:
+> but I'm not exercising the troublesome EFI case at all.
 
-<<
-Now:
-	ret = platform_get_irq_optional(...);
-	if (ret != -ENXIO)
-		return ret; // respect deferred probe
-	if (ret > 0)
-		...we get an IRQ...
- >>
+Yeah, I added some debug printks in a VM yesterday to confirm the
+ordering. But will give Anjaneya some more time to verify, before I
+queue them next week.
 
-    The (ret != -ENXIO) check also succeeds on the (positive) IRQ #s, so the 
-following code becomes unreachable. :-/
+-- 
+Regards/Gruss,
+    Boris.
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed7027fdf4ec41ed6df6814956dc11860232a9d5
-
-MBR, Sergey
+https://people.kernel.org/tglx/notes-about-netiquette

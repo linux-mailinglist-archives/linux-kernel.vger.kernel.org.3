@@ -2,87 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7E347130D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2475B471310
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 10:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbhLKI6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 03:58:38 -0500
-Received: from mga09.intel.com ([134.134.136.24]:11059 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229687AbhLKI6h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 03:58:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639213117; x=1670749117;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c69z9ssnFeHJKesmh0alTNQ6ljocX/UdfZXdlwLn880=;
-  b=kgMR4RTaId4xYQ0UGMLjY9iPG9H0l54nNfkkRfov3WM/1yQZbp57mrFZ
-   BXo/dwEfydobdL83g4ah33p5u5X14tPI4Gyg2QXGG/ZFhTcmRn8lAsRZv
-   R4rL7N8PphdyKdNf/Y4QI1Aug5v2GHUgF3E4ARCBHcP/FLCtpTU48La3C
-   4QJbuJsO6ZNUaTO35MAKo4ajAiqRCrvD7CXqqmTzgyn9B+zCJLNprNXRm
-   alpqlYOp/rtokDcsm4/c3IRFWXUq427q7jmvzUPa5VtTIQpHSO7IJTMYL
-   96wPwT3L3ykovPgVZ5GZzbovgVQ1iYlmDbcsC39h1hFo42eI7FU2lYCK5
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238328820"
-X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="238328820"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 00:58:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="602476961"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Dec 2021 00:58:35 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvyDD-0004NV-2r; Sat, 11 Dec 2021 08:58:35 +0000
-Date:   Sat, 11 Dec 2021 16:58:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-parisc:5.16-vdso-1 1/2] arch/parisc/kernel/signal.c:36:10:
- fatal error: generated/vdso32-offsets.h: No such file or directory
-Message-ID: <202112111656.nshwOA0r-lkp@intel.com>
+        id S230159AbhLKJEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 04:04:23 -0500
+Received: from smtpbg127.qq.com ([109.244.180.96]:65310 "EHLO smtpbg.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229455AbhLKJEW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 04:04:22 -0500
+X-QQ-mid: bizesmtp37t1639213344tpu7n3p3
+Received: from localhost.localdomain (unknown [182.132.179.213])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Sat, 11 Dec 2021 17:02:22 +0800 (CST)
+X-QQ-SSF: 01000000008000D0H000B00A0000000
+X-QQ-FEAT: hR9GyqeohSghM1ElQrnkgPt45yK/ReYtV8IATSrO12n/1LVzMECKREz9LKXxC
+        Jj+Ww9DYFJb5BM0tEI+ngLwy2S4h2Fm759cFAoNFF+hFEHJaUSFY6zfw1t5TrIfln+XavwL
+        pgZnhWWwI1y7a1Wm5nLtQBKcYz77nK78N2QlnttRcK7TzvRv+F5IKAxQWx6wKhdAd2u+W3W
+        mf96YeNKKAYLaY0zNAHbkxe2xF7I8e1UcuGwcAxrewG3uea2U5lrMqmf6fewdb2/xedTn2/
+        pq2PDBVjnC6AbnR7BHD4fKk1umJGI+gGSiTaoFw0ChR69BnYsoUGGXIKOuFELAe+iFmvlJ3
+        quBpcTUednpYkItf51zypBYoXkdNS5ok+prynfl7wK0Afb9p0k=
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     suzuki.poulose@arm.com
+Cc:     mathieu.poirier@linaro.org, alexander.shishkin@linux.intel.com,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] coresight: core: fix typo in a comment
+Date:   Sat, 11 Dec 2021 17:02:21 +0800
+Message-Id: <20211211090221.241529-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git 5.16-vdso-1
-head:   e87fad18b5acbcb8b3f345bfe6ea1099f239bd23
-commit: 1e4b26c042645773fa45cc09eb7cfe59917969e3 [1/2] initial vDSO implementation
-config: parisc-randconfig-r013-20211211 (https://download.01.org/0day-ci/archive/20211211/202112111656.nshwOA0r-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/commit/?id=1e4b26c042645773fa45cc09eb7cfe59917969e3
-        git remote add deller-parisc https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git
-        git fetch --no-tags deller-parisc 5.16-vdso-1
-        git checkout 1e4b26c042645773fa45cc09eb7cfe59917969e3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash arch/parisc/kernel/
+The double `the' in the comment in line 732 is repeated. Remove one
+of them from the comment.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/parisc/kernel/signal.c:36:10: fatal error: generated/vdso32-offsets.h: No such file or directory
-      36 | #include <generated/vdso32-offsets.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +36 arch/parisc/kernel/signal.c
-
-  > 36	#include <generated/vdso32-offsets.h>
-    37	
-
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hwtracing/coresight/coresight-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+index 8a18c71df37a..88653d1c06a4 100644
+--- a/drivers/hwtracing/coresight/coresight-core.c
++++ b/drivers/hwtracing/coresight/coresight-core.c
+@@ -729,7 +729,7 @@ static inline void coresight_put_ref(struct coresight_device *csdev)
+  * coresight_grab_device - Power up this device and any of the helper
+  * devices connected to it for trace operation. Since the helper devices
+  * don't appear on the trace path, they should be handled along with the
+- * the master device.
++ * master device.
+  */
+ static int coresight_grab_device(struct coresight_device *csdev)
+ {
+-- 
+2.34.1
+

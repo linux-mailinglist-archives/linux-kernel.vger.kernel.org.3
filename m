@@ -2,81 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E86471722
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 23:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B5B47172A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 23:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbhLKWVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 17:21:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbhLKWVr (ORCPT
+        id S232131AbhLKWb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 17:31:56 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35222 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229605AbhLKWbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 17:21:47 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DEBC061714;
-        Sat, 11 Dec 2021 14:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OR7MJxyz9yi9GRif0LyRjFc5JufWB/LgEct4g0DHtRo=; b=NdISd7c+CE9Cr1M5d12kS3JQaJ
-        GpciRXX48yuTdNDcC5lu8PnyY6AFiaMODdiCLCOU0kg/fCLhKoy3Mfuuh6W0gW8iWyagG5vH+VWT3
-        IC75pxmdvGiPCL0HuJKVRNW0+ryiUUJecsHgHef3cx/ytlNUF5GiJEwqDSZYuCmXPWkwirz5DzbHZ
-        02KUCm6PXtoi9kYl7joby42noUw0WnyQthGL8mcOyGqS/iwlUXEOilZlNSIjhmdFaSLs68VDUCfLw
-        lRHvX1HsdWppQ2V02FAJJlq+b1TORWzdFQU0yOwmIOqP++a8OD4QMiK2Q2u+HxiBcJ0vg00w0fAd/
-        79NarRhg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwAkQ-00BWe5-6j; Sat, 11 Dec 2021 22:21:42 +0000
-Date:   Sat, 11 Dec 2021 22:21:42 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Anssi Hannula <anssi.hannula@iki.fi>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] docs/vm: clarify overcommit amount sysctl behavior
-Message-ID: <YbUkdvFBayRwV6ax@casper.infradead.org>
-References: <20211211194159.3137362-1-anssi.hannula@iki.fi>
+        Sat, 11 Dec 2021 17:31:55 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BBLRga1009829;
+        Sat, 11 Dec 2021 22:31:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=vZwRmxJHS2djvC909S2q557bysZtD55kpYOBLkUN0eo=;
+ b=Q/NIGh6CH+hqps/7UbCwgUN4m260GNUMjbDFKmFKsLW7z31sz/d/VN+nowfCbHZfc219
+ lKoiCEqZpuFAN+0gca4m1DODbDQMgKEpWnkI4OnmchxsMV9axsiufsR0y4gm9mzTR/3G
+ oFNrAWmYNOk2IbW5NuRmRQ0/EvvEbw2oERbsG4mh0hL/c2h+EaFDSjCcI6TXTkvXWFD2
+ CJQ+JZqiJetKlBXUezSLI1MSdBGPN/OcqoUxWGhVB87qJtsO77sPD4+Td2kA6ZYCYQ6Q
+ eMYfjOyTEvDNonuxkUcFbtj9FSlsE/7wFjTQ+Cb/BJSw6uNxOypjPVbq5Dnig88xdoZR iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw3wxgk2m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 22:31:40 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BBMULlF018289;
+        Sat, 11 Dec 2021 22:31:40 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw3wxgk29-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 22:31:40 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BBMSo78016166;
+        Sat, 11 Dec 2021 22:31:38 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma01wdc.us.ibm.com with ESMTP id 3cvkm90s17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 22:31:38 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BBMVbhO31523132
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 11 Dec 2021 22:31:37 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74AF9B20A7;
+        Sat, 11 Dec 2021 22:31:37 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3C2CB2066;
+        Sat, 11 Dec 2021 22:31:36 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Sat, 11 Dec 2021 22:31:36 +0000 (GMT)
+Message-ID: <7a2fdc4a-a55c-06d9-5c28-8cc2651a147e@linux.ibm.com>
+Date:   Sat, 11 Dec 2021 17:31:36 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v6 12/17] securityfs: Extend securityfs with namespacing
+ support
+Content-Language: en-US
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
+ <20211210194736.1538863-13-stefanb@linux.ibm.com>
+ <20211211105026.pq5stw23gh5na3eq@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20211211105026.pq5stw23gh5na3eq@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1UDO_Ua3JJAxSoZBQANTJJTU-FWVqZAh
+X-Proofpoint-GUID: Ox20ex9AZAyV79EdBbcFwmbyfqp3uvCK
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211211194159.3137362-1-anssi.hannula@iki.fi>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-11_10,2021-12-10_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112110130
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 09:41:59PM +0200, Anssi Hannula wrote:
-> Documentation/vm/overcommit-accounting.rst says that the overcommit
-> amount can be set via vm.overcommit_ratio and vm.overcommit_kbytes.
-> 
-> Add a clarification that those only take effect in overcommit handling
-> mode 2 ("Don't overcommit"), i.e. they do not act as an "additional"
-> limit that is always enforced.
-> 
-> Signed-off-by: Anssi Hannula <anssi.hannula@iki.fi>
-> ---
 
-Simple and clear improvement, IMO.  Cc'ing linux-mm to get more eyes on
-it.
+On 12/11/21 05:50, Christian Brauner wrote:
+> On Fri, Dec 10, 2021 at 02:47:31PM -0500, Stefan Berger wrote:
+>> Extend 'securityfs' for support of IMA namespacing so that each
+>> IMA (user) namespace can have its own front-end for showing the currently
+>> active policy, the measurement list, number of violations and so on.
+>>
+>> Drop the addition dentry reference and simplify cleanup to work without
+>> the additional reference. This enables simple cleanup of dentries upon
+>> umount.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>> ---
+>>   security/inode.c | 14 ++++----------
+>>   1 file changed, 4 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/security/inode.c b/security/inode.c
+>> index fee01ff4d831..c77ae8ecc464 100644
+>> --- a/security/inode.c
+>> +++ b/security/inode.c
+>> @@ -54,7 +54,7 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>>   
+>>   static int securityfs_get_tree(struct fs_context *fc)
+>>   {
+>> -	return get_tree_single(fc, securityfs_fill_super);
+>> +	return get_tree_keyed(fc, securityfs_fill_super, fc->user_ns);
+>>   }
+>>   
+>>   static const struct fs_context_operations securityfs_context_ops = {
+>> @@ -72,6 +72,7 @@ static struct file_system_type fs_type = {
+>>   	.name =		"securityfs",
+>>   	.init_fs_context = securityfs_init_fs_context,
+>>   	.kill_sb =	kill_litter_super,
+>> +	.fs_flags =	FS_USERNS_MOUNT,
+>>   };
+>>   
+>>   /**
+>> @@ -168,7 +169,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>>   		inode->i_fop = fops;
+>>   	}
+>>   	d_instantiate(dentry, inode);
+>> -	dget(dentry);
+>>   	inode_unlock(dir);
+>>   	return dentry;
+>>   
+>> @@ -306,23 +306,17 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
+>>   void securityfs_remove(struct dentry *dentry)
+>>   {
+>>   	struct user_namespace *ns;
+>> -	struct inode *dir;
+>>   
+>>   	if (!dentry || IS_ERR(dentry))
+>>   		return;
+>>   
+>>   	ns = dentry->d_sb->s_user_ns;
+>>   
+>> -	dir = d_inode(dentry->d_parent);
+>> -	inode_lock(dir);
+>>   	if (simple_positive(dentry)) {
+>> -		if (d_is_dir(dentry))
+>> -			simple_rmdir(dir, dentry);
+>> -		else
+>> -			simple_unlink(dir, dentry);
+>> +		d_delete(dentry);
+>>   		dput(dentry);
+> In
+> https://lore.kernel.org/lkml/20211210114934.tacjnwryihrsx6ln@wittgenstein
+> I explained why d_delete()+d_put() only is wrong and how to fix it.
 
-> I've had to look this one up in the code enough times already :)
-> 
-> 
->  Documentation/vm/overcommit-accounting.rst | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/vm/overcommit-accounting.rst b/Documentation/vm/overcommit-accounting.rst
-> index 0dd54bbe4afa..1addb0c374a4 100644
-> --- a/Documentation/vm/overcommit-accounting.rst
-> +++ b/Documentation/vm/overcommit-accounting.rst
-> @@ -34,7 +34,8 @@ The Linux kernel supports the following overcommit handling modes
->  The overcommit policy is set via the sysctl ``vm.overcommit_memory``.
->  
->  The overcommit amount can be set via ``vm.overcommit_ratio`` (percentage)
-> -or ``vm.overcommit_kbytes`` (absolute value).
-> +or ``vm.overcommit_kbytes`` (absolute value). These only have an effect
-> +when ``vm.overcommit_memory`` is set to 2.
->  
->  The current overcommit limit and amount committed are viewable in
->  ``/proc/meminfo`` as CommitLimit and Committed_AS respectively.
-> -- 
-> 2.31.1
-> 
+
+Fixed for v7.
+

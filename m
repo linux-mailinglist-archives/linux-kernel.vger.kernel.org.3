@@ -2,159 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA76471497
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080E147148F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbhLKP6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 10:58:01 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.81]:9000 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbhLKP6B (ORCPT
+        id S230300AbhLKPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 10:54:22 -0500
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:60356 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230204AbhLKPyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 10:58:01 -0500
-X-Greylist: delayed 695 seconds by postgrey-1.27 at vger.kernel.org; Sat, 11 Dec 2021 10:58:00 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1639237557;
-    s=strato-dkim-0002; d=schoebel-theuer.de;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=PBlFu+wsThkymIMAFq4AB4JTJ9Of5haIcw9PRdsiO0o=;
-    b=cJ6JKzYai20jnurxW1YYQFuqqZa97ogddbNTI2d1+Uc8hQwotvMp0DG+zc6EdJXJ2Y
-    kD4AEW8AY7E9K5IHjGOoQUzpOKO7DcRSLWGJyjsRsgzdgRrxeKD2OMruc16NZwUjNxlL
-    R7luu2qp5yaUwUkEdIq4KXP643IXudwZgpIF7qRGBIrggCJQpYMq6+zUH4dStS7kXmX4
-    LAyvBibcPfXuumDJx8CkWMyXZWTRJEexD7t2LJhCui10j9I0isIDKIDNZRmtNsV0wpOf
-    /hjM1D9VxLIwpLPtA7mWPtJKRFOnqOYhGoaurpG+zlTmyezM+tyD9TqUnzqRs3YpiTZa
-    a+zw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OH8QVVOrc/CP6za/qRmbF3BWedPGA1vjs2e0bDjfg8OiOrPJifeRMRhMbfOob5IoQoyC2I0MN+jr"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.2.102]
-    by smtp.strato.de (RZmta 47.35.3 DYNA|AUTH)
-    with ESMTPSA id x08697xBBFjt8HI
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 11 Dec 2021 16:45:55 +0100 (CET)
-Subject: Re: [PATCH v43 00/15] /dev/random - a new approach
-To:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
-        Tso Ted <tytso@mit.edu>, linux-crypto@vger.kernel.org
-Cc:     Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-References: <2036923.9o76ZdvQCi@positron.chronox.de>
-From:   Thomas Schoebel-Theuer <tst@schoebel-theuer.de>
-Message-ID: <f59e7a25-ea0b-b36e-791e-8ab49bc7102c@schoebel-theuer.de>
-Date:   Sat, 11 Dec 2021 16:45:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Sat, 11 Dec 2021 10:54:21 -0500
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 1BBFrqFX005993;
+        Sun, 12 Dec 2021 00:53:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1BBFrqFX005993
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1639238033;
+        bh=OnB0zpwoAwMurjphUAtp8uU+9+JVaMiWORrcysltMaU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gI1mVLvBeXe/apHOHAlBFQKKIUgRxiEWdChVxDGJ4fsI3kuoC/PoDWNKkwQ8+l50n
+         c56iYP9/3ByVZ+196VpisY+ULB2bhl//FFVjMc2YXSxNxgIcp11bJp/p7DG1YdkOAL
+         KdBiI361kZcne82dy7u3JzuuY0xZVFZ5NeFIdF+OHT1uckpOSRdQ3f/8hTDamTbODX
+         Z3FSxvIZXS0959YTasnF39B00jRaA9Apn7JguB4yMwEFSChIny8fLFabMnoRyqz/Hv
+         nrudVqFcJewfqslEKj+iCnyqRz7uhnky2qbwaC//NXuA9b/cyfLRnQd4/dNq53Zg2r
+         45qQLPFzt18/w==
+X-Nifty-SrcIP: [209.85.215.175]
+Received: by mail-pg1-f175.google.com with SMTP id s137so10601195pgs.5;
+        Sat, 11 Dec 2021 07:53:53 -0800 (PST)
+X-Gm-Message-State: AOAM532SG/1Z3Q+EcjODiwM/ZZSUX5zpbutxdnK8XjO6J9cmn+GECOcZ
+        YrU3AxElk9RSD/UIQfNnPSGIQ773h5re2zbn1Pg=
+X-Google-Smtp-Source: ABdhPJwA6pNPRGX5iwZZGN4tY0x/xzcZIrvvAqHfsVMVystJJYLcl9ZLHrzpACGiX8GG/s/ed1fgSYNEPYYNKm8NGt8=
+X-Received: by 2002:a65:50c6:: with SMTP id s6mr45363550pgp.352.1639238032202;
+ Sat, 11 Dec 2021 07:53:52 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <2036923.9o76ZdvQCi@positron.chronox.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20211206140313.5653-1-ojeda@kernel.org> <20211206140313.5653-16-ojeda@kernel.org>
+In-Reply-To: <20211206140313.5653-16-ojeda@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 12 Dec 2021 00:53:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS+eiL-kcdnNyyCUNWjV5qGxrw4PM-oJFfw=o1fbhc2qw@mail.gmail.com>
+Message-ID: <CAK7LNAS+eiL-kcdnNyyCUNWjV5qGxrw4PM-oJFfw=o1fbhc2qw@mail.gmail.com>
+Subject: Re: [PATCH 15/19] Kbuild: add Rust support
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/21 5:39 PM, Stephan Müller wrote:
-> The following patch set provides a complete production-
-> ready and yet different approach to /dev/random which is called Linux
-> Random Number Generator (LRNG) to collect entropy within the Linux kernel.
-> It provides the same API and ABI and can be used as a drop-in replacement.
+On Mon, Dec 6, 2021 at 11:06 PM Miguel Ojeda <ojeda@kernel.org> wrote:
+>
+> Having all the new files in place, we now enable Rust support
+> in the build system, including `Kconfig` entries related to Rust,
+> the Rust configuration printer, the target definition files,
+> the version detection script and a few other bits.
+>
+> In the future, we will likely want to generate the target files
+> on the fly via a script.
+>
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Finn Behrens <me@kloenk.de>
+> Signed-off-by: Finn Behrens <me@kloenk.de>
+> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Co-developed-by: Douglas Su <d0u9.su@outlook.com>
+> Signed-off-by: Douglas Su <d0u9.su@outlook.com>
+> Co-developed-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+> Signed-off-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+> Co-developed-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  .gitignore                    |   5 +
+>  .rustfmt.toml                 |  12 ++
+>  Makefile                      | 146 +++++++++++++-
+>  arch/arm/rust/target.json     |  27 +++
+>  arch/arm64/rust/target.json   |  34 ++++
+>  arch/powerpc/rust/target.json |  29 +++
+>  arch/riscv/Makefile           |   1 +
+>  arch/riscv/rust/rv32ima.json  |  36 ++++
+>  arch/riscv/rust/rv32imac.json |  36 ++++
+>  arch/riscv/rust/rv64ima.json  |  36 ++++
+>  arch/riscv/rust/rv64imac.json |  36 ++++
+>  arch/x86/rust/target.json     |  36 ++++
+>  init/Kconfig                  |  31 ++-
+>  lib/Kconfig.debug             | 144 ++++++++++++++
+>  rust/.gitignore               |   7 +
+>  rust/Makefile                 | 353 ++++++++++++++++++++++++++++++++++
+>  rust/bindgen_parameters       |  13 ++
+>  scripts/Makefile.build        |  22 +++
+>  scripts/Makefile.debug        |  10 +
+>  scripts/Makefile.lib          |  12 ++
+>  scripts/Makefile.modfinal     |   8 +-
+>  scripts/is_rust_module.sh     |  19 ++
+>  scripts/kconfig/confdata.c    |  75 ++++++++
+>  scripts/rust-version.sh       |  31 +++
+>  24 files changed, 1147 insertions(+), 12 deletions(-)
+>  create mode 100644 .rustfmt.toml
+>  create mode 100644 arch/arm/rust/target.json
+>  create mode 100644 arch/arm64/rust/target.json
+>  create mode 100644 arch/powerpc/rust/target.json
+>  create mode 100644 arch/riscv/rust/rv32ima.json
+>  create mode 100644 arch/riscv/rust/rv32imac.json
+>  create mode 100644 arch/riscv/rust/rv64ima.json
+>  create mode 100644 arch/riscv/rust/rv64imac.json
+>  create mode 100644 arch/x86/rust/target.json
+>  create mode 100644 rust/.gitignore
+>  create mode 100644 rust/Makefile
+>  create mode 100644 rust/bindgen_parameters
+>  create mode 100755 scripts/is_rust_module.sh
+>  create mode 100755 scripts/rust-version.sh
+>
+> diff --git a/.gitignore b/.gitignore
+> index 7afd412dadd2..48c68948f476 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -37,6 +37,7 @@
+>  *.o
+>  *.o.*
+>  *.patch
+> +*.rmeta
+>  *.s
+>  *.so
+>  *.so.dbg
+> @@ -96,6 +97,7 @@ modules.order
+>  !.gitattributes
+>  !.gitignore
+>  !.mailmap
+> +!.rustfmt.toml
+>
+>  #
+>  # Generated include files
+> @@ -161,3 +163,6 @@ x509.genkey
+>
+>  # Documentation toolchain
+>  sphinx_*/
+> +
+> +# Rust analyzer configuration
+> +/rust-project.json
+> diff --git a/.rustfmt.toml b/.rustfmt.toml
+> new file mode 100644
+> index 000000000000..3de5cc497465
+> --- /dev/null
+> +++ b/.rustfmt.toml
+> @@ -0,0 +1,12 @@
+> +edition = "2021"
+> +newline_style = "Unix"
+> +
+> +# Unstable options that help catching some mistakes in formatting and that we may want to enable
+> +# when they become stable.
+> +#
+> +# They are kept here since they are useful to run from time to time.
+> +#format_code_in_doc_comments = true
+> +#reorder_impl_items = true
+> +#comment_width = 100
+> +#wrap_comments = true
+> +#normalize_comments = true
+> diff --git a/Makefile b/Makefile
+> index 0a6ecc8bb2d2..0f20ca9bd723 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -120,6 +120,13 @@ endif
+>
+>  export KBUILD_CHECKSRC
+>
+> +# Enable "clippy" (a linter) as part of the Rust compilation.
+> +#
+> +# Use 'make CLIPPY=1' to enable it.
+> +ifeq ("$(origin CLIPPY)", "command line")
+> +  KBUILD_CLIPPY := $(CLIPPY)
+> +endif
 
-My suggestion: please name it /dev/fastrandom or /dev/fips-random or 
-/dev/scalable-random or whatever is appropriate, and please leave the 
-traditional /dev/random as it was for decades.
+Do you really want to support CLIPPY=1
+in addition to KBUILD_CLIPPY=1 ?
 
-My reasons:
+(Refer to C=  V=  M=  O=, which checks $(origin ) )
 
-I am one of the downstream kernel responsibles you might affect with 
-your changes. I am responsible for any kernel issues for millions of 
-customers.
 
-For me, the _slowness_ of the traditional /dev/random is a _feature_.
 
-Some more detailed arguments, important for my use cases as seen by me:
+>
+>  KBUILD_LDFLAGS_MODULE += --build-id=sha1
+>  LDFLAGS_vmlinux += --build-id=sha1
+> @@ -1095,6 +1163,11 @@ ifeq ($(KBUILD_EXTMOD),)
+>  core-y                 += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
+>  core-$(CONFIG_BLOCK)   += block/
+>
+> +# Keep this one as an `ifdef` block since its `Makefile` runs `rustc`.
+> +ifdef CONFIG_RUST
+> +core-y                 += rust/
+> +endif
 
-1) Personally, I have made some 1&1-internal scripts which don't rely on 
-a single source of entropy, as seen by sysadmins. Note that each 
-/dev/$other_random is a _single_ _source_ of entropy from a sysadmin's 
-perspective (and also a "blackbox"), although the role is different from 
-a kernel developer's perspective.
 
-2) Any new kernel must be able to run on any of our machines, even very 
-old machines (bound by old customer contracts) which don't have certain 
-hardware features, or have a different non-functional behaviour like 
-performance, or interrupt timing behaviour, etc. Thus the non-functional 
-behaviour of the traditional /dev/random is important for me. Please do 
-not change it.
 
-3) Whenever a new kernel behaviour is "discovered" by some userspace 
-developers (whether in-house or from many OpenSource projects around the 
-world), they tend to use it sooner or later, for whatever reason. If 
-suchalike would happen at the traditional /dev/random, it would be 
-noticed by some of our sysadmin teams. Here is the reason:
+Is there any reason why
+you did not write like
 
-4) Collection of entropy vs consumption of entropy: the old /dev/random 
-has an important feature for me: any _mass_ usage by whatever class of 
-users (whether tenthousands of UIDs per server and/or HTTP/second, or 
-maybe even some privileged orchestration scripts) would _consume_ masses 
-of entropy. When suchalike consumption would exceed the production rate, 
-the old /dev/random would become so slow that our internal monitoring 
-processes would certainly alert, and consequently would hint our 
-responsibles (located at other teams) at the problem. Traditionally, 
-/dev/random and /dev/urandom are thus used for different purposes.
+  core-$(CONFIG_RUST)  += rust/
 
-5) Please don't misunderstand me: I am _not_ against the bazaar model 
-which allows you to develop new and interesting features. Just don't 
-throw away the traditional solutions, encapsulating huge amounts of 
-manpower. Please create a new booth at the bazaar. Then some hundreds of 
-userspace developers can support the new solution, or even  migrate from 
-traditional interfaces like /dev/urandom to newer ones. Many userspace 
-projects are widely distributed, and independent from each other. By 
-providing a different interface (which is easily detectable), separation 
-of concerns will become easy in a worldwide scale.
+?
 
-Hints: whenever changing / improving non-functional properties of your 
-new /dev/$new_random, please report _separate_ version numbers for 
-non-functional vs feature versions. Please maintain it over many years 
-(hopefully comparable to the lifetime of /dev/random). Please long-term 
-document the rules how its new features should be _interpreted_. Please 
-document important use cases. Please create a better documentation than 
-the traditional ones, also understandable by sysadmins (not only by 
-certain developers or security experts). Even more important: please 
-document and depict _scenarios_ where certain features should _NOT_ be used.
 
-Cheers and very sincerly,
 
-Thomas
 
-Homepage: https://github.com/schoebel and look into the mars/ project 
-and also into its docu/ subfolder. Please read the big pdfs. Then you 
-might notice that I could become a potential future user of your new code.
 
+
+
+
+> diff --git a/rust/.gitignore b/rust/.gitignore
+> new file mode 100644
+> index 000000000000..168cb26a31b9
+> --- /dev/null
+> +++ b/rust/.gitignore
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +bindings_generated.rs
+> +bindings_helpers_generated.rs
+> +exports_*_generated.h
+> +doc/
+> +test/
+> diff --git a/rust/Makefile b/rust/Makefile
+> new file mode 100644
+> index 000000000000..2d08314e7031
+> --- /dev/null
+> +++ b/rust/Makefile
+> @@ -0,0 +1,353 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_RUST) += core.o compiler_builtins.o helpers.o
+> +extra-$(CONFIG_RUST) += exports_core_generated.h
+> +
+> +extra-$(CONFIG_RUST) += libmacros.so
+> +
+> +extra-$(CONFIG_RUST) += bindings_generated.rs bindings_helpers_generated.rs
+> +obj-$(CONFIG_RUST) += alloc.o kernel.o
+> +extra-$(CONFIG_RUST) += exports_alloc_generated.h exports_kernel_generated.h
+> +
+> +ifdef CONFIG_RUST_BUILD_ASSERT_DENY
+> +extra-$(CONFIG_RUST) += build_error.o
+> +else
+> +obj-$(CONFIG_RUST) += build_error.o
+> +endif
+
+
+extra-y does nothing for 'make modules'.
+Is this your expected behavior?
+
+(commit d0e628cd817f3)
+
+
+
+
+
+> +$(objtree)/rust/build_error.o: $(srctree)/rust/build_error.rs \
+> +    $(objtree)/rust/compiler_builtins.o FORCE
+> +       $(call if_changed_dep,rustc_library)
+> +
+> +# ICE on `--extern macros`: https://github.com/rust-lang/rust/issues/56935
+> +$(objtree)/rust/kernel.o: private rustc_target_flags = --extern alloc \
+> +    --extern build_error \
+> +    --extern macros=$(objtree)/rust/libmacros.so
+> +$(objtree)/rust/kernel.o: $(srctree)/rust/kernel/lib.rs $(objtree)/rust/alloc.o \
+> +    $(objtree)/rust/build_error.o \
+> +    $(objtree)/rust/libmacros.so $(objtree)/rust/bindings_generated.rs \
+> +    $(objtree)/rust/bindings_helpers_generated.rs FORCE
+> +       $(call if_changed_dep,rustc_library)
+> +
+> +# Targets that need to expand twice
+> +.SECONDEXPANSION:
+
+Why is .SECONDEXPANSION: needed ?
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

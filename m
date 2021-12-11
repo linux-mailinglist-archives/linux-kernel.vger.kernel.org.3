@@ -2,95 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5565C470F24
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5782470F29
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345361AbhLKAGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 19:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244143AbhLKAGI (ORCPT
+        id S1345364AbhLKAHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 19:07:14 -0500
+Received: from relay05.th.seeweb.it ([5.144.164.166]:51617 "EHLO
+        relay05.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345376AbhLKAHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 19:06:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5232AC0617A1;
-        Fri, 10 Dec 2021 16:02:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 10 Dec 2021 19:07:02 -0500
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 971BECE2DE4;
-        Sat, 11 Dec 2021 00:02:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9413C341C8;
-        Sat, 11 Dec 2021 00:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639180948;
-        bh=g2fpJY8Ik0eUgfvQC3WA/DMV+Xj4NaJeRayahqJ4rYQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c3cb7o5GcFRBiCPeKWbyHQmT4gsFpBNYza6+azVVyUG0j9s/y53/L4dHLsnNftiII
-         uqoUUNYOel0wclD1QoQj2ewPd5pEiTfmnnXg2V+1C2hJ0sKEqvznQ9Yy3lfWZxtqwR
-         FWF6O8NiPy+XLWPtPMn/ymDsKbnLSeOVoc/XgJW2yIxaEHTvhwdIWF7NK6J25j0sN4
-         xLuIIP0l1qoGgoxIq4mIBbYa7sW48rPPgjZ0Xcyuo/Zp3+Ojy7NRTmBg2Y8cwQnzlq
-         z1cLWhjmeMCP+ZQVMHI2KMGlSf5E6ZEjIoDUnYy0wNntExEkby8ljGd1LNzxB75B/1
-         5xR4fd1pX8R3Q==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.14 3/3] signalfd: use wake_up_pollfree()
-Date:   Fri, 10 Dec 2021 16:02:23 -0800
-Message-Id: <20211211000223.50630-4-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211211000223.50630-1-ebiggers@kernel.org>
-References: <20211211000223.50630-1-ebiggers@kernel.org>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E9DC43EEF3;
+        Sat, 11 Dec 2021 01:03:22 +0100 (CET)
+Date:   Sat, 11 Dec 2021 01:03:15 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH v3 12/13] drm/msm/dsi: Add support for DSC configuration
+Message-ID: <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
+References: <20211116062256.2417186-1-vkoul@kernel.org>
+ <20211116062256.2417186-13-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211116062256.2417186-13-vkoul@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+Hi Vinod,
 
-commit 9537bae0da1f8d1e2361ab6d0479e8af7824e160 upstream.
+On 2021-11-16 11:52:55, Vinod Koul wrote:
+> When DSC is enabled, we need to configure DSI registers accordingly and
+> configure the respective stream compression registers.
+> 
+> Add support to calculate the register setting based on DSC params and
+> timing information and configure these registers.
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  drivers/gpu/drm/msm/dsi/dsi.xml.h  |  10 +++
+>  drivers/gpu/drm/msm/dsi/dsi_host.c | 113 ++++++++++++++++++++++++++++-
+>  2 files changed, 122 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> index 49b551ad1bff..c1c85df58c4b 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> @@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
+>  #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
+>  
+>  
+> +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
+> +
+> +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
+> +
+> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
+> +
+> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
+> +
+> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
 
-wake_up_poll() uses nr_exclusive=1, so it's not guaranteed to wake up
-all exclusive waiters.  Yet, POLLFREE *must* wake up all waiters.  epoll
-and aio poll are fortunately not affected by this, but it's very
-fragile.  Thus, the new function wake_up_pollfree() has been introduced.
+I presume you are aware that these files are autogenerated, but there
+does not seem to be any link to patches adding these registers to the
+XML files in either envytools to mesa, nor could I find any merge/pull
+requests on the matter.  Would you mind posting those?  Before doing so
+though, consider the comment below about register mapping.
 
-Convert signalfd to use wake_up_pollfree().
+> +
+>  #endif /* DSI_XML */
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 31d385d8d834..2c14c36f0b3d 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -908,6 +908,20 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
+>  		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
+>  }
+>  
+> +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
+> +				  int pic_width, int pic_height)
 
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Fixes: d80e731ecab4 ("epoll: introduce POLLFREE to flush ->signalfd_wqh before kfree()")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211209010455.42744-4-ebiggers@kernel.org
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- fs/signalfd.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+This function - adopted from downstream - does not seem to perform a
+whole lot, especially without the modulo checks against the slice size.
+Perhaps it can be inlined?
 
-diff --git a/fs/signalfd.c b/fs/signalfd.c
-index 1c667af86da52..0b7c6c2c95b89 100644
---- a/fs/signalfd.c
-+++ b/fs/signalfd.c
-@@ -35,17 +35,7 @@
- 
- void signalfd_cleanup(struct sighand_struct *sighand)
- {
--	wait_queue_head_t *wqh = &sighand->signalfd_wqh;
--	/*
--	 * The lockless check can race with remove_wait_queue() in progress,
--	 * but in this case its caller should run under rcu_read_lock() and
--	 * sighand_cachep is SLAB_TYPESAFE_BY_RCU, we can safely return.
--	 */
--	if (likely(!waitqueue_active(wqh)))
--		return;
--
--	/* wait_queue_entry_t->func(POLLFREE) should do remove_wait_queue() */
--	wake_up_poll(wqh, POLLHUP | POLLFREE);
-+	wake_up_pollfree(&sighand->signalfd_wqh);
- }
- 
- struct signalfd_ctx {
--- 
-2.34.1
+> +{
+> +	if (!dsc || !pic_width || !pic_height) {
+> +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
+> +		return -EINVAL;
+> +	}
+> +
+> +	dsc->drm->pic_width = pic_width;
+> +	dsc->drm->pic_height = pic_height;
+> +
+> +	return 0;
+> +}
+> +
+>  static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>  {
+>  	struct drm_display_mode *mode = msm_host->mode;
+> @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>  		hdisplay /= 2;
+>  	}
+>  
+> +	if (msm_host->dsc) {
+> +		struct msm_display_dsc_config *dsc = msm_host->dsc;
+> +
+> +		/* update dsc params with timing params */
+> +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
+> +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
 
+This seems to be pretty non-standard and perhaps unnecessary debug code,
+with a stray dash in there.  Is is needed here, and if so how about
+using %dx%d\n to format width and height?
+
+> +
+> +		/* we do the calculations for dsc parameters here so that
+> +		 * panel can use these parameters
+> +		 */
+> +		dsi_populate_dsc_params(dsc);
+> +
+> +		/* Divide the display by 3 but keep back/font porch and
+> +		 * pulse width same
+> +		 */
+
+A more general nit on the comments in this patch series: it is
+appreciated if comments explain the rationale rather than - or in
+addition to - merely paraphrasing the code that follows.
+
+> +		h_total -= hdisplay;
+> +		hdisplay /= 3;
+> +		h_total += hdisplay;
+> +		ha_end = ha_start + hdisplay;
+> +	}
+> +
+>  	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> +		if (msm_host->dsc) {
+> +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> +			u32 reg, intf_width, slice_per_intf;
+> +			u32 total_bytes_per_intf;
+> +
+> +			/* first calculate dsc parameters and then program
+> +			 * compress mode registers
+> +			 */
+> +			intf_width = hdisplay;
+> +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+> +
+> +			dsc->drm->slice_count = 1;
+> +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
+
+If I am not mistaken this is the same value as dsc->drm->slice_width,
+since a multiple of 8 is inherently "a multiple of 8" and hence needs no
+rounding when divided by 8 again.
+
+Also note that the cmdmode variant below uses bits_per_pixel here; is
+that discrepancy intended?
+
+> +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+> +
+> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
+> +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
+> +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> +
+> +			reg = dsc->bytes_per_pkt << 16;
+> +			reg |= (0x0b << 8);    /* dtype of compressed image */
+> +
+> +			/* pkt_per_line:
+> +			 * 0 == 1 pkt
+> +			 * 1 == 2 pkt
+> +			 * 2 == 4 pkt
+> +			 * 3 pkt is not supported
+> +			 * above translates to ffs() - 1
+> +			 */
+> +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
+> +
+> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+
+This was already calculated and assigned just a couple lines above.
+
+> +			reg |= dsc->eol_byte_num << 4;
+> +			reg |= 1;
+
+Note that the XML register file exists to map out the layout of these
+registers, including bit offset, size, and (enum) constant values.  It
+is appreciated if you can replace all these magical shifts and magic
+flags/bits with the appropriate enum constants and constructor
+functions, after mapping them out in the XML file.
+
+> +
+> +			dsi_write(msm_host,
+> +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
+> +		}
+> +
+>  		dsi_write(msm_host, REG_DSI_ACTIVE_H,
+>  			DSI_ACTIVE_H_START(ha_start) |
+>  			DSI_ACTIVE_H_END(ha_end));
+> @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>  			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
+>  			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
+>  	} else {		/* command mode */
+> +		if (msm_host->dsc) {
+> +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> +			u32 reg, reg_ctrl, reg_ctrl2;
+> +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
+> +
+> +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+> +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+
+Shouldn't old values be masked out first, before writing new bits or
+values below?  The video-mode variant doesn't read back old register
+values.
+
+> +
+> +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+> +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
+> +						      dsc->drm->bits_per_pixel, 8);
+> +			dsc->drm->slice_chunk_size = bytes_in_slice;
+> +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+> +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> +
+> +			reg = 0x39 << 8;
+
+Same comment about moving magic constants and shifts into the XML file.
+
+> +			reg |= ffs(dsc->pkt_per_line) << 6;
+
+Doesn't the calculation need -1 here just like video mode?
+
+Thanks!
+
+- Marijn
+
+> +
+> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> +			reg |= dsc->eol_byte_num << 4;
+> +			reg |= 1;
+> +
+> +			reg_ctrl |= reg;
+> +			reg_ctrl2 |= bytes_in_slice;
+> +
+> +			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
+> +			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
+> +		}
+> +
+>  		/* image data and 1 byte write_memory_start cmd */
+> -		wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+> +		if (!msm_host->dsc)
+> +			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+> +		else
+> +			wc = mode->hdisplay / 2 + 1;
+>  
+>  		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+>  			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
+> @@ -2051,9 +2158,13 @@ int msm_dsi_host_modeset_init(struct mipi_dsi_host *host,
+>  {
+>  	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
+>  	const struct msm_dsi_cfg_handler *cfg_hnd = msm_host->cfg_hnd;
+> +	struct msm_drm_private *priv;
+>  	int ret;
+>  
+>  	msm_host->dev = dev;
+> +	priv = dev->dev_private;
+> +	priv->dsc = msm_host->dsc;
+> +
+>  	ret = cfg_hnd->ops->tx_buf_alloc(msm_host, SZ_4K);
+>  	if (ret) {
+>  		pr_err("%s: alloc tx gem obj failed, %d\n", __func__, ret);
+> -- 
+> 2.31.1
+> 

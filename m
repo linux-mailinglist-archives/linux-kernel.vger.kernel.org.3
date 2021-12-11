@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 898504716C5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F964716CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbhLKVff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:35:35 -0500
-Received: from relay03.th.seeweb.it ([5.144.164.164]:47129 "EHLO
-        relay03.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbhLKVfe (ORCPT
+        id S231319AbhLKViH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229933AbhLKViH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:35:34 -0500
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1BA26202F2;
-        Sat, 11 Dec 2021 22:35:30 +0100 (CET)
-Date:   Sat, 11 Dec 2021 22:35:28 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, abhinavk@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
- panels
-Message-ID: <20211211213528.uroqfdksvokspbxf@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, robdclark@gmail.com,
-        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org
-References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
- <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
- <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
- <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
+        Sat, 11 Dec 2021 16:38:07 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8469EC061714;
+        Sat, 11 Dec 2021 13:38:06 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id bn20so18521280ljb.8;
+        Sat, 11 Dec 2021 13:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AN606FDWoic1gE/hvIhNv/tnFd7knEeZEmhAMBvktOQ=;
+        b=LLKACYa/RglwZ3lc+IgOkFptxsNWlNEp2S1LoPxuOhjVJnxlkAkMMg7GVek+lN0nMh
+         a7OXtCOcI97959q+n4eeVfYRQ2v9YD73i1h5nhVmG899RH2MWdWVScMGa1cFhfyA3lrT
+         kzKBCr6d/rKnDxeaTebzq8FV8vnSj2QYmOsL1QTX/C6+ytDp7oEIU5OR7arKPuFKqo26
+         uML9DYon7GugigEv4PP7fOSbIMtrAEzZVUV1wIdWQOjG5WF3L+gckeg8WfSIHpyNZ5bd
+         oSvLhdqlXZVHnEFXD7x9ofq5W+7MeDn+kqWdiCcGyl13Ifsb1hLQNEqBw2kJ2I5U8o0K
+         hX7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AN606FDWoic1gE/hvIhNv/tnFd7knEeZEmhAMBvktOQ=;
+        b=48fvpiDiyWPfo9QpmbOQBbEDb/TTMdyZZozzDNArNKvqsBpHhKXOzsCLwD7muzWiwG
+         Z8MXBnf/3Khjk2xY66r/UfiVnaSbH+obYHFfe0uaT0FEcLoFYXxAYT8rQtpZf+MwtACo
+         w6OUgNQHOQMJic2tQ8TEwF+NZBe9qCx0mTHaYmt18QNetjADI38B40KPQWOkApo4DCjt
+         D6UKQAIXfDnuKNKb7q8FbfK/b/kG6LzvyB/Yg5QlL5YorOu91/Lt7HJfODvwwkI8kNVt
+         tV72ZXk7aJ4YR1t/r01FbXa1U9HZ4d7LlO7QHkN3NQeW7Y9/8tHCnOzoRCkzw4iSX+qZ
+         uOnw==
+X-Gm-Message-State: AOAM532K0W49SwxU3Fly80yOXu0lfYzVpUwrTAZfcFMJ62aO/a8EF+DV
+        +HZNH3Kf/WT21DM/0si3d2g=
+X-Google-Smtp-Source: ABdhPJw9Udh0ZLeBHQZnYsPbOAv42sClfx6AJuaWEU5e75QX0H8fo56IQmU7TA6gsFS6FPg71+K9eA==
+X-Received: by 2002:a2e:b8cf:: with SMTP id s15mr20806073ljp.364.1639258684871;
+        Sat, 11 Dec 2021 13:38:04 -0800 (PST)
+Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.gmail.com with ESMTPSA id w14sm786844ljj.7.2021.12.11.13.38.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 13:38:04 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Support Sharp LQ101R1SX03 and HannStar HSD101PWW2 panels
+Date:   Sun, 12 Dec 2021 00:36:50 +0300
+Message-Id: <20211211213653.17700-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-09 18:02:40, AngeloGioacchino Del Regno wrote:
-> Il 02/10/21 00:33, Dmitry Baryshkov ha scritto:
-> > On 11/09/2021 19:39, AngeloGioacchino Del Regno wrote:
-> >> [..]
-> > I've compared this with the MDP5 driver, where we always wait for PP_DONE 
-> > interrupt. Would it be enough to always wait for it (= always call 
-> > dpu_encoder_phys_cmd_wait_for_tx_complete())?
-> > 
-> 
-> Jokes apart, yes it would make sense to do that, it's something that works
-> at least... but we should verify that such a thing doesn't break new platforms
-> (like sm8150 and newer).
+This series adds support for Sharp LQ101R1SX03 and HannStar HSD101PWW2
+display panels that are used by Asus Transformer tablets, which we're
+planning to support since 5.17 kernel.
 
-On sm6125 (keeping in mind that we're on llvmpipe, will bring up the GPU
-later) none of this hurts the display:
+Changelog:
 
-- Without this patch, so only checking for wait_for_ctl_start;
-- With this patch, checking for idle if it was already started;
-- With this patch altered to only ever call wait_for_tx_complete (wait
-  for idle), in place of wait_for_ctl_start.
+v2: - Added ack from Rob Herring to the HSD101PWW2 binding.
 
-Working in the sense that glxgears, which actually reports a framerate
-of approx 170 despite being on llvmpipe on an SoC that is still in
-snail-mode, seems to update (commit) the panel smoothly on every
-occasion.
+    - Updated LQ101R1SX01 binding, like it was suggested by Rob Herring,
+      making LQ101R1SX03 directly compatible with the LQ101R1SX01.
+      Such that ["sharp,lq101r1sx03", "sharp,lq101r1sx01"] could be
+      used in DT. This removes need to update panel driver with the new
+      compatible.
 
-On this note, does it perhaps make more sense to call the "internal"
-_dpu_encoder_phys_cmd_wait_for_idle function directly, instead of going
-through the "public" dpu_encoder_phys_cmd_wait_for_tx_complete which
-seems solely intended to handle the wait_for_tx_complete callback?
+    - Improved commit message of the LQ101R1SX03 patch.
 
-- Marijn
+    - Added my s-o-b to all patches.
+
+Anton Bambura (1):
+  dt-bindings: sharp,lq101r1sx01: Add compatible for LQ101R1SX03
+
+Svyatoslav Ryhel (2):
+  dt-bindings: display: simple: Add HannStar HSD101PWW2
+  drm/panel: simple: Add support for HannStar HSD101PWW2 panel
+
+ .../bindings/display/panel/panel-simple.yaml  |  2 ++
+ .../display/panel/sharp,lq101r1sx01.yaml      |  7 ++++-
+ drivers/gpu/drm/panel/panel-simple.c          | 28 +++++++++++++++++++
+ 3 files changed, 36 insertions(+), 1 deletion(-)
+
+-- 
+2.33.1
+

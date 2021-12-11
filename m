@@ -2,97 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B128E47153F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB333471547
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbhLKSBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 13:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbhLKSA5 (ORCPT
+        id S230468AbhLKSIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 13:08:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59547 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229609AbhLKSH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 13:00:57 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37946C0617A1;
-        Sat, 11 Dec 2021 10:00:57 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id u1so20067378wru.13;
-        Sat, 11 Dec 2021 10:00:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NTqJE9O5IKUSo/m88Ab/X8Fm1HEOexFRkRE81c4V/Mg=;
-        b=LfuiKKGmEbpKqw430aASUTABt3NnFt6A7kO84jFi0HbZqcIRYjovGFxIdzgoPgz6vV
-         nwauJ6arBYI+7/rqV6Z4Z8YeVKdCDEbNxPtrJyTinw3el7zvfIktrz3AQRUx0DptNe7t
-         dL/H3v3BxG48WfD4AhqivG5mnbZ5g2eceXMXvUzlgJiNG2lSpaJ5w0ruNik0K4OhG0OY
-         7NTkF00HlJmRA9CPSWcDo5pgOfuzW3y1Cv1qxsX56lvkUoV4wRPvxnag+HGBpBBbXWDS
-         GkYCJ0BStnJhUsEK8utPdqurQad7JftGG9pRH0Y2R5VxxmFi+LDQdu3uuv5hX3OtsAKk
-         96tQ==
+        Sat, 11 Dec 2021 13:07:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639246078;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fxsp9HMeNtoKt/pFNzallH86Zw4trkvvgTKYXFAZ8jg=;
+        b=cMdvAblGHpVB+xSYQBiKJo2wWN0jRp1HANltCeNS9Hh4WmqcN48RvF/AXYXHSNpdU6NDHT
+        mJqnBpERj5b3m/mSJL+IOkczNhg6j3pqv64HcMnPJsgpcQ7naWD0L6PeiQgykXlgXLSSM+
+        uPWHQM4JVr6bP0hJQZ5KFfaW/zxKOrU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-15-hBITifjEPaqMgnX4pO4GgA-1; Sat, 11 Dec 2021 13:07:57 -0500
+X-MC-Unique: hBITifjEPaqMgnX4pO4GgA-1
+Received: by mail-ed1-f72.google.com with SMTP id i19-20020a05640242d300b003e7d13ebeedso10771817edc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:07:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NTqJE9O5IKUSo/m88Ab/X8Fm1HEOexFRkRE81c4V/Mg=;
-        b=lZ8X+mnwvIehwinp4QZjDU2A873YJrWkNpFVdVGQAzzbrQEmQy7Tl3AJOWWiOamvDP
-         BofxPDVY2TyJ4SCzFx+7S16Oivu8V3Az5tytc90oM1WV8mts7v8pa2UFQTnY8iNxxqdi
-         KMxO84eIxSJhutjHoDyl0dd2ePVRvKeDiWEEUzcs1byP0oh8Qb9KURVvE5D037hpzgTU
-         cXRR2wWEkwj2uxAmm0YM9jxuquFgTvtwG7Lqt7EvCNARgWIyb05sfyWHVHSY/khO9RL/
-         SdThCXriVXJ9EQ9ExxgJnpUdKQgAeGcjDFTz5awsD1cKMIau4UsQ02kRFJUKSrs+MOlR
-         nBUA==
-X-Gm-Message-State: AOAM530uuSF+FnTGz1WUzW2PuoKZmaFIxoNekJ4RNy9bQYxJtuo52GYM
-        YyMW4UoDEvLLR/kvJsHgt2u0JxoscDJYEMBM
-X-Google-Smtp-Source: ABdhPJxUAVBviSw0OvKnZaywdMXUJn7Ur6vlRTPj4c6JyDiOu3sUOnpqJgWSgh8vZYgMdzgksGZ31w==
-X-Received: by 2002:adf:f3d0:: with SMTP id g16mr6478226wrp.699.1639245655258;
-        Sat, 11 Dec 2021 10:00:55 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id z7sm1994792wmi.33.2021.12.11.10.00.54
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=fxsp9HMeNtoKt/pFNzallH86Zw4trkvvgTKYXFAZ8jg=;
+        b=c/fFJVi2zMrOuKTinhjbBw9IwAJxJmNLiPP1x4zcxVlgPQ2UtthB1of6P/iUUCl3St
+         KjOD6iyY1m5FVUUShQz/qBijmkvwzqLBPyfL08sDGtDnfhQ2alKRkQvzPg37Q8J4Gfu8
+         As4x0wote6enZ2FWrSHbQqYd1l5xZfacSWOz9DGnbJco2vWhoUnPWQyoTkX/OZFcEj9t
+         MkX8vPw2sAZ971kVovvgz+ByL+NZNZdQtyTevmERpb7kgMDC//PDsBNwwS2Bb51cL1lM
+         G2BSrB2+WJOV10IugLHKoR4++dF8DoeJARQwx+Dr3H4FnUEnt1xrI5D4AQmh82j9dJA/
+         0Gnw==
+X-Gm-Message-State: AOAM530/2/brSl8eQ9Xv9KcsxrqA+EKFLrScEs/iFE7fBKkyBNj6wyY6
+        9SyGoP5Hz+hSr0f5HDkI0qFCgyIeXCtXY9w5nkYGpG91cMbSQrL+TgZMvmdBcDRP0kcCxeY9alo
+        LjBTeB7P12DjHozIuvT1Z81SC
+X-Received: by 2002:a05:6402:42d5:: with SMTP id i21mr48825315edc.373.1639246074180;
+        Sat, 11 Dec 2021 10:07:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwmtuRu9IIGsJRm7VLPbqM73bHk2TxaMBH4XL764mJtXwub90GMZUqJA6TwherwcvopC10EVA==
+X-Received: by 2002:a05:6402:42d5:: with SMTP id i21mr48825147edc.373.1639246072480;
+        Sat, 11 Dec 2021 10:07:52 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id go10sm3302346ejc.115.2021.12.11.10.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 10:00:54 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] phy: rockchip-inno-usb2: remove redundant assignment to variable delay
-Date:   Sat, 11 Dec 2021 18:00:54 +0000
-Message-Id: <20211211180054.525368-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Sat, 11 Dec 2021 10:07:51 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 266C3180471; Sat, 11 Dec 2021 19:07:48 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Yihao Han <hanyihao@vivo.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, kernel@vivo.com
+Subject: Re: [PATCH v2] samples/bpf: xdpsock: fix swap.cocci warning
+In-Reply-To: <CAEf4Bza3a88pdhFEQdR-FnT_gBPqBh+KL-OP-1P3bVfXv=Gbaw@mail.gmail.com>
+References: <20211209092250.56430-1-hanyihao@vivo.com>
+ <877dccwn6x.fsf@toke.dk>
+ <CAEf4Bza3a88pdhFEQdR-FnT_gBPqBh+KL-OP-1P3bVfXv=Gbaw@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Sat, 11 Dec 2021 19:07:48 +0100
+Message-ID: <87sfuzuia3.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable delay is being assigned to zero and the code falls through to
-the next case in a switch statement that returns out of the function.
-The variable is never read in this scenario and so the assignment is
-redundant and can be removed.
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Cleans up scan-build static analysis warning:
-drivers/phy/rockchip/phy-rockchip-inno-usb2.c:753:3: warning: Value
-stored to 'delay' is never read [deadcode.DeadStores]
+> On Fri, Dec 10, 2021 at 6:26 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> Yihao Han <hanyihao@vivo.com> writes:
+>>
+>> > Fix following swap.cocci warning:
+>> > ./samples/bpf/xdpsock_user.c:528:22-23:
+>> > WARNING opportunity for swap()
+>> >
+>> > Signed-off-by: Yihao Han <hanyihao@vivo.com>
+>>
+>> Erm, did this get applied without anyone actually trying to compile
+>> samples? I'm getting build errors as:
+>
+> Good news: I actually do build samples/bpf nowadays after fixing a
+> bunch of compilation issues recently.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 1 -
- 1 file changed, 1 deletion(-)
+Awesome!
 
-diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-index 1938365abbb3..9f95b587e2c0 100644
---- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-+++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-@@ -750,7 +750,6 @@ static void rockchip_chg_detect_work(struct work_struct *work)
- 		fallthrough;
- 	case USB_CHG_STATE_SECONDARY_DONE:
- 		rphy->chg_state = USB_CHG_STATE_DETECTED;
--		delay = 0;
- 		fallthrough;
- 	case USB_CHG_STATE_DETECTED:
- 		/* put the controller in normal mode */
--- 
-2.34.1
+> Bad news: seems like I didn't pay too much attention after building
+> samples/bpf for this particular patch, sorry about that. I've dropped
+> this patch, samples/bpf builds for me. We should be good now.
+
+Yup, looks good, thanks!
+
+>>   CC  /home/build/linux/samples/bpf/xsk_fwd.o
+>> /home/build/linux/samples/bpf/xsk_fwd.c: In function =E2=80=98swap_mac_a=
+ddresses=E2=80=99:
+>> /home/build/linux/samples/bpf/xsk_fwd.c:658:9: warning: implicit declara=
+tion of function =E2=80=98swap=E2=80=99; did you mean =E2=80=98swab=E2=80=
+=99? [-Wimplicit-function-declaration]
+>>   658 |         swap(*src_addr, *dst_addr);
+>>       |         ^~~~
+>>       |         swab
+>>
+>> /usr/bin/ld: /home/build/linux/samples/bpf/xsk_fwd.o: in function `threa=
+d_func':
+>> xsk_fwd.c:(.text+0x440): undefined reference to `swap'
+>> collect2: error: ld returned 1 exit status
+>>
+>>
+>> Could we maybe get samples/bpf added to the BPF CI builds? :)
+>
+> Maybe we could, if someone dedicated their effort towards making this
+> happen.
+
+Is it documented anywhere what that would entail? Is it just a matter of
+submitting a change to https://github.com/kernel-patches/vmtest ?
+
+-Toke
 

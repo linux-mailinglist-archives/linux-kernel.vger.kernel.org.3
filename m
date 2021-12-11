@@ -2,224 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A50471711
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 23:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F90471714
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 23:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbhLKWAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 17:00:55 -0500
-Received: from mga03.intel.com ([134.134.136.65]:56897 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229535AbhLKWAy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 17:00:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639260054; x=1670796054;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=N00dYyjaBi2FTFr0RgUppElHeHocCDhfu2dSJOuNeoE=;
-  b=cSCTvivQkFXddvmxtB9CRiW4eE0eDhjGcJlkCayAQAzPakHG19AQWSjX
-   NkoBd1RXj39gA3P27wgm7Oej1SjST5gHQxWdGSLG1Y6sWAjN5Q5XhrEzw
-   XRxuU3wMolvMz1jrbBfWDqLEA6FAtfGUVxv/KbVtx/alDATS8BALSACWX
-   ugRK431pPyY41wl55Wn09Pyw2utQ/G6tT8uy8YASnarKZjoP/HUu94Yhh
-   vxXKc1G4WUJ+vBvndII1aO+bKYTqMdsKPGmqMBNs2jr2wFErDohhqpw0a
-   zqlb4bwxqptT9ZTUxs5/6nVu/gjShOIHbDcKQBOphbjBOKM3yOwINQ070
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="238506125"
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="238506125"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 14:00:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="681167233"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Dec 2021 14:00:53 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwAQG-000580-EX; Sat, 11 Dec 2021 22:00:52 +0000
-Date:   Sun, 12 Dec 2021 06:00:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/urgent] BUILD SUCCESS
- b7fd35a0ad976ee8e7d4914e063410686b5fa353
-Message-ID: <61b51f70.BfzyQtAaIT9caByQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231459AbhLKWEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 17:04:23 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:36603 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229605AbhLKWEW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 17:04:22 -0500
+Received: by mail-il1-f200.google.com with SMTP id y15-20020a056e02174f00b002a4222f24a5so12792950ill.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 14:04:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=31ZnY55RFUp+GSZ4GBgxn8B/M7nKKxdMX7CbhSvMYSI=;
+        b=0WXm2ieff2JwKG8LiE5HKnP3iv7f6tVYRcTYvk+HnCzq3/AIgwXRY+/0Bvo2I3c6Sy
+         ofL+oM1qvNAXjsfhy5t/wCZdCFnFjb2QpkzsJfFpFjwP2D/JZwoaJr+ZqoLg34zv3DtX
+         QS0UfZLEt/cHm638+x0oFiRfGD+qiThAZTXooz1UrlOoqC63mY2y0qVIdb7EbTqiLGSn
+         Ce6f2d95ymd9DDUU7OL5WTq97+xkzgtRs1FZZu8qfWJ8wb02riMQ4kyQmR3WEoe1DZ4I
+         ELGPV91BfO3ejBzTC2I05ndwypwedAqG/5S6g7pHvlky6Ua3delzUz2g9ldFhm275gBo
+         3Skg==
+X-Gm-Message-State: AOAM530HDnAPOVA9G3OtX3vVthwijoSz9ly3TFA4YvsBoPXCA7dc5nt2
+        NNYbsf+7V1Ox/cF+itOuIf67AYL/Oo+yOH56m99sABQMSPgJ
+X-Google-Smtp-Source: ABdhPJzUMJWKdauYpJPL8xZ4g221gRRdIbAR8sRmFOqXTCpVmPOeKmuzXgn75jEla4APahQV3JImixl9pqF4gd7D7xpGQQ5zFhvm
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6602:218d:: with SMTP id b13mr27860356iob.19.1639260261717;
+ Sat, 11 Dec 2021 14:04:21 -0800 (PST)
+Date:   Sat, 11 Dec 2021 14:04:21 -0800
+In-Reply-To: <00000000000069e12f05d0b78c2d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000981d5005d2e60598@google.com>
+Subject: Re: [syzbot] BUG: MAX_LOCKDEP_CHAINS too low! (3)
+From:   syzbot <syzbot+8a249628ae32ea7de3a2@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andrii@kernel.org, andy@greyhouse.net,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, glider@google.com, hawk@kernel.org,
+        j.vosburgh@gmail.com, john.fastabend@gmail.com,
+        john.ogness@linutronix.de, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pmladek@suse.com, rdunlap@infradead.org,
+        songliubraving@fb.com, swboyd@chromium.org,
+        syzkaller-bugs@googlegroups.com, vfalico@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-branch HEAD: b7fd35a0ad976ee8e7d4914e063410686b5fa353  Merge tag 'irqchip-fixes-5.16-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
+syzbot has found a reproducer for the following issue on:
 
-elapsed time: 724m
+HEAD commit:    6f513529296f Merge tag 'for-5.16-rc4-tag' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10a8954db00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=221ffc09e39ebbd1
+dashboard link: https://syzkaller.appspot.com/bug?extid=8a249628ae32ea7de3a2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12777551b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a99a05b00000
 
-configs tested: 151
-configs skipped: 3
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8a249628ae32ea7de3a2@syzkaller.appspotmail.com
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+BUG: MAX_LOCKDEP_CHAINS too low!
+turning off the locking correctness validator.
+CPU: 0 PID: 6709 Comm: kworker/u4:7 Not tainted 5.16.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: bond1948 bond_netdev_notify_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ add_chain_cache kernel/locking/lockdep.c:3649 [inline]
+ lookup_chain_cache_add kernel/locking/lockdep.c:3748 [inline]
+ validate_chain kernel/locking/lockdep.c:3769 [inline]
+ __lock_acquire.cold+0x372/0x3ab kernel/locking/lockdep.c:5027
+ lock_acquire kernel/locking/lockdep.c:5637 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602
+ process_one_work+0x921/0x1690 kernel/workqueue.c:2274
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211210
-m68k                        m5307c3_defconfig
-arm                        spear6xx_defconfig
-sh                             sh03_defconfig
-riscv                            alldefconfig
-powerpc                        cell_defconfig
-arm                        mini2440_defconfig
-arm                         assabet_defconfig
-powerpc                     tqm8548_defconfig
-powerpc64                        alldefconfig
-arc                          axs101_defconfig
-mips                           mtx1_defconfig
-powerpc                     pseries_defconfig
-mips                       lemote2f_defconfig
-powerpc                     ppa8548_defconfig
-arm                         shannon_defconfig
-arm                         bcm2835_defconfig
-riscv                            allyesconfig
-arm                          iop32x_defconfig
-arm                           h5000_defconfig
-powerpc                 mpc837x_rdb_defconfig
-arc                      axs103_smp_defconfig
-sh                         apsh4a3a_defconfig
-powerpc                      katmai_defconfig
-powerpc                       eiger_defconfig
-nios2                         3c120_defconfig
-arm                       multi_v4t_defconfig
-sh                           se7619_defconfig
-arm                      integrator_defconfig
-um                             i386_defconfig
-powerpc                     sequoia_defconfig
-arm                         lpc32xx_defconfig
-microblaze                      mmu_defconfig
-sh                        edosk7705_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                          g5_defconfig
-mips                        bcm47xx_defconfig
-xtensa                  audio_kc705_defconfig
-powerpc                 mpc837x_mds_defconfig
-arc                          axs103_defconfig
-openrisc                         alldefconfig
-powerpc                 mpc8540_ads_defconfig
-m68k                       bvme6000_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                      chrp32_defconfig
-m68k                        m5407c3_defconfig
-arc                            hsdk_defconfig
-openrisc                  or1klitex_defconfig
-powerpc                     pq2fads_defconfig
-alpha                            alldefconfig
-arm                       netwinder_defconfig
-s390                          debug_defconfig
-arm                        mvebu_v7_defconfig
-arm                          pxa168_defconfig
-arm                  randconfig-c002-20211210
-arm                  randconfig-c002-20211212
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20211210
-i386                 randconfig-a002-20211210
-i386                 randconfig-a005-20211210
-i386                 randconfig-a003-20211210
-i386                 randconfig-a006-20211210
-i386                 randconfig-a004-20211210
-i386                 randconfig-a013-20211211
-i386                 randconfig-a011-20211211
-i386                 randconfig-a016-20211211
-i386                 randconfig-a014-20211211
-i386                 randconfig-a015-20211211
-i386                 randconfig-a012-20211211
-x86_64               randconfig-a006-20211210
-x86_64               randconfig-a005-20211210
-x86_64               randconfig-a001-20211210
-x86_64               randconfig-a002-20211210
-x86_64               randconfig-a003-20211210
-x86_64               randconfig-a004-20211210
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-arm                  randconfig-c002-20211210
-x86_64               randconfig-c007-20211210
-riscv                randconfig-c006-20211210
-mips                 randconfig-c004-20211210
-i386                 randconfig-c001-20211210
-s390                 randconfig-c005-20211210
-powerpc              randconfig-c003-20211210
-x86_64               randconfig-a011-20211210
-x86_64               randconfig-a012-20211210
-x86_64               randconfig-a014-20211210
-x86_64               randconfig-a013-20211210
-x86_64               randconfig-a016-20211210
-x86_64               randconfig-a015-20211210
-i386                 randconfig-a013-20211210
-i386                 randconfig-a011-20211210
-i386                 randconfig-a016-20211210
-i386                 randconfig-a014-20211210
-i386                 randconfig-a015-20211210
-i386                 randconfig-a012-20211210
-hexagon              randconfig-r045-20211210
-riscv                randconfig-r042-20211210
-s390                 randconfig-r044-20211210
-hexagon              randconfig-r041-20211210
-hexagon              randconfig-r045-20211212
-riscv                randconfig-r042-20211212
-s390                 randconfig-r044-20211212
-hexagon              randconfig-r041-20211212
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

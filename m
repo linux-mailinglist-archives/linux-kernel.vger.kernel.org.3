@@ -2,113 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 680FE471099
+	by mail.lfdr.de (Postfix) with ESMTP id 97CB647109A
 	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 03:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242247AbhLKCIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 21:08:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244538AbhLKCI0 (ORCPT
+        id S1345785AbhLKCIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 21:08:55 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:37098 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241304AbhLKCIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:08:26 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D5EC0617A2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 18:04:51 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id r138so9492725pgr.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 18:04:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2S8/I20Ezd/HLw6sc+AWiuN7klMREXmDQI1IahWHKQA=;
-        b=6fM9O1Dh/P1lWRQ3SMkvNku8Ph06gI7kJMWiYxUHz3X9Nb0HHP6CsFLuy6JJbjVqt/
-         kYY2kJdZwjFVV4qinsy6RA1x8KQ2+RyqSeqiMVWtCEVU9ci4hKSF88eQRH74qv7ihE6Q
-         brqWWhoTcGwYUf8Ca3M5y+WV3VhDqKlIGGlwNXI2WttfWgiSFXAwdwk2Py05M/z1NUUA
-         9fF94bS/Fw3MGD1qnixQ2yZwP7Ngq1Hy7oW3uPHYvy9/VAi7h1sXXShKXPhdOLKIINPI
-         ZTucxmEpUkKbd4FC2kAwmiXrZtWEVJZE1ANiEIX1qoHx+sQ6BHrEsUub8Ayxf7F9u4ip
-         TWtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2S8/I20Ezd/HLw6sc+AWiuN7klMREXmDQI1IahWHKQA=;
-        b=RM+dQbzd8MrXZv9Zmz2VnXDBFXsvzz3qwxJgvzkdTFJgNsxhXRvs2zAZIsqAsWij1o
-         2C8Nyeudky6yM74SZ1xCuTsxV3s4I9qPxGhXq0brP0KRTEqZot8SUEGRWJlm7RFWoV67
-         m42z6WGMEw6zgdn/kDrC+3reGm7dPELgp/r9qdfRQb8rs/49Jq9RO3WteYO5rVKhHeEp
-         KVhJ1xiIP7nfPDWgoEsnNk6V/4EVYR/NxyDxKFFs0nuCs+ktbqs1VpGwBgQ43djtATA4
-         Q4+Uv73f69ob2kLNegS4iImxeVBrOckb0MhlVbX6o+td9D8/AfLqQHyCOX+tRYbOtB68
-         kAdw==
-X-Gm-Message-State: AOAM531G4VUzjueJYv5kIA3UqMKCWe00QYrDCsO/uHqStF+/lVCoVYt+
-        /2W04OdDW9ISQRi34T18j9PtxlGTzRDciA==
-X-Google-Smtp-Source: ABdhPJzRP3MBItZpg6nAIkTDSO2bM6xHpEVEXCUCFKSIS6assdVuUWT7a0rrwdfVSe6hVc1kRpbCTQ==
-X-Received: by 2002:a05:6a00:1681:b0:4a8:2462:ba0a with SMTP id k1-20020a056a00168100b004a82462ba0amr21272811pfc.75.1639188290374;
-        Fri, 10 Dec 2021 18:04:50 -0800 (PST)
-Received: from [172.20.4.26] ([66.185.175.30])
-        by smtp.gmail.com with ESMTPSA id nm13sm244380pjb.56.2021.12.10.18.04.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 18:04:49 -0800 (PST)
-Subject: Re: Random high CPU utilization in blk-mq with the none scheduler
-To:     Dexuan Cui <decui@microsoft.com>,
-        "'ming.lei@redhat.com'" <ming.lei@redhat.com>,
-        'Christoph Hellwig' <hch@lst.de>,
-        "'linux-block@vger.kernel.org'" <linux-block@vger.kernel.org>
-Cc:     Long Li <longli@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>
-References: <BYAPR21MB1270C598ED214C0490F47400BF719@BYAPR21MB1270.namprd21.prod.outlook.com>
- <BYAPR21MB1270DCE17A0FE017AF3272F1BF729@BYAPR21MB1270.namprd21.prod.outlook.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <b80bfe9a-bece-1f32-3d2a-fb4d94b1fa8c@kernel.dk>
-Date:   Fri, 10 Dec 2021 19:04:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 10 Dec 2021 21:08:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D83A0CE2D34;
+        Sat, 11 Dec 2021 02:04:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806F6C00446;
+        Sat, 11 Dec 2021 02:04:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639188296;
+        bh=MhQShSnRIzNvyMUq3ckYrycP8kO80RVx5wmfq2vwJOs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gEh6ZKwGrHl9boly93oUeOarJzJSDa7mOB6hEzhRMB9nj+lU9dry5/c39xg/YsRhO
+         jPYQ96hfQLPhxO8TwxlllxNZ1ktbUspnRIiXcb2oO480p/+iBGa9wk3neP9P116x8h
+         Ii9VZqYkgV67/wOuE66A7xTROOKs+Zh4Yv3zLK5HB7hrQjh6ltR+glnNdtPzJc4Fhc
+         6ynXEke+X+nucBJfFnRUt/Ig8iwkPXUDwY/DLksZowvNtUNEeFC2Gh32TrHqFz4UoI
+         jfn6aqIeAxTMVLrghwcXSk+jyvGhmRZJG6lvIYooBFL0LCi3Rsz6qiluMpk761mnON
+         qCGtJpbItE2/Q==
+Received: by pali.im (Postfix)
+        id C0927252C; Sat, 11 Dec 2021 03:04:53 +0100 (CET)
+Date:   Sat, 11 Dec 2021 03:04:53 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Sean Young <sean@mess.org>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Incorrect handling of . and .. files
+Message-ID: <20211211020453.mkuzumgpnignsuri@pali>
+References: <20210927111948.GA16257@gofer.mess.org>
 MIME-Version: 1.0
-In-Reply-To: <BYAPR21MB1270DCE17A0FE017AF3272F1BF729@BYAPR21MB1270.namprd21.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210927111948.GA16257@gofer.mess.org>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 6:29 PM, Dexuan Cui wrote:
->> From: Dexuan Cui
->> Sent: Thursday, December 9, 2021 7:30 PM
->>
->> Hi all,
->> I found a random high CPU utilization issue with some database benchmark
->> program running on a 192-CPU virtual machine (VM). Originally the issue
->> was found with RHEL 8.4 and Ubuntu 20.04, and further tests show that the
->> issue also reproduces with the latest upstream stable kernel v5.15.7, but
->> *not* with v5.16-rc1. It looks like someone resolved the issue in v5.16-rc1
->> recently?
+Hello!
+
+I tried to find some information what is allowed and what not.
+
+On Monday 27 September 2021 12:19:48 Sean Young wrote:
+> Hi,
 > 
-> I did git-bisect on the linux-block tree's for-5.16/block branch and this patch
-> resolves the random high CPU utilization issue (I'm not sure how):
-> 	dc5fc361d891 ("block: attempt direct issue of plug list")
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-5.16/block&id=dc5fc361d891e089dfd9c0a975dc78041036b906
+> Windows allows files and directories called "." and ".." to be created
+> using UNC paths, i.e. "\\?\D:\..". Now this is totally insane behaviour,
+> but when an exfat filesytem with such a file is mounted on Linux, those
+> files show up as another directory and its contents is inaccessible.
 > 
-> Do you think if it's easy to backport it to earlier versions like 5.10?
-> It looks like there are a lot of prerequisite patches.
+> I can replicate this using exfat filesystems, but not ntfs.
 
-It's more likely the real fix is avoiding the repeated plug list scan,
-which I guess makes sense. That is this commit:
+Microsoft exFAT specification explicitly disallow "." and "..", see:
 
-commit d38a9c04c0d5637a828269dccb9703d42d40d42b
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Thu Oct 14 07:24:07 2021 -0600
+https://docs.microsoft.com/en-us/windows/win32/fileio/exfat-specification#773-filename-field
 
-    block: only check previous entry for plug merge attempt
+  The file names "." and ".." have the special meaning of "this
+  directory" and "containing directory", respectively. Implementations
+  shall not record either of these reserved file names in the FileName
+  field.
 
-If that's the case, try 5.15.x again and do:
+On the other hand Microsoft FAT32 specification can be understood that
+file may have long name (vfat) set to "." or ".." but not short name.
 
-echo 2 > /sys/block/<dev>/queue/nomerges
+https://download.microsoft.com/download/0/8/4/084c452b-b772-4fe5-89bb-a0cbf082286a/fatgen103.doc (section Long Directory Entries)
 
-for each drive you are using in the IO test, and see if that gets
-rid of the excess CPU usage.
+  The characters may be any combination of those defined for short names
+  with the addition of the period (.) character used multiple times
+  within the long name.
 
--- 
-Jens Axboe
+Microsoft NTFS specification is not available.
 
+OSTA UDF 2.60 specification does not disallow "." and ".." entries, but
+specifies what UNIX operating system should do with invalid file names:
+
+http://osta.org/specs/pdf/udf260.pdf (section 4.2.2.1.5 UNIX)
+
+  A FileIdentifier that contains characters considered invalid within a
+  UNIX file name for the current system environment, or not displayable
+  in the current environment shall have them translated into “_” (#005E).
+
+By default non-multi-volume Volume Set on UDF use Interchange Level 2
+which do not have defined any restriction for File Identifier in UDF
+reference ECMA 167 specification. Interchange Level 1 has following
+restrictions:
+
+https://www.ecma-international.org/publications-and-standards/standards/ecma-167/ (section 4/15.1)
+
+  A sequence of fileid-characters shall be a sequence of d-characters
+  (1/7.2) excluding SPACE, COMMA, FULL STOP and REVERSE SOLIDUS
+  characters except as part of a code extension character (see 1/7.2.9.1).
+
+So it means that "." and ".." entries could be stored on disk as valid
+file names.
+
+> This is what I did on Windows using rust:
+> 
+> 	use std::fs::File;
+> 	use std::io::Write;
+> 
+> 	fn main() {
+> 	    let mut file =
+> 		File::create(r"\\?\D:\..").expect("create dot file");
+> 	    file.write_all(b"Hello, world!").expect("write dot file");
+> 	}
+> 
+> Now on Linux (I also created a file called ".").
+> 
+> [root@xywoleh tmp]# mount -t exfat /dev/loop0p1 /mnt
+> [root@xywoleh tmp]# cd /mnt
+> [root@xywoleh mnt]# ls -la
+> total 20
+> drwxr-xr-x. 5 root root 4096 Sep 27 11:47  .
+> drwxr-xr-x. 5 root root 4096 Sep 27 11:47  .
+> dr-xr-xr-x. 1 root root  176 Sep 21 11:05  ..
+> dr-xr-xr-x. 1 root root  176 Sep 21 11:05  ..
+> drwxr-xr-x. 2 root root 4096 Sep 27  2021 '$RECYCLE.BIN'
+> drwxr-xr-x. 2 root root 4096 Sep 27  2021 'System Volume Information'
+> 
+> Microsoft says this:
+> 
+> https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file#win32-file-namespaces
+> 
+> 	Because it turns off automatic expansion of the path string, the
+> 	"\\?\" prefix also allows the use of ".." and "." in the path names,
+> 	which can be useful if you are attempting to perform operations on a
+> 	file with these otherwise reserved relative path specifiers as part of
+> 	the fully qualified path.
+> 
+> So, in Linux cannot read "." or ".." (i.e., I can't see "Hello, World!"). I
+> don't know what the correct handling should be, but having two "." and two
+> ".." files does not seem right at all.
+
+This is really a bug in Linux kernel. It should not export "." and ".."
+into VFS even when filesystem disk format supports such insane file
+names.
+
+For FAT32 we could show short file name instead of long name as short
+name alias has explicitly disallowed "." and ".." names. I think that
+NTFS has optional support for DOS short name alias. UDF specification
+defines translation to "_" but it just opens a new question how to deal
+with conflicts with real file name "_".
+
+So either Linux needs to completely hide these insane file names from
+VFS or translate them to something which do not conflict with other
+files in correct directory.
+
+I guess that hiding them for exfat is valid thing as Microsoft
+specification explicitly disallow them. Probably fsck.exfat can be teach
+to rename these files and/or put them to lost+found directory.
+
+I'm really surprised that some filesystems specifications really allow
+such insane file names and also the fact that there is an implementation
+(Windows kernel) which allows creating them and it is even documented.
+
+> Thanks,
+> Sean

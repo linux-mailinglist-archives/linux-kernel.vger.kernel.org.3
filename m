@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 212E34713A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 12:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E607471397
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 12:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbhLKLa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 06:30:28 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16367 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbhLKLaM (ORCPT
+        id S230447AbhLKL0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 06:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhLKL0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 06:30:12 -0500
-Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JB5CF6Q04z91Px;
-        Sat, 11 Dec 2021 19:29:29 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 11 Dec 2021 19:30:10 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 11 Dec 2021 19:30:10 +0800
-From:   Weili Qian <qianweili@huawei.com>
-To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
-        Weili Qian <qianweili@huawei.com>
-Subject: [PATCH 6/6] crypto: hisilicon/qm - disable queue when 'CQ' error
-Date:   Sat, 11 Dec 2021 19:25:19 +0800
-Message-ID: <20211211112519.21201-7-qianweili@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211211112519.21201-1-qianweili@huawei.com>
-References: <20211211112519.21201-1-qianweili@huawei.com>
+        Sat, 11 Dec 2021 06:26:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA680C061714;
+        Sat, 11 Dec 2021 03:26:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45D2FB80935;
+        Sat, 11 Dec 2021 11:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E464AC004DD;
+        Sat, 11 Dec 2021 11:25:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639221960;
+        bh=PHU+6bwJbN3vxmPhHKk0TqqTJ4YRMYdtHRcfi13UnRk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aJtXOJ2unJiHbtj1GfKOgVvh20x6DQ6LA8xQt39M2qxUEof7hg29khlLh7cxVQTip
+         8iyg8FSUIFu6SJzaVysHqyB3p1eJ/D4Q67I8uIv6VlLbEDmvAvNbzWimpFdeIuBg0F
+         6RmbPuwF5dd2+mEQOIEGN2Uu5nGHIqQ430bK0BKYIAdmtmOnbFVVokudbwm/QJ/m0q
+         aYtnEoWjil0+l8FBJyOpCOdhLopCnJAO3nZptUL5TryqTlQf570PPTGKq9aq9BXXnk
+         VbBQJaa0xhsX8qHQI53dYOQJH5O1ZctKcgSdpkRmbqMtcA/K5BGxlOOIci86slQxyW
+         vxyZ+hI3ky0dg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 57173405D8; Sat, 11 Dec 2021 08:25:57 -0300 (-03)
+Date:   Sat, 11 Dec 2021 08:25:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, Song Liu <song@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf tools: Fix NULL vs IS_ERR_OR_NULL() checking
+Message-ID: <YbSKxcj7Ld+0JQ/F@kernel.org>
+References: <20211211053856.19827-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211211053856.19827-1-linmq006@gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the hardware reports the 'CQ' overflow or 'CQE' error by the abnormal
-interrupt, disable the queue and stop tasks send to hardware.
+Em Sat, Dec 11, 2021 at 05:38:53AM +0000, Miaoqian Lin escreveu:
+> The function trace_event__tp_format_id may return ERR_PTR(-ENOMEM).
+> Use IS_ERR_OR_NULL to check tp_format.
 
-Signed-off-by: Weili Qian <qianweili@huawei.com>
----
- drivers/crypto/hisilicon/qm.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+Thanks, applied.
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index 6c61f9d25f75..b1fe9c7b8cc8 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -89,7 +89,10 @@
+- Arnaldo
+
  
- #define QM_AEQE_PHASE(aeqe)		((le32_to_cpu((aeqe)->dw0) >> 16) & 0x1)
- #define QM_AEQE_TYPE_SHIFT		17
-+#define QM_AEQE_CQN_MASK		GENMASK(15, 0)
-+#define QM_CQ_OVERFLOW			0
- #define QM_EQ_OVERFLOW			1
-+#define QM_CQE_ERROR			2
- 
- #define QM_DOORBELL_CMD_SQ		0
- #define QM_DOORBELL_CMD_CQ		1
-@@ -989,6 +992,15 @@ static void qm_set_qp_disable(struct hisi_qp *qp, int offset)
- 	mb();
- }
- 
-+static void qm_disable_qp(struct hisi_qm *qm, u32 qp_id)
-+{
-+	struct hisi_qp *qp = &qm->qp_array[qp_id];
-+
-+	qm_set_qp_disable(qp, QM_RESET_STOP_TX_OFFSET);
-+	hisi_qm_stop_qp(qp);
-+	qm_set_qp_disable(qp, QM_RESET_STOP_RX_OFFSET);
-+}
-+
- static void qm_reset_function(struct hisi_qm *qm)
- {
- 	struct hisi_qm *pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
-@@ -1022,16 +1034,24 @@ static irqreturn_t qm_aeq_thread(int irq, void *data)
- {
- 	struct hisi_qm *qm = data;
- 	struct qm_aeqe *aeqe = qm->aeqe + qm->status.aeq_head;
--	u32 type;
-+	u32 type, qp_id;
- 
- 	while (QM_AEQE_PHASE(aeqe) == qm->status.aeqc_phase) {
- 		type = le32_to_cpu(aeqe->dw0) >> QM_AEQE_TYPE_SHIFT;
-+		qp_id = le32_to_cpu(aeqe->dw0) & QM_AEQE_CQN_MASK;
- 
- 		switch (type) {
- 		case QM_EQ_OVERFLOW:
- 			dev_err(&qm->pdev->dev, "eq overflow, reset function\n");
- 			qm_reset_function(qm);
- 			return IRQ_HANDLED;
-+		case QM_CQ_OVERFLOW:
-+			dev_err(&qm->pdev->dev, "cq overflow, stop qp(%u)\n",
-+				qp_id);
-+			fallthrough;
-+		case QM_CQE_ERROR:
-+			qm_disable_qp(qm, qp_id);
-+			break;
- 		default:
- 			dev_err(&qm->pdev->dev, "unknown error type %u\n",
- 				type);
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  tools/perf/util/python.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
+> index 563a9ba8954f..7f782a31bda3 100644
+> --- a/tools/perf/util/python.c
+> +++ b/tools/perf/util/python.c
+> @@ -461,7 +461,7 @@ get_tracepoint_field(struct pyrf_event *pevent, PyObject *attr_name)
+>  		struct tep_event *tp_format;
+>  
+>  		tp_format = trace_event__tp_format_id(evsel->core.attr.config);
+> -		if (!tp_format)
+> +		if (IS_ERR_OR_NULL(tp_format))
+>  			return NULL;
+>  
+>  		evsel->tp_format = tp_format;
+> -- 
+> 2.17.1
+
 -- 
-2.33.0
 
+- Arnaldo

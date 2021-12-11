@@ -2,88 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0764712F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD5D4712F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhLKItg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 03:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbhLKItf (ORCPT
+        id S230120AbhLKIvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 03:51:07 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47144 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229619AbhLKIvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 03:49:35 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A19C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 00:49:35 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j204-20020a2523d5000000b005c21574c704so20706771ybj.13
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 00:49:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=SrNa6exOHutT9geCBxzlhw7Uajzqri7l4YdB9tBFads=;
-        b=GPEel5AcZBhdC3IwbTcZBfQcaGHipcfdC1f7PADb1EnkVRN4MAO3BFaSTtKl7nh+jG
-         eRSL76x2ZdwB+AqMJ7Te02wIrOhxklbALNaj2k1RyPGvy5C118/Q47nVgNUv3jvi9RdW
-         9HvE4r6rrUZ23VFOQd0nvFr5ph/vUnMEsc7Z1yyR5G/eQK+CtX4oUC7FY4x7d+v5CuvO
-         UcQagyiHHmwmn/yITvZarTOX+ibhEbVRficV+vwcSepfvt7gcm3Q1ahkxYxpQLfdTGwO
-         TTe5H0yZwZ1C5ZGQSDeLFIGclrvnIO6otVzKQqDgga3lNx2tsDeA0vzugijZe4JWtR3C
-         +ycw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=SrNa6exOHutT9geCBxzlhw7Uajzqri7l4YdB9tBFads=;
-        b=5KYjPQhENuk2Vw+j+30tI2D71sIbWqUt3qI1MV2UyIbVl20aTShDhEwu2Vhbxa6ID5
-         lU5dWVDU7xrNFeWkTlsR8XO5WKGGFTXDHZT78m1lh6tZrx8FDxap5Rd4R0IvEYoNwewG
-         gL+hMqKo+MvL1IDyFoiacl7VAKEVS8LS9yGfrLf1+DW/2CHm7t0F3Yw+7pQ7I3jm6qOq
-         CNZW+Vk1WJSy7AFTa8YaM9OFBs32ZIZSgJ7Zh3PMVInUfmkQ+rFTS9v70ZOh0L5pkioG
-         P9VuYfriIRyVUIXOaItClXy9VpA5doIFY2OgGCbMgf5LGUdPPFRLQOv9I3jxFjORCrWc
-         G2wQ==
-X-Gm-Message-State: AOAM532YdLabjakEP53JaqkzdbD7KMU6mq6yrbJQC/tB5WgytaIrGVdH
-        RCvPEYH6C7i/+1VDZ+xzGO8WU5DtR7VvLA==
-X-Google-Smtp-Source: ABdhPJxbvkfX1BIPcCXSGvyHbXF8UF5q5bOpkmkwWeHhRSXRyVU6mjxtQ/urM4KvPuCKzoI5DB5cPgxAhoGO1w==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:ac24:: with SMTP id
- w36mr19470213ybi.118.1639212574168; Sat, 11 Dec 2021 00:49:34 -0800 (PST)
-Date:   Sat, 11 Dec 2021 08:49:28 +0000
-Message-Id: <20211211084928.410669-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH] kunit: tool: Default --jobs to number of CPUs
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 11 Dec 2021 03:51:06 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 04DC0CE2F2C;
+        Sat, 11 Dec 2021 08:51:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834F5C004DD;
+        Sat, 11 Dec 2021 08:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639212663;
+        bh=oJGUsMuzhDiLopzzrBe771arSsE8B8iNDaGa8ER+kHk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=t9MzsQVDBlKb3rzfv8QZQAqPiDAe49brqUFusMBOaHlscPLr6zb/SaLMjQoxQEHoT
+         irTVxdVFvP8sq5EmbKSgvTnDLW2DOwF5wMHbDA/fxSrmVts1SLrpgyEOK3ZImosvDW
+         LO8QVDViPtpNW6dZsoqsiGvVvu/KtNfyC1LQWPcEBUKJQ1gzTxJDAc3pZYr2XooSYE
+         Wt4LJlebZrugmfV5VnkGU3tIRMM/ryEO9FtaB/XgF+jbGSzLkuUS6Bp0cVm3uOFFYq
+         2dmhfFotzfyYoiraek/nFGwmbYA1b4BE6HLd9nqQZZpdiw9bXWRFwDP1t1JUUYA8CO
+         N3NzbZPZDptgA==
+Date:   Sat, 11 Dec 2021 09:50:55 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.16
+Message-ID: <YbRmbxcM9crWkl0y@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EuK4WBe/E+JOtAly"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The --jobs parameter for kunit_tool currently defaults to 8 CPUs,
-regardless of the number available. For systems with significantly more
-(or less), this is not as efficient. Instead, default --jobs to the
-number of CPUs present in the system: while there are as many
-superstitions as to exactly what the ideal jobs:CPU ratio is, this seems
-sufficiently sensible to me.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- tools/testing/kunit/kunit.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--EuK4WBe/E+JOtAly
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 68e6f461c758..2cb6c7db5683 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -310,7 +310,7 @@ def add_build_opts(parser) -> None:
- 	parser.add_argument('--jobs',
- 			    help='As in the make command, "Specifies  the number of '
- 			    'jobs (commands) to run simultaneously."',
--			    type=int, default=8, metavar='jobs')
-+			    type=int, default=os.cpu_count(), metavar='jobs')
- 
- def add_exec_opts(parser) -> None:
- 	parser.add_argument('--timeout',
--- 
-2.34.1.173.g76aa8bc2d0-goog
+Linus,
 
+here are two more I2C driver bugfixes.
+
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to a74c313aca266fab0d1d1a72becbb8b7b5286b6e:
+
+  i2c: mpc: Use atomic read and fix break condition (2021-12-10 22:27:30 +0100)
+
+----------------------------------------------------------------
+Chris Packham (1):
+      i2c: mpc: Use atomic read and fix break condition
+
+Vincent Whitchurch (1):
+      i2c: virtio: fix completion handling
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Maxime Bizon (1):
+      (Test) i2c: mpc: Use atomic read and fix break condition
+
+ drivers/i2c/busses/i2c-mpc.c    |  2 +-
+ drivers/i2c/busses/i2c-virtio.c | 32 ++++++++++++--------------------
+ 2 files changed, 13 insertions(+), 21 deletions(-)
+
+--EuK4WBe/E+JOtAly
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG0ZmsACgkQFA3kzBSg
+KbapWw//czmYCkD+ynvwRHX6KJfA82y5Z0k8uo63Y0V8daFIPBmWFW2ueCYWFtLk
+vdRytH2fUvFezUPy/9rtd3eTJfb38MfFjyfg28ZLJSlxAFJlUSufVpVbE17KY8bB
+dPItyl7NZPJxKnJbC/q/hMkVmSjtdY/3hB0SkXVJOBSKk4VrIT2T3LTzXYTyRn0K
+VlMcS7/DY19++aOXr2UFl4/7YYIb1BQJ7aJVNBOXsNuodkLDaHkvEjzYhRFgupas
+rncoku6nesPpWqIdj5UBEh51NKdvINPYGquJO/HYjDJ/nyJpdBFB5s2WH5PSxHZw
+0Js8mel5sFvoTq+iPQ6CUi78sRqgG6TkoD0Fy4OKqQa+jERcuUoJbhl/u6h4PBnP
+/oJ29+2Bt30V2m+mmvvUkEq+PJD8xxNBhFad4eGW7xmyOXSqXrlGKv74cOYx1hP6
+BYUKDrHUfJ1vgT05FaQlhFNkG/qrNjL6aef0PRNkVB3ASUC29JW0ypVidEuEYwpU
+qZK5EpypqaGhIgaedIFZLs0k9YoE97CYiXruNmvisbEQeAE8ZEdrIoLkkhpj98z5
+kH52WilLv1tWq75NxaPigjFH1T+TR/rsv+IbI22kbraEhBbhYhvbDRIv9m8bgGFb
+ea+zDkvpSXmGf+qbig6FSWW1ivt4tWodlJKVsGpdC5z+wLwcyiw=
+=z+LA
+-----END PGP SIGNATURE-----
+
+--EuK4WBe/E+JOtAly--

@@ -2,80 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA68B47136F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 11:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052D1471375
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 11:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbhLKKuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 05:50:23 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:53448 "EHLO
+        id S229977AbhLKKuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 05:50:40 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53578 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbhLKKuW (ORCPT
+        with ESMTP id S229724AbhLKKui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 05:50:22 -0500
+        Sat, 11 Dec 2021 05:50:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C2591CE2F5A;
-        Sat, 11 Dec 2021 10:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA3EC341C6;
-        Sat, 11 Dec 2021 10:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639219817;
-        bh=oULXXNjKX1XrkECFAxfwuHzkSGlYBJuKuwLL+fq0ybU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lCuk5L40IwsyzelUSyACjQrrJkVNXgI7MGWK/RCMTsn5u/O9rRUVhOJ34Lqzsly46
-         6NBR8M2iFMo8pKARNaMazD1OxhxP/1QUcP2QbAWTGyX1r42djjr35cR1irS1793dDg
-         ihHd4lnlq3G2z6rhWuquWigmawyvNOrI6iYk4bEM=
-Date:   Sat, 11 Dec 2021 11:50:11 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v3 3/3] blk-crypto: show crypto capabilities in sysfs
-Message-ID: <YbSCYyAv1SmYy7mz@kroah.com>
-References: <20211208013534.136590-1-ebiggers@kernel.org>
- <20211208013534.136590-4-ebiggers@kernel.org>
- <6ff4d074-7508-4f4c-de06-f36899668168@acm.org>
- <YbKT/lcp6iZ+lD4n@sol.localdomain>
- <YbL2uUqV0GWFOitE@kroah.com>
- <cb29756b-8b21-5b4d-f107-b5573945d7ab@acm.org>
+        by sin.source.kernel.org (Postfix) with ESMTPS id D8D77CE2A7B;
+        Sat, 11 Dec 2021 10:50:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E0B5C004DD;
+        Sat, 11 Dec 2021 10:50:29 +0000 (UTC)
+Date:   Sat, 11 Dec 2021 11:50:26 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v6 12/17] securityfs: Extend securityfs with namespacing
+ support
+Message-ID: <20211211105026.pq5stw23gh5na3eq@wittgenstein>
+References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
+ <20211210194736.1538863-13-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cb29756b-8b21-5b4d-f107-b5573945d7ab@acm.org>
+In-Reply-To: <20211210194736.1538863-13-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:29:41AM -0800, Bart Van Assche wrote:
-> On 12/9/21 10:42 PM, Greg Kroah-Hartman wrote:
-> > A single hex value makes sense to me.
+On Fri, Dec 10, 2021 at 02:47:31PM -0500, Stefan Berger wrote:
+> Extend 'securityfs' for support of IMA namespacing so that each
+> IMA (user) namespace can have its own front-end for showing the currently
+> active policy, the measurement list, number of violations and so on.
 > 
-> Hi Greg,
+> Drop the addition dentry reference and simplify cleanup to work without
+> the additional reference. This enables simple cleanup of dentries upon
+> umount.
 > 
-> I'm not enthusiast about this approach because:
-> (a) A single hex value can be confused with a number. Reporting a bitfield in
->     hex format is not sufficient to prevent confusion with a number.
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> ---
+>  security/inode.c | 14 ++++----------
+>  1 file changed, 4 insertions(+), 10 deletions(-)
+> 
+> diff --git a/security/inode.c b/security/inode.c
+> index fee01ff4d831..c77ae8ecc464 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -54,7 +54,7 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  
+>  static int securityfs_get_tree(struct fs_context *fc)
+>  {
+> -	return get_tree_single(fc, securityfs_fill_super);
+> +	return get_tree_keyed(fc, securityfs_fill_super, fc->user_ns);
+>  }
+>  
+>  static const struct fs_context_operations securityfs_context_ops = {
+> @@ -72,6 +72,7 @@ static struct file_system_type fs_type = {
+>  	.name =		"securityfs",
+>  	.init_fs_context = securityfs_init_fs_context,
+>  	.kill_sb =	kill_litter_super,
+> +	.fs_flags =	FS_USERNS_MOUNT,
+>  };
+>  
+>  /**
+> @@ -168,7 +169,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+>  		inode->i_fop = fops;
+>  	}
+>  	d_instantiate(dentry, inode);
+> -	dget(dentry);
+>  	inode_unlock(dir);
+>  	return dentry;
+>  
+> @@ -306,23 +306,17 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
+>  void securityfs_remove(struct dentry *dentry)
+>  {
+>  	struct user_namespace *ns;
+> -	struct inode *dir;
+>  
+>  	if (!dentry || IS_ERR(dentry))
+>  		return;
+>  
+>  	ns = dentry->d_sb->s_user_ns;
+>  
+> -	dir = d_inode(dentry->d_parent);
+> -	inode_lock(dir);
+>  	if (simple_positive(dentry)) {
+> -		if (d_is_dir(dentry))
+> -			simple_rmdir(dir, dentry);
+> -		else
+> -			simple_unlink(dir, dentry);
+> +		d_delete(dentry);
+>  		dput(dentry);
 
-Each sysfs file has their own "units" or values, or whatever.  So a hex
-number or bitfield or something else is fine.
-
-Again, single value, no need to parse, is the key here.
-
-> (b) No other block layer sysfs attribute follows this encoding scheme.
-
-Then follow what they do.  Do they have multiple values in a single
-file?  If so, they are broken and we should change that.
-
-> (c) This encoding enforces the restriction that data unit sizes are a power of
->     two. Is there anything fundamental in encryption that restricts data unit
->     sizes to a power of two? I don't know the answer myself.
-
-Again, you all can pick the rules you want for this file, if you want to
-have bitfields, wonderful!  If you want to make it an enum, wonderful!
-
-thanks,
-
-greg k-h
+In
+https://lore.kernel.org/lkml/20211210114934.tacjnwryihrsx6ln@wittgenstein
+I explained why d_delete()+d_put() only is wrong and how to fix it.

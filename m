@@ -2,135 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE15B470F43
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C36DE470F45
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345382AbhLKAO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 19:14:27 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:51722 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237677AbhLKAO0 (ORCPT
+        id S1345396AbhLKAPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 19:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345384AbhLKAO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 19:14:26 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639181448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UyP3TRH2iWjdq5r7E4NtaTCjbCea3W5A7JaubhEgR60=;
-        b=tt4xN8CIwj4OENid7IXT63tCLVnDpex6pyMXFnXPTsP9ztIZ+J/cT/inMEad29mARgktUC
-        CZFYoxBTQmo/XXc20tak+FLtpw4sBQqlTR/eWqr8wrvdtHlWLX8ZPYRDgO+4hGd+63wJjM
-        1Q2JPZaPt2JfJyME5M8T32Xplk4YRaFA2dVny4uk0Ur8P6hhC5JzzaOIkK7YZUkEp0MmWp
-        cZUGUPrIHA7GnKDPr5gXX/LPaSELecYp17CLL4VnTvz6dwslvsTp2Z2BSvI9ttuaZnOUyC
-        C6vVeF5goAeUdJd+fhy0qpEpO2BfaPP80VyE/bkLkn62X2QS20cbYu+BnHt+Ew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639181448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UyP3TRH2iWjdq5r7E4NtaTCjbCea3W5A7JaubhEgR60=;
-        b=K3f0EOt34Ew7ARu8PxC8R10wpkywTX74rU4HKWS+pcsps5ch7Fr1N4WV6XlBdnaAd2YXwd
-        FftW5iUjxv/ZkpCA==
-To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        pbonzini@redhat.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        yang.zhong@intel.com
-Subject: Re: [PATCH 15/19] kvm: x86: Save and restore guest XFD_ERR properly
-In-Reply-To: <20211208000359.2853257-16-yang.zhong@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-16-yang.zhong@intel.com>
-Date:   Sat, 11 Dec 2021 01:10:47 +0100
-Message-ID: <87pmq4vw54.ffs@tglx>
+        Fri, 10 Dec 2021 19:14:59 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11EDC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Z950PYmZjozMauJWN95yjblekf6k1s+LeUA7vpTPbc0=; b=cdPbHzLTwvUCCPaOeax3hPYx1c
+        +Ig+IovKOkTwfcaAfJMZ10de+GbZKM7O0Vpyi53tAGd/fB83cMhL5I/aHGkzk4fEGxb1A2SgyfUu6
+        gEyA6q57aa1edzbjDb2f5iB+35LJjiatoUDbe/8WYgfcvX1GmC+z/Eb7LnoaqZqITlDqlyex8zcHj
+        HU7TuJ27Ja5Us4cXDJDASqtuClY49CaFdSMbwAlwrcuR2z4VjRhtApwRTolyESBfTLUIUCtZRkvUz
+        FIKxCP/8f5xc9en++OuhbiZWRUaGviHJYRrwQZbV588H0kqWNZcVGyaqRDffWw95mGmcf+WKTTSc+
+        ZJ+qNegw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvpyz-004LBK-Mg; Sat, 11 Dec 2021 00:11:21 +0000
+Date:   Fri, 10 Dec 2021 16:11:21 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jessica Yu <jeyu@kernel.org>, Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] module: add in-kernel support for decompressing
+Message-ID: <YbPsqR5ZyiFwJul3@bombadil.infradead.org>
+References: <YbLvDWdyFivlj7pP@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbLvDWdyFivlj7pP@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07 2021 at 19:03, Yang Zhong wrote:
-> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> index 5089f2e7dc22..9811dc98d550 100644
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -238,6 +238,7 @@ bool fpu_alloc_guest_fpstate(struct fpu_guest *gfpu)
->  	fpstate->is_guest	= true;
+On Thu, Dec 09, 2021 at 10:09:17PM -0800, Dmitry Torokhov wrote:
+> diff --git a/init/Kconfig b/init/Kconfig
+> index cd23faa163d1..d90774ff7610 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -2305,6 +2305,19 @@ config MODULE_COMPRESS_ZSTD
 >  
->  	gfpu->fpstate		= fpstate;
-> +	gfpu->xfd_err           = XFD_ERR_GUEST_DISABLED;
-
-This wants to be part of the previous patch, which introduces the field.
-
->  	gfpu->user_xfeatures	= fpu_user_cfg.default_features;
->  	gfpu->user_perm		= fpu_user_cfg.default_features;
->  	fpu_init_guest_permissions(gfpu);
-> @@ -297,6 +298,7 @@ int fpu_swap_kvm_fpstate(struct fpu_guest *guest_fpu, bool enter_guest)
->  		fpu->fpstate = guest_fps;
->  		guest_fps->in_use = true;
->  	} else {
-> +		fpu_save_guest_xfd_err(guest_fpu);
-
-Hmm. See below.
-
->  		guest_fps->in_use = false;
->  		fpu->fpstate = fpu->__task_fpstate;
->  		fpu->__task_fpstate = NULL;
-> @@ -4550,6 +4550,9 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
->  		kvm_steal_time_set_preempted(vcpu);
->  	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+>  endchoice
 >  
-> +	if (vcpu->preempted)
-> +		fpu_save_guest_xfd_err(&vcpu->arch.guest_fpu);
+> +config MODULE_DECOMPRESS
+> +	bool "Support in-kernel module decompression"
+> +	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
+> +	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
+> +	select XZ_DEC if MODULE_COMPRESS_XZ
 
-I'm not really exited about the thought of an exception cause register
-in guest clobbered state.
+What if MODULE_COMPRESS_GZIP and MODULE_COMPRESS_XZ are enabled?
+These are not mutually exclusive.
 
-Aside of that I really have to ask the question why all this is needed?
+> +	help
+> +
+> +	  Support for decompressing kernel modules by the kernel itself
+> +	  instead of relying on userspace to perform this task. Useful when
+> +	  load pinning security policy is enabled.
 
-#NM in the guest is slow path, right? So why are you trying to optimize
-for it?
+Shouldn't kernel decompression be faster too? If so, what's the
+point of doing it in userspace?
 
-The straight forward solution to this is:
+> diff --git a/kernel/module_decompress.c b/kernel/module_decompress.c
+> new file mode 100644
+> index 000000000000..590ca00aa098
+> --- /dev/null
+> +++ b/kernel/module_decompress.c
+> @@ -0,0 +1,271 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright 2021 Google LLC.
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/highmem.h>
+> +#include <linux/kobject.h>
+> +#include <linux/mm.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/vmalloc.h>
+> +
+> +#include "module-internal.h"
+> +
+> +static int module_extend_max_pages(struct load_info *info, unsigned int extent)
+> +{
+> +	struct page **new_pages;
+> +
+> +	new_pages = kvmalloc_array(info->max_pages + extent,
+> +				   sizeof(info->pages), GFP_KERNEL);
+> +	if (!new_pages)
+> +		return -ENOMEM;
+> +
+> +	memcpy(new_pages, info->pages, info->max_pages * sizeof(info->pages));
+> +	kvfree(info->pages);
+> +	info->pages = new_pages;
+> +	info->max_pages += extent;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct page *module_get_next_page(struct load_info *info)
+> +{
+> +	struct page *page;
+> +	int error;
+> +
+> +	if (info->max_pages == info->used_pages) {
+> +		error = module_extend_max_pages(info, info->used_pages);
+> +		if (error)
+> +			return ERR_PTR(error);
+> +	}
+> +
+> +	page = alloc_page(GFP_KERNEL | __GFP_HIGHMEM);
+> +	if (!page)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	info->pages[info->used_pages++] = page;
+> +	return page;
+> +}
+> +
+> +#ifdef CONFIG_MODULE_COMPRESS_GZIP
+> +#include <linux/zlib.h>
+> +#define MODULE_COMPRESSION	gzip
+> +#define MODULE_DECOMPRESS_FN	module_gzip_decompress
 
-    1) Trap #NM and MSR_XFD_ERR write
+So gzip is assumed if your kernel has both gzip and xz. That seems odd.
 
-    2) When the guest triggers #NM is takes an VMEXIT and the host
-       does:
+<-- snip -->
 
-                rdmsrl(MSR_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+> +#elif CONFIG_MODULE_COMPRESS_XZ
+> +#include <linux/xz.h>
+> +#define MODULE_COMPRESSION	xz
+> +#define MODULE_DECOMPRESS_FN	module_xz_decompress
+> +#else
 
-       injects the #NM and goes on.
+<-- snip -->
 
-    3) When the guest writes to MSR_XFD_ERR it takes an VMEXIT and
-       the host does:
+> +#error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
 
-           vcpu->arch.guest_fpu.xfd_err = msrval;
-           wrmsrl(MSR_XFD_ERR, msrval);
+Using "depends on" logic on the kconfig symbol would resolve this and
+make this not needed.
 
-      and goes back.
+Why can't we just inspect the module and determine? Or, why not just add
+a new kconfig symbol under MODULE_DECOMPRESS which lets you specify the
+MODULE_COMPRESSION_TYPE. This way this is explicit.
 
-    4) Before entering the preemption disabled section of the VCPU loop
-       do:
-       
-           if (vcpu->arch.guest_fpu.xfd_err)
-                      wrmsrl(MSR_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+> +module_init(module_decompress_sysfs_init);
 
-    5) Before leaving the preemption disabled section of the VCPU loop
-       do:
-       
-           if (vcpu->arch.guest_fpu.xfd_err)
-                      wrmsrl(MSR_XFD_ERR, 0);
+This seems odd, altough it works, can you use late_initcall instead()?
 
-It's really that simple and pretty much 0 overhead for the regular case.
-
-If the guest triggers #NM with a high frequency then taking the VMEXITs
-is the least of the problems. That's not a realistic use case, really.
-
-Hmm?
-
-Thanks,
-
-        tglx
+  Luis

@@ -2,106 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59695471398
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 12:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B29094713B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 12:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbhLKL3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 06:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhLKL3E (ORCPT
+        id S229541AbhLKLuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 06:50:17 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:53810 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229475AbhLKLuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 06:29:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824B2C061714;
-        Sat, 11 Dec 2021 03:29:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 369CAB8093B;
-        Sat, 11 Dec 2021 11:29:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA068C004DD;
-        Sat, 11 Dec 2021 11:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639222140;
-        bh=bRzrWnqdaJziN+i3we6kulKgLiTwa5uBJnQvuioHYyw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g7lCQD18OMyO8bYrW59KXLDjIefpUeGbgALxPDiy2+vkvw/ovgpqdOrYHOUAobPP0
-         pt49tkCWk5NYASFki/nhg3tf5NAh82iEY1un/bW7lJCWg2PV+JMj1daIiu2rPXGb27
-         8hbwtREF8J89dIcSRqx8Ug3mNvSUfshilKQK3gGQps7WS/FFKqQPcm0J8Jx/BUZ9/H
-         ia6hC96whPgZdSpl7ml1hIQaa9HesSOKGgQPYfeYp9MbdvNDcyFwd76WhIMnrnttRn
-         zZRRRYGigcB6yDxhRaEUP3WjknSsaz1u+o08uyS+d4EB/QhTeJpqQ+uZaFKnOy6oCx
-         g7KgvqbDSLrjA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1A5FB405D8; Sat, 11 Dec 2021 08:28:59 -0300 (-03)
-Date:   Sat, 11 Dec 2021 08:28:59 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Alistair Francis <alistair.francis@opensource.wdc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Alistair Francis <alistair23@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-perf-users@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        Sat, 11 Dec 2021 06:50:16 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639223415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZXmVvWeVFr327aKuDnZsQAcpc7QhDSVmcSsZcSFgDPs=;
+        b=iZmRJbGaVW7o47WayeqjS7VlT0VazPEds34xcquZLIuk27qDBDYgrpW0jCLdfzOkrl+FX2
+        w2Zj1w6XvsdI7BejKTLOpAJdGeMg9T6/ZjgxTTnnkSPOHAQoxHsHAubWZoXzUwGn3hC/rb
+        qsD54Hxzk3W5dIm6iccI4AQEmCZJK2tj3vfRV4X7lMMG6qGscsz54KQ4xuyM5/XWZyLLod
+        xemZCWDp15ov5TRBl78auDjUsduwDtuViqPsmjdQhc3SjDs+texsTqzqaHFmdpxI5dztR6
+        Uyp5RLaoQXzIfuV1/gmZMwD6XJguLJlA92Kd8+LbYSkOBXUTkIyL0CLhuUiNnQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639223415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZXmVvWeVFr327aKuDnZsQAcpc7QhDSVmcSsZcSFgDPs=;
+        b=z/kIlfWeFwsaHzmhp+S6NBJIOR9tcKb5wXURwobItwKFhsgRINGieYNTWGZn9IKY8sicKD
+        0yIHdiLJFUDWzPBg==
+To:     Peter Collingbourne <pcc@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: Re: [PATCH v5 1/6] perf bench futex: Add support for 32-bit systems
- with 64-bit time_t
-Message-ID: <YbSLe1EWglAc592n@kernel.org>
-References: <20211209235857.423773-1-alistair.francis@opensource.wdc.com>
- <YbNX3mRT0A9/N2il@kernel.org>
- <YbNZw1/cUXJ8up5b@kernel.org>
- <CAK8P3a05D=fb9stZEL6rUMs7c=S6gJxN5gR7HG_i8RiXAbaB5Q@mail.gmail.com>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        David Hildenbrand <david@redhat.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>
+Subject: Re: [PATCH v4 4/7] uaccess-buffer: add CONFIG_GENERIC_ENTRY support
+In-Reply-To: <20211209221545.2333249-5-pcc@google.com>
+References: <20211209221545.2333249-1-pcc@google.com>
+ <20211209221545.2333249-5-pcc@google.com>
+Date:   Sat, 11 Dec 2021 12:50:14 +0100
+Message-ID: <87a6h7webt.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a05D=fb9stZEL6rUMs7c=S6gJxN5gR7HG_i8RiXAbaB5Q@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Dec 10, 2021 at 03:23:42PM +0100, Arnd Bergmann escreveu:
-> On Fri, Dec 10, 2021 at 2:44 PM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> > Em Fri, Dec 10, 2021 at 10:36:30AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Fri, Dec 10, 2021 at 09:58:52AM +1000, Alistair Francis escreveu:
-> > > > From: Alistair Francis <alistair.francis@wdc.com>
+Peter,
 
-> > > > Some 32-bit architectures (such are 32-bit RISC-V) only have a 64-bit
-> > > > time_t and as such don't have the SYS_futex syscall. This patch will
-> > > > allow us to use the SYS_futex_time64 syscall on those platforms.
+On Thu, Dec 09 2021 at 14:15, Peter Collingbourne wrote:
+> @@ -197,14 +201,19 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+>  static void exit_to_user_mode_prepare(struct pt_regs *regs)
+>  {
+>  	unsigned long ti_work = READ_ONCE(current_thread_info()->flags);
+> +	bool uaccess_buffer_pending;
+>  
+>  	lockdep_assert_irqs_disabled();
+>  
+>  	/* Flush pending rcuog wakeup before the last need_resched() check */
+>  	tick_nohz_user_enter_prepare();
+>  
+> -	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
+> +	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK)) {
+> +		bool uaccess_buffer_pending = uaccess_buffer_pre_exit_loop();
+> +
+>  		ti_work = exit_to_user_mode_loop(regs, ti_work);
+> +		uaccess_buffer_post_exit_loop(uaccess_buffer_pending);
 
-> > > > This also converts the futex calls to be y2038 safe (when built for a
-> > > > 5.1+ kernel).
+What? Let me look at the these two functions, which are so full of useful
+comments:
 
-> > > > This is a revert of commit ba4026b09d83acf56c040b6933eac7916c27e728
-> > > > "Revert "perf bench futex: Add support for 32-bit systems with 64-bit time_t"".
+> +bool __uaccess_buffer_pre_exit_loop(void)
+> +{
+> +	struct uaccess_buffer_info *buf = &current->uaccess_buffer;
+> +	struct uaccess_descriptor __user *desc_ptr;
+> +	sigset_t tmp_mask;
+> +
+> +	if (get_user(desc_ptr, buf->desc_ptr_ptr) || !desc_ptr)
+> +		return false;
+> +
+> +	current->real_blocked = current->blocked;
+> +	sigfillset(&tmp_mask);
+> +	set_current_blocked(&tmp_mask);
 
-> > > > The original commit was reverted as including linux/time_types.h would
-> > > > fail to compile on older kernels. This commit doesn't include
-> > > > linux/time_types.h to avoid this issue.
+This prevents signal delivery in exit_to_user_mode_loop(), right?
 
-> > >   10     9.99 alpine:3.12                   : FAIL gcc version 9.3.0 (Alpine 9.3.0)
-> > >     In file included from bench/futex-hash.c:29:
-> > >     bench/futex.h:37:2: error: unknown type name '__kernel_old_time_t'
-> > >        37 |  __kernel_old_time_t tv_sec;  /* seconds */
-> > >           |  ^~~~~~~~~~~~~~~~~~~
-> > >     In file included from bench/futex-wake.c:25:
+> +	return true;
+> +}
+> +
+> +void __uaccess_buffer_post_exit_loop(void)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&current->sighand->siglock, flags);
+> +	current->blocked = current->real_blocked;
+> +	recalc_sigpending();
+
+This restores the signal blocked mask _after_ exit_to_user_mode_loop()
+has completed, recalculates pending signals and goes out to user space
+with eventually pending signals.
+
+How is this supposed to be even remotely correct?
+
+But that aside, let me look at the whole picture as I understand it from
+reverse engineering it. Yes, reverse engineering, because there are
+neither comments in the code nor any useful information in the
+changelogs of 2/7 and 4/7. Also the cover letter and the "documentation"
+are not explaining any of this and just blurb about sanitizers and how
+wonderful this all is.
  
-> It looks like we need to add include/uapi/linux/time_types.h to
-> tools/include/linux/ and update tools/include/linux/types.h
-> in order to address this.
+> @@ -70,6 +71,9 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+>  			return ret;
+>  	}
+>  
+> +	if (work & SYSCALL_WORK_UACCESS_BUFFER_ENTRY)
+> +		uaccess_buffer_syscall_entry();
 
-And make sure it is found before the system ones, yes, that would fix
-the issues. I'll try to do it these days.
+This conditionally sets SYSCALL_WORK_UACCESS_BUFFER_EXIT.
 
-- Arnaldo
+> @@ -247,6 +256,9 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
+>  
+>  	audit_syscall_exit(regs);
+>  
+> +	if (work & SYSCALL_WORK_UACCESS_BUFFER_EXIT)
+> +		uaccess_buffer_syscall_exit();
+
+When returning from the syscall and SYSCALL_WORK_UACCESS_BUFFER_EXIT is
+set, then uaccess_buffer_syscall_exit() clears
+SYSCALL_WORK_UACCESS_BUFFER_EXIT, right?
+
+This is called _before_ exit_to_user_mode_prepare(). So why is this
+__uaccess_buffer_pre/post_exit_loop() required at all?
+
+It's not required at all. Why?
+
+Simply because there are only two ways how exit_to_user_mode_prepare()
+can be reached:
+
+  1) When returning from a syscall
+
+  2) When returning from an interrupt which hit user mode execution
+
+#1 SYSCALL_WORK_UACCESS_BUFFER_EXIT is cleared _before_
+   exit_to_user_mode_prepare() is reached as documented above.
+
+#2 SYSCALL_WORK_UACCESS_BUFFER_EXIT cannot be set because the entry
+   to the kernel does not go through syscall_trace_enter().
+
+So what is this pre/post exit loop code about? Handle something which
+cannot happen in the first place?
+
+If at all this would warrant a:
+
+	if (WARN_ON_ONCE(test_syscall_work(UACCESS_BUFFER_ENTRY)))
+        	do_something_sensible();
+
+instead of adding undocumented voodoo w/o providing any rationale. Well,
+I can see why that was not provided because there is no rationale to
+begin with.
+
+Seriously, I'm all for better instrumentation and analysis, but if the
+code provided for that is incomprehensible, uncommented and
+undocumented, then the result is worse than what we have now.
+
+If you think that this qualifies as documentation:
+
+> +/*
+> + * uaccess_buffer_syscall_entry - hook to be run before syscall entry
+> + */
+
+> +/*
+> + * uaccess_buffer_syscall_exit - hook to be run after syscall exit
+> + */
+
+> +/*
+> + * uaccess_buffer_pre_exit_loop - hook to be run immediately before the
+> + * pre-kernel-exit loop that handles signals, tracing etc. Returns a bool to
+> + * be passed to uaccess_buffer_post_exit_loop.
+> + */
+
+> +/*
+> + * uaccess_buffer_post_exit_loop - hook to be run immediately after the
+> + * pre-kernel-exit loop that handles signals, tracing etc.
+> + * @pending: the bool returned from uaccess_buffer_pre_exit_loop.
+> + */
+
+then we have a very differrent understanding of what documentation
+should provide.
+
+Thanks,
+
+        tglx

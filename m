@@ -2,131 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A904716D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBC74716DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbhLKViN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbhLKViJ (ORCPT
+        id S231438AbhLKVnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:43:13 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:3152 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231319AbhLKVnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:38:09 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63DDC061751;
-        Sat, 11 Dec 2021 13:38:08 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id b19so16718376ljr.12;
-        Sat, 11 Dec 2021 13:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Y5cqVCk6ynWp5U/3Ep3k4Mo6eL6tir3HlEgYMajRnK4=;
-        b=OtOehzc58gi64fYKYGJoUhU9yfbyw5erXeRGj9xZ//qaRQtR/innknOTIwss8QsRxX
-         uGrRsJb1d2E1wcxH24VILEMMrLn1C7j8APXpVN46pIqXdDi2mV9JNYr8kvFW5gclVsnp
-         gB7fo6UO6vmMJLx+RSgX2mlXCjUtYTsC6052zSOKM6SoQLtgE2TKjEI2+f57zJbU5DB2
-         nGPFYks1dvbnGj2fOGSBnIVTrY9ReXqb1ibf4JQuUBIsFJ83exRIGGkAclUCfctQlk2C
-         bazsgZ0gsuj3/VWLwhZFT/JlQJKDdfjmO1KjsoZTOZMNuvxsYDUhfvoQSVBJPmJsFCKW
-         6G5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Y5cqVCk6ynWp5U/3Ep3k4Mo6eL6tir3HlEgYMajRnK4=;
-        b=pdcs83GMWl/gJonYvsy8lDlYbfMZlzlbmGenBpApz5H8YLJy31xQDKn/2hTiEkDfS4
-         kNxsSpnlxBm+zGsscrpUpEKj3kuabVjZCJ9Fx7Bh58YCTfuI2Wg4BT/tS60iFL35f/GO
-         /YZXLhurmCc59In1rHZsn5Xoc+9EyQH/QxYzIS8Dwa79aX/UehH5Br2AkvAIiX7RwB+7
-         yaNkWs7d7fgBcyQaTeRxQ0T2PR8diMr2+xvHAOVMcLXqkncLT4f52NxZnl7wgey/m8Q5
-         GT4KA5ZI8BvpYt26d1a9NKeYoLagZ31hYqGGLr4L5J1xCTtascoEuIhX9j1lnPi2dbOS
-         0UaQ==
-X-Gm-Message-State: AOAM530ngBQkVmHgp9WF/GaOu/YLZm9rGV92ME0+Nnar8ZvHA3Z+sI9x
-        58GMorUOK075l32f1zAw/EE=
-X-Google-Smtp-Source: ABdhPJxK+AF0es5MIQf67gn1WgcvNfNMLLw8QZninH5UxBgKlGqTHB3Q6eB1OovkgWAQD7IxOF9O5w==
-X-Received: by 2002:a2e:2242:: with SMTP id i63mr20232363lji.448.1639258687039;
-        Sat, 11 Dec 2021 13:38:07 -0800 (PST)
-Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id w14sm786844ljj.7.2021.12.11.13.38.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 13:38:06 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] drm/panel: simple: Add support for HannStar HSD101PWW2 panel
-Date:   Sun, 12 Dec 2021 00:36:53 +0300
-Message-Id: <20211211213653.17700-4-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211211213653.17700-1-digetx@gmail.com>
-References: <20211211213653.17700-1-digetx@gmail.com>
+        Sat, 11 Dec 2021 16:43:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639258992; x=1670794992;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=duHVJqEHLRTSeXn8k5byUzvbaZ9BWdUr6/MSxxYjdTw=;
+  b=qFKZudr16XZ6rfs5Sp2fGqZOdE0qqpm3TxeW0tl4YMSdJGVZY5ihOyCw
+   nVIay5I53qmGs5jEEi4KTniwJfO1ahtGlSJC0L4jd97bG5JGla2qieAdz
+   Dwgc4lTYj0P1716I0xgog4K3ReFcCI/RCERAQYgn1oecYxBN7Ro/nSQyI
+   0pRi/q/p/HY/+WMc+kfUJwBi74qp8oIcCmNPE8R6tbqxCIHsbZi5PXmuN
+   rF8iOJoTwij0LaZxPmfQSj+rlFQUh8L88mpOEZ1e3NZqHyvLB2TKAD91d
+   dYluZCIikH5KDxKTZwUP8N5TA7fXx/5Cf92USwWud575S5+iPLZwdArMP
+   A==;
+IronPort-SDR: caX+W4Jn8lmqc96Flnla7Y22iyWs5rjPhkloQnj86FOhIg1ZHoKCrA6u7TyrUPYGNRdLGQSYHh
+ 9CB7UB1ZSiC8H1tfRXuxDeJ4Ho7QmRDIEfJ1baePn/VfI1S+LF1ifjblB5fTVd55y8aWLKyrIj
+ JkQ9fRsvQXOGOhU5edigzip5f0flgz3PgBPMz/tW6wa+rxIqI7c7cBaoj6X4fEdy12I/ZyleCs
+ wI0uJaiTJ4s/auflJnPJ0iMewQqiZriaDtybH45LiIGbqqXjPNjjz1Fq2TL2ZhU+gI+AeQ06v9
+ zwmaM0xfC8Qxv4YUtn/rWJZ0
+X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
+   d="scan'208";a="155153470"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Dec 2021 14:43:11 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sat, 11 Dec 2021 14:43:11 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Sat, 11 Dec 2021 14:43:09 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <linux@armlinux.org.uk>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Fix the configuration of the pcs
+Date:   Sat, 11 Dec 2021 22:44:20 +0100
+Message-ID: <20211211214420.1283938-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Svyatoslav Ryhel <clamor95@gmail.com>
+When inserting a SFP that runs at 2.5G, then the Serdes was still
+configured to run at 1G. Because the config->speed was 0, and then the
+speed of the serdes was not configured at all, it was using the default
+value which is 1G. This patch stop calling the serdes function set_speed
+and allow the serdes to figure out the speed based on the interface
+type.
 
-Add definition of the HannStar HSD101PWW2 Rev0-A00/A01 LCD
-SuperIPS+ HD panel.
-
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Fixes: d28d6d2e37d10d ("net: lan966x: add port module support")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- drivers/gpu/drm/panel/panel-simple.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/net/ethernet/microchip/lan966x/lan966x_port.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index dde033066f3d..f86378ff32a5 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -1927,6 +1927,31 @@ static const struct panel_desc hannstar_hsd100pxn1 = {
- 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
- };
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
+index 2ddb20585d40..237555845a52 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
+@@ -331,7 +331,6 @@ int lan966x_port_pcs_set(struct lan966x_port *port,
+ 	struct lan966x *lan966x = port->lan966x;
+ 	bool inband_aneg = false;
+ 	bool outband;
+-	int err;
  
-+static const struct display_timing hannstar_hsd101pww2_timing = {
-+	.pixelclock = { 64300000, 71100000, 82000000 },
-+	.hactive = { 1280, 1280, 1280 },
-+	.hfront_porch = { 1, 1, 10 },
-+	.hback_porch = { 1, 1, 10 },
-+	.hsync_len = { 58, 158, 661 },
-+	.vactive = { 800, 800, 800 },
-+	.vfront_porch = { 1, 1, 10 },
-+	.vback_porch = { 1, 1, 10 },
-+	.vsync_len = { 1, 21, 203 },
-+	.flags = DISPLAY_FLAGS_DE_HIGH,
-+};
-+
-+static const struct panel_desc hannstar_hsd101pww2 = {
-+	.timings = &hannstar_hsd101pww2_timing,
-+	.num_timings = 1,
-+	.bpc = 8,
-+	.size = {
-+		.width = 217,
-+		.height = 136,
-+	},
-+	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+	.connector_type = DRM_MODE_CONNECTOR_LVDS,
-+};
-+
- static const struct drm_display_mode hitachi_tx23d38vm0caa_mode = {
- 	.clock = 33333,
- 	.hdisplay = 800,
-@@ -3775,6 +3800,9 @@ static const struct of_device_id platform_of_match[] = {
- 	}, {
- 		.compatible = "hannstar,hsd100pxn1",
- 		.data = &hannstar_hsd100pxn1,
-+	}, {
-+		.compatible = "hannstar,hsd101pww2",
-+		.data = &hannstar_hsd101pww2,
- 	}, {
- 		.compatible = "hit,tx23d38vm0caa",
- 		.data = &hitachi_tx23d38vm0caa
+ 	if (config->inband) {
+ 		if (config->portmode == PHY_INTERFACE_MODE_SGMII ||
+@@ -341,11 +340,6 @@ int lan966x_port_pcs_set(struct lan966x_port *port,
+ 			 config->autoneg)
+ 			inband_aneg = true; /* Clause-37 in-band-aneg */
+ 
+-		if (config->speed > 0) {
+-			err = phy_set_speed(port->serdes, config->speed);
+-			if (err)
+-				return err;
+-		}
+ 		outband = false;
+ 	} else {
+ 		outband = true;
 -- 
-2.33.1
+2.33.0
 

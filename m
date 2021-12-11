@@ -2,66 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DFC4713D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 13:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AC94713D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 13:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhLKMmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 07:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        id S230040AbhLKMow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 07:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbhLKMmW (ORCPT
+        with ESMTP id S229668AbhLKMov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 07:42:22 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBABC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 04:42:21 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o20so38303700eds.10
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 04:42:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=4ZAJ7+RgU5SwB6cKjMFXYqwkNJH4syc0PUZ0Dq3SneI=;
-        b=mLOuX1htqo7NGV+yTWrW0sgynr1MFaYe5WPW2+//7R8DmYopvP73faJ66jI/pkgZHt
-         LXhIOBeGGV6FNPdQbpGlU0nulVQF9awEidx3vvb0rGoLO0M8NJN1bqhWeufPlXm0y1o6
-         0C/KB2HkDl3TCo9RfyIBIRNHlNYufiLXKN4gg8t/Lyqj6K3/31Hpd7wWMcWB23PMtNtM
-         QlBKkJ2I0vyuI/4SdRx/ADoXM/LaJx0zTb+4/a/l2cbz7Upxev3Zvn1ytIaHREHZyiCb
-         ar9MXw+hOf9REgpgTuNCATGtfa43G/8rzW5I2krnkws6s3KphGighoU1W0bfy+DXGVWR
-         wyXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=4ZAJ7+RgU5SwB6cKjMFXYqwkNJH4syc0PUZ0Dq3SneI=;
-        b=swa39UWPXu15Du3UFfeRmK+WozGsey+hZMwK2RQgRWFjv7ZrX9bq/9XCGp8cm9PrdT
-         Of3pkz+gXEa3zBVIiG+CWhLaG7/1KGyoiU+ddR279gDCwaCHgQWV38OOtRo9Ur7f8Zxd
-         BTnDujndzVU6DjIpQ8zg4AvpjzMplbaoCBnI5/a4elNeNEC9pinEDVl338kb5wXzffDv
-         xlix7ftZisqI3kF4gIPbIn5BgBjk2SIRFAWhsWp2iIn5MSq3kwzyCUiZHzT2Wgc5g257
-         bo7CeDSANpGUUzzJ6gNTgaw9djQgdfMoQXvUiS2OCIzC0cm0Nxb3N0h1BsmEekPqxou/
-         N3vQ==
-X-Gm-Message-State: AOAM530Ux8Rd9ha3x8ArpbGHNX83TilZE7mYvUhQSL1l7Ah3F9GMxr9B
-        8DMuySgO6Cy1r17UWnar3yPtRXOQA0yb4uynCeQ=
-X-Google-Smtp-Source: ABdhPJwdeV+CaW9T/9u5HzGQ/7obemLiU0/mOkUiSpr8p/lfG8DvA3HC6ccXuI2iFkFll41JA5Tmka1+C2p2fnVDnzw=
-X-Received: by 2002:a17:906:7109:: with SMTP id x9mr30148623ejj.559.1639226540038;
- Sat, 11 Dec 2021 04:42:20 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a50:ab0:0:0:0:0:0 with HTTP; Sat, 11 Dec 2021 04:42:19 -0800 (PST)
-Reply-To: mrhenrypaul148@gmail.com
-From:   Mr Henry Paul <mrsritabrown087@gmail.com>
-Date:   Sat, 11 Dec 2021 13:42:19 +0100
-Message-ID: <CAEp6EqTBUY_QBBvmpJ6tQdeXoh2XAuwCAfeLb8iDpv=Ahz3fpQ@mail.gmail.com>
-Subject: LUCKY WINNER
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 11 Dec 2021 07:44:51 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208EDC061714;
+        Sat, 11 Dec 2021 04:44:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CAEAACE2F58;
+        Sat, 11 Dec 2021 12:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C05C004DD;
+        Sat, 11 Dec 2021 12:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639226687;
+        bh=d91Ayw03rWwFTfi5KgADTTpd8Z9Lq/uFJpUZh12wQrU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rZqcnDeP0Y5Xa3IalxG+IyobRM7TX3FCgyJ1r1PGcaup06FY6MrtctY8J2xG6guZN
+         GazDkawRSha5lO5f965fD1K5UILK34D6izdGDFiBQtEKSuCxaCxwNUJRbGrUPnf5w4
+         UWoaI+/sXTmqvs+vCjC8z4B+K0BJW6LGo1L9AhH0ZlloZ7PDvSKGp9vv12rec5fC9l
+         uA+0Ubfv5uGmunGX3a+BJp6r8rUQyYB7RD8KXamTuQdx/JSzCzHEaz7naT4CDNjDtt
+         32SCzvQH88qbdyxXavddLhsax2QX2+FPuWpzWlrYDz/JAWO/R4w1NOgNZrJcehx0NK
+         vNy759Kb8Qo1w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mw1k4-00BSpN-DJ; Sat, 11 Dec 2021 12:44:44 +0000
+Date:   Sat, 11 Dec 2021 12:44:40 +0000
+Message-ID: <87tuff9upz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Rob Herring <robh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: interrupt-controller: apple,aic: Add apple,aic2 support
+In-Reply-To: <8c099fc2-a319-7c80-3053-ed2b39b86835@marcan.st>
+References: <20211209043249.65474-1-marcan@marcan.st>
+        <20211209043249.65474-2-marcan@marcan.st>
+        <YbI8wBS2mrETiTfw@robh.at.kernel.org>
+        <8c099fc2-a319-7c80-3053-ed2b39b86835@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, robh@kernel.org, tglx@linutronix.de, sven@svenpeter.dev, alyssa@rosenzweig.io, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LOTTERY WINNING AWARD.
+On Sat, 11 Dec 2021 12:28:10 +0000,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> On 10/12/2021 02.28, Rob Herring wrote:
+> > On Thu, Dec 09, 2021 at 01:32:44PM +0900, Hector Martin wrote:
+> <snip>
+> >> +  - if:
+> >> +      properties:
+> >> +        compatible:
+> >> +          contains:
+> >> +            enum:
+> >> +              - apple,aic2
+> >> +    then:
+> >> +      required:
+> >> +        - apple,event-reg
+> > 
+> > Is this property valid for aic1? If not, you need:
+> > 
+> > else:
+> >    not:
+> >      required:
+> >        - apple,event-reg
+> > 
+> 
+> Thanks, I wasn't sure how to do this. Took me a second to realize how
+> the logic works here, heh.
+> 
+> > 
+> > I tend to think you should just make this a separate document. There's
+> > not a whole lot of sharing (compared to any other interrupt controller).
+> 
+> Good point. I just kind of defaulted to this way because the driver is
+> the same (and does share a bunch), but indeed the binding doesn't
+> really reflect any of that. I'll split it off into another document
+> for v2. Might as well make the 4-argument interrupt form mandatory
+> then (we use it for all DTs, even the current 1-die machines, on AICv2
+> SoCs; the driver can handle both but we might as well be stricter with
+> the binding).
 
-Your email won 2.600.000 million dollars, Contact Barrister Marcel
-Cremer through his email here (  cremerchambers@gmail.com ) to claim
-your winning fund with your details as follows, your full name, your
-country, your home address and your phone number.
+Well, I'm about to add this 4th cell for FIQ signalled interrupts so
+that we can specify an affinity (similarly to what we do with GICv3, 0
+meaning no specific affinity and a non-zero phandle indicating a
+specific affinity).
 
-Regards,
-Mr.  Malick Samba
+Generalising the 4-cell even on AICv1 systems would be pretty nice,
+and we can always keep the backward compat as a fallback for old DTs
+(that'd pretty cheap).
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

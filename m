@@ -2,100 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD3647154A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6906D47154C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbhLKSKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 13:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
+        id S231683AbhLKSNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 13:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbhLKSJ6 (ORCPT
+        with ESMTP id S231627AbhLKSNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 13:09:58 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E583C061714;
-        Sat, 11 Dec 2021 10:09:58 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id p18so9076956wmq.5;
-        Sat, 11 Dec 2021 10:09:58 -0800 (PST)
+        Sat, 11 Dec 2021 13:13:23 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87896C061751
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:13:23 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id t23so17663325oiw.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:13:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zA92V1btmrTrQKYhZyZjsNIHT2URvEbAj4KA4p/lKAY=;
-        b=TSvkTe2LbjI08HFOsXQoUB44oUbVFIbH8+rZ8sj176haMNUQuvdORHM/2G9niiMIqM
-         lhfDm0VOHIQ9hnZvat3NTIw8AM6qSUGFnU7D+iZWNdumFncXmrJ1kOPId/OeUqxK+kYs
-         uq0oMVW1dWSCA3vvffKxV/Aam3WOQdrhXeLz+Wg6FfCKWB/Jr7WV3eSSA6FDp/TTkydq
-         tXP28aSP2ScgT4d/KuHMGL2COCHfpaAUVhFNG/eG9/W2/b1nWheliIl07ZqlamO5B0HI
-         sjLGnKD+fvW8eoy3eH0Yw57bg7p9W5U+40+wxirgxGKPqH43g6OemiEZTCPiN1jsmWFQ
-         UrNg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZKuXDdMqteEEKXb+96og2uMkZKlBM9xGB/3xrHMNNJ4=;
+        b=aWs1p9AyHBbvhMn//ieXmew23uafLMJkWDAEFpKLr/y3EDFmf/hAW9aqurfWekiYJa
+         5Y1mrm8+8O1+DctJZZ2x203nP/1PwLA1IforTxfWsg3iai7cKVIsegSiJtT77NzfsMxN
+         i3OAM1FhXsDcRi3Rl7pQZccNNGGmSlpGrh3CYXLV2Ka1U4baeL3O5R54nGYFWtIaq5Cq
+         IguHuhJ2jT5eEkAx5asn/T8vP7onjdwjd+qEmmL8QPvjHD6nlYJSopu5rLo2RVp7/kEZ
+         lZ6fMoyk0ht++uIEsgPGXNbCGBJAHDdAhzgeDYkqtfz7WC9AEbkZvfrZHVXfDsofSoF6
+         lMnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zA92V1btmrTrQKYhZyZjsNIHT2URvEbAj4KA4p/lKAY=;
-        b=bpbDt9HnhVDLTe9ZveicGfTLrVBg3elOoqymTsIKfVRvyEQrhA1vM7nCGCXo42mGuc
-         SDc5NfBNIrbkjFOr6LOP3v3roEXMnKXEGo8W2PXunM6BiPuku5nCWY6vYZVEdcQ4Wzxh
-         tdq2EfLBCXkNtrdyYpUzKcvBDNlihn6zgkMhbkxxKdjJS9F6wClWsNWrzi8vLfQO+JF2
-         HyysQTHnDFD1J8OTBpUZe3+dfbcUQNTpJDBp29GJ3bVTLcFN83wF3PlT0ebKAo8RKWJz
-         Zv5efy1aBrT/WE7kdHtgCWhuzoxEw1U9ewW+ROH05sEkFRsxydpjJAaV4lwJQdR2rxTv
-         zybA==
-X-Gm-Message-State: AOAM532n9NOa2VyD0cegPMJ/Rjwx0kfC4wF8CW/qwkldP0DbMF25+ZyI
-        tatCVtipQvYwlljLhQTS025R/Y/OHu5Ae8FF
-X-Google-Smtp-Source: ABdhPJyfr/+qyNj7EVGW/LU9V1sTrzoTLBRcl8C0CJQgQQYbFeMNxL1/sm0g3FRmeJ9gbC005AafHA==
-X-Received: by 2002:a1c:21d7:: with SMTP id h206mr25088757wmh.60.1639246196992;
-        Sat, 11 Dec 2021 10:09:56 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id w22sm2049694wmi.27.2021.12.11.10.09.56
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZKuXDdMqteEEKXb+96og2uMkZKlBM9xGB/3xrHMNNJ4=;
+        b=kfux2ds4Qu45MokKPY4bIhAE2Tu//wNbZbO9ITdHHyBxvRo0p30mFEKYumst6Qb42q
+         XGn2uWDx1JDOgxmA9OK9DZFnNMhuswKRdgZTt5CQlgNxRSiCW9Pr478bSnYPwC9UVaE+
+         zAunSC6DYb7AuR2fz+xJ086xmOogmgz/moKfs2uEn3dSSVseZOdXnh4npCHIEUB/9N8/
+         cV8K1xCXrJth4TvPEdbmimbfJfmpZgVpuMQ/BM/ycP3hAzaypVwm077aEgY07nu92SqG
+         gmJV/G0JrHqT6Teo18Nj8JDKGX9ye51Cs7ta3SRha1RV7tQNiQPsc68nnWG5V72VlF61
+         zGaw==
+X-Gm-Message-State: AOAM530skjYnJK5NncSwE8bVjcbf8eki6XpYWclLHTkzQgn03Re5544L
+        txjp8BGrTVpMHBhDx3UoHzAcVg==
+X-Google-Smtp-Source: ABdhPJwJgs25lTgbpqlRe9kzvrGm41yKRcwXPaPnmvLa062O2KlX0HXEsj/sNKm6DJR4tJAdo1WZPA==
+X-Received: by 2002:a05:6808:1a2a:: with SMTP id bk42mr19079854oib.118.1639246402724;
+        Sat, 11 Dec 2021 10:13:22 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id y12sm1641771oiv.49.2021.12.11.10.13.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 10:09:56 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        linux-nilfs@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nilfs2: remove redundant pointer sbufs
-Date:   Sat, 11 Dec 2021 18:09:55 +0000
-Message-Id: <20211211180955.550380-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Sat, 11 Dec 2021 10:13:22 -0800 (PST)
+Date:   Sat, 11 Dec 2021 12:13:17 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] clk: qcom: Add clock driver for SM8450
+Message-ID: <YbTqPfs7026l6LFE@builder.lan>
+References: <20211207114003.100693-1-vkoul@kernel.org>
+ <20211207114003.100693-3-vkoul@kernel.org>
+ <20211209082537.1AF6CC341C8@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209082537.1AF6CC341C8@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer sbufs is being assigned a value but it's not being used
-later on. The pointer is redundant and can be removed. Cleans up
-scan-build static analysis warning:
+On Thu 09 Dec 02:25 CST 2021, Stephen Boyd wrote:
 
-fs/nilfs2/page.c:203:8: warning: Although the value stored to 'sbufs'
-is used in the enclosing expression, the value is never actually read
-from 'sbufs' [deadcode.DeadStores]
-        sbh = sbufs = page_buffers(src);
+> Quoting Vinod Koul (2021-12-07 03:40:03)
+> > diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
+> > new file mode 100644
+> > index 000000000000..82ac419718d7
+> > --- /dev/null
+> > +++ b/drivers/clk/qcom/gcc-sm8450.c
+> > @@ -0,0 +1,3303 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+> > + * Copyright (c) 2021, Linaro Limited
+> > + */
+> > +
+> > +#include <linux/module.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/regmap.h>
+> > +
+> > +#include <dt-bindings/clock/qcom,gcc-sm8450.h>
+> > +
+> > +#include "clk-alpha-pll.h"
+> > +#include "clk-branch.h"
+> > +#include "clk-rcg.h"
+> > +#include "clk-regmap.h"
+> > +#include "clk-regmap-divider.h"
+> > +#include "clk-regmap-mux.h"
+> > +#include "gdsc.h"
+> > +#include "reset.h"
+> > +
+> > +enum {
+> > +       P_BI_TCXO,
+> > +       P_GCC_GPLL0_OUT_EVEN,
+> > +       P_GCC_GPLL0_OUT_MAIN,
+> > +       P_GCC_GPLL4_OUT_MAIN,
+> > +       P_GCC_GPLL9_OUT_MAIN,
+> > +       P_PCIE_0_PIPE_CLK,
+> > +       P_PCIE_1_PHY_AUX_CLK,
+> > +       P_PCIE_1_PIPE_CLK,
+> > +       P_SLEEP_CLK,
+> > +       P_UFS_PHY_RX_SYMBOL_0_CLK,
+> > +       P_UFS_PHY_RX_SYMBOL_1_CLK,
+> > +       P_UFS_PHY_TX_SYMBOL_0_CLK,
+> > +       P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK,
+> > +};
+> > +
+> > +static struct clk_alpha_pll gcc_gpll0 = {
+> > +       .offset = 0x0,
+> > +       .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_EVO],
+> > +       .clkr = {
+> > +               .enable_reg = 0x62018,
+> > +               .enable_mask = BIT(0),
+> > +               .hw.init = &(struct clk_init_data){
+> > +                       .name = "gcc_gpll0",
+> > +                       .parent_data = &(const struct clk_parent_data){
+> > +                               .fw_name = "bi_tcxo",
+> 
+> Maybe you want to drop these strings and use the dt index directly? That
+> may actually be faster because we don't do as many string comparisons
+> and the code may be smaller if we don't have to store bi_tcxo. I suppose
+> to make it more readable we could have #defines for each DT index like
+> 
+>  #define DT_BI_TCXO	0
+>  #define DT_SLEEP_CLK	1
+> 
+> Blaze a new trail!
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/nilfs2/page.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I like the idea, and iiuc it's just a matter of replacing .fw_name with
+.index?
 
-diff --git a/fs/nilfs2/page.c b/fs/nilfs2/page.c
-index bc3e2cd4117f..063dd16d75b5 100644
---- a/fs/nilfs2/page.c
-+++ b/fs/nilfs2/page.c
-@@ -195,12 +195,12 @@ void nilfs_page_bug(struct page *page)
-  */
- static void nilfs_copy_page(struct page *dst, struct page *src, int copy_dirty)
- {
--	struct buffer_head *dbh, *dbufs, *sbh, *sbufs;
-+	struct buffer_head *dbh, *dbufs, *sbh;
- 	unsigned long mask = NILFS_BUFFER_INHERENT_BITS;
- 
- 	BUG_ON(PageWriteback(dst));
- 
--	sbh = sbufs = page_buffers(src);
-+	sbh = page_buffers(src);
- 	if (!page_has_buffers(dst))
- 		create_empty_buffers(dst, sbh->b_size, 0);
- 
--- 
-2.33.1
+I am however worried that people will get the order wrong as they are
+hacking on their dts/drivers, because (at least in my view) the order of
+clocks & clock-names has been seen as "a dt binding requirement" up
+until such change. But if we replace the names with indices such enum
+would have to be kept in sync with the DT binding and there's no way to
+validate it.
 
+If we do this we should force the driver and dts-writers to rely on the
+binding document by omitting clock-names from the binding (and hence
+dts). Otherwise people will (I will) assume that the clock-names are
+still what matters...
+
+Regards,
+Bjorn
+
+> > +                       },
+> > +                       .num_parents = 1,
+> > +                       .ops = &clk_alpha_pll_fixed_lucid_evo_ops,
+> > +               },
+> > +       },
+> > +};

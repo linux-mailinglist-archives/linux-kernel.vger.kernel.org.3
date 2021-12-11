@@ -2,133 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1477C47162B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 21:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC1947163D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 21:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbhLKUhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 15:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbhLKUhe (ORCPT
+        id S231997AbhLKUkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 15:40:32 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:34768 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231292AbhLKUk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 15:37:34 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B6FC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 12:37:34 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id m9so14346304iop.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 12:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vimKUBu4jl1yDMrzMKNMXbtLDYzaP8Rhsu237Y7354I=;
-        b=dh0SHigCv4/fO/fM257DhD4dXavhZ9244NcnFJ4NjMA4iEaOEs2DOV1RMCM5k7xhzi
-         qWkyXD5n2WlAucY7ltc//CmHIk329EcYDhGB0/DTVqd5yHBI/bkNtd4HzHyfKsh+h7i/
-         pcG6d3zAL/dq+QMfKtv+xeBXfx3UTUU69lcsetHlLX6rlLJ2hjrOsHa/dYz5rCkeDC3r
-         FBBSqNRx+N6RrZKzofXZdqxlKBurs0MYTybwMflFE5+DNI7U0VnRQdrN10XHH93+XU7W
-         dGfXaG/pYd7FTNs2pid5gXxCNqVKJOj9/Z3bmy/sLa8D1o13y5+nsurbqM5WY/7GWiOj
-         c4cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vimKUBu4jl1yDMrzMKNMXbtLDYzaP8Rhsu237Y7354I=;
-        b=qWAzf8H6IUmMiCgi46OdgV1ZY4J5kT3reyPVNlB30zC8hqMyosUNv1u0JZKUpRXh10
-         VcV8dEKRcycsYG7pYuJFPtAxqDi0wnPr/mzuAaxxOmNpSYGE5hH91N5f7dV2EfEVFxns
-         5d4CezPs+npeZs2qw2GTSwJknfIX3rzreVGs35On4JWbdVeBYsLOUcu2UAxdYX8i/0Xl
-         MWqJl2hNl+C40U5ULUq48oN9t6lxVapX3CEHpraZtWJDyoSMXdV2jvZdkv/gnx8k1wgZ
-         Yre1AWHpoCt3P1sxTrqPsVNUwfW2j/9GLVVC68fo1MHYDYtFewWz+IZ+J5Xb5sKw6cLb
-         AN8w==
-X-Gm-Message-State: AOAM533YQobRx3jqWS1P65B0hQ/GSB4FEr+crRQIXw6o1t1HfA0fyD80
-        nGhOErd4ypSFfk/G885G1vFM5lq53iyZVfj7bwenJw==
-X-Google-Smtp-Source: ABdhPJwWiv46khWjoDfNffz//oMDNQtsoju0bZe08RkhtTRCY+X8rh8SN3c1haaBR+WLssUWIVio8ctXjtveB1X4dAc=
-X-Received: by 2002:a5e:8a41:: with SMTP id o1mr26618187iom.131.1639255053377;
- Sat, 11 Dec 2021 12:37:33 -0800 (PST)
+        Sat, 11 Dec 2021 15:40:26 -0500
+X-UUID: cfad6ca73e2d44ddbc05cfe0c5cc520b-20211212
+X-UUID: cfad6ca73e2d44ddbc05cfe0c5cc520b-20211212
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1254169002; Sun, 12 Dec 2021 04:40:18 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sun, 12 Dec 2021 04:40:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 12 Dec
+ 2021 04:40:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 12 Dec 2021 04:40:17 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <matthias.bgg@gmail.com>, <broonie@kernel.org>
+CC:     <bgolaszewski@baylibre.com>, <sean.wang@mediatek.com>,
+        <bayi.cheng@mediatek.com>, <gch981213@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v6 0/4] Add basic SoC support for mediatek mt8195
+Date:   Sun, 12 Dec 2021 04:40:10 +0800
+Message-ID: <20211211204014.8014-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
 MIME-Version: 1.0
-References: <20211211084928.410669-1-davidgow@google.com>
-In-Reply-To: <20211211084928.410669-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Sat, 11 Dec 2021 12:37:22 -0800
-Message-ID: <CAGS_qxqAqnEo5iojk85uhuD9dcRNxTw030nfCMCsMADm9RsmbA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Default --jobs to number of CPUs
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 12:49 AM David Gow <davidgow@google.com> wrote:
->
-> The --jobs parameter for kunit_tool currently defaults to 8 CPUs,
-> regardless of the number available. For systems with significantly more
-> (or less), this is not as efficient. Instead, default --jobs to the
-> number of CPUs present in the system: while there are as many
-> superstitions as to exactly what the ideal jobs:CPU ratio is, this seems
-> sufficiently sensible to me.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+This series adds basic SoC support for Mediatek's SoC MT8195.
 
-Reminder: the unit tests depend on this hard-coded value.
-$ ag '\b8\b' tools/testing/kunit/kunit_tool_test.py
-422:
-self.linux_source_mock.build_kernel.assert_called_once_with(False, 8,
-'.kunit', None)
-529:
-self.linux_source_mock.build_kernel.assert_called_once_with(False, 8,
-build_dir, None)
+---
+Changes in v6:
+  - rebase on 5.16-rc1
+  - add new clock name to spi-nor dt-bindings
+  - add "pins" property in pinctrl dt-bindings
+  - fix fails of dtbs_checks
+    - remove "arm,armv8" not matched in yaml from cpu compatile
+    - fix node name of xhci
+    - remvoe xhci upstreaming wakeup properties
+    - remove xhci unused properties address-cells and size-cells
+    - fix node name of ufs-phy 
+    - fix node name of spi-nor
+    - fix node name and sub-nodes of pinctrl
+    - fix mmc compatible
+Changes in v5:
+  - enable basic nodes in mt8195-evb.dts
+  - remove dedicated clock nodes
+  - add mmc2 node
+  - fix interrupt number of pinctrl node
+  - update clock nodes to apply internal fixes
+  - add dt-bindings for perficfg node
 
-> ---
->  tools/testing/kunit/kunit.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 68e6f461c758..2cb6c7db5683 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -310,7 +310,7 @@ def add_build_opts(parser) -> None:
->         parser.add_argument('--jobs',
->                             help='As in the make command, "Specifies  the number of '
->                             'jobs (commands) to run simultaneously."',
-> -                           type=int, default=8, metavar='jobs')
-> +                           type=int, default=os.cpu_count(), metavar='jobs')
+v4 thread:
+https://lore.kernel.org/all/20210922093303.23720-2-seiya.wang@mediatek.com/
+v3 thread:
+https://lore.kernel.org/all/20210601075350.31515-2-seiya.wang@mediatek.com/
+v2 thread:
+https://lore.kernel.org/all/20210319023427.16711-10-seiya.wang@mediatek.com/
+v1 thread:
+https://lore.kernel.org/all/20210316111443.3332-11-seiya.wang@mediatek.com/
+---
 
-Just looking for edge cases:
-https://docs.python.org/3/library/os.html#os.cpu_count says
-> Returns None if undetermined
-and
-> This number is not equivalent to the number of CPUs the current process can use. The number of usable CPUs can be obtained with len(os.sched_getaffinity(0))
+Tinghan Shen (4):
+  dt-bindings: arm: mediatek: add mt8195 pericfg compatible
+  dt-bindings: spi: add new clock name 'axi' for spi nor
+  dt-bindings: pinctrl: mt8195: add 'pins' wrapping node
+  arm64: dts: Add mediatek SoC mt8195 and evaluation board
 
-I assume the None caveat is mainly for other operating systems and
-doubt it'll impact any users.
-The second point is a bit more interesting, but still niche.
-Up to you if you want to use that instead.
+ .../arm/mediatek/mediatek,pericfg.yaml        |    1 +
+ .../bindings/pinctrl/pinctrl-mt8195.yaml      |  307 ++---
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml    |    6 +-
+ arch/arm64/boot/dts/mediatek/Makefile         |    1 +
+ arch/arm64/boot/dts/mediatek/mt8195-evb.dts   |  209 ++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 1034 +++++++++++++++++
+ 6 files changed, 1410 insertions(+), 148 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
 
-Super unscientific comparison (n=1) running all on CPU #0
+-- 
+2.18.0
 
-$ taskset 0x1 ./tools/testing/kunit/kunit.py run --jobs=1
-Elapsed time: ... 155.978s building ...
-
---jobs=2 (some people swear by the 2x ratio)
-Elapsed time: ... 158.891s building ...
-
---jobs=8 (Old behavior)
-...
-Elapsed time: ... 171.448s building
-
---jobs=32
-Elapsed time: ...  170.765s building ...
-
-So the overhead of j being "too high" isn't that bad and it doesn't
-seem to matter much either way.
-
-
->
->  def add_exec_opts(parser) -> None:
->         parser.add_argument('--timeout',
-> --
-> 2.34.1.173.g76aa8bc2d0-goog
->

@@ -2,106 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AA8471655
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EC947165A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbhLKVLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:11:21 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:34678 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbhLKVLS (ORCPT
+        id S232031AbhLKVOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230241AbhLKVOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:11:18 -0500
-Received: by mail-il1-f199.google.com with SMTP id h10-20020a056e021b8a00b002a3f246adeaso12693032ili.1
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 13:11:18 -0800 (PST)
+        Sat, 11 Dec 2021 16:14:22 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36088C061714;
+        Sat, 11 Dec 2021 13:14:22 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id z8so18453485ljz.9;
+        Sat, 11 Dec 2021 13:14:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dQgbXLDygjds0YLNQGqPucAQ1zkcXHyC+uTKGssc/nw=;
+        b=d0s/oQOZmkvjre/cNKFItCJ/1EZLydSntVWLC6j8cJ0HxRoODrT0Y0xdaEwR8Eemx5
+         w1xguGi84Cz/SO+y5YujOm0yS57TPWugvXlp9PP3jMXo+y5kakvBb1WHCDYz0h7muABt
+         Uos+Gv7SpgpXdJErj21hvFtkK7ZE8cjEMkVuk+pK+4PJTt4kQD3T2yaAhI+5jkLGwDh3
+         kFX5iS8hcl+J0G6GFJ8VQFfuJx2Zu3KTdBgPbYVhR7QaJL5hKWb3c6wQ0nZpPw89+GNc
+         dpUj4JGUtcnBz/UqTER0xkEcgxOjweJEUJN8hIrv4TOnqOTGHSwP639EeYXzo1K5CQs7
+         62Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=CYGR9bZw+KIePmDbKlN+yDXqrqSokfI8Kg57QmN2R08=;
-        b=BIgR8yZIcU0IA3921ZPa5PhAtR6A/8XwinGgxDHtq/BwV/dYoW0Pq7hqfkrj4kofJ0
-         CwZbuJ8N6NyMSDsUIzESW1I69xcr/sO6aAxIwZQRnoAYFNh1mTPNiV2oyYnhPBQtNv4J
-         s8GqE3c3ER6YRDF0eOc5S9H4BE33G8Dfd0D1VGuFHl/DuiNEQyv59GpOOUH352mqMXQd
-         53CGhN00o0PEKhhpQeAwNmSounzBNYJSWso0TGfjO23DW2SPPS3yAsYJe458Kyi4TzE5
-         SrwQbtVGUOZhiRrch4hIeH0MN5688IfCJ3OQfHm/B/q1mp+gN4te8/tKwor2hqC/UAZV
-         XmWg==
-X-Gm-Message-State: AOAM531O/YkvmZwWvSLoECl5F9AH550fE4Izu/k5uTh9yCb733FjcbL7
-        kBdlGqPYWFiP6YvGw3yj6n4EWoFy7L7xLGJoDdP28edpha1G
-X-Google-Smtp-Source: ABdhPJymjaYNAjYQ48XUhE4xMGPHtNR/UJeJEwZ02kt+IgRx2mzJOo0Ae/bfuGwX2GGL6S8sHgWInfgmV8TD737O15Yf9vuSST9J
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dQgbXLDygjds0YLNQGqPucAQ1zkcXHyC+uTKGssc/nw=;
+        b=tcL/10e1SC3fuoNjreZyJlEXoJl0YtTN47hl0mCWLa9Djte5BN+oufxGTzC7vl1SUj
+         OzNLL1FlmcOA6xNwXJi58KM0pwnYDgsEZM22djKCXhB/Gm9zg1P8QjUE9mdSb9xKeCQ4
+         /NXUDmGDsrkkNjO4wQ9td05b+rojlN2XdlWosUJ9lTvD9MMIUxD2gUoawRkc3F44uQAP
+         T5k8o5SiqXVPs1/RJOBV0+7X30Ir8iZCiEw7jnFG4hCGo8+4WnNs7Y/GVokFHjypq/k8
+         Sv+0IK+kF1xR6ZYWfEv+4c9i6QTYoA/qX9vtZlaX1xPLwNclV2tP+WWnOmQMQMdz+ZDh
+         RHEg==
+X-Gm-Message-State: AOAM530Yc02yKvr0rWvDIPXuBQcfJUGlXXNyEnbO5bdG2heA5mslKZrD
+        juCKcecPDNourwqZEeOy/iU=
+X-Google-Smtp-Source: ABdhPJyrlmPEmlo7S0omL3v5zrt7N4IvW8LO438GG5Yg2+OeJeOMN8ckgThZGPzE2oRoDy5kxLOh1A==
+X-Received: by 2002:a2e:9b07:: with SMTP id u7mr20749966lji.200.1639257260232;
+        Sat, 11 Dec 2021 13:14:20 -0800 (PST)
+Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 13:14:19 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        David Heidelberg <david@ixit.cz>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola Milosavljevic <mnidza@outlook.com>,
+        Ion Agorria <ion@agorria.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 00/28] NVIDIA Tegra ARM32 device-tree patches for 5.17 (new devices and more)
+Date:   Sun, 12 Dec 2021 00:13:44 +0300
+Message-Id: <20211211211412.10791-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:490:: with SMTP id y16mr27206525iov.162.1639257078190;
- Sat, 11 Dec 2021 13:11:18 -0800 (PST)
-Date:   Sat, 11 Dec 2021 13:11:18 -0800
-In-Reply-To: <00000000000050185105d2ac05d2@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d7549b05d2e54715@google.com>
-Subject: Re: [syzbot] INFO: task can't die in reclaim_throttle
-From:   syzbot <syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mgorman@techsingularity.net,
-        syzkaller-bugs@googlegroups.com, vbabka@suse.cz,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+In this patchset you will find:
 
-HEAD commit:    ea922272cbe5 Add linux-next specific files for 20211210
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15175f75b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c1359a19d2230002
-dashboard link: https://syzkaller.appspot.com/bug?extid=dcea9eda277e1090b35f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d842b1b00000
+  - New device-trees of ASUS Transformer and Pegatron Chagall tablets.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com
+  - New device-tree of Nyan Big Chromebook variant that has 1080p display
+    panel.
 
-INFO: task syz-executor.1:3674 can't die for more than 143 seconds.
-task:syz-executor.1  state:D stack:23920 pid: 3674 ppid:     1 flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4986 [inline]
- __schedule+0xab2/0x4d90 kernel/sched/core.c:6296
- schedule+0xd2/0x260 kernel/sched/core.c:6369
- schedule_timeout+0x14a/0x2a0 kernel/time/timer.c:1881
- reclaim_throttle+0x1ce/0x5e0 mm/vmscan.c:1072
- consider_reclaim_throttle mm/vmscan.c:3399 [inline]
- shrink_zones mm/vmscan.c:3486 [inline]
- do_try_to_free_pages+0x7cd/0x1620 mm/vmscan.c:3541
- try_to_free_mem_cgroup_pages+0x2cd/0x840 mm/vmscan.c:3855
- reclaim_high.constprop.0+0x190/0x250 mm/memcontrol.c:2299
- mem_cgroup_handle_over_high+0x18c/0x540 mm/memcontrol.c:2483
- tracehook_notify_resume include/linux/tracehook.h:198 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
- exit_to_user_mode_prepare+0x1ab/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f345ee5e9d8
-RSP: 002b:00007fff5c713cb0 EFLAGS: 00000287 ORIG_RAX: 0000000000000101
-RAX: 0000000000000003 RBX: 0000000000000003 RCX: 00007f345ee5e9d8
-RDX: 0000000000090800 RSI: 00007f345eeb8256 RDI: 00000000ffffff9c
-RBP: 00007fff5c713d7c R08: 0000000000090800 R09: 00007f345eeb8256
-R10: 0000000000000000 R11: 0000000000000287 R12: 0000000000000000
-R13: 00000000000b3eac R14: 000000000000000b R15: 00007fff5c713de0
- </TASK>
+  - Enabled video decoder on Tegra114.
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/26:
- #0: ffffffff8bb818a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6460
-1 lock held by klogd/2959:
-2 locks held by getty/3289:
- #0: ffff88823bcca898 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
- #1: ffffc90002b962e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2077
-2 locks held by kworker/u4:1/3705:
- #0: ffff8880b9c39c98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:489
- #1: ffff8880b9c27988 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x3e7/0x4e0 kernel/sched/psi.c:891
+  - Minor cleanup of Nexus7 device-tree.
 
-=============================================
+  - Renamed clocks and regulator nodes.
 
+  - Fixes for T124 device-trees.
+
+Changelog:
+
+v6: - Added my s-o-b to all patches.
+
+    - Separated clk/regulator nodes renaming patch and gave Thierry Reding
+      credit for that.
+
+    - Borrowed "ARM: tegra: Add #reset-cells for Tegra114 MC" patch from
+      Thierry to resolve merge conflict with the video decoder patch.
+
+    - Added old patch from Stefan Agner that enables gpio-ranges, it was
+      brought up in the other DT thread. I borrowed "ARM: tegra: Remove stray
+      #reset-cells property" patch from Thierry to resolve merge conflict of
+      these patches.
+
+    - Reordered all DT nodes alphabetically.
+
+    - Enabled couple more options in tegra_defconfig needed by Nyan
+      Chromebook, as was requested by Thomas Graichen.
+
+    - Improved thermal zones of TF101, making them to match what latest
+      DT of Acer A500 uses. Previous versions used older variant of the
+      A500 zones.
+
+v5: - Minor update. Maxim improved commit messages. We added links to the
+      postmarketOS Wiki.
+
+v4: - Factored out common parts of ASUS device-trees into separate patches.
+      I retained the original author of the tegra30-asus-transformer-common.dtsi
+      after chatting with Svyatoslav. Initially I wanted to change the
+      authorship to Michał, but not that much left from the original DT that
+      was created by Michał, so it's fair to keep Svyatoslav the author.
+      I explained in the commit message that the common DT was derived from
+      the Michał's TF300T DT and then reworked heavily, I also added Michał
+      as co-developer of the common part.
+
+    - Added new T124 patches that were requested by Thomas Graichen. They
+      restore USB, CPUFreq and fix overheating of Nyan Chromebooks.
+
+    - Added patches that update tegra_defconfig and multi_v7_defconfig with
+      enabled drivers used by ASUS Transformers and Nyan Chromebooks.
+
+    - Added acks that were given by Rob Herring to v3.
+
+    - Changed display panel compatible of ASUS TF701T like it was suggested
+      by Rob Herring in other thread.
+
+    - Removed yet unused SDMMC1 pinmux from TF701T DT as was requested by
+      Anton Bambura.
+
+    - Added patch which adds node labels to T30 DTSI. It eases porting
+      devices to upstream. This was requested by Michał Mirosław.
+
+v3: - Maxim added couple "FIXME" comments to Transformer device-trees for
+      things that are yet missing on kernel side, and thus, can't be enabled
+      in the DT for now.
+
+    - Maxim also found that v2 had a small problem in the patch which adds
+      device-tree for Chagall tablet. Turned out I made a mistake during
+      rebase of the patches and haven't noticed it, it's fixed now.
+
+v2: - Svyatoslav and Maxim made couple corrections to regulators, comments
+      and default brightness of the device-trees.
+
+    - Added thermtrip node to transformers DT as we now have PMIC fix for
+      it [1], it works properly now.
+
+      [1] https://patchwork.ozlabs.org/project/linux-tegra/patch/20211124190104.23554-1-digetx@gmail.com/
+
+    - Changed sound card model names to make them per-device and consistent
+      with the names that other Tegra DTs already use in upstream. This will
+      prevent potential ABI breakages in the future if we will find that sound
+      of some device needs extra differentiation.
+
+Anton Bambura (3):
+  ARM: tegra: Add labels to tegra114.dtsi
+  ARM: tegra: Add device-tree for ASUS Transformer Pad TF701T
+  ARM: tegra: Enable video decoder on Tegra114
+
+David Heidelberg (3):
+  dt-bindings: ARM: tegra: Document Pegatron Chagall
+  ARM: tegra: Rename top-level clocks
+  ARM: tegra: nexus7: Drop clock-frequency from NFC node
+
+Dmitry Osipenko (7):
+  ARM: tegra: Add device-tree for 1080p version of Nyan Big
+  ARM: tegra: Enable HDMI CEC on Nyan
+  ARM: tegra: Enable CPU DFLL on Nyan
+  ARM: tegra: Add CPU thermal zones to Nyan device-tree
+  ARM: tegra: Rename top-level regulators
+  ARM: tegra_defconfig: Enable drivers wanted by Acer Chromebooks and
+    ASUS tablets
+  ARM: config: multi v7: Enable display drivers used by Tegra devices
+
+Maxim Schwalm (2):
+  ARM: tegra: Add common device-tree for LVDS display panels of Tegra30
+    ASUS tablets
+  ARM: tegra: nexus7: Use common LVDS display device-tree
+
+Michał Mirosław (2):
+  ARM: tegra: Add labels to tegra30.dtsi
+  ARM: tegra: Add device-tree for ASUS Transformer Pad TF300T
+
+Nikola Milosavljevic (1):
+  ARM: tegra: Add device-tree for ASUS Transformer EeePad TF101
+
+Stefan Agner (1):
+  ARM: tegra: Re-add gpio-ranges properties
+
+Stefan Eichenberger (1):
+  ARM: tegra: Add usb-role-switch property to USB OTG ports
+
+Svyatoslav Ryhel (6):
+  dt-bindings: ARM: tegra: Document ASUS Transformers
+  ARM: tegra: Add common device-tree base for Tegra30 ASUS Transformers
+  ARM: tegra: Add device-tree for ASUS Transformer Prime TF201
+  ARM: tegra: Add device-tree for ASUS Transformer Pad TF300TG
+  ARM: tegra: Add device-tree for ASUS Transformer Infinity TF700T
+  ARM: tegra: Add device-tree for Pegatron Chagall
+
+Thierry Reding (2):
+  ARM: tegra: Add #reset-cells for Tegra114 MC
+  ARM: tegra: Remove stray #reset-cells property
+
+ .../devicetree/bindings/arm/tegra.yaml        |   19 +
+ arch/arm/boot/dts/Makefile                    |   10 +-
+ arch/arm/boot/dts/tegra114-asus-tf701t.dts    |  788 +++++
+ arch/arm/boot/dts/tegra114-dalmore.dts        |   16 +-
+ arch/arm/boot/dts/tegra114-roth.dts           |   14 +-
+ arch/arm/boot/dts/tegra114-tn7.dts            |    8 +-
+ arch/arm/boot/dts/tegra114.dtsi               |   92 +-
+ arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi   |    1 +
+ arch/arm/boot/dts/tegra124-apalis.dtsi        |    1 +
+ arch/arm/boot/dts/tegra124-jetson-tk1.dts     |   26 +-
+ arch/arm/boot/dts/tegra124-nyan-big-fhd.dts   |   11 +
+ arch/arm/boot/dts/tegra124-nyan.dtsi          |   84 +-
+ arch/arm/boot/dts/tegra124-venice2.dts        |   30 +-
+ arch/arm/boot/dts/tegra124.dtsi               |    2 -
+ .../boot/dts/tegra20-acer-a500-picasso.dts    |   12 +-
+ arch/arm/boot/dts/tegra20-asus-tf101.dts      | 1228 ++++++++
+ arch/arm/boot/dts/tegra20-harmony.dts         |   16 +-
+ arch/arm/boot/dts/tegra20-medcom-wide.dts     |    8 +-
+ arch/arm/boot/dts/tegra20-paz00.dts           |    6 +-
+ arch/arm/boot/dts/tegra20-plutux.dts          |    8 +-
+ arch/arm/boot/dts/tegra20-seaboard.dts        |   16 +-
+ arch/arm/boot/dts/tegra20-tamonten.dtsi       |    4 +-
+ arch/arm/boot/dts/tegra20-tec.dts             |    8 +-
+ arch/arm/boot/dts/tegra20-trimslice.dts       |   12 +-
+ arch/arm/boot/dts/tegra20-ventana.dts         |   12 +-
+ arch/arm/boot/dts/tegra20.dtsi                |    2 -
+ .../boot/dts/tegra30-asus-lvds-display.dtsi   |   61 +
+ .../tegra30-asus-nexus7-grouper-common.dtsi   |   64 +-
+ ...egra30-asus-nexus7-grouper-maxim-pmic.dtsi |    4 +-
+ .../tegra30-asus-nexus7-grouper-ti-pmic.dtsi  |    2 +-
+ .../boot/dts/tegra30-asus-nexus7-grouper.dtsi |    1 -
+ .../boot/dts/tegra30-asus-nexus7-tilapia.dtsi |    2 -
+ arch/arm/boot/dts/tegra30-asus-tf201.dts      |  623 ++++
+ arch/arm/boot/dts/tegra30-asus-tf300t.dts     | 1030 ++++++
+ arch/arm/boot/dts/tegra30-asus-tf300tg.dts    | 1072 +++++++
+ arch/arm/boot/dts/tegra30-asus-tf700t.dts     |  818 +++++
+ .../dts/tegra30-asus-transformer-common.dtsi  | 1729 ++++++++++
+ arch/arm/boot/dts/tegra30-beaver.dts          |   20 +-
+ arch/arm/boot/dts/tegra30-cardhu-a02.dts      |   12 +-
+ arch/arm/boot/dts/tegra30-cardhu-a04.dts      |   14 +-
+ arch/arm/boot/dts/tegra30-cardhu.dtsi         |   28 +-
+ arch/arm/boot/dts/tegra30-ouya.dts            |    5 -
+ .../arm/boot/dts/tegra30-pegatron-chagall.dts | 2794 +++++++++++++++++
+ arch/arm/boot/dts/tegra30.dtsi                |   38 +-
+ arch/arm/configs/multi_v7_defconfig           |    5 +
+ arch/arm/configs/tegra_defconfig              |   12 +
+ 46 files changed, 10497 insertions(+), 271 deletions(-)
+ create mode 100644 arch/arm/boot/dts/tegra114-asus-tf701t.dts
+ create mode 100644 arch/arm/boot/dts/tegra124-nyan-big-fhd.dts
+ create mode 100644 arch/arm/boot/dts/tegra20-asus-tf101.dts
+ create mode 100644 arch/arm/boot/dts/tegra30-asus-lvds-display.dtsi
+ create mode 100644 arch/arm/boot/dts/tegra30-asus-tf201.dts
+ create mode 100644 arch/arm/boot/dts/tegra30-asus-tf300t.dts
+ create mode 100644 arch/arm/boot/dts/tegra30-asus-tf300tg.dts
+ create mode 100644 arch/arm/boot/dts/tegra30-asus-tf700t.dts
+ create mode 100644 arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
+ create mode 100644 arch/arm/boot/dts/tegra30-pegatron-chagall.dts
+
+-- 
+2.33.1
 

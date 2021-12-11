@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FAD471697
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AA247169C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbhLKVPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S232402AbhLKVPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbhLKVOr (ORCPT
+        with ESMTP id S232301AbhLKVOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:14:47 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC84EC0698CA;
-        Sat, 11 Dec 2021 13:14:40 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id l7so18500217lja.2;
-        Sat, 11 Dec 2021 13:14:40 -0800 (PST)
+        Sat, 11 Dec 2021 16:14:48 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36A4C0698CC;
+        Sat, 11 Dec 2021 13:14:41 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id l22so24096451lfg.7;
+        Sat, 11 Dec 2021 13:14:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wFv5ewELhNJglV+yW+iqcYT9tK2sEvBiahvNmcOYRpE=;
-        b=cJ4IMGi9wDk2bKuQGFRd4u+BwhLdFNyz/2jaznmXgeZ42j2X0zlVmA1Ynf2aEeqbKX
-         AgstJEBZ2oJpiOMfX1iSIB+sUXo1t5B1rbvwalVzC9/jywVJCc6TXEjyKsty3/n8Lix/
-         xMj3MghIj3bbibXRLqdrv2IiTPzG6CE0N0tSO0sIXuVmSEM4kGW2mHOanDj9n2yhlHXF
-         C/EZa56Lyk+sN8EgXUFihpqrdwBhun0MzO/2HfhTlStXDo9Z1Ihw3PeuQv9HvXmZxz57
-         AhbohJNTSiayTV9Ni4szr4akLlKxkZCqr+zzgm/FAWo54T5o2OnM5Kb/nMc+2hzU0izo
-         TBKA==
+        bh=C5+BX638e/zr1wlcSpe5wD1KbonKJ+ofJR/o6bNYwLY=;
+        b=S4tTGwU2J41V0zrJCpXdp1qxBO7MQP9fh/s5edR+Rq1nuUrXWLH1gkdntzrUR1A/g2
+         BGz0dv+X69+fn+R1k9i0+sB/PwXa7lkaXahdFhCifq4rMqCMDWaWhAv7ixNVoAlf32yi
+         SpoLVyuEFHp3kLjQygSZ3OSRxjzsnvnUMkWJm+kP1H/fl+xh3bZpAtOl+1ri0QrK3iBW
+         CsYtJHG0IZYC2LxmKw+wYSf8/qFFsZipmK5FnnipPnHixEDbHyMhoCXkkSEFLx1vo/Im
+         y1//BnJx4XNJDxW4Lmmn8tRkPq9Osi7KkQJ5dMWgXYyaLhZGqfv76xT84g8uFfxhhUmY
+         NMfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wFv5ewELhNJglV+yW+iqcYT9tK2sEvBiahvNmcOYRpE=;
-        b=QACHrZRNHUUAwBnxttDT6uZ9Zcc4vvtArvy1GFLSPloVBJMUVEsblEWnpkZU6S1OvU
-         nfHZsqcER+ZwPNVT+KQHdtguiQQ5TTSqpf9JnibCWVJxm+6qgM2FQ/mlJMCfM2RV7txI
-         /irBN+Xd0ZUpZ1+B0XRyDE8wKVetQDshB62s4bxCCM4R9GUSgH1Kqklqcz9uuGqEd0dY
-         jg/ndFWm5zsicKRIrA/cQqsmdy1KqAe9A48ode91i/MZktsGsjrkw7BDdlU8jUasG2QH
-         /EwkCldf9Sa4+ag8rTId3SCXHsNJlS61TSsyDmLqEZxSr1Yc5SmfYu2F6oyR6mNXHvU7
-         NlOQ==
-X-Gm-Message-State: AOAM532qMvvBesk8b0QJeDZR1xOf9+vlDtxza3xfiYv8TdiFzJNkVpPL
-        FtllpMsCY+dFufsbzY5OzUM=
-X-Google-Smtp-Source: ABdhPJxZsaHAf0Qb8FT+bruVPtYb4eIei4hOEcjJQePH4qpqYqYm9Y3pLVyEWDJOttMlM5V2tDjlSw==
-X-Received: by 2002:a2e:9698:: with SMTP id q24mr20673795lji.246.1639257279017;
-        Sat, 11 Dec 2021 13:14:39 -0800 (PST)
+        bh=C5+BX638e/zr1wlcSpe5wD1KbonKJ+ofJR/o6bNYwLY=;
+        b=8GcXYNUWs43Ftr3oIOda+chl6+FMrzZYM/oqCYEpBKPvacHOQnpJ3IV0Dn6EBMK7mg
+         cf3K4QYoVDdR/cspNO3n6V9I1AD8x1GqVneq7oqUY1opCHH+mZHO7AdPkRVW0qOh8i0Q
+         JeW+wHCMa/ebrrGEjiKZ2BC9CPRpSrdxJq8fzcImP1MbtniG5XBjAKGnKgkqH+NctFW6
+         A3nt0Cg6RnXey9aj0Arwo3rb9e0/xMhnnr1+89+Zi62jRAtnMr3smbd86C+3dy/c0vGh
+         c61jTdktX1GNN5NfimGMZgmMK1xAcDXnS+sqFNo/mhzBR4CIIiK6dI2peURQ6JYwV0qL
+         yBGQ==
+X-Gm-Message-State: AOAM530ctuPsDVX/VERFWns/kKoN0Ixc4+E+w/Om6XEAuYK71toMXGFz
+        papypYV69Q2KCe3xzo0jhyU=
+X-Google-Smtp-Source: ABdhPJyLXaZpmA35EJMWVZ53d9IaqNIE4KD+6BFBSKFaToaJ2Ikx8jxhf+GliFnkBiUpD340sZ2KBA==
+X-Received: by 2002:ac2:5e89:: with SMTP id b9mr11220227lfq.616.1639257280059;
+        Sat, 11 Dec 2021 13:14:40 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.38
+        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 13:14:38 -0800 (PST)
+        Sat, 11 Dec 2021 13:14:39 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -69,9 +69,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 17/28] ARM: tegra: Enable CPU DFLL on Nyan
-Date:   Sun, 12 Dec 2021 00:14:01 +0300
-Message-Id: <20211211211412.10791-18-digetx@gmail.com>
+Subject: [PATCH v6 18/28] ARM: tegra: Add CPU thermal zones to Nyan device-tree
+Date:   Sun, 12 Dec 2021 00:14:02 +0300
+Message-Id: <20211211211412.10791-19-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211211211412.10791-1-digetx@gmail.com>
 References: <20211211211412.10791-1-digetx@gmail.com>
@@ -81,29 +81,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable CPU DFLL node on Nyan Chromebooks. DFLL was previously disabled due
-to Linux kernel CPUFreq driver which didn't support suspend-resume. That
-problem was fixed years ago, but DFLL was never re-enabled.
+CPU of Nyan Chromebooks is overheating badly because apparently hardware
+soctherm controller doesn't work well. Add CPU thermal zones to enable
+software thermal control over CPU and fix the overheat trouble.
 
 Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan Big
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra124-nyan.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/tegra124-nyan.dtsi | 49 +++++++++++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/tegra124-nyan.dtsi b/arch/arm/boot/dts/tegra124-nyan.dtsi
-index a5dff226831b..ec01a23d4d47 100644
+index ec01a23d4d47..b16cce7476ef 100644
 --- a/arch/arm/boot/dts/tegra124-nyan.dtsi
 +++ b/arch/arm/boot/dts/tegra124-nyan.dtsi
-@@ -532,7 +532,7 @@ mmc@700b0600 { /* eMMC on this bus */
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/thermal/thermal.h>
+ #include "tegra124.dtsi"
  
- 	/* CPU DFLL clock */
- 	clock@70110000 {
--		status = "disabled";
-+		status = "okay";
- 		vdd-cpu-supply = <&vdd_cpu>;
- 		nvidia,i2c-fs-rate = <400000>;
+ / {
+@@ -87,7 +88,7 @@ acodec: audio-codec@10 {
+ 			interrupts = <TEGRA_GPIO(H, 4) IRQ_TYPE_EDGE_FALLING>;
+ 		};
+ 
+-		temperature-sensor@4c {
++		tmp451: temperature-sensor@4c {
+ 			compatible = "ti,tmp451";
+ 			reg = <0x4c>;
+ 			interrupt-parent = <&gpio>;
+@@ -789,6 +790,52 @@ gpio-restart {
+ 		gpios = <&gpio TEGRA_GPIO(I, 5) GPIO_ACTIVE_LOW>;
+ 		priority = <200>;
  	};
++
++	cpus {
++		cpu0: cpu@0 {
++			#cooling-cells = <2>;
++		};
++
++		cpu1: cpu@1 {
++			#cooling-cells = <2>;
++		};
++
++		cpu2: cpu@2 {
++			#cooling-cells = <2>;
++		};
++
++		cpu3: cpu@3 {
++			#cooling-cells = <2>;
++		};
++	};
++
++	thermal-zones {
++		cpu-skin-thermal {
++			polling-delay-passive = <1000>; /* milliseconds */
++			polling-delay = <5000>; /* milliseconds */
++
++			thermal-sensors = <&tmp451 0>;
++
++			trips {
++				cpu_passive_trip: cpu-alert0 {
++					/* throttle at 70C until temperature drops to 69.8C */
++					temperature = <70000>;
++					hysteresis = <200>;
++					type = "passive";
++				};
++			};
++
++			cooling-maps {
++				map0 {
++					trip = <&cpu_passive_trip>;
++					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++				};
++			};
++		};
++	};
+ };
+ 
+ #include "cros-ec-keyboard.dtsi"
 -- 
 2.33.1
 

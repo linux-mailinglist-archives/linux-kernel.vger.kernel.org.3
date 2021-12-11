@@ -2,125 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B6B4715D5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E9E4715DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbhLKT5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 14:57:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43235 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231925AbhLKT5H (ORCPT
+        id S231937AbhLKT6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 14:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230156AbhLKT6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 14:57:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639252626;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2DFo9Dp28T64dYNt0j+jsMdK+yCDWDWA9qmn5tDJ3QQ=;
-        b=i98u6uzxZdlt+Ay64eWj4XTIdsUdkEOTkdx7W3KtihGJ8sAlUHcEM4EQprUVnDLTdii63E
-        Yk8uA88k30Bv8fKExpWBuhiHvzwoK3hrGYkxhmLpvQUSmSyehqYf+OiULNqIFBHcsH1/+8
-        ASZ/ayxNgkmYaFTG9jgx0T4bsVSsYM4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-LEfwAlQ1MDacvp5FIsp0CQ-1; Sat, 11 Dec 2021 14:57:05 -0500
-X-MC-Unique: LEfwAlQ1MDacvp5FIsp0CQ-1
-Received: by mail-wm1-f70.google.com with SMTP id r129-20020a1c4487000000b00333629ed22dso8916639wma.6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 11:57:04 -0800 (PST)
+        Sat, 11 Dec 2021 14:58:16 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFA8C061714;
+        Sat, 11 Dec 2021 11:58:16 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id r25so39577482edq.7;
+        Sat, 11 Dec 2021 11:58:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CqpqKhU0+Lmh3lJMOy6FtAfC8RxScM0RzyUAyQHvAzw=;
+        b=UBcv/NA10KAjLxfHPwdTchWi6foL9mmEpRprNjXEgjfOCM4TQ1zmWo//j+lnV9LY92
+         7I2SuWmjSUYkPKHgW6TmyQxSiygP0DUphtr3pfp1TQ7eELvnE+TUWKPf/Gs3Vy/VDAGF
+         Bbd0ZM1uxeNnmNgkTgxBVD8iTPTATRSeFHoOvcikVvz3Z8mH12JCoUp0oGBf8IznHJ1H
+         hkc9Tg403l70x+IFRg7gZSn/rqz4VTbXmUBZ4ZNpMpE4b6fQraHguNMynhbAUfPyjAMf
+         s0RypWwiKNYXlfe461CfrJzZhjOlaGG9oX9BDT38K1jJmDpA7cE3HhEu7spxnqeiYFAY
+         0ywQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2DFo9Dp28T64dYNt0j+jsMdK+yCDWDWA9qmn5tDJ3QQ=;
-        b=KhLz3PfBYIGi1n9AbMYu+moyEjo2wXvBW+ZDL7Gv5+ENGOehHgXgygqmeZ/S2yQVZa
-         h8CTcoQ3xTE3C9iqsiUWvi+8smQQ0LReZt6CXdBOD/m3ZmMyCdKJ/Whrf6Zo6iWKIABz
-         DUb1UHNQgwuJPvJO9b9osuGyjeFffLL8oa1d58CFoPCEkpAwSGBW9nq0BJWAU+ZCESi+
-         tMo3YMaseywgWToKGzgGQZEcLD/Eb7uDDI761Bx5tYlh713NHANMsyFP3u1eC8DSfX4v
-         L8GrMt8m2/uCYsOjz+xcBAj+ofA/EuyPunqtnaJBWVpYFIjWYPj38te2GcxRGiRen01g
-         aR3w==
-X-Gm-Message-State: AOAM533ccEQdaLBLSJdlEiwJGtqKwdp2IoaOIdZCaKOq16/MeYDB6iKt
-        GdDEJU5YIH25WrQnv1zYJcvaDgInitQX4vZEo3RM2HLgKdNymTdKtkvUlTNCxoahRDnpwpwRaPO
-        aZjB01/JekOzWbhshABPqhf83
-X-Received: by 2002:a7b:c770:: with SMTP id x16mr26571086wmk.66.1639252623861;
-        Sat, 11 Dec 2021 11:57:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJydZc5cE76J6JywjIU7eqe3LfuKTKOpyovdO/qqcLgyrjjm5LowG3aJr3E764w27/gy6nztmg==
-X-Received: by 2002:a7b:c770:: with SMTP id x16mr26571075wmk.66.1639252623706;
-        Sat, 11 Dec 2021 11:57:03 -0800 (PST)
-Received: from krava ([83.240.60.218])
-        by smtp.gmail.com with ESMTPSA id w7sm5674611wru.51.2021.12.11.11.57.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CqpqKhU0+Lmh3lJMOy6FtAfC8RxScM0RzyUAyQHvAzw=;
+        b=gVKNrZIeODB7wei8t0Oi3Gi+4o2p8BITIUwDSrZzfkwlT3LMr9KjNGtCnGAHpFz2Hs
+         vGigtrAg/EEQGCY9dEAmlLjcj+y/oYAEtB3H66qtB3sbyp7NqdVvF+kOoRsVFRtn5K1O
+         6IE/wrFfDkHn1fBzrv9URL0eSA022NV5hG0qjg5qQ/04dLMaqb2etnVoWL/aLpfewOBz
+         m3n/VtcMFB6CiAFKfWjARRG5c3uAcqCz4h2LDaerTte5fwJ/FUy6171vn5T2jg5+g55V
+         ITbOm8D2N9J2S9DtAMt7KLMmWlRumCBBZYhmWjhgc8NqMfAvVGLQZptbyfy9J4/Omt2z
+         OtvA==
+X-Gm-Message-State: AOAM532ha99agEfVZ25lno6II2EJHvQnmCoeiR+cl2lcS496gcTlqDpI
+        lIwT2AmZYRDHPp7KbJhEkF7/TF6IjMV0FA==
+X-Google-Smtp-Source: ABdhPJzy0TB8zX42CkEUICEzB0tpAVqGcC1XZLdEBXnF33xmYTmIZTGjlZeHXKlcUOwhXkzk5qYncA==
+X-Received: by 2002:a17:907:86a1:: with SMTP id qa33mr33559577ejc.142.1639252694434;
+        Sat, 11 Dec 2021 11:58:14 -0800 (PST)
+Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.googlemail.com with ESMTPSA id e15sm3581479edq.46.2021.12.11.11.58.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 11:57:02 -0800 (PST)
-Date:   Sat, 11 Dec 2021 20:57:00 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        "Frank Ch. Eigler" <fche@redhat.com>
-Subject: Re: [RFC] perf record: Disable debuginfod by default
-Message-ID: <YbUCjKYiLBgnDqq8@krava>
-References: <20211209200425.303561-1-jolsa@kernel.org>
- <CAM9d7cjyN_sxMe9yajgnuDRy5234NZQ5sd0e4ynBmCnQSv=WFQ@mail.gmail.com>
- <YbNGxMAu5LYvqtpq@krava>
- <CAM9d7cit-GKyDcVp435np7WSe_KW-+NYD7rHSC10EEoW1EpTSA@mail.gmail.com>
+        Sat, 11 Dec 2021 11:58:13 -0800 (PST)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [net-next RFC PATCH v4 00/15] Add support for qca8k mdio rw in Ethernet packet
+Date:   Sat, 11 Dec 2021 20:57:43 +0100
+Message-Id: <20211211195758.28962-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cit-GKyDcVp435np7WSe_KW-+NYD7rHSC10EEoW1EpTSA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 10:41:49AM -0800, Namhyung Kim wrote:
-> On Fri, Dec 10, 2021 at 4:23 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Thu, Dec 09, 2021 at 03:39:20PM -0800, Namhyung Kim wrote:
-> > > Hi Jiri,
-> > >
-> > > On Thu, Dec 9, 2021 at 12:04 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> > > >
-> > > > hi,
-> > > > after migrating to fedora 35 I found perf record hanging on exit
-> > > > and it's because fedora 35 sets DEBUGINFOD_URLS that triggers
-> > > > debuginfod query which might take long time to process.
-> > > >
-> > > > I discussed this briefly with Frank and I'm sending the change
-> > > > to disable debuginfod by default in perf record.
-> > > >
-> > > > Frank had other idea we could discuss here to fork or just spawn
-> > > > "/usr/bin/debuginfod-find ...." into background after perf record.
-> > > >
-> > > > Perhaps there are other ways as well, hence this is RFC ;-)
-> > >
-> > > I thought the debuginfod was for perf report, not record.
-> > > Maybe I'm missing something but how about moving it to
-> > > report?  We can talk to debuginfod after checking the local
-> > > build-id cache and binary on the system.
-> >
-> > at the end of the perf record we populate buildid cache
-> > with profiled binaries for the current perf.data
-> >
-> > **IF** there's DEBUGINFOD_URLS defined, that code will
-> > also ask debuginfod for binaries it could not find on
-> > the system
-> 
-> Yeah, I know what you're doing.  But I guess debuginfod
-> contains binaries for the distro and they'd be available for
-> a while.  Then I think we don't need to do it at perf record.
+This require the "Replace DSA dp->priv with tagger-owned storage" series
+https://patchwork.kernel.org/project/netdevbpf/cover/20211209233447.336331-1-vladimir.oltean@nxp.com/
+This require specifically
+https://patchwork.kernel.org/project/netdevbpf/patch/20211209233447.336331-2-vladimir.oltean@nxp.com/
+of Vladimir series to correctly compile and work.
 
-well there's also profiling of non system binaries, which you want
-to cache, because you might want to check that profile later
 
-so I think we should still do that in perf record, just to have
-some control over debuginfod, which is executed as part of
-build_id_cache__find_debug function
 
-jirka
+Hi, this is still WIP and currently has some problem but I would love if
+someone can give this a superficial review and answer to some problem
+with this.
+
+The main reason for this is that we notice some routing problem in the
+switch and it seems assisted learning is needed. Considering mdio is
+quite slow due to the indirect write using this Ethernet alternative way
+seems to be quicker.
+
+The qca8k switch supports a special way to pass mdio read/write request
+using specially crafted Ethernet packet.
+This works by putting some defined data in the Ethernet header where the
+mac source and dst should be placed. The Ethernet type header is set to qca
+header and is set to a mdio read/write type.
+This is used to communicate to the switch that this is a special packet
+and should be parsed differently.
+
+Current implementation of this use completion API to wait for the packet
+to be processed by the tagger and has a timeout that fallback to the
+legacy mdio way and mutex to enforce one transaction at time.
+
+Here I list the main concern I have about this:
+- Is the changes done to the tagger acceptable? (moving stuff to global
+  include)
+- Is it correct to put the skb generation code in the qca8k source?
+- Is the changes generally correct? (referring to how this is
+  implemented with part of the implementation split between the tagger
+  and the driver)
+
+I still have to find a solution to a slowdown problem and this is where
+I would love to get some hint.
+Currently I still didn't find a good way to understand when the tagger
+starts to accept packets and because of this the initial setup is slow
+as every completion timeouts. Am I missing something or is there a way
+to check for this?
+After the initial slowdown, as soon as the cpu port is ready and starts
+to accept packet, every transaction is near instant and no completion
+timeouts.
+
+As I said this is still WIP but it does work correctly aside from the
+initial slowdown problem. (the slowdown is in the first port init and at
+the first port init... from port 2 the tagger starts to accept packet
+and this starts to work)
+
+Additional changes to the original implementation:
+
+We now have connect()/disconnect() ops for the tagger. They are used to
+allocate priv data in the dsa priv. The header still has to be put in
+global include to make it usable by a dsa driver.
+They are called when the tag is connect to the dst and the data is freed
+using discconect on tagger change.
+
+(if someone wonder why the bind function is put at in the general setup
+function it's because tag is set in the cpu port where the notifier is
+still not available and we require the notifier to sen the
+tag_proto_connect() event.
+
+We now have a tag_proto_connect() for the dsa driver used to put
+additional data in the tagger priv (that is actually the dsa priv).
+This is called using a switch event DSA_NOTIFIER_TAG_PROTO_CONNECT.
+Current use for this is adding handler for the Ethernet packet to keep
+the tagger code as dumb as possible.
+
+From what I read in the old series we probably need to drop the priv and
+move to a more specific use to prevent any abuse... (or actually just
+add an additional priv just for the tagger to prevent any breakage by
+removing priv from dsa_port)
+
+I still didn't investigate the slowdown problem that is still present in
+some part when the port are actually init.
+
+Hope Andrew is not too angry about this implementation but it seems
+flexible and not that bad.
+
+(also in the current code I assume a tagger is always present. This
+should be the case or a check if the tagger is not present is needed?)
+
+Also still have to work on the autocast handler but it's really a
+function to add with the current implementation. Tagger is already have
+support to handle them.
+
+
+
+Additional changes to current implementation v3:
+
+The tagger priv has changed to only implement the handler. All the
+other stuff is now placed in the qca8k_priv and the tagger has to access
+it under lock.
+We also add MIB in Ethernet packet with an additional handler.
+We also use mdio Ethernet for phy read/write but that is still dubious.
+We use the new API from Vladimir to track if the master port is
+operational or not. We had to track many thing to reach a usable state.
+Checking if the port is UP is not enough and tracking a NETDEV_CHANGE is
+also not enough since it use also for other task. The correct way was
+both track for interface UP and if a qdisc was assigned to the
+interface. That tells us the port (and the tagger indirectly) is ready
+to accept and process packet.
+
+
+
+Current concern are:
+- Any hint about the naming? Is calling this mdio Ethernet correct?
+  Should we use a more ""standard""/significant name? (considering also
+  other switch will implement this)
+- Should we use Ethernet packet also for phy read/write? From my test it
+  works right but wonder if we should use mdio for phy and Ethernet for
+  config/other task? It looks like the switch can work with both mdio
+  mdio used for reg and Ethernet. (probably a locking internally)
+  Also from CPU load, what is heavier? mdio or ethernet handling?
+  Considering how phy works we require 3 skb allocation while for
+  mdio we need at worst 9+ write.
+
+Aside from these minor concern this should be ready for review.
+
+v4:
+- Remove duplicate patch sent by mistake.
+v3:
+- Include MIB with Ethernet packet.
+- Include phy read/write with Ethernet packet.
+- Reorganize code with new API.
+- Introuce master tracking by Vladimir
+v2:
+- Address all suggestion from Vladimir.
+  Try to generilize this with connect/disconnect function from the
+  tagger and tag_proto_connect for the driver.
+
+Ansuel Smith (11):
+  net: dsa: tag_qca: convert to FIELD macro
+  net: dsa: tag_qca: move define to include linux/dsa
+  net: da: tag_qca: enable promisc_on_master flag
+  net: dsa: tag_qca: add define for handling mdio Ethernet packet
+  net: dsa: tag_qca: add define for handling MIB packet
+  net: dsa: tag_qca: add support for handling mdio Ethernet and MIB
+    packet
+  net: dsa: qca8k: add tracking state of master port
+  net: dsa: qca8k: add support for mdio read/write in Ethernet packet
+  net: dsa: qca8k: add support for mib autocast in Ethernet packet
+  net: dsa: qca8k: add support for phy read/write with mdio Ethernet
+  net: dsa: qca8k: cache lo and hi for mdio write
+
+Vladimir Oltean (4):
+  net: dsa: provide switch operations for tracking the master state
+  net: dsa: stop updating master MTU from master.c
+  net: dsa: hold rtnl_mutex when calling dsa_master_{setup,teardown}
+  net: dsa: replay master state events in
+    dsa_tree_{setup,teardown}_master
+
+ drivers/net/dsa/qca8k.c     | 501 +++++++++++++++++++++++++++++++++++-
+ drivers/net/dsa/qca8k.h     |  31 ++-
+ include/linux/dsa/tag_qca.h |  79 ++++++
+ include/net/dsa.h           |  11 +
+ net/dsa/dsa2.c              |  81 +++++-
+ net/dsa/dsa_priv.h          |  13 +
+ net/dsa/master.c            |  29 +--
+ net/dsa/slave.c             |  32 +++
+ net/dsa/switch.c            |  15 ++
+ net/dsa/tag_qca.c           |  94 +++++--
+ 10 files changed, 820 insertions(+), 66 deletions(-)
+ create mode 100644 include/linux/dsa/tag_qca.h
+
+-- 
+2.32.0
 

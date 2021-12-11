@@ -2,288 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5782470F29
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4619C470F2B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345364AbhLKAHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 19:07:14 -0500
-Received: from relay05.th.seeweb.it ([5.144.164.166]:51617 "EHLO
-        relay05.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345376AbhLKAHC (ORCPT
+        id S244058AbhLKAIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 19:08:37 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:12953 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243876AbhLKAIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 19:07:02 -0500
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E9DC43EEF3;
-        Sat, 11 Dec 2021 01:03:22 +0100 (CET)
-Date:   Sat, 11 Dec 2021 01:03:15 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH v3 12/13] drm/msm/dsi: Add support for DSC configuration
-Message-ID: <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
-References: <20211116062256.2417186-1-vkoul@kernel.org>
- <20211116062256.2417186-13-vkoul@kernel.org>
+        Fri, 10 Dec 2021 19:08:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1639181097; x=1670717097;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xEgeQ/Mk2e4FA08czcoHG5Hp46F5amIhTyxfqhk+t+k=;
+  b=nVoTg3uFOHrAP8SM4YKSr5ZbELAzRMaLNu8NwXReBrzKjiEh8CfRXZm2
+   pnCpkzLhytI4lpvV8qqgnUMJRoC/rr7jq4ZzGv0IlIRVJT/htdNsQshtG
+   e3KDrV9tWb91uyfzFgZzK4/QVm8qAg7B9YXYPX+kgqhTNvgLKwmvhV6I3
+   h7CJjj8anFnpJPoClZBZY2v/uIOoaYCC6qqvCcJ8veSeZ5uDWiZmT27fy
+   j9vh1Xva3ddIOvNs4eUIoC5BEPzO5CiGryW79zSUtTmNd38qwyIOAbQUn
+   Y0tEe52MdHfpLsdS13BmyW3yo3sMhnf6ZcA9nkgW+mg2m4iEdiH6g6h5Z
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,197,1635177600"; 
+   d="scan'208";a="192763312"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 11 Dec 2021 08:04:57 +0800
+IronPort-SDR: IqqyPnQnVEKfkJJ14UVACVgzpTwlLEVGPKZsiB2f9VIRlVRkmc/lcmyiAkfWyR/3M3o8rPySnW
+ WtLWDQKC/h8kyxTwmllU7RZKY1Io9RT+l6GhRXjDGGbjfchfaDx54v9D/KUVNcZekOPmu16ZJW
+ 4GAGeA5qMfg5qDDdOuHPeSQevQlAxiLPO/mH8Pdgzlz0aQC3h/Zd97RhozVC0SeLMHb7ZjyeOH
+ lDycVocJl8zkgitBzjpcWEJD2PU1bX7zL5Vhaf1wqa4TYtr/s+b9jCTAGjp0y9hRSKpD9ELKdn
+ kTpgpA/s00rnJcAAVM+J4ERw
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:37:59 -0800
+IronPort-SDR: UEqyHcKXUhylZBvzREb8NbW31xVmkrYWd9FOp0MGKfePRlUKChv9cE5Fv4Nj7l9Mlqd850Eavf
+ PYTObhMxiwOHgnvPp7v5yEokpXgdRMk6YroDSLOJuY6D1cmF/fY2sNUgrELvKWf9Ssi6F9vm+W
+ pIfYGDv4VVQfoh9SJ9epLACvvO6sBNM6ryEOfuWI/M7S9n2zYd1QrIvF7dHf/MYuHthJ/XlgUp
+ BlqjE4o22RrDosNEVTfN4/h+amchkHvFxV+oCzm98Lrwwph1JAsCNRcUoF6g+0kbtHng7/1hMw
+ bM0=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 16:04:58 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J9p1Q43Qpz1Rwns
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:04:58 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1639181098; x=1641773099; bh=xEgeQ/Mk2e4FA08czcoHG5Hp46F5amIhTyx
+        fqhk+t+k=; b=H68JC5acb2gyp1NM51k/IDOW1mgoyM1B+LYvxYYnykfRHl4u1AB
+        jjOh09dl9HiKwgYu5blzyrisA6k/Xul8PVjpAQw2WwaX9m8/Nra87hDp0bbjDclX
+        8bY34UJlivO2BxJeniUOh8lWtI+5U4Pdy66VOnpVbzWXG556n5zB++9vtrjmyIEW
+        NFggpTVNw9wJTn3O5opBHmXpID1XhiQR5QOaM7QWEXAVMzoW/yd4wmIf2JsfocGk
+        rMISd4gdY6QftKjcMlFVGhOG//RleYJT4F2er9PmF/vjimAY8MGDPueKEW1JrSb3
+        CvJp0KtFHE9Pit+fTjYTzM46xtcKP+UJF+A==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Yvl3Tt8zHcoC for <linux-kernel@vger.kernel.org>;
+        Fri, 10 Dec 2021 16:04:58 -0800 (PST)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J9p1P2TPNz1RtVG;
+        Fri, 10 Dec 2021 16:04:57 -0800 (PST)
+Message-ID: <b5c109c5-9338-cd95-ae6d-b4bebd86a210@opensource.wdc.com>
+Date:   Sat, 11 Dec 2021 09:04:55 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211116062256.2417186-13-vkoul@kernel.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v1 2/2] ata: libahci_platform: Remove bogus 32-bit DMA
+ mask attempt
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>
+References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
+ <20211209145937.77719-2-andriy.shevchenko@linux.intel.com>
+ <YbOr0Y7qacDmCg73@smile.fi.intel.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital
+In-Reply-To: <YbOr0Y7qacDmCg73@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
-
-On 2021-11-16 11:52:55, Vinod Koul wrote:
-> When DSC is enabled, we need to configure DSI registers accordingly and
-> configure the respective stream compression registers.
+On 2021/12/11 4:34, Andy Shevchenko wrote:
+> On Thu, Dec 09, 2021 at 04:59:37PM +0200, Andy Shevchenko wrote:
+>> If 64-bit mask attempt fails, the 32-bit will fail by the very same reason.
+>> Don't even try the latter. It's a continuation of the changes that contains,
+>> e.g. dcc02c19cc06 ("sata_sil24: use dma_set_mask_and_coherent").
 > 
-> Add support to calculate the register setting based on DSC params and
-> timing information and configure these registers.
+> I understand that some people have nothing besides bikeshedding, but this patch
+> seems fine to everybody, am I right? Can it be applied (it's independent from
+> patch 1 anyways)?
 > 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  drivers/gpu/drm/msm/dsi/dsi.xml.h  |  10 +++
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 113 ++++++++++++++++++++++++++++-
->  2 files changed, 122 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> index 49b551ad1bff..c1c85df58c4b 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> @@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
->  #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
->  
->  
-> +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
-> +
-> +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
-> +
-> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
-> +
-> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
-> +
-> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
 
-I presume you are aware that these files are autogenerated, but there
-does not seem to be any link to patches adding these registers to the
-XML files in either envytools to mesa, nor could I find any merge/pull
-requests on the matter.  Would you mind posting those?  Before doing so
-though, consider the comment below about register mapping.
+Yes, this one seems fine to me. It would be good to get a different review
+though (I know hard to get reviews on ata patches...).
+I will queue it for 5.17.
 
-> +
->  #endif /* DSI_XML */
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 31d385d8d834..2c14c36f0b3d 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -908,6 +908,20 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
->  		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
->  }
->  
-> +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
-> +				  int pic_width, int pic_height)
 
-This function - adopted from downstream - does not seem to perform a
-whole lot, especially without the modulo checks against the slice size.
-Perhaps it can be inlined?
-
-> +{
-> +	if (!dsc || !pic_width || !pic_height) {
-> +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
-> +		return -EINVAL;
-> +	}
-> +
-> +	dsc->drm->pic_width = pic_width;
-> +	dsc->drm->pic_height = pic_height;
-> +
-> +	return 0;
-> +}
-> +
->  static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->  {
->  	struct drm_display_mode *mode = msm_host->mode;
-> @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->  		hdisplay /= 2;
->  	}
->  
-> +	if (msm_host->dsc) {
-> +		struct msm_display_dsc_config *dsc = msm_host->dsc;
-> +
-> +		/* update dsc params with timing params */
-> +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
-> +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
-
-This seems to be pretty non-standard and perhaps unnecessary debug code,
-with a stray dash in there.  Is is needed here, and if so how about
-using %dx%d\n to format width and height?
-
-> +
-> +		/* we do the calculations for dsc parameters here so that
-> +		 * panel can use these parameters
-> +		 */
-> +		dsi_populate_dsc_params(dsc);
-> +
-> +		/* Divide the display by 3 but keep back/font porch and
-> +		 * pulse width same
-> +		 */
-
-A more general nit on the comments in this patch series: it is
-appreciated if comments explain the rationale rather than - or in
-addition to - merely paraphrasing the code that follows.
-
-> +		h_total -= hdisplay;
-> +		hdisplay /= 3;
-> +		h_total += hdisplay;
-> +		ha_end = ha_start + hdisplay;
-> +	}
-> +
->  	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> +		if (msm_host->dsc) {
-> +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> +			u32 reg, intf_width, slice_per_intf;
-> +			u32 total_bytes_per_intf;
-> +
-> +			/* first calculate dsc parameters and then program
-> +			 * compress mode registers
-> +			 */
-> +			intf_width = hdisplay;
-> +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
-> +
-> +			dsc->drm->slice_count = 1;
-> +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
-
-If I am not mistaken this is the same value as dsc->drm->slice_width,
-since a multiple of 8 is inherently "a multiple of 8" and hence needs no
-rounding when divided by 8 again.
-
-Also note that the cmdmode variant below uses bits_per_pixel here; is
-that discrepancy intended?
-
-> +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-> +
-> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
-> +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
-> +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-> +
-> +			reg = dsc->bytes_per_pkt << 16;
-> +			reg |= (0x0b << 8);    /* dtype of compressed image */
-> +
-> +			/* pkt_per_line:
-> +			 * 0 == 1 pkt
-> +			 * 1 == 2 pkt
-> +			 * 2 == 4 pkt
-> +			 * 3 pkt is not supported
-> +			 * above translates to ffs() - 1
-> +			 */
-> +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
-> +
-> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-
-This was already calculated and assigned just a couple lines above.
-
-> +			reg |= dsc->eol_byte_num << 4;
-> +			reg |= 1;
-
-Note that the XML register file exists to map out the layout of these
-registers, including bit offset, size, and (enum) constant values.  It
-is appreciated if you can replace all these magical shifts and magic
-flags/bits with the appropriate enum constants and constructor
-functions, after mapping them out in the XML file.
-
-> +
-> +			dsi_write(msm_host,
-> +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
-> +		}
-> +
->  		dsi_write(msm_host, REG_DSI_ACTIVE_H,
->  			DSI_ACTIVE_H_START(ha_start) |
->  			DSI_ACTIVE_H_END(ha_end));
-> @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->  			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
->  			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
->  	} else {		/* command mode */
-> +		if (msm_host->dsc) {
-> +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> +			u32 reg, reg_ctrl, reg_ctrl2;
-> +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
-> +
-> +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
-> +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
-
-Shouldn't old values be masked out first, before writing new bits or
-values below?  The video-mode variant doesn't read back old register
-values.
-
-> +
-> +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
-> +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
-> +						      dsc->drm->bits_per_pixel, 8);
-> +			dsc->drm->slice_chunk_size = bytes_in_slice;
-> +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-> +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-> +
-> +			reg = 0x39 << 8;
-
-Same comment about moving magic constants and shifts into the XML file.
-
-> +			reg |= ffs(dsc->pkt_per_line) << 6;
-
-Doesn't the calculation need -1 here just like video mode?
-
-Thanks!
-
-- Marijn
-
-> +
-> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> +			reg |= dsc->eol_byte_num << 4;
-> +			reg |= 1;
-> +
-> +			reg_ctrl |= reg;
-> +			reg_ctrl2 |= bytes_in_slice;
-> +
-> +			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
-> +			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
-> +		}
-> +
->  		/* image data and 1 byte write_memory_start cmd */
-> -		wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
-> +		if (!msm_host->dsc)
-> +			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
-> +		else
-> +			wc = mode->hdisplay / 2 + 1;
->  
->  		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
->  			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
-> @@ -2051,9 +2158,13 @@ int msm_dsi_host_modeset_init(struct mipi_dsi_host *host,
->  {
->  	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
->  	const struct msm_dsi_cfg_handler *cfg_hnd = msm_host->cfg_hnd;
-> +	struct msm_drm_private *priv;
->  	int ret;
->  
->  	msm_host->dev = dev;
-> +	priv = dev->dev_private;
-> +	priv->dsc = msm_host->dsc;
-> +
->  	ret = cfg_hnd->ops->tx_buf_alloc(msm_host, SZ_4K);
->  	if (ret) {
->  		pr_err("%s: alloc tx gem obj failed, %d\n", __func__, ret);
-> -- 
-> 2.31.1
-> 
+-- 
+Damien Le Moal
+Western Digital Research

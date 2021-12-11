@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 966A24715AA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B251C4715AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbhLKTZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 14:25:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40040 "EHLO
+        id S231863AbhLKTZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 14:25:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24696 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230170AbhLKTZJ (ORCPT
+        by vger.kernel.org with ESMTP id S231876AbhLKTZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 14:25:09 -0500
+        Sat, 11 Dec 2021 14:25:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639250708;
+        s=mimecast20190719; t=1639250715;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Sg3tYegBcr8a1PhGekugtBk97+3Tj4pLXTNqM52G2ak=;
-        b=ZnH7sAKbcTK28HZWrOlmxFUfGDNLbT0Yo8h2FHh+H4LycoDwiI6OUxSo5WGz8G3945ebJG
-        396e1h+Ipng04iiZclwPxnEfbc+q48EvWfweB1JqO7ak8G+wPoPYrEFCIfSCK5ryIXySy6
-        byEbVOMNRvJrkzO9rpY7Gx/nxmZb8TA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=dIv6pkKUGV1T0mAJB7D51zRDre7thjOw+CRPJNXh72s=;
+        b=fGnAyTiZmUzJ/Yg4hh88GwRoX7MKMweW0dP78i7sR3Pt0vgP8xe5i9IBS7jHdeBm1mHERI
+        FFBhdOnol4Bi0L2Y864wojPTj1ljobPKZG3Xb3ZYNmarSP4s3L4SIGELjIC6YRhbs8fgVa
+        hJfSh3Htzd0331GdrhlO2iHcXitrDlg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-287-02w6aES5PoisB-iNxpqutg-1; Sat, 11 Dec 2021 14:25:07 -0500
-X-MC-Unique: 02w6aES5PoisB-iNxpqutg-1
-Received: by mail-wm1-f71.google.com with SMTP id g11-20020a1c200b000000b003320d092d08so7017618wmg.9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 11:25:06 -0800 (PST)
+ us-mta-205-uEJn_E8_O7ehfFWlEGkmxQ-1; Sat, 11 Dec 2021 14:25:14 -0500
+X-MC-Unique: uEJn_E8_O7ehfFWlEGkmxQ-1
+Received: by mail-wm1-f70.google.com with SMTP id k25-20020a05600c1c9900b00332f798ba1dso8874646wms.4
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 11:25:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Sg3tYegBcr8a1PhGekugtBk97+3Tj4pLXTNqM52G2ak=;
-        b=p9RvOgGSmq4JsJNKO/GXm1Ww6QodE+UwKp16gDIklZx5ruFmW37t1YGFf+IlOSmsxz
-         1McQZC9ALfVEolIcjApcoVeLsv6O+Hyd6MPYNEsGsrzVovosQVKkYwwD50qETGfkI7JJ
-         EvvdeVfHWBKtYbWfUEvJfggEqPcKkJSXGn8qypz6vZnjDOuqbQxNstI8kXOUP+mDtg7V
-         NTu8V9ic4q9cmOognrI4kj20jQuqQJKmVKtHgxPc63IObuG6nIZkOJFp++SzqmRC5zIr
-         p/4NMNGPL4ce1w2cg9ZTTxti5VVOtmHj+KKPY2ycOvtNbihC3vOredtwzlUKhIocQPgp
-         V/MA==
-X-Gm-Message-State: AOAM533+5lr1mCzDhMxGXQFa720eWPD67sYhwCHC+ziR2bwxMhsoZh5b
-        OmLQyfNsNwFEc8dK/6Oe4eNBQ8gMs0NMtxuzfGme8USpnDlnuLKZ7UlG3feoYG42kNTxOZiQaQf
-        gJPEISLfGo+V7L6UrbRN7+2cw
-X-Received: by 2002:a05:6000:1625:: with SMTP id v5mr21433901wrb.196.1639250705498;
-        Sat, 11 Dec 2021 11:25:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxTpjMNfovA5xcjOrwxzt06x14rvtSJ8nONeyisARxOvdFpDA0WXOOEF8zSOsDUhDjheMvD9w==
-X-Received: by 2002:a05:6000:1625:: with SMTP id v5mr21433881wrb.196.1639250705330;
-        Sat, 11 Dec 2021 11:25:05 -0800 (PST)
+        bh=dIv6pkKUGV1T0mAJB7D51zRDre7thjOw+CRPJNXh72s=;
+        b=5td95/RkvPZoUA8gBf91JCt2pJ8l7rnl1KgmC5dKwZ+C+x2NPtteW635PaB/O7vIW+
+         g1u4RCCM2fS/ZtqNP9WudggzLYqx1fm3oXsaQFZJ+zTnirWu5pE+w+P1vGQ2em58vgQ3
+         B/p6YhBwYY1C/3GmdWwC+mZftb8bGZrT7CA3PjIBjd+xHhGDkemED5zsLbvUgbJAjLos
+         CWSXHZkiUv6NlouUJ+DCNyK7aN+/6275S5GwpjXCqmav9yQiyYzHkzWpOd86sQIGnj7X
+         qTEr0RtQG7HqEd4lSgHBehVd0/AAPoK3aDGKfOZVcTAQ6L4s1ypmgattiQnU7s+Dqw6x
+         /q+g==
+X-Gm-Message-State: AOAM5311+fYmbjwm2rHJXZ9TaMqfoQPdZnmijgzJWyHArVgypkn5dPAt
+        /RcntEfCx2GA9HQCcIl2BnXwu9f1D6zk8L342D7keCR3rUv0t0Y6rt+YWLZTV7gh28uJbaKgEaz
+        8Y4DcHt8dIcrzWKjXgfhADmX1
+X-Received: by 2002:a7b:c007:: with SMTP id c7mr25977349wmb.82.1639250713162;
+        Sat, 11 Dec 2021 11:25:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJztQTZBoBdnMJaOKM6MJZD+Tf74WLX+vCpXk18rbXjj4VZdB0bXkx78rI4ZvQ9zGByCWUhwNw==
+X-Received: by 2002:a7b:c007:: with SMTP id c7mr25977331wmb.82.1639250712984;
+        Sat, 11 Dec 2021 11:25:12 -0800 (PST)
 Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id e24sm5893514wra.78.2021.12.11.11.25.04
+        by smtp.gmail.com with ESMTPSA id l8sm2364512wmc.40.2021.12.11.11.25.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 11:25:04 -0800 (PST)
-Date:   Sat, 11 Dec 2021 20:25:02 +0100
+        Sat, 11 Dec 2021 11:25:12 -0800 (PST)
+Date:   Sat, 11 Dec 2021 20:25:10 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Ian Rogers <irogers@google.com>
 Cc:     Andi Kleen <ak@linux.intel.com>,
@@ -74,94 +74,144 @@ Cc:     Andi Kleen <ak@linux.intel.com>,
         Mike Leach <mike.leach@linaro.org>,
         Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
         linux-arm-kernel@lists.infradead.org, eranian@google.com
-Subject: Re: [PATCH 06/22] perf cpumap: Remove map+index get_socket
-Message-ID: <YbT7DgbmLDXctakZ@krava>
+Subject: Re: [PATCH 17/22] perf cpumap: Refactor cpu_map__build_map
+Message-ID: <YbT7Fg1l8sZ3R44a@krava>
 References: <20211208024607.1784932-1-irogers@google.com>
- <20211208024607.1784932-7-irogers@google.com>
+ <20211208024607.1784932-18-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208024607.1784932-7-irogers@google.com>
+In-Reply-To: <20211208024607.1784932-18-irogers@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 06:45:51PM -0800, Ian Rogers wrote:
-> Migrate final users to appropriate cpu variant.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/topology.c | 2 +-
->  tools/perf/util/cpumap.c    | 9 ---------
->  tools/perf/util/cpumap.h    | 1 -
->  tools/perf/util/stat.c      | 2 +-
->  4 files changed, 2 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/perf/tests/topology.c b/tools/perf/tests/topology.c
-> index 869986139146..69a64074b897 100644
-> --- a/tools/perf/tests/topology.c
-> +++ b/tools/perf/tests/topology.c
-> @@ -150,7 +150,7 @@ static int check_cpu_topology(char *path, struct perf_cpu_map *map)
+On Tue, Dec 07, 2021 at 06:46:02PM -0800, Ian Rogers wrote:
+
+SNIP
+
+> -			perror("cannot build core map");
+> -			return -1;
+> -		}
+> -		stat_config.aggr_get_id = perf_stat__get_core_file;
+> -		break;
+> +		return perf_stat__get_core_file;
+>  	case AGGR_NODE:
+> -		if (perf_env__build_node_map(env, evsel_list->core.cpus, &stat_config.aggr_map)) {
+> -			perror("cannot build core map");
+> -			return -1;
+> -		}
+> -		stat_config.aggr_get_id = perf_stat__get_node_file;
+> -		break;
+> +		return perf_stat__get_node_file;
+>  	case AGGR_NONE:
+>  	case AGGR_GLOBAL:
+>  	case AGGR_THREAD:
+>  	case AGGR_UNSET:
+>  	default:
+> -		break;
+> +		return NULL;
+>  	}
+> +}
+> +
+> +static int perf_stat_init_aggr_mode_file(struct perf_stat *st)
+> +{
+> +	struct perf_env *env = &st->session->header.env;
 >  
->  	// Test that socket ID contains only socket
->  	for (i = 0; i < map->nr; i++) {
-> -		id = cpu_map__get_socket(map, i, NULL);
-> +		id = cpu_map__get_socket_aggr_by_cpu(perf_cpu_map__cpu(map, i), NULL);
+> +	aggr_cpu_id_get_t f = aggr_mode__get_aggr_file(stat_config.aggr_mode);
 
-you could also use the perf_cpu_map__for_each_cpu in here?
-same for the following changes
+we use get_id for aggr_get_id_t, maybe we could use it instead of 'f' in
+here as well
 
-jirka
-
->  		TEST_ASSERT_VAL("Socket map - Socket ID doesn't match",
->  			session->header.env.cpu[map->map[i]].socket_id == id.socket);
+> +
+> +	if (!f)
+> +		return 0;
+> +
+> +	stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.cpus, f, env);
+> +	if (!stat_config.aggr_map) {
+> +		pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
+> +		return -1;
+> +	}
+> +	stat_config.aggr_get_id = aggr_mode__get_id_file(stat_config.aggr_mode);
+>  	return 0;
+>  }
 >  
 > diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-> index feaf34b25efc..342a5eaee9d3 100644
+> index 32f9fc2dd389..ba4468f691c8 100644
 > --- a/tools/perf/util/cpumap.c
 > +++ b/tools/perf/util/cpumap.c
-> @@ -136,15 +136,6 @@ struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data __maybe_u
+> @@ -140,7 +140,7 @@ struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data __maybe_u
 >  	return id;
 >  }
 >  
-> -struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
-> -				       void *data)
-> -{
-> -	if (idx < 0 || idx > map->nr)
-> -		return cpu_map__empty_aggr_cpu_id();
-> -
-> -	return cpu_map__get_socket_aggr_by_cpu(map->map[idx], data);
-> -}
-> -
->  static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
+> -static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
+> +static int aggr_cpu_id__cmp(const void *a_pointer, const void *b_pointer)
 >  {
 >  	struct aggr_cpu_id *a = (struct aggr_cpu_id *)a_pointer;
-> diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-> index 9648816c4255..a53af24301d2 100644
-> --- a/tools/perf/util/cpumap.h
-> +++ b/tools/perf/util/cpumap.h
-> @@ -32,7 +32,6 @@ size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size);
->  size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp);
->  int cpu_map__get_socket_id(int cpu);
->  struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data);
-> -struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx, void *data);
->  int cpu_map__get_die_id(int cpu);
->  struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data);
->  struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data);
-> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-> index 09ea334586f2..9eca1111fa52 100644
-> --- a/tools/perf/util/stat.c
-> +++ b/tools/perf/util/stat.c
-> @@ -328,7 +328,7 @@ static int check_per_pkg(struct evsel *counter,
->  	if (!(vals->run && vals->ena))
->  		return 0;
+>  	struct aggr_cpu_id *b = (struct aggr_cpu_id *)b_pointer;
+> @@ -157,37 +157,40 @@ static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
+>  		return a->thread - b->thread;
+>  }
 >  
-> -	s = cpu_map__get_socket(cpus, cpu, NULL).socket;
-> +	s = cpu_map__get_socket_id(cpu);
->  	if (s < 0)
->  		return -1;
+> -int cpu_map__build_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **res,
+> -		       struct aggr_cpu_id (*f)(int cpu, void *data),
+> -		       void *data)
+> +struct cpu_aggr_map *cpu_aggr_map__new(const struct perf_cpu_map *cpus,
+> +				       aggr_cpu_id_get_t f,
+> +				       void *data)
+
+same here
+
+thanks,
+jirka
+
+>  {
+> -	int nr = cpus->nr;
+> -	struct cpu_aggr_map *c = cpu_aggr_map__empty_new(nr);
+> -	int cpu, s2;
+> -	struct aggr_cpu_id s1;
+> +	int cpu, idx;
+> +	struct cpu_aggr_map *c = cpu_aggr_map__empty_new(cpus->nr);
 >  
-> -- 
-> 2.34.1.400.ga245620fadb-goog
-> 
+>  	if (!c)
+> -		return -1;
+> +		return NULL;
+>  
+>  	/* Reset size as it may only be partially filled */
+>  	c->nr = 0;
+>  
+> -	for (cpu = 0; cpu < nr; cpu++) {
+> -		s1 = f(cpu, data);
+> -		for (s2 = 0; s2 < c->nr; s2++) {
+> -			if (aggr_cpu_id__equal(&s1, &c->map[s2]))
+> +	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
+> +		bool duplicate = false;
+> +		struct aggr_cpu_id cpu_id = f(cpu, data);
+> +
+> +		for (int j = 0; j < c->nr; j++) {
+> +			if (aggr_cpu_id__equal(&cpu_id, &c->map[j])) {
+> +				duplicate = true;
+>  				break;
+> +			}
+>  		}
+> -		if (s2 == c->nr) {
+> -			c->map[c->nr] = s1;
+> +		if (!duplicate) {
+> +			c->map[c->nr] = cpu_id;
+>  			c->nr++;
+>  		}
+>  	}
+> +
+>  	/* ensure we process id in increasing order */
+> -	qsort(c->map, c->nr, sizeof(struct aggr_cpu_id), cmp_aggr_cpu_id);
+> +	qsort(c->map, c->nr, sizeof(struct aggr_cpu_id), aggr_cpu_id__cmp);
+> +
+> +	return c;
+>  
+> -	*res = c;
+> -	return 0;
+>  }
+>  
+
+SNIP
 

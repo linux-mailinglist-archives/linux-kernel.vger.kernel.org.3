@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B7A4716DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862364716E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbhLKVpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:45:41 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:57484 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbhLKVpk (ORCPT
+        id S231539AbhLKVtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231319AbhLKVtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:45:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639259142; x=1670795142;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kPEOxlRJTHMuHZKyDDPAt3/GOzpvpZEMvEMb59PqfX4=;
-  b=ko/2LossjFmUG3QrQMnjlSZUoiDhmFqDVRTS9VFEvfJndxEwLHQjCCYD
-   crYqb8ZNqwNLz5Wa90+9ndDzjvC92DHE/pvImn2JLBuHGMcK0bo6IdsOc
-   bE3c9axYv4glLXmdSd95/gGeZydrFIhK2tkpFv4MvfIvfRn7o0JiwSuuQ
-   m0I7Gm6/HlWvigQ7dveoD58cq9y4IHbcu8GMZXTmgBL7I7VcLRtglkfok
-   pkn72VxxbEoulhaihRpJwyGH7+mHSryfC0t4aUQ4gLqx0hdBuilhDh9U9
-   yfsbEcQJ40KHdynC0hMCZc7YTMCFcG1J6Wd5TZOVLhdVIG3ZAd2lOElgt
-   A==;
-IronPort-SDR: Iq/GQflWI2WFGi7l4IFzHQCasMOinRa6l6YAAZNDoUkcsoxL6iBCh1Ih6Qr8sflGMy7xa8We7M
- XWUClBFBdyNedL+38z1tZYbMVxciv0DBPpfQNZn73WJo5pKw2DYsENN8wiq61cas9+WInK8KBk
- O16JaVpi/kns7dREtuDyfphn5XSmnn2f4jl6Vk4TGjCB8VAn019UOuv4aeIBhi+8bBecgdaceP
- I1oi/Kb/ccyDAcLeFqL2n1usxXUkWDCDMOA3kCT/PhOJV3lSfArwPD4V/JnML2aOGiniok+shi
- 2JXH8bsqEZzM7O/DakRcF1pd
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="146345647"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Dec 2021 14:45:41 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sat, 11 Dec 2021 14:45:39 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Sat, 11 Dec 2021 14:45:38 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     <kishon@ti.com>, <vkoul@kernel.org>, <linux@armlinux.org.uk>,
-        "Horatiu Vultur" <horatiu.vultur@microchip.com>
-Subject: [PATCH] phy: lan966x: Remove set_speed function
-Date:   Sat, 11 Dec 2021 22:47:17 +0100
-Message-ID: <20211211214717.1284306-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 11 Dec 2021 16:49:22 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68DDC061751
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 13:49:21 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id 193so10933645qkh.10
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 13:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=216kzXBuHrtR+pLZX4A3zjdY7dFTRS45ivYaDgXHWiQ=;
+        b=WIirWmQcQEqP2Wsh1HLpBUmtp5ElEGVZPHWWrXCao2NbowwGB49iuKgypZmpAC2RG9
+         aGTY7flkNkCdjmv+wnoyOgDhmP2dPwD1X3mgpOKJosfDx84GAzH7k2nAjP5EueMZhFSD
+         kDzJWY3PCHC587bNDcQChGc+W+o1R+H+5zzPoHCG72QhcbGIxXXBJSQgIwtO2G5qtJsv
+         gHzqK7H+bwqKePEbgEA/5Sj9jvJPjynaVxfZmDcQlsAUwd0FL6/soXcCkl8IkkkcG5np
+         foCd0OtqOqE8sNhtjtSJt1Z5LVVJpc8GFgcjiZ25KlnecQBG3EU0iiLWweWdYbbq4ggk
+         eP3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=216kzXBuHrtR+pLZX4A3zjdY7dFTRS45ivYaDgXHWiQ=;
+        b=1jBH5/SmmOqviTiL62CziK0NNUi87iD7vDbZK+Eq5TK0zruSzLMKM9oy7ieRjWVuBn
+         YIpsd8ny2/soTKTgi59L7FlwFrJU4Wj/Xt8z05GHgPcDlAiUVjIakYCmq7tmOqaMip1Z
+         GpkjYSamRc2BwilMN49l2Ln8EQRCCkDt1BmJCLSC0ZRiQonGwV4HMbnhGGIWyEilJlJ5
+         kqU66zWDqo4lKSStVomsAmRnfA7Q3dJVWVq4iDmAhIxJY4zv52c/s1ple8R8T+Os9V7v
+         SZVjEgMfwt9Ipaun0UbrzNYOceGHnhAVymdxDhyGxDHgIctsBIF98qgxeMAuycESqlD/
+         k3Kw==
+X-Gm-Message-State: AOAM5333B5K6ON3m7F9bGVPVzgo2yG+P0B5rObWMo9Jm3kEeVPmncJaB
+        hbHCE4AOqko5dtYeKbPkFvHgbbQh7YIrUdG0HKMmRA==
+X-Google-Smtp-Source: ABdhPJx0HA+TFdXFAe/Fn75girIuuARUxIWPNthwtIiISDoqzb4TtSUHLZLxUyYEMWCTuNAKiVa9lepST9gbf9uY4UQ=
+X-Received: by 2002:a05:620a:13ea:: with SMTP id h10mr27102972qkl.30.1639259360286;
+ Sat, 11 Dec 2021 13:49:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
+ <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
+ <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org> <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
+ <20211211213528.uroqfdksvokspbxf@SoMainline.org>
+In-Reply-To: <20211211213528.uroqfdksvokspbxf@SoMainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 12 Dec 2021 00:49:09 +0300
+Message-ID: <CAA8EJprT5gcWOsS5jJk8egUpxutBpUdW2Pnh-8FFXhgOd3hr=A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode panels
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch, abhinavk@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the set_speed function and allow the driver to figure out the
-speed at which needs to configure the serdes based on the interface type.
+On Sun, 12 Dec 2021 at 00:35, Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
+>
+> On 2021-12-09 18:02:40, AngeloGioacchino Del Regno wrote:
+> > Il 02/10/21 00:33, Dmitry Baryshkov ha scritto:
+> > > On 11/09/2021 19:39, AngeloGioacchino Del Regno wrote:
+> > >> [..]
+> > > I've compared this with the MDP5 driver, where we always wait for PP_DONE
+> > > interrupt. Would it be enough to always wait for it (= always call
+> > > dpu_encoder_phys_cmd_wait_for_tx_complete())?
+> > >
+> >
+> > Jokes apart, yes it would make sense to do that, it's something that works
+> > at least... but we should verify that such a thing doesn't break new platforms
+> > (like sm8150 and newer).
+>
+> On sm6125 (keeping in mind that we're on llvmpipe, will bring up the GPU
+> later) none of this hurts the display:
+>
+> - Without this patch, so only checking for wait_for_ctl_start;
+> - With this patch, checking for idle if it was already started;
+> - With this patch altered to only ever call wait_for_tx_complete (wait
+>   for idle), in place of wait_for_ctl_start.
+>
+> Working in the sense that glxgears, which actually reports a framerate
+> of approx 170 despite being on llvmpipe on an SoC that is still in
+> snail-mode, seems to update (commit) the panel smoothly on every
+> occasion.
+>
+> On this note, does it perhaps make more sense to call the "internal"
+> _dpu_encoder_phys_cmd_wait_for_idle function directly, instead of going
+> through the "public" dpu_encoder_phys_cmd_wait_for_tx_complete which
+> seems solely intended to handle the wait_for_tx_complete callback?
 
-Fixes: 305524902a0045 ("phy: Add lan966x ethernet serdes PHY driver")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/phy/microchip/lan966x_serdes.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+Either one would work. The main difference is the error message. Do
+you want to see it here if the wait times out or not?
 
-diff --git a/drivers/phy/microchip/lan966x_serdes.c b/drivers/phy/microchip/lan966x_serdes.c
-index c0b80a176387..e86a879b92b5 100644
---- a/drivers/phy/microchip/lan966x_serdes.c
-+++ b/drivers/phy/microchip/lan966x_serdes.c
-@@ -392,6 +392,11 @@ static int serdes_set_mode(struct phy *phy, enum phy_mode mode, int submode)
- 	if (mode != PHY_MODE_ETHERNET)
- 		return -EOPNOTSUPP;
- 
-+	if (submode == PHY_INTERFACE_MODE_2500BASEX)
-+		macro->speed = SPEED_2500;
-+	else
-+		macro->speed = SPEED_1000;
-+
- 	if (submode == PHY_INTERFACE_MODE_1000BASEX ||
- 	    submode == PHY_INTERFACE_MODE_2500BASEX)
- 		submode = PHY_INTERFACE_MODE_SGMII;
-@@ -427,19 +432,8 @@ static int serdes_set_mode(struct phy *phy, enum phy_mode mode, int submode)
- 	return -EINVAL;
- }
- 
--static int serdes_set_speed(struct phy *phy, int speed)
--{
--	struct serdes_macro *macro = phy_get_drvdata(phy);
--
--	macro->speed = speed;
--
--	return lan966x_sd6g40_setup(macro, macro->idx - (CU_MAX + 1),
--				    macro->mode);
--}
--
- static const struct phy_ops serdes_ops = {
- 	.set_mode	= serdes_set_mode,
--	.set_speed	= serdes_set_speed,
- 	.owner		= THIS_MODULE,
- };
- 
-@@ -482,7 +476,6 @@ static int serdes_phy_create(struct serdes_ctrl *ctrl, u8 idx, struct phy **phy)
- 
- 	macro->idx = idx;
- 	macro->ctrl = ctrl;
--	macro->speed = SPEED_1000;
- 	macro->port = -1;
- 
- 	phy_set_drvdata(*phy, macro);
 -- 
-2.33.0
-
+With best wishes
+Dmitry

@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B00A8470FE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 02:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71710470FE3
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 02:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345574AbhLKBgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 20:36:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45060 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbhLKBgU (ORCPT
+        id S1345581AbhLKBgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 20:36:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345576AbhLKBgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 20:36:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C64A8B82A7E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 01:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A96C00446;
-        Sat, 11 Dec 2021 01:32:41 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 20:32:40 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] tracing: Account bottom half disabled sections.
-Message-ID: <20211210203240.43a8e7eb@gandalf.local.home>
-In-Reply-To: <YbO5H+H3dwLoIVka@linutronix.de>
-References: <YbO5H+H3dwLoIVka@linutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 10 Dec 2021 20:36:41 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62709C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 17:33:05 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id r11so34508383edd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 17:33:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=igz7mhddA6SiLDrTxK7BBgnsMQANYZ9nkpc2VVEuP/Y=;
+        b=R4DuHb77tzI2CNOtFViwBCj+4QGHu6zxAqu6R6Gl8zxHH8I9rM+opDDDGeMMSuLC2s
+         KYJggWuCEonKlrSJqJlTkLPtil9MBgHbVFh2BhXj2cC05FOWXrorpnVd4Hnemz4jhSia
+         ntQ53cEFi2Vge1N0b5RlxRnNasS9Ry7qahHs0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=igz7mhddA6SiLDrTxK7BBgnsMQANYZ9nkpc2VVEuP/Y=;
+        b=TFhrLSpPEDojY1rNWIuJxtOz8k6DdwO65WLT8kWLgV2upQdHkrCdeGCP33psySTrmf
+         Lq4CBmkR4vlCnCSEDyspnViwpFU7eChTjgG+toDjxzeI0LC808vUYPPiNpcs6idFHpvd
+         2t9oBjoPtF6oejtw9AFMnRP3iy3tKSWVmc059LhgzFuyflk1FprcE+oRPnN7MpxXF0nP
+         jmQiNATJIOIHLvIZCQr1fwVUalc4BGwFN2/4vOj1TABlb+Kk9uY47c4zS5zTHS0TF+Nw
+         CH3XuCZaAdcXnKh57QO8VH5h3q50HrTLubIU8/tWb7jGUOM3eYUWASSDZeZttXCzyjDl
+         RG/w==
+X-Gm-Message-State: AOAM533L8VdB36Nk1vhowyDm3FueMncwhCVJ74xv9Bs+/dMj6K69a8yM
+        kEKPdqp2bQnDUkMrKILRANo9h4XbhK5jPo7KBEE=
+X-Google-Smtp-Source: ABdhPJwRyZkgF7QHZU/FHx/lF9vyk1ltmBd5mm0TKpnJaqNFRAp0wRms5pTKsbrbg6X3jyUmsPvZtA==
+X-Received: by 2002:a05:6402:354c:: with SMTP id f12mr45092216edd.256.1639186383426;
+        Fri, 10 Dec 2021 17:33:03 -0800 (PST)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id ig1sm2174153ejc.77.2021.12.10.17.33.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 17:33:02 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id q3so17723734wru.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 17:33:02 -0800 (PST)
+X-Received: by 2002:adf:cc8d:: with SMTP id p13mr17925618wrj.274.1639186381813;
+ Fri, 10 Dec 2021 17:33:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211210053743.GA36420@xsang-OptiPlex-9020> <CAHk-=wgxd2DqzM3PAsFmzJDHFggxg7ODTQxfJoGCRDbjgMm8nA@mail.gmail.com>
+ <CAG48ez1pnatAB095dnbrn9LbuQe4+ENwh-WEW36pM40ozhpruw@mail.gmail.com>
+ <CAHk-=wg1uxUTmdEYgTcxWGQ-s6vb_V_Jux+Z+qwoAcVGkCTDYA@mail.gmail.com> <CAHk-=wh5iFv1MOx6r8zyGYkYGfgfxqcPSrUDwfuOCdis+VR+BQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wh5iFv1MOx6r8zyGYkYGfgfxqcPSrUDwfuOCdis+VR+BQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 Dec 2021 17:32:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj4Cqs=2ZrJ0r-0ansaarD9wt88d73XVVQ4H12XwHgofg@mail.gmail.com>
+Message-ID: <CAHk-=wj4Cqs=2ZrJ0r-0ansaarD9wt88d73XVVQ4H12XwHgofg@mail.gmail.com>
+Subject: Re: [fget] 054aa8d439: will-it-scale.per_thread_ops -5.7% regression
+To:     Jann Horn <jannh@google.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        fengwei.yin@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 21:31:27 +0100
-Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
+On Fri, Dec 10, 2021 at 1:59 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> This is an ENTIRELY UNTESTED patch to do that.
 
-> Disabling only bottom halves via local_bh_disable() disables also
-> preemption but this remains invisible to tracing. On a CONFIG_PREEMPT
-> kernel one might wonder why there is no scheduling happening despite the
-> N flag in the trace. The reason might be the a rcu_read_lock_bh()
-> section.
-> 
-> Add a 'b' to the tracing output if in task context with disabled bottom
-> halves.
-> 
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  include/linux/trace_events.h | 1 +
->  kernel/trace/trace.c         | 6 ++++--
->  kernel/trace/trace_output.c  | 3 +++
->  3 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-> index 2d167ac3452c5..a2af7e1156eac 100644
-> --- a/include/linux/trace_events.h
-> +++ b/include/linux/trace_events.h
-> @@ -172,6 +172,7 @@ enum trace_flag_type {
->  	TRACE_FLAG_SOFTIRQ		= 0x10,
->  	TRACE_FLAG_PREEMPT_RESCHED	= 0x20,
->  	TRACE_FLAG_NMI			= 0x40,
-> +	TRACE_FLAG_BH_OFF		= 0x80,
->  };
->  
->  #ifdef CONFIG_TRACE_IRQFLAGS_SUPPORT
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 88de94da596b1..dca48d556ee5a 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -2601,6 +2601,8 @@ unsigned int tracing_gen_ctx_irq_test(unsigned int irqs_status)
->  		trace_flags |= TRACE_FLAG_HARDIRQ;
->  	if (in_serving_softirq())
->  		trace_flags |= TRACE_FLAG_SOFTIRQ;
-> +	if (softirq_count() >> (SOFTIRQ_SHIFT + 1))
-> +		trace_flags |= TRACE_FLAG_BH_OFF;
->  
->  	if (tif_need_resched())
->  		trace_flags |= TRACE_FLAG_NEED_RESCHED;
-> @@ -4185,7 +4187,7 @@ static void print_lat_help_header(struct seq_file *m)
->  	seq_puts(m, "#                    _------=> CPU#            \n"
->  		    "#                   / _-----=> irqs-off        \n"
->  		    "#                  | / _----=> need-resched    \n"
-> -		    "#                  || / _---=> hardirq/softirq \n"
-> +		    "#                  || / _---=> hardirq/softirq/BH-disables\n"
->  		    "#                  ||| / _--=> preempt-depth   \n"
->  		    "#                  |||| / _-=> migrate-disable \n"
->  		    "#                  ||||| /     delay           \n"
-> @@ -4226,7 +4228,7 @@ static void print_func_help_header_irq(struct array_buffer *buf, struct seq_file
->  
->  	seq_printf(m, "#                            %.*s  _-----=> irqs-off\n", prec, space);
->  	seq_printf(m, "#                            %.*s / _----=> need-resched\n", prec, space);
-> -	seq_printf(m, "#                            %.*s| / _---=> hardirq/softirq\n", prec, space);
-> +	seq_printf(m, "#                            %.*s| / _---=> hardirq/softirq/BH-disabled\n", prec, space);
+Oh, and I guess it's somewhat tested now. I've been running that patch
+for the last couple of hours, and it seems to work fine.
 
-So I went to update the documentation on this, and realized that this is
-wrong. Really, we want this in the irqs-off section probably.
+Not that I actually stressed it in any particular way, but at least it
+doesn't cause any obvious problems. So it's probably fine.
 
-Note, the above is to show we are running in a hardirq or softirq context.
-But BH-disabled does not match that. Should this be with irqs-off being:
+Famous last words.
 
- d - irqs are disabled
- b - BH is disabled?
- D - irqs and BH is disabled?
-
--- Steve
-
-
->  	seq_printf(m, "#                            %.*s|| / _--=> preempt-depth\n", prec, space);
->  	seq_printf(m, "#                            %.*s||| / _-=> migrate-disable\n", prec, space);
->  	seq_printf(m, "#                            %.*s|||| /     delay\n", prec, space);
-> diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-> index 3547e7176ff79..6be644d35ec30 100644
+              Linus

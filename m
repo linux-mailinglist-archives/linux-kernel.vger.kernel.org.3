@@ -2,138 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 191D7471232
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 07:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23F5471236
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 07:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbhLKGkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 01:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S229598AbhLKGqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 01:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbhLKGkG (ORCPT
+        with ESMTP id S229514AbhLKGqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 01:40:06 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CF7C061714;
-        Fri, 10 Dec 2021 22:40:05 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so9287726pjb.1;
-        Fri, 10 Dec 2021 22:40:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YOmWgj2DxdohruN6t1jhLzVebqIDyQ6/9OEYQxNzBg0=;
-        b=avF8g6XTx8SXtkscJO5GafrYodx7aduWYE3dYkSVMyLazEekKe1vVFk1AcFgyRBi6D
-         KLtMP+qE/Amw1XwaQT/yoZ7FOpLwpBIsjgKmZHipCkgkLFNTE6AqlpV1aH5qy7E7MmSl
-         Qm6JgY75X1B3qkf/H2k7QvWLl8G9yHb61vg4+ii+LxdBRZLuOVbmTGjafvriHmt9NNf2
-         C2Gdtyfny7jByIehwd+AyV30ha9OKEIw3yPh05v5AvFtaFqno5FojQ8vmgGFIAbxiGEE
-         h9szKpnk6ljwBnYCjFwml3+o+AVuPYrMIgmExUuBfP4zdOzo4zP83bUHVEc1hawnKN1j
-         56yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YOmWgj2DxdohruN6t1jhLzVebqIDyQ6/9OEYQxNzBg0=;
-        b=TMVBGicERsFuIKKy+F9Yu02a1zdhH5P1TCU8I0jOAhavTMQpYxO/EDws4oM+iv+Hwk
-         AJaLAsBmWYOkhR8jIxAWffEXa7UkDb+paYGSrLck2KHwC3Rykn2r8zOJODe6IvW/WK84
-         d9QE5Di+e4J/XsUnDKch9ZGiG6CRCerfFe/OPmXYuEWTRTMoiZ8PUh0zKn8Nq785AtjF
-         XsMwzG6NR1yC236ab1znuusAA5T6GG4H+nWYE9abRtuiqfZmZz599+HIRk+OcBXglhbC
-         yzTTldzORhwZsBviYDWOEVpOU/8jhlLFnv60AmHsrgasDxFyk+9C/ioKTSIr+Reh7AMs
-         Ov7Q==
-X-Gm-Message-State: AOAM533LrE/gW5/FbmOOKEAvn9Um+xwfN1ZuZebJ6tKN+dw99tkqcoM8
-        caw9zWviJuO74igYWgeKSSI=
-X-Google-Smtp-Source: ABdhPJyBEqkEghuO8KOI7906KYxsqu3siKTh85eWa5YxoDkG4ZEkClWkFiRCnC3BaaN4x8agFkpY0w==
-X-Received: by 2002:a17:90b:1b45:: with SMTP id nv5mr29250796pjb.120.1639204805586;
-        Fri, 10 Dec 2021 22:40:05 -0800 (PST)
-Received: from vultr.guest ([45.76.74.237])
-        by smtp.gmail.com with ESMTPSA id mr2sm869638pjb.25.2021.12.10.22.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 22:40:05 -0800 (PST)
-From:   Yafang Shao <laoar.shao@gmail.com>
-To:     akpm@linux-foundation.org, rostedt@goodmis.org,
-        keescook@chromium.org, pmladek@suse.com, david@redhat.com,
-        arnaldo.melo@gmail.com, andrii.nakryiko@gmail.com,
-        alexei.starovoitov@gmail.com
-Cc:     linux-mm@kvack.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH -mm v2 3/3] tools/perf: replace old hard-coded 16 with TASK_COMM_LEN_16
-Date:   Sat, 11 Dec 2021 06:39:49 +0000
-Message-Id: <20211211063949.49533-4-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211211063949.49533-1-laoar.shao@gmail.com>
-References: <20211211063949.49533-1-laoar.shao@gmail.com>
+        Sat, 11 Dec 2021 01:46:16 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B9EC061714;
+        Fri, 10 Dec 2021 22:46:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=m/bupCjck7SxJ1A7FuvUBMcV3+Q621Kz/I2dJt2yOgQ=; b=IqdHkG0K6whIhKqFjDtE0wtmRi
+        1FfmsLyX3yzBHgD0npJ3Thipx2HYM9BqEywbgwo0ecZw5jLPcJ0wS9B+UoX/r3PrnllSwAN3ZQkfn
+        c+RmJ7sG40Ye2FexCw1xztW4WWQHIuMAu6aMw2naeqbLBj+bZLSjsXogCg0e3sbxM/sOnEWA1ax0O
+        PCXl7RVmryoSG2tblidqJOQM44+SYqHEuIKvZF31AiSqDL2QQ0AvulduLiop/FbRGV+A0VyoovWxE
+        SZz7+CGMClfM2fNqk+FZVvGgv+ax+Oo1mQHHxg2PEd8OxCjsG5R92Qu3OghSozRtcz3lhZlxYMI9c
+        3LhiNBWA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvw98-004duM-Q4; Sat, 11 Dec 2021 06:46:14 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH] remoteproc: qcom: q6v5: make symbols modular when QCOM_AOSS_QMP=m
+Date:   Fri, 10 Dec 2021 22:46:14 -0800
+Message-Id: <20211211064614.1315-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-evsel-tp-sched will verify the task comm len in sched:sched_switch
-and sched:sched_wakeup tracepoints. In order to make it grepable, we'd
-better replace the hard-coded 16 with TASK_COMM_LEN_16.
+When CONFIG_QCOM_Q6V5_COMMON=y and CONFIG_QCOM_AOSS_QMP=m,
+there are linker errors:
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Petr Mladek <pmladek@suse.com>
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `q6v5_load_state_toggle':
+qcom_q6v5.c:(.text+0xac): undefined reference to `qmp_send'
+qcom_q6v5.c:(.text+0xac): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `qmp_send'
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `qcom_q6v5_deinit':
+(.text+0x204): undefined reference to `qmp_put'
+(.text+0x204): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `qmp_put'
+
+Fix these by requiring QCOM_Q6V5 symbols to be modular (=m) when
+QCOM_AOSS_QMP=m.
+
+Fixes: c1fe10d238c0 ("remoteproc: qcom: q6v5: Use qmp_send to update co-processor load state")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Sibi Sankar <sibis@codeaurora.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Ohad Ben-Cohen <ohad@wizery.com>
+Cc: linux-remoteproc@vger.kernel.org
 ---
- tools/perf/tests/evsel-tp-sched.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/remoteproc/Kconfig |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/perf/tests/evsel-tp-sched.c b/tools/perf/tests/evsel-tp-sched.c
-index cf4da3d748c2..8be44b8e2b9c 100644
---- a/tools/perf/tests/evsel-tp-sched.c
-+++ b/tools/perf/tests/evsel-tp-sched.c
-@@ -5,6 +5,8 @@
- #include "tests.h"
- #include "debug.h"
- 
-+#define TASK_COMM_LEN_16 16
-+
- static int evsel__test_field(struct evsel *evsel, const char *name, int size, bool should_be_signed)
- {
- 	struct tep_format_field *field = evsel__field(evsel, name);
-@@ -43,7 +45,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
- 		return -1;
- 	}
- 
--	if (evsel__test_field(evsel, "prev_comm", 16, false))
-+	if (evsel__test_field(evsel, "prev_comm", TASK_COMM_LEN_16, false))
- 		ret = -1;
- 
- 	if (evsel__test_field(evsel, "prev_pid", 4, true))
-@@ -55,7 +57,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
- 	if (evsel__test_field(evsel, "prev_state", sizeof(long), true))
- 		ret = -1;
- 
--	if (evsel__test_field(evsel, "next_comm", 16, false))
-+	if (evsel__test_field(evsel, "next_comm", TASK_COMM_LEN_16, false))
- 		ret = -1;
- 
- 	if (evsel__test_field(evsel, "next_pid", 4, true))
-@@ -73,7 +75,7 @@ static int test__perf_evsel__tp_sched_test(struct test_suite *test __maybe_unuse
- 		return -1;
- 	}
- 
--	if (evsel__test_field(evsel, "comm", 16, false))
-+	if (evsel__test_field(evsel, "comm", TASK_COMM_LEN_16, false))
- 		ret = -1;
- 
- 	if (evsel__test_field(evsel, "pid", 4, true))
--- 
-2.17.1
-
+--- next-2021-1210.orig/drivers/remoteproc/Kconfig
++++ next-2021-1210/drivers/remoteproc/Kconfig
+@@ -176,6 +176,7 @@ config QCOM_Q6V5_ADSP
+ 	tristate "Qualcomm Technology Inc ADSP Peripheral Image Loader"
+ 	depends on OF && ARCH_QCOM
+ 	depends on QCOM_SMEM
++	depends on QCOM_AOSS_QMP
+ 	depends on RPMSG_QCOM_SMD || RPMSG_QCOM_SMD=n
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+@@ -195,6 +196,7 @@ config QCOM_Q6V5_MSS
+ 	tristate "Qualcomm Hexagon V5 self-authenticating modem subsystem support"
+ 	depends on OF && ARCH_QCOM
+ 	depends on QCOM_SMEM
++	depends on QCOM_AOSS_QMP
+ 	depends on RPMSG_QCOM_SMD || RPMSG_QCOM_SMD=n
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+@@ -214,6 +216,7 @@ config QCOM_Q6V5_PAS
+ 	tristate "Qualcomm Hexagon v5 Peripheral Authentication Service support"
+ 	depends on OF && ARCH_QCOM
+ 	depends on QCOM_SMEM
++	depends on QCOM_AOSS_QMP
+ 	depends on RPMSG_QCOM_SMD || RPMSG_QCOM_SMD=n
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+@@ -235,6 +238,7 @@ config QCOM_Q6V5_WCSS
+ 	tristate "Qualcomm Hexagon based WCSS Peripheral Image Loader"
+ 	depends on OF && ARCH_QCOM
+ 	depends on QCOM_SMEM
++	depends on QCOM_AOSS_QMP
+ 	depends on RPMSG_QCOM_SMD || RPMSG_QCOM_SMD=n
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n

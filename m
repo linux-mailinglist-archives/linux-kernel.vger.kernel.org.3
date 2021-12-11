@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA25471419
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 15:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B16471421
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 15:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbhLKOCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 09:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbhLKOB7 (ORCPT
+        id S231194AbhLKOFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 09:05:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25239 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231185AbhLKOFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 09:01:59 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A16C061751;
-        Sat, 11 Dec 2021 06:01:59 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id p18so8078868plf.13;
-        Sat, 11 Dec 2021 06:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=S5lEl/YZSPTyWLii/zQHYRrSecSEgRYfMX2KEJm8EXo=;
-        b=j0eBAXIEJjZMgY2m6PKFGmXDQpx/ndamysZeKIyHORkjeckxqs8zh/KigRizogD5Ea
-         jMbdzgs1mJ995Oph+K4RkZA0w8AA0s06ZyXTXuR1ouhBVxc/dWanyox/hF83vFCqyzzk
-         MflofwTgEn65x04EamT4xaBAP5VCCJVBj25U5772I8QAeUwMb4Zf8SRQXCPnVRYeI2Uf
-         yqDmFdHKizpqFvlxmXpeY5aR7uWXSn0Up3VA0VdZYPEbURe3n8dM9bMQ7duO1LPkjUHJ
-         j2kxGgXyTtyVrSRIHs27umZwnZ1x+JrUp3t4W+BY3vJ4SUC5qTnMcPs3nTiD7+XYVEJV
-         3x8w==
+        Sat, 11 Dec 2021 09:05:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639231519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AKf/L2gDTAfMvTP+/UBDkgpyq8OohMS2d9tzBGN6AKo=;
+        b=OHBGDrcsex39q4SYsAnRIWWReCH5v3U/ANraaSYMxtX40KJuPgdNNIBq+sFXaPweFmVwfJ
+        8dY2Sj8T1pmqB0+/0HiSI01L76nbPMsWQL31eST9/l6egdHM9DeeRGK4GxaavcbJp79R/2
+        f1eg/sVJmG62MaJ+9KsIN05S+SBx5v0=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-343-U5YVaFB0Op6q39PFTj7x4g-1; Sat, 11 Dec 2021 09:05:17 -0500
+X-MC-Unique: U5YVaFB0Op6q39PFTj7x4g-1
+Received: by mail-oi1-f199.google.com with SMTP id k124-20020acaba82000000b002a7401b177cso8083069oif.8
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 06:05:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=S5lEl/YZSPTyWLii/zQHYRrSecSEgRYfMX2KEJm8EXo=;
-        b=NAIfUy7TslXYzbQ3f8m0XutT1enQVYYWQ85J12tIPiF6OsgkTqsOs7FWDigIC31uyF
-         B2C+MVdDhpN0ZbqNStwXoF7nnCVik+9THfjCBaR46IHQnBP2Q6bycpuWuMSkwllIswGE
-         Q2vOBcjQi/K+0kWnRZpsrdaybekeH36cTHwVVIM912FI/bBz6UPz1If/6C6u8gIkVnMq
-         5vqJJVQMSZ9vZR5/YOYY5KexZQqTi3V70lHpgRzPwxL/FI93ZpGpShFNVa7L92XaCEV6
-         oEz4cK+qZVf/2sE12vY72iWqyXS7bbbeDTJR4zkgSzrRu+kz2b/Auk5OmvCq2ObW/jAQ
-         VhvA==
-X-Gm-Message-State: AOAM530zDHOHIN3BsibYfsoSE3k1CedbJ4R3J78xrNeQGIHUPsscwpa6
-        C4Zz4SL+owmOLaMcwBpv+F49DDTQ33t9yTiwRC8=
-X-Google-Smtp-Source: ABdhPJxzZSB8zHDw5dgrQjJ1qJb2q0iYsPRCp6yvjgQqRwxdX8x3hkAi2BT8KQcOh7bVSulj4a3BHQ==
-X-Received: by 2002:a17:902:e852:b0:143:8152:26c7 with SMTP id t18-20020a170902e85200b00143815226c7mr83257431plg.75.1639231318939;
-        Sat, 11 Dec 2021 06:01:58 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id s15sm2112048pjs.51.2021.12.11.06.01.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 06:01:58 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=AKf/L2gDTAfMvTP+/UBDkgpyq8OohMS2d9tzBGN6AKo=;
+        b=49m1I68Emi91anEsPzMx7ezwhLgX0jocS2+WmespV5XaKBiM7Yy3Lnidrd+PqbmKWD
+         LBxIWU4TlBuyNXnSgJB9YvpnfFiOTK9tpypue8sotwWiEG5WCZkqm2MWRr1pe+qQ1Daz
+         /DT6UVrQWxxx03Wu0pgLKnJgTj/48Msl9zvbVcPPLjIm5hsWNrY3Ob62MqmNDWaWOz0M
+         hvbQXCt4fzUZjUeuf68jtyvCvyuQfJQ752Rlirx/ImkKwaR2cS6o6tOmlBZqRhaS+y9M
+         hJDLKhvia2wkHP+PrnT0/iq3J0PQB46fNw/IbZvcRHrItPw5bMvUE6yuSKByEWX+gHD9
+         38Zg==
+X-Gm-Message-State: AOAM5326CJi14Vzjfj8MMEBGaeobZPQvf7thmMdVb4P4oJzmTg0bo3BS
+        ImPo1s2xCjmtCogKVk4ZXjP3JxgoAS9SxftB43AspWci7ATADSX8WPHQh1FMRZ6dHGXmkxjgf5I
+        nVs3ZlEqy0LX9blBZMfaXh7dYi5fcPoTRLd8vUpWQEtWtP28b6RWalIEiFCZ0A3UhrON7OGo=
+X-Received: by 2002:a05:6830:439f:: with SMTP id s31mr15827688otv.272.1639231516847;
+        Sat, 11 Dec 2021 06:05:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzuSXd4gwU+8NKkxyrWrzi0Hmq4atZk5+FQbBVaF/rv+mAOEkuPJ2yob/NojBdQUz2546xwCA==
+X-Received: by 2002:a05:6830:439f:: with SMTP id s31mr15827658otv.272.1639231516486;
+        Sat, 11 Dec 2021 06:05:16 -0800 (PST)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id bj8sm1531957oib.51.2021.12.11.06.05.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Dec 2021 06:05:15 -0800 (PST)
+Subject: Re: [PATCH] fpga: stratix10-soc: fix NULL vs IS_ERR() checking
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] net: bcmgenet: Fix NULL vs IS_ERR() checking
-Date:   Sat, 11 Dec 2021 14:01:53 +0000
-Message-Id: <20211211140154.23613-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+References: <20211211134332.21679-1-linmq006@gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <b1186cd9-c29c-397b-080b-dcfc6b02525f@redhat.com>
+Date:   Sat, 11 Dec 2021 06:05:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20211211134332.21679-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The phy_attach() function does not return NULL. It returns error pointers.
 
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/net/ethernet/broadcom/genet/bcmmii.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 12/11/21 5:43 AM, Miaoqian Lin wrote:
+> The stratix10_svc_allocate_memory function does not return NULL. It
+> returns ERR_PTR(-ENOMEM). Use IS_ERR check the return value.
+>
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>   drivers/fpga/stratix10-soc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+> index 047fd7f23706..2d2687a90ae6 100644
+> --- a/drivers/fpga/stratix10-soc.c
+> +++ b/drivers/fpga/stratix10-soc.c
+> @@ -213,7 +213,7 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
+>   	/* Allocate buffers from the service layer's pool. */
+>   	for (i = 0; i < NUM_SVC_BUFS; i++) {
+>   		kbuf = stratix10_svc_allocate_memory(priv->chan, SVC_BUF_SIZE);
+> -		if (!kbuf) {
+> +		if (IS_ERR(kbuf)) {
+>   			s10_free_buffers(mgr);
+>   			ret = -ENOMEM;
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmmii.c b/drivers/net/ethernet/broadcom/genet/bcmmii.c
-index 5f259641437a..c888ddee1fc4 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmmii.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmmii.c
-@@ -589,9 +589,9 @@ static int bcmgenet_mii_pd_init(struct bcmgenet_priv *priv)
- 		 * Internal or external PHY with MDIO access
- 		 */
- 		phydev = phy_attach(priv->dev, phy_name, pd->phy_interface);
--		if (!phydev) {
-+		if (IS_ERR(phydev)) {
- 			dev_err(kdev, "failed to register PHY device\n");
--			return -ENODEV;
-+			return PTR_ERR(phydev);
- 		}
- 	} else {
- 		/*
--- 
-2.17.1
+This should also change to
+
+ret = PTR_ERR(kbuf)
+
+Tom
+
+>   			goto init_done;
 

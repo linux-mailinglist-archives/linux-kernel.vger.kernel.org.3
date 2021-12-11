@@ -2,161 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36DE470F45
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D75A470F4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345396AbhLKAPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 19:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345384AbhLKAO7 (ORCPT
+        id S1345408AbhLKAPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 19:15:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53009 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243843AbhLKAPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 19:14:59 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11EDC061714
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Z950PYmZjozMauJWN95yjblekf6k1s+LeUA7vpTPbc0=; b=cdPbHzLTwvUCCPaOeax3hPYx1c
-        +Ig+IovKOkTwfcaAfJMZ10de+GbZKM7O0Vpyi53tAGd/fB83cMhL5I/aHGkzk4fEGxb1A2SgyfUu6
-        gEyA6q57aa1edzbjDb2f5iB+35LJjiatoUDbe/8WYgfcvX1GmC+z/Eb7LnoaqZqITlDqlyex8zcHj
-        HU7TuJ27Ja5Us4cXDJDASqtuClY49CaFdSMbwAlwrcuR2z4VjRhtApwRTolyESBfTLUIUCtZRkvUz
-        FIKxCP/8f5xc9en++OuhbiZWRUaGviHJYRrwQZbV588H0kqWNZcVGyaqRDffWw95mGmcf+WKTTSc+
-        ZJ+qNegw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvpyz-004LBK-Mg; Sat, 11 Dec 2021 00:11:21 +0000
-Date:   Fri, 10 Dec 2021 16:11:21 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jessica Yu <jeyu@kernel.org>, Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] module: add in-kernel support for decompressing
-Message-ID: <YbPsqR5ZyiFwJul3@bombadil.infradead.org>
-References: <YbLvDWdyFivlj7pP@google.com>
+        Fri, 10 Dec 2021 19:15:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639181523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TCfiwijmHPHIc3kkqrixLwmjXk/TcaGMQGB9RrBMHuM=;
+        b=TVycKyc3mthpQDSbt87g+bHB8AJ/VHivM4plw4WuXQ7jNlrOZuqjYo0k+HoGolbqr0H1NB
+        y4whx1Ywwy1iggHJ39OPwFW7RT7ppioUUPnorwyHCkkGDaCp0+kHwaLBa7VX86RyLLGu+u
+        F+YaPZQqS7QMBzYGvw9IXh9tr+eW5iQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-502-pptP4O6rN_akHlfsM_qniw-1; Fri, 10 Dec 2021 19:12:00 -0500
+X-MC-Unique: pptP4O6rN_akHlfsM_qniw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2703D80BCA8;
+        Sat, 11 Dec 2021 00:11:59 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 81D187AB43;
+        Sat, 11 Dec 2021 00:11:58 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     laijs@linux.alibaba.com, David Matlack <dmatlack@google.com>
+Subject: [PATCH] Revert "KVM: VMX: Save HOST_CR3 in vmx_prepare_switch_to_guest()"
+Date:   Fri, 10 Dec 2021 19:11:56 -0500
+Message-Id: <20211211001157.74709-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbLvDWdyFivlj7pP@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:09:17PM -0800, Dmitry Torokhov wrote:
-> diff --git a/init/Kconfig b/init/Kconfig
-> index cd23faa163d1..d90774ff7610 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -2305,6 +2305,19 @@ config MODULE_COMPRESS_ZSTD
->  
->  endchoice
->  
-> +config MODULE_DECOMPRESS
-> +	bool "Support in-kernel module decompression"
-> +	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
-> +	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
-> +	select XZ_DEC if MODULE_COMPRESS_XZ
+This reverts commit 15ad9762d69fd8e40a4a51828c1d6b0c1b8fbea0.
 
-What if MODULE_COMPRESS_GZIP and MODULE_COMPRESS_XZ are enabled?
-These are not mutually exclusive.
+David Matlack reports:
 
-> +	help
-> +
-> +	  Support for decompressing kernel modules by the kernel itself
-> +	  instead of relying on userspace to perform this task. Useful when
-> +	  load pinning security policy is enabled.
+"While testing some patches I ran into a VM_BUG_ON that I have been able to
+reproduce at kvm/queue commit 45af1bb99b72 ("KVM: VMX: Clean up PI
+pre/post-block WARNs").
 
-Shouldn't kernel decompression be faster too? If so, what's the
-point of doing it in userspace?
+To repro run the kvm-unit-tests on a kernel built from kvm/queue with
+CONFIG_DEBUG_VM=y. I was testing on an Intel Cascade Lake host and have not
+tested in any other environments yet. The repro is not 100% reliable, although
+it's fairly easy to trigger and always during a vmx* kvm-unit-tests
 
-> diff --git a/kernel/module_decompress.c b/kernel/module_decompress.c
-> new file mode 100644
-> index 000000000000..590ca00aa098
-> --- /dev/null
-> +++ b/kernel/module_decompress.c
-> @@ -0,0 +1,271 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright 2021 Google LLC.
-> + */
-> +
-> +#include <linux/init.h>
-> +#include <linux/highmem.h>
-> +#include <linux/kobject.h>
-> +#include <linux/mm.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/vmalloc.h>
-> +
-> +#include "module-internal.h"
-> +
-> +static int module_extend_max_pages(struct load_info *info, unsigned int extent)
-> +{
-> +	struct page **new_pages;
-> +
-> +	new_pages = kvmalloc_array(info->max_pages + extent,
-> +				   sizeof(info->pages), GFP_KERNEL);
-> +	if (!new_pages)
-> +		return -ENOMEM;
-> +
-> +	memcpy(new_pages, info->pages, info->max_pages * sizeof(info->pages));
-> +	kvfree(info->pages);
-> +	info->pages = new_pages;
-> +	info->max_pages += extent;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct page *module_get_next_page(struct load_info *info)
-> +{
-> +	struct page *page;
-> +	int error;
-> +
-> +	if (info->max_pages == info->used_pages) {
-> +		error = module_extend_max_pages(info, info->used_pages);
-> +		if (error)
-> +			return ERR_PTR(error);
-> +	}
-> +
-> +	page = alloc_page(GFP_KERNEL | __GFP_HIGHMEM);
-> +	if (!page)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	info->pages[info->used_pages++] = page;
-> +	return page;
-> +}
-> +
-> +#ifdef CONFIG_MODULE_COMPRESS_GZIP
-> +#include <linux/zlib.h>
-> +#define MODULE_COMPRESSION	gzip
-> +#define MODULE_DECOMPRESS_FN	module_gzip_decompress
+Given the details of the crash, commit 15ad9762d69f ("KVM: VMX: Save HOST_CR3
+in vmx_prepare_switch_to_guest()") and surrounding commits look most suspect."
 
-So gzip is assumed if your kernel has both gzip and xz. That seems odd.
+Reported-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+	Not tested yet.  I did reproduce the WARN with debug kernels though.
+---
+ arch/x86/kvm/vmx/nested.c |  8 +++++++-
+ arch/x86/kvm/vmx/vmx.c    | 17 +++++++----------
+ 2 files changed, 14 insertions(+), 11 deletions(-)
 
-<-- snip -->
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 2f6f465e575f..26b236187850 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -3054,7 +3054,7 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
+ static int nested_vmx_check_vmentry_hw(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+-	unsigned long cr4;
++	unsigned long cr3, cr4;
+ 	bool vm_fail;
+ 
+ 	if (!nested_early_check)
+@@ -3077,6 +3077,12 @@ static int nested_vmx_check_vmentry_hw(struct kvm_vcpu *vcpu)
+ 	 */
+ 	vmcs_writel(GUEST_RFLAGS, 0);
+ 
++	cr3 = __get_current_cr3_fast();
++	if (unlikely(cr3 != vmx->loaded_vmcs->host_state.cr3)) {
++		vmcs_writel(HOST_CR3, cr3);
++		vmx->loaded_vmcs->host_state.cr3 = cr3;
++	}
++
+ 	cr4 = cr4_read_shadow();
+ 	if (unlikely(cr4 != vmx->loaded_vmcs->host_state.cr4)) {
+ 		vmcs_writel(HOST_CR4, cr4);
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 640f4719612c..7826556b2a47 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1103,7 +1103,6 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+ #ifdef CONFIG_X86_64
+ 	int cpu = raw_smp_processor_id();
+ #endif
+-	unsigned long cr3;
+ 	unsigned long fs_base, gs_base;
+ 	u16 fs_sel, gs_sel;
+ 	int i;
+@@ -1168,14 +1167,6 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+ #endif
+ 
+ 	vmx_set_host_fs_gs(host_state, fs_sel, gs_sel, fs_base, gs_base);
+-
+-	/* Host CR3 including its PCID is stable when guest state is loaded. */
+-	cr3 = __get_current_cr3_fast();
+-	if (unlikely(cr3 != host_state->cr3)) {
+-		vmcs_writel(HOST_CR3, cr3);
+-		host_state->cr3 = cr3;
+-	}
+-
+ 	vmx->guest_state_loaded = true;
+ }
+ 
+@@ -6638,7 +6629,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+-	unsigned long cr4;
++	unsigned long cr3, cr4;
+ 
+ 	/* Record the guest's net vcpu time for enforced NMI injections. */
+ 	if (unlikely(!enable_vnmi &&
+@@ -6683,6 +6674,12 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+ 		vmcs_writel(GUEST_RIP, vcpu->arch.regs[VCPU_REGS_RIP]);
+ 	vcpu->arch.regs_dirty = 0;
+ 
++	cr3 = __get_current_cr3_fast();
++	if (unlikely(cr3 != vmx->loaded_vmcs->host_state.cr3)) {
++		vmcs_writel(HOST_CR3, cr3);
++		vmx->loaded_vmcs->host_state.cr3 = cr3;
++	}
++
+ 	cr4 = cr4_read_shadow();
+ 	if (unlikely(cr4 != vmx->loaded_vmcs->host_state.cr4)) {
+ 		vmcs_writel(HOST_CR4, cr4);
+-- 
+2.31.1
 
-> +#elif CONFIG_MODULE_COMPRESS_XZ
-> +#include <linux/xz.h>
-> +#define MODULE_COMPRESSION	xz
-> +#define MODULE_DECOMPRESS_FN	module_xz_decompress
-> +#else
-
-<-- snip -->
-
-> +#error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
-
-Using "depends on" logic on the kconfig symbol would resolve this and
-make this not needed.
-
-Why can't we just inspect the module and determine? Or, why not just add
-a new kconfig symbol under MODULE_DECOMPRESS which lets you specify the
-MODULE_COMPRESSION_TYPE. This way this is explicit.
-
-> +module_init(module_decompress_sysfs_init);
-
-This seems odd, altough it works, can you use late_initcall instead()?
-
-  Luis

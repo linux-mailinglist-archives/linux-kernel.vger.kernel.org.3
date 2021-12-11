@@ -2,155 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE68F4714CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 17:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 112A44714D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 17:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbhLKQvm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 11 Dec 2021 11:51:42 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28311 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbhLKQvl (ORCPT
+        id S231494AbhLKQzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 11:55:13 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:19753 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230329AbhLKQzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 11:51:41 -0500
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JBDLh3l7XzcpMj;
-        Sun, 12 Dec 2021 00:51:24 +0800 (CST)
-Received: from dggpemm500003.china.huawei.com (7.185.36.56) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 12 Dec 2021 00:51:39 +0800
-Received: from dggpemm500003.china.huawei.com ([7.185.36.56]) by
- dggpemm500003.china.huawei.com ([7.185.36.56]) with mapi id 15.01.2308.020;
- Sun, 12 Dec 2021 00:51:39 +0800
-From:   "miaoxie (A)" <miaoxie@huawei.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: [PATCH] pipe: Fix endless sleep problem due to the out-of-order
-Thread-Topic: [PATCH] pipe: Fix endless sleep problem due to the out-of-order
-Thread-Index: AdfurjGw4gOQnK4ySKaGWPpzRyQ7Eg==
-Date:   Sat, 11 Dec 2021 16:51:39 +0000
-Message-ID: <31566e37493540ada2dda862fe8fb32b@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.178.227]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sat, 11 Dec 2021 11:55:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639241713; x=1670777713;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=wchISsOEFSv6Ol6CYQ0EaOyLO0V1xkmknzcqVarbNVQ=;
+  b=NnClYQ/XDPYXCx/Aw3HUJk2Yg3GrPk2gfaXJFG8s3PUJGgFS4zDg64gG
+   eiAOuAc/FX1pYSrHHRLUr3FVZxBMrqRRo93dc6zVWRvkZI80JRqXlnnPA
+   x9G0k9sGlGIu4zLsu7WmEgszdUIHi9+gUmnzSY6cj0fVoCBlAm/U+ukQZ
+   k=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Dec 2021 08:55:12 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 08:55:12 -0800
+Received: from localhost (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sat, 11 Dec
+ 2021 08:55:11 -0800
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+To:     <paulmck@kernel.org>, <frederic@kernel.org>, <dwmw@amazon.co.uk>,
+        <josh@joshtriplett.org>, <rostedt@goodmis.org>,
+        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
+        <joel@joelfernandes.org>
+CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <urezki@gmail.com>, <boqun.feng@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Subject: [PATCH] rcu/nocb: Handle concurrent nocb kthreads creation
+Date:   Sat, 11 Dec 2021 22:25:01 +0530
+Message-ID: <20211211165501.19395-1-quic_neeraju@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thers is a out-of-order access problem which would cause endless sleep
-when we use pipe with epoll.
+When multiple CPUs in the same nocb gp/cb group concurrently
+come online, they might try to concurrently create the same
+rcuog kthread. Fix this by using nocb gp CPU's spawn mutex to
+provide mutual exclusion for the rcuog kthread creation code.
 
-The story is following, we assume the ring size is 2, the ring head
-is 1, the ring tail is 0, task0 is write task, task1 is read task,
-task2 is write task.
-Task0					Task1		Task2
-epoll_ctl(fd, EPOLL_CTL_ADD, ...)
-  pipe_poll()
-    poll_wait()
-    tail = READ_ONCE(pipe->tail);
-    	// Re-order and get tail=0
-				  	pipe_read
-					tail++ //tail=1
-							pipe_write
-							head++ //head=2
-    head = READ_ONCE(pipe->head);
-    	// head = 2
-    check ring is full by head - tail
-Task0 get head = 2 and tail = 0, so it mistake that the pipe ring is
-full, then task0 is not add into ready list. If the ring is not full
-anymore, task0 would not be woken up forever
-
-The reason of this problem is that we got inconsistent head/tail value
-of the pipe ring, so we fix the problem by getting them by atomic.
-
-It seems that pipe_readable and pipe_writable is safe, so we don't
-change them.
-
-Signed-off-by: Miao Xie <miaoxie@huawei.com>
+Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 ---
- fs/pipe.c                 |  6 ++++--
- include/linux/pipe_fs_i.h | 32 ++++++++++++++++++++++++++++++--
- 2 files changed, 34 insertions(+), 4 deletions(-)
+ kernel/rcu/tree.h      | 2 ++
+ kernel/rcu/tree_nocb.h | 3 +++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 6d4342bad9f1..454056b1eaad 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -649,6 +649,7 @@ pipe_poll(struct file *filp, poll_table *wait)
- 	__poll_t mask;
- 	struct pipe_inode_info *pipe = filp->private_data;
- 	unsigned int head, tail;
-+	u64 ring_idxs;
+diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+index 4b889081f4f4..9815b7844e58 100644
+--- a/kernel/rcu/tree.h
++++ b/kernel/rcu/tree.h
+@@ -204,6 +204,8 @@ struct rcu_data {
+ 	int nocb_defer_wakeup;		/* Defer wakeup of nocb_kthread. */
+ 	struct timer_list nocb_timer;	/* Enforce finite deferral. */
+ 	unsigned long nocb_gp_adv_time;	/* Last call_rcu() CB adv (jiffies). */
++	struct mutex nocb_gp_kthread_mutex; /* Exclusion for nocb gp kthread */
++					    /* spawning */
  
- 	/* Epoll has some historical nasty semantics, this enables them */
- 	pipe->poll_usage = 1;
-@@ -669,8 +670,9 @@ pipe_poll(struct file *filp, poll_table *wait)
- 	 * if something changes and you got it wrong, the poll
- 	 * table entry will wake you up and fix it.
- 	 */
--	head = READ_ONCE(pipe->head);
--	tail = READ_ONCE(pipe->tail);
-+	ring_idxs = (u64)atomic64_read(&pipe->ring_idxs);
-+	head = pipe_get_ring_head(ring_idxs);
-+	tail = pipe_get_ring_tail(ring_idxs);
+ 	/* The following fields are used by call_rcu, hence own cacheline. */
+ 	raw_spinlock_t nocb_bypass_lock ____cacheline_internodealigned_in_smp;
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index eeafb546a7a0..4f67e7d026b6 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1226,6 +1226,7 @@ static void __init rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp)
+ 	raw_spin_lock_init(&rdp->nocb_gp_lock);
+ 	timer_setup(&rdp->nocb_timer, do_nocb_deferred_wakeup_timer, 0);
+ 	rcu_cblist_init(&rdp->nocb_bypass);
++	mutex_init(&rdp->nocb_gp_kthread_mutex);
+ }
  
- 	mask = 0;
- 	if (filp->f_mode & FMODE_READ) {
-diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
-index fc5642431b92..9a7cb8077dc8 100644
---- a/include/linux/pipe_fs_i.h
-+++ b/include/linux/pipe_fs_i.h
-@@ -58,8 +58,18 @@ struct pipe_buffer {
- struct pipe_inode_info {
- 	struct mutex mutex;
- 	wait_queue_head_t rd_wait, wr_wait;
--	unsigned int head;
--	unsigned int tail;
-+	union {
-+		/*
-+		 * If someone want to change this structure, you should also
-+		 * change the macro *PIPE_GET_DOORBELL* that is used to
-+		 * generate the ring head/tail access function.
-+		 */
-+		struct {
-+			unsigned int head;
-+			unsigned int tail;
-+		};
-+		atomic64_t ring_idxs;
-+	};
- 	unsigned int max_usage;
- 	unsigned int ring_size;
- #ifdef CONFIG_WATCH_QUEUE
-@@ -82,6 +92,24 @@ struct pipe_inode_info {
- #endif
- };
- 
-+#define PIPE_GET_DOORBELL(bellname)					\
-+static inline unsigned int pipe_get_ring_##bellname(u64 ring_idxs)	\
-+{									\
-+	unsigned int doorbell;						\
-+	unsigned char *ptr = ((char *)&ring_idxs);			\
-+	int offset;							\
-+									\
-+	offset = (int)offsetof(struct pipe_inode_info, bellname);	\
-+	offset -= (int)offsetof(struct pipe_inode_info, ring_idxs);	\
-+	ptr += offset;							\
-+	doorbell = *((unsigned int *)ptr);				\
-+									\
-+	return doorbell;						\
-+}
-+
-+PIPE_GET_DOORBELL(head)
-+PIPE_GET_DOORBELL(tail)
-+
  /*
-  * Note on the nesting of these functions:
-  *
+@@ -1248,6 +1249,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 
+ 	/* If we didn't spawn the GP kthread first, reorganize! */
+ 	rdp_gp = rdp->nocb_gp_rdp;
++	mutex_lock(&rdp_gp->nocb_gp_kthread_mutex);
+ 	if (!rdp_gp->nocb_gp_kthread) {
+ 		t = kthread_run(rcu_nocb_gp_kthread, rdp_gp,
+ 				"rcuog/%d", rdp_gp->cpu);
+@@ -1255,6 +1257,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 			return;
+ 		WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
+ 	}
++	 mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+ 
+ 	/* Spawn the kthread for this CPU. */
+ 	t = kthread_run(rcu_nocb_cb_kthread, rdp,
 -- 
-2.31.1
+2.17.1
+

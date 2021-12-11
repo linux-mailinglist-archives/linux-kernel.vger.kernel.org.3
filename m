@@ -2,410 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF88947113F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 04:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D1047114D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 04:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345803AbhLKDhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 22:37:04 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:37182 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244514AbhLKDg6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 22:36:58 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax+sj1G7RhlA0GAA--.13327S4;
-        Sat, 11 Dec 2021 11:33:10 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v2 2/2] kdump: crashdump: use copy_to_user_or_kernel() to simplify code
-Date:   Sat, 11 Dec 2021 11:33:08 +0800
-Message-Id: <1639193588-7027-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Ax+sj1G7RhlA0GAA--.13327S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3uryUCF4DKFWkJr43tF1kKrg_yoWDKw1kpr
-        1kK39IyF4Sgas8GwnrtwnrWa48Ww1kG3W7t39Ika4rZ3Z2qFnFv3yDAasFg3yUtr90kFyS
-        yas5Krn0y3yUZw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPC14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7VUjknY5UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S244462AbhLKDov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 22:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237852AbhLKDou (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 22:44:50 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2E2C061751
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 19:41:14 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id t9so17987647wrx.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 19:41:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EO75poJK2xgDITlrG7RVKgMYEM37BaniCA9cW2F8IAE=;
+        b=UUDpGaZ4TlqJucB7PlMbEakgQYttvolbBk2bus1Xxo0uqDAkjBhl6iolgunNvqfE4U
+         3KMqZsunqRx3/AcboOFf5R27X31eWeINs/lCdD0CN8XoBYreShHbrLW7XS8g2GI4cW6a
+         /XIe8l8fwtz17Yzq3YFS59etRNEVvfce/S12CxewPjX9R7+NV+Mzwy55+yF8c43a8rHT
+         P+B+9Bq+1n6YJYgJCOEaFak1CQozKjbeQHcE6+Objr962V5BNP2bjfK+cKL0xHYt+iYf
+         8BZizLTYTR72actmkvGRv0lVG7Zz42wUizEILE+4S6d+kPg/YiunXbps391KW8V9kpk5
+         nupQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EO75poJK2xgDITlrG7RVKgMYEM37BaniCA9cW2F8IAE=;
+        b=tA9Bs7ja9Z0SBKDeeumGdpZB+mAQDue7QeTS8HJENFKmr82c6Wc5ydckjChydjbCnj
+         X9p4253cGQaei1HS7EL4mA7jBYp3NmBBMrZ8/kv8eKc3zNgonG/JFSr1oI3I8UNe6SPS
+         MFDh6n5caAZCDTgHvCzqY0Z9nEjCN6jukGKWjAY0q0Be+v/QsT7xlDxIzzc+qaKQtpAe
+         ZLnGBii2G39WajhYLisWBbdbSx6FrLiBKpMjFp5gIqJCHpKzo3RA3qdJPMS0dDrraS9r
+         RjO1S5spMTXKsh6IMSg29oHuoVZYsZmOU5nFZpq8RoyqVKu904U7quyASDPTb1mKXP2W
+         v6xw==
+X-Gm-Message-State: AOAM530zYTvbVxFPTi0ESwtzPt//RDOuqwCZj1KbbqMV8+W4/Z1VRJXf
+        92f7S8oSTDApH+OAAk6D9uoYqwk76HQRU8J1sDhkVw==
+X-Google-Smtp-Source: ABdhPJxU5WTGxoPImoqEQQ34iwc3zq+NMIe3iv94HfKYLahaxjZujpAul0sWWjXgr8vVvi8pSAKSsitBxMOpHCyl5ZY=
+X-Received: by 2002:adf:eb0f:: with SMTP id s15mr2303012wrn.690.1639194072549;
+ Fri, 10 Dec 2021 19:41:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20211129075451.418122-1-anup.patel@wdc.com>
+In-Reply-To: <20211129075451.418122-1-anup.patel@wdc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Sat, 11 Dec 2021 09:11:01 +0530
+Message-ID: <CAAhSdy3S5HAYh24mH7JpZKSnk4Vjrw2SJToAHaMjyegwiR4XXg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] KVM RISC-V 64-bit selftests support
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Anup Patel <anup.patel@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use copy_to_user_or_kernel() to simplify the related code about
-copy_oldmem_page() in arch/*/kernel/crash_dump*.c files.
+Hi Paolo,
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/arm/kernel/crash_dump.c     | 12 +++---------
- arch/arm64/kernel/crash_dump.c   | 12 +++---------
- arch/ia64/kernel/crash_dump.c    | 12 +++++-------
- arch/mips/kernel/crash_dump.c    | 11 +++--------
- arch/powerpc/kernel/crash_dump.c | 11 ++++-------
- arch/riscv/kernel/crash_dump.c   | 11 +++--------
- arch/sh/kernel/crash_dump.c      | 11 +++--------
- arch/x86/kernel/crash_dump_32.c  | 11 +++--------
- arch/x86/kernel/crash_dump_64.c  | 15 +++++----------
- fs/proc/vmcore.c                 |  4 ++--
- include/linux/crash_dump.h       |  8 ++++----
- 11 files changed, 38 insertions(+), 80 deletions(-)
+On Mon, Nov 29, 2021 at 1:40 PM Anup Patel <anup.patel@wdc.com> wrote:
+>
+> This series adds initial support for testing KVM RISC-V 64-bit using
+> kernel selftests framework. The PATCH1 & PATCH2 of this series does
+> some ground work in KVM RISC-V to implement RISC-V support in the KVM
+> selftests whereas remaining patches does required changes in the KVM
+> selftests.
+>
+> These patches can be found in riscv_kvm_selftests_v2 branch at:
+> https://github.com/avpatel/linux.git
+>
+> Changes since v1:
+>  - Renamed kvm_sbi_ext_expevend_handler() to kvm_sbi_ext_forward_handler()
+>    in PATCH1
+>  - Renamed KVM_CAP_RISCV_VM_GPA_SIZE to KVM_CAP_VM_GPA_BITS in PATCH2
+>    and PATCH4
+>
+> Anup Patel (4):
+>   RISC-V: KVM: Forward SBI experimental and vendor extensions
+>   RISC-V: KVM: Add VM capability to allow userspace get GPA bits
+>   KVM: selftests: Add EXTRA_CFLAGS in top-level Makefile
+>   KVM: selftests: Add initial support for RISC-V 64-bit
 
-diff --git a/arch/arm/kernel/crash_dump.c b/arch/arm/kernel/crash_dump.c
-index 53cb924..a27c5df 100644
---- a/arch/arm/kernel/crash_dump.c
-+++ b/arch/arm/kernel/crash_dump.c
-@@ -29,7 +29,7 @@
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 			 size_t csize, unsigned long offset,
--			 int userbuf)
-+			 bool userbuf)
- {
- 	void *vaddr;
- 
-@@ -40,14 +40,8 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 	if (!vaddr)
- 		return -ENOMEM;
- 
--	if (userbuf) {
--		if (copy_to_user(buf, vaddr + offset, csize)) {
--			iounmap(vaddr);
--			return -EFAULT;
--		}
--	} else {
--		memcpy(buf, vaddr + offset, csize);
--	}
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		csize = -EFAULT;
- 
- 	iounmap(vaddr);
- 	return csize;
-diff --git a/arch/arm64/kernel/crash_dump.c b/arch/arm64/kernel/crash_dump.c
-index 58303a9..d22988f 100644
---- a/arch/arm64/kernel/crash_dump.c
-+++ b/arch/arm64/kernel/crash_dump.c
-@@ -27,7 +27,7 @@
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 			 size_t csize, unsigned long offset,
--			 int userbuf)
-+			 bool userbuf)
- {
- 	void *vaddr;
- 
-@@ -38,14 +38,8 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 	if (!vaddr)
- 		return -ENOMEM;
- 
--	if (userbuf) {
--		if (copy_to_user((char __user *)buf, vaddr + offset, csize)) {
--			memunmap(vaddr);
--			return -EFAULT;
--		}
--	} else {
--		memcpy(buf, vaddr + offset, csize);
--	}
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		csize = -EFAULT;
- 
- 	memunmap(vaddr);
- 
-diff --git a/arch/ia64/kernel/crash_dump.c b/arch/ia64/kernel/crash_dump.c
-index 0ed3c3d..12128f8 100644
---- a/arch/ia64/kernel/crash_dump.c
-+++ b/arch/ia64/kernel/crash_dump.c
-@@ -33,19 +33,17 @@
-  */
- ssize_t
- copy_oldmem_page(unsigned long pfn, char *buf,
--		size_t csize, unsigned long offset, int userbuf)
-+		size_t csize, unsigned long offset, bool userbuf)
- {
- 	void  *vaddr;
- 
- 	if (!csize)
- 		return 0;
-+
- 	vaddr = __va(pfn<<PAGE_SHIFT);
--	if (userbuf) {
--		if (copy_to_user(buf, (vaddr + offset), csize)) {
--			return -EFAULT;
--		}
--	} else
--		memcpy(buf, (vaddr + offset), csize);
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		return -EFAULT;
-+
- 	return csize;
- }
- 
-diff --git a/arch/mips/kernel/crash_dump.c b/arch/mips/kernel/crash_dump.c
-index 2e50f551..7670915 100644
---- a/arch/mips/kernel/crash_dump.c
-+++ b/arch/mips/kernel/crash_dump.c
-@@ -16,7 +16,7 @@
-  * in the current kernel.
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
--			 size_t csize, unsigned long offset, int userbuf)
-+			 size_t csize, unsigned long offset, bool userbuf)
- {
- 	void  *vaddr;
- 
-@@ -24,13 +24,8 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 		return 0;
- 
- 	vaddr = kmap_local_pfn(pfn);
--
--	if (!userbuf) {
--		memcpy(buf, vaddr + offset, csize);
--	} else {
--		if (copy_to_user(buf, vaddr + offset, csize))
--			csize = -EFAULT;
--	}
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		csize = -EFAULT;
- 
- 	kunmap_local(vaddr);
- 
-diff --git a/arch/powerpc/kernel/crash_dump.c b/arch/powerpc/kernel/crash_dump.c
-index 5693e1c67..e2e9612 100644
---- a/arch/powerpc/kernel/crash_dump.c
-+++ b/arch/powerpc/kernel/crash_dump.c
-@@ -69,13 +69,10 @@ void __init setup_kdump_trampoline(void)
- #endif /* CONFIG_NONSTATIC_KERNEL */
- 
- static size_t copy_oldmem_vaddr(void *vaddr, char *buf, size_t csize,
--                               unsigned long offset, int userbuf)
-+				unsigned long offset, bool userbuf)
- {
--	if (userbuf) {
--		if (copy_to_user((char __user *)buf, (vaddr + offset), csize))
--			return -EFAULT;
--	} else
--		memcpy(buf, (vaddr + offset), csize);
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		return -EFAULT;
- 
- 	return csize;
- }
-@@ -94,7 +91,7 @@ static size_t copy_oldmem_vaddr(void *vaddr, char *buf, size_t csize,
-  * in the current kernel. We stitch up a pte, similar to kmap_atomic.
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
--			size_t csize, unsigned long offset, int userbuf)
-+			size_t csize, unsigned long offset, bool userbuf)
- {
- 	void  *vaddr;
- 	phys_addr_t paddr;
-diff --git a/arch/riscv/kernel/crash_dump.c b/arch/riscv/kernel/crash_dump.c
-index 86cc0ad..4167437 100644
---- a/arch/riscv/kernel/crash_dump.c
-+++ b/arch/riscv/kernel/crash_dump.c
-@@ -22,7 +22,7 @@
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 			 size_t csize, unsigned long offset,
--			 int userbuf)
-+			 bool userbuf)
- {
- 	void *vaddr;
- 
-@@ -33,13 +33,8 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 	if (!vaddr)
- 		return -ENOMEM;
- 
--	if (userbuf) {
--		if (copy_to_user((char __user *)buf, vaddr + offset, csize)) {
--			memunmap(vaddr);
--			return -EFAULT;
--		}
--	} else
--		memcpy(buf, vaddr + offset, csize);
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		csize = -EFAULT;
- 
- 	memunmap(vaddr);
- 	return csize;
-diff --git a/arch/sh/kernel/crash_dump.c b/arch/sh/kernel/crash_dump.c
-index 5b41b59..4bc071a 100644
---- a/arch/sh/kernel/crash_dump.c
-+++ b/arch/sh/kernel/crash_dump.c
-@@ -24,7 +24,7 @@
-  * in the current kernel. We stitch up a pte, similar to kmap_atomic.
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
--                               size_t csize, unsigned long offset, int userbuf)
-+			 size_t csize, unsigned long offset, bool userbuf)
- {
- 	void  __iomem *vaddr;
- 
-@@ -33,13 +33,8 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 
- 	vaddr = ioremap(pfn << PAGE_SHIFT, PAGE_SIZE);
- 
--	if (userbuf) {
--		if (copy_to_user((void __user *)buf, (vaddr + offset), csize)) {
--			iounmap(vaddr);
--			return -EFAULT;
--		}
--	} else
--	memcpy(buf, (vaddr + offset), csize);
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		csize = -EFAULT;
- 
- 	iounmap(vaddr);
- 	return csize;
-diff --git a/arch/x86/kernel/crash_dump_32.c b/arch/x86/kernel/crash_dump_32.c
-index 5fcac46..3eff124 100644
---- a/arch/x86/kernel/crash_dump_32.c
-+++ b/arch/x86/kernel/crash_dump_32.c
-@@ -43,7 +43,7 @@ static inline bool is_crashed_pfn_valid(unsigned long pfn)
-  * in the current kernel.
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
--			 unsigned long offset, int userbuf)
-+			 unsigned long offset, bool userbuf)
- {
- 	void  *vaddr;
- 
-@@ -54,13 +54,8 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
- 		return -EFAULT;
- 
- 	vaddr = kmap_local_pfn(pfn);
--
--	if (!userbuf) {
--		memcpy(buf, vaddr + offset, csize);
--	} else {
--		if (copy_to_user(buf, vaddr + offset, csize))
--			csize = -EFAULT;
--	}
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		csize = -EFAULT;
- 
- 	kunmap_local(vaddr);
- 
-diff --git a/arch/x86/kernel/crash_dump_64.c b/arch/x86/kernel/crash_dump_64.c
-index a7f617a..e8fffdf 100644
---- a/arch/x86/kernel/crash_dump_64.c
-+++ b/arch/x86/kernel/crash_dump_64.c
-@@ -13,7 +13,7 @@
- #include <linux/cc_platform.h>
- 
- static ssize_t __copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
--				  unsigned long offset, int userbuf,
-+				  unsigned long offset, bool userbuf,
- 				  bool encrypted)
- {
- 	void  *vaddr;
-@@ -29,13 +29,8 @@ static ssize_t __copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
- 	if (!vaddr)
- 		return -ENOMEM;
- 
--	if (userbuf) {
--		if (copy_to_user((void __user *)buf, vaddr + offset, csize)) {
--			iounmap((void __iomem *)vaddr);
--			return -EFAULT;
--		}
--	} else
--		memcpy(buf, vaddr + offset, csize);
-+	if (copy_to_user_or_kernel(buf, vaddr + offset, csize, userbuf))
-+		csize = -EFAULT;
- 
- 	set_iounmap_nonlazy();
- 	iounmap((void __iomem *)vaddr);
-@@ -56,7 +51,7 @@ static ssize_t __copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
-  * mapped in the current kernel. We stitch up a pte, similar to kmap_atomic.
-  */
- ssize_t copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
--			 unsigned long offset, int userbuf)
-+			 unsigned long offset, bool userbuf)
- {
- 	return __copy_oldmem_page(pfn, buf, csize, offset, userbuf, false);
- }
-@@ -67,7 +62,7 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf, size_t csize,
-  * machines.
-  */
- ssize_t copy_oldmem_page_encrypted(unsigned long pfn, char *buf, size_t csize,
--				   unsigned long offset, int userbuf)
-+				   unsigned long offset, bool userbuf)
- {
- 	return __copy_oldmem_page(pfn, buf, csize, offset, userbuf, true);
- }
-diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-index f67fd77..bba52aa 100644
---- a/fs/proc/vmcore.c
-+++ b/fs/proc/vmcore.c
-@@ -133,7 +133,7 @@ static int open_vmcore(struct inode *inode, struct file *file)
- 
- /* Reads a page from the oldmem device from given offset. */
- ssize_t read_from_oldmem(char *buf, size_t count,
--			 u64 *ppos, int userbuf,
-+			 u64 *ppos, bool userbuf,
- 			 bool encrypted)
- {
- 	unsigned long pfn, offset;
-@@ -233,7 +233,7 @@ int __weak remap_oldmem_pfn_range(struct vm_area_struct *vma,
-  */
- ssize_t __weak
- copy_oldmem_page_encrypted(unsigned long pfn, char *buf, size_t csize,
--			   unsigned long offset, int userbuf)
-+			   unsigned long offset, bool userbuf)
- {
- 	return copy_oldmem_page(pfn, buf, csize, offset, userbuf);
- }
-diff --git a/include/linux/crash_dump.h b/include/linux/crash_dump.h
-index 6208215..033448b 100644
---- a/include/linux/crash_dump.h
-+++ b/include/linux/crash_dump.h
-@@ -25,10 +25,10 @@ extern int remap_oldmem_pfn_range(struct vm_area_struct *vma,
- 				  unsigned long size, pgprot_t prot);
- 
- extern ssize_t copy_oldmem_page(unsigned long, char *, size_t,
--						unsigned long, int);
-+						unsigned long, bool);
- extern ssize_t copy_oldmem_page_encrypted(unsigned long pfn, char *buf,
- 					  size_t csize, unsigned long offset,
--					  int userbuf);
-+					  bool userbuf);
- 
- void vmcore_cleanup(void);
- 
-@@ -136,11 +136,11 @@ static inline int vmcore_add_device_dump(struct vmcoredd_data *data)
- 
- #ifdef CONFIG_PROC_VMCORE
- ssize_t read_from_oldmem(char *buf, size_t count,
--			 u64 *ppos, int userbuf,
-+			 u64 *ppos, bool userbuf,
- 			 bool encrypted);
- #else
- static inline ssize_t read_from_oldmem(char *buf, size_t count,
--				       u64 *ppos, int userbuf,
-+				       u64 *ppos, bool userbuf,
- 				       bool encrypted)
- {
- 	return -EOPNOTSUPP;
--- 
-2.1.0
+Any further comments on this series ?
 
+Regards,
+Anup
+
+>
+>  arch/riscv/include/asm/kvm_host.h             |   1 +
+>  arch/riscv/kvm/mmu.c                          |   5 +
+>  arch/riscv/kvm/vcpu_sbi.c                     |   4 +
+>  arch/riscv/kvm/vcpu_sbi_base.c                |  27 ++
+>  arch/riscv/kvm/vm.c                           |   3 +
+>  include/uapi/linux/kvm.h                      |   1 +
+>  tools/testing/selftests/kvm/Makefile          |  14 +-
+>  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
+>  .../selftests/kvm/include/riscv/processor.h   | 135 +++++++
+>  tools/testing/selftests/kvm/lib/guest_modes.c |  10 +
+>  .../selftests/kvm/lib/riscv/processor.c       | 362 ++++++++++++++++++
+>  tools/testing/selftests/kvm/lib/riscv/ucall.c |  87 +++++
+>  12 files changed, 658 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/kvm/include/riscv/processor.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/riscv/processor.c
+>  create mode 100644 tools/testing/selftests/kvm/lib/riscv/ucall.c
+>
+> --
+> 2.25.1
+>

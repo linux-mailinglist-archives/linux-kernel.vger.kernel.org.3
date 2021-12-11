@@ -2,60 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE294711B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31244711BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbhLKF1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 00:27:06 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:51801 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229452AbhLKF1F (ORCPT
+        id S229609AbhLKF2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 00:28:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33086 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229597AbhLKF2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 00:27:05 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V-DZgsM_1639200206;
-Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V-DZgsM_1639200206)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 11 Dec 2021 13:23:27 +0800
-Message-ID: <2679f583-760e-cd3a-7c69-6cf92114d8df@linux.alibaba.com>
-Date:   Sat, 11 Dec 2021 13:23:26 +0800
+        Sat, 11 Dec 2021 00:28:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639200281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vEoBWvfKJezafb/gz8qOuM9H17UzU01X5cgIQsGVem0=;
+        b=TR6VDql1UKqaraLoZ1DlUzDZEZIgR4Ko5Yz0LQBcysIcULGkLJPxXmwQLIVscaghHR7+us
+        CUnMlkjiX7zfVGtMsT/07q+W29KXXfNewNBJDW+b649Jmp/UsMCpSLYgZF2cJj4bt57mmE
+        jQi2ycNWZVpuGhraGn3+8YeM+I8UhT8=
+Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
+ [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-17-Q7QXfV4zOES8UVYIdEvPSg-1; Sat, 11 Dec 2021 00:24:37 -0500
+X-MC-Unique: Q7QXfV4zOES8UVYIdEvPSg-1
+Received: by mail-ua1-f70.google.com with SMTP id u15-20020ab0458f000000b002ef82056c39so7709158uau.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 21:24:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vEoBWvfKJezafb/gz8qOuM9H17UzU01X5cgIQsGVem0=;
+        b=7CYaKvb0eAUhJ1r8iMF3dA8u5nVnV9fDInrUy1FwbEQOC3mNg2zyMKS7URb5nZKD8h
+         wfrOEqE/7QKJACyqI5frgKKU+GudQJIEIIUGygy6lhz8zn3rYooX7KoJu70S6rbB7Y7Y
+         I1XUzNhiasjAoE5TEeESYbZqzMmvwFAYKB3LJ5k63gfc+MnXaMsWAEKcwMWZpdp96fFf
+         /PfIHUReWo/Gv3ek8Ey7sa8WNcLx+2BP19yQQ9DVzxk16zYpCXgN9T4hGC44K+Zxy1pv
+         r0ATwK+wQ090BIi9BMdUx9Tcj4axLTyWXPxaryIsTRUKrqgmmhuD0Z93gP3rJHaCcYkp
+         DlmQ==
+X-Gm-Message-State: AOAM530PUnJ6G3YnBQHw8DV6pBhRQtWZfZEZfhxS47dPIv48Klg+KbPk
+        /btavqGeaGE/+HZiMwKZevvEclv+ihGZu/+rdBf1ElgicMVv6uHikrdSgjJkL3YpnFNa49GxhOR
+        TUUXjKzozh/Kb4lFlcV6XHc3mv6ZbwDCrwLyXRL+f
+X-Received: by 2002:a05:6102:2910:: with SMTP id cz16mr21266833vsb.9.1639200277314;
+        Fri, 10 Dec 2021 21:24:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyYuTo+cFn0Ym+OeF+CcyKc83VT49otL8gLNPTOMiwVV425TmLj+Cp1WxDVtcutyVADxYR1xNwNuwfmYUW4Meo=
+X-Received: by 2002:a05:6102:2910:: with SMTP id cz16mr21266819vsb.9.1639200277130;
+ Fri, 10 Dec 2021 21:24:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [RFC 01/19] cachefiles: add mode command
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org
-References: <20211210073619.21667-2-jefflexu@linux.alibaba.com>
- <20211210073619.21667-1-jefflexu@linux.alibaba.com>
- <269835.1639134342@warthog.procyon.org.uk>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <269835.1639134342@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
+ <20211209143810.452527-1-jdorminy@redhat.com> <YbIeYIM6JEBgO3tG@zn.tnic>
+ <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com> <YbIgsO/7oQW9h6wv@zn.tnic>
+ <YbIu55LZKoK3IVaF@kernel.org> <YbIw1nUYJ3KlkjJQ@zn.tnic> <YbM5yR+Hy+kwmMFU@zn.tnic>
+In-Reply-To: <YbM5yR+Hy+kwmMFU@zn.tnic>
+From:   John Dorminy <jdorminy@redhat.com>
+Date:   Sat, 11 Dec 2021 00:24:25 -0500
+Message-ID: <CAMeeMh9DVNJC+Q1HSB+DJzy_YKto=j=3iGUiCgseqmx9qjVCUg@mail.gmail.com>
+Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and early
+ param parsing
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
+        tip-bot2@linutronix.de, anjaneya.chagam@intel.com,
+        dan.j.williams@intel.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
+        x86@kernel.org, Hugh Dickins <hughd@google.com>,
+        "Patrick J. Volkerding" <volkerdi@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Apologies for delay; my dev machine was broken much of today. But I
+have tested this patch under the same conditions as previously, and
+agree with Hugh that the patches make mem= work correctly.
 
+Thanks!
 
-On 12/10/21 7:05 PM, David Howells wrote:
-> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
-> 
->> +enum cachefiles_mode {
->> +	CACHEFILES_MODE_CACHE,	/* local cache for netfs (Default) */
->> +	CACHEFILES_MODE_DEMAND,	/* demand read for read-only fs */
->> +};
->> +
-> 
-> I would suggest just adding a flag for the moment.
-> 
+John Dorminy
 
-Make sense. Thanks.
-
--- 
-Thanks,
-Jeffle

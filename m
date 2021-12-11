@@ -2,216 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B251C4715AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1E64715B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbhLKTZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 14:25:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24696 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231876AbhLKTZQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 14:25:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639250715;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dIv6pkKUGV1T0mAJB7D51zRDre7thjOw+CRPJNXh72s=;
-        b=fGnAyTiZmUzJ/Yg4hh88GwRoX7MKMweW0dP78i7sR3Pt0vgP8xe5i9IBS7jHdeBm1mHERI
-        FFBhdOnol4Bi0L2Y864wojPTj1ljobPKZG3Xb3ZYNmarSP4s3L4SIGELjIC6YRhbs8fgVa
-        hJfSh3Htzd0331GdrhlO2iHcXitrDlg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-205-uEJn_E8_O7ehfFWlEGkmxQ-1; Sat, 11 Dec 2021 14:25:14 -0500
-X-MC-Unique: uEJn_E8_O7ehfFWlEGkmxQ-1
-Received: by mail-wm1-f70.google.com with SMTP id k25-20020a05600c1c9900b00332f798ba1dso8874646wms.4
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 11:25:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dIv6pkKUGV1T0mAJB7D51zRDre7thjOw+CRPJNXh72s=;
-        b=5td95/RkvPZoUA8gBf91JCt2pJ8l7rnl1KgmC5dKwZ+C+x2NPtteW635PaB/O7vIW+
-         g1u4RCCM2fS/ZtqNP9WudggzLYqx1fm3oXsaQFZJ+zTnirWu5pE+w+P1vGQ2em58vgQ3
-         B/p6YhBwYY1C/3GmdWwC+mZftb8bGZrT7CA3PjIBjd+xHhGDkemED5zsLbvUgbJAjLos
-         CWSXHZkiUv6NlouUJ+DCNyK7aN+/6275S5GwpjXCqmav9yQiyYzHkzWpOd86sQIGnj7X
-         qTEr0RtQG7HqEd4lSgHBehVd0/AAPoK3aDGKfOZVcTAQ6L4s1ypmgattiQnU7s+Dqw6x
-         /q+g==
-X-Gm-Message-State: AOAM5311+fYmbjwm2rHJXZ9TaMqfoQPdZnmijgzJWyHArVgypkn5dPAt
-        /RcntEfCx2GA9HQCcIl2BnXwu9f1D6zk8L342D7keCR3rUv0t0Y6rt+YWLZTV7gh28uJbaKgEaz
-        8Y4DcHt8dIcrzWKjXgfhADmX1
-X-Received: by 2002:a7b:c007:: with SMTP id c7mr25977349wmb.82.1639250713162;
-        Sat, 11 Dec 2021 11:25:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJztQTZBoBdnMJaOKM6MJZD+Tf74WLX+vCpXk18rbXjj4VZdB0bXkx78rI4ZvQ9zGByCWUhwNw==
-X-Received: by 2002:a7b:c007:: with SMTP id c7mr25977331wmb.82.1639250712984;
-        Sat, 11 Dec 2021 11:25:12 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id l8sm2364512wmc.40.2021.12.11.11.25.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 11:25:12 -0800 (PST)
-Date:   Sat, 11 Dec 2021 20:25:10 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, eranian@google.com
-Subject: Re: [PATCH 17/22] perf cpumap: Refactor cpu_map__build_map
-Message-ID: <YbT7Fg1l8sZ3R44a@krava>
-References: <20211208024607.1784932-1-irogers@google.com>
- <20211208024607.1784932-18-irogers@google.com>
+        id S231839AbhLKTax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 14:30:53 -0500
+Received: from mga11.intel.com ([192.55.52.93]:13514 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229642AbhLKTaw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 14:30:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639251052; x=1670787052;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lQoo0ISAzgQZzm/56C60vnkWnhIFvX23VxzFKfIBtoM=;
+  b=ifU/lrnVFB4SEJm3a2v+LXz1KzaCs9+NjhdMkrpff9mzxMcqEGrteZc/
+   RiMCKO5zuxTXb+YIdWG79P+d/ewtG+y1m9CBd4wnLDR144oCUAovEmUdc
+   J6rwUv3TpgRZ7Rxb/gysovJ/eH58j/B8AVCj1tvs93vwXgkgNs+J1zcuN
+   ySpRCxnI/BPvujNMXVeYpF2hPQ1H1gh7AqnnbScr1DOnW33LG9seHtjtm
+   s2BBfjfsNsdpsfc+NjqbEuF3/Hnv5PUT83jSt9y1VIt7/GZjhIMeq28bg
+   d8mb0Lbwo22hwLR8kpswZQjK7U3NNt5XT9namxCjLWda4+zc1W0r7MOza
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="236076204"
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="236076204"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 11:30:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="464136583"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Dec 2021 11:30:50 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mw853-00050T-NU; Sat, 11 Dec 2021 19:30:49 +0000
+Date:   Sun, 12 Dec 2021 03:30:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [chao:dev 2/5] fs/f2fs/xattr.c:691:20: warning: format specifies
+ type 'unsigned long' but the argument has type 'unsigned int'
+Message-ID: <202112120347.GGgB0mVe-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208024607.1784932-18-irogers@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 06:46:02PM -0800, Ian Rogers wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git dev
+head:   0f9e12d0df416311a310873984101b0b6b4ab054
+commit: 0514b392fdbe2e6681e4fb513ce78b2d05d51496 [2/5] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+config: i386-buildonly-randconfig-r003-20211211 (https://download.01.org/0day-ci/archive/20211212/202112120347.GGgB0mVe-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=0514b392fdbe2e6681e4fb513ce78b2d05d51496
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao dev
+        git checkout 0514b392fdbe2e6681e4fb513ce78b2d05d51496
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/f2fs/
 
-SNIP
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> -			perror("cannot build core map");
-> -			return -1;
-> -		}
-> -		stat_config.aggr_get_id = perf_stat__get_core_file;
-> -		break;
-> +		return perf_stat__get_core_file;
->  	case AGGR_NODE:
-> -		if (perf_env__build_node_map(env, evsel_list->core.cpus, &stat_config.aggr_map)) {
-> -			perror("cannot build core map");
-> -			return -1;
-> -		}
-> -		stat_config.aggr_get_id = perf_stat__get_node_file;
-> -		break;
-> +		return perf_stat__get_node_file;
->  	case AGGR_NONE:
->  	case AGGR_GLOBAL:
->  	case AGGR_THREAD:
->  	case AGGR_UNSET:
->  	default:
-> -		break;
-> +		return NULL;
->  	}
-> +}
-> +
-> +static int perf_stat_init_aggr_mode_file(struct perf_stat *st)
-> +{
-> +	struct perf_env *env = &st->session->header.env;
->  
-> +	aggr_cpu_id_get_t f = aggr_mode__get_aggr_file(stat_config.aggr_mode);
+All warnings (new ones prefixed by >>):
 
-we use get_id for aggr_get_id_t, maybe we could use it instead of 'f' in
-here as well
+>> fs/f2fs/xattr.c:691:20: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+                                           inode->i_ino, ENTRY_SIZE(last));
+                                                         ^~~~~~~~~~~~~~~~
+   fs/f2fs/f2fs.h:2247:35: note: expanded from macro 'f2fs_err'
+           f2fs_printk(sbi, KERN_ERR fmt, ##__VA_ARGS__)
+                                     ~~~    ^~~~~~~~~~~
+   fs/f2fs/xattr.h:62:27: note: expanded from macro 'ENTRY_SIZE'
+   #define ENTRY_SIZE(entry) (XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + \
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-> +
-> +	if (!f)
-> +		return 0;
-> +
-> +	stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.cpus, f, env);
-> +	if (!stat_config.aggr_map) {
-> +		pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
-> +		return -1;
-> +	}
-> +	stat_config.aggr_get_id = aggr_mode__get_id_file(stat_config.aggr_mode);
->  	return 0;
->  }
->  
-> diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-> index 32f9fc2dd389..ba4468f691c8 100644
-> --- a/tools/perf/util/cpumap.c
-> +++ b/tools/perf/util/cpumap.c
-> @@ -140,7 +140,7 @@ struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data __maybe_u
->  	return id;
->  }
->  
-> -static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
-> +static int aggr_cpu_id__cmp(const void *a_pointer, const void *b_pointer)
->  {
->  	struct aggr_cpu_id *a = (struct aggr_cpu_id *)a_pointer;
->  	struct aggr_cpu_id *b = (struct aggr_cpu_id *)b_pointer;
-> @@ -157,37 +157,40 @@ static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
->  		return a->thread - b->thread;
->  }
->  
-> -int cpu_map__build_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **res,
-> -		       struct aggr_cpu_id (*f)(int cpu, void *data),
-> -		       void *data)
-> +struct cpu_aggr_map *cpu_aggr_map__new(const struct perf_cpu_map *cpus,
-> +				       aggr_cpu_id_get_t f,
-> +				       void *data)
 
-same here
+vim +691 fs/f2fs/xattr.c
 
-thanks,
-jirka
+   629	
+   630	static int __f2fs_setxattr(struct inode *inode, int index,
+   631				const char *name, const void *value, size_t size,
+   632				struct page *ipage, int flags)
+   633	{
+   634		struct f2fs_xattr_entry *here, *last;
+   635		void *base_addr, *last_base_addr;
+   636		int found, newsize;
+   637		size_t len;
+   638		__u32 new_hsize;
+   639		int error;
+   640	
+   641		if (name == NULL)
+   642			return -EINVAL;
+   643	
+   644		if (value == NULL)
+   645			size = 0;
+   646	
+   647		len = strlen(name);
+   648	
+   649		if (len > F2FS_NAME_LEN)
+   650			return -ERANGE;
+   651	
+   652		if (size > MAX_VALUE_LEN(inode))
+   653			return -E2BIG;
+   654	
+   655		error = read_all_xattrs(inode, ipage, &base_addr);
+   656		if (error)
+   657			return error;
+   658	
+   659		last_base_addr = (void *)base_addr + XATTR_SIZE(inode);
+   660	
+   661		/* find entry with wanted name. */
+   662		here = __find_xattr(base_addr, last_base_addr, index, len, name);
+   663		if (!here) {
+   664			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has corrupted xattr",
+   665									inode->i_ino);
+   666			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
+   667			error = -EFSCORRUPTED;
+   668			goto exit;
+   669		}
+   670	
+   671		found = IS_XATTR_LAST_ENTRY(here) ? 0 : 1;
+   672	
+   673		if (found) {
+   674			if ((flags & XATTR_CREATE)) {
+   675				error = -EEXIST;
+   676				goto exit;
+   677			}
+   678	
+   679			if (value && f2fs_xattr_value_same(here, value, size))
+   680				goto same;
+   681		} else if ((flags & XATTR_REPLACE)) {
+   682			error = -ENODATA;
+   683			goto exit;
+   684		}
+   685	
+   686		last = here;
+   687		while (!IS_XATTR_LAST_ENTRY(last)) {
+   688			if ((void *)(last) + sizeof(__u32) > last_base_addr ||
+   689				(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
+   690				f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %lu",
+ > 691						inode->i_ino, ENTRY_SIZE(last));
+   692				set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
+   693				error = -EFSCORRUPTED;
+   694				goto exit;
+   695			}
+   696			last = XATTR_NEXT_ENTRY(last);
+   697		}
+   698	
+   699		newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+   700	
+   701		/* 1. Check space */
+   702		if (value) {
+   703			int free;
+   704			/*
+   705			 * If value is NULL, it is remove operation.
+   706			 * In case of update operation, we calculate free.
+   707			 */
+   708			free = MIN_OFFSET(inode) - ((char *)last - (char *)base_addr);
+   709			if (found)
+   710				free = free + ENTRY_SIZE(here);
+   711	
+   712			if (unlikely(free < newsize)) {
+   713				error = -E2BIG;
+   714				goto exit;
+   715			}
+   716		}
+   717	
+   718		/* 2. Remove old entry */
+   719		if (found) {
+   720			/*
+   721			 * If entry is found, remove old entry.
+   722			 * If not found, remove operation is not needed.
+   723			 */
+   724			struct f2fs_xattr_entry *next = XATTR_NEXT_ENTRY(here);
+   725			int oldsize = ENTRY_SIZE(here);
+   726	
+   727			memmove(here, next, (char *)last - (char *)next);
+   728			last = (struct f2fs_xattr_entry *)((char *)last - oldsize);
+   729			memset(last, 0, oldsize);
+   730		}
+   731	
+   732		new_hsize = (char *)last - (char *)base_addr;
+   733	
+   734		/* 3. Write new entry */
+   735		if (value) {
+   736			char *pval;
+   737			/*
+   738			 * Before we come here, old entry is removed.
+   739			 * We just write new entry.
+   740			 */
+   741			last->e_name_index = index;
+   742			last->e_name_len = len;
+   743			memcpy(last->e_name, name, len);
+   744			pval = last->e_name + len;
+   745			memcpy(pval, value, size);
+   746			last->e_value_size = cpu_to_le16(size);
+   747			new_hsize += newsize;
+   748		}
+   749	
+   750		error = write_all_xattrs(inode, new_hsize, base_addr, ipage);
+   751		if (error)
+   752			goto exit;
+   753	
+   754		if (index == F2FS_XATTR_INDEX_ENCRYPTION &&
+   755				!strcmp(name, F2FS_XATTR_NAME_ENCRYPTION_CONTEXT))
+   756			f2fs_set_encrypted_inode(inode);
+   757		f2fs_mark_inode_dirty_sync(inode, true);
+   758		if (!error && S_ISDIR(inode->i_mode))
+   759			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_CP);
+   760	
+   761	same:
+   762		if (is_inode_flag_set(inode, FI_ACL_MODE)) {
+   763			inode->i_mode = F2FS_I(inode)->i_acl_mode;
+   764			inode->i_ctime = current_time(inode);
+   765			clear_inode_flag(inode, FI_ACL_MODE);
+   766		}
+   767	
+   768	exit:
+   769		kfree(base_addr);
+   770		return error;
+   771	}
+   772	
 
->  {
-> -	int nr = cpus->nr;
-> -	struct cpu_aggr_map *c = cpu_aggr_map__empty_new(nr);
-> -	int cpu, s2;
-> -	struct aggr_cpu_id s1;
-> +	int cpu, idx;
-> +	struct cpu_aggr_map *c = cpu_aggr_map__empty_new(cpus->nr);
->  
->  	if (!c)
-> -		return -1;
-> +		return NULL;
->  
->  	/* Reset size as it may only be partially filled */
->  	c->nr = 0;
->  
-> -	for (cpu = 0; cpu < nr; cpu++) {
-> -		s1 = f(cpu, data);
-> -		for (s2 = 0; s2 < c->nr; s2++) {
-> -			if (aggr_cpu_id__equal(&s1, &c->map[s2]))
-> +	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
-> +		bool duplicate = false;
-> +		struct aggr_cpu_id cpu_id = f(cpu, data);
-> +
-> +		for (int j = 0; j < c->nr; j++) {
-> +			if (aggr_cpu_id__equal(&cpu_id, &c->map[j])) {
-> +				duplicate = true;
->  				break;
-> +			}
->  		}
-> -		if (s2 == c->nr) {
-> -			c->map[c->nr] = s1;
-> +		if (!duplicate) {
-> +			c->map[c->nr] = cpu_id;
->  			c->nr++;
->  		}
->  	}
-> +
->  	/* ensure we process id in increasing order */
-> -	qsort(c->map, c->nr, sizeof(struct aggr_cpu_id), cmp_aggr_cpu_id);
-> +	qsort(c->map, c->nr, sizeof(struct aggr_cpu_id), aggr_cpu_id__cmp);
-> +
-> +	return c;
->  
-> -	*res = c;
-> -	return 0;
->  }
->  
-
-SNIP
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

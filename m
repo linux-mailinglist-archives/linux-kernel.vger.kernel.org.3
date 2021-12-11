@@ -2,81 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F1547137C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 11:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C52471384
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 11:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbhLKKwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 05:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhLKKwT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 05:52:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC441C061714;
-        Sat, 11 Dec 2021 02:52:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77FADB807E7;
-        Sat, 11 Dec 2021 10:52:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF2CC004DD;
-        Sat, 11 Dec 2021 10:52:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639219936;
-        bh=wYn3ADgLYrPQRMceGNbHRArEW/qGU4RTivEh07HgNkQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LAf7FtjgctjlDptzlNxV8fA3znYlVJNDypd8oQHEjx1RtkgLeLO9oxpSgU9GK3SCc
-         z2Wg40TFAAHywhOUN03n3v8rTHjtLCaU0Zd26IKCxh/K1WU9EKzUXOZELH1gHM5jvE
-         aHi5wUh0c0gFevijVyLgi+69QnKhHhM0tojBtX5A=
-Date:   Sat, 11 Dec 2021 11:52:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
+        id S229621AbhLKK4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 05:56:16 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:57368 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229457AbhLKK4P (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 05:56:15 -0500
+Received: from ip4d17a2ab.dynamic.kabel-deutschland.de ([77.23.162.171] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1mw02p-0007zm-NW; Sat, 11 Dec 2021 11:55:59 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Sandy Huang <hjc@rock-chips.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        - <opensource@rock-chips.com>, David Heidelberg <david@ixit.cz>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V3 03/35] x86/apic/msi: Use PCI device MSI property
-Message-ID: <YbSC2GadkARsAIA8@kroah.com>
-References: <20211210221642.869015045@linutronix.de>
- <20211210221813.372357371@linutronix.de>
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: convert power domain node for rockchip DW MIPI DSI
+Date:   Sat, 11 Dec 2021 11:55:58 +0100
+Message-ID: <26502781.jAYDHVeSjN@diego>
+In-Reply-To: <20211206212651.126405-1-david@ixit.cz>
+References: <20211206212651.126405-1-david@ixit.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210221813.372357371@linutronix.de>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:18:47PM +0100, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> instead of fiddling with MSI descriptors.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Hi David,
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Am Montag, 6. Dezember 2021, 22:26:50 CET schrieb David Heidelberg:
+> Convert into YAML format into format, which can be validated.
+> 
+> Changes:
+>  - drop panel from example
+
+the patch subject is strange, talking about a "power domain node".
+That needs a fix.
+
+Some more things below.
+
+
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - rockchip,px30-mipi-dsi
+> +              - rockchip,rk3288-mipi-dsi
+> +              - rockchip,rk3399-mipi-dsi
+> +          - const: snps,dw-mipi-dsi
+
+> +      - items:
+> +          - const: rockchip,px30-mipi-dsi
+> +      - items:
+> +          - const: rockchip,rk3288-mipi-dsi
+> +      - items:
+> +          - const: rockchip,rk3399-mipi-dsi
+
+what are these for?
+
+I see that px30 uses the dsi without the snps part, but you
+can also just add a patch adding that second compatible to px30.dtsi
+
+I don't think we need to support both ways.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks: true
+> +
+> +  clock-names: true
+> +
+> +  phys:
+> +    maxItems: 1
+> +    description: The external PHY
+
+make that "Optional external PHY perhaps"?
+
+Heiko
+
+

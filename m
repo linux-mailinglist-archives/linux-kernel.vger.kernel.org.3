@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDE2471196
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8254047119B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345949AbhLKEzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 23:55:15 -0500
-Received: from mga09.intel.com ([134.134.136.24]:9085 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233585AbhLKEzN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 23:55:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639198297; x=1670734297;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ORaAGIoy+j8VYxXqV2KW+tZfGurfvWFFe66CgFnWH2E=;
-  b=TfdzNj3x8TTPZpHV4+5foXCqvOa5t89xrR/flpX3BqLuvOkGcjV3Xncw
-   6BOf+OHqHXrHI0kDflJINX1/tuYT2is0baGt9JqhlQDcwQPj5GoJWZr3l
-   8LTuOQeTcKDr2N8lQ1vjG1I74MAY/5V8gpz4fOW7ym23CvJT7Odsh97Rl
-   C5z4136sryivF1AYiQIl7RgjbTzQO94RzOWloomDJU0T2lcdXw+uhXpWM
-   h/1OzlbhZhISlvVsftdquexMXYv4UXD87jWL4ak4ePsetQrQGTpzeY9Ty
-   DG5HQ6MVOr5j0Y0aF4CpqygXRVWFBaMpw5PJb9qWjW4XDbXfUIyvNb5wq
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="238313066"
-X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="238313066"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 20:51:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="544212044"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Dec 2021 20:51:29 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvuM4-00047v-N4; Sat, 11 Dec 2021 04:51:28 +0000
-Date:   Sat, 11 Dec 2021 12:50:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [superna9999:amlogic/v5.17/g12-dsi 20/23]
- drivers/gpu/drm/meson/meson_encoder_dsi.c:59:37: error: passing 'const
- struct drm_display_mode *' to parameter of type 'struct drm_display_mode *'
- discards qualifiers
-Message-ID: <202112111247.XKv1vmaF-lkp@intel.com>
+        id S229475AbhLKFJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 00:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229448AbhLKFJt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 00:09:49 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A303CC061714;
+        Fri, 10 Dec 2021 21:06:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 96197CE2BB6;
+        Sat, 11 Dec 2021 05:06:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41984C004DD;
+        Sat, 11 Dec 2021 05:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639199169;
+        bh=5LQRaJvTEC5+N58Bwnrobrcf8rrZm/ZrofvhCuxPv+M=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ej7OWVUyCpJCW8QuGF5RGnZk/HwUjGnaYxdrkXmdgmc3JO6wyY3OjFRVGdP7PdbJL
+         X8D8NUTs4kGWG3wkQSke/90rdFxXsVarIV5s2nmOsYMfrVY/XYrzz+D8Ue1mRvV9lz
+         vr+YYVndoXsY4F5b69c0q2ZU4ABkWin51x+Kx3yyxAafR8xG+MnB2x5Ft0stoVdC1s
+         N6GwUxWuSqRNmHSyjdV3SfkI4n5KJh5fUxMMm/b6rae5PnjwofBiGRJcbKr2X77v6L
+         hqxBSX8bFzqEX91q0TRD7VSSU5ZNhrh0mf/eIyEB51FC8yGdrnR44p7Bqdw4bJhxSh
+         SjOc7UQvFgSjQ==
+Message-ID: <d0dbaa48d39079322826bc5e5783db635bf6dc03.camel@kernel.org>
+Subject: Re: [PATCH v3] char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED
+ based on device property
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Rob Barnes <robbarnes@google.com>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sat, 11 Dec 2021 07:06:05 +0200
+In-Reply-To: <20211206120311.2844838-1-robbarnes@google.com>
+References: <Yaut12SfSYPGcs6S@iki.fi>
+         <20211206120311.2844838-1-robbarnes@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/superna9999/linux amlogic/v5.17/g12-dsi
-head:   62dac9179f2937dc08bffe08d15c6846bc4aedb4
-commit: b186318175a12bdca613ee26b4b452964c795eb3 [20/23] fixup! WIP: drm/meson: add DSI encoder
-config: arm-randconfig-r033-20211210 (https://download.01.org/0day-ci/archive/20211211/202112111247.XKv1vmaF-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/superna9999/linux/commit/b186318175a12bdca613ee26b4b452964c795eb3
-        git remote add superna9999 https://github.com/superna9999/linux
-        git fetch --no-tags superna9999 amlogic/v5.17/g12-dsi
-        git checkout b186318175a12bdca613ee26b4b452964c795eb3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/meson/
+On Mon, 2021-12-06 at 12:03 +0000, Rob Barnes wrote:
+> Set TPM_FIRMWARE_POWER_MANAGED flag based on 'firmware-power-managed'
+> ACPI DSD property. For the CR50 TPM, this flag defaults to true when
+> the property is unset.
+>=20
+> When this flag is set to false, the CR50 TPM driver will always send
+> a shutdown command whenever the system suspends.
+>=20
+> Signed-off-by: Rob Barnes <robbarnes@google.com>
+> ---
+>  drivers/char/tpm/tpm_tis_i2c_cr50.c | 16 +++++++++++++++-
+>  drivers/char/tpm/tpm_tis_spi_cr50.c | 16 +++++++++++++++-
+>  2 files changed, 30 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_t=
+is_i2c_cr50.c
+> index c89278103703..f6c0affbb456 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> @@ -628,6 +628,19 @@ static bool tpm_cr50_i2c_req_canceled(struct tpm_chi=
+p *chip, u8 status)
+>  	return status =3D=3D TPM_STS_COMMAND_READY;
+>  }
+> =20
+> +static bool tpm_cr50_i2c_is_firmware_power_managed(struct device *dev)
+> +{
+> +	u8 val;
+> +	int ret;
+> +
+> +	/* This flag should default true when the device property is not presen=
+t */
+> +	ret =3D device_property_read_u8(dev, "firmware-power-managed", &val);
+> +	if (ret)
+> +		return true;
+> +
+> +	return val;
+> +}
+> +
+>  static const struct tpm_class_ops cr50_i2c =3D {
+>  	.flags =3D TPM_OPS_AUTO_STARTUP,
+>  	.status =3D &tpm_cr50_i2c_tis_status,
+> @@ -686,7 +699,8 @@ static int tpm_cr50_i2c_probe(struct i2c_client *clie=
+nt)
+> =20
+>  	/* cr50 is a TPM 2.0 chip */
+>  	chip->flags |=3D TPM_CHIP_FLAG_TPM2;
+> -	chip->flags |=3D TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
+> +	if (tpm_cr50_i2c_is_firmware_power_managed(dev))
+> +		chip->flags |=3D TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
+> =20
+>  	/* Default timeouts */
+>  	chip->timeout_a =3D msecs_to_jiffies(TIS_SHORT_TIMEOUT);
+> diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_t=
+is_spi_cr50.c
+> index dae98dbeeeac..7bf123d3c537 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_cr50.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
+> @@ -185,6 +185,19 @@ static int cr50_spi_flow_control(struct tpm_tis_spi_=
+phy *phy,
+>  	return 0;
+>  }
+> =20
+> +static bool tpm_cr50_spi_is_firmware_power_managed(struct device *dev)
+> +{
+> +	u8 val;
+> +	int ret;
+> +
+> +	/* This flag should default true when the device property is not presen=
+t */
+> +	ret =3D device_property_read_u8(dev, "firmware-power-managed", &val);
+> +	if (ret)
+> +		return true;
+> +
+> +	return val;
+> +}
+> +
+>  static int tpm_tis_spi_cr50_transfer(struct tpm_tis_data *data, u32 addr=
+, u16 len,
+>  				     u8 *in, const u8 *out)
+>  {
+> @@ -309,7 +322,8 @@ int cr50_spi_probe(struct spi_device *spi)
+>  	cr50_print_fw_version(&phy->priv);
+> =20
+>  	chip =3D dev_get_drvdata(&spi->dev);
+> -	chip->flags |=3D TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
+> +	if (tpm_cr50_spi_is_firmware_power_managed(&spi->dev))
+> +		chip->flags |=3D TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
+> =20
+>  	return 0;
+>  }
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you.
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
->> drivers/gpu/drm/meson/meson_encoder_dsi.c:59:37: error: passing 'const struct drm_display_mode *' to parameter of type 'struct drm_display_mode *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           meson_venc_mipi_dsi_mode_set(priv, mode);
-                                              ^~~~
-   drivers/gpu/drm/meson/meson_venc.h:71:32: note: passing argument to parameter 'mode' here
-                                     struct drm_display_mode *mode);
-                                                              ^
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:130:69: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   dev_err(priv->dev, "Failed to find DSI transceiver bridge: %d\n", ret);
-                                                                                     ^~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/gpu/drm/meson/meson_encoder_dsi.c:109:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning and 1 error generated.
+I applied this to my tree, and it should be visible in linux-next soon.
 
-
-vim +59 drivers/gpu/drm/meson/meson_encoder_dsi.c
-
-6b197be782e041 Neil Armstrong 2021-12-09  47  
-b186318175a12b Neil Armstrong 2021-12-10  48  static void meson_encoder_dsi_mode_set(struct drm_bridge *bridge,
-b186318175a12b Neil Armstrong 2021-12-10  49  					const struct drm_display_mode *mode,
-b186318175a12b Neil Armstrong 2021-12-10  50  					const struct drm_display_mode *adjusted_mode)
-6b197be782e041 Neil Armstrong 2021-12-09  51  {
-6b197be782e041 Neil Armstrong 2021-12-09  52  	struct meson_encoder_dsi *encoder_dsi = bridge_to_meson_encoder_dsi(bridge);
-6b197be782e041 Neil Armstrong 2021-12-09  53  	struct meson_drm *priv = encoder_dsi->priv;
-6b197be782e041 Neil Armstrong 2021-12-09  54  
-b186318175a12b Neil Armstrong 2021-12-10  55  	pr_err("%s:%d\n", __func__, __LINE__);
-6b197be782e041 Neil Armstrong 2021-12-09  56  
-b186318175a12b Neil Armstrong 2021-12-10  57  	meson_vclk_setup(priv, MESON_VCLK_TARGET_DSI, mode->clock, 0, 0, 0, false);
-6b197be782e041 Neil Armstrong 2021-12-09  58  
-d521159dd8a996 Neil Armstrong 2021-12-10 @59  	meson_venc_mipi_dsi_mode_set(priv, mode);
-e1e87e576f5bef Neil Armstrong 2021-12-09  60  	meson_encl_load_gamma(priv);
-6b197be782e041 Neil Armstrong 2021-12-09  61  
-b186318175a12b Neil Armstrong 2021-12-10  62  	writel_relaxed(0, priv->io_base + _REG(ENCL_VIDEO_EN));
-b186318175a12b Neil Armstrong 2021-12-10  63  
-e1e87e576f5bef Neil Armstrong 2021-12-09  64  	writel_bits_relaxed(BIT(3), BIT(3), priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
-e1e87e576f5bef Neil Armstrong 2021-12-09  65  	writel_relaxed(0, priv->io_base + _REG(ENCL_TST_EN));
-b186318175a12b Neil Armstrong 2021-12-10  66  }
-b186318175a12b Neil Armstrong 2021-12-10  67  
-
-:::::: The code at line 59 was first introduced by commit
-:::::: d521159dd8a996678230b50e4ecafcdf50648c52 fixup! WIP: drm/meson: add DSI encoder
-
-:::::: TO: Neil Armstrong <narmstrong@baylibre.com>
-:::::: CC: Neil Armstrong <narmstrong@baylibre.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+/Jarkko

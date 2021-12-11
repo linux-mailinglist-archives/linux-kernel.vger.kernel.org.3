@@ -2,97 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB0F471392
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 12:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F5247139A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 12:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhLKLMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 06:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbhLKLMa (ORCPT
+        id S230462AbhLKLaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 06:30:08 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29125 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhLKLaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 06:12:30 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300D2C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 03:12:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NWCgLvBk1kN/RV6Aqo1/UiaNQjY1Ur8dnglelLQ8WDQ=; b=phM56QXIVbabeMHx+tQC2zhfM5
-        Na/NcS37ZxPH2mH5rZexEd6aq96lrYWpVI5jqCQaB1a6gbBcQ0+PsT6EkAiSrklYXVtUHkgNviMJW
-        wUbxfBrA/i16+zoM23M1xkXZVak3Waef9YiejkcR8LLTe65W5i7+Qf+4pWhsIY613UwzwMscdo2wM
-        f0nBZYNwTaZ1ME5HQr64ME1Zv4yVYf/OlJkleSH836sFtTsxDujQKLS0Gf4RNLvUhXGELIYf9YFvJ
-        MT2k9HPEz8rQoZEcaFHl2iSkAQGhSQkUAsUA/e58K7vgygphOfUATeBoSojZKHG+FM40vCx4hIjRI
-        1D0oz2BQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mw0Ib-000icP-3v; Sat, 11 Dec 2021 11:12:17 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 33906981654; Sat, 11 Dec 2021 12:12:15 +0100 (CET)
-Date:   Sat, 11 Dec 2021 12:12:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yihao Wu <wuyihao@linux.alibaba.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Shanpei Chen <shanpeic@linux.alibaba.com>,
-        =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/fair: Again ignore percpu threads for imbalance
- pulls
-Message-ID: <20211211111215.GW16608@worktop.programming.kicks-ass.net>
-References: <20211211094808.109295-1-wuyihao@linux.alibaba.com>
+        Sat, 11 Dec 2021 06:30:07 -0500
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JB58b2R1Nz1DJwq;
+        Sat, 11 Dec 2021 19:27:11 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500009.china.huawei.com (7.221.188.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 11 Dec 2021 19:30:05 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 11 Dec 2021 19:30:05 +0800
+From:   Weili Qian <qianweili@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
+        Weili Qian <qianweili@huawei.com>
+Subject: [PATCH 0/6] crypto: hisilicon/qm - handling abnormal interrupts event
+Date:   Sat, 11 Dec 2021 19:25:13 +0800
+Message-ID: <20211211112519.21201-1-qianweili@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211211094808.109295-1-wuyihao@linux.alibaba.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 05:48:08PM +0800, Yihao Wu wrote:
-> commit 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance
-> pulls") was meant to fix a performance issue, when load balance tries to
-> migrate pinned kernel threads at MC domain level. This was destined to
-> fail. After it fails, it further makes wakeup balance at NUMA domain level
-> messed up. The most severe case that I noticed and frequently occurs:
->     |sum_nr_running(node1) - sum_nr_running(node2)| > 100
-> 
-> However the original bugfix failed, because it covers only case 1) below.
->   1) Created by create_kthread
->   2) Created by kernel_thread
-> No kthread is assigned to task_struct in case 2 (Please refer to comments
-> in free_kthread_struct) so it simply won't work.
-> 
-> The easist way to cover both cases is to check nr_cpus_allowed, just as
-> discussed in the mailing list of the v1 version of the original fix.
-> 
-> * lmbench3.lat_proc -P 104 fork (2 NUMA, and 26 cores, 2 threads)
-> 
->                          w/out patch                 w/ patch
-> fork+exit latency            1660 ms                  1520 ms (   8.4%)
-> 
-> Fixes: 2f5f4cce496e ("sched/fair: Ignore percpu threads for imbalance pulls")
-> Signed-off-by: Yihao Wu <wuyihao@linux.alibaba.com>
-> ---
->  kernel/kthread.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/kernel/kthread.c b/kernel/kthread.c
-> index 4a4d7092a2d8..cb05d3ff2de4 100644
-> --- a/kernel/kthread.c
-> +++ b/kernel/kthread.c
-> @@ -543,11 +543,7 @@ void kthread_set_per_cpu(struct task_struct *k, int cpu)
->  
->  bool kthread_is_per_cpu(struct task_struct *p)
->  {
-> -	struct kthread *kthread = __to_kthread(p);
-> -	if (!kthread)
-> -		return false;
-> -
-> -	return test_bit(KTHREAD_IS_PER_CPU, &kthread->flags);
-> +	return (p->flags & PF_KTHREAD) && p->nr_cpus_allowed == 1;
->  }
+When the hardware reports abnormal interrupt event, the driver needs to
+handle it according to the error type, such as function reset and
+disable queue.
 
-NAK, this will break lots of things.
+Weili Qian (6):
+  crypto: hisilicon/qm - remove unnecessary device memory reset
+  crypto: hisilicon/qm - code movement
+  crypto: hisilicon/qm - modify the handling method after abnormal
+    interruption
+  crypto: hisilicon/qm - use request_threaded_irq instead
+  crypto: hisilicon/qm - reset function if event queue overflows
+  crypto: hisilicon/qm - disable queue when 'CQ' error
+
+ drivers/crypto/hisilicon/qm.c | 278 ++++++++++++++++++++++------------
+ 1 file changed, 183 insertions(+), 95 deletions(-)
+
+-- 
+2.33.0
+

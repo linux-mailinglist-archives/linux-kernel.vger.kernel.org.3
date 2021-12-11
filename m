@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A36354716A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E03C4716AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbhLKVQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S231610AbhLKVQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbhLKVPN (ORCPT
+        with ESMTP id S232221AbhLKVPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:15:13 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080F5C0617A2;
-        Sat, 11 Dec 2021 13:14:50 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id 207so18429658ljf.10;
-        Sat, 11 Dec 2021 13:14:49 -0800 (PST)
+        Sat, 11 Dec 2021 16:15:14 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A11C061D5E;
+        Sat, 11 Dec 2021 13:14:51 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id 13so18396730ljj.11;
+        Sat, 11 Dec 2021 13:14:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qiHcMiEd6KcY2C0+ILivslEVgP5sXrzhXPuybOmc7dw=;
-        b=MOoaFxMbb4EAc7zInKUn4CbujGyyMSYjwTplfSc7bfGtIL8euvXgX0ubzF8F6QQJTI
-         LalMOEHxACPQCamqcg0CmgsHMhIPf1hfLbxGcabAlXRAV7Qp4wb4VFIZcqYgzZ9uMDTm
-         LHcS619xUWwg7+bi93icpcc5RSahO0ZuDDGc2/ff0LZu8FoZLjqPP37FOyf4wwyf2QDc
-         R0P2jt633GMj9XIn3Qt4fw2j4ldxQTZckKOfDXhmsvLaOOAgiG7G25DvCrb6bTxuusrZ
-         cOc9ktKsJm0Sg7ZbujL6l0DykVQzqedzm5o/MzCeg+F0KtV9X48IfRNqqjPnq7poGMIU
-         lrtw==
+        bh=WNUlnyAFdZfXAW0dqu+wpIr279PiDcPDsUdF+Ee+XoU=;
+        b=PReGWHNm/A7etwnGbCdpmm/gpUaT6f/I04HyUfrRGvqStx8AVBsQAX9tA0FSVqgkGF
+         alw5JAZApyi020Bne1VOr63aQ0MhLPCcJTQgtRREQsUbeXOXRgbv2CUak8dsOnk5ZTd7
+         H7aBSMxI/FWtiLbj8h04KPa8cuADDcAkZhzM7P6zJO82sXeztmUFDQLZkzacwq8VzZGn
+         dQez3xVzyQHnP722XHDmNpqJg8ZUYnyIyUnlo76GnrfkG0GeNfcOXUwLMZxMkIu4gMHc
+         QVQIXBkKKj8KAOsJJEglJHvpF1OOPjg+S0MzPQuUV5xEIKIDzAOJAcO0UCunDHmIlHmp
+         rk7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qiHcMiEd6KcY2C0+ILivslEVgP5sXrzhXPuybOmc7dw=;
-        b=NcLw9wxZfcecA0IeVD25qWQxTzYgFy8UnS/FCIEvtzf2HnrmWx/SgtKjk0anCaMYQc
-         uTEVnP3ut2Iof+IgGE/4YDvgPMwc4kCJLKv5xIM0DGvN3qbDq18DINzyMcDwImkmQS+w
-         MQSG5G6yUYKPk3iPHo4pF7YvppHzUgxbc9Ro/v4HSvlIlYVXvgOmh1B+gMY6ASAXEtMW
-         qc4rJmXXLqXr76b7/dL2U10Hz3WsCviaX+q5pffBRWvsCXuuEgQuPhhxtKFTYeFXx6Lc
-         vZLPFX+u1KZmz+SNndRZsjLspjzJ3EoRecUvBlbmONiC43vh5J4hg2jsNVJjYia525YE
-         DHNQ==
-X-Gm-Message-State: AOAM533MpoC+fGb767ZqNzy48IOugwDSSOSt0lFVvHmyzeWT3FxwM+/H
-        tTMWIs96cmtpyw49jvnB5K8=
-X-Google-Smtp-Source: ABdhPJwBfECAzRzARREWDabHv1SnGwl5wYB0H94hUJgwS9fCpiSfbZia17WUFujnG6/4sNcAlef5Yw==
-X-Received: by 2002:a05:651c:1024:: with SMTP id w4mr19697403ljm.154.1639257288345;
-        Sat, 11 Dec 2021 13:14:48 -0800 (PST)
+        bh=WNUlnyAFdZfXAW0dqu+wpIr279PiDcPDsUdF+Ee+XoU=;
+        b=sIe3QuRTv0OQxSq1ZIfK4QbxOPTowAKrKQNg9VUBevj03lke4tk4g+oXlenQlx8Gkz
+         eSbqXYpkuG4p9blL8+xfG3F8vz7kAE7PT0I64cE+4HuM/S7QwiX3OKg/ehVOWFYj3aWv
+         wOmBPHTNIhnqnR50rWCyZwHEvsyV8q1aZCfO4oRVOL+LF4aBbzyXY5I+Nz3T/bnG4515
+         cpHIJhUKqqiHPbdA7LYfzVxmu7UrigwYLyx9VXMlTfSrgNHtsaJE7DeHdDw4dVuvqPl9
+         bmjDh8WbzWU4LofQrhrlNtCsRMvM09KHLXZXnIL31eVJ9LlVYztukTlWC5vQbZN0pA8f
+         1Jmw==
+X-Gm-Message-State: AOAM530+31mVPOfiX8qRmqWb6UsTfZbhjaloxE6FWNdwzFyxFuopI4et
+        3STxoom4BVHhDthwg/16mAM=
+X-Google-Smtp-Source: ABdhPJymU2e8rQHhAnxsnkUfABET8powIsAconkhFxRN/hri4NqoQwDq5C9Ztse6GKQdU+R5D7o4zg==
+X-Received: by 2002:a2e:9246:: with SMTP id v6mr20336703ljg.160.1639257289334;
+        Sat, 11 Dec 2021 13:14:49 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.47
+        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 13:14:48 -0800 (PST)
+        Sat, 11 Dec 2021 13:14:49 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -69,9 +69,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 26/28] ARM: tegra: Re-add gpio-ranges properties
-Date:   Sun, 12 Dec 2021 00:14:10 +0300
-Message-Id: <20211211211412.10791-27-digetx@gmail.com>
+Subject: [PATCH v6 27/28] ARM: tegra_defconfig: Enable drivers wanted by Acer Chromebooks and ASUS tablets
+Date:   Sun, 12 Dec 2021 00:14:11 +0300
+Message-Id: <20211211211412.10791-28-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211211211412.10791-1-digetx@gmail.com>
 References: <20211211211412.10791-1-digetx@gmail.com>
@@ -81,102 +81,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Agner <stefan@agner.ch>
+Enable charger, touchpad  and EC drivers found on Acer Tegra124 (Nyan)
+Chromebooks, display bridge found on ASUS TF700T and audio codecs
+found on ASUS tablets.
 
-The properties have been commented out to prevent a regression a
-while ago. The first regression should be resolved by
-commit 44af7927316e ("spi: Map SPI OF client IRQ at probe time").
-
-The second regression is probably addressed by
-commit 494fd7b7ad10 ("PM / core: fix deferred probe breaking suspend resume order")
-and/or maybe others. Re-add the gpio-ranges properties to see whether
-regressions still get reported.
-
-This reverts commit 4f1d841475e1f6e9e32496dda11215db56f4ea73
-("ARM: tegra: Comment out gpio-ranges properties").
-
-[digetx@gmail.com: removed gpio-ranges from tegra30-ouya.dtsi]
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Suggested-by: Thomas Graichen <thomas.graichen@gmail.com> # Nyan options
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra114.dtsi    | 2 --
- arch/arm/boot/dts/tegra124.dtsi    | 2 --
- arch/arm/boot/dts/tegra20.dtsi     | 2 --
- arch/arm/boot/dts/tegra30-ouya.dts | 4 ----
- arch/arm/boot/dts/tegra30.dtsi     | 2 --
- 5 files changed, 12 deletions(-)
+ arch/arm/configs/tegra_defconfig | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra114.dtsi b/arch/arm/boot/dts/tegra114.dtsi
-index 3d08764401ce..ea5ba6e19a32 100644
---- a/arch/arm/boot/dts/tegra114.dtsi
-+++ b/arch/arm/boot/dts/tegra114.dtsi
-@@ -261,9 +261,7 @@ gpio: gpio@6000d000 {
- 		gpio-controller;
- 		#interrupt-cells = <2>;
- 		interrupt-controller;
--		/*
- 		gpio-ranges = <&pinmux 0 0 246>;
--		*/
- 	};
- 
- 	vde@6001a000 {
-diff --git a/arch/arm/boot/dts/tegra124.dtsi b/arch/arm/boot/dts/tegra124.dtsi
-index 63a64171b422..fbc9bc6e5bd7 100644
---- a/arch/arm/boot/dts/tegra124.dtsi
-+++ b/arch/arm/boot/dts/tegra124.dtsi
-@@ -313,9 +313,7 @@ gpio: gpio@6000d000 {
- 		gpio-controller;
- 		#interrupt-cells = <2>;
- 		interrupt-controller;
--		/*
- 		gpio-ranges = <&pinmux 0 0 251>;
--		*/
- 	};
- 
- 	apbdma: dma@60020000 {
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index 9508248fd166..f9ad0780587f 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -293,9 +293,7 @@ gpio: gpio@6000d000 {
- 		gpio-controller;
- 		#interrupt-cells = <2>;
- 		interrupt-controller;
--		/*
- 		gpio-ranges = <&pinmux 0 0 224>;
--		*/
- 	};
- 
- 	vde@6001a000 {
-diff --git a/arch/arm/boot/dts/tegra30-ouya.dts b/arch/arm/boot/dts/tegra30-ouya.dts
-index fd64aadc472a..e40043546a0b 100644
---- a/arch/arm/boot/dts/tegra30-ouya.dts
-+++ b/arch/arm/boot/dts/tegra30-ouya.dts
-@@ -68,10 +68,6 @@ hdmi@54280000 {
- 		};
- 	};
- 
--	gpio: gpio@6000d000 {
--		gpio-ranges = <&pinmux 0 0 248>;
--	};
--
- 	pinmux@70000868 {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&state_default>;
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index a6772171c910..b7a48758d930 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -441,9 +441,7 @@ gpio: gpio@6000d000 {
- 		gpio-controller;
- 		#interrupt-cells = <2>;
- 		interrupt-controller;
--		/*
- 		gpio-ranges = <&pinmux 0 0 248>;
--		*/
- 	};
- 
- 	vde@6001a000 {
+diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+index 8a8f12b3e6dd..a8093b222551 100644
+--- a/arch/arm/configs/tegra_defconfig
++++ b/arch/arm/configs/tegra_defconfig
+@@ -104,6 +104,8 @@ CONFIG_USB_USBNET=y
+ CONFIG_USB_NET_SMSC75XX=y
+ CONFIG_USB_NET_SMSC95XX=y
+ CONFIG_BRCMFMAC=m
++CONFIG_MWIFIEX=m
++CONFIG_MWIFIEX_SDIO=m
+ CONFIG_RT2X00=y
+ CONFIG_RT2800USB=m
+ CONFIG_INPUT_JOYDEV=y
+@@ -112,6 +114,8 @@ CONFIG_KEYBOARD_GPIO=y
+ CONFIG_KEYBOARD_TEGRA=y
+ CONFIG_KEYBOARD_CROS_EC=y
+ CONFIG_KEYBOARD_CAP11XX=y
++CONFIG_MOUSE_ELAN_I2C=m
++CONFIG_MOUSE_ELAN_I2C_SMBUS=y
+ CONFIG_MOUSE_PS2_ELANTECH=y
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=y
+@@ -131,6 +135,7 @@ CONFIG_SERIAL_DEV_BUS=y
+ # CONFIG_HW_RANDOM is not set
+ # CONFIG_I2C_COMPAT is not set
+ CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MUX_GPIO=y
+ CONFIG_I2C_MUX_PCA954x=y
+ CONFIG_I2C_MUX_PINCTRL=y
+ CONFIG_I2C_TEGRA=y
+@@ -151,7 +156,9 @@ CONFIG_GPIO_TPS65910=y
+ CONFIG_POWER_RESET=y
+ CONFIG_POWER_RESET_AS3722=y
+ CONFIG_POWER_RESET_GPIO=y
++CONFIG_POWER_RESET_GPIO_RESTART=y
+ CONFIG_BATTERY_SBS=y
++CONFIG_CHARGER_BQ24735=y
+ CONFIG_BATTERY_BQ27XXX=y
+ CONFIG_CHARGER_GPIO=y
+ CONFIG_CHARGER_SMB347=y
+@@ -200,7 +207,9 @@ CONFIG_DRM_TEGRA_STAGING=y
+ CONFIG_DRM_PANEL_LVDS=y
+ CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_DRM_PANEL_EDP=y
++CONFIG_DRM_PANEL_SHARP_LQ101R1SX01=y
+ CONFIG_DRM_LVDS_CODEC=y
++CONFIG_DRM_TOSHIBA_TC358768=y
+ CONFIG_FB=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_PWM=y
+@@ -279,6 +288,9 @@ CONFIG_STAGING_MEDIA=y
+ CONFIG_TEGRA_VDE=y
+ CONFIG_CHROME_PLATFORMS=y
+ CONFIG_CROS_EC=y
++CONFIG_CROS_EC_I2C=m
++CONFIG_CROS_EC_SPI=m
++CONFIG_I2C_CROS_EC_TUNNEL=m
+ CONFIG_TEGRA_IOMMU_GART=y
+ CONFIG_TEGRA_IOMMU_SMMU=y
+ CONFIG_ARCH_TEGRA_2x_SOC=y
 -- 
 2.33.1
 

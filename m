@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE433471692
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FAD471697
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhLKVPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S232098AbhLKVPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbhLKVOp (ORCPT
+        with ESMTP id S232287AbhLKVOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:14:45 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21CBC0698C6;
-        Sat, 11 Dec 2021 13:14:39 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id a37so17385526ljq.13;
-        Sat, 11 Dec 2021 13:14:39 -0800 (PST)
+        Sat, 11 Dec 2021 16:14:47 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC84EC0698CA;
+        Sat, 11 Dec 2021 13:14:40 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id l7so18500217lja.2;
+        Sat, 11 Dec 2021 13:14:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ivl/N40c1tlMrmwTfIX/+o/rKme8fK1843gBC9Fg4bk=;
-        b=A0/eEJCRr4yxgiDbcCJzgPvdLv4vDKX8MAe62tMYjj1A4g0e8tP1n84v5HYTc0ZyyM
-         bjKA5GDpmpq6LIlntPL88zwIPVI+AmXgJdqXKX3XzVEGPkwBM4leRt9tx/z4NIlXO8vh
-         zCvnfbxkboZqEHCJyXq6yP9CxzTxN4NnIEeh+ePtNAO42A1N+7aox6Z5QdWM85KFOmlF
-         vR78Z1uGGTbQ+g+RGn9AhjCnwTOsIOEryoknJyGewpKVljsVuUsavQeo3tYPVZ8kiWJp
-         cJ1pDsMo1S7oMCJIJTH3Kiaputtmnv8ZK8bF6CHFW7eGLD78MONYNnkNJBqTx9ZPmCrM
-         xdUw==
+        bh=wFv5ewELhNJglV+yW+iqcYT9tK2sEvBiahvNmcOYRpE=;
+        b=cJ4IMGi9wDk2bKuQGFRd4u+BwhLdFNyz/2jaznmXgeZ42j2X0zlVmA1Ynf2aEeqbKX
+         AgstJEBZ2oJpiOMfX1iSIB+sUXo1t5B1rbvwalVzC9/jywVJCc6TXEjyKsty3/n8Lix/
+         xMj3MghIj3bbibXRLqdrv2IiTPzG6CE0N0tSO0sIXuVmSEM4kGW2mHOanDj9n2yhlHXF
+         C/EZa56Lyk+sN8EgXUFihpqrdwBhun0MzO/2HfhTlStXDo9Z1Ihw3PeuQv9HvXmZxz57
+         AhbohJNTSiayTV9Ni4szr4akLlKxkZCqr+zzgm/FAWo54T5o2OnM5Kb/nMc+2hzU0izo
+         TBKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ivl/N40c1tlMrmwTfIX/+o/rKme8fK1843gBC9Fg4bk=;
-        b=mg7cyAh9J0sDHz52RMtKjauiLLFluzhHgMM7OjQemYpIFCf344HGvGH031QcmaJgi+
-         tzwHABTu6pgavYbAqHwOG+txB2qreSofeHNn5AQnIDLk/90v6j3gKZtyX/Hu7ogNSlXb
-         groppnQQphcDmKuJqCr1O8+6uHamlJBAkj79F/P3I+Ppcu6ctYrNgdc2buwPbTH4Wj3X
-         0n45F9X59FLYQ5l2Doo33P9HnOvTp+ZpRxuJ09uSJWSy9VLSMiuo9YEyPvLBt0KgCZiM
-         SMJ5m5QMnpsU0IcXmv+KuRukdpyTOy+olGRW8XuDLk8b7UShYm3HeUi9i8DdyjjNbqL/
-         Cysg==
-X-Gm-Message-State: AOAM532PRApEDF1tUGd+5CIQ9xYILMX6+WXxo//0g4qwmNYSYBFfq0xv
-        dmW7+ik+qtRYxY9MKfV0H4E=
-X-Google-Smtp-Source: ABdhPJx8r1dnuhpvs3Uq0EhR4PnH6o4X0NVnJg1pmv4pDiAyMHMIzIl1cXQIfC0Mbzgy47wSM0CcEQ==
-X-Received: by 2002:a05:651c:1722:: with SMTP id be34mr19890642ljb.52.1639257278043;
-        Sat, 11 Dec 2021 13:14:38 -0800 (PST)
+        bh=wFv5ewELhNJglV+yW+iqcYT9tK2sEvBiahvNmcOYRpE=;
+        b=QACHrZRNHUUAwBnxttDT6uZ9Zcc4vvtArvy1GFLSPloVBJMUVEsblEWnpkZU6S1OvU
+         nfHZsqcER+ZwPNVT+KQHdtguiQQ5TTSqpf9JnibCWVJxm+6qgM2FQ/mlJMCfM2RV7txI
+         /irBN+Xd0ZUpZ1+B0XRyDE8wKVetQDshB62s4bxCCM4R9GUSgH1Kqklqcz9uuGqEd0dY
+         jg/ndFWm5zsicKRIrA/cQqsmdy1KqAe9A48ode91i/MZktsGsjrkw7BDdlU8jUasG2QH
+         /EwkCldf9Sa4+ag8rTId3SCXHsNJlS61TSsyDmLqEZxSr1Yc5SmfYu2F6oyR6mNXHvU7
+         NlOQ==
+X-Gm-Message-State: AOAM532qMvvBesk8b0QJeDZR1xOf9+vlDtxza3xfiYv8TdiFzJNkVpPL
+        FtllpMsCY+dFufsbzY5OzUM=
+X-Google-Smtp-Source: ABdhPJxZsaHAf0Qb8FT+bruVPtYb4eIei4hOEcjJQePH4qpqYqYm9Y3pLVyEWDJOttMlM5V2tDjlSw==
+X-Received: by 2002:a2e:9698:: with SMTP id q24mr20673795lji.246.1639257279017;
+        Sat, 11 Dec 2021 13:14:39 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.37
+        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 13:14:37 -0800 (PST)
+        Sat, 11 Dec 2021 13:14:38 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -69,9 +69,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 16/28] ARM: tegra: Enable HDMI CEC on Nyan
-Date:   Sun, 12 Dec 2021 00:14:00 +0300
-Message-Id: <20211211211412.10791-17-digetx@gmail.com>
+Subject: [PATCH v6 17/28] ARM: tegra: Enable CPU DFLL on Nyan
+Date:   Sun, 12 Dec 2021 00:14:01 +0300
+Message-Id: <20211211211412.10791-18-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211211211412.10791-1-digetx@gmail.com>
 References: <20211211211412.10791-1-digetx@gmail.com>
@@ -81,29 +81,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable HDMI CEC on Nyan Chromebooks. It allows to control TV over HDMI.
+Enable CPU DFLL node on Nyan Chromebooks. DFLL was previously disabled due
+to Linux kernel CPUFreq driver which didn't support suspend-resume. That
+problem was fixed years ago, but DFLL was never re-enabled.
 
-Suggested-by: Thomas Graichen <thomas.graichen@gmail.com>
 Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan Big
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra124-nyan.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm/boot/dts/tegra124-nyan.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/tegra124-nyan.dtsi b/arch/arm/boot/dts/tegra124-nyan.dtsi
-index 93a40a84b792..a5dff226831b 100644
+index a5dff226831b..ec01a23d4d47 100644
 --- a/arch/arm/boot/dts/tegra124-nyan.dtsi
 +++ b/arch/arm/boot/dts/tegra124-nyan.dtsi
-@@ -390,6 +390,10 @@ pmc@7000e400 {
- 		nvidia,sys-clock-req-active-high;
- 	};
+@@ -532,7 +532,7 @@ mmc@700b0600 { /* eMMC on this bus */
  
-+	cec@70015000 {
+ 	/* CPU DFLL clock */
+ 	clock@70110000 {
+-		status = "disabled";
 +		status = "okay";
-+	};
-+
- 	hda@70030000 {
- 		status = "okay";
+ 		vdd-cpu-supply = <&vdd_cpu>;
+ 		nvidia,i2c-fs-rate = <400000>;
  	};
 -- 
 2.33.1

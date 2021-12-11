@@ -2,113 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62473471430
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 15:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3572A471433
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 15:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbhLKOQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 09:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbhLKOQS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 09:16:18 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEF6C061714;
-        Sat, 11 Dec 2021 06:16:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=e0anjkaxdNpVxEb5moHXvrH7yl2NTFZ61IqrH8qKTDY=; b=Mh8xcA7DyDvxNmeiQA+l94WXGf
-        vCspSXYiunAGFM72nem7R64bjx28jVCw8FQ22HarPTPBKZoCLxYztfeTTOCEPS7qbl3KRKOGly0GM
-        s/DZK9emVxtwRJOgQc+YzCmV0cQeGrFcJL94vIjzIL9v3eIMeOrCfxSQceHkc9Wzg3tV3cLaTz+6/
-        1v1qNLr1PzgnZHElMHBgZLhdGI73xP6jUd/Q3CGkJXp3ShPHJ8pHq57HRiSGXAvmb61gTHZ1/Tcky
-        WG7MaNIJjut0T7EAyjXJwjq8v3K5p0VQ+L5lFiJTYdHJfYb/Epd+9Q+wPwNAmL/C6b3VMPz49Oknh
-        nASWleHA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56232)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mw3AK-00025G-Of; Sat, 11 Dec 2021 14:15:56 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mw3AI-0000kg-2f; Sat, 11 Dec 2021 14:15:54 +0000
-Date:   Sat, 11 Dec 2021 14:15:54 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     philippe.schenker@toradex.com, andrew@lunn.ch,
-        qiangqing.zhang@nxp.com, davem@davemloft.net, festevam@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] net: phy: perform a PHY reset on resume
-Message-ID: <YbSymkxlslW2DqLW@shell.armlinux.org.uk>
-References: <7a4830b495e5e819a2b2b39dd01785aa3eba4ce7.camel@toradex.com>
- <20211211130146.357794-1-francesco.dolcini@toradex.com>
+        id S231204AbhLKOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 09:16:45 -0500
+Received: from meesny.iki.fi ([195.140.195.201]:46554 "EHLO meesny.iki.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229591AbhLKOQo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 09:16:44 -0500
+Received: from localhost (91-154-92-131.elisa-laajakaista.fi [91.154.92.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sakkinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id C5FC62006A;
+        Sat, 11 Dec 2021 16:16:37 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1639232197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zWK2//QP16YYAKOvxB7SmjTHAav5DJvc4RhNrtLCNuY=;
+        b=Yw+soqVk91mkjO+u9oCqsklsz0eDktVYaFrfkr1hqnFszFMmOBOil7PAnbzmZmhF61Y4zC
+        Hf9quCusc7sPSwavjNIydFj+Can7txH9rW+4qryDiQWE2xGeDmuZFDxvR4OgfN8WDCoaUH
+        UBO/myhsmwtcAp0ZSEX0/FDBLD4jOTA=
+Message-ID: <a71b600f34f66d6eca5c50259529b3fc476880f6.camel@iki.fi>
+Subject: Re: [PATCH v4 11/16] securityfs: Only use
+ simple_pin_fs/simple_release_fs for init_user_ns
+From:   Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Date:   Sat, 11 Dec 2021 16:16:36 +0200
+In-Reply-To: <20211207202127.1508689-12-stefanb@linux.ibm.com>
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+         <20211207202127.1508689-12-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211211130146.357794-1-francesco.dolcini@toradex.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1639232197; a=rsa-sha256; cv=none;
+        b=iyX8mTLK1fK+TH/O0vL6Vp+OfWDoKwmG5zy3iecl9baP3uKwFTL5UzU9mxlm/oegva9tF0
+        FJK5+NRzQYp5kyYKFj4u1/wMwBcnYh8y8RkgMYDnM0EtLghdDSkC/Gh8bPZ4ndtiQhxJis
+        3mStMi4Qo/4pE4Y9WB+XG0Wk5sO/Ksk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1639232197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zWK2//QP16YYAKOvxB7SmjTHAav5DJvc4RhNrtLCNuY=;
+        b=h/q1QQqnQYufTz/VSWZnDEytTk3wNcSIu+XrCPAOj0t7g15p74589jP/8f37N8Kpx+0U4S
+        I3/z3cGalEP781aR64ZgFoceBg9622fIqWCWIdjqCYSNZD8d2OdihswIuRwTuE7oB97RhC
+        DirA8wMIIw/wyxDmXc1MnZlWBVdkh+w=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 02:01:46PM +0100, Francesco Dolcini wrote:
-> Perform a PHY reset in phy_init_hw() to ensure that the PHY is working
-> after resume. This is required if the PHY was powered down in suspend
-> like it is done by the freescale FEC driver in fec_suspend().
-> 
-> Link: https://lore.kernel.org/netdev/20211206101326.1022527-1-philippe.schenker@toradex.com/
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> 
-> ---
-> 
-> Philippe: what about something like that? Only compile tested, but I see no reason for this not solving the issue.
-> 
-> Any delay required on the reset can be specified using reset-assert-us/reset-deassert-us.
-> 
-> ---
->  drivers/net/phy/phy_device.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-> index 74d8e1dc125f..7eab0c054adf 100644
-> --- a/drivers/net/phy/phy_device.c
-> +++ b/drivers/net/phy/phy_device.c
-> @@ -1158,7 +1158,8 @@ int phy_init_hw(struct phy_device *phydev)
->  {
->  	int ret = 0;
->  
-> -	/* Deassert the reset signal */
-> +	/* phy reset required if the phy was powered down during suspend */
-> +	phy_device_reset(phydev, 1);
->  	phy_device_reset(phydev, 0);
->  
->  	if (!phydev->drv)
+On Tue, 2021-12-07 at 15:21 -0500, Stefan Berger wrote:
+> To prepare for virtualization of SecurityFS, use simple_pin_fs and
+> simpe_release_fs only when init_user_ns is active.
+>=20
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-I don't particularly like this - this impacts everyone who is using
-phylib at this point, whereas no reset was happening if the reset was
-already deasserted here.
+What do you mean by virtualization, and how does this prepare
+securityfs for it? The commit message should be way more verbose.
 
-In the opening remarks to this series, it is stated:
-
-  If a hardware-design is able to control power to the Ethernet PHY and
-  relying on software to do a reset, the PHY does no longer work after
-  resuming from suspend, given the PHY does need a hardware-reset.
-
-This requirement is conditional on the hardware design, it isn't a
-universal requirement and won't apply everywhere. I think it needs to
-be described in firmware that this action is required. That said...
-
-Please check the datasheet on the PHY regarding application of power and
-reset. You may find that the PHY datasheet requires the reset to be held
-active from power up until the clock input is stable - this could mean
-you need some other arrangement to assert the PHY reset signal after
-re-applying power sooner than would happen by the proposed point in the
-kernel.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+/Jarkko

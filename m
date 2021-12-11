@@ -2,69 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EA74712D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614DE4712DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbhLKIWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 03:22:09 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28307 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbhLKIWI (ORCPT
+        id S230045AbhLKIWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 03:22:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbhLKIWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 03:22:08 -0500
-Received: from kwepemi500001.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JB12k5MHdzbjMg;
-        Sat, 11 Dec 2021 16:21:50 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500001.china.huawei.com (7.221.188.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 11 Dec 2021 16:22:05 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 11 Dec 2021 16:22:05 +0800
-From:   Weili Qian <qianweili@huawei.com>
-To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
-        Weili Qian <qianweili@huawei.com>
-Subject: [PATCH] crypto: hisilicon/hpre - fix memory leak in hpre_curve25519_src_init()
-Date:   Sat, 11 Dec 2021 16:17:19 +0800
-Message-ID: <20211211081719.30329-1-qianweili@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 11 Dec 2021 03:22:19 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA52AC061751;
+        Sat, 11 Dec 2021 00:22:18 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id e3so37399536edu.4;
+        Sat, 11 Dec 2021 00:22:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5kEcZxkBXlWefk5sypVc8zvnb+Y3Uf9P6j2F6q18Als=;
+        b=CEdX4vSeEr3TaiJyStU4U2YGWcRgKqOCkzz2AN2/kPKLEoO0H8z12D1Mjt3zS9RQxr
+         xKT87Jl3Z1Ve0e8QqOESz96xWOf3ZG9CNj10KZ7EoRUJ581VzK3f9Fyb3O17tPO6EUc6
+         BXGIm9vmSWAr12CPQhY5r64TJ5NwysvMwY8KPX9QviGllStB8hqqIugzD29KGxkbCxof
+         3gfoBN83GTd3ZKVRCY88AXqykJrRmvps3Zy3ok1RrU8trk7HKiMmZ9sw9QLkRLDIkX23
+         TKKHU31dEQyFkJcThANukdsCEU+jfzgRIcRYfpkouEjY/VreUhyyCIAyC/G/prOGpKSv
+         AJHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5kEcZxkBXlWefk5sypVc8zvnb+Y3Uf9P6j2F6q18Als=;
+        b=7/t8/8mGilx9eSsSpv11tsr3iejSf3mIVwPhgyGIOXmVeuGtwUUGSqdMUsvUTBCrRE
+         H0WZizmABUoyq3pG7H/nUNoRRJwwJtvjVoXe5lLHjYEwVItgZTywpSniq70XBIBm+fhF
+         h6aZXLXLbIwT/ec4QBmH6qlfGlXAoNWMXpbw99KAlAi3/04ImGScp0i+mqF6sn49djUM
+         mpX7M8EafNfeUEmsnW1x89wgS9bvTUu066NKxUhneHKXy02AN/A4Q7zkWuQf5p1e9WVl
+         7wGWq2FoPWqcKriyuMnFV1DVdEr4H2AYa+7Npdez9Vjt7mji72yDNwFB7qD06AYJH926
+         s5AA==
+X-Gm-Message-State: AOAM53065eu05XY4p84Cc7+E7yJ4ortGStUfwJSOoB7KWFWs0jzZNDVD
+        qZcWrKUYRrSyjXk2b8cMlzHPUzzuAqAGEA==
+X-Google-Smtp-Source: ABdhPJyUXSSeb2vgponB2mBfQznJjlZCp+iEDtjqo3JMKjhZZY+B/C/QwBu5mWnU4Sbeg0ykknjb5g==
+X-Received: by 2002:a17:907:2da2:: with SMTP id gt34mr27760282ejc.372.1639210937454;
+        Sat, 11 Dec 2021 00:22:17 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
+        by smtp.googlemail.com with ESMTPSA id eg8sm2649455edb.75.2021.12.11.00.22.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Dec 2021 00:22:16 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <56281d07-de85-69be-8855-71e7219e0227@redhat.com>
+Date:   Sat, 11 Dec 2021 09:22:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
+ shadow paging if the guest PDPTEs is changed
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Xiao Guangrong <guangrong.xiao@linux.intel.com>
+References: <20211108124407.12187-1-jiangshanlai@gmail.com>
+ <20211111144634.88972-1-jiangshanlai@gmail.com> <Ya/5MOYef4L4UUAb@google.com>
+ <11219bdb-669c-cf6f-2a70-f4e5f909a2ad@redhat.com>
+ <YbPBjdAz1GQGr8DT@google.com>
+ <42701fedbe10acf164ec56818b941061be6ffd4e.camel@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <42701fedbe10acf164ec56818b941061be6ffd4e.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hpre_curve25519_src_init() allocates memory for 'ptr' before calling
-memcmp(). If memcmp() returns 0, the function will return '-EINVAL'
-without freeing memory.
+On 12/11/21 07:56, Maxim Levitsky wrote:
+>> This apparently wasn't validated against a simple use case, let
+>> alone against things like migration with nested VMs, multliple L2s,
+>> etc...
+> 
+> I did validate the *SREGS2* against all the cases I could (like
+> migration, EPT/NPT disabled/etc. I even started testing SMM to see
+> how it affects PDPTRs, and patched seabios to use PAE paging. I still
+> could have missed something.
 
-Signed-off-by: Weili Qian <qianweili@huawei.com>
----
- drivers/crypto/hisilicon/hpre/hpre_crypto.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Don't worry, I think Sean was talking about patch 16 and specifically
+digging at me (who deserved it completely).
 
-diff --git a/drivers/crypto/hisilicon/hpre/hpre_crypto.c b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-index 0f1724d355b8..97d54c1465c2 100644
---- a/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-+++ b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-@@ -1862,7 +1862,7 @@ static int hpre_curve25519_src_init(struct hpre_asym_request *hpre_req,
- 	 */
- 	if (memcmp(ptr, p, ctx->key_sz) == 0) {
- 		dev_err(dev, "gx is p!\n");
--		return -EINVAL;
-+		goto err;
- 	} else if (memcmp(ptr, p, ctx->key_sz) > 0) {
- 		hpre_curve25519_src_modulo_p(ptr);
- 	}
--- 
-2.33.0
-
+Paolo

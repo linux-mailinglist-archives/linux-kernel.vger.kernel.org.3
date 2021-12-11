@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0150547131C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 10:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C61471322
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 10:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbhLKJQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 04:16:50 -0500
-Received: from smtpbg128.qq.com ([106.55.201.39]:26324 "EHLO smtpbg587.qq.com"
+        id S230217AbhLKJTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 04:19:35 -0500
+Received: from smtpbg127.qq.com ([109.244.180.96]:56046 "EHLO smtpbg.qq.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229455AbhLKJQt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 04:16:49 -0500
-X-QQ-mid: bizesmtp34t1639214194t6xo5mdq
+        id S230206AbhLKJTe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 04:19:34 -0500
+X-QQ-mid: bizesmtp45t1639214357tp0q2cjc
 Received: from localhost.localdomain (unknown [182.132.179.213])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Sat, 11 Dec 2021 17:16:33 +0800 (CST)
+        id ; Sat, 11 Dec 2021 17:19:16 +0800 (CST)
 X-QQ-SSF: 01000000008000D0H000B00A0000000
-X-QQ-FEAT: qwt6al2KEqgevBLvWz99rmooOb53MQZxBbMK7rtCrMtOnVMfa7T+nQ3TMI0cd
-        +bUYd3eJzCbTVQtOouTdfOJI05DC9zRgvXUwebrbtmjRqJZR5kK+IkGMjQPkhgPDK7FFE7c
-        OEXtIvyF/XL8osLqWzgBo4Guy7pCUVGw7U4RkbiWQP6C6hd6mE3kSJ8ewTZI73BPHxgJ+8q
-        i41sDiL1Uc7TNj1w6PzM+12fgJs5wuFyihX4Q4SNQJ7qc/EwwB9MJCyhUHUAjQdg9/3HX2Q
-        g/RwQSI3HHD9VRhHY0S+PZ7YSIc/bHshE8Y6NTXglcT/zJIbgxDznbR+QPfKcb7gSiVsENi
-        8E5vOC1b4c1NQ6l04+HFKia9yF1PcV/iBW92Km4SsXg6n1/QFw=
+X-QQ-FEAT: TzHnbXlu93pRW0fktOVQsSVC/lCRcE3bO8RsrNpzf6GBxnYyfN8VswfWiQ4WM
+        E33MpzFJyarduiiY6hHUHZCs7i7+7H1nr9bC2p54n0fNN9tmLLlNyK241DBxpLj8kjrSo42
+        Ue1ZJaJXDHI9aBkel1y40jE0PnxHXaa+gBMmH1l9Zg89f4vXDVC7e02eLaLAXhnbGdWVOb6
+        PGArPe4AIagjJTemiHvLq4l/3eVjHr11zctq9CkKfyqvTHGXBlAVReGVkIKBQNlHMQPCr48
+        mRVjsx9HAAH6rww92wSHy68M6PSAKpGNilczG2XyJhAF908RrB8O3QckkUYr/ugQzEgOns5
+        rg/xHXh7q+8PWJ5k44xc4uM05WbnEtiiadN6kEO
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     gregkh@linuxfoundation.org
-Cc:     fabioaiuto83@gmail.com, marcocesati@gmail.com, arnd@arndb.de,
-        straube.linux@gmail.com, linux-staging@lists.linux.dev,
+To:     bp@alien8.de
+Cc:     tony.luck@intel.com, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] staging: rtl8723bs: fix typo in a comment
-Date:   Sat, 11 Dec 2021 17:16:32 +0800
-Message-Id: <20211211091632.264035-1-wangborong@cdjrlc.com>
+Subject: [PATCH] RAS/CEC: fix typo in a comment
+Date:   Sat, 11 Dec 2021 17:19:14 +0800
+Message-Id: <20211211091914.268823-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `for' in the comment in line 2203 is repeated. Remove one
+The double `an' in the comment in line 41 is repeated. Remove one
 of them from the comment.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 2 +-
+ drivers/ras/cec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-index 0868f56e2979..5157b5b12597 100644
---- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-+++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-@@ -2200,7 +2200,7 @@ static netdev_tx_t rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struc
- 		memcpy(src_mac_addr, dot11_hdr->addr2, sizeof(src_mac_addr));
- 
- 		/* Skip the 802.11 header, QoS (if any) and SNAP, but leave spaces for
--		 * for two MAC addresses
-+		 * two MAC addresses
- 		 */
- 		skb_pull(skb, dot11_hdr_len + qos_len + snap_len - sizeof(src_mac_addr) * 2);
- 		pdata = (unsigned char *)skb->data;
+diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+index d7894f178bd4..42f2fc0bc8a9 100644
+--- a/drivers/ras/cec.c
++++ b/drivers/ras/cec.c
+@@ -38,7 +38,7 @@
+  * elements entered into the array, during which, we're decaying all elements.
+  * If, after decay, an element gets inserted again, its generation is set to 11b
+  * to make sure it has higher numerical count than other, older elements and
+- * thus emulate an an LRU-like behavior when deleting elements to free up space
++ * thus emulate an LRU-like behavior when deleting elements to free up space
+  * in the page.
+  *
+  * When an element reaches it's max count of action_threshold, we try to poison
 -- 
 2.34.1
 

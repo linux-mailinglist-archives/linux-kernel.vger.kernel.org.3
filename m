@@ -2,90 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB41A4714AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 17:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3499F4714C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 17:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbhLKQSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 11:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbhLKQSg (ORCPT
+        id S231443AbhLKQcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 11:32:05 -0500
+Received: from mail-qt1-f177.google.com ([209.85.160.177]:46908 "EHLO
+        mail-qt1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231395AbhLKQcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 11:18:36 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF99C061714;
-        Sat, 11 Dec 2021 08:18:36 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w1so38786462edc.6;
-        Sat, 11 Dec 2021 08:18:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=IHNV5z0x2jo1zjIuAESnRBcnC6JnxrBxV+EMdX4SQgo=;
-        b=Nu28QEEe5uRu/XwGNZoYPdEhWEjIkWlgSm1IZEOmtMMceXKjkm+Klsboqr7sRee6/g
-         n5HHyV5kLt1mxnI6nsWOv4Yrp2Tf/39hDgzKInsrsCE50q7o42JXRS4rFqZf47rQ9tkD
-         pw8A6Prm8KprY2HyQTRyxM2TLqW0zKR9kcQmdSkhrmnHdN32DSyMnCprFKAYmCVAYmL8
-         UvFvY7Hcz/neuuenM4vnKmZD9bvE+HoepYYDiaR2XI8YpG0fz/MmZm2opxUzfWaABipw
-         UqwzhcgEG77C1txXtucsOXrUtpqUt/GoNy/dcJn7yeku2IDHqy5/NA1T6Y3dIEtEsFG/
-         e4vA==
+        Sat, 11 Dec 2021 11:32:04 -0500
+Received: by mail-qt1-f177.google.com with SMTP id m25so11262573qtq.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 08:32:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IHNV5z0x2jo1zjIuAESnRBcnC6JnxrBxV+EMdX4SQgo=;
-        b=6trbiYDPXEsCP3EJiNRo1zLMaIPt0BKJTNv38acc8WcEsXiGA9w6nX1EyLv7r8sir8
-         tWABblOf1i0p8jAPOqapyhAIds4FZf5kS1TcH1VmQ6XRpi9IHrw1p6y6WTunXze0zgCD
-         96HCvzcHoGR96v0tEBo3/RR9g0+/SrDqWOPbWppx7zlaFOowaUpR7jswvY68hy23sHN5
-         Ua2wPOiewRxf/5+bZFR1oAbGwJ9toJnrchWBGuv4BRk4PF+D3dpI3pHy65j3nXrJwRfP
-         2KYGYDpnLMpwx8S0wsrGpiI4ythhjBX3UaZ4AUlfW5olUOZjjTxhrValOKj7ILuGjmqv
-         Gt7A==
-X-Gm-Message-State: AOAM532rxijuXFSKQbLUFq4b9hpQw6RvoRSqhYexilbA5t3UelFXinGt
-        Ofkmfl8CRa9Aa9WgRBJ8QDE=
-X-Google-Smtp-Source: ABdhPJxyIBZMZsCCK0duAvZ0ixgnC4EypXkY3eKOxl5TuHtQdFy1O0RX/2diHlJgKUYAeqoprPjRjA==
-X-Received: by 2002:a17:907:72c7:: with SMTP id du7mr32246201ejc.424.1639239514568;
-        Sat, 11 Dec 2021 08:18:34 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id e8sm3576032edz.73.2021.12.11.08.18.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 11 Dec 2021 08:18:34 -0800 (PST)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH] cgroup: return early if it is already on preloaded list
-Date:   Sat, 11 Dec 2021 16:17:29 +0000
-Message-Id: <20211211161729.10581-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=XEP0DHcvWb7FTwpOkIM/6NPyGUG4yd9oStGTxV/oR7Q=;
+        b=8HwDk1l2i5Gb9CKt/G9doCAWeUzAsNNy1eSMIMjLlwZz0nvg7pN08KG8nHHCGD80c5
+         9jKd5SFi6e9HrhoHj2+6KYq6djIX4pFyTepbFhiI4MWihSorUBtPBUhAkMPEKT1EknNz
+         qZkfmffDTko/coKsKTC9/IQwi4+ypIRxWwRmyMnjYk87uWJm4nLVYc4t05VQ1kUfMWih
+         XTT7YQpkm/8HbR/S4QXwE8G7L7LMowFq2R8LSN6C6BgYSEwmpnT/FCgeI4lNNt1sYe5M
+         GNk1W2v64RbDboONZEo7+k4wtiZAbQZlWiltCnMXJ00BfH43D24LgLkg9HGtAp0fGfYj
+         KT2A==
+X-Gm-Message-State: AOAM533RaverJ5m/PN+EDUnxdF+aVuaKXQqLDny451dPKzUCuhKW+vsN
+        n2Yhmwg/AgI1H8RUliJVFpTO9iW9Tus=
+X-Google-Smtp-Source: ABdhPJwn+63x9YrJunRV4J5b3Uzf76UUlJvfL6T3UbgWx1sVUd9z3WqAuMaKIaZ6SCHPL7tWVoSe7w==
+X-Received: by 2002:ac8:5c45:: with SMTP id j5mr35511882qtj.58.1639240323649;
+        Sat, 11 Dec 2021 08:32:03 -0800 (PST)
+Received: from fedora (pool-173-68-57-129.nycmny.fios.verizon.net. [173.68.57.129])
+        by smtp.gmail.com with ESMTPSA id bk39sm3196965qkb.35.2021.12.11.08.32.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 08:32:03 -0800 (PST)
+Date:   Sat, 11 Dec 2021 11:32:01 -0500
+From:   Dennis Zhou <dennis@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] percpu fixes for v5.16-rc5
+Message-ID: <YbTSgYx7qZ5XO6Yo@fedora>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If it is already on preloaded list, this means we have already setup
-this cset properly for migration.
+Hi Linus,
 
-Let's skip this cset on this condition.
+This contains a fix for SMP && !MMU archs for percpu which has been
+tested by arm and sh. It seems in the past they have gotten away due to
+mapping of vm functions to km functions, but this fell apart a few
+releases ago and was just reported recently. The other is just a minor
+dependency clean up.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
----
- kernel/cgroup/cgroup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think queued up right now by Andrew is a fix in percpu that papers of
+what seems to be a bug in hotplug for a special situation with
+memoryless nodes. Michal Hocko is digging into it further.
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 452a723d4a36..2cf729afe834 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2648,11 +2648,11 @@ void cgroup_migrate_add_src(struct css_set *src_cset,
- 	if (src_cset->dead)
- 		return;
+[1] https://lore.kernel.org/linux-mm/908909e0-4815-b580-7ff5-d824d36a141c@redhat.com/T/
+
+Thanks,
+Dennis
+
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/dennis/percpu.git for-5.16-fixes
+
+for you to fetch changes up to a4f1192cb53758a7210ed5a9ee695aeba22f75fb:
+
+  percpu_ref: Replace kernel.h with the necessary inclusions (2021-12-09 15:41:09 -0500)
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      percpu_ref: Replace kernel.h with the necessary inclusions
+
+Vladimir Murzin (1):
+      percpu: km: ensure it is used with NOMMU (either UP or SMP)
+
+ include/linux/percpu-refcount.h | 2 +-
+ mm/Kconfig                      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/percpu-refcount.h b/include/linux/percpu-refcount.h
+index b31d3f3312ce..d73a1c08c3e3 100644
+--- a/include/linux/percpu-refcount.h
++++ b/include/linux/percpu-refcount.h
+@@ -51,9 +51,9 @@
+ #define _LINUX_PERCPU_REFCOUNT_H
  
--	src_cgrp = cset_cgroup_from_root(src_cset, dst_cgrp->root);
--
- 	if (!list_empty(&src_cset->mg_preload_node))
- 		return;
+ #include <linux/atomic.h>
+-#include <linux/kernel.h>
+ #include <linux/percpu.h>
+ #include <linux/rcupdate.h>
++#include <linux/types.h>
+ #include <linux/gfp.h>
  
-+	src_cgrp = cset_cgroup_from_root(src_cset, dst_cgrp->root);
-+
- 	WARN_ON(src_cset->mg_src_cgrp);
- 	WARN_ON(src_cset->mg_dst_cgrp);
- 	WARN_ON(!list_empty(&src_cset->mg_tasks));
--- 
-2.33.1
-
+ struct percpu_ref;
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 28edafc820ad..356f4f2c779e 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -428,7 +428,7 @@ config THP_SWAP
+ # UP and nommu archs use km based percpu allocator
+ #
+ config NEED_PER_CPU_KM
+-	depends on !SMP
++	depends on !SMP || !MMU
+ 	bool
+ 	default y
+ 

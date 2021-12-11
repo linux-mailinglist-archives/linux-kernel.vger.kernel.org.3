@@ -2,74 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E62C471594
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD4B471599
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbhLKTSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 14:18:33 -0500
-Received: from out162-62-58-211.mail.qq.com ([162.62.58.211]:52907 "EHLO
-        out162-62-58-211.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229560AbhLKTSc (ORCPT
+        id S231840AbhLKTTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 14:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231826AbhLKTS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 14:18:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639250309;
-        bh=p5n6NZ013xXHxvRMkqqySCKi6/eXKwLtJ9F70QGZc0o=;
-        h=From:To:Cc:Subject:Date;
-        b=r1Bld5GlqCMZVY7ZLGRCfTxxhQrWkrdRZacqtfdJjixAnIXiB17C1WHqT2UjkCpdX
-         NdC91SrWeA721zdu8p0TqNq6tR7GCktBORqILXfIezaP063OTDmU2yDFhjqObOy264
-         30kr9LIel7iP+1rxcP/kAJQUPBsPpkPb4VPfNQ6w=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza7.qq.com (NewEsmtp) with SMTP
-        id 38E23CFB; Sun, 12 Dec 2021 01:14:14 +0800
-X-QQ-mid: xmsmtpt1639242854tyvogz8ro
-Message-ID: <tencent_3D368E118A8AF018A5B1FF16904166B2DC07@qq.com>
-X-QQ-XMAILINFO: MgQY1K25Ph0m5cskmfXkJHT32Ic1Br3p3xihwpPCyouDYfrcqXKmOpkD63Sjx7
-         JyAGlAGzvwR6jpDyiBKNosnXPC1dB3XyPG068Su9qs80c5yoGZh4zfBVW41hSlvbvIvctzAAiz8G
-         E0SWDFjMFreEdLgrO5q1QKG21yk0ioYpxzI51MZVj94+SS4FmmtqQ6QkQVGy8hyOWi2KbhdcHRBC
-         eyxyldjOaM1Uao7RMKEI9C+WIYIFt7aCBbf7MyZEk95+eXwzufIjfpz/TVuzoKH8SmIpzQ+I1aLE
-         1m87OHjOqUUL8Gpxo0pXYb4bobFRIY+bzvETxKRPnXz/5RjXJtwNwfDcTnxTe8BdhOvv8WiClWjJ
-         YB56GH6UpDlJP1eM583pB0r+QkZM/AqkT/ZiKcAW2SgXWw30kdBDXnI0R+b11WV7xYQikaGfaa89
-         LXgOIlZzniQyUWkmu3qRov3TgDQPUZ7BkmetbCufQj6cWm+WEGEQoFAnLF2MDOZFwIDoVbW+5KoX
-         Fe9DCtBtK/Hi9Go3MxqZW5/Ds11AJG3CEhCYtdfN47gppFes8qAv173/uD8G8yhsyjBE80W3gwRA
-         6IjV+0m42G73ZifF7ldg92g17Df+Kid/oVnl8kVDBDR/aJCNB5VV/5VLHY5/4SFnxfZ4GEzsbElv
-         DCb4M8BVSh3aT2J94kLVSd3BuASMI0qy67kN5cxUE18fQHiVsnfbpOh2mJHHS+2f5FbSSNR60whu
-         AKJddfRfeiUj+wFTpCPu0NrgvmEmn8tT7418KKvqc/9TssniSNxBc6/7PdU2NVZEwDANYb87f46H
-         N8FE9i2CSgdODnJEXEKq0s/zzCdsd8/cRS964oXgIXA/Ty8gkAZ617idelnZyVnfClR072LNt7Jw
-         ==
-From:   xkernel <xkernel.wang@foxmail.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        xkernel <xkernel.wang@foxmail.com>
-Subject: [PATCH] ALSA: jack: Check the return value of kstrdup()
-Date:   Sun, 12 Dec 2021 01:13:26 +0800
-X-OQ-MSGID: <20211211171326.872-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Sat, 11 Dec 2021 14:18:58 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB9EC061714;
+        Sat, 11 Dec 2021 11:18:57 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id t9so20361535wrx.7;
+        Sat, 11 Dec 2021 11:18:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NOZsAlRxtdOEaYKZZzJe2RJHIDxrF9SsgyDHCqepb50=;
+        b=TfgokTPrZqAgWgNgKBr1AbfKyxRdqe/hbSxakLIHk77fzil3DZDXLVC0M1/+v5My7C
+         YPqG3o7nmMFDR1pEMXEyZoLzkrBVaLCvhovRdgmmO2ArtyfC+9iRKWjTiYlfXz1B2I8e
+         qCD43yMzDLH3vxnW07SDl+V6ZAjEpfDA0qTAZdp3zzv+4OlXDBb1bsU/ec7qGg9z9xRI
+         J43ckh5ohn9x7r+vlvn2uYF3FhNnRpcpRKIpGjrmijNl6K796e4cCmms4v9l/nQkEKqK
+         6PMzdS3sBfk4B8I7FnNMxl1oC1Etx7XcC4yj+4x2nUs4h10CqiovO+Zm3ia9Yd9KG7jh
+         9X7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NOZsAlRxtdOEaYKZZzJe2RJHIDxrF9SsgyDHCqepb50=;
+        b=0EYRMS+UPvmQ8Ho8Ud09S2U0d2EDsbZgGIPYvatNg+ZkmeBH9GCpYuUQWxPDKfvLvz
+         tqkew55sLf0PXlx3F790lpUMqvq6WIb6sCDJNqFTE9rmUabtU82V37SPcAqwJI6hkx6/
+         oWEy4owZs2e/tQxrBDMAX/IJjYs+AXCYvi3Vg8sbMEXJXHFif3G6t5Vy5yqK9CG+ksBP
+         4PdBxdSvUTEqQiuCV/ri+lWtk0xEPWVESffEBEKJhKTS0Z42RgNjnuYjP/5BQhwwprP1
+         F8FnqZnmDIKSMkOpvOQudMJuaNd9sIgPOALcGaB/0sa5T1pjHxijZ946dHOGPWCsJE77
+         nEdA==
+X-Gm-Message-State: AOAM533xisNWy11y8AGiD4Pt9i2V2RK4F7i1WQPbZr4q6eWxgcSuFDnb
+        AW/0vU/3ib3TZKdY3n5+gcwpZKB35z8=
+X-Google-Smtp-Source: ABdhPJy40r4znIMVC3SwDLt2W21bOBCBdQzfojiDdTu6yLRZJQKiyv9r6uOIj4EUQQ9kXHDIdaDB5Q==
+X-Received: by 2002:a5d:4107:: with SMTP id l7mr21713734wrp.209.1639250335994;
+        Sat, 11 Dec 2021 11:18:55 -0800 (PST)
+Received: from 127.0.0.1localhost ([185.69.145.149])
+        by smtp.gmail.com with ESMTPSA id y7sm5463219wrw.55.2021.12.11.11.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 11:18:55 -0800 (PST)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH v2] cgroup/bpf: fast path for not loaded skb BPF filtering
+Date:   Sat, 11 Dec 2021 19:17:49 +0000
+Message-Id: <d1b6d4756287c28faf9ad9ce824e1a62be9a5e84.1639200253.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kstrdup() can return NULL, it is better to check the return value of it.
+cgroup_bpf_enabled_key static key guards from overhead in cases where
+no cgroup bpf program of a specific type is loaded in any cgroup. Turn
+out that's not always good enough, e.g. when there are many cgroups but
+ones that we're interesting in are without bpf. It's seen in server
+environments, but the problem seems to be even wider as apparently
+systemd loads some BPF affecting my laptop.
 
-Signed-off-by: xkernel <xkernel.wang@foxmail.com>
+Profiles for small packet or zerocopy transmissions over fast network
+show __cgroup_bpf_run_filter_skb() taking 2-3%, 1% of which is from
+migrate_disable/enable(), and similarly on the receiving side. Also
+got +4-5% of t-put for local testing.
+
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- sound/core/jack.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/sound/core/jack.c b/sound/core/jack.c
-index 32350c6..5fd9954 100644
---- a/sound/core/jack.c
-+++ b/sound/core/jack.c
-@@ -509,6 +509,8 @@ int snd_jack_new(struct snd_card *card, const char *id, int type,
- 		return -ENOMEM;
+v2: replace bitmask appoach with empty_prog_array (suggested by Martin)
+
+ include/linux/bpf-cgroup.h | 24 +++++++++++++++++++++---
+ include/linux/bpf.h        | 13 +++++++++++++
+ kernel/bpf/cgroup.c        | 18 ++----------------
+ kernel/bpf/core.c          | 12 ++----------
+ 4 files changed, 38 insertions(+), 29 deletions(-)
+
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 11820a430d6c..793e4f65ccb5 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -219,11 +219,28 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+ 				     void *value, u64 flags);
  
- 	jack->id = kstrdup(id, GFP_KERNEL);
-+	if (jack->id == NULL)
-+		return -ENOMEM;
++static inline bool
++__cgroup_bpf_prog_array_is_empty(struct cgroup_bpf *cgrp_bpf,
++				 enum cgroup_bpf_attach_type type)
++{
++	struct bpf_prog_array *array = rcu_access_pointer(cgrp_bpf->effective[type]);
++
++	return array == &empty_prog_array.hdr;
++}
++
++#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
++({									       \
++	struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
++									       \
++	!__cgroup_bpf_prog_array_is_empty(&__cgrp->bpf, (atype));	       \
++})
++
+ /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+ #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
+ ({									      \
+ 	int __ret = 0;							      \
+-	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))		      \
++	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&		      \
++	    CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS)) 	      \
+ 		__ret = __cgroup_bpf_run_filter_skb(sk, skb,		      \
+ 						    CGROUP_INET_INGRESS); \
+ 									      \
+@@ -235,9 +252,10 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+ 	int __ret = 0;							       \
+ 	if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk && sk == skb->sk) { \
+ 		typeof(sk) __sk = sk_to_full_sk(sk);			       \
+-		if (sk_fullsock(__sk))					       \
++		if (sk_fullsock(__sk) &&				       \
++		    CGROUP_BPF_TYPE_ENABLED(__sk, CGROUP_INET_EGRESS))	       \
+ 			__ret = __cgroup_bpf_run_filter_skb(__sk, skb,	       \
+-						      CGROUP_INET_EGRESS); \
++						      CGROUP_INET_EGRESS);     \
+ 	}								       \
+ 	__ret;								       \
+ })
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index e7a163a3146b..4a081065b77d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1161,6 +1161,19 @@ struct bpf_prog_array {
+ 	struct bpf_prog_array_item items[];
+ };
  
- 	/* don't creat input device for phantom jack */
- 	if (!phantom_jack) {
++struct bpf_empty_prog_array {
++	struct bpf_prog_array hdr;
++	struct bpf_prog *null_prog;
++};
++
++/* to avoid allocating empty bpf_prog_array for cgroups that
++ * don't have bpf program attached use one global 'empty_prog_array'
++ * It will not be modified the caller of bpf_prog_array_alloc()
++ * (since caller requested prog_cnt == 0)
++ * that pointer should be 'freed' by bpf_prog_array_free()
++ */
++extern struct bpf_empty_prog_array empty_prog_array;
++
+ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags);
+ void bpf_prog_array_free(struct bpf_prog_array *progs);
+ int bpf_prog_array_length(struct bpf_prog_array *progs);
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 43eb3501721b..99e85f44e257 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1354,20 +1354,6 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
+ }
+ 
+ #ifdef CONFIG_NET
+-static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
+-					     enum cgroup_bpf_attach_type attach_type)
+-{
+-	struct bpf_prog_array *prog_array;
+-	bool empty;
+-
+-	rcu_read_lock();
+-	prog_array = rcu_dereference(cgrp->bpf.effective[attach_type]);
+-	empty = bpf_prog_array_is_empty(prog_array);
+-	rcu_read_unlock();
+-
+-	return empty;
+-}
+-
+ static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen,
+ 			     struct bpf_sockopt_buf *buf)
+ {
+@@ -1430,7 +1416,7 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 	 * attached to the hook so we don't waste time allocating
+ 	 * memory and locking the socket.
+ 	 */
+-	if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_SETSOCKOPT))
++	if (__cgroup_bpf_prog_array_is_empty(&cgrp->bpf, CGROUP_SETSOCKOPT))
+ 		return 0;
+ 
+ 	/* Allocate a bit more than the initial user buffer for
+@@ -1526,7 +1512,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	 * attached to the hook so we don't waste time allocating
+ 	 * memory and locking the socket.
+ 	 */
+-	if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_GETSOCKOPT))
++	if (__cgroup_bpf_prog_array_is_empty(&cgrp->bpf, CGROUP_GETSOCKOPT))
+ 		return retval;
+ 
+ 	ctx.optlen = max_optlen;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 2405e39d800f..fedc7b44a1a9 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1967,18 +1967,10 @@ static struct bpf_prog_dummy {
+ 	},
+ };
+ 
+-/* to avoid allocating empty bpf_prog_array for cgroups that
+- * don't have bpf program attached use one global 'empty_prog_array'
+- * It will not be modified the caller of bpf_prog_array_alloc()
+- * (since caller requested prog_cnt == 0)
+- * that pointer should be 'freed' by bpf_prog_array_free()
+- */
+-static struct {
+-	struct bpf_prog_array hdr;
+-	struct bpf_prog *null_prog;
+-} empty_prog_array = {
++struct bpf_empty_prog_array empty_prog_array = {
+ 	.null_prog = NULL,
+ };
++EXPORT_SYMBOL(empty_prog_array);
+ 
+ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
+ {
 -- 
+2.34.0
 

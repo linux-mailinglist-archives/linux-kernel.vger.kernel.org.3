@@ -2,156 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3494711EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5794711F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbhLKFbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 00:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbhLKFbu (ORCPT
+        id S229644AbhLKFg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 00:36:27 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:54496 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229630AbhLKFg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 00:31:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC5CC061714;
-        Fri, 10 Dec 2021 21:28:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 126EBB82AD3;
-        Sat, 11 Dec 2021 05:28:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 615C0C004DD;
-        Sat, 11 Dec 2021 05:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639200491;
-        bh=DmF69SAhs/bhKdwrdHs+5LvgKoaOu6JAimdnFR5ocro=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=WxZNmaWs7+mM9QuqbhLVtfI1yU4Mes/oBQ2285eK/bpdqmKAMgziF4I0NTeeaQOlz
-         Sx9LteEDeZ/LDGHq1ujSCXZ2wtPLhED4moKs4iaoRhm5pShS9y9vYCvNbTwPLShnGI
-         uAxPZ7ZnZqJVnPVusuNm1nbOZfGIeCswmWWawn9qgyln6FKVOMYRnAb65KY//fnea+
-         UYgVqWaIgv/Co9BIpISfpYAJVVm91xsMjxF2fOmQaboV2av7XQfUaHrADoRKI24Alk
-         4+DKtxMVOzdEeH3WRsF0WNbCQWXH3c55X+NDjVrFrUuN40HZLrLUWwVcTgCOJWPO9S
-         nZcieBuoBoWFw==
-Message-ID: <b6eeb67d3be33767a4d52d8e2009817a90d91224.camel@kernel.org>
-Subject: Re: [PATCH 01/25] x86/sgx: Add shortlog descriptions to ENCLS
- wrappers
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 11 Dec 2021 07:28:08 +0200
-In-Reply-To: <b49ee68b-63c5-f8f8-ca2b-31663c3150f6@intel.com>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
-         <fd9ab4d760a2ea7a42ab9e60b9e19b8620abe11d.1638381245.git.reinette.chatre@intel.com>
-         <YauzxOEmmpeGF/K3@iki.fi> <b49ee68b-63c5-f8f8-ca2b-31663c3150f6@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.2 
+        Sat, 11 Dec 2021 00:36:26 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V-DjWG1_1639200767;
+Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V-DjWG1_1639200767)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 11 Dec 2021 13:32:48 +0800
+Message-ID: <aff937a0-b8fb-b9fc-22ef-d0099b392461@linux.alibaba.com>
+Date:   Sat, 11 Dec 2021 13:32:47 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [RFC 02/19] cachefiles: implement key scheme for demand-read mode
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org
+References: <20211210073619.21667-3-jefflexu@linux.alibaba.com>
+ <20211210073619.21667-1-jefflexu@linux.alibaba.com>
+ <269788.1639134293@warthog.procyon.org.uk>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <269788.1639134293@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-06 at 13:13 -0800, Reinette Chatre wrote:
-> > * "Create an SECS page in the Enclave Page Cache (EPC)"
-> > * "Add a Version Array (VA) page to the Enclave Page Cache (EPC)"
-> >=20
-> > They should have similar descriptions, e.g.
-> >=20
-> > * "Initialize an EPC page into SGX Enclave Control Structure (SECS) pag=
-e."
-> > * "Initialize an EPC page into Version Array (VA) page."
->=20
-> Will do. Did you intentionally omit the articles or would you be ok if I=
-=20
-> change it to:
->=20
-> "Initialize an EPC page into an SGX Enclave Control Structure (SECS) page=
-."
-> "Initialize an EPC page into a Version Array (VA) page."
->=20
-> I also notice that you prefer the comments to end with a period and I=20
-> will do so for all in the next version.
 
-Looks fine to me.
 
-> > > +/* Extend uninitialized enclave measurement */
-> > >   static inline int __eextend(void *secs, void *addr)
-> > >   {
-> > >   	return __encls_2(EEXTEND, secs, addr);
-> > >   }
-> >=20
-> > That description does not make __eextend any less cryptic.
-> >=20
-> > Something like this would be already more informative:
-> >=20
-> > /* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
->=20
-> Thank you, I will use this description.
->=20
-> >=20
-> > This same remark applies to the rest of these comments. They should
-> > provide a clue what the wrapper does rather than an English open coded
-> > function name.
->=20
-> Please see below for another attempt that includes your proposed changes=
-=20
-> so far. What do you think?
->=20
-> __ecreate():
-> /* Initialize an EPC page into an SGX Enclave Control Structure (SECS)=
-=20
-> page. */
->=20
-> __eextend():
-> /* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
->=20
-> __eadd():
-> /* Copy a source page from non-enclave memory into the EPC. */
+On 12/10/21 7:04 PM, David Howells wrote:
+> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+> 
+>> Thus simplify the logic of placing backing files, in which backing files
+>> are under "cache/<volume>/" directory directly.
+> 
+> You then have a scalability issue on the directory inode lock - and there may
+> also be limits on the capacity of a directory.  The hash function is meant to
+> work the same, no matter the cpu arch, so you should be able to copy that to
+> userspace and derive the hash yourself.
 
-Perhaps:
+Yes, as described in the cover letter, I plan to make the hashing
+algorithm used by cachefiles built-in into our user daemon, so that the
+user daemon could place the blob file on the right place. Then the core
+logic of cachefiles won't be touched as much as possible.
 
-/*=C2=A0
- * Associate an EPC page to an enclave either as a REG or TCS page
- * populated with the provided data.
- */
+> 
+>> Also skip coherency checking currently to ease the development and debug.
+> 
+> Better if you can do that in erofs rather than cachefiles.  Just set your
+> coherency data to all zeros or something.
+> 
 
-This is more aligned with your description for __eremove().
+Yes it is preferred to keep the general part of cachefiles untouched.
+Later we can set "CacheFiles.cache" xattr on blob files in advance to
+pass this check.
 
->=20
-> __einit():
-> /* Finalize enclave build, initialize enclave for user code execution */
->=20
-> __eremove():
-> /* Disassociate EPC page from its enclave and mark it as unused. */
->=20
-> __edbgwr():
-> /* Copy data to an EPC page belonging to a debug enclave. */
->=20
-> __edbgrd():
-> /* Copy data from an EPC page belonging to a debug enclave. */
->=20
-> __etrack():
-> /* Track that software has completed the required TLB address clears. */
->=20
-> __eldu():
-> /* Load, verify, and unblock an Enclave Page Cache (EPC) page. */
->=20
-> __eblock():
-> /* Make EPC page inaccessible to enclave, ready to be written to memory. =
-*/
->=20
-> __epa():
-> /* Initialize an EPC page into a Version Array (VA) page. */
->=20
-> __ewb():
-> /* Invalidate an EPC page and write it out to main memory. */
->=20
->=20
-> Reinette
 
-/Jarkko
+-- 
+Thanks,
+Jeffle

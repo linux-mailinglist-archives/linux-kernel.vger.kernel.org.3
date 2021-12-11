@@ -2,111 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EE24712AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF22D4712B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbhLKIBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 03:01:19 -0500
-Received: from mga06.intel.com ([134.134.136.31]:63117 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229968AbhLKIBS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 03:01:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639209678; x=1670745678;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nhJa2cx6wlZzdGgObbJGTb+l0F8TzfJR/Xyj6x9syFc=;
-  b=bsufjbrB0H6s7jRKHdJ4TjjN9/GpySJo6G7KJ/nhJbjsCBMV56D5biqL
-   1+2mA7858D9kFevlBdklNdpFZdxjUDE7yYG+QwgVeUg07vb8yFV9OHMNH
-   vtXWjX3zmLP7ILOBlw7td5M+fldHMrOLNgSrOChiTltZd8oVvU5I3G3BQ
-   UWAIVJIJGSMRjGIrqDJh4EnE4a4IrQvKLaE+jrIi487s8A6DoeikeA4z0
-   Dx+5Hs3sFU6TT/QG3Qfd5mRI1nIAulAqizzI/dX0CK4qt1H3coBqV7Abb
-   SAAV37eJv6hk+7oB5htmb8caam3BQ6gGs4wI7goi2bcUphkI6bCQ5+aZ6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="299302524"
-X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="299302524"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 00:01:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="681021371"
-Received: from xpf.sh.intel.com ([10.239.182.112])
-  by orsmga005.jf.intel.com with ESMTP; 11 Dec 2021 00:01:15 -0800
-Date:   Sat, 11 Dec 2021 16:02:06 +0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Heng Su <heng.su@intel.com>, Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [RFC PATCH v5 1/2] selftests/x86: add xsave test during and
- after signal handling
-Message-ID: <YbRa/hyZIkQ4h3YL@xpf.sh.intel.com>
-References: <cover.1638513720.git.pengfei.xu@intel.com>
- <3f02d300118abfb581d85519b733a2db2bb44b10.1638513720.git.pengfei.xu@intel.com>
- <3f59a9d9-27e6-e6b2-98ff-c18924979cc4@intel.com>
- <YbLb4k3KKYD2TE/6@xpf.sh.intel.com>
- <a271fd86-c618-ced1-e848-c0649b003a16@intel.com>
+        id S230001AbhLKICW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 03:02:22 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:40533 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhLKICU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 03:02:20 -0500
+Received: by mail-io1-f72.google.com with SMTP id d12-20020a0566022d4c00b005ebda1035b1so11855848iow.7
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 00:02:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=EeKz3j9vcR2GnxnTOQwUqGTOoJNYNfAixyeRxFWnQ+w=;
+        b=2geNIF8rsvOyuCVEezhz6EKBEVQXrAjRhdtfW3SVBPOGjuQ36ocI3XRFvZqJVnSMYX
+         QT4CahuBekfHAwWkvFr/HdYzuu7EqEyn4DMXrzTZMFAr/ZUby0YWgzvCtmFFZuFHOa8M
+         jFlO6mCTehMicmFWHiMAfo5zI42h2SIfZGm19oAbUrhUi2YatgJpigYA6Zr1TBts2+ec
+         mt7dfgyyKSSMhgN6ECGP6L+7shnEggw/RGyBRHbEuPjD4AfYpUzHE9hKEUouukIY26VW
+         yus0GA+53q5EKmCEzefcCsAk/r6qTuPm7xj7Fr8yMlFq6hYb3Ljq/BSnf+OlSOHFiwgh
+         xSIw==
+X-Gm-Message-State: AOAM531yh/1tlibQQShV0QOv+VBwhIKRsxOL89uVf7HUrHLQ4+RMSHkR
+        FfLLfv1in6TTvj47z2ZOMAYcIuOY6LSL86KioxRn15HgiBTm
+X-Google-Smtp-Source: ABdhPJzAAVYLQtbiWq2sMTo/heoqsyANjlK4dyHnef3EZdgOvjVxWnM0kL/5dz0hvRhw6lbo8DlR0hYeDkZG1yz6jIrgjSo5J9Ps
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a271fd86-c618-ced1-e848-c0649b003a16@intel.com>
+X-Received: by 2002:a05:6602:1410:: with SMTP id t16mr26122007iov.160.1639209739770;
+ Sat, 11 Dec 2021 00:02:19 -0800 (PST)
+Date:   Sat, 11 Dec 2021 00:02:19 -0800
+In-Reply-To: <000000000000a2490405a20d2b0f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000405dc605d2da425e@google.com>
+Subject: Re: [syzbot] WARNING in dev_watchdog (2)
+From:   syzbot <syzbot+d55372214aff0faa1f1f@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, jhs@mojatatu.com, jiri@resnulli.us,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+syzbot has found a reproducer for the following issue on:
 
-On 2021-12-10 at 08:48:08 -0800, Dave Hansen wrote:
-> On 12/9/21 8:47 PM, Pengfei Xu wrote:
-> > How about the following changes:
-> > Will remove set_avx2_ymm() and will only check XSAVE_MASK_FP, XSAVE_MASK_OPMASK
-> > and XSAVE_MASK_PKRU xstates after signal handling and process switch,
-> 
-> First and foremost, the whole point of these tests is to ensure that the
-> kernel is properly maintaining register state.  Removing registers from
-> the test moves *away* from the primary goal of this test.
-> 
- Thanks for suggestion!
- Actually, I already removed any useless libc function before and after
- xsave action, only left the test action between xsave action:
-"
-	XSAVE(xsave_buf2, XSAVE_TEST_MASK);
-	do raise signal or fork test
-	XSAVE(xsave_buf3, XSAVE_TEST_MASK);
-"
-  I found that after fork() function in virtual machine, XMM0 or XMM1 register
-will be used and changed.
-  But in YMM xstate, I haven't see signal handline and fork action will use
-and change YMM regiseters in the test. Seems we could keep YMM xstate test.
-  Seems it needs some other better way for XMM xstate.
+HEAD commit:    b8a98b6bf66a Merge tag 'pci-v5.16-fixes-2' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12fa7fc5b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7d5e878e3399b6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=d55372214aff0faa1f1f
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1068a551b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1146706db00000
 
-> Second, you just listed three states there.  Have you considered looking
-> at whether those have the same problem as the XMM/YMM registers?  Please do.
-> 
-  I have tested FP, AVX512 opmask and pkru xstates on different platforms and
-virtual machine, gdb these 3 xstates with fork and signal handling even printf,
-above 3 functions will not use and change above 3 xstates. I used previous
-xsave instruction tests to get the results.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d55372214aff0faa1f1f@syzkaller.appspotmail.com
 
-> Third (and I've also suggested this before), we should explicitly tell
-> the compiler not to use the FPU registers.  This is what the kernel
-> does, and it's what allows us to, for instance, make function calls in
-> the kernel without clobbering userspace content in XSAVE-managed registers.
-> 
-> If we did that, then we would only have to worry about calls to things
-> *outside* of the test program, like libc.
-  Thanks! Yes, I will add "float a = 0.12, b = 0.34; a = a + b;" to tell
-libc process, float points has been used.
-  Seems if there is no addition, subtraction, multiplication or division,
-there is no change in FP xstate compared with no float definition. If there
-is above operation, mxcsr(xstate offset 0x18-0x1b bytes)will change from 801f
-to a01f. Rounding control bit change from 00 to 01.
+------------[ cut here ]------------
+NETDEV WATCHDOG: sl14 (): transmit queue 0 timed out
+WARNING: CPU: 1 PID: 20260 at net/sched/sch_generic.c:478 dev_watchdog+0x81d/0x860 net/sched/sch_generic.c:477
+Modules linked in:
+CPU: 1 PID: 20260 Comm: dhcpcd-run-hook Not tainted 5.16.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:dev_watchdog+0x81d/0x860 net/sched/sch_generic.c:477
+Code: 99 51 44 f9 c6 05 0d 02 ab 05 01 4c 89 e7 e8 ba fd e2 ff 48 c7 c7 e0 fb 9c 8b 4c 89 e6 48 89 c2 44 89 e9 31 c0 e8 33 2b 0e f9 <0f> 0b e9 2b fe ff ff 44 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c 3c fc
+RSP: 0018:ffffc90000dc0b40 EFLAGS: 00010246
+RAX: 994dcd9ba1567700 RBX: 00000000ffffddd0 RCX: ffff8880a7b69d00
+RDX: 0000000000000102 RSI: 0000000000000102 RDI: 0000000000000000
+RBP: 00000000ffffde41 R08: ffffffff816a1d52 R09: fffff520001b80b9
+R10: fffff520001b80b9 R11: 0000000000000000 R12: ffff88807dc5e000
+R13: 0000000000000000 R14: ffff88807a490068 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000562f1294c000 CR3: 0000000179f36000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ call_timer_fn+0xf6/0x210 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers+0x71a/0x910 kernel/time/timer.c:1734
+ run_timer_softirq+0x63/0xf0 kernel/time/timer.c:1747
+ __do_softirq+0x392/0x7a3 kernel/softirq.c:558
+ __irq_exit_rcu+0xec/0x170 kernel/softirq.c:637
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x91/0xb0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
+RIP: 0010:get_flush_tlb_info arch/x86/mm/tlb.c:966 [inline]
+RIP: 0010:flush_tlb_mm_range+0x1a2/0x490 arch/x86/mm/tlb.c:1004
+Code: e8 03 80 3c 18 00 74 05 e8 6b 78 94 00 4d 89 7d 10 4c 89 e8 48 c1 e8 03 80 3c 18 00 74 08 4c 89 ef e8 52 78 94 00 48 8b 04 24 <49> 89 45 00 49 8d 7d 24 48 89 f8 48 c1 e8 03 8a 04 18 84 c0 0f 85
+RSP: 0018:ffffc90020abf660 EFLAGS: 00000246
+RAX: ffff888152e71500 RBX: dffffc0000000000 RCX: dffffc0000000000
+RDX: 0000000000000001 RSI: 0000000000000001 RDI: ffff8880b9b38d90
+RBP: ffffc90020abf720 R08: dffffc0000000000 R09: ffffed102a5ce325
+R10: ffffed102a5ce325 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff8880b9b38d80 R14: 0000000000000009 R15: ffffffffffffffff
+ tlb_flush arch/x86/include/asm/tlb.h:23 [inline]
+ tlb_flush_mmu_tlbonly include/asm-generic/tlb.h:426 [inline]
+ tlb_flush_mmu+0x1a7/0x910 mm/mmu_gather.c:248
+ tlb_finish_mmu+0xcb/0x200 mm/mmu_gather.c:340
+ exit_mmap+0x3dd/0x6f0 mm/mmap.c:3172
+ __mmput+0x111/0x3a0 kernel/fork.c:1113
+ exec_mmap+0x589/0x610 fs/exec.c:1028
+ begin_new_exec+0x6c9/0x1180 fs/exec.c:1286
+ load_elf_binary+0x851/0x3c60 fs/binfmt_elf.c:1001
+ search_binary_handler fs/exec.c:1723 [inline]
+ exec_binprm fs/exec.c:1764 [inline]
+ bprm_execve+0x8eb/0x1470 fs/exec.c:1833
+ do_execveat_common+0x44c/0x590 fs/exec.c:1922
+ do_execve fs/exec.c:1990 [inline]
+ __do_sys_execve fs/exec.c:2066 [inline]
+ __se_sys_execve fs/exec.c:2061 [inline]
+ __x64_sys_execve+0x8e/0xa0 fs/exec.c:2061
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fb90670f337
+Code: Unable to access opcode bytes at RIP 0x7fb90670f30d.
+RSP: 002b:00007ffd8df132e8 EFLAGS: 00000246 ORIG_RAX: 000000000000003b
+RAX: ffffffffffffffda RBX: 0000562f1294bf28 RCX: 00007fb90670f337
+RDX: 0000562f1294bf78 RSI: 0000562f1294bf28 RDI: 0000562f1294c000
+RBP: 0000562f1294c000 R08: 0000562f1294c009 R09: 0000000000000000
+R10: 0000000000000008 R11: 0000000000000246 R12: 0000562f1294bf78
+R13: 00007fb9068b4ff4 R14: 0000562f1294bf78 R15: 0000000000000000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	e8 03 80 3c 18       	callq  0x183c8008
+   5:	00 74 05 e8          	add    %dh,-0x18(%rbp,%rax,1)
+   9:	6b 78 94 00          	imul   $0x0,-0x6c(%rax),%edi
+   d:	4d 89 7d 10          	mov    %r15,0x10(%r13)
+  11:	4c 89 e8             	mov    %r13,%rax
+  14:	48 c1 e8 03          	shr    $0x3,%rax
+  18:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1)
+  1c:	74 08                	je     0x26
+  1e:	4c 89 ef             	mov    %r13,%rdi
+  21:	e8 52 78 94 00       	callq  0x947878
+  26:	48 8b 04 24          	mov    (%rsp),%rax
+* 2a:	49 89 45 00          	mov    %rax,0x0(%r13) <-- trapping instruction
+  2e:	49 8d 7d 24          	lea    0x24(%r13),%rdi
+  32:	48 89 f8             	mov    %rdi,%rax
+  35:	48 c1 e8 03          	shr    $0x3,%rax
+  39:	8a 04 18             	mov    (%rax,%rbx,1),%al
+  3c:	84 c0                	test   %al,%al
+  3e:	0f                   	.byte 0xf
+  3f:	85                   	.byte 0x85
 
-Thanks!
-BR.

@@ -2,110 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6720F471409
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54E947140E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbhLKNiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 08:38:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21059 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231129AbhLKNh7 (ORCPT
+        id S231162AbhLKNni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 08:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231138AbhLKNnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 08:37:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639229878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Z8c8lX7Q347Z+4ORdcMYBofXUvb1OCWCHdF//k2AV4=;
-        b=DNli0noFqJ8lUPi7jbfZT67rQaCSs+19MVIEc5UYfulLowkQdCev5HwDr6eJIFkRHy9hYF
-        ZpWFKUtDA6F+7Kzi9kJN5D0FtLeZa0oTeqopJBiU8l0IGOAvAWzX3rQQKZKcy+A58EgHov
-        IC2SZCBaLsn21IEsrGTdpr5Q+J6+oLY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-qp91NnnxO2W56AfTygDTXQ-1; Sat, 11 Dec 2021 08:37:55 -0500
-X-MC-Unique: qp91NnnxO2W56AfTygDTXQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1F5FF801AAB;
-        Sat, 11 Dec 2021 13:37:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7BBF188F7;
-        Sat, 11 Dec 2021 13:37:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CALF+zOknSu_qkb9N0i4LY8tUtXmXirSsU7gGZsUOtLu8c88ieg@mail.gmail.com>
-References: <CALF+zOknSu_qkb9N0i4LY8tUtXmXirSsU7gGZsUOtLu8c88ieg@mail.gmail.com> <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk> <163906979003.143852.2601189243864854724.stgit@warthog.procyon.org.uk>
-To:     David Wysochanski <dwysocha@redhat.com>
-Cc:     dhowells@redhat.com, linux-cachefs <linux-cachefs@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 62/67] nfs: Convert to new fscache volume/cookie API
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <353627.1639229864.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Sat, 11 Dec 2021 13:37:44 +0000
-Message-ID: <353628.1639229864@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Sat, 11 Dec 2021 08:43:37 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D1DC061714;
+        Sat, 11 Dec 2021 05:43:37 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id x131so10897499pfc.12;
+        Sat, 11 Dec 2021 05:43:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=xt13Z5yrhiBpiSbrA3spSqaz9lxIFhXxgvvzrcAvgHQ=;
+        b=hMBxWy/L7MRxtNlyL7GMa99EfLioNuSltV6dOfTJVWuju/w4EteL0LNruNi1thKnwn
+         hXDuHwsno8bnmlCDSko6UrKI2jVv9Mq/NeYr/vwep3Tuu96ONYSC56SFlzQq8jDNjgfm
+         wHcm+osVaKQUnU3gIDjBh53h9c3S68+QTx/k+E9smIzDy1rQt5h8MMHfotwtqKVvi/Sb
+         JvIJuFTMyD+G34pIHvLdxwBh6e7y59AXitorDrYLi/uGPKDceXni4qhkCfHaSpywi41h
+         2uBeunyuAX4xBGJerjD3/Nbu0jA3xf/No3oPBQ8qc2/dPhaVqsg6DDbbfR5Vy73Q1nFw
+         qwnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=xt13Z5yrhiBpiSbrA3spSqaz9lxIFhXxgvvzrcAvgHQ=;
+        b=Ykert5SsQZE0HwoRKshnTqZH833KfTFg+YivG13g4G67XtCfEnTGiIdCCchtimIOCT
+         mwzbpX/+AbPlpI7iC8V+7TfTUlGggzHld1tLaX8USmW+srQy//zNZvtAjNvzwddPnTfQ
+         qafyMQ1pGS8/IMQSfhpaDQVaWJep2i/P7JD/bIWg1LbKm9fD2RkCFTa2TLMWRxz18rTF
+         tgqRuxwBSUhVA8rySdHwER6vmGV61vTTz1pSTYEdoIs4rTVdV28zO9iLS2tb3sQ9EE4B
+         b20LuOJngmozeVotyc0p49jYF9cP0MgLYf+o0lKkiVKHsE4vDYGyk4oRICG6WwD9HJku
+         wy7A==
+X-Gm-Message-State: AOAM533XvMoyZAmkqkAcTMYKAwsmhsZ3qlc13ewjEBqHfntNngVA5xE/
+        vgPk/4XEJD0w3+JBF03X9Yk=
+X-Google-Smtp-Source: ABdhPJwY/lCwWXUTgu9e26XMOIINXeBEO7l6hgdd0JmJM3MjLgdlqlO2PLQJuzamxd56B03fH6/11w==
+X-Received: by 2002:a63:170b:: with SMTP id x11mr40328705pgl.71.1639230216944;
+        Sat, 11 Dec 2021 05:43:36 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id nv12sm2133058pjb.49.2021.12.11.05.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 05:43:36 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Moritz Fischer <mdf@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fpga: stratix10-soc: fix NULL vs IS_ERR() checking
+Date:   Sat, 11 Dec 2021 13:43:32 +0000
+Message-Id: <20211211134332.21679-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Wysochanski <dwysocha@redhat.com> wrote:
+The stratix10_svc_allocate_memory function does not return NULL. It
+returns ERR_PTR(-ENOMEM). Use IS_ERR check the return value.
 
-> >  (4) fscache_enable/disable_cookie() have been removed.
-> >
-> >      Call fscache_use_cookie() and fscache_unuse_cookie() when a file =
-is
-> >      opened or closed to prevent a cache file from being culled and to=
- keep
-> >      resources to hand that are needed to do I/O.
-> >
-> >      Unuse the cookie when a file is opened for writing.  This is gate=
-d by
-> >      the NFS_INO_FSCACHE flag on the nfs_inode.
-> >
-> >      A better way might be to invalidate it with FSCACHE_INVAL_DIO_WRI=
-TE
-> >      which will keep it unused until all open files are closed.
-> >
-> =
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/fpga/stratix10-soc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> It looks like the comment doesn't match what was actually done inside
-> nfs_fscache_open_file().  Is the code right and the comment just out of =
-date?
-
-The comment is out of date.  NFS_INO_FSCACHE isn't used now.
-
-> I'm getting that kasan UAF firing periodically in this code path, and so=
- it
-> looks related to this change,though I don't have great info on it so far=
- and
-> it's hard to reproduce.
-
-Can you copy the kasan UAF text into a reply?
-
-David
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index 047fd7f23706..2d2687a90ae6 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -213,7 +213,7 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
+ 	/* Allocate buffers from the service layer's pool. */
+ 	for (i = 0; i < NUM_SVC_BUFS; i++) {
+ 		kbuf = stratix10_svc_allocate_memory(priv->chan, SVC_BUF_SIZE);
+-		if (!kbuf) {
++		if (IS_ERR(kbuf)) {
+ 			s10_free_buffers(mgr);
+ 			ret = -ENOMEM;
+ 			goto init_done;
+-- 
+2.17.1
 

@@ -2,275 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D26F4712C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6112B4712CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbhLKIK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 03:10:59 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:35624 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbhLKIK6 (ORCPT
+        id S230011AbhLKIQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 03:16:39 -0500
+Received: from mail.parknet.co.jp ([210.171.160.6]:53906 "EHLO
+        mail.parknet.co.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhLKIQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 03:10:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 04E9BCE2F2E;
-        Sat, 11 Dec 2021 08:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF93C004DD;
-        Sat, 11 Dec 2021 08:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639210254;
-        bh=oI+5/sY/L+5iscdhfDYqcwxVdpLCj2U5gYE5uvfSF84=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=PSQeWoYZFP5ERRveMRS37qY8u3LQsZgP6Vp6Cbrxi7jRHR0+VTAGSef6cS95rTceq
-         kc3D8/nf3tEpnoIXEFTZYNVx/CAonAp5ip3NF0kPhoOHxErpIIF9Ah+vJDKiJJhIdC
-         aE/WdLt6P273VsBhsX4/zTLYT3almJOsqEuhBItdfIckiIC9SpjZ4htzZmbJzZ4mLo
-         jYpv6//uE6liBfAqVg+eDS9SXOxDPw2gVD9OBg5bE/st9g8iXGFOnPHP55edmUXDRx
-         j9sFoDC10In/vcqsgT6LB+CRxE1vgzzmsKprFhSp37tLwuWalBeb/nJCb2BIrSwZpY
-         3bb/nGBVUE3eg==
-Message-ID: <2751d6f75d030cbb51abc916f2edbc5218d7f3f7.camel@kernel.org>
-Subject: Re: [PATCH v5 2/2] integrity: support including firmware
- ".platform" keys at build time
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-        Seth Forshee <seth@forshee.me>
-Date:   Sat, 11 Dec 2021 10:10:50 +0200
-In-Reply-To: <20211124204714.82514-3-nayna@linux.ibm.com>
-References: <20211124204714.82514-1-nayna@linux.ibm.com>
-         <20211124204714.82514-3-nayna@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.2 
+        Sat, 11 Dec 2021 03:16:39 -0500
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 36EE114CD00;
+        Sat, 11 Dec 2021 17:16:36 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 1BB8GYcT071519
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 17:16:35 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 1BB8GYVr371026
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 17:16:34 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 1BB8GY3n371025;
+        Sat, 11 Dec 2021 17:16:34 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     "NeilBrown" <neilb@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] FAT: use blkdev_issue_flush() instead of congestion_wait()
+References: <163712349419.13692.2859038330142282757@noble.neil.brown.name>
+        <87ee79yiik.fsf@mail.parknet.co.jp>
+        <163754226639.13692.10449616189734943162@noble.neil.brown.name>
+        <874k84hi5q.fsf@mail.parknet.co.jp>
+        <163911011670.9928.6438117555175130033@noble.neil.brown.name>
+Date:   Sat, 11 Dec 2021 17:16:34 +0900
+In-Reply-To: <163911011670.9928.6438117555175130033@noble.neil.brown.name>
+        (NeilBrown's message of "Fri, 10 Dec 2021 15:21:56 +1100")
+Message-ID: <87lf0rmu8t.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-11-24 at 15:47 -0500, Nayna Jain wrote:
-> A new function load_builtin_platform_cert() is defined to load compiled
-> in certificates onto the ".platform" keyring.
->=20
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+"NeilBrown" <neilb@suse.de> writes:
 
-This is way too non-verbose.
+> On Mon, 22 Nov 2021, OGAWA Hirofumi wrote:
+>> "NeilBrown" <neilb@suse.de> writes:
+>> 
+>> Right. This was to make the removable device usage better (but sync
+>> option is too slow).
+>> 
+>> e.g.
+>>     # cp -a /foo/source /mnt/fatfs
+>> 
+>>     # umount <don't too slow>
+>>     or
+>>     <do other thing, and forget umount>
+>
+> or use GUI to drag a file to the removable device, wait for the copy to
+> appear to finish, then pull the device.
+>
+> sync is too slow as it flush each change to storage as it happens.  Each
+> block, each FA-Table update etc.
+>
+> "-o flush" does the flush as file-close rather than on each write.
+> But it still needs to provide the same safety.  i.e. write and flush and
+> wait.
 
-It does not *really* describe what the patch does, e.g. it is
-completely any description that a kconfig option is added.
-You should describe all things that are going to happen as a
-consequence of applying this patch.
+If you want to provide the data integrity, e.g., you have to check and
+sync parent recursively. And more.
 
-It's not like the commit is just adding a function, and that's
-the whole story.
+>> It makes much slower above "cp -a" part. So I think it is overkill.
+>
+> There doesn't seem to be any point to "-o flush" if it doesn't promise
+> anything.  Without the blkdeV_issue_flush() we have no guarantee that
+> the data is safe after the file is closed - do we?
+> Certainly it will be slower than without "-o flush", but that is the
+> price you pay for safety.
 
-Nit: always use imperative form: "Add a new function...".
+What I originally think to provide here (before this patch) is,
+removable media capable flusher (early flush) + some sort of auto
+unmount (syncfs when fs becomes idle.). IOW, nearly maximum throughput
+and better safety than default fluser. But never guarantee anything the
+data integrity, otherwise this option becomes too complex and heavyweight.
 
-
-> ---
->  security/integrity/Kconfig                    | 10 +++++++
->  security/integrity/Makefile                   | 17 +++++++++++-
->  security/integrity/digsig.c                   |  2 +-
->  security/integrity/integrity.h                |  6 +++++
->  .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
->  .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
->  6 files changed, 82 insertions(+), 2 deletions(-)
->  create mode 100644 security/integrity/platform_certs/platform_cert.S
->=20
-> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-> index 71f0177e8716..9fccf1368b8a 100644
-> --- a/security/integrity/Kconfig
-> +++ b/security/integrity/Kconfig
-> @@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
->           provided by the platform for verifying the kexec'ed kerned imag=
-e
->           and, possibly, the initramfs signature.
-> =20
-> +config INTEGRITY_PLATFORM_KEYS
-> +        string "Builtin X.509 keys for .platform keyring"
-> +        depends on KEYS
-> +        depends on ASYMMETRIC_KEY_TYPE
-> +        depends on INTEGRITY_PLATFORM_KEYRING
-> +        help
-> +          If set, this option should be the filename of a PEM-formatted =
-file
-> +          containing X.509 certificates to be loaded onto the ".platform=
-"
-> +          keyring.
-> +
->  config LOAD_UEFI_KEYS
->         depends on INTEGRITY_PLATFORM_KEYRING
->         depends on EFI
-> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-> index 7ee39d66cf16..46629f5ef4f6 100644
-> --- a/security/integrity/Makefile
-> +++ b/security/integrity/Makefile
-> @@ -3,13 +3,18 @@
->  # Makefile for caching inode integrity data (iint)
->  #
-> =20
-> +quiet_cmd_extract_certs  =3D EXTRACT_CERTS   $(patsubst "%",%,$(2))
-> +      cmd_extract_certs  =3D scripts/extract-cert $(2) $@
-> +$(eval $(call config_filename,INTEGRITY_PLATFORM_KEYS))
-> +
->  obj-$(CONFIG_INTEGRITY) +=3D integrity.o
-> =20
->  integrity-y :=3D iint.o
->  integrity-$(CONFIG_INTEGRITY_AUDIT) +=3D integrity_audit.o
->  integrity-$(CONFIG_INTEGRITY_SIGNATURE) +=3D digsig.o
->  integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) +=3D digsig_asymmetric.o
-> -integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) +=3D platform_certs/platf=
-orm_keyring.o
-> +integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) +=3D platform_certs/platf=
-orm_keyring.o \
-> +						  platform_certs/platform_cert.o
->  integrity-$(CONFIG_LOAD_UEFI_KEYS) +=3D platform_certs/efi_parser.o \
->  				      platform_certs/load_uefi.o \
->  				      platform_certs/keyring_handler.o
-> @@ -19,3 +24,13 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) +=3D platform_certs/=
-efi_parser.o \
->                                       platform_certs/keyring_handler.o
->  obj-$(CONFIG_IMA)			+=3D ima/
->  obj-$(CONFIG_EVM)			+=3D evm/
-> +
-> +
-> +$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_ce=
-rtificate_list
-> +
-> +targets +=3D platform_certificate_list
-> +
-> +$(obj)/platform_certs/platform_certificate_list: scripts/extract-cert $(=
-INTEGRITY_PLATFORM_KEYS_FILENAME) FORCE
-> +	$(call if_changed,extract_certs,$(CONFIG_INTEGRITY_PLATFORM_KEYS))
-> +
-> +clean-files :=3D platform_certs/platform_certificate_list
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index 3b06a01bd0fd..0ea40ed8dfcb 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -38,7 +38,7 @@ static const char * const keyring_name[INTEGRITY_KEYRIN=
-G_MAX] =3D {
->  #define restrict_link_to_ima restrict_link_by_builtin_trusted
->  #endif
-> =20
-> -static struct key *integrity_keyring_from_id(const unsigned int id)
-> +struct key *integrity_keyring_from_id(const unsigned int id)
-
-This export should be split into separate patch.
-
->  {
->  	if (id >=3D INTEGRITY_KEYRING_MAX)
->  		return ERR_PTR(-EINVAL);
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrit=
-y.h
-> index 547425c20e11..feb84e1b1105 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -167,6 +167,7 @@ int __init integrity_init_keyring(const unsigned int =
-id);
->  int __init integrity_load_x509(const unsigned int id, const char *path);
->  int __init integrity_load_cert(const unsigned int id, const char *source=
-,
->  			       const void *data, size_t len, key_perm_t perm);
-> +struct key *integrity_keyring_from_id(const unsigned int id);
->  #else
-> =20
->  static inline int integrity_digsig_verify(const unsigned int id,
-> @@ -194,6 +195,11 @@ static inline int __init integrity_load_cert(const u=
-nsigned int id,
->  {
->  	return 0;
->  }
-> +
-> +static inline struct key *integrity_keyring_from_id(const unsigned int i=
-d)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
->  #endif /* CONFIG_INTEGRITY_SIGNATURE */
-> =20
->  #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
-> diff --git a/security/integrity/platform_certs/platform_cert.S b/security=
-/integrity/platform_certs/platform_cert.S
-> new file mode 100644
-> index 000000000000..20bccce5dc5a
-> --- /dev/null
-> +++ b/security/integrity/platform_certs/platform_cert.S
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <linux/export.h>
-> +#include <linux/init.h>
-> +
-> +	__INITRODATA
-> +
-> +	.align 8
-> +#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-> +	.globl platform_certificate_list
-> +platform_certificate_list:
-> +__cert_list_start:
-> +	.incbin "security/integrity/platform_certs/platform_certificate_list"
-> +__cert_list_end:
-> +#endif
-> +
-> +	.align 8
-> +	.globl platform_certificate_list_size
-> +platform_certificate_list_size:
-> +#ifdef CONFIG_64BIT
-> +	.quad __cert_list_end - __cert_list_start
-> +#else
-> +	.long __cert_list_end - __cert_list_start
-> +#endif
-> diff --git a/security/integrity/platform_certs/platform_keyring.c b/secur=
-ity/integrity/platform_certs/platform_keyring.c
-> index bcafd7387729..b45de142c5f5 100644
-> --- a/security/integrity/platform_certs/platform_keyring.c
-> +++ b/security/integrity/platform_certs/platform_keyring.c
-> @@ -12,8 +12,12 @@
->  #include <linux/cred.h>
->  #include <linux/err.h>
->  #include <linux/slab.h>
-> +#include <keys/system_keyring.h>
->  #include "../integrity.h"
-> =20
-> +extern __initconst const u8 platform_certificate_list[];
-> +extern __initconst const unsigned long platform_certificate_list_size;
-> +
->  /**
->   * add_to_platform_keyring - Add to platform keyring without validation.
->   * @source: Source of key
-> @@ -37,6 +41,28 @@ void __init add_to_platform_keyring(const char *source=
-, const void *data,
->  		pr_info("Error adding keys to platform keyring %s\n", source);
->  }
-> =20
-> +static __init int load_platform_certificate_list(void)
-> +{
-> +	const u8 *p;
-> +	unsigned long size;
-> +	int rc;
-> +	struct key *keyring;
-> +
-> +	p =3D platform_certificate_list;
-> +	size =3D platform_certificate_list_size;
-> +
-> +	keyring =3D integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
-> +	if (IS_ERR(keyring))
-> +		return PTR_ERR(keyring);
-> +
-> +	rc =3D load_certificate_list(p, size, keyring);
-> +	if (rc)
-> +		pr_info("Error adding keys to platform keyring %d\n", rc);
-> +
-> +	return rc;
-> +}
-> +late_initcall(load_platform_certificate_list);
-> +
->  /*
->   * Create the trusted keyrings.
->   */
-
-/Jarkko
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

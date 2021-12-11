@@ -2,100 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3C947145C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6704247145F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbhLKPAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 10:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhLKPAv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 10:00:51 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7A0C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 07:00:51 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id x131so11007873pfc.12
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 07:00:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4OzfNOh9mqp4EATONtMbEtd5LWmkPp1pHnXz+/waGoU=;
-        b=d7pMalBdszZritjqD+9G87Yspx/8x7ondD0PFVX7ch0BYr+lxUnn5VMf5FHPLb1Uln
-         GBRXOdEP8c+lnVm+TEAXP6qBBTKjFl336LcXkPCgkvbFhaADRTtmDue17Z+dpFKmAc5R
-         drMSq9SODiTC1cz67EfOb/lTyZrei2cQQMpJF2HvviDb5mfEPom1cOtRdF2mKietUhvH
-         v7RUCQy5LPbXm92feV+nhrPFuIalEzTSbsq2uAzKrDmi8Cu/DfJjj5iC1Y9pfWbTxPbe
-         x/769XzkGBuJ9NMb+Ngf+BgnD6MCscyUl4Hk+Zs01wJI2CodVIOLH6hSZlOSlPSBZJK6
-         b5jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4OzfNOh9mqp4EATONtMbEtd5LWmkPp1pHnXz+/waGoU=;
-        b=2i4e7P6m2KuJ0ytZYSZnJQxOzS0X43C9ge7hf4bUaQeDaGnIcgAajf9wwPrBYy3mJj
-         grY90SoLLB33PgdXuyobGQwFLbpdz3YrpaIndIMydrO9/quu8YwScpovvywwSUMypi5j
-         /R+bnz3ATqm2x1wXf4v4fM86td2ieR5EOSdVcjaMgdmfNDmBefduyqbjuVdjxFZPQgm/
-         MZXKKNiAi87NQl9PVuFCKV7eMxcUGFKZrzTRqpbELPqNzNsP3YhulsNhvUmN17BSPLCY
-         bAfmnyxMIpaYRhR5OhT+zehm1JuI/5d9+e/g5IuBTQwkOfOpYuZBsoHUmYZjjxYcDoQG
-         xsUg==
-X-Gm-Message-State: AOAM533fiGbgqe4zeH6PTDRFcdwsmq4r1Gk2yAMZirAOnt04SlQDfiy5
-        XRwWGy2MMtqcQ4uKbkt+pZU=
-X-Google-Smtp-Source: ABdhPJze0R7lr76h///4f4sEmHK0I6f6IuqzcU6Xve5uO0ilNEsB1mBGIjy+757nHOghYifg7Re0QA==
-X-Received: by 2002:a63:6b48:: with SMTP id g69mr10934263pgc.571.1639234850865;
-        Sat, 11 Dec 2021 07:00:50 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.105])
-        by smtp.gmail.com with ESMTPSA id p8sm7549648pfo.141.2021.12.11.07.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 07:00:50 -0800 (PST)
-From:   Xiangyang Zhang <xyz.sun.ok@gmail.com>
-To:     rostedt@goodmis.org, mingo@redhat.com
-Cc:     masami.hiramatsu.pt@hitachi.com, oleg@redhat.com,
-        namhyung.kim@lge.com, linux-kernel@vger.kernel.org,
-        xyz.sun.ok@gmail.com
-Subject: [PATCH] tracing/kprobes: 'nmissed' not showed correctly for kretprobe
-Date:   Sat, 11 Dec 2021 23:00:32 +0800
-Message-Id: <20211211150032.7568-1-xyz.sun.ok@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S231290AbhLKPCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 10:02:50 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:51816 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230180AbhLKPCt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 10:02:49 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 7F1DB67D; Sat, 11 Dec 2021 09:02:46 -0600 (CST)
+Date:   Sat, 11 Dec 2021 09:02:46 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Denis Semakin <denis.semakin@huawei.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "containers@lists.linux.dev" <containers@lists.linux.dev>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "mpeters@redhat.com" <mpeters@redhat.com>,
+        "lhinds@redhat.com" <lhinds@redhat.com>,
+        "lsturman@redhat.com" <lsturman@redhat.com>,
+        "puiterwi@redhat.com" <puiterwi@redhat.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "jamjoom@us.ibm.com" <jamjoom@us.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "rgb@redhat.com" <rgb@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>
+Subject: Re: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check
+ corresponding capability
+Message-ID: <20211211150246.GA24925@mail.hallyn.com>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-15-stefanb@linux.ibm.com>
+ <cde301002f884f43bcb7fa244b1c6b84@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cde301002f884f43bcb7fa244b1c6b84@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'nmissed' column of the 'kprobe_profile' file for kretprobe is
-always zero, because 'nmissed' for kretprobe is maintained in
-'tk->rp.nmissed' but not in 'tk->rp.kp.nmissed'
+IMO yes it is unsafe, however I concede that I am not sufficiently familiar
+with the policy language.  At least Stefan and Mimi (IIUC) want the host
+policy language to be able to specify cases where an IMA ns can be
+configured.  What's not clear to me is what sorts of triggers the host
+IMA policy could specify that would safely identify a IMA ns generation
+trigger.
 
-Fixes: c31ffb3ff633 ("tracing/kprobes: Factor out struct trace_probe")
-Signed-off-by: Xiangyang Zhang <xyz.sun.ok@gmail.com>
----
- kernel/trace/trace_kprobe.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Stefan, would you mind showing what such a policy statement would look like?
+Does it amount to "/usr/bin/runc may create an IMA ns which escapes current
+policy" ?  Or is it by UID, or any file which has a certain xattr on it?
 
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index d10c01948e68..2b9de6826e94 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1175,15 +1175,17 @@ static int probes_profile_seq_show(struct seq_file *m, void *v)
- {
- 	struct dyn_event *ev = v;
- 	struct trace_kprobe *tk;
-+	unsigned long nmissed = 0;
- 
- 	if (!is_trace_kprobe(ev))
- 		return 0;
- 
- 	tk = to_trace_kprobe(ev);
-+	nmissed = tk->rp.handler ? tk->rp.nmissed : tk->rp.kp.nmissed;
- 	seq_printf(m, "  %-44s %15lu %15lu\n",
- 		   trace_probe_name(&tk->tp),
- 		   trace_kprobe_nhit(tk),
--		   tk->rp.kp.nmissed);
-+		   nmissed);
- 
- 	return 0;
- }
--- 
-2.25.1
+-serge
 
+On Thu, Dec 09, 2021 at 08:09:20AM +0000, Denis Semakin wrote:
+> Following that thoughts...
+> Will it be so incorrectly to unbound IMA-ns from USER-ns?
+> I realize that it could lead a lot of problems but it is still unclear will current IMA-ns will be useful for Kuber...
+> How userland supposed to use current IMA-ns implementation?
+> 
+> Br,
+> Denis
+> 
+> -----Original Message-----
+> From: Denis Semakin 
+> Sent: Thursday, December 9, 2021 10:22 AM
+> To: 'Stefan Berger' <stefanb@linux.ibm.com>; linux-integrity@vger.kernel.org
+> Cc: zohar@linux.ibm.com; serge@hallyn.com; christian.brauner@ubuntu.com; containers@lists.linux.dev; dmitry.kasatkin@gmail.com; ebiederm@xmission.com; Krzysztof Struczynski <krzysztof.struczynski@huawei.com>; Roberto Sassu <roberto.sassu@huawei.com>; mpeters@redhat.com; lhinds@redhat.com; lsturman@redhat.com; puiterwi@redhat.com; jejb@linux.ibm.com; jamjoom@us.ibm.com; linux-kernel@vger.kernel.org; paul@paul-moore.com; rgb@redhat.com; linux-security-module@vger.kernel.org; jmorris@namei.org
+> Subject: RE: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check corresponding capability
+> 
+> Hi. 
+> My question won't be about capabilities. I'm wondering how IMA-ns which is associated with USER-ns and is created during USER-ns creation would be used by some namespaces orchestration systems, e.g. Kubernetes?.. It seems that it can be run without any user namespaces... 
+> Their community just discuss this opportunity to support User namespaces. (see https://github.com/kubernetes/enhancements/pull/2101)
+> Looks like currently IMA-ns will not be applicable for Kubernetes.
+> 
+> Br,
+> Denis
+> 
+> -----Original Message-----
+> From: Stefan Berger [mailto:stefanb@linux.ibm.com]
+> Sent: Thursday, December 9, 2021 1:18 AM
+> To: linux-integrity@vger.kernel.org
+> Cc: zohar@linux.ibm.com; serge@hallyn.com; christian.brauner@ubuntu.com; containers@lists.linux.dev; dmitry.kasatkin@gmail.com; ebiederm@xmission.com; Krzysztof Struczynski <krzysztof.struczynski@huawei.com>; Roberto Sassu <roberto.sassu@huawei.com>; mpeters@redhat.com; lhinds@redhat.com; lsturman@redhat.com; puiterwi@redhat.com; jejb@linux.ibm.com; jamjoom@us.ibm.com; linux-kernel@vger.kernel.org; paul@paul-moore.com; rgb@redhat.com; linux-security-module@vger.kernel.org; jmorris@namei.org; Stefan Berger <stefanb@linux.ibm.com>; Denis Semakin <denis.semakin@huawei.com>
+> Subject: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check corresponding capability
+> 
+> Use mac_admin_ns_capable() to check corresponding capability to allow read/write IMA policy without CAP_SYS_ADMIN but with CAP_MAC_ADMIN.
+> 
+> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  include/linux/capability.h      | 6 ++++++
+>  security/integrity/ima/ima_fs.c | 2 +-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/capability.h b/include/linux/capability.h index 65efb74c3585..991579178f32 100644
+> --- a/include/linux/capability.h
+> +++ b/include/linux/capability.h
+> @@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+>  		ns_capable(ns, CAP_SYS_ADMIN);
+>  }
+>  
+> +static inline bool mac_admin_ns_capable(struct user_namespace *ns) {
+> +	return ns_capable(ns, CAP_MAC_ADMIN) ||
+> +		ns_capable(ns, CAP_SYS_ADMIN);
+> +}
+> +
+>  /* audit system wants to get cap info from files as well */  int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
+>  			   const struct dentry *dentry,
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c index 0e582ceecc7f..a749a3e79304 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -394,7 +394,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)  #else
+>  		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+>  			return -EACCES;
+> -		if (!capable(CAP_SYS_ADMIN))
+> +		if (!mac_admin_ns_capable(ns->user_ns))
+>  			return -EPERM;
+>  		return seq_open(filp, &ima_policy_seqops);  #endif
+> --
+> 2.31.1

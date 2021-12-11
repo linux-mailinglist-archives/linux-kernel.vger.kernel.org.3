@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD306471485
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C31471489
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbhLKPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 10:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbhLKPjG (ORCPT
+        id S230283AbhLKPlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 10:41:12 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56498 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229518AbhLKPlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 10:39:06 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57228C061714;
-        Sat, 11 Dec 2021 07:39:06 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Sat, 11 Dec 2021 10:41:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D2AE21EC0328;
-        Sat, 11 Dec 2021 16:38:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639237140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PCo8/3FbDWkNYbh+fjQyqWz6U8P5rVcozIYlwpXUhb8=;
-        b=rxqjsay5HYoXItLMry2wgsjUPTI08cALqTVRO5K8rXIZNM2Bx/qHuFTHdRC4N5GmZXzk4k
-        bixmdpRF77fc7OuAFZzTZjXTyBUGQc2EMRvkmrdsCZxfdyVLfTc45NGH+11z134KO/vgDg
-        AcUVL+V31kd2Gnf7r52Fjdytqvw7AFQ=
-Date:   Sat, 11 Dec 2021 16:39:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, mukul.joshi@amd.com,
-        alexander.deucher@amd.com, william.roche@oracle.com
-Subject: Re: [PATCH 1/3] x86/MCE/AMD: Provide an "Unknown" MCA bank type
-Message-ID: <YbTGFYl2FlcJJKz2@zn.tnic>
-References: <20211203020017.728440-1-yazen.ghannam@amd.com>
- <20211203020017.728440-2-yazen.ghannam@amd.com>
- <YaqXiVjNLINxwz8G@zn.tnic>
- <Ya+LukojuewlomeF@yaz-ubuntu>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7330DB807E7;
+        Sat, 11 Dec 2021 15:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CE0C004DD;
+        Sat, 11 Dec 2021 15:41:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639237269;
+        bh=/yzdGEDxV8GD43o8d2iS7Fpu19V4hNZBpBWubgsd76I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kXDkugGdSQy97nMVvk9XMQvGnZ92/Z00n8oJAp5IrpPX9xpIp9YxlYkvoRa1CBdW0
+         LKeRZQbECeyUagoUAmw/QYcAjYbdyAurISTA1jzXouVvnq4tIDDjuZzmxtIDGbOBBf
+         ZaNWx7eXtrylPUFIfsk75oAYCVt12gbxF1Tr1E29U58LIckXQYdcub8yMZma4pUny8
+         L6yBtR/Rkl6ZNTLyKZXQJ85WgLazhE+ZvADr2mQZcxwE3TnSLIrWEO0lGD4p1T2ZTR
+         cWmndM8kjPBpZ9ScrbPp4mfSrrIzfVVjVEHOhh8evIPmAtg3I3jjlzL+aip64Cr9ID
+         9zEUW+wZvI2Tw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>
+Subject: [PATCH] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+Date:   Sat, 11 Dec 2021 23:40:59 +0800
+Message-Id: <20211211154059.7173-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ya+LukojuewlomeF@yaz-ubuntu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 04:28:42PM +0000, Yazen Ghannam wrote:
-> Sure thing. But I don't think removing the second directory will be okay. The
-> layout is "bank"/"block". If the "block" has special use like DRAM ECC, or L3
-> Cache on older systems, then it'll have a unique name. Otherwise, the block
-> will take the name of the bank.
+As Wenqing Liu reported in bugzilla:
 
-Ah, there was something... and I found a good example on my zen1 box:
+https://bugzilla.kernel.org/show_bug.cgi?id=215235
 
-├── umc_0
-│   ├── dram_ecc
-│   │   ├── error_count
-│   │   ├── interrupt_enable
-│   │   └── threshold_limit
-│   └── misc_umc
-│       ├── error_count
-│       ├── interrupt_enable
-│       └── threshold_limit
+- Overview
+page fault in f2fs_setxattr() when mount and operate on corrupted image
 
-but yeah, that still doesn't make it clear how the hierarchy is...
+- Reproduce
+tested on kernel 5.16-rc3, 5.15.X under root
 
-> /sys/devices/system/machinecheck/machinecheck0/thresholding
-> ├── bank0
-> │   ├── desc ("Instruction Fetch")
-> │   └── block0
-> │       ├── desc ("All Errors")
-> │       ├── error_count
-> │       ├── interrupt_enable
-> │       └── threshold_limit
-> ├── bank1
-> │   ├── desc ("Northbridge")
-> │   ├── block0
-> │   │   ├── desc ("DRAM Errors")
-> │   │   ├── error_count
-> │   │   ├── interrupt_enable
-> │   │   └── threshold_limit
-> │   └── block1
-> │       ├── desc ("Link Errors")
-> │       ├── error_count
-> │       ├── interrupt_enable
-> │       └── threshold_limit
-> ...
-> 
-> I'm inclined to the second option, since it keeps all the thresholding
-> functionality under a single directory.
+1. unzip tmp7.zip
+2. ./single.sh f2fs 7
 
-Yeah, that makes it explicit and one can see that a bank can have
-multiple blocks.
+Sometimes need to run the script several times
 
-Renaming will change the ABI but we can always do symlinks later if
-people complain. Which I doubt because I've yet to hear of someone using
-that thresholding thing at all...
+- Kernel dump
+loop0: detected capacity change from 0 to 131072
+F2FS-fs (loop0): Found nat_bits in checkpoint
+F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
+BUG: unable to handle page fault for address: ffffe47bc7123f48
+RIP: 0010:kfree+0x66/0x320
+Call Trace:
+ __f2fs_setxattr+0x2aa/0xc00 [f2fs]
+ f2fs_setxattr+0xfa/0x480 [f2fs]
+ __f2fs_set_acl+0x19b/0x330 [f2fs]
+ __vfs_removexattr+0x52/0x70
+ __vfs_removexattr_locked+0xb1/0x140
+ vfs_removexattr+0x56/0x100
+ removexattr+0x57/0x80
+ path_removexattr+0xa3/0xc0
+ __x64_sys_removexattr+0x17/0x20
+ do_syscall_64+0x37/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Thx.
+The root cause is in __f2fs_setxattr(), we missed to do sanity check on
+last xattr entry, result in out-of-bound memory access during updating
+inconsistent xattr data of target inode.
 
+After the fix, it can detect such xattr inconsistency as below:
+
+F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
+
+Cc: stable@vger.kernel.org
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/xattr.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
+index e348f33bcb2b..c544100643c8 100644
+--- a/fs/f2fs/xattr.c
++++ b/fs/f2fs/xattr.c
+@@ -684,8 +684,17 @@ static int __f2fs_setxattr(struct inode *inode, int index,
+ 	}
+ 
+ 	last = here;
+-	while (!IS_XATTR_LAST_ENTRY(last))
++	while (!IS_XATTR_LAST_ENTRY(last)) {
++		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
++			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
++			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %lu",
++					inode->i_ino, ENTRY_SIZE(last));
++			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
++			error = -EFSCORRUPTED;
++			goto exit;
++		}
+ 		last = XATTR_NEXT_ENTRY(last);
++	}
+ 
+ 	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.32.0
 
-https://people.kernel.org/tglx/notes-about-netiquette

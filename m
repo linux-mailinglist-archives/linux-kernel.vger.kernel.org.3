@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 595AE4716C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898504716C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbhLKVew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:34:52 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:48942 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbhLKVev (ORCPT
+        id S230505AbhLKVff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:35:35 -0500
+Received: from relay03.th.seeweb.it ([5.144.164.164]:47129 "EHLO
+        relay03.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230356AbhLKVfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:34:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 11 Dec 2021 16:35:34 -0500
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 00F5ECE09E6;
-        Sat, 11 Dec 2021 21:34:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 21CE8C341C3;
-        Sat, 11 Dec 2021 21:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639258488;
-        bh=YunQb4XDokziDarP76FC3zXnpXPE1nnGHVBoKCZ5Iik=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bmET9rNcUQKjqkcCPX1ZALmSAICUErLObalALA8shn0sARuxMVzNRnUjQKXgOItZn
-         HuWKHWVBLtDOJwakae2/1GIJXF0Pb+KEvcAg3HWv8PS1sFKTcX4UPfzAUOiF/BqlIy
-         8UagVvtg9mxhxdQt+mRiZxvk/fLz/ygZnpGTZjAdq6ixMIrOr6ysbg74ztcxN5s/lj
-         Vrjfd8zSuRRpnaijksEmVdsVB6OrPJjFBoamwVHBYtURlNuDYAogW2wlTC2Cc3Xgio
-         PZkhQUhnP63pUL6WhbvlpffTZnk5Wz4og0+6B6LnD7mBLQ4DNPfbtq5HWoIlIf1Wm2
-         uFhAbsltGsvfw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F225860A36;
-        Sat, 11 Dec 2021 21:34:47 +0000 (UTC)
-Subject: Re: [GIT PULL] perf tools fixes for v5.16: 3rd batch
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211211153649.468266-1-acme@kernel.org>
-References: <20211211153649.468266-1-acme@kernel.org>
-X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211211153649.468266-1-acme@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.16-2021-12-11
-X-PR-Tracked-Commit-Id: 9937e8daab29d9e20de6b7bc56c76db7a4eeda69
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bbdff6d583be718935b613ab2a966cddaadf661f
-Message-Id: <163925848793.7097.13552881636016347356.pr-tracker-bot@kernel.org>
-Date:   Sat, 11 Dec 2021 21:34:47 +0000
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1BA26202F2;
+        Sat, 11 Dec 2021 22:35:30 +0100 (CET)
+Date:   Sat, 11 Dec 2021 22:35:28 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch, abhinavk@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
+ panels
+Message-ID: <20211211213528.uroqfdksvokspbxf@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, robdclark@gmail.com,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org
+References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
+ <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
+ <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org>
+ <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 11 Dec 2021 12:36:49 -0300:
+On 2021-12-09 18:02:40, AngeloGioacchino Del Regno wrote:
+> Il 02/10/21 00:33, Dmitry Baryshkov ha scritto:
+> > On 11/09/2021 19:39, AngeloGioacchino Del Regno wrote:
+> >> [..]
+> > I've compared this with the MDP5 driver, where we always wait for PP_DONE 
+> > interrupt. Would it be enough to always wait for it (= always call 
+> > dpu_encoder_phys_cmd_wait_for_tx_complete())?
+> > 
+> 
+> Jokes apart, yes it would make sense to do that, it's something that works
+> at least... but we should verify that such a thing doesn't break new platforms
+> (like sm8150 and newer).
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.16-2021-12-11
+On sm6125 (keeping in mind that we're on llvmpipe, will bring up the GPU
+later) none of this hurts the display:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bbdff6d583be718935b613ab2a966cddaadf661f
+- Without this patch, so only checking for wait_for_ctl_start;
+- With this patch, checking for idle if it was already started;
+- With this patch altered to only ever call wait_for_tx_complete (wait
+  for idle), in place of wait_for_ctl_start.
 
-Thank you!
+Working in the sense that glxgears, which actually reports a framerate
+of approx 170 despite being on llvmpipe on an SoC that is still in
+snail-mode, seems to update (commit) the panel smoothly on every
+occasion.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+On this note, does it perhaps make more sense to call the "internal"
+_dpu_encoder_phys_cmd_wait_for_idle function directly, instead of going
+through the "public" dpu_encoder_phys_cmd_wait_for_tx_complete which
+seems solely intended to handle the wait_for_tx_complete callback?
+
+- Marijn

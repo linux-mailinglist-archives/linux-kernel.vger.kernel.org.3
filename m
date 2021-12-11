@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC22B470F64
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABC4470F6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345421AbhLKAZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 19:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
+        id S1345370AbhLKA3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 19:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbhLKAZu (ORCPT
+        with ESMTP id S233546AbhLKA3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 19:25:50 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DA3C061714
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:22:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Ggz87hFziXlCZUJuyehYGdwi+FztQdC7fGKcUudu1UU=; b=X3KlkOavsHzhCTs7O+1C+rtoK8
-        9TokGztQBeYv6bbbJRKtkTDU2zqQsxZZmzDBEPEZPSH/svGcP10oAqP7LY8av1AbHMYCM17lli0+P
-        d3ntRuTZYcKhL+f7yxvJDcQYg5DxfK7+LgL4rmRQYj3HtBx6g2kNnXKlD3FfgwJVh1K3feYUQDsM1
-        dUdfpmukVNTdJevYh+OHFDjlqiv92nKOVcVl5cZgaue/JdMFZuvJj0Sfg7h8ifAKpNFtCKhcNHYBj
-        ST3wIwd2vP7cDUQH43G41ryhtJTnh/Czk0IkgLg/3W7r3Ti/wBXTOU3MJc1p/zUKP4k0TxzilStLY
-        Vk+qZyQQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mvq9V-004La3-8j; Sat, 11 Dec 2021 00:22:13 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Zack Rusin <zackr@vmware.com>,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Martin Krastev <krastevm@vmware.com>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH -next] drm/vmwgfx: use %zu to print size_t
-Date:   Fri, 10 Dec 2021 16:22:12 -0800
-Message-Id: <20211211002212.31408-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Fri, 10 Dec 2021 19:29:41 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B05C061714
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:26:05 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id d9so17617929wrw.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:26:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=cFtnd+aPBqFTXfj41f7VO6IuoOWnyDFrekVK+uQaUbA=;
+        b=bWP74VU1LV2qeDEa9gdnzRoMlwzlvW5GATfUOm3YYqtpUQ7PYEOY03XBXKF43DjaGg
+         HM00xe3UXvG+hezBaw9UPzPu/gHBdRdCDVJGDZ9arLlRTsM808OFyHXxcRfdo2+Abyar
+         dzVzOdvvK1gCcFILCC/YvaLw7+P2tzqCNSAiOdcZz+xm87hbQmAQGcKFKnttfV7FWHhE
+         Ni6SFMrvJpEetnlDecoBrTlKPITbvPa9fsxdnYHl+tx5ikcCNfD9gWfDF5lzuTc7T0Pv
+         LMuFTbX5SK9u9U77uesGy/H4eBnMdUjHLQhK/MjgKu/kJcFhsd1SNP1DY7g552mibmFU
+         +J7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=cFtnd+aPBqFTXfj41f7VO6IuoOWnyDFrekVK+uQaUbA=;
+        b=kaCPb+0d9SZ4w9I6k9LloKkDfIbK6In6ogJgYPdriWFZ6x6JJVLyj9urS7ydAEU38P
+         FfIHhiMgvuF8if7/YQpx3yzSyzOhSBtLkyHVLhv7A6f6xQWRGtO0qd4n3ok6d0Rc8o4w
+         sEMB5g9dgkGh/GGbWaXElqCFFFFwmsuMWl7iSDdbPIGK4TU2ha2il2yT60MSfu8966ua
+         oqkMO7hJXnGo33elolZuylbo3zgHGXRJASIbGuxVxx3za5gAHF3734T+sJ1oY4RS8sjL
+         oFf0QX0K+vNcSyA1fpzd5waDdJq32uTTEIk8fkdEHvIT5gyS2q175EoK5bnGCl3th8+q
+         wHgg==
+X-Gm-Message-State: AOAM531brTxh6+h20k8ZTMRXzh/GkrTdj3GD2Az+udVWSmHFcfN7j6Me
+        DPjHh3J2BQqmKvvFpqRgk+ijRIaJww+R2/Qww7o=
+X-Google-Smtp-Source: ABdhPJwW0r0tTLZqXjMS7JFnqCGTBRpaxi57TfbGSgZ4CsikkcIw33HLLhF0aCv+tp6TVZB7B+4/1ptyr6f2pA31hFQ=
+X-Received: by 2002:a5d:69ce:: with SMTP id s14mr17794716wrw.25.1639182364027;
+ Fri, 10 Dec 2021 16:26:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Sender: victorkalu955@gmail.com
+Received: by 2002:a5d:490e:0:0:0:0:0 with HTTP; Fri, 10 Dec 2021 16:26:03
+ -0800 (PST)
+From:   Evelyn Philips <evelynphilips517@gmail.com>
+Date:   Fri, 10 Dec 2021 16:26:03 -0800
+X-Google-Sender-Auth: nxG0ORP6yfsudA4NDHUPpy_5BGo
+Message-ID: <CAAgkJBmmxbOJd-Ep7-AJ=ZmGHKzee6k2mAZNtcf4qvDsTNwLVg@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent a build format warning by using the correct format specifier
-to print size_t data.
+Hello my beloved,
 
-Fixes this build warning:
+I am glad to know you, but God knows you better and he knows why he
+has directed me to you at this point in time so do not be surprise at
+all. My names are Ms Philips Evelyn. a widow, i have been suffering
+from ovarian cancer disease. At this moment i am about to end the race
+like this because the illness has gotten to a very bad stage, without
+any family members and no child. I hoped that you will not expose or
+betray this trust and confident that I am about to entrust on you for
+the mutual benefit of the orphans and the less privileges ones. I have
+some funds I inherited from my late husband, the sum of ($
+9,500,000.00 Nine point five million dollars.) deposited in the Bank.
+Having known my present health status, I decided to entrust this fund
+to you believing that you will utilize it the way i
+am going to instruct herein.
 
-../drivers/gpu/drm/vmwgfx/vmwgfx_gem.c:230:33: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 4 has type ‘size_t {aka unsigned int}’ [-Wformat=]
+Therefore I need you to assist me and reclaim this money and use it
+for Charity works, for orphanages and gives justice and help to the
+poor, needy and to promote the words of God and the effort that the
+house of God will be maintained says The Lord." Jeremiah 22:15-16.=E2=80=9C
 
-Fixes: 8afa13a0583f ("drm/vmwgfx: Implement DRIVER_GEM")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Zack Rusin <zackr@vmware.com>
-Cc: VMware Graphics <linux-graphics-maintainer@vmware.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Martin Krastev <krastevm@vmware.com>
-Cc: dri-devel@lists.freedesktop.org
----
- drivers/gpu/drm/vmwgfx/vmwgfx_gem.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It will be my great pleasure to compensate you with 35 % percent of
+the total money for your personal use, 5 % percent for any expenses
+that may occur during the international transfer process while 60% of
+the money will go to the charity project.
 
---- next-2021-1210.orig/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
-+++ next-2021-1210/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
-@@ -227,7 +227,7 @@ static void vmw_bo_print_info(int id, st
- 		break;
- 	}
- 
--	seq_printf(m, "\t\t0x%08x: %12ld bytes %s, type = %s",
-+	seq_printf(m, "\t\t0x%08x: %12zu bytes %s, type = %s",
- 		   id, bo->base.base.size, placement, type);
- 	seq_printf(m, ", priority = %u, pin_count = %u, GEM refs = %d, TTM refs = %d",
- 		   bo->base.priority,
+All I require from you is sincerity and ability to complete God task
+without any failure. It will be my pleasure to see that the bank has
+finally release and transfer the fund into your bank account therein
+your country even before I die here in the hospital, because of my
+present health status everything need to be process rapidly as soon as
+possible. I am waiting for your immediate reply, if only you are
+interested for further details of the transaction and execution of
+this charitable project.
+
+Best Regards your friend Ms Philips Evelyn.

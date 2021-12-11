@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 711E9471552
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6C4471550
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbhLKSXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 13:23:06 -0500
-Received: from out162-62-58-211.mail.qq.com ([162.62.58.211]:32983 "EHLO
-        out162-62-58-211.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230415AbhLKSXF (ORCPT
+        id S231714AbhLKSTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 13:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231674AbhLKSTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 13:23:05 -0500
-X-Greylist: delayed 3890 seconds by postgrey-1.27 at vger.kernel.org; Sat, 11 Dec 2021 13:23:04 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639246982;
-        bh=c7iaH1wEpw1P7r58WklCov2S3G3TXz1K2JhYBGQ3gN4=;
-        h=From:To:Cc:Subject:Date;
-        b=kO5PIhmIf3SlXiGJm0VVJmQ6HB97g7gPgPuZ/QudSGuPlJfZuv/5wMoN34Dq+qtWZ
-         UGn3x3T5FWs07DLNPNfbYEupKqjP/pXjnjHxTT7yhvQKKu4MLFzSff0P1RZ4iDgtFt
-         Wa2KbbXda65Qlw72ahncRBUJ3ipzg96TsudRo8vY=
-Received: from localhost.localdomain ([43.227.138.48])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 3F02327D; Sun, 12 Dec 2021 02:15:48 +0800
-X-QQ-mid: xmsmtpt1639246548tmpnv3l5j
-Message-ID: <tencent_D3914A6FFF832049CC70B9411CAD1492E108@qq.com>
-X-QQ-XMAILINFO: M1Qh2uBElWf6sZ58vtZPlhFctg9RlJPqCKfR6ZWs/ZKZ2eh1LPsrea4jNgB9nr
-         K8+UveBsFAdjd4RS72SFxw3VVh2cV+rI8iBln4IkHIgr0SdBQN5yxx9zdVYj6eug2OXtrm4R3ofh
-         /hGQ6oGtYkResDigJZdJhVSW/GG7Jp+gkKqob/OJaiq8ZJrbDI69PAYq2cclMId/STgFUUOLkAgN
-         Ckmre+6NDXlxMx10p1hnnvc+31gAF/e/iH8JJlrMqfRh88nNUEvDqPdOzAz7KqKMH5t+SCBS+5O8
-         Iint8OIkz3fI5YOHpN81+LXMWNTDNCP5/DX753rqFn39J8iU9Ean9Gm4qdnkhIlY+42lg0EYeV+n
-         px+QKi9fWqGQdnO1Xo99arLhp2kpQWp94m1iLmjw+/Wxpf8Fro5YQYgIX0GYtdzlOc7ucYal//zP
-         Ob8hQnCr3bU6HVamUp3lWfJF+c/3x20jfkhET6gfNLjnHLZxjXIW7DxZwpSDf/gqu0jaem4amz+p
-         vcz1vKhG2NzoTpsw8GkdV4uCdBE2esDa4I17pyfiBe7o7wrvETGvdytmYqqDIAbsFUUMC1fJxQGZ
-         U266P6lpl60oVAkLPFa3JS9F6/laDpj4WG5ruGYBMxz4KT5fgggYzcrDb7ZCHBUdOvPVegyMKwGS
-         D+JjmEfC07qNqkqrFbW4tRsQuu7oM5nNt8+JqSLpyU/J79hR+8FouRAmSOan152bdP7g4AkJEvn9
-         vZF+Xw0O/vlILFF8zEKpSZ/ocgZXCUnWQpHF6lHxEoBbuidaoIXWJZ7cDi3Wz7u3pcxJqDYaV8pP
-         HrggQxZSv+oMgSCaRyiA1ZYs5NXxHDNFm0asSYuccaYbEFq0J8fj6xZzem1EqJw+IQfgR0nTZV1C
-         acliaqhNW8e0uJxDjUt9g=
-From:   xkernel <xkernel.wang@foxmail.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xkernel <xkernel.wang@foxmail.com>
-Subject: [PATCH] scsi: ufs: ufshcd-pltfrm: check the return value of kstrdup()
-Date:   Sun, 12 Dec 2021 02:14:16 +0800
-X-OQ-MSGID: <20211211181416.1133-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Sat, 11 Dec 2021 13:19:33 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A880C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:19:33 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id k9so2401229wrd.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=9NDT879wS/nwGa0+oPAPDSKpJbWbahGU+iiAATt/+Qw=;
+        b=ox8hFGdzrGUxFRAtJ+X3KI0hZUXChXbLC+TT/m5cBV3sRKz1/JL7UOtu6kysjfKnqQ
+         9amV5+M0y3YyWWGTmf/o0C3MKwUNJquXgi0pndUuq2ixxFe3GMdwP8nnoUL9YjKLJXhS
+         connbw7WpcTO4oiVDHhnM9WXpqnQw7gff0TMbYZXxnrGRld7+TWkUfd3Ll9OJqs8oeCG
+         dyfq2IHPmSnP5ZDgEfbPbDIyPKvBjC6rNn+SHWiLzqMuETGtsZhKgdfhqyKOjl47zuaW
+         A04vLdfIDxH8WBd1Rno9bksHWV7+YOk+bLJniDFowXvclBqfax7uXhhJXbtg833XqC/Q
+         IjmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=9NDT879wS/nwGa0+oPAPDSKpJbWbahGU+iiAATt/+Qw=;
+        b=qMslAvlhioQ0M/HeTkG8BPJtszNcxbM6gx1FyL0x2pC4MYlCB206fSaWUsJNhnwOa4
+         Jfd99ggUn1ipJkL9em1JfqQAZH2W9rkXZKRrhifJ7I8QxdcBjXEaKqh/6/BOshNshY8y
+         UrRgzsJSLfCPJKtvul2AX1s9OBI3AXoXpwp8IbFKkVVTRNYooJapGc+3XenmhSteVlu2
+         Wn9eNNvL/NIwTslWMcd9yCdwm26jWko8zdvTG5OTuGut4htqHueSAca75QTwVppV9XNd
+         nzBtds6MpBottkOSeghqHwcMD3HWkYElUtaU1AsF9CiJQrSlHKI6bmNUg9l8nuO1ZqZx
+         +tEg==
+X-Gm-Message-State: AOAM533wcEy3Dalkv4QqDR3bsrqnUXt5MBIc73ielkTO7uXgO6kMj8bO
+        h34DR92f7p3U8bqkalEbUAI=
+X-Google-Smtp-Source: ABdhPJxw3iZyjzTstiCTL2RognPOfsmpt7Ucfo0D+Ovgg9T0j4z0vfgm+JRtNsf/LMJhWyfsTs9zBg==
+X-Received: by 2002:adf:cf11:: with SMTP id o17mr21013002wrj.554.1639246771916;
+        Sat, 11 Dec 2021 10:19:31 -0800 (PST)
+Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id h18sm6062833wre.46.2021.12.11.10.19.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Dec 2021 10:19:31 -0800 (PST)
+Message-ID: <fbae9be5-c847-0b6b-f755-312a2af1e285@gmail.com>
+Date:   Sat, 11 Dec 2021 18:19:30 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+Subject: ALSA: drivers: opl3: assignment of a pointer that is not used,
+ probable bug
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kstrdup() can return NULL if some internal memory errors happen, so it
-is better to check the return value of it.
+Hi,
 
-Signed-off-by: xkernel <xkernel.wang@foxmail.com>
----
- drivers/scsi/ufs/ufshcd-pltfrm.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+static analysis with scan-build has found an assignment to vp2 that is 
+never used in function snd_opl3_note_on(), 
+sound/drivers/opl3/opl3_midi.c as follows:
 
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index 8859c13..32e7bd3 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -89,9 +89,15 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
- 			goto out;
- 		}
- 
-+		clki->name = kstrdup(name, GFP_KERNEL);
-+		if (!clki->name) {
-+			ret = -ENOMEM;
-+			devm_kfree(dev, clki);
-+			goto out;
-+		}
-+
- 		clki->min_freq = clkfreq[i];
- 		clki->max_freq = clkfreq[i+1];
--		clki->name = kstrdup(name, GFP_KERNEL);
- 		if (!strcmp(name, "ref_clk"))
- 			clki->keep_link_active = true;
- 		dev_dbg(dev, "%s: min %u max %u name %s\n", "freq-table-hz",
-@@ -127,6 +133,10 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
- 		return -ENOMEM;
- 
- 	vreg->name = kstrdup(name, GFP_KERNEL);
-+	if (!vreg->name) {
-+		devm_kfree(dev, vreg);
-+		return -ENOMEM;
-+	}
- 
- 	snprintf(prop_name, MAX_PROP_SIZE, "%s-max-microamp", name);
- 	if (of_property_read_u32(np, prop_name, &vreg->max_uA)) {
--- 
+         if (instr_4op) {
+                 vp2 = &opl3->voices[voice + 3];
+                 if (vp->state > 0) {
+                         opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
+                                                voice_offset + 3);
+                         reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
+                         opl3->command(opl3, opl3_reg, reg_val);
+                 }
+         }
+
+sound/drivers/opl3/opl3_midi.c:399:3: warning: Value stored to 'vp2' is 
+never read [deadcode.DeadStores]
+                 vp2 = &opl3->voices[voice + 3];
+                 ^     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+I suspect that references to vp in this if block should be to vp2, but 
+I'm unsure if that is for all references or not, hence I'm reporting 
+this issue.
+
+Coln

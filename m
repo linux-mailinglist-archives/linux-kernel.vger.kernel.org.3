@@ -2,124 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4FF471200
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FE1471202
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbhLKFnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 00:43:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38922 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbhLKFng (ORCPT
+        id S229707AbhLKFs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 00:48:27 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:39478 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229502AbhLKFs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 00:43:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EABEB82AA5;
-        Sat, 11 Dec 2021 05:39:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C5CC004DD;
-        Sat, 11 Dec 2021 05:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639201197;
-        bh=hwFn8av9NpYhRVc0lXY+IBn8be7Fk/0rfLSz20DagtE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=HLSkIJOs6fRJnyGs/82DPwZ+Oymo0iUb7oWWSok/1fFbhKDjQOHT3QjnlV/ZQ5zgp
-         tnMZcUU4EwXOAg7OgVKCIdHjMpWE5JX4BwGXKtrgSiRcET6/SNI++vQu0IkjewBgbM
-         KBdo2nztCmPLf0AewljKCQbRRHNht9LR3dtajurjFN6BQz/Fokc0s6PS1mfEGVTvVj
-         hqyHl0+gKUCGv5FTeBsf8SfxKzI2ghaSH111QEWV6HZhqdpMSFnimoPkOH+0u43cqp
-         75OdVSBaWUHjIFu8fW7AhUbZtNw78VtPVpMdyHZSoYlfrLyHj2cDB1f+cbwzJmjw5t
-         CssCXszHxpaqg==
-Message-ID: <bb7757c5b5cc3fe45e74cbee1ddafb9c71c4f4e1.camel@kernel.org>
-Subject: Re: [PATCH 03/25] x86/sgx: Support VMA permissions exceeding
- enclave permissions
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 11 Dec 2021 07:39:54 +0200
-In-Reply-To: <81308f67-a4d1-1774-f58b-223d4e81f8db@intel.com>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
-         <7e622156315c9c22c3ef84a7c0aeb01b5c001ff9.1638381245.git.reinette.chatre@intel.com>
-         <Yavq83gZzvkVaDqq@iki.fi> <YavrSFDJBGqe7K46@iki.fi>
-         <81308f67-a4d1-1774-f58b-223d4e81f8db@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.2 
+        Sat, 11 Dec 2021 00:48:26 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V-DNfxn_1639201487;
+Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V-DNfxn_1639201487)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 11 Dec 2021 13:44:48 +0800
+Message-ID: <a95618c5-723d-bfaa-bf7a-48950be8d31d@linux.alibaba.com>
+Date:   Sat, 11 Dec 2021 13:44:47 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [Linux-cachefs] [RFC 09/19] netfs: refactor netfs_rreq_unlock()
+Content-Language: en-US
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     chao@kernel.org, tao.peng@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        linux-cachefs@redhat.com, bo.liu@linux.alibaba.com,
+        linux-fsdevel@vger.kernel.org, xiang@kernel.org,
+        gerry@linux.alibaba.com, linux-erofs@lists.ozlabs.org,
+        eguan@linux.alibaba.com
+References: <20211210073619.21667-10-jefflexu@linux.alibaba.com>
+ <20211210073619.21667-1-jefflexu@linux.alibaba.com>
+ <292572.1639150908@warthog.procyon.org.uk>
+ <fba8a28b-14c1-bf58-0578-32415c95f55d@linux.alibaba.com>
+In-Reply-To: <fba8a28b-14c1-bf58-0578-32415c95f55d@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-06 at 13:16 -0800, Reinette Chatre wrote:
-> Hi Jarkko,
->=20
-> On 12/4/2021 2:27 PM, Jarkko Sakkinen wrote:
-> > On Sun, Dec 05, 2021 at 12:25:59AM +0200, Jarkko Sakkinen wrote:
-> > > On Wed, Dec 01, 2021 at 11:23:01AM -0800, Reinette Chatre wrote:
-> > > > =3D=3D=3D Summary =3D=3D=3D
-> > > >=20
-> > > > An SGX VMA can only be created if its permissions are the same or
-> > > > weaker than the Enclave Page Cache Map (EPCM) permissions. After VM=
-A
-> > > > creation this rule continues to be enforced by the page fault handl=
-er.
-> > > >=20
-> > > > With SGX2 the EPCM permissions of a page can change after VMA
-> > > > creation resulting in the VMA exceeding the EPCM permissions and th=
-e
-> > > > page fault handler incorrectly blocking access.
-> > > >=20
-> > > > Enable the VMA's pages to remain accessible while ensuring that
-> > > > the page table entries are installed to match the EPCM permissions
-> > > > without exceeding the VMA perms issions.
-> > >=20
-> > > I don't understand what the short summary means in English, and the
-> > > commit message is way too bloated to make any conclusions. It really
-> > > needs a rewrite.
-> > >=20
-> > > These were the questions I could not find answer for:
-> > >=20
-> > > 1. Why it would be by any means safe to remove a permission check?
->=20
-> The permission check is redundant for SGX1 and incorrect for SGX2.
->=20
-> In the current SGX1 implementation the permission check in=20
-> sgx_encl_load_page() is redundant because an SGX VMA can only be created=
-=20
-> if its permissions are the same or weaker than the EPCM permissions.
->=20
-> In SGX2 a user is able to change EPCM permissions during runtime (while=
-=20
-> VMA has the memory mapped). A RW VMA may thus originally have mapped an=
-=20
-> enclave page with RW EPCM permissions but since then the enclave page=20
-> may have its permissions changed to read-only. The VMA should still be=
-=20
-> able to read those enclave pages but the check in sgx_encl_load_page()=
-=20
-> will prevent that.
->=20
-> > > 2. Why not re-issuing mmap()'s is unfeasible? I.e. close existing
-> > >     VMA's and mmap() new ones.
->=20
-> User is not prevented from closing existing VMAs and creating new ones.
->=20
-> > 3. Isn't this an API/ABI break?
->=20
-> Could you please elaborate where you see the API/ABI break? The rule=20
-> that new VMAs cannot exceed EPCM permissions is untouched.
->=20
-> Reinette
 
-I just don't understand the description. There's a whole bunch of text
-but=20
 
-It does not discuss what the patch does in low-level detail what the
-patch does, e.g. the use of vm_insert_pfn_prot(). I honestly do not
-get the story here...
+On 12/11/21 1:23 PM, JeffleXu wrote:
+> 
+> 
+> On 12/10/21 11:41 PM, David Howells wrote:
+>> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+>>
+>>> In demand-read case, the input folio of netfs API is may not the page
+>>
+>> "is may not the page"?  I think you're missing a verb (and you have too many
+>> auxiliary verbs;-)
+>>
+> 
+> Sorry for my poor English... What I want to express is that
+> 
+> "In demand-read case, the input folio of netfs API may not be the page
+> cache inside the address space of the netfs file."
+> 
 
-/Jarkko
+By the way, can we change the current address_space based netfs API to
+folio-based, which shall be more general? That is, the current
+implementation of netfs API uses (address_space, page_offset, len) tuple
+to describe the destination where the read data shall be store into.
+While in the demand-read case, the input folio may not be the page
+cache, and thus there's no address_space attached with it.
+
+-- 
+Thanks,
+Jeffle

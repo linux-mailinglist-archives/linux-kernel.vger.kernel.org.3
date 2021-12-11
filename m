@@ -2,78 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B714713EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B0F4713EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbhLKNFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 08:05:17 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:54062 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbhLKNFM (ORCPT
+        id S230390AbhLKNLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 08:11:25 -0500
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:24915 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229614AbhLKNLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 08:05:12 -0500
-Date:   Sat, 11 Dec 2021 13:05:10 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639227911;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+yKH03qOG5QF0/r8TSne1E+XiIekMYgNuMhVNJdPai0=;
-        b=mzYEzk1IoITj7EFhfQPmdE1NDiXE8uqV+e01MeXjyHeD3UwtHeIgv1jAypBMDNrLJhTCA3
-        fVnRuBMLMwpQkLkgDBY9DwWWZ88UR3wBimsKDvRTJOKZlL1SzTPUAuyFDJGf7arUltF2a6
-        pJZrMr9qNyU5VbZWds87T44EZh1MrBrWt4IxSJiBL2VYIy2p2IEe/R6QQ6loHSqM5cLvSZ
-        3BwyrEMENA88YCKp7V8RoJPh5NY7dH59OCpIEImm1dAlLvFAsBmK4LcK/EyR/SQtbBZhSw
-        WKBTq5UFM28DQ83xfeg1c+WTZmfLt4IHt1FfqL6qZFnpOWLrstgn7PtD1wjXPA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639227911;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+yKH03qOG5QF0/r8TSne1E+XiIekMYgNuMhVNJdPai0=;
-        b=zFsNKPjFcLluySRdRsajsnSO6c2OnRr+Ny/+13HtJH8YEOZzZRsOYuDValxVx/B/fHMpA+
-        2dhnXkDEkmd7c9DA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/urgent] Merge tag 'timers-v5.16-rc4' of
- https://git.linaro.org/people/daniel.lezcano/linux into timers/urgent
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <429b796d-9395-4ca8-81f3-30911f80a9a9@linaro.org>
-References: <429b796d-9395-4ca8-81f3-30911f80a9a9@linaro.org>
+        Sat, 11 Dec 2021 08:11:24 -0500
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 1BBDAvSL022843;
+        Sat, 11 Dec 2021 22:10:58 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 1BBDAvSL022843
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1639228258;
+        bh=qYDFccdAWcc4y87hz8YL2hqcW/2tJJYb/x8dUaXucUQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bqa+5YJABxL3PK4750Tpuijxc4GkiTFemUHucJs0rhr13ibJehpID+gNvtx5mCWfn
+         OFyfLanYHE8PB8orWSiTm3xZtMI8vz8ZdEWGKgLGpzJCbtgthMZWnFPWzpSqfInX9z
+         GHL5UP7GU7PGPY7fbNfzIRLhDPI8vyzqYxKrcQcsSotSSkbKCz2LTsMXRB7UuvQwyZ
+         /gNRmGl1GPgZ3AEbEoeOYDh3hazNl+2LTtS/i5qywR26x/DPCFVseK4BdtP451gOMa
+         jTwaBE+bmrrWPqmPkIzsUu79UO3AqwZoPcaPggD3od2VgpIF7/sCaovUvlCb8BhJWh
+         5OoBsJOpt8BzQ==
+X-Nifty-SrcIP: [209.85.215.180]
+Received: by mail-pg1-f180.google.com with SMTP id j11so10398530pgs.2;
+        Sat, 11 Dec 2021 05:10:58 -0800 (PST)
+X-Gm-Message-State: AOAM531iZ2smHb4aicZ/IwPYFpyYGxAFwBJ2UacmtIUDYIFJslRByrC8
+        sIYAnR/jb5AHSEspLTHYeTqd2CjqE39PeAo7m80=
+X-Google-Smtp-Source: ABdhPJxrWUTVzJUtO2/XZiB7yRc0vSmQkxoWMxhXmEeWjYFrPCY3LGEf/+0CrD0NC0wUUafhcdAPCP0S3ySJZpW0YXI=
+X-Received: by 2002:a65:50c6:: with SMTP id s6mr44883388pgp.352.1639228257267;
+ Sat, 11 Dec 2021 05:10:57 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <163922791058.23020.11227739373527480594.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20211001040126.1200230-1-masahiroy@kernel.org>
+In-Reply-To: <20211001040126.1200230-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 11 Dec 2021 22:10:19 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATvAFvnTte_P4PiTq-Gui5CeK_NJvtv8Q2snsfqcEAUcQ@mail.gmail.com>
+Message-ID: <CAK7LNATvAFvnTte_P4PiTq-Gui5CeK_NJvtv8Q2snsfqcEAUcQ@mail.gmail.com>
+Subject: Re: [PATCH] certs: move the 'depends on' to the choice of module
+ signing keys
+To:     keyrings@vger.kernel.org
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/urgent branch of tip:
+On Fri, Oct 1, 2021 at 1:02 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> When the condition "MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)"
+> is unmet, you cannot choose anything in the choice, but the choice
+> menu is still displayed in the menuconfig etc.
+>
+> Move the 'depends on' to the choice to hide the meaningless menu.
+>
+> Also delete the redundant 'default'. In a choice, the first entry is
+> the default.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-Commit-ID:     aa073d8b2a6308832de3cac18e7901ac60748e26
-Gitweb:        https://git.kernel.org/tip/aa073d8b2a6308832de3cac18e7901ac60748e26
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Sat, 11 Dec 2021 13:56:30 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sat, 11 Dec 2021 13:56:30 +01:00
+Applied to linux-kbuild.
 
-Merge tag 'timers-v5.16-rc4' of https://git.linaro.org/people/daniel.lezcano/linux into timers/urgent
 
-Pull timer fixes from Daniel Lezcano:
 
-  - Fix build error with clang and some kernel configuration on the
-    arm64 architected timer by inlining the
-    erratum_set_next_event_generic() function (Marc Zyngier)
 
-  - Fix probe error on the dw_apb_timer_of driver by fixing the
-    incorrect condition previously introduced (Alexey Sheplyakov)
+>
+>  certs/Kconfig | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/certs/Kconfig b/certs/Kconfig
+> index ae7f2e876a31..73d1350c223a 100644
+> --- a/certs/Kconfig
+> +++ b/certs/Kconfig
+> @@ -17,21 +17,19 @@ config MODULE_SIG_KEY
+>
+>  choice
+>         prompt "Type of module signing key to be generated"
+> -       default MODULE_SIG_KEY_TYPE_RSA
+> +       depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
+>         help
+>          The type of module signing key type to generate. This option
+>          does not apply if a #PKCS11 URI is used.
+>
+>  config MODULE_SIG_KEY_TYPE_RSA
+>         bool "RSA"
+> -       depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
+>         help
+>          Use an RSA key for module signing.
+>
+>  config MODULE_SIG_KEY_TYPE_ECDSA
+>         bool "ECDSA"
+>         select CRYPTO_ECDSA
+> -       depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
+>         help
+>          Use an elliptic curve key (NIST P384) for module signing. Consider
+>          using a strong hash like sha256 or sha384 for hashing modules.
+> --
+> 2.30.2
+>
 
-Link: https://lore.kernel.org/r/429b796d-9395-4ca8-81f3-30911f80a9a9@linaro.org
----
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32A8470FE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 02:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00A8470FE2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 02:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345565AbhLKBf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 20:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbhLKBf0 (ORCPT
+        id S1345574AbhLKBgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 20:36:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45060 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229633AbhLKBgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 20:35:26 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C28AC061714;
-        Fri, 10 Dec 2021 17:31:49 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id x15so35925906edv.1;
-        Fri, 10 Dec 2021 17:31:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6CwkmUHS8TUHgTHQZNO355pdijNlHV5S9aFWvQgQHZc=;
-        b=OiDVhdsbVRCuDETU8Jt6+FuOiQjFOC+k7wpNLaCz4sJSWtd8cNMPW/OSqx5JHMZywf
-         66nhFTgu9cJj9d/tuqVTfQot94a+kAP7cAfqToBiDEzL+LowR9H2VgVKz4g/kxDWqYp0
-         ROExg3sIBVD/KUWQoXq2Dn9GeBlyz6iaN0zHr+zhKDz/Qag6ApPyBnvUoO3/j75AUBOs
-         GoKG3xvSD1+1PH5uSPxHaZ2ANT5Aqom+R4IDgB7vf/HeVhjArUxZDaM0wfukMgvO9yWp
-         52ltPnwjEc6clVIubgkJSCxRRyoaZfiYHn0PGAk6brMuX0ORFrHd05qkAQjrGY2P5gjk
-         L8hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6CwkmUHS8TUHgTHQZNO355pdijNlHV5S9aFWvQgQHZc=;
-        b=FbOrDKxmVbmBJW2u9Qi20l1v+mns7eTp4QeuZDI4Iavtrwb2i5LDDqDKOM7PQERmNI
-         BKPsybWzFkYmAdonYhaRuCTeLOyekVhM2TqfiNtmrCZ/5DxRqjyiIJ3mY5xKmkG9laG4
-         CSSQ2jWaPzvQ9VEfGbzzb8btxb61GvRXX22MzxONffbTBXMS6/ciO5Rt8NGUgvfDtGd+
-         jbl3z8+3sjEMZwrIEC3h32zauTsq6tW9HKZ77crz54W7gBtktSnj8A2gwWHWZIb3mOBC
-         vC4TKHj/Y+T5S+H1BEfr42E3ojnqC0DfIA6mGTfPPuh6Z507yNG3hyE5+NpaY0IqEaP0
-         MFlA==
-X-Gm-Message-State: AOAM530Obq2I2pQszW/GVYEHJfW3M5r2h6qlyj69gmfLcfrHZZcDZC2r
-        bVGv9ckmqucOObh+oQKTSzc=
-X-Google-Smtp-Source: ABdhPJxCxqvJ6GZJzbGQQpnAw4qJuopDImyNSu1ryY4/V5cbxSPQ8cU/s1spdusvRQVvjOCkLKpASw==
-X-Received: by 2002:a05:6402:26cb:: with SMTP id x11mr43166963edd.149.1639186308429;
-        Fri, 10 Dec 2021 17:31:48 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
-        by smtp.googlemail.com with ESMTPSA id cy26sm2245602edb.7.2021.12.10.17.31.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 17:31:47 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <87c26050-9242-e6fb-3fce-b6bde815f76a@redhat.com>
-Date:   Sat, 11 Dec 2021 02:31:42 +0100
+        Fri, 10 Dec 2021 20:36:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C64A8B82A7E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 01:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A96C00446;
+        Sat, 11 Dec 2021 01:32:41 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 20:32:40 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] tracing: Account bottom half disabled sections.
+Message-ID: <20211210203240.43a8e7eb@gandalf.local.home>
+In-Reply-To: <YbO5H+H3dwLoIVka@linutronix.de>
+References: <YbO5H+H3dwLoIVka@linutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 15/19] kvm: x86: Save and restore guest XFD_ERR properly
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-16-yang.zhong@intel.com> <87pmq4vw54.ffs@tglx>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87pmq4vw54.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/21 01:10, Thomas Gleixner wrote:
->      2) When the guest triggers #NM is takes an VMEXIT and the host
->         does:
-> 
->                  rdmsrl(MSR_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-> 
->         injects the #NM and goes on.
-> 
->      3) When the guest writes to MSR_XFD_ERR it takes an VMEXIT and
->         the host does:
-> 
->             vcpu->arch.guest_fpu.xfd_err = msrval;
->             wrmsrl(MSR_XFD_ERR, msrval);
+On Fri, 10 Dec 2021 21:31:27 +0100
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
 
-No wrmsrl here I think, the host value is 0 and should stay so.  Instead 
-the wrmsrl will happen the next time the VCPU loop is entred.
+> Disabling only bottom halves via local_bh_disable() disables also
+> preemption but this remains invisible to tracing. On a CONFIG_PREEMPT
+> kernel one might wonder why there is no scheduling happening despite the
+> N flag in the trace. The reason might be the a rcu_read_lock_bh()
+> section.
+> 
+> Add a 'b' to the tracing output if in task context with disabled bottom
+> halves.
+> 
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  include/linux/trace_events.h | 1 +
+>  kernel/trace/trace.c         | 6 ++++--
+>  kernel/trace/trace_output.c  | 3 +++
+>  3 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+> index 2d167ac3452c5..a2af7e1156eac 100644
+> --- a/include/linux/trace_events.h
+> +++ b/include/linux/trace_events.h
+> @@ -172,6 +172,7 @@ enum trace_flag_type {
+>  	TRACE_FLAG_SOFTIRQ		= 0x10,
+>  	TRACE_FLAG_PREEMPT_RESCHED	= 0x20,
+>  	TRACE_FLAG_NMI			= 0x40,
+> +	TRACE_FLAG_BH_OFF		= 0x80,
+>  };
+>  
+>  #ifdef CONFIG_TRACE_IRQFLAGS_SUPPORT
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 88de94da596b1..dca48d556ee5a 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -2601,6 +2601,8 @@ unsigned int tracing_gen_ctx_irq_test(unsigned int irqs_status)
+>  		trace_flags |= TRACE_FLAG_HARDIRQ;
+>  	if (in_serving_softirq())
+>  		trace_flags |= TRACE_FLAG_SOFTIRQ;
+> +	if (softirq_count() >> (SOFTIRQ_SHIFT + 1))
+> +		trace_flags |= TRACE_FLAG_BH_OFF;
+>  
+>  	if (tif_need_resched())
+>  		trace_flags |= TRACE_FLAG_NEED_RESCHED;
+> @@ -4185,7 +4187,7 @@ static void print_lat_help_header(struct seq_file *m)
+>  	seq_puts(m, "#                    _------=> CPU#            \n"
+>  		    "#                   / _-----=> irqs-off        \n"
+>  		    "#                  | / _----=> need-resched    \n"
+> -		    "#                  || / _---=> hardirq/softirq \n"
+> +		    "#                  || / _---=> hardirq/softirq/BH-disables\n"
+>  		    "#                  ||| / _--=> preempt-depth   \n"
+>  		    "#                  |||| / _-=> migrate-disable \n"
+>  		    "#                  ||||| /     delay           \n"
+> @@ -4226,7 +4228,7 @@ static void print_func_help_header_irq(struct array_buffer *buf, struct seq_file
+>  
+>  	seq_printf(m, "#                            %.*s  _-----=> irqs-off\n", prec, space);
+>  	seq_printf(m, "#                            %.*s / _----=> need-resched\n", prec, space);
+> -	seq_printf(m, "#                            %.*s| / _---=> hardirq/softirq\n", prec, space);
+> +	seq_printf(m, "#                            %.*s| / _---=> hardirq/softirq/BH-disabled\n", prec, space);
 
-Paolo
+So I went to update the documentation on this, and realized that this is
+wrong. Really, we want this in the irqs-off section probably.
+
+Note, the above is to show we are running in a hardirq or softirq context.
+But BH-disabled does not match that. Should this be with irqs-off being:
+
+ d - irqs are disabled
+ b - BH is disabled?
+ D - irqs and BH is disabled?
+
+-- Steve
+
+
+>  	seq_printf(m, "#                            %.*s|| / _--=> preempt-depth\n", prec, space);
+>  	seq_printf(m, "#                            %.*s||| / _-=> migrate-disable\n", prec, space);
+>  	seq_printf(m, "#                            %.*s|||| /     delay\n", prec, space);
+> diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+> index 3547e7176ff79..6be644d35ec30 100644

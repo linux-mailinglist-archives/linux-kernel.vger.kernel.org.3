@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFA6471476
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAD1471479
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbhLKP3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 10:29:06 -0500
-Received: from mail.hallyn.com ([178.63.66.53]:52390 "EHLO mail.hallyn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231321AbhLKP3E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 10:29:04 -0500
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id C45A182A; Sat, 11 Dec 2021 09:29:01 -0600 (CST)
-Date:   Sat, 11 Dec 2021 09:29:01 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Denis Semakin <denis.semakin@huawei.com>
-Subject: Re: [PATCH v6 15/17] ima: Use mac_admin_ns_capable() to check
- corresponding capability
-Message-ID: <20211211152901.GA25170@mail.hallyn.com>
-References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
- <20211210194736.1538863-16-stefanb@linux.ibm.com>
+        id S231337AbhLKPbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 10:31:09 -0500
+Received: from 49-237-179-185.static.tentacle.fi ([185.179.237.49]:48268 "EHLO
+        bitmer.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229836AbhLKPbI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 10:31:08 -0500
+Received: from 88-114-185-38.elisa-laajakaista.fi ([88.114.185.38] helo=[192.168.1.42])
+        by bitmer.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <jarkko.nikula@bitmer.com>)
+        id 1mw4L1-0005wU-GF; Sat, 11 Dec 2021 17:31:03 +0200
+Message-ID: <ef843afa-c99d-328d-853a-00ef293a47f2@bitmer.com>
+Date:   Sat, 11 Dec 2021 17:30:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210194736.1538863-16-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] ARM: dts: Fix timer regression for beagleboard revision c
+Content-Language: en-US
+To:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
+Cc:     =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211125144834.52457-1-tony@atomide.com>
+From:   Jarkko Nikula <jarkko.nikula@bitmer.com>
+In-Reply-To: <20211125144834.52457-1-tony@atomide.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 02:47:34PM -0500, Stefan Berger wrote:
-> Use mac_admin_ns_capable() to check corresponding capability to allow
-> read/write IMA policy without CAP_SYS_ADMIN but with CAP_MAC_ADMIN.
+Hi Tony
+
+On 11/25/21 16:48, Tony Lindgren wrote:
+> Commit e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+> caused a timer regression for beagleboard revision c where the system
+> clockevent stops working if omap3isp module is unloaded.
 > 
-> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Turns out we still have beagleboard revisions a-b4 capacitor c70 quirks
+> applied that limit the usable timers for no good reason. This also affects
+> the power management as we use the system clock instead of the 32k clock
+> source.
+> 
+> Let's fix the issue by adding a new omap3-beagle-ab4.dts for the old timer
+> quirks. This allows us to remove the timer quirks for later beagleboard
+> revisions. We also need to update the related timer quirk check for the
+> correct compatible property.
+> 
+> Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Reported-by: Jarkko Nikula <jarkko.nikula@bitmer.com>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
 > ---
->  include/linux/capability.h      | 6 ++++++
->  security/integrity/ima/ima_fs.c | 2 +-
->  2 files changed, 7 insertions(+), 1 deletion(-)
+
+>  .../devicetree/bindings/arm/omap/omap.txt     |  3 ++
+>  arch/arm/boot/dts/Makefile                    |  1 +
+>  arch/arm/boot/dts/omap3-beagle-ab4.dts        | 47 +++++++++++++++++++
+>  arch/arm/boot/dts/omap3-beagle.dts            | 33 -------------
+>  drivers/clocksource/timer-ti-dm-systimer.c    |  2 +-
+>  5 files changed, 52 insertions(+), 34 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/omap3-beagle-ab4.dts
 > 
-> diff --git a/include/linux/capability.h b/include/linux/capability.h
-> index 65efb74c3585..991579178f32 100644
-> --- a/include/linux/capability.h
-> +++ b/include/linux/capability.h
-> @@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
->  		ns_capable(ns, CAP_SYS_ADMIN);
->  }
->  
-> +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
-> +{
-> +	return ns_capable(ns, CAP_MAC_ADMIN) ||
-> +		ns_capable(ns, CAP_SYS_ADMIN);
-> +}
-> +
->  /* audit system wants to get cap info from files as well */
->  int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
->  			   const struct dentry *dentry,
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index a136d14f29ec..090ee85bfa3a 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -440,7 +440,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
->  #else
->  		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
->  			return -EACCES;
-> -		if (!capable(CAP_SYS_ADMIN))
-> +		if (!mac_admin_ns_capable(user_ns))
+I must have some error in my methodology since I cannot see the issue
+being fixed with your patch :-(
 
-Sorry if I'm missing something.  But I'm looking at your tree's
-version of ima_update_policy() and failing to see where it adds
-extra capability checks.  Note that any unprivileged user can
-unshare a user namespace, map its hostuid to nsuid 0, and pass
-ns_capable(CAP_MAC_ADMIN).
+Testing at commit 6f513529296f ("Merge tag 'for-5.16-rc4-tag' of
+git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux")
 
-Likewise, a host uid 0 process which does not have CAP_MAC_ADMIN
-can create a new user namespace, map hostuid 0 to nsuid 0, and
-have CAP_MAC_ADMIN against the new userns.
+alias ma='nice make -j `getconf _NPROCESSORS_ONLN` ARCH=arm
+CROSS_COMPILE="ccache arm-linux-gnueabihf-"'
 
-Somewhere you need to be checking for privilege against either
-the parent ns or the init_user_ns.  I'm not seeing where that's
-being done.  Can you point me to it?
+make ARCH=arm omap2plus_defconfig
+ma
+cat arch/arm/boot/dts/omap3-beagle.dtb >>arch/arm/boot/zImage
+ma LOADADDR=0x80008000 uImage
 
+-> copy uImage & modules, boot
+# rmmod omap3_isp
+# sleep 1
+-> This is the regression. Sleep is blocked until I hit keys over serial
+console
 
->  			return -EPERM;
->  		return ima_seq_open(filp, &ima_policy_seqops);
->  #endif
-> -- 
-> 2.31.1
+rm vmlinux arch/arm/boot/zImage
+patch -p1 </tmp/your-mail.eml
+
+ma
+cat arch/arm/boot/dts/omap3-beagle-ab4.dtb >>arch/arm/boot/zImage
+ma LOADADDR=0x80008000 uImage
+
+-> copy uImage & modules to µSD, boot
+# rmmod omap3_isp
+# sleep 1
+-> is still blocked until I hit keys over serial console
+
+When I compare the dmesg this is the only difference (along with "linux
+version" line) before user space starts. I.e. timer configuration is the
+same in both.
+
+[    0.000000] OF: fdt: Machine model: TI OMAP3 BeagleBoard
+->
+[    0.000000] OF: fdt: Machine model: TI OMAP3 BeagleBoard A to B4
+
+Jarkko

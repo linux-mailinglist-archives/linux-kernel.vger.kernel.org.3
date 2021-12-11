@@ -2,113 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B0F4713EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495504713EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbhLKNLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 08:11:25 -0500
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:24915 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbhLKNLY (ORCPT
+        id S230325AbhLKNKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 08:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229614AbhLKNKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 08:11:24 -0500
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 1BBDAvSL022843;
-        Sat, 11 Dec 2021 22:10:58 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 1BBDAvSL022843
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639228258;
-        bh=qYDFccdAWcc4y87hz8YL2hqcW/2tJJYb/x8dUaXucUQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bqa+5YJABxL3PK4750Tpuijxc4GkiTFemUHucJs0rhr13ibJehpID+gNvtx5mCWfn
-         OFyfLanYHE8PB8orWSiTm3xZtMI8vz8ZdEWGKgLGpzJCbtgthMZWnFPWzpSqfInX9z
-         GHL5UP7GU7PGPY7fbNfzIRLhDPI8vyzqYxKrcQcsSotSSkbKCz2LTsMXRB7UuvQwyZ
-         /gNRmGl1GPgZ3AEbEoeOYDh3hazNl+2LTtS/i5qywR26x/DPCFVseK4BdtP451gOMa
-         jTwaBE+bmrrWPqmPkIzsUu79UO3AqwZoPcaPggD3od2VgpIF7/sCaovUvlCb8BhJWh
-         5OoBsJOpt8BzQ==
-X-Nifty-SrcIP: [209.85.215.180]
-Received: by mail-pg1-f180.google.com with SMTP id j11so10398530pgs.2;
-        Sat, 11 Dec 2021 05:10:58 -0800 (PST)
-X-Gm-Message-State: AOAM531iZ2smHb4aicZ/IwPYFpyYGxAFwBJ2UacmtIUDYIFJslRByrC8
-        sIYAnR/jb5AHSEspLTHYeTqd2CjqE39PeAo7m80=
-X-Google-Smtp-Source: ABdhPJxrWUTVzJUtO2/XZiB7yRc0vSmQkxoWMxhXmEeWjYFrPCY3LGEf/+0CrD0NC0wUUafhcdAPCP0S3ySJZpW0YXI=
-X-Received: by 2002:a65:50c6:: with SMTP id s6mr44883388pgp.352.1639228257267;
- Sat, 11 Dec 2021 05:10:57 -0800 (PST)
+        Sat, 11 Dec 2021 08:10:54 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE33C061714;
+        Sat, 11 Dec 2021 05:10:54 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639228252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cX98JZxDcKVWuJ5tNuqLqmGqazKuG5pDuxGDjTIGz9Y=;
+        b=OT0qyZqH2e2mTkPLrh43pRlj/5Jfku8XfdG0AsDweaI5/4xY4dnjQSf5nm5sZFwh4Niy7t
+        tfjBoC9ZYUnRP3G3eew2TTNCcwYwyJYklD8efnpxqMp0Wyyl1ZK98/YF+sYShjXEB+CPkQ
+        puAzOIzXLQifTSX1lV4E7U7lVWNKgJX3Ywm3ejOE4wzD5fqAH8v1xfxmjwHx9dyyeWgGfJ
+        czMGBjeWG4HG26rJx0DZRB88oy4kqN1lL+EuKsF+efDJm0MZ3wE+qaNTiYE3wJhiQfIrNA
+        8ikMHDqRlk3Cjw32NaKMaW3BakEinOiKDtH+lYXalZTZXNy2tujSyO8Se+rmNw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639228252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cX98JZxDcKVWuJ5tNuqLqmGqazKuG5pDuxGDjTIGz9Y=;
+        b=xTXqn7Yh6p1HbY+c/ZQttdBrC63GDZ5MCw0q0uEl0jQHNLocPXetvLjxZXtj62Xp2CG/nt
+        ixCX3NPw9AoBz3DQ==
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com
+Subject: Re: [PATCH 15/19] kvm: x86: Save and restore guest XFD_ERR properly
+In-Reply-To: <87c26050-9242-e6fb-3fce-b6bde815f76a@redhat.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-16-yang.zhong@intel.com> <87pmq4vw54.ffs@tglx>
+ <87c26050-9242-e6fb-3fce-b6bde815f76a@redhat.com>
+Date:   Sat, 11 Dec 2021 14:10:52 +0100
+Message-ID: <8735mzwalf.ffs@tglx>
 MIME-Version: 1.0
-References: <20211001040126.1200230-1-masahiroy@kernel.org>
-In-Reply-To: <20211001040126.1200230-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 11 Dec 2021 22:10:19 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATvAFvnTte_P4PiTq-Gui5CeK_NJvtv8Q2snsfqcEAUcQ@mail.gmail.com>
-Message-ID: <CAK7LNATvAFvnTte_P4PiTq-Gui5CeK_NJvtv8Q2snsfqcEAUcQ@mail.gmail.com>
-Subject: Re: [PATCH] certs: move the 'depends on' to the choice of module
- signing keys
-To:     keyrings@vger.kernel.org
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 1, 2021 at 1:02 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sat, Dec 11 2021 at 02:31, Paolo Bonzini wrote:
+> On 12/11/21 01:10, Thomas Gleixner wrote:
+>>      2) When the guest triggers #NM is takes an VMEXIT and the host
+>>         does:
+>> 
+>>                  rdmsrl(MSR_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+>> 
+>>         injects the #NM and goes on.
+>> 
+>>      3) When the guest writes to MSR_XFD_ERR it takes an VMEXIT and
+>>         the host does:
+>> 
+>>             vcpu->arch.guest_fpu.xfd_err = msrval;
+>>             wrmsrl(MSR_XFD_ERR, msrval);
 >
-> When the condition "MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)"
-> is unmet, you cannot choose anything in the choice, but the choice
-> menu is still displayed in the menuconfig etc.
->
-> Move the 'depends on' to the choice to hide the meaningless menu.
->
-> Also delete the redundant 'default'. In a choice, the first entry is
-> the default.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+> No wrmsrl here I think, the host value is 0 and should stay so.  Instead 
+> the wrmsrl will happen the next time the VCPU loop is entred.
 
-Applied to linux-kbuild.
-
-
-
-
->
->  certs/Kconfig | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/certs/Kconfig b/certs/Kconfig
-> index ae7f2e876a31..73d1350c223a 100644
-> --- a/certs/Kconfig
-> +++ b/certs/Kconfig
-> @@ -17,21 +17,19 @@ config MODULE_SIG_KEY
->
->  choice
->         prompt "Type of module signing key to be generated"
-> -       default MODULE_SIG_KEY_TYPE_RSA
-> +       depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
->         help
->          The type of module signing key type to generate. This option
->          does not apply if a #PKCS11 URI is used.
->
->  config MODULE_SIG_KEY_TYPE_RSA
->         bool "RSA"
-> -       depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
->         help
->          Use an RSA key for module signing.
->
->  config MODULE_SIG_KEY_TYPE_ECDSA
->         bool "ECDSA"
->         select CRYPTO_ECDSA
-> -       depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
->         help
->          Use an elliptic curve key (NIST P384) for module signing. Consider
->          using a strong hash like sha256 or sha384 for hashing modules.
-> --
-> 2.30.2
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+I assumed this can be handled in the fast path, but either way.

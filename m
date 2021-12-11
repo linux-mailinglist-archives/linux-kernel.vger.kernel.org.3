@@ -2,116 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD5D4712F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4296E4712F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 09:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbhLKIvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 03:51:07 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47144 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbhLKIvG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 03:51:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 04DC0CE2F2C;
-        Sat, 11 Dec 2021 08:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834F5C004DD;
-        Sat, 11 Dec 2021 08:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639212663;
-        bh=oJGUsMuzhDiLopzzrBe771arSsE8B8iNDaGa8ER+kHk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=t9MzsQVDBlKb3rzfv8QZQAqPiDAe49brqUFusMBOaHlscPLr6zb/SaLMjQoxQEHoT
-         irTVxdVFvP8sq5EmbKSgvTnDLW2DOwF5wMHbDA/fxSrmVts1SLrpgyEOK3ZImosvDW
-         LO8QVDViPtpNW6dZsoqsiGvVvu/KtNfyC1LQWPcEBUKJQ1gzTxJDAc3pZYr2XooSYE
-         Wt4LJlebZrugmfV5VnkGU3tIRMM/ryEO9FtaB/XgF+jbGSzLkuUS6Bp0cVm3uOFFYq
-         2dmhfFotzfyYoiraek/nFGwmbYA1b4BE6HLd9nqQZZpdiw9bXWRFwDP1t1JUUYA8CO
-         N3NzbZPZDptgA==
-Date:   Sat, 11 Dec 2021 09:50:55 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for v5.16
-Message-ID: <YbRmbxcM9crWkl0y@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        id S230046AbhLKIvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 03:51:49 -0500
+Received: from smtpbg126.qq.com ([106.55.201.22]:57189 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229764AbhLKIvt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 03:51:49 -0500
+X-QQ-mid: bizesmtp42t1639212696trxqxjbd
+Received: from localhost.localdomain (unknown [182.132.179.213])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Sat, 11 Dec 2021 16:51:35 +0800 (CST)
+X-QQ-SSF: 01000000008000D0H000B00A0000000
+X-QQ-FEAT: LXTjUhoj8YP3VATQczryXFkrDWl9oLJYyVuZGuMdcD4O6jC5PCng9Wadb9DMB
+        v4YV0a77TAfqPKPN00kuMxjxDmyLn0D3ULIz+kqZ2MJQ66UqeNfsmPN7OhDsW5robt0gZA2
+        vh3wJ39LeY39m9UX+ShPuvGChT1k/MUcIxdVzHEEW8tDg0nGXdQrYcfHV0oCMLbrcSCgHQG
+        XyDJNGFANcVx/mUSFYlr8P4/Mr8qhBZ1YQm7JAhzrdNElTorG/DEPc085nk9BEPkmVHViPG
+        Vsu5GcnmpyGGYKRNY9lERkkZa0/xjWjdHKBlDUJ2EfJ7pIyJKjF3ebmXr6zp6zKsQoWbEov
+        XfniABFXINqXZHN/woxrvIVJqaw5w==
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     tsbogend@alpha.franken.de
+Cc:     rdunlap@infradead.org, wangborong@cdjrlc.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Fix typo in a comment
+Date:   Sat, 11 Dec 2021 16:51:32 +0800
+Message-Id: <20211211085132.224082-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EuK4WBe/E+JOtAly"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The double `the' in the comment in line 344 is repeated. Remove one
+of them from the comment.
 
---EuK4WBe/E+JOtAly
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ arch/mips/mm/c-octeon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Linus,
+diff --git a/arch/mips/mm/c-octeon.c b/arch/mips/mm/c-octeon.c
+index 490322b01f91..737870d8fd94 100644
+--- a/arch/mips/mm/c-octeon.c
++++ b/arch/mips/mm/c-octeon.c
+@@ -341,7 +341,7 @@ asmlinkage void cache_parity_error_octeon_recoverable(void)
+ }
+ 
+ /*
+- * Called when the the exception is not recoverable
++ * Called when the exception is not recoverable
+  */
+ 
+ asmlinkage void cache_parity_error_octeon_non_recoverable(void)
+-- 
+2.34.1
 
-here are two more I2C driver bugfixes.
-
-Please pull.
-
-Thanks,
-
-   Wolfram
-
-
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
-
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-
-for you to fetch changes up to a74c313aca266fab0d1d1a72becbb8b7b5286b6e:
-
-  i2c: mpc: Use atomic read and fix break condition (2021-12-10 22:27:30 +0100)
-
-----------------------------------------------------------------
-Chris Packham (1):
-      i2c: mpc: Use atomic read and fix break condition
-
-Vincent Whitchurch (1):
-      i2c: virtio: fix completion handling
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Maxime Bizon (1):
-      (Test) i2c: mpc: Use atomic read and fix break condition
-
- drivers/i2c/busses/i2c-mpc.c    |  2 +-
- drivers/i2c/busses/i2c-virtio.c | 32 ++++++++++++--------------------
- 2 files changed, 13 insertions(+), 21 deletions(-)
-
---EuK4WBe/E+JOtAly
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG0ZmsACgkQFA3kzBSg
-KbapWw//czmYCkD+ynvwRHX6KJfA82y5Z0k8uo63Y0V8daFIPBmWFW2ueCYWFtLk
-vdRytH2fUvFezUPy/9rtd3eTJfb38MfFjyfg28ZLJSlxAFJlUSufVpVbE17KY8bB
-dPItyl7NZPJxKnJbC/q/hMkVmSjtdY/3hB0SkXVJOBSKk4VrIT2T3LTzXYTyRn0K
-VlMcS7/DY19++aOXr2UFl4/7YYIb1BQJ7aJVNBOXsNuodkLDaHkvEjzYhRFgupas
-rncoku6nesPpWqIdj5UBEh51NKdvINPYGquJO/HYjDJ/nyJpdBFB5s2WH5PSxHZw
-0Js8mel5sFvoTq+iPQ6CUi78sRqgG6TkoD0Fy4OKqQa+jERcuUoJbhl/u6h4PBnP
-/oJ29+2Bt30V2m+mmvvUkEq+PJD8xxNBhFad4eGW7xmyOXSqXrlGKv74cOYx1hP6
-BYUKDrHUfJ1vgT05FaQlhFNkG/qrNjL6aef0PRNkVB3ASUC29JW0ypVidEuEYwpU
-qZK5EpypqaGhIgaedIFZLs0k9YoE97CYiXruNmvisbEQeAE8ZEdrIoLkkhpj98z5
-kH52WilLv1tWq75NxaPigjFH1T+TR/rsv+IbI22kbraEhBbhYhvbDRIv9m8bgGFb
-ea+zDkvpSXmGf+qbig6FSWW1ivt4tWodlJKVsGpdC5z+wLwcyiw=
-=z+LA
------END PGP SIGNATURE-----
-
---EuK4WBe/E+JOtAly--

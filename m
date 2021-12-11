@@ -2,153 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6654715BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61D84715CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbhLKTfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 14:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbhLKTfB (ORCPT
+        id S231920AbhLKTvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 14:51:16 -0500
+Received: from tulikuusama2.dnainternet.net ([83.102.40.151]:49778 "EHLO
+        tulikuusama2.dnainternet.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231911AbhLKTvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 14:35:01 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96100C061714;
-        Sat, 11 Dec 2021 11:35:01 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so13089103otv.9;
-        Sat, 11 Dec 2021 11:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6ThnTDByuTRKbLET20HfDuO4MA37AMxZPubz2iEC7OI=;
-        b=RXL9AOmQ11Mn+hQAi6ZAi1MF4MicKAvwf7/4iEGwvZCzF+iR6+xbEfB+9Pk4wnl32g
-         qdkjHMmB9ysF0BMPN3Tx46sh8oLvWHiR3TOMuCtI/QhAt+PQ5HhYzrca6XLp4BZM7gnx
-         9m+rZr3vv/NxT1hqm2ONPj4bi47DSY9HrvtaZOC1feO4UvwirHdVtVc7nH8ozoDVnbr/
-         tf2DjkaAODCX+2bWNFXHwII6c/ad5fr0lGnvOT/58bXfF9MKMjWpxG/0LnT452l3qwKP
-         CskNiFIt17J/YfxrEktUV3qAwhG7rddCzXMf9zMfWeG13r3U72h/B4bwRyryQvba8Jfn
-         7iHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6ThnTDByuTRKbLET20HfDuO4MA37AMxZPubz2iEC7OI=;
-        b=FLMg/6VLoWBU4HxW0vacAAL3qN+9jLHPFsFr/Cgu5FNxRZ4X2JbEhvWQL6tT5bG0rb
-         1LKe5sl4OubanKXj7oExrMahwjrUt/heZZdDvo3TPhdtb8Y6C4ptO9euwtoYcOigK7aV
-         zMTBnrjMVzWBn9J5rOvu41ogXOJWX1S7FvIQ8cDvFntALHcK55ZWGCJIwEvG4Cf5AdAr
-         QHVMbsug2WlFcIDKygqoqp5FZI10Ttk30SyPyJfzAiMdRA3JA90n3Ebi73zKJ6gD6q86
-         ATgqbI4MFfzhavd4l6IC8rOVNBTP+PApL8S7TkJDslyadroVAPzcKRJ9uSNPs2WYvNw9
-         94HA==
-X-Gm-Message-State: AOAM532zE6Qg+kDvzOlsybsNdVL5SCw6KDyGReYh5DAQoMGNovZ8cqPH
-        DLZUMqOHSYNYLaA913yGEOIsCIpsNCnxvEI87yg=
-X-Google-Smtp-Source: ABdhPJxNEfKRHeU29NN6oWa8t/BJUcitJC2JZGrdiiUpp9GmzT5EwT4Ss9PMF7z5mqUUqag32OlCQpFbd3w0vP0yD4I=
-X-Received: by 2002:a05:6830:4d1:: with SMTP id s17mr17362637otd.246.1639251300939;
- Sat, 11 Dec 2021 11:35:00 -0800 (PST)
+        Sat, 11 Dec 2021 14:51:16 -0500
+X-Greylist: delayed 520 seconds by postgrey-1.27 at vger.kernel.org; Sat, 11 Dec 2021 14:51:15 EST
+Received: from localhost (localhost [127.0.0.1])
+        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id E68BF2A1AB;
+        Sat, 11 Dec 2021 21:42:33 +0200 (EET)
+X-Virus-Scanned: DNA Internet at dnainternet.net
+X-Spam-Flag: NO
+X-Spam-Score: 0.251
+X-Spam-Level: 
+X-Spam-Status: No, score=0.251 tagged_above=-9999 required=6
+        tests=[DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
+        HEADER_FROM_DIFFERENT_DOMAINS=0.249, SPF_HELO_NONE=0.001,
+        SPF_NONE=0.001] autolearn=disabled
+Authentication-Results: tulikuusama2.dnainternet.net (DNA Internet);
+        dkim=pass (1024-bit key) header.d=anssih.iki.fi
+Received: from tulikuusama2.dnainternet.net ([83.102.40.151])
+        by localhost (tulikuusama2.dnainternet.net [127.0.0.1]) (DNA Internet, port 10041)
+        with ESMTP id ESKn04tKTPXV; Sat, 11 Dec 2021 21:42:33 +0200 (EET)
+Received: from kirsikkapuu2.dnainternet.net (kirsikkapuu2.dnainternet.net [83.102.40.52])
+        by tulikuusama2.dnainternet.net (Postfix) with ESMTP id 9038A2A15B;
+        Sat, 11 Dec 2021 21:42:33 +0200 (EET)
+Received: from mail.onse.fi (87-95-225-209.bb.dnainternet.fi [87.95.225.209])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kirsikkapuu2.dnainternet.net (Postfix) with ESMTPS id 156953BAF;
+        Sat, 11 Dec 2021 21:42:29 +0200 (EET)
+Received: by mail.onse.fi (Postfix, from userid 1000)
+        id B6D623222F7; Sat, 11 Dec 2021 21:42:29 +0200 (EET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.onse.fi B6D623222F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anssih.iki.fi;
+        s=default; t=1639251749;
+        bh=dfpAKXsHLovNd5IBRGBtQtckxsVeTIfHXjPHPxwhPaQ=;
+        h=From:To:Cc:Subject:From;
+        b=YthncdtQzcpVAepZ8OSN41woAeuhD80WiBpk6KaNLjBN1e09B046BcwXHcB8Q8HDw
+         j2pK8iJV32+i5XwLswwTzqwhWipsik7Lf5XVdFwmPgvHZtlQKmd4J3Yy0vA9JHYeVP
+         zPofmB5Oy/VGkBpTexVnraMFQsxHjYF9BHdvXnVE=
+From:   Anssi Hannula <anssi.hannula@iki.fi>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] docs/vm: clarify overcommit amount sysctl behavior
+Date:   Sat, 11 Dec 2021 21:41:59 +0200
+Message-Id: <20211211194159.3137362-1-anssi.hannula@iki.fi>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <1638864419-17501-1-git-send-email-wellslutw@gmail.com>
- <1638864419-17501-2-git-send-email-wellslutw@gmail.com> <YbPHxVf1vXZj9GOC@robh.at.kernel.org>
-In-Reply-To: <YbPHxVf1vXZj9GOC@robh.at.kernel.org>
-From:   =?UTF-8?B?5ZGC6Iqz6aiw?= <wellslutw@gmail.com>
-Date:   Sun, 12 Dec 2021 03:34:49 +0800
-Message-ID: <CAFnkrsmXu9ceSQ7rzOAFy_kP6JMa7GvY7HCbT=_wfskH6wXuSw@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 1/2] devicetree: bindings: net: Add bindings
- doc for Sunplus SP7021.
-To:     Rob Herring <robh@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, Wells Lu <wells.lu@sunplus.com>,
-        vincent.shih@sunplus.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Documentation/vm/overcommit-accounting.rst says that the overcommit
+amount can be set via vm.overcommit_ratio and vm.overcommit_kbytes.
 
-Thank you very much for your review.
-Please see my replies below:
+Add a clarification that those only take effect in overcommit handling
+mode 2 ("Don't overcommit"), i.e. they do not act as an "additional"
+limit that is always enforced.
 
-> Add bindings documentation for Sunplus SP7021.
->
-[...]
-> > +
-> > +  interrupts:
-> > +    description: |
-> > +      Contains number and type of interrupt. Number should be 66.
->
-> Drop. That's every 'interrupts' and the exact number is outside the
-> scope of the binding.
+Signed-off-by: Anssi Hannula <anssi.hannula@iki.fi>
+---
 
-Yes, I'll drop the descriptions next patch.
-interrupts property will be:
-
-  interrupts:
-    maxItems: 1
+I've had to look this one up in the code enough times already :)
 
 
-[...]
-> > +
-> > +  mdio:
->
-> Just need:
->
->        $ref: mdio.yaml#
->        unevaluatedProperties: false
->
-> and drop the rest.
+ Documentation/vm/overcommit-accounting.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Yes, I'll modify mdio node next patch.
-mdio node will be:
+diff --git a/Documentation/vm/overcommit-accounting.rst b/Documentation/vm/overcommit-accounting.rst
+index 0dd54bbe4afa..1addb0c374a4 100644
+--- a/Documentation/vm/overcommit-accounting.rst
++++ b/Documentation/vm/overcommit-accounting.rst
+@@ -34,7 +34,8 @@ The Linux kernel supports the following overcommit handling modes
+ The overcommit policy is set via the sysctl ``vm.overcommit_memory``.
+ 
+ The overcommit amount can be set via ``vm.overcommit_ratio`` (percentage)
+-or ``vm.overcommit_kbytes`` (absolute value).
++or ``vm.overcommit_kbytes`` (absolute value). These only have an effect
++when ``vm.overcommit_memory`` is set to 2.
+ 
+ The current overcommit limit and amount committed are viewable in
+ ``/proc/meminfo`` as CommitLimit and Committed_AS respectively.
+-- 
+2.31.1
 
-  mdio:
-    $ref: mdio.yaml#
-    unevaluatedProperties: false
-
-
-> > +    type: object
-> > +    description: external MDIO Bus
-> > +
-> > +    properties:
-> > +      "#address-cells":
-> > +        const: 1
-> > +
-> > +      "#size-cells":
-> > +        const: 0
-> > +
-> > +    patternProperties:
-> > +      "^ethernet-phy@[0-9a-f]+$":
-> > +        type: object
-> > +        description: external PHY node
-> > +
-> > +        properties:
-> > +          reg:
-> > +            minimum: 0
-> > +            maximum: 30
-
-Can I limit value of 'reg' to no more than 30?
-
-
-> > +
-> > +        required:
-> > +          - reg
-> > +
-> > +additionalProperties: false
-> > +
-[...]
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    emac: emac@9c108000 {
->
-> ethernet@9c108000 {
-
-I'll modify it next patch.
-
-
-[...]
-> > 2.7.4
-> >
-
-
-Best regards,
-Wells

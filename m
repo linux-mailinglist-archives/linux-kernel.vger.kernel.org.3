@@ -2,57 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 473C8471645
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 21:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D76F471647
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 21:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbhLKUs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 15:48:27 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:50990 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229800AbhLKUs1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 15:48:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=VxSkwg6ghmArPl90zmq1KDncKWgwBOo/4YCVA6ZQIZ0=; b=WKUuktnDtTljfOtDuxTGqjRKCv
-        Rj5TYqRF/nixGbCRjkW47LDtJzN0eELkVzTzAdkDfKKD+UMFZsZ9DcWjFW7E1g44YYP9RgIqX+K94
-        rulzOqte5Jbl+Z8W/5fG5n1taRUZxYsucgz75IMF0atg+aEfVHibM07G9csjIZXG9hP4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mw9I5-00GHif-SC; Sat, 11 Dec 2021 21:48:21 +0100
-Date:   Sat, 11 Dec 2021 21:48:21 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     alexandru.tachici@analog.com
-Cc:     o.rempel@pengutronix.de, davem@davemloft.net,
-        devicetree@vger.kernel.org, hkallweit1@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v4 2/7] net: phy: Add 10-BaseT1L registers
-Message-ID: <YbUOlRWhbE+F9KCx@lunn.ch>
-References: <20211210110509.20970-1-alexandru.tachici@analog.com>
- <20211210110509.20970-3-alexandru.tachici@analog.com>
+        id S231207AbhLKUxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 15:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229489AbhLKUxo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 15:53:44 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F72C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 12:53:44 -0800 (PST)
+Date:   Sat, 11 Dec 2021 21:53:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1639256019;
+        bh=2bJBMRa2aedQcNCGUCixbKNKcjm/wdw2OXmrHKMkcyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mc2CnC03Q5E6C1eBPEhkLKYrYVt3N9dcYVJvsIDJ/DT0LQGUraVC2+Siy4JUtGQXP
+         GA6Kkfu+GYwIxA4d2JlDsjTvcjg9CJwGEH7ma5Fwvt5cBejgdVZC5EVcrZIvMdR64M
+         O8kgYvJnwjd4pAJO8k5CBSw04UBtqoFzFAfUcslM=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Charles Mirabile <cmirabil@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com,
+        Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>
+Subject: Re: [PATCH V5 1/6] drivers/mfd: sensehat: Raspberry Pi Sense HAT
+ core driver
+Message-ID: <7bff30f0-143a-4268-9e9a-9d7bd6973e52@t-8ch.de>
+References: <20211210221033.912430-1-cmirabil@redhat.com>
+ <20211210221033.912430-2-cmirabil@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211210110509.20970-3-alexandru.tachici@analog.com>
+In-Reply-To: <20211210221033.912430-2-cmirabil@redhat.com>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 01:05:04PM +0200, alexandru.tachici@analog.com wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
-> 
-> The 802.3gc specification defines the 10-BaseT1L link
-> mode for ethernet trafic on twisted wire pair.
-> 
-> PMA status register can be used to detect if the phy supports
-> 2.4 V TX level and PCS control register can be used to
-> enable/disable PCS level loopback.
-> 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+Hi,
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Currently this patch already contains some code that is only needed by the
+patches adding the actual subdrivers.
+I marked them below.
 
-    Andrew
+If you are resubmitting this code should be moved to the respective subdriver
+patch.
+
+On 2021-12-10 17:10-0500, Charles Mirabile wrote:
+> This patch adds the core driver file, containing the regmap configuration
+> needed to communicate with the board over I2C. We also add the header
+> file shared by all three drivers, containing common data and definitions.
+> In addition, we add a config option to toggle compilation of the driver.
+> 
+> Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
+> Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
+> Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
+> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> ---
+>  drivers/mfd/Kconfig          |   8 ++
+>  drivers/mfd/Makefile         |   1 +
+>  drivers/mfd/sensehat-core.c  | 157 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/sensehat.h |  51 ++++++++++++
+>  4 files changed, 217 insertions(+)
+>  create mode 100644 drivers/mfd/sensehat-core.c
+>  create mode 100644 include/linux/mfd/sensehat.h
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 3fb480818599..e6de22f98c0e 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -11,6 +11,14 @@ config MFD_CORE
+>  	select IRQ_DOMAIN
+>  	default n
+>  
+> +config MFD_SENSEHAT_CORE
+> +	tristate "Raspberry Pi Sense HAT core functions"
+> +	depends on I2C
+> +	select MFD_CORE
+> +	help
+> +	  This is the core driver for the Raspberry Pi Sense HAT. This provides
+> +	  the necessary functions to communicate with the hardware.
+> +
+>  config MFD_CS5535
+>  	tristate "AMD CS5535 and CS5536 southbridge core functions"
+>  	select MFD_CORE
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 0b1b629aef3e..2b012e3d497d 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -263,6 +263,7 @@ obj-$(CONFIG_MFD_ROHM_BD718XX)	+= rohm-bd718x7.o
+>  obj-$(CONFIG_MFD_ROHM_BD957XMUF)	+= rohm-bd9576.o
+>  obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
+>  obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+> +obj-$(CONFIG_MFD_SENSEHAT_CORE) += sensehat-core.o
+>  obj-$(CONFIG_MFD_ACER_A500_EC)	+= acer-ec-a500.o
+>  obj-$(CONFIG_MFD_QCOM_PM8008)	+= qcom-pm8008.o
+>  
+> diff --git a/drivers/mfd/sensehat-core.c b/drivers/mfd/sensehat-core.c
+> new file mode 100644
+> index 000000000000..c5b6f4648d88
+> --- /dev/null
+> +++ b/drivers/mfd/sensehat-core.c
+> @@ -0,0 +1,157 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Raspberry Pi Sense HAT core driver
+> + * http://raspberrypi.org
+> + *
+> + * Copyright (C) 2015 Raspberry Pi
+> + * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + *
+> + * Original Author: Serge Schneider
+> + * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + *
+> + * This driver is based on wm8350 implementation and was refactored to use the
+> + * misc device subsystem rather than the deprecated framebuffer subsystem.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/i2c.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/sensehat.h>
+> +
+> +#define SENSEHAT_WAI 0xF0
+> +#define SENSEHAT_VER 0xF1
+> +
+> +#define SENSEHAT_ID 's'
+> +
+> +static struct platform_device *
+> +sensehat_client_dev_register(struct sensehat *sensehat, const char *name);
+> +
+> +static struct regmap_config sensehat_config;
+> +
+> +static int sensehat_probe(struct i2c_client *i2c,
+> +			  const struct i2c_device_id *id)
+> +{
+> +	int ret;
+> +	unsigned int reg;
+> +
+> +	struct sensehat *sensehat =
+> +		devm_kzalloc(&i2c->dev, sizeof(*sensehat), GFP_KERNEL);
+> +
+> +	if (!sensehat)
+> +		return -ENOMEM;
+> +
+> +	i2c_set_clientdata(i2c, sensehat);
+> +	sensehat->dev = &i2c->dev;
+> +	sensehat->i2c_client = i2c;
+> +
+> +	sensehat->regmap =
+> +		devm_regmap_init_i2c(sensehat->i2c_client, &sensehat_config);
+> +
+> +	if (IS_ERR(sensehat->regmap)) {
+> +		dev_err(sensehat->dev, "Failed to initialize sensehat regmap");
+> +		return PTR_ERR(sensehat->regmap);
+> +	}
+> +
+> +	ret = regmap_read(sensehat->regmap, SENSEHAT_WAI, &reg);
+> +	if (ret < 0) {
+> +		dev_err(sensehat->dev, "failed to read from device");
+> +		return ret;
+> +	}
+> +
+> +	if (reg != SENSEHAT_ID) {
+> +		dev_err(sensehat->dev, "expected device ID %i, got %i",
+> +			SENSEHAT_ID, ret);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = regmap_read(sensehat->regmap, SENSEHAT_VER, &reg);
+> +	if (ret < 0) {
+> +		dev_err(sensehat->dev,
+> +			"Unable to get sensehat firmware version");
+> +		return ret;
+> +	}
+> +
+> +	dev_info(sensehat->dev, "Raspberry Pi Sense HAT firmware version %i\n",
+> +		 reg);
+> +
+> +#ifdef CONFIG_JOYSTICK_SENSEHAT
+> +	sensehat->joystick.pdev =
+> +		sensehat_client_dev_register(sensehat, "sensehat-joystick");
+> +
+> +	if (IS_ERR(sensehat->joystick.pdev)) {
+> +		dev_err(sensehat->dev, "failed to register sensehat-joystick");
+> +		return PTR_ERR(sensehat->joystick.pdev);
+> +	}
+> +#endif
+> +#ifdef CONFIG_SENSEHAT_DISPLAY
+> +
+> +	sensehat->display.pdev =
+> +		sensehat_client_dev_register(sensehat, "sensehat-display");
+> +
+> +	if (IS_ERR(sensehat->display.pdev)) {
+> +		dev_err(sensehat->dev, "failed to register sensehat-display");
+> +		return PTR_ERR(sensehat->display.pdev);
+> +	}
+> +#endif
+
+These two ifdef blocks.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_device *
+> +sensehat_client_dev_register(struct sensehat *sensehat, const char *name)
+> +{
+> +	long ret = -ENOMEM;
+> +	struct platform_device *pdev =
+> +		platform_device_alloc(name, PLATFORM_DEVID_AUTO);
+> +
+> +	if (!pdev)
+> +		goto alloc_fail;
+> +
+> +	pdev->dev.parent = sensehat->dev;
+> +	platform_set_drvdata(pdev, sensehat);
+> +
+> +	ret = platform_device_add(pdev);
+> +	if (ret)
+> +		goto add_fail;
+> +
+> +	ret = devm_add_action_or_reset(
+> +		sensehat->dev, (void *)platform_device_unregister, pdev);
+> +	if (ret)
+> +		goto alloc_fail;
+> +
+> +	return pdev;
+> +
+> +add_fail:
+> +	platform_device_put(pdev);
+> +alloc_fail:
+> +	return ERR_PTR(ret);
+> +}
+> +
+> +static struct regmap_config sensehat_config = {
+> +	.name = "sensehat",
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +};
+> +
+> +static const struct i2c_device_id sensehat_i2c_id[] = {
+> +	{ .name = "sensehat" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(i2c, sensehat_i2c_id);
+> +
+> +static struct i2c_driver sensehat_driver = {
+> +	.driver = { .name = "sensehat" },
+> +	.probe = sensehat_probe,
+> +	.id_table = sensehat_i2c_id,
+> +};
+> +
+> +module_i2c_driver(sensehat_driver);
+> +
+> +MODULE_DESCRIPTION("Raspberry Pi Sense HAT core driver");
+> +MODULE_AUTHOR("Serge Schneider <serge@raspberrypi.org>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/sensehat.h b/include/linux/mfd/sensehat.h
+> new file mode 100644
+> index 000000000000..5d241dbed174
+> --- /dev/null
+> +++ b/include/linux/mfd/sensehat.h
+> @@ -0,0 +1,51 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * Raspberry Pi Sense HAT core driver
+> + * http://raspberrypi.org
+> + *
+> + * Copyright (C) 2015 Raspberry Pi
+> + * Copyright (C) 2021 Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + *
+> + * Original Author: Serge Schneider
+> + * Revised for upstream Linux by: Charles Mirabile, Mwesigwa Guma, Joel Savitz
+> + */
+> +
+> +#ifndef __LINUX_MFD_SENSEHAT_H_
+> +#define __LINUX_MFD_SENSEHAT_H_
+> +#include <linux/miscdevice.h>
+> +
+> +#define SENSEDISP_IOC_MAGIC 0xF1
+> +
+> +#define SENSEDISP_IOGET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 0)
+> +#define SENSEDISP_IOSET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 1)
+> +#define SENSEDISP_IORESET_GAMMA _IO(SENSEDISP_IOC_MAGIC, 2)
+
+These defines.
+
+> +struct sensehat {
+> +	struct device *dev;
+> +	struct i2c_client *i2c_client;
+> +	struct regmap *regmap;
+> +
+> +	/* Client devices */
+> +	struct sensehat_joystick {
+> +		struct platform_device *pdev;
+> +		struct input_dev *keys_dev;
+> +	} joystick;
+> +
+> +	struct sensehat_display {
+> +		struct platform_device *pdev;
+> +		struct miscdevice mdev;
+> +		struct mutex rw_mtx;
+> +		u8 gamma[32];
+> +		struct {
+> +			u16 b : 5, u : 1, g : 5, r : 5;
+> +		} vmem[8][8];
+> +	} display;
+
+These two substructs.
+
+> +};
+> +
+> +enum gamma_preset {
+> +	GAMMA_DEFAULT = 0,
+> +	GAMMA_LOWLIGHT,
+> +	GAMMA_PRESET_COUNT,
+> +};
+
+This enum.
+
+> +
+> +#endif
+> -- 
+> 2.31.1
+> 

@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 862364716E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E664716E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbhLKVtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:49:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbhLKVtW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:49:22 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68DDC061751
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 13:49:21 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id 193so10933645qkh.10
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 13:49:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=216kzXBuHrtR+pLZX4A3zjdY7dFTRS45ivYaDgXHWiQ=;
-        b=WIirWmQcQEqP2Wsh1HLpBUmtp5ElEGVZPHWWrXCao2NbowwGB49iuKgypZmpAC2RG9
-         aGTY7flkNkCdjmv+wnoyOgDhmP2dPwD1X3mgpOKJosfDx84GAzH7k2nAjP5EueMZhFSD
-         kDzJWY3PCHC587bNDcQChGc+W+o1R+H+5zzPoHCG72QhcbGIxXXBJSQgIwtO2G5qtJsv
-         gHzqK7H+bwqKePEbgEA/5Sj9jvJPjynaVxfZmDcQlsAUwd0FL6/soXcCkl8IkkkcG5np
-         foCd0OtqOqE8sNhtjtSJt1Z5LVVJpc8GFgcjiZ25KlnecQBG3EU0iiLWweWdYbbq4ggk
-         eP3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=216kzXBuHrtR+pLZX4A3zjdY7dFTRS45ivYaDgXHWiQ=;
-        b=1jBH5/SmmOqviTiL62CziK0NNUi87iD7vDbZK+Eq5TK0zruSzLMKM9oy7ieRjWVuBn
-         YIpsd8ny2/soTKTgi59L7FlwFrJU4Wj/Xt8z05GHgPcDlAiUVjIakYCmq7tmOqaMip1Z
-         GpkjYSamRc2BwilMN49l2Ln8EQRCCkDt1BmJCLSC0ZRiQonGwV4HMbnhGGIWyEilJlJ5
-         kqU66zWDqo4lKSStVomsAmRnfA7Q3dJVWVq4iDmAhIxJY4zv52c/s1ple8R8T+Os9V7v
-         SZVjEgMfwt9Ipaun0UbrzNYOceGHnhAVymdxDhyGxDHgIctsBIF98qgxeMAuycESqlD/
-         k3Kw==
-X-Gm-Message-State: AOAM5333B5K6ON3m7F9bGVPVzgo2yG+P0B5rObWMo9Jm3kEeVPmncJaB
-        hbHCE4AOqko5dtYeKbPkFvHgbbQh7YIrUdG0HKMmRA==
-X-Google-Smtp-Source: ABdhPJx0HA+TFdXFAe/Fn75girIuuARUxIWPNthwtIiISDoqzb4TtSUHLZLxUyYEMWCTuNAKiVa9lepST9gbf9uY4UQ=
-X-Received: by 2002:a05:620a:13ea:: with SMTP id h10mr27102972qkl.30.1639259360286;
- Sat, 11 Dec 2021 13:49:20 -0800 (PST)
+        id S231566AbhLKVyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:54:23 -0500
+Received: from ixit.cz ([94.230.151.217]:42022 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231319AbhLKVyV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 16:54:21 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 0E71721F5E;
+        Sat, 11 Dec 2021 22:54:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1639259657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zSpqLPn7P+S+3UQTwr7zSIFu2ADotQIHst4N/Z4gL4k=;
+        b=nmOyzjJY8oReV6w6eiprkNmXME0kKkv0YoRZy3sL7d/G22zD+UJRAf0OrV9koPO5dpD+9j
+        kbrj6Ubo9kYzMnZNoFXNLbnU7Eu8kvejuqFgZ16GQxQt7wX3SNH55tJQ/0lHooGXQJz9oF
+        Ke31daEMl/EFBy9hSK4iLPUWRqBPtSo=
+From:   David Heidelberg <david@ixit.cz>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Oder Chiou <oder_chiou@realtek.com>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        Mark Brown <broonie@linaro.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: dt-bindings: add missing pins
+Date:   Sat, 11 Dec 2021 22:51:19 +0100
+Message-Id: <20211211215120.70966-1-david@ixit.cz>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
- <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
- <b325fc8d-e06b-36de-b40a-b5ffbcebb1c5@linaro.org> <94bedea3-0e5f-5ae8-79d1-ceb17ccdea23@somainline.org>
- <20211211213528.uroqfdksvokspbxf@SoMainline.org>
-In-Reply-To: <20211211213528.uroqfdksvokspbxf@SoMainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 12 Dec 2021 00:49:09 +0300
-Message-ID: <CAA8EJprT5gcWOsS5jJk8egUpxutBpUdW2Pnh-8FFXhgOd3hr=A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode panels
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, abhinavk@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Dec 2021 at 00:35, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
->
-> On 2021-12-09 18:02:40, AngeloGioacchino Del Regno wrote:
-> > Il 02/10/21 00:33, Dmitry Baryshkov ha scritto:
-> > > On 11/09/2021 19:39, AngeloGioacchino Del Regno wrote:
-> > >> [..]
-> > > I've compared this with the MDP5 driver, where we always wait for PP_DONE
-> > > interrupt. Would it be enough to always wait for it (= always call
-> > > dpu_encoder_phys_cmd_wait_for_tx_complete())?
-> > >
-> >
-> > Jokes apart, yes it would make sense to do that, it's something that works
-> > at least... but we should verify that such a thing doesn't break new platforms
-> > (like sm8150 and newer).
->
-> On sm6125 (keeping in mind that we're on llvmpipe, will bring up the GPU
-> later) none of this hurts the display:
->
-> - Without this patch, so only checking for wait_for_ctl_start;
-> - With this patch, checking for idle if it was already started;
-> - With this patch altered to only ever call wait_for_tx_complete (wait
->   for idle), in place of wait_for_ctl_start.
->
-> Working in the sense that glxgears, which actually reports a framerate
-> of approx 170 despite being on llvmpipe on an SoC that is still in
-> snail-mode, seems to update (commit) the panel smoothly on every
-> occasion.
->
-> On this note, does it perhaps make more sense to call the "internal"
-> _dpu_encoder_phys_cmd_wait_for_idle function directly, instead of going
-> through the "public" dpu_encoder_phys_cmd_wait_for_tx_complete which
-> seems solely intended to handle the wait_for_tx_complete callback?
+Add pins missing in documentation, but present in the hardware.
 
-Either one would work. The main difference is the error message. Do
-you want to see it here if the wait times out or not?
+Fixes: 0e826e867264 ("ASoC: add RT5677 CODEC driver")
 
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ Documentation/devicetree/bindings/sound/rt5677.txt | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/rt5677.txt b/Documentation/devicetree/bindings/sound/rt5677.txt
+index da2430099181..74b6359b802d 100644
+--- a/Documentation/devicetree/bindings/sound/rt5677.txt
++++ b/Documentation/devicetree/bindings/sound/rt5677.txt
+@@ -54,9 +54,21 @@ Pins on the device (for linking into audio routes):
+   * DMIC2
+   * DMIC3
+   * DMIC4
++  * DMIC L1
++  * DMIC L2
++  * DMIC L3
++  * DMIC L4
++  * DMIC R1
++  * DMIC R2
++  * DMIC R3
++  * DMIC R4
+   * LOUT1
+   * LOUT2
+   * LOUT3
++  * PDM1L
++  * PDM1R
++  * PDM2L
++  * PDM2R
+ 
+ Example:
+ 
 -- 
-With best wishes
-Dmitry
+2.33.0
+

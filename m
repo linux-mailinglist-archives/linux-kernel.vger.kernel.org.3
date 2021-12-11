@@ -2,147 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B56964714C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 17:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE68F4714CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 17:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbhLKQdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 11:33:50 -0500
-Received: from mga12.intel.com ([192.55.52.136]:47356 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231455AbhLKQdu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 11:33:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="218564677"
-X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
-   d="scan'208";a="218564677"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 08:33:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
-   d="scan'208";a="462902902"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by orsmga003.jf.intel.com with ESMTP; 11 Dec 2021 08:33:49 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        rafael@kernel.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] x86: intel_epb: Allow model specific normal EPB value
-Date:   Sat, 11 Dec 2021 08:33:27 -0800
-Message-Id: <20211211163327.3093169-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        id S231487AbhLKQvm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 11 Dec 2021 11:51:42 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:28311 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230329AbhLKQvl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 11:51:41 -0500
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JBDLh3l7XzcpMj;
+        Sun, 12 Dec 2021 00:51:24 +0800 (CST)
+Received: from dggpemm500003.china.huawei.com (7.185.36.56) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 12 Dec 2021 00:51:39 +0800
+Received: from dggpemm500003.china.huawei.com ([7.185.36.56]) by
+ dggpemm500003.china.huawei.com ([7.185.36.56]) with mapi id 15.01.2308.020;
+ Sun, 12 Dec 2021 00:51:39 +0800
+From:   "miaoxie (A)" <miaoxie@huawei.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Subject: [PATCH] pipe: Fix endless sleep problem due to the out-of-order
+Thread-Topic: [PATCH] pipe: Fix endless sleep problem due to the out-of-order
+Thread-Index: AdfurjGw4gOQnK4ySKaGWPpzRyQ7Eg==
+Date:   Sat, 11 Dec 2021 16:51:39 +0000
+Message-ID: <31566e37493540ada2dda862fe8fb32b@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.227]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current EPB "normal" is defined as 6 and set whenever power-up EPB
-value is 0. This setting resulted in the desired out of box power and
-performance for several CPU generations. But this value is not suitable
-for AlderLake mobile CPUs, as this resulted in higher uncore power.
-Since EPB is model specific, this is not unreasonable to have different
-behavior.
+Thers is a out-of-order access problem which would cause endless sleep
+when we use pipe with epoll.
 
-Allow a capability where "normal" EPB can be redefined. For AlderLake
-mobile CPUs this desired normal value is 7.
+The story is following, we assume the ring size is 2, the ring head
+is 1, the ring tail is 0, task0 is write task, task1 is read task,
+task2 is write task.
+Task0					Task1		Task2
+epoll_ctl(fd, EPOLL_CTL_ADD, ...)
+  pipe_poll()
+    poll_wait()
+    tail = READ_ONCE(pipe->tail);
+    	// Re-order and get tail=0
+				  	pipe_read
+					tail++ //tail=1
+							pipe_write
+							head++ //head=2
+    head = READ_ONCE(pipe->head);
+    	// head = 2
+    check ring is full by head - tail
+Task0 get head = 2 and tail = 0, so it mistake that the pipe ring is
+full, then task0 is not add into ready list. If the ring is not full
+anymore, task0 would not be woken up forever
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+The reason of this problem is that we got inconsistent head/tail value
+of the pipe ring, so we fix the problem by getting them by atomic.
+
+It seems that pipe_readable and pipe_writable is safe, so we don't
+change them.
+
+Signed-off-by: Miao Xie <miaoxie@huawei.com>
 ---
- arch/x86/kernel/cpu/intel_epb.c | 45 +++++++++++++++++++++++----------
- 1 file changed, 32 insertions(+), 13 deletions(-)
+ fs/pipe.c                 |  6 ++++--
+ include/linux/pipe_fs_i.h | 32 ++++++++++++++++++++++++++++++--
+ 2 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-index f4dd73396f28..fbaf12e43f41 100644
---- a/arch/x86/kernel/cpu/intel_epb.c
-+++ b/arch/x86/kernel/cpu/intel_epb.c
-@@ -16,6 +16,7 @@
- #include <linux/syscore_ops.h>
- #include <linux/pm.h>
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 6d4342bad9f1..454056b1eaad 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -649,6 +649,7 @@ pipe_poll(struct file *filp, poll_table *wait)
+ 	__poll_t mask;
+ 	struct pipe_inode_info *pipe = filp->private_data;
+ 	unsigned int head, tail;
++	u64 ring_idxs;
  
-+#include <asm/cpu_device_id.h>
- #include <asm/cpufeature.h>
- #include <asm/msr.h>
+ 	/* Epoll has some historical nasty semantics, this enables them */
+ 	pipe->poll_usage = 1;
+@@ -669,8 +670,9 @@ pipe_poll(struct file *filp, poll_table *wait)
+ 	 * if something changes and you got it wrong, the poll
+ 	 * table entry will wake you up and fix it.
+ 	 */
+-	head = READ_ONCE(pipe->head);
+-	tail = READ_ONCE(pipe->tail);
++	ring_idxs = (u64)atomic64_read(&pipe->ring_idxs);
++	head = pipe_get_ring_head(ring_idxs);
++	tail = pipe_get_ring_tail(ring_idxs);
  
-@@ -58,6 +59,22 @@ static DEFINE_PER_CPU(u8, saved_epb);
- #define EPB_SAVED	0x10ULL
- #define MAX_EPB		EPB_MASK
- 
-+enum energy_perf_value_index {
-+	EPB_INDEX_PERFORMANCE,
-+	EPB_INDEX_BALANCE_PERFORMANCE,
-+	EPB_INDEX_NORMAL,
-+	EPB_INDEX_BALANCE_POWERSAVE,
-+	EPB_INDEX_POWERSAVE,
-+};
-+
-+static u8 energ_perf_values[] = {
-+	[EPB_INDEX_PERFORMANCE] = ENERGY_PERF_BIAS_PERFORMANCE,
-+	[EPB_INDEX_BALANCE_PERFORMANCE] = ENERGY_PERF_BIAS_BALANCE_PERFORMANCE,
-+	[EPB_INDEX_NORMAL] = ENERGY_PERF_BIAS_NORMAL,
-+	[EPB_INDEX_BALANCE_POWERSAVE] = ENERGY_PERF_BIAS_BALANCE_POWERSAVE,
-+	[EPB_INDEX_POWERSAVE] = ENERGY_PERF_BIAS_POWERSAVE,
-+};
-+
- static int intel_epb_save(void)
- {
- 	u64 epb;
-@@ -90,7 +107,7 @@ static void intel_epb_restore(void)
- 		 */
- 		val = epb & EPB_MASK;
- 		if (val == ENERGY_PERF_BIAS_PERFORMANCE) {
--			val = ENERGY_PERF_BIAS_NORMAL;
-+			val = energ_perf_values[EPB_INDEX_NORMAL];
- 			pr_warn_once("ENERGY_PERF_BIAS: Set to 'normal', was 'performance'\n");
- 		}
- 	}
-@@ -103,18 +120,11 @@ static struct syscore_ops intel_epb_syscore_ops = {
+ 	mask = 0;
+ 	if (filp->f_mode & FMODE_READ) {
+diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+index fc5642431b92..9a7cb8077dc8 100644
+--- a/include/linux/pipe_fs_i.h
++++ b/include/linux/pipe_fs_i.h
+@@ -58,8 +58,18 @@ struct pipe_buffer {
+ struct pipe_inode_info {
+ 	struct mutex mutex;
+ 	wait_queue_head_t rd_wait, wr_wait;
+-	unsigned int head;
+-	unsigned int tail;
++	union {
++		/*
++		 * If someone want to change this structure, you should also
++		 * change the macro *PIPE_GET_DOORBELL* that is used to
++		 * generate the ring head/tail access function.
++		 */
++		struct {
++			unsigned int head;
++			unsigned int tail;
++		};
++		atomic64_t ring_idxs;
++	};
+ 	unsigned int max_usage;
+ 	unsigned int ring_size;
+ #ifdef CONFIG_WATCH_QUEUE
+@@ -82,6 +92,24 @@ struct pipe_inode_info {
+ #endif
  };
  
- static const char * const energy_perf_strings[] = {
--	"performance",
--	"balance-performance",
--	"normal",
--	"balance-power",
--	"power"
--};
--static const u8 energ_perf_values[] = {
--	ENERGY_PERF_BIAS_PERFORMANCE,
--	ENERGY_PERF_BIAS_BALANCE_PERFORMANCE,
--	ENERGY_PERF_BIAS_NORMAL,
--	ENERGY_PERF_BIAS_BALANCE_POWERSAVE,
--	ENERGY_PERF_BIAS_POWERSAVE
-+	[EPB_INDEX_PERFORMANCE] = "performance",
-+	[EPB_INDEX_BALANCE_PERFORMANCE] = "balance-performance",
-+	[EPB_INDEX_NORMAL] = "normal",
-+	[EPB_INDEX_BALANCE_POWERSAVE] = "balance-power",
-+	[EPB_INDEX_POWERSAVE] = "power",
- };
- 
- static ssize_t energy_perf_bias_show(struct device *dev,
-@@ -193,13 +203,22 @@ static int intel_epb_offline(unsigned int cpu)
- 	return 0;
- }
- 
-+static const struct x86_cpu_id intel_epb_normal[] = {
-+	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 7),
-+	{}
-+};
++#define PIPE_GET_DOORBELL(bellname)					\
++static inline unsigned int pipe_get_ring_##bellname(u64 ring_idxs)	\
++{									\
++	unsigned int doorbell;						\
++	unsigned char *ptr = ((char *)&ring_idxs);			\
++	int offset;							\
++									\
++	offset = (int)offsetof(struct pipe_inode_info, bellname);	\
++	offset -= (int)offsetof(struct pipe_inode_info, ring_idxs);	\
++	ptr += offset;							\
++	doorbell = *((unsigned int *)ptr);				\
++									\
++	return doorbell;						\
++}
 +
- static __init int intel_epb_init(void)
- {
-+	const struct x86_cpu_id *id = x86_match_cpu(intel_epb_normal);
- 	int ret;
- 
- 	if (!boot_cpu_has(X86_FEATURE_EPB))
- 		return -ENODEV;
- 
-+	if (id)
-+		energ_perf_values[EPB_INDEX_NORMAL] = id->driver_data;
++PIPE_GET_DOORBELL(head)
++PIPE_GET_DOORBELL(tail)
 +
- 	ret = cpuhp_setup_state(CPUHP_AP_X86_INTEL_EPB_ONLINE,
- 				"x86/intel/epb:online", intel_epb_online,
- 				intel_epb_offline);
+ /*
+  * Note on the nesting of these functions:
+  *
 -- 
 2.31.1
-

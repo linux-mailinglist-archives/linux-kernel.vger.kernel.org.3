@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E61F447168A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE433471692
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbhLKVPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:15:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S232333AbhLKVPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:15:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbhLKVOj (ORCPT
+        with ESMTP id S232281AbhLKVOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:14:39 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9432EC061370;
-        Sat, 11 Dec 2021 13:14:38 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id t26so24123155lfk.9;
-        Sat, 11 Dec 2021 13:14:38 -0800 (PST)
+        Sat, 11 Dec 2021 16:14:45 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21CBC0698C6;
+        Sat, 11 Dec 2021 13:14:39 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id a37so17385526ljq.13;
+        Sat, 11 Dec 2021 13:14:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rDbM4I30lOOSvtqVOQfcQSvD6Q4tKt5cQZX4AWoWoK4=;
-        b=EUrrHklyejk3kF460AWimFyf+FnRu1uYRB/EYWZ90nu1dRsWOnHaUH/8k/SHlv84RH
-         VsDWN+T7b/7nlGme9aiWgTvbE4U2aQid+kBDk5SUDMlP3hFn7kKFQri7bCaxpZMG/RhC
-         U6v7sL93nCeOTjO//HMwyw5fhoW6kIaPzrpw/89ulq8Fx4dAhK159reoAM2wSvp34id3
-         xxH1TsweVNOH0yk2I/Yo3nsR3Oze0toEjzo7/PsFmakSCVoVZuy4xB0UFOmMMijP1T6s
-         ekyvE42OXqbC1+xAp7xcg3U4evtUGfPVYl8/iG1ZkrcAi+M874KtmbUECeh0ZqY63Cdu
-         Bz5g==
+        bh=Ivl/N40c1tlMrmwTfIX/+o/rKme8fK1843gBC9Fg4bk=;
+        b=A0/eEJCRr4yxgiDbcCJzgPvdLv4vDKX8MAe62tMYjj1A4g0e8tP1n84v5HYTc0ZyyM
+         bjKA5GDpmpq6LIlntPL88zwIPVI+AmXgJdqXKX3XzVEGPkwBM4leRt9tx/z4NIlXO8vh
+         zCvnfbxkboZqEHCJyXq6yP9CxzTxN4NnIEeh+ePtNAO42A1N+7aox6Z5QdWM85KFOmlF
+         vR78Z1uGGTbQ+g+RGn9AhjCnwTOsIOEryoknJyGewpKVljsVuUsavQeo3tYPVZ8kiWJp
+         cJ1pDsMo1S7oMCJIJTH3Kiaputtmnv8ZK8bF6CHFW7eGLD78MONYNnkNJBqTx9ZPmCrM
+         xdUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rDbM4I30lOOSvtqVOQfcQSvD6Q4tKt5cQZX4AWoWoK4=;
-        b=tD8lJJxowhBQA84g1b0+Mxv6RPTmVkwvhX8ieuHWJiK+DcosRM/tiivX2uZpUtujSr
-         9rBB5fOmTK0mT6iZZN7oTc9saHFgQR6qgpGoSfwxb/wChraPP8Pim7OeQRAQHT0q12F7
-         23KBoOCYe3pFoxEUHVlJLRo8mTScqywzPw9aT4ppBle1NBMzHHFZ92pUpCgG1er4ah+S
-         dH4zXWEC9s1lfurXhMqdxsoAi6m+ehRQlRoOhc9zinmKgT8JzT4JrEB8trqf4zqn6qVM
-         9glzxIbiPUwKNzKluqfYYh2PsR+Q6ho494KNJN1eWxJWWAt+Z5upCZkDrdOlWbgkXvin
-         0z0A==
-X-Gm-Message-State: AOAM531rB5D7P9nz7PfOYG1tEzRvh/YtTv86w8SWLWPbbqp409tnS2hs
-        WA7BvnUmcceOdWVg6dA3n7g=
-X-Google-Smtp-Source: ABdhPJyPfdO6QyJ0t448rPB5HemddGerXN7ceeCqA5mGoP7M0ab+iWPFsY8f/aV8hVahkzd+h8edQg==
-X-Received: by 2002:ac2:442e:: with SMTP id w14mr19707971lfl.577.1639257276910;
-        Sat, 11 Dec 2021 13:14:36 -0800 (PST)
+        bh=Ivl/N40c1tlMrmwTfIX/+o/rKme8fK1843gBC9Fg4bk=;
+        b=mg7cyAh9J0sDHz52RMtKjauiLLFluzhHgMM7OjQemYpIFCf344HGvGH031QcmaJgi+
+         tzwHABTu6pgavYbAqHwOG+txB2qreSofeHNn5AQnIDLk/90v6j3gKZtyX/Hu7ogNSlXb
+         groppnQQphcDmKuJqCr1O8+6uHamlJBAkj79F/P3I+Ppcu6ctYrNgdc2buwPbTH4Wj3X
+         0n45F9X59FLYQ5l2Doo33P9HnOvTp+ZpRxuJ09uSJWSy9VLSMiuo9YEyPvLBt0KgCZiM
+         SMJ5m5QMnpsU0IcXmv+KuRukdpyTOy+olGRW8XuDLk8b7UShYm3HeUi9i8DdyjjNbqL/
+         Cysg==
+X-Gm-Message-State: AOAM532PRApEDF1tUGd+5CIQ9xYILMX6+WXxo//0g4qwmNYSYBFfq0xv
+        dmW7+ik+qtRYxY9MKfV0H4E=
+X-Google-Smtp-Source: ABdhPJx8r1dnuhpvs3Uq0EhR4PnH6o4X0NVnJg1pmv4pDiAyMHMIzIl1cXQIfC0Mbzgy47wSM0CcEQ==
+X-Received: by 2002:a05:651c:1722:: with SMTP id be34mr19890642ljb.52.1639257278043;
+        Sat, 11 Dec 2021 13:14:38 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.35
+        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 13:14:36 -0800 (PST)
+        Sat, 11 Dec 2021 13:14:37 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -69,9 +69,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 15/28] ARM: tegra: Add usb-role-switch property to USB OTG ports
-Date:   Sun, 12 Dec 2021 00:13:59 +0300
-Message-Id: <20211211211412.10791-16-digetx@gmail.com>
+Subject: [PATCH v6 16/28] ARM: tegra: Enable HDMI CEC on Nyan
+Date:   Sun, 12 Dec 2021 00:14:00 +0300
+Message-Id: <20211211211412.10791-17-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211211211412.10791-1-digetx@gmail.com>
 References: <20211211211412.10791-1-digetx@gmail.com>
@@ -81,76 +81,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Enable HDMI CEC on Nyan Chromebooks. It allows to control TV over HDMI.
 
-If an USB port is an OTG port, then we should add the usb-role-switch
-property. Otherwise XUSB setup fails and therefore padctl is unable to
-set up the ports. This leads to broken USB and PCIe ports. Add the
-usb-role-switch properties to Tegra124 device-trees to fix the problem.
-
-The error message shown without this patch is e.g:
-usb2-0: usb-role-switch not found for otg mode
-
-[digetx@gmail.com: improved commit message]
+Suggested-by: Thomas Graichen <thomas.graichen@gmail.com>
 Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan Big
-Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi | 1 +
- arch/arm/boot/dts/tegra124-apalis.dtsi      | 1 +
- arch/arm/boot/dts/tegra124-nyan.dtsi        | 1 +
- arch/arm/boot/dts/tegra124-venice2.dts      | 2 +-
- 4 files changed, 4 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/tegra124-nyan.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi b/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
-index cde9ae8fa04b..b9198f842a34 100644
---- a/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
-+++ b/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi
-@@ -1885,6 +1885,7 @@ ports {
- 			usb2-0 {
- 				status = "okay";
- 				mode = "otg";
-+				usb-role-switch;
- 				vbus-supply = <&reg_usbo1_vbus>;
- 			};
- 
-diff --git a/arch/arm/boot/dts/tegra124-apalis.dtsi b/arch/arm/boot/dts/tegra124-apalis.dtsi
-index a46d9ba9bb7a..1a996fb78ee2 100644
---- a/arch/arm/boot/dts/tegra124-apalis.dtsi
-+++ b/arch/arm/boot/dts/tegra124-apalis.dtsi
-@@ -1877,6 +1877,7 @@ ports {
- 			usb2-0 {
- 				status = "okay";
- 				mode = "otg";
-+				usb-role-switch;
- 				vbus-supply = <&reg_usbo1_vbus>;
- 			};
- 
 diff --git a/arch/arm/boot/dts/tegra124-nyan.dtsi b/arch/arm/boot/dts/tegra124-nyan.dtsi
-index 63a81270300a..93a40a84b792 100644
+index 93a40a84b792..a5dff226831b 100644
 --- a/arch/arm/boot/dts/tegra124-nyan.dtsi
 +++ b/arch/arm/boot/dts/tegra124-nyan.dtsi
-@@ -466,6 +466,7 @@ usb2-0 {
- 				vbus-supply = <&vdd_usb1_vbus>;
- 				status = "okay";
- 				mode = "otg";
-+				usb-role-switch;
- 			};
+@@ -390,6 +390,10 @@ pmc@7000e400 {
+ 		nvidia,sys-clock-req-active-high;
+ 	};
  
- 			usb2-1 {
-diff --git a/arch/arm/boot/dts/tegra124-venice2.dts b/arch/arm/boot/dts/tegra124-venice2.dts
-index e6b54ac1ebd1..de8c18e6b7e6 100644
---- a/arch/arm/boot/dts/tegra124-venice2.dts
-+++ b/arch/arm/boot/dts/tegra124-venice2.dts
-@@ -972,7 +972,7 @@ ports {
- 			usb2-0 {
- 				status = "okay";
- 				mode = "otg";
--
-+				usb-role-switch;
- 				vbus-supply = <&vdd_usb1_vbus>;
- 			};
- 
++	cec@70015000 {
++		status = "okay";
++	};
++
+ 	hda@70030000 {
+ 		status = "okay";
+ 	};
 -- 
 2.33.1
 

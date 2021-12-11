@@ -2,100 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A63184713D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 13:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DFC4713D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 13:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbhLKMkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 07:40:53 -0500
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:51681 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229668AbhLKMkw (ORCPT
+        id S230020AbhLKMmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 07:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229668AbhLKMmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 07:40:52 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 673DB320210E;
-        Sat, 11 Dec 2021 07:40:51 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 11 Dec 2021 07:40:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm3; bh=etmSmuHQy4+c+u468+BrAn+HWX
-        TE3u6TRE2AWVtCPec=; b=hLkzpOLJUeQTTDloTTW8r95Jd2qpOCr3VYM9l8aNPl
-        YKv7551ZWn6YQQM+WWPARwioNSvU/fjJuii4YJKG62hl8HseTKwDL2UfVEuma/rP
-        eoQacD+Rf2osiCBWo12xQCf069Uyn3vEzdIsZ8oCRENCEuN7C6UHliZ9GsjWyqBU
-        G7n8OPAGxRXZLWbW7Cb2jdb3DhvPnfbh+2mcc9KCWCTMDV6QUnv8RfSaSkDZKbSO
-        H0poKA372wV4ptqs/woF9p0V1rLpuh4a/0du+WYvkAfFpWF+BJ9Rx0+rLWmyYTcd
-        kPjjNb5D/EAPr6ipbBeqqIp0YmYjvGWTic81Lz+0oGFQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=etmSmuHQy4+c+u468
-        +BrAn+HWXTE3u6TRE2AWVtCPec=; b=EzmLr2Bdfy5V1fHSuQyJ+mjztj67S5Mqo
-        2dXNOW1Zh0dNjw2kbudvd0j0Ompou6RFMqid5fOZKa0124ShleNRnUT21QuY9vF0
-        lcVvI4OEHfPTRdX0MFWZMA0+orxPMjcuz8JyA+hMHC/aJJOnzI90t5XVq3Gk13J+
-        nsG+978q5fKAmZCK6zg42QxOfj8ntzYXbsT+Ks/MkcZcwyat+/JDJKrf/EmbRSDr
-        PZOkqXduQ3mUMnpgiILWQhBEDkNbjGyxvHfqCUXFD/sV1ogonHHa23nZlCwtY4Bj
-        lFiL4jAKXMNcrtG93U1rK15XAxYNadN6YTp5v+ekCFMm/lHBCXj+g==
-X-ME-Sender: <xms:Upy0YaZiuBBaIQ5iR8Q8CnXx9f41L42Q480Bm8tunPVxVxzb02o9Ag>
-    <xme:Upy0YdZAIfSKAe6yOSmWy23huv7P7lS_6RKPZ2XSrvfvZ2rkN-BR3XhEx1VKCrvDO
-    6dCcJsk76XUAdRGWXU>
-X-ME-Received: <xmr:Upy0YU83ESMHaSa0rRV3NMvCi9clM32CYiCKC32K_XrDZW60fTCSC6nrm7gS80Eb6gXkpHA-tZNcZKdfgkcwpgJQhLGmPzsp5zV4XdlUjRi3XSRrw9mgaqtL0ff2NQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkeeggdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfrvght
-    vghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrhhnpe
-    eugfelkedvtdejffefjeehveelfeevkefgudduhfeghfefgedtheevjeefffffgfenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhessh
-    hvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:Upy0YcryvClt63K1SLj-MEFa8kDLUeuAq4Rx_bg2ag5QLTMmqgXoTA>
-    <xmx:Upy0YVqgEMKPLSGgmJb0d5nuw_67yt6PUF6jU6O7312QbooGWS1ILQ>
-    <xmx:Upy0YaS-A_Egw4UD5aey5oY2_1pdCQjWTzpzdXbJttHwvxbMeq3GIg>
-    <xmx:Upy0YeAJNsg2cdeYdI-8qcl8R3aBcCeFpgebveCIfPz3FmPnJ3ixBw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 11 Dec 2021 07:40:49 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: apple: t8103: Add watchdog node
-Date:   Sat, 11 Dec 2021 13:40:44 +0100
-Message-Id: <20211211124044.4697-1-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Sat, 11 Dec 2021 07:42:22 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBABC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 04:42:21 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id o20so38303700eds.10
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 04:42:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=4ZAJ7+RgU5SwB6cKjMFXYqwkNJH4syc0PUZ0Dq3SneI=;
+        b=mLOuX1htqo7NGV+yTWrW0sgynr1MFaYe5WPW2+//7R8DmYopvP73faJ66jI/pkgZHt
+         LXhIOBeGGV6FNPdQbpGlU0nulVQF9awEidx3vvb0rGoLO0M8NJN1bqhWeufPlXm0y1o6
+         0C/KB2HkDl3TCo9RfyIBIRNHlNYufiLXKN4gg8t/Lyqj6K3/31Hpd7wWMcWB23PMtNtM
+         QlBKkJ2I0vyuI/4SdRx/ADoXM/LaJx0zTb+4/a/l2cbz7Upxev3Zvn1ytIaHREHZyiCb
+         ar9MXw+hOf9REgpgTuNCATGtfa43G/8rzW5I2krnkws6s3KphGighoU1W0bfy+DXGVWR
+         wyXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=4ZAJ7+RgU5SwB6cKjMFXYqwkNJH4syc0PUZ0Dq3SneI=;
+        b=swa39UWPXu15Du3UFfeRmK+WozGsey+hZMwK2RQgRWFjv7ZrX9bq/9XCGp8cm9PrdT
+         Of3pkz+gXEa3zBVIiG+CWhLaG7/1KGyoiU+ddR279gDCwaCHgQWV38OOtRo9Ur7f8Zxd
+         BTnDujndzVU6DjIpQ8zg4AvpjzMplbaoCBnI5/a4elNeNEC9pinEDVl338kb5wXzffDv
+         xlix7ftZisqI3kF4gIPbIn5BgBjk2SIRFAWhsWp2iIn5MSq3kwzyCUiZHzT2Wgc5g257
+         bo7CeDSANpGUUzzJ6gNTgaw9djQgdfMoQXvUiS2OCIzC0cm0Nxb3N0h1BsmEekPqxou/
+         N3vQ==
+X-Gm-Message-State: AOAM530Ux8Rd9ha3x8ArpbGHNX83TilZE7mYvUhQSL1l7Ah3F9GMxr9B
+        8DMuySgO6Cy1r17UWnar3yPtRXOQA0yb4uynCeQ=
+X-Google-Smtp-Source: ABdhPJwdeV+CaW9T/9u5HzGQ/7obemLiU0/mOkUiSpr8p/lfG8DvA3HC6ccXuI2iFkFll41JA5Tmka1+C2p2fnVDnzw=
+X-Received: by 2002:a17:906:7109:: with SMTP id x9mr30148623ejj.559.1639226540038;
+ Sat, 11 Dec 2021 04:42:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a50:ab0:0:0:0:0:0 with HTTP; Sat, 11 Dec 2021 04:42:19 -0800 (PST)
+Reply-To: mrhenrypaul148@gmail.com
+From:   Mr Henry Paul <mrsritabrown087@gmail.com>
+Date:   Sat, 11 Dec 2021 13:42:19 +0100
+Message-ID: <CAEp6EqTBUY_QBBvmpJ6tQdeXoh2XAuwCAfeLb8iDpv=Ahz3fpQ@mail.gmail.com>
+Subject: LUCKY WINNER
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the watchdog node which also enables reboot support on the t8103.
+LOTTERY WINNING AWARD.
 
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- arch/arm64/boot/dts/apple/t8103.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Your email won 2.600.000 million dollars, Contact Barrister Marcel
+Cremer through his email here (  cremerchambers@gmail.com ) to claim
+your winning fund with your details as follows, your full name, your
+country, your home address and your phone number.
 
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index fc8b2bb06ffe..6ef28d833e4f 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -199,6 +199,14 @@ pinctrl_nub: pinctrl@23d1f0000 {
- 				     <AIC_IRQ 336 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		wdt: watchdog@23d2b0000 {
-+			compatible = "apple,t8103-wdt", "apple,wdt";
-+			reg = <0x2 0x3d2b0000 0x0 0x4000>;
-+			clocks = <&clk24>;
-+			interrupt-parent = <&aic>;
-+			interrupts = <AIC_IRQ 338 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
- 		pinctrl_smc: pinctrl@23e820000 {
- 			compatible = "apple,t8103-pinctrl", "apple,pinctrl";
- 			reg = <0x2 0x3e820000 0x0 0x4000>;
--- 
-2.25.1
-
+Regards,
+Mr.  Malick Samba

@@ -2,119 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D1047114D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 04:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B438147114E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 04:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244462AbhLKDov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 22:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbhLKDou (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 22:44:50 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2E2C061751
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 19:41:14 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id t9so17987647wrx.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 19:41:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EO75poJK2xgDITlrG7RVKgMYEM37BaniCA9cW2F8IAE=;
-        b=UUDpGaZ4TlqJucB7PlMbEakgQYttvolbBk2bus1Xxo0uqDAkjBhl6iolgunNvqfE4U
-         3KMqZsunqRx3/AcboOFf5R27X31eWeINs/lCdD0CN8XoBYreShHbrLW7XS8g2GI4cW6a
-         /XIe8l8fwtz17Yzq3YFS59etRNEVvfce/S12CxewPjX9R7+NV+Mzwy55+yF8c43a8rHT
-         P+B+9Bq+1n6YJYgJCOEaFak1CQozKjbeQHcE6+Objr962V5BNP2bjfK+cKL0xHYt+iYf
-         8BZizLTYTR72actmkvGRv0lVG7Zz42wUizEILE+4S6d+kPg/YiunXbps391KW8V9kpk5
-         nupQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EO75poJK2xgDITlrG7RVKgMYEM37BaniCA9cW2F8IAE=;
-        b=tA9Bs7ja9Z0SBKDeeumGdpZB+mAQDue7QeTS8HJENFKmr82c6Wc5ydckjChydjbCnj
-         X9p4253cGQaei1HS7EL4mA7jBYp3NmBBMrZ8/kv8eKc3zNgonG/JFSr1oI3I8UNe6SPS
-         MFDh6n5caAZCDTgHvCzqY0Z9nEjCN6jukGKWjAY0q0Be+v/QsT7xlDxIzzc+qaKQtpAe
-         ZLnGBii2G39WajhYLisWBbdbSx6FrLiBKpMjFp5gIqJCHpKzo3RA3qdJPMS0dDrraS9r
-         RjO1S5spMTXKsh6IMSg29oHuoVZYsZmOU5nFZpq8RoyqVKu904U7quyASDPTb1mKXP2W
-         v6xw==
-X-Gm-Message-State: AOAM530zYTvbVxFPTi0ESwtzPt//RDOuqwCZj1KbbqMV8+W4/Z1VRJXf
-        92f7S8oSTDApH+OAAk6D9uoYqwk76HQRU8J1sDhkVw==
-X-Google-Smtp-Source: ABdhPJxU5WTGxoPImoqEQQ34iwc3zq+NMIe3iv94HfKYLahaxjZujpAul0sWWjXgr8vVvi8pSAKSsitBxMOpHCyl5ZY=
-X-Received: by 2002:adf:eb0f:: with SMTP id s15mr2303012wrn.690.1639194072549;
- Fri, 10 Dec 2021 19:41:12 -0800 (PST)
+        id S244649AbhLKDqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 22:46:07 -0500
+Received: from mga11.intel.com ([192.55.52.93]:7132 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237709AbhLKDqF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 22:46:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639194149; x=1670730149;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Gw8Un5buuLc2nGIlo6e0wCCcMH/7tJ51T5hvY1l8Dno=;
+  b=AKBqdD+vj3E2ZiN2gB+en4nGiJQ3xP3JM7cgyXSfZQRkpz1yDakz4jpb
+   euDS4pZk48OFLIsVqLMyMrYoH33Kwhj+mWXWNjGatAd+GLQx8dtIzIXTn
+   2RtQOHnGg9TMSe0jrT1T0kOLYAhAs/qillLdIFFJ9AJvNVuW62eQ5sRkH
+   RfIt+muAk7MbhON6EkI27NwfAwsOEtuKox6w7eBgtJoQl9McrtPZ0pKkV
+   fRralihYZyqCCO3b5eXR4ekm9k3OmNUAfSWwmI/+j14gpHCDcAa5SUdAV
+   FHoyJs5W4jemuB60qDI27G/gPKy0Sh0HZyCuSykUy0vqUf6Z15EqpzvGO
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="236018430"
+X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
+   d="scan'208";a="236018430"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 19:42:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
+   d="scan'208";a="463931548"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Dec 2021 19:42:28 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvtHH-00044I-FF; Sat, 11 Dec 2021 03:42:27 +0000
+Date:   Sat, 11 Dec 2021 11:41:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ ab0ae3d5a15f609f013d59c20b2436da5190f84b
+Message-ID: <61b41dfa.xNnS/1TwKtPN7B0y%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20211129075451.418122-1-anup.patel@wdc.com>
-In-Reply-To: <20211129075451.418122-1-anup.patel@wdc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sat, 11 Dec 2021 09:11:01 +0530
-Message-ID: <CAAhSdy3S5HAYh24mH7JpZKSnk4Vjrw2SJToAHaMjyegwiR4XXg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] KVM RISC-V 64-bit selftests support
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, Anup Patel <anup.patel@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: ab0ae3d5a15f609f013d59c20b2436da5190f84b  rcu: Add mutex for rcu boost kthread spawning and affinity setting
 
-On Mon, Nov 29, 2021 at 1:40 PM Anup Patel <anup.patel@wdc.com> wrote:
->
-> This series adds initial support for testing KVM RISC-V 64-bit using
-> kernel selftests framework. The PATCH1 & PATCH2 of this series does
-> some ground work in KVM RISC-V to implement RISC-V support in the KVM
-> selftests whereas remaining patches does required changes in the KVM
-> selftests.
->
-> These patches can be found in riscv_kvm_selftests_v2 branch at:
-> https://github.com/avpatel/linux.git
->
-> Changes since v1:
->  - Renamed kvm_sbi_ext_expevend_handler() to kvm_sbi_ext_forward_handler()
->    in PATCH1
->  - Renamed KVM_CAP_RISCV_VM_GPA_SIZE to KVM_CAP_VM_GPA_BITS in PATCH2
->    and PATCH4
->
-> Anup Patel (4):
->   RISC-V: KVM: Forward SBI experimental and vendor extensions
->   RISC-V: KVM: Add VM capability to allow userspace get GPA bits
->   KVM: selftests: Add EXTRA_CFLAGS in top-level Makefile
->   KVM: selftests: Add initial support for RISC-V 64-bit
+elapsed time: 765m
 
-Any further comments on this series ?
+configs tested: 154
+configs skipped: 3
 
-Regards,
-Anup
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->
->  arch/riscv/include/asm/kvm_host.h             |   1 +
->  arch/riscv/kvm/mmu.c                          |   5 +
->  arch/riscv/kvm/vcpu_sbi.c                     |   4 +
->  arch/riscv/kvm/vcpu_sbi_base.c                |  27 ++
->  arch/riscv/kvm/vm.c                           |   3 +
->  include/uapi/linux/kvm.h                      |   1 +
->  tools/testing/selftests/kvm/Makefile          |  14 +-
->  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
->  .../selftests/kvm/include/riscv/processor.h   | 135 +++++++
->  tools/testing/selftests/kvm/lib/guest_modes.c |  10 +
->  .../selftests/kvm/lib/riscv/processor.c       | 362 ++++++++++++++++++
->  tools/testing/selftests/kvm/lib/riscv/ucall.c |  87 +++++
->  12 files changed, 658 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/kvm/include/riscv/processor.h
->  create mode 100644 tools/testing/selftests/kvm/lib/riscv/processor.c
->  create mode 100644 tools/testing/selftests/kvm/lib/riscv/ucall.c
->
-> --
-> 2.25.1
->
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211210
+sh                          r7780mp_defconfig
+powerpc                          g5_defconfig
+arm                  colibri_pxa270_defconfig
+m68k                                defconfig
+openrisc                         alldefconfig
+powerpc                       ebony_defconfig
+arm                           h5000_defconfig
+sh                      rts7751r2d1_defconfig
+arm                       aspeed_g5_defconfig
+sparc64                             defconfig
+arm                          ixp4xx_defconfig
+sh                           se7780_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                 xes_mpc85xx_defconfig
+ia64                        generic_defconfig
+arm                           sama7_defconfig
+powerpc                       holly_defconfig
+powerpc                   motionpro_defconfig
+powerpc                    mvme5100_defconfig
+sh                   sh7770_generic_defconfig
+powerpc                        icon_defconfig
+h8300                       h8s-sim_defconfig
+i386                             alldefconfig
+arc                    vdk_hs38_smp_defconfig
+mips                    maltaup_xpa_defconfig
+mips                         cobalt_defconfig
+mips                        bcm63xx_defconfig
+m68k                            q40_defconfig
+arc                           tb10x_defconfig
+arc                     nsimosci_hs_defconfig
+xtensa                generic_kc705_defconfig
+nios2                         3c120_defconfig
+arm                       multi_v4t_defconfig
+sh                           se7619_defconfig
+arm                      integrator_defconfig
+mips                     loongson2k_defconfig
+um                             i386_defconfig
+powerpc                     sequoia_defconfig
+arm                         lpc32xx_defconfig
+microblaze                      mmu_defconfig
+sh                        edosk7705_defconfig
+sh                             sh03_defconfig
+ia64                                defconfig
+arm64                            alldefconfig
+sh                          rsk7203_defconfig
+sh                          polaris_defconfig
+arm                             mxs_defconfig
+arm                            hisi_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                  mpc866_ads_defconfig
+m68k                          amiga_defconfig
+m68k                          sun3x_defconfig
+parisc                           allyesconfig
+powerpc                 mpc8540_ads_defconfig
+m68k                       bvme6000_defconfig
+powerpc                      ppc40x_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                      chrp32_defconfig
+m68k                        m5407c3_defconfig
+arc                            hsdk_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                     pq2fads_defconfig
+alpha                            alldefconfig
+arm                       netwinder_defconfig
+x86_64                              defconfig
+powerpc                     tqm8541_defconfig
+arm                          pxa3xx_defconfig
+riscv                            alldefconfig
+m68k                       m5275evb_defconfig
+xtensa                          iss_defconfig
+arm                  randconfig-c002-20211210
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20211210
+x86_64               randconfig-a005-20211210
+x86_64               randconfig-a001-20211210
+x86_64               randconfig-a002-20211210
+x86_64               randconfig-a003-20211210
+x86_64               randconfig-a004-20211210
+i386                 randconfig-a001-20211210
+i386                 randconfig-a002-20211210
+i386                 randconfig-a005-20211210
+i386                 randconfig-a003-20211210
+i386                 randconfig-a006-20211210
+i386                 randconfig-a004-20211210
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+arm                  randconfig-c002-20211210
+x86_64               randconfig-c007-20211210
+riscv                randconfig-c006-20211210
+mips                 randconfig-c004-20211210
+i386                 randconfig-c001-20211210
+s390                 randconfig-c005-20211210
+powerpc              randconfig-c003-20211210
+x86_64               randconfig-a012-20211210
+x86_64               randconfig-a014-20211210
+x86_64               randconfig-a013-20211210
+x86_64               randconfig-a016-20211210
+x86_64               randconfig-a015-20211210
+x86_64               randconfig-a011-20211210
+i386                 randconfig-a013-20211210
+i386                 randconfig-a011-20211210
+i386                 randconfig-a016-20211210
+i386                 randconfig-a014-20211210
+i386                 randconfig-a015-20211210
+i386                 randconfig-a012-20211210
+hexagon              randconfig-r045-20211210
+riscv                randconfig-r042-20211210
+s390                 randconfig-r044-20211210
+hexagon              randconfig-r041-20211210
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

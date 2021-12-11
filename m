@@ -2,141 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B8A471495
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056084714A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 17:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbhLKPzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 10:55:03 -0500
-Received: from mout.gmx.net ([212.227.17.21]:59927 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231368AbhLKPzA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 10:55:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1639238082;
-        bh=m568THOr9bt8drU5mZJQIxwuBPDKHdZftpxVk033ksw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=BcRJ3TK3aR+bEfFhLqjlK+A+L5muGiBb0E0rGUp2nHLRt7ODh+VgTNcmxKhS48HRE
-         FiWEpIPAeYoF+zvsbnHKmvOAUlv6vWCfOHZ+R/AOPJfq8+BSEmbcb/7IZtXp6McCPW
-         Ff0rc2wQxblAzhnhEbG2vouq6XWUjDhtJ9SYyvY0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.137.126.34]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1M6Daq-1mtsr41eES-006dXs; Sat, 11 Dec 2021 16:54:42 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] hwmon: (dell-smm) Unify i8k_ioctl() and i8k_ioctl_unlocked()
-Date:   Sat, 11 Dec 2021 16:54:22 +0100
-Message-Id: <20211211155422.16830-3-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211211155422.16830-1-W_Armin@gmx.de>
-References: <20211211155422.16830-1-W_Armin@gmx.de>
+        id S231439AbhLKQGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 11:06:10 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28624 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231434AbhLKQGH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 11:06:07 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BBFb9Yv025425;
+        Sat, 11 Dec 2021 16:05:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=1XXbvveYfvXi++N89zqRKU1Xxu7eymV07uURoT3M2MY=;
+ b=eeTeEoEjE4RmcFoN1jIu6Zl9yz5+EFafOyAZu65rSj6kmWph0p8TSJk4NrYunUm4PVvi
+ KALJZwR65sbdUXg4Iruqg4v9k2jXi8EGl8dRRfqgWUp0It7lb7WRvE4acMSl59Ck4HjS
+ utFBzgcnCQcHH5Z2L4R5M83YVSEi+SKFLdFlvt+3f1rINahaPuytcDqoE2iC70qBi3Re
+ L/nEjEFpK5dwElX+6WBHdNT/kVHO9No/bByJwCza033yOgKi5ssXa57HrNupuCdPLFne
+ j5pjGMEZUqFfGwUaF2o1NxnCqWROQhUdo+2rA0csz4IVlcGljaF5NSTAO51wWsP92ntW bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cvx758ncb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 16:05:52 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BBG5qH9005986;
+        Sat, 11 Dec 2021 16:05:52 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cvx758nc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 16:05:52 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BBFwCsW009197;
+        Sat, 11 Dec 2021 16:00:50 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma01dal.us.ibm.com with ESMTP id 3cvkm97ghm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Dec 2021 16:00:50 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BBG0mnH23724384
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 11 Dec 2021 16:00:48 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DC5B78064;
+        Sat, 11 Dec 2021 16:00:48 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66E097805C;
+        Sat, 11 Dec 2021 16:00:44 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.97.102])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Sat, 11 Dec 2021 16:00:44 +0000 (GMT)
+Message-ID: <985818fabf3ed1478fd53cb4dd48162fff132492.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check
+ corresponding capability
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Denis Semakin <denis.semakin@huawei.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "containers@lists.linux.dev" <containers@lists.linux.dev>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "mpeters@redhat.com" <mpeters@redhat.com>,
+        "lhinds@redhat.com" <lhinds@redhat.com>,
+        "lsturman@redhat.com" <lsturman@redhat.com>,
+        "puiterwi@redhat.com" <puiterwi@redhat.com>,
+        "jamjoom@us.ibm.com" <jamjoom@us.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "rgb@redhat.com" <rgb@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>
+Date:   Sat, 11 Dec 2021 11:00:42 -0500
+In-Reply-To: <7a914d80-db7c-cdd9-358a-97138ec6d750@linux.ibm.com>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+         <20211208221818.1519628-15-stefanb@linux.ibm.com>
+         <cde301002f884f43bcb7fa244b1c6b84@huawei.com>
+         <20211211150246.GA24925@mail.hallyn.com>
+         <7a914d80-db7c-cdd9-358a-97138ec6d750@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:xrtytWxXih+yIIn3dgrrUvFTd142Fajn1/6o4bZpufa12OUItdv
- yjfKHdKEENGmZ3fitgt45CLi/JydwyW+yL7aoOBcN7GvJNXFSplqKRBMSC6hbqilK4dfdvr
- 1Nl+Sf2rdImV9OfFLyMkZ6IkYmt/faFmeljPLVjHZmhYhOT/jhWE7ZgtPwGq+JumHmTdIz9
- gerWhpmfaGGenhTOYrC+Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:at9PlmCMxqg=:E9eablUPpTULKGtCJz6Wpo
- 6I5x+vhhhCb7cvzHDfODnc775q0u6dqousipWk3nOfNv3OAzgqnSmEheAIaAOJqv+BikMso5K
- Efy+gH+3LplX5nyb3px7/U9pyRJhj0y8rCK/06nAI8mVrJDZur8VymQF1XluodgavMhOtEhmz
- qeemyNXu0Rv64pBOWNdz0cvpoVaDR4wAaWrd/xhD0b9j0eYwOFmaPNUo+NOfKaboSYJf3VS/x
- Z9gPEixmdNKya/tXlP9LYQ5g8F9A8u+Wwz0LPAWn0XEu0iot/8FHsW3XShBEqDyKM7ASlqZ0H
- 45P9enNiZUiJoxj5z3X31QQkKK80oPTZG46yEyE3ms4KCjGJtD/l9Lb19KMl8Q6TDIPF85+VU
- 4w4phH5cJDxczbMWGM2XWnRBbR1+mBhSVUtSQlmgWpgxV77xYWnS2v0lBo+QxwcBWDofUpexf
- RF9hs8poh3v9SL4XBrFatvq2u6vfgasQQYkbH9/bN38nKz0xDmDpng2nYXxbizmFlFxIPRwdB
- WeYp8NvvtmCxu/OsWL0vLWkL9GdgWKDE0XyVoJM+foSOww3lPMxzNn5uywaiB91ektq+AHW3e
- fk0fX+v+Quy/j+uNaR8wVN6tGg7dEJOJ05pzUmlADsTWRI2K6G/Ix7E9XMIKpLZVe9+drarFj
- ciuI5vuQUolL9kDGY+pDVJfTlIEMuF4qIUo11DGQOohSxaCbbkcarA+RmnCBEkGG1/5+eOZrH
- hB2PDD6n04no6MOZWQvP8bLvlcBiXXOD/aSL44beWErQeOEJKUoTRM82+89msY6DPZI2S5GCE
- j7Y+RO8su4jTyNzMcCeRh9YZK9/GzEHbL0LfbxJy0Y23naSrkACJiDu8JptsnOfDNgVIDSQqz
- Va3oPkc26GhFLqmg1FEQZzRmV9KXvFopIYTkgwWiJpRjqlELsI5evywUe8/R0nvDsfg7bWkTc
- xFkOdYEv3dyjanQjvRlm/aannJN1j6Yn5BnJmmrgGaCXeUDZdXDMY80MilHowqSuhlompNLSc
- CV5NZwHILhQ3WEJC98HNQWcMMTKn0/n7jJYtWIPnt2LBrsacDeURScjg/aZs9+44aLhA4GbRX
- Z4SBmTSbVW+VbY=
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: o459A8-V-MKQ8h-Jjslc0tWQlDlM3ToD
+X-Proofpoint-GUID: Q8ye0QYaN66eI64W3uABy1ge0cp1o9WC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-11_06,2021-12-10_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxscore=0 spamscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112110089
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only purpose of i8k_ioctl() is to call i8k_ioctl_unlocked()
-with i8k_mutex held. Judging from the hwmon code, this mutex
-only needs to be held when setting the fan speed/mode, so
-the operation of I8K_SET_FAN is guaranteed to be atomic.
-Unify both functions and reduce the locking of i8k_mutex
-to I8K_SET_FAN.
+On Sat, 2021-12-11 at 10:38 -0500, Stefan Berger wrote:
+> On 12/11/21 10:02, Serge E. Hallyn wrote:
+> > IMO yes it is unsafe, however I concede that I am not sufficiently
+> > familiar with the policy language.  At least Stefan and Mimi (IIUC)
+> > want the host policy language to be able to specify cases where an
+> > IMA ns can be configured.  What's not clear to me is what sorts of
+> > triggers the host IMA policy could specify that would safely
+> > identify a IMA ns generation
+> > trigger.
+> > 
+> > Stefan, would you mind showing what such a policy statement would
+> > look like? Does it amount to "/usr/bin/runc may create an IMA ns
+> > which escapes current policy" ?  Or is it by UID, or any file which
+> > has a certain xattr on it?
+> 
+> If this policy here is active on the host then file executions 
+> (BPRM_CHECK) of uid=0 should be measured and audited on the host in
+> any IMA namespace that uid=0 may create. We achieve this with
+> hierarchical processing (v6: 10/17).
+> 
+> measure func=BPRM_CHECK mask=MAY_EXEC uid=0
+> 
+> audit func=BPRM_CHECK mask=MAY_EXEC uid=0
 
-Tested on a Dell Inspiron 3505.
+Or perhaps to put another way that might be more useful to unprivileged
+containers: if you strip the uid=0 from both of those statements, you
+get a rule that logs and audits any execution.  Once you enter the IMA
+namespace, in that namespace you see nothing, but outside the parent is
+still logging and auditing all executions, including those inside the
+container, according to its measure/audit all executions rule.  The
+container can't turn that off by writes to its policy file.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 28 +++++++++-------------------
- 1 file changed, 9 insertions(+), 19 deletions(-)
+So the container can never escape any policy rule imposed by the parent
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 186d40938036..d8c6e75bb374 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -449,12 +449,12 @@ static int i8k_get_power_status(void)
-  * Procfs interface
-  */
+James
 
--static int
--i8k_ioctl_unlocked(struct file *fp, struct dell_smm_data *data, unsigned =
-int cmd, unsigned long arg)
-+static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long ar=
-g)
- {
--	int val =3D 0;
--	int speed, err;
-+	struct dell_smm_data *data =3D PDE_DATA(file_inode(fp));
- 	int __user *argp =3D (int __user *)arg;
-+	int speed, err;
-+	int val =3D 0;
-
- 	if (!argp)
- 		return -EINVAL;
-@@ -516,11 +516,13 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_=
-data *data, unsigned int cmd
- 		if (copy_from_user(&speed, argp + 1, sizeof(int)))
- 			return -EFAULT;
-
-+		mutex_lock(&data->i8k_mutex);
- 		err =3D i8k_set_fan(data, val, speed);
- 		if (err < 0)
--			return err;
--
--		val =3D i8k_get_fan_status(data, val);
-+			val =3D err;
-+		else
-+			val =3D i8k_get_fan_status(data, val);
-+		mutex_unlock(&data->i8k_mutex);
- 		break;
-
- 	default:
-@@ -536,18 +538,6 @@ i8k_ioctl_unlocked(struct file *fp, struct dell_smm_d=
-ata *data, unsigned int cmd
- 	return 0;
- }
-
--static long i8k_ioctl(struct file *fp, unsigned int cmd, unsigned long ar=
-g)
--{
--	struct dell_smm_data *data =3D PDE_DATA(file_inode(fp));
--	long ret;
--
--	mutex_lock(&data->i8k_mutex);
--	ret =3D i8k_ioctl_unlocked(fp, data, cmd, arg);
--	mutex_unlock(&data->i8k_mutex);
--
--	return ret;
--}
--
- /*
-  * Print the information for /proc/i8k.
-  */
-=2D-
-2.30.2
 

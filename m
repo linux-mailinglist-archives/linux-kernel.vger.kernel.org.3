@@ -2,147 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB014710CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 03:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EB64710D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 03:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243001AbhLKCZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 21:25:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S244232AbhLKC0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 21:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233583AbhLKCZQ (ORCPT
+        with ESMTP id S243779AbhLKC0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:25:16 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8FC061714;
-        Fri, 10 Dec 2021 18:21:40 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso10281902wmr.4;
-        Fri, 10 Dec 2021 18:21:40 -0800 (PST)
+        Fri, 10 Dec 2021 21:26:11 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B9FC0617A2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 18:22:35 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g14so34521594edb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 18:22:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/6yvBb+/c9OeTvJt4mvrjb1eKqBxOO4eWlVO74xpdFA=;
-        b=dU/sLd/KkLsc1OLM1LXrGZF8C3ro1RTFkh5dZNGw21BGyZalONWfgFG19D8uWvwrLq
-         APJz4LPDx9EHYz5wx5D0GWC4ghMWXmFJmAcdSPIjKpNr5cAeiS/ofiMUgu/5hl6q6SxP
-         pTH6IbqJMtb4zhDO3ypmtHf8mlIXO8Q/Ks/pKDM/pQzDCL7RNCDXE6PYQqXQI57tdlCF
-         UNiHbLtX6+EXUx4yFXqeZb8FW0p2bpmoTH3asv6ww6pIvbR6qMclhmQdULVx4DfgJJ46
-         JyCpCULzgqwlOcfy+g5z9IzOKxziRFM04eNKMRs3WiO2+6awStpO3CRKgJRjqaSfKJYY
-         0ALQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BN1rqnmoBfuCzzscvm3YOnK3Hq7APTJunkR2e6AyI44=;
+        b=OlOB76TD4cnwKGMSNsqhD27bIGeNBDINaYaPIW606KZgbr4YcpmhVQpRZ5i7HoU25f
+         /gI0gVIIVCFayaXW5CeZBZo5k+GtXYQ2D/y3h5WAD9MrExseetqHU1+3zGzcOlQoLR0P
+         zanBl3z97aC2zyy9oQ3rUdTV9mxpR9uZ4NGcGgkGRM9vDAvtYb+f4gHC4adV+Bdo8ZF1
+         m9LAsszA/U6mjYJH2ySLjicW6cGh+3w8wLo/IiHWpKvQL1zmu7tabwkuHSt4zKfCorhr
+         Fq9JUc3griRTifpQN93SZEkgnsObl1CFUXqoeWhXQ0nB868+o4DL30s3RXlVGjVz6xKS
+         vh2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/6yvBb+/c9OeTvJt4mvrjb1eKqBxOO4eWlVO74xpdFA=;
-        b=xQH4b+j0hdv/vQBJeTcl8SphRl0gu1phl/ZQd/brjc77d5KYHtE896PIMWfGSahSg1
-         H0fUIKMHrwzswsu/z4JvuATRJqolvgvooY8+Aqf1n3vJYithKNpNq7JPL0ASW9LMgYBw
-         K0aeyU1WQU/06syThuQ0Lw9dcr2tMu5UbTD3plTuNQSFHjehcz9JFAPs1qDzXBPdVhHp
-         UbhajZIT1OHkw6TMwbfHpUKlJXx4cobxbV9eTZzsWc28Txfmhkd407PWVP0SPu8zXgbB
-         D0j/jwvRZs0VNuosa1it+xriM0LuYLw0YO614UKeyAiWCWHuR1vKi5snMYZaM9UJKxmR
-         EtMQ==
-X-Gm-Message-State: AOAM5310poerDpoII2K2uJy50gqKc4WewPVhX5tOgxd6OFvDt5L7jdq7
-        tXvMS3qYidLfk3AINODvmaM4BLegXc8=
-X-Google-Smtp-Source: ABdhPJxdYMdqc3P6ViD1PV9Ls9B84yNVrmZKnjk0LAJtDpqiCr6quPSKIj/HxMFjUn1JrytkYtUufw==
-X-Received: by 2002:a7b:c008:: with SMTP id c8mr21090564wmb.87.1639189299434;
-        Fri, 10 Dec 2021 18:21:39 -0800 (PST)
-Received: from [192.168.8.198] ([185.69.145.149])
-        by smtp.gmail.com with ESMTPSA id j40sm350276wms.19.2021.12.10.18.21.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 18:21:39 -0800 (PST)
-Message-ID: <fa707ef9-d612-a3a4-1b2a-fc2b28a3ec5f@gmail.com>
-Date:   Sat, 11 Dec 2021 02:20:13 +0000
+        bh=BN1rqnmoBfuCzzscvm3YOnK3Hq7APTJunkR2e6AyI44=;
+        b=GjiXyqmfjO2A3ix4dOOxMpaCG72wIMezDlyLwC9z/o9P3UUKqND0gc8TOQ3AoPFE6W
+         OANOd14AiIpvlvHMiBK3pOuB/8AJ3/8VktLKpPsI/Is8omPaIgKiJZ+YmIgZ/7IJwlbf
+         BLHLS3MDBTDh0PfgkhEgrrTNN+8vDyhRlY8UPHY6vPswftOmzAjhyRxplkvOLcGrQ/MM
+         K7pySBLrr0FSlqn5mzz/i/aXbWVlopFC+p3UMzqZEl5hB1miOz3peDSm2xvtLmF6PDrM
+         UH9284bfs0ixMa/L4iL+L4roIdBvsC8o8YMNPC8gew/ssNj/GOcyjgYKfCHyaKVwrHD8
+         gRng==
+X-Gm-Message-State: AOAM532OX2PNzqeV0xouYagPFNZb2a98j/VU35xilSqgvI+UiOcnpvMu
+        GPdcVfGp27017yiaXUJWY0nHIwXTkNw4Xw==
+X-Google-Smtp-Source: ABdhPJyIY1FSnIyvZJddEk0bFdLO16sKK4IFXhAd18ZGe1ELTgmf+D8v0J1Iu5Q7EEzNY4Q7QN5HPQ==
+X-Received: by 2002:a17:907:2bd0:: with SMTP id gv16mr27304054ejc.121.1639189353667;
+        Fri, 10 Dec 2021 18:22:33 -0800 (PST)
+Received: from lion.localdomain (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
+        by smtp.gmail.com with ESMTPSA id s2sm2449424ejn.96.2021.12.10.18.22.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 18:22:33 -0800 (PST)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+X-Google-Original-From: Caleb Connolly <caleb@connolly.tech>
+To:     caleb.connolly@linaro.org, sumit.semwal@linaro.org,
+        amit.pundir@linaro.org, john.stultz@linaro.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Caleb Connolly <caleb@connolly.tech>
+Subject: [PATCH 0/7] iio: adc: introduce Qualcomm SPMI Round Robin ADC
+Date:   Sat, 11 Dec 2021 02:22:17 +0000
+Message-Id: <20211211022224.3488860-1-caleb@connolly.tech>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [BPF PATCH for-next] cgroup/bpf: fast path for not loaded skb BPF
- filtering
-Content-Language: en-US
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-References: <d77b08bf757a8ea8dab3a495885c7de6ff6678da.1639102791.git.asml.silence@gmail.com>
- <20211211003838.7u4lcqghcq2gqvho@kafai-mbp.dhcp.thefacebook.com>
- <5f7d2f60-b833-04e5-7710-fdd2ef3b6f67@gmail.com>
- <20211211015656.tvufcnh5k4rrc7sw@kafai-mbp.dhcp.thefacebook.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20211211015656.tvufcnh5k4rrc7sw@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/21 01:56, Martin KaFai Lau wrote:
-> On Sat, Dec 11, 2021 at 01:15:05AM +0000, Pavel Begunkov wrote:
->> On 12/11/21 00:38, Martin KaFai Lau wrote:
->>> On Fri, Dec 10, 2021 at 02:23:34AM +0000, Pavel Begunkov wrote:
->>>> cgroup_bpf_enabled_key static key guards from overhead in cases where
->>>> no cgroup bpf program of a specific type is loaded in any cgroup. Turn
->>>> out that's not always good enough, e.g. when there are many cgroups but
->>>> ones that we're interesting in are without bpf. It's seen in server
->>>> environments, but the problem seems to be even wider as apparently
->>>> systemd loads some BPF affecting my laptop.
->>>>
->>>> Profiles for small packet or zerocopy transmissions over fast network
->>>> show __cgroup_bpf_run_filter_skb() taking 2-3%, 1% of which is from
->>>> migrate_disable/enable(), and similarly on the receiving side. Also
->>>> got +4-5% of t-put for local testing.
->>>>
->>>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->>>> ---
->>>>    include/linux/bpf-cgroup.h | 24 +++++++++++++++++++++---
->>>>    kernel/bpf/cgroup.c        | 23 +++++++----------------
->>>>    2 files changed, 28 insertions(+), 19 deletions(-)
->>>>
->>>> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
->>>> index 11820a430d6c..99b01201d7db 100644
->>>> --- a/include/linux/bpf-cgroup.h
->>>> +++ b/include/linux/bpf-cgroup.h
->>>> @@ -141,6 +141,9 @@ struct cgroup_bpf {
->>>>    	struct list_head progs[MAX_CGROUP_BPF_ATTACH_TYPE];
->>>>    	u32 flags[MAX_CGROUP_BPF_ATTACH_TYPE];
->>>> +	/* for each type tracks whether effective prog array is not empty */
->>>> +	unsigned long enabled_mask;
->>>> +
->>>>    	/* list of cgroup shared storages */
->>>>    	struct list_head storages;
->>>> @@ -219,11 +222,25 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
->>>>    int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
->>>>    				     void *value, u64 flags);
->>>> +static inline bool __cgroup_bpf_type_enabled(struct cgroup_bpf *cgrp_bpf,
->>>> +					     enum cgroup_bpf_attach_type atype)
->>>> +{
->>>> +	return test_bit(atype, &cgrp_bpf->enabled_mask);
->>>> +}
->>>> +
->>>> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
->>>> +({									       \
->>>> +	struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
->>>> +									       \
->>>> +	__cgroup_bpf_type_enabled(&__cgrp->bpf, (atype));		       \
->>>> +})
->>> I think it should directly test if the array is empty or not instead of
->>> adding another bit.
->>>
->>> Can the existing __cgroup_bpf_prog_array_is_empty(cgrp, ...) test be used instead?
->>
->> That was the first idea, but it's still heavier than I'd wish. 0.3%-0.7%
->> in profiles, something similar in reqs/s. rcu_read_lock/unlock() pair is
->> cheap but anyway adds 2 barrier()s, and with bitmasks we can inline
->> the check.
-> It sounds like there is opportunity to optimize
-> __cgroup_bpf_prog_array_is_empty().
-> 
-> How about using rcu_access_pointer(), testing with &empty_prog_array.hdr,
-> and then inline it?  The cgroup prog array cannot be all
-> dummy_bpf_prog.prog.  If that could be the case, it should be replaced
-> with &empty_prog_array.hdr earlier, so please check.
+The RRADC is responsible for reading data about the current and
+voltage from the USB or DC in jacks, it can also read the battery
+ID (resistence) and some temperatures. It is found on the PMI8998 and
+PM660 Qualcomm PMICs.
 
-I'd need to expose and export empty_prog_array, but that should do.
-Will try it out, thanks
+The RRADC has to calibrate some ADC values based on which chip fab
+the PMIC was produced in, to facilitate this the patch
+("mfd: qcom-spmi-pmic: expose the PMIC revid information to clients")
+exposes the PMIC revision information as a struct and registers it
+as driver data in the Qualcomm SPMI PMIC driver so that it can be 
+read by the RRADC.
+
+Caleb Connolly (7):
+  mfd: qcom-spmi-pmic: expose the PMIC revid information to clients
+  dt-bindings: iio: adc: document qcom-spmi-rradc
+  iio: adc: qcom-spmi-rradc: introduce round robin adc
+  arm64: dts: qcom: pmi8998: add rradc node
+  arm64: dts: qcom: sdm845-oneplus: enable rradc
+  arm64: dts: qcom: sdm845-db845c: enable rradc
+  arm64: dts: qcom: sdm845-xiaomi-beryllium: enable RRADC
+
+ .../bindings/iio/adc/qcom,spmi-rradc.yaml     |   54 +
+ arch/arm64/boot/dts/qcom/pmi8998.dtsi         |    8 +
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts    |    4 +
+ .../boot/dts/qcom/sdm845-oneplus-common.dtsi  |    4 +
+ .../boot/dts/qcom/sdm845-xiaomi-beryllium.dts |    4 +
+ drivers/iio/adc/Kconfig                       |   13 +
+ drivers/iio/adc/Makefile                      |    1 +
+ drivers/iio/adc/qcom-spmi-rradc.c             | 1020 +++++++++++++++++
+ drivers/mfd/qcom-spmi-pmic.c                  |  103 +-
+ include/soc/qcom/qcom-pmic.h                  |   58 +
+ 10 files changed, 1216 insertions(+), 53 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/qcom,spmi-rradc.yaml
+ create mode 100644 drivers/iio/adc/qcom-spmi-rradc.c
+ create mode 100644 include/soc/qcom/qcom-pmic.h
 
 -- 
-Pavel Begunkov
+2.34.1
+

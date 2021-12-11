@@ -2,80 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31244711BC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3494711EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 06:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbhLKF2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 00:28:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33086 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229597AbhLKF2S (ORCPT
+        id S229615AbhLKFbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 00:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229586AbhLKFbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 00:28:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639200281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vEoBWvfKJezafb/gz8qOuM9H17UzU01X5cgIQsGVem0=;
-        b=TR6VDql1UKqaraLoZ1DlUzDZEZIgR4Ko5Yz0LQBcysIcULGkLJPxXmwQLIVscaghHR7+us
-        CUnMlkjiX7zfVGtMsT/07q+W29KXXfNewNBJDW+b649Jmp/UsMCpSLYgZF2cJj4bt57mmE
-        jQi2ycNWZVpuGhraGn3+8YeM+I8UhT8=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-Q7QXfV4zOES8UVYIdEvPSg-1; Sat, 11 Dec 2021 00:24:37 -0500
-X-MC-Unique: Q7QXfV4zOES8UVYIdEvPSg-1
-Received: by mail-ua1-f70.google.com with SMTP id u15-20020ab0458f000000b002ef82056c39so7709158uau.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 21:24:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vEoBWvfKJezafb/gz8qOuM9H17UzU01X5cgIQsGVem0=;
-        b=7CYaKvb0eAUhJ1r8iMF3dA8u5nVnV9fDInrUy1FwbEQOC3mNg2zyMKS7URb5nZKD8h
-         wfrOEqE/7QKJACyqI5frgKKU+GudQJIEIIUGygy6lhz8zn3rYooX7KoJu70S6rbB7Y7Y
-         I1XUzNhiasjAoE5TEeESYbZqzMmvwFAYKB3LJ5k63gfc+MnXaMsWAEKcwMWZpdp96fFf
-         /PfIHUReWo/Gv3ek8Ey7sa8WNcLx+2BP19yQQ9DVzxk16zYpCXgN9T4hGC44K+Zxy1pv
-         r0ATwK+wQ090BIi9BMdUx9Tcj4axLTyWXPxaryIsTRUKrqgmmhuD0Z93gP3rJHaCcYkp
-         DlmQ==
-X-Gm-Message-State: AOAM530PUnJ6G3YnBQHw8DV6pBhRQtWZfZEZfhxS47dPIv48Klg+KbPk
-        /btavqGeaGE/+HZiMwKZevvEclv+ihGZu/+rdBf1ElgicMVv6uHikrdSgjJkL3YpnFNa49GxhOR
-        TUUXjKzozh/Kb4lFlcV6XHc3mv6ZbwDCrwLyXRL+f
-X-Received: by 2002:a05:6102:2910:: with SMTP id cz16mr21266833vsb.9.1639200277314;
-        Fri, 10 Dec 2021 21:24:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyYuTo+cFn0Ym+OeF+CcyKc83VT49otL8gLNPTOMiwVV425TmLj+Cp1WxDVtcutyVADxYR1xNwNuwfmYUW4Meo=
-X-Received: by 2002:a05:6102:2910:: with SMTP id cz16mr21266819vsb.9.1639200277130;
- Fri, 10 Dec 2021 21:24:37 -0800 (PST)
-MIME-Version: 1.0
-References: <163697618022.414.12673958553611696646.tip-bot2@tip-bot2>
- <20211209143810.452527-1-jdorminy@redhat.com> <YbIeYIM6JEBgO3tG@zn.tnic>
- <50f25412-d616-1cc6-f07f-a29d80b4bd3b@suse.com> <YbIgsO/7oQW9h6wv@zn.tnic>
- <YbIu55LZKoK3IVaF@kernel.org> <YbIw1nUYJ3KlkjJQ@zn.tnic> <YbM5yR+Hy+kwmMFU@zn.tnic>
-In-Reply-To: <YbM5yR+Hy+kwmMFU@zn.tnic>
-From:   John Dorminy <jdorminy@redhat.com>
-Date:   Sat, 11 Dec 2021 00:24:25 -0500
-Message-ID: <CAMeeMh9DVNJC+Q1HSB+DJzy_YKto=j=3iGUiCgseqmx9qjVCUg@mail.gmail.com>
-Subject: Re: [tip: x86/urgent] x86/boot: Pull up cmdline preparation and early
- param parsing
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Mike Rapoport <rppt@kernel.org>, Juergen Gross <jgross@suse.com>,
-        tip-bot2@linutronix.de, anjaneya.chagam@intel.com,
-        dan.j.williams@intel.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tip-commits@vger.kernel.org, stable@vger.kernel.org,
-        x86@kernel.org, Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>
+        Sat, 11 Dec 2021 00:31:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC5CC061714;
+        Fri, 10 Dec 2021 21:28:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 126EBB82AD3;
+        Sat, 11 Dec 2021 05:28:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 615C0C004DD;
+        Sat, 11 Dec 2021 05:28:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639200491;
+        bh=DmF69SAhs/bhKdwrdHs+5LvgKoaOu6JAimdnFR5ocro=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=WxZNmaWs7+mM9QuqbhLVtfI1yU4Mes/oBQ2285eK/bpdqmKAMgziF4I0NTeeaQOlz
+         Sx9LteEDeZ/LDGHq1ujSCXZ2wtPLhED4moKs4iaoRhm5pShS9y9vYCvNbTwPLShnGI
+         uAxPZ7ZnZqJVnPVusuNm1nbOZfGIeCswmWWawn9qgyln6FKVOMYRnAb65KY//fnea+
+         UYgVqWaIgv/Co9BIpISfpYAJVVm91xsMjxF2fOmQaboV2av7XQfUaHrADoRKI24Alk
+         4+DKtxMVOzdEeH3WRsF0WNbCQWXH3c55X+NDjVrFrUuN40HZLrLUWwVcTgCOJWPO9S
+         nZcieBuoBoWFw==
+Message-ID: <b6eeb67d3be33767a4d52d8e2009817a90d91224.camel@kernel.org>
+Subject: Re: [PATCH 01/25] x86/sgx: Add shortlog descriptions to ENCLS
+ wrappers
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 11 Dec 2021 07:28:08 +0200
+In-Reply-To: <b49ee68b-63c5-f8f8-ca2b-31663c3150f6@intel.com>
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+         <fd9ab4d760a2ea7a42ab9e60b9e19b8620abe11d.1638381245.git.reinette.chatre@intel.com>
+         <YauzxOEmmpeGF/K3@iki.fi> <b49ee68b-63c5-f8f8-ca2b-31663c3150f6@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.2 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apologies for delay; my dev machine was broken much of today. But I
-have tested this patch under the same conditions as previously, and
-agree with Hugh that the patches make mem= work correctly.
+On Mon, 2021-12-06 at 13:13 -0800, Reinette Chatre wrote:
+> > * "Create an SECS page in the Enclave Page Cache (EPC)"
+> > * "Add a Version Array (VA) page to the Enclave Page Cache (EPC)"
+> >=20
+> > They should have similar descriptions, e.g.
+> >=20
+> > * "Initialize an EPC page into SGX Enclave Control Structure (SECS) pag=
+e."
+> > * "Initialize an EPC page into Version Array (VA) page."
+>=20
+> Will do. Did you intentionally omit the articles or would you be ok if I=
+=20
+> change it to:
+>=20
+> "Initialize an EPC page into an SGX Enclave Control Structure (SECS) page=
+."
+> "Initialize an EPC page into a Version Array (VA) page."
+>=20
+> I also notice that you prefer the comments to end with a period and I=20
+> will do so for all in the next version.
 
-Thanks!
+Looks fine to me.
 
-John Dorminy
+> > > +/* Extend uninitialized enclave measurement */
+> > >   static inline int __eextend(void *secs, void *addr)
+> > >   {
+> > >   	return __encls_2(EEXTEND, secs, addr);
+> > >   }
+> >=20
+> > That description does not make __eextend any less cryptic.
+> >=20
+> > Something like this would be already more informative:
+> >=20
+> > /* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
+>=20
+> Thank you, I will use this description.
+>=20
+> >=20
+> > This same remark applies to the rest of these comments. They should
+> > provide a clue what the wrapper does rather than an English open coded
+> > function name.
+>=20
+> Please see below for another attempt that includes your proposed changes=
+=20
+> so far. What do you think?
+>=20
+> __ecreate():
+> /* Initialize an EPC page into an SGX Enclave Control Structure (SECS)=
+=20
+> page. */
+>=20
+> __eextend():
+> /* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
+>=20
+> __eadd():
+> /* Copy a source page from non-enclave memory into the EPC. */
 
+Perhaps:
+
+/*=C2=A0
+ * Associate an EPC page to an enclave either as a REG or TCS page
+ * populated with the provided data.
+ */
+
+This is more aligned with your description for __eremove().
+
+>=20
+> __einit():
+> /* Finalize enclave build, initialize enclave for user code execution */
+>=20
+> __eremove():
+> /* Disassociate EPC page from its enclave and mark it as unused. */
+>=20
+> __edbgwr():
+> /* Copy data to an EPC page belonging to a debug enclave. */
+>=20
+> __edbgrd():
+> /* Copy data from an EPC page belonging to a debug enclave. */
+>=20
+> __etrack():
+> /* Track that software has completed the required TLB address clears. */
+>=20
+> __eldu():
+> /* Load, verify, and unblock an Enclave Page Cache (EPC) page. */
+>=20
+> __eblock():
+> /* Make EPC page inaccessible to enclave, ready to be written to memory. =
+*/
+>=20
+> __epa():
+> /* Initialize an EPC page into a Version Array (VA) page. */
+>=20
+> __ewb():
+> /* Invalidate an EPC page and write it out to main memory. */
+>=20
+>=20
+> Reinette
+
+/Jarkko

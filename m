@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D54E947140E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA25471419
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 15:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbhLKNni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 08:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S231174AbhLKOCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 09:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbhLKNnh (ORCPT
+        with ESMTP id S231152AbhLKOB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 08:43:37 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D1DC061714;
-        Sat, 11 Dec 2021 05:43:37 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id x131so10897499pfc.12;
-        Sat, 11 Dec 2021 05:43:37 -0800 (PST)
+        Sat, 11 Dec 2021 09:01:59 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A16C061751;
+        Sat, 11 Dec 2021 06:01:59 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id p18so8078868plf.13;
+        Sat, 11 Dec 2021 06:01:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id;
-        bh=xt13Z5yrhiBpiSbrA3spSqaz9lxIFhXxgvvzrcAvgHQ=;
-        b=hMBxWy/L7MRxtNlyL7GMa99EfLioNuSltV6dOfTJVWuju/w4EteL0LNruNi1thKnwn
-         hXDuHwsno8bnmlCDSko6UrKI2jVv9Mq/NeYr/vwep3Tuu96ONYSC56SFlzQq8jDNjgfm
-         wHcm+osVaKQUnU3gIDjBh53h9c3S68+QTx/k+E9smIzDy1rQt5h8MMHfotwtqKVvi/Sb
-         JvIJuFTMyD+G34pIHvLdxwBh6e7y59AXitorDrYLi/uGPKDceXni4qhkCfHaSpywi41h
-         2uBeunyuAX4xBGJerjD3/Nbu0jA3xf/No3oPBQ8qc2/dPhaVqsg6DDbbfR5Vy73Q1nFw
-         qwnQ==
+        bh=S5lEl/YZSPTyWLii/zQHYRrSecSEgRYfMX2KEJm8EXo=;
+        b=j0eBAXIEJjZMgY2m6PKFGmXDQpx/ndamysZeKIyHORkjeckxqs8zh/KigRizogD5Ea
+         jMbdzgs1mJ995Oph+K4RkZA0w8AA0s06ZyXTXuR1ouhBVxc/dWanyox/hF83vFCqyzzk
+         MflofwTgEn65x04EamT4xaBAP5VCCJVBj25U5772I8QAeUwMb4Zf8SRQXCPnVRYeI2Uf
+         yqDmFdHKizpqFvlxmXpeY5aR7uWXSn0Up3VA0VdZYPEbURe3n8dM9bMQ7duO1LPkjUHJ
+         j2kxGgXyTtyVrSRIHs27umZwnZ1x+JrUp3t4W+BY3vJ4SUC5qTnMcPs3nTiD7+XYVEJV
+         3x8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=xt13Z5yrhiBpiSbrA3spSqaz9lxIFhXxgvvzrcAvgHQ=;
-        b=Ykert5SsQZE0HwoRKshnTqZH833KfTFg+YivG13g4G67XtCfEnTGiIdCCchtimIOCT
-         mwzbpX/+AbPlpI7iC8V+7TfTUlGggzHld1tLaX8USmW+srQy//zNZvtAjNvzwddPnTfQ
-         qafyMQ1pGS8/IMQSfhpaDQVaWJep2i/P7JD/bIWg1LbKm9fD2RkCFTa2TLMWRxz18rTF
-         tgqRuxwBSUhVA8rySdHwER6vmGV61vTTz1pSTYEdoIs4rTVdV28zO9iLS2tb3sQ9EE4B
-         b20LuOJngmozeVotyc0p49jYF9cP0MgLYf+o0lKkiVKHsE4vDYGyk4oRICG6WwD9HJku
-         wy7A==
-X-Gm-Message-State: AOAM533XvMoyZAmkqkAcTMYKAwsmhsZ3qlc13ewjEBqHfntNngVA5xE/
-        vgPk/4XEJD0w3+JBF03X9Yk=
-X-Google-Smtp-Source: ABdhPJwY/lCwWXUTgu9e26XMOIINXeBEO7l6hgdd0JmJM3MjLgdlqlO2PLQJuzamxd56B03fH6/11w==
-X-Received: by 2002:a63:170b:: with SMTP id x11mr40328705pgl.71.1639230216944;
-        Sat, 11 Dec 2021 05:43:36 -0800 (PST)
+        bh=S5lEl/YZSPTyWLii/zQHYRrSecSEgRYfMX2KEJm8EXo=;
+        b=NAIfUy7TslXYzbQ3f8m0XutT1enQVYYWQ85J12tIPiF6OsgkTqsOs7FWDigIC31uyF
+         B2C+MVdDhpN0ZbqNStwXoF7nnCVik+9THfjCBaR46IHQnBP2Q6bycpuWuMSkwllIswGE
+         Q2vOBcjQi/K+0kWnRZpsrdaybekeH36cTHwVVIM912FI/bBz6UPz1If/6C6u8gIkVnMq
+         5vqJJVQMSZ9vZR5/YOYY5KexZQqTi3V70lHpgRzPwxL/FI93ZpGpShFNVa7L92XaCEV6
+         oEz4cK+qZVf/2sE12vY72iWqyXS7bbbeDTJR4zkgSzrRu+kz2b/Auk5OmvCq2ObW/jAQ
+         VhvA==
+X-Gm-Message-State: AOAM530zDHOHIN3BsibYfsoSE3k1CedbJ4R3J78xrNeQGIHUPsscwpa6
+        C4Zz4SL+owmOLaMcwBpv+F49DDTQ33t9yTiwRC8=
+X-Google-Smtp-Source: ABdhPJxzZSB8zHDw5dgrQjJ1qJb2q0iYsPRCp6yvjgQqRwxdX8x3hkAi2BT8KQcOh7bVSulj4a3BHQ==
+X-Received: by 2002:a17:902:e852:b0:143:8152:26c7 with SMTP id t18-20020a170902e85200b00143815226c7mr83257431plg.75.1639231318939;
+        Sat, 11 Dec 2021 06:01:58 -0800 (PST)
 Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id nv12sm2133058pjb.49.2021.12.11.05.43.35
+        by smtp.googlemail.com with ESMTPSA id s15sm2112048pjs.51.2021.12.11.06.01.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 05:43:36 -0800 (PST)
+        Sat, 11 Dec 2021 06:01:58 -0800 (PST)
 From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Moritz Fischer <mdf@kernel.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+Cc:     linmq006@gmail.com, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] fpga: stratix10-soc: fix NULL vs IS_ERR() checking
-Date:   Sat, 11 Dec 2021 13:43:32 +0000
-Message-Id: <20211211134332.21679-1-linmq006@gmail.com>
+Subject: [PATCH] net: bcmgenet: Fix NULL vs IS_ERR() checking
+Date:   Sat, 11 Dec 2021 14:01:53 +0000
+Message-Id: <20211211140154.23613-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.17.1
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The stratix10_svc_allocate_memory function does not return NULL. It
-returns ERR_PTR(-ENOMEM). Use IS_ERR check the return value.
+The phy_attach() function does not return NULL. It returns error pointers.
 
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/fpga/stratix10-soc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/broadcom/genet/bcmmii.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-index 047fd7f23706..2d2687a90ae6 100644
---- a/drivers/fpga/stratix10-soc.c
-+++ b/drivers/fpga/stratix10-soc.c
-@@ -213,7 +213,7 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
- 	/* Allocate buffers from the service layer's pool. */
- 	for (i = 0; i < NUM_SVC_BUFS; i++) {
- 		kbuf = stratix10_svc_allocate_memory(priv->chan, SVC_BUF_SIZE);
--		if (!kbuf) {
-+		if (IS_ERR(kbuf)) {
- 			s10_free_buffers(mgr);
- 			ret = -ENOMEM;
- 			goto init_done;
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmmii.c b/drivers/net/ethernet/broadcom/genet/bcmmii.c
+index 5f259641437a..c888ddee1fc4 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmmii.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmmii.c
+@@ -589,9 +589,9 @@ static int bcmgenet_mii_pd_init(struct bcmgenet_priv *priv)
+ 		 * Internal or external PHY with MDIO access
+ 		 */
+ 		phydev = phy_attach(priv->dev, phy_name, pd->phy_interface);
+-		if (!phydev) {
++		if (IS_ERR(phydev)) {
+ 			dev_err(kdev, "failed to register PHY device\n");
+-			return -ENODEV;
++			return PTR_ERR(phydev);
+ 		}
+ 	} else {
+ 		/*
 -- 
 2.17.1
 

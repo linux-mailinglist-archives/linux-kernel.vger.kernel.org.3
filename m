@@ -2,112 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4619C470F2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CE3470F30
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244058AbhLKAIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 19:08:37 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:12953 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243876AbhLKAIe (ORCPT
+        id S244113AbhLKAKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 19:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237677AbhLKAKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 19:08:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639181097; x=1670717097;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xEgeQ/Mk2e4FA08czcoHG5Hp46F5amIhTyxfqhk+t+k=;
-  b=nVoTg3uFOHrAP8SM4YKSr5ZbELAzRMaLNu8NwXReBrzKjiEh8CfRXZm2
-   pnCpkzLhytI4lpvV8qqgnUMJRoC/rr7jq4ZzGv0IlIRVJT/htdNsQshtG
-   e3KDrV9tWb91uyfzFgZzK4/QVm8qAg7B9YXYPX+kgqhTNvgLKwmvhV6I3
-   h7CJjj8anFnpJPoClZBZY2v/uIOoaYCC6qqvCcJ8veSeZ5uDWiZmT27fy
-   j9vh1Xva3ddIOvNs4eUIoC5BEPzO5CiGryW79zSUtTmNd38qwyIOAbQUn
-   Y0tEe52MdHfpLsdS13BmyW3yo3sMhnf6ZcA9nkgW+mg2m4iEdiH6g6h5Z
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,197,1635177600"; 
-   d="scan'208";a="192763312"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Dec 2021 08:04:57 +0800
-IronPort-SDR: IqqyPnQnVEKfkJJ14UVACVgzpTwlLEVGPKZsiB2f9VIRlVRkmc/lcmyiAkfWyR/3M3o8rPySnW
- WtLWDQKC/h8kyxTwmllU7RZKY1Io9RT+l6GhRXjDGGbjfchfaDx54v9D/KUVNcZekOPmu16ZJW
- 4GAGeA5qMfg5qDDdOuHPeSQevQlAxiLPO/mH8Pdgzlz0aQC3h/Zd97RhozVC0SeLMHb7ZjyeOH
- lDycVocJl8zkgitBzjpcWEJD2PU1bX7zL5Vhaf1wqa4TYtr/s+b9jCTAGjp0y9hRSKpD9ELKdn
- kTpgpA/s00rnJcAAVM+J4ERw
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 15:37:59 -0800
-IronPort-SDR: UEqyHcKXUhylZBvzREb8NbW31xVmkrYWd9FOp0MGKfePRlUKChv9cE5Fv4Nj7l9Mlqd850Eavf
- PYTObhMxiwOHgnvPp7v5yEokpXgdRMk6YroDSLOJuY6D1cmF/fY2sNUgrELvKWf9Ssi6F9vm+W
- pIfYGDv4VVQfoh9SJ9epLACvvO6sBNM6ryEOfuWI/M7S9n2zYd1QrIvF7dHf/MYuHthJ/XlgUp
- BlqjE4o22RrDosNEVTfN4/h+amchkHvFxV+oCzm98Lrwwph1JAsCNRcUoF6g+0kbtHng7/1hMw
- bM0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 16:04:58 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J9p1Q43Qpz1Rwns
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:04:58 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1639181098; x=1641773099; bh=xEgeQ/Mk2e4FA08czcoHG5Hp46F5amIhTyx
-        fqhk+t+k=; b=H68JC5acb2gyp1NM51k/IDOW1mgoyM1B+LYvxYYnykfRHl4u1AB
-        jjOh09dl9HiKwgYu5blzyrisA6k/Xul8PVjpAQw2WwaX9m8/Nra87hDp0bbjDclX
-        8bY34UJlivO2BxJeniUOh8lWtI+5U4Pdy66VOnpVbzWXG556n5zB++9vtrjmyIEW
-        NFggpTVNw9wJTn3O5opBHmXpID1XhiQR5QOaM7QWEXAVMzoW/yd4wmIf2JsfocGk
-        rMISd4gdY6QftKjcMlFVGhOG//RleYJT4F2er9PmF/vjimAY8MGDPueKEW1JrSb3
-        CvJp0KtFHE9Pit+fTjYTzM46xtcKP+UJF+A==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Yvl3Tt8zHcoC for <linux-kernel@vger.kernel.org>;
-        Fri, 10 Dec 2021 16:04:58 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J9p1P2TPNz1RtVG;
-        Fri, 10 Dec 2021 16:04:57 -0800 (PST)
-Message-ID: <b5c109c5-9338-cd95-ae6d-b4bebd86a210@opensource.wdc.com>
-Date:   Sat, 11 Dec 2021 09:04:55 +0900
+        Fri, 10 Dec 2021 19:10:31 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA88CC061714
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:06:55 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p18so7283128plf.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Dec 2021 16:06:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mwvtcAs9c4jmcp1ZvbkbEf/bbuZRRXYok6y7Iov0DfQ=;
+        b=F5NluEQnvqqPKyswd8my80EgcD67m7YRvf/Z9LohE8VrSxhsNDuqOVE40o1euf72jL
+         l/jPFhhhx0aYrzIzi0gBIN45NH263PvFq/tyDoXJAVIhAz7neS3HpZC3GFNpgyfNQC5t
+         FHVOO/l5tQmB5E2MgDghz7VH8kWlRW048ldTsPiMduSb/py0IkmusNLohr+nf23Y7YEE
+         2UC86/g63KMbVHXQNZZ9rtxWZ5dtJOnk9Kg47Jp8FsZQl9YgRlvfwrZJb28yUkmZa6Jd
+         CoS/UG1TAorxJeV69yPazfcCQlzQtS092aClUAO2j6Geb/c/4AOWXEBMuQuMDJj0Op4v
+         3kyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=mwvtcAs9c4jmcp1ZvbkbEf/bbuZRRXYok6y7Iov0DfQ=;
+        b=ysYCWTSkbu9249VEnG7O7s0IVlq3lCLFuakBbjAjy2Hl8TbyAXlmZPRBDwmWo5RhAC
+         n7dlheQWueFMSIXupPX7xQEspZv1Z63TYmi4W3hcSfwd+0gWe4tixcLg46+ai1b1Iysx
+         9vMkqKflQmEpTeDOhioKCkgZSezEw4bh58UdUhpWKwvchYJ9iC7Bvz7i59JVhKPVKZyh
+         KsGxpp8BdHK5eCl+K9Bw2aCrjORVehGs5lAgoywSFuYse3dUkCUSvJtOibR0bvz4JZSz
+         lvBEfK8mDJO4Acd3jTE0DJ1tGTH6IcEz/Rz52G8EEsPYm7lFvjfl4OWaSPoh91acXC0t
+         EP0Q==
+X-Gm-Message-State: AOAM531xyJkCCcaGibBse6epYsc+kRt6pcjA3R2NCIO6w9Hx/Qyujk1W
+        4+1h46xI50pVC064ALOJeI0=
+X-Google-Smtp-Source: ABdhPJxoDtE3BxP733bwVy3nAMEHl5XMwyEdqk8KeltkRCuLUJTLilQ1K9Qpq72o8aeCtVzH45QhcA==
+X-Received: by 2002:a17:90b:1812:: with SMTP id lw18mr27908444pjb.196.1639181215114;
+        Fri, 10 Dec 2021 16:06:55 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:5800:db25:1c11:3359:7a32])
+        by smtp.gmail.com with ESMTPSA id e11sm120952pjl.20.2021.12.10.16.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 16:06:54 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>, Marco Elver <elver@google.com>
+Subject: [PATCH] perf/core: Fix cgroup event list management
+Date:   Fri, 10 Dec 2021 16:06:52 -0800
+Message-Id: <20211211000652.1836690-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH v1 2/2] ata: libahci_platform: Remove bogus 32-bit DMA
- mask attempt
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <20211209145937.77719-2-andriy.shevchenko@linux.intel.com>
- <YbOr0Y7qacDmCg73@smile.fi.intel.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <YbOr0Y7qacDmCg73@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/11 4:34, Andy Shevchenko wrote:
-> On Thu, Dec 09, 2021 at 04:59:37PM +0200, Andy Shevchenko wrote:
->> If 64-bit mask attempt fails, the 32-bit will fail by the very same reason.
->> Don't even try the latter. It's a continuation of the changes that contains,
->> e.g. dcc02c19cc06 ("sata_sil24: use dma_set_mask_and_coherent").
-> 
-> I understand that some people have nothing besides bikeshedding, but this patch
-> seems fine to everybody, am I right? Can it be applied (it's independent from
-> patch 1 anyways)?
-> 
+The active cgroup events are managed in the per-cpu cgrp_cpuctx_list.
+This list is accessed from current cpu and not protected by any locks.
+But from the commit ef54c1a476ae ("perf: Rework
+perf_event_exit_event()"), this assumption does not hold true anymore.
 
-Yes, this one seems fine to me. It would be good to get a different review
-though (I know hard to get reviews on ata patches...).
-I will queue it for 5.17.
+In the perf_remove_from_context(), it can remove an event from the
+context without an IPI when the context is not active.  I think it
+assumes task event context, but it's possible for cpu event context
+only with cgroup events can be inactive at the moment - and it might
+become active soon.
 
+If the event is enabled when it's about to be closed, it might call
+perf_cgroup_event_disable() and list_del() with the cgrp_cpuctx_list
+on a different cpu.
 
+This resulted in a crash due to an invalid list pointer access during
+the cgroup list traversal on the cpu which the event belongs to.
+
+The following program can crash my box easily..
+
+  #include <stdio.h>
+  #include <fcntl.h>
+  #include <unistd.h>
+  #include <linux/perf_event.h>
+  #include <sys/stat.h>
+  #include <sys/syscall.h>
+
+  //#define CGROUP_ROOT  "/dev/cgroup/devices"
+  #define CGROUP_ROOT  "/sys/fs/cgroup"
+
+  int perf_event_open(struct perf_event_attr *attr, int pid, int cpu,
+                      int grp, unsigned long flags)
+  {
+    return syscall(SYS_perf_event_open, attr, pid, cpu, grp, flags);
+  }
+
+  int get_cgroup_fd(const char *grp)
+  {
+    char buf[128];
+
+    snprintf(buf, sizeof(buf), "%s/%s", CGROUP_ROOT, grp);
+
+    /* ignore failures */
+    mkdir(buf, 0755);
+
+    return open(buf, O_RDONLY);
+  }
+
+  int main(int argc, char *argv[])
+  {
+    struct perf_event_attr hw = {
+      .type = PERF_TYPE_HARDWARE,
+      .config = PERF_COUNT_HW_CPU_CYCLES,
+    };
+    struct perf_event_attr sw = {
+      .type = PERF_TYPE_SOFTWARE,
+      .config = PERF_COUNT_SW_CPU_CLOCK,
+    };
+    int cpus = sysconf(_SC_NPROCESSORS_ONLN);
+    int fd[4][cpus];
+    int cgrpA, cgrpB;
+
+    cgrpA = get_cgroup_fd("A");
+    cgrpB = get_cgroup_fd("B");
+    if (cgrpA < 0 || cgrpB < 0) {
+      printf("failed to get cgroup fd\n");
+      return 1;
+    }
+
+    while (1) {
+      int i;
+
+      for (i = 0; i < cpus; i++) {
+        fd[0][i] = perf_event_open(&hw, cgrpA, i, -1, PERF_FLAG_PID_CGROUP);
+        fd[1][i] = perf_event_open(&sw, cgrpA, i, -1, PERF_FLAG_PID_CGROUP);
+        fd[2][i] = perf_event_open(&hw, cgrpB, i, -1, PERF_FLAG_PID_CGROUP);
+        fd[3][i] = perf_event_open(&sw, cgrpB, i, -1, PERF_FLAG_PID_CGROUP);
+      }
+
+      for (i = 0; i < cpus; i++) {
+        close(fd[3][i]);
+        close(fd[2][i]);
+        close(fd[1][i]);
+        close(fd[0][i]);
+      }
+    }
+    return 0;
+  }
+
+Let's use IPI to prevent such crashes.
+
+Similarly, I think perf_install_in_context() should use IPI for the
+first cgroup event at least.
+
+Cc: Marco Elver <elver@google.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ kernel/events/core.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 30d94f68c5bd..8ebb41ab2089 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -2388,7 +2388,7 @@ static void perf_remove_from_context(struct perf_event *event, unsigned long fla
+ 	 * event_function_call() user.
+ 	 */
+ 	raw_spin_lock_irq(&ctx->lock);
+-	if (!ctx->is_active) {
++	if (!ctx->is_active && (!is_cgroup_event(event) || ctx->nr_cgroups > 1)) {
+ 		__perf_remove_from_context(event, __get_cpu_context(ctx),
+ 					   ctx, (void *)flags);
+ 		raw_spin_unlock_irq(&ctx->lock);
+@@ -2857,11 +2857,14 @@ perf_install_in_context(struct perf_event_context *ctx,
+ 	 * perf_event_attr::disabled events will not run and can be initialized
+ 	 * without IPI. Except when this is the first event for the context, in
+ 	 * that case we need the magic of the IPI to set ctx->is_active.
++	 * Similarly, the first cgroup event for the context also needs the IPI
++	 * to manipulate the cgrp_cpuctx_list.
+ 	 *
+ 	 * The IOC_ENABLE that is sure to follow the creation of a disabled
+ 	 * event will issue the IPI and reprogram the hardware.
+ 	 */
+-	if (__perf_effective_state(event) == PERF_EVENT_STATE_OFF && ctx->nr_events) {
++	if (__perf_effective_state(event) == PERF_EVENT_STATE_OFF &&
++	    ctx->nr_events && (ctx->nr_cgroups || !is_cgroup_event(event))) {
+ 		raw_spin_lock_irq(&ctx->lock);
+ 		if (ctx->task == TASK_TOMBSTONE) {
+ 			raw_spin_unlock_irq(&ctx->lock);
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1.173.g76aa8bc2d0-goog
+

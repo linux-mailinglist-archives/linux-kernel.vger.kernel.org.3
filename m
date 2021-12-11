@@ -2,137 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2553B4714F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 18:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A833D4714F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 18:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbhLKRfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 12:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhLKRff (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 12:35:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB1DC061714;
-        Sat, 11 Dec 2021 09:35:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E206DB80B2F;
-        Sat, 11 Dec 2021 17:35:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A768C004DD;
-        Sat, 11 Dec 2021 17:35:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639244132;
-        bh=lwl+S4gBx9+MmP7cUVpbKcR9U30TwUBZItbC7aQoL7Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Vn9vatHyt83ViQdCtuID65v/a0R2BHIeN8/U9ISQg579+OGH5HnC1AXqI+f49N9mh
-         4sqZaGIVX9z9DVAIgzYLvYtU/exvPy2Gmpe8wzQSSZajglIIRFaSIjLWoC7Pzb5c1n
-         E7NIw8FJ50uJic4XTVf1dRC2vtscyvlhhB4ZBxH7GoUWDiEa/QgNgGAw8LoQYuOfwj
-         D+kszdFRl/EdC5fUkEha7TPAIT9CL3zZIq0muuYXaZZmEMjh4YqrsEQxeQsYmNbu24
-         Einpl0t+ol+5/WydnilM5gzwBNvzAmxc8jElLEa28r8XMJfbg9ehW/AMXjxt8ir55G
-         NkiLRit8FSfWA==
-Date:   Sat, 11 Dec 2021 11:35:30 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v1 1/1] pci_ids: Keep Intel PCI IDs sorted by value
-Message-ID: <20211211173530.GA397083@bhelgaas>
+        id S229679AbhLKRiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 12:38:50 -0500
+Received: from mga18.intel.com ([134.134.136.126]:53421 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229531AbhLKRiu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 12:38:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639244330; x=1670780330;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=A/B2eQjtkc/m1I/GZTBTF5k/jS3vko8y2Bhw59I95JU=;
+  b=UGApUHsdl89xTP5PEc6HMNJd9u631xPWh7ciy9gdVtNZBRaykGHWJS18
+   ur8h1B7uOtIfgWbLv7cftaZ//bTHr/C139myWamZNAxBbsWZdoOXqMPKG
+   vZIkuccUhXCQF7AagsvMrWfitzZFQOPFZyuRxm7BKlDRUXuM5pFfYTcMS
+   xF7/s7UMi9adlasSn1oVXieH3vfQcaO3GCNwOe8To9u3p+Mh0s3XUrq+Z
+   sQdya1qNsKJaT/6geDOx7YXfI/JS2F6NKyZKgDeDYUJqnvWIZkakfmi+g
+   vbkQ/mTMKllzHj6aRDSXKQfH+Zi1Mfjc4mRVl/LGtIO7xtp3Gvm4WSnXn
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="225412377"
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="225412377"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 09:38:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
+   d="scan'208";a="481071645"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 11 Dec 2021 09:38:48 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mw6Kd-0004sX-Ax; Sat, 11 Dec 2021 17:38:47 +0000
+Date:   Sun, 12 Dec 2021 01:38:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Siddharth Gupta <sidgup@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Gurbir Arora <gurbaror@codeaurora.org>
+Subject: drivers/remoteproc/qcom_common.c:126:27: sparse: sparse: restricted
+ __le32 degrades to integer
+Message-ID: <202112120130.DAViXMnZ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209195231.2785-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 09:52:31PM +0200, Andy Shevchenko wrote:
-> Keep Intel PCI IDs sorted by value.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6f513529296fd4f696afb4354c46508abe646541
+commit: 8ed8485c4f056d488d17a2b56581c86aeb42955d remoteproc: qcom: Add capability to collect minidumps
+date:   1 year ago
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211212/202112120130.DAViXMnZ-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8ed8485c4f056d488d17a2b56581c86aeb42955d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8ed8485c4f056d488d17a2b56581c86aeb42955d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-imx/ arch/arm/mach-mvebu/ arch/arm/mach-rockchip/ arch/arm/mach-socfpga/ arch/arm/mach-tegra/ drivers/dma/ drivers/edac/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/ drivers/interconnect/qcom/ drivers/irqchip/ drivers/mtd/nand/onenand/ drivers/net/ethernet/mediatek/ drivers/net/vmxnet3/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/scsi/bnx2fc/ drivers/scsi/lpfc/ drivers/soc/bcm/brcmstb/pm/ drivers/staging/ fs/proc/ net/sched/
 
-Applied to pci/misc for v5.17, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-There were a few Intel IDs that used upper-case hex; I lower-cased
-them to match the rest.
 
-> ---
->  include/linux/pci_ids.h | 32 ++++++++++++++++----------------
->  1 file changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 86678588d191..306201cb9aff 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2738,12 +2738,6 @@
->  #define PCI_DEVICE_ID_INTEL_82801EB_11	0x24db
->  #define PCI_DEVICE_ID_INTEL_82801EB_12	0x24dc
->  #define PCI_DEVICE_ID_INTEL_82801EB_13	0x24dd
-> -#define PCI_DEVICE_ID_INTEL_ESB_1	0x25a1
-> -#define PCI_DEVICE_ID_INTEL_ESB_2	0x25a2
-> -#define PCI_DEVICE_ID_INTEL_ESB_4	0x25a4
-> -#define PCI_DEVICE_ID_INTEL_ESB_5	0x25a6
-> -#define PCI_DEVICE_ID_INTEL_ESB_9	0x25ab
-> -#define PCI_DEVICE_ID_INTEL_ESB_10	0x25ac
->  #define PCI_DEVICE_ID_INTEL_82820_HB	0x2500
->  #define PCI_DEVICE_ID_INTEL_82820_UP_HB	0x2501
->  #define PCI_DEVICE_ID_INTEL_82850_HB	0x2530
-> @@ -2758,14 +2752,15 @@
->  #define PCI_DEVICE_ID_INTEL_82915G_IG	0x2582
->  #define PCI_DEVICE_ID_INTEL_82915GM_HB	0x2590
->  #define PCI_DEVICE_ID_INTEL_82915GM_IG	0x2592
-> +#define PCI_DEVICE_ID_INTEL_ESB_1	0x25a1
-> +#define PCI_DEVICE_ID_INTEL_ESB_2	0x25a2
-> +#define PCI_DEVICE_ID_INTEL_ESB_4	0x25a4
-> +#define PCI_DEVICE_ID_INTEL_ESB_5	0x25a6
-> +#define PCI_DEVICE_ID_INTEL_ESB_9	0x25ab
-> +#define PCI_DEVICE_ID_INTEL_ESB_10	0x25ac
->  #define PCI_DEVICE_ID_INTEL_5000_ERR	0x25F0
->  #define PCI_DEVICE_ID_INTEL_5000_FBD0	0x25F5
->  #define PCI_DEVICE_ID_INTEL_5000_FBD1	0x25F6
-> -#define PCI_DEVICE_ID_INTEL_82945G_HB	0x2770
-> -#define PCI_DEVICE_ID_INTEL_82945G_IG	0x2772
-> -#define PCI_DEVICE_ID_INTEL_3000_HB	0x2778
-> -#define PCI_DEVICE_ID_INTEL_82945GM_HB	0x27A0
-> -#define PCI_DEVICE_ID_INTEL_82945GM_IG	0x27A2
->  #define PCI_DEVICE_ID_INTEL_ICH6_0	0x2640
->  #define PCI_DEVICE_ID_INTEL_ICH6_1	0x2641
->  #define PCI_DEVICE_ID_INTEL_ICH6_2	0x2642
-> @@ -2777,6 +2772,11 @@
->  #define PCI_DEVICE_ID_INTEL_ESB2_14	0x2698
->  #define PCI_DEVICE_ID_INTEL_ESB2_17	0x269b
->  #define PCI_DEVICE_ID_INTEL_ESB2_18	0x269e
-> +#define PCI_DEVICE_ID_INTEL_82945G_HB	0x2770
-> +#define PCI_DEVICE_ID_INTEL_82945G_IG	0x2772
-> +#define PCI_DEVICE_ID_INTEL_3000_HB	0x2778
-> +#define PCI_DEVICE_ID_INTEL_82945GM_HB	0x27A0
-> +#define PCI_DEVICE_ID_INTEL_82945GM_IG	0x27A2
->  #define PCI_DEVICE_ID_INTEL_ICH7_0	0x27b8
->  #define PCI_DEVICE_ID_INTEL_ICH7_1	0x27b9
->  #define PCI_DEVICE_ID_INTEL_ICH7_30	0x27b0
-> @@ -2941,16 +2941,16 @@
->  #define PCI_DEVICE_ID_INTEL_SBRIDGE_BR		0x3cf5	/* 13.6 */
->  #define PCI_DEVICE_ID_INTEL_SBRIDGE_SAD1	0x3cf6	/* 12.7 */
->  #define PCI_DEVICE_ID_INTEL_IOAT_SNB	0x402f
-> -#define PCI_DEVICE_ID_INTEL_5100_16	0x65f0
-> -#define PCI_DEVICE_ID_INTEL_5100_19	0x65f3
-> -#define PCI_DEVICE_ID_INTEL_5100_21	0x65f5
-> -#define PCI_DEVICE_ID_INTEL_5100_22	0x65f6
->  #define PCI_DEVICE_ID_INTEL_5400_ERR	0x4030
->  #define PCI_DEVICE_ID_INTEL_5400_FBD0	0x4035
->  #define PCI_DEVICE_ID_INTEL_5400_FBD1	0x4036
-> -#define PCI_DEVICE_ID_INTEL_IOAT_SCNB	0x65ff
->  #define PCI_DEVICE_ID_INTEL_EP80579_0	0x5031
->  #define PCI_DEVICE_ID_INTEL_EP80579_1	0x5032
-> +#define PCI_DEVICE_ID_INTEL_5100_16	0x65f0
-> +#define PCI_DEVICE_ID_INTEL_5100_19	0x65f3
-> +#define PCI_DEVICE_ID_INTEL_5100_21	0x65f5
-> +#define PCI_DEVICE_ID_INTEL_5100_22	0x65f6
-> +#define PCI_DEVICE_ID_INTEL_IOAT_SCNB	0x65ff
->  #define PCI_DEVICE_ID_INTEL_82371SB_0	0x7000
->  #define PCI_DEVICE_ID_INTEL_82371SB_1	0x7010
->  #define PCI_DEVICE_ID_INTEL_82371SB_2	0x7020
-> -- 
-> 2.33.0
-> 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/qcom_common.c:126:27: sparse: sparse: restricted __le32 degrades to integer
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+
+vim +126 drivers/remoteproc/qcom_common.c
+
+   103	
+   104	static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsystem *subsystem)
+   105	{
+   106		struct minidump_region __iomem *ptr;
+   107		struct minidump_region region;
+   108		int seg_cnt, i;
+   109		dma_addr_t da;
+   110		size_t size;
+   111		char *name;
+   112	
+   113		if (WARN_ON(!list_empty(&rproc->dump_segments))) {
+   114			dev_err(&rproc->dev, "dump segment list already populated\n");
+   115			return -EUCLEAN;
+   116		}
+   117	
+   118		seg_cnt = le32_to_cpu(subsystem->region_count);
+   119		ptr = ioremap((unsigned long)le64_to_cpu(subsystem->regions_baseptr),
+   120			      seg_cnt * sizeof(struct minidump_region));
+   121		if (!ptr)
+   122			return -EFAULT;
+   123	
+   124		for (i = 0; i < seg_cnt; i++) {
+   125			memcpy_fromio(&region, ptr + i, sizeof(region));
+ > 126			if (region.valid == MD_REGION_VALID) {
+   127				name = kstrdup(region.name, GFP_KERNEL);
+   128				if (!name) {
+   129					iounmap(ptr);
+   130					return -ENOMEM;
+   131				}
+   132				da = le64_to_cpu(region.address);
+ > 133				size = le32_to_cpu(region.size);
+   134				rproc_coredump_add_custom_segment(rproc, da, size, NULL, name);
+   135			}
+   136		}
+   137	
+   138		iounmap(ptr);
+   139		return 0;
+   140	}
+   141	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

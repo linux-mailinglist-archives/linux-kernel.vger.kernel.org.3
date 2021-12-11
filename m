@@ -2,108 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FBE471541
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B128E47153F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbhLKSBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 13:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S231719AbhLKSBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 13:01:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhLKSBE (ORCPT
+        with ESMTP id S230468AbhLKSA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 13:01:04 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8186BC061A32;
-        Sat, 11 Dec 2021 10:01:03 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y12so38694339eda.12;
-        Sat, 11 Dec 2021 10:01:03 -0800 (PST)
+        Sat, 11 Dec 2021 13:00:57 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37946C0617A1;
+        Sat, 11 Dec 2021 10:00:57 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id u1so20067378wru.13;
+        Sat, 11 Dec 2021 10:00:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=j9R8K3miqhXvXlJiG1vL3PmKdSgpdU9lAqSqAOUQnj4=;
-        b=UJl++pAKNsr6zwC/Dgul9gYxsuwQgfJK3m9Pm2f/aVQNey0o/YljEvcwujCDN6UaNd
-         Vhh8MDiyDGxqODFXz/OY3m+rLuLq8xWViUh1WOTOakgRVodWMRQNaVIMi4LHEx2XsAKt
-         3wdm5z59tmTcR200uIns9026koBIu9F5u435OpHsJ/VaBjTnUtUOVxnSLsUPTAljsk1o
-         sC1mvZ9GPLXU+XA/de6EXk1RoRzZZg+BTbupZnYlXvruQfJWHz/8CTpU/0bwU1Wf9c8X
-         uAfT4J91jiC0G0ARVqQ44016+StQAsmQpJklpkH4PM8fVOxkxt7zblS0vbS/oB0nxYb4
-         yxxA==
+        bh=NTqJE9O5IKUSo/m88Ab/X8Fm1HEOexFRkRE81c4V/Mg=;
+        b=LfuiKKGmEbpKqw430aASUTABt3NnFt6A7kO84jFi0HbZqcIRYjovGFxIdzgoPgz6vV
+         nwauJ6arBYI+7/rqV6Z4Z8YeVKdCDEbNxPtrJyTinw3el7zvfIktrz3AQRUx0DptNe7t
+         dL/H3v3BxG48WfD4AhqivG5mnbZ5g2eceXMXvUzlgJiNG2lSpaJ5w0ruNik0K4OhG0OY
+         7NTkF00HlJmRA9CPSWcDo5pgOfuzW3y1Cv1qxsX56lvkUoV4wRPvxnag+HGBpBBbXWDS
+         GkYCJ0BStnJhUsEK8utPdqurQad7JftGG9pRH0Y2R5VxxmFi+LDQdu3uuv5hX3OtsAKk
+         96tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=j9R8K3miqhXvXlJiG1vL3PmKdSgpdU9lAqSqAOUQnj4=;
-        b=ylXZki4tsa1/keE11cVZax6R4nP38MJTZfi+rYoH5dK81Ce/zDsZHlprvVpSn6EBZH
-         gjkzUkT3yuhcGu34dBEOlB03MMEevU0GufsE3YlCD0bTH4sMbB8iqNn4nWNLO5KfhwYS
-         4RKFQgCNeRQoXY5tKyJRKS+fKEUGwFQtgJi87CbldXqGs1CQ8z3ykA9sQ8xpFAkJRVKc
-         +KoeRxenEJx/BsgO/MjX/gz86HNqzBuUHKp6I4rg0W4WLgLU43hI9sVocideo8o6bgAh
-         XBwIZILpk69rWZku0gMkt60bycvnxNVABB9VCiuiZXu804yul2tlEBiHT8cW7M0PA7HL
-         2mSA==
-X-Gm-Message-State: AOAM5312qMWeA+Ulzn0tbzV1zJMwqGycm4IADtXpu1RrWwCkGPlGm4Lp
-        nl/y565rj8Ja0cFIAN9S5Wzqo5tCvHQ=
-X-Google-Smtp-Source: ABdhPJwLz2QoTnF7chmJIKhVWiIPhlsbmR9u8x0g3MTo9PczNHpZEX9oNxOXDfRKQEr2taDO3gEYNA==
-X-Received: by 2002:a17:907:7f9e:: with SMTP id qk30mr32405805ejc.313.1639245661439;
-        Sat, 11 Dec 2021 10:01:01 -0800 (PST)
-Received: from localhost.localdomain ([178.94.9.252])
-        by smtp.gmail.com with ESMTPSA id sg17sm3337909ejc.72.2021.12.11.10.00.58
+        bh=NTqJE9O5IKUSo/m88Ab/X8Fm1HEOexFRkRE81c4V/Mg=;
+        b=lZ8X+mnwvIehwinp4QZjDU2A873YJrWkNpFVdVGQAzzbrQEmQy7Tl3AJOWWiOamvDP
+         BofxPDVY2TyJ4SCzFx+7S16Oivu8V3Az5tytc90oM1WV8mts7v8pa2UFQTnY8iNxxqdi
+         KMxO84eIxSJhutjHoDyl0dd2ePVRvKeDiWEEUzcs1byP0oh8Qb9KURVvE5D037hpzgTU
+         cXRR2wWEkwj2uxAmm0YM9jxuquFgTvtwG7Lqt7EvCNARgWIyb05sfyWHVHSY/khO9RL/
+         SdThCXriVXJ9EQ9ExxgJnpUdKQgAeGcjDFTz5awsD1cKMIau4UsQ02kRFJUKSrs+MOlR
+         nBUA==
+X-Gm-Message-State: AOAM530uuSF+FnTGz1WUzW2PuoKZmaFIxoNekJ4RNy9bQYxJtuo52GYM
+        YyMW4UoDEvLLR/kvJsHgt2u0JxoscDJYEMBM
+X-Google-Smtp-Source: ABdhPJxUAVBviSw0OvKnZaywdMXUJn7Ur6vlRTPj4c6JyDiOu3sUOnpqJgWSgh8vZYgMdzgksGZ31w==
+X-Received: by 2002:adf:f3d0:: with SMTP id g16mr6478226wrp.699.1639245655258;
+        Sat, 11 Dec 2021 10:00:55 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id z7sm1994792wmi.33.2021.12.11.10.00.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 10:01:00 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
-        pauk.denis@gmail.com, platform-driver-x86@vger.kernel.org,
-        Daniel Gibson <metalcaedes@gmail.com>,
-        Michael Altizer <michael@theoddone.net>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] hwmon: (nct6775) add ROG STRIX B550-A/X570-I GAMING
-Date:   Sat, 11 Dec 2021 20:00:36 +0200
-Message-Id: <20211211180037.367062-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 11 Dec 2021 10:00:54 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] phy: rockchip-inno-usb2: remove redundant assignment to variable delay
+Date:   Sat, 11 Dec 2021 18:00:54 +0000
+Message-Id: <20211211180054.525368-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ASUS ROG STRIX B550-A/X570-I GAMING boards have got an nct6775 chip, but
-by default there's no use of it because of resource conflict with WMI 
-method.
+Variable delay is being assigned to zero and the code falls through to
+the next case in a switch statement that returns out of the function.
+The variable is never read in this scenario and so the assignment is
+redundant and can be removed.
 
-This commit adds "ROG STRIX B550-A GAMING" and "ROG STRIX X570-I GAMING" to
-the list of boards that can be monitored using ASUS WMI.
+Cleans up scan-build static analysis warning:
+drivers/phy/rockchip/phy-rockchip-inno-usb2.c:753:3: warning: Value
+stored to 'delay' is never read [deadcode.DeadStores]
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Daniel Gibson <metalcaedes@gmail.com>
-Tested-by: Michael Altizer <michael@theoddone.net>
-Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/hwmon/nct6775.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index 93dca471972e..e3edb1a72654 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -4995,11 +4995,13 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG CROSSHAIR VIII FORMULA",
- 	"ROG CROSSHAIR VIII HERO",
- 	"ROG CROSSHAIR VIII IMPACT",
-+	"ROG STRIX B550-A GAMING",
- 	"ROG STRIX B550-E GAMING",
- 	"ROG STRIX B550-F GAMING",
- 	"ROG STRIX B550-F GAMING (WI-FI)",
- 	"ROG STRIX B550-I GAMING",
- 	"ROG STRIX X570-F GAMING",
-+	"ROG STRIX X570-I GAMING",
- 	"ROG STRIX Z390-E GAMING",
- 	"ROG STRIX Z490-I GAMING",
- 	"TUF GAMING B550M-PLUS",
-
-base-commit: c741e49150dbb0c0aebe234389f4aa8b47958fa8
+diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+index 1938365abbb3..9f95b587e2c0 100644
+--- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
++++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+@@ -750,7 +750,6 @@ static void rockchip_chg_detect_work(struct work_struct *work)
+ 		fallthrough;
+ 	case USB_CHG_STATE_SECONDARY_DONE:
+ 		rphy->chg_state = USB_CHG_STATE_DETECTED;
+-		delay = 0;
+ 		fallthrough;
+ 	case USB_CHG_STATE_DETECTED:
+ 		/* put the controller in normal mode */
 -- 
-2.33.0
+2.34.1
 

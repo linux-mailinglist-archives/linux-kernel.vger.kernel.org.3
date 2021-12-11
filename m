@@ -2,99 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E73A4713F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169824713EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 14:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbhLKNNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 08:13:25 -0500
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:28312 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbhLKNNY (ORCPT
+        id S230297AbhLKNH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 08:07:28 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:29183 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229795AbhLKNH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 08:13:24 -0500
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 1BBDD6ts025477
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 22:13:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 1BBDD6ts025477
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639228387;
-        bh=uGXjkP6JbBSWuzRp21ftt5varmKFjiNrC53PYDwq2Bw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HgkGnN7K85ujBLSNy8DTSRFk605z1vqdkcGX+FfKcfwiGSZIBdf6WzM6+4oVA7IZA
-         vfbCpV9awCHdj7anLp+sCGDklwxQPuyLNJhRdv/nnxBCQd8jM5IrhW89U8JfSDV0Hi
-         dhdBApPIzQz15CCYd8otiDCN7+Aa10NzjSxQ/V7//Nn/o5RyeIkY95stVFuOHIjZ+i
-         26AqNd9x4CIl/4CQAsqTnDzeL+vlJLYpco+XhuakrBGhJyh7vxj/qOTYuDrVFqqpq6
-         X4yuBWpDX5ZNr/5I3incKm9hAF7wQDTxxwK6JGwRroonO+xk4Gft8B1LtvKRKLV1TX
-         SKARqX4BfkfWg==
-X-Nifty-SrcIP: [209.85.216.50]
-Received: by mail-pj1-f50.google.com with SMTP id gt5so8729776pjb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 05:13:06 -0800 (PST)
-X-Gm-Message-State: AOAM533w3kgBWvPdidj028Z7ReQhmxHW/EmccTYV9EfqGJXK9JeWE64P
-        la0MaO/qru8fv14PXj0SS51a6aZ7iNi2tW8IP0E=
-X-Google-Smtp-Source: ABdhPJyj2s2VI5D55eBJcUlv+D1zOZ0GEudG/LGvpH9+KO2/uhmtFUqUzDZCzdK7a0f07QucSSIn18UGLUl55KXPM1U=
-X-Received: by 2002:a17:90a:ce02:: with SMTP id f2mr30490290pju.77.1639228386048;
- Sat, 11 Dec 2021 05:13:06 -0800 (PST)
+        Sat, 11 Dec 2021 08:07:27 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JB7Km1rvZz8y0X;
+        Sat, 11 Dec 2021 21:05:16 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 11 Dec 2021 21:07:25 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 11 Dec 2021 21:07:24 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Marco Elver <elver@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mark.rutland@arm.com>, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Joey Gouly" <joey.gouly@arm.com>
+Subject: [PATCH v4] arm64: Enable KCSAN
+Date:   Sat, 11 Dec 2021 21:17:34 +0800
+Message-ID: <20211211131734.126874-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20211013021011.515750-1-masahiroy@kernel.org> <CAEbi=3eqaH7wFKqssKUyWDz2UfJpFSh2VerAwyYp55xWpirVZg@mail.gmail.com>
-In-Reply-To: <CAEbi=3eqaH7wFKqssKUyWDz2UfJpFSh2VerAwyYp55xWpirVZg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 11 Dec 2021 22:12:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQZuEHPagj-Oc6tAq8ZsiiJi93=o3hzAEvEmGiXAT+R3w@mail.gmail.com>
-Message-ID: <CAK7LNAQZuEHPagj-Oc6tAq8ZsiiJi93=o3hzAEvEmGiXAT+R3w@mail.gmail.com>
-Subject: Re: [PATCH] nds32: remove unused BUILTIN_DTB from arch/nds32/Makefile
-To:     Greentime Hu <green.hu@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Alan Kao <alankao@andestech.com>, kclin@andestech.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 2:05 AM Greentime Hu <green.hu@gmail.com> wrote:
->
-> Masahiro Yamada <masahiroy@kernel.org> =E6=96=BC 2021=E5=B9=B410=E6=9C=88=
-13=E6=97=A5 =E9=80=B1=E4=B8=89 10:10 =E5=AF=AB=E9=81=93=EF=BC=9A
-> >
-> > This is not used or exported.
-> >
-> > BUILTIN_DTB is locally defined and used in arch/nds32/boot/dts/Makefile=
-.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  arch/nds32/Makefile | 6 ------
-> >  1 file changed, 6 deletions(-)
-> >
-> > diff --git a/arch/nds32/Makefile b/arch/nds32/Makefile
-> > index c17fc3a755c3..ee26e4df2fd0 100644
-> > --- a/arch/nds32/Makefile
-> > +++ b/arch/nds32/Makefile
-> > @@ -31,12 +31,6 @@ core-y                               +=3D arch/nds32=
-/kernel/ arch/nds32/mm/
-> >  core-$(CONFIG_FPU)              +=3D arch/nds32/math-emu/
-> >  libs-y                         +=3D arch/nds32/lib/
-> >
-> > -ifneq '$(CONFIG_NDS32_BUILTIN_DTB)' '""'
-> > -BUILTIN_DTB :=3D y
-> > -else
-> > -BUILTIN_DTB :=3D n
-> > -endif
-> > -
-> >  ifdef CONFIG_CPU_LITTLE_ENDIAN
-> >  KBUILD_CFLAGS   +=3D $(call cc-option, -EL)
-> >  KBUILD_AFLAGS   +=3D $(call cc-option, -EL)
->
-> loop in KC and Alan.
+This patch enables KCSAN for arm64, with updates to build rules
+to not use KCSAN for several incompatible compilation units.
 
-Applied to linux-kbuild because this is needed for my next work.
+Recent GCC version(at least GCC10) made outline-atomics as the
+default option(unlike Clang), which will cause linker errors
+for kernel/kcsan/core.o. Disables the out-of-line atomics by
+no-outline-atomics to fix the linker errors.
 
-(nds32 seems to be unmaintained)
+Meanwhile, as Mark said[1], some latent issues are needed to be
+fixed which isn't just a KCSAN problem, we make the KCSAN depends
+on EXPERT for now.
 
+Tested selftest and kcsan_test(built with GCC11 and Clang 13),
+and all passed.
 
---=20
-Best Regards
-Masahiro Yamada
+[1] https://lkml.kernel.org/r/YadiUPpJ0gADbiHQ@FVFF77S0Q05N
+Acked-by: Marco Elver <elver@google.com> # kernel/kcsan
+Tested-by: Joey Gouly <joey.gouly@arm.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+
+Tested on Qemu with clang 13 / gcc 11, based on 5.16-rc3 by Kefeng.
+Tested with gcc 11 and clang 14.0 (built from git) on qemu and FVP by Joey.
+
+v4:
+- drop Clang version as commit 8cdd23c23c3d ("arm64: Restrict ARM64_BTI_KERNEL
+  to clang 12.0.0 and newer"), suggested by Nathan Chancellor
+v3:
+- add EXPERT and CLANG_VERSION depends suggested by Mark Rutland
+v2:
+- tested on GCC11 and disable outline-atomics for kernel/kcsan/core.c
+  suggested by Marco Elver
+
+ arch/arm64/Kconfig               | 1 +
+ arch/arm64/kernel/vdso/Makefile  | 1 +
+ arch/arm64/kvm/hyp/nvhe/Makefile | 1 +
+ kernel/kcsan/Makefile            | 1 +
+ 4 files changed, 4 insertions(+)
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 4ff73299f8a9..2cc9dea55e00 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -150,6 +150,7 @@ config ARM64
+ 	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
+ 	select HAVE_ARCH_KASAN_SW_TAGS if HAVE_ARCH_KASAN
+ 	select HAVE_ARCH_KASAN_HW_TAGS if (HAVE_ARCH_KASAN && ARM64_MTE)
++	select HAVE_ARCH_KCSAN if EXPERT
+ 	select HAVE_ARCH_KFENCE
+ 	select HAVE_ARCH_KGDB
+ 	select HAVE_ARCH_MMAP_RND_BITS
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index 700767dfd221..60813497a381 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -32,6 +32,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+ CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
+ 				$(CC_FLAGS_LTO)
+ KASAN_SANITIZE			:= n
++KCSAN_SANITIZE			:= n
+ UBSAN_SANITIZE			:= n
+ OBJECT_FILES_NON_STANDARD	:= y
+ KCOV_INSTRUMENT			:= n
+diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+index c3c11974fa3b..24b2c2425b38 100644
+--- a/arch/arm64/kvm/hyp/nvhe/Makefile
++++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+@@ -89,6 +89,7 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI)
+ # cause crashes. Just disable it.
+ GCOV_PROFILE	:= n
+ KASAN_SANITIZE	:= n
++KCSAN_SANITIZE	:= n
+ UBSAN_SANITIZE	:= n
+ KCOV_INSTRUMENT	:= n
+ 
+diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
+index c2bb07f5bcc7..e893b0e1d62a 100644
+--- a/kernel/kcsan/Makefile
++++ b/kernel/kcsan/Makefile
+@@ -8,6 +8,7 @@ CFLAGS_REMOVE_debugfs.o = $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
+ 
+ CFLAGS_core.o := $(call cc-option,-fno-conserve-stack) \
++	$(call cc-option,-mno-outline-atomics) \
+ 	-fno-stack-protector -DDISABLE_BRANCH_PROFILING
+ 
+ obj-y := core.o debugfs.o report.o
+-- 
+2.26.2
+

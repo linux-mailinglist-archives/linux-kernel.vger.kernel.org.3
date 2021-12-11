@@ -2,130 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 942F2471243
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 07:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DD7471246
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 07:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbhLKG4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 01:56:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48871 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229685AbhLKG4j (ORCPT
+        id S229765AbhLKG5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 01:57:36 -0500
+Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:34240 "EHLO
+        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229685AbhLKG5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 01:56:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639205799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tqlq6AmDWNzPiJUWu/M8hOZ4wSsTPUgjGqMIHLFfx8w=;
-        b=gOWDnvYnGllw3NtXb/YmTyJsR4wGhVIWFyuf1CUpcaDDNnKi5hDs2aT2E2547oaVahGatY
-        QsajEXINVtYxJbQhhcMlOFpEZRy9eS3KvVLKo/3LsXbw4MNw89EEwCI7t66PDh366jmOwy
-        ETYAfXeOKR92in2qmnrvuzUH3o3a0jQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-CjjodwTEPH66bHLZpw0JCg-1; Sat, 11 Dec 2021 01:56:35 -0500
-X-MC-Unique: CjjodwTEPH66bHLZpw0JCg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5029F801AAB;
-        Sat, 11 Dec 2021 06:56:32 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A38568D94;
-        Sat, 11 Dec 2021 06:56:24 +0000 (UTC)
-Message-ID: <42701fedbe10acf164ec56818b941061be6ffd4e.camel@redhat.com>
-Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
- shadow paging if the guest PDPTEs is changed
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Xiao Guangrong <guangrong.xiao@linux.intel.com>
-Date:   Sat, 11 Dec 2021 08:56:23 +0200
-In-Reply-To: <YbPBjdAz1GQGr8DT@google.com>
-References: <20211108124407.12187-1-jiangshanlai@gmail.com>
-         <20211111144634.88972-1-jiangshanlai@gmail.com>
-         <Ya/5MOYef4L4UUAb@google.com>
-         <11219bdb-669c-cf6f-2a70-f4e5f909a2ad@redhat.com>
-         <YbPBjdAz1GQGr8DT@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Sat, 11 Dec 2021 01:57:35 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V-DZw3U_1639205850;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V-DZw3U_1639205850)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 11 Dec 2021 14:57:33 +0800
+Date:   Sat, 11 Dec 2021 14:57:30 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     JeffleXu <jefflexu@linux.alibaba.com>
+Cc:     David Howells <dhowells@redhat.com>, chao@kernel.org,
+        tao.peng@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, linux-cachefs@redhat.com,
+        bo.liu@linux.alibaba.com, linux-fsdevel@vger.kernel.org,
+        xiang@kernel.org, gerry@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, eguan@linux.alibaba.com
+Subject: Re: [Linux-cachefs] [RFC 09/19] netfs: refactor netfs_rreq_unlock()
+Message-ID: <YbRL2glGzjfZkVbH@B-P7TQMD6M-0146.local>
+Mail-Followup-To: JeffleXu <jefflexu@linux.alibaba.com>,
+        David Howells <dhowells@redhat.com>, chao@kernel.org,
+        tao.peng@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, linux-cachefs@redhat.com,
+        bo.liu@linux.alibaba.com, linux-fsdevel@vger.kernel.org,
+        xiang@kernel.org, gerry@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, eguan@linux.alibaba.com
+References: <20211210073619.21667-10-jefflexu@linux.alibaba.com>
+ <20211210073619.21667-1-jefflexu@linux.alibaba.com>
+ <292572.1639150908@warthog.procyon.org.uk>
+ <fba8a28b-14c1-bf58-0578-32415c95f55d@linux.alibaba.com>
+ <a95618c5-723d-bfaa-bf7a-48950be8d31d@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a95618c5-723d-bfaa-bf7a-48950be8d31d@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 21:07 +0000, Sean Christopherson wrote:
-> On Thu, Dec 09, 2021, Paolo Bonzini wrote:
-> > On 12/8/21 01:15, Sean Christopherson wrote:
-> > > > @@ -832,8 +832,14 @@ int load_pdptrs(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu, unsigned long cr3)
-> > > >   	if (memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs))) {
-> > > >   		memcpy(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs));
-> > > >   		kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
-> > > > -		/* Ensure the dirty PDPTEs to be loaded. */
-> > > > -		kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
-> > > > +		/*
-> > > > +		 * Ensure the dirty PDPTEs to be loaded for VMX with EPT
-> > > > +		 * enabled or pae_root to be reconstructed for shadow paging.
-> > > > +		 */
-> > > > +		if (tdp_enabled)
-> > > > +			kvm_make_request(KVM_REQ_LOAD_MMU_PGD, vcpu);
-> > > > +		else
-> > > > +			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
-> > > Shouldn't matter since it's legacy shadow paging, but @mmu should be used instead
-> > > of vcpu->arch.mmuvcpu->arch.mmu.
-> > 
-> > In kvm/next actually there's no mmu parameter to load_pdptrs, so it's okay
-> > to keep vcpu->arch.mmu.
-> > 
-> > > To avoid a dependency on the previous patch, I think it makes sense to have this be:
-> > > 
-> > > 	if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
-> > > 		kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOT_CURRENT);
-> > > 
-> > > before the memcpy().
-> > > 
-> > > Then we can decide independently if skipping the KVM_REQ_LOAD_MMU_PGD if the
-> > > PDPTRs are unchanged with respect to the MMU is safe.
-> > 
-> > Do you disagree that there's already an invariant that the PDPTRs can only
-> > be dirty if KVM_REQ_LOAD_MMU_PGD---and therefore a previous change to the
-> > PDPTRs would have triggered KVM_REQ_LOAD_MMU_PGD?
+Hi Jeffle,
+
+On Sat, Dec 11, 2021 at 01:44:47PM +0800, JeffleXu wrote:
 > 
-> What I think is moot, because commit 24cd19a28cb7 ("KVM: X86: Update mmu->pdptrs
-> only when it is changed") breaks nested VMs with EPT in L0 and PAE shadow paging
-> in L2.  Reproducing is trivial, just disable EPT in L1 and run a VM.  I haven't
-> investigating how it breaks things, because why it's broken is secondary for me.
 > 
-> My primary concern is that we would even consider optimizing the PDPTR logic without
-> a mountain of evidence that any patch is correct for all scenarios.  We had to add
-> an entire ioctl() just to get PDPTRs functional.  This apparently wasn't validated
-> against a simple use case, let alone against things like migration with nested VMs,
-> multliple L2s, etc...
+> On 12/11/21 1:23 PM, JeffleXu wrote:
+> > 
+> > 
+> > On 12/10/21 11:41 PM, David Howells wrote:
+> >> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+> >>
+> >>> In demand-read case, the input folio of netfs API is may not the page
+> >>
+> >> "is may not the page"?  I think you're missing a verb (and you have too many
+> >> auxiliary verbs;-)
+> >>
+> > 
+> > Sorry for my poor English... What I want to express is that
+> > 
+> > "In demand-read case, the input folio of netfs API may not be the page
+> > cache inside the address space of the netfs file."
+> > 
+> 
+> By the way, can we change the current address_space based netfs API to
+> folio-based, which shall be more general? That is, the current
+> implementation of netfs API uses (address_space, page_offset, len) tuple
+> to describe the destination where the read data shall be store into.
+> While in the demand-read case, the input folio may not be the page
+> cache, and thus there's no address_space attached with it.
 
-I did validate the *SREGS2* against all the cases I could (like migration, EPT/NPT disabled/etc.
-I even started testing SMM to see how it affects PDPTRs, and patched seabios to use PAE paging.
-I still could have missed something.
+Thanks for your hard effort on this!
 
-But note that qemu still doesn't use that ioctl (patch stuck in review).
+Just a rough look. Could we use a pseudo inode (actually the current
+managed_inode can be used as this) to retain metadata for fscache
+scenarios? (since it's better to cache all metadata rather than drop
+directly, also the alloc_page() - free_page() cycle takes more time).
 
-Best regards,
-	Maxim Levitsky
+Also if my own limited understanding is correct, you could directly
+use file inode pages with netfs_readpage_demand() rather than
+get_meta_page and then memcpy to the file inode pages.
 
+Thanks,
+Gao Xiang
 
 > 
-
-
+> -- 
+> Thanks,
+> Jeffle

@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 036DB471113
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 04:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9373471112
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 04:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244232AbhLKDLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 22:11:08 -0500
-Received: from mga01.intel.com ([192.55.52.88]:30026 "EHLO mga01.intel.com"
+        id S241559AbhLKDLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 22:11:05 -0500
+Received: from mga06.intel.com ([134.134.136.31]:21028 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229886AbhLKDLG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 22:11:06 -0500
+        id S229886AbhLKDLF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Dec 2021 22:11:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639192050; x=1670728050;
+  t=1639192049; x=1670728049;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=krqBOWpoFtXQHy+HYA4bI1jmOc5SN40WXu3YXX3xZoY=;
-  b=J2A/esDZf8UxdsUfOoUzj2Eg3f2pQjXuFsGcvwAt5iADjVz86NCSsyBz
-   ZK9HYem4OrMAEByvX8cPnkxLcbsO/WwQdXcFQH8ZJ7m21ObsJFJKWh3Ru
-   6pS8GcuxCaYqeefQZjpq4JSr6QCEDJ2t4ziJLA1HiArvtHKsGrx7AYsk/
-   aLyRMAVD4ZA8lweoy/0uxbTA1WKqeKMG+E4tdys2LWPm0LrQyWUukM5kI
-   uxse2L4c3PIYAJOzb7JUCQnpxNCrsf+TxODkujK8vVHbUBKkL+Hki91n/
-   G2giJSKus6v/nvNKpd2SmlpLTHLeis8UQE+nuXiISpuwzdXAld/qBDrtH
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="262615590"
+  bh=Wkl6ypfXBpxjSgt0n39zQafNkPJ6cEj3FjcS7h8o+mc=;
+  b=HP8jSeR3bzk2eTfdajSdmRCqhsPPCKIDhzbbdgRV6WTMyi6N79MD2/NT
+   SDQckNltPn3vYguhsVuwm/CfezgUOaaS8yuqYP4z0B3UucREsqjhndznp
+   oNasfIxVpPKfgdVKTiaJUGdKHSy9/ltm+8p+OUKP8m0DMKMepf1+xPNEk
+   mQdngwBw3LR4/7gjuf8BCbiu6vCoh97ODtHP0QytfvsEgKag3C430Tqy1
+   gLk0tvhyunvUdIfjbutAFJRgfTB1/XPn9VI84w6DN/6wWynRU+srp36Mb
+   ScFuXjVd1/lVmMU/U4hyHVDclTd15VZul6a9zKFmWj74rlKyPcOgmzEY6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="299288130"
 X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="262615590"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 19:07:30 -0800
+   d="scan'208";a="299288130"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 19:07:29 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,197,1635231600"; 
-   d="scan'208";a="517495087"
+   d="scan'208";a="680975233"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Dec 2021 19:07:27 -0800
+  by orsmga005.jf.intel.com with ESMTP; 10 Dec 2021 19:07:26 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mvsjO-000416-AH; Sat, 11 Dec 2021 03:07:26 +0000
-Date:   Sat, 11 Dec 2021 11:06:43 +0800
+        id 1mvsjO-00040t-8L; Sat, 11 Dec 2021 03:07:26 +0000
+Date:   Sat, 11 Dec 2021 11:06:49 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH] perf/core: Fix cgroup event list management
-Message-ID: <202112111047.pgCIWSVK-lkp@intel.com>
-References: <20211211000652.1836690-1-namhyung@kernel.org>
+To:     Wander Lairson Costa <wander@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-rt-users@vger.kernel.org,
+        Wander Lairson Costa <wander@redhat.com>
+Subject: Re: [PREEMPT_RT PATCH 2/2] blktrace: switch trace spinlock to a raw
+ spinlock
+Message-ID: <202112111053.CFUB5OjZ-lkp@intel.com>
+References: <20211210204156.96336-3-wander@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211211000652.1836690-1-namhyung@kernel.org>
+In-Reply-To: <20211210204156.96336-3-wander@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Namhyung,
+Hi Wander,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on tip/master linux/master linus/master v5.16-rc4]
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linux/master linus/master v5.16-rc4]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Namhyung-Kim/perf-core-Fix-cgroup-event-list-management/20211211-080810
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a9f4a6e92b3b319296fb078da2615f618f6cd80c
-config: hexagon-randconfig-r045-20211210 (https://download.01.org/0day-ci/archive/20211211/202112111047.pgCIWSVK-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+url:    https://github.com/0day-ci/linux/commits/Wander-Lairson-Costa/Fix-warnings-in-blktrace/20211211-044405
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: nds32-randconfig-r012-20211210 (https://download.01.org/0day-ci/archive/20211211/202112111053.CFUB5OjZ-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/226bdbf0501464bc088d582c02d0495a61a68b7c
+        # https://github.com/0day-ci/linux/commit/78ab0023d3b1ba3f3dc5703b4d4fac1dd24aa0c2
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Namhyung-Kim/perf-core-Fix-cgroup-event-list-management/20211211-080810
-        git checkout 226bdbf0501464bc088d582c02d0495a61a68b7c
+        git fetch --no-tags linux-review Wander-Lairson-Costa/Fix-warnings-in-blktrace/20211211-044405
+        git checkout 78ab0023d3b1ba3f3dc5703b4d4fac1dd24aa0c2
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/events/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash drivers/vfio/ kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/events/core.c:2391:58: error: no member named 'nr_cgroups' in 'struct perf_event_context'
-           if (!ctx->is_active && (!is_cgroup_event(event) || ctx->nr_cgroups > 1)) {
-                                                              ~~~  ^
-   kernel/events/core.c:2867:30: error: no member named 'nr_cgroups' in 'struct perf_event_context'
-               ctx->nr_events && (ctx->nr_cgroups || !is_cgroup_event(event))) {
-                                  ~~~  ^
-   2 errors generated.
+   kernel/trace/blktrace.c: In function '__trace_note_message':
+   kernel/trace/blktrace.c:148:63: warning: parameter 'blkcg' set but not used [-Wunused-but-set-parameter]
+     148 | void __trace_note_message(struct blk_trace *bt, struct blkcg *blkcg,
+         |                                                 ~~~~~~~~~~~~~~^~~~~
+   kernel/trace/blktrace.c: In function 'blk_trace_remove_queue':
+>> kernel/trace/blktrace.c:1611:31: error: passing argument 1 of 'spin_lock_irq' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1611 |                 spin_lock_irq(&running_trace_lock);
+         |                               ^~~~~~~~~~~~~~~~~~~
+         |                               |
+         |                               raw_spinlock_t * {aka struct raw_spinlock *}
+   In file included from include/linux/wait.h:9,
+                    from include/linux/pid.h:6,
+                    from include/linux/sched.h:14,
+                    from include/linux/blkdev.h:5,
+                    from kernel/trace/blktrace.c:10:
+   include/linux/spinlock.h:372:55: note: expected 'spinlock_t *' {aka 'struct spinlock *'} but argument is of type 'raw_spinlock_t *' {aka 'struct raw_spinlock *'}
+     372 | static __always_inline void spin_lock_irq(spinlock_t *lock)
+         |                                           ~~~~~~~~~~~~^~~~
+>> kernel/trace/blktrace.c:1613:33: error: passing argument 1 of 'spin_unlock_irq' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1613 |                 spin_unlock_irq(&running_trace_lock);
+         |                                 ^~~~~~~~~~~~~~~~~~~
+         |                                 |
+         |                                 raw_spinlock_t * {aka struct raw_spinlock *}
+   In file included from include/linux/wait.h:9,
+                    from include/linux/pid.h:6,
+                    from include/linux/sched.h:14,
+                    from include/linux/blkdev.h:5,
+                    from kernel/trace/blktrace.c:10:
+   include/linux/spinlock.h:397:57: note: expected 'spinlock_t *' {aka 'struct spinlock *'} but argument is of type 'raw_spinlock_t *' {aka 'struct raw_spinlock *'}
+     397 | static __always_inline void spin_unlock_irq(spinlock_t *lock)
+         |                                             ~~~~~~~~~~~~^~~~
+   cc1: some warnings being treated as errors
 
 
-vim +2391 kernel/events/core.c
+vim +/spin_lock_irq +1611 kernel/trace/blktrace.c
 
-  2368	
-  2369	/*
-  2370	 * Remove the event from a task's (or a CPU's) list of events.
-  2371	 *
-  2372	 * If event->ctx is a cloned context, callers must make sure that
-  2373	 * every task struct that event->ctx->task could possibly point to
-  2374	 * remains valid.  This is OK when called from perf_release since
-  2375	 * that only calls us on the top-level context, which can't be a clone.
-  2376	 * When called from perf_event_exit_task, it's OK because the
-  2377	 * context has been detached from its task.
-  2378	 */
-  2379	static void perf_remove_from_context(struct perf_event *event, unsigned long flags)
-  2380	{
-  2381		struct perf_event_context *ctx = event->ctx;
-  2382	
-  2383		lockdep_assert_held(&ctx->mutex);
-  2384	
-  2385		/*
-  2386		 * Because of perf_event_exit_task(), perf_remove_from_context() ought
-  2387		 * to work in the face of TASK_TOMBSTONE, unlike every other
-  2388		 * event_function_call() user.
-  2389		 */
-  2390		raw_spin_lock_irq(&ctx->lock);
-> 2391		if (!ctx->is_active && (!is_cgroup_event(event) || ctx->nr_cgroups > 1)) {
-  2392			__perf_remove_from_context(event, __get_cpu_context(ctx),
-  2393						   ctx, (void *)flags);
-  2394			raw_spin_unlock_irq(&ctx->lock);
-  2395			return;
-  2396		}
-  2397		raw_spin_unlock_irq(&ctx->lock);
-  2398	
-  2399		event_function_call(event, __perf_remove_from_context, (void *)flags);
-  2400	}
-  2401	
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1599  
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1600  static int blk_trace_remove_queue(struct request_queue *q)
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1601  {
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1602  	struct blk_trace *bt;
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1603  
+c3dbe541ef7775 kernel/trace/blktrace.c Jan Kara                 2020-06-05  1604  	bt = rcu_replace_pointer(q->blk_trace, NULL,
+85e0cbbb8a7953 kernel/trace/blktrace.c Luis Chamberlain         2020-06-19  1605  				 lockdep_is_held(&q->debugfs_mutex));
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1606  	if (bt == NULL)
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1607  		return -EINVAL;
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1608  
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1609  	if (bt->trace_state == Blktrace_running) {
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1610  		bt->trace_state = Blktrace_stopped;
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23 @1611  		spin_lock_irq(&running_trace_lock);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1612  		list_del_init(&bt->running_list);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23 @1613  		spin_unlock_irq(&running_trace_lock);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1614  		relay_flush(bt->rchan);
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1615  	}
+5afedf670caf30 kernel/trace/blktrace.c Zhihao Cheng             2021-09-23  1616  
+a6da0024ffc19e kernel/trace/blktrace.c Jens Axboe               2017-11-05  1617  	put_probe_ref();
+c780e86dd48ef6 kernel/trace/blktrace.c Jan Kara                 2020-02-06  1618  	synchronize_rcu();
+ad5dd5493a55e4 kernel/trace/blktrace.c Li Zefan                 2009-03-27  1619  	blk_trace_free(bt);
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1620  	return 0;
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1621  }
+c71a896154119f block/blktrace.c        Arnaldo Carvalho de Melo 2009-01-23  1622  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

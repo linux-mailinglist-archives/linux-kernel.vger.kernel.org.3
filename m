@@ -2,66 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 800D1470F40
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE15B470F43
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 01:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345319AbhLKANt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Dec 2021 19:13:49 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47926 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237677AbhLKANs (ORCPT
+        id S1345382AbhLKAO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Dec 2021 19:14:27 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:51722 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237677AbhLKAO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Dec 2021 19:13:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2205B821CD;
-        Sat, 11 Dec 2021 00:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBB6C00446;
-        Sat, 11 Dec 2021 00:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639181410;
-        bh=XTd7xMkG1GwnlufuROlO6RhP4W7ZmTqO0LM0XAobut0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=foBxdVX5lktVOorJCrWFH77aBfdkvIdpUboWb+B7j6QPmRRBz15JcuNASbcthfPmH
-         zMEiMtZ/N3hsd6sI81D2qlpP2TI4uhxQZ+3r0M4k9uwzVKsMFqDvtdHO12s1ihKG3A
-         kA/mrvkivl7H0Gn3LQ99Ql7/b0J/3XflnryL0H6qep+vjaZX6Tg875O9rHy7ZRw4Re
-         zzrpPf/WHkAR9BU+11uRTufFenb1s7MYpiz9aPjVQIlMUDTJzdTF/N6bECaP72xXl7
-         rFZXfkdMxVZvzR6EvBvhfW8oHoIgjAryJK/vhQs/8NIEzLBVtmQUeRyoiG+kmVw9ar
-         lNv0JbKSL/riw==
-Date:   Fri, 10 Dec 2021 16:10:08 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.14 0/3] POLLFREE fix for 4.14
-Message-ID: <YbPsYMTboeZPa7Tw@sol.localdomain>
-References: <20211211000223.50630-1-ebiggers@kernel.org>
+        Fri, 10 Dec 2021 19:14:26 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639181448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UyP3TRH2iWjdq5r7E4NtaTCjbCea3W5A7JaubhEgR60=;
+        b=tt4xN8CIwj4OENid7IXT63tCLVnDpex6pyMXFnXPTsP9ztIZ+J/cT/inMEad29mARgktUC
+        CZFYoxBTQmo/XXc20tak+FLtpw4sBQqlTR/eWqr8wrvdtHlWLX8ZPYRDgO+4hGd+63wJjM
+        1Q2JPZaPt2JfJyME5M8T32Xplk4YRaFA2dVny4uk0Ur8P6hhC5JzzaOIkK7YZUkEp0MmWp
+        cZUGUPrIHA7GnKDPr5gXX/LPaSELecYp17CLL4VnTvz6dwslvsTp2Z2BSvI9ttuaZnOUyC
+        C6vVeF5goAeUdJd+fhy0qpEpO2BfaPP80VyE/bkLkn62X2QS20cbYu+BnHt+Ew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639181448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UyP3TRH2iWjdq5r7E4NtaTCjbCea3W5A7JaubhEgR60=;
+        b=K3f0EOt34Ew7ARu8PxC8R10wpkywTX74rU4HKWS+pcsps5ch7Fr1N4WV6XlBdnaAd2YXwd
+        FftW5iUjxv/ZkpCA==
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        pbonzini@redhat.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        yang.zhong@intel.com
+Subject: Re: [PATCH 15/19] kvm: x86: Save and restore guest XFD_ERR properly
+In-Reply-To: <20211208000359.2853257-16-yang.zhong@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-16-yang.zhong@intel.com>
+Date:   Sat, 11 Dec 2021 01:10:47 +0100
+Message-ID: <87pmq4vw54.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211211000223.50630-1-ebiggers@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 04:02:20PM -0800, Eric Biggers wrote:
-> This kernel version doesn't have aio poll, but the fix for POLLFREE with
-> exclusive waiters is still applicable to it.  This series resolves
-> conflicts in all three patches, mostly due to POLLHUP having been
-> renamed to EPOLLHUP in more recent kernels.
-> 
-> Eric Biggers (3):
->   wait: add wake_up_pollfree()
->   binder: use wake_up_pollfree()
->   signalfd: use wake_up_pollfree()
-> 
->  drivers/android/binder.c | 21 +++++++++------------
->  fs/signalfd.c            | 12 +-----------
->  include/linux/wait.h     | 26 ++++++++++++++++++++++++++
->  kernel/sched/wait.c      |  7 +++++++
->  4 files changed, 43 insertions(+), 23 deletions(-)
-> 
+On Tue, Dec 07 2021 at 19:03, Yang Zhong wrote:
+> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> index 5089f2e7dc22..9811dc98d550 100644
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -238,6 +238,7 @@ bool fpu_alloc_guest_fpstate(struct fpu_guest *gfpu)
+>  	fpstate->is_guest	= true;
+>  
+>  	gfpu->fpstate		= fpstate;
+> +	gfpu->xfd_err           = XFD_ERR_GUEST_DISABLED;
 
-Sorry, ignore this one; there's a build error in kernel/sched/wait.c.
+This wants to be part of the previous patch, which introduces the field.
 
-- Eric
+>  	gfpu->user_xfeatures	= fpu_user_cfg.default_features;
+>  	gfpu->user_perm		= fpu_user_cfg.default_features;
+>  	fpu_init_guest_permissions(gfpu);
+> @@ -297,6 +298,7 @@ int fpu_swap_kvm_fpstate(struct fpu_guest *guest_fpu, bool enter_guest)
+>  		fpu->fpstate = guest_fps;
+>  		guest_fps->in_use = true;
+>  	} else {
+> +		fpu_save_guest_xfd_err(guest_fpu);
+
+Hmm. See below.
+
+>  		guest_fps->in_use = false;
+>  		fpu->fpstate = fpu->__task_fpstate;
+>  		fpu->__task_fpstate = NULL;
+> @@ -4550,6 +4550,9 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+>  		kvm_steal_time_set_preempted(vcpu);
+>  	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+>  
+> +	if (vcpu->preempted)
+> +		fpu_save_guest_xfd_err(&vcpu->arch.guest_fpu);
+
+I'm not really exited about the thought of an exception cause register
+in guest clobbered state.
+
+Aside of that I really have to ask the question why all this is needed?
+
+#NM in the guest is slow path, right? So why are you trying to optimize
+for it?
+
+The straight forward solution to this is:
+
+    1) Trap #NM and MSR_XFD_ERR write
+
+    2) When the guest triggers #NM is takes an VMEXIT and the host
+       does:
+
+                rdmsrl(MSR_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+
+       injects the #NM and goes on.
+
+    3) When the guest writes to MSR_XFD_ERR it takes an VMEXIT and
+       the host does:
+
+           vcpu->arch.guest_fpu.xfd_err = msrval;
+           wrmsrl(MSR_XFD_ERR, msrval);
+
+      and goes back.
+
+    4) Before entering the preemption disabled section of the VCPU loop
+       do:
+       
+           if (vcpu->arch.guest_fpu.xfd_err)
+                      wrmsrl(MSR_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+
+    5) Before leaving the preemption disabled section of the VCPU loop
+       do:
+       
+           if (vcpu->arch.guest_fpu.xfd_err)
+                      wrmsrl(MSR_XFD_ERR, 0);
+
+It's really that simple and pretty much 0 overhead for the regular case.
+
+If the guest triggers #NM with a high frequency then taking the VMEXITs
+is the least of the problems. That's not a realistic use case, really.
+
+Hmm?
+
+Thanks,
+
+        tglx

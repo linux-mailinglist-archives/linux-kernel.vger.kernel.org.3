@@ -2,107 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0954714E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 18:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F594714E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 18:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbhLKRNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 12:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbhLKRNF (ORCPT
+        id S231553AbhLKRWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 12:22:46 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59644 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229688AbhLKRWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 12:13:05 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937FEC061714;
-        Sat, 11 Dec 2021 09:13:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=FtEEvNYzIIV30TW9aa2QNWVH5p4vZD+jTMyATj033bs=; b=VCNCFWUeWm4Ai+ylUU6uaKXfD1
-        97yeNlRQnLrkoF7Y8X2+b9iQt6pcjBdPn7X8dQgeg/+XqxF81Jeh7uDGUt7P+K3UavTEo5rkVr5TJ
-        cWAKnAAbvwlNgzT//uQCAYQNlU6mMzmwJPTfNjNCVx/A3rSnjSjCPbG0NfiEsbrvxWQ1b2r8kFXXq
-        D67alaSIzo/4hQrqJO7j1+rnTAzvmjHuEb2CGkoMzAfaejUHjtrNMUerKGZNky7OnOXbewzCn7B6Q
-        Mi95k0Rqbgri+cyU3V87V7T9oExXZn6p9W+3X59rFEMjsJiRUMg222YLJmnxjL+sY9DaexUeZkUAA
-        wUwJRC9Q==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mw5vd-000mAc-Qw; Sat, 11 Dec 2021 17:12:59 +0000
-Message-ID: <58cb0905-3725-1aa7-4a32-317fa96e89f8@infradead.org>
-Date:   Sat, 11 Dec 2021 09:12:53 -0800
+        Sat, 11 Dec 2021 12:22:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 300BCB807E7;
+        Sat, 11 Dec 2021 17:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC295C004DD;
+        Sat, 11 Dec 2021 17:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639243363;
+        bh=El6ouO7d2qFEnbF2ztCBnEVpl9HgaAVXZ8f7fX/HH84=;
+        h=Date:From:To:Cc:Subject:From;
+        b=daXfTlTI/6JF1AFFjVl66cGwweFx3XW3o5ScqTwPfuAtWRwQ3hCZ9f+zPuWcDpkMU
+         GIEzoF2k6xK0uO+3NHJ6FHBS+BwId1qQ6o7BozKkXM08KNKKxXbv/8WawxLrHHm7+k
+         0BnAcOkt0wmPmROwx468stzs1PLu2CyQ6qRpHMqC1sAObzDuXZiAqpIKkjvG0AIO7m
+         JmK9oJnSDP/eeNIAwaSlfHLgjAYMMP8VnZ/flNnGve5ZsKk+PmA+0zrAKJmZv+9KaQ
+         BQh4z3hLVzh5wS8UHYGLnm+eO7zE9CY2Pd52Qi0a93A+kxgmoiSOL5EgulZN0vMRzd
+         KQ4iFfmSaKhFQ==
+Date:   Sat, 11 Dec 2021 09:22:42 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+Subject: [GIT PULL] xfs: bug fixes for 5.16-rc4
+Message-ID: <20211211172242.GH1218082@magnolia>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 2/2] docs: address some text issues with css/theme support
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@protonmail.com>, Akira Yokosawa <akiyks@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <cover.1639212812.git.mchehab+huawei@kernel.org>
- <b0b166025019f7cc4f122bd789c79ba28cc2d29d.1639212812.git.mchehab+huawei@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <b0b166025019f7cc4f122bd789c79ba28cc2d29d.1639212812.git.mchehab+huawei@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+Please pull this branch for 5.16-rc4 that fixes a race between a
+readonly remount process and other processes that hold a file IOLOCK on
+files that previously experienced copy on write, that could result in
+severe filesystem corruption if the filesystem is then remounted rw.  I
+think this is fairly rare (since the only reliable reproducer I have
+that fits the second criteria is the experimental xfs_scrub program),
+but the race is clear, so we still need to fix this.
 
-On 12/11/21 00:57, Mauro Carvalho Chehab wrote:
-> Fix:
-> - overriden ->overridden
-> - some whitespace issues introduced at the css/theme
->   Makefile help.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+The branch merges cleanly against upstream as of a few minutes ago.
+Please let me know if anything else strange happens during the merge
+process.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+--D
 
-Thanks.
+The following changes since commit e445976537ad139162980bee015b7364e5b64fff:
 
-> ---
-> 
-> See [PATCH 0/2] at: https://lore.kernel.org/all/cover.1639212812.git.mchehab+huawei@kernel.org/
-> 
->  Documentation/Makefile             | 4 ++--
->  Documentation/doc-guide/sphinx.rst | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/Makefile b/Documentation/Makefile
-> index c9543b63dc6a..9f4bd42cef18 100644
-> --- a/Documentation/Makefile
-> +++ b/Documentation/Makefile
-> @@ -159,8 +159,8 @@ dochelp:
->  	@echo  '  make SPHINX_CONF={conf-file} [target] use *additional* sphinx-build'
->  	@echo  '  configuration. This is e.g. useful to build with nit-picking config.'
->  	@echo
-> -	@echo '   make DOCS_THEME={sphinx-theme} selects a different Sphinx theme.'
-> +	@echo  '  make DOCS_THEME={sphinx-theme} selects a different Sphinx theme.'
->  	@echo
-> -	@echo '   make DOCS_CSS={a .css file} adds a DOCS_CSS override file for html/epub output.'
-> +	@echo  '  make DOCS_CSS={a .css file} adds a DOCS_CSS override file for html/epub output.'
->  	@echo
->  	@echo  '  Default location for the generated documents is Documentation/output'
-> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-> index 7fb6e6168bbb..673cbb769c08 100644
-> --- a/Documentation/doc-guide/sphinx.rst
-> +++ b/Documentation/doc-guide/sphinx.rst
-> @@ -147,7 +147,7 @@ By default, the build will try to use the Read the Docs sphinx theme:
->  
->  If the theme is not available, it will fall-back to the classic one.
->  
-> -The Sphinx theme can be overriden by using the ``DOCS_THEME`` make variable.
-> +The Sphinx theme can be overridden by using the ``DOCS_THEME`` make variable.
->  
->  To remove the generated documentation, run ``make cleandocs``.
->  
-> 
+  xfs: remove incorrect ASSERT in xfs_rename (2021-12-01 17:27:48 -0800)
 
--- 
-~Randy
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.16-fixes-3
+
+for you to fetch changes up to 089558bc7ba785c03815a49c89e28ad9b8de51f9:
+
+  xfs: remove all COW fork extents when remounting readonly (2021-12-07 10:17:29 -0800)
+
+----------------------------------------------------------------
+Fixes for 5.16-rc4:
+ - Fix a data corruption vector that can result from the ro remount
+   process failing to clear all speculative preallocations from files
+   and the rw remount process not noticing the incomplete cleanup.
+
+----------------------------------------------------------------
+Darrick J. Wong (1):
+      xfs: remove all COW fork extents when remounting readonly
+
+ fs/xfs/xfs_super.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)

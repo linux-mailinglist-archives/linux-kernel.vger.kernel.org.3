@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C272471473
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFA6471476
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 16:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbhLKP2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 10:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhLKP2y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 10:28:54 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A1BC061714;
-        Sat, 11 Dec 2021 07:28:53 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id t26so23192051lfk.9;
-        Sat, 11 Dec 2021 07:28:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W+78tT7DvCusUKi3cge1x8a7J0QAvGLFsCIq9fOA3Jg=;
-        b=Sude1OT0MoUDKhSge1VsW272aWD8foR6kHOpmaKMbMBCZQUdAsS6scox7f7o5IXR+T
-         IMmPBAkAq/FpwQ+lMHlC3Q5gkf6vjm5cVEOihn4QXJY5gNzvFpYY+1DHFbMaDO15Sik2
-         17eRm7Q1qL3xVcHzN8g3w9Hkrqy/jzaDwVUupEiA78Vto/JKBvAnGdmmLsKOV1DcvNzp
-         4L14bPdPfzCd1hc/RFrKuOiJWcQObtq9vBbdJUVr7/w1ruoTMny7Y1jRER8enzlMhynY
-         PGtmifZp1cmIGl0oGqympohgatR9RVDcEqpZdR7PBSwoU4yDpfngR0cWfVSVd2EEBa7f
-         Z1XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=W+78tT7DvCusUKi3cge1x8a7J0QAvGLFsCIq9fOA3Jg=;
-        b=ca8NAPzSruo0I32d1wQWTAsZDaLOu1u2cF0lOLi4mL/BSyVaDxNHMjzhA0F/MwBGWo
-         WyBaSPb6woR/mQA/XHkT8JOMi23r5KRFV96FRvcXrOPQ7egsG7fqhmjwiI5WQj1mlO1F
-         qgh0w1cZfvD6qMW65636Cdh8tdCWfkEggcMUbOkbcZQE5SzyT9aYX8+vdlnIX3saOV9m
-         m0hCVt08QCtvfvp1YoVNdD6kbljok0QqEWUN2ZMyYXQ8wkngvdEd85Jin+azxTBXDr8e
-         s9tHoIVMkIX9znzwZGUANw7IAOCU3oY7LiuAZgWmcnJ0KtOLaFJKPNl6xI+LsnKcZXmj
-         LaDQ==
-X-Gm-Message-State: AOAM532qW50/oaQqdopeQ1vkNMO+cBD0yOtYZmNwaJDDDlvbKRjMMowW
-        WiLy/fUjOb048sAFTRQcbdly2LFfwNY=
-X-Google-Smtp-Source: ABdhPJxv4TmikjxD/+ijVr0Ajj6JZ0fjBKhtPlbI7Zdod50NnI3w0fRp49A6Ele6jDbhVL82+SUhxA==
-X-Received: by 2002:ac2:5e89:: with SMTP id b9mr9969602lfq.616.1639236531938;
-        Sat, 11 Dec 2021 07:28:51 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id d24sm666372lfb.139.2021.12.11.07.28.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Dec 2021 07:28:51 -0800 (PST)
-Subject: Re: [PATCH v5 05/24] ARM: tegra: Add device-tree for ASUS Transformer
- EeePad TF101
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        David Heidelberg <david@ixit.cz>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        Nikola Milosavljevic <mnidza@outlook.com>,
-        Ion Agorria <ion@agorria.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        Thomas Graichen <thomas.graichen@gmail.com>,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211208173609.4064-1-digetx@gmail.com>
- <20211208173609.4064-6-digetx@gmail.com> <YbN2T5guOfIRLXg1@orome>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6c33db23-dfb9-bea2-f10f-02b9ed1558eb@gmail.com>
-Date:   Sat, 11 Dec 2021 18:28:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231340AbhLKP3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 10:29:06 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:52390 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231321AbhLKP3E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 10:29:04 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id C45A182A; Sat, 11 Dec 2021 09:29:01 -0600 (CST)
+Date:   Sat, 11 Dec 2021 09:29:01 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+Subject: Re: [PATCH v6 15/17] ima: Use mac_admin_ns_capable() to check
+ corresponding capability
+Message-ID: <20211211152901.GA25170@mail.hallyn.com>
+References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
+ <20211210194736.1538863-16-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <YbN2T5guOfIRLXg1@orome>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210194736.1538863-16-stefanb@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-10.12.2021 18:46, Thierry Reding пишет:
-> Again, the memory-controller node needs to be sorted differently. There
-> are other occurrences of this throughout the file.
+On Fri, Dec 10, 2021 at 02:47:34PM -0500, Stefan Berger wrote:
+> Use mac_admin_ns_capable() to check corresponding capability to allow
+> read/write IMA policy without CAP_SYS_ADMIN but with CAP_MAC_ADMIN.
+> 
+> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  include/linux/capability.h      | 6 ++++++
+>  security/integrity/ima/ima_fs.c | 2 +-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/capability.h b/include/linux/capability.h
+> index 65efb74c3585..991579178f32 100644
+> --- a/include/linux/capability.h
+> +++ b/include/linux/capability.h
+> @@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+>  		ns_capable(ns, CAP_SYS_ADMIN);
+>  }
+>  
+> +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
+> +{
+> +	return ns_capable(ns, CAP_MAC_ADMIN) ||
+> +		ns_capable(ns, CAP_SYS_ADMIN);
+> +}
+> +
+>  /* audit system wants to get cap info from files as well */
+>  int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
+>  			   const struct dentry *dentry,
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index a136d14f29ec..090ee85bfa3a 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -440,7 +440,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+>  #else
+>  		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+>  			return -EACCES;
+> -		if (!capable(CAP_SYS_ADMIN))
+> +		if (!mac_admin_ns_capable(user_ns))
 
-Memory-controller node is placed on purpose in the end of DT to keep it
-readable. Those huge timings make it unreadable. I don't want to change
-it. Alternatively, we can factor out timings into separate DTSI, but
-it's unnecessary to me. I leave it up to you to decide what to do.
+Sorry if I'm missing something.  But I'm looking at your tree's
+version of ima_update_policy() and failing to see where it adds
+extra capability checks.  Note that any unprivileged user can
+unshare a user namespace, map its hostuid to nsuid 0, and pass
+ns_capable(CAP_MAC_ADMIN).
 
-I'll reorder couple nodes alphabetically, those that don't have address
-and were missed by me. The by-address nodes are all okay to me.
+Likewise, a host uid 0 process which does not have CAP_MAC_ADMIN
+can create a new user namespace, map hostuid 0 to nsuid 0, and
+have CAP_MAC_ADMIN against the new userns.
 
-Please feel free to reorder nodes to yours liking by yourself while
-applying if I'll miss something.
+Somewhere you need to be checking for privilege against either
+the parent ns or the init_user_ns.  I'm not seeing where that's
+being done.  Can you point me to it?
+
+
+>  			return -EPERM;
+>  		return ima_seq_open(filp, &ima_policy_seqops);
+>  #endif
+> -- 
+> 2.31.1

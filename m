@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DE34716A1
+	by mail.lfdr.de (Postfix) with ESMTP id B0CAC4716A2
 	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 22:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbhLKVPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 16:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        id S232676AbhLKVPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 16:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbhLKVOu (ORCPT
+        with ESMTP id S232235AbhLKVOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:14:50 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E9C0698E2;
-        Sat, 11 Dec 2021 13:14:48 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id bn20so18476619ljb.8;
-        Sat, 11 Dec 2021 13:14:47 -0800 (PST)
+        Sat, 11 Dec 2021 16:14:51 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE5DC061371;
+        Sat, 11 Dec 2021 13:14:49 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id t26so24123526lfk.9;
+        Sat, 11 Dec 2021 13:14:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8UCI8bCAcWvgd0XmjK0VX0ydFqVgFSWgTDGV3YE2DHU=;
-        b=eoLPFr13zdIVg7Lve2uNUycUavo6V3af8EAMNGZq56HSc6gnM/3UiBp9GJ54CF54Up
-         7LpWUO1JVsegypn5nPLqmEGDTH11wjTemmmCsUfxrNQS73O+iTUIXM3AH8yYeLLeyRfm
-         fryIGdoXwDGc2ocmck96X3mVAmZltZ2eYj3jvLW7SSIq1yEdtf+JDkBUH8teABgsnC42
-         FsctymUlzWGoVsB7FHpFrl8L0Rfltj4Pct+yow6vAhUOM/Hvcc5l76q30UPhesIpm2Ye
-         A8B+5jCswcsrONd9La5COang4VcluJ5T4ZZzC3Ss09MTLJBuicr40pvlVFw279rAIiby
-         JCGA==
+        bh=PKt9YnkKlXD514q7tFDbDrGJcN8l4g6hHAMjM2/Z7es=;
+        b=Ufo/uyD/7MQAkaRBq1aCIdThdkb9eD/xhxhYeqGBVd5zR4MVNGnjNx3V7NPArCpEas
+         vV60tL6etbtCEfucj3MmstWAWhp7PM5yJc1HlU3cTpAM7p1VkhNBWo4rXrO7DdtbPaAv
+         xdoXwc8pfkBBk7PtKvPofKwmb7SEyPu8m840WlUsy9Ndij15wxQbKgEztbANsOzPb030
+         zJ636g5p/LgefmZmBKxyoxLBXUZoHC0xur554nF6Wcr4y/YwoUrv7PiQVVvY+UPorwHr
+         GfyyJdHpHCOawzwmfEWGQk2AtEbPKSmbVgwQrfxnoDJhz0g/b2dB0M8JYIHltqfW9Rv5
+         ZmNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8UCI8bCAcWvgd0XmjK0VX0ydFqVgFSWgTDGV3YE2DHU=;
-        b=C2PQVigt/DCpYHP7KAYG8Ll3mYGMiZc64hjVzZrDAsLsm3Hzd/JQXF4nhJapVIhMwA
-         1Q8IiBtnzjRmPPQ5fBvsMil17exy6gsvKMYmZ3n2Q4lOM5SFVB14XZXlLv+GP+uLhCxt
-         Q85ck/dDoxf3bnArP9gSOEh6zBIeEaUCtaVhnsyHT/NlRuLmcLYz/+o0YP6jvOjYFL4+
-         7OXLd1v8iChAFep0P3LqWT+5woPLKIqeGvfAGhlzpDMUbkQxOE3tZqDFNjPXSSlR7deh
-         C8UhVLReDUx0p+zK5tqXI9bCcp4j0E5wUsE6lu35ieiGWophOcMmABoTlX8DqVbcSKQO
-         CvBQ==
-X-Gm-Message-State: AOAM531SGvX22huqMa9f4DBgR/vFWplPHc5CwKY7IhRzqIDGMhyotQoe
-        gkTL7zWMsoiJkqXY+giqO6s=
-X-Google-Smtp-Source: ABdhPJxZjiCVI6kMfPRr+ybct/YopeznkQYMrlhpr5hx2u4yhmmt/I7RDNzPXE44L0hDvW0vRIQQrg==
-X-Received: by 2002:a2e:9605:: with SMTP id v5mr20927508ljh.177.1639257286325;
-        Sat, 11 Dec 2021 13:14:46 -0800 (PST)
+        bh=PKt9YnkKlXD514q7tFDbDrGJcN8l4g6hHAMjM2/Z7es=;
+        b=F6LWwTgXFWqs6u0dWEVmWnzXLY7OHWyywmWuRjsqxuiD+BBHNbNC6rLWwjf6pValCn
+         7w2AA2lRt3OEDclbcGYM0mz07gCIiKjJOPrhh5rCL4kPEymAZF+Sm7dvYuSnXut920U1
+         OhrN/ucrWOvVegxTvnZhfEuVxS9uQWq4O3jFSXxXgVnAx3HizLObQwQF8Ubzdgs/o3wl
+         nzK4bDC/VmyJJLBl+staYDDCSgJVSEZqdsnH54tqC4bhT2OCvzDQmqLrUGho3l83D7MK
+         YI3Tja4tnMwzb4IDvcfQ6r4+PFjhLbua3GVdXxvji87CVwon70tHjKOm+srGf0FUWw32
+         b4kg==
+X-Gm-Message-State: AOAM533Ks4d3fNH2U0/cgO4dG5gSlNP++aNgsIDL8qC2Q4BjOjwIqi2N
+        xzVQvPvEmLitozRqs8eWcmw=
+X-Google-Smtp-Source: ABdhPJwkLnozsS6NrjlYv2VXKYKVjLTRvnF/RbHq790CdC4zn+qSXYGmLPUY2wDZf6wyvlr+3DG4oQ==
+X-Received: by 2002:a19:614f:: with SMTP id m15mr19852748lfk.187.1639257287302;
+        Sat, 11 Dec 2021 13:14:47 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.45
+        by smtp.gmail.com with ESMTPSA id v6sm765927lfp.61.2021.12.11.13.14.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 13:14:46 -0800 (PST)
+        Sat, 11 Dec 2021 13:14:47 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -69,9 +69,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 24/28] ARM: tegra: Enable video decoder on Tegra114
-Date:   Sun, 12 Dec 2021 00:14:08 +0300
-Message-Id: <20211211211412.10791-25-digetx@gmail.com>
+Subject: [PATCH v6 25/28] ARM: tegra: Remove stray #reset-cells property
+Date:   Sun, 12 Dec 2021 00:14:09 +0300
+Message-Id: <20211211211412.10791-26-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211211211412.10791-1-digetx@gmail.com>
 References: <20211211211412.10791-1-digetx@gmail.com>
@@ -81,71 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Bambura <jenneron@protonmail.com>
+From: Thierry Reding <treding@nvidia.com>
 
-Add Video Decoder Engine node to Tegra114 device-tree.
+The Ouya board specifies the #reset-cells property for the GPIO
+controller. Since the GPIO controller doesn't provide reset controls
+this is not needed, so they can be dropped.
 
-Signed-off-by: Anton Bambura <jenneron@protonmail.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra114.dtsi | 37 +++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ arch/arm/boot/dts/tegra30-ouya.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/tegra114.dtsi b/arch/arm/boot/dts/tegra114.dtsi
-index d487bc180f09..3d08764401ce 100644
---- a/arch/arm/boot/dts/tegra114.dtsi
-+++ b/arch/arm/boot/dts/tegra114.dtsi
-@@ -17,6 +17,19 @@ memory@80000000 {
- 		reg = <0x80000000 0x0>;
+diff --git a/arch/arm/boot/dts/tegra30-ouya.dts b/arch/arm/boot/dts/tegra30-ouya.dts
+index 4259871b76c9..fd64aadc472a 100644
+--- a/arch/arm/boot/dts/tegra30-ouya.dts
++++ b/arch/arm/boot/dts/tegra30-ouya.dts
+@@ -70,7 +70,6 @@ hdmi@54280000 {
+ 
+ 	gpio: gpio@6000d000 {
+ 		gpio-ranges = <&pinmux 0 0 248>;
+-		#reset-cells = <1>;
  	};
  
-+	sram@40000000 {
-+		compatible = "mmio-sram";
-+		reg = <0x40000000 0x40000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0x40000000 0x40000>;
-+
-+		vde_pool: sram@400 {
-+			reg = <0x400 0x3fc00>;
-+			pool;
-+		};
-+	};
-+
- 	host1x@50000000 {
- 		compatible = "nvidia,tegra114-host1x";
- 		reg = <0x50000000 0x00028000>;
-@@ -253,6 +266,30 @@ gpio: gpio@6000d000 {
- 		*/
- 	};
- 
-+	vde@6001a000 {
-+		compatible = "nvidia,tegra114-vde";
-+		reg = <0x6001a000 0x1000>, /* Syntax Engine */
-+		      <0x6001b000 0x1000>, /* Video Bitstream Engine */
-+		      <0x6001c000  0x100>, /* Macroblock Engine */
-+		      <0x6001c200  0x100>, /* Post-processing Engine */
-+		      <0x6001c400  0x100>, /* Motion Compensation Engine */
-+		      <0x6001c600  0x100>, /* Transform Engine */
-+		      <0x6001c800  0x100>, /* Pixel prediction block */
-+		      <0x6001ca00  0x100>, /* Video DMA */
-+		      <0x6001d800  0x400>; /* Video frame controls */
-+		reg-names = "sxe", "bsev", "mbe", "ppe", "mce",
-+			    "tfe", "ppb", "vdma", "frameid";
-+		iram = <&vde_pool>; /* IRAM region */
-+		interrupts = <GIC_SPI  9 IRQ_TYPE_LEVEL_HIGH>, /* Sync token interrupt */
-+			     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>, /* BSE-V interrupt */
-+			     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>; /* SXE interrupt */
-+		interrupt-names = "sync-token", "bsev", "sxe";
-+		clocks = <&tegra_car TEGRA114_CLK_VDE>;
-+		reset-names = "vde", "mc";
-+		resets = <&tegra_car 61>, <&mc TEGRA114_MC_RESET_VDE>;
-+		iommus = <&mc TEGRA_SWGROUP_VDE>;
-+	};
-+
- 	apbmisc@70000800 {
- 		compatible = "nvidia,tegra114-apbmisc", "nvidia,tegra20-apbmisc";
- 		reg = <0x70000800 0x64>, /* Chip revision */
+ 	pinmux@70000868 {
 -- 
 2.33.1
 

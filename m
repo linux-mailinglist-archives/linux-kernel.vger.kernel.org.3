@@ -2,159 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 173B3471602
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 21:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCBB471609
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 21:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbhLKUFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 15:05:33 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59138 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbhLKUFc (ORCPT
+        id S230139AbhLKUHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 15:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229591AbhLKUHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 15:05:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 99857CE0A68;
-        Sat, 11 Dec 2021 20:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6BE0C341C3;
-        Sat, 11 Dec 2021 20:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639253128;
-        bh=qeCm/LKaezkiKrTscTfvAMTl8B5t7FsCgi2rQzCUItE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=puBnUmRFUOjWrx+LwEOma2RsAt0l+p/1YivjU5rXFjlecFvUcUAgULA95uSYH2oQm
-         FDFpIXZfLf5kmjwUnC9ts/GCuXLoBmIbPQqccT9rdqjYfp7P87nk2jyQ7obvC+zsZ+
-         gVvOjaLHALfo7rvIPDkZhQxyW+bvfRQem0+jYvgNaXOUXo+VwTHcUG2mbq1d3tdEYG
-         pD+jemFrpzvk1l1L3T8kqwiJaG2I3+Z+JVE2zI1HVYDpnjg+Lya4vHoztPKM0hCblb
-         og6uJmLNCxd+AWMTeDDFma/20SAPr0m+ytn4x4/BIl2J7sSd6auhmcujAjl+nqm6lP
-         XRLdtDQiYPYng==
-Received: by mail-ed1-f51.google.com with SMTP id w1so39871307edc.6;
-        Sat, 11 Dec 2021 12:05:28 -0800 (PST)
-X-Gm-Message-State: AOAM530tDusrGFYtIX4bUJPt4jy4XrO2s1nGlH4LyGf23BQHu2MmY/M5
-        MNy+EUJ26VeboeurWVNVJMBD8ITJ9Zsx7KifUQ==
-X-Google-Smtp-Source: ABdhPJz6oQ9/ea55Af7SWA6OUXDM4KBuM9Bev/q3Uf53wZn1RxRMeyn57YfpSjZuONVgP96T1zkE3DQebWnJ1Q7LP+0=
-X-Received: by 2002:a05:6402:440f:: with SMTP id y15mr50056378eda.22.1639253126974;
- Sat, 11 Dec 2021 12:05:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20211125144053.774-1-olivier.moysan@foss.st.com>
- <20211125144053.774-2-olivier.moysan@foss.st.com> <1637875562.357461.2858318.nullmailer@robh.at.kernel.org>
- <237f56b3-0597-2526-a182-f1fbdd327338@foss.st.com> <Yaf4jiZIp8+ndaXs@robh.at.kernel.org>
- <627777a4-7458-88ed-e7c5-d11e3db847b5@foss.st.com>
-In-Reply-To: <627777a4-7458-88ed-e7c5-d11e3db847b5@foss.st.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Sat, 11 Dec 2021 14:05:15 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+ZVU=DR0vXq6YOsrK9-MoUp5DJ6RKHmtL-ZGSxQ7qyJQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+ZVU=DR0vXq6YOsrK9-MoUp5DJ6RKHmtL-ZGSxQ7qyJQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] ASoC: dt-bindings: stm32: i2s: add
- audio-graph-card port
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Cc:     Olivier MOYSAN <olivier.moysan@foss.st.com>,
+        Sat, 11 Dec 2021 15:07:07 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4323C061714;
+        Sat, 11 Dec 2021 12:07:06 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id k37so24037531lfv.3;
+        Sat, 11 Dec 2021 12:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=V6k4x0T7Yqsqy3kx1XMpcmFJUv6IYhjnuml9BcYpxwI=;
+        b=OH2nqH0ctm+57VkHHrVdtF+TIRGAm4m3tyrLhEMZwyWSAeoe9TwQXNs5+AK2A1efD8
+         4uqHyHkagVUMsjabIwBubnhph4guhBG5AyjGg2lbOI5/f7ClBPWD1cdjyh1E8mo0/7kM
+         9Jyvn31rGpL93pbe8qvuf/Ojfuz/5T1T4ei5oomMiRbzpmTGn3kcdUZxPQWQ8RyPquon
+         Bmm7p2WAtZ59yOB8+HH6Mzup+xK5/9zA129VLDsWdT2ZACE3+lThpQtA/KcZ2uw592sE
+         1pzh3SmwKFmVMlkCTeMoN6gBj+qtcsvAiQ/P6/JtFZYmmxIUa/2UKnQ0F2AVLV1xZkkm
+         4S6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=V6k4x0T7Yqsqy3kx1XMpcmFJUv6IYhjnuml9BcYpxwI=;
+        b=sUddSG76mMJYPa75L6z5RrmM6nVkwfdvgedK60hkZjg+yKNyan5bR+MM5Inxl3nset
+         5qUXJDmPsYWVZTxpK830aLSH2fOMZJ/II+dhb02FzSabNfwd2x14QAUoM3z53e4Q87aw
+         wWWlK5+DI7SQa+SQo7eByHqxK5iz6LwaKBYVw8WrGfU8jZuYBm+poMnZCNekDPMOgBIb
+         IcitMBbQJBYEk6isPMRMZpMEGKDyW8aozAKLQ4O5aNgRdcEj+yYrfXxDluVWIH0RIY5D
+         RA3UPIOdbKqk54G+BuSomlgUtELxaYYwdMThKALY2A9KqRKEM36UQqoqyKoPOkOxb26Z
+         d7GA==
+X-Gm-Message-State: AOAM533NyeWhnORMTnppjUm82o7bZ7tNsdsX2lw8ayRfb5gCI9xC/nAJ
+        I14WLlmImkdllmOxcRcB4QscF18UXbU=
+X-Google-Smtp-Source: ABdhPJzgtXQot799eer8wTzEJr1EcVdUEu+BL+wJIYOLmb/XRVe5ysC0wpdCJ5YOdO2YXZAXiwoYDQ==
+X-Received: by 2002:a05:6512:14b:: with SMTP id m11mr18738289lfo.681.1639253224777;
+        Sat, 11 Dec 2021 12:07:04 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id 76sm720330ljj.69.2021.12.11.12.07.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Dec 2021 12:07:04 -0800 (PST)
+Subject: Re: [PATCH 2/2] i2c: tegra: Add SMBus block read and SMBus alert
+ functions
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Olivier Moysan <olivier.moysan@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639062321-18840-3-git-send-email-akhilrajeev@nvidia.com>
+ <72ea6030-5f2d-4f51-3a42-8386c3638c65@gmail.com>
+ <BN9PR12MB52733A443AA5D5A690CE7132C0719@BN9PR12MB5273.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b004092e-5662-c9e0-71d8-d45a0635e1be@gmail.com>
+Date:   Sat, 11 Dec 2021 23:07:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <BN9PR12MB52733A443AA5D5A690CE7132C0719@BN9PR12MB5273.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 7:52 AM Alexandre TORGUE
-<alexandre.torgue@foss.st.com> wrote:
->
-> Hi Rob
->
-> On 12/1/21 11:34 PM, Rob Herring wrote:
-> > On Fri, Nov 26, 2021 at 11:25:27AM +0100, Olivier MOYSAN wrote:
-> >> Hi Rob,
-> >>
-> >> On 11/25/21 10:26 PM, Rob Herring wrote:
-> >>> On Thu, 25 Nov 2021 15:40:50 +0100, Olivier Moysan wrote:
-> >>>> The STM2 I2S DAI can be connected via the audio-graph-card.
-> >>>> Add port entry into the bindings.
-> >>>>
-> >>>> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
-> >>>> ---
-> >>>>    Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 5 +++++
-> >>>>    1 file changed, 5 insertions(+)
-> >>>>
-> >>>
-> >>> Running 'make dtbs_check' with the schema in this patch gives the
-> >>> following warnings. Consider if they are expected or the schema is
-> >>> incorrect. These may not be new warnings.
-> >>>
-> >>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> >>> This will change in the future.
-> >>>
-> >>> Full log is available here: https://patchwork.ozlabs.org/patch/1559750
-> >>>
-> >>>
-> >>> audio-controller@4000b000: 'port' does not match any of the regexes: '^port@[0-9]', 'pinctrl-[0-9]+'
-> >>>     arch/arm/boot/dts/stm32mp157a-dk1.dt.yaml
-> >>>     arch/arm/boot/dts/stm32mp157c-dk2.dt.yaml
-> >>>
-> >>
-> >> This warning is not a new one.
-> >>
-> >> The i2s2 node in stm32mp15xx-dkx.dtsi would require the following binding:
-> >> port:
-> >>      $ref: audio-graph-port.yaml#
-> >>      unevaluatedProperties: false
-> >>
-> >> However the spi binding requires to introduce a unit address:
-> >> patternProperties:
-> >>    '^port@[0-9]':
-> >>      $ref: audio-graph-port.yaml#
-> >>      unevaluatedProperties: false
-> >>
-> >> The warning can be removed by re-ordering the bindings patches in the serie,
-> >> as "additionalProperties: true" makes the check more tolerant on extra
-> >> properties.
-> >
-> > That's never right.
-> >
-> >> The patch "ASoC: dt-bindings: stm32: i2s: add audio-graph-card port" can
-> >> even be merely dropped.
-> >> So, I suggest to resend the serie without audio-graph-card patch.
-> >
-> > Only if you aren't using audio-graph-card.
-> >
-> >>
-> >> Does it sound too permissive to you ?
-> >
-> > I think perhaps you need to combine the schemas into 1. Or you need to
-> > restructure your dtsi files such that you only add spi specific
-> > properties when spi mode is enabled and only add i2s specific properties
-> > when i2s mode is enabled. Or use the /delete-property/ directive.
->
-> Initially the aim of this series was to fix a "make W=1" warnings seen
-> on spi and i2s nodes (duplicate unit-address). Moving both nodes in a
-> common node + using a different compatible depending on SPI or I2S usage
-> sounded good) but it is not enough. In this series the common node is
-> named as following: "spi2s2: spi@4000b000". It is fine for a spi usage
-> but if we want to use this "common node" with I2S compatible and
-> specific bindings, the node name remains spi@... and then specific spi
-> checks are done. For this with this series applied we got this issue
-> reported by spi-controller.yaml:
->
-> spi@4000b000: port@0: 'compatible' is a required property
->
-> So, if we use two separates nodes we got W=1 warning and if we use a
-> common node we got yaml check issue. One possibility would be to use a
-> common node with a new node name (for example i2spi@...) but I think it
-> is not acceptable.
+10.12.2021 12:38, Akhil R пишет:
+>>> +struct tegra_i2c_smbalert {
+>> smbalert isn't a word, should be smbus_alert. Same for the GPIO name and
+>> other places.
+> The actual notation, I suppose, is SMBALERT#. If you see it is better to make it 
+> smbus_alert, I can update it. 'smbalert' also looks good to me though.
 
-It is acceptable, see this thread[1].
+smbus_alert is better
 
-Rob
+>>> +     struct i2c_smbus_alert_setup alert_data;
+>>> +     struct i2c_client *ara;
+>> What "ara" stands for? Please use meaningful names, like alert_dev for
+>> example.
+> i2c-smbus.c uses the same name to refer to the smbus alert i2c_client.
+> I thought to use the same for consistency with the core and other drivers.
+> It stands for "Alert response address".
 
-[1] https://lore.kernel.org/all/20211203183517.11390-1-semen.protsenko@linaro.org/
+Please add doc comment for the struct with the explained name then.
+
+>> I don't see where this member is used at all, please remove it.
+> Wouldn't it be good to have it stored so that it is handy if using any other 
+> function later, like i2c_handle_smbus_alert. Moreover, I thought to keep
+> the usage consistent with other drivers having similar function.
+
+Please add it only once it will be actually needed.

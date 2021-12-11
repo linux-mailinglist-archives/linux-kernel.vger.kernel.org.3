@@ -2,237 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1E64715B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913EE4715B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 20:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbhLKTax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 14:30:53 -0500
-Received: from mga11.intel.com ([192.55.52.93]:13514 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229642AbhLKTaw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 14:30:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639251052; x=1670787052;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lQoo0ISAzgQZzm/56C60vnkWnhIFvX23VxzFKfIBtoM=;
-  b=ifU/lrnVFB4SEJm3a2v+LXz1KzaCs9+NjhdMkrpff9mzxMcqEGrteZc/
-   RiMCKO5zuxTXb+YIdWG79P+d/ewtG+y1m9CBd4wnLDR144oCUAovEmUdc
-   J6rwUv3TpgRZ7Rxb/gysovJ/eH58j/B8AVCj1tvs93vwXgkgNs+J1zcuN
-   ySpRCxnI/BPvujNMXVeYpF2hPQ1H1gh7AqnnbScr1DOnW33LG9seHtjtm
-   s2BBfjfsNsdpsfc+NjqbEuF3/Hnv5PUT83jSt9y1VIt7/GZjhIMeq28bg
-   d8mb0Lbwo22hwLR8kpswZQjK7U3NNt5XT9namxCjLWda4+zc1W0r7MOza
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="236076204"
-X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
-   d="scan'208";a="236076204"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 11:30:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,198,1635231600"; 
-   d="scan'208";a="464136583"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Dec 2021 11:30:50 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mw853-00050T-NU; Sat, 11 Dec 2021 19:30:49 +0000
-Date:   Sun, 12 Dec 2021 03:30:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [chao:dev 2/5] fs/f2fs/xattr.c:691:20: warning: format specifies
- type 'unsigned long' but the argument has type 'unsigned int'
-Message-ID: <202112120347.GGgB0mVe-lkp@intel.com>
+        id S231891AbhLKTcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 14:32:21 -0500
+Received: from mail-eopbgr90070.outbound.protection.outlook.com ([40.107.9.70]:45777
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229642AbhLKTcT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 14:32:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PJdE2UAqs5/iGX5QUsKiBma8MoCYzwBEdCr8YY1loJfBrNBZFrjDHrKaiDXS8FZSaUksfKogPPA2WMOd0IHxj24tENT5VOSzd9Xdd+DOEKAy1naVmslgEle3z+EkrzRQX1UNwjOMuvPBbWpnuCZte3B0mtZwya2CZ0qgbk+9Rvk1lQ6Ng0sSuQsxVSuy2kUabKLLg/GaaCX7FGYKA9CltxuSeOg5O5kZnbq/Oxa5Pmtfasf2dBy7MNnGVaSXtuJpxDJhR4Ug/kfCWl8d+/XLvm5A2GUUNedWW0uxgkduXSO2ubXQnorFrhE9eMmNkAlvSrJVKsYryKMS124O7MNmJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PTetijeQxvWBcrtzxwuFhVt1YoOtdJBLrtAq6JFPUaw=;
+ b=dLU/3X5Liikl/aFIMe/qr2hXWJ+BnQyzBxl7KrqJQXMreLW0vFxsGySFvL7S9sPJ47gt2t3oNQcpkpNhfrluvlXWED2iX4s/PSFI9YhQ2iriU5uQobjXHBsEvMbFke5Evod4Qv+dLaf38Y/zkD+iCgcPttxpEN3Azqj6VelEYebGqGmHvSpAIpKSRm4322JYVWVtIKNgrPxcrm5UwnyHDQXN0SBSiX5SWSyRaj9zr9u3WKM5UrpibtYrNvS8nba59r4aHRKY7mDLtfznL7mCbnOn52x0c+7eR9slF4JLdFlhyGZNiPm12+ug4/fsjnNpiZPQfJIJRpBSzs78jRLqXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB1798.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Sat, 11 Dec
+ 2021 19:32:16 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f%2]) with mapi id 15.20.4778.016; Sat, 11 Dec 2021
+ 19:32:16 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Tiezhu Yang' <yangtiezhu@loongson.cn>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 0/2] kdump: simplify code
+Thread-Topic: [PATCH v2 0/2] kdump: simplify code
+Thread-Index: AQHX7j/lEISC3k0/GEOgnQgt9TGtpawtk5YAgAAbhIA=
+Date:   Sat, 11 Dec 2021 19:32:16 +0000
+Message-ID: <2dad13be-dcf7-3a96-c287-9452f0dc027e@csgroup.eu>
+References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+ <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
+In-Reply-To: <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 243e5ee6-941f-4526-a241-08d9bcdcf0c7
+x-ms-traffictypediagnostic: MRZP264MB1798:EE_
+x-microsoft-antispam-prvs: <MRZP264MB17985C26E0E7C14221CA2123ED729@MRZP264MB1798.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KHIjdBO53e1GYN19+ZAQ7eMWAc7SeTVJg65zL4IJ6pGaTYGGtDZpKEQ1TyrgmUyNWL8AvUIRs3iF/i7kp8xLSnqliJqGJHD1vUBy1Sc86/SOVp01wgjmbrSsdSJ2bhjbG7V64R/CmKbKgMlvjggb9oyovHwRcDlaxMw5SIsXqDBHQ6EkJDM+BP3MYoB52eXCGy3olHTpNvnM27g/i/qsZiDQSn7zTCs6MD0Wb5bEIYOpw30vHU4TlNue8lHAIw5i+jbZwvhLwI6R/tUjOyXLMHT0eTImjB04VcpykIIw8BMMv9vM+iZUKD8YH6LfqaexTs+oCfCChM5lxxu1A6p89Gt1NNJyKSIWnQmczjLHE4/WcAom147r6qoELeP9nFnkGEdXAgXU84gR1MAObLD1IS+l86RWuBXj4yTS1hjzddr3VOLoa7Ett8JQLmA+a4HRW2nowWLG9ox7NkwUpsXUhRCuh1kgxPWT/CT87KRcEmiHyFrgNyAA1lBnilaUAnX4hbpA1mH7S8BJ4CnhBhe5oH0hncJcoa5S3Xq/6WrBBqgKe9c8UE5BpirDiHmXTQkp16BFbaHltzo61kHX69yeIjL8g4Zg17isNytJJ1eMw2+JnQhhIYW9QENE/gyRSJ1vtr8Ckrx4XHe6dEeDsN45A0yrMiRjUGfvpQyzNySSsVBmVZ6/MPJepvf0Zw8C5FXsBU1odWiSFLdLWRhsrxCVeGG9zuJq91qwK1jGn3mx3CRqJQMRcHJbzt2U2WJZ0Tg8fuZc2f2rQfypADVxyonw0w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(7416002)(122000001)(4744005)(4326008)(31686004)(2906002)(8676002)(6512007)(8936002)(76116006)(6486002)(316002)(91956017)(110136005)(64756008)(71200400001)(66946007)(6506007)(36756003)(66446008)(66476007)(31696002)(508600001)(44832011)(26005)(38070700005)(66574015)(66556008)(2616005)(86362001)(54906003)(5660300002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YVFDYWhkKzJiNjFMd3NSY081L3pVVU5jZmhTd2JKRWYyblEwdkJMRFRqbjl4?=
+ =?utf-8?B?c2U3YVpHWlp4dEtvNDlLT1d2ZGZNNExHLzZURFlNSWxwMmVFdDIzUXJxRjVY?=
+ =?utf-8?B?K0EyaUdMMHEyVmZKckZrZ0EvTnVwN2t1Q0JMY3I0cjRvbWVEeTd2elNqVzAz?=
+ =?utf-8?B?SWNXSHN5MjIzZWxxUU9rMHUvd1lJL056TzNsZXYrY0pSQU5GcjhxZGFkaWgz?=
+ =?utf-8?B?cCtpQjZkeWRUbGVLMEpGNVhsTTVmdHppRDlZcVN4akJybkU3WS8yWG11cUpa?=
+ =?utf-8?B?WHdKN0poMmlWWDZGZ09Db1dnZE5PNUpvS0NxSDl3ejVjOEx5RDNMdjROaWdi?=
+ =?utf-8?B?VHh2YkVLZ3dKZktKVGlLY0NXam85dWFUV05CVm9OOE5mQVdEYXNoeDNXM1A4?=
+ =?utf-8?B?M0gvRVdPTklJcU41dGRuYWdIRWJmMjlGSzVlU0Z1OXlCN3ZjSlQ5Zk5ZOTZC?=
+ =?utf-8?B?Mk5RMWZCZk04R2U4Z2JuZDdUYUJTeWE3SFhENzBoQW5oVDNmL0ZVSmw3OVV2?=
+ =?utf-8?B?U0NFaE9Ma0t3d3FTYmIxcTVQazFTbHhuUDVXZzBoUzY1a04vRmtkbS9CSFJw?=
+ =?utf-8?B?TUtzMkZNWEI2K0dUNHA3NjRnTDBBbkVxN0hSK1phRkpLVXRhRnhFQXlNUnoz?=
+ =?utf-8?B?K2I0c0wzS2J2VHYxalh0UHh3L0hFZDFBbktBcHZUeHVza3FGVXlPQWxnQU80?=
+ =?utf-8?B?TlpYbFlBWUpMbDF2MDIwdktWNHo5TmxhajFncHVjK3pkRHlWeHhQckpPRDFF?=
+ =?utf-8?B?NFZ1MC9sQlZDUG9oUkI4K2lnd1BzMDVDVkdZdVNGR1E0Y09XTWpUeGZSL0J1?=
+ =?utf-8?B?RmlReXVNQ3BIVUNKUXlsUWlCYWcvTS80VXhmckFOQnQ2cEdQak0zd2lsR2Zi?=
+ =?utf-8?B?WmNHa2Fma2xadnl3UHF4MlNZYVJaeGttRUtmbXdtMVplMldsUFc3OUJoSjJw?=
+ =?utf-8?B?U0dqdGlFUnNJV1BPNzZHQThhUFllVHQ0bHZ5aEtGbExTK1JIODdrN290cmNH?=
+ =?utf-8?B?ZmpCbEU5TnV2a2h3Ukd2V3dLN2RoaWtUcXY4aWVMcHZXbFdlSVU2VnVQLzho?=
+ =?utf-8?B?cVFtdE1qamdOS2RmYmE1dytVUDF4L0RQbjV6M1JnS0pkaUU2M2I2NitPMWZ3?=
+ =?utf-8?B?bHhxem1xR2FWZUdGcm1Pcm5NZ0oyanRHMXEveVhZeU1IWFZ5YnVHUWYrYUlZ?=
+ =?utf-8?B?VFZMcVNEU0hyZjNxSnBIY0xwM2I4TVdaN21VSmtTMjFQUTBMbVljMEpjNWZB?=
+ =?utf-8?B?QnJZLy80Zks0RldaZG8wSG9nUHIxR0ZOZzhtRGNHbDBHTlJLS21WdHkwakUx?=
+ =?utf-8?B?eEpUMEtBaDlGS2VNTFhaYzM4ckthcTAzUHVjZE9TOFRtdVNXTzZZOFFHYXhi?=
+ =?utf-8?B?S3RRanJuM1U4dVpPS0VscDFzV0YrRllDWjZmRm1tRVZ6RUNmWmhKaG5FeGts?=
+ =?utf-8?B?VGxCTjYyQ0xxTjI2dEdhcGlJeWRNQWJvSGZ4YVhZRXk1RWZkM1RxQVhVbVV2?=
+ =?utf-8?B?ZkZHUzFtVHJnVEVJNDN2MEtreDlWaDRpWm9yNEZ3Z2xBL0FDZnh3TFpUOFFt?=
+ =?utf-8?B?YlBDVWtVWGN3bFdaSmV4RWpqOFUxS3ZBTkpRdlJEQlRocVVPa3BsR2RVMkwv?=
+ =?utf-8?B?eVQ1WVg1QWRsS0h0MHZhTEVmSUNvQWlMWXJGeTNQZjY4a0ZwMU9QVEpGVStW?=
+ =?utf-8?B?QlVDWk1MUlh6L2dxQy8vZk0yNDJvNUZMZXh1R1laYzIwREVCcFJFQ0o4NElR?=
+ =?utf-8?B?RlRjeVI2S1h1UEVUalF5eXRnODh4QnBJVlA2OWhPSkt4OVhXajFlWGFvc3Bw?=
+ =?utf-8?B?TDFkZlZiazdqSHQwclVDNnFiMEY1cXlwR3RhQWNRUHk2R0UydklXRWdVMkNh?=
+ =?utf-8?B?NER2K1FvUEcxUS84alVkM2xLampQMzVicjlUVWlIRFhSOWROWURBRExrd3M2?=
+ =?utf-8?B?dE1FKys4dWlNTU9jMHZkeW9KTUZNMlFyQW8xb0cwYm1BdDNGQnc4MEtWM1Fr?=
+ =?utf-8?B?OVZIRlJBUG5rTDFRYytTblpGR2psTjM5dTJhRy90RmlNVHN2dk4xSUx0a2tX?=
+ =?utf-8?B?azZhUGN3RjlpNHZFZTlvNWZSR0VqbDNySWpxMGVkUjk2eG5lN1owemw0TTlD?=
+ =?utf-8?B?SWN4Q2dVbjU3RWI4RlJ5VHBrS2kzV28za05ldTBOcTVtUDZMMUs0RlZ2VlFo?=
+ =?utf-8?B?TEZScmZhb1Nra3ZZdXc2V1dwYVplWm9IVUVwZ2NXNktaaHJhR3RPQmJ3VjVp?=
+ =?utf-8?Q?RAFp9PEiuB8fVEp/7OOhAF85A8n0h/9avlWfEQ6Wow=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C87DC5B0CA5964499922F1A3114944DC@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 243e5ee6-941f-4526-a241-08d9bcdcf0c7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Dec 2021 19:32:16.7570
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2Nxh8VujqM3VOVtmVx7i4TaGxPzq+wkc5XfWvT4rDHXFzuhScdEMjTsNR7NcOzMygCKmaT3+60cNBSJDz+Gn04/RQzdI9IgOZXGzkblffJI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1798
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git dev
-head:   0f9e12d0df416311a310873984101b0b6b4ab054
-commit: 0514b392fdbe2e6681e4fb513ce78b2d05d51496 [2/5] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
-config: i386-buildonly-randconfig-r003-20211211 (https://download.01.org/0day-ci/archive/20211212/202112120347.GGgB0mVe-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=0514b392fdbe2e6681e4fb513ce78b2d05d51496
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao dev
-        git checkout 0514b392fdbe2e6681e4fb513ce78b2d05d51496
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/f2fs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/f2fs/xattr.c:691:20: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-                                           inode->i_ino, ENTRY_SIZE(last));
-                                                         ^~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:2247:35: note: expanded from macro 'f2fs_err'
-           f2fs_printk(sbi, KERN_ERR fmt, ##__VA_ARGS__)
-                                     ~~~    ^~~~~~~~~~~
-   fs/f2fs/xattr.h:62:27: note: expanded from macro 'ENTRY_SIZE'
-   #define ENTRY_SIZE(entry) (XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + \
-                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +691 fs/f2fs/xattr.c
-
-   629	
-   630	static int __f2fs_setxattr(struct inode *inode, int index,
-   631				const char *name, const void *value, size_t size,
-   632				struct page *ipage, int flags)
-   633	{
-   634		struct f2fs_xattr_entry *here, *last;
-   635		void *base_addr, *last_base_addr;
-   636		int found, newsize;
-   637		size_t len;
-   638		__u32 new_hsize;
-   639		int error;
-   640	
-   641		if (name == NULL)
-   642			return -EINVAL;
-   643	
-   644		if (value == NULL)
-   645			size = 0;
-   646	
-   647		len = strlen(name);
-   648	
-   649		if (len > F2FS_NAME_LEN)
-   650			return -ERANGE;
-   651	
-   652		if (size > MAX_VALUE_LEN(inode))
-   653			return -E2BIG;
-   654	
-   655		error = read_all_xattrs(inode, ipage, &base_addr);
-   656		if (error)
-   657			return error;
-   658	
-   659		last_base_addr = (void *)base_addr + XATTR_SIZE(inode);
-   660	
-   661		/* find entry with wanted name. */
-   662		here = __find_xattr(base_addr, last_base_addr, index, len, name);
-   663		if (!here) {
-   664			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has corrupted xattr",
-   665									inode->i_ino);
-   666			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
-   667			error = -EFSCORRUPTED;
-   668			goto exit;
-   669		}
-   670	
-   671		found = IS_XATTR_LAST_ENTRY(here) ? 0 : 1;
-   672	
-   673		if (found) {
-   674			if ((flags & XATTR_CREATE)) {
-   675				error = -EEXIST;
-   676				goto exit;
-   677			}
-   678	
-   679			if (value && f2fs_xattr_value_same(here, value, size))
-   680				goto same;
-   681		} else if ((flags & XATTR_REPLACE)) {
-   682			error = -ENODATA;
-   683			goto exit;
-   684		}
-   685	
-   686		last = here;
-   687		while (!IS_XATTR_LAST_ENTRY(last)) {
-   688			if ((void *)(last) + sizeof(__u32) > last_base_addr ||
-   689				(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
-   690				f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %lu",
- > 691						inode->i_ino, ENTRY_SIZE(last));
-   692				set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
-   693				error = -EFSCORRUPTED;
-   694				goto exit;
-   695			}
-   696			last = XATTR_NEXT_ENTRY(last);
-   697		}
-   698	
-   699		newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
-   700	
-   701		/* 1. Check space */
-   702		if (value) {
-   703			int free;
-   704			/*
-   705			 * If value is NULL, it is remove operation.
-   706			 * In case of update operation, we calculate free.
-   707			 */
-   708			free = MIN_OFFSET(inode) - ((char *)last - (char *)base_addr);
-   709			if (found)
-   710				free = free + ENTRY_SIZE(here);
-   711	
-   712			if (unlikely(free < newsize)) {
-   713				error = -E2BIG;
-   714				goto exit;
-   715			}
-   716		}
-   717	
-   718		/* 2. Remove old entry */
-   719		if (found) {
-   720			/*
-   721			 * If entry is found, remove old entry.
-   722			 * If not found, remove operation is not needed.
-   723			 */
-   724			struct f2fs_xattr_entry *next = XATTR_NEXT_ENTRY(here);
-   725			int oldsize = ENTRY_SIZE(here);
-   726	
-   727			memmove(here, next, (char *)last - (char *)next);
-   728			last = (struct f2fs_xattr_entry *)((char *)last - oldsize);
-   729			memset(last, 0, oldsize);
-   730		}
-   731	
-   732		new_hsize = (char *)last - (char *)base_addr;
-   733	
-   734		/* 3. Write new entry */
-   735		if (value) {
-   736			char *pval;
-   737			/*
-   738			 * Before we come here, old entry is removed.
-   739			 * We just write new entry.
-   740			 */
-   741			last->e_name_index = index;
-   742			last->e_name_len = len;
-   743			memcpy(last->e_name, name, len);
-   744			pval = last->e_name + len;
-   745			memcpy(pval, value, size);
-   746			last->e_value_size = cpu_to_le16(size);
-   747			new_hsize += newsize;
-   748		}
-   749	
-   750		error = write_all_xattrs(inode, new_hsize, base_addr, ipage);
-   751		if (error)
-   752			goto exit;
-   753	
-   754		if (index == F2FS_XATTR_INDEX_ENCRYPTION &&
-   755				!strcmp(name, F2FS_XATTR_NAME_ENCRYPTION_CONTEXT))
-   756			f2fs_set_encrypted_inode(inode);
-   757		f2fs_mark_inode_dirty_sync(inode, true);
-   758		if (!error && S_ISDIR(inode->i_mode))
-   759			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_CP);
-   760	
-   761	same:
-   762		if (is_inode_flag_set(inode, FI_ACL_MODE)) {
-   763			inode->i_mode = F2FS_I(inode)->i_acl_mode;
-   764			inode->i_ctime = current_time(inode);
-   765			clear_inode_flag(inode, FI_ACL_MODE);
-   766		}
-   767	
-   768	exit:
-   769		kfree(base_addr);
-   770		return error;
-   771	}
-   772	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+DQoNCkxlIDExLzEyLzIwMjEgw6AgMTg6NTMsIERhdmlkIExhaWdodCBhIMOpY3JpdMKgOg0KPiBG
+cm9tOiBUaWV6aHUgWWFuZw0KPj4gU2VudDogMTEgRGVjZW1iZXIgMjAyMSAwMzozMw0KPj4NCj4+
+IHYyOg0KPj4gICAgLS0gYWRkIGNvcHlfdG9fdXNlcl9vcl9rZXJuZWwoKSBpbiBsaWIvdXNlcmNv
+cHkuYw0KPj4gICAgLS0gZGVmaW5lIHVzZXJidWYgYXMgYm9vbCB0eXBlDQo+IA0KPiBJbnN0ZWFk
+IG9mIGhhdmluZyBhIGZsYWcgdG8gaW5kaWNhdGUgd2hldGhlciB0aGUgYnVmZmVyIGlzIHVzZXIg
+b3Iga2VybmVsLA0KPiB3b3VsZCBpdCBiZSBiZXR0ZXIgdG8gaGF2ZSB0d28gc2VwYXJhdGUgYnVm
+ZmVyIHBvaW50ZXJzLg0KPiBPbmUgZm9yIGEgdXNlciBzcGFjZSBidWZmZXIsIHRoZSBvdGhlciBm
+b3IgYSBrZXJuZWwgc3BhY2UgYnVmZmVyLg0KPiBFeGFjdGx5IG9uZSBvZiB0aGUgYnVmZmVycyBz
+aG91bGQgYWx3YXlzIGJlIE5VTEwuDQo+IA0KPiBUaGF0IHdheSB0aGUgZmxhZyBpcyBuZXZlciBp
+bmNvcnJlY3RseSBzZXQuDQo+IA0KDQpJdCdzIGEgdmVyeSBnb29kIGlkZWEuDQoNCkkgd2FzIHdv
+cnJpZWQgYWJvdXQgdGhlIGNhc3RzIGZvcmNpbmcgdGhlIF9fdXNlciBwcm9wZXJ0eSBhd2F5IGFu
+ZCBiYWNrLiANCldpdGggdGhhdCBhcHByb2FjaCB3ZSB3aWxsIHByZXNlcnZlIHRoZSBfX3VzZXIg
+dGFncyBvbiB1c2VyIGJ1ZmZlcnMgYW5kIA0KZW5hYmxlIHNwYXJzZSBjaGVja2luZy4NCg0KVGhl
+IG9ubHkgbGl0dGxlIGRyYXdiYWNrIEkgc2VlIGlzIHRoYXQgYXBwYXJlbnRseSBHQ0MgZG9lc24n
+dCBjb25zaWRlciANCnRoZSBOVUxMIHZhbHVlIGFzIGEgY29uc3RhbnQgYW5kIHRoZXJlZm9yZSBk
+b2Vzbid0IHBlcmZvcm0gY29uc3RhbnQgDQpmb2xkaW5nIG9uIHBvaW50ZXJzLiBOb3Qgc3VyZSBp
+ZiB0aGlzIGlzIGEgcHJvYmxlbSBoZXJlLg0KDQpDaHJpc3RvcGhl

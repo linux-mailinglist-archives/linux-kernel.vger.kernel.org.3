@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6C4471550
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4555C47155D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 19:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbhLKSTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 13:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S231748AbhLKSio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 13:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbhLKSTd (ORCPT
+        with ESMTP id S231734AbhLKSin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 13:19:33 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A880C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:19:33 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id k9so2401229wrd.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:19:33 -0800 (PST)
+        Sat, 11 Dec 2021 13:38:43 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E54C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:38:43 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id 14so13976172ioe.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 10:38:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=9NDT879wS/nwGa0+oPAPDSKpJbWbahGU+iiAATt/+Qw=;
-        b=ox8hFGdzrGUxFRAtJ+X3KI0hZUXChXbLC+TT/m5cBV3sRKz1/JL7UOtu6kysjfKnqQ
-         9amV5+M0y3YyWWGTmf/o0C3MKwUNJquXgi0pndUuq2ixxFe3GMdwP8nnoUL9YjKLJXhS
-         connbw7WpcTO4oiVDHhnM9WXpqnQw7gff0TMbYZXxnrGRld7+TWkUfd3Ll9OJqs8oeCG
-         dyfq2IHPmSnP5ZDgEfbPbDIyPKvBjC6rNn+SHWiLzqMuETGtsZhKgdfhqyKOjl47zuaW
-         A04vLdfIDxH8WBd1Rno9bksHWV7+YOk+bLJniDFowXvclBqfax7uXhhJXbtg833XqC/Q
-         IjmQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5p3GJXSJ4l1Ge129QsL/p+gQMy3VOuyRrx3Fb3Lj0Z0=;
+        b=bfBrgMgSUp3u8RSBZmqpH3U+1VTInLj4TNrA/kTb1ublTptkIw9/KBHZeRPyLwgCrl
+         sJQ768kqEnH6q+Oo2WzZDNPqeaezxDmJe08DhAN1pJTv/TI/wKUP0DlaYID4o1LaM8L8
+         /p0u+/vNpUgL1ki+a7G9VuIf4Mpr9UFCeZ1gCVaTqlbefMCs50RfhElwbcK1N935KBK/
+         BIny7N8qY2WXJEJFAEagDInHhki8e+ariXXZJnJE6kMWBpLNpLorteJSPpnoc2edlsWT
+         fgrTAOgbNBa/ocD18s27E+1W3gHXwYXoD5iDjsc5+zp8W5zrradXCesvoGhRkefcAurY
+         NT6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=9NDT879wS/nwGa0+oPAPDSKpJbWbahGU+iiAATt/+Qw=;
-        b=qMslAvlhioQ0M/HeTkG8BPJtszNcxbM6gx1FyL0x2pC4MYlCB206fSaWUsJNhnwOa4
-         Jfd99ggUn1ipJkL9em1JfqQAZH2W9rkXZKRrhifJ7I8QxdcBjXEaKqh/6/BOshNshY8y
-         UrRgzsJSLfCPJKtvul2AX1s9OBI3AXoXpwp8IbFKkVVTRNYooJapGc+3XenmhSteVlu2
-         Wn9eNNvL/NIwTslWMcd9yCdwm26jWko8zdvTG5OTuGut4htqHueSAca75QTwVppV9XNd
-         nzBtds6MpBottkOSeghqHwcMD3HWkYElUtaU1AsF9CiJQrSlHKI6bmNUg9l8nuO1ZqZx
-         +tEg==
-X-Gm-Message-State: AOAM533wcEy3Dalkv4QqDR3bsrqnUXt5MBIc73ielkTO7uXgO6kMj8bO
-        h34DR92f7p3U8bqkalEbUAI=
-X-Google-Smtp-Source: ABdhPJxw3iZyjzTstiCTL2RognPOfsmpt7Ucfo0D+Ovgg9T0j4z0vfgm+JRtNsf/LMJhWyfsTs9zBg==
-X-Received: by 2002:adf:cf11:: with SMTP id o17mr21013002wrj.554.1639246771916;
-        Sat, 11 Dec 2021 10:19:31 -0800 (PST)
-Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id h18sm6062833wre.46.2021.12.11.10.19.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Dec 2021 10:19:31 -0800 (PST)
-Message-ID: <fbae9be5-c847-0b6b-f755-312a2af1e285@gmail.com>
-Date:   Sat, 11 Dec 2021 18:19:30 +0000
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5p3GJXSJ4l1Ge129QsL/p+gQMy3VOuyRrx3Fb3Lj0Z0=;
+        b=Yx4BlINVowSQ16fVoRJIevxHe6Y+tJpdaIbDyYxuB0lw+cAT+dMt+LaWmUbOyzd31q
+         4mg6UM0RKIYgz3oftcZVuvuJld49rvaCbGglHcjv1p8yPcttGBJQs7Xhu6sB+rvUXLoE
+         DL6Txsz5ZNKr3YU53K6jPkoyT6J08eeeXMuffiCpTgs4Yb+bXyWkF2RKSex0FDHNLGiJ
+         uTB5eeh1IbgSRF+dsvHj2wyvP3h8VhF/ov7F0vS7wm7CBXiTmUkJHfLvrjqQ+FKu75cc
+         tvQ8w9e9Um4EYyKlNDE1UodqIFrVLl+KrhvuBczWIQSwZGU94d5SybChILlyhv11J9h3
+         FcLg==
+X-Gm-Message-State: AOAM533EmNEOElyD7Vg0q6ndCJBrOnnVR2FctnZNIYFgblJbB2HuB+D8
+        lsiQ+clHOCYWy4EV492jTwTA04MNQOMQKOWJP2ua99sJIKfFnQ==
+X-Google-Smtp-Source: ABdhPJwOLryi+Vt3XTHfOqRA0l+DWHue39abogkIdE2spUESv3XdJv+edxkknI+iJ2ocSOo2lj0XMfneEf7QmW5Ysm4=
+X-Received: by 2002:a02:cb8f:: with SMTP id u15mr25374083jap.131.1639247922540;
+ Sat, 11 Dec 2021 10:38:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: ALSA: drivers: opl3: assignment of a pointer that is not used,
- probable bug
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211210221033.912430-1-cmirabil@redhat.com> <20211210221033.912430-4-cmirabil@redhat.com>
+In-Reply-To: <20211210221033.912430-4-cmirabil@redhat.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 11 Dec 2021 19:38:31 +0100
+Message-ID: <CANiq72=3jtTn97Kkh1LBhrM4Kcs76b-SZnJ3=b+bNjX-BQM6vw@mail.gmail.com>
+Subject: Re: [PATCH V5 3/6] drivers/auxdisplay: sensehat: Raspberry Pi Sense
+ HAT display driver
+To:     Charles Mirabile <cmirabil@redhat.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        fedora-rpi@googlegroups.com, Mwesigwa Guma <mguma@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Charles, Mwesigwa, Joel, Serge,
 
-static analysis with scan-build has found an assignment to vp2 that is 
-never used in function snd_opl3_note_on(), 
-sound/drivers/opl3/opl3_midi.c as follows:
+On Fri, Dec 10, 2021 at 11:11 PM Charles Mirabile <cmirabil@redhat.com> wrote:
+>
+> Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
+> Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
+> Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
+> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
 
-         if (instr_4op) {
-                 vp2 = &opl3->voices[voice + 3];
-                 if (vp->state > 0) {
-                         opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
-                                                voice_offset + 3);
-                         reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
-                         opl3->command(opl3, opl3_reg, reg_val);
-                 }
-         }
+The "submitting author" should be the last one, i.e.:
 
-sound/drivers/opl3/opl3_midi.c:399:3: warning: Value stored to 'vp2' is 
-never read [deadcode.DeadStores]
-                 vp2 = &opl3->voices[voice + 3];
-                 ^     ~~~~~~~~~~~~~~~~~~~~~~~~
+Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
+Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
+Co-developed-by: Joel Savitz <jsavitz@redhat.com>
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
 
-I suspect that references to vp in this if block should be to vp2, but 
-I'm unsure if that is for all references or not, hence I'm reporting 
-this issue.
+> +config SENSEHAT_DISPLAY
+> +       tristate "Raspberry pi Sense HAT display driver"
 
-Coln
+pi -> Pi
+
+> +static int sensehat_update_display(struct sensehat *sensehat);
+
+Can the function be directly defined instead?
+
+> +       if (*f_pos >= VMEM_SIZE)
+> +               return 0;
+> +       if (*f_pos + count > VMEM_SIZE)
+> +               count = VMEM_SIZE - *f_pos;
+
+`min` / `min_t`?
+
+> +       if (ret < 0)
+> +               dev_err(sensehat->dev,
+> +                       "Update to 8x8 LED matrix display failed");
+
+Could this happen a lot of times? Is it expected to happen under some
+condition or should never happen?
+
+Cheers,
+Miguel

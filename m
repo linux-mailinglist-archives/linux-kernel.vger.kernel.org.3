@@ -2,97 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F330471517
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 18:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B2B47151D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Dec 2021 18:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbhLKRwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 12:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbhLKRwY (ORCPT
+        id S230407AbhLKRxv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 11 Dec 2021 12:53:51 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:23078 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230363AbhLKRxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 12:52:24 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F6C061714;
-        Sat, 11 Dec 2021 09:52:23 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v11so20098851wrw.10;
-        Sat, 11 Dec 2021 09:52:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=88P9J466zr+4P7jgyoGKoQmE3/rhCTfFbyj3bLyp5SE=;
-        b=Zh1HJm120a55SS+8yaq1mGNbIkUCIxPFlDXrdV2EHbIMgN9VEAoSfg9MBtFoFzv/0T
-         hLSNpCLCpXIENDptZHVfFmwGKQ2wmHE7MMZQulW0PIltoffYz7ZPuarh39bUNBCBDhX9
-         Z4QowxELLR20XQjGyBJrGsz/+4pFMf7RtnqxKNjkKyN9ck/wvPRJrF8eyymcSh1o1HxN
-         acsQtLEoYTvCpr4ODpuK8gfBXfX7wTHa9wubnesrQPloDjAFHptgae6ZS3sYcDPzIaYL
-         //SX7U8XE+pfROLOhmEqS+gYHp3nqCNVvIOi7LAxeygrMMPIyeT/ASR83beXw2UN4Vz7
-         GLDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=88P9J466zr+4P7jgyoGKoQmE3/rhCTfFbyj3bLyp5SE=;
-        b=Fcql0MuLF7HycrTxNuKurM7UNHffOUswO/0BWQLNb28GpDOswi4vKsDhJROce34RyX
-         NgKE/YDWt5QhiKGUIzVY/bsSY9jDJvMVsN6I4lRT3AxovJAOVLWD2Rolyip+n7aJlflJ
-         S61hP92JPZ0J3Kkf1sO8R1AD50Nir8aYI669/2hVSS/EjVF8J8sEzY0+ZCNSnW3Ck+5j
-         F9Gr5dmvjco35fLaghBTVtsQbTd641sfMg6l2j1zU4zJcBPGUMVm62GxAZM496mFr/CZ
-         u+U1be++Io9ptTgU20NGdONQIChneYrje741fzsksfrHJIdZKJw6nz+rwJ3tqHGpxU/W
-         //JQ==
-X-Gm-Message-State: AOAM530c6P4mzv136WZUz83vMCxm958XG02MrXUHe0R2KN3d5XpNObNJ
-        te9DxQvMI4XqN/EQtZHEI0gvsdbQjKYcOvBy
-X-Google-Smtp-Source: ABdhPJx/a8cTIBavu3rgOxNQlvbmAxubbORAVtJQ2CGrEpbE+uAIrDvOSWZa9qSxaliY4w4LyQekPg==
-X-Received: by 2002:adf:aa08:: with SMTP id p8mr21485800wrd.572.1639245142418;
-        Sat, 11 Dec 2021 09:52:22 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id v6sm2020890wmh.8.2021.12.11.09.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 09:52:22 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rapidio: Remove redundant variable tmp
-Date:   Sat, 11 Dec 2021 17:52:21 +0000
-Message-Id: <20211211175221.500674-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Sat, 11 Dec 2021 12:53:50 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-14-gpculCQTMuGutzfqbGQ0WA-1; Sat, 11 Dec 2021 17:53:47 +0000
+X-MC-Unique: gpculCQTMuGutzfqbGQ0WA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Sat, 11 Dec 2021 17:53:46 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Sat, 11 Dec 2021 17:53:46 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Tiezhu Yang' <yangtiezhu@loongson.cn>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: RE: [PATCH v2 0/2] kdump: simplify code
+Thread-Topic: [PATCH v2 0/2] kdump: simplify code
+Thread-Index: AQHX7j/jzYqw5kMpA0qY43nH0kUm2Kwtku5w
+Date:   Sat, 11 Dec 2021 17:53:46 +0000
+Message-ID: <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
+References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable tmp is being assigned a value but it is never read
-afterwards. The assignment is redundant and so is the variable, so
-remove tmp.
+From: Tiezhu Yang
+> Sent: 11 December 2021 03:33
+> 
+> v2:
+>   -- add copy_to_user_or_kernel() in lib/usercopy.c
+>   -- define userbuf as bool type
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/rapidio/rio-scan.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Instead of having a flag to indicate whether the buffer is user or kernel,
+would it be better to have two separate buffer pointers.
+One for a user space buffer, the other for a kernel space buffer.
+Exactly one of the buffers should always be NULL.
 
-diff --git a/drivers/rapidio/rio-scan.c b/drivers/rapidio/rio-scan.c
-index 19b0c33f4a62..2bc4d1eaf1ce 100644
---- a/drivers/rapidio/rio-scan.c
-+++ b/drivers/rapidio/rio-scan.c
-@@ -524,7 +524,6 @@ static int rio_enum_peer(struct rio_net *net, struct rio_mport *port,
- {
- 	struct rio_dev *rdev;
- 	u32 regval;
--	int tmp;
- 
- 	if (rio_mport_chk_dev_access(port,
- 			RIO_ANY_DESTID(port->sys_size), hopcount)) {
-@@ -558,7 +557,7 @@ static int rio_enum_peer(struct rio_net *net, struct rio_mport *port,
- 	rio_mport_write_config_32(port, RIO_ANY_DESTID(port->sys_size),
- 				  hopcount,
- 				  RIO_HOST_DID_LOCK_CSR, port->host_deviceid);
--	while ((tmp = rio_get_host_deviceid_lock(port, hopcount))
-+	while (rio_get_host_deviceid_lock(port, hopcount)
- 	       < port->host_deviceid) {
- 		/* Delay a bit */
- 		mdelay(1);
--- 
-2.34.1
+That way the flag is never incorrectly set.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

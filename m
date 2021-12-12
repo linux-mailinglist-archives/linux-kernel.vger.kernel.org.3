@@ -2,89 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35701471C3B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 329E7471C43
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbhLLS3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 13:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbhLLS3U (ORCPT
+        id S231804AbhLLSjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 13:39:17 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:48604
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231719AbhLLSjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 13:29:20 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C96C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:29:19 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id o20so45854062eds.10
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:29:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LzMrK0Bg1r1Iu+weufQ9dNYIZjGWQ6qcmxZmbk2obMs=;
-        b=LudSmqsTJD4KidyI3QagbIOCWT3Sw607/rHpko4Ll1pg1fz3F5Jj1vBo1NoBCdqiGV
-         +o3ySX4SBsUoLyDzSJeugVr8sQjjtteg8PYKjiASelQrm/hyIULP48toi9Mq4RdrEXrd
-         8BwJHA+BJeRHIK3X5hsmjNezth0949wNI0LQI=
+        Sun, 12 Dec 2021 13:39:16 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 65EEA402FB
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 18:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639334355;
+        bh=QOLe+d7csrM+OPfnGCO79vniT112Eujdhj2JN4MALTY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=EhYTMidWnkMC4/98ccp/2uKKFhs15LOCnpaLwlU69K9+DlBISSwTQooCrUvOmCTjf
+         idvlJtTuqHSk0ey5dmfQREu8ERYguOcl5vPGg8XwlBYwPwJpgArLaT4CFWWa59s6al
+         Ccyj0CT1uOntR4IZKjbUdH+3DLnOlnPUsoAH92zd4pqcPyLG1iYUNvQNF4P1JWZUpe
+         hUCk8x9MSxLIncEVT/w3DVsVRE1Eg6dD/j/5JOw8fmpb1hobceGHfR3ufsxzIZjtsE
+         EL3IibOzseEUg4xg9RECiJsw2CTTjbOdJ2mcCIJZRdjLOu9DPDh//jWb2vRLMJBVeR
+         JgyL8x9XVPLeQ==
+Received: by mail-lj1-f199.google.com with SMTP id 83-20020a2e0556000000b00218db3260bdso3994236ljf.9
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:39:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LzMrK0Bg1r1Iu+weufQ9dNYIZjGWQ6qcmxZmbk2obMs=;
-        b=bAjKDZjjsbvdaYhe0rXYjaBk5mq5/bgEDrTRDUs8VN8a0Dbj5I1/FM6MG/02QwJdy5
-         GKeRyB1bskoQuUGTnoKtZ3//Z26l0GJeumN1GZ7eIAgijcsj1GPANSb+RoaUwOT/Ha1N
-         s4EFDXA6xvkyGOLMsB1vCwr6npoiDsmsAt2fka80q4rlJFBtzgWJtaiKalb7J32wlbx3
-         IYFaH46h+kC72DRieSCsZ2VaaKGctW6xvJUPTA1bh4RUBdErHFe4fbTG4yF1fXDwL/wt
-         9tIWE3B+KaXd4Mmk/Duy/9uYFRia0FwblMeoAQXEl82IelFerbYoNy5aCWySINYXXmfP
-         dwmA==
-X-Gm-Message-State: AOAM532CXOdF0cMz3Wr5sg8k3oBm3QpAaeiC1AB2uVQzUm6SSK7lY1e6
-        KG0XLbaAsU3Gcg7y+XPb7VmSzegTmbRHoERg
-X-Google-Smtp-Source: ABdhPJyOeVoX0Vyvzp7m9+bLbD2NAWj5PNUSW1TPl8QcXpGtGXqVbvuSPXwn9iFnv0RTKT9uN7xg4w==
-X-Received: by 2002:a17:906:55d7:: with SMTP id z23mr38788672ejp.393.1639333757902;
-        Sun, 12 Dec 2021 10:29:17 -0800 (PST)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id n8sm5176673edy.4.2021.12.12.10.29.17
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QOLe+d7csrM+OPfnGCO79vniT112Eujdhj2JN4MALTY=;
+        b=1ICXl/IWK+UT4raFXd9CtPq0onuFbz5ETrAJWwjotPalz431bRzZSilGjvzZOsLid+
+         It08/EBgo59LjK/EBlR/mChhSYhKqIyC0r3IkI5Ha+0ldWc7geffzb8BYWzizetp5QCe
+         0rJIoylYUot0ESrUq8m/RykZNQHX5qrFuP1UW5M7oo5pKrEF2lLDCZPPQ9nlGpFEfWx2
+         9+5WOPJERbQVE3MnmaBJ4tXYj/LastSeUN6sJR0ncsE64Y24oaJ69y7GbotRFJm6/iWJ
+         fn/3mWTu72DRlnNjrIAGsngQNa35d+jJRVqz9aXE/hrsYqpP5w6tLDFXtCpIdcr2oISp
+         XaRg==
+X-Gm-Message-State: AOAM530S8tjSeFlHoh/1mHQwCNxtdvbRxak+iaZmPYL7ZtVl+L/IA5OJ
+        ImCIqPLEU/DQBpTXGnbScdSrOzX5MY+nVofBaPLC0jF5ZcyZSlPshdnlyVwOR+f5Re11qmaVavk
+        dhin1QWbgQuPIV+G/ikCNGl2UolxDhJcMDKFOnAMR1Q==
+X-Received: by 2002:a2e:9617:: with SMTP id v23mr24843147ljh.363.1639334354451;
+        Sun, 12 Dec 2021 10:39:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx71+OYijueDFlqmStOqg4sDXiEX31XHw2Ry8T7iC/wKfGFnQGSIzUB9ek+aU57Ro0uZLRFZg==
+X-Received: by 2002:a2e:9617:: with SMTP id v23mr24843135ljh.363.1639334354271;
+        Sun, 12 Dec 2021 10:39:14 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id 1sm1101519ljq.102.2021.12.12.10.39.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 10:29:17 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso12608843wmr.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:29:17 -0800 (PST)
-X-Received: by 2002:a05:600c:4e07:: with SMTP id b7mr32073895wmq.8.1639333757179;
- Sun, 12 Dec 2021 10:29:17 -0800 (PST)
+        Sun, 12 Dec 2021 10:39:13 -0800 (PST)
+Message-ID: <aa76e303-95ac-20ff-c0a9-26f7f8c6b2cb@canonical.com>
+Date:   Sun, 12 Dec 2021 19:39:12 +0100
 MIME-Version: 1.0
-References: <20211211173447.4155374-1-hjl.tools@gmail.com> <CACVxJT-k664=aYp4VkG1LH3PsGHEf50PqP5EA+JWiFVb_JVs2Q@mail.gmail.com>
- <CAMe9rOqM+S_uBO-t5jJ1TLVD0R-LOJEiR6htb+k05c+ak7gF-g@mail.gmail.com>
-In-Reply-To: <CAMe9rOqM+S_uBO-t5jJ1TLVD0R-LOJEiR6htb+k05c+ak7gF-g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 12 Dec 2021 10:29:01 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiEgwj3DGZai2GF9+z-FCSS455kGZ9z2g1qtdPLPWpvxQ@mail.gmail.com>
-Message-ID: <CAHk-=wiEgwj3DGZai2GF9+z-FCSS455kGZ9z2g1qtdPLPWpvxQ@mail.gmail.com>
-Subject: Re: [PATCH] fs/binfmt_elf.c: disallow zero entry point address
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Add bindings definitions for
+ Exynos7885 CMU
+Content-Language: en-US
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        David Virag <virag.david003@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211206153124.427102-1-virag.david003@gmail.com>
+ <20211206153124.427102-2-virag.david003@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211206153124.427102-2-virag.david003@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 5:52 AM H.J. Lu <hjl.tools@gmail.com> wrote:
->
-> On Sat, Dec 11, 2021 at 11:38 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> >
-> > Why not let it segfault?
->
-> Why let it segfault?
+On 06/12/2021 16:31, David Virag wrote:
+> Just like on Exynos850, the clock controller driver is designed to have
+> separate instances for each particular CMU, so clock IDs start from 1
+> for each CMU in this bindings header too.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: David Virag <virag.david003@gmail.com>
+> ---
+> Changes in v2:
+>   - Added R-b tag by Krzysztof Kozlowski
+> 
+> Changes in v3:
+>   - Nothing
+> 
+> Changes in v4:
+>   - Nothing
+> 
+>  include/dt-bindings/clock/exynos7885.h | 115 +++++++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/exynos7885.h
+> 
 
-That's not my main worry - what if somebody has a code section with a
-zero vaddr and intentionally put the entry at the beginning?
+Hi Sylwester,
 
-Maybe it's not supposed to work by some paper standatd, but afaik
-currently it _would_ work.
+The DTS/DTSI patch (7/7) depends on this one, just like the clock driver.
 
-All these things are relative to the load address, so a zero e_entry
-doesn't mean NULL, and may be a perfectly valid address.
+Since some time Arnd and Olof prefer not to have external trees going
+into the arm-soc, even if this is only the header change. They recommend
+one of:
+1. to hard-code the numbers in DTS and replace numbers->macros later,
+2. merge headers to arm-soc tree with DTS and provide the header to an
+external (e.g. clk) tree,
+3. wait with merging DTSI till headers reach mainline.
 
-No?
+I propose that I take the clock headers, put on separate branch and
+provide them to you as stable tag. You can base clk driver changes on
+top of it.
 
-            Linus
+Are you okay with this?
+
+Best regards,
+Krzysztof

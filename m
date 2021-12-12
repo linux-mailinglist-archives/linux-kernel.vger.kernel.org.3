@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E8C47192F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 09:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969EF471931
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 09:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbhLLH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 02:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S229737AbhLLIBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 03:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhLLH76 (ORCPT
+        with ESMTP id S229449AbhLLIBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 02:59:58 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19AEC061714;
-        Sat, 11 Dec 2021 23:59:57 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id z6so12277878pfe.7;
-        Sat, 11 Dec 2021 23:59:57 -0800 (PST)
+        Sun, 12 Dec 2021 03:01:34 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D810C061714;
+        Sun, 12 Dec 2021 00:01:34 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so12445241pju.3;
+        Sun, 12 Dec 2021 00:01:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=ioi42BQ6vHLIjYS1+OM6J++/wIyDwKpFVwDudzXdcWY=;
-        b=LFapcroOPUAlIzAi/yrdDlejzL+u8oHR6Nj+kXFPOfscgNU2CKIPaGkSjlUnd1t14r
-         yzOHwWYiZ0NwqmCsg60TOCEYccjJvw6XJk8DUodq/QaFjLS0/COuCE9ZmDP8eGpp48hl
-         A5iQv1WHeRx7NsKdolF4JDKsXryBIb+tyjI9+bGJEzgF4HHC5T5g2r8EyyyUf0aiY7VO
-         EeJYfR1yEX/ebt5rHwGWREIgiznq6wdAm3H7r5jx4s6qZB2Ydl8b6eWxITF8aB6Zsa7x
-         VUnUvXnp/LHjwA73XLDVq8BKCTQEBL9IVXZD3B8rYUM4llZlNLBhgEyn2ienMPfqVUcU
-         VKbA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Tut+wd6OghmuwrX62X6qY+2CWapMsBgEPobD9jrqcAg=;
+        b=kgVBW8r4kkM+F47zcWdsgSEbw9DMGNP9PXX/0T1vDl6cie07KsI17q+ysdImdsY4LQ
+         /IKQLvg1T0tHMOa9bXrLSRr2QGzIPqeiVYiLE2nWtBuNqajGtTNzN+ZwF+6fzK7c0IcY
+         yPCLWzExhHoUJmW96nTN5pUUXIaqBXsqqnCK3bvv68MVL2LqoVBTG6qIBjMyyyNGdDOC
+         r/8wwIcjNvmwF9gjIHtzv5j9u/cJQ+UJUmRpV/lQwOJkbPfJlkyJhqETTIGppedw3tH8
+         HO1Oz9ViGPnAUvmMv1QlBk03mvf2cEcxZ2TsW2hk0OFU4ZzxQlpdmo5G6/lheQxZgCut
+         rGmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=ioi42BQ6vHLIjYS1+OM6J++/wIyDwKpFVwDudzXdcWY=;
-        b=HtJFeL0pUFYiidZ3xN7eYsxI31AMHDaze4sqeBEX7r+lYK1aUon9Iq83EvB37hVMYv
-         uTqmZMAXDFOSwMN/h9eQJWOcb4JkL5crIgzLrCQGgH5W5WXaH7K+C6FZqLmVVm5Jk/7/
-         Y5WKt8g/XYUimFgCAHh7/y+0spCTHh2q0/0SqpomT9o3h8HKT9roGgXjQ931aHLy89Z4
-         6cZSB6cuzVBTeI4Qa3lsMJbtCM6P6nWLj/I0qTRK/C1ugpL1UtF5HvtjRgiQZKxL1BMr
-         2bJK5dxudqJRVJRaOVFFXx26U/d1ein6zDHSd67n4EsmT4MoAKGMjNTXMZ8GEeuw2zBF
-         NeCQ==
-X-Gm-Message-State: AOAM532jr3Lg4H/CE7R5IUGhG7N3te2bprDIVp6dwBtFxBLCyZbXEHDs
-        AuU94W0CT5NQIY6SkDdIlPWv9fDxvz4=
-X-Google-Smtp-Source: ABdhPJxDkERkWD8OMwnTmiTwjd90Sf8zIM6LHD9t3XrsNNG00JAgvqtzd601F7vZKkwhgQYDVV13JA==
-X-Received: by 2002:a63:790e:: with SMTP id u14mr47675032pgc.478.1639295997327;
-        Sat, 11 Dec 2021 23:59:57 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Tut+wd6OghmuwrX62X6qY+2CWapMsBgEPobD9jrqcAg=;
+        b=79g+3/qIqEHQdRzdrCGQCaKlY6k83xPz5ViEHBLeCmFl79tyIG2clkubFwpbNDCee3
+         9OZAsSFM4YZisLfWbwgNH7nUxJ4KdQpFI4zh3hPQ5Zh6lIITJFfHQkjx+yjj2Cr5SiT9
+         XWSL3cmqH7wz+e+SnGPA4FTDL+BUqNkgsCu1hJab34aFlWLNxRSZbfIYjj4QOtLVv7wL
+         igOvibMIH4sTAnj+3bhIK+wLOUHp0oVYOZSj5f238I10RfmIUS0uOBoeQwQ6wjSHvoFv
+         ZRBCBjxrgZyEC/cIMkbwhCFbAfvi43Z5u++rT5wu2yPzw1+kx61qSGIDxzFEPr9yRKg8
+         10MQ==
+X-Gm-Message-State: AOAM533LNbPgEHKBeZdTyT8KLeBfDmG9ThlnfuRORUcaeXDkv5lQCmcC
+        b0GerspqetE2Tt0BwGkSd5NjZJvMlMY=
+X-Google-Smtp-Source: ABdhPJzvYzVydXG6osUhCDgWzfiZCaIjkyXl3kImL3RvOru1jZAJCwIJrM722fOhUY8Y8pQC3asK+g==
+X-Received: by 2002:a17:90b:4b90:: with SMTP id lr16mr36253016pjb.57.1639296093630;
+        Sun, 12 Dec 2021 00:01:33 -0800 (PST)
 Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id i9sm3149198pgc.27.2021.12.11.23.59.55
+        by smtp.gmail.com with ESMTPSA id 63sm8215576pfz.119.2021.12.12.00.01.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Dec 2021 23:59:56 -0800 (PST)
+        Sun, 12 Dec 2021 00:01:33 -0800 (PST)
+Subject: [PATCH 1/3] docs: sphinx/kfigure.py: Use rsvg-convert(1) for DOT ->
+ PDF conversion
 To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Akira Yokosawa <akiyks@gmail.com>
+References: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
 From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH 0/3] docs: sphinx/kfigure.py: Improve conversion to PDF
-Message-ID: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
-Date:   Sun, 12 Dec 2021 16:59:53 +0900
+Message-ID: <49318f35-fe3a-fa0a-6927-311a116d7c65@gmail.com>
+Date:   Sun, 12 Dec 2021 17:01:31 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -66,78 +70,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set improves conversions of DOT -> PDF and SVG -> PDF
-for PDF docs.
+On openSUSE, dot(1) command does not support direct PDF output.
+On other distros, generated PDF images have unnecessarily wide margins,
+especially for small graphs.
 
-* DOT -> PDF conversion
-
-Current scheme uses "dot -Tpdf" (of graphviz).
-
-Cons:
-  - openSUSE's dot(1) does not support -Tpdf.
-  - Other distro's dot(1) generates PDFs with unnecessarily wide
-    margins for inclusion into LaTeX docs.
-
-Patch 1/3 changes the route to two steps:
+DOT -> PDF conversion can by improved by the following steps:
 
   1. DOT -> SVG by "dot -Tsvg"
-  2. SVG -> PDF by "rsvg-convert -f pdf" with fallback to convert(1).
+  2. SVG -> PDF by "rsvg-convert -f pdf"
 
-Pros:
-  - Improved portability across distros
-  - Less space for graphs in final PDF documents
+Resulting PDFs will be free of extra margins.
 
-Con:
-  - On systems without rsvg-convert, generated PDF will be of raster
-    image.
+Add rules in kfigure.py so that the above mentioned steps are taken
+when rsvg-convert(1) is available.
 
+Note that rsvg-convert(1) is recommended by sphinx_pre_install.
+So it is most likely that existing systems for building pdfdocs have
+rsvg-convert(1) installed.
 
-* SVG -> PDF conversion
+Note:
+    SVG features supported by rsvg-convert(1) vary depends on its
+    version and distro config.
+    For example, the one found on Ubuntu Bionic (version 2.40.20) does
+    poor job in rendering some of SVG files drawn by Inkscape.
 
-Current scheme uses convert(1) (of ImageMagick)
+    SVG files of graphs generated by dot(1) are converted nicely even
+    with such old versions of rsvg-convert.
+    So this change won't affect the quality of such graphs in any way.
 
-Cons:
-  - Generated PDFs are of raster image.  Some of them look blurry.
-  - Raster image tends to be large in size.
-  - convert(1) delegates SVG decoding to rsvg-convert(1).
-    It doesn't cover full range of Inkscape specific SVG features
-    and fails to convert some of SVG figures properly.
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ Documentation/sphinx/kfigure.py | 46 +++++++++++++++++++++++++++++++--
+ 1 file changed, 44 insertions(+), 2 deletions(-)
 
-Failed conversions are observed with:
-  - Documentation/userspace-api/media/v4l/selection.svg
-  - Documentation/userspace-api/media/v4l/vbi_525.svg
-  - Documentation/userspace-api/media/v4l/vbi_625.svg
-
-If you have Inkscape installed as well, convert(1) delegates SVG
-decoding to inkscape(1) and the above SVGs are rendered correctly.
-
-So if Inkscape is required for converting those SVGs, why not use it
-directly in the first place?
-
-Patch 2/3 adds a route of SVG -> PDF conversion by inkscape(1).
-Patch 3/3 hides warning messages from inkscape(1) which are harmless
-in command-line uses.
-
-Pros:
-  - Generated PDFs are of vector graphics.
-  - Vector graphics tends to be smaller in size and keeps looking nice
-    while zoomed in.
-  - SVGs drawn by Inkscape are fully supported.
-
-On systems without Inkscape, there won't be any change in behavior.
-
-        Thanks, Akira
---
-Akira Yokosawa (3):
-  docs: sphinx/kfigure.py: Use rsvg-convert(1) for DOT -> PDF conversion
-  docs: sphinx/kfigure.py: Use inkscape(1) for SVG -> PDF conversion
-  docs: sphinx/kfigure.py: Redirect warnings from inkscape to /dev/null
-
- Documentation/sphinx/kfigure.py | 109 ++++++++++++++++++++++++++++----
- 1 file changed, 97 insertions(+), 12 deletions(-)
-
-
-base-commit: a32fa6b2e8b4e0b8c03f5218afa0649e188239c5
+diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
+index 3c78828330be..955e3ec5de5a 100644
+--- a/Documentation/sphinx/kfigure.py
++++ b/Documentation/sphinx/kfigure.py
+@@ -31,6 +31,8 @@ u"""
+ 
+     * ``dot(1)``: Graphviz (https://www.graphviz.org). If Graphviz is not
+       available, the DOT language is inserted as literal-block.
++      For conversion to PDF, ``rsvg-convert(1)`` of librsvg
++      (https://gitlab.gnome.org/GNOME/librsvg) is used when available.
+ 
+     * SVG to PDF: To generate PDF, you need at least one of this tools:
+ 
+@@ -113,6 +115,9 @@ dot_cmd = None
+ # ImageMagick' convert(1) support
+ convert_cmd = None
+ 
++# librsvg's rsvg-convert(1) support
++rsvg_convert_cmd = None
++
+ 
+ def setup(app):
+     # check toolchain first
+@@ -160,11 +165,12 @@ def setupTools(app):
+ 
+     This function is called once, when the builder is initiated.
+     """
+-    global dot_cmd, convert_cmd   # pylint: disable=W0603
++    global dot_cmd, convert_cmd, rsvg_convert_cmd   # pylint: disable=W0603
+     kernellog.verbose(app, "kfigure: check installed tools ...")
+ 
+     dot_cmd = which('dot')
+     convert_cmd = which('convert')
++    rsvg_convert_cmd = which('rsvg-convert')
+ 
+     if dot_cmd:
+         kernellog.verbose(app, "use dot(1) from: " + dot_cmd)
+@@ -177,6 +183,11 @@ def setupTools(app):
+         kernellog.warn(app,
+             "convert(1) not found, for SVG to PDF conversion install "
+             "ImageMagick (https://www.imagemagick.org)")
++    if rsvg_convert_cmd:
++        kernellog.verbose(app, "use rsvg-convert(1) from: " + rsvg_convert_cmd)
++    else:
++        kernellog.verbose(app, "rsvg-convert(1) not found, "
++                          "falling back to raster image conversion")
+ 
+ 
+ # integrate conversion tools
+@@ -266,7 +277,13 @@ def convert_image(img_node, translator, src_fname=None):
+ 
+             if in_ext == '.dot':
+                 kernellog.verbose(app, 'convert DOT to: {out}/' + _name)
+-                ok = dot2format(app, src_fname, dst_fname)
++                if translator.builder.format == 'latex':
++                    svg_fname = path.join(translator.builder.outdir, fname + '.svg')
++                    ok1 = dot2format(app, src_fname, svg_fname)
++                    ok2 = svg2pdf_by_rsvg(app, svg_fname, dst_fname)
++                    ok = ok1 and ok2
++                else:
++                    ok = dot2format(app, src_fname, dst_fname)
+ 
+             elif in_ext == '.svg':
+                 kernellog.verbose(app, 'convert SVG to: {out}/' + _name)
+@@ -319,6 +336,31 @@ def svg2pdf(app, svg_fname, pdf_fname):
+         kernellog.warn(app, "Error #%d when calling: %s" % (exit_code, " ".join(cmd)))
+     return bool(exit_code == 0)
+ 
++def svg2pdf_by_rsvg(app, svg_fname, pdf_fname):
++    """Convert SVG to PDF with ``rsvg-convert(1)`` command.
++
++    * ``svg_fname`` pathname of input SVG file, including extension ``.svg``
++    * ``pdf_fname`` pathname of output PDF file, including extension ``.pdf``
++
++    Input SVG file should be the one generated by ``dot2format()``.
++    SVG -> PDF conversion is done by ``rsvg-convert(1)``.
++
++    If ``rsvg-convert(1)`` is unavailable, fall back to ``svg2pdf()``.
++
++    """
++
++    if rsvg_convert_cmd is None:
++        ok = svg2pdf(app, svg_fname, pdf_fname)
++    else:
++        cmd = [rsvg_convert_cmd, '--format=pdf', '-o', pdf_fname, svg_fname]
++        # use stdout and stderr from parent
++        exit_code = subprocess.call(cmd)
++        if exit_code != 0:
++            kernellog.warn(app, "Error #%d when calling: %s" % (exit_code, " ".join(cmd)))
++        ok = bool(exit_code == 0)
++
++    return ok
++
+ 
+ # image handling
+ # ---------------------
 -- 
 2.17.1
+
 

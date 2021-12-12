@@ -2,91 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D785F471B82
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 17:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD38471B86
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 17:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbhLLQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 11:15:42 -0500
-Received: from out162-62-57-49.mail.qq.com ([162.62.57.49]:52123 "EHLO
-        out162-62-57-49.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231533AbhLLQPl (ORCPT
+        id S231608AbhLLQTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 11:19:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33797 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230303AbhLLQTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 11:15:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639325738;
-        bh=+MGgQBi4hhhEZS4kFqjecsTC/3bTE6ObWs6UftGMrWs=;
-        h=From:To:Cc:Subject:Date;
-        b=BS2TajBsTT7+gvzfGLMrA7dHNW7vGZzBxu8cD1tTb+LDQwKG8OXoqhRKbuD1qe1aT
-         HlnD4Csau5xznZhjSVD9dGz9l/3TKDOaSdirqdZtm1GGtjQ7ASIfqUcXZQ9Te3ETJH
-         qJolmOTNeu3gsShruo2qeYc3jG1ANIr18UnPIizw=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 373A80BB; Mon, 13 Dec 2021 00:13:51 +0800
-X-QQ-mid: xmsmtpt1639325631t325okpgz
-Message-ID: <tencent_FB2FE472710C51BC87E7288DFF4380EC320A@qq.com>
-X-QQ-XMAILINFO: MAMW4dxoxFytHlFp/K3w5rC1cM/YYuaCgK6GW8f1bs4CY6EVtHDdwucDyZdjnD
-         4gc1xLDUJQLKLpPxqsVr0b55zNxdiGMDbUgLJhlTDPO133K8EuAGIEULW0HfMM/dQd/33mN6kcDU
-         9F4y1PsoH4W4ezl/XMg2c7yO5cSJPjT1aa3+UmgK+THV84+0FSJmsibnu33kY1WnklMcm8PhFd+Z
-         KB9yRQcLPIIb53vFjgXGFckArk3QV6Q3gS9S9OBqKM4ojg8vdptFelnetpRndAX0rwDMNXTAuBOg
-         QxF6vCxlVRlIQOjHBD189E8nUiiMyrNQ2uEnVTIHX9Tar1bvrWb/Fp982PN7E65eVxsRvYHw8ciR
-         KV2I0Ppzeq3QirjJbCArDzXaMy6oBIKqaevuRnytnUOLFgOR3ygFmK5iaE+l/4pI0ThOKjsot1tC
-         rvHy5qOYMfr6+sosYDocpBGW+FwuE6utKSLDznUR+W6lh/Xks5SOF8O1MmDgLEdUsqf0yT3RyTlf
-         FSOf6s7347MMsfzQ3JHplNcZ8Y4SOWlEjcFLlxWLUCkYY1Dwp0SLTMSQYED1sB9AulnLmvYvHO4o
-         Reh+T4CGqydizVUKVf8BNnj0eEtFkQ38QPvwKAbELTq2wRxQF+NrMpG/lZK/tMm7pB6AnFIZRych
-         5MXPBIZofBG7V24ZtoJ+JVSJ4efH2HDcRYMJN3lyhNK2/s0x0r58vaaKne7fRtcHnAeM8tSmi4St
-         SJLmO6dJgLmdImjEfEPQi5mmaxjLA6NtD6UH37WVoCCNmLFg7hm/FCKfgl9OIrNVIda48LoreXiG
-         GCLsXoPum7/AsuURlHSDvViEekHVnBs3m1XYhsUjIK+qkU9WrpVv8RKPy1R5mMlGC/gDfGIskLHg
-         ==
-From:   xkernel <xkernel.wang@foxmail.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        xkernel <xkernel.wang@foxmail.com>
-Subject: [PATCH] ALSA: sound/isa/gus: check the return value of kstrdup()
-Date:   Mon, 13 Dec 2021 00:13:05 +0800
-X-OQ-MSGID: <20211212161305.2484-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Sun, 12 Dec 2021 11:19:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639325945;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6cCjOZqs12xhpuMFVCB4bMBXHSeejxEaibApUugkFrU=;
+        b=Lz8Cu0/wR2KySHEnREopPZ0mUkYk2tlEykW172pkG1QPpVQRzOPnWZnNhZ7rqmsb8Ife7+
+        i4P4YUEMEtS6RPcQv0XTyT2MtTuqMwKnNioQGGR/7vif+UxIah/XtmwaJmV6Evo7V0uRVa
+        iHQr8KH3uzm2Kuhe499/qf+29M/D6Ag=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-iT3xpjSeMaGNvEEPn9Kuzg-1; Sun, 12 Dec 2021 11:19:04 -0500
+X-MC-Unique: iT3xpjSeMaGNvEEPn9Kuzg-1
+Received: by mail-oo1-f70.google.com with SMTP id g20-20020a4a7554000000b002caefc8179cso9278153oof.1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 08:19:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=6cCjOZqs12xhpuMFVCB4bMBXHSeejxEaibApUugkFrU=;
+        b=fPdCDciJcy2YsVBKsBXoAFch9qXmHIga1mkJIBUjsfNQo2Aw9bfOODak20vH1Ot0BB
+         A7EOf+t+aQGMlENMJAdzeVYbOpYIkjuyQIsDgvQW+bZkWQAlh7y1mVl1YDYisND0/G0E
+         LZ3lSpaywwukiCjbqFq+aKvZHpGiKxJyett2wB9+t+AEloA3jd/qhOTvfED6MoPZYWyE
+         FsAahddniOSPfewO7Z1urTWKXqFtMmu1/r5/SrXYmz388lSf4nC4cuiz4dJ3sdC/eXx2
+         umuOZ+iw7+Jmqcs3jdQgxPwuSI2MxtNQGvdkDYhAmPQthwxM3qXSifxWRIDBIXN22PS9
+         JU5Q==
+X-Gm-Message-State: AOAM531qaSZTSD8jgzxcgAlY57nCPhKHsqvcs1bkWBJt0QM2oOObTz/5
+        fnUy8tOt8bKGPtzdqRzazQ/NzA3xrBc5vWAsMf6HvzFxEFLh90/qey5UXw65ZQCQIE1CCuOnt8E
+        qA87nPQ+9vdM4Pei3uZ/IKnJ0DgnaFxIdf+DIvVDWq8ULFA7S1QFUySt7S/rUaBMdg+AChmc=
+X-Received: by 2002:a05:6808:1411:: with SMTP id w17mr23185883oiv.10.1639325943235;
+        Sun, 12 Dec 2021 08:19:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxX7Uox2evc4myz9kRdrXIaCV/yCvO5RUReZz7+AKUJ1uFZNay6PJDdQIT3IgFssrEYDjCaJQ==
+X-Received: by 2002:a05:6808:1411:: with SMTP id w17mr23185866oiv.10.1639325942965;
+        Sun, 12 Dec 2021 08:19:02 -0800 (PST)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id w18sm1713186otm.1.2021.12.12.08.19.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 08:19:02 -0800 (PST)
+Subject: Re: [PATCH] fpga: stratix10-soc: fix typo in a comment
+To:     Jason Wang <wangborong@cdjrlc.com>, hao.wu@intel.com
+Cc:     mdf@kernel.org, yilun.xu@intel.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211212031956.46029-1-wangborong@cdjrlc.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <c10b3af5-5371-a4c0-bbe6-a29b3c3573ee@redhat.com>
+Date:   Sun, 12 Dec 2021 08:19:00 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211212031956.46029-1-wangborong@cdjrlc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kstrdup() returns NULL when some internal memory errors happen, it is
-better to check the return value of it. Otherwise, we may not to be able
-to catch some memory errors in time.
 
-Signed-off-by: xkernel <xkernel.wang@foxmail.com>
----
- sound/isa/gus/gus_mem.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 12/11/21 7:19 PM, Jason Wang wrote:
+> The double `if' in the comment in line 288 is repeated. Remove one
+> of them from the comment.
+>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>   drivers/fpga/stratix10-soc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+> index 357cea58ec98..e4f2e83a615b 100644
+> --- a/drivers/fpga/stratix10-soc.c
+> +++ b/drivers/fpga/stratix10-soc.c
+> @@ -285,7 +285,7 @@ static int s10_ops_write(struct fpga_manager *mgr, const char *buf,
+>   
+>   	/*
+>   	 * Loop waiting for buffers to be returned.  When a buffer is returned,
+> -	 * reuse it to send more data or free if if all data has been sent.
+> +	 * reuse it to send more data or free if all data has been sent.
 
-diff --git a/sound/isa/gus/gus_mem.c b/sound/isa/gus/gus_mem.c
-index ff9480f..f8d915f 100644
---- a/sound/isa/gus/gus_mem.c
-+++ b/sound/isa/gus/gus_mem.c
-@@ -199,6 +199,8 @@ struct snd_gf1_mem_block *snd_gf1_mem_alloc(struct snd_gf1_mem * alloc, int owne
- 		memcpy(&block.share_id, share_id, sizeof(block.share_id));
- 	block.owner = owner;
- 	block.name = kstrdup(name, GFP_KERNEL);
-+	if (block.name == NULL)
-+		return NULL;
- 	nblock = snd_gf1_mem_xalloc(alloc, &block);
- 	snd_gf1_mem_lock(alloc, 1);
- 	return nblock;
-@@ -237,13 +239,13 @@ int snd_gf1_mem_init(struct snd_gus_card * gus)
- 		block.ptr = 0;
- 		block.size = 1024;
- 		block.name = kstrdup("InterWave LFOs", GFP_KERNEL);
--		if (snd_gf1_mem_xalloc(alloc, &block) == NULL)
-+		if (block.name == NULL || snd_gf1_mem_xalloc(alloc, &block) == NULL)
- 			return -ENOMEM;
- 	}
- 	block.ptr = gus->gf1.default_voice_address;
- 	block.size = 4;
- 	block.name = kstrdup("Voice default (NULL's)", GFP_KERNEL);
--	if (snd_gf1_mem_xalloc(alloc, &block) == NULL)
-+	if (block.name == NULL || snd_gf1_mem_xalloc(alloc, &block) == NULL)
- 		return -ENOMEM;
- #ifdef CONFIG_SND_DEBUG
- 	snd_card_ro_proc_new(gus->card, "gusmem", gus, snd_gf1_mem_info_read);
--- 
+This looks fine.
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+>   	 */
+>   	while (count > 0 || s10_free_buffer_count(mgr) != NUM_SVC_BUFS) {
+>   		reinit_completion(&priv->status_return_completion);
+

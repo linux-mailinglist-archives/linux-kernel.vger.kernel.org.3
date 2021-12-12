@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B08471A19
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 13:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E45471A36
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 13:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbhLLMk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 07:40:58 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:60758 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229787AbhLLMk6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 07:40:58 -0500
-Received: from ip4d17a2ab.dynamic.kabel-deutschland.de ([77.23.162.171] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1mwO9w-0004Fw-1K; Sun, 12 Dec 2021 13:40:56 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: Re: (subset) [PATCH v2 0/3] RK356x/Quartz64 Model A SPI
-Date:   Sun, 12 Dec 2021 13:40:53 +0100
-Message-Id: <163931280631.2862987.5299564340042039820.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211127141910.12649-1-frattaroli.nicolas@gmail.com>
-References: <20211127141910.12649-1-frattaroli.nicolas@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S230441AbhLLMyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 07:54:09 -0500
+Received: from smtp-34-i2.italiaonline.it ([213.209.12.34]:54174 "EHLO
+        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229985AbhLLMyE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 07:54:04 -0500
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([82.50.51.121])
+        by smtp-34.iol.local with ESMTPA
+        id wOMammqwPUpmcwOMamGyIl; Sun, 12 Dec 2021 13:54:01 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1639313641; bh=Mu6DObjl4NjaDHGHcI+cH71n6ivJ3cELCJZmt93mjOo=;
+        h=From;
+        b=tK78/E7yg2F0gOx+rU96RGNTqXLK+SBRlZnvX+tsvzU2zt0o+Jy+SdEWL0FO4oTov
+         C7gblnAXZTe5IYRI27qI1ZnrzmmldSRVnHomxLOBRfOYWyCJctGuKm5CJkU1R7hsfz
+         uo6mapLVuoWf9RO6hRh8s5yIZ12LStYmPCy3L8T4bKuiH9qJNcFH43LitM47QiVC7B
+         LapMpxpLSjSNjtwpTlUSda1yxPlnGVBDSg9GO24EBNat6JJdPM4h87joxRjnEzL5lt
+         KFKZ6WGdGQz9Ms8rofB3S5j1ID/yiEHDdGh0PYPdixDwhwtIa4G0OSiCACIbc/tUG9
+         4cT7Fyl/7jbZQ==
+X-CNFS-Analysis: v=2.4 cv=VsDmv86n c=1 sm=1 tr=0 ts=61b5f0e9 cx=a_exe
+ a=xtCFBUu/Ze6RtP+zVSd77w==:117 a=xtCFBUu/Ze6RtP+zVSd77w==:17
+ a=8I0KCcMPWWhMFVcpAy8A:9
+From:   Dario Binacchi <dariobin@libero.it>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Andrew F . Davis" <afd@ti.com>, Felipe Balbi <balbi@ti.com>,
+        Rachna Patil <rachna@ti.com>, Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Jeff Lance <j-lance1@ti.com>,
+        Zubair Lutfullah <zubair.lutfullah@gmail.com>,
+        Vignesh R <vigneshr@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Brad Griffis <bgriffis@ti.com>,
+        Dario Binacchi <dariobin@libero.it>
+Subject: [RESEND PATCH 0/3] input: touchscreen: am335x: fix and improvements
+Date:   Sun, 12 Dec 2021 13:53:55 +0100
+Message-Id: <20211212125358.14416-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfF4DdcLXCoY0YJggC1A/zGE1daSGJ1y0kOs+yr+ynnqmiltxHTucCBzBzUM3j8rSF+afXC7fFIrMEb7VZPf14ll2rYq/oIjzYe01ENK2Cunk9N9K40a8
+ 0vGNZsDTAWemdfQrxurvg7mXqRwX65N6KSXJ1vkOQxSwXBSIeM3XK3H3CVVBA02rha5mhY/waY9oxkH+otEiiz8dP86rcJYzt5M+eAj9UWhDzsAjcY1Mpl3L
+ fHgLpYsVE/DGVSaYmeTTU/l8aEMcVvpwnEDQwfghExludvLd/ixCiQ6EAQe7ppcbDJ/YfDO/JlTKKJ/0LRompFwtVhzJ6HkzBQtwKDS4DLUrP2IkB/15MRxg
+ wHsUTXkEpwMQRcnYy32xGqP3b1zGFvI8YEgpL1CpvNtBmBA8q2FSb4Rfwb+nZ5Vpy4BhqiEbzNFI86SBK1dnHdmuBH2wxbJWp0q9Zz/b8sdQbIPdPrBicnSa
+ zOHNKiouSltzA1IUHra3c2hoXir9rnYmaVdqCFllJBYRB1ik/h61uCJxDXpH+jQVYoVRq9xewiit/dLZmBTrS5EpJUu3OFi0m6+OyHpaYLvkEBgAYNp2VBY0
+ 0rPu2OE9aLmLVRtpN3Tu1C0EUymYSE2AqPiHNYmunYT2JApyQeobrYbjlXQAbLAOS4g=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Nov 2021 15:19:06 +0100, Nicolas Frattaroli wrote:
-> Changes in v2:
->  - sort properties in rk356x.dtsi correctly
->  - remove pinctrl-1 line from rk356x.dtsi as it refers to
->    non-mainline stuff
-> 
-> Original cover letter:
-> 
-> [...]
 
-Applied, thanks!
+This series grew out of a touchscreen validation activity on a custom
+board. Oscilloscope measurements and driver source analysis led to these
+patches.
 
-[2/3] arm64: dts: rockchip: Add spi nodes on rk356x
-      commit: aaa552d84580e9213d0e2bf0f9243477d1227bdd
-[3/3] arm64: dts: rockchip: Add spi1 pins on Quartz64 A
-      commit: ea1847c09c34234c2980b99b6bb732a55447c33f
 
-Best regards,
+Dario Binacchi (3):
+  input: ti_am335x_tsc: set ADCREFM for X configuration
+  input: ti_am335x_tsc: fix STEPCONFIG setup for Z2
+  input: ti_am335x_tsc: lower the X and Y sampling time
+
+ drivers/input/touchscreen/ti_am335x_tsc.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.17.1
+

@@ -2,93 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FCA4718FA
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7037F4718FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbhLLHC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 02:02:27 -0500
-Received: from marcansoft.com ([212.63.210.85]:59184 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229577AbhLLHCZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 02:02:25 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7A277425DF;
-        Sun, 12 Dec 2021 07:02:21 +0000 (UTC)
-From:   Hector Martin <marcan@marcan.st>
-To:     Ben Chuang <benchuanggli@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Marc Zyngier <maz@kernel.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/2] mmc: sdhci-pci-gli: GL975[50]: Issue 8/16-bit MMIO reads as 32-bit reads.
-Date:   Sun, 12 Dec 2021 16:02:10 +0900
-Message-Id: <20211212070210.141664-3-marcan@marcan.st>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211212070210.141664-1-marcan@marcan.st>
-References: <20211212070210.141664-1-marcan@marcan.st>
+        id S229596AbhLLHEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 02:04:52 -0500
+Received: from smtpbg128.qq.com ([106.55.201.39]:23364 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229533AbhLLHEv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 02:04:51 -0500
+X-QQ-mid: bizesmtp51t1639292666tdc0063s
+Received: from localhost.localdomain (unknown [182.132.179.213])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Sun, 12 Dec 2021 15:04:24 +0800 (CST)
+X-QQ-SSF: 01000000002000D0I000B00A0000000
+X-QQ-FEAT: NXXopmE8dHbdspMIfiXAad1qP2yuR39QVi2oeQSv3rBI97xxw1I0MtBjMjlyf
+        MRiAnfVLGM6nJSVEwt8cBPMifHtaa0vmNkA1uTH2Mu2Kc1NrqN93Y5LMeqf5+lLSRUrHlsz
+        CX/FBs3/s0+oDsZfpq0340fvGQ8HC+0BQXHHoUFEA/Nxb9Zqnj+diTjVYvAs9GHRxnMNh1M
+        Lvm7WOPaIipL62z8eC7CM6Vu3M9lDBMxHa5ZcFODcairpJvgss8Hnc2shzhCQA9HiHS87qK
+        XiAG65hzRWTiIanrdp/R+O+ANsIOczrzvnmvphx7JQh31AU/Vikm2YJDRPm1DswLcqn6uXs
+        9YFY2a7QlT8qCDENnirsjYjpfOfAYGQKWRTY8kvKgaTzZ+kNGU=
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     tiwai@suse.com
+Cc:     perex@perex.cz, leon@kernel.org, wangborong@cdjrlc.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: sparc: no need to initialise statics to 0
+Date:   Sun, 12 Dec 2021 15:04:22 +0800
+Message-Id: <20211212070422.281924-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some reason, <32-bit reads do not work on Apple ARM64 platforms with
-these chips (even though they do on other PCIe devices). Issue them as
-32-bit reads instead. This is done unconditionally, as it shouldn't hurt
-even if not necessary.
+Static variables do not need to be initialised to 0, because compiler
+will initialise all uninitialised statics to 0. Thus, remove the
+unneeded initializations.
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/mmc/host/sdhci-pci-gli.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ sound/sparc/dbri.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-index ad742743a494..c6828e84db31 100644
---- a/drivers/mmc/host/sdhci-pci-gli.c
-+++ b/drivers/mmc/host/sdhci-pci-gli.c
-@@ -906,7 +906,28 @@ static int gli_probe_slot_gl9763e(struct sdhci_pci_slot *slot)
- 	return 0;
- }
+diff --git a/sound/sparc/dbri.c b/sound/sparc/dbri.c
+index 6b84f66e4af4..3881e1c1b08a 100644
+--- a/sound/sparc/dbri.c
++++ b/sound/sparc/dbri.c
+@@ -688,7 +688,7 @@ static void dbri_cmdsend(struct snd_dbri *dbri, s32 *cmd, int len)
+ {
+ 	u32 dvma_addr = (u32)dbri->dma_dvma;
+ 	s32 tmp, addr;
+-	static int wait_id = 0;
++	static int wait_id;
  
-+#define REG_OFFSET_IN_BITS(reg) ((reg) << 3 & 0x18)
-+
-+static u16 sdhci_gli_readw(struct sdhci_host *host, int reg)
-+{
-+	u32 val = readl(host->ioaddr + (reg & ~3));
-+	u16 word;
-+
-+	word = (val >> REG_OFFSET_IN_BITS(reg)) & 0xffff;
-+	return word;
-+}
-+
-+static u8 sdhci_gli_readb(struct sdhci_host *host, int reg)
-+{
-+	u32 val = readl(host->ioaddr + (reg & ~3));
-+	u8 byte = (val >> REG_OFFSET_IN_BITS(reg)) & 0xff;
-+
-+	return byte;
-+}
-+
- static const struct sdhci_ops sdhci_gl9755_ops = {
-+	.read_w			= sdhci_gli_readw,
-+	.read_b			= sdhci_gli_readb,
- 	.set_clock		= sdhci_gl9755_set_clock,
- 	.enable_dma		= sdhci_pci_enable_dma,
- 	.set_bus_width		= sdhci_set_bus_width,
-@@ -926,6 +947,8 @@ const struct sdhci_pci_fixes sdhci_gl9755 = {
- };
+ 	wait_id++;
+ 	wait_id &= 0xffff;	/* restrict it to a 16 bit counter. */
+@@ -1926,7 +1926,7 @@ static void dbri_process_interrupt_buffer(struct snd_dbri *dbri)
+ static irqreturn_t snd_dbri_interrupt(int irq, void *dev_id)
+ {
+ 	struct snd_dbri *dbri = dev_id;
+-	static int errcnt = 0;
++	static int errcnt;
+ 	int x;
  
- static const struct sdhci_ops sdhci_gl9750_ops = {
-+	.read_w			= sdhci_gli_readw,
-+	.read_b			= sdhci_gli_readb,
- 	.read_l                 = sdhci_gl9750_readl,
- 	.set_clock		= sdhci_gl9750_set_clock,
- 	.enable_dma		= sdhci_pci_enable_dma,
+ 	if (dbri == NULL)
+@@ -2591,7 +2591,7 @@ static int dbri_probe(struct platform_device *op)
+ 	struct snd_dbri *dbri;
+ 	struct resource *rp;
+ 	struct snd_card *card;
+-	static int dev = 0;
++	static int dev;
+ 	int irq;
+ 	int err;
+ 
 -- 
-2.33.0
+2.34.1
 

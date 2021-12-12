@@ -2,106 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5C3471B8F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 17:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12BB471B91
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 17:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbhLLQ0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 11:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbhLLQ0n (ORCPT
+        id S231661AbhLLQaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 11:30:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41996 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229648AbhLLQaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 11:26:43 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4342C061714;
-        Sun, 12 Dec 2021 08:26:43 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id kl8so12486537qvb.3;
-        Sun, 12 Dec 2021 08:26:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bNwHjQhCMbCngDQX0H2Ckug8Srm3laq1CXvl0Hu0lM4=;
-        b=TN+GNEmKaM7kZ83XqRhVGt6qR97dFjj2J2am6DzEXDqdOCFKNJ7/f4op+u4uknQvtE
-         LZMq3wH8qQk3WE/BcbZe6Zh2Xhm2Miy2dnLuy/5/Y7ITxSNSuq+4TZS18qpuJLXdSKBr
-         FNBky3Sz17QI0vaTJ7y/T6uPtk5gnjBw8/2eCvmn+F+xjesAV3S9r9kKWHksA8CvznMZ
-         AqpH69+Y7r82RSNyl3AWz7cAnVodlsuk68rVVfbXtiAdcW9gv9CaV3YuNxaV+SXM+eq+
-         mHbJZeSN/yoT8a4L9dkv7793323d86qrOZzQUbPVv8NKNF5sCT2DDPPt8WOCh0FC0LEA
-         IRLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bNwHjQhCMbCngDQX0H2Ckug8Srm3laq1CXvl0Hu0lM4=;
-        b=aT9nuvwK4rbzWeDXa3zfOIof6SQOxjPr2WACpGdXHjElUJLBZNrtXG0ifHPh/2mUoI
-         00FyFJz1ovRWOOSSdjIgnCBctvXrHDB7TRQd/xxojAqMhOnQ26B5ezG/7y2RQtLNqQk4
-         i8+Cw6CBqVUsqCx1ZFzE7yt405YjC9BvNkVWAZ0Wy0teKahr76vDqbllPeU4Al57kfic
-         4E7ROmmFSJJd3r9BH1I7D24FeTp+SOuEHyY1008hkNypYW69AK4s4YHvBVgfmWsX/sp3
-         O79KRsm7c/jlpNhmMZ27gplj3uTFdbrFf8WtwCSRk+noxuSBVj1ErHSaOdwv2bMrIvU9
-         cFKA==
-X-Gm-Message-State: AOAM532OQuXFp+cyDdlDEj6uhGzabrVqWSyxNUVnRMVXXtsyrAmuoobF
-        WImT8NTsENRdKJqkWoEYYai/W5fo3P6Dzo67Pbg=
-X-Google-Smtp-Source: ABdhPJz5keJkRw3D5mHm9P4v597lE0nNgF4GdVDHC/Rk0AvaTN8JHYTdOZU++IiRJNA0ndiLIg1li+HMZ/66oZZqZeE=
-X-Received: by 2002:a05:6214:3019:: with SMTP id ke25mr36724071qvb.69.1639326402741;
- Sun, 12 Dec 2021 08:26:42 -0800 (PST)
+        Sun, 12 Dec 2021 11:30:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25C17B80CC9;
+        Sun, 12 Dec 2021 16:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D8BFBC341C8;
+        Sun, 12 Dec 2021 16:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639326609;
+        bh=fxvB5pNQtvtjyrGDzo57OSUsf7bnkNWzHY8g9ucR43s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=B8MG++iAZcdunMr//TApuwjQJTa7Lh8Uglz90NtbGzd4hHO8ExswsTzXICYaSazXs
+         /h1PilwZnbbcsM/FDpwaBxrUBQftQachfdYd+orGDKNHUqjgwYX60nzJs567lMl+j4
+         tcr5xGIw4TTGK9lQ08zr6zcBaJMsy9qBRM2n/YVPfBK1I/FGlIvVDAj7AlsZK/FE42
+         CISD4N9/GBbcl9srMvPIp6A3mm4wQNord8Um0pwJa87Y3iM3XqAnV2Lkb9bzstX+d0
+         HRrcHzAP33W/JXZNZu7w+h/2MrTk50TpkECrz6Vkt1QaPJjiGiQPJtPQoodbCVinuq
+         qx7mjfrqr6unQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id BC58B60C78;
+        Sun, 12 Dec 2021 16:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211211063949.49533-1-laoar.shao@gmail.com> <20211211063949.49533-3-laoar.shao@gmail.com>
- <YbWSQy0pmO9RgRUu@qmqm.qmqm.pl>
-In-Reply-To: <YbWSQy0pmO9RgRUu@qmqm.qmqm.pl>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Mon, 13 Dec 2021 00:26:04 +0800
-Message-ID: <CALOAHbA+i96zO+XHOBM+k3F1viOnhe=e=z=Vobc+1Bh8NAP9SA@mail.gmail.com>
-Subject: Re: [PATCH -mm v2 2/3] cn_proc: replaced old hard-coded 16 with TASK_COMM_LEN_16
-To:     Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linux MM <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] net: hns3: add some fixes for -net
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163932660976.2571.4152316250430591107.git-patchwork-notify@kernel.org>
+Date:   Sun, 12 Dec 2021 16:30:09 +0000
+References: <20211210130934.36278-1-huangguangbin2@huawei.com>
+In-Reply-To: <20211210130934.36278-1-huangguangbin2@huawei.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, wangjie125@huawei.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lipeng321@huawei.com, chenhao288@hisilicon.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 2:10 PM Michal Miroslaw <mirq-linux@rere.qmqm.pl> wrote:
->
-> On Sat, Dec 11, 2021 at 06:39:48AM +0000, Yafang Shao wrote:
-> > This TASK_COMM_LEN_16 has the same meaning with the macro defined in
-> > linux/sched.h, but we can't include linux/sched.h in a UAPI header, so
-> > we should specifically define it in the cn_proc.h.
+Hello:
+
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 10 Dec 2021 21:09:32 +0800 you wrote:
+> This series adds some fixes for the HNS3 ethernet driver.
+> 
+> Jie Wang (1):
+>   net: hns3: fix use-after-free bug in hclgevf_send_mbx_msg
+> 
+> Yufeng Mo (1):
+>   net: hns3: fix race condition in debugfs
+> 
 > [...]
-> > index db210625cee8..6dcccaed383f 100644
-> > --- a/include/uapi/linux/cn_proc.h
-> > +++ b/include/uapi/linux/cn_proc.h
-> > @@ -21,6 +21,8 @@
-> >
-> >  #include <linux/types.h>
-> >
-> > +#define TASK_COMM_LEN_16 16
->
-> Hi,
->
-> Since this is added to UAPI header, maybe you could make it a single
-> instance also used elsewhere? Even though this is constant and not
-> going to change I don't really like multiplying the sources of truth.
->
 
-Hmm, what about defining it in include/uapi/linux/sched.h ?
-Then include "sched.h" in cn_proc.h
-And we also define it in tools/include/uapi/linux/sched.h for the
-usage in tools.
+Here is the summary with links:
+  - [net,1/2] net: hns3: fix use-after-free bug in hclgevf_send_mbx_msg
+    https://git.kernel.org/netdev/net/c/27cbf64a766e
+  - [net,2/2] net: hns3: fix race condition in debugfs
+    https://git.kernel.org/netdev/net/c/6dde452bceca
 
+You are awesome, thank you!
 -- 
-Thanks
-Yafang
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

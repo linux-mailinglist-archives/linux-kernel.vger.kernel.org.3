@@ -2,130 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9841047196E
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00869471971
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbhLLJQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 04:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbhLLJQk (ORCPT
+        id S229978AbhLLJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 04:17:05 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:52578 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229888AbhLLJRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 04:16:40 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A3C061714;
-        Sun, 12 Dec 2021 01:16:39 -0800 (PST)
+        Sun, 12 Dec 2021 04:17:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AB51FCE0B21;
-        Sun, 12 Dec 2021 09:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F02AC341C6;
-        Sun, 12 Dec 2021 09:16:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3DCF4CE0B0D
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 09:17:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D73C341C6;
+        Sun, 12 Dec 2021 09:16:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639300595;
-        bh=FcCfq4bNjl8T6b/+8viEc5WUfvmEh89NrvoiU1a3sYo=;
+        s=k20201202; t=1639300621;
+        bh=elxtjfKOhvAqmW+8MXAqawaVNnq4o0koS73lDKUoLus=;
         h=From:To:Cc:Subject:Date:From;
-        b=nSylLWdl/51/bEM84CdSYtjLlUdiW90rNo5EfAtj691K6sfdOePWpG6Z8ekFpGEyE
-         /xHtJVf+ui8eTKgyk3u6m8CK1EkoSA8R3xpyCX/dFa/Tnj4E4utDyqLaGi9uQ8Qkvu
-         N6qCSEP4MR3oE7uXW4TOczO5b1FeJmxaQU7GZpRQgzDxrqvoGGqQVpwb+dYjjvxc3Q
-         E0FmRVL/ICLoC6IWHg00wdqNNSA9zRjVO+R9eMsYKj+eeLlW/UeztUCtNof5Wh1ei3
-         jvA3+EA5Ab7wRVqYUzAWrJgmrufy6MhvcYi4sYB2WpwulS+z5HBAIrSycwzMYWaW2j
-         R43Bffk254rKQ==
+        b=tNp8drbx6GuzqUybqonJytE1Tz6DSkkDJZmCRv+WeUm90IWESDgxKAtpV8kt3Jqr+
+         7AxTzONGEryLfP6023Wdj1UYsL9eRAyStLBWRdN/orBV+K0GviRkySm/JPlX6iApBy
+         KkRM2llg3ZgyKie8M1WTlhmEKVfXUo5ti3Abece8nGRIHM055AaYTuNDpnouTTFTTn
+         DCuuuHg3oqfhnnaW9GJyC/X0eE/kCeVjWoYdCGSQv8vM3H5McnRX8eIX1K0APs1jlo
+         rv+WTirXbnYftuczuQbJLU4TeqviVSbh8HpcnmF7rX/D6oRBuaAYk1yQeIYtoXnDcX
+         B3ovDj4G8XJbQ==
 From:   Chao Yu <chao@kernel.org>
 To:     jaegeuk@kernel.org
 Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>
-Subject: [PATCH v3] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
-Date:   Sun, 12 Dec 2021 17:16:30 +0800
-Message-Id: <20211212091630.6325-1-chao@kernel.org>
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: clean up __find_inline_xattr() with __find_xattr()
+Date:   Sun, 12 Dec 2021 17:16:56 +0800
+Message-Id: <20211212091656.6404-1-chao@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Wenqing Liu reported in bugzilla:
+Just cleanup, no logic change.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215235
-
-- Overview
-page fault in f2fs_setxattr() when mount and operate on corrupted image
-
-- Reproduce
-tested on kernel 5.16-rc3, 5.15.X under root
-
-1. unzip tmp7.zip
-2. ./single.sh f2fs 7
-
-Sometimes need to run the script several times
-
-- Kernel dump
-loop0: detected capacity change from 0 to 131072
-F2FS-fs (loop0): Found nat_bits in checkpoint
-F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
-BUG: unable to handle page fault for address: ffffe47bc7123f48
-RIP: 0010:kfree+0x66/0x320
-Call Trace:
- __f2fs_setxattr+0x2aa/0xc00 [f2fs]
- f2fs_setxattr+0xfa/0x480 [f2fs]
- __f2fs_set_acl+0x19b/0x330 [f2fs]
- __vfs_removexattr+0x52/0x70
- __vfs_removexattr_locked+0xb1/0x140
- vfs_removexattr+0x56/0x100
- removexattr+0x57/0x80
- path_removexattr+0xa3/0xc0
- __x64_sys_removexattr+0x17/0x20
- do_syscall_64+0x37/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is in __f2fs_setxattr(), we missed to do sanity check on
-last xattr entry, result in out-of-bound memory access during updating
-inconsistent xattr data of target inode.
-
-After the fix, it can detect such xattr inconsistency as below:
-
-F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
-F2FS-fs (loop11): inode (8) has corrupted xattr
-F2FS-fs (loop11): inode (8) has corrupted xattr
-F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
-
-Cc: stable@vger.kernel.org
-Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
 Signed-off-by: Chao Yu <chao@kernel.org>
 ---
-v3:
-- fix compile warning:
-warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
- fs/f2fs/xattr.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ fs/f2fs/xattr.c | 29 +++++++++++------------------
+ 1 file changed, 11 insertions(+), 18 deletions(-)
 
 diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
-index e348f33bcb2b..797ac505a075 100644
+index 797ac505a075..8e5cd9c916ff 100644
 --- a/fs/f2fs/xattr.c
 +++ b/fs/f2fs/xattr.c
-@@ -684,8 +684,17 @@ static int __f2fs_setxattr(struct inode *inode, int index,
- 	}
+@@ -226,15 +226,18 @@ static inline const struct xattr_handler *f2fs_xattr_handler(int index)
+ }
  
- 	last = here;
--	while (!IS_XATTR_LAST_ENTRY(last))
-+	while (!IS_XATTR_LAST_ENTRY(last)) {
-+		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
-+			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
-+			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %zu",
-+					inode->i_ino, ENTRY_SIZE(last));
-+			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
-+			error = -EFSCORRUPTED;
-+			goto exit;
+ static struct f2fs_xattr_entry *__find_xattr(void *base_addr,
+-				void *last_base_addr, int index,
+-				size_t len, const char *name)
++				void *last_base_addr, void **last_addr,
++				int index, size_t len, const char *name)
+ {
+ 	struct f2fs_xattr_entry *entry;
+ 
+ 	list_for_each_xattr(entry, base_addr) {
+ 		if ((void *)(entry) + sizeof(__u32) > last_base_addr ||
+-			(void *)XATTR_NEXT_ENTRY(entry) > last_base_addr)
++			(void *)XATTR_NEXT_ENTRY(entry) > last_base_addr) {
++			if (last_addr)
++				*last_addr = entry;
+ 			return NULL;
 +		}
- 		last = XATTR_NEXT_ENTRY(last);
-+	}
  
- 	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+ 		if (entry->e_name_index != index)
+ 			continue;
+@@ -254,19 +257,9 @@ static struct f2fs_xattr_entry *__find_inline_xattr(struct inode *inode,
+ 	unsigned int inline_size = inline_xattr_size(inode);
+ 	void *max_addr = base_addr + inline_size;
  
+-	list_for_each_xattr(entry, base_addr) {
+-		if ((void *)entry + sizeof(__u32) > max_addr ||
+-			(void *)XATTR_NEXT_ENTRY(entry) > max_addr) {
+-			*last_addr = entry;
+-			return NULL;
+-		}
+-		if (entry->e_name_index != index)
+-			continue;
+-		if (entry->e_name_len != len)
+-			continue;
+-		if (!memcmp(entry->e_name, name, len))
+-			break;
+-	}
++	entry = __find_xattr(base_addr, max_addr, last_addr, index, len, name);
++	if (!entry)
++		return NULL;
+ 
+ 	/* inline xattr header or entry across max inline xattr size */
+ 	if (IS_XATTR_LAST_ENTRY(entry) &&
+@@ -368,7 +361,7 @@ static int lookup_all_xattrs(struct inode *inode, struct page *ipage,
+ 	else
+ 		cur_addr = txattr_addr;
+ 
+-	*xe = __find_xattr(cur_addr, last_txattr_addr, index, len, name);
++	*xe = __find_xattr(cur_addr, last_txattr_addr, NULL, index, len, name);
+ 	if (!*xe) {
+ 		f2fs_err(F2FS_I_SB(inode), "inode (%lu) has corrupted xattr",
+ 								inode->i_ino);
+@@ -659,7 +652,7 @@ static int __f2fs_setxattr(struct inode *inode, int index,
+ 	last_base_addr = (void *)base_addr + XATTR_SIZE(inode);
+ 
+ 	/* find entry with wanted name. */
+-	here = __find_xattr(base_addr, last_base_addr, index, len, name);
++	here = __find_xattr(base_addr, last_base_addr, NULL, index, len, name);
+ 	if (!here) {
+ 		f2fs_err(F2FS_I_SB(inode), "inode (%lu) has corrupted xattr",
+ 								inode->i_ino);
 -- 
 2.32.0
 

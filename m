@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7424C471E24
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 22:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91E0471E3D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbhLLV5o convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 12 Dec 2021 16:57:44 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:35970 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbhLLV5n (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 16:57:43 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 3666E62DA5E9;
-        Sun, 12 Dec 2021 22:57:41 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id C98Zu0q6EXFN; Sun, 12 Dec 2021 22:57:40 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 61B0362DA5F0;
-        Sun, 12 Dec 2021 22:57:40 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id K6Z7PkXH7Fdd; Sun, 12 Dec 2021 22:57:40 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 404F962DA5E9;
-        Sun, 12 Dec 2021 22:57:40 +0100 (CET)
-Date:   Sun, 12 Dec 2021 22:57:40 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     linux-nfs <linux-nfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        anna schumaker <anna.schumaker@netapp.com>,
-        david <david@sigma-star.at>
-Message-ID: <1388843712.160520.1639346260184.JavaMail.zimbra@nod.at>
-In-Reply-To: <7a8d59679ed2ab948b8b694eb1df94e3a90fcc8a.camel@hammerspace.com>
-References: <20211212210044.16238-1-richard@nod.at> <dd3aec8fed9bab9b3e62fc2093803688b7b71682.camel@hammerspace.com> <1812588409.160456.1639344774221.JavaMail.zimbra@nod.at> <7a8d59679ed2ab948b8b694eb1df94e3a90fcc8a.camel@hammerspace.com>
-Subject: Re: [RFC PATCH] NFS: Save 4 bytes when re-exporting
+        id S229921AbhLLWdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 17:33:55 -0500
+Received: from mail.wizzup.org ([95.217.97.174]:43916 "EHLO wizzup.org"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229838AbhLLWdy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 17:33:54 -0500
+X-Greylist: delayed 1568 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Dec 2021 17:33:53 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
+        s=mail; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:
+        To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Gn4QbhSu65M62ejQy1QWEFPPz4XhpZovxB+9NzFOVPg=; b=WGqbeFK/mVGaOu/ZeUQ1V5TL9P
+        RlFS34A21RMnTkWUk6pPDz81A52v3XSpqX2Ge6Pv7c7JHwa3uqa73l9TmHg0CA20mGlm2El1SnIOK
+        oHJUegfwF+O8JJE2cSODHOybM3B4vz+LwNgkTvITKlKSaVeLAW93ZfE/Gw0aAiM3Jdp2Rh2Lyz1R4
+        BXYzmVudcCYuyWkxrxGhDL9yjQzaRnFTX+fdhJ2Hbl+uccyUF83R612QMtC2G3qlKigmuulufq3zg
+        0eJXmGhjVqnYwlJd/kk2+onMsfSRJJharJlLm3/znLyLtpZ8lyN26jt6g6HYycG2HM5kx/dkUPPWt
+        lQd+rf9g==;
+Received: from [45.83.235.159] (helo=gentoo-x13.fritz.box)
+        by wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <merlijn@wizzup.org>)
+        id 1mwX0H-0001dD-U8; Sun, 12 Dec 2021 22:07:34 +0000
+From:   Merlijn Wajer <merlijn@wizzup.org>
+To:     merlijn@wizzup.org
+Cc:     Paul Fertser <fercerpav@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] wl1251: specify max. IE length
+Date:   Sun, 12 Dec 2021 23:13:08 +0100
+Message-Id: <20211212221310.5453-1-merlijn@wizzup.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF94 (Linux)/8.8.12_GA_3809)
-Thread-Topic: Save 4 bytes when re-exporting
-Thread-Index: AQHX75ta92YY4WU8k06yTBIDlSm7OawvXNEA1wwF3iuo9AOGgGEBWxOo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "Trond Myklebust" <trondmy@hammerspace.com>
->> What do you think?
->> 
-> 
-> You don't a priori know the length of the underlying filehandle or its
-> structure. All you know is that you have n bytes of data, and it is
-> possible that the first 2 bytes represent the size 'n-2'. However it is
-> also possible that those 2 bytes are something else that just happens
-> to match the value 'n-2'.
+This fix is similar to commit 77c91295ea53 ("wil6210: specify max. IE
+length").  Without the max IE length set, wpa_supplicant cannot operate
+using the nl80211 interface.
 
-Yes. ;-\
-Our mails have crossed, after hitting send I realized my fault.
+This patch is a workaround - the number 512 is taken from the wlcore
+driver, but note that per Paul Fertser:
 
-Thanks,
-//richard
+    there's no correct number because the driver will ignore the data
+    passed in extra IEs.
+
+Suggested-by: Paul Fertser <fercerpav@gmail.com>
+Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
+---
+ drivers/net/wireless/ti/wl1251/main.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/net/wireless/ti/wl1251/main.c b/drivers/net/wireless/ti/wl1251/main.c
+index 136a0d3b23c9..a25a6143e65f 100644
+--- a/drivers/net/wireless/ti/wl1251/main.c
++++ b/drivers/net/wireless/ti/wl1251/main.c
+@@ -1520,6 +1520,12 @@ int wl1251_init_ieee80211(struct wl1251 *wl)
+ 	wl->hw->wiphy->interface_modes = BIT(NL80211_IFTYPE_STATION) |
+ 					 BIT(NL80211_IFTYPE_ADHOC);
+ 	wl->hw->wiphy->max_scan_ssids = 1;
++
++	/* We set max_scan_ie_len to a random value to make wpa_supplicant scans not
++	 * fail, as the driver will the ignore the extra passed IEs anyway
++	 */
++	wl->hw->wiphy->max_scan_ie_len = 512;
++
+ 	wl->hw->wiphy->bands[NL80211_BAND_2GHZ] = &wl1251_band_2ghz;
+ 
+ 	wl->hw->queues = 4;
+-- 
+2.32.0
+

@@ -2,184 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5BB47197B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DFE47198D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbhLLJ0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 04:26:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47014 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229675AbhLLJ0M (ORCPT
+        id S230026AbhLLJ6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 04:58:52 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:29185 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230014AbhLLJ6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 04:26:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639301171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iOXcr6pHx2dTcXC87fAYLtq4NSmVsSlQxlt3kaDLk48=;
-        b=EzfbxKeB6rYH58Q24lo9Cc7d/724zHQzwCp796HQ6H5Z9y6BloxNMzyMglwa+Q09yF/479
-        I7IxGZVhCe/PS21jYW98YBvCd25CTdpH9SAHRfyDRLlLTHe9hHzh8Q/1B7Sy7gqivEwBJc
-        +vQ4CGsxxaZItW6022i6khyUrqhbhnk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-er43rCaaMomDE4xnfew5gw-1; Sun, 12 Dec 2021 04:26:10 -0500
-X-MC-Unique: er43rCaaMomDE4xnfew5gw-1
-Received: by mail-wm1-f71.google.com with SMTP id z138-20020a1c7e90000000b003319c5f9164so9808932wmc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:26:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=iOXcr6pHx2dTcXC87fAYLtq4NSmVsSlQxlt3kaDLk48=;
-        b=5Xg+4mFBcxiK+Pec1aItObyzx2n1DI99o3GYC9Ov82sjNtmYrlHkAQAGvERTGevdW+
-         Cuj7g57NtpInA0jiLnOcGgG1XjsL0hzMIh55P/qS6X3r1e4rJA38K9T8IRPFmmmOEIzj
-         08QvQt7NLqLYMLjStmIZBx5k1Y+FoJbuxDyuoGfojqnP7Qepehd5x4XzGs4S/F4eNupR
-         U0KvDtyFFEqXj2KsLgWepcGlHuoBpBkAZqFddF5LCmAQRB0J2aQ8V/8rPxi7exRFwGqB
-         9E5AwczP3sQ8so5t1+QuO+rOSHtzMwmgCfuQ/+os6OmbzzuESKuIqD16HeGolOoSMIhR
-         NgCQ==
-X-Gm-Message-State: AOAM532FNXjHOKlrfYYmefFdgHzAyvJNGZdhNYMiFExDxItiq4KJ55jt
-        S4hSzG90f5t6knlAZ4FGcrtUTeqC8R8Ow2xY/sRkwtS24J61ec6hMRISCYdtYTf7RU8aAcVNI1I
-        6n32iMYT0/pfIDXUFOzOf/Mdk
-X-Received: by 2002:adf:f352:: with SMTP id e18mr24921188wrp.39.1639301169219;
-        Sun, 12 Dec 2021 01:26:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxtqXoz8hDbJjLt2rbzhBOfaD5dc4meh/BYw1JmqhXFGUH5XhglF+PBQQDu4hLMN81ueRNuRg==
-X-Received: by 2002:adf:f352:: with SMTP id e18mr24921175wrp.39.1639301169009;
-        Sun, 12 Dec 2021 01:26:09 -0800 (PST)
-Received: from redhat.com ([2a03:c5c0:107e:eefb:294:6ac8:eff6:22df])
-        by smtp.gmail.com with ESMTPSA id 9sm9707263wry.0.2021.12.12.01.26.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 01:26:08 -0800 (PST)
-Date:   Sun, 12 Dec 2021 04:26:04 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Si-Wei Liu <si-wei.liu@oracle.com>
-Cc:     Jason Wang <jasowang@redhat.com>, elic@nvidia.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: Re: vdpa legacy guest support (was Re: [PATCH] vdpa/mlx5:
- set_features should allow reset to zero)
-Message-ID: <20211212042311-mutt-send-email-mst@kernel.org>
-References: <fae0bae7-e4cd-a3aa-57fe-d707df99b634@redhat.com>
- <20210223082536-mutt-send-email-mst@kernel.org>
- <3ff5fd23-1db0-2f95-4cf9-711ef403fb62@oracle.com>
- <20210224000057-mutt-send-email-mst@kernel.org>
- <52836a63-4e00-ff58-50fb-9f450ce968d7@oracle.com>
- <20210228163031-mutt-send-email-mst@kernel.org>
- <2cb51a6d-afa0-7cd1-d6f2-6b153186eaca@redhat.com>
- <20210302043419-mutt-send-email-mst@kernel.org>
- <178f8ea7-cebd-0e81-3dc7-10a058d22c07@redhat.com>
- <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com>
+        Sun, 12 Dec 2021 04:58:51 -0500
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JBg5g25fQzB6dw;
+        Sun, 12 Dec 2021 17:56:39 +0800 (CST)
+Received: from [10.67.102.197] (10.67.102.197) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 12 Dec 2021 17:58:49 +0800
+Subject: Re: [PATCH v2] sysctl: Add a group of macro functions to initcall the
+ sysctl table of each feature
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <viro@zeniv.linux.org.uk>,
+        <ebiederm@xmission.com>, <keescook@chromium.org>,
+        <jlayton@kernel.org>, <bfields@fieldses.org>, <yzaikin@google.com>,
+        <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
+        <lukas.bulwahn@gmail.com>, <julia.lawall@inria.fr>,
+        <akpm@linux-foundation.org>, <wangle6@huawei.com>
+References: <YbEQG1MrjHreKFmw@bombadil.infradead.org>
+ <20211210085849.66169-1-nixiaoming@huawei.com>
+ <YbOMSUBRWAUFyDbQ@bombadil.infradead.org>
+From:   Xiaoming Ni <nixiaoming@huawei.com>
+Message-ID: <02907871-95a9-8cdb-ff73-744e3feb4257@huawei.com>
+Date:   Sun, 12 Dec 2021 17:58:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com>
+In-Reply-To: <YbOMSUBRWAUFyDbQ@bombadil.infradead.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.197]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 05:44:15PM -0800, Si-Wei Liu wrote:
-> Sorry for reviving this ancient thread. I was kinda lost for the conclusion
-> it ended up with. I have the following questions,
+On 2021/12/11 1:20, Luis Chamberlain wrote:
+> On Fri, Dec 10, 2021 at 04:58:49PM +0800, Xiaoming Ni wrote:
+>> To avoid duplicated code, add a set of macro functions to initialize the
+>> sysctl table for each feature.
+>>
+>> The system initialization process is as follows:
+>>
+>> 	start_kernel () {
+>> 		...
+>> 		/* init proc and sysctl base,
+>> 		 * proc_root_init()-->proc_sys_init()-->sysctl_init_bases()
+>> 		 */
+>> 		proc_root_init(); /* init proc and sysctl base */
+>> 		...
+>> 		arch_call_rest_init();
+>> 	}
+>>
+>> 	arch_call_rest_init()-->rest_init()-->kernel_init()
+>> 	kernel_init() {
+>> 		...
+>> 		kernel_init_freeable(); /* do all initcalls */
+>> 		...
+>> 		do_sysctl_args(); /* Process the sysctl parameter: sysctl.*= */
+>> 	}
+>>
+>> 	kernel_init_freeable()--->do_basic_setup()-->do_initcalls()
+>> 	do_initcalls() {
+>> 		for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++) {
+>> 			do_initcall_level
+>> 	}
 > 
-> 1. legacy guest support: from the past conversations it doesn't seem the
-> support will be completely dropped from the table, is my understanding
-> correct? Actually we're interested in supporting virtio v0.95 guest for x86,
-> which is backed by the spec at
-> https://ozlabs.org/~rusty/virtio-spec/virtio-0.9.5.pdf. Though I'm not sure
-> if there's request/need to support wilder legacy virtio versions earlier
-> beyond.
-
-I personally feel it's less work to add in kernel than try to
-work around it in userspace. Jason feels differently.
-Maybe post the patches and this will prove to Jason it's not
-too terrible?
-
-> 2. suppose some form of legacy guest support needs to be there, how do we
-> deal with the bogus assumption below in vdpa_get_config() in the short term?
-> It looks one of the intuitive fix is to move the vdpa_set_features call out
-> of vdpa_get_config() to vdpa_set_config().
+> It was nice to have this documented in the commit log, however you
+> don't provide a developer documentation for this in your changes.
+> Can you justify through documentation why we can use init levels
+> with the above information for the sysctl_initcall() macro?
 > 
->         /*
->          * Config accesses aren't supposed to trigger before features are
-> set.
->          * If it does happen we assume a legacy guest.
->          */
->         if (!vdev->features_valid)
->                 vdpa_set_features(vdev, 0);
->         ops->get_config(vdev, offset, buf, len);
+>> The sysctl interface of each subfeature should be registered after
+>> sysctl_init_bases() and before do_sysctl_args().
 > 
-> I can post a patch to fix 2) if there's consensus already reached.
+> Indeed.
 > 
-> Thanks,
-> -Siwei
+>> It seems
+> 
+> Seems is poor judgement for a change in the kernel. It is or not.
+> 
+>> that the sysctl
+>> interface does not depend on initcall_levels. To prevent the sysctl
+>> interface from being initialized before the feature itself. The
+>> lowest-level
+> 
+> Lower to me means early, but since we are talking about time, best
+> to clarify and say the latest init level during kernel bootup.
+> 
+>> late_initcall() is used as the common sysctl interface
+>> registration level.
+>>
+>> Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
+>>
+>> ---
+>> v2:
+>>    Add a simple checkpatch check.
+>>    Add code comment.
+>> v1:
+>>    https://lore.kernel.org/lkml/20211207011320.100102-1-nixiaoming@huawei.com/
+>> ---
+>>   fs/coredump.c          |  7 +------
+>>   fs/dcache.c            |  7 +------
+>>   fs/exec.c              |  8 +-------
+>>   fs/file_table.c        |  7 +------
+>>   fs/inode.c             |  7 +------
+>>   fs/locks.c             |  7 +------
+>>   fs/namei.c             |  8 +-------
+>>   fs/namespace.c         |  7 +------
+>>   include/linux/sysctl.h | 19 +++++++++++++++++++
+>>   kernel/stackleak.c     |  7 +------
+>>   scripts/checkpatch.pl  |  6 ++++++
+>>   11 files changed, 34 insertions(+), 56 deletions(-)
+>>
+>> diff --git a/fs/coredump.c b/fs/coredump.c
+>> index 570d98398668..8f6c6322651d 100644
+>> --- a/fs/coredump.c
+>> +++ b/fs/coredump.c
+>> @@ -943,12 +943,7 @@ static struct ctl_table coredump_sysctls[] = {
+>>   	{ }
+>>   };
+>>   
+>> -static int __init init_fs_coredump_sysctls(void)
+>> -{
+>> -	register_sysctl_init("kernel", coredump_sysctls);
+>> -	return 0;
+>> -}
+>> -fs_initcall(init_fs_coredump_sysctls);
+>> +kernel_sysctl_initcall(coredump_sysctls);
+> 
+> Nice.
+> 
+> Yes, although I went with fs_initcall() your documentation above
+> does give us certainty that this is fine as well. No need to kick
+> this through earlier.
+> 
+>>   #endif /* CONFIG_SYSCTL */
+>>   
+>>   /*
+>> diff --git a/fs/dcache.c b/fs/dcache.c
+>> index 0eef1102f460..c1570243aaee 100644
+>> --- a/fs/dcache.c
+>> +++ b/fs/dcache.c
+>> @@ -195,12 +195,7 @@ static struct ctl_table fs_dcache_sysctls[] = {
+>>   	{ }
+>>   };
+>>   
+>> -static int __init init_fs_dcache_sysctls(void)
+>> -{
+>> -	register_sysctl_init("fs", fs_dcache_sysctls);
+>> -	return 0;
+>> -}
+>> -fs_initcall(init_fs_dcache_sysctls);
+>> +fs_sysctl_initcall(fs_dcache_sysctls);
+> 
+> Seems fine by me using the same logic as above and I like that
+> you are splitting this by bases. Likewise for the others, this
+> is looking good.
+> 
+>> diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+>> index acf0805cf3a0..ce33e61a8287 100644
+>> --- a/include/linux/sysctl.h
+>> +++ b/include/linux/sysctl.h
+>> @@ -231,6 +231,25 @@ extern int sysctl_init_bases(void);
+>>   extern void __register_sysctl_init(const char *path, struct ctl_table *table,
+>>   				 const char *table_name);
+> 
+> Yes please take the time to write some documentation here which can
+> explain to developers *why* we use the init levels specified.
+> 
+>>   #define register_sysctl_init(path, table) __register_sysctl_init(path, table, #table)
+>> +
 
-I'm not sure how important it is to change that.
-In any case it only affects transitional devices, right?
-Legacy only should not care ...
+/** 
 
+  * sysctl_initcall() - register and init sysctl leaf node to path 
 
-> On 3/2/2021 2:53 AM, Jason Wang wrote:
-> > 
-> > On 2021/3/2 5:47 下午, Michael S. Tsirkin wrote:
-> > > On Mon, Mar 01, 2021 at 11:56:50AM +0800, Jason Wang wrote:
-> > > > On 2021/3/1 5:34 上午, Michael S. Tsirkin wrote:
-> > > > > On Wed, Feb 24, 2021 at 10:24:41AM -0800, Si-Wei Liu wrote:
-> > > > > > > Detecting it isn't enough though, we will need a new ioctl to notify
-> > > > > > > the kernel that it's a legacy guest. Ugh :(
-> > > > > > Well, although I think adding an ioctl is doable, may I
-> > > > > > know what the use
-> > > > > > case there will be for kernel to leverage such info
-> > > > > > directly? Is there a
-> > > > > > case QEMU can't do with dedicate ioctls later if there's indeed
-> > > > > > differentiation (legacy v.s. modern) needed?
-> > > > > BTW a good API could be
-> > > > > 
-> > > > > #define VHOST_SET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
-> > > > > #define VHOST_GET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
-> > > > > 
-> > > > > we did it per vring but maybe that was a mistake ...
-> > > > 
-> > > > Actually, I wonder whether it's good time to just not support
-> > > > legacy driver
-> > > > for vDPA. Consider:
-> > > > 
-> > > > 1) It's definition is no-normative
-> > > > 2) A lot of budren of codes
-> > > > 
-> > > > So qemu can still present the legacy device since the config
-> > > > space or other
-> > > > stuffs that is presented by vhost-vDPA is not expected to be
-> > > > accessed by
-> > > > guest directly. Qemu can do the endian conversion when necessary
-> > > > in this
-> > > > case?
-> > > > 
-> > > > Thanks
-> > > > 
-> > > Overall I would be fine with this approach but we need to avoid breaking
-> > > working userspace, qemu releases with vdpa support are out there and
-> > > seem to work for people. Any changes need to take that into account
-> > > and document compatibility concerns.
-> > 
-> > 
-> > Agree, let me check.
-> > 
-> > 
-> > >   I note that any hardware
-> > > implementation is already broken for legacy except on platforms with
-> > > strong ordering which might be helpful in reducing the scope.
-> > 
-> > 
-> > Yes.
-> > 
-> > Thanks
-> > 
-> > 
-> > > 
-> > > 
-> > 
+  * @path:  path name for sysctl base 
 
+  * @table: This is the sysctl leaf table that needs to be registered to 
+the path
+  * 
+
+  * Leaf node in the sysctl tree: 
+
+  * a) File, .child = NULL 
+
+  * b) Directory, which is not shared by multiple features, .child != 
+NULL
+  * 
+
+  * The sysctl interface for each subfeature should be in the after 
+
+  * sysctl_init_bases() and before do_sysctl_args(). 
+
+  * sysctl_init_bases() is executed before early_initcall(). 
+
+  * do_sysctl_args() is executed after late_initcall(). 
+
+  * Therefore, it is safe to add leaves to the sysctl tree using 
+late_initcall().
+  */
+
+How about that description?
+
+>> +#define sysctl_initcall(path, table) \
+>> +	static int __init init_##table(void) \
+>> +	{ \
+>> +		register_sysctl_init(path, table); \
+>> +		return  0;\
+>> +	} \
+>> +	late_initcall(init_##table)
+>> +
+>> +/*
+>> + * Use xxx_sysctl_initcall() to initialize your sysctl interface unless you want
+>> + * to register the sysctl directory and share it with other features.
+>> + */
+>> +#define kernel_sysctl_initcall(table) sysctl_initcall("kernel", table)
+>> +#define fs_sysctl_initcall(table) sysctl_initcall("fs", table)
+>> +#define vm_sysctl_initcall(table) sysctl_initcall("vm", table)
+>> +#define debug_sysctl_initcall(table) sysctl_initcall("debug", table)
+>> +#define dev_sysctl_initcall(table) sysctl_initcall("dev", table)
+>> +
+>>   extern struct ctl_table_header *register_sysctl_mount_point(const char *path);
+>>   
+>>   void do_sysctl_args(void);
+> 
+>    Luis
+> .
+> 
+
+Thanks
+Xiaoming Ni

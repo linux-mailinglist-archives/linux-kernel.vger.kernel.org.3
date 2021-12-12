@@ -2,110 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2573471A3B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 13:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B00471A41
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbhLLM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 07:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S230495AbhLLNAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 08:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbhLLM5H (ORCPT
+        with ESMTP id S229846AbhLLNAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 07:57:07 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABD1C061714;
-        Sun, 12 Dec 2021 04:57:06 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so12317873wme.0;
-        Sun, 12 Dec 2021 04:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=caHoaEy2aONMpfGjBtSDMo4jFNKxlGFW4Ou5yTv9LW0=;
-        b=HmbBJzZfdUqGsnmLrZpoURuBsBiSGjV1tXowmldCJxnhvs/DjYqS1XTDFbuWHA3GfS
-         kyPBKlxToGGFtwZ4AS2OPz9VF55Vk24FLgP6lrp3bMhpFrkj5CsxYGtbW7da8dXKtrFC
-         8aKYZvmmC/UnG2ybRM8/m1NYPxEjH7lfo1SrKa3+UcHx/msPx+XAODzrZXxOO/CIYq1L
-         CZ5RrVeFajrmhG27nT8CKdR2PBQHJyyGdGNHHkVaFjZLDjqyXiKTyePRtw2EX/IxEvuM
-         qPn+yTM29Tlq+L84oq2K7a8rGseLng3LmtILa4/Gt95/sEp3psED/2gae+cmc1iMXmi7
-         VKPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=caHoaEy2aONMpfGjBtSDMo4jFNKxlGFW4Ou5yTv9LW0=;
-        b=yDE2AxgXd0ypzL+6xu/lIM9gNGSvN7ITverms0vDvDhZ+Z964/sAAh+Wq5NSYAR2Tu
-         CilMm6dwOYCEdMVIXHTaCefe35dFZ8re787AUx9rpq3jw92mj/hm5SR7MPjs/Bf8bVKc
-         AzZZlT74zwRcdei8to+PPDgiLBIWRmNHVSeTgL8AP/ExDV6kzxJV9zDicGY01VCCw8nY
-         7TNwFhf9WiIQeG9g4uAMBssasEhd6TULHfVlSEHrTiiJ+buO2SQWkvSfRC2reYME7XaC
-         5GCnsbnIFx4DcVfndQUAQZa7Yf8md5DdDikas+366UXybEFmka5gHbvnZJxcPhWOWPBt
-         X+kQ==
-X-Gm-Message-State: AOAM5310MXdYyV8X6uyAa6MnbfHvqyHIjLgUxBQ6X5zs/tjDz6cH/NnS
-        zUOL5VFOUQhjS+FidXTRm3kadp1L7DgtdA==
-X-Google-Smtp-Source: ABdhPJzq54FOzUTnAMsHfZoO3dHM+weCQCBhNPy7/RgL54n9AWSHDVP2Ob7VROq7SgUcMoK/R/RjmQ==
-X-Received: by 2002:a7b:c145:: with SMTP id z5mr29694895wmi.131.1639313825173;
-        Sun, 12 Dec 2021 04:57:05 -0800 (PST)
-Received: from [10.74.0.6] ([85.203.46.181])
-        by smtp.gmail.com with ESMTPSA id y6sm8309913wrh.18.2021.12.12.04.57.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 04:57:04 -0800 (PST)
-Subject: Re: [BUG] fs: ext4: possible ABBA deadlock in
- ext4_inline_data_truncate() and ext4_punch_hole()
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <03a92134-ce74-f586-59a0-baed436b275a@gmail.com>
- <YbI2IEzCVo+A6GTi@mit.edu> <c9f25d5a-0963-5b2d-b1f0-e7c7454f7153@gmail.com>
- <YbOWz7tvA6DuXcrw@mit.edu>
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Message-ID: <65ca0a4b-c8f1-860e-8890-4852eb354129@gmail.com>
-Date:   Sun, 12 Dec 2021 20:56:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Sun, 12 Dec 2021 08:00:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC76C061714;
+        Sun, 12 Dec 2021 05:00:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50506CE0B53;
+        Sun, 12 Dec 2021 13:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70EC5C341CA;
+        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639314008;
+        bh=H2l+xf2WeTwJXBbO9SZOz0IoqXaav2fWOq4Wutvwjek=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SA7iwLgW36Yr5tI+gDE/hkdzXECmcQgyFIUKd2wMcR9jlfZBxtL6O/xoVHPCNbMcT
+         d7+iIFDtPrXrjpTLDyoQNmTimw64ntwY7LskdWmRofeWAL+Q7vFJrJx3SPWz55Nurx
+         v8x9DeagZJojjAmyjJANOAfbIDzj+iqG1FU8mQJnFf6VtVz7KQR3K4P2+DhKBylQxY
+         Ck2++zEQkwMbQz44AE/f9I4udVoIGMQ63vK/V5U5jEuMn5CNDKuVt8u7LN774ds1i0
+         Z9apXVO2bYiv5y6PoypwQy55VKNFKEEG1qXH9tXCfrP6YF3ieZCqNF5tcBJCIFomNd
+         XZZ/ZF/RCPk7g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 507DC60BD0;
+        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <YbOWz7tvA6DuXcrw@mit.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163931400832.17396.4075834071106906036.git-patchwork-notify@kernel.org>
+Date:   Sun, 12 Dec 2021 13:00:08 +0000
+References: <20211210072523.38886-1-po-hsu.lin@canonical.com>
+In-Reply-To: <20211210072523.38886-1-po-hsu.lin@canonical.com>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        skhan@linuxfoundation.org, andrea.righi@canonical.com,
+        dsahern@kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 10 Dec 2021 15:25:23 +0800 you wrote:
+> If any sub-test in this icmp_redirect.sh is failing but not expected
+> to fail. The script will complain:
+>     ./icmp_redirect.sh: line 72: [: 1: unary operator expected
+> 
+> This is because when the sub-test is not expected to fail, we won't
+> pass any value for the xfail local variable in log_test() and thus
+> it's empty. Fix this by passing 0 as the 4th variable to log_test()
+> for non-xfail cases.
+> 
+> [...]
+
+Here is the summary with links:
+  - [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
+    https://git.kernel.org/netdev/net/c/3748939bce3f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 2021/12/11 2:05, Theodore Y. Ts'o wrote:
-> On Fri, Dec 10, 2021 at 10:03:37AM +0800, Jia-Ju Bai wrote:
->> Thank you very much for the detailed explanation!
->> I will improve my static analysis tool for this point.
-> I'm not sure it will be possible to programatically detect why the
-> ABBA deadlock isn't possible without having the static analyzer having
-> a semantic understanding how the code works (so it can understand that
-> that code path which leads to the ABBA deadlock won't get executed).
->
-> It may very well be that being able to understand why the ABBA
-> deadlock can't happen in that case is equivalent to solving the
-> halting problem.  But if you do come up with a clever way of improving
-> your static analysis tool, I'll be excited to see it!
-
-Hi Ted,
-
-Thanks a lot for your advice!
-According to your last message, ext4_punch_hole() and 
-ext4_inline_data_truncate() both call ext4_has_inline_data() to check 
-whether the inode has inline data.
-In ext4_inline_data_truncate(), when ext4_has_inline_data() returns 
-zero, the function returns.
-In ext4_punch_hole(), when ext4_has_inline_data() returns zero, the 
-function continues.
-Thus, I think I can add such "concurrency" path conditions in my tool to 
-filter out false positives, by assuming that the same function calls or 
-data structure fields should return/store the same value in concurrency 
-code paths without race conditions.
-
-In fact, my tool can validate path conditions of each sequential code 
-path. I can find ways to validate "concurrency" path conditions in my 
-tool :)
-
-
-Best wishes,
-Jia-Ju Bai

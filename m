@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B971471DC5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 22:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B18471DEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 22:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbhLLVWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 16:22:06 -0500
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:39824 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbhLLVWA (ORCPT
+        id S230502AbhLLVXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 16:23:04 -0500
+Received: from mail-lf1-f52.google.com ([209.85.167.52]:38428 "EHLO
+        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230450AbhLLVWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 16:22:00 -0500
-Received: by mail-lf1-f50.google.com with SMTP id d10so27503266lfg.6;
-        Sun, 12 Dec 2021 13:21:58 -0800 (PST)
+        Sun, 12 Dec 2021 16:22:43 -0500
+Received: by mail-lf1-f52.google.com with SMTP id bi37so27522281lfb.5;
+        Sun, 12 Dec 2021 13:22:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CYB4TkQOzA3vf/K7WR0AkGT34Ge0Y+0VoaElZGGGZzU=;
-        b=YPGRWatSQET2pz+NVqu4ADHfYgaxmP/wWxna6m/lloO4toehydZkLAQeVKfAZnur3U
-         ytUl8qCGBZdPLRC2UzNM4AW78JtCd6wM5cGhTywvum741iPm3RcFk7tkhkZidnvbCnJl
-         R/4YWy2Kn2XQsZfcdS0OqacDfDDCQ28GjMnqHQTevEBhyfW+vOkmPPci2FrLZRzsEI3D
-         rIODFz6+YMOOUk7HX9YcjikZPgA6Qmy3MY8VgfLlwgexSKQyGvZ0zOYmPyq4U9vsPiW2
-         gzi0gfD7OcJAbuwERD0Pe26Rs8F2W7VMl8LrFpshwRBhPegOZQws/YUiLfZf5um9S4nw
-         C5Tg==
+        bh=SiVmxmlmX7gD18KWJKuTaPa7pNX7A6+5Wut7BQEWlWA=;
+        b=qyaqAU+HSKD+HsUBKg5AB4Grj9JsCbr9g/kNEIZtJUYDPkR5w7X3oEBoqbhkveHPA0
+         i7WuMCFDqVmy4v4uwmxmKqJQgyKWbZxAuezUxU7vJ7Js6Vv9mGU7AXWM79sgkKDLmhWK
+         jFp8UPoUTDTrVPMbjiOZPw0kaHhZEow7vk98bEAvorv4PN2Ae1WrpFauYpbNmt6sURPu
+         EHsFzc94IQPacNeM0GpGjXTCkggEJqqfF6pqgsflI/TGqDXRSOm8kaL/erYImjVTvQQe
+         TKd1cdir2wKhwb/5hDwmkKqbCAzORiU/FXU4xaDIEAT35buQchr71urUuURu0JjCKmA+
+         4E2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CYB4TkQOzA3vf/K7WR0AkGT34Ge0Y+0VoaElZGGGZzU=;
-        b=cq6Tx6aKc2aijXuwl3InVPOV0DNiI8VsblqB5RHMk0P+BwbVbJbV/tZtqqif3A+du3
-         kEYK178Djfl5QQCiijiD1i0q+PHRPhZQbDl4T3x9hKKZRXwjygMShXhIYQj+/MmkK19+
-         iuZUCOXmjZwerJFq+Fc9gEMKThFpwZUsEVyVgDjlagXdhPoU1BQrs1MeK3U4/yCn3c2c
-         1FyyxNcvSE9VBOvnBY3zc32zuY+HdNwhCIojtO14UM1gP2IKcQzIDbl3vNn3FHhgxaNc
-         oj3Y9k+5+bQ+JEiIpvab9IsUbHiikohpS/151kvmxwilWOklI+U33RbCNgwL9EaGdAtZ
-         18Lg==
-X-Gm-Message-State: AOAM532xJviTeQIgvqVI+jKlBrJjhGexTBa4g+zWEJvB5fTX2oo/AkVH
-        Tq68pOJthQosR619Cf/RZKyuq07frEE=
-X-Google-Smtp-Source: ABdhPJzJGi8tVTi5bdKFCxEOnO/KtQERR8PihOgq6tSrXYkNCawTEu3K38hiwfey531aaHgxOHQg5Q==
-X-Received: by 2002:a2e:874b:: with SMTP id q11mr26014054ljj.194.1639343018442;
-        Sun, 12 Dec 2021 13:03:38 -0800 (PST)
+        bh=SiVmxmlmX7gD18KWJKuTaPa7pNX7A6+5Wut7BQEWlWA=;
+        b=aTi0Wa/YAxkfi05Gj57EittPaRPBkkhEyEmd5nTJXLSHNzR0jtqERx4DTkQQ3Pcn4f
+         eXuk9kg6+Onc07rLmt1a+KRyymM02yzjNHs6OtHYt7ynoSFCwts02nS0hHXswm0ze6VT
+         cnAeJP8LPihlk0xzv1E0BPkMoBVMXRalVWeE1+PIWufX4CJzybrzCSum1J+V3B37zZ9m
+         pkh02dPvxa3EVeY+GOJwVp2qgQcVO/MWAbSHeDLOkj1vRXM5hwh8DWhxx61afVQ1H6nq
+         nUBlhwIR0ZYSPBu9GHvc25xZgvpjfHQtMb5q1uvF9asU2d3aKlrB3yB7VtqgHzpNuh91
+         NRFQ==
+X-Gm-Message-State: AOAM533PHSwOINy/ERL2ZIL62eVqL86q3eJhCkt+V8tWZg8xls+Lyr9R
+        V430iAGUFRFsNQ4mTzpo6DSqoxHc2sI=
+X-Google-Smtp-Source: ABdhPJzPB5bwYAfFOn1aDytHDcrWq16AdXdyLAU7ztJCQFx3xpkh7jhCINcDSwIbtlftQmSbgta8Pw==
+X-Received: by 2002:a2e:9903:: with SMTP id v3mr25528327lji.143.1639343020440;
+        Sun, 12 Dec 2021 13:03:40 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id y4sm1197172ljp.16.2021.12.12.13.03.36
+        by smtp.gmail.com with ESMTPSA id y4sm1197172ljp.16.2021.12.12.13.03.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 13:03:38 -0800 (PST)
+        Sun, 12 Dec 2021 13:03:40 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -98,9 +98,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
         linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v5 02/21] notifier: Add atomic/blocking_notifier_chain_register_unique_prio()
-Date:   Mon, 13 Dec 2021 00:02:50 +0300
-Message-Id: <20211212210309.9851-3-digetx@gmail.com>
+Subject: [PATCH v5 03/21] reboot: Print error message if restart handler has duplicated priority
+Date:   Mon, 13 Dec 2021 00:02:51 +0300
+Message-Id: <20211212210309.9851-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211212210309.9851-1-digetx@gmail.com>
 References: <20211212210309.9851-1-digetx@gmail.com>
@@ -110,186 +110,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add variant of atomic/blocking_notifier_chain_register() functions that
-doesn't allow to register notifier using a duplicated priority. The -EBUSY
-error code is returned in this case by the new API functions.
+Add sanity check which ensures that there are no two restart handlers
+registered using the same priority. This requirement will become mandatory
+once all drivers will be converted to the new API and such errors will be
+fixed.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- include/linux/notifier.h |  5 +++
- kernel/notifier.c        | 87 +++++++++++++++++++++++++++++++---------
- 2 files changed, 73 insertions(+), 19 deletions(-)
+ kernel/reboot.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/include/linux/notifier.h b/include/linux/notifier.h
-index d4717bc0ab85..ccce26197dd2 100644
---- a/include/linux/notifier.h
-+++ b/include/linux/notifier.h
-@@ -150,6 +150,11 @@ extern int raw_notifier_chain_register(struct raw_notifier_head *nh,
- extern int srcu_notifier_chain_register(struct srcu_notifier_head *nh,
- 		struct notifier_block *nb);
- 
-+extern int atomic_notifier_chain_register_unique_prio(
-+		struct atomic_notifier_head *nh, struct notifier_block *nb);
-+extern int blocking_notifier_chain_register_unique_prio(
-+		struct blocking_notifier_head *nh, struct notifier_block *nb);
-+
- extern int atomic_notifier_chain_unregister(struct atomic_notifier_head *nh,
- 		struct notifier_block *nb);
- extern int blocking_notifier_chain_unregister(struct blocking_notifier_head *nh,
-diff --git a/kernel/notifier.c b/kernel/notifier.c
-index e30d24ee88e9..77e5112ff05b 100644
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -20,7 +20,7 @@ BLOCKING_NOTIFIER_HEAD(reboot_notifier_list);
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 6bcc5d6a6572..35f0cde641c1 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -182,6 +182,21 @@ static ATOMIC_NOTIFIER_HEAD(restart_handler_list);
   */
- 
- static int notifier_chain_register(struct notifier_block **nl,
--		struct notifier_block *n)
-+		struct notifier_block *n, bool unique_priority)
+ int register_restart_handler(struct notifier_block *nb)
  {
- 	while ((*nl) != NULL) {
- 		if (unlikely((*nl) == n)) {
-@@ -29,6 +29,8 @@ static int notifier_chain_register(struct notifier_block **nl,
- 		}
- 		if (n->priority > (*nl)->priority)
- 			break;
-+		if (n->priority == (*nl)->priority && unique_priority)
-+			return -EBUSY;
- 		nl = &((*nl)->next);
- 	}
- 	n->next = *nl;
-@@ -143,12 +145,35 @@ int atomic_notifier_chain_register(struct atomic_notifier_head *nh,
- 	int ret;
- 
- 	spin_lock_irqsave(&nh->lock, flags);
--	ret = notifier_chain_register(&nh->head, n);
-+	ret = notifier_chain_register(&nh->head, n, false);
- 	spin_unlock_irqrestore(&nh->lock, flags);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(atomic_notifier_chain_register);
- 
-+/**
-+ *	atomic_notifier_chain_register_unique_prio - Add notifier to an atomic notifier chain
-+ *	@nh: Pointer to head of the atomic notifier chain
-+ *	@n: New entry in notifier chain
-+ *
-+ *	Adds a notifier to an atomic notifier chain if there is no other
-+ *	notifier registered using the same priority.
-+ *
-+ *	Returns zero on success, -EBUSY otherwise.
-+ */
-+int atomic_notifier_chain_register_unique_prio(struct atomic_notifier_head *nh,
-+					       struct notifier_block *n)
-+{
-+	unsigned long flags;
 +	int ret;
 +
-+	spin_lock_irqsave(&nh->lock, flags);
-+	ret = notifier_chain_register(&nh->head, n, true);
-+	spin_unlock_irqrestore(&nh->lock, flags);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(atomic_notifier_chain_register_unique_prio);
++	ret = atomic_notifier_chain_register_unique_prio(&restart_handler_list, nb);
++	if (ret != -EBUSY)
++		return ret;
 +
- /**
-  *	atomic_notifier_chain_unregister - Remove notifier from an atomic notifier chain
-  *	@nh: Pointer to head of the atomic notifier chain
-@@ -208,18 +233,9 @@ NOKPROBE_SYMBOL(atomic_notifier_call_chain);
-  *	synchronized by an rwsem.
-  */
- 
--/**
-- *	blocking_notifier_chain_register - Add notifier to a blocking notifier chain
-- *	@nh: Pointer to head of the blocking notifier chain
-- *	@n: New entry in notifier chain
-- *
-- *	Adds a notifier to a blocking notifier chain.
-- *	Must be called in process context.
-- *
-- *	Currently always returns zero.
-- */
--int blocking_notifier_chain_register(struct blocking_notifier_head *nh,
--		struct notifier_block *n)
-+static int __blocking_notifier_chain_register(struct blocking_notifier_head *nh,
-+					      struct notifier_block *n,
-+					      bool unique_priority)
- {
- 	int ret;
- 
-@@ -229,15 +245,48 @@ int blocking_notifier_chain_register(struct blocking_notifier_head *nh,
- 	 * such times we must not call down_write().
- 	 */
- 	if (unlikely(system_state == SYSTEM_BOOTING))
--		return notifier_chain_register(&nh->head, n);
-+		return notifier_chain_register(&nh->head, n, unique_priority);
- 
- 	down_write(&nh->rwsem);
--	ret = notifier_chain_register(&nh->head, n);
-+	ret = notifier_chain_register(&nh->head, n, unique_priority);
- 	up_write(&nh->rwsem);
- 	return ret;
- }
++	/*
++	 * Handler must have unique priority. Otherwise call order is
++	 * determined by registration order, which is unreliable.
++	 *
++	 * This requirement will become mandatory once all drivers
++	 * will be converted to use new sys-off API.
++	 */
++	pr_err("failed to register restart handler using unique priority\n");
 +
-+/**
-+ *	blocking_notifier_chain_register - Add notifier to a blocking notifier chain
-+ *	@nh: Pointer to head of the blocking notifier chain
-+ *	@n: New entry in notifier chain
-+ *
-+ *	Adds a notifier to a blocking notifier chain.
-+ *	Must be called in process context.
-+ *
-+ *	Currently always returns zero.
-+ */
-+int blocking_notifier_chain_register(struct blocking_notifier_head *nh,
-+		struct notifier_block *n)
-+{
-+	return __blocking_notifier_chain_register(nh, n, false);
-+}
- EXPORT_SYMBOL_GPL(blocking_notifier_chain_register);
- 
-+/**
-+ *	blocking_notifier_chain_register_unique_prio - Add notifier to a blocking notifier chain
-+ *	@nh: Pointer to head of the blocking notifier chain
-+ *	@n: New entry in notifier chain
-+ *
-+ *	Adds a notifier to an blocking notifier chain if there is no other
-+ *	notifier registered using the same priority.
-+ *
-+ *	Returns zero on success, -EBUSY otherwise.
-+ */
-+int blocking_notifier_chain_register_unique_prio(struct blocking_notifier_head *nh,
-+						 struct notifier_block *n)
-+{
-+	return __blocking_notifier_chain_register(nh, n, true);
-+}
-+EXPORT_SYMBOL_GPL(blocking_notifier_chain_register_unique_prio);
-+
- /**
-  *	blocking_notifier_chain_unregister - Remove notifier from a blocking notifier chain
-  *	@nh: Pointer to head of the blocking notifier chain
-@@ -353,7 +402,7 @@ bool blocking_notifier_call_chain_is_empty(struct blocking_notifier_head *nh)
- int raw_notifier_chain_register(struct raw_notifier_head *nh,
- 		struct notifier_block *n)
- {
--	return notifier_chain_register(&nh->head, n);
-+	return notifier_chain_register(&nh->head, n, false);
+ 	return atomic_notifier_chain_register(&restart_handler_list, nb);
  }
- EXPORT_SYMBOL_GPL(raw_notifier_chain_register);
- 
-@@ -432,10 +481,10 @@ int srcu_notifier_chain_register(struct srcu_notifier_head *nh,
- 	 * such times we must not call mutex_lock().
- 	 */
- 	if (unlikely(system_state == SYSTEM_BOOTING))
--		return notifier_chain_register(&nh->head, n);
-+		return notifier_chain_register(&nh->head, n, false);
- 
- 	mutex_lock(&nh->mutex);
--	ret = notifier_chain_register(&nh->head, n);
-+	ret = notifier_chain_register(&nh->head, n, false);
- 	mutex_unlock(&nh->mutex);
- 	return ret;
- }
+ EXPORT_SYMBOL(register_restart_handler);
 -- 
 2.33.1
 

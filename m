@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 847824719E5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 12:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DB24719E9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 12:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbhLLLtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 06:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S230284AbhLLLze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 06:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbhLLLtv (ORCPT
+        with ESMTP id S229793AbhLLLzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 06:49:51 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EC2C061714;
-        Sun, 12 Dec 2021 03:49:51 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso12187308wmr.4;
-        Sun, 12 Dec 2021 03:49:51 -0800 (PST)
+        Sun, 12 Dec 2021 06:55:33 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CDEC061714;
+        Sun, 12 Dec 2021 03:55:33 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so12694600pja.1;
+        Sun, 12 Dec 2021 03:55:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yzxe8Re5dkGc5HAZ8xQodsn0WXrPFcMV1CfaTBnWvsA=;
-        b=kKaDIX6yqYhVPE5od0/O0AKwG7NdSxydD1JJuvZPDH5+ZFCHyofEmd6tgu1SSAOhFz
-         TdZ+YLVVpKc7wHLVCS1Qkvl0uDpuIWWK5Yd8Wp2Z2HKu6JxXvWRnXkutYBUm8SJvBjDD
-         kJf3bwe/iI5oXlvphQgemdZ8WXWDTF2v57ZIz+XRxyeYVRQeGuaXCdA5MsgPn+sF1HAV
-         GjtXH4T1aH4AH3ce0nTJNyzmwzKeh5kZSLrynudBOaTYG7o/QOHpZbzZ3pIG/+9agf/O
-         nrmipNzrgnfv4MdK3DWpVz8Y86esyCVTmuF6ljexOxq4ctvgLWC0qj+EQUFpjBxSXM0F
-         GVIw==
+        bh=hX/ICKtr5gW8yVaOGnXk5ZnAIDwSq2paZmGCJ/xzR3o=;
+        b=FAjhegj3SG+UvdjFvrXS28CX8qHvlvWkpKSnAo6rjTVKJAY1hjVPXZ8m70f95CvkOT
+         2/zjV1M4KIciELPfm/ZJ8RivZ+R3bOHmcgzYuVtwQQNkEhvuHE6PXQ3vvN9QeuoJOZJu
+         0T8clhzo8RfbmYie2hRraJr7Mp1eEGVkdz6ct/TI7CQxiATv2WKAZMUIpbDCujGcS4+M
+         yP1s0xW/4ziupeNaiBlmRz87TOdRd2UGiSF+Gakf2esA4N+g3FWAUNpstJr4y653Xaib
+         +PWHn6TuRuEMB29NyuoDpGqAczb8f3f/OrLjHDrcqE1/HYIavPSU/wkDbZYhwWA83+9a
+         3MuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yzxe8Re5dkGc5HAZ8xQodsn0WXrPFcMV1CfaTBnWvsA=;
-        b=GeCRHwtVdomJKQKEo+jRJp6TE71FMQhmL99Y5PzCzWZsc0rECrP//BM4LSZYRzBi1u
-         pkHFSoQq++rFKwHcY7lp6op1xLprIQ5iCTb95hhudsswSn/3VR0xnRgz0belOKsSNZAl
-         hAcyoqzhQ5ny9hjUb5vlIp4IBWVGlRmwKUs9mj9Z/CY9YtWOKzwrtarvw+fbbkJUQysc
-         NCZzUgfEqNRHmkyCqxl9eaUfH6b/oEOG31NopXumwpRI73jErnW+IdPpusLhagR6fJDt
-         HO8r7Wyh448TZQYS2B3d+UOUNuNmM4KIdIUNS0uBoWdbF/wfFSLTr+H8vZmrg7CLNk27
-         YOsA==
-X-Gm-Message-State: AOAM532upo/Jzdi7C9QUfPPwXW3Rw05nbpjm5BoLWdN1T6lYOJtoN59M
-        W+L8SlX8itKrLIplniFJ1Wk=
-X-Google-Smtp-Source: ABdhPJx+VEYet6QHWn4eK6qiJvnMorn8TTKQ8tkKyLTTMsqSDkm3Nya0YAohSBzJbeU0lct/ZJfJRA==
-X-Received: by 2002:a7b:c256:: with SMTP id b22mr29895368wmj.176.1639309789956;
-        Sun, 12 Dec 2021 03:49:49 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id g16sm4336837wmq.20.2021.12.12.03.49.46
+        bh=hX/ICKtr5gW8yVaOGnXk5ZnAIDwSq2paZmGCJ/xzR3o=;
+        b=ervNcpCaF/hFYl/Lhvat6KXy6RC+ytJtyL5epWIrcMDtCqdt4bvsINBbAEDcGYyClF
+         j3ILnMM+Fs5nIMsOQrtNKOdYCiYNIrF0UjgGHmx+xRoBzW8+OHmhunz+zapCEDqQo6uo
+         qoHDgLEM7Wi6n3AikbXn4SPGalcKvKiBeRtbmGgvDcc5EmMtp86n4DY6Lm3t2qlmEzeG
+         4XyI0z8j5/D6JqRfIW9BRb4A+jJOaaar0dtZx02hbV2qRT20DdJGMn8gyZ0gDGm1RB1y
+         ee52iRRn2X9bMZMItNe3UwUc6Sa98DAoOGpENcUbmZM1UJs7hlj7Qv8O08yQUcyAy60O
+         qtBw==
+X-Gm-Message-State: AOAM531Z922jS32TFMKNEhYcGJdX90qrhDvPjYsa8cHfUiXoFdbjqnXK
+        DGMeNY7REUrlZI3FbqJJ9t0=
+X-Google-Smtp-Source: ABdhPJyX3oFAc+HQ//7S+51gGzVlfj9Q3l8O5LkRTdU480ioUaICXeQWuw4FTwGfw2PzHI6TOCaWoQ==
+X-Received: by 2002:a17:90b:1e4f:: with SMTP id pi15mr37052454pjb.181.1639310132658;
+        Sun, 12 Dec 2021 03:55:32 -0800 (PST)
+Received: from localhost.localdomain ([240d:1a:8f0:6c00:89cb:88d1:b6b2:3345])
+        by smtp.gmail.com with ESMTPSA id e14sm9909732pfv.18.2021.12.12.03.55.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 03:49:49 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ribalda@chromium.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] media: uvcvideo: Fix memory leak in uvc_gpio_parse
-Date:   Sun, 12 Dec 2021 12:49:30 +0100
-Message-Id: <20211212114929.264905-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 12 Dec 2021 03:55:32 -0800 (PST)
+From:   Alexandre Courbot <gnurou@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, Alexandre Courbot <gnurou@gmail.com>
+Subject: [PATCH] usb: storage: do not use UAS with Logitec LGB-4BNHUC
+Date:   Sun, 12 Dec 2021 20:55:06 +0900
+Message-Id: <20211212115506.180629-1-gnurou@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously the unit buffer was allocated before checking the IRQ for
-privacy GPIO.
-In case of error, the unit buffer was leaked.
+This 4-drives USB 3.1 bay gets unhappy when used with UAS:
 
-Allocate the unit buffer after the IRQ to avoid it.
+	sd 10:0:0:0: [sdb] tag#18 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD IN
+	sd 10:0:0:0: [sdb] tag#18 CDB: Read(16) 88 00 00 00 00 00 00 9d 42 30 00 00 04 00 00 00
 
-Addresses-Coverity-ID: 1474639 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+It works perfectly fine as a regular mass-storage device, so prevent UAS
+from being used with it.
+
+Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/storage/unusual_uas.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 7c007426e082..9e83e2002710 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1533,10 +1533,6 @@ static int uvc_gpio_parse(struct uvc_device *dev)
- 	if (IS_ERR_OR_NULL(gpio_privacy))
- 		return PTR_ERR_OR_ZERO(gpio_privacy);
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index b34b858d82a6..9ef09cabef50 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -52,6 +52,12 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
  
--	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
--	if (!unit)
--		return -ENOMEM;
--
- 	irq = gpiod_to_irq(gpio_privacy);
- 	if (irq < 0) {
- 		if (irq != EPROBE_DEFER)
-@@ -1545,6 +1541,10 @@ static int uvc_gpio_parse(struct uvc_device *dev)
- 		return irq;
- 	}
- 
-+	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
-+	if (!unit)
-+		return -ENOMEM;
++UNUSUAL_DEV(0x0789, 0x0296, 0x0000, 0x9999,
++		"Logitec",
++		"LGB-4BNHUC",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
 +
- 	unit->gpio.gpio_privacy = gpio_privacy;
- 	unit->gpio.irq = irq;
- 	unit->gpio.bControlSize = 1;
+ /*
+  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+  * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
 -- 
-2.25.1
+2.34.1
 

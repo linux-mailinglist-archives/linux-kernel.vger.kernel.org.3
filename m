@@ -2,117 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B06471E92
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1998E471EA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbhLLXFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 18:05:20 -0500
-Received: from mx3.wp.pl ([212.77.101.9]:42616 "EHLO mx3.wp.pl"
+        id S230272AbhLLXMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 18:12:40 -0500
+Received: from mout.gmx.net ([212.227.15.19]:60053 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229532AbhLLXFT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 18:05:19 -0500
-Received: (wp-smtpd smtp.wp.pl 31525 invoked from network); 13 Dec 2021 00:05:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1639350316; bh=IuenmZmLjJO5EeZREf7j9hjrsyHQE/JgXkTClLDzILk=;
-          h=From:Subject:To:Cc;
-          b=ElSc8llOJ9X+eurk7EZOMhdzH/2/aCnfrOWCQ9B9rCDJEgiayBOFtgKyd0CDcYZob
-           KkKuBcony5roqSYeukukoVmbc+Eo2A7SaFO1DfpmLCvoobrJ8/nQFzsp8iNB/7NVev
-           TVMgyH1jszxX28IZY7Wwvt+XItkdspMsDZxU/19I=
-Received: from riviera.nat.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <linux-kernel@vger.kernel.org>; 13 Dec 2021 00:05:16 +0100
-From:   Aleksander Bajkowski <olek2@wp.pl>
-Subject: Re: [PATCH net v2] net: lantiq_xrx200: increase buffer reservation
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     hauke@hauke-m.de, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211206223909.749043-1-olek2@wp.pl>
- <20211207205448.3b297e7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Message-ID: <c4d93a2e-b4de-9b19-ff44-a122dbbb22b8@wp.pl>
-Date:   Mon, 13 Dec 2021 00:05:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S230260AbhLLXMj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 18:12:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639350751;
+        bh=IoQi5EMV/XH/LpqMr+ICgxVN4Bq0JmYZIA4yRCf+EI8=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=FMVowCVOvdeE/C79RvbcOZTU4BcOnnrVPPyanA1TfQow8SmZgTOnoQ3XAzF4NQYQ8
+         vv+gqCw3h9BhdovWNeKnD1y4A3M34Pdn/Q5nRBZ6ffdzWTXNoUA22RKpuQvDo52PDi
+         Vzh2h19125jrhlS4aOPY2RcmFlXP3VcBlcXbzSyk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MCsPy-1mnmak3B0C-008t7c; Mon, 13
+ Dec 2021 00:12:30 +0100
+Date:   Mon, 13 Dec 2021 00:12:29 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>
+Subject: Re: [PATCH v2 1/8] dt-bindings: arm/npcm: Add binding for global
+ control registers (GCR)
+Message-ID: <YbaB3a3pFo9pA2I0@latitude>
+References: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
+ <20211207210823.1975632-2-j.neuschaefer@gmx.net>
+ <YbNqKfwYes0rH07B@robh.at.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211207205448.3b297e7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: e4c1644b2bfb5ce56930ccca2c1ddd69
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000B [McN0]                               
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8Nw9gXbH6ji+XyMM"
+Content-Disposition: inline
+In-Reply-To: <YbNqKfwYes0rH07B@robh.at.kernel.org>
+X-Provags-ID: V03:K1:mKk8Aj49glbM/0M2m2dk9cYhezX/sIrY9ojc/IGUkfvsS6FwQ32
+ THkfd5/wiOkW2DOSO/UaK2Z/vJgijwMB228OOxdqaRUYdeNRul3LcUZnRyL/Nudbl9fiJqD
+ r3Z9wO7XnK0kkWFDrnznS/DsEA876ChdXq1IluGMqZNpfTwawBgpya9VqGLTRJn95tEabEt
+ wkbhv06qX/bnCxN8DcPag==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YY93j3RXj2M=:yFNRmAusrQsqdZwAwRz4vf
+ bpE01BLsoEP8BykGLkpTjjhb6R+ZBk98G3CDkUyyfSzRKafc0hG/LDaHAJiAXGYwGbXoUDXl3
+ Eod2/hDh87ucctPRQ7MHekLpRzIynTR5m06adGA3rNvTk1iTtJgUqV9itvz9rusQ1iap6FaYK
+ uTqapUQD490QEErncmnWHZSyMBeRSKIy3aRBPBjfc6SGtC768ILZYjltzGi/kuqqvFjtzfWJH
+ LoF0Lyh14EDNF1mHnovF4VyLRMhTDWJ0ngryrafQUka5wbuyMuwlcy5J6DYsE5P9QpOL/7CRh
+ /tgSEq4qNd39+dqnOGzCCfF6Dz7cuEqfUHHL5knbZbWQWdVQ6dedsLrP5tfZYqZKlBT2OBVkz
+ mA/IapCj8bbnTMmU+vsx59GJu+T9XZgLl8hFQbfLaFzaldPFAz9SiaJi4pMcYnRXqXjHlBlr0
+ 3th+RYvG4EP8LX/i4IXXcGQv21DIxINsQUa8/7zcHYwJwaIMSmgBdA4+D5kxQgPpIw++1NHnL
+ f2S7U743/dvEGJW5vxMTRpZYgViCAGIxTSUUnk2EaD/M587NcfunYKJmvkJYUXjMgZXsHPI2X
+ 8cvkV6un4fa0ifejZlkH84b7KbAjPUAKvw3c8jXYsMqjS4SrBD4fqMPDdUKeJUcCc3cF7zZjP
+ rkAHX/a/Veaulj2X5pAp2/1Cr+mxKqdUdZBlCVcFenaWrHpxXy4w+nNCV7I9PMjrF8tLXo170
+ DUlU3+xVW7iXRPoBOFohxpZQmP7TIKAQ5gRAQ/UK7vy1niikNpvHDtGjW7po+9X7s6hsFu5oN
+ pRVxlUyC1eUxH1EKUZGeXsi7UpFXWRU/f2a5ExReKKKhMGwcVX1QxkCEEmM7Us5lAoAdjY1JJ
+ Gw3zR0NQ2ZsqEXzE1AHb1I8UJ2zd/PhWMQJ2SzyuuPQrRGmuKB4Ts+hKH9ogGjJ19kH535hyl
+ e47odlZ2Kc6bkp3O8gAQtZQtIWujmnj7yWlXAfdET5JjtjE3LYR8eXalVsLAfFmHfNNgWJ57k
+ DIheW2waRiL84cBLvSKbSnTWgHeHHjMeDhIwuoRfF2sMv432lHYoyk0vymB7OOR+NEQ+UO1g0
+ xqqKd9l2kCU1eQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Sorry for the late reply, but recently I haven't had access to
-hardware to test different MTU values and packet lengths on the
-hardware.
+--8Nw9gXbH6ji+XyMM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/8/21 5:54 AM, Jakub Kicinski wrote:
-> On Mon,  6 Dec 2021 23:39:09 +0100 Aleksander Jan Bajkowski wrote:
->> +static int xrx200_max_frame_len(int mtu)
->> +{
->> +	return VLAN_ETH_HLEN + mtu + ETH_FCS_LEN;
-> 
-> You sure the problem is not that this doesn't include ETH_HLEN? 
-> MTU is the length of the L2 _payload_.
-> 
+On Fri, Dec 10, 2021 at 08:54:33AM -0600, Rob Herring wrote:
+> On Tue, Dec 07, 2021 at 10:08:16PM +0100, Jonathan Neusch=C3=A4fer wrote:
+> > A nuvoton,*-gcr node is present in nuvoton-common-npcm7xx.dtsi and will
+> > be added to nuvoton-wpcm450.dtsi. It is necessary for the NPCM7xx and
+> > WPCM450 pinctrl drivers, and may later be used to retrieve SoC model and
+> > version information.
+> >=20
+> > This patch adds a binding to describe this node.
+> >=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> >=20
+> > ---
+[...]
+> > +description: |
+>=20
+> Don't need '|' if no formatting.
 
-VLAN_ETH_HLEN (14 + 4) contains ETH_HLEN (14). This function returns
-the length of the frame that is written to the RX descriptor. Maybe
-I don't understand the question and you are asking something else? 
+Ok, I'll drop it.
 
->> +}
->> +
->> +static int xrx200_buffer_size(int mtu)
->> +{
->> +	return round_up(xrx200_max_frame_len(mtu) - 1, 4 * XRX200_DMA_BURST_LEN);
-> 
-> Why the - 1 ? 🤔
-> 
+> > +  The Global Control Registers (GCR) are a block of registers in Nuvot=
+on SoCs
+> > +  that expose misc functionality such as chip model and version inform=
+ation or
+> > +  pinmux settings.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - nuvoton,wpcm450-gcr
+> > +          - nuvoton,npcm750-gcr
+> > +      - const: syscon
+> > +      - const: simple-mfd
+>=20
+> blank line
 
-This is how the hardware behaves. I don't really know where the -1
-comes from. Unfortunately, I do not have access to TRM. 
+I'll add it.
 
-> For a frame size 101 => max_frame_len 109 you'll presumably want 
-> the buffer to be 116, not 108?
-> 
+> > +  reg: true
+>=20
+> Need to define how many entries:
+>=20
+> maxItems: 1
 
+Ok
 
-For a frame size 101 => max_frame_len is 123 (18 + 101 + 4). Infact, PMAC strips FCS and ETH_FCS_LEN may not be needed. This behavior
-is controlled by the PMAC_HD_CTL_RC bit. This bit is enabled from
-the beginning of this driver. Ethtool has the option to enable
-FCS reception, but the ethtool interface is not yet supported
-by this driver. 
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
 
->> +}
->> +
+Ah, oops, I missed that I still had this line, when I added the child
+node to the example.
 
-Experiments show that the hardware starts to split the frame at
-max_frame_len() - 1. Some examples:
+> Ideally, you should define the child node names, but you can do this:
+>=20
+> additionalProperties:
+>   type: object
+>=20
+> which means anything undefined must be a node.
 
-pkt len		MTU	max_frame_size()	buffer_size()	desc1	desc2	desc3	desc4
-----------------------------------------------------------------------------------------------
-1506		1483		1505		1504		1502	4	X	X
-1505		1483		1505		1504		1502	3	X	X
-1504		1483		1505		1504		1504	X	X	X
-1503		1483		1505		1504		1503	X	X	X
-1502		1483		1505		1504		1502	X	X	X
-1501		1483		1505		1504		1501	X	X	X
-----------------------------------------------------------------------------------------------
-1249		380		402		416		414	416	416	3
-1248		380		402		416		414	416	416	2
-1247		380		402		416		414	416	416	1
-1246		380		402		416		414	416	416	X
-1245		380		402		416		414	416	415	X
-----------------------------------------------------------------------------------------------
+Ok, makes sense, thanks.
 
 
-In fact, this patch is a preparation for SG DMA support, which
-I wrote some time ago.
+Thanks,
+Jonathan
 
+--8Nw9gXbH6ji+XyMM
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmG2gdwACgkQCDBEmo7z
+X9uJYw/+KUq+yx3n/rhPsNIcTamlF8dDPIAtXBzpieCJZTm8+/nZFH91ntW0u4nR
+5UjQnU7fMDc8LQlHwhr0QDRNyA/na+xiU/L9+MZyxt6bDHoAhGNuAlLieOWpK87l
+AmTUdBbXUHY5COVHA3f86mWf02mSqJAc9Gf8D9T9kQkIpqQ8lPB3nN4sGnAb7gSh
+0cMILvfALzWvYgpiDnmxjnLnFoPHkTdcuEVlyzbAn08GJTTxpG+C5cUbckNpqDI9
+/o94Rj+y+Bdpg+oU8lYpVCTlza0SMjTDfca+Z6rQ8hMVvZNvuqjpU1X7IqpTGF17
+r6gyDlpy6KzP1bbMuxtcJ7iH6ILEJQQhY8JjcljPij42QD8fQ4OYoqNFzufJoQ5/
+0p0gLS9p4LVK2Df0NRK/DTgFw37oVdRGBExmEnSNt3VaCJj8CWz78jI0E2Z9ywXG
+QS8ybWnaBeLZebGst0U5XzjL87mR+4y/pvhyt9ryZv64woeYwOtwdF3pNGGCG5RF
+MNJoM/Mmjkt91/q2564qRwBeZndzoDnKDLtzIKusPyqxSaQ9PaoTeR5tMqRFGTjh
+E18TzVK9z8BzIXCoKHUQgJcyxN7ZBOIwuqbEuTLRqoiiMpNnbr2oxLooOIKJo9mY
+HUza0e+eOZnI4FF3YR5s2sXMKZwr/BdYelI7ytDiHA9Xn5LAcSg=
+=vLrk
+-----END PGP SIGNATURE-----
+
+--8Nw9gXbH6ji+XyMM--

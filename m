@@ -2,176 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB28471EC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70413471ECB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbhLLX2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 18:28:06 -0500
-Received: from mail-bn7nam10on2077.outbound.protection.outlook.com ([40.107.92.77]:25312
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229502AbhLLX2F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 18:28:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c8TkPhBPTzRjTgno7mafcpSY3HGcch+XSmGbUCxrN+Fb6ijkvsWs8UkustpQbNna+QcTASjwGhq1q2JGz5jG4D9idSrEx2dcj18JAtgaQ+yIyJCvm0ZcTBP2xCBWcQB3tl6KrMiIIjbQfv9LX9dDbZ7GxcSKZa+AIoYFL/hOI0i4w95LAX9fD3tMQtGtykKTZF1uyB+YgwAOzOoG7YlRuqlpVoC5NCpubK4EhyrBHpR92UAGqqFfVyM5N+J63gNYYdr5NFJRncYngobV/pm2PT6lpIEMXOMVQIfUyTZma6N2aplpsxuuf9SkOYcfEWAPL4RXPo7UtaDUD5zW/NrXXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zeJJo1tbQoO6wky1sCAjsOVnxXWiJ+2cWKF9ndw66Ec=;
- b=kEnmHNCrrOqPKdfcwsjaXav4fhZn3cbquG34flwNDuEaOO3relWd2YhynUx3eDX8oqinqBDyQb7Ur79cF6E6Ai9bs5/U9KsBEvfeVuUHCHS3gVuG+PL1ZEiCcu2LEqB+QTzTFcJDmpfkIwubC+BsgGuGZoB/18/Jq/aU9kp9l2kHKnHlgFWNb9Aotg/yLY1lgYhmI/N8MhVwU9TbMxqihwltnML4L79XK7Fonc5pgvjklXzppJaEDk10vO4rbXV7Q2RZMhs4d/K8ls2LWcwzZJV6un2xWvtcaiKBIbmflVDQHpVYTk4t+f3uKQgeso6PRLZphVRaxUkZ9k5g/SKYng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zeJJo1tbQoO6wky1sCAjsOVnxXWiJ+2cWKF9ndw66Ec=;
- b=AZ8PQoEKo99j3VBcsS1HHKdilP3FNkWASKScKmdbwLsvGg0PhyXsJcv4+pRRknD5jbLDIGpNw4OIHfMSDj79T8AFABPJlT6pdsc+S6RvdU57dKcf4liqB0DjWDUzh1WVUhyFKG4MfCV0IDNsZhvLGwC5yGhv0F0j2C7I28cr6RV7XHq16mAi6gayGK2IaYWKtjWzVP+wnh6JwaDQkAQYoMljIZ+kYnbcSmWeELny545Rda78ijnWRW/B+h1Nhe471XREsKr9eie3JzWQLf+yyZfZWA1KWZ2CcwJNnMxZqsJpdxxofoqrbFEo9FGWwR3aKAGdqL5Zw5d8XbmA8vyrtQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL0PR12MB5538.namprd12.prod.outlook.com (2603:10b6:208:1c9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Sun, 12 Dec
- 2021 23:28:01 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.017; Sun, 12 Dec 2021
- 23:28:01 +0000
-Date:   Sun, 12 Dec 2021 19:27:58 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Mika =?utf-8?B?UGVudHRpbMOk?= <mika.penttila@nextfour.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Dey, Megha" <megha.dey@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-Message-ID: <20211212232758.GL6385@nvidia.com>
-References: <87k0go8432.ffs@tglx>
- <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com>
- <878rx480fk.ffs@tglx>
- <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
- <87sfv2yy19.ffs@tglx>
- <20211209162129.GS6385@nvidia.com>
- <878rwtzfh1.ffs@tglx>
- <20211209205835.GZ6385@nvidia.com>
- <BN9PR11MB5276599F467AD5EAC935A79E8C719@BN9PR11MB5276.namprd11.prod.outlook.com>
- <3f6d4bd7-8b60-1976-73a4-f5ef7f3dbf27@nextfour.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3f6d4bd7-8b60-1976-73a4-f5ef7f3dbf27@nextfour.com>
-X-ClientProxiedBy: BY3PR03CA0005.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::10) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S229880AbhLLX2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 18:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229831AbhLLX2i (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 18:28:38 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED001C061751
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 15:28:37 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id q25so21206527oiw.0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 15:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vh/wbUgkfdUKYGNf++vDHtfUUGTEz/aDqpk4svRd0AU=;
+        b=eFCYdoOnvicz305xpH32Kg8EG8w2nlSE/gKoZN+QDT0H8gjFjq9u+UK7t6hsKx9edk
+         vycsb162kCx//Be7+ctj2oHH4iauI1LBvJQhhDPhvIYRy0SN7EsFY7NBZBKVtFGP0FwZ
+         onqFNZlUwxK+y4f2a/dpfmjZJYOUgNVFC4EArWVnCp4TR5jT2yitkffWtafNPDXgSrg+
+         bu1bjOzNBu2mdMSGt+u7HPKjQGtC4PR2livr67HoE3RUrdGTx4GmW1Bk5t4M7f5MQf43
+         FlPvugwqwS0nsPToCBWxkbGHQahSkjIUBxStx3nZtbc/iFKRHG2yve04vvANPQzzG+Qa
+         Vmsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vh/wbUgkfdUKYGNf++vDHtfUUGTEz/aDqpk4svRd0AU=;
+        b=hLlDdK+2z2eHbWMF2hZwREP+J3MguivRJwa7yNhTi1VWobE+gw1FxTBLJgV+zr8qUX
+         SApC3LXdPwZkdn0IC9YWHaIodOGTGLVd4+ZwM2ke9wBdyaWXxVZDVdd1KOixHBg0Z4uY
+         e0Tj7Ct+ByV5wIHR9lkDxv5goiqcm7Krz4Nlsyw1sn3nn/gM12APUbCTEwTnqDp6y8dE
+         h5lXOERmRKqi2IZqzVVpVVJPDxW8H6ZgwnE54wNLp0wwAnGX/OGIKW4VokJKL4HheRpD
+         ZBGcq4anvUZe7WUnisODuny4bOIRhk9O0lPLz8OL96b6Oe30bdIzlk8WO4HYonDb0a8X
+         ULBA==
+X-Gm-Message-State: AOAM530amjPbyrjwCwO6MWac58UbuFmaeIatxFf8HA5JxKoag/UtIMtC
+        KSz8ToDjzXknM7DC+5d8lG7SZw==
+X-Google-Smtp-Source: ABdhPJynYL4sOmYh81k1oyCXWiDgoSrW3Neq8jhKGC61PeMkyTcbrmEIWYxN8k2HFvsYnGzbWYIlbg==
+X-Received: by 2002:aca:eb53:: with SMTP id j80mr23670708oih.85.1639351717273;
+        Sun, 12 Dec 2021 15:28:37 -0800 (PST)
+Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id c8sm1933033otk.40.2021.12.12.15.28.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 15:28:36 -0800 (PST)
+Message-ID: <89dfda08-a7cf-0acb-4b3d-6c57577a548e@kali.org>
+Date:   Sun, 12 Dec 2021 17:28:30 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 16894ac3-9985-4889-e13a-08d9bdc709d8
-X-MS-TrafficTypeDiagnostic: BL0PR12MB5538:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB55385843E582801961193810C2739@BL0PR12MB5538.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HNEOyrH5uPc6d0FYYVNRo36RDEOojF8VA9sT4SKq5SEDWuQcEmhj71LQqGt9qm5U9uU8/TzsktxQvpDq45729d5Dds/K7UaOOZZ1SQ8/SA+ilFL/71nNJCWuKGRZ2OFGOtcw4EmvR+98NzVJu+g2RFTn8IdyESvJUw28mHVlwaLLSjlv6d2Q2VymWe7tGoJjXZy1I5bP3NcXu7uGa/9rOGYM2+fnIn4/el3QDuB2+jNU11JHKpCBB9MmiLrzbNF8CJvshkbFvRLw1o+JbZYXTZf6ZaCpobyQ2D7tnJHAJ90w4y9lzInpfpBemUzors5M01DLehcKOyPr2KXeScHzOoF2R4SAhXz2mjrWQkoW3IeQRHoBBEQhzx4yse1cyG5sI7gjaHLMTNrkPZIPq3FsdelLXxdihmd+Ig0bHPDtC6qjtQ7deAU0Ef7liFibpxNuvU1EvbkN8F7zDpuyA6eXC8N6rKHvmiBDi3mHbF8RhOd3nDytNk4EGL7wjU4amrj+yl6IAf9TTpbcGtS/bAq24mixg+t8/iUc/Dmg8HNuuNq6nHW3nuDc0GJfAlSD9uf1Rft7/PQPMdWgkHh4yTBtJIcHzPR4u5fWb+rHn9vDen6UadztNogOy8QYAdMgNqRA4jJDgflrLqG7RLNJltAfzQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6916009)(36756003)(316002)(4326008)(7416002)(5660300002)(54906003)(66946007)(8936002)(6666004)(66556008)(8676002)(1076003)(2906002)(66476007)(508600001)(33656002)(26005)(6486002)(38100700002)(83380400001)(186003)(6506007)(86362001)(2616005)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UUdoZzhEU054L2xYZ0VJSm82WjNhaXNjZTRINlhZUHVtTmhqYlFWSVUzNWps?=
- =?utf-8?B?bVczL3Q3V0Q1d2tzeG92WWpRWVBld3p1M210UkN6ejV2aFhlWXViL3krN2o3?=
- =?utf-8?B?RFFYOWlHZlY2Nk1kYllWbDRYWjdJZnhPSENxd1E5RXJXYzdWWFFPMkw3aWU1?=
- =?utf-8?B?bDhxSnZwWmE0YS9nSHd6R2ppaFU0b3JISk53M3ZoSEtkYkFJenhJY3IzQ1dr?=
- =?utf-8?B?VDJkNVQ5QmJjaWFWRng5QXBlQXdQc25xV1M5c3R6RkR2UmY0bFJINEtHVW1K?=
- =?utf-8?B?anBoaUQzWEVETGZXblYrR2t0aWk4VUpxMU54ajhWelNZcFNkWDJHdWwwUTlE?=
- =?utf-8?B?QVV5bWFzQzhsVkJIV2FFS3hBTVFkSWVOdC9WZ2NBRE1CREFham9CTmxZQ2li?=
- =?utf-8?B?aTdtZGJnMXU2WmVPLytzenZ6b1liYlJTbWpwcm1mZjhib1U2YzR5YUVtVC9U?=
- =?utf-8?B?clVybkV2WWpiaWRPUHYwRXpmd2M0YkZLUitYazVXT2xKZ1ZkdUdOdU9vQy9K?=
- =?utf-8?B?eU9mOTQwKzlkL01yYXFMWlVCalVzVXN2NVU1WWpkdG0wTGpZNDBGbjZzVTU4?=
- =?utf-8?B?Q0dRSnpNZFc3bVRUZW9Ndm9TeG84MHVKOWdqL1dma1hOT0txejRqbUhGVUtl?=
- =?utf-8?B?c2pValR3T1Z3bStSbGFjbW93aGxzcHE4aFdpZjBEaEdlTVV2R29jSmY0MEVK?=
- =?utf-8?B?emlpekJCTkpsQWpXb1BwaFlpM2hQeE5yZGN2NUh1OHFoLyt2djl5eGcrdUdq?=
- =?utf-8?B?cm1SN2RQNExadWxSRGlIbkhyNDZIZVhvdzhLUWMwYU52TUlkdUdKNXNkVGRz?=
- =?utf-8?B?Yis1ZTV2SUIweUNiK1BWVVlFbDhmZ21RZy9Wc010eE9sV1VTMnlBcUovMzBt?=
- =?utf-8?B?bEowVXowcFVoSmhsZFYrQ2ErNWplNWEybGJjRTVIbGVkcHZ2cFREQUw4RUw5?=
- =?utf-8?B?emVDcWpwZjRHaFkxOTV2d2t5U21BUm9PM0p2UU8vMzNtdUlTUGtGeVJFaTBU?=
- =?utf-8?B?OVQ3UVc3emN2aXBjbUNldHl2ejIzQkZUejBHTk9rMG5ReTk2WjV4UFZvL09s?=
- =?utf-8?B?WjVrSGsyUWQvenBNOUwxQXhuU3YySS8zalRRNGNJbGZxdEY5R3BILzl1NllB?=
- =?utf-8?B?MVhnSytDVXJJWUVUM1BJUXhUQzZDa2pOZkxxSSswR2tpYzVtRTY5QkRsbUVX?=
- =?utf-8?B?WHBERkx2Zk5HU3pMc2JzWUpVakptQzFrUVpPYmpQTHJKUm1uQlNsQjlqdnNj?=
- =?utf-8?B?Vk03eWNEeWJmbjFhc1FjVkZ1MlE0ZjFIQ09UcGlzTk50L1IxVnBzSDlUejFM?=
- =?utf-8?B?WVFjZDQwTUFGWGlucm9TYndpNURnVGVxcHg1UHhPSUJMbWxhSUJZQW9jM1dU?=
- =?utf-8?B?cmxCdm85NmQrSTBHc1pPS3l0VklWYXdlbldnbCtKOFl3bnlXMlE2NEFGamlR?=
- =?utf-8?B?ZWIyM0hJYlhpdXdia3R3alRoTWpUN3E4aHVDSCtvNE1VMVM0KzZjQmE0bEVu?=
- =?utf-8?B?Y3MzcVZmaWJWR2E0a0Y3OGtIQmJRUFc2RFh6RmNxVTB6bm83M3QwMUtsc2NO?=
- =?utf-8?B?YkFoZ01DTWhYZWorV0FiQ3VpZ3VkRXRlSHhmNE9FNndzUEllREhReFVKM3dS?=
- =?utf-8?B?S3Q2T2ZYVWlOa3ZLQ3NZekVmbXc2RkNyV2ZIQVVBRFBBdGluUDB1cGNQUTEr?=
- =?utf-8?B?WDZsMExFV3ZocHlYWDBMeExINkJhVlVjSEN5QzNReHNFNzVsMWpPNFBTNEQ0?=
- =?utf-8?B?ZzduN1plbzFtTm1Ncm5JbnZNUkpwb01jYTNoL2cvUUN6ZlBmYWVoZTBWS1gz?=
- =?utf-8?B?ZElXelNvZjRGUEQvNUpkNytDQnpyS2duQzA4MmJUZXdFUU1mclgvbDk0VEV3?=
- =?utf-8?B?TlhGZHUwTTFIU0Q0ekhXeEN3RVlmeHRFVWpsYkVMQTZORFZDVDIwandJU2ZX?=
- =?utf-8?B?SlEwQmtCajExWGxscHh0WWlwOTR5eHloMC9lWFUrNDJrTkh1MGh2S0RlcXVw?=
- =?utf-8?B?RWdHN2lnS05XbVNZcWFjOEN2VUpZR1pIMkJOZnhrVUhieWhZYlhHNFlpRDFR?=
- =?utf-8?B?THRtSlFCcUZORnZTZVNRQVo5a3d5WS9SZ2s4VFUvWUlCY2o2MkF2K3NTSEVj?=
- =?utf-8?Q?/cDQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16894ac3-9985-4889-e13a-08d9bdc709d8
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2021 23:28:01.4423
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ax/OJ08AZALj2IHd774FgQp1WEUTVa4YFbpoHYNNoRLiHeKPzk0Rijm+++xZYSNr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5538
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH] clk: qcom: rcg2: Cache rate changes for parked RCGs
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Amit Nischal <anischal@codeaurora.org>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 08:44:46AM +0200, Mika Penttilä wrote:
 
-> > /*
-> >   * The MSIX mappable capability informs that MSIX data of a BAR can be mmapped
-> >   * which allows direct access to non-MSIX registers which happened to be within
-> >   * the same system page.
-> >   *
-> >   * Even though the userspace gets direct access to the MSIX data, the existing
-> >   * VFIO_DEVICE_SET_IRQS interface must still be used for MSIX configuration.
-> >   */
-> > #define VFIO_REGION_INFO_CAP_MSIX_MAPPABLE      3
-> > 
-> > IIRC this was introduced for PPC when a device has MSI-X in the same BAR as
-> > other MMIO registers. Trapping MSI-X leads to performance downgrade on
-> > accesses to adjacent registers. MSI-X can be mapped by userspace because
-> > PPC already uses a hypercall mechanism for interrupt. Though unclear about
-> > the detail it sounds a similar usage as proposed here.
-> > 
-> > Thanks
-> > Kevin
+On 12/2/21 9:56 PM, Bjorn Andersson wrote:
+> As GDSCs are turned on and off some associated clocks are momentarily
+> enabled for house keeping purposes. Failure to enable these clocks seems
+> to have been silently ignored in the past, but starting in SM8350 this
+> failure will prevent the GDSC to turn on.
 >
-> I see  VFIO_REGION_INFO_CAP_MSIX_MAPPABLE is always set so if msix table is
-> in its own bar, qemu never traps/emulates the access. 
+> At least on SM8350 this operation will enable the RCG per the
+> configuration in CFG_REG. This means that the current model where the
+> current configuration is written back to CF_REG immediately after
+> parking the RCG doesn't work.
+>
+> Instead, keep track of the currently requested rate of the clock and
+> upon enabling the clock reapply the configuration per the saved rate.
+>
+> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as needed")
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>   drivers/clk/qcom/clk-rcg.h  |  2 ++
+>   drivers/clk/qcom/clk-rcg2.c | 32 +++++++++++++++++---------------
+>   2 files changed, 19 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+> index 99efcc7f8d88..6939f4e62768 100644
+> --- a/drivers/clk/qcom/clk-rcg.h
+> +++ b/drivers/clk/qcom/clk-rcg.h
+> @@ -139,6 +139,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
+>    * @freq_tbl: frequency table
+>    * @clkr: regmap clock handle
+>    * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
+> + * @current_rate: cached rate for parked RCGs
+>    */
+>   struct clk_rcg2 {
+>   	u32			cmd_rcgr;
+> @@ -149,6 +150,7 @@ struct clk_rcg2 {
+>   	const struct freq_tbl	*freq_tbl;
+>   	struct clk_regmap	clkr;
+>   	u8			cfg_off;
+> +	unsigned long		current_rate;
+>   };
+>   
+>   #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg2, clkr)
+> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+> index e1b1b426fae4..b574b38dcbd5 100644
+> --- a/drivers/clk/qcom/clk-rcg2.c
+> +++ b/drivers/clk/qcom/clk-rcg2.c
+> @@ -167,6 +167,7 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+>   {
+>   	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+>   	u32 cfg, hid_div, m = 0, n = 0, mode = 0, mask;
+> +	unsigned long rate;
+>   
+>   	regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
+>   
+> @@ -186,7 +187,11 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+>   	hid_div = cfg >> CFG_SRC_DIV_SHIFT;
+>   	hid_div &= mask;
+>   
+> -	return calc_rate(parent_rate, m, n, mode, hid_div);
+> +	rate = calc_rate(parent_rate, m, n, mode, hid_div);
+> +	if (!rcg->current_rate)
+> +		rcg->current_rate = rate;
+> +
+> +	return rate;
+>   }
+>   
+>   static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
+> @@ -968,12 +973,14 @@ static int clk_rcg2_shared_set_rate(struct clk_hw *hw, unsigned long rate,
+>   	if (!f)
+>   		return -EINVAL;
+>   
+> +	rcg->current_rate = rate;
+> +
+>   	/*
+> -	 * In case clock is disabled, update the CFG, M, N and D registers
+> -	 * and don't hit the update bit of CMD register.
+> +	 * In the case that the shared RCG is parked, current_rate will be
+> +	 * applied as the clock is unparked again, so just return here.
+>   	 */
+>   	if (!__clk_is_enabled(hw->clk))
+> -		return __clk_rcg2_configure(rcg, f);
+> +		return 0;
+>   
+>   	return clk_rcg2_shared_force_enable_clear(hw, f);
+>   }
+> @@ -987,8 +994,13 @@ static int clk_rcg2_shared_set_rate_and_parent(struct clk_hw *hw,
+>   static int clk_rcg2_shared_enable(struct clk_hw *hw)
+>   {
+>   	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+> +	const struct freq_tbl *f = NULL;
+>   	int ret;
+>   
+> +	f = qcom_find_freq(rcg->freq_tbl, rcg->current_rate);
+> +	if (!f)
+> +		return -EINVAL;
+> +
+>   	/*
+>   	 * Set the update bit because required configuration has already
+>   	 * been written in clk_rcg2_shared_set_rate()
+> @@ -997,7 +1009,7 @@ static int clk_rcg2_shared_enable(struct clk_hw *hw)
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = update_config(rcg);
+> +	ret = clk_rcg2_configure(rcg, f);
+>   	if (ret)
+>   		return ret;
+>   
+> @@ -1007,13 +1019,6 @@ static int clk_rcg2_shared_enable(struct clk_hw *hw)
+>   static void clk_rcg2_shared_disable(struct clk_hw *hw)
+>   {
+>   	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+> -	u32 cfg;
+> -
+> -	/*
+> -	 * Store current configuration as switching to safe source would clear
+> -	 * the SRC and DIV of CFG register
+> -	 */
+> -	regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, &cfg);
+>   
+>   	/*
+>   	 * Park the RCG at a safe configuration - sourced off of safe source.
+> @@ -1031,9 +1036,6 @@ static void clk_rcg2_shared_disable(struct clk_hw *hw)
+>   	update_config(rcg);
+>   
+>   	clk_rcg2_clear_force_enable(hw);
+> -
+> -	/* Write back the stored configuration corresponding to current rate */
+> -	regmap_write(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, cfg);
+>   }
+>   
+>   const struct clk_ops clk_rcg2_shared_ops = {
 
-It is some backwards compat, the kernel always sets it to indicate a
-new kernel, that doesn't mean qemu doesn't trap.
+Revisiting this...
 
-As the comment says, ""VFIO_DEVICE_SET_IRQS interface must still be
-used for MSIX configuration"" so there is no way qemu can meet that
-without either trapping the MSI page or using a special hypercall
-(ppc)
+With Dmitry's patches applied ( 
+https://lore.kernel.org/linux-arm-msm/20211208022210.1300773-1-dmitry.baryshkov@linaro.org/ 
+) as well as these, and clk_ignore_unused, I get both
 
-Jason
+[ 4.767487] ------------[ cut here ]------------ [ 4.767495] 
+disp_cc_mdss_pclk0_clk_src: rcg didn't update its configuration.
+
+and
+
+
+[ 6.449518] ------------[ cut here ]------------ [ 6.449525] 
+video_cc_venus_clk_src: rcg didn't update its configuration.
+
+This includes after modifying Dmitry's patches to park the above 2 clocks.
+
+Removing "clk_ignore_unused" from the kernel command line, while keeping 
+Dmitry's patchset as well as this patch,
+
+results in the disp_cc_mdss_pclk0_clk_src going away, but the 
+video_cc_venus_clk_src still shows up.
+
+Applying Dmitry's patches, removing this one, and removing 
+"clk_ignore_unused" from command line arguments ends up
+
+with none of these rcg didn't update its configuration messages. As can 
+be seen in http://paste.debian.net/1222931
+
+-- steev
+

@@ -2,158 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32817471ED3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663E5471ED7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbhLLXhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 18:37:17 -0500
-Received: from mail-bn8nam08on2051.outbound.protection.outlook.com ([40.107.100.51]:19712
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229505AbhLLXhQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 18:37:16 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VZzXSWXbbqe/hnWYcboS2pgYEs8m3uT273FNYEX/jLwJXvy2ORAmsN+X9+BS/bdJDhiqQ5NlsP6ytYVb9RNtdNs/uBqRkQGeR0Rj6WcVLJDBMX8TBuxGxY+o8mJ4/R0SQJwflRB8/japTv6vNYn+wyvxUhwKBuJZyDpfWconCo9Rw+7fE7K/1OOzUSjDU5O7AsKshBUg5SU645ejyeUbYeRtEpUDBL3xbDT0KiTfBZHexgUO9fHyW+xOSeGsp1gRTFfaXboQlxHSB8zdTwDBwl3ECe59DD5meuJRRoS2eTHYBlOxKFR5ZmvURGjjQLIH/XzUctmN7opJpy28qCFcKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wF+Qk7+8MiqEzPnqOkVUPnpitocoStsuGlmd/sSS0Eg=;
- b=YUu2N4vcKEyNEHSAAOguWm+1TBWX2AJMuGWY5d6yy2N77oQX3JP2+4FLoXCej2XS2lsgJMmnsoM8bD0L32eDYSaIZ+axVWcyCkZIBMJbOBPzh/5NXYsqBcKlziUzV6ZSplJ9/bLmhNAhWdFWzlmTyiCpY3PMLWfsCtm+dGdeL31Kx9KjVKYwWV3j5kPK2QAbsSTSzRP5HOlkhSHZKIWpcAnmT8udb8LpmgvH7J4b4d9bc+2JFKgV/CApqO6QIWTnYjkxGTZmnKqSRidKdJrr09xEsVRDJ8fg8LGIvpbRuJbcz0NFrRP0IY8gEF34neA+YHrg841ODYOYHZglnXSitg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wF+Qk7+8MiqEzPnqOkVUPnpitocoStsuGlmd/sSS0Eg=;
- b=K99hvQ0tVFihskwKuS9fPq3vCgi1BhqYaHM70SzlJra/2Q7lwwWWh1cJ0/d613WOSM0W7SNV7mSnRdJclSkcR2hQd/gK2MMdpPtgQcFSFVGLS3NeVr24H7hfqEuRENOPg/tkIRnStMNVGqHp2FN0ftRk39zArnnw+a9X0zRpFPyVxcp8/BC1uimZYJ9/EVSgmCmQcbInILrq812shmkk/8Rc4MeTTSXah5I7jKjeA0vsJjhmxMlQkQ7z7Vkzu0eqnmVfSbOxcyDR9oi3D0g7nR+CVt04P0QuClzLoyxlCMvfT9ynUB2w7v32DlB8cEr0ijSXQL16ocNOWjHjZ8MTGA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5110.namprd12.prod.outlook.com (2603:10b6:208:312::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Sun, 12 Dec
- 2021 23:37:15 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.017; Sun, 12 Dec 2021
- 23:37:14 +0000
-Date:   Sun, 12 Dec 2021 19:37:11 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Dey, Megha" <megha.dey@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "x86@kernel.org" <x86@kernel.org>, "Rodel, Jorg" <jroedel@suse.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-Message-ID: <20211212233711.GN6385@nvidia.com>
-References: <20211209205835.GZ6385@nvidia.com>
- <8735n1zaz3.ffs@tglx>
- <87sfv1xq3b.ffs@tglx>
- <BN9PR11MB527619B099061B3814EB40408C719@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20211210123938.GF6385@nvidia.com>
- <87fsr0xp31.ffs@tglx>
- <BN9PR11MB527625E8A9BB854F3C0D19AE8C729@BN9PR11MB5276.namprd11.prod.outlook.com>
- <875yrvwavf.ffs@tglx>
- <BL1PR11MB5271326D39DAB692F07587768C739@BL1PR11MB5271.namprd11.prod.outlook.com>
- <87fsqxv8zf.ffs@tglx>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fsqxv8zf.ffs@tglx>
-X-ClientProxiedBy: SJ0PR03CA0029.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::34) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S230040AbhLLXis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 18:38:48 -0500
+Received: from mout.gmx.net ([212.227.17.21]:45007 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229505AbhLLXir (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 18:38:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639352319;
+        bh=3mMkIzuePUJJcDGvvt1bcnCBjfHfXYzeCjAoAmGStgY=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=ZP+XULGv7neuk32zfUabDp08CoZbLEXOdLfoFLMVLMNjMcxQA8d19vblzucX9nJPn
+         D0SqzVK7H0E54MwvJkdI/HNJ0zDjdvVPE1LV/cNGIXqVrOUItYRnf8s79A6Hz3YNGb
+         7wJj1K9mK2paOxfV6+jxMgw9DrrrQGsqZXWHGC7U=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MvK0X-1mf9xu0VU1-00rDCW; Mon, 13
+ Dec 2021 00:38:39 +0100
+Date:   Mon, 13 Dec 2021 00:38:38 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/8] dt-bindings: pinctrl: Add Nuvoton WPCM450
+Message-ID: <YbaH/ny1nI5l7hh0@latitude>
+References: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
+ <20211207210823.1975632-5-j.neuschaefer@gmx.net>
+ <YbNvqTUwi1jzff4D@robh.at.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 41c53f40-2c82-4873-d5ed-08d9bdc853ce
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5110:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB51104053C83D668AF2E9C596C2739@BL1PR12MB5110.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r9dHcs0LSeTTSRnMK9mWX2OsZsBCg+hAgEtF3ux9k5YpkhKLtIsLzX7vvOdR+88LaOT9Vj1qSWnhoJFQ9alS5KCWqGPz6krKZkbv7Bw9QEHJxlSKgaCTGxfwVjUrtN32SGL1dsskMBYV8uB4zKlAN1lQkMdfwWQBvbAP4JT3LCp4cypqFVGglJRGWvrWKHU3fATv9GpPUZ1i3V65TST7r/QFWAKkUto5iWpwE5sAVmYjzAHtGLRJUCXUHBasdtHsqXQAPUHsM1rmu8jCwkaB0b9L9J4CGzk8BXXJx4w5lUAKW87szL7ZJun8NSY9ULT2ycA2uhuGxrdh28ZlQLfbaRWHC9ypCftHg3/Tbb56lZfxwd0uFO9k6TlZ56bEumRrYSVOEis82hx8RrMeFTLvuZkfsvLWoohINFZiE3kv+Bsl/2u/1RlHoWBJ1bxfqG3h1nZxqdwB9sbDAcqmESzCW2HuWAuPV8jabByAnvbQdHyMpcxyjTmoK1Tuw4xXa28PD+3HPOQrNR1ccTNP6SdW073nh2QKOPnia7M79wELm5zyaqW09LECV0jZYe/it22PGo9ihzYuz2SsP8RB8M/0ZF/aE6/NY5NfFVlKZ2iJkWNVYZyJ5CojB/c3FQaRoEm3tx81M+b0Owpkr0PPnOsEDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(8936002)(86362001)(316002)(508600001)(26005)(36756003)(6512007)(186003)(2906002)(8676002)(4744005)(54906003)(66476007)(5660300002)(4326008)(6666004)(66946007)(6916009)(6506007)(33656002)(1076003)(7416002)(6486002)(2616005)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LY1FUCDXqY5jloOhePXqOjMVQo9exGWANyC6s124MTk6/IC+3zUFNQbGm73k?=
- =?us-ascii?Q?UNFjaIlZvmnnYG8lh8sOOiegcePeeVuGD51JmA84M6TAgArj7O7tQdaw6zfi?=
- =?us-ascii?Q?kW0DGjcZDnjZOLJpwmtz6Xq/t3C+1qyjXAX/i8Niiq9+nsMjVTcxCu8+oXhn?=
- =?us-ascii?Q?nSy1XkUmPieYMhk5tGCSIA2viuxH4bUiGnZMERt1gZH3MEBizBvJN+weVts7?=
- =?us-ascii?Q?sIuTtIuqCIlAvHMtwZewJqdSfBEEGMplRnoFlL4w6eTazVr0a4gu7oYNuq9V?=
- =?us-ascii?Q?QyXjPmmH7D8MaJPKUMWJSWnleV8oQjSedDxqY9lLqxIRV/Uh+OAoeCydYIcu?=
- =?us-ascii?Q?1wVkFb25rtzTU7JUFZP8tiRameekTbz4UuUDGO8m04TeLrLgsDFKEP4haXNg?=
- =?us-ascii?Q?Xc4IoBKNdW1mlP1C1UN5efuJTNfNYgLk45Z4DUXhcSuT5JQmpqvHMevVwMq9?=
- =?us-ascii?Q?4APYSsbJJ889+qLCbQDVk1IBdHvqb+KevWKEojApms2Dn3BeMsa3FUZVcvmp?=
- =?us-ascii?Q?NjXT/N8x314YnWKi7RW0L/JVLP+UPgZFMckF5kfsdg2ZHhRCqKABzgSkuA1F?=
- =?us-ascii?Q?3jINAQggeEeF3PlLpOLaJgDEqqW70ojrv29z4yvWbJFKsJEYIiFOUtEOC8qA?=
- =?us-ascii?Q?yxgTyYBx+OzVV//YlnO86MB/n9XtNplfjKwRa6tr32ve/tHnCzeFEtmAUdSg?=
- =?us-ascii?Q?iq62r9ipPJ6O2Jnzeev7JjQah/AYS9FbuSvMp2k42Bmpz1JuVMqJ4Lm+eS5u?=
- =?us-ascii?Q?NxFLwiV2qz9iFRPmKhEaCwE7v6GON2h6e+aDku4qov8ZyKE1O7fy0FYqQfJU?=
- =?us-ascii?Q?+kwF4dmCw++DGgU0dfAkTVFWAN7RR0pL8lGEs1jyzsxQOruNOfVTknRTYqpn?=
- =?us-ascii?Q?4MzYQW2wgElS7egPnK+BzIfDHe+MUWDDhQeLDQE3gNDYlW1ASmLP9YUEMpAD?=
- =?us-ascii?Q?BT4YwBQk6qWULQfv9mwxtVOKwUz4vmyQQIs0Oj2NHk+YYA75E7/K1T1NI9bE?=
- =?us-ascii?Q?SMTQ7sVVsOqI9P+uOdOymHAzAX2Ms/gpzfHLsDx1vzKzUmozRzMIQf6sQCBM?=
- =?us-ascii?Q?7fywNK/8iT9KylSnkUogUtmLyUg92U8VZzq1KgRbVWSnbTXVTEOR/bMQg/1A?=
- =?us-ascii?Q?m87DsMvKi9GNRGnab3gVNKJALn0+A+LPrYSxtSvmqmYvSA+MMcTP0piyv1Z5?=
- =?us-ascii?Q?QYuJ1Q/N2feZbr+NvB1Lc2DcULodeqW1qWSULMFZQ3w4VbpqtQLeay8Du0ai?=
- =?us-ascii?Q?w5c7SDoBArDgZoH7KxLQlHi5nXZz4KVdDexWPn8SG+0iuA7/TTZUyhWPgLcC?=
- =?us-ascii?Q?9WOxlK6J7b7sYqVn6+N7Sq3xmz8WqU3eRUWnf7pp9W/D26xcb2xaiUU4ysGY?=
- =?us-ascii?Q?soCXg5UggdwyPu13ivplEwBXwJvxasZ/tSlG7en6j+c0vVGe/0QI73BLcUuR?=
- =?us-ascii?Q?BDlpCozOAP+tqb8Q4iFdibZ3n0Yro7pEjXYN3Pk3XeEAy0Q2tPuva11uOczA?=
- =?us-ascii?Q?KoaudsMHS+0EnR07FOwyX1HxbrB0a0Pjqkj9Fc1KicZFXHSRaNU0PT1iGYDu?=
- =?us-ascii?Q?PANrkAoHjY7bdTEWamI=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41c53f40-2c82-4873-d5ed-08d9bdc853ce
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2021 23:37:14.8839
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uyL3ZqrbIvaq/apW/PNPUayEOQJ0Y8ZvdS2rQ6ByBxD9OO6uVmDDyqNTk7L+mHea
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5110
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dobARXniaDUcaAko"
+Content-Disposition: inline
+In-Reply-To: <YbNvqTUwi1jzff4D@robh.at.kernel.org>
+X-Provags-ID: V03:K1:z+ESN2bwK8jz2Nyyr7dtTNg/XT/Ev9qeLtEvNLs5LUKKpvzCZ86
+ SfZXs5qodvV8E/01/s8k1uUpWaSDGGVCt2AOje8PZ4SENbh0kI2+GgXjLPhbOtQB44Eab2R
+ ovymWZtXKVeDnprY3QiQ+hXjg3zmrIbGgIQxrHvQhfGG3bipQYEAYJP+Ojrxs9jXLUcDUoh
+ p72gnnLF5fsbzJM/dVzuQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ENfgMEktfxI=:yemYLyXas7ihLqEjvU6TRf
+ dMgrj5TJ+GABYNdCcf+W0AvaAUvifRq2fzdIFYygZ2NpbxzeSjpJ9HZ/iqmkydIAX7rLXJi8s
+ c04VHduIDT845ZgatwY175eEsPwmwy/3OeYSnCTn7Jxx7bcdtcqp5XncxqYV3P3j0MjsIWIPX
+ rsIZukky35NjiffPyZn4iHlG1Sm1xgc/CumeBxgZSNKojdboGfmA+hyzwa2EYYBH0sTSAqmMS
+ 3Z3Px1+ox6ajNmTu5f9lU2Zyk56x6qLF5DT85SV54a6pdb7Q0HOiYVJ3ZW//gYNMMYzXcZY5r
+ qSoKy8XhwvRH6VSZLInXqkzCS7E6y1DcIks9TzL4L2ZNH81dyStifLba+UYPIzpuRDIPx5obF
+ taAAeWvSSnyYRSvsbI6MPzCeYeTelRhY8DTtd8w7kEvujypQxRuM7QBzHy2X84Ne5KK6cRt39
+ kua8zkajxO1pK2kIVRbsHqMZ9c0O8Aos4JEZrOR8aIuOlcFygujgR3wCjaEDU5yQo9S0jd9gx
+ SyYTAYkDcWCvzsmqzRucrW3ZK5u0LjaaAHYDEdRQyDB/Ve/wN6CSH0zOVQ0IE0g/ISGtz7cOb
+ JOQnhcrM/+s+kILki4iM9HwIoY3K23GgxEf0pdmaP5CZEuzfKjDWQ/Ec5smksmEl3QbCljqix
+ qhtiBzh2/HPU1xnw5KlW7HeTlxwngBqdwbkwvw/idOBrlOkGAPyAGHnnlZSXVhlQe91zW6e7v
+ 3HPnFatmueMBLVE9FwhrrEG1/n9TnmVd01RZh5i43fo/JNnVJlIaTImVJ2JJmip7HuGTU9ipN
+ WA3qU6hLY6+tijAdPjcVN8OWMfOHgWHE8c/8RC+snUxl9PMXE5QxkDGn5ro5pY3jvlkmGQ0zG
+ hiHsi299gmfuC0YuFNzPjfVLXyrJcj22vVZEB3ayrrc0ENeb3J9q0EVxlwH4MG/CjtIfmS4si
+ B3OTDYCIOMAbNwmgtyru+eio50EKk7NBmlYq3XKwevURy1VcNSIM8a/2xxWtIeebMdp1DKuyC
+ SatkEkeX2ShcBasAxH0CCUOlgcn6G1BE32eRq0KgxDsv8uL4GLJPPpD8KyhIhmZa/b8k4I6fQ
+ adY54NY8ctdPl4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 09:55:32PM +0100, Thomas Gleixner wrote:
-> Kevin,
-> 
-> On Sun, Dec 12 2021 at 01:56, Kevin Tian wrote:
-> >> From: Thomas Gleixner <tglx@linutronix.de>
-> >> All I can find is drivers/iommu/virtio-iommu.c but I can't find anything
-> >> vIR related there.
-> >
-> > Well, virtio-iommu is a para-virtualized vIOMMU implementations.
-> >
-> > In reality there are also fully emulated vIOMMU implementations (e.g.
-> > Qemu fully emulates Intel/AMD/ARM IOMMUs). In those configurations
-> > the IR logic in existing iommu drivers just apply:
-> >
-> > 	drivers/iommu/intel/irq_remapping.c
-> > 	drivers/iommu/amd/iommu.c
-> 
-> thanks for the explanation. So that's a full IOMMU emulation. I was more
-> expecting a paravirtualized lightweight one.
 
-Kevin can you explain what on earth vIR is for and how does it work??
+--dobARXniaDUcaAko
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Obviously we don't expose the IR machinery to userspace, so at best
-this is somehow changing what the MSI trap does?
+Hello,
 
-Jason
+On Fri, Dec 10, 2021 at 09:18:01AM -0600, Rob Herring wrote:
+> On Tue, Dec 07, 2021 at 10:08:19PM +0100, Jonathan Neusch=C3=A4fer wrote:
+> > This binding is heavily based on the one for NPCM7xx, because the
+> > hardware is similar. There are some notable differences, however:
+> >=20
+> > - The addresses of GPIO banks are not physical addresses but simple
+> >   indices (0 to 7), because the GPIO registers are not laid out in
+> >   convenient blocks.
+> > - Pinmux settings can explicitly specify that the GPIO mode is used.
+> >=20
+> > Certain pins support blink patterns in hardware. This is currently not
+> > modelled in the DT binding.
+> >=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> >=20
+> >=20
+> > ---
+[...]
+> > +patternProperties:
+> > +  # There are three kinds of subnodes:
+> > +  # 1. a GPIO controller node for each GPIO bank
+> > +  # 2. a pinmux node configures pin muxing for a group of pins (e.g. r=
+mii2)
+> > +  # 3. a pinconf node configures properties of a single pin
+> > +
+> > +  "^gpio@.*$":
+> > +    if:
+>=20
+> Not necessary because you can't have a property with '@' in it.
+
+Ok, I'll change it to "^gpio".
+
+
+> > +        interrupts:
+> > +          maxItems: 4
+>=20
+> Need to define what each interrupt is.
+
+I think in this case one description for all interrupts would be more
+useful, e.g.:
+
+  interrupts:
+    maxItems: 4
+    description: The interrupts associated with this GPIO bank.
+
+
+> > +        nuvoton,interrupt-map:
+>=20
+> Reusing 'interrupt-map' with a different definition bothers me...=20
+
+I'm open to tweaking the name, perhaps to something like
+nuvoton,gpio-interrupt-map. (Or dropping it entirely =E2=80=94 see below.)
+
+
+> > +  "^mux_.*$":
+>=20
+> Use '-' rather than '_' and the '.*' is not necessary.
+>=20
+> "^mux-"
+
+Ok
+
+>=20
+> > +    if:
+>=20
+> Don't need this.
+
+Ok, I'll remove the if/type/then lines throughout the file.
+
+
+> > +        pins:
+> > +          description:
+> > +            A list of pins to configure in certain ways, such as enabl=
+ing
+> > +            debouncing
+> > +          items:
+> > +            enum: [ gpio0, gpio1, gpio2, gpio3, gpio4, gpio5, gpio6, g=
+pio7,
+> > +                    gpio8, gpio9, gpio10, gpio11, gpio12, gpio13, gpio=
+14,
+> > +                    gpio15, gpio16, gpio17, gpio18, gpio19, gpio20, gp=
+io21,
+> > +                    gpio22, gpio23, gpio24, gpio25, gpio26, gpio27, gp=
+io28,
+> > +                    gpio29, gpio30, gpio31, gpio32, gpio33, gpio34, gp=
+io35,
+> > +                    gpio36, gpio37, gpio38, gpio39, gpio40, gpio41, gp=
+io42,
+> > +                    gpio43, gpio44, gpio45, gpio46, gpio47, gpio48, gp=
+io49,
+> > +                    gpio50, gpio51, gpio52, gpio53, gpio54, gpio55, gp=
+io56,
+> > +                    gpio57, gpio58, gpio59, gpio60, gpio61, gpio62, gp=
+io63,
+> > +                    gpio64, gpio65, gpio66, gpio67, gpio68, gpio69, gp=
+io70,
+> > +                    gpio71, gpio72, gpio73, gpio74, gpio75, gpio76, gp=
+io77,
+> > +                    gpio78, gpio79, gpio80, gpio81, gpio82, gpio83, gp=
+io84,
+> > +                    gpio85, gpio86, gpio87, gpio88, gpio89, gpio90, gp=
+io91,
+> > +                    gpio92, gpio93, gpio94, gpio95, gpio96, gpio97, gp=
+io98,
+> > +                    gpio99, gpio100, gpio101, gpio102, gpio103, gpio10=
+4,
+> > +                    gpio105, gpio106, gpio107, gpio108, gpio109, gpio1=
+10,
+> > +                    gpio111, gpio112, gpio113, gpio114, gpio115, gpio1=
+16,
+> > +                    gpio117, gpio118, gpio119, gpio120, gpio121, gpio1=
+22,
+> > +                    gpio123, gpio124, gpio125, gpio126, gpio127 ]
+>=20
+> pattern: '^gpio1?[0-9]{1,2}$'
+
+Indeed, that looks better.
+
+> Feel free to tweak it more to limit to 127 if you want.
+
+Ok.
+
+
+> > +      gpio0: gpio@0 {
+> > +        reg =3D <0>;
+> > +        gpio-controller;
+> > +        #gpio-cells =3D <2>;
+> > +        interrupts =3D <2 IRQ_TYPE_LEVEL_HIGH
+> > +                      3 IRQ_TYPE_LEVEL_HIGH
+> > +                      4 IRQ_TYPE_LEVEL_HIGH>;
+> > +        nuvoton,interrupt-map =3D <0 16 0>;
+>=20
+> Based on the example, you don't need this as it is 1:1.
+
+Ah, it's a bad example. The real chip also has this node:
+
+
+	gpio1: gpio@1 {
+		reg =3D <1>;
+		gpio-controller;
+		#gpio-cells =3D <2>;
+		interrupts =3D <5 IRQ_TYPE_LEVEL_HIGH>;
+		interrupt-controller;
+		nuvoton,interrupt-map =3D <16 2 8>;
+	};
+
+=2E.. meaning that bits 16 and 17 in the GPIO controller's interrupt
+status register correspond to pins 8 and 9 of GPIO bank 1.
+
+I'm not completely sure this is a good property to have in the
+devicetree, I could also hide it in the driver (just like the register
+offsets are not part of this binding).
+
+
+
+Thanks,
+Jonathan
+
+--dobARXniaDUcaAko
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmG2h9YACgkQCDBEmo7z
+X9smnw/9EREnQfOVwcf3sZmXZKAGJ3NOAE3UMGzyikvU9A0cJLjb5TcMUXW6QosO
+2pz4Mf/H8zsGrmFFC/DwC8yO7sMGHckNHFof+/uqgUPJF4pO8cAlUSUqO5QWh/Kz
+vE8/gVz5mNOna7mKfpMXUs2vznNvAKNWQlhizEsal8zY3Dcir4+09Za5u08oTDbR
+52IAbxsuMC68ULft3NJMeib/Zm839MC38GBs93rNyojNu1yBt7DVkNrxyxo8kt6y
+pYNkhTrGKx5p8Yetoax7tKchIvs0k03L7BiabHkimQ7QTZ4XPkjG7vRJ+6PcDVOc
+wc25k1ERWWdi1ORwBGLlvC8But6bvhM14NRezRGEwRY2WbY5h6aiHSXFfWtk80VA
+9ZXaKiuIbCiRGyksdrq2nUu1E258bifUowCYgB/sp68IOdOLYh4zDpFegztDvUtH
+LgfFMXGBMb8Gu1VUOc02wKgmA6tjnzNSr1eiR1uCigUyyoJLqOaHjmCJo2ZHnQNQ
+jFih2QcjTh7uN9gyveARd1rLSadidfjIO7SEqTnGNMQTBOYeiq8YIIJ+kOx+FeCe
+PikOCQyhN0Q/fptQuuCeMe4991//+UBd9sCxzGpDdEnLz4V0GcQcoPATPBnG7bUE
+u2YsJaQeNjSURsnVN/S7qZ2cSxkqIRglFV3W4q6aGtMROEnzRLY=
+=iNfO
+-----END PGP SIGNATURE-----
+
+--dobARXniaDUcaAko--

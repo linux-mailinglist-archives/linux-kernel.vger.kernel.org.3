@@ -2,107 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FF6471966
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2EB47196A
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbhLLJK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 04:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S229954AbhLLJO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 04:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbhLLJK1 (ORCPT
+        with ESMTP id S229939AbhLLJO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 04:10:27 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38F7C061714;
-        Sun, 12 Dec 2021 01:10:26 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id e3so43604603edu.4;
-        Sun, 12 Dec 2021 01:10:26 -0800 (PST)
+        Sun, 12 Dec 2021 04:14:56 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BB3C061714
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:14:56 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id h16so12398235ila.4
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:14:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rILl6CcT7CpVVtaZSnLWIdMjI1vJbvVwqnPQFK8Fnxw=;
-        b=k3eUNoyx+sHKeF1cnsFmcezsvBvT3owO7MgdgpX7jQrfBPRhv2QrR0gRKPmubDz5Qx
-         skXpkdFxpeBvrbMFAYHdPxCUdSz092jg6q3zM6b6sR+MexV3hLOnVRWmupn14W9FzmjL
-         Y7jH7JsJr2jAI2M8m5p0knoOW1M9q9jcvvnetkjoIWWzFq0uFNDw8zm7vpcKz7yK4xvk
-         riTjjgJV32KHwJld9gatbR0wNqDHeK5ITeXDWXkocH54OWlNdQvDtLlgldHiEB22NWvR
-         vNEAtcyypcck7ym+Z+pnF1oDhn7AegGTcxqqzMfysAs/cmnWR5Z9yxE7GxCIpv+aFhDj
-         SqYQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=IiUKpv+oVWndD2PPXpX6DRpUFeiuLfkCjrYl8hrQFws=;
+        b=pdT388iRld337sqYYDFmWpVl1mH+mTAB/m0bvYS2GJZDH8k9r3NH/DiW6SYO3aa8c6
+         9b1CHJf0YQtAoLh98ow/7ZCUuagppKrEWao27GhkJedVzMGWSuVpUejR/4IUZFdSDd6n
+         wA93VROM6o8iKvtvlaR7e2GTlacWr/ZFj/jqD53fxFUyMJiakiDpqK6n4kwIrUC1/iDY
+         uKFFVC5ZGVxcXz10FrWs1YPllmLY8DMM5I126NU/0mb5E0q2En7YWtlhTzZFu+wzrxqK
+         R/EulhBtPnAns2q+7pKhbVLAyyuz2dBYL8ZmJ7xU5Nn56vXV9uro1xE8KdDMlqqfV7ks
+         cCYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rILl6CcT7CpVVtaZSnLWIdMjI1vJbvVwqnPQFK8Fnxw=;
-        b=AfIAptgPAwa9PxpxtklyFWwib4kqi1SPt6f2gaHbhKPGiexDcgRMYSi8A4BXfaYAXg
-         S7gH0SUXxNXdcJ/gDbSXnZx21DfPRDJ/pQugTPyoenT9Tkc/iJOHW7HQZLYnYreaY/M/
-         vQb7gPNeQtjEuPgmPMzMNQJ04w6IkBLoh64dLxHbKk2XZIhWm7zW4JrBTaSwb4LLApky
-         LsMW69F7QzxtTWkIo/DcHOAYvBoZBOe+ef8p9oeY43LjTdXbF34lp5Rc58vZObXHccyB
-         AbG1I5dNj/dy3ny1LDHjnkKHFXPSdGQlZ1QaXuCq7K5IqWH0Tq57JAPO6dIdZo+wvJWP
-         UrIA==
-X-Gm-Message-State: AOAM5328EpCBMkZsTX9/LDIZeVMKBroUykOdnty3H48wrEnsBXdSK85Q
-        uqVq1DOxFfGONb/rqtFQkxeWRXRkFUA=
-X-Google-Smtp-Source: ABdhPJyTl79SjLfDAA+1SCuMO81DM27qUWCgyXippjnFiJYJtH3H9nPaNWvxl1VcRffg8YRoVebGeA==
-X-Received: by 2002:a17:907:9056:: with SMTP id az22mr35737544ejc.107.1639300225264;
-        Sun, 12 Dec 2021 01:10:25 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id dp16sm4722947ejc.34.2021.12.12.01.10.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 01:10:24 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <a2e954bf-22bc-669b-e39e-dd941d330fa1@redhat.com>
-Date:   Sun, 12 Dec 2021 10:10:19 +0100
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=IiUKpv+oVWndD2PPXpX6DRpUFeiuLfkCjrYl8hrQFws=;
+        b=fhihO3UZ5/xVC9GM+CjPRNvHo7hkwudTHKE5zKLo04N16fCyF2IBWj9SCwgUolaAb6
+         /48jhdJxfYV9J29AgrxjomFL40e0lI7jyRPfldHUyeJMX1cEp0u/WrkoEaK2oL6CZDh5
+         Y4wnbGT6BGmfomrzPI4YEtRoc+aYlbe1N5f33NftyGBTeFbWVhPPhx3UL+LVW0e0UzdX
+         xk4/LTnL2NldTSCfvP3t4KE3qILn1Q5Es8IxFuxOJC+tvrR6xq43Vo7rURpA7CX4vZ5w
+         w6BmgMREJnNyfAEN45ixqRhMGMdhmMkR9NjX9dDpYdqs3uBwozeLFPlDOH6wng6bDEuW
+         Bptw==
+X-Gm-Message-State: AOAM530LI9vRSBBUv/55EPkE6oqFOnufc2Yu4Vi8jfUo2CPMzxqQfFPJ
+        i71TF7hmlcdsa57PQSAPgUIjr/GeokLNszZ4I+A=
+X-Google-Smtp-Source: ABdhPJwYdII64CkDhAikdTGF3sq5ZGFROasR+zgJEg/e/CKhC1QffyEJ0/g1URqEyy+lFNWf2O5kw0t5jIamRFcwWak=
+X-Received: by 2002:a05:6e02:1c02:: with SMTP id l2mr26105535ilh.37.1639300495575;
+ Sun, 12 Dec 2021 01:14:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 15/19] kvm: x86: Save and restore guest XFD_ERR properly
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-16-yang.zhong@intel.com> <87pmq4vw54.ffs@tglx>
- <BN9PR11MB5276DF25E38EE7C4F4D29F288C729@BN9PR11MB5276.namprd11.prod.outlook.com>
- <87zgp7uv6g.ffs@tglx>
- <BL1PR11MB5271FDCE84F4D25D0241D5998C739@BL1PR11MB5271.namprd11.prod.outlook.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <BL1PR11MB5271FDCE84F4D25D0241D5998C739@BL1PR11MB5271.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6602:14cb:0:0:0:0 with HTTP; Sun, 12 Dec 2021 01:14:55
+ -0800 (PST)
+Reply-To: kristalinageorgieva20211@gmail.com
+From:   kristalina georgieva <robertwilson40411@gmail.com>
+Date:   Sun, 12 Dec 2021 09:14:55 +0000
+Message-ID: <CAOzYGKRNJtxFkcYCi-B++JuFojoD_C9wJ1fctpxy_=+NyddxkQ@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/21 02:50, Tian, Kevin wrote:
->>
->> If there are other XFD controlled facilities in the future, then it will
->> be NR_USED_XFD_CONTROLLED_FACILITIES * 2 VMEXITs per thread which
->> uses
->> them. Not the end of the world either.
->>
->> Looking at the targeted application space it's pretty unlikely that
->> tasks which utilize AMX are going to be so short lived that the overhead
->> of these VMEXITs really matters.
->>
->> This of course can be revisited when there is a sane use case, but
->> optimizing for it prematurely does not buy us anything else than
->> pointless complexity.
-> It may affect guest which still uses CR0.TS to do lazy save. But likely
-> modern OSes all move to eager save approach so always trapping #NM
-> should be fine.
+-- 
 
-You also don't need to trap #NM if CPUID includes no dynamic bits, 
-because then XFD will never be nonzero.
+-- 
+MANAGING DIRECTOR & CHAIRWOMAN (IMF)
+MRS. KRISTALINA GEORGIEVA
+(VISA CARD BY UBA BANK)
 
-Paolo
+DEAR EMAIL OWNER/FUND BENEFICIARY
+
+I AM IN RECEIPT OF YOUR MAIL AND THE CONTENT THEREIN NOTED. DO CONTACT
+UBA BANK'S SECRETARY FOR IMMEDIATE DELIVERY OF YOUR ACCREDITED ATM
+VISA CARD TO YOUR ADDRESS USING THE CONTACT DETAILS BELOW:
+
+NAMES: MR. TONY ELUMELU
+EMAIL: WWW.UBABANKOFAFRICA.TG01@GMAIL.COM
+
+CONTACT U.B.A SECRETARY HANDLING YOUR TRANSACTION FILE FOR IMMEDIATE
+PREPARATION OF YOUR FUND DOCUMENTS. EMAIL HIM YOUR DETAILS FOR
+DISPATCH OF YOUR ATM VISA CARD AND ALWAYS KEEP ME UPDATED.
+
+NOTE: I WILL ADVISE YOU ALWAYS ACT ACCORDING TO INSTRUCTIONS TO ENABLE
+US GET THIS DELIVERY DONE BEFORE THE ESTIMATED TIME FRAME.
+
+SINCERELY,
+MRS. KRISTALINA GEORGIEVA
+MANAGING DIRECTOR & CHAIRWOMAN (IMF)

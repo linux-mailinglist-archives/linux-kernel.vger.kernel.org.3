@@ -2,146 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B69471C4A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEF4471C53
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbhLLSqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 13:46:12 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41480
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231149AbhLLSqK (ORCPT
+        id S231958AbhLLSrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 13:47:33 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:60944 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231149AbhLLSrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 13:46:10 -0500
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 12 Dec 2021 13:47:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2AFF03F1B3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 18:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639334769;
-        bh=vVmzi0LKYYg7ixdO/Dk9XoMf50KrjdNN8bDu23E8c2o=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=mMcsrNG7e9HpAEThtez52XZddp6vLNfrlhFFw9IsouE7CwlodekjKqRcRcFw5Rymk
-         mcPGRqAg/Q9Tj3rO8i/6HxjjPz2mti635Ke2kB44Zuw/K5uaodYMvJc6KtxFgUmXJ2
-         lHHW6zecwmMenuPQI0y3Ncpglq/j8gHfJieIFys/4aC46q6bDoJM/zxNlMcIxdSPiK
-         JqtqaiV6BavlfJaLw6dda0JLLEZgXXuTRRBTd9ZsGAwOl5BtxudEPIp+U84En9jjma
-         pq2btc+sUMt2FaoNGWi9ZPHG28hcs89j/AgeloCGtgoZV9m8ZpXCBdgFKBQ5fOXS1H
-         5qC5qQS1FsgBg==
-Received: by mail-lf1-f71.google.com with SMTP id z30-20020a0565120c1e00b0041fcb7eaff3so4228547lfu.12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:46:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vVmzi0LKYYg7ixdO/Dk9XoMf50KrjdNN8bDu23E8c2o=;
-        b=oYV2sZQbGf9W4BvNQq/E/+rFEhAeQmI/cbbR1s0K0THMXHHNF5asKb1EcNTVqtM0ws
-         ep4CcXoT9XnZjSDAGHNrNuALOVoMfh9UYRH8qoUvhVDaUEVgFuFXulSXgEIOPQ5M3SW6
-         6kwnfMT9EP5KxcjKV3l5JSgWSytMkDF+2M0wcxiGsbvttvybHZdYrbw/y4EFAV6oGewZ
-         Ipo6CQWKPlZ1Bi3PXTkLN3YTHbMVsqExX6TJ9M13zbc/5VNBVxXYW+xeafIAURNsAbiE
-         i9hBHaxJfBLj5nEQm92Bbf7JnNLSoD3PvwBK82DKTolS5Vn1vI/hqrteR/cxq0JlHehJ
-         Pw8A==
-X-Gm-Message-State: AOAM530x7jrmMZXCcciUzZK1TUr+ot2x/IrRqTAFy2pgK1vo/WgmigTm
-        e+t5zZoYDEXv/8UWLAlpnxHg5N7QW9bGnat7d5YxHLmMsxuyQMfU5UuRlSWwJyS56Cmwtm5C3gZ
-        Hu4YUN92B00SVEnSU0/Kg97IpewhcSAHUeB6PSpKm9w==
-X-Received: by 2002:ac2:454b:: with SMTP id j11mr24306432lfm.41.1639334768466;
-        Sun, 12 Dec 2021 10:46:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxOgwlcKO57jGOmrAmTRgmvAh4zvqGMhAUOSl1PWLIyn+BOi5YBridhbzZTj3J1IT2ofufJzw==
-X-Received: by 2002:ac2:454b:: with SMTP id j11mr24306420lfm.41.1639334768302;
-        Sun, 12 Dec 2021 10:46:08 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id o17sm1153431lfn.50.2021.12.12.10.46.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 10:46:07 -0800 (PST)
-Message-ID: <ffb00485-ad21-a11a-03ea-3856e2212563@canonical.com>
-Date:   Sun, 12 Dec 2021 19:46:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 2/6] dt-bindings: memory: tegra: Add Tegra234 support
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20211210164741.881161-1-thierry.reding@gmail.com>
- <20211210164741.881161-3-thierry.reding@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211210164741.881161-3-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2BCEECE0B6B;
+        Sun, 12 Dec 2021 18:47:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE88C341C6;
+        Sun, 12 Dec 2021 18:47:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639334846;
+        bh=O/JyBKDviYTgGsgLittlUm6OxD4QDh85881BgFqsTKU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WX/y1lYaHaFoupdA2l3qY/o62B9ghJ1IZjsd980RDX7/rerIrgKUr/gKFGDRUsXV2
+         cxA+NocdVBq76GzjVjt4tY7lS8nvBP4xsy7WO/n3QdmNuvhDgte4BLRGeRP71hpHRk
+         rX7OqafhqSxHHSqSlc+G6bH+1TYZreTPU4zPmpOnkwEKwDgYKh009U3e5EKVl5LlMH
+         N5UrNhGOpnz3xjKx17qpeElHC35qo8Rrf4yVyisfL5oTDyYsa/wZBYaP91+NXrgS+v
+         EQZ9Ms3Q2q/c5vhwQEzwxgXKA3dfwMg4oZk7c1uR5W2S94lavOEsxAROT5oWH7un0x
+         bCNo2+TEWQ2CA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mwTsa-00Bd2s-4Z; Sun, 12 Dec 2021 18:47:24 +0000
+Date:   Sun, 12 Dec 2021 18:47:23 +0000
+Message-ID: <87o85lu0ck.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 6/6] irqchip/apple-aic: Add support for AICv2
+In-Reply-To: <20211209043249.65474-7-marcan@marcan.st>
+References: <20211209043249.65474-1-marcan@marcan.st>
+        <20211209043249.65474-7-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, tglx@linutronix.de, robh+dt@kernel.org, sven@svenpeter.dev, alyssa@rosenzweig.io, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 17:47, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
+On Thu, 09 Dec 2021 04:32:49 +0000,
+Hector Martin <marcan@marcan.st> wrote:
 > 
-> Document the variant of the memory controller and external memory
-> controllers found on Tegra234 and add some memory client and SMMU
-> stream ID definitions for use in device tree files.
+> Introduce support for the new AICv2 hardware block in t6000/t6001 SoCs.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> It seems these blocks are missing the information required to compute
+> the event register offset in the capability registers, so we specify
+> that in the DT.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
-> Changes in v2:
-> - conditionally set minItems for reg properties
+>  drivers/irqchip/irq-apple-aic.c | 146 ++++++++++++++++++++++++++++----
+>  1 file changed, 128 insertions(+), 18 deletions(-)
 > 
->  .../nvidia,tegra186-mc.yaml                   | 20 ++++++++++++
->  include/dt-bindings/clock/tegra234-clock.h    |  9 ++++++
->  include/dt-bindings/memory/tegra234-mc.h      | 32 +++++++++++++++++++
->  3 files changed, 61 insertions(+)
->  create mode 100644 include/dt-bindings/memory/tegra234-mc.h
-> 
-
-(...)
-
->  /** @brief output of mux controlled by CLK_RST_CONTROLLER_CLK_SOURCE_SDMMC4 */
-> diff --git a/include/dt-bindings/memory/tegra234-mc.h b/include/dt-bindings/memory/tegra234-mc.h
-> new file mode 100644
-> index 000000000000..2662f70c15c6
-> --- /dev/null
-> +++ b/include/dt-bindings/memory/tegra234-mc.h
-> @@ -0,0 +1,32 @@
-> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> +
-> +#ifndef DT_BINDINGS_MEMORY_TEGRA234_MC_H
-> +#define DT_BINDINGS_MEMORY_TEGRA234_MC_H
-> +
-> +/* special clients */
-> +#define TEGRA234_SID_INVALID		0x00
-> +#define TEGRA234_SID_PASSTHROUGH	0x7f
-> +
-> +
-> +/* NISO1 stream IDs */
-> +#define TEGRA234_SID_SDMMC4	0x02
-> +#define TEGRA234_SID_BPMP	0x10
-> +
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> index 46b7750548a0..226d5232dd14 100644
+> --- a/drivers/irqchip/irq-apple-aic.c
+> +++ b/drivers/irqchip/irq-apple-aic.c
+> @@ -101,6 +101,57 @@
+>  
+>  #define AIC_MAX_IRQ		0x400
+>  
 > +/*
-> + * memory client IDs
+> + * AIC v2 registers (MMIO)
 > + */
 > +
-> +/* sdmmcd memory read client */
-> +#define TEGRA234_MEMORY_CLIENT_SDMMCRAB 0x63
-> +/* sdmmcd memory write client */
-> +#define TEGRA234_MEMORY_CLIENT_SDMMCWAB 0x67
-> +/* BPMP read client */
-> +#define TEGRA234_MEMORY_CLIENT_BPMPR 0x93
-> +/* BPMP write client */
-> +#define TEGRA234_MEMORY_CLIENT_BPMPW 0x94
-> +/* BPMPDMA read client */
-> +#define TEGRA234_MEMORY_CLIENT_BPMPDMAR 0x95
-> +/* BPMPDMA write client */
-> +#define TEGRA234_MEMORY_CLIENT_BPMPDMAW 0x96
+> +#define AIC2_VERSION		0x0000
+> +#define AIC2_VERSION_VER	GENMASK(7, 0)
 > +
+> +#define AIC2_INFO1		0x0004
+> +#define AIC2_INFO1_NR_IRQ	GENMASK(15, 0)
+> +#define AIC2_INFO1_LAST_DIE	GENMASK(27, 24)
+> +
+> +#define AIC2_INFO2		0x0008
+> +
+> +#define AIC2_INFO3		0x000c
+> +#define AIC2_INFO3_MAX_IRQ	GENMASK(15, 0)
+> +#define AIC2_INFO3_MAX_DIE	GENMASK(27, 24)
+> +
+> +#define AIC2_RESET		0x0010
+> +#define AIC2_RESET_RESET	BIT(0)
+> +
+> +#define AIC2_CONFIG		0x0014
+> +#define AIC2_CONFIG_ENABLE	BIT(0)
+> +#define AIC2_CONFIG_PREFER_PCPU	BIT(28)
+> +
+> +#define AIC2_TIMEOUT		0x0028
+> +#define AIC2_CLUSTER_PRIO	0x0030
+> +#define AIC2_DELAY_GROUPS	0x0100
+> +
+> +#define AIC2_IRQ_CFG		0x2000
+> +
+> +/*
+> + * AIC2 registers are laid out like this, starting at AIC2_IRQ_CFG:
+> + *
+> + * Repeat for each die:
+> + *   IRQ_CFG: u32 * MAX_IRQS
+> + *   SW_SET: u32 * (MAX_IRQS / 32)
+> + *   SW_CLR: u32 * (MAX_IRQS / 32)
+> + *   MASK_SET: u32 * (MAX_IRQS / 32)
+> + *   MASK_CLR: u32 * (MAX_IRQS / 32)
+> + *   HW_STATE: u32 * (MAX_IRQS / 32)
+> + *
+> + * This is followed by a set of event registers, each 16K page aligned.
+> + * The first one is the AP event register we will use. Unfortunately,
+> + * the actual implemented die count is not specified anywhere in the
+> + * capability registers, so we have to explcitly specify the event
 
-This header is needed by the driver and DTS patches. One of us can apply
-it and provide to the other via stable-tag. I think Arnd and Olof prefer
-if headers are coming with DTS and are provided to other trees, so maybe
-you will take the bindings and provide a tag for me for the driver?
+explicitly
 
-Best regards,
-Krzysztof
+> + * register offset in the device tree to remain forward-compatible.
+
+Do the current machines actually have more than a single die?
+
+> + */
+> +
+> +#define AIC2_IRQ_CFG_TARGET	GENMASK(3, 0)
+> +#define AIC2_IRQ_CFG_DELAY_IDX	GENMASK(7, 5)
+> +
+>  #define MASK_REG(x)		(4 * ((x) >> 5))
+>  #define MASK_BIT(x)		BIT((x) & GENMASK(4, 0))
+>  
+> @@ -187,6 +238,7 @@ struct aic_info {
+>  	/* Register offsets */
+>  	u32 event;
+>  	u32 target_cpu;
+> +	u32 irq_cfg;
+>  	u32 sw_set;
+>  	u32 sw_clr;
+>  	u32 mask_set;
+> @@ -214,6 +266,14 @@ static const struct aic_info aic1_fipi_info = {
+>  	.fast_ipi	= true,
+>  };
+>  
+> +static const struct aic_info aic2_info = {
+> +	.version	= 2,
+> +
+> +	.irq_cfg	= AIC2_IRQ_CFG,
+> +
+> +	.fast_ipi	= true,
+> +};
+> +
+>  static const struct of_device_id aic_info_match[] = {
+>  	{
+>  		.compatible = "apple,t8103-aic",
+> @@ -223,6 +283,10 @@ static const struct of_device_id aic_info_match[] = {
+>  		.compatible = "apple,aic",
+>  		.data = &aic1_info,
+>  	},
+> +	{
+> +		.compatible = "apple,aic2",
+> +		.data = &aic2_info,
+> +	},
+>  	{}
+>  };
+>  
+> @@ -368,6 +432,14 @@ static struct irq_chip aic_chip = {
+>  	.irq_set_type = aic_irq_set_type,
+>  };
+>  
+> +static struct irq_chip aic2_chip = {
+> +	.name = "AIC2",
+> +	.irq_mask = aic_irq_mask,
+> +	.irq_unmask = aic_irq_unmask,
+> +	.irq_eoi = aic_irq_eoi,
+> +	.irq_set_type = aic_irq_set_type,
+> +};
+
+How is the affinity managed if you don't have a callback? A number of
+things are bound to break if you don't have one. And a description of
+how an interrupt gets routed wouldn't go amiss!
+
+> +
+>  /*
+>   * FIQ irqchip
+>   */
+> @@ -524,10 +596,15 @@ static struct irq_chip fiq_chip = {
+>  static int aic_irq_domain_map(struct irq_domain *id, unsigned int irq,
+>  			      irq_hw_number_t hw)
+>  {
+> +	struct aic_irq_chip *ic = id->host_data;
+>  	u32 type = FIELD_GET(AIC_EVENT_TYPE, hw);
+> +	struct irq_chip *chip = &aic_chip;
+> +
+> +	if (ic->info.version == 2)
+> +		chip = &aic2_chip;
+>  
+>  	if (type == AIC_EVENT_TYPE_HW) {
+> -		irq_domain_set_info(id, irq, hw, &aic_chip, id->host_data,
+> +		irq_domain_set_info(id, irq, hw, chip, id->host_data,
+>  				    handle_fasteoi_irq, NULL, NULL);
+>  		irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(irq)));
+>  	} else if (type == AIC_EVENT_TYPE_FIQ) {
+> @@ -882,23 +959,25 @@ static int aic_init_cpu(unsigned int cpu)
+>  	/* Commit all of the above */
+>  	isb();
+>  
+> -	/*
+> -	 * Make sure the kernel's idea of logical CPU order is the same as AIC's
+> -	 * If we ever end up with a mismatch here, we will have to introduce
+> -	 * a mapping table similar to what other irqchip drivers do.
+> -	 */
+> -	WARN_ON(aic_ic_read(aic_irqc, AIC_WHOAMI) != smp_processor_id());
+> +	if (aic_irqc->info.version == 1) {
+> +		/*
+> +		 * Make sure the kernel's idea of logical CPU order is the same as AIC's
+> +		 * If we ever end up with a mismatch here, we will have to introduce
+> +		 * a mapping table similar to what other irqchip drivers do.
+> +		 */
+> +		WARN_ON(aic_ic_read(aic_irqc, AIC_WHOAMI) != smp_processor_id());
+>  
+> -	/*
+> -	 * Always keep IPIs unmasked at the hardware level (except auto-masking
+> -	 * by AIC during processing). We manage masks at the vIPI level.
+> -	 */
+> -	aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_SELF | AIC_IPI_OTHER);
+> -	if (!aic_irqc->info.fast_ipi) {
+> -		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
+> -		aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
+> -	} else {
+> -		aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF | AIC_IPI_OTHER);
+> +		/*
+> +		 * Always keep IPIs unmasked at the hardware level (except auto-masking
+> +		 * by AIC during processing). We manage masks at the vIPI level.
+> +		 */
+> +		aic_ic_write(aic_irqc, AIC_IPI_ACK, AIC_IPI_SELF | AIC_IPI_OTHER);
+> +		if (!aic_irqc->info.fast_ipi) {
+> +			aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF);
+> +			aic_ic_write(aic_irqc, AIC_IPI_MASK_CLR, AIC_IPI_OTHER);
+> +		} else {
+> +			aic_ic_write(aic_irqc, AIC_IPI_MASK_SET, AIC_IPI_SELF | AIC_IPI_OTHER);
+> +		}
+
+Why is this specific to v1 and not affecting v2? I'm sure there is a
+good reason, but documenting these differences would certainly help
+reviewing (which version implement which registers, for example).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

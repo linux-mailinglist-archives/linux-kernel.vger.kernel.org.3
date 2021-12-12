@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8CA471A39
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 13:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2573471A3B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 13:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbhLLMzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 07:55:03 -0500
-Received: from smtp-34-i2.italiaonline.it ([213.209.12.34]:42941 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230467AbhLLMzC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 07:55:02 -0500
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([82.50.51.121])
-        by smtp-34.iol.local with ESMTPA
-        id wOMammqwPUpmcwOMcmGyK7; Sun, 12 Dec 2021 13:54:02 +0100
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1639313642; bh=XB3UsxbeGSGlitHS0T7zXuAeheulVRHT3ylsFJWY7RA=;
-        h=From;
-        b=ZwtshlG9C0YZNYSxyOlodJ7wBNMvdpVxpX0Q/X6wq6QhBQZKXOcHUHLiq1RoVa7Of
-         7gNXIu80nhElOTMM3p62BbFTgNkS1EVYh9o5366SbyFsiq2LbQiGLXcGoGZsBhZ6yR
-         k5Po007Lmep19FDkT3ORMHxFxDkFGSoVLD0pbgd56R25QePqJKv2K5pTGXGLdqCU+U
-         AqQF8yjLoc7slsrPNSHqj0EwnHyHVo8Ik6TV346lNFbVYfhlWxV6b7zxTE6T19Fpn4
-         jNC52XpxuX/WuhoFCKUnpfyCu20FVcsiduJa8aBJxMfm+ghJk2J3HGIhrwUD4uW032
-         p7KQKDcsP3G9Q==
-X-CNFS-Analysis: v=2.4 cv=VsDmv86n c=1 sm=1 tr=0 ts=61b5f0ea cx=a_exe
- a=xtCFBUu/Ze6RtP+zVSd77w==:117 a=xtCFBUu/Ze6RtP+zVSd77w==:17
- a=VZkyjkMPts0tdjHXfkQA:9
-From:   Dario Binacchi <dariobin@libero.it>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Andrew F . Davis" <afd@ti.com>, Felipe Balbi <balbi@ti.com>,
-        Rachna Patil <rachna@ti.com>, Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, Jeff Lance <j-lance1@ti.com>,
-        Zubair Lutfullah <zubair.lutfullah@gmail.com>,
-        Vignesh R <vigneshr@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Brad Griffis <bgriffis@ti.com>,
-        Dario Binacchi <dariobin@libero.it>
-Subject: [RESEND PATCH 3/3] input: ti_am335x_tsc: lower the X and Y sampling time
-Date:   Sun, 12 Dec 2021 13:53:58 +0100
-Message-Id: <20211212125358.14416-4-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211212125358.14416-1-dariobin@libero.it>
-References: <20211212125358.14416-1-dariobin@libero.it>
-X-CMAE-Envelope: MS4xfCr2tNHPJS5M42ZQsU6d1R66UV4G0n0glQqdeKDjfAiyeLTueeEPu2fSFu5P77D/aBTX8p44qql16w5nDlGsxoeoG5IUD4BWbixP9BIYI6DywAO78p4m
- 9RifdIxgOv44xlkDzDu7JKcfVb7jU6d0TEDqGAGyVZr8z4YmGH9hZGCQrYNEwUA0txz76AEg19uczYTu9II3AZiNiYuMqlfRDszrHVC1sSDdVj7jqOZJqNxj
- J+6uVhJdEBiX0m26d+No8aHmOcbleXa1jW9q+GabG2FA2N+iIth3SeXGkN6H9jtps6lGIwZusGm5sogwGev9RcuRTB/4TLVsGe0c2Vjc3n5HzlurANqtzWmp
- 5yg5WLI2/NLpth7wrPwAPM7o6076wRRD0VjVJSOagAlNNfz9wUl1TlniEiQ1GQ8zXNDfaVSjDwlZS3XG6sNH3yWObfedJ0APPYdS75WJ6ZlaslFV972rN+BR
- CiFyAgaWFZJkjNZa9O5KcAyc3FzI3iU4QeG0qT6bM0A/Bp7GtYrobs+cM6HIlGsfYqv3KBMzX7EBERMuP44hJPtORl4liJtVo7TvJJ5uS5PABFB1WCCF8VMO
- JI7AJ5ufkoXW2fRX/tXElkhQMgtXC97qSS50lj7VvPmKAy4meUC+E11Bs9w9LrRNzvs=
+        id S230483AbhLLM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 07:57:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229867AbhLLM5H (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 07:57:07 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABD1C061714;
+        Sun, 12 Dec 2021 04:57:06 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so12317873wme.0;
+        Sun, 12 Dec 2021 04:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=caHoaEy2aONMpfGjBtSDMo4jFNKxlGFW4Ou5yTv9LW0=;
+        b=HmbBJzZfdUqGsnmLrZpoURuBsBiSGjV1tXowmldCJxnhvs/DjYqS1XTDFbuWHA3GfS
+         kyPBKlxToGGFtwZ4AS2OPz9VF55Vk24FLgP6lrp3bMhpFrkj5CsxYGtbW7da8dXKtrFC
+         8aKYZvmmC/UnG2ybRM8/m1NYPxEjH7lfo1SrKa3+UcHx/msPx+XAODzrZXxOO/CIYq1L
+         CZ5RrVeFajrmhG27nT8CKdR2PBQHJyyGdGNHHkVaFjZLDjqyXiKTyePRtw2EX/IxEvuM
+         qPn+yTM29Tlq+L84oq2K7a8rGseLng3LmtILa4/Gt95/sEp3psED/2gae+cmc1iMXmi7
+         VKPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=caHoaEy2aONMpfGjBtSDMo4jFNKxlGFW4Ou5yTv9LW0=;
+        b=yDE2AxgXd0ypzL+6xu/lIM9gNGSvN7ITverms0vDvDhZ+Z964/sAAh+Wq5NSYAR2Tu
+         CilMm6dwOYCEdMVIXHTaCefe35dFZ8re787AUx9rpq3jw92mj/hm5SR7MPjs/Bf8bVKc
+         AzZZlT74zwRcdei8to+PPDgiLBIWRmNHVSeTgL8AP/ExDV6kzxJV9zDicGY01VCCw8nY
+         7TNwFhf9WiIQeG9g4uAMBssasEhd6TULHfVlSEHrTiiJ+buO2SQWkvSfRC2reYME7XaC
+         5GCnsbnIFx4DcVfndQUAQZa7Yf8md5DdDikas+366UXybEFmka5gHbvnZJxcPhWOWPBt
+         X+kQ==
+X-Gm-Message-State: AOAM5310MXdYyV8X6uyAa6MnbfHvqyHIjLgUxBQ6X5zs/tjDz6cH/NnS
+        zUOL5VFOUQhjS+FidXTRm3kadp1L7DgtdA==
+X-Google-Smtp-Source: ABdhPJzq54FOzUTnAMsHfZoO3dHM+weCQCBhNPy7/RgL54n9AWSHDVP2Ob7VROq7SgUcMoK/R/RjmQ==
+X-Received: by 2002:a7b:c145:: with SMTP id z5mr29694895wmi.131.1639313825173;
+        Sun, 12 Dec 2021 04:57:05 -0800 (PST)
+Received: from [10.74.0.6] ([85.203.46.181])
+        by smtp.gmail.com with ESMTPSA id y6sm8309913wrh.18.2021.12.12.04.57.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 04:57:04 -0800 (PST)
+Subject: Re: [BUG] fs: ext4: possible ABBA deadlock in
+ ext4_inline_data_truncate() and ext4_punch_hole()
+To:     "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <03a92134-ce74-f586-59a0-baed436b275a@gmail.com>
+ <YbI2IEzCVo+A6GTi@mit.edu> <c9f25d5a-0963-5b2d-b1f0-e7c7454f7153@gmail.com>
+ <YbOWz7tvA6DuXcrw@mit.edu>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <65ca0a4b-c8f1-860e-8890-4852eb354129@gmail.com>
+Date:   Sun, 12 Dec 2021 20:56:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <YbOWz7tvA6DuXcrw@mit.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The open delay time has to be applied only on the first sample of the
-X/Y coordinates because on the following samples the ADC channel is not
-changed. Removing this time from the samples after the first one,
-"ti,coordinate-readouts" greater than 1, decreases the total acquisition
-time, allowing to increase the number of acquired coordinates in the time
-unit.
 
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
 
----
+On 2021/12/11 2:05, Theodore Y. Ts'o wrote:
+> On Fri, Dec 10, 2021 at 10:03:37AM +0800, Jia-Ju Bai wrote:
+>> Thank you very much for the detailed explanation!
+>> I will improve my static analysis tool for this point.
+> I'm not sure it will be possible to programatically detect why the
+> ABBA deadlock isn't possible without having the static analyzer having
+> a semantic understanding how the code works (so it can understand that
+> that code path which leads to the ABBA deadlock won't get executed).
+>
+> It may very well be that being able to understand why the ABBA
+> deadlock can't happen in that case is equivalent to solving the
+> halting problem.  But if you do come up with a clever way of improving
+> your static analysis tool, I'll be excited to see it!
 
- drivers/input/touchscreen/ti_am335x_tsc.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Hi Ted,
 
-diff --git a/drivers/input/touchscreen/ti_am335x_tsc.c b/drivers/input/touchscreen/ti_am335x_tsc.c
-index cfc943423241..f4ef218bc1b8 100644
---- a/drivers/input/touchscreen/ti_am335x_tsc.c
-+++ b/drivers/input/touchscreen/ti_am335x_tsc.c
-@@ -126,7 +126,7 @@ static int titsc_config_wires(struct titsc *ts_dev)
- static void titsc_step_config(struct titsc *ts_dev)
- {
- 	unsigned int	config;
--	int i;
-+	int i, n;
- 	int end_step, first_step, tsc_steps;
- 	u32 stepenable;
- 
-@@ -151,9 +151,11 @@ static void titsc_step_config(struct titsc *ts_dev)
- 	first_step = TOTAL_STEPS - tsc_steps;
- 	/* Steps 16 to 16-coordinate_readouts is for X */
- 	end_step = first_step + tsc_steps;
-+	n = 0;
- 	for (i = end_step - ts_dev->coordinate_readouts; i < end_step; i++) {
- 		titsc_writel(ts_dev, REG_STEPCONFIG(i), config);
--		titsc_writel(ts_dev, REG_STEPDELAY(i), STEPCONFIG_OPENDLY);
-+		titsc_writel(ts_dev, REG_STEPDELAY(i),
-+			     n++ == 0 ? STEPCONFIG_OPENDLY : 0);
- 	}
- 
- 	config = 0;
-@@ -175,9 +177,11 @@ static void titsc_step_config(struct titsc *ts_dev)
- 
- 	/* 1 ... coordinate_readouts is for Y */
- 	end_step = first_step + ts_dev->coordinate_readouts;
-+	n = 0;
- 	for (i = first_step; i < end_step; i++) {
- 		titsc_writel(ts_dev, REG_STEPCONFIG(i), config);
--		titsc_writel(ts_dev, REG_STEPDELAY(i), STEPCONFIG_OPENDLY);
-+		titsc_writel(ts_dev, REG_STEPDELAY(i),
-+			     n++ == 0 ? STEPCONFIG_OPENDLY : 0);
- 	}
- 
- 	/* Make CHARGECONFIG same as IDLECONFIG */
--- 
-2.17.1
+Thanks a lot for your advice!
+According to your last message, ext4_punch_hole() and 
+ext4_inline_data_truncate() both call ext4_has_inline_data() to check 
+whether the inode has inline data.
+In ext4_inline_data_truncate(), when ext4_has_inline_data() returns 
+zero, the function returns.
+In ext4_punch_hole(), when ext4_has_inline_data() returns zero, the 
+function continues.
+Thus, I think I can add such "concurrency" path conditions in my tool to 
+filter out false positives, by assuming that the same function calls or 
+data structure fields should return/store the same value in concurrency 
+code paths without race conditions.
 
+In fact, my tool can validate path conditions of each sequential code 
+path. I can find ways to validate "concurrency" path conditions in my 
+tool :)
+
+
+Best wishes,
+Jia-Ju Bai

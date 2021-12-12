@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750BB4717EC
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 04:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F30E74717F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 04:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbhLLDHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 22:07:13 -0500
-Received: from smtpbg128.qq.com ([106.55.201.39]:59739 "EHLO smtpbg587.qq.com"
+        id S232670AbhLLDLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 22:11:36 -0500
+Received: from smtpbg127.qq.com ([109.244.180.96]:40522 "EHLO smtpbg.qq.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232503AbhLLDHM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 22:07:12 -0500
-X-QQ-mid: bizesmtp46t1639278425tke52wg3
+        id S232503AbhLLDLg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 22:11:36 -0500
+X-QQ-mid: bizesmtp35t1639278670ti9jadrr
 Received: from localhost.localdomain (unknown [182.132.179.213])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Sun, 12 Dec 2021 11:07:03 +0800 (CST)
-X-QQ-SSF: 01000000002000D0H000B00A0000000
-X-QQ-FEAT: opOEk+37y/xdMGsA7kIbW+FBz+coLKZWrSaq+Hvn9QJatP7NSNLQWZrnrZZvV
-        VX1kPBgg5ASG4hCsyMrUGoqo3aC0fko8+aUpUkAZCFZRkRVoD8fqUxbshFPmQ59Zi7KXYjs
-        tA9xYT0VmmoFlEkvV74QNYD7Pn30xqMQdn2u5OKiQ5s/5XAQFBztofmg6zOdtOarpeNbOhV
-        BA3w6lG27spyLZ92iXc+2zC0ZnUoRhtrwrVSrArJtGYsr5o2YjRvMBdBH8tEOXKpp+hhqNB
-        zaMoPD6eTtEdz4wAv7JuGBjOeQZFFW5aRxVod+t5nlmSNpzEXQbQ9RPIlS9EvRidgu+eUhN
-        JpDN/MD59dUcaa/+Z0=
+        id ; Sun, 12 Dec 2021 11:11:09 +0800 (CST)
+X-QQ-SSF: 01000000002000D0H000000A0000000
+X-QQ-FEAT: 8eV18jRLafSDr/OUbaHkXpxYLtKfqlvyNQR1r9ormXcNfgenhCDJ6OhrDkLFM
+        OQukjaBRSxvfBMTSBN0l+YxAaRFjVjFI4+8dOsbv92yT11PeK3VL5aayeaVU/86sIxzQeGX
+        wTjMrsLA2haDb2txm2j42t9c+aYUs0N0K6c5Zj/aGUhjXPuqKNQ7Cxn8VdaEPIO+kqzXBoZ
+        irHQBqP9aNyjNk6pqLdLEWo6q8AA0PkYfOitJK9WCa4evlPOjdmY57+4+spzrFnvIPa3SAG
+        mttmAs+sBKyYLjdvEr5ZXBj3qUQWePgv18JafQTM6FrT/j8vhXxJxpj1/ORikpStdohkCQ3
+        5KaAFv5QbVfo2GzeCby9h3jxJuv+w==
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] powercap: fix typo in a comment
-Date:   Sun, 12 Dec 2021 11:06:40 +0800
-Message-Id: <20211212030640.25486-1-wangborong@cdjrlc.com>
+To:     linus.walleij@linaro.org
+Cc:     andy@kernel.org, brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] gpio: sch: fix typo in a comment
+Date:   Sun, 12 Dec 2021 11:11:08 +0800
+Message-Id: <20211212031108.32212-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' in the comment in line 15 is repeated. Remove one
+The double `the' in the comment in line 142 is repeated. Remove one
 of them from the comment.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/powercap/idle_inject.c | 2 +-
+ drivers/gpio/gpio-sch.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index 6e1a0043c411..a20bf12f3ce3 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -12,7 +12,7 @@
-  *
-  * All of the kthreads used for idle injection are created at init time.
-  *
-- * Next, the users of the the idle injection framework provide a cpumask via
-+ * Next, the users of the idle injection framework provide a cpumask via
-  * its register function. The kthreads will be synchronized with respect to
-  * this cpumask.
-  *
+diff --git a/drivers/gpio/gpio-sch.c b/drivers/gpio/gpio-sch.c
+index 0600f71462b5..acda4c5052d3 100644
+--- a/drivers/gpio/gpio-sch.c
++++ b/drivers/gpio/gpio-sch.c
+@@ -139,7 +139,7 @@ static int sch_gpio_direction_out(struct gpio_chip *gc, unsigned int gpio_num,
+ 	/*
+ 	 * according to the datasheet, writing to the level register has no
+ 	 * effect when GPIO is programmed as input.
+-	 * Actually the the level register is read-only when configured as input.
++	 * Actually the level register is read-only when configured as input.
+ 	 * Thus presetting the output level before switching to output is _NOT_ possible.
+ 	 * Hence we set the level after configuring the GPIO as output.
+ 	 * But we cannot prevent a short low pulse if direction is set to high
 -- 
 2.34.1
 

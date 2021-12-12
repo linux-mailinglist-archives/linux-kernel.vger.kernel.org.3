@@ -2,320 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A71C1471CDC
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 21:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3468D471CE1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 21:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhLLUPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 15:15:33 -0500
-Received: from mail-lf1-f41.google.com ([209.85.167.41]:38886 "EHLO
-        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbhLLUPb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 15:15:31 -0500
-Received: by mail-lf1-f41.google.com with SMTP id bi37so27361779lfb.5;
-        Sun, 12 Dec 2021 12:15:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P9iBGIirnE079mDC33m+ZeyiHq9a58D+yeiB4U9Jaqo=;
-        b=ibIriInNreZgcvF3xoBF0Nqe/ta7gRXJYZ26KaXISYrzo1juDykiDuCqEqNmNOXkqc
-         VawmNDA44485VSEYzWfNchhmeyA0L6k0FJNEQ6a7eVZbq8HugKKZSDoXH0I5IQFJrQ/m
-         p9PZxO0ex+Ag341zpH/z4PRDV3vPzRlVrm6lOoLwbLnGmTGIROLm4BZSsNj78C5oyG/T
-         PGG5mC7mVlqLVmKB0uGMBPUkZEOQHyMYenfb0PJbsCjx0PrtSFLxmKcPzVYyYf3cMM8a
-         BKrTOQOwJhTEgb+2bD/QtJGY01DduNThIxodRNP/qZlDho7VTTC+rezMX0PJ2FsKt+Fz
-         qrdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P9iBGIirnE079mDC33m+ZeyiHq9a58D+yeiB4U9Jaqo=;
-        b=7bPY8847pJJ+71zr/uV20lj+4p+p0fbB0HpvsxVFOxcCJMP+WVEsBhjloIfhwyfF0K
-         S3pyW5/ybNmmtrAK5oqELMLGrN8Uy5Ks03ba+2IY/UqENq3psBPm8YjIB8aOgqiA+2dB
-         muEwncI0BBL+EGuQYAI0vNxioD420fz4EX47Nz3GE18KE/IM3V+nHk8XsITqphEtKVIT
-         u8VToNB/hbVIqLPggEDcuKxWBSKWEIWX4LQDqeKl749XVg93Gj8ogg9q3j/hZ0dK9Sr3
-         5KaFgw2ZzeuS83u3SZXP+xY995N9XUyCdD5Yb0zYkkKX9DexNtfFa0UAyiwSDFPvnEWj
-         gxzw==
-X-Gm-Message-State: AOAM531vF1pTz1+YaP4ABSM8qfNmj84a/hPBFCjVB3T3TbG0/bakuC9o
-        Cls5bzxv6WFjBCiAa7wjnavAhEnDQ9OcBe8pk7k=
-X-Google-Smtp-Source: ABdhPJztDTs592zdaCAV22rEoc3dFDuVKaf9eiwmQtAt59lSuvVTsiLV8ugzBjsdTaZqTsX/Gu3b3Fqp6l4+BQ7aRtM=
-X-Received: by 2002:a19:770a:: with SMTP id s10mr26522774lfc.234.1639340069605;
- Sun, 12 Dec 2021 12:14:29 -0800 (PST)
+        id S231349AbhLLUPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 15:15:40 -0500
+Received: from shark3.inbox.lv ([194.152.32.83]:49078 "EHLO shark3.inbox.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231174AbhLLUPi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 15:15:38 -0500
+Received: from shark3.inbox.lv (localhost [127.0.0.1])
+        by shark3-out.inbox.lv (Postfix) with ESMTP id 27DF52800F0;
+        Sun, 12 Dec 2021 22:15:36 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv; s=30062014;
+        t=1639340136; bh=7gKTvcysovQVgk9V+5/n54cyo5QdEOaCKyAFlk9k3V8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=PehT60PVrl9GnTqBvLHhoM7LRt+8apblAJd7e1bOrejqH/WGmgsVoJGulY5DMsk0u
+         /H3GEo9Sd+K0SLWR9dR1bCPy7KGdGhDfwbRxnjC/dAQVy828DDFhBophAfPC9XqaNB
+         nqfuxoelfOeHrdT6b+LBuWGD6fXzX3g5C2KcjRcE=
+Received: from localhost (localhost [127.0.0.1])
+        by shark3-in.inbox.lv (Postfix) with ESMTP id 1EF072800E5;
+        Sun, 12 Dec 2021 22:15:36 +0200 (EET)
+Received: from shark3.inbox.lv ([127.0.0.1])
+        by localhost (shark3.inbox.lv [127.0.0.1]) (spamfilter, port 35)
+        with ESMTP id I5nx0h2I_Hc3; Sun, 12 Dec 2021 22:15:35 +0200 (EET)
+Received: from mail.inbox.lv (pop1 [127.0.0.1])
+        by shark3-in.inbox.lv (Postfix) with ESMTP id 6164A2800C4;
+        Sun, 12 Dec 2021 22:15:35 +0200 (EET)
+Date:   Mon, 13 Dec 2021 05:15:21 +0900
+From:   Alexey Avramov <hakavlad@inbox.lv>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     ValdikSS <iam@valdikss.org.ru>, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com,
+        oleksandr@natalenko.name, kernel@xanmod.org, aros@gmx.com,
+        hakavlad@gmail.com, Yu Zhao <yuzhao@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@suse.com>, hannes@cmpxchg.org,
+        hdanton@sina.com, riel@surriel.com,
+        Shakeel Butt <shakeelb@google.com>
+Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
+ set
+Message-ID: <20211213051521.21f02dd2@mail.inbox.lv>
+In-Reply-To: <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
+References: <20211130201652.2218636d@mail.inbox.lv>
+        <2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru>
+        <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com> <20211105154334.1841927-4-alexandre.ghiti@canonical.com>
-In-Reply-To: <20211105154334.1841927-4-alexandre.ghiti@canonical.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 12 Dec 2021 14:14:18 -0600
-Message-ID: <CAH2r5muPS_PSFpdy1xw2mUNcOJ-CRY5EWU1Zwo9DK+UX6VcDvw@mail.gmail.com>
-Subject: Re: [PATCH 3/7] Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-cachefs@redhat.com,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, linux-power@fi.rohmeurope.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: OK
+X-ESPOL: EZeEAiZdhQo1taLbN/0M6uTt2NezU0QhuTn4zqFSmn9bsq+jx9N0dm6WEoPnHwG8bg==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-You can add my RB is you would like to this.
+> I don't think that the limits should be "N bytes on the current node". 
 
-Also note an additional typo in the existing config description
-"laintext" instead of "plaintext"
+It's not a problem to add a _ratio knobs. How the tunables should look and 
+what their default values should be can still be discussed. Now my task is 
+to prove that the problem exists and the solution I have proposed is 
+effective and correct.
 
-On Fri, Nov 5, 2021 at 11:11 AM Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> This config was removed so remove all references to it.
->
-> Fixes: 76a3c92ec9e0 ("cifs: remove support for NTLM and weaker authentication algorithms")
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
->  Documentation/admin-guide/cifs/usage.rst    | 7 +++----
->  arch/arm/configs/cm_x300_defconfig          | 1 -
->  arch/arm/configs/ezx_defconfig              | 1 -
->  arch/arm/configs/imote2_defconfig           | 1 -
->  arch/arm/configs/nhk8815_defconfig          | 1 -
->  arch/arm/configs/pxa_defconfig              | 1 -
->  arch/mips/configs/fuloong2e_defconfig       | 1 -
->  arch/mips/configs/malta_qemu_32r6_defconfig | 1 -
->  arch/mips/configs/maltaaprp_defconfig       | 1 -
->  arch/mips/configs/maltasmvp_defconfig       | 1 -
->  arch/mips/configs/maltasmvp_eva_defconfig   | 1 -
->  arch/mips/configs/maltaup_defconfig         | 1 -
->  arch/mips/configs/nlm_xlp_defconfig         | 1 -
->  arch/mips/configs/nlm_xlr_defconfig         | 1 -
->  arch/powerpc/configs/ppc6xx_defconfig       | 1 -
->  arch/sh/configs/titan_defconfig             | 1 -
->  16 files changed, 3 insertions(+), 19 deletions(-)
->
-> diff --git a/Documentation/admin-guide/cifs/usage.rst b/Documentation/admin-guide/cifs/usage.rst
-> index f170d8820258..3766bf8a1c20 100644
-> --- a/Documentation/admin-guide/cifs/usage.rst
-> +++ b/Documentation/admin-guide/cifs/usage.rst
-> @@ -734,10 +734,9 @@ SecurityFlags              Flags which control security negotiation and
->                         using weaker password hashes is 0x37037 (lanman,
->                         plaintext, ntlm, ntlmv2, signing allowed).  Some
->                         SecurityFlags require the corresponding menuconfig
-> -                       options to be enabled (lanman and plaintext require
-> -                       CONFIG_CIFS_WEAK_PW_HASH for example).  Enabling
-> -                       plaintext authentication currently requires also
-> -                       enabling lanman authentication in the security flags
-> +                       options to be enabled.  Enabling plaintext
-> +                       authentication currently requires also enabling
-> +                       lanman authentication in the security flags
->                         because the cifs module only supports sending
->                         laintext passwords using the older lanman dialect
->                         form of the session setup SMB.  (e.g. for authentication
-> diff --git a/arch/arm/configs/cm_x300_defconfig b/arch/arm/configs/cm_x300_defconfig
-> index 502a9d870ca4..45769d0ddd4e 100644
-> --- a/arch/arm/configs/cm_x300_defconfig
-> +++ b/arch/arm/configs/cm_x300_defconfig
-> @@ -146,7 +146,6 @@ CONFIG_NFS_V3_ACL=y
->  CONFIG_NFS_V4=y
->  CONFIG_ROOT_NFS=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_PARTITION_ADVANCED=y
->  CONFIG_NLS_CODEPAGE_437=m
->  CONFIG_NLS_ISO8859_1=m
-> diff --git a/arch/arm/configs/ezx_defconfig b/arch/arm/configs/ezx_defconfig
-> index a49e699e52de..ec84d80096b1 100644
-> --- a/arch/arm/configs/ezx_defconfig
-> +++ b/arch/arm/configs/ezx_defconfig
-> @@ -314,7 +314,6 @@ CONFIG_NFSD_V3_ACL=y
->  CONFIG_SMB_FS=m
->  CONFIG_CIFS=m
->  CONFIG_CIFS_STATS=y
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_CODEPAGE_437=m
-> diff --git a/arch/arm/configs/imote2_defconfig b/arch/arm/configs/imote2_defconfig
-> index 118c4c927f26..6db871d4e077 100644
-> --- a/arch/arm/configs/imote2_defconfig
-> +++ b/arch/arm/configs/imote2_defconfig
-> @@ -288,7 +288,6 @@ CONFIG_NFSD_V3_ACL=y
->  CONFIG_SMB_FS=m
->  CONFIG_CIFS=m
->  CONFIG_CIFS_STATS=y
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_CODEPAGE_437=m
-> diff --git a/arch/arm/configs/nhk8815_defconfig b/arch/arm/configs/nhk8815_defconfig
-> index 23595fc5a29a..907d6512821a 100644
-> --- a/arch/arm/configs/nhk8815_defconfig
-> +++ b/arch/arm/configs/nhk8815_defconfig
-> @@ -127,7 +127,6 @@ CONFIG_NFS_FS=y
->  CONFIG_NFS_V3_ACL=y
->  CONFIG_ROOT_NFS=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_NLS_CODEPAGE_437=y
->  CONFIG_NLS_ASCII=y
->  CONFIG_NLS_ISO8859_1=y
-> diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
-> index 58f4834289e6..dedaaae3d0d8 100644
-> --- a/arch/arm/configs/pxa_defconfig
-> +++ b/arch/arm/configs/pxa_defconfig
-> @@ -699,7 +699,6 @@ CONFIG_NFSD_V3_ACL=y
->  CONFIG_NFSD_V4=y
->  CONFIG_CIFS=m
->  CONFIG_CIFS_STATS=y
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_DEFAULT="utf8"
-> diff --git a/arch/mips/configs/fuloong2e_defconfig b/arch/mips/configs/fuloong2e_defconfig
-> index 5c24ac7fdf56..ba47c5e929b7 100644
-> --- a/arch/mips/configs/fuloong2e_defconfig
-> +++ b/arch/mips/configs/fuloong2e_defconfig
-> @@ -206,7 +206,6 @@ CONFIG_NFSD_V3_ACL=y
->  CONFIG_NFSD_V4=y
->  CONFIG_CIFS=m
->  CONFIG_CIFS_STATS2=y
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_CIFS_DEBUG2=y
-> diff --git a/arch/mips/configs/malta_qemu_32r6_defconfig b/arch/mips/configs/malta_qemu_32r6_defconfig
-> index 614af02d83e6..6fb9bc29f4a0 100644
-> --- a/arch/mips/configs/malta_qemu_32r6_defconfig
-> +++ b/arch/mips/configs/malta_qemu_32r6_defconfig
-> @@ -165,7 +165,6 @@ CONFIG_TMPFS=y
->  CONFIG_NFS_FS=y
->  CONFIG_ROOT_NFS=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_CODEPAGE_437=m
-> diff --git a/arch/mips/configs/maltaaprp_defconfig b/arch/mips/configs/maltaaprp_defconfig
-> index 9c051f8fd330..eb72df528243 100644
-> --- a/arch/mips/configs/maltaaprp_defconfig
-> +++ b/arch/mips/configs/maltaaprp_defconfig
-> @@ -166,7 +166,6 @@ CONFIG_TMPFS=y
->  CONFIG_NFS_FS=y
->  CONFIG_ROOT_NFS=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_CODEPAGE_437=m
-> diff --git a/arch/mips/configs/maltasmvp_defconfig b/arch/mips/configs/maltasmvp_defconfig
-> index 2e90d97551d6..1fb40d310f49 100644
-> --- a/arch/mips/configs/maltasmvp_defconfig
-> +++ b/arch/mips/configs/maltasmvp_defconfig
-> @@ -167,7 +167,6 @@ CONFIG_TMPFS=y
->  CONFIG_NFS_FS=y
->  CONFIG_ROOT_NFS=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_CODEPAGE_437=m
-> diff --git a/arch/mips/configs/maltasmvp_eva_defconfig b/arch/mips/configs/maltasmvp_eva_defconfig
-> index d1f7fdb27284..75cb778c6149 100644
-> --- a/arch/mips/configs/maltasmvp_eva_defconfig
-> +++ b/arch/mips/configs/maltasmvp_eva_defconfig
-> @@ -169,7 +169,6 @@ CONFIG_TMPFS=y
->  CONFIG_NFS_FS=y
->  CONFIG_ROOT_NFS=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_CODEPAGE_437=m
-> diff --git a/arch/mips/configs/maltaup_defconfig b/arch/mips/configs/maltaup_defconfig
-> index 48e5bd492452..7b4f247dc60c 100644
-> --- a/arch/mips/configs/maltaup_defconfig
-> +++ b/arch/mips/configs/maltaup_defconfig
-> @@ -165,7 +165,6 @@ CONFIG_TMPFS=y
->  CONFIG_NFS_FS=y
->  CONFIG_ROOT_NFS=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
->  CONFIG_NLS_CODEPAGE_437=m
-> diff --git a/arch/mips/configs/nlm_xlp_defconfig b/arch/mips/configs/nlm_xlp_defconfig
-> index c97f00ece828..1c8b73d03263 100644
-> --- a/arch/mips/configs/nlm_xlp_defconfig
-> +++ b/arch/mips/configs/nlm_xlp_defconfig
-> @@ -459,7 +459,6 @@ CONFIG_NFSD=m
->  CONFIG_NFSD_V3_ACL=y
->  CONFIG_NFSD_V4=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_UPCALL=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
-> diff --git a/arch/mips/configs/nlm_xlr_defconfig b/arch/mips/configs/nlm_xlr_defconfig
-> index 60ea102783d9..11acfc173058 100644
-> --- a/arch/mips/configs/nlm_xlr_defconfig
-> +++ b/arch/mips/configs/nlm_xlr_defconfig
-> @@ -411,7 +411,6 @@ CONFIG_NFSD=m
->  CONFIG_NFSD_V3_ACL=y
->  CONFIG_NFSD_V4=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_UPCALL=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
-> diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
-> index 6697c5e6682f..bb549cb1c3e3 100644
-> --- a/arch/powerpc/configs/ppc6xx_defconfig
-> +++ b/arch/powerpc/configs/ppc6xx_defconfig
-> @@ -1022,7 +1022,6 @@ CONFIG_NFSD=m
->  CONFIG_NFSD_V3_ACL=y
->  CONFIG_NFSD_V4=y
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_CIFS_UPCALL=y
->  CONFIG_CIFS_XATTR=y
->  CONFIG_CIFS_POSIX=y
-> diff --git a/arch/sh/configs/titan_defconfig b/arch/sh/configs/titan_defconfig
-> index ba887f1351be..cd5c58916c65 100644
-> --- a/arch/sh/configs/titan_defconfig
-> +++ b/arch/sh/configs/titan_defconfig
-> @@ -242,7 +242,6 @@ CONFIG_NFSD=y
->  CONFIG_NFSD_V3=y
->  CONFIG_SMB_FS=m
->  CONFIG_CIFS=m
-> -CONFIG_CIFS_WEAK_PW_HASH=y
->  CONFIG_PARTITION_ADVANCED=y
->  CONFIG_NLS_CODEPAGE_437=m
->  CONFIG_NLS_ASCII=m
-> --
-> 2.32.0
->
+> the various zones have different size as well.
 
+I'll just point out the precedent: sc->file_is_tiny works the same way 
+(per node) as suggested sc->clean_below_min etc.
 
--- 
-Thanks,
+> We do already have a lot of sysctls for controlling these sort of
+> things.  
 
-Steve
+There are many of them, but there are no most important ones for solving 
+the problem - those that are proposed in the patch. 
+
+> Was much work put into attempting to utilize the existing
+> sysctls to overcome these issues?
+
+Oh yes! This is all I have been doing for the last 4 years. At the end of 
+2017, I was forced to write my own userspace OOM killer [1] to resist 
+freezes (I didn't know then that earlyoom already existed).
+
+In 2018, Facebook came on the scene with its oomd [2]:
+
+> The traditional Linux OOM killer works fine in some cases, but in others 
+> it kicks in too late, resulting in the system entering a livelock for an 
+> indeterminate period.
+
+Here we can assume that Facebook's engineers haven't found the kernel 
+sysctl tunables that would satisfy them.
+
+In 2019 LKML people could not offer Artem S. Tashkinov a simple solution to 
+the problem he described [3]. In addition to discussing user-space 
+solutions, 2 kernel-side solutions are proposed:
+
+- PSI-based solution was proposed by Johannes Weiner [4].
+- Reserve a fixed (configurable) amount of RAM for caches, and trigger OOM 
+  killer earlier, before most UI code is evicted from memory was suggested 
+  by ndrw [5]. This is what I propose to accept in the mainline. It is the 
+  right way to go.
+
+None of the suggestions posted in that thread were accepted in the 
+mainline.
+
+In 2019, at the same time, Fedora Workstation group discussed [6]
+Issue #98 Better interactivity in low-memory situations.
+As a result, it was decided to enable earlyoom by default for Fedora 
+Workstation 32. No existing sysctl was found to be of much help.
+It was also suggested to use a swap on zram and to enable the cgroup-based 
+uresourced daemon to protect the user session.
+
+So, the problem described by Artem S. Tashkinov in 2019 is still easily 
+reproduced in 2021. The assurances of the maintainers that they consider 
+the thrashing and near-OOM stalls to be a serious problems are difficult to 
+take seriously while they ignore the obvious solution: if reclaiming file 
+caches leads to thrashing, then you just need to prohibit deleting the file 
+cache. And allow the user to control its minimum amount.
+By the way, the implementation of such an idea has been known [7] since 
+2010 and was even used in Chrome OS.
+
+Bonus: demo: https://youtu.be/ZrLqUWRodh4
+Debian 11 on VM, Linux 5.14 with the patch, no swap space, 
+playing SuperTux while 1000 `tail /dev/zero` started simultaneously:
+1. No freezes with vm.clean_min_kbytes=300000, I/O pressure was closed to 
+   zero, memory pressure was moderate (70-80 some, 12-17 full), all tail 
+   processes has been killed in 2 minutes (0:06 - 2:14), it's about 
+   8 processes reaped by oom_reaper per second;
+2. Complete UI freeze without the working set protection (since 3:40).
+
+[1] https://github.com/hakavlad/nohang
+[2] https://engineering.fb.com/2018/07/19/production-engineering/oomd/
+[3] https://lore.kernel.org/lkml/d9802b6a-949b-b327-c4a6-3dbca485ec20@gmx.com/
+[4] https://lore.kernel.org/lkml/20190807205138.GA24222@cmpxchg.org/
+[5] https://lore.kernel.org/lkml/806F5696-A8D6-481D-A82F-49DEC1F2B035@redhazel.co.uk/
+[6] https://pagure.io/fedora-workstation/issue/98
+[7] https://lore.kernel.org/lkml/20101028191523.GA14972@google.com/
+

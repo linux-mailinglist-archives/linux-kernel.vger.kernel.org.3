@@ -2,98 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC83471A81
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B620471A88
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbhLLNzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 08:55:02 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:43205 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229979AbhLLNzB (ORCPT
+        id S231336AbhLLN4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 08:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231319AbhLLN4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 08:55:01 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9A3305C0118;
-        Sun, 12 Dec 2021 08:55:00 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sun, 12 Dec 2021 08:55:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=DU5SXriTNRyS71l2bxO2m+nfg0d
-        UpC1LU1HuaivfHlQ=; b=FJbUlQnjlXMPLDuiUPofv+v99/CAdmIIhstdQfXtgRz
-        cXqrFfvpiZ0JlTihyZ/PNa9RDQdH7/CXffOfjeTMdZYB7s9RFy0CbAN7CQ3Ag4Cn
-        +CEwWG7dp6Qj+xDWheAbxWYLv2btS8G0DRFKTx/25yVzuMypPXrL2MzFEwFm0wjJ
-        RJ7BHLztu9yo0URpPgQnzJypGFqvAGcnyCwR6csf12fG54WUd4q0BbeR2vLq7UMT
-        4VvdYE0Q34n/SjGORhSMEnUez9+klqoUwy+K8xgZQsm7HAX/4TMeY6cmFYNHQDyT
-        p9PVvKXRF6asanmIoiJUqiur2EZLmR6ll7fS0JdZTjg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=DU5SXr
-        iTNRyS71l2bxO2m+nfg0dUpC1LU1HuaivfHlQ=; b=a2px8q7dbHR3zIhEBq1qyw
-        KaTRzZ/j+ZayQjx/oZxMlhGTuQQIn314780fZmBa6C40qtXUvBpNSJLIAyGwojQX
-        d72ro0Polr2+Vb9hgqcUmikYmty7Do1lp31v3gnAhyDBb06rLc6PXPQUEEbIogFD
-        P/9x1VcKwhgZl8d9CDf5/9cew8J4W+9tSpBcOlko5q4HiHcfe8xEUaERgfawnGXF
-        /tO+l8Nlk1Hr0SZ6n6/9veMFw1z8WxQzrPMkLSMJVYbetKx5C9r3RWOY37922lIJ
-        tht8y0U1yOcdkLkt4KSl3PqTBOfFkZJPvrDNPW2sQtXiQJ7QkHHmu2wSq2H+NU0A
-        ==
-X-ME-Sender: <xms:NP-1YeVs1Vp8CvyV87GVKiSMg3yJO54EjPKlyoTJ64D7hqERARAUmQ>
-    <xme:NP-1Yak3x60lk1jb3Ua2_88xPEBamRp_13ycU2FeLIBEtcwoeRWxOt5czjtKpvpun
-    ZEtuqp4oZcN7g>
-X-ME-Received: <xmr:NP-1YSbhAM9RIXtXsciWLn7OfUH36n9KZkJOEsSp0o4hjCBnR7LzTrLqCs1BU4mr8XusrqAbJo8XetFPjSmPcuASRDmuSLGM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkeeigdehkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:NP-1YVVtk7U__F8WLxLMBJoGw5i6CKEfIoVuitpIVf-M1SthEa95NA>
-    <xmx:NP-1YYmvn4DEDy2jUqUWQFWt5BQNdsmjdWguEGRXkOHxEP3BdU4kXg>
-    <xmx:NP-1Yadv5Vzl0f_QTHeHYrwj3T1q_-Hgk0b91-h6HGEadjiWSVdHGg>
-    <xmx:NP-1YZBnbL4MyyFpm8ddAtim9I5Wl6wlFcl6ENwTgRNwOfzMMdCBXg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 12 Dec 2021 08:54:59 -0500 (EST)
-Date:   Sun, 12 Dec 2021 14:54:45 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.10 0/5] aio poll fixes for 5.10
-Message-ID: <YbX/JVz768WuoiXd@kroah.com>
-References: <20211210234805.39861-1-ebiggers@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210234805.39861-1-ebiggers@kernel.org>
+        Sun, 12 Dec 2021 08:56:22 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D946C061714;
+        Sun, 12 Dec 2021 05:56:22 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id o14so9404296plg.5;
+        Sun, 12 Dec 2021 05:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=/gQUbvHkAhzPpWEAlaFTz49oyVa8obtsdC7ymHL+Scc=;
+        b=QlcyK7p51i6cmH6vldrRHaYWe/7z/wdWLBZ31Y6Fnfs2U+g7rKBJgvZDV7r4pH/J5+
+         b4EGprAxZxSsbkUf81T/azTYLP1Cr9n33WYqi56aU+ojpBIGxc5UgVFF7gDXKHkkavMp
+         YmEwhywR4wCchfpsfwh+OQ0Z0mE4dZphlJ7Wq1aKGVyrs8b70bjuEtd2DgrNWrmObW6U
+         tnJncEeaZNV6FsI7ZOTyP1z3FEAyeDTTAFbnHJqZoClRBowNeBjKHV8Xf2ownmm8yC/M
+         hG+iPS7Jn5nMIpNMcDumlw5OFAqn2mZuSY3rNPNVndouSTdBPNbVf/QMj5P9ZGxsOS+B
+         9mjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/gQUbvHkAhzPpWEAlaFTz49oyVa8obtsdC7ymHL+Scc=;
+        b=hcCnnmx34vOfUwZJta96fdWXR1AOBTaL32BtBgYJjS51RqLzWU5cWI5o4a3AAlkrxT
+         zh5xqdw0ikz85Aajs9rge973lgXPpo1/qrBVIaOM3DoOH1sxOYwdNqhkklM35Vmy8PGY
+         msXgJakRRpSU++jw9YuRq2E6BwpuO7dsUuWYhbL6eFkUtIzrBdNUTOiXkz9LYWrA5jkA
+         I6gux5LL/kx6eIy0rklL3LRFLDwHu4l3RIhrIspsFAUE8ZBQNOrepnCgPVmp3+UxUIw5
+         3CzJ/Y5z1GLXpVwJ9iwzbWrdVK6oBV5ybOKiR9O2M3+Q5eP1ZsRwbUOLIhijpkYd8UGO
+         I9mw==
+X-Gm-Message-State: AOAM533/uqYs0y1fAxGR6hoi12DuG3lQlS8AC2297W7j0xIT34dAQrhc
+        4Dqx0ICoOAhExFZmYNEj6PU=
+X-Google-Smtp-Source: ABdhPJwxH8RyIrWI0KeErRauDZVF7CcEaF9YzaKd84AS8nxZoJUUm/P41yvVHXzW4W41ZR3V6gHroQ==
+X-Received: by 2002:a17:902:9b95:b0:143:b899:5b12 with SMTP id y21-20020a1709029b9500b00143b8995b12mr87877211plp.13.1639317381565;
+        Sun, 12 Dec 2021 05:56:21 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id m24sm7572001pgk.39.2021.12.12.05.56.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 05:56:21 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] perf tools: Use IS_ERR_OR_NULL() to clean code and fix check
+Date:   Sun, 12 Dec 2021 13:56:09 +0000
+Message-Id: <20211212135613.20000-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 03:48:00PM -0800, Eric Biggers wrote:
-> Backport the aio poll fixes to 5.10.  This resolves a conflict in
-> aio_poll_wake() in patch 4.  It's a "trivial" conflict, but I'm sending
-> this to make sure it doesn't get dropped.
-> 
-> Eric Biggers (5):
->   wait: add wake_up_pollfree()
->   binder: use wake_up_pollfree()
->   signalfd: use wake_up_pollfree()
->   aio: keep poll requests on waitqueue until completed
->   aio: fix use-after-free due to missing POLLFREE handling
-> 
->  drivers/android/binder.c        |  21 ++--
->  fs/aio.c                        | 184 ++++++++++++++++++++++++++------
->  fs/signalfd.c                   |  12 +--
->  include/linux/wait.h            |  26 +++++
->  include/uapi/asm-generic/poll.h |   2 +-
->  kernel/sched/wait.c             |   7 ++
->  6 files changed, 195 insertions(+), 57 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+Use IS_ERR_OR_NULL() to make the code cleaner.
+Also if the priv is NULL, it's improper to call PTR_ERR(priv).
 
-Thanks for all of the backports, much appreciated and now queued up.
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ tools/perf/util/bpf-loader.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-greg k-h
+diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
+index fbb3c4057c30..22662fc85cc9 100644
+--- a/tools/perf/util/bpf-loader.c
++++ b/tools/perf/util/bpf-loader.c
+@@ -421,7 +421,7 @@ preproc_gen_prologue(struct bpf_program *prog, int n,
+ 	size_t prologue_cnt = 0;
+ 	int i, err;
+ 
+-	if (IS_ERR(priv) || !priv || priv->is_tp)
++	if (IS_ERR_OR_NULL(priv) || priv->is_tp)
+ 		goto errout;
+ 
+ 	pev = &priv->pev;
+@@ -570,7 +570,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+ 	bool need_prologue = false;
+ 	int err, i;
+ 
+-	if (IS_ERR(priv) || !priv) {
++	if (IS_ERR_OR_NULL(priv)) {
+ 		pr_debug("Internal error when hook preprocessor\n");
+ 		return -BPF_LOADER_ERRNO__INTERNAL;
+ 	}
+@@ -642,8 +642,11 @@ int bpf__probe(struct bpf_object *obj)
+ 			goto out;
+ 
+ 		priv = bpf_program__priv(prog);
+-		if (IS_ERR(priv) || !priv) {
+-			err = PTR_ERR(priv);
++		if (IS_ERR_OR_NULL(priv)) {
++			if (!priv)
++				err = -BPF_LOADER_ERRNO__INTERNAL;
++			else
++				err = PTR_ERR(priv);
+ 			goto out;
+ 		}
+ 
+@@ -693,7 +696,7 @@ int bpf__unprobe(struct bpf_object *obj)
+ 		struct bpf_prog_priv *priv = bpf_program__priv(prog);
+ 		int i;
+ 
+-		if (IS_ERR(priv) || !priv || priv->is_tp)
++		if (IS_ERR_OR_NULL(priv) || priv->is_tp)
+ 			continue;
+ 
+ 		for (i = 0; i < priv->pev.ntevs; i++) {
+@@ -751,7 +754,7 @@ int bpf__foreach_event(struct bpf_object *obj,
+ 		struct perf_probe_event *pev;
+ 		int i, fd;
+ 
+-		if (IS_ERR(priv) || !priv) {
++		if (IS_ERR_OR_NULL(priv)) {
+ 			pr_debug("bpf: failed to get private field\n");
+ 			return -BPF_LOADER_ERRNO__INTERNAL;
+ 		}
+-- 
+2.17.1
+

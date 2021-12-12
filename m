@@ -2,283 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1829A471E70
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701E6471E84
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbhLLW7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 17:59:41 -0500
-Received: from mail.wizzup.org ([95.217.97.174]:44004 "EHLO wizzup.org"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230088AbhLLW7h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 17:59:37 -0500
-X-Greylist: delayed 1497 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Dec 2021 17:59:37 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-        s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=5DMTAtnX0dwbB4pzMdMP9C9FA35ra736TcCnoY+8mIg=; b=sd3SqY497G6Ct6bleLCcdmA1OU
-        cZ2RVc/Hy/elb10NqGHPLuxWR0agsG+9KtLBAQ5v2XfnKtI4ua3Vkua+NXGUhlKU2UAUXRszEhF1N
-        tSSAdV+O6ZXzEJ7QPhTkSXk8Esc2BCUZXPBsYPoSuSrTEFkV2BMSPBHeEXZgWscXCtseUepCAN8dV
-        zOtKM++IlUlEPiSg/hSnOCIqpSgxqu1+xI1Dxp7e8cK0PQDkaWfbuqP2+OYHs+hzpyZQmLRd1F9lO
-        p2mU5DwZbcPvSXEuNl3Twc7g/b0EbUQw/eIr2BupEPQLnL1Q6a1KoMySD3o6liqKMVX8V34zO9ASt
-        E3uUaSyA==;
-Received: from [45.83.235.159] (helo=gentoo-x13.fritz.box)
-        by wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <merlijn@wizzup.org>)
-        id 1mwXoZ-0001el-SE; Sun, 12 Dec 2021 22:59:32 +0000
-From:   Merlijn Wajer <merlijn@wizzup.org>
-To:     merlijn@wizzup.org
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Dev Null <devnull@uvos.xyz>, Tony Lindgren <tony@atomide.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] Droid3: add initial DTS
-Date:   Mon, 13 Dec 2021 00:04:59 +0100
-Message-Id: <20211212230459.13579-3-merlijn@wizzup.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211212230459.13579-1-merlijn@wizzup.org>
-References: <20211212230459.13579-1-merlijn@wizzup.org>
+        id S230205AbhLLXCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 18:02:21 -0500
+Received: from mout.gmx.net ([212.227.17.20]:41771 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230204AbhLLXCQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 18:02:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639350129;
+        bh=pGlgCazVp8nQl5psPTq5BoguCoJqXSVkwS4YQtUO2Qk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=aNoV0nm3MR+wa1YjB+hXPLMjVwuNE578mJY6SGCHBfMHcIappqtIGqATiBJK2ayNJ
+         2Evtiys5bdECP+jM+/2iiltqB4AsYOaFlix3+shbyre8SvabuwvaWbfxDTFkx5fO7z
+         LdI1hklCBL4ANFRkdLscunzh0t15AHiWHGCv3qnE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLiCu-1nE4hs3a7M-00HjIl; Mon, 13
+ Dec 2021 00:02:08 +0100
+Date:   Mon, 13 Dec 2021 00:02:07 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 5/8] pinctrl: nuvoton: Add driver for WPCM450
+Message-ID: <YbZ/byE4Sj/fxUrj@latitude>
+References: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
+ <20211207210823.1975632-6-j.neuschaefer@gmx.net>
+ <CAHp75Vew=M_ofNM5pmeHtTJHXRUbbO4RrtgYAtLBznTBm3CS6Q@mail.gmail.com>
+ <YbC6Bv2teZ5CFhFQ@latitude>
+ <CAHp75VdYtLbCLi7iD0UT7MrPi9oxJLWA9ZCBo7uGbWxNCBdGyw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t24WkmUQOwokeUNJ"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdYtLbCLi7iD0UT7MrPi9oxJLWA9ZCBo7uGbWxNCBdGyw@mail.gmail.com>
+X-Provags-ID: V03:K1:yVb59m40aoo/YNSlVRYLEyk2zd8aBC3T0OVDCEh1lZ8U322m9/z
+ 29azbAowmCnvdVlo8413N504Fr2VNkIUEel040iCBouJNb/Nziz55dQNQT4zoju4iJrlug2
+ 1TwTD8leILU/N91SDCOIbLy7XjHmTpKm5lwHNLkrs9ECoWKoKSKANHwiNNQz3ziP3RLw2y7
+ IJfJNhDQO8f4POfBmh6eQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4vW4Yo80IFk=:19Gq3SwuUqJiQ5Z7eD1paq
+ oUIpJ3J2IfH4HzXTR2nevThZn/npmI+ZSdbqSicl39PHNZjHYCeh0yqKkKIsl0tjjFTs+OVPD
+ brbwBncLbofy73Z3X6IPWLLWxd03IZZIqPH0mUmWlSPgRdJkgHaLn4me6WxgFVS5cM0ameVn2
+ b+cszw91kPEbKIrH+RWtO7YyrM+2d4yX3eHOEw+l5mLFJ/t8lZAlJVNdeQV7GNqQVzYIXbHiv
+ PVKHrVA5LB82oOWnq55DeZQFBt1aP9LBEyiHrrNH1ItvQp+za2VSlHViqmlBS/d9Xmkff2OfM
+ ACeFuUlBuCSb7fm7qBJiLdr2RAsVbaWNbAAIgUoFbNvBfMm2o8jbnqOwWD342dZV+tBDF27Vg
+ tGD4bsY+N6WTxGl7lcL2UTdEUo9v3N31k3RlcPf9k6GPNe18JZKp9pyACnx99UBVI5PIi1kLK
+ 845kUvSK9qVRTGxAK6W3VYISzQZDH42szBRHo8KPWw4awsMVpw5UJjtbvVho+dC6xTaaUBoqQ
+ 5k6RbXcaY7N5/n9RDxJ/mIii95+xBrUh+xLmvf+cMiZkzOBgYEYt6sbNfvy4Iu2O8FgHVEYgo
+ CmfWdTic3envNvZiquAHsyLi/XrTq1uiKzv8vFaHjPobjE17r5o39Lm2UV9ebon12yLc4REk6
+ tG7QGXaB/jYudKzeYKw28T4YwjmIKI4MFBnOId76/5F4zymqpfobiR4ZNnBHTcDPSzwTyaOq1
+ BrfZPUPrYANsCHAmfvKGQ9Qq/xtGHnQY2Gdw6iw/kbWDDlgPKjjwGpFyUPOTFlyzRkd3kxKQk
+ JUWzKt3XiK8jR4rTKUVlx9Q7JhFM+HXSQWPAdismKdo7EiwBT8hiq1hMYFA1Eooeoq/QdIwdB
+ Ns5MsOZGZcEmFguNJamadNb3g2bk73JxvMRwIY64UZ6+jnn7AFJY0FkvMYxuEgskKRvhQzhnO
+ Khq19aIiYB5uz+jy37BchSeGYr9K6k8iKiJS8ScB8+UVpSgEV3+8K/FthVlSbQcEi2URxyBxB
+ 3ABS3p1z/OfhlYySeIdogRC0IGCYAc+Xh1k1lenydNUjl56BBeMMKRlnfNGfCntivga9oDSz5
+ 3ZOwvhbohm4SSU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not everything works yet, but a lot does work:
 
-* serial
-* display
-* keyboard
-* touchscreen
-* slider/power button
+--t24WkmUQOwokeUNJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What doesn't work yet:
+On Wed, Dec 08, 2021 at 04:14:38PM +0200, Andy Shevchenko wrote:
+> On Wed, Dec 8, 2021 at 3:58 PM Jonathan Neusch=C3=A4fer <j.neuschaefer@gm=
+x.net> wrote:
+> > On Wed, Dec 08, 2021 at 01:24:18PM +0200, Andy Shevchenko wrote:
+> > > On Tuesday, December 7, 2021, Jonathan Neusch=C3=A4fer <j.neuschaefer=
+@gmx.net>
+> > > wrote:
+>=20
+> ...
+>=20
+> > > > +       ours =3D ((1UL << gpio->num_irqs) - 1) << gpio->first_irq_b=
+it;
+> > >
+> > > BIT()
+> >
+> > I'll use it, but in this case, I think it doesn't simplify much the
+> > whole expression all that much.
+>=20
+> It is still better to use in my opinion.
 
-* display backlight
-* keyboard backlight
+Ok.
 
-Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/motorola-mapphone-common.dtsi    |   4 +-
- arch/arm/boot/dts/omap4-droid3-xt862.dts      | 163 ++++++++++++++++++
- 3 files changed, 166 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm/boot/dts/omap4-droid3-xt862.dts
+>=20
+> > Is there perhaps a macro that
+> > constructs a continuous bitmask of N bits, perhaps additionally
+> > left-shifted by M bits?
+>=20
+> > Maybe somewhere in the bitmap_* API...
+>=20
+> Maybe, I dunno since I haven't clearly got this code anyway, so up to
+> you to check and see what to do about it.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724..7ea8441817e5 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -874,6 +874,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
- 	am335x-osd3358-sm-red.dtb
- dtb-$(CONFIG_ARCH_OMAP4) += \
- 	omap4-droid-bionic-xt875.dtb \
-+	omap4-droid3-xt862.dtb \
- 	omap4-droid4-xt894.dtb \
- 	omap4-duovero-parlor.dtb \
- 	omap4-kc1.dtb \
-diff --git a/arch/arm/boot/dts/motorola-mapphone-common.dtsi b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-index bf18ff33d900..d0d1a1b1676c 100644
---- a/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-+++ b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-@@ -19,7 +19,7 @@ aliases {
- 	 * We seem to have only 1021 MB accessible, 1021 - 1022 is locked,
- 	 * then 1023 - 1024 seems to contain mbm.
- 	 */
--	memory {
-+	memory0: memory {
- 		device_type = "memory";
- 		reg = <0x80000000 0x3fd00000>;	/* 1021 MB */
- 	};
-@@ -35,7 +35,7 @@ reserved-memory {
- 		 * first 512K of that and just overwrite the rest and configure
- 		 * only 384K instead of 2M.
- 		 */
--		ramoops@a0080000 {
-+		ramoops0: ramoops@a0080000 {
- 			compatible = "ramoops";
- 			reg = <0xa0080000 0x60000>;
- 			record-size = <0x20000>;
-diff --git a/arch/arm/boot/dts/omap4-droid3-xt862.dts b/arch/arm/boot/dts/omap4-droid3-xt862.dts
-new file mode 100644
-index 000000000000..f3a7175301ec
---- /dev/null
-+++ b/arch/arm/boot/dts/omap4-droid3-xt862.dts
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/dts-v1/;
-+
-+#include "motorola-mapphone-common.dtsi"
-+
-+/ {
-+	model = "Motorola Droid 3 XT862";
-+	compatible = "motorola,droid3", "ti,omap4430", "ti,omap4";
-+
-+	/*
-+	 * We use pad 0x4a100116 abe_dmic_din3.gpio_122 as the irq instead
-+	 * of the gpio interrupt to avoid lost events in deeper idle states.
-+	 */
-+	gpio_keys {
-+		compatible = "gpio-keys";
-+
-+		slider {
-+			label = "Keypad Slide";
-+			interrupts-extended = <&omap4_pmx_core 0xd6>;
-+			gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>; /* gpio122 */
-+			linux,input-type = <EV_SW>;
-+			linux,code = <SW_KEYPAD_SLIDE>;
-+			linux,can-disable;
-+			/* Value above 7.95ms for no GPIO hardware debounce */
-+			debounce-interval = <10>;
-+		};
-+	};
-+};
-+
-+// Do don't know if pstore is supported, but the current config causes panics,
-+// so delete the node for now
-+/delete-node/ &ramoops0;
-+
-+&memory0 {
-+	reg = <0x80000000 0x1fd00000>;	/* 509 MB */
-+};
-+
-+&dsi1_out_ep {
-+	lanes = <1 0 3 2 5 4>;
-+};
-+
-+&i2c1 {
-+	led-controller@38 {
-+		compatible = "ti,lm3532";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x38>;
-+
-+		enable-gpios = <&gpio6 12 GPIO_ACTIVE_HIGH>;
-+
-+		ramp-up-us = <1024>;
-+		ramp-down-us = <8193>;
-+
-+		backlight_led: led@0 {
-+			reg = <0>;
-+			led-sources = <2>;
-+			ti,led-mode = <0>;
-+			label = ":backlight";
-+		};
-+
-+		led@1 {
-+			reg = <1>;
-+			led-sources = <1>;
-+			ti,led-mode = <0>;
-+			label = ":kbd_backlight";
-+		};
-+	};
-+};
-+
-+&i2c4 {
-+	kxtf9: accelerometer@f {
-+		compatible = "kionix,kxtf9";
-+		reg = <0x0f>;
-+
-+		vdd-supply = <&vhvio>;
-+
-+		interrupt-parent = <&gpio2>;
-+		interrupts = <2 IRQ_TYPE_EDGE_RISING>;
-+
-+		rotation-matrix = "1", "0", "0",
-+				  "0", "1", "0",
-+				  "0", "0", "1";
-+	};
-+};
-+
-+&aes2_target {
-+	status = "disabled";
-+};
-+
-+&keypad {
-+	keypad,num-rows = <8>;
-+	keypad,num-columns = <8>;
-+	linux,keymap = <
-+
-+	/* Row 1 */
-+	MATRIX_KEY(0, 2, KEY_1)
-+	MATRIX_KEY(0, 6, KEY_2)
-+	MATRIX_KEY(2, 3, KEY_3)
-+	MATRIX_KEY(0, 7, KEY_4)
-+	MATRIX_KEY(0, 4, KEY_5)
-+	MATRIX_KEY(5, 5, KEY_6)
-+	MATRIX_KEY(0, 1, KEY_7)
-+	MATRIX_KEY(0, 5, KEY_8)
-+	MATRIX_KEY(0, 0, KEY_9)
-+	MATRIX_KEY(1, 6, KEY_0)
-+
-+	/* Row 2 */
-+	MATRIX_KEY(3, 4, KEY_APOSTROPHE)
-+	MATRIX_KEY(7, 6, KEY_Q)
-+	MATRIX_KEY(7, 7, KEY_W)
-+	MATRIX_KEY(7, 2, KEY_E)
-+	MATRIX_KEY(1, 0, KEY_R)
-+	MATRIX_KEY(4, 4, KEY_T)
-+	MATRIX_KEY(1, 2, KEY_Y)
-+	MATRIX_KEY(6, 7, KEY_U)
-+	MATRIX_KEY(2, 2, KEY_I)
-+	MATRIX_KEY(5, 6, KEY_O)
-+	MATRIX_KEY(3, 7, KEY_P)
-+	MATRIX_KEY(6, 5, KEY_BACKSPACE)
-+
-+	/* Row 3 */
-+	MATRIX_KEY(5, 4, KEY_TAB)
-+	MATRIX_KEY(7, 5, KEY_A)
-+	//MATRIX_KEY(5, 7, KEY_A)
-+	MATRIX_KEY(2, 7, KEY_S)
-+	MATRIX_KEY(7, 0, KEY_D)
-+	MATRIX_KEY(2, 6, KEY_F)
-+	MATRIX_KEY(6, 2, KEY_G)
-+	MATRIX_KEY(6, 6, KEY_H)
-+	MATRIX_KEY(1, 4, KEY_J)
-+	MATRIX_KEY(3, 1, KEY_K)
-+	MATRIX_KEY(2, 1, KEY_L)
-+	MATRIX_KEY(4, 6, KEY_ENTER)
-+
-+	/* Row 4 */
-+	MATRIX_KEY(3, 6, KEY_LEFTSHIFT)		/* KEY_CAPSLOCK */
-+	MATRIX_KEY(6, 1, KEY_Z)
-+	MATRIX_KEY(7, 4, KEY_X)
-+	MATRIX_KEY(5, 1, KEY_C)
-+	MATRIX_KEY(1, 7, KEY_V)
-+	MATRIX_KEY(2, 4, KEY_B)
-+	MATRIX_KEY(4, 1, KEY_N)
-+	MATRIX_KEY(1, 1, KEY_M)
-+	MATRIX_KEY(3, 5, KEY_COMMA)
-+	MATRIX_KEY(5, 2, KEY_DOT)
-+	MATRIX_KEY(6, 3, KEY_UP)
-+	MATRIX_KEY(7, 3, KEY_OK)
-+
-+	/* Row 5 */
-+	MATRIX_KEY(2, 5, KEY_LEFTCTRL)		/* KEY_LEFTSHIFT */
-+	MATRIX_KEY(4, 5, KEY_LEFTALT)		/* SYM */
-+	MATRIX_KEY(6, 0, KEY_MINUS)
-+	MATRIX_KEY(4, 7, KEY_EQUAL)
-+	MATRIX_KEY(1, 5, KEY_SPACE)
-+	MATRIX_KEY(3, 2, KEY_SLASH)
-+	MATRIX_KEY(4, 3, KEY_LEFT)
-+	MATRIX_KEY(5, 3, KEY_DOWN)
-+	MATRIX_KEY(3, 3, KEY_RIGHT)
-+
-+	MATRIX_KEY(5, 0, KEY_VOLUMEUP)
-+	MATRIX_KEY(3, 0, KEY_VOLUMEDOWN)
-+	>;
-+};
--- 
-2.32.0
+Right, I'll evaluate my options and come up with something.
 
+> ...
+>=20
+> > > > +       struct fwnode_handle *np;
+> > >
+> > >  Either be fully OF, or don=E2=80=99t name =E2=80=98np' here. We usua=
+lly use fwnode or
+> > > =E2=80=98child=E2=80=99 in this case.
+> >
+> > Ah, I thought "np" (=3D node pointer) was still appropriate because I'm
+> > dealing with firmware _nodes_. My intention was indeed to switch fully
+> > to the fwnode API.
+>=20
+> Just a convention "de facto".
+
+Ok, I'll change it.
+
+
+> > > > +               ret =3D gpiochip_add_pin_range(&gpio->gc, dev_name(=
+pctrl->dev),
+> > > > +                                            0, bank->base, bank->l=
+ength);
+> > > > +               if (ret) {
+> > > > +                       dev_err(pctrl->dev, "Failed to add pin rang=
+e for GPIO bank %u\n", reg);
+> > > > +                       return ret;
+> > > > +               }
+> > >
+> > > Please move it to the corresponding callback.
+> >
+> > What's the corresponding callback?
+>=20
+> https://elixir.bootlin.com/linux/latest/source/include/linux/gpio/driver.=
+h#L400
+
+Thanks.
+
+
+Best regards,
+Jonathan Neusch=C3=A4fer
+
+--t24WkmUQOwokeUNJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmG2f0MACgkQCDBEmo7z
+X9sYXA//SjVBvUSq+Vp4V6n3Mf8tpNS+Lo6WnaDVN1MdPICwlAu8ael1mV2LXLR8
+bl4LhyvW/Z4LejKiJP+ha0ex/9QH2AfmzPIzhcMPIMw7P4mKG9b62MG5Ny3Oh1x/
+6IlnwwNIg1Sl3RZVMqLStf8kFHzMRAsmtmWCWLEwI8fCrdgzJC4wJsMQ0Ersswig
+NIZ4+pnwIrNuE0nZ9fVZp5YMbV0revnIyuFOcQ6AJuKjstzeZkOf68apcEwafOU9
+ytEO9hybxRTJ5u0UFpwzvqb1oXWmoXx9dilWithnFFPbS1PZmWT5l9sAMuCyYoy4
+XpOpNvH6nyaaQDWbQ21fLNzRFZDmB8jEs2SSluFHPwWYQiKjf6c+dwtauKktw/Mb
+v4idD4xqvYK9LimE28vq+N5EuJZCXi4BXQ3GLiG2GTePrHp09+yGRrNowscta5+u
+dDAqt6PCuAMj1BZoaIZ4tczq6sE0p052Agarqt0Gk+IgZ6FIACnGL7OynU+GO0Ls
+PihSquVF09O5V9L2SktaFXvz0vZv7ab9tbQWD/qwjBj2+XJAo2xWpHnJwNF4S8r7
+wGQ1QNNO5AM+3mC8B28bCv13+bY3tfi4+PlPnPib3XZMiGOwOusgap8RargJS1x5
+9+PLYnHSkO9TvVEPwMm4qDvOFG/KR7VpHsfsYAG0HLYMoH0ZNzM=
+=4g/M
+-----END PGP SIGNATURE-----
+
+--t24WkmUQOwokeUNJ--

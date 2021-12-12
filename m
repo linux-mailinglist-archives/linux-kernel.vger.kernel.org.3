@@ -2,92 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7777471839
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 05:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AF247183A
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 05:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbhLLEXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 23:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S232887AbhLLEXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 23:23:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbhLLEXU (ORCPT
+        with ESMTP id S232874AbhLLEXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 23:23:20 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB74C061714;
-        Sat, 11 Dec 2021 20:23:20 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id m15so11485357pgu.11;
-        Sat, 11 Dec 2021 20:23:20 -0800 (PST)
+        Sat, 11 Dec 2021 23:23:32 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2258BC061714;
+        Sat, 11 Dec 2021 20:23:32 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id m15so11485593pgu.11;
+        Sat, 11 Dec 2021 20:23:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=G0UiJRDCKMkzWw1cDf+yPZPj+/s1Rr6x9jJ5A0IDbqM=;
-        b=NhNXnrmaRdtFVpy/qbFrm0vtgKaNaOQOdF+k+Wk750HHOIZu3nN1eGMDv4SFCvgCsn
-         BzULkcZzPtu+IRFRdU7pMmF4mXjLypk0ca8eXy573Dwi/AA2/93x2JzwUJEOh97uHX94
-         cR2uC3FBnTOwWOHGn1OmwDTMyuiAB5INNjuGhzV63os9Xn+t4DxdO+558UUL3C5dbMjy
-         302cMG+MaQ340oLUa2KZNP8hn0ZVBEUPUL3iRe7IFO3Ub8SpzRgmuuO5URs4YYK7z2N9
-         YGXugiCB2iwgi2QI6wlBR+B8DyTNNL5UDcN2qHAtsBeTvi2VQi0S6Uwt6bDV1y/rQ2By
-         X7TA==
+        h=from:to:cc:subject:date:message-id;
+        bh=MjGexAc/ud9Dqu0t2aWNPXdYMBoR95/keIm6CI6GLNk=;
+        b=aJ10pRFl8dsuUvzVwh2YrZME8VqQPvjDyaRnNuSqrAJtu7/Q3Wsu5DOS959BCIvw8t
+         POlZ5EX6tlCQfDujQrA/Lm86BpXc+CwVPWUtdGotM/iRLHVOpbUFFZviryf7XDcxB1+V
+         R0jHLIaqipvhmX1C5bWJTt2r2QfU1sc/wkLyi+p7S/wn82xqRsFW/dK0r/vFudDvUA4s
+         8/WkYaTVnY7Am1mvYzo9+fZZJQ3TCnnPXd584Vo0LIrOJxRsTPQjwgiiAlbilxr6DXUK
+         k0Vx/0MmDCu2JikElVm4sl+CugmbOlKGXmy4BPz9nIKKyEXIRNS6gj+SW11lObXmMQwc
+         VZGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G0UiJRDCKMkzWw1cDf+yPZPj+/s1Rr6x9jJ5A0IDbqM=;
-        b=naUDFsgzf+Tm3cEjsuva6SWbEIU0iHvkPfX28qaTljp7U1L0KWuCnxU2K/TnbZxyhN
-         qKCYL3b6K6fzuK3Eiav+BPMu0LI4fa4lhFP9d/QnVlUvgYR7I+7AWldfJIU722PydPrH
-         9JaGmg54EGSnZOXZXI4kJugCj+k6EqwHsHPpvI7E9EtEk/PsITqpKehsz+IkRbcc9Et+
-         Nc8ofcADjN7F+3qxwjxKfjXR8n8goSUwal+LSzPbyhQ2OyzeO7A5NkOtwyvNdu0Ltfor
-         +ABfVBHNvoLMvgunMUHERFic0+cxST3siLAx9hXsW9Vmcyp09vF0VSrbzU4ZWKkyGCqP
-         fUXw==
-X-Gm-Message-State: AOAM531AoXprlCzB7Mf0ekIuBhXldDgO+QeNhCvxMdSfW9ULYFDWxkPJ
-        qb/6sFUmfm/kvrlq/C/ckdA=
-X-Google-Smtp-Source: ABdhPJwPfgh7ZR+yYBwELT4LdffMTq8n+4YLFL1lGGz5K///hkVP1fapkaMyeOMilQLlH8/qm4GZqQ==
-X-Received: by 2002:a05:6a00:b49:b0:49f:c8e0:51ff with SMTP id p9-20020a056a000b4900b0049fc8e051ffmr25968790pfo.36.1639282999789;
-        Sat, 11 Dec 2021 20:23:19 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:4964:df1f:902d:8530? ([2600:8802:b00:4a48:4964:df1f:902d:8530])
-        by smtp.gmail.com with ESMTPSA id mi14sm3296109pjb.6.2021.12.11.20.23.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Dec 2021 20:23:18 -0800 (PST)
-Message-ID: <768d3503-a575-3e5b-8a44-8dd0293ca444@gmail.com>
-Date:   Sat, 11 Dec 2021 20:23:17 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [net-next RFC PATCH v4 02/15] net: dsa: stop updating master MTU
- from master.c
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>
-References: <20211211195758.28962-1-ansuelsmth@gmail.com>
- <20211211195758.28962-3-ansuelsmth@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211211195758.28962-3-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=MjGexAc/ud9Dqu0t2aWNPXdYMBoR95/keIm6CI6GLNk=;
+        b=ASsRtDAKSk+DZriddqnDvD1EkqIz8XcsJZ67Zn1atD+QqMnzEfdB0TMPZf88Ns/cNs
+         SkGAvLj1EUPtWIk3uUihlfrFE2QVKrSkghXCe+sS8JnYyhBd84Q/UY3hpFv83mqkwkaT
+         R4/5kfI9l8ZW9xh61xonIV3fDXCGhnnP4WSB/pRcbx1hyNKCBJL6d/0hgZIb8Ahowkng
+         cNPNLGTrddk61X8I/e67q1jnbCMJbic4P4Fo9HNVd4Xf3zx1wwQ9cojxMvUYU1vIsxwD
+         Vbtm8m/ruaS/BV22bHqNXQIxsnonDgaR4dv0VdEwIxxbbMalL5SKyT6i77mdjozNryUp
+         S4OA==
+X-Gm-Message-State: AOAM531q3A2xe00OglbKPtrlAHKJp0Pgxy934zJHqpYLb+v1wpeXGosb
+        uONLSBsvvLAhJDUUWmnav5E=
+X-Google-Smtp-Source: ABdhPJw2ex+IY8mqXukKhHb0PseMEOlTJo0J/mLc+xjY3QpPza8ApoH8vevgaEfdQAOI07a6tfvY1g==
+X-Received: by 2002:a63:ef44:: with SMTP id c4mr45904825pgk.146.1639283011696;
+        Sat, 11 Dec 2021 20:23:31 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id w19sm3045869pjh.10.2021.12.11.20.23.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 20:23:31 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf stat: Fix NULL vs IS_ERR() checking in check_per_pkg
+Date:   Sun, 12 Dec 2021 04:23:21 +0000
+Message-Id: <20211212042325.9751-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The hashmap__new() function does not return NULL on errors. It returns
+ERR_PTR(-ENOMEM). Using IS_ERR() to check the return value
+to fix this.
 
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ tools/perf/util/stat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 12/11/2021 11:57 AM, Ansuel Smith wrote:
-> From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> 
-> The dev_set_mtu() call from dsa_master_setup() has been effectively
-> superseded by the dsa_slave_change_mtu(slave_dev, ETH_DATA_LEN) that is
-> done from dsa_slave_create() for each user port. This function also
-> updates the master MTU according to the largest user port MTU from the
-> tree. Therefore, updating the master MTU through a separate code path
-> isn't needed.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index 09ea334586f2..a77052680087 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -311,8 +311,8 @@ static int check_per_pkg(struct evsel *counter,
+ 
+ 	if (!mask) {
+ 		mask = hashmap__new(pkg_id_hash, pkg_id_equal, NULL);
+-		if (!mask)
+-			return -ENOMEM;
++		if (IS_ERR(mask))
++			return PTR_ERR(mask);
+ 
+ 		counter->per_pkg_mask = mask;
+ 	}
 -- 
-Florian
+2.17.1
+

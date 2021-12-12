@@ -2,61 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2BA471B69
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 16:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9D1471B75
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 16:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbhLLPjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 10:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S231540AbhLLPvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 10:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbhLLPjH (ORCPT
+        with ESMTP id S231360AbhLLPvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 10:39:07 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BC0C061D5E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 07:39:07 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id y8so9528265plg.1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 07:39:07 -0800 (PST)
+        Sun, 12 Dec 2021 10:51:48 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44197C061714;
+        Sun, 12 Dec 2021 07:51:48 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 13so20377391ljj.11;
+        Sun, 12 Dec 2021 07:51:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
-        b=nW34jVsv56Ss5jLoooIeVciA93Clw83n+wCeADNfCEpcC+rdzdpKO/LYgFQaULd1OH
-         U8TXUuQSIh4yHtn8e56U2OR9tvVaBrIbZqVXXTO9qyu2ymRftWSklBAq1tsUV/ZwQyli
-         OQNIJmsnRTWXVSmhooYoNI3mrca0uQe4Qvw2po2hRHk49IphRRBl7/cc79IWCwq/knSD
-         jAnxigACSUDasTs+EUStoKgNQ9kt9Efz64Sltjg2RvPSjES1dEb3Rnabml57kHg8BYan
-         0xGZn+cZ+L22txoY5kcj47AS69tJiBQ/eAoB9E7bJT52uVrJV5T2gB+PKNcvh9Cn0hK0
-         5YnQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OsLzc8H+GZEt3KOwearXOutXvaRaNgkbn2EA2Jl4464=;
+        b=KDWtFqtVrDLPXuAZeJTCfEBgi9b6C9o1WUBoeqQJPNll8R7RqeiIXYme+HYIcZwRl5
+         xuiBKE8NCR5em7CAw6IkndCTXAstCwQwDzBHnzyR2+bKkxdL3rTBO0JnyVk5OEQ8J9tj
+         GjVDBWW8opJY6wwkezB9q2uzoqh8+hPefxKDY+ZoNJ2Qk+nNWHA6krz23vfJYUGS82HD
+         8fXGkmXQeES/Y3Rei1pRGx+5AZ41Wq9p9qaomIrLfBcjyQOT6kVyigmz8mPUdvhubsRr
+         kcbM/HyNddgRUDB0ubswOMBYTHye6FBh27T3Ioe7RlstJw05zr2RXcImAnwe+39LJ+eR
+         0zug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
-        b=lo7tet6dMtAdUAtNSQ2W7dB5SQsx0NxG80iqvkUwJB5tjoakl4yZPt6baDbk5GGZbI
-         0ch+wNoWf+OW8hGWNHJHbr8JyL9v8HTvv7fgUq2FarKhY/CaH+S16GWSwHrodfxSn2Hd
-         HI6p76rzzWTGd/s5qZaABv+fHYPQplXPljfQB1r2uoQ0Sqs4FsZ8olt/lcFULXkeNmLP
-         DGAm1o5LjfF4EMHvd26EdMNcXx08Bg72TCCNJ2+Da9xIUDBxCEZk1yminq8qvdB9MyiU
-         93aPruMWeF4kf0H4QZfMU+JOGfcT7VH2PefeRU08jOJp7eZJg6a/V1cY63qXd6ZhUhdF
-         O2oQ==
-X-Gm-Message-State: AOAM531739yP7gLCdaTjtKhXMIYD3+MGYbfAko3q/cOiBUzB/QBIPZg3
-        +vTiGpneWhzuYSu6flp1ozeDN5KIEmDdo8v/RGU=
-X-Google-Smtp-Source: ABdhPJxsBJYooaMgLjqzimk0hrl//BEpZRFhZTgaDxYyJHLKhaJGvTFjIF0TvE7MIczQ9k5dw4plILBX5bRdp3Gs0bY=
-X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr38626959pjb.7.1639323545943;
- Sun, 12 Dec 2021 07:39:05 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OsLzc8H+GZEt3KOwearXOutXvaRaNgkbn2EA2Jl4464=;
+        b=qodtLYzCs5k/mdn/T8Sy5faAB+VltcuOC+gt7dY1daE79Wuzin0+lGorPb9+oDA3kb
+         EjnKiizDeVrSIYvkX/qrOVmXWcFPxr1NVqSEdj5tUY+98gybmE2XA0gcpo/R6iw2ksCY
+         yNNEyPB3dD6TYe/Z4UQnzhFwKYsLuWiXQU5tHOPIdZx8+UDj/AuiLHigTPaBktmbq+0k
+         GWKU3ynQ5dLs96EQ0CloGrxCZge7eXdJXAsXHP/rh/u4sg48IpFKAuNT3GNYwuL3qHvC
+         IigWMEhQNfonTCj3GsAi/oZWgPqXTKHB/KKVSBpjM3jrg57mfV4RbbJLxT8sChFZL/R5
+         5EPg==
+X-Gm-Message-State: AOAM533jOkdgf27uZxCBuWQvOz3J0jBsQIM+a4hje/HO402T6xJQ6le9
+        8A83nPmYAZJkSwcZ0K7Yg4hYiXPvolWK7QuS4Kk=
+X-Google-Smtp-Source: ABdhPJyIEJGRkABCcxcHDH8NGnxW9Cq01811rNfomHL57m4I3W/hV/yodFWeaF9JzHZPiwVn49yvvR15VbhH31wSnP8=
+X-Received: by 2002:a2e:9c91:: with SMTP id x17mr24839371lji.330.1639324306165;
+ Sun, 12 Dec 2021 07:51:46 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:90b:4c51:0:0:0:0 with HTTP; Sun, 12 Dec 2021 07:39:05
- -0800 (PST)
-Reply-To: mrsisabelladz@gmail.com
-From:   Mrs Isabella <zaidn8225@gmail.com>
-Date:   Sun, 12 Dec 2021 16:39:05 +0100
-Message-ID: <CAMU20GMeochfDfA+tFFMDmQu2qHHMSRkoPHpA3GKtw8UP0dvgw@mail.gmail.com>
-Subject: From Mrs. Isabella Dzsesszika
-To:     undisclosed-recipients:;
+References: <20211211180955.550380-1-colin.i.king@gmail.com>
+In-Reply-To: <20211211180955.550380-1-colin.i.king@gmail.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Mon, 13 Dec 2021 00:51:34 +0900
+Message-ID: <CAKFNMokO9CA6n2veR9JOg7CbzvgUc6rDMofOu2aiU+CDTTsjoA@mail.gmail.com>
+Subject: Re: [PATCH] nilfs2: remove redundant pointer sbufs
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GOOD MORNING DEAR. MY NAME IS Isabella Dzsesszika. I AM CONTACTING YOU
-FOR IMPORTANT ISSUE I WILL LIKE TO DISCUS WITH YOU. PLEASE GET BACK TO
-ME IF YOU READ THIS MAIL.  YOURS, Isabella Dzsesszika
+On Sun, Dec 12, 2021 at 3:09 AM Colin Ian King <colin.i.king@gmail.com> wrote:
+>
+> Pointer sbufs is being assigned a value but it's not being used
+> later on. The pointer is redundant and can be removed. Cleans up
+> scan-build static analysis warning:
+>
+> fs/nilfs2/page.c:203:8: warning: Although the value stored to 'sbufs'
+> is used in the enclosing expression, the value is never actually read
+> from 'sbufs' [deadcode.DeadStores]
+>         sbh = sbufs = page_buffers(src);
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+
+Looks good.
+Will apply, thank you.
+
+Ryusuke Konishi
+
+> ---
+>  fs/nilfs2/page.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/nilfs2/page.c b/fs/nilfs2/page.c
+> index bc3e2cd4117f..063dd16d75b5 100644
+> --- a/fs/nilfs2/page.c
+> +++ b/fs/nilfs2/page.c
+> @@ -195,12 +195,12 @@ void nilfs_page_bug(struct page *page)
+>   */
+>  static void nilfs_copy_page(struct page *dst, struct page *src, int copy_dirty)
+>  {
+> -       struct buffer_head *dbh, *dbufs, *sbh, *sbufs;
+> +       struct buffer_head *dbh, *dbufs, *sbh;
+>         unsigned long mask = NILFS_BUFFER_INHERENT_BITS;
+>
+>         BUG_ON(PageWriteback(dst));
+>
+> -       sbh = sbufs = page_buffers(src);
+> +       sbh = page_buffers(src);
+>         if (!page_has_buffers(dst))
+>                 create_empty_buffers(dst, sbh->b_size, 0);
+>
+> --
+> 2.33.1
+>

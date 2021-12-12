@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5166F471C67
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED09471C72
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 20:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbhLLS6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 13:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbhLLS6v (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 13:58:51 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF695C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:58:50 -0800 (PST)
-Received: from dslb-188-104-058-180.188.104.pools.vodafone-ip.de ([188.104.58.180] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1mwU3a-0001zY-T0; Sun, 12 Dec 2021 19:58:46 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 3/3] staging: r8188eu: clean up rtl8188e_sreset_linked_status_check
-Date:   Sun, 12 Dec 2021 19:58:33 +0100
-Message-Id: <20211212185833.22000-4-martin@kaiser.cx>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211212185833.22000-1-martin@kaiser.cx>
-References: <20211212185833.22000-1-martin@kaiser.cx>
+        id S232112AbhLLTFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 14:05:00 -0500
+Received: from 49-237-179-185.static.tentacle.fi ([185.179.237.49]:48332 "EHLO
+        bitmer.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231902AbhLLTE7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 14:04:59 -0500
+Received: from jarkko by bitmer.com with local (Exim 4.89)
+        (envelope-from <jarkko.nikula@bitmer.com>)
+        id 1mwU9X-0000o6-Rv; Sun, 12 Dec 2021 21:04:55 +0200
+Date:   Sun, 12 Dec 2021 21:04:55 +0200
+From:   Jarkko Nikula <jarkko.nikula@bitmer.com>
+To:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
+Cc:     =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] ARM: dts: Fix timer regression for beagleboard revision c
+Message-ID: <20211212190455.qbggbhmr5nquw7bw@bitmer.com>
+References: <20211125144834.52457-1-tony@atomide.com>
+ <ef843afa-c99d-328d-853a-00ef293a47f2@bitmer.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef843afa-c99d-328d-853a-00ef293a47f2@bitmer.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the rtl8188e_sreset_linked_status_check, which has just
-been moved to rtw_mlme_ext.
+On Sat, Dec 11, 2021 at 05:30:57PM +0200, Jarkko Nikula wrote:
+> Hi Tony
+> 
+> On 11/25/21 16:48, Tony Lindgren wrote:
+> > Commit e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+> > caused a timer regression for beagleboard revision c where the system
+> > clockevent stops working if omap3isp module is unloaded.
+> > 
+> > Turns out we still have beagleboard revisions a-b4 capacitor c70 quirks
+> > applied that limit the usable timers for no good reason. This also affects
+> > the power management as we use the system clock instead of the 32k clock
+> > source.
+> > 
+> > Let's fix the issue by adding a new omap3-beagle-ab4.dts for the old timer
+> > quirks. This allows us to remove the timer quirks for later beagleboard
+> > revisions. We also need to update the related timer quirk check for the
+> > correct compatible property.
+> > 
+> > Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Reported-by: Jarkko Nikula <jarkko.nikula@bitmer.com>
+> > Signed-off-by: Tony Lindgren <tony@atomide.com>
+> > ---
+> 
+> >  .../devicetree/bindings/arm/omap/omap.txt     |  3 ++
+> >  arch/arm/boot/dts/Makefile                    |  1 +
+> >  arch/arm/boot/dts/omap3-beagle-ab4.dts        | 47 +++++++++++++++++++
+> >  arch/arm/boot/dts/omap3-beagle.dts            | 33 -------------
+> >  drivers/clocksource/timer-ti-dm-systimer.c    |  2 +-
+> >  5 files changed, 52 insertions(+), 34 deletions(-)
+> >  create mode 100644 arch/arm/boot/dts/omap3-beagle-ab4.dts
+> > 
+> I must have some error in my methodology since I cannot see the issue
+> being fixed with your patch :-(
+> 
+Facepalm, as I was expecting I had error in my methodology... see below
 
-Don't initialise variables to 0 if the first access sets a new value.
+> cat arch/arm/boot/dts/omap3-beagle.dtb >>arch/arm/boot/zImage
 
-Check the value of fw_status only once.
+This I used years before your patch and by some reason I confused to use
+new omap3-beagle-ab4.dtb when testing your patch yesterday:
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+> cat arch/arm/boot/dts/omap3-beagle-ab4.dtb >>arch/arm/boot/zImage
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 15a443b9bc6d..8e04238fb5fc 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -7161,20 +7161,19 @@ static u8 chk_ap_is_alive(struct adapter *padapter, struct sta_info *psta)
- 
- static void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
- {
--	u32 rx_dma_status = 0;
--	u8 fw_status = 0;
--	rx_dma_status = rtw_read32(padapter, REG_RXDMA_STATUS);
-+	u32 rx_dma_status =  rtw_read32(padapter, REG_RXDMA_STATUS);
-+	u8 fw_status;
-+
- 	if (rx_dma_status != 0x00) {
- 		DBG_88E("%s REG_RXDMA_STATUS:0x%08x\n", __func__, rx_dma_status);
- 		rtw_write32(padapter, REG_RXDMA_STATUS, rx_dma_status);
- 	}
-+
- 	fw_status = rtw_read8(padapter, REG_FMETHR);
--	if (fw_status != 0x00) {
--		if (fw_status == 1)
--			DBG_88E("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!\n", __func__, fw_status);
--		else if (fw_status == 2)
--			DBG_88E("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!\n", __func__, fw_status);
--	}
-+	if (fw_status == 1)
-+		DBG_88E("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!\n", __func__, fw_status);
-+	else if (fw_status == 2)
-+		DBG_88E("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!\n", __func__, fw_status);
- }
- 
- void linked_status_chk(struct adapter *padapter)
--- 
-2.20.1
+without realizing my Beagle Board version is not between A to B4 but C2.
+So when using the omap3-beagle.dtb your patch fixes the regression I
+found.
 
+Tested-by: Jarkko Nikula <jarkko.nikula@bitmer.com>

@@ -2,130 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E07347179A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8700347179D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbhLLB2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 20:28:18 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28336 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230038AbhLLB2P (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 20:28:15 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BC0vaQe022711;
-        Sun, 12 Dec 2021 01:28:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=YZDQ1dVmJSObr2QC5ds1YJSFNcrnTSy0Dpv1KV7by7M=;
- b=NzNAwTGfeotavIYcra89xn1xTyNs23Pyt2HBdTIgWdV7B7ao1UvZmpl+UjdiVukBfdUH
- eiAVRmA1WB9o3od30Yjx0OwY+U2wkAcBS2c/dlSt8UfDFKGq18zSoFh6D84pzVPAV1yy
- gCz0c6izzq7oUAKF2foyH+WJg5g/Gb7csoyL1RxEXm51Da83nEGYT/2tLYm5Zc/tRTV6
- BX6kQHWYeZMXbrnNjHbRFq33BWeeIumyx+qttn4OLLLF5OJdZiziXRvtEbQhHhFmg4cp
- pxaZVB8Cbe+A0qZvCLLTR+mhM7miVG2IVA6yxoW3Das3vx/+kSlYvjTFhnjj3GeDOfJ8 zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw70f89rr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 01:28:10 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BC1S96w018427;
-        Sun, 12 Dec 2021 01:28:09 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw70f89rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 01:28:09 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BC1J37h030766;
-        Sun, 12 Dec 2021 01:28:08 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma01wdc.us.ibm.com with ESMTP id 3cvkm91xkt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 01:28:08 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BC1S6qa11338076
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 12 Dec 2021 01:28:06 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F0EF912405C;
-        Sun, 12 Dec 2021 01:28:05 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D7600124054;
-        Sun, 12 Dec 2021 01:28:05 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Sun, 12 Dec 2021 01:28:05 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     jarkko@kernel.org, peterhuewe@gmx.de,
-        linux-integrity@vger.kernel.org
-Cc:     jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, pavrampu@in.ibm.com,
-        Korrapati.Likhitha@ibm.com, gcwilson@us.ibm.com,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer (powerpc)
-Date:   Sat, 11 Dec 2021 20:28:04 -0500
-Message-Id: <20211212012804.1555661-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        id S231555AbhLLB37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 20:29:59 -0500
+Received: from mga06.intel.com ([134.134.136.31]:14217 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229497AbhLLB36 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 20:29:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639272598; x=1670808598;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M12f23IFJgzzgyMm0+ogo637sJ8FnXS3RDq4TzoEXDg=;
+  b=TGDySSyzAe8qo4v+Ayf9+JBzboYz8QHPZGJSDOzbETj/XZYyJWEvIkch
+   LegDUrYsj/7qQeYtDt8hvLy1DhUgHaPwqdF711DztjC/JGYCbpzUJktyT
+   f/pQm46N135zxt+KGXjbb9rJZ990N0XNP1e6bG687UCvOkJ8SK5/nLdOU
+   OcPguh8swRiQii0NvohAmcVm+McS2L7puK6jOhQbKMQJr0+QelQzSPgH4
+   PVJW0O2tKhrjHwkfA+ViGy4tY6++P8YhCZQOBWOqghULD6g8dLICUxm6X
+   TK4fWU5E9toOoKnydCmNEgrbuA1gJVmEnPPDYGJlBGWuTeSC2orm5nO02
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="299356072"
+X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
+   d="scan'208";a="299356072"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 17:29:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
+   d="scan'208";a="464196825"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Dec 2021 17:29:56 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwDgZ-0005FX-Cy; Sun, 12 Dec 2021 01:29:55 +0000
+Date:   Sun, 12 Dec 2021 09:29:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [superna9999:amlogic/v5.17/g12-dsi 6/23]
+ drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:58:23: error: 'encoder_dsi'
+ undeclared
+Message-ID: <202112120900.1gurSnwO-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: GxgV9UOK6OpX3GkMwldcJNfNFy16amgT
-X-Proofpoint-GUID: Wc47lRA6TO1_spWYa5gsKtc-wxTsIIDq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-11_10,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- bulkscore=0 priorityscore=1501 mlxlogscore=782 clxscore=1011
- suspectscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112120004
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following crash on kexec by checking chip->ops for a NULL pointer
-in tpm_chip_start() and returning an error code if this is the case.
+tree:   https://github.com/superna9999/linux amlogic/v5.17/g12-dsi
+head:   62dac9179f2937dc08bffe08d15c6846bc4aedb4
+commit: 02c9727464cf0ef4cebca0197a0f7395be6371f7 [6/23] fixup! drm/meson: add support for MIPI-DSI transceiver
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20211212/202112120900.1gurSnwO-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/superna9999/linux/commit/02c9727464cf0ef4cebca0197a0f7395be6371f7
+        git remote add superna9999 https://github.com/superna9999/linux
+        git fetch --no-tags superna9999 amlogic/v5.17/g12-dsi
+        git checkout 02c9727464cf0ef4cebca0197a0f7395be6371f7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-BUG: Kernel NULL pointer dereference on read at 0x00000060
-Faulting instruction address: 0xc00000000099a06c
-Oops: Kernel access of bad area, sig: 11 [#1]
-...
-NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
- LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
-Call Trace:
-[c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 (unreliable)
-[c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
-[c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
-[c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
-[c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
-[c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The referenced patch below introduced a function to shut down the VIO bus.
-The bus shutdown now calls tpm_del_char_device (via tpm_chip_unregister)
-after a call to tpm_class_shutdown, which already set chip->ops to NULL.
-The crash occurrs when tpm_del_char_device calls tpm_chip_start with the
-chip->ops NULL pointer.
+Note: the superna9999/amlogic/v5.17/g12-dsi HEAD 62dac9179f2937dc08bffe08d15c6846bc4aedb4 builds fine.
+      It only hurts bisectability.
 
-Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c: In function 'dw_mipi_dsi_phy_init':
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:58:23: error: 'encoder_dsi' undeclared (first use in this function)
+      58 |         phy_configure(encoder_dsi->phy, &mipi_dsi->phy_opts);
+         |                       ^~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:58:23: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:68:9: error: implicit declaration of function 'meson_dw_mipi_dsi_hw_init'; did you mean 'dw_mipi_dsi_phy_init'? [-Werror=implicit-function-declaration]
+      68 |         meson_dw_mipi_dsi_hw_init(mipi_dsi);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |         dw_mipi_dsi_phy_init
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:72:35: error: 'COLOR_24BIT' undeclared (first use in this function)
+      72 |                 dpi_data_format = COLOR_24BIT;
+         |                                   ^~~~~~~~~~~
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:73:35: error: 'MIPI_DSI_VENC_COLOR_24B' undeclared (first use in this function)
+      73 |                 venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:76:35: error: 'COLOR_18BIT_CFG_2' undeclared (first use in this function)
+      76 |                 dpi_data_format = COLOR_18BIT_CFG_2;
+         |                                   ^~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:77:35: error: 'MIPI_DSI_VENC_COLOR_18B' undeclared (first use in this function)
+      77 |                 venc_data_width = MIPI_DSI_VENC_COLOR_18B;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:70:9: warning: enumeration value 'MIPI_DSI_FMT_RGB666_PACKED' not handled in switch [-Wswitch]
+      70 |         switch (mipi_dsi->dsi_device->format) {
+         |         ^~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:70:9: warning: enumeration value 'MIPI_DSI_FMT_RGB565' not handled in switch [-Wswitch]
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:89:59: error: macro "writel_relaxed" passed 3 arguments, but takes just 2
+      89 |                         mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+         |                                                           ^
+   In file included from include/linux/io.h:13,
+                    from include/linux/irq.h:20,
+                    from include/asm-generic/hardirq.h:17,
+                    from arch/arm64/include/asm/hardirq.h:17,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from include/linux/kernel_stat.h:9,
+                    from include/linux/cgroup.h:26,
+                    from include/linux/memcontrol.h:13,
+                    from include/linux/swap.h:9,
+                    from include/linux/suspend.h:5,
+                    from include/linux/regulator/consumer.h:35,
+                    from include/linux/phy/phy.h:17,
+                    from drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:15:
+   arch/arm64/include/asm/io.h:127: note: macro "writel_relaxed" defined here
+     127 | #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
+         | 
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:82:9: error: 'writel_relaxed' undeclared (first use in this function)
+      82 |         writel_relaxed((dpi_data_format  << BIT_DPI_COLOR_MODE)  |
+         |         ^~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:55:27: warning: unused variable 'priv' [-Wunused-variable]
+      55 |         struct meson_drm *priv = mipi_dsi->priv;
+         |                           ^~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:54:39: warning: variable 'venc_data_width' set but not used [-Wunused-but-set-variable]
+      54 |         unsigned int dpi_data_format, venc_data_width;
+         |                                       ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:54:22: warning: variable 'dpi_data_format' set but not used [-Wunused-but-set-variable]
+      54 |         unsigned int dpi_data_format, venc_data_width;
+         |                      ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c: In function 'dw_mipi_dsi_get_lane_mbps':
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:111:24: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     111 |         mipi_dsi->mode = mode;
+         |                        ^
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:113:15: error: implicit declaration of function 'encoder_dsi_pixel_format_to_bpp'; did you mean 'mipi_dsi_pixel_format_to_bpp'? [-Werror=implicit-function-declaration]
+     113 |         bpp = encoder_dsi_pixel_format_to_bpp(mipi_dsi->dsi_device->format);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |               mipi_dsi_pixel_format_to_bpp
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:116:47: error: 'encoder_dsi' undeclared (first use in this function)
+     116 |                                          bpp, encoder_dsi->dsi_device->lanes,
+         |                                               ^~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c: In function 'meson_dw_mipi_dsi_bind':
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:161:13: warning: unused variable 'ret' [-Wunused-variable]
+     161 |         int ret;
+         |             ^~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:160:29: warning: unused variable 'encoder' [-Wunused-variable]
+     160 |         struct drm_encoder *encoder;
+         |                             ^~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c: At top level:
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:176:13: warning: conflicting types for 'meson_dw_mipi_dsi_hw_init'; have 'void(struct meson_dw_mipi_dsi *)'
+     176 | static void meson_dw_mipi_dsi_hw_init(struct meson_dw_mipi_dsi *mipi_dsi)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:176:13: error: static declaration of 'meson_dw_mipi_dsi_hw_init' follows non-static declaration
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:68:9: note: previous implicit declaration of 'meson_dw_mipi_dsi_hw_init' with type 'void(struct meson_dw_mipi_dsi *)'
+      68 |         meson_dw_mipi_dsi_hw_init(mipi_dsi);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c: In function 'meson_dw_mipi_dsi_host_attach':
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:200:9: error: implicit declaration of function 'witch' [-Werror=implicit-function-declaration]
+     200 |         witch (device->format) {
+         |         ^~~~~
+>> drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:200:31: error: expected ';' before '{' token
+     200 |         witch (device->format) {
+         |                               ^~
+         |                               ;
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:196:13: warning: unused variable 'reg' [-Wunused-variable]
+     196 |         u32 reg;
+         |             ^~~
+   At top level:
+   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:176:13: warning: 'meson_dw_mipi_dsi_hw_init' defined but not used [-Wunused-function]
+     176 | static void meson_dw_mipi_dsi_hw_init(struct meson_dw_mipi_dsi *mipi_dsi)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/encoder_dsi +58 drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+
+    47	
+    48	#define encoder_to_meson_dw_mipi_dsi(x) \
+    49		container_of(x, struct meson_dw_mipi_dsi, encoder)
+    50	
+    51	static int dw_mipi_dsi_phy_init(void *priv_data)
+    52	{
+    53		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+    54		unsigned int dpi_data_format, venc_data_width;
+    55		struct meson_drm *priv = mipi_dsi->priv;
+    56		int ret;
+    57	
+  > 58		phy_configure(encoder_dsi->phy, &mipi_dsi->phy_opts);
+    59	
+    60		ret = clk_set_rate(mipi_dsi->px_clk, mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate);
+    61		if (ret) {
+    62			pr_err("Failed to set DSI PLL rate %lu\n",
+    63			       mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate);
+    64	
+    65			return ret;
+    66		}
+    67	
+  > 68		meson_dw_mipi_dsi_hw_init(mipi_dsi);
+    69	
+    70		switch (mipi_dsi->dsi_device->format) {
+    71		case MIPI_DSI_FMT_RGB888:
+  > 72			dpi_data_format = COLOR_24BIT;
+  > 73			venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+    74			break;
+    75		case MIPI_DSI_FMT_RGB666:
+  > 76			dpi_data_format = COLOR_18BIT_CFG_2;
+  > 77			venc_data_width = MIPI_DSI_VENC_COLOR_18B;
+    78			break;
+    79		};
+    80	
+    81		/* Configure color format for DPI register */
+  > 82		writel_relaxed((dpi_data_format  << BIT_DPI_COLOR_MODE)  |
+    83			       (venc_data_width  << BIT_IN_COLOR_MODE) |
+    84				0 << BIT_COMP0_SEL |
+    85				1 << BIT_COMP1_SEL |
+    86				2 << BIT_COMP2_SEL,
+    87				(mipi_dsi->mode->flags & DRM_MODE_FLAG_NHSYNC ? 0 : BIT(BIT_HSYNC_POL)) |
+    88				(mipi_dsi->mode->flags & DRM_MODE_FLAG_NVSYNC ? 0 : BIT(BIT_VSYNC_POL)),
+  > 89				mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+    90	
+    91		phy_power_on(mipi_dsi->phy);
+    92	
+    93		return 0;
+    94	}
+    95	
+    96	static void dw_mipi_dsi_phy_power_off(void *priv_data)
+    97	{
+    98		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+    99	
+   100		phy_power_off(mipi_dsi->phy);
+   101	}
+   102	
+   103	static int
+   104	dw_mipi_dsi_get_lane_mbps(void *priv_data, const struct drm_display_mode *mode,
+   105				  unsigned long mode_flags, u32 lanes, u32 format,
+   106				  unsigned int *lane_mbps)
+   107	{
+   108		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+   109		int bpp;
+   110	
+   111		mipi_dsi->mode = mode;
+   112	
+ > 113		bpp = encoder_dsi_pixel_format_to_bpp(mipi_dsi->dsi_device->format);
+   114	
+   115		phy_mipi_dphy_get_default_config(mode->clock * 1000,
+   116						 bpp, encoder_dsi->dsi_device->lanes,
+   117						 &mipi_dsi->phy_opts.mipi_dphy);
+   118	
+   119		*lane_mbps = mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate / 1000000;
+   120	
+   121		return 0;
+   122	}
+   123	
+   124	static int
+   125	dw_mipi_dsi_phy_get_timing(void *priv_data, unsigned int lane_mbps,
+   126				   struct dw_mipi_dsi_dphy_timing *timing)
+   127	{
+   128		/* TOFIX handle other cases */
+   129	
+   130		timing->clk_lp2hs = 37;
+   131		timing->clk_hs2lp = 135;
+   132		timing->data_lp2hs = 50;
+   133		timing->data_hs2lp = 3;
+   134	
+   135		return 0;
+   136	}
+   137	
+   138	static int
+   139	dw_mipi_dsi_get_esc_clk_rate(void *priv_data, unsigned int *esc_clk_rate)
+   140	{
+   141		*esc_clk_rate = 4; /* Mhz */
+   142	
+   143		return 0;
+   144	}
+   145	
+   146	static const struct dw_mipi_dsi_phy_ops meson_dw_mipi_dsi_phy_ops = {
+   147		.init = dw_mipi_dsi_phy_init,
+   148		.power_off = dw_mipi_dsi_phy_power_off,
+   149		.get_lane_mbps = dw_mipi_dsi_get_lane_mbps,
+   150		.get_timing = dw_mipi_dsi_phy_get_timing,
+   151		.get_esc_clk_rate = dw_mipi_dsi_get_esc_clk_rate,
+   152	};
+   153	
+   154	static int meson_dw_mipi_dsi_bind(struct device *dev, struct device *master,
+   155					void *data)
+   156	{
+   157		struct meson_dw_mipi_dsi *mipi_dsi = dev_get_drvdata(dev);
+   158		struct drm_device *drm = data;
+   159		struct meson_drm *priv = drm->dev_private;
+   160		struct drm_encoder *encoder;
+   161		int ret;
+   162	
+   163		/* Check before if we are supposed to have a sub-device... */
+   164		if (!mipi_dsi->dsi_device)
+   165			return -EPROBE_DEFER;
+   166	
+   167		mipi_dsi->priv = priv;
+   168	
+   169		return 0;
+   170	}
+   171	
+   172	static const struct component_ops meson_dw_mipi_dsi_ops = {
+   173		.bind	= meson_dw_mipi_dsi_bind,
+   174	};
+   175	
+   176	static void meson_dw_mipi_dsi_hw_init(struct meson_dw_mipi_dsi *mipi_dsi)
+   177	{
+   178		writel_relaxed((1 << 4) | (1 << 5) | (0 << 6),
+   179				mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+   180	
+   181		writel_bits_relaxed(0xf, 0xf,
+   182				    mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+   183		writel_bits_relaxed(0xf, 0,
+   184				    mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+   185	
+   186		writel_bits_relaxed(0x3, 0x3,
+   187				    mipi_dsi->base + MIPI_DSI_TOP_CLK_CNTL);
+   188	
+   189		writel_relaxed(0, mipi_dsi->base + MIPI_DSI_TOP_MEM_PD);
+   190	}
+   191	
+   192	static int meson_dw_mipi_dsi_host_attach(void *priv_data,
+   193						 struct mipi_dsi_device *device)
+   194	{
+   195		struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+   196		u32 reg;
+   197	
+   198		mipi_dsi->dsi_device = device;
+   199	
+ > 200		witch (device->format) {
+   201		case MIPI_DSI_FMT_RGB888:
+   202			dpi_data_format = COLOR_24BIT;
+   203			venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+   204			break;
+   205		case MIPI_DSI_FMT_RGB666:
+   206			dpi_data_format = COLOR_18BIT_CFG_2;
+   207			venc_data_width = MIPI_DSI_VENC_COLOR_18B;
+   208			break;
+   209		case MIPI_DSI_FMT_RGB666_PACKED:
+   210		case MIPI_DSI_FMT_RGB565:
+   211			DRM_DEV_ERROR(mipi_dsi->dev, "invalid pixel format %d\n", device->format);
+   212			return -EINVAL;
+   213		};
+   214	
+   215		phy_init(mipi_dsi->phy);
+   216	
+   217		return 0;
+   218	}
+   219	
+
 ---
- drivers/char/tpm/tpm-chip.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index ddaeceb7e109..cca1bde296ee 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -101,6 +101,9 @@ int tpm_chip_start(struct tpm_chip *chip)
- {
- 	int ret;
- 
-+	if (!chip->ops)
-+		return -EINVAL;
-+
- 	tpm_clk_enable(chip);
- 
- 	if (chip->locality == -1) {
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

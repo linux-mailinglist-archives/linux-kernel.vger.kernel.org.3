@@ -2,385 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A972F471CFE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 21:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71C1471CDC
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 21:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbhLLUjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 15:39:33 -0500
-Received: from wp530.webpack.hosteurope.de ([80.237.130.52]:40674 "EHLO
-        wp530.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230388AbhLLUjc (ORCPT
+        id S231219AbhLLUPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 15:15:33 -0500
+Received: from mail-lf1-f41.google.com ([209.85.167.41]:38886 "EHLO
+        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230460AbhLLUPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 15:39:32 -0500
-X-Greylist: delayed 1586 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Dec 2021 15:39:32 EST
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1mwVBL-0000PL-OL; Sun, 12 Dec 2021 21:10:51 +0100
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2021-12-12]
-Date:   Sun, 12 Dec 2021 20:10:51 +0000
-Message-Id: <163933981285.486507.5806345036032364969@leemhuis.info>
-X-Mailer: git-send-email 2.31.1
-Content-Type: text/plain; charset="utf-8"
+        Sun, 12 Dec 2021 15:15:31 -0500
+Received: by mail-lf1-f41.google.com with SMTP id bi37so27361779lfb.5;
+        Sun, 12 Dec 2021 12:15:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P9iBGIirnE079mDC33m+ZeyiHq9a58D+yeiB4U9Jaqo=;
+        b=ibIriInNreZgcvF3xoBF0Nqe/ta7gRXJYZ26KaXISYrzo1juDykiDuCqEqNmNOXkqc
+         VawmNDA44485VSEYzWfNchhmeyA0L6k0FJNEQ6a7eVZbq8HugKKZSDoXH0I5IQFJrQ/m
+         p9PZxO0ex+Ag341zpH/z4PRDV3vPzRlVrm6lOoLwbLnGmTGIROLm4BZSsNj78C5oyG/T
+         PGG5mC7mVlqLVmKB0uGMBPUkZEOQHyMYenfb0PJbsCjx0PrtSFLxmKcPzVYyYf3cMM8a
+         BKrTOQOwJhTEgb+2bD/QtJGY01DduNThIxodRNP/qZlDho7VTTC+rezMX0PJ2FsKt+Fz
+         qrdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P9iBGIirnE079mDC33m+ZeyiHq9a58D+yeiB4U9Jaqo=;
+        b=7bPY8847pJJ+71zr/uV20lj+4p+p0fbB0HpvsxVFOxcCJMP+WVEsBhjloIfhwyfF0K
+         S3pyW5/ybNmmtrAK5oqELMLGrN8Uy5Ks03ba+2IY/UqENq3psBPm8YjIB8aOgqiA+2dB
+         muEwncI0BBL+EGuQYAI0vNxioD420fz4EX47Nz3GE18KE/IM3V+nHk8XsITqphEtKVIT
+         u8VToNB/hbVIqLPggEDcuKxWBSKWEIWX4LQDqeKl749XVg93Gj8ogg9q3j/hZ0dK9Sr3
+         5KaFgw2ZzeuS83u3SZXP+xY995N9XUyCdD5Yb0zYkkKX9DexNtfFa0UAyiwSDFPvnEWj
+         gxzw==
+X-Gm-Message-State: AOAM531vF1pTz1+YaP4ABSM8qfNmj84a/hPBFCjVB3T3TbG0/bakuC9o
+        Cls5bzxv6WFjBCiAa7wjnavAhEnDQ9OcBe8pk7k=
+X-Google-Smtp-Source: ABdhPJztDTs592zdaCAV22rEoc3dFDuVKaf9eiwmQtAt59lSuvVTsiLV8ugzBjsdTaZqTsX/Gu3b3Fqp6l4+BQ7aRtM=
+X-Received: by 2002:a19:770a:: with SMTP id s10mr26522774lfc.234.1639340069605;
+ Sun, 12 Dec 2021 12:14:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639341572;6ed3dcf9;
-X-HE-SMSGID: 1mwVBL-0000PL-OL
+References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com> <20211105154334.1841927-4-alexandre.ghiti@canonical.com>
+In-Reply-To: <20211105154334.1841927-4-alexandre.ghiti@canonical.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 12 Dec 2021 14:14:18 -0600
+Message-ID: <CAH2r5muPS_PSFpdy1xw2mUNcOJ-CRY5EWU1Zwo9DK+UX6VcDvw@mail.gmail.com>
+Subject: Re: [PATCH 3/7] Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-cachefs@redhat.com,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, linux-power@fi.rohmeurope.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is regzbot, the Linux kernel regression tracking bot.
-
-Currently I'm aware of 19 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-========================================================
-current cycle (v5.15.. aka v5.16-rc), culprit identified
-========================================================
-
-
-5-10% increase in IO latencies with nohz balance patch
-------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/YaUH5GFFoLiS4/3/@localhost.localdomain/
-https://lore.kernel.org/lkml/YaUH5GFFoLiS4/3/@localhost.localdomain/
-
-By Josef Bacik, 13 days ago; 10 activities, latest 3 days ago.
-Introduced in 7fd7a9e0caba (v5.16-rc1)
-
-Recent activities from: Valentin Schneider (2), Josef Bacik (1)
-
-
-[ *NEW* ] fbdev/efifb: Monitors no longer sleep (amdgpu dual monitor setup)
----------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net/
-https://lore.kernel.org/linux-fbdev/8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net/
-
-By Brandon Nielsen, 5 days ago; 2 activities, latest 5 days ago.
-Introduced in 55285e21f045 (v5.16-rc1)
-
-Recent activities from: Geert Uytterhoeven (1), Brandon Nielsen (1)
-
-
-====================================================
-current cycle (v5.15.. aka v5.16-rc), unkown culprit
-====================================================
-
-
-mm: LTP/memcg testcase regression induced by 8cd7c588decf..66ce520bb7c2 series
-------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de/
-https://lore.kernel.org/lkml/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de/
-
-By Mike Galbraith, 21 days ago; 27 activities, latest 3 days ago.
-Introduced in 8cd7c588decf..66ce520bb7c2 (v5.15..v5.16-rc1)
-
-Recent activities from: Mel Gorman (3), Shakeel Butt (2), Hugh
-  Dickins (1)
-
-3 patch postings are associated with this regression, the latest is this:
-* [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
-  https://lore.kernel.org/lkml/20211202150614.22440-1-mgorman@techsingularity.net/
-  10 days ago, by Mel Gorman; thread monitored.
-
-Noteworthy links:
-* Related regression, likely to be fixed by the same patch
-  https://lore.kernel.org/lkml/20211124011954.7cab9bb4@mail.inbox.lv/
-  19 days ago, by Alexey Avramov; link later added and described by Thorsten Leemhuis
-* [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
-  https://lore.kernel.org/lkml/20211202131842.9217-1-mgorman@techsingularity.net/
-  10 days ago, by Mel Gorman; thread monitored.
-
-
-mm: reclaim_throttle leads to stall in near-OOM conditions
-----------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211124011954.7cab9bb4@mail.inbox.lv/
-https://lore.kernel.org/lkml/20211124011954.7cab9bb4@mail.inbox.lv/
-
-By Alexey Avramov, 19 days ago; 14 activities, latest 10 days ago.
-Introduced in v5.15..v5.16-rc1
-
-6 patch postings are associated with this regression, the latest is this:
-* [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
-  https://lore.kernel.org/lkml/20211202150614.22440-1-mgorman@techsingularity.net/
-  10 days ago, by Mel Gorman; thread monitored.
-
-Noteworthy links:
-* Related regression, likely to be fixed by the same patch
-  https://lore.kernel.org/lkml/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de/
-  21 days ago, by Mike Galbraith; link later added and described by Thorsten Leemhuis
-* [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
-  https://lore.kernel.org/lkml/20211125151853.8540-1-mgorman@techsingularity.net/
-  17 days ago, by Mel Gorman; thread monitored.
-* [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
-  https://lore.kernel.org/lkml/20211202131842.9217-1-mgorman@techsingularity.net/
-  10 days ago, by Mel Gorman; thread monitored.
-
-
-=========================================================================================
-previous cycle (v5.14..v5.15), culprit identified, with activity in the past three months
-=========================================================================================
-
-
-[ *NEW* ] drm: nouveau: annoying black flickering in some applications with KDE Plasma with Xorg
-------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/da142fb9-07d7-24fe-4533-0247b8d16cdd@sfritsch.de/
-https://lore.kernel.org/dri-devel/da142fb9-07d7-24fe-4533-0247b8d16cdd@sfritsch.de/
-
-By Stefan Fritsch, 8 days ago; 13 activities, latest 1 days ago.
-Introduced in 3e1ad79bf661 (v5.15-rc1)
-
-Recent activities from: Christian König (4), Stefan Fritsch (3), Dan
-  Moulding (3), Daniel Vetter (1), Karol Herbst (1)
-
-2 patch postings are associated with this regression, the latest is this:
-* [PATCH] drm/nouveau: wait for the exclusive fence after the shared ones v2
-  https://lore.kernel.org/dri-devel/20211209102335.18321-1-christian.koenig@amd.com/
-  3 days ago, by Christian König; thread monitored.
-
-
-Kernel 5.15 reboots / freezes upon ifup/ifdown
-----------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/924175a188159f4e03bd69908a91e606b574139b.camel@gmx.de/
-https://lore.kernel.org/stable/924175a188159f4e03bd69908a91e606b574139b.camel@gmx.de/
-
-By Stefan Dietrich, 18 days ago; 21 activities, latest 1 days ago.
-Introduced in a90ec8483732 (v5.15-rc1)
-
-Recent activities from: Stefan Dietrich (3), Vinicius Costa Gomes (1),
-  Thorsten Leemhuis (1)
-
-One patch associated with this regression:
-* [PATCH] igc: Avoid possible deadlock during suspend/resume
-  https://lore.kernel.org/stable/20211201185731.236130-1-vinicius.gomes@intel.com/
-  11 days ago, by Vinicius Costa Gomes
-
-
-[ *NEW* ] Bluetooth not working on 5.15+ since "Bluetooth: Move shutdown callback before flushing tx and rx queue"
-------------------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAJvGw+AJ5dHSb50RtJHnjbhMVQa+rJgYznFV4t-iaO0qx+W-jw@mail.gmail.com/
-https://lore.kernel.org/lkml/CAJvGw%2BAJ5dHSb50RtJHnjbhMVQa%2BrJgYznFV4t-iaO0qx%2BW-jw@mail.gmail.com/
-
-By coldolt, 2 days ago; 3 activities, latest 2 days ago.
-Introduced in 0ea53674d07f (v5.15-rc1)
-
-Recent activities from: Thorsten Leemhuis (1), An, Tedd (1), coldolt (1)
-
-
-net: kernel hangs during power down
------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211124144505.31e15716@hermes.local/
-https://lore.kernel.org/netdev/20211124144505.31e15716@hermes.local/
-
-By Stephen Hemminger, 17 days ago; 14 activities, latest 11 days ago.
-Introduced in f32a21376573 (v5.15-rc1)
-
-Fix incoming:
-* https://lore.kernel.org/regressions/cb51a8cc-7c43-745e-e075-398eee47b071@leemhuis.info/
-
-
-==================================================================================
-older cycles (..v5.14), culprit identified, with activity in the past three months
-==================================================================================
-
-
-[ *NEW* ] usb: gadget: atmel: ethernet over USB Gadget not recognized anymore after disconnect and reconnect
-------------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211211183650.12183-1-marcelo.jimenez@gmail.com/
-https://lore.kernel.org/regressions/20211211183650.12183-1-marcelo.jimenez@gmail.com/
-
-By Marcelo Roberto Jimenez, 1 days ago; 1 activities, latest 1 days ago.
-Introduced in 70a7f8be8598 (v5.2-rc1)
-
-Recent activities from: Marcelo Roberto Jimenez (1)
-
-
-[ *NEW* ] btrfs: deadlocks in dedupe
-------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211210183456.GP17148@hungrycats.org/
-https://lore.kernel.org/linux-btrfs/20211210183456.GP17148@hungrycats.org/
-
-By Zygo Blaxell, 2 days ago; 1 activities, latest 2 days ago.
-Introduced in 3078d85c9a10 (v5.11-rc1)
-
-Recent activities from: Zygo Blaxell (1)
-
-
-[ *NEW* ] drm: amdgpu: apps that need amdgpu do not start after system is woken from suspend
---------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/1295184560.182511.1639075777725@mail.yahoo.com/
-https://lore.kernel.org/linux-i2c/1295184560.182511.1639075777725@mail.yahoo.com/
-
-By Tareque Md.Hanif, 3 days ago; 1 activities, latest 3 days ago.
-Introduced in 5a7b95fb993e (v5.14-rc1)
-
-Recent activities from: Tareque Md.Hanif (1)
-
-
-bluetooth: "Query LE tx power on startup" broke Bluetooth on MacBookPro16,1
----------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/4970a940-211b-25d6-edab-21a815313954@protonmail.com/
-https://lore.kernel.org/regressions/4970a940-211b-25d6-edab-21a815313954@protonmail.com/
-
-By Orlando Chamberlain, 74 days ago; 86 activities, latest 4 days ago.
-Introduced in 7c395ea521e6 (v5.11-rc1)
-
-Fix incoming:
-* Bluetooth: btbcm: disable read tx power for some Macs with the T2 Security chip
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=801b4c027b44a185292007d3cf7513999d644723
-
-
-net: wireless: ath10k: 5GHz channels are marked as No-IR
---------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/1c160dfb-6ccc-b4d6-76f6-4364e0adb6dd@reox.at/
-https://lore.kernel.org/ath10k/1c160dfb-6ccc-b4d6-76f6-4364e0adb6dd@reox.at/
-
-By Sebastian Bachmann, 15 days ago; 20 activities, latest 6 days ago.
-Introduced in 2dc016599cfa (v5.6-rc1)
-
-Recent activities from: Sebastian Bachmann (1)
-
-Noteworthy links:
-* Compex WLE600VX AP mode 5GHz doesn't work since kernel 5.6
-  https://lore.kernel.org/ath10k/5971a327-d11a-35e6-8295-8dfb8ae3a434@yandex.ru/
-  609 days ago, by svp; thread monitored.
-* Re: Compex WLE600VX AP mode 5GHz doesn't work since kernel 5.6
-  https://lore.kernel.org/ath10k/CA+ASDXNNfG3-ra8C2ou457J=Vj5eE83VCXgGsFPQQOixTcu7YA@mail.gmail.com/
-  537 days ago, by Brian Norris
-* [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-  https://lore.kernel.org/linux-wireless/20200730124923.271429-1-alsi@bang-olufsen.dk/
-  500 days ago, by Alvin Šipraga; thread monitored.
-* [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-  https://lore.kernel.org/ath10k/20201022172113.GA1367233@capeo.gueux.org/
-  416 days ago, by Félix Sipma; thread monitored.
-* Re: [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
-  https://lore.kernel.org/ath10k/19e636c1-fdbe-7222-a055-d668e4617070@gmx.de/
-  356 days ago, by sparks71@gmx.de; thread monitored.
-* https://bugs.debian.org/959821
-* https://bbs.archlinux.org/viewtopic.php?id=254535
-
-
-usb: fsl_udc_core: corrupted request list leads to unrecoverable loop
----------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com/
-https://lore.kernel.org/linuxppc-dev/MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com/
-
-By Eugene Bordenkircher, 44 days ago; 16 activities, latest 8 days ago.
-Introduced in f79a60b8785 (v3.4-rc4)
-
-Noteworthy links:
-* Re: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to unrecoverable loop.
-  https://lore.kernel.org/all/CADRPPNSrhiwr8jmBb2h4cFYqHtuDKK8rL0i6Bkg7+xEyXJPATA@mail.gmail.com/
-  43 days ago, by Li Yang
-* Re: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to unrecoverable loop.
-  https://lore.kernel.org/all/2c275adc278477e1e512ea6ecc0c1f4dcc46969d.camel@infinera.com/
-  43 days ago, by Joakim Tjernlund
-
-
-PCIe regression on APM Merlin (aarch64 dev platform) preventing NVME initialization
------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CA+enf=v9rY_xnZML01oEgKLmvY1NGBUUhnSJaETmXtDtXfaczA@mail.gmail.com/
-https://lore.kernel.org/linux-pci/CA%2Benf=v9rY_xnZML01oEgKLmvY1NGBUUhnSJaETmXtDtXfaczA@mail.gmail.com/
-
-By Stéphane Graber, 24 days ago; 9 activities, latest 10 days ago.
-Introduced in 6dce5aa59e0b (v5.5-rc1)
-
-Fix incoming:
-* PCI: xgene: Fix IB window setup
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=c7a75d07827a1f33d566e18e6098379cc2a0c2b2
-
-
-wireless AP (Raspberry Pi with rt2x00usb) crashes every hour or so
-------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20211118132556.GD334428@darkstar.musicnaut.iki.fi/
-https://lore.kernel.org/lkml/20211118132556.GD334428@darkstar.musicnaut.iki.fi/
-
-By Aaro Koskinen, 24 days ago; 6 activities, latest 13 days ago.
-Introduced in 03c3911d2d67 (v5.14-rc1)
-
-Fix incoming:
-* mac80211: fix rate control for retransmitted frames
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=18688c80ad8a8dd50523dc9276e929932cac86d4
-
-
-Ralink RT2800 kernel deference issue since kernel 5.14
-------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/c07b4142fb725ed87a2cef530bae9ee7@lost-in-the-void.net/
-https://lore.kernel.org/linux-wireless/c07b4142fb725ed87a2cef530bae9ee7@lost-in-the-void.net/
-
-By Robert W, 29 days ago; 6 activities, latest 13 days ago.
-Introduced in 03c3911d2d67 (v5.14-rc1)
-
-Fix incoming:
-* mac80211: fix rate control for retransmitted frames
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=18688c80ad8a8dd50523dc9276e929932cac86d4
-
-
-Bug in Memory Layout of rx_desc for QCA6174
--------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAH4F6usFu8-A6k5Z7rU9__iENcSC6Zr-NtRhh_aypR74UvN1uQ@mail.gmail.com/
-https://lore.kernel.org/ath10k/CAH4F6usFu8-A6k5Z7rU9__iENcSC6Zr-NtRhh_aypR74UvN1uQ@mail.gmail.com/
-
-By Francesco Magliocca, 177 days ago; 5 activities, latest 42 days ago.
-Introduced in e3def6f7ddf8 (v4.16-rc1)
-
-Noteworthy links:
-* Bug in Memory Layout of rx_desc for QCA6174
-  https://lore.kernel.org/ath10k/CAH4F6uvX=xtTnBDaj1BVHSx_FDSUbpc4TRC2DGTHBmGJSD2oEA@mail.gmail.com/
-  44 days ago, by Francesco Magliocca; thread monitored.
-
-
-====================================================================
-all others with unkown culprit and activity in the past three months
-====================================================================
-
-
-idle power increased from ~20 to ~28 watts
-------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/c11d94b4-1701-4e26-efd1-42038342c4aa@kaputniks.org/
-https://lore.kernel.org/lkml/c11d94b4-1701-4e26-efd1-42038342c4aa@kaputniks.org/
-
-By Idzibear, 41 days ago; 3 activities, latest 41 days ago.
-Introduced in v5.14..v5.15
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/163872839745.395685.15301798356990039860@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+You can add my RB is you would like to this.
+
+Also note an additional typo in the existing config description
+"laintext" instead of "plaintext"
+
+On Fri, Nov 5, 2021 at 11:11 AM Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+>
+> This config was removed so remove all references to it.
+>
+> Fixes: 76a3c92ec9e0 ("cifs: remove support for NTLM and weaker authentication algorithms")
+> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+> ---
+>  Documentation/admin-guide/cifs/usage.rst    | 7 +++----
+>  arch/arm/configs/cm_x300_defconfig          | 1 -
+>  arch/arm/configs/ezx_defconfig              | 1 -
+>  arch/arm/configs/imote2_defconfig           | 1 -
+>  arch/arm/configs/nhk8815_defconfig          | 1 -
+>  arch/arm/configs/pxa_defconfig              | 1 -
+>  arch/mips/configs/fuloong2e_defconfig       | 1 -
+>  arch/mips/configs/malta_qemu_32r6_defconfig | 1 -
+>  arch/mips/configs/maltaaprp_defconfig       | 1 -
+>  arch/mips/configs/maltasmvp_defconfig       | 1 -
+>  arch/mips/configs/maltasmvp_eva_defconfig   | 1 -
+>  arch/mips/configs/maltaup_defconfig         | 1 -
+>  arch/mips/configs/nlm_xlp_defconfig         | 1 -
+>  arch/mips/configs/nlm_xlr_defconfig         | 1 -
+>  arch/powerpc/configs/ppc6xx_defconfig       | 1 -
+>  arch/sh/configs/titan_defconfig             | 1 -
+>  16 files changed, 3 insertions(+), 19 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/cifs/usage.rst b/Documentation/admin-guide/cifs/usage.rst
+> index f170d8820258..3766bf8a1c20 100644
+> --- a/Documentation/admin-guide/cifs/usage.rst
+> +++ b/Documentation/admin-guide/cifs/usage.rst
+> @@ -734,10 +734,9 @@ SecurityFlags              Flags which control security negotiation and
+>                         using weaker password hashes is 0x37037 (lanman,
+>                         plaintext, ntlm, ntlmv2, signing allowed).  Some
+>                         SecurityFlags require the corresponding menuconfig
+> -                       options to be enabled (lanman and plaintext require
+> -                       CONFIG_CIFS_WEAK_PW_HASH for example).  Enabling
+> -                       plaintext authentication currently requires also
+> -                       enabling lanman authentication in the security flags
+> +                       options to be enabled.  Enabling plaintext
+> +                       authentication currently requires also enabling
+> +                       lanman authentication in the security flags
+>                         because the cifs module only supports sending
+>                         laintext passwords using the older lanman dialect
+>                         form of the session setup SMB.  (e.g. for authentication
+> diff --git a/arch/arm/configs/cm_x300_defconfig b/arch/arm/configs/cm_x300_defconfig
+> index 502a9d870ca4..45769d0ddd4e 100644
+> --- a/arch/arm/configs/cm_x300_defconfig
+> +++ b/arch/arm/configs/cm_x300_defconfig
+> @@ -146,7 +146,6 @@ CONFIG_NFS_V3_ACL=y
+>  CONFIG_NFS_V4=y
+>  CONFIG_ROOT_NFS=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_PARTITION_ADVANCED=y
+>  CONFIG_NLS_CODEPAGE_437=m
+>  CONFIG_NLS_ISO8859_1=m
+> diff --git a/arch/arm/configs/ezx_defconfig b/arch/arm/configs/ezx_defconfig
+> index a49e699e52de..ec84d80096b1 100644
+> --- a/arch/arm/configs/ezx_defconfig
+> +++ b/arch/arm/configs/ezx_defconfig
+> @@ -314,7 +314,6 @@ CONFIG_NFSD_V3_ACL=y
+>  CONFIG_SMB_FS=m
+>  CONFIG_CIFS=m
+>  CONFIG_CIFS_STATS=y
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_CODEPAGE_437=m
+> diff --git a/arch/arm/configs/imote2_defconfig b/arch/arm/configs/imote2_defconfig
+> index 118c4c927f26..6db871d4e077 100644
+> --- a/arch/arm/configs/imote2_defconfig
+> +++ b/arch/arm/configs/imote2_defconfig
+> @@ -288,7 +288,6 @@ CONFIG_NFSD_V3_ACL=y
+>  CONFIG_SMB_FS=m
+>  CONFIG_CIFS=m
+>  CONFIG_CIFS_STATS=y
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_CODEPAGE_437=m
+> diff --git a/arch/arm/configs/nhk8815_defconfig b/arch/arm/configs/nhk8815_defconfig
+> index 23595fc5a29a..907d6512821a 100644
+> --- a/arch/arm/configs/nhk8815_defconfig
+> +++ b/arch/arm/configs/nhk8815_defconfig
+> @@ -127,7 +127,6 @@ CONFIG_NFS_FS=y
+>  CONFIG_NFS_V3_ACL=y
+>  CONFIG_ROOT_NFS=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_NLS_CODEPAGE_437=y
+>  CONFIG_NLS_ASCII=y
+>  CONFIG_NLS_ISO8859_1=y
+> diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+> index 58f4834289e6..dedaaae3d0d8 100644
+> --- a/arch/arm/configs/pxa_defconfig
+> +++ b/arch/arm/configs/pxa_defconfig
+> @@ -699,7 +699,6 @@ CONFIG_NFSD_V3_ACL=y
+>  CONFIG_NFSD_V4=y
+>  CONFIG_CIFS=m
+>  CONFIG_CIFS_STATS=y
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_DEFAULT="utf8"
+> diff --git a/arch/mips/configs/fuloong2e_defconfig b/arch/mips/configs/fuloong2e_defconfig
+> index 5c24ac7fdf56..ba47c5e929b7 100644
+> --- a/arch/mips/configs/fuloong2e_defconfig
+> +++ b/arch/mips/configs/fuloong2e_defconfig
+> @@ -206,7 +206,6 @@ CONFIG_NFSD_V3_ACL=y
+>  CONFIG_NFSD_V4=y
+>  CONFIG_CIFS=m
+>  CONFIG_CIFS_STATS2=y
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_CIFS_DEBUG2=y
+> diff --git a/arch/mips/configs/malta_qemu_32r6_defconfig b/arch/mips/configs/malta_qemu_32r6_defconfig
+> index 614af02d83e6..6fb9bc29f4a0 100644
+> --- a/arch/mips/configs/malta_qemu_32r6_defconfig
+> +++ b/arch/mips/configs/malta_qemu_32r6_defconfig
+> @@ -165,7 +165,6 @@ CONFIG_TMPFS=y
+>  CONFIG_NFS_FS=y
+>  CONFIG_ROOT_NFS=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_CODEPAGE_437=m
+> diff --git a/arch/mips/configs/maltaaprp_defconfig b/arch/mips/configs/maltaaprp_defconfig
+> index 9c051f8fd330..eb72df528243 100644
+> --- a/arch/mips/configs/maltaaprp_defconfig
+> +++ b/arch/mips/configs/maltaaprp_defconfig
+> @@ -166,7 +166,6 @@ CONFIG_TMPFS=y
+>  CONFIG_NFS_FS=y
+>  CONFIG_ROOT_NFS=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_CODEPAGE_437=m
+> diff --git a/arch/mips/configs/maltasmvp_defconfig b/arch/mips/configs/maltasmvp_defconfig
+> index 2e90d97551d6..1fb40d310f49 100644
+> --- a/arch/mips/configs/maltasmvp_defconfig
+> +++ b/arch/mips/configs/maltasmvp_defconfig
+> @@ -167,7 +167,6 @@ CONFIG_TMPFS=y
+>  CONFIG_NFS_FS=y
+>  CONFIG_ROOT_NFS=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_CODEPAGE_437=m
+> diff --git a/arch/mips/configs/maltasmvp_eva_defconfig b/arch/mips/configs/maltasmvp_eva_defconfig
+> index d1f7fdb27284..75cb778c6149 100644
+> --- a/arch/mips/configs/maltasmvp_eva_defconfig
+> +++ b/arch/mips/configs/maltasmvp_eva_defconfig
+> @@ -169,7 +169,6 @@ CONFIG_TMPFS=y
+>  CONFIG_NFS_FS=y
+>  CONFIG_ROOT_NFS=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_CODEPAGE_437=m
+> diff --git a/arch/mips/configs/maltaup_defconfig b/arch/mips/configs/maltaup_defconfig
+> index 48e5bd492452..7b4f247dc60c 100644
+> --- a/arch/mips/configs/maltaup_defconfig
+> +++ b/arch/mips/configs/maltaup_defconfig
+> @@ -165,7 +165,6 @@ CONFIG_TMPFS=y
+>  CONFIG_NFS_FS=y
+>  CONFIG_ROOT_NFS=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+>  CONFIG_NLS_CODEPAGE_437=m
+> diff --git a/arch/mips/configs/nlm_xlp_defconfig b/arch/mips/configs/nlm_xlp_defconfig
+> index c97f00ece828..1c8b73d03263 100644
+> --- a/arch/mips/configs/nlm_xlp_defconfig
+> +++ b/arch/mips/configs/nlm_xlp_defconfig
+> @@ -459,7 +459,6 @@ CONFIG_NFSD=m
+>  CONFIG_NFSD_V3_ACL=y
+>  CONFIG_NFSD_V4=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_UPCALL=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+> diff --git a/arch/mips/configs/nlm_xlr_defconfig b/arch/mips/configs/nlm_xlr_defconfig
+> index 60ea102783d9..11acfc173058 100644
+> --- a/arch/mips/configs/nlm_xlr_defconfig
+> +++ b/arch/mips/configs/nlm_xlr_defconfig
+> @@ -411,7 +411,6 @@ CONFIG_NFSD=m
+>  CONFIG_NFSD_V3_ACL=y
+>  CONFIG_NFSD_V4=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_UPCALL=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+> diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
+> index 6697c5e6682f..bb549cb1c3e3 100644
+> --- a/arch/powerpc/configs/ppc6xx_defconfig
+> +++ b/arch/powerpc/configs/ppc6xx_defconfig
+> @@ -1022,7 +1022,6 @@ CONFIG_NFSD=m
+>  CONFIG_NFSD_V3_ACL=y
+>  CONFIG_NFSD_V4=y
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_CIFS_UPCALL=y
+>  CONFIG_CIFS_XATTR=y
+>  CONFIG_CIFS_POSIX=y
+> diff --git a/arch/sh/configs/titan_defconfig b/arch/sh/configs/titan_defconfig
+> index ba887f1351be..cd5c58916c65 100644
+> --- a/arch/sh/configs/titan_defconfig
+> +++ b/arch/sh/configs/titan_defconfig
+> @@ -242,7 +242,6 @@ CONFIG_NFSD=y
+>  CONFIG_NFSD_V3=y
+>  CONFIG_SMB_FS=m
+>  CONFIG_CIFS=m
+> -CONFIG_CIFS_WEAK_PW_HASH=y
+>  CONFIG_PARTITION_ADVANCED=y
+>  CONFIG_NLS_CODEPAGE_437=m
+>  CONFIG_NLS_ASCII=m
+> --
+> 2.32.0
+>
+
+
+-- 
+Thanks,
+
+Steve

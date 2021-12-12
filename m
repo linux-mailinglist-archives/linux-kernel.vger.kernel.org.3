@@ -2,132 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFDF471852
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 06:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE61471855
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 06:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbhLLE44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 23:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S231769AbhLLFEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 00:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbhLLE4y (ORCPT
+        with ESMTP id S229849AbhLLFEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 23:56:54 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7FFC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 20:56:54 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso13943159otj.1
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 20:56:54 -0800 (PST)
+        Sun, 12 Dec 2021 00:04:22 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4716C061714;
+        Sat, 11 Dec 2021 21:04:21 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id m15so11537781pgu.11;
+        Sat, 11 Dec 2021 21:04:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OxiNtCo8FAmPT/CsvWMylrg0lFIpjinzhe3T8bV2cL8=;
-        b=gvFZd3OhcizPGf47jqdiayAzdIF4bROxr9hIGS2bcbovtpyqm1PiMVw0th9OYksido
-         FqNyeSHzMVf3fy96fNlo27IwEtaoPSwKCKyjniQ0kSw6as33XV64nYJz1B56cme4ufB6
-         4dKxowOEQMJqXhOIAN+wnYlQ0hPBdpUZCqdEhfywWXuTmV827DaqtqsreA5VY9GICkgq
-         TrFIPyqUz7Nh6bH6k9HO/iWUzMn7sI6EicaqQ4qfje2nBlEUHpp/VJG8AuDLOQ7D4/n0
-         orZwsmlgNvHxG0ais+S7e8Deb1tDzd98Yl7RhhkMl/m/yCkEtxt/c57ruCLDlxFH6Mxq
-         vtWQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=oz3vhxEEPbDamv8BpZGdKnIlSqK4/xNum2DQN3KV040=;
+        b=dtdBI74AVvKFn2hVSFY1xTijT8b/vroECOjGYYi+ZH6zvqViC5UKg+lE5vdk/7VSGR
+         FGMTikEUuO3Ye38rWCx9KyCv7b476yhlhCPgVz8yORhwOZ3/h5sht5pvJ8MRq+gJQtyu
+         H/b/7LUipv6UVEGTKq39L5buto4C+p2iOwFEhAg6HjB6wwKNb4t4dAhVegw4GbGJp0+Y
+         dj4EQnSjeD8ii3fYC9183OrNFSi/eJri0rxWuLObOjREfTQjaoCxKb3f5HrbDXgLvQSu
+         KPSbFXKBOA5Y5LFccwEtewZa39kDmw/kEgkhMDuZ/w4Duz3eKHDKu/mVXtR5wUsT2gok
+         k9HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OxiNtCo8FAmPT/CsvWMylrg0lFIpjinzhe3T8bV2cL8=;
-        b=6p/RmnpajOwvoTh3TD9s9Op7N0zG1DU3BCyRu/eNipADJvqkjHRXnzZxIgwaYbwqu/
-         RNqAhrfplV2ZO6M/vhKTPktMuXWm/u2cWx4NIHBMn0mHKcDtuxGSKAz0z+5MSMtrVmx0
-         RKVIF0QLrWshg9/Z+C8j2dGma1i8V8e60PSfPNAmQb0n28O5BFjO5EzKXCf9Z//HZXjR
-         vWAlraucV3C0eFjVgBbh4z8qbpSFIgcnOzDuS/khIPIfkhxrcxBVIsuEy2ujNtZWRH3r
-         zq9qGDA+EpNasSJpNBJpnZ1jzU9Ouex7Il/FIn9R4ebTxQU1RYq+dc6k0zQ4CCmnuMn7
-         pOwg==
-X-Gm-Message-State: AOAM532NaEJ2fRI1BE9TmdmcaGQvs00iFTzZOWAaWQhNeCTNXARDKUYO
-        MCmBXLf3FgBjbR4hvqxYgCbrTkV+oLTR9FZFKBuF3A==
-X-Google-Smtp-Source: ABdhPJwPa3OmsdnUlkIn8H++jGaQIhTDXfkvAYFE7G9HjThGT5fk8FT3u+lJSXmlBKtEb9we1oIgTCRrgPS3dqY0tfk=
-X-Received: by 2002:a05:6830:601:: with SMTP id w1mr18332359oti.267.1639285013242;
- Sat, 11 Dec 2021 20:56:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-5-likexu@tencent.com>
- <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
- <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com> <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
- <b6c1eb18-9237-f604-9a96-9e6ca397121c@redhat.com> <CALMp9eRy==yu1uQriqbeezeQ+mtFyfyP_iy9HdDiSZ27SnEfFg@mail.gmail.com>
- <c381aa2c-beb5-480f-1f24-a14de693e78f@redhat.com> <CALMp9eTKrQVCQPm=hcA50JSUCctPaGLEP19biVbGAtBN54dQfA@mail.gmail.com>
-In-Reply-To: <CALMp9eTKrQVCQPm=hcA50JSUCctPaGLEP19biVbGAtBN54dQfA@mail.gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Sat, 11 Dec 2021 20:56:42 -0800
-Message-ID: <CALMp9eS8xDgdbfJTbzMmek3RcXKwkLdGMW-uMkJR3eJZ6sf0GA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>, Andi Kleen <ak@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oz3vhxEEPbDamv8BpZGdKnIlSqK4/xNum2DQN3KV040=;
+        b=guw3/fqm8JVNA/FtzE+BQAjQXuvZl68TRq5vRHFKZTXkGyZfMWXdmuCCrRlwFd5kJb
+         +5x4t4w1mksb5SFR8as/KxxVYi+ii0tyWId3ZMAYmnbDzYX9ldtb7VoMIVSGXQWqI69+
+         QNsN9Q6CsSTrP98Ll6wlU+hbFxHLXmqHVNpKgOvkyepPwzQAvipeNtqzjKUNdhgG9VBg
+         sXPGX4Miu9vPXxGKLbqumorx782uNFSh+0ppkz4l3uwP2nmtGx8l+3MR66lLl3CvZuMi
+         PHsy/AJj4IQOqPKoI4fHc1GgNemKA/8jop5ev/NKyRF9smrE3Y5E108sZ0gNqPBT2it7
+         shCg==
+X-Gm-Message-State: AOAM530dA08pom1KYjEHTil6+PEAdacZDTyHfakpPqwSE8T4zPS4/mg1
+        ucrNYzr/SqrAJk8XyRluhfA=
+X-Google-Smtp-Source: ABdhPJxp8O7H93R7IQqwX49pF2ZGZ7g34OK0J6VZ9zqALaZxPtmCIxtbSALCuBAkTqsPrz2MtqnyCw==
+X-Received: by 2002:a63:8bca:: with SMTP id j193mr9023278pge.293.1639285461166;
+        Sat, 11 Dec 2021 21:04:21 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id n22sm7707766pfu.2.2021.12.11.21.04.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 21:04:20 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bpftool: Fix NULL vs IS_ERR() checking
+Date:   Sun, 12 Dec 2021 05:04:12 +0000
+Message-Id: <20211212050415.17273-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 3:31 PM Jim Mattson <jmattson@google.com> wrote:
->
-> On Fri, Dec 10, 2021 at 2:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >
-> > On 12/10/21 23:55, Jim Mattson wrote:
-> > >>
-> > >> Even for tracing the SDM says "Like the value returned by RDTSC, TSC
-> > >> packets will include these adjustments, but other timing packets (such
-> > >> as MTC, CYC, and CBR) are not impacted".  Considering that "stand-alone
-> > >> TSC packets are typically generated only when generation of other timing
-> > >> packets (MTCs and CYCs) has ceased for a period of time", I'm not even
-> > >> sure it's a good thing that the values in TSC packets are scaled and offset.
-> > >>
-> > >> Back to the PMU, for non-architectural counters it's not really possible
-> > >> to know if they count in cycles or not.  So it may not be a good idea to
-> > >> special case the architectural counters.
-> > >
-> > > In that case, what we're doing with the guest PMU is not
-> > > virtualization. I don't know what it is, but it's not virtualization.
-> >
-> > It is virtualization even if it is incompatible with live migration to a
-> > different SKU (where, as you point out below, multiple TSC frequencies
-> > might also count as multiple SKUs).  But yeah, it's virtualization with
-> > more caveats than usual.
->
-> It's not virtualization if the counters don't count at the rate the
-> guest expects them to count.
+The hashmap__new() function does not return NULL on errors. It returns
+ERR_PTR(-ENOMEM). Using IS_ERR() to check the return value to fix this.
 
-Per the SDM, unhalted reference cycles count at "a fixed frequency."
-If the frequency changes on migration, then the value of this event is
-questionable at best. For unhalted core cycles, on the other hand, the
-SDM says, "The performance counter for this event counts across
-performance state transitions using different core clock frequencies."
-That does seem to permit frequency changes on migration, but I suspect
-that software expects the event to count at a fixed frequency if
-INVARIANT_TSC is set.
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ tools/bpf/bpftool/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not sure that I buy your argument regarding consistency. In
-general, I would expect the hypervisor to exclude non-architected
-events from the allow-list for any VM instances running in a
-heterogeneous migration pool. Certainly, those events could be allowed
-in a heterogeneous migration pool consisting of multiple SKUs of the
-same microarchitecture running at different clock frequencies, but
-that seems like a niche case.
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 015d2758f826..4a561ec848c0 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -899,7 +899,7 @@ static int do_show(int argc, char **argv)
+ 				      equal_fn_for_key_as_id, NULL);
+ 	btf_map_table = hashmap__new(hash_fn_for_key_as_id,
+ 				     equal_fn_for_key_as_id, NULL);
+-	if (!btf_prog_table || !btf_map_table) {
++	if (IS_ERR(btf_prog_table) || IS_ERR(btf_map_table)) {
+ 		hashmap__free(btf_prog_table);
+ 		hashmap__free(btf_map_table);
+ 		if (fd >= 0)
+-- 
+2.17.1
 
-
-> > > Exposing non-architectural events is questionable with live migration,
-> > > and TSC scaling is unnecessary without live migration. I suppose you
-> > > could have a migration pool with different SKUs of the same generation
-> > > with 'seemingly compatible' PMU events but different TSC frequencies,
-> > > in which case it might be reasonable to expose non-architectural
-> > > events, but I would argue that any of those 'seemingly compatible'
-> > > events are actually not compatible if they count in cycles.
-> > I agree.  Support for marshaling/unmarshaling PMU state exists but it's
-> > more useful for intra-host updates than for actual live migration, since
-> > these days most live migration will use TSC scaling on the destination.
-> >
-> > Paolo
-> >
-> > >
-> > > Unless, of course, Like is right, and the PMU counters do count fractionally.
-> > >
-> >

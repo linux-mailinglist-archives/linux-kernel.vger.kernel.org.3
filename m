@@ -2,165 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884B14719A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 11:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F4A4719A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 11:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbhLLKiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 05:38:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40600 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbhLLKiV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 05:38:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B864DB80AEB;
-        Sun, 12 Dec 2021 10:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D306EC341C6;
-        Sun, 12 Dec 2021 10:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639305498;
-        bh=Am+41ubCC8rkSmzoRSTLkBwWB738N2XLeFzWhjzxHlc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kFN2xbMfSsQOljYnCTYOkMgJv30ClZR1xAKyLVwy8cy6LFTYAsosuurUa8Or85zLc
-         wfZ7ED1tRcaNqZLJ2eUlD+BYIi0ai4pJEmiduWtREl6e8wg3Gne9Qal02h0qCS3QuE
-         WSwwKEN2DVx5JWmobRDsl4NjEtAHWZ+Jkvoxz40MJyAO3xknul6yP+EZ63RSGvNG3+
-         rAE9uj4BG7NFElWxagVwsvyOig0oFxBI+KYs0foNEq0yEWyTEESc533EfA0zBSLFk+
-         Nkwut4TS4PfRdEcDlB5eLj4Q/XWPNnYo1CGUKiwl0/OBEVVkZFIbCRA+JASV+SxNwx
-         yBEWdZkmoOl7Q==
-Date:   Sun, 12 Dec 2021 11:38:13 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] docs: sphinx/kfigure.py: Improve conversion to PDF
-Message-ID: <20211212113813.058e99fc@coco.lan>
-In-Reply-To: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
-References: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        id S230108AbhLLKjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 05:39:07 -0500
+Received: from mga01.intel.com ([192.55.52.88]:30410 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229724AbhLLKjG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 05:39:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639305546; x=1670841546;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XMVhzZiTwstaNWpaRYUoepnrT4xCDkqdTRvDuIZSxi0=;
+  b=lviTU9rkkzO5zpf65R3t2zBE7pOuUOTBAbN71yFqx+v1xKXTHJIs8up2
+   vDB0XznXMPl8MyGSOIqj/DwxtvyrKQYHQC9BhMBDWG04J62XAVfJxnETp
+   Zvv3ccFo4X//L+IM8HwMoyl3L9Hw/t7mdyn2ooHA0WM9Wav1SKtiWcLv9
+   K4wpHucqBKDROQzIV0K1z8DNTt6fdBg84LFUdTrcftGbvwiUhrPp+SmeM
+   BT6J/o7CqsIA2Ci6IyKyA4nQ17FEDKP/3NEC+pyIdRMnILE8McEIe64N5
+   ebwCE5sPMzW08/DrHs6QryHTyv7TC/2o1+Me9/1lv6tLT3zwaMgd/hbJA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="262711925"
+X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
+   d="scan'208";a="262711925"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 02:39:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
+   d="scan'208";a="582531337"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Dec 2021 02:39:04 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwMG0-0005aB-AU; Sun, 12 Dec 2021 10:39:04 +0000
+Date:   Sun, 12 Dec 2021 18:38:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 0f09c274698590d508c43f924d9dffc7130b782d
+Message-ID: <61b5d126.Hh93LWLC8St+A+yQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, 12 Dec 2021 16:59:53 +0900
-Akira Yokosawa <akiyks@gmail.com> escreveu:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 0f09c274698590d508c43f924d9dffc7130b782d  futex: Fix additional regressions
 
-> This patch set improves conversions of DOT -> PDF and SVG -> PDF
-> for PDF docs.
-> 
-> * DOT -> PDF conversion
+elapsed time: 720m
 
-First of all, package requirement for docs generation should be auto
-discovered by:
+configs tested: 107
+configs skipped: 3
 
-	scripts/sphinx-pre-install
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-and should not break the ones detected by check_distros() and that
-supports PDF generation.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                      pxa255-idp_defconfig
+powerpc                 mpc836x_rdk_defconfig
+ia64                             allyesconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                     mpc512x_defconfig
+arc                     nsimosci_hs_defconfig
+powerpc                         ps3_defconfig
+sparc64                          alldefconfig
+powerpc                    sam440ep_defconfig
+powerpc                     tqm8541_defconfig
+mips                           ip27_defconfig
+arm                      tct_hammer_defconfig
+sh                           se7712_defconfig
+mips                     loongson1b_defconfig
+mips                      malta_kvm_defconfig
+mips                     cu1000-neo_defconfig
+arm                        realview_defconfig
+sh                           se7206_defconfig
+arm                  randconfig-c002-20211212
+ia64                                defconfig
+ia64                             allmodconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nds32                               defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                 randconfig-a001-20211212
+i386                 randconfig-a002-20211212
+i386                 randconfig-a005-20211212
+i386                 randconfig-a003-20211212
+i386                 randconfig-a006-20211212
+i386                 randconfig-a004-20211212
+x86_64               randconfig-a001-20211212
+x86_64               randconfig-a002-20211212
+x86_64               randconfig-a003-20211212
+x86_64               randconfig-a004-20211212
+x86_64               randconfig-a006-20211212
+x86_64               randconfig-a005-20211212
+arc                  randconfig-r043-20211212
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-> 
-> Current scheme uses "dot -Tpdf" (of graphviz).
-> 
-> Cons:
->   - openSUSE's dot(1) does not support -Tpdf.
+clang tested configs:
+x86_64               randconfig-c007-20211212
+arm                  randconfig-c002-20211212
+riscv                randconfig-c006-20211212
+mips                 randconfig-c004-20211212
+i386                 randconfig-c001-20211212
+s390                 randconfig-c005-20211212
+powerpc              randconfig-c003-20211212
+x86_64               randconfig-a011-20211212
+x86_64               randconfig-a012-20211212
+x86_64               randconfig-a014-20211212
+x86_64               randconfig-a013-20211212
+x86_64               randconfig-a016-20211212
+x86_64               randconfig-a015-20211212
+i386                 randconfig-a013-20211212
+i386                 randconfig-a011-20211212
+i386                 randconfig-a016-20211212
+i386                 randconfig-a014-20211212
+i386                 randconfig-a015-20211212
+i386                 randconfig-a012-20211212
+hexagon              randconfig-r045-20211212
+s390                 randconfig-r044-20211212
+hexagon              randconfig-r041-20211212
+riscv                randconfig-r042-20211212
 
-I'm sure I tested pdf generation in the past with openSUSE by the
-time I wrote sphinx-pre-install script. Perhaps some change at either
-openSUSE or at the docs makefile broke support for it.
-
->   - Other distro's dot(1) generates PDFs with unnecessarily wide
->     margins for inclusion into LaTeX docs.
-> 
-> Patch 1/3 changes the route to two steps:
-> 
->   1. DOT -> SVG by "dot -Tsvg"
->   2. SVG -> PDF by "rsvg-convert -f pdf" with fallback to convert(1).
-
-rsvg-convert is not present on Fedora (nor on RHEL and CentOS), as far
-as I'm aware.
-
-> Pros:
->   - Improved portability across distros
->   - Less space for graphs in final PDF documents
-> 
-> Con:
->   - On systems without rsvg-convert, generated PDF will be of raster
->     image.
-
-Raster images are a very bad idea. Why don't keep use "dot -Tpdf" when
-supported by the system? instead of falling back to raster images?
-
-> * SVG -> PDF conversion
-> 
-> Current scheme uses convert(1) (of ImageMagick)
-> 
-> Cons:
->   - Generated PDFs are of raster image.  Some of them look blurry.
->   - Raster image tends to be large in size.
->   - convert(1) delegates SVG decoding to rsvg-convert(1).
->     It doesn't cover full range of Inkscape specific SVG features
->     and fails to convert some of SVG figures properly.
-> 
-> Failed conversions are observed with:
->   - Documentation/userspace-api/media/v4l/selection.svg
->   - Documentation/userspace-api/media/v4l/vbi_525.svg
->   - Documentation/userspace-api/media/v4l/vbi_625.svg
-
-What do you mean by failed? With the current way, the VBI ones
-seem OK to me:
-
-	https://linuxtv.org/downloads/v4l-dvb-apis-new/pdf/media.pdf
-
-(This is daily updated. On today's build the raw VBI ones are in
-page 1031/1032)
-
-Do you mean that your changes caused a regression there?
-
-> If you have Inkscape installed as well, convert(1) delegates SVG
-> decoding to inkscape(1) and the above SVGs are rendered correctly.
-> 
-> So if Inkscape is required for converting those SVGs, why not use it
-> directly in the first place?
-
-I remember that the main focus were to be able to generate PDF at the
-major distros. It should be OK to use whatever tool, provided that it
-won't cause regressions with such distros. Not that is should matter
-much for the others, but my particular interest is that it shouldn't
-cause regressions neither on Debian nor on Fedora, as those are the 
-ones I use for PDF generation. Debian is used at linuxtv.org, where we
-do automate builds for PDF, ePUB and HTML. Fedora is what I used locally,
-in order to test and fix issues on media PDF document output.
-
-> Patch 2/3 adds a route of SVG -> PDF conversion by inkscape(1).
-> Patch 3/3 hides warning messages from inkscape(1) which are harmless
-> in command-line uses.
-> 
-> Pros:
->   - Generated PDFs are of vector graphics.
->   - Vector graphics tends to be smaller in size and keeps looking nice
->     while zoomed in.
->   - SVGs drawn by Inkscape are fully supported.
-> 
-> On systems without Inkscape, there won't be any change in behavior.
-> 
->         Thanks, Akira
-> --
-> Akira Yokosawa (3):
->   docs: sphinx/kfigure.py: Use rsvg-convert(1) for DOT -> PDF conversion
->   docs: sphinx/kfigure.py: Use inkscape(1) for SVG -> PDF conversion
->   docs: sphinx/kfigure.py: Redirect warnings from inkscape to /dev/null
-> 
->  Documentation/sphinx/kfigure.py | 109 ++++++++++++++++++++++++++++----
->  1 file changed, 97 insertions(+), 12 deletions(-)
-> 
-> 
-> base-commit: a32fa6b2e8b4e0b8c03f5218afa0649e188239c5
-
-
-
-Thanks,
-Mauro
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

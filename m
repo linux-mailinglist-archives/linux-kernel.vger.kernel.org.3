@@ -2,168 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1998E471EA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DC0471EB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbhLLXMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 18:12:40 -0500
-Received: from mout.gmx.net ([212.227.15.19]:60053 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230260AbhLLXMj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 18:12:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1639350751;
-        bh=IoQi5EMV/XH/LpqMr+ICgxVN4Bq0JmYZIA4yRCf+EI8=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=FMVowCVOvdeE/C79RvbcOZTU4BcOnnrVPPyanA1TfQow8SmZgTOnoQ3XAzF4NQYQ8
-         vv+gqCw3h9BhdovWNeKnD1y4A3M34Pdn/Q5nRBZ6ffdzWTXNoUA22RKpuQvDo52PDi
-         Vzh2h19125jrhlS4aOPY2RcmFlXP3VcBlcXbzSyk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MCsPy-1mnmak3B0C-008t7c; Mon, 13
- Dec 2021 00:12:30 +0100
-Date:   Mon, 13 Dec 2021 00:12:29 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>
-Subject: Re: [PATCH v2 1/8] dt-bindings: arm/npcm: Add binding for global
- control registers (GCR)
-Message-ID: <YbaB3a3pFo9pA2I0@latitude>
-References: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
- <20211207210823.1975632-2-j.neuschaefer@gmx.net>
- <YbNqKfwYes0rH07B@robh.at.kernel.org>
+        id S230315AbhLLX0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 18:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230260AbhLLX0E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 18:26:04 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991E6C06173F;
+        Sun, 12 Dec 2021 15:26:04 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id np3so10627507pjb.4;
+        Sun, 12 Dec 2021 15:26:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ctOJj8vJSmnF76Xt+fHesBQwdRI5nVKPOOT2SR7P/UM=;
+        b=GgSWkvd4FpN4nbu4R29EPGAFY7CTibo7886UnPAuEw1Q5jTTXV2sxhQMXeeE3JKMKF
+         Gj7U0HNiTBYV8oVRPGDTaF1YJsMRbIfA702iEhBmPn3JPTeoDHk0iHoW+Hj661s+myPS
+         oCNy670TVe2Bnimacg39fQ0bECckRySCOwx35eXu7K9ckvg931y8SPwY9nXMH/ZlW5k2
+         HM0RJjV6URZiq0Lg34GUbrwMkjuGgbC71o9b0Qsc6SHzFxoNGxqBfGYSL4nkXcXMyWdX
+         2MesXH6XvyeJuu7ygxd7q25BBWOjXJgc0Dq3Nf6/b22Os3U4JTi8Kmk5WqDVxykReGHv
+         ONpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ctOJj8vJSmnF76Xt+fHesBQwdRI5nVKPOOT2SR7P/UM=;
+        b=d6/1f6+Wc/jaY+4dbu/s9BG1qZ7ipMOwPhyX8Jki1Udpdznt1pLLkONqVtpKyw0yoR
+         2MZ5sCZpEf34U0mF2+QJqO2rvC7qE5lmyV6JvEeBMOAgg4HsYys10svlrMsLYpqkACPI
+         sgR2b2n/eLH2cRfCMbpQ7CbsBQlPoa7C87JX2KBOYlkyBcVrahXHxOIX8loZJAM0he2D
+         VvWkELhAH/yAezttd9cTqeeq9kOuLO9/GSo9V6B+fUVgyydSyf54wyWiVsaojXEmitRU
+         uAvqk9TTyHkvbPgbXbAnckskeg5aBJFEnEVzizI+vbk0Ye3z3UQl3S5fbyteiepREtKe
+         1emQ==
+X-Gm-Message-State: AOAM532hO5PeKSZxpF+kAgWVMQHTk9CgnuJGY6nlmavCKU1zu6XyOIbM
+        LkheUgvXkd6Q155mNDde95Y=
+X-Google-Smtp-Source: ABdhPJyxGJjbdiqAXgsTy5dRoaDxViHSM1EU+RoMH+oCBw3/Gkep6S45mmYFhZOOElbZmuUNnLuWIQ==
+X-Received: by 2002:a17:902:cecf:b0:141:e15d:4a2a with SMTP id d15-20020a170902cecf00b00141e15d4a2amr91205431plg.66.1639351564167;
+        Sun, 12 Dec 2021 15:26:04 -0800 (PST)
+Received: from hibiki.localdomain ([2400:2410:93a3:bc00:c35d:e29e:99a3:5fd9])
+        by smtp.googlemail.com with ESMTPSA id j7sm5281813pjf.41.2021.12.12.15.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 15:26:03 -0800 (PST)
+From:   Akira Kawata <akirakawata1@gmail.com>
+To:     akpm@linux-foundation.org, adobriyan@gmail.com,
+        viro@zeniv.linux.org.uk, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, lukas.bulwahn@gmail.com
+Cc:     akirakawata1@gmail.com, Eric Biederman <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] [PATCH v4 0/2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
+Date:   Mon, 13 Dec 2021 08:24:10 +0900
+Message-Id: <20211212232414.1402199-1-akirakawata1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8Nw9gXbH6ji+XyMM"
-Content-Disposition: inline
-In-Reply-To: <YbNqKfwYes0rH07B@robh.at.kernel.org>
-X-Provags-ID: V03:K1:mKk8Aj49glbM/0M2m2dk9cYhezX/sIrY9ojc/IGUkfvsS6FwQ32
- THkfd5/wiOkW2DOSO/UaK2Z/vJgijwMB228OOxdqaRUYdeNRul3LcUZnRyL/Nudbl9fiJqD
- r3Z9wO7XnK0kkWFDrnznS/DsEA876ChdXq1IluGMqZNpfTwawBgpya9VqGLTRJn95tEabEt
- wkbhv06qX/bnCxN8DcPag==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YY93j3RXj2M=:yFNRmAusrQsqdZwAwRz4vf
- bpE01BLsoEP8BykGLkpTjjhb6R+ZBk98G3CDkUyyfSzRKafc0hG/LDaHAJiAXGYwGbXoUDXl3
- Eod2/hDh87ucctPRQ7MHekLpRzIynTR5m06adGA3rNvTk1iTtJgUqV9itvz9rusQ1iap6FaYK
- uTqapUQD490QEErncmnWHZSyMBeRSKIy3aRBPBjfc6SGtC768ILZYjltzGi/kuqqvFjtzfWJH
- LoF0Lyh14EDNF1mHnovF4VyLRMhTDWJ0ngryrafQUka5wbuyMuwlcy5J6DYsE5P9QpOL/7CRh
- /tgSEq4qNd39+dqnOGzCCfF6Dz7cuEqfUHHL5knbZbWQWdVQ6dedsLrP5tfZYqZKlBT2OBVkz
- mA/IapCj8bbnTMmU+vsx59GJu+T9XZgLl8hFQbfLaFzaldPFAz9SiaJi4pMcYnRXqXjHlBlr0
- 3th+RYvG4EP8LX/i4IXXcGQv21DIxINsQUa8/7zcHYwJwaIMSmgBdA4+D5kxQgPpIw++1NHnL
- f2S7U743/dvEGJW5vxMTRpZYgViCAGIxTSUUnk2EaD/M587NcfunYKJmvkJYUXjMgZXsHPI2X
- 8cvkV6un4fa0ifejZlkH84b7KbAjPUAKvw3c8jXYsMqjS4SrBD4fqMPDdUKeJUcCc3cF7zZjP
- rkAHX/a/Veaulj2X5pAp2/1Cr+mxKqdUdZBlCVcFenaWrHpxXy4w+nNCV7I9PMjrF8tLXo170
- DUlU3+xVW7iXRPoBOFohxpZQmP7TIKAQ5gRAQ/UK7vy1niikNpvHDtGjW7po+9X7s6hsFu5oN
- pRVxlUyC1eUxH1EKUZGeXsi7UpFXWRU/f2a5ExReKKKhMGwcVX1QxkCEEmM7Us5lAoAdjY1JJ
- Gw3zR0NQ2ZsqEXzE1AHb1I8UJ2zd/PhWMQJ2SzyuuPQrRGmuKB4Ts+hKH9ogGjJ19kH535hyl
- e47odlZ2Kc6bkp3O8gAQtZQtIWujmnj7yWlXAfdET5JjtjE3LYR8eXalVsLAfFmHfNNgWJ57k
- DIheW2waRiL84cBLvSKbSnTWgHeHHjMeDhIwuoRfF2sMv432lHYoyk0vymB7OOR+NEQ+UO1g0
- xqqKd9l2kCU1eQ=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ These patches fix a bug in AT_PHDR calculation. 
+ 
+ We cannot calculate AT_PHDR as the sum of load_addr and exec->e_phoff.
+ This is because exec->e_phoff is the offset of PHDRs in the file and the
+ address of PHDRs in the memory may differ from it. These patches fix the
+ bug by calculating the address of program headers from PT_LOADs
+ directly.
+ 
+ Sorry for my latency.
+ 
+ Changes in v4
+ - Reflecting comments from Lukas, add a refactoring commit.
+ 
+ Changes in v3:
+ - Fix a reported bug from kernel test robot.
+ 
+ Changes in v2:
+ - Remove unused load_addr from create_elf_tables.
+ - Improve the commit message.
 
---8Nw9gXbH6ji+XyMM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Akira Kawata (2):
+  fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
+  fs/binfmt_elf: Refactor load_elf_binary function
 
-On Fri, Dec 10, 2021 at 08:54:33AM -0600, Rob Herring wrote:
-> On Tue, Dec 07, 2021 at 10:08:16PM +0100, Jonathan Neusch=C3=A4fer wrote:
-> > A nuvoton,*-gcr node is present in nuvoton-common-npcm7xx.dtsi and will
-> > be added to nuvoton-wpcm450.dtsi. It is necessary for the NPCM7xx and
-> > WPCM450 pinctrl drivers, and may later be used to retrieve SoC model and
-> > version information.
-> >=20
-> > This patch adds a binding to describe this node.
-> >=20
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> >=20
-> > ---
-[...]
-> > +description: |
->=20
-> Don't need '|' if no formatting.
-
-Ok, I'll drop it.
-
-> > +  The Global Control Registers (GCR) are a block of registers in Nuvot=
-on SoCs
-> > +  that expose misc functionality such as chip model and version inform=
-ation or
-> > +  pinmux settings.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - nuvoton,wpcm450-gcr
-> > +          - nuvoton,npcm750-gcr
-> > +      - const: syscon
-> > +      - const: simple-mfd
->=20
-> blank line
-
-I'll add it.
-
-> > +  reg: true
->=20
-> Need to define how many entries:
->=20
-> maxItems: 1
-
-Ok
-
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-
-Ah, oops, I missed that I still had this line, when I added the child
-node to the example.
-
-> Ideally, you should define the child node names, but you can do this:
->=20
-> additionalProperties:
->   type: object
->=20
-> which means anything undefined must be a node.
-
-Ok, makes sense, thanks.
+ fs/binfmt_elf.c | 36 +++++++++++++++++++++---------------
+ 1 file changed, 21 insertions(+), 15 deletions(-)
 
 
-Thanks,
-Jonathan
+base-commit: 4eee8d0b64ecc3231040fa68ba750317ffca5c52
+-- 
+2.34.1
 
---8Nw9gXbH6ji+XyMM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmG2gdwACgkQCDBEmo7z
-X9uJYw/+KUq+yx3n/rhPsNIcTamlF8dDPIAtXBzpieCJZTm8+/nZFH91ntW0u4nR
-5UjQnU7fMDc8LQlHwhr0QDRNyA/na+xiU/L9+MZyxt6bDHoAhGNuAlLieOWpK87l
-AmTUdBbXUHY5COVHA3f86mWf02mSqJAc9Gf8D9T9kQkIpqQ8lPB3nN4sGnAb7gSh
-0cMILvfALzWvYgpiDnmxjnLnFoPHkTdcuEVlyzbAn08GJTTxpG+C5cUbckNpqDI9
-/o94Rj+y+Bdpg+oU8lYpVCTlza0SMjTDfca+Z6rQ8hMVvZNvuqjpU1X7IqpTGF17
-r6gyDlpy6KzP1bbMuxtcJ7iH6ILEJQQhY8JjcljPij42QD8fQ4OYoqNFzufJoQ5/
-0p0gLS9p4LVK2Df0NRK/DTgFw37oVdRGBExmEnSNt3VaCJj8CWz78jI0E2Z9ywXG
-QS8ybWnaBeLZebGst0U5XzjL87mR+4y/pvhyt9ryZv64woeYwOtwdF3pNGGCG5RF
-MNJoM/Mmjkt91/q2564qRwBeZndzoDnKDLtzIKusPyqxSaQ9PaoTeR5tMqRFGTjh
-E18TzVK9z8BzIXCoKHUQgJcyxN7ZBOIwuqbEuTLRqoiiMpNnbr2oxLooOIKJo9mY
-HUza0e+eOZnI4FF3YR5s2sXMKZwr/BdYelI7ytDiHA9Xn5LAcSg=
-=vLrk
------END PGP SIGNATURE-----
-
---8Nw9gXbH6ji+XyMM--

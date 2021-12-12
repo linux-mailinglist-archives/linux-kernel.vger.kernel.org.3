@@ -2,39 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B812A47178D
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CAF471791
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbhLLB0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 20:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbhLLB0s (ORCPT
+        id S232542AbhLLB1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 20:27:00 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58116 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232435AbhLLB0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 20:26:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64740C0617A1
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 17:26:48 -0800 (PST)
+        Sat, 11 Dec 2021 20:26:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DC95B80C6E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:26:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2F07C341CB;
-        Sun, 12 Dec 2021 01:26:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 13293CE0AE0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A22CC341CE;
+        Sun, 12 Dec 2021 01:26:46 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1mwDdV-000kDB-3B;
+        id 1mwDdV-000kDj-9E;
         Sat, 11 Dec 2021 20:26:45 -0500
-Message-ID: <20211212012644.940336536@goodmis.org>
+Message-ID: <20211212012645.119841360@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 11 Dec 2021 20:26:19 -0500
+Date:   Sat, 11 Dec 2021 20:26:20 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Yinan Liu <yinan@linux.alibaba.com>
-Subject: [for-next][PATCH 02/11] script/sorttable: Code style improvements
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [for-next][PATCH 03/11] tracefs: Use d_inode() helper function to get the dentry inode
 References: <20211212012617.690710310@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -42,36 +39,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yinan Liu <yinan@linux.alibaba.com>
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-Modified the code style issue of if() {},
-keep the code style consistent.
+Instead of referencing the inode from a dentry via dentry->d_inode, use
+the helper function d_inode(dentry) instead. This is the considered the
+correct way to access it.
 
-Link: https://lkml.kernel.org/r/20211207151348.54921-3-yinan@linux.alibaba.com
-
-Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
+Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
+Reported: https://lore.kernel.org/all/20211208104454.nhxyvmmn6d2qhpwl@wittgenstein/
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- scripts/sorttable.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/tracefs/inode.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/scripts/sorttable.h b/scripts/sorttable.h
-index a2baa2fefb13..7b9745cf8c70 100644
---- a/scripts/sorttable.h
-+++ b/scripts/sorttable.h
-@@ -364,11 +364,11 @@ static int do_sort(Elf_Ehdr *ehdr,
- 		void *retval = NULL;
- 		/* wait for ORC tables sort done */
- 		rc = pthread_join(orc_sort_thread, &retval);
--		if (rc)
-+		if (rc) {
- 			fprintf(stderr,
- 				"pthread_join failed '%s': %s\n",
- 				strerror(errno), fname);
--		else if (retval) {
-+		} else if (retval) {
- 			rc = -1;
- 			fprintf(stderr,
- 				"failed to sort ORC tables '%s': %s\n",
+diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+index 925a621b432e..9899c6078c95 100644
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -109,12 +109,12 @@ static int tracefs_syscall_rmdir(struct inode *inode, struct dentry *dentry)
+ 	 * also the directory that is being deleted.
+ 	 */
+ 	inode_unlock(inode);
+-	inode_unlock(dentry->d_inode);
++	inode_unlock(d_inode(dentry));
+ 
+ 	ret = tracefs_ops.rmdir(name);
+ 
+ 	inode_lock_nested(inode, I_MUTEX_PARENT);
+-	inode_lock(dentry->d_inode);
++	inode_lock(d_inode(dentry));
+ 
+ 	kfree(name);
+ 
+@@ -212,7 +212,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
+ static int tracefs_apply_options(struct super_block *sb)
+ {
+ 	struct tracefs_fs_info *fsi = sb->s_fs_info;
+-	struct inode *inode = sb->s_root->d_inode;
++	struct inode *inode = d_inode(sb->s_root);
+ 	struct tracefs_mount_opts *opts = &fsi->mount_opts;
+ 
+ 	inode->i_mode &= ~S_IALLUGO;
+@@ -331,18 +331,18 @@ static struct dentry *start_creating(const char *name, struct dentry *parent)
+ 	if (!parent)
+ 		parent = tracefs_mount->mnt_root;
+ 
+-	inode_lock(parent->d_inode);
+-	if (unlikely(IS_DEADDIR(parent->d_inode)))
++	inode_lock(d_inode(parent));
++	if (unlikely(IS_DEADDIR(d_inode(parent))))
+ 		dentry = ERR_PTR(-ENOENT);
+ 	else
+ 		dentry = lookup_one_len(name, parent, strlen(name));
+-	if (!IS_ERR(dentry) && dentry->d_inode) {
++	if (!IS_ERR(dentry) && d_inode(dentry)) {
+ 		dput(dentry);
+ 		dentry = ERR_PTR(-EEXIST);
+ 	}
+ 
+ 	if (IS_ERR(dentry)) {
+-		inode_unlock(parent->d_inode);
++		inode_unlock(d_inode(parent));
+ 		simple_release_fs(&tracefs_mount, &tracefs_mount_count);
+ 	}
+ 
+@@ -351,7 +351,7 @@ static struct dentry *start_creating(const char *name, struct dentry *parent)
+ 
+ static struct dentry *failed_creating(struct dentry *dentry)
+ {
+-	inode_unlock(dentry->d_parent->d_inode);
++	inode_unlock(d_inode(dentry->d_parent));
+ 	dput(dentry);
+ 	simple_release_fs(&tracefs_mount, &tracefs_mount_count);
+ 	return NULL;
+@@ -359,7 +359,7 @@ static struct dentry *failed_creating(struct dentry *dentry)
+ 
+ static struct dentry *end_creating(struct dentry *dentry)
+ {
+-	inode_unlock(dentry->d_parent->d_inode);
++	inode_unlock(d_inode(dentry->d_parent));
+ 	return dentry;
+ }
+ 
+@@ -415,7 +415,7 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
+ 	d_instantiate(dentry, inode);
+-	fsnotify_create(dentry->d_parent->d_inode, dentry);
++	fsnotify_create(d_inode(dentry->d_parent), dentry);
+ 	return end_creating(dentry);
+ }
+ 
+@@ -440,8 +440,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
+ 	d_instantiate(dentry, inode);
+-	inc_nlink(dentry->d_parent->d_inode);
+-	fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
++	inc_nlink(d_inode(dentry->d_parent));
++	fsnotify_mkdir(d_inode(dentry->d_parent), dentry);
+ 	return end_creating(dentry);
+ }
+ 
 -- 
 2.33.0

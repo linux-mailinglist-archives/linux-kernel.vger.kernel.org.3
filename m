@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D365471C33
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D965471C37
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbhLLSVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 13:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbhLLSVJ (ORCPT
+        id S231970AbhLLSXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 13:23:44 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41266
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231307AbhLLSXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 13:21:09 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9285C061751;
-        Sun, 12 Dec 2021 10:21:08 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d24so23681806wra.0;
-        Sun, 12 Dec 2021 10:21:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NX6glLrIhrFAeV+2sLrwAejToH2nkjjgEtF8KiG6Dgc=;
-        b=DW2/UiVaUlSbuzR+l2ag6jTSbeJaDVqab+lSd/dJev63JJM/UwY1cF8OXw/0QS/Mmo
-         Hj82YYUE4HEhH6agr8gJmpSVyjs2fuXsjpBKGtvkigPZ4/PINUu276UKPMqdEClldUnu
-         zmwbXtoRMnmFiYKjtp7hAUw2IbzGjPpI5e7S4XsdOEq7PSFf9jgnTvU0nETOXhlw6anW
-         xzYdnk5OfL3c9ewkVmDAgon3dLRSP6dDX0F+l6E7vsSFBMuLLDrbuV7OqladmVs2vB1c
-         yBVDibJ28I1r7xk3/kYTywrVwkdLmcCl2i3hA1fhvJDXzO/Qm9SMWJ99G68FuBl4bLfK
-         Zxyg==
+        Sun, 12 Dec 2021 13:23:43 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1EA8E3F1D7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 18:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639333422;
+        bh=zsFvDymLAE62cochR5JV+hqkToOtqvgjd65ScGiDZ8Q=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=kNdwRhJvPvuvp1HhVDaWOwUv5W+UeCecVmW4E/A96J7PxyfdA2ktS6pOKp5YqicpB
+         kvLfp7KvegmUNXjZrST0ml05JTIQ7zLzbgxEnlrACb0TFKZTcQPvonYgRisUxmK54V
+         TbVmOXKgLEStLf+2Qmvync6mrDRbWdbbvbhBrT/W/u2QCm/HMElrSMCE98zBpXbmIm
+         sK6gpUjHMsPPVmF2h1Jmex5Kqwr5lXkcETvXXlbCRZ8qEc9dlcUdfPhcAePkyBXbXq
+         5GhDhDfk9S0/qPKf4pT8eJuhFswBfdeH2VI3e+RH7eykWW70VgFrVRbbEv2HBn0ggF
+         ZcI0JEdd25Frg==
+Received: by mail-lf1-f72.google.com with SMTP id d2-20020a0565123d0200b0040370d0d2fbso6465396lfv.23
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:23:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NX6glLrIhrFAeV+2sLrwAejToH2nkjjgEtF8KiG6Dgc=;
-        b=jCjXxyv8St065SUoFQ5JhpxGXiJlndyksImq3Ggq7cKgfSM8yJ/vRcqwp44HChkrV2
-         LLalf1fArE7DqWvLBJzWg1X6LUSq/HoXBuqOKllpIcJg8gvGAiRS/xVtlsiDDb+7C7uI
-         DfucwACiOjtanYGUXCSJt0SyprQBEu6iH+RpOuS+QOB4CjVVpqxw4XOSsiEZdLkAjabh
-         VZ7Ax2ERQMhvkRi5Lrqnm0a46hHqwSbjo1BHt28MY9fS9vZEG3hz/QnVPSMVuOdp1G2a
-         /KK2akZJRNv/DRijt8NLPPXRDCyELPGMiXHNG14RlD+tbRt+4oOevxpHZ4LDfRVP/oR+
-         4Lfw==
-X-Gm-Message-State: AOAM532FDUDllhucumcm2w9DT20isa441C1INshbzFNW8wqaYVElvUI4
-        LcpDJri75ItziYzCWPSnHU0=
-X-Google-Smtp-Source: ABdhPJzFn2ywU0qLuijjPAVSuNhbOAN7Z7ClbfVlW0+gIRMqB2Xv0GSNx1A5QDfhLyqgXs2iHVo/jg==
-X-Received: by 2002:a5d:5147:: with SMTP id u7mr26559316wrt.233.1639333267341;
-        Sun, 12 Dec 2021 10:21:07 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id r62sm4667421wmr.35.2021.12.12.10.21.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 10:21:06 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 2/2] HID: magicmouse: set Magic Trackpad 2021 name
-Date:   Sun, 12 Dec 2021 19:21:00 +0100
-Message-Id: <20211212182100.40968-3-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211212182100.40968-1-jose.exposito89@gmail.com>
-References: <20211212182100.40968-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zsFvDymLAE62cochR5JV+hqkToOtqvgjd65ScGiDZ8Q=;
+        b=Sq4kmlv0HSIy0GUCjPFYxrxJ0cCG15mhEKtGPo6yYCxnyh5brpaIxjt63t40m7yaEx
+         5uYx/ULynMSbF8HdXA2B+5XJ5Koe2+2L6pP8RYsOti4a2pKDkut59RKjIfOuHTLBhkw3
+         nTWVqrOtOy4D4MQ1/7t9FbHGVS4Ped/Z4uZejuBl77yfjPkWZKIZeCjTYTqj+lfhREB2
+         iU2QLHIjUTnwALhbzjhn0v1nL2USc/+JvQapuc6ijsq1TTG+ctQ0fTqeYJOdGPkOh9Qh
+         6nqBpazwJVePfiaedpqlGHDiRID+T0SKNRoOOluHZLA4xy9TP4NJhj0jEYX+XSSfdVuR
+         B0vQ==
+X-Gm-Message-State: AOAM530XrpGeEhX0ndv2853Zo8c+dqlxEZLoPZQlx/qh4M2Yii74sMqF
+        VTE2cZ5cvTNfVc/b5ztQ4HkdT0Xxd9putivLqGfS0oqjEpLVDYdwkQAKJnhk2Wg1MfSZMpaFKvS
+        pUPiewBKOHrTdLAxEe8xENenVXH7FAl1+W5ehp+FNiQ==
+X-Received: by 2002:a19:f241:: with SMTP id d1mr24604059lfk.131.1639333421356;
+        Sun, 12 Dec 2021 10:23:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxdFZTcAiz+yLH3ynk5vBF+dbiNtcpA+ioYNpceWPBWGhHfcQ30v344oKq6PRrfsrAO9LYLCw==
+X-Received: by 2002:a19:f241:: with SMTP id d1mr24604048lfk.131.1639333421187;
+        Sun, 12 Dec 2021 10:23:41 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id k6sm1111431lfu.218.2021.12.12.10.23.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 10:23:40 -0800 (PST)
+Message-ID: <ad05297f-9252-15b3-fc9d-e358052bd983@canonical.com>
+Date:   Sun, 12 Dec 2021 19:23:39 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] i2c: exynos5: Fix getting the optional clock
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212181057.20210-1-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211212181057.20210-1-semen.protsenko@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Apple Magic Trackpad 2021 (3rd generation) has the same product ID
-as the 2nd generation. However, when connected through Bluetooth, the
-version has changed from 0x107 to 0x110.
+On 12/12/2021 19:10, Sam Protsenko wrote:
+> "hsi2c_pclk" clock is optional and may not be present for some SoCs
+> supported by this driver. Nevertheless, in case the clock is provided
+> but some error happens during its getting, that error should be handled
+> properly. Use devm_clk_get_optional() API for that. Also report possible
+> errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+> clock provider is not ready by the time I2C probe function is executed).
+> 
+> Fixes: c93ac09df2a8 ("i2c: exynos5: Add bus clock support")
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>  drivers/i2c/busses/i2c-exynos5.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
 
-The other meaningful change is that the name has dropped the generation
-number and now it is just "Apple Inc. Magic Trackpad", like the first
-generation model.
 
-Set the device name correctly to ensure the same driver settings are
-loaded, whether connected via Bluetooth or USB.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-magicmouse.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
-index e650ade15a7f..2ccded36dafd 100644
---- a/drivers/hid/hid-magicmouse.c
-+++ b/drivers/hid/hid-magicmouse.c
-@@ -51,6 +51,8 @@ static bool report_undeciphered;
- module_param(report_undeciphered, bool, 0644);
- MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state field using a MSC_RAW event");
- 
-+#define TRACKPAD2_2021_BT_VERSION 0x110
-+
- #define TRACKPAD_REPORT_ID 0x28
- #define TRACKPAD2_USB_REPORT_ID 0x02
- #define TRACKPAD2_BT_REPORT_ID 0x31
-@@ -546,10 +548,14 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
- 		 * Set the device name to ensure the same driver settings get
- 		 * loaded, whether connected through bluetooth or USB.
- 		 */
--		if (hdev->vendor == BT_VENDOR_ID_APPLE)
--			input->name = "Apple Inc. Magic Trackpad 2";
--		else /* USB_VENDOR_ID_APPLE */
-+		if (hdev->vendor == BT_VENDOR_ID_APPLE) {
-+			if (input->id.version == TRACKPAD2_2021_BT_VERSION)
-+				input->name = "Apple Inc. Magic Trackpad";
-+			else
-+				input->name = "Apple Inc. Magic Trackpad 2";
-+		} else { /* USB_VENDOR_ID_APPLE */
- 			input->name = hdev->name;
-+		}
- 
- 		__clear_bit(EV_MSC, input->evbit);
- 		__clear_bit(BTN_0, input->keybit);
--- 
-2.25.1
-
+Best regards,
+Krzysztof

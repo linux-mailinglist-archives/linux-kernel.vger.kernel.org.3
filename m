@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF3B471B5B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 16:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB5A471B5C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 16:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbhLLPgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 10:36:54 -0500
-Received: from out162-62-57-64.mail.qq.com ([162.62.57.64]:54671 "EHLO
-        out162-62-57-64.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229468AbhLLPgw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 10:36:52 -0500
-X-Greylist: delayed 12942 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Dec 2021 10:36:51 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639323408;
-        bh=ZoCYAvdIJXISSGluDzuYb73rcqJpbKY8EnluvL4aB2M=;
-        h=From:To:Cc:Subject:Date;
-        b=KfHoJYo/WUBzkUc9hLoqMNKoi2fM9BP93jogNLiocyOsF5u6Qhr4QD+wXmzkmxTu2
-         BF/D5LNFZ+4BXLZn0l8vfx3b3tg0C4uDm14ld0PBx/PTq8Lf7PhI4m27MAOkVRbFFa
-         3nvMssAMEQPwUhNVMuE6GNnD4PqnhtLLfAaQBq3E=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
-        id 92D362B5; Sun, 12 Dec 2021 23:36:45 +0800
-X-QQ-mid: xmsmtpt1639323405tewy6sfmw
-Message-ID: <tencent_D76F400098C9729D38BA28ACC233944AFE09@qq.com>
-X-QQ-XMAILINFO: M3ziZXKDk+iO/aMJEHNWM5YAUuCXF+3E3uYryP62x5isGC1hey5/HrzheEyJxd
-         nvRohTO6XzS9Oi0/2yq9xTooCRiv8Q8xFWBG0RM70muHVwlhGir3AnA1PQW7BF/JkGrkdCPqj4Mu
-         fffCSGW5jfbKq80QlYxd8gRXXyTFXU5BciPxJixC7y5ZjhMwdUVRuNP2J8fLWtNH/7GEDThowvXx
-         v9A98swKgTujvetlaqLj331uiZ9dMP7Slor0TznJ6+wzD8B3NDF/HBpNPjdg7dfQ/c4MU0i2qMu8
-         NWDHQ6sPldl67DlTzgYHUg8bh9tQSA9/8R7aznKGcNYHUp4S2Rr8gCA1d3RjP/Cy8oiaROy13u0O
-         tISdNOa74W3WJBFUqvLWBAG2AoeHuX/F4ct2RfXfvqxZy1vLyDFHvL95nILv2tqQIzihs/E4W/k5
-         YJkP38M86pq6Vh59R9gc/SxbC3gaOoCTcoBTJ2uwwMI9/C6l4EeLXeRjQ6fjRity/6dPdOceASkN
-         mBU5UBlSxY9AoIPAixu01gZM/IldriTS1KyUNSPo5/CjB7dzv0zAx8esoILpV0hKYuWzmzl2FzDT
-         KF7YcLIjs0SZoBqn2WeeSz4PgIEKWDkX0whzJBrIg6seXr8C6TWkeKPljyi6MxPKuiDklXmnIKqe
-         VaHsc2yPx4VJKlSZlote52/+OB3OX9ap15SlbbdTyTQ+9zLi5runCIQHb+4d7IwC/OeIYgpVIf+t
-         Lv/OKESRQObexoFa/l8Mj29vHqBa3k4dv7SvOetMKHtVCHA6cHGQb45ShxJ8i9pqYk1xqLIt8Eb2
-         q6OtRkd27QNdsUW2JmA/5oGkH8BRR7nVKVXwbOvlD7a6a//1Gd1y7RV5sdYwC/qHHusfvkSQGXXN
-         5D/wO0xh1p
-From:   xkernel <xkernel.wang@foxmail.com>
-To:     rostedt@goodmis.org, mingo@redhat.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, xkernel <xkernel.wang@foxmail.com>
-Subject: [PATCH] tracing: check the return value of kstrdup()
-Date:   Sun, 12 Dec 2021 23:36:20 +0800
-X-OQ-MSGID: <20211212153620.2265-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        id S231272AbhLLPhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 10:37:53 -0500
+Received: from foss.arm.com ([217.140.110.172]:33182 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229468AbhLLPhw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 10:37:52 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8FD0106F;
+        Sun, 12 Dec 2021 07:37:51 -0800 (PST)
+Received: from [192.168.0.5] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC6E33F793;
+        Sun, 12 Dec 2021 07:37:48 -0800 (PST)
+Subject: Re: [PATCH] perf stat: Fix NULL vs IS_ERR() checking in check_per_pkg
+From:   German Gomez <german.gomez@arm.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212042325.9751-1-linmq006@gmail.com>
+ <864ad02d-6afe-791c-f742-56582b633482@arm.com>
+Message-ID: <5f4cf208-386e-6a22-5b05-185ed6cdf069@arm.com>
+Date:   Sun, 12 Dec 2021 15:37:40 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <864ad02d-6afe-791c-f742-56582b633482@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kstrdup() returns NULL when some internal memory errors happen, it is
-better to check the return value of it. The code is under Linux-5.15.
 
-Signed-off-by: xkernel <xkernel.wang@foxmail.com>
----
- kernel/trace/trace_boot.c   | 4 ++++
- kernel/trace/trace_uprobe.c | 5 +++++
- 2 files changed, 9 insertions(+)
+On 12/12/2021 14:55, German Gomez wrote:
+> Hi Miaoqian,
+>
+> On 12/12/2021 04:23, Miaoqian Lin wrote:
+>> The hashmap__new() function does not return NULL on errors. It returns
+>> ERR_PTR(-ENOMEM). Using IS_ERR() to check the return value
+>> to fix this.
+>>
+>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>> ---
+>>  tools/perf/util/stat.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+>> index 09ea334586f2..a77052680087 100644
+>> --- a/tools/perf/util/stat.c
+>> +++ b/tools/perf/util/stat.c
+>> @@ -311,8 +311,8 @@ static int check_per_pkg(struct evsel *counter,
+>>  
+>>  	if (!mask) {
+>>  		mask = hashmap__new(pkg_id_hash, pkg_id_equal, NULL);
+>> -		if (!mask)
+>> -			return -ENOMEM;
+>> +		if (IS_ERR(mask))
+>> +			return PTR_ERR(mask);
 
-diff --git a/kernel/trace/trace_boot.c b/kernel/trace/trace_boot.c
-index 8d252f6..0580287 100644
---- a/kernel/trace/trace_boot.c
-+++ b/kernel/trace/trace_boot.c
-@@ -430,6 +430,8 @@ trace_boot_init_histograms(struct trace_event_file *file,
- 		/* All digit started node should be instances. */
- 		if (trace_boot_compose_hist_cmd(node, buf, size) == 0) {
- 			tmp = kstrdup(buf, GFP_KERNEL);
-+			if (!tmp)
-+				return;
- 			if (trigger_process_regex(file, buf) < 0)
- 				pr_err("Failed to apply hist trigger: %s\n", tmp);
- 			kfree(tmp);
-@@ -439,6 +441,8 @@ trace_boot_init_histograms(struct trace_event_file *file,
- 	if (xbc_node_find_subkey(hnode, "keys")) {
- 		if (trace_boot_compose_hist_cmd(hnode, buf, size) == 0) {
- 			tmp = kstrdup(buf, GFP_KERNEL);
-+			if (!tmp)
-+				return;
- 			if (trigger_process_regex(file, buf) < 0)
- 				pr_err("Failed to apply hist trigger: %s\n", tmp);
- 			kfree(tmp);
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 225ce56..173ff0f 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -1618,6 +1618,11 @@ create_local_trace_uprobe(char *name, unsigned long offs,
- 	tu->path = path;
- 	tu->ref_ctr_offset = ref_ctr_offset;
- 	tu->filename = kstrdup(name, GFP_KERNEL);
-+	if (!tu->filename) {
-+		ret = -ENOMEM;
-+		goto error;
-+	}
-+
- 	init_trace_event_call(tu);
- 
- 	ptype = is_ret_probe(tu) ? PROBE_PRINT_RETURN : PROBE_PRINT_NORMAL;
--- 
+Also (sorry, I haven't tried/tested the patch yet) is this return
+necessary? To me it seems it's still ok to keep the "return -ENOMEM".
+
+> I see that callers to "ids__new" are also missing these checks. Did you
+> consider patching those also?
+>
+> Thanks,
+> German
+>
+>>  
+>>  		counter->per_pkg_mask = mask;
+>>  	}

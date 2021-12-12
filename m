@@ -2,206 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BED7471951
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 09:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E654471953
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 09:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbhLLIfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 03:35:06 -0500
-Received: from mga06.intel.com ([134.134.136.31]:19221 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229593AbhLLIfF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 03:35:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639298105; x=1670834105;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OcbWVGtnTuDbOIj1xkHdckwWCRQwQ+MeEbcTE4X9ato=;
-  b=fTl7Ymuy6O8vJwcgN07gKnIT3inVxv3/059kMFZ6seovrqWNPtJaTX/Y
-   Wkbqu+i92oAcKKSgVhKJdGGp11YNquxqOpP+8OTVdOWShSAxYVLAJape1
-   EftQ9JCZT5aybTXd09dxXxHLR1prrdZR0fAUzT1K5ZmX/7ij+QkGZy8Or
-   pDxCKId+q1Fh4YTD7wBD4Skf1H1jQWOr1ZekP/3KqnUZjyzQMh0k316t2
-   Yr535q+N9pW3l57aGnyvvchG9rNj5VfdWd7gtLtRVLXI+3xAgXas9RFp5
-   /yX/9tjhZvGW0Iz9p4fVbitfeSxci6U5vByxWBnsz5agelXwPMZdepkjP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="299372156"
-X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
-   d="scan'208";a="299372156"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 00:35:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
-   d="scan'208";a="504516231"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 12 Dec 2021 00:35:03 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwKJy-0005WY-L0; Sun, 12 Dec 2021 08:35:02 +0000
-Date:   Sun, 12 Dec 2021 16:34:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:60:27: sparse:
- sparse: incorrect type in assignment (different base types)
-Message-ID: <202112121654.cCAtAuqE-lkp@intel.com>
+        id S229887AbhLLIkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 03:40:20 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:50937 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229593AbhLLIkT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 03:40:19 -0500
+Received: by mail-il1-f200.google.com with SMTP id i3-20020a056e021b0300b0029eceae8532so13243961ilv.17
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 00:40:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=+fP7pu5dpdXTe1CRYltw1vlONCE28MLIQNF6LFml/2Y=;
+        b=KRoDDBB0R4UJRQHl9Gz7XhyQql/yQkW/dl9wg4Lz7CdyOTtKou0yuVBhyFMG1fvsxf
+         1SQme3EZ6oL9UYlr6D7jXioCQyHHVJfww4XTEv73fNaX+aR+hLopid3YaXi7RCq7MWs9
+         21iYQGGMFZ4MR4RAeysS1JwC9YWajNFP8+krasUyAi6RVIwGzfgD5TYjh6yL0/1NXieS
+         sNwBjD3QgNR4X7g495JpcPSuiPlMtsdQhoih4SGZZQT0k/V5XslIX+aPpgPaa11xPnW+
+         4bQmU9NnFiQ+0vG/oJu4HaQjbJ8wwnHtrrZgqWs4oa7mXq+YfUkXw37cDsG/3wLAp94L
+         QPig==
+X-Gm-Message-State: AOAM531z44T6/Du2SLxWPsM/9vMIAYrcc3050rKHGiPt5kargXNuV7yp
+        vLP/2eBVxuqmhwx8DeCCc+LJAMuKaYqLZpY7E/DaaxtkHTHf
+X-Google-Smtp-Source: ABdhPJzqOR+4MNKjTcQnNIf1/86Ieop4B3cAMpT7jFIIk0ZcZWgmIgNT5RQcZ8JcDFioIr//U8lZtwDKdRvK+Lj1qeimTeuuqseM
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6e02:1d88:: with SMTP id h8mr30716815ila.138.1639298419233;
+ Sun, 12 Dec 2021 00:40:19 -0800 (PST)
+Date:   Sun, 12 Dec 2021 00:40:19 -0800
+In-Reply-To: <00000000000050185105d2ac05d2@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f5973605d2eee776@google.com>
+Subject: Re: [syzbot] INFO: task can't die in reclaim_throttle
+From:   syzbot <syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mgorman@techsingularity.net,
+        syzkaller-bugs@googlegroups.com, vbabka@suse.cz,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a763d5a5abd65797aec3dd1bf01fe2ccbec32967
-commit: ba37b7caf1ed2395cc84d8f823ff933975f1f789 net: ethernet: mtk_eth_soc: add support for initializing the PPE
-date:   9 months ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211212/202112121654.cCAtAuqE-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba37b7caf1ed2395cc84d8f823ff933975f1f789
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ba37b7caf1ed2395cc84d8f823ff933975f1f789
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/ drivers/interconnect/qcom/ drivers/net/ethernet/mediatek/ drivers/net/vmxnet3/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/scsi/bnx2fc/ drivers/scsi/lpfc/ drivers/staging/ fs/proc/
+syzbot has found a reproducer for the following issue on:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+HEAD commit:    ea922272cbe5 Add linux-next specific files for 20211210
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=130f5f75b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c1359a19d2230002
+dashboard link: https://syzkaller.appspot.com/bug?extid=dcea9eda277e1090b35f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f4a551b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1613df3ab00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dcea9eda277e1090b35f@syzkaller.appspotmail.com
+
+INFO: task syz-executor786:3696 can't die for more than 143 seconds.
+task:syz-executor786 state:D stack:28344 pid: 3696 ppid:  3669 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:4986 [inline]
+ __schedule+0xab2/0x4d90 kernel/sched/core.c:6296
+ schedule+0xd2/0x260 kernel/sched/core.c:6369
+ schedule_timeout+0x14a/0x2a0 kernel/time/timer.c:1881
+ reclaim_throttle+0x1ce/0x5e0 mm/vmscan.c:1072
+ consider_reclaim_throttle mm/vmscan.c:3399 [inline]
+ shrink_zones mm/vmscan.c:3486 [inline]
+ do_try_to_free_pages+0x7cd/0x1620 mm/vmscan.c:3541
+ try_to_free_mem_cgroup_pages+0x2cd/0x840 mm/vmscan.c:3855
+ reclaim_high.constprop.0+0x190/0x250 mm/memcontrol.c:2299
+ mem_cgroup_handle_over_high+0x18c/0x540 mm/memcontrol.c:2483
+ tracehook_notify_resume include/linux/tracehook.h:198 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x1ab/0x290 kernel/entry/common.c:207
+ irqentry_exit_to_user_mode+0x5/0x40 kernel/entry/common.c:313
+ exc_page_fault+0xc6/0x180 arch/x86/mm/fault.c:1543
+ asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:568
+RIP: 0033:0x7fd40489c3ee
+RSP: 002b:00007ffe50e3a520 EFLAGS: 00010202
+RAX: 00007fd4049253d0 RBX: 00007fd40491e508 RCX: 00007fd40489c3cb
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+RBP: 0000000000000001 R08: 0000000000000000 R09: 00005555571d1300
+R10: 00005555571d15d0 R11: 0000000000000246 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000000 R15: 00007ffe50e3a5a0
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/27:
+ #0: ffffffff8bb818a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6460
+6 locks held by kworker/u4:2/50:
+ #0: ffff8880b9d39c98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:489
+ #1: ffff8880b9d27988 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x176/0x4e0 kernel/sched/psi.c:882
+ #2: ffff8880b9d284d8 (&base->lock){-.-.}-{2:2}, at: lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:946
+ #3: ffffffff90799400 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_object_activate+0x12e/0x3e0 lib/debugobjects.c:661
+ #4: ffffffff8ba4a548 (text_mutex){+.+.}-{3:3}, at: arch_jump_label_transform_apply+0xe/0x20 arch/x86/kernel/jump_label.c:145
+ #5: ffff888010dbb138 (ptlock_ptr(page)#2){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:354 [inline]
+ #5: ffff888010dbb138 (ptlock_ptr(page)#2){+.+.}-{2:2}, at: __get_locked_pte+0x2b6/0x4d0 mm/memory.c:1722
+1 lock held by syslogd/2955:
+ #0: ffff8880b9d39c98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:489
+2 locks held by getty/3289:
+ #0: ffff88814a873098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
+ #1: ffffc90002b962e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2077
+3 locks held by syz-executor786/3925:
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
+ #1: ffff88801dc3c888 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x287/0x500 fs/kernfs/file.c:287
+ #2: ffff888070e3c3a8 (kn->active#167){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2ab/0x500 fs/kernfs/file.c:288
+3 locks held by syz-executor786/3928:
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
+ #1: ffff88801dc3cc88 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x287/0x500 fs/kernfs/file.c:287
+ #2: ffff888070e3c3a8 (kn->active#167){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2ab/0x500 fs/kernfs/file.c:288
+3 locks held by syz-executor786/3931:
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
+ #1: ffff888077934488 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x287/0x500 fs/kernfs/file.c:287
+ #2: ffff888070e3c3a8 (kn->active#167){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2ab/0x500 fs/kernfs/file.c:288
+3 locks held by syz-executor786/3933:
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
+ #1: ffff88801dc3d488 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x287/0x500 fs/kernfs/file.c:287
+ #2: ffff888070e3c3a8 (kn->active#167){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2ab/0x500 fs/kernfs/file.c:288
+3 locks held by syz-executor786/3935:
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ #0: ffff88807fb82460 (sb_writers#10){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
+ #1: ffff88801dc3d888 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x287/0x500 fs/kernfs/file.c:287
+ #2: ffff888070e3c3a8 (kn->active#167){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2ab/0x500 fs/kernfs/file.c:288
+
+=============================================
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:60:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int @@     got restricted __be32 [usertype] @@
-   drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:60:27: sparse:     expected unsigned int
-   drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:60:27: sparse:     got restricted __be32 [usertype]
->> drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c:158:46: sparse: sparse: cast to restricted __be16
-
-vim +60 drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
-
-    47	
-    48	static void
-    49	mtk_print_addr(struct seq_file *m, u32 *addr, bool ipv6)
-    50	{
-    51		u32 n_addr[4];
-    52		int i;
-    53	
-    54		if (!ipv6) {
-    55			seq_printf(m, "%pI4h", addr);
-    56			return;
-    57		}
-    58	
-    59		for (i = 0; i < ARRAY_SIZE(n_addr); i++)
-  > 60			n_addr[i] = htonl(addr[i]);
-    61		seq_printf(m, "%pI6", n_addr);
-    62	}
-    63	
-    64	static void
-    65	mtk_print_addr_info(struct seq_file *m, struct mtk_flow_addr_info *ai)
-    66	{
-    67		mtk_print_addr(m, ai->src, ai->ipv6);
-    68		if (ai->src_port)
-    69			seq_printf(m, ":%d", *ai->src_port);
-    70		seq_printf(m, "->");
-    71		mtk_print_addr(m, ai->dest, ai->ipv6);
-    72		if (ai->dest_port)
-    73			seq_printf(m, ":%d", *ai->dest_port);
-    74	}
-    75	
-    76	static int
-    77	mtk_ppe_debugfs_foe_show(struct seq_file *m, void *private, bool bind)
-    78	{
-    79		struct mtk_ppe *ppe = m->private;
-    80		int i, count;
-    81	
-    82		for (i = 0, count = 0; i < MTK_PPE_ENTRIES; i++) {
-    83			struct mtk_foe_entry *entry = &ppe->foe_table[i];
-    84			struct mtk_foe_mac_info *l2;
-    85			struct mtk_flow_addr_info ai = {};
-    86			unsigned char h_source[ETH_ALEN];
-    87			unsigned char h_dest[ETH_ALEN];
-    88			int type, state;
-    89			u32 ib2;
-    90	
-    91	
-    92			state = FIELD_GET(MTK_FOE_IB1_STATE, entry->ib1);
-    93			if (!state)
-    94				continue;
-    95	
-    96			if (bind && state != MTK_FOE_STATE_BIND)
-    97				continue;
-    98	
-    99			type = FIELD_GET(MTK_FOE_IB1_PACKET_TYPE, entry->ib1);
-   100			seq_printf(m, "%05x %s %7s", i,
-   101				   mtk_foe_entry_state_str(state),
-   102				   mtk_foe_pkt_type_str(type));
-   103	
-   104			switch (type) {
-   105			case MTK_PPE_PKT_TYPE_IPV4_HNAPT:
-   106			case MTK_PPE_PKT_TYPE_IPV4_DSLITE:
-   107				ai.src_port = &entry->ipv4.orig.src_port;
-   108				ai.dest_port = &entry->ipv4.orig.dest_port;
-   109				fallthrough;
-   110			case MTK_PPE_PKT_TYPE_IPV4_ROUTE:
-   111				ai.src = &entry->ipv4.orig.src_ip;
-   112				ai.dest = &entry->ipv4.orig.dest_ip;
-   113				break;
-   114			case MTK_PPE_PKT_TYPE_IPV6_ROUTE_5T:
-   115				ai.src_port = &entry->ipv6.src_port;
-   116				ai.dest_port = &entry->ipv6.dest_port;
-   117				fallthrough;
-   118			case MTK_PPE_PKT_TYPE_IPV6_ROUTE_3T:
-   119			case MTK_PPE_PKT_TYPE_IPV6_6RD:
-   120				ai.src = &entry->ipv6.src_ip;
-   121				ai.dest = &entry->ipv6.dest_ip;
-   122				ai.ipv6 = true;
-   123				break;
-   124			}
-   125	
-   126			seq_printf(m, " orig=");
-   127			mtk_print_addr_info(m, &ai);
-   128	
-   129			switch (type) {
-   130			case MTK_PPE_PKT_TYPE_IPV4_HNAPT:
-   131			case MTK_PPE_PKT_TYPE_IPV4_DSLITE:
-   132				ai.src_port = &entry->ipv4.new.src_port;
-   133				ai.dest_port = &entry->ipv4.new.dest_port;
-   134				fallthrough;
-   135			case MTK_PPE_PKT_TYPE_IPV4_ROUTE:
-   136				ai.src = &entry->ipv4.new.src_ip;
-   137				ai.dest = &entry->ipv4.new.dest_ip;
-   138				seq_printf(m, " new=");
-   139				mtk_print_addr_info(m, &ai);
-   140				break;
-   141			}
-   142	
-   143			if (type >= MTK_PPE_PKT_TYPE_IPV4_DSLITE) {
-   144				l2 = &entry->ipv6.l2;
-   145				ib2 = entry->ipv6.ib2;
-   146			} else {
-   147				l2 = &entry->ipv4.l2;
-   148				ib2 = entry->ipv4.ib2;
-   149			}
-   150	
-   151			*((__be32 *)h_source) = htonl(l2->src_mac_hi);
-   152			*((__be16 *)&h_source[4]) = htons(l2->src_mac_lo);
-   153			*((__be32 *)h_dest) = htonl(l2->dest_mac_hi);
-   154			*((__be16 *)&h_dest[4]) = htons(l2->dest_mac_lo);
-   155	
-   156			seq_printf(m, " eth=%pM->%pM etype=%04x"
-   157				      " vlan=%d,%d ib1=%08x ib2=%08x\n",
- > 158				   h_source, h_dest, ntohs(l2->etype),
-   159				   l2->vlan1, l2->vlan2, entry->ib1, ib2);
-   160		}
-   161	
-   162		return 0;
-   163	}
-   164	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

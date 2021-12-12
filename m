@@ -2,127 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7926447176F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 01:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 549C7471782
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbhLLAi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 19:38:58 -0500
-Received: from mga05.intel.com ([192.55.52.43]:8360 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229622AbhLLAi5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 19:38:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639269537; x=1670805537;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o6eoygNvX23HVmicqdMj/32v2wVux1DNKXPtZNPQ+JU=;
-  b=mJxK78xrq/LN/1V4G5hcyWMlFf024rZSavFq9C4ijyxiSafCODhJf7+S
-   f4St/q9SrS6qhdrC9DUINFAkfKZDMENHsPSRBsli1VvsqrXPtW4oqRsWP
-   hsWp3BSSyvS3uNqXdFrde3NyM7OR+02FW+3I9+2CDNrirNbjHe9DbULNr
-   +aNij5kBx4HXDr1zerQjm8XHx8Kppq5eKVfI7OMGn/lmSRstsuvIttcRZ
-   W8GxS2lcQBsRNff7e48UX896M9Afh9i9PZQJmuzPahqtOSz7PJNmmLePJ
-   /TKarORKTG5XTM7v3nRDI9bFQA/A7Sjjgy+rjCE56rQsDLF6N16NHufyi
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="324832311"
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="324832311"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 16:38:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="504434967"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 11 Dec 2021 16:38:55 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwCtD-0005Dx-00; Sun, 12 Dec 2021 00:38:55 +0000
-Date:   Sun, 12 Dec 2021 08:38:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain
- integer as NULL pointer
-Message-ID: <202112120838.OtQsRmlP-lkp@intel.com>
+        id S232376AbhLLBSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 20:18:46 -0500
+Received: from o1.ptr2625.egauge.net ([167.89.112.53]:16368 "EHLO
+        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhLLBSp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 20:18:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type;
+        s=sgd; bh=n0HMddjGrKnpVS5OFQD8ByG36/ADhDg6KTCm0PmFbCs=;
+        b=jS7VhUJptqrjQkc02N/NL+xGFyWX+1Yf+uJAuvP/OZzmzx+lFyqu2t9FZvQcg6fzxvZh
+        NpbrC3Y9FxCvXuRq5WJ6VHq/FkpOvpDOFlG3VSvhE8yWBXYzCS3T813ZewzOTwJNHSeqez
+        y++AYxQtJfgBjHnouFopXULP/1JnFG2AA9wrDMgKW82Q69Cp1CXrVmG7n0JZ/7pRo2bpsz
+        IQHVzZw1ZZogzP02aSU63QfCXDufLIEzMLbdhTvr0oTFI0vbEH52ZHx5DVG+iolRbFvdgL
+        L7KU4NqQDq5Ry2rGyGJcnVlPUQmKRF5ZIod+2YpicCSolV8wcjjxjNIs13V7Y9Lw==
+Received: by filterdrecv-75ff7b5ffb-8jc8g with SMTP id filterdrecv-75ff7b5ffb-8jc8g-1-61B54DF4-10
+        2021-12-12 01:18:44.284698431 +0000 UTC m=+8737071.970174269
+Received: from pearl.egauge.net (unknown)
+        by ismtpd0065p1las1.sendgrid.net (SG) with ESMTP
+        id xfk2N9YfTpi5F9GS2LxzDg
+        Sun, 12 Dec 2021 01:18:44.149 +0000 (UTC)
+Received: by pearl.egauge.net (Postfix, from userid 1000)
+        id EB8707003AA; Sat, 11 Dec 2021 18:18:40 -0700 (MST)
+From:   David Mosberger-Tang <davidm@egauge.net>
+Subject: [PATCH] wilc1000: Allow setting power_save before driver is
+ initialized
+Date:   Sun, 12 Dec 2021 01:18:44 +0000 (UTC)
+Message-Id: <20211212011835.3719001-1-davidm@egauge.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
+ =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvLrlz+ZJBGlhg9mbn?=
+ =?us-ascii?Q?G0wJvhbY2=2FMh8gXkndExOud2LyxMko2i1zJTFmG?=
+ =?us-ascii?Q?t7jbdHjreJO5R6qSOJ1WF6yxZnYn7O23AEEAtdx?=
+ =?us-ascii?Q?AdiFlsxDz8O4cxCReNGH2fW=2Fp7YMpOaRskAc89Q?=
+ =?us-ascii?Q?BKbnZp5dG5HNK9LEIjusXf9iyEXO+=2FqSSLLzlMu?=
+ =?us-ascii?Q?uF+8MRxDqgbRBh24AR4mQ=3D=3D?=
+To:     Ajay Singh <ajay.kathat@microchip.com>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Mosberger-Tang <davidm@egauge.net>
+X-Entity-ID: Xg4JGAcGrJFIz2kDG9eoaQ==
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bbdff6d583be718935b613ab2a966cddaadf661f
-commit: 4e34614636b31747b190488240a95647c227021f irqchip/sun6i-r: Use a stacked irqchip driver
-date:   11 months ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211212/202112120838.OtQsRmlP-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e34614636b31747b190488240a95647c227021f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4e34614636b31747b190488240a95647c227021f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-socfpga/ drivers/dma/ drivers/edac/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/ drivers/interconnect/qcom/ drivers/irqchip/ drivers/net/ethernet/mediatek/ drivers/net/vmxnet3/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/scsi/bnx2fc/ drivers/scsi/lpfc/ drivers/staging/ fs/proc/
+Without this patch, trying to use:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+	iw dev wlan0 set power_save on
 
+before the driver is initialized results in an EIO error.  It is more
+useful to simply remember the desired setting and establish it when
+the driver is initialized.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain integer as NULL pointer
-
-vim +215 drivers/irqchip/irq-sun6i-r.c
-
-   184	
-   185	static int sun6i_r_intc_domain_alloc(struct irq_domain *domain,
-   186					     unsigned int virq,
-   187					     unsigned int nr_irqs, void *arg)
-   188	{
-   189		struct irq_fwspec *fwspec = arg;
-   190		struct irq_fwspec gic_fwspec;
-   191		unsigned long hwirq;
-   192		unsigned int type;
-   193		int i, ret;
-   194	
-   195		ret = sun6i_r_intc_domain_translate(domain, fwspec, &hwirq, &type);
-   196		if (ret)
-   197			return ret;
-   198		if (hwirq + nr_irqs > SUN6I_NR_MUX_BITS)
-   199			return -EINVAL;
-   200	
-   201		/* Construct a GIC-compatible fwspec from this fwspec. */
-   202		gic_fwspec = (struct irq_fwspec) {
-   203			.fwnode      = domain->parent->fwnode,
-   204			.param_count = 3,
-   205			.param       = { GIC_SPI, hwirq, type },
-   206		};
-   207	
-   208		ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &gic_fwspec);
-   209		if (ret)
-   210			return ret;
-   211	
-   212		for (i = 0; i < nr_irqs; ++i, ++hwirq, ++virq) {
-   213			if (hwirq == nmi_hwirq) {
-   214				irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
- > 215							      &sun6i_r_intc_nmi_chip, 0);
-   216				irq_set_handler(virq, handle_fasteoi_ack_irq);
-   217			} else {
-   218				/* Only the NMI is currently supported. */
-   219				return -EINVAL;
-   220			}
-   221		}
-   222	
-   223		return 0;
-   224	}
-   225	
-
+Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/wireless/microchip/wilc1000/cfg80211.c | 3 ---
+ drivers/net/wireless/microchip/wilc1000/hif.c      | 8 ++++++++
+ drivers/net/wireless/microchip/wilc1000/netdev.c   | 3 ++-
+ 3 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/wireless/microchip/wilc1000/cfg80211.c b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
+index dc4bfe7be378..01d607fa2ded 100644
+--- a/drivers/net/wireless/microchip/wilc1000/cfg80211.c
++++ b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
+@@ -1280,9 +1280,6 @@ static int set_power_mgmt(struct wiphy *wiphy, struct net_device *dev,
+ 	struct wilc_vif *vif = netdev_priv(dev);
+ 	struct wilc_priv *priv = &vif->priv;
+ 
+-	if (!priv->hif_drv)
+-		return -EIO;
+-
+ 	wilc_set_power_mgmt(vif, enabled, timeout);
+ 
+ 	return 0;
+diff --git a/drivers/net/wireless/microchip/wilc1000/hif.c b/drivers/net/wireless/microchip/wilc1000/hif.c
+index 29a42bc47017..66fd77c816f7 100644
+--- a/drivers/net/wireless/microchip/wilc1000/hif.c
++++ b/drivers/net/wireless/microchip/wilc1000/hif.c
+@@ -1934,6 +1934,14 @@ int wilc_set_power_mgmt(struct wilc_vif *vif, bool enabled, u32 timeout)
+ 	int result;
+ 	s8 power_mode;
+ 
++	if (!wilc->initialized) {
++		/* Simply remember the desired setting for now; will be
++		 * established by wilc_init_fw_config().
++		 */
++		wilc->power_save_mode = enabled;
++		return 0;
++	}
++
+ 	if (enabled)
+ 		power_mode = WILC_FW_MIN_FAST_PS;
+ 	else
+diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.c b/drivers/net/wireless/microchip/wilc1000/netdev.c
+index 4712cd7dff9f..082bed26a981 100644
+--- a/drivers/net/wireless/microchip/wilc1000/netdev.c
++++ b/drivers/net/wireless/microchip/wilc1000/netdev.c
+@@ -244,6 +244,7 @@ static int wilc1000_firmware_download(struct net_device *dev)
+ static int wilc_init_fw_config(struct net_device *dev, struct wilc_vif *vif)
+ {
+ 	struct wilc_priv *priv = &vif->priv;
++	struct wilc *wilc = vif->wilc;
+ 	struct host_if_drv *hif_drv;
+ 	u8 b;
+ 	u16 hw;
+@@ -305,7 +306,7 @@ static int wilc_init_fw_config(struct net_device *dev, struct wilc_vif *vif)
+ 	if (!wilc_wlan_cfg_set(vif, 0, WID_QOS_ENABLE, &b, 1, 0, 0))
+ 		goto fail;
+ 
+-	b = WILC_FW_NO_POWERSAVE;
++	b = wilc->power_save_mode ? WILC_FW_MIN_FAST_PS : WILC_FW_NO_POWERSAVE;
+ 	if (!wilc_wlan_cfg_set(vif, 0, WID_POWER_MANAGEMENT, &b, 1, 0, 0))
+ 		goto fail;
+ 
+-- 
+2.25.1
+

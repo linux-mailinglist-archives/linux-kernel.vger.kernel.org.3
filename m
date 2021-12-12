@@ -2,95 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46F0471B00
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 15:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C9F471B02
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 15:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbhLLOx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 09:53:56 -0500
-Received: from out203-205-221-236.mail.qq.com ([203.205.221.236]:60293 "EHLO
-        out203-205-221-236.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229633AbhLLOxy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 09:53:54 -0500
-X-Greylist: delayed 74092 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Dec 2021 09:53:54 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639320832;
-        bh=iYZdxcxe9VY+yNUM+YHAJte4KYDTh4ZgWycVEiQ2c6Y=;
-        h=From:To:Cc:Subject:Date;
-        b=vhx1GsisJSjQN72RtyleiCLrVi63xIy/KCtse3lkQDGR1Fo6xWXQqNM0A54fcCJFV
-         Wow19SxSeYDmnD0V4WspyChZFpEH2RCV2eMoubaS0JIo1cj3OQxGoZTdHOBMAFQwii
-         bJANmM1B+DfOwbbRHlRHznMzpCi3NJ9zTdTiPkKA=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id D719A2F8; Sun, 12 Dec 2021 22:53:49 +0800
-X-QQ-mid: xmsmtpt1639320829tbpueg3ia
-Message-ID: <tencent_CE9983800222FC46C9E9BF12C492592F9705@qq.com>
-X-QQ-XMAILINFO: NojR6Ao/DkED+5UYiYGfEf03/afmb+7dfQ6nVybJfhhfOJI6vJB51p0g80gJZp
-         D1b/+V6Id3tZ18RQUY1B8LEMoB2NOsZeuIHD5v7eiwALzLngSRzE080SJX+LO6SWyJNoeba0goTh
-         3xCaItZdN1ejAvOxYScD3XOF3XyRw8rhRnVoYpUr3HMj/9tdAZcGwuPU76QP+eP60kkIFh87+c+a
-         9ghfIqhNZ1v3Y2+fx9rAklTFK3W8gSkS6Z1XhsX0Gi6MWdbiSavixEVDe6LqEf44lJJQdXzujyBH
-         ZEj4meQ8aYuUzSssMvYqdcXLrEiZPnMRlamYwmFKqt6ggoZIgOUVa6pF5sWtj/jjQQK2NobfxLPd
-         PG6Lb45WvP1I39UaZe8iJu9RB2R3ZJGtuGg/rGS8MlLQfS87OOGIs/71yB6wsclk5OuK4BNkugrH
-         bl3XGbDGZPxoNyvOe5vGeRi9yvZQ7G3xf0Gval97ePDHoGPvA+EcWr0NxKtHLRlwDufFCH7SzzAZ
-         TfqqaF8g3IRS8wZ+M8aoNEIUDOwPwjpq/NvckttHpamXNvMGkHcNQBQewKKWiQguV1OvPvGa8yPU
-         LSt9XYHBfvkG1Z1dJb93RT0tcD+hX32xGsmmqg1ygCsPfUtmo/63+yXPcZ/lR0b9LzFS3wDUwA/d
-         kqo5gqN1KQK9cfjVIGWpIUnvUd/1mIro/13rA4jDabVEtfoYVkEUAe8Kqo8ZrZ3x9Qy0nYYP/Bwm
-         9S2c0m67vxHE2XlaWwJyUn0BVuqA45z/JKNzh8AX3IGi4n5v3miQ/pIvJLuvQzHc2KF6kEX65u2L
-         jixKDonjmzxPZfPf0tDEWo8e8fqrdnmFPP//zBxRh2hJegOWcWYatz0VbENFiguyfl57w2ixdQ7k
-         7AS38UpDNboNQg2tUEJr8=
-From:   xkernel <xkernel.wang@foxmail.com>
-To:     crope@iki.fi, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xkernel <xkernel.wang@foxmail.com>
-Subject: [PATCH] media: usb: dvb-usb-v2: check the return value of kstrdup()
-Date:   Sun, 12 Dec 2021 22:52:24 +0800
-X-OQ-MSGID: <20211212145224.2056-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        id S230266AbhLLOze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 09:55:34 -0500
+Received: from foss.arm.com ([217.140.110.172]:32992 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229633AbhLLOze (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 09:55:34 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E3EC106F;
+        Sun, 12 Dec 2021 06:55:33 -0800 (PST)
+Received: from [192.168.0.5] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BE8B3F793;
+        Sun, 12 Dec 2021 06:55:30 -0800 (PST)
+Subject: Re: [PATCH] perf stat: Fix NULL vs IS_ERR() checking in check_per_pkg
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212042325.9751-1-linmq006@gmail.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <864ad02d-6afe-791c-f742-56582b633482@arm.com>
+Date:   Sun, 12 Dec 2021 14:55:21 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211212042325.9751-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kstrdup() returns NULL if some internal memory errors happen, it is
-better to check the return value of it. Since the return type of
-dvb_usbv2_disconnect() is void, so only raise the error info.
+Hi Miaoqian,
 
-Signed-off-by: xkernel <xkernel.wang@foxmail.com>
----
- drivers/media/usb/dvb-usb-v2/dvb_usb_core.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+On 12/12/2021 04:23, Miaoqian Lin wrote:
+> The hashmap__new() function does not return NULL on errors. It returns
+> ERR_PTR(-ENOMEM). Using IS_ERR() to check the return value
+> to fix this.
+>
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  tools/perf/util/stat.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+> index 09ea334586f2..a77052680087 100644
+> --- a/tools/perf/util/stat.c
+> +++ b/tools/perf/util/stat.c
+> @@ -311,8 +311,8 @@ static int check_per_pkg(struct evsel *counter,
+>  
+>  	if (!mask) {
+>  		mask = hashmap__new(pkg_id_hash, pkg_id_equal, NULL);
+> -		if (!mask)
+> -			return -ENOMEM;
+> +		if (IS_ERR(mask))
+> +			return PTR_ERR(mask);
 
-diff --git a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
-index f1c79f3..a43a310 100644
---- a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
-+++ b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
-@@ -1009,6 +1009,9 @@ void dvb_usbv2_disconnect(struct usb_interface *intf)
- 	const char *devname = kstrdup(dev_name(&d->udev->dev), GFP_KERNEL);
- 	const char *drvname = d->name;
- 
-+	if (!devname)
-+		dev_err(&d->udev->dev, "%s: kstrdup() failed\n", KBUILD_MODNAME);
-+
- 	dev_dbg(&d->udev->dev, "%s: bInterfaceNumber=%d\n", __func__,
- 			intf->cur_altsetting->desc.bInterfaceNumber);
- 
-@@ -1023,9 +1026,14 @@ void dvb_usbv2_disconnect(struct usb_interface *intf)
- 	kfree(d->priv);
- 	kfree(d);
- 
--	pr_info("%s: '%s:%s' successfully deinitialized and disconnected\n",
--		KBUILD_MODNAME, drvname, devname);
--	kfree(devname);
-+	if (devname) {
-+		pr_info("%s: '%s:%s' successfully deinitialized and disconnected\n",
-+			KBUILD_MODNAME, drvname, devname);
-+		kfree(devname);
-+	} else {
-+		pr_info("%s: '%s:UNKNOWN' successfully deinitialized and disconnected\n",
-+			KBUILD_MODNAME, drvname);
-+	}
- }
- EXPORT_SYMBOL(dvb_usbv2_disconnect);
- 
--- 
+I see that callers to "ids__new" are also missing these checks. Did you
+consider patching those also?
+
+Thanks,
+German
+
+>  
+>  		counter->per_pkg_mask = mask;
+>  	}

@@ -2,169 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6305471850
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 06:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFDF471852
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 06:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbhLLEzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 23:55:01 -0500
-Received: from mga18.intel.com ([134.134.136.126]:46339 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232874AbhLLEzB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 23:55:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639284901; x=1670820901;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rKdLQcRLeweq4RNmxCGLUmARw2Zi10GGuj7AjazwTMM=;
-  b=PL9K2PQnGzWsIoMmhEUV8CrYi0ZiOZwgwtDpdhDBcAJJeCANJZaIvovF
-   ygf6u2XxMUoY0gncw5Yyffmx4zRXXTnS6asi9yeZGV8HLwtOxF2r/RUrm
-   4LhsiBudNDgfWMr+OpIUN71AOHlP/OvcFrnFhNs9o+GiMPiWiO0pXiKjJ
-   bV4P8fxacldONeDseFhpDxVe+opaSan3zwdEz+E+hT/YQ/Eu+H7Vww0HH
-   LZlotI5x1qHUarozNaQ4orVA0a26SD8v6cZMHa8Z6BQ3a9qui7kCsD/hD
-   aR8EpkL/SnzZGwxl637M/XE3/GRlrCKa+51NnVvXWeb6YZXvUFfOMPGKd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="225441431"
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="225441431"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 20:55:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="681237912"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Dec 2021 20:54:59 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwGt0-0005Pv-QH; Sun, 12 Dec 2021 04:54:58 +0000
-Date:   Sun, 12 Dec 2021 12:54:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: arch/arm/mach-socfpga/pm.c:75:25: sparse: sparse: incorrect type in
- argument 1 (different address spaces)
-Message-ID: <202112121223.N7ibZbQg-lkp@intel.com>
+        id S232943AbhLLE44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 23:56:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232874AbhLLE4y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 23:56:54 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7FFC061714
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 20:56:54 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso13943159otj.1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 20:56:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OxiNtCo8FAmPT/CsvWMylrg0lFIpjinzhe3T8bV2cL8=;
+        b=gvFZd3OhcizPGf47jqdiayAzdIF4bROxr9hIGS2bcbovtpyqm1PiMVw0th9OYksido
+         FqNyeSHzMVf3fy96fNlo27IwEtaoPSwKCKyjniQ0kSw6as33XV64nYJz1B56cme4ufB6
+         4dKxowOEQMJqXhOIAN+wnYlQ0hPBdpUZCqdEhfywWXuTmV827DaqtqsreA5VY9GICkgq
+         TrFIPyqUz7Nh6bH6k9HO/iWUzMn7sI6EicaqQ4qfje2nBlEUHpp/VJG8AuDLOQ7D4/n0
+         orZwsmlgNvHxG0ais+S7e8Deb1tDzd98Yl7RhhkMl/m/yCkEtxt/c57ruCLDlxFH6Mxq
+         vtWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OxiNtCo8FAmPT/CsvWMylrg0lFIpjinzhe3T8bV2cL8=;
+        b=6p/RmnpajOwvoTh3TD9s9Op7N0zG1DU3BCyRu/eNipADJvqkjHRXnzZxIgwaYbwqu/
+         RNqAhrfplV2ZO6M/vhKTPktMuXWm/u2cWx4NIHBMn0mHKcDtuxGSKAz0z+5MSMtrVmx0
+         RKVIF0QLrWshg9/Z+C8j2dGma1i8V8e60PSfPNAmQb0n28O5BFjO5EzKXCf9Z//HZXjR
+         vWAlraucV3C0eFjVgBbh4z8qbpSFIgcnOzDuS/khIPIfkhxrcxBVIsuEy2ujNtZWRH3r
+         zq9qGDA+EpNasSJpNBJpnZ1jzU9Ouex7Il/FIn9R4ebTxQU1RYq+dc6k0zQ4CCmnuMn7
+         pOwg==
+X-Gm-Message-State: AOAM532NaEJ2fRI1BE9TmdmcaGQvs00iFTzZOWAaWQhNeCTNXARDKUYO
+        MCmBXLf3FgBjbR4hvqxYgCbrTkV+oLTR9FZFKBuF3A==
+X-Google-Smtp-Source: ABdhPJwPa3OmsdnUlkIn8H++jGaQIhTDXfkvAYFE7G9HjThGT5fk8FT3u+lJSXmlBKtEb9we1oIgTCRrgPS3dqY0tfk=
+X-Received: by 2002:a05:6830:601:: with SMTP id w1mr18332359oti.267.1639285013242;
+ Sat, 11 Dec 2021 20:56:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-5-likexu@tencent.com>
+ <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
+ <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com> <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
+ <b6c1eb18-9237-f604-9a96-9e6ca397121c@redhat.com> <CALMp9eRy==yu1uQriqbeezeQ+mtFyfyP_iy9HdDiSZ27SnEfFg@mail.gmail.com>
+ <c381aa2c-beb5-480f-1f24-a14de693e78f@redhat.com> <CALMp9eTKrQVCQPm=hcA50JSUCctPaGLEP19biVbGAtBN54dQfA@mail.gmail.com>
+In-Reply-To: <CALMp9eTKrQVCQPm=hcA50JSUCctPaGLEP19biVbGAtBN54dQfA@mail.gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Sat, 11 Dec 2021 20:56:42 -0800
+Message-ID: <CALMp9eS8xDgdbfJTbzMmek3RcXKwkLdGMW-uMkJR3eJZ6sf0GA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Fri, Dec 10, 2021 at 3:31 PM Jim Mattson <jmattson@google.com> wrote:
+>
+> On Fri, Dec 10, 2021 at 2:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >
+> > On 12/10/21 23:55, Jim Mattson wrote:
+> > >>
+> > >> Even for tracing the SDM says "Like the value returned by RDTSC, TSC
+> > >> packets will include these adjustments, but other timing packets (such
+> > >> as MTC, CYC, and CBR) are not impacted".  Considering that "stand-alone
+> > >> TSC packets are typically generated only when generation of other timing
+> > >> packets (MTCs and CYCs) has ceased for a period of time", I'm not even
+> > >> sure it's a good thing that the values in TSC packets are scaled and offset.
+> > >>
+> > >> Back to the PMU, for non-architectural counters it's not really possible
+> > >> to know if they count in cycles or not.  So it may not be a good idea to
+> > >> special case the architectural counters.
+> > >
+> > > In that case, what we're doing with the guest PMU is not
+> > > virtualization. I don't know what it is, but it's not virtualization.
+> >
+> > It is virtualization even if it is incompatible with live migration to a
+> > different SKU (where, as you point out below, multiple TSC frequencies
+> > might also count as multiple SKUs).  But yeah, it's virtualization with
+> > more caveats than usual.
+>
+> It's not virtualization if the counters don't count at the rate the
+> guest expects them to count.
 
-First bad commit (maybe != root cause):
+Per the SDM, unhalted reference cycles count at "a fixed frequency."
+If the frequency changes on migration, then the value of this event is
+questionable at best. For unhalted core cycles, on the other hand, the
+SDM says, "The performance counter for this event counts across
+performance state transitions using different core clock frequencies."
+That does seem to permit frequency changes on migration, but I suspect
+that software expects the event to count at a fixed frequency if
+INVARIANT_TSC is set.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a763d5a5abd65797aec3dd1bf01fe2ccbec32967
-commit: 4483397b03536506535d611b0cb28a81a69e8edf ARM: socfpga: drop ARCH_SOCFPGA
-date:   9 months ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211212/202112121223.N7ibZbQg-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4483397b03536506535d611b0cb28a81a69e8edf
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4483397b03536506535d611b0cb28a81a69e8edf
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-socfpga/ drivers/dma/ drivers/edac/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/ drivers/interconnect/qcom/ drivers/net/ethernet/mediatek/ drivers/net/vmxnet3/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/scsi/bnx2fc/ drivers/scsi/lpfc/ drivers/staging/ fs/proc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'm not sure that I buy your argument regarding consistency. In
+general, I would expect the hypervisor to exclude non-architected
+events from the allow-list for any VM instances running in a
+heterogeneous migration pool. Certainly, those events could be allowed
+in a heterogeneous migration pool consisting of multiple SKUs of the
+same microarchitecture running at different clock frequencies, but
+that seems like a niche case.
 
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/mach-socfpga/pm.c:75:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *dest @@     got void [noderef] __iomem *[assigned] suspend_ocram_base @@
-   arch/arm/mach-socfpga/pm.c:75:25: sparse:     expected void *dest
-   arch/arm/mach-socfpga/pm.c:75:25: sparse:     got void [noderef] __iomem *[assigned] suspend_ocram_base
---
->> drivers/edac/altera_edac.c:886:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __be32 const [usertype] *p @@     got unsigned int const [usertype] *handle @@
-   drivers/edac/altera_edac.c:886:28: sparse:     expected restricted __be32 const [usertype] *p
-   drivers/edac/altera_edac.c:886:28: sparse:     got unsigned int const [usertype] *handle
-
-vim +75 arch/arm/mach-socfpga/pm.c
-
-44fd8c7d4005f6 Alan Tull          2015-06-05  24  
-44fd8c7d4005f6 Alan Tull          2015-06-05  25  static int socfpga_setup_ocram_self_refresh(void)
-44fd8c7d4005f6 Alan Tull          2015-06-05  26  {
-44fd8c7d4005f6 Alan Tull          2015-06-05  27  	struct platform_device *pdev;
-44fd8c7d4005f6 Alan Tull          2015-06-05  28  	phys_addr_t ocram_pbase;
-44fd8c7d4005f6 Alan Tull          2015-06-05  29  	struct device_node *np;
-44fd8c7d4005f6 Alan Tull          2015-06-05  30  	struct gen_pool *ocram_pool;
-44fd8c7d4005f6 Alan Tull          2015-06-05  31  	unsigned long ocram_base;
-44fd8c7d4005f6 Alan Tull          2015-06-05  32  	void __iomem *suspend_ocram_base;
-44fd8c7d4005f6 Alan Tull          2015-06-05  33  	int ret = 0;
-44fd8c7d4005f6 Alan Tull          2015-06-05  34  
-44fd8c7d4005f6 Alan Tull          2015-06-05  35  	np = of_find_compatible_node(NULL, NULL, "mmio-sram");
-44fd8c7d4005f6 Alan Tull          2015-06-05  36  	if (!np) {
-44fd8c7d4005f6 Alan Tull          2015-06-05  37  		pr_err("%s: Unable to find mmio-sram in dtb\n", __func__);
-44fd8c7d4005f6 Alan Tull          2015-06-05  38  		return -ENODEV;
-44fd8c7d4005f6 Alan Tull          2015-06-05  39  	}
-44fd8c7d4005f6 Alan Tull          2015-06-05  40  
-44fd8c7d4005f6 Alan Tull          2015-06-05  41  	pdev = of_find_device_by_node(np);
-44fd8c7d4005f6 Alan Tull          2015-06-05  42  	if (!pdev) {
-44fd8c7d4005f6 Alan Tull          2015-06-05  43  		pr_warn("%s: failed to find ocram device!\n", __func__);
-44fd8c7d4005f6 Alan Tull          2015-06-05  44  		ret = -ENODEV;
-44fd8c7d4005f6 Alan Tull          2015-06-05  45  		goto put_node;
-44fd8c7d4005f6 Alan Tull          2015-06-05  46  	}
-44fd8c7d4005f6 Alan Tull          2015-06-05  47  
-73858173593c31 Vladimir Zapolskiy 2015-09-04  48  	ocram_pool = gen_pool_get(&pdev->dev, NULL);
-44fd8c7d4005f6 Alan Tull          2015-06-05  49  	if (!ocram_pool) {
-44fd8c7d4005f6 Alan Tull          2015-06-05  50  		pr_warn("%s: ocram pool unavailable!\n", __func__);
-44fd8c7d4005f6 Alan Tull          2015-06-05  51  		ret = -ENODEV;
-3ad7b4e8f89d6b Yu Kuai            2020-07-21  52  		goto put_device;
-44fd8c7d4005f6 Alan Tull          2015-06-05  53  	}
-44fd8c7d4005f6 Alan Tull          2015-06-05  54  
-44fd8c7d4005f6 Alan Tull          2015-06-05  55  	ocram_base = gen_pool_alloc(ocram_pool, socfpga_sdram_self_refresh_sz);
-44fd8c7d4005f6 Alan Tull          2015-06-05  56  	if (!ocram_base) {
-44fd8c7d4005f6 Alan Tull          2015-06-05  57  		pr_warn("%s: unable to alloc ocram!\n", __func__);
-44fd8c7d4005f6 Alan Tull          2015-06-05  58  		ret = -ENOMEM;
-3ad7b4e8f89d6b Yu Kuai            2020-07-21  59  		goto put_device;
-44fd8c7d4005f6 Alan Tull          2015-06-05  60  	}
-44fd8c7d4005f6 Alan Tull          2015-06-05  61  
-44fd8c7d4005f6 Alan Tull          2015-06-05  62  	ocram_pbase = gen_pool_virt_to_phys(ocram_pool, ocram_base);
-44fd8c7d4005f6 Alan Tull          2015-06-05  63  
-44fd8c7d4005f6 Alan Tull          2015-06-05  64  	suspend_ocram_base = __arm_ioremap_exec(ocram_pbase,
-44fd8c7d4005f6 Alan Tull          2015-06-05  65  						socfpga_sdram_self_refresh_sz,
-44fd8c7d4005f6 Alan Tull          2015-06-05  66  						false);
-44fd8c7d4005f6 Alan Tull          2015-06-05  67  	if (!suspend_ocram_base) {
-44fd8c7d4005f6 Alan Tull          2015-06-05  68  		pr_warn("%s: __arm_ioremap_exec failed!\n", __func__);
-44fd8c7d4005f6 Alan Tull          2015-06-05  69  		ret = -ENOMEM;
-3ad7b4e8f89d6b Yu Kuai            2020-07-21  70  		goto put_device;
-44fd8c7d4005f6 Alan Tull          2015-06-05  71  	}
-44fd8c7d4005f6 Alan Tull          2015-06-05  72  
-44fd8c7d4005f6 Alan Tull          2015-06-05  73  	/* Copy the code that puts DDR in self refresh to ocram */
-44fd8c7d4005f6 Alan Tull          2015-06-05  74  	socfpga_sdram_self_refresh_in_ocram =
-44fd8c7d4005f6 Alan Tull          2015-06-05 @75  		(void *)fncpy(suspend_ocram_base,
-44fd8c7d4005f6 Alan Tull          2015-06-05  76  			      &socfpga_sdram_self_refresh,
-44fd8c7d4005f6 Alan Tull          2015-06-05  77  			      socfpga_sdram_self_refresh_sz);
-44fd8c7d4005f6 Alan Tull          2015-06-05  78  
-44fd8c7d4005f6 Alan Tull          2015-06-05  79  	WARN(!socfpga_sdram_self_refresh_in_ocram,
-44fd8c7d4005f6 Alan Tull          2015-06-05  80  	     "could not copy function to ocram");
-44fd8c7d4005f6 Alan Tull          2015-06-05  81  	if (!socfpga_sdram_self_refresh_in_ocram)
-44fd8c7d4005f6 Alan Tull          2015-06-05  82  		ret = -EFAULT;
-44fd8c7d4005f6 Alan Tull          2015-06-05  83  
-3ad7b4e8f89d6b Yu Kuai            2020-07-21  84  put_device:
-3ad7b4e8f89d6b Yu Kuai            2020-07-21  85  	put_device(&pdev->dev);
-44fd8c7d4005f6 Alan Tull          2015-06-05  86  put_node:
-44fd8c7d4005f6 Alan Tull          2015-06-05  87  	of_node_put(np);
-44fd8c7d4005f6 Alan Tull          2015-06-05  88  
-44fd8c7d4005f6 Alan Tull          2015-06-05  89  	return ret;
-44fd8c7d4005f6 Alan Tull          2015-06-05  90  }
-44fd8c7d4005f6 Alan Tull          2015-06-05  91  
-
-:::::: The code at line 75 was first introduced by commit
-:::::: 44fd8c7d4005f660f48679439f0a54225ba234a4 ARM: socfpga: support suspend to ram
-
-:::::: TO: Alan Tull <atull@opensource.altera.com>
-:::::: CC: Kevin Hilman <khilman@linaro.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > > Exposing non-architectural events is questionable with live migration,
+> > > and TSC scaling is unnecessary without live migration. I suppose you
+> > > could have a migration pool with different SKUs of the same generation
+> > > with 'seemingly compatible' PMU events but different TSC frequencies,
+> > > in which case it might be reasonable to expose non-architectural
+> > > events, but I would argue that any of those 'seemingly compatible'
+> > > events are actually not compatible if they count in cycles.
+> > I agree.  Support for marshaling/unmarshaling PMU state exists but it's
+> > more useful for intra-host updates than for actual live migration, since
+> > these days most live migration will use TSC scaling on the destination.
+> >
+> > Paolo
+> >
+> > >
+> > > Unless, of course, Like is right, and the PMU counters do count fractionally.
+> > >
+> >

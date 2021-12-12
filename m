@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD944717CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 03:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBD54717CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 03:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbhLLCQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 21:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbhLLCQR (ORCPT
+        id S232543AbhLLCSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 21:18:06 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:45112 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232521AbhLLCSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 21:16:17 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2481C061714;
-        Sat, 11 Dec 2021 18:16:17 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso10637304pjb.0;
-        Sat, 11 Dec 2021 18:16:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ODm5tTBiKjrGbG+xckr2d0+8GcplwxAyRg/WZM+r+ZU=;
-        b=fx/cYQjNTogkQkklLJydR4YdBt6fJXbRKvaeOoIOFI7DBXmRSoXo0ojIGmfZMOZhNr
-         dMcuspsbvAJNb9rzHf1GX3K6IeTIcMC0c5Ymmz1w8LubF7dk50Ur8q+uUrA6KRi+iKp2
-         khoaI/56VO2lV9pSIdiqQpkeMSJqH/CnS33OQ4Pdjp6CamzXMJn5WI8X29TU2ZV9QU3g
-         q0Rp3c0onPer0gpCnAh2JC5At7NuCfw44RArqd4m/rM6MU6iKPVLYsefDsyQUkNa9gl/
-         PpeMQ6zdz/DRWduDt0zCfTDFxG56jCFAVH+oB3kTpoTTyZb3ymiN9ChoJG970B9/SETd
-         Hicw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ODm5tTBiKjrGbG+xckr2d0+8GcplwxAyRg/WZM+r+ZU=;
-        b=TDE+5tVKYJdpj2wIjvb7k6EbagpF2VWtx5iDbUd3Okk7vworJq805iF896U+HSu9MS
-         B4sh1ww2paLfs38t59Ea+dqtKPe95exRlDYZlh1DbEALCo6Bn5EsQZnkUxHzgMbq0Hpj
-         +RF07+P0t/JvI7gq9xzWA8FTY/XkTVjrX9l9o6v0+vp+aTym2YxpFWaPKUfi5x/xQ/og
-         r4aaxMsji5vD0TD57rU66TaydgpnFd4Mpvd6lxNd0Mo9QhEISCGhzT8/+c6WInZdamwS
-         ZwnGjvZ9X5VWvmmf4fsr8eqxIwgt/WHB3DaGbLq0cLStBZBy1LUIUBnBFpeOAlxCRvpy
-         7dsQ==
-X-Gm-Message-State: AOAM5313fXdBTQqvoaND1yxEgfC4ah/aGKOwPduh6Y6Snszpad/XCakt
-        kcYyu3oAxLnieO6AOK81mpIWSbMQynycxBYbYR0=
-X-Google-Smtp-Source: ABdhPJxxdL1mGuaBvfT4Vll0Ypm45+kpnKpBj99qjYdQuu116CxUfv0X/VSqia83k0TsstchZ5IoKRVNzzHPr4Xi0dE=
-X-Received: by 2002:a17:90b:4c03:: with SMTP id na3mr34447607pjb.62.1639275377221;
- Sat, 11 Dec 2021 18:16:17 -0800 (PST)
+        Sat, 11 Dec 2021 21:18:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EF08CCE0B01;
+        Sun, 12 Dec 2021 02:18:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12138C004DD;
+        Sun, 12 Dec 2021 02:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639275480;
+        bh=iJL/6mEne38AzSXVcb8m6/VlwgWeUH9E66rradqeky8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ADivHlcaEKPtZ4Aawh/RUI1NxLo9PVFjqAMSeZ0FRZ8IMv5EZ9X9+bwuDKsTNGNUt
+         lM5aPk86acgFXpnzFPdBd5FUelnLrqtkhm9gJMoqDF84/cuIcm1WqYBHvfKY3dGlKK
+         2LIWxKNpnUT1t2Gv53p5X1fjG8e1LqCbVs86ek6v8ztqmbcu8ewPn7xMEjRBgQ6Q7p
+         HFx/hb7qD6Z2+DfZzHpnkk+L+cettler6BU7ewrxd8JK2LFjMFouat0ITbAqCsPlM/
+         z1urAwW3bJmEajrK6s4ljo4rjLR13mR9gYEt2/8Fa3jMWvv/+RYKIgCvAABBmdF12z
+         9s2I3negR563Q==
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        guoren@kernel.org
+Subject: [GIT PULL] csky fixes for v5.16-rc5
+Date:   Sun, 12 Dec 2021 10:17:53 +0800
+Message-Id: <20211212021753.3541366-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1639030882-92383-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <1639030882-92383-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sat, 11 Dec 2021 18:16:06 -0800
-Message-ID: <CAADnVQKnN6bariMqkXCzHCGcb-ZT6MSJqXq1QjpRbwS8vdy=eQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: use kmemdup() to replace kmalloc + memcpy
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 10:22 PM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> Eliminate the follow coccicheck warning:
->
-> ./kernel/bpf/btf.c:6537:13-20: WARNING opportunity for kmemdup.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 
-Applied. Thanks
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
+
+are available in the Git repository at:
+
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.16-rc5
+
+for you to fetch changes up to a0793fdad9a11a32bc6d21317c93c83f4aa82ebc:
+
+  csky: fix typo of fpu config macro (2021-12-08 14:15:54 +0800)
+
+----------------------------------------------------------------
+csky updates for 5.16-rc5
+
+Only 1 fixup for csky:
+ - fpu config macro
+
+----------------------------------------------------------------
+Kelly Devilliv (1):
+      csky: fix typo of fpu config macro
+
+ arch/csky/kernel/traps.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)

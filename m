@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5020F471E32
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EA6471E34
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbhLLWTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 17:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S229800AbhLLWV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 17:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbhLLWTd (ORCPT
+        with ESMTP id S229762AbhLLWVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 17:19:33 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D63CC06173F;
-        Sun, 12 Dec 2021 14:19:33 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id j9so12910908qvm.10;
-        Sun, 12 Dec 2021 14:19:33 -0800 (PST)
+        Sun, 12 Dec 2021 17:21:25 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30152C06173F;
+        Sun, 12 Dec 2021 14:21:25 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id j3so24200708wrp.1;
+        Sun, 12 Dec 2021 14:21:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5/2Wze8vZRG9YKWtB/AhqKPwIShZlYfqbSfgNVc2Zmw=;
-        b=Y/vY1gwFL5MKOWON7KpUeBBaPUM0qdH0B18FP+J1/yQjsq3mc+DOOgJOkMcqnYDKgB
-         Pj5xqHpQpAD5bGsZohVnOWSyzrGElxwN70wKcl1kT4o1IVkyy6DV9IPOoW8I16wggf9n
-         5fxKoxYtflCYmBIV4z9dI5H0V1kl1fQiecwd4wy8mdA9AXXpBn+cfJQCvsgZ3fHkxpsB
-         lSeu48slHXfxgHvtUPN3VtCtkAbE0HBRsVpKOtR5dqR4qaLMbAVh9cbayw5zUz0tf53n
-         /TlwXqdDOg1P4rbNFOT3ZtFv9SK2FKnT0oxHALAJX/mBNHdIvyKCJzEm++9XduQMdOkQ
-         mZpw==
+        bh=7eDS74LpyA4frPSMwjjpOHEgUo/4S5rJ+isae+pfC4s=;
+        b=bpBy9vGXoqqpZox387Ye5rQni0fMcNgsX/u6iextlwu/sVGNU51eEEXWKPh+Gz4buh
+         oKOuN00BXR08mQWUuu8XQblM3iJ5c6cNTXpyA3aqzLuE50LYMyOGR5/N15nYp6DCGtO0
+         pmkI+CrL0aCcQNioauCYFrTBSPFRqlKQY0Fpp2Ah0ecEMWFmpSQc88fqpPhEqDHaUN7s
+         TH2OAYmIBGyj5jiXHjWea/Fc9nWj7a2M2r8NfZNrbrCYs2ja8j0E9kYt8WnwVZFkp1oD
+         cl6fBW25Zya5sTJMphBEXJ+MPo5baxef3ZsankCWTYm6TnVbV1JZCwHn4YP8fQJPaiTS
+         wIVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5/2Wze8vZRG9YKWtB/AhqKPwIShZlYfqbSfgNVc2Zmw=;
-        b=u6ioi4EKovlKos3ndtF8gF1Re/yLEiVteAFLkLUWVQ1Gd14F4ZPws4/ljM8ahg2m8o
-         7ljD2hSTB7Srx2gZEBwx6pnWi3JEo6IjvYyFTJApZ/Agf+DWpvBRIWYrTHlNZAcjyz2W
-         PVXngvpb9MNOoSgPftcgAvHt1qBbzz55RV5hLbJiAqLuBlRhGq9R08YAqlBE+vTNRKPd
-         c70gJU+0CyM080jb3++6NfNjpXfe/66V7MX/yKd9w9uD1RxbC1S06468LqruVO8b+aRB
-         mpG1J/un1MojaTDP/0vYmGvlzr+Yp1RH9TqGUacCfX390AIaX+YoR5UeULQPMl07vqod
-         lWKA==
-X-Gm-Message-State: AOAM5337jvOaKuH71b3925b7kiKs0Ct0aDXIo+5zxiG0YiqcbnB7WUO5
-        Xq50l6vLrkBa8LF6qidbLaU=
-X-Google-Smtp-Source: ABdhPJzHVYmFFDaQ4KwaHk9hBdAawKnLmvKnYnuJQrjEkU0ha16zl8yUT4O+EEYq1SzNNO3kOvfMGA==
-X-Received: by 2002:ad4:5cef:: with SMTP id iv15mr38245876qvb.86.1639347572362;
-        Sun, 12 Dec 2021 14:19:32 -0800 (PST)
-Received: from localhost.localdomain (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id x1sm2561065qtj.9.2021.12.12.14.19.31
+        bh=7eDS74LpyA4frPSMwjjpOHEgUo/4S5rJ+isae+pfC4s=;
+        b=JBvY/6lArinfnv3DaEW3qXStwedokkRufhz/H/H3eT4wUjtGtKNXbOGE9aSPvG4u4j
+         2eSAXXt/cW48BavOfsFhz/XJzZeV23YJGlu46FT+tQPKdZ0lQLa/4KxrDqFTPylhPZcv
+         DvLN6ZsPSUV69+yV9AiI4tirKTeMkYQD/xXGtplnwGp9dvhWYAVHHeNQVDQdUd9jzWcd
+         fHF82k7rvkHggM7rxeZ/6Viua+e9ZzwjreiG1pvf+gdm1r/2mQLEY9kGzBy3au2yTpcS
+         RKeBTV15islnIT//q6TKCFU5o8pM8WdZJ3PAfrzGsSVT+Zpt+CXxKUtBgYfAJqV0rB3Y
+         duaA==
+X-Gm-Message-State: AOAM532akbthPMx69fidJ9hQYb48atDB1mgw50mJSv4jKzj+QKoPwZ4f
+        NfVZ4iHgYgMFl435aaS4EW0=
+X-Google-Smtp-Source: ABdhPJx6pob1SEOL7xPRpcRuOCpxcFDV6sWdOlb24PyMt32k6FS6/u74LDTUwyYVNU756HLHV2t4Sw==
+X-Received: by 2002:adf:e0c7:: with SMTP id m7mr28507060wri.530.1639347683811;
+        Sun, 12 Dec 2021 14:21:23 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a198sm6202105wme.1.2021.12.12.14.21.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 14:19:31 -0800 (PST)
-From:   frowand.list@gmail.com
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] of: unittest: 64 bit dma address test requires arch support
-Date:   Sun, 12 Dec 2021 16:18:52 -0600
-Message-Id: <20211212221852.233295-1-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 12 Dec 2021 14:21:23 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] libperf tests: Fix a spelling mistake "Runnnig" -> "Running"
+Date:   Sun, 12 Dec 2021 22:21:22 +0000
+Message-Id: <20211212222122.478537-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+There is a spelling mistake in a __T_VERBOSE message. Fix it.
 
-If an architecture does not support 64 bit dma addresses then testing
-for an expected dma address >= 0x100000000 will fail.
-
-Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/of/unittest.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/lib/perf/tests/test-evlist.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 481ba8682ebf..126020e9838a 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -934,8 +934,9 @@ static void __init of_unittest_parse_dma_ranges(void)
- {
- 	of_unittest_dma_ranges_one("/testcase-data/address-tests/device@70000000",
- 		0x0, 0x20000000);
--	of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
--		0x100000000, 0x20000000);
-+	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
-+		of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
-+			0x100000000, 0x20000000);
- 	of_unittest_dma_ranges_one("/testcase-data/address-tests/pci@90000000",
- 		0x80000000, 0x20000000);
- }
+diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
+index 520a78267743..e7afff12c35a 100644
+--- a/tools/lib/perf/tests/test-evlist.c
++++ b/tools/lib/perf/tests/test-evlist.c
+@@ -535,7 +535,7 @@ static int test_stat_multiplexing(void)
+ 				    (double)counts[i].run / (double)counts[i].ena * 100.0,
+ 				    counts[i].run, counts[i].ena);
+ 		} else if (scaled == -1) {
+-			__T_VERBOSE("\t Not Runnnig\n");
++			__T_VERBOSE("\t Not Running\n");
+ 		} else {
+ 			__T_VERBOSE("\t Not Scaling\n");
+ 		}
 -- 
-Frank Rowand <frank.rowand@sony.com>
+2.33.1
 

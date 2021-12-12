@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C84B471924
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C90471926
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhLLHi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 02:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhLLHi4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 02:38:56 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA6DC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 23:38:56 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id y12so41783218eda.12
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 23:38:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=nrf+W6y7tzAcdy+dS0RWH81LBTCNwRRxZNixaO8eBYQ=;
-        b=R1dLxUWhOUkRZ3b53qIKLJN3Fmw1KCHVN7UlbsTSStDSSnt4yLb/S6CuSJM3pCjaS9
-         HldNsLfj/T43MN8Rf/iFCfdV9DI9L1zIB7ZRQ6FuaXempQA7Tmb8k3bl/CGt8ToJj7bE
-         mmCy3APfe1azUhDAF6jnKizwK1etpRs4KZngowwGzK/2RthnqV5uliKhwdRsK/5t+RoH
-         FHHjfJNsG5X2cZImmxA+B8q1sTcv6wU2ZBDYby+CHTIU4uk1SX31lDSsha5Os2FLb5oe
-         HGnE3vnvM1UYQevkuVzDcbmq1RdgZORUF0u6pkwSm5dhPmtQP3aVrw89E6DuKciR2YhX
-         UNuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=nrf+W6y7tzAcdy+dS0RWH81LBTCNwRRxZNixaO8eBYQ=;
-        b=7ksHLyLARGVOuvTdMP7nNXthMDUHGNM0/FXMdIpYS6tbqr8dnSQ6Xl3iE3xQSMMeQh
-         TXcqYat6rigKZ7N+Hftr3aC7wYwCKfcpCjWDLhmm9RgEmcZeaIsclE80r1Xuu1eMLFeA
-         e9rhLULLJDcJ1lhOc69gdRVdftneeNn3H7ZWpxHgxmx7aWBE4gCtGfWzNINr6taOwPxq
-         bu0L5f30y/Nw+UaqwBqveDFQh3N0QP8sSE3YmtJgf543WN04Lyw0P5aDrY2D0vM/EZfo
-         DW26I85vgPqARBoYXj7P7aM5ASnAmoMKHz0v20Y5G/l/GOePpemv9H6mzFQ+DiScJMsT
-         62Hw==
-X-Gm-Message-State: AOAM531Sd1ss9wfOVctTMBWZuiycG8AKguFkt2+NGWzNq/d2JpNC/DR8
-        ZrJkVy8VLuH1kmVgCoH9DRKPNs4e3aVWa/puwg==
-X-Google-Smtp-Source: ABdhPJz7+r91PGdqGga84T/aEJbOpCeKeq2fTEL2ANrTNQZMnPIv09oHaxx75nHI7gbCklwDx9PCoMUA3NfkQCHGxmo=
-X-Received: by 2002:a05:6402:280b:: with SMTP id h11mr54403610ede.341.1639294734852;
- Sat, 11 Dec 2021 23:38:54 -0800 (PST)
+        id S229611AbhLLHky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 02:40:54 -0500
+Received: from smtpbg587.qq.com ([113.96.223.105]:34676 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229449AbhLLHkx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 02:40:53 -0500
+X-QQ-mid: bizesmtp50t1639294849tih7sgr2
+Received: from localhost.localdomain (unknown [182.132.179.213])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Sun, 12 Dec 2021 15:40:48 +0800 (CST)
+X-QQ-SSF: 01000000002000D0I000B00A0000000
+X-QQ-FEAT: yoVs+U5I/l63biBhPqvfp8hx+O7T6kXoc4RHqDESnkArQQE4XerTuRI1t7JJz
+        iCQVtLEJfvjF9Chw9ZqxSzssfFnMw8xrexyzEhvGkwVejuYa+M2EdXc2fJij1ThkIqnHrRq
+        wNs2Rh78yHxPuNqeB5FUFKWsVAqKv3z5SY4TQXszoim6SJFY4v1S/WzR9UuPRVY3s0tvqkg
+        jki6QVJsMX/E3GEjtt8w+9hBJfI1GmYwzGVV1luWsXUncHJOEUWUK5hLmQaloIDbeoufsi3
+        TSmgWf8hRUY+FfBrSm0VvslrAui0QCf8YAHjeQ5EEhjfClpvreMyK4ccOvtXu846UKlIXs0
+        12asVL7RDJ7B0lxs6myLEPRLBBL2+mWdsV5d43uMUHgZY6zsqw=
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     wangborong@cdjrlc.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/virt/fsl_hypervisor: remove an unneeded variable
+Date:   Sun, 12 Dec 2021 15:40:47 +0800
+Message-Id: <20211212074047.330285-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:ab4:988d:0:0:0:0:0 with HTTP; Sat, 11 Dec 2021 23:38:54
- -0800 (PST)
-In-Reply-To: <20211211173447.4155374-1-hjl.tools@gmail.com>
-References: <20211211173447.4155374-1-hjl.tools@gmail.com>
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-Date:   Sun, 12 Dec 2021 09:38:54 +0200
-Message-ID: <CACVxJT-k664=aYp4VkG1LH3PsGHEf50PqP5EA+JWiFVb_JVs2Q@mail.gmail.com>
-Subject: Re: [PATCH] fs/binfmt_elf.c: disallow zero entry point address
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/21, H.J. Lu <hjl.tools@gmail.com> wrote:
-> According to gABI, the entry point address in the ELF header gives the
-> virtual address to which the system first transfers control, thus
-> starting the process.  If the file has no associated entry point, this
-> member holds zero.  Update the ELF loader to disallow an ELF binary
-> with zero entry point address.  This fixes:
->
-> https://bugzilla.kernel.org/show_bug.cgi?id=215303
->
-> Tested by booting Fedora 35 and running a shared library with zero entry
-> point address:
->
-> $ readelf -h load.so | grep "Entry point address:"
->   Entry point address:               0x0
-> $ ./load.so
-> bash: ./load.so: cannot execute binary file: Exec format error
+The variable `ret' used for returning is never changed in function
+`fsl_hv_close'. So that it can be removed and just return its
+initial value 0 at the end of `fsl_hv_close' function.
 
-Why not let it segfault?
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ drivers/virt/fsl_hypervisor.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> +	if (elf_ex->e_entry == 0)
-> +		goto out;
+diff --git a/drivers/virt/fsl_hypervisor.c b/drivers/virt/fsl_hypervisor.c
+index 46ee0a0998b6..e49bec8bc8a4 100644
+--- a/drivers/virt/fsl_hypervisor.c
++++ b/drivers/virt/fsl_hypervisor.c
+@@ -687,15 +687,13 @@ static int fsl_hv_close(struct inode *inode, struct file *filp)
+ 	struct doorbell_queue *dbq = filp->private_data;
+ 	unsigned long flags;
+ 
+-	int ret = 0;
+-
+ 	spin_lock_irqsave(&db_list_lock, flags);
+ 	list_del(&dbq->list);
+ 	spin_unlock_irqrestore(&db_list_lock, flags);
+ 
+ 	kfree(dbq);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static const struct file_operations fsl_hv_fops = {
+-- 
+2.34.1
+

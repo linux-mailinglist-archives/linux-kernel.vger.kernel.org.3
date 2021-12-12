@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63585471E4F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414C0471E77
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbhLLWr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 17:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhLLWr0 (ORCPT
+        id S230177AbhLLXAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 18:00:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25417 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230128AbhLLXAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 17:47:26 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D9DC06173F;
-        Sun, 12 Dec 2021 14:47:26 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id u16so12996726qvk.4;
-        Sun, 12 Dec 2021 14:47:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ix+G0zc+g6/N6041+1Hk6LHt/Y4Z+qpp/k2nnjfJ76s=;
-        b=MpLM3+0TPWqdJ+7DzYXtgH/6RhHatrTyBWY6ICHaz9hQl4lExVUmsYY/G1zRoMz+Lp
-         E9TVClJlGi2yDDaKDBeL7HwrFj63stulPxpfeyJj3Ks1Az9f34PgGj9fZUGnaBxDKfor
-         N9F7IKATjEdFWllTPbqJ9hWb/JqSd3Ckb2bItL2pG1PsIMIIMH+eCtEUB810cwVWWswL
-         BN9c4dzXx6TYNet9IM5t3up8nSR6DNiMIYreCjdJNvaQGkhiGmAICaxtBUbCLuhBQGfT
-         TNdv9hfTVkAp/01h4xDg3alvxwCYoIDPUH/I9cl5QKyNgqbj8edwYNfFaklZOHrsMgkm
-         3zeA==
+        Sun, 12 Dec 2021 18:00:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639350000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=WYVQFnDIbcgI5d/vqJyK9JfPBSSPc6zKfbYcO57Li1U=;
+        b=WmuhVWsO5mi80RT4m+no3isY1iJou4o3YpWQaknax9Wih1bUHUku36xax5VFio+o60zIc7
+        1OGTA7llpIy1V9V4ymdA9oRteRF9FpbmNZ5nA42fn0bQH0A++73QEiJu0FpkduZ58GoFj1
+        7cL4stQ+xqGrzmI1cpzkRO3SI4HcvFI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-337-j7ldPk8kM0Gu_K5lkCPIDA-1; Sun, 12 Dec 2021 17:59:59 -0500
+X-MC-Unique: j7ldPk8kM0Gu_K5lkCPIDA-1
+Received: by mail-wm1-f71.google.com with SMTP id o17-20020a05600c511100b00343141e2a16so2741995wms.5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 14:59:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ix+G0zc+g6/N6041+1Hk6LHt/Y4Z+qpp/k2nnjfJ76s=;
-        b=3BwSufZU6bWzAHHVvCW+VWYgJQtDbtU7sRDV08B67i2ypuN04by29PrzMb9a4nKxSo
-         TKfp/AcnoVvkFDjQjBvNAbuibkn5IQjW0B0hKayjQy1TSRs+PcmEYbfchfYcPGZVif4I
-         sI36EoCOVa4qoye3t/0g3608f8nQy6wQ3rC+LCmXvE8SXGtOXFCbigAzY7k0woPzDpYV
-         K4SZWgbkVk2qRL6XlSb8IiWFPIkbQmqawAom2RlZ3TCJxkNFuUMVUVcpxF5ek2BN5FSM
-         X0Nu2pVsQNVFvTX80CG9rupd3fsebeDC2mseonucAyeymDM55YONeiYtBSlhABYgAFnW
-         1h3A==
-X-Gm-Message-State: AOAM530s7tLfyfTZUXC45g7w6+QXeu0wn6fIj2q7C6IFf5m3/IcRHJbm
-        j6PDij+hkFVKSghmuLnlQF4k2CcuU2o=
-X-Google-Smtp-Source: ABdhPJx1M7WZxHZQTNZ/wYESqgILvAMdnpUS8cPtoHkLGib28aH89EBWD6xno9Y5OaASIppO0DuXbw==
-X-Received: by 2002:ad4:4b26:: with SMTP id s6mr39537389qvw.92.1639349245306;
-        Sun, 12 Dec 2021 14:47:25 -0800 (PST)
-Received: from [192.168.1.49] (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id s20sm8343124qtc.75.2021.12.12.14.47.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 14:47:25 -0800 (PST)
-Subject: Re: [PATCH v2 1/1] of: unittest: fix warning on PowerPC frame size
- warning
-To:     Jim Quinlan <jim2101024@gmail.com>, Christoph Hellwig <hch@lst.de>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211210184636.7273-1-jim2101024@gmail.com>
- <20211210184636.7273-2-jim2101024@gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <598c9bcd-a956-07f1-17a2-5177a8bd5458@gmail.com>
-Date:   Sun, 12 Dec 2021 16:47:24 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=WYVQFnDIbcgI5d/vqJyK9JfPBSSPc6zKfbYcO57Li1U=;
+        b=U44T4xKF3+hZm6XkrfTRpBH65FRisQK7FfmV1M2AIPWaUInPsugkz2eq5vnXeqq8gD
+         Up56/6uCFt12UlrpKDzY+lAUnHNvX7TGoN3vbbC9FaJ99F4Bg3gbFjPSWqNXtIWz89Fn
+         7eSBNWx3jblMDhEoJUPOEOeoERblJiu63hntt8v1u6Ff4dilsIkipl8ppwcoeCFgOldn
+         YGoVrTKGB+qijxoIoZrSLJPr5HOFwzB+Sab6KNqJUj3BUrN5SRO2GmYtdRHq9Lqv13It
+         9MkXULsPqXehkKeYfi4OhsiAf1A8fGgcWaNF6i9+2FaB2oZsb42af1ukl1GMF6N6jecR
+         ajuQ==
+X-Gm-Message-State: AOAM530AxzC9AzOtnc2dU2F8q9vCuJfmV4SITi586TVsqsJ2sWHYjk51
+        BhQNcirhVFeaw1LdvjZMz7FBR1P66o9M/3MBywvTf9iIJ5H6GA+gTJId2zCgt0vZLK7KX5uMuiG
+        5eHoCjrS53mD1XQaO0OqSKGBv
+X-Received: by 2002:a05:600c:1987:: with SMTP id t7mr32456847wmq.24.1639349998383;
+        Sun, 12 Dec 2021 14:59:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx2bTppYN2huiK2nylUvg6FCr00HLDzfg04TlPUjrDVfn+bIvC2GBhAeUTenJbfKS0A/G9aQQ==
+X-Received: by 2002:a05:600c:1987:: with SMTP id t7mr32456804wmq.24.1639349998099;
+        Sun, 12 Dec 2021 14:59:58 -0800 (PST)
+Received: from redhat.com ([2a03:c5c0:107e:eefb:294:6ac8:eff6:22df])
+        by smtp.gmail.com with ESMTPSA id bd18sm5203284wmb.43.2021.12.12.14.59.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 14:59:57 -0800 (PST)
+Date:   Sun, 12 Dec 2021 17:59:51 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, dan.carpenter@oracle.com, hch@lst.de,
+        jasowang@redhat.com, jroedel@suse.de, konrad.wilk@oracle.com,
+        lkp@intel.com, maz@kernel.org, mst@redhat.com, parav@nvidia.com,
+        qperret@google.com, robin.murphy@arm.com, stable@vger.kernel.org,
+        steven.price@arm.com, suzuki.poulose@arm.com, wei.w.wang@intel.com,
+        will@kernel.org, xieyongji@bytedance.com
+Subject: [GIT PULL] vhost: cleanups and fixes
+Message-ID: <20211212175951-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211210184636.7273-2-jim2101024@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mutt-Fcc: =sent
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-moved the file's maintainers from the "cc:" list to the "to:" list
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 
-review comments below
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
 
+are available in the Git repository at:
 
-On 12/10/21 1:46 PM, Jim Quinlan wrote:
-> The struct device variable "dev_bogus" was triggering this warning
-> on a PowerPC build:
-> 
->     drivers/of/unittest.c: In function 'of_unittest_dma_ranges_one.constprop':
->     [...] >> The frame size of 1424 bytes is larger than 1024 bytes
->              [-Wframe-larger-than=]
-> 
-> This variable is now dynamically allocated.
+  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
 
-A side effect of the change is that dev_bogus is initialized to all
-zeros instead of containing random data from the stack.
+for you to fetch changes up to bb47620be322c5e9e372536cb6b54e17b3a00258:
 
-> 
-> Fixes: e0d072782c734 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> ---
->  drivers/of/unittest.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-> index 481ba8682ebf..02c5cd06ad19 100644
-> --- a/drivers/of/unittest.c
-> +++ b/drivers/of/unittest.c
-> @@ -911,11 +911,18 @@ static void __init of_unittest_dma_ranges_one(const char *path,
->  	if (!rc) {
->  		phys_addr_t	paddr;
->  		dma_addr_t	dma_addr;
-> -		struct device	dev_bogus;
-> +		struct device	*dev_bogus;
->  
-> -		dev_bogus.dma_range_map = map;
-> -		paddr = dma_to_phys(&dev_bogus, expect_dma_addr);
-> -		dma_addr = phys_to_dma(&dev_bogus, expect_paddr);
-> +		dev_bogus = kzalloc(sizeof(struct device), GFP_KERNEL);
-> +		if (!dev_bogus) {
-> +			unittest(0, "kzalloc() failed\n");
-> +			kfree(map);
-> +			return;
-> +		}
-> +
-> +		dev_bogus->dma_range_map = map;
-> +		paddr = dma_to_phys(dev_bogus, expect_dma_addr);
-> +		dma_addr = phys_to_dma(dev_bogus, expect_paddr);
->  
->  		unittest(paddr == expect_paddr,
->  			 "of_dma_get_range: wrong phys addr %pap (expecting %llx) on node %pOF\n",
-> @@ -925,6 +932,7 @@ static void __init of_unittest_dma_ranges_one(const char *path,
->  			 &dma_addr, expect_dma_addr, np);
->  
->  		kfree(map);
-> +		kfree(dev_bogus);
->  	}
->  	of_node_put(np);
->  #endif
-> 
+  vdpa: Consider device id larger than 31 (2021-12-08 15:41:50 -0500)
 
-Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+----------------------------------------------------------------
+virtio,vdpa: bugfixes
+
+Misc bugfixes.
+
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      virtio: always enter drivers/virtio/
+
+Dan Carpenter (3):
+      vduse: fix memory corruption in vduse_dev_ioctl()
+      vdpa: check that offsets are within bounds
+      vduse: check that offset is within bounds in get_config()
+
+Parav Pandit (1):
+      vdpa: Consider device id larger than 31
+
+Wei Wang (1):
+      virtio/vsock: fix the transport to work with VMADDR_CID_ANY
+
+Will Deacon (1):
+      virtio_ring: Fix querying of maximum DMA mapping size for virtio device
+
+ drivers/Makefile                        | 3 +--
+ drivers/vdpa/vdpa.c                     | 3 ++-
+ drivers/vdpa/vdpa_user/vduse_dev.c      | 6 ++++--
+ drivers/vhost/vdpa.c                    | 2 +-
+ drivers/virtio/virtio_ring.c            | 2 +-
+ net/vmw_vsock/virtio_transport_common.c | 3 ++-
+ 6 files changed, 11 insertions(+), 8 deletions(-)
+

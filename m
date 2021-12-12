@@ -2,175 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2151B4718EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 07:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134604718F0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 07:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbhLLGuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 01:50:06 -0500
-Received: from mga14.intel.com ([192.55.52.115]:1543 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229448AbhLLGuC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 01:50:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639291802; x=1670827802;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UngDwz10eoJ8+ZwFjZLI6Ul1V3AWLBWADuHYUrN4hrM=;
-  b=SNsdrqV5czGejn+U+BfnH+erJ2xttukpSRvUIEuCloLV6gZsMWRZiOOi
-   sOHsYT6pyg7YYoSPDBUxR9IBDe5r4IGl7HADKHf2PtZr0DIzi3a6fTyGC
-   jrISKjhFcYeX5R4UOdbv7KzA5A7xcmTHzB8c/GbYTXEUthgS0S/xwfUyx
-   qCUUkX6XYfQtl8tJH9inlbV0LdwJsu9Y97+P4sPyMzBTbDOnmeiS9Eb92
-   Yf5mqJROkCJxDjEfKY+2XJ/mDreWdhg7zSTUiEWj/Cs7PMGPP6PEY9zOl
-   v5MQEr7nRo4hDnSrqVWPAdsxzGAgFojUNJkzJMXy4cAoyalNozLqnuzzB
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="238804207"
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="238804207"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2021 22:50:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,199,1635231600"; 
-   d="scan'208";a="681254070"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Dec 2021 22:50:00 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwIgK-0005U6-8f; Sun, 12 Dec 2021 06:50:00 +0000
-Date:   Sun, 12 Dec 2021 14:49:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 8297efc79487755c90bcb74bae4dbf8a4e9f721b
-Message-ID: <61b59b79.l94i24W9M7TP45X9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S229521AbhLLGuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 01:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229505AbhLLGuV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 01:50:21 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD28BC061714;
+        Sat, 11 Dec 2021 22:50:20 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so12383526pju.3;
+        Sat, 11 Dec 2021 22:50:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Vv5HnCBn8ZZpA7yWumcO3TVtFyNutN2LSOBDm38pII4=;
+        b=lHproLaSO5xxAcZ7keHz60psiB6fnSyaocv07YHedRG0Ni2Sgdiu213n4n6BKu5n1X
+         hF/kmfnosyvrSljTVUdQhGwq+T/anRyJ1z2WtNC8hHCeFCz/712L5Z45TjJy2IWlqtyj
+         20oLbMA92hkwdqPlg7Xm0Rl1WbUCudBOUULoVH/RYWmh4UGHbZA9aKP7/kwv5+p5ww5U
+         fxiJVTY8NuFVviJg81e1dlJ1JCN2+eghcYFNUcJ9iCH+W4ac9gaPZiynECOL3KflT5Gb
+         SwAY8uuj0UA4seNSR4M824qTr8Srt1e7AcQJqYpBlkhmIwqDBe/4TFPLfNuTdvDg1rVd
+         gibg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Vv5HnCBn8ZZpA7yWumcO3TVtFyNutN2LSOBDm38pII4=;
+        b=u2itCKGs2Tf6LOvPXFzpco7K4Mdh7kBRttzv8aBFaFecjd7Y8z3ypb+tLSEJ9G9CTF
+         SqeeJ5Igsctph3DoH2tzDU/9rrMlf9u/j0rOEoAiJQ3U/XZxNFKYJ1z5hF0rgEOZ+L6F
+         9x+tHckwFoBNXzCi6dRpRw5GjgUTACXJ5g/o3xFYFy+5UchXD6NNxBhLrOdiq8EFMeVd
+         QFndBag9kOnk83oodCQeWqb+EG7kP8i3Hzq7xBrIgjd72zhWENzIQVR3eC6dIuUDHDud
+         TcLEAbk4ngLS1LjE9HOcw1H/v6DqWbGz0BNp82DP1VHR4b5xnNLUDENgQuKIfZEBRIhU
+         w/Qg==
+X-Gm-Message-State: AOAM5312IsG4d2JNrUpaLw4ewD3N0QkKXYLj/u24e68x51b2+riAfFvS
+        iU/HuNQlU8eR08hcTht8T+4=
+X-Google-Smtp-Source: ABdhPJwGWiBsr3aky1R6JtO8s875qTPMx14Q38lR67upO5k8arQsQEmsr43TObpKWSsNtL550Npx/A==
+X-Received: by 2002:a17:903:2082:b0:142:7dff:f7dc with SMTP id d2-20020a170903208200b001427dfff7dcmr87437835plc.46.1639291819898;
+        Sat, 11 Dec 2021 22:50:19 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id q10sm2910261pjd.0.2021.12.11.22.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 22:50:19 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, JC Kuo <jckuo@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] phy: tegra: xusb: Fix NULL vs IS_ERR_OR_NULL checking
+Date:   Sun, 12 Dec 2021 06:50:14 +0000
+Message-Id: <20211212065014.31660-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 8297efc79487755c90bcb74bae4dbf8a4e9f721b  Merge branch into tip/master: 'irq/urgent'
+The tegra_xusb_find_port_node() function may return error pointer when
+kasprintf() return NULL. Using IS_ERR_OR_NULL to check the return value
+of tegra_xusb_find_port_node() to catch this.
 
-elapsed time: 725m
-
-configs tested: 104
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                              allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-m68k                        m5307c3_defconfig
-arm                        spear6xx_defconfig
-sh                             sh03_defconfig
-riscv                            alldefconfig
-mips                      bmips_stb_defconfig
-powerpc                        cell_defconfig
-mips                         tb0287_defconfig
-arm                       aspeed_g4_defconfig
-sh                            titan_defconfig
-sh                   sh7770_generic_defconfig
-mips                         cobalt_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                     mpc512x_defconfig
-arc                     nsimosci_hs_defconfig
-powerpc                         ps3_defconfig
-sparc64                          alldefconfig
-arc                        vdk_hs38_defconfig
-mips                     loongson1b_defconfig
-sh                               j2_defconfig
-arm                      integrator_defconfig
-arm                  randconfig-c002-20211212
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-m68k                                defconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a001-20211212
-x86_64               randconfig-a002-20211212
-x86_64               randconfig-a003-20211212
-x86_64               randconfig-a004-20211212
-x86_64               randconfig-a006-20211212
-x86_64               randconfig-a005-20211212
-i386                 randconfig-a001-20211212
-i386                 randconfig-a002-20211212
-i386                 randconfig-a005-20211212
-i386                 randconfig-a003-20211212
-i386                 randconfig-a006-20211212
-i386                 randconfig-a004-20211212
-arc                  randconfig-r043-20211212
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-x86_64               randconfig-a011-20211212
-x86_64               randconfig-a012-20211212
-x86_64               randconfig-a013-20211212
-x86_64               randconfig-a015-20211212
-x86_64               randconfig-a014-20211212
-x86_64               randconfig-a016-20211212
-i386                 randconfig-a013-20211210
-i386                 randconfig-a011-20211210
-i386                 randconfig-a016-20211210
-i386                 randconfig-a014-20211210
-i386                 randconfig-a015-20211210
-i386                 randconfig-a012-20211210
-s390                 randconfig-r044-20211212
-hexagon              randconfig-r041-20211212
-hexagon              randconfig-r045-20211212
-riscv                randconfig-r042-20211212
-
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/phy/tegra/xusb.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+index 963de5913e50..52c2f85c67c3 100644
+--- a/drivers/phy/tegra/xusb.c
++++ b/drivers/phy/tegra/xusb.c
+@@ -472,7 +472,7 @@ tegra_xusb_find_port(struct tegra_xusb_padctl *padctl, const char *type,
+ 	struct device_node *np;
+ 
+ 	np = tegra_xusb_find_port_node(padctl, type, index);
+-	if (!np)
++	if (IS_ERR_OR_NULL(np))
+ 		return NULL;
+ 
+ 	list_for_each_entry(port, &padctl->ports, list) {
+@@ -763,7 +763,7 @@ static int tegra_xusb_add_usb2_port(struct tegra_xusb_padctl *padctl,
+ 	 * marked as disabled there is no reason to register it.
+ 	 */
+ 	np = tegra_xusb_find_port_node(padctl, "usb2", index);
+-	if (!np || !of_device_is_available(np))
++	if (IS_ERR_OR_NULL(np) || !of_device_is_available(np))
+ 		goto out;
+ 
+ 	usb2 = kzalloc(sizeof(*usb2), GFP_KERNEL);
+@@ -829,7 +829,7 @@ static int tegra_xusb_add_ulpi_port(struct tegra_xusb_padctl *padctl,
+ 	int err = 0;
+ 
+ 	np = tegra_xusb_find_port_node(padctl, "ulpi", index);
+-	if (!np || !of_device_is_available(np))
++	if (IS_ERR_OR_NULL(np) || !of_device_is_available(np))
+ 		goto out;
+ 
+ 	ulpi = kzalloc(sizeof(*ulpi), GFP_KERNEL);
+@@ -884,7 +884,7 @@ static int tegra_xusb_add_hsic_port(struct tegra_xusb_padctl *padctl,
+ 	int err = 0;
+ 
+ 	np = tegra_xusb_find_port_node(padctl, "hsic", index);
+-	if (!np || !of_device_is_available(np))
++	if (IS_ERR_OR_NULL(np) || !of_device_is_available(np))
+ 		goto out;
+ 
+ 	hsic = kzalloc(sizeof(*hsic), GFP_KERNEL);
+@@ -970,7 +970,7 @@ static int tegra_xusb_add_usb3_port(struct tegra_xusb_padctl *padctl,
+ 	 * hence return 0 instead of an error to allow ports to be optional.
+ 	 */
+ 	np = tegra_xusb_find_port_node(padctl, "usb3", index);
+-	if (!np || !of_device_is_available(np))
++	if (IS_ERR_OR_NULL(np) || !of_device_is_available(np))
+ 		goto out;
+ 
+ 	usb3 = kzalloc(sizeof(*usb3), GFP_KERNEL);
+@@ -1035,7 +1035,7 @@ static int tegra_xusb_find_unused_usb3_port(struct tegra_xusb_padctl *padctl)
+ 
+ 	for (i = 0; i < padctl->soc->ports.usb3.count; i++) {
+ 		np = tegra_xusb_find_port_node(padctl, "usb3", i);
+-		if (!np || !of_device_is_available(np))
++		if (IS_ERR_OR_NULL(np) || !of_device_is_available(np))
+ 			return i;
+ 	}
+ 
+-- 
+2.17.1
+

@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EFE471A85
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC83471A81
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbhLLNzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 08:55:24 -0500
-Received: from mail-m971.mail.163.com ([123.126.97.1]:33742 "EHLO
-        mail-m971.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhLLNzX (ORCPT
+        id S231261AbhLLNzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 08:55:02 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:43205 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229979AbhLLNzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 08:55:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cdE7N
-        cm9pcQKaI/4ppM0Xh5ubS5gPNoRT9n4pnfsXNs=; b=JAArMrvR0UajIpByVpHFM
-        X3hCg5Dcp+wJRdyxipD00Fw4+hjSO2ishCUReaCUuzMwRipbIYX+1Av0u/CrEbAx
-        39FB5A7wglb1cCz7v1Y3xY+MRcJtI/QaNWbHLLdk5DByXWtAM23TfjwhVTA6+iKX
-        j4S6Wh3kaozRisa3cHFTfw=
-Received: from localhost.localdomain (unknown [36.112.214.113])
-        by smtp1 (Coremail) with SMTP id GdxpCgBHmx_9_rVhaB4NBQ--.25678S4;
-        Sun, 12 Dec 2021 21:54:33 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
-        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] security:trusted_tpm2: Fix memory leak in tpm2_key_encode()
-Date:   Sun, 12 Dec 2021 21:54:03 +0800
-Message-Id: <20211212135403.59724-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 12 Dec 2021 08:55:01 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9A3305C0118;
+        Sun, 12 Dec 2021 08:55:00 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sun, 12 Dec 2021 08:55:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=DU5SXriTNRyS71l2bxO2m+nfg0d
+        UpC1LU1HuaivfHlQ=; b=FJbUlQnjlXMPLDuiUPofv+v99/CAdmIIhstdQfXtgRz
+        cXqrFfvpiZ0JlTihyZ/PNa9RDQdH7/CXffOfjeTMdZYB7s9RFy0CbAN7CQ3Ag4Cn
+        +CEwWG7dp6Qj+xDWheAbxWYLv2btS8G0DRFKTx/25yVzuMypPXrL2MzFEwFm0wjJ
+        RJ7BHLztu9yo0URpPgQnzJypGFqvAGcnyCwR6csf12fG54WUd4q0BbeR2vLq7UMT
+        4VvdYE0Q34n/SjGORhSMEnUez9+klqoUwy+K8xgZQsm7HAX/4TMeY6cmFYNHQDyT
+        p9PVvKXRF6asanmIoiJUqiur2EZLmR6ll7fS0JdZTjg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=DU5SXr
+        iTNRyS71l2bxO2m+nfg0dUpC1LU1HuaivfHlQ=; b=a2px8q7dbHR3zIhEBq1qyw
+        KaTRzZ/j+ZayQjx/oZxMlhGTuQQIn314780fZmBa6C40qtXUvBpNSJLIAyGwojQX
+        d72ro0Polr2+Vb9hgqcUmikYmty7Do1lp31v3gnAhyDBb06rLc6PXPQUEEbIogFD
+        P/9x1VcKwhgZl8d9CDf5/9cew8J4W+9tSpBcOlko5q4HiHcfe8xEUaERgfawnGXF
+        /tO+l8Nlk1Hr0SZ6n6/9veMFw1z8WxQzrPMkLSMJVYbetKx5C9r3RWOY37922lIJ
+        tht8y0U1yOcdkLkt4KSl3PqTBOfFkZJPvrDNPW2sQtXiQJ7QkHHmu2wSq2H+NU0A
+        ==
+X-ME-Sender: <xms:NP-1YeVs1Vp8CvyV87GVKiSMg3yJO54EjPKlyoTJ64D7hqERARAUmQ>
+    <xme:NP-1Yak3x60lk1jb3Ua2_88xPEBamRp_13ycU2FeLIBEtcwoeRWxOt5czjtKpvpun
+    ZEtuqp4oZcN7g>
+X-ME-Received: <xmr:NP-1YSbhAM9RIXtXsciWLn7OfUH36n9KZkJOEsSp0o4hjCBnR7LzTrLqCs1BU4mr8XusrqAbJo8XetFPjSmPcuASRDmuSLGM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkeeigdehkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:NP-1YVVtk7U__F8WLxLMBJoGw5i6CKEfIoVuitpIVf-M1SthEa95NA>
+    <xmx:NP-1YYmvn4DEDy2jUqUWQFWt5BQNdsmjdWguEGRXkOHxEP3BdU4kXg>
+    <xmx:NP-1Yadv5Vzl0f_QTHeHYrwj3T1q_-Hgk0b91-h6HGEadjiWSVdHGg>
+    <xmx:NP-1YZBnbL4MyyFpm8ddAtim9I5Wl6wlFcl6ENwTgRNwOfzMMdCBXg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 12 Dec 2021 08:54:59 -0500 (EST)
+Date:   Sun, 12 Dec 2021 14:54:45 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10 0/5] aio poll fixes for 5.10
+Message-ID: <YbX/JVz768WuoiXd@kroah.com>
+References: <20211210234805.39861-1-ebiggers@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgBHmx_9_rVhaB4NBQ--.25678S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww4DGFy7XF4UZr4xZrWrKrg_yoW8Kw4fpF
-        W5KF1UZrWagry7Ary7JF4Svr1fCa98KF47Kws7W39rG3ZxJFsxtFy7Ar4Ygr17ZFWfKw15
-        Za1qvFWUWrWqvwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jf9N3UUUUU=
-X-Originating-IP: [36.112.214.113]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbi6xlnjFXlyhOO9wAAsJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210234805.39861-1-ebiggers@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Line 36 (#1) allocates a memory chunk for scratch by kmalloc(), but
-it is never freed through the function, which will lead to a memory
-leak.
+On Fri, Dec 10, 2021 at 03:48:00PM -0800, Eric Biggers wrote:
+> Backport the aio poll fixes to 5.10.  This resolves a conflict in
+> aio_poll_wake() in patch 4.  It's a "trivial" conflict, but I'm sending
+> this to make sure it doesn't get dropped.
+> 
+> Eric Biggers (5):
+>   wait: add wake_up_pollfree()
+>   binder: use wake_up_pollfree()
+>   signalfd: use wake_up_pollfree()
+>   aio: keep poll requests on waitqueue until completed
+>   aio: fix use-after-free due to missing POLLFREE handling
+> 
+>  drivers/android/binder.c        |  21 ++--
+>  fs/aio.c                        | 184 ++++++++++++++++++++++++++------
+>  fs/signalfd.c                   |  12 +--
+>  include/linux/wait.h            |  26 +++++
+>  include/uapi/asm-generic/poll.h |   2 +-
+>  kernel/sched/wait.c             |   7 ++
+>  6 files changed, 195 insertions(+), 57 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
 
-We should kfree() scratch before the function returns (#2, #3 and #4).
+Thanks for all of the backports, much appreciated and now queued up.
 
-31 static int tpm2_key_encode(struct trusted_key_payload *payload,
-32			   struct trusted_key_options *options,
-33			   u8 *src, u32 len)
-34 {
-36	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
-      	// #1: kmalloc space
-37	u8 *work = scratch, *work1;
-50	if (!scratch)
-51		return -ENOMEM;
-
-56	if (options->blobauth_len == 0) {
-60		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-61			return PTR_ERR(w); // #2: missing kfree
-63	}
-
-71	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-72		 "BUG: scratch buffer is too small"))
-73		return -EINVAL; // #3: missing kfree
-
-  	// #4: missing kfree: scratch is never used afterwards.
-82	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-83		return PTR_ERR(work1);
-
-85	return work1 - payload->blob;
-86 }
-
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- security/keys/trusted-keys/trusted_tpm2.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 0165da386289..3408a74c855f 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 		unsigned char bool[3], *w = bool;
- 		/* tag 0 is emptyAuth */
- 		w = asn1_encode_boolean(w, w + sizeof(bool), true);
--		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-+		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-+			kfree(scratch);
- 			return PTR_ERR(w);
-+		}
- 		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
- 	}
- 
-@@ -69,9 +71,12 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	 * trigger, so if it does there's something nefarious going on
- 	 */
- 	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
--		 "BUG: scratch buffer is too small"))
-+		 "BUG: scratch buffer is too small")) {
-+		kfree(scratch);
- 		return -EINVAL;
-+	}
- 
-+	kfree(scratch);
- 	work = asn1_encode_integer(work, end_work, options->keyhandle);
- 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
- 	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
--- 
-2.25.1
-
+greg k-h

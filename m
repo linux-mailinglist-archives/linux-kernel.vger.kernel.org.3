@@ -2,153 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEBF471DB4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 22:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C6C471DBB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 22:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbhLLVV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 16:21:58 -0500
-Received: from mail-io1-f49.google.com ([209.85.166.49]:38767 "EHLO
-        mail-io1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbhLLVVq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 16:21:46 -0500
-Received: by mail-io1-f49.google.com with SMTP id z18so16488585iof.5
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 13:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=egauge.net; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :organization:user-agent:mime-version:content-transfer-encoding;
-        bh=+9OcGuDpkoMeBODhn8Tb5ApOZvJageVw35+/zZnQ1+s=;
-        b=N8VVxvbV2xs1p4PI0kzLC6pLOO8UDMjFoKxHG1rvpciOCeYYNzsi3dNgr8cb2kzMoi
-         0rhwqD+d9eUkZTbBtnLZjQRVVu0AAMkpOp+aY4ZAtachUQH+cLf8g+1x7XPl0OfcnCzg
-         8Sl+Y16Tun1n9FQttKNrlm7L/jIygTBRBH4oQchRsTP0379UYGF5S37M+7nsKvoctPB1
-         gSMwF1PMveONKJGD1MDKWcBuxbW0SvkDDcOV7QBHu8IpFZKFHzjCqEhqfXmEGyRvd3eL
-         r6PfOFKUcPi39BRxLT0VTFRhkX3qy/kJsDmPspCuKF9PlAPd39OzD3j1L/nDFUdj7HSN
-         AHzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=+9OcGuDpkoMeBODhn8Tb5ApOZvJageVw35+/zZnQ1+s=;
-        b=TF4QTXLXCsOaZHLAL+wzX+l1qTtR3Qy1PPymFHL/P3aI9UihLvIDoh4aVY3GhHlwF2
-         DvH7BQ0JYNhi4haHLYqDlKJYeV7cQOu12f7iUYtBSCpMvMnCfzSvIe2roqqaRJbx6mnT
-         DjKYgamCASl3KaFFN/KclpcN51NY26nN7x2x3gicddNJ9WCM+Kg1Bna8Xg7kn8G9zql3
-         oVXXwsDq6rBrF0xQiPtp/yOqDPxd1TSvbQmiWzcHYmJOEz5CVUgN+Ex9DWTbkCskY5G+
-         6KabHWuTVHSIPf4PEkIUDkncjDoh/LhRBUG+8wOI7o8mHLiz6LpnFJrSR6ZZUkLDbV8k
-         KqAA==
-X-Gm-Message-State: AOAM530YR5rtKK8W+m+62fu7DIoOMdoWYg9XtbI/iCeW5K0g6BmbOaXt
-        z2vFeTWxb1vCn0cvudFGqFAQry8ypLl2AXM=
-X-Google-Smtp-Source: ABdhPJw5Sbr65syF//Kt7IMdnzq6KcuMBwZ0H9xgIXOCMx+iDGjEOS3V/uOHIvAz2Lu5nSRUzyBO1A==
-X-Received: by 2002:a05:6638:14ca:: with SMTP id l10mr29866295jak.107.1639344045464;
-        Sun, 12 Dec 2021 13:20:45 -0800 (PST)
-Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
-        by smtp.gmail.com with ESMTPSA id o22sm7976635iow.52.2021.12.12.13.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 13:20:44 -0800 (PST)
-Message-ID: <6fc9f00aa0b0867029fb6406a55c1e72d4c13af6.camel@egauge.net>
-Subject: Re: [PATCH] wilc1000: Allow setting power_save before driver is
- initialized
-From:   David Mosberger-Tang <davidm@egauge.net>
-To:     Ajay Singh <ajay.kathat@microchip.com>
-Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 12 Dec 2021 14:20:29 -0700
-In-Reply-To: <20211212011835.3719001-1-davidm@egauge.net>
-References: <20211212011835.3719001-1-davidm@egauge.net>
-Organization: eGauge Systems LLC
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S230064AbhLLVV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 16:21:29 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:32794 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229775AbhLLVVW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 16:21:22 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 6FF246B4; Sun, 12 Dec 2021 15:21:17 -0600 (CST)
+Date:   Sun, 12 Dec 2021 15:21:17 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
+ tpm2_key_encode()
+Message-ID: <20211212212117.GA5737@mail.hallyn.com>
+References: <20211212135403.59724-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211212135403.59724-1-niejianglei2021@163.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unfortunately, this patch doesn't seem to be sufficient.  From what I
-can tell, if power-save mode is turned on before a station is
-associated with an access-point, there is no actual power savings.  If
-I issue the command after the station is associated, it works perfectly
-fine.
-
-Ajay, does this make sense to you?
-
-Best regards,
-
-  --david
-
-On Sun, 2021-12-12 at 01:18 +0000, David Mosberger-Tang wrote:
-> Without this patch, trying to use:
+On Sun, Dec 12, 2021 at 09:54:03PM +0800, Jianglei Nie wrote:
+> Line 36 (#1) allocates a memory chunk for scratch by kmalloc(), but
+> it is never freed through the function, which will lead to a memory
+> leak.
 > 
-> 	iw dev wlan0 set power_save on
+> We should kfree() scratch before the function returns (#2, #3 and #4).
 > 
-> before the driver is initialized results in an EIO error.  It is more
-> useful to simply remember the desired setting and establish it when
-> the driver is initialized.
+> 31 static int tpm2_key_encode(struct trusted_key_payload *payload,
+> 32			   struct trusted_key_options *options,
+> 33			   u8 *src, u32 len)
+> 34 {
+> 36	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+>       	// #1: kmalloc space
+> 37	u8 *work = scratch, *work1;
+> 50	if (!scratch)
+> 51		return -ENOMEM;
 > 
-> Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+> 56	if (options->blobauth_len == 0) {
+> 60		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+> 61			return PTR_ERR(w); // #2: missing kfree
+> 63	}
+> 
+> 71	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> 72		 "BUG: scratch buffer is too small"))
+> 73		return -EINVAL; // #3: missing kfree
+> 
+>   	// #4: missing kfree: scratch is never used afterwards.
+> 82	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+> 83		return PTR_ERR(work1);
+> 
+> 85	return work1 - payload->blob;
+> 86 }
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+
+I don't know that we need to keep the line by line recap in
+the full git log, but it def looks correct:
+
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
+
+thanks,
+-serge
+
 > ---
->  drivers/net/wireless/microchip/wilc1000/cfg80211.c | 3 ---
->  drivers/net/wireless/microchip/wilc1000/hif.c      | 8 ++++++++
->  drivers/net/wireless/microchip/wilc1000/netdev.c   | 3 ++-
->  3 files changed, 10 insertions(+), 4 deletions(-)
+>  security/keys/trusted-keys/trusted_tpm2.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/net/wireless/microchip/wilc1000/cfg80211.c b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
-> index dc4bfe7be378..01d607fa2ded 100644
-> --- a/drivers/net/wireless/microchip/wilc1000/cfg80211.c
-> +++ b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
-> @@ -1280,9 +1280,6 @@ static int set_power_mgmt(struct wiphy *wiphy, struct net_device *dev,
->  	struct wilc_vif *vif = netdev_priv(dev);
->  	struct wilc_priv *priv = &vif->priv;
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 0165da386289..3408a74c855f 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  		unsigned char bool[3], *w = bool;
+>  		/* tag 0 is emptyAuth */
+>  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+> -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+> +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
+> +			kfree(scratch);
+>  			return PTR_ERR(w);
+> +		}
+>  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+>  	}
 >  
-> -	if (!priv->hif_drv)
-> -		return -EIO;
-> -
->  	wilc_set_power_mgmt(vif, enabled, timeout);
->  
->  	return 0;
-> diff --git a/drivers/net/wireless/microchip/wilc1000/hif.c b/drivers/net/wireless/microchip/wilc1000/hif.c
-> index 29a42bc47017..66fd77c816f7 100644
-> --- a/drivers/net/wireless/microchip/wilc1000/hif.c
-> +++ b/drivers/net/wireless/microchip/wilc1000/hif.c
-> @@ -1934,6 +1934,14 @@ int wilc_set_power_mgmt(struct wilc_vif *vif, bool enabled, u32 timeout)
->  	int result;
->  	s8 power_mode;
->  
-> +	if (!wilc->initialized) {
-> +		/* Simply remember the desired setting for now; will be
-> +		 * established by wilc_init_fw_config().
-> +		 */
-> +		wilc->power_save_mode = enabled;
-> +		return 0;
+> @@ -69,9 +71,12 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	 * trigger, so if it does there's something nefarious going on
+>  	 */
+>  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> -		 "BUG: scratch buffer is too small"))
+> +		 "BUG: scratch buffer is too small")) {
+> +		kfree(scratch);
+>  		return -EINVAL;
 > +	}
-> +
->  	if (enabled)
->  		power_mode = WILC_FW_MIN_FAST_PS;
->  	else
-> diff --git a/drivers/net/wireless/microchip/wilc1000/netdev.c b/drivers/net/wireless/microchip/wilc1000/netdev.c
-> index 4712cd7dff9f..082bed26a981 100644
-> --- a/drivers/net/wireless/microchip/wilc1000/netdev.c
-> +++ b/drivers/net/wireless/microchip/wilc1000/netdev.c
-> @@ -244,6 +244,7 @@ static int wilc1000_firmware_download(struct net_device *dev)
->  static int wilc_init_fw_config(struct net_device *dev, struct wilc_vif *vif)
->  {
->  	struct wilc_priv *priv = &vif->priv;
-> +	struct wilc *wilc = vif->wilc;
->  	struct host_if_drv *hif_drv;
->  	u8 b;
->  	u16 hw;
-> @@ -305,7 +306,7 @@ static int wilc_init_fw_config(struct net_device *dev, struct wilc_vif *vif)
->  	if (!wilc_wlan_cfg_set(vif, 0, WID_QOS_ENABLE, &b, 1, 0, 0))
->  		goto fail;
 >  
-> -	b = WILC_FW_NO_POWERSAVE;
-> +	b = wilc->power_save_mode ? WILC_FW_MIN_FAST_PS : WILC_FW_NO_POWERSAVE;
->  	if (!wilc_wlan_cfg_set(vif, 0, WID_POWER_MANAGEMENT, &b, 1, 0, 0))
->  		goto fail;
->  
-
+> +	kfree(scratch);
+>  	work = asn1_encode_integer(work, end_work, options->keyhandle);
+>  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+>  	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
+> -- 
+> 2.25.1

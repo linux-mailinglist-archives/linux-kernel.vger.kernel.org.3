@@ -2,65 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBA5471804
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 04:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE85471806
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 04:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbhLLDbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 22:31:46 -0500
-Received: from smtpbg128.qq.com ([106.55.201.39]:23778 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231739AbhLLDbq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 22:31:46 -0500
-X-QQ-mid: bizesmtp44t1639279893tyegqbh1
-Received: from localhost.localdomain (unknown [182.132.179.213])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Sun, 12 Dec 2021 11:31:31 +0800 (CST)
-X-QQ-SSF: 01000000002000D0H000B00A0000000
-X-QQ-FEAT: 0Eq+cbWb7Ry7/jAxm8gwmVC9mbJg0mY/635Z9qzeOdBngML0iVXek9d6sxMvW
-        3V4nN1DD90wC95P57Hs+flcHRQ+JVxvm2nN55Wo3/n4lH0cMED07ziKywywxBpNYNOBK4PS
-        cJjt5LFfIVkRaSPTFM7J++Pa2Ls562mt5Pc26+IJhlxDSfBPzdi0HP3sVZCYZsiRU6/wCXl
-        XJhZGgQ88FBfu4smuc6Kd4v0fYNorSPa99CFKmZSJ1jM5RWkHiAcZJ548ojEQ+a91uhR6vn
-        l1aqpCcrMYio5YbkHe55kcKa2kA+xA2eFgHz0xqAtGsttwwR0Sp0qS9gQUJdZFbNeyKUXC7
-        l4+Z0RPOZbfYzN1HgipxAxh2JkKkZFBCvppcnOv
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] cpuidle: tegra: fix typo in a comment
-Date:   Sun, 12 Dec 2021 11:31:30 +0800
-Message-Id: <20211212033130.64032-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
+        id S232755AbhLLDcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 22:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232746AbhLLDck (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 22:32:40 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F8DC061751
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 19:32:40 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id s7-20020a5b0447000000b005fb83901511so24119349ybp.11
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 19:32:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dZXz4L70xn3lGuV5frFMNTxVjlcyPDah4Fe8iWASoU0=;
+        b=ODrEmf+TvM3S31nOwniA9E7e2YSVuUd0Ow0kybNHJhTVYDFsk20j6mE0HE20VPcjbB
+         ioQsD76gcn90TooKKhlALlkcM4Mjp1ypliTkQvrgmY9rNnDwVrDeCUrAFL7DcWHp5moz
+         XsuZyJM25llg6xz8bm94/u/17PXql9zmF+oZC1k+2OgrZrxVlV7LMAjY8x2tg4dD1lG+
+         RPHInHH8LZYRRR5autOkRHC9ZJExESXts1xcgX5S2HiM5jkuJwRIkTF69UFWgqWxEEy7
+         GWdfYPSGePLYr8qluxCzLFxPqmhEu+AmVnZL7uv/9J7l9oX1oIKopXo/QF9OgHnwxLrc
+         kQbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dZXz4L70xn3lGuV5frFMNTxVjlcyPDah4Fe8iWASoU0=;
+        b=43N2XgJtZSn1b6flN+kAPckH03rg9mDYOBngWUnOTtGdrEmPGan70nQGG7GqPnxpVV
+         4uic7+CCoZ2FXc4pz+41jRMlnTJQG4zvejGmClNHnfsl5S/JVcZLjRVYO+fYw4wxS5n1
+         pcmmCJvjygtdoSrP+4xdEtb2kRTr6D5MJGlfVCCLUTyFRrFc1VDi1AxHkwfW2OxjJIhv
+         2/R/qVVT79vNYuVLSxVFGZI71Qag5HAqIT+/16NsdggCegqeqsL0/4pgxf8OS1hrd33/
+         Axw3aXkY25ocGnKwftVm/kFH0yvychtQcXv/j3kytORf5ujLyS5DzrAYgZb0JrUyi09E
+         rU+w==
+X-Gm-Message-State: AOAM531LAsT6olzvM1S/C/BC3KiYwOxcg2QCnYEhssoNLSiI8Xv1g/gb
+        MGM7yzlhU/1VchzpqB6owXzNh2jUtABiAQ==
+X-Google-Smtp-Source: ABdhPJxhjs+gPvF0lVNaW8OuZQN/SGmvvq6ktiwYxHZUR+1Sc0QW2sntANY7vGVdd14wQi8NPzuuoHQOuSHZaA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:1344:: with SMTP id
+ 65mr24017421ybt.468.1639279959504; Sat, 11 Dec 2021 19:32:39 -0800 (PST)
+Date:   Sun, 12 Dec 2021 11:32:29 +0800
+Message-Id: <20211212033229.527955-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v2] kunit: tool: Default --jobs to number of CPUs
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `that' in the comment in line 275 is repeated. Remove one
-of them from the comment.
+The --jobs parameter for kunit_tool currently defaults to 8 CPUs,
+regardless of the number available. For systems with significantly more
+(or less), this is not as efficient. Instead, default --jobs to the
+number of CPUs available to the process: while there are as many
+superstitions as to exactly what the ideal jobs:CPU ratio is, this seems
+sufficiently sensible to me.
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+A new helper function to get the default number of jobs is added:
+get_default_jobs() -- this is used in kunit_tool_test instead of a
+hardcoded value, or an explicit call to len(os.sched_getaffinity()), so
+should be more flexible if this needs to change in the future.
+
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- drivers/cpuidle/cpuidle-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-index 9845629aeb6d..93ed4b8e164a 100644
---- a/drivers/cpuidle/cpuidle-tegra.c
-+++ b/drivers/cpuidle/cpuidle-tegra.c
-@@ -272,7 +272,7 @@ static int tegra114_enter_s2idle(struct cpuidle_device *dev,
-  * LP2 | C7	(CPU core power gating)
-  * LP2 | CC6	(CPU cluster power gating)
-  *
-- * Note that that the older CPUIDLE driver versions didn't explicitly
-+ * Note that the older CPUIDLE driver versions didn't explicitly
-  * differentiate the LP2 states because these states either used the same
-  * code path or because CC6 wasn't supported.
-  */
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20211211084928.410669-1-davidgow@google.com/
+- Use len(os.sched_getaffinity()) instead of os.cpu_count(), which gives
+  the number of available processors (to this process), rather than the
+  total.
+- Fix kunit_tool_test.py, which had 8 jobs hardcoded in a couple of
+  places.
+- Thanks to Daniel Latypov for these suggestions.
+
+---
+
+ tools/testing/kunit/kunit.py           | 5 ++++-
+ tools/testing/kunit/kunit_tool_test.py | 5 +++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 68e6f461c758..6b0ddd6d0115 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -264,6 +264,9 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
+ 		return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
+ 	return list(map(massage_arg, argv))
+ 
++def get_default_jobs() -> int:
++	return len(os.sched_getaffinity(0))
++
+ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+@@ -310,7 +313,7 @@ def add_build_opts(parser) -> None:
+ 	parser.add_argument('--jobs',
+ 			    help='As in the make command, "Specifies  the number of '
+ 			    'jobs (commands) to run simultaneously."',
+-			    type=int, default=8, metavar='jobs')
++			    type=int, default=get_default_jobs(), metavar='jobs')
+ 
+ def add_exec_opts(parser) -> None:
+ 	parser.add_argument('--timeout',
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 9c4126731457..512936241a56 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -419,7 +419,7 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_build_passes_args_pass(self):
+ 		kunit.main(['build'], self.linux_source_mock)
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
+-		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, '.kunit', None)
++		self.linux_source_mock.build_kernel.assert_called_once_with(False, kunit.get_default_jobs(), '.kunit', None)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+ 
+ 	def test_exec_passes_args_pass(self):
+@@ -525,8 +525,9 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_build_builddir(self):
+ 		build_dir = '.kunit'
++		jobs = kunit.get_default_jobs()
+ 		kunit.main(['build', '--build_dir', build_dir], self.linux_source_mock)
+-		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, build_dir, None)
++		self.linux_source_mock.build_kernel.assert_called_once_with(False, jobs, build_dir, None)
+ 
+ 	def test_exec_builddir(self):
+ 		build_dir = '.kunit'
 -- 
-2.34.1
+2.34.1.173.g76aa8bc2d0-goog
 

@@ -2,104 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2B3471D00
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 21:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E0A471D03
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 21:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbhLLUo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 15:44:26 -0500
-Received: from mail-pf1-f178.google.com ([209.85.210.178]:35559 "EHLO
-        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbhLLUoZ (ORCPT
+        id S231613AbhLLUpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 15:45:03 -0500
+Received: from mail-ed1-f46.google.com ([209.85.208.46]:38868 "EHLO
+        mail-ed1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231585AbhLLUpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 15:44:25 -0500
-Received: by mail-pf1-f178.google.com with SMTP id p13so13255756pfw.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 12:44:25 -0800 (PST)
+        Sun, 12 Dec 2021 15:45:02 -0500
+Received: by mail-ed1-f46.google.com with SMTP id x10so28660372edd.5;
+        Sun, 12 Dec 2021 12:45:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eeyCzwRt/r/iQsMN2NoDyx5KqHfbE7u+BMFfXv83R9w=;
-        b=Udp/fnV8rIvBRrOsf9mZYbmY7qteaNarNrfi52BzZc/t2SSMjyBpd22PxuY01uSnl1
-         Lz9XcA0vH7tbZZ07O7war982He5rOg1l5ZiJD7kK8RmQqMUz07sV4YFU8VwDkOWZwbO1
-         LEPmwCfl81VYnbe5i5t2kCYhAD6JWfAXIz0WHx8LLk68CY+lsxhCDGCn0bVPJ7mXLvhn
-         CF5HwWdNDqvPfEZW5V8Cb7/ry9EK6gleu0V+5tzNGYz0l+WBPYUsDFZ2dAtbzryzPM7z
-         8vSrJucH0VC+vGFrOLAVw6LDPf3/3i1dIlKDIbra4vhh75Y6MOMKYWgWz7CSEO1xNtvD
-         UCUQ==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yP2O9civRRxQtY3Lz25ifh6I1U06VEYbkYd4G8hA+6Q=;
+        b=EVCFPAzeNtIR4NLQweygrDcmmZDGq3eOACnKcs/hfw0MqusEaudP1EcUZUf6LLvHam
+         nS7Kz+OzkwKm42WGeRqXN6qIErYf7F8FF8XKjMUIN1VKuT4zCA2bVfnTpqLzgOTied4F
+         +ZLUP8EkuF9LJAPqG4Ry2jnTRbxkqm1lApeK5lMEfiATUZZ5vWm3FSBwVBMoYKohcQf2
+         60u1/LzACjJYBLHIXvxtVuPs8iaQQwDm0oIW9xettkTSj6txiFzpJbNYVaeezw775p9/
+         blJEae/WAdiqQasK9wGPpD3rpKvW0GnEPOQ36X2lUvg6qvPaGjWDeQjymptnwp/5OIhg
+         3QiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eeyCzwRt/r/iQsMN2NoDyx5KqHfbE7u+BMFfXv83R9w=;
-        b=q4S532wzSx79OYoMPOzrTMzxikK3TCa4MdClDLjxDHyl+3c33QHyS8ZZVkCJh8EkIl
-         Yt6n8XTLViILjVzRgS9/Qba4noI9FFAk3ak0kokvzB83Vs7HTFFCf4UP4yw5W0ZJ2/td
-         SXfzzKRZRSQsXHBjoC1R2yOMPb0I7h0Q/rn1pEyN7CRz+zq4yyIZrXq1rE2p5sUnXRjr
-         hZmbGDfjB7gYR/au/bFXao0xxdAoON/vMcvu9ABC8+XskUIuGlZsZs+nPwrIlIRvWePi
-         ULbDLXqlmqVOS6c8t2VzlNB7/63HPvO8Lr2VRzw7z8qtBa5rhyAmMn4TRp0RisJ/Ivi6
-         ZjcQ==
-X-Gm-Message-State: AOAM531NP1hgk4YHksqj5VTuQaXVWgh944oxEKeUllxq8w1/P5kcbj4B
-        40cdCbCjMNYlFauUkYEsxwE=
-X-Google-Smtp-Source: ABdhPJzE+pTUQgdtlmcqTq761EgtiZODIzpfL7s1GI4iY2ckbnAi4pFrNpAdrwlXA8eQ6Broz59hCg==
-X-Received: by 2002:a63:7e01:: with SMTP id z1mr49502409pgc.238.1639341805239;
-        Sun, 12 Dec 2021 12:43:25 -0800 (PST)
-Received: from gnu-cfl-2.localdomain ([172.58.35.133])
-        by smtp.gmail.com with ESMTPSA id q2sm10110196pfj.62.2021.12.12.12.43.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 12:43:25 -0800 (PST)
-Received: by gnu-cfl-2.localdomain (Postfix, from userid 1000)
-        id 044B8420978; Sun, 12 Dec 2021 12:43:24 -0800 (PST)
-Date:   Sun, 12 Dec 2021 12:43:23 -0800
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] fs/binfmt_elf.c: disallow zero entry point address
-Message-ID: <YbZe67Rj2QuxeADn@gmail.com>
-References: <20211211173447.4155374-1-hjl.tools@gmail.com>
- <CACVxJT-k664=aYp4VkG1LH3PsGHEf50PqP5EA+JWiFVb_JVs2Q@mail.gmail.com>
- <CAMe9rOqM+S_uBO-t5jJ1TLVD0R-LOJEiR6htb+k05c+ak7gF-g@mail.gmail.com>
- <CAHk-=wiEgwj3DGZai2GF9+z-FCSS455kGZ9z2g1qtdPLPWpvxQ@mail.gmail.com>
- <CAMe9rOqYxiMabie_2LN2mTTP7QPa0_mfKwDY10OSzKFj5GYT7A@mail.gmail.com>
- <CAHk-=whPK-aB34T1YS4CVK0G1m6QU7FZg28+oEeVaGy-b4hZGA@mail.gmail.com>
- <CAMe9rOoqkH=FL3s331YKeyz_Qjf7pR9M_Cf117XHErrTU-2iRA@mail.gmail.com>
- <CAHk-=wiKzE-+X7uZHELP-udnULXf75jog=UfO7GQ_gPXycELjw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yP2O9civRRxQtY3Lz25ifh6I1U06VEYbkYd4G8hA+6Q=;
+        b=NmS2K5rN5aYrnPSbUjn/tn+ZVOIyqow1liKT+syHlCupd9p1eSVcjTJnZSgwySaL7n
+         1oprj1DuFz4DSNxy6inMs4kcsRbWImKk6sN1oxNV4muAC8Y6KWqIhl+ZOjqTGibxQlbv
+         cOBPz9KCvCqQReb2ZCz6WYaETizOlMAQwVaKCc7Gl87w3WunJrPAVfI3srdgfnCBGdPC
+         0WZY73kmsXBRgydzzBHggvQIQSBwclF4GaABNu//dxOyuv9lEs0n60Jy2DwsH5dGWElI
+         hAiHpuDQxFNGykb4Y0s08r863iManoYaqz20G3tzhHcmAHBcIQr3LNFTX/cPuKZvnd5K
+         CVIw==
+X-Gm-Message-State: AOAM533PhLArMdrkVk69lXJissyZr9/q5sptzlR9GOZg6rQOkG0F+sEh
+        4GcTMsSNs6YwlyaZ6RWXNAK8NKD3TYx1FJnRB0o=
+X-Google-Smtp-Source: ABdhPJynDnAdk3DFucCVq3HNgD6bpcw0wB668tsm6h4tMO7JBDvph4oMhm+3W7hax5atapV9b9iXrwZ0zPtk0x073VQ=
+X-Received: by 2002:a50:f189:: with SMTP id x9mr58742036edl.95.1639341841296;
+ Sun, 12 Dec 2021 12:44:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiKzE-+X7uZHELP-udnULXf75jog=UfO7GQ_gPXycELjw@mail.gmail.com>
+References: <20211212201844.114949-1-aouledameur@baylibre.com> <20211212201844.114949-3-aouledameur@baylibre.com>
+In-Reply-To: <20211212201844.114949-3-aouledameur@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 12 Dec 2021 21:43:50 +0100
+Message-ID: <CAFBinCCjrKYOjUsJZ7rPan-0XVNMU0+x0fUS1Wn_bNUXxqBLdQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] phy: amlogic: meson8b-usb2: Use dev_err_probe()
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     khilman@baylibre.com, p.zabel@pengutronix.de, balbi@kernel.org,
+        jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 11:35:56AM -0800, Linus Torvalds wrote:
-> [ Crossed emails ]
-> 
-> On Sun, Dec 12, 2021 at 11:30 AM H.J. Lu <hjl.tools@gmail.com> wrote:
-> >
-> > On Linux, the start of the first PT_LOAD segment is the ELF
-> > header and the address 0 points to the ELF magic bytes which
-> > isn't a valid code sequence.
-> 
-> Yeah, then I think a much more valid argument (and patch) is _that_ argument.
-> 
-> So that kind of explanation, along with a patch more along the line of that
-> 
->         if (elf_ex->e_entry < header_sizes)
->                 goto out;
-> 
-> I suggested, and not talking about paper standards that may or may not
-> be relevant.
-> 
-> That would be much more palatable to me - it's a _technical_ argument,
-> not a "some paper standard that we clearly have never followed"
-> argument.
-> 
->                 Linus
+Hi Amjad,
 
-I sent out the v2 patch with
+On Sun, Dec 12, 2021 at 9:18 PM Amjad Ouled-Ameur
+<aouledameur@baylibre.com> wrote:
+>
+> Use the existing dev_err_probe() helper instead of open-coding the same
+> operation.
+>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-	if (elf_ex->e_entry < sizeof(*elf_ex))
-		goto out;
-
-
-H.J.
+For future patches: if you send another version of the patchset then
+please keep any Reviewed-by/Acked-by/etc. for patches in the series
+which have not changed.

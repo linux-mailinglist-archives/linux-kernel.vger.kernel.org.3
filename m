@@ -2,86 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08665471BA3
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 17:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A2F471BA7
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 17:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbhLLQoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 11:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbhLLQoh (ORCPT
+        id S231710AbhLLQyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 11:54:36 -0500
+Received: from out162-62-57-64.mail.qq.com ([162.62.57.64]:58639 "EHLO
+        out162-62-57-64.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231694AbhLLQye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 11:44:37 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F3CC061751
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 08:44:36 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id q21so9027328vkn.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 08:44:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4Iup0PuQre5u2Fob/RPt24yhd3mS85xJKv7O7p908ig=;
-        b=F2V1Iuxnw9sXZfv56vR+qR+HCrc1/OxCJlGpzFbiru0wzuPfyfrIEIOon3bymnAoag
-         j2F/IT3+KnzDb3lApTtZb3+torJDqkF1EP7sKKH0moLvV9PG2bvbOPQiOen+WYHHc+sU
-         3e+GhLSHRGzkOM3EHNPHCeJQyXP5sRmNmhKUE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Iup0PuQre5u2Fob/RPt24yhd3mS85xJKv7O7p908ig=;
-        b=OIXdfK9GCz91gHUexKGxcLq0vJPQ2RG0xWDS73GD01TyE0c0JSM4jT+LnLcFNSFxLw
-         A4UYavgzcUjh+bZ0dyBouhT1IFZMzoq3oUHM4BTVQ1QLVMlKuhUsiIiA808oJbPZlk72
-         p3pHDBoRJ8lR18MoHMrQT/W3tZ6w5nH7MYxV9kZqy9Ngm8HY6mfU8blCrmulLSwjwibU
-         7E/3O76U02Gbd8/r+GPwxGJwMS0z4wuoZn2EGY1l6+r4scy8M7xhy4VdjJgnXYkGDy0d
-         r2cWrKrf2575cvD8teFhiLOF6iSleX0EbaaqlxV3HW4cptbbRiihrOKqCfGsCmB2BYsR
-         Ifgw==
-X-Gm-Message-State: AOAM531j0qCcqpCIYeP1HMVHh7BiNTJd2vojByoNZGB5cd4/3kbTnsYJ
-        iP6EJpG3CkMC3xgokzpP3pjszOZxS33L9d3UiJx08Q==
-X-Google-Smtp-Source: ABdhPJwEJeOqr6oQvcFJg4KKaYC67h13cUgL588VnkbnkRUdVDD8DYVhG8iE/HgJufzkIQypRs6woELUDisWGMdurjo=
-X-Received: by 2002:a05:6122:1354:: with SMTP id f20mr28815931vkp.12.1639327475901;
- Sun, 12 Dec 2021 08:44:35 -0800 (PST)
+        Sun, 12 Dec 2021 11:54:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639328069;
+        bh=1pXiJm/XdfCHGUHrUq3aIQM1q83tiYf3WoWjaGkPR20=;
+        h=From:To:Cc:Subject:Date;
+        b=VCysTCz5oM+EDCktqOoMjEoUnNRFp9p2+BAGS5ar/zhOxy9mFuCD7ru/x+mfj7ZvF
+         jHHVpla7z0S778ivX2NyBxNw2JyYeGyewbP/kiVckpVkbSaDSHtGq4uGwnGZ7ezO0q
+         3/HwmazrMUj3MqRJty/YXAS3i6v2qmvrHPtIIo80=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+        id D500BEED; Mon, 13 Dec 2021 00:53:16 +0800
+X-QQ-mid: xmsmtpt1639327996t8l0poumn
+Message-ID: <tencent_1AB342AE1B4723454E78A4D2FD3F33C81306@qq.com>
+X-QQ-XMAILINFO: NzOHSugmTg7X+KikSiSMQqPXolIHXnD6UhGF0Lj1ITOJuupesg8GxhhWDYxv0M
+         VzbNY9riooFSKOUJn1iPElqHO5ciPeBY+xHylF2GjFnPHwBd3ZzuokbPkaT+qPbgLDQTSRr+8cua
+         5pibFX52nTMWAR+ly7B4B5Upx1EAhEDOpsDtucNw45n9KI/RbYX8iAIikbd027F/nYSGmJADjaXh
+         1QvVEDqZZX8Ygfxpj9oQZyBuxt69g049XwYdzz/bhDPD73JvHSODf7wT0DPs0/bLzc2SzEqDcJ77
+         U5AGeoxmtRqO1QFvcC/jlOiCOBzFgcJeFuZdnQBAeIT0uq9+LXx1xyBDVtQaXnUyhy3wu5stajab
+         tmFKW+4LNfLNxIVQFuuzjxgWe8t2eAGmblXw6GGRxfaVpSdDzLzxBc0XsALUn7cK4ObbDZT8aF52
+         04tgL0Qta1n4EswuE3pGcPY88zFIRfzgWOEd8bSROZ+1US4UBvKvYitkgyGfbcfCMeRSNtp1mD3g
+         jSN6F/jWhdUn1ULeLVlzD9hZgoru/1uL/kFJuvb0t+YU0I+JZQjz9iu7bCdRsWltxEKaU/zhVQeK
+         RtaVa4YqiCssCwuFfG/+MqY72sSik8OVCX7URllTOWedzIipm9p3jqFfWk62reM9naMWmO9l8EYh
+         xoMsdoYE9SchG4Ly3FiS2bTVA3ddT4xpUmp0N68ZtuTXfS24hdJTIGF4gGBe5Kshf+JFQXCeyuTm
+         k0PO76sSEuD7gpbjUSn+5++rrQeoNDdYCe0eQb6JLsG1zcdIeojbCJ5VDOF8KL5NwctugKQY/1RV
+         Ovnp4cfMrrLej0F2tNrLG6hMUEo0ucCKym6IbTjIxBW67GYPyeteCYt1w6wrE7U9pGWsLlKIUdqJ
+         cPszAn3Jkq
+From:   xkernel <xkernel.wang@foxmail.com>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xkernel <xkernel.wang@foxmail.com>
+Subject: [PATCH] thunderbolt: check the return value of kmemdup()
+Date:   Mon, 13 Dec 2021 00:51:33 +0800
+X-OQ-MSGID: <20211212165133.2754-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-References: <20211126202144.72936-1-romain.perier@gmail.com>
- <20211126202144.72936-7-romain.perier@gmail.com> <CAFr9PXmpKrcPXL=EdL-uGu0X3nZBrAVcBSDqSbaDEvRhE6Abiw@mail.gmail.com>
- <CABgxDo+pF0RKK+HL+MVv5s0pn1T9a9Mqp6uPEkT0YPEH9kvQqw@mail.gmail.com>
-In-Reply-To: <CABgxDo+pF0RKK+HL+MVv5s0pn1T9a9Mqp6uPEkT0YPEH9kvQqw@mail.gmail.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Mon, 13 Dec 2021 01:44:25 +0900
-Message-ID: <CAFr9PXnXHw2ppg8ZBrPVAxsW5YETyeS7ygrkpTmAKV9W58pTTw@mail.gmail.com>
-Subject: Re: [PATCH 5/5] ARM: dts: mstar: Switch to compatible
- "mstar,ssd20xd-timer" on ssd20xd
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Romain,
+kmemdup() return NULL when some internal memory errors happen, it is
+better to check the return value of it. Otherwise, some memory errors
+will not be catched in time and may further result in wrong memory
+access.
 
-On Mon, 13 Dec 2021 at 01:10, Romain Perier <romain.perier@gmail.com> wrote:
->> I just noticed this during testing. I think we should put this in
->> mstar-infinity2m.dts. All of the infinity2m chips use the same die
->> from what I can tell so if the ssd201/ssd202d needs this then anything
->> else that includes mstar-infinity2m.dtsi will too.
->
->
-> Mhhh, makes sense.
-> Do we keep the compatible "sstar,ssd20xd-timer" in this case ?
-> Because this is true for either the SSR621D or the SSD201 or the SSD202D,
-> so... what about "sstar,ssxd-timer", or something like this ?
+Signed-off-by: xkernel <xkernel.wang@foxmail.com>
+---
+ drivers/thunderbolt/icm.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-I think for anything infinity2m specific we use "sstar,ssd20xd-timer"
-as the SSD201 and SSD202D are the first chips we found this in.
-The SSR621D might get some specific compatibles for things that only
-it has broken out like the SATA.
-
-Cheers,
-
-Daniel
+diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+index 6255f1e..fff0c74 100644
+--- a/drivers/thunderbolt/icm.c
++++ b/drivers/thunderbolt/icm.c
+@@ -1741,8 +1741,13 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
+ 	if (!n)
+ 		return;
+ 
+-	INIT_WORK(&n->work, icm_handle_notification);
+ 	n->pkg = kmemdup(buf, size, GFP_KERNEL);
++	if (!n->pkg) {
++		kfree(n);
++		return;
++	}
++
++	INIT_WORK(&n->work, icm_handle_notification);
+ 	n->tb = tb;
+ 
+ 	queue_work(tb->wq, &n->work);
+-- 

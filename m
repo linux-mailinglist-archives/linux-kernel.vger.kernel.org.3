@@ -2,84 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A91E0471E3D
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5020F471E32
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbhLLWdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 17:33:55 -0500
-Received: from mail.wizzup.org ([95.217.97.174]:43916 "EHLO wizzup.org"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229838AbhLLWdy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 17:33:54 -0500
-X-Greylist: delayed 1568 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Dec 2021 17:33:53 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-        s=mail; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:
-        To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=Gn4QbhSu65M62ejQy1QWEFPPz4XhpZovxB+9NzFOVPg=; b=WGqbeFK/mVGaOu/ZeUQ1V5TL9P
-        RlFS34A21RMnTkWUk6pPDz81A52v3XSpqX2Ge6Pv7c7JHwa3uqa73l9TmHg0CA20mGlm2El1SnIOK
-        oHJUegfwF+O8JJE2cSODHOybM3B4vz+LwNgkTvITKlKSaVeLAW93ZfE/Gw0aAiM3Jdp2Rh2Lyz1R4
-        BXYzmVudcCYuyWkxrxGhDL9yjQzaRnFTX+fdhJ2Hbl+uccyUF83R612QMtC2G3qlKigmuulufq3zg
-        0eJXmGhjVqnYwlJd/kk2+onMsfSRJJharJlLm3/znLyLtpZ8lyN26jt6g6HYycG2HM5kx/dkUPPWt
-        lQd+rf9g==;
-Received: from [45.83.235.159] (helo=gentoo-x13.fritz.box)
-        by wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <merlijn@wizzup.org>)
-        id 1mwX0H-0001dD-U8; Sun, 12 Dec 2021 22:07:34 +0000
-From:   Merlijn Wajer <merlijn@wizzup.org>
-To:     merlijn@wizzup.org
-Cc:     Paul Fertser <fercerpav@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] wl1251: specify max. IE length
-Date:   Sun, 12 Dec 2021 23:13:08 +0100
-Message-Id: <20211212221310.5453-1-merlijn@wizzup.org>
-X-Mailer: git-send-email 2.32.0
+        id S229774AbhLLWTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 17:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbhLLWTd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 17:19:33 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D63CC06173F;
+        Sun, 12 Dec 2021 14:19:33 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id j9so12910908qvm.10;
+        Sun, 12 Dec 2021 14:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5/2Wze8vZRG9YKWtB/AhqKPwIShZlYfqbSfgNVc2Zmw=;
+        b=Y/vY1gwFL5MKOWON7KpUeBBaPUM0qdH0B18FP+J1/yQjsq3mc+DOOgJOkMcqnYDKgB
+         Pj5xqHpQpAD5bGsZohVnOWSyzrGElxwN70wKcl1kT4o1IVkyy6DV9IPOoW8I16wggf9n
+         5fxKoxYtflCYmBIV4z9dI5H0V1kl1fQiecwd4wy8mdA9AXXpBn+cfJQCvsgZ3fHkxpsB
+         lSeu48slHXfxgHvtUPN3VtCtkAbE0HBRsVpKOtR5dqR4qaLMbAVh9cbayw5zUz0tf53n
+         /TlwXqdDOg1P4rbNFOT3ZtFv9SK2FKnT0oxHALAJX/mBNHdIvyKCJzEm++9XduQMdOkQ
+         mZpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5/2Wze8vZRG9YKWtB/AhqKPwIShZlYfqbSfgNVc2Zmw=;
+        b=u6ioi4EKovlKos3ndtF8gF1Re/yLEiVteAFLkLUWVQ1Gd14F4ZPws4/ljM8ahg2m8o
+         7ljD2hSTB7Srx2gZEBwx6pnWi3JEo6IjvYyFTJApZ/Agf+DWpvBRIWYrTHlNZAcjyz2W
+         PVXngvpb9MNOoSgPftcgAvHt1qBbzz55RV5hLbJiAqLuBlRhGq9R08YAqlBE+vTNRKPd
+         c70gJU+0CyM080jb3++6NfNjpXfe/66V7MX/yKd9w9uD1RxbC1S06468LqruVO8b+aRB
+         mpG1J/un1MojaTDP/0vYmGvlzr+Yp1RH9TqGUacCfX390AIaX+YoR5UeULQPMl07vqod
+         lWKA==
+X-Gm-Message-State: AOAM5337jvOaKuH71b3925b7kiKs0Ct0aDXIo+5zxiG0YiqcbnB7WUO5
+        Xq50l6vLrkBa8LF6qidbLaU=
+X-Google-Smtp-Source: ABdhPJzHVYmFFDaQ4KwaHk9hBdAawKnLmvKnYnuJQrjEkU0ha16zl8yUT4O+EEYq1SzNNO3kOvfMGA==
+X-Received: by 2002:ad4:5cef:: with SMTP id iv15mr38245876qvb.86.1639347572362;
+        Sun, 12 Dec 2021 14:19:32 -0800 (PST)
+Received: from localhost.localdomain (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
+        by smtp.gmail.com with ESMTPSA id x1sm2561065qtj.9.2021.12.12.14.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 14:19:31 -0800 (PST)
+From:   frowand.list@gmail.com
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] of: unittest: 64 bit dma address test requires arch support
+Date:   Sun, 12 Dec 2021 16:18:52 -0600
+Message-Id: <20211212221852.233295-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fix is similar to commit 77c91295ea53 ("wil6210: specify max. IE
-length").  Without the max IE length set, wpa_supplicant cannot operate
-using the nl80211 interface.
+From: Frank Rowand <frank.rowand@sony.com>
 
-This patch is a workaround - the number 512 is taken from the wlcore
-driver, but note that per Paul Fertser:
+If an architecture does not support 64 bit dma addresses then testing
+for an expected dma address >= 0x100000000 will fail.
 
-    there's no correct number because the driver will ignore the data
-    passed in extra IEs.
-
-Suggested-by: Paul Fertser <fercerpav@gmail.com>
-Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
+Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
+Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 ---
- drivers/net/wireless/ti/wl1251/main.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/of/unittest.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ti/wl1251/main.c b/drivers/net/wireless/ti/wl1251/main.c
-index 136a0d3b23c9..a25a6143e65f 100644
---- a/drivers/net/wireless/ti/wl1251/main.c
-+++ b/drivers/net/wireless/ti/wl1251/main.c
-@@ -1520,6 +1520,12 @@ int wl1251_init_ieee80211(struct wl1251 *wl)
- 	wl->hw->wiphy->interface_modes = BIT(NL80211_IFTYPE_STATION) |
- 					 BIT(NL80211_IFTYPE_ADHOC);
- 	wl->hw->wiphy->max_scan_ssids = 1;
-+
-+	/* We set max_scan_ie_len to a random value to make wpa_supplicant scans not
-+	 * fail, as the driver will the ignore the extra passed IEs anyway
-+	 */
-+	wl->hw->wiphy->max_scan_ie_len = 512;
-+
- 	wl->hw->wiphy->bands[NL80211_BAND_2GHZ] = &wl1251_band_2ghz;
- 
- 	wl->hw->queues = 4;
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 481ba8682ebf..126020e9838a 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -934,8 +934,9 @@ static void __init of_unittest_parse_dma_ranges(void)
+ {
+ 	of_unittest_dma_ranges_one("/testcase-data/address-tests/device@70000000",
+ 		0x0, 0x20000000);
+-	of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
+-		0x100000000, 0x20000000);
++	if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
++		of_unittest_dma_ranges_one("/testcase-data/address-tests/bus@80000000/device@1000",
++			0x100000000, 0x20000000);
+ 	of_unittest_dma_ranges_one("/testcase-data/address-tests/pci@90000000",
+ 		0x80000000, 0x20000000);
+ }
 -- 
-2.32.0
+Frank Rowand <frank.rowand@sony.com>
 

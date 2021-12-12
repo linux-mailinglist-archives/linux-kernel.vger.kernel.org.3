@@ -2,323 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5FC4719CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 12:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F214719D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 12:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbhLLLeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 06:34:04 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:45193 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230156AbhLLLeD (ORCPT
+        id S230196AbhLLLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 06:38:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46706 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229464AbhLLLi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 06:34:03 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yinan@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V-JK-la_1639308839;
-Received: from localhost.localdomain(mailfrom:yinan@linux.alibaba.com fp:SMTPD_---0V-JK-la_1639308839)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 12 Dec 2021 19:34:00 +0800
-From:   Yinan Liu <yinan@linux.alibaba.com>
-To:     rostedt@goodmis.org
-Cc:     peterz@infradead.org, mark-pk.tsai@mediatek.com, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8] scripts: ftrace - move the sort-processing in ftrace_init
-Date:   Sun, 12 Dec 2021 19:33:58 +0800
-Message-Id: <20211212113358.34208-2-yinan@linux.alibaba.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20211212113358.34208-1-yinan@linux.alibaba.com>
-References: <20210911135043.16014-1-yinan@linux.alibaba.com>
- <20211212113358.34208-1-yinan@linux.alibaba.com>
+        Sun, 12 Dec 2021 06:38:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639309105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=enZ9wtju2weTaLCliJwjtIvdjIiIKEzWJXF4kl1QYYg=;
+        b=IVvPqLxEE3Gfxpm9pmkTj98YIQNXNN/qiVHunXoETx0kUGSbSfqPdFjLdJW2R59dUGmZQa
+        Twb+R1ZqST6kCTNdRFFoGvWWE/XAO2UnZ/0SYhnbtUiW1pVp3Jg2EcAk9/sduhgxjlyYLD
+        ITX+0a/7llOD7HRaEDMMN79ydaLLink=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-534-9nc2ceiiN_CW9m-HlUWJmw-1; Sun, 12 Dec 2021 06:38:23 -0500
+X-MC-Unique: 9nc2ceiiN_CW9m-HlUWJmw-1
+Received: by mail-ed1-f69.google.com with SMTP id p4-20020aa7d304000000b003e7ef120a37so11614928edq.16
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 03:38:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=enZ9wtju2weTaLCliJwjtIvdjIiIKEzWJXF4kl1QYYg=;
+        b=5+6OenBrmlmL02Jc4p0CaJTkpVJVV9LyEkIHab7xEscvJsrLN8dnUN3bCP89ENLr/H
+         j+hTM6ryGGgD/yo+1piZiE1fml900wI/BhbJTHb1ToppSfA4zAUJZ3Uy6cFDWGHmrbgU
+         1npUszJnvCO+DjVG4NQLwdfLNXMAkJOg1icVqCnc516sRpFnbX5s21MplhMG3Yk3s9it
+         /vzXu5g0t/Hng7NW6oU2/X4NVP2k+BaIvdfYp3b5AuNe7lcqyam4AvteLSAP+IXsxJ6o
+         ZgHNgfr/2EUgQFtd+vUJypubZJ0Feo1M9KPqMeYsjCb9LH1EXln7Zn0PKIdrNx4r4QGC
+         msnA==
+X-Gm-Message-State: AOAM530EjH8O73YtcjfmXjqXB7AhqR8T6FzKV0Ub0G908UW1BqDm0TCR
+        KdYRrPo9u9PWvD9Pn7LhKmZKIMpz7bk9EOpVQ1rBe5wX2q5lPOOs9wh5DGNAh5j+j7kgfj6IPlS
+        67G769bQmc4wFFJiRaixCK18/
+X-Received: by 2002:a17:906:d54c:: with SMTP id cr12mr35915080ejc.56.1639309102154;
+        Sun, 12 Dec 2021 03:38:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzW9vaJuFcH2IwdHdxLGm0JdPJEr8oNOfr6SlYZ1y82jRAzo0ZkyuchOniriaZlKdGyAKu2Zg==
+X-Received: by 2002:a17:906:d54c:: with SMTP id cr12mr35915063ejc.56.1639309101900;
+        Sun, 12 Dec 2021 03:38:21 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id s18sm4738692edd.15.2021.12.12.03.38.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 03:38:21 -0800 (PST)
+Message-ID: <76ac4a54-4913-66f7-5de8-9e70c14bde80@redhat.com>
+Date:   Sun, 12 Dec 2021 12:38:21 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] lib/genalloc: Fix NULL vs IS_ERR() checking
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211211144957.31381-1-linmq006@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211211144957.31381-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the kernel starts, the initialization of ftrace takes
-up a portion of the time (approximately 6~8ms) to sort mcount
-addresses. We can save this time by moving mcount-sorting to
-compile time.
+Hi,
 
-Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: kernel test robot <oliver.sang@intel.com>
----
- kernel/trace/ftrace.c   |  11 +++-
- scripts/Makefile        |   6 +-
- scripts/link-vmlinux.sh |   6 +-
- scripts/sorttable.c     |   2 +
- scripts/sorttable.h     | 120 +++++++++++++++++++++++++++++++++++++++-
- 5 files changed, 137 insertions(+), 8 deletions(-)
+On 12/11/21 15:49, Miaoqian Lin wrote:
+> The devm_gen_pool_create() function does not return NULL. It
+> returns error pointers.
+> 
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index be5f6b32a012..d5751a96213b 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6412,8 +6412,15 @@ static int ftrace_process_locs(struct module *mod,
- 	if (!count)
- 		return 0;
- 
--	sort(start, count, sizeof(*start),
--	     ftrace_cmp_ips, NULL);
-+	/*
-+	 * Sorting mcount in vmlinux at build time depend on
-+	 * CONFIG_BUILDTIME_TABLE_SORT, while mcount loc in
-+	 * modules can not be sorted at build time.
-+	 */
-+	if (!IS_ENABLED(CONFIG_BUILDTIME_TABLE_SORT) || mod) {
-+		sort(start, count, sizeof(*start),
-+		     ftrace_cmp_ips, NULL);
-+	}
- 
- 	start_pg = ftrace_allocate_pages(count);
- 	if (!start_pg)
-diff --git a/scripts/Makefile b/scripts/Makefile
-index 9adb6d247818..b082d2f93357 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -17,6 +17,7 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
- hostprogs-always-$(CONFIG_SYSTEM_REVOCATION_LIST)	+= extract-cert
- 
- HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
-+HOSTLDLIBS_sorttable = -lpthread
- HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
- HOSTCFLAGS_sign-file.o = $(CRYPTO_CFLAGS)
- HOSTLDLIBS_sign-file = $(CRYPTO_LIBS)
-@@ -29,7 +30,10 @@ ARCH := x86
- endif
- HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
- HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
--HOSTLDLIBS_sorttable = -lpthread
-+endif
-+
-+ifdef CONFIG_DYNAMIC_FTRACE
-+HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
- endif
- 
- # The following programs are only built on demand
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 5cdd9bc5c385..dd9955f45774 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -400,6 +400,9 @@ if [ -n "${CONFIG_DEBUG_INFO_BTF}" -a -n "${CONFIG_BPF}" ]; then
- 	${RESOLVE_BTFIDS} vmlinux
- fi
- 
-+info SYSMAP System.map
-+mksysmap vmlinux System.map
-+
- if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
- 	info SORTTAB vmlinux
- 	if ! sorttable vmlinux; then
-@@ -408,9 +411,6 @@ if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
- 	fi
- fi
- 
--info SYSMAP System.map
--mksysmap vmlinux System.map
--
- # step a (see comment above)
- if [ -n "${CONFIG_KALLSYMS}" ]; then
- 	mksysmap ${kallsyms_vmlinux} .tmp_System.map
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index b7c2ad71f9cf..70bdc787ddfb 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -30,6 +30,8 @@
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
-+#include <errno.h>
-+#include <pthread.h>
- 
- #include <tools/be_byteshift.h>
- #include <tools/le_byteshift.h>
-diff --git a/scripts/sorttable.h b/scripts/sorttable.h
-index a2baa2fefb13..d1fbee1f81ef 100644
---- a/scripts/sorttable.h
-+++ b/scripts/sorttable.h
-@@ -19,6 +19,9 @@
- 
- #undef extable_ent_size
- #undef compare_extable
-+#undef get_mcount_loc
-+#undef sort_mcount_loc
-+#undef elf_mcount_loc
- #undef do_sort
- #undef Elf_Addr
- #undef Elf_Ehdr
-@@ -41,6 +44,9 @@
- #ifdef SORTTABLE_64
- # define extable_ent_size	16
- # define compare_extable	compare_extable_64
-+# define get_mcount_loc		get_mcount_loc_64
-+# define sort_mcount_loc	sort_mcount_loc_64
-+# define elf_mcount_loc		elf_mcount_loc_64
- # define do_sort		do_sort_64
- # define Elf_Addr		Elf64_Addr
- # define Elf_Ehdr		Elf64_Ehdr
-@@ -62,6 +68,9 @@
- #else
- # define extable_ent_size	8
- # define compare_extable	compare_extable_32
-+# define get_mcount_loc		get_mcount_loc_32
-+# define sort_mcount_loc	sort_mcount_loc_32
-+# define elf_mcount_loc		elf_mcount_loc_32
- # define do_sort		do_sort_32
- # define Elf_Addr		Elf32_Addr
- # define Elf_Ehdr		Elf32_Ehdr
-@@ -84,8 +93,6 @@
- 
- #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
- /* ORC unwinder only support X86_64 */
--#include <errno.h>
--#include <pthread.h>
- #include <asm/orc_types.h>
- 
- #define ERRSTR_MAXSZ	256
-@@ -191,7 +198,64 @@ static int compare_extable(const void *a, const void *b)
- 		return 1;
- 	return 0;
- }
-+#ifdef MCOUNT_SORT_ENABLED
-+struct elf_mcount_loc {
-+	Elf_Ehdr *ehdr;
-+	Elf_Shdr *init_data_sec;
-+	uint_t start_mcount_loc;
-+	uint_t stop_mcount_loc;
-+};
-+
-+/* Sort the addresses stored between __start_mcount_loc to __stop_mcount_loc in vmlinux */
-+static void *sort_mcount_loc(void *arg)
-+{
-+	struct elf_mcount_loc *emloc = (struct elf_mcount_loc *)arg;
-+	uint_t offset = emloc->start_mcount_loc - _r(&(emloc->init_data_sec)->sh_addr)
-+					+ _r(&(emloc->init_data_sec)->sh_offset);
-+	uint_t count = emloc->stop_mcount_loc - emloc->start_mcount_loc;
-+	unsigned char *start_loc = (void *)emloc->ehdr + offset;
-+
-+	qsort(start_loc, count/sizeof(uint_t), sizeof(uint_t), compare_extable);
-+	return NULL;
-+}
-+
-+/* Get the address of __start_mcount_loc and __stop_mcount_loc in System.map */
-+static void get_mcount_loc(uint_t *_start, uint_t *_stop)
-+{
-+	FILE *file_start, *file_stop;
-+	char start_buff[20];
-+	char stop_buff[20];
-+	int len = 0;
-+
-+	file_start = popen(" grep start_mcount System.map | awk '{print $1}' ", "r");
-+	if (!file_start) {
-+		fprintf(stderr, "get start_mcount_loc error!");
-+		return;
-+	}
-+
-+	file_stop = popen(" grep stop_mcount System.map | awk '{print $1}' ", "r");
-+	if (!file_stop) {
-+		fprintf(stderr, "get stop_mcount_loc error!");
-+		pclose(file_start);
-+		return;
-+	}
-+
-+	while (fgets(start_buff, sizeof(start_buff), file_start) != NULL) {
-+		len = strlen(start_buff);
-+		start_buff[len - 1] = '\0';
-+	}
-+	*_start = strtoul(start_buff, NULL, 16);
-+
-+	while (fgets(stop_buff, sizeof(stop_buff), file_stop) != NULL) {
-+		len = strlen(stop_buff);
-+		stop_buff[len - 1] = '\0';
-+	}
-+	*_stop = strtoul(stop_buff, NULL, 16);
- 
-+	pclose(file_start);
-+	pclose(file_stop);
-+}
-+#endif
- static int do_sort(Elf_Ehdr *ehdr,
- 		   char const *const fname,
- 		   table_sort_t custom_sort)
-@@ -217,6 +281,12 @@ static int do_sort(Elf_Ehdr *ehdr,
- 	int idx;
- 	unsigned int shnum;
- 	unsigned int shstrndx;
-+#ifdef MCOUNT_SORT_ENABLED
-+	struct elf_mcount_loc mstruct;
-+	uint_t _start_mcount_loc = 0;
-+	uint_t _stop_mcount_loc = 0;
-+	pthread_t mcount_sort_thread;
-+#endif
- #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
- 	unsigned int orc_ip_size = 0;
- 	unsigned int orc_size = 0;
-@@ -253,6 +323,17 @@ static int do_sort(Elf_Ehdr *ehdr,
- 			symtab_shndx = (Elf32_Word *)((const char *)ehdr +
- 						      _r(&s->sh_offset));
- 
-+#ifdef MCOUNT_SORT_ENABLED
-+		/* locate the .init.data section in vmlinux */
-+		if (!strcmp(secstrings + idx, ".init.data")) {
-+			get_mcount_loc(&_start_mcount_loc, &_stop_mcount_loc);
-+			mstruct.ehdr = ehdr;
-+			mstruct.init_data_sec = s;
-+			mstruct.start_mcount_loc = _start_mcount_loc;
-+			mstruct.stop_mcount_loc = _stop_mcount_loc;
-+		}
-+#endif
-+
- #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
- 		/* locate the ORC unwind tables */
- 		if (!strcmp(secstrings + idx, ".orc_unwind_ip")) {
-@@ -294,6 +375,23 @@ static int do_sort(Elf_Ehdr *ehdr,
- 		goto out;
- 	}
- #endif
-+
-+#ifdef MCOUNT_SORT_ENABLED
-+	if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-+		fprintf(stderr,
-+			"incomplete mcount's sort in file: %s\n",
-+			fname);
-+		goto out;
-+	}
-+
-+	/* create thread to sort mcount_loc concurrently */
-+	if (pthread_create(&mcount_sort_thread, NULL, &sort_mcount_loc, &mstruct)) {
-+		fprintf(stderr,
-+			"pthread_create mcount_sort_thread failed '%s': %s\n",
-+			strerror(errno), fname);
-+		goto out;
-+	}
-+#endif
- 	if (!extab_sec) {
- 		fprintf(stderr,	"no __ex_table in file: %s\n", fname);
- 		goto out;
-@@ -376,5 +474,23 @@ static int do_sort(Elf_Ehdr *ehdr,
- 		}
- 	}
- #endif
-+
-+#ifdef MCOUNT_SORT_ENABLED
-+	if (mcount_sort_thread) {
-+		void *retval = NULL;
-+		/* wait for mcount sort done */
-+		rc = pthread_join(mcount_sort_thread, &retval);
-+		if (rc) {
-+			fprintf(stderr,
-+				"pthread_join failed '%s': %s\n",
-+				strerror(errno), fname);
-+		} else if (retval) {
-+			rc = -1;
-+			fprintf(stderr,
-+				"failed to sort mcount '%s': %s\n",
-+				(char *)retval, fname);
-+		}
-+	}
-+#endif
- 	return rc;
- }
--- 
-2.27.0
+This is already fixed in linux-next, see:
+
+https://cgit.freedesktop.org/drm-misc/commit/drivers/gpu/drm/vboxvideo/vbox_main.c?id=cebbb5c46d0cb0615fd0c62dea9b44273d0a9780
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/gpu/drm/vboxvideo/vbox_main.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/vboxvideo/vbox_main.c b/drivers/gpu/drm/vboxvideo/vbox_main.c
+> index f28779715ccd..c9e8b3a63c62 100644
+> --- a/drivers/gpu/drm/vboxvideo/vbox_main.c
+> +++ b/drivers/gpu/drm/vboxvideo/vbox_main.c
+> @@ -127,8 +127,8 @@ int vbox_hw_init(struct vbox_private *vbox)
+>  	/* Create guest-heap mem-pool use 2^4 = 16 byte chunks */
+>  	vbox->guest_pool = devm_gen_pool_create(vbox->ddev.dev, 4, -1,
+>  						"vboxvideo-accel");
+> -	if (!vbox->guest_pool)
+> -		return -ENOMEM;
+> +	if (IS_ERR(vbox->guest_pool))
+> +		return PTR_ERR(vbox->guest_pool);
+>  
+>  	ret = gen_pool_add_virt(vbox->guest_pool,
+>  				(unsigned long)vbox->guest_heap,
+> 
 

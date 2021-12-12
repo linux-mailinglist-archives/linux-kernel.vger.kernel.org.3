@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C90471926
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D14747192D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 09:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbhLLHky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 02:40:54 -0500
-Received: from smtpbg587.qq.com ([113.96.223.105]:34676 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhLLHkx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 02:40:53 -0500
-X-QQ-mid: bizesmtp50t1639294849tih7sgr2
+        id S229634AbhLLH6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 02:58:45 -0500
+Received: from smtpbg126.qq.com ([106.55.201.22]:35064 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229449AbhLLH6o (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 02:58:44 -0500
+X-QQ-mid: bizesmtp38t1639295793tlenb3pc
 Received: from localhost.localdomain (unknown [182.132.179.213])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Sun, 12 Dec 2021 15:40:48 +0800 (CST)
+        id ; Sun, 12 Dec 2021 15:56:32 +0800 (CST)
 X-QQ-SSF: 01000000002000D0I000B00A0000000
-X-QQ-FEAT: yoVs+U5I/l63biBhPqvfp8hx+O7T6kXoc4RHqDESnkArQQE4XerTuRI1t7JJz
-        iCQVtLEJfvjF9Chw9ZqxSzssfFnMw8xrexyzEhvGkwVejuYa+M2EdXc2fJij1ThkIqnHrRq
-        wNs2Rh78yHxPuNqeB5FUFKWsVAqKv3z5SY4TQXszoim6SJFY4v1S/WzR9UuPRVY3s0tvqkg
-        jki6QVJsMX/E3GEjtt8w+9hBJfI1GmYwzGVV1luWsXUncHJOEUWUK5hLmQaloIDbeoufsi3
-        TSmgWf8hRUY+FfBrSm0VvslrAui0QCf8YAHjeQ5EEhjfClpvreMyK4ccOvtXu846UKlIXs0
-        12asVL7RDJ7B0lxs6myLEPRLBBL2+mWdsV5d43uMUHgZY6zsqw=
+X-QQ-FEAT: ipjz9r0KCw45BcGJHR0/xo9gqDd0d055zbZMFckWOkH0n8oeRFwIdycKxt0Uo
+        gn4b3CBWf394MRAbewqFy0XGKfUpzixd0x4FR7EMhtgDCBUHsv0rfyyxr6Cudp9wpUjryJm
+        n57Lhhou7e1TPICZPsxutpFNToA8v6lXECcRrx2TXLRRPL6lJD5yy1cMEgXFXEpeXqs0b06
+        ojAdGxjWhU8W7JcnxjYHi3bLQF/YAufNitHM/AMqSZRIoXAfQYiRUQvDdMIgTLIrTFBLtfi
+        YMTuMdCZTx5BA2I2V4DfsHriXWkg9dXSShNVqu7/8LYaDAGiRhAwPLzYG1qqV0ajhpD4239
+        d4nztsNQ7xmrRk5Ao9kTH/JHmCi/PsudzCd9xo2Wx4yWjZ7dag=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     wangborong@cdjrlc.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/virt/fsl_hypervisor: remove an unneeded variable
-Date:   Sun, 12 Dec 2021 15:40:47 +0800
-Message-Id: <20211212074047.330285-1-wangborong@cdjrlc.com>
+To:     linux@dominikbrodowski.net
+Cc:     lee.jones@linaro.org, wangborong@cdjrlc.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pcmcia: pcmcia_resource: return 0 if success
+Date:   Sun, 12 Dec 2021 15:56:30 +0800
+Message-Id: <20211212075630.349459-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam3
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable `ret' used for returning is never changed in function
-`fsl_hv_close'. So that it can be removed and just return its
-initial value 0 at the end of `fsl_hv_close' function.
+The initial value of variable `ret' is -EINVAL, which is used for
+returning the error status in `pcmcia_release_io' when errors occur.
+But if there is no error in `pcmcia_release_io', `ret' should be changed
+to a successful value to return. Thus we change `ret' value to 0 when
+the function's status is successful.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/virt/fsl_hypervisor.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/pcmcia/pcmcia_resource.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/virt/fsl_hypervisor.c b/drivers/virt/fsl_hypervisor.c
-index 46ee0a0998b6..e49bec8bc8a4 100644
---- a/drivers/virt/fsl_hypervisor.c
-+++ b/drivers/virt/fsl_hypervisor.c
-@@ -687,15 +687,13 @@ static int fsl_hv_close(struct inode *inode, struct file *filp)
- 	struct doorbell_queue *dbq = filp->private_data;
- 	unsigned long flags;
+diff --git a/drivers/pcmcia/pcmcia_resource.c b/drivers/pcmcia/pcmcia_resource.c
+index c1c197292111..257181cb686f 100644
+--- a/drivers/pcmcia/pcmcia_resource.c
++++ b/drivers/pcmcia/pcmcia_resource.c
+@@ -409,6 +409,7 @@ static int pcmcia_release_io(struct pcmcia_device *p_dev)
  
--	int ret = 0;
--
- 	spin_lock_irqsave(&db_list_lock, flags);
- 	list_del(&dbq->list);
- 	spin_unlock_irqrestore(&db_list_lock, flags);
+ 	p_dev->_io = 0;
+ 	c->state &= ~CONFIG_IO_REQ;
++	ret = 0;
  
- 	kfree(dbq);
- 
--	return ret;
-+	return 0;
- }
- 
- static const struct file_operations fsl_hv_fops = {
+ out:
+ 	mutex_unlock(&s->ops_mutex);
 -- 
 2.34.1
 

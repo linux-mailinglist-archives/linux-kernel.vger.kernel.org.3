@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8E6471BF4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 18:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CF0471BF7
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 18:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbhLLRtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 12:49:12 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54560 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229584AbhLLRtL (ORCPT
+        id S231871AbhLLRuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 12:50:11 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41020
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230476AbhLLRuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 12:49:11 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BCHTWOM022620;
-        Sun, 12 Dec 2021 17:49:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=9im8bINFr6HEhLEf+QMSkLywF3Qj1B6x6+Mrrb7bbEY=;
- b=N4a2HFKeVVOGIOO9wyIRo12R/aAMpat7vHjtwkv+Vw/p8JftQ90De1Ou0xH7satl8Ni+
- 6KV2GHnDb/k4+8YwlTni9IVhZh4SwLquhCuT4g/Gj9qlJMlig48tgxvu+6UlGjIaBTiJ
- /00yDXmTZqHJk4mnB8KKi+DPwSQTNo+rooG5ficg3b8dY1TAym3Ag4zyp0FoFaL5LVWs
- yhgkeYlSUb9PHVStFhvQij9xsik5T5WSmHFYb2G9xNv0I5lkwU64WK5syFa5b9SZRYYj
- mxYqPWOtZcVfMlfh70EygOf5OLIbZESgcs5TepfLjtyyXqWL07uh7o9NBmY9IQkZUvgw Zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cwngxr75m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 17:49:05 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BCHkiB5003332;
-        Sun, 12 Dec 2021 17:49:04 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cwngxr754-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 17:49:04 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BCHhW3j028899;
-        Sun, 12 Dec 2021 17:49:02 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3cvkm8e9au-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 17:49:02 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BCHmwaL20054298
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 12 Dec 2021 17:48:58 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55EA611C073;
-        Sun, 12 Dec 2021 17:48:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D1E6B11C06E;
-        Sun, 12 Dec 2021 17:48:57 +0000 (GMT)
-Received: from osiris (unknown [9.145.153.15])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sun, 12 Dec 2021 17:48:57 +0000 (GMT)
-Date:   Sun, 12 Dec 2021 18:48:56 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: Re: [PATCH 01/10] exit/s390: Remove dead reference to do_exit from
- copy_thread
-Message-ID: <YbY2CDkZbOFRBN0i@osiris>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-1-ebiederm@xmission.com>
+        Sun, 12 Dec 2021 12:50:09 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2D4A13F1B3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 17:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639331408;
+        bh=WCCvwpT22jrWbgMHRE3RsRLnwwEuukRNrzKAgDnW7I4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=rFQvdsnNMngDF6QWIFABlSQt8Z7G25XrMKHi9Yr6eS+ar7uzP509feHDS2kcqZBCt
+         qziLQ1hsk9nwAoQKq2uK5EX9fwKR8QazszNPM+5jeH0RD/n35XHn/v3jBEuYZzmSao
+         zDUgPfI1o+LT+vcc5HsOnLhyhcyzUWfUaS75fXyLKBtcQjH2P6zhD/x5RncXFm1w3N
+         LR68mi0weyaXsSrMmJwdA5XtPfTwqfWu6DuCTeeURmt+kMKveJ82+fhgukES2HpC6B
+         K4QGhczfdDDGxaIF3YuuDl+YoYLgIgw4DjhEe7t8p6vETEGgq6ebmwW4mGJ2AJ/aRj
+         VeMEwD112GRNA==
+Received: by mail-lf1-f70.google.com with SMTP id o11-20020a056512230b00b0041ca68ddf35so6453898lfu.22
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 09:50:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WCCvwpT22jrWbgMHRE3RsRLnwwEuukRNrzKAgDnW7I4=;
+        b=64/B+LTfut3L5qioHm4ikTbJCRfR4iUimL7gEgBzpN+bJKrtxxJvmpMRiYz2aAGbxG
+         iFiWj/RsN14Ei9abyhf+Wcu7yTSLZypy7CDjnBDzANpBMSOrK4BHjRh5Xe6ZvzL0+Vlk
+         EA0KmFWajjvkQrB81bYcJMWGq+S4PYPv5Vbkc+KFeJRw44VCbfdD3Eexf4XIhCO71lyK
+         rbHRjeutEtWEPHQ3WyINwmDIBeKsSMxHKNRNgj9FCLtj1+pEgmML3/Uh8l6VjVQuJN3G
+         2PXy9wmfPOL6VsYMTfLm0QKNHbLe4dE406hSlQeBt7xH9Tkg42WlnaV3k7eUgLWfBNli
+         hJtQ==
+X-Gm-Message-State: AOAM530H6s+PONQ9o5FNxHSNOzxQKtVoyK9CL0ILCcwgAaU5b2OeWxTx
+        BagmPowNb4XZixaf4y+nZYC2yS4Yq2kGG+T88bSIWwoKEcUggmBnq5vJxqFo0y4NHuD0oEpI8A3
+        636kUAGkp9z0LtFdp2GPtFilvb6pjIMzOIrjgJxG8pA==
+X-Received: by 2002:a05:6512:2820:: with SMTP id cf32mr24881732lfb.510.1639331407210;
+        Sun, 12 Dec 2021 09:50:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzUu1cZVv3akhdYGI1KReu7wig7sZszq46hRcYvBeAwNUtzmKOFPO3wTQxMzJmtsBvtBD/ddg==
+X-Received: by 2002:a05:6512:2820:: with SMTP id cf32mr24881715lfb.510.1639331407044;
+        Sun, 12 Dec 2021 09:50:07 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id u7sm1135220lja.58.2021.12.12.09.50.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 09:50:06 -0800 (PST)
+Message-ID: <b618ff5b-ee41-2c29-5074-24fd4d0f0933@canonical.com>
+Date:   Sun, 12 Dec 2021 18:50:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208202532.16409-1-ebiederm@xmission.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qO-2S9u-J4wCnXBo5p9cuBUOLvh1NgVf
-X-Proofpoint-ORIG-GUID: ZiJj0tik5lgEsnkHHuvdFTOduCt6Fxet
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-12_07,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 suspectscore=0 adultscore=0 spamscore=0 phishscore=0
- mlxlogscore=742 impostorscore=0 malwarescore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112120107
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] watchdog: s3c2410: Fix getting the optional clock
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212170247.30646-1-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211212170247.30646-1-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:25:23PM -0600, Eric W. Biederman wrote:
-> My s390 assembly is not particularly good so I have read the history
-> of the reference to do_exit copy_thread and have been able to
-> verify that do_exit is not used.
+On 12/12/2021 18:02, Sam Protsenko wrote:
+> "watchdog_src" clock is optional and may not be present for some SoCs
+> supported by this driver. Nevertheless, in case the clock is provided
+> but some error happens during its getting, that error should be handled
+> properly. Use devm_clk_get_optional() API for that. Also report possible
+> errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+> clock provider is not ready by the time WDT probe function is executed).
 > 
-> The general argument is that s390 has been changed to use the generic
-> kernel_thread and kernel_execve and the generic versions do not call
-> do_exit.  So it is strange to see a do_exit reference sitting there.
-> 
-> The history of the do_exit reference in s390's version of copy_thread
-> seems conclusive that the do_exit reference is something that lingers
-> and should have been removed several years ago.
-...
-> Remove this dead reference to do_exit to make it clear that s390 is
-> not doing anything with do_exit in copy_thread.
->
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> Fixes: a4f3dc8d5fbc ("watchdog: s3c2410: Support separate source clock")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
->  arch/s390/kernel/process.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/watchdog/s3c2410_wdt.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+> 
 
-Applied to s390 tree. Just in case you want to apply this to your tree too:
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

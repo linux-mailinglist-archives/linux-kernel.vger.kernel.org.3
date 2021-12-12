@@ -2,82 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7C047178C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D6247178E
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbhLLB0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 20:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S232446AbhLLB0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 20:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbhLLB0s (ORCPT
+        with ESMTP id S232367AbhLLB0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 11 Dec 2021 20:26:48 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3020EC061714
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFBAC061751
         for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 17:26:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F206DB80BFA
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE647C004DD;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24487B80C0A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6921C341C8;
         Sun, 12 Dec 2021 01:26:45 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1mwDdU-000kC2-NF;
+        id 1mwDdU-000kCd-TQ;
         Sat, 11 Dec 2021 20:26:44 -0500
-Message-ID: <20211212012617.690710310@goodmis.org>
+Message-ID: <20211212012644.746059161@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 11 Dec 2021 20:26:17 -0500
+Date:   Sat, 11 Dec 2021 20:26:18 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [for-next][PATCH 00/11] tracing: More updates for 5.17
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Keeping <john@metanate.com>
+Subject: [for-next][PATCH 01/11] tracing: Make trace_marker{,_raw} stream-like
+References: <20211212012617.690710310@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-for-next
+From: John Keeping <john@metanate.com>
 
-Head SHA1: 85c62c8c3749eec02ba81217bdcac26867dc262e
+The tracing marker files are write-only streams with no meaningful
+concept of file position.  Using stream_open() to mark them as
+stream-link indicates this and has the added advantage that a single
+file descriptor can now be used from multiple threads without contention
+thanks to clearing FMODE_ATOMIC_POS.
 
+Note that this has the potential to break existing userspace by since
+both lseek(2) and pwrite(2) will now return ESPIPE when previously lseek
+would have updated the stored offset and pwrite would have appended to
+the trace.  A survey of libtracefs and several other projects found to
+use trace_marker(_raw) [1][2][3] suggests that everyone limits
+themselves to calling write(2) and close(2) on these file descriptors so
+there is a good chance this will go unnoticed and the benefits of
+reduced overhead and lock contention seem worth the risk.
 
-Beau Belgrave (1):
-      tracing: Do not let synth_events block other dyn_event systems during create
+[1] https://github.com/google/perfetto
+[2] https://github.com/intel/media-driver/
+[3] https://w1.fi/cgit/hostap/
 
-Jiri Olsa (1):
-      tracing: Iterate trace_[ku]probe objects directly
+Link: https://lkml.kernel.org/r/20211207142558.347029-1-john@metanate.com
 
-John Keeping (1):
-      tracing: Make trace_marker{,_raw} stream-like
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ kernel/trace/trace.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-Steven Rostedt (VMware) (2):
-      tracefs: Use d_inode() helper function to get the dentry inode
-      tracing: Use trace_iterator_reset() in tracing_read_pipe()
-
-Tom Zanussi (4):
-      tracing: Change event_command func() to parse()
-      tracing: Change event_trigger_ops func() to trigger()
-      tracing: Add helper functions to simplify event_command.parse() callback handling
-      tracing: Have existing event_command.parse() implementations use helpers
-
-Xiu Jianfeng (1):
-      tracing: Use memset_startat helper in trace_iterator_reset()
-
-Yinan Liu (1):
-      script/sorttable: Code style improvements
-
-----
- fs/tracefs/inode.c                  |  24 +-
- kernel/trace/trace.c                |  21 +-
- kernel/trace/trace.h                |  72 +++--
- kernel/trace/trace_eprobe.c         |  11 +-
- kernel/trace/trace_events_hist.c    | 109 +++----
- kernel/trace/trace_events_synth.c   |  13 +-
- kernel/trace/trace_events_trigger.c | 558 ++++++++++++++++++++++++++----------
- kernel/trace/trace_kprobe.c         |  13 +-
- kernel/trace/trace_uprobe.c         |  23 +-
- scripts/sorttable.h                 |   4 +-
- 10 files changed, 558 insertions(+), 290 deletions(-)
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index e3b8c906b7b4..588de6df473f 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -4841,6 +4841,12 @@ int tracing_open_generic_tr(struct inode *inode, struct file *filp)
+ 	return 0;
+ }
+ 
++static int tracing_mark_open(struct inode *inode, struct file *filp)
++{
++	stream_open(inode, filp);
++	return tracing_open_generic_tr(inode, filp);
++}
++
+ static int tracing_release(struct inode *inode, struct file *file)
+ {
+ 	struct trace_array *tr = inode->i_private;
+@@ -7117,9 +7123,6 @@ tracing_mark_write(struct file *filp, const char __user *ubuf,
+ 	if (tt)
+ 		event_triggers_post_call(tr->trace_marker_file, tt);
+ 
+-	if (written > 0)
+-		*fpos += written;
+-
+ 	return written;
+ }
+ 
+@@ -7178,9 +7181,6 @@ tracing_mark_raw_write(struct file *filp, const char __user *ubuf,
+ 
+ 	__buffer_unlock_commit(buffer, event);
+ 
+-	if (written > 0)
+-		*fpos += written;
+-
+ 	return written;
+ }
+ 
+@@ -7580,16 +7580,14 @@ static const struct file_operations tracing_free_buffer_fops = {
+ };
+ 
+ static const struct file_operations tracing_mark_fops = {
+-	.open		= tracing_open_generic_tr,
++	.open		= tracing_mark_open,
+ 	.write		= tracing_mark_write,
+-	.llseek		= generic_file_llseek,
+ 	.release	= tracing_release_generic_tr,
+ };
+ 
+ static const struct file_operations tracing_mark_raw_fops = {
+-	.open		= tracing_open_generic_tr,
++	.open		= tracing_mark_open,
+ 	.write		= tracing_mark_raw_write,
+-	.llseek		= generic_file_llseek,
+ 	.release	= tracing_release_generic_tr,
+ };
+ 
+-- 
+2.33.0

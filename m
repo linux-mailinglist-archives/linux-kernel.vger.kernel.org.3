@@ -2,343 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FDE471BE1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 18:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BE7471BEA
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 18:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbhLLRWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 12:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S231825AbhLLRhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 12:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbhLLRWP (ORCPT
+        with ESMTP id S229584AbhLLRhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 12:22:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEF7C061714;
-        Sun, 12 Dec 2021 09:22:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E79C3CE0BA3;
-        Sun, 12 Dec 2021 17:22:12 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 5721DC341C7;
-        Sun, 12 Dec 2021 17:22:06 +0000 (UTC)
-Date:   Sun, 12 Dec 2021 17:27:25 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     sumit.semwal@linaro.org, amit.pundir@linaro.org,
-        john.stultz@linaro.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/7] mfd: qcom-spmi-pmic: expose the PMIC revid
- information to clients
-Message-ID: <20211212172725.4556ef55@jic23-huawei>
-In-Reply-To: <20211211022224.3488860-2-caleb@connolly.tech>
-References: <20211211022224.3488860-1-caleb@connolly.tech>
- <20211211022224.3488860-2-caleb@connolly.tech>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Sun, 12 Dec 2021 12:37:34 -0500
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281CAC061714;
+        Sun, 12 Dec 2021 09:37:34 -0800 (PST)
+Received: by mail-oo1-xc29.google.com with SMTP id e17-20020a4a8291000000b002c5ee0645e7so3683186oog.2;
+        Sun, 12 Dec 2021 09:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=x3STyh9wrfy9GMEn+OwlQkK5L6ldjXxwL1dbZKdBiTs=;
+        b=n/k4zrf/bm4298JkI9uzGG3tx3vzZ8oNmRp/NTR+bImJ7r02BoRfyq4TZHmJX1qAyt
+         c6dIc3FZ8jQgTAZX8lKG36pFOQO5F2ddKX2M1zWzRdUMOHKtdlQI7Fp5EGLGlHA6Ly1F
+         jBcoWY8WDYexGGEnLfS+KDZSu/LMl1+DN4fOQFveCZBLnihYTU8BEU0J475m7FpBH5Mi
+         HEMad1fZv9Z0nMg4vFFtdFsELnxEfXvrSr5RhkcjHK0zX9g5ao2GOzppObTUOzw/7JLt
+         uPgOznAo/+cvGsxyGwCuVfRLKUCN+3YF/ozRvBXXF0g+Fy/tucXVwhbX4T7FjtDiV/iC
+         ZDPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=x3STyh9wrfy9GMEn+OwlQkK5L6ldjXxwL1dbZKdBiTs=;
+        b=bbUGlSjg3QnULyl0N/AHuW7oRqcGyrsPGUVeMCkREd5x6Ujh5ugRW/gYCrq1cGA6LU
+         WzYy84gOHcFelOMZXG4XaiEblIQLibRM631s9WaR73JgKASyKNGgdqQf94tYhiD6UlYM
+         4qNO3/DMYljpSFIWFasdc2gSom6+aLkUrsOnj1aEDn5M1zPxQe9IG1esBW5yWGIXPsqQ
+         x9OZGNRcznmcZjkxBtn4BqL+qL0LJ58VM/i9Rj/c85ggylVpw7n4q/OdCdohG2+pO1WB
+         Liy+lH2EmEZZKlP8uOWoliOxM5z6oiqYJa61hpYFXysfUT05IaZMVvTdgeycZlM/hRh7
+         ZKAA==
+X-Gm-Message-State: AOAM533AhtnAoDwZNWWM3dB6NYEUdm4ZTdQtfzKE3ZUiwxKflENWd9Zh
+        r3XI7r9NgqOUFXFq3ih2GuQq0QPa438=
+X-Google-Smtp-Source: ABdhPJzFb5azKRc0nIdKAFEU45euIqe4ojeF9bogkOHliSPflkks09JdlRGdcczSCs038kXv6mKnPQ==
+X-Received: by 2002:a4a:ea84:: with SMTP id r4mr16463021ooh.13.1639330653096;
+        Sun, 12 Dec 2021 09:37:33 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n23sm2142912oig.4.2021.12.12.09.37.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 09:37:32 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] watchdog: s3c2410: Fix getting the optional clock
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212170247.30646-1-semen.protsenko@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <5d21438c-b122-41ce-c6be-771c63b0258a@roeck-us.net>
+Date:   Sun, 12 Dec 2021 09:37:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20211212170247.30646-1-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Dec 2021 02:22:18 +0000
-Caleb Connolly <caleb.connolly@linaro.org> wrote:
-
-> From: Caleb Connolly <caleb.connolly@linaro.org>
+On 12/12/21 9:02 AM, Sam Protsenko wrote:
+> "watchdog_src" clock is optional and may not be present for some SoCs
+> supported by this driver. Nevertheless, in case the clock is provided
+> but some error happens during its getting, that error should be handled
+> properly. Use devm_clk_get_optional() API for that. Also report possible
+> errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+> clock provider is not ready by the time WDT probe function is executed).
 > 
-> Some PMIC functions such as the RRADC need to be aware of the PMIC
-> chip revision information to implement errata or otherwise adjust
-> behaviour, export the PMIC information to enable this.
-> 
-> This is specifically required to enable the RRADC to adjust
-> coefficients based on which chip fab the PMIC was produced in,
-> this can vary per unique device and therefore has to be read at
-> runtime.
-> 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> Fixes: a4f3dc8d5fbc ("watchdog: s3c2410: Support separate source clock")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-Hi Calib,
-
-Comments inline.
-
-Jonathan
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/mfd/qcom-spmi-pmic.c | 103 +++++++++++++++++------------------
->  include/soc/qcom/qcom-pmic.h |  58 ++++++++++++++++++++
->  2 files changed, 108 insertions(+), 53 deletions(-)
->  create mode 100644 include/soc/qcom/qcom-pmic.h
+>   drivers/watchdog/s3c2410_wdt.c | 22 ++++++++++++----------
+>   1 file changed, 12 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/mfd/qcom-spmi-pmic.c b/drivers/mfd/qcom-spmi-pmic.c
-> index 1cacc00aa6c9..78530c1aca4b 100644
-> --- a/drivers/mfd/qcom-spmi-pmic.c
-> +++ b/drivers/mfd/qcom-spmi-pmic.c
-> @@ -3,51 +3,25 @@
->   * Copyright (c) 2014, The Linux Foundation. All rights reserved.
->   */
->  
-> +#include <linux/device.h>
-> +#include <linux/gfp.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/slab.h>
->  #include <linux/spmi.h>
-> +#include <linux/string.h>
->  #include <linux/regmap.h>
->  #include <linux/of_platform.h>
-> +#include <soc/qcom/qcom-pmic.h>
->  
->  #define PMIC_REV2		0x101
->  #define PMIC_REV3		0x102
->  #define PMIC_REV4		0x103
->  #define PMIC_TYPE		0x104
->  #define PMIC_SUBTYPE		0x105
-> -
-> +#define PMIC_FAB_ID		0x1f2
->  #define PMIC_TYPE_VALUE		0x51
->  
-> -#define COMMON_SUBTYPE		0x00
-> -#define PM8941_SUBTYPE		0x01
-> -#define PM8841_SUBTYPE		0x02
-> -#define PM8019_SUBTYPE		0x03
-> -#define PM8226_SUBTYPE		0x04
-> -#define PM8110_SUBTYPE		0x05
-> -#define PMA8084_SUBTYPE		0x06
-> -#define PMI8962_SUBTYPE		0x07
-> -#define PMD9635_SUBTYPE		0x08
-> -#define PM8994_SUBTYPE		0x09
-> -#define PMI8994_SUBTYPE		0x0a
-> -#define PM8916_SUBTYPE		0x0b
-> -#define PM8004_SUBTYPE		0x0c
-> -#define PM8909_SUBTYPE		0x0d
-> -#define PM8028_SUBTYPE		0x0e
-> -#define PM8901_SUBTYPE		0x0f
-> -#define PM8950_SUBTYPE		0x10
-> -#define PMI8950_SUBTYPE		0x11
-> -#define PM8998_SUBTYPE		0x14
-> -#define PMI8998_SUBTYPE		0x15
-> -#define PM8005_SUBTYPE		0x18
-> -#define PM660L_SUBTYPE		0x1A
-> -#define PM660_SUBTYPE		0x1B
-> -#define PM8150_SUBTYPE		0x1E
-> -#define PM8150L_SUBTYPE		0x1f
-> -#define PM8150B_SUBTYPE		0x20
-> -#define PMK8002_SUBTYPE		0x21
-> -#define PM8009_SUBTYPE		0x24
-> -#define PM8150C_SUBTYPE		0x26
-> -#define SMB2351_SUBTYPE		0x29
-> -
->  static const struct of_device_id pmic_spmi_id_table[] = {
->  	{ .compatible = "qcom,pm660",     .data = (void *)PM660_SUBTYPE },
->  	{ .compatible = "qcom,pm660l",    .data = (void *)PM660L_SUBTYPE },
-> @@ -81,57 +55,64 @@ static const struct of_device_id pmic_spmi_id_table[] = {
->  	{ }
->  };
->  
-> -static void pmic_spmi_show_revid(struct regmap *map, struct device *dev)
-> +static void pmic_spmi_load_revid(struct regmap *map, struct device *dev,
-> +				 struct qcom_spmi_pmic *pmic)
->  {
-> -	unsigned int rev2, minor, major, type, subtype;
-> -	const char *name = "unknown";
->  	int ret, i;
->  
-> -	ret = regmap_read(map, PMIC_TYPE, &type);
-> +	ret = regmap_read(map, PMIC_TYPE, &pmic->type);
-
-Given this isn't just for a debug print any more, I'd suggest you should
-do proper error handling.  If these values can't be read fail the probe.
-
->  	if (ret < 0)
->  		return;
->  
-> -	if (type != PMIC_TYPE_VALUE)
-> +	if (pmic->type != PMIC_TYPE_VALUE)
->  		return;
->  
-> -	ret = regmap_read(map, PMIC_SUBTYPE, &subtype);
-> +	ret = regmap_read(map, PMIC_SUBTYPE, &pmic->subtype);
->  	if (ret < 0)
->  		return;
->  
->  	for (i = 0; i < ARRAY_SIZE(pmic_spmi_id_table); i++) {
-> -		if (subtype == (unsigned long)pmic_spmi_id_table[i].data)
-> +		if (pmic->subtype == (unsigned long)pmic_spmi_id_table[i].data)
->  			break;
->  	}
->  
-> -	if (i != ARRAY_SIZE(pmic_spmi_id_table))
-> -		name = pmic_spmi_id_table[i].compatible;
-> +	if (i != ARRAY_SIZE(pmic_spmi_id_table)) {
-> +		pmic->name = kmalloc(strlen(pmic_spmi_id_table[i].compatible),
-> +			GFP_KERNEL);
-> +		strncpy(pmic->name, pmic_spmi_id_table[i].compatible,
-> +			strlen(pmic_spmi_id_table[i].compatible));
-
-Under what circumstances could you not just use a pointer to the string in the
-table for this?  Is there a life time issue?  Given you free the string in the
-remove it seems unlikely.
-
-If so why not use use kstrdup()
-
-
-> +	}
->  
-> -	ret = regmap_read(map, PMIC_REV2, &rev2);
-> +	ret = regmap_read(map, PMIC_REV2, &pmic->rev2);
->  	if (ret < 0)
->  		return;
->  
-> -	ret = regmap_read(map, PMIC_REV3, &minor);
-> +	ret = regmap_read(map, PMIC_REV3, &pmic->minor);
->  	if (ret < 0)
->  		return;
->  
-> -	ret = regmap_read(map, PMIC_REV4, &major);
-> +	ret = regmap_read(map, PMIC_REV4, &pmic->major);
->  	if (ret < 0)
->  		return;
->  
-> +	if (pmic->subtype == PMI8998_SUBTYPE || pmic->subtype == PM660_SUBTYPE) {
-> +		ret = regmap_read(map, PMIC_FAB_ID, &pmic->fab_id);
-> +		if (ret < 0)
-> +			return;
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index bb374b9fc163..71c280d3e1a2 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -713,16 +713,18 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>   	 * "watchdog_src" clock is optional; if it's not present -- just skip it
+>   	 * and use "watchdog" clock as both bus and source clock.
+>   	 */
+> -	wdt->src_clk = devm_clk_get(dev, "watchdog_src");
+> -	if (!IS_ERR(wdt->src_clk)) {
+> -		ret = clk_prepare_enable(wdt->src_clk);
+> -		if (ret < 0) {
+> -			dev_err(dev, "failed to enable source clock\n");
+> -			ret = PTR_ERR(wdt->src_clk);
+> -			goto err_bus_clk;
+> -		}
+> -	} else {
+> -		wdt->src_clk = NULL;
+> +	wdt->src_clk = devm_clk_get_optional(dev, "watchdog_src");
+> +	if (IS_ERR(wdt->src_clk)) {
+> +		dev_err_probe(dev, PTR_ERR(wdt->src_clk),
+> +			      "failed to get source clock\n");
+> +		ret = PTR_ERR(wdt->src_clk);
+> +		goto err_bus_clk;
 > +	}
 > +
->  	/*
->  	 * In early versions of PM8941 and PM8226, the major revision number
->  	 * started incrementing from 0 (eg 0 = v1.0, 1 = v2.0).
->  	 * Increment the major revision number here if the chip is an early
->  	 * version of PM8941 or PM8226.
->  	 */
-> -	if ((subtype == PM8941_SUBTYPE || subtype == PM8226_SUBTYPE) &&
-> -	    major < 0x02)
-> -		major++;
-> -
-> -	if (subtype == PM8110_SUBTYPE)
-> -		minor = rev2;
-> +	if ((pmic->subtype == PM8941_SUBTYPE || pmic->subtype == PM8226_SUBTYPE) &&
-> +	    pmic->major < 0x02)
-> +		pmic->major++;
->  
-> -	dev_dbg(dev, "%x: %s v%d.%d\n", subtype, name, major, minor);
-> +	if (pmic->subtype == PM8110_SUBTYPE)
-> +		pmic->minor = pmic->rev2;
->  }
->  
->  static const struct regmap_config spmi_regmap_config = {
-> @@ -144,22 +125,38 @@ static const struct regmap_config spmi_regmap_config = {
->  static int pmic_spmi_probe(struct spmi_device *sdev)
->  {
->  	struct regmap *regmap;
-> +	struct qcom_spmi_pmic *pmic;
->  
->  	regmap = devm_regmap_init_spmi_ext(sdev, &spmi_regmap_config);
->  	if (IS_ERR(regmap))
->  		return PTR_ERR(regmap);
->  
-> +	pmic = devm_kzalloc(&sdev->dev, sizeof(*pmic), GFP_KERNEL);
-> +	if (!pmic)
-> +		return -ENOMEM;
-> +
->  	/* Only the first slave id for a PMIC contains this information */
-> -	if (sdev->usid % 2 == 0)
-> -		pmic_spmi_show_revid(regmap, &sdev->dev);
-> +	if (sdev->usid % 2 == 0) {
-> +		pmic_spmi_load_revid(regmap, &sdev->dev, pmic);
-> +		spmi_device_set_drvdata(sdev, pmic);
-> +		qcom_pmic_print_info(&sdev->dev, pmic);
-> +	}
->  
->  	return devm_of_platform_populate(&sdev->dev);
->  }
->  
-> +static void pmic_spmi_remove(struct spmi_device *sdev)
-> +{
-> +	struct qcom_spmi_pmic *pmic = spmi_device_get_drvdata(sdev);
-> +
-> +	kfree(pmic->name);
-> +}
-> +
->  MODULE_DEVICE_TABLE(of, pmic_spmi_id_table);
->  
->  static struct spmi_driver pmic_spmi_driver = {
->  	.probe = pmic_spmi_probe,
-> +	.remove = pmic_spmi_remove,
->  	.driver = {
->  		.name = "pmic-spmi",
->  		.of_match_table = pmic_spmi_id_table,
-> diff --git a/include/soc/qcom/qcom-pmic.h b/include/soc/qcom/qcom-pmic.h
-> new file mode 100644
-> index 000000000000..bf87a4f2de6a
-> --- /dev/null
-> +++ b/include/soc/qcom/qcom-pmic.h
-> @@ -0,0 +1,58 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/* Copyright (c) 2021 Linaro. All rights reserved.
-> + * Copyright (c) 2021 Caleb Connolly <caleb.connolly@linaro.org>
-> + */
-> +
-> +#define COMMON_SUBTYPE		0x00
-> +#define PM8941_SUBTYPE		0x01
-> +#define PM8841_SUBTYPE		0x02
-> +#define PM8019_SUBTYPE		0x03
-> +#define PM8226_SUBTYPE		0x04
-> +#define PM8110_SUBTYPE		0x05
-> +#define PMA8084_SUBTYPE		0x06
-> +#define PMI8962_SUBTYPE		0x07
-> +#define PMD9635_SUBTYPE		0x08
-> +#define PM8994_SUBTYPE		0x09
-> +#define PMI8994_SUBTYPE		0x0a
-> +#define PM8916_SUBTYPE		0x0b
-> +#define PM8004_SUBTYPE		0x0c
-> +#define PM8909_SUBTYPE		0x0d
-> +#define PM8028_SUBTYPE		0x0e
-> +#define PM8901_SUBTYPE		0x0f
-> +#define PM8950_SUBTYPE		0x10
-> +#define PMI8950_SUBTYPE		0x11
-> +#define PM8998_SUBTYPE		0x14
-> +#define PMI8998_SUBTYPE		0x15
-> +#define PM8005_SUBTYPE		0x18
-> +#define PM660L_SUBTYPE		0x1A
-> +#define PM660_SUBTYPE		0x1B
-> +#define PM8150_SUBTYPE		0x1E
-> +#define PM8150L_SUBTYPE		0x1f
-> +#define PM8150B_SUBTYPE		0x20
-> +#define PMK8002_SUBTYPE		0x21
-> +#define PM8009_SUBTYPE		0x24
-> +#define PM8150C_SUBTYPE		0x26
-> +#define SMB2351_SUBTYPE		0x29
-> +
-> +#define PMI8998_FAB_ID_SMIC	0x11
-> +#define PMI8998_FAB_ID_GF	0x30
-> +
-> +#define PM660_FAB_ID_GF		0x0
-> +#define PM660_FAB_ID_TSMC	0x2
-> +#define PM660_FAB_ID_MX		0x3
-> +
-> +struct qcom_spmi_pmic {
-> +	unsigned int type;
-> +	unsigned int subtype;
-> +	unsigned int major;
-> +	unsigned int minor;
-> +	unsigned int rev2;
-> +	unsigned int fab_id;
-> +	char *name;
-> +};
-> +
-> +inline void qcom_pmic_print_info(struct device *dev, struct qcom_spmi_pmic *pmic)
-> +{
-> +	dev_info(dev, "%x: %s v%d.%d\n",
-> +		pmic->subtype, pmic->name, pmic->major, pmic->minor);
-> +}
+> +	ret = clk_prepare_enable(wdt->src_clk);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable source clock\n");
+> +		goto err_bus_clk;
+>   	}
+>   
+>   	wdt->wdt_device.min_timeout = 1;
+> 
 

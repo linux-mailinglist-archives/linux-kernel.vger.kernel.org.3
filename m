@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 856644718FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCB14718FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbhLLHFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 02:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbhLLHFH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 02:05:07 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC53C061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 23:05:07 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id l7so19451139lja.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 23:05:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=6LU/tly/OnmzSqVoqxRgCanCx1K/OauRFfDCzPG0MrI=;
-        b=QuJbf7XOx9o58FqDkSxA3xaFsMj7fF96cCL6OfsKL9mCsDoMPLIAlVqxzypdv8k0Lr
-         6H+oaPg8DZOTC75EjoBI1aF3CZFtrkkItwst+rzKdDLe2x8sgyoZUIAV8ofWPbE0qxrL
-         URsQQ4yiK2g6avCwp5LqjTinWFYBvaYn5bq/1MJYdPilwL/jgxhVk2XnGfVmp2UItqdl
-         MV3qeyHaHtYvv2DerSzkfmgcTDclqUtFWmYFGtkt7WPslP9o6PSd/X8fbpzYqxHu6hBC
-         cHyDljCC4Zqv78dA8I9m9JNCBeuEGh5SLNTUOExsO8uvAGnp8MAWT3thRb8msgkswnDT
-         gx5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=6LU/tly/OnmzSqVoqxRgCanCx1K/OauRFfDCzPG0MrI=;
-        b=Ei5Z5JMlje/y7VrL+QA1hineOeZblgZPt4kqDtcch6w/vqlM0gq2ePlg7R7rCeH1/l
-         wAF3bdSwG7D/OGJzNBT/cYk15JzrLctRG3COwl+8AWnEzd5c5dK8FDS4bwr+y1e2u9g0
-         VWs7gRtGEjv8paO4A0qwt0lQZN0vxIUvmUpG/uQfwOznuy8jd6zjP7SeSIwbKMLmtb9U
-         /DCp9bScTAzERILxCGa1jUw80n6m4ZQu8tWLUIB5cDPGuht58xehU+Zsn2iGwFjoHrQk
-         qzaU6LRcG9maejiV53oifs9p6598IsNBo2Ec5CifTJE2R42EwUts20wdoFgU/oVFGX9w
-         szLg==
-X-Gm-Message-State: AOAM5307+m3ZQ6sGWV+k6A8psiuBlURevrRW6uVNSeyrHgKpIizSP8I5
-        p2PomFLUYijDWpDs3MgQdhYdI7nzfqezwKKyE3c=
-X-Google-Smtp-Source: ABdhPJxCr3b2+y420uyprVImekYlRzuPpiy7L7llL80HTibem20C0vxIbebcd8SdQPGIgkDsL/l1BBB3iHJfpVdHuKs=
-X-Received: by 2002:a2e:995a:: with SMTP id r26mr22470527ljj.378.1639292705600;
- Sat, 11 Dec 2021 23:05:05 -0800 (PST)
+        id S229627AbhLLHFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 02:05:55 -0500
+Received: from marcansoft.com ([212.63.210.85]:60066 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229533AbhLLHFy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 02:05:54 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 426E042598;
+        Sun, 12 Dec 2021 07:05:51 +0000 (UTC)
+Subject: Re: [PATCH v2 0/2] (mmc: sdhci-pci-gli: GL9755: Quirks for Apple ARM
+ platforms)
+To:     Ben Chuang <benchuanggli@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211212070210.141664-1-marcan@marcan.st>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <99496d50-bbf0-ec73-a97e-7c1be59e21cd@marcan.st>
+Date:   Sun, 12 Dec 2021 16:05:48 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Sun, 12 Dec 2021 12:34:54 +0530
-Message-ID: <CAHhAz+iKepmJGRKzLe+B_XFOax4CzVzeeAB_T5YtZrPgeX8o6g@mail.gmail.com>
-Subject: X86 : system call
-To:     kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        tglx@linutronix.de, Ingo Molnar <mingo@redhat.com>, hpa@zytor.com,
-        x86@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211212070210.141664-1-marcan@marcan.st>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 12/12/2021 16.02, Hector Martin wrote:
+> Hi folks,
+> 
+> This short series adds a few quirks needed to make the card readers in
+> Apple M1 Pro/Max MacBook laptops work properly.
+> 
+> The first patch should be straightforward; it just allows configuring
+> the CD/WP polarity based on device tree settings. There is already a
+> standard DT binding for this.
+> 
+> The second patch works around an issue with 8/16-bit MMIO reads that
+> only affects these platforms, for some reason.
+> 
+> Changes since v1:
+> 
+> - Also applied workaround to GL9750
+> - Fixed checkpatch warnings
+> 
+> Hector Martin (2):
+>    mmc: sdhci-pci-gli: GL9755: Support for CD/WP inversion on OF
+>      platforms
+>    mmc: sdhci-pci-gli: GL975[50]: Issue 8/16-bit MMIO reads as 32-bit
+>      reads.
+> 
+>   drivers/mmc/host/sdhci-pci-gli.c | 42 ++++++++++++++++++++++++++++++--
+>   1 file changed, 40 insertions(+), 2 deletions(-)
+> 
 
-32-bit system call numbers and entry vectors are defined in the format
-"<number> <abi> <name> <entry point> <compat entry point>". What is
-the difference between <entry point> and <compat entry point>?
-
-The abi is always "i386" for arch/x86/entry/syscalls/syscall_32.tbl,
-whereas for 64-bit(arch/x86/entry/syscalls/syscall_64.tbl) it is used
-as "common" and "64", "x32". What is the difference between "common"
-and "64", "x32"?
-
-While adding a new system call(for example: mlock) to kernel,
-/kernel/sys_ni.c file modified as mentioned below:
-+cond_syscall(sys_mlock2);
-
-Why do we pass <entry point> to cond_syscall()?
-
-Also, could someone please point me to a document which explains about
-"how to add a new system call" and the "system call flow from user
-space to kernel space" in X86 ARCHITECTURE (32-BIT AND 64-BIT).
-
+Argh, sorry about the bad subject. Copy&paste mishap while editing the
+cover letter. Not doing great on the emailing for this one... :(
 
 -- 
-Thanks,
-Sekhar
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

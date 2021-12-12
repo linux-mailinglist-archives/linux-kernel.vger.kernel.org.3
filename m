@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEF14719A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 11:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B30554719A7
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 11:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbhLLKmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 05:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S230127AbhLLKpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 05:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhLLKmm (ORCPT
+        with ESMTP id S229622AbhLLKpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 05:42:42 -0500
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C873C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 02:42:42 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso14435296otr.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 02:42:42 -0800 (PST)
+        Sun, 12 Dec 2021 05:45:03 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E27EC061714;
+        Sun, 12 Dec 2021 02:45:03 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id b11so9211011pld.12;
+        Sun, 12 Dec 2021 02:45:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=hJFClO1LCN+vB6xPHw7uoAZkWe3iJ2H6AR4bZzcjig8=;
-        b=jk7LnVuf26rZugQUVtOPGShvi7cSlVNJakdMjA497qOxrnmHAq6Xvw6s1ALPN4wLRU
-         +KEe6xaWYgz3xO/RnmXkA9m6nGdv22vd14a6DmEKMsCl7O87NdTOwYmYrEgsFcFvUQ0y
-         UpgkeDwhQEPeD44QwCzuMPlykq460+JODNLHNl75i1x8x1z/0lj/KPU3DKSfViVU6nN3
-         Oqae2zJB8AWCCAhQMPhY1bq/Vx+rgc/RHlCWkb1YxV+RXbJHdKV/1n+dqRfk7oHZkGE+
-         633OQkLtro9MB2Nfr44Dh1Ie2YYp4Q42DyOK8xDzxbvMT/u5aJHBOqHA3vtPRwmKQ+/D
-         LGIw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rCn440tKtkzAwO1Bl/FgEJ2hmsU7YRbUmVeW5PxwasM=;
+        b=GnavoKbhE7V4CZiF+ENSkwT29zXiV4bKjZYKvRwIx976Al67IttZvFhf+nB+bcpcBi
+         XW2GTdmtqwETnrecyuhTURev8XPHr93nJvJwd9ml3ghjy9nhEHc9iZMXj/D0AnPb67hb
+         s+GZLBD/ODokJZkHmY0sfZyS+hilLpm5HKTwiku+uJjDv8D85j8k+aPlNkR0PWsEbmJV
+         gkzbbFNJ4Qngfd/1gayKkqFlnsj+NhPqZ9BLS1RZT1xbYdsnOJ/1WOOWgDRN0yc1krIw
+         Fcfe9/PysVmXFcZiCfP419D8iR7ZHIfd6aMtFvoErp5hJnWjdx6QmQ4p2yP/hI/Mr08y
+         UDIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=hJFClO1LCN+vB6xPHw7uoAZkWe3iJ2H6AR4bZzcjig8=;
-        b=e9rZA5sa8M38PT76P8kVy8W9J2oitKRdinRfxAT1Q35hK05Xshjd0l9cPebTKiRdWC
-         c/P1SIuMNZgavHqCFXATDQrh5LVEiUEp29nDLHHlzIyxffvqLTP1M3QlTEj4DwzcKhj2
-         ud2XKd3hlBeHqBRBM/gKORZy/OzOlo5b6DYd/xCJ1pCiS/gbU5SbDzEz9N4PnsXYRVC5
-         NpwGuC6Mw1vTon18w0d4isf95sPyrBOHysjF7BkJz/+Pi1IQNGnQMJa2ML59+3XiFuCm
-         lvBOjNYJE2CiIAHyiSQkMhSXjvK+mR84LvWckJykYfX8enccPE/9egMpqK7lBjjmuEBm
-         MyXA==
-X-Gm-Message-State: AOAM531CwIne3aGWO47wxyUY/bXCCksHUGBEq0aP+l1PK1XkJMCNn2AI
-        /43QhADxVPL1pByAf8JB3NUDP0DpM6wBELAE+60=
-X-Google-Smtp-Source: ABdhPJzVN4w95DPvifjCEXOaAw959RoN6ZOGokxibCKYYQT7fP3HBJSPMgTbxZMNBcMMUniXu40x+nMXX8sLQravF2k=
-X-Received: by 2002:a05:6830:2425:: with SMTP id k5mr19866850ots.319.1639305761619;
- Sun, 12 Dec 2021 02:42:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rCn440tKtkzAwO1Bl/FgEJ2hmsU7YRbUmVeW5PxwasM=;
+        b=ZUUdM6WIQiPSy8Qo8zSA8YMnGf5jHeZ48B9DFd3m3wKjqmgRP1pqRTel5dFc4Wpp76
+         T8bcwX0FS/OpPr7rk70RZRvOV7P0zTj7LTyvYXrYVqYgRcBk5WWu+2yRkaK4ANUY/n8y
+         m6xdpOooIE/NMiSHIWCfQ8zHTX68lFFeTxUovBrh79ciyWF3i954Y2hDtmWTtsQi5xCH
+         WNq3GvDeejRt6ZYFJ6BZnmyBcQGE95AHQtcpPFpMa4EiD8pB3UPEwOrebGtlm90tsBIX
+         kiP+67BUFAc5326gsIh1IQ0WX1g98v6hBzNeJ/RVy+xqel6j4dcEQydHKTnfQtmnvsvN
+         tRkA==
+X-Gm-Message-State: AOAM531sCF42DunjEzHHOG21062n8bh2F5li7WLWDjx6CQvNuLw/FFeP
+        noDHklH6amxtv68PaNBQfRI//HjGfprrnA==
+X-Google-Smtp-Source: ABdhPJyyQqs5e2hm4kAqpUZ7gKLzmgvaVmuj3KuTVJQTQfa8q5uuSTPSCYfqiZrILD/EnyswXruo0Q==
+X-Received: by 2002:a17:90b:3ec2:: with SMTP id rm2mr37301920pjb.1.1639305902564;
+        Sun, 12 Dec 2021 02:45:02 -0800 (PST)
+Received: from LAPTOP-M5MOLEEC.localdomain (111-243-35-130.dynamic-ip.hinet.net. [111.243.35.130])
+        by smtp.gmail.com with ESMTPSA id k19sm8291722pff.20.2021.12.12.02.45.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 02:45:02 -0800 (PST)
+From:   Joseph CHANG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Sun, 12 Dec 2021 18:46:02 +0800
+Message-Id: <20211212104604.20334-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: fre0707lo@gmail.com
-Sender: mr.daviwilliams02@gmail.com
-Received: by 2002:a05:6841:131e:b0:b35:6b66:b3ec with HTTP; Sun, 12 Dec 2021
- 02:42:41 -0800 (PST)
-From:   Forum <udom4395@gmail.com>
-Date:   Sun, 12 Dec 2021 11:42:41 +0100
-X-Google-Sender-Auth: 5FF2xV2mkbUhmeWgiIQolgtdFj4
-Message-ID: <CACX5axZYTF17CEQwxa1zmtuA8_qQ9SVKPwL=ajFa17vpnsvFaw@mail.gmail.com>
-Subject: Let's work together
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear friend
+DM9051 is a spi interface ethernet controller chip
+Fewer connect pins to CPU compare to DM9000
 
-Please accept my apologies for contacting you this way. I was looking
-for a foreigner to help me in a transaction. So when i saw you online
-i was pushed to contact you for our mutual benefit and see how best we
-can help each other. I'm Mrs. Lori, a US bank clerk. I believe it is
-God's wish that I come across you now. I am having an important
-business deal worth $6.3 million that I want to share with you, which
-I think will interest you, because it is in connection that only a
-foreigner can assist, and you will benefit from it. I expect to hear
-from you soon.
+Joseph CHANG (2):
+  yaml: Add dm9051 SPI network yaml file
+  net: Add dm9051 driver
 
-Best wishes.
+ .../bindings/net/davicom,dm9051.yaml          |  62 ++
+ drivers/net/ethernet/davicom/Kconfig          |  30 +
+ drivers/net/ethernet/davicom/Makefile         |   1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 865 ++++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         | 225 +++++
+ 5 files changed, 1183 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
+
+
+base-commit: 77ab714f00703c91d5a6e15d7445775c80358774
+-- 
+2.25.1
+

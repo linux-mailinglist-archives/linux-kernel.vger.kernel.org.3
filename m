@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEA247195B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B5347195D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbhLLJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 04:00:35 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57008 "EHLO
+        id S229925AbhLLJBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 04:01:17 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57040 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbhLLJAf (ORCPT
+        with ESMTP id S229593AbhLLJBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 04:00:35 -0500
+        Sun, 12 Dec 2021 04:01:16 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 159511F3AF;
-        Sun, 12 Dec 2021 09:00:34 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id A38B41F3AC;
+        Sun, 12 Dec 2021 09:01:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639299634; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639299675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=l6AWHjo6PQ4BPF1NmbEadN6JkpBp7NJYDqAaABlQrJA=;
-        b=yO4T3trLR3Y7Qtb5BPXdQ71UqgUWjx/BALtPjZVb7AiAUgPTNiDKOf1EZzLxDlYzyWreGE
-        YfCwdyZsActTG5kCj5ZkvCjxyBeAznxpewO8esAwMRvcxJabMJvzX9IBImEuMP0NJvZg9n
-        Fx/Q4IGU1MdJ9scAfKPaF7ba8R1TkF4=
+        bh=myvKX6aaWUQyuRcpS6ozcBW4BDxk3fcFLskgKOInBZg=;
+        b=QET21Flprmcx/Yp84qmWMrtWNukLYsHAlNmiF3dSlcgY2pfI0ofAttdFupuLptlKWzBRGj
+        UJJe5aFPU/p6J4a9+SH16dLr1RwRkaLcLiMP4Q+JYvkkr43aCof8fk9SbtG1EoURQZHLsb
+        QJqgt0DIK+f4/yLShQrmq3VcS5/OcQg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639299634;
+        s=susede2_ed25519; t=1639299675;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=l6AWHjo6PQ4BPF1NmbEadN6JkpBp7NJYDqAaABlQrJA=;
-        b=jY0NFM1MnKr1TmAVxEHgQN4018OzeYqQnSGampGhlJitezM95HRntOoS1GEupEz6mzhcEm
-        veGwFkyGeIBN0zDA==
+        bh=myvKX6aaWUQyuRcpS6ozcBW4BDxk3fcFLskgKOInBZg=;
+        b=ahIb/F68nloyAdb/IrA0b29AiMIW8fZXfvlJFCAKUaeUlZANM/cj+HyMycuGYOvNr2PsI/
+        0SDloUP+ukZA8SBQ==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id D267DA3B83;
-        Sun, 12 Dec 2021 09:00:33 +0000 (UTC)
-Date:   Sun, 12 Dec 2021 10:00:33 +0100
-Message-ID: <s5h8rwqfb9q.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 8B803A3B83;
+        Sun, 12 Dec 2021 09:01:15 +0000 (UTC)
+Date:   Sun, 12 Dec 2021 10:01:15 +0100
+Message-ID: <s5h7dcafb8k.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     "Colin King (gmail)" <colin.i.king@gmail.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: ALSA: drivers: opl3: assignment of a pointer that is not used, probable bug
-In-Reply-To: <fbae9be5-c847-0b6b-f755-312a2af1e285@gmail.com>
-References: <fbae9be5-c847-0b6b-f755-312a2af1e285@gmail.com>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     tiwai@suse.com, perex@perex.cz, leon@kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: sparc: no need to initialise statics to 0
+In-Reply-To: <20211212070422.281924-1-wangborong@cdjrlc.com>
+References: <20211212070422.281924-1-wangborong@cdjrlc.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -54,38 +52,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Dec 2021 19:19:30 +0100,
-Colin King (gmail) wrote:
+On Sun, 12 Dec 2021 08:04:22 +0100,
+Jason Wang wrote:
 > 
-> Hi,
+> Static variables do not need to be initialised to 0, because compiler
+> will initialise all uninitialised statics to 0. Thus, remove the
+> unneeded initializations.
 > 
-> static analysis with scan-build has found an assignment to vp2 that is
-> never used in function snd_opl3_note_on(),
-> sound/drivers/opl3/opl3_midi.c as follows:
-> 
->         if (instr_4op) {
->                 vp2 = &opl3->voices[voice + 3];
->                 if (vp->state > 0) {
->                         opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
->                                                voice_offset + 3);
->                         reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
->                         opl3->command(opl3, opl3_reg, reg_val);
->                 }
->         }
-> 
-> sound/drivers/opl3/opl3_midi.c:399:3: warning: Value stored to 'vp2'
-> is never read [deadcode.DeadStores]
->                 vp2 = &opl3->voices[voice + 3];
->                 ^     ~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> I suspect that references to vp in this if block should be to vp2, but
-> I'm unsure if that is for all references or not, hence I'm reporting
-> this issue.
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-Yes, the next vp->state > 0 check must be vp2->state > 0.
-Care to submit a proper fix patch?
+Thanks, applied now.
 
-
-Thanks!
 
 Takashi

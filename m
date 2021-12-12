@@ -2,36 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CAF471791
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8369D47178F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbhLLB1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 20:27:00 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58116 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbhLLB0t (ORCPT
+        id S232489AbhLLB0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 20:26:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232443AbhLLB0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 11 Dec 2021 20:26:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA112C061714
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 17:26:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 13293CE0AE0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A22CC341CE;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B4C2B80B9B
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493D6C341CF;
         Sun, 12 Dec 2021 01:26:46 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1mwDdV-000kDj-9E;
+        id 1mwDdV-000kEH-FC;
         Sat, 11 Dec 2021 20:26:45 -0500
-Message-ID: <20211212012645.119841360@goodmis.org>
+Message-ID: <20211212012645.307872958@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 11 Dec 2021 20:26:20 -0500
+Date:   Sat, 11 Dec 2021 20:26:21 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [for-next][PATCH 03/11] tracefs: Use d_inode() helper function to get the dentry inode
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [for-next][PATCH 04/11] tracing: Iterate trace_[ku]probe objects directly
 References: <20211212012617.690710310@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -39,107 +44,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+From: Jiri Olsa <jolsa@redhat.com>
 
-Instead of referencing the inode from a dentry via dentry->d_inode, use
-the helper function d_inode(dentry) instead. This is the considered the
-correct way to access it.
+As suggested by Linus [1] using list_for_each_entry to iterate
+directly trace_[ku]probe objects so we can skip another call to
+container_of in these loops.
 
-Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
-Reported: https://lore.kernel.org/all/20211208104454.nhxyvmmn6d2qhpwl@wittgenstein/
+[1] https://lore.kernel.org/r/CAHk-=wjakjw6-rDzDDBsuMoDCqd+9ogifR_EE1F0K-jYek1CdA@mail.gmail.com
+
+Link: https://lkml.kernel.org/r/20211125202852.406405-1-jolsa@kernel.org
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- fs/tracefs/inode.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ kernel/trace/trace_kprobe.c | 13 ++++---------
+ kernel/trace/trace_uprobe.c | 23 ++++++++---------------
+ 2 files changed, 12 insertions(+), 24 deletions(-)
 
-diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-index 925a621b432e..9899c6078c95 100644
---- a/fs/tracefs/inode.c
-+++ b/fs/tracefs/inode.c
-@@ -109,12 +109,12 @@ static int tracefs_syscall_rmdir(struct inode *inode, struct dentry *dentry)
- 	 * also the directory that is being deleted.
- 	 */
- 	inode_unlock(inode);
--	inode_unlock(dentry->d_inode);
-+	inode_unlock(d_inode(dentry));
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index d10c01948e68..f8c26ee72de3 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -327,11 +327,9 @@ static inline int __enable_trace_kprobe(struct trace_kprobe *tk)
  
- 	ret = tracefs_ops.rmdir(name);
- 
- 	inode_lock_nested(inode, I_MUTEX_PARENT);
--	inode_lock(dentry->d_inode);
-+	inode_lock(d_inode(dentry));
- 
- 	kfree(name);
- 
-@@ -212,7 +212,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
- static int tracefs_apply_options(struct super_block *sb)
+ static void __disable_trace_kprobe(struct trace_probe *tp)
  {
- 	struct tracefs_fs_info *fsi = sb->s_fs_info;
--	struct inode *inode = sb->s_root->d_inode;
-+	struct inode *inode = d_inode(sb->s_root);
- 	struct tracefs_mount_opts *opts = &fsi->mount_opts;
+-	struct trace_probe *pos;
+ 	struct trace_kprobe *tk;
  
- 	inode->i_mode &= ~S_IALLUGO;
-@@ -331,18 +331,18 @@ static struct dentry *start_creating(const char *name, struct dentry *parent)
- 	if (!parent)
- 		parent = tracefs_mount->mnt_root;
- 
--	inode_lock(parent->d_inode);
--	if (unlikely(IS_DEADDIR(parent->d_inode)))
-+	inode_lock(d_inode(parent));
-+	if (unlikely(IS_DEADDIR(d_inode(parent))))
- 		dentry = ERR_PTR(-ENOENT);
- 	else
- 		dentry = lookup_one_len(name, parent, strlen(name));
--	if (!IS_ERR(dentry) && dentry->d_inode) {
-+	if (!IS_ERR(dentry) && d_inode(dentry)) {
- 		dput(dentry);
- 		dentry = ERR_PTR(-EEXIST);
- 	}
- 
- 	if (IS_ERR(dentry)) {
--		inode_unlock(parent->d_inode);
-+		inode_unlock(d_inode(parent));
- 		simple_release_fs(&tracefs_mount, &tracefs_mount_count);
- 	}
- 
-@@ -351,7 +351,7 @@ static struct dentry *start_creating(const char *name, struct dentry *parent)
- 
- static struct dentry *failed_creating(struct dentry *dentry)
+-	list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
+-		tk = container_of(pos, struct trace_kprobe, tp);
++	list_for_each_entry(tk, trace_probe_probe_list(tp), tp.list) {
+ 		if (!trace_kprobe_is_registered(tk))
+ 			continue;
+ 		if (trace_kprobe_is_return(tk))
+@@ -348,7 +346,7 @@ static void __disable_trace_kprobe(struct trace_probe *tp)
+ static int enable_trace_kprobe(struct trace_event_call *call,
+ 				struct trace_event_file *file)
  {
--	inode_unlock(dentry->d_parent->d_inode);
-+	inode_unlock(d_inode(dentry->d_parent));
- 	dput(dentry);
- 	simple_release_fs(&tracefs_mount, &tracefs_mount_count);
- 	return NULL;
-@@ -359,7 +359,7 @@ static struct dentry *failed_creating(struct dentry *dentry)
+-	struct trace_probe *pos, *tp;
++	struct trace_probe *tp;
+ 	struct trace_kprobe *tk;
+ 	bool enabled;
+ 	int ret = 0;
+@@ -369,8 +367,7 @@ static int enable_trace_kprobe(struct trace_event_call *call,
+ 	if (enabled)
+ 		return 0;
  
- static struct dentry *end_creating(struct dentry *dentry)
+-	list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
+-		tk = container_of(pos, struct trace_kprobe, tp);
++	list_for_each_entry(tk, trace_probe_probe_list(tp), tp.list) {
+ 		if (trace_kprobe_has_gone(tk))
+ 			continue;
+ 		ret = __enable_trace_kprobe(tk);
+@@ -559,11 +556,9 @@ static bool trace_kprobe_has_same_kprobe(struct trace_kprobe *orig,
+ 					 struct trace_kprobe *comp)
  {
--	inode_unlock(dentry->d_parent->d_inode);
-+	inode_unlock(d_inode(dentry->d_parent));
- 	return dentry;
- }
+ 	struct trace_probe_event *tpe = orig->tp.event;
+-	struct trace_probe *pos;
+ 	int i;
  
-@@ -415,7 +415,7 @@ struct dentry *tracefs_create_file(const char *name, umode_t mode,
- 	inode->i_fop = fops ? fops : &tracefs_file_operations;
- 	inode->i_private = data;
- 	d_instantiate(dentry, inode);
--	fsnotify_create(dentry->d_parent->d_inode, dentry);
-+	fsnotify_create(d_inode(dentry->d_parent), dentry);
- 	return end_creating(dentry);
- }
+-	list_for_each_entry(pos, &tpe->probes, list) {
+-		orig = container_of(pos, struct trace_kprobe, tp);
++	list_for_each_entry(orig, &tpe->probes, tp.list) {
+ 		if (strcmp(trace_kprobe_symbol(orig),
+ 			   trace_kprobe_symbol(comp)) ||
+ 		    trace_kprobe_offset(orig) != trace_kprobe_offset(comp))
+diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+index a4d5c624fe79..3bd09d612137 100644
+--- a/kernel/trace/trace_uprobe.c
++++ b/kernel/trace/trace_uprobe.c
+@@ -409,12 +409,10 @@ static bool trace_uprobe_has_same_uprobe(struct trace_uprobe *orig,
+ 					 struct trace_uprobe *comp)
+ {
+ 	struct trace_probe_event *tpe = orig->tp.event;
+-	struct trace_probe *pos;
+ 	struct inode *comp_inode = d_real_inode(comp->path.dentry);
+ 	int i;
  
-@@ -440,8 +440,8 @@ static struct dentry *__create_dir(const char *name, struct dentry *parent,
- 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
- 	inc_nlink(inode);
- 	d_instantiate(dentry, inode);
--	inc_nlink(dentry->d_parent->d_inode);
--	fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
-+	inc_nlink(d_inode(dentry->d_parent));
-+	fsnotify_mkdir(d_inode(dentry->d_parent), dentry);
- 	return end_creating(dentry);
- }
+-	list_for_each_entry(pos, &tpe->probes, list) {
+-		orig = container_of(pos, struct trace_uprobe, tp);
++	list_for_each_entry(orig, &tpe->probes, tp.list) {
+ 		if (comp_inode != d_real_inode(orig->path.dentry) ||
+ 		    comp->offset != orig->offset)
+ 			continue;
+@@ -1072,14 +1070,12 @@ static int trace_uprobe_enable(struct trace_uprobe *tu, filter_func_t filter)
  
+ static void __probe_event_disable(struct trace_probe *tp)
+ {
+-	struct trace_probe *pos;
+ 	struct trace_uprobe *tu;
+ 
+ 	tu = container_of(tp, struct trace_uprobe, tp);
+ 	WARN_ON(!uprobe_filter_is_empty(tu->tp.event->filter));
+ 
+-	list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
+-		tu = container_of(pos, struct trace_uprobe, tp);
++	list_for_each_entry(tu, trace_probe_probe_list(tp), tp.list) {
+ 		if (!tu->inode)
+ 			continue;
+ 
+@@ -1091,7 +1087,7 @@ static void __probe_event_disable(struct trace_probe *tp)
+ static int probe_event_enable(struct trace_event_call *call,
+ 			struct trace_event_file *file, filter_func_t filter)
+ {
+-	struct trace_probe *pos, *tp;
++	struct trace_probe *tp;
+ 	struct trace_uprobe *tu;
+ 	bool enabled;
+ 	int ret;
+@@ -1126,8 +1122,7 @@ static int probe_event_enable(struct trace_event_call *call,
+ 	if (ret)
+ 		goto err_flags;
+ 
+-	list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
+-		tu = container_of(pos, struct trace_uprobe, tp);
++	list_for_each_entry(tu, trace_probe_probe_list(tp), tp.list) {
+ 		ret = trace_uprobe_enable(tu, filter);
+ 		if (ret) {
+ 			__probe_event_disable(tp);
+@@ -1272,7 +1267,7 @@ static bool trace_uprobe_filter_add(struct trace_uprobe_filter *filter,
+ static int uprobe_perf_close(struct trace_event_call *call,
+ 			     struct perf_event *event)
+ {
+-	struct trace_probe *pos, *tp;
++	struct trace_probe *tp;
+ 	struct trace_uprobe *tu;
+ 	int ret = 0;
+ 
+@@ -1284,8 +1279,7 @@ static int uprobe_perf_close(struct trace_event_call *call,
+ 	if (trace_uprobe_filter_remove(tu->tp.event->filter, event))
+ 		return 0;
+ 
+-	list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
+-		tu = container_of(pos, struct trace_uprobe, tp);
++	list_for_each_entry(tu, trace_probe_probe_list(tp), tp.list) {
+ 		ret = uprobe_apply(tu->inode, tu->offset, &tu->consumer, false);
+ 		if (ret)
+ 			break;
+@@ -1297,7 +1291,7 @@ static int uprobe_perf_close(struct trace_event_call *call,
+ static int uprobe_perf_open(struct trace_event_call *call,
+ 			    struct perf_event *event)
+ {
+-	struct trace_probe *pos, *tp;
++	struct trace_probe *tp;
+ 	struct trace_uprobe *tu;
+ 	int err = 0;
+ 
+@@ -1309,8 +1303,7 @@ static int uprobe_perf_open(struct trace_event_call *call,
+ 	if (trace_uprobe_filter_add(tu->tp.event->filter, event))
+ 		return 0;
+ 
+-	list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
+-		tu = container_of(pos, struct trace_uprobe, tp);
++	list_for_each_entry(tu, trace_probe_probe_list(tp), tp.list) {
+ 		err = uprobe_apply(tu->inode, tu->offset, &tu->consumer, true);
+ 		if (err) {
+ 			uprobe_perf_close(call, event);
 -- 
 2.33.0

@@ -2,44 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1EB471B17
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 16:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBA9471B28
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 16:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbhLLPK0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 12 Dec 2021 10:10:26 -0500
-Received: from bln02.to.infn.it ([192.84.137.52]:53446 "EHLO bln02.to.infn.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231174AbhLLPKZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 10:10:25 -0500
-X-Greylist: delayed 7659 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Dec 2021 10:10:24 EST
-X-INFNTO-Scanned: by amavisd-new [2.10.1] at to.infn.it [Opossum: ON]
-Received: from [10.48.0.26] ([45.134.22.14])
-        (authenticated bits=0)
-        by bln02.to.infn.it (8.14.7/8.14.7/[Gnorri: ON]) with ESMTP id 1BCF7CNv008792
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=NO);
-        Sun, 12 Dec 2021 16:09:53 +0100
-Message-Id: <202112121509.1BCF7CNv008792@bln02.to.infn.it>
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: 
-To:     Recipients <sec4@mi.infn.it>
-From:   "Dave Ramsden" <sec4@mi.infn.it>
-Date:   Sun, 12 Dec 2021 15:09:42 +0000
-Reply-To: d.rsm85@aol.com
+        id S231203AbhLLPMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 10:12:23 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55198 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229468AbhLLPMW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 10:12:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 87F56CE0B71;
+        Sun, 12 Dec 2021 15:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD75AC341C5;
+        Sun, 12 Dec 2021 15:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639321938;
+        bh=gjSeig3LkDORydOFqVAVccrLKisIwhV8ljKAJ/dciz0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bWOA8zKXlLcuCbsABBNiBURBI53md2oKRCvZ0Q7+gjkcfGaTInYQp3CFjzAZZyA5b
+         PJx863MXv+BEKr4nog1tX3jn5es7tdhecPFE8bKmTuOjmNdT6qad9Pfu+LYhg21JyM
+         90BkEFPlyZJRps1QBRncvtURQ8SlXOs/4rlBBJEhQOP39ThWX1tdIsOftTp26Z1UZL
+         rOeqKJheOV580AOHI2i6J7r7rco/bynn7tVwwjT5HdUWG+xJ+sgB2Pg/bmHhpMteUo
+         qwXSKVq8JyGLJourkXu87ZaPwrYUOsdLm9wMIMrcEJXPklvjGoPIhUkIW4w7vdWo+5
+         T3eIzpFxFBvuQ==
+Date:   Mon, 13 Dec 2021 00:12:15 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 13/13] user_events: Use __get_rel_str for relative
+ string fields
+Message-Id: <20211213001215.366afbe59715ed5aa1e2e865@kernel.org>
+In-Reply-To: <20211210184551.GB2242@kbox>
+References: <20211209223210.1818-1-beaub@linux.microsoft.com>
+        <20211209223210.1818-14-beaub@linux.microsoft.com>
+        <20211210102327.ab971d529613271ab1bf0073@kernel.org>
+        <20211210184551.GB2242@kbox>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-11. desember 2021.
-  
-Er du åpen for en forretningsoverture som er verdt et betydelig beløp? Når jeg har mottatt din bekreftelse på denne e-posten, skal jeg avsløre detaljer om intensjonen min i e-posten min på neste side.
-  
-Vis din interesse for engelsk, hvis mulig, for bedre kommunikasjon.
-  
-Med vennlig hilsen,
-Dave Ramsden
-E-post: d.rsm85@aol.com
-__________________________
-Sekretær: Janice Dylan
+On Fri, 10 Dec 2021 10:45:51 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
+
+> On Fri, Dec 10, 2021 at 10:23:27AM +0900, Masami Hiramatsu wrote:
+> > Hi Beau,
+> > 
+> > On Thu,  9 Dec 2021 14:32:10 -0800
+> > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > 
+> > > Switch between __get_str and __get_rel_str within the print_fmt of
+> > > user_events. Add unit test to ensure print_fmt is correct on known
+> > > types.
+> > > 
+> > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> > > ---
+> > >  kernel/trace/trace_events_user.c              |  24 ++-
+> > >  .../selftests/user_events/ftrace_test.c       | 166 ++++++++++++++++++
+> > >  2 files changed, 182 insertions(+), 8 deletions(-)
+> > > 
+> > > diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> > > index 56eb58ddb4cf..3779fa2ca14a 100644
+> > > --- a/kernel/trace/trace_events_user.c
+> > > +++ b/kernel/trace/trace_events_user.c
+> > > @@ -257,7 +257,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
+> > >  	goto add_field;
+> > >  
+> > >  add_validator:
+> > > -	if (strstr(type, "char[") != 0)
+> > > +	if (strstr(type, "char") != 0)
+> > >  		validator_flags |= VALIDATOR_ENSURE_NULL;
+> > 
+> > What is this change for? This seems not related to the other changes.
+> > (Also, what happen if it is a single char type?)
+> > 
+> 
+> I'm glad you asked, it appears like __data_loc / __rel_loc can take char
+> as it's type (It doesn't appear to be limited to char[] cases). I wanted
+> to ensure something malicious couldn't sneak past by using this corner
+> case.
+> 
+> IE: __data_loc char test
+> 
+> In trace_events_filter.c:
+> int filter_assign_type(const char *type)
+> {
+>         if (strstr(type, "__data_loc") && strstr(type, "char"))
+>                 return FILTER_DYN_STRING;
+> 
+>         if (strchr(type, '[') && strstr(type, "char"))
+>                 return FILTER_STATIC_STRING;
+> 
+>         if (strcmp(type, "char *") == 0 || strcmp(type, "const char *") == 0)
+>                 return FILTER_PTR_STRING;
+> 
+>         return FILTER_OTHER;
+> }
+> 
+> char[ is only checked if __data_loc is not specified.
+
+OK, but in that case, is this patch good place for that change?
+
+> 
+> > >  
+> > >  	validator = kmalloc(sizeof(*validator), GFP_KERNEL);
+> > > @@ -456,14 +456,21 @@ static const char *user_field_format(const char *type)
+> > >  	return "%llu";
+> > >  }
+> > >  
+> > > -static bool user_field_is_dyn_string(const char *type)
+> > > +static bool user_field_is_dyn_string(const char *type, const char **str_func)
+> > >  {
+> > > -	if (str_has_prefix(type, "__data_loc ") ||
+> > > -	    str_has_prefix(type, "__rel_loc "))
+> > > -		if (strstr(type, "char[") != 0)
+> > > -			return true;
+> > > +	if (str_has_prefix(type, "__data_loc ")) {
+> > > +		*str_func = "__get_str";
+> > > +		goto check;
+> > > +	}
+> > > +
+> > > +	if (str_has_prefix(type, "__rel_loc ")) {
+> > > +		*str_func = "__get_rel_str";
+> > > +		goto check;
+> > > +	}
+> > >  
+> > >  	return false;
+> > > +check:
+> > > +	return strstr(type, "char") != 0;
+> > >  }
+> > >  
+> > >  #define LEN_OR_ZERO (len ? len - pos : 0)
+> > > @@ -472,6 +479,7 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
+> > >  	struct ftrace_event_field *field, *next;
+> > >  	struct list_head *head = &user->fields;
+> > >  	int pos = 0, depth = 0;
+> > > +	const char *str_func;
+> > >  
+> > >  	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
+> > >  
+> > > @@ -488,9 +496,9 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
+> > >  	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
+> > >  
+> > >  	list_for_each_entry_safe_reverse(field, next, head, link) {
+> > > -		if (user_field_is_dyn_string(field->type))
+> > > +		if (user_field_is_dyn_string(field->type, &str_func))
+> > >  			pos += snprintf(buf + pos, LEN_OR_ZERO,
+> > > -					", __get_str(%s)", field->name);
+> > > +					", %s(%s)", str_func, field->name);
+> > >  		else
+> > >  			pos += snprintf(buf + pos, LEN_OR_ZERO,
+> > >  					", REC->%s", field->name);
+> > > diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+> > 
+> > Just a nitpick, if possible, please split this part from the kernel update.
+> > 
+> 
+> I will try to do so, could you help me understand why I would split this
+> out? (For future patches)
+> 
+> I thought the intention of each would be to contain it's logical grouping:
+> I wanted to show, yes the code changed, and yes we have a unit test for
+> that new condition.
+
+Hrm, in this specific case, maybe this can be acceptable. Following
+case you might need to take care of it.
+
+- if the feature and the test code are maintained by different maintainer.
+- if the test code is added much later than the feature.
+
+In both case, the piece of patches will be applied separately. The former
+case, by different maintainer, the latter case by different tree (e.g. 
+stable tree may not have the test case.)
+
+BTW, I also think this change is a fix for the previous patches in the series.
+In that case, please update those patches so that the patch is completely works.
+That will be good for bisecting.
+
+Thank you,
+
+> 
+> > > index 16aff1fb295a..b2e5c0765a68 100644
+> > > --- a/tools/testing/selftests/user_events/ftrace_test.c
+> > > +++ b/tools/testing/selftests/user_events/ftrace_test.c
+> > > @@ -20,6 +20,7 @@ const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+> > >  const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+> > >  const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/enable";
+> > >  const char *trace_file = "/sys/kernel/debug/tracing/trace";
+> > > +const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
+> > >  
+> > >  static int trace_bytes(void)
+> > >  {
+> > > @@ -47,6 +48,61 @@ static int trace_bytes(void)
+> > >  	return bytes;
+> > >  }
+> > >  
+> > > +static int get_print_fmt(char *buffer, int len)
+> > > +{
+> > > +	FILE *fp = fopen(fmt_file, "r");
+> > > +	int c, index = 0, last = 0;
+> > > +
+> > > +	if (!fp)
+> > > +		return -1;
+> > > +
+> > > +	/* Read until empty line (Skip Common) */
+> > > +	while (true) {
+> > > +		c = getc(fp);
+> > > +
+> > > +		if (c == EOF)
+> > > +			break;
+> > > +
+> > > +		if (last == '\n' && c == '\n')
+> > > +			break;
+> > > +
+> > > +		last = c;
+> > > +	}
+> > 
+> > Another nitpick, maybe you need a function like skip_until_empty_line(fp)
+> > and repeat it like this.
+> > 
+> > 	if (skip_until_empty_line(fp) < 0)
+> > 		goto out;
+> > 	if (skip_until_empty_line(fp) < 0)
+> > 		goto out;
+> > 
+> 
+> Sure thing.
+> 
+> > > +
+> > > +	last = 0;
+> > > +
+> > > +	/* Read until empty line (Skip Properties) */
+> > > +	while (true) {
+> > > +		c = getc(fp);
+> > > +
+> > > +		if (c == EOF)
+> > > +			break;
+> > > +
+> > > +		if (last == '\n' && c == '\n')
+> > > +			break;
+> > > +
+> > > +		last = c;
+> > > +	}
+> > > +
+> > > +	/* Read in print_fmt: */
+> > > +	while (len > 1) {
+> > > +		c = getc(fp);
+> > > +
+> > > +		if (c == EOF || c == '\n')
+> > > +			break;
+> > > +
+> > > +		buffer[index++] = c;
+> > > +
+> > > +		len--;
+> > > +	}
+> > 
+> > And here you can use fgets(buffer, len, fp).
+> > 
+> 
+> Makes sense.
+> 
+> > 
+> > Thank you,
+> > 
+> > 
+> 
+> [..]
+> 
+> > 
+> > -- 
+> > Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> Thanks,
+> -Beau
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

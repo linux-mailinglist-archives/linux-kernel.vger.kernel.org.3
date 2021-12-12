@@ -2,370 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1059647174F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 00:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A00F47175B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 01:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbhLKXih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 18:38:37 -0500
-Received: from ixit.cz ([94.230.151.217]:42252 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232289AbhLKXig (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 18:38:36 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 3FB7D24AF5;
-        Sun, 12 Dec 2021 00:38:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1639265914;
+        id S232285AbhLLAML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 19:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229478AbhLLAMK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 19:12:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9CFC061714;
+        Sat, 11 Dec 2021 16:12:10 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639267926;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=dG9cEjITJ2Ie+kdqJbPAtJRjOIdju1WIOYnTVU9mmJ0=;
-        b=elnD2pM6Z46CxOHmrTui0wZ7q1ovP2LA5b8mPJqk1obtJHss7s1Ef3N+QDOx7OKlmjy9DG
-        sN+ZYBfquVNtzYcIIkuIgL4qG1WHdudvLhSzGpFV6WU0HFJ4US3Zx/rFZeVljq+NatHuOo
-        o37/b0X1rrpf9hl5Kv6tI3zwlkNZYE0=
-From:   David Heidelberg <david@ixit.cz>
-To:     Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>, - <opensource@rock-chips.com>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: convert Rockchip DW MIPI DSI binding to YAML format
-Date:   Sun, 12 Dec 2021 00:38:18 +0100
-Message-Id: <20211211233818.88482-2-david@ixit.cz>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211211233818.88482-1-david@ixit.cz>
-References: <20211211233818.88482-1-david@ixit.cz>
+        bh=96U2PvNjfJ25atF3ICxYtTfUxrjzv0nAHv5JG16938Y=;
+        b=qM/Otsa93p16nlR9DkrMfklAwRdZuI5Fi25hBcrv+RfRaQAnQIKilESEITJdIeherUES3k
+        lEaluejCbQWR8vk3qXKRNe+fSzEjZb8Lq3xD/g/QVQbw2wlcenFnWnTJxDsf1kZJF6REQ3
+        C9owWU1oMpezJc0cGBg1Af7a9tW6FDI64myjiMK6J61lmq2xMhrzFTs2v3ietjUS8abHyg
+        b1qgZguIkR+9v0JztqlD3sdejolUuoSPxqFGPoppQxL1CEJqX9wL0HaAYwAC+nRoCb6Fm3
+        8LoezdAb0uju/kjuKofSa3R/O5T6+9q+mHPCLQ/1CiFiZakwWBbAHFrsMAIZ9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639267926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=96U2PvNjfJ25atF3ICxYtTfUxrjzv0nAHv5JG16938Y=;
+        b=pzckp4fggY2TyL8TqgqkB1LFIEa6p646bMIt0lGvtXjie64eXqNhFKTbnbkfUlzQ8hiJu1
+        kIrEo8pOTLFsyWDQ==
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Jiang, Dave" <dave.jiang@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Dey, Megha" <megha.dey@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+Subject: RE: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+In-Reply-To: <BN9PR11MB5276B2584F928B4BFD4573428C729@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com>
+ <878rx480fk.ffs@tglx>
+ <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <87sfv2yy19.ffs@tglx> <20211209162129.GS6385@nvidia.com>
+ <878rwtzfh1.ffs@tglx> <20211209205835.GZ6385@nvidia.com>
+ <8735n1zaz3.ffs@tglx> <87sfv1xq3b.ffs@tglx>
+ <BN9PR11MB527619B099061B3814EB40408C719@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20211210123938.GF6385@nvidia.com>
+ <BN9PR11MB5276B2584F928B4BFD4573428C729@BN9PR11MB5276.namprd11.prod.outlook.com>
+Date:   Sun, 12 Dec 2021 01:12:05 +0100
+Message-ID: <87lf0qvfze.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert into YAML format into format, which can be validated.
+Kevin,
 
-Changes:
- - drop panel from example
+On Sat, Dec 11 2021 at 07:52, Kevin Tian wrote:
+>> From: Jason Gunthorpe <jgg@nvidia.com>
+>> > Then Qemu needs to find out the GSI number for the vIRTE handle.
+>> > Again Qemu doesn't have such information since it doesn't know
+>> > which MSI[-X] entry points to this handle due to no trap.
+>> 
+>> No this is already going wrong. qemu *cannot* know the MSI information
+>> because there is no MSI information for IMS.
+>
+> I haven't thought of IMS at this step. The IR approach applies to
+> all types of interrupt storages, thus I'm more interested in how it
+> affect the storages which are already virtualized today (MSI[-X] 
+> in my thought practice).
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
-v2:
- - rename patch
- - drop possibility for only one compatible string
- - add patch for adding compatible to the PX30 dtsi
+They are not any different. As I explained several times now IMS is
+nothing new at all. It existed since the invention of Message Signaled
+interrupts. Why?
 
-.../display/rockchip/dw_mipi_dsi_rockchip.txt |  93 ---------
- .../rockchip/rockchip,dw-mipi-dsi.yaml        | 194 ++++++++++++++++++
- 2 files changed, 194 insertions(+), 93 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt
- create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml
+The principle behind Message Signaled Interrupts is:
 
-diff --git a/Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt b/Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt
-deleted file mode 100644
-index 39792f051d2d..000000000000
---- a/Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt
-+++ /dev/null
-@@ -1,93 +0,0 @@
--Rockchip specific extensions to the Synopsys Designware MIPI DSI
--================================
--
--Required properties:
--- #address-cells: Should be <1>.
--- #size-cells: Should be <0>.
--- compatible: one of
--	"rockchip,px30-mipi-dsi", "snps,dw-mipi-dsi"
--	"rockchip,rk3288-mipi-dsi", "snps,dw-mipi-dsi"
--	"rockchip,rk3399-mipi-dsi", "snps,dw-mipi-dsi"
--- reg: Represent the physical address range of the controller.
--- interrupts: Represent the controller's interrupt to the CPU(s).
--- clocks, clock-names: Phandles to the controller's pll reference
--  clock(ref) when using an internal dphy and APB clock(pclk).
--  For RK3399, a phy config clock (phy_cfg) and a grf clock(grf)
--  are required. As described in [1].
--- rockchip,grf: this soc should set GRF regs to mux vopl/vopb.
--- ports: contain a port node with endpoint definitions as defined in [2].
--  For vopb,set the reg = <0> and set the reg = <1> for vopl.
--- video port 0 for the VOP input, the remote endpoint maybe vopb or vopl
--- video port 1 for either a panel or subsequent encoder
--
--Optional properties:
--- phys: from general PHY binding: the phandle for the PHY device.
--- phy-names: Should be "dphy" if phys references an external phy.
--- #phy-cells: Defined when used as ISP phy, should be 0.
--- power-domains: a phandle to mipi dsi power domain node.
--- resets: list of phandle + reset specifier pairs, as described in [3].
--- reset-names: string reset name, must be "apb".
--
--[1] Documentation/devicetree/bindings/clock/clock-bindings.txt
--[2] Documentation/devicetree/bindings/media/video-interfaces.txt
--[3] Documentation/devicetree/bindings/reset/reset.txt
--
--Example:
--	mipi_dsi: mipi@ff960000 {
--		#address-cells = <1>;
--		#size-cells = <0>;
--		compatible = "rockchip,rk3288-mipi-dsi", "snps,dw-mipi-dsi";
--		reg = <0xff960000 0x4000>;
--		interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cru SCLK_MIPI_24M>, <&cru PCLK_MIPI_DSI0>;
--		clock-names = "ref", "pclk";
--		resets = <&cru SRST_MIPIDSI0>;
--		reset-names = "apb";
--		rockchip,grf = <&grf>;
--
--		ports {
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--			mipi_in: port@0 {
--				reg = <0>;
--				#address-cells = <1>;
--				#size-cells = <0>;
--
--				mipi_in_vopb: endpoint@0 {
--					reg = <0>;
--					remote-endpoint = <&vopb_out_mipi>;
--				};
--				mipi_in_vopl: endpoint@1 {
--					reg = <1>;
--					remote-endpoint = <&vopl_out_mipi>;
--				};
--			};
--
--			mipi_out: port@1 {
--				reg = <1>;
--				#address-cells = <1>;
--				#size-cells = <0>;
--
--				mipi_out_panel: endpoint {
--					remote-endpoint = <&panel_in_mipi>;
--				};
--			};
--		};
--
--		panel {
--			compatible ="boe,tv080wum-nl0";
--			reg = <0>;
--
--			enable-gpios = <&gpio7 3 GPIO_ACTIVE_HIGH>;
--			pinctrl-names = "default";
--			pinctrl-0 = <&lcd_en>;
--			backlight = <&backlight>;
--
--			port {
--				panel_in_mipi: endpoint {
--					remote-endpoint = <&mipi_out_panel>;
--				};
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml
-new file mode 100644
-index 000000000000..9165c578d721
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml
-@@ -0,0 +1,194 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/rockchip/rockchip,dw-mipi-dsi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip specific extensions to the Synopsys Designware MIPI DSI
-+
-+maintainers:
-+  - opensource@rock-chips.com
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: rockchip,px30-mipi-dsi
-+      then:
-+        properties:
-+          clocks:
-+            maxItems: 1
-+          clock-names:
-+            items:
-+              - const: pclk
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: rockchip,rk3288-mipi-dsi
-+      then:
-+        properties:
-+          clocks:
-+            maxItems: 2
-+          clock-names:
-+            items:
-+              - const: ref
-+              - const: pclk
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: rockchip,rk3399-mipi-dsi
-+      then:
-+        properties:
-+          clocks:
-+            minItems: 4
-+            maxItems: 4
-+          clock-names:
-+            items:
-+              - const: ref
-+              - const: pclk
-+              - const: phy_cfg
-+              - const: grf
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - rockchip,px30-mipi-dsi
-+              - rockchip,rk3288-mipi-dsi
-+              - rockchip,rk3399-mipi-dsi
-+          - const: snps,dw-mipi-dsi
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks: true
-+
-+  clock-names: true
-+
-+  phys:
-+    maxItems: 1
-+    description: Optional external PHY
-+
-+  phy-names:
-+    const: dphy
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: >
-+          Video port for the VOP input.
-+
-+        properties:
-+          endpoint@0:
-+            $ref: /schemas/graph.yaml#/properties/endpoint
-+            description: Connection to the VOPB
-+
-+          endpoint@1:
-+            $ref: /schemas/graph.yaml#/properties/endpoint
-+            description: Connection to the VOPL
-+
-+        required:
-+          - endpoint@0
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: >
-+          Video port for panel or subsequent encoder
-+
-+    required:
-+      - port@0
-+      - port@1
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    items:
-+      - const: apb
-+
-+  rockchip,grf:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the GRF to mux vopl/vopb
-+
-+  power-domains: true
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#phy-cells':
-+    const: 0
-+
-+  '#size-cells':
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - rockchip,grf
-+  - ports
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/rk3288-cru.h>
-+
-+    mipi_dsi: mipi@ff960000 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        compatible = "rockchip,rk3288-mipi-dsi", "snps,dw-mipi-dsi";
-+        reg = <0xff960000 0x4000>;
-+        interrupts = <0 83 4>;
-+        clocks = <&cru 148>, <&cru PCLK_MIPI_DSI0>;
-+        clock-names = "ref", "pclk";
-+        resets = <&cru SRST_MIPIDSI0>;
-+        reset-names = "apb";
-+        rockchip,grf = <&grf>;
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            mipi_in: port@0 {
-+                reg = <0>;
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                mipi_in_vopb: endpoint@0 {
-+                    reg = <0>;
-+                    remote-endpoint = <&vopb_out_mipi>;
-+                };
-+                mipi_in_vopl: endpoint@1 {
-+                    reg = <1>;
-+                    remote-endpoint = <&vopl_out_mipi>;
-+                };
-+            };
-+
-+            mipi_out: port@1 {
-+                reg = <1>;
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                mipi_out_panel: endpoint {
-+                    remote-endpoint = <&panel_in_mipi>;
-+                };
-+            };
-+        };
-+    };
--- 
-2.33.0
+    Device writes DATA to ADDRESS which raises an interrupt in a CPU
+
+Message Signaled Interrupts obviously need some place to store the
+ADDRESS/DATA pair so that the device can use it for raising an
+interrupt, i.e. an
+
+   Interrupt Message Store, short IMS.
+
+PCI/MSI was the first implementation of this and the storage was defined
+to be at a specified and therefore uniform and device independent place.
+
+PCI/MSI-X followed the same approch. While it solved quite some of the
+shortcomings of PCI/MSI it still has a specificed and uniform and device
+independent place to store the message (ADDRESS/DATA pair)
+
+Now the PCI wizards figured out that PCI/MSI[-X] is not longer up to the
+task for various reasons and came up with the revolutionary new concept
+of IMS, aka Interrupt Message Store. where the device defines where the
+message is stored.
+
+IOW, this is coming back full circle to the original problem of where to
+store the message, i.e. the ADDRESS/DATA pair so that the device can
+raise an interrupt in a CPU, which requires - drum roll - an
+
+   Interrupt Message Store, short IMS.
+
+So you simply have to look at it from a pure MSI (not PCI/MSI) point
+of view:
+
+   MSI at the conceptual level requires storage for the ADDRESS/DATA
+   pair at some place so that the device or the compute unit embedded in
+   the device can write DATA to ADDRESS.
+
+That's it. Not more, not less.
+
+When you look at it from this perspective, then you'll realize that
+
+     PCI/MSI and PCI/MSI-X are just implementations of IMS
+
+Not more, not less. The fact that they have very strict rules about the
+storage space and the fact that they are mutually exclusive does not
+change that at all.
+
+That's where a lot of the confusion comes from. If you go back to all
+the IDXD/IMS discussions which happened over time then you'll figure out
+that _all_ of us where coming from the same wrong assumption:
+
+    IMS is new and it's just another exclusive variant of PCI/MSI and
+    PCi/MSI-X.
+
+It took _all_ of us quite some time to realize that we need to look at
+it from the other way around.
+
+There was surely some other conceptual confusion vs. subdevices, queues
+and whatever involved which contributed to that. Water under the bridge.
+
+Coming back to your initial question:
+
+> I haven't thought of IMS at this step. The IR approach applies to
+> all types of interrupt storages, thus I'm more interested in how it
+> affect the storages which are already virtualized today (MSI[-X] 
+> in my thought practice).
+
+Stop focussing on implementation details. Focus on the general concept
+instead. See above.
+
+Thanks,
+
+        tglx
 

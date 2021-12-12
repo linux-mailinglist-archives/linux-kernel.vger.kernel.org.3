@@ -2,166 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A00F47175B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 01:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE83471765
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 01:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbhLLAML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 19:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbhLLAMK (ORCPT
+        id S230221AbhLLA3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 19:29:16 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:34513 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhLLA3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 19:12:10 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9CFC061714;
-        Sat, 11 Dec 2021 16:12:10 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639267926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=96U2PvNjfJ25atF3ICxYtTfUxrjzv0nAHv5JG16938Y=;
-        b=qM/Otsa93p16nlR9DkrMfklAwRdZuI5Fi25hBcrv+RfRaQAnQIKilESEITJdIeherUES3k
-        lEaluejCbQWR8vk3qXKRNe+fSzEjZb8Lq3xD/g/QVQbw2wlcenFnWnTJxDsf1kZJF6REQ3
-        C9owWU1oMpezJc0cGBg1Af7a9tW6FDI64myjiMK6J61lmq2xMhrzFTs2v3ietjUS8abHyg
-        b1qgZguIkR+9v0JztqlD3sdejolUuoSPxqFGPoppQxL1CEJqX9wL0HaAYwAC+nRoCb6Fm3
-        8LoezdAb0uju/kjuKofSa3R/O5T6+9q+mHPCLQ/1CiFiZakwWBbAHFrsMAIZ9w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639267926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=96U2PvNjfJ25atF3ICxYtTfUxrjzv0nAHv5JG16938Y=;
-        b=pzckp4fggY2TyL8TqgqkB1LFIEa6p646bMIt0lGvtXjie64eXqNhFKTbnbkfUlzQ8hiJu1
-        kIrEo8pOTLFsyWDQ==
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Jiang, Dave" <dave.jiang@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Dey, Megha" <megha.dey@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "linux-ntb@googlegroups.com" <linux-ntb@googlegroups.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Subject: RE: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-In-Reply-To: <BN9PR11MB5276B2584F928B4BFD4573428C729@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com>
- <878rx480fk.ffs@tglx>
- <BN9PR11MB52765F2EF8420C60FD5945D18C709@BN9PR11MB5276.namprd11.prod.outlook.com>
- <87sfv2yy19.ffs@tglx> <20211209162129.GS6385@nvidia.com>
- <878rwtzfh1.ffs@tglx> <20211209205835.GZ6385@nvidia.com>
- <8735n1zaz3.ffs@tglx> <87sfv1xq3b.ffs@tglx>
- <BN9PR11MB527619B099061B3814EB40408C719@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20211210123938.GF6385@nvidia.com>
- <BN9PR11MB5276B2584F928B4BFD4573428C729@BN9PR11MB5276.namprd11.prod.outlook.com>
-Date:   Sun, 12 Dec 2021 01:12:05 +0100
-Message-ID: <87lf0qvfze.ffs@tglx>
+        Sat, 11 Dec 2021 19:29:15 -0500
+Received: by mail-il1-f199.google.com with SMTP id h10-20020a056e021b8a00b002a3f246adeaso12887953ili.1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 16:29:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=nDG4SEwejxlIh6+HWy4XvDA2HuM5COpv4vJgPsHPavo=;
+        b=ZFtCNsvlsjw6LSWDwPq+VGfelLniBuI9gNDQ8jenMJAmHRikU9NZGdJjn263X6s6Ai
+         dmPTZuGPOzKR6CYh6hIZ9EIh0rdid7rPXBASGjgmrYsxq9QCuOjyHWa2UOvp6ho6HFJ7
+         FVUnZBF5hf1j7dveIkBjDL6FwGK70WMjsKPoWkdIr2hgXllrdIGPWRt1ZByp5IgrfoT5
+         7PKSLJn9Ui3181t5MUdq4vlI+9xH99K+4sPHfRq4XhdcEWSgGB+4r30VVG/cH3mr25C6
+         d26heZBw3pIHdReYKGidT7tENPN5tSmUiLreO50IBk3LWPdDwhH9du9IQGKl2Xi4Stse
+         VZPg==
+X-Gm-Message-State: AOAM531CBFYH0NsqyHrg4fBi1fv++8WRZ6W8xcSVtg94ZrdqNJq5ZXkq
+        et0SvAG1rtg/rnFgbC1DEZ5j8pwCrSAI/1kaAWty+fC5HO2g
+X-Google-Smtp-Source: ABdhPJwzHakTYI1Wa9BYeGT4aejJxGYvhT9EdlMdrBDi7DNg035WzF6pyQvv8kDTCOTdf6YuX6qFjYtFrL2Zt2gyHUsIpsas+q7d
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Received: by 2002:a05:6638:dd5:: with SMTP id m21mr24924006jaj.44.1639268953978;
+ Sat, 11 Dec 2021 16:29:13 -0800 (PST)
+Date:   Sat, 11 Dec 2021 16:29:13 -0800
+In-Reply-To: <00000000000047627e05b17a6ec9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b17d0105d2e80b47@google.com>
+Subject: Re: [syzbot] general protection fault in scsi_queue_rq
+From:   syzbot <syzbot+0796b72dc61f223d8cc5@syzkaller.appspotmail.com>
+To:     anmol.karan123@gmail.com, capitolscan@capitolsecuritypr.com,
+        hare@suse.de, hch@lst.de, jejb@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com,
+        tadeusz.struk@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kevin,
+syzbot suspects this issue was fixed by commit:
 
-On Sat, Dec 11 2021 at 07:52, Kevin Tian wrote:
->> From: Jason Gunthorpe <jgg@nvidia.com>
->> > Then Qemu needs to find out the GSI number for the vIRTE handle.
->> > Again Qemu doesn't have such information since it doesn't know
->> > which MSI[-X] entry points to this handle due to no trap.
->> 
->> No this is already going wrong. qemu *cannot* know the MSI information
->> because there is no MSI information for IMS.
->
-> I haven't thought of IMS at this step. The IR approach applies to
-> all types of interrupt storages, thus I'm more interested in how it
-> affect the storages which are already virtualized today (MSI[-X] 
-> in my thought practice).
+commit 20aaef52eb08f1d987d46ad26edb8f142f74d83a
+Author: Tadeusz Struk <tadeusz.struk@linaro.org>
+Date:   Wed Nov 3 17:06:58 2021 +0000
 
-They are not any different. As I explained several times now IMS is
-nothing new at all. It existed since the invention of Message Signaled
-interrupts. Why?
+    scsi: scsi_ioctl: Validate command size
 
-The principle behind Message Signaled Interrupts is:
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11db6f3ab00000
+start commit:   ec681c53f8d2 Merge tag 'net-5.15-rc6' of git://git.kernel...
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bab9d35f204746a7
+dashboard link: https://syzkaller.appspot.com/bug?extid=0796b72dc61f223d8cc5
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1279df24b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a855f4b00000
 
-    Device writes DATA to ADDRESS which raises an interrupt in a CPU
+If the result looks correct, please mark the issue as fixed by replying with:
 
-Message Signaled Interrupts obviously need some place to store the
-ADDRESS/DATA pair so that the device can use it for raising an
-interrupt, i.e. an
+#syz fix: scsi: scsi_ioctl: Validate command size
 
-   Interrupt Message Store, short IMS.
-
-PCI/MSI was the first implementation of this and the storage was defined
-to be at a specified and therefore uniform and device independent place.
-
-PCI/MSI-X followed the same approch. While it solved quite some of the
-shortcomings of PCI/MSI it still has a specificed and uniform and device
-independent place to store the message (ADDRESS/DATA pair)
-
-Now the PCI wizards figured out that PCI/MSI[-X] is not longer up to the
-task for various reasons and came up with the revolutionary new concept
-of IMS, aka Interrupt Message Store. where the device defines where the
-message is stored.
-
-IOW, this is coming back full circle to the original problem of where to
-store the message, i.e. the ADDRESS/DATA pair so that the device can
-raise an interrupt in a CPU, which requires - drum roll - an
-
-   Interrupt Message Store, short IMS.
-
-So you simply have to look at it from a pure MSI (not PCI/MSI) point
-of view:
-
-   MSI at the conceptual level requires storage for the ADDRESS/DATA
-   pair at some place so that the device or the compute unit embedded in
-   the device can write DATA to ADDRESS.
-
-That's it. Not more, not less.
-
-When you look at it from this perspective, then you'll realize that
-
-     PCI/MSI and PCI/MSI-X are just implementations of IMS
-
-Not more, not less. The fact that they have very strict rules about the
-storage space and the fact that they are mutually exclusive does not
-change that at all.
-
-That's where a lot of the confusion comes from. If you go back to all
-the IDXD/IMS discussions which happened over time then you'll figure out
-that _all_ of us where coming from the same wrong assumption:
-
-    IMS is new and it's just another exclusive variant of PCI/MSI and
-    PCi/MSI-X.
-
-It took _all_ of us quite some time to realize that we need to look at
-it from the other way around.
-
-There was surely some other conceptual confusion vs. subdevices, queues
-and whatever involved which contributed to that. Water under the bridge.
-
-Coming back to your initial question:
-
-> I haven't thought of IMS at this step. The IR approach applies to
-> all types of interrupt storages, thus I'm more interested in how it
-> affect the storages which are already virtualized today (MSI[-X] 
-> in my thought practice).
-
-Stop focussing on implementation details. Focus on the general concept
-instead. See above.
-
-Thanks,
-
-        tglx
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

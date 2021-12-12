@@ -2,134 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBF7471E89
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B06471E92
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 00:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhLLXDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 18:03:44 -0500
-Received: from mout.gmx.net ([212.227.17.22]:44671 "EHLO mout.gmx.net"
+        id S230251AbhLLXFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 18:05:20 -0500
+Received: from mx3.wp.pl ([212.77.101.9]:42616 "EHLO mx3.wp.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229532AbhLLXDn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 18:03:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1639350212;
-        bh=Z5WwtTDX5wghj67msRyvSxbS9jBL/4GvXlyeuYQk528=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=PYaCbNAuwwmMSZ1EKwRBCRU2CWZ5KEabWhyesX6mpwK5kHsqkAkxmGPvYMtLuUdNg
-         iNGHDwTa5qUYFy9O2GThgEKYntPMlE4kM/wWKCP5HlIxQvmn3I0Cv5Hy3p0al0zkze
-         CEKVLtlxiQ5QtUrJXT6CrWHMGWIqop0ARDTq5tPA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTiTt-1n6bQE0uVB-00U1YZ; Mon, 13
- Dec 2021 00:03:31 +0100
-Date:   Mon, 13 Dec 2021 00:03:29 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     zweiss@equinix.com,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 5/8] pinctrl: nuvoton: Add driver for WPCM450
-Message-ID: <YbZ/wQJwPDIS5fUr@latitude>
-References: <20211207210823.1975632-1-j.neuschaefer@gmx.net>
- <20211207210823.1975632-6-j.neuschaefer@gmx.net>
- <CAHp75Vew=M_ofNM5pmeHtTJHXRUbbO4RrtgYAtLBznTBm3CS6Q@mail.gmail.com>
- <YbC6Bv2teZ5CFhFQ@latitude>
- <20211209082623.GF25091@packtop>
- <CACRpkdb_zGz4+8R0=ORCbbbVeJVkLqBG2CDXAzi2VAA7-PPZ6A@mail.gmail.com>
+        id S229532AbhLLXFT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 18:05:19 -0500
+Received: (wp-smtpd smtp.wp.pl 31525 invoked from network); 13 Dec 2021 00:05:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1639350316; bh=IuenmZmLjJO5EeZREf7j9hjrsyHQE/JgXkTClLDzILk=;
+          h=From:Subject:To:Cc;
+          b=ElSc8llOJ9X+eurk7EZOMhdzH/2/aCnfrOWCQ9B9rCDJEgiayBOFtgKyd0CDcYZob
+           KkKuBcony5roqSYeukukoVmbc+Eo2A7SaFO1DfpmLCvoobrJ8/nQFzsp8iNB/7NVev
+           TVMgyH1jszxX28IZY7Wwvt+XItkdspMsDZxU/19I=
+Received: from riviera.nat.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <linux-kernel@vger.kernel.org>; 13 Dec 2021 00:05:16 +0100
+From:   Aleksander Bajkowski <olek2@wp.pl>
+Subject: Re: [PATCH net v2] net: lantiq_xrx200: increase buffer reservation
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     hauke@hauke-m.de, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211206223909.749043-1-olek2@wp.pl>
+ <20211207205448.3b297e7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Message-ID: <c4d93a2e-b4de-9b19-ff44-a122dbbb22b8@wp.pl>
+Date:   Mon, 13 Dec 2021 00:05:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="30EHFckTS99T6vMB"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdb_zGz4+8R0=ORCbbbVeJVkLqBG2CDXAzi2VAA7-PPZ6A@mail.gmail.com>
-X-Provags-ID: V03:K1:Prd4tc5qLh62yLE6oLOE+ix2UlQ+ezQYkWrRtinGcZEkv8EWY6N
- WKBUScH60G3k16oz7zg6JcWHWrW6vgBtM9857uaF1ApmWYv2EJzhloUCSakNdi/EkGIe4H7
- +IFOD+Rct9FPrTLEuRUKDHYOxYXAWVL7HxJdLfvdA5ID5k/VZQrj5Li1VqSAvzkNDDaChyq
- E02dRLAxbRTQWa9bfRezw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:K1/zGZieM+M=:SEuHYXCK7Z3n744Ebh3HR/
- 5dX0URXderiqhVpw945NdKElEDjS67jBLOhOGUJUlrspxvJjPNMTxDeNro6Ly/Y8OS5AuFO/y
- 5UzL7/CQXD1zZ1INuRoJBXWbVIX23TohFq50h2NjfXNqQkaPvbQmhhHq7l/Hkl7SCqu1NV4TD
- IVqWMIwpdv6MZ/FQn0T5FG25Q915q/9wup/n6Bxrq+3q2fVzpNTIIX+wAp7h4m4dIDge2e7Gb
- YwTfbt8Pa2YZ2wjUcNGH8lxIq24ZEyAGqIfLMywB7rGtIH+B1AAi/UIJ7jSLmKKoCX+ActT56
- 1Us3Pjt9+0J1RkW6tM0Sq/WEtv2gNA/KTsz2ovpmBvT00Zlb2J9RXosnsrp8993KWnIbC7uS3
- 7evrEs+Q3iHNUYeE/Mh+4NV1lS9M/Cs1D1RdSmkl/Dji0Agy2cQs0002N1FGTw88NieVNJBEz
- fnVBh1Nikc3sSyIjbhudoAAHQeRs0ckTXIkT5WL0a8mCI/eBhBQmorQtvlW7lEPHDRQc+0gPc
- qUC5tn33SmgZnqLLl3gqmk3RmTXuQhTMS0LywHTL/v333bB0spRuG6a3giW++r5d/u0P1optY
- 0K95awfoaTyElcP7Jo5khz5NbMRqMsFwi+JRxeZBlC9qkXR0Oj3vrrolCspDxJvBPsCdc4ht5
- mAgI28bNVH/SUz+RZOJ0TFzWYgHHsMpAEPE3UFUwnMm2Wfbn34RI2gtYTrvV9IqRfHYdsOCcP
- idAMWklGp09kqBEeQ1shqDGHFqtzC2uQSeXThBXb7hWfZBeCQGJKe+rKWucmrkAXWw5z5HbPh
- fgYC29y7RnhZkY+cnRcASVXYDQRs2oMD1p+cyzQW6bXjA/2HIlG5FBalA/S85qW9frIjzwTM6
- phsw4+DZlnHO+h0GNbUeDrk0LKEKDluLEBC2NM5JBvhXZk9LmTW/3aJHJDj+kJblZafCAYXCm
- HjDwe0UezlgteRFf7/dJhJ8f1ZxWUtdYMJKicZ7ksCGY9/r4KJYU/HgXzxq5rOHJgnbrga54C
- YIAYTEJlZuzV+L4QZwbUTxD5Hb0l2hi0NToyhlS9cik2uxfLICFdYXSegCzem1nXqXww5em9N
- QyshoJWk6OAY/0=
+In-Reply-To: <20211207205448.3b297e7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: e4c1644b2bfb5ce56930ccca2c1ddd69
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000B [McN0]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---30EHFckTS99T6vMB
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for the late reply, but recently I haven't had access to
+hardware to test different MTU values and packet lengths on the
+hardware.
 
-On Fri, Dec 10, 2021 at 02:41:45AM +0100, Linus Walleij wrote:
-> On Thu, Dec 9, 2021 at 9:26 AM Zev Weiss <zweiss@equinix.com> wrote:
-> > On Wed, Dec 08, 2021 at 05:58:30AM PST, Jonathan Neusch=C3=A4fer wrote:
->=20
-> > >> BIT()
-> > >
-> > >I'll use it, but in this case, I think it doesn't simplify much the
-> > >whole expression all that much. Is there perhaps a macro that
-> > >constructs a continuous bitmask of N bits, perhaps additionally
-> > >left-shifted by M bits?
-> > >
-> > >Maybe somewhere in the bitmap_* API...
-> > >
-> >
-> > There's GENMASK(), though it takes a high bit and low bit rather than a
-> > bit position and count, so it'd require a small bit of arithmetic, e.g.
-> >
-> >   lastbit =3D gpio->first_irq_bit + gpio->num_irqs - 1;
-> >   ours =3D GENMASK(lastbit, gpio->first_irq_bit);
-> >
-> > or a manual shift:
-> >
-> >   ours =3D GENMASK(gpio->num_irqs - 1, 0) << gpio->first_irq_bit;
->=20
-> I think this can be handled with FIELD_PREP() from
-> <linux/bitfield.h>? Some examples at the top of the
-> header.
+On 12/8/21 5:54 AM, Jakub Kicinski wrote:
+> On Mon,  6 Dec 2021 23:39:09 +0100 Aleksander Jan Bajkowski wrote:
+>> +static int xrx200_max_frame_len(int mtu)
+>> +{
+>> +	return VLAN_ETH_HLEN + mtu + ETH_FCS_LEN;
+> 
+> You sure the problem is not that this doesn't include ETH_HLEN? 
+> MTU is the length of the L2 _payload_.
+> 
 
-Thank you both!
+VLAN_ETH_HLEN (14 + 4) contains ETH_HLEN (14). This function returns
+the length of the frame that is written to the RX descriptor. Maybe
+I don't understand the question and you are asking something else? 
 
-Best regards,
-Jonathan
+>> +}
+>> +
+>> +static int xrx200_buffer_size(int mtu)
+>> +{
+>> +	return round_up(xrx200_max_frame_len(mtu) - 1, 4 * XRX200_DMA_BURST_LEN);
+> 
+> Why the - 1 ? 🤔
+> 
 
---30EHFckTS99T6vMB
-Content-Type: application/pgp-signature; name="signature.asc"
+This is how the hardware behaves. I don't really know where the -1
+comes from. Unfortunately, I do not have access to TRM. 
 
------BEGIN PGP SIGNATURE-----
+> For a frame size 101 => max_frame_len 109 you'll presumably want 
+> the buffer to be 116, not 108?
+> 
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmG2f8EACgkQCDBEmo7z
-X9vyUQ//br+ESQtfq4JlJ6O3bLYKACQe7YaNJu423ivv1HwZ8cBzvRLdFgSwPxbM
-JwAkXckp05zpRHzp/0WYDsvy16yPlTAoyrLlnqyKuesXIB4Z/EM2aVNtu4dv+Wbl
-fMAt3epKy2ZjT7fPooRm0ySjJdq3d2uzu7fVCo+VMWpRZmXrrUVsphPeNKjS/16f
-YQHswQMJ9oSDlL3cfugjtz0AOoZ/XyKtKfbcS4uE9lgTq9V5Bj9IiEopv4GDMRhG
-eQVItYAukQ0oTxqned+qom4U+RcuJgrel8p5C/ZQojQ3XVYiqvDZWiStk5fkDIt8
-IrrPJt1psBE4/O3r6utoo/I9LbctYoy69E5pIvo/IUELfkngzFQu6w+eIL+ndAIx
-vKWMJYzAOWY3l94tQqvu3zPloZhbAXmvt5V49r8YQnNXsb7QCGSo7as8/tkT3nIQ
-bFXsZarXI6b8tGwUpj4TCgISIG2TojxAZOSxPg/7zUnxXY2O4A2bbuSoumFiDlN3
-PhiwUg+6oCZ1EZS4bOhdqrRm/h+7ZVSJxlFnAyeV5bFeW84B3CQzQ7nDtsPK6N4i
-oc/McWrIBMt5qKw08eXi2PrE9HrqDcKEhkck45NVR8NsX9+5O9U0Jg5FNHxN64f+
-4oqgPpe9vxeinHIrSWs5yTJ1Q1a7c8adb4P7bGeCEWp9aXGvLgI=
-=6U2z
------END PGP SIGNATURE-----
 
---30EHFckTS99T6vMB--
+For a frame size 101 => max_frame_len is 123 (18 + 101 + 4). Infact, PMAC strips FCS and ETH_FCS_LEN may not be needed. This behavior
+is controlled by the PMAC_HD_CTL_RC bit. This bit is enabled from
+the beginning of this driver. Ethtool has the option to enable
+FCS reception, but the ethtool interface is not yet supported
+by this driver. 
+
+>> +}
+>> +
+
+Experiments show that the hardware starts to split the frame at
+max_frame_len() - 1. Some examples:
+
+pkt len		MTU	max_frame_size()	buffer_size()	desc1	desc2	desc3	desc4
+----------------------------------------------------------------------------------------------
+1506		1483		1505		1504		1502	4	X	X
+1505		1483		1505		1504		1502	3	X	X
+1504		1483		1505		1504		1504	X	X	X
+1503		1483		1505		1504		1503	X	X	X
+1502		1483		1505		1504		1502	X	X	X
+1501		1483		1505		1504		1501	X	X	X
+----------------------------------------------------------------------------------------------
+1249		380		402		416		414	416	416	3
+1248		380		402		416		414	416	416	2
+1247		380		402		416		414	416	416	1
+1246		380		402		416		414	416	416	X
+1245		380		402		416		414	416	415	X
+----------------------------------------------------------------------------------------------
+
+
+In fact, this patch is a preparation for SG DMA support, which
+I wrote some time ago.
+
+
+

@@ -2,141 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D3047196B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9841047196E
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhLLJPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 04:15:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44054 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbhLLJPG (ORCPT
+        id S229974AbhLLJQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 04:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229955AbhLLJQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 04:15:06 -0500
+        Sun, 12 Dec 2021 04:16:40 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A3C061714;
+        Sun, 12 Dec 2021 01:16:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69955B80B8F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 09:15:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7660C341C6;
-        Sun, 12 Dec 2021 09:15:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AB51FCE0B21;
+        Sun, 12 Dec 2021 09:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F02AC341C6;
+        Sun, 12 Dec 2021 09:16:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639300504;
-        bh=vLxxgiN0imWkT8KfiHgu08g5fJXl0/viq5uHLPUJ5SM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QFlQM4qMyz1cklOPUeW6tPx2tCzGaG/5zH6dwDEWR1a3ZnitKeiHEdoPR/k3GdIx9
-         xtJi28g109rkIDdCZDJGr4mmqgu+wjV5D9GBplCyehOPPQSys8pYWZNj5R+MKzk8/2
-         rhzvoIbjz4BO4NdtudZ+ImeZZiEPInspxOaP8sfxdH1oJl63oOBOpKiaTVpXovCbvz
-         iRb1Gr+1k+Ijdx+ayKvQIbaIaB056wQDuOl2LmsXn3zGNRKJ0hUtQKrJ55uoaN4LTM
-         QrN7Axv7z9NnW7VojO2VCZprEh/n4//KuVXdT8GwCtZtFIgsi38pRYWPw8N4+hWUHS
-         hMUCc4bV9qcHA==
-Message-ID: <51598d4d-0136-4a41-6b06-fbd7221ffd0e@kernel.org>
-Date:   Sun, 12 Dec 2021 17:15:00 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [f2fs-dev] [syzbot] BUG: unable to handle kernel NULL pointer
- dereference in folio_mark_dirty
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <0000000000005f297e05d24f05f6@google.com>
- <20211206175631.5d0c3caefa96f0479f0fc2e8@linux-foundation.org>
- <Ya7jYRDwQqftGLtW@casper.infradead.org> <Ya/Ueh7MWyvV2zdg@google.com>
- <Ya/ZaxznaTmrIvdO@casper.infradead.org> <Ya/bviwnMPsSnOcy@google.com>
+        s=k20201202; t=1639300595;
+        bh=FcCfq4bNjl8T6b/+8viEc5WUfvmEh89NrvoiU1a3sYo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nSylLWdl/51/bEM84CdSYtjLlUdiW90rNo5EfAtj691K6sfdOePWpG6Z8ekFpGEyE
+         /xHtJVf+ui8eTKgyk3u6m8CK1EkoSA8R3xpyCX/dFa/Tnj4E4utDyqLaGi9uQ8Qkvu
+         N6qCSEP4MR3oE7uXW4TOczO5b1FeJmxaQU7GZpRQgzDxrqvoGGqQVpwb+dYjjvxc3Q
+         E0FmRVL/ICLoC6IWHg00wdqNNSA9zRjVO+R9eMsYKj+eeLlW/UeztUCtNof5Wh1ei3
+         jvA3+EA5Ab7wRVqYUzAWrJgmrufy6MhvcYi4sYB2WpwulS+z5HBAIrSycwzMYWaW2j
+         R43Bffk254rKQ==
 From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Ya/bviwnMPsSnOcy@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>
+Subject: [PATCH v3] f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+Date:   Sun, 12 Dec 2021 17:16:30 +0800
+Message-Id: <20211212091630.6325-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/8 6:10, Jaegeuk Kim wrote:
-> On 12/07, Matthew Wilcox wrote:
->> On Tue, Dec 07, 2021 at 01:39:06PM -0800, Jaegeuk Kim wrote:
->>> On 12/07, Matthew Wilcox wrote:
->>>>>> Call Trace:
->>>>>>   <TASK>
->>>>>>   folio_mark_dirty+0x136/0x270 mm/page-writeback.c:2639
->>>>
->>>>          if (likely(mapping)) {
->>>> ...
->>>>                  if (folio_test_reclaim(folio))
->>>>                          folio_clear_reclaim(folio);
->>>>                  return mapping->a_ops->set_page_dirty(&folio->page);
->>>>
->>>> how do we get to a NULL ->set_page_dirty for a metadata page's
->>>> mapping->a_ops?  This is definitely an f2fs expert question.
->>>
->>> I can't find anything in f2fs, since that page was got by f2fs_grab_meta_page
->>> along with grab_cache_page() that we never unlocked it.
->>>
->>>    40 struct page *f2fs_grab_meta_page(struct f2fs_sb_info *sbi, pgoff_t index)
->>>    41 {
->>>    42         struct address_space *mapping = META_MAPPING(sbi);
->>>    43         struct page *page;
->>>    44 repeat:
->>>    45         page = f2fs_grab_cache_page(mapping, index, false);
->>>
->>>                      -> grab_cache_page(mapping, index);
->>>
->>>    46         if (!page) {
->>>    47                 cond_resched();
->>>    48                 goto repeat;
->>>    49         }
->>>    50         f2fs_wait_on_page_writeback(page, META, true, true);
->>>    51         if (!PageUptodate(page))
->>>    52                 SetPageUptodate(page);
->>>    53         return page;
->>>    54 }
->>>
->>>
->>> Suspecting something in folio wrt folio_mapping()?
->>>
->>>   81 bool set_page_dirty(struct page *page)
->>>   82 {
->>>   83         return folio_mark_dirty(page_folio(page));
->>>   84 }
->>
->> ... huh?  How could folio_mapping() be getting this wrong?
-> 
-> Dunno.
-> 
->> page_folio() does the same thing as compound_head() -- as far as I know
->> you don't use compound pages for f2fs metadata, so this basically just
->> casts the page to a struct folio.
->>
->> folio_mapping() is just like the old page_mapping() (see commit
->> 2f52578f9c64).  Unless you've done something like set the swapcache
->> bit on your metadata page, it's just going to return folio->mapping
->> (ie the same as page->mapping).
-> 
-> Hmm, I've never seen this call stack before, so simply started to suspect
-> folio.
+As Wenqing Liu reported in bugzilla:
 
-I'm afraid this is a f2fs bug... :(
+https://bugzilla.kernel.org/show_bug.cgi?id=215235
 
-folio wasn't merged at the first report time (5.14-rc2).
+- Overview
+page fault in f2fs_setxattr() when mount and operate on corrupted image
 
-https://syzkaller.appspot.com/bug?extid=07ff38c9c93ca170de07
+- Reproduce
+tested on kernel 5.16-rc3, 5.15.X under root
 
-I doubt the direct reason of panic may be the same as the one of bug
-reported in bugzilla:
+1. unzip tmp7.zip
+2. ./single.sh f2fs 7
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215231
+Sometimes need to run the script several times
 
-However, I still can't figure out why meta_inode's a_ops will change
-to f2fs_meta_aops.
+- Kernel dump
+loop0: detected capacity change from 0 to 131072
+F2FS-fs (loop0): Found nat_bits in checkpoint
+F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
+BUG: unable to handle page fault for address: ffffe47bc7123f48
+RIP: 0010:kfree+0x66/0x320
+Call Trace:
+ __f2fs_setxattr+0x2aa/0xc00 [f2fs]
+ f2fs_setxattr+0xfa/0x480 [f2fs]
+ __f2fs_set_acl+0x19b/0x330 [f2fs]
+ __vfs_removexattr+0x52/0x70
+ __vfs_removexattr_locked+0xb1/0x140
+ vfs_removexattr+0x56/0x100
+ removexattr+0x57/0x80
+ path_removexattr+0xa3/0xc0
+ __x64_sys_removexattr+0x17/0x20
+ do_syscall_64+0x37/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Thanks,
+The root cause is in __f2fs_setxattr(), we missed to do sanity check on
+last xattr entry, result in out-of-bound memory access during updating
+inconsistent xattr data of target inode.
 
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+After the fix, it can detect such xattr inconsistency as below:
+
+F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has corrupted xattr
+F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
+
+Cc: stable@vger.kernel.org
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v3:
+- fix compile warning:
+warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+ fs/f2fs/xattr.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
+index e348f33bcb2b..797ac505a075 100644
+--- a/fs/f2fs/xattr.c
++++ b/fs/f2fs/xattr.c
+@@ -684,8 +684,17 @@ static int __f2fs_setxattr(struct inode *inode, int index,
+ 	}
+ 
+ 	last = here;
+-	while (!IS_XATTR_LAST_ENTRY(last))
++	while (!IS_XATTR_LAST_ENTRY(last)) {
++		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
++			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
++			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %zu",
++					inode->i_ino, ENTRY_SIZE(last));
++			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
++			error = -EFSCORRUPTED;
++			goto exit;
++		}
+ 		last = XATTR_NEXT_ENTRY(last);
++	}
+ 
+ 	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+ 
+-- 
+2.32.0
+

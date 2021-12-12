@@ -2,109 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B222C471C59
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88F0471C66
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 19:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbhLLSu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 13:50:29 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41524
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231985AbhLLSu2 (ORCPT
+        id S232079AbhLLS6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 13:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232035AbhLLS6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 13:50:28 -0500
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B5FA03F204
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 18:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639335027;
-        bh=hEPUkc4LL4i/gGwaF5ugHQxC2zekuBT7zmaD1tTpKNA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=MdM54K5osfJ4ehktXQ9zZnoaui3oXBZEca8rl/t/H1IWIW1kJfLmzMExhJvR1JPqj
-         F768yGGQphZoyXjld3S3swglc6AMReDEZPU4dSLZmNQP7EiHDxdk+52ClGrLzF5m1m
-         NxNG1EJpLdAssHXRN98pw/ktESyy8u6S1gTHb8jHCYBpP2VxG5sRJy8jUTMEt+8juB
-         QBzV28RXoBJrLGjhqtOKRaoDpRKVKcMOGloC/1hkvpYb0MGUiOrLnYInncvPtubZJE
-         fZluYvm4gl3+ga/iiz99Q8t34GZu2wfTHZgkGQZkF08uniuRWQmXMFiMdGX51UELnv
-         RgSeHyvmooEVw==
-Received: by mail-lf1-f72.google.com with SMTP id e23-20020a196917000000b0041bcbb80798so6479508lfc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:50:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hEPUkc4LL4i/gGwaF5ugHQxC2zekuBT7zmaD1tTpKNA=;
-        b=LlaTqKmGVyAhXFB0XRIYKijV1cQpiLG5o0+2mivCTrQTnpcYvyFEnwcFCFpVuldQKW
-         y9/OM1FJPz8psDGG4XaxBUIeUXsMtI95CbTylQsbEusk7qGrAkkXo6mSYTbi+JpJxdlF
-         e7iyM9444n31+v2tCuTb1wDI0UQMPmwtUReoScUTB4P1ihtwmcje5T+6PLHJYYlR9X2u
-         XG0IwyHrdV3EJ5Vv7b/xgfKTVMCqf7tC0Yl2A7QOOXRZvHIp6aVUoi5/zWoph9r3h+t1
-         weHms11dA+f+F/5s3sdhZOMC4a/EoOrigtZMlBg8zM4AhbW+YXoDKMbBMbK+VuuuXxq8
-         04+w==
-X-Gm-Message-State: AOAM531R0I98Qc4Cmj9EQET32Zk7g2hD8TzHbxw7/Yhau+rQGb8v43CU
-        vhYIxZuIR2tob5/aJZuOw+ODuASyN9BQFfqvKEA0lt/W/NuL66+DATXGyhhr8gdoG2lkN/f6YJH
-        IxCcx3kVzXgtW8KL2jWAKfIDH9K4W9VX2HYRokhYBdw==
-X-Received: by 2002:a05:6512:3a7:: with SMTP id v7mr1580892lfp.38.1639335026765;
-        Sun, 12 Dec 2021 10:50:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjknyFs69XnefPUpSdk+caKnTh6qWLgyrLozHO1KCEUN/kRatVQ59NwitqYuKpsN2ATYd1Ag==
-X-Received: by 2002:a05:6512:3a7:: with SMTP id v7mr1580882lfp.38.1639335026615;
-        Sun, 12 Dec 2021 10:50:26 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id b7sm1124779lfb.224.2021.12.12.10.50.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 10:50:26 -0800 (PST)
-Message-ID: <77efa5e3-f6bd-9892-8bf2-427b4709329f@canonical.com>
-Date:   Sun, 12 Dec 2021 19:50:25 +0100
+        Sun, 12 Dec 2021 13:58:49 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC90C061751
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 10:58:48 -0800 (PST)
+Received: from dslb-188-104-058-180.188.104.pools.vodafone-ip.de ([188.104.58.180] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1mwU3W-0001zY-KP; Sun, 12 Dec 2021 19:58:42 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 0/3] staging: r8188eu: remove hal sreset
+Date:   Sun, 12 Dec 2021 19:58:30 +0100
+Message-Id: <20211212185833.22000-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 1/6] dt-bindings: memory: tegra: Document
- #interconnect-cells property
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211210164741.881161-1-thierry.reding@gmail.com>
- <20211210164741.881161-2-thierry.reding@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211210164741.881161-2-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 17:47, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> The #interconnect-cells properties are required to hook up memory
-> clients to the MC/EMC in interconnects properties. Add a description for
-> these properties.
-> 
-> Also, allow multiple reg and interrupt entries required by Tegra194 and
-> later.
+This patch set moves two simple functions out of the hal layer into
+the place where they are used. Since we support only a single chipset
+in this driver, there's no need to go through the hal layer for such
+simple functions.
 
-I think number of interrupts is fixed and you do not change them for
-newer SoC, so the message is a little bit not precise. Also the subject
-does not it the patch - maybe something like - "adjust properties for
-Tegra196"?
+Martin Kaiser (3):
+  staging: r8188eu: move xmit status check from hal to rtw_cmd
+  staging: r8188eu: move linked status check from hal to rtw_mlme_ext
+  staging: r8188eu: clean up rtl8188e_sreset_linked_status_check
 
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
-> Changes in v2:
-> - drop incomplete BPMP snippet from example
-> - explicitly set minItems for reg property
-> - describe MC and EMC general interrupts
-> 
->  .../nvidia,tegra186-mc.yaml                   | 78 ++++++++++++++++---
->  1 file changed, 67 insertions(+), 11 deletions(-)
-> 
+ drivers/staging/r8188eu/Makefile              |  1 -
+ drivers/staging/r8188eu/core/rtw_cmd.c        | 13 ++++++-
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 18 ++++++++-
+ drivers/staging/r8188eu/hal/rtl8188e_sreset.c | 37 -------------------
+ .../staging/r8188eu/include/rtl8188e_hal.h    |  1 -
+ .../staging/r8188eu/include/rtl8188e_sreset.h | 13 -------
+ 6 files changed, 29 insertions(+), 54 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/hal/rtl8188e_sreset.c
+ delete mode 100644 drivers/staging/r8188eu/include/rtl8188e_sreset.h
 
+-- 
+2.20.1
 
-
-Best regards,
-Krzysztof

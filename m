@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACB34718D9
+	by mail.lfdr.de (Postfix) with ESMTP id BEDF64718DB
 	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 07:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbhLLGKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 01:10:20 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:19140 "EHLO rere.qmqm.pl"
+        id S232953AbhLLGYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 01:24:21 -0500
+Received: from marcansoft.com ([212.63.210.85]:49568 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229511AbhLLGKS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 01:10:18 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JBZ4Q0SSxz64;
-        Sun, 12 Dec 2021 07:10:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1639289416; bh=VuSaSqZcrW41+uEiAuo1l/ttygVpq/wNgVGxyoOZ6fE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Se5KLieRBNcATvBBOunx0rHx7HuEfdgOk9WDp7fVx4+6kG3zs28wFtU9k/J4M21SE
-         zGcMLgd4EFo5i4VsU2OyUytJnB5P94a2dy7o+rL1f5PqdCY6d1I1l+qVZNYrcYWrnF
-         emwF88A1fMLkqFpXhi+rmLgCnUB9GT6Lbk3X/XxfcLyE1I6QUX4ArcKzTP4BR8qAsC
-         Z/viU6GxVCXZkj3WtqkWtv3+favkbkgBsXAzkniR9xhKmlcfQVqXMR9dhyt3143syq
-         FQxwbfFM9ShuoiBiNVEdno8gl1Xr7tvt5T2BQs9wrkf2d59rFTKXbIXACuxeWnwjN6
-         a9cjxE1oiuL9g==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.3 at mail
-Date:   Sun, 12 Dec 2021 07:10:11 +0100
-From:   Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     akpm@linux-foundation.org, rostedt@goodmis.org,
-        keescook@chromium.org, pmladek@suse.com, david@redhat.com,
-        arnaldo.melo@gmail.com, andrii.nakryiko@gmail.com,
-        alexei.starovoitov@gmail.com, linux-mm@kvack.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH -mm v2 2/3] cn_proc: replaced old hard-coded 16 with
- TASK_COMM_LEN_16
-Message-ID: <YbWSQy0pmO9RgRUu@qmqm.qmqm.pl>
-References: <20211211063949.49533-1-laoar.shao@gmail.com>
- <20211211063949.49533-3-laoar.shao@gmail.com>
+        id S229511AbhLLGYS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 01:24:18 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 990CF424CD;
+        Sun, 12 Dec 2021 06:24:12 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [PATCH v3 0/3] drm/simpledrm: Apple M1 / DT platform support fixes
+Date:   Sun, 12 Dec 2021 15:24:04 +0900
+Message-Id: <20211212062407.138309-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211211063949.49533-3-laoar.shao@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 06:39:48AM +0000, Yafang Shao wrote:
-> This TASK_COMM_LEN_16 has the same meaning with the macro defined in
-> linux/sched.h, but we can't include linux/sched.h in a UAPI header, so
-> we should specifically define it in the cn_proc.h.
-[...]
-> index db210625cee8..6dcccaed383f 100644
-> --- a/include/uapi/linux/cn_proc.h
-> +++ b/include/uapi/linux/cn_proc.h
-> @@ -21,6 +21,8 @@
->  
->  #include <linux/types.h>
->  
-> +#define TASK_COMM_LEN_16 16
+Hi DRM folks,
 
-Hi,
+This short series makes simpledrm work on Apple M1 (including Pro/Max)
+platforms the way simplefb already does, by adding XRGB2101010 support
+and making it bind to framebuffers in /chosen the same way simplefb
+does.
 
-Since this is added to UAPI header, maybe you could make it a single
-instance also used elsewhere? Even though this is constant and not
-going to change I don't really like multiplying the sources of truth.
+This avoids breaking the bootloader-provided framebuffer console when
+simpledrm is selected to replace simplefb, as these FBs always seem to
+be 10-bit (at least when a real screen is attached).
 
-Best Regards
-Micha³ Miros³aw
+Changes since v2:
+- Made 10-bit conversion code fill the LSBs
+- Added ARGB2101010 to supported formats list
+- Simplified OF core code per review feedback
+Hector Martin (3):
+  of: Move simple-framebuffer device handling from simplefb to of
+  drm/format-helper: Add drm_fb_xrgb8888_to_xrgb2101010_toio()
+  drm/simpledrm: Add [AX]RGB2101010 formats
+
+ drivers/gpu/drm/drm_format_helper.c | 64 +++++++++++++++++++++++++++++
+ drivers/gpu/drm/tiny/simpledrm.c    |  4 +-
+ drivers/of/platform.c               |  4 ++
+ drivers/video/fbdev/simplefb.c      | 21 +---------
+ include/drm/drm_format_helper.h     |  3 ++
+ 5 files changed, 74 insertions(+), 22 deletions(-)
+
+-- 
+2.33.0
+

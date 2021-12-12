@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B00471A41
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE3D471A9E
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 15:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbhLLNAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 08:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhLLNAM (ORCPT
+        id S231368AbhLLOS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 09:18:29 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38938 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231359AbhLLOS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 08:00:12 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC76C061714;
-        Sun, 12 Dec 2021 05:00:12 -0800 (PST)
+        Sun, 12 Dec 2021 09:18:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50506CE0B53;
-        Sun, 12 Dec 2021 13:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70EC5C341CA;
-        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B1CD9CE0B66
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 14:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DCBC341C5;
+        Sun, 12 Dec 2021 14:18:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639314008;
-        bh=H2l+xf2WeTwJXBbO9SZOz0IoqXaav2fWOq4Wutvwjek=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SA7iwLgW36Yr5tI+gDE/hkdzXECmcQgyFIUKd2wMcR9jlfZBxtL6O/xoVHPCNbMcT
-         d7+iIFDtPrXrjpTLDyoQNmTimw64ntwY7LskdWmRofeWAL+Q7vFJrJx3SPWz55Nurx
-         v8x9DeagZJojjAmyjJANOAfbIDzj+iqG1FU8mQJnFf6VtVz7KQR3K4P2+DhKBylQxY
-         Ck2++zEQkwMbQz44AE/f9I4udVoIGMQ63vK/V5U5jEuMn5CNDKuVt8u7LN774ds1i0
-         Z9apXVO2bYiv5y6PoypwQy55VKNFKEEG1qXH9tXCfrP6YF3ieZCqNF5tcBJCIFomNd
-         XZZ/ZF/RCPk7g==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 507DC60BD0;
-        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1639318704;
+        bh=vHEegeDN9TpY8LC9UjSd5Q4VU5L1v3FFcVMkQUhz5GY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XGa5on+6YdNFNzaaHutU0uuyWlXPFgLnNy7jqbO1oUQ0qxq3Lrc23bp74KK7YQtgT
+         mXpUFlII5HS1Abzr7X1rilgObnVSm/huRH5d2pPi6w4CUH2UplIZzZep/INJs8SNpU
+         1P+Ym8qzGt1HvHNE2iqp7mTM4D1sJJn+jPhWnqDCuYjP1L+MQ1waAnsGIxjeXogy93
+         lmXp2v0HNFsJkcQ2e4GlUrwuOTNndhcMrmX2x+Su/RQQ70/O4Cz4aiExmOPSQ+x77N
+         IvGfMa7gVFHY/jgodZbahXN8mXOpjTcfI6eNxdaC3bPUjLgM2YHqZA87xcyYN5S11c
+         XgTNpqCdVrgQg==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: fix to check available space of CP area correctly in update_ckpt_flags()
+Date:   Sun, 12 Dec 2021 20:28:12 +0800
+Message-Id: <20211212122812.8132-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163931400832.17396.4075834071106906036.git-patchwork-notify@kernel.org>
-Date:   Sun, 12 Dec 2021 13:00:08 +0000
-References: <20211210072523.38886-1-po-hsu.lin@canonical.com>
-In-Reply-To: <20211210072523.38886-1-po-hsu.lin@canonical.com>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        skhan@linuxfoundation.org, andrea.righi@canonical.com,
-        dsahern@kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Otherwise, nat_bit area may be persisted across boundary of CP area during
+nat_bit rebuilding.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Fixes: 94c821fb286b ("f2fs: rebuild nat_bits during umount")
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/checkpoint.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, 10 Dec 2021 15:25:23 +0800 you wrote:
-> If any sub-test in this icmp_redirect.sh is failing but not expected
-> to fail. The script will complain:
->     ./icmp_redirect.sh: line 72: [: 1: unary operator expected
-> 
-> This is because when the sub-test is not expected to fail, we won't
-> pass any value for the xfail local variable in log_test() and thus
-> it's empty. Fix this by passing 0 as the 4th variable to log_test()
-> for non-xfail cases.
-> 
-> [...]
-
-Here is the summary with links:
-  - [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
-    https://git.kernel.org/netdev/net/c/3748939bce3f
-
-You are awesome, thank you!
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index f1693d45bb78..2011e9742443 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -1302,8 +1302,8 @@ static void update_ckpt_flags(struct f2fs_sb_info *sbi, struct cp_control *cpc)
+ 	unsigned long flags;
+ 
+ 	if (cpc->reason & CP_UMOUNT) {
+-		if (le32_to_cpu(ckpt->cp_pack_total_block_count) >
+-			sbi->blocks_per_seg - NM_I(sbi)->nat_bits_blocks) {
++		if (le32_to_cpu(ckpt->cp_pack_total_block_count) +
++			NM_I(sbi)->nat_bits_blocks > sbi->blocks_per_seg) {
+ 			clear_ckpt_flags(sbi, CP_NAT_BITS_FLAG);
+ 			f2fs_notice(sbi, "Disable nat_bits due to no space");
+ 		} else if (!is_set_ckpt_flags(sbi, CP_NAT_BITS_FLAG) &&
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.32.0
 

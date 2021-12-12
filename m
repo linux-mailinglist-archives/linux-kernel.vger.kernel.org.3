@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F5D4717F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 04:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5694717FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 04:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbhLLDYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 22:24:49 -0500
-Received: from smtpbg126.qq.com ([106.55.201.22]:29475 "EHLO smtpbg587.qq.com"
+        id S232723AbhLLD1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 22:27:07 -0500
+Received: from smtpbg126.qq.com ([106.55.201.22]:50560 "EHLO smtpbg587.qq.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229635AbhLLDYs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 22:24:48 -0500
-X-QQ-mid: bizesmtp44t1639279467tpfmb7r9
+        id S229635AbhLLD1G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 22:27:06 -0500
+X-QQ-mid: bizesmtp38t1639279616tvuhi8oz
 Received: from localhost.localdomain (unknown [182.132.179.213])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Sun, 12 Dec 2021 11:24:26 +0800 (CST)
+        id ; Sun, 12 Dec 2021 11:26:55 +0800 (CST)
 X-QQ-SSF: 01000000002000D0H000B00A0000000
-X-QQ-FEAT: F3yR32iATbjGUty7JOvTDi9n9m+mqQYI+e6hSssoDfBJE9Gd1TVesQbCMo/zT
-        XaJoDxOp5Ul78RrkWXckhcOORY64vVS4qzStsNL3hzJL3LMVuIJNV1J3pJipQIrybW8xzxE
-        7p+ghhl9NUn7a07iDNvzpo5d1cL0fM6v6Q/125FwcN3+X3jB7Yl27zeBaAXKADvcfOByLrJ
-        W8HyHVBHvjzDxfeuSst7SyPhRrOd2kKwMcIXUz3XZrNsVRfzQH3YuaPbgh8R2qb63WFJY3M
-        /vjwaqXnzof+3K+A5nfEEXeJDN/ET/+HV0h0P1t25lYBlvzf8kDycHW+Bt8hJk2iZ+tgNGn
-        OPcKH6XRVfHOp5f/XEO5bZ6t8JEnIPFAV0cQONr
+X-QQ-FEAT: dpyQmELDBxFo0y7giH8K9FeBllKIq5qQDPu1p2HfTShzZnbL2O7nslt9VgfqG
+        IAsXQG4UbhLSHiLwpKqmn0GCxknqpOpPu/bYN/mbziCKnVC4WbtyloZ9TmmT/clfkIEAbWv
+        9GcyTXRu9chT6ETAWAfaEYWnadG8bYOMIpgWScCQR757QRAm9FR70DpLX+lNGrpOpvB1R/H
+        VkLa7iSv5Q+q4IfjK6ohJLAMc0PbKB2u4tZ5i8JS/Pue3d0RhKGtMxZlH744iKt7RKapN6A
+        ujg3yY1OTSpNKHECgYDbnQrTGpgVu7+8t5/v6IUx62GuHo/f8z+yHcD/RM9eq2eEFyVLQsD
+        JjMqkzGLEfg45SkqEZxsDtvcYRJAyY8oLElZV8w+UPnNlZ22SU=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     jgross@suse.com
-Cc:     boris.ostrovsky@oracle.com, sstabellini@kernel.org,
-        wangborong@cdjrlc.com, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] xen/pciback: fix typo in a comment
-Date:   Sun, 12 Dec 2021 11:24:08 +0800
-Message-Id: <20211212032408.52180-1-wangborong@cdjrlc.com>
+To:     bp@alien8.de
+Cc:     yazen.ghannam@amd.com, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] EDAC/amd64: fix typo in a comment
+Date:   Sun, 12 Dec 2021 11:26:53 +0800
+Message-Id: <20211212032653.56459-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -40,27 +40,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' in the comment in line 163 is repeated. Remove it
-from the comment.
+The double `reads' in the comment in line 126 is repeated. Remove one
+of them from the comment.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/xen/xen-pciback/pciback_ops.c | 2 +-
+ drivers/edac/amd64_edac.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/xen/xen-pciback/pciback_ops.c b/drivers/xen/xen-pciback/pciback_ops.c
-index 3fbc21466a93..e38b43b5065e 100644
---- a/drivers/xen/xen-pciback/pciback_ops.c
-+++ b/drivers/xen/xen-pciback/pciback_ops.c
-@@ -160,7 +160,7 @@ int xen_pcibk_enable_msi(struct xen_pcibk_device *pdev,
- 	}
- 
- 	/* The value the guest needs is actually the IDT vector, not the
--	 * the local domain's IRQ number. */
-+	 * local domain's IRQ number. */
- 
- 	op->value = dev->irq ? xen_pirq_from_irq(dev->irq) : 0;
- 
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index ca0c67bc25c6..dff6469e9f67 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -123,7 +123,7 @@ static inline int amd64_read_dct_pci_cfg(struct amd64_pvt *pvt, u8 dct,
+ 		if (dct) {
+ 			/*
+ 			 * Note: If ganging is enabled, barring the regs
+-			 * F2x[1,0]98 and F2x[1,0]9C; reads reads to F2x1xx
++			 * F2x[1,0]98 and F2x[1,0]9C; reads to F2x1xx
+ 			 * return 0. (cf. Section 2.8.1 F10h BKDG)
+ 			 */
+ 			if (dct_ganging_enabled(pvt))
 -- 
 2.34.1
 

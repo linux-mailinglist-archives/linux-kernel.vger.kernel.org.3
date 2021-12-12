@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C99E7471958
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 09:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEA247195B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbhLLI6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 03:58:34 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56938 "EHLO
+        id S229915AbhLLJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 04:00:35 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57008 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbhLLI6d (ORCPT
+        with ESMTP id S229593AbhLLJAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 03:58:33 -0500
+        Sun, 12 Dec 2021 04:00:35 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DBA241F3AC;
-        Sun, 12 Dec 2021 08:58:31 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 159511F3AF;
+        Sun, 12 Dec 2021 09:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639299511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639299634; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=RdQERHM96yBBje3WLQrA2u2xMGiyCJwJHqviZnXvKlY=;
-        b=SRDdQrTHKUFY1dasR0do6uLLHNl0S2oR4XOYwu8ppoYOjCkAqOXC4uR+XnvJwIMkLvVhyz
-        GM0ACvzUEyxAxWFIHjLMpjd8XCJXzrhHRLM6fOn+Wde1sJSMO6SMpshLZQryTd6hBYaQfJ
-        Tw3FiLkbcBuT/LXZdFPVPRcZx5W4x0Y=
+        bh=l6AWHjo6PQ4BPF1NmbEadN6JkpBp7NJYDqAaABlQrJA=;
+        b=yO4T3trLR3Y7Qtb5BPXdQ71UqgUWjx/BALtPjZVb7AiAUgPTNiDKOf1EZzLxDlYzyWreGE
+        YfCwdyZsActTG5kCj5ZkvCjxyBeAznxpewO8esAwMRvcxJabMJvzX9IBImEuMP0NJvZg9n
+        Fx/Q4IGU1MdJ9scAfKPaF7ba8R1TkF4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639299511;
+        s=susede2_ed25519; t=1639299634;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=RdQERHM96yBBje3WLQrA2u2xMGiyCJwJHqviZnXvKlY=;
-        b=EKWma8HOpEuFSxv1dXTn0Fsq+UMd5n3dIZUReSjHYmrehd1DRPLRYL6ziXIu0ZFU5dpYeJ
-        ioFzMLoIOPv5qVBw==
+        bh=l6AWHjo6PQ4BPF1NmbEadN6JkpBp7NJYDqAaABlQrJA=;
+        b=jY0NFM1MnKr1TmAVxEHgQN4018OzeYqQnSGampGhlJitezM95HRntOoS1GEupEz6mzhcEm
+        veGwFkyGeIBN0zDA==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 3C972A3B81;
-        Sun, 12 Dec 2021 08:58:31 +0000 (UTC)
-Date:   Sun, 12 Dec 2021 09:58:31 +0100
-Message-ID: <s5ha6h6fbd4.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id D267DA3B83;
+        Sun, 12 Dec 2021 09:00:33 +0000 (UTC)
+Date:   Sun, 12 Dec 2021 10:00:33 +0100
+Message-ID: <s5h8rwqfb9q.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Bradley Scott <Bradley.Scott@zebra.com>
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Kailang Yang <kailang@realtek.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Sami Loone <sami@loone.fi>, Elia Devito <eliadevito@gmail.com>,
-        alsa-devel@alsa-project.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: hda/realtek: Amp init fixup for HP ZBook 15 G6
-In-Reply-To: <20211210192614.460529-1-Bradley.Scott@zebra.com>
-References: <20211210192614.460529-1-Bradley.Scott@zebra.com>
+        alsa-devel@alsa-project.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: ALSA: drivers: opl3: assignment of a pointer that is not used, probable bug
+In-Reply-To: <fbae9be5-c847-0b6b-f755-312a2af1e285@gmail.com>
+References: <fbae9be5-c847-0b6b-f755-312a2af1e285@gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -60,29 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 20:26:12 +0100,
-Bradley Scott wrote:
+On Sat, 11 Dec 2021 19:19:30 +0100,
+Colin King (gmail) wrote:
 > 
-> HP ZBook 15 G6 (SSID 103c:860f) needs the same speaker amplifier
-> initialization as used on several other HP laptops using ALC285.
+> Hi,
 > 
-> This commit also adds a new "alc285-hp-amp-init" model that can be used
-> to apply this same amp init fixup to other devices by passing
-> "hda_model=alc285-hp-amp-init" to the snd-sof-intel-hda-common module or
-> "model=alc285-hp-amp-init" to the snd-hda-intel module, depending on
-> which is being used.
+> static analysis with scan-build has found an assignment to vp2 that is
+> never used in function snd_opl3_note_on(),
+> sound/drivers/opl3/opl3_midi.c as follows:
 > 
-> Signed-off-by: Bradley Scott <Bradley.Scott@zebra.com>
+>         if (instr_4op) {
+>                 vp2 = &opl3->voices[voice + 3];
+>                 if (vp->state > 0) {
+>                         opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK +
+>                                                voice_offset + 3);
+>                         reg_val = vp->keyon_reg & ~OPL3_KEYON_BIT;
+>                         opl3->command(opl3, opl3_reg, reg_val);
+>                 }
+>         }
+> 
+> sound/drivers/opl3/opl3_midi.c:399:3: warning: Value stored to 'vp2'
+> is never read [deadcode.DeadStores]
+>                 vp2 = &opl3->voices[voice + 3];
+>                 ^     ~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> I suspect that references to vp in this if block should be to vp2, but
+> I'm unsure if that is for all references or not, hence I'm reporting
+> this issue.
 
-Thanks for the patch.  Unfortunately, somehow your MUA broke the tabs
-with spaces and the patch wasn't cleanly applicable.
+Yes, the next vp->state > 0 check must be vp2->state > 0.
+Care to submit a proper fix patch?
 
-Also, I prefer splitting the changes to two, the addition of a quirk
-entry and the addition to the model string.  Then old stable kernels
-have more chance to pick up.
 
-Could you try to resubmit?  In the worst case, I can take the
-attachments, too.
-
+Thanks!
 
 Takashi

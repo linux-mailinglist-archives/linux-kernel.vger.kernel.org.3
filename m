@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC7A471908
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FABB47190B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 08:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbhLLHPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 02:15:04 -0500
-Received: from smtpbg604.qq.com ([59.36.128.82]:59988 "EHLO smtpbg604.qq.com"
+        id S229687AbhLLHS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 02:18:59 -0500
+Received: from smtpbg587.qq.com ([113.96.223.105]:33635 "EHLO smtpbg587.qq.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229518AbhLLHPD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 02:15:03 -0500
-X-QQ-mid: bizesmtp46t1639293297tac9mnvn
+        id S229450AbhLLHS6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 02:18:58 -0500
+X-QQ-mid: bizesmtp43t1639293524tv5aum6o
 Received: from localhost.localdomain (unknown [182.132.179.213])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Sun, 12 Dec 2021 15:14:55 +0800 (CST)
+        id ; Sun, 12 Dec 2021 15:18:43 +0800 (CST)
 X-QQ-SSF: 01000000002000D0I000B00A0000000
-X-QQ-FEAT: 8QKpqxZbV7FYtRzLYMIsptAal0aV5pn5hYkqAwSjoSxsCPGc+6SNiywpXuteq
-        mVzKZwdqscScGXH8ot1LRy2u/ljJemuxh+mEAZMoyLNzfoOzgQChgaF7IZUd7rwpi36y291
-        7aEBEVatFAEynuK3rogtM9PSyttSTg+42EhVABl4+tLvyQavESvYBldxtFo1891d0eIYjF+
-        epuIxP263lEDKUOLMUxh+AjsSESkHYdXAQaH4Nz7jwxQDgJAREOiNdJ/7ueUUmJqWf0lJGQ
-        ncOLrpj4UgCSSy/H1/h5iSgqWog67D3Cmbk+5RhLpFjR11T95kh0FNsmQw8cVOZy93Ug2pF
-        kF9CL59Owfsi+AHBqXsOX3BSS/q8mb89RglyEOhY6UHdJu1gjs5MBt/Ynwnfg==
+X-QQ-FEAT: 1vYwxPNStGnyvBaKtccJIyIA7HDYdPnUz/WvUZSMcG5FKGQdsA2DBetccSGSr
+        dXrA12NnKBsBmVX4ymanOPfGey7Y4rJ4f+te8K4rHyRc69lIODZ7ZctkqwD2B6KcdnjZ0zG
+        vQUWNbyjPutRURE6OY50DixKHBtr8TMnSkuHpst9K9/MH5vz0cR46OGEsb/y5AsHt3GOTWf
+        vaFdaLVUgNckiJvWvfVEO/rte2mpoqvUWjeHzIcNnClE0wprUWWT3Sb8kBRqsW7uC2N3F+T
+        tDfyePh8WyZLXD82uDXHYO03nT3je+L6C+ybMujRiUPFx9oJg8VwF/aocL7jfw6kEZS/ZXy
+        3TPT+mLMwDfHrlh502LAiEBdsR0IKIVg76143Yu6Omqp4aHAgA=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     frowand.list@gmail.com
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] of: unneed to initialise statics to 0 or NULL
-Date:   Sun, 12 Dec 2021 15:14:54 +0800
-Message-Id: <20211212071454.298251-1-wangborong@cdjrlc.com>
+To:     gregkh@linuxfoundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] applicom: unneed to initialise statics to 0
+Date:   Sun, 12 Dec 2021 15:18:38 +0800
+Message-Id: <20211212071838.304307-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam4
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Static variables do not need to be initialised to 0 or NULL,
-because compilers will initialise all uninitialised statics
-to 0 or NULL. Thus, remove the unneeded initializations.
+Static variables do not need to be initialised to 0, because compilers
+will initialise all uninitialised statics to 0. Thus, remove the
+unneeded initializations.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/of/pdt.c | 4 ++--
+ drivers/char/applicom.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/of/pdt.c b/drivers/of/pdt.c
-index 7eda43c66c91..37d02fcb81d0 100644
---- a/drivers/of/pdt.c
-+++ b/drivers/of/pdt.c
-@@ -40,7 +40,7 @@ static inline void irq_trans_init(struct device_node *dp) { }
+diff --git a/drivers/char/applicom.c b/drivers/char/applicom.c
+index deb85a334c93..36203d3fa6ea 100644
+--- a/drivers/char/applicom.c
++++ b/drivers/char/applicom.c
+@@ -89,8 +89,8 @@ static struct applicom_board {
+ 	spinlock_t mutex;
+ } apbs[MAX_BOARD];
  
- static char * __init of_pdt_build_full_name(struct device_node *dp)
- {
--	static int failsafe_id = 0; /* for generating unique names on failure */
-+	static int failsafe_id; /* for generating unique names on failure */
- 	const char *name;
- 	char path[256];
- 	char *buf;
-@@ -67,7 +67,7 @@ static struct property * __init of_pdt_build_one_prop(phandle node, char *prev,
- 					       void *special_val,
- 					       int special_len)
- {
--	static struct property *tmp = NULL;
-+	static struct property *tmp;
- 	struct property *p;
- 	int err;
+-static unsigned int irq = 0;	/* interrupt number IRQ       */
+-static unsigned long mem = 0;	/* physical segment of board  */
++static unsigned int irq;	/* interrupt number IRQ       */
++static unsigned long mem;	/* physical segment of board  */
  
+ module_param_hw(irq, uint, irq, 0);
+ MODULE_PARM_DESC(irq, "IRQ of the Applicom board");
 -- 
 2.34.1
 

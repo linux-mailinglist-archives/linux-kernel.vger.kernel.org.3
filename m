@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F9A4717D5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 03:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604CC4717DB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 03:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbhLLCXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 21:23:49 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:51146 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232495AbhLLCXr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 21:23:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5yrMToKMdkkVY4CQzgz+QrmftWNp5HW8nmVmkKpF9O0=; b=I//tJ1t3tCSfFCDcZY3VLsjTd3
-        kn9imk9KAK8crIJBLwKd21QkmHstp4Qz2IsIaOFemRYdgLTzlPjud6e+5rlz4QSCnf6xZM8u5IEuv
-        5H/IIYBgixE+fZ6O3jPHRljm1mdZSIATbOutx/WL44IPY1LfYjtzg3njWS0a3NZqbmBo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mwEWZ-00GISJ-F1; Sun, 12 Dec 2021 03:23:39 +0100
-Date:   Sun, 12 Dec 2021 03:23:39 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     JosephCHANG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
+        id S232605AbhLLCmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 21:42:24 -0500
+Received: from relay036.a.hostedemail.com ([64.99.140.36]:9897 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232495AbhLLCmY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 11 Dec 2021 21:42:24 -0500
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id 7A0002234B;
+        Sun, 12 Dec 2021 02:42:22 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 02B2F37;
+        Sun, 12 Dec 2021 02:42:20 +0000 (UTC)
+Message-ID: <e7eeecfb1c967336944f0941900a9052bcce279e.camel@perches.com>
+Subject: Re: [PATCH] net: bcmgenet: Fix NULL vs IS_ERR() checking
+From:   Joe Perches <joe@perches.com>
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Dan Carpenter <error27@gmail.com>
+Cc:     Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3, 2/2] net: Add dm9051 driver
-Message-ID: <YbVdK69SB0Ebt8C9@lunn.ch>
-References: <20211210084021.13993-1-josright123@gmail.com>
- <20211210084021.13993-3-josright123@gmail.com>
+Date:   Sat, 11 Dec 2021 18:42:19 -0800
+In-Reply-To: <20211211140154.23613-1-linmq006@gmail.com>
+References: <20211211140154.23613-1-linmq006@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210084021.13993-3-josright123@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 02B2F37
+X-Spam-Status: No, score=-3.04
+X-Stat-Signature: rtx4mxyg7rrt6c6e4terzb84xmjnc1fm
+X-Rspamd-Server: rspamout08
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19V+2w4H3z8/tKHt6v8o/V7BtPfcoyla5g=
+X-HE-Tag: 1639276940-116653
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +/* netdev_ops
-> + */
-> +static int dm9051_open(struct net_device *dev);
-> +static int dm9051_stop(struct net_device *dev);
-> +static netdev_tx_t dm9051_start_xmit(struct sk_buff *skb, struct net_device *dev);
-> +static void dm9051_set_multicast_list_schedule(struct net_device *dev);
-> +static int dm9051_set_mac_address(struct net_device *dev, void *p);
+On Sat, 2021-12-11 at 14:01 +0000, Miaoqian Lin wrote:
+> The phy_attach() function does not return NULL. It returns error pointers.
 
-You should not need these. Move the code around so the functions come
-before there first use.
+Perhaps all the functions that return error pointers rather than
+NULL on error should be marked with a special attribute:
 
-> +/* carrier
-> + */
-> +#define	dm_carrier_init(db)			mii_check_link(&(db)->mii)
-> +#define	dm_carrier_poll(db)			mii_check_link(&(db)->mii)
+Something like:
 
-I requested you make use of phylib. Once you do, these will go away.
+#define __returns_nonnull	__attribute__((__returns_nonnull__))
 
-> +#define	dm_carrier_off(dev)			netif_carrier_off(dev)
+---
 
-No wrappers around standard functions. Also, once you use phylib, it
-will take care of the carrier for you.
+ include/linux/compiler_attributes.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-> +
-> +/* xmit support
-> + */
-> +#define	dm_sk_buff_head_init(db)		skb_queue_head_init(&(db)->txq)
-> +#define	dm_sk_buff_get(db)			skb_dequeue(&(db)->txq)
-> +#define	dm_sk_buff_set(db, skb)			skb_queue_tail(&(db)->txq, skb)
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index 37e2600202216..e2351a36dda97 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -250,6 +250,18 @@
+ # define __no_profile
+ #endif
+ 
++/*
++ * Optional: only supported since GCC >= 5.x
++ *
++ *      gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-returns_005fnonnull-function-attribute
++ *    clang: https://clang.llvm.org/docs/AttributeReference.html#returns-nonnull
++ */
++#if __has_attribute(__returns_nonnull__)
++# define __returns_nonnull		__attribute__((__returns_nonnull__))
++#else
++# define __returns_nonnull
++#endif
++
+ /*
+  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noreturn-function-attribute
+  * clang: https://clang.llvm.org/docs/AttributeReference.html#noreturn
 
-These wrappers should also be removed.
 
-> +/* spi transfers
-> + */
-> +#define ior					std_spi_read_reg			// read reg
-> +#define iior					disp_spi_read_reg			// read disp
-> +#define iow					std_spi_write_reg			// write reg
-> +#define dm9inblk				std_read_rx_buf_ncpy			// read buff
-> +#define dm9outblk				std_write_tx_buf			// write buf
-> +
-> +#define	ncr_reg_reset(db)			iow(db, DM9051_NCR, NCR_RST)		// reset
-> +#define	mbd_reg_byte(db)			iow(db, DM9051_MBNDRY, MBNDRY_BYTE)	// MemBound
-> +#define	fcr_reg_enable(db)			iow(db, DM9051_FCR, FCR_FLOW_ENABLE)	// FlowCtrl
-> +#define	ppcr_reg_seeting(db)			iow(db, DM9051_PPCR, PPCR_PAUSE_COUNT)	// PauPktCn
-> +#define	isr_reg_clear_to_stop_mrcmd(db)		iow(db, DM9051_ISR, 0xff)		// ClearISR
-> +#define rcr_reg_stop(db)			iow(db, DM9051_RCR, RCR_RX_DISABLE)	// DisabRX
-> +#define imr_reg_stop(db)			iow(db, DM9051_IMR, IMR_PAR)		// DisabAll
-> +#define rcr_reg_start(db, rcr_all)		iow(db, DM9051_RCR, rcr_all)		// EnabRX
-> +#define imr_reg_start(db, imr_all)		iow(db, DM9051_IMR, imr_all)		// Re-enab
-> +#define	intcr_reg_setval(db)			iow(db, DM9051_INTCR, INTCR_POL_LOW)	// INTCR
-> +#define	ledcr_reg_setting(db, lcr_all)		iow(db, DM9051_LMCR, lcr_all)		// LEDMode1
-
-Please remove all these wrapper.
-
-       Andrew

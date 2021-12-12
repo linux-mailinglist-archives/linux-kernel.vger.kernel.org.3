@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D90471C8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 20:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27812471CB1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 20:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbhLLTai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 14:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
+        id S229687AbhLLTdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 14:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbhLLTai (ORCPT
+        with ESMTP id S229464AbhLLTdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 14:30:38 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0540C061714
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 11:30:37 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so13173689pja.1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 11:30:37 -0800 (PST)
+        Sun, 12 Dec 2021 14:33:23 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313E9C061714
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 11:33:23 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x10so28362184edd.5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 11:33:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uHFphg5cxl9eHx+EM+ayhZRLUX15gEzneKCxjSJWVNc=;
-        b=atO3zjkadP5BGnoJZKa+jVrckytkN0sEjwUFaB2f01w6x8zbgy8j/+weAfhlOmPHiL
-         aVj2KSLyZxmrlRWsdtTGxT36hrGdBbvn6Lz5I4JJZKHRMZ/Uhp+TY3dLCSzLNPZ7gGiQ
-         LqoyVVhhH/tWWHazEMp7uzDQ2E2KHzYNxrIMRAC9RGrV3m7J+vyyyHg1knwjGCvgERAa
-         eviLH4PDS7JyN5dPBAoNVznIjDQnj9l7y+aMBFPlrMCgazYHha5EyJxaSyY/4j3UxIX9
-         +LkgUk85Wcg7OmiqMSLHrQ0aeQ0XKq5IFUhQ948w8m/8lkPvQk2JNDPSuJOczTN+pl85
-         CprQ==
+        bh=pljls+26iqXs8586OeHQW1pbrGyYEa1Rh9wwbuHdgrs=;
+        b=E5i9G4gN+surlpqIyILHSsMEUvb+guvBn/ai49HLSV3WgAUOa58O8daZh0yeq/XF5N
+         33umFap1Af1L8VyMoYgqJImL3RwQfmCy6OgGmxPAB3Sr0Hw6Ef8OSH1uEzz1rHCWBXiY
+         0uqUaFStR7fYrJL69xYGWf/DRk+zyGqVJlgyE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uHFphg5cxl9eHx+EM+ayhZRLUX15gEzneKCxjSJWVNc=;
-        b=AUhMOB6emXnTG7qu9poFXO8QMKteYcg6bf2XdpqQyeSNpDzadw5/t09VMAYa4uh9aC
-         YZQxY7Th09mWD9M8H2hWtLxMFfv6qiLBGDzHqLJP1y8KXqKMlfkg+HPMHPfZW/5wrqUv
-         RPL05zE8tGvPCheAbATpzuQFJYalHOSLKS/T55rhnPP5zti9d8H5L8GGczkFA0Z8V2sf
-         JtAKsq+y9q+KNc8JnD2+mJ7+K8gH8U5DmueVE8n6UOTtNdhCYAJCJVhSBG9q18fAZrK4
-         uEdi1rXbnSm+f1YtoI2NV3xBOg1YIZHh2FSbjGwjyzhn2ef1krzr0vDNBzCx0me7o5Qy
-         WTWg==
-X-Gm-Message-State: AOAM532uks52t1RpSp3bjULdrNP0PflKQ7rg8yJM9gyzV5QxInFc1BVw
-        B//H05ElqmmY+SXQ5wBHIvbL4RvQOBzymWlxbOw=
-X-Google-Smtp-Source: ABdhPJxQzS8hVJ0AYMHVxdh0cY0L8hVYy6/U95MBITk75g3JQI7JmApEOGDDpZSsc2jan577YXnozd/CPh1jKmR7Nk0=
-X-Received: by 2002:a17:902:904b:b0:143:73ff:eb7d with SMTP id
- w11-20020a170902904b00b0014373ffeb7dmr88504763plz.85.1639337437247; Sun, 12
- Dec 2021 11:30:37 -0800 (PST)
+        bh=pljls+26iqXs8586OeHQW1pbrGyYEa1Rh9wwbuHdgrs=;
+        b=qFBsbYGli4l6D6nA8CULz7wdAWxQbqwmKLnQS0ySQjIgHNdXOD3t+ZObN5eQkG7zA5
+         DI+Fy/Zmgsr4Io7Nlgl/L/VQZ/jHlJR8s1eYO6TNKxiGLxqSWTi6Lzo824lMm84ETN9M
+         MLV0ABODf9YgV8eScCV+fJM47n/hT/O6vt0YWWi1QOuVi+aD2NXaSPsry1q5ZljZmd2s
+         xN8tyxLfVIVHTBejZ0NMzsKtZCV1z6Ah8HafPOVtMRC22JYm2auR/c4l4k6L0MxVVzxl
+         P1Hl7k4lGJiFumdfnFXxvrGRgruWnXB1wWkHrAiSrtjmr/3kXAByaXCP9kKjs3gEUYnx
+         OyEg==
+X-Gm-Message-State: AOAM5321uqFutKGD3wY+uwRg0IurrqdaTEqJOb2cDeoyxteHkxnkywbx
+        9M+EudaxtX/niPPRJ2yK2UkjiKIVeGfmNHC7
+X-Google-Smtp-Source: ABdhPJylH5a2k8AqDkvSXMYGWK2KLD5i6Bs0fNQQ+/u7Z/DHsNIZ+st5KdQIcCiXVSFCt3/mxvBdmg==
+X-Received: by 2002:a50:ee96:: with SMTP id f22mr57564605edr.77.1639337601648;
+        Sun, 12 Dec 2021 11:33:21 -0800 (PST)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id g15sm4802144ejt.10.2021.12.12.11.33.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 11:33:21 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id a18so23753320wrn.6
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 11:33:21 -0800 (PST)
+X-Received: by 2002:adf:8b0e:: with SMTP id n14mr25727225wra.281.1639337600994;
+ Sun, 12 Dec 2021 11:33:20 -0800 (PST)
 MIME-Version: 1.0
 References: <20211211173447.4155374-1-hjl.tools@gmail.com> <CACVxJT-k664=aYp4VkG1LH3PsGHEf50PqP5EA+JWiFVb_JVs2Q@mail.gmail.com>
  <CAMe9rOqM+S_uBO-t5jJ1TLVD0R-LOJEiR6htb+k05c+ak7gF-g@mail.gmail.com>
  <CAHk-=wiEgwj3DGZai2GF9+z-FCSS455kGZ9z2g1qtdPLPWpvxQ@mail.gmail.com>
  <CAMe9rOqYxiMabie_2LN2mTTP7QPa0_mfKwDY10OSzKFj5GYT7A@mail.gmail.com> <CAHk-=whPK-aB34T1YS4CVK0G1m6QU7FZg28+oEeVaGy-b4hZGA@mail.gmail.com>
 In-Reply-To: <CAHk-=whPK-aB34T1YS4CVK0G1m6QU7FZg28+oEeVaGy-b4hZGA@mail.gmail.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Sun, 12 Dec 2021 11:30:01 -0800
-Message-ID: <CAMe9rOoqkH=FL3s331YKeyz_Qjf7pR9M_Cf117XHErrTU-2iRA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 12 Dec 2021 11:33:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whrqh1bVQk2j+wMHtukUCRxMBH=Tz3bbRm25=RM67GMRQ@mail.gmail.com>
+Message-ID: <CAHk-=whrqh1bVQk2j+wMHtukUCRxMBH=Tz3bbRm25=RM67GMRQ@mail.gmail.com>
 Subject: Re: [PATCH] fs/binfmt_elf.c: disallow zero entry point address
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
 Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -67,42 +73,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sun, Dec 12, 2021 at 11:15 AM Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
 >
-> On Sun, Dec 12, 2021 at 11:06 AM H.J. Lu <hjl.tools@gmail.com> wrote:
-> >
-> > According to the ELF specification, zero entry point value means
-> > there is no entry point.  Such ELF binary doesn't conform to the
-> > ELF specification.
->
-> Nobody cares about paper specifications.
->
-> All that matters is REALITY.
->
-> So let me quote my email again, since you clearly didn't actually read
-> it (read that "maybe it's not supposed to work" part):
->
-> > That's not my main worry - what if somebody has a code section with a
-> > zero vaddr and intentionally put the entry at the beginning?
-> >
-> > Maybe it's not supposed to work by some paper standatd, but afaik
-> > currently it _would_ work.
->
 > I'm not sure this can happen currently (maybe all tools effectively
 > make it so that the ELF headers etc are part of the loaded image).
->
-> But no, paper specifications have absolutely no meaning if they don't
-> match realty.
->
-> And the reality is that I don't think we've ever checked e_entry being
-> zero, which means that maybe people have used it.
->
-> So convince me that the above cannot happen. I'm perfectly willing to
-> be convinced, but "some random paper standard that we've never
-> followed" is not the thing to quote.
->
 
-On Linux, the start of the first PT_LOAD segment is the ELF
-header and the address 0 points to the ELF magic bytes which
-isn't a valid code sequence.
+Side note: if that ends up being the case (ie e_entry always
+effectively relative to the head of the image), then I think a better
+fix would be to make that explicit, something like
 
--- 
-H.J.
+        if (elf_ex->e_entry < header_sizes)
+                goto out;
+
+but the logic on exactly how things get loaded is so messy that I'm
+not sure just what the situation is.
+
+We've had things like old tool chains generate messy binaries before,
+to the point where we've had to revert much more important changes (ie
+the whole mess with MAP_FIXED_NOREPLACE and overlapping sections).
+
+                 Linus

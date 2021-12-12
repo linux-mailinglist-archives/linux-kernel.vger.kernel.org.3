@@ -2,107 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 990E4471788
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CDC47178B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 02:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbhLLBZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Dec 2021 20:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S232421AbhLLBZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Dec 2021 20:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhLLBZd (ORCPT
+        with ESMTP id S232406AbhLLBZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Dec 2021 20:25:33 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB6AC061714
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 17:25:33 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id y5so23252433ual.7
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Dec 2021 17:25:33 -0800 (PST)
+        Sat, 11 Dec 2021 20:25:35 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82909C061714;
+        Sat, 11 Dec 2021 17:25:34 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o29so9580686wms.2;
+        Sat, 11 Dec 2021 17:25:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=W3a+UOJsNc9ZqMkKYG+PXJQrvd2n9lHBewMUav5hoUo=;
-        b=qXE1eOiy1+fTZ4qdWlCw8Mh15pl1nD5A7sg7U5uBhmMVwJbT3vgpbDBt9r5OXvIyjt
-         eOh1hZCKu5dXFKA3G8vmkDdQezxmOHFpSHOlX/ZguhRZcNv1vO1zzzoBMlRiGvPWaH7f
-         NrUWpx4rI0a/s6slbMdvJGNFc08YX+d3kgA7bUIRCoM5UGKDLM/sn8NlX8QFObdnArCI
-         YOzDgYZXT6tSuikq7pxqW1HK6jsSjhOa7f0dWWxrHROQ7yhsPML33i41u3NaH3ABhJB/
-         x1TeUyPLvH4Nry9CcPMh72LM6kXIrvFa0bSp1vKqq7oRun0X7EuKj4HUtlzw8iVbdgd3
-         zLIQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aeWgIsg9nRx5DjC5z2Qu5CS/pGASfsc5ob34Cm+Pa1M=;
+        b=hB2TqXacA/XsZxvxS6/qIMxG2a7bQZiHfVxQUvfGhsb2VOK8GD1mgMxxNTWOw5YN8q
+         oH6YUjg4/Rin5qWq8Z8mwupJojZ7Qp8qhYlxfDZTrBly06tUJQQgDXhmx9esQw3xFCik
+         KJvvhJtUeTDGv62wp8u065XcQ2/eB1IbsdDQ/5AImQfReFvvLY1+NMzdSiWztbr0Z0xx
+         HGWjjRBnFxlbmUU34DsZNRUg70NEuUXe0U6Y6t317WhVMiI8HFUAEjOe2hcDRS65PpCT
+         XxLzTTDxStoKtUhJu1klHhmy9l16u0z+h64sD3nT9chLclNrBuUo2h2K/uW5lYvri9S4
+         oriA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=W3a+UOJsNc9ZqMkKYG+PXJQrvd2n9lHBewMUav5hoUo=;
-        b=c1vwzLIAZOW/5lZitZJgIOgriQL607v1Ctm47njptCDG7NuF4V6SJn73kqXL0/tNe4
-         QLVyxrG2ghFBDdkNuLxaLv9i5kDqr6bM3OA+D6fa3Ex3CuJkZq3hR7uGr48dp4w3b5o/
-         QNELzJ7viR9KmeCynK2WrAgQx8fmF0qx1uFLabEm0+LNOxL1V1nq8P5fhZVtwO3yxt/o
-         HCHdVXtUFUaKvtUkHtN2Q2giDIxoW3Nq9h3X0N4Gtm2/xpijJzULbXVSE5eN6I9DmGFt
-         GfL2+G7acsxUo4apO52SUpY1kE0bPy9tlkjXApJSwDUH/ZEhzYmTQdWHU0FREDOLsbZX
-         hlFg==
-X-Gm-Message-State: AOAM533dAv4uyTaBpIcq/c7qgHk0VOorNZHOt6okEKyS31foEefPnPkl
-        znEkKzs88jfC6C3/aElzYJXMsnVEXZQyvImIIf0=
-X-Google-Smtp-Source: ABdhPJwKPddQyyKhWn9zElPKGQgwlJVyJPP8r6DDIACNMH48W70Vpw8SHkun9msymqG8oW8DTeNI8HzcT1S63umc5nw=
-X-Received: by 2002:a67:e18e:: with SMTP id e14mr21013796vsl.49.1639272327471;
- Sat, 11 Dec 2021 17:25:27 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aeWgIsg9nRx5DjC5z2Qu5CS/pGASfsc5ob34Cm+Pa1M=;
+        b=FeYQq+W6QBkdVhIIDZmGv6oqJ3XhkEfK83W1M4tbmb6iGOVaqPMD2Lt2he0QmQaKQy
+         0zxmJFWXIydnGf9avTjPEEZeB12yOhQbpn2De4RCvi+J9mQmapLarrN3P2Pdh9Hyg8vi
+         fWuKoYQ+o6z9VyUhAxH2AUs021zvmxrfd5Bxhae+sBif+77YCT3VxpLGMNPEMYsRybs0
+         ZtFDlkX9XGO9e3Ds5cI4e216q2Odm+aDGrOsdItZuEXynAB5BBivB74jOzZHecbMeKtB
+         XrD33V1YX2R+2z3qQLTzTqREsgVaHEC/VTYYXRNF83BqfqIl0hvyOylokExBVxS36KoC
+         drJw==
+X-Gm-Message-State: AOAM5302iEE3s+fonByb3yfF86ALnhFp/3VfA9XDP3mI247/Tk1XesaW
+        T4RWO8bP5rJQm21/kM/aBmE=
+X-Google-Smtp-Source: ABdhPJxzzrEKp1UNQInYRNmbtVeKoLKQeM606xQFQdns+T9Jcqh0clV9X2Pg1JhhmCNb7fjkZAtiog==
+X-Received: by 2002:a05:600c:a01:: with SMTP id z1mr5315067wmp.52.1639272332782;
+        Sat, 11 Dec 2021 17:25:32 -0800 (PST)
+Received: from ?IPv6:2003:c7:8f4e:668:2247:20d3:1195:d634? (p200300c78f4e0668224720d31195d634.dip0.t-ipconnect.de. [2003:c7:8f4e:668:2247:20d3:1195:d634])
+        by smtp.gmail.com with ESMTPSA id n13sm6290489wrt.44.2021.12.11.17.25.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Dec 2021 17:25:32 -0800 (PST)
+Subject: Re: [PATCH v3 2/5] Docs: usb: update comment and code near decrement
+ our usage count for the device
+To:     Oliver Neukum <oneukum@suse.com>, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+References: <cover.1638771720.git.philipp.g.hortmann@gmail.com>
+ <ca8fd26ccff6521c7477a2035e703e099da56214.1638771720.git.philipp.g.hortmann@gmail.com>
+ <bc30a2f4-a913-1f5e-c1fa-e10f8f357128@suse.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Message-ID: <54d4056a-7456-523f-7b63-bebdf0cc549b@gmail.com>
+Date:   Sun, 12 Dec 2021 02:25:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Sender: mcdonnalouise@gmail.com
-Received: by 2002:a05:612c:197:b0:23d:f525:588 with HTTP; Sat, 11 Dec 2021
- 17:25:27 -0800 (PST)
-From:   Jackie Fowler <jackiefowler597@gmail.com>
-Date:   Sun, 12 Dec 2021 01:25:27 +0000
-X-Google-Sender-Auth: xcLgkLgyadRK327nJNFCjoCbzDw
-Message-ID: <CAPVGnmVuwzayZcb6num-u2zvP_RYdxGehOe-LKEtB6FXJGgr4Q@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <bc30a2f4-a913-1f5e-c1fa-e10f8f357128@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gooday dear,
+On 12/7/21 10:30 AM, Oliver Neukum wrote:
+> On 06.12.21 21:57, Philipp Hortmann wrote:
+> 
+>> Update comment: decrement our usage count ..
+>> and code according to usb-skeleton.c
+> 
+> Hi,
+> 
+> and that is exactly the problem, I am afraid.
+> Your patch would be correct if the underlying code were correct.
+> 
+>>   
+>> -    /* decrement our usage count for the device */
+>> -    --skel->open_count;
+>> +    /* decrement the count on our device */
+>> +    kref_put(&dev->kref, skel_delete);
+>>   
+>>   
+>>   One of the more difficult problems that USB drivers must be able to
+> 
+> I am sorry but the code in usb-skel.c is wrong. You grab a reference
+> in skel_open():
+> 
+>          /* increment our usage count for the device */
+>          kref_get(&dev->kref);
+> 
+> which is good, but in skel_release() we do:
+> 
+>          /* decrement the count on our device */
+>          kref_put(&dev->kref, skel_delete);
+> 
+> unconditionally.
+> 
+> Think this through:
+> 
+> - Device is plugged in -> device node and internal data is created
+> - open() called -> kref_get(), we get a reference
+> - close() -> kref_put() -> refcount goes to zero -> skel_delete() is called, struct usb_skel is freed:
+> 
+> static void skel_delete(struct kref *kref)
+> {
+>          struct usb_skel *dev = to_skel_dev(kref);
+> 
+>          usb_free_urb(dev->bulk_in_urb);
+>          usb_put_intf(dev->interface);
+>          usb_put_dev(dev->udev);
+>          kfree(dev->bulk_in_buffer);
+>          kfree(dev);
+> }
+> 
+> with intfdata left intact.
+> 
+> - open() is called again -> We are following a dangling pointer into cloud cuckoo land.
+> 
+> Unfortunately this code is older than git, so I cannot just send a revert.
+> What to do?
+> 
+> 	Regards
+> 		Oliver
+> 
+I cannot see the issue you described.
 
-  I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Ms.Jackie Fowler,a widow and citizen of
-Canada.I am suffering from a long time brain tumor, It has defiled all
-forms of medical treatment, and right now I have about a few months to
-leave, according to medical experts. The situation has gotten
-complicated recently with my inability to hear proper, am
-communicating with you with the help of the chief nurse herein the
-hospital, from all indication my conditions is really deteriorating
-and it is quite obvious that, according to my doctors they have
-advised me that I may not live too long, Because this illness has
-gotten to a very bad stage. I plead that you will not expose or betray
-this trust and confidence that I am about to repose on you for the
-mutual benefit of the orphans and the less privilege. I have some
-funds I inherited from my late husband, the sum of ($ 12,500,000.00
-Dollars).Having known my condition, I decided to donate this fund to
-you believing that you will utilize it the way i am going to instruct
-herein.
+Think this through:
+- probe() is called and kref_init() sets refcount to 1
+- open() is called and refcount is increased to 2
+- close() is called and refcount is decreased to 1 -> delete() is not called
+- disconnect() is called and refcount is decreased to 0 -> delete() is 
+called
 
- I need you to assist me and reclaim this money and use it for Charity
-works, for orphanages and gives justice and help to the poor, needy
-and widows says The Lord." Jeremiah 22:15-16.=E2=80=9C and also build schoo=
-ls
-for less privilege that will be named after my late husband if
-possible and to promote the word of God and the effort that the house
-of God is maintained. I do not want a situation where this money will
-be used in an ungodly manner. That's why I'm taking this decision. I'm
-not afraid of death, so I know where I'm going. I accept this decision
-because I do not have any child who will inherit this money after I
-die. Please I want your sincerely and urgent answer to know if you
-will be able to execute this project for the glory of God, and I will
-give you more information on how the fund will be transferred to your
-bank account. May the grace, peace, love and the truth in the Word of
-God be with you and all those that you love and care for.
-I'm waiting for your immediate reply.
-Best Regard's.
-Ms.Jackie Fowler.
-Writting From the hospital.
-May God Bless you,
+Putting debug messages into the code and follow the log:
+[12820.221534] skeleton 2-1.6:1.0: skel_probe called
+[12820.221658] skeleton 2-1.6:1.0: USB Skeleton device now attached to 
+USBSkel-1
+[12820.221690] usbcore: registered new interface driver skeleton
+[12824.046075] skeleton 2-1.6:1.0: skel_open called
+[12825.047213] skeleton 2-1.6:1.0: skel_release called
+[12826.047854] skeleton 2-1.6:1.0: skel_open called
+[12827.049017] skeleton 2-1.6:1.0: skel_release called
+[12831.035262] usb 2-1.6: USB disconnect, device number 4
+[12831.035500] skeleton 2-1.6:1.0: skel_disconnect call
+[12831.035504] skeleton 2-1.6:1.0: skel_delete called
+[12831.035507] skeleton 2-1.6:1.0: USB Skeleton #1 now disconnected
+
+delete() is only called on disconnect and not earlier.
+
+This seems to be fine to me. Please find position of debug messages below.
+
+Thanks for your reply.
+
+Regards,
+
+Philipp
+
+
+
+  /* Define these values to match your devices */
+-#define USB_SKEL_VENDOR_ID     0xfff0
+-#define USB_SKEL_PRODUCT_ID    0xfff0
++#define USB_SKEL_VENDOR_ID     0x1a86
++#define USB_SKEL_PRODUCT_ID    0x7523
+
+-/* table of devices that work with this driver */
+  static const struct usb_device_id skel_table[] = {
+         { USB_DEVICE(USB_SKEL_VENDOR_ID, USB_SKEL_PRODUCT_ID) },
+         { }                                     /* Terminating entry */
+@@ -73,6 +72,7 @@ static void skel_delete(struct kref *kref)
+  {
+         struct usb_skel *dev = to_skel_dev(kref);
+
++       dev_info(&dev->interface->dev, "skel_delete called\n");
+         usb_free_urb(dev->bulk_in_urb);
+         usb_put_intf(dev->interface);
+         usb_put_dev(dev->udev);
+@@ -110,6 +110,7 @@ static int skel_open(struct inode *inode, struct 
+file *file)
+         /* increment our usage count for the device */
+         kref_get(&dev->kref);
+
++       dev_info(&interface->dev, "skel_open called\n");
+         /* save our object in the file's private structure */
+         file->private_data = dev;
+
+@@ -125,6 +126,7 @@ static int skel_release(struct inode *inode, struct 
+file *file)
+         if (dev == NULL)
+                 return -ENODEV;
+
++       dev_info(&dev->interface->dev, "skel_release called\n");
+         /* allow the device to be autosuspended */
+         usb_autopm_put_interface(dev->interface);
+
+@@ -507,6 +509,7 @@ static int skel_probe(struct usb_interface *interface,
+         dev->udev = usb_get_dev(interface_to_usbdev(interface));
+         dev->interface = usb_get_intf(interface);
+
++       dev_info(&dev->interface->dev, "skel_probe called\n");
+         /* set up the endpoint information */
+         /* use only the first bulk-in and bulk-out endpoints */
+         retval = usb_find_common_endpoints(interface->cur_altsetting,
+@@ -577,6 +580,7 @@ static void skel_disconnect(struct usb_interface 
+*interface)
+         usb_kill_urb(dev->bulk_in_urb);
+         usb_kill_anchored_urbs(&dev->submitted);
+
++       dev_info(&dev->interface->dev, "skel_disconnect call\n");
+         /* decrement our usage count */
+         kref_put(&dev->kref, skel_delete);
+

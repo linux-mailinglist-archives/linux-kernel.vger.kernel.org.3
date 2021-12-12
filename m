@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B11BD471C87
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 20:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3FE471C84
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 20:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231783AbhLLTRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 14:17:07 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:43224 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbhLLTQw (ORCPT
+        id S230483AbhLLTRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 14:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230267AbhLLTQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 14:16:52 -0500
+        Sun, 12 Dec 2021 14:16:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A7CC061714;
+        Sun, 12 Dec 2021 11:16:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 451DBCE0D92
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 19:16:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E0A2C341C8;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D22B7B80D77;
+        Sun, 12 Dec 2021 19:16:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE8C5C341D1;
         Sun, 12 Dec 2021 19:16:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639336609;
-        bh=rlUUGSQHq1tdVnOeXerFxtabDE5hlrHox0WzmwN4QVY=;
+        bh=0TKxMv5PJHHl3i26zutQq4DJRgmokU+3MXbGBuoAgp4=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gkIW8DaYKGtvt0lgmDv8WDrJcXtu39jg72csA6R5BGX8nvsu/KIcnQaiRex3GCUMm
-         TAUNTblxRWXl5g3hNvf6lHrb8ORVTQ8znssw1fVMDiaszK+24hGnGOE8Pj/JJgKK8r
-         jR5JeSWfkyB6uA1bZ+3Nk4WTdLV0qMnS9sB5yvU/FHrwvHGZ4EWCw1hN2RlTLDcjSF
-         d20AO0Abpzv5cbBuWqxRBKPWR3v4IfUmAW2r779YZxlhUd1DKPz3bQ2RVJW29a6hqZ
-         Hmy0KkhZWVHLRTU01t2M6Om7WwUAA7u8IDWnEbLLT4iXMzYbYdZcK4829v+zhbvP2H
-         O/7TsgiAuhKRw==
+        b=LbL1EPGgl+F0W67B0tI4rLEosPf77vWhYZjfbP4wLBKFuAn+up2dECmLfxilBSCCm
+         X34fGR/wMYV/HCebnEMhH2/ELrW0Bz1+5m0SGV7fIme+jfcPcyZUxJkOQUYGUmElE6
+         pFwhc6XO7LTNge4nCnNWLzJwkc0eYQmFTU33nP/2pBu/T8rqX4g6R3LOIQZ22IW6xH
+         u7r1+S3qvJSXoJ9wkcOJNtKQtF4YbO1aYCAEJGrlpeg4+l7rbtngpt04rxO59g8yle
+         k67PSq15u8EreRNOZ4fWm/MXavt4bviozq1CaKE6YN6cEvwq+uqObG8+69+TxZOPbL
+         hCXYmFkNj5Tlw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5DB3F60A3C;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9CEA160AA5;
         Sun, 12 Dec 2021 19:16:49 +0000 (UTC)
-Subject: Re: [GIT pull] sched/urgent for v5.16-rc5
+Subject: Re: [GIT PULL] USB fixes for 5.16-rc5
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <163930519817.2118055.7014553397541088230.tglx@xen13>
-References: <163930519667.2118055.7751610896538340816.tglx@xen13> <163930519817.2118055.7014553397541088230.tglx@xen13>
+In-Reply-To: <YbYDDrBFYegNGQ7m@kroah.com>
+References: <YbYDDrBFYegNGQ7m@kroah.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <163930519817.2118055.7014553397541088230.tglx@xen13>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-urgent-2021-12-12
-X-PR-Tracked-Commit-Id: cabdc3a8475b918e55744f43719b26a82dc8fa6b
+X-PR-Tracked-Message-Id: <YbYDDrBFYegNGQ7m@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc5
+X-PR-Tracked-Commit-Id: ca5737396927afd4d57b133fd2874bbcf3421cdb
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 773602256a2ca73455b0baeae5737c4a9ed6ef49
-Message-Id: <163933660937.938.12417822004916924573.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 90d9fbc16b691403a80a119d7094528721c03279
+Message-Id: <163933660963.938.14152376833669228778.pr-tracker-bot@kernel.org>
 Date:   Sun, 12 Dec 2021 19:16:49 +0000
-To:     Thomas Gleixner <tglx@linutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 12 Dec 2021 11:34:22 +0100 (CET):
+The pull request you sent on Sun, 12 Dec 2021 15:11:26 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-urgent-2021-12-12
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc5
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/773602256a2ca73455b0baeae5737c4a9ed6ef49
+https://git.kernel.org/torvalds/c/90d9fbc16b691403a80a119d7094528721c03279
 
 Thank you!
 

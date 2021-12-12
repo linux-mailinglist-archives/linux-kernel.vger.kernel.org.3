@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00869471971
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743B3471973
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 10:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbhLLJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 04:17:05 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52578 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbhLLJRE (ORCPT
+        id S229984AbhLLJSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 04:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229888AbhLLJR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 04:17:04 -0500
+        Sun, 12 Dec 2021 04:17:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C152C061714
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 01:17:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3DCF4CE0B0D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 09:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D73C341C6;
-        Sun, 12 Dec 2021 09:16:59 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 580BACE0B17
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 09:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A740AC341C5;
+        Sun, 12 Dec 2021 09:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639300621;
-        bh=elxtjfKOhvAqmW+8MXAqawaVNnq4o0koS73lDKUoLus=;
+        s=k20201202; t=1639300675;
+        bh=4UhWf3Jd+rOdwe6f4ewKSADPW73hEhAJ7GGD4MoB2XE=;
         h=From:To:Cc:Subject:Date:From;
-        b=tNp8drbx6GuzqUybqonJytE1Tz6DSkkDJZmCRv+WeUm90IWESDgxKAtpV8kt3Jqr+
-         7AxTzONGEryLfP6023Wdj1UYsL9eRAyStLBWRdN/orBV+K0GviRkySm/JPlX6iApBy
-         KkRM2llg3ZgyKie8M1WTlhmEKVfXUo5ti3Abece8nGRIHM055AaYTuNDpnouTTFTTn
-         DCuuuHg3oqfhnnaW9GJyC/X0eE/kCeVjWoYdCGSQv8vM3H5McnRX8eIX1K0APs1jlo
-         rv+WTirXbnYftuczuQbJLU4TeqviVSbh8HpcnmF7rX/D6oRBuaAYk1yQeIYtoXnDcX
-         B3ovDj4G8XJbQ==
+        b=mwrO35RVUT5ypEFRh5RiDrbPXWDtoAtHcZqTNbCCXrVnT/RDgWAt833oWxAYMf9IO
+         ic9QKj5m1pjxjZXdWiYYUZl+lmRgP61QrMn/ygHiNY/t7GV1sMQw8FzuM5QVIROg3l
+         fmwd02iMgejt9fWrA82pIk+zvb5qNLUDOQ3AeZexWmDoc9PGG1w+IyE+hTARkyB0Yy
+         Lgbd4ijXfKfbvlVovB5sN7MCfEYOYzOJupNZzogqcqbXtR40aaSU49kCuLP+7jc3gY
+         VmG54UBm8KibdVu3ziNWoAx/AsxNLCxNV0RPYKv4rZh1W8hzYCMfLnixEIn5v8RKZt
+         KVWz9GPSE4oTg==
 From:   Chao Yu <chao@kernel.org>
 To:     jaegeuk@kernel.org
 Cc:     linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH] f2fs: clean up __find_inline_xattr() with __find_xattr()
-Date:   Sun, 12 Dec 2021 17:16:56 +0800
-Message-Id: <20211212091656.6404-1-chao@kernel.org>
+Subject: [PATCH] f2fs: support fault injection to f2fs_trylock_op()
+Date:   Sun, 12 Dec 2021 17:17:51 +0800
+Message-Id: <20211212091751.6499-1-chao@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,80 +46,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just cleanup, no logic change.
+f2fs: support fault injection for f2fs_trylock_op()
+
+This patch supports to inject fault into f2fs_trylock_op().
+
+Usage:
+a) echo 65536 > /sys/fs/f2fs/<dev>/inject_type or
+b) mount -o fault_type=65536 <dev> <mountpoint>
 
 Signed-off-by: Chao Yu <chao@kernel.org>
 ---
- fs/f2fs/xattr.c | 29 +++++++++++------------------
- 1 file changed, 11 insertions(+), 18 deletions(-)
+ Documentation/filesystems/f2fs.rst | 1 +
+ fs/f2fs/f2fs.h                     | 5 +++++
+ fs/f2fs/super.c                    | 1 +
+ 3 files changed, 7 insertions(+)
 
-diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
-index 797ac505a075..8e5cd9c916ff 100644
---- a/fs/f2fs/xattr.c
-+++ b/fs/f2fs/xattr.c
-@@ -226,15 +226,18 @@ static inline const struct xattr_handler *f2fs_xattr_handler(int index)
+diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+index d7b84695f56a..4a2426f0485a 100644
+--- a/Documentation/filesystems/f2fs.rst
++++ b/Documentation/filesystems/f2fs.rst
+@@ -198,6 +198,7 @@ fault_type=%d		 Support configuring fault injection type, should be
+ 			 FAULT_WRITE_IO		  0x000004000
+ 			 FAULT_SLAB_ALLOC	  0x000008000
+ 			 FAULT_DQUOT_INIT	  0x000010000
++			 FAULT_LOCK_OP		  0x000020000
+ 			 ===================	  ===========
+ mode=%s			 Control block allocation mode which supports "adaptive"
+ 			 and "lfs". In "lfs" mode, there should be no random
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index d2d3b2332e79..f0bee78ce1f3 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -56,6 +56,7 @@ enum {
+ 	FAULT_WRITE_IO,
+ 	FAULT_SLAB_ALLOC,
+ 	FAULT_DQUOT_INIT,
++	FAULT_LOCK_OP,
+ 	FAULT_MAX,
+ };
+ 
+@@ -2096,6 +2097,10 @@ static inline void f2fs_lock_op(struct f2fs_sb_info *sbi)
+ 
+ static inline int f2fs_trylock_op(struct f2fs_sb_info *sbi)
+ {
++	if (time_to_inject(sbi, FAULT_LOCK_OP)) {
++		f2fs_show_injection_info(sbi, FAULT_LOCK_OP);
++		return 0;
++	}
+ 	return down_read_trylock(&sbi->cp_rwsem);
  }
  
- static struct f2fs_xattr_entry *__find_xattr(void *base_addr,
--				void *last_base_addr, int index,
--				size_t len, const char *name)
-+				void *last_base_addr, void **last_addr,
-+				int index, size_t len, const char *name)
- {
- 	struct f2fs_xattr_entry *entry;
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 666dc9aed262..053b508d1e4f 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -59,6 +59,7 @@ const char *f2fs_fault_name[FAULT_MAX] = {
+ 	[FAULT_WRITE_IO]	= "write IO error",
+ 	[FAULT_SLAB_ALLOC]	= "slab alloc",
+ 	[FAULT_DQUOT_INIT]	= "dquot initialize",
++	[FAULT_LOCK_OP]		= "lock_op",
+ };
  
- 	list_for_each_xattr(entry, base_addr) {
- 		if ((void *)(entry) + sizeof(__u32) > last_base_addr ||
--			(void *)XATTR_NEXT_ENTRY(entry) > last_base_addr)
-+			(void *)XATTR_NEXT_ENTRY(entry) > last_base_addr) {
-+			if (last_addr)
-+				*last_addr = entry;
- 			return NULL;
-+		}
- 
- 		if (entry->e_name_index != index)
- 			continue;
-@@ -254,19 +257,9 @@ static struct f2fs_xattr_entry *__find_inline_xattr(struct inode *inode,
- 	unsigned int inline_size = inline_xattr_size(inode);
- 	void *max_addr = base_addr + inline_size;
- 
--	list_for_each_xattr(entry, base_addr) {
--		if ((void *)entry + sizeof(__u32) > max_addr ||
--			(void *)XATTR_NEXT_ENTRY(entry) > max_addr) {
--			*last_addr = entry;
--			return NULL;
--		}
--		if (entry->e_name_index != index)
--			continue;
--		if (entry->e_name_len != len)
--			continue;
--		if (!memcmp(entry->e_name, name, len))
--			break;
--	}
-+	entry = __find_xattr(base_addr, max_addr, last_addr, index, len, name);
-+	if (!entry)
-+		return NULL;
- 
- 	/* inline xattr header or entry across max inline xattr size */
- 	if (IS_XATTR_LAST_ENTRY(entry) &&
-@@ -368,7 +361,7 @@ static int lookup_all_xattrs(struct inode *inode, struct page *ipage,
- 	else
- 		cur_addr = txattr_addr;
- 
--	*xe = __find_xattr(cur_addr, last_txattr_addr, index, len, name);
-+	*xe = __find_xattr(cur_addr, last_txattr_addr, NULL, index, len, name);
- 	if (!*xe) {
- 		f2fs_err(F2FS_I_SB(inode), "inode (%lu) has corrupted xattr",
- 								inode->i_ino);
-@@ -659,7 +652,7 @@ static int __f2fs_setxattr(struct inode *inode, int index,
- 	last_base_addr = (void *)base_addr + XATTR_SIZE(inode);
- 
- 	/* find entry with wanted name. */
--	here = __find_xattr(base_addr, last_base_addr, index, len, name);
-+	here = __find_xattr(base_addr, last_base_addr, NULL, index, len, name);
- 	if (!here) {
- 		f2fs_err(F2FS_I_SB(inode), "inode (%lu) has corrupted xattr",
- 								inode->i_ino);
+ void f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned int rate,
 -- 
 2.32.0
 

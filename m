@@ -2,168 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7E8471A97
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 15:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE2A471AF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 15:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbhLLONg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 09:13:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52150 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230031AbhLLONf (ORCPT
+        id S231483AbhLLOua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 09:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230184AbhLLOu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 09:13:35 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BCAvmWX023404;
-        Sun, 12 Dec 2021 14:13:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=zz+7EQX/yR912zBj1Ap6jnqdFxMhKtRzZX2+xD3wEhY=;
- b=m3I8V/AFUdNwxFRMT004zKUJz4yW7eKGlGohDOAvtQqeBvJ8tQyTw4FGduJ1CYQHn9o2
- ShuASAWwY/zoHilJDmxe6cVmAKN786fdU9BpdoxQhJ5ZlAOAtqaN1akwjlLS7ZxXW6C2
- MSWDSKeCR7iZ6zJCifb15TyFTWOv1LhYXEjhtsr6ds1cJgGdpd8rGpTSJZXp9IjvTkn3
- wDmVw5uE03wAcSSAUZJQW5LoiXk6W6jqg9iM5BE9iUFfJ7srz37/g9ZI0C8hCSlwFMmr
- 2n4IKAM0apwwy7kwDM6QOJplIIRJ7fj8yg2xJL4hq8d5+6Alp0smOxRZpob0/gIhTx/D zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cwfspa404-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 14:13:19 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BCDjt7M025071;
-        Sun, 12 Dec 2021 14:13:19 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cwfspa3yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 14:13:19 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BCE8JT8011132;
-        Sun, 12 Dec 2021 14:13:18 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01dal.us.ibm.com with ESMTP id 3cvkm9jsym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Dec 2021 14:13:18 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BCEDGHG29950428
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 12 Dec 2021 14:13:16 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 975DA78064;
-        Sun, 12 Dec 2021 14:13:16 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3ED167805F;
-        Sun, 12 Dec 2021 14:13:14 +0000 (GMT)
-Received: from [IPv6:2601:5c4:4300:c551::c447] (unknown [9.211.97.102])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sun, 12 Dec 2021 14:13:13 +0000 (GMT)
-Message-ID: <e72104c480c2c7f5c29f80b72d2a597a50ef9fae.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Sun, 12 Dec 2021 09:13:12 -0500
-In-Reply-To: <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
-         <20211208221818.1519628-16-stefanb@linux.ibm.com>
-         <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
-         <20211209143749.wk4agkynfqdzftbl@wittgenstein>
-         <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
-         <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
-         <20211210114934.tacjnwryihrsx6ln@wittgenstein>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Sun, 12 Dec 2021 09:50:29 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073ABC061714;
+        Sun, 12 Dec 2021 06:50:29 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id z8so20305709ljz.9;
+        Sun, 12 Dec 2021 06:50:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ozulntsIRFIf7sG1Mn+ueuvrGY7+eE7tUHdbtMSCB9g=;
+        b=Hoq8ZZIHwuGXKF5mMDSZWJx38WYaCg0jCTclOkhJ+RQWRB4awXwJBI9lh4rA0B/g5X
+         53ZjdPLF9kLrAagsXMfALHMm1/xuuq1UFVMPWkFJgqoVKtPRH5dKIyCnF++bJXQAy1ni
+         DgXLR3G4QrQlBDYlra3e/WevuzXx9HgDTtl+d8edT49kXinDrKqCDjQ1gjysMATkePZ1
+         9C40innq+rXLs+m+ucof1hoE6uRip3mzePiZ+rtI59vLyyNpsPNf19ew/Tw2YJyiutwu
+         BRtB0N1w8Rz40cmKtnAi6TcbcI4L+K/fXvUmCE4mIFdbp3bjeU/uk9ECteGDgb+8YnLq
+         Vq9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ozulntsIRFIf7sG1Mn+ueuvrGY7+eE7tUHdbtMSCB9g=;
+        b=4i19ereJKMQ4WqnAMTJ7/EB2eTepiKzLJMqfaOGMe7Wb+MmHiCkkchMcPpnd5VCMxJ
+         7C1vcJwqu8t63V1sVJcSDYQL69mbXMK6SqYtRTb1YuK24K0Ca4paRYJ76myYWnjDI2Xi
+         jSnv8JoqGvx4LvNKVvp4/A3EL+j12NL/aXfCjrgroEfyIJ4d8WcbL6D6axQxY5rV1L0/
+         Cwx/yLylxLmx5lgYyA89bZ0uMvM9T7qwCttZmf9xcoMe75LIaQxSfy1sxXNZ9e/2+v3W
+         PFDztTMVANc3mj2vNy0QM17kyvWb8lW5M852vHd1WhkLZa0D5/RmcbQDrwB3heqZnXF0
+         M/lw==
+X-Gm-Message-State: AOAM530zBWOOaO5z+Uj7zkenx3xrPKkS8E17qrpYqChkaFebQwdYcXnZ
+        Y6mKsimXmgwml3J2iHvuRaU=
+X-Google-Smtp-Source: ABdhPJwoafQFUVY+djjccyUhfv7DafXubgwpmptr1qgVov/hkWyUUTEysjel7p0dkbhRyA9avC1xyQ==
+X-Received: by 2002:a05:651c:50c:: with SMTP id o12mr25271211ljp.88.1639320627344;
+        Sun, 12 Dec 2021 06:50:27 -0800 (PST)
+Received: from trashcan (public-nat-10.vpngate.v4.open.ad.jp. [219.100.37.242])
+        by smtp.gmail.com with ESMTPSA id e21sm192075lfc.229.2021.12.12.06.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 06:50:26 -0800 (PST)
+Date:   Sun, 12 Dec 2021 14:16:01 +0000
+From:   Vladimir Lypak <vladimir.lypak@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Kristian H. Kristensen" <hoegsberg@google.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Akhil P Oommen <akhilpo@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/msm/a5xx: Add support for Adreno 506 GPU
+Message-ID: <YbYEIcBSXK9Z0uun@trashcan>
+References: <20211022114349.102552-1-vladimir.lypak@gmail.com>
+ <YXL16V17upehvUwt@ripper>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fAh9BOZMrTezWMxvjyrb9G_Fo9kdxXSc
-X-Proofpoint-GUID: wSxZLv_S19gi7vRgusRJuGaG2TbTaHiO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-12_05,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0 bulkscore=0
- priorityscore=1501 phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=832
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112120086
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YXL16V17upehvUwt@ripper>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
-> On Thu, Dec 09, 2021 at 02:38:13PM -0500, James Bottomley wrote:
-[...]
-> > @@ -317,21 +315,15 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
-> >  void securityfs_remove(struct dentry *dentry)
+On Fri, Oct 22, 2021 at 10:33:29AM -0700, Bjorn Andersson wrote:
+> On Fri 22 Oct 04:43 PDT 2021, Vladimir Lypak wrote:
+> 
+> > This GPU is found on SoCs such as MSM8953(650MHz), SDM450(600MHz),
+> > SDM632(725MHz).
+> > 
+> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > ---
+> >  drivers/gpu/drm/msm/adreno/a5xx_gpu.c      | 34 ++++++++++++++--------
+> >  drivers/gpu/drm/msm/adreno/adreno_device.c | 18 ++++++++++++
+> >  drivers/gpu/drm/msm/adreno/adreno_gpu.h    |  5 ++++
+> >  3 files changed, 45 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+> > index 5e2750eb3810..249a0d8bc673 100644
+> > --- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+> > +++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+> > @@ -441,7 +441,7 @@ void a5xx_set_hwcg(struct msm_gpu *gpu, bool state)
+> >  	const struct adreno_five_hwcg_regs *regs;
+> >  	unsigned int i, sz;
+> >  
+> > -	if (adreno_is_a508(adreno_gpu)) {
+> > +	if (adreno_is_a506(adreno_gpu) || adreno_is_a508(adreno_gpu)) {
+> >  		regs = a50x_hwcg;
+> >  		sz = ARRAY_SIZE(a50x_hwcg);
+> >  	} else if (adreno_is_a509(adreno_gpu) || adreno_is_a512(adreno_gpu)) {
+> > @@ -485,7 +485,7 @@ static int a5xx_me_init(struct msm_gpu *gpu)
+> >  	OUT_RING(ring, 0x00000000);
+> >  
+> >  	/* Specify workarounds for various microcode issues */
+> > -	if (adreno_is_a530(adreno_gpu)) {
+> > +	if (adreno_is_a506(adreno_gpu) || adreno_is_a530(adreno_gpu)) {
+> >  		/* Workaround for token end syncs
+> >  		 * Force a WFI after every direct-render 3D mode draw and every
+> >  		 * 2D mode 3 draw
+> > @@ -620,8 +620,17 @@ static int a5xx_ucode_init(struct msm_gpu *gpu)
+> >  
+> >  static int a5xx_zap_shader_resume(struct msm_gpu *gpu)
 > >  {
-> >  	struct user_namespace *ns = dentry->d_sb->s_user_ns;
-> > -	struct inode *dir;
+> > +	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+> >  	int ret;
 > >  
-> >  	if (!dentry || IS_ERR(dentry))
-> >  		return;
-> >  
-> > -	dir = d_inode(dentry->d_parent);
-> > -	inode_lock(dir);
-> >  	if (simple_positive(dentry)) {
-> > -		if (d_is_dir(dentry))
-> > -			simple_rmdir(dir, dentry);
-> > -		else
-> > -			simple_unlink(dir, dentry);
-> > +		d_delete(dentry);
+> > +	/*
+> > +	 * Adreno 506,508,512 have CPZ Retention feature and
+> > +	 * don't need to resume zap shader
+> > +	 */
+> > +	if (adreno_is_a506(adreno_gpu) || adreno_is_a508(adreno_gpu) ||
+> > +	    adreno_is_a512(adreno_gpu))
+> > +		return 0;
 > 
-> Not, that doesn't work. You can't just call d_delete() and dput() and
-> even if I wouldn't advise it. And you also can't do this without
-> taking the inode lock on the directory.
-
-Agreed on that
-
-> simple_rmdir()/simple_unlink() take care to update various inode
-> fields in the parent dir and handle link counts. This really wants to
-> be sm like
+> Afaict all other changes in the patch adds a506 support, but this hunk
+> changes a508 and a512 behavior.
 > 
-> 	struct inode *parent_inode;
+> I'm not saying that the change is wrong, but this hunk deserves to be in
+> it's own patch - so that if there's any impact on those other versions
+> it can be tracked down to that specific patch.
 > 
-> 	parent_inode = d_inode(dentry->d_parent);
-> 	inode_lock(parent_inode);
-> 	if (simple_positive(dentry)) {
-> 		dget(dentry);
-> 		if (d_is_dir(dentry)
-> 			simple_unlink(parent_inode, dentry);
-> 		else
-> 			simple_unlink(parent_inode, dentry);
-> 		d_delete(dentry);
-> 		dput(dentry);
-> 	}
-> 	inode_unlock(parent_inode);
+> Thanks,
+> Bjorn
 
-It just slightly annoys me how the simple_ functions change fields in
-an inode that is about to be evicted ... it seems redundant; plus we
-shouldn't care if the object we're deleting is a directory or file.  I
-also don't think we need the additional dget because the only consumer
-is policy file removal and the opener of that file will have done a
-dget.  The inode lock now prevents us racing with another remove in the
-case of two simultaneous writes.
+Hello, Bjorn.
 
-How about
+You're right on that. I'm going to remove those changes in V2, since
+that SCM call only causes problems on A506 and i can't test it on other
+GPUs.
 
-        struct inode *parent_inode;
-
-        parent_inode = d_inode(dentry->d_parent);
-        inode_lock(parent_inode);
-        if (simple_positive(dentry)) {
-		drop_nlink(parent_inode);
-                d_delete(dentry);
-                dput(dentry);
-        }
-        inode_unlock(parent_inode);
-
-James
-
-
+Best regards,
+Vladimir

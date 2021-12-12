@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E993471B07
+	by mail.lfdr.de (Postfix) with ESMTP id B3469471B09
 	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 16:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbhLLPAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 10:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S231195AbhLLPAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 10:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbhLLPAR (ORCPT
+        with ESMTP id S231135AbhLLPAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 10:00:17 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107C8C061714;
+        Sun, 12 Dec 2021 10:00:18 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7584AC061751;
         Sun, 12 Dec 2021 07:00:17 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id c4so22982001wrd.9;
-        Sun, 12 Dec 2021 07:00:16 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so10049860wmd.1;
+        Sun, 12 Dec 2021 07:00:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UP9pG6uKZAoL6xiFw7btc/sBc9qDC7+hGRLW0JFhSVk=;
-        b=HmWK9zrUArMWPecimSXNGOviBl90BWrJqgUGPU7yVt13kPvA9G6JvY7VAJtJi7/eje
-         BRkinnynjf56loJ1VqDKhxHKtb98Vx/DiT7LUeqP/Tl0hh599HdhA9/UxQYRZe+OxPDy
-         9op1J1ZSDfy0RXoTokv3DAcAl1q4Eeh1NYxjYoDhX4KKuJzCBvvePd232YSBn0zJWo/R
-         79GoQ3cqFTrU2xHzpVI2ek0DnSQl+8qCzyad4S75YRAQuTEx9Zz8az1CZy4Nvn+AYoRf
-         3fQgM26oppedVZbAoLTJVVeCJuDwdrSM5sUCzvDYCFpLDGVSNOtfI2uNr9w6ilR9Mn8A
-         tKmw==
+        bh=sFsVzNxUTe0zVj2n7sBsxSG3rvMdpK3tm6ziU6/sth4=;
+        b=o8kNIO4V5DpeQn/CO4pcYqGPR8q9ooMHRa4H2Nnf3TiH94ML9bRY69YKwLjq9PsWLF
+         OKwgvhneOXaHninwwOCbce3CPynUCK2SmXGS7xoyKbd8qmU4PqZDB9MEDQsVNCY5GGQU
+         adzzr+E/XVktg+/Q6VheylsmpnJmfR1VI2CluHSFl8qX3DDJcmT2UBvyOcwtyS2Dfe26
+         CHpvVJzTkoloIDLVAjiXLx7UvUV+XeZrSauOesllhUwTcE0dE4FXj0O+lNIsuUtwuaMb
+         rWz7Zs4ygupu8R8HRwUAxiMia4ySTQCg1HgG3yQcRNmoFXVW6sawitqjv1L4Bk3cTFwi
+         BhoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UP9pG6uKZAoL6xiFw7btc/sBc9qDC7+hGRLW0JFhSVk=;
-        b=UZ7AHVMkvUxIg1FBFYhXOe+XpkWuANMiR8rIqItP4hs6hP9dRBGxe+ZWd5DWHZJWHK
-         4mU5z84+2mj/ehaLz4QPUihJ8oBU+qjoUzXKtOtrGLVPwrAJ2nP63zNSOgcO6e2nKp9s
-         wSKBguJ6tYofBSHDvIq7Ex32q+lf02MUL8ALhZGSvXyxHAs9JPP0Aa6sGwjWYDkaHSYo
-         9IZX/fcS/is+MUVRyMc39glbFPdQoGAei+nStl2eiwp9LHB5O1nYFVy0U5JEeaJsK/ts
-         t9cmqzIAg3AkxUGXKhpJG4UGUpA9treEf61Jda6xkSmtMNwijccavm5VkIg/9Rao1qpp
-         KHQQ==
-X-Gm-Message-State: AOAM532FjUJl63hY+sosJU5Tw1SVJX/1MoLit6U9dV8n/jZfbQiMV0UE
-        yGvDjDtj63ddtVvpQx5j8AwG5fuTuW8=
-X-Google-Smtp-Source: ABdhPJwpaIddF4DVl6f4wvuWcPjNKOVW2rREdmwupLSd5gDnxqV8ytN/+qfTw9Ic3bUFJ61NQ0xx7A==
-X-Received: by 2002:a5d:6da9:: with SMTP id u9mr26132109wrs.237.1639321215068;
+        bh=sFsVzNxUTe0zVj2n7sBsxSG3rvMdpK3tm6ziU6/sth4=;
+        b=w0cZaUmd7XpdMZ/XBsjnjddHueAtDPoU5705AdZB1fs+OqpngTTHL7rogt56I/CFHd
+         l7andAQ9ZP7EjsDQf+v0PGh6tjllmk1BRqDYQszySUymsLj8cRJnNWM3+1oiHL1iY9EN
+         ommpNmPuBKYsGJj+WFHbHG+TKjaOtzZg+XVelIG7QJN4mYUtU3RD050u2tJ5Fwor7OlE
+         9ydNfSOe7f0li8DChwF2x6gkg4YlBPii6u+pEIoqKYyrKNBw2ONNETJAMPFmeexm3m5S
+         /+QNstR+G/U2ALlchhVeEj8FBRUxoj7xwNYP8I3UEHStWd2ORJZtiyy3YerkSjWhQF54
+         5YxQ==
+X-Gm-Message-State: AOAM531oxIORe4oXnR7BZr/KD9/ZigfV4Rn7riMkjf+JbioUrVWUOeLv
+        MJIrU1sIjSfv23r6tuSpSxbejkzldyE=
+X-Google-Smtp-Source: ABdhPJyGOu4P/Sk2o4zR/guets/zV0FzqSwb8tkgl4GngGpSOa/a9EAL+b/sfF4ReYEMO38qI899Gg==
+X-Received: by 2002:a05:600c:1ca0:: with SMTP id k32mr31048506wms.74.1639321215876;
         Sun, 12 Dec 2021 07:00:15 -0800 (PST)
 Received: from localhost.localdomain (dynamic-2a01-0c22-6ebc-0100-f22f-74ff-fe21-0725.c22.pool.telefonica.de. [2a01:c22:6ebc:100:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id v6sm4284789wmh.8.2021.12.12.07.00.14
+        by smtp.googlemail.com with ESMTPSA id v6sm4284789wmh.8.2021.12.12.07.00.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 07:00:14 -0800 (PST)
+        Sun, 12 Dec 2021 07:00:15 -0800 (PST)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     linux-mmc@vger.kernel.org, linux-amlogic@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         ulf.hansson@linaro.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v1 1/2] mmc: meson-mx-sdhc: Set MANUAL_STOP for multi-block SDIO commands
-Date:   Sun, 12 Dec 2021 15:59:55 +0100
-Message-Id: <20211212145956.1423755-2-martin.blumenstingl@googlemail.com>
+Subject: [PATCH v1 2/2] mmc: meson-mx-sdhc: Drop unused MESON_SDHC_NUM_BUILTIN_CLKS macro
+Date:   Sun, 12 Dec 2021 15:59:56 +0100
+Message-Id: <20211212145956.1423755-3-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211212145956.1423755-1-martin.blumenstingl@googlemail.com>
 References: <20211212145956.1423755-1-martin.blumenstingl@googlemail.com>
@@ -65,68 +65,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vendor driver implements special handling for multi-block
-SD_IO_RW_DIRECT and SD_IO_RW_EXTENDED commands. It sets the MANUAL_STOP
-bit in the MESON_SDHC_MISC register for these commands. In All other
-cases this bit is cleared.
+Remove MESON_SDHC_NUM_BUILTIN_CLKS because it is not used anywhere in
+the driver.
 
-This fixes SDIO wifi using the brcmfmac driver which reported the
-following error without this change on a Netxeon S82 board using a
-Meson8 (S802) SoC:
-  brcmf_fw_alloc_request: using brcm/brcmfmac43362-sdio for chip
-                          BCM43362/1
-  brcmf_sdiod_ramrw: membytes transfer failed
-  brcmf_sdio_download_code_file: error -110 on writing 219557 membytes
-                                 at 0x00000000
-  brcmf_sdio_download_firmware: dongle image file download failed
-
-And with this change:
-  brcmf_fw_alloc_request: using brcm/brcmfmac43362-sdio for chip
-                          BCM43362/1
-  brcmf_c_process_clm_blob: no clm_blob available (err=-2), device may
-                            have limited channels available
-  brcmf_c_preinit_dcmds: Firmware: BCM43362/1 wl0: Apr 22 2013 14:50:00
-                         version 5.90.195.89.6 FWID 01-b30a427d
-
-Fixes: e4bf1b0970ef96 ("mmc: host: meson-mx-sdhc: new driver for the Amlogic Meson SDHC host")
 Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- drivers/mmc/host/meson-mx-sdhc-mmc.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/mmc/host/meson-mx-sdhc-clkc.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/mmc/host/meson-mx-sdhc-mmc.c b/drivers/mmc/host/meson-mx-sdhc-mmc.c
-index 7cd9c0ec2fcf..a89190d479cf 100644
---- a/drivers/mmc/host/meson-mx-sdhc-mmc.c
-+++ b/drivers/mmc/host/meson-mx-sdhc-mmc.c
-@@ -135,6 +135,7 @@ static void meson_mx_sdhc_start_cmd(struct mmc_host *mmc,
- 				    struct mmc_command *cmd)
- {
- 	struct meson_mx_sdhc_host *host = mmc_priv(mmc);
-+	bool manual_stop = false;
- 	u32 ictl, send;
- 	int pack_len;
+diff --git a/drivers/mmc/host/meson-mx-sdhc-clkc.c b/drivers/mmc/host/meson-mx-sdhc-clkc.c
+index e1f29b279123..19200b7079a6 100644
+--- a/drivers/mmc/host/meson-mx-sdhc-clkc.c
++++ b/drivers/mmc/host/meson-mx-sdhc-clkc.c
+@@ -12,8 +12,6 @@
  
-@@ -172,12 +173,20 @@ static void meson_mx_sdhc_start_cmd(struct mmc_host *mmc,
- 		else
- 			/* software flush: */
- 			ictl |= MESON_SDHC_ICTL_DATA_XFER_OK;
-+
-+		manual_stop = cmd->data->blocks > 1 &&
-+			      (cmd->opcode == SD_IO_RW_DIRECT ||
-+			       cmd->opcode == SD_IO_RW_EXTENDED);
- 	} else {
- 		pack_len = 0;
+ #include "meson-mx-sdhc.h"
  
- 		ictl |= MESON_SDHC_ICTL_RESP_OK;
- 	}
- 
-+	regmap_update_bits(host->regmap, MESON_SDHC_MISC,
-+			   MESON_SDHC_MISC_MANUAL_STOP,
-+			   manual_stop ? MESON_SDHC_MISC_MANUAL_STOP : 0);
-+
- 	if (cmd->opcode == MMC_STOP_TRANSMISSION)
- 		send |= MESON_SDHC_SEND_DATA_STOP;
- 
+-#define MESON_SDHC_NUM_BUILTIN_CLKS	6
+-
+ struct meson_mx_sdhc_clkc {
+ 	struct clk_mux			src_sel;
+ 	struct clk_divider		div;
 -- 
 2.34.1
 

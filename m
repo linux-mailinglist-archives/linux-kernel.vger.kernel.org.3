@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 083CF471A48
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB6D471A68
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 14:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbhLLNDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 08:03:45 -0500
-Received: from ixit.cz ([94.230.151.217]:43348 "EHLO ixit.cz"
+        id S231159AbhLLNZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 08:25:59 -0500
+Received: from mga18.intel.com ([134.134.136.126]:25181 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229739AbhLLNDo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 08:03:44 -0500
-Received: from [127.0.0.1] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id E3EE224AF0;
-        Sun, 12 Dec 2021 14:03:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1639314222;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LKBncOiJrAHylK3jJuEOyh8VWLh2/06IDh/2G+b3Wfs=;
-        b=MJHP/g7q9tdOQEMWaPGFSmG6dQik3NCZKybeE1k3hiD8mX3PTwBxnCsKS2fgvxXbcssenu
-        C7SdAtf3HXzHjn0hxcBrNJjtR4hJMAamfEbIr77yaEcqKsf43xwl5n248roJEPfFKpNILa
-        PT61dew0EOqa5d5KOu1TrbQqsOaJyv0=
-Date:   Sun, 12 Dec 2021 13:03:40 +0000
-From:   David Heidelberg <david@ixit.cz>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] dt-bindings: misc: fastrpc convert bindings to yaml
-In-Reply-To: <YbPIM9OXyuU5hfHY@robh.at.kernel.org>
-References: <20211208101508.24582-1-david@ixit.cz> <YbPIM9OXyuU5hfHY@robh.at.kernel.org>
-Message-ID: <7A333484-F1D4-4D0E-97D5-6A40DEC44BFE@ixit.cz>
+        id S231147AbhLLNZ6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 08:25:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639315558; x=1670851558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UVgsHQ0yCvU4R2e1t7Q7njPEsjY6WlZzqKR6lmHRqxw=;
+  b=QfBdKkcORThQ3ha8S4zgcJPJmctO/9gcxw5rWjO+3EYTAGJMaRb0b5d2
+   fiwLOTeUImx43xheV3QPzneBLbIDgpR5C94+DXCeg4TRzOUB2RJDUA2FK
+   2Dciq/67d20nbZu7Tive2Ypx1nGHKioA3tLv6RjP3SYOZHcLBrmurYgGB
+   8fb4C7cLNF3ez4jopZ4OMJK+IMxckzzaqLwS+B0v4epcMrjA1ArIMo9a9
+   sFBRmmAapnmPTJHCGXJ8hJ5eZ7pS33PPJSaTzmxxR0DVTv3eJFwqlIkG8
+   Yu25EWldS8ecJLcrC8TEfx8NA4qNNfW12T87PSQPsMcppYL9X2LZnSbDc
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10195"; a="225465564"
+X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
+   d="scan'208";a="225465564"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 05:25:58 -0800
+X-IronPort-AV: E=Sophos;i="5.88,200,1635231600"; 
+   d="scan'208";a="608521467"
+Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.144.101])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 12 Dec 2021 05:25:54 -0800
+Date:   Sun, 12 Dec 2021 21:10:59 +0800
+From:   Yang Zhong <yang.zhong@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, seanjc@google.com,
+        jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        yang.zhong@intel.com
+Subject: Re: [PATCH 15/19] kvm: x86: Save and restore guest XFD_ERR properly
+Message-ID: <20211212131059.GA21846@yangzhon-Virtual>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-16-yang.zhong@intel.com>
+ <97814bdf-2e58-2823-ca55-30b2447af3f1@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97814bdf-2e58-2823-ca55-30b2447af3f1@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Well, since this is a subnode, some nodes are not converted yet and at leas=
-t know it'll bash about iommus, qcom,glink-channels and qcom,smd-channels=
-=2E I can change it to false, bit it'll print these additional warnings, un=
-til other binding don't get converted=2E
+On Fri, Dec 10, 2021 at 11:01:15PM +0100, Paolo Bonzini wrote:
+> On 12/8/21 01:03, Yang Zhong wrote:
+> >--- a/arch/x86/kvm/cpuid.c
+> >+++ b/arch/x86/kvm/cpuid.c
+> >@@ -219,6 +219,11 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+> >  		kvm_apic_set_version(vcpu);
+> >  	}
+> >+	/* Enable saving guest XFD_ERR */
+> >+	best = kvm_find_cpuid_entry(vcpu, 7, 0);
+> >+	if (best && cpuid_entry_has(best, X86_FEATURE_AMX_TILE))
+> >+		vcpu->arch.guest_fpu.xfd_err = 0;
+> >+
+> 
+> This is incorrect.  Instead it should check whether leaf 0xD
+> includes any dynamic features.
+> 
 
-David
+  Thanks Paolo, So ditto for "[PATCH 04/19] kvm: x86: Check guest xstate permissions when KVM_SET_CPUID2".
 
+  Yang
 
-> +    required:
-> +      - compatible
-> +      - reg
-> +
-> +    additionalProperties: true
-
-Why? What other properties are present=2E
-
-> +
-> +required:
-> +  - compatible
-> +  - label
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +
-> +additionalProperties: true
-
-Why? What other properties are present=2E This is generally never correct=
-=2E
-
-Rob
-
+> Paolo

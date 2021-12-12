@@ -2,90 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF17471E43
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63585471E4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Dec 2021 23:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbhLLWer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 17:34:47 -0500
-Received: from mail.wizzup.org ([95.217.97.174]:43970 "EHLO wizzup.org"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229838AbhLLWep (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 17:34:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-        s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=HjeuObHTxT5SBm5noxlsZ0/REB/4irXmfOfjaJve7Wg=; b=VQ7jL4+uH6pIGb9SPySu3HP1eT
-        fsX2I1R5z6YlAJqgPr5+sLvvtMYDvz8mA6EeehfWlUd0ljB10mPTu2IEWh4mi/JDRPbilYu1vRdet
-        bTe2MItfSKb8Wt3tf5QpmtEcH3WnsAB4WLrw2GJmw/lfefWSNwb4/+CDNuk57GFScuWFRrONBg1cy
-        LooAFXH/AyAvnNyfwsb1gn676yW/r5LO4/iqbz+C4X1ZK6Stpd6ZXFgmugVNzs5xfP/LWQsa7SBIO
-        wQPGcb+HauQX7zEEe0OOEqw8y3P3jRIdLT8Ci6Uqh9cjLPomyiKYkePe9Pl2m3sDduxshtTnVvwyG
-        33ZcrYIA==;
-Received: from [45.83.235.159] (helo=gentoo-x13.fritz.box)
-        by wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <merlijn@wizzup.org>)
-        id 1mwXQS-0001do-Kw; Sun, 12 Dec 2021 22:34:36 +0000
-From:   Merlijn Wajer <merlijn@wizzup.org>
-To:     merlijn@wizzup.org
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Dev Null <devnull@uvos.xyz>, Tony Lindgren <tony@atomide.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Doug Zobel <dougdev334@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] leds: lp55xx: initialise output direction from dts
-Date:   Sun, 12 Dec 2021 23:40:07 +0100
-Message-Id: <20211212224007.10293-3-merlijn@wizzup.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211212224007.10293-1-merlijn@wizzup.org>
-References: <20211212224007.10293-1-merlijn@wizzup.org>
+        id S230070AbhLLWr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 17:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229979AbhLLWr0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 17:47:26 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D9DC06173F;
+        Sun, 12 Dec 2021 14:47:26 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id u16so12996726qvk.4;
+        Sun, 12 Dec 2021 14:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ix+G0zc+g6/N6041+1Hk6LHt/Y4Z+qpp/k2nnjfJ76s=;
+        b=MpLM3+0TPWqdJ+7DzYXtgH/6RhHatrTyBWY6ICHaz9hQl4lExVUmsYY/G1zRoMz+Lp
+         E9TVClJlGi2yDDaKDBeL7HwrFj63stulPxpfeyJj3Ks1Az9f34PgGj9fZUGnaBxDKfor
+         N9F7IKATjEdFWllTPbqJ9hWb/JqSd3Ckb2bItL2pG1PsIMIIMH+eCtEUB810cwVWWswL
+         BN9c4dzXx6TYNet9IM5t3up8nSR6DNiMIYreCjdJNvaQGkhiGmAICaxtBUbCLuhBQGfT
+         TNdv9hfTVkAp/01h4xDg3alvxwCYoIDPUH/I9cl5QKyNgqbj8edwYNfFaklZOHrsMgkm
+         3zeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ix+G0zc+g6/N6041+1Hk6LHt/Y4Z+qpp/k2nnjfJ76s=;
+        b=3BwSufZU6bWzAHHVvCW+VWYgJQtDbtU7sRDV08B67i2ypuN04by29PrzMb9a4nKxSo
+         TKfp/AcnoVvkFDjQjBvNAbuibkn5IQjW0B0hKayjQy1TSRs+PcmEYbfchfYcPGZVif4I
+         sI36EoCOVa4qoye3t/0g3608f8nQy6wQ3rC+LCmXvE8SXGtOXFCbigAzY7k0woPzDpYV
+         K4SZWgbkVk2qRL6XlSb8IiWFPIkbQmqawAom2RlZ3TCJxkNFuUMVUVcpxF5ek2BN5FSM
+         X0Nu2pVsQNVFvTX80CG9rupd3fsebeDC2mseonucAyeymDM55YONeiYtBSlhABYgAFnW
+         1h3A==
+X-Gm-Message-State: AOAM530s7tLfyfTZUXC45g7w6+QXeu0wn6fIj2q7C6IFf5m3/IcRHJbm
+        j6PDij+hkFVKSghmuLnlQF4k2CcuU2o=
+X-Google-Smtp-Source: ABdhPJx1M7WZxHZQTNZ/wYESqgILvAMdnpUS8cPtoHkLGib28aH89EBWD6xno9Y5OaASIppO0DuXbw==
+X-Received: by 2002:ad4:4b26:: with SMTP id s6mr39537389qvw.92.1639349245306;
+        Sun, 12 Dec 2021 14:47:25 -0800 (PST)
+Received: from [192.168.1.49] (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
+        by smtp.gmail.com with ESMTPSA id s20sm8343124qtc.75.2021.12.12.14.47.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 14:47:25 -0800 (PST)
+Subject: Re: [PATCH v2 1/1] of: unittest: fix warning on PowerPC frame size
+ warning
+To:     Jim Quinlan <jim2101024@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211210184636.7273-1-jim2101024@gmail.com>
+ <20211210184636.7273-2-jim2101024@gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <598c9bcd-a956-07f1-17a2-5177a8bd5458@gmail.com>
+Date:   Sun, 12 Dec 2021 16:47:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211210184636.7273-2-jim2101024@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit a5d3d1adc95f ("leds: lp55xx: Initialize enable GPIO direction to
-output") attempts to fix this, but the fix did not work since at least
-for the Nokia N900 the value needs to be set to HIGH, per the device
-tree. So rather than hardcoding the value to a potentially invalid value
-for some devices, let's set direction in lp55xx_init_device.
+moved the file's maintainers from the "cc:" list to the "to:" list
 
-Fixes: a5d3d1adc95f ("leds: lp55xx: Initialize enable GPIO direction to output")
-Fixes: 92a81562e695 ("leds: lp55xx: Add multicolor framework support to lp55xx")
-Fixes: ac219bf3c9bd ("leds: lp55xx: Convert to use GPIO descriptors")
-Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
----
- drivers/leds/leds-lp55xx-common.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+review comments below
 
-diff --git a/drivers/leds/leds-lp55xx-common.c b/drivers/leds/leds-lp55xx-common.c
-index d1657c46ee2f..9fdfc1b9a1a0 100644
---- a/drivers/leds/leds-lp55xx-common.c
-+++ b/drivers/leds/leds-lp55xx-common.c
-@@ -439,6 +439,8 @@ int lp55xx_init_device(struct lp55xx_chip *chip)
- 		return -EINVAL;
- 
- 	if (pdata->enable_gpiod) {
-+		gpiod_direction_output(pdata->enable_gpiod, 0);
-+
- 		gpiod_set_consumer_name(pdata->enable_gpiod, "LP55xx enable");
- 		gpiod_set_value(pdata->enable_gpiod, 0);
- 		usleep_range(1000, 2000); /* Keep enable down at least 1ms */
-@@ -694,7 +696,7 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
- 	of_property_read_u8(np, "clock-mode", &pdata->clock_mode);
- 
- 	pdata->enable_gpiod = devm_gpiod_get_optional(dev, "enable",
--						      GPIOD_OUT_LOW);
-+						      GPIOD_ASIS);
- 	if (IS_ERR(pdata->enable_gpiod))
- 		return ERR_CAST(pdata->enable_gpiod);
- 
--- 
-2.32.0
 
+On 12/10/21 1:46 PM, Jim Quinlan wrote:
+> The struct device variable "dev_bogus" was triggering this warning
+> on a PowerPC build:
+> 
+>     drivers/of/unittest.c: In function 'of_unittest_dma_ranges_one.constprop':
+>     [...] >> The frame size of 1424 bytes is larger than 1024 bytes
+>              [-Wframe-larger-than=]
+> 
+> This variable is now dynamically allocated.
+
+A side effect of the change is that dev_bogus is initialized to all
+zeros instead of containing random data from the stack.
+
+> 
+> Fixes: e0d072782c734 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> ---
+>  drivers/of/unittest.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> index 481ba8682ebf..02c5cd06ad19 100644
+> --- a/drivers/of/unittest.c
+> +++ b/drivers/of/unittest.c
+> @@ -911,11 +911,18 @@ static void __init of_unittest_dma_ranges_one(const char *path,
+>  	if (!rc) {
+>  		phys_addr_t	paddr;
+>  		dma_addr_t	dma_addr;
+> -		struct device	dev_bogus;
+> +		struct device	*dev_bogus;
+>  
+> -		dev_bogus.dma_range_map = map;
+> -		paddr = dma_to_phys(&dev_bogus, expect_dma_addr);
+> -		dma_addr = phys_to_dma(&dev_bogus, expect_paddr);
+> +		dev_bogus = kzalloc(sizeof(struct device), GFP_KERNEL);
+> +		if (!dev_bogus) {
+> +			unittest(0, "kzalloc() failed\n");
+> +			kfree(map);
+> +			return;
+> +		}
+> +
+> +		dev_bogus->dma_range_map = map;
+> +		paddr = dma_to_phys(dev_bogus, expect_dma_addr);
+> +		dma_addr = phys_to_dma(dev_bogus, expect_paddr);
+>  
+>  		unittest(paddr == expect_paddr,
+>  			 "of_dma_get_range: wrong phys addr %pap (expecting %llx) on node %pOF\n",
+> @@ -925,6 +932,7 @@ static void __init of_unittest_dma_ranges_one(const char *path,
+>  			 &dma_addr, expect_dma_addr, np);
+>  
+>  		kfree(map);
+> +		kfree(dev_bogus);
+>  	}
+>  	of_node_put(np);
+>  #endif
+> 
+
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>

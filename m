@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7372472153
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34615472155
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbhLMHEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:04:20 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:35556 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbhLMHET (ORCPT
+        id S232350AbhLMHFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232341AbhLMHFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:04:19 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D09C81F3B0;
-        Mon, 13 Dec 2021 07:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639379057; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aEqBV9gaFo2wyx1G4xG19C/0b13L1C/hoEvYE9B85GE=;
-        b=l/hLlA5w3OBwKRP+sBt/ehoVB3EoaTuRtFJa9WBwUg8DKSN0+dWtXmPaULZ5nea0glf+3i
-        /y099EP4z9wGokt1s7ezqdFqw780FOZu/+ajH8HFYxpYwantjdLh91yQrYkA6XOijRd/n1
-        sLfk1JR2eSud6NM0G4BZ3LPOJ7i0/y8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639379057;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aEqBV9gaFo2wyx1G4xG19C/0b13L1C/hoEvYE9B85GE=;
-        b=fbIFNrfIGETnM5AYz2WyO2gy+fZNb61dtNZ2rejU57HQMud9rQbH2LfXezo8Za7bUX9l4C
-        gqceDp2a6mOOzNCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A220013B51;
-        Mon, 13 Dec 2021 07:04:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0YQoF23wtmFUaQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 13 Dec 2021 07:04:13 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Mon, 13 Dec 2021 02:05:12 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3491BC06173F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 23:05:12 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so13950418pjc.4
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 23:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m/kc7ebJlnLqfaZVU4eMOkFHSZDqfSXCTb3+LTn6SwU=;
+        b=LShxVAZyIyqYus7DPwCbQTlPaaUHZLiGxYbFJH10V2CQ1IHefDJR6+7Fo49/Qzh6AU
+         Lbw76mOSk/+soRdakEt0fsh8z0H9XwL21N9buUkkH8K50PN+8cDX4wcvo9eT4Dt9MGJW
+         Ej0LzjYq6a6JUzQ9qzY5r/Yhavs06Cs6ltLCw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m/kc7ebJlnLqfaZVU4eMOkFHSZDqfSXCTb3+LTn6SwU=;
+        b=VV0yDSohX7ufzQcD/RCREz12yjTl98drMpeKK9zEcNIpJpu2PL8skMru49/ROKjRDt
+         htrcezbQLq5gLqsWW5oPHUlw8+1861RUjfM33d2VQR3yNddbDkIjcKj045m3fkRsRrO0
+         m3XeqGi1h9BocShjujuPbL38oxLahUD8C2gRvroVgD/0REO77Z5nWJexcqYGJiMOB9pB
+         zFIKDRVjy3vBxp/pjhik7CrcXt6h4Lq91UdL6bPWCzoeGc3EF0v6OSJxEI7zXntMWsES
+         MoocQdsDDn4xUapt3TYMJOtrzJZ9jtM92wZp+nqL0Y++8V7ExIL5UyNBDVkJKSRy75WL
+         zA/w==
+X-Gm-Message-State: AOAM531esWEwKD5CTUGd7mV+QHreLCMbagO1u30HVA0MxcBpWm1FLfef
+        TcKVLQjgFm39eQAcVotQ7Y5kjr3qOKJF0Q==
+X-Google-Smtp-Source: ABdhPJw5eN9BL11bnpjH2Litra/spgqz7gb1zNDlZ8DD8NBRQ5q5FEL8J+LhSLy30C37bExPbUB0QA==
+X-Received: by 2002:a17:90b:fd5:: with SMTP id gd21mr43377175pjb.37.1639379111712;
+        Sun, 12 Dec 2021 23:05:11 -0800 (PST)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:9447:edff:ad23:1bfc])
+        by smtp.gmail.com with ESMTPSA id k5sm5079402pgm.94.2021.12.12.23.05.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 23:05:11 -0800 (PST)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2] mailbox: mtk-cmdq: Silent EPROBE_DEFER errors for clks
+Date:   Mon, 13 Dec 2021 15:05:01 +0800
+Message-Id: <20211213070500.3977049-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Dave Chinner" <david@fromorbit.com>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        "Philipp Reisner" <philipp.reisner@linbit.com>,
-        "Lars Ellenberg" <lars.ellenberg@linbit.com>,
-        "Jan Kara" <jack@suse.com>,
-        "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] Remove bdi_congested() and wb_congested() and related
- functions
-In-reply-to: <20211213050736.GS449541@dread.disaster.area>
-References: <163936868317.23860.5037433897004720387.stgit@noble.brown>,
- <163936886727.23860.5245364396572576756.stgit@noble.brown>,
- <20211213050736.GS449541@dread.disaster.area>
-Date:   Mon, 13 Dec 2021 18:04:10 +1100
-Message-id: <163937905049.22433.10716750573737410875@noble.neil.brown.name>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021, Dave Chinner wrote:
-> On Mon, Dec 13, 2021 at 03:14:27PM +1100, NeilBrown wrote:
-> > These functions are no longer useful as the only bdis that report
-> > congestion are in ceph, fuse, and nfs.  None of those bdis can be the
-> > target of the calls in drbd, ext2, nilfs2, or xfs.
-> > 
-> > Removing the test on bdi_write_contested() in current_may_throttle()
-> > could cause a small change in behaviour, but only when PF_LOCAL_THROTTLE
-> > is set.
-> > 
-> > So replace the calls by 'false' and simplify the code - and remove the
-> > functions.
-> > 
-> > Signed-off-by: NeilBrown <neilb@suse.de>
-> ....
-> > diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-> > index 631c5a61d89b..22f73b3e888e 100644
-> > --- a/fs/xfs/xfs_buf.c
-> > +++ b/fs/xfs/xfs_buf.c
-> > @@ -843,9 +843,6 @@ xfs_buf_readahead_map(
-> >  {
-> >  	struct xfs_buf		*bp;
-> >  
-> > -	if (bdi_read_congested(target->bt_bdev->bd_disk->bdi))
-> > -		return;
-> 
-> Ok, but this isn't a "throttle writeback" test here - it's trying to
-> avoid having speculative readahead blocking on a full request queue
-> instead of just skipping the readahead IO. i.e. prevent readahead
-> thrashing and/or adding unnecessary read load when we already have a
-> full read queue...
-> 
-> So what is the replacement for that? We want to skip the entire
-> buffer lookup/setup/read overhead if we're likely to block on IO
-> submission - is there anything we can use to do this these days?
+Silent the error if it's EPROBE_DEFER for clks.
 
-I don't think there is a concept of a "full read queue" any more.
-There are things that can block an IO submission though.
-There is allocation of the bio from a mempool, and there is
-rq_qos_throttle, and there are probably other places where submission
-can block.  I don't think you can tell in advance if a submission is
-likely to block.
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+v2: fix comments
+---
+ drivers/mailbox/mtk-cmdq-mailbox.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-I think the idea is that the top level of the submission stack should
-rate-limit based on the estimated throughput of the stack.  I think
-write-back does this.  I don't know about read-ahead.
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index a8845b162dbf..6f9ee831ccd8 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -573,8 +573,10 @@ static int cmdq_probe(struct platform_device *pdev)
+ 				cmdq->clocks[alias_id].id = clk_names[alias_id];
+ 				cmdq->clocks[alias_id].clk = of_clk_get(node, 0);
+ 				if (IS_ERR(cmdq->clocks[alias_id].clk)) {
+-					dev_err(dev, "failed to get gce clk: %d\n", alias_id);
+-					return PTR_ERR(cmdq->clocks[alias_id].clk);
++					return dev_err_probe(dev,
++							     PTR_ERR(cmdq->clocks[alias_id].clk),
++							     "failed to get gce clk: %d\n",
++							     alias_id);
+ 				}
+ 			}
+ 		}
+@@ -582,8 +584,8 @@ static int cmdq_probe(struct platform_device *pdev)
+ 		cmdq->clocks[alias_id].id = clk_name;
+ 		cmdq->clocks[alias_id].clk = devm_clk_get(&pdev->dev, clk_name);
+ 		if (IS_ERR(cmdq->clocks[alias_id].clk)) {
+-			dev_err(dev, "failed to get gce clk\n");
+-			return PTR_ERR(cmdq->clocks[alias_id].clk);
++			return dev_err_probe(dev, PTR_ERR(cmdq->clocks[alias_id].clk),
++					     "failed to get gce clk\n");
+ 		}
+ 	}
+ 
+-- 
+2.34.1.173.g76aa8bc2d0-goog
 
-NeilBrown

@@ -2,91 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEABC47346F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E81473471
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242018AbhLMS4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:56:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S237683AbhLMS4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbhLMS43 (ORCPT
+        with ESMTP id S236468AbhLMS4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:56:29 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB31C061574;
-        Mon, 13 Dec 2021 10:56:28 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id u1so28618483wru.13;
-        Mon, 13 Dec 2021 10:56:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SlRUCNZA27tVMMcwdRpt49s0tEWpr4zRWRRepQCcdFA=;
-        b=TZDTJVpd4mh00xWC2z0z5mHYHH2o9JjzG2pmnMngm1ScOQb4vMwt1hw3bQHfVaD+be
-         vlyvZG0lOATSHAG8/TAKUkYzZUryX2/bKeOm+0MpkG1wAJMsVV+GLsxJDuQ8zdi/GFHX
-         89YHco+p1YsDIWksqhSotC0WUL4R6iBR7p3ofHtc7h7AQYzMUajOz/z8vFyuJKarzCYe
-         D8cxIcpLGSU30Cl624XVZouBkXIoUek2nJgcsRYzuNk8dSvataBej7Nbul9pXXqZTqOi
-         q9xdulk4/wzNQ5Z0zos8gEgVxkdQNScmLo5FxkpV+2NXLcsa0ZKRWy0ZG+WV44WVchtG
-         ymdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SlRUCNZA27tVMMcwdRpt49s0tEWpr4zRWRRepQCcdFA=;
-        b=mggzpcllawWq3XKE3ECGginq1wC7Y/Uom3lu4PRRILtIzTNUVesrkd5Yh2gNZRD7BF
-         wlP6AZU7aaLjhDMXWe9zOfnu0FV8esgQcIkm6cPSW4SqEQSB/O3D7XGjdXS0n2CNCMTQ
-         tddrNu3C9zOXq8RNPOuZpHarysKzK9a97WP2xluf/zVEmQjnrinr3q/22lJPAvnDObL1
-         ghdAZEADUIk2aqynaZNWoScS7V29dqLg31zxNL1LsiuweJ+pl+S/UC9bGHP5JCqdyOEJ
-         j2IZ81JTTDN48FXBglr9/wmpiO6dCfZt3F7YwXEUXINTbOUri2edQ7BoSs7IKlrqygrr
-         jTSg==
-X-Gm-Message-State: AOAM530LXyTBK0G1UpGI3mLhp+82dp/pvh5atoPDx0gzrOf3FrzoV2rR
-        vBnwn4dRZvsofiJlUrbL6O4=
-X-Google-Smtp-Source: ABdhPJw24lKF33uNsYPUjdoHiUoD27t9zwBAzTBlU549U7TdTtZQz1aZGZQZk7jnGsNdwoJuhAz1bg==
-X-Received: by 2002:a5d:6c67:: with SMTP id r7mr369009wrz.286.1639421787485;
-        Mon, 13 Dec 2021 10:56:27 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id e7sm14944804wrg.31.2021.12.13.10.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 10:56:26 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-alpha@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] alpha: osf_sys: reduce kernel log spamming on invalid osf_mount call typenr
-Date:   Mon, 13 Dec 2021 18:56:25 +0000
-Message-Id: <20211213185625.546358-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 13 Dec 2021 13:56:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44655C061574;
+        Mon, 13 Dec 2021 10:56:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9E9461190;
+        Mon, 13 Dec 2021 18:56:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355EEC34600;
+        Mon, 13 Dec 2021 18:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639421808;
+        bh=lFEPGVcplB2/PUnkl473QALTUhz7KgoAcwA4eLB2eUE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mdV7ERkpi5xIZkM+GeAomPGESkR11M/ptbUrlD6g747DJcOcIgbw3JK2z4BNh64of
+         AOvY/6qBrBY+s8JIwGfVyuP250d67ntL7euQPgOnDFRjm8tEeK9HOe3NKFBIquSWyY
+         3GCtWHwrt+5Ce8P2QxM52P4YQHI2aMl/Tg0GU9wpO20/B5tqTGcav0vRCc6me14oJK
+         W5732bSUFOIqT7yW9FI9y7Ujd+3ccAi5qhBJflvoq8H9fgh6N+5fP9CnllwHb0XNSk
+         urahTjjbf+Zp61YJNoeLJ88oiKh2QbWmtWz0n0bDxjaJgnZw324rzzGYc+w4onaeyv
+         1PmD8KQox2C4g==
+Date:   Mon, 13 Dec 2021 18:56:43 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Weilong Chen <chenweilong@huawei.com>
+Cc:     catalin.marinas@arm.com, corbet@lwn.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] cache: Workaround HiSilicon Taishan DC CVAU
+Message-ID: <20211213185643.GA12717@willie-the-truck>
+References: <20211126091139.358114-1-chenweilong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211126091139.358114-1-chenweilong@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Calling the osf_mount system call with an invalid typenr value will
-spam the kernel log with error messages. Reduce the spamming by making
-it a ratelimited printk.  Issue found when exercising with the stress-ng
-enosys system call stressor.
+On Fri, Nov 26, 2021 at 05:11:39PM +0800, Weilong Chen wrote:
+> Taishan's L1/L2 cache is inclusive, and the data is consistent.
+> Any change of L1 does not require DC operation to brush CL in L1 to L2.
+> It's safe that don't clean data cache by address to point of unification.
+> 
+> Without IDC featrue, kernel needs to flush icache as well as dcache,
+> causes performance degradation.
+> 
+> The flaw refers to V110/V200 variant 1.
+> 
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+>  Documentation/arm64/silicon-errata.rst |  2 ++
+>  arch/arm64/Kconfig                     | 11 +++++++++
+>  arch/arm64/include/asm/cputype.h       |  2 ++
+>  arch/arm64/kernel/cpu_errata.c         | 32 ++++++++++++++++++++++++++
+>  arch/arm64/tools/cpucaps               |  1 +
+>  5 files changed, 48 insertions(+)
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- arch/alpha/kernel/osf_sys.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hmm. We don't usually apply optimisations for specific CPUs on arm64, simply
+because the diversity of CPUs out there means it quickly becomes a
+fragmented mess.
 
-diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-index 8bbeebb73cf0..2367a385d726 100644
---- a/arch/alpha/kernel/osf_sys.c
-+++ b/arch/alpha/kernel/osf_sys.c
-@@ -521,7 +521,7 @@ SYSCALL_DEFINE4(osf_mount, unsigned long, typenr, const char __user *, path,
- 		break;
- 	default:
- 		retval = -EINVAL;
--		printk("osf_mount(%ld, %x)\n", typenr, flag);
-+		printk_ratelimited("osf_mount(%ld, %x)\n", typenr, flag);
- 	}
- 
- 	return retval;
--- 
-2.33.1
+Is this patch purely a performance improvement? If so, please can you
+provide some numbers in an attempt to justify it?
 
+Thanks,
+
+Will

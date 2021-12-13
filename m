@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEF0472473
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4EB472796
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbhLMJgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbhLMJfU (ORCPT
+        id S240981AbhLMKCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:02:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44282 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239639AbhLMJ5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:35:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAD3C0698C6;
-        Mon, 13 Dec 2021 01:35:20 -0800 (PST)
+        Mon, 13 Dec 2021 04:57:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB0BDB80E18;
-        Mon, 13 Dec 2021 09:35:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F68BC00446;
-        Mon, 13 Dec 2021 09:35:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 230E9B80E1D;
+        Mon, 13 Dec 2021 09:57:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 408E7C34601;
+        Mon, 13 Dec 2021 09:57:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388118;
-        bh=fwKfU68T5Hd0pP7zVDoYkgUMpmAPRlZHPW4STjVw6ks=;
+        s=korg; t=1639389458;
+        bh=eKoZL/IWl6mnlOA534IqrJXEQcTAIN7tORLNr1kWGD8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mFBgn6LorfEBBkxaJsJCCm0aHGtkguvStZb+rb91H7ZgbGZ/71QttzTl2gyZwXzZ8
-         BO+iTEnw3tx/aJsi0lwaxOq48OPe3rav86JxomuIakc5p18VtonLK9KsPZQylJ/QY4
-         qtFHrolZYbcYXsaPB9q9bqTmn0Sbpgrd+4U2NPCo=
+        b=1/M0DYGFnYWQEjolI98FyqjcjFperq4brOGRTC91qX0vgsmoQd4ZRND9hgTNyN8Bw
+         z/zglp2f45lul4mVlHRVretiDifKAx7RXfTQeZ/H+1QNDvyBgbu2k21ytWJqO5R7mV
+         Y23NHT32tTp/URWnKn2jfGD879WEkGmbRidIRgRM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.9 35/42] iio: ltr501: Dont return error code in trigger handler
+        stable@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 102/171] block: fix ioprio_get(IOPRIO_WHO_PGRP) vs setuid(2)
 Date:   Mon, 13 Dec 2021 10:30:17 +0100
-Message-Id: <20211213092927.702177942@linuxfoundation.org>
+Message-Id: <20211213092948.479026201@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,43 +45,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Davidlohr Bueso <dave@stgolabs.net>
 
-commit ef9d67fa72c1b149a420587e435a3e888bdbf74f upstream.
+commit e6a59aac8a8713f335a37d762db0dbe80e7f6d38 upstream.
 
-IIO trigger handlers need to return one of the irqreturn_t values.
-Returning an error code is not supported.
+do_each_pid_thread(PIDTYPE_PGID) can race with a concurrent
+change_pid(PIDTYPE_PGID) that can move the task from one hlist
+to another while iterating. Serialize ioprio_get to take
+the tasklist_lock in this case, just like it's set counterpart.
 
-The ltr501 interrupt handler gets this right for most error paths, but
-there is one case where it returns the error code.
-
-In addition for this particular case the trigger handler does not call
-`iio_trigger_notify_done()`. Which when not done keeps the triggered
-disabled forever.
-
-Modify the code so that the function returns a valid irqreturn_t value as
-well as calling `iio_trigger_notify_done()` on all exit paths.
-
-Fixes: 2690be905123 ("iio: Add Lite-On ltr501 ambient light / proximity sensor driver")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024171251.22896-1-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: d69b78ba1de (ioprio: grab rcu_read_lock in sys_ioprio_{set,get}())
+Acked-by: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
+Link: https://lore.kernel.org/r/20211210182058.43417-1-dave@stgolabs.net
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/light/ltr501.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/ioprio.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/iio/light/ltr501.c
-+++ b/drivers/iio/light/ltr501.c
-@@ -1248,7 +1248,7 @@ static irqreturn_t ltr501_trigger_handle
- 		ret = regmap_bulk_read(data->regmap, LTR501_ALS_DATA1,
- 				       (u8 *)als_buf, sizeof(als_buf));
- 		if (ret < 0)
--			return ret;
-+			goto done;
- 		if (test_bit(0, indio_dev->active_scan_mask))
- 			scan.channels[j++] = le16_to_cpu(als_buf[1]);
- 		if (test_bit(1, indio_dev->active_scan_mask))
+--- a/block/ioprio.c
++++ b/block/ioprio.c
+@@ -220,6 +220,7 @@ SYSCALL_DEFINE2(ioprio_get, int, which,
+ 				pgrp = task_pgrp(current);
+ 			else
+ 				pgrp = find_vpid(who);
++			read_lock(&tasklist_lock);
+ 			do_each_pid_thread(pgrp, PIDTYPE_PGID, p) {
+ 				tmpio = get_task_ioprio(p);
+ 				if (tmpio < 0)
+@@ -229,6 +230,8 @@ SYSCALL_DEFINE2(ioprio_get, int, which,
+ 				else
+ 					ret = ioprio_best(ret, tmpio);
+ 			} while_each_pid_thread(pgrp, PIDTYPE_PGID, p);
++			read_unlock(&tasklist_lock);
++
+ 			break;
+ 		case IOPRIO_WHO_USER:
+ 			uid = make_kuid(current_user_ns(), who);
 
 

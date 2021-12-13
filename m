@@ -2,126 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3124D472B49
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E12E472B4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbhLMLZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:25:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27574 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235472AbhLMLZW (ORCPT
+        id S235630AbhLMLZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:25:37 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:59362 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235473AbhLMLZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:25:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639394722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NgW2HZbqk/vaW0uvmcY9DBIAYMKjrYwVqr2SxXfM1k4=;
-        b=Ps0QhxUSq3/AlzN1kjdEiJx7M2yQ+CgACzvR/hWkxWYcX0dwATrMZpn9M86XGrReyivKZf
-        ILu0/quxRraXhLmgVfzo8o+qZnCCAFKtTNm7Z1nI13LECp1su5RGiImNQoPdnM8ti4zAZt
-        U68jSZw//or4zGVJ984aL6/4G1Q3Eac=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-207-2hzbBmnZM3uE2eCdvOx4TA-1; Mon, 13 Dec 2021 06:25:19 -0500
-X-MC-Unique: 2hzbBmnZM3uE2eCdvOx4TA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 13 Dec 2021 06:25:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 95334193F568;
-        Mon, 13 Dec 2021 11:25:17 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DA6EF5ED25;
-        Mon, 13 Dec 2021 11:25:16 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, ignat@cloudflare.com, bgardon@google.com,
-        dmatlack@google.com, stevensd@chromium.org,
-        kernel-team@cloudflare.com, stable@vger.kernel.org
-Subject: [PATCH 2/2] KVM: x86: zap invalid roots in kvm_tdp_mmu_zap_all
-Date:   Mon, 13 Dec 2021 06:25:14 -0500
-Message-Id: <20211213112514.78552-3-pbonzini@redhat.com>
-In-Reply-To: <20211213112514.78552-1-pbonzini@redhat.com>
-References: <20211213112514.78552-1-pbonzini@redhat.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 01B99CE100F;
+        Mon, 13 Dec 2021 11:25:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0196CC34603;
+        Mon, 13 Dec 2021 11:25:24 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 12:25:20 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
+Message-ID: <20211213112520.q7oc5hnjqh7yzgdq@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-16-stefanb@linux.ibm.com>
+ <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
+ <20211209143749.wk4agkynfqdzftbl@wittgenstein>
+ <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
+ <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
+ <20211210114934.tacjnwryihrsx6ln@wittgenstein>
+ <e72104c480c2c7f5c29f80b72d2a597a50ef9fae.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e72104c480c2c7f5c29f80b72d2a597a50ef9fae.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_tdp_mmu_zap_all is intended to visit all roots and zap their page
-tables, which flushes the accessed and dirty bits out to the Linux
-"struct page"s.  Missing some of the roots has catastrophic effects,
-because kvm_tdp_mmu_zap_all is called when the MMU notifier is being
-removed and any PTEs left behind might become dangling by the time
-kvm-arch_destroy_vm tears down the roots for good.
+On Sun, Dec 12, 2021 at 09:13:12AM -0500, James Bottomley wrote:
+> On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
+> > On Thu, Dec 09, 2021 at 02:38:13PM -0500, James Bottomley wrote:
+> [...]
+> > > @@ -317,21 +315,15 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
+> > >  void securityfs_remove(struct dentry *dentry)
+> > >  {
+> > >  	struct user_namespace *ns = dentry->d_sb->s_user_ns;
+> > > -	struct inode *dir;
+> > >  
+> > >  	if (!dentry || IS_ERR(dentry))
+> > >  		return;
+> > >  
+> > > -	dir = d_inode(dentry->d_parent);
+> > > -	inode_lock(dir);
+> > >  	if (simple_positive(dentry)) {
+> > > -		if (d_is_dir(dentry))
+> > > -			simple_rmdir(dir, dentry);
+> > > -		else
+> > > -			simple_unlink(dir, dentry);
+> > > +		d_delete(dentry);
+> > 
+> > Not, that doesn't work. You can't just call d_delete() and dput() and
+> > even if I wouldn't advise it. And you also can't do this without
+> > taking the inode lock on the directory.
+> 
+> Agreed on that
+> 
+> > simple_rmdir()/simple_unlink() take care to update various inode
+> > fields in the parent dir and handle link counts. This really wants to
+> > be sm like
+> > 
+> > 	struct inode *parent_inode;
+> > 
+> > 	parent_inode = d_inode(dentry->d_parent);
+> > 	inode_lock(parent_inode);
+> > 	if (simple_positive(dentry)) {
+> > 		dget(dentry);
+> > 		if (d_is_dir(dentry)
+> > 			simple_unlink(parent_inode, dentry);
+> > 		else
+> > 			simple_unlink(parent_inode, dentry);
+> > 		d_delete(dentry);
+> > 		dput(dentry);
+> > 	}
+> > 	inode_unlock(parent_inode);
+> 
+> It just slightly annoys me how the simple_ functions change fields in
+> an inode that is about to be evicted ... it seems redundant; plus we
+> shouldn't care if the object we're deleting is a directory or file.  I
+> also don't think we need the additional dget because the only consumer
+> is policy file removal and the opener of that file will have done a
+> dget.  The inode lock now prevents us racing with another remove in the
+> case of two simultaneous writes.
+> 
+> How about
+> 
+>         struct inode *parent_inode;
+> 
+>         parent_inode = d_inode(dentry->d_parent);
+>         inode_lock(parent_inode);
+>         if (simple_positive(dentry)) {
+> 		drop_nlink(parent_inode);
+>                 d_delete(dentry);
+>                 dput(dentry);
+>         }
+>         inode_unlock(parent_inode);
 
-Unfortunately that is exactly what kvm_tdp_mmu_zap_all is doing: it
-visits all roots via for_each_tdp_mmu_root_yield_safe, which in turn
-uses kvm_tdp_mmu_get_root to skip invalid roots.  If the current root is
-invalid at the time of kvm_tdp_mmu_zap_all, its page tables will remain
-in place but will later be zapped during kvm_arch_destroy_vm.
+It doesn't just change fields in an inode that is about to be evicted.
+It changes fields in the parent inode.
+If you're deleting any file or directory your function currently fails
+to update mtime and ctime for the parent directory.
 
-To fix this, ensure that kvm_tdp_mmu_zap_all goes over all roots,
-including the invalid ones.  The easiest way to do so is for
-kvm_tdp_mmu_zap_all to do the same as kvm_mmu_zap_all_fast: invalidate
-all roots, and then zap the invalid roots.  However, there is no need
-to go through tdp_mmu_zap_spte_atomic because there are no running vCPUs.
+What you're doing below also isn't all that future proof or safe for
+callers other than ima.
 
-Fixes: b7cccd397f31 ("KVM: x86/mmu: Fast invalidation for TDP MMU")
-Cc: stable@vger.kernel.org
-Reported-by: Ignat Korchagin <ignat@cloudflare.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/mmu/tdp_mmu.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+Consider a future caller that might want to call securityfs_remove() with
 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index f2dd5c97bbc2..ce3fafb6c9a7 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -779,18 +779,6 @@ bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
- 	return flush;
- }
- 
--void kvm_tdp_mmu_zap_all(struct kvm *kvm)
--{
--	bool flush = false;
--	int i;
--
--	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
--		flush = kvm_tdp_mmu_zap_gfn_range(kvm, i, 0, -1ull, flush);
--
--	if (flush)
--		kvm_flush_remote_tlbs(kvm);
--}
--
- static struct kvm_mmu_page *next_invalidated_root(struct kvm *kvm,
- 						  struct kvm_mmu_page *prev_root)
- {
-@@ -888,6 +876,19 @@ void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
- 			root->role.invalid = true;
- }
- 
-+void kvm_tdp_mmu_zap_all(struct kvm *kvm)
-+{
-+	/*
-+	 * We need to zap all roots, including already-invalid ones.  The
-+	 * easiest way is to ensure there's only invalid roots which then,
-+	 * for efficiency, we zap while mmu_lock is taken exclusively.
-+	 * Since the MMU notifier is being torn down, contention on the
-+	 * mmu_lock is not an issue.
-+	 */
-+	kvm_tdp_mmu_invalidate_all_roots(kvm);
-+	kvm_tdp_mmu_zap_invalidated_roots(kvm, false);
-+}
-+
- /*
-  * Installs a last-level SPTE to handle a TDP page fault.
-  * (NPT/EPT violation/misconfiguration)
--- 
-2.31.1
+.open   = first_file()
 
+.relase = first_release(
+	securityfs_remove(second_file)
+)
+
+.open    = second_file()
+
+If your securityfs_remove() is called from the first file's release
+function while the second_file is still open and thus holds a reference
+and won't go way during first_release()'s securityfs_remove() call you
+have just failed to update relevant inode fields of a file that can
+still be queried via stat* functions and can be used to create other
+files below it.
+
+In addition, if someone accidently calls your securityfs_remove() on a
+directory that is not-empty you're effectively deleting the directory
+without deleting the files in that directory first whereas
+simple_rmdir() would tell you to go away.
+
+If a user later needs an .unlink/.rmdir method for securityfs or allows
+calls of securityfs_remove() on the same dentry from concurrent
+locations you need the dget() in securityfs_remove() even if the
+inode_lock() is exclusive otherwise you can end up doing a dput() too
+many, iirc.
+
+I would recommened to not turn this into a nih exercise for simple vfs
+functionality. Your version isn't even significantly simpler. The
+securityfs_remove() function doesn't need to be reinvented.
+
+void securityfs_remove(struct dentry *dentry)
+{
+	struct inode *dir;
+
+	if (WARN_ON(!dentry || IS_ERR(dentry)))
+		return;
+
+	dir = d_inode(dentry->d_parent);
+	inode_lock(dir);
+	if (simple_positive(dentry)) {
+		dget(dentry);
+		if (d_is_dir(dentry))
+			simple_rmdir(dir, dentry);
+		else
+			simple_unlink(dir, dentry);
+		d_delete(dentry);
+		dput(dentry);
+	}
+	inode_unlock(dir);
+}
+
+I'm not claiming or trying to make this the most minimal version of
+securityfs_remove() that we could possibly get but I'm making it one
+where we don't have to worry that there's a subtle corner case that'll
+bite us in the future just because we tried to hand-massage a function
+that isn't in any hotpath.

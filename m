@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2316471FC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 05:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3927A471FC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbhLMEBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 23:01:02 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:29187 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbhLMEBC (ORCPT
+        id S231566AbhLMD71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 22:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229748AbhLMD70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 23:01:02 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JC76K1yCVz970c;
-        Mon, 13 Dec 2021 11:58:49 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 12:00:59 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 12:00:58 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Nadav Amit <namit@vmware.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>
-Subject: [PATCH] smp: Fix the comments of smp_call_function_many()
-Date:   Mon, 13 Dec 2021 11:57:55 +0800
-Message-ID: <20211213035755.73-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Sun, 12 Dec 2021 22:59:26 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333ECC06173F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 19:59:26 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id t23so21634581oiw.3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 19:59:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OtQHb3uGVvvleXWJLYhGFtxLvxFVtU+Bbl9uaeK7i8c=;
+        b=TUh65o6wo7281h2otq7gQvCynFBYMPZdz1plxh8eAGjj5/6nyKLSD4HcMuPYjnrw5/
+         caVfSro6kGt44Euv32EmnqTf7ioAN35BwWUlnT/cCqM5hmmt5Do76QfVnM45jODOBRK6
+         dDd+7P3NvRjzY3g7PnOtPgqMxv9y8CmTjwcDkwSVA/HyNhERTJR3DP9RfyIuUa01hAI6
+         ejt9Umx1CE6anw//fTyrkkRwIccr+Q8KGgSrhF+fPXCTRZueBs3niXTluz37GQSJRALn
+         MYcFYRO7McxXCOBRn65UBwUq9s5tAxjHq+d+tIu3PyW/g0lZzLSzT5P+uIdT6CXRbUPn
+         oEdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=OtQHb3uGVvvleXWJLYhGFtxLvxFVtU+Bbl9uaeK7i8c=;
+        b=0Q5YT+PZ2fnoZpLUweKRKjWhSxKyK33UzlWYnUQjxXHG/oTt7ZFqypobgDL2K11gaP
+         1tYU53r1sjcut4Nwadi4BeLxY2Oyz+PHYFVCv+KyYBzyUqT0+OxMt9uQs0b/5ty6YrrJ
+         dlBpAkZiG+1gfgvpEgm3wjIWB8WHdk314u3VHQs0KNtuCp5geJowUmvwkBlnnbrl0K7v
+         8zYN1DSUzX4Nl3fWp+QhMTCma1DpH+2KhlFjv8TsXGwZQO/F71f8WX+WOi/RdD6Eqdyx
+         NpPHAB5T5YHs0cD4miWWEnFuAG4HzCvKoVyEQflbONgR4Zz8Hnz5goYYaiRU321uFtqU
+         4rmQ==
+X-Gm-Message-State: AOAM530QSlGUFnuUdZH3AoQbeMyIwidWCRZgXFD3rTTrmD9tdsEBDJci
+        3ddAjr7Jnm0oh6rMwZ9Frd38JpxbscU=
+X-Google-Smtp-Source: ABdhPJwFMtgs8idiTbiHky4rp63Kquzq77GK9/+p8qUrcOWue2HGHX4EGmsIjJMv545V2KwmIzlegQ==
+X-Received: by 2002:a05:6808:d54:: with SMTP id w20mr25519021oik.146.1639367965327;
+        Sun, 12 Dec 2021 19:59:25 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s6sm2543246ois.3.2021.12.12.19.59.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 19:59:24 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 12 Dec 2021 19:59:23 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 5.16-rc5
+Message-ID: <20211213035923.GA735445@roeck-us.net>
+References: <CAHk-=wixe1NPqC0PmgUbV0Xoa8D0Pbyu7X_0sfABYMG+ocLdbQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wixe1NPqC0PmgUbV0Xoa8D0Pbyu7X_0sfABYMG+ocLdbQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commit a32a4d8a815c ("smp: Run functions concurrently in
-smp_call_function_many_cond()") itself says:
-                  "Keep other smp_call_function_many() semantic as it is
-today for backward compatibility: the called function is not executed in
-this case locally."
+On Sun, Dec 12, 2021 at 03:24:52PM -0800, Linus Torvalds wrote:
+> So everything looks fairly normal. This rc5 is perhaps a bit bigger
+> than usual, but it's not like it's breaking any records. I blame
+> people trying to get stuff done before the holidays, and/or just
+> random timing effects.
+> 
+> Anyway, I do expect things to calm down over the next couple of weeks,
+> but we'll see.
+> 
+> As to rc5, the patch is dominated by drivers (network, sound, hid,
+> rdma, usb... and a lot of other random things) and selftest updates
+> (bpf, kvm and networking).
+> 
+> The rest is fairly random - filesystems (cifs, btrfs, tracefs), core
+> kernel and networking. Some fixups to the new damon virtual address
+> space monitoring code.
+> 
+> Shortlog appended.
+> 
+> Do give it a good testing - with the holidays coming up, things are
+> probably going to slow down both on the development and testing front,
+> and as a result I expect that I will also extend the rc series by
+> another week not because it's necessarily needed (too early to tell,
+> but doesn't feel that way), but simply because nobody will want to
+> open the next merge window immediately in the new year.
+> 
 
-It's clear that, the function header comments of smp_call_function_many()
-does not need to be changed.
+Build results:
+	total: 153 pass: 152 fail: 1
+Failed builds:
+	mips:allmodconfig
+Qemu test results:
+	total: 480 pass: 480 fail: 0
 
-So move the comment about 'scf_flags' to smp_call_function_many_cond(),
-and restore the original comments of smp_call_function_many().
+Same old.
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/smp.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+Building mips:allmodconfig ... failed
+--------------
+Error log:
+ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
+ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 01a7c1706a58b1d..6ec884f41b7506d 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -861,6 +861,13 @@ EXPORT_SYMBOL_GPL(smp_call_function_any);
- #define SCF_WAIT	(1U << 0)
- #define SCF_RUN_LOCAL	(1U << 1)
- 
-+/**
-+ * smp_call_function_many_cond(): Run a function on a set of CPUs.
-+ * @scf_flags: Bitmask that controls the operation. If %SCF_WAIT is set,
-+ *        wait (atomically) until function has completed on other CPUs. If
-+ *        %SCF_RUN_LOCAL is set, the function will also be run locally
-+ *        if the local CPU is set in the @cpumask.
-+ */
- static void smp_call_function_many_cond(const struct cpumask *mask,
- 					smp_call_func_t func, void *info,
- 					unsigned int scf_flags,
-@@ -972,14 +979,12 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- }
- 
- /**
-- * smp_call_function_many(): Run a function on a set of CPUs.
-+ * smp_call_function_many(): Run a function on a set of other CPUs.
-  * @mask: The set of cpus to run on (only runs on online subset).
-  * @func: The function to run. This must be fast and non-blocking.
-  * @info: An arbitrary pointer to pass to the function.
-- * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
-- *        (atomically) until function has completed on other CPUs. If
-- *        %SCF_RUN_LOCAL is set, the function will also be run locally
-- *        if the local CPU is set in the @cpumask.
-+ * @wait: If true, wait (atomically) until function has completed
-+ *        on other CPUs.
-  *
-  * If @wait is true, then returns once @func has returned.
-  *
--- 
-2.25.1
-
+Guenter

@@ -2,53 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C53472993
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0614725E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239267AbhLMKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244982AbhLMKTA (ORCPT
+        id S236450AbhLMJrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:47:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55816 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236044AbhLMJmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:19:00 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BE9C06115E;
-        Mon, 13 Dec 2021 01:57:19 -0800 (PST)
+        Mon, 13 Dec 2021 04:42:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 95E13CE0EBE;
-        Mon, 13 Dec 2021 09:57:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D22C34600;
-        Mon, 13 Dec 2021 09:57:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94FFDB80CAB;
+        Mon, 13 Dec 2021 09:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C1CC00446;
+        Mon, 13 Dec 2021 09:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389435;
-        bh=2TGvWSkkKLptobPI9RE2WsuizoW+s0YnvyS0QNY3rXg=;
+        s=korg; t=1639388565;
+        bh=ZpwtapzWO29sefySWMzngw+JAJvNCuWs3vtmOgku8fg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=magoGFXHWX5xS+8auSQ1ufnlBfxoJBK90p/L0K4WnBLz5wXuWtt/MdK4lTDBy81Nr
-         wWaiD1nuu9IHcSXYqNI/ExVb7j4cIoztnMue30kA3J9tA5wNAZJTwo81xVjBuOc/ua
-         E52EIXoRgRRrZhv6/mx10Prnm/33hcGXYPFmsytU=
+        b=KAtF4yU2n63vL3kqVO1uqQmV5JTw4NIFqL6AGD2kVvS/H5I7nOtco1MvNno6kB6XK
+         iTSHv4itZoOg+HZ2WrOVGirApas6GVgVoBUcoOjcNZ1Si6MoHGO1P4B5hR5KL7JDZI
+         rfiOeSTq5bZZi4HamM/jyy3tMLfLk5H5CrHXiESc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 062/171] mm/slub: fix endianness bug for alloc/free_traces attributes
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 5.4 07/88] HID: add USB_HID dependancy to hid-chicony
 Date:   Mon, 13 Dec 2021 10:29:37 +0100
-Message-Id: <20211213092947.168513763@linuxfoundation.org>
+Message-Id: <20211213092933.489538477@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,92 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 005a79e5c254c3f60ec269a459cc41b55028c798 upstream.
+commit d080811f27936f712f619f847389f403ac873b8f upstream.
 
-On big-endian s390, the alloc/free_traces attributes produce endless
-output, because of always 0 idx in slab_debugfs_show().
+The chicony HID driver only controls USB devices, yet did not have a
+dependancy on USB_HID.  This causes build errors on some configurations
+like sparc when building due to new changes to the chicony driver.
 
-idx is de-referenced from *v, which points to a loff_t value, with
-
-    unsigned int idx = *(unsigned int *)v;
-
-This will only give the upper 32 bits on big-endian, which remain 0.
-
-Instead of only fixing this de-reference, during discussion it seemed
-more appropriate to change the seq_ops so that they use an explicit
-iterator in private loc_track struct.
-
-This patch adds idx to loc_track, which will also fix the endianness
-bug.
-
-Link: https://lore.kernel.org/r/20211117193932.4049412-1-gerald.schaefer@linux.ibm.com
-Link: https://lkml.kernel.org/r/20211126171848.17534-1-gerald.schaefer@linux.ibm.com
-Fixes: 64dd68497be7 ("mm: slub: move sysfs slab alloc/free interfaces to debugfs")
-Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Reported-by: Steffen Maier <maier@linux.ibm.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Cc: Faiyaz Mohammed <faiyazm@codeaurora.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: stable@vger.kernel.org
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211203075927.2829218-1-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/slub.c |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/hid/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5072,6 +5072,7 @@ struct loc_track {
- 	unsigned long max;
- 	unsigned long count;
- 	struct location *loc;
-+	loff_t idx;
- };
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -206,7 +206,7 @@ config HID_CHERRY
  
- static struct dentry *slab_debugfs_root;
-@@ -6035,11 +6036,11 @@ __initcall(slab_sysfs_init);
- #if defined(CONFIG_SLUB_DEBUG) && defined(CONFIG_DEBUG_FS)
- static int slab_debugfs_show(struct seq_file *seq, void *v)
- {
--
--	struct location *l;
--	unsigned int idx = *(unsigned int *)v;
- 	struct loc_track *t = seq->private;
-+	struct location *l;
-+	unsigned long idx;
- 
-+	idx = (unsigned long) t->idx;
- 	if (idx < t->count) {
- 		l = &t->loc[idx];
- 
-@@ -6088,16 +6089,18 @@ static void *slab_debugfs_next(struct se
- {
- 	struct loc_track *t = seq->private;
- 
--	v = ppos;
--	++*ppos;
-+	t->idx = ++(*ppos);
- 	if (*ppos <= t->count)
--		return v;
-+		return ppos;
- 
- 	return NULL;
- }
- 
- static void *slab_debugfs_start(struct seq_file *seq, loff_t *ppos)
- {
-+	struct loc_track *t = seq->private;
-+
-+	t->idx = *ppos;
- 	return ppos;
- }
- 
+ config HID_CHICONY
+ 	tristate "Chicony devices"
+-	depends on HID
++	depends on USB_HID
+ 	default !EXPERT
+ 	---help---
+ 	Support for Chicony Tactical pad and special keys on Chicony keyboards.
 
 

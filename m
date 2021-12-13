@@ -2,202 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A96A4472B84
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE708472B86
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236104AbhLMLe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:34:27 -0500
-Received: from mickerik.phytec.de ([195.145.39.210]:62280 "EHLO
-        mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235058AbhLMLeX (ORCPT
+        id S231585AbhLMLej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235966AbhLMLeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:34:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1639395262; x=1641987262;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+CfUaDtCzKMIec1hYZi6pt2waSX8RrwpItBr78PMMrU=;
-        b=poniwzXmLP7DcVElo5Shl1RwIl2mD9/3G9hQt40GccbfaO0ftJRbeH/amvEeW3BV
-        n2oFgJFlHYQ0xq7aywXQaLxVofbZKcJEpzQHQpmTUMVvXoaaQ3gkcb+ocm0She2M
-        EVWxL7w7SsBvf6tw12OG+aTXNPyl1FoozlhamOVMrSM=;
-X-AuditID: c39127d2-4ef327000000426a-5d-61b72fbeda71
-Received: from florix.phytec.de (florix.phytec.de [172.16.0.118])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 2E.13.17002.EBF27B16; Mon, 13 Dec 2021 12:34:22 +0100 (CET)
-Received: from Berlix.phytec.de (172.16.0.117) by Florix.phytec.de
- (172.16.0.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 13 Dec
- 2021 12:34:22 +0100
-Received: from Berlix.phytec.de ([fe80::1c1b:e8b7:a0d4:89b2]) by
- berlix.phytec.de ([fe80::1c1b:e8b7:a0d4:89b2%3]) with mapi id 15.01.2375.017;
- Mon, 13 Dec 2021 12:34:22 +0100
-From:   Yunus Bas <Y.Bas@phytec.de>
-To:     "shawnguo@kernel.org" <shawnguo@kernel.org>
-CC:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/3] ARM: dts: imx6qdl: phytec: Add support for optional
- PEB-EVAL-01 board
-Thread-Topic: [PATCH 1/3] ARM: dts: imx6qdl: phytec: Add support for optional
- PEB-EVAL-01 board
-Thread-Index: AQHX5cnyF9MDax+eMkim9MW+ChwuEqwkug8AgAuUV4A=
-Date:   Mon, 13 Dec 2021 11:34:22 +0000
-Message-ID: <4b8ee4ab7ca758ea20ff535689665e96db9d012e.camel@phytec.de>
-References: <20211130085355.2291607-1-y.bas@phytec.de>
-         <20211206024433.GW4216@dragon>
-In-Reply-To: <20211206024433.GW4216@dragon>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.0.116]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <67F502BCEE5CC141924B004DC6A753F6@phytec.de>
-Content-Transfer-Encoding: base64
+        Mon, 13 Dec 2021 06:34:37 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9793CC061370;
+        Mon, 13 Dec 2021 03:34:36 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id e3so51686286edu.4;
+        Mon, 13 Dec 2021 03:34:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2e+UzRHJrxGPPbZbFl3bp02hL6qW3g/3CXhqDegQXgY=;
+        b=lH4bKcV/MYfbCayfl/Uz5ftNa5t2S1eJFIcB/ZAt0HfLIZVovbwizoyOdLSYqVkWr1
+         +JdNtbtLiNsqRZnFgTxKuj3KfXt7UABFNmO6ogqDJGkqcyL6D7Bu5Np3m4rzk5QOA+bA
+         2yndlT2MKmnryf6RacXKnVDdmp3AfSDVUZ43rlVvhksTxHfTnuIfZD9ZC7QwSFa1kiux
+         ZcG4dgeOsTjzjPdknhx1uLPI9CrHGgVCn7yUm8oYWFyTYwQkMpFJJAM5MDXkGxfzhoZB
+         DZUdeQzQKzC1jTmTs3snbIV5L2rdBhhu5uwedDZIHsjNX02nIzTbPnEcEgKqpAVbGPcr
+         R/Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2e+UzRHJrxGPPbZbFl3bp02hL6qW3g/3CXhqDegQXgY=;
+        b=AyZfgVcrdVWi4mfoF8pBG4DyEZK/IqEDZe9IDL2TCvAdIbMnQCSMD/qSNZfkn+T2uH
+         ANksM/VLDqKiuajuQeRlpqcfya1UI1q0rhNkHJDy8Oxlk9XpScTjcr7OcrSTgUNlFm6B
+         3lABLGdPYdMYAmb2/WKcuaqR8FumEG0y2y2l35QNTS/4SeWj8VCs/OqOIujnoyeD6+Da
+         FpcqKJ46takng8Lr8yU9dDNChhyz5X7OZmMlcG1tkk0+S4n7wHAeppRy0QZhdusBJ/6M
+         vo+BLY8qmQlFqQMC/ruKF5hksfUk9WZeg6KJp05+skeJeNtU0zrroYYXz0EjtMZLHF2D
+         456Q==
+X-Gm-Message-State: AOAM532URgedxTL+52tFkuHoPiQmCNWHKSVwbwNI2nE9CGqAcAeigleT
+        d2pA2ciOVPVJidjEAoqOaA4=
+X-Google-Smtp-Source: ABdhPJxQ75d60voASMmkeQXmRq5Wk8RM74ghwGmxeGWXH15Kc/F0Yv1JhPRcJGGlp8B7ljQdpgXQ7A==
+X-Received: by 2002:a50:9e0f:: with SMTP id z15mr63057251ede.278.1639395275080;
+        Mon, 13 Dec 2021 03:34:35 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id sc27sm6043432ejc.125.2021.12.13.03.34.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 03:34:34 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <0d893664-ff8d-83ed-e9be-441b45992f68@redhat.com>
+Date:   Mon, 13 Dec 2021 12:34:32 +0100
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsWyRoChTHef/vZEgzVtyhbzj5xjtXh41d9i
-        1dSdLBaXd81hs2jde4Td4u/2TSwWL7aIO7B77Jx1l91j06pONo/+vwYenzfJBbBEcdmkpOZk
-        lqUW6dslcGV8f/mSrWCPd8W71o2sDYxHPLsYOTkkBEwkJm+YxwxiCwksY5KY8rOoi5ELyH7E
-        KPFt7wVGCGcTo8SWVwtYuhg5ONgEFCWu3MoHaRAR0Jd4v+UvC0gNs8A+JokDjf+ZQBLCAgkS
-        HTcWskEUJUrMO7YSyraSeH5xI5jNIqAqsX/NTTCbV8BN4uKy7YwQV0RIXPz9GuwiTgFtiY3b
-        j4DVMArISmzYcB4sziwgLrHp2XdWiA8EJJbsgYhLCIhKvHz8DyquINHW08kEcjOzgKbE+l36
-        EK0WEv+PTmWBsBUlpnQ/ZIc4QVDi5MwnLBMYxWch2TALoXsWku5ZSLpnIelewMi6ilEoNzM5
-        O7UoM1uvIKOyJDVZLyV1EyMwSg9PVL+0g7FvjschRiYOxkOMEhzMSiK8L623JgrxpiRWVqUW
-        5ccXleakFh9ilOZgURLnvd/DlCgkkJ5YkpqdmlqQWgSTZeLglGpgrPxx8fff6JMPS/5YVcvc
-        T2D/Wm3vnlvxYPc6q4CXT+60rtT7ctU0LuT29MIzpb/spNyr3RosuEObi5iZ57H68thwvw2p
-        914d9WODxl6hbwd6/qyLS5gTIHY7cPGe43ZiqeVMGXvE7bM8J+1wf78iTtp6Fb/SXtHERYfq
-        z8mve5bXZ7g5WPOyEktxRqKhFnNRcSIAedClHcACAAA=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/5] KVM: nSVM: deal with L1 hypervisor that intercepts
+ interrupts but lets L2 control EFLAGS.IF
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Jim Mattson <jmattson@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joerg Roedel <joro@8bytes.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20211213104634.199141-1-mlevitsk@redhat.com>
+ <20211213104634.199141-2-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211213104634.199141-2-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgU2hhd24sCgpTb3JyeSBmb3IgdGhlIGxhdGUgcmVzcG9uc2UuIEkgd2FzIHNpY2sgZm9yIHRo
-ZSB3aG9sZSB3ZWVrLgoKQW0gTW9udGFnLCBkZW0gMDYuMTIuMjAyMSB1bSAxMDo0NCArMDgwMCBz
-Y2hyaWViIFNoYXduIEd1bzoKPiBPbiBUdWUsIE5vdiAzMCwgMjAyMSBhdCAwOTo1Mzo1M0FNICsw
-MTAwLCBZdW51cyBCYXMgd3JvdGU6Cj4gPiBUaGUgUEhZVEVDIFBFVi1FVkFMLTAxIGV4cGFuc2lv
-biBib2FyZCBhZGRzIHN1cHBvcnQgZm9yIGFkZGl0aW9uYWwKPiA+IGdwaW8tdHJpZ2dlcmVkIHVz
-ZXItbGVkcyBhbmQgZ3Bpby1rZXkgc3VwcG9ydC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogWXVu
-dXMgQmFzIDx5LmJhc0BwaHl0ZWMuZGU+Cj4gPiAtLS0KPiA+IMKgLi4uL2Jvb3QvZHRzL2lteDZk
-bC1waHl0ZWMtbWlyYS1yZGstbmFuZC5kdHPCoCB8wqAgMSArCj4gPiDCoC4uLi9ib290L2R0cy9p
-bXg2cS1waHl0ZWMtbWlyYS1yZGstZW1tYy5kdHPCoMKgIHzCoCAxICsKPiA+IMKgLi4uL2Jvb3Qv
-ZHRzL2lteDZxLXBoeXRlYy1taXJhLXJkay1uYW5kLmR0c8KgwqAgfMKgIDEgKwo+ID4gwqAuLi4v
-ZHRzL2lteDZxZGwtcGh5dGVjLW1pcmEtcGViLWV2YWwtMDEuZHRzacKgIHwgNzEKPiA+ICsrKysr
-KysrKysrKysrKysrKysKPiA+IMKgLi4uL2Jvb3QvZHRzL2lteDZxcC1waHl0ZWMtbWlyYS1yZGst
-bmFuZC5kdHPCoCB8wqAgMSArCj4gPiDCoDUgZmlsZXMgY2hhbmdlZCwgNzUgaW5zZXJ0aW9ucygr
-KQo+ID4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC1waHl0
-ZWMtbWlyYS1wZWItZXZhbC0KPiA+IDAxLmR0c2kKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gv
-YXJtL2Jvb3QvZHRzL2lteDZkbC1waHl0ZWMtbWlyYS1yZGstbmFuZC5kdHMKPiA+IGIvYXJjaC9h
-cm0vYm9vdC9kdHMvaW14NmRsLXBoeXRlYy1taXJhLXJkay1uYW5kLmR0cwo+ID4gaW5kZXggOWY3
-ZjlmOTgxMzlkLi5iMDU3ZmE2NjRhNmIgMTAwNjQ0Cj4gPiAtLS0gYS9hcmNoL2FybS9ib290L2R0
-cy9pbXg2ZGwtcGh5dGVjLW1pcmEtcmRrLW5hbmQuZHRzCj4gPiArKysgYi9hcmNoL2FybS9ib290
-L2R0cy9pbXg2ZGwtcGh5dGVjLW1pcmEtcmRrLW5hbmQuZHRzCj4gPiBAQCAtOCw2ICs4LDcgQEAK
-PiA+IMKgI2luY2x1ZGUgImlteDZkbC5kdHNpIgo+ID4gwqAjaW5jbHVkZSAiaW14NnFkbC1waHl0
-ZWMtcGh5Y29yZS1zb20uZHRzaSIKPiA+IMKgI2luY2x1ZGUgImlteDZxZGwtcGh5dGVjLW1pcmEu
-ZHRzaSIKPiA+ICsjaW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS1wZWItZXZhbC0wMS5kdHNp
-Igo+ID4gwqAKPiA+IMKgLyB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgbW9kZWwgPSAiUEhZVEVDIHBo
-eUJPQVJELU1pcmEgRHVhbExpdGUvU29sbyBDYXJyaWVyLUJvYXJkCj4gPiB3aXRoIE5BTkQiOwo+
-ID4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxLXBoeXRlYy1taXJhLXJkay1l
-bW1jLmR0cwo+ID4gYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWlyYS1yZGstZW1t
-Yy5kdHMKPiA+IGluZGV4IDJlNzBlYTU2MjNjNi4uZGI2ZTJjYzM2NzU5IDEwMDY0NAo+ID4gLS0t
-IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEtcmRrLWVtbWMuZHRzCj4gPiAr
-KysgYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWlyYS1yZGstZW1tYy5kdHMKPiA+
-IEBAIC04LDYgKzgsNyBAQAo+ID4gwqAjaW5jbHVkZSAiaW14NnEuZHRzaSIKPiA+IMKgI2luY2x1
-ZGUgImlteDZxZGwtcGh5dGVjLXBoeWNvcmUtc29tLmR0c2kiCj4gPiDCoCNpbmNsdWRlICJpbXg2
-cWRsLXBoeXRlYy1taXJhLmR0c2kiCj4gPiArI2luY2x1ZGUgImlteDZxZGwtcGh5dGVjLW1pcmEt
-cGViLWV2YWwtMDEuZHRzaSIKPiA+IMKgCj4gPiDCoC8gewo+ID4gwqDCoMKgwqDCoMKgwqDCoG1v
-ZGVsID0gIlBIWVRFQyBwaHlCT0FSRC1NaXJhIFF1YWQgQ2Fycmllci1Cb2FyZCB3aXRoCj4gPiBl
-TU1DIjsKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWly
-YS1yZGstbmFuZC5kdHMKPiA+IGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEt
-cmRrLW5hbmQuZHRzCj4gPiBpbmRleCA2NWQyZTQ4M2MxMzYuLjUxZmY2MDFiMWFlYyAxMDA2NDQK
-PiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxLXBoeXRlYy1taXJhLXJkay1uYW5kLmR0
-cwo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEtcmRrLW5hbmQu
-ZHRzCj4gPiBAQCAtOCw2ICs4LDcgQEAKPiA+IMKgI2luY2x1ZGUgImlteDZxLmR0c2kiCj4gPiDC
-oCNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1waHljb3JlLXNvbS5kdHNpIgo+ID4gwqAjaW5jbHVk
-ZSAiaW14NnFkbC1waHl0ZWMtbWlyYS5kdHNpIgo+ID4gKyNpbmNsdWRlICJpbXg2cWRsLXBoeXRl
-Yy1taXJhLXBlYi1ldmFsLTAxLmR0c2kiCj4gPiDCoAo+ID4gwqAvIHsKPiA+IMKgwqDCoMKgwqDC
-oMKgwqBtb2RlbCA9ICJQSFlURUMgcGh5Qk9BUkQtTWlyYSBRdWFkIENhcnJpZXItQm9hcmQgd2l0
-aAo+ID4gTkFORCI7Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC1w
-aHl0ZWMtbWlyYS1wZWItZXZhbC0wMS5kdHNpCj4gPiBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZx
-ZGwtcGh5dGVjLW1pcmEtcGViLWV2YWwtMDEuZHRzaQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-PiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uM2JjYWQ0MDJkM2VjCj4gPiAtLS0gL2Rldi9udWxsCj4g
-PiArKysgYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLXBoeXRlYy1taXJhLXBlYi1ldmFsLTAx
-LmR0c2kKPiA+IEBAIC0wLDAgKzEsNzEgQEAKPiA+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmll
-cjogKEdQTC0yLjArIE9SIE1JVCkKPiA+ICsvKgo+ID4gKyAqIENvcHlyaWdodCAoQykgMjAxOCBQ
-SFlURUMgTWVzc3RlY2huaWsKPiA+ICsgKiBBdXRob3I6IENocmlzdGlhbiBIZW1wIDxjLmhlbXBA
-cGh5dGVjLmRlPgo+ID4gKyAqLwo+ID4gKwo+ID4gKyNpbmNsdWRlIDxkdC1iaW5kaW5ncy9pbnB1
-dC9pbnB1dC5oPgo+ID4gKwo+ID4gKy8gewo+ID4gK8KgwqDCoMKgwqDCoMKgZ3Bpby1rZXlzIHsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gImdwaW8ta2V5
-cyI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGluY3RybC1uYW1lcyA9ICJk
-ZWZhdWx0IjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwaW5jdHJsLTAgPSA8
-JnBpbmN0cmxfZ3Bpb19rZXlzPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBz
-dGF0dXMgPSAiZGlzYWJsZWQiOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoGhvbWUgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBsYWJlbCA9ICJIb21lIjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgZ3Bpb3MgPSA8JmdwaW82IDE4IEdQSU9fQUNUSVZFX0xPVz47Cj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxpbnV4LGNvZGUg
-PSA8S0VZX1NMRUVQPjsKPiAKPiBLRVlfU0xFRVAgZm9yIEhvbWU/CgpJJ2xsIGNoYW5nZSB0aGUg
-bm9kZSBuYW1lIGFuZCBsYWJlbCBpbiB2MgoKPiAKPiBTaGF3bgo+IAo+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgcG93ZXIgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBsYWJlbCA9ICJQb3dlciBCdXR0b24iOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvcyA9IDwmZ3BpbzUgMjggR1BJT19BQ1RJVkVf
-TE9XPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-bGludXgsY29kZSA9IDxLRVlfV0FLRVVQPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgd2FrZXVwLXNvdXJjZTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqB9Owo+ID4gK8KgwqDCoMKgwqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKgwqDC
-oMKgwqDCoHVzZXJfbGVkczogdXNlci1sZWRzIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBjb21wYXRpYmxlID0gImdwaW8tbGVkcyI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsKPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBwaW5jdHJsLTAgPSA8JnBpbmN0cmxfdXNlcl9sZWRzPjsKPiA+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzdGF0dXMgPSAiZGlzYWJsZWQiOwo+ID4gKwo+
-ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHVzZXItbGVkMSB7Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdwaW9zID0gPCZncGlvNyAx
-IEdQSU9fQUNUSVZFX0hJR0g+Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBsaW51eCxkZWZhdWx0LXRyaWdnZXIgPSAiZ3BpbyI7Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRlZmF1bHQtc3RhdGUgPSAi
-b24iOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdXNlci1sZWQyIHsKPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ3Bpb3MgPSA8JmdwaW83IDAgR1BJT19B
-Q1RJVkVfSElHSD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGxpbnV4LGRlZmF1bHQtdHJpZ2dlciA9ICJncGlvIjsKPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGVmYXVsdC1zdGF0ZSA9ICJvbiI7Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqB1c2VyLWxlZDMgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvcyA9IDwmZ3BpbzUgMjkgR1BJT19BQ1RJVkVf
-SElHSD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGxpbnV4LGRlZmF1bHQtdHJpZ2dlciA9ICJncGlvIjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGVmYXVsdC1zdGF0ZSA9ICJvbiI7Cj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICvCoMKgwqDCoMKgwqDCoH07Cj4gPiAr
-fTsKPiA+ICsKPiA+ICsmaW9tdXhjIHsKPiA+ICvCoMKgwqDCoMKgwqDCoHBpbmN0cmxfZ3Bpb19r
-ZXlzOiBncGlva2V5c2dycCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnNs
-LHBpbnMgPSA8Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoE1YNlFETF9QQURfU0QzX0RBVDZfX0dQSU82X0lPMTjCoMKgwqDCoMKgwqDCoMKgwqAweDEK
-PiA+IGIwYjAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgTVg2UURMX1BBRF9DU0kwX0RBVDEwX19HUElPNV9JTzI4wqDCoMKgwqDCoMKgwqAweDEKPiA+
-IGIwYjAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA+Owo+ID4gK8KgwqDCoMKg
-wqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHBpbmN0cmxfdXNlcl9sZWRzOiB1c2Vy
-bGVkc2dycCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnNsLHBpbnMgPSA8
-Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFE
-TF9QQURfU0QzX0RBVDRfX0dQSU83X0lPMDHCoMKgwqDCoMKgwqDCoMKgwqAweDEKPiA+IGIwYjAK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgTVg2UURM
-X1BBRF9TRDNfREFUNV9fR1BJTzdfSU8wMMKgwqDCoMKgwqDCoMKgwqDCoDB4MQo+ID4gYjBiMAo+
-ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBNWDZRRExf
-UEFEX0NTSTBfREFUMTFfX0dQSU81X0lPMjnCoMKgwqDCoMKgwqDCoDB4MQo+ID4gYjBiMAo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoD47Cj4gPiArwqDCoMKgwqDCoMKgwqB9Owo+
-ID4gK307Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFwLXBoeXRlYy1t
-aXJhLXJkay1uYW5kLmR0cwo+ID4gYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cXAtcGh5dGVjLW1p
-cmEtcmRrLW5hbmQuZHRzCj4gPiBpbmRleCBmMjdkN2FiNDI2MjYuLjA2ZmUwYzUzMTVmYyAxMDA2
-NDQKPiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxcC1waHl0ZWMtbWlyYS1yZGstbmFu
-ZC5kdHMKPiA+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxcC1waHl0ZWMtbWlyYS1yZGst
-bmFuZC5kdHMKPiA+IEBAIC04LDYgKzgsNyBAQAo+ID4gwqAjaW5jbHVkZSAiaW14NnFwLmR0c2ki
-Cj4gPiDCoCNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1waHljb3JlLXNvbS5kdHNpIgo+ID4gwqAj
-aW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS5kdHNpIgo+ID4gKyNpbmNsdWRlICJpbXg2cWRs
-LXBoeXRlYy1taXJhLXBlYi1ldmFsLTAxLmR0c2kiCj4gPiDCoAo+ID4gwqAvIHsKPiA+IMKgwqDC
-oMKgwqDCoMKgwqBtb2RlbCA9ICJQSFlURUMgcGh5Qk9BUkQtTWlyYSBRdWFkUGx1cyBDYXJyaWVy
-LUJvYXJkIHdpdGgKPiA+IE5BTkQiOwo+ID4gLS0gCj4gPiAyLjI1LjEKPiA+IAoK
+On 12/13/21 11:46, Maxim Levitsky wrote:
+> Fix a corner case in which L1 hypervisor intercepts interrupts (INTERCEPT_INTR)
+> and either doesn't use virtual interrupt masking (V_INTR_MASKING) or
+> enters a nested guest with EFLAGS.IF disabled prior to the entry.
+> 
+> In this case, despite the fact that L1 intercepts the interrupts,
+> KVM still needs to set up an interrupt window to wait before it
+> can deliver INTR vmexit.
+> 
+> Currently instead, the KVM enters an endless loop of 'req_immediate_exit'.
+> 
+> Note that on VMX this case is impossible as there is only
+> 'vmexit on external interrupts' execution control which either set,
+> in which case both host and guest's EFLAGS.IF
+> is ignored, or clear, in which case no VMexit is delivered.
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>   arch/x86/kvm/svm/svm.c | 10 +++++++---
+>   1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index e57e6857e0630..c9668a3b51011 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3372,17 +3372,21 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+>   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+>   {
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+> +	bool blocked;
+> +
+>   	if (svm->nested.nested_run_pending)
+>   		return -EBUSY;
+>   
+> +	blocked = svm_interrupt_blocked(vcpu);
+> +
+>   	/*
+>   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+>   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
+>   	 */
+>   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
+> -		return -EBUSY;
+> -
+> -	return !svm_interrupt_blocked(vcpu);
+> +		return !blocked ? -EBUSY : 0;
+> +	else
+> +		return !blocked;
+>   }
+>   
+>   static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
+> 
+
+Right, another case is when CLGI is not trapped and the guest therefore
+runs with GIF=0.  I think that means that a similar change has to be
+done in all the *_allowed functions.
+
+I would write it as
+
+   	if (svm->nested.nested_run_pending)
+   		return -EBUSY;
+   
+	if (svm_interrupt_blocked(vcpu))
+		return 0;
+
+   	/*
+   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
+   	 */
+   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
+		return -EBUSY;
+	return 1;
+
+Paolo

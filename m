@@ -2,238 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F7F4733FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5C0473409
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241826AbhLMS3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235765AbhLMS3j (ORCPT
+        id S241876AbhLMSbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:31:24 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:59894 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230114AbhLMSbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:29:39 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F69C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:29:38 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id l25so55507626eda.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:29:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JVp+xWM4KFb2U5Tm2sWK0RVveL8ra0yv5BzRwMMdZQk=;
-        b=hBZLbXLvI92rLqvMAnKAujm5/V/JDlnB3areZfiRGLNFPhm2QzYakzo3Tvg5xoCfAf
-         kCxLrccvdx6Bm0tKCYeAOgB6V4DghsLj3jFts6M334RI7RBolB9Kg4v88J37K5lWT2wi
-         dJhf5mDgnJdZklW0v3XpfqLG1gRnPbY9wsBA+zR1PZO6jpdjN/IZiyXduL0arYpky93J
-         s1GA5KzB/mwXUb1NPqFRszFLg2b8ip0EUvuvPT9j9b0xKDlnGSGDfsrrHhWJoiuMVxRz
-         btNgHZTWOrvor3tJklRuqQxpI6aA6xLdlvwR2uuaxtR2AO7DdAdSqoYSzM1+Ca3YpB7M
-         1cvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JVp+xWM4KFb2U5Tm2sWK0RVveL8ra0yv5BzRwMMdZQk=;
-        b=QfZ28E1j+TswQenGxJDBMHPQAN+JanlqUss2MYlrHygo7oiYpMA6LZmEwxYoRlTNfD
-         jHTJY62M31Lwd5zlkTVVm62J+w5AhVvJmGtNfXFLN3rtirbtycD5M1XANazMOtE6YUy0
-         1fhdgaeYC/Lj//1t0ZajbZIP2eidNc3czk8Z0ccdBTXcKQRhH05XMLzbPvmT575/NE8K
-         SVR5D5CD+XO0BfGlAcAmhsL1KR7GEfyjs7nDOhP9+ogF1VAY3vTuVndeKGsjoPnLssqH
-         VFkxbNXk0XRlEo8uWIzBHpAhq9P7DBSz7VzHY9sKofuG9pDY3PIhGk+Q7TuJvI19Rtc/
-         4nRQ==
-X-Gm-Message-State: AOAM533CYWVue6ZkirsrpcYHA938Ywp5JWe2RN6tsrTJB7qwRlydGjpS
-        fI7CgF8EZlL1sJ2lfOorkX2BWCV9t3atBGlXM27g+g==
-X-Google-Smtp-Source: ABdhPJxog21TNQxLva1xrLe3ix1jmAP0WPS+rYpoedG974KVZVylJeGmyXpFaVgFi8rllCLkbAaiOuP0AUsjTBljW84=
-X-Received: by 2002:a05:6402:4b:: with SMTP id f11mr535537edu.267.1639420177047;
- Mon, 13 Dec 2021 10:29:37 -0800 (PST)
+        Mon, 13 Dec 2021 13:31:23 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BDITweD032784;
+        Mon, 13 Dec 2021 12:29:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639420199;
+        bh=CIwJXsDVc6MpWMxloZbtRdlpLw1Ztan/9G2UzPwMY0E=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=aQr+rT7AbNmri1BYm4glcZYUB4D0/LtbXNn0eGzLe1Xq4LgTziMH/fZw9NMlUSxOJ
+         eUvgRnz/JUOtWmI/LUlydZmqlDtGvShVqc/335BSewifnzHFovUoMb7LUYizCR9g/k
+         /rYDbql0vQTQMlM2Nnxl+1kL4PPvB9mCQmf5UIQI=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BDITwlR038320
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Dec 2021 12:29:58 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 13
+ Dec 2021 12:29:58 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 13 Dec 2021 12:29:58 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BDITwZX089938;
+        Mon, 13 Dec 2021 12:29:58 -0600
+Date:   Mon, 13 Dec 2021 12:29:58 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        <xen-devel@lists.xenproject.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        <iommu@lists.linux-foundation.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
+Message-ID: <20211213182958.ytj4m6gsg35u77cv@detonator>
+References: <20211210221642.869015045@linutronix.de>
 MIME-Version: 1.0
-References: <20211213092939.074326017@linuxfoundation.org>
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 13 Dec 2021 23:59:25 +0530
-Message-ID: <CA+G9fYtxrPzTkPc-RE6U8ERtcngdqr9xqKDs=czYu6ePyn6QFw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211210221642.869015045@linutronix.de>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 at 15:17, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.85 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.85-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 23:18-20211210, Thomas Gleixner wrote:
+[...]
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> 
+> It's also available from git:
+> 
+>      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v3-part-2
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+[...]
 
-## Build
-* kernel: 5.10.85-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: f6a609e247c6d6f15ec8c4a87c9aef37b7c8e5a5
-* git describe: v5.10.84-133-gf6a609e247c6
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.84-133-gf6a609e247c6
+> ---
+>  drivers/dma/ti/k3-udma-private.c                    |    6 
+>  drivers/dma/ti/k3-udma.c                            |   14 -
+>  drivers/irqchip/irq-ti-sci-inta.c                   |    2 
+>  drivers/soc/ti/k3-ringacc.c                         |    6 
+>  drivers/soc/ti/ti_sci_inta_msi.c                    |   22 --
+>  include/linux/soc/ti/ti_sci_inta_msi.h              |    1 
 
-## No Test Regressions (compared to v5.10.83-131-gea2293709b3c)
+Also while testing on TI K3 platforms, I noticed:
 
-## No Test Fixes (compared to v5.10.83-131-gea2293709b3c)
+msi_device_data_release/msi_device_destroy_sysfs in am64xx-evm / j7200
+[1] https://gist.github.com/nmenon/36899c7819681026cfe1ef185fb95f33#file-am64xx-evm-txt-L1018
+[2] https://gist.github.com/nmenon/36899c7819681026cfe1ef185fb95f33#file-j7200-evm-txt-L1076
 
-## Test result summary
-total: 83789, pass: 71973, fail: 330, skip: 10774, xfail: 712
+Which is not present in vanilla v5.16-rc4
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 255 passed, 4 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 16 passed, 8 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 0 passed, 1 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
+v5.16-rc4:
+https://gist.github.com/nmenon/1aee3f0a7da47d5e9dcb7336b32a70cb
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
+msi-v3-part-2:
+https://gist.github.com/nmenon/36899c7819681026cfe1ef185fb95f33
 
---
-Linaro LKFT
-https://lkft.linaro.org
+(.config https://gist.github.com/nmenon/ec6f95303828abf16a64022d8e3a269f)
+
+Vs:
+next-20211208:
+https://gist.github.com/nmenon/f5ca3558bd5c1fbe62dc5ceb420b536e
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

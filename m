@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF09C472661
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB9C4726EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236182AbhLMJvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbhLMJpv (ORCPT
+        id S235854AbhLMJ4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:56:00 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:42600 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237633AbhLMJvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:45:51 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DAEC0698C8;
-        Mon, 13 Dec 2021 01:41:00 -0800 (PST)
+        Mon, 13 Dec 2021 04:51:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D4F44CE0E99;
-        Mon, 13 Dec 2021 09:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4C2C341CD;
-        Mon, 13 Dec 2021 09:40:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4880ECE0E86;
+        Mon, 13 Dec 2021 09:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20F5C00446;
+        Mon, 13 Dec 2021 09:51:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388457;
-        bh=O1PGDriwSHEBuP3uf4Ecckevvwq7N6/cAK0xB98i31o=;
+        s=korg; t=1639389099;
+        bh=fXR2igRIPaMZ/u1LUJxUYkheQ7XdH1H0uGeN/3Vs8pE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uBXQT1yR3M2Ysu+rI2mFmTX74W0d6XF1RJgQFL2DsT+OUOIGNTUAPltotLnbVvuY/
-         KKGeKmzgct9EO1vO5DK99fI7P/IffnXL81ODhilftr1n6AF/dXZbTcTkjOb2zUapl9
-         TCdyUTr/dTputb1bs3JBc58nVkgCSMrvd6R3BAx0=
+        b=q2DszApeKCIjNUb6cFmBof3AIWnj5Qa9P0f6rCLtYGUXYvjifYB79N/WJlrvvjjT2
+         Hoda514pVPls1hMLJvhtJg5bumC2NJHy0E92BU3KYBwFImGnzlV///sSIMMXDhbBMJ
+         P+XR2CU6jE3I9NgZvRHXmyYo6bE/zil/aDymdFUk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: [PATCH 4.19 55/74] usb: core: config: using bit mask instead of individual bits
+        stable@vger.kernel.org,
+        Grzegorz Szczurek <grzegorzx.szczurek@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Bindushree P <Bindushree.p@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 085/132] i40e: Fix pre-set max number of queues for VF
 Date:   Mon, 13 Dec 2021 10:30:26 +0100
-Message-Id: <20211213092932.639371687@linuxfoundation.org>
+Message-Id: <20211213092942.033154090@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,34 +48,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Hofman <pavel.hofman@ivitera.com>
+From: Mateusz Palczewski <mateusz.palczewski@intel.com>
 
-commit ca5737396927afd4d57b133fd2874bbcf3421cdb upstream.
+commit 8aa55ab422d9d0d825ebfb877702ed661e96e682 upstream.
 
-Using standard USB_EP_MAXP_MULT_MASK instead of individual bits for
-extracting multiple-transactions bits from wMaxPacketSize value.
+After setting pre-set combined to 16 queues and reserving 16 queues by
+tc qdisc, pre-set maximum combined queues returned to default value
+after VF reset being 4 and this generated errors during removing tc.
+Fixed by removing clear num_req_queues before reset VF.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-Link: https://lore.kernel.org/r/20211210085219.16796-2-pavel.hofman@ivitera.com
+Fixes: e284fc280473 (i40e: Add and delete cloud filter)
+Signed-off-by: Grzegorz Szczurek <grzegorzx.szczurek@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Bindushree P <Bindushree.p@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/config.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |    5 -----
+ 1 file changed, 5 deletions(-)
 
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -425,9 +425,9 @@ static int usb_parse_endpoint(struct dev
- 		maxpacket_maxes = full_speed_maxpacket_maxes;
- 		break;
- 	case USB_SPEED_HIGH:
--		/* Bits 12..11 are allowed only for HS periodic endpoints */
-+		/* Multiple-transactions bits are allowed only for HS periodic endpoints */
- 		if (usb_endpoint_xfer_int(d) || usb_endpoint_xfer_isoc(d)) {
--			i = maxp & (BIT(12) | BIT(11));
-+			i = maxp & USB_EP_MAXP_MULT_MASK;
- 			maxp &= ~i;
- 		}
- 		/* fallthrough */
+--- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
+@@ -3787,11 +3787,6 @@ static int i40e_vc_add_qch_msg(struct i4
+ 
+ 	/* set this flag only after making sure all inputs are sane */
+ 	vf->adq_enabled = true;
+-	/* num_req_queues is set when user changes number of queues via ethtool
+-	 * and this causes issue for default VSI(which depends on this variable)
+-	 * when ADq is enabled, hence reset it.
+-	 */
+-	vf->num_req_queues = 0;
+ 
+ 	/* reset the VF in order to allocate resources */
+ 	i40e_vc_reset_vf(vf, true);
 
 

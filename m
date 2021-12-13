@@ -2,110 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C16C472A53
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 279BB4729DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbhLMKim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243976AbhLMKiX (ORCPT
+        id S240644AbhLMKZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:25:54 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:65029 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242212AbhLMKXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:38:23 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08704C04C896;
-        Mon, 13 Dec 2021 02:24:56 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id o13so26085794wrs.12;
-        Mon, 13 Dec 2021 02:24:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Lps8zlY0plffu89oo+ZuKtBVR2UFB4mYLL1XQcOR5SA=;
-        b=Za7I3FFfxdMWiq9GbGcKIbeq0brDgYen8LmJIsEVOpyPpHwYZbppF3xfqtlIfENdP1
-         jHzUFwVAP2of3Xe4rLtkWRMId6pLI74v5FjBEJhPFD2Qe3miPuN6o+ncw3dknYNTDqMQ
-         wi42NVQiYAJAWQuwYkLNh0hK3QsTiXETLvNGR0EhwzmqH4c74hCm5xpFWWJMJYXIQTGT
-         BYc3zFYCdPn8GMYWHCfq2KJLnwt2dEmjvKUfVgKQT2HwZ3pO9WkLRmLq19EdRyHkAMrM
-         fL4N8RW+umwAa887wcZi43Se2SgJtZuq1L7bW2zIXPKWZgkAjcr0R4miICMkPdiQ/sVh
-         cxTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Lps8zlY0plffu89oo+ZuKtBVR2UFB4mYLL1XQcOR5SA=;
-        b=whCIDkFaj4gYg5jFIpKMmN/dS1Sx/G9OJj85S8El46UnnFGIiHLl59m6pDLi45oofD
-         tXEoRs4c+7nCVSdE6TpH+IPXngA+JSrP/JzzWIkdmwWikt2N/7cbzNokjmXsTUOqzZvx
-         bG2E+DUbDdAtQUlF9Kno22DO6UYodfJL0tHxebNXnkmfagGVFKgCiMP0ZUfuSalzVvI7
-         bQZoamgsJUh8aFQLD3tkKvgCJHtnFfXWXD08ydx8whQVMQ7Imt3LeZTLuENaE9B+4MlS
-         8jZWuAvxrxXCxWRu6lSFgQcL+IzhyQDOmNfkkm/lP2QG0+09LSaT3d09xvR1G2ytL2uY
-         pcTg==
-X-Gm-Message-State: AOAM531GWe77MkSSYFtxZYi9Q3NSC2SApsMqhLtIVNmlY+sdDTFCioTl
-        gSHJuxrLLLuT20RQTmwQZ3o=
-X-Google-Smtp-Source: ABdhPJwFcQlQB6qp/Z8EgEGC4clwRl8Lug9EUHupaG/P+GoEeE207ABb2BWX1xTZnxDob1Ye9DojIQ==
-X-Received: by 2002:a5d:5643:: with SMTP id j3mr31204212wrw.138.1639391094112;
-        Mon, 13 Dec 2021 02:24:54 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id o3sm7170098wms.10.2021.12.13.02.24.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 02:24:53 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:24:50 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     digetx@gmail.com, jckuo@nvidia.com, jonathanh@nvidia.com,
-        kishon@ti.com, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
-        vkoul@kernel.org
-Subject: Re: [PATCH v2] phy: tegra: xusb: Fix return value of
- tegra_xusb_find_port_node function
-Message-ID: <YbcfcpkwxCkeGP3f@orome>
-References: <942f943c-9ec8-9887-aa6d-4d133821beca@gmail.com>
- <20211213020507.1458-1-linmq006@gmail.com>
+        Mon, 13 Dec 2021 05:23:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639391011; x=1670927011;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RW19rszBP6toUbDeC1RTtY+8YV4n8NBBlhMnFptQuwU=;
+  b=yl3RvcKOWamkj9D0eynwoC70JxvShvWgd5bjOSIZJgA/2kOSqO15c9dx
+   wvDI6KpCM/Pa4yCIoUOPRm5pw8BFXy0qRQJVHTlK7oDDbD3hD3pTPC/n+
+   YuLQjdEJ+FsBSuu4YmWxa/cv5ITw4Wfrdpnf1j3NKnkl5ADA0e4Yxy706
+   fxB7ePP1oSgD3a+cLk0AKhT1+I9r4KFASnKvUztrOcK8AY6qmQPemTx6q
+   +hRn8JrqkM2SJOETFktdwE7UQU8qqQYJI12xnC4IT1+xtR8Nrs+VbFS1T
+   KNeF2+VAxmrT28j2Aaytq6EGvBpuRbZxDGMgSkziNwldhYMLbNA7w+cB5
+   g==;
+IronPort-SDR: /5CJsChaOHgaInoE5fLrPx6y/v9MLhiY6SQy3jAJfsvXR7CpYHiSkVhADnurO9b9y0i9D2hQuD
+ CyUj4SiFZ4loXQNxYEgA8E94tVFyifxY2kSB3H8raErHsU8cbQ/xPmX+0DC7USZQveydBwannF
+ PdxY534HzVKTtlZYsDfJSoQirHVMKA829NSfdjrFYhrgnxhg2r+X6hoz1OMykbjjAMvhhIdSqS
+ 3Fn6I11julh7rnjC886X+cIZ3u1RoePM1IJDGr6DW7CpCxSIJs+nADazf5T/Jd1vVaDQuQpjf3
+ 0CoroNbzkxLuh3D/DSvhY4b2
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="146447267"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2021 03:23:29 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 13 Dec 2021 03:23:27 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 13 Dec 2021 03:23:27 -0700
+Date:   Mon, 13 Dec 2021 11:25:29 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>
+Subject: Re: [PATCH net-next v3 6/6] net: lan966x: Add switchdev support
+Message-ID: <20211213102529.tzdvekwwngo4zgex@soft-dev3-1.localhost>
+References: <20211209094615.329379-1-horatiu.vultur@microchip.com>
+ <20211209094615.329379-7-horatiu.vultur@microchip.com>
+ <20211209133616.2kii2xfz5rioii4o@skbuf>
+ <20211209164311.agnofh275znn5t5c@soft-dev3-1.localhost>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="W2swrXWGj6l4aaDV"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20211213020507.1458-1-linmq006@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+In-Reply-To: <20211209164311.agnofh275znn5t5c@soft-dev3-1.localhost>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 12/09/2021 17:43, Horatiu Vultur wrote:
+> > > +int lan966x_register_notifier_blocks(struct lan966x *lan966x)
+> > > +{
+> > > +     int err;
+> > > +
+> > > +     lan966x->netdevice_nb.notifier_call = lan966x_netdevice_event;
+> > > +     err = register_netdevice_notifier(&lan966x->netdevice_nb);
+> > > +     if (err)
+> > > +             return err;
+> > > +
+> > > +     lan966x->switchdev_nb.notifier_call = lan966x_switchdev_event;
+> > > +     err = register_switchdev_notifier(&lan966x->switchdev_nb);
+> > > +     if (err)
+> > > +             goto err_switchdev_nb;
+> > > +
+> > > +     lan966x->switchdev_blocking_nb.notifier_call = lan966x_switchdev_blocking_event;
+> > > +     err = register_switchdev_blocking_notifier(&lan966x->switchdev_blocking_nb);
+> > > +     if (err)
+> > > +             goto err_switchdev_blocking_nb;
+> > > +
+> > > +     lan966x_owq = alloc_ordered_workqueue("lan966x_order", 0);
+> > > +     if (!lan966x_owq) {
+> > > +             err = -ENOMEM;
+> > > +             goto err_switchdev_blocking_nb;
+> > > +     }
+> > 
+> > These should be singleton objects, otherwise things get problematic if
+> > you have more than one switch device instantiated in the system.
+> 
+> Yes, I will update this.
 
---W2swrXWGj6l4aaDV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Actually I think they need to be part of lan966x.
+Because we want each lan966x instance to be independent of each other.
+This is not seen in this version but is more clear in the next version
+(v4).
 
-On Mon, Dec 13, 2021 at 02:05:07AM +0000, Miaoqian Lin wrote:
-> callers of tegra_xusb_find_port_node() function only do NULL checking for
-> the return value. return NULL instead of ERR_PTR(-ENOMEM) to keep
-> consistent.
->=20
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/phy/tegra/xusb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> > 
+> 
+> -- 
+> /Horatiu
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---W2swrXWGj6l4aaDV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG3H3IACgkQ3SOs138+
-s6HJrw/+PwLmkXa7Ame0lq2zyamq1ugkXKFFAabK3ZHFV8Epsuyl4tT+FKNn2ShM
-y7Dy/Vqh6SVtb4CXBFc25tI4SyfoH1uRALMdFc8CqUyPGhN4HXOOIPRrikUyeWyg
-xROkHn5Fnjf3vdkBat3vwVEHZiu++AZTMz97GOsNP25lwMIEmw/sGw9KBFt+cCTV
-S8g/ihfq8fncGHOIO7soGncJyjZPQhWB/R7mur7A5eSelfj+OKW+BqeZUwhI167C
-+yvONyxgtB8EZmNWGnw5jrV384n0hw6kOJGR9G4tsZRV9kVWGL7vTGcdiAZiDB/v
-GIZGGdzNiCKFSp9di9nj8lkvl28YGJrgQgg7VfT1MF5KfDZCW0dohgq+KrrBPw4N
-/IxAVEvF8rYmuESrL4UuPS8KVjAhjN0DlvtJvWoBumq3rhx0FsD5OpuZik1daN8c
-/eXWcxlvAZZZSYyyiNMIxTIPDixHxj3s2J9/9zTfDpNZYuShOBR2t43wYTiCUbfr
-HRIyaUO73BHbOU1wUeutEO4IS9pqL4YU2a2bnELG5GGG6HQ1/HmdIeMWVjgeebux
-LG1eqUqKSoV13LWt8ULgli4Xz3Ra+y6PJpbB1a1hsINgCmuv0PpDG2qkHS2ZKYbJ
-9XiWzxcgulRpx1OzLOFkdkcfbRt/zWCCiOK1bQiJIG5mwrI3NQo=
-=JIfE
------END PGP SIGNATURE-----
-
---W2swrXWGj6l4aaDV--
+-- 
+/Horatiu

@@ -2,86 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D10747347B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C766473485
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242047AbhLMS5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S242056AbhLMS7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236468AbhLMS5J (ORCPT
+        with ESMTP id S237544AbhLMS7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:57:09 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C45C061574;
-        Mon, 13 Dec 2021 10:57:09 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BA0771EC058C;
-        Mon, 13 Dec 2021 19:57:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639421823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vug8c6LeiYsA8ecHoSXfAGDN69ymkQs1b6qpIjHtAAE=;
-        b=jaXPqYRD1U/EpsAljNHIQnZJtaf+hUyUFWtbuqD43Jf/AApyBPA7ymJZoxF8/uHXBJXYLH
-        J+hAKMqZn7J728aTOtDyDHG1AlBvR+BYoyc+qbyHjOfXQvC618ovAS0L4k7FrZBCP0FX+L
-        oLfQeqzBGjssQRAnKvq9Pg7ZaU0GOek=
-Date:   Mon, 13 Dec 2021 19:57:02 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     john.p.donnelly@oracle.com
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 00/10] support reserving crashkernel above 4G on
- arm64 kdump
-Message-ID: <YbeXfkEkqp1Js3TP@zn.tnic>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <5ef3ef54-33db-3cb2-4908-8bd1254749e3@oracle.com>
+        Mon, 13 Dec 2021 13:59:00 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DA4C061574;
+        Mon, 13 Dec 2021 10:59:00 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id d10so40751009ybe.3;
+        Mon, 13 Dec 2021 10:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IqQC7tgPMbNXR/+JNvw896EE85G5XX2sbVCCzLSsfQ4=;
+        b=LyLcrbv44h8PePiceZ/nDsApu2MVHNPwKg9S2QdPg0p2XM4XPyXHVHdyFiGR5Oltm6
+         BHW3hWBwoB1sUksHzCz6uosCecnUrFPFxV8Sfym4bN84uHkuYzjPaW0Kqoa0e57Rbo0+
+         K5cgzGWsAfVmmS2GhHS9n0DtUuGLoid7zj0Aibhp+oDNua82y5zG5HC2otaQjiq/XHCU
+         OrImPA8Uoqht65JDTQj8R3YtGfULChMDHFIxrv+P19W5QTrr/83bKwjZsIY1JkXURnpX
+         jPcJOkb/aVdDUwcGIhgwEaXcj+Fsi5HZ6rLhFdG80uFgl6IWxtemnim28PywspqHVWmY
+         FKBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IqQC7tgPMbNXR/+JNvw896EE85G5XX2sbVCCzLSsfQ4=;
+        b=D8aYOFEKjsNqv9pREHuXwt1VW6OY25/+WerYZPcoV3exF8hmAtfoHfMYXK2EK4AUs5
+         CVYxay557bUMVA4UgRVewthYimTCeFYi59w7gajySJRMXmK0GPXqF0wywx/lONO7qCyp
+         k6Fjw3RPwN2ZmTg2Mp1obwrK/ehXW7lxhQN7+kssZZ5rv8EVvqmtc7YlrviADHLdBYe/
+         E6iEabYzVnAmnfB+n9MkV7lazpg6ktZUzZNeqNILmriLled510hjnBZsf4Lhlx5KAc4a
+         BrOJH24Gs2foW1dOFXW1i1B6W+vWEF/j8SwNkgdSCcEDndIvki2byW632iWEzKEcmblo
+         T8Jw==
+X-Gm-Message-State: AOAM5316alofOwC+FlTxZTXoNtHRFMkuiKLuZbUIj4dH2vIWn3vRhALR
+        c+gQZyVzJU0TT5Wu/x2byupt3CKKYzptajLu4Vo=
+X-Google-Smtp-Source: ABdhPJxLF+T1Na0RFVC8OoLY9i6ikPWpX5kC9cOOlXjhXiKjEofITC6KbzD5umxoHToYB7r1XD1HdStFk+/KK223cE4=
+X-Received: by 2002:a25:7316:: with SMTP id o22mr406530ybc.640.1639421939347;
+ Mon, 13 Dec 2021 10:58:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5ef3ef54-33db-3cb2-4908-8bd1254749e3@oracle.com>
+References: <20211213092930.763200615@linuxfoundation.org> <CADVatmPsqW050=k07RDChjnf_F+MJfkLzHiRcdeoWQ7Mws_qMw@mail.gmail.com>
+In-Reply-To: <CADVatmPsqW050=k07RDChjnf_F+MJfkLzHiRcdeoWQ7Mws_qMw@mail.gmail.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Mon, 13 Dec 2021 18:58:23 +0000
+Message-ID: <CADVatmMMe7NGpX9CcViLrhxP69gJ6m+9rViEVuh0E6j1QXGDVg@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/74] 4.19.221-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 08:37:48AM -0600, john.p.donnelly@oracle.com wrote:
-> After 2 years, and 17 versions, can we now get this series promoted into a
-> build ?
+On Mon, Dec 13, 2021 at 4:27 PM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> HI Greg,
+>
+> On Mon, Dec 13, 2021 at 9:51 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 4.19.221 release.
+> > There are 74 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> > Anything received after that time might be too late.
+>
+> Just an initial report. mips allmodconfig is failing with the following error.
 
-For example:
+Ignore this please. I am not seeing the error on a clean build. Need
+to check what went wrong with my build script.
 
-$ ./scripts/get_maintainer.pl -f Documentation/admin-guide/kdump/kdump.rst
-Baoquan He <bhe@redhat.com> (maintainer:KDUMP)
-Vivek Goyal <vgoyal@redhat.com> (reviewer:KDUMP)
-Dave Young <dyoung@redhat.com> (reviewer:KDUMP)
-Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-kexec@lists.infradead.org (open list:KDUMP)
-
-I see only two acks from Baoquan.
-
-So yes, this needs to go through the normal review process first.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards
+Sudip

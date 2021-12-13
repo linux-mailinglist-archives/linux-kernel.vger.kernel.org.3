@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0894725E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C184728EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236783AbhLMJra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:47:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57004 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235220AbhLMJn1 (ORCPT
+        id S238162AbhLMKQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:16:39 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:46178 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235027AbhLMJ45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:43:27 -0500
+        Mon, 13 Dec 2021 04:56:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0F14B80E19;
-        Mon, 13 Dec 2021 09:43:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124CBC00446;
-        Mon, 13 Dec 2021 09:43:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E16FACE0E86;
+        Mon, 13 Dec 2021 09:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D08C34600;
+        Mon, 13 Dec 2021 09:56:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388604;
-        bh=QYZw4Oi+QsrIpZP8i5jCONO2o298oXGsuEOvFbztz38=;
+        s=korg; t=1639389411;
+        bh=uf172LFsvGkogJ4pSihMNlwgTlNtAhValDJMtbHFdNU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fBStNkp1OJEDmanW8D1TN8ZrXxLbJK/WgUDgKEFoGPw4m+GdesxoZfU10CFE19D40
-         9LxPLyz31k4AHu1s/eIkf8YbNZ1BesZ4oqz/IhBQX3ndumwwDifQdDObuGaXdjUbsl
-         EhD+cfUWzJBbN1dzn6tAoFtC4L6NWOyft5SZKj3Q=
+        b=EqZV7rrhQkoJ6KfHCcuJ3fAXI6yfCtTjBxx0083FJW5U1tNpYJTi2n+hwphBp/nD5
+         ohb4dFCjo7Rx/FvFV53uVg1OqzAyJNNB11HGLzlD79y/Ajpqm6X5Qye2e0LnSqRMdZ
+         XJlMJcB/nUHJafvyGrH1d9TCivfvx/2Nqeb7/RIk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.4 34/88] btrfs: replace the BUG_ON in btrfs_del_root_ref with proper error handling
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.15 089/171] mmc: renesas_sdhi: initialize variable properly when tuning
 Date:   Mon, 13 Dec 2021 10:30:04 +0100
-Message-Id: <20211213092934.418604006@linuxfoundation.org>
+Message-Id: <20211213092948.047760768@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,36 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-commit 8289ed9f93bef2762f9184e136d994734b16d997 upstream.
+commit 7dba402807a85fa3723f4a27504813caf81cc9d7 upstream.
 
-I hit the BUG_ON() with generic/475 test case, and to my surprise, all
-callers of btrfs_del_root_ref() are already aborting transaction, thus
-there is not need for such BUG_ON(), just go to @out label and caller
-will properly handle the error.
+'cmd_error' is not necessarily initialized on some error paths in
+mmc_send_tuning(). Initialize it.
 
-CC: stable@vger.kernel.org # 5.4+
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: 2c9017d0b5d3 ("mmc: renesas_sdhi: abort tuning when timeout detected")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211130132309.18246-1-wsa+renesas@sang-engineering.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/root-tree.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/mmc/host/renesas_sdhi_core.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/btrfs/root-tree.c
-+++ b/fs/btrfs/root-tree.c
-@@ -371,7 +371,8 @@ int btrfs_del_root_ref(struct btrfs_tran
- 	key.offset = ref_id;
- again:
- 	ret = btrfs_search_slot(trans, tree_root, &key, path, -1, 1);
--	BUG_ON(ret < 0);
-+	if (ret < 0)
-+		goto out;
- 	if (ret == 0) {
- 		leaf = path->nodes[0];
- 		ref = btrfs_item_ptr(leaf, path->slots[0],
+--- a/drivers/mmc/host/renesas_sdhi_core.c
++++ b/drivers/mmc/host/renesas_sdhi_core.c
+@@ -673,7 +673,7 @@ static int renesas_sdhi_execute_tuning(s
+ 
+ 	/* Issue CMD19 twice for each tap */
+ 	for (i = 0; i < 2 * priv->tap_num; i++) {
+-		int cmd_error;
++		int cmd_error = 0;
+ 
+ 		/* Set sampling clock position */
+ 		sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_TAPSET, i % priv->tap_num);
 
 

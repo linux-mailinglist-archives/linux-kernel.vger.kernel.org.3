@@ -2,162 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8644734D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB474734D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238685AbhLMTTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:19:43 -0500
-Received: from mail.efficios.com ([167.114.26.124]:47906 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbhLMTTm (ORCPT
+        id S242240AbhLMTUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238814AbhLMTUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:19:42 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C5D8931CEC2;
-        Mon, 13 Dec 2021 14:19:41 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id batosGk9nsmz; Mon, 13 Dec 2021 14:19:41 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 0331B31CF38;
-        Mon, 13 Dec 2021 14:19:41 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0331B31CF38
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1639423181;
-        bh=6IJ768Q+9Et3bA7CRGWla9iClFZ1ud4C606P/yp0cMQ=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=E7EIcnzHexB40Oyf/Hdh4Y9EJRqZaGx1l8tKcCVe7Yw4xragAeBvn91oPBmjma+xA
-         2Tf3znBAfXv2wBbaS2R07c8HVll6oMhuhEDbPRbHLPcE9CRVW6skR0DtUNWPwBJ3h/
-         VNKfRwtOaJPfVGYV3MYLezON+hF69nHOh7ZV5Eg/tvkPFXjg+DdSwKhBiMR/VUq2Py
-         kSwLhp5+68j1IR2jvCcJinO2kqJ/GwMxXEvpQ3QHH4JMLY0UMUoYWEYZK7wYgwDACi
-         L8NNvggWN6NernQyRsRMAgZxeS5R9FfO6+CPxvwicfqwYwy/6qcUJ2nGEbBxE2FcDs
-         k7Dfp5yy4JpqA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id MZIzfRKoEqo1; Mon, 13 Dec 2021 14:19:40 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id E57DA31CD70;
-        Mon, 13 Dec 2021 14:19:40 -0500 (EST)
-Date:   Mon, 13 Dec 2021 14:19:40 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     linux-api <linux-api@vger.kernel.org>,
-        Jann Horn <jannh@google.com>,
-        libc-alpha <libc-alpha@sourceware.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        paulmck <paulmck@kernel.org>
-Message-ID: <697825714.30478.1639423180784.JavaMail.zimbra@efficios.com>
-In-Reply-To: <87tufctk82.fsf@oldenburg.str.redhat.com>
-References: <87tufctk82.fsf@oldenburg.str.redhat.com>
-Subject: Re: rseq + membarrier programming model
+        Mon, 13 Dec 2021 14:20:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA15C061574;
+        Mon, 13 Dec 2021 11:20:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58BF0B812A9;
+        Mon, 13 Dec 2021 19:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BDA6C34602;
+        Mon, 13 Dec 2021 19:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639423213;
+        bh=dVOQkoPSpvtHpQHWFwN+bzQdI2n0UetrZqTKARhnvJw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=KcYA8pr5SP80aeDn8a6cV0q2h+gJKeexOAmYyF0MiZTki1vM30gh7mWUuuEAdxxB+
+         a8wi9WMj8vySayN+ta1q4cr0cRZbnQ6OpWGgdJQiZ/7if1Nuy6VJKMhlbosz24AZCE
+         EvEzNDrtOKX0lFvYQED2eoOULa5ptXLjapfXlu8+ttZ94WaZALmKougseWNHPaQ2WI
+         ZTsaPJu54nKFrWntnV036bbdxv/OhTtf+6uj1LKE3olVU1nG0tOiqTC86+8U0TJ3ds
+         pptklgkj4Gd4GIaU95d1W6wo8NY9rVpejmjLKhTFA5HcuXOna1e37lEvMyqbr/BRk8
+         us+cKZ3tb/Ayw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EA0E35C0B9E; Mon, 13 Dec 2021 11:20:12 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:20:12 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, josh@joshtriplett.org,
+        rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        urezki@gmail.com, boqun.feng@gmail.com
+Subject: Re: [PATCH] rcu/exp: Fix check for idle context in rcu_exp_handler
+Message-ID: <20211213192012.GQ641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211213061024.24285-1-quic_neeraju@quicinc.com>
+ <20211213113455.GB782195@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4173 (ZimbraWebClient - FF94 (Linux)/8.8.15_GA_4177)
-Thread-Topic: rseq + membarrier programming model
-Thread-Index: Jeg44R6PVmLUvL/g/E9uUG22JuKmYg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213113455.GB782195@lothringen>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Dec 13, 2021, at 1:47 PM, Florian Weimer fweimer@redhat.com wrote:
-
-> I've been studying Jann Horn's biased locking example:
+On Mon, Dec 13, 2021 at 12:34:55PM +0100, Frederic Weisbecker wrote:
+> On Mon, Dec 13, 2021 at 11:40:24AM +0530, Neeraj Upadhyay wrote:
+> > For PREEMPT_RCU, the rcu_exp_handler() function checks
+> > whether the current CPU is in idle, by calling
+> > rcu_dynticks_curr_cpu_in_eqs(). However, rcu_exp_handler()
+> > is called in IPI handler context. So, it should be checking
+> > the idle context using rcu_is_cpu_rrupt_from_idle(). Fix this
+> > by using rcu_is_cpu_rrupt_from_idle() instead of
+> > rcu_dynticks_curr_cpu_in_eqs(). Non-preempt configuration
+> > already uses the correct check.
+> > 
+> > Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 > 
->  Re: [PATCH 0/4 POC] Allow executing code and syscalls in another address space
->  <https://lore.kernel.org/linux-api/CAG48ez02UDn_yeLuLF4c=kX0=h2Qq8Fdb0cer1yN8atbXSNjkQ@mail.gmail.com/>
-> 
-> It uses MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ as part of the biased lock
-> revocation.
-> 
-> How does the this code know that the process has called
-> MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ?
+> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 
-I won't speak for this code snippet in particular, but in general
-issuing MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ from a thread which
-belongs to a process which has not performed
-MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ will result in
-membarrier returning -EPERM. If the kernel is built without CONFIG_RSEQ
-support, it will return -EINVAL:
+Queued for further review and testing, thank you both!
 
-membarrier_private_expedited():
+							Thanx, Paul
 
-        } else if (flags == MEMBARRIER_FLAG_RSEQ) {
-                if (!IS_ENABLED(CONFIG_RSEQ))
-                        return -EINVAL;
-                if (!(atomic_read(&mm->membarrier_state) &
-                      MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ_READY))
-                        return -EPERM;
-
-If you want to create code which optionally depends on availability
-of EXPEDITED_RSEQ membarrier, I suspect you will want to perform
-registration from a library constructor, and keep track of registration
-success/failure in a static variable within the library.
-
-> Could it fall back to
-> MEMBARRIER_CMD_GLOBAL instead?
-
-No. CMD_GLOBAL does not issue the required rseq fence used by the
-algorithm discussed. Also, CMD_GLOBAL has quite a few other shortcomings:
-it takes a while to execute, and is incompatible with nohz_full kernels.
-
-> Why is it that MEMBARRIER_CMD_GLOBAL
-> does not require registration (the broader/more expensive barrier), but
-> the more restricted versions do?
-
-The more restricted versions (which require explicit registration) have a
-close integration with the Linux scheduler, and in some cases require
-additional code to be executed when scheduling between threads which
-belong to different processes, for instance the for "SYNC_CORE" membarrier,
-which is useful for JITs:
-
-static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
-{
-        if (current->mm != mm)
-                return;
-        if (likely(!(atomic_read(&mm->membarrier_state) &
-                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE)))
-                return;
-        sync_core_before_usermode();
-}
-
-Also, for the "global-expedited" commands, these can generate IPIs which will
-interrupt the flow of threads running on behalf of a registered process.
-Therefore, in order to make sure we do not add delays to real-time sensitive
-applications, we made this registration "opt-in".
-
-In order to make sure the programming model is the same for expedited
-private/global plain/sync-core/rseq membarrier commands, we require that
-each process perform a registration beforehand.
-
-> 
-> Or put differently, why wouldn't we request
-> MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ unconditionally at
-> process start in glibc, once we start biased locking in a few places?
-
-The registration of membarrier expedited can be either performed immediately
-when the process starts, or later, possibly when there are other threads
-running concurrently. Note however that the registration scheme has been
-optimized for the scenario where it is called when a single thread is
-running in the process (see sync_runqueues_membarrier_state()). Otherwise
-we need to use the more heavyweight synchronize_rcu(). So my advice would
-be to perform the membarrier expedited registration while the process
-is still single-threaded if possible, rather than postpone this and
-do it entirely lazily on first use, which may happen while other
-threads are already running.
-
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> Florian
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> > ---
+> >  kernel/rcu/tree_exp.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > index 237a79989aba..1568c8ef185b 100644
+> > --- a/kernel/rcu/tree_exp.h
+> > +++ b/kernel/rcu/tree_exp.h
+> > @@ -656,7 +656,7 @@ static void rcu_exp_handler(void *unused)
+> >  	 */
+> >  	if (!depth) {
+> >  		if (!(preempt_count() & (PREEMPT_MASK | SOFTIRQ_MASK)) ||
+> > -		    rcu_dynticks_curr_cpu_in_eqs()) {
+> > +		    rcu_is_cpu_rrupt_from_idle()) {
+> >  			rcu_report_exp_rdp(rdp);
+> >  		} else {
+> >  			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
+> > -- 
+> > 2.17.1
+> > 

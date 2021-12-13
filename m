@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AE447275C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 463634727CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbhLMKAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238896AbhLMJyx (ORCPT
+        id S235165AbhLMKFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:05:01 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:48236 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238133AbhLMJ7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:54:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F837C08EE28;
-        Mon, 13 Dec 2021 01:45:55 -0800 (PST)
+        Mon, 13 Dec 2021 04:59:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16A74B80E0E;
-        Mon, 13 Dec 2021 09:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406EAC341C5;
-        Mon, 13 Dec 2021 09:45:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 46E6ECE0F1C;
+        Mon, 13 Dec 2021 09:59:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC6EBC34602;
+        Mon, 13 Dec 2021 09:59:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388752;
-        bh=whCGHq9Jf7S43kKFy5mkFVyuu5pEgSFlTrb85xag2iY=;
+        s=korg; t=1639389590;
+        bh=H7Qak2Uu8GQGaaJfU4DC3QJww0IaBikf2/9RwFQyyQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KEXZWS3wr14C5Jvb2rupGk6mKTfwNQxLWIhc0uye1U/p0gNRWJGeNkSWHxkjk5i6b
-         AmUpX2XK3EnFz1jBBX8CDEJs7tErCkjaCykpbkjQwyPlnMWo1ZJsHPXnedWAr14Sln
-         u6ZBO8L43jqb1fdU/T+E7ZBm0E1cYyVuAGDwgr6U=
+        b=rYqPzLNGRRPfhJOSoE/1n/grASjW84ymxaiZJZ94cSDnoGw9C6QTyxM4j8140d2XK
+         que4ZYxJovv28D18swLptBWuBgdqC2HjlJdZI8UpXioujPWUNrJbeTYd0j0bAHo4XB
+         Ay2rBb2ECbOOavyCnoMvDvG/gvMNuJpNG5zXDt0s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.4 84/88] irqchip/armada-370-xp: Fix support for Multi-MSI interrupts
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH 5.15 139/171] usb: core: config: fix validation of wMaxPacketValue entries
 Date:   Mon, 13 Dec 2021 10:30:54 +0100
-Message-Id: <20211213092936.105028520@linuxfoundation.org>
+Message-Id: <20211213092949.714921110@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,59 +45,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
 
-commit d0a553502efd545c1ce3fd08fc4d423f8e4ac3d6 upstream.
+commit 1a3910c80966e4a76b25ce812f6bea0ef1b1d530 upstream.
 
-irq-armada-370-xp driver already sets MSI_FLAG_MULTI_PCI_MSI flag into
-msi_domain_info structure. But allocated interrupt numbers for Multi-MSI
-needs to be properly aligned otherwise devices send MSI interrupt with
-wrong number.
+The checks performed by commit aed9d65ac327 ("USB: validate
+wMaxPacketValue entries in endpoint descriptors") require that initial
+value of the maxp variable contains both maximum packet size bits
+(10..0) and multiple-transactions bits (12..11). However, the existing
+code assings only the maximum packet size bits. This patch assigns all
+bits of wMaxPacketSize to the variable.
 
-Fix this issue by using function bitmap_find_free_region() instead of
-bitmap_find_next_zero_area() to allocate aligned interrupt numbers.
-
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Fixes: a71b9412c90c ("irqchip/armada-370-xp: Allow allocation of multiple MSIs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211125130057.26705-2-pali@kernel.org
+Fixes: aed9d65ac327 ("USB: validate wMaxPacketValue entries in endpoint descriptors")
+Cc: stable <stable@vger.kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Link: https://lore.kernel.org/r/20211210085219.16796-1-pavel.hofman@ivitera.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-armada-370-xp.c |   14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/usb/core/config.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/irqchip/irq-armada-370-xp.c
-+++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -232,16 +232,12 @@ static int armada_370_xp_msi_alloc(struc
- 	int hwirq, i;
- 
- 	mutex_lock(&msi_used_lock);
-+	hwirq = bitmap_find_free_region(msi_used, PCI_MSI_DOORBELL_NR,
-+					order_base_2(nr_irqs));
-+	mutex_unlock(&msi_used_lock);
- 
--	hwirq = bitmap_find_next_zero_area(msi_used, PCI_MSI_DOORBELL_NR,
--					   0, nr_irqs, 0);
--	if (hwirq >= PCI_MSI_DOORBELL_NR) {
--		mutex_unlock(&msi_used_lock);
-+	if (hwirq < 0)
- 		return -ENOSPC;
--	}
--
--	bitmap_set(msi_used, hwirq, nr_irqs);
--	mutex_unlock(&msi_used_lock);
- 
- 	for (i = 0; i < nr_irqs; i++) {
- 		irq_domain_set_info(domain, virq + i, hwirq + i,
-@@ -259,7 +255,7 @@ static void armada_370_xp_msi_free(struc
- 	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
- 
- 	mutex_lock(&msi_used_lock);
--	bitmap_clear(msi_used, d->hwirq, nr_irqs);
-+	bitmap_release_region(msi_used, d->hwirq, order_base_2(nr_irqs));
- 	mutex_unlock(&msi_used_lock);
- }
- 
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -406,7 +406,7 @@ static int usb_parse_endpoint(struct dev
+ 	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+ 	 * (see the end of section 5.6.3), so don't warn about them.
+ 	 */
+-	maxp = usb_endpoint_maxp(&endpoint->desc);
++	maxp = le16_to_cpu(endpoint->desc.wMaxPacketSize);
+ 	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+ 		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
+ 		    cfgno, inum, asnum, d->bEndpointAddress);
 
 

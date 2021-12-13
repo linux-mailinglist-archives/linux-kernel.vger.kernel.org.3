@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FF64734D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAF54734D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242252AbhLMTSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S242354AbhLMTTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242260AbhLMTSt (ORCPT
+        with ESMTP id S242294AbhLMTSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:18:49 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EB0C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:48 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id y7so11925890plp.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:48 -0800 (PST)
+        Mon, 13 Dec 2021 14:18:50 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC20C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:50 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so13128534pjj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7I3/ylyyWl5IlmqGZ0OG/LXzIE6BgtyXBZbZqV7mIfI=;
-        b=YEt96t0I/zwnRPtcUJWtCB32yHqCK81frW17Oeg4ukU+lS+COyrZiOD4g2DILT8Psc
-         WGnARMS9aMP7uG0cwMmPVhtkgiOi2mkEMokHczj2acWZc31ieT3c8ukxhhoxQUbEnhrj
-         QfTAtuSVJ8YjVIBye9Pjoa/tA2KMnbeo/OOe3f3TqaENJo6jTHL2XEKOvsDiTD0LUUwV
-         Bsn2p3ao7Gtvxr8QOqw/+HLwb+/kiWgyeWPOCvQSUPVpMJRygrn26nnmp4+ZLAeQkpmI
-         1zU9qmI9B6GMtlLaMlnknaUO3E7x2F++Fu+9B5ubRV8jUwtnwu78uPPlLzjQI/5gxDDX
-         8VUg==
+        bh=o3N2jiGWgxs5xgqtqhRLupRBvzYgm+RjsEtpOg8EXqs=;
+        b=cOxpxTHwQm+gY5ptQYH6zwc4T4dr79EPGK43U7hvYZLZtApSaUZgY4xB7C8g8iaqxQ
+         pa7wmcJf1j3P41mYdBWaZI2eqv2u/lRzsgegth61bWyaWv0vsMU7ntJGM8uhSZtDbOGm
+         Hgop8DncHYIO4LRfB7d7P+mhZ8aQtyLNyMhbXkzu1rM/mBLu+X7WDiiwu7V2h162XZjT
+         DiPha/AvBwMEumlhUA8ZQXTWxi1mPwRzTNgyh6KV5/j/mSlGxlmoDOLgNsTD+P+C2e0f
+         v69y/zfRCii0/t5eDubcmWitt7m6EYHw/+w1XsYn0Q27x0Hzzlbpvgshz2Q2x9cgl/Ip
+         m/aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=7I3/ylyyWl5IlmqGZ0OG/LXzIE6BgtyXBZbZqV7mIfI=;
-        b=lg9gnHqtZ0jl5FroxO3T/I50msZGY9W5uTjU0SmbgCrDwIdt76pJqSZQFNWIyDeUZW
-         wkEMmTnYFk2+b6OOK1Vj4l12jBOC1IT5fhA9glv3X+k6MiEowTMoV4nj+EZxSHP0fYCY
-         GTMaPN5Bpmz3S6HkzBmbvISjY1rHQTR8BcN0eyNL/XvZOidm0kSSRFA51UKHeP/3hY/d
-         81Z8eGpLeZSRzcWOrim0LqxVVsySWz1e6VZiUQ+/TpBH+v3A2YeDVGrudi3MNA7LVcVe
-         hMMINFiG/ZQX2sxnp/vUxnVNk+Bs02HeGPgd9nmlnY/FsWiqIFbSWxt84w9A7OCX+U+h
-         Lwdw==
-X-Gm-Message-State: AOAM5321poLydEqOCbKwgyN2GoyG+EPk84yLrjqLYOTAKJXYIaQ4X/Ht
-        FZTI2Vb3SCQiqPX0Xr3Dc+A=
-X-Google-Smtp-Source: ABdhPJy7otCQpGJA5qLk63TIGFW0endiu3Nh348wD7QO9a8pS69ZMDMSshZCediJ5oJ+c1g/9ARXNA==
-X-Received: by 2002:a17:90a:6e0c:: with SMTP id b12mr223157pjk.41.1639423127939;
-        Mon, 13 Dec 2021 11:18:47 -0800 (PST)
+        bh=o3N2jiGWgxs5xgqtqhRLupRBvzYgm+RjsEtpOg8EXqs=;
+        b=N5WJLfdCs617Pfs6rfCb1kRQWrWme/wd6PlKjaD3AzcM7maM7hr1qzr7A2dhh62T7h
+         hpqATrtb6MsOAfngDeNmHBro0LtY8UBoWUPtQvbLqMd/f3nKqeh0vMcxnGypSR5NCDK+
+         Lw+FchgcCN2F/ZkkCx5twOChZntDU5HY8ZOuSvryLwkbe7/UKyaJmSt5qN1UzlhcSxBo
+         AmC6t9voLnQZpfIuV9MHTmY9B1fFVe6vbpp7/bs2bGRnGM0V2jywLiO3d67RCUkJ0NAn
+         L4BO+31/KSODyCv9CWXui7popLMRQ9NonAFg99T1bzPnzfH80vOMLvuAmf2IgqvWObL+
+         bNJA==
+X-Gm-Message-State: AOAM530U1IYD2hEXGcZVwI6Pg5lKjZv/ONDrB073M1oQK0MPt1wsGiNL
+        4YYN/+NB/yDxqVmCwz28RyM=
+X-Google-Smtp-Source: ABdhPJxQMKntZ1IQ4u6bfRC+tQAihXYD6Yxb1JnXSvZ5LzzTX3t9rBu9REmKmXHYjpDAZ66nil4zEQ==
+X-Received: by 2002:a17:90b:f81:: with SMTP id ft1mr255804pjb.136.1639423129804;
+        Mon, 13 Dec 2021 11:18:49 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id b9sm14052022pfm.127.2021.12.13.11.18.47
+        by smtp.gmail.com with ESMTPSA id mi18sm7726669pjb.13.2021.12.13.11.18.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:18:47 -0800 (PST)
+        Mon, 13 Dec 2021 11:18:49 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
@@ -57,9 +57,9 @@ To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
         jannh@google.com
 Cc:     linux-kernel@vger.kernel.org, security@kernel.org,
         kernel-team@fb.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 4/6] selftests: cgroup: Make cg_create() use 0755 for permission instead of 0644
-Date:   Mon, 13 Dec 2021 09:18:31 -1000
-Message-Id: <20211213191833.916632-5-tj@kernel.org>
+Subject: [PATCH 5/6] selftests: cgroup: Test open-time credential usage for migration checks
+Date:   Mon, 13 Dec 2021 09:18:32 -1000
+Message-Id: <20211213191833.916632-6-tj@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213191833.916632-1-tj@kernel.org>
 References: <20211213191833.916632-1-tj@kernel.org>
@@ -69,27 +69,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0644 is an odd perm to create a cgroup which is a directory. Use the regular
-0755 instead. This is necessary for euid switching test case.
+When a task is writing to an fd opened by a different task, the perm check
+should use the credentials of the latter task. Add a test for it.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 ---
- tools/testing/selftests/cgroup/cgroup_util.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/cgroup/test_core.c | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index 623cec04ad42..0cf7e90c0052 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -221,7 +221,7 @@ int cg_find_unified_root(char *root, size_t len)
- 
- int cg_create(const char *cgroup)
- {
--	return mkdir(cgroup, 0644);
-+	return mkdir(cgroup, 0755);
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index 3df648c37876..01b766506973 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -674,6 +674,73 @@ static int test_cgcore_thread_migration(const char *root)
+ 	return ret;
  }
  
- int cg_wait_for_proc_count(const char *cgroup, int count)
++/*
++ * cgroup migration permission check should be performed based on the
++ * credentials at the time of open instead of write.
++ */
++static int test_cgcore_lesser_euid_open(const char *root)
++{
++	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
++	int ret = KSFT_FAIL;
++	char *cg_test_a = NULL, *cg_test_b = NULL;
++	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
++	int cg_test_b_procs_fd = -1;
++	uid_t saved_uid;
++
++	cg_test_a = cg_name(root, "cg_test_a");
++	cg_test_b = cg_name(root, "cg_test_b");
++
++	if (!cg_test_a || !cg_test_b)
++		goto cleanup;
++
++	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
++	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
++
++	if (!cg_test_a_procs || !cg_test_b_procs)
++		goto cleanup;
++
++	if (cg_create(cg_test_a) || cg_create(cg_test_b))
++		goto cleanup;
++
++	if (cg_enter_current(cg_test_a))
++		goto cleanup;
++
++	if (chown(cg_test_a_procs, test_euid, -1) ||
++	    chown(cg_test_b_procs, test_euid, -1))
++		goto cleanup;
++
++	saved_uid = geteuid();
++	if (seteuid(test_euid))
++		goto cleanup;
++
++	cg_test_b_procs_fd = open(cg_test_b_procs, O_RDWR);
++
++	if (seteuid(saved_uid))
++		goto cleanup;
++
++	if (cg_test_b_procs_fd < 0)
++		goto cleanup;
++
++	if (write(cg_test_b_procs_fd, "0", 1) >= 0 || errno != EACCES)
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	cg_enter_current(root);
++	if (cg_test_b_procs_fd >= 0)
++		close(cg_test_b_procs_fd);
++	if (cg_test_b)
++		cg_destroy(cg_test_b);
++	if (cg_test_a)
++		cg_destroy(cg_test_a);
++	free(cg_test_b_procs);
++	free(cg_test_a_procs);
++	free(cg_test_b);
++	free(cg_test_a);
++	return ret;
++}
++
+ #define T(x) { x, #x }
+ struct corecg_test {
+ 	int (*fn)(const char *root);
+@@ -689,6 +756,7 @@ struct corecg_test {
+ 	T(test_cgcore_proc_migration),
+ 	T(test_cgcore_thread_migration),
+ 	T(test_cgcore_destroy),
++	T(test_cgcore_lesser_euid_open),
+ };
+ #undef T
+ 
 -- 
 2.34.1
 

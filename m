@@ -2,145 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A884721D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471AF4721D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbhLMHjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:39:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31431 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230053AbhLMHji (ORCPT
+        id S232569AbhLMHkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:40:08 -0500
+Received: from out203-205-221-233.mail.qq.com ([203.205.221.233]:58783 "EHLO
+        out203-205-221-233.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230053AbhLMHkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:39:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639381178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E8bgL6C9Jmq2/dh2Fy2dZYjJ3Ymjso37o3dth3Pmxw0=;
-        b=Mn0PqRWKXDNPJQOzPgrrKnKO6A2rew5LTE0MUJYG03O1CciKPq2b0H8yIva1EDTZFtg49G
-        KcpMGUmVaSnwHy21MD4qybHx6q7KQlSLEAAEa+hUYIen1/Gx3ywm7z6IRoBx/RrYXeWmrg
-        zrfWFSNpu9n5Rq+1pIsH6t7bYAgfpUo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-J6IXeTT9PpSssop9pUXXlg-1; Mon, 13 Dec 2021 02:39:32 -0500
-X-MC-Unique: J6IXeTT9PpSssop9pUXXlg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D0BA4612ED;
-        Mon, 13 Dec 2021 07:39:29 +0000 (UTC)
-Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6345F45D61;
-        Mon, 13 Dec 2021 07:39:28 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 15:39:25 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christoph Lameter <cl@gentwo.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hch@lst.de, robin.murphy@arm.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        vbabka@suse.cz, m.szyprowski@samsung.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org
-Subject: Re: [PATCH RESEND v2 0/5] Avoid requesting page from DMA zone when
- no managed pages
-Message-ID: <20211213073925.GA29905@MiWiFi-R3L-srv>
-References: <20211207030750.30824-1-bhe@redhat.com>
- <alpine.DEB.2.22.394.2112070859420.201880@gentwo.de>
- <20211209080540.GA3050@MiWiFi-R3L-srv>
- <alpine.DEB.2.22.394.2112091355510.270348@gentwo.de>
+        Mon, 13 Dec 2021 02:40:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639381206;
+        bh=qH16UCbILLK1VIbn+YL3Zn3/Z/NDBg3u6EOmyyHF0tg=;
+        h=From:To:Cc:Subject:Date;
+        b=dPRrriv6ZYfP7/lOxqTKk83MCj+NQKV5kPtiY0rI+lypw7mhYyOpBTJwrrQxKN7hl
+         GpcT8mU0Sw93e9Ls4CdGhaM7RPp+39kjMu008MrLWvjViuVGqhp0zS0GtJ1V+Lydfe
+         YoReIzxfPNsYo2KBNVyC0M+0IuiYeqsN1T58vHYk=
+Received: from localhost.localdomain ([43.227.136.188])
+        by newxmesmtplogicsvrszb6.qq.com (NewEsmtp) with SMTP
+        id A028B824; Mon, 13 Dec 2021 15:40:02 +0800
+X-QQ-mid: xmsmtpt1639381202t5rjibsfn
+Message-ID: <tencent_094816F3522E0DC704056C789352EBBF0606@qq.com>
+X-QQ-XMAILINFO: M3ziZXKDk+iONkM+zBmL0oqMt2X16OZTTutED+JoujGCtiQ2z8gR+vGN3V/CI/
+         GShe+Jsau0ry/h9XFHVauYxB4xEO0FcIxcXxTEIvyYZfXXiFAN18s4RXSn7wYklgYmu4M0MsSbG9
+         yvqogXfzVLPKHisniYSaZxFhmcHf5Xy9jlGoidgAcUzHtQm6cHan3zKXzu3roKRmtrQd+4wqa2HM
+         Lf5JbXKLRnWd5icoGFHyJaFTvAz2Rly6VwydGW4VbdSqv9plwzULhKPaCuPEmsTO7RkiBrLOmIpA
+         YGkmwpVEIRrdbrX9Ptx7qaP6TJbClLtsVA75x8Oksa3NBhV3ZvvSpYH+ve8PdiHAw2ZrTF+cLHQY
+         3d3xhvoujmdP2SCCXzV2zrchJvksqZI/CtI+gz63SsK4k4I7M368Haq9Qr1pJuLujSQv6rWv811U
+         psDokJlv/ZAqJkx3gNTev4cb9N4Cq5JHQwBDARt0K/HUZqwjAVztiNT3BZsu7h75Qu7Iv3JBRXnV
+         sK45mv7pK7rnlhsBriS9rmnLo+KU04v4Kj6pwzcN/0lQ82g/tBQV8DtBY+u4YGZwMF2037SuwJW3
+         pMa5GuR7ahu0j3Of9HsqAs0nqK8IHAv5rn+omp2fx4ltewZ9xYNVDXg2vbmOMmGzE2Cc/MHfYwAP
+         DGzUDeoZH2roDHGExUloMP7v5lwOrOsxZP10AO3hwrotLj8AEcVy7+2R8L6W0kXk/52En/jd7g6k
+         S8+Btg7E7rYp9HyOQnO0xN7yAXl9eqwYjxwtv3b9a4YG4Hr++ZcvsicyLw+JolZBr1VZIVw/kToV
+         lEqcpNPageHd0XKM+wLImlAn0CEF21xLwgFnlk83vLX+Kfl/btR0q+Hqce+tAWY0TOoHUPFk9Q9m
+         oDJvziX/oxdEWukiW1MlE7n823vH2FrzfBi8+hcSeMTo3h5kfMa3s=
+From:   Xiaoke Wang <xkernel.wang@foxmail.com>
+To:     joe@perches.com, perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: Re: [PATCH] ALSA: jack: Check the return value of kstrdup()
+Date:   Mon, 13 Dec 2021 15:39:31 +0800
+X-OQ-MSGID: <20211213073932.4240-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2112091355510.270348@gentwo.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/09/21 at 01:59pm, Christoph Lameter wrote:
-> On Thu, 9 Dec 2021, Baoquan He wrote:
-> 
-> > > The slab allocators guarantee that all kmalloc allocations are DMA able
-> > > indepent of specifying ZONE_DMA/ZONE_DMA32
-> >
-> > Here you mean we guarantee dma-kmalloc will be DMA able independent of
-> > specifying ZONE_DMA/DMA32, or the whole sla/ub allocator?
-> 
-> All memory obtained via kmalloc --independent of "dma-alloc", ZONE_DMA
-> etc-- must be dmaable.
+kstrdup() can return NULL, it is better to check the return value of it.
+Fix: free jack and use my full name.
 
-This has a prerequisite as you said at below, only if devices can
-address full memory, right?
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ sound/core/jack.c | 4 ++
+ 1 file changed, 4 insertions(+)
 
-
-> 
-> > With my understanding, isn't the reasonable sequence zone DMA firstly if
-> > GFP_DMA, then zone DMA32, finaly zone NORMAL. At least, on x86_64, I
-> > believe device driver developer prefer to see this because most of time,
-> > zone DMA and zone DMA32 are both used for dma buffer allocation, if
-> > IOMMU is not enabled. However, memory got from zone NORMAL when required
-> > with GFP_DMA, and it succeeds, does it mean that the developer doesn't
-> > take the GFP_DMA flag seriously, just try to get buffer for allocation?
-> 
-> ZONE_NORMAL is also used for DMA allocations. ZONE_DMA and ZONE_DMA32 are
-> only used if the physical range of memory supported by a device does not
-> include all of normal memory.
-
-If devices can address full memory, ZONE_NORMAL can also be used for DMA
-allocations. (This covers the systems where IOMMU is provided).
-
-If device has address limit, e.g dma mask is 24bit or 32bit, ZONE_DMA
-and ZONE_DMA32 are needed.
-
-> 
-> > > The size of ZONE_DMA is traditionally depending on the platform. On some
-> > > it is 16MB, on some 1G and on some 4GB. ZONE32 is always 4GB and should
-> > > only be used if ZONE_DMA has already been used.
-> >
-> > As said at above, ia64 and riscv don't have ZONE_DMA at all, they just
-> > cover low 4G with ZONE_DMA32 alone.
-> 
-> If you do not have devices that are crap and cannot address the full
-> memory then you dont need these special zones.
-
-I am not a DMA expert, with my understanding, on x86_64 and arm64, we
-have PCIe devices which dma mask is 32bit, means they can only address
-ZONE_DMA32. Supporting to address full memory might be too expensive for
-devices, e.g on these two ARCHes, supported memory could be deployed on
-Petabyte of address.
-
-> 
-> Sorry this subject has caused confusion multiple times over the years and
-> there are still arches that are not implementing this in a consistent way.
-
-Seems so.
-
-And by the way, when I read slub code, noticed a strange phenomenon, I
-haven't found out why. When create cache with kmem_cache_create(), zone
-flag SLAB_CACHE_DMA, SLAB_CACHE_DMA32 can be specified. allocflags will
-store them, and will take out to use when allocating new slab.
-Meanwhile, we can also specify gfpflags, but it can't be GFP_DMA32,
-because of GFP_SLAB_BUG_MASK. I traced back to very old git history,
-didn't find out why GFP_DMA32 can't be specified during
-kmem_cache_alloc().
-
-We can completely rely on the cache->allocflags to mark the zone which
-we will request page from, but we can also specify gfpflags in
-kmem_cache_alloc() to change zone. GFP_DMA32 is prohibited. Here I can
-only see that kmalloc() might be the reason, since kmalloc_large()
-doesn't have created cache, so no ->allocflags to use.
-
-Is this expected? What can we do to clarify or improve this, at
-leaset on code readability?
-
-I am going to post v3, will discard the 'Further thinking' in cover
-letter according to your comment. Please help point out if anthing need
-be done or missed.
-
-Thanks a lot.
-
-Baoquan
-Thanks
+diff --git a/sound/core/jack.c b/sound/core/jack.c
+index 32350c6..5fd9954 100644
+--- a/sound/core/jack.c
++++ b/sound/core/jack.c
+@@ -509,6 +509,10 @@ int snd_jack_new(struct snd_card *card, const char *id, int type,
+ 		return -ENOMEM;
+ 
+ 	jack->id = kstrdup(id, GFP_KERNEL);
++	if (jack->id == NULL) {
++		kfree(jack);
++		return -ENOMEM;
++	}
+ 
+ 	/* don't creat input device for phantom jack */
+ 	if (!phantom_jack) {
+-- 
 

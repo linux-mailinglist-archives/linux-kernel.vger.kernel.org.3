@@ -2,103 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE929472137
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E33472133
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbhLMGuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:50:17 -0500
-Received: from tartarus.angband.pl ([51.83.246.204]:34492 "EHLO
-        tartarus.angband.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbhLMGuQ (ORCPT
+        id S232216AbhLMGsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:48:55 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:51608 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230315AbhLMGsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:50:16 -0500
-Received: from kilobyte by tartarus.angband.pl with local (Exim 4.94.2)
-        (envelope-from <kilobyte@angband.pl>)
-        id 1mwf7g-00HGOd-Va; Mon, 13 Dec 2021 07:47:44 +0100
-Date:   Mon, 13 Dec 2021 07:47:44 +0100
-From:   Adam Borowski <kilobyte@angband.pl>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Sean Young <sean@mess.org>, Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Incorrect handling of . and .. files
-Message-ID: <YbbskNBJI8Ak1Vl/@angband.pl>
-References: <20210927111948.GA16257@gofer.mess.org>
- <20211211020453.mkuzumgpnignsuri@pali>
+        Mon, 13 Dec 2021 01:48:54 -0500
+X-UUID: 32ab375df4d0450c883b8e6e68f01821-20211213
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=QzfN+FlUlQnx8BtRAnoYm3/IBA3s2vzJNiXDt9dMjuc=;
+        b=ado7JXbk+FUwxEeCldWs/n01lJJyV9VYOwKZu1DXH5Y7n3YYmxmB+BARRhvVhRReprAYcA2qs1ndQPeJit/MRIEEOpuDv5/KDCr3FRZTvkMAgL1RRG5jnQBa86MNwcVc3ldfILxvfXiW5Mxi7C+0nz+feqK4MBWvuLT4mXRrO4U=;
+X-UUID: 32ab375df4d0450c883b8e6e68f01821-20211213
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 340885932; Mon, 13 Dec 2021 14:48:52 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 13 Dec 2021 14:48:51 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 13 Dec 2021 14:48:49 +0800
+Message-ID: <5d1ebe0089acd28032b74e3a180466f418580805.camel@mediatek.com>
+Subject: Re: [PATCH 1/4] dt-bindings: memory: mediatek: Correct the minItems
+ of clk for larbs
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Joerg Roedel <joro@8bytes.org>, <yi.kuo@mediatek.com>,
+        <anan.sun@mediatek.com>, "Will Deacon" <will@kernel.org>,
+        <devicetree@vger.kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        <anthony.huang@mediatek.com>, <lc.kan@mediatek.com>,
+        <srv_heupstream@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-mediatek@lists.infradead.org>, <youlin.pei@mediatek.com>
+Date:   Mon, 13 Dec 2021 14:48:52 +0800
+In-Reply-To: <1638574455.281202.1043012.nullmailer@robh.at.kernel.org>
+References: <20211203064027.14993-1-yong.wu@mediatek.com>
+         <20211203064027.14993-2-yong.wu@mediatek.com>
+         <1638574455.281202.1043012.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211211020453.mkuzumgpnignsuri@pali>
-X-Junkbait: aaron@angband.pl, zzyx@angband.pl
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: kilobyte@angband.pl
-X-SA-Exim-Scanned: No (on tartarus.angband.pl); SAEximRunCond expanded to false
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 03:04:53AM +0100, Pali Rohár wrote:
-> I tried to find some information what is allowed and what not.
-> 
-> On Monday 27 September 2021 12:19:48 Sean Young wrote:
-> > Windows allows files and directories called "." and ".." to be created
-> > using UNC paths, i.e. "\\?\D:\..". Now this is totally insane behaviour,
-> > but when an exfat filesytem with such a file is mounted on Linux, those
-> > files show up as another directory and its contents is inaccessible.
-> > 
-> > I can replicate this using exfat filesystems, but not ntfs.
-> 
-> Microsoft exFAT specification explicitly disallow "." and "..", see:
-[...]
-> On the other hand Microsoft FAT32 specification can be understood that
-> file may have long name (vfat) set to "." or ".." but not short name.
-[...]
-> OSTA UDF 2.60 specification does not disallow "." and ".." entries, but
-[...]
-> So it means that "." and ".." entries could be stored on disk as valid
-> file names.
+T24gRnJpLCAyMDIxLTEyLTAzIGF0IDE3OjM0IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
+T24gRnJpLCAwMyBEZWMgMjAyMSAxNDo0MDoyNCArMDgwMCwgWW9uZyBXdSB3cm90ZToNCj4gPiBJ
+ZiBhIHBsYXRmb3JtJ3MgbGFyYiBzdXBwb3J0IGdhbHMsIHRoZXJlIHdpbGwgYmUgc29tZSBsYXJi
+cyBoYXZlIGENCj4gPiBvbmUNCj4gPiBtb3JlICJnYWxzIiBjbG9jayB3aGlsZSB0aGUgb3RoZXJz
+IHN0aWxsIG9ubHkgbmVlZCAiYXBiIi8ic21pIg0KPiA+IGNsb2Nrcy4NCj4gPiB0aGVuIHRoZSBt
+aW5JdGVtcyBpcyAyIGFuZCB0aGUgbWF4SXRlbXMgaXMgMy4NCj4gPiANCj4gPiBGaXhlczogMjdi
+YjBlNDI4NTVhICgiZHQtYmluZGluZ3M6IG1lbW9yeTogbWVkaWF0ZWs6IENvbnZlcnQgU01JIHRv
+DQo+ID4gRFQgc2NoZW1hIikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBZb25nIFd1IDx5b25nLnd1QG1l
+ZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRpbmdzL21lbW9yeS1jb250cm9sbGVy
+cy9tZWRpYXRlayxzbWktbGFyYi55YW1sICAgICAgICAgIHwNCj4gPiAyICstDQo+ID4gIDEgZmls
+ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiA+IA0KPiANCj4gUnVu
+bmluZyAnbWFrZSBkdGJzX2NoZWNrJyB3aXRoIHRoZSBzY2hlbWEgaW4gdGhpcyBwYXRjaCBnaXZl
+cyB0aGUNCj4gZm9sbG93aW5nIHdhcm5pbmdzLiBDb25zaWRlciBpZiB0aGV5IGFyZSBleHBlY3Rl
+ZCBvciB0aGUgc2NoZW1hIGlzDQo+IGluY29ycmVjdC4gVGhlc2UgbWF5IG5vdCBiZSBuZXcgd2Fy
+bmluZ3MuDQo+IA0KPiBOb3RlIHRoYXQgaXQgaXMgbm90IHlldCBhIHJlcXVpcmVtZW50IHRvIGhh
+dmUgMCB3YXJuaW5ncyBmb3INCj4gZHRic19jaGVjay4NCj4gVGhpcyB3aWxsIGNoYW5nZSBpbiB0
+aGUgZnV0dXJlLg0KPiANCj4gRnVsbCBsb2cgaXMgYXZhaWxhYmxlIGhlcmU6IA0KPiBodHRwczov
+L3BhdGNod29yay5vemxhYnMub3JnL3BhdGNoLzE1NjMxMjcNCj4gDQo+IA0KPiBsYXJiQDE0MDE2
+MDAwOiAnbWVkaWF0ZWssbGFyYi1pZCcgaXMgYSByZXF1aXJlZCBwcm9wZXJ0eQ0KPiAJYXJjaC9h
+cm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxNjctcHVtcGtpbi5kdC55YW1sDQoNCkkgd2lsbCBm
+aXggdGhpcyBpbiBuZXh0IHZlcnNpb24uIFRoaXMgcHJvcGVydHkgaXMgbm90IG5lZWRlZCBpbiBt
+dDgxNjcuDQoNCj4gDQo+IGxhcmJAMTQwMTcwMDA6IGNsb2NrLW5hbWVzOiBbJ2FwYicsICdzbWkn
+XSBpcyB0b28gc2hvcnQNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWV2
+Yi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1q
+YWN1enppLQ0KPiBidXJuZXQuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
+ay9tdDgxODMta3VrdWktamFjdXp6aS1kYW11LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9k
+dHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktDQo+IGZlbm5lbDE0LmR0LnlhbWwNCj4g
+CWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktZmVubmVs
+LQ0KPiBza3UxLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgz
+LWt1a3VpLWphY3V6emktZmVubmVsLQ0KPiBza3U2LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9v
+dC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktanVuaXBlci0NCj4gc2t1MTYuZHQu
+eWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6
+aS1rYXBwYS5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1r
+dWt1aS1qYWN1enppLWtlbnpvLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0
+ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktd2lsbG93LQ0KPiBza3UwLmR0LnlhbWwNCj4gCWFyY2gv
+YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktd2lsbG93LQ0KPiBz
+a3UxLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3Vp
+LWtha2FkdS5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1r
+dWt1aS1rb2RhbWEtc2t1MTYuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
+ay9tdDgxODMta3VrdWkta29kYW1hLXNrdTI3Mi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3Qv
+ZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rb2RhbWEtc2t1Mjg4LmR0LnlhbWwNCj4gCWFyY2gv
+YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UzMi5kdC55YW1s
+DQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rcmFuZS1za3Uw
+LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWty
+YW5lLXNrdTE3Ni5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4
+My1wdW1wa2luLmR0LnlhbWwNCg0KU29tZSBsYXJicyBvbmx5IGhhdmUgdHdvIGNsb2NrcyhhcGIv
+c21pKSBpbiBtdDgxODMuIHRodXMgaXQgaXMNCnJlYXNvbmFibGUgZm9yIG1lLiBJIHdvbid0IGZp
+eCB0aGlzIGluIG5leHQgdmVyc2lvbi4NCg0KUGxlYXNlIHRlbGwgbWUgaWYgSSBtaXNzIHNvbWV0
+aGluZy4NClRoYW5rcy4NCg0KPiANCj4gbGFyYkAxNTAwMTAwMDogJ21lZGlhdGVrLGxhcmItaWQn
+IGlzIGEgcmVxdWlyZWQgcHJvcGVydHkNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
+bXQ4MTY3LXB1bXBraW4uZHQueWFtbA0KPiANCj4gbGFyYkAxNjAxMDAwMDogY2xvY2stbmFtZXM6
+IFsnYXBiJywgJ3NtaSddIGlzIHRvbyBzaG9ydA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRp
+YXRlay9tdDgxODMtZXZiLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
+bXQ4MTgzLWt1a3VpLWphY3V6emktDQo+IGJ1cm5ldC5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jv
+b3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1qYWN1enppLWRhbXUuZHQueWFtbA0KPiAJYXJj
+aC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS0NCj4gZmVubmVs
+MTQuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkt
+amFjdXp6aS1mZW5uZWwtDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9t
+ZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS1mZW5uZWwtDQo+IHNrdTYuZHQueWFtbA0KPiAJ
+YXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS1qdW5pcGVy
+LQ0KPiBza3UxNi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4
+My1rdWt1aS1qYWN1enppLWthcHBhLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
+aWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emkta2Vuem8uZHQueWFtbA0KPiAJYXJjaC9hcm02NC9i
+b290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS13aWxsb3ctDQo+IHNrdTAuZHQu
+eWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6
+aS13aWxsb3ctDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
+ay9tdDgxODMta3VrdWkta2FrYWR1LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
+aWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UxNi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jv
+b3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rb2RhbWEtc2t1MjcyLmR0LnlhbWwNCj4gCWFy
+Y2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UyODguZHQu
+eWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkta29kYW1h
+LXNrdTMyLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1
+a3VpLWtyYW5lLXNrdTAuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9t
+dDgxODMta3VrdWkta3JhbmUtc2t1MTc2LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMv
+bWVkaWF0ZWsvbXQ4MTgzLXB1bXBraW4uZHQueWFtbA0KPiANCj4gbGFyYkAxNjAxMDAwMDogJ21l
+ZGlhdGVrLGxhcmItaWQnIGlzIGEgcmVxdWlyZWQgcHJvcGVydHkNCj4gCWFyY2gvYXJtNjQvYm9v
+dC9kdHMvbWVkaWF0ZWsvbXQ4MTY3LXB1bXBraW4uZHQueWFtbA0KPiANCj4gbGFyYkAxNzAxMDAw
+MDogY2xvY2stbmFtZXM6IFsnYXBiJywgJ3NtaSddIGlzIHRvbyBzaG9ydA0KPiAJYXJjaC9hcm02
+NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMtZXZiLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9v
+dC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktDQo+IGJ1cm5ldC5kdC55YW1sDQo+
+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1qYWN1enppLWRhbXUu
+ZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFj
+dXp6aS0NCj4gZmVubmVsMTQuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
+ay9tdDgxODMta3VrdWktamFjdXp6aS1mZW5uZWwtDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9h
+cm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS1mZW5uZWwtDQo+IHNr
+dTYuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkt
+amFjdXp6aS1qdW5pcGVyLQ0KPiBza3UxNi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRz
+L21lZGlhdGVrL210ODE4My1rdWt1aS1qYWN1enppLWthcHBhLmR0LnlhbWwNCj4gCWFyY2gvYXJt
+NjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emkta2Vuem8uZHQueWFtbA0K
+PiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS13aWxs
+b3ctDQo+IHNrdTAuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgx
+ODMta3VrdWktamFjdXp6aS13aWxsb3ctDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9i
+b290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkta2FrYWR1LmR0LnlhbWwNCj4gCWFyY2gvYXJt
+NjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UxNi5kdC55YW1sDQo+
+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rb2RhbWEtc2t1Mjcy
+LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtv
+ZGFtYS1za3UyODguZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgx
+ODMta3VrdWkta29kYW1hLXNrdTMyLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
+aWF0ZWsvbXQ4MTgzLWt1a3VpLWtyYW5lLXNrdTAuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290
+L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkta3JhbmUtc2t1MTc2LmR0LnlhbWwNCj4gCWFyY2gv
+YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLXB1bXBraW4uZHQueWFtbA0KPiANCg==
 
-It doesn't matter one whit what the specification says.  Anyone with a disk
-editor can craft a filesystem containing filenames such as "." or "..", "/"
-"foo/bar" or anything else we would like to ban.
-
-> > So, in Linux cannot read "." or ".." (i.e., I can't see "Hello, World!"). I
-> > don't know what the correct handling should be, but having two "." and two
-> > ".." files does not seem right at all.
-> 
-> This is really a bug in Linux kernel. It should not export "." and ".."
-> into VFS even when filesystem disk format supports such insane file
-> names.
-
-This.
-
-Otherwise, every filesystem driver would need to contain redundant code for
-checking for such bad names.
-
-> So either Linux needs to completely hide these insane file names from
-> VFS or translate them to something which do not conflict with other
-> files in correct directory.
-
-Escaping bad names has the problem of the escaped name also possibly
-existing -- perhaps even recursively.  Plus, the filesystem might be using
-hashed or tree indices which could go wrong if a name is altered.
-
-But then, I once proposed (and I'm pondering reviving) a ban for characters
-\x01..\x1f and possibly others, and if banned, they can still legitimately
-occur in old filesystems.
-
-> I guess that hiding them for exfat is valid thing as Microsoft
-> specification explicitly disallow them. Probably fsck.exfat can be teach
-> to rename these files and/or put them to lost+found directory.
-
-fsck fixing those is a good thing but we still need to handle them at
-runtime.
-
-
-Meow!
--- 
-⢀⣴⠾⠻⢶⣦⠀
-⣾⠁⢠⠒⠀⣿⡁ in the beginning was the boot and root floppies and they were good.
-⢿⡄⠘⠷⠚⠋⠀                                       -- <willmore> on #linux-sunxi
-⠈⠳⣄⠀⠀⠀⠀

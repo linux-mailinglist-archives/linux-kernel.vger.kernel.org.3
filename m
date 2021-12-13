@@ -2,110 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C97C472D3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE13472CF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237389AbhLMN1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S237255AbhLMNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbhLMN1Q (ORCPT
+        with ESMTP id S232266AbhLMNNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:27:16 -0500
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADECC061574;
-        Mon, 13 Dec 2021 05:27:16 -0800 (PST)
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Mon, 13 Dec 2021 14:27:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1639402033; bh=EQE8WzySYHcpssz4ldGn0q583iyG+myzil/ydlXGiOo=;
-        h=Resent-From:Resent-Date:Resent-To:Date:From:To:Cc:Subject:
-         References:In-Reply-To:From;
-        b=HGRKMpX8lQm0RM9G+HopxM/ecIsqyIaT5tdQ75CoV1bjD8hQLEM4eL+vbrWEonDy2
-         2s3cN+0GxiML6b1wxBuxvr3Yt2Ltgy6bLboJO67I2UeH7TP2Leursj+H3OFXpoHwqX
-         6ya7g3pOEHgase5GCPtXXFlON2YWmma73ISC+uTk=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id CA2B58048E;
-        Mon, 13 Dec 2021 14:27:12 +0100 (CET)
-Received: from mail.avm.de ([212.42.244.94])
-          by mail-notes.avm.de (HCL Domino Release 11.0.1FP4)
-          with ESMTP id 2021121314133553-9308 ;
-          Mon, 13 Dec 2021 14:13:35 +0100 
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail.avm.de (Postfix) with ESMTP
-        for <n.schier@avm.de>; Mon, 13 Dec 2021 14:13:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1639401215; bh=EQE8WzySYHcpssz4ldGn0q583iyG+myzil/ydlXGiOo=;
+        Mon, 13 Dec 2021 08:13:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D63CC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:13:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5A930CE1020
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:13:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69352C34601;
+        Mon, 13 Dec 2021 13:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639401224;
+        bh=+H14nh2/sZ0LVCVrXezcSj2QeyM904bTsAn6bMsPTig=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sQ6TaBOB7uLBmwlB8ACkvf5z4B1ao7J0rnQ8KnTFcPfBLjMwTbLQSXdvlZWuLGn5x
-         iZRqY9BMhInu+Pue7wJAZvwJkeUCoUWKuEek7/90mnCCbr4CaN42uLm3TTloKnF0Qk
-         vuA0AbKVoYbIVZMTlSlAlXG/zgeveniDFm5gaZtM=
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-        id 500711815FD; Mon, 13 Dec 2021 14:13:35 +0100 (CET)
-Date:   Mon, 13 Dec 2021 14:13:35 +0100
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH 06/10] kbuild: stop using config_filename in
- scripts/Makefile.modsign
-Message-ID: <YbdG/ye08e5Hw/MH@buildd.core.avm.de>
-References: <20211212192941.1149247-1-masahiroy@kernel.org>
- <20211212192941.1149247-7-masahiroy@kernel.org>
+        b=sb0dpr6TwSBZACfF6GkoHi3NqvetedwQqwpymVw11z35Kbo+1p2VXZWApQACXQx7e
+         bSCcOo7/ZEFmOu5nSTb4g5D7hggkaMlRZG9pjF+GvRqWYXAVCLFeMpWxeDr9cAx0Gr
+         DBEhLPr2dcQiZuDcYNuZCcMSivgJut/WpnRGVAM1WWelDMI53khcw87qz6Yf8TGmYW
+         ZrJMuNLI49w1oqhtLhrv+sx41KeNS3fF761/uROQqa+TkYz7ZIdQ9Yyu+bTwgyBMyn
+         RzBWyoyqz/gwrpz2Dnv7UzkycKUYUCSHNQaWtT8/dR5ZBdHYA5W8eEXaXWdWWzTBW+
+         tk06VB/II0RWg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E17C2405D8; Mon, 13 Dec 2021 10:13:42 -0300 (-03)
+Date:   Mon, 13 Dec 2021 10:13:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH 2/2] perf inject: Fix segfault due to perf_data__fd()
+ without open
+Message-ID: <YbdHBhw7lk/6vKd5@kernel.org>
+References: <20211213084829.114772-1-adrian.hunter@intel.com>
+ <20211213084829.114772-3-adrian.hunter@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211212192941.1149247-7-masahiroy@kernel.org>
-X-MIMETrack: Itemize by SMTP Server on ANIS1/AVM(Release 11.0.1FP4|October 01,
- 2021) at 13.12.2021 14:13:35,  Serialize by http on ANIS1/AVM(Release
- 11.0.1FP4|October 01, 2021) at 13.12.2021 14:15:58,    Serialize complete at
- 13.12.2021 14:15:58
-X-TNEFEvaluated: 1
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Notes-UNID: E2B300B1522848FD0B3ADAD0B4C77966
-X-purgate-ID: 149429::1639402032-0000056E-1032BC0E/0/0
-X-purgate-type: clean
-X-purgate-size: 1326
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
+In-Reply-To: <20211213084829.114772-3-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:29:37AM +0900, Masahiro Yamada wrote:
-> Toward the goal of removing the config_filename macro, drop
-> the double-quotes and add $(srctree)/ prefix in an ad hoc way.
+Em Mon, Dec 13, 2021 at 10:48:29AM +0200, Adrian Hunter escreveu:
+> The fixed commit attempts to get the output file descriptor even if the
+> file was never opened e.g.
 > 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+>  $ perf record uname
+>  Linux
+>  [ perf record: Woken up 1 times to write data ]
+>  [ perf record: Captured and wrote 0.002 MB perf.data (7 samples) ]
+>  $ perf inject -i perf.data --vm-time-correlation=dry-run
+>  Segmentation fault (core dumped)
+>  $ gdb --quiet perf
+>  Reading symbols from perf...
+>  (gdb) r inject -i perf.data --vm-time-correlation=dry-run
+>  Starting program: /home/ahunter/bin/perf inject -i perf.data --vm-time-correlation=dry-run
+>  [Thread debugging using libthread_db enabled]
+>  Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+> 
+>  Program received signal SIGSEGV, Segmentation fault.
+>  __GI___fileno (fp=0x0) at fileno.c:35
+>  35      fileno.c: No such file or directory.
+>  (gdb) bt
+>  #0  __GI___fileno (fp=0x0) at fileno.c:35
+>  #1  0x00005621e48dd987 in perf_data__fd (data=0x7fff4c68bd08) at util/data.h:72
+>  #2  perf_data__fd (data=0x7fff4c68bd08) at util/data.h:69
+>  #3  cmd_inject (argc=<optimized out>, argv=0x7fff4c69c1f0) at builtin-inject.c:1017
+>  #4  0x00005621e4936783 in run_builtin (p=0x5621e4ee6878 <commands+600>, argc=4, argv=0x7fff4c69c1f0) at perf.c:313
+>  #5  0x00005621e4897d5c in handle_internal_command (argv=<optimized out>, argc=<optimized out>) at perf.c:365
+>  #6  run_argv (argcp=<optimized out>, argv=<optimized out>) at perf.c:409
+>  #7  main (argc=4, argv=0x7fff4c69c1f0) at perf.c:539
+>  (gdb)
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Fixes: 0ae03893623d ("perf tools: Pass a fd to perf_file_header__read_pipe()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/builtin-inject.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
->  scripts/Makefile.modinst | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-> index ff9b09e4cfca..df7e3d578ef5 100644
-> --- a/scripts/Makefile.modinst
-> +++ b/scripts/Makefile.modinst
-> @@ -66,9 +66,10 @@ endif
->  # Don't stop modules_install even if we can't sign external modules.
->  #
->  ifeq ($(CONFIG_MODULE_SIG_ALL),y)
-> +CONFIG_MODULE_SIG_KEY := $(CONFIG_MODULE_SIG_KEY:"%"=%)
-> +sig-key := $(if $(wildcard $(CONFIG_MODULE_SIG_KEY)),,$(srctree)/)$(CONFIG_MODULE_SIG_KEY)
->  quiet_cmd_sign = SIGN    $@
-> -$(eval $(call config_filename,MODULE_SIG_KEY))
-> -      cmd_sign = scripts/sign-file $(CONFIG_MODULE_SIG_HASH) $(MODULE_SIG_KEY_SRCPREFIX)$(CONFIG_MODULE_SIG_KEY) certs/signing_key.x509 $@ \
-> +      cmd_sign = scripts/sign-file $(CONFIG_MODULE_SIG_HASH) $(sig-key) certs/signing_key.x509 $@ \
->                   $(if $(KBUILD_EXTMOD),|| true)
->  else
->  quiet_cmd_sign :=
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index af70f1c72052..409b721666cb 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -755,12 +755,16 @@ static int parse_vm_time_correlation(const struct option *opt, const char *str,
+>  	return inject->itrace_synth_opts.vm_tm_corr_args ? 0 : -ENOMEM;
+>  }
+>  
+> +static int output_fd(struct perf_inject *inject)
+> +{
+> +	return inject->in_place_update ? -1 : perf_data__fd(&inject->output);
+> +}
+> +
+>  static int __cmd_inject(struct perf_inject *inject)
+>  {
+>  	int ret = -EINVAL;
+>  	struct perf_session *session = inject->session;
+> -	struct perf_data *data_out = &inject->output;
+> -	int fd = inject->in_place_update ? -1 : perf_data__fd(data_out);
+> +	int fd = output_fd(inject);
+>  	u64 output_data_offset;
+>  
+>  	signal(SIGINT, sig_handler);
+> @@ -1015,7 +1019,7 @@ int cmd_inject(int argc, const char **argv)
+>  	}
+>  
+>  	inject.session = __perf_session__new(&data, repipe,
+> -					     perf_data__fd(&inject.output),
+> +					     output_fd(&inject),
+>  					     &inject.tool);
+>  	if (IS_ERR(inject.session)) {
+>  		ret = PTR_ERR(inject.session);
 > -- 
-> 2.32.0
-> 
+> 2.25.1
+
+-- 
+
+- Arnaldo

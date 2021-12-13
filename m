@@ -2,90 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CB3472A26
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10DD472A78
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237565AbhLMKc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:32:59 -0500
-Received: from mail.wizzup.org ([95.217.97.174]:44092 "EHLO wizzup.org"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242718AbhLMKcG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:32:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-        s=mail; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
-        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=q3wBe9qY4BB30nANlAR9vfoazoNiXcPXvVEwwQ+bgS0=; b=D49rpiwM6m+pRUxdhvOI12TdIc
-        qZ2LkRy9V4o9qekgAGidOczJo4Tj5zBhOs8McU9x2o39KxcO3gnjaZxkoAOLu6TkW/Nf6/8V5yvTR
-        KNjAqFVRXFm9b0Qx7YXaL/vjvHjJtLGyhb3yBu3s1F8oKrKXNSiHLAr6lNhfwpwMVHAsIpWGBG9RH
-        sA8ubwqWgGo+d4ua5wirMcLIJoDWRG5U1bL73lZlMkQLnY2s4TcBMXuYi6M/ZufOK5E3ewHM2l45w
-        iRejXIxiv1LAksBhCt58Drj97LgS8lBGOJgKYx9ywSNgvEthpvXgXE5QOxIckgojSH87M7PXGUAHG
-        9xi3++gw==;
-Received: from [45.83.235.159] (helo=[0.0.0.0])
-        by wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <merlijn@wizzup.org>)
-        id 1mwick-0001xV-P3; Mon, 13 Dec 2021 10:32:02 +0000
-Subject: Re: [RFC PATCH 1/2] pmic-cpcap: add motorola,droid3 compatible
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Dev Null <devnull@uvos.xyz>,
-        Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211212230459.13579-1-merlijn@wizzup.org>
- <20211212230459.13579-2-merlijn@wizzup.org> <Ybbg3GNwST5Cr9Br@atomide.com>
-From:   Merlijn Wajer <merlijn@wizzup.org>
-Message-ID: <a89e329c-af4e-53ec-fdf1-77f3727a4376@wizzup.org>
-Date:   Mon, 13 Dec 2021 11:37:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S237250AbhLMKnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:43:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31768 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236460AbhLMKnC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 05:43:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639392181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PfuPpOABuCOUfJ766e10nvZWJe+DxQ1giE4QiO5fk8I=;
+        b=Z2f4EKCXZIv5oypEZP4KX8GhUGC9T2micrK2xdtuXNwB/n7b1ZNUSoUq+yxiX6x+wxY0W/
+        9v9fZJFyNtmcX+V/J0wB7+ygB+vbCbSC/izoBi0pRmXW0JzRLEpdqZnxZrj43izFtln97o
+        NpK8f/NPeZVqm5F2pndnt+Oo06q5lpc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-505-Ccx8uMDjP76BgCXSl-I5eQ-1; Mon, 13 Dec 2021 05:43:00 -0500
+X-MC-Unique: Ccx8uMDjP76BgCXSl-I5eQ-1
+Received: by mail-ed1-f70.google.com with SMTP id t9-20020aa7d709000000b003e83403a5cbso13580174edq.19
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:43:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PfuPpOABuCOUfJ766e10nvZWJe+DxQ1giE4QiO5fk8I=;
+        b=kAPxlLGe6JH8yj2UvVEmNuxOOZz2dSJx0NS3n6IhgZnDLQnb+/6U0rdAueVthdbuqH
+         qotija0S0bskl3vT7GvhmFtOdNxYJ3FzZt3f/PypRAiiw7mgXB4KhrkNeihapTZk13Ay
+         OeaEJqhCPjbg902/TzAxpT0dWFYKnYfoRuhuI0hAABN1UgRRn+HsQwGGFrh2FjeV7j2T
+         3cAZt67NRVLIKOak5JPBFw1eSBnfV+Hem+bEeeAvibLAYHgAOW1TzB0XhUNzOGFJMXoO
+         kVU0rvNhqy4mQ2gQJFhqO/11747yNqi0rgTP3DLZ7pOuu9FWlU9aK/PupSovpdmb2HA/
+         RULA==
+X-Gm-Message-State: AOAM5315N0rp/xSQiuDYw0UBb8hJcP0pzO8fMP9LIjrUt8n5OptlkSQP
+        WrJdrYyy3a8LYVaiEu96vyI5RFBrB6YILUT0fOI73AKUZPdUoWCMmCk/W3KVEABAmqru4lYakfU
+        thZZaxNl7y2yU4kloUAYn1x+A
+X-Received: by 2002:a50:bb2a:: with SMTP id y39mr61671543ede.348.1639392179559;
+        Mon, 13 Dec 2021 02:42:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJye188DD7VOBZu1z7K1fsIYJwVvhudMERb9VekFgUrFgqwmr0f6OoIDcHbVxO67vqs6b5qZUg==
+X-Received: by 2002:a50:bb2a:: with SMTP id y39mr61671520ede.348.1639392179371;
+        Mon, 13 Dec 2021 02:42:59 -0800 (PST)
+Received: from redhat.com ([2.55.148.125])
+        by smtp.gmail.com with ESMTPSA id r11sm6278620edd.70.2021.12.13.02.42.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 02:42:58 -0800 (PST)
+Date:   Mon, 13 Dec 2021 05:42:55 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Si-Wei Liu <si-wei.liu@oracle.com>, Eli Cohen <elic@nvidia.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: vdpa legacy guest support (was Re: [PATCH] vdpa/mlx5:
+ set_features should allow reset to zero)
+Message-ID: <20211213053420-mutt-send-email-mst@kernel.org>
+References: <52836a63-4e00-ff58-50fb-9f450ce968d7@oracle.com>
+ <20210228163031-mutt-send-email-mst@kernel.org>
+ <2cb51a6d-afa0-7cd1-d6f2-6b153186eaca@redhat.com>
+ <20210302043419-mutt-send-email-mst@kernel.org>
+ <178f8ea7-cebd-0e81-3dc7-10a058d22c07@redhat.com>
+ <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com>
+ <20211212042311-mutt-send-email-mst@kernel.org>
+ <CACGkMEtwWcBNj62Yn_ZSq33N42ZG5yhCcZf=eQZ_AdVgJhEjEA@mail.gmail.com>
+ <20211213030535-mutt-send-email-mst@kernel.org>
+ <CACGkMEtRfqRDPxXS2T-a0u4Aji3KtUq7-2iUD8Z-X1k84EgOZA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Ybbg3GNwST5Cr9Br@atomide.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEtRfqRDPxXS2T-a0u4Aji3KtUq7-2iUD8Z-X1k84EgOZA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
-
-On 13/12/2021 06:57, Tony Lindgren wrote:
-> * Merlijn Wajer <merlijn@wizzup.org> [211212 23:00]:
->> The Droid 3 and the Bionic appear to share the same hardware, so add
->> the compatible for the Droid 3 as well.
->>
->> Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
->> ---
->>  arch/arm/mach-omap2/pmic-cpcap.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm/mach-omap2/pmic-cpcap.c b/arch/arm/mach-omap2/pmic-cpcap.c
->> index 668dc84fd31e..b9188dde13b9 100644
->> --- a/arch/arm/mach-omap2/pmic-cpcap.c
->> +++ b/arch/arm/mach-omap2/pmic-cpcap.c
->> @@ -245,7 +245,8 @@ int __init omap4_cpcap_init(void)
->>  	voltdm = voltdm_lookup("mpu");
->>  	omap_voltage_register_pmic(voltdm, &omap443x_max8952_mpu);
->>  
->> -	if (of_machine_is_compatible("motorola,droid-bionic")) {
->> +	if (of_machine_is_compatible("motorola,droid-bionic") ||
->> +	    of_machine_is_compatible("motorola,droid3")) {
->>  		voltdm = voltdm_lookup("core");
->>  		omap_voltage_register_pmic(voltdm, &omap_cpcap_core);
->>  
+On Mon, Dec 13, 2021 at 04:57:38PM +0800, Jason Wang wrote:
+> On Mon, Dec 13, 2021 at 4:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Mon, Dec 13, 2021 at 11:02:39AM +0800, Jason Wang wrote:
+> > > On Sun, Dec 12, 2021 at 5:26 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Fri, Dec 10, 2021 at 05:44:15PM -0800, Si-Wei Liu wrote:
+> > > > > Sorry for reviving this ancient thread. I was kinda lost for the conclusion
+> > > > > it ended up with. I have the following questions,
+> > > > >
+> > > > > 1. legacy guest support: from the past conversations it doesn't seem the
+> > > > > support will be completely dropped from the table, is my understanding
+> > > > > correct? Actually we're interested in supporting virtio v0.95 guest for x86,
+> > > > > which is backed by the spec at
+> > > > > https://ozlabs.org/~rusty/virtio-spec/virtio-0.9.5.pdf. Though I'm not sure
+> > > > > if there's request/need to support wilder legacy virtio versions earlier
+> > > > > beyond.
+> > > >
+> > > > I personally feel it's less work to add in kernel than try to
+> > > > work around it in userspace. Jason feels differently.
+> > > > Maybe post the patches and this will prove to Jason it's not
+> > > > too terrible?
+> > >
+> > > That's one way, other than the config access before setting features,
+> > > we need to deal with other stuffs:
+> > >
+> > > 1) VIRTIO_F_ORDER_PLATFORM
+> > > 2) there could be a parent device that only support 1.0 device
+> > >
+> > > And a lot of other stuff summarized in spec 7.4 which seems not an
+> > > easy task. Various vDPA parent drivers were written under the
+> > > assumption that only modern devices are supported.
+> > >
+> > > Thanks
+> >
+> > Limiting things to x86 will likely address most issues though, won't it?
 > 
-> Looks OK to me, however we should also add all the mapphones to the
-> Documentation/devicetree/bindings/arm/omap/omap.txt so we can avoid
-> dtb check warnings. Care to also do a patch for that? Looks like the
-> others are missing too.
+> For the ordering, yes. But it means we need to introduce a config
+> option for legacy logic?
+> And we need to deal with, as you said in another thread, kick before DRIVER_OK:
+> 
+> E.g we had thing like this:
+> 
+>         if ((status & VIRTIO_CONFIG_S_DRIVER_OK) &&
+>             !(status_old & VIRTIO_CONFIG_S_DRIVER_OK)) {
+>                 ret = ifcvf_request_irq(adapter);
+>                 if (ret) {
+> 
+> Similar issues could be found in other parents.
 
-Sure, I'll do that and add the others too while at it. Shall I add those
-to this patch, or make a separate patch?
+The driver ok thing is mostly an issue for block where it
+expects to access the disk directly during probe.
 
-Regards,
-Merlijn
+> We also need to consider whether we should encourage the vendor to
+> implement the logic.
+> 
+> I think we can try and see how hard it is.
+> 
+> Thanks
+
+Right. My point exactly.
+
+> >
+> > > >
+> > > > > 2. suppose some form of legacy guest support needs to be there, how do we
+> > > > > deal with the bogus assumption below in vdpa_get_config() in the short term?
+> > > > > It looks one of the intuitive fix is to move the vdpa_set_features call out
+> > > > > of vdpa_get_config() to vdpa_set_config().
+> > > > >
+> > > > >         /*
+> > > > >          * Config accesses aren't supposed to trigger before features are
+> > > > > set.
+> > > > >          * If it does happen we assume a legacy guest.
+> > > > >          */
+> > > > >         if (!vdev->features_valid)
+> > > > >                 vdpa_set_features(vdev, 0);
+> > > > >         ops->get_config(vdev, offset, buf, len);
+> > > > >
+> > > > > I can post a patch to fix 2) if there's consensus already reached.
+> > > > >
+> > > > > Thanks,
+> > > > > -Siwei
+> > > >
+> > > > I'm not sure how important it is to change that.
+> > > > In any case it only affects transitional devices, right?
+> > > > Legacy only should not care ...
+> > > >
+> > > >
+> > > > > On 3/2/2021 2:53 AM, Jason Wang wrote:
+> > > > > >
+> > > > > > On 2021/3/2 5:47 下午, Michael S. Tsirkin wrote:
+> > > > > > > On Mon, Mar 01, 2021 at 11:56:50AM +0800, Jason Wang wrote:
+> > > > > > > > On 2021/3/1 5:34 上午, Michael S. Tsirkin wrote:
+> > > > > > > > > On Wed, Feb 24, 2021 at 10:24:41AM -0800, Si-Wei Liu wrote:
+> > > > > > > > > > > Detecting it isn't enough though, we will need a new ioctl to notify
+> > > > > > > > > > > the kernel that it's a legacy guest. Ugh :(
+> > > > > > > > > > Well, although I think adding an ioctl is doable, may I
+> > > > > > > > > > know what the use
+> > > > > > > > > > case there will be for kernel to leverage such info
+> > > > > > > > > > directly? Is there a
+> > > > > > > > > > case QEMU can't do with dedicate ioctls later if there's indeed
+> > > > > > > > > > differentiation (legacy v.s. modern) needed?
+> > > > > > > > > BTW a good API could be
+> > > > > > > > >
+> > > > > > > > > #define VHOST_SET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > > > > #define VHOST_GET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > > > >
+> > > > > > > > > we did it per vring but maybe that was a mistake ...
+> > > > > > > >
+> > > > > > > > Actually, I wonder whether it's good time to just not support
+> > > > > > > > legacy driver
+> > > > > > > > for vDPA. Consider:
+> > > > > > > >
+> > > > > > > > 1) It's definition is no-normative
+> > > > > > > > 2) A lot of budren of codes
+> > > > > > > >
+> > > > > > > > So qemu can still present the legacy device since the config
+> > > > > > > > space or other
+> > > > > > > > stuffs that is presented by vhost-vDPA is not expected to be
+> > > > > > > > accessed by
+> > > > > > > > guest directly. Qemu can do the endian conversion when necessary
+> > > > > > > > in this
+> > > > > > > > case?
+> > > > > > > >
+> > > > > > > > Thanks
+> > > > > > > >
+> > > > > > > Overall I would be fine with this approach but we need to avoid breaking
+> > > > > > > working userspace, qemu releases with vdpa support are out there and
+> > > > > > > seem to work for people. Any changes need to take that into account
+> > > > > > > and document compatibility concerns.
+> > > > > >
+> > > > > >
+> > > > > > Agree, let me check.
+> > > > > >
+> > > > > >
+> > > > > > >   I note that any hardware
+> > > > > > > implementation is already broken for legacy except on platforms with
+> > > > > > > strong ordering which might be helpful in reducing the scope.
+> > > > > >
+> > > > > >
+> > > > > > Yes.
+> > > > > >
+> > > > > > Thanks
+> > > > > >
+> > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > >
+> > > >
+> >
+

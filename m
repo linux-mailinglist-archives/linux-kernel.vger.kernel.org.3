@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D83F47283E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6468472528
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbhLMKJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S233128AbhLMJla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242439AbhLMKHf (ORCPT
+        with ESMTP id S234883AbhLMJjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:07:35 -0500
+        Mon, 13 Dec 2021 04:39:39 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1820C08EC3B;
-        Mon, 13 Dec 2021 01:51:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0E6C0698DD;
+        Mon, 13 Dec 2021 01:38:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 17B74CE0B20;
-        Mon, 13 Dec 2021 09:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5041C00446;
-        Mon, 13 Dec 2021 09:51:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B44EDCE0E39;
+        Mon, 13 Dec 2021 09:38:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FEBFC341C5;
+        Mon, 13 Dec 2021 09:37:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389105;
-        bh=CaGJg9L+b7+ixx5BF0mYsdNS66KsGLOlP7xuy9QgWP0=;
+        s=korg; t=1639388279;
+        bh=EMXsWDEEBe/1M5XBOr7AJEtKoVJym7LRnp2sCEeC2kg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J7hCs2VXXHT1bSr1bM/2ihv430Q1pCpWF4j0g0NOhJpIFe6ylV04pmCuB110C4pCx
-         0ZsRsGbdlXjcmbREDAnyXcOfdveS2AOmq033R6utVxS7mn7eM5h2mSzZLMnBLNwuYa
-         t2dUocKOz3N+om8C3yk0QkTHkvUyFPCQiFsecnsg=
+        b=lU8c7THCwNJ/cSemGeo5bU1rguIVFK2NP8yxxSzRC5nlzH6LS9Oq2Y2k+/r1K7paa
+         rCxsblAobJkPGW8+nL3V537BDoR0JqyCDgxigYLZoCVnAfh3PacGbKYaag3At5gxF2
+         HkHbibDjXbRMFERrE4Gg2W6GfIlzvFQMtT1SfXxU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.10 087/132] mtd: rawnand: fsmc: Fix timing computation
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.14 49/53] iio: accel: kxcjk-1013: Fix possible memory leak in probe and remove
 Date:   Mon, 13 Dec 2021 10:30:28 +0100
-Message-Id: <20211213092942.095636249@linuxfoundation.org>
+Message-Id: <20211213092929.993372000@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,106 +50,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herve Codina <herve.codina@bootlin.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 9472335eaa1452b51dc8e8edaa1a342997cb80c7 upstream.
+commit 70c9774e180d151abaab358108e3510a8e615215 upstream.
 
-Under certain circumstances, the timing settings calculated by
-the FSMC NAND controller driver were inaccurate.
-These settings led to incorrect data reads or fallback to
-timing mode 0 depending on the NAND chip used.
+When ACPI type is ACPI_SMO8500, the data->dready_trig will not be set, the
+memory allocated by iio_triggered_buffer_setup() will not be freed, and cause
+memory leak as follows:
 
-The timing computation did not take into account the following
-constraint given in SPEAr3xx reference manual:
-  twait >= tCEA - (tset * TCLK) + TOUTDEL + TINDEL
+unreferenced object 0xffff888009551400 (size 512):
+  comm "i2c-SMO8500-125", pid 911, jiffies 4294911787 (age 83.852s)
+  hex dump (first 32 bytes):
+    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 20 e2 e5 c0 ff ff ff ff  ........ .......
+  backtrace:
+    [<0000000041ce75ee>] kmem_cache_alloc_trace+0x16d/0x360
+    [<000000000aeb17b0>] iio_kfifo_allocate+0x41/0x130 [kfifo_buf]
+    [<000000004b40c1f5>] iio_triggered_buffer_setup_ext+0x2c/0x210 [industrialio_triggered_buffer]
+    [<000000004375b15f>] kxcjk1013_probe+0x10c3/0x1d81 [kxcjk_1013]
 
-Enhance the timings calculation by taking into account this
-additional constraint.
+Fix it by remove data->dready_trig condition in probe and remove.
 
-This change has no impact on slow timing modes such as mode 0.
-Indeed, on mode 0, computed values are the same with and
-without the patch.
-
-NANDs which previously stayed in mode 0 because of fallback to
-mode 0 can now work at higher speeds and NANDs which were not
-working at all because of the corrupted data work at high
-speeds without troubles.
-
-Overall improvement on a Micron/MT29F1G08 (flash_speed tool):
-                        mode0       mode3
-eraseblock write speed  3220 KiB/s  4511 KiB/s
-eraseblock read speed   4491 KiB/s  7529 KiB/s
-
-Fixes: d9fb079571833 ("mtd: nand: fsmc: add support for SDR timings")
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211119150316.43080-5-herve.codina@bootlin.com
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: a25691c1f967 ("iio: accel: kxcjk1013: allow using an external trigger")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Cc: <Stable@vger.kernel.org>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20211025124159.2700301-1-yangyingliang@huawei.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/fsmc_nand.c |   32 ++++++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+ drivers/iio/accel/kxcjk-1013.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
---- a/drivers/mtd/nand/raw/fsmc_nand.c
-+++ b/drivers/mtd/nand/raw/fsmc_nand.c
-@@ -94,6 +94,14 @@
- 
- #define FSMC_BUSY_WAIT_TIMEOUT	(1 * HZ)
- 
-+/*
-+ * According to SPEAr300 Reference Manual (RM0082)
-+ *  TOUDEL = 7ns (Output delay from the flip-flops to the board)
-+ *  TINDEL = 5ns (Input delay from the board to the flipflop)
-+ */
-+#define TOUTDEL	7000
-+#define TINDEL	5000
-+
- struct fsmc_nand_timings {
- 	u8 tclr;
- 	u8 tar;
-@@ -278,7 +286,7 @@ static int fsmc_calc_timings(struct fsmc
- {
- 	unsigned long hclk = clk_get_rate(host->clk);
- 	unsigned long hclkn = NSEC_PER_SEC / hclk;
--	u32 thiz, thold, twait, tset;
-+	u32 thiz, thold, twait, tset, twait_min;
- 
- 	if (sdrt->tRC_min < 30000)
- 		return -EOPNOTSUPP;
-@@ -310,13 +318,6 @@ static int fsmc_calc_timings(struct fsmc
- 	else if (tims->thold > FSMC_THOLD_MASK)
- 		tims->thold = FSMC_THOLD_MASK;
- 
--	twait = max(sdrt->tRP_min, sdrt->tWP_min);
--	tims->twait = DIV_ROUND_UP(twait / 1000, hclkn) - 1;
--	if (tims->twait == 0)
--		tims->twait = 1;
--	else if (tims->twait > FSMC_TWAIT_MASK)
--		tims->twait = FSMC_TWAIT_MASK;
--
- 	tset = max(sdrt->tCS_min - sdrt->tWP_min,
- 		   sdrt->tCEA_max - sdrt->tREA_max);
- 	tims->tset = DIV_ROUND_UP(tset / 1000, hclkn) - 1;
-@@ -325,6 +326,21 @@ static int fsmc_calc_timings(struct fsmc
- 	else if (tims->tset > FSMC_TSET_MASK)
- 		tims->tset = FSMC_TSET_MASK;
- 
-+	/*
-+	 * According to SPEAr300 Reference Manual (RM0082) which gives more
-+	 * information related to FSMSC timings than the SPEAr600 one (RM0305),
-+	 *   twait >= tCEA - (tset * TCLK) + TOUTDEL + TINDEL
-+	 */
-+	twait_min = sdrt->tCEA_max - ((tims->tset + 1) * hclkn * 1000)
-+		    + TOUTDEL + TINDEL;
-+	twait = max3(sdrt->tRP_min, sdrt->tWP_min, twait_min);
-+
-+	tims->twait = DIV_ROUND_UP(twait / 1000, hclkn) - 1;
-+	if (tims->twait == 0)
-+		tims->twait = 1;
-+	else if (tims->twait > FSMC_TWAIT_MASK)
-+		tims->twait = FSMC_TWAIT_MASK;
-+
+--- a/drivers/iio/accel/kxcjk-1013.c
++++ b/drivers/iio/accel/kxcjk-1013.c
+@@ -1326,8 +1326,7 @@ static int kxcjk1013_probe(struct i2c_cl
  	return 0;
- }
  
+ err_buffer_cleanup:
+-	if (data->dready_trig)
+-		iio_triggered_buffer_cleanup(indio_dev);
++	iio_triggered_buffer_cleanup(indio_dev);
+ err_trigger_unregister:
+ 	if (data->dready_trig)
+ 		iio_trigger_unregister(data->dready_trig);
+@@ -1350,8 +1349,8 @@ static int kxcjk1013_remove(struct i2c_c
+ 	pm_runtime_set_suspended(&client->dev);
+ 	pm_runtime_put_noidle(&client->dev);
+ 
++	iio_triggered_buffer_cleanup(indio_dev);
+ 	if (data->dready_trig) {
+-		iio_triggered_buffer_cleanup(indio_dev);
+ 		iio_trigger_unregister(data->dready_trig);
+ 		iio_trigger_unregister(data->motion_trig);
+ 	}
 
 

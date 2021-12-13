@@ -2,62 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DC5473200
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE15473205
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240965AbhLMQkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:40:16 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:39649 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240951AbhLMQkM (ORCPT
+        id S236968AbhLMQkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238169AbhLMQki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:40:12 -0500
-Received: by mail-il1-f198.google.com with SMTP id d3-20020a056e021c4300b002a23bcd5ee7so15203218ilg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:40:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=3ID3XANipYuWRqgtPQ1BWFFiHhMGJojTDZG87ujp4KY=;
-        b=o3u2iO/jcUE7O8geLTAHHRRCD+fZm5T6vk5RUcE3HFJ83WYBxiCnRTOMM1X5lsmZ2t
-         rBNtNiF0+Uq+QS48H6X97JNqP8JoNOM/+WNDHnKV801RnnoFoJ2CjtzlHafiG5iiDfgx
-         /XL3gWK6SaDItYXdiwtvLwyk0otncDCH/VXFup5xtcLp7PJlwpdBkQ/Pvhi04iK6GqXJ
-         QhZJwDptDPRvsEWOh6KnY7UBjNYWwJWytkPPs/sl6MXb6Trrr1Lq7bIOyzSdgYHPjB8v
-         CmkkU/aIWnYIcgEy4qtjRhgHBeR+ex2lgcfVPJPiGeov/pDsew/Hh+U0Jwry4dyYBuZx
-         iFjA==
-X-Gm-Message-State: AOAM5302xh7D/OE1i+s5VYa4JclfNezbgwmIZC+00LG7mku2cCxGHMPE
-        qW83um2XysDPeaVpdBVVwV9L4lw4r4Waq9RO1ybaZOi8PMfD
-X-Google-Smtp-Source: ABdhPJxnluLGA2ihn4eZD4ifoLmKB715ATvxozGrTPZEpBkNwTIO3XvJfes46/CiIaBlqjUweE8RJD/5lOM7GyE7ylqU+tT2teSE
+        Mon, 13 Dec 2021 11:40:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207C7C061748;
+        Mon, 13 Dec 2021 08:40:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB0E1B811D2;
+        Mon, 13 Dec 2021 16:40:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E80C34603;
+        Mon, 13 Dec 2021 16:40:30 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 17:40:27 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem
+ related variables into ima_namespace
+Message-ID: <20211213164027.7z7gpcjnsaqodq4j@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-14-stefanb@linux.ibm.com>
+ <20211209191109.o3x7nynnm52zhygz@wittgenstein>
+ <0ab33fbc-8438-27b6-ff4c-0321bfc73855@linux.ibm.com>
+ <20211210113244.odv2ibrifz2jzft5@wittgenstein>
+ <dca4e7c9-87a7-9a9e-b1f2-df16f1a45019@linux.ibm.com>
+ <20211211095026.i2gvqjy4df3sxq42@wittgenstein>
+ <85b75c98-6452-9706-7549-10b416350b7d@linux.ibm.com>
+ <20211213155020.pvadnomqnsub5vg2@wittgenstein>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d6c7:: with SMTP id z7mr35334339ilp.92.1639413611269;
- Mon, 13 Dec 2021 08:40:11 -0800 (PST)
-Date:   Mon, 13 Dec 2021 08:40:11 -0800
-In-Reply-To: <494d69b4-d9da-b698-39e6-ed41b64a09a7@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f0971c05d309b9c2@google.com>
-Subject: Re: [syzbot] possible deadlock in io_worker_cancel_cb
-From:   syzbot <syzbot+b18b8be69df33a3918e9@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, haoxu@linux.alibaba.com,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211213155020.pvadnomqnsub5vg2@wittgenstein>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Dec 13, 2021 at 04:50:20PM +0100, Christian Brauner wrote:
+> On Mon, Dec 13, 2021 at 10:33:40AM -0500, Stefan Berger wrote:
+> > 
+> > On 12/11/21 04:50, Christian Brauner wrote:
+> > > On Fri, Dec 10, 2021 at 08:57:11AM -0500, Stefan Berger wrote:
+> > > > 
+> > > > 
+> > > > there anything that would prevent us from setns()'ing to that target user
+> > > > namespace so that we would now see that of a user namespace that we are not
+> > > > allowed to see?
+> > > If you're really worried about someone being able to access a securityfs
+> > > instance whose userns doesn't match the userns the securityfs instance
+> > > was mounted in there are multiple ways to fix it. The one that I tend to
+> > > prefer is:
+> > > 
+> > >  From e0ff6a8dcc573763568e685dd70d1547efd68df9 Mon Sep 17 00:00:00 2001
+> > > From: Christian Brauner <christian.brauner@ubuntu.com>
+> > > Date: Fri, 10 Dec 2021 11:47:37 +0100
+> > > Subject: !!!! HERE BE DRAGONS - COMPLETELY UNTESTED !!!!
+> > > 
+> > > securityfs: only allow access to securityfs from within same namespace
+> > > 
+> > > Limit opening of securityfs files to callers located in the same namespace.
+> > > 
+> > > ---
+> > >   security/inode.c | 33 +++++++++++++++++++++++++++++++--
+> > >   1 file changed, 31 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/security/inode.c b/security/inode.c
+> > > index eaccba7017d9..9eaf757c08cb 100644
+> > > --- a/security/inode.c
+> > > +++ b/security/inode.c
+> > > @@ -80,6 +80,35 @@ static struct file_system_type fs_type = {
+> > >   	.fs_flags =	FS_USERNS_MOUNT,
+> > >   };
+> > > +static int securityfs_permission(struct user_namespace *mnt_userns,
+> > > +				 struct inode *inode, int mask)
+> > > +{
+> > > +	int err;
+> > > +
+> > > +	err = generic_permission(&init_user_ns, inode, mask);
+> > > +	if (!err) {
+> > > +		if (inode->i_sb->s_user_ns != current_user_ns())
+> > > +			err = -EACCES;
+> > > +	}
+> > > +
+> > > +	return err;
+> > > +}
+> > > +
+> > > +const struct inode_operations securityfs_dir_inode_operations = {
+> > > +	.permission	= securityfs_permission,
+> > > +	.lookup		= simple_lookup,
+> > > +};
+> > > +
+> > > +const struct file_operations securityfs_dir_operations = {
+> > > +	.permission	= securityfs_permission,
+> > 
+> > 
+> > This interface function on file operations doesn't exist.
+> 
+> It's almost as if the subject line of this patch warned about its draft
+> character. That was supposed for regular files.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+b18b8be69df33a3918e9@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         d800c65c io-wq: drop wqe lock before creating new worker
-git tree:       git://git.kernel.dk/linux-block io_uring-5.16
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6c3ab72998e7f1a4
-dashboard link: https://syzkaller.appspot.com/bug?extid=b18b8be69df33a3918e9
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: testing is done by a robot and is best-effort only.
+Mah, I deleted the ;) after it on accident. I wasn't mocking. :)

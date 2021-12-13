@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A100472654
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFE0472998
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235680AbhLMJu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:50:26 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:38634 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236096AbhLMJqD (ORCPT
+        id S239274AbhLMKX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242211AbhLMKUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:46:03 -0500
+        Mon, 13 Dec 2021 05:20:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B2DC08EAFA;
+        Mon, 13 Dec 2021 01:58:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6D467CE0AE2;
-        Mon, 13 Dec 2021 09:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1923DC341C5;
-        Mon, 13 Dec 2021 09:45:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFB1CB80E83;
+        Mon, 13 Dec 2021 09:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24690C34601;
+        Mon, 13 Dec 2021 09:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388758;
-        bh=agXYGWcwPEAsrO1o53XHEHFx2axEpc30MbfPaN2kDjM=;
+        s=korg; t=1639389485;
+        bh=oVI2L5Y/QgONeFmQaI1+k95QDY05CDNeV1WSyGyDTeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EWsBzAm27Z6nAHDMin7EGtRzO1s4HGt61kXmSShBctLCQjp7ga+1ZhzKLst6xVI3f
-         boz5dK3bikWbAhGC7c2OkADMXeSwD4n9zYB2iPjTxY40sAF0DC1lKz3n82Tfle6vyA
-         Q8ss0fgq1WqL07zj+7SsQvhxcfX/tGc/GGclN0tE=
+        b=LCeF+xxxNDYxa8fGIFeq/yUv87LQC0tGrhPbQ++cI1YBG/NAY9cJoj4MyOlyVZuQr
+         ftzO7HtwJUWYn5iV0igY5WG5d3OTG/Wr2sZX9c17in710WwpFeldNpIvpPjB1Pu0wZ
+         tdYqbPfwy4IqLcKlvya2NvYZ6yzcrWuRUpgd4SYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.4 54/88] mtd: rawnand: fsmc: Take instruction delay into account
-Date:   Mon, 13 Dec 2021 10:30:24 +0100
-Message-Id: <20211213092935.130636806@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 110/171] ASoC: codecs: wsa881x: fix return values from kcontrol put
+Date:   Mon, 13 Dec 2021 10:30:25 +0100
+Message-Id: <20211213092948.760479502@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,44 +49,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herve Codina <herve.codina@bootlin.com>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-commit a4ca0c439f2d5ce9a3dc118d882f9f03449864c8 upstream.
+commit 3fc27e9a1f619b50700f020e6cd270c1b74755f0 upstream.
 
-The FSMC NAND controller should apply a delay after the
-instruction has been issued on the bus.
-The FSMC NAND controller driver did not handle this delay.
+wsa881x_set_port() and wsa881x_put_pa_gain() currently returns zero eventhough
+it changes the value. Fix this, so that change notifications are sent
+correctly.
 
-Add this waiting delay in the FSMC NAND controller driver.
-
-Fixes: 4da712e70294 ("mtd: nand: fsmc: use ->exec_op()")
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211119150316.43080-4-herve.codina@bootlin.com
+Fixes: a0aab9e1404a ("ASoC: codecs: add wsa881x amplifier support")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20211130160507.22180-5-srinivas.kandagatla@linaro.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/fsmc_nand.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ sound/soc/codecs/wsa881x.c |   16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
---- a/drivers/mtd/nand/raw/fsmc_nand.c
-+++ b/drivers/mtd/nand/raw/fsmc_nand.c
-@@ -15,6 +15,7 @@
+--- a/sound/soc/codecs/wsa881x.c
++++ b/sound/soc/codecs/wsa881x.c
+@@ -772,7 +772,8 @@ static int wsa881x_put_pa_gain(struct sn
  
- #include <linux/clk.h>
- #include <linux/completion.h>
-+#include <linux/delay.h>
- #include <linux/dmaengine.h>
- #include <linux/dma-direction.h>
- #include <linux/dma-mapping.h>
-@@ -650,6 +651,9 @@ static int fsmc_exec_op(struct nand_chip
- 						instr->ctx.waitrdy.timeout_ms);
- 			break;
- 		}
-+
-+		if (instr->delay_ns)
-+			ndelay(instr->delay_ns);
+ 		usleep_range(1000, 1010);
  	}
+-	return 0;
++
++	return 1;
+ }
  
- 	return ret;
+ static int wsa881x_get_port(struct snd_kcontrol *kcontrol,
+@@ -816,15 +817,22 @@ static int wsa881x_set_port(struct snd_k
+ 		(struct soc_mixer_control *)kcontrol->private_value;
+ 	int portidx = mixer->reg;
+ 
+-	if (ucontrol->value.integer.value[0])
++	if (ucontrol->value.integer.value[0]) {
++		if (data->port_enable[portidx])
++			return 0;
++
+ 		data->port_enable[portidx] = true;
+-	else
++	} else {
++		if (!data->port_enable[portidx])
++			return 0;
++
+ 		data->port_enable[portidx] = false;
++	}
+ 
+ 	if (portidx == WSA881X_PORT_BOOST) /* Boost Switch */
+ 		wsa881x_boost_ctrl(comp, data->port_enable[portidx]);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ static const char * const smart_boost_lvl_text[] = {
 
 

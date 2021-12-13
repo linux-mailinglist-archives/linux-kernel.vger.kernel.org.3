@@ -2,47 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C1A472850
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D3247265B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240011AbhLMKKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:10:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240533AbhLMKIi (ORCPT
+        id S237555AbhLMJuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:50:52 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38922 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235278AbhLMJqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:08:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C161C08EA49;
-        Mon, 13 Dec 2021 01:52:02 -0800 (PST)
+        Mon, 13 Dec 2021 04:46:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06B44B80E1C;
-        Mon, 13 Dec 2021 09:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 490CBC00446;
-        Mon, 13 Dec 2021 09:51:59 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 52535CE0E93;
+        Mon, 13 Dec 2021 09:46:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C5EC00446;
+        Mon, 13 Dec 2021 09:46:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389119;
-        bh=qQUGZqqzlDxQXWJnYiSxY4RtcCgIXI0x4rWanSpHhCg=;
+        s=korg; t=1639388781;
+        bh=wVjwqELeO4GSWdRg1zD8OEFEc3ea2jB8SpW09lMJW74=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ggFpg5vXf1HTv4vfE+1W8zW0PVbsNHE/VJNG2dEVZQuMJMh6ZzvzGFhJZ+DGe17FU
-         Fv7S7XicoXHJq01z8nc22YaD5rjniHqgbRdv9+a/VD1tN2yTbPr2o1fVQAlkPCwEPZ
-         vzbExuO+rw2LVw1WxeWsS1cgZ7uaYAQ4WbfbPILU=
+        b=kiXVH3xqA5VuaNiE2/jBzbOFHs07hD5T9CmYKA9UeEJKwpMziY4CFR8nt3+cDPmBz
+         I2UM43j/f22WNLDr/E8ujvFw1F4Kg4ey/GoCQBm9pL8XJ8M3qAKR3x7F3siwiqwb5X
+         1Tn1Esy+G6EyvXeOFF4gkP4YnbvS4BYVmM+Tz0TQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 117/132] iio: adc: stm32: fix a current leak by resetting pcsel before disabling vdda
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH 5.4 88/88] bpf: Add selftests to cover packet access corner cases
 Date:   Mon, 13 Dec 2021 10:30:58 +0100
-Message-Id: <20211213092943.113466040@linuxfoundation.org>
+Message-Id: <20211213092936.236660507@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,42 +45,809 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-commit f711f28e71e965c0d1141c830fa7131b41abbe75 upstream.
+commit b560b21f71eb4ef9dfc7c8ec1d0e4d7f9aa54b51 upstream.
 
-Some I/Os are connected to ADC input channels, when the corresponding bit
-in PCSEL register are set on STM32H7 and STM32MP15. This is done in the
-prepare routine of stm32-adc driver.
-There are constraints here, as PCSEL shouldn't be set when VDDA supply
-is disabled. Enabling/disabling of VDDA supply in done via stm32-adc-core
-runtime PM routines (before/after ADC is enabled/disabled).
+This commit adds BPF verifier selftests that cover all corner cases by
+packet boundary checks. Specifically, 8-byte packet reads are tested at
+the beginning of data and at the beginning of data_meta, using all kinds
+of boundary checks (all comparison operators: <, >, <=, >=; both
+permutations of operands: data + length compared to end, end compared to
+data + length). For each case there are three tests:
 
-Currently, PCSEL remains set when disabling ADC. Later on, PM runtime
-can disable the VDDA supply. This creates some conditions on I/Os that
-can start to leak current.
-So PCSEL needs to be cleared when disabling the ADC.
+1. Length is just enough for an 8-byte read. Length is either 7 or 8,
+   depending on the comparison.
 
-Fixes: 95e339b6e85d ("iio: adc: stm32: add support for STM32H7")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Reviewed-by: Olivier Moysan <olivier.moysan@foss.st.com>
-Link: https://lore.kernel.org/r/1634905169-23762-1-git-send-email-fabrice.gasnier@foss.st.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+2. Length is increased by 1 - should still pass the verifier. These
+   cases are useful, because they failed before commit 2fa7d94afc1a
+   ("bpf: Fix the off-by-two error in range markings").
+
+3. Length is decreased by 1 - should be rejected by the verifier.
+
+Some existing tests are just renamed to avoid duplication.
+
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211207081521.41923-1-maximmi@nvidia.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/stm32-adc.c |    1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/verifier/xdp_direct_packet_access.c |  600 +++++++++-
+ 1 file changed, 584 insertions(+), 16 deletions(-)
 
---- a/drivers/iio/adc/stm32-adc.c
-+++ b/drivers/iio/adc/stm32-adc.c
-@@ -979,6 +979,7 @@ static void stm32h7_adc_unprepare(struct
+--- a/tools/testing/selftests/bpf/verifier/xdp_direct_packet_access.c
++++ b/tools/testing/selftests/bpf/verifier/xdp_direct_packet_access.c
+@@ -35,7 +35,7 @@
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ },
  {
- 	struct stm32_adc *adc = iio_priv(indio_dev);
- 
-+	stm32_adc_writel(adc, STM32H7_ADC_PCSEL, 0);
- 	stm32h7_adc_disable(indio_dev);
- 	stm32h7_adc_enter_pwr_down(adc);
- }
+-	"XDP pkt read, pkt_data' > pkt_end, good access",
++	"XDP pkt read, pkt_data' > pkt_end, corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -88,6 +88,41 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_data' > pkt_end, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data' > pkt_end, corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_end > pkt_data', good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+@@ -106,7 +141,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_end > pkt_data', bad access 1",
++	"XDP pkt read, pkt_end > pkt_data', corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -143,6 +178,42 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_end > pkt_data', corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_end > pkt_data', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_data' < pkt_end, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+@@ -161,7 +232,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_data' < pkt_end, bad access 1",
++	"XDP pkt read, pkt_data' < pkt_end, corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -198,7 +269,43 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_end < pkt_data', good access",
++	"XDP pkt read, pkt_data' < pkt_end, corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data' < pkt_end, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_end < pkt_data', corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -251,6 +358,41 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_end < pkt_data', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_end < pkt_data', corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_data' >= pkt_end, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+@@ -268,7 +410,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_data' >= pkt_end, bad access 1",
++	"XDP pkt read, pkt_data' >= pkt_end, corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -304,7 +446,41 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_end >= pkt_data', good access",
++	"XDP pkt read, pkt_data' >= pkt_end, corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data' >= pkt_end, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_end >= pkt_data', corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -359,7 +535,44 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_data' <= pkt_end, good access",
++	"XDP pkt read, pkt_end >= pkt_data', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_end >= pkt_data', corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data' <= pkt_end, corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -414,6 +627,43 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_data' <= pkt_end, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data' <= pkt_end, corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_end <= pkt_data', good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+@@ -431,7 +681,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_end <= pkt_data', bad access 1",
++	"XDP pkt read, pkt_end <= pkt_data', corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
+@@ -467,7 +717,41 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_meta' > pkt_data, good access",
++	"XDP pkt read, pkt_end <= pkt_data', corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_end <= pkt_data', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
++		    offsetof(struct xdp_md, data_end)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_meta' > pkt_data, corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -520,6 +804,41 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_meta' > pkt_data, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_meta' > pkt_data, corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_data > pkt_meta', good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+@@ -538,7 +857,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_data > pkt_meta', bad access 1",
++	"XDP pkt read, pkt_data > pkt_meta', corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -575,6 +894,42 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_data > pkt_meta', corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data > pkt_meta', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_meta' < pkt_data, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+@@ -593,7 +948,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_meta' < pkt_data, bad access 1",
++	"XDP pkt read, pkt_meta' < pkt_data, corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -630,7 +985,43 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_data < pkt_meta', good access",
++	"XDP pkt read, pkt_meta' < pkt_data, corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_meta' < pkt_data, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data < pkt_meta', corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -683,6 +1074,41 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_data < pkt_meta', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data < pkt_meta', corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLT, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_meta' >= pkt_data, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+@@ -700,7 +1126,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_meta' >= pkt_data, bad access 1",
++	"XDP pkt read, pkt_meta' >= pkt_data, corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -736,7 +1162,41 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_data >= pkt_meta', good access",
++	"XDP pkt read, pkt_meta' >= pkt_data, corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_meta' >= pkt_data, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data >= pkt_meta', corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -791,7 +1251,44 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_meta' <= pkt_data, good access",
++	"XDP pkt read, pkt_data >= pkt_meta', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data >= pkt_meta', corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JGE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_meta' <= pkt_data, corner case, good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -846,6 +1343,43 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
++	"XDP pkt read, pkt_meta' <= pkt_data, corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 9),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -9),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_meta' <= pkt_data, corner case -1, bad access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_1, BPF_REG_3, 1),
++	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R1 offset is outside of the packet",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
+ 	"XDP pkt read, pkt_data <= pkt_meta', good access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+@@ -863,7 +1397,7 @@
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
+ {
+-	"XDP pkt read, pkt_data <= pkt_meta', bad access 1",
++	"XDP pkt read, pkt_data <= pkt_meta', corner case -1, bad access",
+ 	.insns = {
+ 	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
+ 		    offsetof(struct xdp_md, data_meta)),
+@@ -898,3 +1432,37 @@
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ },
++{
++	"XDP pkt read, pkt_data <= pkt_meta', corner case, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 7),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"XDP pkt read, pkt_data <= pkt_meta', corner case +1, good access",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
++		    offsetof(struct xdp_md, data_meta)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data)),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
++	BPF_JMP_REG(BPF_JLE, BPF_REG_3, BPF_REG_1, 1),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_XDP,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
 
 

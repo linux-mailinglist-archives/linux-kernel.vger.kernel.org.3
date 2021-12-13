@@ -2,91 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD792472689
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A6E472589
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238086AbhLMJwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbhLMJpv (ORCPT
+        id S234285AbhLMJoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:44:12 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:37768 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233163AbhLMJlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:45:51 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125C7C0698C9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:41:01 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id r130so14471318pfc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:41:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SyI4CrxhxjGs4U1AItbH04mOIfBjvOwSAkZHtBeA6Zg=;
-        b=MX0I7o11RVxfLQX6hcbyPebvWZP/qh+9KfyXgxOQsIcWqztDfvoyEDJc8rKXoXoAc5
-         V2oXQlEnOKkOSK19/PwMBHVwgaevaut0Thnx3XoMCm4OMr2xGIyg4F9qk5+sANxs5pYF
-         s641u8j196wmdy8T+4gn7S2ycrB7NQIF6KwU0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SyI4CrxhxjGs4U1AItbH04mOIfBjvOwSAkZHtBeA6Zg=;
-        b=hUF+v2ycxqrNA9+BOaflYds6+q2AhCN35rIef7D/HumPglI92DuiwUFUwSVBbKQIhX
-         sBg+arP17DY+qpdtMyU/JGNVD+8szLqP4NlljTThtVRqhZPiNcAWiwkLyO+/AswA5DCG
-         NP/qpX1Lc0UdJFHcEYiIx4TpVkqDHTKa8/Tv4cWmLLH2NtwySNMxLW7V9rQesZvMwtVy
-         yyisXrrbGNjFncmCqFZPKG+7/gPGjmYBWt4X2w2zHujBLC5SwhvCkCfrsALJtkI2wtrn
-         IDjIpyvEuEWMtTYr7qZre1n+BR3TC0g263h0UXNmt1QxrlGE/216Wn//83J8GluTwHTj
-         4wFQ==
-X-Gm-Message-State: AOAM533wLAIHhN5yxLfkuoUC+xmP9bg5ePnV+NCLZJ+doc4a8phLOGaI
-        YYBhwdresfvAU7+Li5nuueGu9Q==
-X-Google-Smtp-Source: ABdhPJwi4MogYiq2WtTnKfk5V1Z8klqo9x/WnYX4zftDB46L0eAqZXBBuZS9aouvemOMLPDEY/iBiQ==
-X-Received: by 2002:a05:6a00:9a3:b0:49f:bf9b:3192 with SMTP id u35-20020a056a0009a300b0049fbf9b3192mr32444060pfg.44.1639388460570;
-        Mon, 13 Dec 2021 01:41:00 -0800 (PST)
-Received: from shiro.work (p864106-ipngn200510sizuokaden.shizuoka.ocn.ne.jp. [180.9.58.106])
-        by smtp.googlemail.com with ESMTPSA id d195sm10237609pga.41.2021.12.13.01.40.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 01:41:00 -0800 (PST)
-From:   Daniel Palmer <daniel@0x0f.com>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, linux-gpio@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Daniel Palmer <daniel@0x0f.com>,
-        Romain Perier <romain.perier@gmail.com>
-Subject: [PATCH v3 5/5] ARM: dts: mstar: Set gpio compatible for ssd20xd
-Date:   Mon, 13 Dec 2021 18:40:36 +0900
-Message-Id: <20211213094036.1787950-6-daniel@0x0f.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213094036.1787950-1-daniel@0x0f.com>
-References: <20211213094036.1787950-1-daniel@0x0f.com>
+        Mon, 13 Dec 2021 04:41:45 -0500
+X-UUID: 3a67a27478eb489bba3522b22854af66-20211213
+X-UUID: 3a67a27478eb489bba3522b22854af66-20211213
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 247211187; Mon, 13 Dec 2021 17:41:40 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 13 Dec 2021 17:41:39 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 13 Dec 2021 17:41:39 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <stable@vger.kernel.org>
+CC:     <rppt@kernel.org>, <akpm@linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux@armlinux.org.uk>, <rppt@linux.ibm.com>, <tony@atomide.com>,
+        <wangkefeng.wang@huawei.com>, <mark-pk.tsai@mediatek.com>,
+        <yj.chiang@mediatek.com>
+Subject: [PATCH 5.10 0/5] memblock, arm: fixes for freeing of the memory map
+Date:   Mon, 13 Dec 2021 17:41:30 +0800
+Message-ID: <20211213094135.1798-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now there is gpio support for ssd20xd set the right compatible in the gpio node.
+When linux memory is not aligned with page block size and have hole in zone,
+the 5.4-lts arm kernel might crash in move_freepages() as Kefen Wang reported in [1].
+Backport the upstream fix commits by Mike Rapoport [2] to 5.4 can fix this issue.
 
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-Reviewed-by: Romain Perier <romain.perier@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+And free_unused_memmap() of arm and arm64 are moved to generic mm/memblock in
+the below upstream commit, so I applied the first two patches to free_unused_memmap()
+in arch/arm/mm/init.c.
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi b/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi
-index 7a5e28b33f96..6f067da61ba3 100644
---- a/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi
-+++ b/arch/arm/boot/dts/mstar-infinity2m-ssd20xd.dtsi
-@@ -6,6 +6,11 @@
- 
- #include "mstar-infinity2m.dtsi"
- 
-+&gpio {
-+	compatible = "sstar,ssd20xd-gpio";
-+	status = "okay";
-+};
-+
- &smpctrl {
- 	compatible = "sstar,ssd201-smpctrl", "mstar,smpctrl";
- 	status = "okay";
+(4f5b0c178996 arm, arm64: move free_unused_memmap() to generic mm)
+
+[1] https://lore.kernel.org/lkml/2a1592ad-bc9d-4664-fd19-f7448a37edc0@huawei.com/
+[2] https://lore.kernel.org/lkml/20210630071211.21011-1-rppt@kernel.org/#t
+
+Mike Rapoport (5):
+  memblock: free_unused_memmap: use pageblock units instead of MAX_ORDER
+  memblock: align freed memory map on pageblock boundaries with
+    SPARSEMEM
+  memblock: ensure there is no overflow in memblock_overlaps_region()
+  arm: extend pfn_valid to take into account freed memory map alignment
+  arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
+
+ arch/arm/mm/init.c    | 37 +++++++++++++++++++++++++------------
+ arch/arm/mm/ioremap.c |  4 +++-
+ mm/memblock.c         |  3 ++-
+ 3 files changed, 30 insertions(+), 14 deletions(-)
+
 -- 
-2.34.1
+2.18.0
 

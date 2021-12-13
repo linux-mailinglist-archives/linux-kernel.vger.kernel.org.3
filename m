@@ -2,143 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B28473669
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5E747366B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243078AbhLMVLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:11:34 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44012 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237803AbhLMVLd (ORCPT
+        id S243089AbhLMVMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237803AbhLMVMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:11:33 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BDKEYpp014358;
-        Mon, 13 Dec 2021 21:11:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cxglZ7/AwM4mImr+J8Y9KgqOLtRmaU0v6+QCAKtir84=;
- b=pkeFxYzcXYc9PKF0qDkCBQRKslxnE43g05QRkRgL98YPVFTZ4tduo4FmAm5IoHZuec8k
- f/UvXFtX13/B0kaDbZgy8yd5imxdMb/zOrvwj9aqVlQbtq8EyW9Tx4PwlqKuY/oKY6mB
- lfJrTn87DsQx4Y47bl4/I6IuwhkqkKHAIozKe7/mFuH535hv+41FTUKYekaaipVGs8aq
- CNtSNk1X5ue16FQnDnu4RlYuurBpJ4NwU5RIOjTwIEFJD8glweC9kOre35iQomPRg9MP
- o4S4Q2SQvnjojTGWSVqM2jvhusRqp+blpELvooXByVLgO1CUyDYGuepw7IX8OjkWo0YF Ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r86udf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 21:11:21 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BDKgbv1012728;
-        Mon, 13 Dec 2021 21:11:20 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r86ucr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 21:11:20 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BDL8BNH002690;
-        Mon, 13 Dec 2021 21:11:19 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma04dal.us.ibm.com with ESMTP id 3cvkma10pg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 21:11:19 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BDLBIVo19267986
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Dec 2021 21:11:18 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D0CB6A047;
-        Mon, 13 Dec 2021 21:11:18 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AEB486A064;
-        Mon, 13 Dec 2021 21:11:16 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Dec 2021 21:11:16 +0000 (GMT)
-Message-ID: <b4249c5d-da3d-4306-8d9b-10f06ec80cba@linux.ibm.com>
-Date:   Mon, 13 Dec 2021 16:11:16 -0500
+        Mon, 13 Dec 2021 16:12:18 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB29AC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:12:17 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id 131so41420457ybc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:12:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=My/OmXhiq7OcGWJQkiyFCdd+Kv9m1hhBpvsAaIS748A=;
+        b=sY0boUSc1kTXk72pj3AYCRHIOA8Z6v1zNg5f88fHXl3fc5dDyTD5tq09jKOUVmGhPK
+         CItGWETFsRFeAZEYlBFXT9SNE6uCVO24zMKr5NFAubzN/HM0eTO+j6Q+4WrFA00zhBMy
+         Lzi/fevPTDecqL4v1GIYSjkUz14rZmPCcu4nw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=My/OmXhiq7OcGWJQkiyFCdd+Kv9m1hhBpvsAaIS748A=;
+        b=K+oxPstT6+5YLjGFrGpvBEY0V/QjoJCQVN7tUHIbTwCDOiiUPkPXqO5ig007eJXPo/
+         SYlKZaTWW0QgQAVxBWmb8msWmQ4LW59D4Ke4MHHYQk1TYOIwBUZi/pO5tSiGldB+PqcF
+         z74epFXW+b7eNG3x0LzPIJzzIHCLXj4/mCmxzDHXmCVE8straOF2vCnAbpFEgCmFhm5u
+         d30AkitQRMjxO4OjcQwEkJYszA2L4V20+afo7okGnQ3kY8UAfIixv+NilfMNUSgsmdCk
+         0YfEuubVG1m7kOdFNWpcqj4M9rj2GhVr6fbFFpgMGgcR76yYlrEWsdUX3rUNYZwHEOow
+         CaCQ==
+X-Gm-Message-State: AOAM53012ngZyljbOOdXkTN0kbhFsv3Ikmy5/E9FnklranHhMBmnvLUw
+        AnzGd+2jqDJIcLEWNSJBi+uFKr48ahSmJRva5ooO
+X-Google-Smtp-Source: ABdhPJyXbSLGCxibT4a70SEhm5mStRU/zPOS5amju8xNPK1f0j5SugkLU631wl+AaxrsP+OLo83bRKYQEBu7AaRlO50=
+X-Received: by 2002:a25:bf8d:: with SMTP id l13mr1054805ybk.713.1639429937040;
+ Mon, 13 Dec 2021 13:12:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v6 01/17] ima: Add IMA namespace support
-Content-Language: en-US
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
- <20211210194736.1538863-2-stefanb@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211210194736.1538863-2-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Gl0VRmzp9YJ5KhbgF-xrGoeCYfy5bvkM
-X-Proofpoint-ORIG-GUID: 1Da7rQz0f_76s6BMfzO3OG24C7Y4_6HE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-13_10,2021-12-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 clxscore=1015 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112130125
+References: <20211204002038.113653-1-atishp@atishpatra.org>
+ <20211204002038.113653-4-atishp@atishpatra.org> <48012a35c4f66340547ff50525792a29@kernel.org>
+In-Reply-To: <48012a35c4f66340547ff50525792a29@kernel.org>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 13 Dec 2021 13:12:06 -0800
+Message-ID: <CAOnJCUJQrOqEX94Zcv_rfZj3ja0mrM-3NSWwgxj_sn_Q+aHTmQ@mail.gmail.com>
+Subject: Re: [RFC 3/6] RISC-V: Use __cpu_up_stack/task_pointer only for
+ spinwait method
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup.patel@wdc.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/10/21 14:47, Stefan Berger wrote:
-> Implement an IMA namespace data structure that gets created alongside a
-> user namespace with CLONE_NEWUSER. This lays down the foundation for
-> namespacing the different aspects of IMA (eg. IMA-audit, IMA-measurement,
-> IMA-appraisal).
+On Mon, Dec 13, 2021 at 4:59 AM Marc Zyngier <maz@kernel.org> wrote:
 >
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> ---
->   include/linux/ima.h                      | 37 +++++++++++++
->   include/linux/user_namespace.h           |  4 ++
->   init/Kconfig                             | 10 ++++
->   kernel/user.c                            |  7 +++
->   kernel/user_namespace.c                  |  8 +++
->   security/integrity/ima/Makefile          |  3 +-
->   security/integrity/ima/ima.h             |  4 ++
->   security/integrity/ima/ima_init.c        |  4 ++
->   security/integrity/ima/ima_init_ima_ns.c | 32 +++++++++++
->   security/integrity/ima/ima_ns.c          | 69 ++++++++++++++++++++++++
->   10 files changed, 177 insertions(+), 1 deletion(-)
->   create mode 100644 security/integrity/ima/ima_init_ima_ns.c
->   create mode 100644 security/integrity/ima/ima_ns.c
+> On 2021-12-04 00:20, Atish Patra wrote:
+> > From: Atish Patra <atishp@rivosinc.com>
+> >
+> > The __cpu_up_stack/task_pointer array is only used for spinwait method
+> > now. The per cpu array based lookup is also fragile for platforms with
+> > discontiguous/sparse hartids. The spinwait method is only used for
+> > M-mode Linux or older firmwares without SBI HSM extension. For general
+> > Linux systems, ordered booting method is preferred anyways to support
+> > cpu hotplug and kexec.
+> >
+> > Make sure that __cpu_up_stack/task_pointer is only used for spinwait
+> > method. Take this opportunity to rename it to
+> > __cpu_spinwait_stack/task_pointer to emphasize the purpose as well.
+> >
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/cpu_ops.h     |  2 --
+> >  arch/riscv/kernel/cpu_ops.c          | 16 ----------------
+> >  arch/riscv/kernel/cpu_ops_spinwait.c | 27 ++++++++++++++++++++++++++-
+> >  arch/riscv/kernel/head.S             |  4 ++--
+> >  arch/riscv/kernel/head.h             |  4 ++--
+> >  5 files changed, 30 insertions(+), 23 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/cpu_ops.h
+> > b/arch/riscv/include/asm/cpu_ops.h
+> > index a8ec3c5c1bd2..134590f1b843 100644
+> > --- a/arch/riscv/include/asm/cpu_ops.h
+> > +++ b/arch/riscv/include/asm/cpu_ops.h
+> > @@ -40,7 +40,5 @@ struct cpu_operations {
+> >
+> >  extern const struct cpu_operations *cpu_ops[NR_CPUS];
+> >  void __init cpu_set_ops(int cpu);
+> > -void cpu_update_secondary_bootdata(unsigned int cpuid,
+> > -                                struct task_struct *tidle);
+> >
+> >  #endif /* ifndef __ASM_CPU_OPS_H */
+> > diff --git a/arch/riscv/kernel/cpu_ops.c b/arch/riscv/kernel/cpu_ops.c
+> > index 3f5a38b03044..c1e30f403c3b 100644
+> > --- a/arch/riscv/kernel/cpu_ops.c
+> > +++ b/arch/riscv/kernel/cpu_ops.c
+> > @@ -8,31 +8,15 @@
+> >  #include <linux/of.h>
+> >  #include <linux/string.h>
+> >  #include <linux/sched.h>
+> > -#include <linux/sched/task_stack.h>
+> >  #include <asm/cpu_ops.h>
+> >  #include <asm/sbi.h>
+> >  #include <asm/smp.h>
+> >
+> >  const struct cpu_operations *cpu_ops[NR_CPUS] __ro_after_init;
+> >
+> > -void *__cpu_up_stack_pointer[NR_CPUS] __section(".data");
+> > -void *__cpu_up_task_pointer[NR_CPUS] __section(".data");
+> > -
+> >  extern const struct cpu_operations cpu_ops_sbi;
+> >  extern const struct cpu_operations cpu_ops_spinwait;
+> >
+> > -void cpu_update_secondary_bootdata(unsigned int cpuid,
+> > -                                struct task_struct *tidle)
+> > -{
+> > -     int hartid = cpuid_to_hartid_map(cpuid);
+> > -
+> > -     /* Make sure tidle is updated */
+> > -     smp_mb();
+> > -     WRITE_ONCE(__cpu_up_stack_pointer[hartid],
+> > -                task_stack_page(tidle) + THREAD_SIZE);
+> > -     WRITE_ONCE(__cpu_up_task_pointer[hartid], tidle);
+> > -}
+> > -
+> >  void __init cpu_set_ops(int cpuid)
+> >  {
+> >  #if IS_ENABLED(CONFIG_RISCV_SBI)
+> > diff --git a/arch/riscv/kernel/cpu_ops_spinwait.c
+> > b/arch/riscv/kernel/cpu_ops_spinwait.c
+> > index b2c957bb68c1..9f398eb94f7a 100644
+> > --- a/arch/riscv/kernel/cpu_ops_spinwait.c
+> > +++ b/arch/riscv/kernel/cpu_ops_spinwait.c
+> > @@ -6,11 +6,36 @@
+> >  #include <linux/errno.h>
+> >  #include <linux/of.h>
+> >  #include <linux/string.h>
+> > +#include <linux/sched/task_stack.h>
+> >  #include <asm/cpu_ops.h>
+> >  #include <asm/sbi.h>
+> >  #include <asm/smp.h>
+> >
+> >  const struct cpu_operations cpu_ops_spinwait;
+> > +void *__cpu_spinwait_stack_pointer[NR_CPUS] __section(".data");
+> > +void *__cpu_spinwait_task_pointer[NR_CPUS] __section(".data");
+> > +
+> > +static void cpu_update_secondary_bootdata(unsigned int cpuid,
+> > +                                struct task_struct *tidle)
+> > +{
+> > +     int hartid = cpuid_to_hartid_map(cpuid);
+> > +
+> > +     /*
+> > +      * The hartid must be less than NR_CPUS to avoid out-of-bound access
+> > +      * errors for __cpu_spinwait_stack/task_pointer. That is not always
+> > possible
+> > +      * for platforms with discontiguous hartid numbering scheme. That's
+> > why
+> > +      * spinwait booting is not the recommended approach for any platforms
+> > +      * and will be removed in future.
 >
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index b6ab66a546ae..f282e40c316c 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -11,6 +11,7 @@
->   #include <linux/fs.h>
->   #include <linux/security.h>
->   #include <linux/kexec.h>
-> +#include <linux/user_namespace.h>
->   #include <crypto/hash_info.h>
->   struct linux_binprm;
->   
-> @@ -210,6 +211,42 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
->   }
->   #endif /* CONFIG_IMA_APPRAISE */
->   
-> +struct ima_namespace {
-> +	int avoid_zero_size;
-> +};
+> How can you do that? Yes, spinning schemes are terrible.
+> However, once you started supporting them, you are stuck.
+>
+
+This was a typo. It is supposed to say "disabled" in the future based
+on other configs.
+For now, it is enabled by default. Any platform with sparse hartid
+needs to disable it in their own config.
+
+In the future, we may be able to make it only available to M-mode
+Linux if we can ensure that nobody is running
+older firmware without SBI HSM extension.
+
+> Best case, you can have an allow-list and only allow some
+> older platforms to use them. You can also make some features
+> dependent on non-spin schemes (kexec being one).
+>
+> But dropping support isn't a valid option, I'm afraid.
+>
+> Thanks,
+>
+>           M.
+> --
+> Jazz is not dead. It just smells funny...
 
 
-I moved the structure to security/integrity/ima/ima.h for v7 and added 
-__randomize_layout to it.
 
-   Stefan
+-- 
+Regards,
+Atish

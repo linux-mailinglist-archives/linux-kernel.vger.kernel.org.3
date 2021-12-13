@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C4F472731
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C1F4727F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbhLMJ7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238264AbhLMJwu (ORCPT
+        id S237723AbhLMKG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:06:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40690 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234926AbhLMJ6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:52:50 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482FDC08ED4B;
-        Mon, 13 Dec 2021 01:44:55 -0800 (PST)
+        Mon, 13 Dec 2021 04:58:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C068ECE0E29;
-        Mon, 13 Dec 2021 09:44:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F716C00446;
-        Mon, 13 Dec 2021 09:44:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED63DB80E2E;
+        Mon, 13 Dec 2021 09:58:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCE2C34600;
+        Mon, 13 Dec 2021 09:58:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388693;
-        bh=tbqDddX6n0aiTDtdtor2oO2VapLmWUIKud5GacnsEXM=;
+        s=korg; t=1639389525;
+        bh=3gnD6d7lN1enafBU5IvsDbkhbJlmzWiS6gjM4NQMUH8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TcwlGPSdTL3y7ar/VV0BWZZBJYyOuBv6L5gMZYzO3X/WvKSnf3o/XZ+Vf0N5dcoG4
-         i0NBKqJcraf+uKuSPOn6OJjw6bN8X3uMx8yA8vmNDlcuLaks4lJP+oBcm9RrCfDE+h
-         ir2aH0rX/UK3Pz+5NCXH3DDIU7AIn7zZq/rtMtGY=
+        b=Os56eTXvUsUiDycnNwEbpi36AxqwNmrwSCWWn1R6pKZV2sYWpkjG6o07srVJfl8GV
+         rbZLfyC50gChHvBIgc5vosag51iFNUWK4oC5SAULIwj3ogWSSFn8FOb235H77FEDHv
+         OlSvydGUeWZ12bGvNsMK087CpD2RzGb1On3MnQEc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
-Subject: [PATCH 5.4 65/88] USB: gadget: zero allocate endpoint 0 buffers
+        stable@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.15 120/171] mtd: rawnand: fsmc: Take instruction delay into account
 Date:   Mon, 13 Dec 2021 10:30:35 +0100
-Message-Id: <20211213092935.506110613@linuxfoundation.org>
+Message-Id: <20211213092949.093777539@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +45,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Herve Codina <herve.codina@bootlin.com>
 
-commit 86ebbc11bb3f60908a51f3e41a17e3f477c2eaa3 upstream.
+commit a4ca0c439f2d5ce9a3dc118d882f9f03449864c8 upstream.
 
-Under some conditions, USB gadget devices can show allocated buffer
-contents to a host.  Fix this up by zero-allocating them so that any
-extra data will all just be zeros.
+The FSMC NAND controller should apply a delay after the
+instruction has been issued on the bus.
+The FSMC NAND controller driver did not handle this delay.
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Add this waiting delay in the FSMC NAND controller driver.
+
+Fixes: 4da712e70294 ("mtd: nand: fsmc: use ->exec_op()")
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211119150316.43080-4-herve.codina@bootlin.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c   |    2 +-
- drivers/usb/gadget/legacy/dbgp.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/raw/fsmc_nand.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2173,7 +2173,7 @@ int composite_dev_prepare(struct usb_com
- 	if (!cdev->req)
- 		return -ENOMEM;
+--- a/drivers/mtd/nand/raw/fsmc_nand.c
++++ b/drivers/mtd/nand/raw/fsmc_nand.c
+@@ -15,6 +15,7 @@
  
--	cdev->req->buf = kmalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
-+	cdev->req->buf = kzalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
- 	if (!cdev->req->buf)
- 		goto fail;
- 
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -137,7 +137,7 @@ static int dbgp_enable_ep_req(struct usb
- 		goto fail_1;
+ #include <linux/clk.h>
+ #include <linux/completion.h>
++#include <linux/delay.h>
+ #include <linux/dmaengine.h>
+ #include <linux/dma-direction.h>
+ #include <linux/dma-mapping.h>
+@@ -664,6 +665,9 @@ static int fsmc_exec_op(struct nand_chip
+ 						instr->ctx.waitrdy.timeout_ms);
+ 			break;
+ 		}
++
++		if (instr->delay_ns)
++			ndelay(instr->delay_ns);
  	}
  
--	req->buf = kmalloc(DBGP_REQ_LEN, GFP_KERNEL);
-+	req->buf = kzalloc(DBGP_REQ_LEN, GFP_KERNEL);
- 	if (!req->buf) {
- 		err = -ENOMEM;
- 		stp = 2;
+ 	return ret;
 
 

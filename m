@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F9947288B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7BC4729E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbhLMKOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S237993AbhLMK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:26:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240933AbhLMKCv (ORCPT
+        with ESMTP id S239682AbhLMKYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:02:51 -0500
+        Mon, 13 Dec 2021 05:24:06 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AD3C07E5EE;
-        Mon, 13 Dec 2021 01:49:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98E3C018B41;
+        Mon, 13 Dec 2021 01:59:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CCDF4CE0E92;
-        Mon, 13 Dec 2021 09:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77111C341CE;
-        Mon, 13 Dec 2021 09:49:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6D0B9CE0F47;
+        Mon, 13 Dec 2021 09:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1841AC34600;
+        Mon, 13 Dec 2021 09:59:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388981;
-        bh=fMgUlj/beUfdjYidA1J9qCIA8KBnSkOcbIGRPgjrGRg=;
+        s=korg; t=1639389573;
+        bh=R5rS5VHgeyL4l0JwjhOqMsMgnTHLdlbhgq0jbVGHanw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VGeTJ8xR/1QB1l07fs+shvGgI19LK//rCtx6wAKYeJpzso3Cgt763WYC8CerwCUey
-         qTWOnucn8adHd0hWHiuq0r4vbXx+JNnkRxIzZUy36uMz9wlNxXsK7tvPI/tPILdv+9
-         6m/xT7icbW5xNOEKFHaAsLXq6w/SxF0Mh7UzS3X8=
+        b=OZ+MXQuwcy6BnS+lub1BqtqgTYop2dDXwcWIJXa1uj5gSAhk7djsM/KXCVFYLSwE1
+         MUPw4dUjwPhzCXGhKGSnRN1saxG/2nuPvG5YQdTSuEGHj7xuZM/GbAFjZvvqhn+7GP
+         I4ciDCVqkkm/z0gZ+bzJAxqmYBkdnk2lK6J2FRZc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.10 075/132] PM: runtime: Fix pm_runtime_active() kerneldoc comment
+        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.15 101/171] i2c: mpc: Use atomic read and fix break condition
 Date:   Mon, 13 Dec 2021 10:30:16 +0100
-Message-Id: <20211213092941.684110349@linuxfoundation.org>
+Message-Id: <20211213092948.440424427@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,31 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-commit 444dd878e85fb33fcfb2682cfdab4c236f33ea3e upstream.
+commit a74c313aca266fab0d1d1a72becbb8b7b5286b6e upstream.
 
-The kerneldoc comment of pm_runtime_active() does not reflect the
-behavior of the function, so update it accordingly.
+Maxime points out that the polling code in mpc_i2c_isr should use the
+_atomic API because it is called in an irq context and that the
+behaviour of the MCF bit is that it is 1 when the byte transfer is
+complete. All of this means the original code was effectively a
+udelay(100).
 
-Fixes: 403d2d116ec0 ("PM: runtime: Add kerneldoc comments to multiple helpers")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fix this by using readb_poll_timeout_atomic() and removing the negation
+of the break condition.
+
+Fixes: 4a8ac5e45cda ("i2c: mpc: Poll for MCF")
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Tested-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/pm_runtime.h |    2 +-
+ drivers/i2c/busses/i2c-mpc.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -127,7 +127,7 @@ static inline bool pm_runtime_suspended(
-  * pm_runtime_active - Check whether or not a device is runtime-active.
-  * @dev: Target device.
-  *
-- * Return %true if runtime PM is enabled for @dev and its runtime PM status is
-+ * Return %true if runtime PM is disabled for @dev or its runtime PM status is
-  * %RPM_ACTIVE, or %false otherwise.
-  *
-  * Note that the return value of this function can only be trusted if it is
+--- a/drivers/i2c/busses/i2c-mpc.c
++++ b/drivers/i2c/busses/i2c-mpc.c
+@@ -636,7 +636,7 @@ static irqreturn_t mpc_i2c_isr(int irq,
+ 	status = readb(i2c->base + MPC_I2C_SR);
+ 	if (status & CSR_MIF) {
+ 		/* Wait up to 100us for transfer to properly complete */
+-		readb_poll_timeout(i2c->base + MPC_I2C_SR, status, !(status & CSR_MCF), 0, 100);
++		readb_poll_timeout_atomic(i2c->base + MPC_I2C_SR, status, status & CSR_MCF, 0, 100);
+ 		writeb(0, i2c->base + MPC_I2C_SR);
+ 		mpc_i2c_do_intr(i2c, status);
+ 		return IRQ_HANDLED;
 
 

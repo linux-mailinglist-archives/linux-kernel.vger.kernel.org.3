@@ -2,157 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA20B471F0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 01:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F9D471F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 01:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbhLMAr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 19:47:57 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20292 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229540AbhLMAr4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 19:47:56 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BCLvUvs016229;
-        Mon, 13 Dec 2021 00:47:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=zOt3Vw1U7V5T99tnwjAB0hqFcNcT+qcheJmHQjaOsDc=;
- b=F8/JJF/CMQkwYdXH2gOkspH9BGznTIlmEjk2tbDT3cNiGruZxPmgEZscKF4w97q2zlVS
- /iOWD8O48zgbDaTfQlAXVBOTmN6PffuB72Cd592G3Xs/tJNjARJIsLnWGpTQkt3ifdr9
- 0qbdA3btRtclEt+RGPuEpfGFhbhMOuImS7Jz8/32qQnP0g2arS52oD97X1ML2/+bDGCI
- uqj4AKPrGwlwBNwJt7NDpIgwuv8PtKv5d+9/sktwcP4ZTcQV0XY9rfguTnrhc2eV5Lm7
- 2sB/XNmMJiQu3O2mrxoN9jlk4lcx9Qu3GD/wRICTU2STJiO0rn2TfFstVmlEsuMlct4l 4Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cwsf0sxxb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 00:47:02 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BD0h65K010409;
-        Mon, 13 Dec 2021 00:47:02 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cwsf0sxx0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 00:47:01 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BD0hleo005625;
-        Mon, 13 Dec 2021 00:47:00 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma01dal.us.ibm.com with ESMTP id 3cvkm9rffq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 00:47:00 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BD0kwtg25887224
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Dec 2021 00:46:58 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1EDE124054;
-        Mon, 13 Dec 2021 00:46:57 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14392124055;
-        Mon, 13 Dec 2021 00:46:54 +0000 (GMT)
-Received: from [9.211.121.29] (unknown [9.211.121.29])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Dec 2021 00:46:53 +0000 (GMT)
-Message-ID: <17153a1c-86c6-6ffd-35d6-5329829661df@linux.vnet.ibm.com>
-Date:   Sun, 12 Dec 2021 19:46:53 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
+        id S230449AbhLMAtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 19:49:08 -0500
+Received: from mail-eopbgr150042.outbound.protection.outlook.com ([40.107.15.42]:60480
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229540AbhLMAtH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 19:49:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EqjtaXhfGn5Cpo5bD7tOrNmD063lTUebiLn8biNuNTtesDFE1wDfUY/UOkDLziT8EPqjdcRrn1y4gRDMYDuQyM6MOBjf4hvsIJVX0yhiq31sXu31MSE6TFdDFj3c4+uF/CKlgdqiA2u7xU5izaDC/PmZzSzoLi6UsGbC0IL1U6/BDPXZRlt9Fdzm4r6Ml3QtNLb3F+EcHRPSLb3UcfKgFKzDfhbcfBttpw7WS/20bafWrTOSsTc+LIQJw/Pq+5rACltKBqLbtWBzPSzTL4usw0Rm8H8B4yQL1HJcecBWlHOSisfjujiHyiuZro5/Fpme8y1rbYrPiUcaSP++sEn8UA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XHSIMfwbB24gtoLFlnTdQBHR/grEr4pGBhT1XjxBnSk=;
+ b=UKff9Fhlr8NHlqunpflHy9dvInNVaVvuo9V9HIDm3Fo/bSeSP+/rcLFHuY7GdlQww8DZTVPBCAd1epFUXQCtOM/c3PPiZNUKPh2A/4vTb1H8PSwrSnoxoeh8ySMktJJF7n1+wR+ppPc3PUvTUJlnY8fTIQVSCXFesctnJardT+r+dQIPpMjXIE1/PAvt1gov9j/X/a0CWFix+FZLBv5uZlcDIIf9x2J63aGwXF4IFQoqjH2LGBrF0QSNwdR8gUGkUYO9M48Gwxpuo0cHSxhKhlU3ZVUv1T1pEp5eprJZfg1umZ7l6WTUxvxC0P2A/E80lRoBqpdiWtNGjur1Yi6klA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XHSIMfwbB24gtoLFlnTdQBHR/grEr4pGBhT1XjxBnSk=;
+ b=C8Afi29ayZmDrClv5JeeYpSd0SDYRYb09UcKy5hYkiYeNiTZJK4Tt3EVlYSU9j5RHpW5gAe+uICqn57e3pq3D3bCUzJcKG/EJTAaX1kAQJEHdgSGGbwZ0A8zFL53VjLWImyq1T1AyUNNtrXNiOoOHHHkyAdxhUGaQ7oK+heRniM=
+Received: from DB8PR04MB5785.eurprd04.prod.outlook.com (2603:10a6:10:b0::22)
+ by DBBPR04MB6137.eurprd04.prod.outlook.com (2603:10a6:10:c1::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
+ 2021 00:49:04 +0000
+Received: from DB8PR04MB5785.eurprd04.prod.outlook.com
+ ([fe80::30f6:2b14:3433:c9bf]) by DB8PR04MB5785.eurprd04.prod.outlook.com
+ ([fe80::30f6:2b14:3433:c9bf%5]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 00:49:04 +0000
+From:   Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "joabreu@synopsys.com" <joabreu@synopsys.com>,
+        Yannick Vignon <yannick.vignon@nxp.com>,
+        "boon.leong.ong@intel.com" <boon.leong.ong@intel.com>,
+        "Jose.Abreu@synopsys.com" <Jose.Abreu@synopsys.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "Joao.Pinto@synopsys.com" <Joao.Pinto@synopsys.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Leo Li <leoyang.li@nxp.com>
+Subject: RE: [EXT] Re: [PATCH net-next] net: stmmac: bump tc when get
+ underflow error from DMA descriptor
+Thread-Topic: [EXT] Re: [PATCH net-next] net: stmmac: bump tc when get
+ underflow error from DMA descriptor
+Thread-Index: AQHX7Bmwj7VotTMrk0auLbMKkiRGRqwpYOIAgAGlwYCAAAEj4IAA39cAgAOzRbA=
+Date:   Mon, 13 Dec 2021 00:49:03 +0000
+Message-ID: <DB8PR04MB5785AC0B2197DC4EBD28B146F0749@DB8PR04MB5785.eurprd04.prod.outlook.com>
+References: <20211208100651.19369-1-xiaoliang.yang_1@nxp.com>
+        <VI1PR04MB68009F16CAA80DCEBFA8F170E6709@VI1PR04MB6800.eurprd04.prod.outlook.com>
+        <20211209184123.63117f42@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <DB8PR04MB57852B80794A0B487167D3A2F0719@DB8PR04MB5785.eurprd04.prod.outlook.com>
+ <20211210080636.3c1ab98f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211210080636.3c1ab98f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org
-Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-s390@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <cover.1637862358.git.msuchanek@suse.de>
- <8b30a3c6a4e845eb77f276298424811897efdebf.1637862358.git.msuchanek@suse.de>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <8b30a3c6a4e845eb77f276298424811897efdebf.1637862358.git.msuchanek@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YD7rJlLgYd2Udqtt5LalPdJn3WE0YgaV
-X-Proofpoint-ORIG-GUID: gG1gdafl-3bV4bqCZbyCCQ71PQZVX-ez
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-12_10,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- phishscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112130001
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e0a062bc-94da-437b-068b-08d9bdd25c86
+x-ms-traffictypediagnostic: DBBPR04MB6137:EE_
+x-microsoft-antispam-prvs: <DBBPR04MB613766C49F907EF3C1EF1F83F0749@DBBPR04MB6137.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4bAO8pvRdURobdYQSg4CQo3BK0GhtyRlW/OEBe4Z0x9j6+fP9uigTGitmgm2Nj7ldDrTQjm8B732Dii7W4cvtEkh6GxfIRvsdH0QV+agivigvE6G60DyJ0m05yLlxi6QOSTQsanpkHzFqBpwgsGz8lGuNA2xcku/qYzGSD8MG/AgS8jbyN+PAC8qyTZ0LXasYs1Ea1IBDvZSQOlpdmCWy4pgdCmWzf79TzTTletfBO3l4ktZX73DPlQ9seLG4sw/wg/H3BaOZY8CI6FUOcpm5dSsRAv+iBYBGgqG/OmMiZROBomFeTRfQ3M5gBF6ikZOrSkMjFiMSATwEZ2mZKOI3I4ASzV/rmePU90lkpKuD2nY+/otfKd1EfcePpK+c5pnT+xfHdhqc/j7NM2pC06p6tUfB7cZcrjdO0O1B9J0OW9SogUjA10mBuyYAg61v44yN2wwAEAWbsG6cZ709mRcyR2f5Ls1UvtIm5aRVBKQC3OboR8wp43KoWajdMU8vouVcFIbboD7n9e4KDOoQrJGV+4Shn7qGiNuw0Gm7Kt+FKU1J4lQ10lY3yEGbOizpvpM9ZqkXxzSE+tiLcaejNTSeLA1zUQUAVI6cB62zi0GdeKA1Ul4jPlTjsGmAFaS+NpUj6l6BhfQAPWDWdF/Qbwrz/PvuZg25Hm6IxSyLAXlwNhUEH5uMR1BtLak1smEQSrSgxdzvjelbMhCS+B61UFz9g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB5785.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(8936002)(5660300002)(2906002)(9686003)(54906003)(122000001)(6916009)(7416002)(316002)(6506007)(83380400001)(26005)(52536014)(86362001)(186003)(8676002)(55016003)(66946007)(33656002)(76116006)(66556008)(508600001)(66476007)(71200400001)(66446008)(7696005)(64756008)(38100700002)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+Al2rneXR5k+YmMWTkN/h4XRSqCQwP4kc79a1XI+iczvKQ7abiBeHvzSX0tN?=
+ =?us-ascii?Q?NDuhJTuSOZOBTxiv4+8M67WhUf/VteEandVDWconsdW8Fw2ngN6u3/MWb/b5?=
+ =?us-ascii?Q?RMyUpLaIvDSw0wL6GgqZCvQhiPrXdIcf++VsIInOOS/PKotXvntYKklRWniq?=
+ =?us-ascii?Q?wBQjftqOk+z4iU4urwPROuuYbgodxtdivM/9WuGGrQ+oMfNUFjK02fv2XkQT?=
+ =?us-ascii?Q?xIlZxZECW8Zk0q9h7mDAPm1d08NSiPDPHBKuv+d7n8L1J9fuG4IEVmM3G1TQ?=
+ =?us-ascii?Q?YvT9cu/giTewRDPzhy3EA/+LtpR1MDuDDlxTGKkyqhyH9tD5MFQMk1yWpGu7?=
+ =?us-ascii?Q?faiDAWFxh03B+3SE8x+0uSpHQDaN26bm5N7GBnWBIhpKWfM1ijw57hGDB00f?=
+ =?us-ascii?Q?Xy1FnS0e4Z5oB9RpPjpfMh9UcREUtfupSS3+jOjJj/0Myh6Q1XOZyOU1Pgud?=
+ =?us-ascii?Q?VVHFL1QaonYe1ffl2ZsqR0VKYo/qVttu/F4iArK30nmUnNsnRLMV0nkTRrxh?=
+ =?us-ascii?Q?0FDTPht/792+q3FkRo0mFh8i2T/rTDQUfL22rBa8ZOIosxUH8Zip16yYBcCY?=
+ =?us-ascii?Q?JgIgOAxv4scuxxe17MpBN5EZtrqM18G6zpId2rUrI7AQ+4qEHwPlPY+ckH6m?=
+ =?us-ascii?Q?rKQjXQJOZhzsVff4no7q4nPkX24a9Q8i4Bo+raH9ioXgB6/MSwfvmiy7i3PR?=
+ =?us-ascii?Q?noVQceF7ivJNFYgyRA8F4oF9bpzZ11/j5DLW6TAO+Bfl/POhD2CbGlWRfvxw?=
+ =?us-ascii?Q?/xee9wDW8peLAOhwAnf5NKlWO+3jMqyL0W9yT19A5v4R1Pu89JqE/nvLcigK?=
+ =?us-ascii?Q?Whf4HVYkiE7cOCKqvNk2yRI1wRYKZPURW1XfrTVJwNyUu0WP6MO5KxKfMn61?=
+ =?us-ascii?Q?ADqhbL6eBJQvssmN2TGhT/4Kph1X72qSWzTaaxSseqFb1JTpPg11AtbfNi17?=
+ =?us-ascii?Q?cPORYNWKujc2ms5l0jVjxlZUurJ+RIZjq1aau2orpgDQF3Ol1IsxUoD4290B?=
+ =?us-ascii?Q?Q5c3dZbPY3ghbtUloRn1fyOSPlxuwRw9woVEOymU7bQ8WJ/Da5yaFY/zONDp?=
+ =?us-ascii?Q?pDX9IxWApiqu4ayrWe5/K6dLsR5CDpsd2Xq2nmENOgeLpss7kFKTKJLh3EEL?=
+ =?us-ascii?Q?/9yD5e8rp/9VRHJo5gm1bo9Js59tOCABkUApMp0bIbp9Unt7RSa7cOVlr0oh?=
+ =?us-ascii?Q?67hMBdGIYZMHOFg7eV0k6sZJV18M6imHzEGv5he+gZXNjRT58UWoxuHXCfV/?=
+ =?us-ascii?Q?xSo5OiYIWwIf34pJJthviK2onnoihwwQwZK1GyBxXOq/c66aaFApvtaFQed5?=
+ =?us-ascii?Q?V7TBlY1CfW5ueqsJqBidy9HpMK1D/IYb9c+lSmKwr0+EPdOHmkAMTlLq54Ft?=
+ =?us-ascii?Q?grpgDeRHi3xiKbE6NfFMIP/ChcoKpLoJQlNT04UyUINPHGODmUy2XHpsS4r9?=
+ =?us-ascii?Q?CZEIwyFbqy9wX8BE2wrLhKgio7q3PdXUsDHCdXqxnaAegDgNn+y+6CrZW6rl?=
+ =?us-ascii?Q?vXJquLXsMZK0AO1iOOa4mrEMfQT3XZGykG7vdJ//aodY/6oU8umoVEMdACkv?=
+ =?us-ascii?Q?1l1MOilFUBtVZbkcULh/4n/uMJhTORKKW57fGM8SjvryoABpmFnOHOUetK1A?=
+ =?us-ascii?Q?/Pthn1jgEb21r4aUik8EXyXIL/wu3lxv0aZeOUFctnNKX2Red7Y7ArxBzI0C?=
+ =?us-ascii?Q?lk6tKQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB5785.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0a062bc-94da-437b-068b-08d9bdd25c86
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 00:49:03.9986
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wk8dDGxxfRnI7IMV7ZUzUAi2teHhb5prvqNk3oihHtmW18Ux4dsPxNfFznH9XOjGe0WVv1w6rE3z3bpoyhQXhf/KCgBGw5qXj6ph+N9BWuA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6137
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 11/25/21 13:02, Michal Suchanek wrote:
-> Copy the code from s390x
->
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
->   arch/powerpc/Kconfig        | 11 +++++++++++
->   arch/powerpc/kexec/elf_64.c | 36 ++++++++++++++++++++++++++++++++++++
->   2 files changed, 47 insertions(+)
->
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index ac0c515552fd..ecc1227a77f1 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -561,6 +561,17 @@ config KEXEC_FILE
->   config ARCH_HAS_KEXEC_PURGATORY
->   	def_bool KEXEC_FILE
->
-> +config KEXEC_SIG
-> +	bool "Verify kernel signature during kexec_file_load() syscall"
-> +	depends on KEXEC_FILE && MODULE_SIG_FORMAT
-> +	help
-> +	  This option makes kernel signature verification mandatory for
-> +	  the kexec_file_load() syscall.
-> +
+On Fri, 11 Dec 2021 00:07:13 Jakub Kicinski wrote:
+> > > > 5 queues with FIFO cut-through mode can work well after applying th=
+is
+> patch.
+> > >
+> > > This never worked, correct? It's not a regression fix?
+> >
+> > Yes, it's never worked when the underflow error is observed in the
+> > case of NFS boot on i.mx8mp. I'm not sure if other SoC have same issue
+> > in this case, but I think it's necessary to increase the threshold
+> > value in case of underflow error.
+>=20
+> Oh, so NFS boot works for the most part on i.mx8mp but under certain
+> conditions (or with certain configuration?) this error can be observed an=
+d the
+> boot will fail?
+Yes, when configure the DMA as threshold mode, this error can be observed.
 
-Resending my last response as looks like it didn't go through mailing 
-list because of some wrong formatting. My apologies to those who are 
-receiving it twice.
-
-Since powerpc also supports IMA_ARCH_POLICY for kernel image signature 
-verification, please include the following:
-
-"An alternative implementation for the powerpc arch is IMA_ARCH_POLICY. 
-It verifies the appended kernel image signature and additionally 
-includes both the signed and unsigned file hashes in the IMA measurement 
-list, extends the IMA PCR in the TPM, and prevents blacklisted binary 
-kernel images from being kexec'd."
-
-Thanks & Regards,
-
-     - Nayna
+>=20
+> > Do you mean that I need to send the patch as a bug fix to net branch?
+>=20
+> Your call, if you would like for the patch to go to stable and LTS releas=
+es -- then
+> it need to be resent for net with a Fixes tag.
+>=20
+> LMK if you prefer net or net-next.
+Because this error requires a certain condition in DTS file, and I haven't =
+update the DTS file. So I prefer to add the patch in net-next, thanks.
 

@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C21B4737FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56839473800
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243959AbhLMWvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:51:06 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:41038 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243945AbhLMWvF (ORCPT
+        id S243967AbhLMWvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:51:09 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:45929 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243945AbhLMWvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:51:05 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:45234)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwu9w-0081F3-BK; Mon, 13 Dec 2021 15:51:04 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:60372 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwu9v-007pJx-7N; Mon, 13 Dec 2021 15:51:03 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     <linux-kernel@vger.kernel.org>
-Cc:     <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>, <linux-api@vger.kernel.org>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-Date:   Mon, 13 Dec 2021 16:50:56 -0600
-In-Reply-To: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Wed, 08 Dec 2021 14:17:22 -0600")
-Message-ID: <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 13 Dec 2021 17:51:07 -0500
+Received: by mail-ot1-f52.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso19022930otf.12;
+        Mon, 13 Dec 2021 14:51:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=TXNuhThSZzYh5dHlQEsy87eUYOOCcMvcopbthlMlzi0=;
+        b=NHPDWRJY/+FfnhFlo8/StQQ+lix2feBhwgfXhSCSiO3lqSaFC9aK5klIyX0bIKOqq4
+         HHfs6qnoFyW/3mk8l0wTklJHPBv+nG1uZ5pmNXORgvuSF8W1vqXW4OE8Ic3nMQbRNX76
+         bLgNrNFt2HJo37MWEWZSBZzccUAdXt9jKrnaJph+sexHaRUZpxMOXeDGKUEkODMn1sqf
+         holWK0Y4nu1UfZBywfZBkJwFZWhj9knd6HiG1otnj2VFrg44nmtrvSsky+gACpuROZW0
+         SJWFvh7dk0R4TI8nc1aolflDahHqmkwO9vWFvcxmduPvGFjrJAUDXa+edgZCAIebCMqc
+         8lkg==
+X-Gm-Message-State: AOAM532hNlfoi9aPPFOVXfjRghAHYtWeRu0BObA3ntUR3XRdgbV4ny86
+        3jmNvMw/NWsr/XzmqN+2Uw==
+X-Google-Smtp-Source: ABdhPJxCfZL3SzReunSYLPdv6bxyyePW0yFhigNTzi/mCZehsa7+8nCDGdg/U+lRD5jiU+CUp/zDpg==
+X-Received: by 2002:a9d:77d1:: with SMTP id w17mr1156068otl.329.1639435867068;
+        Mon, 13 Dec 2021 14:51:07 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e4sm1490630oiy.12.2021.12.13.14.51.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 14:51:06 -0800 (PST)
+Received: (nullmailer pid 1725465 invoked by uid 1000);
+        Mon, 13 Dec 2021 22:51:05 -0000
+Date:   Mon, 13 Dec 2021 16:51:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Cc:     Sandy Huang <hjc@rock-chips.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, - <opensource@rock-chips.com>,
+        David Heidelberg <david@ixit.cz>,
+        ~okias/devicetree@lists.sr.ht, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: convert power domain node for rockchip DW
+ MIPI DSI
+Message-ID: <YbfOWXZJAZDuEU1V@robh.at.kernel.org>
+References: <20211206212651.126405-1-david@ixit.cz>
+ <26502781.jAYDHVeSjN@diego>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mwu9v-007pJx-7N;;;mid=<87bl1kunjj.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/ldPosCXFTTNb6Bl3CGqPIXoijxcUBdx4=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_XM_PhishingBody,T_TooManySym_01,T_TooManySym_02,
-        XMNoVowels,XM_B_Phish66 autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4954]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  2.0 XM_B_Phish66 BODY: Obfuscated XMission
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 TR_XM_PhishingBody Phishing flag in body of message
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;<linux-kernel@vger.kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 372 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 13 (3.4%), b_tie_ro: 11 (2.9%), parse: 1.43
-        (0.4%), extract_message_metadata: 4.9 (1.3%), get_uri_detail_list:
-        1.90 (0.5%), tests_pri_-1000: 6 (1.5%), tests_pri_-950: 1.89 (0.5%),
-        tests_pri_-900: 1.43 (0.4%), tests_pri_-90: 98 (26.4%), check_bayes:
-        96 (25.8%), b_tokenize: 9 (2.3%), b_tok_get_all: 7 (1.9%),
-        b_comp_prob: 3.0 (0.8%), b_tok_touch_all: 73 (19.7%), b_finish: 1.19
-        (0.3%), tests_pri_0: 219 (58.8%), check_dkim_signature: 0.74 (0.2%),
-        check_dkim_adsp: 3.5 (0.9%), poll_dns_idle: 0.86 (0.2%), tests_pri_10:
-        3.9 (1.1%), tests_pri_500: 11 (2.9%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 0/8] signal: Cleanup of the signal->flags
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <26502781.jAYDHVeSjN@diego>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Dec 11, 2021 at 11:55:58AM +0100, Heiko Stübner wrote:
+> Hi David,
+> 
+> Am Montag, 6. Dezember 2021, 22:26:50 CET schrieb David Heidelberg:
+> > Convert into YAML format into format, which can be validated.
+> > 
+> > Changes:
+> >  - drop panel from example
+> 
+> the patch subject is strange, talking about a "power domain node".
+> That needs a fix.
+> 
+> Some more things below.
+> 
+> 
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - rockchip,px30-mipi-dsi
+> > +              - rockchip,rk3288-mipi-dsi
+> > +              - rockchip,rk3399-mipi-dsi
+> > +          - const: snps,dw-mipi-dsi
+> 
+> > +      - items:
+> > +          - const: rockchip,px30-mipi-dsi
+> > +      - items:
+> > +          - const: rockchip,rk3288-mipi-dsi
+> > +      - items:
+> > +          - const: rockchip,rk3399-mipi-dsi
+> 
+> what are these for?
+> 
+> I see that px30 uses the dsi without the snps part, but you
+> can also just add a patch adding that second compatible to px30.dtsi
 
-The special case of SIGKILL during coredumps is very fragile today and
-while reading through the code I realized I have almost broken it twice.
-So this simplifies that special case, removes SIGNAL_GROUP_COREDUMP
-which has become unnecessary with the addition of signal->core_state,
-and this removes the helper signal_group_exit which is misnamed and
-is not used properly.
+Or drop snps,dw-mipi-dsi as it doesn't seem to be all that meaningful. 
+But I guess that's more invasive so maybe stick with changing px30.
 
-If you squint very hard there might be a user space visible difference
-in behavior somewhere but I don't think there is one in practice.
+> 
+> I don't think we need to support both ways.
 
-These patches are on top of:
-https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/ signal-for-v5.17
+Agreed.
 
-After these patches have been reviewed it is my plan to apply them to my
-signal-for-v5.17 branch.
-
-Eric W. Biederman (8):
-      signal: Make SIGKILL during coredumps an explicit special case
-      signal: Drop signals received after a fatal signal has been processed
-      signal: Have the oom killer detect coredumps using signal->core_state
-      signal: During coredumps set SIGNAL_GROUP_EXIT in zap_process
-      signal: Remove SIGNAL_GROUP_COREDUMP
-      coredump: Stop setting signal->group_exit_task
-      signal: Rename group_exit_task group_exec_task
-      signal: Remove the helper signal_group_exit
-
- fs/coredump.c                | 20 +++++++++-----------
- fs/exec.c                    | 10 +++++-----
- include/linux/sched/signal.h | 18 +++---------------
- kernel/exit.c                | 12 ++++++++----
- kernel/signal.c              | 24 ++++++++++++++++--------
- mm/oom_kill.c                |  2 +-
- 6 files changed, 42 insertions(+), 44 deletions(-)
-
-Eric
+Rob

@@ -2,139 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16B94732B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5894732B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240499AbhLMRKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 12:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbhLMRKc (ORCPT
+        id S241049AbhLMRKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 12:10:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56126 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240595AbhLMRKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 12:10:32 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A242DC061574;
-        Mon, 13 Dec 2021 09:10:32 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 13 Dec 2021 12:10:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9200841982;
-        Mon, 13 Dec 2021 17:10:28 +0000 (UTC)
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211212034726.26306-1-marcan@marcan.st>
- <20211212034726.26306-4-marcan@marcan.st> <YbaIwa/9utI9SD1u@sirena.org.uk>
- <d566c897-ee7d-f32f-1548-57f037c69c89@marcan.st>
- <YbdtLFSrwjYcz/zz@sirena.org.uk>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
-Message-ID: <d87ae109-4b58-7465-b16e-3bf7c9d60f1f@marcan.st>
-Date:   Tue, 14 Dec 2021 02:10:26 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id 803FFB811E4;
+        Mon, 13 Dec 2021 17:10:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE31C34600;
+        Mon, 13 Dec 2021 17:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639415435;
+        bh=kkvIpkmawwIjXx5mjnzb3Qo76kdaI6KWhL4+4TY6bKQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EXsI3c7+a1htohJ6Zqc/U/zQ3Z2oj7DfhXjR/J4IdhPyun+3uDxK7ZeZUWkegRSjc
+         mjr5bXeeXGvIDfVNEV/1yKsfebRGxH1W1E44UX/ndd4fJ/6WnXWwnlFqQy0VwwXfbX
+         HB4YSNNngotXgTX4mRVKvvcHk2YxTHAtXjQAjOJz/FIXsOkLf8Os2XDyEXz9dCqvJl
+         xgceRkHSyFu06wuXKgfnIR5KMe8vqlS7IIGZ484g7U1nMOoOAvngakVhi5dYqjvY7d
+         zFU00EhqZBBStjxhmQX/6lRvspCNJWR/sPi0nw2RQ/Ijh1zkOM7oh3jAJU7SpfSsd3
+         oBlh5s6GouEbQ==
+Date:   Mon, 13 Dec 2021 12:10:33 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 13/24] tools: Fix math.h breakage
+Message-ID: <Ybd+if4php4IoSjT@sashalap>
+References: <20211206211230.1660072-1-sashal@kernel.org>
+ <20211206211230.1660072-13-sashal@kernel.org>
+ <Ya5+ckVw3ZYjdNDJ@casper.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <YbdtLFSrwjYcz/zz@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Ya5+ckVw3ZYjdNDJ@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2021 00.56, Mark Brown wrote:
-> On Mon, Dec 13, 2021 at 12:50:49PM +0900, Hector Martin wrote:
->> On 13/12/2021 08.41, Mark Brown wrote:
->>> On Sun, Dec 12, 2021 at 12:47:26PM +0900, Hector Martin wrote:
-> 
->>>> @@ -0,0 +1,566 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * Apple SoC SPI device driver
->>>> + *
-> 
->>> Please keep the entire comment a C++ one so things look more
->>> intentional.
-> 
->> I thought this pattern was pretty much the standard style.
-> 
-> It's common, especially given all the automated conversions, but ugly.
+On Mon, Dec 06, 2021 at 09:19:46PM +0000, Matthew Wilcox wrote:
+>On Mon, Dec 06, 2021 at 04:12:18PM -0500, Sasha Levin wrote:
+>> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+>>
+>> [ Upstream commit d6e6a27d960f9f07aef0b979c49c6736ede28f75 ]
+>>
+>> Commit 98e1385ef24b ("include/linux/radix-tree.h: replace kernel.h with
+>> the necessary inclusions") broke the radix tree test suite in two
+>> different ways; first by including math.h which didn't exist in the
+>> tools directory, and second by removing an implicit include of
+>> spinlock.h before lockdep.h.  Fix both issues.
+>
+>I'm confused.  Was 98e1385ef24b backported to v5.15?  I don't see it
+>in linux-5.15.y, and I don't know why it would be considered a stable
+>backport candidate.  If not, why would this patch be needed?
 
-Sure, I'll change it if you insist :)
-
->>> Some brackets or an intermediate variable wouldn't hurt here, especially
->>> given the line length.
-> 
->> How about this?
-> 
->> return (200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2) <= t->speed_hz;
-> 
-> That's better but it's still a very long line which is half the issue.
-
-I think it's quite readable at this point (especially with the comment 
-above explaining it anyway). Note that these days a lot of people 
-consider lines up to 100 chars okay in the kernel, and checkpatch uses 
-that limit. Do you have a specific change in mind?
-
->>>> +static const struct of_device_id apple_spi_of_match[] = {
->>>> +	{ .compatible = "apple,spi", },
->>>> +	{}
->>>> +};
->>>> +MODULE_DEVICE_TABLE(of, apple_spi_of_match);
-> 
->>> This is an awfully generic compatible.  It's common to use the SoC name
->>> for the IP compatibles when they're not otherwise identified?
-> 
->> Apple like to keep blocks compatible across SoC generations - I think this
->> one dates, at least to some extent, to the original iPhone or thereabouts.
->> We do use per-SoC compatibles in the DTs in case we need to throw in per-SoC
->> quirks in the future ("apple,t8103-spi", "apple,spi"), but for drivers like
->> this we prefer to use generic compatibles as long as backwards compatibility
->> doesn't break. If Apple do something totally incompatible (like they did
->> with AIC2 in the latest chips), we'll bump to something like apple,spi2.
->> This happens quite rarely, so it makes sense to just keep things generic
->> except for these instances. That way old kernels will happily bind to the
->> block in newer SoCs if it is compatible.
-> 
-> There's currently a bit of a fashion for people with very old SPI blocks
-> to make incompatible new versions recently, a lot of it seems to be
-> driven by things like flash engine support.  Sometimes these things end
-> up getting instantiated together as they have different purposes and the
-> incompatibilties make the IPs larger.
-
-I think if they haven't changed it by now they probably won't; e.g. they 
-tacked on DMA using a coprocessor instead of changing the block itself. 
-I don't think Apple uses SPI for anything performance-critical. They 
-don't even bother with QSPI for the NOR flash (which is mostly only used 
-for bootloaders and variable storage).
-
->> If we had a detailed lineage of what SoCs used what blocks and when things
->> changed we could try something else, like using the first SoC where the
->> specific block version was introduced, but we don't... so I think it makes
->> sense to just go with generic ones where we don't think things have changed
->> much since the dark ages. FWIW, Apple calls this one spi-1,spimc and claims
->> "spi-version = 1" and the driver has Samsung in the name... so the history
->> of this block definitely goes back quite a ways :-)
-> 
-> Have you done a contrast and compare with the Samsung driver?  Given
-> both this and your comments above about this dating back to the original
-> iPhone...
-
-You mean the *two* Samsung drivers? :-)
-
-It seems Samsung like to keep making up incompatible SPI blocks. This 
-one shares a *few* bits in a *couple* registers with spi-s3c24xx driver, 
-which point to a common lineage, but those registers aren't even at the 
-same addresses. Not enough in common for it to make sense to try to use 
-one driver for both (unlike with UART, where it was close enough to be 
-added as a new Samsung UART variant, or I2C, where we could refactor the 
-pasemi driver to add a platform backend alongside the existing PCI 
-support and mostly use it as-is).
+Yup, I can drop this one. Thanks!
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Thanks,
+Sasha

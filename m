@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D1C472135
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E67547213A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbhLMGtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S232292AbhLMGvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbhLMGtH (ORCPT
+        with ESMTP id S232268AbhLMGvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:49:07 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01475C06173F;
-        Sun, 12 Dec 2021 22:49:07 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so13948213pja.1;
-        Sun, 12 Dec 2021 22:49:06 -0800 (PST)
+        Mon, 13 Dec 2021 01:51:12 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701E3C061751
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:51:12 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso12566676pjb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:51:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GS6TBSkNvGlEIjVNsFvYKFeWjbTrFdDN1acBfD429pE=;
-        b=ov16Lr8WDwm71/zA2oJCmtDvLel/EF2ZkZ0Vd9nZPAXlsCuIdVLmz8t4ErfHcjjOEg
-         eDYS4gE/gvcS0a97ICH7ucndAeq86oFu9GqQlbBMaJAwA4V4lVb/9xXTTEqOIE4h3U9V
-         XtkLlwcMvDXnY6nDuM7p+8/EWKG30zue/ZCDxNyJzHW3U/B+hdi1g2iw97ZpjclRiiJQ
-         mEtH+FfhgiLSj4knWDmvo62W2ukvRRE9WWsTDYiESiT20q1+GMsXCb3sjCE5luRyfC6c
-         dfQlu76DudK9mCvMr8yOqyoADKS2kPTDJXxm7SEXBu+XhWivc4FdxcIinqh9WOoZ15Gu
-         SPkw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yMpVC2kpu7YFJ/s6LMhrkQcovk/km/8dHffArUV16q0=;
+        b=oPGvhlBLdePFU+vncJhdgAZjBfHeKjhh6MPusmJt+0IB/EJccsFj7zrhUb/Aja+8Zz
+         EszcTrfoJLa3TkwV8b+m0u+uOSZh79kVe/lc0vRwoEmRxqeQc4LorXEj7MwmhlPWRUQV
+         wIYmWdM/3KTBHocPo0OIzgJ4W/M8jnPKjv+jP+MhKhx9t/mh/A2eH3fZbu96x9o5hREI
+         pN2I4c3T/6fYUR2OLSIQaCu9RYxzGOd5rTsYKT+8dnpHQzFFMf3cTp8qq4FyA8z0DjuR
+         aid1hpYFQBEWppb66PdvAZ1aJ50d23ValXXxDqMUkJtNDsh5pu6Xwli1somJSt5nQGgv
+         zdbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GS6TBSkNvGlEIjVNsFvYKFeWjbTrFdDN1acBfD429pE=;
-        b=h8jDKlczPckjo5BN571wojekwPn42EBDeSs2feG/ejc7IlR9+Z91sn4pZDyoki7Tto
-         McQTdH4l9nWV7tf1uufYkaUVC5qG77QO0mSOmAAgtZofGXyl6uJRTPqT9Swaj5Gsqftq
-         A1ltEfBSwb7kP5Bh/6D2ixeuwueobStCDMDc8b2I7TyMvPmj4maFcyuY6KoJTy8g5vSu
-         lSyV3Pb8kig3N0buQAqD8ivzJ504tQrOGologl80/78Og7FAKiNIvCwH81wsEGKULgLp
-         jskvfQC79dX87LtY1TFqNZUCtkqm2efPUF2K2eBBYW3AzmjpfM5Yq21bFnQGqUVP9DHc
-         ZnmA==
-X-Gm-Message-State: AOAM533L7kn50AlXiE5mlhLjvvFS2LRO+tBLQtLr6p82rRDCrQxN9JBG
-        HawsmZiooGmWIbcFof4hizw=
-X-Google-Smtp-Source: ABdhPJyUJCjObbObAlvLYVaHaGdai5j/wPqetffkbDAo+1TIV2oOwnbrEHTsPiBJYSYmO5CfYwy7DA==
-X-Received: by 2002:a17:90b:3810:: with SMTP id mq16mr42306638pjb.128.1639378146498;
-        Sun, 12 Dec 2021 22:49:06 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id c18sm11959670pfl.201.2021.12.12.22.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 22:49:06 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     hao.wu@intel.com
-Cc:     linmq006@gmail.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdf@kernel.org, trix@redhat.com,
-        yilun.xu@intel.com
-Subject: [PATCH v3] fpga: stratix10-soc: fix NULL vs IS_ERR() checking
-Date:   Mon, 13 Dec 2021 06:49:00 +0000
-Message-Id: <20211213064900.10386-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <DM6PR11MB3819B3918DA4D58E59228CAC85749@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <DM6PR11MB3819B3918DA4D58E59228CAC85749@DM6PR11MB3819.namprd11.prod.outlook.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yMpVC2kpu7YFJ/s6LMhrkQcovk/km/8dHffArUV16q0=;
+        b=JeycPOaqU7J8Uo866Z/bnBanVTMVI9R4WgFvRLn40RccQPV37W2tzoyknYeBzXIqf2
+         SFn5JcbaTjwwYp3TMpjdezbAJfiBeqrj12tQBAqELYtQgkf6F4gk+tp9rNxW9UvSwmBB
+         KF5QnL7sCMqNz9QmoQBmLIlubTcAulmJKn2zAZn/elyQEZjGyELqaBFy6UpTALc2OBW9
+         d8tzPcGNNIc+bTM6p4Ujyz4RWVPWxBNKwJxJ9aiIdpUZwzfgAgsEHKWXF+gqlqrZXMVi
+         mCNjxLQ6tGhk6RvsIT+FN4pRhhVjI2eiTwqrendG+TPRH4c5QKrU6z7cRVUNlkMWf7+6
+         mNXg==
+X-Gm-Message-State: AOAM530t/Q/NF7H/pfhHZjYjemcBRGaPl94cXxgx2kKhs3Fs262CyWP4
+        nJC+kKyPjEtrdSJRDdtKfhF7Iw==
+X-Google-Smtp-Source: ABdhPJw6Ii106D5I9zYxT/oqiqsbsiSwsVIAzMOg3NbCSBjxDSmPtMPSzECMrPXJQBkaBymf7eS8uQ==
+X-Received: by 2002:a17:90b:3508:: with SMTP id ls8mr42473847pjb.51.1639378271977;
+        Sun, 12 Dec 2021 22:51:11 -0800 (PST)
+Received: from [10.76.43.192] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id f10sm5904851pjm.52.2021.12.12.22.51.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 22:51:11 -0800 (PST)
+Message-ID: <15bbfed1-5b7c-e6ff-07e9-9de3a0ee4728@bytedance.com>
+Date:   Mon, 13 Dec 2021 14:49:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v3] sched/numa: add per-process numa_balancing
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
+From:   Gang Li <ligang.bdlg@bytedance.com>
+In-Reply-To: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The stratix10_svc_allocate_memory function does not return NULL. It
-returns ERR_PTR(-ENOMEM). Use IS_ERR check the return value.
+Hi,
+Any comments plz ;)
 
-Fixes: e7eef1d7633a("fpga: add intel stratix10 soc fpga manager driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Tom Rix <trix@redhat.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Acked-by: Wu Hao <hao.wu@intel.com>
----
- drivers/fpga/stratix10-soc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 2021/12/6 10:45, Gang Li wrote:
+> This patch add a new api PR_NUMA_BALANCING in prctl.
+> 
+> A large number of page faults will cause performance loss when numa
+> balancing is performing. Thus those processes which care about worst-case
+> performance need numa balancing disabled. Others, on the contrary, allow a
+> temporary performance loss in exchange for higher average performance, so
+> enable numa balancing is better for them.
+> 
+> Numa balancing can only be controlled globally by
+> /proc/sys/kernel/numa_balancing. Due to the above case, we want to
+> disable/enable numa_balancing per-process instead.
+> 
+> Add numa_balancing under mm_struct. Then use it in task_tick_fair.
+> 
+> Set per-process numa balancing:
+> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DISABLE); //disable
+> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_ENABLE);  //enable
+> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DEFAULT); //follow global
+> Get numa_balancing state:
+> 	prctl(PR_NUMA_BALANCING, PR_GET_NUMAB, &ret);
+> 	cat /proc/<pid>/status | grep NumaB_enabled
+> 
+> Cc: linux-api@vger.kernel.org
+> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
 
-diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-index 047fd7f23706..91212bab5871 100644
---- a/drivers/fpga/stratix10-soc.c
-+++ b/drivers/fpga/stratix10-soc.c
-@@ -213,9 +213,9 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
- 	/* Allocate buffers from the service layer's pool. */
- 	for (i = 0; i < NUM_SVC_BUFS; i++) {
- 		kbuf = stratix10_svc_allocate_memory(priv->chan, SVC_BUF_SIZE);
--		if (!kbuf) {
-+		if (IS_ERR(kbuf)) {
- 			s10_free_buffers(mgr);
--			ret = -ENOMEM;
-+			ret = PTR_ERR(kbuf);
- 			goto init_done;
- 		}
- 
--- 
-2.17.1
 

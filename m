@@ -2,118 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90274472373
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15817472378
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbhLMJEh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Dec 2021 04:04:37 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:49224 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233546AbhLMJEe (ORCPT
+        id S233556AbhLMJFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:05:12 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:45610 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233404AbhLMJFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:04:34 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BD94NppC030276, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BD94NppC030276
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 13 Dec 2021 17:04:23 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 17:04:23 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 17:04:23 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01]) by
- RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01%5]) with mapi id
- 15.01.2308.020; Mon, 13 Dec 2021 17:04:23 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     Jian-Hong Pan <jhp@endlessos.org>,
-        Bernie Huang <phhuang@realtek.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux@endlessos.org" <linux@endlessos.org>
-Subject: RE: [PATCH] rtw88: pci: turn off PCI ASPM during NAPI polling
-Thread-Topic: [PATCH] rtw88: pci: turn off PCI ASPM during NAPI polling
-Thread-Index: AQHX7/kQjSc2DLccoUatj4jk7MRPeqwwIE+Q
-Date:   Mon, 13 Dec 2021 09:04:22 +0000
-Message-ID: <963fc5bc39314dc49faa719b03a79ad4@realtek.com>
-References: <20211213080908.80723-1-jhp@endlessos.org>
-In-Reply-To: <20211213080908.80723-1-jhp@endlessos.org>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/12/13_=3F=3F_07:23:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 13 Dec 2021 04:05:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56839CE0E10;
+        Mon, 13 Dec 2021 09:05:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B02C00446;
+        Mon, 13 Dec 2021 09:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639386307;
+        bh=p+M3T+RTwV57SMISSVPa/A0bgNo17ZpkMNetFBukon0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TT/2uFqPptvbZ9EQXca29KzXo3/v8Dcqhd/eq1R8kXPB/BkfNgVqNR6/gohyvC1hQ
+         8Gf2ldpV4iX44ZjLsBOKmjlLzV/LyvU/8p+BDnS/RZtcMDt+i63D8Ja11PTHJ/9LDA
+         lKbAeL9Nq9GIpcaenVIG3DZN2p26hasdsyCPx+yrVll8aU0ev8ygps/wIAdB/W50Q5
+         x8kqZa4uYrVNWmOz+bvHdsmEI6JHZ1b1bF45OSuVHfBLCZvmPIEtjJ/XS198URKqiv
+         uf3fJQb9SJvMSm3xSoK3hUVWFOVYsY+AumHpa8MHUOLJqiAv2nkU08YMlBUEQuxbr0
+         DsTBNreOmMaMA==
+Date:   Mon, 13 Dec 2021 14:35:03 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        dmaengine@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: stm32-mdma: Use bitfield helpers
+Message-ID: <YbcMv4gqLoxIUohi@matsya>
+References: <a1445d3abb45cfc95cb1b03180fd53caf122035b.1637593297.git.geert+renesas@glider.be>
+ <36ceab242a594233dc7dc6f1dddb4ac32d1e846f.1637593297.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36ceab242a594233dc7dc6f1dddb4ac32d1e846f.1637593297.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22-11-21, 16:54, Geert Uytterhoeven wrote:
+> Use the FIELD_{GET,PREP}() helpers, instead of defining custom macros
+> implementing the same operations.
 
-> -----Original Message-----
-> From: Jian-Hong Pan <jhp@endlessos.org>
-> Sent: Monday, December 13, 2021 4:09 PM
-> To: Pkshih <pkshih@realtek.com>; Bernie Huang <phhuang@realtek.com>; Kai-Heng Feng
-> <kai.heng.feng@canonical.com>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo
-> <kvalo@codeaurora.org>
-> Cc: linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux@endlessos.org; Jian-Hong Pan <jhp@endlessos.org>
-> Subject: [PATCH] rtw88: pci: turn off PCI ASPM during NAPI polling
-> 
-> The system on the machines equipped with RTL8821CE freezes randomly
-> until the PCI ASPM is disabled during NAPI poll function.
-> 
-> Link: https://www.spinics.net/lists/linux-wireless/msg218387.html
-> Fixes: 9e2fd29864c5 ("rtw88: add napi support")
-> Signed-off-by: Jian-Hong Pan <jhp@endlessos.org>
-> ---
->  drivers/net/wireless/realtek/rtw88/pci.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wireless/realtek/rtw88/pci.c
-> index a7a6ebfaa203..a6fdddecd37d 100644
-> --- a/drivers/net/wireless/realtek/rtw88/pci.c
-> +++ b/drivers/net/wireless/realtek/rtw88/pci.c
-> @@ -1658,6 +1658,7 @@ static int rtw_pci_napi_poll(struct napi_struct *napi, int budget)
->  					      priv);
->  	int work_done = 0;
-> 
-> +	rtw_pci_link_ps(rtwdev, false);
->  	while (work_done < budget) {
->  		u32 work_done_once;
-> 
-> @@ -1681,6 +1682,7 @@ static int rtw_pci_napi_poll(struct napi_struct *napi, int budget)
->  		if (rtw_pci_get_hw_rx_ring_nr(rtwdev, rtwpci))
->  			napi_schedule(napi);
->  	}
-> +	rtw_pci_link_ps(rtwdev, true);
-> 
->  	return work_done;
->  }
+Applied, thanks
 
-I think we need to add ref_cnt and only do this thing on specific chip and platform [1].
-
-[1] https://lore.kernel.org/linux-wireless/e78b81f3a73c45b59f4c4d9f5b414508@realtek.com/T/#m95b22af523ea801fdb84225b87a84ca4f04bb33d
-
---
-Ping-Ke
-
+-- 
+~Vinod

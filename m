@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7904725CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03EE4724EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbhLMJqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:46:25 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:36158 "EHLO
+        id S231550AbhLMJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:39:43 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:33514 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbhLMJmP (ORCPT
+        with ESMTP id S233071AbhLMJiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:42:15 -0500
+        Mon, 13 Dec 2021 04:38:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3FEBECE0E7C;
-        Mon, 13 Dec 2021 09:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E03D0C00446;
-        Mon, 13 Dec 2021 09:42:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 545EFCE0E83;
+        Mon, 13 Dec 2021 09:38:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA08C00446;
+        Mon, 13 Dec 2021 09:38:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388531;
-        bh=KuizVhzQOX9IAUk1dy4PamTLw9ie4WTpEA56DY+VdFg=;
+        s=korg; t=1639388288;
+        bh=whCGHq9Jf7S43kKFy5mkFVyuu5pEgSFlTrb85xag2iY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QVSpyibejdr11mIth4lsL/w97z0KLKSjBF1c4TN6Q0RcGRb+sB2CrOr86myP3Oa9t
-         CAVtBSXSsZFAvZ7L3qs3wG5QxlquXaPQm7C/mmYKoLRGn98tZIHW8SZwxZJE8VO7oq
-         PP1z1uxW1UAn2pVIue2oGVdE6U4ZmTQ6jRRdnP/8=
+        b=2VNzWfbOJ8qxonoh5PjRE27+6WR3VhXj3mFwrTjLkYJItyTEczkyTxqX85wfzQrFn
+         2xXHbOeZPldGt6LlWqyrKv3zGzvk8Xr/iGFydb/RM99XUe3JXL11fBH4eG6UqNTdQW
+         /C/aFdEehrPR1Uxf8JsmXuh0pE593/V5MH8qJV/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 59/74] iio: stk3310: Dont return error code in interrupt handler
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 4.14 51/53] irqchip/armada-370-xp: Fix support for Multi-MSI interrupts
 Date:   Mon, 13 Dec 2021 10:30:30 +0100
-Message-Id: <20211213092932.776600804@linuxfoundation.org>
+Message-Id: <20211213092930.061249259@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,49 +46,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Pali Rohár <pali@kernel.org>
 
-commit 8e1eeca5afa7ba84d885987165dbdc5decf15413 upstream.
+commit d0a553502efd545c1ce3fd08fc4d423f8e4ac3d6 upstream.
 
-Interrupt handlers must return one of the irqreturn_t values. Returning a
-error code is not supported.
+irq-armada-370-xp driver already sets MSI_FLAG_MULTI_PCI_MSI flag into
+msi_domain_info structure. But allocated interrupt numbers for Multi-MSI
+needs to be properly aligned otherwise devices send MSI interrupt with
+wrong number.
 
-The stk3310 event interrupt handler returns an error code when reading the
-flags register fails.
+Fix this issue by using function bitmap_find_free_region() instead of
+bitmap_find_next_zero_area() to allocate aligned interrupt numbers.
 
-Fix the implementation to always return an irqreturn_t value.
-
-Fixes: 3dd477acbdd1 ("iio: light: Add threshold interrupt support for STK3310")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024171251.22896-3-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Fixes: a71b9412c90c ("irqchip/armada-370-xp: Allow allocation of multiple MSIs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20211125130057.26705-2-pali@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/light/stk3310.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-armada-370-xp.c |   14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
---- a/drivers/iio/light/stk3310.c
-+++ b/drivers/iio/light/stk3310.c
-@@ -545,9 +545,8 @@ static irqreturn_t stk3310_irq_event_han
- 	mutex_lock(&data->lock);
- 	ret = regmap_field_read(data->reg_flag_nf, &dir);
- 	if (ret < 0) {
--		dev_err(&data->client->dev, "register read failed\n");
--		mutex_unlock(&data->lock);
--		return ret;
-+		dev_err(&data->client->dev, "register read failed: %d\n", ret);
-+		goto out;
- 	}
- 	event = IIO_UNMOD_EVENT_CODE(IIO_PROXIMITY, 1,
- 				     IIO_EV_TYPE_THRESH,
-@@ -559,6 +558,7 @@ static irqreturn_t stk3310_irq_event_han
- 	ret = regmap_field_write(data->reg_flag_psint, 0);
- 	if (ret < 0)
- 		dev_err(&data->client->dev, "failed to reset interrupts\n");
-+out:
- 	mutex_unlock(&data->lock);
+--- a/drivers/irqchip/irq-armada-370-xp.c
++++ b/drivers/irqchip/irq-armada-370-xp.c
+@@ -232,16 +232,12 @@ static int armada_370_xp_msi_alloc(struc
+ 	int hwirq, i;
  
- 	return IRQ_HANDLED;
+ 	mutex_lock(&msi_used_lock);
++	hwirq = bitmap_find_free_region(msi_used, PCI_MSI_DOORBELL_NR,
++					order_base_2(nr_irqs));
++	mutex_unlock(&msi_used_lock);
+ 
+-	hwirq = bitmap_find_next_zero_area(msi_used, PCI_MSI_DOORBELL_NR,
+-					   0, nr_irqs, 0);
+-	if (hwirq >= PCI_MSI_DOORBELL_NR) {
+-		mutex_unlock(&msi_used_lock);
++	if (hwirq < 0)
+ 		return -ENOSPC;
+-	}
+-
+-	bitmap_set(msi_used, hwirq, nr_irqs);
+-	mutex_unlock(&msi_used_lock);
+ 
+ 	for (i = 0; i < nr_irqs; i++) {
+ 		irq_domain_set_info(domain, virq + i, hwirq + i,
+@@ -259,7 +255,7 @@ static void armada_370_xp_msi_free(struc
+ 	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
+ 
+ 	mutex_lock(&msi_used_lock);
+-	bitmap_clear(msi_used, d->hwirq, nr_irqs);
++	bitmap_release_region(msi_used, d->hwirq, order_base_2(nr_irqs));
+ 	mutex_unlock(&msi_used_lock);
+ }
+ 
 
 

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B874728D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0D44725C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243037AbhLMKO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241618AbhLMKE5 (ORCPT
+        id S236169AbhLMJqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:46:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53434 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235518AbhLMJmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:04:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850FFC0A8861;
-        Mon, 13 Dec 2021 01:50:34 -0800 (PST)
+        Mon, 13 Dec 2021 04:42:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30B56B80E2F;
-        Mon, 13 Dec 2021 09:50:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 696F2C00446;
-        Mon, 13 Dec 2021 09:50:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FDC0B80D1F;
+        Mon, 13 Dec 2021 09:42:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC47C00446;
+        Mon, 13 Dec 2021 09:41:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389033;
-        bh=Kuf5ivleTHQnzzKGMV3HkDb+ZfqNvldDPHustQKlQUI=;
+        s=korg; t=1639388520;
+        bh=ZYjbgX+BZiyb9z3VDh+GVx9Vz7E313fu+HUzpoW+waY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wbFmTt7v05eGnzvoEhAHOKQ6RgifOxaF8XNSLmU/j8OjhoQ9CFsxXZEXGgIf79IuJ
-         nZx7K6AIlqBixj11Z9Rms47J/em2APVaqMOPV2cUoe5pqTuHa+Kb3D/adYqEWHQ4+g
-         ef2FcS5I2S8G+ltZTN8ym3Hq70J5simm2jgMWq6k=
+        b=QT28/tXvbYeF3460AFKtVdSa+QdEO+ars9DrwUW0gJx1hYLeF1Az/Q7eNcargKw3Q
+         0KzUGZurieuhxt3qbK6W4wKZxIw+4FoB/du4dMRyVcdXhTJGylKfzAHpeEXO52oSrQ
+         1abDXWGLVjrqN0Cd+DgN7xmZyFJ6r5zrRBUP5hQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 095/132] net: altera: set a couple error code in probe()
+        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.19 65/74] iio: dln2: Check return value of devm_iio_trigger_register()
 Date:   Mon, 13 Dec 2021 10:30:36 +0100
-Message-Id: <20211213092942.370557067@linuxfoundation.org>
+Message-Id: <20211213092932.969581309@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,45 +45,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit badd7857f5c933a3dc34942a2c11d67fdbdc24de upstream.
+commit 90751fb9f224e0e1555b49a8aa9e68f6537e4cec upstream.
 
-There are two error paths which accidentally return success instead of
-a negative error code.
+Registering a trigger can fail and the return value of
+devm_iio_trigger_register() must be checked. Otherwise undefined behavior
+can occur when the trigger is used.
 
-Fixes: bbd2190ce96d ("Altera TSE: Add main and header file for Altera Ethernet Driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 7c0299e879dd ("iio: adc: Add support for DLN2 ADC")
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Link: https://lore.kernel.org/r/20211101133043.6974-1-lars@metafoo.de
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/altera/altera_tse_main.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/iio/adc/dln2-adc.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/altera/altera_tse_main.c
-+++ b/drivers/net/ethernet/altera/altera_tse_main.c
-@@ -1431,16 +1431,19 @@ static int altera_tse_probe(struct platf
- 		priv->rxdescmem_busaddr = dma_res->start;
- 
- 	} else {
-+		ret = -ENODEV;
- 		goto err_free_netdev;
+--- a/drivers/iio/adc/dln2-adc.c
++++ b/drivers/iio/adc/dln2-adc.c
+@@ -668,7 +668,11 @@ static int dln2_adc_probe(struct platfor
+ 		return -ENOMEM;
  	}
- 
--	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask)))
-+	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask))) {
- 		dma_set_coherent_mask(priv->device,
- 				      DMA_BIT_MASK(priv->dmaops->dmamask));
--	else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32)))
-+	} else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32))) {
- 		dma_set_coherent_mask(priv->device, DMA_BIT_MASK(32));
--	else
-+	} else {
-+		ret = -EIO;
- 		goto err_free_netdev;
+ 	iio_trigger_set_drvdata(dln2->trig, dln2);
+-	devm_iio_trigger_register(dev, dln2->trig);
++	ret = devm_iio_trigger_register(dev, dln2->trig);
++	if (ret) {
++		dev_err(dev, "failed to register trigger: %d\n", ret);
++		return ret;
 +	}
+ 	iio_trigger_set_immutable(indio_dev, dln2->trig);
  
- 	/* MAC address space */
- 	ret = request_and_map(pdev, "control_port", &control_port,
+ 	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
 
 

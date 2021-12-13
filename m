@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD24472443
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC504724AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbhLMJfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:35:20 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58940 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbhLMJe1 (ORCPT
+        id S234603AbhLMJhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234091AbhLMJg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:27 -0500
+        Mon, 13 Dec 2021 04:36:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0415DC061D5F;
+        Mon, 13 Dec 2021 01:36:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CEDC0CE0E76;
-        Mon, 13 Dec 2021 09:34:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D3C8C341C5;
-        Mon, 13 Dec 2021 09:34:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7C679CE0E7A;
+        Mon, 13 Dec 2021 09:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D97C341CA;
+        Mon, 13 Dec 2021 09:36:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388064;
-        bh=ENgPx5OkxDJcwKlrbQgZkXRGBAk/W6IXPLXjBp12eas=;
+        s=korg; t=1639388170;
+        bh=SYImRba0OL2VvXLel88LbEVOuoFKhdSSi32tj1hGNSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0JG19fO6ZYGQsR7EdmTZ4COICctfetooiF3zpf6Rokrc4TH44MjYp8UkvB4FPjXpr
-         YPyIBYM0l8C6pqW4cfbCQJqs52ohqwb6Pj4jq5tT9BoNXF81XtSk1Gz3dVmz+mJ7Bj
-         VLAsr4FyciOgDrXOvSHfJQEV6csiz0UhUfxVllgA=
+        b=EQq8+kZlzOtVUuZO1R2gcZ5M0t64cpewABIgUaEBRV6LYGUEN1i3+9GvWKhRRWOoF
+         bNGpIwtU6DOqZ566HpPwq9lt6C6XCOltrKgYQzOtkvuf23wWIUcTdE/S63BDBykzIE
+         xDb8dzErK4V/aBE+3FWJjYSBksa4AjN6lhSl5OB0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.9 08/42] can: sja1000: fix use after free in ems_pcmcia_add_card()
+        stable@vger.kernel.org, Andrea Mayer <andrea.mayer@uniroma2.it>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 11/53] seg6: fix the iif in the IPv6 socket control block
 Date:   Mon, 13 Dec 2021 10:29:50 +0100
-Message-Id: <20211213092926.856019651@linuxfoundation.org>
+Message-Id: <20211213092928.739924337@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,42 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
 
-commit 3ec6ca6b1a8e64389f0212b5a1b0f6fed1909e45 upstream.
+commit ae68d93354e5bf5191ee673982251864ea24dd5c upstream.
 
-If the last channel is not available then "dev" is freed.  Fortunately,
-we can just use "pdev->irq" instead.
+When an IPv4 packet is received, the ip_rcv_core(...) sets the receiving
+interface index into the IPv4 socket control block (v5.16-rc4,
+net/ipv4/ip_input.c line 510):
 
-Also we should check if at least one channel was set up.
+    IPCB(skb)->iif = skb->skb_iif;
 
-Fixes: fd734c6f25ae ("can/sja1000: add driver for EMS PCMCIA card")
-Link: https://lore.kernel.org/all/20211124145041.GB13656@kili
-Cc: stable@vger.kernel.org
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+If that IPv4 packet is meant to be encapsulated in an outer IPv6+SRH
+header, the seg6_do_srh_encap(...) performs the required encapsulation.
+In this case, the seg6_do_srh_encap function clears the IPv6 socket control
+block (v5.16-rc4 net/ipv6/seg6_iptunnel.c line 163):
+
+    memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+
+The memset(...) was introduced in commit ef489749aae5 ("ipv6: sr: clear
+IP6CB(skb) on SRH ip4ip6 encapsulation") a long time ago (2019-01-29).
+
+Since the IPv6 socket control block and the IPv4 socket control block share
+the same memory area (skb->cb), the receiving interface index info is lost
+(IP6CB(skb)->iif is set to zero).
+
+As a side effect, that condition triggers a NULL pointer dereference if
+commit 0857d6f8c759 ("ipv6: When forwarding count rx stats on the orig
+netdev") is applied.
+
+To fix that issue, we set the IP6CB(skb)->iif with the index of the
+receiving interface once again.
+
+Fixes: ef489749aae5 ("ipv6: sr: clear IP6CB(skb) on SRH ip4ip6 encapsulation")
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20211208195409.12169-1-andrea.mayer@uniroma2.it
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/sja1000/ems_pcmcia.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/ipv6/seg6_iptunnel.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/net/can/sja1000/ems_pcmcia.c
-+++ b/drivers/net/can/sja1000/ems_pcmcia.c
-@@ -243,7 +243,12 @@ static int ems_pcmcia_add_card(struct pc
- 			free_sja1000dev(dev);
+--- a/net/ipv6/seg6_iptunnel.c
++++ b/net/ipv6/seg6_iptunnel.c
+@@ -128,6 +128,14 @@ int seg6_do_srh_encap(struct sk_buff *sk
+ 		hdr->hop_limit = ip6_dst_hoplimit(skb_dst(skb));
+ 
+ 		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
++
++		/* the control block has been erased, so we have to set the
++		 * iif once again.
++		 * We read the receiving interface index directly from the
++		 * skb->skb_iif as it is done in the IPv4 receiving path (i.e.:
++		 * ip_rcv_core(...)).
++		 */
++		IP6CB(skb)->iif = skb->skb_iif;
  	}
  
--	err = request_irq(dev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
-+	if (!card->channels) {
-+		err = -ENODEV;
-+		goto failure_cleanup;
-+	}
-+
-+	err = request_irq(pdev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
- 			  DRV_NAME, card);
- 	if (!err)
- 		return 0;
+ 	hdr->nexthdr = NEXTHDR_ROUTING;
 
 

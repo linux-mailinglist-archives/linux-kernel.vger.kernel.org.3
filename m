@@ -2,87 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0917347372E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97778473730
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243338AbhLMWDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:03:49 -0500
-Received: from mga11.intel.com ([192.55.52.93]:40554 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242178AbhLMWDr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:03:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236370995"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="236370995"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 14:03:47 -0800
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="603877437"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 14:03:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mwtPF-005oQj-2t;
-        Tue, 14 Dec 2021 00:02:49 +0200
-Date:   Tue, 14 Dec 2021 00:02:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
- when IRQ can't be retrieved
-Message-ID: <YbfDCNIMNy4PdBwL@smile.fi.intel.com>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
- <549c1825-56e6-de9e-e109-77f0d06cfd0f@opensource.wdc.com>
- <5322dafd-86ad-a293-6005-29384cb96cc8@omp.ru>
- <de3dc434-8b87-5d9d-7fe8-bd44ff2bcbfb@opensource.wdc.com>
- <Ybcz85/ZoXRCmbbD@smile.fi.intel.com>
- <0d967bb4-0b80-c293-b7d5-f49c9cc38718@opensource.wdc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d967bb4-0b80-c293-b7d5-f49c9cc38718@opensource.wdc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S243211AbhLMWEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237196AbhLMWEJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 17:04:09 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609D1C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:04:09 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id t184-20020a2546c1000000b006008b13c80bso32975274yba.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:04:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to;
+        bh=vPUizE+pHXS+jDaiWEOrq3f78poFiz2E/gTDlblt2Xs=;
+        b=cnDaFIPUp7Z9nfqJDzUdyNkSfWkL6b+d9+Ci73/XOs1oG6yxuC6B4/Vf+I/yAFwcfe
+         DtylpwWq8aRZEuGY558+dUsSS+Oqy4AOsmV6NLwk5RyVrucdrlcDGlb4MszrL5de7lR1
+         MqFdiSrSb3mdwhngGdUuCy6YvHcOTf6x7I4/DjSWonhDsS4Duik0xgk6moSeolV3V412
+         XLp6TqSTYsoBGevn1KnP0HxyqTAgCtWkJKgX+yjERnDh27nhvwpQv4cjie4nB7DnHLmT
+         eI60L+nRbFN3plnNjYvDkZRe9mrslxwH4PQo7qGjHRXTlDD2mPZb1FHaeP/31Y/HcIHf
+         urEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to;
+        bh=vPUizE+pHXS+jDaiWEOrq3f78poFiz2E/gTDlblt2Xs=;
+        b=wtxpHUSvjmJFKCkoaFJPGLV+essVMUGGMIT3AF+oxY0tOni9n05ltY5Ss66VU0JaX1
+         r6baPmHDS3Y+SfW+I2++7Z8+WsJFJvg2rVx4YJDr6QkBC4MzFTgCpQi/uJO1f/XGSksp
+         W3htyaU6a8FfYGf7o1ZLvrr4WygurFBD8gIyuWDshtGWGkkSGeZSwa3W/fHRyzn7RVx7
+         BHEcPHtfDU//IMX9AMvmfWYqgHd1mzaf1N8LHnJhWaGySngejuuNz4KyWIvtMLFwE9dl
+         /KiY0LeQKuP7uIIVijtbBg0EKqfCRF6rLXv9lTQWv08KupEw5sY3ojAXwDc70egiuEgY
+         qKsw==
+X-Gm-Message-State: AOAM532OsYKrY41jiF4hnVhFZ/pGHef+O5Ga33k0gcqw9UI2VGDLH2L6
+        +g7c1OGax2zAA32DA4oANNdLdzvf
+X-Google-Smtp-Source: ABdhPJza09MgbMQa8HF5koDtQ5f4n/AFQZ39gAA+LwBUrx/jaVvBW9dJDf5BS1LljokHs55Q3pJ0gAnc
+X-Received: from gnomeregan.cam.corp.google.com ([2620:15c:6:412:1712:4a63:4cd1:9a15])
+ (user=brho job=sendgmr) by 2002:a25:8205:: with SMTP id q5mr1462960ybk.256.1639433048480;
+ Mon, 13 Dec 2021 14:04:08 -0800 (PST)
+Date:   Mon, 13 Dec 2021 17:04:01 -0500
+Message-Id: <20211213220401.1039578-1-brho@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH] rlimits: do not grab tasklist_lock for do_prlimit on current
+From:   Barret Rhoden <brho@google.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        William Cohen <wcohen@redhat.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 06:36:00AM +0900, Damien Le Moal wrote:
-> On 2021/12/13 20:52, Andy Shevchenko wrote:
-> > On Mon, Dec 13, 2021 at 07:39:31AM +0900, Damien Le Moal wrote:
-> >> On 2021/12/11 19:25, Sergey Shtylyov wrote:
+The tasklist_lock can be a scalability bottleneck.  For current tasks,
+we don't need the tasklist_lock to protect tsk->sighand or tsk->signal.
+If non-current callers become a bottleneck, we could use
+lock_task_sighand().
 
-...
+Signed-off-by: Barret Rhoden <brho@google.com>
+---
+ kernel/sys.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> >> The problem I see is that the current behavior is unclear: what does
-> >> platform_get_irq_optional() returning 0 mean ? IRQ == 0 ? or "no IRQ" ? I think
-> >> it should be the latter rather than the former. Note that the function could
-> >> return ENOENT (or similar) for the "no IRQ" case. With that, case (2) goes away,
-> >> but then I do not see any difference between platform_get_irq_optional() and
-> >> platform_get_irq().
-> >>
-> >> If the preferred API semantic is to allow returning IRQ 0 with a warning, then
-> >> the kdoc comments of platform_get_irq_optional() and platform_get_irq() are
-> >> totally broken, and the code for many drivers is probably wrong too.
-> > 
-> > Yeah, what we need to do is that (roughly a roadmap):
-> >  - revisit callers of platform_get_irq_optional() to be prepared for
-> >    new behaviour
-> >  - rewrite platform_get_irq() to return -ENOENT
-> >  - rewrite platform_get_irq_optional() to return 0 on -ENOENT
-> > 
-> > This is how other similar (i.e. _optional) APIs do.
-> 
-> Sounds like a good plan to me. In the mean time though, your patch 1/2 should
-> keep the "if (!irq)" test and return an error for that case. No ?
-
-No problem. I can send a v2.
-
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 8fdac0d90504..e56d1ae910af 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -1576,7 +1576,8 @@ int do_prlimit(struct task_struct *tsk, unsigned int resource,
+ 	}
+ 
+ 	/* protect tsk->signal and tsk->sighand from disappearing */
+-	read_lock(&tasklist_lock);
++	if (tsk != current)
++		read_lock(&tasklist_lock);
+ 	if (!tsk->sighand) {
+ 		retval = -ESRCH;
+ 		goto out;
+@@ -1611,7 +1612,8 @@ int do_prlimit(struct task_struct *tsk, unsigned int resource,
+ 	     IS_ENABLED(CONFIG_POSIX_TIMERS))
+ 		update_rlimit_cpu(tsk, new_rlim->rlim_cur);
+ out:
+-	read_unlock(&tasklist_lock);
++	if (tsk != current)
++		read_unlock(&tasklist_lock);
+ 	return retval;
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1.173.g76aa8bc2d0-goog
 

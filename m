@@ -2,43 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC73472894
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F39472745
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbhLMKOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240905AbhLMKLN (ORCPT
+        id S239496AbhLMJ7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:59:25 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:44118 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238633AbhLMJyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:11:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63325C08ECB3;
-        Mon, 13 Dec 2021 01:54:03 -0800 (PST)
+        Mon, 13 Dec 2021 04:54:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AEF20CE0E6F;
-        Mon, 13 Dec 2021 09:54:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55894C34603;
-        Mon, 13 Dec 2021 09:53:59 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DCFA6CE0E86;
+        Mon, 13 Dec 2021 09:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6225DC34600;
+        Mon, 13 Dec 2021 09:54:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389239;
-        bh=6UikLrr2zxxoqQxCmqJ8iOfr3jCOlMDSVw6reSBi2Yw=;
+        s=korg; t=1639389243;
+        bh=YuVJlIGSlCkVhtXj8FaAbmuuXCq70y9BGZekMbL5gyY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N6FTpsw4ZohhsJjmevfWaMXw94YNnNXjxao5IlKPv+PgjyT45HST5eCLrsdtGryTy
-         +v560XpuAnsIwXi2xkxr7GVBPkxvx8YDnydBDpd/rtWO3G9mixlgg0y25Oww80BrkV
-         PbrOhsvofSzq1JlG6ztIQhbPawWTjmZUaXE78yMw=
+        b=vr76wly59UJ6rt0+8A0No0sOEM4OCu4bMvtPEvdedfYCTv9M/Fiz6800Ky6l3W1qF
+         35yTR9zhWK2WGdN01+j1YEsdOP4SnljkQRSZJyB56dCaVQYU25ljX6bHTg9xvvQiZ+
+         ez4vPkrxDq9KguyPJzuzES55or2ZKbLV9BtZDZwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Fabrizio Bertocci <fabriziobertocci@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 5.15 032/171] platform/x86: amd-pmc: Fix s2idle failures on certain AMD laptops
-Date:   Mon, 13 Dec 2021 10:29:07 +0100
-Message-Id: <20211213092946.145020824@linuxfoundation.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 033/171] nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
+Date:   Mon, 13 Dec 2021 10:29:08 +0100
+Message-Id: <20211213092946.177905131@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
 References: <20211213092945.091487407@linuxfoundation.org>
@@ -50,49 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabrizio Bertocci <fabriziobertocci@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit 49201b90af818654c5506a0decc18e111eadcb66 upstream.
+commit 4cd8371a234d051f9c9557fcbb1f8c523b1c0d10 upstream.
 
-On some AMD hardware laptops, the system fails communicating with the
-PMC when entering s2idle and the machine is battery powered.
+The done() netlink callback nfc_genl_dump_ses_done() should check if
+received argument is non-NULL, because its allocation could fail earlier
+in dumpit() (nfc_genl_dump_ses()).
 
-Hardware description: HP Pavilion Aero Laptop 13-be0097nr
-CPU: AMD Ryzen 7 5800U with Radeon Graphics
-GPU: 03:00.0 VGA compatible controller [0300]: Advanced Micro Devices,
-Inc. [AMD/ATI] Device [1002:1638] (rev c1)
-
-Detailed description of the problem (and investigation) here:
-https://gitlab.freedesktop.org/drm/amd/-/issues/1799
-
-Patch is a single line: reduce the polling delay in half, from 100uSec
-to 50uSec when waiting for a change in state from the PMC after a
-write command operation.
-
-After changing the delay, I did not see a single failure on this
-machine (I have this fix for now more than one week and s2idle worked
-every single time on battery power).
-
-Cc: stable@vger.kernel.org
-Acked-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Signed-off-by: Fabrizio Bertocci <fabriziobertocci@gmail.com>
-Link: https://lore.kernel.org/r/CADtzkx7TdfbwtaVEXUdD6YXPey52E-nZVQNs+Z41DTx7gqMqtw@mail.gmail.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Fixes: ac22ac466a65 ("NFC: Add a GET_SE netlink API")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20211209081307.57337-1-krzysztof.kozlowski@canonical.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/amd-pmc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/nfc/netlink.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/platform/x86/amd-pmc.c
-+++ b/drivers/platform/x86/amd-pmc.c
-@@ -70,7 +70,7 @@
- #define AMD_CPU_ID_CZN			AMD_CPU_ID_RN
- #define AMD_CPU_ID_YC			0x14B5
+--- a/net/nfc/netlink.c
++++ b/net/nfc/netlink.c
+@@ -1392,8 +1392,10 @@ static int nfc_genl_dump_ses_done(struct
+ {
+ 	struct class_dev_iter *iter = (struct class_dev_iter *) cb->args[0];
  
--#define PMC_MSG_DELAY_MIN_US		100
-+#define PMC_MSG_DELAY_MIN_US		50
- #define RESPONSE_REGISTER_LOOP_MAX	20000
+-	nfc_device_iter_exit(iter);
+-	kfree(iter);
++	if (iter) {
++		nfc_device_iter_exit(iter);
++		kfree(iter);
++	}
  
- #define SOC_SUBSYSTEM_IP_MAX	12
+ 	return 0;
+ }
 
 

@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D1B4725D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE7B472757
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbhLMJqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:46:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56286 "EHLO
+        id S238324AbhLMKAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:00:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41598 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235866AbhLMJmZ (ORCPT
+        with ESMTP id S237407AbhLMJzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:42:25 -0500
+        Mon, 13 Dec 2021 04:55:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D016B80E1A;
-        Mon, 13 Dec 2021 09:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B502C341CA;
-        Mon, 13 Dec 2021 09:42:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC692B80E23;
+        Mon, 13 Dec 2021 09:55:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2D5C34600;
+        Mon, 13 Dec 2021 09:55:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388542;
-        bh=pYunldn8c+cek+g0KVcD73JxXvmy0KMzFkAaBRyh5Bw=;
+        s=korg; t=1639389341;
+        bh=nZULYzr+I9ZBDLmax1pe4YX3kNbyD0jEs3DKzJC9gu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MVr5qVhkarvVVkH664+4yswc2UnHDpy9+5Yt7MZiPgM679cBFAIU1mnJj0wojnAxk
-         jgrP+DXtEP6Rx/Ga1Bxhabwqf/9AyGqVS2qHZRlAsLwB5YTXJuXxcQjIqYWpAFvRtc
-         KGVmL0lOuHS5wU3566cMASvLlrl859rdiZHBkeeg=
+        b=RUL9y3OWfQvz/nKIDHbKsUj+0qaMyS2hC6s7oVRM5YktHO2pEF2T60RnYkW8IaF2H
+         +yvJ9jl0UwZAbb+WeqJrVOz7Q8gFEoKQAAEzFrfn0Upk2DpRWx258WJ3UDbDaox4jV
+         Afq4R0Q4FseCNsMfm8HqHGo9+SuSR9a2b2ySa8a0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.4 12/88] can: kvaser_usb: get CAN clock frequency from device
+        stable@vger.kernel.org,
+        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 067/171] ALSA: pcm: oss: Fix negative period/buffer sizes
 Date:   Mon, 13 Dec 2021 10:29:42 +0100
-Message-Id: <20211213092933.647068125@linuxfoundation.org>
+Message-Id: <20211213092947.330992093@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,186 +47,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jimmy Assarsson <extja@kvaser.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit fb12797ab1fef480ad8a32a30984844444eeb00d upstream.
+commit 9d2479c960875ca1239bcb899f386970c13d9cfe upstream.
 
-The CAN clock frequency is used when calculating the CAN bittiming
-parameters. When wrong clock frequency is used, the device may end up
-with wrong bittiming parameters, depending on user requested bittiming
-parameters.
+The period size calculation in OSS layer may receive a negative value
+as an error, but the code there assumes only the positive values and
+handle them with size_t.  Due to that, a too big value may be passed
+to the lower layers.
 
-To avoid this, get the CAN clock frequency from the device. Various
-existing Kvaser Leaf products use different CAN clocks.
+This patch changes the code to handle with ssize_t and adds the proper
+error checks appropriately.
 
-Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
-Link: https://lore.kernel.org/all/20211208152122.250852-2-extja@kvaser.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
+Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
+Link: https://lore.kernel.org/r/20211201073606.11660-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c |  101 ++++++++++++++++-------
- 1 file changed, 73 insertions(+), 28 deletions(-)
+ sound/core/oss/pcm_oss.c |   24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -28,10 +28,6 @@
- 
- #include "kvaser_usb.h"
- 
--/* Forward declaration */
--static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg;
--
--#define CAN_USB_CLOCK			8000000
- #define MAX_USBCAN_NET_DEVICES		2
- 
- /* Command header size */
-@@ -80,6 +76,12 @@ static const struct kvaser_usb_dev_cfg k
- 
- #define CMD_LEAF_LOG_MESSAGE		106
- 
-+/* Leaf frequency options */
-+#define KVASER_USB_LEAF_SWOPTION_FREQ_MASK 0x60
-+#define KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK 0
-+#define KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK BIT(5)
-+#define KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK BIT(6)
-+
- /* error factors */
- #define M16C_EF_ACKE			BIT(0)
- #define M16C_EF_CRCE			BIT(1)
-@@ -340,6 +342,50 @@ struct kvaser_usb_err_summary {
- 	};
- };
- 
-+static const struct can_bittiming_const kvaser_usb_leaf_bittiming_const = {
-+	.name = "kvaser_usb",
-+	.tseg1_min = KVASER_USB_TSEG1_MIN,
-+	.tseg1_max = KVASER_USB_TSEG1_MAX,
-+	.tseg2_min = KVASER_USB_TSEG2_MIN,
-+	.tseg2_max = KVASER_USB_TSEG2_MAX,
-+	.sjw_max = KVASER_USB_SJW_MAX,
-+	.brp_min = KVASER_USB_BRP_MIN,
-+	.brp_max = KVASER_USB_BRP_MAX,
-+	.brp_inc = KVASER_USB_BRP_INC,
-+};
-+
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_8mhz = {
-+	.clock = {
-+		.freq = 8000000,
-+	},
-+	.timestamp_freq = 1,
-+	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+};
-+
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_16mhz = {
-+	.clock = {
-+		.freq = 16000000,
-+	},
-+	.timestamp_freq = 1,
-+	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+};
-+
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_24mhz = {
-+	.clock = {
-+		.freq = 24000000,
-+	},
-+	.timestamp_freq = 1,
-+	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+};
-+
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_32mhz = {
-+	.clock = {
-+		.freq = 32000000,
-+	},
-+	.timestamp_freq = 1,
-+	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+};
-+
- static void *
- kvaser_usb_leaf_frame_to_cmd(const struct kvaser_usb_net_priv *priv,
- 			     const struct sk_buff *skb, int *frame_len,
-@@ -471,6 +517,27 @@ static int kvaser_usb_leaf_send_simple_c
- 	return rc;
- }
- 
-+static void kvaser_usb_leaf_get_software_info_leaf(struct kvaser_usb *dev,
-+						   const struct leaf_cmd_softinfo *softinfo)
-+{
-+	u32 sw_options = le32_to_cpu(softinfo->sw_options);
-+
-+	dev->fw_version = le32_to_cpu(softinfo->fw_version);
-+	dev->max_tx_urbs = le16_to_cpu(softinfo->max_outstanding_tx);
-+
-+	switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
-+	case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
-+		dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
-+		break;
-+	case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
-+		dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
-+		break;
-+	case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
-+		dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
-+		break;
-+	}
-+}
-+
- static int kvaser_usb_leaf_get_software_info_inner(struct kvaser_usb *dev)
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -147,7 +147,7 @@ snd_pcm_hw_param_value_min(const struct
+  *
+  * Return the maximum value for field PAR.
+  */
+-static unsigned int
++static int
+ snd_pcm_hw_param_value_max(const struct snd_pcm_hw_params *params,
+ 			   snd_pcm_hw_param_t var, int *dir)
  {
- 	struct kvaser_cmd cmd;
-@@ -486,14 +553,13 @@ static int kvaser_usb_leaf_get_software_
- 
- 	switch (dev->card_data.leaf.family) {
- 	case KVASER_LEAF:
--		dev->fw_version = le32_to_cpu(cmd.u.leaf.softinfo.fw_version);
--		dev->max_tx_urbs =
--			le16_to_cpu(cmd.u.leaf.softinfo.max_outstanding_tx);
-+		kvaser_usb_leaf_get_software_info_leaf(dev, &cmd.u.leaf.softinfo);
- 		break;
- 	case KVASER_USBCAN:
- 		dev->fw_version = le32_to_cpu(cmd.u.usbcan.softinfo.fw_version);
- 		dev->max_tx_urbs =
- 			le16_to_cpu(cmd.u.usbcan.softinfo.max_outstanding_tx);
-+		dev->cfg = &kvaser_usb_leaf_dev_cfg_8mhz;
- 		break;
- 	}
- 
-@@ -1225,24 +1291,11 @@ static int kvaser_usb_leaf_init_card(str
+@@ -682,18 +682,24 @@ static int snd_pcm_oss_period_size(struc
+ 				   struct snd_pcm_hw_params *oss_params,
+ 				   struct snd_pcm_hw_params *slave_params)
  {
- 	struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
+-	size_t s;
+-	size_t oss_buffer_size, oss_period_size, oss_periods;
+-	size_t min_period_size, max_period_size;
++	ssize_t s;
++	ssize_t oss_buffer_size;
++	ssize_t oss_period_size, oss_periods;
++	ssize_t min_period_size, max_period_size;
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	size_t oss_frame_size;
  
--	dev->cfg = &kvaser_usb_leaf_dev_cfg;
- 	card_data->ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
+ 	oss_frame_size = snd_pcm_format_physical_width(params_format(oss_params)) *
+ 			 params_channels(oss_params) / 8;
  
- 	return 0;
- }
++	oss_buffer_size = snd_pcm_hw_param_value_max(slave_params,
++						     SNDRV_PCM_HW_PARAM_BUFFER_SIZE,
++						     NULL);
++	if (oss_buffer_size <= 0)
++		return -EINVAL;
+ 	oss_buffer_size = snd_pcm_plug_client_size(substream,
+-						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_BUFFER_SIZE, NULL)) * oss_frame_size;
+-	if (!oss_buffer_size)
++						   oss_buffer_size * oss_frame_size);
++	if (oss_buffer_size <= 0)
+ 		return -EINVAL;
+ 	oss_buffer_size = rounddown_pow_of_two(oss_buffer_size);
+ 	if (atomic_read(&substream->mmap_count)) {
+@@ -730,7 +736,7 @@ static int snd_pcm_oss_period_size(struc
  
--static const struct can_bittiming_const kvaser_usb_leaf_bittiming_const = {
--	.name = "kvaser_usb",
--	.tseg1_min = KVASER_USB_TSEG1_MIN,
--	.tseg1_max = KVASER_USB_TSEG1_MAX,
--	.tseg2_min = KVASER_USB_TSEG2_MIN,
--	.tseg2_max = KVASER_USB_TSEG2_MAX,
--	.sjw_max = KVASER_USB_SJW_MAX,
--	.brp_min = KVASER_USB_BRP_MIN,
--	.brp_max = KVASER_USB_BRP_MAX,
--	.brp_inc = KVASER_USB_BRP_INC,
--};
--
- static int kvaser_usb_leaf_set_bittiming(struct net_device *netdev)
- {
- 	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
-@@ -1348,11 +1401,3 @@ const struct kvaser_usb_dev_ops kvaser_u
- 	.dev_read_bulk_callback = kvaser_usb_leaf_read_bulk_callback,
- 	.dev_frame_to_cmd = kvaser_usb_leaf_frame_to_cmd,
- };
--
--static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg = {
--	.clock = {
--		.freq = CAN_USB_CLOCK,
--	},
--	.timestamp_freq = 1,
--	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
--};
+ 	min_period_size = snd_pcm_plug_client_size(substream,
+ 						   snd_pcm_hw_param_value_min(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
+-	if (min_period_size) {
++	if (min_period_size > 0) {
+ 		min_period_size *= oss_frame_size;
+ 		min_period_size = roundup_pow_of_two(min_period_size);
+ 		if (oss_period_size < min_period_size)
+@@ -739,7 +745,7 @@ static int snd_pcm_oss_period_size(struc
+ 
+ 	max_period_size = snd_pcm_plug_client_size(substream,
+ 						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
+-	if (max_period_size) {
++	if (max_period_size > 0) {
+ 		max_period_size *= oss_frame_size;
+ 		max_period_size = rounddown_pow_of_two(max_period_size);
+ 		if (oss_period_size > max_period_size)
+@@ -752,7 +758,7 @@ static int snd_pcm_oss_period_size(struc
+ 		oss_periods = substream->oss.setup.periods;
+ 
+ 	s = snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIODS, NULL);
+-	if (runtime->oss.maxfrags && s > runtime->oss.maxfrags)
++	if (s > 0 && runtime->oss.maxfrags && s > runtime->oss.maxfrags)
+ 		s = runtime->oss.maxfrags;
+ 	if (oss_periods > s)
+ 		oss_periods = s;
 
 

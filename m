@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0455A47276E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F654729A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbhLMKAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S245280AbhLMKXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238352AbhLMJ4g (ORCPT
+        with ESMTP id S239734AbhLMKQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:56:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67524C0617A1;
-        Mon, 13 Dec 2021 01:46:32 -0800 (PST)
+        Mon, 13 Dec 2021 05:16:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DA8C110F2B;
+        Mon, 13 Dec 2021 01:55:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35B75B80E1A;
-        Mon, 13 Dec 2021 09:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FEAC00446;
-        Mon, 13 Dec 2021 09:46:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D1A2CCE0E7D;
+        Mon, 13 Dec 2021 09:55:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D49C34600;
+        Mon, 13 Dec 2021 09:55:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388790;
-        bh=GrrkshFVfILxXHp+6KEbzkw9qlv/EElZCZ0UOJzap4I=;
+        s=korg; t=1639389330;
+        bh=+Fbey8t6tGChg+w6blG37u1MpyKeFJaz57PNqXChuko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kFaXzkFgSrrgqY6i2Waf7Ljf2KprVwBhgE2386eNDoRF67kkh6TIOptLxCIdBYcjG
-         JDlG58FeLKgAnw2vR4Qvq1/5tK1A4fzu7fyUmvwg7S7/+KrAVgcJNTVIf9dpCMWT+m
-         qryyBZOsT1SoV7R0FHw+hbap7/2EoLvMm/o+tioQ=
+        b=AjfVBBJ3e0CscLLftmYrz8cd9g16KOmKmIxHN3ESNUfrC658Le38R26M8+CqpklS6
+         2aqd4z8nxuXKCSbT8lyLUUoTmagGFQhhDV5M48Z8TLMc18UOE2uRdzPs7dIzVa6dI7
+         E2yWMyZSNilSXXMO5N1GSrPzXXcOsWzHG6bP1byw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Lindroth <thomas.lindroth@gmail.com>
-Subject: [PATCH 5.10 002/132] gcc-plugins: simplify GCC plugin-dev capability test
-Date:   Mon, 13 Dec 2021 10:29:03 +0100
-Message-Id: <20211213092939.156328381@linuxfoundation.org>
+        stable@vger.kernel.org, Russell King <rmk+kernel@armlinux.org.uk>,
+        Maarten Zanders <maarten.zanders@mind.be>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 029/171] net: dsa: mv88e6xxx: fix "dont use PHY_DETECT on internal PHYs"
+Date:   Mon, 13 Dec 2021 10:29:04 +0100
+Message-Id: <20211213092946.047009548@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,84 +49,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-commit 1e860048c53ee77ee9870dcce94847a28544b753 upstream.
+commit 2b29cb9e3f7f038c7f50ad2583b47caf5cb1eaf2 upstream.
 
-Linus pointed out a third of the time in the Kconfig parse stage comes
-from the single invocation of cc1plus in scripts/gcc-plugin.sh [1],
-and directly testing plugin-version.h for existence cuts down the
-overhead a lot. [2]
+This commit fixes a misunderstanding in commit 4a3e0aeddf09 ("net: dsa:
+mv88e6xxx: don't use PHY_DETECT on internal PHY's").
 
-This commit takes one step further to kill the build test entirely.
+For Marvell DSA switches with the PHY_DETECT bit (for non-6250 family
+devices), controls whether the PPU polls the PHY to retrieve the link,
+speed, duplex and pause status to update the port configuration. This
+applies for both internal and external PHYs.
 
-The small piece of code was probably intended to test the C++ designated
-initializer, which was not supported until C++20.
+For some switches such as 88E6352 and 88E6390X, PHY_DETECT has an
+additional function of enabling auto-media mode between the internal
+PHY and SERDES blocks depending on which first gains link.
 
-In fact, with -pedantic option given, both GCC and Clang emit a warning.
+The original intention of commit 5d5b231da7ac (net: dsa: mv88e6xxx: use
+PHY_DETECT in mac_link_up/mac_link_down) was to allow this bit to be
+used to detect when this propagation is enabled, and allow software to
+update the port configuration. This has found to be necessary for some
+switches which do not automatically propagate status from the SERDES to
+the port, which includes the 88E6390. However, commit 4a3e0aeddf09
+("net: dsa: mv88e6xxx: don't use PHY_DETECT on internal PHY's") breaks
+this assumption.
 
-$ echo 'class test { public: int test; } test = { .test = 1 };' | g++ -x c++ -pedantic - -fsyntax-only
-<stdin>:1:43: warning: C++ designated initializers only available with '-std=c++2a' or '-std=gnu++2a' [-Wpedantic]
-$ echo 'class test { public: int test; } test = { .test = 1 };' | clang++ -x c++ -pedantic - -fsyntax-only
-<stdin>:1:43: warning: designated initializers are a C++20 extension [-Wc++20-designator]
-class test { public: int test; } test = { .test = 1 };
-                                          ^
-1 warning generated.
+Maarten Zanders has confirmed that the issue he was addressing was for
+an 88E6250 switch, which does not have a PHY_DETECT bit in bit 12, but
+instead a link status bit. Therefore, mv88e6xxx_port_ppu_updates() does
+not report correctly.
 
-Otherwise, modern C++ compilers should be able to build the code, and
-hopefully skipping this test should not make any practical problem.
+This patch resolves the above issues by reverting Maarten's change and
+instead making mv88e6xxx_port_ppu_updates() indicate whether the port
+is internal for the 88E6250 family of switches.
 
-Checking the existence of plugin-version.h is still needed to ensure
-the plugin-dev package is installed. The test code is now small enough
-to be embedded in scripts/gcc-plugins/Kconfig.
+  Yes, you're right, I'm targeting the 6250 family. And yes, your
+  suggestion would solve my case and is a better implementation for
+  the other devices (as far as I can see).
 
-[1] https://lore.kernel.org/lkml/CAHk-=wjU4DCuwQ4pXshRbwDCUQB31ScaeuDo1tjoZ0_PjhLHzQ@mail.gmail.com/
-[2] https://lore.kernel.org/lkml/CAHk-=whK0aQxs6Q5ijJmYF1n2ch8cVFSUzU5yUM_HOjig=+vnw@mail.gmail.com/
-
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20201203125700.161354-1-masahiroy@kernel.org
-Cc: Thomas Lindroth <thomas.lindroth@gmail.com>
+Fixes: 4a3e0aeddf09 ("net: dsa: mv88e6xxx: don't use PHY_DETECT on internal PHY's")
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+Tested-by: Maarten Zanders <maarten.zanders@mind.be>
+Link: https://lore.kernel.org/r/E1muXm7-00EwJB-7n@rmk-PC.armlinux.org.uk
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/gcc-plugin.sh       |   19 -------------------
- scripts/gcc-plugins/Kconfig |    2 +-
- 2 files changed, 1 insertion(+), 20 deletions(-)
- delete mode 100755 scripts/gcc-plugin.sh
+ drivers/net/dsa/mv88e6xxx/chip.c |   21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
---- a/scripts/gcc-plugin.sh
-+++ /dev/null
-@@ -1,19 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--
--set -e
--
--srctree=$(dirname "$0")
--
--gccplugins_dir=$($* -print-file-name=plugin)
--
--# we need a c++ compiler that supports the designated initializer GNU extension
--$HOSTCC -c -x c++ -std=gnu++98 - -fsyntax-only -I $srctree/gcc-plugins -I $gccplugins_dir/include 2>/dev/null <<EOF
--#include "gcc-common.h"
--class test {
--public:
--	int test;
--} test = {
--	.test = 1
--};
--EOF
---- a/scripts/gcc-plugins/Kconfig
-+++ b/scripts/gcc-plugins/Kconfig
-@@ -9,7 +9,7 @@ menuconfig GCC_PLUGINS
- 	bool "GCC plugins"
- 	depends on HAVE_GCC_PLUGINS
- 	depends on CC_IS_GCC
--	depends on $(success,$(srctree)/scripts/gcc-plugin.sh $(CC))
-+	depends on $(success,test -e $(shell,$(CC) -print-file-name=plugin)/include/plugin-version.h)
- 	default y
- 	help
- 	  GCC plugins are loadable modules that provide extra features to the
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -471,6 +471,12 @@ static int mv88e6xxx_port_ppu_updates(st
+ 	u16 reg;
+ 	int err;
+ 
++	/* The 88e6250 family does not have the PHY detect bit. Instead,
++	 * report whether the port is internal.
++	 */
++	if (chip->info->family == MV88E6XXX_FAMILY_6250)
++		return port < chip->info->num_internal_phys;
++
+ 	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_STS, &reg);
+ 	if (err) {
+ 		dev_err(chip->dev,
+@@ -753,11 +759,10 @@ static void mv88e6xxx_mac_link_down(stru
+ 	ops = chip->info->ops;
+ 
+ 	mv88e6xxx_reg_lock(chip);
+-	/* Internal PHYs propagate their configuration directly to the MAC.
+-	 * External PHYs depend on whether the PPU is enabled for this port.
++	/* Force the link down if we know the port may not be automatically
++	 * updated by the switch or if we are using fixed-link mode.
+ 	 */
+-	if (((!mv88e6xxx_phy_is_internal(ds, port) &&
+-	      !mv88e6xxx_port_ppu_updates(chip, port)) ||
++	if ((!mv88e6xxx_port_ppu_updates(chip, port) ||
+ 	     mode == MLO_AN_FIXED) && ops->port_sync_link)
+ 		err = ops->port_sync_link(chip, port, mode, false);
+ 	mv88e6xxx_reg_unlock(chip);
+@@ -780,11 +785,11 @@ static void mv88e6xxx_mac_link_up(struct
+ 	ops = chip->info->ops;
+ 
+ 	mv88e6xxx_reg_lock(chip);
+-	/* Internal PHYs propagate their configuration directly to the MAC.
+-	 * External PHYs depend on whether the PPU is enabled for this port.
++	/* Configure and force the link up if we know that the port may not
++	 * automatically updated by the switch or if we are using fixed-link
++	 * mode.
+ 	 */
+-	if ((!mv88e6xxx_phy_is_internal(ds, port) &&
+-	     !mv88e6xxx_port_ppu_updates(chip, port)) ||
++	if (!mv88e6xxx_port_ppu_updates(chip, port) ||
+ 	    mode == MLO_AN_FIXED) {
+ 		/* FIXME: for an automedia port, should we force the link
+ 		 * down here - what if the link comes up due to "other" media
 
 

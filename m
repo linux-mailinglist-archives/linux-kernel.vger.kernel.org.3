@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F09647363D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70071473638
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243032AbhLMUpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:45:42 -0500
-Received: from mga03.intel.com ([134.134.136.65]:9028 "EHLO mga03.intel.com"
+        id S242790AbhLMUoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:44:39 -0500
+Received: from mga07.intel.com ([134.134.136.100]:36849 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236136AbhLMUpj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:45:39 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="238772610"
+        id S236136AbhLMUoi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 15:44:38 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302207177"
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="238772610"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 12:45:38 -0800
+   d="scan'208";a="302207177"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 12:44:38 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="603854155"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 12:45:37 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mwsBc-005m8o-4m;
-        Mon, 13 Dec 2021 22:44:40 +0200
-Date:   Mon, 13 Dec 2021 22:44:39 +0200
+   d="scan'208";a="517916776"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 13 Dec 2021 12:44:36 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 37218144; Mon, 13 Dec 2021 22:44:42 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Li Wang <liwang@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v1 1/1] radix-tree: Replace kernel.h with the necessary
- inclusions
-Message-ID: <Ybewt64Szbudu6B+@smile.fi.intel.com>
-References: <20211027150528.80003-1-andriy.shevchenko@linux.intel.com>
- <CAEemH2edgtA+XOY8WjgwFD-50qcw_MGFSgjjBjgKVi_dAwtR6w@mail.gmail.com>
- <YZT7q+Eo9mudqOLF@smile.fi.intel.com>
+Subject: [PATCH v2 1/1] kunit: Replace kernel.h with the necessary inclusions
+Date:   Mon, 13 Dec 2021 22:44:41 +0200
+Message-Id: <20211213204441.56204-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZT7q+Eo9mudqOLF@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 02:55:08PM +0200, Andy Shevchenko wrote:
-> On Wed, Nov 17, 2021 at 03:01:12PM +0800, Li Wang wrote:
-> 
-> Thanks for the report! And do not top post next time, please.
-> 
-> > This patch breaks the radix tree test building.
-> 
-> Yes and no. The dirty tricks with kernel headers that tools/ do is what has
-> been revealed by this patch.
+When kernel.h is used in the headers it adds a lot into dependency hell,
+especially when there are circular dependencies are involved.
 
-Should be fixed by Matthew's patch.
+Replace kernel.h inclusion with the list of what is really being used.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+Andrew, please take it through your tree since KUnit maintainer is non-responsive
+by unknown (to me) reasons.
+
+ include/kunit/assert.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index ad889b539ab3..ccbc36c0b02f 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -10,7 +10,7 @@
+ #define _KUNIT_ASSERT_H
+ 
+ #include <linux/err.h>
+-#include <linux/kernel.h>
++#include <linux/printk.h>
+ 
+ struct kunit;
+ struct string_stream;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.33.0
 

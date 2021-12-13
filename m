@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0146847244A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C714726FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbhLMJf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:35:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48358 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbhLMJeg (ORCPT
+        id S239258AbhLMJ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236345AbhLMJvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:36 -0500
+        Mon, 13 Dec 2021 04:51:55 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E00C08E857;
+        Mon, 13 Dec 2021 01:44:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26A07B80E0E;
-        Mon, 13 Dec 2021 09:34:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB69C341C8;
-        Mon, 13 Dec 2021 09:34:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5092ACE0E29;
+        Mon, 13 Dec 2021 09:44:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE75FC00446;
+        Mon, 13 Dec 2021 09:44:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388073;
-        bh=txRjvqdPoP9bXfWGgH14tGapvUXAwE0Jl0sRvtiVegU=;
+        s=korg; t=1639388670;
+        bh=hiA75hrDbvhs9K9HBmABCcwv89YXozl550sSAsakBsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AoQ5t9yxLWR3RjGM53FV/vFVh4783eviwujDgceXrcR83GHDzxaXU5MxsQgbgmQyZ
-         I5rz9ksg8jNRmc/VbuYJ34aVLaWdYxrKwI6f2A+debCZSIBSLv7wg0MqDUdFbPZNIU
-         UaN3r4Y3tzb+1SBBI7a94+X4cf+3JC9XHFdyHkIc=
+        b=oOHelFuKgWqay78kr0xALrPfgat5BBm4jLuHvptjDOWiDRk79UwNEMQWgLcoS7Pdi
+         nX15Kj27/yk3uftkYD9hXv8bsLHb1XeWCKlmgOgcuhXMu+AHTW+ljpuidb2/ywrpzW
+         6RZ+r1tCA82iPpfcs3c26AnVp0sJVX3GNSOpC0a4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Young <consult.awy@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 12/42] ALSA: ctl: Fix copy of updated id with element read/write
+        stable@vger.kernel.org,
+        Mitch Williams <mitch.a.williams@intel.com>,
+        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.4 24/88] iavf: restore MSI state on reset
 Date:   Mon, 13 Dec 2021 10:29:54 +0100
-Message-Id: <20211213092926.979784266@linuxfoundation.org>
+Message-Id: <20211213092934.055192410@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Young <consult.awy@gmail.com>
+From: Mitch Williams <mitch.a.williams@intel.com>
 
-commit b6409dd6bdc03aa178bbff0d80db2a30d29b63ac upstream.
+commit 7e4dcc13965c57869684d57a1dc6dd7be589488c upstream.
 
-When control_compat.c:copy_ctl_value_to_user() is used, by
-ctl_elem_read_user() & ctl_elem_write_user(), it must also copy back the
-snd_ctl_elem_id value that may have been updated (filled in) by the call
-to snd_ctl_elem_read/snd_ctl_elem_write().
+If the PF experiences an FLR, the VF's MSI and MSI-X configuration will
+be conveniently and silently removed in the process. When this happens,
+reset recovery will appear to complete normally but no traffic will
+pass. The netdev watchdog will helpfully notify everyone of this issue.
 
-This matches the functionality provided by snd_ctl_elem_read_user() and
-snd_ctl_elem_write_user(), via snd_ctl_build_ioff().
+To prevent such public embarrassment, restore MSI configuration at every
+reset. For normal resets, this will do no harm, but for VF resets
+resulting from a PF FLR, this will keep the VF working.
 
-Without this, and without making additional calls to snd_ctl_info()
-which are unnecessary when using the non-compat calls, a userspace
-application will not know the numid value for the element and
-consequently will not be able to use the poll/read interface on the
-control file to determine which elements have updates.
-
-Signed-off-by: Alan Young <consult.awy@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211202150607.543389-1-consult.awy@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 5eae00c57f5e ("i40evf: main driver core")
+Signed-off-by: Mitch Williams <mitch.a.williams@intel.com>
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/control_compat.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/intel/iavf/iavf_main.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/core/control_compat.c
-+++ b/sound/core/control_compat.c
-@@ -281,6 +281,7 @@ static int copy_ctl_value_to_user(void _
- 				  struct snd_ctl_elem_value *data,
- 				  int type, int count)
- {
-+	struct snd_ctl_elem_value32 __user *data32 = userdata;
- 	int i, size;
- 
- 	if (type == SNDRV_CTL_ELEM_TYPE_BOOLEAN ||
-@@ -297,6 +298,8 @@ static int copy_ctl_value_to_user(void _
- 		if (copy_to_user(valuep, data->value.bytes.data, size))
- 			return -EFAULT;
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -2151,6 +2151,7 @@ static void iavf_reset_task(struct work_
  	}
-+	if (copy_to_user(&data32->id, &data->id, sizeof(data32->id)))
-+		return -EFAULT;
- 	return 0;
- }
  
+ 	pci_set_master(adapter->pdev);
++	pci_restore_msi_state(adapter->pdev);
+ 
+ 	if (i == IAVF_RESET_WAIT_COUNT) {
+ 		dev_err(&adapter->pdev->dev, "Reset never finished (%x)\n",
 
 

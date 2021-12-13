@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFAB472904
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDA74729D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244505AbhLMKRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:17:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36264 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237537AbhLMJuo (ORCPT
+        id S242859AbhLMKZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236802AbhLMJrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:50:44 -0500
+        Mon, 13 Dec 2021 04:47:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6CBC079798;
+        Mon, 13 Dec 2021 01:42:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB589B80E1B;
-        Mon, 13 Dec 2021 09:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B946C00446;
-        Mon, 13 Dec 2021 09:50:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB4BAB80E18;
+        Mon, 13 Dec 2021 09:42:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13473C00446;
+        Mon, 13 Dec 2021 09:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389041;
-        bh=nKs1OFeYhl2AZTBd3wI0QdBEgjmBnc1e1q70qRmWa1s=;
+        s=korg; t=1639388528;
+        bh=SNinJDI/s5uITO2X384nbB/vA2DjQ1fYrdkbOgBz21U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GNVz8nzuYoog3LzXa61dBW16FJv0bqXAIjvL2y4+oCrq1sqDQGLNSvlcy3PYva0+i
-         rjpE3m4uZTIcn70M/6UHgtp0+LzH4P6m5vArliOLoMddP6peU5xnUk4Lrjfv2mGzmP
-         5cMKSg6lGJ8gHiqV9psm70O01klxbjOT1l9MuRfI=
+        b=QO3ttItVhMiFsbjRdOL5QOmVoW2EAZgoz2dXqKitnIPLST2C6OcGQRsddKdESsA5g
+         EdvTMUXB6IQsOoigGuC/6l2z399Dq9SqP4VtREp9Qm5YYy4Vs8rksosBUr9meGf/HE
+         hQGWsobDauyR6Cq41oal39uyHsWmZip42sPn0GIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 098/132] net/qla3xxx: fix an error code in ql_adapter_up()
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.19 68/74] iio: accel: kxcjk-1013: Fix possible memory leak in probe and remove
 Date:   Mon, 13 Dec 2021 10:30:39 +0100
-Message-Id: <20211213092942.473775175@linuxfoundation.org>
+Message-Id: <20211213092933.071649975@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,57 +50,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit d17b9737c2bc09b4ac6caf469826e5a7ce3ffab7 upstream.
+commit 70c9774e180d151abaab358108e3510a8e615215 upstream.
 
-The ql_wait_for_drvr_lock() fails and returns false, then this
-function should return an error code instead of returning success.
+When ACPI type is ACPI_SMO8500, the data->dready_trig will not be set, the
+memory allocated by iio_triggered_buffer_setup() will not be freed, and cause
+memory leak as follows:
 
-The other problem is that the success path prints an error message
-netdev_err(ndev, "Releasing driver lock\n");  Delete that and
-re-order the code a little to make it more clear.
+unreferenced object 0xffff888009551400 (size 512):
+  comm "i2c-SMO8500-125", pid 911, jiffies 4294911787 (age 83.852s)
+  hex dump (first 32 bytes):
+    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 20 e2 e5 c0 ff ff ff ff  ........ .......
+  backtrace:
+    [<0000000041ce75ee>] kmem_cache_alloc_trace+0x16d/0x360
+    [<000000000aeb17b0>] iio_kfifo_allocate+0x41/0x130 [kfifo_buf]
+    [<000000004b40c1f5>] iio_triggered_buffer_setup_ext+0x2c/0x210 [industrialio_triggered_buffer]
+    [<000000004375b15f>] kxcjk1013_probe+0x10c3/0x1d81 [kxcjk_1013]
 
-Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20211207082416.GA16110@kili
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fix it by remove data->dready_trig condition in probe and remove.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: a25691c1f967 ("iio: accel: kxcjk1013: allow using an external trigger")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Cc: <Stable@vger.kernel.org>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20211025124159.2700301-1-yangyingliang@huawei.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/qlogic/qla3xxx.c |   19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/iio/accel/kxcjk-1013.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/qlogic/qla3xxx.c
-+++ b/drivers/net/ethernet/qlogic/qla3xxx.c
-@@ -3494,20 +3494,19 @@ static int ql_adapter_up(struct ql3_adap
+--- a/drivers/iio/accel/kxcjk-1013.c
++++ b/drivers/iio/accel/kxcjk-1013.c
+@@ -1423,8 +1423,7 @@ static int kxcjk1013_probe(struct i2c_cl
+ 	return 0;
  
- 	spin_lock_irqsave(&qdev->hw_lock, hw_flags);
+ err_buffer_cleanup:
+-	if (data->dready_trig)
+-		iio_triggered_buffer_cleanup(indio_dev);
++	iio_triggered_buffer_cleanup(indio_dev);
+ err_trigger_unregister:
+ 	if (data->dready_trig)
+ 		iio_trigger_unregister(data->dready_trig);
+@@ -1447,8 +1446,8 @@ static int kxcjk1013_remove(struct i2c_c
+ 	pm_runtime_set_suspended(&client->dev);
+ 	pm_runtime_put_noidle(&client->dev);
  
--	err = ql_wait_for_drvr_lock(qdev);
--	if (err) {
--		err = ql_adapter_initialize(qdev);
--		if (err) {
--			netdev_err(ndev, "Unable to initialize adapter\n");
--			goto err_init;
--		}
--		netdev_err(ndev, "Releasing driver lock\n");
--		ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
--	} else {
-+	if (!ql_wait_for_drvr_lock(qdev)) {
- 		netdev_err(ndev, "Could not acquire driver lock\n");
-+		err = -ENODEV;
- 		goto err_lock;
++	iio_triggered_buffer_cleanup(indio_dev);
+ 	if (data->dready_trig) {
+-		iio_triggered_buffer_cleanup(indio_dev);
+ 		iio_trigger_unregister(data->dready_trig);
+ 		iio_trigger_unregister(data->motion_trig);
  	}
- 
-+	err = ql_adapter_initialize(qdev);
-+	if (err) {
-+		netdev_err(ndev, "Unable to initialize adapter\n");
-+		goto err_init;
-+	}
-+	ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
-+
- 	spin_unlock_irqrestore(&qdev->hw_lock, hw_flags);
- 
- 	set_bit(QL_ADAPTER_UP, &qdev->flags);
 
 

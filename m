@@ -2,65 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8B847303C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A00473040
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238911AbhLMPQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbhLMPQE (ORCPT
+        id S239714AbhLMPQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:16:39 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57558 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230072AbhLMPQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:16:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EBBC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:16:03 -0800 (PST)
-Date:   Mon, 13 Dec 2021 16:16:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639408562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 13 Dec 2021 10:16:37 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6DE711F3B9;
+        Mon, 13 Dec 2021 15:16:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639408596; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ToQdhf3v46EZ7+ZT9zyhPQONFZf+B2zPmzbPVD/BAeU=;
-        b=pERNLzZJjVAcatK8nKwh+e3/ir5V4GqYTXEV/4/VQL4X6A9yfIhb3yeRgk0UY7OlPPL46J
-        dzdMLb+quVCLmrX+IYw0Bgi1KURNobWqVHF3OYGirnOo3QFfv9zcBBsCX++F3iblLNMbTM
-        h24J2WieuJlxCBYCtsfNeHSyt2wv46U2RL/arV2E+Bhkwzm5si51Jl2gLoUVojwD9bHeNj
-        OaFwU+bU8yg53A1gdOdQsOQIHp1HElsxv3Ubw1oLblDbMmiUzcyVI7bp+YXdSElMO8pEPh
-        S9Qr1N0PmybSyves1hIv+y5Iy5LDTG/KYcfuxF88/wH4VyKNQvJQEsFRc8EFbw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639408562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ToQdhf3v46EZ7+ZT9zyhPQONFZf+B2zPmzbPVD/BAeU=;
-        b=XFbpZO9zW32wcIgRasmjpBfwkx72wiR1WVrMUX4XpoGTrsut+u7op55fiPi1wJXSfJ5ixH
-        YJq+njPRgxc1VbBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 5/5] random: Defer processing of randomness on PREEMPT_RT.
-Message-ID: <YbdjsPYSUbNnaH8N@linutronix.de>
-References: <20211207121737.2347312-1-bigeasy@linutronix.de>
- <20211207121737.2347312-6-bigeasy@linutronix.de>
- <CAHmME9q2Yid56ZZ9sBQWjEWEK2B06g3H9KYRwWqExXRoCdbPdA@mail.gmail.com>
- <20211207201037.h46573oa5nfj33xq@linutronix.de>
+        bh=xCCaxXJm8B7uTbUUdIN5mtZibEs0z6RoWTXwhkZrBG0=;
+        b=UXhTmLBfkxU/+rQYsEaoBrklnIopW7t+wSivDM0j6f+7ejerEKa0QOXYyU1moDtxNw9vNe
+        5XU62vkpY7H75f+gjYDkF3XcNZSsrrRzazB9ZynEJjfsD4CCDEe1u7ENCbuQArK4uRaeD9
+        Q4cufKr98022wmRm1CumZgRRAVwHGmk=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 453B7A3B81;
+        Mon, 13 Dec 2021 15:16:36 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 16:16:36 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com
+Subject: Re: [RFC PATCH] module: Introduce module unload taint tracking
+Message-ID: <Ybdj1EDnMSl2NLab@alley>
+References: <20211124173327.3878177-1-atomlin@redhat.com>
+ <YbEZ4HgSYQEPuRmS@bombadil.infradead.org>
+ <20211209153131.a54fdfbci4qnyy6h@ava.usersys.com>
+ <YbKUUJUtjBk/n913@bombadil.infradead.org>
+ <YbMlVFwBiRujKdEX@alley>
+ <20211210160931.ftvxpulno73a2l7c@ava.usersys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207201037.h46573oa5nfj33xq@linutronix.de>
+In-Reply-To: <20211210160931.ftvxpulno73a2l7c@ava.usersys.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-07 21:10:39 [+0100], To Jason A. Donenfeld wrote:
-> On 2021-12-07 19:14:16 [+0100], Jason A. Donenfeld wrote:
-> > Hi Sebastian,
-> Hi Jason,
-Hi Jason,
+On Fri 2021-12-10 16:09:31, Aaron Tomlin wrote:
+> On Fri 2021-12-10 11:00 +0100, Petr Mladek wrote:
+> > > If someone enables this feature I can't think of a reason why they
+> > > would want to limit this to some arbitrary number. So my preference
+> > > is to remove that limitation completely. I see no point to it.
+> > 
+> > I agree with Luis here. We could always add the limit later when
+> > people report some real life problems with too long list. It is
+> > always good to know that someone did some heavy lifting in
+> > the system.
+> 
+> Fair enough.
+> 
+> > It might be even interesting to remember timestamp of the removal
+> > to match it with another events reported in the system log.
+> 
+> I'm not so sure about this. We could gather such details already via Ftrace
+> (e.g. see load_module()). Personally, I'd prefer to maintain a simple list.
 
-is there anything I should do and didn't do or do you just need some
-time to think?
+Fair enough. It was just an idea. Simple list is a good start. We
+could always add more details if people find it useful.
 
-Sebastian
+
+> > > If you just bump the count then its not duplication, it just adds
+> > > more information that the same module name with the same taint flag
+> > > has been unloaded now more than once.
+> > 
+> > Please, do not remove records that a module was removed. IMHO, it
+> > might be useful to track all removed module, including the non-tainted
+> > ones. Module removal is always tricky and not much tested. The tain
+> > flags might be just shown as extra information in the output.
+> 
+> This is an interesting suggestion. Albeit, as per the subject, I prefer to
+> just keep track of any module that tainted the kernel. That being said,
+> Petr, if you'd prefer to track each module unload/or deletion event, then I
+> would suggest for instance to remove a module once it has been reintroduced
+> or maintain an unload count as suggested by Luis.
+
+I just have fresh in mind the patchset
+https://lore.kernel.org/r/20211129034509.2646872-1-ming.lei@redhat.com
+It is about that removing sysfs interface is tricky and might lead to
+use after free problems. I could imagine many other similar problems
+that might happen with any module.
+
+But I agree that the information about modules that tainted the kernel is
+more important. I do not want to block the feature by requiring more
+requirements.
+
+
+Also we should keep in mind that the default panic() message should
+be reasonably short. Only the last lines might be visible on screen.
+Serial consoles might be really slow.
+
+It is perfectly fine to add few lines, like the existing list of
+loaded modules. Any potentially extensive output should be optional.
+There already is support for optional info, see panic_print_sys_info().
+
+Best Regards,
+Petr

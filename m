@@ -2,96 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61922471FC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 05:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788DA471FCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 05:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbhLMEDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 23:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbhLMEDg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 23:03:36 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C3CC06173F;
-        Sun, 12 Dec 2021 20:03:36 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso16142355otj.11;
-        Sun, 12 Dec 2021 20:03:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ug13LLEtOlyfDsGusRE39UXEknZ3h0eopE24mhESkBw=;
-        b=O+qZgOmCbOUhJzYLrtlEsn5ErqpoVgtQ/LNhCJ33sft0B9maQUg7027+hPK9U7Ikm3
-         k45GVUbidP9o+lOcR002kxvQb9YFqHvZJrVvnEmHP79qH8AKyc4Szw2dk1oaGky+CUTY
-         eIIqlEu7DgxDKVSg1lqqTv0Rh3F+AHMllxX0GWHhOtHuz56cx8b+/fFxCZ/CXp6uVIyz
-         Ls3ePmMsMvcEedc7bGsCqKJC5+0jGmYnTr/Qpy/T0A64vkKkD51KHeLK09hQc0Tj3C2B
-         ifS0SYHM5IMSuLlliC85+8dFqspyJ6WoGjA6pjfEsAFdSR7QyPvOXK1gLjW7wqpWMUxo
-         dU0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ug13LLEtOlyfDsGusRE39UXEknZ3h0eopE24mhESkBw=;
-        b=pVTIO1+gdMDRif+s82ykW9Gm/jrAdMTwIrX9S4BK93rtfcRCV7wAssMImEygaiKgcx
-         bmdDm6WIQXftaFPl7mxpO+tdmJ9JgZhtGemK1M3CJX50xoSMYQaITFUEJV0sxw67eWSf
-         SpqG8AGOGv7u68YNnPgiDvek+5khBNBIXi3fR/FxQCop8gNizueuTe1IA/McnQ6eq0bb
-         uvj0Qkey355NfBHwYMnxrbELA9E3HgRAllZqivfX7TsFYorpR3SobZFrvKTEpiQUzG/V
-         lPtzZd4cWW03tO8q8TNuZj9DBiI8h0hbuQZMgTu2DQCay/XJYCk8/QjKZQbjqW9a2wfK
-         E8yg==
-X-Gm-Message-State: AOAM533V7kQ3yvv6IcTkeBGK7haLWJXo8VXL2G35Y0Zf+B2dNWhEWgmw
-        AGGS4h5bTCYAHRFCpeSJX7jrSZJsURg=
-X-Google-Smtp-Source: ABdhPJxTh+nMmn7T4QvU38aV8sxW/Kgfg2KQnKtDCRXpjH+AoMbpp6WcyZmzp/plOqNLpjOnkEzqMA==
-X-Received: by 2002:a9d:404b:: with SMTP id o11mr21920449oti.332.1639368215664;
-        Sun, 12 Dec 2021 20:03:35 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h14sm2039655ots.22.2021.12.12.20.03.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 20:03:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: fix array may be out of bound
-To:     zhangyue <zhangyue1@kylinos.cn>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211213033419.70458-1-zhangyue1@kylinos.cn>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <8cef5d56-0d26-d35c-13c4-f6a6671888a2@roeck-us.net>
-Date:   Sun, 12 Dec 2021 20:03:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231566AbhLMEFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 23:05:40 -0500
+Received: from mga06.intel.com ([134.134.136.31]:58126 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229748AbhLMEFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 23:05:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639368339; x=1670904339;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SIKrcXiNkEqdWrtSf7SK+haGM38rR9yNMx/1JXebCf0=;
+  b=Ts1UyL6s42oWuPSJgSmvFjo2NoNT3C478mEUnl4QeXz8/nv2d0vJmMJH
+   TL3vhyI6dyANRvF7OoMtgD/yUO3a/woqKJd04LJUmpn1yPpjvRM2FW456
+   Ybsz4PgUCzaLo4AGm5s2OZBLZ6osN9rzawjcMde4Xgt4z/CemPcA479oX
+   lBXXy4TUu3SlPvlbKAciXeT6v52+S/28qeCNwHJzGu+0d8vOgtQ1nCUgr
+   ngBoPfuTHSKeJGkCC6oQYIGlotp4bYcUrGa+ptypt/N5Vypuamifr1Czr
+   d70MeZjUqymFCU/78vOHMzx25NdVnZqxrf54hu03JhAthpa6f/2XMZEr/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="299441232"
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="299441232"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 20:05:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="754092926"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Dec 2021 20:05:35 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwcal-0006Fu-8r; Mon, 13 Dec 2021 04:05:35 +0000
+Date:   Mon, 13 Dec 2021 12:04:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org
+Cc:     kbuild-all@lists.01.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-kernel@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Christoph Hellwig <hch@lst.de>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 3/3] vmcore: Convert read_from_oldmem() to take an
+ iov_iter
+Message-ID: <202112131249.lfVULc7X-lkp@intel.com>
+References: <20211213000636.2932569-4-willy@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20211213033419.70458-1-zhangyue1@kylinos.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213000636.2932569-4-willy@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/21 7:34 PM, zhangyue wrote:
-> In this function, the param 'idx' may be
-> equal to 'DW_WDT_NUM_TOPS'.
-> At this time, the array 'dw_wdt->timeouts'
-> may be out of bound
-> 
-> Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
-> ---
->   drivers/watchdog/dw_wdt.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index cd578843277e..15fb1895c085 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -155,6 +155,9 @@ static unsigned int dw_wdt_get_min_timeout(struct dw_wdt *dw_wdt)
->   			break;
->   	}
->   
-> +	if (idx == DW_WDT_NUM_TOPS)
-> +		return 1;
-> +
+Hi "Matthew,
 
-Please look at the code (and the comments) more closely.
-This can not happen.
+Thank you for the patch! Yet something to improve:
 
-Guenter
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on arm64/for-next/core powerpc/next s390/features linus/master v5.16-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Matthew-Wilcox-Oracle/Convert-vmcore-to-use-an-iov_iter/20211213-080748
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git e463a09af2f0677b9485a7e8e4e70b396b2ffb6f
+config: riscv-randconfig-r012-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131249.lfVULc7X-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/22576d6aef6fb4cffad0a4e85953662c147dfe66
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/Convert-vmcore-to-use-an-iov_iter/20211213-080748
+        git checkout 22576d6aef6fb4cffad0a4e85953662c147dfe66
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash fs/proc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   fs/proc/vmcore.c: In function 'read_from_oldmem':
+   fs/proc/vmcore.c:157:31: error: implicit declaration of function 'iov_iter_zero' [-Werror=implicit-function-declaration]
+     157 |                         tmp = iov_iter_zero(nr_bytes, iter);
+         |                               ^~~~~~~~~~~~~
+   fs/proc/vmcore.c: In function 'elfcorehdr_read':
+>> fs/proc/vmcore.c:202:16: error: variable 'kvec' has initializer but incomplete type
+     202 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                ^~~~
+>> fs/proc/vmcore.c:202:31: error: 'struct kvec' has no member named 'iov_base'
+     202 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                               ^~~~~~~~
+>> fs/proc/vmcore.c:202:42: warning: excess elements in struct initializer
+     202 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                                          ^~~
+   fs/proc/vmcore.c:202:42: note: (near initialization for 'kvec')
+>> fs/proc/vmcore.c:202:48: error: 'struct kvec' has no member named 'iov_len'
+     202 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                                                ^~~~~~~
+   fs/proc/vmcore.c:202:58: warning: excess elements in struct initializer
+     202 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                                                          ^~~~~
+   fs/proc/vmcore.c:202:58: note: (near initialization for 'kvec')
+   fs/proc/vmcore.c:202:21: error: storage size of 'kvec' isn't known
+     202 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                     ^~~~
+   fs/proc/vmcore.c:203:25: error: storage size of 'iter' isn't known
+     203 |         struct iov_iter iter;
+         |                         ^~~~
+   fs/proc/vmcore.c:205:9: error: implicit declaration of function 'iov_iter_kvec' [-Werror=implicit-function-declaration]
+     205 |         iov_iter_kvec(&iter, READ, &kvec, 1, count);
+         |         ^~~~~~~~~~~~~
+   fs/proc/vmcore.c:203:25: warning: unused variable 'iter' [-Wunused-variable]
+     203 |         struct iov_iter iter;
+         |                         ^~~~
+   fs/proc/vmcore.c:202:21: warning: unused variable 'kvec' [-Wunused-variable]
+     202 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                     ^~~~
+   fs/proc/vmcore.c: In function 'elfcorehdr_read_notes':
+   fs/proc/vmcore.c:215:16: error: variable 'kvec' has initializer but incomplete type
+     215 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                ^~~~
+   fs/proc/vmcore.c:215:31: error: 'struct kvec' has no member named 'iov_base'
+     215 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                               ^~~~~~~~
+   fs/proc/vmcore.c:215:42: warning: excess elements in struct initializer
+     215 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                                          ^~~
+   fs/proc/vmcore.c:215:42: note: (near initialization for 'kvec')
+   fs/proc/vmcore.c:215:48: error: 'struct kvec' has no member named 'iov_len'
+     215 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                                                ^~~~~~~
+   fs/proc/vmcore.c:215:58: warning: excess elements in struct initializer
+     215 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                                                          ^~~~~
+   fs/proc/vmcore.c:215:58: note: (near initialization for 'kvec')
+   fs/proc/vmcore.c:215:21: error: storage size of 'kvec' isn't known
+     215 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                     ^~~~
+   fs/proc/vmcore.c:216:25: error: storage size of 'iter' isn't known
+     216 |         struct iov_iter iter;
+         |                         ^~~~
+   fs/proc/vmcore.c:216:25: warning: unused variable 'iter' [-Wunused-variable]
+   fs/proc/vmcore.c:215:21: warning: unused variable 'kvec' [-Wunused-variable]
+     215 |         struct kvec kvec = { .iov_base = buf, .iov_len = count };
+         |                     ^~~~
+   fs/proc/vmcore.c: In function '__read_vmcore':
+   fs/proc/vmcore.c:327:17: error: invalid use of undefined type 'struct iov_iter'
+     327 |         if (iter->count == 0 || *fpos >= vmcore_size)
+         |                 ^~
+   fs/proc/vmcore.c:331:17: error: invalid use of undefined type 'struct iov_iter'
+     331 |         if (iter->count > vmcore_size - *fpos)
+         |                 ^~
+   fs/proc/vmcore.c:332:21: error: invalid use of undefined type 'struct iov_iter'
+     332 |                 iter->count = vmcore_size - *fpos;
+         |                     ^~
+   In file included from include/linux/kernel.h:17,
+                    from include/linux/cpumask.h:10,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:10,
+                    from fs/proc/vmcore.c:11:
+   fs/proc/vmcore.c:336:62: error: invalid use of undefined type 'struct iov_iter'
+     336 |                 tsz = min(elfcorebuf_sz - (size_t)*fpos, iter->count);
+         |                                                              ^~
+   include/linux/minmax.h:20:46: note: in definition of macro '__typecheck'
+      20 |         (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+         |                                              ^
+   include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~
+   include/linux/minmax.h:45:25: note: in expansion of macro '__careful_cmp'
+      45 | #define min(x, y)       __careful_cmp(x, y, <)
+         |                         ^~~~~~~~~~~~~
+   fs/proc/vmcore.c:336:23: note: in expansion of macro 'min'
+     336 |                 tsz = min(elfcorebuf_sz - (size_t)*fpos, iter->count);
+         |                       ^~~
+   In file included from arch/riscv/include/asm/bug.h:10,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:9,
+                    from fs/proc/vmcore.c:11:
+   fs/proc/vmcore.c:336:62: error: invalid use of undefined type 'struct iov_iter'
+     336 |                 tsz = min(elfcorebuf_sz - (size_t)*fpos, iter->count);
+         |                                                              ^~
+   include/linux/const.h:12:55: note: in definition of macro '__is_constexpr'
+      12 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+         |                                                       ^
+   include/linux/minmax.h:26:39: note: in expansion of macro '__no_side_effects'
+      26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+         |                                       ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
+      36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+         |                               ^~~~~~~~~~
+
+
+vim +/kvec +202 fs/proc/vmcore.c
+
+   196	
+   197	/*
+   198	 * Architectures may override this function to read from ELF header
+   199	 */
+   200	ssize_t __weak elfcorehdr_read(char *buf, size_t count, u64 *ppos)
+   201	{
+ > 202		struct kvec kvec = { .iov_base = buf, .iov_len = count };
+   203		struct iov_iter iter;
+   204	
+   205		iov_iter_kvec(&iter, READ, &kvec, 1, count);
+   206	
+   207		return read_from_oldmem(&iter, count, ppos, false);
+   208	}
+   209	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

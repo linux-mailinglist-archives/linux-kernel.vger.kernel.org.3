@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0694E47341B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A161473424
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241876AbhLMSer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S241928AbhLMSg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237355AbhLMSep (ORCPT
+        with ESMTP id S241925AbhLMSg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:34:45 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCD7C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:34:45 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id r11so54411381edd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:34:45 -0800 (PST)
+        Mon, 13 Dec 2021 13:36:27 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A033AC061748;
+        Mon, 13 Dec 2021 10:36:26 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id t5so54973337edd.0;
+        Mon, 13 Dec 2021 10:36:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vIyY6p2EZlLqvkpDw90dPzbnUYj0Y0TXgSTtv3pwKXg=;
-        b=J7ur5TAWevBbsI8h6USlM3dUQ7+7Mv2HnRlkEJYzPRTHEhMSVi7T4fY7vtSC5i4QT4
-         M5td+aQXfDFkd2CikoPDIe/wfA9nL8Y9/g2b7PaKxa0TADHyRzziV5xWtI9N1fvmsRYh
-         R0dAF1+8ln0zPDbFV22IkTj+2kwIeH3CYlWLcav6wi4lDUkCPsdIlyUYil+rWMiQwh2J
-         NhmPcRjRunsRZ1cZVOZfztw3zlLQh7Eecq7oGnLBZukhodOWLpiLg/UVY8BNvSYf9Ns0
-         OksgSO1g8sY5AUpmDQ8wpnQLZ+bq7LRDLKdN5Tvg5maeOZsdOHNw8nKyNdzLdZgKUCiW
-         uNOQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D9HDwMRbrHhqS+RAMOtyip5SrGwIhn2OMyxvs6pUsog=;
+        b=GyXp1bRpM5xc7y3ovN+XrgnFL/YT1pQGPbuM+V0usMfizPWpZMmuSZYAm48SNUPOk5
+         g4YgXhpZfg5FO5IE7PXSLpTCOKM8VwCL7KTGTmZwyt+vABMyB5nq+jbR65GcPQMOsJ71
+         n0SXjFiJdEam3BLP/W7+3ujAMM0sTLr5MlW9bk90Na3s719RfbbIcfam7eWlnI2PFmxC
+         P2l2+102sXsKIQEHGmD4JBH424gFi+5cCPStTidN8YBf3vTxbVUNgoet0HCvoI+KkurZ
+         LhLd4utOgmvpR8I7O/ZmUV3t4ERBurWpOlUbMI/yTYBlh797DHDwsO6OPeygpCqpV3Ri
+         9jWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vIyY6p2EZlLqvkpDw90dPzbnUYj0Y0TXgSTtv3pwKXg=;
-        b=fri7fnAuZmfkdpC7FgxHx5gdI74mJAUhRLjuicHit7kIVYeOY/OJsyORcrGNfob6FY
-         zX/56LsF8WB0YGBGCNzRdzjloZARpKCfz8Am4PvHmjjL4QCGjylAIO1GHZSizeBiSUiS
-         oBvoBJtDyEH9xjtGxO6ZIpGEwmHQSClv2nRO9GElmIUYq0lty/EMfuCWDYJOPZKmRcCH
-         Zx0G8TgT5FlfDiol0W+U3fgHc6E3PKVwbLwwjUMiOxfoB4htXY0lS4J09zBKIogv5WPJ
-         DwGzGdiSMHVNxi2CEC6yMD7NcpbDF/FCP/Q2De2koFqkQ/OIQ3RyBWM5XdgXiLEScGAe
-         YBEA==
-X-Gm-Message-State: AOAM530To+Dbmx2JXL7245BQpayaoy1zMkHaY9c466qSuTMmoyI7rVr9
-        oG3IKrFpIlRUmhzuUZux1qfcxG3BMg==
-X-Google-Smtp-Source: ABdhPJzJFloF5r6zXDs6qopBcUai3Uq45DVzW1MoEH4XsxcjMTx/w27ev6S8ZnBq24tfAcFbfHBF3Q==
-X-Received: by 2002:a17:907:7e95:: with SMTP id qb21mr86775ejc.678.1639420483986;
-        Mon, 13 Dec 2021 10:34:43 -0800 (PST)
-Received: from localhost.localdomain ([46.53.251.150])
-        by smtp.gmail.com with ESMTPSA id w7sm6758846ede.66.2021.12.13.10.34.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D9HDwMRbrHhqS+RAMOtyip5SrGwIhn2OMyxvs6pUsog=;
+        b=vi4o3VkEBYZ1n8zXTZ3l9dOzqRrXgz/wMww8eblZ0SHsMoFHlF4+uFqXpMMFRS/TJL
+         UukluViRbTeDg6Puxc/+gBtjJ5avuvuGoG5n8BFUPVjsmTWEcCZi8mvQKF5WhQEI3N5J
+         pfWg51wKoDHptDcp+t9XAzwUs4pNTPGT7J0BvksW+E3ulrkQ0VgquBdR8kRdQReRn9i6
+         QHzYGChHYNIo1C69u7gekNse2IWaTw8YnLkoSsqwIy4Fg7+lBU++9TNvHjCgHFZVct4C
+         uywKbP5KxGoMaKanOtxaR63+XVNowt5uXZnEHsmBWwWoZLcIgrpZn1Qp+HS8HNIU5DOI
+         Gjrg==
+X-Gm-Message-State: AOAM5305Bn/FP0h1no/kg2FircAot9yQ4plDfXn0Eb6nTBCSqzzM7sUa
+        g94CcWwakQwm67ZG8TgiQeg=
+X-Google-Smtp-Source: ABdhPJyfwLPxKj8REmRfcQVQFjc+QGvFUevReO93kayGymfoGsxl56jpZ2lRWZeE8qQO7S6N+YTIAw==
+X-Received: by 2002:a17:906:9f10:: with SMTP id fy16mr54595ejc.637.1639420585197;
+        Mon, 13 Dec 2021 10:36:25 -0800 (PST)
+Received: from CLU-56K1TB3.ad.garmin.com ([176.223.64.4])
+        by smtp.gmail.com with ESMTPSA id q17sm6816793edd.10.2021.12.13.10.36.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 10:34:43 -0800 (PST)
-Date:   Mon, 13 Dec 2021 21:34:41 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] fs/binfmt_elf.c: disallow zero entry point address
-Message-ID: <YbeSQfdSuo5CmIub@localhost.localdomain>
-References: <20211211173447.4155374-1-hjl.tools@gmail.com>
- <CACVxJT-k664=aYp4VkG1LH3PsGHEf50PqP5EA+JWiFVb_JVs2Q@mail.gmail.com>
- <CAMe9rOqM+S_uBO-t5jJ1TLVD0R-LOJEiR6htb+k05c+ak7gF-g@mail.gmail.com>
+        Mon, 13 Dec 2021 10:36:24 -0800 (PST)
+From:   Razvan Heghedus <heghedus.razvan@gmail.com>
+Cc:     heghedus.razvan@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/2] usb: core: Export usb_device_match_id
+Date:   Mon, 13 Dec 2021 20:36:14 +0200
+Message-Id: <20211213183617.14156-1-heghedus.razvan@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMe9rOqM+S_uBO-t5jJ1TLVD0R-LOJEiR6htb+k05c+ak7gF-g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 05:52:14AM -0800, H.J. Lu wrote:
-> On Sat, Dec 11, 2021 at 11:38 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> >
-> > On 12/11/21, H.J. Lu <hjl.tools@gmail.com> wrote:
-> > > According to gABI, the entry point address in the ELF header gives the
-> > > virtual address to which the system first transfers control, thus
-> > > starting the process.  If the file has no associated entry point, this
-> > > member holds zero.  Update the ELF loader to disallow an ELF binary
-> > > with zero entry point address.  This fixes:
-> > >
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=215303
-> > >
-> > > Tested by booting Fedora 35 and running a shared library with zero entry
-> > > point address:
-> > >
-> > > $ readelf -h load.so | grep "Entry point address:"
-> > >   Entry point address:               0x0
-> > > $ ./load.so
-> > > bash: ./load.so: cannot execute binary file: Exec format error
-> >
-> > Why not let it segfault?
-> >
-> > > +     if (elf_ex->e_entry == 0)
-> > > +             goto out;
-> 
-> Why let it segfault?
+Export usb_device_match_id so that it can be used for easily matching an
+usb_device with a table of IDs.
 
-Such babysitting adds a branch for everyone to catch small number of
-binaries.
+Signed-off-by: Razvan Heghedus <heghedus.razvan@gmail.com>
+---
+ Changes in v4:
+  - make a patch series
+ drivers/usb/core/driver.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-e_entry can point to kernelspace, and it should segfault on the first
-instruction (correctly).
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 267a134311be..355ed33a2179 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -834,6 +834,7 @@ const struct usb_device_id *usb_device_match_id(struct usb_device *udev,
+ 
+ 	return NULL;
+ }
++EXPORT_SYMBOL_GPL(usb_device_match_id);
+ 
+ bool usb_driver_applicable(struct usb_device *udev,
+ 			   struct usb_device_driver *udrv)
+-- 
+2.34.1
 
-It can iincorrectly point to unmapped area or VMA with wrong permissions,
-with the same effect. But now check is more costly.

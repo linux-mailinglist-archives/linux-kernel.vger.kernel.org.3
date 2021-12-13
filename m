@@ -2,171 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9EC473728
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6660F47372A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243312AbhLMWAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:00:33 -0500
-Received: from mail-bn8nam11on2077.outbound.protection.outlook.com ([40.107.236.77]:5408
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238754AbhLMWAc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:00:32 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z+epXGhl6VEZrGUT1+92iRUL1/H0yDUAsk9o8gjmQueBhC/A+y6GGT+o5rm82rlj6tCYLRf6aD7u7fT01lZ6gIvctrwf/BG7apbXcD9k3wRsCYXsI7FE6pKOIDBmcWqtkDDmOx4UPgVE9bw1uLuQrFO+xUP4rKej4T5QaGORjLMrEdnbbHoYcDESgX+2OKdcG6LgKChAubG5nsAw6AOYr/dyqUYlx6LXjcpirEcZwv9tOimcPu12LPm9dAlCsPpDwOy0nEjoBUwigha4TS2dYEV7pVwGNfpsoLVbR9ILsITPubmnIt71zCqSBd7D47ITg2AA+j9CTEdv+S3cIapeCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NcQ24mTImXA0x3TYhCaAlrVAA9ie4cD2E+7PXPMehW8=;
- b=cO9hgM4BP0QNHFLLDyvp67MlQTYsMQuxc4Cg/6xmef4SwYK56Q2y5tYcVL9K5GJOGYkAJjNRc7nCBFCIE/RvvZoO/GiiM+Tmtodr+Zo4W8q8sFhg11Ha63E8IEfUVnB7tWz1xF4OYuakVDU3lYbDpzanzl/5lIwG6kkLMgr8qNFXN9w9yqa68Ly9D/JraMqnSqrTl+cxownZLoZmbXOsWXXp/ux/9GZDS5JNMmKWngC6uknOmQz4e7GYU2USplxnfeyfpiE8wotqktbWZhy0ezmQy0IYL6YUkqDgpfMu+3AunewbxEn52pVUcDrnugusWJbEUXLobS3vRJQOBRcVdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NcQ24mTImXA0x3TYhCaAlrVAA9ie4cD2E+7PXPMehW8=;
- b=kima35WoJgJFV56xtBTIkqbJsMsK3nzY7wiBe3h5Hk7b7zS99GTaaSL7qQXGPCqCm6v256rCd26rEPjshQk+Tyf5jEno9Dr6GinXTu+gGeq648PpXX4MfSxaYCiF5a4wTVNGw23KULPvM6HUBNrPxH0Ual8Vrqhh2lahuCnfzPYtD/FDa3LOGdtj1hXcKWXR0A8Goiq8TKXXQi0Edo2e2z6cCeY7zz+UqUAK398YV8vSERJM86fma7sAFXFgvA6AlZKk2vq4Q7zUEvPzKZOTbis1EvqdCY8487GjXPgXc/LZ+g037d1LWk/9aXWTMXKf42V9RRRZraiwj6bu48NaMQ==
-Received: from MWHPR12MB1726.namprd12.prod.outlook.com (2603:10b6:300:110::16)
- by MWHPR1201MB2558.namprd12.prod.outlook.com (2603:10b6:300:e5::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
- 2021 22:00:29 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by MWHPR12MB1726.namprd12.prod.outlook.com (2603:10b6:300:110::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.18; Mon, 13 Dec
- 2021 22:00:28 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::6df1:639d:74ea:d39e]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::6df1:639d:74ea:d39e%7]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 22:00:28 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-CC:     Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v4 03/23] PCI/P2PDMA: Attempt to set map_type if it has
- not been set
-Thread-Topic: [PATCH v4 03/23] PCI/P2PDMA: Attempt to set map_type if it has
- not been set
-Thread-Index: AQHX3AdpaBbhnfL/1kKrOJvpVJUMZ6wxIZ2A
-Date:   Mon, 13 Dec 2021 22:00:27 +0000
-Message-ID: <8665d69d-7cf3-2c6f-1899-7f436954e55b@nvidia.com>
-References: <20211117215410.3695-1-logang@deltatee.com>
- <20211117215410.3695-4-logang@deltatee.com>
-In-Reply-To: <20211117215410.3695-4-logang@deltatee.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 93f8a0c3-f7c0-43b5-eaf9-08d9be83f92f
-x-ms-traffictypediagnostic: MWHPR12MB1726:EE_|MWHPR1201MB2558:EE_
-x-microsoft-antispam-prvs: <MWHPR12MB172629FE92339EFF3B06DFCBA3749@MWHPR12MB1726.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: evzYVwPA9YsljV6Rm/uT2OoKhlwEkc0UrOlJ/WyWOqEj4E/Zh+Pvcwu4LQS7ZmbNHJqia6j+ZEFRTgKC7VQYdjvVu1xzqGbeBegHPNCDw1Mhm5gSufXeeU1XZX1E5+maQSqB/Y/kCPLrShlWfVzaKLAx+OXRwkfGsmNppSlnhONd8CBA2cOtRbKqufHYjWcm9BjgzB1sL7G3kctiCuOn61pTj9CLEJLsf6aArhyz4TsAu47qszLE5H1yW5rXr6Nnu95MSdOG+C+dC8yWsHEXHv1b+qpEp7WoUItCm3PpgFEdDj/tEEGFv3KSA2tSv81pLdrXHgaGW1G4EpTOsGcO4rG/yArSJiofRM0o2J6eUjT6+gmhAxlkjsXhHTcOHokyQt7tZXDFLO8FflJC1slKmXGG6UUuOPixkp83hUNXri5w1HzPMMaQFtfgvvLUFLMOdQeyIr8pQjCgQIF5SyU1o7vW4id2RajjL52pBPcOr8JFqFsicIGYdN5t2UCndjX7hoIxykmk4w3BqkKNMi3U6c/xvD2IY6MosjIKa1OiMlTxRf7Q5OyWgwYirQAp9d/5eYQOIvb2BrD6FvQkVU1aba/Lyx3xLnmEvms0lnt3XJlEinbnhQgtzy5QQbMXBWkF754v1RXodxSXsTnw9s5o2Y6wTa7ThN/KZ1sM4uiBK6Q6g9qBXmGLXtHE3Aqdl3ZHiQwH1ewyJTehQNa4149+eBozXuBbQCxBUnJrTxVVhgwcMA2B1+JR20g9zS9E4KrRIlaCPYObDchcDKaMQTgnqg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR12MB1726.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(71200400001)(64756008)(66446008)(91956017)(53546011)(66946007)(86362001)(6506007)(66476007)(4326008)(76116006)(36756003)(38070700005)(7416002)(508600001)(186003)(2616005)(316002)(110136005)(54906003)(38100700002)(31696002)(6486002)(31686004)(2906002)(83380400001)(122000001)(5660300002)(8936002)(8676002)(6512007)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Qm5maEJtTzRTMUYwOHE5VVFCdW85Um5PQTA4Uk1ManpNZk16TXp6N2VGd1pF?=
- =?utf-8?B?OCtvUWp1MWRLci93Sm1xbEdMMUtEV3VKcENUcW0rdytrS3Y4WE15TWwrTWFY?=
- =?utf-8?B?ZWczZjROSnNLTE5nSkRPMTB0U0VYNzNna2J6amxHRlB2UVRYaWRNZTlJdE5p?=
- =?utf-8?B?NEZ6cGwxS0t5eGxQQlNVV0EvcFZDZ2NiTHMxZUYya3JvSWcrTExsK1d3SnJn?=
- =?utf-8?B?RlBkaWxDb1RMdGdJbC95SE1LY0o4ZHhSZHhmc1I0c3RzcnRWQWdrUW5MOXUw?=
- =?utf-8?B?Ykh3RDdiUmkzRGNobGw2Y1JxclFhL0R3VHAwTTJUZ1RrMWpJZWVRY1hndkd0?=
- =?utf-8?B?bkFsOHZOVjROMnI4YU4yeHpORlRqek1JcU5aMjlOVUZkZkp2M2dJVDBGS3Y3?=
- =?utf-8?B?Tk13OHNXcjVTVEhWVllVUHZiMW1YdFlDRk9VWEtMd0IxOFdxVGFIdktBQjJw?=
- =?utf-8?B?a2hveVNQZWF5ZHdGUkNHVWM2cjdTVXMwd2ZRaFFDNmpJVlY0NGx1VGxibjlk?=
- =?utf-8?B?R2VBamV2cFAzVGZHOUlubjJnNTFZbDFqR0ptYkVCQ3VrLzB3eFAxT0NZUFli?=
- =?utf-8?B?SWc3QjIvdExCdEtTYmR2KzNhejg5ODhwVGE0N3ZGamZQSm5GMVQ0d1FyRjMz?=
- =?utf-8?B?M2FzUDFjbFpPa2pDZVVwN1N4cnREbWVUaFYyU04wUzVrcmZmVmRHcWVZS1Ja?=
- =?utf-8?B?WitoODh2ODB0aTN1d2prNkE2cXdmUlZ3V3ZFS2lXZlhZK1BEeHFtR3NkV1R2?=
- =?utf-8?B?RThicEU0YXIwMWVhdUVUMGU1a1FZa0dON1NhTy9iSW1lMlhTRHUyYWRzanUr?=
- =?utf-8?B?MVZNUGgrZGd6SWc5cmNxYUVhVSs4ck5rMk14Qlg3R3ZNRjB4YnF5TWFMS0xW?=
- =?utf-8?B?NEJNc0V3cWpObnFoU2pSajJMQkRQa25CTFdydHdPRkNPU2tad1R0RHBJb2Uv?=
- =?utf-8?B?U25OdkRaK0d4TUQ2ejJjaVNlb09tWklDdUhHYWprdU0rcW00RWJrcGpEd3Iz?=
- =?utf-8?B?U3g5NlhTNVhCM20zVWFFWTVYTjdJR3hJNDlBRXJzR2NnMkFScHlNRVFjdGY0?=
- =?utf-8?B?RWJta1E5dE00d2hGeE41U3BPc0FVUTlDRUNVRlIvWEx0WkFuWGxXWUExRlRa?=
- =?utf-8?B?cWtqdTIrcnVzUldWd2tvVmMvcmZOVi84MjJSMmRjbmNmNFltT25OSmp4R3pF?=
- =?utf-8?B?OEFOZlN2UDB0eERUc2k0Q2pDQSsvdnFiQW9pbHhtdGdkV2pLOHJPVE9rQlJB?=
- =?utf-8?B?QXhrVHNQblU0aEx6K1hRb0grRmVSSkNJYzduaHFhZnYraUJ4NlhxSkdETDZ1?=
- =?utf-8?B?VUJlZU1PZUlnUFlNcjNqNG5pRGJVQTloaC8ySHRGeXRPcDFRdDdpZ0t2MXRp?=
- =?utf-8?B?KzB4WVNYZXJLckdpUHdwZzhDMTlFVzlnU2E2TFQyMmt2b0d3aWNaM1NIdGJa?=
- =?utf-8?B?TGo5TGY5VEJscjZaVFBodmc1L3Z1d2pOSlp0Mm54QmkzelIyaUZrM01aeG9R?=
- =?utf-8?B?RTRHcGNzM29UTEVkY3hxWk1ndVhzRndGVGtyTU03THFMWTFQS0FXTWFyQVFU?=
- =?utf-8?B?RVB2RTlLL2pBZmROTFU4L0poc1hTZTlIeWtJdHhva1dnbnB2V0JMcGw0MnpD?=
- =?utf-8?B?UkdLeGVQajZ2RDE1ZWttb1RWcXVtM2VNQjBYeHp2ZWtTM0RKU1N0ZEV2ajRT?=
- =?utf-8?B?anZlSmtnN3AwblhFRmIwV0RHb3ZZOW1EZ3VsT0NsMEd3OGNyb2pTM3FoZGVz?=
- =?utf-8?B?YWFWRXRRMFY2aWhoZ25OM05xVC9WTmJtTldKUUMrV3VhR0tIWW05YjFqbWVJ?=
- =?utf-8?B?dkhRcHQxMVhVTUdHK1dtUWExdzY3ekpNSVB0eTlJRTZvTGNDWlJ4QTFTVWVJ?=
- =?utf-8?B?a2tEeHdEd3liOERQVzhobzQvQ3FneStZcHk4YW5ZYXAxZGhuRnFob2hpUnJr?=
- =?utf-8?B?aEEyMlhpQlMzWkd2R3NpaGs4ODN3ejl5NWw4NEFLTDZTQ25wN2VUcDN4RXI0?=
- =?utf-8?B?T0ZWcVVDWGliRklsR2drWEthSG95dnVGOHo5Yzh0TytvcVJxb0pQUU5EOU1R?=
- =?utf-8?B?dnZjM1RFNTVVR01QT2gveWFFWVF6bE53NW54Q0ZYaVA2MnFqM2Q2bURiZlBJ?=
- =?utf-8?B?YWNCdWRjNXZPKzh0ZitGdHNQc21FV2NzSHV1em8wVUkySTNoT2dUeG1EQ0wr?=
- =?utf-8?Q?KK8PGI6MgQ9TuVNefkvq0h57YKzjm4HTQL/asYNrPGSL?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <443FF690B8AAC7449B892A6AA021BEF2@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S239596AbhLMWBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:01:17 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:62684 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236151AbhLMWBP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 17:01:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1639432874; x=1670968874;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CTDDzkkzYAXHAdfrMIkUFsLaarbAPdQQeDjaiAyU1DQ=;
+  b=lwlqbyxEdbgU4RiWUzJ2+ik+ai8xHa1XRSlKiIgqEi25PO9Pzz+FRtWQ
+   /WRh7tdwA+NO2kMPk/24uxd5pNGF/4dUdrChqDZ8Rj1FueSdST0Znkto0
+   +hQs1ujk80jljk6UAKBGTiji4f1GoPs5zGXPliDZLjC6P2QnzyjOXTXe2
+   GEv4GWxDLn6EFShnIs3qIB7gSgTAh4rSjZxChYU0TbfQXXhrp6kTPVxMj
+   ym/LtU02mK4ApleMiLh7xTSMiWUCYMulA3feHup5quV2aES20KWihU8CH
+   Veejg/kcCG7xSiinEVzfsHrFSXQU/dF7WkiRlvNoM1P/1zd6E9hXkTa7I
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,203,1635177600"; 
+   d="scan'208";a="192941059"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2021 06:01:13 +0800
+IronPort-SDR: iVaI4tM4yWfsHIH8NN0tAk4Hs2nHsRvTmFYCg46lYQy50mK8m/dA2IdW4PYRDIBcXhqhP1xZHi
+ 9BsflF3mGJf7fCz4k7LWsSx5G9/RVlv2HrgFJpBFa0hgBKSYwrvHw9da+MV8bCQZgIzuvaNDh/
+ 2WH1oW7dAvjlTObHYQjRNSTov2+HELNed68Lfa5L7iAZRX211P9Dn1B4tVLEPq5ToFJRV/NpNy
+ C4AlNukDvoiozfkjDCiXqieoWsmuyj2TR9KmaW8pIyqJ0RglIS7q8Exu1khaUcRcClYN73ZKVw
+ pZxoxgap6kfiv9P9LeDdsXC7
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 13:35:40 -0800
+IronPort-SDR: iG4UohqhFsyBalJHk/Rd70V0bcc50AqDxWYKJ+emwS875DvoYGEK2NejSbJ+7DXborpqby8LQ/
+ SNNG2nGJfMc3lqfCpWWbTUWJcK+009LDv9MuKdr+4hqchf8QvwjHJSLxjn/TVH3gz8GcPF9UMc
+ joPZBi+jmEhtZxOMLsfWL02f7EoAAy2wDpf8T/WJnoIdAAOCXPoh6qO1lWEwFRpoknf61hYBwx
+ NnH+/NPZMgijGCy8Rd/9nXpU/hHUQkaRsaDBbVhQ7rtOyR2uDmE4kSCkQEuBBocYYE/DwSSDmi
+ PBA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 14:01:13 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JCb7F52ckz1RvTh
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:01:13 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1639432872; x=1642024873; bh=CTDDzkkzYAXHAdfrMIkUFsLaarbAPdQQeDj
+        aiAyU1DQ=; b=IzEhidLnt8vtEeWRNRazt5e/syrNrRWuiRUx4ET7mtZ2wtCkAuf
+        yjtqcc9PUM7T3HN7V70If1LyhV+eqYKNTYx1syXbTTQion37LyR9Ef8GGSC8uBhJ
+        mlchI8E8TknntPsZ5QihM5Rzd59pkPjWHGBxu8p0Y8MaKtJhF01yFcmFLdcxjETS
+        b/+oEEElbl4XjlbxootYh9t36tQLu8zSTuGDj/1BsoCM95BG2GCOqXloe57QhsQk
+        GBAuXxYQmHsI59Is+PpMWjknERpmM78Ql3NHqGP5h4PE+TBChpGdT4/jdYW1vB/g
+        3EFBbW2t5leC5d4pFDerhuHQyGreYd4nSow==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id BsoO1fKfraAO for <linux-kernel@vger.kernel.org>;
+        Mon, 13 Dec 2021 14:01:12 -0800 (PST)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JCb7C1YRgz1RtVG;
+        Mon, 13 Dec 2021 14:01:11 -0800 (PST)
+Message-ID: <edcdd00e-a3c9-5f48-6b62-e314452812cd@opensource.wdc.com>
+Date:   Tue, 14 Dec 2021 07:01:10 +0900
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93f8a0c3-f7c0-43b5-eaf9-08d9be83f92f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 22:00:27.7957
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0ozLz52JoSyQgD6gNAP9UHhjnxYT0VODw4vjhPbNCDZvniTJtxtoK4Y40Et4oubs6ywhjcYszu20nmMOwrTltA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB2558
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v3] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jinpu.wang@cloud.ionos.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     Viswas.G@microchip.com, Ajish.Koshy@microchip.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1639390248-213603-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital
+In-Reply-To: <1639390248-213603-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTEvMTcvMjEgMTo1MyBQTSwgTG9nYW4gR3VudGhvcnBlIHdyb3RlOg0KPiBBdHRlbXB0IHRv
-IGZpbmQgdGhlIG1hcHBpbmcgdHlwZSBmb3IgUDJQRE1BIHBhZ2VzIG9uIHRoZSBmaXJzdA0KPiBE
-TUEgbWFwIGF0dGVtcHQgaWYgaXQgaGFzIG5vdCBiZWVuIGRvbmUgYWhlYWQgb2YgdGltZS4NCj4g
-DQo+IFByZXZpb3VzbHksIHRoZSBtYXBwaW5nIHR5cGUgd2FzIGV4cGVjdGVkIHRvIGJlIGNhbGN1
-bGF0ZWQgYWhlYWQgb2YNCj4gdGltZSwgYnV0IGlmIHBhZ2VzIGFyZSB0byBjb21lIGZyb20gdXNl
-cnNwYWNlIHRoZW4gdGhlcmUncyBubw0KPiB3YXkgdG8gZW5zdXJlIHRoZSBwYXRoIHdhcyBjaGVj
-a2VkIGFoZWFkIG9mIHRpbWUuDQo+IA0KPiBUaGlzIGNoYW5nZSB3aWxsIGNhbGN1bGF0ZSB0aGUg
-bWFwcGluZyB0eXBlIGlmIGl0IGhhc24ndCBwcmUtY2FsY3VsYXRlZA0KPiBzbyBpdCBpcyBubyBs
-b25nZXIgaW52YWxpZCB0byBjYWxsIHBjaV9wMnBkbWFfbWFwX3NnKCkgYmVmb3JlIHRoZSBtYXBw
-aW5nDQo+IHR5cGUgaXMgY2FsY3VsYXRlZCwgc28gZHJvcCB0aGUgV0FSTl9PTiB3aGVuIHRoYXQg
-aXMgaGUgY2FzZS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IExvZ2FuIEd1bnRob3JwZSA8bG9nYW5n
-QGRlbHRhdGVlLmNvbT4NCj4gQWNrZWQtYnk6IEJqb3JuIEhlbGdhYXMgPGJoZWxnYWFzQGdvb2ds
-ZS5jb20+DQo+IC0tLQ0KDQpQZXJoYXBzIGEgY29tbWVudCB3b3VsZCBiZSBuaWNlIGluIHRoZSBk
-ZWZhdWx0IGNhc2UgaW4NCnBjaV9wMnBkbWFfbWFwX3NnX2F0dHJzKCkgd2hlcmUgeW91IGhhdmUg
-cmVtb3ZlZCB0aGUgV0FSTl9PTl9PTkNFKCkuDQoNCkVpdGhlciB3YXksIGxvb2tzIGdvb2QuDQoN
-ClJldmlld2VkLWJ5OiBDaGFpdGFueWEgS3Vsa2FybmkgPGtjaEBudmlkaWEuY29tPg0KDQo=
+On 2021/12/13 19:10, John Garry wrote:
+> The driver supports a "direct" mode of operation, where the SMP req frame
+> is directly copied into the command payload (and vice-versa for the SMP
+> resp).
+> 
+> To get at the SMP req frame data in the scatterlist the driver uses
+> phys_to_virt() on the DMA mapped memory dma_addr_t . This is broken,
+> and subsequently crashes as follows when an IOMMU is enabled:
+> 
+>  Unable to handle kernel paging request at virtual address
+> ffff0000fcebfb00
+> 	...
+>  pc : pm80xx_chip_smp_req+0x2d0/0x3d0
+>  lr : pm80xx_chip_smp_req+0xac/0x3d0
+>  pm80xx_chip_smp_req+0x2d0/0x3d0
+>  pm8001_task_exec.constprop.0+0x368/0x520
+>  pm8001_queue_command+0x1c/0x30
+>  smp_execute_task_sg+0xdc/0x204
+>  sas_discover_expander.part.0+0xac/0x6cc
+>  sas_discover_root_expander+0x8c/0x150
+>  sas_discover_domain+0x3ac/0x6a0
+>  process_one_work+0x1d0/0x354
+>  worker_thread+0x13c/0x470
+>  kthread+0x17c/0x190
+>  ret_from_fork+0x10/0x20
+>  Code: 371806e1 910006d6 6b16033f 54000249 (38766b05)
+>  ---[ end trace b91d59aaee98ea2d ]---
+> note: kworker/u192:0[7] exited with preempt_count 1
+> 
+> Instead use kmap_atomic().
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> --
+> Difference to v1:
+> - use kmap_atomic() in both locations
+> Difference to  v2:
+> - add whitespace around arithmetic (Damien)
+> 
+> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+> index b9f6d83ff380..2101fc5761c3 100644
+> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
+> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+> @@ -3053,7 +3053,6 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
+>  	struct smp_completion_resp *psmpPayload;
+>  	struct task_status_struct *ts;
+>  	struct pm8001_device *pm8001_dev;
+> -	char *pdma_respaddr = NULL;
+>  
+>  	psmpPayload = (struct smp_completion_resp *)(piomb + 4);
+>  	status = le32_to_cpu(psmpPayload->status);
+> @@ -3080,19 +3079,23 @@ mpi_smp_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
+>  		if (pm8001_dev)
+>  			atomic_dec(&pm8001_dev->running_req);
+>  		if (pm8001_ha->smp_exp_mode == SMP_DIRECT) {
+> +			struct scatterlist *sg_resp = &t->smp_task.smp_resp;
+> +			u8 *payload;
+> +			void *to;
+> +
+>  			pm8001_dbg(pm8001_ha, IO,
+>  				   "DIRECT RESPONSE Length:%d\n",
+>  				   param);
+> -			pdma_respaddr = (char *)(phys_to_virt(cpu_to_le64
+> -						((u64)sg_dma_address
+> -						(&t->smp_task.smp_resp))));
+> +			to = kmap_atomic(sg_page(sg_resp));
+> +			payload = to + sg_resp->offset;
+>  			for (i = 0; i < param; i++) {
+> -				*(pdma_respaddr+i) = psmpPayload->_r_a[i];
+> +				*(payload + i) = psmpPayload->_r_a[i];
+>  				pm8001_dbg(pm8001_ha, IO,
+>  					   "SMP Byte%d DMA data 0x%x psmp 0x%x\n",
+> -					   i, *(pdma_respaddr + i),
+> +					   i, *(payload + i),
+>  					   psmpPayload->_r_a[i]);
+>  			}
+> +			kunmap_atomic(to);
+>  		}
+>  		break;
+>  	case IO_ABORTED:
+> @@ -4236,14 +4239,14 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>  	struct sas_task *task = ccb->task;
+>  	struct domain_device *dev = task->dev;
+>  	struct pm8001_device *pm8001_dev = dev->lldd_dev;
+> -	struct scatterlist *sg_req, *sg_resp;
+> +	struct scatterlist *sg_req, *sg_resp, *smp_req;
+>  	u32 req_len, resp_len;
+>  	struct smp_req smp_cmd;
+>  	u32 opc;
+>  	struct inbound_queue_table *circularQ;
+> -	char *preq_dma_addr = NULL;
+> -	__le64 tmp_addr;
+>  	u32 i, length;
+> +	u8 *payload;
+> +	u8 *to;
+>  
+>  	memset(&smp_cmd, 0, sizeof(smp_cmd));
+>  	/*
+> @@ -4280,8 +4283,9 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>  		pm8001_ha->smp_exp_mode = SMP_INDIRECT;
+>  
+>  
+> -	tmp_addr = cpu_to_le64((u64)sg_dma_address(&task->smp_task.smp_req));
+> -	preq_dma_addr = (char *)phys_to_virt(tmp_addr);
+> +	smp_req = &task->smp_task.smp_req;
+> +	to = kmap_atomic(sg_page(smp_req));
+> +	payload = to + smp_req->offset;
+>  
+>  	/* INDIRECT MODE command settings. Use DMA */
+>  	if (pm8001_ha->smp_exp_mode == SMP_INDIRECT) {
+> @@ -4289,7 +4293,7 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>  		/* for SPCv indirect mode. Place the top 4 bytes of
+>  		 * SMP Request header here. */
+>  		for (i = 0; i < 4; i++)
+> -			smp_cmd.smp_req16[i] = *(preq_dma_addr + i);
+> +			smp_cmd.smp_req16[i] = *(payload + i);
+>  		/* exclude top 4 bytes for SMP req header */
+>  		smp_cmd.long_smp_req.long_req_addr =
+>  			cpu_to_le64((u64)sg_dma_address
+> @@ -4320,20 +4324,20 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>  		pm8001_dbg(pm8001_ha, IO, "SMP REQUEST DIRECT MODE\n");
+>  		for (i = 0; i < length; i++)
+>  			if (i < 16) {
+> -				smp_cmd.smp_req16[i] = *(preq_dma_addr+i);
+> +				smp_cmd.smp_req16[i] = *(payload + i);
+>  				pm8001_dbg(pm8001_ha, IO,
+>  					   "Byte[%d]:%x (DMA data:%x)\n",
+>  					   i, smp_cmd.smp_req16[i],
+> -					   *(preq_dma_addr));
+> +					   *(payload));
+>  			} else {
+> -				smp_cmd.smp_req[i] = *(preq_dma_addr+i);
+> +				smp_cmd.smp_req[i] = *(payload + i);
+>  				pm8001_dbg(pm8001_ha, IO,
+>  					   "Byte[%d]:%x (DMA data:%x)\n",
+>  					   i, smp_cmd.smp_req[i],
+> -					   *(preq_dma_addr));
+> +					   *(payload));
+>  			}
+>  	}
+> -
+> +	kunmap_atomic(to);
+>  	build_smp_cmd(pm8001_dev->device_id, smp_cmd.tag,
+>  				&smp_cmd, pm8001_ha->smp_exp_mode, length);
+>  	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &smp_cmd,
+
+Looks good to me.
+
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+
+-- 
+Damien Le Moal
+Western Digital Research

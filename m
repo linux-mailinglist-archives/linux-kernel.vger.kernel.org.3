@@ -2,285 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C0047348C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1A747348F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242075AbhLMTAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:00:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26835 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242064AbhLMTAP (ORCPT
+        id S242067AbhLMTBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:01:32 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:43722 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237499AbhLMTB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:00:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639422014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bkKzjijiSKbe6MvRJ5MBgBJTRxbp/4nkJ2nAyZ4TKpU=;
-        b=CWFThDTvXFXTF5O/45cO+eluCRZ7wdJzFPbaofxhdWjxMa4KdkjBhxdyofF80Gu5PgW1Ws
-        dXUrv9jJZtKEQ2yd2vXUmqphZ4Jlh6+uHF8bL5AR805kwOQg4LYqdbHzDt1y+9zGoJdfQl
-        S2GnMyeSs6yeuWmXJVWrlrSVfI5MggA=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-108-KGiZm-t4Pvq7OCBrUS7VWA-1; Mon, 13 Dec 2021 14:00:13 -0500
-X-MC-Unique: KGiZm-t4Pvq7OCBrUS7VWA-1
-Received: by mail-oi1-f199.google.com with SMTP id p186-20020aca42c3000000b002bc99d2b74aso11476336oia.18
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:00:13 -0800 (PST)
+        Mon, 13 Dec 2021 14:01:29 -0500
+Received: by mail-il1-f200.google.com with SMTP id j1-20020a056e02154100b002a181a1ce89so15494897ilu.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:01:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bkKzjijiSKbe6MvRJ5MBgBJTRxbp/4nkJ2nAyZ4TKpU=;
-        b=YJWNF/wePqNvAN6uEGXmdpH1+S+1e9NhjfNRG0I/Z2oZaOkzUejYkZZqZ2J6lnblKf
-         RmFQ2ZgaOhHgWbsnc7Z6Z8Xal9NgHj7ZR5eezQpJzL55Uo4VCdvFvH9h/sYs8T+3rDLB
-         gXwX3IssMVlxOT+Wn1GgRUvGyaFbqBxfgG+DkcKWmtmdeMoBKm/ALGrL7x1cywZz5D5T
-         3BQ6hsN2D2Krt51d/GSkNhw8oRnt//ihtYi0sizRJznKi3E7tP7x0SJhfU0Kle+tWJLi
-         wIqub0R46JR93C81yxxcrFv6C1sizNzjkQcTc0mD6NpZetGKlw2OePUmVcP/mDD2lfJo
-         Yn7Q==
-X-Gm-Message-State: AOAM532PrHJZzKLu4AqRIRkEULlK/DJyOnw37A9nyd0bIcaoLgJf2W68
-        a14cPvFXJnxqq1jBlYfBeI6Xzewj25wFZrxj6rx+RJygp0JRtPnMk7MsGZ1VwJ0Al4i9gzD6xYA
-        h/FUnPDmz5pjLPy7S/ByjvRJK
-X-Received: by 2002:a9d:6394:: with SMTP id w20mr366255otk.248.1639422012210;
-        Mon, 13 Dec 2021 11:00:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZ0v/QhdUhMfYMxIrjqAvM0c+I02ce8+c4SY8k5nWNB4ZCTvQ7Vjr3daAhkW6A1qp6SJAUlA==
-X-Received: by 2002:a9d:6394:: with SMTP id w20mr366227otk.248.1639422011805;
-        Mon, 13 Dec 2021 11:00:11 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::49])
-        by smtp.gmail.com with ESMTPSA id n189sm2766729oif.33.2021.12.13.11.00.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:00:11 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:00:08 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com,
-        peterz@infradead.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
- search for on a stack
-Message-ID: <20211213190008.r4rjeytfz5ycbstb@treble>
-References: <20211210124449.21537-1-mbenes@suse.cz>
- <20211210124449.21537-2-mbenes@suse.cz>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=IjOBdkaNIK6gC+Baxtp5WU85YNW/1FamwWergs9nsxY=;
+        b=Ab1pz1WXeOL3pYPAwKL7ATScaKuWYmQjqLfPWHQ4NNqqPo4ED2sOX5nFaeSvnhkQ+S
+         gcqcjS2lxPR9VeRW5xFCxIxpU3jaZNtBLI8iuxRGNoMlsG01d5QO+gD0r6MSErhju4an
+         lpzYf0plI18Ee8KwR5g8g3iGX0jKMVpUoK8JIYjRqojDejGkb1wmms4c69gYEZUCQ+eS
+         3Yc9snSy38r48vNKRNEPhe09rctGJSJ4ZDHt5Gm7xo8dn1QHHJsQag+AZ6DdCVzZaPY9
+         2pFbDrStYbW5g2u3Rgq8HzxYBsVXkWG2Ywh4Dk5CGjTwrnSrUgnJg49/USbT0CjfXV6P
+         Ng7w==
+X-Gm-Message-State: AOAM532qJz7OV9m2ThPkN567VWl0dMeHKwqg94Zhv2NmZMxdcXPxJ/d2
+        NuMW6Cu/C+PlMK5Wfmh9uT6GVvMO+RGB3xAdzsLGCXGMypxy
+X-Google-Smtp-Source: ABdhPJxgvZINxtvZccOmSP4U13GjBQFYuKlwNhuEsoD8rG7od8JO30mcJ3PVxU7vdhF0UbMi5LnQ0TLLOaZCZ6t7zhU0zMqr9Xp3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210124449.21537-2-mbenes@suse.cz>
+X-Received: by 2002:a05:6638:359f:: with SMTP id v31mr101712jal.230.1639422088976;
+ Mon, 13 Dec 2021 11:01:28 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:01:28 -0800
+In-Reply-To: <0000000000004c915205b1a04ad9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000040225805d30bb3a8@google.com>
+Subject: Re: [syzbot] kernel BUG at fs/ext4/inline.c:LINE!
+From:   syzbot <syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 01:44:48PM +0100, Miroslav Benes wrote:
-> --- a/include/linux/livepatch.h
-> +++ b/include/linux/livepatch.h
-> @@ -29,6 +29,8 @@
->   * @new_func:	pointer to the patched function code
->   * @old_sympos: a hint indicating which symbol position the old function
->   *		can be found (optional)
-> + * @stack_only:	only search for the function (specified by old_name) on any
-> + * 		task's stack
+syzbot has found a reproducer for the following issue on:
 
-This should probably make it clear that it doesn't actually patch the
-function.  How about something like:
+HEAD commit:    2585cf9dfaad Linux 5.16-rc5
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1034be69b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=44af4fa322f7642f
+dashboard link: https://syzkaller.appspot.com/bug?extid=4faa160fa96bfba639f8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148458d1b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=110f6169b00000
 
- * @stack_only:	don't patch old_func; only make sure it's not on the stack
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=119be2ab900000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=139be2ab900000
+console output: https://syzkaller.appspot.com/x/log.txt?x=159be2ab900000
 
->   * @old_func:	pointer to the function being patched
->   * @kobj:	kobject for sysfs resources
->   * @node:	list node for klp_object func_list
-> @@ -66,6 +68,7 @@ struct klp_func {
->  	 * in kallsyms for the given object is used.
->  	 */
->  	unsigned long old_sympos;
-> +	bool stack_only;
->  
->  	/* internal */
->  	void *old_func;
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 335d988bd811..62ff4180dc9b 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -89,6 +89,10 @@ static struct klp_func *klp_find_func(struct klp_object *obj,
->  	struct klp_func *func;
->  
->  	klp_for_each_func(obj, func) {
-> +		/* Do not create nop klp_func for stack_only function */
-> +		if (func->stack_only)
-> +			return func;
-> +
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com
 
-This has me confused.  Maybe I'm missing something.
-
-First, klp_find_func() is a surprising place for this behavior.
-
-Second, if obj's first func happens to be stack_only, this will short
-circuit the rest of the list traversal and will effectively prevent nops
-for all the rest of the funcs, even if they're *not* stack_only.
-
-Third, I'm not sure this approach would even make sense.  I was thinking
-there are two special cases to consider:
-
-1) If old_func is stack_only, that's effectively the same as !old_func,
-   in which case we don't need a nop.
-
-2) If old_func is *not* stack_only, but new_func *is* stack_only, that's
-   effectively the same as (old_func && !new_func), in which case we
-   *do* want a nop.  Since new_func already exists, we can just convert
-   it from stack_only to nop.
-
-Does that make sense?  Or am I missing something?
-
-For example:
-
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -536,9 +536,23 @@ static int klp_add_object_nops(struct klp_patch *patch,
- 	}
- 
- 	klp_for_each_func(old_obj, old_func) {
-+		if (old_func->stack_only) {
-+			/* equivalent to !old_func; no nop needed */
-+			continue;
-+		}
- 		func = klp_find_func(obj, old_func);
--		if (func)
-+		if (func) {
-+			if (func->stack_only) {
-+				/*
-+				 * equivalent to (old_func && !new_func);
-+				 * convert stack_only to nop:
-+				 */
-+				func->stack_only = false;
-+				func->nop = true;
-+			}
-+
- 			continue;
-+		}
- 
- 		func = klp_alloc_func_nop(old_func, obj);
- 		if (!func)
-
-
-And while we're at it, we may want to rename "{func,obj}" to
-"new_{func,obj}" for those functions which have "old_{func,obj}".  It
-would help prevent confusion between the two.
-
->  		if ((strcmp(old_func->old_name, func->old_name) == 0) &&
->  		    (old_func->old_sympos == func->old_sympos)) {
->  			return func;
-> @@ -499,6 +503,17 @@ static struct klp_func *klp_alloc_func_nop(struct klp_func *old_func,
->  	return func;
->  }
->  
-> +static bool klp_is_object_stack_only(struct klp_object *old_obj)
-> +{
-> +	struct klp_func *old_func;
-> +
-> +	klp_for_each_func(old_obj, old_func)
-> +		if (!old_func->stack_only)
-> +			return false;
-> +
-> +	return true;
-> +}
-> +
->  static int klp_add_object_nops(struct klp_patch *patch,
->  			       struct klp_object *old_obj)
->  {
-> @@ -508,6 +523,13 @@ static int klp_add_object_nops(struct klp_patch *patch,
->  	obj = klp_find_object(patch, old_obj);
->  
->  	if (!obj) {
-> +		/*
-> +		 * Do not create nop klp_object for old_obj which contains
-> +		 * stack_only functions only.
-> +		 */
-> +		if (klp_is_object_stack_only(old_obj))
-> +			return 0;
-
-This code is already pretty self explanatory and the comment isn't
-needed IMO.
-
-> +
->  		obj = klp_alloc_object_dynamic(old_obj->name, patch);
->  		if (!obj)
->  			return -ENOMEM;
-> @@ -723,8 +745,9 @@ static int klp_init_func(struct klp_object *obj, struct klp_func *func)
->  	/*
->  	 * NOPs get the address later. The patched module must be loaded,
->  	 * see klp_init_object_loaded().
-> +	 * stack_only functions do not get new_func addresses at all.
->  	 */
-> -	if (!func->new_func && !func->nop)
-> +	if (!func->new_func && !func->nop && !func->stack_only)
->  		return -EINVAL;
-
-Same here, I'm not sure this comment really helps.
-
->  
->  	if (strlen(func->old_name) >= KSYM_NAME_LEN)
-> @@ -804,6 +827,9 @@ static int klp_init_object_loaded(struct klp_patch *patch,
->  		if (func->nop)
->  			func->new_func = func->old_func;
->  
-> +		if (func->stack_only)
-> +			continue;
-> +
->  		ret = kallsyms_lookup_size_offset((unsigned long)func->new_func,
->  						  &func->new_size, NULL);
->  		if (!ret) {
-> diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
-> index fe316c021d73..221ed691cc7f 100644
-> --- a/kernel/livepatch/patch.c
-> +++ b/kernel/livepatch/patch.c
-> @@ -250,6 +250,9 @@ static void __klp_unpatch_object(struct klp_object *obj, bool nops_only)
->  		if (nops_only && !func->nop)
->  			continue;
->  
-> +		if (func->stack_only)
-> +			continue;
-> +
->  		if (func->patched)
->  			klp_unpatch_func(func);
->  	}
-> @@ -273,6 +276,9 @@ int klp_patch_object(struct klp_object *obj)
->  		return -EINVAL;
->  
->  	klp_for_each_func(obj, func) {
-> +		if (func->stack_only)
-> +			continue;
-> +
-
-Instead of these stack_only checks, we might want to add a new
-klp_for_each_patchable_func() macro.  It could also be used in
-klp_add_object_nops() to filter out old_func->stack_only.
-
->  		ret = klp_patch_func(func);
->  		if (ret) {
->  			klp_unpatch_object(obj);
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> index 5683ac0d2566..fa0630fcab1a 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -200,7 +200,10 @@ static int klp_check_stack_func(struct klp_func *func, unsigned long *entries,
->  	for (i = 0; i < nr_entries; i++) {
->  		address = entries[i];
->  
-> -		if (klp_target_state == KLP_UNPATCHED) {
-> +		if (func->stack_only) {
-> +			func_addr = (unsigned long)func->old_func;
-> +			func_size = func->old_size;
-> +		} else if (klp_target_state == KLP_UNPATCHED) {
-
-Hm, what does this mean for the unpatching case?  What if the new
-function's .cold child is on the stack when we're trying to unpatch?
-
-Would it make sense to allow the user specify a 'new_func' for
-stack_only, which is a func to check on the stack when unpatching?  Then
-new_func could point to the new .cold child.  And then
-klp_check_stack_func() wouldn't need a special case.
-
--- 
-Josh
+------------[ cut here ]------------
+kernel BUG at fs/ext4/inline.c:755!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3633 Comm: syz-executor843 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ext4_write_inline_data_end+0xa11/0x1120 fs/ext4/inline.c:755
+Code: 01 44 89 f6 e8 40 dc 67 ff 41 83 fe 01 0f 87 2a fb ff ff e8 11 da 67 ff 4c 89 e7 e8 79 fe 90 ff e9 9e fb ff ff e8 ff d9 67 ff <0f> 0b e8 f8 d9 67 ff 4c 89 e2 48 b8 00 00 00 00 00 fc ff df 48 c1
+RSP: 0018:ffffc9000281f3a8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888076750000 RSI: ffffffff820fd161 RDI: 0000000000000003
+RBP: ffff8880737a5c58 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff820fc907 R11: 0000000000000000 R12: ffffea0001f0d640
+R13: 0000000000000001 R14: ffff8880737a5a08 R15: ffffc9000281f400
+FS:  00007f57f9ace700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055c0556fbf48 CR3: 000000007a16f000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ ext4_write_end+0x200/0xcf0 fs/ext4/inode.c:1292
+ ext4_da_write_end+0x375/0x990 fs/ext4/inode.c:3026
+ generic_perform_write+0x2c6/0x510 mm/filemap.c:3765
+ ext4_buffered_write_iter+0x1ac/0x3b0 fs/ext4/file.c:269
+ ext4_file_write_iter+0x423/0x14e0 fs/ext4/file.c:681
+ call_write_iter include/linux/fs.h:2162 [inline]
+ do_iter_readv_writev+0x472/0x750 fs/read_write.c:725
+ do_iter_write+0x188/0x710 fs/read_write.c:851
+ vfs_iter_write+0x70/0xa0 fs/read_write.c:892
+ iter_file_splice_write+0x723/0xc70 fs/splice.c:689
+ do_splice_from fs/splice.c:767 [inline]
+ direct_splice_actor+0x110/0x180 fs/splice.c:936
+ splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891
+ do_splice_direct+0x1b3/0x280 fs/splice.c:979
+ do_sendfile+0xaf2/0x1250 fs/read_write.c:1245
+ __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f57f9b21de9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f57f9ace2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f57f9ba74c0 RCX: 00007f57f9b21de9
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
+RBP: 00007f57f9b740cc R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000010000 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 00007f57f9b730c8 R14: 0000000300000002 R15: 00007f57f9ba74c8
+ </TASK>
+Modules linked in:
+---[ end trace e6a45f74f6d725ce ]---
+RIP: 0010:ext4_write_inline_data_end+0xa11/0x1120 fs/ext4/inline.c:755
+Code: 01 44 89 f6 e8 40 dc 67 ff 41 83 fe 01 0f 87 2a fb ff ff e8 11 da 67 ff 4c 89 e7 e8 79 fe 90 ff e9 9e fb ff ff e8 ff d9 67 ff <0f> 0b e8 f8 d9 67 ff 4c 89 e2 48 b8 00 00 00 00 00 fc ff df 48 c1
+RSP: 0018:ffffc9000281f3a8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888076750000 RSI: ffffffff820fd161 RDI: 0000000000000003
+RBP: ffff8880737a5c58 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff820fc907 R11: 0000000000000000 R12: ffffea0001f0d640
+R13: 0000000000000001 R14: ffff8880737a5a08 R15: ffffc9000281f400
+FS:  00007f57f9ace700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f57f9aad718 CR3: 000000007a16f000 CR4: 0000000000350ef0
 

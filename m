@@ -2,54 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4FA47220E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD06472217
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbhLMIDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:03:03 -0500
-Received: from verein.lst.de ([213.95.11.211]:46543 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229547AbhLMIDB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:03:01 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B987768BEB; Mon, 13 Dec 2021 09:02:57 +0100 (CET)
-Date:   Mon, 13 Dec 2021 09:02:57 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Christoph Hellwig <hch@lst.de>, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 3/3] vmcore: Convert read_from_oldmem() to take an
- iov_iter
-Message-ID: <20211213080257.GC20986@lst.de>
-References: <20211213000636.2932569-1-willy@infradead.org> <20211213000636.2932569-4-willy@infradead.org>
+        id S232721AbhLMIG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:06:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25521 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232732AbhLMIG4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 03:06:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639382815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ppFYv3R1teHWfY7IoGI+J3KcvC+92KTAnR33CqYPNrM=;
+        b=b573VVKbB3337UybGzRHv8djg/byDvi0SVqLtDcXZyplcjrDRqVyr/Ylt6pN8Kkgw40mlF
+        BtB5OGnWQFRkcZ7PqFARSTh63tIY65QI3FnLkC7xgExtFV0/NuskZ+4FtzST/yhfMWvkDM
+        7IYDSlot84GGHWKxEbVkXmZbGO58NhY=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-351-Z5qJfJn-NbaERMzeRzPhbw-1; Mon, 13 Dec 2021 03:06:54 -0500
+X-MC-Unique: Z5qJfJn-NbaERMzeRzPhbw-1
+Received: by mail-ed1-f71.google.com with SMTP id l15-20020a056402124f00b003e57269ab87so13151780edw.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:06:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ppFYv3R1teHWfY7IoGI+J3KcvC+92KTAnR33CqYPNrM=;
+        b=eL/0TqMDkc7U9NPNbl+fNUxKMAgnoEwZ9VtsyfKXYpn/fMG8i6f6R20faUCq5McoKR
+         QWqBS5oqJmHp2wVvvJBzaELJtrtrrhDY/CBk1OZJ+dnGgX6XG29vgTfG2y1i1AzbTUn3
+         wnl+mjNLsnsVg6Q7l8cpp9zhE9MP2lbIzAQ0UsYudQGzQUkjuIbfKJTjV3uU7N16/lRB
+         mhHaPIQZ0szbHDR4X/Nsx10OSq87w89WPSYjYj6fzGrRdmEP1iqANPlhmAs6TLlyaBHe
+         cJxl57u2RulmfzyerX3xlfnUpLHVlQS+1SlBk7ITvz0KUzFycgRW6KAD4cBsIFr/6v9C
+         7zHA==
+X-Gm-Message-State: AOAM532tw78xweFEKrjr+tCxS6Af4vKriDFEPdbau6FN+OiJ84aFmW1H
+        BSe6LlQpCB9SPU72GV6keZNjL3NEUr+vRbCRtlAxF2HjMDr9jTb20Wn769sc58HVb2bFFsd6W8z
+        K1gvru6iQzZkVZhMkOMsYPog+
+X-Received: by 2002:a05:6402:124e:: with SMTP id l14mr60671506edw.74.1639382813058;
+        Mon, 13 Dec 2021 00:06:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyzLix4rVHAPEUnAuCm8F6B/tu/kAFRPY4UjJuE0IRdt+98l2KDOnJD1Bi6Ev1zJJARNW1hlQ==
+X-Received: by 2002:a05:6402:124e:: with SMTP id l14mr60671484edw.74.1639382812833;
+        Mon, 13 Dec 2021 00:06:52 -0800 (PST)
+Received: from redhat.com ([2.55.148.125])
+        by smtp.gmail.com with ESMTPSA id w5sm5992484edc.58.2021.12.13.00.06.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 00:06:52 -0800 (PST)
+Date:   Mon, 13 Dec 2021 03:06:47 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Si-Wei Liu <si-wei.liu@oracle.com>, Eli Cohen <elic@nvidia.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: vdpa legacy guest support (was Re: [PATCH] vdpa/mlx5:
+ set_features should allow reset to zero)
+Message-ID: <20211213030535-mutt-send-email-mst@kernel.org>
+References: <3ff5fd23-1db0-2f95-4cf9-711ef403fb62@oracle.com>
+ <20210224000057-mutt-send-email-mst@kernel.org>
+ <52836a63-4e00-ff58-50fb-9f450ce968d7@oracle.com>
+ <20210228163031-mutt-send-email-mst@kernel.org>
+ <2cb51a6d-afa0-7cd1-d6f2-6b153186eaca@redhat.com>
+ <20210302043419-mutt-send-email-mst@kernel.org>
+ <178f8ea7-cebd-0e81-3dc7-10a058d22c07@redhat.com>
+ <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com>
+ <20211212042311-mutt-send-email-mst@kernel.org>
+ <CACGkMEtwWcBNj62Yn_ZSq33N42ZG5yhCcZf=eQZ_AdVgJhEjEA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211213000636.2932569-4-willy@infradead.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEtwWcBNj62Yn_ZSq33N42ZG5yhCcZf=eQZ_AdVgJhEjEA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  
->  ssize_t elfcorehdr_read(char *buf, size_t count, u64 *ppos)
->  {
-> -	return read_from_oldmem(buf, count, ppos, 0,
-> +	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-> +	struct iov_iter iter;
-> +
-> +	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-> +
-> +	return read_from_oldmem(&iter, count, ppos,
->  				cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
->  }
+On Mon, Dec 13, 2021 at 11:02:39AM +0800, Jason Wang wrote:
+> On Sun, Dec 12, 2021 at 5:26 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Fri, Dec 10, 2021 at 05:44:15PM -0800, Si-Wei Liu wrote:
+> > > Sorry for reviving this ancient thread. I was kinda lost for the conclusion
+> > > it ended up with. I have the following questions,
+> > >
+> > > 1. legacy guest support: from the past conversations it doesn't seem the
+> > > support will be completely dropped from the table, is my understanding
+> > > correct? Actually we're interested in supporting virtio v0.95 guest for x86,
+> > > which is backed by the spec at
+> > > https://ozlabs.org/~rusty/virtio-spec/virtio-0.9.5.pdf. Though I'm not sure
+> > > if there's request/need to support wilder legacy virtio versions earlier
+> > > beyond.
+> >
+> > I personally feel it's less work to add in kernel than try to
+> > work around it in userspace. Jason feels differently.
+> > Maybe post the patches and this will prove to Jason it's not
+> > too terrible?
+> 
+> That's one way, other than the config access before setting features,
+> we need to deal with other stuffs:
+> 
+> 1) VIRTIO_F_ORDER_PLATFORM
+> 2) there could be a parent device that only support 1.0 device
+> 
+> And a lot of other stuff summarized in spec 7.4 which seems not an
+> easy task. Various vDPA parent drivers were written under the
+> assumption that only modern devices are supported.
+> 
+> Thanks
 
-elfcorehdr_read should probably also take an iov_iter while we're at it.
+Limiting things to x86 will likely address most issues though, won't it?
 
-I also don't quite understand why we even need the arch overrides for it,
-but that would require some digging into the history of this interface.
+> >
+> > > 2. suppose some form of legacy guest support needs to be there, how do we
+> > > deal with the bogus assumption below in vdpa_get_config() in the short term?
+> > > It looks one of the intuitive fix is to move the vdpa_set_features call out
+> > > of vdpa_get_config() to vdpa_set_config().
+> > >
+> > >         /*
+> > >          * Config accesses aren't supposed to trigger before features are
+> > > set.
+> > >          * If it does happen we assume a legacy guest.
+> > >          */
+> > >         if (!vdev->features_valid)
+> > >                 vdpa_set_features(vdev, 0);
+> > >         ops->get_config(vdev, offset, buf, len);
+> > >
+> > > I can post a patch to fix 2) if there's consensus already reached.
+> > >
+> > > Thanks,
+> > > -Siwei
+> >
+> > I'm not sure how important it is to change that.
+> > In any case it only affects transitional devices, right?
+> > Legacy only should not care ...
+> >
+> >
+> > > On 3/2/2021 2:53 AM, Jason Wang wrote:
+> > > >
+> > > > On 2021/3/2 5:47 下午, Michael S. Tsirkin wrote:
+> > > > > On Mon, Mar 01, 2021 at 11:56:50AM +0800, Jason Wang wrote:
+> > > > > > On 2021/3/1 5:34 上午, Michael S. Tsirkin wrote:
+> > > > > > > On Wed, Feb 24, 2021 at 10:24:41AM -0800, Si-Wei Liu wrote:
+> > > > > > > > > Detecting it isn't enough though, we will need a new ioctl to notify
+> > > > > > > > > the kernel that it's a legacy guest. Ugh :(
+> > > > > > > > Well, although I think adding an ioctl is doable, may I
+> > > > > > > > know what the use
+> > > > > > > > case there will be for kernel to leverage such info
+> > > > > > > > directly? Is there a
+> > > > > > > > case QEMU can't do with dedicate ioctls later if there's indeed
+> > > > > > > > differentiation (legacy v.s. modern) needed?
+> > > > > > > BTW a good API could be
+> > > > > > >
+> > > > > > > #define VHOST_SET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > > #define VHOST_GET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > >
+> > > > > > > we did it per vring but maybe that was a mistake ...
+> > > > > >
+> > > > > > Actually, I wonder whether it's good time to just not support
+> > > > > > legacy driver
+> > > > > > for vDPA. Consider:
+> > > > > >
+> > > > > > 1) It's definition is no-normative
+> > > > > > 2) A lot of budren of codes
+> > > > > >
+> > > > > > So qemu can still present the legacy device since the config
+> > > > > > space or other
+> > > > > > stuffs that is presented by vhost-vDPA is not expected to be
+> > > > > > accessed by
+> > > > > > guest directly. Qemu can do the endian conversion when necessary
+> > > > > > in this
+> > > > > > case?
+> > > > > >
+> > > > > > Thanks
+> > > > > >
+> > > > > Overall I would be fine with this approach but we need to avoid breaking
+> > > > > working userspace, qemu releases with vdpa support are out there and
+> > > > > seem to work for people. Any changes need to take that into account
+> > > > > and document compatibility concerns.
+> > > >
+> > > >
+> > > > Agree, let me check.
+> > > >
+> > > >
+> > > > >   I note that any hardware
+> > > > > implementation is already broken for legacy except on platforms with
+> > > > > strong ordering which might be helpful in reducing the scope.
+> > > >
+> > > >
+> > > > Yes.
+> > > >
+> > > > Thanks
+> > > >
+> > > >
+> > > > >
+> > > > >
+> > > >
+> >
+

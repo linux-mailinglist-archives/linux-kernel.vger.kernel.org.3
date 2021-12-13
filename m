@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC6447276D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A36347261C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236789AbhLMKAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:00:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43310 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239047AbhLMJ43 (ORCPT
+        id S235223AbhLMJtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235303AbhLMJod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:56:29 -0500
+        Mon, 13 Dec 2021 04:44:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFFDC061D5E;
+        Mon, 13 Dec 2021 01:40:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24F51B80E0C;
-        Mon, 13 Dec 2021 09:56:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672F3C34601;
-        Mon, 13 Dec 2021 09:56:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9ED2B80E19;
+        Mon, 13 Dec 2021 09:40:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CC1C00446;
+        Mon, 13 Dec 2021 09:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389387;
-        bh=uB8cIxYoipcCABWNf7cRsg9wS1m0XY4xes92Yctg9kY=;
+        s=korg; t=1639388448;
+        bh=+PfCJkbJZsskR/GCh/m+ZdAW7iA2MMayYcLX+c/hYpk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BKANlz9wfiOnotRQf8Jdgjw++q4N59WnEYQAoRo7TqkFEC4SiD8ts8aL8Jl4r3AUF
-         E944YomUzhJxCJ1ZvlTbO6AhBCMsRH2QTMclubI1PMJO9KdNqpDy1hfAwrIs+meOV9
-         oitRg3PPygSdZmtg7x3YiH7+9mdGcvjyBOf/3DTk=
+        b=EhCFpXuwauT4z2IkF6617okCEKKevUN6sJNSS0O9KgcWp6+jiji1NTu65ATm7DwoB
+         cf+34QFTT+/QQ7742RqIzAqtHKoiomigOrPhXlarPQLdJPIxelqZh39rzTGLhK4zQz
+         HC0a0a28tAa8qX78/OUKGWxnXq9BHmLSqQdl70Fk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.15 082/171] perf intel-pt: Fix error timestamp setting on the decoder error path
+        stable@vger.kernel.org,
+        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 26/74] ALSA: pcm: oss: Limit the period size to 16MB
 Date:   Mon, 13 Dec 2021 10:29:57 +0100
-Message-Id: <20211213092947.820108410@linuxfoundation.org>
+Message-Id: <20211213092931.680864627@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,33 +50,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 6665b8e4836caa8023cbc7e53733acd234969c8c upstream.
+commit 8839c8c0f77ab8fc0463f4ab8b37fca3f70677c2 upstream.
 
-An error timestamp shows the last known timestamp for the queue, but this
-is not updated on the error path. Fix by setting it.
+Set the practical limit to the period size (the fragment shift in OSS)
+instead of a full 31bit; a too large value could lead to the exhaust
+of memory as we allocate temporary buffers of the period size, too.
 
-Fixes: f4aa081949e7b6 ("perf tools: Add Intel PT decoder")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: stable@vger.kernel.org # v5.15+
-Link: https://lore.kernel.org/r/20211210162303.2288710-8-adrian.hunter@intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+As of this patch, we set to 16MB limit, which should cover all use
+cases.
+
+Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
+Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
+Link: https://lore.kernel.org/r/20211201073606.11660-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/intel-pt.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/core/oss/pcm_oss.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/perf/util/intel-pt.c
-+++ b/tools/perf/util/intel-pt.c
-@@ -2510,6 +2510,7 @@ static int intel_pt_run_decoder(struct i
- 				ptq->sync_switch = false;
- 				intel_pt_next_tid(pt, ptq);
- 			}
-+			ptq->timestamp = state->est_timestamp;
- 			if (pt->synth_opts.errors) {
- 				err = intel_ptq_synth_error(ptq, state);
- 				if (err)
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -1967,7 +1967,7 @@ static int snd_pcm_oss_set_fragment1(str
+ 	if (runtime->oss.subdivision || runtime->oss.fragshift)
+ 		return -EINVAL;
+ 	fragshift = val & 0xffff;
+-	if (fragshift >= 31)
++	if (fragshift >= 25) /* should be large enough */
+ 		return -EINVAL;
+ 	runtime->oss.fragshift = fragshift;
+ 	runtime->oss.maxfrags = (val >> 16) & 0xffff;
 
 

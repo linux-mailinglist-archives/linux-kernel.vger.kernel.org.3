@@ -2,167 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645FD4738EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625F4473902
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244280AbhLMXu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 18:50:56 -0500
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:20364 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbhLMXus (ORCPT
+        id S244329AbhLMXzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 18:55:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40319 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244311AbhLMXzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 18:50:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639439448; x=1670975448;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/Iq4rE9AFlBiu4pRFoedEB6+mxmMnRKKVlnEefSaiag=;
-  b=WefsoRjUtHP2CVd80t4QPEeN+EwgZpeP2gHyLg3EXDFDCBALFCQQUryI
-   bgghXp+QnAdR/9gDkSTCXsYMA8bMni7laFD/0U7KXGkg7bqjY6M3L1Cs6
-   fJrklAJGGhiOM6pkJp8BDpu60rylHEw8u4BXFaJMNuX+hnCmaqhj4SVhe
-   EmpTILD1PhJ9c466YMKOurM/pFchavYdBpE1I0GvVFc4Vim+8CZDqovJH
-   qBFdAHMXq2QXwym6WY41x4lLmWLtL6NOR0RadogkHQ5G71V20j2NzHu5V
-   Gp+O6ZkB9WFiyRwJUhhm/z+OaCJk+lLnhUMPVS3hZNaKKIg9mAfWSRHhY
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,203,1635177600"; 
-   d="scan'208";a="292150125"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2021 07:50:47 +0800
-IronPort-SDR: W+NnQwW28+s7pn5MsqPmH1tHRC+di8l+B5j9+HdiP1rwJfA0epwDupg17wUwLZoFrvcOL5k4Tf
- kWuLZlPHeX83a8T4UPYNnKxYaxVd6xVucAIVSm3LpT51WuXhmvFdTpLS5ypHg4tyHHOfSwmpm2
- a4i7ODr6YftTE/O4HH3jro1yfqQ18JP2Py/TS2mTMaRiGl46Xh6HdXGN1/xPUY6Tm6qT7d8D1S
- AYdxP4Bu07afmRVZCeCCPLwNWf14ui23Y0ySxfLvhbxoYqK8JTSb46hhEyT6YKs9hEarnuYuGb
- 0eVCxuNQKVmwI7I1GmleyQ5e
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 15:23:45 -0800
-IronPort-SDR: Mx0axcajkZ9G4aLqRkPZO5wCnfn7KxFCGpyCGNIcrulLWpGf/C/afKRyYZjA4fFfEvJtEJIrhw
- BRLcicqQGXCdGZLFA3Xaj2gntZLN8mbaYmWKNctRY1eeZ8ITRBV606MfchrzCTfzE+z5Un94b4
- zTijFEIS13siG5Bu5Kf3mBkbbOfLLME/sL0ky/6DKGbk5FVB/BfMCvAHsdkJ29H+3ET9I0sqz+
- eO0F9Mn8HErXMK1O6HYqSj85fh32v6sm0pIcj1cwcExYFM2U2QS8WSKye/oXtUrGmR+F2GRY+K
- lto=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 15:50:48 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JCdYg279fz1Rvlf
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 15:50:47 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1639439446; x=1642031447; bh=/Iq4rE9AFlBiu4pRFoedEB6+mxmMnRKKVln
-        EefSaiag=; b=feKGBx2dIHnJG/aZ+RQwphZMMS3qSmD+iE0jeNehLP/XhGuyIhM
-        qB7llE8i/xqghihakytBfeTJLU+C/nBSXQD5UWPmrqgSDuJPnpGvEkDGH+JBhUGm
-        xTRAx1qE6QsT3MYLQ2zLYjAjJElxCJws3x4YO1r34LpqREGtWn9EnCORRIE3nrLf
-        gyTeMNGvTRKbD9h8QI0gkOHF2FKJGiuvJkOQNBSuBIa4LjxTcjn71Y0cd2tS3zM0
-        oYHBOl/xwqxoetQV7tSMZv47N17yxJFYUR3OjOeShYx4tareZRn2M/JWXSlq+M6w
-        oz+7CvPisX8U69b3R1uBJJu8JlJ1hdfj+AA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8ZfGcpZcxn20 for <linux-kernel@vger.kernel.org>;
-        Mon, 13 Dec 2021 15:50:46 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JCdYf0N7mz1RtVG;
-        Mon, 13 Dec 2021 15:50:45 -0800 (PST)
-Message-ID: <632b632d-a34b-5a75-973b-29586ef9ecae@opensource.wdc.com>
-Date:   Tue, 14 Dec 2021 08:50:44 +0900
+        Mon, 13 Dec 2021 18:55:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639439750;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FVJn8jwHDo/cZGCCQ5V+Thn/N1ZbGdPrh27DtsiDMDk=;
+        b=cBj8/WJLI4cj/tWEFbYlR/+le7i7X7S7KNs0KRoRA2xw9Rbka5Mljfxqm2GAyY8JctFySR
+        0DRJsqJrf/WXZ8NLMt+JmXcyfgNskQJwY5oaTKGPwQCVMtQQ3mpDp3WGpZQOo2rpQ5NChr
+        z6V97L9W16sr4qOMYJdn5xKFV827Qcs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-350-YTemTlJKMaGcpBZ7_kuOtA-1; Mon, 13 Dec 2021 18:55:49 -0500
+X-MC-Unique: YTemTlJKMaGcpBZ7_kuOtA-1
+Received: by mail-wm1-f69.google.com with SMTP id 201-20020a1c04d2000000b003335bf8075fso10444034wme.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 15:55:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FVJn8jwHDo/cZGCCQ5V+Thn/N1ZbGdPrh27DtsiDMDk=;
+        b=POgt/fC6MzzzqePUercK2rFmdeX11xgpLp10M3FVs0V+PQdzTFMY0EpviTwsk5yLrp
+         pTNDnB2vY8s96eWvnVbJIJUeCpE+gloK4bZbdnPD4DrBI2PEWCMjV2gBCcZi5B2afMih
+         DtudknU690wb2esYlWn9ncWDVb9Cub9q/TcPJ7MPMJldgvw7lpMbX5aUD5fAayAUi4td
+         /qqAmQkUtpvVd3GzwNLrQDoPkkNdnVodlVTi/9eEsllXYKlSYqnrxExGxIW8UnDY/qVd
+         0Hll/qexxQLBwwNMN6TGTmumMfzx7OtbDA4r7mOvSxk2jO/WkrXVL1GL+WRn3o8t0H4s
+         yPfg==
+X-Gm-Message-State: AOAM530qPSgKaz/2vY+yjVSeDXetJvRmFsdjGAb/cxQmu/SXsUJX3w8y
+        noasJkciRJ/x1EjmcWqIKb+8h18WQ2NvVQ13o5Vl7lMrWtEJPJSAkDS53whYwFGEnKxbQUBgclF
+        3b0pI1u0NFQ3XqqKVS4Iq/mwo
+X-Received: by 2002:a05:6000:250:: with SMTP id m16mr1830931wrz.459.1639439748403;
+        Mon, 13 Dec 2021 15:55:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxRuduDc4gHi1E9c1BxySUihdpD8sKyFElGW2gb5/RJfnRnGzyG7IjozaxundgzWnwsMzmibw==
+X-Received: by 2002:a05:6000:250:: with SMTP id m16mr1830918wrz.459.1639439748269;
+        Mon, 13 Dec 2021 15:55:48 -0800 (PST)
+Received: from redhat.com ([2a03:c5c0:207d:b931:2ce5:ef76:2d17:5466])
+        by smtp.gmail.com with ESMTPSA id f1sm10050910wrh.116.2021.12.13.15.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 15:55:47 -0800 (PST)
+Date:   Mon, 13 Dec 2021 18:55:44 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>
+Subject: Re: [PATCH] virtio_mmio: pm: Add notification handlers for restore
+ and freeze
+Message-ID: <20211213185317-mutt-send-email-mst@kernel.org>
+References: <20211213160002.GA202134@opensynergy.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH RESEND 2] libata: if T_LENGTH is zero, dma direction
- should be DMA_NONE
-Content-Language: en-US
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     linux-ide@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <1f57bc3d-d125-7e09-4699-0338ddcc50f1@oracle.com>
- <c6212443-e40a-2813-1920-905e89884204@opensource.wdc.com>
- <e3ff85bc-bf01-c90d-298f-4cbd30b460c1@oracle.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <e3ff85bc-bf01-c90d-298f-4cbd30b460c1@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213160002.GA202134@opensynergy.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/14 7:15, George Kennedy wrote:
+On Mon, Dec 13, 2021 at 05:00:08PM +0100, Mikhail Golubev wrote:
+> From: Yurii Danilovskyi <glyd@opensynergy.com>
+> 
+> Handle restore and freeze notifications from the PM core. Expose
+> these to individual virtio drivers that can quiesce and resume vq
+> operations.
+> 
+> Signed-off-by: Yurii Danilovskyi <glyd@opensynergy.com>
+> Signed-off-by: Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+> ---
+>  drivers/virtio/virtio_mmio.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> index 56128b9c46eb..af79f8c2a2f2 100644
+> --- a/drivers/virtio/virtio_mmio.c
+> +++ b/drivers/virtio/virtio_mmio.c
+> @@ -762,6 +762,24 @@ static void vm_unregister_cmdline_devices(void)
+>  
+>  #endif
+>  
+> +static int __maybe_unused virtio_mmio_freeze(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct virtio_mmio_device *vm_dev = platform_get_drvdata(pdev);
+> +
+> +	return virtio_device_freeze(&vm_dev->vdev);
+> +}
+> +
+> +static int __maybe_unused virtio_mmio_restore(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct virtio_mmio_device *vm_dev = platform_get_drvdata(pdev);
+> +
+> +	return virtio_device_restore(&vm_dev->vdev);
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(virtio_mmio_pm_ops, virtio_mmio_freeze, virtio_mmio_restore);
+> +
+>  /* Platform driver */
+>  
+>  static const struct of_device_id virtio_mmio_match[] = {
+> @@ -785,6 +803,7 @@ static struct platform_driver virtio_mmio_driver = {
+>  		.name	= "virtio-mmio",
+>  		.of_match_table	= virtio_mmio_match,
+>  		.acpi_match_table = ACPI_PTR(virtio_mmio_acpi_match),
+> +		.pm = &virtio_mmio_pm_ops,
+>  	},
+>  };
+
+All this code needs to be within ifdef CONFIG_PM_SLEEP.  Alternatively,
+tweak virtio.h to expose virtio_device_freeze/virtio_device_restore
+unconditionally.
+
+
+>  
+> -- 
+> 2.34.1
 > 
 > 
-> On 12/13/2021 4:37 PM, Damien Le Moal wrote:
->> On 2021/12/14 0:33, George Kennedy wrote:
->>> Avoid data corruption by rejecting pass-through commands where
->>> T_LENGTH is zero (No data is transferred) and the dma direction
->>> is not DMA_NONE.
->>>
->>> Cc:<stable@vger.kernel.org>  # 5.4.y
->> 5.4 only ? What about other LTS versions ? They do not have that bug ?
-> Our distros are based on 5.4.y, 5.15.y and 4.14.y, so the fix should go 
-> there,
-> but it looks like the fix is also needed in: 5.14.y, 5.13.y, 5.10.y, and 
-> 4.19.y.
+> -- 
 
-Then please resend with:
-
-Cc: stable@vger.kernel.org
-
-No version specified.
-
-> 
-> Thank you,
-> George
->>
->>> Reported-by: syzkaller<syzkaller@googlegroups.com>
->>> Signed-off-by: George Kennedy<george.kennedy@oracle.com>
->>> ---
->>>    drivers/ata/libata-scsi.c | 6 ++++++
->>>    1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->>> index 1b84d55..d428392 100644
->>> --- a/drivers/ata/libata-scsi.c
->>> +++ b/drivers/ata/libata-scsi.c
->>> @@ -2859,6 +2859,12 @@ static unsigned int ata_scsi_pass_thru(struct ata_queued_cmd *qc)
->>>    		goto invalid_fld;
->>>    	}
->>>    
->>> +	/* if T_LENGTH is zero (No data is transferred), then dir should be DMA_NONE */
->>> +	if ((cdb[2 + cdb_offset] & 3) == 0 && scmd->sc_data_direction != DMA_NONE) {
->>> +		fp = 2 + cdb_offset;
->>> +		goto invalid_fld;
->>> +	}
->>> +
->>>    	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
-
-cdb[2 + cdb_offset] & 3) is used again for the ncq test, so you can group things:
-
-	if (!(cdb[2 + cdb_offset] & 0x3)) {
-		/*
-		 * When T_LENGTH is zero (no data is transferred),
-		 * then dir should be DMA_NONE.
-		 */
-		if (scmd->sc_data_direction != DMA_NONE) {
-			fp = 2 + cdb_offset;
-			goto invalid_fld;
-		}
-
-		if (ata_is_ncq(tf->protocol))
-			tf->protocol = ATA_PROT_NCQ_NODATA;
-	}
-
->>>    		tf->protocol = ATA_PROT_NCQ_NODATA;
->>>    
->>> -- 1.8.3.1
->>>
->>
-> 
-
-
--- 
-Damien Le Moal
-Western Digital Research

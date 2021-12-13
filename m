@@ -2,42 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5F6472583
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C2747270C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235024AbhLMJoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:44:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55494 "EHLO
+        id S239339AbhLMJ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:57:12 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38280 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbhLMJlb (ORCPT
+        with ESMTP id S237208AbhLMJv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:41:31 -0500
+        Mon, 13 Dec 2021 04:51:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECF4EB80E2A;
-        Mon, 13 Dec 2021 09:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136AEC00446;
-        Mon, 13 Dec 2021 09:41:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F8C6B80E16;
+        Mon, 13 Dec 2021 09:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508A6C00446;
+        Mon, 13 Dec 2021 09:51:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388488;
-        bh=IZp7M0GCPlkcazySjNI+e9di3CnE5zDbc8DLXEjeq9Q=;
+        s=korg; t=1639389114;
+        bh=jQN/HNVVbD2WGBmSRc+jLwnRdojvjt56bzQhZG2x9iE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qpx/vCuNZbUiHw7luY2EdoX7NBm8d0OCbYn7CN5w41lXOBl8sIJyDkuv0TWNVE/pm
-         U4kPUp31A50GRtM9hMydOyPY8FffEzWxT+jx2X466JQN1Uu2L6J8jnZEPuYWRXazM4
-         hChjEmHdk7S0HdHeKIjOF++jOBwVcagtddXiGpms=
+        b=GOuYVTm0sElbsq4wiehPDr95l2wRu1I+k56Q6aljZH5JsNM9VvRh39emjsquqExvk
+         RVEeM1K9bGx/ytERkevSWgeebCtUn5DclE1iUyxJQSn7DPry7H657NBuVxSXRJEcsG
+         2OwI80+Kz4+gP+6hmnxEmHshtOxYyKcTsbe0xOlw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 60/74] iio: mma8452: Fix trigger reference couting
+        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Konstantin Khlebnikov <koct9i@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paul Clarke <pc@us.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 090/132] perf tools: Fix SMT detection fast read path
 Date:   Mon, 13 Dec 2021 10:30:31 +0100
-Message-Id: <20211213092932.807795193@linuxfoundation.org>
+Message-Id: <20211213092942.198374589@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,41 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Ian Rogers <irogers@google.com>
 
-commit cd0082235783f814241a1c9483fb89e405f4f892 upstream.
+commit 4ffbe87e2d5b53bcb0213d8650bbe70bf942de6a upstream.
 
-The mma8452 driver directly assigns a trigger to the struct iio_dev. The
-IIO core when done using this trigger will call `iio_trigger_put()` to drop
-the reference count by 1.
+sysfs__read_int() returns 0 on success, and so the fast read path was
+always failing.
 
-Without the matching `iio_trigger_get()` in the driver the reference count
-can reach 0 too early, the trigger gets freed while still in use and a
-use-after-free occurs.
-
-Fix this by getting a reference to the trigger before assigning it to the
-IIO device.
-
-Fixes: ae6d9ce05691 ("iio: mma8452: Add support for interrupt driven triggers.")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024092700.6844-1-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: bb629484d924118e ("perf tools: Simplify checking if SMT is active.")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Konstantin Khlebnikov <koct9i@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Paul Clarke <pc@us.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Link: http://lore.kernel.org/lkml/20211124001231.3277836-2-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/mma8452.c |    2 +-
+ tools/perf/util/smt.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -1470,7 +1470,7 @@ static int mma8452_trigger_setup(struct
- 	if (ret)
- 		return ret;
+--- a/tools/perf/util/smt.c
++++ b/tools/perf/util/smt.c
+@@ -15,7 +15,7 @@ int smt_on(void)
+ 	if (cached)
+ 		return cached_result;
  
--	indio_dev->trig = trig;
-+	indio_dev->trig = iio_trigger_get(trig);
+-	if (sysfs__read_int("devices/system/cpu/smt/active", &cached_result) > 0)
++	if (sysfs__read_int("devices/system/cpu/smt/active", &cached_result) >= 0)
+ 		goto done;
  
- 	return 0;
- }
+ 	ncpu = sysconf(_SC_NPROCESSORS_CONF);
 
 

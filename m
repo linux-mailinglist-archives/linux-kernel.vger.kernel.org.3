@@ -2,139 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B62754734C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1D54734BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242262AbhLMTR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:17:56 -0500
-Received: from mga12.intel.com ([192.55.52.136]:23795 "EHLO mga12.intel.com"
+        id S236101AbhLMTQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:16:58 -0500
+Received: from mga01.intel.com ([192.55.52.88]:65225 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242211AbhLMTRg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:17:36 -0500
+        id S231878AbhLMTQ5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 14:16:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639423056; x=1670959056;
+  t=1639423017; x=1670959017;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=VHnDozIc4v7QpR3IRCWWh2AZ3tIbWgh1pH62gbq7Lbg=;
-  b=MgLMW0oUOakek0lzcKrRxXnyQ7oRdk28kqi0HI1T4MtSFyl6gyWw4+A+
-   CZA6SPm+4AiqCJlYNHMDrriUm+rGp2uqQ79jDzb8r0BEutGppVined8ho
-   wkCQrOQyswVg7wbz6Y23buN55bAO70uDe5TrmqBuh/WghVCrQWe4mu32/
-   b0BWu8ocvYxBhV3Pb9UcxayoKx2iS1+eep0bbiE7fPrGej4+mPSrl1EW7
-   K8VUPg2SfeIjJTBmvMTgVqbDWvO9K1Rk7HWGONQJM0+L9PIc5C1Kpqg9X
-   e1X/gliFqLdjhknJ3mUErM2JSjWkfegPq6jyzEl+5EwAC9Kw71No4ylRQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="218824060"
+   mime-version:in-reply-to;
+  bh=bp3F5ril2o2hFHFGNs2ohZXce1AXnq3rH4wu9NdRWF4=;
+  b=PqzPwKnQO1KQ/Q3bkea+ZF29nKxmyhHbecenuQX+GCKrJCbEbcLqO8UJ
+   yCrZgMkZQBnyMH+rDVkp+0mAg/r9JPZz//YAnqHrR8NPGnRlfPJBkfDPf
+   Wve1OQuryQVdqiMs9wIk2GZoOXc9vQ+E8JoDO1ORnyUci/c6KFIf9Qnsg
+   DADC6lY/kTtBDijltgKSTl2s+0vHyzdG3akDmGL4R3FUuhQ+ItCwkOO0L
+   HSDa0jtzXstdstWRPpcHJgAkhrzLoTRgzjymnDLLpKyxc7iGPEOFAAFJS
+   2uydQpWs5m1ch1OG2zLv83jq4bfg9HQYRHBz3c4rCFo7M9/8GdvaURr9b
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="262940003"
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="218824060"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 11:16:56 -0800
+   d="scan'208";a="262940003"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 11:16:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="544890170"
+   d="scan'208";a="464762074"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Dec 2021 11:16:54 -0800
+  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 11:16:54 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mwqof-0006yP-BL; Mon, 13 Dec 2021 19:16:53 +0000
-Date:   Tue, 14 Dec 2021 03:16:37 +0800
+        id 1mwqof-0006yR-Bq; Mon, 13 Dec 2021 19:16:53 +0000
+Date:   Tue, 14 Dec 2021 03:16:42 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     lianzhi chang <changlianzhi@uniontech.com>,
+To:     Leo Yan <leo.yan@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        dmitry.torokhov@gmail.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, andriy.shevchenko@linux.intel.com,
-        282827961@qq.com, lianzhi chang <changlianzhi@uniontech.com>
-Subject: Re: [PATCH v21] tty: Fix the keyboard led light display problem
-Message-ID: <202112140304.qPpjdgPQ-lkp@intel.com>
-References: <20211213124122.25605-1-changlianzhi@uniontech.com>
+        Leo Yan <leo.yan@linaro.org>
+Subject: Re: [PATCH v2 4/4] coresight: etm3x: Don't trace PID for non-root
+ PID namespace
+Message-ID: <202112140344.viPmOWp6-lkp@intel.com>
+References: <20211213121323.1887180-5-leo.yan@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211213124122.25605-1-changlianzhi@uniontech.com>
+In-Reply-To: <20211213121323.1887180-5-leo.yan@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi lianzhi,
+Hi Leo,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on linux/master linus/master v5.16-rc5]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.16-rc5]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/lianzhi-chang/tty-Fix-the-keyboard-led-light-display-problem/20211213-204404
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: mips-randconfig-r022-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140304.qPpjdgPQ-lkp@intel.com/config)
+url:    https://github.com/0day-ci/linux/commits/Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2585cf9dfaaddf00b069673f27bb3f8530e2039c
+config: arm-buildonly-randconfig-r003-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140344.viPmOWp6-lkp@intel.com/config)
 compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/8cc658e5dd82e5d70fa3ac9dace8fe62eaed325f
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/81d5f47788c40d34c8159d64d4505eb485254e8f
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review lianzhi-chang/tty-Fix-the-keyboard-led-light-display-problem/20211213-204404
-        git checkout 8cc658e5dd82e5d70fa3ac9dace8fe62eaed325f
+        git fetch --no-tags linux-review Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
+        git checkout 81d5f47788c40d34c8159d64d4505eb485254e8f
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/tty/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwtracing/coresight/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/tty/sysrq.c:31:
-   include/linux/kbd_kern.h:35:27: error: character <U+FF1B> not allowed in an identifier
-           unsigned char kbdledctl:1； /* Whether to allow to control the led of the keyboard */
-                                    ^~
-   include/linux/kbd_kern.h:35:27: error: invalid suffix '；' on integer constant
-   In file included from drivers/tty/sysrq.c:51:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:7:
->> include/linux/poll.h:142:27: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                           ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   include/linux/poll.h:142:39: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                                       ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   2 warnings and 2 errors generated.
+>> drivers/hwtracing/coresight/coresight-etm3x-core.c:344:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
+           if (!task_is_in_init_pid_ns(current))
+                ^
+   1 error generated.
 
 
-vim +142 include/linux/poll.h
+vim +/task_is_in_init_pid_ns +344 drivers/hwtracing/coresight/coresight-etm3x-core.c
 
-7a163b2195cda0 Al Viro 2018-02-01  137  
-7a163b2195cda0 Al Viro 2018-02-01  138  static inline __poll_t demangle_poll(u16 val)
-7a163b2195cda0 Al Viro 2018-02-01  139  {
-7a163b2195cda0 Al Viro 2018-02-01  140  #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-7a163b2195cda0 Al Viro 2018-02-01  141  	return M(IN) | M(OUT) | M(PRI) | M(ERR) | M(NVAL) |
-7a163b2195cda0 Al Viro 2018-02-01 @142  		M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-7a163b2195cda0 Al Viro 2018-02-01  143  		M(HUP) | M(RDHUP) | M(MSG);
-7a163b2195cda0 Al Viro 2018-02-01  144  #undef M
-7a163b2195cda0 Al Viro 2018-02-01  145  }
-7a163b2195cda0 Al Viro 2018-02-01  146  #undef __MAP
-7a163b2195cda0 Al Viro 2018-02-01  147  
-7a163b2195cda0 Al Viro 2018-02-01  148  
+   301	
+   302	#define ETM3X_SUPPORTED_OPTIONS (ETMCR_CYC_ACC | \
+   303					 ETMCR_TIMESTAMP_EN | \
+   304					 ETMCR_RETURN_STACK)
+   305	
+   306	static int etm_parse_event_config(struct etm_drvdata *drvdata,
+   307					  struct perf_event *event)
+   308	{
+   309		struct etm_config *config = &drvdata->config;
+   310		struct perf_event_attr *attr = &event->attr;
+   311	
+   312		if (!attr)
+   313			return -EINVAL;
+   314	
+   315		/* Clear configuration from previous run */
+   316		memset(config, 0, sizeof(struct etm_config));
+   317	
+   318		if (attr->exclude_kernel)
+   319			config->mode = ETM_MODE_EXCL_KERN;
+   320	
+   321		if (attr->exclude_user)
+   322			config->mode = ETM_MODE_EXCL_USER;
+   323	
+   324		/* Always start from the default config */
+   325		etm_set_default(config);
+   326	
+   327		/*
+   328		 * By default the tracers are configured to trace the whole address
+   329		 * range.  Narrow the field only if requested by user space.
+   330		 */
+   331		if (config->mode)
+   332			etm_config_trace_mode(config);
+   333	
+   334		/*
+   335		 * At this time only cycle accurate, return stack  and timestamp
+   336		 * options are available.
+   337		 */
+   338		if (attr->config & ~ETM3X_SUPPORTED_OPTIONS)
+   339			return -EINVAL;
+   340	
+   341		config->ctrl = attr->config;
+   342	
+   343		/* Don't trace contextID when runs in non-root PID namespace */
+ > 344		if (!task_is_in_init_pid_ns(current))
+   345			config->ctrl &= ~ETMCR_CTXID_SIZE;
+   346	
+   347		/*
+   348		 * Possible to have cores with PTM (supports ret stack) and ETM
+   349		 * (never has ret stack) on the same SoC. So if we have a request
+   350		 * for return stack that can't be honoured on this core then
+   351		 * clear the bit - trace will still continue normally
+   352		 */
+   353		if ((config->ctrl & ETMCR_RETURN_STACK) &&
+   354		    !(drvdata->etmccer & ETMCCER_RETSTACK))
+   355			config->ctrl &= ~ETMCR_RETURN_STACK;
+   356	
+   357		return 0;
+   358	}
+   359	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

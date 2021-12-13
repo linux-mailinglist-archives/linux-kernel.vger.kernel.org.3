@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A69B47264F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EC0472773
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237518AbhLMJuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:50:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S237282AbhLMKBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbhLMJqA (ORCPT
+        with ESMTP id S236286AbhLMJzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:46:00 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9523C08EB30;
-        Mon, 13 Dec 2021 01:41:08 -0800 (PST)
+        Mon, 13 Dec 2021 04:55:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA5DC08EAF6;
+        Mon, 13 Dec 2021 01:46:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 419B2CE0AE2;
-        Mon, 13 Dec 2021 09:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5EDFC00446;
-        Mon, 13 Dec 2021 09:41:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 080C0B80E0C;
+        Mon, 13 Dec 2021 09:46:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48ABDC00446;
+        Mon, 13 Dec 2021 09:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388465;
-        bh=pbGKeqSyT3S8vgeYSj2aiYLj+pRwBYeHLrr1VfZCNvc=;
+        s=korg; t=1639388772;
+        bh=Kuf5ivleTHQnzzKGMV3HkDb+ZfqNvldDPHustQKlQUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N2Oz0iAzEjHX4oMtfC2U2T+JBeBMgjYkAQax9g2caFf117HNX6MANyGxsSjOUiaBm
-         Tkc8SfL9BmCggC8l7PaEz1kxxZX8TUUVKeTHkyf0GiaKifTWlfdqr32ZBYzzpEJEYg
-         MmQJHHHZWCmBosvf/qKsKK4+G1VASqfIAORkbrnM=
+        b=V7VOCjVBiRCgzkJIU3T/6EOZ+NGls4x9S6FrPGvrPQ7d/M4OHyiBvyEM/tN9ActwV
+         dgh1Cr6WvEPS9Y4/jWszA65kqYJI1U2QYDbRMtJFUAPP3sYBqIiT/Qs88EkiyWjf1T
+         wUwOoDokM6JsTRvNjdVUfHU8GPv4ydogieA8i60M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 58/74] iio: trigger: stm32-timer: fix MODULE_ALIAS
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 59/88] net: altera: set a couple error code in probe()
 Date:   Mon, 13 Dec 2021 10:30:29 +0100
-Message-Id: <20211213092932.737429494@linuxfoundation.org>
+Message-Id: <20211213092935.299803867@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,31 +48,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alyssa Ross <hi@alyssa.is>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 893621e0606747c5bbefcaf2794d12c7aa6212b7 upstream.
+commit badd7857f5c933a3dc34942a2c11d67fdbdc24de upstream.
 
-modprobe can't handle spaces in aliases.
+There are two error paths which accidentally return success instead of
+a negative error code.
 
-Fixes: 93fbe91b5521 ("iio: Add STM32 timer trigger driver")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Link: https://lore.kernel.org/r/20211125182850.2645424-1-hi@alyssa.is
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: bbd2190ce96d ("Altera TSE: Add main and header file for Altera Ethernet Driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/trigger/stm32-timer-trigger.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/altera/altera_tse_main.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/iio/trigger/stm32-timer-trigger.c
-+++ b/drivers/iio/trigger/stm32-timer-trigger.c
-@@ -884,6 +884,6 @@ static struct platform_driver stm32_time
- };
- module_platform_driver(stm32_timer_trigger_driver);
+--- a/drivers/net/ethernet/altera/altera_tse_main.c
++++ b/drivers/net/ethernet/altera/altera_tse_main.c
+@@ -1431,16 +1431,19 @@ static int altera_tse_probe(struct platf
+ 		priv->rxdescmem_busaddr = dma_res->start;
  
--MODULE_ALIAS("platform: stm32-timer-trigger");
-+MODULE_ALIAS("platform:stm32-timer-trigger");
- MODULE_DESCRIPTION("STMicroelectronics STM32 Timer Trigger driver");
- MODULE_LICENSE("GPL v2");
+ 	} else {
++		ret = -ENODEV;
+ 		goto err_free_netdev;
+ 	}
+ 
+-	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask)))
++	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask))) {
+ 		dma_set_coherent_mask(priv->device,
+ 				      DMA_BIT_MASK(priv->dmaops->dmamask));
+-	else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32)))
++	} else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32))) {
+ 		dma_set_coherent_mask(priv->device, DMA_BIT_MASK(32));
+-	else
++	} else {
++		ret = -EIO;
+ 		goto err_free_netdev;
++	}
+ 
+ 	/* MAC address space */
+ 	ret = request_and_map(pdev, "control_port", &control_port,
 
 

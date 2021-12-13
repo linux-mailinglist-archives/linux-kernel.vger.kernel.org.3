@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EDC472C15
+	by mail.lfdr.de (Postfix) with ESMTP id A3633472C16
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbhLMMN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:13:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
+        id S236625AbhLMMOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:14:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbhLMMNz (ORCPT
+        with ESMTP id S236566AbhLMMN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:13:55 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C844FC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:13:54 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id y12so50579676eda.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:13:54 -0800 (PST)
+        Mon, 13 Dec 2021 07:13:57 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73178C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:13:57 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id g14so50545868edb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:13:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4/q5CQ3/q+2EJBhXdOxiiNn1t4GGrRS1OQ5Mkhf3Sec=;
-        b=FQOiwxWIa/V50ZOvIdGrxTMDpMzUJYTDnJDsBkBrsHoCMvjGB3JGMyk2jz0ZhXKQQV
-         P10aOa+Fd3f0lB2j4MAI924aBw3zStw8fq1rOvxuIHgQ+3LHMroZZe0QL/eAzbPtP6cM
-         Py5peunGY3HKzWu8JFSe9Jf64cg24VZLyM39StxAr+lvo7RL8tR9TDD+cFO67mJ81IOC
-         TuZLaIbncZ40e+u4rpBAO8dYHzJfNUraSjcpxrbs3KGkbNENZshyn1ulLZTf5dPLhMDh
-         SUSbVCpTixyLr3V1bL3fVjDXi8L5ElPpfB4pd5+EsUOMRjmCrqbe1/1S4q+d51LfUejw
-         3oTA==
+        bh=TSGFEEK57vZgNj+GJPFHPovuhunjSnX1LTdz3s3nsLA=;
+        b=ShuKM7QtQJfbrrEovXJ4uS7mOzRqEUFSdQ7aM7lCo9LkxPZQjIqDKwIOo63kafeBvr
+         kQJ+oQFG5qNVMyIRLMlNyZemMrQLCii6MG1ibBiv0x0SYygmdX8N0wtLNT5vdBrtgtpy
+         9oorT95681UBLuDX36Qt/2ANtKnW2EdXzvszsioSG4OxP4IDPWdMDEKTGzgHcNBeaiVB
+         9uQyopAHfJE+K8ZO9iLOSUWVZU8KnpYUfVUqwLNJGzfo6TtosWDMuWLXsJV93JW0qm+X
+         A+rqqF9WSaaMuXyQYmO4M7Q2KIr2tcPUrwqV6jmCRinZtAHaOihmNFs+Rm3VyLT4/J9/
+         qnZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4/q5CQ3/q+2EJBhXdOxiiNn1t4GGrRS1OQ5Mkhf3Sec=;
-        b=EikP5lBU2Xx60AvjNDe2F5l9FOuBs1Z7joP2Flw+32weLDIKO7DO73croLNRRZvJ7q
-         CM2dDtHJTiNJVynvuanoFJ/nFtFdgY43E3xbKW++Z3Wb4HyuVBk/CW6wuWo6PdfaF5mq
-         NyRyyH2VQUS2SLHAhMsejqnkYlfsjHX9b1J30RMcRXeXmhHqx3YubPSkTMxI5yYfvT8V
-         QF55Vh/cXqqg/py5IGgkd8BlTTQ7GNQEc+88UPuqkTAafQUi8W3Bc4404m+ZMH0GphKt
-         2flcp1OQddFd5e23FhjW4XJLElYuLYJYESpllzwYAuZW3bWQiqfOsWjVWM3z8Czg71lN
-         HUzw==
-X-Gm-Message-State: AOAM5314PGe1jxZii+4FjWg2MTgeHzQn6Y0p+Z1Ot4CVToQDzPZTELTo
-        Z3qFidyY2nd0VPPmPTUDlZxsQA==
-X-Google-Smtp-Source: ABdhPJwpHCWcd1fqcvPvzOIn657fLFck/7Gj6sLy9umteOuFTthGsPkU/q9M/IcZwJZKz36vOlBQgQ==
-X-Received: by 2002:aa7:d794:: with SMTP id s20mr62400515edq.305.1639397633225;
-        Mon, 13 Dec 2021 04:13:53 -0800 (PST)
+        bh=TSGFEEK57vZgNj+GJPFHPovuhunjSnX1LTdz3s3nsLA=;
+        b=tKB8SrQUdyOF8p+arlRkrV4XLQuXA12LtqPvMn5/VX/4OJz4hXsP8pr+h1X00A1MtO
+         vN0aExrZPT/JE+HB6Hehr/+NikLZDKPBhy/+EqVot6DLI9Az2rwaHSWMa5ee3bi3S59x
+         PL1eTZJgD2z0bIDZueTkbw+/Qq2nNDnnjb2EfKZFYenBbHyP8f6bFdSZmDHusmE37Yf3
+         pVvLkzNFAJY4zpAOnxmw9Zjsp1R0Gx3MuOOpBfVzFY4SlJt5ZssC5ILZG+lgbQhdIf0N
+         GND+8mIbtFsIISBWgU4h3T38j8zV2zRlntZDAFn6bgsFymNC4InJ5lRSVP4HG6NBmXqK
+         xDAg==
+X-Gm-Message-State: AOAM531vN8frJKG01qcmuKM9CJLz5769vjlxQdrkIn8w6i10uaaOTvdn
+        gY3N5hGQ3kEIzBGtZewOYgQDLg==
+X-Google-Smtp-Source: ABdhPJy6QhigKx/sG6cyezTv+KNVxOCZGCewaO1EOL4bzSW8lGQxoFkpqUmBkvpQwCmQisQsh4GUKQ==
+X-Received: by 2002:a17:906:c109:: with SMTP id do9mr43177666ejc.48.1639397635903;
+        Mon, 13 Dec 2021 04:13:55 -0800 (PST)
 Received: from localhost ([104.245.96.202])
-        by smtp.gmail.com with ESMTPSA id r3sm5803128ejr.79.2021.12.13.04.13.52
+        by smtp.gmail.com with ESMTPSA id bd12sm6247430edb.11.2021.12.13.04.13.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 04:13:52 -0800 (PST)
+        Mon, 13 Dec 2021 04:13:55 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -56,9 +56,9 @@ To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 2/4] coresight: etm4x: Don't use virtual contextID for non-root PID namespace
-Date:   Mon, 13 Dec 2021 20:13:21 +0800
-Message-Id: <20211213121323.1887180-3-leo.yan@linaro.org>
+Subject: [PATCH v2 3/4] coresight: etm4x: Don't trace PID for non-root PID namespace
+Date:   Mon, 13 Dec 2021 20:13:22 +0800
+Message-Id: <20211213121323.1887180-4-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211213121323.1887180-1-leo.yan@linaro.org>
 References: <20211213121323.1887180-1-leo.yan@linaro.org>
@@ -68,87 +68,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commented in the function ctxid_pid_store(), it can cause the PID
-values mismatching between context ID tracing and PID allocated in a
-non-root namespace.
+When runs in perf mode, the driver always enables the PID tracing.  This
+can lead confusion when the profiling session runs in non-root PID
+namespace, whereas it records the PIDs from the root PID namespace.
 
-For this reason, when a process runs in non-root PID namespace, the
-driver doesn't allow PID tracing and returns failure when access
-contextID related sysfs nodes.
+To avoid confusion for PID tracing, when runs in perf mode, this patch
+changes to only enable PID tracing for root PID namespace.
 
-VMID works for virtual contextID when the kernel runs in EL2 mode with
-VHE; on the other hand, the driver doesn't prevent users from accessing
-it when programs run in the non-root namespace.  Thus this can lead
-to same issues with contextID described above.
+As result, after apply this patch, the perf tool reports PID as '-1' for
+all samples:
 
-This patch imposes the checking on VMID related sysfs knobs and returns
-failure if current process runs in non-root PID namespace.
+  # unshare --fork --pid perf record -e cs_etm// -m 64K,64K -a \
+	-o perf_test.data -- uname
+  # perf report -i perf_test.data --itrace=Zi1000i --stdio
+
+  # Total Lost Samples: 0
+  #
+  # Samples: 94  of event 'instructions'
+  # Event count (approx.): 94000
+  #
+  # Overhead  Command  Shared Object      Symbol
+  # ........  .......  .................  ..............................
+  #
+      68.09%  :-1      [kernel.kallsyms]  [k] __sched_text_end
+       3.19%  :-1      [kernel.kallsyms]  [k] hrtimer_interrupt
+       2.13%  :-1      [kernel.kallsyms]  [k] __bitmap_and
+       2.13%  :-1      [kernel.kallsyms]  [k] trace_vbprintk
+       1.06%  :-1      [kernel.kallsyms]  [k] __fget_files
+       1.06%  :-1      [kernel.kallsyms]  [k] __schedule
+       1.06%  :-1      [kernel.kallsyms]  [k] __softirqentry_text_start
+       1.06%  :-1      [kernel.kallsyms]  [k] __update_load_avg_cfs_rq
+       1.06%  :-1      [kernel.kallsyms]  [k] __update_load_avg_se
+       1.06%  :-1      [kernel.kallsyms]  [k] arch_counter_get_cntpct
+       1.06%  :-1      [kernel.kallsyms]  [k] check_and_switch_context
+       1.06%  :-1      [kernel.kallsyms]  [k] format_decode
+       1.06%  :-1      [kernel.kallsyms]  [k] handle_percpu_devid_irq
+       1.06%  :-1      [kernel.kallsyms]  [k] irq_enter_rcu
+       1.06%  :-1      [kernel.kallsyms]  [k] irqtime_account_irq
+       1.06%  :-1      [kernel.kallsyms]  [k] ktime_get
+       1.06%  :-1      [kernel.kallsyms]  [k] ktime_get_coarse_real_ts64
+       1.06%  :-1      [kernel.kallsyms]  [k] memmove
+       1.06%  :-1      [kernel.kallsyms]  [k] perf_ioctl
+       1.06%  :-1      [kernel.kallsyms]  [k] perf_output_begin
+       1.06%  :-1      [kernel.kallsyms]  [k] perf_output_copy
+       1.06%  :-1      [kernel.kallsyms]  [k] profile_tick
+       1.06%  :-1      [kernel.kallsyms]  [k] sched_clock
+       1.06%  :-1      [kernel.kallsyms]  [k] timerqueue_add
+       1.06%  :-1      [kernel.kallsyms]  [k] trace_save_cmdline
+       1.06%  :-1      [kernel.kallsyms]  [k] update_load_avg
+       1.06%  :-1      [kernel.kallsyms]  [k] vbin_printf
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- .../coresight/coresight-etm4x-sysfs.c         | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-index 2f3b4eef8261..a00c0d1bbd85 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-@@ -2111,6 +2111,13 @@ static ssize_t vmid_val_show(struct device *dev,
- 	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
- 	struct etmv4_config *config = &drvdata->config;
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index 86a313857b58..f3eda536267c 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -656,7 +656,9 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+ 		config->cfg |= BIT(11);
+ 	}
  
-+	/*
-+	 * Don't use virtual contextID tracing if coming from a PID namespace.
-+	 * See comment in ctxid_pid_store().
-+	 */
-+	if (!task_is_in_init_pid_ns(current))
-+		return -EINVAL;
-+
- 	spin_lock(&drvdata->spinlock);
- 	val = (unsigned long)config->vmid_val[config->vmid_idx];
- 	spin_unlock(&drvdata->spinlock);
-@@ -2125,6 +2132,13 @@ static ssize_t vmid_val_store(struct device *dev,
- 	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
- 	struct etmv4_config *config = &drvdata->config;
+-	if (attr->config & BIT(ETM_OPT_CTXTID))
++	/* Only trace contextID when runs in root PID namespace */
++	if ((attr->config & BIT(ETM_OPT_CTXTID)) &&
++	    task_is_in_init_pid_ns(current))
+ 		/* bit[6], Context ID tracing bit */
+ 		config->cfg |= BIT(ETM4_CFG_BIT_CTXTID);
  
-+	/*
-+	 * Don't use virtual contextID tracing if coming from a PID namespace.
-+	 * See comment in ctxid_pid_store().
-+	 */
-+	if (!task_is_in_init_pid_ns(current))
-+		return -EINVAL;
+@@ -670,7 +672,11 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+ 			ret = -EINVAL;
+ 			goto out;
+ 		}
+-		config->cfg |= BIT(ETM4_CFG_BIT_VMID) | BIT(ETM4_CFG_BIT_VMID_OPT);
 +
- 	/*
- 	 * only implemented when vmid tracing is enabled, i.e. at least one
- 	 * vmid comparator is implemented and at least 8 bit vmid size
-@@ -2148,6 +2162,13 @@ static ssize_t vmid_masks_show(struct device *dev,
- 	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
- 	struct etmv4_config *config = &drvdata->config;
++		/* Only trace virtual contextID when runs in root PID namespace */
++		if (task_is_in_init_pid_ns(current))
++			config->cfg |= BIT(ETM4_CFG_BIT_VMID) |
++				       BIT(ETM4_CFG_BIT_VMID_OPT);
+ 	}
  
-+	/*
-+	 * Don't use virtual contextID tracing if coming from a PID namespace.
-+	 * See comment in ctxid_pid_store().
-+	 */
-+	if (!task_is_in_init_pid_ns(current))
-+		return -EINVAL;
-+
- 	spin_lock(&drvdata->spinlock);
- 	val1 = config->vmid_mask0;
- 	val2 = config->vmid_mask1;
-@@ -2165,6 +2186,13 @@ static ssize_t vmid_masks_store(struct device *dev,
- 	struct etmv4_config *config = &drvdata->config;
- 	int nr_inputs;
- 
-+	/*
-+	 * Don't use virtual contextID tracing if coming from a PID namespace.
-+	 * See comment in ctxid_pid_store().
-+	 */
-+	if (!task_is_in_init_pid_ns(current))
-+		return -EINVAL;
-+
- 	/*
- 	 * only implemented when vmid tracing is enabled, i.e. at least one
- 	 * vmid comparator is implemented and at least 8 bit vmid size
+ 	/* return stack - enable if selected and supported */
 -- 
 2.25.1
 

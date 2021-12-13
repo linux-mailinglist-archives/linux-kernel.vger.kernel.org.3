@@ -2,337 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76541472BB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C85472BAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbhLMLko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:40:44 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:33572 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231463AbhLMLkm (ORCPT
+        id S234337AbhLMLkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:40:35 -0500
+Received: from mickerik.phytec.de ([195.145.39.210]:62492 "EHLO
+        mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231463AbhLMLke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:40:42 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BD5StQO021923;
-        Mon, 13 Dec 2021 05:40:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- references : in-reply-to : subject : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=AyJDsqK4TktiOaHc93I1NcIFPacc8LcRVfCNYLD2O7k=;
- b=HDfpfr0+/AVc9nGh3qru+D9pPm1nSCza8DzBZj3Zy6s7NBf3a2KI+S6YIaF+uqKcZHeb
- vI4pMLOyddWgW0QC9Be4p+RRljAGAY4iQayTJ7oMnn4Lr9JNV2e6lZm7t5jJtrqq2NdV
- XK4EC5Kx2gy3EU7dCaQZ2OOIN8qlYT75fITAng9ab4S96f+2LxH4mG+betKRMF9nWKuq
- qToVOr+O/wi/UpKo9Cx9BIdo53BXYZM+af4zF45DSX6qEmLu7hS9gQwaG1+ShUUuOYvh
- aFVqHt2e0GJ5txTyowyKecKO0Rob/K2VO0SlPD0TZYfQ4HoRutKug0cTnIFpwtrNXKW0 8g== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3cwc0bs810-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 13 Dec 2021 05:40:33 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 13 Dec 2021 06:40:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1639395631; x=1641987631;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RG2G+YbQRik8GU4D6qPZon8bAlgbu+/tYIpmX47TNBM=;
+        b=nRVEF6mwJ+dVuzlV4iiVCGQgrqdNEzw59P/P8IDXR4oz1uty7Nq/Hbz+WKCSeRGY
+        xVT0Bo6KZot6A4+XQ+uWb7RgWXc7L2GKotK8KgpgTU9fWAZtntXQ4/bWW6OV0efM
+        7QvlhPcWw0qSYkyCfoGZVb7JicjdbItXg60GiYuXzRc=;
+X-AuditID: c39127d2-4f7337000000426a-3f-61b7312fb59a
+Received: from florix.phytec.de (florix.phytec.de [172.16.0.118])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 1C.33.17002.F2137B16; Mon, 13 Dec 2021 12:40:31 +0100 (CET)
+Received: from Berlix.phytec.de (172.16.0.117) by Florix.phytec.de
+ (172.16.0.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 13 Dec
- 2021 11:40:31 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 13 Dec 2021 11:40:31 +0000
-Received: from LONN2DGDQ73 (unknown [198.90.238.114])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D027AB13;
-        Mon, 13 Dec 2021 11:40:30 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     'Hans de Goede' <hdegoede@redhat.com>,
-        'Mark Brown' <broonie@kernel.org>,
-        "'Rafael J . Wysocki'" <rafael@kernel.org>,
-        'Len Brown' <lenb@kernel.org>,
-        'Mark Gross' <markgross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20211210154050.3713-1-sbinding@opensource.cirrus.com> <8160a1c8-544d-6d95-4f80-224c7a9a9d40@redhat.com>
-In-Reply-To: <8160a1c8-544d-6d95-4f80-224c7a9a9d40@redhat.com>
-Subject: RE: [PATCH v2 0/6] Support Spi in i2c-multi-instantiate driver
-Date:   Mon, 13 Dec 2021 11:40:30 +0000
-Message-ID: <002401d7f016$3bb4f260$b31ed720$@opensource.cirrus.com>
+ 2021 12:40:31 +0100
+Received: from Berlix.phytec.de ([fe80::1c1b:e8b7:a0d4:89b2]) by
+ berlix.phytec.de ([fe80::1c1b:e8b7:a0d4:89b2%3]) with mapi id 15.01.2375.017;
+ Mon, 13 Dec 2021 12:40:31 +0100
+From:   Yunus Bas <Y.Bas@phytec.de>
+To:     "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: Re: [PATCH 2/3] ARM: dts: imx6qdl: phytec: Add support for optional
+ PEB-AV-02 LCD adapter
+Thread-Topic: [PATCH 2/3] ARM: dts: imx6qdl: phytec: Add support for optional
+ PEB-AV-02 LCD adapter
+Thread-Index: AQHX5cnz+AwqIm8hWUig1JEUcSBZ7Kwku3wAgAuUo4A=
+Date:   Mon, 13 Dec 2021 11:40:31 +0000
+Message-ID: <06f9e906333f7cc4f6ce7839a653d0700db6bf1e.camel@phytec.de>
+References: <20211130085355.2291607-1-y.bas@phytec.de>
+         <20211130085355.2291607-2-y.bas@phytec.de> <20211206024939.GX4216@dragon>
+In-Reply-To: <20211206024939.GX4216@dragon>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.0.116]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <355B429F6582C645B30979B7E9D0BB4C@phytec.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AQHKVo1VqSuCeo4owGzltFIRzsdrTwLFQoXGrDVIrYA=
-X-Proofpoint-ORIG-GUID: Ap_HBtL1SbmuCLSLjWcTDUoGQGP6jXpD
-X-Proofpoint-GUID: Ap_HBtL1SbmuCLSLjWcTDUoGQGP6jXpD
-X-Proofpoint-Spam-Reason: safe
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWyRoChTFffcHuiwbHV6hbzj5xjtXh41d9i
+        1dSdLBaXd81hs2jde4Td4u/2TSwWL7aIO7B77Jx1l91j06pONo/+vwYenzfJBbBEcdmkpOZk
+        lqUW6dslcGUsnbudtaCtqmLrWrkGxi9lXYycHBICJhLHbm1iA7GFBJYxScz4ZwRhP2KU+HdC
+        vIuRC8jexCjR0rGbvYuRg4NNQFHiyq18kBoRAX2J91v+soDUMAvsY5I40PifCSQhLJAi8fvs
+        DUaIolSJrra5LBC2lcS0e9PZQWwWAVWJ+VfawWp4Bdwkpk1uYoZY3Mwo8W2HL4jNKaAt8ejR
+        XFYQm1FAVmLDhvNgNcwC4hKbnn1nhXhAQGLJHoi4hICoxMvH/6DiChJtPZ1MIDczC2hKrN+l
+        D9FqITHrxhp2CFtRYkr3Q3aIEwQlTs58wjKBUXwWkg2zELpnIemehaR7FpLuBYysqxiFcjOT
+        s1OLMrP1CjIqS1KT9VJSNzECI/TwRPVLOxj75ngcYmTiYDzEKMHBrCTC+9J6a6IQb0piZVVq
+        UX58UWlOavEhRmkOFiVx3vs9TIlCAumJJanZqakFqUUwWSYOTqkGxuioIh6H+Xl/fLT/r/6s
+        MDua8zbjgdvhe78/Oi4x8yx34NPlsQcr1Ar4Au4laF35npy65+tD1pUWcexTrBXCyt3/JU1l
+        +te6QKTxbqLl3+gNc6fNmvC2UPmw16nq5ltLHmt9bd2sV2o29W1ST7HbJZ46S84HiTx83rra
+        /298qcqPysl+71MiosRSnJFoqMVcVJwIAMCjnZu+AgAA
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-> -----Original Message-----
-> From: Hans de Goede <hdegoede@redhat.com>
-> Sent: 10 December 2021 16:55
-> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
-> <broonie@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Len =
-Brown
-> <lenb@kernel.org>; Mark Gross <markgross@kernel.org>
-> Cc: linux-kernel@vger.kernel.org; linux-spi@vger.kernel.org; linux-
-> acpi@vger.kernel.org; platform-driver-x86@vger.kernel.org;
-> patches@opensource.cirrus.com
-> Subject: Re: [PATCH v2 0/6] Support Spi in i2c-multi-instantiate =
-driver
->=20
-> Hi Stefan,
->=20
-> On 12/10/21 16:40, Stefan Binding wrote:
-> > Add support for SPI bus in the ic2-multi-instantiate driver as
-> > upcoming laptops will need to multi instantiate SPI devices from a
-> > single device node, which has multiple SpiSerialBus entries at the
-> > ACPI table.
-> >
-> > With the new SPI support, i2c-multi-instantiate becomes
-> > bus-multi-instantiate and is moved to the ACPI folder.
-> >
-> > The intention is to support the SPI bus by re-using the current I2C
-> > multi instantiate, instead of creating a new SPI multi instantiate, =
-to
-> > make it possible for peripherals that can be controlled by I2C or =
-SPI
-> > to have the same HID at the ACPI table.
-> >
-> > The new driver (Bus multi instantiate, bmi) checks for the =
-hard-coded
-> > bus type and returns -ENODEV in case of zero devices found for that
-> > bus. In the case of automatic bus detection, the driver will give
-> > preference to I2C.
-> >
-> > The expectation is for a device node in the ACPI table to have
-> > multiple I2cSerialBus only or multiple SpiSerialBus only, not a mix =
-of
-> > both; and for the case where there are both entries in one device
-> > node, only the I2C ones would be probed.
-> >
-> > This new bus multi instantiate will be used in CS35L41 HDA new =
-driver,
-> > being upstreamed:
-> > https://lkml.org/lkml/2021/11/23/723
->=20
-> Unfortunately you never really answered my questions about v1 of this
-> series:
->=20
-> https://lore.kernel.org/platform-driver-x86/a1f546c2-5c63-573a-c032-
-> 603c792f3f7c@redhat.com/
->=20
-> So looking at the linked CS35L41 HDA series there is a single ACPI =
-device node
-> with a HID of CLSA0100 which describes two CS35L41 amplifiers =
-connected
-> over I2C ?
-
-Yes, the related series uses HID CLSA0100, which contains 2 I2C devices =
-inside a
-single node. This ID was mistakenly used for this laptop, and instead =
-CSC3551=20
-has been used for subsequent laptops.
-
->=20
-> I assume you are doing this work because there are also designs where =
-there
-> is a similar CLSA0100 ACPI device which also describes two CS35L41 =
-amplifiers
-> but then connected over SPI ?
-
-Yes, there are several laptop designs which use an equivalent ACPI which =
-describes
-2 or 4 CS35L41 amplifiers which are connected either via I2C or via SPI.
-Both designs use the same ACPI design and have 2-4 devices (either I2C =
-or SPI)
-defined inside a single ACPI node for HID CSC3551.
-Note that the devices inside the node can be either SPI or I2C, but =
-never SPI
-and I2C.
-
->=20
-> It would really help if you can:
->=20
-> 1. Answer my questions from v1
-
-I hope my colleague Lucas has answered these questions now.
-
-> 2. Provide a concrete example of a device where these changes will be
-> necessary to make things work, preferably with a link to an actual =
-ACPI DSDT
-> of that device.
-
-This is the CSC3551 node for a laptop with 4 SPI nodes, with a shared =
-IRQ:
-
- Scope (_SB.PC00.SPI0)
-    {
-        Device (GSPK)
-        {
-            Name (_HID, "CSC3551")  // _HID: Hardware ID
-            Method (AUID, 0, NotSerialized)
-            {
-                Return ("103C89C3")
-            }
-
-            Method (_SUB, 0, NotSerialized)  // _SUB: Subsystem ID
-            {
-                Return (AUID ())
-            }
-
-            Name (_UID, One)  // _UID: Unique ID
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource =
-Settings
-            {
-                Name (RBUF, ResourceTemplate ()
-                {
-                    SpiSerialBusV2 (0x0000, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    SpiSerialBusV2 (0x0001, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    SpiSerialBusV2 (0x0002, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    SpiSerialBusV2 (0x0003, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    GpioIo (Exclusive, PullUp, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Exclusive, PullUp, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Exclusive, PullUp, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Exclusive, PullDown, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Shared, PullUp, 0x0064, 0x0000, =
-IoRestrictionInputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioInt (Edge, ActiveBoth, Shared, PullUp, 0x0064,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                })
-                CreateWordField (RBUF, 0xCA, ACS1)
-                CreateWordField (RBUF, 0xA7, ACS2)
-                CreateWordField (RBUF, 0xED, ACS3)
-                CreateWordField (RBUF, 0x0110, ARST)
-                CreateWordField (RBUF, 0x0133, AINT)
-                CreateWordField (RBUF, 0x0156, AIN2)
-                ACS1 =3D GNUM (0x090E0016)
-                ACS2 =3D GNUM (0x090E0017)
-                ACS3 =3D GNUM (0x090C0006)
-                ARST =3D GNUM (0x09070017)
-                AINT =3D GNUM (0x09070013)
-                AIN2 =3D GNUM (0x09070013)
-                Return (RBUF) /* \_SB_.PC00.SPI0.GSPK._CRS.RBUF */
-            }
-
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                Return (0x0F)
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-            }
-            Name (_DSD, Package ()  // _DSD: Device-Specific Data
-            {
-                ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* =
-Device Properties for _DSD */,
-                Package ()
-                {
-                    Package () { "cirrus,dev-index", Package () { 0, 1, =
-2, 3 } },
-                    Package ()
-                    {
-                        "reset-gpios", Package ()
-                        {
-                            ^GSPK, 3, 0, 0,
-                            ^GSPK, 3, 0, 0,
-                            ^GSPK, 3, 0, 0,
-                            ^GSPK, 3, 0, 0,
-                        },
-                    },
-                    Package () { "cirrus,speaker-position",     Package =
-() { 1, 0, 1, 0 } },
-                    Package () { "cirrus,gpio1-func",           Package =
-() { 3, 3, 3, 3 } },
-                    Package () { "cirrus,gpio2-func",           Package =
-() { 2, 2, 2, 2 } },
-                    Package () { "cirrus,boost-ind-nanohenry",  Package =
-() { 1000, 1000, 1000, 1000 } },
-                    Package () { "cirrus,boost-peak-milliamp",  Package =
-() { 4500, 4500, 4500, 4500 } },
-                    Package () { "cirrus,boost-cap-microfarad", Package =
-() { 24, 24, 24, 24 } },
-                }
-            })
-        }
-    }
-
-This is just our node from the DSDT, we are working to obtain and share =
-the full DSDT, if still required.
-
->=20
-> Until you can better clarify why this is necessary, this series gets a =
-nack from
-> me. The i2c-mult-instantiate code is a hack to deal with some rather =
-sub-
-> optimal choices made in DSDTs used on devices shipped with Windows and
-> unless absolutely necessary I would rather not see this get expanded =
-to SPI.
->=20
-> Regards,
->=20
-> Hans
-
-Thanks,
-
-Stefan
-
-
+SGkgU2hhd24sCgpUaGFuayB5b3UgZm9yIHRoZSByZXZpZXcgYW5kIHNvcnJ5IGZvciB0aGUgbm9p
+c2UuIEknbGwgYXBwbHkgdGhlCmNoYW5nZXMgYW5kIHNlbmQgdjIuCgpSZWdhcmRzCll1bnVzCgpB
+bSBNb250YWcsIGRlbSAwNi4xMi4yMDIxIHVtIDEwOjQ5ICswODAwIHNjaHJpZWIgU2hhd24gR3Vv
+Ogo+IE9uIFR1ZSwgTm92IDMwLCAyMDIxIGF0IDA5OjUzOjU0QU0gKzAxMDAsIFl1bnVzIEJhcyB3
+cm90ZToKPiA+IFRoZSBQRUItQVYtMDIgZXhwYW5zaW9uIGFkYXB0ZXIgZXh0ZW5kcyB0aGUgcGh5
+Qk9BUkQtTWlyYSBib2FyZHMgdG8KPiA+IGNvbm5lY3QgcGFyYWxsZWwgTENEIGRpc3BsYXlzLCBl
+aXRoZXIgd2l0aCBjYXBhY2l0aXZlIG9yIHJlc2lzdGl2ZQo+ID4gdG91Y2guCj4gPiAKPiA+IFNp
+Z25lZC1vZmYtYnk6IFl1bnVzIEJhcyA8eS5iYXNAcGh5dGVjLmRlPgo+ID4gLS0tCj4gPiDCoC4u
+Li9ib290L2R0cy9pbXg2ZGwtcGh5dGVjLW1pcmEtcmRrLW5hbmQuZHRzwqAgfMKgwqAgMSArCj4g
+PiDCoC4uLi9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWlyYS1yZGstZW1tYy5kdHPCoMKgIHzCoMKg
+IDEgKwo+ID4gwqAuLi4vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEtcmRrLW5hbmQuZHRzwqDC
+oCB8wqDCoCAxICsKPiA+IMKgLi4uL2R0cy9pbXg2cWRsLXBoeXRlYy1taXJhLXBlYi1hdi0wMi5k
+dHNpwqDCoMKgIHwgMTIyCj4gPiArKysrKysrKysrKysrKysrKysKPiA+IMKgLi4uL2Jvb3QvZHRz
+L2lteDZxcC1waHl0ZWMtbWlyYS1yZGstbmFuZC5kdHPCoCB8wqDCoCAxICsKPiA+IMKgNSBmaWxl
+cyBjaGFuZ2VkLCAxMjYgaW5zZXJ0aW9ucygrKQo+ID4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgYXJj
+aC9hcm0vYm9vdC9kdHMvaW14NnFkbC1waHl0ZWMtbWlyYS1wZWItYXYtCj4gPiAwMi5kdHNpCj4g
+PiAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9pbXg2ZGwtcGh5dGVjLW1pcmEt
+cmRrLW5hbmQuZHRzCj4gPiBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZkbC1waHl0ZWMtbWlyYS1y
+ZGstbmFuZC5kdHMKPiA+IGluZGV4IGIwNTdmYTY2NGE2Yi4uODE2NWZhZTJiMWQxIDEwMDY0NAo+
+ID4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NmRsLXBoeXRlYy1taXJhLXJkay1uYW5kLmR0
+cwo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NmRsLXBoeXRlYy1taXJhLXJkay1uYW5k
+LmR0cwo+ID4gQEAgLTksNiArOSw3IEBACj4gPiDCoCNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1w
+aHljb3JlLXNvbS5kdHNpIgo+ID4gwqAjaW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS5kdHNp
+Igo+ID4gwqAjaW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS1wZWItZXZhbC0wMS5kdHNpIgo+
+ID4gKyNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1taXJhLXBlYi1hdi0wMi5kdHNpIgo+ID4gwqAK
+PiA+IMKgLyB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgbW9kZWwgPSAiUEhZVEVDIHBoeUJPQVJELU1p
+cmEgRHVhbExpdGUvU29sbyBDYXJyaWVyLUJvYXJkCj4gPiB3aXRoIE5BTkQiOwo+ID4gZGlmZiAt
+LWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxLXBoeXRlYy1taXJhLXJkay1lbW1jLmR0cwo+
+ID4gYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWlyYS1yZGstZW1tYy5kdHMKPiA+
+IGluZGV4IGRiNmUyY2MzNjc1OS4uYmJmNTA5N2NhOTc0IDEwMDY0NAo+ID4gLS0tIGEvYXJjaC9h
+cm0vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEtcmRrLWVtbWMuZHRzCj4gPiArKysgYi9hcmNo
+L2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWlyYS1yZGstZW1tYy5kdHMKPiA+IEBAIC05LDYg
+KzksNyBAQAo+ID4gwqAjaW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtcGh5Y29yZS1zb20uZHRzaSIK
+PiA+IMKgI2luY2x1ZGUgImlteDZxZGwtcGh5dGVjLW1pcmEuZHRzaSIKPiA+IMKgI2luY2x1ZGUg
+ImlteDZxZGwtcGh5dGVjLW1pcmEtcGViLWV2YWwtMDEuZHRzaSIKPiA+ICsjaW5jbHVkZSAiaW14
+NnFkbC1waHl0ZWMtbWlyYS1wZWItYXYtMDIuZHRzaSIKPiA+IMKgCj4gPiDCoC8gewo+ID4gwqDC
+oMKgwqDCoMKgwqDCoG1vZGVsID0gIlBIWVRFQyBwaHlCT0FSRC1NaXJhIFF1YWQgQ2Fycmllci1C
+b2FyZCB3aXRoCj4gPiBlTU1DIjsKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9p
+bXg2cS1waHl0ZWMtbWlyYS1yZGstbmFuZC5kdHMKPiA+IGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14
+NnEtcGh5dGVjLW1pcmEtcmRrLW5hbmQuZHRzCj4gPiBpbmRleCA1MWZmNjAxYjFhZWMuLjk1MDUx
+ZTE4MzI0ZiAxMDA2NDQKPiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxLXBoeXRlYy1t
+aXJhLXJkay1uYW5kLmR0cwo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGh5dGVj
+LW1pcmEtcmRrLW5hbmQuZHRzCj4gPiBAQCAtOSw2ICs5LDcgQEAKPiA+IMKgI2luY2x1ZGUgImlt
+eDZxZGwtcGh5dGVjLXBoeWNvcmUtc29tLmR0c2kiCj4gPiDCoCNpbmNsdWRlICJpbXg2cWRsLXBo
+eXRlYy1taXJhLmR0c2kiCj4gPiDCoCNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1taXJhLXBlYi1l
+dmFsLTAxLmR0c2kiCj4gPiArI2luY2x1ZGUgImlteDZxZGwtcGh5dGVjLW1pcmEtcGViLWF2LTAy
+LmR0c2kiCj4gPiDCoAo+ID4gwqAvIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBtb2RlbCA9ICJQSFlU
+RUMgcGh5Qk9BUkQtTWlyYSBRdWFkIENhcnJpZXItQm9hcmQgd2l0aAo+ID4gTkFORCI7Cj4gPiBk
+aWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC1waHl0ZWMtbWlyYS1wZWItYXYt
+MDIuZHRzaQo+ID4gYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLXBoeXRlYy1taXJhLXBlYi1h
+di0wMi5kdHNpCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMDAw
+Li42NzFlODAyNGNiYTUKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL2FyY2gvYXJtL2Jvb3Qv
+ZHRzL2lteDZxZGwtcGh5dGVjLW1pcmEtcGViLWF2LTAyLmR0c2kKPiA+IEBAIC0wLDAgKzEsMTIy
+IEBACj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wKyBPUiBNSVQpCj4g
+PiArLyoKPiA+ICsgKiBDb3B5cmlnaHQgKEMpIDIwMTggUEhZVEVDIE1lc3N0ZWNobmlrCj4gPiAr
+ICogQXV0aG9yOiBDaHJpc3RpYW4gSGVtcCA8Yy5oZW1wQHBoeXRlYy5kZT4KPiA+ICsgKi8KPiA+
+ICsKPiA+ICsvIHsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGRpc3BsYXk6IGRpc3BsYXlAZGkw
+IHsKPiAKPiBkaTAgYmVpbmcgdW5pdC1hZGRyZXNzPwoKSW4gdGhpcyBjYXNlIGl0J3Mgbm90IGEg
+dW5pdC1hZGRyZXNzLiBJdCdzIGEgcGFydCBvZiB0aGUgbm9kZSBuYW1lLiBCdXQKSSBjYW4gdW5k
+ZXJzdGFuZCB0aGF0IHRoaXMgaXMgY29uZnVzaW5nLiBJJ20gZ29pbmcgdG8gcmVtb3ZlIHRoZSBs
+ZXNzZXIKcGFydC4KCj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI2FkZHJl
+c3MtY2VsbHMgPSA8MT47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI3NpemUt
+Y2VsbHMgPSA8MD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0aWJs
+ZSA9ICJmc2wsaW14LXBhcmFsbGVsLWRpc3BsYXkiOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoHBpbmN0cmwtbmFtZXMgPSAiZGVmYXVsdCI7Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcGluY3RybC0wID0gPCZwaW5jdHJsX2Rpc3AwPjsKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlcmZhY2UtcGl4LWZtdCA9ICJyZ2IyNCI7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RhdHVzID0gImRpc2FibGVkIjsKPiA+ICsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwb3J0QDAgewo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZWcgPSA8MD47Cj4gPiArCj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRpc3BsYXkw
+X2luOiBlbmRwb2ludCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZW1vdGUtZW5kcG9pbnQgPQo+ID4gPCZpcHUxX2Rp
+MF9kaXNwMD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoH07Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICsKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwb3J0QDEgewo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZWcgPSA8MT47Cj4gPiArCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRpc3BsYXkwX291dDog
+ZW5kcG9pbnQgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVtb3RlLWVuZHBvaW50ID0KPiA+IDwmcGViX3BhbmVsX2xj
+ZF9pbj47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oH07Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICvCoMKgwqDCoMKg
+wqDCoH07Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBwYW5lbC1sY2Qgewo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbXBhdGlibGUgPSAiZWR0LGV0bTA3MDBnMGVkaDYiOwo+
+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBpbmN0cmwtbmFtZXMgPSAiZGVmYXVs
+dCI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGluY3RybC0wID0gPCZwaW5j
+dHJsX2Rpc3AwX3B3cj47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcG93ZXIt
+c3VwcGx5ID0gPCZyZWdfZGlzcGxheT47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgZW5hYmxlLWdwaW9zID0gPCZncGlvMyAyMiBHUElPX0FDVElWRV9ISUdIPjsKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBiYWNrbGlnaHQgPSA8JmJhY2tsaWdodD47Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RhdHVzID0gImRpc2FibGVkIjsKPiA+ICsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwb3J0IHsKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGViX3BhbmVsX2xjZF9pbjogZW5k
+cG9pbnQgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgcmVtb3RlLWVuZHBvaW50ID0gPCZkaXNwbGF5MF9vdXQ+Owo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Owo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiArwqDCoMKgwqDCoMKgwqB9Owo+ID4g
+Kwo+ID4gK8KgwqDCoMKgwqDCoMKgcmVnX2Rpc3BsYXk6IHJlZ3VsYXRvci1wZWItZGlzcGxheSB7
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0aWJsZSA9ICJyZWd1bGF0
+b3ItZml4ZWQiOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZ3VsYXRvci1u
+YW1lID0gInBlYi1kaXNwbGF5IjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBy
+ZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwzMzAwMDAwPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqByZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMzAwMDAwPjsKPiA+ICvC
+oMKgwqDCoMKgwqDCoH07Cj4gPiArfTsKPiA+ICsKPiA+ICsmaTJjMSB7Cj4gPiArwqDCoMKgwqDC
+oMKgwqBlZHRfZnQ1eDA2OiB0b3VjaHNjcmVlbkAzOCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgY29tcGF0aWJsZSA9ICJlZHQsZWR0LWZ0NTQwNiIsICJlZHQsZWR0LWZ0NXgw
+NiI7Cj4gCj4gRGlkIHlvdSBydW4gbWFrZSBkdGJzX2NoZWNrIGFnYWluc3QgYmluZGluZ3M/Cj4g
+Cj4gwqBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaW5wdXQvdG91Y2hzY3JlZW4v
+ZWR0LWZ0NXgwNi55YW1sCj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGlu
+Y3RybC1uYW1lcyA9ICJkZWZhdWx0IjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBwaW5jdHJsLTAgPSA8JnBpbmN0cmxfZWR0X2Z0NXgwNj47Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcmVnID0gPDB4Mzg+Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGludGVycnVwdC1wYXJlbnQgPSA8JmdwaW8zPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBpbnRlcnJ1cHRzID0gPDIgSVJRX1RZUEVfTk9ORT47Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RhdHVzID0gImRpc2FibGVkIjsKPiA+ICvCoMKgwqDC
+oMKgwqDCoCB9Owo+ID4gK307Cj4gPiArCj4gPiArJmlwdTFfZGkwX2Rpc3AwIHsKPiA+ICvCoMKg
+wqDCoMKgwqDCoHJlbW90ZS1lbmRwb2ludCA9IDwmZGlzcGxheTBfaW4+Owo+ID4gK307Cj4gPiAr
+Cj4gPiArJmlvbXV4YyB7Cj4gPiArwqDCoMKgwqDCoMKgwqBwaW5jdHJsX2Rpc3AwOiBkaXNwMGdy
+cCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnNsLHBpbnMgPSA8Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURf
+REkwX0RJU1BfQ0xLX19JUFUxX0RJMF9ESVNQX0NMS8KgCj4gPiDCoMKgwqDCoMKgMHgxMAo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBNWDZRRExfUEFE
+X0RJMF9QSU4yX19JUFUxX0RJMF9QSU4wMsKgwqDCoMKgwqDCoMKgwqAKPiA+IMKgwqDCoMKgwqAw
+eDEwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1Y
+NlFETF9QQURfREkwX1BJTjNfX0lQVTFfREkwX1BJTjAzwqDCoMKgwqDCoMKgwqDCoAo+ID4gwqDC
+oMKgwqDCoDB4MTAKPiA+ICsKPiAKPiBEcm9wIHRoZSBuZXdsaW5lLgo+IAo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBNWDZRRExfUEFEX0RJMF9QSU4x
+NV9fSVBVMV9ESTBfUElOMTXCoMKgwqDCoMKgwqDCoAo+ID4gwqDCoMKgwqDCoDB4MWIwODAKPiA+
+ICsKPiAKPiBEaXR0bwo+IAo+IFNoYXduCj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUMF9fSVBVMV9ESVNQMF9E
+QVRBMDDCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUMV9fSVBVMV9ESVNQ
+MF9EQVRBMDHCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUMl9fSVBVMV9E
+SVNQMF9EQVRBMDLCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUM19fSVBV
+MV9ESVNQMF9EQVRBMDPCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUNF9f
+SVBVMV9ESVNQMF9EQVRBMDTCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFU
+NV9fSVBVMV9ESVNQMF9EQVRBMDXCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBf
+REFUNl9fSVBVMV9ESVNQMF9EQVRBMDbCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElT
+UDBfREFUN19fSVBVMV9ESVNQMF9EQVRBMDfCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURf
+RElTUDBfREFUOF9fSVBVMV9ESVNQMF9EQVRBMDjCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9Q
+QURfRElTUDBfREFUOV9fSVBVMV9ESVNQMF9EQVRBMDnCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDEw
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFE
+TF9QQURfRElTUDBfREFUMTBfX0lQVTFfRElTUDBfREFUQTEwwqDCoAo+ID4gwqDCoMKgwqDCoDB4
+MTAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgTVg2
+UURMX1BBRF9ESVNQMF9EQVQxMV9fSVBVMV9ESVNQMF9EQVRBMTHCoMKgCj4gPiDCoMKgwqDCoMKg
+MHgxMAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBN
+WDZRRExfUEFEX0RJU1AwX0RBVDEyX19JUFUxX0RJU1AwX0RBVEExMsKgwqAKPiA+IMKgwqDCoMKg
+wqAweDEwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oE1YNlFETF9QQURfRElTUDBfREFUMTNfX0lQVTFfRElTUDBfREFUQTEzwqDCoAo+ID4gwqDCoMKg
+wqDCoDB4MTAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgTVg2UURMX1BBRF9ESVNQMF9EQVQxNF9fSVBVMV9ESVNQMF9EQVRBMTTCoMKgCj4gPiDCoMKg
+wqDCoMKgMHgxMAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBNWDZRRExfUEFEX0RJU1AwX0RBVDE1X19JUFUxX0RJU1AwX0RBVEExNcKgwqAKPiA+IMKg
+wqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUMTZfX0lQVTFfRElTUDBfREFUQTE2wqDCoAo+ID4g
+wqDCoMKgwqDCoDB4MTAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgTVg2UURMX1BBRF9ESVNQMF9EQVQxN19fSVBVMV9ESVNQMF9EQVRBMTfCoMKgCj4g
+PiDCoMKgwqDCoMKgMHgxMAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBNWDZRRExfUEFEX0RJU1AwX0RBVDE4X19JUFUxX0RJU1AwX0RBVEExOMKgwqAK
+PiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUMTlfX0lQVTFfRElTUDBfREFUQTE5wqDC
+oAo+ID4gwqDCoMKgwqDCoDB4MTAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgTVg2UURMX1BBRF9ESVNQMF9EQVQyMF9fSVBVMV9ESVNQMF9EQVRBMjDC
+oMKgCj4gPiDCoMKgwqDCoMKgMHgxMAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBNWDZRRExfUEFEX0RJU1AwX0RBVDIxX19JUFUxX0RJU1AwX0RBVEEy
+McKgwqAKPiA+IMKgwqDCoMKgwqAweDEwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRElTUDBfREFUMjJfX0lQVTFfRElTUDBfREFU
+QTIywqDCoAo+ID4gwqDCoMKgwqDCoDB4MTAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgTVg2UURMX1BBRF9ESVNQMF9EQVQyM19fSVBVMV9ESVNQMF9E
+QVRBMjPCoMKgCj4gPiDCoMKgwqDCoMKgMHgxMAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoD47Cj4gPiArwqDCoMKgwqDCoMKgwqB9Owo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKg
+cGluY3RybF9kaXNwMF9wd3I6IGRpc3AwcHdyZ3JwIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqBmc2wscGlucyA9IDwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgTVg2UURMX1BBRF9FSU1fRDIyX19HUElPM19JTzIywqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAKPiA+IMKgwqDCoMKgwqAweDFiMGIwCj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgPjsKPiA+ICvCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDC
+oMKgwqDCoMKgwqBwaW5jdHJsX2VkdF9mdDV4MDY6IGVkdGZ0NXgwNmdycCB7Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnNsLHBpbnMgPSA8Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFETF9QQURfRUlNX0RBMl9fR1BJTzNf
+SU8wMsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiDCoMKgwqDCoMKgMHhiMGIxCj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgPjsKPiA+ICvCoMKgwqDCoMKgwqDCoH07Cj4g
+PiArfTsKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9pbXg2cXAtcGh5dGVjLW1p
+cmEtcmRrLW5hbmQuZHRzCj4gPiBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxcC1waHl0ZWMtbWly
+YS1yZGstbmFuZC5kdHMKPiA+IGluZGV4IDA2ZmUwYzUzMTVmYy4uMzQzNjM5Y2IwMzVjIDEwMDY0
+NAo+ID4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFwLXBoeXRlYy1taXJhLXJkay1uYW5k
+LmR0cwo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFwLXBoeXRlYy1taXJhLXJkay1u
+YW5kLmR0cwo+ID4gQEAgLTksNiArOSw3IEBACj4gPiDCoCNpbmNsdWRlICJpbXg2cWRsLXBoeXRl
+Yy1waHljb3JlLXNvbS5kdHNpIgo+ID4gwqAjaW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS5k
+dHNpIgo+ID4gwqAjaW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS1wZWItZXZhbC0wMS5kdHNp
+Igo+ID4gKyNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1taXJhLXBlYi1hdi0wMi5kdHNpIgo+ID4g
+wqAKPiA+IMKgLyB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgbW9kZWwgPSAiUEhZVEVDIHBoeUJPQVJE
+LU1pcmEgUXVhZFBsdXMgQ2Fycmllci1Cb2FyZCB3aXRoCj4gPiBOQU5EIjsKPiA+IC0tIAo+ID4g
+Mi4yNS4xCj4gPiAKCg==

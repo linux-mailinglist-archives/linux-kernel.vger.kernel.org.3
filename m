@@ -2,79 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BCD4728E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8F34727B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbhLMKQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:16:19 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:59316 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232051AbhLMJ6G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:58:06 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxXN0lGbdhlAIAAA--.85S4;
-        Mon, 13 Dec 2021 17:58:00 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jason Self <jason@bluehome.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] MIPS: Makefile: Remove "ifdef need-compiler" for Kbuild.platforms
-Date:   Mon, 13 Dec 2021 17:57:57 +0800
-Message-Id: <1639389477-17586-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1639389477-17586-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1639389477-17586-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9BxXN0lGbdhlAIAAA--.85S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFWkXF4UJF13Zr18Zw47urg_yoW3trX_K3
-        9Fk3W0kw1rXrn3W3y2qw45Wryqy398Crn5CwnxXrnxXa45ta1kGFWkta48JF4rXF4v9r4r
-        tFyfZFnrCr92gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-xFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-        AFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-        0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
-        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJbIYCTnIWIevJa73UjIFyTuYvjfUe1v3UUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S238655AbhLMKEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:04:34 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:40906 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237211AbhLMJ7I (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 04:59:08 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E97C212B5;
+        Mon, 13 Dec 2021 09:59:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639389546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FgFiLzjgbXLZxTBe4GEz5aIIqbjYxRyytqqqX3mrDuE=;
+        b=ZK9OuRFsw7ZuOWNC41adF8WxDztCAH4n/XqZRkfySE7WDRHZbdeLxgui1+bBRo/U3MjCWs
+        c8o6/9UTEFK9gQcwMJbZE4CVWESxg/rA8qqCysBwLmgIxsB0xc1LATPUaNZbhlFuBhkjB7
+        fCKwtzpfMAcpjPwL6Zopao5kxSS8vR8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639389546;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FgFiLzjgbXLZxTBe4GEz5aIIqbjYxRyytqqqX3mrDuE=;
+        b=15MXXOfulmPEK8kcXwxrFsBqD0ENkARPnbaOAOtgPszH8LdEu1/Hy0pb9pwVVcBDlyTmJM
+        ump/CoWRrgcopPBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF6E213BB2;
+        Mon, 13 Dec 2021 09:59:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3OliOWkZt2GwMQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 13 Dec 2021 09:59:05 +0000
+Message-ID: <c1006921-19b4-4cd4-2522-4d83af575ff7@suse.de>
+Date:   Mon, 13 Dec 2021 10:59:05 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/ast: potential dereference of null pointer
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, airlied@redhat.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------vgdy448xJ8wWkFJTMzeIyPCX"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 13ceb48bc19c ("MIPS: Loongson2ef: Remove unnecessary
-{as,cc}-option calls"), no need to use "ifdef need-compiler" for
-Kbuild.platforms, because the cause of the build issue mentioned
-in commit 0706f74f719e ("MIPS: fix *-pkg builds for loongson2ef
-platform") has been disappeared, so just remove it.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------vgdy448xJ8wWkFJTMzeIyPCX
+Content-Type: multipart/mixed; boundary="------------SLQLno00Mmt0cNjfmolt8nGu";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Jiasheng Jiang <jiasheng@iscas.ac.cn>, airlied@redhat.com,
+ airlied@linux.ie, daniel@ffwll.ch
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-ID: <c1006921-19b4-4cd4-2522-4d83af575ff7@suse.de>
+Subject: Re: [PATCH] drm/ast: potential dereference of null pointer
+References: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/Makefile | 2 --
- 1 file changed, 2 deletions(-)
+--------------SLQLno00Mmt0cNjfmolt8nGu
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index ace7f03..e036fc0 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -253,9 +253,7 @@ endif
- #
- # Board-dependent options and extra files
- #
--ifdef need-compiler
- include $(srctree)/arch/mips/Kbuild.platforms
--endif
- 
- ifdef CONFIG_PHYSICAL_START
- load-y					= $(CONFIG_PHYSICAL_START)
--- 
-2.1.0
+SGksDQoNCnRoYW5rcyBmb3IgdGhlIHBhdGNoLg0KDQpBbSAxMy4xMi4yMSB1bSAwNjozOSBz
+Y2hyaWViIEppYXNoZW5nIEppYW5nOg0KPiBoZSByZXR1cm4gdmFsdWUgb2Yga3phbGxvYygp
+IG5lZWRzIHRvIGJlIGNoZWNrZWQuDQoNCidUaGUnDQoNCj4gVG8gYXZvaWQgdXNlIG9mIG51
+bGwgcG9pbnRlciAnJmFzdF9zdGF0ZS0+YmFzZScgaW4gY2FzZSBvZiB0aGUNCj4gZmFpbHVy
+ZSBvZiBhbGxvYy4NCj4gDQo+IEZpeGVzOiBmMGFkYmMzODJiOGIgKCJkcm0vYXN0OiBBbGxv
+Y2F0ZSBpbml0aWFsIENSVEMgc3RhdGUgb2YgdGhlIGNvcnJlY3Qgc2l6ZSIpDQo+IFNpZ25l
+ZC1vZmYtYnk6IEppYXNoZW5nIEppYW5nIDxqaWFzaGVuZ0Bpc2Nhcy5hYy5jbj4NCj4gLS0t
+DQo+ICAgZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jIHwgMyArKy0NCj4gICAxIGZp
+bGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jIGIvZHJpdmVycy9ncHUv
+ZHJtL2FzdC9hc3RfbW9kZS5jDQo+IGluZGV4IDM2ZDk1NzVhYTI3Yi4uNjdmOGUzZjkwZWEy
+IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMNCj4gKysr
+IGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+IEBAIC0xMTIwLDcgKzExMjAs
+OCBAQCBzdGF0aWMgdm9pZCBhc3RfY3J0Y19yZXNldChzdHJ1Y3QgZHJtX2NydGMgKmNydGMp
+DQo+ICAgCWlmIChjcnRjLT5zdGF0ZSkNCj4gICAJCWNydGMtPmZ1bmNzLT5hdG9taWNfZGVz
+dHJveV9zdGF0ZShjcnRjLCBjcnRjLT5zdGF0ZSk7DQo+ICAgDQo+IC0JX19kcm1fYXRvbWlj
+X2hlbHBlcl9jcnRjX3Jlc2V0KGNydGMsICZhc3Rfc3RhdGUtPmJhc2UpOw0KPiArCWlmIChh
+c3Rfc3RhdGUpDQo+ICsJCV9fZHJtX2F0b21pY19oZWxwZXJfY3J0Y19yZXNldChjcnRjLCAm
+YXN0X3N0YXRlLT5iYXNlKTsNCg0KSWYgYXN0X3N0YXRlIGlzIE5VTEwsIF9fZHJtX2F0b21p
+Y19oZWxwZXJfY3J0Y19yZXNldCgpIGhhcyB0byBiZSBjYWxsZWQgDQp3aXRoIGEgc3RhdGUg
+b2YgTlVMTC4gT3RoZXJ3aXNlIHRoZSByZXNldCBtaWdodCBsZWF2ZSB0aGUgZGFuZ2xpbmcg
+DQpwb2ludGVyIGluIHRoZSBDUlRDJ3Mgc3RhdGUgZmllbGQuDQoNCkJlc3QgcmVnYXJkcw0K
+VGhvbWFzDQoNCj4gICB9DQo+ICAgDQo+ICAgc3RhdGljIHN0cnVjdCBkcm1fY3J0Y19zdGF0
+ZSAqDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
+ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
+dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
+ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
+--------------SLQLno00Mmt0cNjfmolt8nGu--
+
+--------------vgdy448xJ8wWkFJTMzeIyPCX
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG3GWkFAwAAAAAACgkQlh/E3EQov+De
+zxAAnQjDWB6NElK8HofBKdqK3FhOM7r+wyTdOpOrW3w6wvpy4PGLaRIV6/rsW4OIno0fMYKeFvsr
+tXUllbM2fEj2RS0trzrmBINwC6jTPRHEgKgYFDOk1T98y+yJ3giSH+7l6pLrNSuE5ZKv4Bs2yBFA
+G6NOnwiaImByy23+Te2c1ZI0y1rwh2QtB+HvEVyEATJI0553ELdyWORKg6PvjccRiptwLzfC8W54
+Qo/UixE9aGCl/4zu518fpe7dYtPHdFCXihRlXd9Ok5x2Jb9+cNXH3B+zACGNWF/hugHCAQfmCLg3
+Go6nJWlISYp+L4Toil+b6VsP1t1TGpvDt/CFui8kcutOZOFPXuomyOmufsLVclSWgHPKVOc0Evcx
+wZzVDTKR4lySoTQJ3mmLscBN1gNUKdI3/wtBDLaid5i+8MgAPXABgx8sELILeKrn/K4fDeRBNOru
+sdnUFc8s8vrVswKW8FFp+OJ0zld0mZsk5bm28YC1ZwM92dta+ZNPLezafq1N21z4ALCj6uXBds1O
+RK4Sda3fib5bFAQMe2cbPznGQJiudm8Yy/61hzvLLN4T0FgU/f8TSO0d8NJPxGj0o0OOgmnPJsDd
+92+i/rARU/aOkO6xBnDDK1Q+IYMwxaENE1RqlbHOnLq+Uwrl2H29wM9hdX56sEdm+3ncOP69DZiF
+Aeo=
+=msep
+-----END PGP SIGNATURE-----
+
+--------------vgdy448xJ8wWkFJTMzeIyPCX--

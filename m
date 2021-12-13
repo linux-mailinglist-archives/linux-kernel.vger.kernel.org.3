@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FA4472397
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1BA472393
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbhLMJQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:16:26 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4251 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233539AbhLMJQZ (ORCPT
+        id S233619AbhLMJQO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Dec 2021 04:16:14 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:60519 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231224AbhLMJQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:16:25 -0500
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JCG781HrNz67v1F;
-        Mon, 13 Dec 2021 17:15:00 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 10:16:23 +0100
-Received: from [10.47.83.94] (10.47.83.94) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 13 Dec
- 2021 09:16:22 +0000
-Subject: Re: [PATCH v2] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <Viswas.G@microchip.com>, <Ajish.Koshy@microchip.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1639158706-18446-1-git-send-email-john.garry@huawei.com>
- <5d1b0c7c-90c6-8aba-3153-29df6eac865d@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <63cc50a5-b7ce-5930-68f1-039a71178b48@huawei.com>
-Date:   Mon, 13 Dec 2021 09:16:02 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Mon, 13 Dec 2021 04:16:12 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 3E44E200003;
+        Mon, 13 Dec 2021 09:16:10 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 10:16:09 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     cgel.zte@gmail.com
+Cc:     han.xu@nxp.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH nand-next] mtd/nand:remove unneeded variable
+Message-ID: <20211213101519.25f4e2e1@xps13>
+In-Reply-To: <20211210021822.423833-1-chi.minghao@zte.com.cn>
+References: <20211210021822.423833-1-chi.minghao@zte.com.cn>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <5d1b0c7c-90c6-8aba-3153-29df6eac865d@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.94]
-X-ClientProxiedBy: lhreml701-chm.china.huawei.com (10.201.108.50) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/2021 00:26, Damien Le Moal wrote:
->> ss
->> @@ -4320,20 +4324,20 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
->>   		pm8001_dbg(pm8001_ha, IO, "SMP REQUEST DIRECT MODE\n");
->>   		for (i = 0; i < length; i++)
->>   			if (i < 16) {
->> -				smp_cmd.smp_req16[i] = *(preq_dma_addr+i);
->> +				smp_cmd.smp_req16[i] = *(payload+i);
-> Maybe add spacs around the "+" as you did above ?
+Hello,
 
-Yeah, right. I noticed now that only strict mode of checkpatch picks up 
-on this.
+cgel.zte@gmail.com wrote on Fri, 10 Dec 2021 02:18:22 +0000:
+
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Return status directly from function called.
+
+The subject prefix should be "mtd: rawnand: gpmi: "
 
 > 
->>   				pm8001_dbg(pm8001_ha, IO,
->>   					   "Byte[%d]:%x (DMA data:%x)\n",
->>   					   i, smp_cmd.smp_req16[i],
+> Reported-by: Zeal Robot <zealci@zte.com.cm>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> index 10cc71829dcb..ab9d1099bafa 100644
+> --- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> +++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+> @@ -1425,7 +1425,6 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
+>  	struct mtd_info *mtd = nand_to_mtd(chip);
+>  	struct gpmi_nand_data *this = nand_get_controller_data(chip);
+>  	struct bch_geometry *nfc_geo = &this->bch_geometry;
+> -	int ret;
+>  
+>  	dev_dbg(this->dev, "ecc write page.\n");
+>  
+> @@ -1445,9 +1444,7 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
+>  				    this->auxiliary_virt);
+>  	}
+>  
+> -	ret = nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
+> -
+> -	return ret;
+> +	return nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
+>  }
+>  
+>  /*
 
-...
 
->>   	}
->> -
->> +	kunmap_atomic(to);
->>   	build_smp_cmd(pm8001_dev->device_id, smp_cmd.tag,
->>   				&smp_cmd, pm8001_ha->smp_exp_mode, length);
->>   	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &smp_cmd,
-> Otherwise, looks OK to me.
-
-cheers
+Thanks,
+Miquèl

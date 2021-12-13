@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5400472285
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFA347228A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbhLMI1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S231616AbhLMI1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbhLMI1N (ORCPT
+        with ESMTP id S231521AbhLMI1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:27:13 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B057C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:13 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id y13so48936299edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:13 -0800 (PST)
+        Mon, 13 Dec 2021 03:27:15 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150CBC061748
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:14 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id r25so48908243edq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cDtUj/hlSiO5g1FDUhurbeKUU4tNZcuIesr1T0TKlmc=;
-        b=JKOAHe8dnpkJ+TQT5DUqrc58eXknAEVGELeBHJ/rxL00PXNiwSzVa9h9GvHAYUTF49
-         bRyiRu6vfvaAQgbyzP4izYuA8ktOFudGnHGQi2DVZ6f/Ovnh2A5LOhwo7WgQSOIlPZjX
-         B7e1CoewgPSIauAhJHo9BtEIgHuxVQeKY+MmgsL86+AlLfk67MVSNQyPTe1K51YmNpa2
-         emQY1aEd0W6tsi1wZXQuHoqPZigOTFurJoeJ3/R2+m6gWooxdLnsld2kaYRp7Cdl5Rdw
-         yPCYxnvVo9Wi7OIhs8LqE3yI+EFkSwa9REgXkqKDgM4ztv9qQ/Qm0tWchpYL8qTHKwpF
-         h6CQ==
+        bh=nx2k/Z7zXaHDEmILWiW6Gfo7Sovd555lCUGQrDZv1B4=;
+        b=GRizKnCZzX4XIZWXwe1fB83XbndD7/QihySjOEbyZNuabUOz8HGjbO+wfgwY0T16MV
+         UR7gF8NbIMN04a8DE+abCipUbDfVk+cvGE3tCAmJYcDR2AUFdhJwF+la0FSUzwpMdfQ1
+         cExq2O1ZjjpDvVp1K+KBAHwpFiXJPqlXlp2n7C65pA6PbteyusrOQVWqfouq5tB1eavk
+         j9E0KbXJBWuunFZ7gs8KRq+8ycrVk0WjDQ54nMPjcdblsxlSrq+WrBffeCIjwVAsXyQR
+         vjgTLQKqc3LUVO8DdXKmHB3HmWUTcba1umhWqCN8PWs5p07eQVxamcRNPXH+V2ahe82/
+         xf8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cDtUj/hlSiO5g1FDUhurbeKUU4tNZcuIesr1T0TKlmc=;
-        b=0lVTooEyedoQDxNMxUgeSDXSKoHAo3TOpzA08mIj+ZnA+K6iDAfE8zXh8Y6BWdqg8C
-         ZcTkNlXdiKcz6YjlZ8rbCxTS36rwnIK0JSQMBq1a63+0InP8jDHCjPsZW2F0E0HbLGi3
-         GQgipoO86DzC5FkbQhErNQD6i+PMCmYGN5rzDH6F9CwX1kD417ZDHZmm1vUiNgOWXwq5
-         qHz4Je5VlR2YA0IIcM0jSz/eloV9kvNbpIBJ3etGfI+6e3bM9Sff+xKkozKI48xlETqF
-         CqowuorSr2x+Ypef/ZybXiqSSlOjztmHdTHH9yrYXgtE86mp1oCr+DQXncZ/Byj896fu
-         4iOQ==
-X-Gm-Message-State: AOAM531qNPoq7YeoQqGHsj6xicEpAn9dLtAEZNgZpl2E+zEW4LsI6bWg
-        yqxDRc46RbVSkUPsYX//+PUuCA==
-X-Google-Smtp-Source: ABdhPJw5onQbiuMOz/yLVf54mM8clTCXpShvsuZoDLU01mffQrGmnABnLtacCGAMfHCbMBCbL4J5EQ==
-X-Received: by 2002:a05:6402:1450:: with SMTP id d16mr62634702edx.144.1639384032013;
+        bh=nx2k/Z7zXaHDEmILWiW6Gfo7Sovd555lCUGQrDZv1B4=;
+        b=jiM7fG1+GYk1yAmEMB7kU3b9B+VrHu6P1pmw4pEg/wYis5SBHc/i66GYlboBJxgCyU
+         KV8fjyYq5t37bGkIYAnD8xRNeOq8bU4S0qdNW0Zvs7xZadwmhZjuwUKlIKcTklYG91VI
+         2N23VrPIx9cr1TSOZXVIQ2+sYU2J8uGYWIpVB5eDk7WNwT4I0IFH/DRUJiPPamlNejuG
+         gvIiLFNK2zDciypkOGKS0n6XxET9CpvDkUUy87WCVwiI3SyZntbz0NG2tDfbphx8oVv8
+         yyA+PlnMn194VpJr6GnB8h0/uF+DvNqZSoHtmPZ8vDIlQj/pJQ4Mk3AU8X5WyVuq/Vie
+         qLcw==
+X-Gm-Message-State: AOAM532vXPNqG1yILTC3ihiwnlZeRGgQRXr12XHWGJv5PemxpDRxch39
+        DWq3DTX9Od0syj0UzgzkniIs6qYPeGgID7p7VVw=
+X-Google-Smtp-Source: ABdhPJwc8O3GyxL3m5uw07gi57MsjGEjsBsmLY/+KmZbUmFN/YdDjU9HlK6mY71lXx8b9isj79j5RA==
+X-Received: by 2002:aa7:dad5:: with SMTP id x21mr61383134eds.280.1639384032749;
         Mon, 13 Dec 2021 00:27:12 -0800 (PST)
 Received: from localhost.localdomain ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
-        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.11
+        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 00:27:11 -0800 (PST)
+        Mon, 13 Dec 2021 00:27:12 -0800 (PST)
 From:   Luca Weiss <luca.weiss@fairphone.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Rob Herring <robh@kernel.org>,
         Luca Weiss <luca.weiss@fairphone.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 01/10] dt-bindings: arm: msm: Add LLCC for SM6350
-Date:   Mon, 13 Dec 2021 09:26:02 +0100
-Message-Id: <20211213082614.22651-2-luca.weiss@fairphone.com>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 02/10] dt-bindings: firmware: scm: Add SM6350 compatible
+Date:   Mon, 13 Dec 2021 09:26:03 +0100
+Message-Id: <20211213082614.22651-3-luca.weiss@fairphone.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213082614.22651-1-luca.weiss@fairphone.com>
 References: <20211213082614.22651-1-luca.weiss@fairphone.com>
@@ -75,33 +68,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+Add devicetree compatible for SCM on SM6350 SoC.
 
-Add LLCC compatible for SM6350 SoC.
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
-Please note, that this patch is a resend that wasn't picked up when
-sent to the lists in August 2021.
-
- Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml | 1 +
+ Documentation/devicetree/bindings/firmware/qcom,scm.txt | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-index 62fcbd883392..e12fc7999356 100644
---- a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-@@ -24,6 +24,7 @@ properties:
-       - qcom,sc7180-llcc
-       - qcom,sc7280-llcc
-       - qcom,sdm845-llcc
-+      - qcom,sm6350-llcc
-       - qcom,sm8150-llcc
-       - qcom,sm8250-llcc
- 
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.txt b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+index d7e3cda8924e..1fc14f64e318 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.txt
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+@@ -26,6 +26,7 @@ Required properties:
+  * "qcom,scm-sc7280"
+  * "qcom,scm-sdm845"
+  * "qcom,scm-sdx55"
++ * "qcom,scm-sm6350"
+  * "qcom,scm-sm8150"
+  * "qcom,scm-sm8250"
+  * "qcom,scm-sm8350"
 -- 
 2.34.1
 

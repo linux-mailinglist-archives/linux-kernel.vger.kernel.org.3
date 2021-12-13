@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEAC4720C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62336472044
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbhLMFup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 00:50:45 -0500
-Received: from mail108.syd.optusnet.com.au ([211.29.132.59]:48359 "EHLO
-        mail108.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229502AbhLMFuo (ORCPT
+        id S231841AbhLMFOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 00:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230008AbhLMFOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 00:50:44 -0500
-Received: from dread.disaster.area (pa49-181-243-119.pa.nsw.optusnet.com.au [49.181.243.119])
-        by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id 8243C58B7A0;
-        Mon, 13 Dec 2021 16:50:40 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1mwdYm-002S6K-Gx; Mon, 13 Dec 2021 16:07:36 +1100
-Date:   Mon, 13 Dec 2021 16:07:36 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Jan Kara <jack@suse.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] Remove bdi_congested() and wb_congested() and
- related functions
-Message-ID: <20211213050736.GS449541@dread.disaster.area>
-References: <163936868317.23860.5037433897004720387.stgit@noble.brown>
- <163936886727.23860.5245364396572576756.stgit@noble.brown>
+        Mon, 13 Dec 2021 00:14:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928B2C06173F;
+        Sun, 12 Dec 2021 21:14:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 500C7CE0DC7;
+        Mon, 13 Dec 2021 05:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F64C00446;
+        Mon, 13 Dec 2021 05:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639372469;
+        bh=m+MbzkCsPCJNXsBFySexaUdkbI+fIAKWZPiq+A6GBck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pcDQjwCHOz6BSONU5joUW6e60Mu1jAbxQzts0EfFaFm5JmSfwPYHyrXe+as4aLjeM
+         eFJH1OLum6J0MwbxxotL5Ynx/Wl9FSzFLuVcZ/MiaFGyolmZeXYP0aRrzCZjW5ZdJq
+         Yt5fu6OtnruTRf7YSvoSO+XnwngnSyHnpkVidlaQ4C6iMZ9tlspBmToBaYm7+u5kTp
+         56ZJujbc1BVH7oROt6l/x3asZi1J9mKWjGd5xEZzFFEQ0GglJh+ze5/cFl0ltz5OnT
+         HkJi0GnpAKgWw3QDQFyUKxAUiibgYJ1iBPJwPobSVKG5xk0d9X3x2zWgArHsKu4K1+
+         TCjLAS6Yk203w==
+Date:   Mon, 13 Dec 2021 10:44:25 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dmaengine@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V3 29/35] dmaengine: mv_xor_v2: Get rid of msi_desc abuse
+Message-ID: <YbbWsUO6o5ccU5ai@matsya>
+References: <20211210221642.869015045@linutronix.de>
+ <20211210221814.970099984@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <163936886727.23860.5245364396572576756.stgit@noble.brown>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=61b6df32
-        a=BEa52nrBdFykVEm6RU8P4g==:117 a=BEa52nrBdFykVEm6RU8P4g==:17
-        a=kj9zAlcOel0A:10 a=IOMw9HtfNCkA:10 a=7-415B0cAAAA:8
-        a=HeSqFrNRAXltMStoDEkA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+In-Reply-To: <20211210221814.970099984@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 03:14:27PM +1100, NeilBrown wrote:
-> These functions are no longer useful as the only bdis that report
-> congestion are in ceph, fuse, and nfs.  None of those bdis can be the
-> target of the calls in drbd, ext2, nilfs2, or xfs.
+On 10-12-21, 23:19, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
 > 
-> Removing the test on bdi_write_contested() in current_may_throttle()
-> could cause a small change in behaviour, but only when PF_LOCAL_THROTTLE
-> is set.
-> 
-> So replace the calls by 'false' and simplify the code - and remove the
-> functions.
-> 
-> Signed-off-by: NeilBrown <neilb@suse.de>
-....
-> diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-> index 631c5a61d89b..22f73b3e888e 100644
-> --- a/fs/xfs/xfs_buf.c
-> +++ b/fs/xfs/xfs_buf.c
-> @@ -843,9 +843,6 @@ xfs_buf_readahead_map(
->  {
->  	struct xfs_buf		*bp;
->  
-> -	if (bdi_read_congested(target->bt_bdev->bd_disk->bdi))
-> -		return;
+> Storing a pointer to the MSI descriptor just to keep track of the Linux
+> interrupt number is daft. Use msi_get_virq() instead.
 
-Ok, but this isn't a "throttle writeback" test here - it's trying to
-avoid having speculative readahead blocking on a full request queue
-instead of just skipping the readahead IO. i.e. prevent readahead
-thrashing and/or adding unnecessary read load when we already have a
-full read queue...
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-So what is the replacement for that? We want to skip the entire
-buffer lookup/setup/read overhead if we're likely to block on IO
-submission - is there anything we can use to do this these days?
-
-Cheers,
-
-Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+~Vinod

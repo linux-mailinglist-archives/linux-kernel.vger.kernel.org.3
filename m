@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AE4472B4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C45472B4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235664AbhLML0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:26:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:52260 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235626AbhLML0A (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:26:00 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C59F6D;
-        Mon, 13 Dec 2021 03:26:00 -0800 (PST)
-Received: from bogus (unknown [10.57.33.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 858233F793;
-        Mon, 13 Dec 2021 03:25:58 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:25:55 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH v7 06/16] firmware: arm_scmi: Add configurable polling
- mode for transports
-Message-ID: <20211213112555.vhjhu3xopesvxmio@bogus>
-References: <20211129191156.29322-1-cristian.marussi@arm.com>
- <20211129191156.29322-7-cristian.marussi@arm.com>
+        id S235683AbhLML0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232619AbhLML0j (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:26:39 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29210C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:26:39 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id i12so14039238qvh.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:26:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eD6ckxYOFOb+e8Paz6iMpOBDcRBstNtUogT+wtDanIo=;
+        b=YVi7qSMIHAmqR1ziLS+oBD5WujjcwCE+4G3u70/XFkRKtNHL1rmXZEJ6FmKJIFdu02
+         G30X1MLGRJxf++u4dAJreJ13q94+xdZEYlYccDmaClkGWseDYg+fD8ts0JDIIZZviucL
+         HTEGgM4gQ9sUu8VL3lLv5/VSo1ZfHkDMvbT93gKgQ3pR7xt6x/KZENec/ExMhE0iQFJB
+         dwHUJjwa4xgINdLxvcqAJDMxWo1U3CHNleqylIUhodRUv3EH7OHwJQ1IY4STphC/7ly/
+         PmlpYT3LHnBODRFdhuqfX5iQhOFE/nphgwagOdAsYTHu7ewT0wzFaDV3M2h2sQVHCnOx
+         3RdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eD6ckxYOFOb+e8Paz6iMpOBDcRBstNtUogT+wtDanIo=;
+        b=uR9A2smKlu/UEbMguzP6YGL1yuWf+Df1lSvU2Mi0zLaHyPOHnxI8ynfiotNemkE3GM
+         /hh4EZ89G4Nk3s99F0k8xUiviwy6bTPpqdjJzOuoLYPbVnefvlg6xotoLZWCEJc9iMnu
+         gn8vvdsmW1RKtvXvLXTixLDrNb+jGFPTsJJ5IZOnEeyvJggL4+Cb5b2J4mnhCue8m80H
+         jpvhDmGPvDkkjxgLpnljethTuCt7Yu9JTOoLGAIJA+0Gu8Qkl03ZyYT00MBSdgYZhMwZ
+         8JuCK1yT/ofdlBe3asEvB7JhQUlZXytMjhyOfX5U/gkFNAJvr1lhCTd2VzJCwR/USpV+
+         2zeQ==
+X-Gm-Message-State: AOAM533H3wxziGjzqD8faqUD6NlnDXzyCQLAyHDQg08g7DE1Scaa8+01
+        wVmdNgEJa5JfbT35XYNbfuY=
+X-Google-Smtp-Source: ABdhPJyz8j/K09DZ5hzBHAp/+joA+v2M/C1JywjSTePQKxvwDTIJHTjCcK3ctzU6nAsJmW04ncaugA==
+X-Received: by 2002:a05:6214:5094:: with SMTP id kk20mr40535508qvb.71.1639394798344;
+        Mon, 13 Dec 2021 03:26:38 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id i14sm5900465qko.9.2021.12.13.03.26.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 03:26:37 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     miquel.raynal@bootlin.com
+Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn, han.xu@nxp.com,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        richard@nod.at, vigneshr@ti.com, zealci@zte.com.cn
+Subject: [PATCH v3 nand-next] mtd: rawnand: gpmi: remove unneeded variable
+Date:   Mon, 13 Dec 2021 11:26:27 +0000
+Message-Id: <20211213112627.436745-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211213101519.25f4e2e1@xps13>
+References: <20211213101519.25f4e2e1@xps13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129191156.29322-7-cristian.marussi@arm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:11:46PM +0000, Cristian Marussi wrote:
-> SCMI communications along TX channels can optionally be provided of a
-> completion interrupt; when such interrupt is not available, command
-> transactions should rely on polling, where the SCMI core takes care to
-> repeatedly evaluate the transport-specific .poll_done() function, if
-> available, to determine if and when a request was fully completed or
-> timed out.
-> 
-> Such mechanism is already present and working on a single transfer base:
-> SCMI protocols can indeed enable hdr.poll_completion on specific commands
-> ahead of each transfer and cause that transaction to be handled with
-> polling.
-> 
-> Introduce a couple of flags to be able to enforce such polling behaviour
-> globally at will:
-> 
->  - scmi_desc.force_polling: to statically switch the whole transport to
->    polling mode.
-> 
->  - scmi_chan_info.no_completion_irq: to switch a single channel dynamically
->    to polling mode if, at runtime, is determined that no completion
->    interrupt was available for such channel.
-> 
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
-> v5 --> v6
-> - removed check on replies received by IRQs when xfer was requested
->   as poll_completion (not all transport can suppress IRQs on an xfer basis)
-> v4 --> v5
-> - make force_polling const
-> - introduce polling_enabled flag to simplify checks on do_xfer
-> v3 --> v4:
-> - renamed .needs_polling flag to .no_completion_irq
-> - refactored error path when polling needed but not supported
-> ---
->  drivers/firmware/arm_scmi/common.h | 11 +++++++++++
->  drivers/firmware/arm_scmi/driver.c | 17 +++++++++++++++++
->  2 files changed, 28 insertions(+)
-> 
-> diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-> index 6438b5248c24..99b74f4d39b6 100644
-> --- a/drivers/firmware/arm_scmi/common.h
-> +++ b/drivers/firmware/arm_scmi/common.h
-> @@ -339,11 +339,19 @@ void scmi_protocol_release(const struct scmi_handle *handle, u8 protocol_id);
->   * @dev: Reference to device in the SCMI hierarchy corresponding to this
->   *	 channel
->   * @handle: Pointer to SCMI entity handle
-> + * @no_completion_irq: Flag to indicate that this channel has no completion
-> + *		       interrupt mechanism for synchronous commands.
-> + *		       This can be dynamically set by transports at run-time
-> + *		       inside their provided .chan_setup().
-> + * @polling_enabled: Flag used to annotate if polling mode is currently enabled
-> + *		     on this channel.
->   * @transport_info: Transport layer related information
->   */
->  struct scmi_chan_info {
->  	struct device *dev;
->  	struct scmi_handle *handle;
-> +	bool no_completion_irq;
-> +	bool polling_enabled;
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Do we really need a separate flag for polling_enabled ?
-no_completion_irq means you need to enable polling and force_polling too.
-Just trying to see if we can get rid of unnecessary flags.
+Return status directly from function called.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+change since v1: mtd/nand:remove unneeded variable
+             v2: mtd: rawnand: gpmi: remove unneeded variable
+             v3: move the update log here
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+index 10cc71829dcb..ab9d1099bafa 100644
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -1425,7 +1425,6 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
+ 	struct mtd_info *mtd = nand_to_mtd(chip);
+ 	struct gpmi_nand_data *this = nand_get_controller_data(chip);
+ 	struct bch_geometry *nfc_geo = &this->bch_geometry;
+-	int ret;
+ 
+ 	dev_dbg(this->dev, "ecc write page.\n");
+ 
+@@ -1445,9 +1444,7 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
+ 				    this->auxiliary_virt);
+ 	}
+ 
+-	ret = nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
+-
+-	return ret;
++	return nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
+ }
+ 
+ /*
 -- 
-Regards,
-Sudeep
+2.25.1
+

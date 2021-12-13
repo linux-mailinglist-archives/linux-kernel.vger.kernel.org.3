@@ -2,111 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE3A47232B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DEF472334
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbhLMIoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbhLMIob (ORCPT
+        id S232078AbhLMIsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:48:17 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4249 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229873AbhLMIsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:44:31 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545ACC061748
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:44:31 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id t11so14500683qtw.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:44:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h4WDvjM2kgyM01qsLxjBdup3VQZvL5+0/2y39dEt4C8=;
-        b=BEKQMXeItUho4Q0NwJ1f8FstJ+Jf7PJ9R80lW/4yWOljS10XpFJ5HT0VacDeVVZ5dB
-         RA8M/ibrXbb86GoJWidGhnp2LswMUu5ZEA8I+eBMOhkaVFr147SQCO22fS8My096MzHz
-         /b4tB4pB3SK5lX3cOoqr4/vD0aAw3Bltsw/sRGVFuY5u0FVY/ewz5xqM6AScU3FhIGaF
-         hzZZ8sjjAb530wrrBoAn2oyZwohVZ0dYe+J0zWB1Hrrao9Y0iWo3GoXfTu3jVY75H8s0
-         sLy7Kmn6LBGQsS1Oq/Lj79Q5YUshGorcNIQIt/kifgDCscax9hh6tfa28rNWxSWGu/+Z
-         Mp5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h4WDvjM2kgyM01qsLxjBdup3VQZvL5+0/2y39dEt4C8=;
-        b=zJqJ0feDhr6DRsoOBbAMlQIjtzGItXgJoZt3iK5e2AQlMXz4uBHjDhSQa4ada+euGd
-         0mGF9PX/vvl950PobucNdLkXMcmX/ZM5j4OGDUc8myVmzVKdjJqUSYr122KiT/5I9GmL
-         9l9s7/O9j+fAnu7oQk9C+eKkunwA/Pvsm+6QSjd+ZK2AF746tsTN/lvo/8lLvghdrvQ6
-         vb30Miuiag9vCwNfck69kZV00waPhePQ4kJzCdPrV91X4TpEpFCkSwnV6wjQ5p6EZPTP
-         Ka6dwRyxd2Y4HzVd6FUpPjyfLAQtC6EASRusiNzDzFoeJuNDODV2uissyH85MjquO663
-         +v7A==
-X-Gm-Message-State: AOAM530WqIIg74JsZaAXVE88x8ihmsPuUpT0zilO//JH1dz/DXDwm/av
-        zm1M2ZXhgaSKKEDqKL7imVl+ZMdWI/SWCvLK+f0oWw==
-X-Google-Smtp-Source: ABdhPJziiOVM2+Dx6BT3tLzDj98Xw0vskZvlatbAvbgT2x6SaH8jcF/6PODw5NoYcf9gsRZOzBLKdkLelCk4wGV+gos=
-X-Received: by 2002:a05:622a:202:: with SMTP id b2mr43442164qtx.34.1639385070353;
- Mon, 13 Dec 2021 00:44:30 -0800 (PST)
+        Mon, 13 Dec 2021 03:48:16 -0500
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JCFVf68Smz67tWy;
+        Mon, 13 Dec 2021 16:46:50 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 09:48:14 +0100
+Received: from [10.47.80.231] (10.47.80.231) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 13 Dec
+ 2021 08:48:13 +0000
+Subject: Re: [PATCH v2] perf util: Fix use after free in metric__new
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        <peterz@infradead.org>
+CC:     <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@redhat.com>,
+        <namhyung@kernel.org>, <irogers@google.com>, <ak@linux.intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211212115818.267011-1-jose.exposito89@gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <690406fd-306c-9786-bacc-fd27e2e531fb@huawei.com>
+Date:   Mon, 13 Dec 2021 08:47:53 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20211212062407.138309-1-marcan@marcan.st> <20211212062407.138309-2-marcan@marcan.st>
-In-Reply-To: <20211212062407.138309-2-marcan@marcan.st>
-From:   Javier Martinez Canillas <javier@dowhile0.org>
-Date:   Mon, 13 Dec 2021 09:44:19 +0100
-Message-ID: <CABxcv=m4fu8h=FwY7R=thuvd13_ZbFqB9rNNN07QOAd__jdYSQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        devicetree@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211212115818.267011-1-jose.exposito89@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.80.231]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Hector,
+On 12/12/2021 11:58, José Expósito wrote:
+> Fixes: b85a4d61d302 (perf metric: Allow modifiers on metrics)
+> Addresses-Coverity-ID: 1494000
+> Acked-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 
-On Sun, Dec 12, 2021 at 7:24 AM Hector Martin <marcan@marcan.st> wrote:
->
-> This code is required for both simplefb and simpledrm, so let's move it
-> into the OF core instead of having it as an ad-hoc initcall in the
-> drivers.
->
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+Reviewed-by: John Garry <john.garry@huawei.com>
+
+> 
 > ---
->  drivers/of/platform.c          |  4 ++++
->  drivers/video/fbdev/simplefb.c | 21 +--------------------
->  2 files changed, 5 insertions(+), 20 deletions(-)
->
+> 
+> v2: Add Fixes and Acked-by tags
+> ---
+>   tools/perf/util/metricgroup.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+> index fffe02aae3ed..4d2fed3aefd1 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -209,8 +209,8 @@ static struct metric *metric__new(const struct pmu_event *pe,
+>   	m->metric_name = pe->metric_name;
+>   	m->modifier = modifier ? strdup(modifier) : NULL;
+>   	if (modifier && !m->modifier) {
+> -		free(m);
+>   		expr__ctx_free(m->pctx);
+> +		free(m);
+>   		return NULL;
+>   	}
+>   	m->metric_expr = pe->metric_expr;
+> 
 
-This is indeed a much better approach than what I suggested. I just
-have one comment.
-
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index b3faf89744aa..793350028906 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -540,6 +540,10 @@ static int __init of_platform_default_populate_init(void)
->                 of_node_put(node);
->         }
->
-> +       node = of_get_compatible_child(of_chosen, "simple-framebuffer");
-
-You have to check if the node variable is NULL here.
-
-> +       of_platform_device_create(node, NULL, NULL);
-
-Otherwise this could lead to a NULL pointer dereference if debug
-output is enabled (the node->full_name is printed).
-
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
-Best regards,
-Javier

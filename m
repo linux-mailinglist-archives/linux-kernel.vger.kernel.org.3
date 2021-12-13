@@ -2,183 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5E24727EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1620472815
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237402AbhLMKGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S242734AbhLMKH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240292AbhLMKBA (ORCPT
+        with ESMTP id S241297AbhLMKDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:01:00 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AF5C09B133
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:49:09 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso13593927wml.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:49:08 -0800 (PST)
+        Mon, 13 Dec 2021 05:03:17 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D55C09CE4B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:50:05 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id y13so49646375edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:50:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mcSDirnuruPYtCN32bQ78CUK9bGGfX21Psk5mubRymc=;
-        b=rx86q3KyeOaDPbmRyuxzvLBUSlHYCv4JC/1G0pwjzcdS1VIR3XaYXGb5cFsnaZK2ZX
-         V7+w9fU2jsxuiU79JaVhajtALFAB/FyHQKiogR2VH+nlh9VzJI8jua/mcgGx2TmFL4i8
-         mPLsdrQVtk0HaW45aCnIzH8X2N9RHvTcBMDINJJENW+Z6YCsfZiTjH3OPjaFCkRrryTc
-         LcA+rCiUYLBZYbE7KqXnx7rQTdDyllJLKIymh0EUSBLHGPoDH5NCpNPuf1hbwceKDydx
-         4opHq2T1wUhJY7PPo3wROeBOC0TZZDKeCb3GnZ+nzc+hcChIfTzw88EVO1zcXB18j77c
-         yGpw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SNaPD4txBcBTeRtU9QDE/cr6Tf7raUPC4eWzWstn6dU=;
+        b=GwnXUEDrN8geUjFIGzsJwTqnanWjeb/bQWJ3DW7YY2Nv1rJBf6GDN0lXTjB2L8SvQr
+         +FsPYSKscIPv0XTCahi/82xay8tgJl2WcronvJ8WeG5lN0ek9Fd40a+m0h5PsX789flN
+         oceT5oFlEP2xyT4DUtqjAcEgR3iN2mzagSztkIkSi0P/ZI0kuW3vJLMZZS685WzjogeU
+         ocdnYr5lcEVtcOKFC6LkWlX9VTeh+uV27u6b6BacH3PBvLd6YKagLSNKoNlcSJ34ytRS
+         Q/pDhNyphFK2ngM6pjq/1XDUlY0z5sbOL7EmK7y4H+h2mpbgnmwwn/MzafKl5EbATmdB
+         KD1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mcSDirnuruPYtCN32bQ78CUK9bGGfX21Psk5mubRymc=;
-        b=Y61GM8wqPeDw4fJ0ex0Ezc8rHNrXIipsSOxe/ZF1oy+csWHPPBSFSV/lrG0aD1xICo
-         8hSo/cjI5IylmxaFvKlCkM9/axG5RUj7PQ9HpAewZ8vMlU9g5sB2NWfiSYd6BQAla61h
-         wdpWLsxZsahnn3f7W6AdzyxoLUkuRtv13H85XeFyj4MiRdLGq7by0M2RN0IM2oHHEK5d
-         JEQSCVCIldCviC+Djw6x6v3+c+6eLOiEOe3CAkbuaeQBu4UCdN3DhejVMeADg9tzDVNh
-         CdnfybTsg2jh4RpwopYw5UaZ7a7T3eb/uu3X+R0Liz6aOpvmV2q4t1l6Eo1HWa6EhMuH
-         UoKA==
-X-Gm-Message-State: AOAM530s1vxzJvbR+CSpmsc4VIuMXgHY6Fn0UiXDnKAAKyQs3lK2bI4O
-        lt7/YaCpfjkzvwWZ4vjB87xcNS/7YG78sijr/ZYLaw==
-X-Google-Smtp-Source: ABdhPJwGPvf897zKrfEaiVQJPiIpbfihpMX+HCalDhTRUPfCDbostdOtET6QWAEYoG0Z+/501Ad5gXEmSDuLKQR2nzs=
-X-Received: by 2002:a1c:a5c3:: with SMTP id o186mr36876304wme.63.1639388947467;
- Mon, 13 Dec 2021 01:49:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SNaPD4txBcBTeRtU9QDE/cr6Tf7raUPC4eWzWstn6dU=;
+        b=FX6drjcq4/UCulgqTb6erNyUhiR1rCn/hy/g6cg7L934ZMeFowzqmKzYxW3WgGf0Us
+         F69d1Emo/uUM3Z1mfSg7CBuoD+rPJeBDzFqObnc9vosNxz0TJp0hc5f/RrV0hQgeaObe
+         QxBToBiF9hX2XL/bQRs4jMYvxUSV75iM+ITWExBGCgg81F9hd5MjTWbQzXxQwoY4zx5u
+         AEPjvMu/x98NjNlu/JZTH9QW6RmLzWsNQSyrOsyb5vsWt/AmuqqPL48LqGxZVWRCWUfH
+         fMCSLVxoSIVs19zLERZUW+kX71UjAFSWXxo6C9L9DomNrCD3vw79drGJioExPPLVoDLS
+         Dv9Q==
+X-Gm-Message-State: AOAM531pzJVBeKcJ8kicY9v49wlHqNqfv3fT45A7a4Hv+phw4k9xMDmk
+        uBfMpG7fbfy6EIJ1QI4Ae/8=
+X-Google-Smtp-Source: ABdhPJyHDOAWR44PF/QZ7CDFmnTpRb4Dbt3Ln1Tb2dy3NHTsubJNt+EVgI8mlcFUYkuDZnE/EJFfyA==
+X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr57572835edz.342.1639389003992;
+        Mon, 13 Dec 2021 01:50:03 -0800 (PST)
+Received: from oberon.zico.biz.zico.biz ([83.222.187.186])
+        by smtp.gmail.com with ESMTPSA id qb21sm5789774ejc.78.2021.12.13.01.50.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 01:50:03 -0800 (PST)
+From:   "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>
+To:     rostedt@goodmis.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/5] tracing: Introduce configurable ring sub buffer size
+Date:   Mon, 13 Dec 2021 11:49:57 +0200
+Message-Id: <20211213095002.62110-1-tz.stoyanov@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211208160907.749482-1-james.clark@arm.com> <20211208160907.749482-2-james.clark@arm.com>
- <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com> <b61ef2e3-e573-4867-af5d-fd5fabece4b1@arm.com>
- <20211210172220.GA1238770@p14s>
-In-Reply-To: <20211210172220.GA1238770@p14s>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Mon, 13 Dec 2021 09:48:55 +0000
-Message-ID: <CAJ9a7VgBxO0-R4jX6+-Vu10DtcsOeMiq9YrPkEEFQ=6ixNXXVQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] coresight: Fail to open with return stacks if they
- are unavailable
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     James Clark <James.Clark@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+From: "Tzvetomir Stoyanov (VMware)" <tstoyanov@vmware.com>
 
-A couple of points - relating mainly to docs:
+Currently the size of one sub buffer page is global for all buffers and it
+is hard coded to one system page. The patch set introduces configurable
+ring buffer sub page size, per ring buffer. A new user space interface is
+introduced, which allows to change the sub page size of the ftrace buffer, per
+ftrace instance.
 
-1. Activating branch broadcast overrides any setting of return stack.
-As a minimum there needs to be a documentation update to reflect this
--Setting both options is not prohibited in hardware - and in the case
-where we can use branch broadcast over a range both are then relevant.
+[Resend to LKML]
 
-2. A documented note to reflect that choosing this option will result
-in a significant increase in the amount of trace generated - possible
-danger of overflows, or less actual instructions covered. In addition
-perhaps documents could reflect the intended use-case for this option,
-given the disadvantages.
+v4 changes:
+ - Do not change the sub buffer size of the temp event buffer per CPU,
+   trace_buffered_event. That size if fixed to one system page.
+v3 changes:
+ - Fixed ring buffer readers and writers to work with custom sub buffer page
+   size.
+v2 changes:
+ - Split code refactoring in a separate patch.
+ - Changed the logic to work with order of system pages, instead of page
+   size.
+ - Fix freeing of the allocated pages, to take into account the actual order.
+ - Code clean ups.
+ - Bug fixes.
 
-3. Has this been tested in a situation where it will be of use?
-Testing against static code images will show the same decoded trace
-output as not using branch broadcast. (although the packet dumps will
-show additional output)
+Tzvetomir Stoyanov (VMware) (5):
+  [RFC] tracing: Refactor ring buffer implementation
+  [RFC] tracing: Page size per ring buffer
+  [RFC] tracing: Add interface for configuring trace sub buffer size
+  [RFC] tracing: Set new size of the ring buffer sub page
+  [RFC] tracing: Read and write to ring buffers with custom sub buffer
+    size
 
-Given a primary use is for situations where code is patched or
-dynamically altered at runtime - then this can affect the full decode
-output. If the code is being patched to only alter the branch
-addresses then decode should work against static images.
-If, however, we are tracing code that adds in new branches, on top of
-NOPs for example, then the decoding against the original static image
-will be wrong, as the image will have the NOPs, rather than the branch
-instructions so the apparent location of E atoms will be in a
-different position to the actual code. Is there anything in perf that
-will ensure that the patched code is presented to the decoder?
-
-If there are potential decode issues - these too need documenting.
-
-Other than the documents and testing,  I cannot see any issues with
-this patch set in terms of setting and enabling the option.
-
-Regards
-
-Mike
-
-
-On Fri, 10 Dec 2021 at 17:22, Mathieu Poirier
-<mathieu.poirier@linaro.org> wrote:
->
-> Hi James,
->
-> On Thu, Dec 09, 2021 at 11:13:55AM +0000, James Clark wrote:
-> >
-> >
-> > On 09/12/2021 11:00, Suzuki K Poulose wrote:
-> > > On 08/12/2021 16:09, James Clark wrote:
-> > >> Maintain consistency with the other options by failing to open when they
-> > >> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
-> > >> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
-> > >> requested but not supported by hardware.
-> > >>
-> > >> The consequence of not doing this is that the user may not be
-> > >> aware that they are not enabling the feature as it is silently disabled.
-> > >>
-> > >> Signed-off-by: James Clark <james.clark@arm.com>
-> > >> ---
-> > >>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
-> > >>   1 file changed, 9 insertions(+), 4 deletions(-)
-> > >>
-> > >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> > >> index d2bafb50c66a..0a9bb943a5e5 100644
-> > >> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> > >> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> > >> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
-> > >>       }
-> > >>         /* return stack - enable if selected and supported */
-> > >> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
-> > >> -        /* bit[12], Return stack enable bit */
-> > >> -        config->cfg |= BIT(12);
-> > >> -
-> > >> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
-> > >> +        if (!drvdata->retstack) {
-> > >> +            ret = -EINVAL;
-> > >> +            goto out;
-> > >> +        } else {
-> > >> +            /* bit[12], Return stack enable bit */
-> > >> +            config->cfg |= BIT(12);
-> > >> +        }
-> > >
-> > > nit: While at this, please could you change the hard coded value
-> > > to ETM4_CFG_BIT_RETSTK ?
-> > >
-> > I started changing them all because I had trouble searching for bits by name but then
-> > I thought it would snowball into a bigger change so I undid it.
-> >
-> > I think I'll just go and do it now if it's an issue here.
->
-> I can apply this set right away and you send another patch to fix all hard coded
-> bitfields or you can send another revision with all 4 patches included in it
-> (bitfields fix plus these 3).  Just let me know what you want to do.  And next
-> time please add a cover letter.
->
-> Thanks,
-> Mathieu
->
-> >
-> > > Otherwise, looks good to me
-> > >
-> > > Suzuki
-
-
+ include/linux/ring_buffer.h          |  17 +-
+ kernel/trace/ring_buffer.c           | 345 ++++++++++++++++++++-------
+ kernel/trace/ring_buffer_benchmark.c |  10 +-
+ kernel/trace/trace.c                 |  84 +++++--
+ kernel/trace/trace.h                 |   1 +
+ kernel/trace/trace_events.c          |  50 +++-
+ 6 files changed, 392 insertions(+), 115 deletions(-)
 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+2.31.1
+

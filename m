@@ -2,217 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0D0472356
+	by mail.lfdr.de (Postfix) with ESMTP id C6DC4472358
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbhLMI5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbhLMI5s (ORCPT
+        id S233493AbhLMI54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:57:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46947 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231818AbhLMI5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:57:48 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D16C06173F;
-        Mon, 13 Dec 2021 00:57:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l5i8aOwYZ9do5D9SoUNIZJ1fpx0LnO1tw2XaMOUnxXU=; b=GIpHdgcAj/nxlojUTPgXQxtgHz
-        PhciNtgM5Xk6jjUKvy7vV73BrVJrITb+c/6XKdMZ6+u7QuJ1N9h5U8WZEc3uoDYi965LFUdolSKn1
-        dfKaL2HsASlbmSVezf3EsGAh4b/qSGmfU2Xnqxg8QfZsz5Jdn0y2inK6LDZnAAdWHf21IK5EC9LN6
-        7EkZhGBKoLxShd67jI86MIORnfqP1pChlFmjRrc4fwTIUzg/bkJL9vHp4Tinrkk77TtfQGSQqvnz1
-        FW4fnzRV5tAQA95ZWaoSBK6OO6YtugY7qWqYEMQbf9cKlKOYnVoPGE7JvGgoinx1puzC2/nbXLaA5
-        tYCiAs9A==;
-Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwh98-008Reh-0q; Mon, 13 Dec 2021 08:57:22 +0000
-Message-ID: <1b4f10dd64e0288443fe7dbf706d5d5560cf98f4.camel@infradead.org>
-Subject: Re: [PATCH v1.1 02/11] rcu: Kill rnp->ofl_seq and use only
- rcu_state.ofl_lock for exclusion
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
-Date:   Mon, 13 Dec 2021 08:57:16 +0000
-In-Reply-To: <b7f2bb55-4f0e-f52d-d41c-b591aa3927f2@quicinc.com>
-References: <20211209150938.3518-1-dwmw2@infradead.org>
-         <20211209150938.3518-3-dwmw2@infradead.org>
-         <dfa110f0-8fd0-0f37-2c37-89eccac1ad08@quicinc.com>
-         <5b086c9e5a92bb91e6f4c086e6d01e380a7491af.camel@infradead.org>
-         <b7f2bb55-4f0e-f52d-d41c-b591aa3927f2@quicinc.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-/hDq5qSn0TI18wu6T3Em"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 13 Dec 2021 03:57:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639385872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p9DVBPqK/d21aVsh+v6i0c9OVAXlQK07WZGATq/KnvE=;
+        b=Rmn/WIVgI4+Whd9PIcgxNvd+mqji/V7Qr1Oox3NOvHocL7uqOSC+QObVLotaiFeXJ3T7m3
+        XSA6iJf8b/PUWuHO8TdDFIzrmR0LwGdfp62N5Tjr3IFa8HNhdLW76PqCR/jTE0S0Wic4ps
+        I1KWnKVPXBxKadNf9FvRTHOuo7IglK8=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-332-nSMPfJBpNjizYT_ycEciMA-1; Mon, 13 Dec 2021 03:57:51 -0500
+X-MC-Unique: nSMPfJBpNjizYT_ycEciMA-1
+Received: by mail-lj1-f200.google.com with SMTP id i123-20020a2e2281000000b0021cfde1fa8eso4282037lji.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:57:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=p9DVBPqK/d21aVsh+v6i0c9OVAXlQK07WZGATq/KnvE=;
+        b=HpN9eS0L2FY9uoBYnOWGluNULn7FqFHfddQ/QnipkA4+kfkPeyUozfvQSYfXoy9YOY
+         PlMau7/mgm9kmHR+TyZuLXrl5I6718F7PU8o9zFQ8kL+57yKsCfL1KYfg998TV/IygGO
+         u1L0Fv4RTIaHNauc06HPmVmVFVqs/EX0jdS8oxeoz4OVelR/DIrGz+XXHZcvp+V+AnOJ
+         2TCKZZkHtKzi6pyukw3yPqYVxIp/dPSr4W58aFqYaTJasi6AYZhCP7Gvq5d9RTzooKh3
+         VAJ6fI9TYno1QpOdtrRcRDsYI9Pr5leW0cIwDQXsG6hlApb9HNbP+PnLwGxU3FnLSDaB
+         RuvA==
+X-Gm-Message-State: AOAM533SvalSPufrSheHc/1MUqBn9EShc30NoAAG7YoDTUztRrFgU2mP
+        gGfg35JYinIMAVm4fvnIbbv1C59alxpU4qhKwV2hj3mOrqQBIRVz9liEjiys4nMXKQLLg7CDGtS
+        gNRSYHJ0A3HZO/67zyvdrXMr7G2xEBUo9vPj++Ovx
+X-Received: by 2002:a05:6512:3b2b:: with SMTP id f43mr28111792lfv.629.1639385869925;
+        Mon, 13 Dec 2021 00:57:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwKQv6cjOzLwU+SaW+IgVD/YNCHy3d5cQA+UHXctkBj0q7a1O8d5EuvuGrOXD0FCaxdFFZAe4G2ilJ7UjuF+y4=
+X-Received: by 2002:a05:6512:3b2b:: with SMTP id f43mr28111776lfv.629.1639385869712;
+ Mon, 13 Dec 2021 00:57:49 -0800 (PST)
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <3ff5fd23-1db0-2f95-4cf9-711ef403fb62@oracle.com>
+ <20210224000057-mutt-send-email-mst@kernel.org> <52836a63-4e00-ff58-50fb-9f450ce968d7@oracle.com>
+ <20210228163031-mutt-send-email-mst@kernel.org> <2cb51a6d-afa0-7cd1-d6f2-6b153186eaca@redhat.com>
+ <20210302043419-mutt-send-email-mst@kernel.org> <178f8ea7-cebd-0e81-3dc7-10a058d22c07@redhat.com>
+ <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com> <20211212042311-mutt-send-email-mst@kernel.org>
+ <CACGkMEtwWcBNj62Yn_ZSq33N42ZG5yhCcZf=eQZ_AdVgJhEjEA@mail.gmail.com> <20211213030535-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20211213030535-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 13 Dec 2021 16:57:38 +0800
+Message-ID: <CACGkMEtRfqRDPxXS2T-a0u4Aji3KtUq7-2iUD8Z-X1k84EgOZA@mail.gmail.com>
+Subject: Re: vdpa legacy guest support (was Re: [PATCH] vdpa/mlx5:
+ set_features should allow reset to zero)
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Si-Wei Liu <si-wei.liu@oracle.com>, Eli Cohen <elic@nvidia.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 13, 2021 at 4:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Dec 13, 2021 at 11:02:39AM +0800, Jason Wang wrote:
+> > On Sun, Dec 12, 2021 at 5:26 PM Michael S. Tsirkin <mst@redhat.com> wro=
+te:
+> > >
+> > > On Fri, Dec 10, 2021 at 05:44:15PM -0800, Si-Wei Liu wrote:
+> > > > Sorry for reviving this ancient thread. I was kinda lost for the co=
+nclusion
+> > > > it ended up with. I have the following questions,
+> > > >
+> > > > 1. legacy guest support: from the past conversations it doesn't see=
+m the
+> > > > support will be completely dropped from the table, is my understand=
+ing
+> > > > correct? Actually we're interested in supporting virtio v0.95 guest=
+ for x86,
+> > > > which is backed by the spec at
+> > > > https://ozlabs.org/~rusty/virtio-spec/virtio-0.9.5.pdf. Though I'm =
+not sure
+> > > > if there's request/need to support wilder legacy virtio versions ea=
+rlier
+> > > > beyond.
+> > >
+> > > I personally feel it's less work to add in kernel than try to
+> > > work around it in userspace. Jason feels differently.
+> > > Maybe post the patches and this will prove to Jason it's not
+> > > too terrible?
+> >
+> > That's one way, other than the config access before setting features,
+> > we need to deal with other stuffs:
+> >
+> > 1) VIRTIO_F_ORDER_PLATFORM
+> > 2) there could be a parent device that only support 1.0 device
+> >
+> > And a lot of other stuff summarized in spec 7.4 which seems not an
+> > easy task. Various vDPA parent drivers were written under the
+> > assumption that only modern devices are supported.
+> >
+> > Thanks
+>
+> Limiting things to x86 will likely address most issues though, won't it?
 
---=-/hDq5qSn0TI18wu6T3Em
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+For the ordering, yes. But it means we need to introduce a config
+option for legacy logic?
 
-On Fri, 2021-12-10 at 09:56 +0530, Neeraj Upadhyay wrote:
-> > -	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) || READ_ONCE(rnp->ofl_seq=
-) & 0x1)
-> > +	/*
-> > +	 * Strictly, we care here about the case where the current CPU is
-> > +	 * in rcu_cpu_starting() and thus has an excuse for rdp->grpmask
-> > +	 * not being up to date. So arch_spin_is_locked() might have a
->=20
-> Minor:
->=20
-> Is this comment right - "thus has an excuse for rdp->grpmask not being=
-=20
-> up to date"; shouldn't it be "thus has an excuse for rnp->qsmaskinitnext=
-=20
-> not being up to date"?
->=20
-> Also, arch_spin_is_locked() also handles the rcu_report_dead() case,
-> where raw_spin_unlock_irqrestore_rcu_node() can have a rcu_read_lock=20
-> from lockdep path with CPU bits already cleared from rnp->qsmaskinitnext?
+And we need to deal with, as you said in another thread, kick before DRIVER=
+_OK:
 
-Good point; thanks. How's this:
+E.g we had thing like this:
 
-	/*
-	 * Strictly, we care here about the case where the current CPU is in
-	 * rcu_cpu_starting() or rcu_report_dead() and thus has an excuse for
-	 * rdp->qsmaskinitnext not being up to date. So arch_spin_is_locked()
-	 * might have a false positive if it's held by some *other* CPU, but
-	 * that's OK because that just means a false *negative* on the
-	 * warning.
-	 */
+        if ((status & VIRTIO_CONFIG_S_DRIVER_OK) &&
+            !(status_old & VIRTIO_CONFIG_S_DRIVER_OK)) {
+                ret =3D ifcvf_request_irq(adapter);
+                if (ret) {
 
-> >  	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CP=
-U? */
-> > +		/* rcu_report_qs_rnp() *really* wants some flags to restore */
-> > +		unsigned long flags2;
->=20
-> Minor: checkpatch flags it "Missing a blank line after declarations"
+Similar issues could be found in other parents.
 
-Ack. Also fixed and pushed out to my parallel-5.16 branch at=20
-https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/paralle=
-l-5.16
+We also need to consider whether we should encourage the vendor to
+implement the logic.
 
-This commit is probably the only one that's strictly needed for that
-parallel bringup, but for now I've kept my rcu boost thread mutex
-patch, and added your two patches (with minor whitespace fixes). I
-think the best option is to let Paul handle them all.
+I think we can try and see how hard it is.
 
-We'll do the final step of actually *enabling* the parallel bringup on
-any given architecture only after the various fixes have made their way
-in and we've done a proper review of the remaining code paths.
+Thanks
 
-
-
---=-/hDq5qSn0TI18wu6T3Em
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
-ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
-OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
-RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
-cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
-uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
-Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
-Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
-xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
-YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
-nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
-PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
-7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
-Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
-MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
-NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
-AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
-/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
-0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
-vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
-ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
-ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
-CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
-BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
-aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
-bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
-bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
-LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
-CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
-W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
-vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
-gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
-RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
-jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
-b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
-AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
-BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
-+bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
-WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
-aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
-CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
-u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
-RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
-QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
-b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
-cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
-SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
-0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
-KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
-E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
-M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
-jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
-yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
-gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
-R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
-ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
-MjEzMDg1NzE2WjAvBgkqhkiG9w0BCQQxIgQgoro/5sHM4ir95Xt3aQiT1WZdSzE76MH5sawELAXf
-Ji4wgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
-TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
-PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
-aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBABxLZdkvWYTAkUpVKrIt5wMptRMLUPTGbg4CcufGKJXfUAkCDrW7I+JkX1FOALiM
-EiKXR/V5mGnrHrB8nMRRxY5hC7jip3UCS6c+DJzIyNf9VHlIMk6NmSbq9sjPG7t2CKUaWp6Lu7qL
-RBU8caB0XCaEtxJekduhyKFq8W95gqjwgi0t2CK/qiyjAeoJwVr5jFbkkHEUUnjAu3rZusf4M3Im
-5nsU6Uc9jhLnyZQPzYI4u9eJ1XHhKbmK/azRrLgF5oSg7Bhl4zCeNxkeXU/xmKP/GI3acoERE717
-13i2CDPg3OB5ApIjqyD4+eTEg67VIx49iNKFDw/gGEggAM/yVCMAAAAAAAA=
-
-
---=-/hDq5qSn0TI18wu6T3Em--
+>
+> > >
+> > > > 2. suppose some form of legacy guest support needs to be there, how=
+ do we
+> > > > deal with the bogus assumption below in vdpa_get_config() in the sh=
+ort term?
+> > > > It looks one of the intuitive fix is to move the vdpa_set_features =
+call out
+> > > > of vdpa_get_config() to vdpa_set_config().
+> > > >
+> > > >         /*
+> > > >          * Config accesses aren't supposed to trigger before featur=
+es are
+> > > > set.
+> > > >          * If it does happen we assume a legacy guest.
+> > > >          */
+> > > >         if (!vdev->features_valid)
+> > > >                 vdpa_set_features(vdev, 0);
+> > > >         ops->get_config(vdev, offset, buf, len);
+> > > >
+> > > > I can post a patch to fix 2) if there's consensus already reached.
+> > > >
+> > > > Thanks,
+> > > > -Siwei
+> > >
+> > > I'm not sure how important it is to change that.
+> > > In any case it only affects transitional devices, right?
+> > > Legacy only should not care ...
+> > >
+> > >
+> > > > On 3/2/2021 2:53 AM, Jason Wang wrote:
+> > > > >
+> > > > > On 2021/3/2 5:47 =E4=B8=8B=E5=8D=88, Michael S. Tsirkin wrote:
+> > > > > > On Mon, Mar 01, 2021 at 11:56:50AM +0800, Jason Wang wrote:
+> > > > > > > On 2021/3/1 5:34 =E4=B8=8A=E5=8D=88, Michael S. Tsirkin wrote=
+:
+> > > > > > > > On Wed, Feb 24, 2021 at 10:24:41AM -0800, Si-Wei Liu wrote:
+> > > > > > > > > > Detecting it isn't enough though, we will need a new io=
+ctl to notify
+> > > > > > > > > > the kernel that it's a legacy guest. Ugh :(
+> > > > > > > > > Well, although I think adding an ioctl is doable, may I
+> > > > > > > > > know what the use
+> > > > > > > > > case there will be for kernel to leverage such info
+> > > > > > > > > directly? Is there a
+> > > > > > > > > case QEMU can't do with dedicate ioctls later if there's =
+indeed
+> > > > > > > > > differentiation (legacy v.s. modern) needed?
+> > > > > > > > BTW a good API could be
+> > > > > > > >
+> > > > > > > > #define VHOST_SET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > > > #define VHOST_GET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > > >
+> > > > > > > > we did it per vring but maybe that was a mistake ...
+> > > > > > >
+> > > > > > > Actually, I wonder whether it's good time to just not support
+> > > > > > > legacy driver
+> > > > > > > for vDPA. Consider:
+> > > > > > >
+> > > > > > > 1) It's definition is no-normative
+> > > > > > > 2) A lot of budren of codes
+> > > > > > >
+> > > > > > > So qemu can still present the legacy device since the config
+> > > > > > > space or other
+> > > > > > > stuffs that is presented by vhost-vDPA is not expected to be
+> > > > > > > accessed by
+> > > > > > > guest directly. Qemu can do the endian conversion when necess=
+ary
+> > > > > > > in this
+> > > > > > > case?
+> > > > > > >
+> > > > > > > Thanks
+> > > > > > >
+> > > > > > Overall I would be fine with this approach but we need to avoid=
+ breaking
+> > > > > > working userspace, qemu releases with vdpa support are out ther=
+e and
+> > > > > > seem to work for people. Any changes need to take that into acc=
+ount
+> > > > > > and document compatibility concerns.
+> > > > >
+> > > > >
+> > > > > Agree, let me check.
+> > > > >
+> > > > >
+> > > > > >   I note that any hardware
+> > > > > > implementation is already broken for legacy except on platforms=
+ with
+> > > > > > strong ordering which might be helpful in reducing the scope.
+> > > > >
+> > > > >
+> > > > > Yes.
+> > > > >
+> > > > > Thanks
+> > > > >
+> > > > >
+> > > > > >
+> > > > > >
+> > > > >
+> > >
+>
 

@@ -2,110 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 461BC472D86
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B61472D83
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237726AbhLMNht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:37:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60506 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237716AbhLMNhs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:37:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639402668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g+u/c+H/rcBrTEgKIs3qQRnTecevHVmV6fnVkgG1Vpo=;
-        b=UBQYcRcu+754kkHohpoLBLdQLTF1opbTP6oocfGLwuizME+6uSA23ry+UUprw363EpTCCK
-        Z5NdYR99ijkRd2PBGe8gRx5PW9HoMClvD0MFRxUIQUGkJFChBKRRJsH1SZHqaMM8yf8X9h
-        8OtmB+6Yce8qGH4pL+5NIt6PX6Mr/Cw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-1-jX6aXRXDMYqcbyOxnQElnw-1; Mon, 13 Dec 2021 08:37:42 -0500
-X-MC-Unique: jX6aXRXDMYqcbyOxnQElnw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BDC02802C99;
-        Mon, 13 Dec 2021 13:37:38 +0000 (UTC)
-Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 903F4ADCD;
-        Mon, 13 Dec 2021 13:37:37 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 21:37:35 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        id S237704AbhLMNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:37:41 -0500
+Received: from mail-dm6nam12on2069.outbound.protection.outlook.com ([40.107.243.69]:1600
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231772AbhLMNhj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 08:37:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ki5BN33Ic7DMxipuaQkKgWuddBouHcbm9iDqcVZrR56znv0141dDiHveqC2MxsMYUQn6UkM4NoBmSWVFIR1tqVb+4jbwzRMcunlGkw0o504hq2PNdWd4p7pQON7B8ITZl9IsDKWMVDSlDWe317IiwsUe2TYPhc0d2SAwsEfb+Vc2l3m3+iJsvbhTCQdg369sZjv3mWnQbw0VhYWg0NpwOIusTXsOB3s7c663R3oad1clj46XagEeZYigzjHBpl9Rp7fayl+9IhMbPwe658J7UjH8KNpwLMJGar3NOW8SHpC5beufAo6VYJssr8P/qrSXgHPWPKbJ8Ir74qV8h8ei3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xggFXRr0LsROw2d6Z61nZ7hHVxM38Z13f0KEkB/Uhw4=;
+ b=LQI9zQrgi8BymOvVzFpv1YQx4Mn+ONoD7weq7u3udebHW2dqNlHqmwe011BFI0KH0+7JSFapNgMcIQrO3qu5SxyLiTw5xHz4Ahm6kAZqfvKZv+vHs3xdH+Q2IpfoCHQJUkKLbYpmLYlSK9OTkgzCCpudMjeZvvu4EfESI4WQi/2Kmst4Lf+iz2P79hFNWSnAxObHJX2vlOhC3dM0AH5PXb82HrbyWyLiB7QftLIzhrYcOqokCiHICKDjmP0iu6K61mhKT+Z++1u0SXBeQOX0xjk87Vp5S57NUQ+3QAXJ0QcGEFECuWnale2HGWxcGXPwRKDeBjL7Tm/f7dxkAsz73w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xggFXRr0LsROw2d6Z61nZ7hHVxM38Z13f0KEkB/Uhw4=;
+ b=ZlSorW0ZAGYSekVtz/5f9u42qg+HPrOHdhQllA8cjTUmTe9SpCiM/zPfJuA5zBlcE8cMql/RhORIjOQJwiZrstDuS6a8ScAr9yGaT0SkKT0xrwIxJTr6rgEjN38rnMh9xdhiBMZhPACsrIJGViVUxkNVOjN8Bjjn/9WAaAL77NOhwMD8MXVdZNxK8lEWNoVtfUw7jbVFhIW1Az7QXDhkzvQDGLrLpNpeQAFWqrmS7yBFq9yo2Ae3ntg6EyMoMVPjLolc+2bRctZyfmKKxOJhBBLGEEVw4+RmEERFCx2QK1PGUWF1ym8uaGSDvgI4S/EmqyRoZBHFBd3CIKN5muA9pA==
+Received: from BL1PR12MB5272.namprd12.prod.outlook.com (2603:10b6:208:319::18)
+ by BL1PR12MB5207.namprd12.prod.outlook.com (2603:10b6:208:318::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
+ 2021 13:37:38 +0000
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5272.namprd12.prod.outlook.com (2603:10b6:208:319::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Mon, 13 Dec
+ 2021 13:37:37 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 13:37:37 +0000
+Date:   Mon, 13 Dec 2021 09:37:35 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 02/10] x86: kdump: make the lower bound of crash
- kernel reservation consistent
-Message-ID: <20211213133735.GB23510@MiWiFi-R3L-srv>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-3-thunder.leizhen@huawei.com>
-MIME-Version: 1.0
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V3 01/35] PCI/MSI: Set pci_dev::msi[x]_enabled early
+Message-ID: <20211213133735.GU6385@nvidia.com>
+References: <20211210221642.869015045@linutronix.de>
+ <20211210221813.250049810@linutronix.de>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210065533.2023-3-thunder.leizhen@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20211210221813.250049810@linutronix.de>
+X-ClientProxiedBy: YT3PR01CA0059.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:82::6) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6f276fb4-b3b7-4cd0-30db-08d9be3dba1f
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5272:EE_|BL1PR12MB5207:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5272067DA35BD30855DBC8C5C2749@BL1PR12MB5272.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5ZNdlvyKTGTbehIFUDKiA7YcdDH/5E9YKYmkS8atCo5M1+yMncNYjnyXmTrFKfiy9YWTVVTW/J6rrc7RCcDpa50UexR+l7IaZ1EYQf8SVlEDIijCGL+A77atYYSyGk74xu0IuG2BLeBFGf69eAlp7l1g6PTTkVU8ajhVuaiOVe186TaZGIMGIFg+wWCpLwPfzSMOI17nC/TatKdncHABQwX/l27k9Ox+Lmcp9cbyrSe0fC+YFBOCr+pVUbGGYPte94jP0BD2NVxB9fvqHvm8G+yYg4MTQEpzGjOYMNFonH7egb9lAsbpyQMK4FqfW6SROxF0KvqIbPvaQ+30vF/vdtuFIxJE4RORQ0EY1Q7XpoG1UrB2s8f4XkjkCeVjlONRHn844uuIWETBKA1E1iL+77eO/kvj8KMRAlLNhP5CAEJv6uQTigMPh4JtxeQ72wVlNPuQqcPWiWoLDysRVbrraUhcsfLslucBQOYf0eu35zurh1xtBmERNDMzMgw4A8Tb99mKXkPNWgDMtXWzYaOXP2k7e64kR/PHWXPhzE93N14u4xelnWFtJdPuTXeFQZKmBcglOnf9gaYYsaV52t8qrhNADMS59ZU97pqqT9bjrKlwWM6MWFdEXzUP2UcQYN2k7vmep7rpMkMBEMBj0+diTg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5272.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(54906003)(86362001)(4326008)(7406005)(316002)(36756003)(7416002)(83380400001)(508600001)(6512007)(38100700002)(8676002)(2906002)(6486002)(4744005)(1076003)(5660300002)(33656002)(26005)(6506007)(66476007)(186003)(66946007)(2616005)(66556008)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xdqpvC6oG/g8YjIodR1SC4/6w3DBlwnZJ0pJ5J+9kjCrBJbjmPTloLXFgSWU?=
+ =?us-ascii?Q?XTyGOe4aUI29ZZb2KP2+F3Sh9pNDeSADj3XDjmgU3H1PJK8nCcq62n337HBg?=
+ =?us-ascii?Q?WVwhCHVZQh51MA1uZ4llaE0WsHXusAe/NpQ0+aQItmefcLUpeJmNHcQ1uVJ/?=
+ =?us-ascii?Q?4+7wiFaIh4xyAjp2rpvQj9RodEKiGmwQHDggzJfkqqMFgaX+rI05mcJs/NRc?=
+ =?us-ascii?Q?h/St0MWkgpHbX0lkTGw7BUINrpXkhV82undeRCyAW9Mjxhj0RoBj01CZedwv?=
+ =?us-ascii?Q?+t2BkL5FcXzFN/nI8wFJfYz+hf9+wWKstPUD089HvAxxcnBKctmp9d7kx551?=
+ =?us-ascii?Q?f48DK4/sxFzAkm7QXHvMZ3V3g+33FGbd2fk5jTGFXMr4sdqDEUQW5OzNnNaT?=
+ =?us-ascii?Q?r3ianOYaF10GTHCoSbFbFJe7BM0unNiP5IKcYjY5k3r1hiIwelOhi3TqETR3?=
+ =?us-ascii?Q?3WP+CaTRaQqpV1rZ/ICh7M56q5w7HC9cLvq2PMJ6hAOCcSEY5acqLz6UtH5c?=
+ =?us-ascii?Q?YdXwSKE/oSkd/BN8tnNQsohn3rFthwg+4WCedpXhfY5ZpkwmIk4aJuQIwlqh?=
+ =?us-ascii?Q?Y0XZBVP3NVhMEnvMc2GYlm0VF246sGlXHKPFHGGGjEum41Zosyhv/pGsuUD9?=
+ =?us-ascii?Q?TbelPO+G2Myz8I98fbyTJO+buyH9jxmmgJR0HrWtRjsLxujZO7JOZ/k3djW5?=
+ =?us-ascii?Q?iGb0shFdBAQB8ij/bGpNMEwV9vgT99DskvE5jp6hI+xIH9gxHTj4tMD0qceC?=
+ =?us-ascii?Q?VPBguO27ihBmUSFT7KGPZf0A+cUtvzz7bo6d5NMhkJHgXSOCIgfF46jf2Q1I?=
+ =?us-ascii?Q?KD9SDpdczWJqDk0sqXY7PZEMDLV/jNVfWrW2YN3uVqGIb5oyMgL8UQ2ZW8Eq?=
+ =?us-ascii?Q?RN/+Ac/gQ3z0pl/3FtdIbjXa7v499FzyZQXD6F3XRhbI8TYSK6Sx/a2Bkff3?=
+ =?us-ascii?Q?ATQkvEzUPcU13I21IvWl5YE9ZdxHJfnJ3kiZMRqtsqJAIfyro8MIdiMewviH?=
+ =?us-ascii?Q?HbDF0eWilAPXOEohUbSUlDoZdrBokj9EKaQdy3sVLrgm/8CnXkAIK1+ZYEmM?=
+ =?us-ascii?Q?Dg/qJvd403zZojUiF8yTilXG+aReBDrJMFF0SgmW5IIXyP5MgWN5/T9lpeHN?=
+ =?us-ascii?Q?SdNMYIo6n7b4mUF20CfBfVTWWe2z8AaP0qPNRWXe5nOfJGpAQXIzA4fXyZdT?=
+ =?us-ascii?Q?74dlnPeVgUC4fP20/lwkM9Pi6eAdar/z2ngarMQ1JOVN2P9LWBEeQ98JLfSg?=
+ =?us-ascii?Q?8VdoKOfoopHxnEq10zr5ZH4yjrMKRuic+EVMCjAI19e+2oReOwupEXKKCcx5?=
+ =?us-ascii?Q?3CATr5MC0B2E7gSMjzIBczFwGftt99cyP4/o0N1f+9fPYlGRyqS9bXa6DMn2?=
+ =?us-ascii?Q?7qBYoIv0rbk5kMvn89z8xAat/3eDb1Cscrl7yNZLCZnOfDZsILYYQDT03gUu?=
+ =?us-ascii?Q?DQHY/K2u+hvbI5xkFE4ItRbbN9ofh6jMhrcOkugbPso8ntAqtVF7SOq9FhNR?=
+ =?us-ascii?Q?E1RXBy+DpRjwV+b/Ot++hGmUoZr2mobxa3J7lGRd7YSvQzTMZGLdKV2/f34d?=
+ =?us-ascii?Q?0EnIyilE+lYn1/BDh/Y=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f276fb4-b3b7-4cd0-30db-08d9be3dba1f
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 13:37:37.6399
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VytknH7paVPjrCWIKp0flqHqBuCf5kFFsxuZNo9G/pTnt4rie8xiU6i3m/jhM/Nc
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5207
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 at 02:55pm, Zhen Lei wrote:
-> From: Chen Zhou <chenzhou10@huawei.com>
+On Fri, Dec 10, 2021 at 11:18:44PM +0100, Thomas Gleixner wrote:
+> There are quite some places which retrieve the first MSI descriptor to
+> evaluate whether the setup is for MSI or MSI-X. That's required because
+> pci_dev::msi[x]_enabled is only set when the setup completed successfully.
 > 
-> The lower bounds of crash kernel reservation and crash kernel low
-> reservation are different, use the consistent value CRASH_ALIGN.
+> There is no real reason why msi[x]_enabled can't be set at the beginning of
+> the setup sequence and cleared in case of a failure.
 > 
-> Suggested-by: Dave Young <dyoung@redhat.com>
-> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-
-You may need add Co-developed-by to clarify who is author, and who is
-co-author. Please check section "When to use Acked-by:, Cc:, and Co-developed-by:"
-of Documentation/process/submitting-patches.rst. Otherwise, 
-
-Acked-by: Baoquan He <bhe@redhat.com>
-
-> Tested-by: John Donnelly <John.p.donnelly@oracle.com>
-> Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+> Implement that so the MSI descriptor evaluations can be converted to simple
+> property queries.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  arch/x86/kernel/setup.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 5cc60996eac56d6..6424ee4f23da2cf 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -441,7 +441,8 @@ static int __init reserve_crashkernel_low(void)
->  			return 0;
->  	}
->  
-> -	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
-> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, CRASH_ALIGN,
-> +			CRASH_ADDR_LOW_MAX);
->  	if (!low_base) {
->  		pr_err("Cannot reserve %ldMB crashkernel low memory, please try smaller size.\n",
->  		       (unsigned long)(low_size >> 20));
-> -- 
-> 2.25.1
-> 
+> V3: New patch
+> ---
+>  drivers/pci/msi/msi.c |   23 +++++++++++++++++------
+>  1 file changed, 17 insertions(+), 6 deletions(-)
 
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+Jason

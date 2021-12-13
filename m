@@ -2,144 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9BD472B28
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9278472B2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbhLMLTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbhLMLTK (ORCPT
+        id S232603AbhLMLTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:19:35 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:50808 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231296AbhLMLTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:19:10 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A01C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:19:09 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id e24so4438484lfc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:19:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pisr92gZKvsteBy/s9F3IAR+cQBvUriK+eu6zsF7wyw=;
-        b=Q9NH27t3R9Qm08Yn225jCBXBnjCDUbBZlO9iRSlzuJM0fyX3f4CIpWznxDuwS3/xNl
-         y2RpQuwsrnpMkdIOZb4IWOfvErkD6LdjKd7X8Paq83V3hc5v2n3QXq3pP4vuRHpp8gyK
-         QkJW8E8vid1iTF5iQKzovyuhseShdVMobmPGSrZXnl9JqSSSPJlix4PWSVSmZMrKeyhO
-         ygeYT11OLE4eFeCBzH4iRsOtraCkEgzGqvcV/xvaxftmcI3T2BN7wUUKDpuZG+EkT+ai
-         hBk2Zdp1yNsq5FvvflSwi97L2anCWRtNWArzEuD2dELEz2VNih1Zd0dWPKt9aRScBjcZ
-         ILGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pisr92gZKvsteBy/s9F3IAR+cQBvUriK+eu6zsF7wyw=;
-        b=W/XixkX4+1TL5Y+0kp/sZJcMlJvaDU+XGEUrRpQcNe1jppo97FuIb/zW/xgexLjYl4
-         2vw+0Ezd2lTpaXZ/z57NTR5XflIxoex7sSs2mMWvuBsEVJJ/fNMqlCp6lZjxv3AZZr6A
-         jF3QbUNtemGWdmHS3ymFuQgYtnvvbmriYLJS9taNit645cmHGFbZ3ma2sj5Cpd9uBEy0
-         tfTeXBQBROevakTwkfT2QsS6ATqOsUDtSTzJCuUN5pg0v0llmys6Y8fsavMOlHBt5If1
-         4I+Sh6ODo96czriKFUu1LynA9C41WTH5si5Hpx0pGFGuDS4eodyBlWXdLuDYtUYZyMxQ
-         yJbw==
-X-Gm-Message-State: AOAM532r4bVUZ3WIv4PuWU9xg3L2V9j+RSC4XdIyMdQrM16NsaxvIs0r
-        rmq4ml4sHWAYYaDFIfjnG5YtETcpq3qLSp3BJ086mg==
-X-Google-Smtp-Source: ABdhPJx30c7FAJ3lvGEDI+ZSXrcR+/grZyj0VFN1XwsLOUnbgMIYy/6u7p86PmkVTn96nNYygrLsKqZS0iLS3XSZseg=
-X-Received: by 2002:a05:6512:118b:: with SMTP id g11mr26987032lfr.46.1639394347900;
- Mon, 13 Dec 2021 03:19:07 -0800 (PST)
+        Mon, 13 Dec 2021 06:19:34 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1432A212B6;
+        Mon, 13 Dec 2021 11:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639394373; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ire/tjZ+0o47YsB/d9PyauJHzxOJtSQJIvqpR3Apzt0=;
+        b=sDGcWHfWM6aHjXn75M6zAANHID7akGsBt2d+ckoKJl6HkN29KFRZJTeBksHJd23xRHZEZ3
+        dwMc16bqrvoEhcFDpLeoaM+aFgQivmvayeq/z4OdisESzYKF2RUrfzqZuQri8H+L3N08uZ
+        gKOApVPPC4cLuGWh+UIgyrQCorNe2Ug=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3A1C9A3B81;
+        Mon, 13 Dec 2021 11:19:32 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 12:19:30 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Dan Schatzberg <schatzberg.dan@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <guro@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm: add group_oom_kill memory event
+Message-ID: <YbcsQhxKwpW4127B@dhcp22.suse.cz>
+References: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
 MIME-Version: 1.0
-References: <20211122110817.33319-1-mie@igel.co.jp> <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
- <20211207171447.GA6467@ziepe.ca> <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
- <20211210124204.GG6467@ziepe.ca> <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
- <20211210132656.GH6467@ziepe.ca> <d25b2895-63b6-158d-ff73-f05e437e0f91@amd.com>
-In-Reply-To: <d25b2895-63b6-158d-ff73-f05e437e0f91@amd.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Mon, 13 Dec 2021 20:18:57 +0900
-Message-ID: <CANXvt5rzmEnF3Gph4U6NT-XzJhV6zqyay1g7dHkTgH=Aqc6Geg@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Doug Ledford <dledford@redhat.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Tomohito Esaki <etom@igel.co.jp>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2021=E5=B9=B412=E6=9C=8810=E6=97=A5(=E9=87=91) 22:29 Christian K=C3=B6nig <=
-christian.koenig@amd.com>:
->
-> Am 10.12.21 um 14:26 schrieb Jason Gunthorpe:
-> > On Fri, Dec 10, 2021 at 01:47:37PM +0100, Christian K=C3=B6nig wrote:
-> >> Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
-> >>> On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
-> >>>> Hi Jason,
-> >>>> Thank you for replying.
-> >>>>
-> >>>> 2021=E5=B9=B412=E6=9C=888=E6=97=A5(=E6=B0=B4) 2:14 Jason Gunthorpe <=
-jgg@ziepe.ca>:
-> >>>>> On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
-> >>>>>> Hi maintainers,
-> >>>>>>
-> >>>>>> Could you please review this patch series?
-> >>>>> Why is it RFC?
-> >>>>>
-> >>>>> I'm confused why this is useful?
-> >>>>>
-> >>>>> This can't do copy from MMIO memory, so it shouldn't be compatible
-> >>>>> with things like Gaudi - does something prevent this?
-> >>>> I think if an export of the dma-buf supports vmap, CPU is able to ac=
-cess the
-> >>>> mmio memory.
-> >>>>
-> >>>> Is it wrong? If this is wrong, there is no advantages this changes..
-> >>> I don't know what the dmabuf folks did, but yes, it is wrong.
-> >>>
-> >>> IOMEM must be touched using only special accessors, some platforms
-> >>> crash if you don't do this. Even x86 will crash if you touch it with
-> >>> something like an XMM optimized memcpy.
-> >>>
-> >>> Christian? If the vmap succeeds what rules must the caller use to
-> >>> access the memory?
-> >> See dma-buf-map.h and especially struct dma_buf_map.
-> >>
-> >> MMIO memory is perfectly supported here and actually the most common c=
-ase.
-> > Okay that looks sane, but this rxe RFC seems to ignore this
-> > completely. It stuffs the vaddr directly into a umem which goes to all
-> > manner of places in the driver.
-> >
-> > ??
->
-> Well, yes that can go boom pretty quickly.
-Sorry, I was wrong. The dma_buf_map treats both iomem and vaddr region, but
-this RFC only supports vaddr. Advantage of the partial support is we can us=
-e the
-vaddr dma-buf in RXE without changing a rxe data copy implementation.
+On Fri 03-12-21 08:24:23, Dan Schatzberg wrote:
+> Our container agent wants to know when a container exits if it was OOM
+> killed or not to report to the user. We use memory.oom.group = 1 to
+> ensure that OOM kills within the container's cgroup kill
+> everything. Existing memory.events are insufficient for knowing if
+> this triggered:
 
-An example of a dma-buf pointing to a vaddr is some gpu drivers use RAM for
-VRAM and we can get dma-buf for the region that indicates vaddr regions.
-Specifically, the gpu driver using gpu/drm/drm_gem_cma_helper.c is one such
-example.
+Yes our events reporting is not really friendly for this kind of usage.
+OOM_KILL is accounted to the memcg of the task so it will not be updated
+for inter nodes other than recursively (so never in local events).
+OOM event, even though it is reported to the memcg under oom, cannot be
+really used either because in some cases the oom killer is simply not
+invoked. So there indeed is no clear way to tell what is happening under
+the memcg hierarchy and what is happening for the whole hierarchy.
+ 
+> 1) Our current approach reads memory.events oom_kill and reports the
+> container was killed if the value is non-zero. This is erroneous in
+> some cases where containers create their children cgroups with
+> memory.oom.group=1 as such OOM kills will get counted against the
+> container cgroup's oom_kill counter despite not actually OOM killing
+> the entire container.
+> 
+> 2) Reading memory.events.local will fail to identify OOM kills in leaf
+> cgroups (that don't set memory.oom.group) within the container cgroup.
 
-> Not sure what they want to use this for.
-I'd like to use RDMA with RXE for that memory region.
+I am a bit confused by 2). local events by definition cannot tell you
+anything about children cgroups.
 
-Best,
-Shunsuke
-> Christian.
->
-> >
-> > Jason
->
+> This patch adds a new oom_group_kill event when memory.oom.group
+> triggers to allow userspace to cleanly identify when an entire cgroup
+> is oom killed.
+
+New counter makes sense to me because it allows to tell oom events even
+on the middle nodes.
+
+> Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
+
+once the cgroup v1 interface part is dropped (as suggested by Johannes),
+feel free to add
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst | 4 ++++
+>  include/linux/memcontrol.h              | 1 +
+>  mm/memcontrol.c                         | 5 +++++
+>  mm/oom_kill.c                           | 1 +
+>  4 files changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 2aeb7ae8b393..eec830ce2068 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1268,6 +1268,10 @@ PAGE_SIZE multiple when read back.
+>  		The number of processes belonging to this cgroup
+>  		killed by any kind of OOM killer.
+>  
+> +          oom_group_kill
+> +                The number of times all tasks in the cgroup were killed
+> +                due to memory.oom.group.
+
+This can be rather confusing for hierarchicaly reported values but the
+same applies for other counters as well. So be it.
+[...]
+> @@ -4390,6 +4390,9 @@ static int mem_cgroup_oom_control_read(struct seq_file *sf, void *v)
+>  	seq_printf(sf, "under_oom %d\n", (bool)memcg->under_oom);
+>  	seq_printf(sf, "oom_kill %lu\n",
+>  		   atomic_long_read(&memcg->memory_events[MEMCG_OOM_KILL]));
+> +	seq_printf(sf, "oom_group_kill %lu\n",
+> +		   atomic_long_read(
+> +			&memcg->memory_events[MEMCG_OOM_GROUP_KILL]));
+>  	return 0;
+>  }
+
+This should be dropped.
+-- 
+Michal Hocko
+SUSE Labs

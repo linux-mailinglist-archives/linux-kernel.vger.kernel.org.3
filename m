@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391EB4729CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3108472704
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbhLMKZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S239486AbhLMJ5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244940AbhLMKUz (ORCPT
+        with ESMTP id S238066AbhLMJwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:20:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA0EC094259;
-        Mon, 13 Dec 2021 01:58:29 -0800 (PST)
+        Mon, 13 Dec 2021 04:52:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1A2C08ED0A;
+        Mon, 13 Dec 2021 01:44:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4CCFB80E81;
-        Mon, 13 Dec 2021 09:58:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEDEC34600;
-        Mon, 13 Dec 2021 09:58:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C7D0BCE0B59;
+        Mon, 13 Dec 2021 09:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D9CC00446;
+        Mon, 13 Dec 2021 09:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389507;
-        bh=bP/mCHnNWJSVWTol0xxFMwMXmjI10uo99AR0u52iLIY=;
+        s=korg; t=1639388679;
+        bh=ybYobvTj9OmFcLqPSyOaUehHwauotJRb9HkaJx4c2N4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s/6zh5QKOnnGlmLBZTzJ4oxwn8DwvSxY/PlHqCuhi/uHKBHHdcH41UZgzVgcUu6Io
-         +kTFUC6s5rWIzTVfUvpTP8/pYWYyOc7IW8SZdPpGf1cdz32wCaB3jxAYZbpfRlTjY2
-         xZuKAnKuqAqpKlj0QWrc2EV03YpBKyMwZOkS6LzI=
+        b=2C7WlKWKNj3ElbdF8hIbaTozsBD4fATheAbZ6HJbCtLNFjFvFbk/0fGFPtZqErSFR
+         +BQNlDea8vKZJa2WOrIkzVm/kaBPAP445pAjJ6bX/d+6WdoQ2Pk8/O1RB00qn0z4S8
+         R4n0aOsPepvNMIzMk0DQhJTY9jbsSpmv2ZJ1Hzbk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.15 115/171] hwmon: (dell-smm) Fix warning on /proc/i8k creation error
+        stable@vger.kernel.org, Russell King <rmk+kernel@arm.linux.org.uk>,
+        Nicolas Diaz <nicolas.diaz@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 60/88] net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
 Date:   Mon, 13 Dec 2021 10:30:30 +0100
-Message-Id: <20211213092948.930278387@linuxfoundation.org>
+Message-Id: <20211213092935.330760199@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,43 +50,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-commit dbd3e6eaf3d813939b28e8a66e29d81cdc836445 upstream.
+commit b5bd95d17102b6719e3531d627875b9690371383 upstream.
 
-The removal function is called regardless of whether
-/proc/i8k was created successfully or not, the later
-causing a WARN() on module removal.
-Fix that by only registering the removal function
-if /proc/i8k was created successfully.
+Background:
+We have a customer is running a Profinet stack on the 8MM which receives and
+responds PNIO packets every 4ms and PNIO-CM packets every 40ms. However, from
+time to time the received PNIO-CM package is "stock" and is only handled when
+receiving a new PNIO-CM or DCERPC-Ping packet (tcpdump shows the PNIO-CM and
+the DCERPC-Ping packet at the same time but the PNIO-CM HW timestamp is from
+the expected 40 ms and not the 2s delay of the DCERPC-Ping).
 
-Tested on a Inspiron 3505.
+After debugging, we noticed PNIO, PNIO-CM and DCERPC-Ping packets would
+be handled by different RX queues.
 
-Fixes: 039ae58503f3 ("hwmon: Allow to compile dell-smm-hwmon driver without /proc/i8k")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20211112171440.59006-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+The root cause should be driver ack all queues' interrupt when handle a
+specific queue in fec_enet_rx_queue(). The blamed patch is introduced to
+receive as much packets as possible once to avoid interrupt flooding.
+But it's unreasonable to clear other queues'interrupt when handling one
+queue, this patch tries to fix it.
+
+Fixes: ed63f1dcd578 (net: fec: clear receive interrupts before processing a packet)
+Cc: Russell King <rmk+kernel@arm.linux.org.uk>
+Reported-by: Nicolas Diaz <nicolas.diaz@nxp.com>
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+Link: https://lore.kernel.org/r/20211206135457.15946-1-qiangqing.zhang@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/dell-smm-hwmon.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/freescale/fec.h      |    3 +++
+ drivers/net/ethernet/freescale/fec_main.c |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -623,10 +623,9 @@ static void __init i8k_init_procfs(struc
- {
- 	struct dell_smm_data *data = dev_get_drvdata(dev);
+--- a/drivers/net/ethernet/freescale/fec.h
++++ b/drivers/net/ethernet/freescale/fec.h
+@@ -373,6 +373,9 @@ struct bufdesc_ex {
+ #define FEC_ENET_WAKEUP	((uint)0x00020000)	/* Wakeup request */
+ #define FEC_ENET_TXF	(FEC_ENET_TXF_0 | FEC_ENET_TXF_1 | FEC_ENET_TXF_2)
+ #define FEC_ENET_RXF	(FEC_ENET_RXF_0 | FEC_ENET_RXF_1 | FEC_ENET_RXF_2)
++#define FEC_ENET_RXF_GET(X)	(((X) == 0) ? FEC_ENET_RXF_0 :	\
++				(((X) == 1) ? FEC_ENET_RXF_1 :	\
++				FEC_ENET_RXF_2))
+ #define FEC_ENET_TS_AVAIL       ((uint)0x00010000)
+ #define FEC_ENET_TS_TIMER       ((uint)0x00008000)
  
--	/* Register the proc entry */
--	proc_create_data("i8k", 0, NULL, &i8k_proc_ops, data);
--
--	devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
-+	/* Only register exit function if creation was successful */
-+	if (proc_create_data("i8k", 0, NULL, &i8k_proc_ops, data))
-+		devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
- }
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -1444,7 +1444,7 @@ fec_enet_rx_queue(struct net_device *nde
+ 			break;
+ 		pkt_received++;
  
- #else
+-		writel(FEC_ENET_RXF, fep->hwp + FEC_IEVENT);
++		writel(FEC_ENET_RXF_GET(queue_id), fep->hwp + FEC_IEVENT);
+ 
+ 		/* Check for errors. */
+ 		status ^= BD_ENET_RX_LAST;
 
 

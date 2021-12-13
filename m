@@ -2,552 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1232F472C53
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC06C472C56
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbhLMMcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbhLMMco (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:32:44 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17C6C061574;
-        Mon, 13 Dec 2021 04:32:43 -0800 (PST)
-Date:   Mon, 13 Dec 2021 13:32:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639398761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=F4+FlvEzRVslF1whkfwXHyEJnnuvAyLGfSmqr2OhHAo=;
-        b=VsUMwBijyH8wTz1aBubNVUnz4oTPduJTOK7TC1bcvIGpO3q3sZogvk3Ij8H9DRewEG0L9O
-        CXfpYzH17LGeIzd9iuWalogl10WTxtC/rF/539Dl0V7/mmhTgGgCeIgk5Bf/mgyALuoip+
-        A8u2O/ARPESh0R9rBdsyAh8rys0uIjvs1lUo2sLVqigV0WemgucnF9Vq6AVGqJDnwB4SVC
-        vRj9OBdtniBqYXB+Efgsf7dze8QsgG1i1swxSvUTUybbqgLJZl4KmiysQKy82gsQV5/SsA
-        CXroZcKjY1qpFkwBFwjhYNbYgnH2JOrEuiAtCEWcI9TzArJFfbikW/Nw5eNa4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639398761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=F4+FlvEzRVslF1whkfwXHyEJnnuvAyLGfSmqr2OhHAo=;
-        b=69f9kpzzv5dc8qURpfQOXIM+FoPKecTWom8Eqf0+d2yBLNc5WdBweQijqLQ6cV5TtMMJvT
-        /Bh8UTpN63ANqEBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [ANNOUNCE] v5.16-rc5-rt10
-Message-ID: <Ybc9ZyKbxTkBpyc0@linutronix.de>
+        id S236001AbhLMMdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:33:24 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:55607 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231733AbhLMMdW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 07:33:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1639398802; x=1670934802;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BDj9ra8itOriardQ6ZRvtI5csjEmV2CGanL5WbQl7dU=;
+  b=CRpt+yXX8GF8HfUJ7mx0X0zgnKhfIQ6DzVuG1qPWlp0WA/D3dD2+KOrz
+   7CG60pr3ZxsCwCPIw62pqm0QVRpB03oXEvnZAjtWncfC3r2Fmm3A9uM1d
+   xRbcyqJNK0jyofJRvE/rG00JDM4f/5QVRRiFPVyQVJz2Svp5ClhxLh/6o
+   yaYUkbYMrMqw2hj+i9dbGac+D4hDZruRaM1doZ2K52UUAMFVTkmUhSzOp
+   p+Xrto5pLCGUkvYwW1TfLcKb1/lZ50PBeTiHU9iHQJmRCYWHvCuiyHLze
+   JJ34Gy3q9tEMeqfW5ioL8auCz2H32yG0JwAcCWoW+9Jgkps4viy5uVG1E
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,202,1635199200"; 
+   d="scan'208";a="21010718"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 13 Dec 2021 13:33:21 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 13 Dec 2021 13:33:21 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 13 Dec 2021 13:33:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1639398801; x=1670934801;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BDj9ra8itOriardQ6ZRvtI5csjEmV2CGanL5WbQl7dU=;
+  b=aGj4l0MC3mKowFrmvLlcbmhjx2jxmfEohBfTL6zHpmalJNNJfA9DcfvI
+   M2lEMp19C9+swqPGnY2klrfqFETOAccBK7egk6vElUfqO7ZsAbszk29A3
+   VmxdpxXLv8hGhkT7B7I3+WSuACT0d1j5Hpz5dKH+id+XHSJy9qRDWzoUO
+   BiLFi1n3zS3WenSJ0PP82OzdLqziRkVyOQ35aLZsBzbXUCJSHRrid0AXA
+   DSAMwp3cxvpLctvZOA/meicQ7vS4DmgGwL/B84U1qVC1weTithlgmpkWY
+   LzMynwQBJk5zm5VtbvkPpVsZ/VT83PlxctO6QJPDZbLt2pa2rmN3A0Oc6
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,202,1635199200"; 
+   d="scan'208";a="21010717"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 13 Dec 2021 13:33:21 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9A511280065;
+        Mon, 13 Dec 2021 13:33:20 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] dma-direct: Fix dma_direct_use_pool helper
+Date:   Mon, 13 Dec 2021 13:33:11 +0100
+Message-Id: <20211213123311.2399611-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear RT folks!
+During refactoring the logic around gfpflags_allow_blocking() got inverted
+due to missing '!'. Fix this by adding it back.
 
-I'm pleased to announce the v5.16-rc5-rt10 patch set. 
+Fixes: 8d7c141bb80f ("dma-direct: add a dma_direct_use_pool helper")
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+I bisected this to the commit in 'Fixed:' tag. Here is the splat:
+------------[ cut here ]------------                                                                                                                                                                                                                                           
+Failed to get suitable pool for 30be0000.ethernet                                                                                                                                                                                                                              
+WARNING: CPU: 0 PID: 62 at kernel/dma/pool.c:279 dma_alloc_from_pool+0x88/0x1d0                                                                                                                                                                                                
+Modules linked in:                                                                                                                                                                                                                                                             
+CPU: 0 PID: 62 Comm: kworker/u8:2 Not tainted 5.16.0-rc4-tq+ #238                                                                                                                                                                                                              
+Hardware name: TQ-Systems GmbH i.MX8MQ TQMa8MQ on MBa8Mx (DT)                                                                                                                                                                                                                  
+Workqueue: events_unbound deferred_probe_work_func                                                                                                                                                                                                                             
+pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)                                                                                                                                                                                                                
+pc : dma_alloc_from_pool+0x88/0x1d0                                                                                                                                                                                                                                            
+lr : dma_alloc_from_pool+0x88/0x1d0                                                                                                                                                                                                                                            
+sp : ffff8000126b3860                                                                                                                                                                                                                                                          
+x29: ffff8000126b3860 x28: ffff800012133d68 x27: 0000000000000000                                                                                                                                                                                                              
+x26: ffff0000c03e0000 x25: ffff8000126b3930 x24: ffff0000c08ee010                                                                                                                                                                                                              
+x23: ffff800012133d48 x22: ffff80001011f4b0 x21: ffff800011712820                                                                                                                                                                                                              
+x20: 0000000000018000 x19: ffff0000c0ef8000 x18: 0000000000000014                                                                                                                                                                                                              
+x17: 756420676e697375 x16: 202c646e756f6620 x15: 0000000000000000                                                                                                                                                                                                              
+x14: 0000000000000000 x13: 20726f66206c6f6f x12: 7020656c62617469                                                                                                                                                                                                              
+x11: 656820747563205b x10: 000000000000000a x9 : ffff8000126b3860                                                                                                                                                                                                              
+x8 : 000000000000000a x7 : 0000000000000011 x6 : 000000000000000a
+x5 : 0000000000000000 x4 : 0000000000000000 x3 : 00000000ffffffff
+x2 : ffff800011eb6b30 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ dma_alloc_from_pool+0x88/0x1d0
+ dma_direct_alloc+0x8c/0x39c
+ dma_alloc_attrs+0x7c/0xe4
+ dmam_alloc_attrs+0x68/0xbc
+ fec_enet_init+0xfc/0x504
+ fec_probe+0x558/0x8b0
+ platform_probe+0x64/0x100
+ call_driver_probe+0x28/0x130
+ really_probe+0xbc/0x390
+ __driver_probe_device+0xfc/0x144
+ driver_probe_device+0xcc/0x150
+ __device_attach_driver+0xd4/0x180
+ bus_for_each_drv+0x74/0xc4
+ __device_attach+0xd8/0x1e0
+ device_initial_probe+0x10/0x20
+ bus_probe_device+0x90/0xa0
+ deferred_probe_work_func+0x9c/0xf0
+ process_one_work+0x1cc/0x360
+ worker_thread+0x214/0x3b0
+ kthread+0x150/0x160
+ ret_from_fork+0x10/0x20
+---[ end trace 3934c72dbe137fa9 ]---
 
-Changes since v5.16-rc5-rt9:
+ kernel/dma/direct.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  - Redo add_interrupt_randomness() handling on PREEMPT_RT.
-
-  - Cosmetic changes to "u64_stats".
-
-  - Cosmetic changes to how busylock is acquired in __dev_xmit_skb().
-
-  - Cosmetic changes to one i915 patch.
-
-  - The random oops_id has been replaced by 0.
-
-Known issues
-     - netconsole triggers WARN.
-
-     - The "Memory controller" (CONFIG_MEMCG) has been disabled.
-
-     - Valentin Schneider reported a few splats on ARM64, see
-          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
-
-The delta patch against v5.16-rc5-rt9 is appended below and can be found here:
- 
-     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/incr/patch-5.16-rc5-rt9-rt10.patch.xz
-
-You can get this release via the git tree at:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.16-rc5-rt10
-
-The RT patch against v5.16-rc5 can be found here:
-
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/older/patch-5.16-rc5-rt10.patch.xz
-
-The split quilt queue is available at:
-
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/older/patches-5.16-rc5-rt10.tar.xz
-
-Sebastian
-
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 896986c8c01de..2a0f836789118 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -75,12 +75,11 @@ void hv_remove_vmbus_handler(void)
- DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_stimer0)
- {
- 	struct pt_regs *old_regs = set_irq_regs(regs);
--	u64 ip = regs ? instruction_pointer(regs) : 0;
- 
- 	inc_irq_stat(hyperv_stimer0_count);
- 	if (hv_stimer0_handler)
- 		hv_stimer0_handler();
--	add_interrupt_randomness(HYPERV_STIMER0_VECTOR, 0, ip);
-+	add_interrupt_randomness(HYPERV_STIMER0_VECTOR);
- 	ack_APIC_irq();
- 
- 	set_irq_regs(old_regs);
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 56b2d5a7e2a07..12fad0c2e61ff 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -200,7 +200,7 @@
-  *	void add_device_randomness(const void *buf, unsigned int size);
-  * 	void add_input_randomness(unsigned int type, unsigned int code,
-  *                                unsigned int value);
-- *	void add_interrupt_randomness(int irq, int irq_flags);
-+ *	void add_interrupt_randomness(int irq);
-  * 	void add_disk_randomness(struct gendisk *disk);
-  *
-  * add_device_randomness() is for adding data to the random pool that
-@@ -1242,55 +1242,97 @@ static __u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
- 	return *ptr;
- }
- 
--void add_interrupt_randomness(int irq, int irq_flags, __u64 ip)
-+static bool process_interrupt_randomness_pool(struct fast_pool *fast_pool)
- {
- 	struct entropy_store	*r;
-+
-+	if (unlikely(crng_init == 0)) {
-+		bool pool_reset = false;
-+
-+		if ((fast_pool->count >= 64) &&
-+		    crng_fast_load((char *) fast_pool->pool,
-+				   sizeof(fast_pool->pool)))
-+			pool_reset = true;
-+
-+		return pool_reset;
-+	}
-+
-+	if ((fast_pool->count < 64) &&
-+	    !time_after(jiffies, fast_pool->last + HZ))
-+		return false;
-+
-+	r = &input_pool;
-+	if (!spin_trylock(&r->lock))
-+		return false;
-+
-+	__mix_pool_bytes(r, &fast_pool->pool, sizeof(fast_pool->pool));
-+	spin_unlock(&r->lock);
-+
-+	/* award one bit for the contents of the fast pool */
-+	credit_entropy_bits(r, 1);
-+	return true;
-+}
-+
-+#ifdef CONFIG_PREEMPT_RT
-+void process_interrupt_randomness(void)
-+{
-+	struct fast_pool *cpu_pool;
-+	struct fast_pool fast_pool;
-+
-+	lockdep_assert_irqs_enabled();
-+
-+	migrate_disable();
-+	cpu_pool = this_cpu_ptr(&irq_randomness);
-+
-+	local_irq_disable();
-+	memcpy(&fast_pool, cpu_pool, sizeof(fast_pool));
-+	local_irq_enable();
-+
-+	if (process_interrupt_randomness_pool(&fast_pool)) {
-+		local_irq_disable();
-+		cpu_pool->last = jiffies;
-+		cpu_pool->count = 0;
-+		local_irq_enable();
-+	}
-+	memzero_explicit(&fast_pool, sizeof(fast_pool));
-+	migrate_enable();
-+}
-+#endif
-+
-+void add_interrupt_randomness(int irq)
-+{
- 	struct fast_pool	*fast_pool = this_cpu_ptr(&irq_randomness);
-+	struct pt_regs		*regs = get_irq_regs();
- 	unsigned long		now = jiffies;
- 	cycles_t		cycles = random_get_entropy();
- 	__u32			c_high, j_high;
-+	__u64			ip;
- 
- 	if (cycles == 0)
--		cycles = get_reg(fast_pool, NULL);
-+		cycles = get_reg(fast_pool, regs);
- 	c_high = (sizeof(cycles) > 4) ? cycles >> 32 : 0;
- 	j_high = (sizeof(now) > 4) ? now >> 32 : 0;
- 	fast_pool->pool[0] ^= cycles ^ j_high ^ irq;
- 	fast_pool->pool[1] ^= now ^ c_high;
--	if (!ip)
--		ip = _RET_IP_;
-+	ip = regs ? instruction_pointer(regs) : _RET_IP_;
- 	fast_pool->pool[2] ^= ip;
- 	fast_pool->pool[3] ^= (sizeof(ip) > 4) ? ip >> 32 :
--		get_reg(fast_pool, NULL);
-+		get_reg(fast_pool, regs);
- 
- 	fast_mix(fast_pool);
- 	add_interrupt_bench(cycles);
- 
--	if (unlikely(crng_init == 0)) {
--		if ((fast_pool->count >= 64) &&
--		    crng_fast_load((char *) fast_pool->pool,
--				   sizeof(fast_pool->pool))) {
--			fast_pool->count = 0;
-+	/*
-+	 * On PREEMPT_RT the entropy can not be fed into the input_pool because
-+	 * it needs to acquire sleeping locks with disabled interrupts.
-+	 * This is deferred to the threaded handler.
-+	 */
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+		if (process_interrupt_randomness_pool(fast_pool)) {
- 			fast_pool->last = now;
-+			fast_pool->count = 0;
- 		}
--		return;
- 	}
--
--	if ((fast_pool->count < 64) &&
--	    !time_after(now, fast_pool->last + HZ))
--		return;
--
--	r = &input_pool;
--	if (!spin_trylock(&r->lock))
--		return;
--
--	fast_pool->last = now;
--	__mix_pool_bytes(r, &fast_pool->pool, sizeof(fast_pool->pool));
--	spin_unlock(&r->lock);
--
--	fast_pool->count = 0;
--
--	/* award one bit for the contents of the fast pool */
--	credit_entropy_bits(r, 1);
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
- 
-diff --git a/drivers/gpu/drm/i915/gt/intel_context.h b/drivers/gpu/drm/i915/gt/intel_context.h
-index 8a575629ef1b6..d8c74bbf9aae2 100644
---- a/drivers/gpu/drm/i915/gt/intel_context.h
-+++ b/drivers/gpu/drm/i915/gt/intel_context.h
-@@ -212,7 +212,7 @@ static inline void intel_context_enter(struct intel_context *ce)
- static inline void intel_context_mark_active(struct intel_context *ce)
- {
- 	lockdep_assert(lockdep_is_held(&ce->timeline->mutex) ||
--		       test_bit(CONTEXT_IS_PARKED, &ce->flags));
-+		       test_bit(CONTEXT_IS_PARKING, &ce->flags));
- 	++ce->active_count;
- }
- 
-diff --git a/drivers/gpu/drm/i915/gt/intel_context_types.h b/drivers/gpu/drm/i915/gt/intel_context_types.h
-index 329f470d125f2..30cd81ad8911a 100644
---- a/drivers/gpu/drm/i915/gt/intel_context_types.h
-+++ b/drivers/gpu/drm/i915/gt/intel_context_types.h
-@@ -118,7 +118,7 @@ struct intel_context {
- #define CONTEXT_LRCA_DIRTY		9
- #define CONTEXT_GUC_INIT		10
- #define CONTEXT_PERMA_PIN		11
--#define CONTEXT_IS_PARKED		12
-+#define CONTEXT_IS_PARKING		12
- 
- 	struct {
- 		u64 timeout_us;
-diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pm.c b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-index 456f1f5d0c04e..a8a2ad44b7e39 100644
---- a/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-+++ b/drivers/gpu/drm/i915/gt/intel_engine_pm.c
-@@ -180,7 +180,7 @@ static bool switch_to_kernel_context(struct intel_engine_cs *engine)
- 	 * engine->wakeref.count, we may see the request completion and retire
- 	 * it causing an underflow of the engine->wakeref.
- 	 */
--	set_bit(CONTEXT_IS_PARKED, &ce->flags);
-+	set_bit(CONTEXT_IS_PARKING, &ce->flags);
- 	GEM_BUG_ON(atomic_read(&ce->timeline->active_count) < 0);
- 
- 	rq = __i915_request_create(ce, GFP_NOWAIT);
-@@ -212,7 +212,7 @@ static bool switch_to_kernel_context(struct intel_engine_cs *engine)
- 
- 	result = false;
- out_unlock:
--	clear_bit(CONTEXT_IS_PARKED, &ce->flags);
-+	clear_bit(CONTEXT_IS_PARKING, &ce->flags);
- 	return result;
- }
- 
-diff --git a/drivers/gpu/drm/i915/i915_request.h b/drivers/gpu/drm/i915/i915_request.h
-index c5898882bb27a..b7fe67405fd32 100644
---- a/drivers/gpu/drm/i915/i915_request.h
-+++ b/drivers/gpu/drm/i915/i915_request.h
-@@ -643,7 +643,7 @@ i915_request_timeline(const struct i915_request *rq)
- 	/* Valid only while the request is being constructed (or retired). */
- 	return rcu_dereference_protected(rq->timeline,
- 					 lockdep_is_held(&rcu_access_pointer(rq->timeline)->mutex) ||
--					 test_bit(CONTEXT_IS_PARKED, &rq->context->flags));
-+					 test_bit(CONTEXT_IS_PARKING, &rq->context->flags));
- }
- 
- static inline struct i915_gem_context *
-diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-index 7be17d52eaaea..3a1f007b678a0 100644
---- a/drivers/hv/hyperv_vmbus.h
-+++ b/drivers/hv/hyperv_vmbus.h
-@@ -19,7 +19,6 @@
- #include <linux/atomic.h>
- #include <linux/hyperv.h>
- #include <linux/interrupt.h>
--#include <linux/irq.h>
- 
- #include "hv_trace.h"
- 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index c5e9725fb5ff2..7ae04ccb10438 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -22,7 +22,6 @@
- #include <linux/clockchips.h>
- #include <linux/cpu.h>
- #include <linux/sched/task_stack.h>
--#include <linux/irq.h>
- 
- #include <linux/delay.h>
- #include <linux/notifier.h>
-@@ -1338,8 +1337,6 @@ static void vmbus_isr(void)
- 	void *page_addr = hv_cpu->synic_event_page;
- 	struct hv_message *msg;
- 	union hv_synic_event_flags *event;
--	struct pt_regs *regs = get_irq_regs();
--	u64 ip = regs ? instruction_pointer(regs) : 0;
- 	bool handled = false;
- 
- 	if (unlikely(page_addr == NULL))
-@@ -1384,7 +1381,7 @@ static void vmbus_isr(void)
- 			tasklet_schedule(&hv_cpu->msg_dpc);
- 	}
- 
--	add_interrupt_randomness(vmbus_interrupt, 0, ip);
-+	add_interrupt_randomness(vmbus_interrupt);
- }
- 
- static irqreturn_t vmbus_percpu_isr(int irq, void *dev_id)
-diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
-index 5cf06e8287d57..93d270ca0c567 100644
---- a/include/linux/irqdesc.h
-+++ b/include/linux/irqdesc.h
-@@ -68,7 +68,6 @@ struct irq_desc {
- 	unsigned int		irqs_unhandled;
- 	atomic_t		threads_handled;
- 	int			threads_handled_last;
--	u64			random_ip;
- 	raw_spinlock_t		lock;
- 	struct cpumask		*percpu_enabled;
- 	const struct cpumask	*percpu_affinity;
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 0e41d05278091..a02c285a5ee52 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -35,7 +35,8 @@ static inline void add_latent_entropy(void) {}
- 
- extern void add_input_randomness(unsigned int type, unsigned int code,
- 				 unsigned int value) __latent_entropy;
--extern void add_interrupt_randomness(int irq, int irq_flags, __u64 ip) __latent_entropy;
-+extern void add_interrupt_randomness(int irq) __latent_entropy;
-+extern void process_interrupt_randomness(void);
- 
- extern void get_random_bytes(void *buf, int nbytes);
- extern int wait_for_random_bytes(void);
-diff --git a/include/linux/u64_stats_sync.h b/include/linux/u64_stats_sync.h
-index 81dc1f5e181ac..6ad4e9032d538 100644
---- a/include/linux/u64_stats_sync.h
-+++ b/include/linux/u64_stats_sync.h
-@@ -66,7 +66,7 @@
- #include <linux/seqlock.h>
- 
- struct u64_stats_sync {
--#if BITS_PER_LONG==32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
-+#if BITS_PER_LONG == 32 && (defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT))
- 	seqcount_t	seq;
- #endif
- };
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index f895265d75487..c093246630882 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -575,8 +575,6 @@ EXPORT_SYMBOL_GPL(handle_simple_irq);
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index d0a317ed8f02..50f48e9e4598 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -162,7 +162,7 @@ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
   */
- void handle_untracked_irq(struct irq_desc *desc)
+ static bool dma_direct_use_pool(struct device *dev, gfp_t gfp)
  {
--	unsigned int flags = 0;
--
- 	raw_spin_lock(&desc->lock);
- 
- 	if (!irq_may_run(desc))
-@@ -593,7 +591,7 @@ void handle_untracked_irq(struct irq_desc *desc)
- 	irqd_set(&desc->irq_data, IRQD_IRQ_INPROGRESS);
- 	raw_spin_unlock(&desc->lock);
- 
--	__handle_irq_event_percpu(desc, &flags);
-+	__handle_irq_event_percpu(desc);
- 
- 	raw_spin_lock(&desc->lock);
- 	irqd_clear(&desc->irq_data, IRQD_IRQ_INPROGRESS);
-diff --git a/kernel/irq/handle.c b/kernel/irq/handle.c
-index a86a503b2a11a..9489f93b3db34 100644
---- a/kernel/irq/handle.c
-+++ b/kernel/irq/handle.c
-@@ -136,7 +136,7 @@ void __irq_wake_thread(struct irq_desc *desc, struct irqaction *action)
- 	wake_up_process(action->thread);
+-	return gfpflags_allow_blocking(gfp) && !is_swiotlb_for_alloc(dev);
++	return !gfpflags_allow_blocking(gfp) && !is_swiotlb_for_alloc(dev);
  }
  
--irqreturn_t __handle_irq_event_percpu(struct irq_desc *desc, unsigned int *flags)
-+irqreturn_t __handle_irq_event_percpu(struct irq_desc *desc)
- {
- 	irqreturn_t retval = IRQ_NONE;
- 	unsigned int irq = desc->irq_data.irq;
-@@ -174,10 +174,6 @@ irqreturn_t __handle_irq_event_percpu(struct irq_desc *desc, unsigned int *flags
- 			}
- 
- 			__irq_wake_thread(desc, action);
--
--			fallthrough;	/* to add to randomness */
--		case IRQ_HANDLED:
--			*flags |= action->flags;
- 			break;
- 
- 		default:
-@@ -192,18 +188,11 @@ irqreturn_t __handle_irq_event_percpu(struct irq_desc *desc, unsigned int *flags
- 
- irqreturn_t handle_irq_event_percpu(struct irq_desc *desc)
- {
--	struct pt_regs *regs = get_irq_regs();
--	u64 ip = regs ? instruction_pointer(regs) : 0;
--	unsigned int flags = 0;
- 	irqreturn_t retval;
- 
--	retval = __handle_irq_event_percpu(desc, &flags);
-+	retval = __handle_irq_event_percpu(desc);
- 
--#ifdef CONFIG_PREEMPT_RT
--	desc->random_ip = ip;
--#else
--	add_interrupt_randomness(desc->irq_data.irq, flags, ip);
--#endif
-+	add_interrupt_randomness(desc->irq_data.irq);
- 
- 	if (!irq_settings_no_debug(desc))
- 		note_interrupt(desc, retval);
-diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
-index 54363527feea4..99cbdf55a8bda 100644
---- a/kernel/irq/internals.h
-+++ b/kernel/irq/internals.h
-@@ -103,7 +103,7 @@ extern int __irq_get_irqchip_state(struct irq_data *data,
- 
- extern void init_kstat_irqs(struct irq_desc *desc, int node, int nr);
- 
--irqreturn_t __handle_irq_event_percpu(struct irq_desc *desc, unsigned int *flags);
-+irqreturn_t __handle_irq_event_percpu(struct irq_desc *desc);
- irqreturn_t handle_irq_event_percpu(struct irq_desc *desc);
- irqreturn_t handle_irq_event(struct irq_desc *desc);
- 
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 894e4db1fffcc..d641de1f879f4 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -1281,12 +1281,9 @@ static int irq_thread(void *data)
- 		if (action_ret == IRQ_WAKE_THREAD)
- 			irq_wake_secondary(desc, action);
- 
--		if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
--			migrate_disable();
--			add_interrupt_randomness(action->irq, 0,
--				 desc->random_ip ^ (unsigned long) action);
--			migrate_enable();
--		}
-+		if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+			process_interrupt_randomness();
-+
- 		wake_threads_waitq(desc);
- 	}
- 
-diff --git a/kernel/panic.c b/kernel/panic.c
-index d509c0694af95..f4c7c77595bd2 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -538,28 +538,9 @@ void oops_enter(void)
- 		trigger_all_cpu_backtrace();
- }
- 
--/*
-- * 64-bit random ID for oopses:
-- */
--static u64 oops_id;
--
--static int init_oops_id(void)
--{
--#ifndef CONFIG_PREEMPT_RT
--	if (!oops_id)
--		get_random_bytes(&oops_id, sizeof(oops_id));
--	else
--#endif
--		oops_id++;
--
--	return 0;
--}
--late_initcall(init_oops_id);
--
- static void print_oops_end_marker(void)
- {
--	init_oops_id();
--	pr_warn("---[ end trace %016llx ]---\n", (unsigned long long)oops_id);
-+	pr_warn("---[ end trace %016llx ]---\n", 0ULL);
- 	pr_flush(1000, true);
- }
- 
-diff --git a/localversion-rt b/localversion-rt
-index 22746d6390a42..d79dde624aaac 100644
---- a/localversion-rt
-+++ b/localversion-rt
-@@ -1 +1 @@
---rt9
-+-rt10
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 6cdb416c6ff4b..0179312d11c43 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3838,12 +3838,12 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
- 	 * separate lock before trying to get qdisc main lock.
- 	 * This permits qdisc->running owner to get the lock more
- 	 * often and dequeue packets faster.
-+	 * On PREEMPT_RT it is possible to preempt the qdisc owner during xmit
-+	 * and then other tasks will only enqueue packets. The packets will be
-+	 * sent after the qdisc owner is scheduled again. To prevent this
-+	 * scenario the task always serialize on the lock.
- 	 */
--#ifdef CONFIG_PREEMPT_RT
--	contended = true;
--#else
--	contended = qdisc_is_running(q);
--#endif
-+	contended = IS_ENABLED(CONFIG_PREEMPT_RT) || qdisc_is_running(q);
- 	if (unlikely(contended))
- 		spin_lock(&q->busylock);
- 
+ static void *dma_direct_alloc_from_pool(struct device *dev, size_t size,
+-- 
+2.25.1
+

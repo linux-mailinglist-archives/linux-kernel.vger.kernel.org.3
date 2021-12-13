@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A91374723CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0EA47269D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233733AbhLMJ3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:29:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46664 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233728AbhLMJ3e (ORCPT
+        id S236464AbhLMJxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:53:39 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39910 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237288AbhLMJsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:29:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639387773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0VZhEx+sUMMeSJSQzTqGhraZkHXzXw9WTjnutstzo9Q=;
-        b=GcERNv3hqnY1wk6Kfcb7iz+0mELo/6AeTDzsRV+sJvGIrcrdnVnwD4sk5WSx73Wys0+255
-        aKhtKI7kT1GxrY6c7Hnn6AUkjQmT0kKEQ+Di3MPR04Z23ppvFy0Tx0iSlPnySzbYx56F0x
-        2od92sRX5u+cwnLm6XD74K8yf4I4jaQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-n-9qWa54PzOagvRgJ_RVzA-1; Mon, 13 Dec 2021 04:29:28 -0500
-X-MC-Unique: n-9qWa54PzOagvRgJ_RVzA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 13 Dec 2021 04:48:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 614F9593AE;
-        Mon, 13 Dec 2021 09:29:27 +0000 (UTC)
-Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 898396107F;
-        Mon, 13 Dec 2021 09:29:18 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 17:29:15 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 3/3] vmcore: Convert read_from_oldmem() to take an
- iov_iter
-Message-ID: <20211213092915.GC29905@MiWiFi-R3L-srv>
-References: <20211213000636.2932569-1-willy@infradead.org>
- <20211213000636.2932569-4-willy@infradead.org>
- <20211213080257.GC20986@lst.de>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 35444CE0AE2;
+        Mon, 13 Dec 2021 09:48:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B56C00446;
+        Mon, 13 Dec 2021 09:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639388895;
+        bh=ABDbxUGi36Vw+IJJjd+uvmNcwBpa6OJuHgGlHRCWDy0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Qrs86tYToErFa8cD5fPRx3k6cmB8vIDY7cKAheoJ5M6qVWTduHiyQjWpHLO7sL9BQ
+         /UM4RgvzIdD1aG9eh68E6CVsxq52+EvnxT7XHEoygrcWYYSJRUJ9PfnLQIYQIuIPrT
+         +SNVhXWNjkr8LJPwSvtva3dQHotvxuQ6iOb7LRIM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.10 014/132] IB/hfi1: Insure use of smp_processor_id() is preempt disabled
+Date:   Mon, 13 Dec 2021 10:29:15 +0100
+Message-Id: <20211213092939.564555995@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213080257.GC20986@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 at 09:02am, Christoph Hellwig wrote:
-> >  
-> >  ssize_t elfcorehdr_read(char *buf, size_t count, u64 *ppos)
-> >  {
-> > -	return read_from_oldmem(buf, count, ppos, 0,
-> > +	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-> > +	struct iov_iter iter;
-> > +
-> > +	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-> > +
-> > +	return read_from_oldmem(&iter, count, ppos,
-> >  				cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
-> >  }
-> 
-> elfcorehdr_read should probably also take an iov_iter while we're at it.
-> 
-> I also don't quite understand why we even need the arch overrides for it,
-> but that would require some digging into the history of this interface.
-> 
+From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
-Below patchset removing sec_active() from generic code added this arch
-override on x86_64. Before that, s390 and arm64 have had arch overrides. 
-And arm64 says "elfcorehdr_read() is simple as the region is always mapped."
-in commit e62aaeac42 "arm64: kdump: provide /proc/vmcore file".
+commit b6d57e24ce6cc3df8a8845e1b193e88a65d501b1 upstream.
 
-[v3,0/6] Remove x86-specific code from generic headers
-https://patchwork.kernel.org/project/linux-fsdevel/cover/20190718032858.28744-1-bauerman@linux.ibm.com/
+The following BUG has just surfaced with our 5.16 testing:
 
-5cbdaeefb655 s390/mm: Remove sev_active() function
-ae7eb82a92fa fs/core/vmcore: Move sev_active() reference to x86 arch code
-284e21fab2cf x86, s390/mm: Move sme_active() and sme_me_mask to x86-specific header
-e740815a97e2 dma-mapping: Remove dma_check_mask()
-47e5d8f9ed34 swiotlb: Remove call to sme_active()
-0c9c1d563975 x86, s390: Move ARCH_HAS_MEM_ENCRYPT definition to arch/Kconfig
+  BUG: using smp_processor_id() in preemptible [00000000] code: mpicheck/1581081
+  caller is sdma_select_user_engine+0x72/0x210 [hfi1]
+  CPU: 0 PID: 1581081 Comm: mpicheck Tainted: G S                5.16.0-rc1+ #1
+  Hardware name: Intel Corporation S2600WT2R/S2600WT2R, BIOS SE5C610.86B.01.01.0016.033120161139 03/31/2016
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x33/0x42
+   check_preemption_disabled+0xbf/0xe0
+   sdma_select_user_engine+0x72/0x210 [hfi1]
+   ? _raw_spin_unlock_irqrestore+0x1f/0x31
+   ? hfi1_mmu_rb_insert+0x6b/0x200 [hfi1]
+   hfi1_user_sdma_process_request+0xa02/0x1120 [hfi1]
+   ? hfi1_write_iter+0xb8/0x200 [hfi1]
+   hfi1_write_iter+0xb8/0x200 [hfi1]
+   do_iter_readv_writev+0x163/0x1c0
+   do_iter_write+0x80/0x1c0
+   vfs_writev+0x88/0x1a0
+   ? recalibrate_cpu_khz+0x10/0x10
+   ? ktime_get+0x3e/0xa0
+   ? __fget_files+0x66/0xa0
+   do_writev+0x65/0x100
+   do_syscall_64+0x3a/0x80
+
+Fix this long standing bug by moving the smp_processor_id() to after the
+rcu_read_lock().
+
+The rcu_read_lock() implicitly disables preemption.
+
+Link: https://lore.kernel.org/r/20211129191958.101968.87329.stgit@awfm-01.cornelisnetworks.com
+Cc: stable@vger.kernel.org
+Fixes: 0cb2aa690c7e ("IB/hfi1: Add sysfs interface for affinity setup")
+Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/infiniband/hw/hfi1/sdma.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/infiniband/hw/hfi1/sdma.c
++++ b/drivers/infiniband/hw/hfi1/sdma.c
+@@ -880,8 +880,8 @@ struct sdma_engine *sdma_select_user_eng
+ 	if (current->nr_cpus_allowed != 1)
+ 		goto out;
+ 
+-	cpu_id = smp_processor_id();
+ 	rcu_read_lock();
++	cpu_id = smp_processor_id();
+ 	rht_node = rhashtable_lookup(dd->sdma_rht, &cpu_id,
+ 				     sdma_rht_params);
+ 
 
 

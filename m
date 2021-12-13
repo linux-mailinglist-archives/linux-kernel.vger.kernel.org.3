@@ -2,112 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B6E4731E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868B34731EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235632AbhLMQgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbhLMQgG (ORCPT
+        id S240892AbhLMQhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:37:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39974 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233962AbhLMQhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:36:06 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C162C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:36:05 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id r130so15450259pfc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5wyxUOFKzXzWH6KmMgR+HYDbJTzQzijXFBl960+ZGjY=;
-        b=D8O81HGIxMuUln1CvFs5EppKQefv7NmfhODLWT6c95m5ppaYrbylr/8cX4L3KfDPG/
-         KwTwxNpcAZUCpn1+SywI9p6Mo2PwVKUSmKkpKGoiWlgLqY8QzAhdXR4Lxf6Sx8B6KEOl
-         9Y4wvQPORVDvX/Xq9OwUDBf7DgvYBz+tjueGiOed2Rrcz14r0yb+kNN5Vd+u6dHsWc0R
-         XpqeSCjvAjo5yhyTI6ughv6riC68rRsXPaGBa+Xx/5U3yp8lAzBo+JWXzcJfW79E+Kpu
-         kGbFUH4Jf4vKZdlaSqyIqPUQ9L9OG3S71vKMhrj57V8gSru8Qozg4tu/OmEFXTkNRm78
-         MBvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5wyxUOFKzXzWH6KmMgR+HYDbJTzQzijXFBl960+ZGjY=;
-        b=2KqyK7RaFuPSK/SxkR2+Lw9tjwbEx+P/YsQAi6Pdxr0lPt41JFV9yuDj9TRtqpSdqb
-         bSn+8jbKKnQqWb/FROK/5czUNgBP8viFJSVKNB7UgEfc+AIg7DbkKdJfWr55wJ3e++qQ
-         DjulVRkAgGVDs8p2M9RD+FgPh9qs6KeTLwPVenornfPzmcnCyraIXoZ8yK8qZ7wBgtr2
-         Jo2xi4lX1B1wTZxpNtTeMl7I8io0DePhodWlphVmwFMHX9g9PN4nMdRVfjfDMC1nKiW9
-         YwXr1pY9wi/4LPajH2EW8AinJMU0Y5YD3j9bs5ORNqQb6AL7giYipPZmjqmmR88uQ8+N
-         TjyA==
-X-Gm-Message-State: AOAM5331XpKZPR6luQKYf0BkcXCrCmXnBxQHl6HQCoMSg8bCjtp9HiVW
-        kkdRyrFsOWLJbpt/iJJRG9hWkg==
-X-Google-Smtp-Source: ABdhPJyXncbWfDcnfXrMsKYIsvJnDH5haMuRwYLqcxc16EUEfKi0gk5UXHBHOqGpstTcilOU7RUBsw==
-X-Received: by 2002:a63:c155:: with SMTP id p21mr46985502pgi.156.1639413364899;
-        Mon, 13 Dec 2021 08:36:04 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y28sm12953221pfa.208.2021.12.13.08.36.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 08:36:04 -0800 (PST)
-Date:   Mon, 13 Dec 2021 16:36:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        ignat@cloudflare.com, bgardon@google.com, dmatlack@google.com,
-        stevensd@chromium.org, kernel-team@cloudflare.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86: zap invalid roots in kvm_tdp_mmu_zap_all
-Message-ID: <Ybd2cEqUnxiy/JBd@google.com>
-References: <20211213112514.78552-1-pbonzini@redhat.com>
- <20211213112514.78552-3-pbonzini@redhat.com>
+        Mon, 13 Dec 2021 11:37:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C3656116B;
+        Mon, 13 Dec 2021 16:37:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA86C34603;
+        Mon, 13 Dec 2021 16:37:07 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 17:37:05 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem
+ related variables into ima_namespace
+Message-ID: <20211213163705.ui4g3d2rklklbhc6@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-14-stefanb@linux.ibm.com>
+ <20211209191109.o3x7nynnm52zhygz@wittgenstein>
+ <0ab33fbc-8438-27b6-ff4c-0321bfc73855@linux.ibm.com>
+ <20211210113244.odv2ibrifz2jzft5@wittgenstein>
+ <dca4e7c9-87a7-9a9e-b1f2-df16f1a45019@linux.ibm.com>
+ <20211211095026.i2gvqjy4df3sxq42@wittgenstein>
+ <85b75c98-6452-9706-7549-10b416350b7d@linux.ibm.com>
+ <20211213155020.pvadnomqnsub5vg2@wittgenstein>
+ <eb3d11b4-8077-bea0-85ff-8d7cf84dae58@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211213112514.78552-3-pbonzini@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <eb3d11b4-8077-bea0-85ff-8d7cf84dae58@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021, Paolo Bonzini wrote:
-> kvm_tdp_mmu_zap_all is intended to visit all roots and zap their page
-> tables, which flushes the accessed and dirty bits out to the Linux
-> "struct page"s.  Missing some of the roots has catastrophic effects,
-> because kvm_tdp_mmu_zap_all is called when the MMU notifier is being
-> removed and any PTEs left behind might become dangling by the time
-> kvm-arch_destroy_vm tears down the roots for good.
+On Mon, Dec 13, 2021 at 11:25:28AM -0500, Stefan Berger wrote:
 > 
-> Unfortunately that is exactly what kvm_tdp_mmu_zap_all is doing: it
-> visits all roots via for_each_tdp_mmu_root_yield_safe, which in turn
-> uses kvm_tdp_mmu_get_root to skip invalid roots.  If the current root is
-> invalid at the time of kvm_tdp_mmu_zap_all, its page tables will remain
-> in place but will later be zapped during kvm_arch_destroy_vm.
+> On 12/13/21 10:50, Christian Brauner wrote:
+> > On Mon, Dec 13, 2021 at 10:33:40AM -0500, Stefan Berger wrote:
+> > > On 12/11/21 04:50, Christian Brauner wrote:
+> > > > On Fri, Dec 10, 2021 at 08:57:11AM -0500, Stefan Berger wrote:
+> > > > > 
+> > > > > there anything that would prevent us from setns()'ing to that target user
+> > > > > namespace so that we would now see that of a user namespace that we are not
+> > > > > allowed to see?
+> > > > If you're really worried about someone being able to access a securityfs
+> > > > instance whose userns doesn't match the userns the securityfs instance
+> > > > was mounted in there are multiple ways to fix it. The one that I tend to
+> > > > prefer is:
+> > > > 
+> > > >   From e0ff6a8dcc573763568e685dd70d1547efd68df9 Mon Sep 17 00:00:00 2001
+> > > > From: Christian Brauner <christian.brauner@ubuntu.com>
+> > > > Date: Fri, 10 Dec 2021 11:47:37 +0100
+> > > > Subject: !!!! HERE BE DRAGONS - COMPLETELY UNTESTED !!!!
+> > > > 
+> > > > securityfs: only allow access to securityfs from within same namespace
+> > > > 
+> > > > Limit opening of securityfs files to callers located in the same namespace.
+> > > > 
+> > > > ---
+> > > >    security/inode.c | 33 +++++++++++++++++++++++++++++++--
+> > > >    1 file changed, 31 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/security/inode.c b/security/inode.c
+> > > > index eaccba7017d9..9eaf757c08cb 100644
+> > > > --- a/security/inode.c
+> > > > +++ b/security/inode.c
+> > > > @@ -80,6 +80,35 @@ static struct file_system_type fs_type = {
+> > > >    	.fs_flags =	FS_USERNS_MOUNT,
+> > > >    };
+> > > > +static int securityfs_permission(struct user_namespace *mnt_userns,
+> > > > +				 struct inode *inode, int mask)
+> > > > +{
+> > > > +	int err;
+> > > > +
+> > > > +	err = generic_permission(&init_user_ns, inode, mask);
+> > > > +	if (!err) {
+> > > > +		if (inode->i_sb->s_user_ns != current_user_ns())
+> > > > +			err = -EACCES;
+> > > > +	}
+> > > > +
+> > > > +	return err;
+> > > > +}
+> > > > +
+> > > > +const struct inode_operations securityfs_dir_inode_operations = {
+> > > > +	.permission	= securityfs_permission,
+> > > > +	.lookup		= simple_lookup,
+> > > > +};
+> > > > +
+> > > > +const struct file_operations securityfs_dir_operations = {
+> > > > +	.permission	= securityfs_permission,
+> > > 
+> > > This interface function on file operations doesn't exist.
+> > It's almost as if the subject line of this patch warned about its draft
+> > character. That was supposed for regular files.
+> > 
+> > > I'll use the inode_operations and also hook it to the root dentry of the
+> > > super_block. Then there's no need to have this check on symlinks and
+> > > files...
+> > Don't special case the inode_operations for the root inode!
+> 
+> I modified the inode_operations *also* for the root node, since that one is
+> initialized with &simple_dir_inode_operationsby simple_fill_super, so I
+> didn't want to miss it...
+> 
+> 
+> > If a privileged process opens an fd refering to a struct file for the
+> > root inode and leaks it to an unprivileged process by accident the
+> > unprivileged process can open any file or directory beneath via openat()
+> > and friends.
+> > 
+> > Symlinks don't need a .permission handler anyway because they just
+> > contain the name of another file and that is checked for .permission
+> > unless you have a separate .getlink handler where you want to restrict
+> > link contents further.
+> > 
+> > But regular files need to have a .permission method see openat().
+> 
+> So here's what I have now for the hardening.
+> 
+> 
+> diff --git a/security/inode.c b/security/inode.c
+> index fee01ff4d831..a0d9f086e3d5 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -26,6 +26,29 @@
+>  static struct vfsmount *init_securityfs_mount;
+>  static int init_securityfs_mount_count;
+> 
+> +static int securityfs_permission(struct user_namespace *mnt_userns,
+> +                                struct inode *inode, int mask)
+> +{
+> +       int err;
+> +
+> +       err = generic_permission(&init_user_ns, inode, mask);
+> +       if (!err) {
+> +               if (inode->i_sb->s_user_ns != current_user_ns())
+> +                       err = -EACCES;
 
-As stated in the bug report thread[*], it should be impossible as for the MMU
-notifier to be unregistered while kvm_mmu_zap_all_fast() is running.
-
-I do believe there's a race between set_nx_huge_pages() and kvm_mmu_notifier_release(),
-but that would result in the use-after-free kvm_set_pfn_dirty() tracing back to
-set_nx_huge_pages(), not kvm_destroy_vm().  And for that, I would much prefer we
-elevant mm->users while changing the NX hugepage setting.
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 8f0035517450..985df4db8192 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6092,10 +6092,15 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
-                mutex_lock(&kvm_lock);
-
-                list_for_each_entry(kvm, &vm_list, vm_list) {
-+                       if (!mmget_not_zero(kvm->mm))
-+                               continue;
-+
-                        mutex_lock(&kvm->slots_lock);
-                        kvm_mmu_zap_all_fast(kvm);
-                        mutex_unlock(&kvm->slots_lock);
-
-+                       mmput_async(kvm->mm);
-+
-                        wake_up_process(kvm->arch.nx_lpage_recovery_thread);
-                }
-                mutex_unlock(&kvm_lock);
-
-[*] https://lore.kernel.org/all/Ybdxd7QcJI71UpHm@google.com/
+Please consider
+https://lore.kernel.org/lkml/20211211104527.7cp4mbznjpcijfqx@wittgenstein
+otherwise looks ok.

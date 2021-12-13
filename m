@@ -2,26 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0283B473700
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C413473703
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243361AbhLMVzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S243372AbhLMVzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:55:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243344AbhLMVzG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 16:55:06 -0500
-Received: from out0.migadu.com ([94.23.1.103]:20013 "EHLO out0.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243367AbhLMVzC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:55:02 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B69C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:55:05 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639432501;
+        t=1639432504;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xS/npKqLDOlLS7GUOQeVJqvjcgKhqLlgaKGLm1W4Mro=;
-        b=OSZF9QehuGKytjp2/V1w0fMRG10MR9MmO52qSTWcoIrkp76qmfS0edl98byJlLha85CH4x
-        LE6vwlT5oxQJGzDUDpWdP+l/GyhHTrdxyzlRKMJT+57/IAD4DYZrweDhDoNawziCAzYMaY
-        xOJDoLSnWAy1yXCwwhcyWEFqmNwycbo=
+        bh=vluHY+VQM1dpG6ccvF7RpbMooJaXSsDFIpBMIGK6fR8=;
+        b=JnDImSkLaZ6d7uJJAqpBoqYBBE7J0wOFYTvyehFxEy4bRBF1E6C15fV9dW58vlWcg0OVqc
+        kh1HsWxG4piAmnn1hi6+5dpNyhk8/q769Q+GniE5V6LHtL+PYs3URK4pXqeABGEwpPt8av
+        RLMbS14ILb02u/kXoRiu8Q15pzow6KU=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -39,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 31/38] kasan, arm64: don't tag executable vmalloc allocations
-Date:   Mon, 13 Dec 2021 22:54:27 +0100
-Message-Id: <4a5ec956a2666c1f967c9789534a8ac4d4fe26f9.1639432170.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 32/38] kasan: mark kasan_arg_stacktrace as __initdata
+Date:   Mon, 13 Dec 2021 22:54:28 +0100
+Message-Id: <7825a5fecec3626441ed3fe734090e9e3ab9a0f9.1639432170.git.andreyknvl@google.com>
 In-Reply-To: <cover.1639432170.git.andreyknvl@google.com>
 References: <cover.1639432170.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,65 +58,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Besides asking vmalloc memory to be executable via the prot argument
-of __vmalloc_node_range() (see the previous patch), the kernel can skip
-that bit and instead mark memory as executable via set_memory_x().
+As kasan_arg_stacktrace is only used in __init functions, mark it as
+__initdata instead of __ro_after_init to allow it be freed after boot.
 
-Once tag-based KASAN modes start tagging vmalloc allocations, executing
-code from such allocations will lead to the PC register getting a tag,
-which is not tolerated by the kernel.
-
-Generic kernel code typically allocates memory via module_alloc() if
-it intends to mark memory as executable. (On arm64 module_alloc()
-uses __vmalloc_node_range() without setting the executable bit).
-
-Thus, reset pointer tags of pointers returned from module_alloc().
-
-However, on arm64 there's an exception: the eBPF subsystem. Instead of
-using module_alloc(), it uses vmalloc() (via bpf_jit_alloc_exec())
-to allocate its JIT region.
-
-Thus, reset pointer tags of pointers returned from bpf_jit_alloc_exec().
+The other enums for KASAN args are used in kasan_init_hw_tags_cpu(),
+which is not marked as __init as a CPU can be hot-plugged after boot.
+Clarify this in a comment.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Suggested-by: Marco Elver <elver@google.com>
 
 ---
 
-Changes v2->v3:
+Changes v1->v2:
 - Add this patch.
 ---
- arch/arm64/kernel/module.c    | 3 ++-
- arch/arm64/net/bpf_jit_comp.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ mm/kasan/hw_tags.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-index d3a1fa818348..f2d4bb14bfab 100644
---- a/arch/arm64/kernel/module.c
-+++ b/arch/arm64/kernel/module.c
-@@ -63,7 +63,8 @@ void *module_alloc(unsigned long size)
- 		return NULL;
- 	}
+diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+index bbcf6f914490..fb08fe1a3cf7 100644
+--- a/mm/kasan/hw_tags.c
++++ b/mm/kasan/hw_tags.c
+@@ -40,7 +40,7 @@ enum kasan_arg_stacktrace {
  
--	return p;
-+	/* Memory is intended to be executable, reset the pointer tag. */
-+	return kasan_reset_tag(p);
+ static enum kasan_arg kasan_arg __ro_after_init;
+ static enum kasan_arg_mode kasan_arg_mode __ro_after_init;
+-static enum kasan_arg_stacktrace kasan_arg_stacktrace __ro_after_init;
++static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
+ 
+ /* Whether KASAN is enabled at all. */
+ DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
+@@ -116,7 +116,10 @@ static inline const char *kasan_mode_info(void)
+ 		return "sync";
  }
  
- enum aarch64_reloc_op {
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 07aad85848fa..381a67922c2d 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1147,7 +1147,8 @@ u64 bpf_jit_alloc_exec_limit(void)
- 
- void *bpf_jit_alloc_exec(unsigned long size)
+-/* kasan_init_hw_tags_cpu() is called for each CPU. */
++/*
++ * kasan_init_hw_tags_cpu() is called for each CPU.
++ * Not marked as __init as a CPU can be hot-plugged after boot.
++ */
+ void kasan_init_hw_tags_cpu(void)
  {
--	return vmalloc(size);
-+	/* Memory is intended to be executable, reset the pointer tag. */
-+	return kasan_reset_tag(vmalloc(size));
- }
- 
- void bpf_jit_free_exec(void *addr)
+ 	/*
 -- 
 2.25.1
 

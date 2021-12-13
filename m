@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBCE472431
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4681D47277F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234167AbhLMJev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbhLMJeI (ORCPT
+        id S235644AbhLMKBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:01:41 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:45818 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238974AbhLMJ4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F891C0698DF;
-        Mon, 13 Dec 2021 01:34:06 -0800 (PST)
+        Mon, 13 Dec 2021 04:56:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 132FFCE0E6B;
-        Mon, 13 Dec 2021 09:34:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B699EC00446;
-        Mon, 13 Dec 2021 09:34:03 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 76266CE0E6B;
+        Mon, 13 Dec 2021 09:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232E8C34603;
+        Mon, 13 Dec 2021 09:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388044;
-        bh=0yWxunA5Y9GyMGObMKX+xYzYLxqY+ynFD0oM9DUBi1Y=;
+        s=korg; t=1639389372;
+        bh=ybFAwcSXdIy4tT/s09golkOAvRym3nZx/tRRa4EusaE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YjV2DfpWyXUkHNdlR1h5/gzaJJmCBL+oS8gVdsNbItKQP9POgLiHwbLWumiJu2p4T
-         heAPbeChjTXI7AO8LYonTx04E011+CaQGqdlCwZ6zyPFr0P2E0QRGYUOpCR/9YiMXd
-         RisC3CP4wsjr5zTp/mEvwyaPrs0dq95QP+Eki/Vw=
+        b=XWopd8IBUDUWuD8xQdJoAbse8o6FzcRusNZdDAXzsDJbclu7LFHVVMfrx6oc1tILG
+         7iCEJjegjPt+iI1QY/RH7o0CzgW7aDqfAXSYbUuO95TbbkO9fc2xR0+6TgdHjUq8xX
+         5Az5xqQhfLcJ+nExpSc3c8K8fBY4vuptjupsPwpg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 4.9 10/42] IB/hfi1: Correct guard on eager buffer deallocation
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.15 077/171] perf intel-pt: Fix sync state when a PSB (synchronization) packet is found
 Date:   Mon, 13 Dec 2021 10:29:52 +0100
-Message-Id: <20211213092926.918962696@linuxfoundation.org>
+Message-Id: <20211213092947.663677024@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,35 +46,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit 9292f8f9a2ac42eb320bced7153aa2e63d8cc13a upstream.
+commit ad106a26aef3a95ac7ca88d033b431661ba346ce upstream.
 
-The code tests the dma address which legitimately can be 0.
+When syncing, it may be that branch packet generation is not enabled at
+that point, in which case there will not immediately be a control-flow
+packet, so some packets before a control flow packet turns up, get
+ignored.  However, the decoder is in sync as soon as a PSB is found, so
+the state should be set accordingly.
 
-The code should test the kernel logical address to avoid leaking eager
-buffer allocations that happen to map to a dma address of 0.
-
-Fixes: 60368186fd85 ("IB/hfi1: Fix user-space buffers mapping with IOMMU enabled")
-Link: https://lore.kernel.org/r/20211129191952.101968.17137.stgit@awfm-01.cornelisnetworks.com
-Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: f4aa081949e7b6 ("perf tools: Add Intel PT decoder")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: stable@vger.kernel.org # v5.15+
+Link: https://lore.kernel.org/r/20211210162303.2288710-3-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hfi1/init.c |    2 +-
+ tools/perf/util/intel-pt-decoder/intel-pt-decoder.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/infiniband/hw/hfi1/init.c
-+++ b/drivers/infiniband/hw/hfi1/init.c
-@@ -955,7 +955,7 @@ void hfi1_free_ctxtdata(struct hfi1_devd
- 	kfree(rcd->egrbufs.rcvtids);
+--- a/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
++++ b/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
+@@ -3607,7 +3607,7 @@ static int intel_pt_sync(struct intel_pt
+ 	}
  
- 	for (e = 0; e < rcd->egrbufs.alloced; e++) {
--		if (rcd->egrbufs.buffers[e].dma)
-+		if (rcd->egrbufs.buffers[e].addr)
- 			dma_free_coherent(&dd->pcidev->dev,
- 					  rcd->egrbufs.buffers[e].len,
- 					  rcd->egrbufs.buffers[e].addr,
+ 	decoder->have_last_ip = true;
+-	decoder->pkt_state = INTEL_PT_STATE_NO_IP;
++	decoder->pkt_state = INTEL_PT_STATE_IN_SYNC;
+ 
+ 	err = intel_pt_walk_psb(decoder);
+ 	if (err)
 
 

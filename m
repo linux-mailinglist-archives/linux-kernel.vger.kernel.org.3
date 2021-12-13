@@ -2,340 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7BD4734E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7349E4734D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242326AbhLMTWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242301AbhLMTWC (ORCPT
+        id S242270AbhLMTUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:20:31 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:38776 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238814AbhLMTUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:22:02 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEE6C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:22:01 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id b15-20020a25ae8f000000b005c20f367790so32148039ybj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:22:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=gCOEw4QO1AVPuSgnsLdJE/xa8zh8JvsUy2eJYm/CDMI=;
-        b=ByBOw3Wzs/qlg6xr/pPHQlzP7HFzW6svzdh5JCb/aoEx9ySbJi35qVTBmATmB2widm
-         oDHKsZZ9MPp4Cgkf28Dg/uiDFi8vcwKuP5sujljtP1N/30U4qKWVVqz4hdVk46Ynxa5M
-         vvgNyhYiVfiBkJ+gd+6dQ3vXPM4hMJVcwOoc3JhGuK5xlNMceoUaMp0IGmhA24u5m7bB
-         t0FfNVwsNwb+Y+vVnmsfH+0FyMJe4vu/eKlJzxTCNpjhPtYf2cJjMee4qWx8+TlRSZ98
-         EawkzNTs90Quigk53bGy/5psE6F+5iA1ZbxkTFEzyqVHr8JGl0B1NJta9vMngeCp9Djq
-         I/cw==
+        Mon, 13 Dec 2021 14:20:30 -0500
+Received: by mail-il1-f197.google.com with SMTP id j4-20020a056e02218400b002ab6e4dbf88so2741125ila.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:20:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=gCOEw4QO1AVPuSgnsLdJE/xa8zh8JvsUy2eJYm/CDMI=;
-        b=VA5WC+tMeEIi4TXgVKyEJi0Xjc5lJ5jvnsN7xMy63uBG0LcxlsFScgiNhJs5Nhpk7I
-         tE8ValR3LC6Lzj0vG70dMn0mOxOEbegnHIX5xCRDdhGLfRAzsPPz2AEPaSUuBGVtyqKN
-         QMW7+kPhuo8xtUt4YlL8WK5wgICfou9XkTDMDMqdGjE0Gsrb7KvEiKknkLh4X40HEMfS
-         mXFdXlP/VlAmV6YM7aUL5DHEZ8pYuYHgh7vfg3Eith8Hf6DNXhRB4Vyiw+uhhDs9BW0Y
-         6WEaL4rdCwsxRRGa2omAhETxaDgi4Kzzyxfr3l+haaxtSg3Sjt8RGbFu2ayPoHv1z6bA
-         S1tQ==
-X-Gm-Message-State: AOAM533vi3Nmkmh6Z5dFUwroQFvJZr9CQDF5xWguvnvjG8VWZXExwq95
-        OjK3UUpEzHKClKz6/4t9MgsePoP6MQ==
-X-Google-Smtp-Source: ABdhPJx9BgjvwjvxCMH+VtL/IZLfDQUrh21Px/zp+UYD6x80bTaCqWOP1hetm2FCBxqUoQsqglNv5NdQfA==
-X-Received: from yaelt.nyc.corp.google.com ([2620:0:1003:415:de4f:7d66:d7c7:4b0a])
- (user=yaelt job=sendgmr) by 2002:a25:e746:: with SMTP id e67mr515443ybh.476.1639423320949;
- Mon, 13 Dec 2021 11:22:00 -0800 (PST)
-Date:   Mon, 13 Dec 2021 14:20:30 -0500
-Message-Id: <20211213192030.125091-1-yaelt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v2] Instantiate key with user-provided decrypted data.
-From:   Yael Tiomkin <yaelt@google.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
-        corbet@lwn.net, dhowells@redhat.com, jmorris@namei.org,
-        serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Yael Tiomkin <yaelt@google.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=vwc41IJxAaaBt+Mt67GWSjMlPa85Pj/CmHoWGwGNQwk=;
+        b=CTceJ2HooeQHsm/D9zYFMCy+wzNbkl6QqBLVEYRl3RxhZGneS3porLbq5Z/Rn/XUJS
+         VMR+7xf0e3fG2BpsNRz69UxzKgIXpXZ2/VeXN+reYbwC2y/hxGdzUDEaaZC4ujuJGCS2
+         atumkA6bydY1LK8A000BtMwQxKgLwg632WWJ9URpusQs4tz0n2Qy/rGM0N9Uyqmm9HVp
+         bHx42sl0tlOeHew4PbWjmqLWT2E890S594jqg38UeyEq0Ggs1aGG50uzBR/wMHbbmRjU
+         qi3p4rE5mT9WMd7NGRfVOoqJORge4bU4P/bL8ewuR0zPVu5fv8ZeU6BuqCgZrNEb4MCf
+         2e6A==
+X-Gm-Message-State: AOAM533vDTLAJSaPCsiFxycZWzJJYmAj46jZHugaj+Cu3YSZluLx3TkR
+        wJrWEC0s6Nb7ySDGDlQiUeukr8YS29iRN79FtvgrysbA2Oh9
+X-Google-Smtp-Source: ABdhPJz+/fUH2ghhANmNq42Wi7kFZZuSv1+IWSYe4JNkTyeQHIuvd27zgJVrhA3H7no2RpO1WOxBUMvGffkEKBGzEOLzx3N2c8VW
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:14cf:: with SMTP id l15mr153799jak.273.1639423230245;
+ Mon, 13 Dec 2021 11:20:30 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:20:30 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000467dff05d30bf75a@google.com>
+Subject: [syzbot] KASAN: out-of-bounds Read in leaf_paste_entries (2)
+From:   syzbot <syzbot+38b79774b6c990637f95@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The encrypted.c class supports instantiation of encrypted keys with
-either an already-encrypted key material, or by generating new key
-material based on random numbers. To support encryption of
-user-provided decrypted data, this patch defines a new datablob
-format: [<format>] <master-key name> <decrypted data length>
-<decrypted data>.
+Hello,
 
-Signed-off-by: Yael Tiomkin <yaelt@google.com>
+syzbot found the following issue on:
+
+HEAD commit:    2585cf9dfaad Linux 5.16-rc5
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1627c4d1b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=95a8e2162a0920fc
+dashboard link: https://syzkaller.appspot.com/bug?extid=38b79774b6c990637f95
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140a32d5b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b3de05b00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+38b79774b6c990637f95@syzkaller.appspotmail.com
+
+REISERFS (device loop0): checking transaction log (loop0)
+REISERFS (device loop0): Using tea hash to sort names
+==================================================================
+BUG: KASAN: out-of-bounds in memmove include/linux/fortify-string.h:241 [inline]
+BUG: KASAN: out-of-bounds in leaf_paste_entries+0x449/0x910 fs/reiserfs/lbalance.c:1377
+Read of size 18446744073709551584 at addr ffff888064651fa4 by task syz-executor913/3605
+
+CPU: 1 PID: 3605 Comm: syz-executor913 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x2ed mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ memmove+0x20/0x60 mm/kasan/shadow.c:54
+ memmove include/linux/fortify-string.h:241 [inline]
+ leaf_paste_entries+0x449/0x910 fs/reiserfs/lbalance.c:1377
+ balance_leaf_finish_node_paste_dirent fs/reiserfs/do_balan.c:1295 [inline]
+ balance_leaf_finish_node_paste fs/reiserfs/do_balan.c:1321 [inline]
+ balance_leaf_finish_node fs/reiserfs/do_balan.c:1364 [inline]
+ balance_leaf+0x951e/0xd8b0 fs/reiserfs/do_balan.c:1452
+ do_balance+0x315/0x810 fs/reiserfs/do_balan.c:1888
+ reiserfs_paste_into_item+0x762/0x8e0 fs/reiserfs/stree.c:2159
+ reiserfs_add_entry+0x8cb/0xcf0 fs/reiserfs/namei.c:567
+ reiserfs_mkdir+0x675/0x980 fs/reiserfs/namei.c:860
+ create_privroot fs/reiserfs/xattr.c:889 [inline]
+ reiserfs_xattr_init+0x4de/0xb60 fs/reiserfs/xattr.c:1012
+ reiserfs_fill_super+0x21ea/0x2f80 fs/reiserfs/super.c:2175
+ mount_bdev+0x34d/0x410 fs/super.c:1370
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1500
+ do_new_mount fs/namespace.c:2988 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3318
+ do_mount fs/namespace.c:3331 [inline]
+ __do_sys_mount fs/namespace.c:3539 [inline]
+ __se_sys_mount fs/namespace.c:3516 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3516
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f1bcda75d2a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd9ad780d8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffd9ad78130 RCX: 00007f1bcda75d2a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd9ad780f0
+RBP: 00007ffd9ad780f0 R08: 00007ffd9ad78130 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 00000000200002a8
+R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000007
+ </TASK>
+
+The buggy address belongs to the page:
+page:ffffea0001919440 refcount:3 mapcount:0 mapping:ffff88801715bc80 index:0x3d97 pfn:0x64651
+memcg:ffff8880114d4000
+aops:def_blk_aops ino:700000
+flags: 0xfff00000002022(referenced|active|private|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000002022 0000000000000000 dead000000000122 ffff88801715bc80
+raw: 0000000000003d97 ffff8880701d4040 00000003ffffffff ffff8880114d4000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Movable, gfp_mask 0x148c48(GFP_NOFS|__GFP_NOFAIL|__GFP_COMP|__GFP_HARDWALL|__GFP_MOVABLE), pid 3605, ts 68498864248, free_ts 15483839908
+ prep_new_page mm/page_alloc.c:2418 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4149
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5369
+ alloc_pages+0x1a7/0x300 mm/mempolicy.c:2191
+ folio_alloc+0x1c/0x70 mm/mempolicy.c:2201
+ filemap_alloc_folio mm/filemap.c:1036 [inline]
+ __filemap_get_folio+0x5f2/0xd60 mm/filemap.c:1951
+ pagecache_get_page+0x2c/0x1a0 mm/folio-compat.c:125
+ find_or_create_page include/linux/pagemap.h:489 [inline]
+ grow_dev_page fs/buffer.c:949 [inline]
+ grow_buffers fs/buffer.c:1014 [inline]
+ __getblk_slow+0x1ed/0xae0 fs/buffer.c:1041
+ __getblk_gfp+0x6e/0x80 fs/buffer.c:1334
+ sb_getblk include/linux/buffer_head.h:327 [inline]
+ search_by_key+0x3a5/0x3cc0 fs/reiserfs/stree.c:672
+ reiserfs_read_locked_inode+0x154/0x2160 fs/reiserfs/inode.c:1557
+ reiserfs_fill_super+0x1350/0x2f80 fs/reiserfs/super.c:2071
+ mount_bdev+0x34d/0x410 fs/super.c:1370
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1500
+ do_new_mount fs/namespace.c:2988 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3318
+ do_mount fs/namespace.c:3331 [inline]
+ __do_sys_mount fs/namespace.c:3539 [inline]
+ __se_sys_mount fs/namespace.c:3516 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3516
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1338 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1389
+ free_unref_page_prepare mm/page_alloc.c:3309 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3388
+ free_contig_range+0xa8/0xf0 mm/page_alloc.c:9271
+ destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1016
+ debug_vm_pgtable+0x2984/0x2a16 mm/debug_vm_pgtable.c:1330
+ do_one_initcall+0x103/0x650 init/main.c:1297
+ do_initcall_level init/main.c:1370 [inline]
+ do_initcalls init/main.c:1386 [inline]
+ do_basic_setup init/main.c:1405 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1610
+ kernel_init+0x1a/0x1d0 init/main.c:1499
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+Memory state around the buggy address:
+ ffff888064651e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888064651f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff888064651f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                               ^
+ ffff888064652000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff888064652080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Notes:
-    v -> v2: fixed compilation error.
-
- .../security/keys/trusted-encrypted.rst       | 25 ++++++--
- security/keys/encrypted-keys/encrypted.c      | 61 +++++++++++++------
- 2 files changed, 62 insertions(+), 24 deletions(-)
-
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentat=
-ion/security/keys/trusted-encrypted.rst
-index 80d5a5af62a1..2ea6fad394fe 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -107,12 +107,13 @@ Encrypted Keys
- --------------
-=20
- Encrypted keys do not depend on a trust source, and are faster, as they us=
-e AES
--for encryption/decryption. New keys are created from kernel-generated rand=
-om
--numbers, and are encrypted/decrypted using a specified =E2=80=98master=E2=
-=80=99 key. The
--=E2=80=98master=E2=80=99 key can either be a trusted-key or user-key type.=
- The main disadvantage
--of encrypted keys is that if they are not rooted in a trusted key, they ar=
-e only
--as secure as the user key encrypting them. The master user key should ther=
-efore
--be loaded in as secure a way as possible, preferably early in boot.
-+for encryption/decryption. New keys are created either from kernel-generat=
-ed
-+random numbers or user-provided decrypted data, and are encrypted/decrypte=
-d
-+using a specified =E2=80=98master=E2=80=99 key. The =E2=80=98master=E2=80=
-=99 key can either be a trusted-key or
-+user-key type. The main disadvantage of encrypted keys is that if they are=
- not
-+rooted in a trusted key, they are only as secure as the user key encryptin=
-g
-+them. The master user key should therefore be loaded in as secure a way as
-+possible, preferably early in boot.
-=20
-=20
- Usage
-@@ -199,6 +200,8 @@ Usage::
-=20
-     keyctl add encrypted name "new [format] key-type:master-key-name keyle=
-n"
-         ring
-+    keyctl add encrypted name "new [format] key-type:master-key-name keyle=
-n
-+        decrypted-data" ring
-     keyctl add encrypted name "load hex_blob" ring
-     keyctl update keyid "update key-type:master-key-name"
-=20
-@@ -303,6 +306,16 @@ Load an encrypted key "evm" from saved blob::
-     82dbbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564=
-e0
-     24717c64 5972dcb82ab2dde83376d82b2e3c09ffc
-=20
-+Instantiate an encrypted key "evm" using user-provided decrypted data::
-+
-+    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm.blob`" @u
-+    794890253
-+
-+    $ keyctl print 794890253
-+    default user:kmk 32 2375725ad57798846a9bbd240de8906f006e66c03af53b1b38=
-2d
-+    bbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564e02=
-47
-+    17c64 5972dcb82ab2dde83376d82b2e3c09ffc
-+
- Other uses for trusted and encrypted keys, such as for disk and file encry=
-ption
- are anticipated.  In particular the new format 'ecryptfs' has been defined
- in order to use encrypted keys to mount an eCryptfs filesystem.  More deta=
-ils
-diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encry=
-pted-keys/encrypted.c
-index 87432b35d771..9921ed4de488 100644
---- a/security/keys/encrypted-keys/encrypted.c
-+++ b/security/keys/encrypted-keys/encrypted.c
-@@ -159,6 +159,7 @@ static int valid_master_desc(const char *new_desc, cons=
-t char *orig_desc)
-  *
-  * datablob format:
-  * new [<format>] <master-key name> <decrypted data length>
-+ * new [<format>] <master-key name> <decrypted data length> <decrypted dat=
-a>
-  * load [<format>] <master-key name> <decrypted data length>
-  *     <encrypted iv + data>
-  * update <new-master-key name>
-@@ -170,7 +171,7 @@ static int valid_master_desc(const char *new_desc, cons=
-t char *orig_desc)
-  */
- static int datablob_parse(char *datablob, const char **format,
- 			  char **master_desc, char **decrypted_datalen,
--			  char **hex_encoded_iv)
-+			  char **hex_encoded_iv, char **decrypted_data)
- {
- 	substring_t args[MAX_OPT_ARGS];
- 	int ret =3D -EINVAL;
-@@ -231,6 +232,8 @@ static int datablob_parse(char *datablob, const char **=
-format,
- 				"when called from .update method\n", keyword);
- 			break;
- 		}
-+		*decrypted_data =3D strsep(&datablob, " \t");
-+
- 		ret =3D 0;
- 		break;
- 	case Opt_load:
-@@ -595,7 +598,8 @@ static int derived_key_decrypt(struct encrypted_key_pay=
-load *epayload,
- static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
- 							 const char *format,
- 							 const char *master_desc,
--							 const char *datalen)
-+							 const char *datalen,
-+							 const char *decrypted_data)
- {
- 	struct encrypted_key_payload *epayload =3D NULL;
- 	unsigned short datablob_len;
-@@ -604,6 +608,7 @@ static struct encrypted_key_payload *encrypted_key_allo=
-c(struct key *key,
- 	unsigned int encrypted_datalen;
- 	unsigned int format_len;
- 	long dlen;
-+	int i;
- 	int ret;
-=20
- 	ret =3D kstrtol(datalen, 10, &dlen);
-@@ -613,6 +618,20 @@ static struct encrypted_key_payload *encrypted_key_all=
-oc(struct key *key,
- 	format_len =3D (!format) ? strlen(key_format_default) : strlen(format);
- 	decrypted_datalen =3D dlen;
- 	payload_datalen =3D decrypted_datalen;
-+
-+	if (decrypted_data) {
-+		if (strlen(decrypted_data) !=3D decrypted_datalen) {
-+			pr_err("encrypted key: decrypted data provided does not match decrypted=
- data length provided\n");
-+			return ERR_PTR(-EINVAL);
-+		}
-+		for (i =3D 0; i < strlen(decrypted_data); i++) {
-+			if (!isalnum(decrypted_data[i])) {
-+				pr_err("encrypted key: decrypted data provided must be alphanumeric\n"=
-);
-+				return ERR_PTR(-EINVAL);
-+			}
-+		}
-+	}
-+
- 	if (format) {
- 		if (!strcmp(format, key_format_ecryptfs)) {
- 			if (dlen !=3D ECRYPTFS_MAX_KEY_BYTES) {
-@@ -740,13 +759,14 @@ static void __ekey_init(struct encrypted_key_payload =
-*epayload,
- /*
-  * encrypted_init - initialize an encrypted key
-  *
-- * For a new key, use a random number for both the iv and data
-- * itself.  For an old key, decrypt the hex encoded data.
-+ * For a new key, use either a random number or user-provided decrypted da=
-ta in
-+ * case it is provided. A random number is used for the iv in both cases. =
-For
-+ * an old key, decrypt the hex encoded data.
-  */
- static int encrypted_init(struct encrypted_key_payload *epayload,
- 			  const char *key_desc, const char *format,
- 			  const char *master_desc, const char *datalen,
--			  const char *hex_encoded_iv)
-+			  const char *hex_encoded_iv, const char *decrypted_data)
- {
- 	int ret =3D 0;
-=20
-@@ -760,21 +780,25 @@ static int encrypted_init(struct encrypted_key_payloa=
-d *epayload,
- 	}
-=20
- 	__ekey_init(epayload, format, master_desc, datalen);
--	if (!hex_encoded_iv) {
--		get_random_bytes(epayload->iv, ivsize);
--
--		get_random_bytes(epayload->decrypted_data,
--				 epayload->decrypted_datalen);
--	} else
-+	if (hex_encoded_iv) {
- 		ret =3D encrypted_key_decrypt(epayload, format, hex_encoded_iv);
-+	} else if (decrypted_data) {
-+		get_random_bytes(epayload->iv, ivsize);
-+		memcpy(epayload->decrypted_data, decrypted_data, epayload->decrypted_dat=
-alen);
-+	} else {
-+		get_random_bytes(epayload->iv, ivsize);
-+		get_random_bytes(epayload->decrypted_data, epayload->decrypted_datalen);
-+	}
- 	return ret;
- }
-=20
- /*
-  * encrypted_instantiate - instantiate an encrypted key
-  *
-- * Decrypt an existing encrypted datablob or create a new encrypted key
-- * based on a kernel random number.
-+ * Instantiates the key:
-+ * - by decrypting an existing encrypted datablob, or
-+ * - by creating a new encrypted key based on a kernel random number, or
-+ * - using provided decrypted data.
-  *
-  * On success, return 0. Otherwise return errno.
-  */
-@@ -787,6 +811,7 @@ static int encrypted_instantiate(struct key *key,
- 	char *master_desc =3D NULL;
- 	char *decrypted_datalen =3D NULL;
- 	char *hex_encoded_iv =3D NULL;
-+	char *decrypted_data =3D NULL;
- 	size_t datalen =3D prep->datalen;
- 	int ret;
-=20
-@@ -799,18 +824,18 @@ static int encrypted_instantiate(struct key *key,
- 	datablob[datalen] =3D 0;
- 	memcpy(datablob, prep->data, datalen);
- 	ret =3D datablob_parse(datablob, &format, &master_desc,
--			     &decrypted_datalen, &hex_encoded_iv);
-+			     &decrypted_datalen, &hex_encoded_iv, &decrypted_data);
- 	if (ret < 0)
- 		goto out;
-=20
- 	epayload =3D encrypted_key_alloc(key, format, master_desc,
--				       decrypted_datalen);
-+				       decrypted_datalen, decrypted_data);
- 	if (IS_ERR(epayload)) {
- 		ret =3D PTR_ERR(epayload);
- 		goto out;
- 	}
- 	ret =3D encrypted_init(epayload, key->description, format, master_desc,
--			     decrypted_datalen, hex_encoded_iv);
-+			     decrypted_datalen, hex_encoded_iv, decrypted_data);
- 	if (ret < 0) {
- 		kfree_sensitive(epayload);
- 		goto out;
-@@ -860,7 +885,7 @@ static int encrypted_update(struct key *key, struct key=
-_preparsed_payload *prep)
-=20
- 	buf[datalen] =3D 0;
- 	memcpy(buf, prep->data, datalen);
--	ret =3D datablob_parse(buf, &format, &new_master_desc, NULL, NULL);
-+	ret =3D datablob_parse(buf, &format, &new_master_desc, NULL, NULL, NULL);
- 	if (ret < 0)
- 		goto out;
-=20
-@@ -869,7 +894,7 @@ static int encrypted_update(struct key *key, struct key=
-_preparsed_payload *prep)
- 		goto out;
-=20
- 	new_epayload =3D encrypted_key_alloc(key, epayload->format,
--					   new_master_desc, epayload->datalen);
-+					   new_master_desc, epayload->datalen, NULL);
- 	if (IS_ERR(new_epayload)) {
- 		ret =3D PTR_ERR(new_epayload);
- 		goto out;
---=20
-2.34.1.173.g76aa8bc2d0-goog
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

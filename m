@@ -2,331 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18765471F95
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949F3471F9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbhLMDbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 22:31:25 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:29186 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbhLMDbY (ORCPT
+        id S231496AbhLMDdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 22:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229492AbhLMDdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 22:31:24 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JC6S74ysJz96p0;
-        Mon, 13 Dec 2021 11:29:11 +0800 (CST)
-Received: from use12-sp2.huawei.com (10.67.189.174) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 11:31:22 +0800
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <viro@zeniv.linux.org.uk>,
-        <ebiederm@xmission.com>, <keescook@chromium.org>,
-        <jlayton@kernel.org>, <bfields@fieldses.org>, <mcgrof@kernel.org>,
-        <yzaikin@google.com>, <apw@canonical.com>, <joe@perches.com>,
-        <dwaipayanray1@gmail.com>, <lukas.bulwahn@gmail.com>,
-        <julia.lawall@inria.fr>, <akpm@linux-foundation.org>
-CC:     <nixiaoming@huawei.com>, <wangle6@huawei.com>
-Subject: [PATCH v3] sysctl: Add a group of macro functions to initcall the sysctl table of each feature
-Date:   Mon, 13 Dec 2021 11:31:19 +0800
-Message-ID: <20211213033119.51263-1-nixiaoming@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211210085849.66169-1-nixiaoming@huawei.com>
-References: <20211210085849.66169-1-nixiaoming@huawei.com>
+        Sun, 12 Dec 2021 22:33:00 -0500
+X-Greylist: delayed 85518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Dec 2021 19:33:00 PST
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E493C06173F;
+        Sun, 12 Dec 2021 19:33:00 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id A0FF8425B1;
+        Mon, 13 Dec 2021 03:32:54 +0000 (UTC)
+To:     Sven Peter <sven@svenpeter.dev>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211212034726.26306-1-marcan@marcan.st>
+ <20211212034726.26306-4-marcan@marcan.st>
+ <2f23875c-ce8e-436a-837b-b8afb6e8411b@www.fastmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
+Message-ID: <49d1deeb-6d58-b1ca-addc-2505847d602f@marcan.st>
+Date:   Mon, 13 Dec 2021 12:32:52 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.189.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
+In-Reply-To: <2f23875c-ce8e-436a-837b-b8afb6e8411b@www.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid duplicated code, add a set of macro functions to initialize the
-sysctl table for each feature.
+Thanks for the review!
 
-The system initialization process is as follows:
+On 12/12/2021 21.39, Sven Peter wrote:
+>> +
+> 
+> #include <linux/bits.h> for GENMASK even though it's probably
+> pulled in by one of the #includes below
 
-	start_kernel () {
-		...
-		/* init proc and sysctl base,
-		 * proc_root_init()-->proc_sys_init()-->sysctl_init_bases()
-		 */
-		proc_root_init(); /* init proc and sysctl base */
-		...
-		arch_call_rest_init();
-	}
+Ack, fixed for v2.
 
-	arch_call_rest_init()-->rest_init()-->kernel_init()
-	kernel_init() {
-		...
-		kernel_init_freeable(); /* do all initcalls */
-		...
-		do_sysctl_args(); /* Process the sysctl parameter: sysctl.*= */
-	}
+>> +	/* We will want to poll if the time we need to wait is
+>> +	 * less than the context switching time.
+>> +	 * Let's call that threshold 5us. The operation will take:
+>> +	 *    bits_per_word * fifo_threshold / hz <= 5 * 10^-6
+>> +	 *    200000 * bits_per_word * fifo_threshold <= hz
+>> +	 */
+>> +	return 200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2 <=
+>> t->speed_hz;
+> 
+> Nice :-)
 
-	kernel_init_freeable()--->do_basic_setup()-->do_initcalls()
-	do_initcalls() {
-		for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++) {
-			do_initcall_level
-	}
+I stole this one from the sifive driver :-) (slightly adjusted)
 
-The sysctl interface of each subfeature should be registered after
-sysctl_init_bases() and before do_sysctl_args().
-sysctl_init_bases() is executed before early_initcall().
-do_sysctl_args() is executed after late_initcall().
-To prevent the sysctl interface from being initialized before the feature
-itself. The lowest level of late_initcall() is safe as a normal sysctl
-interface registration level.
+>> +static int apple_spi_probe(struct platform_device *pdev)
+>> +{
+>> +	struct apple_spi *spi;
+>> +	int ret, irq;
+>> +	struct spi_controller *ctlr;
+>> +
+>> +	ctlr = spi_alloc_master(&pdev->dev, sizeof(struct apple_spi));
+> 
+> devm_spi_alloc_master and then you can get rid of the spi_controller_put
+> error path.
 
-Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
----
-v3:
-  Adjust the commit information description and add document comments to
-  sysctl_initcall().
-v2: https://lore.kernel.org/lkml/20211210085849.66169-1-nixiaoming@huawei.com/
-  Add a simple checkpatch check.
-  Add code comment.
-v1: https://lore.kernel.org/lkml/20211207011320.100102-1-nixiaoming@huawei.com/
----
- fs/coredump.c          |  7 +------
- fs/dcache.c            |  7 +------
- fs/exec.c              |  8 +-------
- fs/file_table.c        |  7 +------
- fs/inode.c             |  7 +------
- fs/locks.c             |  7 +------
- fs/namei.c             |  8 +-------
- fs/namespace.c         |  7 +------
- include/linux/sysctl.h | 34 ++++++++++++++++++++++++++++++++++
- kernel/stackleak.c     |  7 +------
- scripts/checkpatch.pl  |  6 ++++++
- 11 files changed, 49 insertions(+), 56 deletions(-)
+Ack, fixed for v2. That simplifies a bunch of the error handling.
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 570d98398668..8f6c6322651d 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -943,12 +943,7 @@ static struct ctl_table coredump_sysctls[] = {
- 	{ }
- };
- 
--static int __init init_fs_coredump_sysctls(void)
--{
--	register_sysctl_init("kernel", coredump_sysctls);
--	return 0;
--}
--fs_initcall(init_fs_coredump_sysctls);
-+kernel_sysctl_initcall(coredump_sysctls);
- #endif /* CONFIG_SYSCTL */
- 
- /*
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 0eef1102f460..c1570243aaee 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -195,12 +195,7 @@ static struct ctl_table fs_dcache_sysctls[] = {
- 	{ }
- };
- 
--static int __init init_fs_dcache_sysctls(void)
--{
--	register_sysctl_init("fs", fs_dcache_sysctls);
--	return 0;
--}
--fs_initcall(init_fs_dcache_sysctls);
-+fs_sysctl_initcall(fs_dcache_sysctls);
- #endif
- 
- /*
-diff --git a/fs/exec.c b/fs/exec.c
-index cc5ec43df028..3c30e686af79 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -2124,11 +2124,5 @@ static struct ctl_table fs_exec_sysctls[] = {
- 	{ }
- };
- 
--static int __init init_fs_exec_sysctls(void)
--{
--	register_sysctl_init("fs", fs_exec_sysctls);
--	return 0;
--}
--
--fs_initcall(init_fs_exec_sysctls);
-+fs_sysctl_initcall(fs_exec_sysctls);
- #endif /* CONFIG_SYSCTL */
-diff --git a/fs/file_table.c b/fs/file_table.c
-index 57edef16dce4..52b60e9378a7 100644
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -116,12 +116,7 @@ static struct ctl_table fs_stat_sysctls[] = {
- 	{ }
- };
- 
--static int __init init_fs_stat_sysctls(void)
--{
--	register_sysctl_init("fs", fs_stat_sysctls);
--	return 0;
--}
--fs_initcall(init_fs_stat_sysctls);
-+fs_sysctl_initcall(fs_stat_sysctls);
- #endif
- 
- static struct file *__alloc_file(int flags, const struct cred *cred)
-diff --git a/fs/inode.c b/fs/inode.c
-index bef6ba9b8eb4..cd20d6dd8ffa 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -132,12 +132,7 @@ static struct ctl_table inodes_sysctls[] = {
- 	{ }
- };
- 
--static int __init init_fs_inode_sysctls(void)
--{
--	register_sysctl_init("fs", inodes_sysctls);
--	return 0;
--}
--early_initcall(init_fs_inode_sysctls);
-+fs_sysctl_initcall(inodes_sysctls);
- #endif
- 
- static int no_open(struct inode *inode, struct file *file)
-diff --git a/fs/locks.c b/fs/locks.c
-index 8c6df10cd9ed..d86a74d19ed3 100644
---- a/fs/locks.c
-+++ b/fs/locks.c
-@@ -113,12 +113,7 @@ static struct ctl_table locks_sysctls[] = {
- 	{}
- };
- 
--static int __init init_fs_locks_sysctls(void)
--{
--	register_sysctl_init("fs", locks_sysctls);
--	return 0;
--}
--early_initcall(init_fs_locks_sysctls);
-+fs_sysctl_initcall(locks_sysctls);
- #endif /* CONFIG_SYSCTL */
- 
- /*
-diff --git a/fs/namei.c b/fs/namei.c
-index 8d4f832f94aa..7eb636796fd4 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -1066,13 +1066,7 @@ static struct ctl_table namei_sysctls[] = {
- 	{ }
- };
- 
--static int __init init_fs_namei_sysctls(void)
--{
--	register_sysctl_init("fs", namei_sysctls);
--	return 0;
--}
--fs_initcall(init_fs_namei_sysctls);
--
-+fs_sysctl_initcall(namei_sysctls);
- #endif /* CONFIG_SYSCTL */
- 
- /**
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 647af66f313d..7117214b7a85 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4626,11 +4626,6 @@ static struct ctl_table fs_namespace_sysctls[] = {
- 	{ }
- };
- 
--static int __init init_fs_namespace_sysctls(void)
--{
--	register_sysctl_init("fs", fs_namespace_sysctls);
--	return 0;
--}
--fs_initcall(init_fs_namespace_sysctls);
-+fs_sysctl_initcall(fs_namespace_sysctls);
- 
- #endif /* CONFIG_SYSCTL */
-diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
-index acf0805cf3a0..1c09894d453e 100644
---- a/include/linux/sysctl.h
-+++ b/include/linux/sysctl.h
-@@ -231,6 +231,40 @@ extern int sysctl_init_bases(void);
- extern void __register_sysctl_init(const char *path, struct ctl_table *table,
- 				 const char *table_name);
- #define register_sysctl_init(path, table) __register_sysctl_init(path, table, #table)
-+
-+/**
-+ * sysctl_initcall() - register and init sysctl leaf node to path
-+ * @path: path name for sysctl base
-+ * @table: sysctl leaf table to be registered to the path
-+ *
-+ * Leaf node in the sysctl tree:
-+ * a) File, .child = NULL
-+ * b) Directory, which is not shared by multiple features, .child != NULL
-+ *
-+ * The sysctl interface for each subfeature should be after sysctl_init_bases()
-+ * and before do_sysctl_args().
-+ * sysctl_init_bases() is executed before early_initcall().
-+ * do_sysctl_args() is executed after late_initcall().
-+ * Therefore, it is safe to add leaves to the sysctl tree using late_initcall().
-+ */
-+#define sysctl_initcall(path, table) \
-+	static int __init init_##table(void) \
-+	{ \
-+		register_sysctl_init(path, table); \
-+		return  0;\
-+	} \
-+	late_initcall(init_##table)
-+
-+/*
-+ * Use xxx_sysctl_initcall() to initialize your sysctl interface unless you want
-+ * to register the sysctl directory and share it with other features.
-+ */
-+#define kernel_sysctl_initcall(table) sysctl_initcall("kernel", table)
-+#define fs_sysctl_initcall(table) sysctl_initcall("fs", table)
-+#define vm_sysctl_initcall(table) sysctl_initcall("vm", table)
-+#define debug_sysctl_initcall(table) sysctl_initcall("debug", table)
-+#define dev_sysctl_initcall(table) sysctl_initcall("dev", table)
-+
- extern struct ctl_table_header *register_sysctl_mount_point(const char *path);
- 
- void do_sysctl_args(void);
-diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-index 66b8af394e58..f084c1c787ba 100644
---- a/kernel/stackleak.c
-+++ b/kernel/stackleak.c
-@@ -57,12 +57,7 @@ static struct ctl_table stackleak_sysctls[] = {
- 	{}
- };
- 
--static int __init stackleak_sysctls_init(void)
--{
--	register_sysctl_init("kernel", stackleak_sysctls);
--	return 0;
--}
--late_initcall(stackleak_sysctls_init);
-+kernel_sysctl_initcall(stackleak_sysctls);
- #endif /* CONFIG_SYSCTL */
- 
- #define skip_erasing()	static_branch_unlikely(&stack_erasing_bypass)
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index b01c36a15d9d..e8701d54b458 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7212,6 +7212,12 @@ sub process {
- 			     "Deprecated use of '$deprecated_api', prefer '$new_api' instead\n" . $herecurr);
- 		}
- 
-+# check register_sysctl_init
-+		if ($prevline =~ /{/ && $rawline =~ /\sregister_sysctl_init\(\"(kernel|fs|vm|debug|dev)\",\s+(.*)\)\;/) {
-+			WARN("DEPRECATED_API",
-+			     "Deprecated use of 'register_sysctl_init(\"$1\", $2);', prefer '$1_sysctl_initcall($2);' instead\n".$herecurr);
-+		}
-+
- # check for various structs that are normally const (ops, kgdb, device_tree)
- # and avoid what seem like struct definitions 'struct foo {'
- 		if (defined($const_structs) &&
+> 
+>> +	if (!ctlr) {
+>> +		dev_err(&pdev->dev, "out of memory\n");
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	spi = spi_controller_get_devdata(ctlr);
+>> +	init_completion(&spi->done);
+>> +	platform_set_drvdata(pdev, ctlr);
+>> +
+>> +	spi->regs = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(spi->regs)) {
+>> +		ret = PTR_ERR(spi->regs);
+>> +		goto put_ctlr;
+>> +	}
+>> +
+>> +	spi->clk = devm_clk_get(&pdev->dev, NULL);
+>> +	if (IS_ERR(spi->clk)) {
+>> +		dev_err(&pdev->dev, "Unable to find bus clock\n");
+>> +		ret = PTR_ERR(spi->clk);
+>> +		goto put_ctlr;
+>> +	}
+> 
+> dev_err_probe can be used here in case devm_clk_get returns -EPROBE_DEFER.
+
+Yup, good point. I switched most of the dev_errs to dev_err_probe.
+
+> 
+>> +
+>> +	irq = platform_get_irq(pdev, 0);
+>> +	if (irq < 0) {
+>> +		ret = irq;
+>> +		goto put_ctlr;
+>> +	}
+>> +
+>> +	ret = devm_request_irq(&pdev->dev, irq, apple_spi_irq, 0,
+>> +			       dev_name(&pdev->dev), spi);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Unable to bind to interrupt\n");
+>> +		goto put_ctlr;
+>> +	}
+>> +
+>> +	ret = clk_prepare_enable(spi->clk);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Unable to enable bus clock\n");
+>> +		goto put_ctlr;
+>> +	}
+> 
+> Unfortunately there's no devm_clk_prepare_enable but you could use
+> devm_add_action_or_reset like almost all watchdog drivers as well.
+
+Done.
+
+>> +
+>> +	ctlr->dev.of_node = pdev->dev.of_node;
+>> +	ctlr->bus_num = pdev->id;
+>> +	ctlr->num_chipselect = 1;
+>> +	ctlr->mode_bits = SPI_CPHA | SPI_CPOL | SPI_LSB_FIRST;
+>> +	ctlr->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
+>> +	ctlr->flags = 0;
+>> +	ctlr->prepare_message = apple_spi_prepare_message;
+>> +	ctlr->set_cs = apple_spi_set_cs;
+>> +	ctlr->transfer_one = apple_spi_transfer_one;
+>> +	ctlr->auto_runtime_pm = true;
+>> +
+>> +	pm_runtime_set_active(&pdev->dev);
+>> +	pm_runtime_enable(&pdev->dev);
+> 
+> You could also use devm_pm_runtime_enable here and then everything
+> should be devres managed.
+
+Done, though I still need to wrap the remove remove function in 
+pm_runtime calls, since the device might be suspended when it gets called.
+
 -- 
-2.12.3
-
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

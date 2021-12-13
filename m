@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDA0472CCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56176472CCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237094AbhLMNGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:06:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57384 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbhLMNGj (ORCPT
+        id S237152AbhLMNHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231837AbhLMNHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:06:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5B19B80ED5;
-        Mon, 13 Dec 2021 13:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA89C34601;
-        Mon, 13 Dec 2021 13:06:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639400796;
-        bh=5DDNREbgZYf2Wb465q9DL6mzRWB+Z8LHhxEBmfk3qrk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SpMRuR5JGp88zDszictVmc1bG5OG3CEMB/w7h+X8vGUA7ZjqJy6ZMHSo3sYLCxomL
-         aP955FXE0g5iEXRHKjyB3+W2QMszHm14s6qstnxKCj1iqR5VS47Ta15MrivV72/JRy
-         GUmfh6nhgyHBqWhWUIsKaV0LyQnVGIrFHCIehvkZTJdH56pOiLLkOc5JL6Btjm99eZ
-         CyV5gYHBWuHnbewpcz0ZTbRgIVufLZqJsVKFY6XfaKJGoo6jaUXamIKwUvc/ZXOY/E
-         VHc8dczIB864pWVeUuF4YS4UhP94Brto0O9mqhNX0k/y5IXWdI2taWAfLzSpbegdGb
-         nwDT5hRpEl3Kw==
-Date:   Mon, 13 Dec 2021 14:06:33 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc:     paulmck@kernel.org, dwmw@amazon.co.uk, josh@joshtriplett.org,
-        rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        urezki@gmail.com, boqun.feng@gmail.com
-Subject: Re: [PATCH] rcu: Make rcu_state.n_online_cpus updates atomic
-Message-ID: <20211213130633.GC782195@lothringen>
-References: <20211213070059.6381-1-quic_neeraju@quicinc.com>
+        Mon, 13 Dec 2021 08:07:08 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46842C061574;
+        Mon, 13 Dec 2021 05:07:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dZO5LI8ID/6JEA+jyyA3F3bKLk0KMZ/PAq5/idus8Ns=; b=GCWAK04LRc34iEhbc/HuogQkq5
+        G/KA7qMvNIyJYxvkbT52p+Vo47b4i16/eCyTYTsJh88ZPuTmXG0YGoFXoJrmsYmxzHWqbz4yiFAbA
+        e2H//GejEMiL/swftGqRLaAMWckpuqieeX4MZMndAvrgxlpge9piQjES8pTBbszEaq0zI/bEHj2O0
+        ilVfNub6g36RMxMU5RzYIm7xx93jc9gmIGLGvvxg8ScfOLfHH5Q24CRImTtFgutF6k0T8ZNDvlD6e
+        aqLDobrE0YK73Pfdp4B7rKWHnEmDSD23uL0F3YDUrWRtapiKo0F4/BRi8owQYjiJrjm/H8Oi3zm7B
+        BJBeIixg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwl2m-009cIo-OA; Mon, 13 Dec 2021 13:07:04 +0000
+Date:   Mon, 13 Dec 2021 05:07:04 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     axboe@kernel.dk, bigeasy@linutronix.de, tglx@linutronix.de,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH] blk-mq: make synchronous hw_queue runs RT friendly
+Message-ID: <YbdFeHVnQbT0E5kR@infradead.org>
+References: <20211213054425.28121-1-dave@stgolabs.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213070059.6381-1-quic_neeraju@quicinc.com>
+In-Reply-To: <20211213054425.28121-1-dave@stgolabs.net>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 12:30:59PM +0530, Neeraj Upadhyay wrote:
-> To support onlining multiple CPUs concurrently,
-> change rcu_state.n_online_cpus updates to be atomic.
-> Note, it's ok for rcu_blocking_is_gp() to do a
-> atomic_read(&rcu_state.n_online_cpus), as the
-> value of .n_online_cpus switches from 1->2, in
-> rcutree_prepare_cpu(), which runs before the new
-> CPU comes online. Similarly 2->1 transition happens
-> from rcutree_dead_cpu(), which executes after the
-> CPU is offlined, and runs on the last online CPU.
-> 
-> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> +#ifndef CONFIG_PREEMPT_RT
 
-That's a step but I can imagine much more complications to handle while looking
-at rcutree_dead_cpu() VS rcutree_dead_cpu() (or other hotplug operations)
-inside the same rnp calling rcu_boost_kthread_setaffinity() concurrently
-or more generally rcu_boost_kthread_setaffinity() against concurrent onlining/offlining.
+Please don't add these silly inverted ifdefs.
 
-This function fetches the online CPUs to decide the affinity of boosting.
-This can go quite wrong if CPUs can be concurrently onlined/offlined.
+> +static inline void blk_mq_start_sync_run_hw_queue(void)
+> +{
+> +	preempt_disable();
+> +}
+> +static inline void blk_mq_end_sync_run_hw_queue(void)
+> +{
+> +	preempt_enable();
+> +}
+> +#else
+> +static inline void blk_mq_start_sync_run_hw_queue(void)
+> +{
+> +	migrate_disable();
+> +}
+> +static inline void blk_mq_end_sync_run_hw_queue(void)
+> +{
+> +	migrate_enable();
+> +}
+> +#endif
 
-And I don't know how such problems are going to be solved in the future
-but some new CPU hotplug concurrency primitives will be needed...
-
-That's one more reason why I think it is a bit early to handle this wide problem...
-
-Thanks.
+But more importantly:  why isn't migrate_disable/enable doing the right
+thing for !PREEMPT_RT to avoid this mess?

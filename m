@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABD2472590
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E2547287E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbhLMJoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:44:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55946 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234908AbhLMJlv (ORCPT
+        id S240062AbhLMKNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241519AbhLMKEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:41:51 -0500
+        Mon, 13 Dec 2021 05:04:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3377C025493;
+        Mon, 13 Dec 2021 01:50:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D62A8B80E1C;
-        Mon, 13 Dec 2021 09:41:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C8BC341C8;
-        Mon, 13 Dec 2021 09:41:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA7E9B80E3A;
+        Mon, 13 Dec 2021 09:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C98C341C5;
+        Mon, 13 Dec 2021 09:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388508;
-        bh=cMRoBHFAD/Ug1Q1Bfe2egISMVmUxzArhOr3wWTKEg0o=;
+        s=korg; t=1639389021;
+        bh=XY+5QjQkfAzoqtBLjsjFlqQGFCZdy4KKgQnncCaeXJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IGSUXoD8ApKUAgT48l+nkjwemBx6QZRlAQKW4Gk/qlVjow94aJJSO3Btv0AYCHL2N
-         oJEguEJuDVpOxa0n+7Dt46SJyVPDLEwR6GYcv5g4YokXqRDZSS4O5inleOYuStXAIf
-         BM2Oe4lqBpbRhXb2Qxdic1SUV2va9UIVvh5bZZIU=
+        b=SEbyGa1UP2nxqRK0+x64xH3FSUvRVelv6k13NRmTrt76t16jEOT86NuuMgl7NFiN6
+         diM6VlxrfSm9l3cgtqfq1JwE8U5zVt5jeDPAETA2YUO52lWsucoYjAAfGXgz8Cw17d
+         SapVbV1/f2rFrpMrWPFtyvfAjadMMZo0Omqe9jHY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 61/74] iio: ltr501: Dont return error code in trigger handler
+        stable@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH 5.10 091/132] Documentation/locking/locktypes: Update migrate_disable() bits.
 Date:   Mon, 13 Dec 2021 10:30:32 +0100
-Message-Id: <20211213092932.840186384@linuxfoundation.org>
+Message-Id: <20211213092942.231632373@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,43 +49,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-commit ef9d67fa72c1b149a420587e435a3e888bdbf74f upstream.
+commit 6a631c0432dcccbcf45839016a07c015e335e9ae upstream.
 
-IIO trigger handlers need to return one of the irqreturn_t values.
-Returning an error code is not supported.
+The initial implementation of migrate_disable() for mainline was a
+wrapper around preempt_disable(). RT kernels substituted this with
+a real migrate disable implementation.
 
-The ltr501 interrupt handler gets this right for most error paths, but
-there is one case where it returns the error code.
+Later on mainline gained true migrate disable support, but the
+documentation was not updated.
 
-In addition for this particular case the trigger handler does not call
-`iio_trigger_notify_done()`. Which when not done keeps the triggered
-disabled forever.
+Update the documentation, remove the claims about migrate_disable()
+mapping to preempt_disable() on non-PREEMPT_RT kernels.
 
-Modify the code so that the function returns a valid irqreturn_t value as
-well as calling `iio_trigger_notify_done()` on all exit paths.
-
-Fixes: 2690be905123 ("iio: Add Lite-On ltr501 ambient light / proximity sensor driver")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024171251.22896-1-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 74d862b682f51 ("sched: Make migrate_disable/enable() independent of RT")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211127163200.10466-2-bigeasy@linutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/light/ltr501.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/locking/locktypes.rst |    9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
---- a/drivers/iio/light/ltr501.c
-+++ b/drivers/iio/light/ltr501.c
-@@ -1275,7 +1275,7 @@ static irqreturn_t ltr501_trigger_handle
- 		ret = regmap_bulk_read(data->regmap, LTR501_ALS_DATA1,
- 				       (u8 *)als_buf, sizeof(als_buf));
- 		if (ret < 0)
--			return ret;
-+			goto done;
- 		if (test_bit(0, indio_dev->active_scan_mask))
- 			scan.channels[j++] = le16_to_cpu(als_buf[1]);
- 		if (test_bit(1, indio_dev->active_scan_mask))
+--- a/Documentation/locking/locktypes.rst
++++ b/Documentation/locking/locktypes.rst
+@@ -439,11 +439,9 @@ preemption. The following substitution w
+   spin_lock(&p->lock);
+   p->count += this_cpu_read(var2);
+ 
+-On a non-PREEMPT_RT kernel migrate_disable() maps to preempt_disable()
+-which makes the above code fully equivalent. On a PREEMPT_RT kernel
+ migrate_disable() ensures that the task is pinned on the current CPU which
+ in turn guarantees that the per-CPU access to var1 and var2 are staying on
+-the same CPU.
++the same CPU while the task remains preemptible.
+ 
+ The migrate_disable() substitution is not valid for the following
+ scenario::
+@@ -456,9 +454,8 @@ scenario::
+     p = this_cpu_ptr(&var1);
+     p->val = func2();
+ 
+-While correct on a non-PREEMPT_RT kernel, this breaks on PREEMPT_RT because
+-here migrate_disable() does not protect against reentrancy from a
+-preempting task. A correct substitution for this case is::
++This breaks because migrate_disable() does not protect against reentrancy from
++a preempting task. A correct substitution for this case is::
+ 
+   func()
+   {
 
 

@@ -2,119 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCF447210F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E912447210D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbhLMG1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:27:43 -0500
-Received: from mga12.intel.com ([192.55.52.136]:23035 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232176AbhLMG1l (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:27:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639376861; x=1670912861;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rWBzBemTO2R+UxAwKhYbiYU/nf9v9KstHstUOWje57Q=;
-  b=mH9qJ2Nn33OvT7V7Rbm8fZ95fbMEHH36wzkfuLSx0wY4wEcwcUKBvvJ0
-   0poiYd1fGD1KN9ZRaHImNJSuRY0Wn+txIfKYiAJ5GNXPPjnSsLPiFHGsW
-   Bf3qUgy7uiGz+MGwdiOGyumSw+y9Ay4C9oz8sN+nv4mbYbyGvc5Bxumfk
-   i9pc7C2gky47XWRfnD1rLOqBHsb8rJijk/hQ1UP355o8ab7/GH9oAAWW5
-   wZX00G7WgI5knFwqOoTFLOiYxbhygotk19pIy2FvMYpTNOVY7nR3Lu0jB
-   H35r2x4pHRmSw1GO/uAGUNMXoRtDBgYDNu3eD9d0BwqNFChtyQXwCgulZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="218684995"
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="218684995"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 22:27:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="463269894"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 12 Dec 2021 22:27:39 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mweoE-0006Nk-Bl; Mon, 13 Dec 2021 06:27:38 +0000
-Date:   Mon, 13 Dec 2021 14:27:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: drivers/watchdog/mtx-1_wdt.c:184:27: sparse: sparse: incorrect type
- in initializer (incompatible argument 2 (different address spaces))
-Message-ID: <202112131443.4HWvLXx9-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S232203AbhLMG1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:27:32 -0500
+Received: from out203-205-221-233.mail.qq.com ([203.205.221.233]:45152 "EHLO
+        out203-205-221-233.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232176AbhLMG1b (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 01:27:31 -0500
+X-Greylist: delayed 51215 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 01:27:30 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639376849;
+        bh=0Q6VnTr5SGW3kzpVwfmAO+56hCYf2WTdqo4y/9exOXk=;
+        h=In-Reply-To:References:From:To:Cc:Subject:Date;
+        b=GbOK4gqMF5wn1NLzIxjiJthDp4dQB96fpNygSnOEzUBlcaKBkwBCRyeWGhHsdvNSM
+         seLI1F2tjnpZf6vq5hKBVgIKEH53RkfNMwKHfEHhqn29k2y7PT0SOa0RD4i1iDZALj
+         p8jrkxWdb3svpqTYw2Y4lSdUNT7PxSfvOYymGAvw=
+X-QQ-FEAT: oHWrrGTW1dB69m49duS3mdhuyhfj4A9h
+X-QQ-SSF: 00000000000000F000000000000000Z
+X-QQ-XMAILINFO: NitsDAv9uCbJ1ysSWxVlFuoEitg2Y/gWkgppySOi8GZutLDNjbqp0RUjiuiK6y
+         H+aA5Ne4G2rOlX0ZqjXE0qn55G/t/RJo7S+DKnpKp05MKLoj/y3Fu+ANXlTwwjhrVM91Z6tgWixml
+         N5t4jQ0UlixUQfdKCVloh1lALwWr/p/WNosfgh7Xrr397ejz2SWu+TNUM0ffYV2Sfj5BmzbiOUwEz
+         XJ7mcPf2k01LzbHXQtdZM3u7Q2ZGpfW2nkftUe2TQKWNyiJzh+hfpxw3vLP1LygW9qxjzO75R9Xg2
+         ZopRI7MlTE+aK/KTn+9Mk4vuVjTFUjQlZvvLCe92hS8GT1lRur/L4fryE6AIRvw4I+QDBbeWrm+mJ
+         xKL+g3PvDvFeljnCSn/oop26ca+49FAwzk4mykl2MMGKBPz7TSwtiygBXVV9EPQPFjtnYthol8dDS
+         sYjw2UM4lKwJdryzZfJKB+JBcNBvZ4Se6rf1GXfsM6MMPe2h9NCV2saYvzjPBhuKiPy+YqYPk+HLW
+         nBozc3So4svd/Bjr+wdQBkBOI3ocdL9QtxlwzF8VJvA0WlcbhzffFIUk/VmJeDz/nRYKf1W56xJcg
+         /JFK3F5+v4IHp7QppBFp42FIJaf1wMN83aXqhmIWf9EANO9Ws/uGnusoOsUFg77zr/Z5UhrFa9rnx
+         Mnsk0g1wLiIQAUvTG1YjgmPLqkwvZmnNAhhrzZ2lK7ile6Zww+7zV41uNVkrmxea2Et7dXZOBtzPq
+         L3AEvuk00Aip+DfUPAaYKRBzO65zAwb35kwBXsNP0n9sbamBVRJI+SkARIcRrtOT/iyV36ga7R+xJ
+         6u8x9iGoZv1CD+mSBo4lnPxYiKu8h7IOppfV0o+ngdMJPVOiiXNcyAo=
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 223.75.155.17
+In-Reply-To: <Ybbj470ocCf7bj68@kroah.com>
+References: <tencent_1AB342AE1B4723454E78A4D2FD3F33C81306@qq.com>
+        <Ybbj470ocCf7bj68@kroah.com>
+X-QQ-STYLE: 
+X-QQ-mid: webmail813t1639376848t6984519
+From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
+To:     "=?ISO-8859-1?B?R3JlZyBLSA==?=" <gregkh@linuxfoundation.org>
+Cc:     "=?ISO-8859-1?B?bGludXgtdXNi?=" <linux-usb@vger.kernel.org>,
+        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
+        "=?ISO-8859-1?B?YW5kcmVhcy5ub2V2ZXI=?=" <andreas.noever@gmail.com>,
+        "=?ISO-8859-1?B?bWljaGFlbC5qYW1ldA==?=" <michael.jamet@intel.com>,
+        "=?ISO-8859-1?B?bWlrYS53ZXN0ZXJiZXJn?=" 
+        <mika.westerberg@linux.intel.com>,
+        "=?ISO-8859-1?B?WWVoZXprZWxTaEI=?=" <YehezkelShB@gmail.com>
+Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="ISO-8859-1"
+Content-Transfer-Encoding: base64
+Date:   Mon, 13 Dec 2021 14:27:28 +0800
+X-Priority: 3
+Message-ID: <tencent_D34525AAFF71905A66815C118E0E8A96F007@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+T24gTW9uLCBEZWMgMTMsIDIwMjEgMDI6MTAgUE0sIEdyZWcgS0ggd3JvdGU6Cj4ga21lbWR1
+cCgpIHJldHVybiBOVUxMIHdoZW4gc29tZSBpbnRlcm5hbCBtZW1vcnkgZXJyb3JzIGhhcHBl
+biwgaXQgaXMKPiBiZXR0ZXIgdG8gY2hlY2sgdGhlIHJldHVybiB2YWx1ZSBvZiBpdC4gT3Ro
+ZXJ3aXNlLCBzb21lIG1lbW9yeSBlcnJvcnMKPiB3aWxsIG5vdCBiZSBjYXRjaGVkIGluIHRp
+bWUgYW5kIG1heSBmdXJ0aGVyIHJlc3VsdCBpbiB3cm9uZyBtZW1vcnk+IGFjY2Vzcy4KPiAK
+PiBTaWduZWQtb2ZmLWJ5OiB4a2VybmVsIDx4a2VybmVsLndhbmdAZm94bWFpbC5jb20+Cj4K
+PiBQbGVhc2UgdXNlIHlvdXIgImZ1bGwiIG5hbWUsIEkgZG91YnQgeW91IHNpZ24gZG9jdW1l
+bnRzIGFzICJ4a2VybmVsIi4gOikKPgo+IHRoYW5rcywKPgo+IGdyZWcgay1oCgpJIGFtIHZl
+cnkgc29ycnkgYWJvdXQgdGhhdCwgbXkgZnVsbCBuYW1lIGlzICJYaWFva2UgV2FuZyIu
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2585cf9dfaaddf00b069673f27bb3f8530e2039c
-commit: 76215889be9d2cd388207545424bbbe3bf80e1ea watchdog: mtx-1: drop au1000.h header file
-date:   6 months ago
-config: mips-randconfig-s032-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131443.4HWvLXx9-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=76215889be9d2cd388207545424bbbe3bf80e1ea
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 76215889be9d2cd388207545424bbbe3bf80e1ea
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/watchdog/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   command-line: note: in included file:
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
-   builtin:0:0: sparse: this was the original definition
->> drivers/watchdog/mtx-1_wdt.c:184:27: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected long ( *write )( ... ) @@     got long ( * )( ... ) @@
-   drivers/watchdog/mtx-1_wdt.c:184:27: sparse:     expected long ( *write )( ... )
-   drivers/watchdog/mtx-1_wdt.c:184:27: sparse:     got long ( * )( ... )
-
-vim +184 drivers/watchdog/mtx-1_wdt.c
-
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  177  
-b47a166ed0baaa drivers/watchdog/mtx-1_wdt.c      Jan Engelhardt   2008-01-22  178  static const struct file_operations mtx1_wdt_fops = {
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  179  	.owner		= THIS_MODULE,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  180  	.llseek		= no_llseek,
-ed78c2da149247 drivers/watchdog/mtx-1_wdt.c      Alan Cox         2008-05-19  181  	.unlocked_ioctl	= mtx1_wdt_ioctl,
-b6dfb2477fb0bf drivers/watchdog/mtx-1_wdt.c      Arnd Bergmann    2019-06-03  182  	.compat_ioctl	= compat_ptr_ioctl,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  183  	.open		= mtx1_wdt_open,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06 @184  	.write		= mtx1_wdt_write,
-7944d3a5a70ee5 drivers/watchdog/mtx-1_wdt.c      Wim Van Sebroeck 2008-08-06  185  	.release	= mtx1_wdt_release,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  186  };
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  187  
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  188  
-
-:::::: The code at line 184 was first introduced by commit
-:::::: 04bf3b4f5fc033adf921f2e57d034ddbebef5fe7 [WATCHDOG] MTX-1 Watchdog driver
-
-:::::: TO: Florian Fainelli <florian.fainelli@int-evry.fr>
-:::::: CC: Wim Van Sebroeck <wim@iguana.be>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

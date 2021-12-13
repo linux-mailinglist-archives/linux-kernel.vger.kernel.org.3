@@ -2,99 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909B247325B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E462947326C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241095AbhLMQzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S241091AbhLMQz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:55:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241082AbhLMQy7 (ORCPT
+        with ESMTP id S241171AbhLMQzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:54:59 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E395C0617A2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:54:58 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id iq11so12283129pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:54:58 -0800 (PST)
+        Mon, 13 Dec 2021 11:55:46 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469B7C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:55:42 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id x131so15412252pfc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:55:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=AA3cmGxjX7rQ7Nx4YLnLHex97OOC6jIUqWvPUCK4d4I=;
-        b=iRjD5da3CL6RA/latOqqXOupbElJzpRlpjwTJ8TqDONfl5WIJDZprRk5SK29fgOSkY
-         N9hnANhBHCZMe/K+03c1NveVYvuszrsdJe8Cbq0m4EtExXWlaCP6TFvVryopRMN+Gt2Q
-         WW1fsRfVwiK2FDt7ynDhuyeQevMJ9awzfLQtM4ecGk1C7jN0vMMsXBCtykgpWHC45kdm
-         1cuQ75hkRoxMYxbJyvnhXXHki5jkQjP9EOTulzyrk2VrDclrhd5tXbiY7FO24+SqKm9D
-         EXlTZtDyvrREtrDFhx7DtXnZHgmw4EZMZtwORpWerh3eBwi8HhpDTRQYQBDzwlXcwX93
-         e0Kw==
+        bh=Otkd94Ddo+0y+d19P9705aLyzrf8R+OhLjXGWeBBDgI=;
+        b=D2pQ/ahpacnzEw4VKDE+IWQG9HUL/EEsWexNqmtOR4aNU5XRNcTMGIcFE4kTfkdg0u
+         Urd3qw/wp/ybiCNZNvxY6XJqtkpMjR7QhPecu67jMtnbj8hmJRn7kKShA1+mgYpvL4D9
+         oJ+CQnNFirWc+8lo2KnWjDX25k+depiKcixPXsbzZLKTktNrWBdmAfNhMUPhXTPMeaC2
+         FaS6wUQ2IcWiOerE3Pyg6w+scfVh9PTa34b3UVdXWWrmV5TO7oDfLZvKZNzeU2MkUqEa
+         DLItbA1GxSmg2iPv/Kl/jc/yWytd88vFon1VNR3NZdFRymNAlInFzVkcL5HrNEtJUZ4a
+         gcyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=AA3cmGxjX7rQ7Nx4YLnLHex97OOC6jIUqWvPUCK4d4I=;
-        b=xdZ7cWe3EKVJ0zR0QH9r6NjsMaDS/QD1qjIfbbqC4o3jPsdL/ottIBDaGUzUATNeFv
-         LazSUXwLpTFRYcWmRvvxbZZuo6BwIBh+wBQFpfXsCae2zV/b5Y4OFm4GYMOC/z/baYIW
-         8XklWzkIz5SSiv11VHWzDyBoRywnhpWwSGB9/tASiT0A/vL0Ddx0sHtTlbDRFQ2ZTLDT
-         3ejATcluP7A+k2DUTKGnPvYo+rgpALO9Jwhd3pDmwORIs7oD4bNgHVrQ8/m6HDJhaUQ/
-         aTRpVH9vl8Mw2hhllTGVpV2J0UjmJ0LOjo7HQibgCVzZ7WuHturI1fVo7ypK5TetkDtV
-         5bwg==
-X-Gm-Message-State: AOAM532xb6zkQGdUTVksB/7c11iQaU6Suaufp6NIWG0OREp6gE2Noop1
-        8iVWqWb453z3Hw+uzOEPhPRBYltZqFZA2Q==
-X-Google-Smtp-Source: ABdhPJyTgegmMEhcIYWAwl3DrUFQNFLkahj1X0m9a7EeXwVZUJuv36hfE0mmLT4nhioZz35NV2uMCg==
-X-Received: by 2002:a17:90b:34b:: with SMTP id fh11mr45254545pjb.14.1639414497559;
-        Mon, 13 Dec 2021 08:54:57 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l9sm13637501pfu.55.2021.12.13.08.54.56
+        bh=Otkd94Ddo+0y+d19P9705aLyzrf8R+OhLjXGWeBBDgI=;
+        b=cuHvcghLAQ7wNvFxovu65Z5Y6TmFKSxEwM3RMPyAUuR50wKuLMRBRCPSEyGqXdspJI
+         R5cFI5ascaG4Tgkpqhjfq/UUKe+gZwl0fNr4IblD1Z+qkQV/bEmZnTXf4iLPNvKx9Ioc
+         I1hCQ7HNeOgPkmWlaZ/fejcf7yopacRtxBJ/PTIHCAE7LiJu9l+ELXl5UhWsddEDWB9i
+         Y/p8ZUnJn0hoZUR1yLYse9uHkgcPkRcKhsRK19F7EIzSN0uFWpAy+NHPejCV0dOaVcy8
+         dOpN1bX4OIBWneCR7YxZxfK08q6jqNTnKV+BSjsCk6+5ZXrbNZhXOuo5Q9WLG9CagwTl
+         kF5A==
+X-Gm-Message-State: AOAM531jTfOkprGNVvx9KimdwalNG+pP4db01NM6wX/ThxfX9ZixpDWV
+        m9TJQ1Xp0oLmToXZiyskf8tSHw==
+X-Google-Smtp-Source: ABdhPJxcG+pDaR82nQIpiGgA+GsZ94Xtzp0Mh0VcEJpkpsk7NgrveddXN3qtbe4XWzRsAWtKejnyUw==
+X-Received: by 2002:a65:6557:: with SMTP id a23mr12921258pgw.451.1639414541767;
+        Mon, 13 Dec 2021 08:55:41 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id r6sm7378794pjz.56.2021.12.13.08.55.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 08:54:57 -0800 (PST)
-Date:   Mon, 13 Dec 2021 16:54:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Xiao Guangrong <guangrong.xiao@linux.intel.com>
-Subject: Re: [PATCH 17/15] KVM: X86: Ensure pae_root to be reconstructed for
- shadow paging if the guest PDPTEs is changed
-Message-ID: <Ybd63U3f9kXrMVEs@google.com>
-References: <20211108124407.12187-1-jiangshanlai@gmail.com>
- <20211111144634.88972-1-jiangshanlai@gmail.com>
- <Ya/5MOYef4L4UUAb@google.com>
- <11219bdb-669c-cf6f-2a70-f4e5f909a2ad@redhat.com>
- <YbPBjdAz1GQGr8DT@google.com>
- <42701fedbe10acf164ec56818b941061be6ffd4e.camel@redhat.com>
- <56281d07-de85-69be-8855-71e7219e0227@redhat.com>
+        Mon, 13 Dec 2021 08:55:40 -0800 (PST)
+Date:   Mon, 13 Dec 2021 09:55:38 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc:     bjorn.andersson@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, matthias.bgg@gmail.com,
+        ohad@wizery.com, yj.chiang@mediatek.com
+Subject: Re: [PATCH v2] remoteproc: use %pe format string to print return
+ error code
+Message-ID: <20211213165538.GA1396405@p14s>
+References: <20211116162933.GA2318486@p14s>
+ <20211213072015.32235-1-mark-pk.tsai@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <56281d07-de85-69be-8855-71e7219e0227@redhat.com>
+In-Reply-To: <20211213072015.32235-1-mark-pk.tsai@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021, Paolo Bonzini wrote:
-> On 12/11/21 07:56, Maxim Levitsky wrote:
-> > > This apparently wasn't validated against a simple use case, let
-> > > alone against things like migration with nested VMs, multliple L2s,
-> > > etc...
+On Mon, Dec 13, 2021 at 03:20:15PM +0800, Mark-PK Tsai wrote:
+> > Good day,
 > > 
-> > I did validate the *SREGS2* against all the cases I could (like
-> > migration, EPT/NPT disabled/etc. I even started testing SMM to see
-> > how it affects PDPTRs, and patched seabios to use PAE paging. I still
-> > could have missed something.
+> > On Tue, Nov 16, 2021 at 09:57:03PM +0800, Mark-PK Tsai wrote:
+> > > > > > > Use %pe format string to print return error code which
+> > > > > > > make the error message easier to understand.
+> > > > > > >
+> > > > > > > Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> > > > > > > ---
+> > > > > > >  drivers/remoteproc/remoteproc_core.c | 4 ++--
+> > > > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> > > > > > > index 502b6604b757..2242da320368 100644
+> > > > > > > --- a/drivers/remoteproc/remoteproc_core.c
+> > > > > > > +++ b/drivers/remoteproc/remoteproc_core.c
+> > > > > > > @@ -575,8 +575,8 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+> > > > > > >                                            dma_get_mask(rproc->dev.parent));
+> > > > > > >         if (ret) {
+> > > > > > >                 dev_warn(dev,
+> > > > > > > -                        "Failed to set DMA mask %llx. Trying to continue... %x\n",
+> > > > > > > -                        dma_get_mask(rproc->dev.parent), ret);
+> > > > > > > +                        "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
+> > > > > > > +                        dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
+> > > > > >
+> > > > > > Macro ERR_PTR() is used to convert error codes to pointer type when
+> > > > > > returning from a function - I fail to see how doing so in a dev_warn()
+> > > > > > context can make the message easier to understand.  Can you provide an
+> > > > > > example?
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > When dma_coerce_mask_and_coherent() fail, the output log will be as following.
+> > > > >
+> > > > > format          log
+> > > > > %x              Trying to continue... fffffffb
+> > > > > %d              Trying to continue... -5
+> > > > > %pe             Trying to continue... -5        (if CONFIG_SYMBOLIC_ERRNAME is not set)
+> > > > > %pe             Trying to continue... -EIO      (if CONFIG_SYMBOLIC_ERRNAME=y)
+> > > >
+> > > > When failing, functions dma_coerce_mask_and_coherent() returns -EIO.
+> > > > Casting that to a (void *) with ERR_PTR() does not change that value.
+> > > > Since variable @ret is already declared as "int" the real fix is to
+> > > > change "%x" to "%d".
+> > > 
+> > > There're some other drivers do the same thing in the recent kernel, so I think
+> > > it's fine to casting the `ret` to a (void *) for more user friendly.
+> > > But I suppose it would depend on the maintainer's opinion.
+> > > 
+> > > So how about previous patch I sent, which also fix this issue by using %d.
+> > > 
+> > > https://lore.kernel.org/lkml/20211102120805.27137-1-mark-pk.tsai@mediatek.com/
+> > 
+> > I had not seen Russell's reply in the link you posted above.  I am not
+> > completely sure about his solution but his insight and guidance in kernel
+> > programming have precedence over mine.
+> > 
+> > I will take this patch.
+> > 
+> > Thanks,
+> > Mathieu
+> > 
 > 
-> Don't worry, I think Sean was talking about patch 16 and specifically
-> digging at me (who deserved it completely).
+> Hi,
+> 
+> Sorry to disturb you.
+> Is this patch queued?
+> Just want to make sure it has not been forgotten.
 
-Yes, patch 16.  My goal wasn't to dig at anyone, I just wanted to dramatically
-emphasize how ridiculousy fragile and complex the PDPTR crud is due to the number
-of edge cases.
+https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/log/?h=for-next
+

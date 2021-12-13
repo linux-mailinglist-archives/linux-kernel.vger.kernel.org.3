@@ -2,126 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7051D4732D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EE04732DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241282AbhLMRYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 12:24:34 -0500
-Received: from mail-dm6nam10on2049.outbound.protection.outlook.com ([40.107.93.49]:57057
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234741AbhLMRYd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 12:24:33 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iYn+xaKQQ9wjaQpMo4j4hIskVoF8r+uOrPTx1W1RAewVauvKSb7x1VYg/6b/47wh5eKJkdrMoW2FIzUgnDDhihrVA989/rmDv8XoleXkG0L7On+9jrIDu7h7R4jsVK3K8UWHdhBMGM1lxJhgcov5obfjlP0rp0IOtA99ouAoHfkJ4znU/QM7hqazofk4OBnAQ5/31iPnihVy7GityZVl459h8npsM6E+C9UzYLgPnBoOFsCnIdzx2mjAdOct6uub9hTiz5x0g4j73FhFnfaw7P1KQGjn9O90TPIJij3kKvXXHrud/+AmYpPCF6QGoDuTZViXxuHqFI+nY1/elRlORA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0URwh3si2KevCdmqAIX8Xg/075BF1mSjUS/eDUBue3k=;
- b=F89dwvW8aWHGSkb3gxCSwiEMPc+gZMtxAhiqMGZoGyVl31P6hTHfSZY3SM6LcumFnvx4ZnpwZ/cHc8ZOoUjyKT2gupqJlXCOz4aO5d8J25uR+Lg4+CDIfDVKSNhl3U6xCRx/btzntqh/S61L9T3PCthlRH9Yil2ZMHKk43A9ziTwomKiLBXSuaOFgcHZhoQ15KCgxvavj26du9mO/xdl1x1dGOySwnjaEjw1LOrcdPxcTzlR4dGDqncCjZCgrIaVUIEz32gKHB2KzHvIJRUgQTzCLMkiOIs/mjszuqGDdsyTnRKRbQ/u+XJ03Uvl1JU/eMfz+H/Rk7qVVDqdEUIegg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0URwh3si2KevCdmqAIX8Xg/075BF1mSjUS/eDUBue3k=;
- b=tkht99yTcP56WQwpKw+kpf3QbTbXWY2m1pjNY9p1bR2Zsl03G7cqlDlcl9PE8f+wHJNREYjlv/xdMKMgMpKGCSgLRIRd46tWUjAFPizwNUHwlvfUYlBH2/7msNYBEzepPD3mZIe7DTHve1Rszjxx0HkDPKQF+J1rmQ9sTcnFSJk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN8PR12MB4770.namprd12.prod.outlook.com (2603:10b6:408:a1::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Mon, 13 Dec
- 2021 17:24:30 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a192:7073:258c:28b3]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a192:7073:258c:28b3%6]) with mapi id 15.20.4778.018; Mon, 13 Dec 2021
- 17:24:30 +0000
-Date:   Mon, 13 Dec 2021 17:24:26 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-        william.roche@oracle.com
-Subject: Re: [PATCH 3/4] EDAC/amd64: Check register values from all UMCs
-Message-ID: <YbeByvJlicfuehaA@yaz-ubuntu>
-References: <20211208174356.1997855-1-yazen.ghannam@amd.com>
- <20211208174356.1997855-4-yazen.ghannam@amd.com>
- <YbNJSyv4GdC+SUSD@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbNJSyv4GdC+SUSD@zn.tnic>
-X-ClientProxiedBy: BL1PR13CA0352.namprd13.prod.outlook.com
- (2603:10b6:208:2c6::27) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        id S241300AbhLMRYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 12:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236018AbhLMRYp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 12:24:45 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CCFC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 09:24:45 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id d14so13309052ila.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 09:24:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izyPlV9s0tLTAm1bln4PLV07W4NiOuUYJ+h3tC2rZQU=;
+        b=L0yHgl5pDE97iwbnffL0ku07lI6XItptlcgK9ck39E3x3NU/nrTUqNU08cnJ/yUzBd
+         0x56ANvbsiPB/V3I+DaiN62gZ8XKmtxYQF6JtMIdJ5sGdLP/zZ/BiOPMcDoQCZlB4UQV
+         RkJtgLNdJXdkkHJuJZC47W/iCZHy+Z12hicpgnxdjpAZ0D19yEVWbEQCOHNfE7s5jdk5
+         10gEHvxckK6KHJ3TZWsmkV7s5by8bonnQF//Fo38jWT6d5V6iHRErDZT5aKflqqkgWe4
+         Vt5c1ul90bdHCbAFPeXfYCkdvW1YLtszg6rSVCUGeDcNOcoOD0VdGENdlvedirL4RbK9
+         JaRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izyPlV9s0tLTAm1bln4PLV07W4NiOuUYJ+h3tC2rZQU=;
+        b=iB+etI4dZ6B4PpXb/VWR/5Tk1JkWvirvPrniAT0DgDjTVZenUs8ZO2KYrHtAvI34Ef
+         9RWCaXy2lJ8Ym3OdrWBVr9WygHFvTKP/gy4p8WgeYE2DiU5iGyIZ9ebK/y1xsBTOTt4h
+         2+AYk7QHEdtTP8cAaiypNIO5DN4eTmAynSi+7UWdabHfZppAYkor0vkNbdHmo8CbwKU1
+         QD2TvxrZS2QZOV27D6wzx36feTZCnMkQIQsL6FfdzJdyp7aLK+/bh3hj5KI/pp++Br6r
+         wxzwyG/LB19LWH65O3hqspbnbHqgCFH+h1nl8HnaRqlDMs9wzbD2TC/ZOGSrDG18QBJk
+         0agA==
+X-Gm-Message-State: AOAM531iL1PKpXYzaQlglmQWvREK+A9vXH1gBDAXS7XhE780e+2CgzOH
+        7r8bDqnykWhACLCpuZ0ifrP2aYbQ0IoAXVs6Sc6AEg==
+X-Google-Smtp-Source: ABdhPJycnm2C06ujzF8qEW+PQFkoSKqxTYZ8z0mySQetvQ6cFneJ7i9qhDQWx4Q4OSCWDxlfI2eqX5hvkEx77luR3OA=
+X-Received: by 2002:a92:d586:: with SMTP id a6mr13074796iln.293.1639416284276;
+ Mon, 13 Dec 2021 09:24:44 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3236763f-383e-40b2-0985-08d9be5d6bf6
-X-MS-TrafficTypeDiagnostic: BN8PR12MB4770:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB4770C614FC5DAA2FBC12AF21F8749@BN8PR12MB4770.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1051;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VPTDAfBvlnV6ChE+yLb2X6sas9vWVwFiJRECceBE/CgOBB5CXvZ9bOlm2Ym70aMJst9i9Pd+BJDDhwss/Ao2xnk+cibLAZFXfWl9zPBUMJzSEFDV3rY5NfpLHEsMuFkGb2sGG5kIWCS7UIaLxcw56uPPvHaXEpBHBwGxvPALoktQeKsTvzbq0Im7YKPNwFnG9jT599Lfpc6DAKQfKEDa6er8+Rup4Q46EmyuVOGlGtzCpZp5IyBZ4wFzjQ9ioj/yWP+w1hwHu07GPMzh1NOFfhQarsRSvnEck90lQNtQ0dxCq1x9LKqaM0XTO50VLs9MlqWPZQeZRtDGmRPMApgOqWr8GziszTYvVbHmqyR/gCXr5Tc3QLfQcgaHB9V4iTTAomBQhltbLTUJRl5dUgw+e3PZclgOjRU3tT8Yf8djpZIN+F0Q6q9+/xh7OK7lyZGEDyeXsJ3sMx6riJJliq0+IF19dyDIRurtx6RiZ0Wp81KM5vt1EYieBLB7D5YTFfNUaPtTsImBeTRzfFse9Lmywne5lS4SSWxg57jIYq+GVe2/c5LtLcZVl1QJM0cc+eKZxp1Ufr6eJnEUgEI0084EwN+CiR6mKZu6Yy+6yHv760bb3d+rkZ5rfxHCUOyHlkiqGlrq8bMqr0kIgmHfiF9NkA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(33716001)(8936002)(8676002)(4326008)(38100700002)(508600001)(9686003)(6512007)(5660300002)(83380400001)(4744005)(26005)(6666004)(186003)(6486002)(66946007)(66476007)(66556008)(2906002)(6916009)(86362001)(44832011)(6506007)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ulIddD0v8ZQ+deC6pxC595LRfHvc/PVWv2NABtxWNsFb7vOs4ZfHevbMpb+H?=
- =?us-ascii?Q?vZNhgOABCzD6lK9+5aFjkbkyuRyU0/t3BOm9aCkogCNKjdp68paCcA+D3Fnc?=
- =?us-ascii?Q?Lcu/Va0yIN+f4H8Hn2p2nfOGWhRSY5TAsWeE0EvzoBGbHwGdJiVP2Hroqju8?=
- =?us-ascii?Q?K/b/yy/kFMWtxpTWOAxHQAjcUsqs2v0A2lIGX+FErh0FN0W3AhKlYLP87+vX?=
- =?us-ascii?Q?D+jqibCCOMMQPiPqETWZhnPjMtFUskEnj0Ncm88+yyqDv9u8xBVBkZIL0Xrg?=
- =?us-ascii?Q?n2xE7DJBr3ve6AlzdLhsIXHiT4PgkEdPxC5CuFi+uI46VhCHVCRZKjOYOYW5?=
- =?us-ascii?Q?qz9x20xW1RPRMP/VLxEZdQImjHZ+8L+jwM65jlq+7tcjilW0soqTYAC0TEcX?=
- =?us-ascii?Q?mUSx8M4hbcVNd4OnsqUqzUTVzMm3Yi1apsR8ZpDZEWkGst1fQfkpD1YY6v2e?=
- =?us-ascii?Q?CC3Wsd1Y62CQ9GrqRhTrMfLWKJePEf3MgHU8/Ec+T0/yMB0C8QzUWWLHNx2b?=
- =?us-ascii?Q?Sb2o0mO5Mgr2l7kMyRd1eWe36MmiYKsbeIrvQJ6bnmM0XbzVwp0Zn+W43gxm?=
- =?us-ascii?Q?u1/D9R91SgvsDax9zl4s3FWPUhoylgZMPax7IJ+aNOa2C7xJvAuM+viNvTzq?=
- =?us-ascii?Q?TnmHDDt1n8qeSVBqp07V+NkJiujIt4LllNPFXv2VvijuEcH+SCvc2Sv/LjLu?=
- =?us-ascii?Q?f1euim3nA1+dq6BNMYjumrirEG3t1VJgvuSS/0OuJcl7udFTeR8WKtGgjIEf?=
- =?us-ascii?Q?566/OrcoDtMCnBWlHdEvgYb03+HMg+1GCLKSoj/VsYHkzKArfg3KRZPFbPRC?=
- =?us-ascii?Q?1fSHFEOEi1bXpwLTuRbgECmudH3sCZZ3RXN64IPPfIlVcRTwKMB/DrsITgzb?=
- =?us-ascii?Q?afEEA/qVBojoEVB5eOjFcM1WMgEBUxzz2sZlZ/fZ51tA0Sqg0Q3IOX/Q2kgP?=
- =?us-ascii?Q?VP7uCiFDKXQQESyFMoCmRiRpvLdAUE2TgfU0jrif4MUIOIQKlSEnvD3/EJkK?=
- =?us-ascii?Q?OfBIxXs9pPGqJrIgFayVDAmHnEhqKf0UiuqEiUPeL9xxn8JQBNI2p0ysIWKN?=
- =?us-ascii?Q?3eN6dyUK9iC4f3k4hRunMWPMhTsksTdH0kl5yPBZN1l68uk68c9P0L3eabqa?=
- =?us-ascii?Q?LRXHgDs+nG+q7PQD4n73oHAJvwZes+VNMxizv3hf4pzbOG5jgnt4oED8zp7b?=
- =?us-ascii?Q?5MWpiCrSD7N2TYiWNvL+vo1qR+j6Qq4awmLrOaQcAzNnjSIa8crGoZBny5ww?=
- =?us-ascii?Q?fJO0Aed1tbHzRflqGF5uYcOC3k8386mH9O/ITXIqgDg5sTk3spPGxE51nQO9?=
- =?us-ascii?Q?GOETXRwYeczTbZ2oDNdminLO24aKkt3kmqRawPEo6IdOUTXGlGdvjG70csST?=
- =?us-ascii?Q?f5WK9ztf9x3Ft3oMmwvD7uzeVJ/WaUW6PtrSx9wf7mWRqFT0fH+gzfR5L76N?=
- =?us-ascii?Q?YbX5ZdMOO0wizOEqf6hoSvmP1b+GS3AdACcmJqwrRqKO9v257buX11UrQZBd?=
- =?us-ascii?Q?B8eDP307vPXI9mJP8GBpQAh0OsCAv+l6lXir8+7U3l38aJbIS8u8f576TyT/?=
- =?us-ascii?Q?dLrHzwotlfHdLw2TDvSc2PYWrHREqU4VxQf0z1yoUnORsGgbLz0LXWV8331C?=
- =?us-ascii?Q?DNEYIyyx0VTbKRnIn2wJ0r0=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3236763f-383e-40b2-0985-08d9be5d6bf6
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 17:24:30.3720
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ed4ICSI6vOiC99mztyuMcE2jDm3SLIUnaxXZW8csr73u2Em8Nvg99tBXleAPZHSw+p/G8tVwqm3JTw1xUIYQNg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB4770
+References: <20211212033229.527955-1-davidgow@google.com>
+In-Reply-To: <20211212033229.527955-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 13 Dec 2021 09:24:33 -0800
+Message-ID: <CAGS_qxrDxVPDGqSqpVTF5wq23Q=3WDitc+k2VtOzQwm_N6Cyjg@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: tool: Default --jobs to number of CPUs
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 01:34:19PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 08, 2021 at 05:43:55PM +0000, Yazen Ghannam wrote:
-> > Loop over all UMCs and create bitmasks to check the values of the
-> > DIMM_CFG and UMC_CFG registers rather than just checking the values from
-> > the first two UMCs.
-> 
-> Do not talk about what your patch does in the commit message - that
-> should hopefully be visible in the diff itself. Rather, talk about *why*
-> you're doing what you're doing.
+On Sat, Dec 11, 2021 at 7:32 PM David Gow <davidgow@google.com> wrote:
 >
+> The --jobs parameter for kunit_tool currently defaults to 8 CPUs,
+> regardless of the number available. For systems with significantly more
+> (or less), this is not as efficient. Instead, default --jobs to the
+> number of CPUs available to the process: while there are as many
+> superstitions as to exactly what the ideal jobs:CPU ratio is, this seems
+> sufficiently sensible to me.
+>
+> A new helper function to get the default number of jobs is added:
+> get_default_jobs() -- this is used in kunit_tool_test instead of a
+> hardcoded value, or an explicit call to len(os.sched_getaffinity()), so
+> should be more flexible if this needs to change in the future.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Understood.
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-Thanks,
-Yazen 
+Looks good to me.
+I played around with a few commands like
+$ taskset 0x3 ./tools/testing/kunit/kunit.py run
+and saw it pick the pass the expected --jobs value to make.
+
+> ---
+>
+> Changes since v1:
+> https://lore.kernel.org/linux-kselftest/20211211084928.410669-1-davidgow@google.com/
+> - Use len(os.sched_getaffinity()) instead of os.cpu_count(), which gives
+>   the number of available processors (to this process), rather than the
+>   total.
+> - Fix kunit_tool_test.py, which had 8 jobs hardcoded in a couple of
+>   places.
+> - Thanks to Daniel Latypov for these suggestions.
+>
+> ---
+>
+>  tools/testing/kunit/kunit.py           | 5 ++++-
+>  tools/testing/kunit/kunit_tool_test.py | 5 +++--
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 68e6f461c758..6b0ddd6d0115 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -264,6 +264,9 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
+>                 return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
+>         return list(map(massage_arg, argv))
+>
+> +def get_default_jobs() -> int:
+> +       return len(os.sched_getaffinity(0))
+> +
+>  def add_common_opts(parser) -> None:
+>         parser.add_argument('--build_dir',
+>                             help='As in the make command, it specifies the build '
+> @@ -310,7 +313,7 @@ def add_build_opts(parser) -> None:
+>         parser.add_argument('--jobs',
+>                             help='As in the make command, "Specifies  the number of '
+>                             'jobs (commands) to run simultaneously."',
+> -                           type=int, default=8, metavar='jobs')
+> +                           type=int, default=get_default_jobs(), metavar='jobs')
+>
+>  def add_exec_opts(parser) -> None:
+>         parser.add_argument('--timeout',
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 9c4126731457..512936241a56 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -419,7 +419,7 @@ class KUnitMainTest(unittest.TestCase):
+>         def test_build_passes_args_pass(self):
+>                 kunit.main(['build'], self.linux_source_mock)
+>                 self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
+> -               self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, '.kunit', None)
+> +               self.linux_source_mock.build_kernel.assert_called_once_with(False, kunit.get_default_jobs(), '.kunit', None)
+>                 self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+>
+>         def test_exec_passes_args_pass(self):
+> @@ -525,8 +525,9 @@ class KUnitMainTest(unittest.TestCase):
+>
+>         def test_build_builddir(self):
+>                 build_dir = '.kunit'
+> +               jobs = kunit.get_default_jobs()
+>                 kunit.main(['build', '--build_dir', build_dir], self.linux_source_mock)
+> -               self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, build_dir, None)
+> +               self.linux_source_mock.build_kernel.assert_called_once_with(False, jobs, build_dir, None)
+>
+>         def test_exec_builddir(self):
+>                 build_dir = '.kunit'
+> --
+> 2.34.1.173.g76aa8bc2d0-goog
+>

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD42547283F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D444725B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbhLMKJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242333AbhLMKH1 (ORCPT
+        id S235916AbhLMJpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:45:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54200 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235360AbhLMJlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:07:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA99C08EA3E;
-        Mon, 13 Dec 2021 01:51:44 -0800 (PST)
+        Mon, 13 Dec 2021 04:41:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BB92B80E26;
-        Mon, 13 Dec 2021 09:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA0F3C341DC;
-        Mon, 13 Dec 2021 09:51:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CC0CB80E2D;
+        Mon, 13 Dec 2021 09:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F05C341C5;
+        Mon, 13 Dec 2021 09:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389102;
-        bh=FCuNgBFsc8u8IDHFF0BtuVwKsvSSR0VJsSfu4qlvBVs=;
+        s=korg; t=1639388459;
+        bh=0DIUgGOPOUBCfafPEecVBrMCWtPw9QpapuNnHh91ljc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ehopoYWhCsyBiuuAMlWuSHKw5r7QL0axDYuVvXOkLHKOz1/ai7Q+AVoofRBwOdygl
-         oA7mQNtXzb8eyghFfQxrdtjJHadSWwSTQlMLCuSSTfFS5COcRTmJOZi3hQFfQg52Qn
-         z5B3bXlKCth10PJoMNDbB8kpI52JYVElnIUUaHwY=
+        b=uoQGLuxq/+oROox4SpQQGULABnJ4HLtFhiPCMFpFgMHI5HQohbz+a3BD0myORm1db
+         mgXbo1mWUI0v9mIOnr4xccwdqS7PcSmsGacaRfoxX84POFDO1uXjFj+4hXmKWw/r70
+         AeBm4JJm5HygmBzHB5DhVDqg3AP8gdiFfzy4L8Ug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.10 086/132] mtd: rawnand: fsmc: Take instruction delay into account
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 4.19 56/74] xhci: avoid race between disable slot command and host runtime suspend
 Date:   Mon, 13 Dec 2021 10:30:27 +0100
-Message-Id: <20211213092942.065275793@linuxfoundation.org>
+Message-Id: <20211213092932.678223681@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,44 +45,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herve Codina <herve.codina@bootlin.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit a4ca0c439f2d5ce9a3dc118d882f9f03449864c8 upstream.
+commit 7faac1953ed1f658f719cdf7bb7303fa5eef822c upstream.
 
-The FSMC NAND controller should apply a delay after the
-instruction has been issued on the bus.
-The FSMC NAND controller driver did not handle this delay.
+Make xhci_disable_slot() synchronous, thus ensuring it, and
+xhci_free_dev() calling it return after xHC controller completes
+the disable slot command.
 
-Add this waiting delay in the FSMC NAND controller driver.
+Otherwise the roothub and xHC host may runtime suspend, and clear the
+command ring while the disable slot command is being processed.
 
-Fixes: 4da712e70294 ("mtd: nand: fsmc: use ->exec_op()")
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211119150316.43080-4-herve.codina@bootlin.com
+This causes a command completion mismatch as the completion event can't
+be mapped to the correct command.
+Command ring gets out of sync and commands time out.
+Driver finally assumes host is unresponsive and bails out.
+
+usb 2-4: USB disconnect, device number 10
+xhci_hcd 0000:00:0d.0: ERROR mismatched command completion event
+...
+xhci_hcd 0000:00:0d.0: xHCI host controller not responding, assume dead
+xhci_hcd 0000:00:0d.0: HC died; cleaning up
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20211210141735.1384209-3-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/fsmc_nand.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/host/xhci-hub.c  |    1 +
+ drivers/usb/host/xhci-ring.c |    1 -
+ drivers/usb/host/xhci.c      |   22 +++++++++++++++-------
+ 3 files changed, 16 insertions(+), 8 deletions(-)
 
---- a/drivers/mtd/nand/raw/fsmc_nand.c
-+++ b/drivers/mtd/nand/raw/fsmc_nand.c
-@@ -15,6 +15,7 @@
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -625,6 +625,7 @@ static int xhci_enter_test_mode(struct x
+ 			continue;
  
- #include <linux/clk.h>
- #include <linux/completion.h>
-+#include <linux/delay.h>
- #include <linux/dmaengine.h>
- #include <linux/dma-direction.h>
- #include <linux/dma-mapping.h>
-@@ -653,6 +654,9 @@ static int fsmc_exec_op(struct nand_chip
- 						instr->ctx.waitrdy.timeout_ms);
- 			break;
- 		}
-+
-+		if (instr->delay_ns)
-+			ndelay(instr->delay_ns);
+ 		retval = xhci_disable_slot(xhci, i);
++		xhci_free_virt_device(xhci, i);
+ 		if (retval)
+ 			xhci_err(xhci, "Failed to disable slot %d, %d. Enter test mode anyway\n",
+ 				 i, retval);
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1236,7 +1236,6 @@ static void xhci_handle_cmd_disable_slot
+ 	if (xhci->quirks & XHCI_EP_LIMIT_QUIRK)
+ 		/* Delete default control endpoint resources */
+ 		xhci_free_device_endpoint_resources(xhci, virt_dev, true);
+-	xhci_free_virt_device(xhci, slot_id);
+ }
+ 
+ static void xhci_handle_cmd_config_ep(struct xhci_hcd *xhci, int slot_id,
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3836,9 +3836,8 @@ static void xhci_free_dev(struct usb_hcd
  	}
+ 	xhci_debugfs_remove_slot(xhci, udev->slot_id);
+ 	virt_dev->udev = NULL;
+-	ret = xhci_disable_slot(xhci, udev->slot_id);
+-	if (ret)
+-		xhci_free_virt_device(xhci, udev->slot_id);
++	xhci_disable_slot(xhci, udev->slot_id);
++	xhci_free_virt_device(xhci, udev->slot_id);
+ }
  
+ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id)
+@@ -3848,7 +3847,7 @@ int xhci_disable_slot(struct xhci_hcd *x
+ 	u32 state;
+ 	int ret = 0;
+ 
+-	command = xhci_alloc_command(xhci, false, GFP_KERNEL);
++	command = xhci_alloc_command(xhci, true, GFP_KERNEL);
+ 	if (!command)
+ 		return -ENOMEM;
+ 
+@@ -3871,6 +3870,15 @@ int xhci_disable_slot(struct xhci_hcd *x
+ 	}
+ 	xhci_ring_cmd_db(xhci);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
++
++	wait_for_completion(command->completion);
++
++	if (command->status != COMP_SUCCESS)
++		xhci_warn(xhci, "Unsuccessful disable slot %u command, status %d\n",
++			  slot_id, command->status);
++
++	xhci_free_command(xhci, command);
++
  	return ret;
+ }
+ 
+@@ -3979,9 +3987,8 @@ int xhci_alloc_dev(struct usb_hcd *hcd,
+ 	return 1;
+ 
+ disable_slot:
+-	ret = xhci_disable_slot(xhci, udev->slot_id);
+-	if (ret)
+-		xhci_free_virt_device(xhci, udev->slot_id);
++	xhci_disable_slot(xhci, udev->slot_id);
++	xhci_free_virt_device(xhci, udev->slot_id);
+ 
+ 	return 0;
+ }
+@@ -4110,6 +4117,7 @@ static int xhci_setup_device(struct usb_
+ 
+ 		mutex_unlock(&xhci->mutex);
+ 		ret = xhci_disable_slot(xhci, udev->slot_id);
++		xhci_free_virt_device(xhci, udev->slot_id);
+ 		if (!ret)
+ 			xhci_alloc_dev(hcd, udev);
+ 		kfree(command->completion);
 
 

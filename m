@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAB7472A0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A7847285A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbhLMK3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
+        id S240378AbhLMKK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344689AbhLMK1n (ORCPT
+        with ESMTP id S241903AbhLMKGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:27:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780A4C01DF1C;
-        Mon, 13 Dec 2021 02:01:33 -0800 (PST)
+        Mon, 13 Dec 2021 05:06:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D18C0A8897;
+        Mon, 13 Dec 2021 01:51:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C4B96CE0E69;
-        Mon, 13 Dec 2021 10:01:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A66C34604;
-        Mon, 13 Dec 2021 10:01:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8F7BB80E1C;
+        Mon, 13 Dec 2021 09:51:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE72C00446;
+        Mon, 13 Dec 2021 09:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389690;
-        bh=vxz0y/+UF10FMsWkCs6YvhigHuhFml/sB4T8Uv3Dczo=;
+        s=korg; t=1639389070;
+        bh=c4PyAvgauIE/r1W3fXe8JPNA4wDziqxWatb/PabbAA8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pWwC/nrH76y5DvN8ew9lvdQYhCuTFlzfCPHUiawcUsD7nFtZk1piz+7UmzzWuV4/E
-         D+BIov5Icoe96Lc21//YeZj6tNJ3b+w4hbO7z+1TJn4pb1txtTxPv4slNbF3hkajpP
-         PavJi7wVFaPcgM/Nga7xN+mfPvtTW78QBH3gFVbA=
+        b=vWfbcwrv9EDa+lX5Z6f5O12IH2BOxObD85ColmaHBMc7ASDgaYXMnbqM6GRYUzkas
+         VFhYoSyqMIEB/wGo5rMgdGnVjU/Ak7LlUz9tA0mThHF73mqlwd/APxY4cofQsErwOo
+         C7dX5RInxBoxsUHhJL8FKuoLDGqd4yG0zPwPNoLk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Russell King <rmk+kernel@arm.linux.org.uk>,
-        Nicolas Diaz <nicolas.diaz@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 132/171] net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
-Date:   Mon, 13 Dec 2021 10:30:47 +0100
-Message-Id: <20211213092949.491729640@linuxfoundation.org>
+        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.10 107/132] iio: trigger: Fix reference counting
+Date:   Mon, 13 Dec 2021 10:30:48 +0100
+Message-Id: <20211213092942.772638037@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,61 +50,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joakim Zhang <qiangqing.zhang@nxp.com>
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit b5bd95d17102b6719e3531d627875b9690371383 upstream.
+commit a827a4984664308f13599a0b26c77018176d0c7c upstream.
 
-Background:
-We have a customer is running a Profinet stack on the 8MM which receives and
-responds PNIO packets every 4ms and PNIO-CM packets every 40ms. However, from
-time to time the received PNIO-CM package is "stock" and is only handled when
-receiving a new PNIO-CM or DCERPC-Ping packet (tcpdump shows the PNIO-CM and
-the DCERPC-Ping packet at the same time but the PNIO-CM HW timestamp is from
-the expected 40 ms and not the 2s delay of the DCERPC-Ping).
+In viio_trigger_alloc() device_initialize() is used to set the initial
+reference count of the trigger to 1. Then another get_device() is called on
+trigger. This sets the reference count to 2 before the trigger is returned.
 
-After debugging, we noticed PNIO, PNIO-CM and DCERPC-Ping packets would
-be handled by different RX queues.
+iio_trigger_free(), which is the matching API to viio_trigger_alloc(),
+calls put_device() which decreases the reference count by 1. But the second
+reference count acquired in viio_trigger_alloc() is never dropped.
 
-The root cause should be driver ack all queues' interrupt when handle a
-specific queue in fec_enet_rx_queue(). The blamed patch is introduced to
-receive as much packets as possible once to avoid interrupt flooding.
-But it's unreasonable to clear other queues'interrupt when handling one
-queue, this patch tries to fix it.
+As a result the iio_trigger_release() function is never called and the
+memory associated with the trigger is never freed.
 
-Fixes: ed63f1dcd578 (net: fec: clear receive interrupts before processing a packet)
-Cc: Russell King <rmk+kernel@arm.linux.org.uk>
-Reported-by: Nicolas Diaz <nicolas.diaz@nxp.com>
-Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-Link: https://lore.kernel.org/r/20211206135457.15946-1-qiangqing.zhang@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Since there is no reason for the trigger to start its lifetime with two
+reference counts just remove the extra get_device() in
+viio_trigger_alloc().
+
+Fixes: 5f9c035cae18 ("staging:iio:triggers. Add a reference get to the core for triggers.")
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Acked-by: Nuno Sá <nuno.sa@analog.com>
+Link: https://lore.kernel.org/r/20211024092700.6844-2-lars@metafoo.de
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/fec.h      |    3 +++
- drivers/net/ethernet/freescale/fec_main.c |    2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/iio/industrialio-trigger.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/net/ethernet/freescale/fec.h
-+++ b/drivers/net/ethernet/freescale/fec.h
-@@ -377,6 +377,9 @@ struct bufdesc_ex {
- #define FEC_ENET_WAKEUP	((uint)0x00020000)	/* Wakeup request */
- #define FEC_ENET_TXF	(FEC_ENET_TXF_0 | FEC_ENET_TXF_1 | FEC_ENET_TXF_2)
- #define FEC_ENET_RXF	(FEC_ENET_RXF_0 | FEC_ENET_RXF_1 | FEC_ENET_RXF_2)
-+#define FEC_ENET_RXF_GET(X)	(((X) == 0) ? FEC_ENET_RXF_0 :	\
-+				(((X) == 1) ? FEC_ENET_RXF_1 :	\
-+				FEC_ENET_RXF_2))
- #define FEC_ENET_TS_AVAIL       ((uint)0x00010000)
- #define FEC_ENET_TS_TIMER       ((uint)0x00008000)
+--- a/drivers/iio/industrialio-trigger.c
++++ b/drivers/iio/industrialio-trigger.c
+@@ -550,7 +550,6 @@ struct iio_trigger *viio_trigger_alloc(c
+ 		irq_modify_status(trig->subirq_base + i,
+ 				  IRQ_NOREQUEST | IRQ_NOAUTOEN, IRQ_NOPROBE);
+ 	}
+-	get_device(&trig->dev);
  
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1480,7 +1480,7 @@ fec_enet_rx_queue(struct net_device *nde
- 			break;
- 		pkt_received++;
+ 	return trig;
  
--		writel(FEC_ENET_RXF, fep->hwp + FEC_IEVENT);
-+		writel(FEC_ENET_RXF_GET(queue_id), fep->hwp + FEC_IEVENT);
- 
- 		/* Check for errors. */
- 		status ^= BD_ENET_RX_LAST;
 
 

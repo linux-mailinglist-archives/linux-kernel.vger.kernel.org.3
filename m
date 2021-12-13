@@ -2,102 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 524724734C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1133B4734CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242205AbhLMTSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:18:02 -0500
-Received: from mail-qk1-f180.google.com ([209.85.222.180]:39749 "EHLO
-        mail-qk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242219AbhLMTR6 (ORCPT
+        id S242221AbhLMTSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:18:21 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:37690 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235389AbhLMTST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:17:58 -0500
-Received: by mail-qk1-f180.google.com with SMTP id b67so14876070qkg.6;
-        Mon, 13 Dec 2021 11:17:58 -0800 (PST)
+        Mon, 13 Dec 2021 14:18:19 -0500
+Received: by mail-oi1-f182.google.com with SMTP id bj13so24526648oib.4;
+        Mon, 13 Dec 2021 11:18:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZdDsue3rdtYrdCoUMZ9VwBkGQMAsRFep+AIp/S8CTaM=;
-        b=guRbQyiLfSeITN8EnSAfQoXkwwMday74GWUbtsRU2o/IDYa68PHmzShkF3Y+EZ/a5L
-         UiF2YvKF1VRlDbrvC2i7ChmXEfymu8HFKfiDsplFE0LOA0obJ+z6oicreDUtWG3e+GqD
-         LlTU0enRR//4UyYDoE0tZ1dUjsoqIGjASzCB4i6YMZ9qfL/PihAM/64GWjUpGHfJk0kR
-         IQxW8sgtRBm79pb07XmAl5q+CP1KeJaTC8uzxiE1+QIeApNF1RjAGqlc9y216Yh3zVB7
-         Lko+sTDtFzynypw1YcarVGSnJTyVXrf2HWoWtV5wosO9i3K+Y8FIQP1zm1TGG5LWxvl6
-         XIiA==
-X-Gm-Message-State: AOAM531n/WVZFlpOdU186kr1psjTz6+6u4DmjNDmRx6NyStoYHqgoQG2
-        hJ0UiKysR/EimHzd+vlYYPo=
-X-Google-Smtp-Source: ABdhPJwD9gPdGR9osSmzXzDMpxR72RO/z0K+vqJZz4VOS+YSst+UdjoRVvDX+9dE/KZT0pcn2u9Caw==
-X-Received: by 2002:a37:410:: with SMTP id 16mr150839qke.672.1639423077763;
-        Mon, 13 Dec 2021 11:17:57 -0800 (PST)
-Received: from localhost (fwdproxy-ash-004.fbsv.net. [2a03:2880:20ff:4::face:b00c])
-        by smtp.gmail.com with ESMTPSA id t30sm4730587qkj.125.2021.12.13.11.17.57
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R/zNofg9s1DxdI5VeTHZvff8L4CaAo1nQD16KrTGNeo=;
+        b=xfWbCDbMkLPxjauAS2rFgE0Jc7ECFyH2cLsNKd6rQon+zEhXpSJZBiHyzGcKAquN1Q
+         U25t7tKKicxlhb31XBa4IvNRxaWVK7bf9EnwXF8RnicLSWl+zqw6N5ByiSm7fm94Cl60
+         ERH4jD6kDySJrPQBISj4gF6sZ4674QIiCNL3m+94JSBDDz4XfjtnWfGhszf3fWtYRRZk
+         1mOzBjnGNmf1URvimDF6VEYRIPJf/Wem10NnkeqaiH9xLfGL77b3r7RxFHhlNyR79yWv
+         NjadocXZUjBNqbLsFQePm9E1gnpowO2sB5wOKVVls1yHR+RgHM1dh9+JaY6yUpISdIb5
+         8usA==
+X-Gm-Message-State: AOAM533wwY1IU7kWhnKL7OijAO5B4HsfY8OIBqKfD2vPnvOqBgvoP9oO
+        sjvQOeOENKrAolBQbHUCFQ==
+X-Google-Smtp-Source: ABdhPJxgR3bMAASLLVa1GRLK96PgQv2XYW3WIaufufWwqdTssF9f7ALWr0YgiR70uVViS38+5kzRVQ==
+X-Received: by 2002:a05:6808:2016:: with SMTP id q22mr475655oiw.81.1639423098988;
+        Mon, 13 Dec 2021 11:18:18 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id v20sm2286544otj.27.2021.12.13.11.18.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:17:57 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     pmladek@suse.com, linux-doc@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com, corbet@lwn.net
-Cc:     void@manifault.com, yhs@fb.com, songliubraving@fb.com
-Subject: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
-Date:   Mon, 13 Dec 2021 11:17:35 -0800
-Message-Id: <20211213191734.3238783-1-void@manifault.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 13 Dec 2021 11:18:18 -0800 (PST)
+Received: (nullmailer pid 1410569 invoked by uid 1000);
+        Mon, 13 Dec 2021 19:18:17 -0000
+Date:   Mon, 13 Dec 2021 13:18:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 4/4] dt-bindings: pci: layerscape-pci: define AER/PME
+ interrupts
+Message-ID: <YbececugsiFdOh0H@robh.at.kernel.org>
+References: <20211202004636.5276-1-leoyang.li@nxp.com>
+ <20211202004636.5276-5-leoyang.li@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202004636.5276-5-leoyang.li@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When enabling a KLP patch with `klp_enable_patch`, we invoke
-`klp_init_patch_early` to initialize the kobjects for the patch itself, as
-well as the `struct klp_object*`'s and `struct klp_func*`'s that comprise
-it. However, there are some paths where we may fail to do an
-early-initialization of an object or its functions if certain conditions
-are not met, such as an object having a `NULL` funcs pointer. In these
-paths, we may currently leak the `struct klp_patch*`'s kobject, as well as
-any of its objects or functions, as we don't free the patch in
-`klp_enable_patch` if `klp_init_patch_early` returns an error code. For
-example, if we added the following object entry to the sample livepatch
-code, it would cause us to leak the vmlinux `klp_object`, and its `struct
-klp_func` which updates `cmdline_proc_show`:
+On Wed, 01 Dec 2021 18:46:36 -0600, Li Yang wrote:
+> Different platforms using this controller are using different numbers of
+> interrupt lines and the routing of events to these interrupt lines are
+> different too.  So instead of trying to define names for these interrupt
+> lines, we define the more specific AER/PME events that are routed to
+> these interrupt lines.
+> 
+> For platforms which only has a single interrupt line for miscellaneous
+> controller events, we can keep using the original "intr" name for
+> backward compatibility.
+> 
+> Also change the example from ls1021a to ls2088a for better representation.
+> 
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> ---
+>  .../bindings/pci/layerscape-pci.txt           | 40 +++++++++++--------
+>  1 file changed, 24 insertions(+), 16 deletions(-)
+> 
 
-```
-static struct klp_object objs[] = {
-        {
-                .name = "kvm",
-        }, { }
-};
-```
-
-Without this change, if we enable `CONFIG_DEBUG_KOBJECT` and try to `kpatch
-load livepatch-sample.ko`, we don't observe the kobjects being released
-(though of course we do observe `insmod` failing to insert the module).
-With the change, we do observe that the `kobject` for the patch and its
-`vmlinux` object are released.
-
-Signed-off-by: David Vernet <void@manifault.com>
----
- kernel/livepatch/core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 335d988bd811..16e96836a825 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -1052,10 +1052,7 @@ int klp_enable_patch(struct klp_patch *patch)
- 	}
- 
- 	ret = klp_init_patch_early(patch);
--	if (ret) {
--		mutex_unlock(&klp_mutex);
--		return ret;
--	}
-+		goto err;
- 
- 	ret = klp_init_patch(patch);
- 	if (ret)
--- 
-2.30.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>

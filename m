@@ -2,132 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5448472EA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D66A472EA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbhLMOO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:14:57 -0500
-Received: from mga14.intel.com ([192.55.52.115]:3918 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231897AbhLMOO4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:14:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639404896; x=1670940896;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G04cXBtUSsm7wq/Vr2vnKJIsSoX7a99iXDaJkTVsrNA=;
-  b=Les6DeCIu8Sx//eDt5ZFbedCHoxs0X8/8XVmbmInwujFo1UlKXMMovUT
-   DiFN5VVGGga0f7cxQScFbTWz6zLkLhWBAW/jn62u9UG3I8QjVmCS39t0/
-   Qlu3I3uU9ASWoqcBM8xgm9L2W5oS3oHe2PlryI/BVHmIDJYdgleZVUx/v
-   pVaHl34z9Q9SgFhCQ/Wn9dlLMS5vqYAmr5V/2Wuv+tXgw7N0dLNxK/oOr
-   PXBxpW6xptoSYyyr9eCCqVPSxtd62wH5qV5FezRaqqzvehQl3hBzzDcpi
-   Q3hqUrzlv6EK02h84KyxM5/to/X98Rh2qB+6h1QdSogHU7NGFu9XhSZWn
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238963935"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="238963935"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 06:14:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="517765793"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Dec 2021 06:14:48 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwm6J-0006kK-Gk; Mon, 13 Dec 2021 14:14:47 +0000
-Date:   Mon, 13 Dec 2021 22:14:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Mathieu Poirier <mathieu.poirer@linaro.org>
-Subject: drivers/remoteproc/imx_rproc.c:298:12: sparse: sparse: incorrect
- type in assignment (different address spaces)
-Message-ID: <202112132256.jCxIHiiN-lkp@intel.com>
+        id S238752AbhLMOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:18:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34218 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231897AbhLMOSR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 09:18:17 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B18CEB81062;
+        Mon, 13 Dec 2021 14:18:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CBEC34602;
+        Mon, 13 Dec 2021 14:18:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639405094;
+        bh=NtWdzlEjft5tnQeFaBXUVrmubHd8T7HRkrRLfS+HxKc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ef4dtFt35n0BNeZHb5cwHF2nWR84NPJ4B4Ej+DcAmvR7/HzogwktH/W/meMnZnx1/
+         Xg3O6A+RredIYQtKTQ5Xmko6sTk52Ckx/QDevDNiQkd9m6eeVOhNiVRfdPIU5wthcz
+         kslBCgGFDpF4EoLzXiuVfEO/wBb1eXc3RIOJDVQs=
+Date:   Mon, 13 Dec 2021 15:18:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Yuwen Ng <yuwen.ng@mediatek.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: mtu3: add memory barrier before set GPD's HWO
+Message-ID: <YbdWI5PD3e6uFz8U@kroah.com>
+References: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
+ <20211209031424.17842-2-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211209031424.17842-2-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+On Thu, Dec 09, 2021 at 11:14:23AM +0800, Chunfeng Yun wrote:
+> There is a seldom issue that the controller access invalid address
+> and trigger devapc or emimpu violation. That is due to memory access
+> is out of order and cause gpd data is not correct.
+> Make sure GPD is fully written before giving it to HW by setting its
+> HWO.
+> 
+> Fixes: 48e0d3735aa5 ("usb: mtu3: supports new QMU format")
+> Cc: stable@vger.kernel.org
+> Reported-by: Eddie Hung <eddie.hung@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  drivers/usb/mtu3/mtu3_qmu.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_qmu.c b/drivers/usb/mtu3/mtu3_qmu.c
+> index 3f414f91b589..34bb5ac67efe 100644
+> --- a/drivers/usb/mtu3/mtu3_qmu.c
+> +++ b/drivers/usb/mtu3/mtu3_qmu.c
+> @@ -273,6 +273,8 @@ static int mtu3_prepare_tx_gpd(struct mtu3_ep *mep, struct mtu3_request *mreq)
+>  			gpd->dw3_info |= cpu_to_le32(GPD_EXT_FLAG_ZLP);
+>  	}
+>  
+> +	/* make sure GPD is fully written before giving it to HW */
+> +	mb();
 
-First bad commit (maybe != root cause):
+So this means you are using mmio for this structure?  If so, shouldn't
+you be using normal io memory read/write calls as well and not just
+"raw" pointers like this:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2585cf9dfaaddf00b069673f27bb3f8530e2039c
-commit: 2df7062002d0263bde70b453f671bb4f8493e169 remoteproc: imx_proc: enable virtio/mailbox
-date:   9 months ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211213/202112132256.jCxIHiiN-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2df7062002d0263bde70b453f671bb4f8493e169
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2df7062002d0263bde70b453f671bb4f8493e169
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/ drivers/gpu/drm/tegra/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/staging/ fs/proc/
+>  	gpd->dw0_info |= cpu_to_le32(GPD_FLAGS_IOC | GPD_FLAGS_HWO);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Are you sure this is ok?
+
+Sprinkling around mb() calls is almost never the correct solution.
+
+If you need to ensure that a write succeeds, shouldn't you do a read
+from it afterward?  Many busses require this, doesn't yours?
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/imx_rproc.c:298:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
-   drivers/remoteproc/imx_rproc.c:298:12: sparse:     expected void *va
-   drivers/remoteproc/imx_rproc.c:298:12: sparse:     got void [noderef] __iomem *
->> drivers/remoteproc/imx_rproc.c:315:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *iomem_cookie @@     got void *va @@
-   drivers/remoteproc/imx_rproc.c:315:20: sparse:     expected void volatile [noderef] __iomem *iomem_cookie
-   drivers/remoteproc/imx_rproc.c:315:20: sparse:     got void *va
 
-vim +298 drivers/remoteproc/imx_rproc.c
+>  
+>  	mreq->gpd = gpd;
+> @@ -306,6 +308,8 @@ static int mtu3_prepare_rx_gpd(struct mtu3_ep *mep, struct mtu3_request *mreq)
+>  	gpd->next_gpd = cpu_to_le32(lower_32_bits(enq_dma));
+>  	ext_addr |= GPD_EXT_NGP(mtu, upper_32_bits(enq_dma));
+>  	gpd->dw3_info = cpu_to_le32(ext_addr);
+> +	/* make sure GPD is fully written before giving it to HW */
+> +	mb();
 
-a0ff4aa6f01080 Oleksij Rempel 2017-08-17  290  
-b29b4249f8f0ca Peng Fan       2021-03-06  291  static int imx_rproc_mem_alloc(struct rproc *rproc,
-b29b4249f8f0ca Peng Fan       2021-03-06  292  			       struct rproc_mem_entry *mem)
-b29b4249f8f0ca Peng Fan       2021-03-06  293  {
-b29b4249f8f0ca Peng Fan       2021-03-06  294  	struct device *dev = rproc->dev.parent;
-b29b4249f8f0ca Peng Fan       2021-03-06  295  	void *va;
-b29b4249f8f0ca Peng Fan       2021-03-06  296  
-b29b4249f8f0ca Peng Fan       2021-03-06  297  	dev_dbg(dev, "map memory: %p+%zx\n", &mem->dma, mem->len);
-b29b4249f8f0ca Peng Fan       2021-03-06 @298  	va = ioremap_wc(mem->dma, mem->len);
-b29b4249f8f0ca Peng Fan       2021-03-06  299  	if (IS_ERR_OR_NULL(va)) {
-b29b4249f8f0ca Peng Fan       2021-03-06  300  		dev_err(dev, "Unable to map memory region: %p+%zx\n",
-b29b4249f8f0ca Peng Fan       2021-03-06  301  			&mem->dma, mem->len);
-b29b4249f8f0ca Peng Fan       2021-03-06  302  		return -ENOMEM;
-b29b4249f8f0ca Peng Fan       2021-03-06  303  	}
-b29b4249f8f0ca Peng Fan       2021-03-06  304  
-b29b4249f8f0ca Peng Fan       2021-03-06  305  	/* Update memory entry va */
-b29b4249f8f0ca Peng Fan       2021-03-06  306  	mem->va = va;
-b29b4249f8f0ca Peng Fan       2021-03-06  307  
-b29b4249f8f0ca Peng Fan       2021-03-06  308  	return 0;
-b29b4249f8f0ca Peng Fan       2021-03-06  309  }
-b29b4249f8f0ca Peng Fan       2021-03-06  310  
-b29b4249f8f0ca Peng Fan       2021-03-06  311  static int imx_rproc_mem_release(struct rproc *rproc,
-b29b4249f8f0ca Peng Fan       2021-03-06  312  				 struct rproc_mem_entry *mem)
-b29b4249f8f0ca Peng Fan       2021-03-06  313  {
-b29b4249f8f0ca Peng Fan       2021-03-06  314  	dev_dbg(rproc->dev.parent, "unmap memory: %pa\n", &mem->dma);
-b29b4249f8f0ca Peng Fan       2021-03-06 @315  	iounmap(mem->va);
-b29b4249f8f0ca Peng Fan       2021-03-06  316  
-b29b4249f8f0ca Peng Fan       2021-03-06  317  	return 0;
-b29b4249f8f0ca Peng Fan       2021-03-06  318  }
-b29b4249f8f0ca Peng Fan       2021-03-06  319  
+Again, mb(); does not ensure that memory-mapped i/o actually hits the
+HW.  Or if it does on your platform, how?
 
-:::::: The code at line 298 was first introduced by commit
-:::::: b29b4249f8f0cad1a1787cbe59e638ff23d489ed remoteproc: imx_rproc: add i.MX specific parse fw hook
+mb() is a compiler barrier, not a memory write to a bus barrier.  Please
+read Documentation/memory-barriers.txt for more details.
 
-:::::: TO: Peng Fan <peng.fan@nxp.com>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+thanks,
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h

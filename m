@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4EC472523
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D83F47283E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235397AbhLMJlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S234387AbhLMKJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbhLMJj0 (ORCPT
+        with ESMTP id S242439AbhLMKHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:39:26 -0500
+        Mon, 13 Dec 2021 05:07:35 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898FAC0698CE;
-        Mon, 13 Dec 2021 01:38:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1820C08EC3B;
+        Mon, 13 Dec 2021 01:51:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D6153CE0E85;
-        Mon, 13 Dec 2021 09:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AC8C341C5;
-        Mon, 13 Dec 2021 09:37:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 17B74CE0B20;
+        Mon, 13 Dec 2021 09:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5041C00446;
+        Mon, 13 Dec 2021 09:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388277;
-        bh=irIT6cFm4AtfXyXW5+1xoGp+O06qu0zyxDUvqmeHhDY=;
+        s=korg; t=1639389105;
+        bh=CaGJg9L+b7+ixx5BF0mYsdNS66KsGLOlP7xuy9QgWP0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ohTQsjyJMSDtcN1YfQlW+nlWnpMHf+hoFazORTE0yJok3ysVZr7+14+wX5FhSbnFf
-         7LR0MRZFetl0+PEW5DgwRHxq6RNCU04zwkOc9ZZM3CPUkrH5XpF8jqjyDvWii0ixrE
-         CJY1heR9e//s6McLJb6TOVHxiwtE7GZ5Ko2xqNlw=
+        b=J7hCs2VXXHT1bSr1bM/2ihv430Q1pCpWF4j0g0NOhJpIFe6ylV04pmCuB110C4pCx
+         0ZsRsGbdlXjcmbREDAnyXcOfdveS2AOmq033R6utVxS7mn7eM5h2mSzZLMnBLNwuYa
+         t2dUocKOz3N+om8C3yk0QkTHkvUyFPCQiFsecnsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evgeny Boger <boger@wirenboard.com>,
-        Chen-Yu Tsai <wens@csie.org>, Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.14 48/53] iio: adc: axp20x_adc: fix charging current reporting on AXP22x
-Date:   Mon, 13 Dec 2021 10:30:27 +0100
-Message-Id: <20211213092929.953652764@linuxfoundation.org>
+        stable@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.10 087/132] mtd: rawnand: fsmc: Fix timing computation
+Date:   Mon, 13 Dec 2021 10:30:28 +0100
+Message-Id: <20211213092942.095636249@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,66 +48,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evgeny Boger <boger@wirenboard.com>
+From: Herve Codina <herve.codina@bootlin.com>
 
-commit 92beafb76a31bdc02649eb44e93a8e4f4cfcdbe8 upstream.
+commit 9472335eaa1452b51dc8e8edaa1a342997cb80c7 upstream.
 
-Both the charging and discharging currents on AXP22x are stored as
-12-bit integers, in accordance with the datasheet.
-It's also confirmed by vendor BSP (axp20x_adc.c:axp22_icharge_to_mA).
+Under certain circumstances, the timing settings calculated by
+the FSMC NAND controller driver were inaccurate.
+These settings led to incorrect data reads or fallback to
+timing mode 0 depending on the NAND chip used.
 
-The scale factor of 0.5 is never mentioned in datasheet, nor in the
-vendor source code. I think it was here to compensate for
-erroneous addition bit in register width.
+The timing computation did not take into account the following
+constraint given in SPEAr3xx reference manual:
+  twait >= tCEA - (tset * TCLK) + TOUTDEL + TINDEL
 
-Tested on custom A40i+AXP221s board with external ammeter as
-a reference.
+Enhance the timings calculation by taking into account this
+additional constraint.
 
-Fixes: 0e34d5de961d ("iio: adc: add support for X-Powers AXP20X and AXP22X PMICs ADCs")
-Signed-off-by: Evgeny Boger <boger@wirenboard.com>
-Acked-by: Chen-Yu Tsai <wens@csie.org>
-Link: https://lore.kernel.org/r/20211116213746.264378-1-boger@wirenboard.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+This change has no impact on slow timing modes such as mode 0.
+Indeed, on mode 0, computed values are the same with and
+without the patch.
+
+NANDs which previously stayed in mode 0 because of fallback to
+mode 0 can now work at higher speeds and NANDs which were not
+working at all because of the corrupted data work at high
+speeds without troubles.
+
+Overall improvement on a Micron/MT29F1G08 (flash_speed tool):
+                        mode0       mode3
+eraseblock write speed  3220 KiB/s  4511 KiB/s
+eraseblock read speed   4491 KiB/s  7529 KiB/s
+
+Fixes: d9fb079571833 ("mtd: nand: fsmc: add support for SDR timings")
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211119150316.43080-5-herve.codina@bootlin.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/axp20x_adc.c |   18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+ drivers/mtd/nand/raw/fsmc_nand.c |   32 ++++++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
 
---- a/drivers/iio/adc/axp20x_adc.c
-+++ b/drivers/iio/adc/axp20x_adc.c
-@@ -224,19 +224,8 @@ static int axp22x_adc_raw(struct iio_dev
- 			  struct iio_chan_spec const *chan, int *val)
+--- a/drivers/mtd/nand/raw/fsmc_nand.c
++++ b/drivers/mtd/nand/raw/fsmc_nand.c
+@@ -94,6 +94,14 @@
+ 
+ #define FSMC_BUSY_WAIT_TIMEOUT	(1 * HZ)
+ 
++/*
++ * According to SPEAr300 Reference Manual (RM0082)
++ *  TOUDEL = 7ns (Output delay from the flip-flops to the board)
++ *  TINDEL = 5ns (Input delay from the board to the flipflop)
++ */
++#define TOUTDEL	7000
++#define TINDEL	5000
++
+ struct fsmc_nand_timings {
+ 	u8 tclr;
+ 	u8 tar;
+@@ -278,7 +286,7 @@ static int fsmc_calc_timings(struct fsmc
  {
- 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
--	int size;
+ 	unsigned long hclk = clk_get_rate(host->clk);
+ 	unsigned long hclkn = NSEC_PER_SEC / hclk;
+-	u32 thiz, thold, twait, tset;
++	u32 thiz, thold, twait, tset, twait_min;
  
--	/*
--	 * N.B.: Unlike the Chinese datasheets tell, the charging current is
--	 * stored on 12 bits, not 13 bits. Only discharging current is on 13
--	 * bits.
--	 */
--	if (chan->type == IIO_CURRENT && chan->channel == AXP22X_BATT_DISCHRG_I)
--		size = 13;
--	else
--		size = 12;
+ 	if (sdrt->tRC_min < 30000)
+ 		return -EOPNOTSUPP;
+@@ -310,13 +318,6 @@ static int fsmc_calc_timings(struct fsmc
+ 	else if (tims->thold > FSMC_THOLD_MASK)
+ 		tims->thold = FSMC_THOLD_MASK;
+ 
+-	twait = max(sdrt->tRP_min, sdrt->tWP_min);
+-	tims->twait = DIV_ROUND_UP(twait / 1000, hclkn) - 1;
+-	if (tims->twait == 0)
+-		tims->twait = 1;
+-	else if (tims->twait > FSMC_TWAIT_MASK)
+-		tims->twait = FSMC_TWAIT_MASK;
 -
--	*val = axp20x_read_variable_width(info->regmap, chan->address, size);
-+	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
- 	if (*val < 0)
- 		return *val;
+ 	tset = max(sdrt->tCS_min - sdrt->tWP_min,
+ 		   sdrt->tCEA_max - sdrt->tREA_max);
+ 	tims->tset = DIV_ROUND_UP(tset / 1000, hclkn) - 1;
+@@ -325,6 +326,21 @@ static int fsmc_calc_timings(struct fsmc
+ 	else if (tims->tset > FSMC_TSET_MASK)
+ 		tims->tset = FSMC_TSET_MASK;
  
-@@ -329,9 +318,8 @@ static int axp22x_adc_scale(struct iio_c
- 		return IIO_VAL_INT_PLUS_MICRO;
++	/*
++	 * According to SPEAr300 Reference Manual (RM0082) which gives more
++	 * information related to FSMSC timings than the SPEAr600 one (RM0305),
++	 *   twait >= tCEA - (tset * TCLK) + TOUTDEL + TINDEL
++	 */
++	twait_min = sdrt->tCEA_max - ((tims->tset + 1) * hclkn * 1000)
++		    + TOUTDEL + TINDEL;
++	twait = max3(sdrt->tRP_min, sdrt->tWP_min, twait_min);
++
++	tims->twait = DIV_ROUND_UP(twait / 1000, hclkn) - 1;
++	if (tims->twait == 0)
++		tims->twait = 1;
++	else if (tims->twait > FSMC_TWAIT_MASK)
++		tims->twait = FSMC_TWAIT_MASK;
++
+ 	return 0;
+ }
  
- 	case IIO_CURRENT:
--		*val = 0;
--		*val2 = 500000;
--		return IIO_VAL_INT_PLUS_MICRO;
-+		*val = 1;
-+		return IIO_VAL_INT;
- 
- 	case IIO_TEMP:
- 		*val = 100;
 
 

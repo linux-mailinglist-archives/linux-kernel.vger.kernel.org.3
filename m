@@ -2,117 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 996A6472E7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4F4472E80
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238700AbhLMOF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbhLMOF5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:05:57 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF56C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 06:05:57 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id v1so52895355edx.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 06:05:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hKHNX1Cfkir1ZxZd9YI3NR7JZlbs+TQWYgY/r/rPi/c=;
-        b=PTR6bp8qq3r9RbtwUkEH/QSvI/Tzogyzw2uBklC5EaHV4pRylFTLrra7oTv1iMF6sn
-         Mi9OGpHwz4R5cmXWFnwb62VA8OhFikujPDKAQ51jVbkA40YfQ9CXXuv5caX0d18vh+xS
-         fit2Am5ooNVDOHdCy31xhi0O8TYbG2G37ShSa1xVTFOoR61jDVeMa5KbagXpLSXHqaTM
-         fApPP/jmxLWzuZnIZ7IBDEH+bt4xo7thTaD0fLFZJrINsQpC/L9wK2cekJFGdPbNKBcE
-         YQUae1NvAVCZ0YTrTfunnFQbeXItUyjzhkVOTqozdj9NfSFu0f/wWfXF3hIVVZ1wbcpK
-         2nXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hKHNX1Cfkir1ZxZd9YI3NR7JZlbs+TQWYgY/r/rPi/c=;
-        b=lvO0FcsfD47sGXQ4nxBFEYyg0wYtoBHco07//Jg/KdI5R/zfjsuwG1rpe/48DVZ5O4
-         F7RSaXGITvVfzPrRtGoE0JOUE7F8sh64G/cf0dDN66/TykUJb7ygQ2SuWzUqA3GDZQIx
-         IpxcOWGrKYfQbHcUWthZepzaEFuwLMHz8c7ep+1Zu7MdoYdvaxBMcgScLIbBuf5pQ4VG
-         PSQVoru1uwrhbyYpPQ838QJTVzgnhKdvfnnsFGdZ4zVfZNlIjXRYQaz8dsa1kvSPVwyY
-         jBuhEFcdDWNLERCKUfA+idm6nSHmQZiLe1y4t5HuZUeniZLovKWlwDBHUpebeIfYTEXJ
-         pchw==
-X-Gm-Message-State: AOAM533xYvgilZnPBAntTlJbbedwc20asoJYZjn9cnmrzWanFZh5Xn1i
-        6l8x/6Z8Sojf+Bzy2IBzxXOv0RRZoPRI+6v75hYnkg==
-X-Google-Smtp-Source: ABdhPJzNmI8hBP7Z6jOOeh+Kk0ESRTIOrC1hq1TWFJNUBVAqrlTDSLs19adyGSmf6ivukugI6L2d1+VVmWKiOLYes7Y=
-X-Received: by 2002:a17:907:2bd1:: with SMTP id gv17mr42989283ejc.231.1639404355487;
- Mon, 13 Dec 2021 06:05:55 -0800 (PST)
+        id S238713AbhLMOGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:06:05 -0500
+Received: from mail-mw2nam08on2075.outbound.protection.outlook.com ([40.107.101.75]:46671
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236742AbhLMOGD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 09:06:03 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NNR0osBeJ/xnfcB9OdE/defjMSmy/SNoedJzUTAaPUM7u6z3AmcKSBdUl6tlCi2OY9eCxcv7RNNw5L63mDf+Zwop7FKETRi5Zb/4dHKadsxGgTEOXXrzaMi3vNW5uIWkHrJaK4PhBz0Z3wAOWwf/KeYg6rCWadVExI46xkgMc+0WCdKr/a+F1Ief9u4N+DOQ2QkDYgqdWsfrNM7WGz+75uhwBVMXUFTlWyh8TUEbv53Tg+l3oC9/EnSsNRXVlP0XQ+pUz/tQTFhNK55PcorBwxTCanmQqRT9lhxVuZRKbw/jWr+vHSaaWQL3txTJuXM8twuXNrKP9jz9CuOJ6gAw0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=proizXdp8kJN21h3QN2ScDg/8vSLfKY+CDRRljhwb5A=;
+ b=W+A8usOy3nfr4+ek32xsh2ii4tdyTHNg0P3Utx/3T64x6GxTzafkpejUXQLmZOyDg1m6ZOiccOlU3TI0X5prBXb/usZ+mekH3x2UQ8Af+jcuy2h+K3zRjFgOxL0V/p1pRbvYzlsrWPx076zX5UcoEykFB7kkPMDaZeyBzlp51C1B9UmQF0eqd6t0QP5cUOa0QuH5r/Bl3ixM+dwElUQZDNtvlQz4vG/NA4eofpXVaIySa2QurudnCulcGEC329g45DwKumErldoGoLQguw+EpPco3UX7o+GFuFQl7N36ixO1SWjfCHvwaA7JTRYZbI0Sjxvqy7Nvha0dvbIN2N6t7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=proizXdp8kJN21h3QN2ScDg/8vSLfKY+CDRRljhwb5A=;
+ b=PHggXsbSfVtiqgKOEV6AtutxsZY8qeSFdiXA+3/oibd+jnNOYfbDC0bJtvcfnVw/RPGjvse8RCr3jG08idOjRm8ajaJKxH7PJbwAE8dF+frWebgt/WVgoOvodbGahohjFPe8/cBxmAKEg+4cC2VCqQpc6poyA3dEGA6Hjg/aYSQ63ZYt96of1c4uyb/+guPLP7hhyZbzq7J3OLru2YjBeuSAZlE9HBvKkWjcjlGy/kST7gVlfBTScHpNmveIsoCU4ce9TIU4FhKG3r/K4/xFrDvN9ybs1N6FPodHS0dYtpQdwWPdtuPUlMFw1CWZjzA7pWxiG1zFQ5U1VAEF6zGRpw==
+Received: from BL1PR12MB5077.namprd12.prod.outlook.com (2603:10b6:208:310::17)
+ by BL1PR12MB5063.namprd12.prod.outlook.com (2603:10b6:208:31a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
+ 2021 14:06:02 +0000
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5077.namprd12.prod.outlook.com (2603:10b6:208:310::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.24; Mon, 13 Dec
+ 2021 14:06:01 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 14:06:01 +0000
+Date:   Mon, 13 Dec 2021 10:05:59 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch V3 25/35] powerpc/pseries/msi: Let core code check for
+ contiguous entries
+Message-ID: <20211213140559.GA6385@nvidia.com>
+References: <20211210221642.869015045@linutronix.de>
+ <20211210221814.720998720@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211210221814.720998720@linutronix.de>
+X-ClientProxiedBy: YT3PR01CA0054.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:82::25) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-References: <20211210090315.4889-1-Richard_Hsu@asmedia.com.tw>
-In-Reply-To: <20211210090315.4889-1-Richard_Hsu@asmedia.com.tw>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 13 Dec 2021 15:05:44 +0100
-Message-ID: <CAMRc=Mc4roTrpXwDa+zqyr_95fMbZOS2+NVvkmnPtCGpAH88Sg@mail.gmail.com>
-Subject: Re: [PATCH v4] gpio: amdpt: add new device ID and 24-pin support
-To:     Yuchang Hsu <saraon640529@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Richard_Hsu@asmedia.com.tw,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yd_Tseng@asmedia.com.tw, Cindy1_Hsu@asmedia.com.tw,
-        Andrew_Su@asmedia.com.tw
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: da0ded4b-8b89-45fe-905f-08d9be41b1ca
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5077:EE_|BL1PR12MB5063:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5077785CCBF529927B384CFBC2749@BL1PR12MB5077.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WJI2TZzOpNBRQYIWGw1WgTy4otpPQndYD+e00WIQIiIC09QJ6PrR+11VINVn2DO7uEPYGpTH1M6j7Lb7SCts6zR0D3E1f6DvK3AHyqBgfcfrdIKFj6RKPFMNgD3sQebyVfT+sKEk+ive1rxkOsgTPThybMq0mx/TlbqBnpTUHbV2nsTuA1ZBhJ5b30ZfNtuagXchhott9xWEyTR+zmWY75LitQLypyAfjwyqMq3lORypBrYtxgCC38qyfLjvY6EenMJB0jvOBxScJWho+PU45YO8bImF+l4Fw81ZfR699tVH+iwQZEpMmgmUH12YdqMBMor0MAigDmpBL2ZTu8YhLVt8PvOtxLJZ7heH6/K2VQH7qjDl+phbJsWC5xRzUhlddJ1LEKMxRF3qs+vv9IbFzmL69ci2nhcmNMW2Pz7OALSInj15DHKbEfeyoCokY4Tgt9j1H8a5bpRO9O+Ir6JC78W5eM/CWRD0OQS9dW6ohXdEGUk0xWQ2kuyR0EaeK1bjDjrENlLqyl0iq8wWKV9kjiubhGBh64CcgpbHJu1Kl97X5bH6hpxp24F0A9k86XdV+dFYDSKDz4VdwirSTMTPZkXEjROqFFvYiU8GoZiqsCpQfBjetfOqIgMH2aHhE/KU+m0ogmEsSnGaRq1kH5ZCKw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5077.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(38100700002)(83380400001)(186003)(54906003)(6512007)(2616005)(66946007)(4744005)(36756003)(508600001)(6486002)(316002)(86362001)(1076003)(66476007)(2906002)(66556008)(26005)(8936002)(6506007)(7406005)(8676002)(7416002)(6916009)(5660300002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WVBnS2Y4ZzczQmpMeGlUaXRzeGxjbGtQUXdMU1NEb3hVNm1JRElhT1lGZWEy?=
+ =?utf-8?B?ck4rMFlLRjd2YVRnb3RNeDB0UnY1TmRza2tlM2R1TXVtdnpQSlRpK04zYlVq?=
+ =?utf-8?B?S0x3OFlhUkUrV0JzenBVaVprUDBUY0ZYVkNScmc4bUU4ZDUxWkVsTFo4MXh0?=
+ =?utf-8?B?ck93RWlhYTMxcXhSQjBOUmNZekRtU0pMeitoY2c2ZXBaaTJOSlA4R0lNNkxU?=
+ =?utf-8?B?Nk81VUtxandkQ3FxNUVXYTluY3R0V1hUWFNtbFhIYUc2MGU3c0NXcFh3Ymk0?=
+ =?utf-8?B?VUE1NW1kYTgremVlenhtMzY2akY2a1RMd0lsNmZrRWV0SmtHVWl4OE9CUjIv?=
+ =?utf-8?B?eEszWHRmbXpVWVFnb0FOMmVlS1BqMXVNK2ltSHpHMkpLWWFCSU5XWENZRkM1?=
+ =?utf-8?B?YitQdGNOek5vSUk2Y1ZpcGd1RllyNnpGRERFa3lkQjhqeHRHNTIxdVhMc1lT?=
+ =?utf-8?B?QUpZVG9EZGZDU0J5Rm1raW0wUlJ2L3JCNUxRZmJ2YS9FT055VDB2aDVhRDZG?=
+ =?utf-8?B?RnhUaG1uSzFTSGcyVzgvUXZNQTd4eVlqQmlxaTlsOFJsc1lZUjBGZDcvSmdS?=
+ =?utf-8?B?WnZWamNzN3QvM0JVSFloRUhlbDFBNnk3ZktLd0ZjU1l0WEc2UnU1UmYrNGR3?=
+ =?utf-8?B?WXVteHdTMVBHcVFscmpQdG5FSEJRdGVDSkNxNTZtK2hwdmwvYWV6VTM3bnlX?=
+ =?utf-8?B?MlNHYnJvUzltWUoxQzZxcGtrN2lDL1B3RSttZjREdStjbHJPWGVoTDJEa1I2?=
+ =?utf-8?B?ci9YSW5Zb1Y1NmFwTEtqS3k2VFU5UmdDcWhZTXhhZzV2N29xQlpicm14QlJ5?=
+ =?utf-8?B?UDhGRzNlMUxtREx5b1VjMkJkSFNOZzlQZTdSNUVhY2xvNVBqaXpxUFlzN2lO?=
+ =?utf-8?B?bDdtN21nTW5XWlV1U2JKeWxuMlAyQllBNnJNeG4vKzVDME0wRElLM3k5Y0xB?=
+ =?utf-8?B?ODlQa3VYbHlIVlhmMm5PRVpQd3Q2MEVUbUlVZjVVT29PMFovb3IzdmxETVQx?=
+ =?utf-8?B?UlZDZ2VEMmJDakVKWUtWS2xOUWp6aDNwTHJGc09uSE5XekIvdEdHQno0T3Vu?=
+ =?utf-8?B?akU2TDRUS2ZmZXNPNW9rYUZrQm1CRHpDYUtydHN4V1h1eXkzWDFzbVZLbGNV?=
+ =?utf-8?B?UTI1S0VMNXRmbytXU3ZQTldwQlZ4S0tnRWFWNTlKZkdDUmQ4blRIU05JdkhC?=
+ =?utf-8?B?Y0ladHFZeWNZMXdwUnlUZnRnVnQvSmhoNmRNS1JZWURSajQ0WFJyUTZXYXdL?=
+ =?utf-8?B?VGtiN1dWY29XQUhMc3pML1p3Q1k1R1JORVVPc3pjTHlrQk4wWkZpYkJSeWJZ?=
+ =?utf-8?B?YzBnMXlRaUd0eit3S3o5eGhzS3VZbWdZaDcrOVBGaEhGWlBkVm0rTzB3WjhG?=
+ =?utf-8?B?T2h3LzVOUnNrbkZ0YmgwWC9qYUc0Nk01bWJNaFJnQUxVL1M4cWVzakF5VG9l?=
+ =?utf-8?B?cHpPWXNEcUdYV3p2WDVyeGY4cXlSZVI2d3VMTktzd0gyY2dvS2NYOWFGSHhi?=
+ =?utf-8?B?RnJ5aWptaGRXcXRmTFVpbjVnWFJqYUdoNGdEMWZ6SWxRbWhGODNoSGxsRjN5?=
+ =?utf-8?B?Q3dZT1NZalZ4anpVemR3eUpDdWl6UFlvLzlVWXYwM3lQRUNLZGcveVFTL3Vu?=
+ =?utf-8?B?WXJUeFFCdWYvTlltak44b2JKTHhtbXdxMk93elIvNDI5cWVOV25pWGdYTEo2?=
+ =?utf-8?B?RlNyWXZtRFlERjZCRHo1WXFCYmRidXpkV2pBQ3JSR2hsR0xpV2dDc2ZUQ2Rl?=
+ =?utf-8?B?OEQrQldoVGtvWEhJelE2ZDVnY09ITlZxSmRlcXdlQndJbVRiM2RNZGxkeFlQ?=
+ =?utf-8?B?UU92NFBBTkI0NjNXVmtmVzZiVFVsbTF5dW9PT1hZK0NZbG1TZW16Y1N2bHNi?=
+ =?utf-8?B?dEJzaU5PWFpVOUhqeDRMUjVyZ1A1dHpjODNBZHRkaE5FR0xtMmJsRitOMWJv?=
+ =?utf-8?B?U0RyRHA2TC9qUDZpMmJJSmVoSEZHN1ZKMEJlei9nMTA1MjJ4YXlzU0JBajJ0?=
+ =?utf-8?B?UWZxaTBZVUw1QnpicEg4WEtDYkZDR0MxSzFybDI4RHVUYUZhQ2pDdU1YZzZT?=
+ =?utf-8?B?bTdtSGtybkV4R2UydzZHdEg2N1JxbnlvaEF4WEhtcHF0UGVPUXNMMWMvZ0ln?=
+ =?utf-8?Q?mV08=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da0ded4b-8b89-45fe-905f-08d9be41b1ca
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 14:06:01.6828
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 40bJpPqRRPF2i5X+mtFiS5EUePG3uz/PEf5FTcFgzDxKXFnevSYh2HV7vx0N1jKh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5063
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 10:03 AM Yuchang Hsu <saraon640529@gmail.com> wrote:
->
-> From: Hsu Yuchang <Richard_Hsu@asmedia.com.tw>
->
-> Add an ACPI HID(AMDIF031) and pin number in the pt_gpio_acpi_match.
->
-> Signed-off-by: Yuchang Hsu <Richard_Hsu@asmedia.com.tw>
+On Fri, Dec 10, 2021 at 11:19:22PM +0100, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> Set the domain info flag and remove the check.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: "Cédric Le Goater" <clg@kaod.org>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> 
 > ---
-> Reposition and modify the changelog
->  drivers/gpio/gpio-amdpt.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-amdpt.c b/drivers/gpio/gpio-amdpt.c
-> index bbf53e289141..13f4e2af3800 100644
-> --- a/drivers/gpio/gpio-amdpt.c
-> +++ b/drivers/gpio/gpio-amdpt.c
-> @@ -14,6 +14,7 @@
->  #include <linux/platform_device.h>
->
->  #define PT_TOTAL_GPIO 8
-> +#define PT_TOTAL_GPIO_EX 24
->
->  /* PCI-E MMIO register offsets */
->  #define PT_DIRECTION_REG   0x00
-> @@ -103,7 +104,7 @@ static int pt_gpio_probe(struct platform_device *pdev)
->         pt_gpio->gc.owner            = THIS_MODULE;
->         pt_gpio->gc.request          = pt_gpio_request;
->         pt_gpio->gc.free             = pt_gpio_free;
-> -       pt_gpio->gc.ngpio            = PT_TOTAL_GPIO;
-> +       pt_gpio->gc.ngpio            = (uintptr_t)device_get_match_data(dev);
->  #if defined(CONFIG_OF_GPIO)
->         pt_gpio->gc.of_node          = dev->of_node;
->  #endif
-> @@ -133,8 +134,9 @@ static int pt_gpio_remove(struct platform_device *pdev)
->  }
->
->  static const struct acpi_device_id pt_gpio_acpi_match[] = {
-> -       { "AMDF030", 0 },
-> -       { "AMDIF030", 0 },
-> +       { "AMDF030", PT_TOTAL_GPIO },
-> +       { "AMDIF030", PT_TOTAL_GPIO },
-> +       { "AMDIF031", PT_TOTAL_GPIO_EX },
->         { },
->  };
->  MODULE_DEVICE_TABLE(acpi, pt_gpio_acpi_match);
-> --
-> 2.30.2
->
+> V2: Remove it completely - Cedric
+> ---
+>  arch/powerpc/platforms/pseries/msi.c |   33 ++++++++-------------------------
+>  1 file changed, 8 insertions(+), 25 deletions(-)
 
-Applied, thanks!
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Bart
+Jason
+ 

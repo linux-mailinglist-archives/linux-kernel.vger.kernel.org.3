@@ -2,53 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 908064729BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09E947278C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbhLMKYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S240660AbhLMKCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244986AbhLMKTB (ORCPT
+        with ESMTP id S239356AbhLMJ5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:19:01 -0500
+        Mon, 13 Dec 2021 04:57:13 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF5CC0698DB;
-        Mon, 13 Dec 2021 01:57:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE0AC0698CA;
+        Mon, 13 Dec 2021 01:47:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 71881CE0EBE;
-        Mon, 13 Dec 2021 09:57:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2CDC34601;
-        Mon, 13 Dec 2021 09:57:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 14776CE0E85;
+        Mon, 13 Dec 2021 09:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40EFC00446;
+        Mon, 13 Dec 2021 09:47:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389438;
-        bh=Mgksbc7XnrxrkG9XyPVkNJ6rb/2H8GMBBJatfmT8n74=;
+        s=korg; t=1639388873;
+        bh=UzSP2opDKlWKYwxKXq730Htbnlz9RTgEBBO9cva9LZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KNkSSCrHv3ri/ikis/JJC6FA8Uf1YBLWhRDOFk+cooSM19oZBu7jZ4DunMHUZfAAB
-         Kry3YHfUeiPBFVuGe1W1yedOaul7mnbTQsb+PCEsxLx3uBBp5juwUhR1VGYlyeeHUJ
-         9/8YRK415j37mMyYKCFEIBJu5gp2HHkWhYyS0TME=
+        b=RkuwT91nA8eC/qoXZVNRzH3SIwhOnlVtPeynO4QccHn9xeo8YkYjNjVeZF6jBowTD
+         x9tbISGPKrOXs7S1rQbrZGnTE9LkzvceOiv1Q20uNLOoZARFijtXGE4QENroUWPpz4
+         FkKUPuQ8NXaUkVBAcfSKfO7R1CGIryejma/mcJkw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manjong Lee <mj0123.lee@samsung.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Changheun Lee <nanich.lee@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        seunghwan.hyun@samsung.com, sookwan7.kim@samsung.com,
-        yt0928.kim@samsung.com, junho89.kim@samsung.com,
-        jisoo2146.oh@samsung.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 063/171] mm: bdi: initialize bdi_min_ratio when bdi is unregistered
-Date:   Mon, 13 Dec 2021 10:29:38 +0100
-Message-Id: <20211213092947.204153620@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mitch Williams <mitch.a.williams@intel.com>,
+        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 038/132] iavf: restore MSI state on reset
+Date:   Mon, 13 Dec 2021 10:29:39 +0100
+Message-Id: <20211213092940.429842884@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,61 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manjong Lee <mj0123.lee@samsung.com>
+From: Mitch Williams <mitch.a.williams@intel.com>
 
-commit 3c376dfafbf7a8ea0dea212d095ddd83e93280bb upstream.
+commit 7e4dcc13965c57869684d57a1dc6dd7be589488c upstream.
 
-Initialize min_ratio if it is set during bdi unregistration.  This can
-prevent problems that may occur a when bdi is removed without resetting
-min_ratio.
+If the PF experiences an FLR, the VF's MSI and MSI-X configuration will
+be conveniently and silently removed in the process. When this happens,
+reset recovery will appear to complete normally but no traffic will
+pass. The netdev watchdog will helpfully notify everyone of this issue.
 
-For example.
-1) insert external sdcard
-2) set external sdcard's min_ratio 70
-3) remove external sdcard without setting min_ratio 0
-4) insert external sdcard
-5) set external sdcard's min_ratio 70 << error occur(can't set)
+To prevent such public embarrassment, restore MSI configuration at every
+reset. For normal resets, this will do no harm, but for VF resets
+resulting from a PF FLR, this will keep the VF working.
 
-Because when an sdcard is removed, the present bdi_min_ratio value will
-remain.  Currently, the only way to reset bdi_min_ratio is to reboot.
-
-[akpm@linux-foundation.org: tweak comment and coding style]
-
-Link: https://lkml.kernel.org/r/20211021161942.5983-1-mj0123.lee@samsung.com
-Signed-off-by: Manjong Lee <mj0123.lee@samsung.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Changheun Lee <nanich.lee@samsung.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: <seunghwan.hyun@samsung.com>
-Cc: <sookwan7.kim@samsung.com>
-Cc: <yt0928.kim@samsung.com>
-Cc: <junho89.kim@samsung.com>
-Cc: <jisoo2146.oh@samsung.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 5eae00c57f5e ("i40evf: main driver core")
+Signed-off-by: Mitch Williams <mitch.a.williams@intel.com>
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/backing-dev.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/ethernet/intel/iavf/iavf_main.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/mm/backing-dev.c
-+++ b/mm/backing-dev.c
-@@ -947,6 +947,13 @@ void bdi_unregister(struct backing_dev_i
- 	wb_shutdown(&bdi->wb);
- 	cgwb_bdi_unregister(bdi);
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -2139,6 +2139,7 @@ static void iavf_reset_task(struct work_
+ 	}
  
-+	/*
-+	 * If this BDI's min ratio has been set, use bdi_set_min_ratio() to
-+	 * update the global bdi_min_ratio.
-+	 */
-+	if (bdi->min_ratio)
-+		bdi_set_min_ratio(bdi, 0);
-+
- 	if (bdi->dev) {
- 		bdi_debug_unregister(bdi);
- 		device_unregister(bdi->dev);
+ 	pci_set_master(adapter->pdev);
++	pci_restore_msi_state(adapter->pdev);
+ 
+ 	if (i == IAVF_RESET_WAIT_COMPLETE_COUNT) {
+ 		dev_err(&adapter->pdev->dev, "Reset never finished (%x)\n",
 
 

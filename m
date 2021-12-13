@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8032472AA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4BD472AAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237042AbhLMKtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236848AbhLMKtk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:49:40 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D4CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:49:40 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id j17so14742017qtx.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7vlfNfrOceOEoYXiDCyE8CsjbUpv2PQ5GDOLk4jPLtE=;
-        b=WHwgI4i/lIvtO/xog+9VopKiTNorTcd27b97xeXShSYZLzm188UY22HdGYZnVsUY/m
-         FfjIfhYfzesQ48+7a3qql/vBdi80iZy71cV55ilrkMiDvalGKSP5ZiwX35UCO+eohK/9
-         Um11+rY+gJTSb2da5Bmjdw7PmNhFrOAJGJpvKg2iu6eezERgpciSnDwpIIm9GnZe6ETY
-         dMq1oauC2wHsX6tUtt1Df0Ak9ykP6dnJu9QJNwDyjBVcoNjcWGU8RQMkElHYAjUf/qMb
-         VN4krq7nTGG3EqaR4VquEPq35YFtGRAN5fQkxWPGFG/NDae7CliNiSNwo3CMaoa/PTgn
-         QUmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7vlfNfrOceOEoYXiDCyE8CsjbUpv2PQ5GDOLk4jPLtE=;
-        b=ag994F12X7FCCsCSF7hGyGZlJ1ru4tSswRUUGwquxFj53FuREwZRnZbVyM7/tUavCr
-         RX4aWV6crf4uox2ajsRrkMloxUwz6F2t1UfT0QhWRgQyQUL1GLNqHVOvWYWLylloZvL+
-         V/L7mRZ9Wc/kwXEyi4nfTz+vEeKyWz0RerkAnl6HCRDEoyrfYrGWGBrig6uem3dJIXWw
-         SYPXV+lYkvvKthfigrNDNt0umcsuaBLhJwc4CF24xhwluyXYQuTqG4LR9dQ2l0kXqQND
-         WTKCzunIWxOs4nIhG60cJ3LeQoL2GNXWol/x8ZozYGXB4G5zbMWM/n6cruFDFOsU2NDJ
-         QHaQ==
-X-Gm-Message-State: AOAM531PlTy3766BYlO6YufcWOogA8wqU28QDzlnlv7KwCriMfxmjfFr
-        +SUq0ZDFUdNJL2TZIa2ZyEY=
-X-Google-Smtp-Source: ABdhPJzPAG4ov64AeneoCqMD8XRa2RVV0yc9vdWyYc/bORq1dEYKgI2qZ2TqWzWZ1Y1o8vjMzrQ7dw==
-X-Received: by 2002:ac8:5f93:: with SMTP id j19mr43808197qta.596.1639392579818;
-        Mon, 13 Dec 2021 02:49:39 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i6sm9089759qti.40.2021.12.13.02.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 02:49:39 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     miquel.raynal@bootlin.com
-Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn, han.xu@nxp.com,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        richard@nod.at, vigneshr@ti.com, zealci@zte.com.cn
-Subject: [PATCH nand-next v2] mtd: rawnand: gpmi: remove unneeded variable
-Date:   Mon, 13 Dec 2021 10:49:30 +0000
-Message-Id: <20211213104930.436602-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211213101519.25f4e2e1@xps13>
-References: <20211213101519.25f4e2e1@xps13>
+        id S230374AbhLMKuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:50:19 -0500
+Received: from first.geanix.com ([116.203.34.67]:37706 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229950AbhLMKuR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 05:50:17 -0500
+Received: from skn-laptop (unknown [195.24.41.109])
+        by first.geanix.com (Postfix) with ESMTPSA id 1C885E1D01;
+        Mon, 13 Dec 2021 10:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1639392614; bh=cGxFVdayz5jAaqQX0zPXjvkju3c6WvmCUgBcKAZPV0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=cS23gm/a38x3zfw858JVQzfU+NOG0lg1sHsfkkCjK/fcYFTCUqhwGmjNrrh/OW8nB
+         +s2p5caiTdXgujox/EVVWxX/h3VI3gBeiZQ/yKbfU9IeQkXP7mPHvXpS3rDTKppBUg
+         tssMieQEkBNXsqkW/9HidFUGXjoZM3CfOyq+BJcaFw3+qagPrUdJgG9pp29Iyp8DC4
+         YjD3jLzPc0dOckfQi1ds3Xr4f15Ian2wHijeYbMtlGi5h+qgLUTMkcfVYdasqCD5BK
+         IATqXq37qr8RqdEM2pxZE28eavvI+ZP+QD+7CbD/CDZBI258BspnT7t+Oqp1zFgQgG
+         oRNFHWZYya/MQ==
+Date:   Mon, 13 Dec 2021 12:50:12 +0200
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v5 3/4] mtd: core: protect access to MTD devices while in
+ suspend
+Message-ID: <20211213105012.65jk4rylxzncqdfy@skn-laptop>
+References: <20211130132912.v6v45boce2zbnoy3@skn-laptop>
+ <20211130143705.5d0404aa@collabora.com>
+ <20211203143958.40645506@xps13>
+ <20211209140721.6ki7gznvxwyn3cze@skn-laptop.hinnerup>
+ <20211209152811.318bdf17@xps13>
+ <20211210132535.gy7rqj5zblqlnz5y@skn-laptop.hadsten>
+ <20211213101025.42c27b43@xps13>
+ <20211213102801.569b50b1@collabora.com>
+ <20211213103350.22590c13@xps13>
+ <20211213105336.7be369b7@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211213105336.7be369b7@collabora.com>
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on 13e2a5895688
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Hi Miquel and Boris,
 
-Return status directly from function called.
-change since v1: mtd/nand:remove unneeded variable
-             v2: mtd: rawnand: gpmi: remove unneeded variable
+On Mon, Dec 13, 2021 at 10:53:36AM +0100, Boris Brezillon wrote:
+> On Mon, 13 Dec 2021 10:33:50 +0100
+> Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> 
+> > Hello,
+> > 
+> > boris.brezillon@collabora.com wrote on Mon, 13 Dec 2021 10:28:01 +0100:
+> > 
+> > > On Mon, 13 Dec 2021 10:10:25 +0100
+> > > Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> > >   
+> > > > Hi Sean,
+> > > > 
+> > > > sean@geanix.com wrote on Fri, 10 Dec 2021 14:25:35 +0100:
+> > > >     
+> > > > > On Thu, Dec 09, 2021 at 03:28:11PM +0100, Miquel Raynal wrote:      
+> > > > > > Hi Sean,
+> > > > > > 
+> > > > > > sean@geanix.com wrote on Thu, 9 Dec 2021 15:07:21 +0100:
+> > > > > >         
+> > > > > > > On Fri, Dec 03, 2021 at 02:39:58PM +0100, Miquel Raynal wrote:        
+> > > > > > > > Hello,
+> > > > > > > >           
+> > > > > > > > > > Fine by me, lets drop this series.          
+> > > > > > > > 
+> > > > > > > > FYI I've dropped the entire series from mtd/next. I'm waiting for the
+> > > > > > > > fix discussed below (without abusing the chip mutex ;-) ).          
+> > > > > > > 
+> > > > > > > Cool, looking forward to test a patch series :)        
+> > > > > > 
+> > > > > > Test? You mean "write"? :)
+> > > > > > 
+> > > > > > Cheers,
+> > > > > > Miquèl        
+> > > > > 
+> > > > > Hi Miquel,
+> > > > > 
+> > > > > Should we us a atomic for the suspended variable?      
+> > > > 
+> > > > I haven't thought about it extensively, an atomic variable sound fine
+> > > > but I am definitely not a locking expert...    
+> > > 
+> > > No need to use an atomic if the variable is already protected by a lock
+> > > when accessed, and this seems to be case.  
+> > 
+> > Maybe there was a confusion about this lock: I think Boris just do not
+> > want the core to take any lock during a suspend operation. But you can
+> > still use locks, as long as you release them before suspending.
+> > 
+> > And also, that chip lock might not be the one you want to take because
+> > it's been introduced for another purpose.
+> 
+> Access to the suspended field is already protected by the chip lock,
+> and I think it's just fine to keep it this way.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+I'm reading the suspended variable in wait_event() outside the lock :/
 
-diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index 10cc71829dcb..ab9d1099bafa 100644
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -1425,7 +1425,6 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
- 	struct mtd_info *mtd = nand_to_mtd(chip);
- 	struct gpmi_nand_data *this = nand_get_controller_data(chip);
- 	struct bch_geometry *nfc_geo = &this->bch_geometry;
--	int ret;
- 
- 	dev_dbg(this->dev, "ecc write page.\n");
- 
-@@ -1445,9 +1444,7 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
- 				    this->auxiliary_virt);
- 	}
- 
--	ret = nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
--
--	return ret;
-+	return nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
- }
- 
- /*
--- 
-2.25.1
-
+/Sean

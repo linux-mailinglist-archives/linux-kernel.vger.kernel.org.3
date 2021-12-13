@@ -2,131 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB87047353F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4297B473543
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236855AbhLMTuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:50:21 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:36882 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbhLMTuT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:50:19 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639425018;
+        id S242522AbhLMTvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:51:10 -0500
+Received: from ixit.cz ([94.230.151.217]:46550 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233215AbhLMTvK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 14:51:10 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id BB75824AF5;
+        Mon, 13 Dec 2021 20:51:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1639425068;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=wYckKKvewtBcVFlW8nrro81h3BRkBO7Fro639TQehrs=;
-        b=1gALEEOiekKQbNzJ+i/yHebFnVvq8DkQMOc03gSYbc2C1invCPu/rrUsdC98Mr463gcEWO
-        Y/B5imh3Q7NG1dZFHQLgTnPXauoPkAEyleaXNWD98t3sHeG2AndgzaCwT1maSAI5s1K4Nt
-        7xnde9hLIz3BNgunn8HOUWgZpKNfV2Bs7cgvk0w396wdATfO2rkrvkYRcO34MPtox4i7Ag
-        b+LNuZLcGl+j50jTe/LJ7mn1qhZfZoePEPOLSrtRBEUYyUk6K3n3wq8PHCHPIXBR768Fky
-        NyAImqg4BCDRFnSQgbDVIYaK4dZMKPyaikMFqIzWrtlSoTZqDGnI3HCqAZEvzw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639425018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=wYckKKvewtBcVFlW8nrro81h3BRkBO7Fro639TQehrs=;
-        b=WDQQ++O/y/vHVZQt6hWGa6SZlR3PBHfsvGC6O97zJvMy2IGHeVxCp0nPjwF4bY/c3YLcCW
-        HrD6+R2E+SivLsBg==
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com
-Subject: Re: [PATCH 02/19] x86/fpu: Prepare KVM for dynamically enabled states
-In-Reply-To: <16c938e2-2427-c8dd-94a1-eba8f967283b@redhat.com>
-Date:   Mon, 13 Dec 2021 20:50:17 +0100
-Message-ID: <87v8zsthc6.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eXNpgvmUGI/xsXfaBGu6T6lZYyCtjGgaudUrm9Xl7kI=;
+        b=b/Yc0pvVyMAefjGIHDSrUQVjDjxuarsUKhlfR9KK00OdgNdX790kmPP/ftDjsX/gFZlZMW
+        X82xt32gaXmpdEfEjKtPWtT+CRg4uMjNNjdYmKSXeu+kbPPy9bk/dYpftdG4yDydCk8jRi
+        QGMFDIILNndw3aueDRdTZtuKjd4nk3M=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Caleb Connolly <caleb@connolly.tech>,
+        David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sdm845: fix microphone bias properties and values
+Date:   Mon, 13 Dec 2021 20:51:04 +0100
+Message-Id: <20211213195105.114596-1-david@ixit.cz>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo,
+replace millivolt with correct microvolt and adjust value to
+the minimal value allowed by documentation.
 
-On Mon, Dec 13 2021 at 13:45, Paolo Bonzini wrote:
-> On 12/13/21 13:00, Thomas Gleixner wrote:
->> On Mon, Dec 13 2021 at 10:12, Paolo Bonzini wrote:
->>> Please rename to alloc_xfeatures
->> 
->> That name makes no sense at all. This has nothing to do with alloc.
->
-> Isn't that the features for which space is currently allocated?
+Found with `make qcom/sdm845-oneplus-fajita.dtb`.
 
-It is, but from the kernel POV this is user. :)
+Fixes:
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias1-microvolt' is a required property
+        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias2-microvolt' is a required property
+        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias3-microvolt' is a required property
+        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias4-microvolt' is a required property
+        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias1-millivolt', 'qcom,micbias2-millivolt', 'qcom,micbias3-millivolt', 'qcom,micbias4-millivolt' do not match any of the regexes: '^.*@[0-9a-f]+$', 'pinctrl-[0-9]+'
 
-> Reading "user_xfeatures" in there is cryptic, it seems like it's 
-> something related to the userspace thread or group that has invoked the 
-> KVM ioctl.  If it's renamed to alloc_xfeatures, then this:
->
-> +		missing = request & ~guest_fpu->alloc_xfeatures;
-> +		if (missing) {
-> +			vcpu->arch.guest_fpu.realloc_request |= missing;
-> +			return true;
-> +		}
->
-> makes it obvious that the allocation is for features that are requested 
-> but haven't been allocated in the xstate yet.
+Fixes: 27ca1de07dc3 ("arm64: dts: qcom: sdm845: add slimbus nodes")
 
-Let's rename it to xfeatures and perm and be done with it.
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->> Why? Yet another export of FPU internals just because?
->
-> It's one function more and one field less.  I prefer another export of 
-> FPU internals, to a write to a random field with undocumented
-> invariants.
-
-We want less not more exports. :)
-
-> For example, why WARN_ON_ONCE if enter_guest == true?  If you enter the 
-> guest after the host has restored MSR_IA32_XFD with KVM_SET_MSR, the
-
-Indeed restoring a guest might require buffer reallocation, I missed
-that, duh!
-
-On restore the following components are involved:
-
-   XCR0, XFD, XSTATE
-
-XCR0 and XFD have to be restored _before_ XSTATE and that needs to
-be enforced.
-
-But independent of the ordering of XCR0 and XFD restore the following
-check applies to both the restore and the runtime logic:
-
-int kvm_fpu_realloc(struct kvm_vcpu *vcpu, u64 xcr0, u64 xfd)
-{
-   	u64 expand, enabled = xcr0 & ~xfd;
-
-        expand = enabled & ~vcpu->arch.guest_fpu.xfeatures;
-        if (!expand)
-        	return 0;
-        
-        return fpu_enable_guest_features(&vcpu->arch.guest_fpu, expand);
-}
-
-int fpu_enable_guest_features(struct guest_fpu *gfpu, u64 which)
-{
-        permission_checks();
-        ...
-        return fpstate_realloc(.....)
-}
-
-fpstate_realloc() needs to be careful about flipping the pointers
-depending on the question whether guest_fpu->fpstate is actually active,
-i.e.:
-
-        current->thread.fpu.fpstate == gfpu->fpstate
-
-I'm halfways done with that. Will send something soonish.
-
-Thanks,
-
-        tglx
-
-       
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index cfdeaa81f1bb..1bb4d98db96f 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -3613,10 +3613,10 @@ wcd9340: codec@1{
+ 					#clock-cells = <0>;
+ 					clock-frequency = <9600000>;
+ 					clock-output-names = "mclk";
+-					qcom,micbias1-millivolt = <1800>;
+-					qcom,micbias2-millivolt = <1800>;
+-					qcom,micbias3-millivolt = <1800>;
+-					qcom,micbias4-millivolt = <1800>;
++					qcom,micbias1-microvolt = <1800000>;
++					qcom,micbias2-microvolt = <1800000>;
++					qcom,micbias3-microvolt = <1800000>;
++					qcom,micbias4-microvolt = <1800000>;
+ 
+ 					#address-cells = <1>;
+ 					#size-cells = <1>;
+-- 
+2.33.0
 

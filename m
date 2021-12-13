@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB154473227
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14F947322B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241003AbhLMQp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbhLMQp0 (ORCPT
+        id S241045AbhLMQqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:46:07 -0500
+Received: from smtpbguseast3.qq.com ([54.243.244.52]:60102 "EHLO
+        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241015AbhLMQp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:45:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAC1C061574;
-        Mon, 13 Dec 2021 08:45:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22706B80D99;
-        Mon, 13 Dec 2021 16:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7604DC34603;
-        Mon, 13 Dec 2021 16:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639413923;
-        bh=hKfqmXe6u4vNjyIrgd9Gkjmd3Ni7szyFVG5wQnl5oLY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lUQpY1CsJ10ZBzipX6FV82UeH4d9wyOBYeC0bkYyTUM9xqtBJN1JYUXJnxl8k1kX1
-         C8rJrh9KDhq7LUS1Zha7Ve246SkHxMK/dowATpW/0tjWBzi9EkEOJGpJx90nQysvKz
-         6PmehDlAwPusHrmfRRVCdx3QEBzs/sD5WbgRVHqXVYbXCv1lkbHsX2zjcdVxbQCMCC
-         9WlKxiPgke4pf0gFNs0Np2yItU09iHMo3zYJTC5SWWJlryIhqNw59fbGnhhMmJnQZp
-         VF5+mArLxCJGv/cuKHCvshWdGVoCGWzewagDKM2RQ+dbk0wR2hSCHpmMPcnhYSLvZ8
-         PNQMWXTtUyYOA==
-From:   broonie@kernel.org
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: linux-next: manual merge of the tip tree with the arm64 tree
-Date:   Mon, 13 Dec 2021 16:45:16 +0000
-Message-Id: <20211213164517.3393671-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 13 Dec 2021 11:45:58 -0500
+X-QQ-mid: bizesmtp54t1639413940txmmgyuj
+Received: from Z2zz.localdomain (unknown [218.17.40.219])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Tue, 14 Dec 2021 00:45:32 +0800 (CST)
+X-QQ-SSF: 0140000000200040C000B00A0000000
+X-QQ-FEAT: HLlK6K2y+MeY6hDC/4WuxThwsnoVOG7HtMajX9N7ihXsht2dMqWBXJ0yXmNSw
+        x0WBWaNpArrYXyO82HU1hBN8GPx8jWIh+n1tQv4+VdJQdPrrpJW6pUSWCdVTynwgFIXPYMQ
+        JiidyAQYRjXXdoLWhnwBVbHWcGj5DDoGQANAIJ+sREP2YQ3G2c2YGN7sc8rwSRneRPk63Z3
+        lhC0MbHINN4BZyxZd82z5GERBgRRCJHy2Y4ZAkiQ/o0+r4PTIV9DECMVHX/za2rGwWNVcQp
+        ozNyZIk1T4xdnjAtJw0aHut4AoX/QlB4BFIClhszLReGTkQBERzPuwpg6WjXe/SkIS4jxot
+        t5YEf56Ph3mGvH/brHPCavfpYgdEw==
+X-QQ-GoodBg: 2
+From:   Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+To:     akpm@linux-foundation.org
+Cc:     broonie@kernel.org, seanga2@gmail.com, weizhenliang@huawei.com,
+        tangbin@cmss.chinamobile.com, zhangshengju@cmss.chinamobile.com,
+        zhaochongxi2019@email.szu.edu.cn, zhangyinan2019@email.szu.edu.cn,
+        linux-kernel@vger.kernel.org, caoyixuan2019@email.szu.edu.cn,
+        hanshenghong2019@email.szu.edu.cn
+Subject: [PATCH 2/2] tools/vm/page_owner_sort.c: two trivial fixes
+Date:   Tue, 14 Dec 2021 00:45:18 +0800
+Message-Id: <20211213164518.2461-1-hanshenghong2019@email.szu.edu.cn>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+1) There is an unused variable. It's better to delete it.
+2) One case is missing in the usage().
 
-Today's linux-next merge of the tip tree got a conflict in:
+Signed-off-by: Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+---
+ tools/vm/page_owner_sort.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-  arch/arm64/kernel/perf_callchain.c
+diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
+index c16774f09eeb..a2c6797e09f8 100644
+--- a/tools/vm/page_owner_sort.c
++++ b/tools/vm/page_owner_sort.c
+@@ -41,8 +41,6 @@ static struct block_list *list;
+ static int list_size;
+ static int max_size;
+ 
+-struct block_list *block_head;
+-
+ int read_block(char *buf, int buf_size, FILE *fin)
+ {
+ 	char *curr = buf, *const buf_end = buf + buf_size;
+@@ -249,7 +247,8 @@ static void usage(void)
+ 		"-p	Sort by pid.\n"
+ 		"-a	Sort by memory allocate time.\n"
+ 		"-r	Sort by memory release time.\n"
+-		"-c	cull by comparing stacktrace instead of total block.\n"
++		"-c	Cull by comparing stacktrace instead of total block.\n"
++		"-f	Filter out the information of blocks whose memory has not been released.\n"
+ 	);
+ }
+ 
+-- 
+2.30.1
 
-between commit:
 
-  ed876d35a1dc7 ("arm64: Make perf_callchain_kernel() use arch_stack_walk()")
 
-from the arm64 tree and commit:
-
-  1c3430516b073 ("perf: Add wrappers for invoking guest callbacks")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc arch/arm64/kernel/perf_callchain.c
-index e9b7d99f4e3a0,db04a55cee7e0..0000000000000
---- a/arch/arm64/kernel/perf_callchain.c
-+++ b/arch/arm64/kernel/perf_callchain.c
-@@@ -141,7 -147,9 +141,7 @@@ static bool callchain_trace(void *data
-  void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
-  			   struct pt_regs *regs)
-  {
-- 	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
- -	struct stackframe frame;
- -
-+ 	if (perf_guest_state()) {
-  		/* We don't support guest os callchain now */
-  		return;
-  	}

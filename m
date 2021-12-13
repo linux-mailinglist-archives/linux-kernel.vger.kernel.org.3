@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA82472C90
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 096F6472C92
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbhLMMtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S236958AbhLMMtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbhLMMtM (ORCPT
+        with ESMTP id S232942AbhLMMtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:49:12 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAF1C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:49:12 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m25-20020a7bcb99000000b0033aa12cdd33so10832203wmi.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:49:12 -0800 (PST)
+        Mon, 13 Dec 2021 07:49:49 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8101C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:49:48 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so13978403wme.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:49:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iO5vzlIer6fDLM0na/dQ5p5rFP8hEKcj8s5Xpjl6kgY=;
-        b=1ZTTzXKH5Xq/6YAoxUA5Kc2BVqvi5x9kyiglHTiwHaKtzCjDFkO7M9lK8bk6atQBJ+
-         mI4tnIZpWnIWJuoQSIuWgPlcnk85SiA9UMlOqgnpqNSpIl1Mp9Y+4og2J9cozSxm66hE
-         pQO99cPml2YaizauvbEb0oq5FEAYAK8mm9UxWoDL2LQ1VRdrTd6bN+VsWt/T0ud2psaU
-         3bP5GQzLiyJ7xGV4OSwo22T6XZ3V5UaE2S6f5seM2kzS6VYO2u7Z9BZvw2y6Nd4Avvtv
-         RfPK/R2XtzFsI/Xo7i4UDvTPP6lH+4xGtalynCxhcv8ahJ0vxTfMbHY2uk5lifJ4a3cw
-         fxmg==
+        bh=hXQYwOotvNt7nBs8RK2HcYpypTegYe76SWSdNP6SpOk=;
+        b=Mwej99eKLJ2T6KE0qNHvTltiVl/qRpIrX2iSvi/ELOdMV/Xn0oR6keuB1RI5uqgbXd
+         BAFu5sSboKOqGyLqZnPcMggy6S1veMWQfmIQGrwDx8PY64lEoM/WP8L4bl3SQG2kJuJ4
+         bzXipTGMdUfoJtsXwbUhclcAKPHNIECs3HNG22wa0VC1/DCac3/cHjeaJi3oLJk0QAOj
+         qasAldeQI1xT2p4Hv3Inm87QmC5lbOl3r04G9GL1n8eqmTWz4A/VgSBgnSIegmwkasAo
+         B/wvUD7BY+uYg/Dkn9qdz1+1SjGnpi3iRU3aUspLZd+8c4E2z8INIQ6HWRsr+eIju1op
+         J8Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iO5vzlIer6fDLM0na/dQ5p5rFP8hEKcj8s5Xpjl6kgY=;
-        b=OLdndyTzN+SZm3Woa9FuH4rk3COZhAcxjKzgHykCzKElioEn/VhXtR/CqGdM74agWD
-         nzXUDDB68DCZ1yunXtfdof39AfO2HhpOy5+4EEBFRmHz+lg9GKjjcvo9i8hm/C4F89Zc
-         KSaIT2aOUYm9/MHQ/JlPiLZP/5JRyuxY1w1KVFyQUCTSI026oMs6zqb7t6lqUj56VNqR
-         id19mCSIKv7b+hfYPExy0eq9mtD7LsmpCijWGsCTm7ifure7o8wPYe6ZgYsgIgpK6jTe
-         jFs5fvQPuLYIHiSKxYi5QjehU+7j/M51HVRJ1vrBr13D6qL0M1wemPf8Lrnn1O+Knlc2
-         KWlg==
-X-Gm-Message-State: AOAM533FuZDnw5M6+WJT6+/xBNYULwSYxju0eM48zrsTPyTrDKAVV4Ek
-        7LwJswT5Yvwh1y5wlZnkMN5CI5T+DOA5pXuaYtSCbg==
-X-Google-Smtp-Source: ABdhPJw3LIWsqBsi9zA/gDWa8zURWNMqpMgPLjxX8qetHHIkurbkUF1StBBOKu/1WzjQfQfXd3TbSK1gUlnB9QAZhKY=
-X-Received: by 2002:a7b:c256:: with SMTP id b22mr37111462wmj.176.1639399750405;
- Mon, 13 Dec 2021 04:49:10 -0800 (PST)
+        bh=hXQYwOotvNt7nBs8RK2HcYpypTegYe76SWSdNP6SpOk=;
+        b=CYMVOyyAbRfGeUDh3W9kTzZg/Tm2bMB+DtgUPRsWJHe67moplxkjr+CWGdNlkQ/vHp
+         LlTF2vfZgtPGwJ7VS65dnixCQc9SQvZfj1MteIH4u5nEmRlcH0BMZUyRBEmeLMmZus/Q
+         iAVuaAlOeTN5LoksXB7xPLm2YcnQ5RXvk6Nb76dY6/ewgy52HD6fn/KgaFBG+C52HbDC
+         Q5ceb8HTQHsTYcylp6w3IqWokToV8ffldGe5pUMyvJLeKo8qzZvFi20J6sfxhKugjzZ6
+         tI6SPpC4u8RnKJlOkylpjS6i669VqhOrcey09D0aZrUyv5ZqibjI/Cqu7HcoPTDWLYkf
+         /Axw==
+X-Gm-Message-State: AOAM530BKlE3hmc1/+OBEsjAxuA7IcE5EJBVbEh8GuEEKfnj/2mlyMCK
+        IQ/g/loOnNE9WuLTECP7dpBnrqQJC3ACH2ZV5NwBOA==
+X-Google-Smtp-Source: ABdhPJx2Fvi9nAN/wxCPzg1bi9wODMYYJfN+Mji5z+NXA+F9wK2XSoVAsNeYsLL8OavLElsE/D2dsnGOJDc8LVYnGGg=
+X-Received: by 2002:a7b:c7cd:: with SMTP id z13mr37985073wmk.59.1639399787309;
+ Mon, 13 Dec 2021 04:49:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20211204002038.113653-1-atishp@atishpatra.org> <20211204002038.113653-2-atishp@atishpatra.org>
-In-Reply-To: <20211204002038.113653-2-atishp@atishpatra.org>
+References: <20211204002038.113653-1-atishp@atishpatra.org> <20211204002038.113653-3-atishp@atishpatra.org>
+In-Reply-To: <20211204002038.113653-3-atishp@atishpatra.org>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 13 Dec 2021 18:18:59 +0530
-Message-ID: <CAAhSdy2YsrGSk4P41hneNkJJg6je9fMYV9-py6vim=ZEexigOQ@mail.gmail.com>
-Subject: Re: [RFC 1/6] RISC-V: Avoid using per cpu array for ordered booting
+Date:   Mon, 13 Dec 2021 18:19:35 +0530
+Message-ID: <CAAhSdy3ySJN5NCkUpromH1zQQqfaDPQHmEiMGYEUY5snAd-jFQ@mail.gmail.com>
+Subject: Re: [RFC 2/6] RISC-V: Do not print the SBI version during HSM
+ extension boot print
 To:     Atish Patra <atishp@atishpatra.org>
 Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
         Atish Patra <atishp@rivosinc.com>,
@@ -80,154 +81,38 @@ On Sat, Dec 4, 2021 at 5:50 AM Atish Patra <atishp@atishpatra.org> wrote:
 >
 > From: Atish Patra <atishp@rivosinc.com>
 >
-> Currently both order booting and spinwait approach uses a per cpu
-> array to update stack & task pointer. This approach will not work for the
-> following cases.
-> 1. If NR_CPUs are configured to be less than highest hart id.
-> 2. A platform has sparse hartid.
+> The HSM extension information log also prints the SBI version v0.2. This
+> is misleading as the underlying firmware SBI version may be different
+> from v0.2.
 >
-> This issue can be fixed for ordered booting as the booting cpu brings up
-> one cpu at a time using SBI HSM extension which has opaque parameter
-> that is unused until now.
->
-> Introduce a common secondary boot data structure that can store the stack
-> and task pointer. Secondary harts will use this data while booting up
-> to setup the sp & tp.
+> Remove the unncessary printing of SBI version.
 >
 > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/include/asm/cpu_ops_sbi.h | 28 ++++++++++++++++++++++++++++
->  arch/riscv/kernel/cpu_ops_sbi.c      | 23 ++++++++++++++++++++---
->  arch/riscv/kernel/head.S             | 19 ++++++++++---------
->  3 files changed, 58 insertions(+), 12 deletions(-)
->  create mode 100644 arch/riscv/include/asm/cpu_ops_sbi.h
->
-> diff --git a/arch/riscv/include/asm/cpu_ops_sbi.h b/arch/riscv/include/asm/cpu_ops_sbi.h
-> new file mode 100644
-> index 000000000000..ccb9a6d30486
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/cpu_ops_sbi.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2021 by Rivos Inc.
-> + */
-> +#ifndef __ASM_CPU_OPS_SBI_H
-> +#define __ASM_CPU_OPS_SBI_H
-> +
-> +#ifndef __ASSEMBLY__
-> +#include <linux/init.h>
-> +#include <linux/sched.h>
-> +#include <linux/threads.h>
-> +
-> +/**
-> + * struct sbi_hart_boot_data - Hart specific boot used during booting and
-> + *                            cpu hotplug.
-> + * @task_ptr: A pointer to the hart specific tp
-> + * @stack_ptr: A pointer to the hart specific sp
-> + */
-> +struct sbi_hart_boot_data {
-> +       void *task_ptr;
-> +       void *stack_ptr;
-> +};
-> +#endif
-> +
-> +#define SBI_HART_BOOT_TASK_PTR_OFFSET (0x00)
-> +#define SBI_HART_BOOT_STACK_PTR_OFFSET RISCV_SZPTR
 
-Don't manually create these defines instead generate this
-defines at compile time by adding entries in kernel/asm-offsets.c
+Looks good to me.
 
-> +
-> +#endif /* ifndef __ASM_CPU_OPS_H */
-> diff --git a/arch/riscv/kernel/cpu_ops_sbi.c b/arch/riscv/kernel/cpu_ops_sbi.c
-> index 685fae72b7f5..2e7a9dd9c2a7 100644
-> --- a/arch/riscv/kernel/cpu_ops_sbi.c
-> +++ b/arch/riscv/kernel/cpu_ops_sbi.c
-> @@ -7,13 +7,22 @@
->
->  #include <linux/init.h>
->  #include <linux/mm.h>
-> +#include <linux/sched/task_stack.h>
->  #include <asm/cpu_ops.h>
-> +#include <asm/cpu_ops_sbi.h>
->  #include <asm/sbi.h>
->  #include <asm/smp.h>
->
->  extern char secondary_start_sbi[];
->  const struct cpu_operations cpu_ops_sbi;
->
-> +/*
-> + * Ordered booting via HSM brings one cpu at a time. However, cpu hotplug can
-> + * be invoked from multiple threads in paralle. Define a per cpu data
-> + * to handle that.
-> + */
-> +DEFINE_PER_CPU(struct sbi_hart_boot_data, boot_data);
-> +
->  static int sbi_hsm_hart_start(unsigned long hartid, unsigned long saddr,
->                               unsigned long priv)
->  {
-> @@ -58,9 +67,17 @@ static int sbi_cpu_start(unsigned int cpuid, struct task_struct *tidle)
->         int rc;
->         unsigned long boot_addr = __pa_symbol(secondary_start_sbi);
->         int hartid = cpuid_to_hartid_map(cpuid);
-> -
-> -       cpu_update_secondary_bootdata(cpuid, tidle);
-> -       rc = sbi_hsm_hart_start(hartid, boot_addr, 0);
-> +       unsigned long hsm_data;
-> +       struct sbi_hart_boot_data *bdata = &per_cpu(boot_data, cpuid);
-> +
-> +       /* Make sure tidle is updated */
-> +       smp_mb();
-> +       bdata->task_ptr = tidle;
-> +       bdata->stack_ptr = task_stack_page(tidle) + THREAD_SIZE;
-> +       /* Make sure boot data is updated */
-> +       smp_mb();
-> +       hsm_data = __pa(bdata);
-> +       rc = sbi_hsm_hart_start(hartid, boot_addr, hsm_data);
->
->         return rc;
->  }
-> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> index f52f01ecbeea..40d4c625513c 100644
-> --- a/arch/riscv/kernel/head.S
-> +++ b/arch/riscv/kernel/head.S
-> @@ -11,6 +11,7 @@
->  #include <asm/page.h>
->  #include <asm/pgtable.h>
->  #include <asm/csr.h>
-> +#include <asm/cpu_ops_sbi.h>
->  #include <asm/hwcap.h>
->  #include <asm/image.h>
->  #include "efi-header.S"
-> @@ -167,15 +168,15 @@ secondary_start_sbi:
->         la a3, .Lsecondary_park
->         csrw CSR_TVEC, a3
->
-> -       slli a3, a0, LGREG
-> -       la a4, __cpu_up_stack_pointer
-> -       XIP_FIXUP_OFFSET a4
-> -       la a5, __cpu_up_task_pointer
-> -       XIP_FIXUP_OFFSET a5
-> -       add a4, a3, a4
-> -       add a5, a3, a5
-> -       REG_L sp, (a4)
-> -       REG_L tp, (a5)
-> +       /* a0 contains the hartid & a1 contains boot data */
-> +       li a2, SBI_HART_BOOT_TASK_PTR_OFFSET
-> +       XIP_FIXUP_OFFSET a2
-> +       add a2, a2, a1
-> +       REG_L tp, (a2)
-> +       li a3, SBI_HART_BOOT_STACK_PTR_OFFSET
-> +       XIP_FIXUP_OFFSET a3
-> +       add a3, a3, a1
-> +       REG_L sp, (a3)
->
->         .global secondary_start_common
->  secondary_start_common:
-> --
-> 2.33.1
->
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
 Regards,
 Anup
+
+> ---
+>  arch/riscv/kernel/cpu_ops.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/kernel/cpu_ops.c b/arch/riscv/kernel/cpu_ops.c
+> index 1985884fe829..3f5a38b03044 100644
+> --- a/arch/riscv/kernel/cpu_ops.c
+> +++ b/arch/riscv/kernel/cpu_ops.c
+> @@ -38,7 +38,7 @@ void __init cpu_set_ops(int cpuid)
+>  #if IS_ENABLED(CONFIG_RISCV_SBI)
+>         if (sbi_probe_extension(SBI_EXT_HSM) > 0) {
+>                 if (!cpuid)
+> -                       pr_info("SBI v0.2 HSM extension detected\n");
+> +                       pr_info("SBI HSM extension detected\n");
+>                 cpu_ops[cpuid] = &cpu_ops_sbi;
+>         } else
+>  #endif
+> --
+> 2.33.1
+>

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85273472848
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA25E472673
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238232AbhLMKKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241921AbhLMKG4 (ORCPT
+        id S237841AbhLMJwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:52:11 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:37168 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236026AbhLMJpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:06:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CFDC0A88E7;
-        Mon, 13 Dec 2021 01:51:21 -0800 (PST)
+        Mon, 13 Dec 2021 04:45:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 144BAB80E1C;
-        Mon, 13 Dec 2021 09:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40738C341D0;
-        Mon, 13 Dec 2021 09:51:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BA09DCE0E96;
+        Mon, 13 Dec 2021 09:45:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60297C00446;
+        Mon, 13 Dec 2021 09:45:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389078;
-        bh=yfNeD6G1Kmy4bh+5KjrMiAOg/1LhcK5/ZAnxbPSOvRg=;
+        s=korg; t=1639388744;
+        bh=UwSDO8IZxWRsMCp0xnXpmJ0UXGnrmXOhCVIXuoXYIhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=10nFjPiJwAdQExe2BrWz8FE9b61hb2b9g2aCDrnZSfRV08K5hsuJ+3MxXebv/8QBa
-         y0W960EcCa1nxYql6Z5nnsPHJnqgXOIi9SyEbGfrKgLkt0XzHk0wiUIBoYee0vjlML
-         tF10jBV+93E15LMVKn8LVW6PFj6gnkTZcCElTICw=
+        b=KzeKlgzTFIwVRe9wCRDQ6Jcoay7ewfWk/4OH+VvCaz/06aS4u7lDSkAPwTGsP4b2t
+         ZxMivVYRC62aJLL9Y6gGm8r/yvu47Vgyke1YXxq7W2GGKYZCNdGzE76RcXqrhl2ISl
+         y38L4vJ+DtlWq6k9kqleb9Z4txWWnBdUq5fsqhfA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 110/132] iio: mma8452: Fix trigger reference couting
+Subject: [PATCH 5.4 81/88] iio: ad7768-1: Call iio_trigger_notify_done() on error
 Date:   Mon, 13 Dec 2021 10:30:51 +0100
-Message-Id: <20211213092942.881133856@linuxfoundation.org>
+Message-Id: <20211213092936.009854762@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,39 +48,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit cd0082235783f814241a1c9483fb89e405f4f892 upstream.
+commit 6661146427cbbce6d1fe3dbb11ff1c487f55799a upstream.
 
-The mma8452 driver directly assigns a trigger to the struct iio_dev. The
-IIO core when done using this trigger will call `iio_trigger_put()` to drop
-the reference count by 1.
+IIO trigger handlers must call iio_trigger_notify_done() when done. This
+must be done even when an error occurred. Otherwise the trigger will be
+seen as busy indefinitely and the trigger handler will never be called
+again.
 
-Without the matching `iio_trigger_get()` in the driver the reference count
-can reach 0 too early, the trigger gets freed while still in use and a
-use-after-free occurs.
+The ad7768-1 driver neglects to call iio_trigger_notify_done() when there
+is an error reading the converter data. Fix this by making sure that
+iio_trigger_notify_done() is included in the error exit path.
 
-Fix this by getting a reference to the trigger before assigning it to the
-IIO device.
-
-Fixes: ae6d9ce05691 ("iio: mma8452: Add support for interrupt driven triggers.")
+Fixes: a5f8c7da3dbe ("iio: adc: Add AD7768-1 ADC basic support")
 Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024092700.6844-1-lars@metafoo.de
+Link: https://lore.kernel.org/r/20211101144055.13858-2-lars@metafoo.de
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/mma8452.c |    2 +-
+ drivers/iio/adc/ad7768-1.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -1473,7 +1473,7 @@ static int mma8452_trigger_setup(struct
- 	if (ret)
- 		return ret;
+--- a/drivers/iio/adc/ad7768-1.c
++++ b/drivers/iio/adc/ad7768-1.c
+@@ -470,8 +470,8 @@ static irqreturn_t ad7768_trigger_handle
+ 	iio_push_to_buffers_with_timestamp(indio_dev, &st->data.scan,
+ 					   iio_get_time_ns(indio_dev));
  
--	indio_dev->trig = trig;
-+	indio_dev->trig = iio_trigger_get(trig);
+-	iio_trigger_notify_done(indio_dev->trig);
+ err_unlock:
++	iio_trigger_notify_done(indio_dev->trig);
+ 	mutex_unlock(&st->lock);
  
- 	return 0;
- }
+ 	return IRQ_HANDLED;
 
 

@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D5A473013
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67447473015
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbhLMPGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbhLMPGa (ORCPT
+        id S236872AbhLMPGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:06:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:55912 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231924AbhLMPGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:06:30 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20228C061574;
-        Mon, 13 Dec 2021 07:06:30 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id x15so53969582edv.1;
-        Mon, 13 Dec 2021 07:06:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=05MSUOX7QKlZHM76FG8mrj5dNi0SySsL9hwhrZB90/w=;
-        b=qTSuFPTLolLl3YBOOOIP13LOXuzcr7aLCbRrc9Cu5Qk1rJsS80JIIkNZQlxR8r88yk
-         yTSKFnKR5/7y7VCElgHukPP7SuRsw9E0nRe9UvfpIq/DigZxR9Y7EoaSRwilAtDOhmgi
-         qTi3Zhga/7Yo+hFEYJnHTVAXMoxsWi4WiKMI8Ese0l5tscopSIqJX1k1libg+lieDCLG
-         ZzbT4VaEuqXrdfNWdA6a5tFWoY/VkQya0ITI+4mCc+ghqtd9EvTUTh5WzNOKxpbP9nvy
-         61TVgRyIUteS6mkLcPKr7zGES8lMvbqcjGkf6c06AGMDnsUoIvJfdrJagfP/D0FtwBe4
-         0r0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=05MSUOX7QKlZHM76FG8mrj5dNi0SySsL9hwhrZB90/w=;
-        b=0U0KYc2EqWcWrbWTj2lRI+qahcrub1PJWukOscIyS+YDb0o5x79/Uu780BNYtgnCSr
-         qc6cyNkcQa95IirvKGi0+Ng0amYgzAxjSwi0KlN7TO5/7u+Ytak2h4+6uiOdFenQxjqg
-         kWaSbLBUStNQsAqvvDwHYKXctJNjU3cjk8qPIgUYeiDJD2mEvCnHjxCzhuzGZNmu+wGk
-         xyJfwcK27tHrWSEWIGhwWeZGNJlWcoeRShyUbPXiGxspRoe3S0ZWdg3zDzMWvwMH5Avq
-         IVFZ9E6xDpwbUaSAy4+7HvomSvAi/hn/c1bUXR6kZarQs8iu2Tmzrrxgs5C8KrZozadY
-         aEpA==
-X-Gm-Message-State: AOAM531BTTXKtYBjnH1YtAmzio72Lds3j1jbPRrVV544TnLCrCG2DEHh
-        KZwBUn2lBo8Bver2DLdhNfM=
-X-Google-Smtp-Source: ABdhPJxlFPQxAhtEOPHZcRPWluXeSwT2vPHNvpF32tXtYU6hX4CPmtvP3EiGpZdyS65qG74mYattkw==
-X-Received: by 2002:a17:906:eda3:: with SMTP id sa3mr45390200ejb.51.1639407985274;
-        Mon, 13 Dec 2021 07:06:25 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id ar4sm5799601ejc.52.2021.12.13.07.06.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 07:06:24 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <022620db-13ad-8118-5296-ae2913d41f1f@redhat.com>
-Date:   Mon, 13 Dec 2021 16:06:22 +0100
+        Mon, 13 Dec 2021 10:06:34 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 985F01F3B9;
+        Mon, 13 Dec 2021 15:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639407992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mo0LvTTdCAdYCELtja1WibnDYrDpY4UUg3gYnSLtKHs=;
+        b=Zv5q+rsqvGBcvPNXTC0JYSr5b+BCn+RUcwsHqjHFcdPO8dKSiP1Ro/pxEtzq/mPItUxgXc
+        xXYhrJoSvPPt52OonbLIzk8XN6t8WeGqg3+JhoraV3Hjbtepfq22fi968GfIQH2cxqiC9v
+        gsqwy8wrjljI5ipLw+Xm4mwO/6oFeb0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 68C9DA3B8A;
+        Mon, 13 Dec 2021 15:06:32 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 16:06:31 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Alexey Makhalov <amakhalov@vmware.com>
+Cc:     Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Nico Pache <npache@redhat.com>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <YbdhdySBaHJ/UxBZ@dhcp22.suse.cz>
+References: <2e191db3-286f-90c6-bf96-3f89891e9926@gmail.com>
+ <YYqstfX8PSGDfWsn@dhcp22.suse.cz>
+ <YYrGpn/52HaLCAyo@fedora>
+ <YYrSC7vtSQXz652a@dhcp22.suse.cz>
+ <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
-Content-Language: en-US
-To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-11-yang.zhong@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211208000359.2853257-11-yang.zhong@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/21 01:03, Yang Zhong wrote:
-> +		/*
-> +		 * Update IA32_XFD to the guest value so #NM can be
-> +		 * raised properly in the guest. Instead of directly
-> +		 * writing the MSR, call a helper to avoid breaking
-> +		 * per-cpu cached value in fpu core.
-> +		 */
-> +		fpregs_lock();
-> +		current->thread.fpu.fpstate->xfd = data;
+On Thu 09-12-21 11:48:42, Michal Hocko wrote:
+[...]
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 852041f6be41..2d38a431f62f 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1161,19 +1161,21 @@ static void reset_node_present_pages(pg_data_t *pgdat)
+>  }
+>  
+>  /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
+> -static pg_data_t __ref *hotadd_new_pgdat(int nid)
+> +static pg_data_t __ref *hotadd_init_pgdat(int nid)
+>  {
+>  	struct pglist_data *pgdat;
+>  
+>  	pgdat = NODE_DATA(nid);
+> -	if (!pgdat) {
+> -		pgdat = arch_alloc_nodedata(nid);
+> -		if (!pgdat)
+> -			return NULL;
+>  
+> +	/*
+> +	 * NODE_DATA is preallocated (free_area_init) but its internal
+> +	 * state is not allocated completely. Add missing pieces.
+> +	 * Completely offline nodes stay around and they just need
+> +	 * reintialization.
+> +	 */
+> +	if (!pgdat->per_cpu_nodestats) {
+>  		pgdat->per_cpu_nodestats =
+>  			alloc_percpu(struct per_cpu_nodestat);
+> -		arch_refresh_nodedata(nid, pgdat);
 
-This is wrong, it should be written in vcpu->arch.guest_fpu.
-
-> +		xfd_update_state(current->thread.fpu.fpstate);
-
-This is okay though, so that KVM_SET_MSR will not write XFD and WRMSR will.
-
-That said, I think xfd_update_state should not have an argument. 
-current->thread.fpu.fpstate->xfd is the only fpstate that should be 
-synced with the xfd_state per-CPU variable.
-
-Paolo
-
-> +		fpregs_unlock();
-
+This should really be 
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 42211485bcf3..2daa88ce8c80 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1173,7 +1173,7 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
+ 	 * Completely offline nodes stay around and they just need
+ 	 * reintialization.
+ 	 */
+-	if (!pgdat->per_cpu_nodestats) {
++	if (pgdat->per_cpu_nodestats == &boot_nodestats) {
+ 		pgdat->per_cpu_nodestats =
+ 			alloc_percpu(struct per_cpu_nodestat);
+ 	} else {
+-- 
+Michal Hocko
+SUSE Labs

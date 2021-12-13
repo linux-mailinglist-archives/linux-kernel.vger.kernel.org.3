@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6654731DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9764731E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236523AbhLMQb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:31:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59692 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239936AbhLMQbv (ORCPT
+        id S240070AbhLMQfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:35:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39146 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233962AbhLMQe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:31:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639413111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MT4/b2QPfJ4jW4cPiNaQ4X6156JfED28RbUoF2jZNtA=;
-        b=bzv0FPjkfJf6R975MNyU7JRxih5NzngDexme8K/ZE0E5Je/fud2InfwWAiydQKr+XTj3ob
-        k4TFQA1ekkaY0ZoxNh7hI++ZXNxkBKzG9hTLRLx4ejv/KjpfRoczy0oTlJRuiWYzxVB+4L
-        QRqT57IPe/8j+vccFK0P38k62E6srYU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-201-GBD0qURQN5eGKu3jfMKAFg-1; Mon, 13 Dec 2021 11:31:47 -0500
-X-MC-Unique: GBD0qURQN5eGKu3jfMKAFg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 13 Dec 2021 11:34:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 39715100F942;
-        Mon, 13 Dec 2021 16:31:46 +0000 (UTC)
-Received: from [10.22.18.158] (unknown [10.22.18.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 18798100164A;
-        Mon, 13 Dec 2021 16:31:45 +0000 (UTC)
-Message-ID: <383e4f24-8165-7aab-40af-52340c09de46@redhat.com>
-Date:   Mon, 13 Dec 2021 11:31:44 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74AA4B811A5;
+        Mon, 13 Dec 2021 16:34:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A8BC34603;
+        Mon, 13 Dec 2021 16:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639413297;
+        bh=wnOhd0uugHq1/ztVIeKV8oKWDawezTEWep8Ktuozols=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iHx90Veb6E2b1Q+kSSLbX8VMNXhEa0DEAnEw/GW5LThCYBLRa7Q2V6Vbab1p/pY+M
+         nDhiVTWBs71CBj+zDFsHdOzRqez3TI1aT2s/qkV3Nzl/ym19lAN1qA9vg6n0B+w5VB
+         S1Ln8hP4imkqRSiKwczKb/Gig80wHnfn/zU+TjExt6kxQmjETIcpEpT6gbv3qykYtM
+         CGCSjtsdB450aT+uKty7RjCpr/O526BcnE8YazrC4JG+G8Mw1PzTt9TfNimgdG/nLE
+         bGJot3ieeyL0tTN5Nokv36YggiKHbiaaa7IAJgYhrSr428y9K3AFkd/OQEFtt3nbRa
+         qxqn/jUK3Eh8w==
+Date:   Mon, 13 Dec 2021 16:34:52 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Oder Chiou <oder_chiou@realtek.com>,
+        ~okias/devicetree@lists.sr.ht, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: dt-bindings: add missing pins
+Message-ID: <Ybd2LMZ8+UqcUZTS@sirena.org.uk>
+References: <20211211215120.70966-1-david@ixit.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH -next] lockdep: Use memset_startat() helper in
- reinit_class()
-Content-Language: en-US
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
-Cc:     wangweiyang2@huawei.com, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, keescook@chromium.org
-References: <20211213132618.105737-1-xiujianfeng@huawei.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211213132618.105737-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vmxQrrQTZR4eGkiO"
+Content-Disposition: inline
+In-Reply-To: <20211211215120.70966-1-david@ixit.cz>
+X-Cookie: No solicitors.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 08:26, Xiu Jianfeng wrote:
-> use memset_startat() helper to simplify the code, there is no functional
-> change in this patch.
->
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->   kernel/locking/lockdep.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> index 4a882f83aeb9..89b3df51fd98 100644
-> --- a/kernel/locking/lockdep.c
-> +++ b/kernel/locking/lockdep.c
-> @@ -6011,13 +6011,10 @@ static void zap_class(struct pending_free *pf, struct lock_class *class)
->   
->   static void reinit_class(struct lock_class *class)
->   {
-> -	void *const p = class;
-> -	const unsigned int offset = offsetof(struct lock_class, key);
-> -
->   	WARN_ON_ONCE(!class->lock_entry.next);
->   	WARN_ON_ONCE(!list_empty(&class->locks_after));
->   	WARN_ON_ONCE(!list_empty(&class->locks_before));
-> -	memset(p + offset, 0, sizeof(*class) - offset);
-> +	memset_startat(class, 0, key);
->   	WARN_ON_ONCE(!class->lock_entry.next);
->   	WARN_ON_ONCE(!list_empty(&class->locks_after));
->   	WARN_ON_ONCE(!list_empty(&class->locks_before));
 
-LGTM
+--vmxQrrQTZR4eGkiO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Waiman Long <longman@redhat.com>
+On Sat, Dec 11, 2021 at 10:51:19PM +0100, David Heidelberg wrote:
 
+> Add pins missing in documentation, but present in the hardware.
+
+> Fixes: 0e826e867264 ("ASoC: add RT5677 CODEC driver")
+
+Please don't just add nonsense fixes tags for the sake of it, this just
+creates noise and gets in the way of people trying to use the tags to
+work out if thy need fixes.  The commit you're mentioning doesn't even
+contain any changes to the binding document.
+
+> @@ -54,9 +54,21 @@ Pins on the device (for linking into audio routes):
+>    * DMIC2
+>    * DMIC3
+>    * DMIC4
+> +  * DMIC L1
+> +  * DMIC L2
+> +  * DMIC L3
+> +  * DMIC L4
+> +  * DMIC R1
+> +  * DMIC R2
+> +  * DMIC R3
+> +  * DMIC R4
+
+These clearly aren't pins you're adding, digital microphones use PDM
+and carry a stereo pair on a single physical pin (which is what should
+be and already is in the bindings).  This is adding an extra set of pins
+to the binding duplicating the existing ones.
+
+>    * LOUT1
+>    * LOUT2
+>    * LOUT3
+> +  * PDM1L
+> +  * PDM1R
+> +  * PDM2L
+> +  * PDM2R
+
+I'd expect these to be just PDM1 and PDM2, assuming that that's what the
+pins are called in the chip datasheet.
+
+--vmxQrrQTZR4eGkiO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG3disACgkQJNaLcl1U
+h9BZSwf+OOcBl5DrmVF88D9eLae6ah84DXOIEIStolvdAuNRSWnUdkm1RQ4G99zC
+LBwG7K6/O6vcGdcGQ4JO2+r8MvFhGlQxs9cJAZOqBvUUXlZHJhS75Ki7N6Y95T4n
+vOK5yRKGcBUEdTB6455YsppRqEkpNZ9XzCVzN3dLNZHvWUkGpAcRQCggDTfT6wBK
+ApDK+YWsRjUCGboPu5k9COT/l2N36qSbkFoe8BVadhNBCKYMVqD1bhlgcUExqbU7
+E4PkP5TOJZ7PKnIUx73lRSf7LfOrDU9sH06rvB2ER/hcwo2vwDlZxKNuMAyU9Bd0
+5vu9vqUY+iaLxeDdxv66WH0IykLN4A==
+=EMvB
+-----END PGP SIGNATURE-----
+
+--vmxQrrQTZR4eGkiO--

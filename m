@@ -2,130 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF6A472A3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA92F472A28
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243111AbhLMKeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:34:36 -0500
-Received: from mga14.intel.com ([192.55.52.115]:51780 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238817AbhLMKdu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:33:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238930055"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="238930055"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 02:32:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="660821548"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Dec 2021 02:32:49 -0800
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] usb: Remove usb_for_each_port()
-Date:   Mon, 13 Dec 2021 13:32:43 +0300
-Message-Id: <20211213103243.33657-6-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
-References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
+        id S240859AbhLMKeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:34:04 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:41288 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240868AbhLMKdT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 05:33:19 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 792841C0B79; Mon, 13 Dec 2021 11:33:15 +0100 (CET)
+Date:   Mon, 13 Dec 2021 11:33:14 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.19 00/74] 4.19.221-rc1 review
+Message-ID: <20211213103314.GB17683@duo.ucw.cz>
+References: <20211213092930.763200615@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
+Content-Disposition: inline
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no more users for the function.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/core/usb.c | 46 ------------------------------------------
- include/linux/usb.h    |  9 ---------
- 2 files changed, 55 deletions(-)
+--uZ3hkaAS1mZxFaxD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 62368c4ed37af..2ce3667ec6fae 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -398,52 +398,6 @@ int usb_for_each_dev(void *data, int (*fn)(struct usb_device *, void *))
- }
- EXPORT_SYMBOL_GPL(usb_for_each_dev);
- 
--struct each_hub_arg {
--	void *data;
--	int (*fn)(struct device *, void *);
--};
--
--static int __each_hub(struct usb_device *hdev, void *data)
--{
--	struct each_hub_arg *arg = (struct each_hub_arg *)data;
--	struct usb_hub *hub;
--	int ret = 0;
--	int i;
--
--	hub = usb_hub_to_struct_hub(hdev);
--	if (!hub)
--		return 0;
--
--	mutex_lock(&usb_port_peer_mutex);
--
--	for (i = 0; i < hdev->maxchild; i++) {
--		ret = arg->fn(&hub->ports[i]->dev, arg->data);
--		if (ret)
--			break;
--	}
--
--	mutex_unlock(&usb_port_peer_mutex);
--
--	return ret;
--}
--
--/**
-- * usb_for_each_port - interate over all USB ports in the system
-- * @data: data pointer that will be handed to the callback function
-- * @fn: callback function to be called for each USB port
-- *
-- * Iterate over all USB ports and call @fn for each, passing it @data. If it
-- * returns anything other than 0, we break the iteration prematurely and return
-- * that value.
-- */
--int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
--{
--	struct each_hub_arg arg = {data, fn};
--
--	return usb_for_each_dev(&arg, __each_hub);
--}
--EXPORT_SYMBOL_GPL(usb_for_each_port);
--
- /**
-  * usb_release_dev - free a usb device structure when all users of it are finished.
-  * @dev: device that's been disconnected
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 7ccaa76a9a968..200b7b79acb56 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -875,15 +875,6 @@ extern struct usb_host_interface *usb_find_alt_setting(
- 		unsigned int iface_num,
- 		unsigned int alt_num);
- 
--#if IS_REACHABLE(CONFIG_USB)
--int usb_for_each_port(void *data, int (*fn)(struct device *, void *));
--#else
--static inline int usb_for_each_port(void *data, int (*fn)(struct device *, void *))
--{
--	return 0;
--}
--#endif
--
- /* port claiming functions */
- int usb_hub_claim_port(struct usb_device *hdev, unsigned port1,
- 		struct usb_dev_state *owner);
--- 
-2.33.0
+Hi!
 
+> This is the start of the stable review cycle for the 4.19.221 release.
+> There are 74 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.19.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--uZ3hkaAS1mZxFaxD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYbchagAKCRAw5/Bqldv6
+8pM7AKCj/7H6po37gA+4EJBMksDtzk6RJwCfRoVO5pTg2TkgEL53kBk6WPQkVpo=
+=IVFn
+-----END PGP SIGNATURE-----
+
+--uZ3hkaAS1mZxFaxD--

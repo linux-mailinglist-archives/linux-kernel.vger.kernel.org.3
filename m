@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75584728C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667A8472588
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238954AbhLMKOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239065AbhLMKFs (ORCPT
+        id S235453AbhLMJoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:44:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55816 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234909AbhLMJlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:05:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85ECC0A8888;
-        Mon, 13 Dec 2021 01:50:55 -0800 (PST)
+        Mon, 13 Dec 2021 04:41:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E2E9B80E1C;
-        Mon, 13 Dec 2021 09:50:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B83C341C5;
-        Mon, 13 Dec 2021 09:50:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 468DFB80E1D;
+        Mon, 13 Dec 2021 09:41:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C0FC341C5;
+        Mon, 13 Dec 2021 09:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389053;
-        bh=tbqDddX6n0aiTDtdtor2oO2VapLmWUIKud5GacnsEXM=;
+        s=korg; t=1639388500;
+        bh=IEH0SgXW32ZJv2QeLrjSktkpfigNy0ReA7GV2QSSPMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zm+gNbBldtaagl+Or98UvP28l8ehIgisHYy/3ivkRM845MvChnrnBeu50H4zlS3FU
-         3dS1rUJG88qtFwaDyH+hHAzr5QEXpustDAZ7qGpBgysrvnNy67WcixtCsWu5bk2ypk
-         c+FtZfXZk8Cc+5R9rIt1yxuijWad5iDEtzb94wwU=
+        b=1WTeaoxAp0s7Ya53SVuhEMYdSkwwi5oWTkPP2/0L/DTRR/np3cpzH0/f5FI1e/696
+         0L+DUEd+FBKeSOo9LAFcvg7uqP5OrVGuZZyIBC/OVLC9YsURa7OULHHxmzQ+s7Ao1I
+         4xtpKH7XAHFB0fMj8HHXa4WbZq33smXXg+Mowp3Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
-Subject: [PATCH 5.10 101/132] USB: gadget: zero allocate endpoint 0 buffers
-Date:   Mon, 13 Dec 2021 10:30:42 +0100
-Message-Id: <20211213092942.564132187@linuxfoundation.org>
+        stable@vger.kernel.org, Vladimir Murzin <vladimir.murzin@arm.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 4.19 72/74] irqchip: nvic: Fix offset for Interrupt Priority Offsets
+Date:   Mon, 13 Dec 2021 10:30:43 +0100
+Message-Id: <20211213092933.220484355@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +45,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Vladimir Murzin <vladimir.murzin@arm.com>
 
-commit 86ebbc11bb3f60908a51f3e41a17e3f477c2eaa3 upstream.
+commit c5e0cbe2858d278a27d5b3fe31890aea5be064c4 upstream.
 
-Under some conditions, USB gadget devices can show allocated buffer
-contents to a host.  Fix this up by zero-allocating them so that any
-extra data will all just be zeros.
+According to ARM(v7M) ARM Interrupt Priority Offsets located at
+0xE000E400-0xE000E5EC, while 0xE000E300-0xE000E33C covers read-only
+Interrupt Active Bit Registers
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Fixes: 292ec080491d ("irqchip: Add support for ARMv7-M NVIC")
+Signed-off-by: Vladimir Murzin <vladimir.murzin@arm.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20211201110259.84857-1-vladimir.murzin@arm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c   |    2 +-
- drivers/usb/gadget/legacy/dbgp.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/irqchip/irq-nvic.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2173,7 +2173,7 @@ int composite_dev_prepare(struct usb_com
- 	if (!cdev->req)
- 		return -ENOMEM;
+--- a/drivers/irqchip/irq-nvic.c
++++ b/drivers/irqchip/irq-nvic.c
+@@ -29,7 +29,7 @@
  
--	cdev->req->buf = kmalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
-+	cdev->req->buf = kzalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
- 	if (!cdev->req->buf)
- 		goto fail;
+ #define NVIC_ISER		0x000
+ #define NVIC_ICER		0x080
+-#define NVIC_IPR		0x300
++#define NVIC_IPR		0x400
  
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -137,7 +137,7 @@ static int dbgp_enable_ep_req(struct usb
- 		goto fail_1;
- 	}
- 
--	req->buf = kmalloc(DBGP_REQ_LEN, GFP_KERNEL);
-+	req->buf = kzalloc(DBGP_REQ_LEN, GFP_KERNEL);
- 	if (!req->buf) {
- 		err = -ENOMEM;
- 		stp = 2;
+ #define NVIC_MAX_BANKS		16
+ /*
 
 

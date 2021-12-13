@@ -2,90 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF20B473527
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0573447352A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbhLMTnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:43:21 -0500
-Received: from www381.your-server.de ([78.46.137.84]:49386 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240557AbhLMTnU (ORCPT
+        id S242424AbhLMToQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240557AbhLMToP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:43:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=/U2kRbjnUmmfO5VcGjkbT326Y4PX+CdMdtu1XG7vuao=; b=A4VhOy/ckIuFeL7tUGbt4bYZWt
-        DwRHP1fdP5yz9xLPvfjJCF99l73Qb6NHRsfVgf43y/V5iXNKr9nkjlvK9uzhfy28zMzFX4EVtas39
-        om1Uuu2om2W6Fo29+0KtNusZYcSUaLeobVSBWyJYH1y+AJ16Jj7YEPF32pX9/M0rKW3GuPM2iU872
-        1V7Aj4KmNrhkPvo1zaZU7cxFECG2FK3xX1L1dLmUvHClevs5ZYnsBcSIPEvJrTT4fPfAZBWc0Gqcp
-        1NbBwuX8n8RJdgLI2yIW0VPy6kJcm/r2nf9CJDq5DroA0i5qFKklB5Ejhu9gQVkFQk8TmaWm18VaF
-        7b6oVnwQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1mwrEC-000FhI-7q; Mon, 13 Dec 2021 20:43:16 +0100
-Received: from [2001:a61:2aa6:c001:9e5c:8eff:fe01:8578]
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1mwrEB-000AeU-DF; Mon, 13 Dec 2021 20:43:15 +0100
-Subject: Re: [PATCH v2 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
- driver
-To:     Tanmay Shah <tanmay.shah@xilinx.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ben Levinsky <ben.levinsky@xilinx.com>,
-        Bill Mills <bill.mills@linaro.org>,
-        Sergei Korneichuk <sergei.korneichuk@xilinx.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20211123062050.1442712-1-tanmay.shah@xilinx.com>
- <20211123062050.1442712-7-tanmay.shah@xilinx.com>
- <ab9e009a-5e35-ae49-2c8e-65be6ba36d7f@metafoo.de>
- <acbd7749-7bb2-0de2-5658-2b62ace9520a@xilinx.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <b8b24b65-786b-2a4e-5548-5e5e8bf988be@metafoo.de>
-Date:   Mon, 13 Dec 2021 20:43:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 13 Dec 2021 14:44:15 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31224C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:44:14 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id u80so15849398pfc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ME1prsBK5y2s/TuairpTrn8GnmoJtUSZrFIhH9W9WcY=;
+        b=ZwYwi5inxpKI9iCEmuqii70nhXQojehT5dYm1r5u45whCEe/NINA/vD/UlTFswkrb+
+         CSkBmBYfTYIApQiMVbj/mt3LalQyfjKaS0iShIU3Y8oDw+v39B1emW3y5PgKLiiWE0qA
+         b6STiQ5k/8u8BsEDngpBFTAoJAbNf9mmSuS43t52JwbWr9p7RLwo8zV20VHMqJv3WPXN
+         a4Xq95b3/UMg8qq4xfeGx3vrgGOaftNUKR8XirunkQBhO61dC0UGO0hGC4UuLvQYiNus
+         iqvk0gp7KYNJQ8Z2JjKJf3URZcUfWI+qpWFboi7c0SrCu5DxaKvqZuTT+rUMztgZbVa6
+         WCYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ME1prsBK5y2s/TuairpTrn8GnmoJtUSZrFIhH9W9WcY=;
+        b=SE2lKUNufOBSo2p1Vue323NaXCYz+nSmqHk4lSR9cRq7VymgLrLman796KC2Mp7oQw
+         ObofbTJ8hAalm0ON9QlI1TcJHCuZ7rJEl7NO+y2IO9V0oaDSDSZsIsG9tviWC4kiUJzk
+         7ZJRfhABmBxQp75EfcMiensXVqY/qZ/O66rGiKjx3LDk8vhbV/cLXc4wLlpvZrxQ4X1e
+         0eLzAoHnDy8ki6ZlPkoWHRheJUhJW+SSpihEE/i8b1eRmXIV2SwWXiIPVnxngVJSHW9C
+         oT4D3IBB2JOMOt0x4xKyvWeB4cu4yBUAIU4V2DHTa+bHdSFZimDbHUfFJJveXcDq7df5
+         hX1w==
+X-Gm-Message-State: AOAM531nWc1on9hesl4noe3ClYMfb2AB0I9OlTVG6Iiqm/j1c5lOPc6K
+        JDxMvgY/s8AIWlSIn+/A+i5few==
+X-Google-Smtp-Source: ABdhPJwnvqQ5c+YJfxrtRKuAgKIkvVSjuHwzczHzds1rPinaQwQcQyOgwZj0zbP55rAiNB5wrGmfnw==
+X-Received: by 2002:a63:d103:: with SMTP id k3mr512140pgg.6.1639424653551;
+        Mon, 13 Dec 2021 11:44:13 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a18sm12477587pfn.185.2021.12.13.11.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 11:44:12 -0800 (PST)
+Date:   Mon, 13 Dec 2021 19:44:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ignat Korchagin <ignat@cloudflare.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        bgardon@google.com, dmatlack@google.com, stevensd@chromium.org,
+        kernel-team <kernel-team@cloudflare.com>
+Subject: Re: [PATCH 0/2] KVM: x86: Fix dangling page reference in TDP MMU
+Message-ID: <YbeiiT9b350lYBiR@google.com>
+References: <20211213112514.78552-1-pbonzini@redhat.com>
+ <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
+ <Ybd5JJ/IZvcW/b2Y@google.com>
 MIME-Version: 1.0
-In-Reply-To: <acbd7749-7bb2-0de2-5658-2b62ace9520a@xilinx.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26385/Mon Dec 13 10:38:12 2021)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ybd5JJ/IZvcW/b2Y@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 8:31 PM, Tanmay Shah wrote:
->>> +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
->>> +{
->>> [...]
->>> +
->>>
->>> +    i = 0;
->>> +    for_each_available_child_of_node(dev_node, child) {
->>> +        child_pdev = of_find_device_by_node(child);
->>> +        if (!child_pdev)
->> A return or a break in a for_each_available_child_of_node() will leak 
->> the reference to the child node.
->
-> Do you mean I have to use of_put_node for each child?
+On Mon, Dec 13, 2021, Sean Christopherson wrote:
+> On Mon, Dec 13, 2021, Ignat Korchagin wrote:
+> > Unfortunately, this patchset does not fix the original issue reported in [1].
+> 
+> Can you provide your kernel config?  And any other version/config info that might
+> be relevant, e.g. anything in gvisor or runsc?
 
-You have to put a `of_put_node(child)` before each break or return in 
-the loop.
-
-If you search the kernel commit history for 
-for_each_available_child_of_node or for_each_child_of_node you'll find 
-many fixes for similar problems. For example 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e1b391e9712db
-
+Scratch that, I've reproduced this, with luck I'll have a root cause by end of day.

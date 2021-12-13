@@ -2,164 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E33472133
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D1C472135
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbhLMGsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:48:55 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:51608 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230315AbhLMGsy (ORCPT
+        id S232253AbhLMGtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230315AbhLMGtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:48:54 -0500
-X-UUID: 32ab375df4d0450c883b8e6e68f01821-20211213
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=QzfN+FlUlQnx8BtRAnoYm3/IBA3s2vzJNiXDt9dMjuc=;
-        b=ado7JXbk+FUwxEeCldWs/n01lJJyV9VYOwKZu1DXH5Y7n3YYmxmB+BARRhvVhRReprAYcA2qs1ndQPeJit/MRIEEOpuDv5/KDCr3FRZTvkMAgL1RRG5jnQBa86MNwcVc3ldfILxvfXiW5Mxi7C+0nz+feqK4MBWvuLT4mXRrO4U=;
-X-UUID: 32ab375df4d0450c883b8e6e68f01821-20211213
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 340885932; Mon, 13 Dec 2021 14:48:52 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 13 Dec 2021 14:48:51 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 13 Dec 2021 14:48:49 +0800
-Message-ID: <5d1ebe0089acd28032b74e3a180466f418580805.camel@mediatek.com>
-Subject: Re: [PATCH 1/4] dt-bindings: memory: mediatek: Correct the minItems
- of clk for larbs
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Joerg Roedel <joro@8bytes.org>, <yi.kuo@mediatek.com>,
-        <anan.sun@mediatek.com>, "Will Deacon" <will@kernel.org>,
-        <devicetree@vger.kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        <anthony.huang@mediatek.com>, <lc.kan@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-mediatek@lists.infradead.org>, <youlin.pei@mediatek.com>
-Date:   Mon, 13 Dec 2021 14:48:52 +0800
-In-Reply-To: <1638574455.281202.1043012.nullmailer@robh.at.kernel.org>
-References: <20211203064027.14993-1-yong.wu@mediatek.com>
-         <20211203064027.14993-2-yong.wu@mediatek.com>
-         <1638574455.281202.1043012.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 13 Dec 2021 01:49:07 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01475C06173F;
+        Sun, 12 Dec 2021 22:49:07 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so13948213pja.1;
+        Sun, 12 Dec 2021 22:49:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GS6TBSkNvGlEIjVNsFvYKFeWjbTrFdDN1acBfD429pE=;
+        b=ov16Lr8WDwm71/zA2oJCmtDvLel/EF2ZkZ0Vd9nZPAXlsCuIdVLmz8t4ErfHcjjOEg
+         eDYS4gE/gvcS0a97ICH7ucndAeq86oFu9GqQlbBMaJAwA4V4lVb/9xXTTEqOIE4h3U9V
+         XtkLlwcMvDXnY6nDuM7p+8/EWKG30zue/ZCDxNyJzHW3U/B+hdi1g2iw97ZpjclRiiJQ
+         mEtH+FfhgiLSj4knWDmvo62W2ukvRRE9WWsTDYiESiT20q1+GMsXCb3sjCE5luRyfC6c
+         dfQlu76DudK9mCvMr8yOqyoADKS2kPTDJXxm7SEXBu+XhWivc4FdxcIinqh9WOoZ15Gu
+         SPkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GS6TBSkNvGlEIjVNsFvYKFeWjbTrFdDN1acBfD429pE=;
+        b=h8jDKlczPckjo5BN571wojekwPn42EBDeSs2feG/ejc7IlR9+Z91sn4pZDyoki7Tto
+         McQTdH4l9nWV7tf1uufYkaUVC5qG77QO0mSOmAAgtZofGXyl6uJRTPqT9Swaj5Gsqftq
+         A1ltEfBSwb7kP5Bh/6D2ixeuwueobStCDMDc8b2I7TyMvPmj4maFcyuY6KoJTy8g5vSu
+         lSyV3Pb8kig3N0buQAqD8ivzJ504tQrOGologl80/78Og7FAKiNIvCwH81wsEGKULgLp
+         jskvfQC79dX87LtY1TFqNZUCtkqm2efPUF2K2eBBYW3AzmjpfM5Yq21bFnQGqUVP9DHc
+         ZnmA==
+X-Gm-Message-State: AOAM533L7kn50AlXiE5mlhLjvvFS2LRO+tBLQtLr6p82rRDCrQxN9JBG
+        HawsmZiooGmWIbcFof4hizw=
+X-Google-Smtp-Source: ABdhPJyUJCjObbObAlvLYVaHaGdai5j/wPqetffkbDAo+1TIV2oOwnbrEHTsPiBJYSYmO5CfYwy7DA==
+X-Received: by 2002:a17:90b:3810:: with SMTP id mq16mr42306638pjb.128.1639378146498;
+        Sun, 12 Dec 2021 22:49:06 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id c18sm11959670pfl.201.2021.12.12.22.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 22:49:06 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     hao.wu@intel.com
+Cc:     linmq006@gmail.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mdf@kernel.org, trix@redhat.com,
+        yilun.xu@intel.com
+Subject: [PATCH v3] fpga: stratix10-soc: fix NULL vs IS_ERR() checking
+Date:   Mon, 13 Dec 2021 06:49:00 +0000
+Message-Id: <20211213064900.10386-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <DM6PR11MB3819B3918DA4D58E59228CAC85749@DM6PR11MB3819.namprd11.prod.outlook.com>
+References: <DM6PR11MB3819B3918DA4D58E59228CAC85749@DM6PR11MB3819.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTEyLTAzIGF0IDE3OjM0IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
-T24gRnJpLCAwMyBEZWMgMjAyMSAxNDo0MDoyNCArMDgwMCwgWW9uZyBXdSB3cm90ZToNCj4gPiBJ
-ZiBhIHBsYXRmb3JtJ3MgbGFyYiBzdXBwb3J0IGdhbHMsIHRoZXJlIHdpbGwgYmUgc29tZSBsYXJi
-cyBoYXZlIGENCj4gPiBvbmUNCj4gPiBtb3JlICJnYWxzIiBjbG9jayB3aGlsZSB0aGUgb3RoZXJz
-IHN0aWxsIG9ubHkgbmVlZCAiYXBiIi8ic21pIg0KPiA+IGNsb2Nrcy4NCj4gPiB0aGVuIHRoZSBt
-aW5JdGVtcyBpcyAyIGFuZCB0aGUgbWF4SXRlbXMgaXMgMy4NCj4gPiANCj4gPiBGaXhlczogMjdi
-YjBlNDI4NTVhICgiZHQtYmluZGluZ3M6IG1lbW9yeTogbWVkaWF0ZWs6IENvbnZlcnQgU01JIHRv
-DQo+ID4gRFQgc2NoZW1hIikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBZb25nIFd1IDx5b25nLnd1QG1l
-ZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRpbmdzL21lbW9yeS1jb250cm9sbGVy
-cy9tZWRpYXRlayxzbWktbGFyYi55YW1sICAgICAgICAgIHwNCj4gPiAyICstDQo+ID4gIDEgZmls
-ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiA+IA0KPiANCj4gUnVu
-bmluZyAnbWFrZSBkdGJzX2NoZWNrJyB3aXRoIHRoZSBzY2hlbWEgaW4gdGhpcyBwYXRjaCBnaXZl
-cyB0aGUNCj4gZm9sbG93aW5nIHdhcm5pbmdzLiBDb25zaWRlciBpZiB0aGV5IGFyZSBleHBlY3Rl
-ZCBvciB0aGUgc2NoZW1hIGlzDQo+IGluY29ycmVjdC4gVGhlc2UgbWF5IG5vdCBiZSBuZXcgd2Fy
-bmluZ3MuDQo+IA0KPiBOb3RlIHRoYXQgaXQgaXMgbm90IHlldCBhIHJlcXVpcmVtZW50IHRvIGhh
-dmUgMCB3YXJuaW5ncyBmb3INCj4gZHRic19jaGVjay4NCj4gVGhpcyB3aWxsIGNoYW5nZSBpbiB0
-aGUgZnV0dXJlLg0KPiANCj4gRnVsbCBsb2cgaXMgYXZhaWxhYmxlIGhlcmU6IA0KPiBodHRwczov
-L3BhdGNod29yay5vemxhYnMub3JnL3BhdGNoLzE1NjMxMjcNCj4gDQo+IA0KPiBsYXJiQDE0MDE2
-MDAwOiAnbWVkaWF0ZWssbGFyYi1pZCcgaXMgYSByZXF1aXJlZCBwcm9wZXJ0eQ0KPiAJYXJjaC9h
-cm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxNjctcHVtcGtpbi5kdC55YW1sDQoNCkkgd2lsbCBm
-aXggdGhpcyBpbiBuZXh0IHZlcnNpb24uIFRoaXMgcHJvcGVydHkgaXMgbm90IG5lZWRlZCBpbiBt
-dDgxNjcuDQoNCj4gDQo+IGxhcmJAMTQwMTcwMDA6IGNsb2NrLW5hbWVzOiBbJ2FwYicsICdzbWkn
-XSBpcyB0b28gc2hvcnQNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWV2
-Yi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1q
-YWN1enppLQ0KPiBidXJuZXQuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
-ay9tdDgxODMta3VrdWktamFjdXp6aS1kYW11LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9k
-dHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktDQo+IGZlbm5lbDE0LmR0LnlhbWwNCj4g
-CWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktZmVubmVs
-LQ0KPiBza3UxLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgz
-LWt1a3VpLWphY3V6emktZmVubmVsLQ0KPiBza3U2LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9v
-dC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktanVuaXBlci0NCj4gc2t1MTYuZHQu
-eWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6
-aS1rYXBwYS5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1r
-dWt1aS1qYWN1enppLWtlbnpvLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0
-ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktd2lsbG93LQ0KPiBza3UwLmR0LnlhbWwNCj4gCWFyY2gv
-YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktd2lsbG93LQ0KPiBz
-a3UxLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3Vp
-LWtha2FkdS5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1r
-dWt1aS1rb2RhbWEtc2t1MTYuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
-ay9tdDgxODMta3VrdWkta29kYW1hLXNrdTI3Mi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3Qv
-ZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rb2RhbWEtc2t1Mjg4LmR0LnlhbWwNCj4gCWFyY2gv
-YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UzMi5kdC55YW1s
-DQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rcmFuZS1za3Uw
-LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWty
-YW5lLXNrdTE3Ni5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4
-My1wdW1wa2luLmR0LnlhbWwNCg0KU29tZSBsYXJicyBvbmx5IGhhdmUgdHdvIGNsb2NrcyhhcGIv
-c21pKSBpbiBtdDgxODMuIHRodXMgaXQgaXMNCnJlYXNvbmFibGUgZm9yIG1lLiBJIHdvbid0IGZp
-eCB0aGlzIGluIG5leHQgdmVyc2lvbi4NCg0KUGxlYXNlIHRlbGwgbWUgaWYgSSBtaXNzIHNvbWV0
-aGluZy4NClRoYW5rcy4NCg0KPiANCj4gbGFyYkAxNTAwMTAwMDogJ21lZGlhdGVrLGxhcmItaWQn
-IGlzIGEgcmVxdWlyZWQgcHJvcGVydHkNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
-bXQ4MTY3LXB1bXBraW4uZHQueWFtbA0KPiANCj4gbGFyYkAxNjAxMDAwMDogY2xvY2stbmFtZXM6
-IFsnYXBiJywgJ3NtaSddIGlzIHRvbyBzaG9ydA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRp
-YXRlay9tdDgxODMtZXZiLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
-bXQ4MTgzLWt1a3VpLWphY3V6emktDQo+IGJ1cm5ldC5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jv
-b3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1qYWN1enppLWRhbXUuZHQueWFtbA0KPiAJYXJj
-aC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS0NCj4gZmVubmVs
-MTQuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkt
-amFjdXp6aS1mZW5uZWwtDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9t
-ZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS1mZW5uZWwtDQo+IHNrdTYuZHQueWFtbA0KPiAJ
-YXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS1qdW5pcGVy
-LQ0KPiBza3UxNi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4
-My1rdWt1aS1qYWN1enppLWthcHBhLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
-aWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emkta2Vuem8uZHQueWFtbA0KPiAJYXJjaC9hcm02NC9i
-b290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS13aWxsb3ctDQo+IHNrdTAuZHQu
-eWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6
-aS13aWxsb3ctDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
-ay9tdDgxODMta3VrdWkta2FrYWR1LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
-aWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UxNi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jv
-b3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rb2RhbWEtc2t1MjcyLmR0LnlhbWwNCj4gCWFy
-Y2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UyODguZHQu
-eWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkta29kYW1h
-LXNrdTMyLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1
-a3VpLWtyYW5lLXNrdTAuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9t
-dDgxODMta3VrdWkta3JhbmUtc2t1MTc2LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMv
-bWVkaWF0ZWsvbXQ4MTgzLXB1bXBraW4uZHQueWFtbA0KPiANCj4gbGFyYkAxNjAxMDAwMDogJ21l
-ZGlhdGVrLGxhcmItaWQnIGlzIGEgcmVxdWlyZWQgcHJvcGVydHkNCj4gCWFyY2gvYXJtNjQvYm9v
-dC9kdHMvbWVkaWF0ZWsvbXQ4MTY3LXB1bXBraW4uZHQueWFtbA0KPiANCj4gbGFyYkAxNzAxMDAw
-MDogY2xvY2stbmFtZXM6IFsnYXBiJywgJ3NtaSddIGlzIHRvbyBzaG9ydA0KPiAJYXJjaC9hcm02
-NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMtZXZiLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9v
-dC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emktDQo+IGJ1cm5ldC5kdC55YW1sDQo+
-IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1qYWN1enppLWRhbXUu
-ZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFj
-dXp6aS0NCj4gZmVubmVsMTQuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRl
-ay9tdDgxODMta3VrdWktamFjdXp6aS1mZW5uZWwtDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9h
-cm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS1mZW5uZWwtDQo+IHNr
-dTYuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkt
-amFjdXp6aS1qdW5pcGVyLQ0KPiBza3UxNi5kdC55YW1sDQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRz
-L21lZGlhdGVrL210ODE4My1rdWt1aS1qYWN1enppLWthcHBhLmR0LnlhbWwNCj4gCWFyY2gvYXJt
-NjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWphY3V6emkta2Vuem8uZHQueWFtbA0K
-PiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWktamFjdXp6aS13aWxs
-b3ctDQo+IHNrdTAuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgx
-ODMta3VrdWktamFjdXp6aS13aWxsb3ctDQo+IHNrdTEuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9i
-b290L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkta2FrYWR1LmR0LnlhbWwNCj4gCWFyY2gvYXJt
-NjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtvZGFtYS1za3UxNi5kdC55YW1sDQo+
-IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1rdWt1aS1rb2RhbWEtc2t1Mjcy
-LmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWt1a3VpLWtv
-ZGFtYS1za3UyODguZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgx
-ODMta3VrdWkta29kYW1hLXNrdTMyLmR0LnlhbWwNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
-aWF0ZWsvbXQ4MTgzLWt1a3VpLWtyYW5lLXNrdTAuZHQueWFtbA0KPiAJYXJjaC9hcm02NC9ib290
-L2R0cy9tZWRpYXRlay9tdDgxODMta3VrdWkta3JhbmUtc2t1MTc2LmR0LnlhbWwNCj4gCWFyY2gv
-YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLXB1bXBraW4uZHQueWFtbA0KPiANCg==
+The stratix10_svc_allocate_memory function does not return NULL. It
+returns ERR_PTR(-ENOMEM). Use IS_ERR check the return value.
+
+Fixes: e7eef1d7633a("fpga: add intel stratix10 soc fpga manager driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+Acked-by: Wu Hao <hao.wu@intel.com>
+---
+ drivers/fpga/stratix10-soc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index 047fd7f23706..91212bab5871 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -213,9 +213,9 @@ static int s10_ops_write_init(struct fpga_manager *mgr,
+ 	/* Allocate buffers from the service layer's pool. */
+ 	for (i = 0; i < NUM_SVC_BUFS; i++) {
+ 		kbuf = stratix10_svc_allocate_memory(priv->chan, SVC_BUF_SIZE);
+-		if (!kbuf) {
++		if (IS_ERR(kbuf)) {
+ 			s10_free_buffers(mgr);
+-			ret = -ENOMEM;
++			ret = PTR_ERR(kbuf);
+ 			goto init_done;
+ 		}
+ 
+-- 
+2.17.1
 

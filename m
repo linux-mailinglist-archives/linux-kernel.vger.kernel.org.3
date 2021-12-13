@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E632F472983
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552DF47248F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238698AbhLMKVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241387AbhLMKS1 (ORCPT
+        id S234826AbhLMJhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:37:04 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:59990 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232580AbhLMJfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:18:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2375BC08E884;
-        Mon, 13 Dec 2021 01:56:32 -0800 (PST)
+        Mon, 13 Dec 2021 04:35:50 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E515AB80E26;
-        Mon, 13 Dec 2021 09:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35726C34601;
-        Mon, 13 Dec 2021 09:56:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 40AEACE0E85;
+        Mon, 13 Dec 2021 09:35:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2F0C341C5;
+        Mon, 13 Dec 2021 09:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389389;
-        bh=cmUs+c0Bm5Tmi7gJOlk7Ewmu1KjnnZnSqifgvRzERxU=;
+        s=korg; t=1639388147;
+        bh=hwFRtmyEf/mAFJdBB3fQiFSrTYHKvyvgW5eCodCTbH8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f54Qod5cl7W+xCkVCquqZ78BgTspQ91qBx31pPr8naLCfpEhxYwoy+jtrG1zhzaM5
-         g+6mkf9TwBm49CH1TxmD3SMjDwyhOAj6V3QTLiw0d6ICQDAmzlIEUSuQA+bmUHXuD9
-         1HHJ4G+omes7XkwFXDd4TWL2vguJzVtaDOZK1COA=
+        b=ZWwqIDYHmo7wcVShq1AZDZNindGYCLiNglRtXo+t7oeziBssjr49VjsEesYELKvS/
+         qZ/zNDTxrMEEvh6TbZgBytBcV4Xr29NK9Y1kuIDWmNt0ZBdu4Q83vIzCX3R25EZKyx
+         u9p/YLMxsIzaI2nYtRXG4jfL2JmrihWs8GONHDOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Markus Hochholdinger <markus@hochholdinger.net>,
-        Xiao Ni <xni@redhat.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH 5.15 083/171] md: fix update super 1.0 on rdev size change
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Yabin Cui <yabinc@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 4.9 16/42] tracefs: Have new files inherit the ownership of their parent
 Date:   Mon, 13 Dec 2021 10:29:58 +0100
-Message-Id: <20211213092947.854248567@linuxfoundation.org>
+Message-Id: <20211213092927.108231338@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
+References: <20211213092926.578829548@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,35 +52,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markus Hochholdinger <markus@hochholdinger.net>
+From: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-commit 55df1ce0d4e086e05a8ab20619c73c729350f965 upstream.
+commit ee7f3666995d8537dec17b1d35425f28877671a9 upstream.
 
-The superblock of version 1.0 doesn't get moved to the new position on a
-device size change. This leads to a rdev without a superblock on a known
-position, the raid can't be re-assembled.
+If directories in tracefs have their ownership changed, then any new files
+and directories that are created under those directories should inherit
+the ownership of the director they are created in.
 
-The line was removed by mistake and is re-added by this patch.
+Link: https://lkml.kernel.org/r/20211208075720.4855d180@gandalf.local.home
 
-Fixes: d9c0fa509eaf ("md: fix max sectors calculation for super 1.0")
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yabin Cui <yabinc@google.com>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Markus Hochholdinger <markus@hochholdinger.net>
-Reviewed-by: Xiao Ni <xni@redhat.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
+Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+Reported-by: Kalesh Singh <kaleshsingh@google.com>
+Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/md.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/tracefs/inode.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -2193,6 +2193,7 @@ super_1_rdev_size_change(struct md_rdev
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -411,6 +411,8 @@ struct dentry *tracefs_create_file(const
+ 	inode->i_mode = mode;
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
+ 	d_instantiate(dentry, inode);
+ 	fsnotify_create(dentry->d_parent->d_inode, dentry);
+ 	return end_creating(dentry);
+@@ -433,6 +435,8 @@ static struct dentry *__create_dir(const
+ 	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
+ 	inode->i_op = ops;
+ 	inode->i_fop = &simple_dir_operations;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
  
- 		if (!num_sectors || num_sectors > max_sectors)
- 			num_sectors = max_sectors;
-+		rdev->sb_start = sb_start;
- 	}
- 	sb = page_address(rdev->sb_page);
- 	sb->data_size = cpu_to_le64(num_sectors);
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
 
 

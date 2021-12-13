@@ -2,47 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A164729F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153E7472703
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238381AbhLMK2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240434AbhLMK0f (ORCPT
+        id S239462AbhLMJ5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:57:18 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:42924 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237900AbhLMJwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:26:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044BCC08EB31;
-        Mon, 13 Dec 2021 02:00:50 -0800 (PST)
+        Mon, 13 Dec 2021 04:52:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E4597CE0F75;
-        Mon, 13 Dec 2021 10:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A162C34611;
-        Mon, 13 Dec 2021 10:00:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 01BF9CE0DDE;
+        Mon, 13 Dec 2021 09:52:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95E1C00446;
+        Mon, 13 Dec 2021 09:52:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389646;
-        bh=PozmafkI3PnrsVUNbWPaNZUqQne7Z8YJx8i/09gyFHc=;
+        s=korg; t=1639389133;
+        bh=sg68J44qRYs5VJblzylihmVmIW1LKKXSLtAEAQTYjks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nwNPJyog703bJbAIlmsRcaOjxMpNKa0/UmwPYaxBeUFGExgeC5s2F4WnE6j4AJTM2
-         WD9FJIOz9ZATzlw7qZrJpLkF/jTOR9+W3rObYcbOm+n9Ot1K1zc1Dp0z6yr3vh6u4T
-         z3AxwpA2nIvSkKbD5PJKRSPYasq0gHAJ9ryQVmmg=
+        b=WluRqfAFx55mtpU3iwJGBmXFyyySMx0puXN06NRjiATX98qAoKhPNog3M/LSow51f
+         xXyJ9HSNNcrb4fd2qKbcZmuS71BMfDRz1BygZ1TJ10MgvV5igX5NLcuDGuj/Z15CtI
+         GVsaWY7aPtErhnFBBlESvtxnMxU+pSiyPKhcqbnA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 154/171] iio: adc: stm32: fix a current leak by resetting pcsel before disabling vdda
-Date:   Mon, 13 Dec 2021 10:31:09 +0100
-Message-Id: <20211213092950.181085337@linuxfoundation.org>
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 5.10 129/132] kbuild: simplify GCC_PLUGINS enablement in dummy-tools/gcc
+Date:   Mon, 13 Dec 2021 10:31:10 +0100
+Message-Id: <20211213092943.523382782@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,42 +44,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit f711f28e71e965c0d1141c830fa7131b41abbe75 upstream.
+commit f4c3b83b75b91c5059726cb91e3165cc01764ce7 upstream.
 
-Some I/Os are connected to ADC input channels, when the corresponding bit
-in PCSEL register are set on STM32H7 and STM32MP15. This is done in the
-prepare routine of stm32-adc driver.
-There are constraints here, as PCSEL shouldn't be set when VDDA supply
-is disabled. Enabling/disabling of VDDA supply in done via stm32-adc-core
-runtime PM routines (before/after ADC is enabled/disabled).
+With commit 1e860048c53e ("gcc-plugins: simplify GCC plugin-dev
+capability test") applied, this hunk can be way simplified because
+now scripts/gcc-plugins/Kconfig only checks plugin-version.h
 
-Currently, PCSEL remains set when disabling ADC. Later on, PM runtime
-can disable the VDDA supply. This creates some conditions on I/Os that
-can start to leak current.
-So PCSEL needs to be cleared when disabling the ADC.
-
-Fixes: 95e339b6e85d ("iio: adc: stm32: add support for STM32H7")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Reviewed-by: Olivier Moysan <olivier.moysan@foss.st.com>
-Link: https://lore.kernel.org/r/1634905169-23762-1-git-send-email-fabrice.gasnier@foss.st.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/stm32-adc.c |    1 +
- 1 file changed, 1 insertion(+)
+ scripts/dummy-tools/gcc |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
---- a/drivers/iio/adc/stm32-adc.c
-+++ b/drivers/iio/adc/stm32-adc.c
-@@ -975,6 +975,7 @@ static void stm32h7_adc_unprepare(struct
- {
- 	struct stm32_adc *adc = iio_priv(indio_dev);
+--- a/scripts/dummy-tools/gcc
++++ b/scripts/dummy-tools/gcc
+@@ -75,16 +75,12 @@ if arg_contain -S "$@"; then
+ 	fi
+ fi
  
-+	stm32_adc_writel(adc, STM32H7_ADC_PCSEL, 0);
- 	stm32h7_adc_disable(indio_dev);
- 	stm32h7_adc_enter_pwr_down(adc);
- }
+-# For scripts/gcc-plugin.sh
++# To set GCC_PLUGINS
+ if arg_contain -print-file-name=plugin "$@"; then
+ 	plugin_dir=$(mktemp -d)
+ 
+-	sed -n 's/.*#include "\(.*\)"/\1/p' $(dirname $0)/../gcc-plugins/gcc-common.h |
+-	while read header
+-	do
+-		mkdir -p $plugin_dir/include/$(dirname $header)
+-		touch $plugin_dir/include/$header
+-	done
++	mkdir -p $plugin_dir/include
++	touch $plugin_dir/include/plugin-version.h
+ 
+ 	echo $plugin_dir
+ 	exit 0
 
 

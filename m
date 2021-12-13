@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF5A473712
+	by mail.lfdr.de (Postfix) with ESMTP id 6B209473713
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243406AbhLMVz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S243417AbhLMVz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243417AbhLMVzy (ORCPT
+        with ESMTP id S243422AbhLMVz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:55:54 -0500
+        Mon, 13 Dec 2021 16:55:57 -0500
 Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B05C061751
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:55:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D66C061751
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:55:56 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639432551;
+        t=1639432555;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AV0M9szKvSlfXhwybxJe1jA9V5abexpCELFOGxjWDjg=;
-        b=VrpiAL19fvyDS+74lLUXNB07lb/PRLnHTLw/kFLzGwOuw/PUtCxSFrLOE/xcXoLwz0qln0
-        Tx+ksuULQBrasx1H1H3ZIGMKOhuMRJqgfm6F11tpTD+ACUzjbKneWOBmWaPgxnnFUbLIKV
-        nz9gVt/fNqcXNXu/G54sUgUBFYhG5Xw=
+        bh=atsw/HgrrU9UEfCA9neCOdaHXk4j162F8pSBON7qM7s=;
+        b=bihdkVfTLCsUKtTc5+RCKvRuDP20xKGBlrbZuyVewg7+ajLcOxrFy03xEQQJI5qHNmPyq+
+        jZZo4YkNKe4odT4j0JWaXpC0NZx+bJZeG1iWpAPHU7qFh4sNOwufby6W42pOuC38c208cR
+        TqPoSCwT7x12lAUAvLDuzDnvfRKh6G8=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -43,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 37/38] kasan: documentation updates
-Date:   Mon, 13 Dec 2021 22:55:39 +0100
-Message-Id: <7159d84eee5ade160a139a28116fceded025108c.1639432170.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 38/38] kasan: improve vmalloc tests
+Date:   Mon, 13 Dec 2021 22:55:40 +0100
+Message-Id: <3da23b9b90a4092dfc0e8355a974702985f6d426.1639432170.git.andreyknvl@google.com>
 In-Reply-To: <cover.1639432170.git.andreyknvl@google.com>
 References: <cover.1639432170.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,85 +58,243 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Update KASAN documentation:
+Update the existing vmalloc_oob() test to account for the specifics
+of the tag-based modes. Also add a few new checks and comments.
 
-- Bump Clang version requirement for HW_TAGS as ARM64_MTE depends on
-  AS_HAS_LSE_ATOMICS as of commit 2decad92f4731 ("arm64: mte: Ensure
-  TIF_MTE_ASYNC_FAULT is set atomically"), which requires Clang 12.
-- Add description of the new kasan.vmalloc command line flag.
-- Mention that SW_TAGS and HW_TAGS modes now support vmalloc tagging.
-- Explicitly say that the "Shadow memory" section is only applicable
-  to software KASAN modes.
-- Mention that shadow-based KASAN_VMALLOC is supported on arm64.
+Add new vmalloc-related tests:
+
+- vmalloc_helpers_tags() to check that exported vmalloc helpers can
+  handle tagged pointers.
+- vmap_tags() to check that SW_TAGS mode properly tags vmap() mappings.
+- vm_map_ram_tags() to check that SW_TAGS mode properly tags
+  vm_map_ram() mappings.
+- vmalloc_percpu() to check that SW_TAGS mode tags regions allocated
+  for __alloc_percpu(). The tagging of per-cpu mappings is best-effort;
+  proper tagging is tracked in [1].
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=215019
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- Documentation/dev-tools/kasan.rst | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ lib/test_kasan.c | 181 +++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 175 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-index 8089c559d339..7614a1fc30fa 100644
---- a/Documentation/dev-tools/kasan.rst
-+++ b/Documentation/dev-tools/kasan.rst
-@@ -30,7 +30,7 @@ Software tag-based KASAN mode is only supported in Clang.
+diff --git a/lib/test_kasan.c b/lib/test_kasan.c
+index 847cdbefab46..a554aaec45cc 100644
+--- a/lib/test_kasan.c
++++ b/lib/test_kasan.c
+@@ -1049,21 +1049,174 @@ static void kmalloc_double_kzfree(struct kunit *test)
+ 	KUNIT_EXPECT_KASAN_FAIL(test, kfree_sensitive(ptr));
+ }
  
- The hardware KASAN mode (#3) relies on hardware to perform the checks but
- still requires a compiler version that supports memory tagging instructions.
--This mode is supported in GCC 10+ and Clang 11+.
-+This mode is supported in GCC 10+ and Clang 12+.
- 
- Both software KASAN modes work with SLUB and SLAB memory allocators,
- while the hardware tag-based KASAN currently only supports SLUB.
-@@ -206,6 +206,9 @@ additional boot parameters that allow disabling KASAN or controlling features:
-   Asymmetric mode: a bad access is detected synchronously on reads and
-   asynchronously on writes.
- 
-+- ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
-+  allocations (default: ``on``).
++static void vmalloc_helpers_tags(struct kunit *test)
++{
++	void *ptr;
 +
- - ``kasan.stacktrace=off`` or ``=on`` disables or enables alloc and free stack
-   traces collection (default: ``on``).
- 
-@@ -279,8 +282,8 @@ Software tag-based KASAN uses 0xFF as a match-all pointer tag (accesses through
- pointers with the 0xFF pointer tag are not checked). The value 0xFE is currently
- reserved to tag freed memory regions.
- 
--Software tag-based KASAN currently only supports tagging of slab and page_alloc
--memory.
-+Software tag-based KASAN currently only supports tagging of slab, page_alloc,
-+and vmalloc memory.
- 
- Hardware tag-based KASAN
- ~~~~~~~~~~~~~~~~~~~~~~~~
-@@ -303,8 +306,8 @@ Hardware tag-based KASAN uses 0xFF as a match-all pointer tag (accesses through
- pointers with the 0xFF pointer tag are not checked). The value 0xFE is currently
- reserved to tag freed memory regions.
- 
--Hardware tag-based KASAN currently only supports tagging of slab and page_alloc
--memory.
-+Hardware tag-based KASAN currently only supports tagging of slab, page_alloc,
-+and VM_ALLOC-based vmalloc memory.
- 
- If the hardware does not support MTE (pre ARMv8.5), hardware tag-based KASAN
- will not be enabled. In this case, all KASAN boot parameters are ignored.
-@@ -319,6 +322,8 @@ checking gets disabled.
- Shadow memory
- -------------
- 
-+The contents of this section are only applicable to software KASAN modes.
++	/* This test is intended for tag-based modes. */
++	KASAN_TEST_NEEDS_CONFIG_OFF(test, CONFIG_KASAN_GENERIC);
 +
- The kernel maps memory in several different parts of the address space.
- The range of kernel virtual addresses is large: there is not enough real
- memory to support a real shadow region for every address that could be
-@@ -349,7 +354,7 @@ CONFIG_KASAN_VMALLOC
++	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_VMALLOC);
++
++	ptr = vmalloc(PAGE_SIZE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
++
++	/* Check that the returned pointer is tagged. */
++	KUNIT_EXPECT_GE(test, (u8)get_tag(ptr), (u8)KASAN_TAG_MIN);
++	KUNIT_EXPECT_LT(test, (u8)get_tag(ptr), (u8)KASAN_TAG_KERNEL);
++
++	/* Make sure exported vmalloc helpers handle tagged pointers. */
++	KUNIT_ASSERT_TRUE(test, is_vmalloc_addr(ptr));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, vmalloc_to_page(ptr));
++
++	vfree(ptr);
++}
++
+ static void vmalloc_oob(struct kunit *test)
+ {
+-	void *area;
++	char *v_ptr, *p_ptr;
++	struct page *page;
++	size_t size = PAGE_SIZE / 2 - KASAN_GRANULE_SIZE - 5;
  
- With ``CONFIG_KASAN_VMALLOC``, KASAN can cover vmalloc space at the
- cost of greater memory usage. Currently, this is supported on x86,
--riscv, s390, and powerpc.
-+arm64, riscv, s390, and powerpc.
+ 	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_VMALLOC);
  
- This works by hooking into vmalloc and vmap and dynamically
- allocating real shadow memory to back the mappings.
++	v_ptr = vmalloc(size);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_ptr);
++
+ 	/*
+-	 * We have to be careful not to hit the guard page.
++	 * We have to be careful not to hit the guard page in vmalloc tests.
+ 	 * The MMU will catch that and crash us.
+ 	 */
+-	area = vmalloc(3000);
+-	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, area);
+ 
+-	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)area)[3100]);
+-	vfree(area);
++	/* Make sure in-bounds accesses are valid. */
++	v_ptr[0] = 0;
++	v_ptr[size - 1] = 0;
++
++	/*
++	 * An unaligned access past the requested vmalloc size.
++	 * Only generic KASAN can precisely detect these.
++	 */
++	if (IS_ENABLED(CONFIG_KASAN_GENERIC))
++		KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)v_ptr)[size]);
++
++	/* An aligned access into the first out-of-bounds granule. */
++	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)v_ptr)[size + 5]);
++
++	/* Check that in-bounds accesses to the physical page are valid. */
++	page = vmalloc_to_page(v_ptr);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, page);
++	p_ptr = page_address(page);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_ptr);
++	p_ptr[0] = 0;
++
++	vfree(v_ptr);
++
++	/*
++	 * We can't check for use-after-unmap bugs in this nor in the following
++	 * vmalloc tests, as the page might be fully unmapped and accessing it
++	 * will crash the kernel.
++	 */
++}
++
++static void vmap_tags(struct kunit *test)
++{
++	char *p_ptr, *v_ptr;
++	struct page *p_page, *v_page;
++	size_t order = 1;
++
++	/*
++	 * This test is specifically crafted for the software tag-based mode,
++	 * the only tag-based mode that poisons vmap mappings.
++	 */
++	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_SW_TAGS);
++
++	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_VMALLOC);
++
++	p_page = alloc_pages(GFP_KERNEL, order);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_page);
++	p_ptr = page_address(p_page);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_ptr);
++
++	v_ptr = vmap(&p_page, 1 << order, VM_MAP, PAGE_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_ptr);
++
++	/*
++	 * We can't check for out-of-bounds bugs in this nor in the following
++	 * vmalloc tests, as allocations have page granularity and accessing
++	 * the guard page will crash the kernel.
++	 */
++
++	KUNIT_EXPECT_GE(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_MIN);
++	KUNIT_EXPECT_LT(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_KERNEL);
++
++	/* Make sure that in-bounds accesses through both pointers work. */
++	*p_ptr = 0;
++	*v_ptr = 0;
++
++	/* Make sure vmalloc_to_page() correctly recovers the page pointer. */
++	v_page = vmalloc_to_page(v_ptr);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_page);
++	KUNIT_EXPECT_PTR_EQ(test, p_page, v_page);
++
++	vunmap(v_ptr);
++	free_pages((unsigned long)p_ptr, order);
++}
++
++static void vm_map_ram_tags(struct kunit *test)
++{
++	char *p_ptr, *v_ptr;
++	struct page *page;
++	size_t order = 1;
++
++	/*
++	 * This test is specifically crafted for the software tag-based mode,
++	 * the only tag-based mode that poisons vm_map_ram mappings.
++	 */
++	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_SW_TAGS);
++
++	page = alloc_pages(GFP_KERNEL, order);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, page);
++	p_ptr = page_address(page);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_ptr);
++
++	v_ptr = vm_map_ram(&page, 1 << order, -1);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_ptr);
++
++	KUNIT_EXPECT_GE(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_MIN);
++	KUNIT_EXPECT_LT(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_KERNEL);
++
++	/* Make sure that in-bounds accesses through both pointers work. */
++	*p_ptr = 0;
++	*v_ptr = 0;
++
++	vm_unmap_ram(v_ptr, 1 << order);
++	free_pages((unsigned long)p_ptr, order);
++}
++
++static void vmalloc_percpu(struct kunit *test)
++{
++	char __percpu *ptr;
++	int cpu;
++
++	/*
++	 * This test is specifically crafted for the software tag-based mode,
++	 * the only tag-based mode that poisons percpu mappings.
++	 */
++	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_SW_TAGS);
++
++	ptr = __alloc_percpu(PAGE_SIZE, PAGE_SIZE);
++
++	for_each_possible_cpu(cpu) {
++		char *c_ptr = per_cpu_ptr(ptr, cpu);
++
++		KUNIT_EXPECT_GE(test, (u8)get_tag(c_ptr), (u8)KASAN_TAG_MIN);
++		KUNIT_EXPECT_LT(test, (u8)get_tag(c_ptr), (u8)KASAN_TAG_KERNEL);
++
++		/* Make sure that in-bounds accesses don't crash the kernel. */
++		*c_ptr = 0;
++	}
++
++	free_percpu(ptr);
+ }
+ 
+ /*
+@@ -1097,6 +1250,18 @@ static void match_all_not_assigned(struct kunit *test)
+ 		KUNIT_EXPECT_LT(test, (u8)get_tag(ptr), (u8)KASAN_TAG_KERNEL);
+ 		free_pages((unsigned long)ptr, order);
+ 	}
++
++	if (!IS_ENABLED(CONFIG_KASAN_VMALLOC))
++		return;
++
++	for (i = 0; i < 256; i++) {
++		size = (get_random_int() % 1024) + 1;
++		ptr = vmalloc(size);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
++		KUNIT_EXPECT_GE(test, (u8)get_tag(ptr), (u8)KASAN_TAG_MIN);
++		KUNIT_EXPECT_LT(test, (u8)get_tag(ptr), (u8)KASAN_TAG_KERNEL);
++		vfree(ptr);
++	}
+ }
+ 
+ /* Check that 0xff works as a match-all pointer tag for tag-based modes. */
+@@ -1202,7 +1367,11 @@ static struct kunit_case kasan_kunit_test_cases[] = {
+ 	KUNIT_CASE(kasan_bitops_generic),
+ 	KUNIT_CASE(kasan_bitops_tags),
+ 	KUNIT_CASE(kmalloc_double_kzfree),
++	KUNIT_CASE(vmalloc_helpers_tags),
+ 	KUNIT_CASE(vmalloc_oob),
++	KUNIT_CASE(vmap_tags),
++	KUNIT_CASE(vm_map_ram_tags),
++	KUNIT_CASE(vmalloc_percpu),
+ 	KUNIT_CASE(match_all_not_assigned),
+ 	KUNIT_CASE(match_all_ptr_tag),
+ 	KUNIT_CASE(match_all_mem_tag),
 -- 
 2.25.1
 

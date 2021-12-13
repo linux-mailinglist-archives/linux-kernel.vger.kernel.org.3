@@ -2,150 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD8E472C24
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6223B472C23
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236689AbhLMMQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:16:25 -0500
-Received: from mga07.intel.com ([134.134.136.100]:56153 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229766AbhLMMQY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:16:24 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="302100779"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="302100779"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 04:16:24 -0800
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="752251069"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 04:16:21 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mwkEm-005bpu-A9;
-        Mon, 13 Dec 2021 14:15:24 +0200
-Date:   Mon, 13 Dec 2021 14:15:24 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     lianzhi chang <changlianzhi@uniontech.com>
-Cc:     linux-kernel@vger.kernel.org, dmitry.torokhov@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org, 282827961@qq.com,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH v20] tty: Fix the keyboard led light display problem
-Message-ID: <Ybc5XPfd5f66L92i@smile.fi.intel.com>
-References: <20211213061244.13732-1-changlianzhi@uniontech.com>
+        id S236699AbhLMMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236679AbhLMMPq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 07:15:46 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854B4C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:15:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kJtXQtfvYfjtAuOsUxUmIXm6ivARMk0ODegCZPt1LPs=; b=H7bbFZ/quMX3+o3miYBzwg0533
+        Qu9mtfezrl2Eb3JCiNkhYV36v41+D4lmA0oyOM6Xmm/sbOPWxA/mIlwRNSF5Pk3vKl7HWdsbbc6x8
+        Vhax30mWT9EQw2RmTvjEQNi0fyRV41sYKnyPDWW3UeDTdaHsthBr9iu0jtH9JHGoGm0gEWOC3hn+i
+        qlqXE+lvRYKfMVG7zVHBR1/gh7qp/HWyvUWy2uEARKUA3cbp64JsE5YczGjaWtNgtkC9moJmA+b+C
+        yGbe+7Xg9btzD3WdunriM/Tt50R0LLdIZBxIDccMY/t67fENDtTMobw4+dT2PlDlKfSNONNhqnZNt
+        qEBn9o0w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwkEz-00Cm5V-Cc; Mon, 13 Dec 2021 12:15:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2599D30026A;
+        Mon, 13 Dec 2021 13:15:36 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D4FBC2D3EC7E9; Mon, 13 Dec 2021 13:15:36 +0100 (CET)
+Date:   Mon, 13 Dec 2021 13:15:36 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, mark.rutland@arm.com,
+        elver@google.com, keescook@chromium.org, hch@infradead.org,
+        torvalds@linux-foundation.org, axboe@kernel.dk
+Subject: [PATCH v2 10/9] atomic: Document the atomic_{}_overflow() functions
+Message-ID: <Ybc5aMFodXvDkT4f@hirez.programming.kicks-ass.net>
+References: <20211210161618.645249719@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211213061244.13732-1-changlianzhi@uniontech.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211210161618.645249719@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 02:12:44PM +0800, lianzhi chang wrote:
-> Use the "ctrl+alt+Fn" key combination to switch the system from tty to
-> desktop or switch the system from desktop to tty. After the switch is
-> completed, it is found that the state of the keyboard lock is
-> inconsistent with the state of the keyboard Led light.The reasons are
-> as follows:
-> 
-> * The desktop environment (Xorg and other services) is bound to a tty
->   (assuming it is tty1), and the kb->kbdmode attribute value of tty1
->   will be set to VC_OFF. According to the current code logic, in the
->   desktop environment, the values of ledstate and kb->ledflagstate
->   of tty1 will not be modified anymore, so they are always 0.
-> 
-> * When switching between each tty, the final value of ledstate set by
->   the previous tty is compared with the kb->ledflagstate value of the
->   current tty to determine whether to set the state of the keyboard
->   light. The process of switching between desktop and tty is also the
->   process of switching between tty1 and other ttys. There are two
->   situations:
-> 
->   - (1) In the desktop environment, tty1 will not set the ledstate,
->   which will cause when switching from the desktop to other ttys,
->   if the desktop lights up the keyboard's led, after the switch is
->   completed, the keyboard's led light will always be on;
-> 
->   - (2) When switching from another tty to the desktop, this
->   mechanism will trigger tty1 to set the led state. If other tty
->   lights up the led of the keyboard before switching to the desktop,
->   the led will be forcibly turned off. This situation should
->   be avoided.
-> 
-> * Current patch explanation:When VT is switched,the keyboard LED
->   status will be set to the current tty saved value;the value of
->   kb->kbdledctl can be used to confirm whether the current VT
->   can change the status of the keyboard led light;kb->kbdledctl
->   is a new addition,you can use ioctl get or set.
-> 
-> Signed-off-by: lianzhi chang <changlianzhi@uniontech.com>
-> Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+They're damn special, they're very likely to confuse people, write a
+few words in a vain attempt to twart some of that confusion.
 
-I believe the original issue hasn't been reported by above mentioned
-CIs/people. If you want to give a credit, use changelog for that.
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ Documentation/atomic_t.txt                     |   36 +++++++++++++++++
+ include/linux/atomic/atomic-arch-fallback.h    |   52 ++++++++++++++++++++++++-
+ scripts/atomic/fallbacks/dec_and_test_overflow |   10 ++++
+ scripts/atomic/fallbacks/dec_overflow          |    9 ++++
+ scripts/atomic/fallbacks/inc_overflow          |    9 ++++
+ 5 files changed, 115 insertions(+), 1 deletion(-)
 
-...
-
-> +/**
-> + *	vt_do_kdskbledctl
-
-Description?
-
-> + *	@console: the console to use
-> + *	@arg: the requested mode
-> + *
-> + *	Whether to allow the current vt to change the
-> + *	keyboard light
-> + */
-
-...
-
-> +	struct kbd_struct *kb = &kbd_table[console];
-> +	int ret = 0;
-> +	unsigned long flags;
-
-Slightly better to read:
-
-	struct kbd_struct *kb = &kbd_table[console];
-	unsigned long flags;
-	int ret = 0;
-
-...
-
-> +int vt_do_kdgkbledctl(unsigned int console)
-> +{
-> +	struct kbd_struct *kb = &kbd_table[console];
-
-+ Blank line here. Checkpatch should complain.
-
-> +	/* This is a spot read so needs no locking */
-> +	switch (kb->kbdledctl) {
-> +	case VC_LEDCTL_ON:
-> +		return K_LEDCTL_ON;
-> +	case VC_LEDCTL_OFF:
-> +		return K_LEDCTL_OFF;
-
-> +		}
-
-Indentation issue.
-Consider adding default case.
-
-> +}
-
-...
-
-> +	unsigned char kbdledctl:1； /*Whether to allow to control the led of the keyboard */
-
-Missed space in the comment.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--- a/Documentation/atomic_t.txt
++++ b/Documentation/atomic_t.txt
+@@ -45,6 +45,14 @@ The 'full' API consists of (atomic64_ an
+   atomic_sub_and_test(), atomic_dec_and_test()
+ 
+ 
++Reference count with overflow (as used by refcount_t):
++
++  atomic_inc_overflow(), atomic_dec_overflow()
++  atomic_dec_and_test_overflow()
++
++  ATOMIC_OVERFLOW_OFFSET
++
++
+ Misc:
+ 
+   atomic_inc_and_test(), atomic_add_negative()
+@@ -157,6 +165,34 @@ atomic variable) can be fully ordered an
+ visible.
+ 
+ 
++Overflow ops:
++
++The atomic_{}_overflow() ops are similar to their !_overflow() bretheren with
++two notable exceptions:
++
++ - they take a label as their final argument to to jump to when the atomic op
++   overflows;
++
++ - the actual value can be offset from 0 in order to allow architectures
++   to play games with condition flags in order to generate better code. This
++   offset is ATOMIC_OVERFLOW_OFFSET.
++
++The canonical overflow conditions are (ATOMIC_OVERFLOW_OFFSET == 0):
++
++  inc: zero or negative on the value pre increment
++  dec: zero or negative on the value post decrement
++  dec_and_test: negative on the value post decrement
++
++This gives an effective range of [0, INT_MIN] for the actual value. When an
++architecture uses ATOMIC_OVERFLOW_OFFSET == 1 (x86), the effective range
++becomes [-1, INT_MIN], or [0, INT_MIN+1] after correction.
++
++These semantics match the reference count use-case (for which they were
++created). Specifically incrementing from zero is a failure because zero means
++the object is freed (IOW use-after-free). Decrementing to zero is a failure
++because it goes undetected (see dec_and_test) and the object would leak.
++
++
+ ORDERING  (go read memory-barriers.txt first)
+ --------
+ 
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -1251,6 +1251,14 @@ arch_atomic_dec_if_positive(atomic_t *v)
+ #endif
+ 
+ #ifndef arch_atomic_inc_overflow
++/**
++ * arch_atomic_inc_overflow - increment with overflow exception
++ * @_v: pointer of type atomic_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically increments @_v and goto @_label when the old
++ * value (+ATOMIC_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_atomic_inc_overflow(_v, _label)				\
+ do {									\
+ 	int __old = arch_atomic_fetch_inc(_v);			\
+@@ -1260,6 +1268,14 @@ do {									\
+ #endif
+ 
+ #ifndef arch_atomic_dec_overflow
++/**
++ * arch_atomic_dec_overflow - decrement with overflow exception
++ * @_v: pointer of type atomic_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically decrements @_v and goto @_label when the
++ * result (+ATOMIC_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_atomic_dec_overflow(_v, _label)				\
+ do {									\
+ 	int __new = arch_atomic_dec_return(_v);			\
+@@ -1269,6 +1285,15 @@ do {									\
+ #endif
+ 
+ #ifndef arch_atomic_dec_and_test_overflow
++/**
++ * arch_atomic_dec_and_test_overflow - decrement and test if zero with overflow exception
++ * @_v: pointer of type atomic_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically decrements @_v and returns true if the result
++ * (+ATOMIC_OVERFLOW_OFFSET) is zero or goto @_label when the
++ * result (+ATOMIC_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_atomic_dec_and_test_overflow(_v, _label)		\
+ ({									\
+ 	bool __ret = false;						\
+@@ -2389,6 +2414,14 @@ arch_atomic64_dec_if_positive(atomic64_t
+ #endif
+ 
+ #ifndef arch_atomic64_inc_overflow
++/**
++ * arch_atomic64_inc_overflow - increment with overflow exception
++ * @_v: pointer of type atomic64_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically increments @_v and goto @_label when the old
++ * value (+ATOMIC64_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_atomic64_inc_overflow(_v, _label)				\
+ do {									\
+ 	s64 __old = arch_atomic64_fetch_inc(_v);			\
+@@ -2398,6 +2431,14 @@ do {									\
+ #endif
+ 
+ #ifndef arch_atomic64_dec_overflow
++/**
++ * arch_atomic64_dec_overflow - decrement with overflow exception
++ * @_v: pointer of type atomic64_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically decrements @_v and goto @_label when the
++ * result (+ATOMIC64_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_atomic64_dec_overflow(_v, _label)				\
+ do {									\
+ 	s64 __new = arch_atomic64_dec_return(_v);			\
+@@ -2407,6 +2448,15 @@ do {									\
+ #endif
+ 
+ #ifndef arch_atomic64_dec_and_test_overflow
++/**
++ * arch_atomic64_dec_and_test_overflow - decrement and test if zero with overflow exception
++ * @_v: pointer of type atomic64_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically decrements @_v and returns true if the result
++ * (+ATOMIC64_OVERFLOW_OFFSET) is zero or goto @_label when the
++ * result (+ATOMIC64_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_atomic64_dec_and_test_overflow(_v, _label)		\
+ ({									\
+ 	bool __ret = false;						\
+@@ -2420,4 +2470,4 @@ do {									\
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// e4c677b23b3fd5e8dc4bce9d6c055103666cfc4a
++// ccccab23ad71e0523949b969f68b40fe6812fc15
+--- a/scripts/atomic/fallbacks/dec_and_test_overflow
++++ b/scripts/atomic/fallbacks/dec_and_test_overflow
+@@ -1,4 +1,14 @@
++ATOMIC=`echo ${atomic} | tr '[:lower:]' '[:upper:]'`
+ cat << EOF
++/**
++ * arch_${atomic}_dec_and_test_overflow - decrement and test if zero with overflow exception
++ * @_v: pointer of type ${atomic}_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically decrements @_v and returns true if the result
++ * (+${ATOMIC}_OVERFLOW_OFFSET) is zero or goto @_label when the
++ * result (+${ATOMIC}_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_${atomic}_dec_and_test_overflow(_v, _label)		\\
+ ({									\\
+ 	bool __ret = false;						\\
+--- a/scripts/atomic/fallbacks/dec_overflow
++++ b/scripts/atomic/fallbacks/dec_overflow
+@@ -1,4 +1,13 @@
++ATOMIC=`echo ${atomic} | tr '[:lower:]' '[:upper:]'`
+ cat << EOF
++/**
++ * arch_${atomic}_dec_overflow - decrement with overflow exception
++ * @_v: pointer of type ${atomic}_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically decrements @_v and goto @_label when the
++ * result (+${ATOMIC}_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_${atomic}_dec_overflow(_v, _label)				\\
+ do {									\\
+ 	${int} __new = arch_${atomic}_dec_return(_v);			\\
+--- a/scripts/atomic/fallbacks/inc_overflow
++++ b/scripts/atomic/fallbacks/inc_overflow
+@@ -1,4 +1,13 @@
++ATOMIC=`echo ${atomic} | tr '[:lower:]' '[:upper:]'`
+ cat << EOF
++/**
++ * arch_${atomic}_inc_overflow - increment with overflow exception
++ * @_v: pointer of type ${atomic}_t
++ * @_label: label to goto on overflow
++ *
++ * Atomically increments @_v and goto @_label when the old
++ * value (+${ATOMIC}_OVERFLOW_OFFSET) is negative.
++ */
+ #define arch_${atomic}_inc_overflow(_v, _label)				\\
+ do {									\\
+ 	${int} __old = arch_${atomic}_fetch_inc(_v);			\\

@@ -2,223 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B00473664
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EA6473665
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243069AbhLMVIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S243074AbhLMVJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240899AbhLMVI3 (ORCPT
+        with ESMTP id S240899AbhLMVJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:08:29 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF92C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:08:29 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id q74so41384861ybq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qvvfVGKq2r4h6KgjK824L1pTxzdWnyMXPhPq1Abh2Pc=;
-        b=OhnCM8HmOxUmeTJ8oEfNP7AxeaEroLySOUJgpAH2eAjbuT58h22HJ2buXWPJOVx6X4
-         qsLPi5Li2w+KekHaK76mfwW5ITYXQ4r5QSXKGVpUIgME/enF/XrCu1RYxSft/tAH/vlJ
-         A8LDbv3NW/2XkuLD4ljhVHSd9gsiRLgpv5PUc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qvvfVGKq2r4h6KgjK824L1pTxzdWnyMXPhPq1Abh2Pc=;
-        b=b8fiR+Q20IWiHQ3TWkeUsd2nE7e8ZalCpfujli7zvA/50S8wK6xPVK4RNXduqIKIXM
-         5fP8pIJfFFURiOW+si1JMnmHugHUVMeQIXUUtAsRAlWhK4ZX0aDeKVBtmReR5e2zJ+3C
-         EevdW+w34CjfhPZ/QFzQX4p+g56l/SkzvkreEq62V1KA5ygTA1Rz1jMtQhMOnILWLMtS
-         nBWFPvymikn8D/mZ21xLFl4zgn1Ai9LWYDCTiEBtwXI0FoAtXaFn7Xkv2Sfo81sDwlxB
-         9M4K8RUh34pYuLmg6mSmejXS5t1xaETih7fgRu8LePbxuy0kqQZ/33uBhhmIAiimaJfw
-         F2ZQ==
-X-Gm-Message-State: AOAM530u+E1BHx9ht/omagG52Iv0yoKmjepj/m7401hrk8lk75amGw9Z
-        ENNWDVDRxve2uEoW4XQ2n+GusZrZ8AvRHOwNfEJI
-X-Google-Smtp-Source: ABdhPJySH293yyZH4o0ftTnpFHpzJBygH5SyLk84APfDVxuvxrOAU7+LkNTBs3WLK3icgPpUkUlQND5CUFinaUtkqck=
-X-Received: by 2002:a25:d157:: with SMTP id i84mr988416ybg.703.1639429708496;
- Mon, 13 Dec 2021 13:08:28 -0800 (PST)
+        Mon, 13 Dec 2021 16:09:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50731C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1y1X36Ob8cU0XGIpCqJ5e0YF1TEd/Y/leqFCnMQMzVM=; b=l3KyKA+Z7eWQoL9j1RlZbno6mg
+        vNGt5KIwmnO07E9rCmeATEXVn9BjTp7nL9IQSbIYN89XgKL6bKYzoBJKRrsjqey/7SHdsCEbEnybD
+        E5WQaSp2TWUWdMC+jgVuDiEJ5iXRBY+td10bJYfeo+VSc4/m6TLKhzBZ5CmWUDd5hcfQeB8KO/BVz
+        FgEFwzCnmVvnC6bggiV4V3nq9xLvQ2Gwx9M4q+AH2Wmmz6/zb8gwBP5KHa6J36ymS1OKrssACVFWM
+        ddVOx9xxO46PzJtShpM/hUxnwdUyJWNrlgdrwjic5qOlrtlFa1sip1WeMbu91T3Vs5uuQEn/N3hDl
+        53ws3vJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwsZ9-00D9rp-On; Mon, 13 Dec 2021 21:09:00 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2AB49981767; Mon, 13 Dec 2021 22:08:59 +0100 (CET)
+Date:   Mon, 13 Dec 2021 22:08:59 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        kernel test robot <lkp@intel.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v2] perf/core: Fix cgroup event list management
+Message-ID: <20211213210859.GC16608@worktop.programming.kicks-ass.net>
+References: <20211213065936.1965081-1-namhyung@kernel.org>
 MIME-Version: 1.0
-References: <20211204002038.113653-1-atishp@atishpatra.org>
- <20211204002038.113653-6-atishp@atishpatra.org> <CAAhSdy26i0KiHce_FveXS795WecSJJ3ujbCmOVVVBiSOd8chRw@mail.gmail.com>
-In-Reply-To: <CAAhSdy26i0KiHce_FveXS795WecSJJ3ujbCmOVVVBiSOd8chRw@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 13 Dec 2021 13:08:17 -0800
-Message-ID: <CAOnJCU+LnN=YrQ34VEgj83dSH1NmDLfozoZPPbxT0SCfBM9PyA@mail.gmail.com>
-Subject: Re: [RFC 5/6] RISC-V: Move spinwait booting method to its own config
-To:     Anup Patel <anup@brainfault.org>
-Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Anup Patel <anup.patel@wdc.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213065936.1965081-1-namhyung@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 5:02 AM Anup Patel <anup@brainfault.org> wrote:
->
-> On Sat, Dec 4, 2021 at 5:51 AM Atish Patra <atishp@atishpatra.org> wrote:
-> >
-> > From: Atish Patra <atishp@rivosinc.com>
-> >
-> > The spinwait booting method should only be used for platforms with older
-> > firmware without SBI HSM extension or M-mode firmware because spinwait
-> > method can't support cpu hotplug, kexec or sparse hartid. It is better
-> > to move the entire spinwait implementation to its own config which can
-> > be disabled if required. It is enabled by default to maintain backward
-> > compatibility and M-mode Linux.
-> >
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > ---
-> >  arch/riscv/Kconfig          | 14 ++++++++++++++
-> >  arch/riscv/kernel/Makefile  |  3 ++-
-> >  arch/riscv/kernel/cpu_ops.c |  8 ++++++++
-> >  arch/riscv/kernel/head.S    |  6 +++---
-> >  arch/riscv/kernel/head.h    |  2 ++
-> >  5 files changed, 29 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 821252b65f89..4afb42d5707d 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -403,6 +403,20 @@ config RISCV_SBI_V01
-> >           This config allows kernel to use SBI v0.1 APIs. This will be
-> >           deprecated in future once legacy M-mode software are no longer in use.
-> >
-> > +config RISCV_BOOT_SPINWAIT
-> > +       bool "Spinwait booting method"
-> > +       depends on SMP
-> > +       default y
-> > +       help
-> > +         This enables support for booting Linux via spinwait method. In the
-> > +         spinwait method, all cores randomly jump to Linux. One of the core
-> > +         gets chosen via lottery and all other keeps spinning on a percpu
-> > +         variable. This method can not support cpu hotplug and sparse hartid
-> > +         scheme. It should be only enabled for M-mode Linux or platforms relying
-> > +         on older firmware without SBI HSM extension. All other platform should
-> > +         rely on ordered booing via SBI HSM extension which gets chosen
-> > +          dynamically at runtime if the firmware supports it.
-> > +
-> >  config KEXEC
-> >         bool "Kexec system call"
-> >         select KEXEC_CORE
-> > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> > index 3397ddac1a30..612556faa527 100644
-> > --- a/arch/riscv/kernel/Makefile
-> > +++ b/arch/riscv/kernel/Makefile
-> > @@ -43,7 +43,8 @@ obj-$(CONFIG_FPU)             += fpu.o
-> >  obj-$(CONFIG_SMP)              += smpboot.o
-> >  obj-$(CONFIG_SMP)              += smp.o
-> >  obj-$(CONFIG_SMP)              += cpu_ops.o
-> > -obj-$(CONFIG_SMP)              += cpu_ops_spinwait.o
-> > +
-> > +obj-$(CONFIG_RISCV_BOOT_SPINWAIT) += cpu_ops_spinwait.o
-> >  obj-$(CONFIG_MODULES)          += module.o
-> >  obj-$(CONFIG_MODULE_SECTIONS)  += module-sections.o
-> >
-> > diff --git a/arch/riscv/kernel/cpu_ops.c b/arch/riscv/kernel/cpu_ops.c
-> > index c1e30f403c3b..170d07e57721 100644
-> > --- a/arch/riscv/kernel/cpu_ops.c
-> > +++ b/arch/riscv/kernel/cpu_ops.c
-> > @@ -15,7 +15,15 @@
-> >  const struct cpu_operations *cpu_ops[NR_CPUS] __ro_after_init;
-> >
-> >  extern const struct cpu_operations cpu_ops_sbi;
-> > +#ifdef CONFIG_RISCV_BOOT_SPINWAIT
-> >  extern const struct cpu_operations cpu_ops_spinwait;
-> > +#else
-> > +const struct cpu_operations cpu_ops_spinwait = {
-> > +       .name           = "",
-> > +       .cpu_prepare    = NULL,
-> > +       .cpu_start      = NULL,
-> > +};
-> > +#endif
-> >
-> >  void __init cpu_set_ops(int cpuid)
-> >  {
-> > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> > index 9f16bfe9307e..4a694e15b95b 100644
-> > --- a/arch/riscv/kernel/head.S
-> > +++ b/arch/riscv/kernel/head.S
-> > @@ -259,7 +259,7 @@ pmp_done:
-> >         li t0, SR_FS
-> >         csrc CSR_STATUS, t0
-> >
-> > -#ifdef CONFIG_SMP
-> > +#ifdef CONFIG_RISCV_BOOT_SPINWAIT
-> >         li t0, CONFIG_NR_CPUS
-> >         blt a0, t0, .Lgood_cores
-> >         tail .Lsecondary_park
-> > @@ -285,7 +285,7 @@ pmp_done:
-> >         beq t0, t1, .Lsecondary_start
-> >
-> >  #endif /* CONFIG_XIP */
-> > -#endif /* CONFIG_SMP */
-> > +#endif /* CONFIG_RISCV_BOOT_SPINWAIT */
-> >
-> >  #ifdef CONFIG_XIP_KERNEL
-> >         la sp, _end + THREAD_SIZE
-> > @@ -344,7 +344,7 @@ clear_bss_done:
-> >         call soc_early_init
-> >         tail start_kernel
-> >
-> > -#ifdef CONFIG_SMP
-> > +#if defined(CONFIG_SMP) && defined(CONFIG_RISCV_BOOT_SPINWAIT)
->
-> The RISCV_BOOT_SPINWAIT option already depends on SMP.
->
-> Do you still need to check defined(CONFIG_SMP) here ?
->
+On Sun, Dec 12, 2021 at 10:59:36PM -0800, Namhyung Kim wrote:
+> The active cgroup events are managed in the per-cpu cgrp_cpuctx_list.
+> This list is accessed from current cpu and not protected by any locks.
+> But from the commit ef54c1a476ae ("perf: Rework
+> perf_event_exit_event()"), this assumption does not hold true anymore.
+> 
+> In the perf_remove_from_context(), it can remove an event from the
+> context without an IPI when the context is not active.  I think it
+> assumes task event context, but it's possible for cpu event context
 
-Nope. I guess this one slipped through the cracks. All other related
-#ifdef have only CONFIG_RISCV_BOOT_SPINWAIT
-I will fix it in v2.
+Yes, event_function_call() in general doesn't work, but for cpu events
+it does.
 
-> Regards,
-> Anup
->
-> >  .Lsecondary_start:
-> >         /* Set trap vector to spin forever to help debug */
-> >         la a3, .Lsecondary_park
-> > diff --git a/arch/riscv/kernel/head.h b/arch/riscv/kernel/head.h
-> > index 5393cca77790..726731ada534 100644
-> > --- a/arch/riscv/kernel/head.h
-> > +++ b/arch/riscv/kernel/head.h
-> > @@ -16,7 +16,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa);
-> >  asmlinkage void __init __copy_data(void);
-> >  #endif
-> >
-> > +#ifdef CONFIG_RISCV_BOOT_SPINWAIT
-> >  extern void *__cpu_spinwait_stack_pointer[];
-> >  extern void *__cpu_spinwait_task_pointer[];
-> > +#endif
-> >
-> >  #endif /* __ASM_HEAD_H */
-> > --
-> > 2.33.1
-> >
+> only with cgroup events can be inactive at the moment - and it might
+> become active soon.
 
+It can't, we're holding ctx->mutex and ctx->lock, and since it's a cpu
+event, that's cpuctx.
 
+But yes, cgrp_cpuctx_list relies on being strictly per-cpu and I can't
+come up with a better solution either, doing those IPIs suck but...
 
--- 
-Regards,
-Atish
+But please, put in a comment like:
+
+	/*
+	 * Cgroup events are per-CPU events, and must IPI because of
+	 * cgrp_cpuctx_list.
+	 */
+	if (!ctx->is_active || !is_cgroup_event(event)) {

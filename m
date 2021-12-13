@@ -2,121 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88BA472B5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB042472B5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235783AbhLML2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235740AbhLML2C (ORCPT
+        id S235819AbhLML20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:28:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53692 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232733AbhLML2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:28:02 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14628C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:28:02 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E8BC1EC054F;
-        Mon, 13 Dec 2021 12:28:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639394880;
+        Mon, 13 Dec 2021 06:28:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639394903;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Zvq+iuXs8lIFhddRqKkphqajuGv+Wb9UvUgh6rYtibA=;
-        b=mepNFZkEBPrDJ1HaWVLSNu8HW7wN3OYD3WKDAkCp34pJ5dc3/MODzX/jSVEJNNlPfxlKOj
-        t598KjK4doVKU7eQdqcqdauet2UnTZ8TW9zwmkqoF1MJmc798Mes69Lcb2n3nHoGs/su0k
-        YVSdAwcHkA9EeoaqYY9Wr/6UYM85uiQ=
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        John Dorminy <jdorminy@redhat.com>, anjaneya.chagam@intel.com,
-        dan.j.williams@intel.com, Hugh Dickins <hughd@google.com>,
-        "Patrick J. Volkerding" <volkerdi@gmail.com>
-Subject: [PATCH 3/3] x86/boot: Move EFI range reservation after cmdline parsing
-Date:   Mon, 13 Dec 2021 12:27:57 +0100
-Message-Id: <20211213112757.2612-4-bp@alien8.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211213112757.2612-1-bp@alien8.de>
-References: <YbcTgQdTpJAHAZw4@zn.tnic>
- <20211213112757.2612-1-bp@alien8.de>
+        bh=49IXfwSMYuzdL01r4rIJ5dsEZzYtD7h3rOZZT+C9p4U=;
+        b=E4cDhG9EiD2nqHJ2kAXEyZU47cJ84sGCQBQtOGbfTPnpqPS+7ITiCWQwmUgvgyv0kMzk80
+        Dh9jl521R1VHsQu5CPoXC2OeFY8gBlkGEzQa8EKrZkrRBuKo5clCPtwShEXiOp6YcQe8/H
+        ViAdEORJkMYjyKUsHk5bqH+Sko5BjFQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-445-17AJkUrPNZK51aNPUdPJZw-1; Mon, 13 Dec 2021 06:28:20 -0500
+X-MC-Unique: 17AJkUrPNZK51aNPUdPJZw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EC692801962;
+        Mon, 13 Dec 2021 11:28:18 +0000 (UTC)
+Received: from [10.39.195.18] (unknown [10.39.195.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ACA024ABA9;
+        Mon, 13 Dec 2021 11:28:17 +0000 (UTC)
+Message-ID: <b9ca5d3b-abda-5195-4c17-fa3b49d37334@redhat.com>
+Date:   Mon, 13 Dec 2021 12:28:16 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH 1/2] HID: logitech-dj: add support for the new lightspeed
+ receiver iteration
+To:     =?UTF-8?Q?Filipe_La=c3=adns?= <lains@archlinux.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>
+References: <20210123180334.3062995-1-lains@archlinux.org>
+ <CAO-hwJKdfAy9i28iFEKi5DWU0SPOopiEyjT_2HdpL7ahFhdGFg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAO-hwJKdfAy9i28iFEKi5DWU0SPOopiEyjT_2HdpL7ahFhdGFg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@kernel.org>
+Hi Filipe,
 
-The memory reservation in arch/x86/platform/efi/efi.c depends on at
-least two command line parameters. Put it back later in the boot process
-and move efi_memblock_x86_reserve_range() out of early_memory_reserve().
+On Mon, Mar 1, 2021 at 3:46 PM Benjamin Tissoires <benjamin.tissoires@redhat.com> wrote:
+>
+> On Sat, Jan 23, 2021 at 7:03 PM Filipe Laíns <lains@archlinux.org> wrote:
+> >
+> > From: Filipe Laíns <lains@riseup.net>
+> >
+> > Tested with the G Pro X Superlight. libratbag sees the device, as
+> > expected, and input events are passing trough.
+> >
+> > https://github.com/libratbag/libratbag/pull/1122
+> >
+> > The receiver has a quirk where the moused interface doesn't have a
+> > report ID, I am not sure why, perhaps they forgot. All other interfaces
+> > have report IDs so I am left scratching my head.
+> > Since this driver doesn't have a quirk system, I simply implemented it
+> > as a different receiver type, which is true, it just wouldn't be the
+> > prefered approach :P
+> >
+> > Signed-off-by: Filipe Laíns <lains@riseup.net>
+> > ---
+> >  drivers/hid/hid-ids.h         |  1 +
+> >  drivers/hid/hid-logitech-dj.c | 49 +++++++++++++++++++++++++----------
+> >  2 files changed, 37 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> > index 4c5f23640f9c..8eac3c93fa38 100644
+> > --- a/drivers/hid/hid-ids.h
+> > +++ b/drivers/hid/hid-ids.h
+> > @@ -803,6 +803,7 @@
+> >  #define USB_DEVICE_ID_LOGITECH_NANO_RECEIVER_LIGHTSPEED_1      0xc539
+> >  #define USB_DEVICE_ID_LOGITECH_NANO_RECEIVER_LIGHTSPEED_1_1    0xc53f
+> >  #define USB_DEVICE_ID_LOGITECH_NANO_RECEIVER_POWERPLAY 0xc53a
+> > +#define USB_DEVICE_ID_LOGITECH_NANO_RECEIVER_LIGHTSPEED_1_2    0xc547
+> >  #define USB_DEVICE_ID_SPACETRAVELLER   0xc623
+> >  #define USB_DEVICE_ID_SPACENAVIGATOR   0xc626
+> >  #define USB_DEVICE_ID_DINOVO_DESKTOP   0xc704
+> > diff --git a/drivers/hid/hid-logitech-dj.c b/drivers/hid/hid-logitech-dj.c
+> > index 1401ee2067ca..6596c81947a8 100644
+> > --- a/drivers/hid/hid-logitech-dj.c
+> > +++ b/drivers/hid/hid-logitech-dj.c
+> > @@ -114,6 +114,7 @@ enum recvr_type {
+> >         recvr_type_dj,
+> >         recvr_type_hidpp,
+> >         recvr_type_gaming_hidpp,
+> > +       recvr_type_gaming_hidpp_missing_mse_report_id,  /* lightspeed receiver missing the mouse report ID */
+> >         recvr_type_mouse_only,
+> >         recvr_type_27mhz,
+> >         recvr_type_bluetooth,
+> > @@ -1360,6 +1361,7 @@ static int logi_dj_ll_parse(struct hid_device *hid)
+> >                 dbg_hid("%s: sending a mouse descriptor, reports_supported: %llx\n",
+> >                         __func__, djdev->reports_supported);
+> >                 if (djdev->dj_receiver_dev->type == recvr_type_gaming_hidpp ||
+> > +                   djdev->dj_receiver_dev->type == recvr_type_gaming_hidpp_missing_mse_report_id ||
+> >                     djdev->dj_receiver_dev->type == recvr_type_mouse_only)
+> >                         rdcat(rdesc, &rsize, mse_high_res_descriptor,
+> >                               sizeof(mse_high_res_descriptor));
+> > @@ -1605,19 +1607,35 @@ static int logi_dj_raw_event(struct hid_device *hdev,
+> >                         data[0] = data[1];
+> >                         data[1] = 0;
+> >                 }
+> > -               /*
+> > -                * Mouse-only receivers send unnumbered mouse data. The 27 MHz
+> > -                * receiver uses 6 byte packets, the nano receiver 8 bytes.
+> > -                */
+> > -               if (djrcv_dev->unnumbered_application == HID_GD_MOUSE &&
+> > -                   size <= 8) {
+> > -                       u8 mouse_report[9];
+> > -
+> > -                       /* Prepend report id */
+> > -                       mouse_report[0] = REPORT_TYPE_MOUSE;
+> > -                       memcpy(mouse_report + 1, data, size);
+> > -                       logi_dj_recv_forward_input_report(hdev, mouse_report,
+> > -                                                         size + 1);
+> > +
+> > +
+> > +               if (djrcv_dev->unnumbered_application == HID_GD_MOUSE) {
+> > +                       /*
+> > +                        * Mouse-only receivers send unnumbered mouse data. The 27 MHz
+> > +                        * receiver uses 6 byte packets, the nano receiver 8 bytes.
+> > +                        */
+> > +                       if (size <= 8) {
+> > +                               u8 mouse_report[9];
+>
+> Hmm, as stated above, the 27 MHz receiver already does the exact same thing.
+>
+> Can't we just bump the array size and check above to the following:
+>
+> if (size <= 16) {
+>   u8 mouse_report[17];
+>
+> The property "djrcv_dev->unnumbered_application" is based on the
+> report descriptor entirely, and they are just following the HID norm
+> here. So I think this should be enough.
 
-An attempt to fix this was done in
+I've been pinged last week about the G Pro X superlight, and Peter found
+that this patch never got into upstream.
 
-  8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param parsing")
-
-but that caused other troubles so it got reverted.
-
-The bug this is addressing is:
-
-Dan reports that Anjaneya Chagam can no longer use the efi=nosoftreserve
-kernel command line parameter to suppress "soft reservation" behavior.
-
-This is due to the fact that the following call-chain happens at boot:
-
-early_reserve_memory
-|-> efi_memblock_x86_reserve_range
-    |-> efi_fake_memmap_early
-
-which does
-
-        if (!efi_soft_reserve_enabled())
-                return;
-
-and that would have set EFI_MEM_NO_SOFT_RESERVE after having parsed
-"nosoftreserve".
-
-However, parse_early_param() gets called *after* it, leading to the boot
-cmdline not being taken into account.
-
- [ bp: Productize into a proper patch. ]
-
-Signed-off-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/e8dd8993c38702ee6dd73b3c11f158617e665607.camel@intel.com
+AFAICT, compared to upstream the following code change should have the
+same effect that what you proposed here:
 ---
- arch/x86/kernel/setup.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+diff --git a/drivers/hid/hid-logitech-dj.c b/drivers/hid/hid-logitech-dj.c
+index 7106b921b53c..f5cdfce272e7 100644
+--- a/drivers/hid/hid-logitech-dj.c
++++ b/drivers/hid/hid-logitech-dj.c
+@@ -1691,11 +1691,12 @@ static int logi_dj_raw_event(struct hid_device *hdev,
+                 }
+                 /*
+                  * Mouse-only receivers send unnumbered mouse data. The 27 MHz
+-                * receiver uses 6 byte packets, the nano receiver 8 bytes.
++                * receiver uses 6 byte packets, the nano receiver 8 bytes and
++                * some gaming ones are using 16 bytes.
+                  */
+                 if (djrcv_dev->unnumbered_application == HID_GD_MOUSE &&
+-                   size <= 8) {
+-                       u8 mouse_report[9];
++                   size <= 16) {
++                       u8 mouse_report[17];
+  
+                         /* Prepend report id */
+                         mouse_report[0] = REPORT_TYPE_MOUSE;
+---
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 49b596db5631..e04f5e6eb33f 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -713,9 +713,6 @@ static void __init early_reserve_memory(void)
- 
- 	early_reserve_initrd();
- 
--	if (efi_enabled(EFI_BOOT))
--		efi_memblock_x86_reserve_range();
--
- 	memblock_x86_reserve_range_setup_data();
- 
- 	reserve_ibft_region();
-@@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
- 
- 	parse_early_param();
- 
-+	if (efi_enabled(EFI_BOOT))
-+		efi_memblock_x86_reserve_range();
-+
- #ifdef CONFIG_MEMORY_HOTPLUG
- 	/*
- 	 * Memory used by the kernel cannot be hot-removed because Linux
--- 
-2.29.2
+Would you mind sending a v2 of the patch updated to the current for-next so we can schedule this for 5.17?
+
+
+Cheers,
+Benjamin
+
+>
+> Cheers,
+> Benjamin
+>
+> > +
+> > +                               /* Prepend report id */
+> > +                               mouse_report[0] = REPORT_TYPE_MOUSE;
+> > +                               memcpy(mouse_report + 1, data, size);
+> > +                               logi_dj_recv_forward_input_report(hdev, mouse_report,
+> > +                                                                 size + 1);
+> > +
+> > +                       /*
+> > +                        * A variant of the ligtpseed receivers is missing the mouse
+> > +                        * report ID.
+> > +                        */
+> > +                       } else if (djrcv_dev->type == recvr_type_gaming_hidpp_missing_mse_report_id) {
+> > +                               u8 mouse_report[17];
+> > +
+> > +                               /* Prepend report id */
+> > +                               mouse_report[0] = REPORT_TYPE_MOUSE;
+> > +                               memcpy(mouse_report + 1, data, size);
+> > +                               logi_dj_recv_forward_input_report(hdev, mouse_report,
+> > +                                                                 size + 1);
+> > +                       }
+> >                 }
+> >
+> >                 return false;
+> > @@ -1688,6 +1706,7 @@ static int logi_dj_probe(struct hid_device *hdev,
+> >         case recvr_type_dj:             no_dj_interfaces = 3; break;
+> >         case recvr_type_hidpp:          no_dj_interfaces = 2; break;
+> >         case recvr_type_gaming_hidpp:   no_dj_interfaces = 3; break;
+> > +       case recvr_type_gaming_hidpp_missing_mse_report_id: no_dj_interfaces = 3; break;
+> >         case recvr_type_mouse_only:     no_dj_interfaces = 2; break;
+> >         case recvr_type_27mhz:          no_dj_interfaces = 2; break;
+> >         case recvr_type_bluetooth:      no_dj_interfaces = 2; break;
+> > @@ -1886,6 +1905,10 @@ static const struct hid_device_id logi_dj_receivers[] = {
+> >           HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
+> >                 USB_DEVICE_ID_LOGITECH_NANO_RECEIVER_LIGHTSPEED_1_1),
+> >          .driver_data = recvr_type_gaming_hidpp},
+> > +       { /* Logitech lightspeed receiver (0xc547) */
+> > +         HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
+> > +               USB_DEVICE_ID_LOGITECH_NANO_RECEIVER_LIGHTSPEED_1_2),
+> > +        .driver_data = recvr_type_gaming_hidpp_missing_mse_report_id},
+> >         { /* Logitech 27 MHz HID++ 1.0 receiver (0xc513) */
+> >           HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_MX3000_RECEIVER),
+> >          .driver_data = recvr_type_27mhz},
+> > --
+> > 2.30.0
+> >
 

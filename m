@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1492473575
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A58147358C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242696AbhLMUAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S241848AbhLMUB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242685AbhLMUAG (ORCPT
+        with ESMTP id S229897AbhLMUBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:00:06 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBEBC061574;
-        Mon, 13 Dec 2021 12:00:05 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id u80so15882165pfc.9;
-        Mon, 13 Dec 2021 12:00:05 -0800 (PST)
+        Mon, 13 Dec 2021 15:01:55 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91756C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:01:55 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id p65so20139766iof.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:01:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=T+v8JxkzxA7oytgSjjFXvjzv7aKmRDN8aF4ox5F3VLs=;
-        b=BrouahSjF10Ey1ayjKm5d6H6EbOjReOa09rSrWImBAuhBZChNkWF1i2PEx0wQ27Ymp
-         OVADvYlVYkDr9ZUNbIF2Bn+ygvrBPjsDDS2kxlOmkqM5xfHFDgOh4Fcp5GTeuMvWfTbp
-         4sY0iEyUdi1ACx0WMUkHQZ0sOL5n/vJEgMU5FGulYxoWM9PMCB6X7z0fcSlDp0yprUEq
-         uJn5ylxNcvfc5mxQn/i12v75LArxxO3OSbuj24iGL6WAXwFPlqh4bSsSzPEP/tC6kx7a
-         Mu530wVUN11zU8XwWbgMEQFOIdTFk333nGsNK5BwmG/Z98pkUh4HZHR7HMuhz7aSu5Kt
-         93Gw==
+        d=ieee.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3iSNR3ejvooF9vq0Obv4fgL6xUSCQ0TFvXQZX/GtFkc=;
+        b=SVHjXXfQaaDzN7wXth1wyGOaMQxNfL1z0B+Chg1iOUIWWUcxNx2pFt5vFlYrgEp1yy
+         xOZ/Zqoc7U992FYO4cRVGWJyiataCj0GfX3IuBrfxdN6uG10ojbadbWW4uDmFy1Gu3Yd
+         rXGi7PVF+o8oMfIZ7wWXjqiSmCKCDXF3EMDGs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=T+v8JxkzxA7oytgSjjFXvjzv7aKmRDN8aF4ox5F3VLs=;
-        b=QwZ1B8t4qcnDm5gCE9ERsbCnW26zhpELdUWOnj2Gq7ZW10cvr71Mmg9W1SK4M8ubgw
-         WaTIYzIpB0JSqvqvxMJ8RPbZzl80P08BUaqndGJoJ1av94n6tWl9d/Vsq8/XvCk0zjU5
-         cradKBszKCi9xBDPFA9HlYXhMZpO0fsYXVxrID+TogbKbnACHrsw7FVxpDZQowUiQAM9
-         oYkKwGmVU2hU90dPxbdWVoxhTyeMByek8YL57LC6kYsUXUZ7GrWEWK+8MxJkOqKtZQuT
-         DBtmRatDz4V2PCB+M5FV8N4CgJKtYR7DffRrMUUox9Juv/DbEMtq7Hft6P5lSJSH0LR6
-         vMcA==
-X-Gm-Message-State: AOAM533L6LSyVGeTt8RNeCVv0a/JSGC1FwAKjzb3dJC9FoKKLWa2AttI
-        T2/sckqqIfDXsCrDgVlbiakbmzVaD0o=
-X-Google-Smtp-Source: ABdhPJw4bOsBbhMyNtTuhs+X36crxIdRCscbl4mHH7oHthAPLMw+RcyVes1Ue2jtZEarMDlSVzxkDA==
-X-Received: by 2002:a05:6a00:1906:b0:44c:b35d:71a8 with SMTP id y6-20020a056a00190600b0044cb35d71a8mr329976pfi.51.1639425605096;
-        Mon, 13 Dec 2021 12:00:05 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id rm10sm8867689pjb.29.2021.12.13.12.00.03
+        bh=3iSNR3ejvooF9vq0Obv4fgL6xUSCQ0TFvXQZX/GtFkc=;
+        b=gJ8xXPtPoFDa71KNVwQzhrgtJTv12lZ56Accbfi2h83SD8RCWl4yPp4Y9IJ1RwLQz3
+         zx0sepcb+1Nt2Id253M9g/O20sQLiT4XHHXU984rXaHohGO1HqriJdl6o0j3aP/JrNPQ
+         bFmiRKr5ORkm3Hzei+fUeDdBUIU7/rlpJVTeFigwC9k+06pxQqVhrRvetNSgRhckqo03
+         qZH94ouT/NdpENQxEkstE0jvBn5MVD74kMkl4rVgkpoVkVlO1juGZulXKgZ67H4uhQOa
+         aaf3xklv4171Vi8lj1jhTISR/TokEHYCEkVEWfQ1kO8ssdqlDfPF/dcMcb7nuhxce0GE
+         axuw==
+X-Gm-Message-State: AOAM533a1Bb91XcAhXgcPUYY9eEqlfi975txCe9tEp7kVxNWWn0YYmq7
+        1jUnOUPBW5JjQ6vS46KSraty7Q==
+X-Google-Smtp-Source: ABdhPJyFBMFxUOUIPIbjlZyG/ZSu4VqoYZES+FW9ZhxkEwdbgUXjZCkFd37nP9KY24vozOVaiaCCqQ==
+X-Received: by 2002:a05:6602:2c83:: with SMTP id i3mr682865iow.54.1639425714638;
+        Mon, 13 Dec 2021 12:01:54 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id 8926c6da1cb9f-2faa6b4da5dsm42295173.96.2021.12.13.12.01.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 12:00:04 -0800 (PST)
-Subject: Re: [PATCH 4.9 00/42] 4.9.293-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20211213092926.578829548@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <c4d5f14b-19bb-7420-927e-fdbaf10fc73f@gmail.com>
-Date:   Mon, 13 Dec 2021 12:00:02 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 13 Dec 2021 12:01:48 -0800 (PST)
+Message-ID: <bf148212-3030-9ed9-2ff0-5cff0b2e727e@ieee.org>
+Date:   Mon, 13 Dec 2021 14:01:46 -0600
 MIME-Version: 1.0
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] greybus: es2: fix typo in a comment
 Content-Language: en-US
+To:     Jason Wang <wangborong@cdjrlc.com>, elder@kernel.org
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20211212031657.41169-1-wangborong@cdjrlc.com>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <20211212031657.41169-1-wangborong@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 1:29 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.293 release.
-> There are 42 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.293-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On 12/11/21 9:16 PM, Jason Wang wrote:
+> The double `for' in the comment in line 81 is repeated. Remove one
+> of them from the comment.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+This looks fine.  But it's so trivial...  Are you aware
+of *any* other similar trivial problems in comments that
+could be fixed together with this?  If so, I would prefer
+that.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+If you've looked, and there are no others:
+
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>   drivers/greybus/es2.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/greybus/es2.c b/drivers/greybus/es2.c
+> index 15661c7f3633..e89cca015095 100644
+> --- a/drivers/greybus/es2.c
+> +++ b/drivers/greybus/es2.c
+> @@ -78,7 +78,7 @@ struct es2_cport_in {
+>    * @hd: pointer to our gb_host_device structure
+>    *
+>    * @cport_in: endpoint, urbs and buffer for cport in messages
+> - * @cport_out_endpoint: endpoint for for cport out messages
+> + * @cport_out_endpoint: endpoint for cport out messages
+>    * @cport_out_urb: array of urbs for the CPort out messages
+>    * @cport_out_urb_busy: array of flags to see if the @cport_out_urb is busy or
+>    *			not.
+> 
+

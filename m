@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CB3473522
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF20B473527
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242456AbhLMTl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:41:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36058 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242436AbhLMTly (ORCPT
+        id S242410AbhLMTnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:43:21 -0500
+Received: from www381.your-server.de ([78.46.137.84]:49386 "EHLO
+        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240557AbhLMTnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:41:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55FED611DA;
-        Mon, 13 Dec 2021 19:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA740C34602;
-        Mon, 13 Dec 2021 19:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639424513;
-        bh=qW9T2rELRJWjZiDK05qYGlaZ7KW6KZTBlr8kXEFzOF8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=L6GrtPu/82K+1q5q+iloPMWSevPfO/rE6Z/nmV/BSxv1Nchxsclgri48S3QB0SC0d
-         YSN06jvilRT/b3o/cRfcLJrmMdCc+ZwZL1FCyNAfrkDJRxX+wO+4jrauoHPC22aI/J
-         Kg/j8HU1or80fC7DJ5BbRfQ9mbmOrbufX9bGUSPD381TnunCebvyf+Up7ICBi9yOvP
-         rFIgNfRTUyUwsUefNaDnXxBmu9JmrZkNIOu82XE/8UGm/J42HSV72eOyX4F/0xQLW/
-         XoKi6LWgsyUPxK74YQlOqbEMgzZtX9ouelgAulFV2nCZSPsktXkGyKoaLLSawtroV+
-         05tW6uf4QBDcQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5F9105C0B9E; Mon, 13 Dec 2021 11:41:53 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:41:53 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc:     josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, urezki@gmail.com,
-        frederic@kernel.org, boqun.feng@gmail.com
-Subject: Re: [PATCH] rcu: Remove unused rcu_state.boost
-Message-ID: <20211213194153.GS641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211213070209.7464-1-quic_neeraju@quicinc.com>
+        Mon, 13 Dec 2021 14:43:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=/U2kRbjnUmmfO5VcGjkbT326Y4PX+CdMdtu1XG7vuao=; b=A4VhOy/ckIuFeL7tUGbt4bYZWt
+        DwRHP1fdP5yz9xLPvfjJCF99l73Qb6NHRsfVgf43y/V5iXNKr9nkjlvK9uzhfy28zMzFX4EVtas39
+        om1Uuu2om2W6Fo29+0KtNusZYcSUaLeobVSBWyJYH1y+AJ16Jj7YEPF32pX9/M0rKW3GuPM2iU872
+        1V7Aj4KmNrhkPvo1zaZU7cxFECG2FK3xX1L1dLmUvHClevs5ZYnsBcSIPEvJrTT4fPfAZBWc0Gqcp
+        1NbBwuX8n8RJdgLI2yIW0VPy6kJcm/r2nf9CJDq5DroA0i5qFKklB5Ejhu9gQVkFQk8TmaWm18VaF
+        7b6oVnwQ==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <lars@metafoo.de>)
+        id 1mwrEC-000FhI-7q; Mon, 13 Dec 2021 20:43:16 +0100
+Received: from [2001:a61:2aa6:c001:9e5c:8eff:fe01:8578]
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1mwrEB-000AeU-DF; Mon, 13 Dec 2021 20:43:15 +0100
+Subject: Re: [PATCH v2 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
+ driver
+To:     Tanmay Shah <tanmay.shah@xilinx.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ben Levinsky <ben.levinsky@xilinx.com>,
+        Bill Mills <bill.mills@linaro.org>,
+        Sergei Korneichuk <sergei.korneichuk@xilinx.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20211123062050.1442712-1-tanmay.shah@xilinx.com>
+ <20211123062050.1442712-7-tanmay.shah@xilinx.com>
+ <ab9e009a-5e35-ae49-2c8e-65be6ba36d7f@metafoo.de>
+ <acbd7749-7bb2-0de2-5658-2b62ace9520a@xilinx.com>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+Message-ID: <b8b24b65-786b-2a4e-5548-5e5e8bf988be@metafoo.de>
+Date:   Mon, 13 Dec 2021 20:43:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213070209.7464-1-quic_neeraju@quicinc.com>
+In-Reply-To: <acbd7749-7bb2-0de2-5658-2b62ace9520a@xilinx.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26385/Mon Dec 13 10:38:12 2021)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 12:32:09PM +0530, Neeraj Upadhyay wrote:
-> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+On 12/13/21 8:31 PM, Tanmay Shah wrote:
+>>> +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+>>> +{
+>>> [...]
+>>> +
+>>>
+>>> +    i = 0;
+>>> +    for_each_available_child_of_node(dev_node, child) {
+>>> +        child_pdev = of_find_device_by_node(child);
+>>> +        if (!child_pdev)
+>> A return or a break in a for_each_available_child_of_node() will leak 
+>> the reference to the child node.
+>
+> Do you mean I have to use of_put_node for each child?
 
-Good eyes!  This has since been replaced by the ->can_boost field of
-the rcu_torture_ops structure.
+You have to put a `of_put_node(child)` before each break or return in 
+the loop.
 
-Queued for review and testing, thank you!
+If you search the kernel commit history for 
+for_each_available_child_of_node or for_each_child_of_node you'll find 
+many fixes for similar problems. For example 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e1b391e9712db
 
-							Thanx, Paul
-
-> ---
->  kernel/rcu/tree.h        | 5 ++---
->  kernel/rcu/tree_plugin.h | 2 --
->  2 files changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-> index 4b889081f4f4..caea946700f3 100644
-> --- a/kernel/rcu/tree.h
-> +++ b/kernel/rcu/tree.h
-> @@ -303,9 +303,8 @@ struct rcu_state {
->  
->  	/* The following fields are guarded by the root rcu_node's lock. */
->  
-> -	u8	boost ____cacheline_internodealigned_in_smp;
-> -						/* Subject to priority boost. */
-> -	unsigned long gp_seq;			/* Grace-period sequence #. */
-> +	unsigned long gp_seq ____cacheline_internodealigned_in_smp;
-> +						/* Grace-period sequence #. */
->  	unsigned long gp_max;			/* Maximum GP duration in */
->  						/*  jiffies. */
->  	struct task_struct *gp_kthread;		/* Task for grace periods. */
-> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> index 1439cb3680eb..54ef0e8c8742 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -1174,8 +1174,6 @@ static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)
->  	if (rnp->boost_kthread_task || !rcu_scheduler_fully_active)
->  		goto out;
->  
-> -	rcu_state.boost = 1;
-> -
->  	t = kthread_create(rcu_boost_kthread, (void *)rnp,
->  			   "rcub/%d", rnp_index);
->  	if (WARN_ON_ONCE(IS_ERR(t)))
-> -- 
-> 2.17.1
-> 

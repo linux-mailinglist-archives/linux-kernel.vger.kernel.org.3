@@ -2,72 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3050A472219
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0A847221D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbhLMIHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S232748AbhLMIHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbhLMIHC (ORCPT
+        with ESMTP id S231453AbhLMIHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:07:02 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D113C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:07:02 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id cf39so17137031lfb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=t7I28HqZkghwhrZHUUn8NTs6S2RHIB9DZcJNWAJhWMY=;
-        b=LsPD0SMXwIxCEt2/4UIgZsDZrNe4V0blMahA8x5TD9u6LNdX/B7HLHJgjaDZB2W+Lf
-         27xi8EEABBVYYe46DBgxO5teRmuRxdA7/jCLfi5rKwGJ/OC1yDtBfCgujGmhk0ocNgbT
-         tHmyx7lAijk5czUiSrfrAH0okKQjGKiI13yn4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=t7I28HqZkghwhrZHUUn8NTs6S2RHIB9DZcJNWAJhWMY=;
-        b=ZeZ1tgWIs9EV+OsLWAiIQdK0nkpi76JY00eI3t5JPlBE/ndVPxPnCv43pX8mSDLdge
-         AzkNXQvfi6mxeLfN3YUtf1vfzOfrxFqraw+AZuxevcuaDm4+Ss2Ml3OZ2aVXbqr0rbHx
-         uau/ARUUpLCV4PG1LjegfWbB6JMaMqbNDPaS4OZcZ6oqQ2yI8oHUt3CbBkMCaLwcasWh
-         lhutAdNOJmdHJn0nVGSTwM8uZv9Q/8iNau3C0AGM0k+vI9ZZ0zpGKcnyvBpH8unYraOC
-         BIoTuRZXjNz1wmLay4VW6mn8SLHbMyvnRZP1wtFLh3pP1nN+nbWIWQwNttq0nNrqgq61
-         hsSA==
-X-Gm-Message-State: AOAM530fJYejozi5LPhyWVZq5ui2EH1sJmn4B+63/8xYGx8WgJNodnZ8
-        x2/eI0YMJc7BpHg+UTwTrUkEQW95DhGAyui+JiKdiQ==
-X-Google-Smtp-Source: ABdhPJxLqEqJrlLZ0L7uWkbBqzn0qyqaZrw47K03z1EWMg8G5E4XhaZHaJHlOy1JBY2EVegaQZJTj487DMrNj11SLgM=
-X-Received: by 2002:a05:6512:32c9:: with SMTP id f9mr27458632lfg.308.1639382820385;
- Mon, 13 Dec 2021 00:07:00 -0800 (PST)
+        Mon, 13 Dec 2021 03:07:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049CBC06173F;
+        Mon, 13 Dec 2021 00:07:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDB49B80DD7;
+        Mon, 13 Dec 2021 08:07:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE576C00446;
+        Mon, 13 Dec 2021 08:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639382849;
+        bh=KBVBYKSOAnpU19r4bh9LFOK0UocsIq+Tk7h75NjXXSU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qs/t0Q3udVHvzANavU8aWC1zq9ikbj1GPpzNOrnXS9LgHB51/ecTvnpirt0qLVj/V
+         PQJ3naRMp/1PHovJzQXP4sD5WZPt/RcIC28B3gYilubvF78rLUSg/c5WglGEfwmBXP
+         eGpq1TVZqgQQktgZIDVpw7638MvngYhEpUUPjcYo2WWtSn/B3BPV9QCw8MBOzFfkU9
+         zBdNLixPiHZs08dfR8dI8LfYbvOIXmqg++SJEQeL33OKPjrN2DnEq7Vv+6rFB0rt8d
+         JQun5zhQtOQ0zMVJAByoYDlBLpun2Jt+03RijNUs1F3RV65P5JNoBOF4DkQu1j7ZTA
+         MRVUQZXdh6tTQ==
+Date:   Mon, 13 Dec 2021 13:37:25 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     ludovic.desroches@microchip.com, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        mripard@kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 08/13] dmaengine: at_xdmac: Move the free desc to the
+ tail of the desc list
+Message-ID: <Ybb/PV5M1Gi59s7I@matsya>
+References: <20211125090028.786832-1-tudor.ambarus@microchip.com>
+ <20211125090028.786832-9-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-References: <20211208185211.40682-1-jose.exposito89@gmail.com>
-In-Reply-To: <20211208185211.40682-1-jose.exposito89@gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 13 Dec 2021 16:06:49 +0800
-Message-ID: <CAGXv+5FpmRyPXUB523+v9=tZ+3_2YzvS7qMEn5Dc5N8rfs5A-A@mail.gmail.com>
-Subject: Re: [PATCH] clk: mediatek: Fix memory leaks on probe
-To:     jose.exposito89@gmail.com
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        ikjn@chromium.org, chun-jie.chen@mediatek.com,
-        weiyi.lu@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211125090028.786832-9-tudor.ambarus@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 2:52 AM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gma=
-il.com> wrote:
->
-> Handle the error branches to free memory where required.
->
-> Addresses-Coverity-ID: 1491825 ("Resource leak")
-> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+On 25-11-21, 11:00, Tudor Ambarus wrote:
+> So that we don't use the same desc over and over again.
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Please use full para in the changelog and not a continuation of the
+patch title!
 
-Though the bigger problem still perststs: clks registers aren't unregistere=
-d.
+and why is wrong with using same desc over and over? Any benefits of not
+doing so?
+
+
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>  drivers/dma/at_xdmac.c | 23 ++++++++++++++---------
+>  1 file changed, 14 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
+> index 2cc9af222681..8804a86a9bcc 100644
+> --- a/drivers/dma/at_xdmac.c
+> +++ b/drivers/dma/at_xdmac.c
+> @@ -729,7 +729,8 @@ at_xdmac_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
+>  		if (!desc) {
+>  			dev_err(chan2dev(chan), "can't get descriptor\n");
+>  			if (first)
+> -				list_splice_init(&first->descs_list, &atchan->free_descs_list);
+> +				list_splice_tail_init(&first->descs_list,
+> +						      &atchan->free_descs_list);
+>  			goto spin_unlock;
+>  		}
+>  
+> @@ -817,7 +818,8 @@ at_xdmac_prep_dma_cyclic(struct dma_chan *chan, dma_addr_t buf_addr,
+>  		if (!desc) {
+>  			dev_err(chan2dev(chan), "can't get descriptor\n");
+>  			if (first)
+> -				list_splice_init(&first->descs_list, &atchan->free_descs_list);
+> +				list_splice_tail_init(&first->descs_list,
+> +						      &atchan->free_descs_list);
+>  			spin_unlock_irqrestore(&atchan->lock, irqflags);
+>  			return NULL;
+>  		}
+> @@ -1051,8 +1053,8 @@ at_xdmac_prep_interleaved(struct dma_chan *chan,
+>  							       src_addr, dst_addr,
+>  							       xt, chunk);
+>  			if (!desc) {
+> -				list_splice_init(&first->descs_list,
+> -						 &atchan->free_descs_list);
+> +				list_splice_tail_init(&first->descs_list,
+> +						      &atchan->free_descs_list);
+>  				return NULL;
+>  			}
+>  
+> @@ -1132,7 +1134,8 @@ at_xdmac_prep_dma_memcpy(struct dma_chan *chan, dma_addr_t dest, dma_addr_t src,
+>  		if (!desc) {
+>  			dev_err(chan2dev(chan), "can't get descriptor\n");
+>  			if (first)
+> -				list_splice_init(&first->descs_list, &atchan->free_descs_list);
+> +				list_splice_tail_init(&first->descs_list,
+> +						      &atchan->free_descs_list);
+>  			return NULL;
+>  		}
+>  
+> @@ -1308,8 +1311,8 @@ at_xdmac_prep_dma_memset_sg(struct dma_chan *chan, struct scatterlist *sgl,
+>  						   sg_dma_len(sg),
+>  						   value);
+>  		if (!desc && first)
+> -			list_splice_init(&first->descs_list,
+> -					 &atchan->free_descs_list);
+> +			list_splice_tail_init(&first->descs_list,
+> +					      &atchan->free_descs_list);
+>  
+>  		if (!first)
+>  			first = desc;
+> @@ -1701,7 +1704,8 @@ static void at_xdmac_tasklet(struct tasklet_struct *t)
+>  
+>  		spin_lock_irq(&atchan->lock);
+>  		/* Move the xfer descriptors into the free descriptors list. */
+> -		list_splice_init(&desc->descs_list, &atchan->free_descs_list);
+> +		list_splice_tail_init(&desc->descs_list,
+> +				      &atchan->free_descs_list);
+>  		at_xdmac_advance_work(atchan);
+>  		spin_unlock_irq(&atchan->lock);
+>  	}
+> @@ -1850,7 +1854,8 @@ static int at_xdmac_device_terminate_all(struct dma_chan *chan)
+>  	/* Cancel all pending transfers. */
+>  	list_for_each_entry_safe(desc, _desc, &atchan->xfers_list, xfer_node) {
+>  		list_del(&desc->xfer_node);
+> -		list_splice_init(&desc->descs_list, &atchan->free_descs_list);
+> +		list_splice_tail_init(&desc->descs_list,
+> +				      &atchan->free_descs_list);
+>  	}
+>  
+>  	clear_bit(AT_XDMAC_CHAN_IS_PAUSED, &atchan->status);
+> -- 
+> 2.25.1
+
+-- 
+~Vinod

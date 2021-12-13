@@ -2,105 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19090472D4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20147472CBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237612AbhLMNaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:30:21 -0500
-Received: from mail.avm.de ([212.42.244.119]:38384 "EHLO mail.avm.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237587AbhLMNaU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:30:20 -0500
-X-Greylist: delayed 458 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 08:30:18 EST
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Mon, 13 Dec 2021 14:22:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1639401757; bh=IVPImOOLXtr/Bn2m+I26RzZTtMbzBbmsOEwwcqioxxo=;
-        h=Resent-From:Resent-Date:Resent-To:Date:From:To:Cc:Subject:
-         References:In-Reply-To:From;
-        b=VLb85zUezabo88THimlI3id0NIrAyDCPJJCOGTrjAd6uIFUo14e4lWwTeez/9KUC7
-         6y0GtRl0pZDFcQ/Cv635QAbCyPlPrOS3HpZrCS0WgMRQUSlZ8+mh7nq7fWXlvh9pzy
-         /9Nq3fYiTRa+cSIuDtbIWsjD3n39QY8uo7D/6/PA=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id 399788048E;
-        Mon, 13 Dec 2021 14:22:37 +0100 (CET)
-Received: from mail.avm.de ([212.42.244.120])
-          by mail-notes.avm.de (HCL Domino Release 11.0.1FP4)
-          with ESMTP id 2021121314003867-8912 ;
-          Mon, 13 Dec 2021 14:00:38 +0100 
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail.avm.de (Postfix) with ESMTP
-        for <n.schier@avm.de>; Mon, 13 Dec 2021 14:00:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1639400438; bh=IVPImOOLXtr/Bn2m+I26RzZTtMbzBbmsOEwwcqioxxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XL4r0nRquDQ+ddGSE1BE1PtTnjKm6Sr3T/QuLT/lpiUmI0fOmPyV8cu03YK4F8Zxj
-         1kHC5tnmyYjo4dvkw/jHpWB+fkEvE/Tcl6Cx3hzga4L8BgE+a+KZFKHdK8pg5f7Uyd
-         ugem8/PEv+kjvc9NIGSRuW7vzEt+bsDPjtZKftyY=
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-        id 854321844C6; Mon, 13 Dec 2021 14:00:38 +0100 (CET)
-Date:   Mon, 13 Dec 2021 14:00:38 +0100
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH 01/10] certs: use $@ to simplify the key generation rule
-Message-ID: <YbdD9nnoZnK0QKeg@buildd.core.avm.de>
-References: <20211212192941.1149247-1-masahiroy@kernel.org>
- <20211212192941.1149247-2-masahiroy@kernel.org>
+        id S237111AbhLMNCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233102AbhLMNCH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 08:02:07 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5FAC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:02:07 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id j3so26962670wrp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:02:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lZVF2oyg56K2eXdYGD9l8O6KjfCMEpIT69R3sA9KD0E=;
+        b=2s3ik6I9r6hO6Koe0XyQpBO4uF6+LEpZ8E8a4XPO5uyNO7BHQaf1Esfy0gR5rh27vJ
+         QVUUkRTsI8VuSxmP26qtyf0ct/akSX22bwlYOY+HX+l5zbF7em7JTABRo0YVgfjCl7tL
+         ooBkO9DP/O8wFEDDAi+iDoFXByKiDtKxoh1EK7KTzJWPfPUVYFXj9MDBX9Vxo65oguKq
+         u0lQiCxQBlgzroL5EG9GX68wjGsgO4gee2H9265KeJQNwK2dPY/z/H61Vw8oAva0bF0R
+         ESEWtL0uXi8AjlgTKLKbNtFb5fx2/49j5h7Ojz5PVa5b2TTgm/J+uk5wTL5VJWwyeHm3
+         bQzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lZVF2oyg56K2eXdYGD9l8O6KjfCMEpIT69R3sA9KD0E=;
+        b=NM0DkqJ0HN1dWr5McR7rTv8byXO6EZMhNj6/QcMdCGKMGCBTjmxT+F6tBAxguRTuCb
+         0ycXPRZVFT6P5FBc5QngqtiX0jMmynuAovzrkqySvhiipVqsAUBbAs4NNsh5IKClPbRJ
+         gzlSoHdHiSVd68ITUsfNYvtDl+vVCtju4lyhcT5gNShnu0MUw/99lmupiBHSHfJ0sp2J
+         Y28Mp+/fZRzpqXhe4lLKY4wERtzdJu5Pb8wgKEHwrtKbEGyfnxNFKYVVcmHRm/DZPoQI
+         IMHEFx7RB+YOBbYzjYs5Cg/KkwB8TYFeuzshDI7BTPfAhNCoxVRJcBvOjOGT4endA+a7
+         f95g==
+X-Gm-Message-State: AOAM5319XIo2YlbrlYg0tdViyY8ufMQzaeEg5A6iI1670hbU18SUAVnv
+        syyXPnMsubFFOPLgf4AmXbwuzhycBMk90CSpc6y15A==
+X-Google-Smtp-Source: ABdhPJzh9ioitLYUUDPnsJ3CIp6AwYVFCGBTgyyI6H5cI/cmcXKBPfaF6TMStgFI+sNsDiw0LSR7KLjxX/aCfJYli6k=
+X-Received: by 2002:a5d:4909:: with SMTP id x9mr32836164wrq.313.1639400525484;
+ Mon, 13 Dec 2021 05:02:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211212192941.1149247-2-masahiroy@kernel.org>
-X-MIMETrack: Itemize by SMTP Server on ANIS1/AVM(Release 11.0.1FP4|October 01,
- 2021) at 13.12.2021 14:00:38,  Serialize by http on ANIS1/AVM(Release
- 11.0.1FP4|October 01, 2021) at 13.12.2021 14:00:56,    Serialize complete at
- 13.12.2021 14:00:56
-X-TNEFEvaluated: 1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Notes-UNID: 4203A2D34AAB4B4A231BFAD29A795EC7
-X-purgate-ID: 149429::1639401757-0000056E-E50412BF/0/0
-X-purgate-type: clean
-X-purgate-size: 1038
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
+References: <20211204002038.113653-1-atishp@atishpatra.org> <20211204002038.113653-6-atishp@atishpatra.org>
+In-Reply-To: <20211204002038.113653-6-atishp@atishpatra.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 13 Dec 2021 18:31:53 +0530
+Message-ID: <CAAhSdy26i0KiHce_FveXS795WecSJJ3ujbCmOVVVBiSOd8chRw@mail.gmail.com>
+Subject: Re: [RFC 5/6] RISC-V: Move spinwait booting method to its own config
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup.patel@wdc.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:29:32AM +0900, Masahiro Yamada wrote:
-> Do not repeat $(obj)/signing_key.pem
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Sat, Dec 4, 2021 at 5:51 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> From: Atish Patra <atishp@rivosinc.com>
+>
+> The spinwait booting method should only be used for platforms with older
+> firmware without SBI HSM extension or M-mode firmware because spinwait
+> method can't support cpu hotplug, kexec or sparse hartid. It is better
+> to move the entire spinwait implementation to its own config which can
+> be disabled if required. It is enabled by default to maintain backward
+> compatibility and M-mode Linux.
+>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > ---
-> 
->  certs/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/certs/Makefile b/certs/Makefile
-> index a702b70f3cb9..97fd6cc02972 100644
-> --- a/certs/Makefile
-> +++ b/certs/Makefile
-> @@ -61,8 +61,7 @@ keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) := -newkey ec -pkeyopt ec_paramgen_c
->  quiet_cmd_gen_key = GENKEY  $@
->        cmd_gen_key = openssl req -new -nodes -utf8 -$(CONFIG_MODULE_SIG_HASH) -days 36500 \
->  		-batch -x509 -config $(obj)/x509.genkey \
+>  arch/riscv/Kconfig          | 14 ++++++++++++++
+>  arch/riscv/kernel/Makefile  |  3 ++-
+>  arch/riscv/kernel/cpu_ops.c |  8 ++++++++
+>  arch/riscv/kernel/head.S    |  6 +++---
+>  arch/riscv/kernel/head.h    |  2 ++
+>  5 files changed, 29 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 821252b65f89..4afb42d5707d 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -403,6 +403,20 @@ config RISCV_SBI_V01
+>           This config allows kernel to use SBI v0.1 APIs. This will be
+>           deprecated in future once legacy M-mode software are no longer in use.
+>
+> +config RISCV_BOOT_SPINWAIT
+> +       bool "Spinwait booting method"
+> +       depends on SMP
+> +       default y
+> +       help
+> +         This enables support for booting Linux via spinwait method. In the
+> +         spinwait method, all cores randomly jump to Linux. One of the core
+> +         gets chosen via lottery and all other keeps spinning on a percpu
+> +         variable. This method can not support cpu hotplug and sparse hartid
+> +         scheme. It should be only enabled for M-mode Linux or platforms relying
+> +         on older firmware without SBI HSM extension. All other platform should
+> +         rely on ordered booing via SBI HSM extension which gets chosen
+> +          dynamically at runtime if the firmware supports it.
+> +
+>  config KEXEC
+>         bool "Kexec system call"
+>         select KEXEC_CORE
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index 3397ddac1a30..612556faa527 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -43,7 +43,8 @@ obj-$(CONFIG_FPU)             += fpu.o
+>  obj-$(CONFIG_SMP)              += smpboot.o
+>  obj-$(CONFIG_SMP)              += smp.o
+>  obj-$(CONFIG_SMP)              += cpu_ops.o
+> -obj-$(CONFIG_SMP)              += cpu_ops_spinwait.o
+> +
+> +obj-$(CONFIG_RISCV_BOOT_SPINWAIT) += cpu_ops_spinwait.o
+>  obj-$(CONFIG_MODULES)          += module.o
+>  obj-$(CONFIG_MODULE_SECTIONS)  += module-sections.o
+>
+> diff --git a/arch/riscv/kernel/cpu_ops.c b/arch/riscv/kernel/cpu_ops.c
+> index c1e30f403c3b..170d07e57721 100644
+> --- a/arch/riscv/kernel/cpu_ops.c
+> +++ b/arch/riscv/kernel/cpu_ops.c
+> @@ -15,7 +15,15 @@
+>  const struct cpu_operations *cpu_ops[NR_CPUS] __ro_after_init;
+>
+>  extern const struct cpu_operations cpu_ops_sbi;
+> +#ifdef CONFIG_RISCV_BOOT_SPINWAIT
+>  extern const struct cpu_operations cpu_ops_spinwait;
+> +#else
+> +const struct cpu_operations cpu_ops_spinwait = {
+> +       .name           = "",
+> +       .cpu_prepare    = NULL,
+> +       .cpu_start      = NULL,
+> +};
+> +#endif
+>
+>  void __init cpu_set_ops(int cpuid)
+>  {
+> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> index 9f16bfe9307e..4a694e15b95b 100644
+> --- a/arch/riscv/kernel/head.S
+> +++ b/arch/riscv/kernel/head.S
+> @@ -259,7 +259,7 @@ pmp_done:
+>         li t0, SR_FS
+>         csrc CSR_STATUS, t0
+>
+> -#ifdef CONFIG_SMP
+> +#ifdef CONFIG_RISCV_BOOT_SPINWAIT
+>         li t0, CONFIG_NR_CPUS
+>         blt a0, t0, .Lgood_cores
+>         tail .Lsecondary_park
+> @@ -285,7 +285,7 @@ pmp_done:
+>         beq t0, t1, .Lsecondary_start
+>
+>  #endif /* CONFIG_XIP */
+> -#endif /* CONFIG_SMP */
+> +#endif /* CONFIG_RISCV_BOOT_SPINWAIT */
+>
+>  #ifdef CONFIG_XIP_KERNEL
+>         la sp, _end + THREAD_SIZE
+> @@ -344,7 +344,7 @@ clear_bss_done:
+>         call soc_early_init
+>         tail start_kernel
+>
+> -#ifdef CONFIG_SMP
+> +#if defined(CONFIG_SMP) && defined(CONFIG_RISCV_BOOT_SPINWAIT)
 
-Don't you want to replace $< too?
+The RISCV_BOOT_SPINWAIT option already depends on SMP.
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+Do you still need to check defined(CONFIG_SMP) here ?
 
-> -		-outform PEM -out $(obj)/signing_key.pem \
-> -		-keyout $(obj)/signing_key.pem $(keytype-y) 2>&1
-> +		-outform PEM -out $@ -keyout $@ $(keytype-y) 2>&1
->  
->  $(obj)/signing_key.pem: $(obj)/x509.genkey FORCE
->  	$(call if_changed,gen_key)
-> -- 
-> 2.32.0
-> 
+Regards,
+Anup
+
+>  .Lsecondary_start:
+>         /* Set trap vector to spin forever to help debug */
+>         la a3, .Lsecondary_park
+> diff --git a/arch/riscv/kernel/head.h b/arch/riscv/kernel/head.h
+> index 5393cca77790..726731ada534 100644
+> --- a/arch/riscv/kernel/head.h
+> +++ b/arch/riscv/kernel/head.h
+> @@ -16,7 +16,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa);
+>  asmlinkage void __init __copy_data(void);
+>  #endif
+>
+> +#ifdef CONFIG_RISCV_BOOT_SPINWAIT
+>  extern void *__cpu_spinwait_stack_pointer[];
+>  extern void *__cpu_spinwait_task_pointer[];
+> +#endif
+>
+>  #endif /* __ASM_HEAD_H */
+> --
+> 2.33.1
+>

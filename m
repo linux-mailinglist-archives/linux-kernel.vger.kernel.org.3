@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C01347251E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 724844726EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbhLMJlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:41:09 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34202 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234725AbhLMJjS (ORCPT
+        id S234810AbhLMJ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237205AbhLMJvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:39:18 -0500
+        Mon, 13 Dec 2021 04:51:46 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA64C08EACF;
+        Mon, 13 Dec 2021 01:44:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B6A20CE0E93;
-        Mon, 13 Dec 2021 09:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B15C00446;
-        Mon, 13 Dec 2021 09:39:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9A93FCE0E77;
+        Mon, 13 Dec 2021 09:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407DDC00446;
+        Mon, 13 Dec 2021 09:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388354;
-        bh=g7pT1Y+mH7tE5bA+TV7uwFPEpTj+EStwLjrPcmYtDQw=;
+        s=korg; t=1639388664;
+        bh=qxNcVW7lb+e+31rnDB9NxSOPSM9BhEp7+K57v0W+hSY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JmR2ImaL6+WbjKSnxcAzimhp8sQLxmg3n6EG36CFmlV3XVptw3b+jNYV2OCVbXWQT
-         JxCd8NU3xSqLXAfBIH92d8yIgTtpS9UwAtf/QsOAJfI/MKWF9cQQcM9mSAKHGDBISl
-         bII5cQC4QCtMfphhOTjFOSCEt89GJV3xWx8ke+TQ=
+        b=SXlCD/7MWN3zZ69jdFSqifJBAlkV892BYWUBGXaa++ucgb0NMOUie1DDqMGopFfnC
+         53nSt23pJm7OReb84v8ZdVQsiYs4/FmsqwHrcaIkfR9oPktw5EJSYmAiIf0yNIaPrv
+         Rk2fU4pk6ME6VX2W23qOgjkVRrcJlzLB8UrlJx/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Andrea Mayer <andrea.mayer@uniroma2.it>,
         David Ahern <dsahern@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 20/74] seg6: fix the iif in the IPv6 socket control block
-Date:   Mon, 13 Dec 2021 10:29:51 +0100
-Message-Id: <20211213092931.470280502@linuxfoundation.org>
+Subject: [PATCH 5.4 22/88] seg6: fix the iif in the IPv6 socket control block
+Date:   Mon, 13 Dec 2021 10:29:52 +0100
+Message-Id: <20211213092933.980775980@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -89,7 +92,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/net/ipv6/seg6_iptunnel.c
 +++ b/net/ipv6/seg6_iptunnel.c
-@@ -148,6 +148,14 @@ int seg6_do_srh_encap(struct sk_buff *sk
+@@ -143,6 +143,14 @@ int seg6_do_srh_encap(struct sk_buff *sk
  		hdr->hop_limit = ip6_dst_hoplimit(skb_dst(skb));
  
  		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));

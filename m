@@ -2,120 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3325472FCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62852472FD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbhLMOv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:51:29 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:52936 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbhLMOv1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:51:27 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:45796)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwmfk-007Cyd-Mm; Mon, 13 Dec 2021 07:51:24 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:40216 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwmfj-00BB7w-LH; Mon, 13 Dec 2021 07:51:24 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <20211208202532.16409-1-ebiederm@xmission.com>
-        <YbY2CDkZbOFRBN0i@osiris>
-Date:   Mon, 13 Dec 2021 08:50:44 -0600
-In-Reply-To: <YbY2CDkZbOFRBN0i@osiris> (Heiko Carstens's message of "Sun, 12
-        Dec 2021 18:48:56 +0100")
-Message-ID: <87czm036ez.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S239763AbhLMOx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:53:58 -0500
+Received: from mail-db8eur05on2082.outbound.protection.outlook.com ([40.107.20.82]:20842
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231349AbhLMOx5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 09:53:57 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aNtwHl6a2gcT+xCGG3lhlIRb3A8lbEQbdHWxwa309oRVfxUSfPTRgm/1WjiSFgDnRb3ArJbC9eIHHMYYLkiBweWl+Fffuhjfsc37VTPSOq99T5IIZJQ3b6IWvW/4u3gMqdVcj7klPaxmL5Wl6hsowOUzOWfdZkLo0LkuCpIBIhDhNIw3u2Gl4jIDD7Dn+qcRN4rDrgOs8tfvj40Q95PNzmxBKKdWZYWAJzgN/bDxgM/WoW+tSQCZs9OU59BNim7ZziO1mxT6Cy8W1Lt9IwiZfQk8CTHk0VpF4ax1iccBYFGUFrdve7QkjQI2SA5NDg61jDEtCcwtsLrvyQmleU9Aew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0mfTp2DVJurz2yY/CIE2XC4xv4kNtDtiQgv/JVFNH2Y=;
+ b=I6G4YV4zkAnlCUvdRre1gKDRggN9A/y6NKsppgcTOQ0Yex77RfE+DCTIzMnhyWpCX67wC5I+6ik/ti/vOb/cHQYyGWJq7520mUx+AbRTfYilFzHX1gsmW7qEK/Ss5cf6t867fQ0naRSB2L6k78ThiXSQzrMf1xhhFxgPYA+b/Aes4BdmwzRboNR81SOM2V08NuPQdpBWtvMlIB47MELhmvnpKQ+SrV4E2QtH3V7UM8ZwgQDaF8/BssKEfjRXJ8pysnq4cuiAFd7DmvwvJ+yGGUxo7mGl2Bkz380u4a0oDFXVfu7gGoRRzNY7nJoubqEs0rKi9kdP9WXOnRSto1zlzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0mfTp2DVJurz2yY/CIE2XC4xv4kNtDtiQgv/JVFNH2Y=;
+ b=MpJsVLYKngV6V5nrAVjf/3LSUve3WOQuLdNZXYqaDj5aJbjjaiU3J2EOmsT9IHOo2eRnXdcBrlhnEBUpLsxelpQXj/26+58UQWL0aQBEV8zPh/jAkLG5eygZtZDtmisGFZx14dvRohMvTjyIOjfNk/jDATtMWF1+vail8dIbiAY=
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
+ by DB6PR1001MB0967.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:63::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
+ 2021 14:53:52 +0000
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2082:9a35:28f4:9328]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2082:9a35:28f4:9328%4]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 14:53:52 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Andrej Picej <andrej.picej@norik.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Support Opensource <Support.Opensource@diasemi.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: RE: [RFC PATCH] watchdog: da9062: Correct the timeout values
+ [Klartext]
+Thread-Topic: [RFC PATCH] watchdog: da9062: Correct the timeout values
+ [Klartext]
+Thread-Index: AdfwANztWgHN3oJ0TZqwlPeCV8dlmAAL2e8Q
+Date:   Mon, 13 Dec 2021 14:53:52 +0000
+Message-ID: <DB9PR10MB4652D761596216F84AFF95EB80749@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+References: <4254747d8cde4c5dbcbfdd00a3ecf701@dh-electronics.com>
+In-Reply-To: <4254747d8cde4c5dbcbfdd00a3ecf701@dh-electronics.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9ce29af8-df85-46b5-9c35-08d9be4860ef
+x-ms-traffictypediagnostic: DB6PR1001MB0967:EE_
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-microsoft-antispam-prvs: <DB6PR1001MB096726F8EF535C6E348C63CFA7749@DB6PR1001MB0967.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cf/3cC72H4cTXWhrFucu5cDyU3gmXj/iJtAB/HTpQ7jpv1OOMkjXploX8b0LtG+3mXd7xLg9HLQiBLyp/mezqQ7AcEzxuOq+EAYHIcSAGj5jcI1iuFp/Sp+gOeMUP1gI1yDSadS5uzGGLAYn2zfkmmlwK/k6kzfrc5zPWexc8kIvfpkeNwFW/fAjMnqxbYdoliioACabn0zqvgt1WakVlTroLzjlwhlZbsWeVAXHLiemfRN77EN6zuJCTxSamEkoobzel9ReMNZiCcKqoXfAoupS+pi0nm+k37BgTO4kRRXCvyhr/u6R4hDv3zK9Dsa5TwFqhKADlsVm3aCCJBJt2yuJbAQ3Z8IVF2v4Dnq7m4dWmkODt0JLzLE3geL6WS3i7EVVyGI3rmOsODsW3baIeRE9uimNiyco5mBcDvKPnRpj94sjhYBg3QVSsQ3Cm7XKB0RqsrxbN5I6JmIGC2pw03Hb2AXWTi4oCB1wHVQ1ZX1XWTa8ec6vSP4McfiSr0s2OwhnPmZY+F/QDMB9c+ox7nZgoT+7Qt2fsFXLpHO7qzRzpK6fgA91RAOogsUFcfnak8ZRGafo4WcftP0blbgoYIV9NrCn77P8hWHC2lW2wYDb8RvhYcDxZArtj2yaHPZYkTa0rhNG0l068seNsUpO2zN5DTtRLKEvpTKaF1IuJWRHDeGnaB95/5dVGYiZo85t1nMB92hyOuL43g+ljvlU6w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(66556008)(76116006)(508600001)(66446008)(5660300002)(83380400001)(2906002)(316002)(55016003)(71200400001)(122000001)(7696005)(38100700002)(8676002)(4326008)(64756008)(6506007)(38070700005)(26005)(8936002)(53546011)(110136005)(55236004)(9686003)(186003)(52536014)(54906003)(33656002)(86362001)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dzFQVENDN1NsdWJmaGtSSUYrTExzcWJaQmZxdEVkUVc1MWhORWRyOUtsV2w1?=
+ =?utf-8?B?QjVkZytDd2ZJSU10cXY1S2oxTXZjYVpzNU1hNU91ZFJqb2ZIcWltMXNnSHAy?=
+ =?utf-8?B?Y0kwWlhUaklnVjVNS3hodTcvbmVZbTVnOU5GZDlsYlUrc2VqVjhad1FlN3dp?=
+ =?utf-8?B?NzZ1ci91ck1kNkNybVZMVS9wQ1Z4b3kyZlg1L3BJb1g1N283MU5Jd0UweGw1?=
+ =?utf-8?B?Zng5SFhSbkg3V2RhSTJRM05Gc2NOcXVIMzQzakRScXYvVkZvM1pKeUx1NzM3?=
+ =?utf-8?B?SzREWk92WmJENHdlOEhGd2RISHNoYjRBSDlQcXI4TmsyVWRia1RhUzkweWFR?=
+ =?utf-8?B?Ujk2TEJLOWFJc1RLdHgzYVkrZ3l6VGxJaUFSREJsdVJjMDVLRkphdCtrck9S?=
+ =?utf-8?B?WEFiS3poVkcySkxEcHYzb3pWdVkwc01yN3NnTFF5OXJJV3FHSWl4dUphMDY2?=
+ =?utf-8?B?c1hlMlBGdzJyMG5ycG1sVHpNcjdUNlRBdVYxVStaK0dvV0FwZ0VxTGgrTUtE?=
+ =?utf-8?B?RHZmWlRsOHR0Y0R0QVdzT2EyZi9zSG92dkYxOG5HVHNNcjIxVHlya242alhT?=
+ =?utf-8?B?bWhFQXhMQy9mL2grVm12RlFaZVVGUHBkdi84ZTdkOUxBSzhKOFZLZ0RnbExo?=
+ =?utf-8?B?RkFSU3lhT0NtSFVlcEx2VWlvOXpVTkFwNEZVU1ZWTG1UOUNtTy96NUx3ZFdP?=
+ =?utf-8?B?ZWtEajVQUUdrUFJ0Mmcvd0orTVcyUUlqWmtNTDU1ZXNqMHJWTlVYOUF4TFZq?=
+ =?utf-8?B?cjVBMTJVVngremJIVGJlMlVoT2c3Q21OeEJFQlVGdDFZYmJPSHR2RWllSUhE?=
+ =?utf-8?B?ZXRrNGl5NWcrc2RyblA4VFJRWnZ3V1ZzU0pHKzVxRjBFdWRHU2Vzd1QxL3lt?=
+ =?utf-8?B?cUl5ZEVEVy91ZDJZaFBLdmJnSXhEeGdkb1RUdG11QUVSbUREYU5pSmhvVHdB?=
+ =?utf-8?B?MVU1aWJneHRQOFlsVzlxWkd0Q1JqZDE4cnE4eDkzRTVEazNyTERLZml0NjVu?=
+ =?utf-8?B?U0pUL0V1R3NxUnQ3WW9wU1N6ZGV2c1d2MmlFb0pmb3haNnZWN1NNc1ZsQmJy?=
+ =?utf-8?B?cmtPSVVlMGFPQ1E3eUFQMUkyWW9jc0QrU1pxWU0wS082MW1LWVBmQVlveG9V?=
+ =?utf-8?B?NHpKemphUXJySHBjZlZodHBZdTR1NjV2dWtPdFNYLy92RktoOGhYVldmSnA5?=
+ =?utf-8?B?RnM0emNNcTdPMGpvUGhwMWdFQVNoQk5rL1lLM0l6TmYxSFJ6WVhtVlpvbU1z?=
+ =?utf-8?B?NjlUZTNtWXA0UDZRbG1xcThVWmZuUENxTnR1eGxkRFlSQjhzcHNLRjJ0dEZw?=
+ =?utf-8?B?UEU1dUQxKzJ3MVRPU0lKTmtpcVpic0k5ejM5TDdKWllLTDE2bXFzb0EzcWt4?=
+ =?utf-8?B?UHZrL2Z0VE1ka2JYV3d2Wm52RHhvZkU4Q2FlSFRXblVSMEh2QXBVclZYZkVB?=
+ =?utf-8?B?S1FGL05TM0Vwc3BuN0pHSGx4QVpUbXYwc25wUW1jampiQjJNdi96SFNRL1hN?=
+ =?utf-8?B?ZUJ5VmlxTmo3aGxUVjJZcGNPUDljaTBOTzZIZmtYaUZmMnpYa3gvK3o4YU5z?=
+ =?utf-8?B?MkdhM0x6V2lGSDBnNENyMVMvTUdxYlJDdzQvdlMrRnlSOVdiaHBTNkJKTEQx?=
+ =?utf-8?B?MGlIVGlkbFhzNFRjTFdCOFVKMklGcnRCSHVMQWRUZzVGTGNZaFhiYnVnZTlP?=
+ =?utf-8?B?enlqeDUvdjEwdUlNWWM4VjhsbEJZdmFDcW9MdmN2Y24yU01ZRTQzcGFZT0N6?=
+ =?utf-8?B?U1ByeFA4SUJvMUVBTlh2L3hJbHpUQ0FUMTJaMWplb2cxeTcvd0h6dkV1M3JG?=
+ =?utf-8?B?SzVxZXFVWXlPZzNVMkNJUEM4dUcvS3dTV010K052Nzk4Y1NlRjRBckNRUEdm?=
+ =?utf-8?B?M2FDT25XSHk2S0o4QzlQb2FYOTFYQTVaV0hpeFloeHN2YVJhWm12ZmxqYXZw?=
+ =?utf-8?B?Z0NhZThQREpYVnFJK2tiWmRldGVtQ1g2Z2ZoaTV6RW53WHliYjZrSjcwVHNs?=
+ =?utf-8?B?MlArWDVWMGhHQUpIT3BhQzJ0QjZPWmJrcWxhcUtjSVAyT2ZuRWxaL3c1anFR?=
+ =?utf-8?B?ZXRnelFMNVNyRVlkYUVIdkV2NmtscUt5VlAvdW5uZnRuQWtpTTVMMkJ5Qll6?=
+ =?utf-8?B?WGsyT0NTbzVMRlVKRm5nQzdMcEN0WjI0NGFTREZ0UmZmSlY2TjRQV0NsaEg5?=
+ =?utf-8?B?VTlJNWRRbC9mckNTcVluRXZGdlpkMjdvRkVubmlKTEtRYlB4eGdWczFXdTVs?=
+ =?utf-8?B?cEJRTkw3elFyQkhicmQ3cnZ5Y3VnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mwmfj-00BB7w-LH;;;mid=<87czm036ez.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18KAzcwgpDXJi2izmCoG3YxLtoPlPFwE2s=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
-        XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Heiko Carstens <hca@linux.ibm.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 431 ms - load_scoreonly_sql: 0.12 (0.0%),
-        signal_user_changed: 12 (2.8%), b_tie_ro: 10 (2.4%), parse: 0.95
-        (0.2%), extract_message_metadata: 14 (3.3%), get_uri_detail_list: 1.69
-        (0.4%), tests_pri_-1000: 14 (3.3%), tests_pri_-950: 1.37 (0.3%),
-        tests_pri_-900: 1.08 (0.3%), tests_pri_-90: 57 (13.3%), check_bayes:
-        56 (13.0%), b_tokenize: 7 (1.6%), b_tok_get_all: 7 (1.7%),
-        b_comp_prob: 2.3 (0.5%), b_tok_touch_all: 36 (8.4%), b_finish: 0.87
-        (0.2%), tests_pri_0: 317 (73.7%), check_dkim_signature: 0.64 (0.1%),
-        check_dkim_adsp: 2.7 (0.6%), poll_dns_idle: 0.86 (0.2%), tests_pri_10:
-        2.1 (0.5%), tests_pri_500: 7 (1.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 01/10] exit/s390: Remove dead reference to do_exit from copy_thread
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ce29af8-df85-46b5-9c35-08d9be4860ef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 14:53:52.0999
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /yUOmNCxgyUaVQwwzr6ymAhKYxGOYs43VRaFRTHmcaC3V/NiHUVQmQuIYT1sl2gcJJfrfkDlBpx+2gMPdNpo0yNKDcyBVPny0dRgtlK7rW8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR1001MB0967
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Heiko Carstens <hca@linux.ibm.com> writes:
-
-> On Wed, Dec 08, 2021 at 02:25:23PM -0600, Eric W. Biederman wrote:
->> My s390 assembly is not particularly good so I have read the history
->> of the reference to do_exit copy_thread and have been able to
->> verify that do_exit is not used.
->> 
->> The general argument is that s390 has been changed to use the generic
->> kernel_thread and kernel_execve and the generic versions do not call
->> do_exit.  So it is strange to see a do_exit reference sitting there.
->> 
->> The history of the do_exit reference in s390's version of copy_thread
->> seems conclusive that the do_exit reference is something that lingers
->> and should have been removed several years ago.
-> ...
->> Remove this dead reference to do_exit to make it clear that s390 is
->> not doing anything with do_exit in copy_thread.
->>
->> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->> ---
->>  arch/s390/kernel/process.c | 1 -
->>  1 file changed, 1 deletion(-)
->
-> Applied to s390 tree. Just in case you want to apply this to your tree too:
-> Acked-by: Heiko Carstens <hca@linux.ibm.com>
-
-Thank you for looking at this and confirming I had read that the code
-properly and that the do_exit reference was no longer used.
-
-I will probably take this through my tree as well just so I don't have
-that trailing do_exit reference.
-
-At this point I will give things a bit more for people to review or say
-something about the other changes and if there is no negative feedback
-I think I will just apply the lot.
-
-Eric
-
+T24gMTMgRGVjZW1iZXIgMjAyMSAwOToxMSwgQ2hyaXN0b3BoIE5pZWRlcm1haWVyIHdyb3RlOg0K
+DQo+IFJlc2VuZCB3aXRoIFtLbGFydGV4dF0gdG8gdHVybiBvZmYgVExTIGVuY3J5cHRpb24uDQo+
+DQo+IEZyb206IEFkYW0gVGhvbXNvbg0KPiBTZW50OiBNb25kYXksIERlY2VtYmVyIDYsIDIwMjEg
+NTozOCBQTQ0KPiA+PiBUaGFua3MgYW55d2F5LCBzbyBub3cgSSBrbm93IGl0IG11c3QgYmUNCj4g
+Pj4gcHJvYmxlbSB3aXRoIG15IERBOTA2MSBjaGlwLg0KPiA+Pg0KPiA+PiBAQWRhbQ0KPiA+PiBX
+aGVyZSBjYW4gaXQgY29tZSBmcm9tPw0KPiA+PiBDYW4geW91IGdpdmUgd2UgYSBoaW50IHdoYXQg
+dG8gY2hlY2s/DQo+ID4NCj4gPiBJJ3ZlIHNwb2tlbiBpbnRlcm5hbGx5IGFuZCBoYXZlIGJlZW4g
+aW5mb3JtZWQgdGhhdCB0aGlzIGlzIGRvd24gdG8gdGhlIGZhY3QgdGhhdA0KPiA+IERBOTA2MSBy
+dW5zIG9ubHkgZnJvbSBhbiBpbnRlcm5hbCBvc2NpbGxhdG9yIHdoaWNoIG1heSBiZSBzbG93ZXIu
+IFRoZQ0KPiBpbmRpY2F0aW9uDQo+ID4gaXMgdGhhdCB0aGUgdmFsdWVzIGZvciBUV0RTQ0FMRSBk
+ZXNjcmliZSB0aGUgd2luZG93IHdoZXJlIGlmIGEga2ljay9waW5nDQo+IG9jY3Vycw0KPiA+IHdp
+dGhpbiB0aGF0IHBlcmlvZCB0aGVuIHRoZSB3YXRjaGRvZyBpcyBndWFyYW50ZWVkICpub3QqIHRv
+IHRpbWVvdXQuIFRoZQ0KPiBhY3R1YWwNCj4gPiB0aW1lb3V0IHdvdWxkIGJlIGF0IHNvbWUgcG9p
+bnQgYWZ0ZXIgdGhlIHNlbGVjdGVkIHRpbWVvdXQgcGVyaW9kLCBhc3N1bWluZw0KPiBubw0KPiA+
+IHBpbmcva2ljayBvY2N1cnJlZC4NCj4gPg0KPiA+IFRhYmxlIDggaW4gdGhlIGRhdGFzaGVldCBz
+cGVjaWZpZXMgYSBtaW5pbXVtIHdhdGNoZG9nIHRpbWVvdXQgb2YgMi41cw0KPiAodFdETUFYKQ0K
+PiA+IHVuZGVyIHNwZWNpZmljIG9wZXJhdGluZyBjb25kaXRpb25zLCBzbyBpZiB0aGUgbWluaW11
+bSAycyB3aW5kb3cgd2FzIGNob3Nlbg0KPiA+IChUV0RTQ0FMRSA9IDEpIHRoZW4gZWFybGllc3Qg
+dGhlIHdhdGNoZG9nIHdvdWxkIGFjdHVhbGx5IHRpbWVvdXQsIGZvbGxvd2luZyBhDQo+ID4gcGlu
+ZywgaXMgMi41cywgYXNzdW1pbmcgdGhlIGNvbmRpdGlvbnMgbWF0Y2hlZCB0aG9zZSBkZXNjcmli
+ZWQuDQo+ID4NCj4gPiBJZiB5b3UgaGF2ZSBmdXJ0aGVyIHF1ZXN0aW9ucyBpdCBwcm9iYWJseSBt
+YWtlcyBzZW5zZSB0byBjb250YWN0DQo+IERpYWxvZy9SZW5lc2FzDQo+ID4gc3VwcG9ydCBhcyB0
+aGV5IHdpbGwgYmUgYWJsZSB0byBwcm92aWRlIG1vcmUgZGV0YWlsZWQgaW5mbyBvbiB0aGlzLg0K
+Pg0KPiBTbyBhIERBOTA2MSBydW5zIG9ubHkgZnJvbSBhbiBpbnRlcm5hbCBvc2NpbGxhdG9yLCB3
+aGVyZWFzIGEgREE5MDYyDQo+IGNhbiBydW4gb24gZWl0aGVyIGFuIGludGVybmFsIG9yIGFuIGV4
+dGVybmFsIG9zY2lsbGF0b3IuIFNvIHRoaXMNCj4gbWVhbnMgdGhhdCB0aGUgREE5MDYxIHRpbWVv
+dXQgdmFsdWVzIGFyZSBkaWZmZXIgZnJvbSB0aGUgREE5MDYyDQo+IHdpdGggYW4gZXh0ZXJuYWwg
+b3NjaWxsYXRvciBub3Qgb25seSBvbiBteSBkZXZpY2UgYnV0IG9uIGFsbCBEQTkwNjENCj4gZGV2
+aWNlcy4NCj4NCj4gVGhpcyBhcmUgdGhlIHZhbHVlcyAoaW4gc2Vjb25kcykgaW4gY29tcGFyaXNv
+bjoNCj4gREE5MDYyIChmcm9tIGRyaXZlcik6IDAgIDIgIDQgICA4ICAxNiAgMzIgIDY1IDEzMQ0K
+PiBEQTkwNjEgKG1lYXN1cmVkKTogICAgMCAgMyAgNiAgMTIgIDI1ICA1MSAxMDIgMjA0DQo+ID09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCj4gRGlmZmVy
+ZW5jZTogICAgICAgICAgIDAgKzEgKzIgICs0ICArOSArMTkgKzM3ICs3Mw0KPg0KPiBJbiBteSBv
+cGluaW9uLCB0aGUgZGlmZmVyZW5jZXMgaW4gdGhlIGhpZ2hlciB2YWx1ZXMgYXJlIHZlcnkgaHVn
+ZS4NCj4gSWYgSSBleHBlY3QgdGhhdCB0aGUgd2F0Y2hkb2cgdHJpZ2dlcnMgYW5kIEkgaGF2ZSB0
+byB3YWl0IG1vcmUgdGhhbg0KPiBhIG1pbnV0ZSBmb3IgdGhhdCB0byBoYXBwZW4gSSBhc2sgbXlz
+ZWxmIGlzIHRoZXJlIHNvbWV0aGluZyB3cm9uZy4NCj4NCj4gQEFuZHJlag0KPiBJIGd1ZXNzLCB5
+b3UgYXJlIHVzaW5nIGFuIGV4dGVybmFsIG9zY2lsbGF0b3IsIGFyZW4ndCB5b3U/DQo+DQo+IEBB
+ZGFtDQo+IElzIHRoZXJlIGEgd2F5IHRvIGNoZWNrIGluIHRoZSBkcml2ZXIgd2hpY2ggb3NjaWxs
+YXRvciBpcyBpbiB1c2U/DQoNCkEgcXVpY2sgc2NhbiBvZiB0aGUgREE5MDYyIGRhdGFzaGVldCBz
+aG93cyB0aGF0IHJlZy9maWVsZCBFTl8zMksvQ1JZU1RBTCB3aWxsDQppbmRpY2F0ZSB0aGUgcHJl
+c2VuY2Ugb2YgYSAzMktIeiBjcnlzdGFsIG9zY2lsbGF0b3IuIE9idmlvdXNseSBvbiBEQTkwNjEg
+dGhhdA0Kb3B0aW9uIGlzbid0IGF2YWlsYWJsZS4NCg0KSSB0aGluayB0aGUgcHJvYmxlbSBzZWVt
+cyB0byBsaWUgYXJvdW5kIGRldGVybWluaW5nIHRoZSBpbnRlcm5hbCBvc2NpbGxhdG9yJ3MNCmZy
+ZXF1ZW5jeS4gRGF0YXNoZWV0IHJlZmVyZW5jZXMgMjVNaHogaW4gVGFibGUgOSAoV2F0Y2hkb2cg
+RWxlY3RyaWNhbA0KQ2hhcmFjdGVyaXN0aWNzKSwgYnV0IHRoYXQgZG9lc24ndCBzZWVtIHRvIHRh
+bGx5IHdpdGggeW91ciB0aW1pbmdzIGFuZCBJIGRvbid0DQpzZWUgYW4gb2J2aW91cyB3YXkgaW4g
+dGhlIHJlZ21hcCB0byBjYWxjdWxhdGUgdGhpcyBhdCBydW4gdGltZS4gKklmKiB0aGUNCm9zY2ls
+bGF0b3IgZnJlcXVlbmN5IHZhcmllcyBmcm9tIHBhcnQgdG8gcGFydCwgb3IgdW5kZXIgZGlmZmVy
+ZW50IGVudmlyb25tZW50YWwNCmNvbmRpdGlvbnMsIHRoZW4gaXQncyBnb2luZyB0byBiZSB0b3Vn
+aCB0byB0aWUgdGhpcyBkb3duLCBhbmQgeW91IHdvdWxkbid0IHdhbnQNCnRvIHN0YXRlIGEgdGlt
+ZW91dCB2YWx1ZSB0aGF0J3MgbG9uZ2VyIHRoYW4gcmVhbGl0eS4NCg==

@@ -2,57 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF924737F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75794737F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243917AbhLMWts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:49:48 -0500
-Received: from aposti.net ([89.234.176.197]:34516 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243841AbhLMWtr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:49:47 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 3/3] MIPS: Add support for LTO
-Date:   Mon, 13 Dec 2021 22:49:14 +0000
-Message-Id: <20211213224914.1501303-4-paul@crapouillou.net>
-In-Reply-To: <20211213224914.1501303-1-paul@crapouillou.net>
-References: <20211213224914.1501303-1-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S243939AbhLMWuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243924AbhLMWuB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 17:50:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFA7C061574;
+        Mon, 13 Dec 2021 14:50:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67E7BB816CF;
+        Mon, 13 Dec 2021 22:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24235C34600;
+        Mon, 13 Dec 2021 22:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639435799;
+        bh=kn8oxVkJ6yPEUpS8v7x4XjZ+luhJ//RD7OwzUBU08GE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=FJHAUSVplX9ssZzTKkrdlWgZDn5urUEhpHLspLu0tFD+iwkj6mAsz6CsF6hqbWifn
+         3dHfusbpeJatnLm8ZhTcc+Br0X31isNLqRkqLzZCmYneC9Nb2tFC+wGwNsYa7LzVNj
+         dSiRJggs7Cm8vJJxSY1c30N8h5iwONAiWCjFY6qiDGa3aWPL9aCPOFmg62cQjoSoJw
+         tOcwCzXU0JL+CJKILmIx1Y5kj8rqWhLl6oASrB10nIuQf+oKhdSjdh4ANreMqiT3i9
+         sCAhJgYbrg0yAy8PtF9IBFwyOjw73JT9P+pyW6iZk5SyakGwKTY8DCwcAb+Tlb6o4H
+         vFbMDBNDOsTYg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 00536609D6;
+        Mon, 13 Dec 2021 22:49:58 +0000 (UTC)
+Subject: Re: [GIT PULL] vhost: cleanups and fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211212175951-mutt-send-email-mst@kernel.org>
+References: <20211212175951-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-List-Id: <netdev.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211212175951-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+X-PR-Tracked-Commit-Id: bb47620be322c5e9e372536cb6b54e17b3a00258
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
+Message-Id: <163943579893.4494.7297461004032490348.pr-tracker-bot@kernel.org>
+Date:   Mon, 13 Dec 2021 22:49:58 +0000
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, dan.carpenter@oracle.com, hch@lst.de,
+        jasowang@redhat.com, jroedel@suse.de, konrad.wilk@oracle.com,
+        lkp@intel.com, maz@kernel.org, mst@redhat.com, parav@nvidia.com,
+        qperret@google.com, robin.murphy@arm.com, stable@vger.kernel.org,
+        steven.price@arm.com, suzuki.poulose@arm.com, wei.w.wang@intel.com,
+        will@kernel.org, xieyongji@bytedance.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow CONFIG_LTO_CLANG to be enabled. The ThinLTO variant is not yet
-supported.
+The pull request you sent on Sun, 12 Dec 2021 17:59:51 -0500:
 
-While this option allows to build a LTO'd kernel, the result kernel file
-ends up being *bigger* than the non-LTO variant (about 3.6 MiB with LTO
-vs. 3.1 MiB without with a ZSTD-compressed kernel).
+> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 0215dc1529e9..6987db8d5f64 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -22,6 +22,7 @@ config MIPS
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_SUPPORTS_HUGETLBFS if CPU_SUPPORTS_HUGEPAGES
-+	select ARCH_SUPPORTS_LTO_CLANG if CPU_LITTLE_ENDIAN
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select ARCH_WANT_LD_ORPHAN_WARN
+Thank you!
+
 -- 
-2.33.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

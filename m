@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9764731E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B6E4731E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbhLMQfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:35:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39146 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbhLMQe7 (ORCPT
+        id S235632AbhLMQgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233962AbhLMQgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:34:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74AA4B811A5;
-        Mon, 13 Dec 2021 16:34:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A8BC34603;
-        Mon, 13 Dec 2021 16:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639413297;
-        bh=wnOhd0uugHq1/ztVIeKV8oKWDawezTEWep8Ktuozols=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iHx90Veb6E2b1Q+kSSLbX8VMNXhEa0DEAnEw/GW5LThCYBLRa7Q2V6Vbab1p/pY+M
-         nDhiVTWBs71CBj+zDFsHdOzRqez3TI1aT2s/qkV3Nzl/ym19lAN1qA9vg6n0B+w5VB
-         S1Ln8hP4imkqRSiKwczKb/Gig80wHnfn/zU+TjExt6kxQmjETIcpEpT6gbv3qykYtM
-         CGCSjtsdB450aT+uKty7RjCpr/O526BcnE8YazrC4JG+G8Mw1PzTt9TfNimgdG/nLE
-         bGJot3ieeyL0tTN5Nokv36YggiKHbiaaa7IAJgYhrSr428y9K3AFkd/OQEFtt3nbRa
-         qxqn/jUK3Eh8w==
-Date:   Mon, 13 Dec 2021 16:34:52 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Oder Chiou <oder_chiou@realtek.com>,
-        ~okias/devicetree@lists.sr.ht, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: dt-bindings: add missing pins
-Message-ID: <Ybd2LMZ8+UqcUZTS@sirena.org.uk>
-References: <20211211215120.70966-1-david@ixit.cz>
+        Mon, 13 Dec 2021 11:36:06 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C162C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:36:05 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id r130so15450259pfc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:36:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5wyxUOFKzXzWH6KmMgR+HYDbJTzQzijXFBl960+ZGjY=;
+        b=D8O81HGIxMuUln1CvFs5EppKQefv7NmfhODLWT6c95m5ppaYrbylr/8cX4L3KfDPG/
+         KwTwxNpcAZUCpn1+SywI9p6Mo2PwVKUSmKkpKGoiWlgLqY8QzAhdXR4Lxf6Sx8B6KEOl
+         9Y4wvQPORVDvX/Xq9OwUDBf7DgvYBz+tjueGiOed2Rrcz14r0yb+kNN5Vd+u6dHsWc0R
+         XpqeSCjvAjo5yhyTI6ughv6riC68rRsXPaGBa+Xx/5U3yp8lAzBo+JWXzcJfW79E+Kpu
+         kGbFUH4Jf4vKZdlaSqyIqPUQ9L9OG3S71vKMhrj57V8gSru8Qozg4tu/OmEFXTkNRm78
+         MBvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5wyxUOFKzXzWH6KmMgR+HYDbJTzQzijXFBl960+ZGjY=;
+        b=2KqyK7RaFuPSK/SxkR2+Lw9tjwbEx+P/YsQAi6Pdxr0lPt41JFV9yuDj9TRtqpSdqb
+         bSn+8jbKKnQqWb/FROK/5czUNgBP8viFJSVKNB7UgEfc+AIg7DbkKdJfWr55wJ3e++qQ
+         DjulVRkAgGVDs8p2M9RD+FgPh9qs6KeTLwPVenornfPzmcnCyraIXoZ8yK8qZ7wBgtr2
+         Jo2xi4lX1B1wTZxpNtTeMl7I8io0DePhodWlphVmwFMHX9g9PN4nMdRVfjfDMC1nKiW9
+         YwXr1pY9wi/4LPajH2EW8AinJMU0Y5YD3j9bs5ORNqQb6AL7giYipPZmjqmmR88uQ8+N
+         TjyA==
+X-Gm-Message-State: AOAM5331XpKZPR6luQKYf0BkcXCrCmXnBxQHl6HQCoMSg8bCjtp9HiVW
+        kkdRyrFsOWLJbpt/iJJRG9hWkg==
+X-Google-Smtp-Source: ABdhPJyXncbWfDcnfXrMsKYIsvJnDH5haMuRwYLqcxc16EUEfKi0gk5UXHBHOqGpstTcilOU7RUBsw==
+X-Received: by 2002:a63:c155:: with SMTP id p21mr46985502pgi.156.1639413364899;
+        Mon, 13 Dec 2021 08:36:04 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y28sm12953221pfa.208.2021.12.13.08.36.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 08:36:04 -0800 (PST)
+Date:   Mon, 13 Dec 2021 16:36:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        ignat@cloudflare.com, bgardon@google.com, dmatlack@google.com,
+        stevensd@chromium.org, kernel-team@cloudflare.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: x86: zap invalid roots in kvm_tdp_mmu_zap_all
+Message-ID: <Ybd2cEqUnxiy/JBd@google.com>
+References: <20211213112514.78552-1-pbonzini@redhat.com>
+ <20211213112514.78552-3-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vmxQrrQTZR4eGkiO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211211215120.70966-1-david@ixit.cz>
-X-Cookie: No solicitors.
+In-Reply-To: <20211213112514.78552-3-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 13, 2021, Paolo Bonzini wrote:
+> kvm_tdp_mmu_zap_all is intended to visit all roots and zap their page
+> tables, which flushes the accessed and dirty bits out to the Linux
+> "struct page"s.  Missing some of the roots has catastrophic effects,
+> because kvm_tdp_mmu_zap_all is called when the MMU notifier is being
+> removed and any PTEs left behind might become dangling by the time
+> kvm-arch_destroy_vm tears down the roots for good.
+> 
+> Unfortunately that is exactly what kvm_tdp_mmu_zap_all is doing: it
+> visits all roots via for_each_tdp_mmu_root_yield_safe, which in turn
+> uses kvm_tdp_mmu_get_root to skip invalid roots.  If the current root is
+> invalid at the time of kvm_tdp_mmu_zap_all, its page tables will remain
+> in place but will later be zapped during kvm_arch_destroy_vm.
 
---vmxQrrQTZR4eGkiO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+As stated in the bug report thread[*], it should be impossible as for the MMU
+notifier to be unregistered while kvm_mmu_zap_all_fast() is running.
 
-On Sat, Dec 11, 2021 at 10:51:19PM +0100, David Heidelberg wrote:
+I do believe there's a race between set_nx_huge_pages() and kvm_mmu_notifier_release(),
+but that would result in the use-after-free kvm_set_pfn_dirty() tracing back to
+set_nx_huge_pages(), not kvm_destroy_vm().  And for that, I would much prefer we
+elevant mm->users while changing the NX hugepage setting.
 
-> Add pins missing in documentation, but present in the hardware.
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 8f0035517450..985df4db8192 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -6092,10 +6092,15 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
+                mutex_lock(&kvm_lock);
 
-> Fixes: 0e826e867264 ("ASoC: add RT5677 CODEC driver")
+                list_for_each_entry(kvm, &vm_list, vm_list) {
++                       if (!mmget_not_zero(kvm->mm))
++                               continue;
++
+                        mutex_lock(&kvm->slots_lock);
+                        kvm_mmu_zap_all_fast(kvm);
+                        mutex_unlock(&kvm->slots_lock);
 
-Please don't just add nonsense fixes tags for the sake of it, this just
-creates noise and gets in the way of people trying to use the tags to
-work out if thy need fixes.  The commit you're mentioning doesn't even
-contain any changes to the binding document.
++                       mmput_async(kvm->mm);
++
+                        wake_up_process(kvm->arch.nx_lpage_recovery_thread);
+                }
+                mutex_unlock(&kvm_lock);
 
-> @@ -54,9 +54,21 @@ Pins on the device (for linking into audio routes):
->    * DMIC2
->    * DMIC3
->    * DMIC4
-> +  * DMIC L1
-> +  * DMIC L2
-> +  * DMIC L3
-> +  * DMIC L4
-> +  * DMIC R1
-> +  * DMIC R2
-> +  * DMIC R3
-> +  * DMIC R4
-
-These clearly aren't pins you're adding, digital microphones use PDM
-and carry a stereo pair on a single physical pin (which is what should
-be and already is in the bindings).  This is adding an extra set of pins
-to the binding duplicating the existing ones.
-
->    * LOUT1
->    * LOUT2
->    * LOUT3
-> +  * PDM1L
-> +  * PDM1R
-> +  * PDM2L
-> +  * PDM2R
-
-I'd expect these to be just PDM1 and PDM2, assuming that that's what the
-pins are called in the chip datasheet.
-
---vmxQrrQTZR4eGkiO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG3disACgkQJNaLcl1U
-h9BZSwf+OOcBl5DrmVF88D9eLae6ah84DXOIEIStolvdAuNRSWnUdkm1RQ4G99zC
-LBwG7K6/O6vcGdcGQ4JO2+r8MvFhGlQxs9cJAZOqBvUUXlZHJhS75Ki7N6Y95T4n
-vOK5yRKGcBUEdTB6455YsppRqEkpNZ9XzCVzN3dLNZHvWUkGpAcRQCggDTfT6wBK
-ApDK+YWsRjUCGboPu5k9COT/l2N36qSbkFoe8BVadhNBCKYMVqD1bhlgcUExqbU7
-E4PkP5TOJZ7PKnIUx73lRSf7LfOrDU9sH06rvB2ER/hcwo2vwDlZxKNuMAyU9Bd0
-5vu9vqUY+iaLxeDdxv66WH0IykLN4A==
-=EMvB
------END PGP SIGNATURE-----
-
---vmxQrrQTZR4eGkiO--
+[*] https://lore.kernel.org/all/Ybdxd7QcJI71UpHm@google.com/

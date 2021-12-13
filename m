@@ -2,108 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4610A4733FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F7F4733FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241872AbhLMS31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S241826AbhLMS3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241723AbhLMS3Z (ORCPT
+        with ESMTP id S235765AbhLMS3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:29:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB09C061574;
-        Mon, 13 Dec 2021 10:29:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C943611AB;
-        Mon, 13 Dec 2021 18:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B27C34602;
-        Mon, 13 Dec 2021 18:29:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639420164;
-        bh=dwmZCtu/nnxrkO4uE9UCl7n6sr+jvUg3xCrI1Q2jU7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oF+1FRcff5FSXd2n2eexUMZ3r2KALwtrpAtkSdPPa3SGXoXACB9DHrbyQgF0ZiKL4
-         fXjrqwIH0JFPeKtyQUQAQEkXp2Lzv8VtZa3RRNJCnXVyFjrF5FyCcdftxzzGjiireA
-         EPRSO7l1z5j+rcunUB9xNEAHtB6xGFOzp2BKDSaSrVIjfpUJhwxbstW6PUetIywHWd
-         Sf5Timfd5e+jTDR4Ub167IoIw7rEMSQ2T6APYE4mCtN5es9gASDgPYg0Ol7oTZyZeq
-         RG48Z5jQR0LUnp9wl8aXHwxjnJ3a8pFZRyH4ok8GJc6pWSGaFZOa1gb6wEt+aSVDQS
-         3QLSrxerLKY4g==
-Date:   Mon, 13 Dec 2021 18:29:19 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        XiaokangQian <xiaokang.qian@arm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Catalin Marinas <catalin.marinas@arm.com>, nd <nd@arm.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] crypto: arm64/gcm-ce - unroll factors to 4-way
- interleave of aes and ghash
-Message-ID: <20211213182918.GC12405@willie-the-truck>
-References: <20210923063027.166247-1-xiaokang.qian@arm.com>
- <YVK1u4BgVAa84fMa@sol.localdomain>
- <CAMj1kXHeJBUAzcLHRNYDbbUDe5vRS7Bxy_LKF5gdRLJca7TNRQ@mail.gmail.com>
+        Mon, 13 Dec 2021 13:29:39 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F69C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:29:38 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l25so55507626eda.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:29:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JVp+xWM4KFb2U5Tm2sWK0RVveL8ra0yv5BzRwMMdZQk=;
+        b=hBZLbXLvI92rLqvMAnKAujm5/V/JDlnB3areZfiRGLNFPhm2QzYakzo3Tvg5xoCfAf
+         kCxLrccvdx6Bm0tKCYeAOgB6V4DghsLj3jFts6M334RI7RBolB9Kg4v88J37K5lWT2wi
+         dJhf5mDgnJdZklW0v3XpfqLG1gRnPbY9wsBA+zR1PZO6jpdjN/IZiyXduL0arYpky93J
+         s1GA5KzB/mwXUb1NPqFRszFLg2b8ip0EUvuvPT9j9b0xKDlnGSGDfsrrHhWJoiuMVxRz
+         btNgHZTWOrvor3tJklRuqQxpI6aA6xLdlvwR2uuaxtR2AO7DdAdSqoYSzM1+Ca3YpB7M
+         1cvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JVp+xWM4KFb2U5Tm2sWK0RVveL8ra0yv5BzRwMMdZQk=;
+        b=QfZ28E1j+TswQenGxJDBMHPQAN+JanlqUss2MYlrHygo7oiYpMA6LZmEwxYoRlTNfD
+         jHTJY62M31Lwd5zlkTVVm62J+w5AhVvJmGtNfXFLN3rtirbtycD5M1XANazMOtE6YUy0
+         1fhdgaeYC/Lj//1t0ZajbZIP2eidNc3czk8Z0ccdBTXcKQRhH05XMLzbPvmT575/NE8K
+         SVR5D5CD+XO0BfGlAcAmhsL1KR7GEfyjs7nDOhP9+ogF1VAY3vTuVndeKGsjoPnLssqH
+         VFkxbNXk0XRlEo8uWIzBHpAhq9P7DBSz7VzHY9sKofuG9pDY3PIhGk+Q7TuJvI19Rtc/
+         4nRQ==
+X-Gm-Message-State: AOAM533CYWVue6ZkirsrpcYHA938Ywp5JWe2RN6tsrTJB7qwRlydGjpS
+        fI7CgF8EZlL1sJ2lfOorkX2BWCV9t3atBGlXM27g+g==
+X-Google-Smtp-Source: ABdhPJxog21TNQxLva1xrLe3ix1jmAP0WPS+rYpoedG974KVZVylJeGmyXpFaVgFi8rllCLkbAaiOuP0AUsjTBljW84=
+X-Received: by 2002:a05:6402:4b:: with SMTP id f11mr535537edu.267.1639420177047;
+ Mon, 13 Dec 2021 10:29:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHeJBUAzcLHRNYDbbUDe5vRS7Bxy_LKF5gdRLJca7TNRQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 13 Dec 2021 23:59:25 +0530
+Message-ID: <CA+G9fYtxrPzTkPc-RE6U8ERtcngdqr9xqKDs=czYu6ePyn6QFw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 11:04:03PM +0200, Ard Biesheuvel wrote:
-> On Tue, 28 Sept 2021 at 08:27, Eric Biggers <ebiggers@kernel.org> wrote:
-> >
-> > On Thu, Sep 23, 2021 at 06:30:25AM +0000, XiaokangQian wrote:
-> > > To improve performance on cores with deep piplines such as A72,N1,
-> > > implement gcm(aes) using a 4-way interleave of aes and ghash (totally
-> > > 8 blocks in parallel), which can make full utilize of pipelines rather
-> > > than the 4-way interleave we used currently. It can gain about 20% for
-> > > big data sizes such that 8k.
-> > >
-> > > This is a complete new version of the GCM part of the combined GCM/GHASH
-> > > driver, it will co-exist with the old driver, only serve for big data
-> > > sizes. Instead of interleaving four invocations of AES where each chunk
-> > > of 64 bytes is encrypted first and then ghashed, the new version uses a
-> > > more coarse grained approach where a chunk of 64 bytes is encrypted and
-> > > at the same time, one chunk of 64 bytes is ghashed (or ghashed and
-> > > decrypted in the converse case).
-> > >
-> > > The table below compares the performance of the old driver and the new
-> > > one on various micro-architectures and running in various modes with
-> > > various data sizes.
-> > >
-> > >             |     AES-128       |     AES-192       |     AES-256       |
-> > >      #bytes | 1024 | 1420 |  8k | 1024 | 1420 |  8k | 1024 | 1420 |  8k |
-> > >      -------+------+------+-----+------+------+-----+------+------+-----+
-> > >         A72 | 5.5% |  12% | 25% | 2.2% |  9.5%|  23%| -1%  |  6.7%| 19% |
-> > >         A57 |-0.5% |  9.3%| 32% | -3%  |  6.3%|  26%| -6%  |  3.3%| 21% |
-> > >         N1  | 0.4% |  7.6%|24.5%| -2%  |  5%  |  22%| -4%  |  2.7%| 20% |
-> > >
-> > > Signed-off-by: XiaokangQian <xiaokang.qian@arm.com>
-> >
-> > Does this pass the self-tests, including the fuzz tests which are enabled by
-> > CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y?
-> >
-> 
-> Please test both little-endian and big-endian. (Note that you don't
-> need a big-endian user space for this - the self tests are executed
-> before the rootfs is mounted)
-> 
-> Also, you will have to rebase this onto the latest cryptodev tree,
-> which carries some changes I made recently to this driver.
+On Mon, 13 Dec 2021 at 15:17, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.85 release.
+> There are 132 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.85-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-XiaokangQian -- did you post an updated version of this? It would end up
-going via Herbert, but I was keeping half an eye on it and it all seems
-to have gone quiet.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Thanks,
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Will
+## Build
+* kernel: 5.10.85-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: f6a609e247c6d6f15ec8c4a87c9aef37b7c8e5a5
+* git describe: v5.10.84-133-gf6a609e247c6
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.84-133-gf6a609e247c6
+
+## No Test Regressions (compared to v5.10.83-131-gea2293709b3c)
+
+## No Test Fixes (compared to v5.10.83-131-gea2293709b3c)
+
+## Test result summary
+total: 83789, pass: 71973, fail: 330, skip: 10774, xfail: 712
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 255 passed, 4 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 46 passed, 6 failed
+* riscv: 24 total, 16 passed, 8 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 0 passed, 1 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

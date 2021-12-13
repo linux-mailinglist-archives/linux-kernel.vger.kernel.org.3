@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 394E14726E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D16B94723DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbhLMJzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S233756AbhLMJc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237132AbhLMJvj (ORCPT
+        with ESMTP id S233766AbhLMJcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:51:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC8FC08ECA9;
-        Mon, 13 Dec 2021 01:44:20 -0800 (PST)
+        Mon, 13 Dec 2021 04:32:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2A1C061574;
+        Mon, 13 Dec 2021 01:32:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCB2EB80E1B;
-        Mon, 13 Dec 2021 09:44:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225A9C00446;
-        Mon, 13 Dec 2021 09:44:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 84DF9CE0E29;
+        Mon, 13 Dec 2021 09:32:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE0EC00446;
+        Mon, 13 Dec 2021 09:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388658;
-        bh=ylt4XBzjjrhFJBzCSs54aBQ+raqqABPx4pq1rbLz1m0=;
+        s=korg; t=1639387940;
+        bh=UqZ6yA+EEgn0w2LlqejE8mAd9QsOWdeloBmO2HNRhFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KIR9OGMJvizEcmbY5TXuCxtVXQSIHE09si8wQoEnPNmGoOzUEKb4dQMO+CCWu2PZc
-         PHPahBvFHSNmi0Dr/9iYLkbHTDfSHkLM5cIWleEDTvYgJ56OQLWvOvUtdHmnv/XL12
-         SoNcSz58HKSQbh93TKVDr0N2ZpmwWUvezMFTVw5c=
+        b=0drQ9V25IwktwdQ95M/o0Xh6v1AbqxX31pWemf8jS/95Fj4pxu8kTvmZIIqJWDODV
+         bskVJVu0K9y6Xry1OxPzeFozMT66yqqYVwPRqJ4Jo8rYW3gMqtOBX3qKzFSLAyktWc
+         7WdQ72Us/c7Awep08tISYzeBOA+T4S+o0a8aL6NU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 20/88] bonding: make tx_rebalance_counter an atomic
+        stable@vger.kernel.org,
+        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.4 12/37] ALSA: pcm: oss: Fix negative period/buffer sizes
 Date:   Mon, 13 Dec 2021 10:29:50 +0100
-Message-Id: <20211213092933.910826596@linuxfoundation.org>
+Message-Id: <20211213092925.773453675@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,132 +50,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit dac8e00fb640e9569cdeefd3ce8a75639e5d0711 upstream.
+commit 9d2479c960875ca1239bcb899f386970c13d9cfe upstream.
 
-KCSAN reported a data-race [1] around tx_rebalance_counter
-which can be accessed from different contexts, without
-the protection of a lock/mutex.
+The period size calculation in OSS layer may receive a negative value
+as an error, but the code there assumes only the positive values and
+handle them with size_t.  Due to that, a too big value may be passed
+to the lower layers.
 
-[1]
-BUG: KCSAN: data-race in bond_alb_init_slave / bond_alb_monitor
+This patch changes the code to handle with ssize_t and adds the proper
+error checks appropriately.
 
-write to 0xffff888157e8ca24 of 4 bytes by task 7075 on cpu 0:
- bond_alb_init_slave+0x713/0x860 drivers/net/bonding/bond_alb.c:1613
- bond_enslave+0xd94/0x3010 drivers/net/bonding/bond_main.c:1949
- do_set_master net/core/rtnetlink.c:2521 [inline]
- __rtnl_newlink net/core/rtnetlink.c:3475 [inline]
- rtnl_newlink+0x1298/0x13b0 net/core/rtnetlink.c:3506
- rtnetlink_rcv_msg+0x745/0x7e0 net/core/rtnetlink.c:5571
- netlink_rcv_skb+0x14e/0x250 net/netlink/af_netlink.c:2491
- rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:5589
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x5fc/0x6c0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x6e1/0x7d0 net/netlink/af_netlink.c:1916
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0x39a/0x510 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x195/0x230 net/socket.c:2492
- __do_sys_sendmsg net/socket.c:2501 [inline]
- __se_sys_sendmsg net/socket.c:2499 [inline]
- __x64_sys_sendmsg+0x42/0x50 net/socket.c:2499
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-read to 0xffff888157e8ca24 of 4 bytes by task 1082 on cpu 1:
- bond_alb_monitor+0x8f/0xc00 drivers/net/bonding/bond_alb.c:1511
- process_one_work+0x3fc/0x980 kernel/workqueue.c:2298
- worker_thread+0x616/0xa70 kernel/workqueue.c:2445
- kthread+0x2c7/0x2e0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
-
-value changed: 0x00000001 -> 0x00000064
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 1082 Comm: kworker/u4:3 Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: bond1 bond_alb_monitor
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
+Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
+Link: https://lore.kernel.org/r/20211201073606.11660-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_alb.c |   14 ++++++++------
- include/net/bond_alb.h         |    2 +-
- 2 files changed, 9 insertions(+), 7 deletions(-)
+ sound/core/oss/pcm_oss.c |   24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -1514,14 +1514,14 @@ void bond_alb_monitor(struct work_struct
- 	struct slave *slave;
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -172,7 +172,7 @@ snd_pcm_hw_param_value_min(const struct
+  *
+  * Return the maximum value for field PAR.
+  */
+-static unsigned int
++static int
+ snd_pcm_hw_param_value_max(const struct snd_pcm_hw_params *params,
+ 			   snd_pcm_hw_param_t var, int *dir)
+ {
+@@ -707,18 +707,24 @@ static int snd_pcm_oss_period_size(struc
+ 				   struct snd_pcm_hw_params *oss_params,
+ 				   struct snd_pcm_hw_params *slave_params)
+ {
+-	size_t s;
+-	size_t oss_buffer_size, oss_period_size, oss_periods;
+-	size_t min_period_size, max_period_size;
++	ssize_t s;
++	ssize_t oss_buffer_size;
++	ssize_t oss_period_size, oss_periods;
++	ssize_t min_period_size, max_period_size;
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	size_t oss_frame_size;
  
- 	if (!bond_has_slaves(bond)) {
--		bond_info->tx_rebalance_counter = 0;
-+		atomic_set(&bond_info->tx_rebalance_counter, 0);
- 		bond_info->lp_counter = 0;
- 		goto re_arm;
- 	}
+ 	oss_frame_size = snd_pcm_format_physical_width(params_format(oss_params)) *
+ 			 params_channels(oss_params) / 8;
  
- 	rcu_read_lock();
++	oss_buffer_size = snd_pcm_hw_param_value_max(slave_params,
++						     SNDRV_PCM_HW_PARAM_BUFFER_SIZE,
++						     NULL);
++	if (oss_buffer_size <= 0)
++		return -EINVAL;
+ 	oss_buffer_size = snd_pcm_plug_client_size(substream,
+-						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_BUFFER_SIZE, NULL)) * oss_frame_size;
+-	if (!oss_buffer_size)
++						   oss_buffer_size * oss_frame_size);
++	if (oss_buffer_size <= 0)
+ 		return -EINVAL;
+ 	oss_buffer_size = rounddown_pow_of_two(oss_buffer_size);
+ 	if (atomic_read(&substream->mmap_count)) {
+@@ -755,7 +761,7 @@ static int snd_pcm_oss_period_size(struc
  
--	bond_info->tx_rebalance_counter++;
-+	atomic_inc(&bond_info->tx_rebalance_counter);
- 	bond_info->lp_counter++;
+ 	min_period_size = snd_pcm_plug_client_size(substream,
+ 						   snd_pcm_hw_param_value_min(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
+-	if (min_period_size) {
++	if (min_period_size > 0) {
+ 		min_period_size *= oss_frame_size;
+ 		min_period_size = roundup_pow_of_two(min_period_size);
+ 		if (oss_period_size < min_period_size)
+@@ -764,7 +770,7 @@ static int snd_pcm_oss_period_size(struc
  
- 	/* send learning packets */
-@@ -1543,7 +1543,7 @@ void bond_alb_monitor(struct work_struct
- 	}
+ 	max_period_size = snd_pcm_plug_client_size(substream,
+ 						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
+-	if (max_period_size) {
++	if (max_period_size > 0) {
+ 		max_period_size *= oss_frame_size;
+ 		max_period_size = rounddown_pow_of_two(max_period_size);
+ 		if (oss_period_size > max_period_size)
+@@ -777,7 +783,7 @@ static int snd_pcm_oss_period_size(struc
+ 		oss_periods = substream->oss.setup.periods;
  
- 	/* rebalance tx traffic */
--	if (bond_info->tx_rebalance_counter >= BOND_TLB_REBALANCE_TICKS) {
-+	if (atomic_read(&bond_info->tx_rebalance_counter) >= BOND_TLB_REBALANCE_TICKS) {
- 		bond_for_each_slave_rcu(bond, slave, iter) {
- 			tlb_clear_slave(bond, slave, 1);
- 			if (slave == rcu_access_pointer(bond->curr_active_slave)) {
-@@ -1553,7 +1553,7 @@ void bond_alb_monitor(struct work_struct
- 				bond_info->unbalanced_load = 0;
- 			}
- 		}
--		bond_info->tx_rebalance_counter = 0;
-+		atomic_set(&bond_info->tx_rebalance_counter, 0);
- 	}
- 
- 	if (bond_info->rlb_enabled) {
-@@ -1623,7 +1623,8 @@ int bond_alb_init_slave(struct bonding *
- 	tlb_init_slave(slave);
- 
- 	/* order a rebalance ASAP */
--	bond->alb_info.tx_rebalance_counter = BOND_TLB_REBALANCE_TICKS;
-+	atomic_set(&bond->alb_info.tx_rebalance_counter,
-+		   BOND_TLB_REBALANCE_TICKS);
- 
- 	if (bond->alb_info.rlb_enabled)
- 		bond->alb_info.rlb_rebalance = 1;
-@@ -1660,7 +1661,8 @@ void bond_alb_handle_link_change(struct
- 			rlb_clear_slave(bond, slave);
- 	} else if (link == BOND_LINK_UP) {
- 		/* order a rebalance ASAP */
--		bond_info->tx_rebalance_counter = BOND_TLB_REBALANCE_TICKS;
-+		atomic_set(&bond_info->tx_rebalance_counter,
-+			   BOND_TLB_REBALANCE_TICKS);
- 		if (bond->alb_info.rlb_enabled) {
- 			bond->alb_info.rlb_rebalance = 1;
- 			/* If the updelay module parameter is smaller than the
---- a/include/net/bond_alb.h
-+++ b/include/net/bond_alb.h
-@@ -126,7 +126,7 @@ struct tlb_slave_info {
- struct alb_bond_info {
- 	struct tlb_client_info	*tx_hashtbl; /* Dynamically allocated */
- 	u32			unbalanced_load;
--	int			tx_rebalance_counter;
-+	atomic_t		tx_rebalance_counter;
- 	int			lp_counter;
- 	/* -------- rlb parameters -------- */
- 	int rlb_enabled;
+ 	s = snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIODS, NULL);
+-	if (runtime->oss.maxfrags && s > runtime->oss.maxfrags)
++	if (s > 0 && runtime->oss.maxfrags && s > runtime->oss.maxfrags)
+ 		s = runtime->oss.maxfrags;
+ 	if (oss_periods > s)
+ 		oss_periods = s;
 
 

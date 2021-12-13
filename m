@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B09E947278C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970BE4723D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240660AbhLMKCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239356AbhLMJ5N (ORCPT
+        id S233713AbhLMJcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:32:16 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57400 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229494AbhLMJcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:57:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE0AC0698CA;
-        Mon, 13 Dec 2021 01:47:55 -0800 (PST)
+        Mon, 13 Dec 2021 04:32:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 14776CE0E85;
-        Mon, 13 Dec 2021 09:47:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40EFC00446;
-        Mon, 13 Dec 2021 09:47:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0C1D0CE0E29;
+        Mon, 13 Dec 2021 09:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8434C341C8;
+        Mon, 13 Dec 2021 09:32:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388873;
-        bh=UzSP2opDKlWKYwxKXq730Htbnlz9RTgEBBO9cva9LZY=;
+        s=korg; t=1639387932;
+        bh=/SdA1HN9oyfgJohuAE0t28ar12qvyacTE7d4FdX1278=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RkuwT91nA8eC/qoXZVNRzH3SIwhOnlVtPeynO4QccHn9xeo8YkYjNjVeZF6jBowTD
-         x9tbISGPKrOXs7S1rQbrZGnTE9LkzvceOiv1Q20uNLOoZARFijtXGE4QENroUWPpz4
-         FkKUPuQ8NXaUkVBAcfSKfO7R1CGIryejma/mcJkw=
+        b=BOy9f6F/700XedgGiD0mccEKdaLxg+/acYI3waJzxFlUQ/d6Hl3VGbqz8dQeFRGAZ
+         GKuV+6k1AQPe3huOn5o+PCpgoM+PkOwpluM1icPru6Ys48JH7fdnFLklS7s4CN3Q1e
+         8nVjm59soMz/j2PV1CNKK4SIdvKM3qomoSQrWPHA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mitch Williams <mitch.a.williams@intel.com>,
-        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.10 038/132] iavf: restore MSI state on reset
+        stable@vger.kernel.org, Jason Gerecke <jason.gerecke@wacom.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 4.4 01/37] HID: introduce hid_is_using_ll_driver
 Date:   Mon, 13 Dec 2021 10:29:39 +0100
-Message-Id: <20211213092940.429842884@linuxfoundation.org>
+Message-Id: <20211213092925.428214066@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -50,37 +48,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mitch Williams <mitch.a.williams@intel.com>
+From: Jason Gerecke <killertofu@gmail.com>
 
-commit 7e4dcc13965c57869684d57a1dc6dd7be589488c upstream.
+commit fc2237a724a9e448599076d7d23497f51e2f7441 upstream.
 
-If the PF experiences an FLR, the VF's MSI and MSI-X configuration will
-be conveniently and silently removed in the process. When this happens,
-reset recovery will appear to complete normally but no traffic will
-pass. The netdev watchdog will helpfully notify everyone of this issue.
+Although HID itself is transport-agnostic, occasionally a driver may
+want to interact with the low-level transport that a device is connected
+through. To do this, we need to know what kind of bus is in use. The
+first guess may be to look at the 'bus' field of the 'struct hid_device',
+but this field may be emulated in some cases (e.g. uhid).
 
-To prevent such public embarrassment, restore MSI configuration at every
-reset. For normal resets, this will do no harm, but for VF resets
-resulting from a PF FLR, this will keep the VF working.
+More ideally, we can check which ll_driver a device is using. This
+function introduces a 'hid_is_using_ll_driver' function and makes the
+'struct hid_ll_driver' of the four most common transports accessible
+through hid.h.
 
-Fixes: 5eae00c57f5e ("i40evf: main driver core")
-Signed-off-by: Mitch Williams <mitch.a.williams@intel.com>
-Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
+Acked-By: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/hid/i2c-hid/i2c-hid.c |    3 ++-
+ drivers/hid/uhid.c            |    3 ++-
+ drivers/hid/usbhid/hid-core.c |    3 ++-
+ include/linux/hid.h           |   11 +++++++++++
+ net/bluetooth/hidp/core.c     |    3 ++-
+ 5 files changed, 19 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2139,6 +2139,7 @@ static void iavf_reset_task(struct work_
- 	}
+--- a/drivers/hid/i2c-hid/i2c-hid.c
++++ b/drivers/hid/i2c-hid/i2c-hid.c
+@@ -789,7 +789,7 @@ static int i2c_hid_power(struct hid_devi
+ 	return 0;
+ }
  
- 	pci_set_master(adapter->pdev);
-+	pci_restore_msi_state(adapter->pdev);
+-static struct hid_ll_driver i2c_hid_ll_driver = {
++struct hid_ll_driver i2c_hid_ll_driver = {
+ 	.parse = i2c_hid_parse,
+ 	.start = i2c_hid_start,
+ 	.stop = i2c_hid_stop,
+@@ -799,6 +799,7 @@ static struct hid_ll_driver i2c_hid_ll_d
+ 	.output_report = i2c_hid_output_report,
+ 	.raw_request = i2c_hid_raw_request,
+ };
++EXPORT_SYMBOL_GPL(i2c_hid_ll_driver);
  
- 	if (i == IAVF_RESET_WAIT_COMPLETE_COUNT) {
- 		dev_err(&adapter->pdev->dev, "Reset never finished (%x)\n",
+ static int i2c_hid_init_irq(struct i2c_client *client)
+ {
+--- a/drivers/hid/uhid.c
++++ b/drivers/hid/uhid.c
+@@ -372,7 +372,7 @@ static int uhid_hid_output_report(struct
+ 	return uhid_hid_output_raw(hid, buf, count, HID_OUTPUT_REPORT);
+ }
+ 
+-static struct hid_ll_driver uhid_hid_driver = {
++struct hid_ll_driver uhid_hid_driver = {
+ 	.start = uhid_hid_start,
+ 	.stop = uhid_hid_stop,
+ 	.open = uhid_hid_open,
+@@ -381,6 +381,7 @@ static struct hid_ll_driver uhid_hid_dri
+ 	.raw_request = uhid_hid_raw_request,
+ 	.output_report = uhid_hid_output_report,
+ };
++EXPORT_SYMBOL_GPL(uhid_hid_driver);
+ 
+ #ifdef CONFIG_COMPAT
+ 
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -1272,7 +1272,7 @@ static int usbhid_idle(struct hid_device
+ 	return hid_set_idle(dev, ifnum, report, idle);
+ }
+ 
+-static struct hid_ll_driver usb_hid_driver = {
++struct hid_ll_driver usb_hid_driver = {
+ 	.parse = usbhid_parse,
+ 	.start = usbhid_start,
+ 	.stop = usbhid_stop,
+@@ -1285,6 +1285,7 @@ static struct hid_ll_driver usb_hid_driv
+ 	.output_report = usbhid_output_report,
+ 	.idle = usbhid_idle,
+ };
++EXPORT_SYMBOL_GPL(usb_hid_driver);
+ 
+ static int usbhid_probe(struct usb_interface *intf, const struct usb_device_id *id)
+ {
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -754,6 +754,17 @@ struct hid_ll_driver {
+ 	int (*idle)(struct hid_device *hdev, int report, int idle, int reqtype);
+ };
+ 
++extern struct hid_ll_driver i2c_hid_ll_driver;
++extern struct hid_ll_driver hidp_hid_driver;
++extern struct hid_ll_driver uhid_hid_driver;
++extern struct hid_ll_driver usb_hid_driver;
++
++static inline bool hid_is_using_ll_driver(struct hid_device *hdev,
++		struct hid_ll_driver *driver)
++{
++	return hdev->ll_driver == driver;
++}
++
+ #define	PM_HINT_FULLON	1<<5
+ #define PM_HINT_NORMAL	1<<1
+ 
+--- a/net/bluetooth/hidp/core.c
++++ b/net/bluetooth/hidp/core.c
+@@ -734,7 +734,7 @@ static void hidp_stop(struct hid_device
+ 	hid->claimed = 0;
+ }
+ 
+-static struct hid_ll_driver hidp_hid_driver = {
++struct hid_ll_driver hidp_hid_driver = {
+ 	.parse = hidp_parse,
+ 	.start = hidp_start,
+ 	.stop = hidp_stop,
+@@ -743,6 +743,7 @@ static struct hid_ll_driver hidp_hid_dri
+ 	.raw_request = hidp_raw_request,
+ 	.output_report = hidp_output_report,
+ };
++EXPORT_SYMBOL_GPL(hidp_hid_driver);
+ 
+ /* This function sets up the hid device. It does not add it
+    to the HID system. That is done in hidp_add_connection(). */
 
 

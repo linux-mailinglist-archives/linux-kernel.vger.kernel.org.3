@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5111E471F4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3097471F4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhLMCP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 21:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
+        id S231289AbhLMCRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 21:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLMCP6 (ORCPT
+        with ESMTP id S229436AbhLMCRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 21:15:58 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1604BC06173F;
-        Sun, 12 Dec 2021 18:15:58 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id p19so13902812qtw.12;
-        Sun, 12 Dec 2021 18:15:58 -0800 (PST)
+        Sun, 12 Dec 2021 21:17:05 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD8FC06173F;
+        Sun, 12 Dec 2021 18:17:05 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id j17so13971333qtx.2;
+        Sun, 12 Dec 2021 18:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OK+01rE8av+7Y4vzBf+grUD9vYsbU9TwKKraT+N95Pc=;
-        b=FY8iVW63KGP5lbyFd7OGt33SfGHPjhgQJ1TzdqCmeUE4+GmjPjoaiJ6eqGAG4qE654
-         oDE/nPnSl4NdJwupq8c3L+W0enI5+YTZNkBQcLrR5hr8VEpTRR6stBLOoLeKMbtR7UU7
-         XNWSiU7ZUTZOhiGHDpZVbZypFoSNYHVHXHAmUdjfoIdJniw9p4/rliw3smm7sKbV9Ezr
-         ChdPRhgtdYHfDKa+W1Z8e1fVWhXTeEB9j4I/52KV8W1vtMQmwO7rwWAU/74hnaOCoqwM
-         WJSKYG1muLUR+zWJbMCk9NEiaqLTvQWf42mJkI7dALIlBKnHhl1bZnJptTV+2AZ5HsQk
-         YTAg==
+        bh=evLgmZF+MStMUXwK9NXtGfPC0/tyQF0RITO4iK/gxDs=;
+        b=MBe0NeM2dWXwhj44sF0kUiW3YWWnNfXSM6WQQWYjcj1ea6bPSUTQVFYpIsQXb1rsIC
+         FQC7aIPkcxzO7oZvSK/3CzfIdOTCcJDBeCQVlJqLngKCx2lGqoDtgEv0xjskUhhFTtMD
+         FgWLho23S9fWBN2E5YTQ8xuwOgEna/ehRMDefYZLHMZkgfqjsL+Jwgem997mvGwUv+dn
+         QatDf6MN5SRLBnO5AO1x+uGElPxM05UdFogJuxnWXFHPtUoVoLt3ewXz2llfWCc9qJjz
+         RySfyJ5TMAVFibkl/ryA3W4xJfGFzazmXxVIBJg8TsRvYmb4zXkcIDp7CCCgImHijirB
+         CzhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OK+01rE8av+7Y4vzBf+grUD9vYsbU9TwKKraT+N95Pc=;
-        b=PMIPiR7NywmzQlnirhF2fRRWEI95CVqJiEMNlyEaDQ1lq15cpMFOqnarQaZlHcoNJ+
-         X/aKWqenj7UdOdeYq1k5a3csnvXX3BhUKH3EdFi9D1oFUGoidk28dZEKkxTUWKLbOwVt
-         s16ibKxuBK4QD7wm0oa985UnsKFfLOJ4zJujZ691e9RGcMd4ULta3WyLtrXPK8TOmZgl
-         50mVhSc4oatFKCRcPA6Sy+nUdGZJiGvn9hosP64Kv6GKRF+mHUaPFPqHxzmkztRrKiaj
-         ul+2belFuRG10xw4P96HJbpZF9UIR7icKGnhsUQYh+DstVoX9ampp/B7i6HOHORRNnne
-         eeTw==
-X-Gm-Message-State: AOAM532ve58lHKWCw544gs39/v+sh59MOWb+FZ+mvhGjhzqsG7sgNoGR
-        cAMWGikxoSjzvpKbmzOSzAuq6ply378=
-X-Google-Smtp-Source: ABdhPJxcsspCwPrhH0BGs6rwawHGlTuuolVIhdQfb0CPh3CD2DKPdKzE7rXYpuhCSXMYnZ5BvMfaNA==
-X-Received: by 2002:a05:622a:287:: with SMTP id z7mr42809520qtw.223.1639361757084;
-        Sun, 12 Dec 2021 18:15:57 -0800 (PST)
+        bh=evLgmZF+MStMUXwK9NXtGfPC0/tyQF0RITO4iK/gxDs=;
+        b=adylEqYWAFQ5EijW9/bg7iTuPFYIzdrL6gMb3LrkLCrolq0cKztsJ0qwi69k1sMcOb
+         SqT/iOixDDkWRlZAO+slPwycZh0TOAgOreIqOVS1tmLQUF53B8gVnI6P93dZH3vyrPay
+         szba39U9aMVxpEhhDrPODez31L2du8AxQmXqSnFtglW919csLwyqVHxFT71XGKbiOSI3
+         /8U6LzrfNnGoPUw39KsPm0vbsujM+pEkhf5k9wS3cbbpev8opkwwgwJn+5okAkvJe8ok
+         HRQaXO39lgvL16fEarw7qrCLjlvgtlfO2INuNAhnwk5HcKlyqXQNSJpBPm9SjgPbDBqW
+         uT8w==
+X-Gm-Message-State: AOAM533BVpaJo596oUyswegqtF5FZ4/soNyoxK0hperJlnH45darjUFQ
+        jyF2Wc2RTBUTLlCu3wVr3Y61nWCzqiU=
+X-Google-Smtp-Source: ABdhPJxMre4zIccQzX6H/dUWf0n76pvh7VABSaTKCOFZLGU3c/3gXqLKtTaKLw1T8g2sTIJyEk6mYw==
+X-Received: by 2002:a05:622a:413:: with SMTP id n19mr41874429qtx.69.1639361824687;
+        Sun, 12 Dec 2021 18:17:04 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m20sm8573687qtx.39.2021.12.12.18.15.49
+        by smtp.gmail.com with ESMTPSA id c1sm7795520qte.79.2021.12.12.18.17.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 18:15:52 -0800 (PST)
+        Sun, 12 Dec 2021 18:17:04 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     a.zummo@towertech.it
-Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     tony@atomide.com
+Cc:     lgirdwood@gmail.com, broonie@kernel.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH rtc-next] drivers/rtc: remove redundant err variable
-Date:   Mon, 13 Dec 2021 02:15:38 +0000
-Message-Id: <20211213021538.435341-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] drivers/regulator: remove redundant ret variable
+Date:   Mon, 13 Dec 2021 02:16:55 +0000
+Message-Id: <20211213021655.435423-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,39 +67,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value from s35390a_set_reg() directly instead
+Return value from twlreg_write() directly instead
 of taking this in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/rtc/rtc-s35390a.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/regulator/twl-regulator.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index 26278c770731..b382759aa544 100644
---- a/drivers/rtc/rtc-s35390a.c
-+++ b/drivers/rtc/rtc-s35390a.c
-@@ -211,7 +211,7 @@ static int s35390a_rtc_set_time(struct device *dev, struct rtc_time *tm)
+diff --git a/drivers/regulator/twl-regulator.c b/drivers/regulator/twl-regulator.c
+index 4a51cfea45ac..e2a20d512152 100644
+--- a/drivers/regulator/twl-regulator.c
++++ b/drivers/regulator/twl-regulator.c
+@@ -196,7 +196,6 @@ static int twl4030reg_enable(struct regulator_dev *rdev)
  {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct s35390a	*s35390a = i2c_get_clientdata(client);
--	int i, err;
-+	int i;
- 	char buf[7], status;
+ 	struct twlreg_info	*info = rdev_get_drvdata(rdev);
+ 	int			grp;
+-	int			ret;
  
- 	dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d mday=%d, "
-@@ -234,9 +234,7 @@ static int s35390a_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	for (i = 0; i < 7; ++i)
- 		buf[i] = bitrev8(buf[i]);
+ 	grp = twlreg_grp(rdev);
+ 	if (grp < 0)
+@@ -204,16 +203,13 @@ static int twl4030reg_enable(struct regulator_dev *rdev)
  
--	err = s35390a_set_reg(s35390a, S35390A_CMD_TIME1, buf, sizeof(buf));
+ 	grp |= P1_GRP_4030;
+ 
+-	ret = twlreg_write(info, TWL_MODULE_PM_RECEIVER, VREG_GRP, grp);
 -
--	return err;
-+	return s35390a_set_reg(s35390a, S35390A_CMD_TIME1, buf, sizeof(buf));
+-	return ret;
++	return twlreg_write(info, TWL_MODULE_PM_RECEIVER, VREG_GRP, grp);
  }
  
- static int s35390a_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ static int twl4030reg_disable(struct regulator_dev *rdev)
+ {
+ 	struct twlreg_info	*info = rdev_get_drvdata(rdev);
+ 	int			grp;
+-	int			ret;
+ 
+ 	grp = twlreg_grp(rdev);
+ 	if (grp < 0)
+@@ -221,9 +217,7 @@ static int twl4030reg_disable(struct regulator_dev *rdev)
+ 
+ 	grp &= ~(P1_GRP_4030 | P2_GRP_4030 | P3_GRP_4030);
+ 
+-	ret = twlreg_write(info, TWL_MODULE_PM_RECEIVER, VREG_GRP, grp);
+-
+-	return ret;
++	return twlreg_write(info, TWL_MODULE_PM_RECEIVER, VREG_GRP, grp);
+ }
+ 
+ static int twl4030reg_get_status(struct regulator_dev *rdev)
 -- 
 2.25.1
 

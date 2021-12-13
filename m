@@ -2,213 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 593CB4737B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C32E4737B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243649AbhLMWjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S243709AbhLMWjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243647AbhLMWjF (ORCPT
+        with ESMTP id S243664AbhLMWjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 17:39:05 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9F4C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:39:04 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q16so15763832pgq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:39:04 -0800 (PST)
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7ABC0613F8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:39:05 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id np3so12897467pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:39:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0MT/vHE1ydzFe9PN6Wp2UZVjSoHcS4dYEtLHlHKEEAM=;
-        b=YGvnvAuqro151EfwgJKAALvz+kJyqgCsgO5oXMZXTc4McLwsP+2Tt2nK/DxNVgXIAe
-         88rUvAL023ldcNApa6EZUZZQCMnNDs8r5Ga8v5HlbnaHudKIDV+KjxVwtgN7uOXFaIbQ
-         a7dRHSLnBFZJQxNZRAjXvCiVr8o65n5n0D94g=
+        bh=+S/VUT00+x6Z89xGgyuUNI6qyyri/wBiYIReskukCeo=;
+        b=be2VJyv0F8VJ9seriq9Of4P5A2gEqfdJF/M7gDlAQQ1JQ2YYzUk0g4ZjmZDQd8idHX
+         IYqWo1HYhg4r3AVywsaEsIl2Q5rV+BjwuLmdI5boZfY78g8dkLD61v2yvKkEww/fCG2N
+         jKtiSYfllrTTfg7IPXesRe3OIxzAMCBxWoL1g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0MT/vHE1ydzFe9PN6Wp2UZVjSoHcS4dYEtLHlHKEEAM=;
-        b=1NYOdzuYRBxtCqCBp3aAcX64wpgMomlAs9ah3f5LbQgriN842iTZUMSzVH/Jc7Fv5g
-         9ZmeRlIbl+uUWejhx82lICGjtbbLMHQZh2p9XkwpiUhMKvFpDDEJgClVdpN8jHIQymX1
-         NGuNjt2lW8Qkb4wbjhwiVF3gNu3amWtqammJWL+0YySDAtd6tRMVmZn6Tu8pzn0zgtqd
-         S7/DxQGaDqdKibASA1+TAsVPotw2RHopUYLdWNEZeY0avBg+UecR7E++cKhXhfsUNFwm
-         22sunUT14g50bXSgu1XDEohtrmDEl6vNPmEouFFcFOwsk80n8B6xA6rwMd3+11oIDsgu
-         +hKg==
-X-Gm-Message-State: AOAM530czYLMdwD4kmEuI+VbnQfbmy83clRsM6960+gTqNwbrzli96ws
-        6VoG3EuyFj25b3gaIEgzcLoG6A==
-X-Google-Smtp-Source: ABdhPJyA0kifmlmp09ULzUkVNS3B5zsL46YKdL6X5gUXjzYwPTvQUN8jwmFIq+nNLfPBsfjYFryetQ==
-X-Received: by 2002:aa7:9a04:0:b0:4a2:ebcd:89a with SMTP id w4-20020aa79a04000000b004a2ebcd089amr981317pfj.60.1639435144258;
+        bh=+S/VUT00+x6Z89xGgyuUNI6qyyri/wBiYIReskukCeo=;
+        b=b0cyWoz7if2mAMeiDEun3Nj6l50LU58eIuE9ACuY6SieA8iQheYj73gp6EE0xyo0DN
+         24c5dNnHZvot+rsw8pygMYROzgqzGACE7kW8jQbvQpe7cxKQHZyjk8g5UkqwfMYkOMJk
+         0lvoZM+gRjftTqrIdMSmFh6UzSlO1js/231OyYjRt2lbbe1pDS1fHXk+hplbowBiJVas
+         5VGtX3QulIO4l+Vvq7I7BmSH3X4tY9b+qhP5txjILjXZEbU4PLEANcb8L/nGZb1tc2GQ
+         teqZtvE6F6fN8GhpygVvACNkzlKw/OqXvYn0FXZBXtxdKYDo6wGVYFVape3mRjvz7pti
+         GR8A==
+X-Gm-Message-State: AOAM5315znmEGTVlSoZMkbRHyj1Yuz0mjFvnlD9Li4HobZk1eeeQGwSa
+        N2+QLtROE1mZQOP+lsI3+X0fEQ==
+X-Google-Smtp-Source: ABdhPJwdoix/yTBKz/2BgZrs1Q/wm1ReoN398quHYHtKhFBOCSRrSGiQjasuUFPQ1QcgsB8Pg1be1w==
+X-Received: by 2002:a17:902:bf4b:b0:143:aa96:f608 with SMTP id u11-20020a170902bf4b00b00143aa96f608mr1038689pls.23.1639435144665;
         Mon, 13 Dec 2021 14:39:04 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t13sm13181529pfl.98.2021.12.13.14.39.03
+        by smtp.gmail.com with ESMTPSA id y190sm13118399pfg.153.2021.12.13.14.39.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 14:39:03 -0800 (PST)
+        Mon, 13 Dec 2021 14:39:04 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-hardening@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 15/17] scsi: lpfc: Use struct_group() to initialize struct lpfc_cgn_info
-Date:   Mon, 13 Dec 2021 14:33:29 -0800
-Message-Id: <20211213223331.135412-16-keescook@chromium.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 16/17] fortify: Detect struct member overflows in memset() at compile-time
+Date:   Mon, 13 Dec 2021 14:33:30 -0800
+Message-Id: <20211213223331.135412-17-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211213223331.135412-1-keescook@chromium.org>
 References: <20211213223331.135412-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4872; h=from:subject; bh=b7Gop8YkIsZSGaBsGHz+xW8brMLq6H3enGBmwNbBTro=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o6LbqKmAkUNnfmlrw0b7QUEamBgQovX0V9gsVd 8MY1kVOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOgAKCRCJcvTf3G3AJtVLD/ 4k62/NuNCnXqabCvHr68q+AQ5zUtY0Xz+S6EU7HgUfTO6Qj6pdWIgl8Mai8sy4Taa+YO0pHT6Gq+hl HTnevazuz76atJOM+gpoVzm0wMuthUzVGIGM9nEv+tB97wdj60ofuJDubae4PNalUR/ttfanHLDefZ JX8TPos1tsLQhPIaKPabzrILLazhZfO0ZagZXPvF45qVuRzLBzjZG0jR+LIvNEw0kuSGcgrFgNnYND 9Lb6hWwrfE8wqnKpcO/JliZ7eXMe8tfVaeZ7KgKwqgCuOMVvSuQJ+bygomAZCCT2jluKGyBpy41bf5 4AhWN1xssa9laAbpaK2Ma/5cMhcWSmHrDZ4gkqHrtpufJjetO1nTDTQRjNMPHlZWx7PUZZd+Gzyb6n lh6bZpRFit8dBAutA2Mi76C0o/qMZxe4L2BumDDP/ycfl5DIzRYgKreOS7iYuatlSM2EqbT3K8+j0f QqxtlMHGeq/MKQ0jCUTP/cztyBExbc5PMJBJnx/K9voPhhTuTT71YXFG4wIpBFTJRoVTgANamLxDAk rA7jLMZV+mzP5jLjaZn5SCyhXb5h3/IHo3wTpYMHM6YmQXK1tj8aLJwk0doq88iT5pdE1r7bfbNNj2 IvJvSrVVaBmMQAg1qmmgy47/ukFQ3EgACgaCJvChAxaaCJpvq8brRmRGhUNQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3657; h=from:subject; bh=AnF2T8S0riHB2TUA3T95l35firv45Lry8MXqk/mof/8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o6zUesA2HmcbV8VDUR/FHxBGAXdI6UXLyl52LJ /Sp6XLmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOgAKCRCJcvTf3G3AJn7xD/ 43+ftwFcw6Z3MbxWyqFBUl0QJ+jnhtO9yA4tEmuPsKde7wWuGIQIVcB+LM7tf9AGYTuo4m96woAiR9 o0g2DOOxWlRpUB835qT2vHKJJjvrNo9kiqTnGmNMZWlatctJEMiS7Os1qJgeidn1hyVz/x8ijHKlaa Fxkah8HxUxEFOa7z8iHGXVcIj3cKJZ/9VtreYNta+KGmrH6xf9IBG4YgTFBwNW/TnyXzxJrlCjkM// tbdnCf30Dr6AeKwjfDOWCkAxUsyxQsWhTBWLYG9s7dJSbZMFA7DgfYsjpGihDhcvPyX1YHK4zZ5rRR T11TgtszpQ7CBsBlyQp/6AFdAZ8EJq/h5KzIiTstWWu0LqfcP04tfuDiC85UaeWVeWv+PEz9cWKQt7 hHMii/6aF12qwhIclS6MuJMzLBSAen/k2FO5wqZ+4DRFhEerGl+sV20fdB8eHct1Nc/UK47+TfiFH9 NvnCHU5g9wX/yYe7ZIVrA3w8DNdv81zGT+a4L2/6kmeBjqnnw8wFn9JTgUW/CG4iKl1IBktnsxedTM BaJY1Igxxq0jNmop3X1fPHriG9nh/mLQ2K9B0trUgmsETbrhbvOLwNum4u1RKF5KVZo7OnyRjRIeSP K64ry9GwMC8sxdXQD6M+7L8JQ1iDO9M/ZBhI9DlzJgP0220IuYuDNfnZHiTw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing compile-time and run-time
-field bounds checking for memset(), avoid intentionally writing across
-neighboring fields.
+As done for memcpy(), also update memset() to use the same tightened
+compile-time bounds checking under CONFIG_FORTIFY_SOURCE.
 
-Add struct_group() to mark "stat" region of struct lpfc_cgn_info that
-should be initialized to zero, and refactor the "data" region memset()
-to wipe everything up to the cgn_stats region.
-
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Dick Kennedy <dick.kennedy@broadcom.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/scsi/lpfc/lpfc.h      | 90 +++++++++++++++++------------------
- drivers/scsi/lpfc/lpfc_init.c |  4 +-
- 2 files changed, 46 insertions(+), 48 deletions(-)
+ include/linux/fortify-string.h                | 54 ++++++++++++++++---
+ .../write_overflow_field-memset.c             |  5 ++
+ 2 files changed, 51 insertions(+), 8 deletions(-)
+ create mode 100644 lib/test_fortify/write_overflow_field-memset.c
 
-diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-index 3faadcfcdcbb..4878c94761f9 100644
---- a/drivers/scsi/lpfc/lpfc.h
-+++ b/drivers/scsi/lpfc/lpfc.h
-@@ -496,52 +496,50 @@ struct lpfc_cgn_info {
- 	__le32   cgn_alarm_hr[24];
- 	__le32   cgn_alarm_day[LPFC_MAX_CGN_DAYS];
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index c07871a3fcd0..c45159dbdaa1 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -200,17 +200,56 @@ __FORTIFY_INLINE char *strncat(char *p, const char *q, __kernel_size_t count)
+ 	return p;
+ }
  
--	/* Start of congestion statistics */
--	uint8_t  cgn_stat_npm;		/* Notifications per minute */
--
--	/* Start Time */
--	uint8_t  cgn_stat_month;
--	uint8_t  cgn_stat_day;
--	uint8_t  cgn_stat_year;
--	uint8_t  cgn_stat_hour;
--	uint8_t  cgn_stat_minute;
--	uint8_t  cgn_pad2[2];
--
--	__le32   cgn_notification;
--	__le32   cgn_peer_notification;
--	__le32   link_integ_notification;
--	__le32   delivery_notification;
--
--	uint8_t  cgn_stat_cgn_month; /* Last congestion notification FPIN */
--	uint8_t  cgn_stat_cgn_day;
--	uint8_t  cgn_stat_cgn_year;
--	uint8_t  cgn_stat_cgn_hour;
--	uint8_t  cgn_stat_cgn_min;
--	uint8_t  cgn_stat_cgn_sec;
--
--	uint8_t  cgn_stat_peer_month; /* Last peer congestion FPIN */
--	uint8_t  cgn_stat_peer_day;
--	uint8_t  cgn_stat_peer_year;
--	uint8_t  cgn_stat_peer_hour;
--	uint8_t  cgn_stat_peer_min;
--	uint8_t  cgn_stat_peer_sec;
--
--	uint8_t  cgn_stat_lnk_month; /* Last link integrity FPIN */
--	uint8_t  cgn_stat_lnk_day;
--	uint8_t  cgn_stat_lnk_year;
--	uint8_t  cgn_stat_lnk_hour;
--	uint8_t  cgn_stat_lnk_min;
--	uint8_t  cgn_stat_lnk_sec;
--
--	uint8_t  cgn_stat_del_month; /* Last delivery notification FPIN */
--	uint8_t  cgn_stat_del_day;
--	uint8_t  cgn_stat_del_year;
--	uint8_t  cgn_stat_del_hour;
--	uint8_t  cgn_stat_del_min;
--	uint8_t  cgn_stat_del_sec;
--#define LPFC_CGN_STAT_SIZE	48
--#define LPFC_CGN_DATA_SIZE	(sizeof(struct lpfc_cgn_info) -  \
--				LPFC_CGN_STAT_SIZE - sizeof(uint32_t))
-+	struct_group(cgn_stat,
-+		uint8_t  cgn_stat_npm;		/* Notifications per minute */
-+
-+		/* Start Time */
-+		uint8_t  cgn_stat_month;
-+		uint8_t  cgn_stat_day;
-+		uint8_t  cgn_stat_year;
-+		uint8_t  cgn_stat_hour;
-+		uint8_t  cgn_stat_minute;
-+		uint8_t  cgn_pad2[2];
-+
-+		__le32   cgn_notification;
-+		__le32   cgn_peer_notification;
-+		__le32   link_integ_notification;
-+		__le32   delivery_notification;
-+
-+		uint8_t  cgn_stat_cgn_month; /* Last congestion notification FPIN */
-+		uint8_t  cgn_stat_cgn_day;
-+		uint8_t  cgn_stat_cgn_year;
-+		uint8_t  cgn_stat_cgn_hour;
-+		uint8_t  cgn_stat_cgn_min;
-+		uint8_t  cgn_stat_cgn_sec;
-+
-+		uint8_t  cgn_stat_peer_month; /* Last peer congestion FPIN */
-+		uint8_t  cgn_stat_peer_day;
-+		uint8_t  cgn_stat_peer_year;
-+		uint8_t  cgn_stat_peer_hour;
-+		uint8_t  cgn_stat_peer_min;
-+		uint8_t  cgn_stat_peer_sec;
-+
-+		uint8_t  cgn_stat_lnk_month; /* Last link integrity FPIN */
-+		uint8_t  cgn_stat_lnk_day;
-+		uint8_t  cgn_stat_lnk_year;
-+		uint8_t  cgn_stat_lnk_hour;
-+		uint8_t  cgn_stat_lnk_min;
-+		uint8_t  cgn_stat_lnk_sec;
-+
-+		uint8_t  cgn_stat_del_month; /* Last delivery notification FPIN */
-+		uint8_t  cgn_stat_del_day;
-+		uint8_t  cgn_stat_del_year;
-+		uint8_t  cgn_stat_del_hour;
-+		uint8_t  cgn_stat_del_min;
-+		uint8_t  cgn_stat_del_sec;
-+	);
+-__FORTIFY_INLINE void *memset(void *p, int c, __kernel_size_t size)
++__FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
++					 const size_t p_size,
++					 const size_t p_size_field)
+ {
+-	size_t p_size = __builtin_object_size(p, 0);
++	if (__builtin_constant_p(size)) {
++		/*
++		 * Length argument is a constant expression, so we
++		 * can perform compile-time bounds checking where
++		 * buffer sizes are known.
++		 */
  
- 	__le32   cgn_info_crc;
- #define LPFC_CGN_CRC32_MAGIC_NUMBER	0x1EDC6F41
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 2fe7d9d885d9..c18000d05379 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -13483,7 +13483,7 @@ lpfc_init_congestion_buf(struct lpfc_hba *phba)
- 	phba->cgn_evt_minute = 0;
- 	phba->hba_flag &= ~HBA_CGN_DAY_WRAP;
+-	if (__builtin_constant_p(size) && p_size < size)
+-		__write_overflow();
+-	if (p_size < size)
+-		fortify_panic(__func__);
+-	return __underlying_memset(p, c, size);
++		/* Error when size is larger than enclosing struct. */
++		if (p_size > p_size_field && p_size < size)
++			__write_overflow();
++
++		/* Warn when write size is larger than dest field. */
++		if (p_size_field < size)
++			__write_overflow_field(p_size_field, size);
++	}
++	/*
++	 * At this point, length argument may not be a constant expression,
++	 * so run-time bounds checking can be done where buffer sizes are
++	 * known. (This is not an "else" because the above checks may only
++	 * be compile-time warnings, and we want to still warn for run-time
++	 * overflows.)
++	 */
++
++	/*
++	 * Always stop accesses beyond the struct that contains the
++	 * field, when the buffer's remaining size is known.
++	 * (The -1 test is to optimize away checks where the buffer
++	 * lengths are unknown.)
++	 */
++	if (p_size != (size_t)(-1) && p_size < size)
++		fortify_panic("memset");
+ }
  
--	memset(cp, 0xff, LPFC_CGN_DATA_SIZE);
-+	memset(cp, 0xff, offsetof(struct lpfc_cgn_info, cgn_stat));
- 	cp->cgn_info_size = cpu_to_le16(LPFC_CGN_INFO_SZ);
- 	cp->cgn_info_version = LPFC_CGN_INFO_V3;
- 
-@@ -13542,7 +13542,7 @@ lpfc_init_congestion_stat(struct lpfc_hba *phba)
- 		return;
- 
- 	cp = (struct lpfc_cgn_info *)phba->cgn_i->virt;
--	memset(&cp->cgn_stat_npm, 0, LPFC_CGN_STAT_SIZE);
-+	memset(&cp->cgn_stat, 0, sizeof(cp->cgn_stat));
- 
- 	ktime_get_real_ts64(&cmpl_time);
- 	time64_to_tm(cmpl_time.tv_sec, 0, &broken);
++#define __fortify_memset_chk(p, c, size, p_size, p_size_field) ({	\
++	size_t __fortify_size = (size_t)(size);				\
++	fortify_memset_chk(__fortify_size, p_size, p_size_field),	\
++	__underlying_memset(p, c, __fortify_size);			\
++})
++
++/*
++ * __builtin_object_size() must be captured here to avoid evaluating argument
++ * side-effects further into the macro layers.
++ */
++#define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
++		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
++
+ /*
+  * To make sure the compiler can enforce protection against buffer overflows,
+  * memcpy(), memmove(), and memset() must not be used beyond individual
+@@ -401,7 +440,6 @@ __FORTIFY_INLINE char *strcpy(char *p, const char *q)
+ /* Don't use these outside the FORITFY_SOURCE implementation */
+ #undef __underlying_memchr
+ #undef __underlying_memcmp
+-#undef __underlying_memset
+ #undef __underlying_strcat
+ #undef __underlying_strcpy
+ #undef __underlying_strlen
+diff --git a/lib/test_fortify/write_overflow_field-memset.c b/lib/test_fortify/write_overflow_field-memset.c
+new file mode 100644
+index 000000000000..2331da26909e
+--- /dev/null
++++ b/lib/test_fortify/write_overflow_field-memset.c
+@@ -0,0 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#define TEST	\
++	memset(instance.buf, 0x42, sizeof(instance.buf) + 1)
++
++#include "test_fortify.h"
 -- 
 2.30.2
 

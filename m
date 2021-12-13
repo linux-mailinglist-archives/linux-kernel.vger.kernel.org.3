@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C614737BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B4D4737C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243760AbhLMWnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:43:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43636 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243685AbhLMWnH (ORCPT
+        id S243765AbhLMWnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:43:46 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43464 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243685AbhLMWnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:43:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639435386;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vW4X6Ke5veUZbybwsL96gvfHgtgqWjDKHvFvdIhk4m4=;
-        b=NBxEt+SbWT+YscEB9CB5jPPFaENDkBQxV3GFSqOUuc3H/5U7egMDXlMeDNGBdkhyAkvTg2
-        u1adKcEIcDlTE2RNozLU2NGzQZzjHLOTF3S/UIo4l0VgWQSdte5UkbAUVbJH6GLbjM1T1D
-        Yqm9NOeHHeT00039bGIIlezsU2Iz9vc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-440-rlMMXtpWPBWNVWL8hbTtMQ-1; Mon, 13 Dec 2021 17:43:03 -0500
-X-MC-Unique: rlMMXtpWPBWNVWL8hbTtMQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 78D1681EE61;
-        Mon, 13 Dec 2021 22:43:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A05F7AB41;
-        Mon, 13 Dec 2021 22:43:01 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <163941464554.620822.14509008966840730864.stgit@warthog.procyon.org.uk>
-References: <163941464554.620822.14509008966840730864.stgit@warthog.procyon.org.uk>
-To:     marc.dionne@auristor.com
-Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] afs: Fix mmap
+        Mon, 13 Dec 2021 17:43:45 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id 7E26C1F44304
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1639435424; bh=UEBxljg7U0AjxP8YVVrv1TQKitx1bpMVVjCQIvNZxmM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=gtp42DPr62P1xEgyR9Ua5atRu227T9uo7AU0GOjOCcpdQT76gXktGHcEoHfDVKpSm
+         G9sbIRXCepQNryY6CwJygV68qXn+qbLbDs2F0RIUrvbim3xazRDRoBTx+0fEfk3JfQ
+         5MMwP3aNhLdNnQTZJymmDEt+r5UKlav1XDpH0FwwQWWwkBPNL5syEkmDr3nNSsFc0l
+         x79S1m3gYVR9BXAiYlzobKsupboLT4i+G51pLLa901grhOEhxA9DflmEb7EiuhZC6/
+         seQl9WwNKCE589LGMiy59wHts1Ulv9mQVyVx0CXwnS5yA8wJUrILquRIEExGCUy92N
+         vh51hArjODXrA==
+Subject: Re: [PATCH 0/4] fsl-asoc-card: Add optional dt property for setting
+ mclk-id
+To:     Rob Herring <robh@kernel.org>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Xiubo.Lee@gmail.com,
+        bcousson@baylibre.com, broonie@kernel.org, festevam@gmail.com,
+        kuninori.morimoto.gx@renesas.com, lgirdwood@gmail.com,
+        michael@amarulasolutions.com, nicoleotsuka@gmail.com,
+        perex@perex.cz, shengjiu.wang@gmail.com, tiwai@suse.com,
+        tony@atomide.com
+References: <20211203134930.128703-1-ariel.dalessandro@collabora.com>
+ <YbeukcwXQueEquJZ@robh.at.kernel.org>
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Message-ID: <f35f34bc-e850-40a8-7d5e-3b783aeeaac8@collabora.com>
+Date:   Mon, 13 Dec 2021 19:43:32 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <686464.1639435380.1@warthog.procyon.org.uk>
-Date:   Mon, 13 Dec 2021 22:43:00 +0000
-Message-ID: <686465.1639435380@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <YbeukcwXQueEquJZ@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I forgot to commit the patch and so lost part of it.  Full patch below.
+Hi Rob,
 
-David
----
-commit 23e7d72edeeff56d7bfa47c32c9638385c90eddd
-Author: David Howells <dhowells@redhat.com>
-Date:   Mon Dec 13 16:26:44 2021 +0000
+Thanks for the review.
 
-    afs: Fix mmap
-    
-    Fix afs_add_open_map() to check that the vnode isn't already on the list
-    when it adds it.  It's possible that afs_drop_open_mmap() decremented the
-    cb_nr_mmap counter, but hadn't yet got into the locked section to remove
-    it.
-    
-    Also vnode->cb_mmap_link should be initialised, so fix that too.
-    
-    Fixes: 6e0e99d58a65 ("afs: Fix mmap coherency vs 3rd-party changes")
-    Reported-by: kafs-testing+fedora34_64checkkafs-build-300@auristor.com
-    Suggested-by: Marc Dionne <marc.dionne@auristor.com>
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    cc: linux-afs@lists.infradead.org
+On 12/13/21 5:35 PM, Rob Herring wrote:
+> On Fri, Dec 03, 2021 at 10:49:26AM -0300, Ariel D'Alessandro wrote:
+>> This is a follow up of patchset:
+>>
+>>     [RFC patch 0/5] Support BCLK input clock in tlv320aic31xx
+> 
+> Link?
 
-diff --git a/fs/afs/file.c b/fs/afs/file.c
-index cb6ad61eec3b..afe4b803f84b 100644
---- a/fs/afs/file.c
-+++ b/fs/afs/file.c
-@@ -514,8 +514,9 @@ static void afs_add_open_mmap(struct afs_vnode *vnode)
- 	if (atomic_inc_return(&vnode->cb_nr_mmap) == 1) {
- 		down_write(&vnode->volume->cell->fs_open_mmaps_lock);
- 
--		list_add_tail(&vnode->cb_mmap_link,
--			      &vnode->volume->cell->fs_open_mmaps);
-+		if (list_empty(&vnode->cb_mmap_link))
-+			list_add_tail(&vnode->cb_mmap_link,
-+				      &vnode->volume->cell->fs_open_mmaps);
- 
- 		up_write(&vnode->volume->cell->fs_open_mmaps_lock);
- 	}
-diff --git a/fs/afs/super.c b/fs/afs/super.c
-index d110def8aa8e..34c68724c98b 100644
---- a/fs/afs/super.c
-+++ b/fs/afs/super.c
-@@ -667,6 +667,7 @@ static void afs_i_init_once(void *_vnode)
- 	INIT_LIST_HEAD(&vnode->pending_locks);
- 	INIT_LIST_HEAD(&vnode->granted_locks);
- 	INIT_DELAYED_WORK(&vnode->lock_work, afs_lock_work);
-+	INIT_LIST_HEAD(&vnode->cb_mmap_link);
- 	seqlock_init(&vnode->cb_lock);
- }
- 
+Link to the datasheet?
 
+http://www.ti.com/lit/ds/symlink/tlv320aic3100.pdf
+
+> 
+>> Sound cards may allow using different main clock inputs. In the generic
+>> fsl-asoc-card driver, these values are hardcoded for each specific card
+>> configuration.
+>>
+>> Let's make it more flexible, allowing setting mclk-id from the
+>> device-tree node.
+>>
+>> Ariel D'Alessandro (4):
+>>   dt-bindings: sound: Rename tlv320aic31xx-micbias as tlv320aic31xx
+>>   dt-bindings: tlv320aic31xx: Define PLL clock inputs
+>>   ASoC: fsl-asoc-card: Add optional dt property for setting mclk-id
+> 
+> 'mclk-id' is not documented.
+> 
+>>   ASoC: fsl-asoc-card: Remove BCLK default value for tlv320aic31xx card
+>>
+>>  .../devicetree/bindings/sound/fsl-asoc-card.txt    |  1 +
+>>  .../devicetree/bindings/sound/tlv320aic31xx.txt    |  2 +-
+>>  arch/arm/boot/dts/am43x-epos-evm.dts               |  2 +-
+>>  include/dt-bindings/sound/tlv320aic31xx-micbias.h  |  9 ---------
+>>  include/dt-bindings/sound/tlv320aic31xx.h          | 14 ++++++++++++++
+>>  sound/soc/codecs/tlv320aic31xx.c                   |  2 +-
+>>  sound/soc/fsl/fsl-asoc-card.c                      |  7 ++++++-
+>>  7 files changed, 24 insertions(+), 13 deletions(-)
+>>  delete mode 100644 include/dt-bindings/sound/tlv320aic31xx-micbias.h
+>>  create mode 100644 include/dt-bindings/sound/tlv320aic31xx.h
+>>
+>> -- 
+>> 2.30.2
+
+Regards,
+Ariel

@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 510B5472D4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCA6472D51
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237584AbhLMNaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:30:08 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34656 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235637AbhLMNaG (ORCPT
+        id S237587AbhLMNa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231847AbhLMNaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:30:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EE243CE101C;
-        Mon, 13 Dec 2021 13:30:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67355C34601;
-        Mon, 13 Dec 2021 13:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639402203;
-        bh=sRU8BNAdNf2xyfnyW5j/+kAV8EwcPrmJ6lESbKeGPxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y5+rb59S15gUX3TKeSQHKHW0SBmnGiK9aiNCk2YzPMT+JYRrETpLh1Ywf1oVk258J
-         CHxhqTViJDArMbuKlu5Epp3aMRD2O/pzsVBOAO9k3Q5dPprlvYdSIzgjuAWzd7VKsI
-         km99CcLAWoHR2QK1l21o2PS7NiYUhtbIF8v6dT3WCQ7dTC29fW4ayrRGDBO6s8D3Kr
-         1dxHKps3K7H48ipR7uk5ZcZbQexSNMQGKWsevLbXYRk+7V9GCEREvfXMcxLZXUSFC3
-         717ADrHpe7RCDNYk02d1RbhPIkgU4fq2mAt8bvckKCEn0m0D7QZYw8lBW+/0L3Xy1+
-         I6hJtWYaiHO2w==
-Date:   Mon, 13 Dec 2021 21:29:46 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jianhe@ambarella.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: cdnsp: Fix lack of
- spin_lock_irqsave/spin_lock_restore
-Message-ID: <20211213132946.GD5346@Peter>
-References: <20211213122001.47370-1-pawell@gli-login.cadence.com>
+        Mon, 13 Dec 2021 08:30:55 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCFBC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:30:55 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so11567914wmc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=r2HS8LXycqYlvkyk1XtSS91naiCW1cjlSGDJBqmdHWg=;
+        b=RUCPa4BU55mGZ3TPxnm4P9VciYv4X75/TbhC+EkFMF61gjOKbFsj5x49+Ef4rCRs0y
+         CjN/eRIvxorXtf5guYPabAbXaRmpiQQB/t9gB+FOiMM2fXsIJpuUqTbmEjW4Tvf3+TOV
+         zlHbinqcNCTNdGL6iyXFR5f/ulG5ButbS/JmOy1gErM30r0DBGytKnLJ4nFx0FmzoDkz
+         /+8+8wCetkc8kX0RxeS0qbLymfqJMSHlAfD9IFapDXQDT1yYPUycajrNjucdZPgfVf4O
+         WhnBvW/AsrmRm95+9g/Eo/9xMzQbeNQ0OuziNbYZNHZvIMuoEN130pKeF11Qpd1DDbjJ
+         B6tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=r2HS8LXycqYlvkyk1XtSS91naiCW1cjlSGDJBqmdHWg=;
+        b=cpEFLYADN8HbfgIpyL5QbVN5H52gD+teU94B8TKFfCve6ONuWA5UXfvmDIcEuqsosF
+         DuKz0q5TLcTEgmMd3BtjW104rKK2eClyAVtNUBNCjcHOyU7neAzkhKEuqmN0Qs44Vo7i
+         opy/B+LssNEl1K+bfVel3An8GYsKrRqzpQzZL3HY2amFffhLX2WxUi6u3IrPOGz6oFvU
+         rbbsxTXJXFp6g6pgh+VtPQxkvMgZ/T0e1R1oLmJBKhb9wfGx8DeOkBAxSfowlwH/sICG
+         Jow5SUM9umc2fbVOy1vH6qn/RPHBK9nsfdIZ1RNR1Ve6mXhaulN/d7HQMtHAwbzGKAIe
+         SCOw==
+X-Gm-Message-State: AOAM530hvPXLWFCAT6ghGxUEA6ZaS358Je6GFkVkYJLe87z8/LKq3qIk
+        XUccLjoL0mtPASVad8OlPFz6Hy7wBqQnC0Jb
+X-Google-Smtp-Source: ABdhPJyWkKnbNBpJs/AcEzDRZ6MIPMKl4r6vPgd/oMbTn650gQez7KXqYtOuijioggr4iU7HWEvJcg==
+X-Received: by 2002:a05:600c:3c85:: with SMTP id bg5mr37251416wmb.58.1639402254025;
+        Mon, 13 Dec 2021 05:30:54 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:3328:f8ef:d20f:532a? ([2001:861:44c0:66c0:3328:f8ef:d20f:532a])
+        by smtp.gmail.com with ESMTPSA id g124sm7083697wme.28.2021.12.13.05.30.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 05:30:53 -0800 (PST)
+Subject: Re: [PATCH v5 0/3] usb: meson: fix shared reset control use
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>, khilman@baylibre.com
+Cc:     p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20211212201844.114949-1-aouledameur@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <91db0d03-aa52-9810-8831-b5e44793a4d4@baylibre.com>
+Date:   Mon, 13 Dec 2021 14:30:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213122001.47370-1-pawell@gli-login.cadence.com>
+In-Reply-To: <20211212201844.114949-1-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-12-13 13:20:01, Pawel Laszczak wrote:
-> From: Pawel Laszczak <pawell@cadence.com>
-> 
-> Patch puts content of cdnsp_gadget_pullup function inside
-> spin_lock_irqsave and spin_lock_restore section.
-> This construction is required here to keep the data consistency,
-> otherwise some data can be changed e.g. from interrupt context.
-> 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Reported-by: Ken (Jian) He <jianhe@ambarella.com>
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/cdns3/cdnsp-gadget.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-> index f6d231760a6a..d0c040556984 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.c
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> @@ -1544,8 +1544,10 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
->  {
->  	struct cdnsp_device *pdev = gadget_to_cdnsp(gadget);
->  	struct cdns *cdns = dev_get_drvdata(pdev->dev);
-> +	unsigned long flags;
->  
->  	trace_cdnsp_pullup(is_on);
-> +	spin_lock_irqsave(&pdev->lock, flags);
+Hi Amljad,
 
-If the interrupt bottom half is pending, the consistent issue may still
-exist, you may let the bottom half has finished first, eg: calling
-disable_irq before spin_lock_irqsave.
-
-Peter
->  
->  	if (!is_on) {
->  		cdnsp_reset_device(pdev);
-> @@ -1553,6 +1555,9 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
->  	} else {
->  		cdns_set_vbus(cdns);
->  	}
-> +
-> +	spin_unlock_irqrestore(&pdev->lock, flags);
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.25.1
+On 12/12/2021 21:18, Amjad Ouled-Ameur wrote:
+> This patchset fixes a usb suspend warning seen on the libretech-cc by
+> using reset_control_rearm() call of the reset framework API. 
+> This call allows a reset consummer to release the reset line even when 
+> just triggered so that it may be triggered again by other reset
+> consummers.
+> 
+> reset_control_(de)assert() calls are called, in some meson usb drivers, 
+> on a shared reset line when reset_control_reset has been used. This is not
+> allowed by the reset framework.
+> 
+> Finally the meson usb drivers are updated to use this new call, which
+> solves the suspend issue addressed by the previous reverted 
+> commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
+> use").
+> 
+> changes since v4:
+> - call reset_control_rearm() after clk_prepare_enable() fails
+> 
+> Amjad Ouled-Ameur (3):
+>   phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
+>   phy: amlogic: meson8b-usb2: Use dev_err_probe()
+>   phy: amlogic: meson8b-usb2: fix shared reset control use
+> 
+>  drivers/phy/amlogic/phy-meson-gxl-usb2.c | 5 ++++-
+>  drivers/phy/amlogic/phy-meson8b-usb2.c   | 9 +++++++--
+>  2 files changed, 11 insertions(+), 3 deletions(-)
 > 
 
--- 
+For whole serie:
 
-Thanks,
-Peter Chen
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
 
+Thanks for fixing that !
+
+Neil

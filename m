@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5084727F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC774729EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235246AbhLMKGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:06:17 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:48818 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbhLMKAb (ORCPT
+        id S238084AbhLMK17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237101AbhLMK0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:00:31 -0500
+        Mon, 13 Dec 2021 05:26:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F37FC01DF04;
+        Mon, 13 Dec 2021 02:00:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A4C5BCE0EE1;
-        Mon, 13 Dec 2021 10:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D05C34601;
-        Mon, 13 Dec 2021 10:00:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18E7BB80DEC;
+        Mon, 13 Dec 2021 10:00:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B21C34601;
+        Mon, 13 Dec 2021 10:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389627;
-        bh=bT8fZiEE3OsnyRilO4i9hYFSC/yQ/MPlPWJSo/i5iOE=;
+        s=korg; t=1639389631;
+        bh=9FdpmkzTWuaFh15PEjKrURtIJNq4boE8px8lf9ZVNtU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QiHx0qhDEiFSMK5QYPYSbJuzVTdmCMYkV/WlL84l6fYWA7S2/lMcRklD2zUVc434u
-         l9iuEO3LQhlQqVaOSd0kHCmmvOd/h1AvlNwPzNiP9gHooFq9U5tXY0ez5AwITix6kQ
-         ilMDGlFe+8HcdfT01dIiEi8E5ads7cnaEI2wF+U8=
+        b=xq+vdjVG6Dg2NcquP43xoGeBP0obVDpO5Gui899do5UDp9MiseoqzT1lzZDmL0RVa
+         yZl89HOZ/g4+yjyCZ4Wmlg5Kw48dThBQywFX69JSE8mv3kremr7oVnav3bcB7xMEOC
+         4mZFfV5uuH6VYCJfS8u/ccpCchwCgICvnUFzxM5Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 149/171] iio: kxsd9: Dont return error code in trigger handler
-Date:   Mon, 13 Dec 2021 10:31:04 +0100
-Message-Id: <20211213092950.027785109@linuxfoundation.org>
+Subject: [PATCH 5.15 150/171] iio: itg3200: Call iio_trigger_notify_done() on error
+Date:   Mon, 13 Dec 2021 10:31:05 +0100
+Message-Id: <20211213092950.058049565@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
 References: <20211213092945.091487407@linuxfoundation.org>
@@ -49,52 +51,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit 45febe0d63917ee908198c5be08511c64ee1790a upstream.
+commit 67fe29583e72b2103abb661bb58036e3c1f00277 upstream.
 
-IIO trigger handlers need to return one of the irqreturn_t values.
-Returning an error code is not supported.
+IIO trigger handlers must call iio_trigger_notify_done() when done. This
+must be done even when an error occurred. Otherwise the trigger will be
+seen as busy indefinitely and the trigger handler will never be called
+again.
 
-The kxsd9 interrupt handler returns an error code if reading the data
-registers fails. In addition when exiting due to an error the trigger
-handler does not call `iio_trigger_notify_done()`. Which when not done
-keeps the triggered disabled forever.
+The itg3200 driver neglects to call iio_trigger_notify_done() when there is
+an error reading the gyro data. Fix this by making sure that
+iio_trigger_notify_done() is included in the error exit path.
 
-Modify the code so that the function returns a valid irqreturn_t value as
-well as calling `iio_trigger_notify_done()` on all exit paths.
-
-Since we can't return the error code make sure to at least log it as part
-of the error message.
-
-Fixes: 0427a106a98a ("iio: accel: kxsd9: Add triggered buffer handling")
+Fixes: 9dbf091da080 ("iio: gyro: Add itg3200")
 Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20211024171251.22896-2-lars@metafoo.de
+Link: https://lore.kernel.org/r/20211101144055.13858-1-lars@metafoo.de
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/kxsd9.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/iio/gyro/itg3200_buffer.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/kxsd9.c
-+++ b/drivers/iio/accel/kxsd9.c
-@@ -224,14 +224,14 @@ static irqreturn_t kxsd9_trigger_handler
- 			       hw_values.chan,
- 			       sizeof(hw_values.chan));
- 	if (ret) {
--		dev_err(st->dev,
--			"error reading data\n");
--		return ret;
-+		dev_err(st->dev, "error reading data: %d\n", ret);
-+		goto out;
- 	}
+--- a/drivers/iio/gyro/itg3200_buffer.c
++++ b/drivers/iio/gyro/itg3200_buffer.c
+@@ -61,9 +61,9 @@ static irqreturn_t itg3200_trigger_handl
  
- 	iio_push_to_buffers_with_timestamp(indio_dev,
- 					   &hw_values,
- 					   iio_get_time_ns(indio_dev));
-+out:
+ 	iio_push_to_buffers_with_timestamp(indio_dev, &scan, pf->timestamp);
+ 
++error_ret:
  	iio_trigger_notify_done(indio_dev->trig);
  
+-error_ret:
  	return IRQ_HANDLED;
+ }
+ 
 
 

@@ -2,134 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B87472872
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6DC472933
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237952AbhLMKN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:13:27 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61204 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241682AbhLMKFH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:05:07 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BD9vkNl004542;
-        Mon, 13 Dec 2021 10:05:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=6CGYLc1xNdrHtFcxv7O7p0PZOmm8ac/QPQD4TYfJJbM=;
- b=OY+05C/1+ClrIU0Wiz8jpHzcGnFic9/vQ1MXh56izcbLSsPHycQ85uVq8uWrN+1HiTK8
- nlZ/iSw+LOPKYcS0xjJTwE3+kOBA8BGyk5tPcjfULCyYjQvbyGmIMMWGM6ifYHTWa3Dv
- QhIEYwq/r/g9YeGVtUDOeHwiI0sbDS5vGz+H+jbUZpsPekeudUI7wXYK/VXLjLEvNIbM
- Gp3mudIEV4JPdCua4WctrudSdaeD6Ftf9elO/DKKEkyS/vwpVsAUNw6VM0aHQRct0ND/
- JCeyp2HFst+lFXvlXjqCwLdLeVQB72FP0rYLgbgSeMuk/BwUxNLcqalPOMSP3mhKEL1M +w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx40mg47n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 10:05:03 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BDA0VSg014545;
-        Mon, 13 Dec 2021 10:05:02 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx40mg46m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 10:05:02 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BDA31Jh026874;
-        Mon, 13 Dec 2021 10:05:00 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3cvkm92h34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 10:04:59 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BD9v26Z23724516
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Dec 2021 09:57:02 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38F9C11C064;
-        Mon, 13 Dec 2021 10:04:56 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A153B11C074;
-        Mon, 13 Dec 2021 10:04:55 +0000 (GMT)
-Received: from [9.171.24.181] (unknown [9.171.24.181])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Dec 2021 10:04:55 +0000 (GMT)
-Message-ID: <67908963-76ad-8400-c6c2-24f70da3af8d@linux.ibm.com>
-Date:   Mon, 13 Dec 2021 11:05:59 +0100
+        id S235923AbhLMKSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:18:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:48786 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240693AbhLMKPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 05:15:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF050D6E;
+        Mon, 13 Dec 2021 02:06:05 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.67.68])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF623F793;
+        Mon, 13 Dec 2021 02:06:04 -0800 (PST)
+Date:   Mon, 13 Dec 2021 10:06:01 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     will@kernel.org, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, elver@google.com,
+        keescook@chromium.org, hch@infradead.org,
+        torvalds@linux-foundation.org, axboe@kernel.dk
+Subject: Re: [PATCH v2 3/9] atomic: Introduce
+ atomic_{inc,dec,dec_and_test}_overflow()
+Message-ID: <YbcbCQ/ySN8ZpTWR@FVFF77S0Q05N>
+References: <20211210161618.645249719@infradead.org>
+ <20211210162313.464256797@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 1/1] s390x: KVM: accept STSI for CPU topology
- information
-Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, cohuck@redhat.com, david@redhat.com,
-        thuth@redhat.com, gor@linux.ibm.com
-References: <20211122131443.66632-1-pmorel@linux.ibm.com>
- <20211122131443.66632-2-pmorel@linux.ibm.com>
- <20211209133616.650491fd@p-imbrenda> <YbImqX/NEus71tZ1@osiris>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <YbImqX/NEus71tZ1@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rnNuXZzttlUbykPMmtGBCFN6qaDd_BzO
-X-Proofpoint-ORIG-GUID: smVw9YNjx-0WLtG9y50VJzW6KB6iTBK3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-13_03,2021-12-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112130065
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210162313.464256797@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/9/21 16:54, Heiko Carstens wrote:
-> On Thu, Dec 09, 2021 at 01:36:16PM +0100, Claudio Imbrenda wrote:
->> On Mon, 22 Nov 2021 14:14:43 +0100
->> Pierre Morel <pmorel@linux.ibm.com> wrote:
->>
->>> We let the userland hypervisor know if the machine support the CPU
->>> topology facility using a new KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
->>>
->>> The PTF instruction will report a topology change if there is any change
->>> with a previous STSI_15_1_2 SYSIB.
->>> Changes inside a STSI_15_1_2 SYSIB occur if CPU bits are set or clear
->>> inside the CPU Topology List Entry CPU mask field, which happens with
->>> changes in CPU polarization, dedication, CPU types and adding or
->>> removing CPUs in a socket.
->>>
->>> The reporting to the guest is done using the Multiprocessor
->>> Topology-Change-Report (MTCR) bit of the utility entry of the guest's
->>> SCA which will be cleared during the interpretation of PTF.
->>>
->>> To check if the topology has been modified we use a new field of the
->>> arch vCPU to save the previous real CPU ID at the end of a schedule
->>> and verify on next schedule that the CPU used is in the same socket.
->>>
->>> We assume in this patch:
->>> - no polarization change: only horizontal polarization is currently
->>>    used in linux.
+On Fri, Dec 10, 2021 at 05:16:21PM +0100, Peter Zijlstra wrote:
+> In order to facilitate architecture support for refcount_t, introduce
+> a number of new atomic primitives that have a uaccess style exception
+> for overflow.
 > 
-> Why is this assumption necessary? The statement that Linux runs only
-> with horizontal polarization is not true.
+> Notably:
+> 
+>   atomic_inc_overflow(v, Label):
+> 
+> 	increment and goto Label when the old value of v is zero or
+> 	negative.
+> 
+>   atomic_dec_overflow(v, Label):
+> 
+> 	decrement and goto Label when the new value of v is zero or
+> 	negative
+> 
+>   atomic_dec_and_test_overflow(v, Label):
+> 
+> 	decrement and return true when the result is zero and goto
+> 	Label when the new value of v is negative
 
-Oh OK, I will change this and take a look at the implications.
+Maybe it's worth adding these as comments in the fallback, which we have for a
+few existing functions, e.g.
 
-Thanks,
-Pierre
+| /**
+|  * arch_${atomic}_add_negative - add and test if negative
+|  * @i: integer value to add 
+|  * @v: pointer of type ${atomic}_t
+|  *
+|  * Atomically adds @i to @v and returns true
+|  * if the result is negative, or false when
+|  * result is greater than or equal to zero.
+|  */
+| static __always_inline bool
+| arch_${atomic}_add_negative(${int} i, ${atomic}_t *v) 
+| {
+|         return arch_${atomic}_add_return(i, v) < 0;
+| }
+
+Not a big deal either way.
 
 > 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/linux/atomic/atomic-arch-fallback.h    |   64 ++++++++++++++++++++++++
+>  include/linux/atomic/atomic-instrumented.h     |   65 ++++++++++++++++++++++++-
+>  include/linux/atomic/atomic-long.h             |   32 +++++++++++-
+>  scripts/atomic/atomics.tbl                     |    3 +
+>  scripts/atomic/fallbacks/dec_and_test_overflow |   12 ++++
+>  scripts/atomic/fallbacks/dec_overflow          |    8 +++
+>  scripts/atomic/fallbacks/inc_overflow          |    8 +++
+>  7 files changed, 189 insertions(+), 3 deletions(-)
+> 
+> --- a/include/linux/atomic/atomic-arch-fallback.h
+> +++ b/include/linux/atomic/atomic-arch-fallback.h
+> @@ -1250,6 +1250,37 @@ arch_atomic_dec_if_positive(atomic_t *v)
+>  #define arch_atomic_dec_if_positive arch_atomic_dec_if_positive
+>  #endif
+>  
+> +#ifndef arch_atomic_inc_overflow
+> +#define arch_atomic_inc_overflow(_v, _label)				\
+> +do {									\
+> +	int __old = arch_atomic_fetch_inc(_v);			\
+> +	if (unlikely(__old <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic_dec_overflow
+> +#define arch_atomic_dec_overflow(_v, _label)				\
+> +do {									\
+> +	int __new = arch_atomic_dec_return(_v);			\
+> +	if (unlikely(__new <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic_dec_and_test_overflow
+> +#define arch_atomic_dec_and_test_overflow(_v, _label)		\
+> +({									\
+> +	bool __ret = false;						\
+> +	int __new = arch_atomic_dec_return(_v);			\
+> +	if (unlikely(__new < 0))					\
+> +		goto _label;						\
+> +	if (unlikely(__new == 0))					\
+> +		__ret = true;						\
+> +	__ret;								\
+> +})
+> +#endif
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+I had wanted to move at least part of this to a function to ensure
+single-evaluation and avoid accidental symbol aliasing, but (as we discussed
+over IRC) I couldn't find any good way to do so, and given this is sufficiently
+specialise I think we should be ok with this as-is. It's certainly no worse
+than the existing stuff for xchg/cmpxchg.
+
+With that in mind, these (and the other variants, and the underlying fallback
+templates) all look good to me.
+
+With or without the comments as above:
+
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
+> +
+>  #ifdef CONFIG_GENERIC_ATOMIC64
+>  #include <asm-generic/atomic64.h>
+>  #endif
+> @@ -2357,5 +2388,36 @@ arch_atomic64_dec_if_positive(atomic64_t
+>  #define arch_atomic64_dec_if_positive arch_atomic64_dec_if_positive
+>  #endif
+>  
+> +#ifndef arch_atomic64_inc_overflow
+> +#define arch_atomic64_inc_overflow(_v, _label)				\
+> +do {									\
+> +	s64 __old = arch_atomic64_fetch_inc(_v);			\
+> +	if (unlikely(__old <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic64_dec_overflow
+> +#define arch_atomic64_dec_overflow(_v, _label)				\
+> +do {									\
+> +	s64 __new = arch_atomic64_dec_return(_v);			\
+> +	if (unlikely(__new <= 0))					\
+> +		goto _label;						\
+> +} while (0)
+> +#endif
+> +
+> +#ifndef arch_atomic64_dec_and_test_overflow
+> +#define arch_atomic64_dec_and_test_overflow(_v, _label)		\
+> +({									\
+> +	bool __ret = false;						\
+> +	s64 __new = arch_atomic64_dec_return(_v);			\
+> +	if (unlikely(__new < 0))					\
+> +		goto _label;						\
+> +	if (unlikely(__new == 0))					\
+> +		__ret = true;						\
+> +	__ret;								\
+> +})
+> +#endif
+> +
+>  #endif /* _LINUX_ATOMIC_FALLBACK_H */
+> -// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
+> +// e4c677b23b3fd5e8dc4bce9d6c055103666cfc4a
+> --- a/include/linux/atomic/atomic-instrumented.h
+> +++ b/include/linux/atomic/atomic-instrumented.h
+> @@ -599,6 +599,27 @@ atomic_dec_if_positive(atomic_t *v)
+>  	return arch_atomic_dec_if_positive(v);
+>  }
+>  
+> +#define atomic_inc_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_inc_overflow(__ai_v, L); \
+> +})
+> +
+> +#define atomic_dec_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_dec_overflow(__ai_v, L); \
+> +})
+> +
+> +#define atomic_dec_and_test_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_dec_and_test_overflow(__ai_v, L); \
+> +})
+> +
+>  static __always_inline s64
+>  atomic64_read(const atomic64_t *v)
+>  {
+> @@ -1177,6 +1198,27 @@ atomic64_dec_if_positive(atomic64_t *v)
+>  	return arch_atomic64_dec_if_positive(v);
+>  }
+>  
+> +#define atomic64_inc_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic64_inc_overflow(__ai_v, L); \
+> +})
+> +
+> +#define atomic64_dec_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic64_dec_overflow(__ai_v, L); \
+> +})
+> +
+> +#define atomic64_dec_and_test_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic64_dec_and_test_overflow(__ai_v, L); \
+> +})
+> +
+>  static __always_inline long
+>  atomic_long_read(const atomic_long_t *v)
+>  {
+> @@ -1755,6 +1797,27 @@ atomic_long_dec_if_positive(atomic_long_
+>  	return arch_atomic_long_dec_if_positive(v);
+>  }
+>  
+> +#define atomic_long_inc_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_long_inc_overflow(__ai_v, L); \
+> +})
+> +
+> +#define atomic_long_dec_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_long_dec_overflow(__ai_v, L); \
+> +})
+> +
+> +#define atomic_long_dec_and_test_overflow(v, L) \
+> +({ \
+> +	typeof(v) __ai_v = (v); \
+> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
+> +	arch_atomic_long_dec_and_test_overflow(__ai_v, L); \
+> +})
+> +
+>  #define xchg(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> @@ -1912,4 +1975,4 @@ atomic_long_dec_if_positive(atomic_long_
+>  
+>  
+>  #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
+> -// 66cdf9a0e0a995cba29c61baf018f7ef35974ae5
+> +// 702806891ef1d01d76767c55088264ab6a1ef77d
+> --- a/include/linux/atomic/atomic-long.h
+> +++ b/include/linux/atomic/atomic-long.h
+> @@ -515,6 +515,21 @@ arch_atomic_long_dec_if_positive(atomic_
+>  	return arch_atomic64_dec_if_positive(v);
+>  }
+>  
+> +#define arch_atomic_long_inc_overflow(v, L) \
+> +({ \
+> +	arch_atomic64_inc_overflow((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_overflow(v, L) \
+> +({ \
+> +	arch_atomic64_dec_overflow((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_and_test_overflow(v, L) \
+> +({ \
+> +	arch_atomic64_dec_and_test_overflow((v), L) \
+> +})
+> +
+>  #else /* CONFIG_64BIT */
+>  
+>  static __always_inline long
+> @@ -1009,6 +1024,21 @@ arch_atomic_long_dec_if_positive(atomic_
+>  	return arch_atomic_dec_if_positive(v);
+>  }
+>  
+> +#define arch_atomic_long_inc_overflow(v, L) \
+> +({ \
+> +	arch_atomic_inc_overflow((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_overflow(v, L) \
+> +({ \
+> +	arch_atomic_dec_overflow((v), L) \
+> +})
+> +
+> +#define arch_atomic_long_dec_and_test_overflow(v, L) \
+> +({ \
+> +	arch_atomic_dec_and_test_overflow((v), L) \
+> +})
+> +
+>  #endif /* CONFIG_64BIT */
+>  #endif /* _LINUX_ATOMIC_LONG_H */
+> -// e8f0e08ff072b74d180eabe2ad001282b38c2c88
+> +// 487bc4fea91f23f2a4b42af7d5b49ef9172ae792
+> --- a/scripts/atomic/atomics.tbl
+> +++ b/scripts/atomic/atomics.tbl
+> @@ -44,3 +44,6 @@ inc_not_zero		b	v
+>  inc_unless_negative	b	v
+>  dec_unless_positive	b	v
+>  dec_if_positive		i	v
+> +inc_overflow			n	v	L
+> +dec_overflow			n	v	L
+> +dec_and_test_overflow	m	v	L
+> --- /dev/null
+> +++ b/scripts/atomic/fallbacks/dec_and_test_overflow
+> @@ -0,0 +1,12 @@
+> +cat << EOF
+> +#define arch_${atomic}_dec_and_test_overflow(_v, _label)		\\
+> +({									\\
+> +	bool __ret = false;						\\
+> +	${int} __new = arch_${atomic}_dec_return(_v);			\\
+> +	if (unlikely(__new < 0))					\\
+> +		goto _label;						\\
+> +	if (unlikely(__new == 0))					\\
+> +		__ret = true;						\\
+> +	__ret;								\\
+> +})
+> +EOF
+> --- /dev/null
+> +++ b/scripts/atomic/fallbacks/dec_overflow
+> @@ -0,0 +1,8 @@
+> +cat << EOF
+> +#define arch_${atomic}_dec_overflow(_v, _label)				\\
+> +do {									\\
+> +	${int} __new = arch_${atomic}_dec_return(_v);			\\
+> +	if (unlikely(__new <= 0))					\\
+> +		goto _label;						\\
+> +} while (0)
+> +EOF
+> --- /dev/null
+> +++ b/scripts/atomic/fallbacks/inc_overflow
+> @@ -0,0 +1,8 @@
+> +cat << EOF
+> +#define arch_${atomic}_inc_overflow(_v, _label)				\\
+> +do {									\\
+> +	${int} __old = arch_${atomic}_fetch_inc(_v);			\\
+> +	if (unlikely(__old <= 0))					\\
+> +		goto _label;						\\
+> +} while (0)
+> +EOF
+> 
+> 

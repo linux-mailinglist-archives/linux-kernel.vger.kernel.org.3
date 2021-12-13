@@ -2,142 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D253C47236A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BF847236D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbhLMJBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:01:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S233427AbhLMJEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbhLMJB1 (ORCPT
+        with ESMTP id S229725AbhLMJEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:01:27 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E4BC061748;
-        Mon, 13 Dec 2021 01:01:27 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x10so32269202edd.5;
-        Mon, 13 Dec 2021 01:01:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CR75fK/LU5VxKAcUyjQTvhGDV/ZY9kpeodVRSprVuA8=;
-        b=fFXPFUDKDJngOpm5GYKXQt98kIqMolFEF+NQhpGOKEtqUJFL/orLbECLPJWIYq5NOJ
-         FHnm6qBZ53kuGmOwEknnmj3SWDy1Q2Yx+jswNfpmm+JT3FkZo/ZVhptCImO56gyQuyaZ
-         1J4xzctqXFFYlVBqGY6rY2narFowxj71pdUpaS/JnYlV3RoxLg8BzFeoX5qnCvenwfBw
-         v/xyEXzkIYgixwDiJs/bsPDP1Jspfxu8GaeBp5hoVtjrbGTPyfZyvDVj10JO8yYYIZiy
-         3nNlCwTw7LFAOL/5rlMg6/xNR/UQmVtXSxAlUVv0PCLm8gIwXGr0/o6j34sjR8J9Oqb6
-         zDWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CR75fK/LU5VxKAcUyjQTvhGDV/ZY9kpeodVRSprVuA8=;
-        b=5jkvE3uBMfF3ihRMdR8sbl0jw2t03woQatHXMn/2QtPwH2YZBFlGNbR4xgxFmD6Rdp
-         d9T5yXGGKjzzt2KCJVFoaHqABYPDZU2L/fpZTeZzf6T3DdpgbwXqChsKwWwa50JgMicV
-         U32Urr7dy0rbKqaAbt33VLOiJ50xaHH6lfNuFaSM+U78hd51raX8lBCvlZUDXtO32AUG
-         bI4WERYXQ9DeGtNv1RpmEWgU1G2eSV/ayM68Z2EPMy2X2rpgTyq6Do8KuW7xvbKLNQ6K
-         KrbreAkddfD9KuccRIXN4GJQMQQuvwSreJ76taMe27fH7Nagnoe6HN4WG3IahjESXdXG
-         gWaw==
-X-Gm-Message-State: AOAM531c9U0vnRatKxm0UYohIfWpfQQtSf+qxEzirDsdKKO4dz2hLqie
-        Z+5Evzo+HmysXoDp6Nb/xP2FiP4338s=
-X-Google-Smtp-Source: ABdhPJwV5BETtKCcxFQWK5P0KGO8i9sykZ84Ui0u3OoJwWlF8y3+lY3qi4V7zT1gjhyLngzG7WCF2w==
-X-Received: by 2002:a05:6402:35cc:: with SMTP id z12mr61896976edc.393.1639386085596;
-        Mon, 13 Dec 2021 01:01:25 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
-        by smtp.googlemail.com with ESMTPSA id h7sm6354080ede.40.2021.12.13.01.01.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 01:01:25 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <7de6b755-3cf9-4d1c-11e8-3458e6764545@redhat.com>
-Date:   Mon, 13 Dec 2021 10:01:23 +0100
+        Mon, 13 Dec 2021 04:04:10 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A29C06173F;
+        Mon, 13 Dec 2021 01:04:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=E1tfJAJEo2ii3UUfFc4sMr4HPboIoKFc3I0QAP/7CAY=; b=aIrkrI+KqL28ZA6400YDIn5IRt
+        l/K5scmwRddqvQ4sE0ypmZYXJJlYitkGODVJZb+y0TgOVv54m15f3u+j3oQp6CC7XNdvtxL6zewm5
+        wVLwzhTVZ0guWNcDSliGheB19UtdIGNOf8Edd9tenuethftMe2lSvWjMDGO5BIVsYw60DVxcIJXg9
+        8D9jlXCJajiE7uuBy01ct8hzHIr96VtnyABQb2KZDfCcEK6qALNDGh6d7/eoKvaptsKAfe4c1Pf0O
+        DZ5/9P6Hm20Gs2DvIGP1uc4PJK+LjSecS4BbZPZ+UQm524ZMKszJ/5wNQbln7cKISDMGA1UQglJ/u
+        ZRpyi5wQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwhFf-008UXb-Be; Mon, 13 Dec 2021 09:04:07 +0000
+Date:   Mon, 13 Dec 2021 01:04:07 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     ira.weiny@intel.com
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/7] drm/i915: Replace kmap() with kmap_local_page()
+Message-ID: <YbcMhzfm31aL5fzx@infradead.org>
+References: <20211210232404.4098157-1-ira.weiny@intel.com>
+ <20211210232404.4098157-2-ira.weiny@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
-Content-Language: en-US
-To:     "Liu, Jing2" <jing2.liu@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-11-yang.zhong@intel.com>
- <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
- <MWHPR11MB1245F7730D9BF0DA251D302DA9749@MWHPR11MB1245.namprd11.prod.outlook.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <MWHPR11MB1245F7730D9BF0DA251D302DA9749@MWHPR11MB1245.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210232404.4098157-2-ira.weiny@intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 08:51, Liu, Jing2 wrote:
-> On 12/11/2021 12:02 AM, Paolo Bonzini wrote:
->>
->> Also:
->>
->> On 12/8/21 01:03, Yang Zhong wrote:
->>>
->>> +		if (!guest_cpuid_has(vcpu, X86_FEATURE_XFD))
->>> +			return 1;
->>
->> This should allow msr->host_initiated always (even if XFD is not part of
->> CPUID).
-> Thanks Paolo.
-> 
-> msr->host_initiated handling would be added in next version.
-> 
-> I'd like to ask why always allow msr->host_initiated even if XFD is not part of
-> CPUID, although guest doesn't care that MSR?  We found some MSRs
->   (e.g. MSR_AMD64_OSVW_STATUS and MSR_AMD64_OSVW_ID_LENGTH )
-> are specially handled so would like to know the consideration of allowing
-> msr->host_initiated.
-> 
-> if (!msr_info->host_initiated && !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
->          return 1;
+On Fri, Dec 10, 2021 at 03:23:58PM -0800, ira.weiny@intel.com wrote:
+> -		vaddr = kmap(page);
+> +		vaddr = kmap_local_page(page);
+>  		memcpy(vaddr, data, len);
+> -		kunmap(page);
+> +		kunmap_local(vaddr);
 
-Because it's simpler if userspace can just take the entire list from 
-KVM_GET_MSR_INDEX_LIST and pass it to KVM_GET/SET_MSR.  See for example 
-vcpu_save_state and vcpu_load_state in 
-tools/testing/selftests/kvm/lib/x86_64/processor.c.
-
->>  However, if XFD is nonzero and kvm_check_guest_realloc_fpstate
->> returns true, then it should return 1.
->
-> If XFD is nonzero, kvm_check_guest_realloc_fpstate() won't return true. So
-> may not need this check here?
-
-It can't for now, because there's a single dynamic feature, but here:
-
-+	if ((xfd & xcr0) != xcr0) {
-+		u64 request = (xcr0 ^ xfd) & xcr0;
-+		struct fpu_guest *guest_fpu = &vcpu->arch.guest_fpu;
-+
-+		/*
-+		 * If requested features haven't been enabled, update
-+		 * the request bitmap and tell the caller to request
-+		 * dynamic buffer reallocation.
-+		 */
-+		if ((guest_fpu->user_xfeatures & request) != request) {
-+			vcpu->arch.guest_fpu.realloc_request = request;
-+			return true;
-+		}
-+	}
-
-it is certainly possible to return true with nonzero XFD.
-
-Paolo
+memcpy_to_page?

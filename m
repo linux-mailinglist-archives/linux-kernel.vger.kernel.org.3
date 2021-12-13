@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67447473015
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A802D473019
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236872AbhLMPGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:06:36 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55912 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbhLMPGe (ORCPT
+        id S237282AbhLMPHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234797AbhLMPG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:06:34 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 985F01F3B9;
-        Mon, 13 Dec 2021 15:06:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639407992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mo0LvTTdCAdYCELtja1WibnDYrDpY4UUg3gYnSLtKHs=;
-        b=Zv5q+rsqvGBcvPNXTC0JYSr5b+BCn+RUcwsHqjHFcdPO8dKSiP1Ro/pxEtzq/mPItUxgXc
-        xXYhrJoSvPPt52OonbLIzk8XN6t8WeGqg3+JhoraV3Hjbtepfq22fi968GfIQH2cxqiC9v
-        gsqwy8wrjljI5ipLw+Xm4mwO/6oFeb0=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 68C9DA3B8A;
-        Mon, 13 Dec 2021 15:06:32 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 16:06:31 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Makhalov <amakhalov@vmware.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YbdhdySBaHJ/UxBZ@dhcp22.suse.cz>
-References: <2e191db3-286f-90c6-bf96-3f89891e9926@gmail.com>
- <YYqstfX8PSGDfWsn@dhcp22.suse.cz>
- <YYrGpn/52HaLCAyo@fedora>
- <YYrSC7vtSQXz652a@dhcp22.suse.cz>
- <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
- <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
- <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
- <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
- <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
+        Mon, 13 Dec 2021 10:06:57 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F21BC061574;
+        Mon, 13 Dec 2021 07:06:57 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id w1so52985799edc.6;
+        Mon, 13 Dec 2021 07:06:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D+OM0ZcmedPw5LKW8sfyRrJjP9nbgID1f4xqcJPjBqg=;
+        b=dGtwxoABqgZdJ5QjvI4V8UtjlNuiMAQ3vWwTGuWwrK2drWzZCZZI4vGHWuI/wD16Oc
+         qjVBzujgQpZh89ulOq87nBrULvmABQfl84GIiSsuEj7f6TdCz1d1MaVVIZ7WTrb3A/6I
+         rn3IRSdzHiebOeQlBeF5y+8oCt5tSdZft76fxgcwb0+aA8LBbcii2IIm1Q8C8tnIQssH
+         /xUUITLAvM5UU3OqKHgsjhT6gfreOyXB5ZG0KG+T7X1muJl6xVswp8cxIFrvXl+IEYsV
+         e+GhLek8C7BCKwPErAvxBMW9Qm3Ytrnaf+/5pRJT/x1yeheWfpqI5aZSdRddJoZD5QZw
+         /v7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D+OM0ZcmedPw5LKW8sfyRrJjP9nbgID1f4xqcJPjBqg=;
+        b=YePVV+Mo4CYt8qxaIL6Q3/Ud4HeL8VJfkONogbozdIR51WiJaDX9YdWqxReP3Ez1rb
+         NainbYvt9cSXNDLEcFbtJbyYmub4F6u62LnIb6qXcamECgXzRMzdCHWTg6NoFXVZneJp
+         ZQBJj8/V8dOtkIfImNzzCFPEJ32rBwPXt98B1furkFinhF/szpXDpiUnKnM56pPltUps
+         lHq2J7V0xKowbiRsPPJKg4ADvbWVh2Lx3K2C5YxUqgLsUlPfb27D4B3tRnIdPdRU801N
+         pXP/xunt+oTaMZ/1G+tCCuR05Ad3EYskbybsRt9kWWqOxJy9szcu1IIIY3fjv1hcc9K4
+         nN6g==
+X-Gm-Message-State: AOAM531tZ3OsSLhdEctYW49CZ7xGSfT6Ib6eWgMHjCO/hqBFhoHK8MPF
+        KDAFU5v1ji8GvneGxvl5LPo=
+X-Google-Smtp-Source: ABdhPJwjITmETfb+FsdYrE5cod1vvUS9pztM2qIpHDo9t+iIrJaI3IyW7a5Kw0VCSn9jSjeOKWFbqA==
+X-Received: by 2002:a17:907:7250:: with SMTP id ds16mr44384421ejc.54.1639408011892;
+        Mon, 13 Dec 2021 07:06:51 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id cq19sm6308649edb.33.2021.12.13.07.06.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 07:06:51 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <452f3642-04fd-aa32-920e-5ad5925c0c91@redhat.com>
+Date:   Mon, 13 Dec 2021 16:06:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 0/2] KVM: x86: Fix dangling page reference in TDP MMU
+Content-Language: en-US
+To:     Ignat Korchagin <ignat@cloudflare.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>, bgardon@google.com,
+        dmatlack@google.com, stevensd@chromium.org,
+        kernel-team <kernel-team@cloudflare.com>
+References: <20211213112514.78552-1-pbonzini@redhat.com>
+ <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09-12-21 11:48:42, Michal Hocko wrote:
-[...]
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 852041f6be41..2d38a431f62f 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1161,19 +1161,21 @@ static void reset_node_present_pages(pg_data_t *pgdat)
->  }
->  
->  /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
-> -static pg_data_t __ref *hotadd_new_pgdat(int nid)
-> +static pg_data_t __ref *hotadd_init_pgdat(int nid)
->  {
->  	struct pglist_data *pgdat;
->  
->  	pgdat = NODE_DATA(nid);
-> -	if (!pgdat) {
-> -		pgdat = arch_alloc_nodedata(nid);
-> -		if (!pgdat)
-> -			return NULL;
->  
-> +	/*
-> +	 * NODE_DATA is preallocated (free_area_init) but its internal
-> +	 * state is not allocated completely. Add missing pieces.
-> +	 * Completely offline nodes stay around and they just need
-> +	 * reintialization.
-> +	 */
-> +	if (!pgdat->per_cpu_nodestats) {
->  		pgdat->per_cpu_nodestats =
->  			alloc_percpu(struct per_cpu_nodestat);
-> -		arch_refresh_nodedata(nid, pgdat);
+On 12/13/21 14:43, Ignat Korchagin wrote:
+> The only difference I noticed is the presence of __tdp_mmu_set_spte
+> between zap_gfn_range and __handle_changed_spte, which is absent from
+> the original stacktrace.
 
-This should really be 
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 42211485bcf3..2daa88ce8c80 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1173,7 +1173,7 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
- 	 * Completely offline nodes stay around and they just need
- 	 * reintialization.
- 	 */
--	if (!pgdat->per_cpu_nodestats) {
-+	if (pgdat->per_cpu_nodestats == &boot_nodestats) {
- 		pgdat->per_cpu_nodestats =
- 			alloc_percpu(struct per_cpu_nodestat);
- 	} else {
--- 
-Michal Hocko
-SUSE Labs
+That's just a difference in inlining decisions, so it doesn't really matter.
+
+Let's see if Sean has some more ideas or finds something obviously wrong 
+in my patch.
+
+Paolo

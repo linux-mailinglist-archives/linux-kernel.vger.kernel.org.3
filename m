@@ -2,272 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 231674722BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1BC4722C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbhLMIcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:32:46 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:33408 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229577AbhLMIcp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:32:45 -0500
-X-UUID: 90a57daf20424a32b435a4d3fd51e6f7-20211213
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=VqN44xeo5LvrcQCH8nOqwMnATk8LRZ9hZSYuxrOxs8k=;
-        b=TTkU3R5KHlKSJJrJGQqbs9DPcXKcXIGppsKLc9S8q560++UFLPK7vBRcsFr4FX/9EkvD6dzgkxicBiwnIxIxBq08J/v++DIGBKw4sWjihoLGCqr9WTddMQn4bEbLPtckwSyEL4d5deO3bKaqg3/mMsC3DXO9QObr5ITxMoinHUU=;
-X-UUID: 90a57daf20424a32b435a4d3fd51e6f7-20211213
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2050973981; Mon, 13 Dec 2021 16:32:41 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 13 Dec 2021 16:32:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 13 Dec
- 2021 16:32:39 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 13 Dec 2021 16:32:38 +0800
-Message-ID: <46fa090f9d6f02a0dea8bc3043777faff46bdf10.camel@mediatek.com>
-Subject: Re: [PATCH v12, 15/19] dt-bindings: media: mtk-vcodec: Adds decoder
- dt-bindings for mt8192
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        "Tiffany Lin" <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 13 Dec 2021 16:32:40 +0800
-In-Reply-To: <YbOFBMyABgTfTMM7@robh.at.kernel.org>
-References: <20211202034544.2750-1-yunfei.dong@mediatek.com>
-         <20211202034544.2750-16-yunfei.dong@mediatek.com>
-         <YbOFBMyABgTfTMM7@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S233181AbhLMIgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:36:43 -0500
+Received: from mga11.intel.com ([192.55.52.93]:35786 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233174AbhLMIgm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 03:36:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639384602; x=1670920602;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=MLwKWlHuDZfnIeyy1QWhivi4pxHn0acp6WQCWS0Ckes=;
+  b=hEQDYvhgWK/fvKaA4sUhLpyjKZ7tq1lKp/qBYoOcsEJYfKfEv+G4Hggp
+   /eIEVerHZnTKDkPDKWuG7RuiVJDgBdMTmG7uqy/0RNve4WC8IMshAoMKi
+   B3S7rWPFadT52UScKOu73cdPnpO8Z5QZ54uDDZc/tG1Fmg1iPBvB6MOLW
+   BKO7gJjlEEeik2Pbh9Az4ir2F91nM4+KPIdvXEmcKv2MUPtxQ69C1rz3u
+   y5FUAdFimF9JdsZc7nfzuTREw+0ekfksCrlHT5FCuOSm/u8bZ0EMDjbEE
+   AhVSHhdz/99uQ71FBkUylS/htMQkuYQZEzBN1wjr4dC/sfLfncZzFKhY1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="236217543"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="236217543"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:36:40 -0800
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="464540315"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.170.242]) ([10.249.170.242])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:36:38 -0800
+Subject: Re: [kbuild-all] Re: [paulmck-rcu:dev.2021.12.07a 56/57]
+ kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when
+ used here
+To:     paulmck@kernel.org, kernel test robot <lkp@intel.com>
+Cc:     David Woodhouse <dwmw@amazon.co.uk>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202112101543.wHvqhgYk-lkp@intel.com>
+ <20211210135717.GL641268@paulmck-ThinkPad-P17-Gen-1>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <a3543eca-32b5-9489-322a-bea82dc6e0ca@intel.com>
+Date:   Mon, 13 Dec 2021 16:36:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20211210135717.GL641268@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgUm9iLA0KDQpUaGFua3MgZm9yIHlvdXIgc3VnZ2VzdGlvbi4NCk9uIEZyaSwgMjAyMS0xMi0x
-MCBhdCAxMDo0OSAtMDYwMCwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+IE9uIFRodSwgRGVjIDAyLCAy
-MDIxIGF0IDExOjQ1OjQwQU0gKzA4MDAsIFl1bmZlaSBEb25nIHdyb3RlOg0KPiA+IEFkZHMgZGVj
-b2RlciBkdC1iaW5kaW5ncyBmb3IgbXQ4MTkyLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFl1
-bmZlaSBEb25nIDx5dW5mZWkuZG9uZ0BtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIC4uLi9t
-ZWRpYS9tZWRpYXRlayx2Y29kZWMtc3ViZGV2LWRlY29kZXIueWFtbCB8IDI2Ng0KPiA+ICsrKysr
-KysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMjY2IGluc2VydGlvbnMoKykNCj4g
-PiAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL21lZGlhL21lZGlhdGVrLHZjb2RlYy1zdWJkZXYtDQo+ID4gZGVjb2Rlci55YW1sDQo+ID4g
-DQo+ID4gZGlmZiAtLWdpdA0KPiA+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L21lZGlhL21lZGlhdGVrLHZjb2RlYy1zdWJkZXYtDQo+ID4gZGVjb2Rlci55YW1sDQo+ID4gYi9E
-b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWVkaWEvbWVkaWF0ZWssdmNvZGVjLXN1
-YmRldi0NCj4gPiBkZWNvZGVyLnlhbWwNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGlu
-ZGV4IDAwMDAwMDAwMDAwMC4uNjdjYmNmOGIzMzczDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsr
-KyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZWRpYS9tZWRpYXRlayx2Y29k
-ZWMtDQo+ID4gc3ViZGV2LWRlY29kZXIueWFtbA0KPiA+IEBAIC0wLDAgKzEsMjY2IEBADQo+ID4g
-KyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNl
-KQ0KPiA+ICsNCj4gPiArJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICskaWQ6ICINCj4gPiBodHRw
-Oi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9tZWRpYS9tZWRpYXRlayx2Y29kZWMtc3ViZGV2LWRl
-Y29kZXIueWFtbCMNCj4gPiAiDQo+ID4gKyRzY2hlbWE6ICJodHRwOi8vZGV2aWNldHJlZS5vcmcv
-bWV0YS1zY2hlbWFzL2NvcmUueWFtbCMiDQo+ID4gKw0KPiA+ICt0aXRsZTogTWVkaWF0ZWsgVmlk
-ZW8gRGVjb2RlIEFjY2VsZXJhdG9yIFdpdGggTXVsdGkgSGFyZHdhcmUNCj4gPiArDQo+ID4gK21h
-aW50YWluZXJzOg0KPiA+ICsgIC0gWXVuZmVpIERvbmcgPHl1bmZlaS5kb25nQG1lZGlhdGVrLmNv
-bT4NCj4gPiArDQo+ID4gK2Rlc2NyaXB0aW9uOiB8DQo+ID4gKyAgTWVkaWF0ZWsgVmlkZW8gRGVj
-b2RlIGlzIHRoZSB2aWRlbyBkZWNvZGUgaGFyZHdhcmUgcHJlc2VudCBpbg0KPiA+IE1lZGlhdGVr
-DQo+ID4gKyAgU29DcyB3aGljaCBzdXBwb3J0cyBoaWdoIHJlc29sdXRpb24gZGVjb2RpbmcgZnVu
-Y3Rpb25hbGl0aWVzLg0KPiA+IFJlcXVpcmVkDQo+ID4gKyAgcGFyZW50IGFuZCBjaGlsZCBkZXZp
-Y2Ugbm9kZS4NCj4gPiArDQo+ID4gKyAgQWJvdXQgdGhlIERlY29kZXIgSGFyZHdhcmUgQmxvY2sg
-RGlhZ3JhbSwgcGxlYXNlIGNoZWNrIGJlbG93Og0KPiA+ICsNCj4gPiArICAgICstLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4g
-LS0tLS0tLS0tKw0KPiA+ICsgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
-ICAgICAgICAgICAgICAgICAgICAgICAgICANCj4gPiAgICAgICAgICB8DQo+ID4gKyAgICB8IGlu
-cHV0IC0+IGxhdCBIVyAtPiBsYXQgYnVmZmVyIC0tfC0tPiBsYXQgYnVmZmVyIC0+IGNvcmUgSFcN
-Cj4gPiAtPiBvdXRwdXQgfA0KPiA+ICsgICAgfCAgICAgICAgICAgIHx8ICAgICAgICAgICAgICAg
-ICAgIHwgICAgICAgICAgICAgICAgICAgICB8fCAgICANCj4gPiAgICAgICAgICB8DQo+ID4gKyAg
-ICArLS0tLS0tLS0tLS0tfHwtLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LXx8LS0NCj4gPiAtLS0tLS0tLS0tLSsNCj4gPiArICAgICAgICAgICAgICBsYXQgd29ya3F1ZXVl
-ICAgICAgICAgICB8ICAgICAgICAgICAgICBjb3JlDQo+ID4gd29ya3F1ZXVlICAgICA8cGFyZW50
-Pg0KPiA+ICsgICAgLS0tLS0tLS0tLS0tLXx8LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS18fC0tDQo+ID4gLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICsgICAgICAgICAgICAg
-ICAgIHx8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8fCAgICANCj4g
-PiAgICAgICA8Y2hpbGQ+DQo+ID4gKyAgICAgICAgICAgICAgICAgXC8gPC0tLS0tLS0tLS0tLS0t
-LS1IVyBpbmRleC0tLS0tLS0tLS0tLS0tPlwvDQo+ID4gKyAgICAgICAgICAgKy0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gPiAtLSsNCj4gPiAr
-ICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICBlbmFibGUvZGlzYWJsZSAgICAgICAgICAg
-ICAgICAgICAgDQo+ID4gfA0KPiA+ICsgICAgICAgICAgIHwgICAgICAgICAgIGNsayAgICAgcG93
-ZXIgICAgaXJxICAgIGlvbW11ICAgICAgICAgICAgICANCj4gPiB8DQo+ID4gKyAgICAgICAgICAg
-fCAgICAgICAgICAgICAgICAgKGxhdC9sYXQNCj4gPiBzb2MvY29yZTAvY29yZTEpICAgICAgICAg
-ICAgfA0KPiA+ICsgICAgICAgICAgICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4gLS0rDQo+ID4gKw0KPiA+ICsgIEFzIGFib3ZlLCB0aGVy
-ZSBhcmUgcGFyZW50IGFuZCBjaGlsZCBkZXZpY2VzLCBjaGlsZCBtZWFuIGVhY2gNCj4gPiBoYXJk
-d2FyZS4gVGhlIGNoaWxkIGRldmljZQ0KPiA+ICsgIGNvbnRyb2xzIHRoZSBpbmZvcm1hdGlvbiBv
-ZiBlYWNoIGhhcmR3YXJlIGluZGVwZW5kZW50IHdoaWNoDQo+ID4gaW5jbHVkZSBjbGsvcG93ZXIv
-aXJxLg0KPiA+ICsNCj4gPiArICBUaGVyZSBhcmUgdHdvIHdvcmtxdWV1ZXMgaW4gcGFyZW50IGRl
-dmljZTogbGF0IHdvcmtxdWV1ZSBhbmQNCj4gPiBjb3JlIHdvcmtxdWV1ZS4gVGhleSBhcmUgdXNl
-ZA0KPiA+ICsgIHRvIGxhdCBhbmQgY29yZSBoYXJkd2FyZSBkZW9jZGVyLiBMYXQgd29ya3F1ZXVl
-IG5lZWQgdG8gZ2V0DQo+ID4gaW5wdXQgYml0c3RyZWFtIGFuZCBsYXQgYnVmZmVyLA0KPiA+ICsg
-IHRoZW4gZW5hYmxlIGxhdCB0byBkZWNvZGUsIHdyaXRpbmcgdGhlIHJlc3VsdCB0byBsYXQgYnVm
-ZmVyLA0KPiA+IGRpc2xhYmUgaGFyZHdhcmUgd2hlbiBsYXQgZGVjb2RlDQo+ID4gKyAgZG9uZS4g
-Q29yZSB3b3JrcXVldWUgbmVlZCB0byBnZXQgbGF0IGJ1ZmZlciBhbmQgb3V0cHV0IGJ1ZmZlciwN
-Cj4gPiB0aGVuIGVuYWJsZSBjb3JlIHRvIGRlY29kZSwNCj4gPiArICB3cml0aW5nIHRoZSByZXN1
-bHQgdG8gb3V0cHV0IGJ1ZmZlciwgZGlzYWJsZSBoYXJkd2FyZSB3aGVuIGNvcmUNCj4gPiBkZWNv
-ZGUgZG9uZS4gVGhlc2UgdHdvDQo+ID4gKyAgaGFyZHdhcmVzIHdpbGwgZGVjb2RlIGVhY2ggZnJh
-bWUgY3ljbGljYWxseS4NCj4gPiArDQo+ID4gKyAgRm9yIHRoZSBzbWkgY29tbW9uIG1heSBub3Qg
-dGhlIHNhbWUgZm9yIGVhY2ggaGFyZHdhcmUsIGNhbid0DQo+ID4gY29tYmluZSBhbGwgaGFyZHdh
-cmUgaW4gb25lIG5vZGUsDQo+ID4gKyAgb3IgbGVhZGluZyB0byBpb21tdSBmYXVsdCB3aGVuIGFj
-Y2VzcyBkcmFtIGRhdGEuDQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGli
-bGU6DQo+ID4gKyAgICBjb25zdDogbWVkaWF0ZWssbXQ4MTkyLXZjb2RlYy1kZWMNCj4gPiArDQo+
-ID4gKyAgcmVnOg0KPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgaW9tbXVzOg0K
-PiA+ICsgICAgbWluSXRlbXM6IDENCj4gPiArICAgIG1heEl0ZW1zOiAzMg0KPiA+ICsgICAgZGVz
-Y3JpcHRpb246IHwNCj4gPiArICAgICAgTGlzdCBvZiB0aGUgaGFyZHdhcmUgcG9ydCBpbiByZXNw
-ZWN0aXZlIElPTU1VIGJsb2NrIGZvcg0KPiA+IGN1cnJlbnQgU29jcy4NCj4gPiArICAgICAgUmVm
-ZXIgdG8gYmluZGluZ3MvaW9tbXUvbWVkaWF0ZWssaW9tbXUueWFtbC4NCj4gPiArDQo+ID4gKyAg
-bWVkaWF0ZWssc2NwOg0KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5p
-dGlvbnMvcGhhbmRsZQ0KPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArICAgIGRlc2NyaXB0aW9u
-OiB8DQo+ID4gKyAgICAgIFRoZSBub2RlIG9mIHN5c3RlbSBjb250cm9sIHByb2Nlc3NvciAoU0NQ
-KSwgdXNpbmcNCj4gPiArICAgICAgdGhlIHJlbW90ZXByb2MgJiBycG1zZyBmcmFtZXdvcmsuDQo+
-ID4gKyAgICAgICRyZWY6IC9zY2hlbWFzL3JlbW90ZXByb2MvbXRrLHNjcC55YW1sDQo+IA0KPiAn
-JHJlZicgaXMgbm90IHZhbGlkIGhlcmUuIEp1c3QgJ1NlZSByZW1vdGVwcm9jL210ayxzY3AueWFt
-bCcNCj4gDQpSZW1vdmUgdGhpcyBsaW5lLg0KPiA+ICsNCj4gPiArICBkbWEtcmFuZ2VzOg0KPiA+
-ICsgICAgbWF4SXRlbXM6IDENCj4gPiArICAgIGRlc2NyaXB0aW9uOiB8DQo+ID4gKyAgICAgIERl
-c2NyaWJlcyB0aGUgcGh5c2ljYWwgYWRkcmVzcyBzcGFjZSBvZiBJT01NVSBtYXBzIHRvDQo+ID4g
-bWVtb3J5Lg0KPiA+ICsNCj4gPiArICAiI2FkZHJlc3MtY2VsbHMiOg0KPiA+ICsgICAgY29uc3Q6
-IDENCj4gPiArDQo+ID4gKyAgIiNzaXplLWNlbGxzIjoNCj4gPiArICAgIGNvbnN0OiAxDQo+ID4g
-Kw0KPiA+ICsgIHJhbmdlczogdHJ1ZQ0KPiA+ICsNCj4gPiArIyBSZXF1aXJlZCBjaGlsZCBub2Rl
-Og0KPiA+ICtwYXR0ZXJuUHJvcGVydGllczoNCj4gPiArICB2Y29kZWMtbGF0Og0KPiANCj4gJ152
-Y29kZWMtbGF0QFswLTlhLWZdKyQnOg0KPiANCkZpeCBpbiB2MTMuDQo+ID4gKyAgICB0eXBlOiBv
-YmplY3QNCj4gPiArDQo+ID4gKyAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICBjb21wYXRpYmxl
-Og0KPiA+ICsgICAgICAgIGNvbnN0OiBtZWRpYXRlayxtdGstdmNvZGVjLWxhdA0KPiA+ICsNCj4g
-PiArICAgICAgcmVnOg0KPiA+ICsgICAgICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICsgICAg
-ICBpbnRlcnJ1cHRzOg0KPiA+ICsgICAgICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICsgICAg
-ICBpb21tdXM6DQo+ID4gKyAgICAgICAgbWluSXRlbXM6IDENCj4gPiArICAgICAgICBtYXhJdGVt
-czogMzINCj4gPiArICAgICAgICBkZXNjcmlwdGlvbjogfA0KPiA+ICsgICAgICAgICAgTGlzdCBv
-ZiB0aGUgaGFyZHdhcmUgcG9ydCBpbiByZXNwZWN0aXZlIElPTU1VIGJsb2NrIGZvcg0KPiA+IGN1
-cnJlbnQgU29jcy4NCj4gPiArICAgICAgICAgIFJlZmVyIHRvIGJpbmRpbmdzL2lvbW11L21lZGlh
-dGVrLGlvbW11LnlhbWwuDQo+ID4gKw0KPiA+ICsgICAgICBjbG9ja3M6DQo+ID4gKyAgICAgICAg
-bWF4SXRlbXM6IDUNCj4gPiArDQo+ID4gKyAgICAgIGNsb2NrLW5hbWVzOg0KPiA+ICsgICAgICAg
-IGl0ZW1zOg0KPiA+ICsgICAgICAgICAgLSBjb25zdDogc2VsDQo+ID4gKyAgICAgICAgICAtIGNv
-bnN0OiBzb2MtdmRlYw0KPiA+ICsgICAgICAgICAgLSBjb25zdDogc29jLWxhdA0KPiA+ICsgICAg
-ICAgICAgLSBjb25zdDogdmRlYw0KPiA+ICsgICAgICAgICAgLSBjb25zdDogdG9wDQo+ID4gKw0K
-PiA+ICsgICAgICBhc3NpZ25lZC1jbG9ja3M6DQo+ID4gKyAgICAgICAgbWF4SXRlbXM6IDENCj4g
-PiArDQo+ID4gKyAgICAgIGFzc2lnbmVkLWNsb2NrLXBhcmVudHM6DQo+ID4gKyAgICAgICAgbWF4
-SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgICAgIHBvd2VyLWRvbWFpbnM6DQo+ID4gKyAgICAgICAg
-bWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgICByZXF1aXJlZDoNCj4gPiArICAgICAgLSBjb21w
-YXRpYmxlDQo+ID4gKyAgICAgIC0gcmVnDQo+ID4gKyAgICAgIC0gaW50ZXJydXB0cw0KPiA+ICsg
-ICAgICAtIGlvbW11cw0KPiA+ICsgICAgICAtIGNsb2Nrcw0KPiA+ICsgICAgICAtIGNsb2NrLW5h
-bWVzDQo+ID4gKyAgICAgIC0gYXNzaWduZWQtY2xvY2tzDQo+ID4gKyAgICAgIC0gYXNzaWduZWQt
-Y2xvY2stcGFyZW50cw0KPiA+ICsgICAgICAtIHBvd2VyLWRvbWFpbnMNCj4gPiArDQo+ID4gKyAg
-ICBhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCj4gPiArDQo+ID4gKyAgdmNvZGVjLWNvcmU6
-DQo+IA0KPiBTYW1lIGhlcmUuDQpGaXggaW4gdjEzLg0KDQpUaGFua3MsDQpZdW5mZWkgRG9uZw0K
-PiANCj4gPiArICAgIHR5cGU6IG9iamVjdA0KPiA+ICsNCj4gPiArICAgIHByb3BlcnRpZXM6DQo+
-ID4gKyAgICAgIGNvbXBhdGlibGU6DQo+ID4gKyAgICAgICAgY29uc3Q6IG1lZGlhdGVrLG10ay12
-Y29kZWMtY29yZQ0KPiA+ICsNCj4gPiArICAgICAgcmVnOg0KPiA+ICsgICAgICAgIG1heEl0ZW1z
-OiAxDQo+ID4gKw0KPiA+ICsgICAgICBpbnRlcnJ1cHRzOg0KPiA+ICsgICAgICAgIG1heEl0ZW1z
-OiAxDQo+ID4gKw0KPiA+ICsgICAgICBpb21tdXM6DQo+ID4gKyAgICAgICAgbWluSXRlbXM6IDEN
-Cj4gPiArICAgICAgICBtYXhJdGVtczogMzINCj4gPiArICAgICAgICBkZXNjcmlwdGlvbjogfA0K
-PiA+ICsgICAgICAgICAgTGlzdCBvZiB0aGUgaGFyZHdhcmUgcG9ydCBpbiByZXNwZWN0aXZlIElP
-TU1VIGJsb2NrIGZvcg0KPiA+IGN1cnJlbnQgU29jcy4NCj4gPiArICAgICAgICAgIFJlZmVyIHRv
-IGJpbmRpbmdzL2lvbW11L21lZGlhdGVrLGlvbW11LnlhbWwuDQo+ID4gKw0KPiA+ICsgICAgICBj
-bG9ja3M6DQo+ID4gKyAgICAgICAgbWF4SXRlbXM6IDUNCj4gPiArDQo+ID4gKyAgICAgIGNsb2Nr
-LW5hbWVzOg0KPiA+ICsgICAgICAgIGl0ZW1zOg0KPiA+ICsgICAgICAgICAgLSBjb25zdDogc2Vs
-DQo+ID4gKyAgICAgICAgICAtIGNvbnN0OiBzb2MtdmRlYw0KPiA+ICsgICAgICAgICAgLSBjb25z
-dDogc29jLWxhdA0KPiA+ICsgICAgICAgICAgLSBjb25zdDogdmRlYw0KPiA+ICsgICAgICAgICAg
-LSBjb25zdDogdG9wDQo+ID4gKw0KPiA+ICsgICAgICBhc3NpZ25lZC1jbG9ja3M6DQo+ID4gKyAg
-ICAgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgICAgIGFzc2lnbmVkLWNsb2NrLXBhcmVu
-dHM6DQo+ID4gKyAgICAgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgICAgIHBvd2VyLWRv
-bWFpbnM6DQo+ID4gKyAgICAgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgICByZXF1aXJl
-ZDoNCj4gPiArICAgICAgLSBjb21wYXRpYmxlDQo+ID4gKyAgICAgIC0gcmVnDQo+ID4gKyAgICAg
-IC0gaW50ZXJydXB0cw0KPiA+ICsgICAgICAtIGlvbW11cw0KPiA+ICsgICAgICAtIGNsb2Nrcw0K
-PiA+ICsgICAgICAtIGNsb2NrLW5hbWVzDQo+ID4gKyAgICAgIC0gYXNzaWduZWQtY2xvY2tzDQo+
-ID4gKyAgICAgIC0gYXNzaWduZWQtY2xvY2stcGFyZW50cw0KPiA+ICsgICAgICAtIHBvd2VyLWRv
-bWFpbnMNCj4gPiArDQo+ID4gKyAgICBhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UNCj4gPiAr
-DQo+ID4gK3JlcXVpcmVkOg0KPiA+ICsgIC0gY29tcGF0aWJsZQ0KPiA+ICsgIC0gcmVnDQo+ID4g
-KyAgLSBpb21tdXMNCj4gPiArICAtIG1lZGlhdGVrLHNjcA0KPiA+ICsgIC0gZG1hLXJhbmdlcw0K
-PiA+ICsgIC0gcmFuZ2VzDQo+ID4gKw0KPiA+ICthZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UN
-Cj4gPiArDQo+ID4gK2V4YW1wbGVzOg0KPiA+ICsgIC0gfA0KPiA+ICsgICAgI2luY2x1ZGUgPGR0
-LWJpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL2FybS1naWMuaD4NCj4gPiArICAgICNpbmNs
-dWRlIDxkdC1iaW5kaW5ncy9tZW1vcnkvbXQ4MTkyLWxhcmItcG9ydC5oPg0KPiA+ICsgICAgI2lu
-Y2x1ZGUgPGR0LWJpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL2lycS5oPg0KPiA+ICsgICAg
-I2luY2x1ZGUgPGR0LWJpbmRpbmdzL2Nsb2NrL210ODE5Mi1jbGsuaD4NCj4gPiArICAgICNpbmNs
-dWRlIDxkdC1iaW5kaW5ncy9wb3dlci9tdDgxOTItcG93ZXIuaD4NCj4gPiArDQo+ID4gKyAgICB2
-aWRlby1jb2RlY0AxNjAwMDAwMCB7DQo+ID4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRpYXRl
-ayxtdDgxOTItdmNvZGVjLWRlYyI7DQo+ID4gKyAgICAgICAgbWVkaWF0ZWssc2NwID0gPCZzY3A+
-Ow0KPiA+ICsgICAgICAgIGlvbW11cyA9IDwmaW9tbXUwIE00VV9QT1JUX0w0X1ZERUNfTUNfRVhU
-PjsNCj4gPiArICAgICAgICBkbWEtcmFuZ2VzID0gPDB4MSAweDAgMHgwIDB4NDAwMDAwMDAgMHgw
-IDB4ZmZmMDAwMDA+Ow0KPiA+ICsgICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiA+ICsg
-ICAgICAgICNzaXplLWNlbGxzID0gPDE+Ow0KPiA+ICsgICAgICAgIHJhbmdlcyA9IDwwIDB4MTYw
-MDAwMDAgMHg0MDAwMD47DQo+ID4gKyAgICAgICAgcmVnID0gPDB4MTYwMDAwMDAgMHgxMDAwPjsJ
-CS8qIFZERUNfU1lTICovDQo+ID4gKyAgICAgICAgdmNvZGVjLWxhdEAxMDAwMCB7DQo+ID4gKyAg
-ICAgICAgICAgIGNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXRrLXZjb2RlYy1sYXQiOw0KPiA+ICsg
-ICAgICAgICAgICByZWcgPSA8MHgxMDAwMCAweDgwMD47DQo+ID4gKyAgICAgICAgICAgIGludGVy
-cnVwdHMgPSA8R0lDX1NQSSA0MjYgSVJRX1RZUEVfTEVWRUxfSElHSCAwPjsNCj4gPiArICAgICAg
-ICAgICAgaW9tbXVzID0gPCZpb21tdTAgTTRVX1BPUlRfTDVfVkRFQ19MQVQwX1ZMRF9FWFQ+LA0K
-PiA+ICsgICAgICAgICAgICAgICAgPCZpb21tdTAgTTRVX1BPUlRfTDVfVkRFQ19MQVQwX1ZMRDJf
-RVhUPiwNCj4gPiArICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00VV9QT1JUX0w1X1ZERUNfTEFU
-MF9BVkNfTVZfRVhUPiwNCj4gPiArICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00VV9QT1JUX0w1
-X1ZERUNfTEFUMF9QUkVEX1JEX0VYVD4sDQo+ID4gKyAgICAgICAgICAgICAgICA8JmlvbW11MCBN
-NFVfUE9SVF9MNV9WREVDX0xBVDBfVElMRV9FWFQ+LA0KPiA+ICsgICAgICAgICAgICAgICAgPCZp
-b21tdTAgTTRVX1BPUlRfTDVfVkRFQ19MQVQwX1dETUFfRVhUPiwNCj4gPiArICAgICAgICAgICAg
-ICAgIDwmaW9tbXUwIE00VV9QT1JUX0w1X1ZERUNfTEFUMF9SR19DVFJMX0RNQV9FWFQ+LA0KPiA+
-ICsgICAgICAgICAgICAgICAgPCZpb21tdTAgTTRVX1BPUlRfTDVfVkRFQ19VRk9fRU5DX0VYVD47
-DQo+ID4gKyAgICAgICAgICAgIGNsb2NrcyA9IDwmdG9wY2tnZW4gQ0xLX1RPUF9WREVDX1NFTD4s
-DQo+ID4gKyAgICAgICAgICAgICAgICA8JnZkZWNzeXNfc29jIENMS19WREVDX1NPQ19WREVDPiwN
-Cj4gPiArICAgICAgICAgICAgICAgIDwmdmRlY3N5c19zb2MgQ0xLX1ZERUNfU09DX0xBVD4sDQo+
-ID4gKyAgICAgICAgICAgICAgICA8JnZkZWNzeXNfc29jIENMS19WREVDX1NPQ19MQVJCMT4sDQo+
-ID4gKyAgICAgICAgICAgICAgICA8JnRvcGNrZ2VuIENMS19UT1BfTUFJTlBMTF9END47DQo+ID4g
-KyAgICAgICAgICAgIGNsb2NrLW5hbWVzID0gInNlbCIsICJzb2MtdmRlYyIsICJzb2MtbGF0Iiwg
-InZkZWMiLA0KPiA+ICJ0b3AiOw0KPiA+ICsgICAgICAgICAgICBhc3NpZ25lZC1jbG9ja3MgPSA8
-JnRvcGNrZ2VuIENMS19UT1BfVkRFQ19TRUw+Ow0KPiA+ICsgICAgICAgICAgICBhc3NpZ25lZC1j
-bG9jay1wYXJlbnRzID0gPCZ0b3Bja2dlbg0KPiA+IENMS19UT1BfTUFJTlBMTF9END47DQo+ID4g
-KyAgICAgICAgICAgIHBvd2VyLWRvbWFpbnMgPSA8JnNwbSBNVDgxOTJfUE9XRVJfRE9NQUlOX1ZE
-RUM+Ow0KPiA+ICsgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgIHZjb2RlYy1jb3JlQDI1
-MDAwIHsNCj4gPiArICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdGstdmNvZGVj
-LWNvcmUiOw0KPiA+ICsgICAgICAgICAgICByZWcgPSA8MHgyNTAwMCAweDEwMDA+Ow0KPiA+ICsg
-ICAgICAgICAgICBpbnRlcnJ1cHRzID0gPEdJQ19TUEkgNDI1IElSUV9UWVBFX0xFVkVMX0hJR0gg
-MD47DQo+ID4gKyAgICAgICAgICAgIGlvbW11cyA9IDwmaW9tbXUwIE00VV9QT1JUX0w0X1ZERUNf
-TUNfRVhUPiwNCj4gPiArICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00VV9QT1JUX0w0X1ZERUNf
-VUZPX0VYVD4sDQo+ID4gKyAgICAgICAgICAgICAgICA8JmlvbW11MCBNNFVfUE9SVF9MNF9WREVD
-X1BQX0VYVD4sDQo+ID4gKyAgICAgICAgICAgICAgICA8JmlvbW11MCBNNFVfUE9SVF9MNF9WREVD
-X1BSRURfUkRfRVhUPiwNCj4gPiArICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00VV9QT1JUX0w0
-X1ZERUNfUFJFRF9XUl9FWFQ+LA0KPiA+ICsgICAgICAgICAgICAgICAgPCZpb21tdTAgTTRVX1BP
-UlRfTDRfVkRFQ19QUFdSQVBfRVhUPiwNCj4gPiArICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00
-VV9QT1JUX0w0X1ZERUNfVElMRV9FWFQ+LA0KPiA+ICsgICAgICAgICAgICAgICAgPCZpb21tdTAg
-TTRVX1BPUlRfTDRfVkRFQ19WTERfRVhUPiwNCj4gPiArICAgICAgICAgICAgICAgIDwmaW9tbXUw
-IE00VV9QT1JUX0w0X1ZERUNfVkxEMl9FWFQ+LA0KPiA+ICsgICAgICAgICAgICAgICAgPCZpb21t
-dTAgTTRVX1BPUlRfTDRfVkRFQ19BVkNfTVZfRVhUPiwNCj4gPiArICAgICAgICAgICAgICAgIDwm
-aW9tbXUwIE00VV9QT1JUX0w0X1ZERUNfUkdfQ1RSTF9ETUFfRVhUPjsNCj4gPiArICAgICAgICAg
-ICAgY2xvY2tzID0gPCZ0b3Bja2dlbiBDTEtfVE9QX1ZERUNfU0VMPiwNCj4gPiArICAgICAgICAg
-ICAgICAgIDwmdmRlY3N5cyBDTEtfVkRFQ19WREVDPiwNCj4gPiArICAgICAgICAgICAgICAgIDwm
-dmRlY3N5cyBDTEtfVkRFQ19MQVQ+LA0KPiA+ICsgICAgICAgICAgICAgICAgPCZ2ZGVjc3lzIENM
-S19WREVDX0xBUkIxPiwNCj4gPiArICAgICAgICAgICAgICAgIDwmdG9wY2tnZW4gQ0xLX1RPUF9N
-QUlOUExMX0Q0PjsNCj4gPiArICAgICAgICAgICAgY2xvY2stbmFtZXMgPSAic2VsIiwgInNvYy12
-ZGVjIiwgInNvYy1sYXQiLCAidmRlYyIsDQo+ID4gInRvcCI7DQo+ID4gKyAgICAgICAgICAgIGFz
-c2lnbmVkLWNsb2NrcyA9IDwmdG9wY2tnZW4gQ0xLX1RPUF9WREVDX1NFTD47DQo+ID4gKyAgICAg
-ICAgICAgIGFzc2lnbmVkLWNsb2NrLXBhcmVudHMgPSA8JnRvcGNrZ2VuDQo+ID4gQ0xLX1RPUF9N
-QUlOUExMX0Q0PjsNCj4gPiArICAgICAgICAgICAgcG93ZXItZG9tYWlucyA9IDwmc3BtIE1UODE5
-Ml9QT1dFUl9ET01BSU5fVkRFQzI+Ow0KPiA+ICsgICAgICAgIH07DQo+ID4gKyAgICB9Ow0KPiA+
-IC0tIA0KPiA+IDIuMjUuMQ0KPiA+IA0KPiA+IA0K
 
+
+On 12/10/2021 9:57 PM, Paul E. McKenney wrote:
+> On Fri, Dec 10, 2021 at 03:30:22PM +0800, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.12.07a
+>> head:   89ddc546d3ad541bc89ec553c92036c98aef57a6
+>> commit: 342f2d0f88f3c2d7ab2ae206be5846579319e3bf [56/57] rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
+>> config: hexagon-randconfig-r041-20211210 (https://download.01.org/0day-ci/archive/20211210/202112101543.wHvqhgYk-lkp@intel.com/config)
+>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+>>          git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+>>          git fetch --no-tags paulmck-rcu dev.2021.12.07a
+>>          git checkout 342f2d0f88f3c2d7ab2ae206be5846579319e3bf
+>>          # save the config file to linux build tree
+>>          mkdir build_dir
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> kernel/rcu/tree.c:4312:45: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
+>>                     rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>>                                                               ^~~~~
+>>     kernel/rcu/tree.c:4280:21: note: initialize the variable 'flags' to silence this warning
+>>             unsigned long flags, seq_flags;
+>>                                ^
+>>                                 = 0
+>>     1 warning generated.
+> 
+> Good catch, but Neeraj and David beat you to this.  The updated commit
+> is defd1f8a1f4e ("rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock
+> for exclusion").
+> 
+> One thing that might be helpful to you during times of backlock...  In the
+> -rcu tree, if you have several branches with the same prefix (for example,
+> dev.2021.12.03a, dev.2021.12.07a, and dev.2021.12.09a), you can safely
+> ignore all but the last one in lexicographic order.  In this example,
+> dev.2021.12.09a obsoletes dev.2021.12.03a and dev.2021.12.07a, so you
+> would lose nothing by just ignoring the earlier two branches.
+> 
+> 							Thanx, Paul
+
+Hi Paul,
+
+Thanks for the advice, We'll investigate it in the near future to avoid
+sending old issues that already fixed in the latest branch.
+
+Best Regards,
+Rong Chen
+
+> 
+>> vim +/flags +4312 kernel/rcu/tree.c
+>>
+>> 4df8374254ea929 Thomas Gleixner         2016-07-13  4266
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4267  /*
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4268   * Mark the specified CPU as being online so that subsequent grace periods
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4269   * (both expedited and normal) will wait on it.  Note that this means that
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4270   * incoming CPUs are not allowed to use RCU read-side critical sections
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4271   * until this function is called.  Failing to observe this restriction
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4272   * will result in lockdep splats.
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4273   *
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4274   * Note that this function is special in that it is invoked directly
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4275   * from the incoming CPU rather than from the cpuhp_step mechanism.
+>> deb34f364398083 Paul E. McKenney        2017-03-23  4276   * This is because this function must be invoked at a precise location.
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4277   */
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4278  void rcu_cpu_starting(unsigned int cpu)
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4279  {
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4280  	unsigned long flags, seq_flags;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4281  	unsigned long mask;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4282  	struct rcu_data *rdp;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4283  	struct rcu_node *rnp;
+>> abfce0414814149 Wei Yang                2020-04-19  4284  	bool newcpu;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4285
+>> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4286  	rdp = per_cpu_ptr(&rcu_data, cpu);
+>> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4287  	if (rdp->cpu_started)
+>> f64c6013a202931 Peter Zijlstra          2018-05-22  4288  		return;
+>> c0f97f20e5d97a1 Paul E. McKenney        2020-07-24  4289  	rdp->cpu_started = true;
+>> f64c6013a202931 Peter Zijlstra          2018-05-22  4290
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4291  	rnp = rdp->mynode;
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4292  	mask = rdp->grpmask;
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4293  	local_irq_save(seq_flags);
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4294  	arch_spin_lock(&rcu_state.ofl_lock);
+>> 2caebefb00f03b5 Paul E. McKenney        2021-07-28  4295  	rcu_dynticks_eqs_online();
+>> 4d60b475f858ebd Paul E. McKenney        2020-10-13  4296  	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4297  	raw_spin_lock_rcu_node(rnp);
+>> 105abf82b0a6266 Paul E. McKenney        2020-01-03  4298  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+>> abfce0414814149 Wei Yang                2020-04-19  4299  	newcpu = !(rnp->expmaskinitnext & mask);
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4300  	rnp->expmaskinitnext |= mask;
+>> 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4301  	/* Allow lockless access for expedited grace periods. */
+>> abfce0414814149 Wei Yang                2020-04-19  4302  	smp_store_release(&rcu_state.ncpus, rcu_state.ncpus + newcpu); /* ^^^ */
+>> 2f08469563550d1 Paul E. McKenney        2020-02-10  4303  	ASSERT_EXCLUSIVE_WRITER(rcu_state.ncpus);
+>> e05121ba5b81e2f Paul E. McKenney        2018-05-07  4304  	rcu_gpnum_ovf(rnp, rdp); /* Offline-induced counter wrap? */
+>> eb7a6653887b540 Paul E. McKenney        2018-07-05  4305  	rdp->rcu_onl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+>> eb7a6653887b540 Paul E. McKenney        2018-07-05  4306  	rdp->rcu_onl_gp_flags = READ_ONCE(rcu_state.gp_flags);
+>> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4307)
+>> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4308) 	/* An incoming CPU should never be blocking a grace period. */
+>> 9f866dac94292f9 Joel Fernandes (Google  2020-09-29  4309) 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? */
+>> 516e5ae0c940162 Joel Fernandes (Google  2019-09-05  4310) 		rcu_disable_urgency_upon_qs(rdp);
+>> 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4311  		/* Report QS -after- changing ->qsmaskinitnext! */
+>> b50912d0b5e03f1 Paul E. McKenney        2018-07-03 @4312  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>> 99990da1b3c00f6 Paul E. McKenney        2018-05-03  4313  	} else {
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4314  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4315  	}
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4316  	arch_spin_unlock(&rcu_state.ofl_lock);
+>> 342f2d0f88f3c2d David Woodhouse         2021-12-09  4317  	local_irq_restore(seq_flags);
+>> 313517fc44fb2d8 Paul E. McKenney        2017-06-08  4318  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4319  }
+>> 7ec99de36f40261 Paul E. McKenney        2016-06-30  4320
+>>
+>> :::::: The code at line 4312 was first introduced by commit
+>> :::::: b50912d0b5e03f11004fec1e2b50244de9e2fa41 rcu: Remove rsp parameter from rcu_report_qs_rnp()
+>>
+>> :::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+>> :::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+>>
+>> ---
+>> 0-DAY CI Kernel Test Service, Intel Corporation
+>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 

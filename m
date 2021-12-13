@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17725472695
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D290C472508
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbhLMJxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:53:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33718 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237265AbhLMJsM (ORCPT
+        id S234066AbhLMJkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234065AbhLMJi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:48:12 -0500
+        Mon, 13 Dec 2021 04:38:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75516C08E89B;
+        Mon, 13 Dec 2021 01:37:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03B69B80D1F;
-        Mon, 13 Dec 2021 09:48:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD2BC00446;
-        Mon, 13 Dec 2021 09:48:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41D78B80E25;
+        Mon, 13 Dec 2021 09:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F89C00446;
+        Mon, 13 Dec 2021 09:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388889;
-        bh=DL2KAsAXH0kNhRFxNijFLl/ttY2ZlaVeockTmqaVeZo=;
+        s=korg; t=1639388237;
+        bh=kVnBx3KDquuRJKSfVJ/VNrJl0GEmX+U2VoJwTEOmqWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QSWadre8Tv41hcyQdOsdgpFa+noxb79x1TgY6f/t9Qxez91EajYQEImO2kSA8juGy
-         fETxpgrEcWLvn5v4JFh8KH7uBD5cizYCxGcqh5yVqYSFr4JqQdQewg6kjhG8l/CVyY
-         ng3nlwSntZ/r9nVefS99EzGGbIjsnmlsAcXO7Q9Y=
+        b=gT6kUPJl/iGk3GJ1wadxLgj6ZvLK55s7yDjkCKxFdcgNqm54xh3aNyBRGydHPSo7X
+         E4MMnY6gLeUSGX2WCZXm6Yxuw8RVKHuUL/25XRT/5oM+lg0rMn6lJBrq1o8AczAg1u
+         Dd1vxd3BsXtM7djcLwM+qvhF4g2rNZ7ZRESon62E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.10 043/132] KVM: x86: Wait for IPIs to be delivered when handling Hyper-V TLB flush hypercall
+        stable@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH 4.14 05/53] HID: wacom: fix problems when device is not a valid USB device
 Date:   Mon, 13 Dec 2021 10:29:44 +0100
-Message-Id: <20211213092940.600722432@linuxfoundation.org>
+Message-Id: <20211213092928.532415360@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,50 +49,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 1ebfaa11ebb5b603a3c3f54b2e84fcf1030f5a14 upstream.
+commit 720ac467204a70308bd687927ed475afb904e11b upstream.
 
-Prior to commit 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use
-tlb_flush_guest()"), kvm_hv_flush_tlb() was using 'KVM_REQ_TLB_FLUSH |
-KVM_REQUEST_NO_WAKEUP' when making a request to flush TLBs on other vCPUs
-and KVM_REQ_TLB_FLUSH is/was defined as:
+The wacom driver accepts devices of more than just USB types, but some
+code paths can cause problems if the device being controlled is not a
+USB device due to a lack of checking.  Add the needed checks to ensure
+that the USB device accesses are only happening on a "real" USB device,
+and not one on some other bus.
 
- (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
-
-so KVM_REQUEST_WAIT was lost. Hyper-V TLFS, however, requires that
-"This call guarantees that by the time control returns back to the
-caller, the observable effects of all flushes on the specified virtual
-processors have occurred." and without KVM_REQUEST_WAIT there's a small
-chance that the vCPU making the TLB flush will resume running before
-all IPIs get delivered to other vCPUs and a stale mapping can get read
-there.
-
-Fix the issue by adding KVM_REQUEST_WAIT flag to KVM_REQ_TLB_FLUSH_GUEST:
-kvm_hv_flush_tlb() is the sole caller which uses it for
-kvm_make_all_cpus_request()/kvm_make_vcpus_request_mask() where
-KVM_REQUEST_WAIT makes a difference.
-
-Cc: stable@kernel.org
-Fixes: 0baedd792713 ("KVM: x86: make Hyper-V PV TLB flush use tlb_flush_guest()")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20211209102937.584397-1-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: linux-input@vger.kernel.org
+Cc: stable@vger.kernel.org
+Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211201183503.2373082-2-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/kvm_host.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/wacom_sys.c |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -85,7 +85,7 @@
- 	KVM_ARCH_REQ_FLAGS(25, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_TLB_FLUSH_CURRENT	KVM_ARCH_REQ(26)
- #define KVM_REQ_TLB_FLUSH_GUEST \
--	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_NO_WAKEUP)
-+	KVM_ARCH_REQ_FLAGS(27, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_APF_READY		KVM_ARCH_REQ(28)
- #define KVM_REQ_MSR_FILTER_CHANGED	KVM_ARCH_REQ(29)
+--- a/drivers/hid/wacom_sys.c
++++ b/drivers/hid/wacom_sys.c
+@@ -578,7 +578,7 @@ static void wacom_retrieve_hid_descripto
+ 	 * Skip the query for this type and modify defaults based on
+ 	 * interface number.
+ 	 */
+-	if (features->type == WIRELESS) {
++	if (features->type == WIRELESS && intf) {
+ 		if (intf->cur_altsetting->desc.bInterfaceNumber == 0)
+ 			features->device_type = WACOM_DEVICETYPE_WL_MONITOR;
+ 		else
+@@ -2280,6 +2280,9 @@ static void wacom_wireless_work(struct w
  
+ 	wacom_destroy_battery(wacom);
+ 
++	if (!usbdev)
++		return;
++
+ 	/* Stylus interface */
+ 	hdev1 = usb_get_intfdata(usbdev->config->interface[1]);
+ 	wacom1 = hid_get_drvdata(hdev1);
+@@ -2559,8 +2562,6 @@ static void wacom_mode_change_work(struc
+ static int wacom_probe(struct hid_device *hdev,
+ 		const struct hid_device_id *id)
+ {
+-	struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
+-	struct usb_device *dev = interface_to_usbdev(intf);
+ 	struct wacom *wacom;
+ 	struct wacom_wac *wacom_wac;
+ 	struct wacom_features *features;
+@@ -2593,8 +2594,14 @@ static int wacom_probe(struct hid_device
+ 	wacom_wac->hid_data.inputmode = -1;
+ 	wacom_wac->mode_report = -1;
+ 
+-	wacom->usbdev = dev;
+-	wacom->intf = intf;
++	if (hid_is_usb(hdev)) {
++		struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
++		struct usb_device *dev = interface_to_usbdev(intf);
++
++		wacom->usbdev = dev;
++		wacom->intf = intf;
++	}
++
+ 	mutex_init(&wacom->lock);
+ 	INIT_DELAYED_WORK(&wacom->init_work, wacom_init_work);
+ 	INIT_WORK(&wacom->wireless_work, wacom_wireless_work);
 
 

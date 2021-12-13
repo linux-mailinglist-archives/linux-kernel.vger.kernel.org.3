@@ -2,167 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D8F4727E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3448472A10
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239083AbhLMKFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:05:49 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:35526 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240395AbhLMKBJ (ORCPT
+        id S239928AbhLMK3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344659AbhLMK1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:01:09 -0500
-Received: by mail-ot1-f44.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso16885064otr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:01:08 -0800 (PST)
+        Mon, 13 Dec 2021 05:27:41 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2D8C01DF13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:01:28 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id n8so10800317plf.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RGPbS3ptpBIcspU7gfa8wTdMihj1/K3FQePm6Jj2a18=;
+        b=n4W8+INQiqKuO54BVtoc7ZlB77fNFPAgtFVxN/xdXWXzE0ojixqsah7MPgvurkOb6r
+         +UtsZIC1TBf+ogqAnUdwjlXZLGrUedgcaWAWnWWg+8PmTsOSC8c9i3e3d+ZfJPyRy8uQ
+         ITTTlGZWyqvi2vjjRuYy/dZHLHcoVkS65AnDc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XeBMiuDdEV6Ne7aU6TPbb3k+NoeyXfYTUvJrW81TPQE=;
-        b=CiI19V6pHxGRsG/VGZ0leBQ+9b2JJlOP5pVKWqgi/bzz7cbzlTLiosDnhnQiqxY4ng
-         JiPo2Awl5Tj3apo0xdGdg1RLkX9vnP+1aMv0P+ce3iwQorEHC5AxoX1AJBZFr+nU+N+Y
-         S4X7ORcv1xCNDRJB7NVzVR9h3fL8UuZduGrzYVUObMd2SOAE+GaWB0BSeV0M5uWKu7rp
-         wzXaAJze+owHXEjTNCPAPFO5qR4948CtRAYIQvdOVH1IvJzB5jKhI72NDDfipS3AvfIL
-         Hffsg7Fc2hg/proqF29hc9PTLsphAnXUkSlNwS7iATuTmk18Wcm8aS0nTiDvLA5fA9cO
-         O5qA==
-X-Gm-Message-State: AOAM533dC5JjHO3Cu/6q3mYqDllEEe8hXor4CwOgjR28xMqmOdP+Goox
-        vzl4L00LFUEIGOLCeeryKsQLhBX/M+oS/BRHHJY=
-X-Google-Smtp-Source: ABdhPJw/xWBZHNyXQEkpfirFVAdJz/pnZ6bqZbBigO7Uzma7RKqwr/vlINyJ34STv6jBDdc3AC4qewM9tEiCM5PhuJc=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr24537577otf.198.1639389668140;
- Mon, 13 Dec 2021 02:01:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RGPbS3ptpBIcspU7gfa8wTdMihj1/K3FQePm6Jj2a18=;
+        b=RoJfwa2Rkz58B8ZhKPfTI/T7667IjhD6xuL7vorqhURemkNujHbbjd4LPXmI2KcGD2
+         D8ZaENMccaZaARk/JDcyaHIGm0f91v3eDMtQCUuUMgC/TgkWv0PvEqBKDlVfFDwJpoVS
+         CaU6pRhJNjECWnzJHqyXdDqIb689AYYBhIlPsVibW8fUQwSvamaW0EwpO+ldrZBdGDaa
+         /Nt+05QN9VP7wx8u5mqVlKTT70mT/duFmD6HcvVFWcDR0tJFmueNUKm+y7GQ3o+O1RPh
+         LeTeA9vfIsnsqfWWkkhyJnYXHdYMxgDvaAk+yyGFSo1V06ki22hJeWCtsHVy42hBtabK
+         0CGA==
+X-Gm-Message-State: AOAM532KljE8K7eUpXM3+TMPtopgu/J8KOwS1SLH204cqqYdbXk84GuH
+        z38mTyjlVmlPY+rnlyV/lP+Jif6LCJKwxg==
+X-Google-Smtp-Source: ABdhPJxQO6GGkSA5nbBRrUUT0ZxaXAiaRWUDRWJlPmSjCn0sY8+ZitdbJ3EkmNVE0pW6juNXlpDSxg==
+X-Received: by 2002:a17:90b:3e85:: with SMTP id rj5mr43406785pjb.172.1639389687703;
+        Mon, 13 Dec 2021 02:01:27 -0800 (PST)
+Received: from shiro.work (p864106-ipngn200510sizuokaden.shizuoka.ocn.ne.jp. [180.9.58.106])
+        by smtp.googlemail.com with ESMTPSA id d185sm9953767pgc.58.2021.12.13.02.01.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 02:01:27 -0800 (PST)
+From:   Daniel Palmer <daniel@0x0f.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, romain.perier@gmail.com,
+        Daniel Palmer <daniel@0x0f.com>
+Subject: [PATCH 0/3] ARM: mstar: Initial Miyoo Mini support
+Date:   Mon, 13 Dec 2021 19:01:09 +0900
+Message-Id: <20211213100112.1791192-1-daniel@0x0f.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211211163327.3093169-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20211211163327.3093169-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Dec 2021 11:00:56 +0100
-Message-ID: <CAJZ5v0idd=Ey=pDyDgyBZz=SqrPvBkT1SvK30wbVy5myKAR1pg@mail.gmail.com>
-Subject: Re: [PATCH] x86: intel_epb: Allow model specific normal EPB value
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 5:33 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> The current EPB "normal" is defined as 6 and set whenever power-up EPB
-> value is 0. This setting resulted in the desired out of box power and
-> performance for several CPU generations. But this value is not suitable
-> for AlderLake mobile CPUs, as this resulted in higher uncore power.
-> Since EPB is model specific, this is not unreasonable to have different
-> behavior.
->
-> Allow a capability where "normal" EPB can be redefined. For AlderLake
-> mobile CPUs this desired normal value is 7.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Add a few device tree bits to support the Miyoo Mini
+which is retro emulation device based on the SigmaStar
+SSD202D.
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+http://linux-chenxing.org/infinity2/miyoomini/
 
-> ---
->  arch/x86/kernel/cpu/intel_epb.c | 45 +++++++++++++++++++++++----------
->  1 file changed, 32 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-> index f4dd73396f28..fbaf12e43f41 100644
-> --- a/arch/x86/kernel/cpu/intel_epb.c
-> +++ b/arch/x86/kernel/cpu/intel_epb.c
-> @@ -16,6 +16,7 @@
->  #include <linux/syscore_ops.h>
->  #include <linux/pm.h>
->
-> +#include <asm/cpu_device_id.h>
->  #include <asm/cpufeature.h>
->  #include <asm/msr.h>
->
-> @@ -58,6 +59,22 @@ static DEFINE_PER_CPU(u8, saved_epb);
->  #define EPB_SAVED      0x10ULL
->  #define MAX_EPB                EPB_MASK
->
-> +enum energy_perf_value_index {
-> +       EPB_INDEX_PERFORMANCE,
-> +       EPB_INDEX_BALANCE_PERFORMANCE,
-> +       EPB_INDEX_NORMAL,
-> +       EPB_INDEX_BALANCE_POWERSAVE,
-> +       EPB_INDEX_POWERSAVE,
-> +};
-> +
-> +static u8 energ_perf_values[] = {
-> +       [EPB_INDEX_PERFORMANCE] = ENERGY_PERF_BIAS_PERFORMANCE,
-> +       [EPB_INDEX_BALANCE_PERFORMANCE] = ENERGY_PERF_BIAS_BALANCE_PERFORMANCE,
-> +       [EPB_INDEX_NORMAL] = ENERGY_PERF_BIAS_NORMAL,
-> +       [EPB_INDEX_BALANCE_POWERSAVE] = ENERGY_PERF_BIAS_BALANCE_POWERSAVE,
-> +       [EPB_INDEX_POWERSAVE] = ENERGY_PERF_BIAS_POWERSAVE,
-> +};
-> +
->  static int intel_epb_save(void)
->  {
->         u64 epb;
-> @@ -90,7 +107,7 @@ static void intel_epb_restore(void)
->                  */
->                 val = epb & EPB_MASK;
->                 if (val == ENERGY_PERF_BIAS_PERFORMANCE) {
-> -                       val = ENERGY_PERF_BIAS_NORMAL;
-> +                       val = energ_perf_values[EPB_INDEX_NORMAL];
->                         pr_warn_once("ENERGY_PERF_BIAS: Set to 'normal', was 'performance'\n");
->                 }
->         }
-> @@ -103,18 +120,11 @@ static struct syscore_ops intel_epb_syscore_ops = {
->  };
->
->  static const char * const energy_perf_strings[] = {
-> -       "performance",
-> -       "balance-performance",
-> -       "normal",
-> -       "balance-power",
-> -       "power"
-> -};
-> -static const u8 energ_perf_values[] = {
-> -       ENERGY_PERF_BIAS_PERFORMANCE,
-> -       ENERGY_PERF_BIAS_BALANCE_PERFORMANCE,
-> -       ENERGY_PERF_BIAS_NORMAL,
-> -       ENERGY_PERF_BIAS_BALANCE_POWERSAVE,
-> -       ENERGY_PERF_BIAS_POWERSAVE
-> +       [EPB_INDEX_PERFORMANCE] = "performance",
-> +       [EPB_INDEX_BALANCE_PERFORMANCE] = "balance-performance",
-> +       [EPB_INDEX_NORMAL] = "normal",
-> +       [EPB_INDEX_BALANCE_POWERSAVE] = "balance-power",
-> +       [EPB_INDEX_POWERSAVE] = "power",
->  };
->
->  static ssize_t energy_perf_bias_show(struct device *dev,
-> @@ -193,13 +203,22 @@ static int intel_epb_offline(unsigned int cpu)
->         return 0;
->  }
->
-> +static const struct x86_cpu_id intel_epb_normal[] = {
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 7),
-> +       {}
-> +};
-> +
->  static __init int intel_epb_init(void)
->  {
-> +       const struct x86_cpu_id *id = x86_match_cpu(intel_epb_normal);
->         int ret;
->
->         if (!boot_cpu_has(X86_FEATURE_EPB))
->                 return -ENODEV;
->
-> +       if (id)
-> +               energ_perf_values[EPB_INDEX_NORMAL] = id->driver_data;
-> +
->         ret = cpuhp_setup_state(CPUHP_AP_X86_INTEL_EPB_ONLINE,
->                                 "x86/intel/epb:online", intel_epb_online,
->                                 intel_epb_offline);
-> --
-> 2.31.1
->
+Daniel Palmer (3):
+  dt-bindings: vendor-prefixes: Add prefix for Miyoo
+  dt-bindings: arm: mstar: Add compatible for Miyoo Mini
+  ARM: dts: mstar: Add a dts for Miyoo Mini
+
+ .../devicetree/bindings/arm/mstar/mstar.yaml  |  1 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 ++
+ arch/arm/boot/dts/Makefile                    |  1 +
+ .../mstar-infinity2m-ssd202d-miyoo-mini.dts   | 25 +++++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 arch/arm/boot/dts/mstar-infinity2m-ssd202d-miyoo-mini.dts
+
+-- 
+2.34.1
+

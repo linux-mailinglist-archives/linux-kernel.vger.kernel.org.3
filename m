@@ -2,113 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EDE473655
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F03E473659
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238624AbhLMVAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbhLMVAT (ORCPT
+        id S242471AbhLMVFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:05:41 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:56436 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233931AbhLMVFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:00:19 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68499C061574;
-        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id q17so12034203plr.11;
-        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
-        b=f9xizRMo/j3PXqOZs5juMJcQ37RJ5hWQLM+DY21WpJeu9oIwrszgkESzp+5lzfcPu/
-         S1xClURBIc1R5ZVu5ZUI/+iUkArHUMLGwuCCKqUaRzYwg5Avh7YpSAokVvTPS2Fl4yej
-         QEpPj8HkBkveAgjGp1Uwvd74RkiIpvriZ0fL7nvbYk0KnZrMlg7CSDEyu3KP1tz1BuDs
-         QfTGyB7tn/01WVnR0Fwv8cm0i1q2j9i7t0OAAPsgRMy/+EsZTeFoyqT/4Xo1TuvOAomL
-         rtOobYElaG+HmdQnvhuS2kPRXEJ534YqBFGguvlzK1LZO2run0kelOEKRf4Yj3qIeeoE
-         ar2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
-        b=rLqvmML42zYIc28M9XqybmOXqbLcZaJ2cwnE7KpKMp7TkZkVTFIIQuj7MdPuAg834P
-         O4QXtXJLpdIHdtdPV6VfW4yVRFYiNOOZohcDjfACVrfoZeCtvlIgWJWesOEqafY0yFtz
-         FgOpVyPmTPdAqvT54SEtevub+Sex6pdFETEPd+dbBLJmSy9p79C3WZM6tO1GeHPaqvFK
-         UyQ7u35kp80hIVa93CKIzjw2fTOTLDn0aqi+fD81j5wFC0zK2J1wfN78VFdAb7eVn9Sf
-         tZERx/rQpHBfZpT344yekkzEagXcjlbXj7ScN08UvyB2WlWXymE4Np7UfKFTxYDHofwR
-         /FGA==
-X-Gm-Message-State: AOAM531g4rQ3Xe736AgMrafvK5YGlYoJdzB2eW2rvsgGgmqNokC0jafh
-        daca8DO93wgv+FXfDM1b75I=
-X-Google-Smtp-Source: ABdhPJz081wudgrw0mrWIs2FAxS1rWp5wOiKfQbqpkYviU3rS8iu9dWtDsDEnN9Q6qUkBrtVzexdhQ==
-X-Received: by 2002:a17:902:b110:b0:142:7621:aecb with SMTP id q16-20020a170902b11000b001427621aecbmr481454plr.55.1639429218693;
-        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id ot1sm36852pjb.6.2021.12.13.13.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Dec 2021 11:00:17 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-7-longman@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211205183220.818872-7-longman@redhat.com>
+        Mon, 13 Dec 2021 16:05:40 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 33057CE12BD
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:05:39 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BAD360EFF;
+        Mon, 13 Dec 2021 21:05:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1639429536;
+        bh=biOxBHYttmfLcu5XjgSOMwkLkRSOPguut1k6wAtMXN8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u1PQEIyQ9fEj+8m1vJaDpqw/RsoyQOUMXBQcRRSp9KJgbzaXKJ88IOpqo2doiJqhu
+         KoXEzh+f1z2M4o3QsR15cEN9pmDNzVBrTUHzH0UZnB15n8tXGtgmlM9wQpoaBMbhkc
+         X4AFHDwWEk8iFT8bbebxcTFroz8XJIi+PQP7BJhU=
+Date:   Mon, 13 Dec 2021 13:05:34 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, hch@lst.de,
+        cl@linux.com, John.p.donnelly@oracle.com, kexec@lists.infradead.org
+Subject: Re: [PATCH v3 0/5] Avoid requesting page from DMA zone when no
+ managed pages
+Message-Id: <20211213130534.af47c7956c219797e6b56687@linux-foundation.org>
+In-Reply-To: <20211213122712.23805-1-bhe@redhat.com>
+References: <20211213122712.23805-1-bhe@redhat.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 13 Dec 2021 20:27:07 +0800 Baoquan He <bhe@redhat.com> wrote:
 
-On Sun, Dec 05, 2021 at 01:32:19PM -0500, Waiman Long wrote:
-> +	In the case of an invalid partition root, a descriptive string on
-> +	why the partition is invalid is included within parentheses.
-> +
-> +	Almost all possible state transitions among "member", valid
-> +	and invalid partition roots are allowed except from "member"
-> +	to invalid partition root.
+> Background information can be checked in cover letter of v2 RESEND POST
+> as below:
+> https://lore.kernel.org/all/20211207030750.30824-1-bhe@redhat.com/T/#u
 
-So, this part still bothers me for the following two reasons that I brought
-up earlier:
+Please include all relevant info right here, in the [0/n].  For a
+number of reasons, one of which is that the text is more likely to be
+up to date as the patchset evolves.
 
-* When a valid partition turns invalid, now we have a reliable way of
-  discovering what exactly caused the transition. However, when a user now
-  fails to turn a member into partition, all they get is -EINVAL and there's
-  no way to discover why it failed and the failure conditions that -EINVAL
-  represents aren't simple.
+It's unusual that this patchset has two non-urgent patches and the
+final three patches are cc:stable.  It makes one worry that patches 3-5
+might have dependencies on 1-2.  Also, I'd expect to merge the three
+-stable patches during 5.16-rcX which means I have to reorder things,
+redo changelogs, update links and blah blah.
 
-* In an automated configuration scenarios, this operation mode may be
-  difficult to make reliable and lead to sporadic failures which can be
-  tricky to track down. The core problem is that whether a given operation
-  succeeds or not may depend on external states (CPU on/offline) which may
-  change asynchronously in a way that the configuring entity doesn't have
-  any control over.
-
-It's true that both are existing problems with the current partition
-interface and given that this is a pretty spcialized feature, this can be
-okay. Michal, what are your thoughts?
+So can I ask that you redo all of this as two patch series?  A 3-patch
+series which is targeted at -stable, followed by a separate two-patch
+series which is targeted at 5.17-rc1.  Each series with its own fully
+prepared [0/n] cover.
 
 Thanks.
-
--- 
-tejun

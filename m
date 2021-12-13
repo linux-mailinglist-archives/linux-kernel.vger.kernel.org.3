@@ -2,243 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 392BE4730E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C32B4730EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240135AbhLMPuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:50:55 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:37034 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbhLMPuy (ORCPT
+        id S239360AbhLMPwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:52:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232606AbhLMPwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:50:54 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:38854)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwnbI-007JDw-RW; Mon, 13 Dec 2021 08:50:52 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:41060 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwnbH-00BKrr-EJ; Mon, 13 Dec 2021 08:50:52 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        0day robot <lkp@intel.com>, lkp@lists.01.org,
-        kernel test robot <oliver.sang@intel.com>
-References: <cover.1638218242.git.legion@kernel.org>
-        <24c87e225c7950bf2ea1ff4b4a8f237348808241.1638218242.git.legion@kernel.org>
-Date:   Mon, 13 Dec 2021 09:50:45 -0600
-In-Reply-To: <24c87e225c7950bf2ea1ff4b4a8f237348808241.1638218242.git.legion@kernel.org>
-        (Alexey Gladkov's message of "Mon, 29 Nov 2021 21:37:26 +0100")
-Message-ID: <87tufc1p2i.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 13 Dec 2021 10:52:40 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C7DC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:52:40 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id c3so19004805iob.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:52:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CjOK7zG4lmsI/zp9Y5fQMp7GBNGBJj/NStUfv3M1YVc=;
+        b=dwo2lL/xcAhMSZxaD4BKaEmuczKzyAZqbBJYR+yDjtagIiQtaf/vB7gm48RoLcI/rI
+         VW1aBzFKjdGInllx2a4i4+Q40oYWfUOP+nlyVlKK0r+iGPJiWlNLyZ45eKchDZ9b2p1U
+         QhpZq7jCAqDY/M6pXX7CuP/c1coiEAJx2yDnw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CjOK7zG4lmsI/zp9Y5fQMp7GBNGBJj/NStUfv3M1YVc=;
+        b=vC7MajWlgZl9+aK2fgCAJrhbF8hVne7aOt08BGnb3aq+QLFutw7V23DbGwIt2hmIxu
+         F0VKpAeixkpDfvgCeWqCu3FKNhK85MX2zEPowRoyXW0sNgI3QPCsIPVPMmG9WjaBFjQn
+         owCsC0wbOv/EX0Sr2dkJMKCb3APlkM2L5CEWMfiPwCnyn5mBhq5IKlrlXzTSxWt02+FB
+         +xFPERmEG09JLTrZUbrly8Y5+FOPs0eFfgP36d3qE0ZqvNJurcQAfNob0Vz4YYmVEmFD
+         N/U42p2z5fA/JB1ZBjYTjpUr0AfVlEJBs71cAsyPoCEYMF6+G8D2az30Azjdm7zW14NI
+         Jyrg==
+X-Gm-Message-State: AOAM530/U/WmglLwpG8ijp5BEDTzy5EjgyPv3BArP1TpfWfvfeWdWNCf
+        2r3sqmesckSV6qG5yccS1XbbmiVpAKjOFg==
+X-Google-Smtp-Source: ABdhPJzldEoqXPsbDlb4KY32JNKCJa7pINtbNA8kxu6TWVKKcHYaTFAgbwg8Cavm6VRTlDXi5myH5Q==
+X-Received: by 2002:a5e:cb0d:: with SMTP id p13mr32581199iom.71.1639410759616;
+        Mon, 13 Dec 2021 07:52:39 -0800 (PST)
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com. [209.85.166.171])
+        by smtp.gmail.com with ESMTPSA id m14sm7876140iov.14.2021.12.13.07.52.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 07:52:38 -0800 (PST)
+Received: by mail-il1-f171.google.com with SMTP id w1so15380120ilh.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:52:37 -0800 (PST)
+X-Received: by 2002:a92:cdaa:: with SMTP id g10mr31230629ild.142.1639410757022;
+ Mon, 13 Dec 2021 07:52:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mwnbH-00BKrr-EJ;;;mid=<87tufc1p2i.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+YbcX3pVFz6SwYbXeGqi+WvZYayKg9XWc=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubLong autolearn=disabled
-        version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4840]
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Alexey Gladkov <legion@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 833 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (1.3%), b_tie_ro: 10 (1.1%), parse: 1.01
-        (0.1%), extract_message_metadata: 14 (1.6%), get_uri_detail_list: 3.3
-        (0.4%), tests_pri_-1000: 7 (0.8%), tests_pri_-950: 1.18 (0.1%),
-        tests_pri_-900: 1.01 (0.1%), tests_pri_-90: 85 (10.2%), check_bayes:
-        83 (10.0%), b_tokenize: 16 (1.9%), b_tok_get_all: 9 (1.1%),
-        b_comp_prob: 2.4 (0.3%), b_tok_touch_all: 52 (6.2%), b_finish: 0.93
-        (0.1%), tests_pri_0: 701 (84.2%), check_dkim_signature: 0.59 (0.1%),
-        check_dkim_adsp: 5 (0.7%), poll_dns_idle: 0.42 (0.0%), tests_pri_10:
-        2.1 (0.3%), tests_pri_500: 7 (0.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 2/2] ucounts: Move rlimit max values from ucounts max
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+References: <1638427092-9139-1-git-send-email-quic_c_sbhanu@quicinc.com>
+In-Reply-To: <1638427092-9139-1-git-send-email-quic_c_sbhanu@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 13 Dec 2021 07:52:24 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VB6hsEHEb8yZmB=xA__47p4vC6dBc528RV37dvAKTgOQ@mail.gmail.com>
+Message-ID: <CAD=FV=VB6hsEHEb8yZmB=xA__47p4vC6dBc528RV37dvAKTgOQ@mail.gmail.com>
+Subject: Re: [PATCH V2] mtd: spi-nor: winbond: Add support for winbond chip
+To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Cc:     tudor.ambarus@microchip.com, michael@walle.cc, p.yadav@ti.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stummala@codeaurora.org, vbadigan@codeaurora.org,
+        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
+        sartgarg@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexey Gladkov <legion@kernel.org> writes:
+Hi,
 
-> Since the semantics of maximum rlimit values are different, they need to
-> be separated from ucount_max. This will prevent the error of using
-> inc_count/dec_ucount for rlimit parameters.
+On Wed, Dec 1, 2021 at 10:38 PM Shaik Sajida Bhanu
+<quic_c_sbhanu@quicinc.com> wrote:
 >
-> This patch also renames the functions to emphasize the lack of
-> connection between rlimit_max and ucount_max.
+> Add support for winbond W25Q512NW-IM chip.
 >
-> v2:
-> - Fix the array-index-out-of-bounds that was found by the lkp project.
-
-Just looking at this I wonder if it things would come out cleaner if we
-had a separate "enum ucount_rlimit_type" and a separate array in "struct
-ucount" for the rlimits.
-
-Just so that people don't accidentally mix the two.
-
->
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 > ---
->  include/linux/user_namespace.h | 17 ++++++++++++-----
->  kernel/fork.c                  | 10 +++++-----
->  kernel/ucount.c                | 10 +++-------
->  kernel/user_namespace.c        | 10 +++++-----
->  4 files changed, 25 insertions(+), 22 deletions(-)
+> Changes since V1:
+>         Added space before name of the flash part as suggested by Doug.
+
+When someone comments on V1, it's nice to CC them on V2. ;-)
+
+> ---
+>  drivers/mtd/spi-nor/winbond.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
-> index 33a4240e6a6f..812b6935f4a3 100644
-> --- a/include/linux/user_namespace.h
-> +++ b/include/linux/user_namespace.h
-> @@ -58,10 +58,11 @@ enum ucount_type {
->  	UCOUNT_RLIMIT_MSGQUEUE,
->  	UCOUNT_RLIMIT_SIGPENDING,
->  	UCOUNT_RLIMIT_MEMLOCK,
-> -	UCOUNT_COUNTS,
-> +	UCOUNT_ALL_COUNTS,
->  };
->  
-> -#define MAX_PER_NAMESPACE_UCOUNTS UCOUNT_RLIMIT_NPROC
-> +#define UCOUNT_COUNTS UCOUNT_RLIMIT_NPROC
-> +#define RLIMIT_COUNTS UCOUNT_ALL_COUNTS - UCOUNT_COUNTS + 1
->  
->  struct user_namespace {
->  	struct uid_gid_map	uid_map;
-> @@ -99,6 +100,7 @@ struct user_namespace {
->  #endif
->  	struct ucounts		*ucounts;
->  	long ucount_max[UCOUNT_COUNTS];
-> +	long rlimit_max[RLIMIT_COUNTS];
->  } __randomize_layout;
->  
->  struct ucounts {
-> @@ -106,7 +108,7 @@ struct ucounts {
->  	struct user_namespace *ns;
->  	kuid_t uid;
->  	atomic_t count;
-> -	atomic_long_t ucount[UCOUNT_COUNTS];
-> +	atomic_long_t ucount[UCOUNT_ALL_COUNTS];
->  };
->  
->  extern struct user_namespace init_user_ns;
-> @@ -131,10 +133,15 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type);
->  void dec_rlimit_put_ucounts(struct ucounts *ucounts, enum ucount_type type);
->  bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long max);
->  
-> -static inline void set_rlimit_ucount_max(struct user_namespace *ns,
-> +static inline long get_userns_rlimit_max(struct user_namespace *ns, enum ucount_type type)
-> +{
-> +	return READ_ONCE(ns->rlimit_max[type - UCOUNT_COUNTS]);
-> +}
-> +
-> +static inline void set_userns_rlimit_max(struct user_namespace *ns,
->  		enum ucount_type type, unsigned long max)
->  {
-> -	ns->ucount_max[type] = max <= LONG_MAX ? max : LONG_MAX;
-> +	ns->rlimit_max[type - UCOUNT_COUNTS] = max <= LONG_MAX ? max : LONG_MAX;
->  }
->  
->  #ifdef CONFIG_USER_NS
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 3244cc56b697..365819458030 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -836,13 +836,13 @@ void __init fork_init(void)
->  	init_task.signal->rlim[RLIMIT_SIGPENDING] =
->  		init_task.signal->rlim[RLIMIT_NPROC];
->  
-> -	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++)
-> +	for (i = 0; i < UCOUNT_COUNTS; i++)
->  		init_user_ns.ucount_max[i] = max_threads/2;
->  
-> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_NPROC,      RLIM_INFINITY);
-> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_MSGQUEUE,   RLIM_INFINITY);
-> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_SIGPENDING, RLIM_INFINITY);
-> -	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_MEMLOCK,    RLIM_INFINITY);
-> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_NPROC,      RLIM_INFINITY);
-> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_MSGQUEUE,   RLIM_INFINITY);
-> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_SIGPENDING, RLIM_INFINITY);
-> +	set_userns_rlimit_max(&init_user_ns, UCOUNT_RLIMIT_MEMLOCK,    RLIM_INFINITY);
->  
->  #ifdef CONFIG_VMAP_STACK
->  	cpuhp_setup_state(CPUHP_BP_PREPARE_DYN, "fork:vm_stack_cache",
-> diff --git a/kernel/ucount.c b/kernel/ucount.c
-> index 7b32c356ebc5..ffffcfae8474 100644
-> --- a/kernel/ucount.c
-> +++ b/kernel/ucount.c
-> @@ -87,10 +87,6 @@ static struct ctl_table user_table[] = {
->  	UCOUNT_ENTRY("max_fanotify_groups"),
->  	UCOUNT_ENTRY("max_fanotify_marks"),
->  #endif
-> -	{ },
-> -	{ },
-> -	{ },
-> -	{ },
->  	{ }
->  };
->  #endif /* CONFIG_SYSCTL */
-> @@ -273,7 +269,7 @@ long inc_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v)
->  			ret = LONG_MAX;
->  		else if (iter == ucounts)
->  			ret = new;
-> -		max = READ_ONCE(iter->ns->ucount_max[type]);
-> +		max = get_userns_rlimit_max(iter->ns, type);
->  	}
->  	return ret;
->  }
-> @@ -322,7 +318,7 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type)
->  			goto unwind;
->  		if (iter == ucounts)
->  			ret = new;
-> -		max = READ_ONCE(iter->ns->ucount_max[type]);
-> +		max = get_userns_rlimit_max(iter->ns, type);
->  		/*
->  		 * Grab an extra ucount reference for the caller when
->  		 * the rlimit count was previously 0.
-> @@ -350,7 +346,7 @@ bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsign
->  	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
->  		if (get_ucounts_value(iter, type) > max)
->  			return true;
-> -		max = READ_ONCE(iter->ns->ucount_max[type]);
-> +		max = get_userns_rlimit_max(iter->ns, type);
->  	}
->  	return false;
->  }
-> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-> index 6b2e3ca7ee99..b9f6729b4e5f 100644
-> --- a/kernel/user_namespace.c
-> +++ b/kernel/user_namespace.c
-> @@ -119,13 +119,13 @@ int create_user_ns(struct cred *new)
->  	ns->owner = owner;
->  	ns->group = group;
->  	INIT_WORK(&ns->work, free_user_ns);
-> -	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++) {
-> +	for (i = 0; i < UCOUNT_COUNTS; i++) {
->  		ns->ucount_max[i] = INT_MAX;
->  	}
-> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC));
-> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MSGQUEUE, rlimit(RLIMIT_MSGQUEUE));
-> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_SIGPENDING, rlimit(RLIMIT_SIGPENDING));
-> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MEMLOCK, rlimit(RLIMIT_MEMLOCK));
-> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC));
-> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_MSGQUEUE, rlimit(RLIMIT_MSGQUEUE));
-> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_SIGPENDING, rlimit(RLIMIT_SIGPENDING));
-> +	set_userns_rlimit_max(ns, UCOUNT_RLIMIT_MEMLOCK, rlimit(RLIMIT_MEMLOCK));
->  	ns->ucounts = ucounts;
->  
->  	/* Inherit USERNS_SETGROUPS_ALLOWED from our parent */
+> diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+> index 96573f6..44f19f2 100644
+> --- a/drivers/mtd/spi-nor/winbond.c
+> +++ b/drivers/mtd/spi-nor/winbond.c
+> @@ -100,6 +100,9 @@ static const struct flash_info winbond_parts[] = {
+>                              SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+>         { "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024,
+>                             SECT_4K | SPI_NOR_QUAD_READ | SPI_NOR_DUAL_READ) },
+> +       { "w25q512nw", INFO(0xef8020, 0, 64 * 1024, 1024,
+> +                          SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
+> +                          SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB) },
+
+I had a quick look. Though I'm no expert on this driver, I believe
+that the name should be "w25q512nwm", not "w25q512nw" (you need an "m"
+at the end). Evidence:
+
+The Winbond doc [1] shows:
+
+W25Q512NW-IM is 0xef8020
+W25Q512NW-IQ/IN is 0xef6020
+
+Comparing to a different datasheet [2], I see that:
+
+W25Q256JW-IM is 0xef8019
+W25Q256JW is 0xef6019
+
+Since "W25Q256JW-IM" is in code as "w25q256jwm" it implies to me that
+for the "-IM" suffix you just add a "m" to the end of the name.
+
+[1] https://www.winbond.com/resource-files/W25Q512NW%20RevB%2007192021.pdf
+[2] https://www.winbond.com/resource-files/W25Q256JW%20SPI%20RevJ%2003102021%20Plus.pdf
+
+After changing the name, feel free to add my Reviewed-by (and please
+CC me on v3).
+
+-Doug

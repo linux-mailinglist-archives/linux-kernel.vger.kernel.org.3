@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C484726F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8864724B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238327AbhLMJ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:56:28 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41600 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235383AbhLMJuR (ORCPT
+        id S232942AbhLMJhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234638AbhLMJgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:50:17 -0500
+        Mon, 13 Dec 2021 04:36:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA3EC0617A2;
+        Mon, 13 Dec 2021 01:36:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9A791CE0E7A;
-        Mon, 13 Dec 2021 09:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C326C341C5;
-        Mon, 13 Dec 2021 09:50:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A8A07CE0E82;
+        Mon, 13 Dec 2021 09:36:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BA2C00446;
+        Mon, 13 Dec 2021 09:36:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389012;
-        bh=T/BiCObvvFI+lM3daIrVjCm/eLx18KrlFu81miRfABM=;
+        s=korg; t=1639388184;
+        bh=+PfCJkbJZsskR/GCh/m+ZdAW7iA2MMayYcLX+c/hYpk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SEt3atTiYSFFSpF/3n+9fAlZthyTa2T9wrX1OyN+qXBxTqBvm+a80av2VlKp03J+D
-         bsuvYuWX/EXHjGL8/GyADbOKegHhmg51s9H7cKPhnyIXnX1oFEoJ+o13F8KvcCMJW7
-         PSSxP4J0mwbsRKNQzMce6XilLMV1ZJ17+j47naPs=
+        b=OKupRid35xfXOsWUpIG0ZtqtShyTlGo/HjAdVvRUz4Wxfg36BGCbWDATOilRYNw4L
+         /JxHnHIryLyqXAmdxdpZvq/D7QNUBP6q/vnSN0VhxAo534cn8LS91lcVfx/XGLbKhh
+         xQy22kJaBiz/nvcq+JjIV56oDEX6+aCOERLNokS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Markus Hochholdinger <markus@hochholdinger.net>,
-        Xiao Ni <xni@redhat.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH 5.10 054/132] md: fix update super 1.0 on rdev size change
+        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 16/53] ALSA: pcm: oss: Limit the period size to 16MB
 Date:   Mon, 13 Dec 2021 10:29:55 +0100
-Message-Id: <20211213092940.980646075@linuxfoundation.org>
+Message-Id: <20211213092928.901248256@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,35 +50,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markus Hochholdinger <markus@hochholdinger.net>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 55df1ce0d4e086e05a8ab20619c73c729350f965 upstream.
+commit 8839c8c0f77ab8fc0463f4ab8b37fca3f70677c2 upstream.
 
-The superblock of version 1.0 doesn't get moved to the new position on a
-device size change. This leads to a rdev without a superblock on a known
-position, the raid can't be re-assembled.
+Set the practical limit to the period size (the fragment shift in OSS)
+instead of a full 31bit; a too large value could lead to the exhaust
+of memory as we allocate temporary buffers of the period size, too.
 
-The line was removed by mistake and is re-added by this patch.
+As of this patch, we set to 16MB limit, which should cover all use
+cases.
 
-Fixes: d9c0fa509eaf ("md: fix max sectors calculation for super 1.0")
-Cc: stable@vger.kernel.org
-Signed-off-by: Markus Hochholdinger <markus@hochholdinger.net>
-Reviewed-by: Xiao Ni <xni@redhat.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
+Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
+Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
+Link: https://lore.kernel.org/r/20211201073606.11660-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/md.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/core/oss/pcm_oss.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -2252,6 +2252,7 @@ super_1_rdev_size_change(struct md_rdev
- 
- 		if (!num_sectors || num_sectors > max_sectors)
- 			num_sectors = max_sectors;
-+		rdev->sb_start = sb_start;
- 	}
- 	sb = page_address(rdev->sb_page);
- 	sb->data_size = cpu_to_le64(num_sectors);
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -1967,7 +1967,7 @@ static int snd_pcm_oss_set_fragment1(str
+ 	if (runtime->oss.subdivision || runtime->oss.fragshift)
+ 		return -EINVAL;
+ 	fragshift = val & 0xffff;
+-	if (fragshift >= 31)
++	if (fragshift >= 25) /* should be large enough */
+ 		return -EINVAL;
+ 	runtime->oss.fragshift = fragshift;
+ 	runtime->oss.maxfrags = (val >> 16) & 0xffff;
 
 

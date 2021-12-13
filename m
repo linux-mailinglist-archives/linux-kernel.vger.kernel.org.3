@@ -2,92 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C766473485
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE75147348A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242056AbhLMS7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S237544AbhLMTAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbhLMS7A (ORCPT
+        with ESMTP id S232416AbhLMTAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:59:00 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DA4C061574;
-        Mon, 13 Dec 2021 10:59:00 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id d10so40751009ybe.3;
-        Mon, 13 Dec 2021 10:59:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IqQC7tgPMbNXR/+JNvw896EE85G5XX2sbVCCzLSsfQ4=;
-        b=LyLcrbv44h8PePiceZ/nDsApu2MVHNPwKg9S2QdPg0p2XM4XPyXHVHdyFiGR5Oltm6
-         BHW3hWBwoB1sUksHzCz6uosCecnUrFPFxV8Sfym4bN84uHkuYzjPaW0Kqoa0e57Rbo0+
-         K5cgzGWsAfVmmS2GhHS9n0DtUuGLoid7zj0Aibhp+oDNua82y5zG5HC2otaQjiq/XHCU
-         OrImPA8Uoqht65JDTQj8R3YtGfULChMDHFIxrv+P19W5QTrr/83bKwjZsIY1JkXURnpX
-         jPcJOkb/aVdDUwcGIhgwEaXcj+Fsi5HZ6rLhFdG80uFgl6IWxtemnim28PywspqHVWmY
-         FKBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IqQC7tgPMbNXR/+JNvw896EE85G5XX2sbVCCzLSsfQ4=;
-        b=D8aYOFEKjsNqv9pREHuXwt1VW6OY25/+WerYZPcoV3exF8hmAtfoHfMYXK2EK4AUs5
-         CVYxay557bUMVA4UgRVewthYimTCeFYi59w7gajySJRMXmK0GPXqF0wywx/lONO7qCyp
-         k6Fjw3RPwN2ZmTg2Mp1obwrK/ehXW7lxhQN7+kssZZ5rv8EVvqmtc7YlrviADHLdBYe/
-         E6iEabYzVnAmnfB+n9MkV7lazpg6ktZUzZNeqNILmriLled510hjnBZsf4Lhlx5KAc4a
-         BrOJH24Gs2foW1dOFXW1i1B6W+vWEF/j8SwNkgdSCcEDndIvki2byW632iWEzKEcmblo
-         T8Jw==
-X-Gm-Message-State: AOAM5316alofOwC+FlTxZTXoNtHRFMkuiKLuZbUIj4dH2vIWn3vRhALR
-        c+gQZyVzJU0TT5Wu/x2byupt3CKKYzptajLu4Vo=
-X-Google-Smtp-Source: ABdhPJxLF+T1Na0RFVC8OoLY9i6ikPWpX5kC9cOOlXjhXiKjEofITC6KbzD5umxoHToYB7r1XD1HdStFk+/KK223cE4=
-X-Received: by 2002:a25:7316:: with SMTP id o22mr406530ybc.640.1639421939347;
- Mon, 13 Dec 2021 10:58:59 -0800 (PST)
+        Mon, 13 Dec 2021 14:00:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B8DC061574;
+        Mon, 13 Dec 2021 11:00:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF811B81255;
+        Mon, 13 Dec 2021 19:00:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A90AAC34600;
+        Mon, 13 Dec 2021 19:00:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639422005;
+        bh=7r2b3zIykqzLviEJZiXs7snpV80iotoqxiNSSC/IIdQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=bhWWvKxJqH1GrV3KQJ4HIG943VnstdXGJUBUbcpftai8/XZtnux5qInMFxr9IKiPv
+         OP1Y2pbz0wSdlKpfH4I/Hr5aoiHUWO5Rix8Ri0TeEJSJKMCtmqnqFO5/z2PmA1R+u+
+         0APpNLLUuKxHfjCiUWPIyuaWMbQDZm+fyveadObECvWL6u4gC2sgjACdy7Q9wmfkC7
+         Inyb9witJxd4CLY79U4GeGPJls+Iqj1LJmUczy9+lBkHr6Hqj06sC0He1JYARESX26
+         BpSBo3mNQVQqOax1kcg6Q2/lKEMtk3AAqaXzz5G9ArditI9ef8Fu5EjasL9Cfz/35D
+         2WSZ95tgmJouQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 680BC5C0B9E; Mon, 13 Dec 2021 11:00:05 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:00:05 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, urezki@gmail.com,
+        boqun.feng@gmail.com
+Subject: Re: [PATCH v2] rcu/nocb: Handle concurrent nocb kthreads creation
+Message-ID: <20211213190005.GP641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211211170139.27711-1-quic_neeraju@quicinc.com>
+ <6c184b9ffc5c641736d53bb7598f814d6b4c3fe0.camel@infradead.org>
+ <601ecb12-ae2e-9608-7127-c2cddc8038a6@quicinc.com>
+ <20211213112246.GA782195@lothringen>
+ <984a63d4c11d04e2ee8a83fc9c61006413bf209e.camel@infradead.org>
+ <20211213131407.GD782195@lothringen>
 MIME-Version: 1.0
-References: <20211213092930.763200615@linuxfoundation.org> <CADVatmPsqW050=k07RDChjnf_F+MJfkLzHiRcdeoWQ7Mws_qMw@mail.gmail.com>
-In-Reply-To: <CADVatmPsqW050=k07RDChjnf_F+MJfkLzHiRcdeoWQ7Mws_qMw@mail.gmail.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Mon, 13 Dec 2021 18:58:23 +0000
-Message-ID: <CADVatmMMe7NGpX9CcViLrhxP69gJ6m+9rViEVuh0E6j1QXGDVg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/74] 4.19.221-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213131407.GD782195@lothringen>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 4:27 PM Sudip Mukherjee
-<sudipm.mukherjee@gmail.com> wrote:
->
-> HI Greg,
->
-> On Mon, Dec 13, 2021 at 9:51 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 4.19.221 release.
-> > There are 74 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> > Anything received after that time might be too late.
->
-> Just an initial report. mips allmodconfig is failing with the following error.
+On Mon, Dec 13, 2021 at 02:14:07PM +0100, Frederic Weisbecker wrote:
+> On Mon, Dec 13, 2021 at 11:28:45AM +0000, David Woodhouse wrote:
+> > On Mon, 2021-12-13 at 12:22 +0100, Frederic Weisbecker wrote:
+> > > I was about to ack the patch but, should we really add code that isn't going to
+> > > be necessary before a long while?
+> > 
+> > Yeah, I'm torn on that. In this case it's harmless enough and it makes
+> > the code reentrant in its own right instead of relying on the fact that
+> > the cpuhp code won't invoke it multiple times in parallel. So I think
+> > that's reasonable defensive programming.
+> 
+> The thing is that RCU code is already quite complicated. Are we even at least
+> sure that we'll ever make CPU hotplug allow concurrent CPU onlining/offlining?
+> 
+> This will require much more thoughts and a new hotplug concurrency
+> infrastructure that we'll need to base RCU on. IMHO it's a bit early to handle
+> that on hotplug individual callbacks.
+> 
+> But anyway, let's see what Paul thinks about it...
 
-Ignore this please. I am not seeing the error on a clean build. Need
-to check what went wrong with my build script.
+We need to at least think through parallelizing the various RCU
+CPU-hotplug notifiers.  For one thing, it might turn out to be necessary
+to parallelize those notifiers, perhaps on some non-x86 architecture or
+on some non-Amazon .config.  For another thing, doing so might suggest
+some simplifications, as has happened in my ongoing rcu_barrier() work.
 
+My thought is to pull in the patches and at the very least leave a
+tag recording them for later possible use.
 
--- 
-Regards
-Sudip
+							Thanx, Paul

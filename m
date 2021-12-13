@@ -2,161 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F7A473148
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B805747314A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbhLMQKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S240450AbhLMQKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234908AbhLMQKQ (ORCPT
+        with ESMTP id S240415AbhLMQKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:10:16 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2158CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:10:16 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id q72so19007583iod.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:10:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DtD0mEb50I7aZGSUK6tagzUKH6gP/G5BXylrgwHSko8=;
-        b=jhyho1evvUYVgGY6Y/EMFo0OWrpcH5OEFzSnbhkAVsMmFL/XOxgyu8nmSMBfPGr1IG
-         hDGG4OTb4zjswGYyNLFKYQmcukSigaMIcDiLzc0q+ydMylBN1eH+tabibsoirxorrAnv
-         q9xw3GWbLLHyuwbU8z74zL37KBObCTVa2CQ3KwlIYY9MzxH6hmtH/N5YCYhYz6TRlD7z
-         /30hfbZc0Z7K/J1EtqLIM4zUs1mDYATFiSGgjvijEyLm2H08XZd1l3PiP2rVCT2WkIa/
-         jeDkmDTXlyhNn7ehw0GvXMmHUA7O+JVLSuwxEJG5sVn+BmAjqeP9CqS0kZcyivUCihPh
-         yb9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DtD0mEb50I7aZGSUK6tagzUKH6gP/G5BXylrgwHSko8=;
-        b=JEMIoSygaL4wPpevdwh4VCapIVtheGJAGzism5tJtASQCYz/9iAnaNALXDQU4rvAMo
-         O/MHox9e0W74U8R48On/jOK4lkdHBcf2SsVztWn7sfk5KSMZlYZlM1pRcY63dc4IMpDQ
-         Zt5xnPsZhWD1gz81+Y4zJARdsPmrVMA2iielQ1Cp9a0pytB5L8T6T0V+mLK5ogSr8LbT
-         pJdpWHQaHFVRUMad7+IFoIYeFx7DmY+BO0fPyOc7LdlMHwMkT65ZWUM8xvI0aOJnDQRn
-         pJiz5gbQrV+y0P21N3JhVFnuf5mFo3LJoAVx2Mi95Ht03qhldEWqFupONjwGIiGY1hoY
-         /b8A==
-X-Gm-Message-State: AOAM533C04PBBusfqaY1HHwoeK1gy9dobs66Y7JaS6zdSpLN6UuBs5s+
-        udicOlSSpe+tZ2/T34kfKU/F5sth9TzcKfMUmI7HeA==
-X-Google-Smtp-Source: ABdhPJxkOBCIc1higoQpTE6i07rWNH/y+S/K4/kf4WrljzAwludPzIqFp8MZyIOrGJkP4CXhASvTjgWV3hkmk9PVaeI=
-X-Received: by 2002:a05:6638:144f:: with SMTP id l15mr33654639jad.21.1639411815204;
- Mon, 13 Dec 2021 08:10:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20211208024607.1784932-1-irogers@google.com> <c0c88d24-a609-bf4a-ec23-dfe555ab9cfc@arm.com>
-In-Reply-To: <c0c88d24-a609-bf4a-ec23-dfe555ab9cfc@arm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 13 Dec 2021 08:10:03 -0800
-Message-ID: <CAP-5=fVHNqHym1xNCx_WhmUWHEWa9MDW9QAdOhkLGXuD6+0bqA@mail.gmail.com>
-Subject: Re: [PATCH 00/22] Refactor perf cpumap
-To:     James Clark <james.clark@arm.com>
-Cc:     eranian@google.com, Andi Kleen <ak@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 13 Dec 2021 11:10:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3219C061574;
+        Mon, 13 Dec 2021 08:10:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F779B8119A;
+        Mon, 13 Dec 2021 16:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373A5C34605;
+        Mon, 13 Dec 2021 16:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639411817;
+        bh=7HtdPFNYEb4LaXUb12fHONdhZO/kQ3Sv3ZgpwATgqjU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Bi7qV+l8Er3xb9xSCeK7nIbcvMbzYbBc50smVyROK+SRti5R83RXvL+tStxxtEOU/
+         nanJhQmIsmctFiQp4i0QTSBmTJiMGf0DBgoMzGPVvJTxhclxtgpiHYB0OpsFuY1yv9
+         /UEUJ0l/ebQ9TDzuGjv4aveMtYXW4rnDQtJacmsjJCXkOepxrDVOjkHpG5KUWaIDh9
+         Xw880obgaOcxXzCOhugcUeC3bS/5907vaMzhg5w0WXS9Kps3FmLeggxwZMgBBTS8eE
+         DBB3GJDneROA0uZpu9IQX1uqsefOjgOVz9mqZC9Crtppi9jS8tkDzD9q5EB1bASlwq
+         LEIr1avCXZHwA==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mwnu3-00BqkU-9z; Mon, 13 Dec 2021 16:10:15 +0000
+Date:   Mon, 13 Dec 2021 16:10:14 +0000
+Message-ID: <87mtl4jxjt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 5/6] irqchip/apple-aic: Support multiple dies
+In-Reply-To: <20211209043249.65474-6-marcan@marcan.st>
+References: <20211209043249.65474-1-marcan@marcan.st>
+        <20211209043249.65474-6-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, tglx@linutronix.de, robh+dt@kernel.org, sven@svenpeter.dev, alyssa@rosenzweig.io, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 3:39 AM James Clark <james.clark@arm.com> wrote:
->
->
->
-> On 08/12/2021 02:45, Ian Rogers wrote:
-> > Perf cpu map has various functions where a cpumap and index are passed
-> > in order to load the cpu. A problem with this is that the wrong index
-> > may be passed for the cpumap, causing problems like aggregation on the
-> > wrong CPU:
-> > https://lore.kernel.org/lkml/20211204023409.969668-1-irogers@google.com/
-> >
-> > This patch set refactors the cpu map API, greatly reducing it and
-> > explicitly passing the cpu (rather than the pair) to functions that
-> > need it. Comments are added at the same time.
-> >
-> > Ian Rogers (22):
-> >   libperf: Add comments to perf_cpu_map.
-> >   perf stat: Add aggr creators that are passed a cpu.
-> >   perf stat: Switch aggregation to use for_each loop
-> >   perf stat: Switch to cpu version of cpu_map__get
-> >   perf cpumap: Switch cpu_map__build_map to cpu function
-> >   perf cpumap: Remove map+index get_socket
-> >   perf cpumap: Remove map+index get_die
-> >   perf cpumap: Remove map+index get_core
-> >   perf cpumap: Remove map+index get_node
-> >   perf cpumap: Add comments to aggr_cpu_id
-> >   perf cpumap: Remove unused cpu_map__socket
-> >   perf cpumap: Simplify equal function name.
-> >   perf cpumap: Rename empty functions.
-> >   perf cpumap: Document cpu__get_node and remove redundant function
-> >   perf cpumap: Remove map from function names that don't use a map.
-> >   perf cpumap: Remove cpu_map__cpu, use libperf function.
-> >   perf cpumap: Refactor cpu_map__build_map
-> >   perf cpumap: Rename cpu_map__get_X_aggr_by_cpu functions
-> >   perf cpumap: Move 'has' function to libperf
-> >   perf cpumap: Add some comments to cpu_aggr_map
-> >   perf cpumap: Trim the cpu_aggr_map
-> >   perf stat: Fix memory leak in check_per_pkg
-> >
-> >  tools/lib/perf/cpumap.c                  |   7 +-
-> >  tools/lib/perf/include/internal/cpumap.h |   9 +-
-> >  tools/lib/perf/include/perf/cpumap.h     |   1 +
-> >  tools/perf/arch/arm/util/cs-etm.c        |  16 +-
-> >  tools/perf/builtin-ftrace.c              |   2 +-
-> >  tools/perf/builtin-sched.c               |   6 +-
-> >  tools/perf/builtin-stat.c                | 273 ++++++++++++-----------
-> >  tools/perf/tests/topology.c              |  10 +-
-> >  tools/perf/util/cpumap.c                 | 182 ++++++---------
-> >  tools/perf/util/cpumap.h                 | 102 ++++++---
-> >  tools/perf/util/cputopo.c                |   2 +-
-> >  tools/perf/util/env.c                    |   6 +-
-> >  tools/perf/util/stat-display.c           |  69 +++---
-> >  tools/perf/util/stat.c                   |   9 +-
-> >  tools/perf/util/stat.h                   |   3 +-
-> >  15 files changed, 361 insertions(+), 336 deletions(-)
-> >
->
-> For the whole set:
->
-> Reviewed-by: James Clark <james.clark@arm.com>
->
-> I didn't see any obvious issues with mixing up aggregation modes or CPU/idx types. Also
-> gave perf stat a test in the different modes and didn't see an issue.
->
-> But I'm wondering if it's possible to go further and add a struct around the CPU int so that the
-> compiler checks for correctness instead. It still seems quite easy to mix up index and
-> CPU, for example these functions are subtly different, but both use int:
->
->   LIBPERF_API int perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx);
->   LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, int cpu);
->
-> Something like this would make it impossible to make a mistake:
->
->   struct cpu { int cpu };
->
-> I mean it's more of a coincidence that CPUs can be identified by an integer, but they are more
-> of an object than an integer, so it could make sense to wrap it. But maybe it could be quite
-> cumbersome to use and be overkill.
+On Thu, 09 Dec 2021 04:32:48 +0000,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> Multi-die support in AICv2 uses several sets of IRQ registers. Introduce
+> a die count and compute the register group offset based on the die ID
+> field of the hwirq number, as reported by the hardware.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/irqchip/irq-apple-aic.c | 75 +++++++++++++++++++++++----------
+>  1 file changed, 53 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> index d03caed51d56..46b7750548a0 100644
+> --- a/drivers/irqchip/irq-apple-aic.c
+> +++ b/drivers/irqchip/irq-apple-aic.c
 
-Thanks James! I am working on a v2 patch set and will have a go at
-adding this to the end.
+[...]
 
-Ian
+> @@ -535,28 +545,41 @@ static int aic_irq_domain_translate(struct irq_domain *id,
+>  				    unsigned int *type)
+>  {
+>  	struct aic_irq_chip *ic = id->host_data;
+> +	u32 *args;
+> +	u32 die = 0;
+>  
+> -	if (fwspec->param_count != 3 || !is_of_node(fwspec->fwnode))
+> +	if (fwspec->param_count < 3 || fwspec->param_count > 4 ||
+> +	    !is_of_node(fwspec->fwnode))
+>  		return -EINVAL;
+>  
+> +	args = &fwspec->param[1];
+> +
+> +	if (fwspec->param_count == 4) {
+> +		die = args[0];
+> +		args++;
+> +	}
+> +
+>  	switch (fwspec->param[0]) {
+>  	case AIC_IRQ:
+> -		if (fwspec->param[1] >= ic->nr_irq)
+> +		if (die >= ic->nr_die)
+> +			return -EINVAL;
+> +		if (args[0] >= ic->nr_irq)
+>  			return -EINVAL;
+> -		*hwirq = (FIELD_PREP(AIC_EVENT_TYPE, AIC_EVENT_TYPE_HW) |
+> -			  FIELD_PREP(AIC_EVENT_NUM, fwspec->param[1]));
+> +		*hwirq = AIC_IRQ_HWIRQ(die, args[0]);
+>  		break;
+
+A side issue with this is that it breaks MSIs, due to the way we
+construct the intspec (I did hit that when upgrading the M1 intspec to
+4 cells for the PMU). I have the following hack locally:
+
+diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+index b090924b41fe..f7b4a67b13cf 100644
+--- a/drivers/pci/controller/pcie-apple.c
++++ b/drivers/pci/controller/pcie-apple.c
+@@ -218,7 +218,7 @@ static int apple_msi_domain_alloc(struct irq_domain *domain, unsigned int virq,
+ 	if (hwirq < 0)
+ 		return -ENOSPC;
+ 
+-	fwspec.param[1] += hwirq;
++	fwspec.param[1 + (fwspec.param_count == 4)] += hwirq;
+ 
+ 	ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &fwspec);
+ 	if (ret)
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

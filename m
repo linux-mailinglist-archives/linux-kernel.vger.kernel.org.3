@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2E3472927
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DEC472686
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242315AbhLMKS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:18:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243788AbhLMKOh (ORCPT
+        id S237704AbhLMJwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:52:01 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39450 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236603AbhLMJrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:14:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B07C08ED78;
-        Mon, 13 Dec 2021 01:55:04 -0800 (PST)
+        Mon, 13 Dec 2021 04:47:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4229B80E0C;
-        Mon, 13 Dec 2021 09:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7661C34600;
-        Mon, 13 Dec 2021 09:55:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0C209CE0B59;
+        Mon, 13 Dec 2021 09:47:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC424C00446;
+        Mon, 13 Dec 2021 09:47:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389301;
-        bh=xyuxhrqRtt6uGmkMlP/GJ4qCXYEpTPAKCmXMEUmbOJk=;
+        s=korg; t=1639388836;
+        bh=sWiTJK3c64+gXHiQzoUryTdm1kf1T2CwMmd+hcjSwIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDqL8rsvZsADbMroSaq5AFuzbs+mpEsUig6WXifRFs/1I3SlF/sat7r2Si8mFb2YA
-         NEdUMsy0qOBKOD4MUTvoGih3MAwqPzplqzrUB/305QnCMwiT3/H22KHalWSneCol7Z
-         ixY6XxS2r49A1ISjoy+k23K2J+plw84pgHfd9kR0=
+        b=YbUzAGrFyOrOoqAmtq1CIb/NUJb+h4HlEcnE08XwEQk0xUWQDAVL+EjKLomTJsgjo
+         ca5vbfmXljvZEavDMd0HHouwuWbhco3esjsdPUNV9ra6YnPPYmaV/1D3kraO3a/Xtl
+         ZY7pyCht9dKxothF6f83oqui71TmpCNt1keqPJTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Moshe Shemesh <moshe@mellanox.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 051/171] devlink: fix netns refcount leak in devlink_nl_cmd_reload()
-Date:   Mon, 13 Dec 2021 10:29:26 +0100
-Message-Id: <20211213092946.805975522@linuxfoundation.org>
+        stable@vger.kernel.org, youling <youling257@gmail.com>,
+        Yifan Zhang <yifan1.zhang@amd.com>,
+        James Zhu <James.Zhu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.10 026/132] drm/amdkfd: fix boot failure when iommu is disabled in Picasso.
+Date:   Mon, 13 Dec 2021 10:29:27 +0100
+Message-Id: <20211213092940.006167973@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,63 +47,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Yifan Zhang <yifan1.zhang@amd.com>
 
-commit 4dbb0dad8e63fcd0b5a117c2861d2abe7ff5f186 upstream.
+commit afd18180c07026f94a80ff024acef5f4159084a4 upstream.
 
-While preparing my patch series adding netns refcount tracking,
-I spotted bugs in devlink_nl_cmd_reload()
+When IOMMU disabled in sbios and kfd in iommuv2 path, iommuv2
+init will fail. But this failure should not block amdgpu driver init.
 
-Some error paths forgot to release a refcount on a netns.
-
-To fix this, we can reduce the scope of get_net()/put_net()
-section around the call to devlink_reload().
-
-Fixes: ccdf07219da6 ("devlink: Add reload action option to devlink reload command")
-Fixes: dc64cc7c6310 ("devlink: Add devlink reload limit option")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Moshe Shemesh <moshe@mellanox.com>
-Cc: Jacob Keller <jacob.e.keller@intel.com>
-Cc: Jiri Pirko <jiri@nvidia.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Link: https://lore.kernel.org/r/20211205192822.1741045-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: youling <youling257@gmail.com>
+Tested-by: youling <youling257@gmail.com>
+Signed-off-by: Yifan Zhang <yifan1.zhang@amd.com>
+Reviewed-by: James Zhu <James.Zhu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/devlink.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |    4 ----
+ drivers/gpu/drm/amd/amdkfd/kfd_device.c    |    3 +++
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
---- a/net/core/devlink.c
-+++ b/net/core/devlink.c
-@@ -4031,14 +4031,6 @@ static int devlink_nl_cmd_reload(struct
- 		return err;
- 	}
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -2255,10 +2255,6 @@ static int amdgpu_device_ip_init(struct
+ 		amdgpu_xgmi_add_device(adev);
+ 	amdgpu_amdkfd_device_init(adev);
  
--	if (info->attrs[DEVLINK_ATTR_NETNS_PID] ||
--	    info->attrs[DEVLINK_ATTR_NETNS_FD] ||
--	    info->attrs[DEVLINK_ATTR_NETNS_ID]) {
--		dest_net = devlink_netns_get(skb, info);
--		if (IS_ERR(dest_net))
--			return PTR_ERR(dest_net);
--	}
+-	r = amdgpu_amdkfd_resume_iommu(adev);
+-	if (r)
+-		goto init_failed;
 -
- 	if (info->attrs[DEVLINK_ATTR_RELOAD_ACTION])
- 		action = nla_get_u8(info->attrs[DEVLINK_ATTR_RELOAD_ACTION]);
- 	else
-@@ -4081,6 +4073,14 @@ static int devlink_nl_cmd_reload(struct
- 			return -EINVAL;
- 		}
- 	}
-+	if (info->attrs[DEVLINK_ATTR_NETNS_PID] ||
-+	    info->attrs[DEVLINK_ATTR_NETNS_FD] ||
-+	    info->attrs[DEVLINK_ATTR_NETNS_ID]) {
-+		dest_net = devlink_netns_get(skb, info);
-+		if (IS_ERR(dest_net))
-+			return PTR_ERR(dest_net);
-+	}
-+
- 	err = devlink_reload(devlink, dest_net, action, limit, &actions_performed, info->extack);
+ 	amdgpu_fru_get_product_info(adev);
  
- 	if (dest_net)
+ init_failed:
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
+@@ -751,6 +751,9 @@ bool kgd2kfd_device_init(struct kfd_dev
+ 
+ 	kfd_cwsr_init(kfd);
+ 
++	if(kgd2kfd_resume_iommu(kfd))
++		goto device_iommu_error;
++
+ 	if (kfd_resume(kfd))
+ 		goto kfd_resume_error;
+ 
 
 

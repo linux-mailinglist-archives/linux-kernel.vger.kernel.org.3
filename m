@@ -2,81 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A8F472205
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60616472208
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbhLMH7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:59:23 -0500
-Received: from out162-62-57-137.mail.qq.com ([162.62.57.137]:56209 "EHLO
-        out162-62-57-137.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229728AbhLMH7V (ORCPT
+        id S232690AbhLMIAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229728AbhLMIA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:59:21 -0500
-X-Greylist: delayed 25267 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 02:59:19 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639382357;
-        bh=hZhmtF9KS7UscRW9F6LM5Awl0828NXiTWNMt+b+wQDQ=;
-        h=From:To:Cc:Subject:Date;
-        b=TUiweKALXsLE8x4WxBUN/hUQsRx0DOPKrc3Hw3qv3FSU8Kbbtbl/uq3JfauoNZlM5
-         iyRXn7a22/FH1pkaHnRFy/adKimfCgMSNfwb1WSsIjCUMY4AIUNRCO1CosYorQXnau
-         D29/9cwDtev6laCCbNa1360xa/5e9YmrVCl+dGHY=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id ECE938A4; Mon, 13 Dec 2021 15:59:14 +0800
-X-QQ-mid: xmsmtpt1639382354tev1jruem
-Message-ID: <tencent_B595FC0780AC301FE5EE719C50FC8553280A@qq.com>
-X-QQ-XMAILINFO: MAMW4dxoxFytibx0XFNH1TQTAxCMbttEUazcBw73t1yGH1ebeugJMlPzP8O0DP
-         XCfRa7KZk1dq7DZwUdDwrM74mdmhWXOmXD5DUKqdrljyjCNpDMfxgWmEWOLgE5FYdFNpbdR2Q08Z
-         mjCj/yRomvTCcjiaQCdIb1SyzdiWfzogrGCIR/eCrWLCGgFIgv8qUdWulxtiMbYqick0KlP1VH1a
-         GdEmZg8gTfaaY/tl0mmjW7DL0yg1O/6L/d06vJJzf8Kr6TDqUL9H7yHVflAXBkK6+Rc2uKD2S1W5
-         ipIn4z/Nu0nYNU8DZyR36yjSWjjsiBB+y0/X3c2jWaMUBKjnd3zF0C5NYWcrcnPhfYOcmrQWQ53c
-         GPXqr0lTVaVWTWMPw/6yOMnbflbaFywo6QmuLIJm5yyvxlBF6XZtv9u3LznPc7Czgk8MDvJ6Gt2M
-         XrqqF4E+Fjj0OAoy8Swp/IWkkdZQCmutVrW7quqUnMEmUyMEwxaONqMsmbC48/Y+FUVlpzkPwxaK
-         2HYNCIKFDMPD2EiYCrxFz1bWvKDo0RV9T6z9wr/d03LIlz4mTXu7yJiLT9ty9gO345GpVqLO6EZd
-         wdFoplbaGnmoVhl4WAqucqg+MRJnVoaXBVQ9jacJeN6CChjQoFbaePQjGPBaguiR42lvNldZG0KS
-         dn47ZMPmiEHh/IVeWjTPPLURCEpun5GfH6ZO0kz5F0v1/dqwXkZPzACiQr/nb3E+dlzdYzUCdrs1
-         llRCMGQtpqFGvW1Hxt5djAisHnpPK7+riP6pmlZXxConD2/9EbcFG/csme8GF9qu8F8dT7SR58QG
-         5X6RIfALmL44wcaSDpEBhJEDnDw8xVZVM/Xz/+1Su++FEY8QczzYmco5oJW85SROIlW4S9txLmV1
-         0Xidu7sf3p+VuBCdyJaK96y+svrXBPwQAKjfwdJvraDZEjWBNbO8t9J2xRb0O/RdmMZC3h/rwR
-From:   Xiaoke Wang <xkernel.wang@foxmail.com>
-To:     rostedt@goodmis.org, mingo@redhat.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: Re: [PATCH] tracing: check the return value of kstrdup()
-Date:   Mon, 13 Dec 2021 15:59:04 +0800
-X-OQ-MSGID: <20211213075904.4325-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Mon, 13 Dec 2021 03:00:29 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF470C06173F;
+        Mon, 13 Dec 2021 00:00:28 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id r25so48700687edq.7;
+        Mon, 13 Dec 2021 00:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r6FKk19wLg5/5DanNVy/BnJQBLp86OcclKvVLtQ50Cg=;
+        b=WuJro8kofehX89Gb5M3Dh7ue6WjBYH9KUzFFWSMHP6V02Lh0bcQN+0utDoA1tAgG9T
+         om/TU37/M9erhiuC5C1hLymKoIj4pP2qbtwi6ku8ujJBu/rlEhnPUPmtqRuYsqS230Qe
+         Mp87IN/ni1Flmkw6ErLxYTcanG0/gvVma5IaEeiXOcjxnAnqQA3mXJv/TGciUOR7b+cE
+         8hGCJMZQyEMU4HLab1d45eerHsoU62jPS/882nfAc9FDT0GgkKd052EAlgu2IioHMcSU
+         TnHAY9XVhZUsf2zG6tiKRXHTHkmHEh+z/dPBpbSDcxJSwMqzhSWl0eqRs1d9z4sDnA9O
+         H8kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r6FKk19wLg5/5DanNVy/BnJQBLp86OcclKvVLtQ50Cg=;
+        b=BNgw1HqusPnkTSgwHD7YRuFzZ2L37GJKam58FooUmohUEWyhjnmsSlnsZv0dKLofk1
+         VHBh+N9xcB3fjYs4YFffiKCZmSDTXoFLcrba+g4FuTwilcGXjomytjR8Lu4+pBwL486P
+         BGJZucLbo7oEKNU78gRd2r1HYnv8/f/IIWZDNVi6uMl0EcHqoNIqME95nzeB36468KDA
+         ojDkKwVGOv8yt3vYfhhDnb4AlnePoqL2JurAi+iz+SIdpxYH/hfwu+o87uB3RNpAyTo2
+         okmoalm+qKoHuSMn1975qOASf3wTp2z3giDhL2quC6wc71uaZjixqnOq3Uw6ClZbyN6u
+         Bzhg==
+X-Gm-Message-State: AOAM531F3HUSt95J+KKOgLeKFAiXP7fK3r53bka+T58ByZ50izM4gYy7
+        j/0Jl/l1jxAcLdmLKEOm3hMd3ALFKN7aDDj7wps=
+X-Google-Smtp-Source: ABdhPJzyAV6hcirGTfopAi5t2oKVXclfJJBFKcRP9UOMftdSaUhg/5nzA/QIbd585iWLWgHLkbqFFf05XXoGq67+v3s=
+X-Received: by 2002:aa7:c915:: with SMTP id b21mr61063698edt.195.1639382427393;
+ Mon, 13 Dec 2021 00:00:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211213070330.3351505-1-rong.chen@amlogic.com>
+In-Reply-To: <20211213070330.3351505-1-rong.chen@amlogic.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 13 Dec 2021 09:00:16 +0100
+Message-ID: <CAFBinCCr9RQReHOJbb=spcVRxM0aRo=Z3YMz_zxA_qiFBDzwWA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: meson: initial ocr available by default value
+To:     Rong Chen <rong.chen@amlogic.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>, --to=1131046452@qq.com,
+        45581586@qq.com, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note: Compare with the last email, this one is using my full name.
-And I am sorry that yesterday I did not notice the bugs in trace_boot.c had been
-already patched.
-kstrdup() returns NULL when some internal memory errors happen, it is
-better to check the return value of it.
+Hello,
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- kernel/trace/trace_uprobe.c | 5 +++++
- 1 files changed, 5 insertions(+)
+On Mon, Dec 13, 2021 at 8:03 AM Rong Chen <rong.chen@amlogic.com> wrote:
+>
+> The patch will add a value of ocr supported by the controller,
+> to specify some of voltage values are supported.
+Can you please share some details on this topic?
 
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index 225ce56..173ff0f 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -1618,6 +1618,11 @@ create_local_trace_uprobe(char *name, unsigned long offs,
- 	tu->path = path;
- 	tu->ref_ctr_offset = ref_ctr_offset;
- 	tu->filename = kstrdup(name, GFP_KERNEL);
-+	if (!tu->filename) {
-+		ret = -ENOMEM;
-+		goto error;
-+	}
-+
- 	init_trace_event_call(tu);
- 
- 	ptype = is_ret_probe(tu) ? PROBE_PRINT_RETURN : PROBE_PRINT_NORMAL;
--- 
+We already have many boards upstreamed which work fine without
+manually setting ocr_avail in the driver.
+In general there's two types of boards:
+1) boards where the regulator can switch between different voltages.
+One example is the Odroid-C2, see meson-gxbb-odroidc2.dts [0]
+Here we specify:
+  vmmc-supply = <&tflash_vdd>;
+  vqmmc-supply = <&tf_io>;
+&tflash_vdd is either turned off or at 3.3V when turned on.
+&tf_io can be either turned off, 1.8V or 3.3V.
+
+2) boards where the voltages are fixed.
+One example is Radxa Zero, see meson-g12a-radxa-zero.dts [1]
+For the SD card the board uses:
+  vmmc-supply = <&vddao_3v3>;
+  vqmmc-supply = <&vddao_3v3>;
+(meaning fixed 3.3V always-on power source for both VMMC and VQMMC)
+and for eMMC the board uses:
+  vmmc-supply = <&vcc_3v3>;
+  vqmmc-supply = <&vcc_1v8>;
+(meaning: 3.3V always-on power source for vmmc and 1.8V always-on
+power source for VQMMC)
+
+With the information from the regulators the MMC core will
+automatically detect ocr_avail in Linux.
+Or in other words: your .dts may be missing the link between regulator
+and MMC controller vmmc/vqmmc.
+Can you please double-check this?
+
+
+Best regards,
+Martin
+
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts?id=2585cf9dfaaddf00b069673f27bb3f8530e2039c#n354
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts?id=2585cf9dfaaddf00b069673f27bb3f8530e2039c#n333

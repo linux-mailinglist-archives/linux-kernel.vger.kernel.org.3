@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F98D47261A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33127472883
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237350AbhLMJtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S240205AbhLMKNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbhLMJoc (ORCPT
+        with ESMTP id S241468AbhLMKEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:44:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09659C0617A2;
-        Mon, 13 Dec 2021 01:40:48 -0800 (PST)
+        Mon, 13 Dec 2021 05:04:39 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3202C09CE67;
+        Mon, 13 Dec 2021 01:50:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA46AB80E19;
-        Mon, 13 Dec 2021 09:40:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EEBBC00446;
-        Mon, 13 Dec 2021 09:40:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5794DCE0EBC;
+        Mon, 13 Dec 2021 09:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A0AC341C8;
+        Mon, 13 Dec 2021 09:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388445;
-        bh=tb/BMbCNYyqjxBdfWFu9rfg2H09brFwOXJl7YRQAI5M=;
+        s=korg; t=1639389018;
+        bh=p7PfO+Az2Gb7VxA4W2Nv4CkymF12Ggc/UgBoxJWSxHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sVP+2NAr/5NURnAWsKkvB7Wx1LyIDvSjqdlLvKEbs0lUMed+5mhBBXWWdelcHmNHw
-         LoOeEgy4bhmuijbA5x9n9NcjHuLT2iJ4IrflT5BfuG94/B14fWpkMynrdTgWFvYP3S
-         opt54mkkrbgqQ8Yf83khN/9msKBGtnWA07ZX/wLE=
+        b=bdbMLP7zoqBFQMFo0ESMnPnMHxURACX1UtJohHA0gC45WXrDALPa/xL16gRCZkZTN
+         UyzTFbF2Cykp7ZC+wYxR+txVxTo36oummNhi2zbgJQX1NOuT9f4+gL8y+5BjeLL15t
+         7EWYe6jeUfBoEmc77ck+18+u+1DJgsclHEooAOkk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
-Subject: [PATCH 4.19 52/74] USB: gadget: zero allocate endpoint 0 buffers
+        stable@vger.kernel.org, Yangyang Li <liyangyang20@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.10 082/132] RDMA/hns: Do not destroy QP resources in the hw resetting phase
 Date:   Mon, 13 Dec 2021 10:30:23 +0100
-Message-Id: <20211213092932.548220881@linuxfoundation.org>
+Message-Id: <20211213092941.939901088@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +49,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Yangyang Li <liyangyang20@huawei.com>
 
-commit 86ebbc11bb3f60908a51f3e41a17e3f477c2eaa3 upstream.
+commit b0969f83890bf8b47f5c8bd42539599b2b52fdeb upstream.
 
-Under some conditions, USB gadget devices can show allocated buffer
-contents to a host.  Fix this up by zero-allocating them so that any
-extra data will all just be zeros.
+When hns_roce_v2_destroy_qp() is called, the brief calling process of the
+driver is as follows:
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+ ......
+ hns_roce_v2_destroy_qp
+ hns_roce_v2_qp_modify
+	   hns_roce_cmd_mbox
+ hns_roce_qp_destroy
+
+If hns_roce_cmd_mbox() detects that the hardware is being reset during the
+execution of the hns_roce_cmd_mbox(), the driver will not be able to get
+the return value from the hardware (the firmware cannot respond to the
+driver's mailbox during the hardware reset phase).
+
+The driver needs to wait for the hardware reset to complete before
+continuing to execute hns_roce_qp_destroy(), otherwise it may happen that
+the driver releases the resources but the hardware is still accessing. In
+order to fix this problem, HNS RoCE needs to add a piece of code to wait
+for the hardware reset to complete.
+
+The original interface get_hw_reset_stat() is the instantaneous state of
+the hardware reset, which cannot accurately reflect whether the hardware
+reset is completed, so it needs to be replaced with the ae_dev_reset_cnt
+interface.
+
+The sign that the hardware reset is complete is that the return value of
+the ae_dev_reset_cnt interface is greater than the original value
+reset_cnt recorded by the driver.
+
+Fixes: 6a04aed6afae ("RDMA/hns: Fix the chip hanging caused by sending mailbox&CMQ during reset")
+Link: https://lore.kernel.org/r/20211123142402.26936-1-liangwenpeng@huawei.com
+Signed-off-by: Yangyang Li <liyangyang20@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c   |    2 +-
- drivers/usb/gadget/legacy/dbgp.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2159,7 +2159,7 @@ int composite_dev_prepare(struct usb_com
- 	if (!cdev->req)
- 		return -ENOMEM;
+--- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
++++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+@@ -33,6 +33,7 @@
+ #include <linux/acpi.h>
+ #include <linux/etherdevice.h>
+ #include <linux/interrupt.h>
++#include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/types.h>
+ #include <net/addrconf.h>
+@@ -964,9 +965,14 @@ static int hns_roce_v2_cmd_hw_resetting(
+ 					unsigned long instance_stage,
+ 					unsigned long reset_stage)
+ {
++#define HW_RESET_TIMEOUT_US 1000000
++#define HW_RESET_SLEEP_US 1000
++
+ 	struct hns_roce_v2_priv *priv = hr_dev->priv;
+ 	struct hnae3_handle *handle = priv->handle;
+ 	const struct hnae3_ae_ops *ops = handle->ae_algo->ops;
++	unsigned long val;
++	int ret;
  
--	cdev->req->buf = kmalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
-+	cdev->req->buf = kzalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
- 	if (!cdev->req->buf)
- 		goto fail;
+ 	/* When hardware reset is detected, we should stop sending mailbox&cmq&
+ 	 * doorbell to hardware. If now in .init_instance() function, we should
+@@ -978,7 +984,11 @@ static int hns_roce_v2_cmd_hw_resetting(
+ 	 * again.
+ 	 */
+ 	hr_dev->dis_db = true;
+-	if (!ops->get_hw_reset_stat(handle))
++
++	ret = read_poll_timeout(ops->ae_dev_reset_cnt, val,
++				val > hr_dev->reset_cnt, HW_RESET_SLEEP_US,
++				HW_RESET_TIMEOUT_US, false, handle);
++	if (!ret)
+ 		hr_dev->is_reset = true;
  
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -137,7 +137,7 @@ static int dbgp_enable_ep_req(struct usb
- 		goto fail_1;
- 	}
- 
--	req->buf = kmalloc(DBGP_REQ_LEN, GFP_KERNEL);
-+	req->buf = kzalloc(DBGP_REQ_LEN, GFP_KERNEL);
- 	if (!req->buf) {
- 		err = -ENOMEM;
- 		stp = 2;
+ 	if (!hr_dev->is_reset || reset_stage == HNS_ROCE_STATE_RST_INIT ||
 
 

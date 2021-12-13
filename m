@@ -2,257 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC91647211B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908AC472128
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhLMGdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+        id S230437AbhLMGiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbhLMGdg (ORCPT
+        with ESMTP id S229716AbhLMGiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:33:36 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820A4C06173F;
-        Sun, 12 Dec 2021 22:33:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CDA87CE0BAC;
-        Mon, 13 Dec 2021 06:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA82BC00446;
-        Mon, 13 Dec 2021 06:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639377212;
-        bh=TzIKARFOBboM5lRCfMll7DQr4HiRrpKP+ecsgRxYMFk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IajWd52bP8Q0ZuFL0o1FI3SA2WgwssoHg0cXzcLkIo583J7dBbaXkPdDQQqJCfKcT
-         fjXs6nRs3z5bxt4OUGUFIbL8Bze/g7edsgVcYTPsmu8NE032rj62Qgp+d+qfsSdaTI
-         +clweOCtQexKpEdR8+o6OpgJvXAd6WKhLlwo+rj9awMxydJu8KLdzCbdmk23MDb+Rs
-         frHeVBUTPuI5KJjcfeygb77XYTTnr2MKkSvNCCQN5pBrL+YGEHVmrkzIyq0sorkhca
-         dhGgoTOdtyQirrhCuVB5OD8bw9Uoj+axjTnjEV1IM85NtlkW1nWKx9ktc1QayyIwvL
-         ie9C8iCf86k8A==
-Date:   Mon, 13 Dec 2021 07:33:27 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] docs: sphinx/kfigure.py: Improve conversion to PDF
-Message-ID: <20211213073327.11191087@coco.lan>
-In-Reply-To: <8840a859-ca57-c49a-f542-0a37401ccdfc@gmail.com>
-References: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
-        <20211212113813.058e99fc@coco.lan>
-        <8840a859-ca57-c49a-f542-0a37401ccdfc@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Mon, 13 Dec 2021 01:38:07 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C203C06173F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:38:06 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id 7so21883335oip.12
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8lP8OOorDp4RjZXoLRJhvTaaFlxLo7QMGtZf6Mua7X0=;
+        b=VvqbD7i/phDRw4qlo/3D8JSYLBuK9N9Idj+2AhKszf22QRc3mns9rbQIAGYmQR9Cre
+         JJpX/99WXVnfLUPMIEYw2BTEp9BUVjizx52QBoujIaooCUu8OPiqPGCw82L8McPAGRwT
+         casmlHZ73tCkjgVEfcjpBt9xLgXUc90nWtz8/VKTj7VYJ2Vx6cTxdr6bSrsa3jKd0HNR
+         3gdzjbK/ZXnJy/ZFb1NuP0MOixRinsKK6eqEnnAUNPJu02kCTdEWdJrxMnwSwJ+xOHak
+         k7h4HU4Yiic7u4xbqqGgQzrRaf3PyGTYV4OAhvomtwbga8lCFria43ju8aUxFnAS32XI
+         lhtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8lP8OOorDp4RjZXoLRJhvTaaFlxLo7QMGtZf6Mua7X0=;
+        b=hmNu72jQ+qpT/ne/OgK4NWH1XqbVZrbryi20pP3wQCIqBAqnx3WoXi2Pwo11DzKsey
+         wSaWeyYvVfmfoyrCnN7ugVe+Pj+XjnzqLwUBDyIqG1Q0MEyHUvAoT9xNgAPFAJ0z6V/P
+         BIK9OMdpUk+tyNMaSt/pEO2HIo39SjiNp5PEJW9OugUKg5jvlFfLgcDW1cMeGi8/sjQD
+         xOMfaZcOjh0JDWvYCWRHac4FdkT03/TLWYFt6weoDBHIK+Q9NL6zOglzvX76lolfqoUv
+         XsJJ24OeRPqiuRDQA8skwmK7hZXOyjGxvWWd6zCPzsgP2tmMMxQ20YPhUkVfRObzYz0c
+         7yxA==
+X-Gm-Message-State: AOAM533JjfJS/+3aHzfwE2LfyRf9wt5XBJVrbU2oZU4Bvbx+ylidwn17
+        ohfiJEeXCJGy9GzjZLjhLPh1pg1BptBnGDP42ROVqQ==
+X-Google-Smtp-Source: ABdhPJxrvfANGAnK2tE5T2zE6CDhSVPk9jE0d3+LQ+mW7YRbOoSb0FlzP9qgVi00dKe8M4+tNVTTAP024Bdvq936/zY=
+X-Received: by 2002:aca:674a:: with SMTP id b10mr26934304oiy.66.1639377485743;
+ Sun, 12 Dec 2021 22:38:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-5-likexu@tencent.com>
+ <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
+ <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com> <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
+ <b6c1eb18-9237-f604-9a96-9e6ca397121c@redhat.com> <CALMp9eRy==yu1uQriqbeezeQ+mtFyfyP_iy9HdDiSZ27SnEfFg@mail.gmail.com>
+ <c381aa2c-beb5-480f-1f24-a14de693e78f@redhat.com> <CALMp9eTKrQVCQPm=hcA50JSUCctPaGLEP19biVbGAtBN54dQfA@mail.gmail.com>
+ <CALMp9eS8xDgdbfJTbzMmek3RcXKwkLdGMW-uMkJR3eJZ6sf0GA@mail.gmail.com>
+In-Reply-To: <CALMp9eS8xDgdbfJTbzMmek3RcXKwkLdGMW-uMkJR3eJZ6sf0GA@mail.gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Sun, 12 Dec 2021 22:37:54 -0800
+Message-ID: <CALMp9eThnOMnCkYp1LYM6Ph3NeB296QvXEWtn06A_1XtS+VCDA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>, Andi Kleen <ak@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, 12 Dec 2021 20:57:23 +0900
-Akira Yokosawa <akiyks@gmail.com> escreveu:
+On Sat, Dec 11, 2021 at 8:56 PM Jim Mattson <jmattson@google.com> wrote:
+>
+> On Fri, Dec 10, 2021 at 3:31 PM Jim Mattson <jmattson@google.com> wrote:
+> >
+> > On Fri, Dec 10, 2021 at 2:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > >
+> > > On 12/10/21 23:55, Jim Mattson wrote:
+> > > >>
+> > > >> Even for tracing the SDM says "Like the value returned by RDTSC, TSC
+> > > >> packets will include these adjustments, but other timing packets (such
+> > > >> as MTC, CYC, and CBR) are not impacted".  Considering that "stand-alone
+> > > >> TSC packets are typically generated only when generation of other timing
+> > > >> packets (MTCs and CYCs) has ceased for a period of time", I'm not even
+> > > >> sure it's a good thing that the values in TSC packets are scaled and offset.
+> > > >>
+> > > >> Back to the PMU, for non-architectural counters it's not really possible
+> > > >> to know if they count in cycles or not.  So it may not be a good idea to
+> > > >> special case the architectural counters.
+> > > >
+> > > > In that case, what we're doing with the guest PMU is not
+> > > > virtualization. I don't know what it is, but it's not virtualization.
+> > >
+> > > It is virtualization even if it is incompatible with live migration to a
+> > > different SKU (where, as you point out below, multiple TSC frequencies
+> > > might also count as multiple SKUs).  But yeah, it's virtualization with
+> > > more caveats than usual.
+> >
+> > It's not virtualization if the counters don't count at the rate the
+> > guest expects them to count.
+>
+> Per the SDM, unhalted reference cycles count at "a fixed frequency."
+> If the frequency changes on migration, then the value of this event is
+> questionable at best. For unhalted core cycles, on the other hand, the
+> SDM says, "The performance counter for this event counts across
+> performance state transitions using different core clock frequencies."
+> That does seem to permit frequency changes on migration, but I suspect
+> that software expects the event to count at a fixed frequency if
+> INVARIANT_TSC is set.
 
-> On Sun, 12 Dec 2021 11:38:13 +0100, Mauro Carvalho Chehab wrote:
-> 
-> Hi Mauro,
-> 
-> I didn't expect such a quick response.
-> Thank you so much!
-> 
-> > Em Sun, 12 Dec 2021 16:59:53 +0900
-> > Akira Yokosawa <akiyks@gmail.com> escreveu:
-> >   
-> >> This patch set improves conversions of DOT -> PDF and SVG -> PDF
-> >> for PDF docs.
-> >>
-> >> * DOT -> PDF conversion  
-> > 
-> > First of all, package requirement for docs generation should be auto
-> > discovered by:
-> > 
-> > 	scripts/sphinx-pre-install  
-> 
-> Please note that this update does not change any requirement.
-
-Ok.
-
-> I think you are worried by the possible degradation of DOT rendering
-> without rsvg-convert.  Please see comments below.
-> 
-> > 
-> > and should not break the ones detected by check_distros() and that
-> > supports PDF generation.
-> >   
-> >>
-> >> Current scheme uses "dot -Tpdf" (of graphviz).
-> >>
-> >> Cons:
-> >>   - openSUSE's dot(1) does not support -Tpdf.  
-> > 
-> > I'm sure I tested pdf generation in the past with openSUSE by the
-> > time I wrote sphinx-pre-install script. Perhaps some change at either
-> > openSUSE or at the docs makefile broke support for it.  
-> 
-> dot -T? on openSUSE Tumbleweed says (long line folded):
-> 
-> Format: "?" not recognized. Use one of: canon cmap cmapx cmapx_np dot dot
-> _json eps fig gd gd2 gif gv imap imap_np ismap jpe jpeg jpg json json0 mp
->  pic plain plain-ext png pov ps ps2 svg svgz tk vml vmlz vrml wbmp xdot
->  xdot1.2 xdot1.4 xdot_json
-> 
-> There is no "pdf" here.
-
-Tumbleweed is a rolling distribution. Something could have changed since
-when I added support for it. Anyway, the script could check the output of
-it to enable/disable pdf via dot (not saying it is worth or not).
-
-> >   
-> >>   - Other distro's dot(1) generates PDFs with unnecessarily wide
-> >>     margins for inclusion into LaTeX docs.
-> >>
-> >> Patch 1/3 changes the route to two steps:
-> >>
-> >>   1. DOT -> SVG by "dot -Tsvg"
-> >>   2. SVG -> PDF by "rsvg-convert -f pdf" with fallback to convert(1).  
-> > 
-> > rsvg-convert is not present on Fedora (nor on RHEL and CentOS), as far
-> > as I'm aware.  
-> 
-> It is provided in the "librsvg2-tools" package, which is suggested by
-> sphinx_pre_install.
-> So once you have it installed on Fedora/RHEL/CentOS, this change won't
-> cause any regression.
-> 
-> Don't you agree?
-
-Yeah, I missed that. Thanks for reminding me about that ;-)
-
-> >   
-> >> Pros:
-> >>   - Improved portability across distros
-> >>   - Less space for graphs in final PDF documents
-> >>
-> >> Con:
-> >>   - On systems without rsvg-convert, generated PDF will be of raster
-> >>     image.  
-> > 
-> > Raster images are a very bad idea. Why don't keep use "dot -Tpdf" when
-> > supported by the system? instead of falling back to raster images?  
-> 
-> I suppose I am able to do so.  I just thought installing rsvg-convert
-> wouldn't be that difficult.
-> I can add a patch in v2 if you insist that is necessary.
-> 
-> >   
-> >> * SVG -> PDF conversion
-> >>
-> >> Current scheme uses convert(1) (of ImageMagick)
-> >>
-> >> Cons:
-> >>   - Generated PDFs are of raster image.  Some of them look blurry.
-> >>   - Raster image tends to be large in size.
-> >>   - convert(1) delegates SVG decoding to rsvg-convert(1).
-> >>     It doesn't cover full range of Inkscape specific SVG features
-> >>     and fails to convert some of SVG figures properly.
-> >>
-> >> Failed conversions are observed with:
-> >>   - Documentation/userspace-api/media/v4l/selection.svg
-> >>   - Documentation/userspace-api/media/v4l/vbi_525.svg
-> >>   - Documentation/userspace-api/media/v4l/vbi_625.svg  
-> > 
-> > What do you mean by failed? With the current way, the VBI ones
-> > seem OK to me:
-> > 
-> > 	https://linuxtv.org/downloads/v4l-dvb-apis-new/pdf/media.pdf  
-> 
-> By "fail", I meant "fail to render properly.
-> 
-> selection.svg is rendered on page 810 in your PDF.
-> I think the mask strap is lost in the figure.
-> Well, selection.svg has Inkscape specific elements for the strap.
-> So it is not rendered in a browser, either.
-
-Ok, so we should fix selection.svg to address such issues. The same applies
-to other images and graphs. That may include properly setting the margins.
-
-> If you open it in Inkscape, I think you will see the difference.
-> Actually speaking, I have edited selection.svg so that it can
-> be rendered in a browser.  My plan is to send it as an independent
-> patch once this patch set is accepted.
-
-No matter if this is merged or not, if you find an issue at the images
-at the media docs, please send them to linux-media@vger.org.
-
-> 
-> Figures 10, 11, and 12 on pages 1031 and 1032 don't look good
-> either.  Do you see what I mean?
-> 
-> > 
-> > (This is daily updated. On today's build the raw VBI ones are in
-> > page 1031/1032)
-> > 
-> > Do you mean that your changes caused a regression there?  
-> 
-> Of course not!
-> 
-> >   
-> >> If you have Inkscape installed as well, convert(1) delegates SVG
-> >> decoding to inkscape(1) and the above SVGs are rendered correctly.
-> >>
-> >> So if Inkscape is required for converting those SVGs, why not use it
-> >> directly in the first place?  
-> > 
-> > I remember that the main focus were to be able to generate PDF at the
-> > major distros. It should be OK to use whatever tool, provided that it
-> > won't cause regressions with such distros. Not that is should matter
-> > much for the others, but my particular interest is that it shouldn't
-> > cause regressions neither on Debian nor on Fedora, as those are the 
-> > ones I use for PDF generation. Debian is used at linuxtv.org, where we
-> > do automate builds for PDF, ePUB and HTML. Fedora is what I used locally,
-> > in order to test and fix issues on media PDF document output.  
-> 
-> I have tested this change on Debian and Fedora systems as well as
-> openSUSE, Arch, and other distros.
-> I'd say it works flawlessly.
-> 
-> I'd appreciate if you could give a try on your systems.
-
-I'll try to run some tests today.
-
-> Thanks for your feedback.
-> I am willing to improve the quality of the PDF docs further.
-> 
->         Thanks, Akira
-> 
-> >   
-> >> Patch 2/3 adds a route of SVG -> PDF conversion by inkscape(1).
-> >> Patch 3/3 hides warning messages from inkscape(1) which are harmless
-> >> in command-line uses.
-> >>
-> >> Pros:
-> >>   - Generated PDFs are of vector graphics.
-> >>   - Vector graphics tends to be smaller in size and keeps looking nice
-> >>     while zoomed in.
-> >>   - SVGs drawn by Inkscape are fully supported.
-> >>
-> >> On systems without Inkscape, there won't be any change in behavior.
-> >>
-> >>         Thanks, Akira
-> >> --
-> >> Akira Yokosawa (3):
-> >>   docs: sphinx/kfigure.py: Use rsvg-convert(1) for DOT -> PDF conversion
-> >>   docs: sphinx/kfigure.py: Use inkscape(1) for SVG -> PDF conversion
+Actually, I now realize that unhalted reference cycles is independent
+of the host or guest TSC, so it is not affected by TSC scaling.
+However, we still have to decide on a specific fixed frequency to
+virtualize so that the frequency doesn't change on migration. As a
+practical matter, it may be the case that the reference cycles
+frequency is the same on all processors in a migration pool, and we
+don't have to do anything.
 
 
-> >>   docs: sphinx/kfigure.py: Redirect warnings from inkscape to /dev/null
-
-It sounds too risky to redirect stderr to /dev/null. Yeah, here, the output
-of inkscape is too crowd of warnings. Hacking it with a 
-SPHINX_SHOW_INKSCAPE_WARN variable also seems a bad idea.
-
-Not sure how this could be solved.
-
-Thanks,
-Mauro
+> I'm not sure that I buy your argument regarding consistency. In
+> general, I would expect the hypervisor to exclude non-architected
+> events from the allow-list for any VM instances running in a
+> heterogeneous migration pool. Certainly, those events could be allowed
+> in a heterogeneous migration pool consisting of multiple SKUs of the
+> same microarchitecture running at different clock frequencies, but
+> that seems like a niche case.
+>
+>
+> > > > Exposing non-architectural events is questionable with live migration,
+> > > > and TSC scaling is unnecessary without live migration. I suppose you
+> > > > could have a migration pool with different SKUs of the same generation
+> > > > with 'seemingly compatible' PMU events but different TSC frequencies,
+> > > > in which case it might be reasonable to expose non-architectural
+> > > > events, but I would argue that any of those 'seemingly compatible'
+> > > > events are actually not compatible if they count in cycles.
+> > > I agree.  Support for marshaling/unmarshaling PMU state exists but it's
+> > > more useful for intra-host updates than for actual live migration, since
+> > > these days most live migration will use TSC scaling on the destination.
+> > >
+> > > Paolo
+> > >
+> > > >
+> > > > Unless, of course, Like is right, and the PMU counters do count fractionally.
+> > > >
+> > >

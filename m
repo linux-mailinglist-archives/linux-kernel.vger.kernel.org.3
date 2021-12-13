@@ -2,176 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9382D472FB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7871B472FB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238911AbhLMOqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:46:16 -0500
-Received: from mail-bn8nam12on2044.outbound.protection.outlook.com ([40.107.237.44]:12512
+        id S236871AbhLMOr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:47:58 -0500
+Received: from mail-bn8nam12on2063.outbound.protection.outlook.com ([40.107.237.63]:26593
         "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234143AbhLMOqP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:46:15 -0500
+        id S230272AbhLMOr4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 09:47:56 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LUPd1zIbTKqxCBz9sUghISRzEwK06LJnayWAzp45si+ZbsjMjLt6FCxEoeOsROiglFfBnANH9KO79P5qpb9+ZsZdJw4gRG3zsZ675lJjXR3bzBfvmj4RC3wY1lifICIrvoX5pICBqPARmonrVuzAguZuQScCMkfHIIA4PWAzF7o/Ehm+XFvQHlM1gqNpSOs98HTEjGEN60SJQXPfXlb2g3SLGbTo8qicE4M03eYTmTZA58C1vmOEzu3jShhnFqGmv6TXy4S5YZ2KMcUbl5WEqdPxuFq9Bvpq2n5GVr00EI+cnW21/l8yp7c5GNnJ9ds/oiTe7uN0OyY6OAEBHJnwJA==
+ b=bisgCVrYx20vaB8zKnmEGpYwCsiYCZYRxFpwKaW+0/JE6KBJfTh4rIlyFE+eiYpYyaGMNSeOr0cRr7BYC6w1rfsXVwPFQb53r35QtxJdSDzprG2ztYSQSn887lZ22KABMhlvsHFpLkBuRpwW4yd0dsrfSsqjispeGPxAYw5jLqOliBSKRis3SetuUh9v7rL71ueXRHnNMHt32oSkD38LScNqLFNKE3VA9mA/89Fq4KhZvp0tqZeLipkx+DH9lzwXHx7FSZW+6k33FpeIoG/7iGlfZ3TsVcye0Hvc917vKt10w4+IhiGQxqc/Hoc5MYNrGGGtU+tFV2rYpu1TGDMcPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FkR3X6rTJw7MzzdqfahNVCniR9QaQlKVwcMGAMpaNos=;
- b=FXSJtC5mNlNQ5sOhYqI00oTbsbJnH4obNnyNziLlxmo8/P90dcdpNy1zSAB6YF1/pczWPteGkIH/I9x1BK2MOvt6gP9h9b/GiYhmEoIVVxQMcdRvi77OKzxZ1u2qTicu4Yk04gQeoV4BJEWMVj3tWuBDGPF1RyFw6bC9LHSEze1lNehUsQ/y4MrxKcPkti/6Lfq72VV6OArdXxtCKfAzmyQ7XbzIkc4ebnSJI9kcbplELRKruIN9YhzFvfa1RwXg/+lVhqcZQLWEKP3vorwspolBgoBZqpu2wVdIJxu0niZQ07ltTG2bnSL3g4g1LW9rw1vKgbBrU6Z2uZRBVsh0kA==
+ bh=nFNXnfLiG1OlXl1+8bwGz6N1A3MpjwsUKkk1hoIKYuw=;
+ b=Uf4ggWp/HRsC5xd03uv7wPHbs1JdZJljZJfYOiMHPHl3DFr2naoTtrAus+UfR+yAAFfU59alqyKj1EQ2cHBFV+Rv0MhlhM8sNpBBwgXVSmGxSvj4ZUNz25zwtR2KtUyJ0XkZjNk2dWlafKQOiekVRxLAXGaJ3rRRwDWosxJKLkOckPaYQLhDNv7vVzlOSQlUPROomlpvcuqLdgtPnEpkjio27q0D6wT/VRy5Gp1pkJO6tFIVLxhO1RDYTJiWTXyaDv3RNb3fBh0cSDqL3FMUdsVtqE66RM374ymSJn3NfAR2TLG6rxJhBWUr3JOd17BhMLFbjsRiho+sM+UbH+K2lA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FkR3X6rTJw7MzzdqfahNVCniR9QaQlKVwcMGAMpaNos=;
- b=nDa5Gt1qm2YHTBkNv42GZHiQbwg4s/WMI5jio9UUeHZ/gTfzTb9oV2kvpU+beyoNI1blxveOl9170xTEEMPJfA58NEKvU09u4fH/q8jC3HNyri0VtT7qge/GSaLPAqfgwOxZFt33yChbBtxOP9+dTglg2+c4YDVhkTwtq0Zook2i+q0Kx6Aaf/UiyAsXG1ktM00zeKH9IMzff3f/cT1lQDrvYu7hyIZ4glvRhgzeHpI0JXb2bAUYSu+e7LD1WJ9FdP45Gx2cNsIZS3bUBKedOHuhj1O5TT02ZawXcqxdiy2pRqdJaPLqXrWIVNVwtiUYD6G2XAGaiYfwLP6VLk04rQ==
+ bh=nFNXnfLiG1OlXl1+8bwGz6N1A3MpjwsUKkk1hoIKYuw=;
+ b=HUVENerx67wCutVIsPTUO4r/t/Yn8Mslk4HhfZk7Bay+u+2d4hAhSStq7WUxRf72w+ptXOl2rC5lwiJ0rEysAoqbZHg/rInmWvfVu3NPI2Xe0S+JT8Dl8c3YIx/hOKo/aKGdTIGeag9STpGIZRCztpQ3YZ1f2jQA1519KgyCHJQ=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.22; Mon, 13 Dec 2021 14:46:14 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::ecac:528f:e36c:39d0]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::ecac:528f:e36c:39d0%5]) with mapi id 15.20.4755.022; Mon, 13 Dec 2021
- 14:46:12 +0000
-Subject: Re: [PATCH 5.15 000/171] 5.15.8-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, f.fainelli@gmail.com,
-        stable@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20211213092945.091487407@linuxfoundation.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <9a5ae64c-ed9d-f192-3871-ff5fe3575a8a@nvidia.com>
-Date:   Mon, 13 Dec 2021 14:46:04 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0322.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:197::21) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
+ by BYAPR12MB3576.namprd12.prod.outlook.com (2603:10b6:a03:d8::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
+ 2021 14:47:54 +0000
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::4899:90ea:bb12:518]) by BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::4899:90ea:bb12:518%6]) with mapi id 15.20.4778.018; Mon, 13 Dec 2021
+ 14:47:53 +0000
+Date:   Mon, 13 Dec 2021 20:17:37 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
+ SD_NUMA spans multiple LLCs
+Message-ID: <YbddCcGJUpcPc8nS@BLR-5CG11610CF.amd.com>
+References: <20211210093307.31701-1-mgorman@techsingularity.net>
+ <20211210093307.31701-3-mgorman@techsingularity.net>
+ <YbcEE/mgIAhWuS+A@BLR-5CG11610CF.amd.com>
+ <20211213130131.GQ3366@techsingularity.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213130131.GQ3366@techsingularity.net>
+X-ClientProxiedBy: PN2PR01CA0046.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:22::21) To BYAPR12MB3286.namprd12.prod.outlook.com
+ (2603:10b6:a03:139::15)
 MIME-Version: 1.0
-Received: from [10.26.49.14] (195.110.77.193) by LO4P123CA0322.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:197::21) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Mon, 13 Dec 2021 14:46:09 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9172e23d-bd76-407f-be67-08d9be474ebf
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB54444AEA5D219D5A565A63C2D9749@CO6PR12MB5444.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: b8ffc31d-02c6-4478-66b8-08d9be478ab9
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3576:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB357659C86B037FD7D727A1A196749@BYAPR12MB3576.namprd12.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eZnJ5jZ3y45Rimv/t56Kxpo+nFA6lVIWA67A4wkf4yWwUIw173wC8a1c+8YUgim18GceW1tUWuLKQIC2FDhrxY2omWevkPR3nlHaTOnk687XMBrUvHN/w4FEPcrZatqJ3dRcC+4cW4iKiZtWchQyUUSc1WIMcj4HaK/K2gk1ByCXHlB2Q+w3APZV1rndJmEmFAcAUnOMxaKLkHLGBMSwKCXVHIR2wAySLSh0jZHcmgitl50wwhzyniCs6e76KT6z8xerwivodPGT5VrtP9gF9ZlQjC98b+vZtAE0Dv4yomK+558XdDvZk9IDTtk24MZw6mwIIoGSDIoL46y/qztbsLrpnwiOiNGXaP690PRS9JG+uGWYDqhwTxQhZSzOu7otvNC9ToooIMr73MnP/j6mMIOUTWOUOU/vVQL4kpIJIywsHTVvQor+2HWR4GOTtcorKDUbzqlGN+BahoHoOf29GY3nkGRNl6PC3uj1GDkW26xLlmAdrM9cjlXlyXqTZePLKKf5kc4fWhFc4t5RTINCq2T43s4H20ilNmx1yJElxtlUH1DDZ/K9RgzNxU6st54f/EmOyJq2GWwm5tlOLzAlgApC1SeGVZmv7U0Ki9QGoJLM4wR16H8Q3+blBIt1bmD1XyOShAf2e00XVgXX+10uznRw+vwFis4nmbpQX0x7UIvqDX3+G6qCn4JMCQh+cNzlshJdkLasLzNmf749t84oTV0sNuKcp7bipmw2JTKVkmzbhMfD0qFRJWv1HZ9v4C3V7/kaWeU7Mi85XNIaB9X+nrWevLg6HB3Wbh5RADevCZ5vZ91CmJ2pp/p5IDxDTxXRbVm4RJvnbmbsUDhW8wkcPq6F4y5FhpePN9TmNgmfg3Q=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(53546011)(8676002)(86362001)(966005)(31686004)(508600001)(316002)(83380400001)(31696002)(4326008)(16576012)(6486002)(2906002)(7416002)(66946007)(8936002)(6666004)(66556008)(55236004)(186003)(2616005)(66476007)(956004)(38100700002)(26005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 4VcQbYm/wwj+imErGoaqnCwM5xlvMYnOTr9ZsNMNvNoL+O9psISyjLRIAlNTdCvKKAPWkuqMjKtSnNl9mQlq2Lc9JTjt/f/sKyRTbjWtNb4/GBtwxB4+6RHWzfMZtAjSZobfs8NNGskUXwBOK4TXgpBQ7IBOBTSFR7l4NGcMUlNHLEPFSo7WHVhPtm4sJrE//xdBKKXeEYI3OpJjWrhzeMXv13USdzvdUsbPzrXqCcuaON3Yi1hF05/eSBOmfTKIeNr/CTk980JM91GvS3y1V9qaEM5jZI2aBeEenLdN6OWw1XYg0Vb55W8XY823YLHMGwmNpqXxXPxR4c1I7cCQwxS2Mt7pLVBp3abN6wzLYRTNHeFwymVFTgu0J8fYGhIXOa94bYTe5AlPGwCrHyj7y8vbc0pMxrGJ7xDm3iJyqwbcj2eDev77mPeB7OyQrr2SSOAFusBHxQ3LIi7a9X7PzPivM0C8W1LKBDznH4HHupT+RoGfHga+9CD9//u/LiNsNW1C+gRF6h3xrE/WP2xAtdzCZrq2+9WsBXD6sL2uXFfw7bwX1nTDgfxwRFsSsXBbHrYB9luXXCsHp6A3IGiHzCVzhRtkycuHvBv9/SjSEhSDr1m/aZbWZdEpj2Q+C3rLpgvw/MSfqbnV//Nt55jybQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(66476007)(38100700002)(6916009)(86362001)(7416002)(66556008)(4326008)(83380400001)(508600001)(6506007)(8676002)(6486002)(8936002)(2906002)(5660300002)(30864003)(6512007)(54906003)(186003)(316002)(26005)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVAzNUVaeW5zaE5DMDdKOUhrODM5a0RMK212WS9TZzNUckorNCtFUkUxbElF?=
- =?utf-8?B?VjB1eEtMWXIvdmtFNkJ6YUg5Z0tEU0VIbk90MGRvTDRORE5ER2d6cjhBMGRq?=
- =?utf-8?B?MGpOOEVTWkFGR1d6NEFrL2RYRFVSd0JxcW1yZGZlUjFEZ0ZSMElKdjgxVXNW?=
- =?utf-8?B?UHJZMEtvSmRkUExMbENtVlQvMkdJTDI3QnI3UE9Gb2p5Nkl1VmlmOGsvZXpG?=
- =?utf-8?B?ZnQzL1RTeFQ1Ty9aQ3FTOEg2VzBwY3pJZTVBQWUraFVaYnZhVmxSQzIyNzJE?=
- =?utf-8?B?S1o4cjJVenVYaWJZbWxyRDA1dER4OGYwT1pyWXJFUFcyWFcvTFBEM2gwVWt2?=
- =?utf-8?B?TGs3eTVCWnhsL1k4RmdySGkySGEzb0htRWlQUTFYdnNXTmVuV25wcS9DVW9P?=
- =?utf-8?B?dEhKUFNmdmltSmdIOS9kTjBFb1NtQlVVTWRvb3F1SExPT2tRYm1vcGlZOXZq?=
- =?utf-8?B?bzAzZVFMeXJqWEtGWFhHaGFFS0FZTllaaENhMnNzb3E3TUc1aVRXTktkY0Jx?=
- =?utf-8?B?MXorMy8wL1JBUnpvbitHNG13Z2htVkpFTzNsOW96SzN4NWJHWm5takE5TWli?=
- =?utf-8?B?WVVSa3VrYlQxcGk5cDJ4NkcxQThVV0JGWWx3R21BTTFWbmUvZ1lXVTdYRVYz?=
- =?utf-8?B?YU1McnVaL1R2c1A5OHdub2ZKbXlyUlJLenZEdmozRmtSczlzMHN4anF4NlYx?=
- =?utf-8?B?amU2dGlpWnVrT01tMUR3blZxNzlXekVpNjUvVml1N0pGandSYjI2eXFuSnVi?=
- =?utf-8?B?eEF0ZHAzSUlISVI0SkgvaU1va0ljU0dyb0dPOWhtNjN0bk5WV1k3aUZ6bThi?=
- =?utf-8?B?MlFVd1hibXBPanJnY09xSksrSjZwb2xGc2xBaWs1YlRNY3ZJQVNuS0Z3M2cx?=
- =?utf-8?B?eUFlOTEyaVZQN3Rsd2FGTGpmRTg2MjF5dkpHTUZRSEtXVWZUTDlwV0FKOEJU?=
- =?utf-8?B?WkpRN004UlV4cTFGblE5akYwQTVLdldiN2hDSFlvMWlDTVZVTkV5M1A2VDhT?=
- =?utf-8?B?QlBIdXpJcWpTVmVqRnZoNUR4UkZZUlhBeHdDemJJZUNYVWZyL0liSGhDenlh?=
- =?utf-8?B?SmpLM1ZGODhoTVh2d1VVT09PbVg1T1R4YUVvZ20wOWdzMHlqaXhKS3dlQ0RK?=
- =?utf-8?B?RVlkNW05Q3F6YS91STZlMFoxSWgrU1N2V2pIa0ZmNU5Xc0JKVjZ2cDIzeDZ0?=
- =?utf-8?B?VHlZMktjTVE3cHRGWlJzazlnUDNqTDVZUmpGeWdpNmFsanVnTjl6UWdaNjdn?=
- =?utf-8?B?RkJCUGt2N2RGWHdoMHEwVU9QQXpDK2wzSlVtVTdONnIwQWN3MEZWMWhtNmZo?=
- =?utf-8?B?MjkyYmtKT0xKcGY4NWZlU0FTRjlzZ3A1Mmx3R2NlUlBCYlVVcDZtbGd6dGtw?=
- =?utf-8?B?Q2pkRWEwbXplNndEL1pxVDI1V09LUG4vZ2tRakR4MEVNMXUwVEJvbkRwOFNX?=
- =?utf-8?B?dytJRWlLUHpEb2NWdk4xM3JkS0F0dUw1eUhTN1VzWk9jVXhKcUlyczNqb2ZN?=
- =?utf-8?B?Qk1SR0Zqa3dBQ09FRVdVeGZZN0lqOEliblpIWHd4NFdIT2xqMnVUY3NNL2tY?=
- =?utf-8?B?QXBheHNJcWtGVUU1M1ZpOUNtMVBBTFJTSDBxdisxL3l0VTRTN21lOWNjczQ1?=
- =?utf-8?B?bkZaMFpaRUY0VkxRRExPdGo5MlRDeHR0TVkyYWJRc1JXdk53bGJuRDN0K2lH?=
- =?utf-8?B?bTNhbjMyRkgrT0RIVmtrVURqU0hyc2RaTFI1N2lDa1pLeGM2Yy9XSXp5ZVNk?=
- =?utf-8?B?dlhDTkJ6Zms1bEV6cXBWaklwRGhRTUdEZFdXL1pZQ0tGOUtIc2VrcFFicm5K?=
- =?utf-8?B?Z0x6Y3gyQnB1Ymd4NUhEaithVmc1VDJ1RlQ5Ylc5VFJaRXFkUVk0NCtDS2Mz?=
- =?utf-8?B?Q282QWdoRzRlVy94ZmpSRUpzN2RVMDR5ZUczcnBROE5MdlBnQ0hYczBOZ2xr?=
- =?utf-8?B?RWhVUW11akt2OEg2OWUwTGkvUXVNbzN4QUFJcGdXWnM2VWQ2a3BIWDB3Z3JN?=
- =?utf-8?B?d2dKcWxwYmRCOU9lT09pR3JJUW9SdHo3T2JJdXFDdS8rZ1dmc1pUMGtUQm9U?=
- =?utf-8?B?TXEvTzJ6WDJrTWgwaHk0M2o1MGttaGFRMWhDTytES3duRWtoK1QzQm1CY3Z6?=
- =?utf-8?B?czJ1UmFKdzBFZTFDSERvQnJPc1V0YllxeGpicVNVWGZBUUlMTDhURDlIaURQ?=
- =?utf-8?Q?BMSjC79zx4EQxPjnVJpQWmc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9172e23d-bd76-407f-be67-08d9be474ebf
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R03hRazOsxlp6O6xdCFy4/dJnSJr+8Bz4AHGalJ9vcryb29sw5g6+sYKte6y?=
+ =?us-ascii?Q?oWo5TgpLE7SHO3VSyDG5ITrcXpmLo/W5jftJeb6TpC3VuUHuJvYC4vFVmKTR?=
+ =?us-ascii?Q?NVJ8inTog81nlsffEFpF8bA2ExMHUTPao4XIfmlaYK77TAIpIu0xRZDa45/g?=
+ =?us-ascii?Q?5SQSr8FRvrtR19mJSeKSBFXVWWGzNVCLfs6kj0qWPYmRyglDriFrG+IDN2Ma?=
+ =?us-ascii?Q?yINH+rFWtckPFKf/EwqA0VOnnZoC48FjjE4+i05DZJu4XWPV4/Izh2pdx9a1?=
+ =?us-ascii?Q?mxHnvOR65zSjYiKNrQiN+vdhdfLys1pWPqHPJ3q69Hb/YV2ZT7BBcXsXp6Td?=
+ =?us-ascii?Q?XmMH2YrZxkPBjaSwKk/iZmwgEKb2YavB4+HTtAdidTVeCgHRTakNBRBPNcHM?=
+ =?us-ascii?Q?z9kaau//nkI7rYFfQ2q8LST6N9naVfkXqbwxOrqECVJ2TCXnU99/7feZN6fs?=
+ =?us-ascii?Q?I8gD8ojgWg1Pn2JRm/rwleoGbwM0LelYb0ZJ7HsQzugP63GdCTUQlSHn/KOo?=
+ =?us-ascii?Q?hTsd9otSqWeWSZ4g5L1QKZ+yUpqPs45wmlRn9xL+TVyMa5a8PPuTiH4yt8eT?=
+ =?us-ascii?Q?xEtrLr4rOV7qFraRZNdfO2FD4y57FfpYZGeX9dg4fo384iSEvU9Q7ENrtY1+?=
+ =?us-ascii?Q?/Q2Cg+GwmrCQ3AVYPMDt+9aOCCxbi2OVTS6kXwdNTdDI6DNNi6sKPrjFTiZK?=
+ =?us-ascii?Q?7RmGxEG9kU/HlxTHBbtCBvhRsWeDNrsSW+PUts+u2g6xV/VtY6JT1Gn1S3Fr?=
+ =?us-ascii?Q?3roeG+GE3doBROjyEn9FkOnetE7ON5PO712SXLCvXkNXXMnADsNZ0GYbGxkG?=
+ =?us-ascii?Q?KVfPh7MJJXD0zT1Tc7CNEJQm4lGTOEhzwa9Io1EGO173cXxPNu0v0M1GTfpS?=
+ =?us-ascii?Q?JT+Xxz0vwG93H1+swFuWTVvrdpessQLvnsgIhAf+XU5XlOXcANYqsJj+0nkp?=
+ =?us-ascii?Q?BE3+P8nTE6+AjZMHL4fx6ika+OqrwqUiJsCBqszNahj+c5CoXWm6HwZMiS1p?=
+ =?us-ascii?Q?/iiIMFBvOTtsZmmN5JFJKpNmvhy09woPd8RWnph6h/kxApLVq3rDobEEQ3Mt?=
+ =?us-ascii?Q?Ork6uOk02cQXHGMSiCggMB1SEKvrjMUBMxmhLznAs2v89z2qIMwBFXlgI1cj?=
+ =?us-ascii?Q?1n/lzZWm9NeheN6Z/ENmC6zM3dhgO8Hi6kzpX3LL2Lcu/KMfJmNys49yDfMO?=
+ =?us-ascii?Q?eXzJr9nIN4TYNONRBD4Sk3/Wahtd5jv8N6jzx1Zovm8eD2SXphT4WNLU/AOB?=
+ =?us-ascii?Q?hwsEU3S7DmbJa4MBgIVhSrcwrLXFRAGli6xXrKZ2Ei9M/34X1feaHvOixUva?=
+ =?us-ascii?Q?lbkBF+vEMSgCPK3/ClkDbyubOVrTd+MFsCvCIqcD5ObGCyum3keqyh1FOhCd?=
+ =?us-ascii?Q?xpqny9C9QY1OxzxOMWSwEaTHSzKBn7BVlJqq7aqH+g+Mm+D7oxCenhbEXnK/?=
+ =?us-ascii?Q?glillwjqoMMfuKdi9wvWH5lQNUA9LlaxTQEBZAmIHknauEL2S94d7GMQVPhk?=
+ =?us-ascii?Q?BBQZrZ0q1FOWxPmHaTlRPe3U6fZk5IbW4+8luimF6zw7+b3e/T482kAylsZO?=
+ =?us-ascii?Q?B6yinF2HZyngUJ5tzoZBPiItehPENM+d2vlPoMaMxOLVISq6MUuRGSqGI8ve?=
+ =?us-ascii?Q?b67IkwnQSzfS7dgYRCPdAyA=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8ffc31d-02c6-4478-66b8-08d9be478ab9
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 14:46:12.6155
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 14:47:53.5715
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cpZnl07WkfOtLXGYaNuM70IMfqp4E2DSx4UNxPsCCsdb1zw8lW4t8YJQmjN/O/cMf/yM8b0olLvS0W7X9vUTQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5444
+X-MS-Exchange-CrossTenant-UserPrincipalName: lWFtw+RY6XP9z2Lcxzrudu3ApHEWZLHYZaI+JT9JMcZv+AxN6pwwIS8/f7pdDaKitxVJcQvqaZ5PNRzn7QwUFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3576
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Mel,
 
-On 13/12/2021 09:28, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.8 release.
-> There are 171 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Dec 13, 2021 at 01:01:31PM +0000, Mel Gorman wrote:
+> On Mon, Dec 13, 2021 at 01:58:03PM +0530, Gautham R. Shenoy wrote:
+> > > On a Zen3 machine running STREAM parallelised with OMP to have on instance
+> > > per LLC the results and without binding, the results are
+> > > 
+> > >                             5.16.0-rc1             5.16.0-rc1
+> > >                                vanilla       sched-numaimb-v4
+> > > MB/sec copy-16    166712.18 (   0.00%)   651540.22 ( 290.82%)
+> > > MB/sec scale-16   140109.66 (   0.00%)   382254.74 ( 172.83%)
+> > > MB/sec add-16     160791.18 (   0.00%)   623073.98 ( 287.51%)
+> > > MB/sec triad-16   160043.84 (   0.00%)   633964.52 ( 296.12%)
+> > 
+> > 
+> > Could you please share the size of the stream array ? These numbers
+> > are higher than what I am observing.
+> > 
 > 
-> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> Anything received after that time might be too late.
+> 512MB
+
+Thanks, I will try with this one.
+
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.8-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+> > > @@ -9280,19 +9286,14 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+> > >  	}
+> > >  }
+> > >  
+> > > -#define NUMA_IMBALANCE_MIN 2
+> > > -
+> > >  static inline long adjust_numa_imbalance(int imbalance,
+> > > -				int dst_running, int dst_weight)
+> > > +				int dst_running, int dst_weight,
+> > > +				int imb_numa_nr)
+> > >  {
+> > >  	if (!allow_numa_imbalance(dst_running, dst_weight))
+> > >  		return imbalance;
+> > >
+> > 
+> > if (4 * dst_running >= dst_weight) we return imbalance here. The
+> > dst_weight here corresponds to the span of the domain, while
+> > dst_running is the nr_running in busiest.
+> > 
 > 
-> thanks,
+> Yes, once dst_running is high enough, no imbalance is allowed. In
+> previous versions I changed this but that was a mistake and in this
+> version, the threshold where imbalance is not allowed remains the same.
 > 
-> greg k-h
+> > On Zen3, at the top most NUMA domain, the dst_weight = 256 across in
+> > all the configurations of Nodes Per Socket (NPS) = 1/2/4. There are
+> > two groups, where each group is a socket. So, unless there are at
+> > least 64 tasks running in one of the sockets, we would not return
+> > imbalance here and go to the next step.
+> > 
+> 
+> Yes
+> 
+> > 
+> > > -	/*
+> > > -	 * Allow a small imbalance based on a simple pair of communicating
+> > > -	 * tasks that remain local when the destination is lightly loaded.
+> > > -	 */
+> > > -	if (imbalance <= NUMA_IMBALANCE_MIN)
+> > > +	if (imbalance <= imb_numa_nr)
+> > 
+> > imb_numa_nr in NPS=1 mode, imb_numa_nr would be 4. Since NUMA domains
+> > don't have PREFER_SIBLING, we would be balancing the number of idle
+> > CPUs. We will end up doing the imbalance, as long as the difference
+> > between the idle CPUs is at least 8.
+> > 
+> > In NPS=2, imb_numa_nr = 8 for this topmost NUMA domain. So here, we
+> > will not rebalance unless the difference between the idle CPUs is 16.
+> > 
+> > In NPS=4, imb_numa_nr = 16 for this topmost NUMA domain. So, the
+> > threshold is now bumped up to 32.
+> > 
+> > >  		return 0;
+> > 
+> > 
+> > 
+> > >  
+> > >  	return imbalance;
+> > > @@ -9397,7 +9398,8 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+> > >  		/* Consider allowing a small imbalance between NUMA groups */
+> > >  		if (env->sd->flags & SD_NUMA) {
+> > >  			env->imbalance = adjust_numa_imbalance(env->imbalance,
+> > > -				busiest->sum_nr_running, env->sd->span_weight);
+> > > +				busiest->sum_nr_running, env->sd->span_weight,
+> > > +				env->sd->imb_numa_nr);
+> > >  		}
+> > >  
+> > >  		return;
+> > > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> > > index d201a7052a29..bacec575ade2 100644
+> > > --- a/kernel/sched/topology.c
+> > > +++ b/kernel/sched/topology.c
+> > > @@ -2242,6 +2242,43 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
+> > >  		}
+> > >  	}
+> > >  
+> > > +	/*
+> > > +	 * Calculate an allowed NUMA imbalance such that LLCs do not get
+> > > +	 * imbalanced.
+> > > +	 */
+> > > +	for_each_cpu(i, cpu_map) {
+> > > +		unsigned int imb = 0;
+> > > +		unsigned int imb_span = 1;
+> > > +
+> > > +		for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
+> > > +			struct sched_domain *child = sd->child;
+> > > +
+> > > +			if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
+> > > +			    (child->flags & SD_SHARE_PKG_RESOURCES)) {
+> > > +				struct sched_domain *top = sd;
+> > 
+> > 
+> > We don't seem to be using top anywhere where sd may not be used since
+> > we already have variables imb and imb_span to record the
+> > top->imb_numa_nr and top->span_weight.
+> > 
+> 
+> Top could have been removed but we might still need it.
+> 
+> > 
+> > > +				unsigned int llc_sq;
+> > > +
+> > > +				/*
+> > > +				 * nr_llcs = (top->span_weight / llc_weight);
+> > > +				 * imb = (child_weight / nr_llcs) >> 2
+> > 
+> > child here is the llc. So can we use imb = (llc_weight / nr_llcs) >> 2.
+> > 
+> 
+> That is be clearer.
+> 
+> > > +				 *
+> > > +				 * is equivalent to
+> > > +				 *
+> > > +				 * imb = (llc_weight^2 / top->span_weight) >> 2
+> > > +				 *
+> > > +				 */
+> > > +				llc_sq = child->span_weight * child->span_weight;
+> > > +
+> > > +				imb = max(2U, ((llc_sq / top->span_weight) >> 2));
+> > > +				imb_span = sd->span_weight;
+> > 
+> > On Zen3, child_weight (or llc_weight) = 16. llc_sq = 256.
+> >    with NPS=1
+> >       top = DIE.
+> >       top->span_weight = 128. imb = max(2, (256/128) >> 2) = 2. imb_span = 128.
+> > 
+> >    with NPS=2
+> >       top = NODE.
+> >       top->span_weight = 64. imb = max(2, (256/64) >> 2) = 2. imb_span = 64.
+> > 
+> >    with NPS=4      
+> >       top = NODE.
+> >       top->span_weight = 32. imb = max(2, (256/32) >> 2) = 2. imb_span = 32.
+> > 
+> > On Zen2, child_weight (or llc_weight) = 8. llc_sq = 64.
+> >    with NPS=1
+> >       top = DIE.
+> >       top->span_weight = 128. imb = max(2, (64/128) >> 2) = 2. imb_span = 128.
+> > 
+> >    with NPS=2
+> >       top = NODE.
+> >       top->span_weight = 64. imb = max(2, (64/64) >> 2) = 2. imb_span = 64.
+> > 
+> >    with NPS=4      
+> >       top = NODE.
+> >       top->span_weight = 32. imb = max(2, (64/32) >> 2) = 2. imb_span = 32.
+> > 
+> > 
+> > > +
+> > > +				sd->imb_numa_nr = imb;
+> > > +			} else {
+> > > +				sd->imb_numa_nr = imb * (sd->span_weight / imb_span);
+> > > +			}
+> > 
+> > On Zen3,
+> >    with NPS=1
+> >         sd=NUMA, sd->span_weight = 256. sd->imb_numa_nr = 2 * (256/128) = 4.
+> > 
+> >    with NPS=2
+> >         sd=NUMA, sd->span_weight = 128. sd->imb_numa_nr = 2 * (128/64) = 4
+> > 	sd=NUMA, sd->span_weight = 256. sd->imb_numa_nr = 2 * (256/64) = 8
+> > 
+> >    with NPS=4
+> >         sd=NUMA, sd->span_weight = 128. sd->imb_numa_nr = 2 * (128/32) = 8
+> > 	sd=NUMA, sd->span_weight = 256. sd->imb_numa_nr = 2 * (256/32) = 16
+> > 
+> > 
+> > For Zen2, since the imb_span and imb values are the same as the
+> > corresponding NPS=x values on Zen3, the imb_numa_nr values are the
+> > same as well since the corresponding sd->span_weight is the same.
+> > 
+> > If we look at the highest NUMA domain, there are two groups in all the
+> > NPS configurations. There are the same number of LLCs in each of these
+> > groups across the different NPS configurations (nr_llcs=8 on Zen3, 16
+> > on Zen2) . However, the imb_numa_nr at this domain varies with the NPS
+> > value, since we compute the imb_numa_nr value relative to the number
+> > of "top" domains that can be fit within this NUMA domain. This is
+> > because the size of the "top" domain varies with the NPS value. This
+> > shows up in the benchmark results.
+> > 
+> 
+> This was intentional to have some scaling but based on your results, the
+> scaling might be at the wrong level.
+
+Ok. 
 
 
-No new regressions.
+> 
+> > 
+> > 
+> > The numbers with stream, tbench and YCSB +
+> > Mongodb are as follows:
+> > 
+> > 
+> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > Stream with 16 threads.
+> > built with -DSTREAM_ARRAY_SIZE=128000000, -DNTIMES=10
+> > Zen3, 64C128T per socket, 2 sockets,
+> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > NPS=1
+> > Test:     tip/sched/core                 mel-v3                    mel-v4
+> >  Copy:    113716.62 (0.00 pct)     218961.59 (92.55 pct)     217130.07 (90.93 pct)
+> > Scale:    110996.89 (0.00 pct)     216674.73 (95.20 pct)     220765.94 (98.89 pct)
+> >   Add:    124504.19 (0.00 pct)     253461.32 (103.57 pct     260273.88 (109.04 pct)
+> > Triad:    122890.43 (0.00 pct)     247552.00 (101.44 pct     252615.62 (105.56 pct)
+> > 
+> > 
+> > NPS=2
+> > Test:     tip/sched/core                 mel-v3                     mel-v4
+> >  Copy:    58217.00 (0.00 pct)      204630.34 (251.49 pct)     191312.73 (228.62 pct)
+> > Scale:    55004.76 (0.00 pct)      212142.88 (285.68 pct)     175499.15 (219.06 pct)
+> >   Add:    63269.04 (0.00 pct)      254752.56 (302.64 pct)     203571.50 (221.75 pct)
+> > Triad:    62178.25 (0.00 pct)      247290.80 (297.71 pct)     198988.70 (220.02 pct)
+> > 
+> > NPS=4
+> > Test:     tip/sched/core                 mel-v3                     mel-v4
+> >  Copy:    37986.66 (0.00 pct)      254183.87 (569.13 pct)     48748.87 (28.33 pct)
+> > Scale:    35471.22 (0.00 pct)      237804.76 (570.41 pct)     48317.82 (36.21 pct)
+> >   Add:    39303.25 (0.00 pct)      292285.20 (643.66 pct)     54259.59 (38.05 pct)
+> > Triad:    39319.85 (0.00 pct)      285284.30 (625.54 pct)     54503.98 (38.61 pct)
+> > 
+> 
+> At minimum, v3 is a failure because a single pair of communicating tasks
+> were getting split across NUMA domains and the allowed numa imbalance
+> gets cut off too early because of the change to allow_numa_imbalance.
+> So while it's a valid comparison, it's definitely not the fix.
 
-Test results for stable-v5.15:
-     10 builds:	10 pass, 0 fail
-     28 boots:	28 pass, 0 fail
-     114 tests:	108 pass, 6 fail
+v3 is definitely not a fix. I wasn't hinting at that. It was just to
+point out the opportunity that we have.
 
-Linux version:	5.15.8-rc1-g5eac0dfa371b
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                 tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                 tegra20-ventana, tegra210-p2371-2180,
-                 tegra210-p3450-0000, tegra30-cardhu-a04
 
-Test failures:	tegra194-p2972-0000: boot.py
-                 tegra194-p2972-0000: tegra-audio-boot-sanity.sh
-                 tegra194-p2972-0000: tegra-audio-hda-playback.sh
-                 tegra194-p3509-0000+p3668-0000: devices
-                 tegra194-p3509-0000+p3668-0000: tegra-audio-boot-sanity.sh
-                 tegra194-p3509-0000+p3668-0000: tegra-audio-hda-playback.sh
+> 
+> Given how you describe NPS, maybe the scaling should only start at the
+> point where tasks are no longer balanced between sibling domains. Can
+> you try this? I've only boot tested it at this point. It should work for
+> STREAM at least but probably not great for tbench.
 
-Still waiting for one more fix to be merged upstream [0]. I
-checked on this today and looks like it was missed, but has
-now been picked up. So hopefully it will land soon.
+Thanks for the patch. I will queue this one for tonight.
 
-Cheers
-Jon
 
-[0] https://lore.kernel.org/linux-arm-kernel/20211119170714.BQFJ7tn39YCcxjxErR9lKorUx6FTJ9inZFOmDd1zR8w@z/T/
+> 
+> 
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index bacec575ade2..1fa3e977521d 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -2255,26 +2255,38 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
+>  
+>  			if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
+>  			    (child->flags & SD_SHARE_PKG_RESOURCES)) {
+> -				struct sched_domain *top = sd;
+> +				struct sched_domain *top, *top_p;
+>  				unsigned int llc_sq;
+>  
+>  				/*
+> -				 * nr_llcs = (top->span_weight / llc_weight);
+> -				 * imb = (child_weight / nr_llcs) >> 2
+> +				 * nr_llcs = (sd->span_weight / llc_weight);
+> +				 * imb = (llc_weight / nr_llcs) >> 2
+>  				 *
+>  				 * is equivalent to
+>  				 *
+> -				 * imb = (llc_weight^2 / top->span_weight) >> 2
+> +				 * imb = (llc_weight^2 / sd->span_weight) >> 2
+>  				 *
+>  				 */
+>  				llc_sq = child->span_weight * child->span_weight;
+>  
+> -				imb = max(2U, ((llc_sq / top->span_weight) >> 2));
+> -				imb_span = sd->span_weight;
+> -
+> +				imb = max(2U, ((llc_sq / sd->span_weight) >> 2));
+>  				sd->imb_numa_nr = imb;
+> +
+> +				/*
+> +				 * Set span based on top domain that places
+> +				 * tasks in sibling domains.
+> +				 */
+> +				top = sd;
+> +				top_p = top->parent;
+> +				while (top_p && (top_p->flags & SD_PREFER_SIBLING)) {
+> +					top = top->parent;
+> +					top_p = top->parent;
+> +				}
+> +				imb_span = top_p ? top_p->span_weight : sd->span_weight;
+>  			} else {
+> -				sd->imb_numa_nr = imb * (sd->span_weight / imb_span);
+> +				int factor = max(1U, (sd->span_weight / imb_span));
+> +
+> +				sd->imb_numa_nr = imb * factor;
+>  			}
+>  		}
+>  	}
 
--- 
-nvpublic
+--
+Thanks and Regards
+gautham.

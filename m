@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A802D473019
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D39547301C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237282AbhLMPHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S239922AbhLMPHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbhLMPG5 (ORCPT
+        with ESMTP id S235390AbhLMPHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:06:57 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F21BC061574;
-        Mon, 13 Dec 2021 07:06:57 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w1so52985799edc.6;
-        Mon, 13 Dec 2021 07:06:56 -0800 (PST)
+        Mon, 13 Dec 2021 10:07:15 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B2BC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:07:15 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id r5so14818557pgi.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:07:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D+OM0ZcmedPw5LKW8sfyRrJjP9nbgID1f4xqcJPjBqg=;
-        b=dGtwxoABqgZdJ5QjvI4V8UtjlNuiMAQ3vWwTGuWwrK2drWzZCZZI4vGHWuI/wD16Oc
-         qjVBzujgQpZh89ulOq87nBrULvmABQfl84GIiSsuEj7f6TdCz1d1MaVVIZ7WTrb3A/6I
-         rn3IRSdzHiebOeQlBeF5y+8oCt5tSdZft76fxgcwb0+aA8LBbcii2IIm1Q8C8tnIQssH
-         /xUUITLAvM5UU3OqKHgsjhT6gfreOyXB5ZG0KG+T7X1muJl6xVswp8cxIFrvXl+IEYsV
-         e+GhLek8C7BCKwPErAvxBMW9Qm3Ytrnaf+/5pRJT/x1yeheWfpqI5aZSdRddJoZD5QZw
-         /v7g==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wmuKU/yN3EGitfvXJk13tFIWVK/CDHyZIX1jbSDni5c=;
+        b=Wyf7pQ5tM2bSl793eOKIJambJoHqd6b4vqFrOm38l+0hoGoEuC+dGzCaO17DzxicuG
+         U7+3vdNWRTjZwLwlTRzalAUkklsdXKVYZQ8RBR6HckYZYGmrtMWrOCtlwdfxaEOhIa0m
+         BYWZi2Vc6VpIWwhknQRwP+tcYSuWooPXFVo5M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D+OM0ZcmedPw5LKW8sfyRrJjP9nbgID1f4xqcJPjBqg=;
-        b=YePVV+Mo4CYt8qxaIL6Q3/Ud4HeL8VJfkONogbozdIR51WiJaDX9YdWqxReP3Ez1rb
-         NainbYvt9cSXNDLEcFbtJbyYmub4F6u62LnIb6qXcamECgXzRMzdCHWTg6NoFXVZneJp
-         ZQBJj8/V8dOtkIfImNzzCFPEJ32rBwPXt98B1furkFinhF/szpXDpiUnKnM56pPltUps
-         lHq2J7V0xKowbiRsPPJKg4ADvbWVh2Lx3K2C5YxUqgLsUlPfb27D4B3tRnIdPdRU801N
-         pXP/xunt+oTaMZ/1G+tCCuR05Ad3EYskbybsRt9kWWqOxJy9szcu1IIIY3fjv1hcc9K4
-         nN6g==
-X-Gm-Message-State: AOAM531tZ3OsSLhdEctYW49CZ7xGSfT6Ib6eWgMHjCO/hqBFhoHK8MPF
-        KDAFU5v1ji8GvneGxvl5LPo=
-X-Google-Smtp-Source: ABdhPJwjITmETfb+FsdYrE5cod1vvUS9pztM2qIpHDo9t+iIrJaI3IyW7a5Kw0VCSn9jSjeOKWFbqA==
-X-Received: by 2002:a17:907:7250:: with SMTP id ds16mr44384421ejc.54.1639408011892;
-        Mon, 13 Dec 2021 07:06:51 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id cq19sm6308649edb.33.2021.12.13.07.06.50
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wmuKU/yN3EGitfvXJk13tFIWVK/CDHyZIX1jbSDni5c=;
+        b=t6zLHM64aC0ryQHZ7WAyafvBl8hBYbFecpu6PuAgqXGBQjoL456YwADuT0EmtcpnSd
+         PGwST4+jPOsshBp0BVy03xgq6qnVvpnA2k/7YPtVp/aq+DN1wWBAuIGJGbA0+POpaf2a
+         TniJxaH8uTNZfZ4YPsMpnOl+/lDw4iTcHulWknnJBvIt9jCae1/RVuH9u//lfF8Eq8WL
+         lk6eSKTxptdmxoXFWScVYUym+w4QPIaj4fSs/YN3kIUOOIIBD9YRgD/omzzBJ5nYP2Zw
+         wYrxi4TGEidyE9jjJQ4SGwk9ZOzWssU27CA9tBweP/anB9iaLdPjj6mnRbo7DhDyx49y
+         SHpQ==
+X-Gm-Message-State: AOAM531lnZ9SkJwai/flDBKbPIm3uErq5h40ROYw2Pg9b559dJj6Fdnt
+        L7wgsc8Eo0H/n6fgapX4PspJBw==
+X-Google-Smtp-Source: ABdhPJwJzjkTGVQC+Anjfc+ZBv4CymnaW1VG7s5Ay3avO0gZJy0il2SCP3V7uulVVkwcuf6gP0/c7g==
+X-Received: by 2002:a63:110d:: with SMTP id g13mr32658100pgl.315.1639408034904;
+        Mon, 13 Dec 2021 07:07:14 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:f4ab:25c3:a317:92ed])
+        by smtp.gmail.com with UTF8SMTPSA id j7sm13235054pfu.164.2021.12.13.07.07.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 07:06:51 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <452f3642-04fd-aa32-920e-5ad5925c0c91@redhat.com>
-Date:   Mon, 13 Dec 2021 16:06:49 +0100
+        Mon, 13 Dec 2021 07:07:14 -0800 (PST)
+Date:   Mon, 13 Dec 2021 07:07:11 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Panicker Harish <quic_pharish@quicinc.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        quic_hemantg@quicinc.com, linux-arm-msm@vger.kernel.org,
+        quic_bgodavar@quicinc.com, rjliao@codeaurora.org,
+        hbandi@codeaurora.org, abhishekpandit@chromium.org,
+        mcchou@chromium.org, quic_saluvala@quicinc.com
+Subject: Re: [PATCH v2] Bluetooth: hci_qca: Stop IBS timer during BT OFF
+Message-ID: <Ybdhn8mPrPBp397r@google.com>
+References: <1639373496-28009-1-git-send-email-quic_pharish@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 0/2] KVM: x86: Fix dangling page reference in TDP MMU
-Content-Language: en-US
-To:     Ignat Korchagin <ignat@cloudflare.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>, bgardon@google.com,
-        dmatlack@google.com, stevensd@chromium.org,
-        kernel-team <kernel-team@cloudflare.com>
-References: <20211213112514.78552-1-pbonzini@redhat.com>
- <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1639373496-28009-1-git-send-email-quic_pharish@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 14:43, Ignat Korchagin wrote:
-> The only difference I noticed is the presence of __tdp_mmu_set_spte
-> between zap_gfn_range and __handle_changed_spte, which is absent from
-> the original stacktrace.
+On Mon, Dec 13, 2021 at 11:01:36AM +0530, Panicker Harish wrote:
+> This change stops IBS timers during BT OFF.
 
-That's just a difference in inlining decisions, so it doesn't really matter.
+nit: avoid thing like 'this patch ...' in commit messages, you could just
+say 'Stop IBS timers while Bluetooth is off.
 
-Let's see if Sean has some more ideas or finds something obviously wrong 
-in my patch.
+> Signed-off-by: Panicker Harish <quic_pharish@quicinc.com>
 
-Paolo
+Looks like this should have a ´Fixes' tag to make sure it lands in the
+relevant -stable trees. Commit 3e4be65eb82c ("Bluetooth: hci_qca: Add
+poweroff support during hci down for wcn3990") would probably be a
+suitable commit for that.

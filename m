@@ -2,174 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B67AE472E76
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BF7472E97
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238673AbhLMOEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:04:34 -0500
-Received: from mail-mw2nam08on2047.outbound.protection.outlook.com ([40.107.101.47]:15974
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232193AbhLMOEb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:04:31 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UJeMf0AdzWz10t5c2AvMM1Qy1mBzi7y6w9yF6YR7W9s7OqoioCPOiOG/F9x6k3Y8D/IJWlvR6o7kfCUdV6BZnXMubc/kgRosZgWRtpEZAJs3SBQFt6Rl1OVSnFM5jPUNgBfdrhywBW9wBYk85cfVWO3B9JLSxNrJqy3lBRqKzAGPL31J74o2HPT3P2oLJiGuIp9YiNA55QzC81zbiesTZvibz3F5tBH+VV0W9U2jsRGvPjEKTu8YMIEKZpMniLnw6bKRDecw/jMYKxrgTJM6m2tETTeQixcolHFBeBEONnDbtUQL4nDk3bORQVC2An9kCB8U+LlwQv+UQT5rQC4V0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sFR2qCBgO35DCCzARlo9F87PegthBCAuSA/4C+N7+3I=;
- b=NfL72K7eN36HpcftECMCu7TLOZyDq4ev/lJSPxStofkbT1H614pn9t3ODoGu2+lN7dUetVhTVt+214RqxtkR+txv5Lu115zYcq1rKfl0W2PK3/gyXFKTeGPP1jiBTyJVzhsK9lLS8Q1xk3LYazgGGxPYZtIY68oWDw0rggdRlQzbg/dercs36OIqCfMEx8a1s/B1Mooq+rMI3hzGG86Trui2YYnNN+Ae/75FaH9nRQ8LYVmKNOrqKBHQ5e6/ISonKo717FAkHWR/XaRka7eRDxi6i7N2zpnDUdxhna+KPkoJte8p2EfLDHiteQc9BAQ3KuomJgZ1eMDyVXU2aUZ2yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sFR2qCBgO35DCCzARlo9F87PegthBCAuSA/4C+N7+3I=;
- b=TXX9Mht1d36cVmT/6hl5jKBzi00it1UcMsA9GMYLR4tyNeOsz+WWqPHOHHQmAPNmO4iuMEXJxTtTA+hZvLC7OErlNlYBKZ51cw9uh+0UxaAkMv69EShaqSEdUkbwjlT3XFvPjyn6cdWQ6tmxBEMt2CpRk2DDPJIAaS2kOQkok26tYsKblmP6lSsUuPLatXcoFy6Uw2MPaui8xyhReddwyiclVkGKEqjNe8/j649Wsfw56T1Gj1Y0EJ3Du+vrXFLjtlRTKLGOvTBScLf1GZqZabDFS6ZhJw4BtXm6pitMLqVHY9cXFuj2abwTbNDMWDpKNGeY+CqjnBm1SZBcy3lv9g==
-Received: from BL1PR12MB5048.namprd12.prod.outlook.com (2603:10b6:208:30a::17)
- by BL1PR12MB5063.namprd12.prod.outlook.com (2603:10b6:208:31a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
- 2021 14:04:29 +0000
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5048.namprd12.prod.outlook.com (2603:10b6:208:30a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Mon, 13 Dec
- 2021 14:04:29 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 14:04:29 +0000
-Date:   Mon, 13 Dec 2021 10:04:27 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        id S238744AbhLMOKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:10:48 -0500
+Received: from mga14.intel.com ([192.55.52.115]:3399 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238725AbhLMOKs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 09:10:48 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238961836"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="238961836"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 06:05:41 -0800
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="609028967"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 06:05:31 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mwlwO-005dxK-9w;
+        Mon, 13 Dec 2021 16:04:32 +0200
+Date:   Mon, 13 Dec 2021 16:04:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Tony Lindgren <tony@atomide.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Thierry Reding <treding@nvidia.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-unisoc@lists.infradead.org,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Keerthy <j-keerthy@ti.com>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
         Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V3 06/35] powerpc/pseries/msi: Use PCI device properties
-Message-ID: <20211213140427.GZ6385@nvidia.com>
-References: <20211210221642.869015045@linutronix.de>
- <20211210221813.556202506@linutronix.de>
+        Kevin Hilman <khilman@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v1 1/3] gpio: Get rid of duplicate of_node assignment in
+ the drivers
+Message-ID: <YbdS8E6lHGzWniba@smile.fi.intel.com>
+References: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
+ <CAMRc=Meve=W3yvPmakFap-s6cOY1GUq7c1VjJE2dEH4f0+shag@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210221813.556202506@linutronix.de>
-X-ClientProxiedBy: CH2PR14CA0036.namprd14.prod.outlook.com
- (2603:10b6:610:56::16) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 98e7e462-cd68-4183-9f08-08d9be417a7f
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5048:EE_|BL1PR12MB5063:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB50480FC48CED472F62D2B0C4C2749@BL1PR12MB5048.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Vod+DPCiFPAdYsVFh2/PPcMbts7bAuPrkNT5362HkhU3xCcdE27qtR8MvrIkJ4ZWju/zlX0YTDw5CK8B+KvfpLNcNHjqaZKWG9cwXRuQ5ooo/w+tN1JvorL5tqJdmWZdFACIxs4r0TtlQtNaZkvMrX131Pc9/6fT4PSr1fER11EM5cNNlpegCHznJJ6nIuK+dn/AkJNe3M5i/2fo938X0KYcHtyzrcxCAvIQGtCa1wK9yii/Y0TYVKp9aEar2upyCvscs3N7ylRYNblOdXIarVhrtqaA3kYYsCgLJnBX5Vs2JY11V50noqMm2d7c8SDG7UlEKvmyQ/Vhh0PwJM5bzHSmmn+D3jz/ioZtXVE2hIeN7PaD20eUL/Ev3VkIhe9hjPw9MBocpydMcTklxfep+dwz4zAYveAqWV9HXwexfXaPLyr5eNc22zVOF/doJj7PU7Q8eMMCShwq3eBNFgG/+SvMfmBbrC5QaXWr49B62+nhkL060U1K4qjW/vCvcIPWcGA/aILTliDOxoY7ceH7g5NuiOfjYjNBZGKbHTfAkgds+c0ceBHNX6isOESB3oIwh3g76vv7Oad5TiyUE71IpwPxRz7RasXVmWDC1pSdMU0Q36NCZrWwTpj/5Naj+ciEXPEKZ2GTghov6nn2y/0QMQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(38100700002)(83380400001)(186003)(54906003)(6512007)(2616005)(66946007)(36756003)(508600001)(6486002)(316002)(86362001)(1076003)(66476007)(2906002)(66556008)(26005)(8936002)(6506007)(7406005)(8676002)(7416002)(6916009)(5660300002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J5VUedlTPcvI3lTUwuQpw0Y/Y13Y9NuOw40xNlNBrf3hZVU8eLB/ewcBpXin?=
- =?us-ascii?Q?ymPhJHF9SJaRl1e5g0ipxAVcHlf6ZNCVVjLPj2SDOT3BnrGcG/+nVFN0os5n?=
- =?us-ascii?Q?eYJlm/RDQv2tE0BIgnlg9EdSXKqW6V62X7UHQgHl+hWLwMIq9vEIuFpL7lxE?=
- =?us-ascii?Q?mp02noZYdE170szxV67/xeRrGM0ocZW/AbqFhMjsLfGZZ9durphOIkpeZqil?=
- =?us-ascii?Q?tFquVql5n9IurqlV73hZjYHBL7bWlWTi8OgfroZAvzLxmX3fQMKZx94lrplS?=
- =?us-ascii?Q?8mY4pXZHLpIHMJwtrl5T48Popdv/WMdsbMpptrmhIoGSOjdI+SvU3vIaVaR6?=
- =?us-ascii?Q?EtC2UCoCWE5nQbeWzUJMppGb5DYRnHghLGpqtUt2QPP7dB4z1AuaVCmY2siI?=
- =?us-ascii?Q?FpyZ91HC+SWdyMUV0GygkSdCsvSIQh8rEIgMd3vx0rypPrv3EbWvIeVSbSew?=
- =?us-ascii?Q?GfHtt0fcabIEXeKWYvzfoIReLfzBTKh+tRa2coqFDvt2LTYcFpFZ0S+WnNcM?=
- =?us-ascii?Q?+YyWvo7/va6WWu28TphBLLDaC82egcYoM40HPdY+RwP5oLA3D+69RNuaYARP?=
- =?us-ascii?Q?0Y/bmSWZ5yG8dU0I3G8HpmborhZ1AYmaMB95AjUmFKrwjeZ3RvjAF+gJ5ZcP?=
- =?us-ascii?Q?Dzo4UTy2wvX8wNISKJFuGDNDXi5Jg/LhxcZS+NuefFb1KI1xQ8Os8dOgKT1Y?=
- =?us-ascii?Q?Y0FW467uERIq0klB7gEQ4xnDDeKvSHNZRg7UjsG6aGdf9W1JTJeVsJWQB3wO?=
- =?us-ascii?Q?v2/UO3enIbp9B2flFMBHdwrbHj36m9dDWV4TXk4vHEjHGa5Ux0LDkmLHhWMA?=
- =?us-ascii?Q?nn01tWToMMq0c8Ob10vWy3AgkgXcmKcj6NLCvXynsxGsgEeCUGSm4NrZ4DV7?=
- =?us-ascii?Q?3ws3SeX8ahUAvUMdWSXMp8ROKJojUaiEueI0nkBrb7rUCjIww7dTd3i0vPP9?=
- =?us-ascii?Q?s4ozbbQoccXyHr/wZ3raMc9RCwNIzyY1dT5Ny3Pnh3rKRp9y7AagXgomvPDX?=
- =?us-ascii?Q?LmJMLBLXFnnG1OnKu8h+1wbSo9O4/UpcB4KPhTFbYy/OTth4I2nS4oUYvT0a?=
- =?us-ascii?Q?coKArLlMTBgAHBYUAe9dAwTUp0gN6L3Z50oeazYO4VbPHfzlNBuATFeKXDMy?=
- =?us-ascii?Q?5uWBSB2U/t05u3dqGVjemQDYc6sfdP6O+Io45bwZbt75mYQWVCf1WmI4UUI8?=
- =?us-ascii?Q?kHCuiaCwTD5Q8oy+QNO+l2FsM836CoQgCTLcoK4D76F6oBk235KyOJJMDXLS?=
- =?us-ascii?Q?DHwu1nTmI6EpPm/BmDv2LCW7ELg25k8NQttrYxMNo6HpKNU0Vb4br1xln+Gz?=
- =?us-ascii?Q?/awkyiJI/BWt33rrBVBiPl8wHccvXVqsH+0EXgBoHGwh/anKda/YkcXg/i7g?=
- =?us-ascii?Q?u8teW5Y/hZHEz6vBj8r8JC/U/NT3ZZwexlbQcT+hgIoZJbWD5yM5budx8Mm1?=
- =?us-ascii?Q?igAVVQgYnwMmCuFoUQ0M4Fm6/VDiKVvi5hqmTqMPB+ME+cHoam96GwHCv/hB?=
- =?us-ascii?Q?NOKpbZtWBkrBCmV9WFDMHy5SQLrhXLuVwSIprk3fU3VZK0vejVxNoV7+tHK/?=
- =?us-ascii?Q?tkYAAVTj/PR5ASrGwww=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98e7e462-cd68-4183-9f08-08d9be417a7f
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 14:04:28.9314
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bcZfBQZ+ybB0I2QtMD5KRQT9sCR68eyc1pg9XMS388uv83zLKwHWWsdZZSqLTmnG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5063
+In-Reply-To: <CAMRc=Meve=W3yvPmakFap-s6cOY1GUq7c1VjJE2dEH4f0+shag@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:18:52PM +0100, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> instead of fiddling with MSI descriptors.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> ---
-> V3: Use pci_dev->msix_enabled - Jason
-> ---
->  arch/powerpc/platforms/pseries/msi.c |    3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+On Mon, Dec 13, 2021 at 02:50:57PM +0100, Bartosz Golaszewski wrote:
+> On Thu, Dec 2, 2021 at 10:17 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > GPIO library does copy the of_node from the parent device of
+> > the GPIO chip, there is no need to repeat this in the individual
+> > drivers. Remove these assignment all at once.
+> >
+> > For the details one may look into the of_gpio_dev_init() implementation.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
- 
-> --- a/arch/powerpc/platforms/pseries/msi.c
-> +++ b/arch/powerpc/platforms/pseries/msi.c
-> @@ -448,8 +448,7 @@ static int pseries_msi_ops_prepare(struc
->  				   int nvec, msi_alloc_info_t *arg)
->  {
->  	struct pci_dev *pdev = to_pci_dev(dev);
-> -	struct msi_desc *desc = first_pci_msi_entry(pdev);
-> -	int type = desc->pci.msi_attrib.is_msix ? PCI_CAP_ID_MSIX : PCI_CAP_ID_MSI;
-> +	int type = pdev->msix_enabled ? PCI_CAP_ID_MSIX : PCI_CAP_ID_MSI;
+> If there are no objections, I am willing to apply this to give it some
+> time in next and get the work on dropping the OF APIs from gpiolib
+> going.
 
-Long term it probably makes sense to change the msi_domain_ops so that
-it has PCI versions of the ops to use in places like this that hard
-assume PCI is the only kind of MSI at all.
+There was a v2 sent out.
 
-If the non-PCI op isn't provided then things like IMS would be denied
-- and the PCI op can directly pass in a pci_dev * so we don't have all
-these to_pci_devs() in drivers.
+  Message-Id: <20211206131852.74746-1-andriy.shevchenko@linux.intel.com>
 
-Jason
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

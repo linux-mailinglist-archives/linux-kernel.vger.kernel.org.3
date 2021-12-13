@@ -2,70 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 761344735FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6396C473601
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240680AbhLMUfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:35:07 -0500
-Received: from mga07.intel.com ([134.134.136.100]:36156 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238005AbhLMUfG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:35:06 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302205690"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="302205690"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 12:35:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="505062199"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 13 Dec 2021 12:35:04 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6C97414F; Mon, 13 Dec 2021 22:35:11 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v1 2/2] uuid: Remove licence boilerplate text from the header
-Date:   Mon, 13 Dec 2021 22:35:07 +0200
-Message-Id: <20211213203507.54157-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211213203507.54157-1-andriy.shevchenko@linux.intel.com>
-References: <20211213203507.54157-1-andriy.shevchenko@linux.intel.com>
+        id S242890AbhLMUfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:35:40 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:44935 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238005AbhLMUfc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 15:35:32 -0500
+Received: by mail-ot1-f41.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso18698731otj.11;
+        Mon, 13 Dec 2021 12:35:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UjShsLmpN0SZM+m8SUUiNDWjd+SPX71KTwqzkwvysM0=;
+        b=0t9YK6lZuanHzXySrhR+ntHk+RgsYp8Z7MmNfE23arkMOtwKaBlNcYyeqF6KivBYQa
+         y+Dy3Y/xJvWkZNueQ0kScD6EEhhdymedREDQITXqKaq+bpE0l2NibkeHL0Bty35SgCQT
+         qfxzq83ESmT1RTda4Eh3GQds1IoD9WVeNTbzrVg9YB1A4OreVA4UXORcMcd2nvuDxibX
+         QLXnGFx2bWt0FnNaHxf0avKbWQuWkqXdjzhr+UHLmbdXZe/cBSZbjPGzGNfqIwwZjW7Y
+         W9vyoNi+wiWT9EsUW75jbG2021wWy5XW2mRZZ3ft+BzTtrYDljY5JrM7CUjbc5cI4lXn
+         3uyA==
+X-Gm-Message-State: AOAM530lquzBj7WOLObH3xnBjiA/3caNir8kyH5P2LjkNPhXUVQ5DhVI
+        31hmxJyWAqFmJaRiqxsJkQ==
+X-Google-Smtp-Source: ABdhPJy3T03Lv6DYRee0EAteJwqi9P/4wzvwMoGsPqpWTMFq+yupuVXKZwoG097ja4/X7OvByWI01w==
+X-Received: by 2002:a9d:6190:: with SMTP id g16mr742838otk.54.1639427731541;
+        Mon, 13 Dec 2021 12:35:31 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p10sm2340679otp.53.2021.12.13.12.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 12:35:30 -0800 (PST)
+Received: (nullmailer pid 1526504 invoked by uid 1000);
+        Mon, 13 Dec 2021 20:35:29 -0000
+Date:   Mon, 13 Dec 2021 14:35:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Xiubo.Lee@gmail.com,
+        bcousson@baylibre.com, broonie@kernel.org, festevam@gmail.com,
+        kuninori.morimoto.gx@renesas.com, lgirdwood@gmail.com,
+        michael@amarulasolutions.com, nicoleotsuka@gmail.com,
+        perex@perex.cz, shengjiu.wang@gmail.com, tiwai@suse.com,
+        tony@atomide.com
+Subject: Re: [PATCH 0/4] fsl-asoc-card: Add optional dt property for setting
+ mclk-id
+Message-ID: <YbeukcwXQueEquJZ@robh.at.kernel.org>
+References: <20211203134930.128703-1-ariel.dalessandro@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203134930.128703-1-ariel.dalessandro@collabora.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove licence boilerplate text from the UAPI header.
+On Fri, Dec 03, 2021 at 10:49:26AM -0300, Ariel D'Alessandro wrote:
+> This is a follow up of patchset:
+> 
+>     [RFC patch 0/5] Support BCLK input clock in tlv320aic31xx
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/uapi/linux/uuid.h | 9 ---------
- 1 file changed, 9 deletions(-)
+Link?
 
-diff --git a/include/uapi/linux/uuid.h b/include/uapi/linux/uuid.h
-index 32615dc5f0cf..c0f4bd9b040e 100644
---- a/include/uapi/linux/uuid.h
-+++ b/include/uapi/linux/uuid.h
-@@ -5,15 +5,6 @@
-  *
-  * Copyright (C) 2010, Intel Corp.
-  *	Huang Ying <ying.huang@intel.com>
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU General Public License version
-- * 2 as published by the Free Software Foundation;
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
- 
- #ifndef _UAPI_LINUX_UUID_H_
--- 
-2.33.0
+> Sound cards may allow using different main clock inputs. In the generic
+> fsl-asoc-card driver, these values are hardcoded for each specific card
+> configuration.
+> 
+> Let's make it more flexible, allowing setting mclk-id from the
+> device-tree node.
+> 
+> Ariel D'Alessandro (4):
+>   dt-bindings: sound: Rename tlv320aic31xx-micbias as tlv320aic31xx
+>   dt-bindings: tlv320aic31xx: Define PLL clock inputs
+>   ASoC: fsl-asoc-card: Add optional dt property for setting mclk-id
 
+'mclk-id' is not documented.
+
+>   ASoC: fsl-asoc-card: Remove BCLK default value for tlv320aic31xx card
+> 
+>  .../devicetree/bindings/sound/fsl-asoc-card.txt    |  1 +
+>  .../devicetree/bindings/sound/tlv320aic31xx.txt    |  2 +-
+>  arch/arm/boot/dts/am43x-epos-evm.dts               |  2 +-
+>  include/dt-bindings/sound/tlv320aic31xx-micbias.h  |  9 ---------
+>  include/dt-bindings/sound/tlv320aic31xx.h          | 14 ++++++++++++++
+>  sound/soc/codecs/tlv320aic31xx.c                   |  2 +-
+>  sound/soc/fsl/fsl-asoc-card.c                      |  7 ++++++-
+>  7 files changed, 24 insertions(+), 13 deletions(-)
+>  delete mode 100644 include/dt-bindings/sound/tlv320aic31xx-micbias.h
+>  create mode 100644 include/dt-bindings/sound/tlv320aic31xx.h
+> 
+> -- 
+> 2.30.2
+> 
+> 

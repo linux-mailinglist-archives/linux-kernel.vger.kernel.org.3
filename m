@@ -2,30 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A7B472B59
+	by mail.lfdr.de (Postfix) with ESMTP id D88BA472B5A
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbhLML2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:28:07 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:37402 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232694AbhLML2B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:28:01 -0500
+        id S235783AbhLML2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:28:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235740AbhLML2C (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:28:02 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14628C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:28:02 -0800 (PST)
 Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AB0901EC0505;
-        Mon, 13 Dec 2021 12:27:59 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E8BC1EC054F;
+        Mon, 13 Dec 2021 12:28:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639394879;
+        t=1639394880;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vcxSBSqU45k/Njt3p5jtMil09vVThO25BVYEC466cyM=;
-        b=IaBR1iNiyiFz9GkBebWTgO5v7DHLtPPJrt/L31OmEBrqpPk3K+WZiyFoAXEQya6mmmXv9v
-        8T87fWuiKVzMTmeP+uIttCVikhz4/69crb9sk/U9SffX/gcHMoNt080pcdDJY28R/vK68Z
-        6SfnRagT7TxUkvWoJp/9bw7RNxbnxdg=
+        bh=Zvq+iuXs8lIFhddRqKkphqajuGv+Wb9UvUgh6rYtibA=;
+        b=mepNFZkEBPrDJ1HaWVLSNu8HW7wN3OYD3WKDAkCp34pJ5dc3/MODzX/jSVEJNNlPfxlKOj
+        t598KjK4doVKU7eQdqcqdauet2UnTZ8TW9zwmkqoF1MJmc798Mes69Lcb2n3nHoGs/su0k
+        YVSdAwcHkA9EeoaqYY9Wr/6UYM85uiQ=
 From:   Borislav Petkov <bp@alien8.de>
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
@@ -33,9 +37,9 @@ Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         John Dorminy <jdorminy@redhat.com>, anjaneya.chagam@intel.com,
         dan.j.williams@intel.com, Hugh Dickins <hughd@google.com>,
         "Patrick J. Volkerding" <volkerdi@gmail.com>
-Subject: [PATCH 2/3] Revert "x86/boot: Pull up cmdline preparation and early param parsing"
-Date:   Mon, 13 Dec 2021 12:27:56 +0100
-Message-Id: <20211213112757.2612-3-bp@alien8.de>
+Subject: [PATCH 3/3] x86/boot: Move EFI range reservation after cmdline parsing
+Date:   Mon, 13 Dec 2021 12:27:57 +0100
+Message-Id: <20211213112757.2612-4-bp@alien8.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211213112757.2612-1-bp@alien8.de>
 References: <YbcTgQdTpJAHAZw4@zn.tnic>
@@ -46,118 +50,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Mike Rapoport <rppt@kernel.org>
 
-This reverts commit 8d48bf8206f77aa8687f0e241e901e5197e52423.
+The memory reservation in arch/x86/platform/efi/efi.c depends on at
+least two command line parameters. Put it back later in the boot process
+and move efi_memblock_x86_reserve_range() out of early_memory_reserve().
 
-It turned out to be a bad idea as it broke supplying mem= cmdline
-parameters due to parse_memopt() requiring preparatory work like setting
-up the e820 table in e820__memory_setup() in order to be able to exclude
-the range specified by mem=.
+An attempt to fix this was done in
 
-Pulling that up would've broken Xen PV again, see threads at
+  8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param parsing")
 
-  https://lkml.kernel.org/r/20210920120421.29276-1-jgross@suse.com
+but that caused other troubles so it got reverted.
 
-due to xen_memory_setup() needing the first reservations in
-early_reserve_memory() - kernel and initrd - to have happened already.
+The bug this is addressing is:
 
-This could be fixed again by having Xen do those reservations itself...
+Dan reports that Anjaneya Chagam can no longer use the efi=nosoftreserve
+kernel command line parameter to suppress "soft reservation" behavior.
 
-Long story short, revert this and do a simpler fix in a later patch.
+This is due to the fact that the following call-chain happens at boot:
 
+early_reserve_memory
+|-> efi_memblock_x86_reserve_range
+    |-> efi_fake_memmap_early
+
+which does
+
+        if (!efi_soft_reserve_enabled())
+                return;
+
+and that would have set EFI_MEM_NO_SOFT_RESERVE after having parsed
+"nosoftreserve".
+
+However, parse_early_param() gets called *after* it, leading to the boot
+cmdline not being taken into account.
+
+ [ bp: Productize into a proper patch. ]
+
+Signed-off-by: Mike Rapoport <rppt@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/e8dd8993c38702ee6dd73b3c11f158617e665607.camel@intel.com
 ---
- arch/x86/kernel/setup.c | 66 +++++++++++++++++------------------------
- 1 file changed, 27 insertions(+), 39 deletions(-)
+ arch/x86/kernel/setup.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index c410be738ae7..49b596db5631 100644
+index 49b596db5631..e04f5e6eb33f 100644
 --- a/arch/x86/kernel/setup.c
 +++ b/arch/x86/kernel/setup.c
-@@ -742,28 +742,6 @@ dump_kernel_offset(struct notifier_block *self, unsigned long v, void *p)
- 	return 0;
- }
+@@ -713,9 +713,6 @@ static void __init early_reserve_memory(void)
  
--static char *prepare_command_line(void)
--{
--#ifdef CONFIG_CMDLINE_BOOL
--#ifdef CONFIG_CMDLINE_OVERRIDE
--	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
--#else
--	if (builtin_cmdline[0]) {
--		/* append boot loader cmdline to builtin */
--		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
--		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
--		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
--	}
--#endif
--#endif
--
--	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
--
--	parse_early_param();
--
--	return command_line;
--}
--
- /*
-  * Determine if we were loaded by an EFI loader.  If so, then we have also been
-  * passed the efi memmap, systab, etc., so we should use these data structures
-@@ -852,23 +830,6 @@ void __init setup_arch(char **cmdline_p)
+ 	early_reserve_initrd();
  
- 	x86_init.oem.arch_setup();
- 
--	/*
--	 * x86_configure_nx() is called before parse_early_param() (called by
--	 * prepare_command_line()) to detect whether hardware doesn't support
--	 * NX (so that the early EHCI debug console setup can safely call
--	 * set_fixmap()). It may then be called again from within noexec_setup()
--	 * during parsing early parameters to honor the respective command line
--	 * option.
--	 */
--	x86_configure_nx();
+-	if (efi_enabled(EFI_BOOT))
+-		efi_memblock_x86_reserve_range();
 -
--	/*
--	 * This parses early params and it needs to run before
--	 * early_reserve_memory() because latter relies on such settings
--	 * supplied as early params.
--	 */
--	*cmdline_p = prepare_command_line();
--
- 	/*
- 	 * Do some memory reservations *before* memory is added to memblock, so
- 	 * memblock allocations won't overwrite it.
-@@ -902,6 +863,33 @@ void __init setup_arch(char **cmdline_p)
- 	bss_resource.start = __pa_symbol(__bss_start);
- 	bss_resource.end = __pa_symbol(__bss_stop)-1;
+ 	memblock_x86_reserve_range_setup_data();
  
-+#ifdef CONFIG_CMDLINE_BOOL
-+#ifdef CONFIG_CMDLINE_OVERRIDE
-+	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
-+#else
-+	if (builtin_cmdline[0]) {
-+		/* append boot loader cmdline to builtin */
-+		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
-+		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-+		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
-+	}
-+#endif
-+#endif
-+
-+	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
-+	*cmdline_p = command_line;
-+
-+	/*
-+	 * x86_configure_nx() is called before parse_early_param() to detect
-+	 * whether hardware doesn't support NX (so that the early EHCI debug
-+	 * console setup can safely call set_fixmap()). It may then be called
-+	 * again from within noexec_setup() during parsing early parameters
-+	 * to honor the respective command line option.
-+	 */
-+	x86_configure_nx();
-+
-+	parse_early_param();
+ 	reserve_ibft_region();
+@@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
+ 
+ 	parse_early_param();
+ 
++	if (efi_enabled(EFI_BOOT))
++		efi_memblock_x86_reserve_range();
 +
  #ifdef CONFIG_MEMORY_HOTPLUG
  	/*

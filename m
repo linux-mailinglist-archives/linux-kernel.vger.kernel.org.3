@@ -2,134 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8F34727B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F594729F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238655AbhLMKEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:04:34 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:40906 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237211AbhLMJ7I (ORCPT
+        id S235400AbhLMK2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240510AbhLMK0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:59:08 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E97C212B5;
-        Mon, 13 Dec 2021 09:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639389546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FgFiLzjgbXLZxTBe4GEz5aIIqbjYxRyytqqqX3mrDuE=;
-        b=ZK9OuRFsw7ZuOWNC41adF8WxDztCAH4n/XqZRkfySE7WDRHZbdeLxgui1+bBRo/U3MjCWs
-        c8o6/9UTEFK9gQcwMJbZE4CVWESxg/rA8qqCysBwLmgIxsB0xc1LATPUaNZbhlFuBhkjB7
-        fCKwtzpfMAcpjPwL6Zopao5kxSS8vR8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639389546;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FgFiLzjgbXLZxTBe4GEz5aIIqbjYxRyytqqqX3mrDuE=;
-        b=15MXXOfulmPEK8kcXwxrFsBqD0ENkARPnbaOAOtgPszH8LdEu1/Hy0pb9pwVVcBDlyTmJM
-        ump/CoWRrgcopPBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF6E213BB2;
-        Mon, 13 Dec 2021 09:59:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3OliOWkZt2GwMQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 13 Dec 2021 09:59:05 +0000
-Message-ID: <c1006921-19b4-4cd4-2522-4d83af575ff7@suse.de>
-Date:   Mon, 13 Dec 2021 10:59:05 +0100
+        Mon, 13 Dec 2021 05:26:37 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC6C08EB32;
+        Mon, 13 Dec 2021 02:00:51 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id y196so11456001wmc.3;
+        Mon, 13 Dec 2021 02:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2J3WjUUDZRJctdcJl6/snud+aQbH4TqfkyM0/+9MbGI=;
+        b=HypspHRWAWDb0rHyq47aLfBUtix48TRHayaWJOCh5uPH8KKIg8/zhItvVjRNYLc+I4
+         5BunMEsQf0ycC1ysUhASXrHP4/P133GjW2h/fInQuMSYelrVChIecqQPvm6mV519REgd
+         WhRvkW42MPcdViOtISTuItmGNJimzO6pkaNc4bT9KMb9XAV1PCHkXbHuYFzb7XhnRCWv
+         4qOhBC9IJsLoWDPHU9NxivG7Pn+HMr0B4Ly+l0LEZX4R2jYPJDltczSaP7Qp5Bq6JonC
+         YRK8u5Luq9pf8kWynRsp2hEJO8zpPRtCSgHZfUhAi4DrL0gza5b6oDNlXIKW2ofRx5k/
+         4ntQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2J3WjUUDZRJctdcJl6/snud+aQbH4TqfkyM0/+9MbGI=;
+        b=TyxYl2BraDM1S1hlZqGQwIKC4tl44B4AZdsPjpZpQLerc1nNcHLdSxui9QsiP8wdXx
+         lGNutLDdlVC62h3TwbtIvlnNLjGNihGHe+XLlMasF52SbhSCNj2fnTwAFPWg7bqT93SA
+         lGKRKQvVdE5gNn3i9YlRzBD02Sco94PpubRN00ugRcForG2NXZHDWOWD2t3oNMcGMJ39
+         7vF09i5t4rBU9PaOYhAkdz9P+JZ67bymltV9hQTUupF5Top7mj5yGR+SlBZMsUQB4qgP
+         sA+SvB3CXND0zSIk0p0ZkqdzRRYnzLacM7IKE9MVxfoAGgWXaWAJqzJMAw0uw9sB0j/g
+         WJng==
+X-Gm-Message-State: AOAM531Hb9zZmASts9u9SJYDchNDvVQzXqaSDH5gqgRg6icaUtFbnN+Y
+        r6WkNQVXaoNUjUpkX3U37y0=
+X-Google-Smtp-Source: ABdhPJzySgR4gq8pBxNNwNaxt133hwPgUa7GfoJEXYD0w+IgEkrfVZPmO2xDFBxhYc4pkgSGAqUg2w==
+X-Received: by 2002:a05:600c:510d:: with SMTP id o13mr35926524wms.104.1639389649930;
+        Mon, 13 Dec 2021 02:00:49 -0800 (PST)
+Received: from localhost.localdomain ([2a00:a040:197:458f:acc5:ce9c:f048:f197])
+        by smtp.googlemail.com with ESMTPSA id s8sm11826590wra.9.2021.12.13.02.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 02:00:49 -0800 (PST)
+From:   Ariel Marcovitch <arielmarcovitch@gmail.com>
+To:     masahiroy@kernel.org
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ariel Marcovitch <arielmarcovitch@gmail.com>
+Subject: [PATCH 0/2] kconfig: Improve comment blocks in the .config file
+Date:   Mon, 13 Dec 2021 12:00:41 +0200
+Message-Id: <20211213100043.45645-1-arielmarcovitch@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/ast: potential dereference of null pointer
-Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, airlied@redhat.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------vgdy448xJ8wWkFJTMzeIyPCX"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------vgdy448xJ8wWkFJTMzeIyPCX
-Content-Type: multipart/mixed; boundary="------------SLQLno00Mmt0cNjfmolt8nGu";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jiasheng Jiang <jiasheng@iscas.ac.cn>, airlied@redhat.com,
- airlied@linux.ie, daniel@ffwll.ch
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-ID: <c1006921-19b4-4cd4-2522-4d83af575ff7@suse.de>
-Subject: Re: [PATCH] drm/ast: potential dereference of null pointer
-References: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
+Hi there!
 
---------------SLQLno00Mmt0cNjfmolt8nGu
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This series attempts to make the .config file format make more sense.
+Currently menuconfig blocks look exactly like regular configs while
+comment blocks look almost exactly like menu blocks.
 
-SGksDQoNCnRoYW5rcyBmb3IgdGhlIHBhdGNoLg0KDQpBbSAxMy4xMi4yMSB1bSAwNjozOSBz
-Y2hyaWViIEppYXNoZW5nIEppYW5nOg0KPiBoZSByZXR1cm4gdmFsdWUgb2Yga3phbGxvYygp
-IG5lZWRzIHRvIGJlIGNoZWNrZWQuDQoNCidUaGUnDQoNCj4gVG8gYXZvaWQgdXNlIG9mIG51
-bGwgcG9pbnRlciAnJmFzdF9zdGF0ZS0+YmFzZScgaW4gY2FzZSBvZiB0aGUNCj4gZmFpbHVy
-ZSBvZiBhbGxvYy4NCj4gDQo+IEZpeGVzOiBmMGFkYmMzODJiOGIgKCJkcm0vYXN0OiBBbGxv
-Y2F0ZSBpbml0aWFsIENSVEMgc3RhdGUgb2YgdGhlIGNvcnJlY3Qgc2l6ZSIpDQo+IFNpZ25l
-ZC1vZmYtYnk6IEppYXNoZW5nIEppYW5nIDxqaWFzaGVuZ0Bpc2Nhcy5hYy5jbj4NCj4gLS0t
-DQo+ICAgZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jIHwgMyArKy0NCj4gICAxIGZp
-bGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jIGIvZHJpdmVycy9ncHUv
-ZHJtL2FzdC9hc3RfbW9kZS5jDQo+IGluZGV4IDM2ZDk1NzVhYTI3Yi4uNjdmOGUzZjkwZWEy
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMNCj4gKysr
-IGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+IEBAIC0xMTIwLDcgKzExMjAs
-OCBAQCBzdGF0aWMgdm9pZCBhc3RfY3J0Y19yZXNldChzdHJ1Y3QgZHJtX2NydGMgKmNydGMp
-DQo+ICAgCWlmIChjcnRjLT5zdGF0ZSkNCj4gICAJCWNydGMtPmZ1bmNzLT5hdG9taWNfZGVz
-dHJveV9zdGF0ZShjcnRjLCBjcnRjLT5zdGF0ZSk7DQo+ICAgDQo+IC0JX19kcm1fYXRvbWlj
-X2hlbHBlcl9jcnRjX3Jlc2V0KGNydGMsICZhc3Rfc3RhdGUtPmJhc2UpOw0KPiArCWlmIChh
-c3Rfc3RhdGUpDQo+ICsJCV9fZHJtX2F0b21pY19oZWxwZXJfY3J0Y19yZXNldChjcnRjLCAm
-YXN0X3N0YXRlLT5iYXNlKTsNCg0KSWYgYXN0X3N0YXRlIGlzIE5VTEwsIF9fZHJtX2F0b21p
-Y19oZWxwZXJfY3J0Y19yZXNldCgpIGhhcyB0byBiZSBjYWxsZWQgDQp3aXRoIGEgc3RhdGUg
-b2YgTlVMTC4gT3RoZXJ3aXNlIHRoZSByZXNldCBtaWdodCBsZWF2ZSB0aGUgZGFuZ2xpbmcg
-DQpwb2ludGVyIGluIHRoZSBDUlRDJ3Mgc3RhdGUgZmllbGQuDQoNCkJlc3QgcmVnYXJkcw0K
-VGhvbWFzDQoNCj4gICB9DQo+ICAgDQo+ICAgc3RhdGljIHN0cnVjdCBkcm1fY3J0Y19zdGF0
-ZSAqDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
-ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
-dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
-ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+The first patch makes menuconfig blocks look the same as menu blocks.
 
---------------SLQLno00Mmt0cNjfmolt8nGu--
+The second makes comment blocks look different than menu blocks.
 
---------------vgdy448xJ8wWkFJTMzeIyPCX
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+The format for comment blocks in the second patch is a suggestion. I
+realize some people will think the '###' prefix is distasteful. I'm open
+to other options as well, I just couldn't think of a better option that
+starts with '#', looks different from a menu and can't be confused with
+a disabled config.
 
------BEGIN PGP SIGNATURE-----
+Ariel Marcovitch (2):
+  kconfig: Show menuconfigs as menus in the .config file
+  kconfig: Make comments look different than menus in .config
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG3GWkFAwAAAAAACgkQlh/E3EQov+De
-zxAAnQjDWB6NElK8HofBKdqK3FhOM7r+wyTdOpOrW3w6wvpy4PGLaRIV6/rsW4OIno0fMYKeFvsr
-tXUllbM2fEj2RS0trzrmBINwC6jTPRHEgKgYFDOk1T98y+yJ3giSH+7l6pLrNSuE5ZKv4Bs2yBFA
-G6NOnwiaImByy23+Te2c1ZI0y1rwh2QtB+HvEVyEATJI0553ELdyWORKg6PvjccRiptwLzfC8W54
-Qo/UixE9aGCl/4zu518fpe7dYtPHdFCXihRlXd9Ok5x2Jb9+cNXH3B+zACGNWF/hugHCAQfmCLg3
-Go6nJWlISYp+L4Toil+b6VsP1t1TGpvDt/CFui8kcutOZOFPXuomyOmufsLVclSWgHPKVOc0Evcx
-wZzVDTKR4lySoTQJ3mmLscBN1gNUKdI3/wtBDLaid5i+8MgAPXABgx8sELILeKrn/K4fDeRBNOru
-sdnUFc8s8vrVswKW8FFp+OJ0zld0mZsk5bm28YC1ZwM92dta+ZNPLezafq1N21z4ALCj6uXBds1O
-RK4Sda3fib5bFAQMe2cbPznGQJiudm8Yy/61hzvLLN4T0FgU/f8TSO0d8NJPxGj0o0OOgmnPJsDd
-92+i/rARU/aOkO6xBnDDK1Q+IYMwxaENE1RqlbHOnLq+Uwrl2H29wM9hdX56sEdm+3ncOP69DZiF
-Aeo=
-=msep
------END PGP SIGNATURE-----
+ scripts/kconfig/confdata.c | 34 +++++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
---------------vgdy448xJ8wWkFJTMzeIyPCX--
+
+base-commit: e06a61a89ccd3edda046c78f9d08aa045b8c4d32
+-- 
+2.25.1
+

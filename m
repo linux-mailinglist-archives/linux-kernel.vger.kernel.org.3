@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1704724B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78758472615
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbhLMJhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbhLMJg3 (ORCPT
+        id S237310AbhLMJtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:49:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58028 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234074AbhLMJob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:36:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954A7C0613F8;
-        Mon, 13 Dec 2021 01:36:22 -0800 (PST)
+        Mon, 13 Dec 2021 04:44:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E23B0CE0E82;
-        Mon, 13 Dec 2021 09:36:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 906DCC341C5;
-        Mon, 13 Dec 2021 09:36:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA0EFB80E23;
+        Mon, 13 Dec 2021 09:44:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A762C00446;
+        Mon, 13 Dec 2021 09:44:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388179;
-        bh=fWchdcSIpbNAREqcECfxi337wWpII1DZOZmkczHDfKw=;
+        s=korg; t=1639388667;
+        bh=v8sDFuNm0OB9rrbzdrg2J85zpwIIIL8wrbxInuL6A5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pmNb2Qzlkv/+Jzbk4GO/mOJ8xi+oUkbKL76pcv8dEHqtZx/bGBWqs/mTcQzGAPgnG
-         KOXx0PFl13AipItwyRwWDe1YG4QH3ymllP1pT2MAMV57sJAWUhZb065YtTBBHSDLoY
-         LYR+dtuZF/lmAfzpP6iv7ZhYbXaYB6NWJQsqUwZ8=
+        b=bjmtiyOeh33h8hdCxoUfJknodAZBFCwWf8zezvat9SfTI3t1cAY0ticwlhkCQ9hU/
+         mI+rm0J50Cu1B7EpYN4mubOS7ojXxFM2YzUOqHnuR3q5KjPLO4+ouK9dR2tRxRTo+S
+         QKjrIoqGn9fEqjghr7+9GGFGs+gk4eKxPSq/Y9f8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Young <consult.awy@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 14/53] ALSA: ctl: Fix copy of updated id with element read/write
+        stable@vger.kernel.org, Jianguo Wu <wujianguo@chinatelecom.cn>,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 23/88] udp: using datalen to cap max gso segments
 Date:   Mon, 13 Dec 2021 10:29:53 +0100
-Message-Id: <20211213092928.835441252@linuxfoundation.org>
+Message-Id: <20211213092934.015054757@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +46,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Young <consult.awy@gmail.com>
+From: Jianguo Wu <wujianguo@chinatelecom.cn>
 
-commit b6409dd6bdc03aa178bbff0d80db2a30d29b63ac upstream.
+commit 158390e45612ef0fde160af0826f1740c36daf21 upstream.
 
-When control_compat.c:copy_ctl_value_to_user() is used, by
-ctl_elem_read_user() & ctl_elem_write_user(), it must also copy back the
-snd_ctl_elem_id value that may have been updated (filled in) by the call
-to snd_ctl_elem_read/snd_ctl_elem_write().
+The max number of UDP gso segments is intended to cap to UDP_MAX_SEGMENTS,
+this is checked in udp_send_skb():
 
-This matches the functionality provided by snd_ctl_elem_read_user() and
-snd_ctl_elem_write_user(), via snd_ctl_build_ioff().
+    if (skb->len > cork->gso_size * UDP_MAX_SEGMENTS) {
+        kfree_skb(skb);
+        return -EINVAL;
+    }
 
-Without this, and without making additional calls to snd_ctl_info()
-which are unnecessary when using the non-compat calls, a userspace
-application will not know the numid value for the element and
-consequently will not be able to use the poll/read interface on the
-control file to determine which elements have updates.
+skb->len contains network and transport header len here, we should use
+only data len instead.
 
-Signed-off-by: Alan Young <consult.awy@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211202150607.543389-1-consult.awy@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: bec1f6f69736 ("udp: generate gso with UDP_SEGMENT")
+Signed-off-by: Jianguo Wu <wujianguo@chinatelecom.cn>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Link: https://lore.kernel.org/r/900742e5-81fb-30dc-6e0b-375c6cdd7982@163.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/control_compat.c |    3 +++
- 1 file changed, 3 insertions(+)
+ net/ipv4/udp.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/core/control_compat.c
-+++ b/sound/core/control_compat.c
-@@ -279,6 +279,7 @@ static int copy_ctl_value_to_user(void _
- 				  struct snd_ctl_elem_value *data,
- 				  int type, int count)
- {
-+	struct snd_ctl_elem_value32 __user *data32 = userdata;
- 	int i, size;
- 
- 	if (type == SNDRV_CTL_ELEM_TYPE_BOOLEAN ||
-@@ -295,6 +296,8 @@ static int copy_ctl_value_to_user(void _
- 		if (copy_to_user(valuep, data->value.bytes.data, size))
- 			return -EFAULT;
- 	}
-+	if (copy_to_user(&data32->id, &data->id, sizeof(data32->id)))
-+		return -EFAULT;
- 	return 0;
- }
- 
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -845,7 +845,7 @@ static int udp_send_skb(struct sk_buff *
+ 			kfree_skb(skb);
+ 			return -EINVAL;
+ 		}
+-		if (skb->len > cork->gso_size * UDP_MAX_SEGMENTS) {
++		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
+ 			kfree_skb(skb);
+ 			return -EINVAL;
+ 		}
 
 

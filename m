@@ -2,169 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 805B147230F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE3A47232B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbhLMImY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:42:24 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48502 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233322AbhLMImN (ORCPT
+        id S231896AbhLMIoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230280AbhLMIob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:42:13 -0500
-X-UUID: 831b1a5f638c477da67cf914ee6694e9-20211213
-X-UUID: 831b1a5f638c477da67cf914ee6694e9-20211213
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 812427127; Mon, 13 Dec 2021 16:42:11 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 13 Dec 2021 16:42:10 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 13 Dec
- 2021 16:42:10 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Mon, 13 Dec 2021 16:42:08 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v13, 19/19] media: mtk-vcodec: Remove mtk_vcodec_release_enc_pm
-Date:   Mon, 13 Dec 2021 16:41:41 +0800
-Message-ID: <20211213084141.13363-20-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211213084141.13363-1-yunfei.dong@mediatek.com>
-References: <20211213084141.13363-1-yunfei.dong@mediatek.com>
+        Mon, 13 Dec 2021 03:44:31 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545ACC061748
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:44:31 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id t11so14500683qtw.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:44:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h4WDvjM2kgyM01qsLxjBdup3VQZvL5+0/2y39dEt4C8=;
+        b=BEKQMXeItUho4Q0NwJ1f8FstJ+Jf7PJ9R80lW/4yWOljS10XpFJ5HT0VacDeVVZ5dB
+         RA8M/ibrXbb86GoJWidGhnp2LswMUu5ZEA8I+eBMOhkaVFr147SQCO22fS8My096MzHz
+         /b4tB4pB3SK5lX3cOoqr4/vD0aAw3Bltsw/sRGVFuY5u0FVY/ewz5xqM6AScU3FhIGaF
+         hzZZ8sjjAb530wrrBoAn2oyZwohVZ0dYe+J0zWB1Hrrao9Y0iWo3GoXfTu3jVY75H8s0
+         sLy7Kmn6LBGQsS1Oq/Lj79Q5YUshGorcNIQIt/kifgDCscax9hh6tfa28rNWxSWGu/+Z
+         Mp5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h4WDvjM2kgyM01qsLxjBdup3VQZvL5+0/2y39dEt4C8=;
+        b=zJqJ0feDhr6DRsoOBbAMlQIjtzGItXgJoZt3iK5e2AQlMXz4uBHjDhSQa4ada+euGd
+         0mGF9PX/vvl950PobucNdLkXMcmX/ZM5j4OGDUc8myVmzVKdjJqUSYr122KiT/5I9GmL
+         9l9s7/O9j+fAnu7oQk9C+eKkunwA/Pvsm+6QSjd+ZK2AF746tsTN/lvo/8lLvghdrvQ6
+         vb30Miuiag9vCwNfck69kZV00waPhePQ4kJzCdPrV91X4TpEpFCkSwnV6wjQ5p6EZPTP
+         Ka6dwRyxd2Y4HzVd6FUpPjyfLAQtC6EASRusiNzDzFoeJuNDODV2uissyH85MjquO663
+         +v7A==
+X-Gm-Message-State: AOAM530WqIIg74JsZaAXVE88x8ihmsPuUpT0zilO//JH1dz/DXDwm/av
+        zm1M2ZXhgaSKKEDqKL7imVl+ZMdWI/SWCvLK+f0oWw==
+X-Google-Smtp-Source: ABdhPJziiOVM2+Dx6BT3tLzDj98Xw0vskZvlatbAvbgT2x6SaH8jcF/6PODw5NoYcf9gsRZOzBLKdkLelCk4wGV+gos=
+X-Received: by 2002:a05:622a:202:: with SMTP id b2mr43442164qtx.34.1639385070353;
+ Mon, 13 Dec 2021 00:44:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+References: <20211212062407.138309-1-marcan@marcan.st> <20211212062407.138309-2-marcan@marcan.st>
+In-Reply-To: <20211212062407.138309-2-marcan@marcan.st>
+From:   Javier Martinez Canillas <javier@dowhile0.org>
+Date:   Mon, 13 Dec 2021 09:44:19 +0100
+Message-ID: <CABxcv=m4fu8h=FwY7R=thuvd13_ZbFqB9rNNN07QOAd__jdYSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
+ simplefb to of
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        devicetree@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are only two lines in mtk_vcodec_release_enc_pm, using
-pm_runtime_disable and put_device instead directly.
+Hello Hector,
 
-Move pm_runtime_enable outside mtk_vcodec_release_enc_pm to symmetry with
-pm_runtime_disable, after that, rename mtk_vcodec_init_enc_pm to *_clk since
-it only has clock operations now.
+On Sun, Dec 12, 2021 at 7:24 AM Hector Martin <marcan@marcan.st> wrote:
+>
+> This code is required for both simplefb and simpledrm, so let's move it
+> into the OF core instead of having it as an ad-hoc initcall in the
+> drivers.
+>
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/of/platform.c          |  4 ++++
+>  drivers/video/fbdev/simplefb.c | 21 +--------------------
+>  2 files changed, 5 insertions(+), 20 deletions(-)
+>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Co-developed-by: Yong Wu <yong.wu@mediatek.com>
----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 9 ++++++---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c  | 9 +--------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h  | 3 +--
- 3 files changed, 8 insertions(+), 13 deletions(-)
+This is indeed a much better approach than what I suggested. I just
+have one comment.
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 0f326d82dea0..7816efb90cbe 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -11,6 +11,7 @@
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/of.h>
-+#include <linux/pm_runtime.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-mem2mem.h>
- #include <media/videobuf2-dma-contig.h>
-@@ -260,7 +261,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		return PTR_ERR(dev->fw_handler);
- 
- 	dev->venc_pdata = of_device_get_match_data(&pdev->dev);
--	ret = mtk_vcodec_init_enc_pm(dev);
-+	ret = mtk_vcodec_init_enc_clk(dev);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to get mtk vcodec clock source!");
- 		goto err_enc_pm;
-@@ -372,7 +373,8 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- err_enc_alloc:
- 	v4l2_device_unregister(&dev->v4l2_dev);
- err_res:
--	mtk_vcodec_release_enc_pm(dev);
-+	pm_runtime_disable(dev->pm.dev);
-+	put_device(dev->pm.larbvenc);
- err_enc_pm:
- 	mtk_vcodec_fw_release(dev->fw_handler);
- 	return ret;
-@@ -462,7 +464,8 @@ static int mtk_vcodec_enc_remove(struct platform_device *pdev)
- 		video_unregister_device(dev->vfd_enc);
- 
- 	v4l2_device_unregister(&dev->v4l2_dev);
--	mtk_vcodec_release_enc_pm(dev);
-+	pm_runtime_disable(dev->pm.dev);
-+	put_device(dev->pm.larbvenc);
- 	mtk_vcodec_fw_release(dev->fw_handler);
- 	return 0;
- }
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-index 0c8c8f86788c..0825c6ec4eb7 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-@@ -13,7 +13,7 @@
- #include "mtk_vcodec_enc_pm.h"
- #include "mtk_vcodec_util.h"
- 
--int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
-+int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *mtkdev)
- {
- 	struct device_node *node;
- 	struct platform_device *pdev;
-@@ -86,13 +86,6 @@ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
- 	return ret;
- }
- 
--void mtk_vcodec_release_enc_pm(struct mtk_vcodec_dev *mtkdev)
--{
--	pm_runtime_disable(mtkdev->pm.dev);
--	put_device(mtkdev->pm.larbvenc);
--}
--
--
- void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
- {
- 	struct mtk_vcodec_clk *enc_clk = &pm->venc_clk;
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-index b7ecdfd74823..bc455cefc0cd 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-@@ -9,8 +9,7 @@
- 
- #include "mtk_vcodec_drv.h"
- 
--int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *dev);
--void mtk_vcodec_release_enc_pm(struct mtk_vcodec_dev *dev);
-+int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *dev);
- 
- void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm);
--- 
-2.25.1
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index b3faf89744aa..793350028906 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -540,6 +540,10 @@ static int __init of_platform_default_populate_init(void)
+>                 of_node_put(node);
+>         }
+>
+> +       node = of_get_compatible_child(of_chosen, "simple-framebuffer");
 
+You have to check if the node variable is NULL here.
+
+> +       of_platform_device_create(node, NULL, NULL);
+
+Otherwise this could lead to a NULL pointer dereference if debug
+output is enabled (the node->full_name is printed).
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+Best regards,
+Javier

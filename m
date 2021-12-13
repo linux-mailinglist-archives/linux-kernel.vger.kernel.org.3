@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA25E472673
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7ED4727C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237841AbhLMJwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:52:11 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:37168 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236026AbhLMJpr (ORCPT
+        id S236911AbhLMKEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:04:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45968 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240137AbhLMJ7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:45:47 -0500
+        Mon, 13 Dec 2021 04:59:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BA09DCE0E96;
-        Mon, 13 Dec 2021 09:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60297C00446;
-        Mon, 13 Dec 2021 09:45:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42C7BB80E77;
+        Mon, 13 Dec 2021 09:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C51C34601;
+        Mon, 13 Dec 2021 09:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388744;
-        bh=UwSDO8IZxWRsMCp0xnXpmJ0UXGnrmXOhCVIXuoXYIhU=;
+        s=korg; t=1639389584;
+        bh=WXMDWIZdNPtfYwTwtejyjnPNuMZjWiv2DkxxbW2jCRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KzeKlgzTFIwVRe9wCRDQ6Jcoay7ewfWk/4OH+VvCaz/06aS4u7lDSkAPwTGsP4b2t
-         ZxMivVYRC62aJLL9Y6gGm8r/yvu47Vgyke1YXxq7W2GGKYZCNdGzE76RcXqrhl2ISl
-         y38L4vJ+DtlWq6k9kqleb9Z4txWWnBdUq5fsqhfA=
+        b=UxBibb1w8FxvkduE5Sm0Ih6GR4Rs19X9znspsj/bpjTGXHOucWcrOxQaSg8ohOD/m
+         k1N+vQ73sQPYa6sxsHbuKWyVoGtIE3Bryhmk290dnx8YF3hjqUZlDswFvKZ0KMZmMi
+         kRjP8RKtLum3LjfBit3RNpRfZZpeLr1DlIfmJWCQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.4 81/88] iio: ad7768-1: Call iio_trigger_notify_done() on error
-Date:   Mon, 13 Dec 2021 10:30:51 +0100
-Message-Id: <20211213092936.009854762@linuxfoundation.org>
+        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
+Subject: [PATCH 5.15 137/171] USB: gadget: zero allocate endpoint 0 buffers
+Date:   Mon, 13 Dec 2021 10:30:52 +0100
+Message-Id: <20211213092949.651414710@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,40 +44,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 6661146427cbbce6d1fe3dbb11ff1c487f55799a upstream.
+commit 86ebbc11bb3f60908a51f3e41a17e3f477c2eaa3 upstream.
 
-IIO trigger handlers must call iio_trigger_notify_done() when done. This
-must be done even when an error occurred. Otherwise the trigger will be
-seen as busy indefinitely and the trigger handler will never be called
-again.
+Under some conditions, USB gadget devices can show allocated buffer
+contents to a host.  Fix this up by zero-allocating them so that any
+extra data will all just be zeros.
 
-The ad7768-1 driver neglects to call iio_trigger_notify_done() when there
-is an error reading the converter data. Fix this by making sure that
-iio_trigger_notify_done() is included in the error exit path.
-
-Fixes: a5f8c7da3dbe ("iio: adc: Add AD7768-1 ADC basic support")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211101144055.13858-2-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/ad7768-1.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/composite.c   |    2 +-
+ drivers/usb/gadget/legacy/dbgp.c |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/iio/adc/ad7768-1.c
-+++ b/drivers/iio/adc/ad7768-1.c
-@@ -470,8 +470,8 @@ static irqreturn_t ad7768_trigger_handle
- 	iio_push_to_buffers_with_timestamp(indio_dev, &st->data.scan,
- 					   iio_get_time_ns(indio_dev));
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -2221,7 +2221,7 @@ int composite_dev_prepare(struct usb_com
+ 	if (!cdev->req)
+ 		return -ENOMEM;
  
--	iio_trigger_notify_done(indio_dev->trig);
- err_unlock:
-+	iio_trigger_notify_done(indio_dev->trig);
- 	mutex_unlock(&st->lock);
+-	cdev->req->buf = kmalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
++	cdev->req->buf = kzalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
+ 	if (!cdev->req->buf)
+ 		goto fail;
  
- 	return IRQ_HANDLED;
+--- a/drivers/usb/gadget/legacy/dbgp.c
++++ b/drivers/usb/gadget/legacy/dbgp.c
+@@ -137,7 +137,7 @@ static int dbgp_enable_ep_req(struct usb
+ 		goto fail_1;
+ 	}
+ 
+-	req->buf = kmalloc(DBGP_REQ_LEN, GFP_KERNEL);
++	req->buf = kzalloc(DBGP_REQ_LEN, GFP_KERNEL);
+ 	if (!req->buf) {
+ 		err = -ENOMEM;
+ 		stp = 2;
 
 

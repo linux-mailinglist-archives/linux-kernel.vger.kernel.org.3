@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 761434725B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3FD4724C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbhLMJpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:45:39 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:35576 "EHLO
+        id S233131AbhLMJiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:38:15 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:60704 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234819AbhLMJlS (ORCPT
+        with ESMTP id S234707AbhLMJgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:41:18 -0500
+        Mon, 13 Dec 2021 04:36:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3F67ECE0E29;
-        Mon, 13 Dec 2021 09:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F69C341C5;
-        Mon, 13 Dec 2021 09:41:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3E5E1CE0E7A;
+        Mon, 13 Dec 2021 09:36:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE1B2C00446;
+        Mon, 13 Dec 2021 09:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388474;
-        bh=zatavcxwREI+5Jc3Vrzg5H/iMUWRcUJjtWgyS1cmf44=;
+        s=korg; t=1639388205;
+        bh=OZgN9ZcKcqPl4KxPzbqIg/iDXsvL2fZZuK7YsRPASo0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wrW2IWK9GgkTUOlLpNwYFFXM/218zygHDx3+//jYsBAGDf1X3UngGn95gJuZF/L3f
-         Npk4EA584k28Uef0w/xUwm4ACmPwykGnnfzz/WbQKzWTe0VBdcH5QGyiK8mgjV8Ild
-         0/N7svFxmnrIxUUViU9UQJtwTB410XRmUPsO3Yfs=
+        b=SI2CvsA4oA1t36N5T04R829jw3mmGiepKSD/Ux2t4jglUrZ7ZzIO/88TVFb0YdveP
+         2PDi7fGsjqe/L0aF1MlXC5cAt5SAaVBQ0D1EfHPeUb3TyIEfmtJXsKAWTPcArYkdGa
+         0IYhgXDzx+Jn9AsiDD817fmz42BoPq0YPaXIFtWg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 4.19 29/74] clk: qcom: regmap-mux: fix parent clock lookup
-Date:   Mon, 13 Dec 2021 10:30:00 +0100
-Message-Id: <20211213092931.784850569@linuxfoundation.org>
+        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.14 22/53] libata: add horkage for ASMedia 1092
+Date:   Mon, 13 Dec 2021 10:30:01 +0100
+Message-Id: <20211213092929.103203804@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,70 +45,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Hannes Reinecke <hare@suse.de>
 
-commit 9a61f813fcc8d56d85fcf9ca6119cf2b5ac91dd5 upstream.
+commit a66307d473077b7aeba74e9b09c841ab3d399c2d upstream.
 
-The function mux_get_parent() uses qcom_find_src_index() to find the
-parent clock index, which is incorrect: qcom_find_src_index() uses src
-enum for the lookup, while mux_get_parent() should use cfg field (which
-corresponds to the register value). Add qcom_find_cfg_index() function
-doing this kind of lookup and use it for mux parent lookup.
+The ASMedia 1092 has a configuration mode which will present a
+dummy device; sadly the implementation falsely claims to provide
+a device with 100M which doesn't actually exist.
+So disable this device to avoid errors during boot.
 
-Fixes: df964016490b ("clk: qcom: add parent map for regmap mux")
 Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20211115233407.1046179-1-dmitry.baryshkov@linaro.org
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/qcom/clk-regmap-mux.c |    2 +-
- drivers/clk/qcom/common.c         |   12 ++++++++++++
- drivers/clk/qcom/common.h         |    2 ++
- 3 files changed, 15 insertions(+), 1 deletion(-)
+ drivers/ata/libata-core.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/clk/qcom/clk-regmap-mux.c
-+++ b/drivers/clk/qcom/clk-regmap-mux.c
-@@ -36,7 +36,7 @@ static u8 mux_get_parent(struct clk_hw *
- 	val &= mask;
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -4449,6 +4449,8 @@ static const struct ata_blacklist_entry
+ 	{ "VRFDFC22048UCHC-TE*", NULL,		ATA_HORKAGE_NODMA },
+ 	/* Odd clown on sil3726/4726 PMPs */
+ 	{ "Config  Disk",	NULL,		ATA_HORKAGE_DISABLE },
++	/* Similar story with ASMedia 1092 */
++	{ "ASMT109x- Config",	NULL,		ATA_HORKAGE_DISABLE },
  
- 	if (mux->parent_map)
--		return qcom_find_src_index(hw, mux->parent_map, val);
-+		return qcom_find_cfg_index(hw, mux->parent_map, val);
- 
- 	return val;
- }
---- a/drivers/clk/qcom/common.c
-+++ b/drivers/clk/qcom/common.c
-@@ -69,6 +69,18 @@ int qcom_find_src_index(struct clk_hw *h
- }
- EXPORT_SYMBOL_GPL(qcom_find_src_index);
- 
-+int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map, u8 cfg)
-+{
-+	int i, num_parents = clk_hw_get_num_parents(hw);
-+
-+	for (i = 0; i < num_parents; i++)
-+		if (cfg == map[i].cfg)
-+			return i;
-+
-+	return -ENOENT;
-+}
-+EXPORT_SYMBOL_GPL(qcom_find_cfg_index);
-+
- struct regmap *
- qcom_cc_map(struct platform_device *pdev, const struct qcom_cc_desc *desc)
- {
---- a/drivers/clk/qcom/common.h
-+++ b/drivers/clk/qcom/common.h
-@@ -47,6 +47,8 @@ extern void
- qcom_pll_set_fsm_mode(struct regmap *m, u32 reg, u8 bias_count, u8 lock_count);
- extern int qcom_find_src_index(struct clk_hw *hw, const struct parent_map *map,
- 			       u8 src);
-+extern int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map,
-+			       u8 cfg);
- 
- extern int qcom_cc_register_board_clk(struct device *dev, const char *path,
- 				      const char *name, unsigned long rate);
+ 	/* Weird ATAPI devices */
+ 	{ "TORiSAN DVD-ROM DRD-N216", NULL,	ATA_HORKAGE_MAX_SEC_128 },
 
 

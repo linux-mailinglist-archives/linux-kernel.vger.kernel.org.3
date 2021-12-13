@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A36347261C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269584723ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbhLMJtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
+        id S233858AbhLMJct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:32:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235303AbhLMJod (ORCPT
+        with ESMTP id S233826AbhLMJco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:44:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFFDC061D5E;
-        Mon, 13 Dec 2021 01:40:50 -0800 (PST)
+        Mon, 13 Dec 2021 04:32:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7815FC061756;
+        Mon, 13 Dec 2021 01:32:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9ED2B80E19;
-        Mon, 13 Dec 2021 09:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CC1C00446;
-        Mon, 13 Dec 2021 09:40:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C35FECE0E29;
+        Mon, 13 Dec 2021 09:32:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AAC8C341C8;
+        Mon, 13 Dec 2021 09:32:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388448;
-        bh=+PfCJkbJZsskR/GCh/m+ZdAW7iA2MMayYcLX+c/hYpk=;
+        s=korg; t=1639387961;
+        bh=iezxOYLblFU7hMNDiwL4/Dw9Dwcu8PjD2n7pwGNV2IM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EhCFpXuwauT4z2IkF6617okCEKKevUN6sJNSS0O9KgcWp6+jiji1NTu65ATm7DwoB
-         cf+34QFTT+/QQ7742RqIzAqtHKoiomigOrPhXlarPQLdJPIxelqZh39rzTGLhK4zQz
-         HC0a0a28tAa8qX78/OUKGWxnXq9BHmLSqQdl70Fk=
+        b=FW2AaKMlo1eg5npgBfa/CwjgRrzJ4p06Fm0zsCG55sYX91zhlbF3GiAyAul/O67cy
+         hZN62Z7pGBJ6BC/S4L/E9rMpgTk87ef8qsrnqAdxBTizz8jJtkfw1ZMKR6NdGGigI0
+         Jl32C1WVnLha7KgZC92TMH47SK+4R3DpR75Ido5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
-        Bixuan Cui <cuibixuan@linux.alibaba.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 26/74] ALSA: pcm: oss: Limit the period size to 16MB
+        "linux-kernel@vger.kernel.org, Linus Torvalds" 
+        <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.4 19/37] binder: use wake_up_pollfree()
 Date:   Mon, 13 Dec 2021 10:29:57 +0100
-Message-Id: <20211213092931.680864627@linuxfoundation.org>
+Message-Id: <20211213092925.994950120@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,38 +50,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 8839c8c0f77ab8fc0463f4ab8b37fca3f70677c2 upstream.
+commit a880b28a71e39013e357fd3adccd1d8a31bc69a8 upstream.
 
-Set the practical limit to the period size (the fragment shift in OSS)
-instead of a full 31bit; a too large value could lead to the exhaust
-of memory as we allocate temporary buffers of the period size, too.
+wake_up_poll() uses nr_exclusive=1, so it's not guaranteed to wake up
+all exclusive waiters.  Yet, POLLFREE *must* wake up all waiters.  epoll
+and aio poll are fortunately not affected by this, but it's very
+fragile.  Thus, the new function wake_up_pollfree() has been introduced.
 
-As of this patch, we set to 16MB limit, which should cover all use
-cases.
+Convert binder to use wake_up_pollfree().
 
-Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
-Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
-Link: https://lore.kernel.org/r/20211201073606.11660-3-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: f5cb779ba163 ("ANDROID: binder: remove waitqueue when thread exits.")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211209010455.42744-3-ebiggers@kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/oss/pcm_oss.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/android/binder.c |   21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
---- a/sound/core/oss/pcm_oss.c
-+++ b/sound/core/oss/pcm_oss.c
-@@ -1967,7 +1967,7 @@ static int snd_pcm_oss_set_fragment1(str
- 	if (runtime->oss.subdivision || runtime->oss.fragshift)
- 		return -EINVAL;
- 	fragshift = val & 0xffff;
--	if (fragshift >= 31)
-+	if (fragshift >= 25) /* should be large enough */
- 		return -EINVAL;
- 	runtime->oss.fragshift = fragshift;
- 	runtime->oss.maxfrags = (val >> 16) & 0xffff;
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -2623,21 +2623,18 @@ static int binder_free_thread(struct bin
+ 	}
+ 
+ 	/*
+-	 * If this thread used poll, make sure we remove the waitqueue
+-	 * from any epoll data structures holding it with POLLFREE.
+-	 * waitqueue_active() is safe to use here because we're holding
+-	 * the global lock.
++	 * If this thread used poll, make sure we remove the waitqueue from any
++	 * poll data structures holding it.
+ 	 */
+-	if ((thread->looper & BINDER_LOOPER_STATE_POLL) &&
+-	    waitqueue_active(&thread->wait)) {
+-		wake_up_poll(&thread->wait, POLLHUP | POLLFREE);
+-	}
++	if (thread->looper & BINDER_LOOPER_STATE_POLL)
++		wake_up_pollfree(&thread->wait);
+ 
+ 	/*
+-	 * This is needed to avoid races between wake_up_poll() above and
+-	 * and ep_remove_waitqueue() called for other reasons (eg the epoll file
+-	 * descriptor being closed); ep_remove_waitqueue() holds an RCU read
+-	 * lock, so we can be sure it's done after calling synchronize_rcu().
++	 * This is needed to avoid races between wake_up_pollfree() above and
++	 * someone else removing the last entry from the queue for other reasons
++	 * (e.g. ep_remove_wait_queue() being called due to an epoll file
++	 * descriptor being closed).  Such other users hold an RCU read lock, so
++	 * we can be sure they're done after we call synchronize_rcu().
+ 	 */
+ 	if (thread->looper & BINDER_LOOPER_STATE_POLL)
+ 		synchronize_rcu();
 
 

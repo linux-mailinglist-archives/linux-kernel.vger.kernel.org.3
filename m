@@ -2,239 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DC4472358
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7425347235B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbhLMI54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:57:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46947 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231818AbhLMI5x (ORCPT
+        id S233497AbhLMI6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:58:08 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:56944 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231818AbhLMI6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:57:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639385872;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p9DVBPqK/d21aVsh+v6i0c9OVAXlQK07WZGATq/KnvE=;
-        b=Rmn/WIVgI4+Whd9PIcgxNvd+mqji/V7Qr1Oox3NOvHocL7uqOSC+QObVLotaiFeXJ3T7m3
-        XSA6iJf8b/PUWuHO8TdDFIzrmR0LwGdfp62N5Tjr3IFa8HNhdLW76PqCR/jTE0S0Wic4ps
-        I1KWnKVPXBxKadNf9FvRTHOuo7IglK8=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-nSMPfJBpNjizYT_ycEciMA-1; Mon, 13 Dec 2021 03:57:51 -0500
-X-MC-Unique: nSMPfJBpNjizYT_ycEciMA-1
-Received: by mail-lj1-f200.google.com with SMTP id i123-20020a2e2281000000b0021cfde1fa8eso4282037lji.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:57:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=p9DVBPqK/d21aVsh+v6i0c9OVAXlQK07WZGATq/KnvE=;
-        b=HpN9eS0L2FY9uoBYnOWGluNULn7FqFHfddQ/QnipkA4+kfkPeyUozfvQSYfXoy9YOY
-         PlMau7/mgm9kmHR+TyZuLXrl5I6718F7PU8o9zFQ8kL+57yKsCfL1KYfg998TV/IygGO
-         u1L0Fv4RTIaHNauc06HPmVmVFVqs/EX0jdS8oxeoz4OVelR/DIrGz+XXHZcvp+V+AnOJ
-         2TCKZZkHtKzi6pyukw3yPqYVxIp/dPSr4W58aFqYaTJasi6AYZhCP7Gvq5d9RTzooKh3
-         VAJ6fI9TYno1QpOdtrRcRDsYI9Pr5leW0cIwDQXsG6hlApb9HNbP+PnLwGxU3FnLSDaB
-         RuvA==
-X-Gm-Message-State: AOAM533SvalSPufrSheHc/1MUqBn9EShc30NoAAG7YoDTUztRrFgU2mP
-        gGfg35JYinIMAVm4fvnIbbv1C59alxpU4qhKwV2hj3mOrqQBIRVz9liEjiys4nMXKQLLg7CDGtS
-        gNRSYHJ0A3HZO/67zyvdrXMr7G2xEBUo9vPj++Ovx
-X-Received: by 2002:a05:6512:3b2b:: with SMTP id f43mr28111792lfv.629.1639385869925;
-        Mon, 13 Dec 2021 00:57:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwKQv6cjOzLwU+SaW+IgVD/YNCHy3d5cQA+UHXctkBj0q7a1O8d5EuvuGrOXD0FCaxdFFZAe4G2ilJ7UjuF+y4=
-X-Received: by 2002:a05:6512:3b2b:: with SMTP id f43mr28111776lfv.629.1639385869712;
- Mon, 13 Dec 2021 00:57:49 -0800 (PST)
+        Mon, 13 Dec 2021 03:58:08 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BD85p53007337;
+        Mon, 13 Dec 2021 09:57:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=SeZDBFVaRDbxNKpAz/6sNDYoE6Cy11vIthxzbtG3n/E=;
+ b=3twl9z0/8PmZf2fK15a5ruSE1VqhnbmZINcPTEK9JhNECNZVx6Jecz6zv4FE9dc88hP+
+ 9Mqv9wdEbWc1yLqoNm51wsmRWHJjmuZnMsSKlrWl9wP2bR74CZ02+JNhTNGWC6CmUzaI
+ R/CYSo782bpuEI5zJin4xZWSP/dPL3xUe23erKZWZLEQctHNk/6aX3bnP4fGnc8sseNZ
+ csW/11XJ1CVmsTIMRJixUiY7fFaxww10IapuDm3nRKz3NnA3Y34x+rVi5cFpMBFzkite
+ GzXgdQJOO8m40ewwl33cwweclI7vHIq+dA4BHF1Vg/7tJlFJfMYyypDKSUafcQoG+4HY XA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cx2c709s8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Dec 2021 09:57:58 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A243110002A;
+        Mon, 13 Dec 2021 09:57:57 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9958522685D;
+        Mon, 13 Dec 2021 09:57:57 +0100 (CET)
+Received: from lmecxl0557.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 13 Dec
+ 2021 09:57:56 +0100
+Subject: Re: [PATCH] drm/stm: ltdc: support of new hardware version
+To:     Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211203085618.11314-1-yannick.fertre@foss.st.com>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Message-ID: <57a01b8e-a894-09d1-523b-dd77f38783e6@foss.st.com>
+Date:   Mon, 13 Dec 2021 09:57:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <3ff5fd23-1db0-2f95-4cf9-711ef403fb62@oracle.com>
- <20210224000057-mutt-send-email-mst@kernel.org> <52836a63-4e00-ff58-50fb-9f450ce968d7@oracle.com>
- <20210228163031-mutt-send-email-mst@kernel.org> <2cb51a6d-afa0-7cd1-d6f2-6b153186eaca@redhat.com>
- <20210302043419-mutt-send-email-mst@kernel.org> <178f8ea7-cebd-0e81-3dc7-10a058d22c07@redhat.com>
- <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com> <20211212042311-mutt-send-email-mst@kernel.org>
- <CACGkMEtwWcBNj62Yn_ZSq33N42ZG5yhCcZf=eQZ_AdVgJhEjEA@mail.gmail.com> <20211213030535-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20211213030535-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 13 Dec 2021 16:57:38 +0800
-Message-ID: <CACGkMEtRfqRDPxXS2T-a0u4Aji3KtUq7-2iUD8Z-X1k84EgOZA@mail.gmail.com>
-Subject: Re: vdpa legacy guest support (was Re: [PATCH] vdpa/mlx5:
- set_features should allow reset to zero)
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Si-Wei Liu <si-wei.liu@oracle.com>, Eli Cohen <elic@nvidia.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211203085618.11314-1-yannick.fertre@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-13_03,2021-12-10_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 4:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+Hello Yannick,
+
+
+Thank you for this patch.
+
+
+Tested-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com <mailto:raphael.gallais-pou@foss.st.com>>
+Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com <mailto:raphael.gallais-pou@foss.st.com>>
+
+
+Regards,
+
+Raphaël Gallais-Pou
+
+
+On 12/3/21 9:56 AM, Yannick Fertre wrote:
+> Add support of new hardware version 0x40100.
 >
-> On Mon, Dec 13, 2021 at 11:02:39AM +0800, Jason Wang wrote:
-> > On Sun, Dec 12, 2021 at 5:26 PM Michael S. Tsirkin <mst@redhat.com> wro=
-te:
-> > >
-> > > On Fri, Dec 10, 2021 at 05:44:15PM -0800, Si-Wei Liu wrote:
-> > > > Sorry for reviving this ancient thread. I was kinda lost for the co=
-nclusion
-> > > > it ended up with. I have the following questions,
-> > > >
-> > > > 1. legacy guest support: from the past conversations it doesn't see=
-m the
-> > > > support will be completely dropped from the table, is my understand=
-ing
-> > > > correct? Actually we're interested in supporting virtio v0.95 guest=
- for x86,
-> > > > which is backed by the spec at
-> > > > https://ozlabs.org/~rusty/virtio-spec/virtio-0.9.5.pdf. Though I'm =
-not sure
-> > > > if there's request/need to support wilder legacy virtio versions ea=
-rlier
-> > > > beyond.
-> > >
-> > > I personally feel it's less work to add in kernel than try to
-> > > work around it in userspace. Jason feels differently.
-> > > Maybe post the patches and this will prove to Jason it's not
-> > > too terrible?
-> >
-> > That's one way, other than the config access before setting features,
-> > we need to deal with other stuffs:
-> >
-> > 1) VIRTIO_F_ORDER_PLATFORM
-> > 2) there could be a parent device that only support 1.0 device
-> >
-> > And a lot of other stuff summarized in spec 7.4 which seems not an
-> > easy task. Various vDPA parent drivers were written under the
-> > assumption that only modern devices are supported.
-> >
-> > Thanks
+> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> ---
+>  drivers/gpu/drm/stm/ltdc.c | 172 ++++++++++++++++++++++++++++++-------
+>  drivers/gpu/drm/stm/ltdc.h |   3 +-
+>  2 files changed, 145 insertions(+), 30 deletions(-)
 >
-> Limiting things to x86 will likely address most issues though, won't it?
-
-For the ordering, yes. But it means we need to introduce a config
-option for legacy logic?
-
-And we need to deal with, as you said in another thread, kick before DRIVER=
-_OK:
-
-E.g we had thing like this:
-
-        if ((status & VIRTIO_CONFIG_S_DRIVER_OK) &&
-            !(status_old & VIRTIO_CONFIG_S_DRIVER_OK)) {
-                ret =3D ifcvf_request_irq(adapter);
-                if (ret) {
-
-Similar issues could be found in other parents.
-
-We also need to consider whether we should encourage the vendor to
-implement the logic.
-
-I think we can try and see how hard it is.
-
-Thanks
-
->
-> > >
-> > > > 2. suppose some form of legacy guest support needs to be there, how=
- do we
-> > > > deal with the bogus assumption below in vdpa_get_config() in the sh=
-ort term?
-> > > > It looks one of the intuitive fix is to move the vdpa_set_features =
-call out
-> > > > of vdpa_get_config() to vdpa_set_config().
-> > > >
-> > > >         /*
-> > > >          * Config accesses aren't supposed to trigger before featur=
-es are
-> > > > set.
-> > > >          * If it does happen we assume a legacy guest.
-> > > >          */
-> > > >         if (!vdev->features_valid)
-> > > >                 vdpa_set_features(vdev, 0);
-> > > >         ops->get_config(vdev, offset, buf, len);
-> > > >
-> > > > I can post a patch to fix 2) if there's consensus already reached.
-> > > >
-> > > > Thanks,
-> > > > -Siwei
-> > >
-> > > I'm not sure how important it is to change that.
-> > > In any case it only affects transitional devices, right?
-> > > Legacy only should not care ...
-> > >
-> > >
-> > > > On 3/2/2021 2:53 AM, Jason Wang wrote:
-> > > > >
-> > > > > On 2021/3/2 5:47 =E4=B8=8B=E5=8D=88, Michael S. Tsirkin wrote:
-> > > > > > On Mon, Mar 01, 2021 at 11:56:50AM +0800, Jason Wang wrote:
-> > > > > > > On 2021/3/1 5:34 =E4=B8=8A=E5=8D=88, Michael S. Tsirkin wrote=
-:
-> > > > > > > > On Wed, Feb 24, 2021 at 10:24:41AM -0800, Si-Wei Liu wrote:
-> > > > > > > > > > Detecting it isn't enough though, we will need a new io=
-ctl to notify
-> > > > > > > > > > the kernel that it's a legacy guest. Ugh :(
-> > > > > > > > > Well, although I think adding an ioctl is doable, may I
-> > > > > > > > > know what the use
-> > > > > > > > > case there will be for kernel to leverage such info
-> > > > > > > > > directly? Is there a
-> > > > > > > > > case QEMU can't do with dedicate ioctls later if there's =
-indeed
-> > > > > > > > > differentiation (legacy v.s. modern) needed?
-> > > > > > > > BTW a good API could be
-> > > > > > > >
-> > > > > > > > #define VHOST_SET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
-> > > > > > > > #define VHOST_GET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
-> > > > > > > >
-> > > > > > > > we did it per vring but maybe that was a mistake ...
-> > > > > > >
-> > > > > > > Actually, I wonder whether it's good time to just not support
-> > > > > > > legacy driver
-> > > > > > > for vDPA. Consider:
-> > > > > > >
-> > > > > > > 1) It's definition is no-normative
-> > > > > > > 2) A lot of budren of codes
-> > > > > > >
-> > > > > > > So qemu can still present the legacy device since the config
-> > > > > > > space or other
-> > > > > > > stuffs that is presented by vhost-vDPA is not expected to be
-> > > > > > > accessed by
-> > > > > > > guest directly. Qemu can do the endian conversion when necess=
-ary
-> > > > > > > in this
-> > > > > > > case?
-> > > > > > >
-> > > > > > > Thanks
-> > > > > > >
-> > > > > > Overall I would be fine with this approach but we need to avoid=
- breaking
-> > > > > > working userspace, qemu releases with vdpa support are out ther=
-e and
-> > > > > > seem to work for people. Any changes need to take that into acc=
-ount
-> > > > > > and document compatibility concerns.
-> > > > >
-> > > > >
-> > > > > Agree, let me check.
-> > > > >
-> > > > >
-> > > > > >   I note that any hardware
-> > > > > > implementation is already broken for legacy except on platforms=
- with
-> > > > > > strong ordering which might be helpful in reducing the scope.
-> > > > >
-> > > > >
-> > > > > Yes.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > >
-> > > > > >
-> > > > > >
-> > > > >
-> > >
->
-
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index dbdee954692a..c0619f372630 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -46,15 +46,15 @@
+>  #define HWVER_10200 0x010200
+>  #define HWVER_10300 0x010300
+>  #define HWVER_20101 0x020101
+> +#define HWVER_40100 0x040100
+>  
+>  /*
+>   * The address of some registers depends on the HW version: such registers have
+> - * an extra offset specified with reg_ofs.
+> + * an extra offset specified with layer_ofs.
+>   */
+> -#define REG_OFS_NONE	0
+> -#define REG_OFS_4	4		/* Insertion of "Layer Conf. 2" reg */
+> -#define REG_OFS		(ldev->caps.reg_ofs)
+> -#define LAY_OFS		0x80		/* Register Offset between 2 layers */
+> +#define LAY_OFS_0	0x80
+> +#define LAY_OFS_1	0x100
+> +#define LAY_OFS	(ldev->caps.layer_ofs)
+>  
+>  /* Global register offsets */
+>  #define LTDC_IDR	0x0000		/* IDentification */
+> @@ -75,29 +75,34 @@
+>  #define LTDC_LIPCR	0x0040		/* Line Interrupt Position Conf. */
+>  #define LTDC_CPSR	0x0044		/* Current Position Status */
+>  #define LTDC_CDSR	0x0048		/* Current Display Status */
+> +#define LTDC_FUT	0x0090		/* Fifo underrun Threshold */
+>  
+>  /* Layer register offsets */
+> -#define LTDC_L1LC1R	(0x80)		/* L1 Layer Configuration 1 */
+> -#define LTDC_L1LC2R	(0x84)		/* L1 Layer Configuration 2 */
+> -#define LTDC_L1CR	(0x84 + REG_OFS)/* L1 Control */
+> -#define LTDC_L1WHPCR	(0x88 + REG_OFS)/* L1 Window Hor Position Config */
+> -#define LTDC_L1WVPCR	(0x8C + REG_OFS)/* L1 Window Vert Position Config */
+> -#define LTDC_L1CKCR	(0x90 + REG_OFS)/* L1 Color Keying Configuration */
+> -#define LTDC_L1PFCR	(0x94 + REG_OFS)/* L1 Pixel Format Configuration */
+> -#define LTDC_L1CACR	(0x98 + REG_OFS)/* L1 Constant Alpha Config */
+> -#define LTDC_L1DCCR	(0x9C + REG_OFS)/* L1 Default Color Configuration */
+> -#define LTDC_L1BFCR	(0xA0 + REG_OFS)/* L1 Blend Factors Configuration */
+> -#define LTDC_L1FBBCR	(0xA4 + REG_OFS)/* L1 FrameBuffer Bus Control */
+> -#define LTDC_L1AFBCR	(0xA8 + REG_OFS)/* L1 AuxFB Control */
+> -#define LTDC_L1CFBAR	(0xAC + REG_OFS)/* L1 Color FrameBuffer Address */
+> -#define LTDC_L1CFBLR	(0xB0 + REG_OFS)/* L1 Color FrameBuffer Length */
+> -#define LTDC_L1CFBLNR	(0xB4 + REG_OFS)/* L1 Color FrameBuffer Line Nb */
+> -#define LTDC_L1AFBAR	(0xB8 + REG_OFS)/* L1 AuxFB Address */
+> -#define LTDC_L1AFBLR	(0xBC + REG_OFS)/* L1 AuxFB Length */
+> -#define LTDC_L1AFBLNR	(0xC0 + REG_OFS)/* L1 AuxFB Line Number */
+> -#define LTDC_L1CLUTWR	(0xC4 + REG_OFS)/* L1 CLUT Write */
+> -#define LTDC_L1YS1R	(0xE0 + REG_OFS)/* L1 YCbCr Scale 1 */
+> -#define LTDC_L1YS2R	(0xE4 + REG_OFS)/* L1 YCbCr Scale 2 */
+> +#define LTDC_L1C0R	(ldev->caps.layer_regs[0])	/* L1 configuration 0 */
+> +#define LTDC_L1C1R	(ldev->caps.layer_regs[1])	/* L1 configuration 1 */
+> +#define LTDC_L1RCR	(ldev->caps.layer_regs[2])	/* L1 reload control */
+> +#define LTDC_L1CR	(ldev->caps.layer_regs[3])	/* L1 control register */
+> +#define LTDC_L1WHPCR	(ldev->caps.layer_regs[4])	/* L1 window horizontal position configuration */
+> +#define LTDC_L1WVPCR	(ldev->caps.layer_regs[5])	/* L1 window vertical position configuration */
+> +#define LTDC_L1CKCR	(ldev->caps.layer_regs[6])	/* L1 color keying configuration */
+> +#define LTDC_L1PFCR	(ldev->caps.layer_regs[7])	/* L1 pixel format configuration */
+> +#define LTDC_L1CACR	(ldev->caps.layer_regs[8])	/* L1 constant alpha configuration */
+> +#define LTDC_L1DCCR	(ldev->caps.layer_regs[9])	/* L1 default color configuration */
+> +#define LTDC_L1BFCR	(ldev->caps.layer_regs[10])	/* L1 blending factors configuration */
+> +#define LTDC_L1BLCR	(ldev->caps.layer_regs[11])	/* L1 burst length configuration */
+> +#define LTDC_L1PCR	(ldev->caps.layer_regs[12])	/* L1 planar configuration */
+> +#define LTDC_L1CFBAR	(ldev->caps.layer_regs[13])	/* L1 color frame buffer address */
+> +#define LTDC_L1CFBLR	(ldev->caps.layer_regs[14])	/* L1 color frame buffer length */
+> +#define LTDC_L1CFBLNR	(ldev->caps.layer_regs[15])	/* L1 color frame buffer line number */
+> +#define LTDC_L1AFBA0R	(ldev->caps.layer_regs[16])	/* L1 auxiliary frame buffer address 0 */
+> +#define LTDC_L1AFBA1R	(ldev->caps.layer_regs[17])	/* L1 auxiliary frame buffer address 1 */
+> +#define LTDC_L1AFBLR	(ldev->caps.layer_regs[18])	/* L1 auxiliary frame buffer length */
+> +#define LTDC_L1AFBLNR	(ldev->caps.layer_regs[19])	/* L1 auxiliary frame buffer line number */
+> +#define LTDC_L1CLUTWR	(ldev->caps.layer_regs[20])	/* L1 CLUT write */
+> +#define LTDC_L1CYR0R	(ldev->caps.layer_regs[21])	/* L1 Conversion YCbCr RGB 0 */
+> +#define LTDC_L1CYR1R	(ldev->caps.layer_regs[22])	/* L1 Conversion YCbCr RGB 1 */
+> +#define LTDC_L1FPF0R	(ldev->caps.layer_regs[23])	/* L1 Flexible Pixel Format 0 */
+> +#define LTDC_L1FPF1R	(ldev->caps.layer_regs[24])	/* L1 Flexible Pixel Format 1 */
+>  
+>  /* Bit definitions */
+>  #define SSCR_VSH	GENMASK(10, 0)	/* Vertical Synchronization Height */
+> @@ -208,7 +213,10 @@ enum ltdc_pix_fmt {
+>  	/* Indexed formats */
+>  	PF_L8,			/* Indexed 8 bits [8 bits] */
+>  	PF_AL44,		/* Alpha:4 bits + indexed 4 bits [8 bits] */
+> -	PF_AL88			/* Alpha:8 bits + indexed 8 bits [16 bits] */
+> +	PF_AL88,		/* Alpha:8 bits + indexed 8 bits [16 bits] */
+> +	PF_ABGR8888,		/* ABGR [32 bits] */
+> +	PF_BGRA8888,		/* BGRA [32 bits] */
+> +	PF_BGR565		/* RGB [16 bits] */
+>  };
+>  
+>  /* The index gives the encoding of the pixel format for an HW version */
+> @@ -234,6 +242,102 @@ static const enum ltdc_pix_fmt ltdc_pix_fmt_a1[NB_PF] = {
+>  	PF_ARGB4444		/* 0x07 */
+>  };
+>  
+> +static const enum ltdc_pix_fmt ltdc_pix_fmt_a2[NB_PF] = {
+> +	PF_ARGB8888,		/* 0x00 */
+> +	PF_ABGR8888,		/* 0x01 */
+> +	PF_RGBA8888,		/* 0x02 */
+> +	PF_BGRA8888,		/* 0x03 */
+> +	PF_RGB565,		/* 0x04 */
+> +	PF_BGR565,		/* 0x05 */
+> +	PF_RGB888,		/* 0x06 */
+> +	PF_ARGB1555		/* 0x07 */
+> +};
+> +
+> +/* Layer register offsets */
+> +static const u32 ltdc_layer_regs_a0[] = {
+> +	0x80,	/* L1 configuration 0 */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x84,	/* L1 control register */
+> +	0x88,	/* L1 window horizontal position configuration */
+> +	0x8c,	/* L1 window vertical position configuration */
+> +	0x90,	/* L1 color keying configuration */
+> +	0x94,	/* L1 pixel format configuration */
+> +	0x98,	/* L1 constant alpha configuration */
+> +	0x9c,	/* L1 default color configuration */
+> +	0xa0,	/* L1 blending factors configuration */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0xac,	/* L1 color frame buffer address */
+> +	0xb0,	/* L1 color frame buffer length */
+> +	0xb4,	/* L1 color frame buffer line number */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0xc4,	/* L1 CLUT write */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00	/* not available */
+> +};
+> +
+> +static const u32 ltdc_layer_regs_a1[] = {
+> +	0x80,	/* L1 configuration 0 */
+> +	0x84,	/* L1 configuration 1 */
+> +	0x00,	/* L1 reload control */
+> +	0x88,	/* L1 control register */
+> +	0x8c,	/* L1 window horizontal position configuration */
+> +	0x90,	/* L1 window vertical position configuration */
+> +	0x94,	/* L1 color keying configuration */
+> +	0x98,	/* L1 pixel format configuration */
+> +	0x9c,	/* L1 constant alpha configuration */
+> +	0xa0,	/* L1 default color configuration */
+> +	0xa4,	/* L1 blending factors configuration */
+> +	0xa8,	/* L1 burst length configuration */
+> +	0x00,	/* not available */
+> +	0xac,	/* L1 color frame buffer address */
+> +	0xb0,	/* L1 color frame buffer length */
+> +	0xb4,	/* L1 color frame buffer line number */
+> +	0xb8,	/* L1 auxiliary frame buffer address 0 */
+> +	0xbc,	/* L1 auxiliary frame buffer address 1 */
+> +	0xc0,	/* L1 auxiliary frame buffer length */
+> +	0xc4,	/* L1 auxiliary frame buffer line number */
+> +	0xc8,	/* L1 CLUT write */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00	/* not available */
+> +};
+> +
+> +static const u32 ltdc_layer_regs_a2[] = {
+> +	0x100,	/* L1 configuration 0 */
+> +	0x104,	/* L1 configuration 1 */
+> +	0x108,	/* L1 reload control */
+> +	0x10c,	/* L1 control register */
+> +	0x110,	/* L1 window horizontal position configuration */
+> +	0x114,	/* L1 window vertical position configuration */
+> +	0x118,	/* L1 color keying configuration */
+> +	0x11c,	/* L1 pixel format configuration */
+> +	0x120,	/* L1 constant alpha configuration */
+> +	0x124,	/* L1 default color configuration */
+> +	0x128,	/* L1 blending factors configuration */
+> +	0x12c,	/* L1 burst length configuration */
+> +	0x130,	/* L1 planar configuration */
+> +	0x134,	/* L1 color frame buffer address */
+> +	0x138,	/* L1 color frame buffer length */
+> +	0x13c,	/* L1 color frame buffer line number */
+> +	0x140,	/* L1 auxiliary frame buffer address 0 */
+> +	0x144,	/* L1 auxiliary frame buffer address 1 */
+> +	0x148,	/* L1 auxiliary frame buffer length */
+> +	0x14c,	/* L1 auxiliary frame buffer line number */
+> +	0x150,	/* L1 CLUT write */
+> +	0x16c,	/* L1 Conversion YCbCr RGB 0 */
+> +	0x170,	/* L1 Conversion YCbCr RGB 1 */
+> +	0x174,	/* L1 Flexible Pixel Format 0 */
+> +	0x178	/* L1 Flexible Pixel Format 1 */
+> +};
+> +
+>  static const u64 ltdc_format_modifiers[] = {
+>  	DRM_FORMAT_MOD_LINEAR,
+>  	DRM_FORMAT_MOD_INVALID
+> @@ -1158,7 +1262,8 @@ static int ltdc_get_caps(struct drm_device *ddev)
+>  	switch (ldev->caps.hw_version) {
+>  	case HWVER_10200:
+>  	case HWVER_10300:
+> -		ldev->caps.reg_ofs = REG_OFS_NONE;
+> +		ldev->caps.layer_ofs = LAY_OFS_0;
+> +		ldev->caps.layer_regs = ltdc_layer_regs_a0;
+>  		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a0;
+>  		/*
+>  		 * Hw older versions support non-alpha color formats derived
+> @@ -1174,12 +1279,21 @@ static int ltdc_get_caps(struct drm_device *ddev)
+>  		ldev->caps.nb_irq = 2;
+>  		break;
+>  	case HWVER_20101:
+> -		ldev->caps.reg_ofs = REG_OFS_4;
+> +		ldev->caps.layer_ofs = LAY_OFS_0;
+> +		ldev->caps.layer_regs = ltdc_layer_regs_a1;
+>  		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a1;
+>  		ldev->caps.non_alpha_only_l1 = false;
+>  		ldev->caps.pad_max_freq_hz = 150000000;
+>  		ldev->caps.nb_irq = 4;
+>  		break;
+> +	case HWVER_40100:
+> +		ldev->caps.layer_ofs = LAY_OFS_1;
+> +		ldev->caps.layer_regs = ltdc_layer_regs_a2;
+> +		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a2;
+> +		ldev->caps.non_alpha_only_l1 = false;
+> +		ldev->caps.pad_max_freq_hz = 90000000;
+> +		ldev->caps.nb_irq = 2;
+> +		break;
+>  	default:
+>  		return -ENODEV;
+>  	}
+> diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
+> index f153b908c70e..55a125f89af6 100644
+> --- a/drivers/gpu/drm/stm/ltdc.h
+> +++ b/drivers/gpu/drm/stm/ltdc.h
+> @@ -14,7 +14,8 @@
+>  struct ltdc_caps {
+>  	u32 hw_version;		/* hardware version */
+>  	u32 nb_layers;		/* number of supported layers */
+> -	u32 reg_ofs;		/* register offset for applicable regs */
+> +	u32 layer_ofs;		/* layer offset for applicable regs */
+> +	const u32 *layer_regs;	/* layer register offset */
+>  	u32 bus_width;		/* bus width (32 or 64 bits) */
+>  	const u32 *pix_fmt_hw;	/* supported pixel formats */
+>  	bool non_alpha_only_l1; /* non-native no-alpha formats on layer 1 */

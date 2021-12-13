@@ -2,138 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6CE47359E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0784735A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239076AbhLMUK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:10:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57930 "EHLO
+        id S242585AbhLMUMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:12:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40510 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231971AbhLMUK2 (ORCPT
+        by vger.kernel.org with ESMTP id S237759AbhLMUMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:10:28 -0500
+        Mon, 13 Dec 2021 15:12:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639426228;
+        s=mimecast20190719; t=1639426342;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=98410SCY73aKt24LcVMxqvWF7akIYNbHy7o+glUPBM4=;
-        b=JQM+2SNRVQLxk0m3dCELXvJupEXT4BC4PtRnn8oShbWOPjXc2XIiMABtayBh5nwnvvq7nP
-        Yqdlo/Bn2vI45BbWJNQT4NwxLvEm4QOkI25bdURsJgb5xiXWz4HOeGN232AYgYdOikC1k6
-        CBuXcMNCN10I+2ZJ2QMVXs9Nx4FlnMw=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=xU/SmztKLLgt1uf7mPiopLf2mkRcYGHM3iLZTJn1eYs=;
+        b=WRTNUkNJq2GNHrO4KRuV7QryxpVi1OnUPl+ICk5FxF0nsWxROxBQoTVjv6kSJVXP39QzO+
+        Qa3y/iuewwNFxTNkWu+ASoBXwaNBAcTqWpa+6n1GVyx6AY8XNfYdgzRP8tG2fCGXMXQPH2
+        ZOsh0MyMZ7G0ZdPVx9hUJ1OCnzEX7P4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511--zjZFenxNt2pgOOrw4bAaQ-1; Mon, 13 Dec 2021 15:10:27 -0500
-X-MC-Unique: -zjZFenxNt2pgOOrw4bAaQ-1
-Received: by mail-ot1-f69.google.com with SMTP id z16-20020a056830129000b0055c7b3ceaf5so6795762otp.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:10:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=98410SCY73aKt24LcVMxqvWF7akIYNbHy7o+glUPBM4=;
-        b=Po1QqzNs2otc9CC/6TfWRZdbgeUNOMsQrGFUNYxG8lLiMR56PlLCBJBDWH6SxRQWQ9
-         vaib4SjfSzy62Vxfq/ffGSBQjnVHVnvyJMxKWNk2VoKYcjBnsZZYgh16QaCM3AM3r9yd
-         Bn4NYkl/wfnHdcbeWA2P4MRLqnPVPyflxtvdFmYfZ2ZJZEYZIbuk+0Z+hplh7/BXLXph
-         CfLFp/LWA93Sx5hwTQKYr+Z6z6i13xmH78B33gYjiRrXK6YNQ4WKiYKSfh2LOzg+PQK1
-         w/D6XYEHgAjJ6ZxaHNKRaMnkvYIu9BVnfdlJoYEAQ2Rx4NsVy+HlRK9Stw+/EGvpXcbF
-         LVAw==
-X-Gm-Message-State: AOAM530irOiGfqrSbz5aVbQmrapGeDEdvRsokfehAHoYBfCM0QLp0+g1
-        Q4Maez4zqbLcqnU3Rrm9Peo0z+e/1tIV07ksBwUkMo+1VqP4s1YLKqAWr9QNu2y+J931d9HwMGv
-        qxmbzqev1j2bgvS/Y4aZ2/AbX
-X-Received: by 2002:a4a:d184:: with SMTP id j4mr448485oor.72.1639426226196;
-        Mon, 13 Dec 2021 12:10:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzdF5hmqnDtiL8k0ufA6KXBZMr+XhxgtNNHlmdJ9hKuUpIpa3M2DrnM0v+LSkj9mIo3zup2qw==
-X-Received: by 2002:a4a:d184:: with SMTP id j4mr448461oor.72.1639426225935;
-        Mon, 13 Dec 2021 12:10:25 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::49])
-        by smtp.gmail.com with ESMTPSA id h14sm2392996ots.22.2021.12.13.12.10.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 12:10:25 -0800 (PST)
-Date:   Mon, 13 Dec 2021 12:10:22 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     David Vernet <void@manifault.com>
-Cc:     pmladek@suse.com, linux-doc@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-        corbet@lwn.net, yhs@fb.com, songliubraving@fb.com
-Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
-Message-ID: <20211213201022.dhalhtc2bpey55gh@treble>
-References: <20211213191734.3238783-1-void@manifault.com>
+ us-mta-28-2EeCaazvPlmBrHa0cftLEg-1; Mon, 13 Dec 2021 15:12:18 -0500
+X-MC-Unique: 2EeCaazvPlmBrHa0cftLEg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5F3FE192FDA0;
+        Mon, 13 Dec 2021 20:12:17 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.17.223])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 50EBE5F70B;
+        Mon, 13 Dec 2021 20:12:15 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-api <linux-api@vger.kernel.org>,
+        Jann Horn <jannh@google.com>,
+        libc-alpha <libc-alpha@sourceware.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        paulmck <paulmck@kernel.org>
+Subject: Re: rseq + membarrier programming model
+References: <87tufctk82.fsf@oldenburg.str.redhat.com>
+        <697825714.30478.1639423180784.JavaMail.zimbra@efficios.com>
+        <87ilvstia9.fsf@oldenburg.str.redhat.com>
+        <1424606270.30586.1639425414221.JavaMail.zimbra@efficios.com>
+Date:   Mon, 13 Dec 2021 21:12:12 +0100
+In-Reply-To: <1424606270.30586.1639425414221.JavaMail.zimbra@efficios.com>
+        (Mathieu Desnoyers's message of "Mon, 13 Dec 2021 14:56:54 -0500
+        (EST)")
+Message-ID: <87bl1ktgbn.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211213191734.3238783-1-void@manifault.com>
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:17:35AM -0800, David Vernet wrote:
-> When enabling a KLP patch with `klp_enable_patch`, we invoke
-> `klp_init_patch_early` to initialize the kobjects for the patch itself, as
-> well as the `struct klp_object*`'s and `struct klp_func*`'s that comprise
-> it. However, there are some paths where we may fail to do an
-> early-initialization of an object or its functions if certain conditions
-> are not met, such as an object having a `NULL` funcs pointer. In these
-> paths, we may currently leak the `struct klp_patch*`'s kobject, as well as
-> any of its objects or functions, as we don't free the patch in
-> `klp_enable_patch` if `klp_init_patch_early` returns an error code. For
-> example, if we added the following object entry to the sample livepatch
-> code, it would cause us to leak the vmlinux `klp_object`, and its `struct
-> klp_func` which updates `cmdline_proc_show`:
-> 
-> ```
-> static struct klp_object objs[] = {
->         {
->                 .name = "kvm",
->         }, { }
-> };
-> ```
-> 
-> Without this change, if we enable `CONFIG_DEBUG_KOBJECT` and try to `kpatch
-> load livepatch-sample.ko`, we don't observe the kobjects being released
-> (though of course we do observe `insmod` failing to insert the module).
-> With the change, we do observe that the `kobject` for the patch and its
-> `vmlinux` object are released.
-> 
-> Signed-off-by: David Vernet <void@manifault.com>
+* Mathieu Desnoyers:
 
-Thanks for reporting the issue and submitting the patch!
+> ----- On Dec 13, 2021, at 2:29 PM, Florian Weimer fweimer@redhat.com wrot=
+e:
+>
+>> * Mathieu Desnoyers:
+>>=20
+>>>> Could it fall back to
+>>>> MEMBARRIER_CMD_GLOBAL instead?
+>>>
+>>> No. CMD_GLOBAL does not issue the required rseq fence used by the
+>>> algorithm discussed. Also, CMD_GLOBAL has quite a few other shortcoming=
+s:
+>>> it takes a while to execute, and is incompatible with nohz_full kernels.
+>>=20
+>> What about using sched_setcpu to move the current thread to the same CPU
+>> (and move it back afterwards)?  Surely that implies the required sort of
+>> rseq barrier that MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ with
+>> MEMBARRIER_CMD_FLAG_CPU performs?
+>
+> I guess you refer to using sched_setaffinity(2) there ? There are various
+> reasons why this may fail. For one, the affinity mask is a shared global
+> resource which can be changed by external applications.
 
-The patch description needs a few tweaks.  In the kernel we don't use
-Markdown for patch descriptions.
+So is process memory =E2=80=A6
 
-A function can be postfixed with a trailing pair of parentheses, like
-klp_enable_patch().
+> Also, setting the affinity is really just a hint. In the presence of
+> cpu hotplug and or cgroup cpuset, it is known to lead to situations
+> where the kernel just gives up and provides an affinity mask including
+> all CPUs.
 
-Other symbols can be enclosed with single quotes, like 'struct
-klp_object'.
+How does CPU hotplug impact this negatively?
 
-I'd also recommend avoiding the excessive use of "we", in favor of more
-imperative-type language.
+The cgroup cpuset issue clearly is a bug.
 
-See Documentation/process/submitting-patches.rst for more details.  It's
-also a good idea to look at some kernel commit logs to get a general
-idea of the kernel patch description style.
+> Therefore, using sched_setaffinity() and expecting to be pinned to
+> a specific CPU for correctness purposes seems brittle.
 
-> @@ -1052,10 +1052,7 @@ int klp_enable_patch(struct klp_patch *patch)
->  	}
->  
->  	ret = klp_init_patch_early(patch);
-> -	if (ret) {
-> -		mutex_unlock(&klp_mutex);
-> -		return ret;
-> -	}
-> +		goto err;
->  
->  	ret = klp_init_patch(patch);
->  	if (ret)
+I'm pretty sure it used to work reliably for some forms of concurrency
+control.
 
-I don't think the fix will be quite that simple.  For example, if
-klp_init_patch_early() fails, that means try_module_get() hasn't been
-done, so klp_free_patch_finish() will wrongly do a module_put().
+> But _if_ we'd have something like a sched_setaffinity which we can
+> trust, yes, temporarily migrating to the target CPU, and observing that
+> we indeed run there, would AFAIU provide the same guarantee as the rseq
+> fence provided by membarrier. It would have a higher overhead than
+> membarrier as well.
 
--- 
-Josh
+Presumably a signal could do it as well.
+
+>> That is possible even without membarrier, so I wonder why registration
+>> of intent is needed for MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ.
+>
+> I would answer that it is not possible to do this _reliably_ today
+> without membarrier (see above discussion of cpu hotplug, cgroups, and
+> modification of cpu affinity by external processes).
+>
+> AFAIR, registration of intent for MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ
+> is mainly there to provide a programming model similar to private expedit=
+ed
+> plain and core-sync cmds.
+>
+> The registration of intent allows the kernel to further tweak what is
+> done internally and make tradeoffs which only impact applications
+> performing the registration.
+
+But if there is no strong performance argument to do so, this introduces
+additional complexity into userspace.  Surely we could say we just do
+MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ at process start and document
+failure (in case of seccomp etc.), but then why do this at all?
+
+>>> In order to make sure the programming model is the same for expedited
+>>> private/global plain/sync-core/rseq membarrier commands, we require that
+>>> each process perform a registration beforehand.
+>>=20
+>> Hmm.  At least it's not possible to unregister again.
+>>=20
+>> But I think it would be really useful to have some of these barriers
+>> available without registration, possibly in a more expensive form.
+>
+> What would be wrong with doing a membarrier private-expedited-rseq
+> registration on libc startup, and exposing a glibc tunable to allow
+> disabling this ?
+
+The configurations that need to be supported go from =E2=80=9Cno rseq=E2=80=
+=9C/=E2=80=9Crseq=E2=80=9D
+to =E2=80=9Cno rseq=E2=80=9C/=E2=80=9Crseq=E2=80=9D/=E2=80=9Crseq with memb=
+arrier=E2=80=9D.  Everyone now needs to
+think about implementing support for all three instead just the obvious
+two.
+
+Thanks,
+Florian
 

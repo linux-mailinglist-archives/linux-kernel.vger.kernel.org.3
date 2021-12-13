@@ -2,127 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9FB472E69
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86A8472E72
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238662AbhLMOCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbhLMOCK (ORCPT
+        id S238209AbhLMOEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:04:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27188 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232193AbhLMOEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:02:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F62C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 06:02:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Dec 2021 09:04:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639404239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1AptlvWm8ovvag4ndsPZnTJsnei0DVx3SWRb8MH/REI=;
+        b=czgPCxLwgejaGuEn9FHevlMSUrcO9i9CqCha6GYVyJJdzTOeDvRh5hS7assSym1KDjmh4N
+        8zryFoJAvjZDkavcHeaYMZpf9H89iWTdyj8iinYji5q96Ebr8Abrz9g8co33zcD65i94Nd
+        J3WHa1yd9rX7cfH0okile1NvG55TYok=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-164-kLNGR4PCP-62LTetQkCMpw-1; Mon, 13 Dec 2021 09:03:56 -0500
+X-MC-Unique: kLNGR4PCP-62LTetQkCMpw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACF9EB80EFF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC50C34603
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639404127;
-        bh=f/j742BUMo0QU9baS+yWgKBmRVntjzG99e6tjqBEtqk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E/3w25C3E4nPRXqIFtG8aFk+koyzXySpeMfcpyhWuint/qzSlOsibK5v4vBCorz0R
-         HtGrJIrCj6j86pCX8d2KEf0iKx+N6ngqk3IZ1t3TdL4t7brU+zWTxXdxy9yVfVBky5
-         l4qSznVHzh1g9tV3DaxH2ePXbror20+etHa92EtpM2FcygxUbYorOXR16AVymmJ74g
-         SP0vk2rbVc4TLRQh0QM9CXSA7xHsHHM/TV71RNszt6b2njTwgwQ62BFxPt15d/FO3o
-         LRUsFUKlWsEiu8tpXBdSnJ3RbGksJMjs2R6MbI008nabgnOO038cfL4U6or34dSVm4
-         /3fRX7mxNzAbA==
-Received: by mail-oo1-f48.google.com with SMTP id e17-20020a4a8291000000b002c5ee0645e7so4200743oog.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 06:02:07 -0800 (PST)
-X-Gm-Message-State: AOAM5329B69BR1hXMJcValYGhrQfOc6pWtP9qelhc7bEIauq2DaAS57k
-        PPaqtOP2IsNhON+uVlEuwPFkR8iRffQCqTgFaSM=
-X-Google-Smtp-Source: ABdhPJz+QkBo80K8nuAF1icHCzWOFgzDxeHuSiVnAaQ4GJAYqVrQJZfPTh6t3FLdvQfX++BzUlGiGCCW7LQDZWj5H3Q=
-X-Received: by 2002:a05:6820:30b:: with SMTP id l11mr19558661ooe.32.1639404126737;
- Mon, 13 Dec 2021 06:02:06 -0800 (PST)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 677BC343C9;
+        Mon, 13 Dec 2021 14:03:53 +0000 (UTC)
+Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C4344ADCB;
+        Mon, 13 Dec 2021 14:03:51 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 22:03:48 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
+        robin.murphy@arm.com, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz,
+        m.szyprowski@samsung.com, John.p.donnelly@oracle.com,
+        kexec@lists.infradead.org, rppt@linux.ibm.com
+Subject: Re: [PATCH RESEND v2 0/5] Avoid requesting page from DMA zone when
+ no managed pages
+Message-ID: <20211213140348.GA26562@MiWiFi-R3L-srv>
+References: <20211207030750.30824-1-bhe@redhat.com>
+ <20211207031631.GA5604@MiWiFi-R3L-srv>
+ <YbdJ00wRFvi0aqze@zn.tnic>
 MIME-Version: 1.0
-References: <20211210095432.51798-1-jianyong.wu@arm.com> <1e63e2f7-0563-2866-4665-84fe220b615f@arm.com>
- <CAMj1kXF3Kf_OP-EL6oRfstw6VdEaqowVPioABxfMv+1FnPvfew@mail.gmail.com> <20211213134503.GD11570@willie-the-truck>
-In-Reply-To: <20211213134503.GD11570@willie-the-truck>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 13 Dec 2021 15:01:55 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH0qTEiUyJLxr8YJhpWc_iLCN9-30KD_WTyUfKga9O3YA@mail.gmail.com>
-Message-ID: <CAMj1kXH0qTEiUyJLxr8YJhpWc_iLCN9-30KD_WTyUfKga9O3YA@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64/mm: avoid fixmap race condition when create pud mapping
-To:     Will Deacon <will@kernel.org>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Jianyong Wu <jianyong.wu@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Gavin Shan <gshan@redhat.com>, Jia He <justin.he@arm.com>,
-        nd <nd@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbdJ00wRFvi0aqze@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 at 14:45, Will Deacon <will@kernel.org> wrote:
->
-> On Mon, Dec 13, 2021 at 11:35:16AM +0100, Ard Biesheuvel wrote:
-> > On Mon, 13 Dec 2021 at 11:16, Anshuman Khandual
-> > <anshuman.khandual@arm.com> wrote:
-> > > On 12/10/21 3:24 PM, Jianyong Wu wrote:
-> > > > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> > > > index acfae9b41cc8..98ac09ae9588 100644
-> > > > --- a/arch/arm64/mm/mmu.c
-> > > > +++ b/arch/arm64/mm/mmu.c
-> > > > @@ -63,6 +63,7 @@ static pmd_t bm_pmd[PTRS_PER_PMD] __page_aligned_bss __maybe_unused;
-> > > >  static pud_t bm_pud[PTRS_PER_PUD] __page_aligned_bss __maybe_unused;
-> > > >
-> > > >  static DEFINE_SPINLOCK(swapper_pgdir_lock);
-> > > > +static DEFINE_SPINLOCK(fixmap_lock);
-> > > >
-> > > >  void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
-> > > >  {
-> > > > @@ -329,6 +330,11 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
-> > > >       }
-> > > >       BUG_ON(p4d_bad(p4d));
-> > > >
-> > > > +     /*
-> > > > +      * fixmap is global resource, thus it needs to be protected by a lock
-> > > > +      * in case of race condition.
-> > > > +      */
-> > >
-> > > Small nit, format and align this comment block. I guess
-> > > could also be done while merging this patch as well.
-> > >
-> > > > +     spin_lock(&fixmap_lock);
-> > > >       pudp = pud_set_fixmap_offset(p4dp, addr);
-> > > >       do {
-> > > >               pud_t old_pud = READ_ONCE(*pudp);
-> > > > @@ -359,6 +365,7 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
-> > > >       } while (pudp++, addr = next, addr != end);
-> > > >
-> > > >       pud_clear_fixmap();
-> > > > +     spin_unlock(&fixmap_lock);
-> > > >  }
-> > > >
-> > > >  static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
-> > > >
-> > >
-> > > Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> >
-> > We have different fixmap slots for different page table levels, so
-> > 'fixmap_lock' is not the right name.
-> >
-> > But we already have swapper_pgdir_lock as well, which serializes the
-> > use of the pgdir level fixmap slot. And we have no spinlocks
-> > protecting the other levels.
-> >
-> > So should we perhaps clean this up more comprehensively? Wouldn't it
-> > be better to add a mutex to __create_pgd_mapping(), for instance?
->
-> That does sound like a better way to do things, but the simplicity of this
-> patch is quite attractive for backporting. Would you object to me queuing
-> it as-is, on the premise that I'm more than happy to take consolidation
-> changes on top?
->
+On 12/13/21 at 02:25pm, Borislav Petkov wrote:
+> On Tue, Dec 07, 2021 at 11:16:31AM +0800, Baoquan He wrote:
+> > > This low 1M lock down is needed because AMD SME encrypts memory making
+> > > the old backup region mechanims impossible when switching into kdump
+> > > kernel. And Intel engineer mentioned their TDX (Trusted domain extensions)
+> > > which is under development in kernel also needs lock down the low 1M.
+> > > So we can't simply revert above commits to fix the page allocation
+> > > failure from DMA zone as someone suggested.
+> 
+> Did you read
+> 
+>   f1d4d47c5851 ("x86/setup: Always reserve the first 1M of RAM")
+> 
+> carefully for a more generically important reason as to why the first 1M
+> should not be used?
 
-No objections from me.
+Apparently I didn't. I slacked off and just grabbed things stored in my
+brain. This is the right justification and missed. Thanks for pointing
+it out.
+

@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE15473205
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EDB473206
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236968AbhLMQkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238169AbhLMQki (ORCPT
+        id S238255AbhLMQlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:41:00 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:50190 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240928AbhLMQk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:40:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207C7C061748;
-        Mon, 13 Dec 2021 08:40:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB0E1B811D2;
-        Mon, 13 Dec 2021 16:40:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E80C34603;
-        Mon, 13 Dec 2021 16:40:30 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 17:40:27 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem
- related variables into ima_namespace
-Message-ID: <20211213164027.7z7gpcjnsaqodq4j@wittgenstein>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-14-stefanb@linux.ibm.com>
- <20211209191109.o3x7nynnm52zhygz@wittgenstein>
- <0ab33fbc-8438-27b6-ff4c-0321bfc73855@linux.ibm.com>
- <20211210113244.odv2ibrifz2jzft5@wittgenstein>
- <dca4e7c9-87a7-9a9e-b1f2-df16f1a45019@linux.ibm.com>
- <20211211095026.i2gvqjy4df3sxq42@wittgenstein>
- <85b75c98-6452-9706-7549-10b416350b7d@linux.ibm.com>
- <20211213155020.pvadnomqnsub5vg2@wittgenstein>
+        Mon, 13 Dec 2021 11:40:57 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:52960)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mwoNj-007PXD-Gq; Mon, 13 Dec 2021 09:40:55 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:42090 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mwoNh-00BUaK-Kn; Mon, 13 Dec 2021 09:40:55 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>
+References: <20211212204043.231568-1-hjl.tools@gmail.com>
+Date:   Mon, 13 Dec 2021 10:40:47 -0600
+In-Reply-To: <20211212204043.231568-1-hjl.tools@gmail.com> (H. J. Lu's message
+        of "Sun, 12 Dec 2021 12:40:43 -0800")
+Message-ID: <87wnk8xxtc.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211213155020.pvadnomqnsub5vg2@wittgenstein>
+Content-Type: text/plain
+X-XM-SPF: eid=1mwoNh-00BUaK-Kn;;;mid=<87wnk8xxtc.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19pbTH4z+6uLN0ot5gSwteXaqMMOjqQ5Pc=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        T_TooManySym_02,XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4997]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;"H.J. Lu" <hjl.tools@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1297 ms - load_scoreonly_sql: 0.10 (0.0%),
+        signal_user_changed: 12 (0.9%), b_tie_ro: 10 (0.7%), parse: 1.12
+        (0.1%), extract_message_metadata: 13 (1.0%), get_uri_detail_list: 1.74
+        (0.1%), tests_pri_-1000: 16 (1.3%), tests_pri_-950: 1.42 (0.1%),
+        tests_pri_-900: 1.07 (0.1%), tests_pri_-90: 54 (4.2%), check_bayes: 53
+        (4.1%), b_tokenize: 6 (0.5%), b_tok_get_all: 7 (0.5%), b_comp_prob:
+        2.4 (0.2%), b_tok_touch_all: 34 (2.6%), b_finish: 0.92 (0.1%),
+        tests_pri_0: 1183 (91.3%), check_dkim_signature: 0.72 (0.1%),
+        check_dkim_adsp: 2.7 (0.2%), poll_dns_idle: 0.90 (0.1%), tests_pri_10:
+        2.3 (0.2%), tests_pri_500: 9 (0.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2] fs/binfmt_elf.c: disallow invalid entry point address
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:50:20PM +0100, Christian Brauner wrote:
-> On Mon, Dec 13, 2021 at 10:33:40AM -0500, Stefan Berger wrote:
-> > 
-> > On 12/11/21 04:50, Christian Brauner wrote:
-> > > On Fri, Dec 10, 2021 at 08:57:11AM -0500, Stefan Berger wrote:
-> > > > 
-> > > > 
-> > > > there anything that would prevent us from setns()'ing to that target user
-> > > > namespace so that we would now see that of a user namespace that we are not
-> > > > allowed to see?
-> > > If you're really worried about someone being able to access a securityfs
-> > > instance whose userns doesn't match the userns the securityfs instance
-> > > was mounted in there are multiple ways to fix it. The one that I tend to
-> > > prefer is:
-> > > 
-> > >  From e0ff6a8dcc573763568e685dd70d1547efd68df9 Mon Sep 17 00:00:00 2001
-> > > From: Christian Brauner <christian.brauner@ubuntu.com>
-> > > Date: Fri, 10 Dec 2021 11:47:37 +0100
-> > > Subject: !!!! HERE BE DRAGONS - COMPLETELY UNTESTED !!!!
-> > > 
-> > > securityfs: only allow access to securityfs from within same namespace
-> > > 
-> > > Limit opening of securityfs files to callers located in the same namespace.
-> > > 
-> > > ---
-> > >   security/inode.c | 33 +++++++++++++++++++++++++++++++--
-> > >   1 file changed, 31 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/security/inode.c b/security/inode.c
-> > > index eaccba7017d9..9eaf757c08cb 100644
-> > > --- a/security/inode.c
-> > > +++ b/security/inode.c
-> > > @@ -80,6 +80,35 @@ static struct file_system_type fs_type = {
-> > >   	.fs_flags =	FS_USERNS_MOUNT,
-> > >   };
-> > > +static int securityfs_permission(struct user_namespace *mnt_userns,
-> > > +				 struct inode *inode, int mask)
-> > > +{
-> > > +	int err;
-> > > +
-> > > +	err = generic_permission(&init_user_ns, inode, mask);
-> > > +	if (!err) {
-> > > +		if (inode->i_sb->s_user_ns != current_user_ns())
-> > > +			err = -EACCES;
-> > > +	}
-> > > +
-> > > +	return err;
-> > > +}
-> > > +
-> > > +const struct inode_operations securityfs_dir_inode_operations = {
-> > > +	.permission	= securityfs_permission,
-> > > +	.lookup		= simple_lookup,
-> > > +};
-> > > +
-> > > +const struct file_operations securityfs_dir_operations = {
-> > > +	.permission	= securityfs_permission,
-> > 
-> > 
-> > This interface function on file operations doesn't exist.
-> 
-> It's almost as if the subject line of this patch warned about its draft
-> character. That was supposed for regular files.
+"H.J. Lu" <hjl.tools@gmail.com> writes:
 
-Mah, I deleted the ;) after it on accident. I wasn't mocking. :)
+> On Linux, the start of the first PT_LOAD segment is the ELF header and
+> the address 0 points to the ELF magic bytes.  Update the ELF loader to
+> disallow ELF binaries with entry point address smaller than the ELF
+> header size.
+
+I kind of get why that was suggested but there is most definitely no
+requirement for the program headers to be loaded let alone be at any
+particular virtual address.  We could be talking about a static elf
+binary.
+
+> This fixes:
+>
+> https://bugzilla.kernel.org/show_bug.cgi?id=215303
+>
+> Tested by booting Fedora 35 and running a shared library with invalid
+> entry point address:
+>
+> $ readelf -h load.so | grep "Entry point address:"
+>   Entry point address:               0x4
+> $ ./load.so
+> bash: ./load.so: cannot execute binary file: Exec format error
+> $
+
+Is the point of this keeping shared libraries from executing?
+What is gained by this patch?
+
+Eric
+
+
+> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+> ---
+>  fs/binfmt_elf.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index bd78587194dc..7f035022131b 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -850,6 +850,8 @@ static int load_elf_binary(struct linux_binprm *bprm)
+>  
+>  	if (elf_ex->e_type != ET_EXEC && elf_ex->e_type != ET_DYN)
+>  		goto out;
+> +	if (elf_ex->e_entry < sizeof(*elf_ex))
+> +		goto out;
+>  	if (!elf_check_arch(elf_ex))
+>  		goto out;
+>  	if (elf_check_fdpic(elf_ex))

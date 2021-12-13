@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 055C1472680
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092FC47252C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbhLMJxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236860AbhLMJrg (ORCPT
+        id S234898AbhLMJlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:41:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51834 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234911AbhLMJjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:47:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411C4C07E5F0;
-        Mon, 13 Dec 2021 01:42:53 -0800 (PST)
+        Mon, 13 Dec 2021 04:39:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E2D6B80E12;
-        Mon, 13 Dec 2021 09:42:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 827DDC00446;
-        Mon, 13 Dec 2021 09:42:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90F23B80CAB;
+        Mon, 13 Dec 2021 09:39:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3549C00446;
+        Mon, 13 Dec 2021 09:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388570;
-        bh=ZYIkG1OlBl5wTCUBGTtuVxJfRXCMzdkwZphnncVVmV0=;
+        s=korg; t=1639388380;
+        bh=ENgPx5OkxDJcwKlrbQgZkXRGBAk/W6IXPLXjBp12eas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TPTyVhzdcyGrJqdXNiVEeVKmQYhRdvtSHwTil8siqiEFvMqvN4HG+jOSUqdwoJ80n
-         hYVqlgUwEueBsHTLzd4wXgeGQqxnx+YKh4m6hQEr9bJFL1NQkMYoJiO/wl2FuhK1tp
-         PDs/7HVqrm0GbuECUNbUXA9yH4tCfCAyc2aOdxGU=
+        b=2ZJt9bIWmeNy7wI9vAQyi9lI+QH6maNVeWNK6I2BXwsiGTTnhNkc5jgg9zDkBrgO6
+         7x8CX3G5NKVFVIS0Xvt7Rjb3mGZigLzXKdm5cYOeKhJUBsA2gL56TM0dzfullihPUV
+         kMQNrCkU9y+YXUPrhe/FfoE6D/aVs7Uhi9mpIIPU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 5.4 09/88] HID: bigbenff: prevent null pointer dereference
-Date:   Mon, 13 Dec 2021 10:29:39 +0100
-Message-Id: <20211213092933.551227122@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 09/74] can: sja1000: fix use after free in ems_pcmcia_add_card()
+Date:   Mon, 13 Dec 2021 10:29:40 +0100
+Message-Id: <20211213092931.087187971@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,32 +46,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 918aa1ef104d286d16b9e7ef139a463ac7a296f0 upstream.
+commit 3ec6ca6b1a8e64389f0212b5a1b0f6fed1909e45 upstream.
 
-When emulating the device through uhid, there is a chance we don't have
-output reports and so report_field is null.
+If the last channel is not available then "dev" is freed.  Fortunately,
+we can just use "pdev->irq" instead.
 
+Also we should check if at least one channel was set up.
+
+Fixes: fd734c6f25ae ("can/sja1000: add driver for EMS PCMCIA card")
+Link: https://lore.kernel.org/all/20211124145041.GB13656@kili
 Cc: stable@vger.kernel.org
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20211202095334.14399-3-benjamin.tissoires@redhat.com
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-bigbenff.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/sja1000/ems_pcmcia.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/hid/hid-bigbenff.c
-+++ b/drivers/hid/hid-bigbenff.c
-@@ -191,7 +191,7 @@ static void bigben_worker(struct work_st
- 		struct bigben_device, worker);
- 	struct hid_field *report_field = bigben->report->field[0];
+--- a/drivers/net/can/sja1000/ems_pcmcia.c
++++ b/drivers/net/can/sja1000/ems_pcmcia.c
+@@ -243,7 +243,12 @@ static int ems_pcmcia_add_card(struct pc
+ 			free_sja1000dev(dev);
+ 	}
  
--	if (bigben->removed)
-+	if (bigben->removed || !report_field)
- 		return;
- 
- 	if (bigben->work_led) {
+-	err = request_irq(dev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
++	if (!card->channels) {
++		err = -ENODEV;
++		goto failure_cleanup;
++	}
++
++	err = request_irq(pdev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
+ 			  DRV_NAME, card);
+ 	if (!err)
+ 		return 0;
 
 

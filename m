@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFE0472998
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44654724E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239274AbhLMKX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242211AbhLMKUZ (ORCPT
+        id S232988AbhLMJjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:39:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51408 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234653AbhLMJhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:20:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B2DC08EAFA;
-        Mon, 13 Dec 2021 01:58:08 -0800 (PST)
+        Mon, 13 Dec 2021 04:37:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFB1CB80E83;
-        Mon, 13 Dec 2021 09:58:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24690C34601;
-        Mon, 13 Dec 2021 09:58:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F2A3B80E1A;
+        Mon, 13 Dec 2021 09:37:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8433C341C5;
+        Mon, 13 Dec 2021 09:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389485;
-        bh=oVI2L5Y/QgONeFmQaI1+k95QDY05CDNeV1WSyGyDTeY=;
+        s=korg; t=1639388271;
+        bh=cun0ekGg+ci1SkOeyve7mtvh54oHXr5WT4R6s7sbnTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LCeF+xxxNDYxa8fGIFeq/yUv87LQC0tGrhPbQ++cI1YBG/NAY9cJoj4MyOlyVZuQr
-         ftzO7HtwJUWYn5iV0igY5WG5d3OTG/Wr2sZX9c17in710WwpFeldNpIvpPjB1Pu0wZ
-         tdYqbPfwy4IqLcKlvya2NvYZ6yzcrWuRUpgd4SYc=
+        b=koKAiZ02bDwQ1YyTsogDzjQgp4T++DgtfVacXN+o+HKwzLly4dkpTLn0s8L1Dttxc
+         H6wAty9Mq8mOmxRDTN+QzPPAX1xaIspuK1Vv3w9pY/LlvaG6F+3TgYRlQAIPOQg6tT
+         kILXGb7QAEUZ45pojkUAqxcXvYAZl20UABm3+5ug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 110/171] ASoC: codecs: wsa881x: fix return values from kcontrol put
+        stable@vger.kernel.org, Jack Andersen <jackoalan@gmail.com>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.14 46/53] iio: dln2-adc: Fix lockdep complaint
 Date:   Mon, 13 Dec 2021 10:30:25 +0100
-Message-Id: <20211213092948.760479502@linuxfoundation.org>
+Message-Id: <20211213092929.891438663@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,60 +47,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Noralf Trønnes <noralf@tronnes.org>
 
-commit 3fc27e9a1f619b50700f020e6cd270c1b74755f0 upstream.
+commit 59f92868176f191eefde70d284bdfc1ed76a84bc upstream.
 
-wsa881x_set_port() and wsa881x_put_pa_gain() currently returns zero eventhough
-it changes the value. Fix this, so that change notifications are sent
-correctly.
+When reading the voltage:
 
-Fixes: a0aab9e1404a ("ASoC: codecs: add wsa881x amplifier support")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20211130160507.22180-5-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+$ cat /sys/bus/iio/devices/iio\:device0/in_voltage0_raw
+
+Lockdep complains:
+
+[  153.910616] ======================================================
+[  153.916918] WARNING: possible circular locking dependency detected
+[  153.923221] 5.14.0+ #5 Not tainted
+[  153.926692] ------------------------------------------------------
+[  153.932992] cat/717 is trying to acquire lock:
+[  153.937525] c2585358 (&indio_dev->mlock){+.+.}-{3:3}, at: iio_device_claim_direct_mode+0x28/0x44
+[  153.946541]
+               but task is already holding lock:
+[  153.952487] c2585860 (&dln2->mutex){+.+.}-{3:3}, at: dln2_adc_read_raw+0x94/0x2bc [dln2_adc]
+[  153.961152]
+               which lock already depends on the new lock.
+
+Fix this by not calling into the iio core underneath the dln2->mutex lock.
+
+Fixes: 7c0299e879dd ("iio: adc: Add support for DLN2 ADC")
+Cc: Jack Andersen <jackoalan@gmail.com>
+Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+Link: https://lore.kernel.org/r/20211018113731.25723-1-noralf@tronnes.org
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wsa881x.c |   16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/iio/adc/dln2-adc.c |   15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
---- a/sound/soc/codecs/wsa881x.c
-+++ b/sound/soc/codecs/wsa881x.c
-@@ -772,7 +772,8 @@ static int wsa881x_put_pa_gain(struct sn
+--- a/drivers/iio/adc/dln2-adc.c
++++ b/drivers/iio/adc/dln2-adc.c
+@@ -251,7 +251,6 @@ static int dln2_adc_set_chan_period(stru
+ static int dln2_adc_read(struct dln2_adc *dln2, unsigned int channel)
+ {
+ 	int ret, i;
+-	struct iio_dev *indio_dev = platform_get_drvdata(dln2->pdev);
+ 	u16 conflict;
+ 	__le16 value;
+ 	int olen = sizeof(value);
+@@ -260,13 +259,9 @@ static int dln2_adc_read(struct dln2_adc
+ 		.chan = channel,
+ 	};
  
- 		usleep_range(1000, 1010);
- 	}
--	return 0;
-+
-+	return 1;
+-	ret = iio_device_claim_direct_mode(indio_dev);
+-	if (ret < 0)
+-		return ret;
+-
+ 	ret = dln2_adc_set_chan_enabled(dln2, channel, true);
+ 	if (ret < 0)
+-		goto release_direct;
++		return ret;
+ 
+ 	ret = dln2_adc_set_port_enabled(dln2, true, &conflict);
+ 	if (ret < 0) {
+@@ -303,8 +298,6 @@ disable_port:
+ 	dln2_adc_set_port_enabled(dln2, false, NULL);
+ disable_chan:
+ 	dln2_adc_set_chan_enabled(dln2, channel, false);
+-release_direct:
+-	iio_device_release_direct_mode(indio_dev);
+ 
+ 	return ret;
  }
+@@ -340,10 +333,16 @@ static int dln2_adc_read_raw(struct iio_
  
- static int wsa881x_get_port(struct snd_kcontrol *kcontrol,
-@@ -816,15 +817,22 @@ static int wsa881x_set_port(struct snd_k
- 		(struct soc_mixer_control *)kcontrol->private_value;
- 	int portidx = mixer->reg;
- 
--	if (ucontrol->value.integer.value[0])
-+	if (ucontrol->value.integer.value[0]) {
-+		if (data->port_enable[portidx])
-+			return 0;
+ 	switch (mask) {
+ 	case IIO_CHAN_INFO_RAW:
++		ret = iio_device_claim_direct_mode(indio_dev);
++		if (ret < 0)
++			return ret;
 +
- 		data->port_enable[portidx] = true;
--	else
-+	} else {
-+		if (!data->port_enable[portidx])
-+			return 0;
+ 		mutex_lock(&dln2->mutex);
+ 		ret = dln2_adc_read(dln2, chan->channel);
+ 		mutex_unlock(&dln2->mutex);
+ 
++		iio_device_release_direct_mode(indio_dev);
 +
- 		data->port_enable[portidx] = false;
-+	}
+ 		if (ret < 0)
+ 			return ret;
  
- 	if (portidx == WSA881X_PORT_BOOST) /* Boost Switch */
- 		wsa881x_boost_ctrl(comp, data->port_enable[portidx]);
- 
--	return 0;
-+	return 1;
- }
- 
- static const char * const smart_boost_lvl_text[] = {
 
 

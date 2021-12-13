@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBDC4720F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C7D4720F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbhLMGKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:10:33 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:31099 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229866AbhLMGKc (ORCPT
+        id S232130AbhLMGKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229866AbhLMGKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:10:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639375832; x=1670911832;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=IXd3JhSGDhc5QndANZs2NvNZOFVCvIjyJBd1zc9vP3s=;
-  b=grYytRsLPWiMrs4Yf4yKmYNSqXW8JLVyCM2HZ0Uu5/oAOOJsGCLONoC0
-   WptKRYFNd3wQlA6x36sTJbnowJz70vTz81fHhCnoAf9/WvUb/0TjEFVog
-   eiJ45p4hAIUwUeATLyaOsexFuncZoagfQf7Rs9yLH5nP7hap0lFgoK/S0
-   c=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 Dec 2021 22:10:32 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 22:10:30 -0800
-Received: from localhost (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sun, 12 Dec
- 2021 22:10:29 -0800
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-To:     <paulmck@kernel.org>, <josh@joshtriplett.org>,
-        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
-        <jiangshanlai@gmail.com>, <joel@joelfernandes.org>
-CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <urezki@gmail.com>, <frederic@kernel.org>, <boqun.feng@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Subject: [PATCH] rcu/exp: Fix check for idle context in rcu_exp_handler
-Date:   Mon, 13 Dec 2021 11:40:24 +0530
-Message-ID: <20211213061024.24285-1-quic_neeraju@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 13 Dec 2021 01:10:54 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11094C06173F;
+        Sun, 12 Dec 2021 22:10:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4E678CE0B0B;
+        Mon, 13 Dec 2021 06:10:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49EC1C00446;
+        Mon, 13 Dec 2021 06:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639375850;
+        bh=JN4dssyGpKnQ7oek17KavvX+yDdx4JvxmSAJzAs7p/I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BPq12Vjo110FkvjRD6pp3kiMDFSQEvUUQLz5qJKvmvjKVjQT72aNbENqDBVoFfU0X
+         3m3z20VH33k8rNAsBuTgsBTv5IqgEpLQBkcR00UDKt21RUQTa3zM1F4C+B0QX4MvTB
+         jVFBDGxbXWkbWk/udQIu4/VC9j+hU3Vb97IIYRBg=
+Date:   Mon, 13 Dec 2021 07:10:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     xkernel <xkernel.wang@foxmail.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
+Message-ID: <Ybbj470ocCf7bj68@kroah.com>
+References: <tencent_1AB342AE1B4723454E78A4D2FD3F33C81306@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_1AB342AE1B4723454E78A4D2FD3F33C81306@qq.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For PREEMPT_RCU, the rcu_exp_handler() function checks
-whether the current CPU is in idle, by calling
-rcu_dynticks_curr_cpu_in_eqs(). However, rcu_exp_handler()
-is called in IPI handler context. So, it should be checking
-the idle context using rcu_is_cpu_rrupt_from_idle(). Fix this
-by using rcu_is_cpu_rrupt_from_idle() instead of
-rcu_dynticks_curr_cpu_in_eqs(). Non-preempt configuration
-already uses the correct check.
+On Mon, Dec 13, 2021 at 12:51:33AM +0800, xkernel wrote:
+> kmemdup() return NULL when some internal memory errors happen, it is
+> better to check the return value of it. Otherwise, some memory errors
+> will not be catched in time and may further result in wrong memory
+> access.
+> 
+> Signed-off-by: xkernel <xkernel.wang@foxmail.com>
 
-Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
----
- kernel/rcu/tree_exp.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please use your "full" name, I doubt you sign documents as "xkernel". :)
 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 237a79989aba..1568c8ef185b 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -656,7 +656,7 @@ static void rcu_exp_handler(void *unused)
- 	 */
- 	if (!depth) {
- 		if (!(preempt_count() & (PREEMPT_MASK | SOFTIRQ_MASK)) ||
--		    rcu_dynticks_curr_cpu_in_eqs()) {
-+		    rcu_is_cpu_rrupt_from_idle()) {
- 			rcu_report_exp_rdp(rdp);
- 		} else {
- 			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
--- 
-2.17.1
+thanks,
 
+greg k-h

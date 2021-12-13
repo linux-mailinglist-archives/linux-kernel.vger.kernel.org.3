@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E38F7472465
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3314725D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbhLMJgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:36:08 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59438 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234321AbhLMJfH (ORCPT
+        id S234688AbhLMJqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235842AbhLMJmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:35:07 -0500
+        Mon, 13 Dec 2021 04:42:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773A1C08EA7B;
+        Mon, 13 Dec 2021 01:39:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D2A8ECE0E7F;
-        Mon, 13 Dec 2021 09:35:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 825F2C341DA;
-        Mon, 13 Dec 2021 09:35:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 223F3B80E19;
+        Mon, 13 Dec 2021 09:39:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64CDCC341C8;
+        Mon, 13 Dec 2021 09:39:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388104;
-        bh=VI8xP7ZuvldA6Iec36rX9eA/AtZCIL+Lvw7PCXDDm8k=;
+        s=korg; t=1639388386;
+        bh=fWchdcSIpbNAREqcECfxi337wWpII1DZOZmkczHDfKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KvdfIVdriLMpb9hE+40gLVFbbvWDHmJ9TE3Dh3zB+kaxeslGYi42i+YjODteHzZjo
-         QYsf5PRNd53cA7FCQeIkUciMLP62qeKgKuwfFWxT6A7cAQ8sSwhBq7YRwjTmavGpHw
-         3gEQE316rIu80rx0jcG9MM1V+io2Tvr5D995o1fU=
+        b=uoMWv5HkkTchPDZXpprc1jVgToaT6wGwl3r4SQXy3LhG7tPauSBdi4qU2/1nLTKgP
+         kVSzEiOpfABVXWZTFshuqxICQNHo0lW46nbJzeWzlwSrspoeVfex+lQ+/thWEy7tLu
+         mAwFpMC7Rze6upJoRtJ+EVfv7oh0Y3bxxdYNT1Wo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
-        Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        stable@vger.kernel.org, Alan Young <consult.awy@gmail.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 13/42] ALSA: pcm: oss: Fix negative period/buffer sizes
+Subject: [PATCH 4.19 24/74] ALSA: ctl: Fix copy of updated id with element read/write
 Date:   Mon, 13 Dec 2021 10:29:55 +0100
-Message-Id: <20211213092927.010408221@linuxfoundation.org>
+Message-Id: <20211213092931.608476302@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,96 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Alan Young <consult.awy@gmail.com>
 
-commit 9d2479c960875ca1239bcb899f386970c13d9cfe upstream.
+commit b6409dd6bdc03aa178bbff0d80db2a30d29b63ac upstream.
 
-The period size calculation in OSS layer may receive a negative value
-as an error, but the code there assumes only the positive values and
-handle them with size_t.  Due to that, a too big value may be passed
-to the lower layers.
+When control_compat.c:copy_ctl_value_to_user() is used, by
+ctl_elem_read_user() & ctl_elem_write_user(), it must also copy back the
+snd_ctl_elem_id value that may have been updated (filled in) by the call
+to snd_ctl_elem_read/snd_ctl_elem_write().
 
-This patch changes the code to handle with ssize_t and adds the proper
-error checks appropriately.
+This matches the functionality provided by snd_ctl_elem_read_user() and
+snd_ctl_elem_write_user(), via snd_ctl_build_ioff().
 
-Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
-Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Without this, and without making additional calls to snd_ctl_info()
+which are unnecessary when using the non-compat calls, a userspace
+application will not know the numid value for the element and
+consequently will not be able to use the poll/read interface on the
+control file to determine which elements have updates.
+
+Signed-off-by: Alan Young <consult.awy@gmail.com>
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
-Link: https://lore.kernel.org/r/20211201073606.11660-2-tiwai@suse.de
+Link: https://lore.kernel.org/r/20211202150607.543389-1-consult.awy@gmail.com
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/oss/pcm_oss.c |   24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ sound/core/control_compat.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/sound/core/oss/pcm_oss.c
-+++ b/sound/core/oss/pcm_oss.c
-@@ -173,7 +173,7 @@ snd_pcm_hw_param_value_min(const struct
-  *
-  * Return the maximum value for field PAR.
-  */
--static unsigned int
-+static int
- snd_pcm_hw_param_value_max(const struct snd_pcm_hw_params *params,
- 			   snd_pcm_hw_param_t var, int *dir)
+--- a/sound/core/control_compat.c
++++ b/sound/core/control_compat.c
+@@ -279,6 +279,7 @@ static int copy_ctl_value_to_user(void _
+ 				  struct snd_ctl_elem_value *data,
+ 				  int type, int count)
  {
-@@ -708,18 +708,24 @@ static int snd_pcm_oss_period_size(struc
- 				   struct snd_pcm_hw_params *oss_params,
- 				   struct snd_pcm_hw_params *slave_params)
- {
--	size_t s;
--	size_t oss_buffer_size, oss_period_size, oss_periods;
--	size_t min_period_size, max_period_size;
-+	ssize_t s;
-+	ssize_t oss_buffer_size;
-+	ssize_t oss_period_size, oss_periods;
-+	ssize_t min_period_size, max_period_size;
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	size_t oss_frame_size;
++	struct snd_ctl_elem_value32 __user *data32 = userdata;
+ 	int i, size;
  
- 	oss_frame_size = snd_pcm_format_physical_width(params_format(oss_params)) *
- 			 params_channels(oss_params) / 8;
+ 	if (type == SNDRV_CTL_ELEM_TYPE_BOOLEAN ||
+@@ -295,6 +296,8 @@ static int copy_ctl_value_to_user(void _
+ 		if (copy_to_user(valuep, data->value.bytes.data, size))
+ 			return -EFAULT;
+ 	}
++	if (copy_to_user(&data32->id, &data->id, sizeof(data32->id)))
++		return -EFAULT;
+ 	return 0;
+ }
  
-+	oss_buffer_size = snd_pcm_hw_param_value_max(slave_params,
-+						     SNDRV_PCM_HW_PARAM_BUFFER_SIZE,
-+						     NULL);
-+	if (oss_buffer_size <= 0)
-+		return -EINVAL;
- 	oss_buffer_size = snd_pcm_plug_client_size(substream,
--						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_BUFFER_SIZE, NULL)) * oss_frame_size;
--	if (!oss_buffer_size)
-+						   oss_buffer_size * oss_frame_size);
-+	if (oss_buffer_size <= 0)
- 		return -EINVAL;
- 	oss_buffer_size = rounddown_pow_of_two(oss_buffer_size);
- 	if (atomic_read(&substream->mmap_count)) {
-@@ -756,7 +762,7 @@ static int snd_pcm_oss_period_size(struc
- 
- 	min_period_size = snd_pcm_plug_client_size(substream,
- 						   snd_pcm_hw_param_value_min(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
--	if (min_period_size) {
-+	if (min_period_size > 0) {
- 		min_period_size *= oss_frame_size;
- 		min_period_size = roundup_pow_of_two(min_period_size);
- 		if (oss_period_size < min_period_size)
-@@ -765,7 +771,7 @@ static int snd_pcm_oss_period_size(struc
- 
- 	max_period_size = snd_pcm_plug_client_size(substream,
- 						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
--	if (max_period_size) {
-+	if (max_period_size > 0) {
- 		max_period_size *= oss_frame_size;
- 		max_period_size = rounddown_pow_of_two(max_period_size);
- 		if (oss_period_size > max_period_size)
-@@ -778,7 +784,7 @@ static int snd_pcm_oss_period_size(struc
- 		oss_periods = substream->oss.setup.periods;
- 
- 	s = snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIODS, NULL);
--	if (runtime->oss.maxfrags && s > runtime->oss.maxfrags)
-+	if (s > 0 && runtime->oss.maxfrags && s > runtime->oss.maxfrags)
- 		s = runtime->oss.maxfrags;
- 	if (oss_periods > s)
- 		oss_periods = s;
 
 

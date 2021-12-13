@@ -2,92 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3858F472368
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D253C47236A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbhLMJBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:01:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59368 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbhLMJBB (ORCPT
+        id S233530AbhLMJBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231772AbhLMJB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:01:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62C42B80DE3;
-        Mon, 13 Dec 2021 09:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B490C00446;
-        Mon, 13 Dec 2021 09:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639386059;
-        bh=hButX0q6t1vsQ+TQR+Yf2PEiS5o8boeQPJjchkqIOmQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uQFAWkGNgeRG7enrJi2t9toOGBctSALvB/as4JgfmBuVfA5h4G/yybNPd4XM2pUSN
-         iH2hfJdlcEhT8FAXfRhXPEAVmf8h1E2FAi8tteVw6VJAIYf3ZVh/Y5VlzPWh3i+wTD
-         JxGJQRPiVnawRtAgkzzxShceU//ZtC4rfKWunPVUu+Nf8b/+vHTMJqo75y8qj90JCP
-         WOgLPw5Ra7yaZAnQl3mbW7dccj7FeMxf+GcUuPCqHXsNSt2kkUqA8FFHKh3gaoZP5z
-         X/D982jaXirojiKTBvAhxLIhYQr0aqlcfG+q8atoW67E/hG5zy2gV/lOM7JzK5eIp3
-         NqqNcYANxmgqA==
-Date:   Mon, 13 Dec 2021 14:30:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Tudor.Ambarus@microchip.com
-Cc:     Ludovic.Desroches@microchip.com, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        mripard@kernel.org, linux-arm-kernel@lists.infradead.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 08/13] dmaengine: at_xdmac: Move the free desc to the
- tail of the desc list
-Message-ID: <YbcLx0wGFvFnvSXY@matsya>
-References: <20211125090028.786832-1-tudor.ambarus@microchip.com>
- <20211125090028.786832-9-tudor.ambarus@microchip.com>
- <Ybb/PV5M1Gi59s7I@matsya>
- <8523ca32-d36f-6e0b-0115-5e07553396f1@microchip.com>
- <YbcLjrMF0YrCVgjc@matsya>
+        Mon, 13 Dec 2021 04:01:27 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E4BC061748;
+        Mon, 13 Dec 2021 01:01:27 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x10so32269202edd.5;
+        Mon, 13 Dec 2021 01:01:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CR75fK/LU5VxKAcUyjQTvhGDV/ZY9kpeodVRSprVuA8=;
+        b=fFXPFUDKDJngOpm5GYKXQt98kIqMolFEF+NQhpGOKEtqUJFL/orLbECLPJWIYq5NOJ
+         FHnm6qBZ53kuGmOwEknnmj3SWDy1Q2Yx+jswNfpmm+JT3FkZo/ZVhptCImO56gyQuyaZ
+         1J4xzctqXFFYlVBqGY6rY2narFowxj71pdUpaS/JnYlV3RoxLg8BzFeoX5qnCvenwfBw
+         v/xyEXzkIYgixwDiJs/bsPDP1Jspfxu8GaeBp5hoVtjrbGTPyfZyvDVj10JO8yYYIZiy
+         3nNlCwTw7LFAOL/5rlMg6/xNR/UQmVtXSxAlUVv0PCLm8gIwXGr0/o6j34sjR8J9Oqb6
+         zDWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CR75fK/LU5VxKAcUyjQTvhGDV/ZY9kpeodVRSprVuA8=;
+        b=5jkvE3uBMfF3ihRMdR8sbl0jw2t03woQatHXMn/2QtPwH2YZBFlGNbR4xgxFmD6Rdp
+         d9T5yXGGKjzzt2KCJVFoaHqABYPDZU2L/fpZTeZzf6T3DdpgbwXqChsKwWwa50JgMicV
+         U32Urr7dy0rbKqaAbt33VLOiJ50xaHH6lfNuFaSM+U78hd51raX8lBCvlZUDXtO32AUG
+         bI4WERYXQ9DeGtNv1RpmEWgU1G2eSV/ayM68Z2EPMy2X2rpgTyq6Do8KuW7xvbKLNQ6K
+         KrbreAkddfD9KuccRIXN4GJQMQQuvwSreJ76taMe27fH7Nagnoe6HN4WG3IahjESXdXG
+         gWaw==
+X-Gm-Message-State: AOAM531c9U0vnRatKxm0UYohIfWpfQQtSf+qxEzirDsdKKO4dz2hLqie
+        Z+5Evzo+HmysXoDp6Nb/xP2FiP4338s=
+X-Google-Smtp-Source: ABdhPJwV5BETtKCcxFQWK5P0KGO8i9sykZ84Ui0u3OoJwWlF8y3+lY3qi4V7zT1gjhyLngzG7WCF2w==
+X-Received: by 2002:a05:6402:35cc:: with SMTP id z12mr61896976edc.393.1639386085596;
+        Mon, 13 Dec 2021 01:01:25 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
+        by smtp.googlemail.com with ESMTPSA id h7sm6354080ede.40.2021.12.13.01.01.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 01:01:25 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <7de6b755-3cf9-4d1c-11e8-3458e6764545@redhat.com>
+Date:   Mon, 13 Dec 2021 10:01:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbcLjrMF0YrCVgjc@matsya>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
+Content-Language: en-US
+To:     "Liu, Jing2" <jing2.liu@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-11-yang.zhong@intel.com>
+ <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
+ <MWHPR11MB1245F7730D9BF0DA251D302DA9749@MWHPR11MB1245.namprd11.prod.outlook.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <MWHPR11MB1245F7730D9BF0DA251D302DA9749@MWHPR11MB1245.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-12-21, 14:29, Vinod Koul wrote:
-> On 13-12-21, 08:51, Tudor.Ambarus@microchip.com wrote:
-> > Hi, Vinod,
-> > 
-> > On 12/13/21 10:07 AM, Vinod Koul wrote:
-> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > > 
-> > > On 25-11-21, 11:00, Tudor Ambarus wrote:
-> > >> So that we don't use the same desc over and over again.
-> > > 
-> > > Please use full para in the changelog and not a continuation of the
-> > > patch title!
-> > 
-> > Ok, will add a better commit description. Here and in other patches where
-> > your comment applies.
+On 12/13/21 08:51, Liu, Jing2 wrote:
+> On 12/11/2021 12:02 AM, Paolo Bonzini wrote:
+>>
+>> Also:
+>>
+>> On 12/8/21 01:03, Yang Zhong wrote:
+>>>
+>>> +		if (!guest_cpuid_has(vcpu, X86_FEATURE_XFD))
+>>> +			return 1;
+>>
+>> This should allow msr->host_initiated always (even if XFD is not part of
+>> CPUID).
+> Thanks Paolo.
 > 
-> Great!
+> msr->host_initiated handling would be added in next version.
 > 
-> > > 
-> > > and why is wrong with using same desc over and over? Any benefits of not
-> > > doing so?
-> > 
-> > Not wrong, but if we move the free desc to the tail of the list, then the
-> > sequence of descriptors is more track-able in case of debug. You would
-> > know which descriptor should come next and you could easier catch
-> > concurrency over descriptors for example. I saw virt-dma uses
-> > list_splice_tail_init() as well, I found it a good idea, so I thought to
-> > follow the core driver.
+> I'd like to ask why always allow msr->host_initiated even if XFD is not part of
+> CPUID, although guest doesn't care that MSR?  We found some MSRs
+>   (e.g. MSR_AMD64_OSVW_STATUS and MSR_AMD64_OSVW_ID_LENGTH )
+> are specially handled so would like to know the consideration of allowing
+> msr->host_initiated.
 > 
-> Okay, I would be good to add this motivation in the change log. I am
-> sure after few you would also wonder why you did this change :)
+> if (!msr_info->host_initiated && !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
+>          return 1;
 
-Also, pls submit serial patches to Greg separately. I guess he saw the
-title and overlooked those...
+Because it's simpler if userspace can just take the entire list from 
+KVM_GET_MSR_INDEX_LIST and pass it to KVM_GET/SET_MSR.  See for example 
+vcpu_save_state and vcpu_load_state in 
+tools/testing/selftests/kvm/lib/x86_64/processor.c.
 
--- 
-~Vinod
+>>  However, if XFD is nonzero and kvm_check_guest_realloc_fpstate
+>> returns true, then it should return 1.
+>
+> If XFD is nonzero, kvm_check_guest_realloc_fpstate() won't return true. So
+> may not need this check here?
+
+It can't for now, because there's a single dynamic feature, but here:
+
++	if ((xfd & xcr0) != xcr0) {
++		u64 request = (xcr0 ^ xfd) & xcr0;
++		struct fpu_guest *guest_fpu = &vcpu->arch.guest_fpu;
++
++		/*
++		 * If requested features haven't been enabled, update
++		 * the request bitmap and tell the caller to request
++		 * dynamic buffer reallocation.
++		 */
++		if ((guest_fpu->user_xfeatures & request) != request) {
++			vcpu->arch.guest_fpu.realloc_request = request;
++			return true;
++		}
++	}
+
+it is certainly possible to return true with nonzero XFD.
+
+Paolo

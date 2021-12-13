@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE0F4725EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5514729C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236969AbhLMJrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:47:42 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:37168 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbhLMJnp (ORCPT
+        id S234447AbhLMKYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242369AbhLMKUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:43:45 -0500
+        Mon, 13 Dec 2021 05:20:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D76EC01388A;
+        Mon, 13 Dec 2021 01:58:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 51F54CE0E7F;
-        Mon, 13 Dec 2021 09:43:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00531C341CD;
-        Mon, 13 Dec 2021 09:43:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 898B2CE0F18;
+        Mon, 13 Dec 2021 09:58:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D713C34600;
+        Mon, 13 Dec 2021 09:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388621;
-        bh=6kBPxSslbtJkTfjdNaA7EiZNeekOmRzTEIcOuJh+uZk=;
+        s=korg; t=1639389492;
+        bh=sUR4msxEilbYVGvj7VU1vHBce5fYvcrIhLnRbNE5VZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S0HjvEd3ndhBOfvUpDSAWqKPUq2lXjJYdBfNYFkxxbyOYnNp0zlK36vKudJXssnU3
-         AQHMAvXqV8YyKtRMfTmXw/yKzczgONc+S5IweaQWuN6E+WyERPt3l1TGpV5f8VV50M
-         Dp5kv+b58dy8lzIZtMsFOcH202DjNJv3x7qKC3NU=
+        b=bv08L7crYyXOmweVn2/3Q7yruLIxAdtwzkvZ1LkKEdYrUYuZdc9Axe6PGE+ZQ9DGH
+         l6KLTKGjPBpjeRZ25APmdMlrRzAaSTekxGGpEz8wKnWpVtnqUu5C1cuWw8QFJgQWNA
+         5mXlxaU2H9wSRYolFQEWpwxOC7dkKCqmJda9EY2o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.4 39/88] can: pch_can: pch_can_rx_normal: fix use after free
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com
+Subject: [PATCH 5.15 094/171] io_uring: ensure task_work gets run as part of cancelations
 Date:   Mon, 13 Dec 2021 10:30:09 +0100
-Message-Id: <20211213092934.588623570@linuxfoundation.org>
+Message-Id: <20211213092948.209020876@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,41 +48,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Jens Axboe <axboe@kernel.dk>
 
-commit 94cddf1e9227a171b27292509d59691819c458db upstream.
+commit 78a780602075d8b00c98070fa26e389b3b3efa72 upstream.
 
-After calling netif_receive_skb(skb), dereferencing skb is unsafe.
-Especially, the can_frame cf which aliases skb memory is dereferenced
-just after the call netif_receive_skb(skb).
+If we successfully cancel a work item but that work item needs to be
+processed through task_work, then we can be sleeping uninterruptibly
+in io_uring_cancel_generic() and never process it. Hence we don't
+make forward progress and we end up with an uninterruptible sleep
+warning.
 
-Reordering the lines solves the issue.
+While in there, correct a comment that should be IFF, not IIF.
 
-Fixes: b21d18b51b31 ("can: Topcliff: Add PCH_CAN driver.")
-Link: https://lore.kernel.org/all/20211123111654.621610-1-mailhol.vincent@wanadoo.fr
+Reported-and-tested-by: syzbot+21e6887c0be14181206d@syzkaller.appspotmail.com
 Cc: stable@vger.kernel.org
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
 ---
- drivers/net/can/pch_can.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/io_uring.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/net/can/pch_can.c
-+++ b/drivers/net/can/pch_can.c
-@@ -692,11 +692,11 @@ static int pch_can_rx_normal(struct net_
- 			cf->data[i + 1] = data_reg >> 8;
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -9775,7 +9775,7 @@ static void io_uring_drop_tctx_refs(stru
+ 
+ /*
+  * Find any io_uring ctx that this task has registered or done IO on, and cancel
+- * requests. @sqd should be not-null IIF it's an SQPOLL thread cancellation.
++ * requests. @sqd should be not-null IFF it's an SQPOLL thread cancellation.
+  */
+ static void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
+ {
+@@ -9816,8 +9816,10 @@ static void io_uring_cancel_generic(bool
+ 							     cancel_all);
  		}
  
--		netif_receive_skb(skb);
- 		rcv_pkts++;
- 		stats->rx_packets++;
- 		quota--;
- 		stats->rx_bytes += cf->can_dlc;
-+		netif_receive_skb(skb);
- 
- 		pch_fifo_thresh(priv, obj_num);
- 		obj_num++;
+-		prepare_to_wait(&tctx->wait, &wait, TASK_UNINTERRUPTIBLE);
++		prepare_to_wait(&tctx->wait, &wait, TASK_INTERRUPTIBLE);
++		io_run_task_work();
+ 		io_uring_drop_tctx_refs(current);
++
+ 		/*
+ 		 * If we've seen completions, retry without waiting. This
+ 		 * avoids a race where a completion comes in before we did
 
 

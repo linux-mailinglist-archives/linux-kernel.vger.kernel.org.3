@@ -2,80 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 015FA47208C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6FD47208F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbhLMFcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 00:32:24 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:8488 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbhLMFcX (ORCPT
+        id S231908AbhLMFdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 00:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229697AbhLMFdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 00:32:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639373543; x=1670909543;
-  h=from:to:cc:subject:date:message-id;
-  bh=AwY+n2QVGFMYvsateJK/8dQELieJjA0Q6bnXLB6eSZw=;
-  b=SE/IVWRsPW8EfDp+Gz7XxkJvlmSUoDOHscbb4daEklCU4xCSy5hKAVWo
-   Oz0A2OT/K2QVe6fS/RHBfPwuSPfQelNcne73HW6HcaVbnrpRJXdsB47yl
-   MZpqiKErhypTpBLJ6aPRFItO3jPG2Z0uznxHQX2kjKV8KYmuQ6NaaeIom
-   U=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 12 Dec 2021 21:32:23 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 12 Dec 2021 21:32:22 -0800
-X-QCInternal: smtphost
-Received: from hyd-lablnx229.qualcomm.com ([10.204.179.152])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 13 Dec 2021 11:02:03 +0530
-Received: by hyd-lablnx229.qualcomm.com (Postfix, from userid 2390365)
-        id 481C221587; Mon, 13 Dec 2021 11:02:02 +0530 (IST)
-From:   Panicker Harish <quic_pharish@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com
-Cc:     mka@chromium.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
-        linux-arm-msm@vger.kernel.org, quic_bgodavar@quicinc.com,
-        rjliao@codeaurora.org, hbandi@codeaurora.org,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        quic_saluvala@quicinc.com,
-        Panicker Harish <quic_pharish@quicinc.com>
-Subject: [PATCH v2] Bluetooth: hci_qca: Stop IBS timer during BT OFF
-Date:   Mon, 13 Dec 2021 11:01:36 +0530
-Message-Id: <1639373496-28009-1-git-send-email-quic_pharish@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 13 Dec 2021 00:33:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D50C06173F;
+        Sun, 12 Dec 2021 21:33:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35DF0B8076B;
+        Mon, 13 Dec 2021 05:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E1DC00446;
+        Mon, 13 Dec 2021 05:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639373583;
+        bh=OX3w/rL67yCfKDwzGmF/nI63myPy5OTBPTIafZbFUVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XR4R8pAwKqjtf0RotDlRCBScq4k/atIB1ugecNJpg2mkL8K22jIQSbO4XcjczceZW
+         AXuQxofPV9QBy9blM0CfmkMK9ZqCNmfeeXdGfmszqCdLWF2Qw8OqD4SYxMBOXOlo87
+         j0HTL+QWY6Rw7qYfr4SkfuHhMLW0A4fidY4XWAz9TU1C3siAybaaYXzzt3w7vXqFLL
+         wnQtxWNXOh1JH6aTX3oH30g3NlSGfYp0CEdLkTRI8uhoWld1mZMj014KPp96Kg1zh4
+         8bCTfKY04h2yZ2C438UFRQVBSYi946qqtNwmIxTDlboJbLfRWFjukfhVHZd7w8Z8Tv
+         Qetf8kUtZrKBg==
+Date:   Mon, 13 Dec 2021 11:02:59 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Nishanth Menon <nm@ti.com>
+Subject: Re: [PATCH] dma: ti: k3-udma: Fix smatch warnings
+Message-ID: <YbbbCyE2db6S1Ibf@matsya>
+References: <20211209180957.29036-1-vigneshr@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209180957.29036-1-vigneshr@ti.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change stops IBS timers during BT OFF.
+On 09-12-21, 23:39, Vignesh Raghavendra wrote:
+> Smatch reports below warnings [1] wrt dereferencing rm_res when it can
+> potentially be ERR_PTR(). This is possible when entire range is
+> allocated to Linux
+> Fix this case by making sure, there is no deference of rm_res when its
+> ERR_PTR().
 
-Signed-off-by: Panicker Harish <quic_pharish@quicinc.com>
+Fixed the subsystem name and applied, thanks
 
-v2:
-  * Addressed the username
-  * The full implementation of IBS is based on timers
-    to that reason I have used timers.
-
-v1: initial patch
----
- drivers/bluetooth/hci_qca.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index dd768a8..6f44b26 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1928,6 +1928,9 @@ static int qca_power_off(struct hci_dev *hdev)
- 	hu->hdev->hw_error = NULL;
- 	hu->hdev->cmd_timeout = NULL;
- 
-+	mod_timer(&qca->tx_idle_timer, 0);
-+	mod_timer(&qca->wake_retrans_timer, 0);
-+
- 	/* Stop sending shutdown command if soc crashes. */
- 	if (soc_type != QCA_ROME
- 		&& qca->memdump_state == QCA_MEMDUMP_IDLE) {
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
-
+~Vinod

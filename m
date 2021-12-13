@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4548D4729D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7825E472905
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239674AbhLMKZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236799AbhLMJrb (ORCPT
+        id S244533AbhLMKRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:17:08 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39450 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235358AbhLMJuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:47:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4108CC079797;
-        Mon, 13 Dec 2021 01:42:05 -0800 (PST)
+        Mon, 13 Dec 2021 04:50:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BC26B80E18;
-        Mon, 13 Dec 2021 09:42:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C49C00446;
-        Mon, 13 Dec 2021 09:42:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BF308CE0E29;
+        Mon, 13 Dec 2021 09:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66788C00446;
+        Mon, 13 Dec 2021 09:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388522;
-        bh=NACCOnpFH/fqVhRjnaKfKiKtOkk/l0MAx+6x3w3GFpA=;
+        s=korg; t=1639389036;
+        bh=aNgla5zW0lbk2VkCsAKhhg88Iow9T1qLh/KMxSWvYus=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cWECs0kxHcimyvPwkX8X7g1A57DFNdu3KRuIwrXQBR5URTkqPcanJ1obtUD/Tm2zm
-         Nqh9X6ZBP/RbFS24E8RkgviPQMHxy//kJorYAsVrGI/RbuyeSF4mvIORJ7OhDeWphU
-         1rg2cZ3ygaObmwLvrtSogCqFGNj0jOqPTC7NykoI=
+        b=gFe6dmO8qFiYk4BmmtKXGUxCEOu99ZyN3MO+SkcU4Ay7wlSKQZQcaOLlyBx4mfINc
+         /qYaM0W1ssfXMkDtc1bKQkAp0xrLpOad5Ns8FFfvHZ/Yb8zb2uS5Ccg2wo7P1dJyjb
+         VAhSX8OC7Ie20XSIC/zXZwZJVgC80JWg8wDoOvA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 66/74] iio: at91-sama5d2: Fix incorrect sign extension
+        stable@vger.kernel.org, Russell King <rmk+kernel@arm.linux.org.uk>,
+        Nicolas Diaz <nicolas.diaz@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 096/132] net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
 Date:   Mon, 13 Dec 2021 10:30:37 +0100
-Message-Id: <20211213092932.999801985@linuxfoundation.org>
+Message-Id: <20211213092942.408078310@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,38 +47,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gwendal Grignou <gwendal@chromium.org>
+From: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-commit 652e7df485c6884d552085ae2c73efa6cfea3547 upstream.
+commit b5bd95d17102b6719e3531d627875b9690371383 upstream.
 
-Use scan_type when processing raw data which also fixes that the sign
-extension was from the wrong bit.
+Background:
+We have a customer is running a Profinet stack on the 8MM which receives and
+responds PNIO packets every 4ms and PNIO-CM packets every 40ms. However, from
+time to time the received PNIO-CM package is "stock" and is only handled when
+receiving a new PNIO-CM or DCERPC-Ping packet (tcpdump shows the PNIO-CM and
+the DCERPC-Ping packet at the same time but the PNIO-CM HW timestamp is from
+the expected 40 ms and not the 2s delay of the DCERPC-Ping).
 
-Use channel definition as root of trust and replace constant
-when reading elements directly using the raw sysfs attributes.
+After debugging, we noticed PNIO, PNIO-CM and DCERPC-Ping packets would
+be handled by different RX queues.
 
-Fixes: 6794e23fa3fe ("iio: adc: at91-sama5d2_adc: add support for oversampling resolution")
-Signed-off-by: Gwendal Grignou <gwendal@chromium.org>
-Reviewed-by: Eugen Hristev <eugen.hristev@microchip.com>
-Cc: <Stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211104082413.3681212-9-gwendal@chromium.org
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+The root cause should be driver ack all queues' interrupt when handle a
+specific queue in fec_enet_rx_queue(). The blamed patch is introduced to
+receive as much packets as possible once to avoid interrupt flooding.
+But it's unreasonable to clear other queues'interrupt when handling one
+queue, this patch tries to fix it.
+
+Fixes: ed63f1dcd578 (net: fec: clear receive interrupts before processing a packet)
+Cc: Russell King <rmk+kernel@arm.linux.org.uk>
+Reported-by: Nicolas Diaz <nicolas.diaz@nxp.com>
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+Link: https://lore.kernel.org/r/20211206135457.15946-1-qiangqing.zhang@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/at91-sama5d2_adc.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/freescale/fec.h      |    3 +++
+ drivers/net/ethernet/freescale/fec_main.c |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/iio/adc/at91-sama5d2_adc.c
-+++ b/drivers/iio/adc/at91-sama5d2_adc.c
-@@ -1375,7 +1375,8 @@ static int at91_adc_read_info_raw(struct
- 		*val = st->conversion_value;
- 		ret = at91_adc_adjust_val_osr(st, val);
- 		if (chan->scan_type.sign == 's')
--			*val = sign_extend32(*val, 11);
-+			*val = sign_extend32(*val,
-+					     chan->scan_type.realbits - 1);
- 		st->conversion_done = false;
- 	}
+--- a/drivers/net/ethernet/freescale/fec.h
++++ b/drivers/net/ethernet/freescale/fec.h
+@@ -373,6 +373,9 @@ struct bufdesc_ex {
+ #define FEC_ENET_WAKEUP	((uint)0x00020000)	/* Wakeup request */
+ #define FEC_ENET_TXF	(FEC_ENET_TXF_0 | FEC_ENET_TXF_1 | FEC_ENET_TXF_2)
+ #define FEC_ENET_RXF	(FEC_ENET_RXF_0 | FEC_ENET_RXF_1 | FEC_ENET_RXF_2)
++#define FEC_ENET_RXF_GET(X)	(((X) == 0) ? FEC_ENET_RXF_0 :	\
++				(((X) == 1) ? FEC_ENET_RXF_1 :	\
++				FEC_ENET_RXF_2))
+ #define FEC_ENET_TS_AVAIL       ((uint)0x00010000)
+ #define FEC_ENET_TS_TIMER       ((uint)0x00008000)
  
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -1439,7 +1439,7 @@ fec_enet_rx_queue(struct net_device *nde
+ 			break;
+ 		pkt_received++;
+ 
+-		writel(FEC_ENET_RXF, fep->hwp + FEC_IEVENT);
++		writel(FEC_ENET_RXF_GET(queue_id), fep->hwp + FEC_IEVENT);
+ 
+ 		/* Check for errors. */
+ 		status ^= BD_ENET_RX_LAST;
 
 

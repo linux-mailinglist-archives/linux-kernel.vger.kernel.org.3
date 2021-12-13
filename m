@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9C2472460
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A954729D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbhLMJgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:36:00 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59388 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbhLMJfB (ORCPT
+        id S238025AbhLMKZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343565AbhLMKWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:35:01 -0500
+        Mon, 13 Dec 2021 05:22:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183D8C01389C;
+        Mon, 13 Dec 2021 01:59:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 36FACCE0E7D;
-        Mon, 13 Dec 2021 09:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A82C00446;
-        Mon, 13 Dec 2021 09:34:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4D2FB80E84;
+        Mon, 13 Dec 2021 09:59:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6A4C34602;
+        Mon, 13 Dec 2021 09:59:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388098;
-        bh=FjB8u9hGsxLMZnkmOfnwddADvaN5d8Fwik2pVsj3iWk=;
+        s=korg; t=1639389554;
+        bh=V9ZrcY/d7BjvEsFuMaik7JWW8x2pC4HSZ7V8mOn9F0A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N2oVMolpyqhIDyxtR/xm7bj6EAyAJRZfix2NIuX1mrGmaPmDe5crH6J54s7f5Pfa8
-         o0PgHVF15xz03i9jlww758kWHbTa/5p1F80SSHygKwTrAeSThdPQBQi+UUqAJyRXuN
-         jSlUSI/nWhND1T8uySTNSJWAYW+02FIiKa1xhw9g=
+        b=vISBJlvCzOkIGIzSMbRKef9fqHvrzHtxUmQcchNhfBfhiZXXMTao1mzFtloYFge2D
+         bEQgyIlMzFakAcVmnnBcsvlJbo5W7ebpP8wmnhbxExF3vHKwgSuPwQ42bCowFa7pvI
+         X7n/5uSCeI7ypOjQQiEV6DR7/AaL2YkYYiSfHdLs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
-Subject: [PATCH 4.9 29/42] USB: gadget: detect too-big endpoint 0 requests
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@google.com>
+Subject: [PATCH 5.15 096/171] binder: use wake_up_pollfree()
 Date:   Mon, 13 Dec 2021 10:30:11 +0100
-Message-Id: <20211213092927.518264100@linuxfoundation.org>
+Message-Id: <20211213092948.270657641@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,104 +49,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 153a2d7e3350cc89d406ba2d35be8793a64c2038 upstream.
+commit a880b28a71e39013e357fd3adccd1d8a31bc69a8 upstream.
 
-Sometimes USB hosts can ask for buffers that are too large from endpoint
-0, which should not be allowed.  If this happens for OUT requests, stall
-the endpoint, but for IN requests, trim the request size to the endpoint
-buffer size.
+wake_up_poll() uses nr_exclusive=1, so it's not guaranteed to wake up
+all exclusive waiters.  Yet, POLLFREE *must* wake up all waiters.  epoll
+and aio poll are fortunately not affected by this, but it's very
+fragile.  Thus, the new function wake_up_pollfree() has been introduced.
 
-Co-developed-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Convert binder to use wake_up_pollfree().
+
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: f5cb779ba163 ("ANDROID: binder: remove waitqueue when thread exits.")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211209010455.42744-3-ebiggers@kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c    |   12 ++++++++++++
- drivers/usb/gadget/legacy/dbgp.c  |   13 +++++++++++++
- drivers/usb/gadget/legacy/inode.c |   16 +++++++++++++++-
- 3 files changed, 40 insertions(+), 1 deletion(-)
+ drivers/android/binder.c |   21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1631,6 +1631,18 @@ composite_setup(struct usb_gadget *gadge
- 	struct usb_function		*f = NULL;
- 	u8				endp;
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -4422,23 +4422,20 @@ static int binder_thread_release(struct
+ 	__release(&t->lock);
  
-+	if (w_length > USB_COMP_EP0_BUFSIZ) {
-+		if (ctrl->bRequestType == USB_DIR_OUT) {
-+			goto done;
-+		} else {
-+			/* Cast away the const, we are going to overwrite on purpose. */
-+			__le16 *temp = (__le16 *)&ctrl->wLength;
-+
-+			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
-+			w_length = USB_COMP_EP0_BUFSIZ;
-+		}
-+	}
-+
- 	/* partial re-init of the response message; the function or the
- 	 * gadget might need to intercept e.g. a control-OUT completion
- 	 * when we delegate to it.
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -344,6 +344,19 @@ static int dbgp_setup(struct usb_gadget
- 	void *data = NULL;
- 	u16 len = 0;
+ 	/*
+-	 * If this thread used poll, make sure we remove the waitqueue
+-	 * from any epoll data structures holding it with POLLFREE.
+-	 * waitqueue_active() is safe to use here because we're holding
+-	 * the inner lock.
++	 * If this thread used poll, make sure we remove the waitqueue from any
++	 * poll data structures holding it.
+ 	 */
+-	if ((thread->looper & BINDER_LOOPER_STATE_POLL) &&
+-	    waitqueue_active(&thread->wait)) {
+-		wake_up_poll(&thread->wait, EPOLLHUP | POLLFREE);
+-	}
++	if (thread->looper & BINDER_LOOPER_STATE_POLL)
++		wake_up_pollfree(&thread->wait);
  
-+	if (length > DBGP_REQ_LEN) {
-+		if (ctrl->bRequestType == USB_DIR_OUT) {
-+			return err;
-+		} else {
-+			/* Cast away the const, we are going to overwrite on purpose. */
-+			__le16 *temp = (__le16 *)&ctrl->wLength;
-+
-+			*temp = cpu_to_le16(DBGP_REQ_LEN);
-+			length = DBGP_REQ_LEN;
-+		}
-+	}
-+
-+
- 	if (request == USB_REQ_GET_DESCRIPTOR) {
- 		switch (value>>8) {
- 		case USB_DT_DEVICE:
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -113,6 +113,8 @@ enum ep0_state {
- /* enough for the whole queue: most events invalidate others */
- #define	N_EVENT			5
+ 	binder_inner_proc_unlock(thread->proc);
  
-+#define RBUF_SIZE		256
-+
- struct dev_data {
- 	spinlock_t			lock;
- 	atomic_t			count;
-@@ -147,7 +149,7 @@ struct dev_data {
- 	struct dentry			*dentry;
- 
- 	/* except this scratch i/o buffer for ep0 */
--	u8				rbuf [256];
-+	u8				rbuf[RBUF_SIZE];
- };
- 
- static inline void get_dev (struct dev_data *data)
-@@ -1336,6 +1338,18 @@ gadgetfs_setup (struct usb_gadget *gadge
- 	u16				w_value = le16_to_cpu(ctrl->wValue);
- 	u16				w_length = le16_to_cpu(ctrl->wLength);
- 
-+	if (w_length > RBUF_SIZE) {
-+		if (ctrl->bRequestType == USB_DIR_OUT) {
-+			return value;
-+		} else {
-+			/* Cast away the const, we are going to overwrite on purpose. */
-+			__le16 *temp = (__le16 *)&ctrl->wLength;
-+
-+			*temp = cpu_to_le16(RBUF_SIZE);
-+			w_length = RBUF_SIZE;
-+		}
-+	}
-+
- 	spin_lock (&dev->lock);
- 	dev->setup_abort = 0;
- 	if (dev->state == STATE_DEV_UNCONNECTED) {
+ 	/*
+-	 * This is needed to avoid races between wake_up_poll() above and
+-	 * and ep_remove_waitqueue() called for other reasons (eg the epoll file
+-	 * descriptor being closed); ep_remove_waitqueue() holds an RCU read
+-	 * lock, so we can be sure it's done after calling synchronize_rcu().
++	 * This is needed to avoid races between wake_up_pollfree() above and
++	 * someone else removing the last entry from the queue for other reasons
++	 * (e.g. ep_remove_wait_queue() being called due to an epoll file
++	 * descriptor being closed).  Such other users hold an RCU read lock, so
++	 * we can be sure they're done after we call synchronize_rcu().
+ 	 */
+ 	if (thread->looper & BINDER_LOOPER_STATE_POLL)
+ 		synchronize_rcu();
 
 

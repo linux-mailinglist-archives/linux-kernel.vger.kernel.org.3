@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BF9472B19
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB41472B20
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbhLMLRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S235297AbhLMLRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbhLMLRH (ORCPT
+        with ESMTP id S234949AbhLMLRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:17:07 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165B1C061574;
-        Mon, 13 Dec 2021 03:17:07 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t18so26352266wrg.11;
-        Mon, 13 Dec 2021 03:17:07 -0800 (PST)
+        Mon, 13 Dec 2021 06:17:08 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23446C061574;
+        Mon, 13 Dec 2021 03:17:08 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id r9-20020a7bc089000000b00332f4abf43fso10708429wmh.0;
+        Mon, 13 Dec 2021 03:17:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Gh9g/hVG0rI1N3VHk0OoCcX2tUyzmtEm7HZfLqJJLcw=;
-        b=cKg6PG4deGYG1ySeSu+L6jhx+0yzcAhyzrNyzJqrEcpm34L/1CkGJTo6JPNvXGPzri
-         Cjsrwma9kdXHUMjPLj7XXLsz5n0i0pQ1uUOLqVq5Uk+jx3+2J2l9402eLFpzXhF+qWxJ
-         bJJwOnnj6yef5NHX5IwGyk65ff0PGzPPi05/ro+nnnT+QIcnxClHFNQ8zAbAwxxn5WmD
-         Pg6owOaGATZTKLfenpBEsBcza6GMON2/hrfTEyIhfNp/LQB/8uz1HcP+olUOgAh5KyeZ
-         9r4H7VIHRlZTB46w5LVRbOVk5DZr9nl91Wcz8gUujbdGFumh3ab52z+3gqGYtRbh0wzP
-         W0Kw==
+        bh=uMRBfgWTYGWrAoh1xYDEsd3By2T32yUhl9tQpBijeUw=;
+        b=P8KULp4RxAz/ZT3rc5HBAu6BiRCKUwkHxSWSabJl6DUuHUToGmquWXEu0dmZjTSdEx
+         p58Z2hLKMJI5qfFo06+WZfEidkd9apgHIGq2nugu4cqCfEh0jmhX/C79kp8Hq+fwqYOn
+         JJS2J7BviG5r+grRwCg1xKEsS0sFHr3b6BFji/ffF0FBl3FrZ5JxxwshELUZYginOLfr
+         3S/5V0HsimlPq2K/tem1OcjUf2Sm6OaTqqimAjiQ4mU04BG5rweeJG3l2H+qp0oZR+uA
+         WTQsjqA5S2i2KwJwF+XBJSwOQuIfj4n9mUMmHx/RDep16pBClT75n+1+BfVTbGj8NKcK
+         3Esg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Gh9g/hVG0rI1N3VHk0OoCcX2tUyzmtEm7HZfLqJJLcw=;
-        b=MoHS+IkUyUzLOKLHLZM36CJEusVaEbFJioQJu4hfgPN/6LSAsdTjrqZJl6Ymhb15wr
-         4qW06xBYw8HFFRWPGXZ6E63U1S3WYdRT/aVK3mJcPuhma0NeyO95lxuGmSSn7rFft+vX
-         mDg+zz11t9E9QSWC8aJQg504d+vuz+dLojZ5vDCqGVmYSPkZDYETUuAyA+qT6VL8/cIB
-         LWrN0aLM6i06hwOh6Xac3O9GhqgJlf8nK1YgfWfUhqRUrayQ2MEhsb8qSATZzLkm/YFx
-         AGE9Z84zYAPO3U6pi2ZXpXAA+EqBcndJyzuHrwrWJrTrNsvFtMMGD5hxeAjXW5TCYc5N
-         GjjQ==
-X-Gm-Message-State: AOAM530AuhKWQPjZTYQ+0R9Na2sFmDmPKd52dsX6oMCpddlbYxI/g8nm
-        ws3xBn2aXQ+j+t3s5x1TtUE=
-X-Google-Smtp-Source: ABdhPJzm1nLrJ12FEr0D8rL1q1mdBsYPVDdt6zlyZvkfjv+fpgOZVmeD9v4TrqkzatT8SDIrKx++ew==
-X-Received: by 2002:a5d:4c51:: with SMTP id n17mr15572370wrt.359.1639394225704;
-        Mon, 13 Dec 2021 03:17:05 -0800 (PST)
+        bh=uMRBfgWTYGWrAoh1xYDEsd3By2T32yUhl9tQpBijeUw=;
+        b=2DfpJF5NunM7838wRZ1udTGDCND7vRhp8qicDQF5ieRi6Yt18Y6PL2R3+iASuFAqN0
+         E25v8b6GC3KDlPsgpwd9yd26KlTrSNGkp/bEEVaA1a53qlLtzkATWzQTIIbgzyu+XZeZ
+         Ds9a1Jxw+1SBQ5HqroxBJZZWdiWkwYcH5sAxSoNyXDi7Mo+3Y+eUKo/qnCQGRAq98L2a
+         kwP0FQ3163dC9fN+JLUIoE6h9sXZfSNznX+M+XRAL2xbm8v8TtYzN+yPz59UCjiIzRRa
+         BCtHhiPlB+Xq7e1feB+N27k3/XZjbFgL1DAsB8TH88V0EQbAjbZGmoxmhP7a7gU/piMO
+         OLsQ==
+X-Gm-Message-State: AOAM533FLma7X8IKTuZpK2TxIP7pbaAGw1/xgLMklW4Q16zarLgf6sIC
+        6xq7UPLdxkdeuyEjDzIXQCLP6yhtjH8=
+X-Google-Smtp-Source: ABdhPJxRGYfYxeyJl459scyOTisugPEc2QmERThdCAzY4wLxtONPCFT8jSjVxD+jQL3W3deInk0dcQ==
+X-Received: by 2002:a1c:1d04:: with SMTP id d4mr35779758wmd.103.1639394226732;
+        Mon, 13 Dec 2021 03:17:06 -0800 (PST)
 Received: from DEL01603w.ebgroup.elektrobit.com (eth1-fw1-nbg6.eb.noris.de. [213.95.148.172])
-        by smtp.gmail.com with ESMTPSA id t17sm7255255wmq.15.2021.12.13.03.17.04
+        by smtp.gmail.com with ESMTPSA id t17sm7255255wmq.15.2021.12.13.03.17.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 03:17:05 -0800 (PST)
+        Mon, 13 Dec 2021 03:17:06 -0800 (PST)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org
@@ -61,9 +61,9 @@ Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Daniel Silsby <dansilsby@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 6/9] mips: remove obsolete selection of CPU_HAS_LOAD_STORE_LR
-Date:   Mon, 13 Dec 2021 12:16:39 +0100
-Message-Id: <20211213111642.11317-7-lukas.bulwahn@gmail.com>
+Subject: [PATCH 7/9] mips: alchemy: remove historic comment on gpio build constraints
+Date:   Mon, 13 Dec 2021 12:16:40 +0100
+Message-Id: <20211213111642.11317-8-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
 References: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
@@ -73,40 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 18d84e2e55b6 ("MIPS: make CPU_HAS_LOAD_STORE_LR opt-out") replaced
-the config CPU_HAS_LOAD_STORE_LR by the config with an inverted semantics,
-making the "LOAD_STORE_LR" cpu configuration the default.
-The ./arch/mips/Kconfig was adjusted accordingly.
+In ./arch/mips/alchemy/common/gpiolib.c, the comment points out certain
+build constraints on CONFIG_GPIOLIB and CONFIG_ALCHEMY_GPIO_INDIRECT.
 
-Later, commit 65ce6197ed40 ("Revert "MIPS: Remove unused R4300 CPU
-support"") reintroduces a select CPU_HAS_LOAD_STORE_LR through its revert
-commit, restoring the config CPU_R4300 in ./arch/mips/Kconfig before the
-refactoring above.
+The commit 832f5dacfa0b ("MIPS: Remove all the uses of custom gpio.h")
+makes all mips machines use the common gpio.h and removes the config
+ALCHEMY_GPIO_INDIRECT. So, this makes the comment in alchemy's gpiolib.c
+historic and obsolete, and can be removed after the commit above.
 
-This select however now refers to a non-existing config and is further
-unneeded, as LOAD_STORE_LR is the default now.
+The issue on the reference to a non-existing Kconfig symbol was identified
+with ./scripts/checkkconfigsymbols.py. This script has been quite useful
+to identify a number of bugs with Kconfig symbols and deserves to be
+executed and checked regularly.
 
-Remove the obsolete select for the reintroduced mips R4300 architecture.
-
-This issue is identified with ./scripts/checkkconfigsymbols.py.
+So, remove the historic comment to reduce the reports made the script and
+simplify to use this script, as new issues are easier to spot when the
+list of reports is shorter.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- arch/mips/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ arch/mips/alchemy/common/gpiolib.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index e329214ac06c..dafc1d62c224 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1608,7 +1608,6 @@ config CPU_R4300
- 	depends on SYS_HAS_CPU_R4300
- 	select CPU_SUPPORTS_32BIT_KERNEL
- 	select CPU_SUPPORTS_64BIT_KERNEL
--	select CPU_HAS_LOAD_STORE_LR
- 	help
- 	  MIPS Technologies R4300-series processors.
- 
+diff --git a/arch/mips/alchemy/common/gpiolib.c b/arch/mips/alchemy/common/gpiolib.c
+index 7d5da5edd74d..a17d7a8909c4 100644
+--- a/arch/mips/alchemy/common/gpiolib.c
++++ b/arch/mips/alchemy/common/gpiolib.c
+@@ -23,8 +23,6 @@
+  *  675 Mass Ave, Cambridge, MA 02139, USA.
+  *
+  *  Notes :
+- *	This file must ONLY be built when CONFIG_GPIOLIB=y and
+- *	 CONFIG_ALCHEMY_GPIO_INDIRECT=n, otherwise compilation will fail!
+  *	au1000 SoC have only one GPIO block : GPIO1
+  *	Au1100, Au15x0, Au12x0 have a second one : GPIO2
+  *	Au1300 is totally different: 1 block with up to 128 GPIOs
 -- 
 2.26.2
 

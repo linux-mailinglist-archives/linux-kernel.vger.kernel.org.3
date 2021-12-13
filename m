@@ -2,74 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3608E47302B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CFC47302C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbhLMPKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:10:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33616 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239992AbhLMPKJ (ORCPT
+        id S240018AbhLMPKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240012AbhLMPK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:10:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35C4E6112B;
-        Mon, 13 Dec 2021 15:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9EDA3C34602;
-        Mon, 13 Dec 2021 15:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639408208;
-        bh=U79dgo2Oi1hCKu3DVMc5M1mfw5cxrCe3bZ1a+rO+hQk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VNnjoNYfr6MoiO1T8vCw3jyARV2pKI2l72rCWglu+plfREHtNnLM9tcHBvn87NO1Z
-         huo92jIkSfD61luw9kyyEwwQIIDvEqkgmNg3e0kz7F6+dKUB/w9oJrsvXfDdaT0mTE
-         V3P5OaKLhiKBYERACjkoL2qdDDUZGDOfm4boJ56mVYNt4DM/EhdA0mDdcPy/zKu/en
-         uGVeOHoPZO5KFiJFqZ8E3UXVdNw5/addDUoYKjvE1Dgf8IOq1mnY9jH9YhCAG6IB1X
-         LG4WBynhOcSGGTfVjTYNgIz0DY/6TA2Wj4KovV8m0IJJmLAOhpcDmvXDB5QrCBhXhW
-         bA6iWmaCd7h5A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8BA9C609CD;
-        Mon, 13 Dec 2021 15:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 13 Dec 2021 10:10:29 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A29C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:10:28 -0800 (PST)
+Date:   Mon, 13 Dec 2021 16:10:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639408226;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yQzDvBmd0niR39PSQr18uU4Z7E1Vka6JV86zg1oC+jQ=;
+        b=XDlN2Sif+ysI7pyEvB176cbRGz1ftheV4aFtL/JlPSCSL5drmON78kvPTQPS9iobCXubc3
+        zZtv6sobI1lbcknBba9T4bU1yH4Hbpz/Ry01rqR64FIIsyJ0MdcXfapowUmrIbAMUHfMUu
+        E5sgBqcdVSMtUdtwBfsMPkzLBo4Ri6SfURJkpf6WG59ohzRpwVx7+lz7ow0iK1Z6qd60jU
+        zOD80XcVfORLpdIKyga/0+V++ZfK4tp8r8Qo6vFEumh90/NZdkNrVZDefY092Me5sLTKV9
+        6Yp5lTRmfRXmK+XgfbnOAdwrydUp/Yf0aia1iGRRVbqigWJQU6OQjESQdHkjGQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639408226;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yQzDvBmd0niR39PSQr18uU4Z7E1Vka6JV86zg1oC+jQ=;
+        b=oA4vs65FuW3tjVSYZivSF4NR+vJ/IHOXp13RAyGytGzDHaGvxvccYP+Z1EZuw5WfGZ4786
+        X7W2IC/DlMpdrUCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     linux-cachefs@redhat.com, linux-kernel@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Gregor Beck <gregor.beck@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 REPOST] fscache: Use only one fscache_object_cong_wait.
+Message-ID: <YbdiYN+wU1RN9mWo@linutronix.de>
+References: <20211118165442.hekmz7xgisdzsyuh@linutronix.de>
+ <20211202205240.giqxuxqemlxxoobw@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: stmmac: Add GFP_DMA32 for rx buffers if no 64 capability
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163940820856.31162.13805444072530757704.git-patchwork-notify@kernel.org>
-Date:   Mon, 13 Dec 2021 15:10:08 +0000
-References: <20211213111515.658351-1-david.wu@rock-chips.com>
-In-Reply-To: <20211213111515.658351-1-david.wu@rock-chips.com>
-To:     David Wu <david.wu@rock-chips.com>
-Cc:     joabreu@synopsys.com, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211202205240.giqxuxqemlxxoobw@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 13 Dec 2021 19:15:15 +0800 you wrote:
-> Use page_pool_alloc_pages instead of page_pool_dev_alloc_pages, which
-> can give the gfp parameter, in the case of not supporting 64-bit width,
-> using 32-bit address memory can reduce a copy from swiotlb.
+On 2021-12-02 21:52:45 [+0100], To linux-cachefs@redhat.com wrote:
+> On 2021-11-18 17:54:44 [+0100], To linux-cachefs@redhat.com wrote:
+> > In the commit mentioned below, fscache was converted from slow-work to
+> > workqueue. slow_work_enqueue() and slow_work_sleep_till_thread_needed()
+> > did not use a per-CPU workqueue. They choose from two global waitqueues
+> > depending on the SLOW_WORK_VERY_SLOW bit which was not set so it always
+> > one waitqueue.
+> > 
+> > I can't find out how it is ensured that a waiter on certain CPU is woken
+> > up be the other side. My guess is that the timeout in schedule_timeout()
+> > ensures that it does not wait forever (or a random wake up).
+> > 
+> > fscache_object_sleep_till_congested() must be invoked from preemptible
+> > context in order for schedule() to work. In this case this_cpu_ptr()
+> > should complain with CONFIG_DEBUG_PREEMPT enabled except the thread is
+> > bound to one CPU.
+> > 
+> > wake_up() wakes only one waiter and I'm not sure if it is guaranteed
+> > that only one waiter exists.
+> > 
+> > Replace the per-CPU waitqueue with one global waitqueue.
+> > 
+> > Fixes: 8b8edefa2fffb ("fscache: convert object to use workqueue instead of slow-work")
+> > Reported-by: Gregor Beck <gregor.beck@gmail.com>
+> > Cc: stable-rt@vger.kernel.org
+> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > 
-> Signed-off-by: David Wu <david.wu@rock-chips.com>
-> ---
->  .../net/ethernet/stmicro/stmmac/stmmac_main.c    | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
+> I noticed that -next gained commit
+>    608bfec640edb ("fscache: Remove the contents of the fscache driver, pending rewrite")
+> 
+> which removes slow_work_sleep_till_thread_needed() and the per-CPU
+> variable. Since it looks like a bug, what happens stable wise?
 
-Here is the summary with links:
-  - net: stmmac: Add GFP_DMA32 for rx buffers if no 64 capability
-    https://git.kernel.org/netdev/net/c/884d2b845477
+a gentle ping.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> > ---
+> > Previous post
+> >   https://lore.kernel.org/all/20211029083839.xwwt7jgzru3kcpii@linutronix.de/
+> > 
+> >  fs/fscache/internal.h |    1 -
+> >  fs/fscache/main.c     |    6 ------
+> >  fs/fscache/object.c   |   13 +++++--------
+> >  3 files changed, 5 insertions(+), 15 deletions(-)
+> > 
+> > --- a/fs/fscache/internal.h
+> > +++ b/fs/fscache/internal.h
+> > @@ -81,7 +81,6 @@ extern unsigned fscache_debug;
+> >  extern struct kobject *fscache_root;
+> >  extern struct workqueue_struct *fscache_object_wq;
+> >  extern struct workqueue_struct *fscache_op_wq;
+> > -DECLARE_PER_CPU(wait_queue_head_t, fscache_object_cong_wait);
+> >  
+> >  extern unsigned int fscache_hash(unsigned int salt, unsigned int *data, unsigned int n);
+> >  
+> > --- a/fs/fscache/main.c
+> > +++ b/fs/fscache/main.c
+> > @@ -41,8 +41,6 @@ struct kobject *fscache_root;
+> >  struct workqueue_struct *fscache_object_wq;
+> >  struct workqueue_struct *fscache_op_wq;
+> >  
+> > -DEFINE_PER_CPU(wait_queue_head_t, fscache_object_cong_wait);
+> > -
+> >  /* these values serve as lower bounds, will be adjusted in fscache_init() */
+> >  static unsigned fscache_object_max_active = 4;
+> >  static unsigned fscache_op_max_active = 2;
+> > @@ -138,7 +136,6 @@ unsigned int fscache_hash(unsigned int s
+> >  static int __init fscache_init(void)
+> >  {
+> >  	unsigned int nr_cpus = num_possible_cpus();
+> > -	unsigned int cpu;
+> >  	int ret;
+> >  
+> >  	fscache_object_max_active =
+> > @@ -161,9 +158,6 @@ static int __init fscache_init(void)
+> >  	if (!fscache_op_wq)
+> >  		goto error_op_wq;
+> >  
+> > -	for_each_possible_cpu(cpu)
+> > -		init_waitqueue_head(&per_cpu(fscache_object_cong_wait, cpu));
+> > -
+> >  	ret = fscache_proc_init();
+> >  	if (ret < 0)
+> >  		goto error_proc;
+> > --- a/fs/fscache/object.c
+> > +++ b/fs/fscache/object.c
+> > @@ -798,6 +798,8 @@ void fscache_object_destroy(struct fscac
+> >  }
+> >  EXPORT_SYMBOL(fscache_object_destroy);
+> >  
+> > +static DECLARE_WAIT_QUEUE_HEAD(fscache_object_cong_wait);
+> > +
+> >  /*
+> >   * enqueue an object for metadata-type processing
+> >   */
+> > @@ -806,16 +808,12 @@ void fscache_enqueue_object(struct fscac
+> >  	_enter("{OBJ%x}", object->debug_id);
+> >  
+> >  	if (fscache_get_object(object, fscache_obj_get_queue) >= 0) {
+> > -		wait_queue_head_t *cong_wq =
+> > -			&get_cpu_var(fscache_object_cong_wait);
+> >  
+> >  		if (queue_work(fscache_object_wq, &object->work)) {
+> >  			if (fscache_object_congested())
+> > -				wake_up(cong_wq);
+> > +				wake_up(&fscache_object_cong_wait);
+> >  		} else
+> >  			fscache_put_object(object, fscache_obj_put_queue);
+> > -
+> > -		put_cpu_var(fscache_object_cong_wait);
+> >  	}
+> >  }
+> >  
+> > @@ -833,16 +831,15 @@ void fscache_enqueue_object(struct fscac
+> >   */
+> >  bool fscache_object_sleep_till_congested(signed long *timeoutp)
+> >  {
+> > -	wait_queue_head_t *cong_wq = this_cpu_ptr(&fscache_object_cong_wait);
+> >  	DEFINE_WAIT(wait);
+> >  
+> >  	if (fscache_object_congested())
+> >  		return true;
+> >  
+> > -	add_wait_queue_exclusive(cong_wq, &wait);
+> > +	add_wait_queue_exclusive(&fscache_object_cong_wait, &wait);
+> >  	if (!fscache_object_congested())
+> >  		*timeoutp = schedule_timeout(*timeoutp);
+> > -	finish_wait(cong_wq, &wait);
+> > +	finish_wait(&fscache_object_cong_wait, &wait);
+> >  
+> >  	return fscache_object_congested();
+> >  }
+ 
+Sebastian

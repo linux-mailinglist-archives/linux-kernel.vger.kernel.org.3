@@ -2,184 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E12E472B4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AE4472B4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235630AbhLMLZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:25:37 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59362 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbhLMLZf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:25:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 01B99CE100F;
-        Mon, 13 Dec 2021 11:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0196CC34603;
-        Mon, 13 Dec 2021 11:25:24 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 12:25:20 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v5 15/16] ima: Move dentries into ima_namespace
-Message-ID: <20211213112520.q7oc5hnjqh7yzgdq@wittgenstein>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-16-stefanb@linux.ibm.com>
- <20211209143428.ip6bwry5hqtee5vy@wittgenstein>
- <20211209143749.wk4agkynfqdzftbl@wittgenstein>
- <fb99af21f029b8072435e35731b919f4ec98f89d.camel@linux.ibm.com>
- <e2feaf2f6ac4bc82f328f94ca35d14cdc3ca79d1.camel@linux.ibm.com>
- <20211210114934.tacjnwryihrsx6ln@wittgenstein>
- <e72104c480c2c7f5c29f80b72d2a597a50ef9fae.camel@linux.ibm.com>
+        id S235664AbhLML0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:26:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:52260 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235626AbhLML0A (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:26:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C59F6D;
+        Mon, 13 Dec 2021 03:26:00 -0800 (PST)
+Received: from bogus (unknown [10.57.33.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 858233F793;
+        Mon, 13 Dec 2021 03:25:58 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:25:55 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH v7 06/16] firmware: arm_scmi: Add configurable polling
+ mode for transports
+Message-ID: <20211213112555.vhjhu3xopesvxmio@bogus>
+References: <20211129191156.29322-1-cristian.marussi@arm.com>
+ <20211129191156.29322-7-cristian.marussi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e72104c480c2c7f5c29f80b72d2a597a50ef9fae.camel@linux.ibm.com>
+In-Reply-To: <20211129191156.29322-7-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 09:13:12AM -0500, James Bottomley wrote:
-> On Fri, 2021-12-10 at 12:49 +0100, Christian Brauner wrote:
-> > On Thu, Dec 09, 2021 at 02:38:13PM -0500, James Bottomley wrote:
-> [...]
-> > > @@ -317,21 +315,15 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
-> > >  void securityfs_remove(struct dentry *dentry)
-> > >  {
-> > >  	struct user_namespace *ns = dentry->d_sb->s_user_ns;
-> > > -	struct inode *dir;
-> > >  
-> > >  	if (!dentry || IS_ERR(dentry))
-> > >  		return;
-> > >  
-> > > -	dir = d_inode(dentry->d_parent);
-> > > -	inode_lock(dir);
-> > >  	if (simple_positive(dentry)) {
-> > > -		if (d_is_dir(dentry))
-> > > -			simple_rmdir(dir, dentry);
-> > > -		else
-> > > -			simple_unlink(dir, dentry);
-> > > +		d_delete(dentry);
-> > 
-> > Not, that doesn't work. You can't just call d_delete() and dput() and
-> > even if I wouldn't advise it. And you also can't do this without
-> > taking the inode lock on the directory.
+On Mon, Nov 29, 2021 at 07:11:46PM +0000, Cristian Marussi wrote:
+> SCMI communications along TX channels can optionally be provided of a
+> completion interrupt; when such interrupt is not available, command
+> transactions should rely on polling, where the SCMI core takes care to
+> repeatedly evaluate the transport-specific .poll_done() function, if
+> available, to determine if and when a request was fully completed or
+> timed out.
 > 
-> Agreed on that
+> Such mechanism is already present and working on a single transfer base:
+> SCMI protocols can indeed enable hdr.poll_completion on specific commands
+> ahead of each transfer and cause that transaction to be handled with
+> polling.
 > 
-> > simple_rmdir()/simple_unlink() take care to update various inode
-> > fields in the parent dir and handle link counts. This really wants to
-> > be sm like
-> > 
-> > 	struct inode *parent_inode;
-> > 
-> > 	parent_inode = d_inode(dentry->d_parent);
-> > 	inode_lock(parent_inode);
-> > 	if (simple_positive(dentry)) {
-> > 		dget(dentry);
-> > 		if (d_is_dir(dentry)
-> > 			simple_unlink(parent_inode, dentry);
-> > 		else
-> > 			simple_unlink(parent_inode, dentry);
-> > 		d_delete(dentry);
-> > 		dput(dentry);
-> > 	}
-> > 	inode_unlock(parent_inode);
+> Introduce a couple of flags to be able to enforce such polling behaviour
+> globally at will:
 > 
-> It just slightly annoys me how the simple_ functions change fields in
-> an inode that is about to be evicted ... it seems redundant; plus we
-> shouldn't care if the object we're deleting is a directory or file.  I
-> also don't think we need the additional dget because the only consumer
-> is policy file removal and the opener of that file will have done a
-> dget.  The inode lock now prevents us racing with another remove in the
-> case of two simultaneous writes.
+>  - scmi_desc.force_polling: to statically switch the whole transport to
+>    polling mode.
 > 
-> How about
+>  - scmi_chan_info.no_completion_irq: to switch a single channel dynamically
+>    to polling mode if, at runtime, is determined that no completion
+>    interrupt was available for such channel.
 > 
->         struct inode *parent_inode;
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> v5 --> v6
+> - removed check on replies received by IRQs when xfer was requested
+>   as poll_completion (not all transport can suppress IRQs on an xfer basis)
+> v4 --> v5
+> - make force_polling const
+> - introduce polling_enabled flag to simplify checks on do_xfer
+> v3 --> v4:
+> - renamed .needs_polling flag to .no_completion_irq
+> - refactored error path when polling needed but not supported
+> ---
+>  drivers/firmware/arm_scmi/common.h | 11 +++++++++++
+>  drivers/firmware/arm_scmi/driver.c | 17 +++++++++++++++++
+>  2 files changed, 28 insertions(+)
 > 
->         parent_inode = d_inode(dentry->d_parent);
->         inode_lock(parent_inode);
->         if (simple_positive(dentry)) {
-> 		drop_nlink(parent_inode);
->                 d_delete(dentry);
->                 dput(dentry);
->         }
->         inode_unlock(parent_inode);
+> diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
+> index 6438b5248c24..99b74f4d39b6 100644
+> --- a/drivers/firmware/arm_scmi/common.h
+> +++ b/drivers/firmware/arm_scmi/common.h
+> @@ -339,11 +339,19 @@ void scmi_protocol_release(const struct scmi_handle *handle, u8 protocol_id);
+>   * @dev: Reference to device in the SCMI hierarchy corresponding to this
+>   *	 channel
+>   * @handle: Pointer to SCMI entity handle
+> + * @no_completion_irq: Flag to indicate that this channel has no completion
+> + *		       interrupt mechanism for synchronous commands.
+> + *		       This can be dynamically set by transports at run-time
+> + *		       inside their provided .chan_setup().
+> + * @polling_enabled: Flag used to annotate if polling mode is currently enabled
+> + *		     on this channel.
+>   * @transport_info: Transport layer related information
+>   */
+>  struct scmi_chan_info {
+>  	struct device *dev;
+>  	struct scmi_handle *handle;
+> +	bool no_completion_irq;
+> +	bool polling_enabled;
 
-It doesn't just change fields in an inode that is about to be evicted.
-It changes fields in the parent inode.
-If you're deleting any file or directory your function currently fails
-to update mtime and ctime for the parent directory.
+Do we really need a separate flag for polling_enabled ?
+no_completion_irq means you need to enable polling and force_polling too.
+Just trying to see if we can get rid of unnecessary flags.
 
-What you're doing below also isn't all that future proof or safe for
-callers other than ima.
-
-Consider a future caller that might want to call securityfs_remove() with
-
-.open   = first_file()
-
-.relase = first_release(
-	securityfs_remove(second_file)
-)
-
-.open    = second_file()
-
-If your securityfs_remove() is called from the first file's release
-function while the second_file is still open and thus holds a reference
-and won't go way during first_release()'s securityfs_remove() call you
-have just failed to update relevant inode fields of a file that can
-still be queried via stat* functions and can be used to create other
-files below it.
-
-In addition, if someone accidently calls your securityfs_remove() on a
-directory that is not-empty you're effectively deleting the directory
-without deleting the files in that directory first whereas
-simple_rmdir() would tell you to go away.
-
-If a user later needs an .unlink/.rmdir method for securityfs or allows
-calls of securityfs_remove() on the same dentry from concurrent
-locations you need the dget() in securityfs_remove() even if the
-inode_lock() is exclusive otherwise you can end up doing a dput() too
-many, iirc.
-
-I would recommened to not turn this into a nih exercise for simple vfs
-functionality. Your version isn't even significantly simpler. The
-securityfs_remove() function doesn't need to be reinvented.
-
-void securityfs_remove(struct dentry *dentry)
-{
-	struct inode *dir;
-
-	if (WARN_ON(!dentry || IS_ERR(dentry)))
-		return;
-
-	dir = d_inode(dentry->d_parent);
-	inode_lock(dir);
-	if (simple_positive(dentry)) {
-		dget(dentry);
-		if (d_is_dir(dentry))
-			simple_rmdir(dir, dentry);
-		else
-			simple_unlink(dir, dentry);
-		d_delete(dentry);
-		dput(dentry);
-	}
-	inode_unlock(dir);
-}
-
-I'm not claiming or trying to make this the most minimal version of
-securityfs_remove() that we could possibly get but I'm making it one
-where we don't have to worry that there's a subtle corner case that'll
-bite us in the future just because we tried to hand-massage a function
-that isn't in any hotpath.
+-- 
+Regards,
+Sudeep

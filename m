@@ -2,210 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4581E472142
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D59DD472144
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbhLMG7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbhLMG7l (ORCPT
+        id S232317AbhLMHBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:01:06 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:29420 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230448AbhLMHBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:59:41 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E84AC06173F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:59:41 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q16so13706874pgq.10
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:59:41 -0800 (PST)
+        Mon, 13 Dec 2021 02:01:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jZjfaRxDW+LbC37hF7gyfGpLJvWLQW/7kDRsRcHSUrM=;
-        b=VEeLpsyyJanyiSAAN9OKx6UVSbUsr5XseiND8grnRsC6cBJaT9L3lMZYziW28Sy6i/
-         C3LNR9RCh+IDTma6mq1NbnmzlPjucrJzCi39nTSq6++oqkfGKkQZNdk8nr13bnUfOU2e
-         PYg3C6eJ3MM2ykOCkF8aQlPVOGXlxSALswgPczysV6SA2oyKtVOSF129MIvwrdIMDV7V
-         XWOplZ8FqjExT/X5A9PN+WDrUerfy8QvtWQeAkVAh0Xhhu/3EhYEKXXuJWICWh4gh3sg
-         7JTJa3u5r/Ky1CTQo7sHRlGA2tFoMRX0X8pjLR9DvCxIJ1rhPx3R7I0wWluI1z2kpKcD
-         4R2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=jZjfaRxDW+LbC37hF7gyfGpLJvWLQW/7kDRsRcHSUrM=;
-        b=HduVPnsP+nN3uxslepVvGFu1oBf7GGYDg9qdbq4IheETMksi/kQYrkBJOA2m2oApSx
-         AVtt0XLF3yNVWCCDumLBJNZDDHvr4rQ3OocVEDAQUPvcXrfV53OGYjotK7P3BPpzn0KY
-         OKgGiuxzZ+HwwMREJxWNYPUfrZ0Q1+Oh8nXIieVuVJTDqoa5JNjUbeD7SWDgwhfKMsOY
-         xBKQp6ZMF87y4bfUV1tK9Sp9g8hs+jmRcWxqbqNF3TCLAAs6/lDHvva17IkWPXhmOVTB
-         n6trr4qWs8sVT07eM8vYjIEOyE198okYc+zRkNiYNmxNUEvUuEGff4SH29Q7bjgDhEvo
-         Xz+Q==
-X-Gm-Message-State: AOAM531xSOGmzCPWIEMv1GOPZR5Ex9/1z4lpFQViY+KQQX6vkfE3rGD1
-        KGrl7SB139i75KZKG9R2A+LJZdyWz0k=
-X-Google-Smtp-Source: ABdhPJzT+C04WoJbrzt66uTLkoFUGQbQmv8BnFG0sCl6MPIQdKInvwOhzY0MhOE7uiL6RZWCr01C5w==
-X-Received: by 2002:a05:6a00:2283:b0:49f:dea0:b9ba with SMTP id f3-20020a056a00228300b0049fdea0b9bamr31906636pfe.56.1639378780646;
-        Sun, 12 Dec 2021 22:59:40 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:5800:791f:f6fd:ec5b:b1f9])
-        by smtp.gmail.com with ESMTPSA id d13sm10878659pfu.213.2021.12.12.22.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 22:59:40 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        kernel test robot <lkp@intel.com>,
-        Marco Elver <elver@google.com>
-Subject: [PATCH v2] perf/core: Fix cgroup event list management
-Date:   Sun, 12 Dec 2021 22:59:36 -0800
-Message-Id: <20211213065936.1965081-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639378865; x=1670914865;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=3FY3fCWzD9sAw2TIOMfDe+NxjQSz+JlxGuoFvhy2Oh0=;
+  b=wUhlDSupWSPHTYIkCUn330/GQ12UNxTvWvJT/2AaEXFN/5SuABiswCix
+   6rSXba8+oyGB5OhfcG+cnzG/03Z6hPwD57st3ooJhrzu4F+vb12aPiAsW
+   Ea2DLEM3PnmLmV8/LOn/SQnm6u75cmPBAUzkamUu+dK+5TU+s9+PFGJid
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Dec 2021 23:01:05 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 23:01:05 -0800
+Received: from localhost (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sun, 12 Dec
+ 2021 23:01:03 -0800
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+To:     <paulmck@kernel.org>, <dwmw@amazon.co.uk>, <josh@joshtriplett.org>,
+        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
+        <jiangshanlai@gmail.com>, <joel@joelfernandes.org>
+CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <urezki@gmail.com>, <frederic@kernel.org>, <boqun.feng@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Subject: [PATCH] rcu: Make rcu_state.n_online_cpus updates atomic
+Date:   Mon, 13 Dec 2021 12:30:59 +0530
+Message-ID: <20211213070059.6381-1-quic_neeraju@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The active cgroup events are managed in the per-cpu cgrp_cpuctx_list.
-This list is accessed from current cpu and not protected by any locks.
-But from the commit ef54c1a476ae ("perf: Rework
-perf_event_exit_event()"), this assumption does not hold true anymore.
+To support onlining multiple CPUs concurrently,
+change rcu_state.n_online_cpus updates to be atomic.
+Note, it's ok for rcu_blocking_is_gp() to do a
+atomic_read(&rcu_state.n_online_cpus), as the
+value of .n_online_cpus switches from 1->2, in
+rcutree_prepare_cpu(), which runs before the new
+CPU comes online. Similarly 2->1 transition happens
+from rcutree_dead_cpu(), which executes after the
+CPU is offlined, and runs on the last online CPU.
 
-In the perf_remove_from_context(), it can remove an event from the
-context without an IPI when the context is not active.  I think it
-assumes task event context, but it's possible for cpu event context
-only with cgroup events can be inactive at the moment - and it might
-become active soon.
-
-If the event is enabled when it's about to be closed, it might call
-perf_cgroup_event_disable() and list_del() with the cgrp_cpuctx_list
-on a different cpu.
-
-This resulted in a crash due to an invalid list pointer access during
-the cgroup list traversal on the cpu which the event belongs to.
-
-The following program can crash my box easily..
-
-  #include <stdio.h>
-  #include <fcntl.h>
-  #include <unistd.h>
-  #include <linux/perf_event.h>
-  #include <sys/stat.h>
-  #include <sys/syscall.h>
-
-  //#define CGROUP_ROOT  "/dev/cgroup/devices"
-  #define CGROUP_ROOT  "/sys/fs/cgroup"
-
-  int perf_event_open(struct perf_event_attr *attr, int pid, int cpu,
-                      int grp, unsigned long flags)
-  {
-    return syscall(SYS_perf_event_open, attr, pid, cpu, grp, flags);
-  }
-
-  int get_cgroup_fd(const char *grp)
-  {
-    char buf[128];
-
-    snprintf(buf, sizeof(buf), "%s/%s", CGROUP_ROOT, grp);
-
-    /* ignore failures */
-    mkdir(buf, 0755);
-
-    return open(buf, O_RDONLY);
-  }
-
-  int main(int argc, char *argv[])
-  {
-    struct perf_event_attr hw = {
-      .type = PERF_TYPE_HARDWARE,
-      .config = PERF_COUNT_HW_CPU_CYCLES,
-    };
-    struct perf_event_attr sw = {
-      .type = PERF_TYPE_SOFTWARE,
-      .config = PERF_COUNT_SW_CPU_CLOCK,
-    };
-    int cpus = sysconf(_SC_NPROCESSORS_ONLN);
-    int fd[4][cpus];
-    int cgrpA, cgrpB;
-
-    cgrpA = get_cgroup_fd("A");
-    cgrpB = get_cgroup_fd("B");
-    if (cgrpA < 0 || cgrpB < 0) {
-      printf("failed to get cgroup fd\n");
-      return 1;
-    }
-
-    while (1) {
-      int i;
-
-      for (i = 0; i < cpus; i++) {
-        fd[0][i] = perf_event_open(&hw, cgrpA, i, -1, PERF_FLAG_PID_CGROUP);
-        fd[1][i] = perf_event_open(&sw, cgrpA, i, -1, PERF_FLAG_PID_CGROUP);
-        fd[2][i] = perf_event_open(&hw, cgrpB, i, -1, PERF_FLAG_PID_CGROUP);
-        fd[3][i] = perf_event_open(&sw, cgrpB, i, -1, PERF_FLAG_PID_CGROUP);
-      }
-
-      for (i = 0; i < cpus; i++) {
-        close(fd[3][i]);
-        close(fd[2][i]);
-        close(fd[1][i]);
-        close(fd[0][i]);
-      }
-    }
-    return 0;
-  }
-
-Let's use IPI to prevent such crashes.
-
-Similarly, I think perf_install_in_context() should use IPI for the
-cgroup events too.
-
-Reported-by: kernel test robot <lkp@intel.com>  # for build error
-Cc: Marco Elver <elver@google.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 ---
-v2) simply use IPI for cgroup events
+ kernel/rcu/tree.c | 6 +++---
+ kernel/rcu/tree.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- kernel/events/core.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 30d94f68c5bd..9460c083acd9 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -2388,7 +2388,7 @@ static void perf_remove_from_context(struct perf_event *event, unsigned long fla
- 	 * event_function_call() user.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 3da7826865f7..c1db01c4ea39 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2460,7 +2460,7 @@ int rcutree_dead_cpu(unsigned int cpu)
+ 	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
+ 		return 0;
+ 
+-	WRITE_ONCE(rcu_state.n_online_cpus, rcu_state.n_online_cpus - 1);
++	atomic_dec(&rcu_state.n_online_cpus);
+ 	/* Adjust any no-longer-needed kthreads. */
+ 	rcu_boost_kthread_setaffinity(rnp, -1);
+ 	// Stop-machine done, so allow nohz_full to disable tick.
+@@ -3740,7 +3740,7 @@ static int rcu_blocking_is_gp(void)
+ 	 * in the code, without the need for additional memory barriers.
+ 	 * Those memory barriers are provided by CPU-hotplug code.
  	 */
- 	raw_spin_lock_irq(&ctx->lock);
--	if (!ctx->is_active) {
-+	if (!ctx->is_active && !is_cgroup_event(event)) {
- 		__perf_remove_from_context(event, __get_cpu_context(ctx),
- 					   ctx, (void *)flags);
- 		raw_spin_unlock_irq(&ctx->lock);
-@@ -2857,11 +2857,14 @@ perf_install_in_context(struct perf_event_context *ctx,
- 	 * perf_event_attr::disabled events will not run and can be initialized
- 	 * without IPI. Except when this is the first event for the context, in
- 	 * that case we need the magic of the IPI to set ctx->is_active.
-+	 * Similarly, cgroup events for the context also needs the IPI to
-+	 * manipulate the cgrp_cpuctx_list.
- 	 *
- 	 * The IOC_ENABLE that is sure to follow the creation of a disabled
- 	 * event will issue the IPI and reprogram the hardware.
- 	 */
--	if (__perf_effective_state(event) == PERF_EVENT_STATE_OFF && ctx->nr_events) {
-+	if (__perf_effective_state(event) == PERF_EVENT_STATE_OFF &&
-+	    ctx->nr_events && !is_cgroup_event(event)) {
- 		raw_spin_lock_irq(&ctx->lock);
- 		if (ctx->task == TASK_TOMBSTONE) {
- 			raw_spin_unlock_irq(&ctx->lock);
-
-base-commit: 73743c3b092277febbf69b250ce8ebbca0525aa2
+-	ret = READ_ONCE(rcu_state.n_online_cpus) <= 1;
++	ret = atomic_read(&rcu_state.n_online_cpus) <= 1;
+ 	preempt_enable();
+ 	return ret;
+ }
+@@ -4199,7 +4199,7 @@ int rcutree_prepare_cpu(unsigned int cpu)
+ 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 	rcu_spawn_one_boost_kthread(rnp);
+ 	rcu_spawn_cpu_nocb_kthread(cpu);
+-	WRITE_ONCE(rcu_state.n_online_cpus, rcu_state.n_online_cpus + 1);
++	atomic_inc(&rcu_state.n_online_cpus);
+ 
+ 	return 0;
+ }
+diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+index 4b889081f4f4..f1017e7e1e9e 100644
+--- a/kernel/rcu/tree.h
++++ b/kernel/rcu/tree.h
+@@ -299,7 +299,7 @@ struct rcu_state {
+ 						/* Hierarchy levels (+1 to */
+ 						/*  shut bogus gcc warning) */
+ 	int ncpus;				/* # CPUs seen so far. */
+-	int n_online_cpus;			/* # CPUs online for RCU. */
++	atomic_t n_online_cpus;			/* # CPUs online for RCU. */
+ 
+ 	/* The following fields are guarded by the root rcu_node's lock. */
+ 
 -- 
-2.34.1.173.g76aa8bc2d0-goog
+2.17.1
 

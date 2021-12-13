@@ -2,159 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C0B472CEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2BC472CBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbhLMNL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbhLMNL5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:11:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD79DC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:11:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JCMNW0lkBz4xdH;
-        Tue, 14 Dec 2021 00:11:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1639401115;
-        bh=jTc1Puw+2oIqpDYLVpQk5kYHh0M0my7/zFGIJ66DjiE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Sr8mIM4faoYbBwD5NOI7CSBv07C53ii6iQomoJVtKs8IQ4O8pYmJmKU5pLcfdKl2k
-         +Q0eeIQuq23PV8froy6TJmhinPKwkIm++eeV2qDDW/34/pDr4p23VTeYAJQzSkOxxQ
-         jvysenzLRCleqL9jSBkDOVLxSiZcc1pZTp/rVyG8EKUF9pbOXin25aREqFxJMWne6w
-         zC9f87/geeMtnAEQOAwdo0/4HC5jFzVnwveetka2BYfcqTRdhG/QO5WCHNgSY2GJh5
-         y+DwDJ39ncFcP9b0GQ53VjD+CPnE8BseABV9W7D58g82Z4h8xzJyGoL7VcDq04tex0
-         ftif826ekzEog==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "alex@ghiti.fr" <alex@ghiti.fr>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v4 06/10] powerpc/mm: Use generic_get_unmapped_area()
- and call it from arch_get_unmapped_area()
-In-Reply-To: <8f54a8d097c402d808147b2044365ebfda2862dd.1638976229.git.christophe.leroy@csgroup.eu>
-References: <cover.1638976228.git.christophe.leroy@csgroup.eu>
- <8f54a8d097c402d808147b2044365ebfda2862dd.1638976229.git.christophe.leroy@csgroup.eu>
- f6795053dac8d4d2f90d4a98842dd6d2ccd544ad
-Date:   Tue, 14 Dec 2021 00:02:32 +1100
-Message-ID: <87ee6gmzdj.fsf@mpe.ellerman.id.au>
+        id S237129AbhLMNCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:02:50 -0500
+Received: from mga14.intel.com ([192.55.52.115]:62212 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237123AbhLMNCt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 08:02:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639400569; x=1670936569;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+hkuBro1FIArmqCU4DnYmYNozBM1ig92k/dHzqugSr8=;
+  b=nsKEA65CIT0kIIS3UOkwgK5wjcI3WaMVs/N/s1wTAPg2xN4UgdN+lJb/
+   QSiTSCX14YqVczC3vWGvP7CbDIK6E3a7DBlh7oQzMggziNJTwN9unHzNr
+   yEoIkKMPVZnEQUml259DJM35c51HN3kEwbg+6RFyPdiMoU6SOZ5XYdg1o
+   cpmG6gxz96Jd5kCfGySm0hsZGZ1WsQ2F9i46rWQ90VSiSU2tYKXkNf06R
+   CMDuKlKIVeKYo3TvFicpg61DkDuD5WWwkhj21tsLFV8rbwhOM866inZdd
+   6NkSsBUk73GghmbsG3JLgn9NKYhj5kXVZkMFeYlGZUb1HBNeZbwBNqwhj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238949452"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="238949452"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 05:02:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="463371551"
+Received: from ttbuckle-mobl.ger.corp.intel.com (HELO [10.252.5.128]) ([10.252.5.128])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 05:02:46 -0800
+Message-ID: <e7cad6ca-d106-c529-6f22-93a7847cd7c0@intel.com>
+Date:   Mon, 13 Dec 2021 13:02:44 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] drm/i915/ttm: fix large buffer population trucation
+Content-Language: en-GB
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>, Oak Zeng <oak.zeng@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20211210195005.2582884-1-bob.beckett@collabora.com>
+From:   Matthew Auld <matthew.auld@intel.com>
+In-Reply-To: <20211210195005.2582884-1-bob.beckett@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Use the generic version of arch_get_unmapped_area() which
-> is now available at all time instead of its copy
-> radix__arch_get_unmapped_area()
->
-> Instead of setting mm->get_unmapped_area() to either
-> arch_get_unmapped_area() or generic_get_unmapped_area(),
-> always set it to arch_get_unmapped_area() and call
-> generic_get_unmapped_area() from there when radix is enabled.
->
-> Do the same with radix__arch_get_unmapped_area_topdown()
->
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On 10/12/2021 19:50, Robert Beckett wrote:
+> ttm->num_pages is uint32_t which was causing very large buffers to
+> only populate a truncated size.
+> 
+> This fixes gem_create@create-clear igt test on large memory systems.
+> 
+> Fixes: 7ae034590cea ("drm/i915/ttm: add tt shmem backend")
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+
+Nice catch,
+Reviewed-by: Matthew Auld <matthew.auld@intel.com>
+
 > ---
->  arch/powerpc/mm/mmap.c | 127 ++---------------------------------------
->  1 file changed, 6 insertions(+), 121 deletions(-)
->
-> diff --git a/arch/powerpc/mm/mmap.c b/arch/powerpc/mm/mmap.c
-> index 9b0d6e395bc0..46781d0103d1 100644
-> --- a/arch/powerpc/mm/mmap.c
-> +++ b/arch/powerpc/mm/mmap.c
-> @@ -81,115 +81,15 @@ static inline unsigned long mmap_base(unsigned long rnd,
->  }
->  
->  #ifdef HAVE_ARCH_UNMAPPED_AREA
-> -#ifdef CONFIG_PPC_RADIX_MMU
-> -/*
-> - * Same function as generic code used only for radix, because we don't need to overload
-> - * the generic one. But we will have to duplicate, because hash select
-> - * HAVE_ARCH_UNMAPPED_AREA
-> - */
-> -static unsigned long
-> -radix__arch_get_unmapped_area(struct file *filp, unsigned long addr,
-> -			     unsigned long len, unsigned long pgoff,
-> -			     unsigned long flags)
-> -{
-> -	struct mm_struct *mm = current->mm;
-> -	struct vm_area_struct *vma;
-> -	int fixed = (flags & MAP_FIXED);
-> -	unsigned long high_limit;
-> -	struct vm_unmapped_area_info info;
-> -
-> -	high_limit = DEFAULT_MAP_WINDOW;
-> -	if (addr >= high_limit || (fixed && (addr + len > high_limit)))
-> -		high_limit = TASK_SIZE;
-> -
-> -	if (len > high_limit)
-> -		return -ENOMEM;
-
-There are some differences in the above vs the generic code, the generic
-arch_get_unmapped_area_topdown() in mm/mmap.c does:
-
-	const unsigned long mmap_end = arch_get_mmap_end(addr);
-
-	if (len > mmap_end - mmap_min_addr)
-		return -ENOMEM;
-
-	if (flags & MAP_FIXED)
-		return addr;
-
-
-Our current code adjusts high_limit for fixed mappings that span above
-the default map window. We added that logic in:
-
-  35602f82d0c7 ("powerpc/64s/hash: Allow MAP_FIXED allocations to cross 128TB boundary")
-
-That means a fixed mapping that crosses the 128T boundary will be
-allowed by our code.
-
-On the other hand the generic code will allow a fixed mapping to cross
-the 128T boundary, but only if the size of the mapping is < ~128T.
-
-(The actual size limit is (128T - mmap_min_addr), which is usually 4K or
-64K, but is adjustable.)
-
-It's unlikely that any apps are doing fixed mappings larger than 128T
-that cross the 128T boundary, but I think we need to allow it. 128T
-seems like a lot, but is not compared to the entire 4PB address space.
-
-So I think we need to fix that in the generic code.
-
-The easiest option is probably to pass flags to arch_get_mmap_end(), and
-then the arches can decide whether to adjust the return value based on
-flags.
-
-
-Then there's also the extra check we have here:
-
-> -	if (fixed) {
-> -		if (addr > high_limit - len)
-> -			return -ENOMEM;
-> -		return addr;
-> -	}
-
-I think we can drop that when converting to the generic version, the
-only case in which it matters is when high_limit == TASK_SIZE, and
-get_unmapped_area() already does that check after calling us:
-
-	if (addr > TASK_SIZE - len)
-		return -ENOMEM;
-
-
-cheers
+>   drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> index 218a9b3037c7..923cc7ad8d70 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> @@ -166,7 +166,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
+>   	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
+>   	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
+>   	const unsigned int max_segment = i915_sg_segment_size();
+> -	const size_t size = ttm->num_pages << PAGE_SHIFT;
+> +	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
+>   	struct file *filp = i915_tt->filp;
+>   	struct sgt_iter sgt_iter;
+>   	struct sg_table *st;
+> 

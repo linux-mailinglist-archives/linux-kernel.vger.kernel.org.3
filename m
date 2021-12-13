@@ -2,152 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EE04732DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8CA4732E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241300AbhLMRYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 12:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236018AbhLMRYp (ORCPT
+        id S241320AbhLMRY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 12:24:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59538 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236018AbhLMRY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 12:24:45 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CCFC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 09:24:45 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id d14so13309052ila.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 09:24:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=izyPlV9s0tLTAm1bln4PLV07W4NiOuUYJ+h3tC2rZQU=;
-        b=L0yHgl5pDE97iwbnffL0ku07lI6XItptlcgK9ck39E3x3NU/nrTUqNU08cnJ/yUzBd
-         0x56ANvbsiPB/V3I+DaiN62gZ8XKmtxYQF6JtMIdJ5sGdLP/zZ/BiOPMcDoQCZlB4UQV
-         RkJtgLNdJXdkkHJuJZC47W/iCZHy+Z12hicpgnxdjpAZ0D19yEVWbEQCOHNfE7s5jdk5
-         10gEHvxckK6KHJ3TZWsmkV7s5by8bonnQF//Fo38jWT6d5V6iHRErDZT5aKflqqkgWe4
-         Vt5c1ul90bdHCbAFPeXfYCkdvW1YLtszg6rSVCUGeDcNOcoOD0VdGENdlvedirL4RbK9
-         JaRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=izyPlV9s0tLTAm1bln4PLV07W4NiOuUYJ+h3tC2rZQU=;
-        b=iB+etI4dZ6B4PpXb/VWR/5Tk1JkWvirvPrniAT0DgDjTVZenUs8ZO2KYrHtAvI34Ef
-         9RWCaXy2lJ8Ym3OdrWBVr9WygHFvTKP/gy4p8WgeYE2DiU5iGyIZ9ebK/y1xsBTOTt4h
-         2+AYk7QHEdtTP8cAaiypNIO5DN4eTmAynSi+7UWdabHfZppAYkor0vkNbdHmo8CbwKU1
-         QD2TvxrZS2QZOV27D6wzx36feTZCnMkQIQsL6FfdzJdyp7aLK+/bh3hj5KI/pp++Br6r
-         wxzwyG/LB19LWH65O3hqspbnbHqgCFH+h1nl8HnaRqlDMs9wzbD2TC/ZOGSrDG18QBJk
-         0agA==
-X-Gm-Message-State: AOAM531iL1PKpXYzaQlglmQWvREK+A9vXH1gBDAXS7XhE780e+2CgzOH
-        7r8bDqnykWhACLCpuZ0ifrP2aYbQ0IoAXVs6Sc6AEg==
-X-Google-Smtp-Source: ABdhPJycnm2C06ujzF8qEW+PQFkoSKqxTYZ8z0mySQetvQ6cFneJ7i9qhDQWx4Q4OSCWDxlfI2eqX5hvkEx77luR3OA=
-X-Received: by 2002:a92:d586:: with SMTP id a6mr13074796iln.293.1639416284276;
- Mon, 13 Dec 2021 09:24:44 -0800 (PST)
+        Mon, 13 Dec 2021 12:24:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB241B811E0;
+        Mon, 13 Dec 2021 17:24:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E403C34602;
+        Mon, 13 Dec 2021 17:24:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639416295;
+        bh=sb0MvNrSORCLQFaBLBkUnz6crCYZ7ga2CwkWso4TfW8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b8W591K813BG47h6LlTFVEqZtJijk76LEhgC4GRuU0elgH6H7Y6LHTsCHjyV5V6YY
+         oQB264X/8mG1uC5yESyBIJPkG2Re7h4MlNd6ROTYED90qi3hrVEW7qLOLLep9o+pF1
+         Q6AQIqMBRdlprEqNPQPqSiUyl6E0Dxd6L8OV3LP7AArE98us7DEjB+f78vch9nAi9d
+         eceXaIGHmEAjeOCEkamTd2DMvxDfj6cDJyuPkiJ/imNa55kVy0vCqqxylWOOkuRMds
+         7VkVRKsQg3CIuHot2cf755jwNau6yZRJXCyyKUhPJH8/RZskBF9oy86F2n06EzfSiu
+         //ItGLzNASnYA==
+Date:   Mon, 13 Dec 2021 09:24:42 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Martijn Coenen <maco@android.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v3 0/5] aio: fix use-after-free and missing wakeups
+Message-ID: <YbeB2jueI86NBthA@sol.localdomain>
+References: <20211209010455.42744-1-ebiggers@kernel.org>
+ <CAHk-=wjkXez+ugCbF3YpODQQS-g=-4poCwXaisLW4p2ZN_=hxw@mail.gmail.com>
+ <YbJM6H2wOisBY6gU@sol.localdomain>
+ <20211213072339.GB20423@lst.de>
 MIME-Version: 1.0
-References: <20211212033229.527955-1-davidgow@google.com>
-In-Reply-To: <20211212033229.527955-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 13 Dec 2021 09:24:33 -0800
-Message-ID: <CAGS_qxrDxVPDGqSqpVTF5wq23Q=3WDitc+k2VtOzQwm_N6Cyjg@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: tool: Default --jobs to number of CPUs
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213072339.GB20423@lst.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 7:32 PM David Gow <davidgow@google.com> wrote:
->
-> The --jobs parameter for kunit_tool currently defaults to 8 CPUs,
-> regardless of the number available. For systems with significantly more
-> (or less), this is not as efficient. Instead, default --jobs to the
-> number of CPUs available to the process: while there are as many
-> superstitions as to exactly what the ideal jobs:CPU ratio is, this seems
-> sufficiently sensible to me.
->
-> A new helper function to get the default number of jobs is added:
-> get_default_jobs() -- this is used in kunit_tool_test instead of a
-> hardcoded value, or an explicit call to len(os.sched_getaffinity()), so
-> should be more flexible if this needs to change in the future.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Mon, Dec 13, 2021 at 08:23:39AM +0100, Christoph Hellwig wrote:
+> On Thu, Dec 09, 2021 at 10:37:28AM -0800, Eric Biggers wrote:
+> > I was hoping that Al would review and apply these, given that he's listed as the
+> > maintainer for this file, and he's worked on this code before.  I was also
+> > hoping for review from Christoph, since he added IOCB_CMD_POLL originally.  But
+> 
+> I was planning to get to it,  but it seems like it got merged over this
+> weekend?
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+There weren't any indications that anyone else was going to review it, and it
+wasn't appropriate to wait any longer.  If you'd still like to review it, please
+do so; if you find any problem I'll fix it in a follow-on fix.
 
-Looks good to me.
-I played around with a few commands like
-$ taskset 0x3 ./tools/testing/kunit/kunit.py run
-and saw it pick the pass the expected --jobs value to make.
-
-> ---
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20211211084928.410669-1-davidgow@google.com/
-> - Use len(os.sched_getaffinity()) instead of os.cpu_count(), which gives
->   the number of available processors (to this process), rather than the
->   total.
-> - Fix kunit_tool_test.py, which had 8 jobs hardcoded in a couple of
->   places.
-> - Thanks to Daniel Latypov for these suggestions.
->
-> ---
->
->  tools/testing/kunit/kunit.py           | 5 ++++-
->  tools/testing/kunit/kunit_tool_test.py | 5 +++--
->  2 files changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 68e6f461c758..6b0ddd6d0115 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -264,6 +264,9 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
->                 return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
->         return list(map(massage_arg, argv))
->
-> +def get_default_jobs() -> int:
-> +       return len(os.sched_getaffinity(0))
-> +
->  def add_common_opts(parser) -> None:
->         parser.add_argument('--build_dir',
->                             help='As in the make command, it specifies the build '
-> @@ -310,7 +313,7 @@ def add_build_opts(parser) -> None:
->         parser.add_argument('--jobs',
->                             help='As in the make command, "Specifies  the number of '
->                             'jobs (commands) to run simultaneously."',
-> -                           type=int, default=8, metavar='jobs')
-> +                           type=int, default=get_default_jobs(), metavar='jobs')
->
->  def add_exec_opts(parser) -> None:
->         parser.add_argument('--timeout',
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 9c4126731457..512936241a56 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -419,7 +419,7 @@ class KUnitMainTest(unittest.TestCase):
->         def test_build_passes_args_pass(self):
->                 kunit.main(['build'], self.linux_source_mock)
->                 self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
-> -               self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, '.kunit', None)
-> +               self.linux_source_mock.build_kernel.assert_called_once_with(False, kunit.get_default_jobs(), '.kunit', None)
->                 self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
->
->         def test_exec_passes_args_pass(self):
-> @@ -525,8 +525,9 @@ class KUnitMainTest(unittest.TestCase):
->
->         def test_build_builddir(self):
->                 build_dir = '.kunit'
-> +               jobs = kunit.get_default_jobs()
->                 kunit.main(['build', '--build_dir', build_dir], self.linux_source_mock)
-> -               self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, build_dir, None)
-> +               self.linux_source_mock.build_kernel.assert_called_once_with(False, jobs, build_dir, None)
->
->         def test_exec_builddir(self):
->                 build_dir = '.kunit'
-> --
-> 2.34.1.173.g76aa8bc2d0-goog
->
+- Eric

@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 221B247349E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27884734A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242115AbhLMTDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:03:44 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:10457 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S240093AbhLMTDn (ORCPT
+        id S235689AbhLMTFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:05:39 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:48740 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232609AbhLMTFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:03:43 -0500
-X-IronPort-AV: E=Sophos;i="5.88,203,1635174000"; 
-   d="scan'208";a="103339454"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 14 Dec 2021 04:03:41 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id BB5A14000C7E;
-        Tue, 14 Dec 2021 04:03:40 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] leds: ktd2692: Drop calling dev_of_node() in ktd2692_parse_dt
-Date:   Mon, 13 Dec 2021 19:03:31 +0000
-Message-Id: <20211213190331.5531-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 13 Dec 2021 14:05:38 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0458B210E2;
+        Mon, 13 Dec 2021 19:05:37 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0F8113E53;
+        Mon, 13 Dec 2021 19:05:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7Wl2HH6Zt2F6FwAAMHmgww
+        (envelope-from <dave@stgolabs.net>); Mon, 13 Dec 2021 19:05:34 +0000
+Date:   Mon, 13 Dec 2021 11:05:29 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     axboe@kernel.dk, bigeasy@linutronix.de, tglx@linutronix.de,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH] blk-mq: make synchronous hw_queue runs RT friendly
+Message-ID: <20211213190529.j54qikq7mk5zuc3o@offworld>
+References: <20211213054425.28121-1-dave@stgolabs.net>
+ <YbdFeHVnQbT0E5kR@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YbdFeHVnQbT0E5kR@infradead.org>
+User-Agent: NeoMutt/20201120
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-output of dev_of_node() is already assigned to "np" variable in
-ktd2692_parse_dt(). Use "np" variable to check if OF node is NULL
-instead of calling dev_of_node() again.
+On Mon, 13 Dec 2021, Christoph Hellwig wrote:
+>But more importantly:  why isn't migrate_disable/enable doing the right
+>thing for !PREEMPT_RT to avoid this mess?
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/leds/flash/leds-ktd2692.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please see Peter's description of the situation in af449901b84.
 
-diff --git a/drivers/leds/flash/leds-ktd2692.c b/drivers/leds/flash/leds-ktd2692.c
-index f341da1503a4..ed1f20a58bf6 100644
---- a/drivers/leds/flash/leds-ktd2692.c
-+++ b/drivers/leds/flash/leds-ktd2692.c
-@@ -274,7 +274,7 @@ static int ktd2692_parse_dt(struct ktd2692_context *led, struct device *dev,
- 	struct device_node *child_node;
- 	int ret;
- 
--	if (!dev_of_node(dev))
-+	if (!np)
- 		return -ENXIO;
- 
- 	led->ctrl_gpio = devm_gpiod_get(dev, "ctrl", GPIOD_ASIS);
--- 
-2.17.1
+While I'm not at all a fan of sprinkling migrate_disabling around code,
+I didn't want to add any overhead for the common case. If this, however,
+were not an issue (if most cases are async runs, for example) the ideal
+solution I think would be to just pin current to the hctx->cpumask.
 
+Thanks,
+Davidlohr

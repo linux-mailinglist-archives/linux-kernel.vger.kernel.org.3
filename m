@@ -2,100 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7A7472D3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 510B5472D4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237510AbhLMN3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:29:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36394 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231784AbhLMN3X (ORCPT
+        id S237584AbhLMNaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:30:08 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34656 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235637AbhLMNaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:29:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639402163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8ceoqArSaP6ZEr1raActJLXti4o2vCE8jCmahCCH2dQ=;
-        b=aJDSxJQ50TPl3VHeOKdv0rSQ5A3WSFODFV+ylNWa0oXSI5jFinFTZXedZGZG0SFumoJkmD
-        KdNpVSWrNJ8qp3PInJR2ZWtKHSD5tMBctJa1hMMVvoCs1eByus5z56jRenqkHbig9MQhH0
-        JSIMEqpNOvimWlhBdjrkOqfg3mKkODY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-212-7KOqA8moP4Ozlz00U9eu6Q-1; Mon, 13 Dec 2021 08:29:19 -0500
-X-MC-Unique: 7KOqA8moP4Ozlz00U9eu6Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 13 Dec 2021 08:30:06 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 652F3802C9B;
-        Mon, 13 Dec 2021 13:29:18 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 251EE100164A;
-        Mon, 13 Dec 2021 13:29:13 +0000 (UTC)
-Message-ID: <0080a4ca56f67fd24edaa64a925d5d700fd016d5.camel@redhat.com>
-Subject: Re: [PATCH v2 1/5] KVM: nSVM: deal with L1 hypervisor that
- intercepts interrupts but lets L2 control EFLAGS.IF
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joerg Roedel <joro@8bytes.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>
-Date:   Mon, 13 Dec 2021 15:29:12 +0200
-In-Reply-To: <6ce77eaf-ed2e-9092-0822-84caddd4a80c@redhat.com>
-References: <20211213104634.199141-1-mlevitsk@redhat.com>
-         <20211213104634.199141-2-mlevitsk@redhat.com>
-         <0d893664-ff8d-83ed-e9be-441b45992f68@redhat.com>
-         <74c548c61aeb4afba3acb4143fcb91d92e7de8d6.camel@redhat.com>
-         <6ce77eaf-ed2e-9092-0822-84caddd4a80c@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by sin.source.kernel.org (Postfix) with ESMTPS id EE243CE101C;
+        Mon, 13 Dec 2021 13:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67355C34601;
+        Mon, 13 Dec 2021 13:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639402203;
+        bh=sRU8BNAdNf2xyfnyW5j/+kAV8EwcPrmJ6lESbKeGPxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y5+rb59S15gUX3TKeSQHKHW0SBmnGiK9aiNCk2YzPMT+JYRrETpLh1Ywf1oVk258J
+         CHxhqTViJDArMbuKlu5Epp3aMRD2O/pzsVBOAO9k3Q5dPprlvYdSIzgjuAWzd7VKsI
+         km99CcLAWoHR2QK1l21o2PS7NiYUhtbIF8v6dT3WCQ7dTC29fW4ayrRGDBO6s8D3Kr
+         1dxHKps3K7H48ipR7uk5ZcZbQexSNMQGKWsevLbXYRk+7V9GCEREvfXMcxLZXUSFC3
+         717ADrHpe7RCDNYk02d1RbhPIkgU4fq2mAt8bvckKCEn0m0D7QZYw8lBW+/0L3Xy1+
+         I6hJtWYaiHO2w==
+Date:   Mon, 13 Dec 2021 21:29:46 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jianhe@ambarella.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdnsp: Fix lack of
+ spin_lock_irqsave/spin_lock_restore
+Message-ID: <20211213132946.GD5346@Peter>
+References: <20211213122001.47370-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213122001.47370-1-pawell@gli-login.cadence.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-13 at 14:15 +0100, Paolo Bonzini wrote:
-> On 12/13/21 14:07, Maxim Levitsky wrote:
-> > > Right, another case is when CLGI is not trapped and the guest therefore
-> > > runs with GIF=0.  I think that means that a similar change has to be
-> > > done in all the *_allowed functions.
-> > 
-> > I think that SVM sets real GIF to 1 on VMentry regardless if it is trapped or not.
+On 21-12-13 13:20:01, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> Yes, the issue is only when CLGI is not trapped (and vGIF is disabled).
-
-Yes, but I just wanted to clarify that GIF is initially enabled on VM entry
-regardless if it is trapped or not, after that the guest can indeed disable
-the GIF if CLGI/STGI is not trapped and vGIF disabled.
-
+> Patch puts content of cdnsp_gadget_pullup function inside
+> spin_lock_irqsave and spin_lock_restore section.
+> This construction is required here to keep the data consistency,
+> otherwise some data can be changed e.g. from interrupt context.
 > 
-> > However if not trapped, and neither EFLAGS.IF is trapped, one could enter a guest
-> > that has EFLAGS.IF == 0, then the guest could disable GIF, enable EFLAGS.IF,
-> > and then enable GIF, but then GIF enablement should trigger out interrupt window
-> > VINTR as well.
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Reported-by: Ken (Jian) He <jianhe@ambarella.com>
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdnsp-gadget.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> While GIF=0 you have svm_nmi_blocked returning true and svm_nmi_allowed 
-> returning -EBUSY; that's wrong isn't it?
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index f6d231760a6a..d0c040556984 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -1544,8 +1544,10 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
+>  {
+>  	struct cdnsp_device *pdev = gadget_to_cdnsp(gadget);
+>  	struct cdns *cdns = dev_get_drvdata(pdev->dev);
+> +	unsigned long flags;
+>  
+>  	trace_cdnsp_pullup(is_on);
+> +	spin_lock_irqsave(&pdev->lock, flags);
 
-Yes, 100% agree, patch (and unit test for this as well) is on the way!
+If the interrupt bottom half is pending, the consistent issue may still
+exist, you may let the bottom half has finished first, eg: calling
+disable_irq before spin_lock_irqsave.
 
-Best regards.	
-	Maxim Levitsky
+Peter
+>  
+>  	if (!is_on) {
+>  		cdnsp_reset_device(pdev);
+> @@ -1553,6 +1555,9 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
+>  	} else {
+>  		cdns_set_vbus(cdns);
+>  	}
+> +
+> +	spin_unlock_irqrestore(&pdev->lock, flags);
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.25.1
 > 
-> Paolo
-> 
 
+-- 
+
+Thanks,
+Peter Chen
 

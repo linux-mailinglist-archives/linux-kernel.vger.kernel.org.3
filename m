@@ -2,43 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9206B472822
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 127184724B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242225AbhLMKHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S234658AbhLMJh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235890AbhLMJ65 (ORCPT
+        with ESMTP id S234250AbhLMJgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:58:57 -0500
+        Mon, 13 Dec 2021 04:36:35 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05170C034020;
-        Mon, 13 Dec 2021 01:48:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97550C0698C6;
+        Mon, 13 Dec 2021 01:36:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 57201CE0EB9;
-        Mon, 13 Dec 2021 09:48:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2666C33A73;
-        Mon, 13 Dec 2021 09:48:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E3C4ACE0E6F;
+        Mon, 13 Dec 2021 09:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 650A0C341C5;
+        Mon, 13 Dec 2021 09:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388918;
-        bh=NZl2Dy2osvAlg8bLvtue5z3wsm1JSMPqiGShltFH7aY=;
+        s=korg; t=1639388191;
+        bh=0p9XQmV2M3kviX6dwt5IIWXClwuY2DBSaPF/Pjv+fGY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=14QdPpCGSyMi+7m5RhKjunMcHdplyuIdNipFV4IZRHgTryLnUulwTWQhbxW33+oCq
-         okCB3/Kizl6xIR6CFVbQ5PDVreQ4ipcfM+OvBSm1BqRZSgz7RYoOdwaYz9tOFu/rhs
-         L0HmSHeH6k678Z4U0ie6oK3vGlboAqBOkYYr6VxY=
+        b=Hci7GmGMQFeChsYfWBnbSDcoIwDZo5d3kHDNxoKmXvHdPOaeKtJqkZaXBDU/kr+UG
+         gcgnImWr0EgnxdyMPjp+oKH+Y7UrDY4a0+xqcSUxCBCc5gQ+IWIcQ6Fm/zTzh4Mwg2
+         6CKBGgsuAIFegsnAzwux80BXudzUu61sfAf7fIpM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "J. Bruce Fields" <bfields@redhat.com>
-Subject: [PATCH 5.10 055/132] nfsd: fix use-after-free due to delegation race
-Date:   Mon, 13 Dec 2021 10:29:56 +0100
-Message-Id: <20211213092941.012051953@linuxfoundation.org>
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Yabin Cui <yabinc@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 4.14 18/53] tracefs: Have new files inherit the ownership of their parent
+Date:   Mon, 13 Dec 2021 10:29:57 +0100
+Message-Id: <20211213092928.972280012@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,63 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: J. Bruce Fields <bfields@redhat.com>
+From: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-commit 548ec0805c399c65ed66c6641be467f717833ab5 upstream.
+commit ee7f3666995d8537dec17b1d35425f28877671a9 upstream.
 
-A delegation break could arrive as soon as we've called vfs_setlease.  A
-delegation break runs a callback which immediately (in
-nfsd4_cb_recall_prepare) adds the delegation to del_recall_lru.  If we
-then exit nfs4_set_delegation without hashing the delegation, it will be
-freed as soon as the callback is done with it, without ever being
-removed from del_recall_lru.
+If directories in tracefs have their ownership changed, then any new files
+and directories that are created under those directories should inherit
+the ownership of the director they are created in.
 
-Symptoms show up later as use-after-free or list corruption warnings,
-usually in the laundromat thread.
+Link: https://lkml.kernel.org/r/20211208075720.4855d180@gandalf.local.home
 
-I suspect aba2072f4523 "nfsd: grant read delegations to clients holding
-writes" made this bug easier to hit, but I looked as far back as v3.0
-and it looks to me it already had the same problem.  So I'm not sure
-where the bug was introduced; it may have been there from the beginning.
-
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yabin Cui <yabinc@google.com>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: J. Bruce Fields <bfields@redhat.com>
+Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+Reported-by: Kalesh Singh <kaleshsingh@google.com>
+Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs4state.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ fs/tracefs/inode.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -1089,6 +1089,11 @@ hash_delegation_locked(struct nfs4_deleg
- 	return 0;
- }
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -409,6 +409,8 @@ struct dentry *tracefs_create_file(const
+ 	inode->i_mode = mode;
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
+ 	d_instantiate(dentry, inode);
+ 	fsnotify_create(dentry->d_parent->d_inode, dentry);
+ 	return end_creating(dentry);
+@@ -431,6 +433,8 @@ static struct dentry *__create_dir(const
+ 	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
+ 	inode->i_op = ops;
+ 	inode->i_fop = &simple_dir_operations;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
  
-+static bool delegation_hashed(struct nfs4_delegation *dp)
-+{
-+	return !(list_empty(&dp->dl_perfile));
-+}
-+
- static bool
- unhash_delegation_locked(struct nfs4_delegation *dp)
- {
-@@ -1096,7 +1101,7 @@ unhash_delegation_locked(struct nfs4_del
- 
- 	lockdep_assert_held(&state_lock);
- 
--	if (list_empty(&dp->dl_perfile))
-+	if (!delegation_hashed(dp))
- 		return false;
- 
- 	dp->dl_stid.sc_type = NFS4_CLOSED_DELEG_STID;
-@@ -4512,7 +4517,7 @@ static void nfsd4_cb_recall_prepare(stru
- 	 * queued for a lease break. Don't queue it again.
- 	 */
- 	spin_lock(&state_lock);
--	if (dp->dl_time == 0) {
-+	if (delegation_hashed(dp) && dp->dl_time == 0) {
- 		dp->dl_time = ktime_get_boottime_seconds();
- 		list_add_tail(&dp->dl_recall_lru, &nn->del_recall_lru);
- 	}
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
 
 

@@ -2,133 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C5D473065
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AD9473074
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239519AbhLMP0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:26:25 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:59632 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234672AbhLMP0X (ORCPT
+        id S240104AbhLMP23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:28:29 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:39889 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234600AbhLMP21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:26:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639409183; x=1670945183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ryug1bVR3itCcTo+/NCw0RmB2Bhud42INAPy6OLzOeg=;
-  b=Ihs5M/iXTi7OsuF9EQXBC7plWp2AAiHFYrq3+Z+s2tn4/r5mq3BTSTTX
-   IcKXI5vIIhC0ItlV7bS1GVQD2hu1nrmKIbb7B4mope+smBYcI+FUIEstg
-   zGEiFtjhZmWTTqf/s6J5jseMXDWAz9xJSeoCkVpV2zScLDxtKJuuyNhlu
-   Fp/wraoEG1z0EfTtKOuLcpQql1uU/mtDLlzimPVk8CPHbhRHvex+Mk5n+
-   j567zZ75hNsuV41J+9/UyLaia3rdCbKN1yjEuyKvV0/trs3o7EnK014Oj
-   qnJrH3vf9CTl65JJRA77NflWhx4VcgrZ4Kn1grKgXWGs+2nPYwobjZfFn
-   w==;
-IronPort-SDR: 5iOVefQ3cbTdHXr4NHxdhWvPOJK0GKSCglZQrkhfsjf0Ol5Ymk15DHsss5hT87YPRylG51c4kd
- kUm9qq43I2AQprrVFz1bhldRUbdH+1A8P7hQVrHkl+xmM2mYnb9gzmYYM83olDTcUdeAwT+REU
- YZWxoLWqbC17tvV72bVlJLwWnIO6UluRncWgMZurBaRLl552MM6zgA8pAlWGx3khTUA8XXE5TM
- ltyVdJCyPnmznts33zrH2/N+oBGkIaMs7unUpZDImEVcoCozfA6bjPbWC0T10zPXQGOi18tyqu
- i/6JyAeAVxTPSX+W7ArEcNrL
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="147044768"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2021 08:26:22 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 13 Dec 2021 08:26:22 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 13 Dec 2021 08:26:21 -0700
-Date:   Mon, 13 Dec 2021 16:28:24 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>
-Subject: Re: [PATCH net-next v3 6/6] net: lan966x: Add switchdev support
-Message-ID: <20211213152824.22odaltycnotozkw@soft-dev3-1.localhost>
-References: <20211209094615.329379-1-horatiu.vultur@microchip.com>
- <20211209094615.329379-7-horatiu.vultur@microchip.com>
- <20211209133616.2kii2xfz5rioii4o@skbuf>
- <20211209164311.agnofh275znn5t5c@soft-dev3-1.localhost>
- <20211213102529.tzdvekwwngo4zgex@soft-dev3-1.localhost>
- <20211213134319.dp6b3or24pl3p4en@skbuf>
- <20211213142656.tfonhcmmtkelszvf@soft-dev3-1.localhost>
- <20211213142907.7s74smjudcecpgik@skbuf>
+        Mon, 13 Dec 2021 10:28:27 -0500
+Received: by mail-il1-f198.google.com with SMTP id d3-20020a056e021c4300b002a23bcd5ee7so15056496ilg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:28:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=aysPfNqjxpRXiA7lBlJLG8Lfatc36uOx/7qWhJ61vc0=;
+        b=h8LQXV6Ncx76BRZa/hdbhTYvteohGTCosr7+EZlcT+GG44tdkzFs+WxG8p5XYvAjTa
+         ngnQpQf8NmoETMduC473IMCfISZJHqhtcCaM0aFrxSqqU7Uy24twavWEAzJzo82F7ytN
+         yNJw2uZNfLNcHue90Ne9oms6Xzpo9mGCY/iShq6exB6P3u7eyqS8szDfcMiAdn049ie3
+         vhE3mGfj38dV7WnIud8FWGo6aYPMCtTqqsCkX9jIWql+Sp4TU4LNNyM1zNhZ6u+g4POv
+         MYCSrcRh9ARp5bPzs+VhesetPxjniL+ULq5M6O5qUT91APJ4ZVmjaRK/25s6KhkJX0wx
+         QmHw==
+X-Gm-Message-State: AOAM5318bBBofFEKwmybC4HNho9a4oZmXOlXIoyfwDVXHjxGCAXEbf/Q
+        3pPd+laA/+mQ0qzntJGa/PO7HOOsPiES09TzxMqokMz6krHr
+X-Google-Smtp-Source: ABdhPJyyJJHgD7cWOTWpnl40UVtKrJ2E/+AkP55QQPE6obPaAC4zLCzSQrGwqQhCsQvEeVRyQ9fKxL03U22X2U21IC14ls3ck3QL
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20211213142907.7s74smjudcecpgik@skbuf>
+X-Received: by 2002:a05:6638:32aa:: with SMTP id f42mr33140073jav.115.1639409306499;
+ Mon, 13 Dec 2021 07:28:26 -0800 (PST)
+Date:   Mon, 13 Dec 2021 07:28:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005affb705d308b986@google.com>
+Subject: [syzbot] KMSAN: uninit-value in udf_evict_inode (2)
+From:   syzbot <syzbot+9ca499bb57a2b9e4c652@syzkaller.appspotmail.com>
+To:     glider@google.com, jack@suse.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 12/13/2021 14:29, Vladimir Oltean wrote:
-> 
-> On Mon, Dec 13, 2021 at 03:26:56PM +0100, Horatiu Vultur wrote:
-> > > They are independent of each other. You deduce the interface on which
-> > > the notifier was emitted using switchdev_notifier_info_to_dev() and act
-> > > upon it, if lan966x_netdevice_check() is true. The notifier handling
-> > > code itself is stateless, all the state is per port / per switch.
-> > > If you register one notifier handler per switch, lan966x_netdevice_check()
-> > > would return true for each notifier handler instance, and you would
-> > > handle each event twice, would you not?
-> >
-> > That is correct, I will get the event twice which is a problem in the
-> > lan966x. The function lan966x_netdevice_check should be per instance, in
-> > this way each instance can filter the events.
-> > The reason why I am putting the notifier_block inside lan966x is to be
-> > able to get to the instance of lan966x even if I get a event that is not
-> > for lan966x port.
-> 
-> That isn't a problem, every netdevice notifier still sees all events.
+Hello,
 
-Yes, that is correct.
-Sorry maybe I am still confused, but some things are still not right.
+syzbot found the following issue on:
 
-So lets say there are two lan966x instances(A and B) and each one has 2
-ports(ethA0, ethA1, ethB0, ethB1).
-So with the current behaviour, if for example ethA0 is added in vlan
-100, then we get two callbacks for each lan966x instance(A and B) because
-each of them registered. And because of lan966x_netdevice_check() is true
-for ethA0 will do twice the work.
-And you propose to have a singleton notifier so we get only 1 callback
-and will be fine for this case. But if you add for example the bridge in
-vlan 200 then I will never be able to get to the lan966x instance which
-is needed in this case.
+HEAD commit:    8b936c96768e kmsan: core: remove the accidentally committe..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=12c9f1beb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ca499bb57a2b9e4c652
+compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-That is why if the lan966x_netdevice_check would be per instance, then
-we can filter like before, we still get call twice but then we filter for
-each instance. We get the lan966x instance from notifier_block and then
-we can check if the port netdev_ops is the same as the lan966x
-netdev_ops.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-And in the other case we will still be able to get to the lan966x instance
-in case the bridge is added in a vlan.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9ca499bb57a2b9e4c652@syzkaller.appspotmail.com
 
-> DSA intercepts a lot of events which aren't directly emitted for its own
-> interfaces. You don't gain much by having one more, if anything.
-> 
-> > > notifier handlers should be registered as singletons, like other drivers
-> > > do.
-> >
-> > It looks like not all the other driver register them as singletone. For
-> > example: prestera, mlx5, sparx5. (I just have done a git grep for
-> > register_switchdev_notifier, I have not looked in details at the
-> > implementation).
-> 
-> Not all driver writers may have realized that it is an issue that needs
-> to be thought of.
+UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2020/09/19 18:44 (1000)
+=====================================================
+BUG: KMSAN: uninit-value in udf_evict_inode+0x2b6/0x830 fs/udf/inode.c:148
+ udf_evict_inode+0x2b6/0x830 fs/udf/inode.c:148
+ evict+0x4f7/0xdc0 fs/inode.c:590
+ iput_final fs/inode.c:1670 [inline]
+ iput+0xc5d/0x1110 fs/inode.c:1696
+ udf_new_inode+0x5d2/0x16e0 fs/udf/ialloc.c:89
+ udf_tmpfile+0x7e/0x2d0 fs/udf/namei.c:631
+ vfs_tmpfile+0x2d9/0x5b0 fs/namei.c:3474
+ do_tmpfile+0x29f/0x6c0 fs/namei.c:3509
+ path_openat+0x4116/0x5dd0 fs/namei.c:3550
+ do_filp_open+0x306/0x760 fs/namei.c:3586
+ do_sys_openat2+0x263/0x8f0 fs/open.c:1212
+ do_sys_open fs/open.c:1228 [inline]
+ __do_compat_sys_openat fs/open.c:1288 [inline]
+ __se_compat_sys_openat fs/open.c:1286 [inline]
+ __ia32_compat_sys_openat+0x353/0x3c0 fs/open.c:1286
+ do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+ __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+ do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
 
--- 
-/Horatiu
+Uninit was stored to memory at:
+ udf_new_inode+0xac1/0x16e0 fs/udf/ialloc.c:67
+ udf_tmpfile+0x7e/0x2d0 fs/udf/namei.c:631
+ vfs_tmpfile+0x2d9/0x5b0 fs/namei.c:3474
+ do_tmpfile+0x29f/0x6c0 fs/namei.c:3509
+ path_openat+0x4116/0x5dd0 fs/namei.c:3550
+ do_filp_open+0x306/0x760 fs/namei.c:3586
+ do_sys_openat2+0x263/0x8f0 fs/open.c:1212
+ do_sys_open fs/open.c:1228 [inline]
+ __do_compat_sys_openat fs/open.c:1288 [inline]
+ __se_compat_sys_openat fs/open.c:1286 [inline]
+ __ia32_compat_sys_openat+0x353/0x3c0 fs/open.c:1286
+ do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+ __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+ do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+Uninit was stored to memory at:
+ udf_alloc_inode+0x28a/0x2c0 fs/udf/super.c:149
+ alloc_inode fs/inode.c:235 [inline]
+ new_inode_pseudo+0xa6/0x5a0 fs/inode.c:944
+ new_inode+0x5a/0x3c0 fs/inode.c:973
+ udf_new_inode+0x139/0x16e0 fs/udf/ialloc.c:60
+ udf_tmpfile+0x7e/0x2d0 fs/udf/namei.c:631
+ vfs_tmpfile+0x2d9/0x5b0 fs/namei.c:3474
+ do_tmpfile+0x29f/0x6c0 fs/namei.c:3509
+ path_openat+0x4116/0x5dd0 fs/namei.c:3550
+ do_filp_open+0x306/0x760 fs/namei.c:3586
+ do_sys_openat2+0x263/0x8f0 fs/open.c:1212
+ do_sys_open fs/open.c:1228 [inline]
+ __do_compat_sys_openat fs/open.c:1288 [inline]
+ __se_compat_sys_openat fs/open.c:1286 [inline]
+ __ia32_compat_sys_openat+0x353/0x3c0 fs/open.c:1286
+ do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+ __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+ do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+Uninit was created at:
+ __alloc_pages+0xbc7/0x10a0 mm/page_alloc.c:5409
+ alloc_pages+0x8a5/0xb80
+ alloc_slab_page mm/slub.c:1810 [inline]
+ allocate_slab+0x287/0x1c20 mm/slub.c:1947
+ new_slab mm/slub.c:2010 [inline]
+ ___slab_alloc+0xbdf/0x1e90 mm/slub.c:3039
+ __slab_alloc mm/slub.c:3126 [inline]
+ slab_alloc_node mm/slub.c:3217 [inline]
+ slab_alloc mm/slub.c:3259 [inline]
+ kmem_cache_alloc+0xbb3/0x11c0 mm/slub.c:3264
+ udf_alloc_inode+0x60/0x2c0 fs/udf/super.c:139
+ alloc_inode fs/inode.c:235 [inline]
+ new_inode_pseudo+0xa6/0x5a0 fs/inode.c:944
+ new_inode+0x5a/0x3c0 fs/inode.c:973
+ udf_new_inode+0x139/0x16e0 fs/udf/ialloc.c:60
+ udf_tmpfile+0x7e/0x2d0 fs/udf/namei.c:631
+ vfs_tmpfile+0x2d9/0x5b0 fs/namei.c:3474
+ do_tmpfile+0x29f/0x6c0 fs/namei.c:3509
+ path_openat+0x4116/0x5dd0 fs/namei.c:3550
+ do_filp_open+0x306/0x760 fs/namei.c:3586
+ do_sys_openat2+0x263/0x8f0 fs/open.c:1212
+ do_sys_open fs/open.c:1228 [inline]
+ __do_compat_sys_openat fs/open.c:1288 [inline]
+ __se_compat_sys_openat fs/open.c:1286 [inline]
+ __ia32_compat_sys_openat+0x353/0x3c0 fs/open.c:1286
+ do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+ __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+ do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+CPU: 1 PID: 9774 Comm: syz-executor.4 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

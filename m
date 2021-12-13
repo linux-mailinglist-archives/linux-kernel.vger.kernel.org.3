@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD8D4733E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4D04733EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241842AbhLMSVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S239976AbhLMSW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbhLMSVX (ORCPT
+        with ESMTP id S232192AbhLMSWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:21:23 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D80C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:21:22 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id g14so54189661edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:21:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8936iJXYzuQp1jpHlnVzWPD6pUJirOWbwtdpnJXACKE=;
-        b=hzrGIorLE9Itm3KY9FMkg4bpBZO3+2x9d1Sxj1q8o+BvYsDL30klxGsR0Z6pNZkAZX
-         Zs/VohMwcPKnWcMC68+vx9B7bZDwVlkeICMYrN1drsdOYJiXbH/A3QYh1mmsp4QuwZio
-         78W/sVYC6g7BZPEZTSlDgYjlsL87503ZcgO90=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8936iJXYzuQp1jpHlnVzWPD6pUJirOWbwtdpnJXACKE=;
-        b=H2nl4jnsG1//h8OY9LtO4PRRRqcrh7SsjkyxXzxxtzQAiI1kE6dDZ/jQaJKmIVVrCU
-         oBhvpt4vnILuFPjatwO6NLAoQWLJvrbr2D98IeJO7qAACE9Az58ra1F/cYoSSRJVClIy
-         Fdobpt2cVSCCF2sApPPJpz/EBtfqs3VslyWQJO9L44fWgXBWQRj/bRcSqcJeMY1V5+pr
-         Uod8YrNAgGSznVvlgvMrXUgeLQSKibx5ysN6AZ8z/E9RzhQNM/bJvkNrTLBL18gkvgwC
-         8Z9KDOiErjWfsQiaBhIOPPMHv4MXy7kPScg2dVsWFfNYhvDB/2U3mwXQtjDbMlHN5d/1
-         RB8Q==
-X-Gm-Message-State: AOAM531H5Ad8tg/r/fc7as0pmXXPSXjz8p7eCRkCoPDCf8qROKfZ2m4N
-        bjsVvNuWJq9w8HbIIL3ppz7nUEgqtfeRIZJG
-X-Google-Smtp-Source: ABdhPJwRrfAAUetpsDDzqgLzg4h4xmV6BxZpVPwiHFRYfElI9a0gVeCMBprciMYoT7DCyGrZ5csv2w==
-X-Received: by 2002:a05:6402:42:: with SMTP id f2mr583212edu.204.1639419681321;
-        Mon, 13 Dec 2021 10:21:21 -0800 (PST)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
-        by smtp.gmail.com with ESMTPSA id du16sm423394ejc.183.2021.12.13.10.21.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 10:21:20 -0800 (PST)
-Received: by mail-wm1-f45.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so12171619wmc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:21:19 -0800 (PST)
-X-Received: by 2002:a05:600c:4e07:: with SMTP id b7mr39723062wmq.8.1639419679279;
- Mon, 13 Dec 2021 10:21:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20211210161618.645249719@infradead.org> <20211210162313.857673010@infradead.org>
- <20211213164334.GY16608@worktop.programming.kicks-ass.net> <CAHk-=wjc+mr_Rh++5pPDkNFuceyPwFxCtzp124AppBLgbVVV0A@mail.gmail.com>
-In-Reply-To: <CAHk-=wjc+mr_Rh++5pPDkNFuceyPwFxCtzp124AppBLgbVVV0A@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Dec 2021 10:21:03 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wide=L5-UK34Rh11=H8wjWKJ9icmqtB3jSmUwCMQH=Spw@mail.gmail.com>
-Message-ID: <CAHk-=wide=L5-UK34Rh11=H8wjWKJ9icmqtB3jSmUwCMQH=Spw@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] atomic,x86: Alternative atomic_*_overflow() scheme
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Mon, 13 Dec 2021 13:22:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1EFC061574;
+        Mon, 13 Dec 2021 10:22:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9303C611B7;
+        Mon, 13 Dec 2021 18:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD28AC34600;
+        Mon, 13 Dec 2021 18:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639419774;
+        bh=/z8URsSr6mo957ROYpUpoGEmX7urlXEv6NBT41IGEDw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IY6gab16/5ywFSg7jsSYQwRBO1tC0bSXlTIYlBV1ALeZ/o/JbWlPLTp8oilYcRCgv
+         rG0bYSj0Pray5X4cZ1KB6Qjg4rdQ6QqWAmWUJLsM5IIzmdrxOT6HcMy6NgSGsmymu7
+         2Wv2e+3Nemug2DcLdm52z7Kk16g9tbnxhjtsNVAPI45eqGSpB+11bDAGeJGkcOKjZq
+         aAPovi8oHCfRq1+gryvUXQ/FWhCv99pj4iwQRGFx1tkcZ0k1+wYzeDNmweCtJ3/V7R
+         Vdq1/7sGj2DQX+St1lZNVh2CNTnoZI9nIAv7Fb4Pqwq5NhZueiu90JTC9YIuYmiAC8
+         v/s0oeWbHDOLg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3C36B405D8; Mon, 13 Dec 2021 15:22:52 -0300 (-03)
+Date:   Mon, 13 Dec 2021 15:22:52 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 2/4] perf script: Add "struct machine" parameter to
+ process_event callback
+Message-ID: <YbePfOMaiJjoDb3b@kernel.org>
+References: <20211201123334.679131-1-german.gomez@arm.com>
+ <20211201123334.679131-3-german.gomez@arm.com>
+ <D6A3A8F3-9946-44FE-A70F-42977C6F38A1@linux.vnet.ibm.com>
+ <38fd4992-63ae-4871-ddfd-27d40b5c48d2@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <38fd4992-63ae-4871-ddfd-27d40b5c48d2@arm.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:11 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> But then on x86 - and other architectures that might prefer to use
-> that offset trick because they have flags - I'm not sure it even makes
-> sense to have anything to do with 'atomic_t' at all [..]
+Em Fri, Dec 03, 2021 at 12:00:26PM +0000, German Gomez escreveu:
+> Hi Athira,
+> 
+> On 02/12/2021 16:03, Athira Rajeev wrote:
+> >
+> >> On 01-Dec-2021, at 6:03 PM, German Gomez <german.gomez@arm.com> wrote:
+> >>
+> >> Include a "struct machine*" parameter to the process_event callback in
+> >> the scripting layer. This will allow access to the perf_env from within
+> >> this callback.
+> >>
+> >> Followup patches will build on top of this to report the correct name of
+> >> the registers in a perf.data file, consistently with the architecture
+> >> the file was recorded in.
+> >>
+> >> Signed-off-by: German Gomez <german.gomez@arm.com>
+> >> ---
+> >> tools/perf/builtin-script.c                   |  2 +-
+> >> .../util/scripting-engines/trace-event-perl.c |  3 ++-
+> >> .../scripting-engines/trace-event-python.c    | 23 +++++++++++--------
+> >> tools/perf/util/trace-event-scripting.c       |  3 ++-
+> >> tools/perf/util/trace-event.h                 |  3 ++-
+> >> 5 files changed, 21 insertions(+), 13 deletions(-)
+> >>
+> >> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> >> index 9434367af..711132f0b 100644
+> >> --- a/tools/perf/builtin-script.c
+> >> +++ b/tools/perf/builtin-script.c
+> >> @@ -2256,7 +2256,7 @@ static int process_sample_event(struct perf_tool *tool,
+> >> 				thread__resolve(al.thread, &addr_al, sample);
+> >> 			addr_al_ptr = &addr_al;
+> >> 		}
+> >> -		scripting_ops->process_event(event, sample, evsel, &al, addr_al_ptr);
+> >> +		scripting_ops->process_event(event, sample, evsel, &al, addr_al_ptr, machine);
+> > Hi,
+> >
+> > Looks like the patch is using “machine” to allow access to perf_env__arch and there by to get the “arch” value.
+> > But can we use from evsel, like  "perf_env__arch(evsel__env(evsel))” to get arch value instead of including new parameter for “struct machine” ?
+> >
+> > Thanks
+> > Athira
+> 
+> Thanks for the suggestion. It looks like we can skip this patch if we
+> can get the arch value that way.
 
-Side note: it might not be just about flags, and not just about things
-like "offset-by-one".
+So the first one is already upstream, will you post a v2?
 
-We used to have special code for old 32-bit sparc because there you
-couldn't actually sanely do 32-bit atomics: you could only really do
-24 bits, because the whole first (upper) byte was the atomic lock
-byte.
-
-Now, that was too painful because nobody else did that, so these days
-32-bit sparc just uses a hashed spinlock instead.
-
-But I think it would be lovely to _design_ the atomic_ref_t to be able
-to deal with that odd sparc32 issue too. Not because anybody cares
-about 32-bit sparc any more, and not because I think anybody would
-ever actually bother to write such code, but because I think it's a
-good design goal to kind of aim for: if we're doing an actual
-ref-counting data structure, where we do *not* have "int" semantics,
-and very much have a concept of overflow, then I think it should
-conceptually also work with that odd sparc32 24-byte atomic integer
-model.
-
-Was it a broken model? Was it stupid? Yes. Do I ever expect to see it
-again? No. But I do think that conceptually we should strive to have
-that as a _possible_ model.
-
-In fact, it might be interesting to have something like that as a
-debug model, where you have a smaller range for ref-counting, just to
-make it easier to test that the code does the right thing for
-overflow. 24 bits is a lot easier to overflow, while still being big
-enough to work in practice.
-
-So I do think that having a separate type system that simply does not
-_work_ with somebody trying to do "atomic_xyz()" on it is the right
-way to go.
-
-              Linus
+- Arnaldo

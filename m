@@ -2,170 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAB3472A7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F101472A82
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbhLMKnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbhLMKnj (ORCPT
+        id S235169AbhLMKoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:44:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34938 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235035AbhLMKoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:43:39 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C6EC061574;
-        Mon, 13 Dec 2021 02:43:39 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id x15so51361647edv.1;
-        Mon, 13 Dec 2021 02:43:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8Z9NIGNy3o2CZvOQQU/99vlG0PiHZ2GfMZ6W8ScxJp4=;
-        b=BTm6mB2Gft6X/rIdY/zyXfkihFf951trDHDrIsIyP/7bP2L9zpZmyXd2OqFk/8RZlP
-         ufd/Hivms6EH73FUUtwfc+1y/w5EiXRbKDo24zBW2aWo+AnoAl8mKXilpn/iZRNQzIOQ
-         RWPl4n9lsilqayQXDSZUxAuC0eZ4r0YM4IFCk49ZH5+FlfxB2MYDvJ9bOPC87tgekttW
-         TIR8K0Nad+0Q9ID5ynzT0QpkozpbDhQl2QYwgXi2rfCf8lhVwjcoMnkzta2ukChluUzC
-         58JJqzIBkbCtTs+jXIA29EVaEet8nB3BiDrThHbaMjEd+0NEku5oL3Zk9iTsf/ILA6S6
-         9u5A==
+        Mon, 13 Dec 2021 05:44:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639392256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SHL+BcRj/pmK+hyLHDbkPYvC+IuJaADgZcfi3kBucvo=;
+        b=T2f6ML266JmCizc1hiVnlvZTQy8Gu2R7gQQ1Qt7PNgZsD0P1eJUN3IeDJl4G3Pf6iIQkEL
+        Zzf/3KpLTgullAXBb13ypLESUz+6l+c28TSda4pfD7tXHyz4eJ8ocljbw3kP8QAVrI1eBA
+        72TWDVR46KTMfZX2l+IBz5Jrk5aUbwU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-zW_PmBR3MgOPvXqx_rOG0g-1; Mon, 13 Dec 2021 05:44:14 -0500
+X-MC-Unique: zW_PmBR3MgOPvXqx_rOG0g-1
+Received: by mail-ed1-f71.google.com with SMTP id w4-20020aa7cb44000000b003e7c0f7cfffso13595010edt.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:44:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8Z9NIGNy3o2CZvOQQU/99vlG0PiHZ2GfMZ6W8ScxJp4=;
-        b=WwFDVXsRt+fEvWOtCbLwR1dnW5S8shrgwOkXup9X26XgaFHHP0EG7NNtezaE/2bNne
-         fEP7LqdsyQOg6hfb4WwgQ6HM683lW32QTW377uAACwQlLABqikKFTTjlizqVFmJvwEZB
-         W69iHsQ08rUcTJmbeDDpkZJJREJFLWZZCz5tGY8nokYmEm5CtpNqngRUzQ6Uq7QwXp8R
-         aVfliKxS7PN0w6p28xTQ/u/8iXshg5wQska9/iTtE8TeUU2jRsOFwhLmt/lsE6Qp/gJm
-         l5S+WJp0K2AJwuDB9eo+A/4nlzkKbFhw6PcDbdMC/4lz9aJMscnrEaZeP1WRlg5FNkb/
-         YLDQ==
-X-Gm-Message-State: AOAM533t+3ycLdT0bXfEHx6+2iOag51qKWixKjDWo4fXwl0AxqxSwv07
-        dG9YfJAv1DKDfJU0+R3mDoo=
-X-Google-Smtp-Source: ABdhPJyYFPMYZA3CDYd101J2HqdJ+O5MT6EuIDsYbmDvpxZc79ghJ+goZS5FEJsw9+7N2NwOQ4VbSw==
-X-Received: by 2002:a17:907:7253:: with SMTP id ds19mr43338192ejc.476.1639392217966;
-        Mon, 13 Dec 2021 02:43:37 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id s16sm6052407edt.30.2021.12.13.02.43.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 02:43:37 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <08107331-34b9-b33d-67ee-300f216341e0@redhat.com>
-Date:   Mon, 13 Dec 2021 11:43:34 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=SHL+BcRj/pmK+hyLHDbkPYvC+IuJaADgZcfi3kBucvo=;
+        b=fBGBq8cdilrEtMJU8X5OQbx8SHLMA2v2YjBIzJ+DePBnz6LYJGZvgL766SXyhsGcAy
+         0mRF6AUXPU601/w04dcn066gWsw0U5jcrXNsyUQl9Wft+tmb41QFRvh4ojVHy0RCY2GR
+         trBfjjRXgpTAjR41J+HR51fdjsYe+xPFW3azjQW4FG2+QG/DrVV6HBKqfdbRmgP7PtO+
+         NqaD8Dkx4B3aUb6xTAQVV1NRILGGb/LNeR1kphAMBEh7Bd6/GsMFF3fv+rgjFOvNDOzs
+         TwwEIjBO2C/1GvCLb8nd3o1Fcw9JlwZd5V+4ifk0/6rWgyJAMcze8/loVPuW1b/XxVVf
+         aIWA==
+X-Gm-Message-State: AOAM530Zd+hhigtmlcCkmNWbKnBCsLmxR2QO+x5C7JaWxa912w42HDjq
+        eDu0fbPYzsGN9gTJr18gXtk0GnxCaN9VBK/JIdFkqY4VEuDW62kTiQnCnhQQ8oZJyrcarBpNVB2
+        0yYBj7PVcZfpr+/X8+14f+4Bf
+X-Received: by 2002:a05:6402:3459:: with SMTP id l25mr64590536edc.137.1639392253445;
+        Mon, 13 Dec 2021 02:44:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxNOaEpqXN+b3HAuKmJouNEtF+PGIf4t0ZSl55UBSuLUkEDHpoVO/YC9kejLGFYbRvvWZpNHg==
+X-Received: by 2002:a05:6402:3459:: with SMTP id l25mr64590503edc.137.1639392253233;
+        Mon, 13 Dec 2021 02:44:13 -0800 (PST)
+Received: from redhat.com ([2.55.148.125])
+        by smtp.gmail.com with ESMTPSA id cw5sm5741448ejc.74.2021.12.13.02.44.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 02:44:12 -0800 (PST)
+Date:   Mon, 13 Dec 2021 05:44:09 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] Bluetooth: virtio_bt: fix device removal
+Message-ID: <20211213054357-mutt-send-email-mst@kernel.org>
+References: <20211125174200.133230-1-mst@redhat.com>
+ <F52F65FE-6A07-486B-8E84-684ED85709E9@holtmann.org>
+ <20211209162149-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-17-yang.zhong@intel.com>
- <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com> <87bl1kvmqg.ffs@tglx>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87bl1kvmqg.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211209162149-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 11:10, Thomas Gleixner wrote:
-> On Fri, Dec 10 2021 at 17:30, Paolo Bonzini wrote:
->> On 12/8/21 01:03, Yang Zhong wrote:
->>> +static int kvm_vcpu_ioctl_x86_set_xsave2(struct kvm_vcpu *vcpu, u8 *state)
->>> +{
->>> +	if (fpstate_is_confidential(&vcpu->arch.guest_fpu))
->>> +		return 0;
->>> +
->>> +	return fpu_copy_uabi_to_guest_fpstate(&vcpu->arch.guest_fpu, state,
->>> +					      supported_xcr0, &vcpu->arch.pkru);
->>> +}
->>> +
->>
->> I think fpu_copy_uabi_to_guest_fpstate (and therefore
->> copy_uabi_from_kernel_to_xstate) needs to check that the size is
->> compatible with the components in the input.
+On Thu, Dec 09, 2021 at 04:22:58PM -0500, Michael S. Tsirkin wrote:
+> On Thu, Nov 25, 2021 at 09:02:01PM +0100, Marcel Holtmann wrote:
+> > Hi Michael,
+> > 
+> > > Device removal is clearly out of virtio spec: it attempts to remove
+> > > unused buffers from a VQ before invoking device reset. To fix, make
+> > > open/close NOPs and do all cleanup/setup in probe/remove.
+> > 
+> > so the virtbt_{open,close} as NOP is not really what a driver is suppose
+> > to be doing. These are transport enable/disable callbacks from the BT
+> > Core towards the driver. It maps to a device being enabled/disabled by
+> > something like bluetoothd for example. So if disabled, I expect that no
+> > resources/queues are in use.
+> > 
+> > Maybe I misunderstand the virtio spec in that regard, but I would like
+> > to keep this fundamental concept of a Bluetooth driver. It does work
+> > with all other transports like USB, SDIO, UART etc.
+> > 
+> > > The cost here is a single skb wasted on an unused bt device - which
+> > > seems modest.
+> > 
+> > There should be no buffer used if the device is powered off. We also don’t
+> > have any USB URBs in-flight if the transport is not active.
+> > 
+> > > NB: with this fix in place driver still suffers from a race condition if
+> > > an interrupt triggers while device is being reset. Work on a fix for
+> > > that issue is in progress.
+> > 
+> > In the virtbt_close() callback we should deactivate all interrupts.
+> > 
+> > Regards
+> > 
+> > Marcel
 > 
-> fpu_copy_uabi_to_guest_fpstate() expects that the input buffer is
-> correctly sized. We surely can add a size check there.
+> So Marcel, do I read it right that you are working on a fix
+> and I can drop this patch for now?
 
-fpu_copy_guest_fpstate_to_uabi is more problematic because that one
-writes memory.  For fpu_copy_uabi_to_guest_fpstate, we know the input
-buffer size from the components and we can use it to do a properly-sized
-memdup_user.
+ping
 
-For fpu_copy_guest_fpstate_to_uabi we can just decide that KVM_GET_XSAVE
-will only save up to the first 4K.  Something like the following might
-actually be good for 5.16-rc; right now, header.xfeatures might lead
-userspace into reading uninitialized or unmapped memory:
+> -- 
+> MST
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index d28829403ed0..69609b8c3887 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1138,8 +1138,10 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
-  	struct xstate_header header;
-  	unsigned int zerofrom;
-  	u64 mask;
-+	u64 size;
-  	int i;
-  
-+	size = to->left;
-  	memset(&header, 0, sizeof(header));
-  	header.xfeatures = xsave->header.xfeatures;
-  
-@@ -1186,7 +1188,20 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
-  	/* Copy xsave->i387.sw_reserved */
-  	membuf_write(&to, xstate_fx_sw_bytes, sizeof(xsave->i387.sw_reserved));
-  
--	/* Copy the user space relevant state of @xsave->header */
-+	/*
-+	 * Copy the user space relevant state of @xsave->header.
-+	 * If not all features fit in the buffer, drop them from the
-+	 * saved state so that userspace does not read uninitialized or
-+	 * unmapped memory.
-+	 */
-+	mask = fpstate->user_xfeatures;
-+	for_each_extended_xfeature(i, mask) {
-+		if (xstate_offsets[i] + xstate_size[i] > size) {
-+			header.xfeatures &= BIT(i) - 1;
-+			mask &= BIT(i) - 1;
-+			break;
-+		}
-+	}
-  	membuf_write(&to, &header, sizeof(header));
-  
-  	zerofrom = offsetof(struct xregs_state, extended_state_area);
-@@ -1197,7 +1212,6 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
-  	 * but there is no state to copy from in the compacted
-  	 * init_fpstate. The gap tracking will zero these states.
-  	 */
--	mask = fpstate->user_xfeatures;
-  
-  	for_each_extended_xfeature(i, mask) {
-  		/*
-
-
-
->> Also, IIUC the size of the AMX state will vary in different processors.
->>    Is this correct?  If so, this should be handled already by
->> KVM_GET/SET_XSAVE2 and therefore should be part of the
->> arch/x86/kernel/fpu APIs.  In the future we want to support migrating a
->> "small AMX" host to a "large AMX" host; and also migrating from a "large
->> AMX" host to a "small AMX" host if the guest CPUID is compatible with
->> the destination of the migration.
-> 
-> How is that supposed to work? If the AMX state size differs then the
-> hosts are not compatible.
-
-I replied with some more questions later.  Basically it depends on how
-Intel will define palettes that aren't part of the first implementation
-of AMX.
-
-Paolo

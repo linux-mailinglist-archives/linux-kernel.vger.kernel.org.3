@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0579C472438
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DA24724D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbhLMJfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbhLMJeQ (ORCPT
+        id S234052AbhLMJiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:38:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50930 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234899AbhLMJhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:16 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23335C061A32;
-        Mon, 13 Dec 2021 01:34:16 -0800 (PST)
+        Mon, 13 Dec 2021 04:37:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 67395CE0E6F;
-        Mon, 13 Dec 2021 09:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16F13C00446;
-        Mon, 13 Dec 2021 09:34:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21818B80E0E;
+        Mon, 13 Dec 2021 09:37:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7A7C341C8;
+        Mon, 13 Dec 2021 09:37:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388052;
-        bh=J9caZIMXJBItJ0Xbq/grVZlfI9TUBcncDxDPE+oWjz8=;
+        s=korg; t=1639388242;
+        bh=ENgPx5OkxDJcwKlrbQgZkXRGBAk/W6IXPLXjBp12eas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uw0OmNld5aErGGIoPnHJnavzbhznmFTyUYzNABcd/mK+gvW4gaiKGvNepuOQelBR/
-         wP4WriteB9xXfWPHl/hlgJYWCEm02JhunIBy7tIbjHoGK2Xv+AbkExFCsRzWEIqYgR
-         T43jp2xdRfkiV/+QMcVI0/nMxg2jjeKEFGGrR7RM=
+        b=MEo4Iy180eE2xeS00ttBQCxud7/+51wKjfMMIQxXIXcylsuFER5us8gWbjz5qqEOj
+         xw1DpZ2jYUpZG52T9U6JKxcDR/EnAZT/UayDVi9SX2dMrVJgQ22sk+8baKYInbukRt
+         ZvDJ6PLQmUtgsooBfNCj7fu92SoK5OTKFBNI+Vs4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 4.9 04/42] HID: add USB_HID dependancy to hid-chicony
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.14 07/53] can: sja1000: fix use after free in ems_pcmcia_add_card()
 Date:   Mon, 13 Dec 2021 10:29:46 +0100
-Message-Id: <20211213092926.719053162@linuxfoundation.org>
+Message-Id: <20211213092928.598228334@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,36 +46,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit d080811f27936f712f619f847389f403ac873b8f upstream.
+commit 3ec6ca6b1a8e64389f0212b5a1b0f6fed1909e45 upstream.
 
-The chicony HID driver only controls USB devices, yet did not have a
-dependancy on USB_HID.  This causes build errors on some configurations
-like sparc when building due to new changes to the chicony driver.
+If the last channel is not available then "dev" is freed.  Fortunately,
+we can just use "pdev->irq" instead.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Also we should check if at least one channel was set up.
+
+Fixes: fd734c6f25ae ("can/sja1000: add driver for EMS PCMCIA card")
+Link: https://lore.kernel.org/all/20211124145041.GB13656@kili
 Cc: stable@vger.kernel.org
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20211203075927.2829218-1-gregkh@linuxfoundation.org
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/sja1000/ems_pcmcia.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -176,7 +176,7 @@ config HID_CHERRY
+--- a/drivers/net/can/sja1000/ems_pcmcia.c
++++ b/drivers/net/can/sja1000/ems_pcmcia.c
+@@ -243,7 +243,12 @@ static int ems_pcmcia_add_card(struct pc
+ 			free_sja1000dev(dev);
+ 	}
  
- config HID_CHICONY
- 	tristate "Chicony devices"
--	depends on HID
-+	depends on USB_HID
- 	default !EXPERT
- 	---help---
- 	Support for Chicony Tactical pad and special keys on Chicony keyboards.
+-	err = request_irq(dev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
++	if (!card->channels) {
++		err = -ENODEV;
++		goto failure_cleanup;
++	}
++
++	err = request_irq(pdev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
+ 			  DRV_NAME, card);
+ 	if (!err)
+ 		return 0;
 
 

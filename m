@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 784CF47265D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5118A47294C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbhLMJvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:51:01 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60684 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236264AbhLMJqa (ORCPT
+        id S235892AbhLMKTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:19:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237552AbhLMKQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:46:30 -0500
+        Mon, 13 Dec 2021 05:16:24 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC07C110F25;
+        Mon, 13 Dec 2021 01:55:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66502B80E1D;
-        Mon, 13 Dec 2021 09:46:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96555C00446;
-        Mon, 13 Dec 2021 09:46:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 12F98CE0EF2;
+        Mon, 13 Dec 2021 09:55:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BCFC34600;
+        Mon, 13 Dec 2021 09:55:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388787;
-        bh=sdT9iJJ3Ok34Fio02uyDvkVlQ4LGyZzVKWRwnIkWQmM=;
+        s=korg; t=1639389327;
+        bh=3X0o7aqwtFUF25bF/mUsP99WsLnWuc88aIihuZ7/CFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AgGVUaYzB8L40kj/4x8/ujf7SZ1DPVr1fTeEBYzO8YHn7TytrqzRxHicUqFPV5Lkb
-         6nKNJD8uWu+IxChcNuvnjSGoqhduTr6Z/DcrCCaqFFyKM7XHloG/GEJa+RgL2UlxvN
-         BiY8zt/iH/i8bWEyBntjx8gYJ3CEEnKEjNzepSyg=
+        b=cNe30vz0+EBgdA5nJ+rC5kdd1EDz6yG1qMe9PD7RbpzUfyuXTZ5AlVaKZIGb5GexI
+         PT/+idQO9o1L0e6du6Dyy/rG3XYQ5JMTstMtp6gBXrwWI+R4/Iim1tvwf4qYgVbZdf
+         2DLFmpG95MpyDczkqcTglmP8ksM6HHruYQVz53d0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Tretter <m.tretter@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Haemmerle <thomas.haemmerle@wolfvision.net>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dan Vacura <W36195@motorola.com>
-Subject: [PATCH 5.10 001/132] usb: gadget: uvc: fix multiple opens
-Date:   Mon, 13 Dec 2021 10:29:02 +0100
-Message-Id: <20211213092939.124772704@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Brian Silverman <brian.silverman@bluerivertech.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.15 028/171] can: m_can: Disable and ignore ELO interrupt
+Date:   Mon, 13 Dec 2021 10:29:03 +0100
+Message-Id: <20211213092946.008992720@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,144 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
+From: Brian Silverman <brian.silverman@bluerivertech.com>
 
-commit 72ee48ee8925446eaeda8e4ef3f2eb16b4a93d2a upstream.
+commit f58ac1adc76b5beda43c64ef359056077df4d93a upstream.
 
-Currently, the UVC function is activated when open on the corresponding
-v4l2 device is called.  On another open the activation of the function
-fails since the deactivation counter in `usb_function_activate` equals
-0. However the error is not returned to userspace since the open of the
-v4l2 device is successful.
+With the design of this driver, this condition is often triggered.
+However, the counter that this interrupt indicates an overflow is never
+read either, so overflowing is harmless.
 
-On a close the function is deactivated (since deactivation counter still
-equals 0) and the video is disabled in `uvc_v4l2_release`, although the
-UVC application potentially is streaming.
+On my system, when a CAN bus starts flapping up and down, this locks up
+the whole system with lots of interrupts and printks.
 
-Move activation of UVC function to subscription on UVC_EVENT_SETUP
-because there we can guarantee for a userspace application utilizing
-UVC.  Block subscription on UVC_EVENT_SETUP while another application
-already is subscribed to it, indicated by `bool func_connected` in
-`struct uvc_device`.  Extend the `struct uvc_file_handle` with member
-`bool is_uvc_app_handle` to tag it as the handle used by the userspace
-UVC application.
+Specifically, this interrupt indicates the CEL field of ECR has
+overflowed. All reads of ECR mask out CEL.
 
-With this a process is able to check capabilities of the v4l2 device
-without deactivating the function for the actual UVC application.
-
-Reviewed-By: Michael Tretter <m.tretter@pengutronix.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Thomas Haemmerle <thomas.haemmerle@wolfvision.net>
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Link: https://lore.kernel.org/r/20211003201355.24081-1-m.grzeschik@pengutronix.de
-Cc: Dan Vacura <W36195@motorola.com>
+Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
+Link: https://lore.kernel.org/all/20211129222628.7490-1-brian.silverman@bluerivertech.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/function/uvc.h      |    2 +
- drivers/usb/gadget/function/uvc_v4l2.c |   49 ++++++++++++++++++++++++++++-----
- 2 files changed, 44 insertions(+), 7 deletions(-)
+ drivers/net/can/m_can/m_can.c |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -117,6 +117,7 @@ struct uvc_device {
- 	enum uvc_state state;
- 	struct usb_function func;
- 	struct uvc_video video;
-+	bool func_connected;
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -204,16 +204,16 @@ enum m_can_reg {
  
- 	/* Descriptors */
- 	struct {
-@@ -147,6 +148,7 @@ static inline struct uvc_device *to_uvc(
- struct uvc_file_handle {
- 	struct v4l2_fh vfh;
- 	struct uvc_video *device;
-+	bool is_uvc_app_handle;
- };
+ /* Interrupts for version 3.0.x */
+ #define IR_ERR_LEC_30X	(IR_STE	| IR_FOE | IR_ACKE | IR_BE | IR_CRCE)
+-#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_ELO | IR_BEU | \
+-			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
+-			 IR_RF1L | IR_RF0L)
++#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_BEU | IR_BEC | \
++			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
++			 IR_RF0L)
+ #define IR_ERR_ALL_30X	(IR_ERR_STATE | IR_ERR_BUS_30X)
  
- #define to_uvc_file_handle(handle) \
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -227,17 +227,55 @@ static int
- uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
- 			 const struct v4l2_event_subscription *sub)
+ /* Interrupts for version >= 3.1.x */
+ #define IR_ERR_LEC_31X	(IR_PED | IR_PEA)
+-#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_ELO | IR_BEU | \
+-			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
+-			 IR_RF1L | IR_RF0L)
++#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_BEU | IR_BEC | \
++			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
++			 IR_RF0L)
+ #define IR_ERR_ALL_31X	(IR_ERR_STATE | IR_ERR_BUS_31X)
+ 
+ /* Interrupt Line Select (ILS) */
+@@ -812,8 +812,6 @@ static void m_can_handle_other_err(struc
  {
-+	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
-+	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
-+	int ret;
-+
- 	if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
- 		return -EINVAL;
- 
--	return v4l2_event_subscribe(fh, sub, 2, NULL);
-+	if (sub->type == UVC_EVENT_SETUP && uvc->func_connected)
-+		return -EBUSY;
-+
-+	ret = v4l2_event_subscribe(fh, sub, 2, NULL);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (sub->type == UVC_EVENT_SETUP) {
-+		uvc->func_connected = true;
-+		handle->is_uvc_app_handle = true;
-+		uvc_function_connect(uvc);
-+	}
-+
-+	return 0;
-+}
-+
-+static void uvc_v4l2_disable(struct uvc_device *uvc)
-+{
-+	uvc->func_connected = false;
-+	uvc_function_disconnect(uvc);
-+	uvcg_video_enable(&uvc->video, 0);
-+	uvcg_free_buffers(&uvc->video.queue);
- }
- 
- static int
- uvc_v4l2_unsubscribe_event(struct v4l2_fh *fh,
- 			   const struct v4l2_event_subscription *sub)
- {
--	return v4l2_event_unsubscribe(fh, sub);
-+	struct uvc_device *uvc = video_get_drvdata(fh->vdev);
-+	struct uvc_file_handle *handle = to_uvc_file_handle(fh);
-+	int ret;
-+
-+	ret = v4l2_event_unsubscribe(fh, sub);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (sub->type == UVC_EVENT_SETUP && handle->is_uvc_app_handle) {
-+		uvc_v4l2_disable(uvc);
-+		handle->is_uvc_app_handle = false;
-+	}
-+
-+	return 0;
- }
- 
- static long
-@@ -292,7 +330,6 @@ uvc_v4l2_open(struct file *file)
- 	handle->device = &uvc->video;
- 	file->private_data = &handle->vfh;
- 
--	uvc_function_connect(uvc);
- 	return 0;
- }
- 
-@@ -304,11 +341,9 @@ uvc_v4l2_release(struct file *file)
- 	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
- 	struct uvc_video *video = handle->device;
- 
--	uvc_function_disconnect(uvc);
--
- 	mutex_lock(&video->mutex);
--	uvcg_video_enable(video, 0);
--	uvcg_free_buffers(&video->queue);
-+	if (handle->is_uvc_app_handle)
-+		uvc_v4l2_disable(uvc);
- 	mutex_unlock(&video->mutex);
- 
- 	file->private_data = NULL;
+ 	if (irqstatus & IR_WDI)
+ 		netdev_err(dev, "Message RAM Watchdog event due to missing READY\n");
+-	if (irqstatus & IR_ELO)
+-		netdev_err(dev, "Error Logging Overflow\n");
+ 	if (irqstatus & IR_BEU)
+ 		netdev_err(dev, "Bit Error Uncorrected\n");
+ 	if (irqstatus & IR_BEC)
 
 

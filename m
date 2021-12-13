@@ -2,45 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D36C947290C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CDA472594
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244701AbhLMKRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236526AbhLMJti (ORCPT
+        id S234631AbhLMJob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:44:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53296 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235056AbhLMJkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:49:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E72C07E5DF;
-        Mon, 13 Dec 2021 01:43:39 -0800 (PST)
+        Mon, 13 Dec 2021 04:40:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B172FCE0E29;
-        Mon, 13 Dec 2021 09:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CDB0C00446;
-        Mon, 13 Dec 2021 09:43:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12B2DB80E0B;
+        Mon, 13 Dec 2021 09:40:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A56C341C5;
+        Mon, 13 Dec 2021 09:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388615;
-        bh=CDXo2h4vz+YwBBOpxTJoGDGKPvgQg9+CFfdB73paPyI=;
+        s=korg; t=1639388399;
+        bh=DQCUutKUGhabyVeopq3tf13shY82HsGV0JIdWwr6m5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hFmglohbSJPV7vga2vXSUunCnEGwDhTgzj8o4ukI18SkV98nkzAuIQ1qZjF874ncg
-         nx8NLrmq1jHSwLBk6PSVx0H6A3QteF2iKybokwrintaUylVFGIDhfEfutrBbg6yAs2
-         vox5HH30nHutVrRNP98ivMHMmwkaszFt4mF/X6JQ=
+        b=1d7Aa2Q6AaaE6IXUkjHpX2NMeLbnmoF1TOVVgrp/lVL5GQCgMk+VA2XXJBWCe00vn
+         i1Mk9wKkTHFBbkpexSwxySUVdmcYW6ZWtnAUcxUrF5xn+kcefQ0wmXXtUiKX9Sdcwz
+         cnrdutSxcjkKn4WtqihLFQB+He76zWP7PnLf3JEs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 5.4 37/88] clk: qcom: regmap-mux: fix parent clock lookup
-Date:   Mon, 13 Dec 2021 10:30:07 +0100
-Message-Id: <20211213092934.520607073@linuxfoundation.org>
+        Eric Biggers <ebiggers@google.com>
+Subject: [PATCH 4.19 37/74] aio: keep poll requests on waitqueue until completed
+Date:   Mon, 13 Dec 2021 10:30:08 +0100
+Message-Id: <20211213092932.060590322@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,70 +44,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 9a61f813fcc8d56d85fcf9ca6119cf2b5ac91dd5 upstream.
+commit 363bee27e25804d8981dd1c025b4ad49dc39c530 upstream.
 
-The function mux_get_parent() uses qcom_find_src_index() to find the
-parent clock index, which is incorrect: qcom_find_src_index() uses src
-enum for the lookup, while mux_get_parent() should use cfg field (which
-corresponds to the register value). Add qcom_find_cfg_index() function
-doing this kind of lookup and use it for mux parent lookup.
+Currently, aio_poll_wake() will always remove the poll request from the
+waitqueue.  Then, if aio_poll_complete_work() sees that none of the
+polled events are ready and the request isn't cancelled, it re-adds the
+request to the waitqueue.  (This can easily happen when polling a file
+that doesn't pass an event mask when waking up its waitqueue.)
 
-Fixes: df964016490b ("clk: qcom: add parent map for regmap mux")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20211115233407.1046179-1-dmitry.baryshkov@linaro.org
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+This is fundamentally broken for two reasons:
+
+  1. If a wakeup occurs between vfs_poll() and the request being
+     re-added to the waitqueue, it will be missed because the request
+     wasn't on the waitqueue at the time.  Therefore, IOCB_CMD_POLL
+     might never complete even if the polled file is ready.
+
+  2. When the request isn't on the waitqueue, there is no way to be
+     notified that the waitqueue is being freed (which happens when its
+     lifetime is shorter than the struct file's).  This is supposed to
+     happen via the waitqueue entries being woken up with POLLFREE.
+
+Therefore, leave the requests on the waitqueue until they are actually
+completed (or cancelled).  To keep track of when aio_poll_complete_work
+needs to be scheduled, use new fields in struct poll_iocb.  Remove the
+'done' field which is now redundant.
+
+Note that this is consistent with how sys_poll() and eventpoll work;
+their wakeup functions do *not* remove the waitqueue entries.
+
+Fixes: 2c14fa838cbe ("aio: implement IOCB_CMD_POLL")
+Cc: <stable@vger.kernel.org> # v4.18+
+Link: https://lore.kernel.org/r/20211209010455.42744-5-ebiggers@kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/qcom/clk-regmap-mux.c |    2 +-
- drivers/clk/qcom/common.c         |   12 ++++++++++++
- drivers/clk/qcom/common.h         |    2 ++
- 3 files changed, 15 insertions(+), 1 deletion(-)
+ fs/aio.c |   83 +++++++++++++++++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 63 insertions(+), 20 deletions(-)
 
---- a/drivers/clk/qcom/clk-regmap-mux.c
-+++ b/drivers/clk/qcom/clk-regmap-mux.c
-@@ -28,7 +28,7 @@ static u8 mux_get_parent(struct clk_hw *
- 	val &= mask;
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -176,8 +176,9 @@ struct poll_iocb {
+ 	struct file		*file;
+ 	struct wait_queue_head	*head;
+ 	__poll_t		events;
+-	bool			done;
+ 	bool			cancelled;
++	bool			work_scheduled;
++	bool			work_need_resched;
+ 	struct wait_queue_entry	wait;
+ 	struct work_struct	work;
+ };
+@@ -1635,14 +1636,26 @@ static void aio_poll_complete_work(struc
+ 	 * avoid further branches in the fast path.
+ 	 */
+ 	spin_lock_irq(&ctx->ctx_lock);
++	spin_lock(&req->head->lock);
+ 	if (!mask && !READ_ONCE(req->cancelled)) {
+-		add_wait_queue(req->head, &req->wait);
++		/*
++		 * The request isn't actually ready to be completed yet.
++		 * Reschedule completion if another wakeup came in.
++		 */
++		if (req->work_need_resched) {
++			schedule_work(&req->work);
++			req->work_need_resched = false;
++		} else {
++			req->work_scheduled = false;
++		}
++		spin_unlock(&req->head->lock);
+ 		spin_unlock_irq(&ctx->ctx_lock);
+ 		return;
+ 	}
++	list_del_init(&req->wait.entry);
++	spin_unlock(&req->head->lock);
+ 	list_del_init(&iocb->ki_list);
+ 	iocb->ki_res.res = mangle_poll(mask);
+-	req->done = true;
+ 	spin_unlock_irq(&ctx->ctx_lock);
  
- 	if (mux->parent_map)
--		return qcom_find_src_index(hw, mux->parent_map, val);
-+		return qcom_find_cfg_index(hw, mux->parent_map, val);
+ 	iocb_put(iocb);
+@@ -1656,9 +1669,9 @@ static int aio_poll_cancel(struct kiocb
  
- 	return val;
+ 	spin_lock(&req->head->lock);
+ 	WRITE_ONCE(req->cancelled, true);
+-	if (!list_empty(&req->wait.entry)) {
+-		list_del_init(&req->wait.entry);
++	if (!req->work_scheduled) {
+ 		schedule_work(&aiocb->poll.work);
++		req->work_scheduled = true;
+ 	}
+ 	spin_unlock(&req->head->lock);
+ 
+@@ -1677,20 +1690,26 @@ static int aio_poll_wake(struct wait_que
+ 	if (mask && !(mask & req->events))
+ 		return 0;
+ 
+-	list_del_init(&req->wait.entry);
+-
+-	if (mask && spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
++	/*
++	 * Complete the request inline if possible.  This requires that three
++	 * conditions be met:
++	 *   1. An event mask must have been passed.  If a plain wakeup was done
++	 *	instead, then mask == 0 and we have to call vfs_poll() to get
++	 *	the events, so inline completion isn't possible.
++	 *   2. The completion work must not have already been scheduled.
++	 *   3. ctx_lock must not be busy.  We have to use trylock because we
++	 *	already hold the waitqueue lock, so this inverts the normal
++	 *	locking order.  Use irqsave/irqrestore because not all
++	 *	filesystems (e.g. fuse) call this function with IRQs disabled,
++	 *	yet IRQs have to be disabled before ctx_lock is obtained.
++	 */
++	if (mask && !req->work_scheduled &&
++	    spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
+ 		struct kioctx *ctx = iocb->ki_ctx;
+ 
+-		/*
+-		 * Try to complete the iocb inline if we can. Use
+-		 * irqsave/irqrestore because not all filesystems (e.g. fuse)
+-		 * call this function with IRQs disabled and because IRQs
+-		 * have to be disabled before ctx_lock is obtained.
+-		 */
++		list_del_init(&req->wait.entry);
+ 		list_del(&iocb->ki_list);
+ 		iocb->ki_res.res = mangle_poll(mask);
+-		req->done = true;
+ 		if (iocb->ki_eventfd && eventfd_signal_count()) {
+ 			iocb = NULL;
+ 			INIT_WORK(&req->work, aio_poll_put_work);
+@@ -1700,7 +1719,20 @@ static int aio_poll_wake(struct wait_que
+ 		if (iocb)
+ 			iocb_put(iocb);
+ 	} else {
+-		schedule_work(&req->work);
++		/*
++		 * Schedule the completion work if needed.  If it was already
++		 * scheduled, record that another wakeup came in.
++		 *
++		 * Don't remove the request from the waitqueue here, as it might
++		 * not actually be complete yet (we won't know until vfs_poll()
++		 * is called), and we must not miss any wakeups.
++		 */
++		if (req->work_scheduled) {
++			req->work_need_resched = true;
++		} else {
++			schedule_work(&req->work);
++			req->work_scheduled = true;
++		}
+ 	}
+ 	return 1;
  }
---- a/drivers/clk/qcom/common.c
-+++ b/drivers/clk/qcom/common.c
-@@ -69,6 +69,18 @@ int qcom_find_src_index(struct clk_hw *h
- }
- EXPORT_SYMBOL_GPL(qcom_find_src_index);
+@@ -1747,8 +1779,9 @@ static ssize_t aio_poll(struct aio_kiocb
+ 	req->events = demangle_poll(iocb->aio_buf) | EPOLLERR | EPOLLHUP;
  
-+int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map, u8 cfg)
-+{
-+	int i, num_parents = clk_hw_get_num_parents(hw);
-+
-+	for (i = 0; i < num_parents; i++)
-+		if (cfg == map[i].cfg)
-+			return i;
-+
-+	return -ENOENT;
-+}
-+EXPORT_SYMBOL_GPL(qcom_find_cfg_index);
-+
- struct regmap *
- qcom_cc_map(struct platform_device *pdev, const struct qcom_cc_desc *desc)
- {
---- a/drivers/clk/qcom/common.h
-+++ b/drivers/clk/qcom/common.h
-@@ -49,6 +49,8 @@ extern void
- qcom_pll_set_fsm_mode(struct regmap *m, u32 reg, u8 bias_count, u8 lock_count);
- extern int qcom_find_src_index(struct clk_hw *hw, const struct parent_map *map,
- 			       u8 src);
-+extern int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map,
-+			       u8 cfg);
+ 	req->head = NULL;
+-	req->done = false;
+ 	req->cancelled = false;
++	req->work_scheduled = false;
++	req->work_need_resched = false;
  
- extern int qcom_cc_register_board_clk(struct device *dev, const char *path,
- 				      const char *name, unsigned long rate);
+ 	apt.pt._qproc = aio_poll_queue_proc;
+ 	apt.pt._key = req->events;
+@@ -1763,17 +1796,27 @@ static ssize_t aio_poll(struct aio_kiocb
+ 	spin_lock_irq(&ctx->ctx_lock);
+ 	if (likely(req->head)) {
+ 		spin_lock(&req->head->lock);
+-		if (unlikely(list_empty(&req->wait.entry))) {
+-			if (apt.error)
++		if (list_empty(&req->wait.entry) || req->work_scheduled) {
++			/*
++			 * aio_poll_wake() already either scheduled the async
++			 * completion work, or completed the request inline.
++			 */
++			if (apt.error) /* unsupported case: multiple queues */
+ 				cancel = true;
+ 			apt.error = 0;
+ 			mask = 0;
+ 		}
+ 		if (mask || apt.error) {
++			/* Steal to complete synchronously. */
+ 			list_del_init(&req->wait.entry);
+ 		} else if (cancel) {
++			/* Cancel if possible (may be too late though). */
+ 			WRITE_ONCE(req->cancelled, true);
+-		} else if (!req->done) { /* actually waiting for an event */
++		} else if (!list_empty(&req->wait.entry)) {
++			/*
++			 * Actually waiting for an event, so add the request to
++			 * active_reqs so that it can be cancelled if needed.
++			 */
+ 			list_add_tail(&aiocb->ki_list, &ctx->active_reqs);
+ 			aiocb->ki_cancel = aio_poll_cancel;
+ 		}
 
 

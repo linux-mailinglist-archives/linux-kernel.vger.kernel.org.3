@@ -2,26 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD4F473710
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF5A473712
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243412AbhLMVzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:55:53 -0500
-Received: from out0.migadu.com ([94.23.1.103]:20485 "EHLO out0.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243401AbhLMVzu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:55:50 -0500
+        id S243406AbhLMVz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:55:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243417AbhLMVzy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 16:55:54 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B05C061751
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:55:53 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639432549;
+        t=1639432551;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iZXIY+Rf2d0lHK12UJvskCxlA4nRW5M9PkBwAVYILek=;
-        b=KjO/G7hNqA0iWGqJdeaO8XdQXa6pflP+0biNjvd7HCEiZnbl78zKnf6b2JzuhAU+Wj6D7A
-        nSWj5ilhSdzFPJmyFyYX6TiFvAZm7XqK6imrxZ4+2ywwpnTS2eGyAGqSPvKgzP9DN6rJ+d
-        dY9qXc0ihY9+CBm3DY4/GlqdNNv1LO0=
+        bh=AV0M9szKvSlfXhwybxJe1jA9V5abexpCELFOGxjWDjg=;
+        b=VrpiAL19fvyDS+74lLUXNB07lb/PRLnHTLw/kFLzGwOuw/PUtCxSFrLOE/xcXoLwz0qln0
+        Tx+ksuULQBrasx1H1H3ZIGMKOhuMRJqgfm6F11tpTD+ACUzjbKneWOBmWaPgxnnFUbLIKV
+        nz9gVt/fNqcXNXu/G54sUgUBFYhG5Xw=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -39,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 36/38] arm64: select KASAN_VMALLOC for SW/HW_TAGS modes
-Date:   Mon, 13 Dec 2021 22:55:38 +0100
-Message-Id: <2a3e235be2015882c6e90e6810f4974a31e7ad42.1639432170.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 37/38] kasan: documentation updates
+Date:   Mon, 13 Dec 2021 22:55:39 +0100
+Message-Id: <7159d84eee5ade160a139a28116fceded025108c.1639432170.git.andreyknvl@google.com>
 In-Reply-To: <cover.1639432170.git.andreyknvl@google.com>
 References: <cover.1639432170.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,47 +58,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Generic KASAN already selects KASAN_VMALLOC to allow VMAP_STACK to be
-selected unconditionally, see commit acc3042d62cb9 ("arm64: Kconfig:
-select KASAN_VMALLOC if KANSAN_GENERIC is enabled").
+Update KASAN documentation:
 
-The same change is needed for SW_TAGS KASAN.
-
-HW_TAGS KASAN does not require enabling KASAN_VMALLOC for VMAP_STACK,
-they already work together as is. Still, selecting KASAN_VMALLOC still
-makes sense to make vmalloc() always protected. In case any bugs in
-KASAN's vmalloc() support are discovered, the command line kasan.vmalloc
-flag can be used to disable vmalloc() checking.
-
-Select KASAN_VMALLOC for all KASAN modes for arm64.
+- Bump Clang version requirement for HW_TAGS as ARM64_MTE depends on
+  AS_HAS_LSE_ATOMICS as of commit 2decad92f4731 ("arm64: mte: Ensure
+  TIF_MTE_ASYNC_FAULT is set atomically"), which requires Clang 12.
+- Add description of the new kasan.vmalloc command line flag.
+- Mention that SW_TAGS and HW_TAGS modes now support vmalloc tagging.
+- Explicitly say that the "Shadow memory" section is only applicable
+  to software KASAN modes.
+- Mention that shadow-based KASAN_VMALLOC is supported on arm64.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-
 ---
+ Documentation/dev-tools/kasan.rst | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-Changes v2->v3:
-- Update patch description.
-
-Changes v1->v2:
-- Split out this patch.
----
- arch/arm64/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index e30b72208efc..29bda8b65b0b 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -203,7 +203,7 @@ config ARM64
- 	select IOMMU_DMA if IOMMU_SUPPORT
- 	select IRQ_DOMAIN
- 	select IRQ_FORCED_THREADING
--	select KASAN_VMALLOC if KASAN_GENERIC
-+	select KASAN_VMALLOC if KASAN
- 	select MODULES_USE_ELF_RELA
- 	select NEED_DMA_MAP_STATE
- 	select NEED_SG_DMA_LENGTH
+diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
+index 8089c559d339..7614a1fc30fa 100644
+--- a/Documentation/dev-tools/kasan.rst
++++ b/Documentation/dev-tools/kasan.rst
+@@ -30,7 +30,7 @@ Software tag-based KASAN mode is only supported in Clang.
+ 
+ The hardware KASAN mode (#3) relies on hardware to perform the checks but
+ still requires a compiler version that supports memory tagging instructions.
+-This mode is supported in GCC 10+ and Clang 11+.
++This mode is supported in GCC 10+ and Clang 12+.
+ 
+ Both software KASAN modes work with SLUB and SLAB memory allocators,
+ while the hardware tag-based KASAN currently only supports SLUB.
+@@ -206,6 +206,9 @@ additional boot parameters that allow disabling KASAN or controlling features:
+   Asymmetric mode: a bad access is detected synchronously on reads and
+   asynchronously on writes.
+ 
++- ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
++  allocations (default: ``on``).
++
+ - ``kasan.stacktrace=off`` or ``=on`` disables or enables alloc and free stack
+   traces collection (default: ``on``).
+ 
+@@ -279,8 +282,8 @@ Software tag-based KASAN uses 0xFF as a match-all pointer tag (accesses through
+ pointers with the 0xFF pointer tag are not checked). The value 0xFE is currently
+ reserved to tag freed memory regions.
+ 
+-Software tag-based KASAN currently only supports tagging of slab and page_alloc
+-memory.
++Software tag-based KASAN currently only supports tagging of slab, page_alloc,
++and vmalloc memory.
+ 
+ Hardware tag-based KASAN
+ ~~~~~~~~~~~~~~~~~~~~~~~~
+@@ -303,8 +306,8 @@ Hardware tag-based KASAN uses 0xFF as a match-all pointer tag (accesses through
+ pointers with the 0xFF pointer tag are not checked). The value 0xFE is currently
+ reserved to tag freed memory regions.
+ 
+-Hardware tag-based KASAN currently only supports tagging of slab and page_alloc
+-memory.
++Hardware tag-based KASAN currently only supports tagging of slab, page_alloc,
++and VM_ALLOC-based vmalloc memory.
+ 
+ If the hardware does not support MTE (pre ARMv8.5), hardware tag-based KASAN
+ will not be enabled. In this case, all KASAN boot parameters are ignored.
+@@ -319,6 +322,8 @@ checking gets disabled.
+ Shadow memory
+ -------------
+ 
++The contents of this section are only applicable to software KASAN modes.
++
+ The kernel maps memory in several different parts of the address space.
+ The range of kernel virtual addresses is large: there is not enough real
+ memory to support a real shadow region for every address that could be
+@@ -349,7 +354,7 @@ CONFIG_KASAN_VMALLOC
+ 
+ With ``CONFIG_KASAN_VMALLOC``, KASAN can cover vmalloc space at the
+ cost of greater memory usage. Currently, this is supported on x86,
+-riscv, s390, and powerpc.
++arm64, riscv, s390, and powerpc.
+ 
+ This works by hooking into vmalloc and vmap and dynamically
+ allocating real shadow memory to back the mappings.
 -- 
 2.25.1
 

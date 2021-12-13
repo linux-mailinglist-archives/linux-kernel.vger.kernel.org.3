@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5D847367F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7180E473686
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243105AbhLMVVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S243125AbhLMVX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236959AbhLMVVM (ORCPT
+        with ESMTP id S237601AbhLMVX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:21:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E80C061574;
-        Mon, 13 Dec 2021 13:21:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3FCD61200;
-        Mon, 13 Dec 2021 21:21:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA4ACC34600;
-        Mon, 13 Dec 2021 21:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639430471;
-        bh=GrHbSxqXx73VbcyZxEt/rRuHYXIzZgAk1CrFskaxZJk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gf2smHO+B8C93MQsZoZEQ10uLweZ/089cOtKwmYDiPN97H39PRNygyFYjwOQyfkRO
-         1ifYxB7z+5L5a8C1kt2zY2d+8yoG/yqTn0JCbjMgbhlJ0Sy/7/KeONadWGhMc/0ThH
-         mlaf3X0cyfiQB+qlISYX99hbcFc1a4/A5tkZstuNI4magOmrqLwPYJEXIMVrFSAk4v
-         qgx5DuLFPh2DHbOSq4qWVG7DHVSCm6FkJ0RnO8Ji43JRa/xZCiLf/K/3lSzCwfRhas
-         pSK9hlmGbPKcIYjU+6I9MEOAfxalEm+rMt0tuwhgoz/9xOUiAukRgDGIyzyYi07eCm
-         M1yGFxJyuH+1A==
-Date:   Mon, 13 Dec 2021 22:21:08 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>
-Subject: Re: [PATCH] rcu: Make rcu_state.n_online_cpus updates atomic
-Message-ID: <20211213212108.GA786870@lothringen>
-References: <20211213070059.6381-1-quic_neeraju@quicinc.com>
- <471d6615f245168d4c6c96c7ac1ccabf56b75945.camel@amazon.co.uk>
- <20211213193256.GR641268@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 13 Dec 2021 16:23:26 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B48C061574;
+        Mon, 13 Dec 2021 13:23:25 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639430602;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5nohn3V+Nchmlh4oPn+MsHeWYr9veg87VFNOSrB/6zU=;
+        b=Z7ohmGLV+GRMk35jV4lyKQnhUa5FhdvrbizQmoOGOWhOimtgt8ldPJK3ajmPDTyeFigAVT
+        ElCeqsXdIR4F6BW/IC7Axfc5hwpWUvacBKpxHpQoP/yIyzibOQU4Q024M3ma8o/+yV35hl
+        94YMhMf58A/KFIoRPPe/CuiFNLKKNsJvP54+DdTn0GKSwct4iBWHrrbkgDXUi9X2KWIzg9
+        p0G0zaWHQomT/grn6HO5JVBNqUy00bVrKNRlSUPWQry3mRX9hVS79r4szuranbz7XnAvjb
+        NZ48uAZGv362zhx6SdXgd/a15APF71pq6CwIxENAIgza2lOCdkq54m1j6aeAUw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639430602;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5nohn3V+Nchmlh4oPn+MsHeWYr9veg87VFNOSrB/6zU=;
+        b=tO9NWnd2naqIbE68KEjNJOANZA0U6mzhrNY514DZ9Crx2YuhcG99RUsI+bmDOt07CUktfI
+        qPf1yL+y/YZDs8Aw==
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com
+Subject: Re: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
+In-Reply-To: <87y24othjj.ffs@tglx>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-11-yang.zhong@intel.com>
+ <022620db-13ad-8118-5296-ae2913d41f1f@redhat.com> <87y24othjj.ffs@tglx>
+Date:   Mon, 13 Dec 2021 22:23:22 +0100
+Message-ID: <87r1agtd11.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211213193256.GR641268@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:32:56AM -0800, Paul E. McKenney wrote:
-> On Mon, Dec 13, 2021 at 08:09:22AM +0000, Woodhouse, David wrote:
-> > On Mon, 2021-12-13 at 12:30 +0530, Neeraj Upadhyay wrote:
-> > > To support onlining multiple CPUs concurrently,
-> > > change rcu_state.n_online_cpus updates to be atomic.
-> > > Note, it's ok for rcu_blocking_is_gp() to do a
-> > > atomic_read(&rcu_state.n_online_cpus), as the
-> > > value of .n_online_cpus switches from 1->2, in
-> > > rcutree_prepare_cpu(), which runs before the new
-> > > CPU comes online. Similarly 2->1 transition happens
-> > > from rcutree_dead_cpu(), which executes after the
-> > > CPU is offlined, and runs on the last online CPU.
-> > > 
-> > > Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > 
-> > In my parallel-bringup series, the prepare stages are still being
-> > executed in series on the BSP, so I don't think this patch is needed
-> > yet. I'm not sure we'd ever end up with the prepare stages being done
-> > in parallel — the most I see us doing is onlining a single *batch* of
-> > CPUs at a time, much like bringup_nonboot_cpus() does.
-> > 
-> > But this patch certainly doesn't *hurt*.
-> > 
-> > Acked-by: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> Queued for further review and testing.
-> 
-> To Frederic's point, this won't go to mainline unless it is actually
-> needed, but it will at least be pulled into a branch in -rcu marked with
-> a tag for future reference.
+Paolo,
 
-Ok, sounds reasonable then.
+On Mon, Dec 13 2021 at 20:45, Thomas Gleixner wrote:
+> On Mon, Dec 13 2021 at 16:06, Paolo Bonzini wrote:
+>> That said, I think xfd_update_state should not have an argument. 
+>> current->thread.fpu.fpstate->xfd is the only fpstate that should be 
+>> synced with the xfd_state per-CPU variable.
+>
+> I'm looking into this right now. The whole restore versus runtime thing
+> needs to be handled differently.
 
-Thanks!
+We need to look at different things here:
+
+   1) XFD MSR write emulation
+
+   2) XFD MSR synchronization when write emulation is disabled
+
+   3) Guest restore
+
+#1 and #2 are in the context of vcpu_run() and
+
+   vcpu->arch.guest_fpu.fpstate == current->thread.fpu.fpstate
+
+while #3 has:
+
+   vcpu->arch.guest_fpu.fpstate != current->thread.fpu.fpstate
+
+
+#2 is only updating fpstate->xfd and the per CPU shadow.
+
+So the state synchronization wants to be something like this:
+
+void fpu_sync_guest_xfd_state(void)
+{
+	struct fpstate *fps = current->thread.fpu.fpstate;
+
+	lockdep_assert_irqs_disabled();
+	if (fpu_state_size_dynamic()) {
+		rdmsrl(MSR_IA32_XFD, fps->xfd);
+		__this_cpu_write(xfd_state, fps->xfd);
+	}
+}
+EXPORT_SYMBOL_GPL(fpu_sync_guest_xfd_state);
+
+No wrmsrl() because the MSR is already up do date. The important part is
+that fpstate->xfd and the shadow state are updated so that after
+reenabling preemption the context switch FPU logic works correctly.
+
+
+#1 and #3 can trigger a reallocation of guest_fpu.fpstate and
+can fail. But this is also true for XSETBV emulation and XCR0 restore.
+
+For #1 modifying fps->xfd in the KVM code before calling into the FPU
+code is just _wrong_ because if the guest removes the XFD restriction
+then it must be ensured that the buffer is sized correctly _before_ this
+is updated.
+
+For #3 it's not really important, but I still try to wrap my head around
+the whole picture vs. XCR0.
+
+There are two options:
+
+  1) Require strict ordering of XFD and XCR0 update to avoid pointless
+     buffer expansion, i.e. XFD before XCR0.
+
+     Because if XCR0 is updated while guest_fpu->fpstate.xfd is still in
+     init state (0) and XCR0 contains extended features, then the buffer
+     would be expanded because XFD does not mask the extended features
+     out. When XFD is restored with a non-zero value, it's too late
+     already.
+
+  2) Ignore buffer expansion up to the point where XSTATE restore happens
+     and evaluate guest XCR0 and guest_fpu->fpstate.xfd there.
+
+I'm leaning towards #1 because that means we have exactly _ONE_ place
+where we need to deal with buffer expansion. If Qemu gets the ordering
+wrong it wastes memory per vCPU, *shrug*.
+
+Thanks,
+
+        tglx
+
+
+
+

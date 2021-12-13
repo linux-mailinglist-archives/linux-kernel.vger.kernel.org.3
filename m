@@ -2,41 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 257DB4724D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDFD4723D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbhLMJjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:39:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49914 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234546AbhLMJha (ORCPT
+        id S233746AbhLMJcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:32:20 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57418 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233741AbhLMJcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:37:30 -0500
+        Mon, 13 Dec 2021 04:32:18 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7ED7B80E15;
-        Mon, 13 Dec 2021 09:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8F9C00446;
-        Mon, 13 Dec 2021 09:37:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DF345CE0E29;
+        Mon, 13 Dec 2021 09:32:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64840C00446;
+        Mon, 13 Dec 2021 09:32:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388248;
-        bh=+txLVm7434gQb8qMkJfbHz/qNnk0pSIt2gK4IJbFqpw=;
+        s=korg; t=1639387935;
+        bh=PEW5JwRnVWEkYcLV4SbNhbgEEuIYDpogGayn3ZHK2N0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LRxFdqzH4EUVIpRfcLvClcYHhbPpOWLJKsU0rRdrspNvp+C/UWudS1OS2wdCbxEmJ
-         B6tiOxUfWHBptZIE/8XyTvGT5aYYVOj+t1j4UKUWueOwiYjOJ8axCVQpFiDJ40UwBR
-         mFG7lmpXTinJsoMmkNeY/9KGXvzKMh9b5wBuKKfY=
+        b=lvOz8efiype1yO8XqLRpOQS1OHmc+Ewc+H7o1VF+hVdk+7hN1r3oldjtw9zp/uhN5
+         mDF1gv17X0p1Yi72TMViLXTSoJ+D+TBDcEUOiOXfMrcnDguQyFwyZcFTgHoaWXuYpC
+         ng6qBU5+I+WG5mLfcg1r+o7po1co9IxSXVmzU9xk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 4.14 09/53] bpf: Fix the off-by-two error in range markings
+        stable@vger.kernel.org, Manjong Lee <mj0123.lee@samsung.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Changheun Lee <nanich.lee@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        seunghwan.hyun@samsung.com, sookwan7.kim@samsung.com,
+        yt0928.kim@samsung.com, junho89.kim@samsung.com,
+        jisoo2146.oh@samsung.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.4 10/37] mm: bdi: initialize bdi_min_ratio when bdi is unregistered
 Date:   Mon, 13 Dec 2021 10:29:48 +0100
-Message-Id: <20211213092928.669463787@linuxfoundation.org>
+Message-Id: <20211213092925.708148558@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,63 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Manjong Lee <mj0123.lee@samsung.com>
 
-commit 2fa7d94afc1afbb4d702760c058dc2d7ed30f226 upstream.
+commit 3c376dfafbf7a8ea0dea212d095ddd83e93280bb upstream.
 
-The first commit cited below attempts to fix the off-by-one error that
-appeared in some comparisons with an open range. Due to this error,
-arithmetically equivalent pieces of code could get different verdicts
-from the verifier, for example (pseudocode):
+Initialize min_ratio if it is set during bdi unregistration.  This can
+prevent problems that may occur a when bdi is removed without resetting
+min_ratio.
 
-  // 1. Passes the verifier:
-  if (data + 8 > data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
+For example.
+1) insert external sdcard
+2) set external sdcard's min_ratio 70
+3) remove external sdcard without setting min_ratio 0
+4) insert external sdcard
+5) set external sdcard's min_ratio 70 << error occur(can't set)
 
-  // 2. Rejected by the verifier (should still pass):
-  if (data + 7 >= data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
+Because when an sdcard is removed, the present bdi_min_ratio value will
+remain.  Currently, the only way to reset bdi_min_ratio is to reboot.
 
-The attempted fix, however, shifts the range by one in a wrong
-direction, so the bug not only remains, but also such piece of code
-starts failing in the verifier:
+[akpm@linux-foundation.org: tweak comment and coding style]
 
-  // 3. Rejected by the verifier, but the check is stricter than in #1.
-  if (data + 8 >= data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
-
-The change performed by that fix converted an off-by-one bug into
-off-by-two. The second commit cited below added the BPF selftests
-written to ensure than code chunks like #3 are rejected, however,
-they should be accepted.
-
-This commit fixes the off-by-two error by adjusting new_range in the
-right direction and fixes the tests by changing the range into the
-one that should actually fail.
-
-Fixes: fb2a311a31d3 ("bpf: fix off by one for range markings with L{T, E} patterns")
-Fixes: b37242c773b2 ("bpf: add test cases to bpf selftests to cover all access tests")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211130181607.593149-1-maximmi@nvidia.com
+Link: https://lkml.kernel.org/r/20211021161942.5983-1-mj0123.lee@samsung.com
+Signed-off-by: Manjong Lee <mj0123.lee@samsung.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Changheun Lee <nanich.lee@samsung.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: <seunghwan.hyun@samsung.com>
+Cc: <sookwan7.kim@samsung.com>
+Cc: <yt0928.kim@samsung.com>
+Cc: <junho89.kim@samsung.com>
+Cc: <jisoo2146.oh@samsung.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/verifier.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/backing-dev.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2989,7 +2989,7 @@ static void find_good_pkt_pointers(struc
+--- a/mm/backing-dev.c
++++ b/mm/backing-dev.c
+@@ -865,6 +865,13 @@ void bdi_unregister(struct backing_dev_i
+ 	wb_shutdown(&bdi->wb);
+ 	cgwb_bdi_destroy(bdi);
  
- 	new_range = dst_reg->off;
- 	if (range_right_open)
--		new_range--;
-+		new_range++;
- 
- 	/* Examples for register markings:
- 	 *
++	/*
++	 * If this BDI's min ratio has been set, use bdi_set_min_ratio() to
++	 * update the global bdi_min_ratio.
++	 */
++	if (bdi->min_ratio)
++		bdi_set_min_ratio(bdi, 0);
++
+ 	if (bdi->dev) {
+ 		bdi_debug_unregister(bdi);
+ 		device_unregister(bdi->dev);
 
 

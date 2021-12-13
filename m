@@ -2,168 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894D4471FAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2999471FC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbhLMDuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 22:50:55 -0500
-Received: from marcansoft.com ([212.63.210.85]:60178 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229724AbhLMDuz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 22:50:55 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        id S231548AbhLMDy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 22:54:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31357 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229724AbhLMDy0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 22:54:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639367665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RtEtPTsuIoiHB5BTI3SwlairjxLeY5++Shr6MIHKyxM=;
+        b=aKZ9vwqYMocQPwNzDLVDelLrhv6yjsw3gyoI/kKQVXSDgBR2y8aCDSletXTvXuUvX4TsLg
+        Tfksq2FU7omhWCvVP1ySlHLXGSQbo0STPw1Fj1uW7md1exy6KV2qy+MQQ1+X9STPsmMRhj
+        7h9P4xLzEtyHU74W/MursqbYJhO7xXI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-YFQwSgmqM16odoosnhlryQ-1; Sun, 12 Dec 2021 22:54:22 -0500
+X-MC-Unique: YFQwSgmqM16odoosnhlryQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 896F34258C;
-        Mon, 13 Dec 2021 03:50:50 +0000 (UTC)
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211212034726.26306-1-marcan@marcan.st>
- <20211212034726.26306-4-marcan@marcan.st> <YbaIwa/9utI9SD1u@sirena.org.uk>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
-Message-ID: <d566c897-ee7d-f32f-1548-57f037c69c89@marcan.st>
-Date:   Mon, 13 Dec 2021 12:50:49 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70B601006AA6;
+        Mon, 13 Dec 2021 03:54:18 +0000 (UTC)
+Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 54C7D5DF4B;
+        Mon, 13 Dec 2021 03:54:15 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 11:54:12 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     John Donnelly <John.p.donnelly@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, luto@kernel.org,
+        peterz@infradead.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@lst.de, robin.murphy@arm.com,
+        cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, vbabka@suse.cz, m.szyprowski@samsung.com,
+        kexec@lists.infradead.org, rppt@linux.ibm.com
+Subject: Re: [PATCH RESEND v2 0/5] Avoid requesting page from DMA zone when
+ no managed pages
+Message-ID: <20211213035412.GA24932@MiWiFi-R3L-srv>
+References: <20211207030750.30824-1-bhe@redhat.com>
+ <20211207031631.GA5604@MiWiFi-R3L-srv>
+ <01b4831f-7136-80af-a6cb-93698cb31fc4@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <YbaIwa/9utI9SD1u@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01b4831f-7136-80af-a6cb-93698cb31fc4@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the review!
-
-On 13/12/2021 08.41, Mark Brown wrote:
-> On Sun, Dec 12, 2021 at 12:47:26PM +0900, Hector Martin wrote:
+On 12/06/21 at 10:03pm, John Donnelly wrote:
+> On 12/6/21 9:16 PM, Baoquan He wrote:
+> > Sorry, forgot adding x86 and x86/mm maintainers
 > 
-> This looks pretty good - one small issue and several stylistic nits
-> below.
+> Hi,
 > 
->> @@ -0,0 +1,566 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Apple SoC SPI device driver
->> + *
+>   These commits need applied to Linux-5.15.0 (LTS) too since it has the
+> original regression :
 > 
-> Please keep the entire comment a C++ one so things look more
-> intentional.
+>  1d659236fb43 ("dma-pool: scale the default DMA coherent pool
+> size with memory capacity")
 
-I thought this pattern was pretty much the standard style.
+Yeah, Fixes and stable need be added. Thanks for pointing out.
 
-$ grep -r -A1 "// SPDX" | grep '/\*' | wc -l
-13512
+As I have said in cover letter, this issue didn't occur until below
+commits applied. So I will add 'Fixes: 6f599d84231f ("x86/kdump: Always
+reserve the low 1M when the crashkernel option is specified")' to patch
+4, 5. The patch 1, 2 are cleanup|improvement, not related to this issue.
 
-$ grep -r -A1 "// SPDX" | grep -v SPDX | grep '//' | wc -l
-705
-
->> +#define APPLE_SPI_DRIVER_NAME           "apple_spi"
-> 
-> This is referenced exactly once, just inline it.
-Done. Also changed to "apple-spi" since all the other apple drivers use 
-the dash convention.
+  1a6a9044b967 x86/setup: Remove CONFIG_X86_RESERVE_LOW and reservelow= options
+  23721c8e92f7 x86/crash: Remove crash_reserve_low_1M()
+  f1d4d47c5851 x86/setup: Always reserve the first 1M of RAM
+  7c321eb2b843 x86/kdump: Remove the backup region handling
+  6f599d84231f x86/kdump: Always reserve the low 1M when the crashkernel option is specified
 
 > 
->> +	/* We will want to poll if the time we need to wait is
->> +	 * less than the context switching time.
->> +	 * Let's call that threshold 5us. The operation will take:
->> +	 *    bits_per_word * fifo_threshold / hz <= 5 * 10^-6
->> +	 *    200000 * bits_per_word * fifo_threshold <= hz
->> +	 */
->> +	return 200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2 <= t->speed_hz;
+> Maybe add "Fixes" to the other commits ?
 > 
-> Some brackets or an intermediate variable wouldn't hurt here, especially
-> given the line length.
-
-How about this?
-
-return (200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2) <= 
-t->speed_hz;
-
->> +	struct apple_spi *spi = spi_controller_get_devdata(ctlr);
->> +	bool poll = apple_spi_prep_transfer(spi, t);
->> +	const void *tx_ptr = t->tx_buf;
->> +	void *rx_ptr = t->rx_buf;
->> +	unsigned int bytes_per_word = t->bits_per_word > 16 ? 4 : t->bits_per_word > 8 ? 2 : 1;
 > 
-> Please don't abuse the ternery operator like this - just write normal
-> conditional statements, they're much easier to read.  In general the
-> driver is a bit too enthusiastic about them and this one is next level.
-
-Ack, I switched it to an if chain. That does mean I had to move the 
-subsequent initializers out of the declarations section, so it's overall 
-a bit more verbose.
-
-	if (t->bits_per_word > 16)
-		bytes_per_word = 4;
-	else if (t->bits_per_word > 8)
-		bytes_per_word = 2;
-	else
-		bytes_per_word = 1;
-
-	words = t->len / bytes_per_word;
-	remaining_tx = tx_ptr ? words : 0;
-	remaining_rx = rx_ptr ? words : 0;
-
->> +static int apple_spi_remove(struct platform_device *pdev)
->> +{
->> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
->> +	struct apple_spi *spi = spi_controller_get_devdata(ctlr);
->> +
->> +	pm_runtime_disable(&pdev->dev);
->> +
->> +	/* Disable all the interrupts just in case */
->> +	reg_write(spi, APPLE_SPI_IE_FIFO, 0);
->> +	reg_write(spi, APPLE_SPI_IE_XFER, 0);
+> > 
+> > On 12/07/21 at 11:07am, Baoquan He wrote:
+> > > ***Problem observed:
+> > > On x86_64, when crash is triggered and entering into kdump kernel, page
+> > > allocation failure can always be seen.
+> > > 
+> > >   ---------------------------------
+> > >   DMA: preallocated 128 KiB GFP_KERNEL pool for atomic allocations
+> > >   swapper/0: page allocation failure: order:5, mode:0xcc1(GFP_KERNEL|GFP_DMA), nodemask=(null),cpuset=/,mems_allowed=0
+> > >   CPU: 0 PID: 1 Comm: swapper/0
+> > >   Call Trace:
+> > >    dump_stack+0x7f/0xa1
+> > >    warn_alloc.cold+0x72/0xd6
+> > >    ......
+> > >    __alloc_pages+0x24d/0x2c0
+> > >    ......
+> > >    dma_atomic_pool_init+0xdb/0x176
+> > >    do_one_initcall+0x67/0x320
+> > >    ? rcu_read_lock_sched_held+0x3f/0x80
+> > >    kernel_init_freeable+0x290/0x2dc
+> > >    ? rest_init+0x24f/0x24f
+> > >    kernel_init+0xa/0x111
+> > >    ret_from_fork+0x22/0x30
+> > >   Mem-Info:
+> > >   ------------------------------------
+> > > 
+> > > ***Root cause:
+> > > In the current kernel, it assumes that DMA zone must have managed pages
+> > > and try to request pages if CONFIG_ZONE_DMA is enabled. While this is not
+> > > always true. E.g in kdump kernel of x86_64, only low 1M is presented and
+> > > locked down at very early stage of boot, so that this low 1M won't be
+> > > added into buddy allocator to become managed pages of DMA zone. This
+> > > exception will always cause page allocation failure if page is requested
+> > > from DMA zone.
+> > > 
+> > > ***Investigation:
+> > > This failure happens since below commit merged into linus's tree.
+> > >    1a6a9044b967 x86/setup: Remove CONFIG_X86_RESERVE_LOW and reservelow= options
+> > >    23721c8e92f7 x86/crash: Remove crash_reserve_low_1M()
+> > >    f1d4d47c5851 x86/setup: Always reserve the first 1M of RAM
+> > >    7c321eb2b843 x86/kdump: Remove the backup region handling
+> > >    6f599d84231f x86/kdump: Always reserve the low 1M when the crashkernel option is specified
+> > > 
+> > > Before them, on x86_64, the low 640K area will be reused by kdump kernel.
+> > > So in kdump kernel, the content of low 640K area is copied into a backup
+> > > region for dumping before jumping into kdump. Then except of those firmware
+> > > reserved region in [0, 640K], the left area will be added into buddy
+> > > allocator to become available managed pages of DMA zone.
+> > > 
+> > > However, after above commits applied, in kdump kernel of x86_64, the low
+> > > 1M is reserved by memblock, but not released to buddy allocator. So any
+> > > later page allocation requested from DMA zone will fail.
+> > > 
+> > > This low 1M lock down is needed because AMD SME encrypts memory making
+> > > the old backup region mechanims impossible when switching into kdump
+> > > kernel. And Intel engineer mentioned their TDX (Trusted domain extensions)
+> > > which is under development in kernel also needs lock down the low 1M.
+> > > So we can't simply revert above commits to fix the page allocation
+> > > failure from DMA zone as someone suggested.
+> > > 
+> > > ***Solution:
+> > > Currently, only DMA atomic pool and dma-kmalloc will initialize and
+> > > request page allocation with GFP_DMA during bootup. So only initialize
+> > > them when DMA zone has available managed pages, otherwise just skip the
+> > > initialization. From testing and code, this doesn't matter. In kdump
+> > > kernel of x86_64, the page allocation failure disappear.
+> > > 
+> > > ***Further thinking
+> > > On x86_64, it consistently takes [0, 16M] into ZONE_DMA, and (16M, 4G]
+> > > into ZONE_DMA32 by default. The zone DMA covering low 16M is used to
+> > > take care of antique ISA devices. In fact, on 64bit system, it rarely
+> > > need ZONE_DMA (which is low 16M) to support almost extinct ISA devices.
+> > > However, some components treat DMA as a generic concept, e.g
+> > > kmalloc-dma, slab allocator initializes it for later any DMA related
+> > > buffer allocation, but not limited to ISA DMA.
+> > > 
+> > > On arm64, even though both CONFIG_ZONE_DMA and CONFIG_ZONE_DMA32
+> > > are enabled, it makes ZONE_DMA covers the low 4G area, and ZONE_DMA32
+> > > empty. Unless on specific platforms (e.g. 30-bit on Raspberry Pi 4),
+> > > then zone DMA covers the 1st 1G area, zone DMA32 covers the rest of
+> > > the 32-bit addressable memory.
+> > > 
+> > > I am wondering if we can also change the size of DMA and DMA32 ZONE as
+> > > dynamically adjusted, just as arm64 is doing? On x86_64, we can make
+> > > zone DMA covers the 32-bit addressable memory, and empty zone DMA32 by
+> > > default. Once ISA_DMA_API is enabled, we go back to make zone DMA covers
+> > > low 16M area, zone DMA32 covers the rest of 32-bit addressable memory.
+> > > (I am not familiar with ISA_DMA_API, will it require 24-bit addressable
+> > > memory when enabled?)
+> > > 
+> > > Change history:
+> > > 
+> > > v2 post:
+> > > https://urldefense.com/v3/__https://lore.kernel.org/all/20210810094835.13402-1-bhe@redhat.com/T/*u__;Iw!!ACWV5N9M2RV99hQ!beOGaLK9suYILSZ8uvbAt4Xd7raHP_p6tcVTvcnZMWCq_eL1VQxSMIJdw-z6EjaERCi0$
+> > > 
+> > > v1 post:
+> > > https://urldefense.com/v3/__https://lore.kernel.org/all/20210624052010.5676-1-bhe@redhat.com/T/*u__;Iw!!ACWV5N9M2RV99hQ!beOGaLK9suYILSZ8uvbAt4Xd7raHP_p6tcVTvcnZMWCq_eL1VQxSMIJdw-z6EgRgBiPP$
+> > > 
+> > > v2->v2 RESEND:
+> > >   John pinged to push the repost of this patchset. So fix one typo of
+> > >   suject of patch 3/5; Fix a building error caused by mix declaration in
+> > >   patch 5/5. Both of them are found by John from his testing.
+> > > 
+> > > v1->v2:
+> > >   Change to check if managed DMA zone exists. If DMA zone has managed
+> > >   pages, go further to request page from DMA zone to initialize. Otherwise,
+> > >   just skip to initialize stuffs which need pages from DMA zone.
+> > > 
+> > > Baoquan He (5):
+> > >    docs: kernel-parameters: Update to reflect the current default size of
+> > >      atomic pool
+> > >    dma-pool: allow user to disable atomic pool
+> > >    mm_zone: add function to check if managed dma zone exists
+> > >    dma/pool: create dma atomic pool only if dma zone has managed pages
+> > >    mm/slub: do not create dma-kmalloc if no managed pages in DMA zone
+> > > 
+> > >   .../admin-guide/kernel-parameters.txt         |  5 ++++-
+> > >   include/linux/mmzone.h                        | 21 +++++++++++++++++++
+> > >   kernel/dma/pool.c                             | 11 ++++++----
+> > >   mm/page_alloc.c                               | 11 ++++++++++
+> > >   mm/slab_common.c                              |  9 ++++++++
+> > >   5 files changed, 52 insertions(+), 5 deletions(-)
+> > > 
+> > > -- 
+> > > 2.17.2
+> > > 
+> > 
 > 
-> Since the driver registers with the SPI subsystem using devm and
-> remove() gets run before devm gets unwound we still potentially have
-> transfers running when the driver gets removed and this probably isn't
-> going to cause them to go well - obviously it's an edge case and it's
-> unclear when someone would be removing the driver but we still shouldn't
-> do this.
 
-With the other devm changes Sven suggested we don't need a remove 
-function at all, so I've just gotten rid of it wholesale.
-
->> +static const struct of_device_id apple_spi_of_match[] = {
->> +	{ .compatible = "apple,spi", },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(of, apple_spi_of_match);
-> 
-> This is an awfully generic compatible.  It's common to use the SoC name
-> for the IP compatibles when they're not otherwise identified?
-
-Apple like to keep blocks compatible across SoC generations - I think 
-this one dates, at least to some extent, to the original iPhone or 
-thereabouts. We do use per-SoC compatibles in the DTs in case we need to 
-throw in per-SoC quirks in the future ("apple,t8103-spi", "apple,spi"), 
-but for drivers like this we prefer to use generic compatibles as long 
-as backwards compatibility doesn't break. If Apple do something totally 
-incompatible (like they did with AIC2 in the latest chips), we'll bump 
-to something like apple,spi2. This happens quite rarely, so it makes 
-sense to just keep things generic except for these instances. That way 
-old kernels will happily bind to the block in newer SoCs if it is 
-compatible.
-
-If we had a detailed lineage of what SoCs used what blocks and when 
-things changed we could try something else, like using the first SoC 
-where the specific block version was introduced, but we don't... so I 
-think it makes sense to just go with generic ones where we don't think 
-things have changed much since the dark ages. FWIW, Apple calls this one 
-spi-1,spimc and claims "spi-version = 1" and the driver has Samsung in 
-the name... so the history of this block definitely goes back quite a 
-ways :-)
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub

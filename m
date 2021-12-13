@@ -2,180 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 545A4472D17
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC15472D34
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237303AbhLMNVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:21:37 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:13634 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231720AbhLMNVh (ORCPT
+        id S237491AbhLMNZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237461AbhLMNZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:21:37 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BD9ktCg011714;
-        Mon, 13 Dec 2021 13:21:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=qSjg8Sj6HRBcb7X2UlWC66OaC1iK9uMKdsjk8ZqUWFw=;
- b=NNOu3y+UVoJfdRl0t8AhmgXxQpLw2A3DZbDQoU3v1pxMI2r/aJe7gu0HSewo3ybzVsOx
- xy1ZBD0K9eCJT/EX1NQxH9IYj23be8Y0lwzY5n3sYzE0V35pEMwrDBONt6cae5CPML31
- 8Se8U/b8q2m5MfkQQNt0MUpgOi84y+sdvkmotUKe56IY9Sl1s/WkjFxbh8x1yrY6tWiW
- +Hzqk4r9V5AhRR5Nlnif97Xvhvdjs/78FEf1Gw+18PzJr2hKXvLx/BCK9vtdCj+a7dto
- ZPgFFx6Eo+FXlaAnTPMY2noClcx3n6PAqj9LtDGpvzxvoHIxysZLfS6L9otjNO2BRKIW dA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cx3uk8esp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Dec 2021 13:21:18 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BDDFmdj160433;
-        Mon, 13 Dec 2021 13:21:17 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
-        by aserp3030.oracle.com with ESMTP id 3cvj1c931s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Dec 2021 13:21:17 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FouL84EiekqNqC+bcjoKQ5ub4JHgoOQbtaorKpVnMDEPru6Pan0Y3eGnoilT/x/28M0XE11tbneXgwVy1dPB40ZgnjSBxaSUebqaCesC3C5WBa9uVTOKRi8vv2CGX69TLyk7ftiskSF+9PSPvGPVWQO1p07mAiWW2LMJYusOZll78CKny4RO0BXa6+lZJOKmXkw+n0VRkXHqHuroMujkUofb5ljfNHwOyGn14NVKdv6+6gwXmmTbw7iGpdUC21d0WueUiSqnB06nisTR+YRwr3RmHV7o+tY/lhYUVsTgFFukfuqwiS7UpRpC67dqnTsEye0aqpn49US6viUJ4fnSpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qSjg8Sj6HRBcb7X2UlWC66OaC1iK9uMKdsjk8ZqUWFw=;
- b=Uhtf5DI5UcF1e2R3P1VgHj/J3K5koOEyNYJbfDPb+JKO0RcS5Y0hX3VMec2ItxtcvDk8kNEeyNzaNuVSbAoV7SDizxxCkBEgt1vDUX9xmzlx3hBoChm27/Ocok8Fq4oJGEOfzQr23Kqu8Z/ekM2k7+NtveCRuZ8MNlO2BRpOle7AlDb1Lf+duYYKSWW8FCYR26IZOZ2xMlKZWi8TKcSt/WjuY8KdZ6rQUNmfrEcPZnoTSqcUSCAKybp7MQ6g9FSY3I+Z/im4hlItHDgRYpTz1lRcY8vIkKMN+cSDO2KHfGKXH6E7VhOYYxBqSuUFqVe1wpd7w8wn9IoHNhM3XHje9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 13 Dec 2021 08:25:48 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0392AC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:25:48 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id c4so26998519wrd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:25:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qSjg8Sj6HRBcb7X2UlWC66OaC1iK9uMKdsjk8ZqUWFw=;
- b=VjhNFvrfQ1YXcZptq0XoOTQmBwXlOBKBUNolV2rnBn5oszz1PYVNbk/I0KoKbs9Dfipr8f8c/K6dPCKTtvssp+sPTAIjPulXPv2YH2oOMA2Wghl7B9ySLm9ol+p5ivgbDjhpNxJ5uhNdpFxiPhGKosfa9QXOYp4FEk2gASUB7TM=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CO6PR10MB5789.namprd10.prod.outlook.com
- (2603:10b6:303:140::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11; Mon, 13 Dec
- 2021 13:21:15 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4755.026; Mon, 13 Dec 2021
- 13:21:15 +0000
-Date:   Mon, 13 Dec 2021 16:20:53 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     lianzhi chang <changlianzhi@uniontech.com>
-Cc:     linux-kernel@vger.kernel.org, dmitry.torokhov@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        andriy.shevchenko@linux.intel.com, 282827961@qq.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v20] tty: Fix the keyboard led light display problem
-Message-ID: <20211213132053.GW1978@kadam>
-References: <20211213061244.13732-1-changlianzhi@uniontech.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213061244.13732-1-changlianzhi@uniontech.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0032.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::9)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=RGPKFGhr5F/E/uf8UwQ+T3hkhLoaT6Ka+qKxD0TAy+M=;
+        b=JRkDFvB8MdbonLD5orH08ZpszbX+Hsq3f2nwGXw96fpGnPaqFoDrqvRETDKF5sU6KK
+         xv3lQs9hvrmLFrUwoek0ZdOCHIuojptCQ1yWZHykSwAgLE/SK6SBW8pbq4FqAu6g9nWv
+         924DpmYSw9ztdMDswaJf/WeLEqNSOOnxXB79SMBeaPNt8+ZkHgAD3h7s6ihu2/KyXDHx
+         vg3QHBv5UPPh3eocemTtBBTTBzaqVjFJQV3N5wg3P+YsDm+0LqQNe1yuhHyH/jGmUPsq
+         Z9s8l5gopJr2ohzjBHONWx2A7IsPSOM+b/Ws8sScQj3jhDNEsgf+fPLbKBmk1rPPAI0D
+         0Evw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=RGPKFGhr5F/E/uf8UwQ+T3hkhLoaT6Ka+qKxD0TAy+M=;
+        b=HtlQourgPS4rhJJkiO9RBBP8LcJoU8KTUXxiNH+UCa0F9a+x6Nz5WtEyDineeVY58i
+         FnN/3yXiHZTJ9B0kj4e6asUaJlrrNF3psB6NGXNZQA0qLzioR3jZGpxLJUhyFiki26e/
+         CP3DyJ/pfpRuk489r7kWD5VlhbJAIUbCYsS3txqzbZAWrfZaZpuXRNP85c76vHpFNHKj
+         seqi1IaYk1eh5k0gg1HClPhQCfrOjnVo6TrdJrTfJNDELilNNr7VHmoIMdi/pQwrXTC4
+         p02OBStcRHCDZArMuhGlQtVStC4zJtISSAC6oYtCYrC4MhvRZzka3zlhk3C4WpQKK9/4
+         qCFg==
+X-Gm-Message-State: AOAM533CNfvwFs/GNrqlza6Vl1xh63SRXhxjfw9hqdcuTdrwWB0b1rEE
+        KYnxNvSMvgMT//7qWoS6E6cT8w==
+X-Google-Smtp-Source: ABdhPJxzzui67Mz+e62UPdxoEnqUeAe7pmkET3SPW+dmE86hGQS6DQJSsCelC6Y5tYdI7kls55z4kg==
+X-Received: by 2002:adf:eb0f:: with SMTP id s15mr15577018wrn.690.1639401946598;
+        Mon, 13 Dec 2021 05:25:46 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id g198sm8086757wme.23.2021.12.13.05.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 05:25:46 -0800 (PST)
+References: <20211213070330.3351505-1-rong.chen@amlogic.com>
+ <2021121319503910358221@amlogic.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     "rong.chen@amlogic.com" <rong.chen@amlogic.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        --to=1131046452 <--to=1131046452@qq.com>,
+        45581586 <45581586@qq.com>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mmc: meson: initial ocr available by default value
+Date:   Mon, 13 Dec 2021 14:22:25 +0100
+In-reply-to: <2021121319503910358221@amlogic.com>
+Message-ID: <1j7dc83acm.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Received: from kadam (102.222.70.114) by JNAP275CA0032.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::9) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Mon, 13 Dec 2021 13:21:08 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 117b1e92-666a-40a7-7471-08d9be3b706b
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5789:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR10MB5789286D15B3BFBF291F7B0A8E749@CO6PR10MB5789.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FIRxxhgFo8RttJPicupHOlGQwnADfPGKmYkRq4esauhYgw4EIUMn1+YKiI4DMXQaqWnRR6I9kQxpoObEspYawpzzylnl5SI9UPn5GmOmRo6LwBexgMvY0NY5TdEBTwPeTUIdfgPpIXxQ0K6QqHoXFhJyAvylQv48u7TeWPiYalLef84uH/wCBo51AW58HM+jGi8v/yewPmBgQWPRnbhIJuS5JVgerBBXN/Sw3nrKzbPaCsAaNimy42Kcvhrl8w49ddfW2XJttERRGQiNRcBgCx5VHwqxEHjXNS2wS9Zn/Cy6s1muVb/+gkVj1HKhAdSqt4rpjE1xJLu+HIKiB8NTDhv1x51DcA01p0NBmkF24jfhwwN8bibIQownAVLO5fNTQ78OjBvFBLvrnG1BPQiBWBbvXEY8BVuKMZHR5H/0FfzMu3XF2L2htAcvEHG5tt2CJc4rgnmZdD/40M7/cmbrBBGWTa/17dbpzyuG+wWy9m/K0EEQrclrb7PEAyt7gNp8iKAEzpMg2CNrj/1EM4GXkJ5y5WZzMnejLk42v4McP0zbWCZUCHjJMLhmPJ4D/UvqqCiMX6BOCFVp3+96UWKuGNkn6WOMo8XrlK+aRGo3e+/2R9uqRs8j8B32/wvhUx5u4GDSpf/zDxW7R4fCSkQ0XTgFXSeav5C03AZ62uqyr+XfOj5jxdl6SkoQPAV/e407frFDiw+BNR4lXklVlDY90g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8936002)(44832011)(5660300002)(8676002)(1076003)(38350700002)(38100700002)(9576002)(186003)(86362001)(26005)(66476007)(66556008)(316002)(55016003)(83380400001)(66946007)(4326008)(6916009)(52116002)(6666004)(6496006)(2906002)(9686003)(33656002)(508600001)(956004)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TS7hf2BnymdNTGtkakrCip/mDT/gAlY0xDpRrOWLLQ07IsdThmVRG9+vMx7q?=
- =?us-ascii?Q?G8RqE33A5sjVqokpUf54374872uANPsClxAqtJAx8zAPN+kCWrmdj6wm3ZDy?=
- =?us-ascii?Q?wwNynkGfdCMKUKR5bolFgOQ5I2Ysm1lxF6V+2u3qa46HYSNfRTGUNR7IpiBe?=
- =?us-ascii?Q?n0UHWDbwDXrFb+UpVAe8i3L+Kw+KfB+GkJVAJ73UnPQ209aSZKkmV6DUjn6y?=
- =?us-ascii?Q?zA0if95rel+3wAm2wl4kkeaecbZ7zt2cy5UBv63gGsY5fT4+wVUJO/0WTJsb?=
- =?us-ascii?Q?52Zly/ZhqdqiRdaNy5uE31qmamXk815W2XZXTp0byP9sqY585dFjDRe/cqIt?=
- =?us-ascii?Q?+CUbR0Rf5ye+sAXWdWiHSIAphI0tv713iaEofvp/06qBpStdm97eUrVn+DNn?=
- =?us-ascii?Q?QaajfJBfZINmt0U2vK1wldZ7UGQSasXyP9gwpHoAmfveO249kMKZ5TV49jb4?=
- =?us-ascii?Q?Dj2t9xtNo/2fIqcqfDpO7aZDiLP7F6iInbNOG/WMlj7bW2l5GcSMTHh1Omy9?=
- =?us-ascii?Q?+KXCeCD/hYnB8si1jOUWWGj1xKqoLI0nJYfeu82+vefmkDxWojkpRFtT2sNE?=
- =?us-ascii?Q?FvJV2iNOafhyEqHKUuXAobO6oqTl5Kbh2x34QRWWHj4l8TL/S+xkz6tuy9cd?=
- =?us-ascii?Q?g6tQRBXNGXDo+7RpkAkYetSYoLHaUDVTKiBEPzdoHIc2NZbZyj2nUh1qI6NS?=
- =?us-ascii?Q?JvvvjgvQt6v1Tvw971PJG8KGFYZvllldeYuq06lVXrZy0t4YB2KV2XXHNgOL?=
- =?us-ascii?Q?RzamnHhpVGFzI2ofWYOFdqvon5c/UcYZCkmNQAEPniepxvBvxa9L3nPH617C?=
- =?us-ascii?Q?nqGlNTh5vCB2SGJ2dEjq7Ts08Iqult3q2PW9AtuxTCjE26+1nkLC4k9EM4VI?=
- =?us-ascii?Q?f83FYred4WDIjeKH2oB5hA3zQv5voj35XRDW9pNT6k5+MJ4Rb1EALo0AD875?=
- =?us-ascii?Q?bHJBi9dnUZWgYcj7HycaNv6YfeAg6x9d26fw1/hWf8V01LdpajOKR8H9ToEx?=
- =?us-ascii?Q?lx+vMwPzhJz4woyJ0InSfcgHN1x3x3mpRoc5ZU/qI8ztAfnD54NeKaobFTGQ?=
- =?us-ascii?Q?oHKT0ZvlT/D+6NAB7nk+tlZBgqo7ohVJA2UduPJUR2tjckViLwzfVhZKFwe1?=
- =?us-ascii?Q?87Rrv31kicoU+SqhTyy5ETlwrts5HPDSvqXdlgT4lMcaBvjiC5Y0UbTlzxKr?=
- =?us-ascii?Q?LQIau/Z2ZEdIa+r7r/I8hJeGa9Xx3G65KqF+mlo2nJ5F6rIaJSY7hZdRAoSJ?=
- =?us-ascii?Q?03YYK5jJ6dKH7G1i0DZnnlrHgMcSFsd/DLRmX6g3lAOADuSpV1VwS+l/uuDW?=
- =?us-ascii?Q?KQXtKXhz9ea4dYOuzmXLEmoYa23rvbi/uNe6qSB345hEZNOuwMHRtGm78piK?=
- =?us-ascii?Q?pHDGbvDJtdnsBhvnGEAkLlBodp3RsFL+QgBASUhsji6AXBNycgqY4QHLZmrq?=
- =?us-ascii?Q?HWNTIq7zzJ9V7JQaXkt88vyLRzN9/2pn9VS83Qn/Kk8YHib32Pg6NY0lG41K?=
- =?us-ascii?Q?Oudr7IIF8X5W3TxCH1QuR39qzR3pn/pqvQvsLz7wVKcURvf33qrpLmVVpVr4?=
- =?us-ascii?Q?Hjt++PBYQycMHfe8JwclNoGhnvd5V215C0u+i6uXVnnjlq4vWMlQQy6d6zg0?=
- =?us-ascii?Q?bxNqkya3bRFeLEVunONhWJUerLK3d9Edpnw/ad1idN0OSY92vxPVf4+WYCCg?=
- =?us-ascii?Q?JR5Isw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 117b1e92-666a-40a7-7471-08d9be3b706b
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 13:21:15.0322
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rtEDX6gm2vrXYQjCIiu7Ti3toRPufoApf9n3bIsfWGmVywoiWvZ43GKbHUJC72EW/SzHtUvSEzkkFNU82/dgUmZr55RIKzJzhaI4Wba+1kQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR10MB5789
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10196 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
- suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112130085
-X-Proofpoint-GUID: oMyStP4iBhivnM0qAUaA_4fEJdXqieWD
-X-Proofpoint-ORIG-GUID: oMyStP4iBhivnM0qAUaA_4fEJdXqieWD
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"the keyboard led light display problem" is pretty vague.  Perhaps say
-"Fix incorrect "Num Lock" LED indicator"
 
-On Mon, Dec 13, 2021 at 02:12:44PM +0800, lianzhi chang wrote:
-> Use the "ctrl+alt+Fn" key combination to switch the system from tty to
-> desktop or switch the system from desktop to tty. After the switch is
-> completed, it is found that the state of the keyboard lock is
+On Mon 13 Dec 2021 at 19:50, "rong.chen@amlogic.com" <rong.chen@amlogic.com> wrote:
 
-Is this one of those fancy gaming keyboards with LEDs under the keys or
-are we talking about Num Lock?
+> Hello,
+> If 3.3V always-on power source for vmmc is supplied by hardware boards fixed, don't need regulator in software, so  .dts unnecessary the link between regulator
+> and MMC controller vmmc/vqmmc. 
+
+Controllable or not, your vmmc/vqmmc regulators should be described in
+DT.
+
+There are several examples of this in arch/arm64/boot/dts/amlogic/*.dts
 
 
-> +int vt_do_kdgkbledctl(unsigned int console)
-> +{
-> +	struct kbd_struct *kb = &kbd_table[console];
-> +	/* This is a spot read so needs no locking */
-> +	switch (kb->kbdledctl) {
-> +	case VC_LEDCTL_ON:
-> +		return K_LEDCTL_ON;
-> +	case VC_LEDCTL_OFF:
-> +		return K_LEDCTL_OFF;
-> +		}
-
-Extra tab.
-
-> +}
-> +
-
-> +#define VC_LEDCTL_ON  0	/* VT can set the keyboard light */
-> +#define VC_LEDCTL_OFF 1	/* Prohibit VT to set the keyboard light */
-
-> +#define K_LEDCTL_ON 0x00
-> +#define K_LEDCTL_OFF 0x01
-
-It's weird that ON is zero and OFF one.  Really, it's unfortunate that
-we need a new ioctl to fix this bug...
-
-regards,
-dan carpenter
+>
+> ------------------------------------------------------------------------------------------------------------------------------------------------------
+> rong.chen@amlogic.com
+>
+>   
+>  From: Martin Blumenstingl
+>  Date: 2021-12-13 16:00
+>  To: Rong Chen
+>  CC: Ulf Hansson; Neil Armstrong; Kevin Hilman; Jerome Brunet; --to=1131046452; 45581586; linux-mmc; linux-arm-kernel; linux-amlogic; linux-kernel
+>  Subject: Re: [PATCH] mmc: meson: initial ocr available by default value
+>  [ EXTERNAL EMAIL ]
+>   
+>  Hello,
+>   
+>  On Mon, Dec 13, 2021 at 8:03 AM Rong Chen <rong.chen@amlogic.com> wrote:
+>  >
+>  > The patch will add a value of ocr supported by the controller,
+>  > to specify some of voltage values are supported.
+>  Can you please share some details on this topic?
+>   
+>  We already have many boards upstreamed which work fine without
+>  manually setting ocr_avail in the driver.
+>  In general there's two types of boards:
+>  1) boards where the regulator can switch between different voltages.
+>  One example is the Odroid-C2, see meson-gxbb-odroidc2.dts [0]
+>  Here we specify:
+>    vmmc-supply = <&tflash_vdd>;
+>    vqmmc-supply = <&tf_io>;
+>  &tflash_vdd is either turned off or at 3.3V when turned on.
+>  &tf_io can be either turned off, 1.8V or 3.3V.
+>   
+>  2) boards where the voltages are fixed.
+>  One example is Radxa Zero, see meson-g12a-radxa-zero.dts [1]
+>  For the SD card the board uses:
+>    vmmc-supply = <&vddao_3v3>;
+>    vqmmc-supply = <&vddao_3v3>;
+>  (meaning fixed 3.3V always-on power source for both VMMC and VQMMC)
+>  and for eMMC the board uses:
+>    vmmc-supply = <&vcc_3v3>;
+>    vqmmc-supply = <&vcc_1v8>;
+>  (meaning: 3.3V always-on power source for vmmc and 1.8V always-on
+>  power source for VQMMC)
+>   
+>  With the information from the regulators the MMC core will
+>  automatically detect ocr_avail in Linux.
+>  Or in other words: your .dts may be missing the link between regulator
+>  and MMC controller vmmc/vqmmc.
+>  Can you please double-check this?
+>   
+>   
+>  Best regards,
+>  Martin
+>   
+>   
+>  [0]
+>  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts?id=2585cf9dfaaddf00b069673f27bb3f8530e2039c#n354
+>  
+>  [1]
+>  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts?id=2585cf9dfaaddf00b069673f27bb3f8530e2039c#n333
 

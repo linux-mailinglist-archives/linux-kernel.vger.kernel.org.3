@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D61D0471F89
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A14471F8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbhLMDRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 22:17:32 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39416 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbhLMDRb (ORCPT
+        id S231450AbhLMDX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 22:23:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33220 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229510AbhLMDX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 22:17:31 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DAFC32114E;
-        Mon, 13 Dec 2021 03:17:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639365449; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Sun, 12 Dec 2021 22:23:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639365807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=2ouwu3rIILZdyNvJCYuDu81WB3rt0CZUyp9hytfG6M4=;
-        b=oFgdzjNketS5iKV6eS2mbjV5pQtJm+3g3a3WIjkFCcOhcbI0DYNKILX429SYKMy4MqY6oQ
-        iSOsNwRyx+mutVpkqbmhK0c8djykMJbiAsDTWFqc5ctUKXgY4u/YubHRBSMM7Beu2Ucy4Z
-        fwH2B9c5ID+ZgFAg0CllQKZq92o6/G4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639365449;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ouwu3rIILZdyNvJCYuDu81WB3rt0CZUyp9hytfG6M4=;
-        b=nm9KnkJTyUnbQj6v6Z7o56gmW+42O6Bz50+yQKiSTxqduOfma7q3oS1TQ88fxdvSoTs2aa
-        g8NLf11IfuosYGAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=2skDNVKo25BiMyqDlfguThb2xQemx2Ye13yt8UEzpJ0=;
+        b=TkXnBUymCSYi/dP/O//OBEfIZPo3uhAzVyKxut7TWv1LrR3mpqnDsAmrrUhrRsZqtzy+89
+        qmoEnWFu6GJ4exHMAoAuw2uxVtiIGGt1bEcUVZ+xhEtU4zMnvaYVekdc4COfOitEibSE1M
+        v4vpYIpMnO2SsI+cWCsfNFXTed2vNZI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-551-z2hyQz-JPIuS77Xbp7IOZw-1; Sun, 12 Dec 2021 22:23:22 -0500
+X-MC-Unique: z2hyQz-JPIuS77Xbp7IOZw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 44BFD13425;
-        Mon, 13 Dec 2021 03:17:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id N8PJAEi7tmGQMgAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 13 Dec 2021 03:17:28 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 94621801B35;
+        Mon, 13 Dec 2021 03:23:20 +0000 (UTC)
+Received: from T590 (ovpn-8-29.pek2.redhat.com [10.72.8.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 634D54ABA9;
+        Mon, 13 Dec 2021 03:23:12 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 11:23:08 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, 'Christoph Hellwig' <hch@lst.de>,
+        "'linux-block@vger.kernel.org'" <linux-block@vger.kernel.org>,
+        Long Li <longli@microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>
+Subject: Re: Random high CPU utilization in blk-mq with the none scheduler
+Message-ID: <Yba8nL4x9R6rmTYL@T590>
+References: <BYAPR21MB1270C598ED214C0490F47400BF719@BYAPR21MB1270.namprd21.prod.outlook.com>
+ <BYAPR21MB1270DCE17A0FE017AF3272F1BF729@BYAPR21MB1270.namprd21.prod.outlook.com>
+ <b80bfe9a-bece-1f32-3d2a-fb4d94b1fa8c@kernel.dk>
+ <BYAPR21MB1270B5DAD526C42C070ECB9EBF729@BYAPR21MB1270.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "OGAWA Hirofumi" <hirofumi@mail.parknet.co.jp>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        "Christoph Hellwig" <hch@infradead.org>
-Subject: [PATCH v3] FAT: use io_schedule_timeout() instead of congestion_wait()
-In-reply-to: <875yrtql2s.fsf@mail.parknet.co.jp>
-References: <163712349419.13692.2859038330142282757@noble.neil.brown.name>,
- <87ee79yiik.fsf@mail.parknet.co.jp>,
- <163754226639.13692.10449616189734943162@noble.neil.brown.name>,
- <874k84hi5q.fsf@mail.parknet.co.jp>,
- <163911011670.9928.6438117555175130033@noble.neil.brown.name>,
- <163911016975.9928.6568675782275129@noble.neil.brown.name>,
- <87h7bfmtqc.fsf@mail.parknet.co.jp>,
- <163936252397.22433.9103044991910658320@noble.neil.brown.name>,
- <875yrtql2s.fsf@mail.parknet.co.jp>
-Date:   Mon, 13 Dec 2021 14:17:25 +1100
-Message-id: <163936544519.22433.13400436295732112065@noble.neil.brown.name>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB1270B5DAD526C42C070ECB9EBF729@BYAPR21MB1270.namprd21.prod.outlook.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dexuan,
 
-congestion_wait() in this context is just a sleep - block devices do not
-support congestion signalling any more.
+On Sat, Dec 11, 2021 at 03:10:43AM +0000, Dexuan Cui wrote:
+> > From: Jens Axboe <axboe@kernel.dk>
+> > Sent: Friday, December 10, 2021 6:05 PM
+> > ...
+> > It's more likely the real fix is avoiding the repeated plug list scan,
+> > which I guess makes sense. That is this commit:
+> > 
+> > commit d38a9c04c0d5637a828269dccb9703d42d40d42b
+> > Author: Jens Axboe <axboe@kernel.dk>
+> > Date:   Thu Oct 14 07:24:07 2021 -0600
+> > 
+> >     block: only check previous entry for plug merge attempt
+> > 
+> > If that's the case, try 5.15.x again and do:
+> > 
+> > echo 2 > /sys/block/<dev>/queue/nomerges
+> > 
+> > for each drive you are using in the IO test, and see if that gets
+> > rid of the excess CPU usage.
+> > 
+> > --
+> > Jens Axboe
+> 
+> Thanks for the reply! Unluckily this does not work.
+> 
+> I tried the below command:
+> 
+> for i in `ls /sys/block/*/queue/nomerges`; do echo 2 > $i; done
+> 
+> and verified that the "nomerges" are changed to "2", but the
+> excess CPU usage can still reproduce easily.
 
-The goal for this wait, which was introduced in Commit ae78bf9c4f5f
-("[PATCH] add -o flush for fat") is to wait for any recently written
-data to get to storage.  We currently have no direct mechanism to do
-this, so a simple wait that behaves identically to the current
-congestion_wait() is the best we can do.
+Can you provide the following blk-mq debugfs log?
 
-This is a step towards removing congestion_wait()
+(cd /sys/kernel/debug/block/dm-N && find . -type f -exec grep -aH . {} \;)
 
-Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Signed-off-by: NeilBrown <neilb@suse.de>
----
+(cd /sys/kernel/debug/block/sdN && find . -type f -exec grep -aH . {} \;)
 
-Hi Andrew,
- I believe you are an appropriate conduit for fs/fat patches once that
- have been suitably acked.
-Thanks
-NeilBrown
+And it is enough to just collect log from one dm-mpath & one underlying iscsi disk,
+so we can understand basic blk-mq setting, such as nr_hw_queues, queue depths, ...
 
- fs/fat/file.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/fat/file.c b/fs/fat/file.c
-index 13855ba49cd9..a5a309fcc7fa 100644
---- a/fs/fat/file.c
-+++ b/fs/fat/file.c
-@@ -175,9 +175,10 @@ long fat_generic_ioctl(struct file *filp, unsigned int c=
-md, unsigned long arg)
- static int fat_file_release(struct inode *inode, struct file *filp)
- {
- 	if ((filp->f_mode & FMODE_WRITE) &&
--	     MSDOS_SB(inode->i_sb)->options.flush) {
-+	    MSDOS_SB(inode->i_sb)->options.flush) {
- 		fat_flush_inodes(inode->i_sb, inode, NULL);
--		congestion_wait(BLK_RW_ASYNC, HZ/10);
-+		set_current_state(TASK_UNINTERRUPTIBLE);
-+		io_schedule_timeout(HZ/10);
- 	}
- 	return 0;
- }
---=20
-2.34.1
+
+Thanks,
+Ming
 

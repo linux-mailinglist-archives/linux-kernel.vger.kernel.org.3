@@ -2,265 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CBA4725A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D97C4723D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbhLMJo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbhLMJka (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:40:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAABC07E5F7;
-        Mon, 13 Dec 2021 01:38:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F4E8B80E1D;
-        Mon, 13 Dec 2021 09:38:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F18C341C5;
-        Mon, 13 Dec 2021 09:38:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388335;
-        bh=evDyZY0PEbn0zu2pJ6eXH17/EwKIPcm2iyDgQmHT1M4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yECPkkNx1jwy0rE7Y/COGM8he7pF301/mGQeS9QBhhpWJT5UYTZNF+p2zfk2RIK5D
-         Vao1x0dmo8oWEtDapPyVqHTFkJxL9Y3nAQXGL5riahAuA5/P7MNn4T9o0S1t+6z5Pw
-         sSiGkRT/wM3fEC4XT0ck345X/7Nda/oqD0VHzSNc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, lee.jones@linaro.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vlad Buslov <vladbu@mellanox.com>,
-        Jiri Pirko <jiri@mellanox.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com
-Subject: [PATCH 4.19 14/74] net: sched: use Qdisc rcu API instead of relying on rtnl lock
-Date:   Mon, 13 Dec 2021 10:29:45 +0100
-Message-Id: <20211213092931.262028851@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S233739AbhLMJao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:30:44 -0500
+Received: from mga06.intel.com ([134.134.136.31]:56330 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232176AbhLMJan (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 04:30:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639387843; x=1670923843;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yVt/ODBycBkvtn7j8Y/tG9kdt7wCm1gLpwdSpxbvChc=;
+  b=TakyiGA01f1Y7WJ973pnwSe+2Nad5/4U+mt84o68csChyVagHj6tJYA/
+   uJtj1E7HljSWPZq0Q23KJVMK7IX6LM6cUXhiVawPs8qhhIR1IHxGTfqWi
+   e7nr1jfmrumNLh+VbjntSNrs8cFHtsPtQvVIEw2OkBVx7l/IauSXywHqV
+   sT2iz3MRx3H4A29X4XraDeCQYaeFoucJVF7ZlPZxe4qynJ4W+NK1Fougz
+   Y6Z1Cdn9yJIzKlQAdd+rXJQo+ihHwjGGij3tAEyDL6njXQEcnBVW58FAu
+   7xzUARy5zIYhZ//58PFmcouzcOtfbOfnldRCEtiRp6QnztALrpcu6pU2C
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="299480171"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="299480171"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 01:30:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="681575445"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 13 Dec 2021 01:30:42 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwhfN-0006WE-K4; Mon, 13 Dec 2021 09:30:41 +0000
+Date:   Mon, 13 Dec 2021 17:29:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
+Message-ID: <202112131709.Ma8woYHb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vlad Buslov <vladbu@mellanox.com>
+Hi Herbert,
 
-[ Upstream commit e368fdb61d8e7c67ac70791b23345b26d7bbc661 ]
+FYI, the error/warning still remains.
 
-As a preparation from removing rtnl lock dependency from rules update path,
-use Qdisc rcu and reference counting capabilities instead of relying on
-rtnl lock while working with Qdiscs. Create new tcf_block_release()
-function, and use it to free resources taken by tcf_block_find().
-Currently, this function only releases Qdisc and it is extended in next
-patches in this series.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2585cf9dfaaddf00b069673f27bb3f8530e2039c
+commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
+date:   1 year ago
+config: s390-randconfig-r044-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131709.Ma8woYHb-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Signed-off-by: Vlad Buslov <vladbu@mellanox.com>
-Acked-by: Jiri Pirko <jiri@mellanox.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[Lee: Sent to Stable]
-Link: https://syzkaller.appspot.com/bug?id=d7e411c5472dd5da33d8cc921ccadc747743a568
-Reported-by: syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
+   irq-imx-intmux.c:(.text+0x4b0): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
+   phy-mvebu-a3700-utmi.c:(.text+0x108): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
+   clk-fixed-mmio.c:(.text+0x36): undefined reference to `of_iomap'
+   s390-linux-ld: clk-fixed-mmio.c:(.text+0x58): undefined reference to `iounmap'
+   s390-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
+   hidma.c:(.text+0x51c): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: hidma.c:(.text+0x556): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_xbar_event_map':
+   edma.c:(.text+0x634): undefined reference to `of_address_to_resource'
+   s390-linux-ld: edma.c:(.text+0x664): undefined reference to `devm_ioremap'
+   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_probe':
+   edma.c:(.text+0x454c): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/omap-dma.o: in function `omap_dma_probe':
+   omap-dma.c:(.text+0x32b8): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_am335x_xbar_probe':
+   dma-crossbar.c:(.text+0x408): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_dra7_xbar_probe':
+   dma-crossbar.c:(.text+0xb8c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
+   dpaa2-console.c:(.text+0x7e): undefined reference to `iounmap'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
+   dpaa2-console.c:(.text+0xda): undefined reference to `of_address_to_resource'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
+   dpaa2-console.c:(.text+0x202): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x238): undefined reference to `iounmap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x264): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x3ec): undefined reference to `iounmap'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_detach':
+   main.c:(.text+0x9a): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0xea): undefined reference to `iounmap'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `config_ipwireless':
+   main.c:(.text+0x314): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0x35e): undefined reference to `iounmap'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_probe.part.0':
+   main.c:(.text+0x69e): undefined reference to `ioremap'
+   s390-linux-ld: main.c:(.text+0x75e): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0x7bc): undefined reference to `ioremap'
+   s390-linux-ld: main.c:(.text+0x812): undefined reference to `iounmap'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x35a): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+   meson-rng.c:(.text+0xe6): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+   mtk-rng.c:(.text+0x28e): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
+   npcm-rng.c:(.text+0x2a0): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+>> xillybus_of.c:(.text+0x1ce): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/mfd/sun6i-prcm.o: in function `sun6i_prcm_probe':
+   sun6i-prcm.c:(.text+0x90): undefined reference to `mfd_add_devices'
+   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arc_rimi_exit':
+   arc-rimi.c:(.exit.text+0x34): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arcrimi_found':
+   arc-rimi.c:(.init.text+0x10c): undefined reference to `ioremap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x1a0): undefined reference to `iounmap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x346): undefined reference to `iounmap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x3de): undefined reference to `ioremap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x4ba): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `check_mirror':
+   arc-rimi.c:(.text.unlikely+0x58): undefined reference to `ioremap'
+   s390-linux-ld: arc-rimi.c:(.text.unlikely+0x88): undefined reference to `iounmap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+   cistpl.c:(.text+0x336): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x34e): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x3ce): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x3ea): undefined reference to `iounmap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+   cistpl.c:(.text+0x1318): undefined reference to `iounmap'
+   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
+   sirfsoc_wdt.c:(.text+0x16a): undefined reference to `devm_platform_ioremap_resource'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
+   Depends on HAS_IOMEM && (ARCH_SUNXI || COMPILE_TEST
+   Selected by
+   - CLK_SUNXI_PRCM_SUN6I && COMMON_CLK && CLK_SUNXI
+   - CLK_SUNXI_PRCM_SUN8I && COMMON_CLK && CLK_SUNXI
+
 ---
- net/sched/cls_api.c |   79 ++++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 64 insertions(+), 15 deletions(-)
-
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -539,6 +539,7 @@ static struct tcf_block *tcf_block_find(
- 					struct netlink_ext_ack *extack)
- {
- 	struct tcf_block *block;
-+	int err = 0;
- 
- 	if (ifindex == TCM_IFINDEX_MAGIC_BLOCK) {
- 		block = tcf_block_lookup(net, block_index);
-@@ -550,55 +551,93 @@ static struct tcf_block *tcf_block_find(
- 		const struct Qdisc_class_ops *cops;
- 		struct net_device *dev;
- 
-+		rcu_read_lock();
-+
- 		/* Find link */
--		dev = __dev_get_by_index(net, ifindex);
--		if (!dev)
-+		dev = dev_get_by_index_rcu(net, ifindex);
-+		if (!dev) {
-+			rcu_read_unlock();
- 			return ERR_PTR(-ENODEV);
-+		}
- 
- 		/* Find qdisc */
- 		if (!*parent) {
- 			*q = dev->qdisc;
- 			*parent = (*q)->handle;
- 		} else {
--			*q = qdisc_lookup(dev, TC_H_MAJ(*parent));
-+			*q = qdisc_lookup_rcu(dev, TC_H_MAJ(*parent));
- 			if (!*q) {
- 				NL_SET_ERR_MSG(extack, "Parent Qdisc doesn't exists");
--				return ERR_PTR(-EINVAL);
-+				err = -EINVAL;
-+				goto errout_rcu;
- 			}
- 		}
- 
-+		*q = qdisc_refcount_inc_nz(*q);
-+		if (!*q) {
-+			NL_SET_ERR_MSG(extack, "Parent Qdisc doesn't exists");
-+			err = -EINVAL;
-+			goto errout_rcu;
-+		}
-+
- 		/* Is it classful? */
- 		cops = (*q)->ops->cl_ops;
- 		if (!cops) {
- 			NL_SET_ERR_MSG(extack, "Qdisc not classful");
--			return ERR_PTR(-EINVAL);
-+			err = -EINVAL;
-+			goto errout_rcu;
- 		}
- 
- 		if (!cops->tcf_block) {
- 			NL_SET_ERR_MSG(extack, "Class doesn't support blocks");
--			return ERR_PTR(-EOPNOTSUPP);
-+			err = -EOPNOTSUPP;
-+			goto errout_rcu;
- 		}
- 
-+		/* At this point we know that qdisc is not noop_qdisc,
-+		 * which means that qdisc holds a reference to net_device
-+		 * and we hold a reference to qdisc, so it is safe to release
-+		 * rcu read lock.
-+		 */
-+		rcu_read_unlock();
-+
- 		/* Do we search for filter, attached to class? */
- 		if (TC_H_MIN(*parent)) {
- 			*cl = cops->find(*q, *parent);
- 			if (*cl == 0) {
- 				NL_SET_ERR_MSG(extack, "Specified class doesn't exist");
--				return ERR_PTR(-ENOENT);
-+				err = -ENOENT;
-+				goto errout_qdisc;
- 			}
- 		}
- 
- 		/* And the last stroke */
- 		block = cops->tcf_block(*q, *cl, extack);
--		if (!block)
--			return ERR_PTR(-EINVAL);
-+		if (!block) {
-+			err = -EINVAL;
-+			goto errout_qdisc;
-+		}
- 		if (tcf_block_shared(block)) {
- 			NL_SET_ERR_MSG(extack, "This filter block is shared. Please use the block index to manipulate the filters");
--			return ERR_PTR(-EOPNOTSUPP);
-+			err = -EOPNOTSUPP;
-+			goto errout_qdisc;
- 		}
- 	}
- 
- 	return block;
-+
-+errout_rcu:
-+	rcu_read_unlock();
-+errout_qdisc:
-+	if (*q)
-+		qdisc_put(*q);
-+	return ERR_PTR(err);
-+}
-+
-+static void tcf_block_release(struct Qdisc *q, struct tcf_block *block)
-+{
-+	if (q)
-+		qdisc_put(q);
- }
- 
- struct tcf_block_owner_item {
-@@ -1336,6 +1375,7 @@ replay:
- errout:
- 	if (chain)
- 		tcf_chain_put(chain);
-+	tcf_block_release(q, block);
- 	if (err == -EAGAIN)
- 		/* Replay the request. */
- 		goto replay;
-@@ -1457,6 +1497,7 @@ static int tc_del_tfilter(struct sk_buff
- errout:
- 	if (chain)
- 		tcf_chain_put(chain);
-+	tcf_block_release(q, block);
- 	return err;
- }
- 
-@@ -1542,6 +1583,7 @@ static int tc_get_tfilter(struct sk_buff
- errout:
- 	if (chain)
- 		tcf_chain_put(chain);
-+	tcf_block_release(q, block);
- 	return err;
- }
- 
-@@ -1858,7 +1900,8 @@ replay:
- 	chain_index = tca[TCA_CHAIN] ? nla_get_u32(tca[TCA_CHAIN]) : 0;
- 	if (chain_index > TC_ACT_EXT_VAL_MASK) {
- 		NL_SET_ERR_MSG(extack, "Specified chain index exceeds upper limit");
--		return -EINVAL;
-+		err = -EINVAL;
-+		goto errout_block;
- 	}
- 	chain = tcf_chain_lookup(block, chain_index);
- 	if (n->nlmsg_type == RTM_NEWCHAIN) {
-@@ -1870,23 +1913,27 @@ replay:
- 				tcf_chain_hold(chain);
- 			} else {
- 				NL_SET_ERR_MSG(extack, "Filter chain already exists");
--				return -EEXIST;
-+				err = -EEXIST;
-+				goto errout_block;
- 			}
- 		} else {
- 			if (!(n->nlmsg_flags & NLM_F_CREATE)) {
- 				NL_SET_ERR_MSG(extack, "Need both RTM_NEWCHAIN and NLM_F_CREATE to create a new chain");
--				return -ENOENT;
-+				err = -ENOENT;
-+				goto errout_block;
- 			}
- 			chain = tcf_chain_create(block, chain_index);
- 			if (!chain) {
- 				NL_SET_ERR_MSG(extack, "Failed to create filter chain");
--				return -ENOMEM;
-+				err = -ENOMEM;
-+				goto errout_block;
- 			}
- 		}
- 	} else {
- 		if (!chain || tcf_chain_held_by_acts_only(chain)) {
- 			NL_SET_ERR_MSG(extack, "Cannot find specified filter chain");
--			return -EINVAL;
-+			err = -EINVAL;
-+			goto errout_block;
- 		}
- 		tcf_chain_hold(chain);
- 	}
-@@ -1930,6 +1977,8 @@ replay:
- 
- errout:
- 	tcf_chain_put(chain);
-+errout_block:
-+	tcf_block_release(q, block);
- 	if (err == -EAGAIN)
- 		/* Replay the request. */
- 		goto replay;
-
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

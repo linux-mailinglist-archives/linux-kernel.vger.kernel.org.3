@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E83A472808
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D75584728C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242307AbhLMKHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:07:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47726 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239445AbhLMKBx (ORCPT
+        id S238954AbhLMKOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239065AbhLMKFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:01:53 -0500
+        Mon, 13 Dec 2021 05:05:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85ECC0A8888;
+        Mon, 13 Dec 2021 01:50:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01A1BB80EAF;
-        Mon, 13 Dec 2021 10:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F4EC34601;
-        Mon, 13 Dec 2021 10:01:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E2E9B80E1C;
+        Mon, 13 Dec 2021 09:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B83C341C5;
+        Mon, 13 Dec 2021 09:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389710;
-        bh=XY+5QjQkfAzoqtBLjsjFlqQGFCZdy4KKgQnncCaeXJA=;
+        s=korg; t=1639389053;
+        bh=tbqDddX6n0aiTDtdtor2oO2VapLmWUIKud5GacnsEXM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x3t5qemKsh/tYE2hh8YHGDa8uuFYqa/L9KTACLD41UyrKq94zkWWytMxZlAo1FirJ
-         Q7YnP2bzrYk2eCllAnmAQLwZtDanhX+OD+Y7ybWBWUXl5GgL9Ea3LqmgviYcbNEoNw
-         wZUsotwyJDQqBBcUCopq1/nfJpJGFxrnd3GEiIgo=
+        b=Zm+gNbBldtaagl+Or98UvP28l8ehIgisHYy/3ivkRM845MvChnrnBeu50H4zlS3FU
+         3dS1rUJG88qtFwaDyH+hHAzr5QEXpustDAZ7qGpBgysrvnNy67WcixtCsWu5bk2ypk
+         c+FtZfXZk8Cc+5R9rIt1yxuijWad5iDEtzb94wwU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 5.15 127/171] Documentation/locking/locktypes: Update migrate_disable() bits.
+        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
+Subject: [PATCH 5.10 101/132] USB: gadget: zero allocate endpoint 0 buffers
 Date:   Mon, 13 Dec 2021 10:30:42 +0100
-Message-Id: <20211213092949.320735852@linuxfoundation.org>
+Message-Id: <20211213092942.564132187@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,55 +47,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 6a631c0432dcccbcf45839016a07c015e335e9ae upstream.
+commit 86ebbc11bb3f60908a51f3e41a17e3f477c2eaa3 upstream.
 
-The initial implementation of migrate_disable() for mainline was a
-wrapper around preempt_disable(). RT kernels substituted this with
-a real migrate disable implementation.
+Under some conditions, USB gadget devices can show allocated buffer
+contents to a host.  Fix this up by zero-allocating them so that any
+extra data will all just be zeros.
 
-Later on mainline gained true migrate disable support, but the
-documentation was not updated.
-
-Update the documentation, remove the claims about migrate_disable()
-mapping to preempt_disable() on non-PREEMPT_RT kernels.
-
-Fixes: 74d862b682f51 ("sched: Make migrate_disable/enable() independent of RT")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211127163200.10466-2-bigeasy@linutronix.de
+Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/locking/locktypes.rst |    9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/usb/gadget/composite.c   |    2 +-
+ drivers/usb/gadget/legacy/dbgp.c |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/Documentation/locking/locktypes.rst
-+++ b/Documentation/locking/locktypes.rst
-@@ -439,11 +439,9 @@ preemption. The following substitution w
-   spin_lock(&p->lock);
-   p->count += this_cpu_read(var2);
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -2173,7 +2173,7 @@ int composite_dev_prepare(struct usb_com
+ 	if (!cdev->req)
+ 		return -ENOMEM;
  
--On a non-PREEMPT_RT kernel migrate_disable() maps to preempt_disable()
--which makes the above code fully equivalent. On a PREEMPT_RT kernel
- migrate_disable() ensures that the task is pinned on the current CPU which
- in turn guarantees that the per-CPU access to var1 and var2 are staying on
--the same CPU.
-+the same CPU while the task remains preemptible.
+-	cdev->req->buf = kmalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
++	cdev->req->buf = kzalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
+ 	if (!cdev->req->buf)
+ 		goto fail;
  
- The migrate_disable() substitution is not valid for the following
- scenario::
-@@ -456,9 +454,8 @@ scenario::
-     p = this_cpu_ptr(&var1);
-     p->val = func2();
+--- a/drivers/usb/gadget/legacy/dbgp.c
++++ b/drivers/usb/gadget/legacy/dbgp.c
+@@ -137,7 +137,7 @@ static int dbgp_enable_ep_req(struct usb
+ 		goto fail_1;
+ 	}
  
--While correct on a non-PREEMPT_RT kernel, this breaks on PREEMPT_RT because
--here migrate_disable() does not protect against reentrancy from a
--preempting task. A correct substitution for this case is::
-+This breaks because migrate_disable() does not protect against reentrancy from
-+a preempting task. A correct substitution for this case is::
- 
-   func()
-   {
+-	req->buf = kmalloc(DBGP_REQ_LEN, GFP_KERNEL);
++	req->buf = kzalloc(DBGP_REQ_LEN, GFP_KERNEL);
+ 	if (!req->buf) {
+ 		err = -ENOMEM;
+ 		stp = 2;
 
 

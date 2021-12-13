@@ -2,107 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2967472ACD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEA5472AD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbhLMLAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:00:34 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:34290
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232392AbhLMLA3 (ORCPT
+        id S232749AbhLMLD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232342AbhLMLD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:00:29 -0500
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C35BD3F1FE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639393228;
-        bh=oPxIYppN3M08WPSh+FUwx/WTHd0f19tpTgpTR+J0vso=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=QEJQT1gCS2301OpKRzovG+KaKoPdq+9rSYdbrqwfp1g4lZ5rPHvFfawU2nXA4gcad
-         1jvbgAlhf6lTtvuO4odJKuhp65uIlnMmp4c1OkIOf5FSrB5Cz6wd+alrsFaJExAP+3
-         OrTkiIclSBI0FKoSiN/1z4XmS9oOnjV56NbYbUoAWczYAAI3GryG7/wdwqCfOGqKPe
-         jQAY7M0mLHbUtkECLKaMKlT/hL0BSs84OuSvW8VV5znc09TeHesCrhi994hxhpk+lw
-         Hi99iBCkf7pP4zmJT5iy+Clp7goBhHnm06Q8ucHarinHCYT1CrpEtKeX5A6p0lafLX
-         g6BdG2EQaDSUA==
-Received: by mail-lf1-f70.google.com with SMTP id j9-20020a05651231c900b004037efe9fddso7352749lfe.18
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:00:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oPxIYppN3M08WPSh+FUwx/WTHd0f19tpTgpTR+J0vso=;
-        b=Z73ekEBgL6Tocw9N6l7tLezLZeopFeG1WK6gbhWAIAy4JtlvnMV7uH/mO1K2XRj73W
-         j72pLzzMGbJcQR/iN2YMA0je8cRmsG0lGsNiFLpryPCVHHR+OIHuqM6nGFmnWtF1iB4i
-         rbMI5bCwHjoXSJ0T05UVNzOY/ksihkzRmPPBgmSt/gY4oNNdSrtogwbhI5Z9XGEyCpRK
-         UC7DlU0aCaqer6jvyMJ9TJheI4M/Yk5lgW3e3ZYuRliR88hKiZFQMZ5Rm+657kIjSHrF
-         rN7fx0qq6MlOFlgxZMABb9kzZDr+bLq8LAcOdraBrLXcYT7wpXT63zwYzNnh/Kj6OtbN
-         Ty2w==
-X-Gm-Message-State: AOAM532moGTAlatHaQ+hj3FMS/CrDyhQST8Btf3mNj5u78uryC6LfOUs
-        G8vltPtl5+o9ESDbBk3MlPWLcZq2AIUX5sU1p4ELJi46AF6FPlgVtcnBI0FiLxoIMFaOz8W/1+B
-        UyMnITDukvxzKaAjkPA9dFPqkrva16AM96RCgivA47w==
-X-Received: by 2002:a05:6512:c25:: with SMTP id z37mr27246236lfu.160.1639393228090;
-        Mon, 13 Dec 2021 03:00:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyAhZVupAQj4Ctos4E4tzeNhHXTV3N6ad1L0/m+9uXiWRs4tbCEa22HF2XhyXJEMAq2lBo4Dg==
-X-Received: by 2002:a05:6512:c25:: with SMTP id z37mr27246200lfu.160.1639393227812;
-        Mon, 13 Dec 2021 03:00:27 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id g10sm1388745lfv.113.2021.12.13.03.00.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 03:00:27 -0800 (PST)
-Message-ID: <e9472cec-7aca-92c4-6184-f442c0f88d56@canonical.com>
-Date:   Mon, 13 Dec 2021 12:00:26 +0100
+        Mon, 13 Dec 2021 06:03:27 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7836C06173F;
+        Mon, 13 Dec 2021 03:03:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TAxkZYTLGQdMl8InjvEC8WjPoh21RqQVBS9pBjUFe48=; b=ycFjoDTBAlTagIUP/oMHJM4ATO
+        Ob7GLoxAAD5gc8lE7Kq9Zob+RkI8OojC+d8/0o/QQBdj32gifcPpTiukGTx7GMsyLDf3oy48JrE2z
+        +AAx2xaxqQFPV2sslZvyV4PUjQOt6KSftcm0SdTyOBC3n8ES93tb/DF61a3boHsodh5udCqqjxNPs
+        zDZP+wj5UYa3Q5SuSo5h0NrXNklVmWy9pnUTclsMD5oXlUUNei42qYS3IETbJXxWRka2WrofUN92D
+        H+qvpcAuuYbS3uZg4Iff6tJSzKJZ9zZn7zdN3YLb5zPjqIfpF94OFzbM/1arWG2KvGpFaxmoJKrwS
+        HpOdo4JQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56258)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mwj6x-0003UV-0p; Mon, 13 Dec 2021 11:03:15 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mwj6u-0002WP-Aj; Mon, 13 Dec 2021 11:03:12 +0000
+Date:   Mon, 13 Dec 2021 11:03:12 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: add missing of_node_put before return
+Message-ID: <YbcocBZBAJaZ0Rf6@shell.armlinux.org.uk>
+References: <1639388689-64038-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v3 3/5] tty: serial: samsung: Remove USI initialization
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20211204195757.8600-1-semen.protsenko@linaro.org>
- <20211204195757.8600-4-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211204195757.8600-4-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639388689-64038-1-git-send-email-wangqing@vivo.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/12/2021 20:57, Sam Protsenko wrote:
-> USI control is now extracted to the dedicated USI driver. Remove USI
-> related code from serial driver to avoid conflicts and code duplication.
+On Mon, Dec 13, 2021 at 01:44:49AM -0800, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
 > 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
-> Changes in v3:
->   - Spell check fixes in commit message
+> Fix following coccicheck warning:
+> WARNING: Function "for_each_available_child_of_node" 
+> should have of_node_put() before return.
 > 
-> Changes in v2:
->   - (none)
-> 
->  drivers/tty/serial/samsung_tty.c | 36 ++++----------------------------
->  include/linux/serial_s3c.h       |  9 --------
->  2 files changed, 4 insertions(+), 41 deletions(-)
-> 
+> Early exits from for_each_available_child_of_node should decrement the
+> node reference counter.
 
-Hi Sam,
+Most *definitely* NAK. Coccicheck is most definitely wrong on this one,
+and we will probably need some way to tell people not to believe
+coccicheck on this.
 
-Does this patch depend on USI driver? In cover letter you did not
-mention any dependency, so this can go via Greg's tree, right?
+In this path, the DT node is assigned to a struct device. This _must_
+be reference counted. device_set_node() does not increment the
+reference count, nor does of_fwnode_handle(). The reference count
+here is passed from this code over to the struct device.
 
-Best regards,
-Krzysztof
+Adding an of_node_put() will break this.
+
+This must _never_ be "fixed" no matter how much coccicheck complains,
+as fixing the warning _will_ introduce a refcounting bug.
+
+I'll send a patch adding a comment to this effect.
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

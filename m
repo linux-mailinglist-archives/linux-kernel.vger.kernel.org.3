@@ -2,256 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A1147241A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966784725CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbhLMJeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S235452AbhLMJqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbhLMJdm (ORCPT
+        with ESMTP id S235649AbhLMJmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:33:42 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA37C0613FE;
-        Mon, 13 Dec 2021 01:33:41 -0800 (PST)
+        Mon, 13 Dec 2021 04:42:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAF8C07E5DF;
+        Mon, 13 Dec 2021 01:39:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DC4A0CE0E6F;
-        Mon, 13 Dec 2021 09:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF65C341C8;
-        Mon, 13 Dec 2021 09:33:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECEDEB80E18;
+        Mon, 13 Dec 2021 09:39:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3910AC00446;
+        Mon, 13 Dec 2021 09:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388018;
-        bh=FJsuto7G4LcoCpYg4gHFpSaMAJPFQvpbeco5T3WVlmk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fWFJdNpQtKtwxFxd4vV0VAJ5QY4ddm+Bx9DEFl8sWh3G/VFkB9S26W8KRiPaCXhMn
-         6AdPucDeq5jvxNWMfr/weqFL70Bw6G/YoatomIX20BbBvpU4deLJffI8GIlxWF6uTS
-         ZdKrfwhMn4nHAUKNSXDfT8ZFx4Kk07/18E+iifXE=
+        s=korg; t=1639388374;
+        bh=YXQxSd1ArBZRrLah/ix2XeBcM0nYUmWn1hkz7EDCAMc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=peTXo2kNReJnf7jDEiAbiFMB0awU/gIrTMQaUPmq9F3VyhkYx8xlm4QNnroYIVCXt
+         Pu1+GiZTzOvaRQ4XQ4TPmY12vZA3HzTT8+M/HlAiKYRndF06XGXcKFjc9x1mpKFHoa
+         j5TCWuYBr1aNstj6HlioIfQJpCLk3ezooUPI5APo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: [PATCH 4.4 00/37] 4.4.295-rc1 review
+        stable@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Zaidman <michael.zaidman@gmail.com>,
+        Stefan Achatz <erazor_de@users.sourceforge.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH 4.19 07/74] HID: check for valid USB device for many HID drivers
 Date:   Mon, 13 Dec 2021 10:29:38 +0100
-Message-Id: <20211213092925.380184671@linuxfoundation.org>
+Message-Id: <20211213092931.012704182@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.295-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.4.295-rc1
-X-KernelTest-Deadline: 2021-12-15T09:29+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.4.295 release.
-There are 37 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-Anything received after that time might be too late.
+commit 93020953d0fa7035fd036ad87a47ae2b7aa4ae33 upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.295-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.4.y
-and the diffstat can be found below.
+Many HID drivers assume that the HID device assigned to them is a USB
+device as that was the only way HID devices used to be able to be
+created in Linux.  However, with the additional ways that HID devices
+can be created for many different bus types, that is no longer true, so
+properly check that we have a USB device associated with the HID device
+before allowing a driver that makes this assumption to claim it.
 
-thanks,
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Michael Zaidman <michael.zaidman@gmail.com>
+Cc: Stefan Achatz <erazor_de@users.sourceforge.net>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-input@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+[bentiss: amended for thrustmater.c hunk to apply]
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211201183503.2373082-3-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/hid/hid-chicony.c         |    8 ++++++--
+ drivers/hid/hid-corsair.c         |    7 ++++++-
+ drivers/hid/hid-elan.c            |    2 +-
+ drivers/hid/hid-elo.c             |    3 +++
+ drivers/hid/hid-holtek-kbd.c      |    9 +++++++--
+ drivers/hid/hid-holtek-mouse.c    |    9 +++++++++
+ drivers/hid/hid-lg.c              |   10 ++++++++--
+ drivers/hid/hid-prodikeys.c       |   10 ++++++++--
+ drivers/hid/hid-roccat-arvo.c     |    3 +++
+ drivers/hid/hid-roccat-isku.c     |    3 +++
+ drivers/hid/hid-roccat-kone.c     |    3 +++
+ drivers/hid/hid-roccat-koneplus.c |    3 +++
+ drivers/hid/hid-roccat-konepure.c |    3 +++
+ drivers/hid/hid-roccat-kovaplus.c |    3 +++
+ drivers/hid/hid-roccat-lua.c      |    3 +++
+ drivers/hid/hid-roccat-pyra.c     |    3 +++
+ drivers/hid/hid-roccat-ryos.c     |    3 +++
+ drivers/hid/hid-roccat-savu.c     |    3 +++
+ drivers/hid/hid-samsung.c         |    3 +++
+ drivers/hid/hid-uclogic.c         |    3 +++
+ 20 files changed, 84 insertions(+), 10 deletions(-)
 
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.4.295-rc1
-
-Vladimir Murzin <vladimir.murzin@arm.com>
-    irqchip: nvic: Fix offset for Interrupt Priority Offsets
-
-Wudi Wang <wangwudi@hisilicon.com>
-    irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
-
-Yang Yingliang <yangyingliang@huawei.com>
-    iio: accel: kxcjk-1013: Fix possible memory leak in probe and remove
-
-Lars-Peter Clausen <lars@metafoo.de>
-    iio: itg3200: Call iio_trigger_notify_done() on error
-
-Lars-Peter Clausen <lars@metafoo.de>
-    iio: ltr501: Don't return error code in trigger handler
-
-Lars-Peter Clausen <lars@metafoo.de>
-    iio: mma8452: Fix trigger reference couting
-
-Lars-Peter Clausen <lars@metafoo.de>
-    iio: stk3310: Don't return error code in interrupt handler
-
-Pavel Hofman <pavel.hofman@ivitera.com>
-    usb: core: config: fix validation of wMaxPacketValue entries
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    USB: gadget: zero allocate endpoint 0 buffers
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    USB: gadget: detect too-big endpoint 0 requests
-
-Dan Carpenter <dan.carpenter@oracle.com>
-    net/qla3xxx: fix an error code in ql_adapter_up()
-
-Eric Dumazet <edumazet@google.com>
-    net, neigh: clear whole pneigh_entry at alloc time
-
-Joakim Zhang <qiangqing.zhang@nxp.com>
-    net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
-
-Dan Carpenter <dan.carpenter@oracle.com>
-    net: altera: set a couple error code in probe()
-
-Lee Jones <lee.jones@linaro.org>
-    net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero
-
-Davidlohr Bueso <dave@stgolabs.net>
-    block: fix ioprio_get(IOPRIO_WHO_PGRP) vs setuid(2)
-
-Steven Rostedt (VMware) <rostedt@goodmis.org>
-    tracefs: Set all files to the same group ownership as the mount option
-
-Eric Biggers <ebiggers@google.com>
-    signalfd: use wake_up_pollfree()
-
-Eric Biggers <ebiggers@google.com>
-    binder: use wake_up_pollfree()
-
-Eric Biggers <ebiggers@google.com>
-    wait: add wake_up_pollfree()
-
-Hannes Reinecke <hare@suse.de>
-    libata: add horkage for ASMedia 1092
-
-Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-    can: pch_can: pch_can_rx_normal: fix use after free
-
-Steven Rostedt (VMware) <rostedt@goodmis.org>
-    tracefs: Have new files inherit the ownership of their parent
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: pcm: oss: Handle missing errors in snd_pcm_oss_change_params*()
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: pcm: oss: Limit the period size to 16MB
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: pcm: oss: Fix negative period/buffer sizes
-
-Alan Young <consult.awy@gmail.com>
-    ALSA: ctl: Fix copy of updated id with element read/write
-
-Manjong Lee <mj0123.lee@samsung.com>
-    mm: bdi: initialize bdi_min_ratio when bdi is unregistered
-
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-    nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
-
-Dan Carpenter <dan.carpenter@oracle.com>
-    can: sja1000: fix use after free in ems_pcmcia_add_card()
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    HID: check for valid USB device for many HID drivers
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    HID: wacom: fix problems when device is not a valid USB device
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    HID: add USB_HID dependancy on some USB HID drivers
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    HID: add USB_HID dependancy to hid-chicony
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    HID: add USB_HID dependancy to hid-prodikeys
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    HID: add hid_is_usb() function to make it simpler for USB detection
-
-Jason Gerecke <killertofu@gmail.com>
-    HID: introduce hid_is_using_ll_driver
-
-
--------------
-
-Diffstat:
-
- Makefile                                      |  4 +-
- block/ioprio.c                                |  3 ++
- drivers/android/binder.c                      | 21 ++++----
- drivers/ata/libata-core.c                     |  2 +
- drivers/hid/Kconfig                           | 10 ++--
- drivers/hid/hid-chicony.c                     |  8 ++-
- drivers/hid/hid-corsair.c                     |  7 ++-
- drivers/hid/hid-elo.c                         |  3 ++
- drivers/hid/hid-holtek-kbd.c                  |  9 +++-
- drivers/hid/hid-holtek-mouse.c                |  9 ++++
- drivers/hid/hid-lg.c                          | 10 +++-
- drivers/hid/hid-prodikeys.c                   | 10 +++-
- drivers/hid/hid-roccat-arvo.c                 |  3 ++
- drivers/hid/hid-roccat-isku.c                 |  3 ++
- drivers/hid/hid-roccat-kone.c                 |  3 ++
- drivers/hid/hid-roccat-koneplus.c             |  3 ++
- drivers/hid/hid-roccat-konepure.c             |  3 ++
- drivers/hid/hid-roccat-kovaplus.c             |  3 ++
- drivers/hid/hid-roccat-lua.c                  |  3 ++
- drivers/hid/hid-roccat-pyra.c                 |  3 ++
- drivers/hid/hid-roccat-ryos.c                 |  3 ++
- drivers/hid/hid-roccat-savu.c                 |  3 ++
- drivers/hid/hid-samsung.c                     |  3 ++
- drivers/hid/hid-uclogic.c                     |  3 ++
- drivers/hid/i2c-hid/i2c-hid.c                 |  3 +-
- drivers/hid/uhid.c                            |  3 +-
- drivers/hid/usbhid/hid-core.c                 |  3 +-
- drivers/hid/wacom_sys.c                       | 17 ++++--
- drivers/iio/accel/kxcjk-1013.c                |  5 +-
- drivers/iio/accel/mma8452.c                   |  2 +-
- drivers/iio/gyro/itg3200_buffer.c             |  2 +-
- drivers/iio/light/ltr501.c                    |  2 +-
- drivers/iio/light/stk3310.c                   |  6 +--
- drivers/irqchip/irq-gic-v3-its.c              |  2 +-
- drivers/irqchip/irq-nvic.c                    |  2 +-
- drivers/net/can/pch_can.c                     |  2 +-
- drivers/net/can/sja1000/ems_pcmcia.c          |  7 ++-
- drivers/net/ethernet/altera/altera_tse_main.c |  9 ++--
- drivers/net/ethernet/freescale/fec.h          |  3 ++
- drivers/net/ethernet/freescale/fec_main.c     |  2 +-
- drivers/net/ethernet/qlogic/qla3xxx.c         | 19 ++++---
- drivers/net/usb/cdc_ncm.c                     |  2 +
- drivers/usb/core/config.c                     |  2 +-
- drivers/usb/gadget/composite.c                | 14 ++++-
- drivers/usb/gadget/legacy/dbgp.c              | 15 +++++-
- drivers/usb/gadget/legacy/inode.c             | 16 +++++-
- fs/signalfd.c                                 | 12 +----
- fs/tracefs/inode.c                            | 76 +++++++++++++++++++++++++++
- include/linux/hid.h                           | 16 ++++++
- include/linux/wait.h                          | 26 +++++++++
- kernel/sched/wait.c                           |  8 +++
- mm/backing-dev.c                              |  7 +++
- net/bluetooth/hidp/core.c                     |  3 +-
- net/core/neighbour.c                          |  2 +-
- net/nfc/netlink.c                             |  6 ++-
- sound/core/control_compat.c                   |  3 ++
- sound/core/oss/pcm_oss.c                      | 37 ++++++++-----
- 57 files changed, 372 insertions(+), 94 deletions(-)
+--- a/drivers/hid/hid-chicony.c
++++ b/drivers/hid/hid-chicony.c
+@@ -61,8 +61,12 @@ static int ch_input_mapping(struct hid_d
+ static __u8 *ch_switch12_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 		unsigned int *rsize)
+ {
+-	struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
+-	
++	struct usb_interface *intf;
++
++	if (!hid_is_usb(hdev))
++		return rdesc;
++
++	intf = to_usb_interface(hdev->dev.parent);
+ 	if (intf->cur_altsetting->desc.bInterfaceNumber == 1) {
+ 		/* Change usage maximum and logical maximum from 0x7fff to
+ 		 * 0x2fff, so they don't exceed HID_MAX_USAGES */
+--- a/drivers/hid/hid-corsair.c
++++ b/drivers/hid/hid-corsair.c
+@@ -556,7 +556,12 @@ static int corsair_probe(struct hid_devi
+ 	int ret;
+ 	unsigned long quirks = id->driver_data;
+ 	struct corsair_drvdata *drvdata;
+-	struct usb_interface *usbif = to_usb_interface(dev->dev.parent);
++	struct usb_interface *usbif;
++
++	if (!hid_is_usb(dev))
++		return -EINVAL;
++
++	usbif = to_usb_interface(dev->dev.parent);
+ 
+ 	drvdata = devm_kzalloc(&dev->dev, sizeof(struct corsair_drvdata),
+ 			       GFP_KERNEL);
+--- a/drivers/hid/hid-elan.c
++++ b/drivers/hid/hid-elan.c
+@@ -54,7 +54,7 @@ struct elan_drvdata {
+ 
+ static int is_not_elan_touchpad(struct hid_device *hdev)
+ {
+-	if (hdev->bus == BUS_USB) {
++	if (hid_is_usb(hdev)) {
+ 		struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
+ 
+ 		return (intf->altsetting->desc.bInterfaceNumber !=
+--- a/drivers/hid/hid-elo.c
++++ b/drivers/hid/hid-elo.c
+@@ -230,6 +230,9 @@ static int elo_probe(struct hid_device *
+ 	struct elo_priv *priv;
+ 	int ret;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+--- a/drivers/hid/hid-holtek-kbd.c
++++ b/drivers/hid/hid-holtek-kbd.c
+@@ -143,12 +143,17 @@ static int holtek_kbd_input_event(struct
+ static int holtek_kbd_probe(struct hid_device *hdev,
+ 		const struct hid_device_id *id)
+ {
+-	struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
+-	int ret = hid_parse(hdev);
++	struct usb_interface *intf;
++	int ret;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
++	ret = hid_parse(hdev);
+ 	if (!ret)
+ 		ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+ 
++	intf = to_usb_interface(hdev->dev.parent);
+ 	if (!ret && intf->cur_altsetting->desc.bInterfaceNumber == 1) {
+ 		struct hid_input *hidinput;
+ 		list_for_each_entry(hidinput, &hdev->inputs, list) {
+--- a/drivers/hid/hid-holtek-mouse.c
++++ b/drivers/hid/hid-holtek-mouse.c
+@@ -65,6 +65,14 @@ static __u8 *holtek_mouse_report_fixup(s
+ 	return rdesc;
+ }
+ 
++static int holtek_mouse_probe(struct hid_device *hdev,
++			      const struct hid_device_id *id)
++{
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++	return 0;
++}
++
+ static const struct hid_device_id holtek_mouse_devices[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT,
+ 			USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A067) },
+@@ -86,6 +94,7 @@ static struct hid_driver holtek_mouse_dr
+ 	.name = "holtek_mouse",
+ 	.id_table = holtek_mouse_devices,
+ 	.report_fixup = holtek_mouse_report_fixup,
++	.probe = holtek_mouse_probe,
+ };
+ 
+ module_hid_driver(holtek_mouse_driver);
+--- a/drivers/hid/hid-lg.c
++++ b/drivers/hid/hid-lg.c
+@@ -714,12 +714,18 @@ static int lg_raw_event(struct hid_devic
+ 
+ static int lg_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ {
+-	struct usb_interface *iface = to_usb_interface(hdev->dev.parent);
+-	__u8 iface_num = iface->cur_altsetting->desc.bInterfaceNumber;
++	struct usb_interface *iface;
++	__u8 iface_num;
+ 	unsigned int connect_mask = HID_CONNECT_DEFAULT;
+ 	struct lg_drv_data *drv_data;
+ 	int ret;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
++	iface = to_usb_interface(hdev->dev.parent);
++	iface_num = iface->cur_altsetting->desc.bInterfaceNumber;
++
+ 	/* G29 only work with the 1st interface */
+ 	if ((hdev->product == USB_DEVICE_ID_LOGITECH_G29_WHEEL) &&
+ 	    (iface_num != 0)) {
+--- a/drivers/hid/hid-prodikeys.c
++++ b/drivers/hid/hid-prodikeys.c
+@@ -802,12 +802,18 @@ static int pk_raw_event(struct hid_devic
+ static int pk_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ {
+ 	int ret;
+-	struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
+-	unsigned short ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
++	struct usb_interface *intf;
++	unsigned short ifnum;
+ 	unsigned long quirks = id->driver_data;
+ 	struct pk_device *pk;
+ 	struct pcmidi_snd *pm = NULL;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
++	intf = to_usb_interface(hdev->dev.parent);
++	ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
++
+ 	pk = kzalloc(sizeof(*pk), GFP_KERNEL);
+ 	if (pk == NULL) {
+ 		hid_err(hdev, "can't alloc descriptor\n");
+--- a/drivers/hid/hid-roccat-arvo.c
++++ b/drivers/hid/hid-roccat-arvo.c
+@@ -347,6 +347,9 @@ static int arvo_probe(struct hid_device
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-isku.c
++++ b/drivers/hid/hid-roccat-isku.c
+@@ -327,6 +327,9 @@ static int isku_probe(struct hid_device
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-kone.c
++++ b/drivers/hid/hid-roccat-kone.c
+@@ -752,6 +752,9 @@ static int kone_probe(struct hid_device
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-koneplus.c
++++ b/drivers/hid/hid-roccat-koneplus.c
+@@ -434,6 +434,9 @@ static int koneplus_probe(struct hid_dev
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-konepure.c
++++ b/drivers/hid/hid-roccat-konepure.c
+@@ -136,6 +136,9 @@ static int konepure_probe(struct hid_dev
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-kovaplus.c
++++ b/drivers/hid/hid-roccat-kovaplus.c
+@@ -504,6 +504,9 @@ static int kovaplus_probe(struct hid_dev
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-lua.c
++++ b/drivers/hid/hid-roccat-lua.c
+@@ -163,6 +163,9 @@ static int lua_probe(struct hid_device *
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-pyra.c
++++ b/drivers/hid/hid-roccat-pyra.c
+@@ -452,6 +452,9 @@ static int pyra_probe(struct hid_device
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-ryos.c
++++ b/drivers/hid/hid-roccat-ryos.c
+@@ -144,6 +144,9 @@ static int ryos_probe(struct hid_device
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-roccat-savu.c
++++ b/drivers/hid/hid-roccat-savu.c
+@@ -116,6 +116,9 @@ static int savu_probe(struct hid_device
+ {
+ 	int retval;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	retval = hid_parse(hdev);
+ 	if (retval) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-samsung.c
++++ b/drivers/hid/hid-samsung.c
+@@ -157,6 +157,9 @@ static int samsung_probe(struct hid_devi
+ 	int ret;
+ 	unsigned int cmask = HID_CONNECT_DEFAULT;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	ret = hid_parse(hdev);
+ 	if (ret) {
+ 		hid_err(hdev, "parse failed\n");
+--- a/drivers/hid/hid-uclogic.c
++++ b/drivers/hid/hid-uclogic.c
+@@ -791,6 +791,9 @@ static int uclogic_tablet_enable(struct
+ 	__u8 *p;
+ 	s32 v;
+ 
++	if (!hid_is_usb(hdev))
++		return -EINVAL;
++
+ 	/*
+ 	 * Read string descriptor containing tablet parameters. The specific
+ 	 * string descriptor and data were discovered by sniffing the Windows
 
 

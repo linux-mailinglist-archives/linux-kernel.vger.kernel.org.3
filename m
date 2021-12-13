@@ -2,208 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D9F4737DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1599A4737DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243825AbhLMWqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:46:25 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:53776 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243765AbhLMWqX (ORCPT
+        id S243831AbhLMWq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240913AbhLMWq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:46:23 -0500
-Received: by mail-io1-f69.google.com with SMTP id a12-20020a056602148c00b005e7052734adso16035901iow.20
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:46:23 -0800 (PST)
+        Mon, 13 Dec 2021 17:46:56 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8C3C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:46:54 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id d11so7151588pgl.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:46:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=16ojLEvFQl04Ei9TwQDGXgw5cA9A1Hd04uE1XtujZhE=;
+        b=eH74KyAHe/mA8Q8X+xDnsgG8JgbmqRfEYay6bnUoN7XWh18/SmcVwJvXDQk/TLhl8D
+         zqTl6rWavB+tFr+gEbXQ9pjJqTKKB9WqbIQqAzmp1TTmDRW7QNT13eSZlmnmZcOuTIQ9
+         Q5tjNwxko0FT90JMdpha29ZKy+yeios+hTMHc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=6slidn2uLEYo6Q9quCUllTZBd4MA2hHMb0ZjtiLaISk=;
-        b=mWqJz70YC9hlz+LRXxJ8Yr+vagdWjGpfbqnqNDUf3oyftyTbl1XPMc/jTeyS54DCdF
-         5CwgNGnf7w1B8z1mo9AU04a6iavpYtOy9L3b0gv16fG0XqD68jcKEfpDJBek88REdDje
-         m5WZR2CDxE45B258/yy+FkIC96yQ74uKx8nBBPsIISm3Vsm4gkHupP2p6h6cS6EjRSLz
-         xRxxxC2i0fyNfsBJQt7fqBmNjdCDcc5xsl7sMbeCdE3nk9Lj7qMrem2bddSKMP5fFd1o
-         7C2oX1cIgQ+zjRXxs/hxj2n5X7FrdPcizlgozbBMu4ebua7DI9WMN9/8SivF3zxZh4IP
-         Kfvg==
-X-Gm-Message-State: AOAM530OBuQnQ9WswBPDvNxtoaBpU9vq5KjRDYan03uXCtxAirlmAvwG
-        +RoWSE2p12HseF6VpzPeVkC3CYoXwPHd0JiAlwhconb+Sqo9
-X-Google-Smtp-Source: ABdhPJwEPv5XuqrZL8qEyaior1XLR9mNECqghXQzSzapQvn55xg83i1Ll/IacX3ZI3+i4TgL5mgRm+Y8oubsH3QOKLAdZ3Aoxtar
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=16ojLEvFQl04Ei9TwQDGXgw5cA9A1Hd04uE1XtujZhE=;
+        b=Qi2H0Sma3DQde/+Z3JMtW68Ub9M89U0ijDip/a9UAd3BlarnhG9Wkkq4y8BkYcZC3K
+         eld1kRA27PHpyB+uEYrj0C/+4IwU4qQJBg1wgbVRhQ6cA+YyKzheKQjqm2dkPrJIWPeY
+         yVDuDuCwHbwJvjuRvzCrU56zcarb8krz22sUMOdjGp4gBlOe9PWZpVeVH8wd6OwVDk25
+         JzplslkuSwIGOLC5WCTZ0VfXg65Pz5FdaTRVLwXRV6KzHYSyFgPlwj/5NYQj1XGWkWQS
+         UCu4OT7r8xlsueG+jNnAh0zX3xYzSo7mkfRPXrIVf73v+j/qy3xxChs8FLDahbFhfS/4
+         PG9w==
+X-Gm-Message-State: AOAM530MTeOK4+v3HsuDLm/oBPWWVP2rFRYkCHo7s66bLs1PjO755aN2
+        JFQ7XrHKI7Q40NMDVxxAWoC6ow==
+X-Google-Smtp-Source: ABdhPJyzOzLg9ARyBlGN7LujMGC7LWQm/6ZQ4WiSneDVV9V/fdbVX9Apvz7R9ldOkXPPammi6eiyyw==
+X-Received: by 2002:a05:6a00:1248:b0:4a2:5cba:89cb with SMTP id u8-20020a056a00124800b004a25cba89cbmr1044578pfi.12.1639435613557;
+        Mon, 13 Dec 2021 14:46:53 -0800 (PST)
+Received: from d1609ac33027 ([203.221.136.13])
+        by smtp.gmail.com with ESMTPSA id r16sm11101963pgk.45.2021.12.13.14.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 14:46:53 -0800 (PST)
+Date:   Mon, 13 Dec 2021 22:46:45 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 000/171] 5.15.8-rc1 review
+Message-ID: <20211213224645.GA8@d1609ac33027>
+References: <20211213092945.091487407@linuxfoundation.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2186:: with SMTP id s6mr753535jaj.96.1639435582645;
- Mon, 13 Dec 2021 14:46:22 -0800 (PST)
-Date:   Mon, 13 Dec 2021 14:46:22 -0800
-In-Reply-To: <000000000000f5ccbf05cd8db7b0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000892b3805d30ed738@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in __dev_queue_xmit (5)
-From:   syzbot <syzbot+b7be9429f37d15205470@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, justin@coraid.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Mon, Dec 13, 2021 at 10:28:35AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.8 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
 
-HEAD commit:    9b5bcb193a3b Merge branch 'dsa-tagger-storage'
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17263269b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d0a94897bd9637ea
-dashboard link: https://syzkaller.appspot.com/bug?extid=b7be9429f37d15205470
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10983f4db00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11613eb1b00000
+Hi Greg,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b7be9429f37d15205470@syzkaller.appspotmail.com
+Looking good.
 
-ieee802154 phy0 wpan0: encryption failed: -22
-ieee802154 phy1 wpan1: encryption failed: -22
-xfrm0 selects TX queue 0, but real number of TX queues is 0
-==================================================================
-BUG: KASAN: use-after-free in __dev_queue_xmit+0x3134/0x3640 net/core/dev.c:4073
-Read of size 8 at addr ffff88804610b408 by task aoe_tx0/1229
+Run tested on:
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-CPU: 1 PID: 1229 Comm: aoe_tx0 Not tainted 5.16.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x320 mm/kasan/report.c:247
- __kasan_report mm/kasan/report.c:433 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
- __dev_queue_xmit+0x3134/0x3640 net/core/dev.c:4073
- tx+0x68/0xb0 drivers/block/aoe/aoenet.c:63
- kthread+0x1e7/0x3b0 drivers/block/aoe/aoecmd.c:1230
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
+In addition: build tested on:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-Allocated by task 31625:
- kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:46 [inline]
- set_alloc_info mm/kasan/common.c:434 [inline]
- ____kasan_kmalloc mm/kasan/common.c:513 [inline]
- ____kasan_kmalloc mm/kasan/common.c:472 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:522
- kmalloc_node include/linux/slab.h:613 [inline]
- kvmalloc_node+0x61/0x120 mm/util.c:587
- kvmalloc include/linux/slab.h:741 [inline]
- kvzalloc include/linux/slab.h:749 [inline]
- netif_alloc_netdev_queues net/core/dev.c:9511 [inline]
- alloc_netdev_mqs+0x758/0xea0 net/core/dev.c:10208
- rtnl_create_link+0x936/0xb40 net/core/rtnetlink.c:3182
- __rtnl_newlink+0xf73/0x1750 net/core/rtnetlink.c:3447
- rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3505
- rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5570
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2492
- netlink_unicast_kernel net/netlink/af_netlink.c:1315 [inline]
- netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1341
- netlink_sendmsg+0x904/0xdf0 net/netlink/af_netlink.c:1917
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:724
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 31625:
- kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:46
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free mm/kasan/common.c:328 [inline]
- __kasan_slab_free+0xff/0x130 mm/kasan/common.c:374
- kasan_slab_free include/linux/kasan.h:235 [inline]
- slab_free_hook mm/slub.c:1723 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1749
- slab_free mm/slub.c:3513 [inline]
- kfree+0xf6/0x560 mm/slub.c:4561
- kvfree+0x42/0x50 mm/util.c:620
- netif_free_tx_queues net/core/dev.c:9499 [inline]
- free_netdev+0xa7/0x5a0 net/core/dev.c:10265
- netdev_run_todo+0x882/0xa80 net/core/dev.c:9953
- rtnl_unlock net/core/rtnetlink.c:112 [inline]
- rtnetlink_rcv_msg+0x420/0xb80 net/core/rtnetlink.c:5571
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2492
- netlink_unicast_kernel net/netlink/af_netlink.c:1315 [inline]
- netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1341
- netlink_sendmsg+0x904/0xdf0 net/netlink/af_netlink.c:1917
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:724
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88804610b400
- which belongs to the cache kmalloc-cg-512 of size 512
-The buggy address is located 8 bytes inside of
- 512-byte region [ffff88804610b400, ffff88804610b600)
-The buggy address belongs to the page:
-page:ffffea0001184200 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88804610b800 pfn:0x46108
-head:ffffea0001184200 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea0001e4dc08 ffffea0001d68508 ffff888010c42dc0
-raw: ffff88804610b800 0000000000100009 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3713, ts 1382028996406, free_ts 15275532588
- prep_new_page mm/page_alloc.c:2418 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4149
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5369
- alloc_pages+0x1a7/0x300 mm/mempolicy.c:2191
- alloc_slab_page mm/slub.c:1793 [inline]
- allocate_slab mm/slub.c:1930 [inline]
- new_slab+0x32d/0x4a0 mm/slub.c:1993
- ___slab_alloc+0x918/0xfe0 mm/slub.c:3022
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3109
- slab_alloc_node mm/slub.c:3200 [inline]
- __kmalloc_node_track_caller+0x2cb/0x360 mm/slub.c:4956
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0xde/0x340 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1129 [inline]
- alloc_skb_with_frags+0x93/0x620 net/core/skbuff.c:5930
- sock_alloc_send_pskb+0x793/0x920 net/core/sock.c:2581
- unix_dgram_sendmsg+0x414/0x1a10 net/unix/af_unix.c:1895
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:724
- sock_write_iter+0x289/0x3c0 net/socket.c:1057
- call_write_iter include/linux/fs.h:2162 [inline]
- new_sync_write+0x429/0x660 fs/read_write.c:503
- vfs_write+0x7cd/0xae0 fs/read_write.c:590
- ksys_write+0x1ee/0x250 fs/read_write.c:643
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1338 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1389
- free_unref_page_prepare mm/page_alloc.c:3309 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3388
- free_contig_range+0xa8/0xf0 mm/page_alloc.c:9271
- destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1016
- debug_vm_pgtable+0x2984/0x2a16 mm/debug_vm_pgtable.c:1330
- do_one_initcall+0x103/0x650 init/main.c:1297
- do_initcall_level init/main.c:1370 [inline]
- do_initcalls init/main.c:1386 [inline]
- do_basic_setup init/main.c:1405 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1610
- kernel_init+0x1a/0x1d0 init/main.c:1499
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-Memory state around the buggy address:
- ffff88804610b300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88804610b380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88804610b400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                      ^
- ffff88804610b480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88804610b500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

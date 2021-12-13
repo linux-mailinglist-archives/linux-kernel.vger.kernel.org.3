@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BEC4721EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B804721EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbhLMHtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbhLMHtE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:49:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D07C06173F;
-        Sun, 12 Dec 2021 23:49:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E51FB80DC3;
-        Mon, 13 Dec 2021 07:49:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC39C00446;
-        Mon, 13 Dec 2021 07:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639381741;
-        bh=ZBr26fW8SEEPQKnMIuVCSbNTJr1TjALGEo+Idc+TQa8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JazxAMQsoyEjlMTZkBohd9hc98iewAPoNVNnzgN9CFwtvFpyOjHY5o/vbXlqn3IkB
-         L1DZMIsC3nmIVDF5deQUq1P8fXkcAtSJUvAeUMBnTOMQaNlulDCg4R4JRX/CPyOrBh
-         VG4B1FCCsj9LEC+uAU1Z9QEONRJrsaB/K03D7G+kFqM1WpnmKZpYP/XfvdaaFT5R1+
-         P5Arx9sTtLNx/gaXDYU/1BKTscLGIgqWkLC0tDvckA1h3gtfsobUh66bEOZWsmChOf
-         EiG7kbqlT7fueHtFa6O30budxcDSJAunkSzakPyF8fQcd1QYfJfUQiawgW9zBiNoLA
-         FArTvCMyyfsXA==
-Date:   Mon, 13 Dec 2021 13:18:56 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Alyssa Ross <hi@alyssa.is>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Ludovic Barre <ludovic.barre@st.com>,
-        Peter Griffin <peter.griffin@linaro.org>,
-        "moderated list:ARM/STI ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM" 
-        <dmaengine@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dmaengine: st_fdma: fix MODULE_ALIAS
-Message-ID: <Ybb66JpLyJ884a5f@matsya>
-References: <20211125154441.2626214-1-hi@alyssa.is>
+        id S232622AbhLMHt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:49:27 -0500
+Received: from verein.lst.de ([213.95.11.211]:46497 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232561AbhLMHtZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 02:49:25 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0BC3D68AFE; Mon, 13 Dec 2021 08:49:20 +0100 (CET)
+Date:   Mon, 13 Dec 2021 08:49:19 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Christoph Lameter <cl@gentwo.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
+        robin.murphy@arm.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, vbabka@suse.cz, m.szyprowski@samsung.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org
+Subject: Re: [PATCH RESEND v2 0/5] Avoid requesting page from DMA zone when
+ no managed pages
+Message-ID: <20211213074919.GC20758@lst.de>
+References: <20211207030750.30824-1-bhe@redhat.com> <alpine.DEB.2.22.394.2112070859420.201880@gentwo.de> <20211209080540.GA3050@MiWiFi-R3L-srv> <alpine.DEB.2.22.394.2112091355510.270348@gentwo.de> <20211213073925.GA29905@MiWiFi-R3L-srv>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211125154441.2626214-1-hi@alyssa.is>
+In-Reply-To: <20211213073925.GA29905@MiWiFi-R3L-srv>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-11-21, 15:44, Alyssa Ross wrote:
-> modprobe can't handle spaces in aliases.
+On Mon, Dec 13, 2021 at 03:39:25PM +0800, Baoquan He wrote:
+> > > As said at above, ia64 and riscv don't have ZONE_DMA at all, they just
+> > > cover low 4G with ZONE_DMA32 alone.
+> > 
+> > If you do not have devices that are crap and cannot address the full
+> > memory then you dont need these special zones.
+> 
+> I am not a DMA expert, with my understanding, on x86_64 and arm64, we
+> have PCIe devices which dma mask is 32bit
 
-Applied, thanks
+Yes, way to many, and they keep getting newly introduce as well.  Also
+weirdo masks like 40, 44 or 48 bits.
 
--- 
-~Vinod
+> , means they can only address
+> ZONE_DMA32.
+
+Yes and no.  Offset between cpu physical and device address make this
+complicated, even ignoring iommus.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3633472C16
+	by mail.lfdr.de (Postfix) with ESMTP id EE597472C17
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236625AbhLMMOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S236629AbhLMMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:14:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbhLMMN5 (ORCPT
+        with ESMTP id S236620AbhLMMOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:13:57 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73178C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:13:57 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id g14so50545868edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:13:57 -0800 (PST)
+        Mon, 13 Dec 2021 07:14:01 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE5CC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:14:00 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id g14so50546336edb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:14:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TSGFEEK57vZgNj+GJPFHPovuhunjSnX1LTdz3s3nsLA=;
-        b=ShuKM7QtQJfbrrEovXJ4uS7mOzRqEUFSdQ7aM7lCo9LkxPZQjIqDKwIOo63kafeBvr
-         kQJ+oQFG5qNVMyIRLMlNyZemMrQLCii6MG1ibBiv0x0SYygmdX8N0wtLNT5vdBrtgtpy
-         9oorT95681UBLuDX36Qt/2ANtKnW2EdXzvszsioSG4OxP4IDPWdMDEKTGzgHcNBeaiVB
-         9uQyopAHfJE+K8ZO9iLOSUWVZU8KnpYUfVUqwLNJGzfo6TtosWDMuWLXsJV93JW0qm+X
-         A+rqqF9WSaaMuXyQYmO4M7Q2KIr2tcPUrwqV6jmCRinZtAHaOihmNFs+Rm3VyLT4/J9/
-         qnZA==
+        bh=CP130Joo5LnzHA5fd0JPgyy8qzQq4QiMmlbo4WSc/bc=;
+        b=PSS1H3WXFIMfkQxsIWTWwPkYK0wcqIk2+76oPkMNGMZ0qSS0iW+g1XjW6KXrKR+L62
+         VZEOcDtuRohjJWGX17jBc1X1QFF5D6QVXy/07L0sCzejVVBUVGun7Rdp3RacKI13kR+G
+         lnFNiTYewYD7lmVCYatZZ2L7DrabtOQEcTGNOeVyK1b3JHPBeBBD5Qqsb3I3H0eVDNfW
+         nHM6svD7D9x/YbKj3k4Yi9DfY+ceccgIxldW8uXVMXTfC3lKetcPIu8unIGmQo70yGvX
+         it9eh/YrirQGva1/nfhawMjYtC5hJ2btu4n/JGYDt9CK30DoC8JabmNh9qmyfMpoXleB
+         g3FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TSGFEEK57vZgNj+GJPFHPovuhunjSnX1LTdz3s3nsLA=;
-        b=tKB8SrQUdyOF8p+arlRkrV4XLQuXA12LtqPvMn5/VX/4OJz4hXsP8pr+h1X00A1MtO
-         vN0aExrZPT/JE+HB6Hehr/+NikLZDKPBhy/+EqVot6DLI9Az2rwaHSWMa5ee3bi3S59x
-         PL1eTZJgD2z0bIDZueTkbw+/Qq2nNDnnjb2EfKZFYenBbHyP8f6bFdSZmDHusmE37Yf3
-         pVvLkzNFAJY4zpAOnxmw9Zjsp1R0Gx3MuOOpBfVzFY4SlJt5ZssC5ILZG+lgbQhdIf0N
-         GND+8mIbtFsIISBWgU4h3T38j8zV2zRlntZDAFn6bgsFymNC4InJ5lRSVP4HG6NBmXqK
-         xDAg==
-X-Gm-Message-State: AOAM531vN8frJKG01qcmuKM9CJLz5769vjlxQdrkIn8w6i10uaaOTvdn
-        gY3N5hGQ3kEIzBGtZewOYgQDLg==
-X-Google-Smtp-Source: ABdhPJy6QhigKx/sG6cyezTv+KNVxOCZGCewaO1EOL4bzSW8lGQxoFkpqUmBkvpQwCmQisQsh4GUKQ==
-X-Received: by 2002:a17:906:c109:: with SMTP id do9mr43177666ejc.48.1639397635903;
-        Mon, 13 Dec 2021 04:13:55 -0800 (PST)
+        bh=CP130Joo5LnzHA5fd0JPgyy8qzQq4QiMmlbo4WSc/bc=;
+        b=mVW3KOOzSSPdX4DbR4yHh4LUYEMEePDFOkzYLzcPMfMqRYYfvwRbFcgLhgdE1txXZV
+         /sEyX4A7Q3iUM6wq3eRB/dpkvMnIjC+FeexfzmF172mw4tIwZIBl1zZ6RvRWP2OoofoQ
+         fP13IxYbEWobOxjkzyXIjr6PnTM3WpK5pvsT7dhHWslz64Dg5nGHVxbKX8eKEENUWkrO
+         9Mgd+frmSgitKHnwJSR596SFSGWv1LlCjEXjdPaKg1uByCcu7bbt2Np2q5VJdWukyI/c
+         8LuRCyAvKTQ+287zd2L1EAzSvxvlZGvAICp1sJl1Pnn9epM8YSHzzwkIFgUtCOfgqFLW
+         K1Uw==
+X-Gm-Message-State: AOAM531M9Yo6G2juAB7ETLzUwe7MtKwP7HVzBvdc88VgjFtqg71t1Zci
+        gvJua8sNg4a19Lid9zKVwGEF4g==
+X-Google-Smtp-Source: ABdhPJzEjrG8YHO4P2YfYwddzrc1l59/YSf3cTyU7Z/e8XhYhxdxpkf6MgfH65sMs/AbT7XDZH+LtA==
+X-Received: by 2002:a17:907:3c6:: with SMTP id su6mr46285599ejb.255.1639397638590;
+        Mon, 13 Dec 2021 04:13:58 -0800 (PST)
 Received: from localhost ([104.245.96.202])
-        by smtp.gmail.com with ESMTPSA id bd12sm6247430edb.11.2021.12.13.04.13.55
+        by smtp.gmail.com with ESMTPSA id d19sm6273171edt.34.2021.12.13.04.13.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 04:13:55 -0800 (PST)
+        Mon, 13 Dec 2021 04:13:58 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -56,9 +56,9 @@ To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 3/4] coresight: etm4x: Don't trace PID for non-root PID namespace
-Date:   Mon, 13 Dec 2021 20:13:22 +0800
-Message-Id: <20211213121323.1887180-4-leo.yan@linaro.org>
+Subject: [PATCH v2 4/4] coresight: etm3x: Don't trace PID for non-root PID namespace
+Date:   Mon, 13 Dec 2021 20:13:23 +0800
+Message-Id: <20211213121323.1887180-5-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211213121323.1887180-1-leo.yan@linaro.org>
 References: <20211213121323.1887180-1-leo.yan@linaro.org>
@@ -68,89 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When runs in perf mode, the driver always enables the PID tracing.  This
-can lead confusion when the profiling session runs in non-root PID
-namespace, whereas it records the PIDs from the root PID namespace.
+ETMv3 driver enables PID tracing by directly using perf config from
+userspace, this means the tracer will capture PID packets from root
+namespace but the profiling session runs in non-root PID namespace.
+Finally, the recorded packets can mislead perf reporting with the
+mismatched PID values.
 
-To avoid confusion for PID tracing, when runs in perf mode, this patch
-changes to only enable PID tracing for root PID namespace.
-
-As result, after apply this patch, the perf tool reports PID as '-1' for
-all samples:
-
-  # unshare --fork --pid perf record -e cs_etm// -m 64K,64K -a \
-	-o perf_test.data -- uname
-  # perf report -i perf_test.data --itrace=Zi1000i --stdio
-
-  # Total Lost Samples: 0
-  #
-  # Samples: 94  of event 'instructions'
-  # Event count (approx.): 94000
-  #
-  # Overhead  Command  Shared Object      Symbol
-  # ........  .......  .................  ..............................
-  #
-      68.09%  :-1      [kernel.kallsyms]  [k] __sched_text_end
-       3.19%  :-1      [kernel.kallsyms]  [k] hrtimer_interrupt
-       2.13%  :-1      [kernel.kallsyms]  [k] __bitmap_and
-       2.13%  :-1      [kernel.kallsyms]  [k] trace_vbprintk
-       1.06%  :-1      [kernel.kallsyms]  [k] __fget_files
-       1.06%  :-1      [kernel.kallsyms]  [k] __schedule
-       1.06%  :-1      [kernel.kallsyms]  [k] __softirqentry_text_start
-       1.06%  :-1      [kernel.kallsyms]  [k] __update_load_avg_cfs_rq
-       1.06%  :-1      [kernel.kallsyms]  [k] __update_load_avg_se
-       1.06%  :-1      [kernel.kallsyms]  [k] arch_counter_get_cntpct
-       1.06%  :-1      [kernel.kallsyms]  [k] check_and_switch_context
-       1.06%  :-1      [kernel.kallsyms]  [k] format_decode
-       1.06%  :-1      [kernel.kallsyms]  [k] handle_percpu_devid_irq
-       1.06%  :-1      [kernel.kallsyms]  [k] irq_enter_rcu
-       1.06%  :-1      [kernel.kallsyms]  [k] irqtime_account_irq
-       1.06%  :-1      [kernel.kallsyms]  [k] ktime_get
-       1.06%  :-1      [kernel.kallsyms]  [k] ktime_get_coarse_real_ts64
-       1.06%  :-1      [kernel.kallsyms]  [k] memmove
-       1.06%  :-1      [kernel.kallsyms]  [k] perf_ioctl
-       1.06%  :-1      [kernel.kallsyms]  [k] perf_output_begin
-       1.06%  :-1      [kernel.kallsyms]  [k] perf_output_copy
-       1.06%  :-1      [kernel.kallsyms]  [k] profile_tick
-       1.06%  :-1      [kernel.kallsyms]  [k] sched_clock
-       1.06%  :-1      [kernel.kallsyms]  [k] timerqueue_add
-       1.06%  :-1      [kernel.kallsyms]  [k] trace_save_cmdline
-       1.06%  :-1      [kernel.kallsyms]  [k] update_load_avg
-       1.06%  :-1      [kernel.kallsyms]  [k] vbin_printf
+This patch changes to only enable PID tracing for root PID namespace.
+Note, the hardware supports VMID tracing from ETMv3.5, but the driver
+never enables VMID trace, this patch doesn't handle VMID trace (bit 30
+in ETMCR register) particularly.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/hwtracing/coresight/coresight-etm3x-core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index 86a313857b58..f3eda536267c 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -656,7 +656,9 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
- 		config->cfg |= BIT(11);
- 	}
+diff --git a/drivers/hwtracing/coresight/coresight-etm3x-core.c b/drivers/hwtracing/coresight/coresight-etm3x-core.c
+index cf64ce73a741..7d413ba8b823 100644
+--- a/drivers/hwtracing/coresight/coresight-etm3x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm3x-core.c
+@@ -340,6 +340,10 @@ static int etm_parse_event_config(struct etm_drvdata *drvdata,
  
--	if (attr->config & BIT(ETM_OPT_CTXTID))
-+	/* Only trace contextID when runs in root PID namespace */
-+	if ((attr->config & BIT(ETM_OPT_CTXTID)) &&
-+	    task_is_in_init_pid_ns(current))
- 		/* bit[6], Context ID tracing bit */
- 		config->cfg |= BIT(ETM4_CFG_BIT_CTXTID);
+ 	config->ctrl = attr->config;
  
-@@ -670,7 +672,11 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
- 			ret = -EINVAL;
- 			goto out;
- 		}
--		config->cfg |= BIT(ETM4_CFG_BIT_VMID) | BIT(ETM4_CFG_BIT_VMID_OPT);
++	/* Don't trace contextID when runs in non-root PID namespace */
++	if (!task_is_in_init_pid_ns(current))
++		config->ctrl &= ~ETMCR_CTXID_SIZE;
 +
-+		/* Only trace virtual contextID when runs in root PID namespace */
-+		if (task_is_in_init_pid_ns(current))
-+			config->cfg |= BIT(ETM4_CFG_BIT_VMID) |
-+				       BIT(ETM4_CFG_BIT_VMID_OPT);
- 	}
- 
- 	/* return stack - enable if selected and supported */
+ 	/*
+ 	 * Possible to have cores with PTM (supports ret stack) and ETM
+ 	 * (never has ret stack) on the same SoC. So if we have a request
 -- 
 2.25.1
 

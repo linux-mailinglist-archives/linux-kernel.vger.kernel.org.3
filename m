@@ -2,268 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6223B472C23
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B084A472C31
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbhLMMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236679AbhLMMPq (ORCPT
+        id S236734AbhLMMVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:21:03 -0500
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:18888 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230050AbhLMMU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:15:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854B4C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kJtXQtfvYfjtAuOsUxUmIXm6ivARMk0ODegCZPt1LPs=; b=H7bbFZ/quMX3+o3miYBzwg0533
-        Qu9mtfezrl2Eb3JCiNkhYV36v41+D4lmA0oyOM6Xmm/sbOPWxA/mIlwRNSF5Pk3vKl7HWdsbbc6x8
-        Vhax30mWT9EQw2RmTvjEQNi0fyRV41sYKnyPDWW3UeDTdaHsthBr9iu0jtH9JHGoGm0gEWOC3hn+i
-        qlqXE+lvRYKfMVG7zVHBR1/gh7qp/HWyvUWy2uEARKUA3cbp64JsE5YczGjaWtNgtkC9moJmA+b+C
-        yGbe+7Xg9btzD3WdunriM/Tt50R0LLdIZBxIDccMY/t67fENDtTMobw4+dT2PlDlKfSNONNhqnZNt
-        qEBn9o0w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwkEz-00Cm5V-Cc; Mon, 13 Dec 2021 12:15:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2599D30026A;
-        Mon, 13 Dec 2021 13:15:36 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D4FBC2D3EC7E9; Mon, 13 Dec 2021 13:15:36 +0100 (CET)
-Date:   Mon, 13 Dec 2021 13:15:36 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     will@kernel.org, boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, mark.rutland@arm.com,
-        elver@google.com, keescook@chromium.org, hch@infradead.org,
-        torvalds@linux-foundation.org, axboe@kernel.dk
-Subject: [PATCH v2 10/9] atomic: Document the atomic_{}_overflow() functions
-Message-ID: <Ybc5aMFodXvDkT4f@hirez.programming.kicks-ass.net>
-References: <20211210161618.645249719@infradead.org>
+        Mon, 13 Dec 2021 07:20:56 -0500
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BDAhM0F009619;
+        Mon, 13 Dec 2021 04:20:43 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=fJo3EHWuNJ5FQ7K8WTwxINXkXvtkUh3n9u6j52+Tb2g=;
+ b=Ff2YYWjqdNmEB2WjiK7rBhuIvD3N6M5kjRAzLzEzDmTyQ8Nwt2/ucG9gIKfbC43+65Kk
+ PEQ20jHa1CyabxycqetEdsL8BxZsxZd2P4fYKp9zKLQpM97wk0gFTftue6wbhewgS5Rs
+ sGe7LQUCZDOEXPdW+g4xNCX9DDejGJHuRVMgdSkGWCT5C+YQQAPW0VmTRnB9QUW0gfsc
+ aiQQdnOnWumTD7ovRyvilYrf/BAGvEmgtzU/mWFXkMlfRfIiGdjoQL8KyUW3C3wH/e3q
+ xqvDynK9JDMRAwzWT9dBnCs6HddTy7w92SXUQMk8/spF1SwgpksSRY2P/NffF/hXjqS7 MA== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3cwc9ruupu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Dec 2021 04:20:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ddQf3nuEtqm2e8GbxoY/bgZxe5O6Rhj0L1o3Dpl7hcqJVhfb5PHcXPtsaUBjTc1F5fJB5q9wFen1h+jUvQfa+rl+75k9g6ZIRRxiMnSbFGzL8hcqb/S/LK7hAXSYbslfKU77wtmaVhcSn+Rs9loT0oxTCXN2cgf7bubZAX/Z47I/Mylofqj1QVt2QGD6+GLS7O2aP6iOF+epps0XmLlb8CG90Q7oP+Nv6lJciHJ4k6MWCIsCGHqy8rFpkUXJS0ojBpKip/B8FtvB2UX+AOsTJNgjXbwawo9jdHW5Y3YH8Esm/hs20mOD1wOwEX4CXukytTUJqGz8VyzPXcSWbigJpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fJo3EHWuNJ5FQ7K8WTwxINXkXvtkUh3n9u6j52+Tb2g=;
+ b=XNHCJ8pQJtYLW6Qform1rDjHKJl3FwR8PKLvjNy0IjPMM50xKgV2D8e2lJY9CDhnVEVuV6cYwentW9RUmtKxZJaEw0Ava91vty/2FbbvUt5s7icXDgUQfXnRvsbp80NE40+L8+NrUkViKI6NoDeR79DuLijb1jml1sxQupk5xNd1q7lxKWLD/slNvIDKKdtuVNuGlgiPGgmpyndw3qyKTmqgCsx4Y4xqmpD74di6IlwaUKdlhYi3kXsfVkt+094sPHDzIybaTMocvOEK+EoJv0SLc7bZhpkB7P3tqtsUCxDqXQHBh2cSXWTs6tu7gL9YXfVizVK4N8d2X1EnOgK3gQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 64.207.220.244) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fJo3EHWuNJ5FQ7K8WTwxINXkXvtkUh3n9u6j52+Tb2g=;
+ b=e8oIAktOZaWxrJlfv9SYF3sdeiLI2vaIox1hHFG70lu/zPo/ljJsBxrq+mezMEIjYkzqW4VRLHTFtPOEBj+DHZlB82A4VIvN/k3kYMKKmpxbC1zf+AEg9yoDUeVXC1ZZe3IPlRC1xAL1g9KnCQ2yoGSNHjZC1almJ1FcAtHiwUE=
+Received: from DM5PR19CA0060.namprd19.prod.outlook.com (2603:10b6:3:116::22)
+ by BL0PR07MB4035.namprd07.prod.outlook.com (2603:10b6:207:49::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Mon, 13 Dec
+ 2021 12:20:39 +0000
+Received: from DM6NAM12FT056.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:3:116:cafe::79) by DM5PR19CA0060.outlook.office365.com
+ (2603:10b6:3:116::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13 via Frontend
+ Transport; Mon, 13 Dec 2021 12:20:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 64.207.220.244)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 64.207.220.244 as permitted sender) receiver=protection.outlook.com;
+ client-ip=64.207.220.244; helo=wcmailrelayl01.cadence.com;
+Received: from wcmailrelayl01.cadence.com (64.207.220.244) by
+ DM6NAM12FT056.mail.protection.outlook.com (10.13.179.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4801.7 via Frontend Transport; Mon, 13 Dec 2021 12:20:38 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 1BDCKbEA201702
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=OK);
+        Mon, 13 Dec 2021 04:20:39 -0800
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu5.global.cadence.com (10.160.110.202) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 13 Dec 2021 13:20:25 +0100
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Mon, 13 Dec 2021 13:20:25 +0100
+Received: from gli-login.cadence.com (10.187.128.100) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Mon, 13 Dec 2021 13:20:25 +0100
+Received: from gli-login.cadence.com (localhost [127.0.0.1])
+        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 1BDCKOQ1048902;
+        Mon, 13 Dec 2021 13:20:24 +0100
+Received: (from pawell@localhost)
+        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 1BDCKNp5048753;
+        Mon, 13 Dec 2021 13:20:23 +0100
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>,
+        <jianhe@ambarella.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: cdnsp: Fix lack of spin_lock_irqsave/spin_lock_restore
+Date:   Mon, 13 Dec 2021 13:20:01 +0100
+Message-ID: <20211213122001.47370-1-pawell@gli-login.cadence.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210161618.645249719@infradead.org>
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 21b78f3c-1527-4337-2820-08d9be32f8fc
+X-MS-TrafficTypeDiagnostic: BL0PR07MB4035:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR07MB4035ADD8235D790714166D8BDD749@BL0PR07MB4035.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lR+z0hRnybTPqxYMeEQGloHvTSyexUiNXjVTUWx9rYPvBQl0rwhhL5rDdcbRMVKVsHUwSWfHbJMN6itJZnJ6r7B9o4urC+v9DgbpLrr6awOKHlWtWZ4Z/cycy5WJg9BG4ZhCIau2KTxQ4PUd+Zy5a024PMtsiQ6grsHDy+rNjp8N2sOq4/nYbp5QqP5baRgA6sffY8YhfT0gThPYK44zQL4yR/aOAJdMYLsUkidlc6uGiwBhiNBfNE2p903KgEW7S37YgTxpkUnMKJfdvt7vvVf9y6n/mNTy9J2Dol3MQMTQlhZYLcEG2biqMu0EPlT+Y2zVi7wiP+aKXkMvCbaIog8mp9S5SPvGj/+eTqDCbqBkw5kqIQ1Gj3d3mOXXgosr1KlelOh9sOnt73rL1tWDlZdYfkP9sVxCvcIArRFh5OOJN8exkayAWKRcK4gPlE9b2QfGkBzz3U1A5yCbE8fdAZh2GQDxLcYU1Y3VpAH/6QMrCWiXYGY4SKZvq2rxqf2F3ptjg8fxaHERm7aGArbgvwsYdCSrjn21ToihMzUOm3MidfgXG8rk+G2iYYX7WT4R4l2svRYyputnTUPmk8h9oL3VlxKebk+dTEf8X2HnyOYiG/XYQqcAcFYq01bnVX6g0+E4Xlsdur/CWf4O6jRRVO2u3MbbZHmMdiKwvogqUmDAgpQSeTGKKIygkkLGLo0nyJzdTDHFwlWfSFBMWK8DmrezVUmncfG991g0eDRkOrnsjwjS7xqE2XLsqMl8VF0mx6wVQ4JOv9jtYYaOxQD8jbkgeoiiNBHy147cTZaFsQ9cUyvC10prSt04n+AmPv8LlkOWYcWBUI4/vyudTguqtg==
+X-Forefront-Antispam-Report: CIP:64.207.220.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wcmailrelayl01.cadence.com;PTR:ErrorRetry;CAT:NONE;SFS:(4636009)(36092001)(46966006)(36840700001)(40470700001)(83380400001)(70206006)(426003)(54906003)(81166007)(356005)(336012)(508600001)(6916009)(86362001)(42186006)(1076003)(47076005)(8676002)(5660300002)(186003)(2906002)(70586007)(40460700001)(26005)(36860700001)(4326008)(6666004)(82310400004)(316002)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 12:20:38.3615
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21b78f3c-1527-4337-2820-08d9be32f8fc
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.244];Helo=[wcmailrelayl01.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT056.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR07MB4035
+X-Proofpoint-ORIG-GUID: uD-fV9w9dZ6fvnqaCbFGkhP0TntAgTTm
+X-Proofpoint-GUID: uD-fV9w9dZ6fvnqaCbFGkhP0TntAgTTm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-13_04,2021-12-13_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 spamscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=532 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112130079
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Pawel Laszczak <pawell@cadence.com>
 
-They're damn special, they're very likely to confuse people, write a
-few words in a vain attempt to twart some of that confusion.
+Patch puts content of cdnsp_gadget_pullup function inside
+spin_lock_irqsave and spin_lock_restore section.
+This construction is required here to keep the data consistency,
+otherwise some data can be changed e.g. from interrupt context.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+Reported-by: Ken (Jian) He <jianhe@ambarella.com>
+cc: <stable@vger.kernel.org>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 ---
- Documentation/atomic_t.txt                     |   36 +++++++++++++++++
- include/linux/atomic/atomic-arch-fallback.h    |   52 ++++++++++++++++++++++++-
- scripts/atomic/fallbacks/dec_and_test_overflow |   10 ++++
- scripts/atomic/fallbacks/dec_overflow          |    9 ++++
- scripts/atomic/fallbacks/inc_overflow          |    9 ++++
- 5 files changed, 115 insertions(+), 1 deletion(-)
+ drivers/usb/cdns3/cdnsp-gadget.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/Documentation/atomic_t.txt
-+++ b/Documentation/atomic_t.txt
-@@ -45,6 +45,14 @@ The 'full' API consists of (atomic64_ an
-   atomic_sub_and_test(), atomic_dec_and_test()
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index f6d231760a6a..d0c040556984 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -1544,8 +1544,10 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
+ {
+ 	struct cdnsp_device *pdev = gadget_to_cdnsp(gadget);
+ 	struct cdns *cdns = dev_get_drvdata(pdev->dev);
++	unsigned long flags;
  
+ 	trace_cdnsp_pullup(is_on);
++	spin_lock_irqsave(&pdev->lock, flags);
  
-+Reference count with overflow (as used by refcount_t):
+ 	if (!is_on) {
+ 		cdnsp_reset_device(pdev);
+@@ -1553,6 +1555,9 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
+ 	} else {
+ 		cdns_set_vbus(cdns);
+ 	}
 +
-+  atomic_inc_overflow(), atomic_dec_overflow()
-+  atomic_dec_and_test_overflow()
++	spin_unlock_irqrestore(&pdev->lock, flags);
 +
-+  ATOMIC_OVERFLOW_OFFSET
-+
-+
- Misc:
+ 	return 0;
+ }
  
-   atomic_inc_and_test(), atomic_add_negative()
-@@ -157,6 +165,34 @@ atomic variable) can be fully ordered an
- visible.
- 
- 
-+Overflow ops:
-+
-+The atomic_{}_overflow() ops are similar to their !_overflow() bretheren with
-+two notable exceptions:
-+
-+ - they take a label as their final argument to to jump to when the atomic op
-+   overflows;
-+
-+ - the actual value can be offset from 0 in order to allow architectures
-+   to play games with condition flags in order to generate better code. This
-+   offset is ATOMIC_OVERFLOW_OFFSET.
-+
-+The canonical overflow conditions are (ATOMIC_OVERFLOW_OFFSET == 0):
-+
-+  inc: zero or negative on the value pre increment
-+  dec: zero or negative on the value post decrement
-+  dec_and_test: negative on the value post decrement
-+
-+This gives an effective range of [0, INT_MIN] for the actual value. When an
-+architecture uses ATOMIC_OVERFLOW_OFFSET == 1 (x86), the effective range
-+becomes [-1, INT_MIN], or [0, INT_MIN+1] after correction.
-+
-+These semantics match the reference count use-case (for which they were
-+created). Specifically incrementing from zero is a failure because zero means
-+the object is freed (IOW use-after-free). Decrementing to zero is a failure
-+because it goes undetected (see dec_and_test) and the object would leak.
-+
-+
- ORDERING  (go read memory-barriers.txt first)
- --------
- 
---- a/include/linux/atomic/atomic-arch-fallback.h
-+++ b/include/linux/atomic/atomic-arch-fallback.h
-@@ -1251,6 +1251,14 @@ arch_atomic_dec_if_positive(atomic_t *v)
- #endif
- 
- #ifndef arch_atomic_inc_overflow
-+/**
-+ * arch_atomic_inc_overflow - increment with overflow exception
-+ * @_v: pointer of type atomic_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically increments @_v and goto @_label when the old
-+ * value (+ATOMIC_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_atomic_inc_overflow(_v, _label)				\
- do {									\
- 	int __old = arch_atomic_fetch_inc(_v);			\
-@@ -1260,6 +1268,14 @@ do {									\
- #endif
- 
- #ifndef arch_atomic_dec_overflow
-+/**
-+ * arch_atomic_dec_overflow - decrement with overflow exception
-+ * @_v: pointer of type atomic_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically decrements @_v and goto @_label when the
-+ * result (+ATOMIC_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_atomic_dec_overflow(_v, _label)				\
- do {									\
- 	int __new = arch_atomic_dec_return(_v);			\
-@@ -1269,6 +1285,15 @@ do {									\
- #endif
- 
- #ifndef arch_atomic_dec_and_test_overflow
-+/**
-+ * arch_atomic_dec_and_test_overflow - decrement and test if zero with overflow exception
-+ * @_v: pointer of type atomic_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically decrements @_v and returns true if the result
-+ * (+ATOMIC_OVERFLOW_OFFSET) is zero or goto @_label when the
-+ * result (+ATOMIC_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_atomic_dec_and_test_overflow(_v, _label)		\
- ({									\
- 	bool __ret = false;						\
-@@ -2389,6 +2414,14 @@ arch_atomic64_dec_if_positive(atomic64_t
- #endif
- 
- #ifndef arch_atomic64_inc_overflow
-+/**
-+ * arch_atomic64_inc_overflow - increment with overflow exception
-+ * @_v: pointer of type atomic64_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically increments @_v and goto @_label when the old
-+ * value (+ATOMIC64_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_atomic64_inc_overflow(_v, _label)				\
- do {									\
- 	s64 __old = arch_atomic64_fetch_inc(_v);			\
-@@ -2398,6 +2431,14 @@ do {									\
- #endif
- 
- #ifndef arch_atomic64_dec_overflow
-+/**
-+ * arch_atomic64_dec_overflow - decrement with overflow exception
-+ * @_v: pointer of type atomic64_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically decrements @_v and goto @_label when the
-+ * result (+ATOMIC64_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_atomic64_dec_overflow(_v, _label)				\
- do {									\
- 	s64 __new = arch_atomic64_dec_return(_v);			\
-@@ -2407,6 +2448,15 @@ do {									\
- #endif
- 
- #ifndef arch_atomic64_dec_and_test_overflow
-+/**
-+ * arch_atomic64_dec_and_test_overflow - decrement and test if zero with overflow exception
-+ * @_v: pointer of type atomic64_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically decrements @_v and returns true if the result
-+ * (+ATOMIC64_OVERFLOW_OFFSET) is zero or goto @_label when the
-+ * result (+ATOMIC64_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_atomic64_dec_and_test_overflow(_v, _label)		\
- ({									\
- 	bool __ret = false;						\
-@@ -2420,4 +2470,4 @@ do {									\
- #endif
- 
- #endif /* _LINUX_ATOMIC_FALLBACK_H */
--// e4c677b23b3fd5e8dc4bce9d6c055103666cfc4a
-+// ccccab23ad71e0523949b969f68b40fe6812fc15
---- a/scripts/atomic/fallbacks/dec_and_test_overflow
-+++ b/scripts/atomic/fallbacks/dec_and_test_overflow
-@@ -1,4 +1,14 @@
-+ATOMIC=`echo ${atomic} | tr '[:lower:]' '[:upper:]'`
- cat << EOF
-+/**
-+ * arch_${atomic}_dec_and_test_overflow - decrement and test if zero with overflow exception
-+ * @_v: pointer of type ${atomic}_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically decrements @_v and returns true if the result
-+ * (+${ATOMIC}_OVERFLOW_OFFSET) is zero or goto @_label when the
-+ * result (+${ATOMIC}_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_${atomic}_dec_and_test_overflow(_v, _label)		\\
- ({									\\
- 	bool __ret = false;						\\
---- a/scripts/atomic/fallbacks/dec_overflow
-+++ b/scripts/atomic/fallbacks/dec_overflow
-@@ -1,4 +1,13 @@
-+ATOMIC=`echo ${atomic} | tr '[:lower:]' '[:upper:]'`
- cat << EOF
-+/**
-+ * arch_${atomic}_dec_overflow - decrement with overflow exception
-+ * @_v: pointer of type ${atomic}_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically decrements @_v and goto @_label when the
-+ * result (+${ATOMIC}_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_${atomic}_dec_overflow(_v, _label)				\\
- do {									\\
- 	${int} __new = arch_${atomic}_dec_return(_v);			\\
---- a/scripts/atomic/fallbacks/inc_overflow
-+++ b/scripts/atomic/fallbacks/inc_overflow
-@@ -1,4 +1,13 @@
-+ATOMIC=`echo ${atomic} | tr '[:lower:]' '[:upper:]'`
- cat << EOF
-+/**
-+ * arch_${atomic}_inc_overflow - increment with overflow exception
-+ * @_v: pointer of type ${atomic}_t
-+ * @_label: label to goto on overflow
-+ *
-+ * Atomically increments @_v and goto @_label when the old
-+ * value (+${ATOMIC}_OVERFLOW_OFFSET) is negative.
-+ */
- #define arch_${atomic}_inc_overflow(_v, _label)				\\
- do {									\\
- 	${int} __old = arch_${atomic}_fetch_inc(_v);			\\
+-- 
+2.25.1
+

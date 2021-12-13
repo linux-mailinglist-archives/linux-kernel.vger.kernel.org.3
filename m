@@ -2,178 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 690D2472E8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A18F472E8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237726AbhLMOJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:09:47 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37890 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbhLMOJq (ORCPT
+        id S237947AbhLMOJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:09:56 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:37687 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231394AbhLMOJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:09:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC3B761043;
-        Mon, 13 Dec 2021 14:09:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63CDBC34601;
-        Mon, 13 Dec 2021 14:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639404585;
-        bh=QrAGT1B3Yarjb7AwosvkB0JspOa/cD58mcxtYJAOAts=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=j+klMESi4uCfFEylZP6jh02UBFCAZJ6wIGdaIH93QSPIp5AZs7YgURWib4DABiLfq
-         OhvoxLarode+c+4kbKs5LSyG8JEr3rd39guP89VgNzTrhuVIYLwVflYS5B3vL19s2P
-         BlI6Kh0JDnGDLUZlniKEiEkpBQvfo6ToSs6GWU/lmy4h2hodIJWo1nU0C1mD+TV5Ej
-         qBvdf10NMdadXgtdUzsPbUFFedYguHjd2kwWspavdkbzdbqmoWs28KRJB45GD2Cbga
-         bihOV/FSDcLmXYW7u+Ic4khebyO6i9MFnAGsGycXsZhVXChrsNWH/67mn/OgVI4Wxj
-         tuCNtPp2a5q4g==
-Received: by mail-ot1-f41.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso17472406otf.12;
-        Mon, 13 Dec 2021 06:09:45 -0800 (PST)
-X-Gm-Message-State: AOAM533f2l48xlmgUbLc3LBwshuHNv4Lttgf2ke9dXy65g0qcvG4BPgk
-        UBGpO8LWvLWo0zbh4VKcavbKn+VYUz37mE0ekb4=
-X-Google-Smtp-Source: ABdhPJxzAenHXhObuJaIOMnjAJbhyD1itt71Ka+xu82CEa7c/Ct3re6PQ4aoYnNTLQsSuuwrJXjXj3CH92jtpJtFumg=
-X-Received: by 2002:a9d:364b:: with SMTP id w69mr25556807otb.18.1639404584560;
- Mon, 13 Dec 2021 06:09:44 -0800 (PST)
+        Mon, 13 Dec 2021 09:09:56 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 59C6E5801C6;
+        Mon, 13 Dec 2021 09:09:55 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 13 Dec 2021 09:09:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=VCeSqHRowXDwNfr8+gvSIOJad9A
+        1kkby+tub0oRqUMQ=; b=bWPevrnPHisRHzc0EJ5cI7uTMLofz4nrrSMW4344ZKH
+        xfhynbf/Fqd82xAb3yDLgC/slsF4p8DikAisNywSNa47XtnvlGuqg0ODtdx+QYw7
+        otTB+jpzJGhyN9AlUQcdoGXh2NEUqEPuMsNZB1mhCRr1td+W0Df312AfIg/nj4KM
+        NS4E2xgWwV0swXvG3F+p4cX+xKYR4GSzlyD+wimJAI4xSjZQ/43yitcEfJFOQlJP
+        TYkcH+OIfWpMCCMMKD+bWy0cw2EuR3d2/vywx5e8hz63v2jRwNBkLYmd8D7kM80d
+        ERrgoipzDc2aNMnhuMlHUv54EA8GF2MmWu8DnkU7Dag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=VCeSqH
+        RowXDwNfr8+gvSIOJad9A1kkby+tub0oRqUMQ=; b=OiqX2KsdN/fF1azSQuzCP3
+        L2EO9OBCU16JhO6JCgToypOYsiTLRekYe+YBo0IA1+VLs7KOi0AqEK5yeAw61w6e
+        KAuIhYHZ28Lhc1xqXmcA9io6oBw4W0Ia6+dvDEhSWSiuOmJY4uDGUTOu4FcaDnmY
+        sxrsr4JEaVUQkoE55kVidpfDwHwlEEMdzE+cbxir0UiXci2X46d2k9leFyhLk02a
+        +U+poVWNj3yZXOIDplbFXpL7UcbTaHBYA3cXfVVDy6ufJa8l/cns8g1Hf3rQBLvz
+        k/AdYq2ESVJiyaARwYBMgpKJ4cybax4o2/fw/Y2DP+yqH3tyEmmHHDh9YolwyTHA
+        ==
+X-ME-Sender: <xms:MlS3YYj2QWFWZjWsKiSc144qYsu3uTMnCCyDuPBMmTdc3SLygZ7r9w>
+    <xme:MlS3YRBE6ikBnTayE59hqinpvE8uAmaIomGmWgxkPFLguLluRPivjcHf4_n-RDbHc
+    XBG1ZKLXRR-_w>
+X-ME-Received: <xmr:MlS3YQGzBegK2R08UIsPlAHfjjv4pmXDgvab3hU1q51eGAZRC5fwOS06henmMfG2uI5CF-wZjFok6ZI2XC6K-BEeCQa0elZZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkeekgdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:MlS3YZSJDxHmQXDVM-IaciNarVBzUkW-kvoLcB6Wc4-T3r39Q16WYw>
+    <xmx:MlS3YVxQ7KHsCmanBu90ClwHdQsep2oAN6b5CGqGe4d8GCMQVTXvcA>
+    <xmx:MlS3YX57h59iUxwKtLrkFxTh-_dvr9W1uNS3uIxp01004Ouh4v7ToA>
+    <xmx:M1S3YYo9zyFkmuep8Crp71-cdsGVQ91xh05Wzx5FXGhvTgv7CF1Hqw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Dec 2021 09:09:53 -0500 (EST)
+Date:   Mon, 13 Dec 2021 15:09:51 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Xiaoke Wang <xkernel.wang@foxmail.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
+Message-ID: <YbdULyzjOq0hUi8Q@kroah.com>
+References: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
 MIME-Version: 1.0
-Received: by 2002:ac9:428a:0:0:0:0:0 with HTTP; Mon, 13 Dec 2021 06:09:44
- -0800 (PST)
-In-Reply-To: <20211213113903.bkspqw2qlpct3uxr@pali>
-References: <20210927111948.GA16257@gofer.mess.org> <20211211020453.mkuzumgpnignsuri@pali>
- <YbbskNBJI8Ak1Vl/@angband.pl> <20211213113903.bkspqw2qlpct3uxr@pali>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Mon, 13 Dec 2021 23:09:44 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd9fjSEsNDLMtqpWOcu9xWdFzr1gqLdC5aKJFmgK9MfHoA@mail.gmail.com>
-Message-ID: <CAKYAXd9fjSEsNDLMtqpWOcu9xWdFzr1gqLdC5aKJFmgK9MfHoA@mail.gmail.com>
-Subject: Re: Incorrect handling of . and .. files
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Adam Borowski <kilobyte@angband.pl>, Sean Young <sean@mess.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2021-12-13 20:39 GMT+09:00, Pali Roh=C3=A1r <pali@kernel.org>:
-> On Monday 13 December 2021 07:47:44 Adam Borowski wrote:
->> On Sat, Dec 11, 2021 at 03:04:53AM +0100, Pali Roh=C3=A1r wrote:
->> > I tried to find some information what is allowed and what not.
->> >
->> > On Monday 27 September 2021 12:19:48 Sean Young wrote:
->> > > Windows allows files and directories called "." and ".." to be
->> > > created
->> > > using UNC paths, i.e. "\\?\D:\..". Now this is totally insane
->> > > behaviour,
->> > > but when an exfat filesytem with such a file is mounted on Linux,
->> > > those
->> > > files show up as another directory and its contents is inaccessible.
->> > >
->> > > I can replicate this using exfat filesystems, but not ntfs.
->> >
->> > Microsoft exFAT specification explicitly disallow "." and "..", see:
->> [...]
->> > On the other hand Microsoft FAT32 specification can be understood that
->> > file may have long name (vfat) set to "." or ".." but not short name.
->> [...]
->> > OSTA UDF 2.60 specification does not disallow "." and ".." entries, bu=
-t
->> [...]
->> > So it means that "." and ".." entries could be stored on disk as valid
->> > file names.
->>
->> It doesn't matter one whit what the specification says.  Anyone with a
->> disk
->> editor can craft a filesystem containing filenames such as "." or "..",
->> "/"
->> "foo/bar" or anything else we would like to ban.
->
-> That is truth. But question is what should do fsck tools with such file
-> names on filesystems where "." and ".." are permitted? Fully valid
-> argument is "do not touch them" because there is nothing bad with these
-> names.
->
->> > > So, in Linux cannot read "." or ".." (i.e., I can't see "Hello,
->> > > World!"). I
->> > > don't know what the correct handling should be, but having two "." a=
-nd
->> > > two
->> > > ".." files does not seem right at all.
->> >
->> > This is really a bug in Linux kernel. It should not export "." and "..=
-"
->> > into VFS even when filesystem disk format supports such insane file
->> > names.
->>
->> This.
->>
->> Otherwise, every filesystem driver would need to contain redundant code
->> for
->> checking for such bad names.
->>
->> > So either Linux needs to completely hide these insane file names from
->> > VFS or translate them to something which do not conflict with other
->> > files in correct directory.
->>
->> Escaping bad names has the problem of the escaped name also possibly
->> existing -- perhaps even recursively.  Plus, the filesystem might be
->> using
->> hashed or tree indices which could go wrong if a name is altered.
->
-> vfat has already own escaping scheme and it is documented in mount(8)
-> manpage. Invalid characters are translated either to fixed char '?' or
-> to ':'... esc sequence if uni_xlate mount option is used. But it looks
-> like that that kernel vfat driver do not have these two entries "." and
-> ".." in its blacklist.
->
-> And, another important thing about vfat is that it has two file names
-> for each file. One short 8.3 and one long vfat. Short 8.3 do not allow
-> "." or "..", so another possibility how to handle this issue for vfat is
-> to show short 8.3 name in VFS when long is invalid.
->
-> For UDF case, specification already says how to handle problematic
-> file names, so I think that udf.ko could implement it according to
-> specification.
->
-> But for all other filesystems it is needed to do something ideally on
-> VFS layer.
->
-> What about generating some deterministic / predicable file names which
-> will not conflict with other file names in current directory for these
-> problematic files?
->
->> But then, I once proposed (and I'm pondering reviving) a ban for
->> characters
->> \x01..\x1f and possibly others, and if banned, they can still
->> legitimately
->> occur in old filesystems.
->>
->> > I guess that hiding them for exfat is valid thing as Microsoft
->> > specification explicitly disallow them. Probably fsck.exfat can be
->> > teach
->> > to rename these files and/or put them to lost+found directory.
->>
->> fsck fixing those is a good thing but we still need to handle them at
->> runtime.
->
-> Namjae Jeon, would you be able to implement fixing of such filenames in
-> fsck.exfat tool?
-We've recently been finalizing the repair function in fsck.exfat. We
-will check it as soon as it is finished.
+On Mon, Dec 13, 2021 at 04:27:15PM +0800, Xiaoke Wang wrote:
+> Note: Compare with the last email, this one is using my full name.
+> kmemdup() return NULL when some internal memory errors happen, it is
+> better to check the return value of it. Otherwise, some memory errors
+> will not be catched in time and may further result in wrong memory
+> access.
+> 
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>  drivers/thunderbolt/icm.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+> index 6255f1e..fff0c74 100644
+> --- a/drivers/thunderbolt/icm.c
+> +++ b/drivers/thunderbolt/icm.c
+> @@ -1741,8 +1741,13 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
+>  	if (!n)
+>  		return;
+>  
+> -	INIT_WORK(&n->work, icm_handle_notification);
+>  	n->pkg = kmemdup(buf, size, GFP_KERNEL);
+> +	if (!n->pkg) {
+> +		kfree(n);
+> +		return;
+> +	}
+> +
+> +	INIT_WORK(&n->work, icm_handle_notification);
+>  	n->tb = tb;
+>  
+>  	queue_work(tb->wq, &n->work);
+> -- 
 
-Thanks for your suggestion!
->
->>
->> Meow!
->> --
->> =E2=A2=80=E2=A3=B4=E2=A0=BE=E2=A0=BB=E2=A2=B6=E2=A3=A6=E2=A0=80
->> =E2=A3=BE=E2=A0=81=E2=A2=A0=E2=A0=92=E2=A0=80=E2=A3=BF=E2=A1=81 in the b=
-eginning was the boot and root floppies and they were
->> good.
->> =E2=A2=BF=E2=A1=84=E2=A0=98=E2=A0=B7=E2=A0=9A=E2=A0=8B=E2=A0=80         =
-                              -- <willmore> on
->> #linux-sunxi
->> =E2=A0=88=E2=A0=B3=E2=A3=84=E2=A0=80=E2=A0=80=E2=A0=80=E2=A0=80
->
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

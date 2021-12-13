@@ -2,144 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 908AC472128
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CEE47212F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbhLMGiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S230517AbhLMGoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbhLMGiH (ORCPT
+        with ESMTP id S230341AbhLMGoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:38:07 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C203C06173F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:38:06 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id 7so21883335oip.12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:38:06 -0800 (PST)
+        Mon, 13 Dec 2021 01:44:14 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F7FC06173F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:44:14 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id x131so14025234pfc.12
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 22:44:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8lP8OOorDp4RjZXoLRJhvTaaFlxLo7QMGtZf6Mua7X0=;
-        b=VvqbD7i/phDRw4qlo/3D8JSYLBuK9N9Idj+2AhKszf22QRc3mns9rbQIAGYmQR9Cre
-         JJpX/99WXVnfLUPMIEYw2BTEp9BUVjizx52QBoujIaooCUu8OPiqPGCw82L8McPAGRwT
-         casmlHZ73tCkjgVEfcjpBt9xLgXUc90nWtz8/VKTj7VYJ2Vx6cTxdr6bSrsa3jKd0HNR
-         3gdzjbK/ZXnJy/ZFb1NuP0MOixRinsKK6eqEnnAUNPJu02kCTdEWdJrxMnwSwJ+xOHak
-         k7h4HU4Yiic7u4xbqqGgQzrRaf3PyGTYV4OAhvomtwbga8lCFria43ju8aUxFnAS32XI
-         lhtw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=B3GY5pHxl40fgyTRDEfHUIewqx+99afdPdvQA2cgGa0=;
+        b=HV1fwtvSc5NgT0fVab6eaFlTGDGdER5gSzWEIzh/LUrn+P7j5QnhBsAm3fvi7kCm4s
+         Ez3PRkKCcTtDyII3WxkhgFgmUD6NHIrr+OjFLVV7t378bQ+vrKHFpBTscxseAJQClXfX
+         ak3n+sLpDfCAN/KH2r2Ii6Vw+Te4BbxQwrfza+nGLDmcUI0gEQyFKA4yHEbIdyxiqoHK
+         +n9vDWDRD6DTLo5E0QzTfkN4fztD1WNhq2VsWis87PFKnTf8GYewzmVdXCKruqhJy9rZ
+         iWpGJgRo9KTqvYVw+Lv5aClszUBGLXdmWU6NqkzDtu2NbM/I3XKVwSgTrkzRBs0BT2EN
+         LmvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8lP8OOorDp4RjZXoLRJhvTaaFlxLo7QMGtZf6Mua7X0=;
-        b=hmNu72jQ+qpT/ne/OgK4NWH1XqbVZrbryi20pP3wQCIqBAqnx3WoXi2Pwo11DzKsey
-         wSaWeyYvVfmfoyrCnN7ugVe+Pj+XjnzqLwUBDyIqG1Q0MEyHUvAoT9xNgAPFAJ0z6V/P
-         BIK9OMdpUk+tyNMaSt/pEO2HIo39SjiNp5PEJW9OugUKg5jvlFfLgcDW1cMeGi8/sjQD
-         xOMfaZcOjh0JDWvYCWRHac4FdkT03/TLWYFt6weoDBHIK+Q9NL6zOglzvX76lolfqoUv
-         XsJJ24OeRPqiuRDQA8skwmK7hZXOyjGxvWWd6zCPzsgP2tmMMxQ20YPhUkVfRObzYz0c
-         7yxA==
-X-Gm-Message-State: AOAM533JjfJS/+3aHzfwE2LfyRf9wt5XBJVrbU2oZU4Bvbx+ylidwn17
-        ohfiJEeXCJGy9GzjZLjhLPh1pg1BptBnGDP42ROVqQ==
-X-Google-Smtp-Source: ABdhPJxrvfANGAnK2tE5T2zE6CDhSVPk9jE0d3+LQ+mW7YRbOoSb0FlzP9qgVi00dKe8M4+tNVTTAP024Bdvq936/zY=
-X-Received: by 2002:aca:674a:: with SMTP id b10mr26934304oiy.66.1639377485743;
- Sun, 12 Dec 2021 22:38:05 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=B3GY5pHxl40fgyTRDEfHUIewqx+99afdPdvQA2cgGa0=;
+        b=afbhCT5X7YsznBIEowP7n9T/Jmqqje0NyDt7VUc4Ruc6HEO8m0mWfMkt6D9xfryqWt
+         TjR5CJwqZ1qfcPVVncnrnfhr3E3TVr0u6TCHIwQttzUYP0zYr1JOhrJ+mEk32xefkrvE
+         UAMZVcI2lf5DTkr55iYeEw33wJQhekkk4W6AylW3dCPMNwjvArTdq9bFBepgl74tf93Z
+         3wJXdmYIuzvwEVnYfNZIyZxAGLsbno3A7D4vZR9VNeUbCs60vidnoHf4wPXk+PP/zeko
+         oGRqBVhxBTWuSE8BkTcFxAA47sogERx4Er8T3DqP4K6LWJRCKS9hAOrZLeMj0qCGTGz4
+         g9hw==
+X-Gm-Message-State: AOAM531ORtfHd9wvinTTn5LWBP3niCm2F0Rzu63n9sBdSmMQrG1Xw0T/
+        w3Wm1EprRRqy199aOnhEKx++ypWwTpblJLtJbco=
+X-Google-Smtp-Source: ABdhPJxXig8nzXkyZqX0NJXTzek0j0BQMnOC2Y9YM2uKPN9n9em7rIUfo+N8RqG8z2dEMPwQ3XJsW8rOaoBES1S09ks=
+X-Received: by 2002:a05:6a00:888:b0:4a8:56c:d2c with SMTP id
+ q8-20020a056a00088800b004a8056c0d2cmr31837093pfj.40.1639377853889; Sun, 12
+ Dec 2021 22:44:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20211130074221.93635-1-likexu@tencent.com> <20211130074221.93635-5-likexu@tencent.com>
- <CALMp9eRAxBFE5mYw=isUSsMTWZS2VOjqZfgh0r3hFuF+5npCAQ@mail.gmail.com>
- <0ca44f61-f7f1-0440-e1e1-8d5e8aa9b540@gmail.com> <CALMp9eTtsMuEsimONp7TOjJ-uskwJBD-52kZzOefSKXeCwn_5A@mail.gmail.com>
- <b6c1eb18-9237-f604-9a96-9e6ca397121c@redhat.com> <CALMp9eRy==yu1uQriqbeezeQ+mtFyfyP_iy9HdDiSZ27SnEfFg@mail.gmail.com>
- <c381aa2c-beb5-480f-1f24-a14de693e78f@redhat.com> <CALMp9eTKrQVCQPm=hcA50JSUCctPaGLEP19biVbGAtBN54dQfA@mail.gmail.com>
- <CALMp9eS8xDgdbfJTbzMmek3RcXKwkLdGMW-uMkJR3eJZ6sf0GA@mail.gmail.com>
-In-Reply-To: <CALMp9eS8xDgdbfJTbzMmek3RcXKwkLdGMW-uMkJR3eJZ6sf0GA@mail.gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Sun, 12 Dec 2021 22:37:54 -0800
-Message-ID: <CALMp9eThnOMnCkYp1LYM6Ph3NeB296QvXEWtn06A_1XtS+VCDA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>, Andi Kleen <ak@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Received: by 2002:a05:6a20:4422:b0:5d:8fef:43a3 with HTTP; Sun, 12 Dec 2021
+ 22:44:13 -0800 (PST)
+Reply-To: sgtkaylam28@gmail.com
+From:   ken manthey <manken827@gmail.com>
+Date:   Sun, 12 Dec 2021 22:44:13 -0800
+Message-ID: <CAHbNM4EQKv=Zr=b0tNMYptkL-DVBoP42pEn2VxDdd8jfFpZnUQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 8:56 PM Jim Mattson <jmattson@google.com> wrote:
->
-> On Fri, Dec 10, 2021 at 3:31 PM Jim Mattson <jmattson@google.com> wrote:
-> >
-> > On Fri, Dec 10, 2021 at 2:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> > >
-> > > On 12/10/21 23:55, Jim Mattson wrote:
-> > > >>
-> > > >> Even for tracing the SDM says "Like the value returned by RDTSC, TSC
-> > > >> packets will include these adjustments, but other timing packets (such
-> > > >> as MTC, CYC, and CBR) are not impacted".  Considering that "stand-alone
-> > > >> TSC packets are typically generated only when generation of other timing
-> > > >> packets (MTCs and CYCs) has ceased for a period of time", I'm not even
-> > > >> sure it's a good thing that the values in TSC packets are scaled and offset.
-> > > >>
-> > > >> Back to the PMU, for non-architectural counters it's not really possible
-> > > >> to know if they count in cycles or not.  So it may not be a good idea to
-> > > >> special case the architectural counters.
-> > > >
-> > > > In that case, what we're doing with the guest PMU is not
-> > > > virtualization. I don't know what it is, but it's not virtualization.
-> > >
-> > > It is virtualization even if it is incompatible with live migration to a
-> > > different SKU (where, as you point out below, multiple TSC frequencies
-> > > might also count as multiple SKUs).  But yeah, it's virtualization with
-> > > more caveats than usual.
-> >
-> > It's not virtualization if the counters don't count at the rate the
-> > guest expects them to count.
->
-> Per the SDM, unhalted reference cycles count at "a fixed frequency."
-> If the frequency changes on migration, then the value of this event is
-> questionable at best. For unhalted core cycles, on the other hand, the
-> SDM says, "The performance counter for this event counts across
-> performance state transitions using different core clock frequencies."
-> That does seem to permit frequency changes on migration, but I suspect
-> that software expects the event to count at a fixed frequency if
-> INVARIANT_TSC is set.
-
-Actually, I now realize that unhalted reference cycles is independent
-of the host or guest TSC, so it is not affected by TSC scaling.
-However, we still have to decide on a specific fixed frequency to
-virtualize so that the frequency doesn't change on migration. As a
-practical matter, it may be the case that the reference cycles
-frequency is the same on all processors in a migration pool, and we
-don't have to do anything.
-
-
-> I'm not sure that I buy your argument regarding consistency. In
-> general, I would expect the hypervisor to exclude non-architected
-> events from the allow-list for any VM instances running in a
-> heterogeneous migration pool. Certainly, those events could be allowed
-> in a heterogeneous migration pool consisting of multiple SKUs of the
-> same microarchitecture running at different clock frequencies, but
-> that seems like a niche case.
->
->
-> > > > Exposing non-architectural events is questionable with live migration,
-> > > > and TSC scaling is unnecessary without live migration. I suppose you
-> > > > could have a migration pool with different SKUs of the same generation
-> > > > with 'seemingly compatible' PMU events but different TSC frequencies,
-> > > > in which case it might be reasonable to expose non-architectural
-> > > > events, but I would argue that any of those 'seemingly compatible'
-> > > > events are actually not compatible if they count in cycles.
-> > > I agree.  Support for marshaling/unmarshaling PMU state exists but it's
-> > > more useful for intra-host updates than for actual live migration, since
-> > > these days most live migration will use TSC scaling on the destination.
-> > >
-> > > Paolo
-> > >
-> > > >
-> > > > Unless, of course, Like is right, and the PMU counters do count fractionally.
-> > > >
-> > >
+Greetings,
+Please did you receive my previous message? Write me back

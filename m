@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F70472832
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0734728E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242809AbhLMKIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:08:51 -0500
-Received: from esa11.hc1455-7.c3s2.iphmx.com ([207.54.90.137]:19255 "EHLO
-        esa11.hc1455-7.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237076AbhLMKEP (ORCPT
+        id S241378AbhLMKP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:15:58 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36776 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240839AbhLMKCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:04:15 -0500
-IronPort-SDR: VdqbBJIheXs0VE/AdTLa77zW0Dx1vM3WaNFsBwQcqo0BM6e6CFbwvbEugrZg15doZidICzt/DD
- AKCNCI2oiScz2TZ4oHbN9GOla7OtEWkAyUSUPqSvV+5x4APWQQSBllxhgaWCN70VnNZplWlGcO
- E99G2HzHje4sjWiz5GFUhn4IdJ0FOq9JcRsygOjPgDZopPfPUFepaPJl5k3yeHrs3zrB4uOOUz
- GTHxQw7opvr6vtwS5M4Q28db3+ijXS/54Va9r7XRyFLolHpdu2AM1IN9YjcaWufHnzW6zqjZ+v
- q2SrC9VHjcm18mVALUC1JgI4
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="35759563"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635174000"; 
-   d="scan'208";a="35759563"
-Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 13 Dec 2021 19:04:09 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id B4FFEE6881;
-        Mon, 13 Dec 2021 19:04:08 +0900 (JST)
-Received: from oym-om3.fujitsu.com (oym-om3.o.css.fujitsu.com [10.85.58.163])
-        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 0567FE6A52;
-        Mon, 13 Dec 2021 19:04:08 +0900 (JST)
-Received: from localhost.localdomain (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om3.fujitsu.com (Postfix) with ESMTP id DB15A40467B4A;
-        Mon, 13 Dec 2021 19:04:07 +0900 (JST)
-From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v2 5/5] selftests/resctrl: Return KSFT_SKIP(4) if resctrlfile system is not supported or resctrl is not run as root
-Date:   Mon, 13 Dec 2021 19:01:54 +0900
-Message-Id: <20211213100154.180599-6-tan.shaopeng@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211213100154.180599-1-tan.shaopeng@jp.fujitsu.com>
-References: <20211213100154.180599-1-tan.shaopeng@jp.fujitsu.com>
+        Mon, 13 Dec 2021 05:02:44 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E58D81F422D4
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1639389763; bh=gbwMY8tv7htkSgQhxyiYITlrUTUsJaPP690NeQU6YUQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=EU11AE4wrTQEE+5LfvBgVxBkiE++ZIemMYyUK2B+hSS6eJlY/R0cwCg4KczXtV85K
+         vVohGdjYANIWOHL6bzUmMFYYOCUsABOL4FQNdnB5XZsiujMneDka+KmSgY+XqyTswi
+         Q4GAwtC//aDpKYEFXBJz1zJ90R8FOGD4ojbWqXyr5Fpx7EIU1jTi/aspJE4E5k//Vv
+         Y0TKL11uPblz25B1JNQBmqSnvnrrHktxrcMj3PvgwCA1xcFREg+olOOnr3IIebmBlu
+         /KdbveU3l7mNYSfN4Dh9IeWggwcAj9cFhS5A5DT/+GgdxI4CHdNgnxy28q1GzzkkGb
+         se5mtDkliq2Bg==
+Subject: Re: [PATCH] drm/mediatek: hdmi: Perform NULL pointer check for
+ mtk_hdmi_conf
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dafna.hirschfeld@collabora.com, kernel@collabora.com
+References: <20211028074311.57842-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <000ba19e-0220-f5c3-0efd-abb8338bb8f2@collabora.com>
+Date:   Mon, 13 Dec 2021 11:02:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+In-Reply-To: <20211028074311.57842-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To unify the return code of resctrl_tests with the return code of
-selftest set, return KSFT_SKIP (4) if resctrl file system is not
-supported or resctrl is not run as root.
+Il 28/10/21 09:43, AngeloGioacchino Del Regno ha scritto:
+> In commit 41ca9caaae0b ("drm/mediatek: hdmi: Add check for CEA modes only")
+> a check for CEA modes was added to function mtk_hdmi_bridge_mode_valid()
+> in order to address possible issues on MT8167; moreover, with commit
+> c91026a938c2 ("drm/mediatek: hdmi: Add optional limit on maximal HDMI mode clock")
+> another similar check was introduced.
+> 
+> Unfortunately though, at the time of writing, MT8173 does not provide
+> any mtk_hdmi_conf structure and this is crashing the kernel with NULL
+> pointer upon entering mtk_hdmi_bridge_mode_valid(), which happens as
+> soon as a HDMI cable gets plugged in.
+> 
+> To fix this regression, add a NULL pointer check for hdmi->conf in the
+> said function, restoring HDMI functionality and avoiding NULL pointer
+> kernel panics.
+> 
+> Fixes: 41ca9caaae0b ("drm/mediatek: hdmi: Add check for CEA modes only")
+> Fixes: c91026a938c2 ("drm/mediatek: hdmi: Add optional limit on maximal HDMI mode clock")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_hdmi.c | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+> index 5838c44cbf6f..3196189429bc 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+> @@ -1224,12 +1224,14 @@ static int mtk_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
+>   			return MODE_BAD;
+>   	}
+>   
+> -	if (hdmi->conf->cea_modes_only && !drm_match_cea_mode(mode))
+> -		return MODE_BAD;
+> +	if (hdmi->conf) {
+> +		if (hdmi->conf->cea_modes_only && !drm_match_cea_mode(mode))
+> +			return MODE_BAD;
+>   
+> -	if (hdmi->conf->max_mode_clock &&
+> -	    mode->clock > hdmi->conf->max_mode_clock)
+> -		return MODE_CLOCK_HIGH;
+> +		if (hdmi->conf->max_mode_clock &&
+> +		    mode->clock > hdmi->conf->max_mode_clock)
+> +			return MODE_CLOCK_HIGH;
+> +	}
+>   
+>   	if (mode->clock < 27000)
+>   		return MODE_CLOCK_LOW;
+> 
 
-Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
----
- tools/testing/selftests/resctrl/resctrl_tests.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello, friendly ping!
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 973f09a66e1e..3be0895c492b 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -205,7 +205,7 @@ int main(int argc, char **argv)
- 	 * 2. We execute perf commands
- 	 */
- 	if (geteuid() != 0)
--		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
-+		return ksft_exit_skip("Not running as root, abort testing.\n");
- 
- 	/* Detect AMD vendor */
- 	detect_amd();
-@@ -235,7 +235,7 @@ int main(int argc, char **argv)
- 	sprintf(bm_type, "fill_buf");
- 
- 	if (!check_resctrlfs_support())
--		return ksft_exit_fail_msg("resctrl FS does not exist\n");
-+		return ksft_exit_skip("resctrl FS does not exist\n");
- 
- 	filter_dmesg();
- 
--- 
-2.27.0
+Can I please get a review (or merge) of this commit?
 
+This is an important fix for a null pointer KP and restores HDMI functionality.
+
+Thanks,
+- Angelo

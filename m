@@ -2,81 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89B54734AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEBB4734AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242152AbhLMTJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S239230AbhLMTJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:09:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbhLMTJ2 (ORCPT
+        with ESMTP id S232609AbhLMTJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:09:28 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD99DC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:09:27 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id r11so54708931edd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:09:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6BhDA9nIP3jKxj6kLj3PfeumvbAy1D8/aRgojun8p+s=;
-        b=SsfOrFRMYggSqS+19aWF6UVE28xgRtdoMGcXYHt3iwVCXGQW4JCETAmpns4sDOgZSl
-         J0kQ/5F5Y/+HWUjWmbr57MT6Ezfw0tBgLOaVSfATeligNHlzloQmMRcFKFCohub+jBoJ
-         AJYT51bHZSv+9kFp7jUxr5qtEjElmct7krwNs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6BhDA9nIP3jKxj6kLj3PfeumvbAy1D8/aRgojun8p+s=;
-        b=azZ33kZiXlxIO3F9iQ03ehEo3GTbpY3PZGLbfFtKrdbVcIonYt9JgaU7ensFLbNrgP
-         29i694EWq+PuAWsPnY+EvMMSFapEjzU2sKbuJ94V6fNDSFzx9ijpM4gYGNq1Nz5ygL7T
-         cQYLUZql0kTdIEmSn4qGRPQ4I/xcEtRb/Wkr6SoWgQc8hqb25JUSJ4Fkmm55j4OrbQzl
-         vkEqpClqwJtfvnPAmrQq4Yht7X0zZA5A+KZnAjL28sPBMNclfW1qYxufBARPEfHXqezY
-         cdHXzGtKDQWSZivE5RhXF87NLM7qLru5vpYvwI8TGzDivV5/h3pj3GrKMajv2F3JFh/B
-         MX+w==
-X-Gm-Message-State: AOAM531RjER2E446ObS79FB8jDSZH6MnxSJiDcOV0GTAAqlmhr4/FeTG
-        SkGZ3KbsyE6vvw66NGd2x7vDmuW/1WrlA3/5
-X-Google-Smtp-Source: ABdhPJz3+OcXkTd7IZ/zgIWqGkAUQHKlLBq85DOF/s2FO+Xs9SjtBjZ8wVS9g8v6vIJu+KhH+xcCUQ==
-X-Received: by 2002:a05:6402:27cd:: with SMTP id c13mr862690ede.57.1639422565185;
-        Mon, 13 Dec 2021 11:09:25 -0800 (PST)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id y27sm448433ejk.157.2021.12.13.11.09.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 11:09:25 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id k9so10970123wrd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:09:24 -0800 (PST)
-X-Received: by 2002:adf:e646:: with SMTP id b6mr431393wrn.442.1639422564568;
- Mon, 13 Dec 2021 11:09:24 -0800 (PST)
+        Mon, 13 Dec 2021 14:09:22 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB03C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:09:22 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F30EA1EC01FC;
+        Mon, 13 Dec 2021 20:09:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639422557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1qN1RpOhsJkbmi5eTSjHFBRg7F1oVNKYFeFXAAGuN0o=;
+        b=TXO/EOp1JfkkBK33WmHy06lcgo5358XB5HYC1/N++X19E8Q7emydEnQW1LAUiOVNtnmq9B
+        fkMgHA2eTugODyrAQ3+ZgkphRCwJZ6eARHAUdpSAwM3m/DjJt+2QBMPEMF0QZtTZ/p5dAm
+        vXzPxBN1deAV2R0vBKzT90h785jItQY=
+Date:   Mon, 13 Dec 2021 20:09:17 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 1/3] X86/db: Change __this_cpu_read() to this_cpu_read()
+ in hw_breakpoint_active()
+Message-ID: <YbeaXT1Y80baey3t@zn.tnic>
+References: <20211213042215.3096-1-jiangshanlai@gmail.com>
+ <20211213042215.3096-2-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-References: <CAHk-=wixe1NPqC0PmgUbV0Xoa8D0Pbyu7X_0sfABYMG+ocLdbQ@mail.gmail.com>
- <20211213035923.GA735445@roeck-us.net>
-In-Reply-To: <20211213035923.GA735445@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Dec 2021 11:09:08 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgP1C723G7+fr9G0a9HO+dA8Zk55uuS9fdbquF-1GhrNA@mail.gmail.com>
-Message-ID: <CAHk-=wgP1C723G7+fr9G0a9HO+dA8Zk55uuS9fdbquF-1GhrNA@mail.gmail.com>
-Subject: Re: Linux 5.16-rc5
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211213042215.3096-2-jiangshanlai@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 7:59 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Same old.
->
-> Building mips:allmodconfig ... failed
+On Mon, Dec 13, 2021 at 12:22:13PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-Gaah. I just keep treating this as trivial and solved, and expecting
-that the fix will come in the normal ways, and thus ignore it.
+Lai, what you're touching is complex stuff. If your commit messages
+are hard to parse then that makes reviewing those patches not a fun
+experience. Not in the least.
 
-I'll pick up the fix directly, just to close this silly issue.
+So please try to restrain yourself and write proper English. Run your
+commit message through a spellchecker at least so that there are no
+funky words.
 
-Thanks for your testing (and patience),
+Also, read Documentation/process/submitting-patches.rst for hints on
+how to write it.
 
-              Linus
+The structure and the explanation is in the right direction but please
+try to formulate them as understandable as possible.
+
+> __this_cpu_read() can not be instrumented except its own debugging code
+> when CONFIG_DEBUG_PREEMPT.  The debugging code will call
+> __this_cpu_preempt_check().  __this_cpu_preempt_check() itself is also
+> noinstr, so __this_cpu_read() can be used in noinstr.
+> 
+> But these is one exception when exc_debug_kernel() calls local_db_save()
+> which calls hw_breakpoint_active() which calls __this_cpu_read().  If
+> the data accessed by __this_cpu_preempt_check() is also watched by
+> hw_breakpoints, it would cause recursive #DB.
+
+Up until here is good.
+ 
+> this_cpu_read() in X86 is also non instrumentable, and it doesn't access
+
+"x86" not "X86" or any other way.
+
+Also, read this: Documentation/process/maintainer-tip.rst
+
+as it has more hints about commit message structure etc.
+
+> to any extra data except the percpu cpu_dr7, and cpu_dr7 is disallowed
+> to be watched in arch_build_bp_info().  So this_cpu_read() is safe to
+> be used when hw_breakpoints is still active, and __this_cpu_read() here
+> should be changed to this_cpu_read().
+> 
+> This problem can only happen when the system owner uses a kernel with
+> CONFIG_DEBUG_PREEMPT enabled and deliberately use hw_breakpoints on
+> the data that __this_cpu_preempt_check() accesses.  Sot it is just a
+> problem with no significance.
+> 
+> One might suggest that, all the data accessed by noinstr functions
+> should be marked in denylist for hw_breakpoints.  That would complexify
+
+should be marked in denylist for hw_breakpoints.  That would complexify
+Unknown word [denylist] in commit message, suggestions:
+        ['deny list', 'deny-list', 'dentistry']
+
+should be marked in denylist for hw_breakpoints.  That would complexify
+Unknown word [complexify] in commit message, suggestions:
+        ['complexity', 'complexion']
+
+> the noinstrment framework and add hurdles to anyone that who want to
+
+the noinstrment framework and add hurdles to anyone that who want to
+Unknown word [noinstrment] in commit message, suggestions:
+        ['instrument']
+
+So you need to restrain yourself and stop inventing new English words.
+
+> add a new noinstr function.  All we need is to suppress #DB in the IST
+
+Who is "we"?
+
+> interrupt entry path until safe place where #DB is disabled in hardware
+> or #DB handler can handle well even it hits data accessed by noinstr
+> function.  Changing __this_cpu_read() to this_cpu_read() is fit for it.
+
+You don't need to write *what* your patch is doing - that is clear from
+the diff.
+
+I'll let Peter comment on what should actually be used.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

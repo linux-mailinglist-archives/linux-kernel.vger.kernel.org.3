@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C25E472974
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F44472693
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242062AbhLMKVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243286AbhLMKMq (ORCPT
+        id S235058AbhLMJxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:53:30 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39792 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237168AbhLMJsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:12:46 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B95EC001629;
-        Mon, 13 Dec 2021 01:54:21 -0800 (PST)
+        Mon, 13 Dec 2021 04:48:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DC537CE0B59;
-        Mon, 13 Dec 2021 09:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3CCC34601;
-        Mon, 13 Dec 2021 09:54:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 90E89CE0E86;
+        Mon, 13 Dec 2021 09:48:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 685EAC341C5;
+        Mon, 13 Dec 2021 09:47:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389258;
-        bh=rsTeZMk7O/u8nSH8mgVqInhb4PGf6dAuTmB3GF4JZNc=;
+        s=korg; t=1639388878;
+        bh=bNjKy9r09ywGYn3+5wZYW5lFwGXqBqsqmVd1dugST5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v6M0oFa3oYVDn3VvUYsl6TYkwqHrUk2MDT9aZDfYQwZImC/Tow+XJF5maXCAo6Tvp
-         00qAeJ0ioE2jyypqxABuXm/tqBcfzqND1qKTzA1lrk4fL1sTihValqmI02pLDZIZEo
-         p3vZdiOLutGeQKS49S8sP89zYbRNbkvshOSKCmlk=
+        b=N5nWMWNcMrA1Hro/ZGV6Iil5uGe1OlxkdsqrxK6bjBXSxFFnqrl/ZFOsq7vNtE1jE
+         o6y7qjg66VDSZxrGlftdO8sNp4l71ZuYnsrXUrHz20M9ilrycRqijfdz/Hvy+3Dxwp
+         h4MtwIJpnxF5jdkslOCy+QH+okiDVL0jkJqE4+wY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 5.15 038/171] bpf: Make sure bpf_disable_instrumentation() is safe vs preemption.
-Date:   Mon, 13 Dec 2021 10:29:13 +0100
-Message-Id: <20211213092946.341901910@linuxfoundation.org>
+        Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.10 013/132] nft_set_pipapo: Fix bucket load in AVX2 lookup routine for six 8-bit groups
+Date:   Mon, 13 Dec 2021 10:29:14 +0100
+Message-Id: <20211213092939.531686388@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,76 +47,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+From: Stefano Brivio <sbrivio@redhat.com>
 
-commit 79364031c5b4365ca28ac0fa00acfab5bf465be1 upstream.
+commit b7e945e228d7df1b1473ef6fd2cdec67433065fb upstream.
 
-The initial implementation of migrate_disable() for mainline was a
-wrapper around preempt_disable(). RT kernels substituted this with a
-real migrate disable implementation.
+The sixth byte of packet data has to be looked up in the sixth group,
+not in the seventh one, even if we load the bucket data into ymm6
+(and not ymm5, for convenience of tracking stalls).
 
-Later on mainline gained true migrate disable support, but neither
-documentation nor affected code were updated.
+Without this fix, matching on a MAC address as first field of a set,
+if 8-bit groups are selected (due to a small set size) would fail,
+that is, the given MAC address would never match.
 
-Remove stale comments claiming that migrate_disable() is PREEMPT_RT only.
-
-Don't use __this_cpu_inc() in the !PREEMPT_RT path because preemption is
-not disabled and the RMW operation can be preempted.
-
-Fixes: 74d862b682f51 ("sched: Make migrate_disable/enable() independent of RT")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211127163200.10466-3-bigeasy@linutronix.de
+Reported-by: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+Cc: <stable@vger.kernel.org> # 5.6.x
+Fixes: 7400b063969b ("nft_set_pipapo: Introduce AVX2-based lookup implementation")
+Signed-off-by: Stefano Brivio <sbrivio@redhat.com>
+Tested-By: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/bpf.h    |   16 ++--------------
- include/linux/filter.h |    3 ---
- 2 files changed, 2 insertions(+), 17 deletions(-)
+ net/netfilter/nft_set_pipapo_avx2.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1321,28 +1321,16 @@ extern struct mutex bpf_stats_enabled_mu
-  * kprobes, tracepoints) to prevent deadlocks on map operations as any of
-  * these events can happen inside a region which holds a map bucket lock
-  * and can deadlock on it.
-- *
-- * Use the preemption safe inc/dec variants on RT because migrate disable
-- * is preemptible on RT and preemption in the middle of the RMW operation
-- * might lead to inconsistent state. Use the raw variants for non RT
-- * kernels as migrate_disable() maps to preempt_disable() so the slightly
-- * more expensive save operation can be avoided.
-  */
- static inline void bpf_disable_instrumentation(void)
- {
- 	migrate_disable();
--	if (IS_ENABLED(CONFIG_PREEMPT_RT))
--		this_cpu_inc(bpf_prog_active);
--	else
--		__this_cpu_inc(bpf_prog_active);
-+	this_cpu_inc(bpf_prog_active);
- }
+--- a/net/netfilter/nft_set_pipapo_avx2.c
++++ b/net/netfilter/nft_set_pipapo_avx2.c
+@@ -887,7 +887,7 @@ static int nft_pipapo_avx2_lookup_8b_6(u
+ 			NFT_PIPAPO_AVX2_BUCKET_LOAD8(4,  lt, 4, pkt[4], bsize);
  
- static inline void bpf_enable_instrumentation(void)
- {
--	if (IS_ENABLED(CONFIG_PREEMPT_RT))
--		this_cpu_dec(bpf_prog_active);
--	else
--		__this_cpu_dec(bpf_prog_active);
-+	this_cpu_dec(bpf_prog_active);
- 	migrate_enable();
- }
+ 			NFT_PIPAPO_AVX2_AND(5, 0, 1);
+-			NFT_PIPAPO_AVX2_BUCKET_LOAD8(6,  lt, 6, pkt[5], bsize);
++			NFT_PIPAPO_AVX2_BUCKET_LOAD8(6,  lt, 5, pkt[5], bsize);
+ 			NFT_PIPAPO_AVX2_AND(7, 2, 3);
  
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -639,9 +639,6 @@ static __always_inline u32 bpf_prog_run(
-  * This uses migrate_disable/enable() explicitly to document that the
-  * invocation of a BPF program does not require reentrancy protection
-  * against a BPF program which is invoked from a preempting task.
-- *
-- * For non RT enabled kernels migrate_disable/enable() maps to
-- * preempt_disable/enable(), i.e. it disables also preemption.
-  */
- static inline u32 bpf_prog_run_pin_on_cpu(const struct bpf_prog *prog,
- 					  const void *ctx)
+ 			/* Stall */
 
 

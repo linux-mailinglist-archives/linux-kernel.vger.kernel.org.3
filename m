@@ -2,102 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A3A472B82
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A96A4472B84
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbhLMLeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:34:24 -0500
-Received: from www381.your-server.de ([78.46.137.84]:40310 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbhLMLeX (ORCPT
+        id S236104AbhLMLe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:34:27 -0500
+Received: from mickerik.phytec.de ([195.145.39.210]:62280 "EHLO
+        mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235058AbhLMLeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 06:34:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=KFfrL7tchd3VQzoip5NprnryMqESCMxCPR4jMuHmN3Y=; b=PtJ5x9X5GFq5e39UsHWKoQ/s+D
-        vMaEmN3GRDCeTlzSU5n8/j4hpu83k3oOfIC4DANGz/IRIPoseaDZ8W0TE8dGCHx3bjxBL4e0Y3tip
-        S+gfNn9qzIbV2VCL7+jy44NBJFJQ47NDUOKXPONs3ZWFYeJOUiunaUtHa62X9vtaJiiRB9EoxhyjY
-        n/MW8zOxCMYeCh86Xeks9/I/UHTFOG0rvp46N64bKJVTCE5l4GXP9kh+HE3/LwlRDZcY5IcRx7Ym8
-        C4OaMH4VNhX1m+lK0M18aTD9aIAvps0gl4IrW4MgFN4X57MMJeG6WSAd9f7dYXmmWZEl2t57Lui6r
-        XqxyYe+Q==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1mwjb2-00031o-59; Mon, 13 Dec 2021 12:34:20 +0100
-Received: from [2001:a61:2aa6:c001:9e5c:8eff:fe01:8578]
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1mwjb1-000HZ2-VA; Mon, 13 Dec 2021 12:34:20 +0100
-Subject: Re: [PATCH v2 0/2] Add ADXL367 driver
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     cosmin.tanislav@analog.com,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211207094337.59300-1-cosmin.tanislav@analog.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <fbf1bc12-5013-0b09-a6f4-a602f0afbe70@metafoo.de>
-Date:   Mon, 13 Dec 2021 12:34:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1639395262; x=1641987262;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+CfUaDtCzKMIec1hYZi6pt2waSX8RrwpItBr78PMMrU=;
+        b=poniwzXmLP7DcVElo5Shl1RwIl2mD9/3G9hQt40GccbfaO0ftJRbeH/amvEeW3BV
+        n2oFgJFlHYQ0xq7aywXQaLxVofbZKcJEpzQHQpmTUMVvXoaaQ3gkcb+ocm0She2M
+        EVWxL7w7SsBvf6tw12OG+aTXNPyl1FoozlhamOVMrSM=;
+X-AuditID: c39127d2-4ef327000000426a-5d-61b72fbeda71
+Received: from florix.phytec.de (florix.phytec.de [172.16.0.118])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 2E.13.17002.EBF27B16; Mon, 13 Dec 2021 12:34:22 +0100 (CET)
+Received: from Berlix.phytec.de (172.16.0.117) by Florix.phytec.de
+ (172.16.0.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 13 Dec
+ 2021 12:34:22 +0100
+Received: from Berlix.phytec.de ([fe80::1c1b:e8b7:a0d4:89b2]) by
+ berlix.phytec.de ([fe80::1c1b:e8b7:a0d4:89b2%3]) with mapi id 15.01.2375.017;
+ Mon, 13 Dec 2021 12:34:22 +0100
+From:   Yunus Bas <Y.Bas@phytec.de>
+To:     "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/3] ARM: dts: imx6qdl: phytec: Add support for optional
+ PEB-EVAL-01 board
+Thread-Topic: [PATCH 1/3] ARM: dts: imx6qdl: phytec: Add support for optional
+ PEB-EVAL-01 board
+Thread-Index: AQHX5cnyF9MDax+eMkim9MW+ChwuEqwkug8AgAuUV4A=
+Date:   Mon, 13 Dec 2021 11:34:22 +0000
+Message-ID: <4b8ee4ab7ca758ea20ff535689665e96db9d012e.camel@phytec.de>
+References: <20211130085355.2291607-1-y.bas@phytec.de>
+         <20211206024433.GW4216@dragon>
+In-Reply-To: <20211206024433.GW4216@dragon>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.0.116]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <67F502BCEE5CC141924B004DC6A753F6@phytec.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20211207094337.59300-1-cosmin.tanislav@analog.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26385/Mon Dec 13 10:38:12 2021)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsWyRoChTHef/vZEgzVtyhbzj5xjtXh41d9i
+        1dSdLBaXd81hs2jde4Td4u/2TSwWL7aIO7B77Jx1l91j06pONo/+vwYenzfJBbBEcdmkpOZk
+        lqUW6dslcGV8f/mSrWCPd8W71o2sDYxHPLsYOTkkBEwkJm+YxwxiCwksY5KY8rOoi5ELyH7E
+        KPFt7wVGCGcTo8SWVwtYuhg5ONgEFCWu3MoHaRAR0Jd4v+UvC0gNs8A+JokDjf+ZQBLCAgkS
+        HTcWskEUJUrMO7YSyraSeH5xI5jNIqAqsX/NTTCbV8BN4uKy7YwQV0RIXPz9GuwiTgFtiY3b
+        j4DVMArISmzYcB4sziwgLrHp2XdWiA8EJJbsgYhLCIhKvHz8DyquINHW08kEcjOzgKbE+l36
+        EK0WEv+PTmWBsBUlpnQ/ZIc4QVDi5MwnLBMYxWch2TALoXsWku5ZSLpnIelewMi6ilEoNzM5
+        O7UoM1uvIKOyJDVZLyV1EyMwSg9PVL+0g7FvjschRiYOxkOMEhzMSiK8L623JgrxpiRWVqUW
+        5ccXleakFh9ilOZgURLnvd/DlCgkkJ5YkpqdmlqQWgSTZeLglGpgrPxx8fff6JMPS/5YVcvc
+        T2D/Wm3vnlvxYPc6q4CXT+60rtT7ctU0LuT29MIzpb/spNyr3RosuEObi5iZ57H68thwvw2p
+        914d9WODxl6hbwd6/qyLS5gTIHY7cPGe43ZiqeVMGXvE7bM8J+1wf78iTtp6Fb/SXtHERYfq
+        z8mve5bXZ7g5WPOyEktxRqKhFnNRcSIAedClHcACAAA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 10:43 AM, Cosmin Tanislav wrote:
-> I have one question that is not actually specific to this driver but would
-> help me clear up some issues.
->
-> I used mutex_lock and mutex_unlock when accessing anything in driver's
-> state that could potentially be written by another process in parallel.
->
-> I heard mixed opinions about this. Some people said that it is not
-> necessary to lock everywhere because loads and stores for data with size
-> smaller or equal than register size would be done in one single atomic
-> instruction.
->
-> On the other hand, I also heard that this is not true unless WRITE_ONCE
-> and READ_ONCE is used.
->
-> It felt weird using WRITE_ONCE and READ_ONCE in this driver, so I kept
-> using mutexes.
->
-> Could I get some opinions on this matter?
-
-What you wrote sums it up very well. READ_ONCE/WRITE_ONCE are required 
-for correctness when no lock is used. The compiler is allowed to do all 
-sorts of optimizations that could break multi-threading, when 
-READ_ONCE/WRITE_ONCE is not used. E.g.
-
-if (x)
-   foo->bar = 10;
-else
-   foo->bar = 20;
-
-Could be implemented as
-
-foo->bar = 20;
-if (x)
-   foo->bar = 10;
-
-In the absence of multi-threading the result will be the same. But if 
-another thread reads foo->bar just at the right time it will read the 
-incorrect 20.
-
-For simple things like `foo->bar = x;` it is unlikely that the compiler 
-will do anything other than the single store. But it could and the code 
-is not correct without the WRITE_ONCE.
-
-Using a mutex is OK, since non of this is performance critical.
+SGkgU2hhd24sCgpTb3JyeSBmb3IgdGhlIGxhdGUgcmVzcG9uc2UuIEkgd2FzIHNpY2sgZm9yIHRo
+ZSB3aG9sZSB3ZWVrLgoKQW0gTW9udGFnLCBkZW0gMDYuMTIuMjAyMSB1bSAxMDo0NCArMDgwMCBz
+Y2hyaWViIFNoYXduIEd1bzoKPiBPbiBUdWUsIE5vdiAzMCwgMjAyMSBhdCAwOTo1Mzo1M0FNICsw
+MTAwLCBZdW51cyBCYXMgd3JvdGU6Cj4gPiBUaGUgUEhZVEVDIFBFVi1FVkFMLTAxIGV4cGFuc2lv
+biBib2FyZCBhZGRzIHN1cHBvcnQgZm9yIGFkZGl0aW9uYWwKPiA+IGdwaW8tdHJpZ2dlcmVkIHVz
+ZXItbGVkcyBhbmQgZ3Bpby1rZXkgc3VwcG9ydC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogWXVu
+dXMgQmFzIDx5LmJhc0BwaHl0ZWMuZGU+Cj4gPiAtLS0KPiA+IMKgLi4uL2Jvb3QvZHRzL2lteDZk
+bC1waHl0ZWMtbWlyYS1yZGstbmFuZC5kdHPCoCB8wqAgMSArCj4gPiDCoC4uLi9ib290L2R0cy9p
+bXg2cS1waHl0ZWMtbWlyYS1yZGstZW1tYy5kdHPCoMKgIHzCoCAxICsKPiA+IMKgLi4uL2Jvb3Qv
+ZHRzL2lteDZxLXBoeXRlYy1taXJhLXJkay1uYW5kLmR0c8KgwqAgfMKgIDEgKwo+ID4gwqAuLi4v
+ZHRzL2lteDZxZGwtcGh5dGVjLW1pcmEtcGViLWV2YWwtMDEuZHRzacKgIHwgNzEKPiA+ICsrKysr
+KysrKysrKysrKysrKysKPiA+IMKgLi4uL2Jvb3QvZHRzL2lteDZxcC1waHl0ZWMtbWlyYS1yZGst
+bmFuZC5kdHPCoCB8wqAgMSArCj4gPiDCoDUgZmlsZXMgY2hhbmdlZCwgNzUgaW5zZXJ0aW9ucygr
+KQo+ID4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC1waHl0
+ZWMtbWlyYS1wZWItZXZhbC0KPiA+IDAxLmR0c2kKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gv
+YXJtL2Jvb3QvZHRzL2lteDZkbC1waHl0ZWMtbWlyYS1yZGstbmFuZC5kdHMKPiA+IGIvYXJjaC9h
+cm0vYm9vdC9kdHMvaW14NmRsLXBoeXRlYy1taXJhLXJkay1uYW5kLmR0cwo+ID4gaW5kZXggOWY3
+ZjlmOTgxMzlkLi5iMDU3ZmE2NjRhNmIgMTAwNjQ0Cj4gPiAtLS0gYS9hcmNoL2FybS9ib290L2R0
+cy9pbXg2ZGwtcGh5dGVjLW1pcmEtcmRrLW5hbmQuZHRzCj4gPiArKysgYi9hcmNoL2FybS9ib290
+L2R0cy9pbXg2ZGwtcGh5dGVjLW1pcmEtcmRrLW5hbmQuZHRzCj4gPiBAQCAtOCw2ICs4LDcgQEAK
+PiA+IMKgI2luY2x1ZGUgImlteDZkbC5kdHNpIgo+ID4gwqAjaW5jbHVkZSAiaW14NnFkbC1waHl0
+ZWMtcGh5Y29yZS1zb20uZHRzaSIKPiA+IMKgI2luY2x1ZGUgImlteDZxZGwtcGh5dGVjLW1pcmEu
+ZHRzaSIKPiA+ICsjaW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS1wZWItZXZhbC0wMS5kdHNp
+Igo+ID4gwqAKPiA+IMKgLyB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgbW9kZWwgPSAiUEhZVEVDIHBo
+eUJPQVJELU1pcmEgRHVhbExpdGUvU29sbyBDYXJyaWVyLUJvYXJkCj4gPiB3aXRoIE5BTkQiOwo+
+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxLXBoeXRlYy1taXJhLXJkay1l
+bW1jLmR0cwo+ID4gYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWlyYS1yZGstZW1t
+Yy5kdHMKPiA+IGluZGV4IDJlNzBlYTU2MjNjNi4uZGI2ZTJjYzM2NzU5IDEwMDY0NAo+ID4gLS0t
+IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEtcmRrLWVtbWMuZHRzCj4gPiAr
+KysgYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWlyYS1yZGstZW1tYy5kdHMKPiA+
+IEBAIC04LDYgKzgsNyBAQAo+ID4gwqAjaW5jbHVkZSAiaW14NnEuZHRzaSIKPiA+IMKgI2luY2x1
+ZGUgImlteDZxZGwtcGh5dGVjLXBoeWNvcmUtc29tLmR0c2kiCj4gPiDCoCNpbmNsdWRlICJpbXg2
+cWRsLXBoeXRlYy1taXJhLmR0c2kiCj4gPiArI2luY2x1ZGUgImlteDZxZGwtcGh5dGVjLW1pcmEt
+cGViLWV2YWwtMDEuZHRzaSIKPiA+IMKgCj4gPiDCoC8gewo+ID4gwqDCoMKgwqDCoMKgwqDCoG1v
+ZGVsID0gIlBIWVRFQyBwaHlCT0FSRC1NaXJhIFF1YWQgQ2Fycmllci1Cb2FyZCB3aXRoCj4gPiBl
+TU1DIjsKPiA+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9pbXg2cS1waHl0ZWMtbWly
+YS1yZGstbmFuZC5kdHMKPiA+IGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEt
+cmRrLW5hbmQuZHRzCj4gPiBpbmRleCA2NWQyZTQ4M2MxMzYuLjUxZmY2MDFiMWFlYyAxMDA2NDQK
+PiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxLXBoeXRlYy1taXJhLXJkay1uYW5kLmR0
+cwo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnEtcGh5dGVjLW1pcmEtcmRrLW5hbmQu
+ZHRzCj4gPiBAQCAtOCw2ICs4LDcgQEAKPiA+IMKgI2luY2x1ZGUgImlteDZxLmR0c2kiCj4gPiDC
+oCNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1waHljb3JlLXNvbS5kdHNpIgo+ID4gwqAjaW5jbHVk
+ZSAiaW14NnFkbC1waHl0ZWMtbWlyYS5kdHNpIgo+ID4gKyNpbmNsdWRlICJpbXg2cWRsLXBoeXRl
+Yy1taXJhLXBlYi1ldmFsLTAxLmR0c2kiCj4gPiDCoAo+ID4gwqAvIHsKPiA+IMKgwqDCoMKgwqDC
+oMKgwqBtb2RlbCA9ICJQSFlURUMgcGh5Qk9BUkQtTWlyYSBRdWFkIENhcnJpZXItQm9hcmQgd2l0
+aAo+ID4gTkFORCI7Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFkbC1w
+aHl0ZWMtbWlyYS1wZWItZXZhbC0wMS5kdHNpCj4gPiBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZx
+ZGwtcGh5dGVjLW1pcmEtcGViLWV2YWwtMDEuZHRzaQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
+PiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uM2JjYWQ0MDJkM2VjCj4gPiAtLS0gL2Rldi9udWxsCj4g
+PiArKysgYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cWRsLXBoeXRlYy1taXJhLXBlYi1ldmFsLTAx
+LmR0c2kKPiA+IEBAIC0wLDAgKzEsNzEgQEAKPiA+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmll
+cjogKEdQTC0yLjArIE9SIE1JVCkKPiA+ICsvKgo+ID4gKyAqIENvcHlyaWdodCAoQykgMjAxOCBQ
+SFlURUMgTWVzc3RlY2huaWsKPiA+ICsgKiBBdXRob3I6IENocmlzdGlhbiBIZW1wIDxjLmhlbXBA
+cGh5dGVjLmRlPgo+ID4gKyAqLwo+ID4gKwo+ID4gKyNpbmNsdWRlIDxkdC1iaW5kaW5ncy9pbnB1
+dC9pbnB1dC5oPgo+ID4gKwo+ID4gKy8gewo+ID4gK8KgwqDCoMKgwqDCoMKgZ3Bpby1rZXlzIHsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gImdwaW8ta2V5
+cyI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGluY3RybC1uYW1lcyA9ICJk
+ZWZhdWx0IjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwaW5jdHJsLTAgPSA8
+JnBpbmN0cmxfZ3Bpb19rZXlzPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBz
+dGF0dXMgPSAiZGlzYWJsZWQiOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGhvbWUgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBsYWJlbCA9ICJIb21lIjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgZ3Bpb3MgPSA8JmdwaW82IDE4IEdQSU9fQUNUSVZFX0xPVz47Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxpbnV4LGNvZGUg
+PSA8S0VZX1NMRUVQPjsKPiAKPiBLRVlfU0xFRVAgZm9yIEhvbWU/CgpJJ2xsIGNoYW5nZSB0aGUg
+bm9kZSBuYW1lIGFuZCBsYWJlbCBpbiB2MgoKPiAKPiBTaGF3bgo+IAo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcG93ZXIgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBsYWJlbCA9ICJQb3dlciBCdXR0b24iOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvcyA9IDwmZ3BpbzUgMjggR1BJT19BQ1RJVkVf
+TE9XPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+bGludXgsY29kZSA9IDxLRVlfV0FLRVVQPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgd2FrZXVwLXNvdXJjZTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB9Owo+ID4gK8KgwqDCoMKgwqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKgwqDC
+oMKgwqDCoHVzZXJfbGVkczogdXNlci1sZWRzIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBjb21wYXRpYmxlID0gImdwaW8tbGVkcyI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBwaW5jdHJsLTAgPSA8JnBpbmN0cmxfdXNlcl9sZWRzPjsKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzdGF0dXMgPSAiZGlzYWJsZWQiOwo+ID4gKwo+
+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHVzZXItbGVkMSB7Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdwaW9zID0gPCZncGlvNyAx
+IEdQSU9fQUNUSVZFX0hJR0g+Owo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBsaW51eCxkZWZhdWx0LXRyaWdnZXIgPSAiZ3BpbyI7Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRlZmF1bHQtc3RhdGUgPSAi
+b24iOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiArCj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdXNlci1sZWQyIHsKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ3Bpb3MgPSA8JmdwaW83IDAgR1BJT19B
+Q1RJVkVfSElHSD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGxpbnV4LGRlZmF1bHQtdHJpZ2dlciA9ICJncGlvIjsKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGVmYXVsdC1zdGF0ZSA9ICJvbiI7Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqB1c2VyLWxlZDMgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvcyA9IDwmZ3BpbzUgMjkgR1BJT19BQ1RJVkVf
+SElHSD47Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGxpbnV4LGRlZmF1bHQtdHJpZ2dlciA9ICJncGlvIjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGVmYXVsdC1zdGF0ZSA9ICJvbiI7Cj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfTsKPiA+ICvCoMKgwqDCoMKgwqDCoH07Cj4gPiAr
+fTsKPiA+ICsKPiA+ICsmaW9tdXhjIHsKPiA+ICvCoMKgwqDCoMKgwqDCoHBpbmN0cmxfZ3Bpb19r
+ZXlzOiBncGlva2V5c2dycCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnNs
+LHBpbnMgPSA8Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoE1YNlFETF9QQURfU0QzX0RBVDZfX0dQSU82X0lPMTjCoMKgwqDCoMKgwqDCoMKgwqAweDEK
+PiA+IGIwYjAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgTVg2UURMX1BBRF9DU0kwX0RBVDEwX19HUElPNV9JTzI4wqDCoMKgwqDCoMKgwqAweDEKPiA+
+IGIwYjAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA+Owo+ID4gK8KgwqDCoMKg
+wqDCoMKgfTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHBpbmN0cmxfdXNlcl9sZWRzOiB1c2Vy
+bGVkc2dycCB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnNsLHBpbnMgPSA8
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoE1YNlFE
+TF9QQURfU0QzX0RBVDRfX0dQSU83X0lPMDHCoMKgwqDCoMKgwqDCoMKgwqAweDEKPiA+IGIwYjAK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgTVg2UURM
+X1BBRF9TRDNfREFUNV9fR1BJTzdfSU8wMMKgwqDCoMKgwqDCoMKgwqDCoDB4MQo+ID4gYjBiMAo+
+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBNWDZRRExf
+UEFEX0NTSTBfREFUMTFfX0dQSU81X0lPMjnCoMKgwqDCoMKgwqDCoDB4MQo+ID4gYjBiMAo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoD47Cj4gPiArwqDCoMKgwqDCoMKgwqB9Owo+
+ID4gK307Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14NnFwLXBoeXRlYy1t
+aXJhLXJkay1uYW5kLmR0cwo+ID4gYi9hcmNoL2FybS9ib290L2R0cy9pbXg2cXAtcGh5dGVjLW1p
+cmEtcmRrLW5hbmQuZHRzCj4gPiBpbmRleCBmMjdkN2FiNDI2MjYuLjA2ZmUwYzUzMTVmYyAxMDA2
+NDQKPiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxcC1waHl0ZWMtbWlyYS1yZGstbmFu
+ZC5kdHMKPiA+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxcC1waHl0ZWMtbWlyYS1yZGst
+bmFuZC5kdHMKPiA+IEBAIC04LDYgKzgsNyBAQAo+ID4gwqAjaW5jbHVkZSAiaW14NnFwLmR0c2ki
+Cj4gPiDCoCNpbmNsdWRlICJpbXg2cWRsLXBoeXRlYy1waHljb3JlLXNvbS5kdHNpIgo+ID4gwqAj
+aW5jbHVkZSAiaW14NnFkbC1waHl0ZWMtbWlyYS5kdHNpIgo+ID4gKyNpbmNsdWRlICJpbXg2cWRs
+LXBoeXRlYy1taXJhLXBlYi1ldmFsLTAxLmR0c2kiCj4gPiDCoAo+ID4gwqAvIHsKPiA+IMKgwqDC
+oMKgwqDCoMKgwqBtb2RlbCA9ICJQSFlURUMgcGh5Qk9BUkQtTWlyYSBRdWFkUGx1cyBDYXJyaWVy
+LUJvYXJkIHdpdGgKPiA+IE5BTkQiOwo+ID4gLS0gCj4gPiAyLjI1LjEKPiA+IAoK

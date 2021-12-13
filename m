@@ -2,155 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3F2472D23
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7786E472CD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237386AbhLMNX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbhLMNX4 (ORCPT
+        id S231971AbhLMNIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:08:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43668 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231616AbhLMNIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:23:56 -0500
-X-Greylist: delayed 78 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Dec 2021 05:23:56 PST
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3612BC061574;
-        Mon, 13 Dec 2021 05:23:56 -0800 (PST)
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Mon, 13 Dec 2021 14:23:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1639401834; bh=UL7R1cXd59fb63aQbLKzvJrfMdZNkVMOW+WjYF0O2lE=;
-        h=Resent-From:Resent-Date:Resent-To:Date:From:To:Cc:Subject:
-         References:In-Reply-To:From;
-        b=LnK1S9W2lDaDMjL3JsmNWe9zklp+3oEQVGRoQCFweNE4VX6vQSINp1cWtnCBMjqfl
-         k5VtwaDpOSp4oAVihVCDLpemqAU9VGojeZwCuCNkE2RJWeOF3Dxc7ktXKkNxjnnek0
-         F12tlSyg8aIgzo5po4noAQQhTkG65l+6RjNoGpYY=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id 66EAA8048E;
-        Mon, 13 Dec 2021 14:23:54 +0100 (CET)
-Received: from mail.avm.de ([212.42.244.120])
-          by mail-notes.avm.de (HCL Domino Release 11.0.1FP4)
-          with ESMTP id 2021121314075056-9118 ;
-          Mon, 13 Dec 2021 14:07:50 +0100 
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail.avm.de (Postfix) with ESMTP
-        for <n.schier@avm.de>; Mon, 13 Dec 2021 14:07:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1639400870; bh=UL7R1cXd59fb63aQbLKzvJrfMdZNkVMOW+WjYF0O2lE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MFcXzraGo7wfo7p42UVDEm65E53pV5/RXMFap05JhCIVmT/kfabzzDcGY/Kv3HjEL
-         u3wSoGScAoWmxB+y7e7Mro1QiGwKTX7liXgERsBEotrwOUJj+S9Ca7OSL1C94sfU1d
-         YeaYvShhYmfGDnCEmvsETeu4UpL7VfTtW7peWl2E=
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-        id 6CE28181273; Mon, 13 Dec 2021 14:07:50 +0100 (CET)
-Date:   Mon, 13 Dec 2021 14:07:50 +0100
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH 02/10] certs: unify duplicated cmd_extract_certs and
- improve the log
-Message-ID: <YbdFplCZHvzeOON+@buildd.core.avm.de>
-References: <20211212192941.1149247-1-masahiroy@kernel.org>
- <20211212192941.1149247-3-masahiroy@kernel.org>
+        Mon, 13 Dec 2021 08:08:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639400900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TgI/nBlOnVQKiq1w9qS0FHuNe/IggXOsd2RaFDgPPDs=;
+        b=HcZXOH77gj5lCQ5qGyJUNRWncg5xC98lHsXUhKgJ4r79BEaXqg9rah+OgiPn9sY0zKOEdj
+        I58kfuVSS7EhzFvAe3CuUdH2GEtDG6BJwKeCADT+0KM7XNfG5CE1D4pj0oxvxEvcT4Hmfy
+        h3zirLVP5JGV5yjg8pTexbpKc+V8QK4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-9-ojG3r84cP2-mISrGfANMyQ-1; Mon, 13 Dec 2021 08:08:14 -0500
+X-MC-Unique: ojG3r84cP2-mISrGfANMyQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4BB4E80BCA8;
+        Mon, 13 Dec 2021 13:08:12 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A0B4D610A5;
+        Mon, 13 Dec 2021 13:07:52 +0000 (UTC)
+Message-ID: <74c548c61aeb4afba3acb4143fcb91d92e7de8d6.camel@redhat.com>
+Subject: Re: [PATCH v2 1/5] KVM: nSVM: deal with L1 hypervisor that
+ intercepts interrupts but lets L2 control EFLAGS.IF
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Jim Mattson <jmattson@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joerg Roedel <joro@8bytes.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>
+Date:   Mon, 13 Dec 2021 15:07:51 +0200
+In-Reply-To: <0d893664-ff8d-83ed-e9be-441b45992f68@redhat.com>
+References: <20211213104634.199141-1-mlevitsk@redhat.com>
+         <20211213104634.199141-2-mlevitsk@redhat.com>
+         <0d893664-ff8d-83ed-e9be-441b45992f68@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-In-Reply-To: <20211212192941.1149247-3-masahiroy@kernel.org>
-X-MIMETrack: Itemize by SMTP Server on ANIS1/AVM(Release 11.0.1FP4|October 01,
- 2021) at 13.12.2021 14:07:50,  Serialize by http on ANIS1/AVM(Release
- 11.0.1FP4|October 01, 2021) at 13.12.2021 14:09:57,    Serialize complete at
- 13.12.2021 14:09:57
-X-TNEFEvaluated: 1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Notes-UNID: 43EAD04059685BA508288FD257D3054C
-X-purgate-ID: 149429::1639401834-0000060F-81CC5DBE/0/0
-X-purgate-type: clean
-X-purgate-size: 2784
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:29:33AM +0900, Masahiro Yamada wrote:
-> cmd_extract_certs is defined twice. Unify them.
+On Mon, 2021-12-13 at 12:34 +0100, Paolo Bonzini wrote:
+> On 12/13/21 11:46, Maxim Levitsky wrote:
+> > Fix a corner case in which L1 hypervisor intercepts interrupts (INTERCEPT_INTR)
+> > and either doesn't use virtual interrupt masking (V_INTR_MASKING) or
+> > enters a nested guest with EFLAGS.IF disabled prior to the entry.
+> > 
+> > In this case, despite the fact that L1 intercepts the interrupts,
+> > KVM still needs to set up an interrupt window to wait before it
+> > can deliver INTR vmexit.
+> > 
+> > Currently instead, the KVM enters an endless loop of 'req_immediate_exit'.
+> > 
+> > Note that on VMX this case is impossible as there is only
+> > 'vmexit on external interrupts' execution control which either set,
+> > in which case both host and guest's EFLAGS.IF
+> > is ignored, or clear, in which case no VMexit is delivered.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >   arch/x86/kvm/svm/svm.c | 10 +++++++---
+> >   1 file changed, 7 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index e57e6857e0630..c9668a3b51011 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -3372,17 +3372,21 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
+> >   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> >   {
+> >   	struct vcpu_svm *svm = to_svm(vcpu);
+> > +	bool blocked;
+> > +
+> >   	if (svm->nested.nested_run_pending)
+> >   		return -EBUSY;
+> >   
+> > +	blocked = svm_interrupt_blocked(vcpu);
+> > +
+> >   	/*
+> >   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+> >   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
+> >   	 */
+> >   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
+> > -		return -EBUSY;
+> > -
+> > -	return !svm_interrupt_blocked(vcpu);
+> > +		return !blocked ? -EBUSY : 0;
+> > +	else
+> > +		return !blocked;
+> >   }
+> >   
+> >   static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
+> > 
 > 
-> The current log shows the input file $(2), which might be empty.
-> You cannot know what is being created from the log, "EXTRACT_CERTS".
-> 
-> Change the log to show the output file with better alignment.
-> 
-> [Before]
-> 
->   EXTRACT_CERTS   certs/signing_key.pem
->   CC      certs/system_keyring.o
->   EXTRACT_CERTS
->   AS      certs/system_certificates.o
->   CC      certs/common.o
->   CC      certs/blacklist.o
->   EXTRACT_CERTS
->   AS      certs/revocation_certificates.o
-> 
-> [After]
-> 
->   CERT    certs/signing_key.x509
->   CC      certs/system_keyring.o
->   CERT    certs/x509_certificate_list
->   AS      certs/system_certificates.o
->   CC      certs/common.o
->   CC      certs/blacklist.o
->   CERT    certs/x509_revocation_list
->   AS      certs/revocation_certificates.o
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+> Right, another case is when CLGI is not trapped and the guest therefore
+> runs with GIF=0.  I think that means that a similar change has to be
+> done in all the *_allowed functions.
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+I think that SVM sets real GIF to 1 on VMentry regardless if it is trapped or not.
+
+However if not trapped, and neither EFLAGS.IF is trapped, one could enter a guest
+that has EFLAGS.IF == 0, then the guest could disable GIF, enable EFLAGS.IF,
+and then enable GIF, but then GIF enablement should trigger out interrupt window
+VINTR as well.
+
 
 > 
->  certs/Makefile | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+> I would write it as
 > 
-> diff --git a/certs/Makefile b/certs/Makefile
-> index 97fd6cc02972..945e53d90d38 100644
-> --- a/certs/Makefile
-> +++ b/certs/Makefile
-> @@ -12,6 +12,9 @@ else
->  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
->  endif
->  
-> +quiet_cmd_extract_certs  = CERT    $@
-> +      cmd_extract_certs  = scripts/extract-cert $(2) $@
-> +
->  ifeq ($(CONFIG_SYSTEM_TRUSTED_KEYRING),y)
->  
->  $(eval $(call config_filename,SYSTEM_TRUSTED_KEYS))
-> @@ -22,9 +25,6 @@ $(obj)/system_certificates.o: $(obj)/x509_certificate_list
->  # Cope with signing_key.x509 existing in $(srctree) not $(objtree)
->  AFLAGS_system_certificates.o := -I$(srctree)
->  
-> -quiet_cmd_extract_certs  = EXTRACT_CERTS   $(patsubst "%",%,$(2))
-> -      cmd_extract_certs  = scripts/extract-cert $(2) $@
-> -
->  targets += x509_certificate_list
->  $(obj)/x509_certificate_list: scripts/extract-cert $(SYSTEM_TRUSTED_KEYS_SRCPREFIX)$(SYSTEM_TRUSTED_KEYS_FILENAME) FORCE
->  	$(call if_changed,extract_certs,$(SYSTEM_TRUSTED_KEYS_SRCPREFIX)$(CONFIG_SYSTEM_TRUSTED_KEYS))
-> @@ -98,9 +98,6 @@ $(eval $(call config_filename,SYSTEM_REVOCATION_KEYS))
->  
->  $(obj)/revocation_certificates.o: $(obj)/x509_revocation_list
->  
-> -quiet_cmd_extract_certs  = EXTRACT_CERTS   $(patsubst "%",%,$(2))
-> -      cmd_extract_certs  = scripts/extract-cert $(2) $@
-> -
->  targets += x509_revocation_list
->  $(obj)/x509_revocation_list: scripts/extract-cert $(SYSTEM_REVOCATION_KEYS_SRCPREFIX)$(SYSTEM_REVOCATION_KEYS_FILENAME) FORCE
->  	$(call if_changed,extract_certs,$(SYSTEM_REVOCATION_KEYS_SRCPREFIX)$(CONFIG_SYSTEM_REVOCATION_KEYS))
-> -- 
-> 2.32.0
+>    	if (svm->nested.nested_run_pending)
+>    		return -EBUSY;
+>    
+> 	if (svm_interrupt_blocked(vcpu))
+> 		return 0;
 > 
+>    	/*
+>    	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+>    	 * e.g. if the IRQ arrived asynchronously after checking nested events.
+>    	 */
+>    	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
+> 		return -EBUSY;
+> 	return 1;
+
+Thanks! I was worried to not break the non nested case but looking again at the code,
+it is logically equivalent. 
+
+
+Thanks for the review,
+	Best regards,
+		Maxim Levitsky
+
+> 
+> Paolo
+> 
+
+

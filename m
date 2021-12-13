@@ -2,211 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9BA471F3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C8B471F41
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbhLMCFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 21:05:09 -0500
-Received: from mga05.intel.com ([192.55.52.43]:26631 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229436AbhLMCFJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 21:05:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639361109; x=1670897109;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1DNIlls3feGIaLgX0Fgh5QmZmcZg9yBWEvhQACumvoo=;
-  b=kUlZYodXIDvHRs7UxMcwLFm0VFBJ6spk1DxRNuO2xB30O70qscNuM0Ty
-   cL7GBV+f50C/C+jpKEitk8nw9SA8fI4wY32kJlf6wO+JJ18KvgX/5job2
-   G80mRZV4Tw9uKG5l/gXx5x5IqGb6MLS+zRxdV69u138QTpEx+S6nOc5S0
-   0JRpyO5kFHL9B5r93j77yj3jrzTemG5Ho7Gus+vWYrS1K043hlwJrKth9
-   nlKFb2LY3nbIpcZEs7vtCGPmM0c8WW+xw8++Cu6yIFtWiUm7GKqMoh5w2
-   cpyZbCtpVzJByVQ2XBM70aWFUdoyJD7TKPFFCxAZpn0oADr6CKk/ik78Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="324914477"
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="324914477"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 18:05:08 -0800
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="603326790"
-Received: from yhuang6-desk2.sh.intel.com ([10.239.159.50])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 18:05:06 -0800
-From:   Huang Ying <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>, Mel Gorman <mgorman@suse.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        stable@vger.kernel.org
-Subject: [PATCH -V2] numa balancing: move some document to make it consistent with the code
-Date:   Mon, 13 Dec 2021 10:04:22 +0800
-Message-Id: <20211213020422.2580612-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S231254AbhLMCFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 21:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230523AbhLMCFT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 21:05:19 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1AEC06173F;
+        Sun, 12 Dec 2021 18:05:19 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id y7so10177140plp.0;
+        Sun, 12 Dec 2021 18:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ZfMoG6X9oBnz9vgJgatuWr3jCxlugYsFtu5GcGk49Mc=;
+        b=g5vVjsFJHe9o2GHUu4E4+Su0ye9H6m0xqBM+DGcgJdmD+IQiPo5zQOKiiu3Ft8IEbs
+         zHBPcspyJeEVAOVSDs2hxq1G/V1lyQek5p3oHS1dZyT8RP7vge/6jUa6z80deAs1Escm
+         KqNH4YQYYqjvsvPSnV6SWPkr001GcVsgSdjEFRjvtNIj2v1zh6T6pGwoXAu/mvU/j8mu
+         clkhoeQjghjlwBf+ck+uSZ7G8C9C2J5ffNXHE3/4ge0i35niKH7wy0bTzREkA1FL7pRJ
+         fN/vq9LkR1bWZKCXUf7BDqsOkx/FL6fldEAA6rmuOO1A6EuV7igYRYWsRMTT4VOkmRZC
+         X2aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=ZfMoG6X9oBnz9vgJgatuWr3jCxlugYsFtu5GcGk49Mc=;
+        b=kzIYD3WF5iZqwXbPR3SevokrltLbpq7MlYd743m0UqmoeeaXqwugO80kiSNLdxCfrE
+         fUf3Mvi1vpYCcWOiind8RNm+7NYLhmxiiB0wahUqZI/U057C4uGM7s/8mhLGWsHNce3S
+         HvZ8iyIHLYlj94stF+Rg/fCq5QEIAI38fNvqWD6zBwww/3N5CKmdFo/gvpzWYVwS4X6z
+         Nr9k1jBurKBXd95u1bXw0FDughrGD22JnqeTnr9y0u4FoCkwt6vLtqAmHD0X3vYSME/z
+         S1GP5lRe0lU0J+36LkwzakhPp+wnu73L+ntvMA/rtIA4T+a6uhAmvk5EzvkbXTpHrbgn
+         S2IQ==
+X-Gm-Message-State: AOAM532ij/qi8yyUsYYW2omZmm1ivGfjlozz80XClgUTsIyd5DAHs6rj
+        kazZdPbAU/Ew+Z1YsE72bh8=
+X-Google-Smtp-Source: ABdhPJxXe2sVfiehDtu1Fli3a+yt3W24vxsc25t6eLYydxx6kbdIMIr5thbA+poPOAHvKPLb0sj9Cw==
+X-Received: by 2002:a17:90a:ce02:: with SMTP id f2mr40408011pju.77.1639361118786;
+        Sun, 12 Dec 2021 18:05:18 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id s28sm11278915pfg.147.2021.12.12.18.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 18:05:18 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     digetx@gmail.com
+Cc:     jckuo@nvidia.com, jonathanh@nvidia.com, kishon@ti.com,
+        linmq006@gmail.com, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
+        thierry.reding@gmail.com, vkoul@kernel.org
+Subject: [PATCH v2] phy: tegra: xusb: Fix return value of tegra_xusb_find_port_node function
+Date:   Mon, 13 Dec 2021 02:05:07 +0000
+Message-Id: <20211213020507.1458-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <942f943c-9ec8-9887-aa6d-4d133821beca@gmail.com>
+References: <942f943c-9ec8-9887-aa6d-4d133821beca@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to
-debugfs"), some NUMA balancing sysctls enclosed with SCHED_DEBUG has
-been moved to debugfs.  This patch move the document for these
-sysctls from
+callers of tegra_xusb_find_port_node() function only do NULL checking for
+the return value. return NULL instead of ERR_PTR(-ENOMEM) to keep
+consistent.
 
-  Documentation/admin-guide/sysctl/kernel.rst
-
-to
-
-  Documentation/scheduler/sched-debug.rst
-
-to make the document consistent with the code.
-
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs")
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: stable@vger.kernel.org # since v5.13
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- Documentation/admin-guide/sysctl/kernel.rst | 46 +-----------------
- Documentation/scheduler/index.rst           |  1 +
- Documentation/scheduler/sched-debug.rst     | 54 +++++++++++++++++++++
- 3 files changed, 56 insertions(+), 45 deletions(-)
- create mode 100644 Documentation/scheduler/sched-debug.rst
+ drivers/phy/tegra/xusb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index 0e486f41185e..603469d42fb9 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -609,51 +609,7 @@ be migrated to a local memory node.
- The unmapping of pages and trapping faults incur additional overhead that
- ideally is offset by improved memory locality but there is no universal
- guarantee. If the target workload is already bound to NUMA nodes then this
--feature should be disabled. Otherwise, if the system overhead from the
--feature is too high then the rate the kernel samples for NUMA hinting
--faults may be controlled by the `numa_balancing_scan_period_min_ms,
--numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms,
--numa_balancing_scan_size_mb`_, and numa_balancing_settle_count sysctls.
--
--
--numa_balancing_scan_period_min_ms, numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms, numa_balancing_scan_size_mb
--===============================================================================================================================
--
--
--Automatic NUMA balancing scans tasks address space and unmaps pages to
--detect if pages are properly placed or if the data should be migrated to a
--memory node local to where the task is running.  Every "scan delay" the task
--scans the next "scan size" number of pages in its address space. When the
--end of the address space is reached the scanner restarts from the beginning.
--
--In combination, the "scan delay" and "scan size" determine the scan rate.
--When "scan delay" decreases, the scan rate increases.  The scan delay and
--hence the scan rate of every task is adaptive and depends on historical
--behaviour. If pages are properly placed then the scan delay increases,
--otherwise the scan delay decreases.  The "scan size" is not adaptive but
--the higher the "scan size", the higher the scan rate.
--
--Higher scan rates incur higher system overhead as page faults must be
--trapped and potentially data must be migrated. However, the higher the scan
--rate, the more quickly a tasks memory is migrated to a local node if the
--workload pattern changes and minimises performance impact due to remote
--memory accesses. These sysctls control the thresholds for scan delays and
--the number of pages scanned.
--
--``numa_balancing_scan_period_min_ms`` is the minimum time in milliseconds to
--scan a tasks virtual memory. It effectively controls the maximum scanning
--rate for each task.
--
--``numa_balancing_scan_delay_ms`` is the starting "scan delay" used for a task
--when it initially forks.
--
--``numa_balancing_scan_period_max_ms`` is the maximum time in milliseconds to
--scan a tasks virtual memory. It effectively controls the minimum scanning
--rate for each task.
--
--``numa_balancing_scan_size_mb`` is how many megabytes worth of pages are
--scanned for a given scan.
--
-+feature should be disabled.
- 
- oops_all_cpu_backtrace
- ======================
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index 88900aabdbf7..30cca8a37b3b 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -17,6 +17,7 @@ Linux Scheduler
-     sched-nice-design
-     sched-rt-group
-     sched-stats
-+    sched-debug
- 
-     text_files
- 
-diff --git a/Documentation/scheduler/sched-debug.rst b/Documentation/scheduler/sched-debug.rst
-new file mode 100644
-index 000000000000..4d3d24f2a439
---- /dev/null
-+++ b/Documentation/scheduler/sched-debug.rst
-@@ -0,0 +1,54 @@
-+=================
-+Scheduler debugfs
-+=================
-+
-+Booting a kernel with CONFIG_SCHED_DEBUG=y will give access to
-+scheduler specific debug files under /sys/kernel/debug/sched. Some of
-+those files are described below.
-+
-+numa_balancing
-+==============
-+
-+`numa_balancing` directory is used to hold files to control NUMA
-+balancing feature.  If the system overhead from the feature is too
-+high then the rate the kernel samples for NUMA hinting faults may be
-+controlled by the `scan_period_min_ms, scan_delay_ms,
-+scan_period_max_ms, scan_size_mb` files.
-+
-+
-+scan_period_min_ms, scan_delay_ms, scan_period_max_ms, scan_size_mb
-+-------------------------------------------------------------------
-+
-+Automatic NUMA balancing scans tasks address space and unmaps pages to
-+detect if pages are properly placed or if the data should be migrated to a
-+memory node local to where the task is running.  Every "scan delay" the task
-+scans the next "scan size" number of pages in its address space. When the
-+end of the address space is reached the scanner restarts from the beginning.
-+
-+In combination, the "scan delay" and "scan size" determine the scan rate.
-+When "scan delay" decreases, the scan rate increases.  The scan delay and
-+hence the scan rate of every task is adaptive and depends on historical
-+behaviour. If pages are properly placed then the scan delay increases,
-+otherwise the scan delay decreases.  The "scan size" is not adaptive but
-+the higher the "scan size", the higher the scan rate.
-+
-+Higher scan rates incur higher system overhead as page faults must be
-+trapped and potentially data must be migrated. However, the higher the scan
-+rate, the more quickly a tasks memory is migrated to a local node if the
-+workload pattern changes and minimises performance impact due to remote
-+memory accesses. These files control the thresholds for scan delays and
-+the number of pages scanned.
-+
-+``scan_period_min_ms`` is the minimum time in milliseconds to scan a
-+tasks virtual memory. It effectively controls the maximum scanning
-+rate for each task.
-+
-+``scan_delay_ms`` is the starting "scan delay" used for a task when it
-+initially forks.
-+
-+``scan_period_max_ms`` is the maximum time in milliseconds to scan a
-+tasks virtual memory. It effectively controls the minimum scanning
-+rate for each task.
-+
-+``scan_size_mb`` is how many megabytes worth of pages are scanned for
-+a given scan.
+diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+index 963de5913e50..aa5237eacd29 100644
+--- a/drivers/phy/tegra/xusb.c
++++ b/drivers/phy/tegra/xusb.c
+@@ -455,7 +455,7 @@ tegra_xusb_find_port_node(struct tegra_xusb_padctl *padctl, const char *type,
+ 	name = kasprintf(GFP_KERNEL, "%s-%u", type, index);
+ 	if (!name) {
+ 		of_node_put(ports);
+-		return ERR_PTR(-ENOMEM);
++		return NULL;
+ 	}
+ 	np = of_get_child_by_name(ports, name);
+ 	kfree(name);
 -- 
-2.30.2
+2.17.1
 

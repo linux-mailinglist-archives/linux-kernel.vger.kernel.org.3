@@ -2,175 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C22A4737B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F854737B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243713AbhLMWlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:41:04 -0500
-Received: from mga01.intel.com ([192.55.52.88]:17143 "EHLO mga01.intel.com"
+        id S243606AbhLMWmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:42:10 -0500
+Received: from mga06.intel.com ([134.134.136.31]:56984 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240404AbhLMWlD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:41:03 -0500
+        id S243753AbhLMWmA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 17:42:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639435263; x=1670971263;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aOtCRBgsGCRfD+nEJ3CWE2K/ME0CwgA4+RTTMrMhKzc=;
-  b=O7dO7V4klOFJN7U0sEwAaSrEcl/4LOnnOk1Rya6VyqZN4YTysoC7Hvf3
-   tjT+kgmEmz4BoDgl6O/f+IoFz3kMJlyLdiGyCJbFyV8c7O2Fbmo2+GjKC
-   5vC5Hw4M8Nb5SFIJ8YRF6M6oQYRR/p8tQM5/dHb2YmfJA8MaBejY+4gqq
-   HF6i5Uo9P7j0enqMEKgk9ZeHoFqzRVV4uWIzranGVIbmlsUndqaQg52Qp
-   /vmrjzABTZGZBMh4esV9EV1cGavaICI1qTVvCKTj86x6cnKO3KjMdSunG
-   NoCso7FG6dZZ0JtHxaeHcQ54WZX2kcAvPCRtCkXD7TOeLBs6PgxsP53WT
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="262980670"
+  t=1639435320; x=1670971320;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8MQdGwojxAw7y4szkMSyqsqVvv0P2kGBswWuxrRjxU4=;
+  b=JIASZ9ftIptAvzqexJqEmIfDD0vz75SG1nwKvjzJyYnLpkQXCz2fCkGA
+   8EDd0E7sryM+T4r22/CUpbuWk99QEPHXhsHUk7nJvLSAeF/VluiMBUqDI
+   XIsCEgIrsydYJvBGnKynls5/Btm0HAjPr9HuoKkd2iO2JB9FW162LHeoj
+   eNKLKXY+MHykWgEZbjiBfFWwxkNixWNRAzeDt2VNXADTk+dbhbJ2WPCmk
+   mvwgUPOQkWWoTvDcwg4N0E40dOrZqSx3xZ7dwIclw/AXZ6FnR/PFxbIcK
+   Cqvu7MqyzfHnVN5udDBgJp1kkjegpY8QNXb+XRWYH8hvf+rGcisuWlDkS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299627281"
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="262980670"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 14:41:02 -0800
+   d="scan'208";a="299627281"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 14:42:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="544942011"
+   d="scan'208";a="583065288"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Dec 2021 14:40:58 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 13 Dec 2021 14:41:58 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mwu0A-00078e-2D; Mon, 13 Dec 2021 22:40:58 +0000
-Date:   Tue, 14 Dec 2021 06:40:21 +0800
+        id 1mwu18-000796-77; Mon, 13 Dec 2021 22:41:58 +0000
+Date:   Tue, 14 Dec 2021 06:41:37 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Stephane Eranian <eranian@google.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, peterz@infradead.org,
-        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
-        songliubraving@fb.com, mpe@ellerman.id.au, maddy@linux.ibm.com
-Subject: Re: [PATCH v4 08/14] ACPI: add perf low power callback
-Message-ID: <202112140636.UOuRtBxF-lkp@intel.com>
-References: <20211210210229.2991238-9-eranian@google.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 5fb6e8cf53b005d287d4c2d137a415ff7d025a81
+Message-ID: <61b7cc21.t8/whQ+qZrxmL+AP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210210229.2991238-9-eranian@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephane,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+branch HEAD: 5fb6e8cf53b005d287d4c2d137a415ff7d025a81  locking/atomic: atomic64: Remove unusable atomic ops
 
-Thank you for the patch! Yet something to improve:
+elapsed time: 731m
 
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on tip/x86/core v5.16-rc5]
-[cannot apply to rafael-pm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+configs tested: 208
+configs skipped: 4
 
-url:    https://github.com/0day-ci/linux/commits/Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211211-050541
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a9f4a6e92b3b319296fb078da2615f618f6cd80c
-config: x86_64-randconfig-c002-20211210 (https://download.01.org/0day-ci/archive/20211214/202112140636.UOuRtBxF-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/9d928356688ed9c42e01fed16e59c1d6eda16647
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211211-050541
-        git checkout 9d928356688ed9c42e01fed16e59c1d6eda16647
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211213
+powerpc                      pasemi_defconfig
+mips                        jmr3927_defconfig
+powerpc                       holly_defconfig
+powerpc                          allmodconfig
+sh                          landisk_defconfig
+powerpc                         wii_defconfig
+powerpc                      acadia_defconfig
+arm                        magician_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                     ep8248e_defconfig
+arm                           omap1_defconfig
+mips                  decstation_64_defconfig
+powerpc                 mpc837x_rdb_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                      walnut_defconfig
+sh                ecovec24-romimage_defconfig
+mips                           xway_defconfig
+arm                        keystone_defconfig
+powerpc                      pcm030_defconfig
+mips                     loongson1b_defconfig
+powerpc                      katmai_defconfig
+powerpc                        warp_defconfig
+ia64                      gensparse_defconfig
+sh                           se7705_defconfig
+powerpc                   motionpro_defconfig
+arm                       imx_v6_v7_defconfig
+arm                         s5pv210_defconfig
+powerpc                     taishan_defconfig
+arm                          pxa3xx_defconfig
+sh                           se7722_defconfig
+arc                     haps_hs_smp_defconfig
+mips                     decstation_defconfig
+mips                          rm200_defconfig
+xtensa                  audio_kc705_defconfig
+mips                     cu1830-neo_defconfig
+mips                           mtx1_defconfig
+mips                     loongson1c_defconfig
+mips                           rs90_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                   currituck_defconfig
+sparc                       sparc32_defconfig
+arm                      integrator_defconfig
+sh                     magicpanelr2_defconfig
+powerpc                   bluestone_defconfig
+m68k                       m5249evb_defconfig
+s390                             allyesconfig
+arc                        vdk_hs38_defconfig
+arc                                 defconfig
+xtensa                              defconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc                 mpc85xx_cds_defconfig
+mips                           gcw0_defconfig
+mips                         tb0219_defconfig
+powerpc                       ebony_defconfig
+arm                        trizeps4_defconfig
+arm                       aspeed_g4_defconfig
+sh                         ap325rxa_defconfig
+m68k                            mac_defconfig
+sh                             shx3_defconfig
+arm                          pxa168_defconfig
+arc                          axs103_defconfig
+arm                         at91_dt_defconfig
+arm                       spear13xx_defconfig
+powerpc64                        alldefconfig
+sh                        sh7785lcr_defconfig
+m68k                        stmark2_defconfig
+powerpc                    ge_imp3a_defconfig
+powerpc                     pq2fads_defconfig
+arm                       cns3420vb_defconfig
+arm                            hisi_defconfig
+powerpc                      pmac32_defconfig
+xtensa                  cadence_csp_defconfig
+i386                             alldefconfig
+powerpc                 mpc8560_ads_defconfig
+m68k                                defconfig
+xtensa                  nommu_kc705_defconfig
+sh                          kfr2r09_defconfig
+sh                          r7785rp_defconfig
+powerpc                     mpc83xx_defconfig
+sh                           sh2007_defconfig
+arc                     nsimosci_hs_defconfig
+powerpc                    sam440ep_defconfig
+m68k                       m5208evb_defconfig
+m68k                         apollo_defconfig
+sh                              ul2_defconfig
+sh                   sh7724_generic_defconfig
+m68k                        m5307c3_defconfig
+sh                            migor_defconfig
+sh                        edosk7705_defconfig
+m68k                       bvme6000_defconfig
+powerpc                 canyonlands_defconfig
+arm                           sunxi_defconfig
+mips                           ip22_defconfig
+powerpc                     tqm8541_defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                      ppc64e_defconfig
+mips                       rbtx49xx_defconfig
+openrisc                         alldefconfig
+mips                         bigsur_defconfig
+arc                 nsimosci_hs_smp_defconfig
+openrisc                            defconfig
+powerpc                  iss476-smp_defconfig
+nds32                               defconfig
+arm                      tct_hammer_defconfig
+mips                           ip32_defconfig
+h8300                    h8300h-sim_defconfig
+m68k                          hp300_defconfig
+mips                          malta_defconfig
+powerpc                     ksi8560_defconfig
+h8300                       h8s-sim_defconfig
+arm                       multi_v4t_defconfig
+mips                      loongson3_defconfig
+mips                         tb0287_defconfig
+sh                          r7780mp_defconfig
+ia64                        generic_defconfig
+arm                            qcom_defconfig
+sh                           se7724_defconfig
+mips                      bmips_stb_defconfig
+mips                         mpc30x_defconfig
+mips                        vocore2_defconfig
+mips                      pic32mzda_defconfig
+powerpc                     mpc512x_defconfig
+m68k                          multi_defconfig
+arm                  randconfig-c002-20211213
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a011-20211213
+x86_64               randconfig-a012-20211213
+x86_64               randconfig-a014-20211213
+x86_64               randconfig-a013-20211213
+x86_64               randconfig-a016-20211213
+x86_64               randconfig-a015-20211213
+i386                 randconfig-a013-20211213
+i386                 randconfig-a011-20211213
+i386                 randconfig-a016-20211213
+i386                 randconfig-a014-20211213
+i386                 randconfig-a015-20211213
+i386                 randconfig-a012-20211213
+arc                  randconfig-r043-20211213
+riscv                randconfig-r042-20211213
+s390                 randconfig-r044-20211213
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-All errors (new ones prefixed by >>):
-
-   drivers/acpi/acpi_pad.c: In function 'power_saving_thread':
->> drivers/acpi/acpi_pad.c:168:4: error: implicit declaration of function 'perf_lopwr_cb' [-Werror=implicit-function-declaration]
-     168 |    perf_lopwr_cb(true);
-         |    ^~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/perf_lopwr_cb +168 drivers/acpi/acpi_pad.c
-
-   135	
-   136	static unsigned int idle_pct = 5; /* percentage */
-   137	static unsigned int round_robin_time = 1; /* second */
-   138	static int power_saving_thread(void *data)
-   139	{
-   140		int do_sleep;
-   141		unsigned int tsk_index = (unsigned long)data;
-   142		u64 last_jiffies = 0;
-   143	
-   144		sched_set_fifo_low(current);
-   145	
-   146		while (!kthread_should_stop()) {
-   147			unsigned long expire_time;
-   148	
-   149			/* round robin to cpus */
-   150			expire_time = last_jiffies + round_robin_time * HZ;
-   151			if (time_before(expire_time, jiffies)) {
-   152				last_jiffies = jiffies;
-   153				round_robin_cpu(tsk_index);
-   154			}
-   155	
-   156			do_sleep = 0;
-   157	
-   158			expire_time = jiffies + HZ * (100 - idle_pct) / 100;
-   159	
-   160			while (!need_resched()) {
-   161				if (tsc_detected_unstable && !tsc_marked_unstable) {
-   162					/* TSC could halt in idle, so notify users */
-   163					mark_tsc_unstable("TSC halts in idle");
-   164					tsc_marked_unstable = 1;
-   165				}
-   166				local_irq_disable();
-   167	
- > 168				perf_lopwr_cb(true);
-   169	
-   170				tick_broadcast_enable();
-   171				tick_broadcast_enter();
-   172				stop_critical_timings();
-   173	
-   174				mwait_idle_with_hints(power_saving_mwait_eax, 1);
-   175	
-   176				start_critical_timings();
-   177				tick_broadcast_exit();
-   178	
-   179				perf_lopwr_cb(false);
-   180	
-   181				local_irq_enable();
-   182	
-   183				if (time_before(expire_time, jiffies)) {
-   184					do_sleep = 1;
-   185					break;
-   186				}
-   187			}
-   188	
-   189			/*
-   190			 * current sched_rt has threshold for rt task running time.
-   191			 * When a rt task uses 95% CPU time, the rt thread will be
-   192			 * scheduled out for 5% CPU time to not starve other tasks. But
-   193			 * the mechanism only works when all CPUs have RT task running,
-   194			 * as if one CPU hasn't RT task, RT task from other CPUs will
-   195			 * borrow CPU time from this CPU and cause RT task use > 95%
-   196			 * CPU time. To make 'avoid starvation' work, takes a nap here.
-   197			 */
-   198			if (unlikely(do_sleep))
-   199				schedule_timeout_killable(HZ * idle_pct / 100);
-   200	
-   201			/* If an external event has set the need_resched flag, then
-   202			 * we need to deal with it, or this loop will continue to
-   203			 * spin without calling __mwait().
-   204			 */
-   205			if (unlikely(need_resched()))
-   206				schedule();
-   207		}
-   208	
-   209		exit_round_robin(tsk_index);
-   210		return 0;
-   211	}
-   212	
+clang tested configs:
+x86_64               randconfig-c007-20211213
+arm                  randconfig-c002-20211213
+riscv                randconfig-c006-20211213
+mips                 randconfig-c004-20211213
+i386                 randconfig-c001-20211213
+s390                 randconfig-c005-20211213
+powerpc              randconfig-c003-20211213
+i386                 randconfig-a001-20211213
+i386                 randconfig-a002-20211213
+i386                 randconfig-a005-20211213
+i386                 randconfig-a003-20211213
+i386                 randconfig-a006-20211213
+i386                 randconfig-a004-20211213
+x86_64               randconfig-a006-20211213
+x86_64               randconfig-a005-20211213
+x86_64               randconfig-a001-20211213
+x86_64               randconfig-a002-20211213
+x86_64               randconfig-a003-20211213
+x86_64               randconfig-a004-20211213
+hexagon              randconfig-r045-20211213
+hexagon              randconfig-r041-20211213
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

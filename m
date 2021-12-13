@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69184472611
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 855414728EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235924AbhLMJs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbhLMJoY (ORCPT
+        id S244110AbhLMKQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:16:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44358 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239771AbhLMJ5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:44:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A86C08EAF8;
-        Mon, 13 Dec 2021 01:40:43 -0800 (PST)
+        Mon, 13 Dec 2021 04:57:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C1E7BCE0E7D;
-        Mon, 13 Dec 2021 09:40:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F849C341C5;
-        Mon, 13 Dec 2021 09:40:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 443D5B80E7A;
+        Mon, 13 Dec 2021 09:57:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A18C34602;
+        Mon, 13 Dec 2021 09:57:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388440;
-        bh=6DpQ31aG0z+ukyUsg8bVAtl6LBU0L/GQYVMEmQARurs=;
+        s=korg; t=1639389472;
+        bh=anaYCRf9rJ3zXGTVKfWIsIw4C9o8BeinwzDfcQpXx/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BnuBZNz7tvPCDXFnD8OZHM6lXt9ov9C6l+wLhV0vv22M2+Y1ySWAxIl6YjrxLoGVi
-         ja8FHmZ4WgwlgCInuUU2A5872FoxuY5f7O5Bc+TEIv8JKboY28QRqQXzb0Wn3FP0aU
-         Pg3alLzjPI6wO1ffPSLJYdV23UNxhBXVlIvVMITM=
+        b=HNi1N29soTgrhCEbRUOtOvvpx8+TUnWSLpWoh5F6MdWWo+y3LDsvNDvPBB/r89/Up
+         wXJo9AGx8f6GqYK57j3i16ZEVsXh18vpf3ek8d8mo4Qz4ruFSZ4olYLs5MoGYkglAm
+         CQ8DsHkpt2ULVBtat0urZB7LBa6xCWVAdphmcLjY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Manish Chopra <manishc@marvell.com>,
+        Alok Prasad <palok@marvell.com>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 50/74] net/qla3xxx: fix an error code in ql_adapter_up()
+Subject: [PATCH 5.15 106/171] qede: validate non LSO skb length
 Date:   Mon, 13 Dec 2021 10:30:21 +0100
-Message-Id: <20211213092932.485366235@linuxfoundation.org>
+Message-Id: <20211213092948.619729882@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,57 +48,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Manish Chopra <manishc@marvell.com>
 
-commit d17b9737c2bc09b4ac6caf469826e5a7ce3ffab7 upstream.
+commit 8e227b198a55859bf790dc7f4b1e30c0859c6756 upstream.
 
-The ql_wait_for_drvr_lock() fails and returns false, then this
-function should return an error code instead of returning success.
+Although it is unlikely that stack could transmit a non LSO
+skb with length > MTU, however in some cases or environment such
+occurrences actually resulted into firmware asserts due to packet
+length being greater than the max supported by the device (~9700B).
 
-The other problem is that the success path prints an error message
-netdev_err(ndev, "Releasing driver lock\n");  Delete that and
-re-order the code a little to make it more clear.
+This patch adds the safeguard for such odd cases to avoid firmware
+asserts.
 
-Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20211207082416.GA16110@kili
+v2: Added "Fixes" tag with one of the initial driver commit
+    which enabled the TX traffic actually (as this was probably
+    day1 issue which was discovered recently by some customer
+    environment)
+
+Fixes: a2ec6172d29c ("qede: Add support for link")
+Signed-off-by: Manish Chopra <manishc@marvell.com>
+Signed-off-by: Alok Prasad <palok@marvell.com>
+Signed-off-by: Prabhakar Kushwaha <pkushwaha@marvell.com>
+Signed-off-by: Ariel Elior <aelior@marvell.com>
+Link: https://lore.kernel.org/r/20211203174413.13090-1-manishc@marvell.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/qlogic/qla3xxx.c |   19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/qlogic/qede/qede_fp.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/net/ethernet/qlogic/qla3xxx.c
-+++ b/drivers/net/ethernet/qlogic/qla3xxx.c
-@@ -3496,20 +3496,19 @@ static int ql_adapter_up(struct ql3_adap
- 
- 	spin_lock_irqsave(&qdev->hw_lock, hw_flags);
- 
--	err = ql_wait_for_drvr_lock(qdev);
--	if (err) {
--		err = ql_adapter_initialize(qdev);
--		if (err) {
--			netdev_err(ndev, "Unable to initialize adapter\n");
--			goto err_init;
--		}
--		netdev_err(ndev, "Releasing driver lock\n");
--		ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
--	} else {
-+	if (!ql_wait_for_drvr_lock(qdev)) {
- 		netdev_err(ndev, "Could not acquire driver lock\n");
-+		err = -ENODEV;
- 		goto err_lock;
- 	}
- 
-+	err = ql_adapter_initialize(qdev);
-+	if (err) {
-+		netdev_err(ndev, "Unable to initialize adapter\n");
-+		goto err_init;
-+	}
-+	ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
+--- a/drivers/net/ethernet/qlogic/qede/qede_fp.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_fp.c
+@@ -1643,6 +1643,13 @@ netdev_tx_t qede_start_xmit(struct sk_bu
+ 			data_split = true;
+ 		}
+ 	} else {
++		if (unlikely(skb->len > ETH_TX_MAX_NON_LSO_PKT_LEN)) {
++			DP_ERR(edev, "Unexpected non LSO skb length = 0x%x\n", skb->len);
++			qede_free_failed_tx_pkt(txq, first_bd, 0, false);
++			qede_update_tx_producer(txq);
++			return NETDEV_TX_OK;
++		}
 +
- 	spin_unlock_irqrestore(&qdev->hw_lock, hw_flags);
- 
- 	set_bit(QL_ADAPTER_UP, &qdev->flags);
+ 		val |= ((skb->len & ETH_TX_DATA_1ST_BD_PKT_LEN_MASK) <<
+ 			 ETH_TX_DATA_1ST_BD_PKT_LEN_SHIFT);
+ 	}
 
 

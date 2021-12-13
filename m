@@ -2,122 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAA04730C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C604730D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238544AbhLMPp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234484AbhLMPpZ (ORCPT
+        id S234427AbhLMPsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:48:01 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:42036 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232841AbhLMPsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:45:25 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3047C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:45:24 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so17840541otl.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:45:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dQ0iYUP0JWxWxyVvkeGeGLlGPIXkHbinLcx5o3bfw2o=;
-        b=GT2LUf8AZMMbJBvm19dhzHYN+vNChABVOEFBTkozsYpZC7hM/deocMT5X5GMYIDOek
-         5LBXg6Ot9xO7cq/Jk7zgArH4zvnKvrbCFxFNX8dsF13FJEKUga57PYX+I8Hi1ZfJAIK/
-         lbC6PuujBugYWprOiaNoUFWcBjLuSQX8QIWYLTNOIErrR3PFA/R/NZ5OZ1BQe0cyH2u0
-         nAxuEZuXTWTPI8uD3iiMIhXC+C6hwff7Bfdc2WEeE81/t/APcJ7o3YcoRbMbC+3Gxrb6
-         F71aYRG/1GESx3DTZCuueBZ/iX706Ujvo4hj5uB/ty469INRnDEZrTlkBjMLNWhE+0OQ
-         nJPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dQ0iYUP0JWxWxyVvkeGeGLlGPIXkHbinLcx5o3bfw2o=;
-        b=0RAzHgNvduOjKulOvAVR9wMHsh2DxjF6w56ghS6I9HwMwhqyVZwygnAycCvzHLkd6Y
-         O7uP1ZLSW424/QGJNUvJDBofTOIpKAtoH6oMnHlQlCdeY5hCvZpFhV6VscyxkVDmSgZ/
-         7/ucY9jLFq6vwMvA999CFOhag78NiezNPIG9hRQhuu5AU0eSbUPiCWHyMc6G09B2FTrj
-         7ziq6+NlEwXiE9wn331JB/8nWS02+WdET0bEUBsfo3SapoczEf3BW22R3dOMrpb8LVWc
-         c7gXK2eKaNCm2CJ1BHQuOaFMW9DRuqRg6kcRFAHrVDJE46ZhEkJKOjnB8hOx3wBHlAkO
-         Srig==
-X-Gm-Message-State: AOAM533+U4iIoLSPLMdKzlkyccg7bwExBt0bd1bqwVZfte45JuHAbkJu
-        zBoQ5hs5ov6QbYxF5delqiW3/A==
-X-Google-Smtp-Source: ABdhPJzNsAq/rJmgcNdCPksFNXX6L/lDEXt5jzOfIQryTdTz3diL0hIrAXJ+3WKe0bwcch9hGMFEwQ==
-X-Received: by 2002:a9d:6f13:: with SMTP id n19mr24707012otq.317.1639410324291;
-        Mon, 13 Dec 2021 07:45:24 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id c8sm2281168otk.40.2021.12.13.07.45.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 07:45:23 -0800 (PST)
-Date:   Mon, 13 Dec 2021 07:46:42 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
-        jeyr@codeaurora.org, bkumar@qti.qualcomm.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] dt-bindings: misc: add property to support
- non-secure DSP
-Message-ID: <Ybdq4qAeqK8C8Yvc@ripper>
-References: <20211209120626.26373-1-srinivas.kandagatla@linaro.org>
- <20211209120626.26373-6-srinivas.kandagatla@linaro.org>
+        Mon, 13 Dec 2021 10:48:00 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BDFlqCZ012715;
+        Mon, 13 Dec 2021 09:47:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639410472;
+        bh=mbYED82dn4MjyP6EvX8PXfBnoglYGGz1EzHgbNlxAj0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=KGe33ZgykL4GOpguxxK5VxnoB8c2CKpTpWWz5eKSmkSbbv3QcKQmRmfFUZBOxtGZT
+         kRcjgTzVkj5d9bhJ989f3+qf8JCcwsHgAFqf+FLa8Zp3ECaTuLUzO9nJlska0wO9Nz
+         BD9NCF+uEfFqYWS6A2FHr5goppNxMRq/6x/NgIMg=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BDFlqMH074458
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Dec 2021 09:47:52 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 13
+ Dec 2021 09:47:52 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 13 Dec 2021 09:47:52 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BDFlqhD047784;
+        Mon, 13 Dec 2021 09:47:52 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Subject: Re: [PATCH v2] soc: ti: k3-socinfo: Add entry for J721S2 SoC family
+Date:   Mon, 13 Dec 2021 09:47:51 -0600
+Message-ID: <163941045503.28855.14280891128603768621.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20211203120913.14737-1-a-govindraju@ti.com>
+References: <20211203120913.14737-1-a-govindraju@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209120626.26373-6-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09 Dec 04:06 PST 2021, Srinivas Kandagatla wrote:
+Hi Aswath Govindraju,
 
-> From: Jeya R <jeyr@codeaurora.org>
+On Fri, 3 Dec 2021 17:39:13 +0530, Aswath Govindraju wrote:
+> J721S2 SoC's JTAG PARTNO is 0xBB75.
 > 
-> Add property to set DSP domain as non-secure.
 > 
-> ADSP/MDSP/SDSP are by default secured, where as CDSP can be either be
-> secured/unsecured.
-> non-secured Compute DSP would allow users to load unsigned process
-> and run hexagon instructions, but limiting access to secured hardware
-> within the DSP.
-> 
-> Based on this flag device nodes for secured and unsecured are created.
-> 
-> Signed-off-by: Jeya R <jeyr@codeaurora.org>
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
-> 
-> This patch has dependency this yaml conversion patch:
-> https://lore.kernel.org/lkml/20211208101508.24582-1-david@ixit.cz/T/
-> 
->  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> index f42ab208a7fc..f0df0a3bf69f 100644
-> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> @@ -29,6 +29,11 @@ properties:
->          - sdsp
->          - cdsp
->  
-> +  qcom,non-secure-domain:
-> +    type: boolean
-> +    description: >
-> +      Property to specify that dsp domain is non-secure.
 
-"non-secure" feels vague, how about expressing it as "Specifies that the
-domains of this DSP instance may run unsigned programs."
+I have applied the following to branch ti-drivers-soc-next on [1].
+Thank you!
 
-Perhaps even go so far to name the property
-qcom,allow-unsigned-programs? (Or some other word for "program"?)
+[1/1] soc: ti: k3-socinfo: Add entry for J721S2 SoC family
+      commit: a34ff76a161583d24d29816a6cce85232ea7d9d0
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
 Regards,
-Bjorn
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
-> +
->    '#address-cells':
->      const: 1
->  
-> -- 
-> 2.21.0
-> 

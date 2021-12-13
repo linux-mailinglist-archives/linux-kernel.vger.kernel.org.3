@@ -2,52 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C2747270C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8CB4724F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbhLMJ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:57:12 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38280 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237208AbhLMJv4 (ORCPT
+        id S233202AbhLMJkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:40:01 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:33556 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233109AbhLMJiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:51:56 -0500
+        Mon, 13 Dec 2021 04:38:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F8C6B80E16;
-        Mon, 13 Dec 2021 09:51:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508A6C00446;
-        Mon, 13 Dec 2021 09:51:53 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2772ECE0E95;
+        Mon, 13 Dec 2021 09:38:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C874BC341C8;
+        Mon, 13 Dec 2021 09:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389114;
-        bh=jQN/HNVVbD2WGBmSRc+jLwnRdojvjt56bzQhZG2x9iE=;
+        s=korg; t=1639388291;
+        bh=w6F+ty0ZxFSujMTStnXobz0I1cwsN2IrtuDJVFPJQZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GOuYVTm0sElbsq4wiehPDr95l2wRu1I+k56Q6aljZH5JsNM9VvRh39emjsquqExvk
-         RVEeM1K9bGx/ytERkevSWgeebCtUn5DclE1iUyxJQSn7DPry7H657NBuVxSXRJEcsG
-         2OwI80+Kz4+gP+6hmnxEmHshtOxYyKcTsbe0xOlw=
+        b=ofsZrZykbtcSaYfsIE7jlItacjBwPxzkvRxwAnQXjAES7zw0Cue3niyfLgrmsQATa
+         JQ2sfWLNjvXPY9vrsydPs+2z60LHOb+imIp0O4ju7P9GtRUOz6BhjjfEkBcRGh2z32
+         44JEBmsQemfv4N+a4xUBvdwN1Az7dqgQMGvtiLlc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Konstantin Khlebnikov <koct9i@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Clarke <pc@us.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.10 090/132] perf tools: Fix SMT detection fast read path
+        stable@vger.kernel.org, Wudi Wang <wangwudi@hisilicon.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 4.14 52/53] irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
 Date:   Mon, 13 Dec 2021 10:30:31 +0100
-Message-Id: <20211213092942.198374589@linuxfoundation.org>
+Message-Id: <20211213092930.091021199@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
+From: Wudi Wang <wangwudi@hisilicon.com>
 
-commit 4ffbe87e2d5b53bcb0213d8650bbe70bf942de6a upstream.
+commit b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a upstream.
 
-sysfs__read_int() returns 0 on success, and so the fast read path was
-always failing.
+INVALL CMD specifies that the ITS must ensure any caching associated with
+the interrupt collection defined by ICID is consistent with the LPI
+configuration tables held in memory for all Redistributors. SYNC is
+required to ensure that INVALL is executed.
 
-Fixes: bb629484d924118e ("perf tools: Simplify checking if SMT is active.")
-Signed-off-by: Ian Rogers <irogers@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Kajol Jain <kjain@linux.ibm.com>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Konstantin Khlebnikov <koct9i@gmail.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Paul Clarke <pc@us.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Link: http://lore.kernel.org/lkml/20211124001231.3277836-2-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Currently, LPI configuration data may be inconsistent with that in the
+memory within a short period of time after the INVALL command is executed.
+
+Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
+Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/smt.c |    2 +-
+ drivers/irqchip/irq-gic-v3-its.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/perf/util/smt.c
-+++ b/tools/perf/util/smt.c
-@@ -15,7 +15,7 @@ int smt_on(void)
- 	if (cached)
- 		return cached_result;
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -531,7 +531,7 @@ static struct its_collection *its_build_
  
--	if (sysfs__read_int("devices/system/cpu/smt/active", &cached_result) > 0)
-+	if (sysfs__read_int("devices/system/cpu/smt/active", &cached_result) >= 0)
- 		goto done;
+ 	its_fixup_cmd(cmd);
  
- 	ncpu = sysconf(_SC_NPROCESSORS_CONF);
+-	return NULL;
++	return desc->its_invall_cmd.col;
+ }
+ 
+ static struct its_vpe *its_build_vinvall_cmd(struct its_cmd_block *cmd,
 
 

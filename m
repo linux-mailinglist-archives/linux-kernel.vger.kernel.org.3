@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22085472BCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBAD472BCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbhLMLxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:53:19 -0500
-Received: from mga09.intel.com ([134.134.136.24]:19391 "EHLO mga09.intel.com"
+        id S235814AbhLMLyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:54:44 -0500
+Received: from foss.arm.com ([217.140.110.172]:53026 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229618AbhLMLxS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:53:18 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238532082"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="238532082"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 03:53:18 -0800
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="464600657"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 03:53:16 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mwjsR-005bR7-V5;
-        Mon, 13 Dec 2021 13:52:19 +0200
-Date:   Mon, 13 Dec 2021 13:52:19 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
- when IRQ can't be retrieved
-Message-ID: <Ybcz85/ZoXRCmbbD@smile.fi.intel.com>
-References: <20211209145937.77719-1-andriy.shevchenko@linux.intel.com>
- <d91cf14d-c7d8-1c61-9071-102f38e8c924@opensource.wdc.com>
- <febc7f73-929f-d8a6-ea01-5056b9101b46@omp.ru>
- <549c1825-56e6-de9e-e109-77f0d06cfd0f@opensource.wdc.com>
- <5322dafd-86ad-a293-6005-29384cb96cc8@omp.ru>
- <de3dc434-8b87-5d9d-7fe8-bd44ff2bcbfb@opensource.wdc.com>
+        id S229618AbhLMLyn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:54:43 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90DB66D;
+        Mon, 13 Dec 2021 03:54:42 -0800 (PST)
+Received: from bogus (unknown [10.57.33.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA2073F793;
+        Mon, 13 Dec 2021 03:54:40 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:54:37 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH v7 08/16] firmware: arm_scmi: Add
+ sync_cmds_atomic_replies transport flag
+Message-ID: <20211213115437.23ecitnqztx5yl7g@bogus>
+References: <20211129191156.29322-1-cristian.marussi@arm.com>
+ <20211129191156.29322-9-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <de3dc434-8b87-5d9d-7fe8-bd44ff2bcbfb@opensource.wdc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211129191156.29322-9-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 07:39:31AM +0900, Damien Le Moal wrote:
-> On 2021/12/11 19:25, Sergey Shtylyov wrote:
-> > On 11.12.2021 2:45, Damien Le Moal wrote:
-
-...
-
-> >>>> So 0 will be returned as-is. That is rather weird. That should be fixed to
-> >>>> return -ENXIO:
-> >>>>
-> >>>> 	if (WARN(ret == 0, "0 is an invalid IRQ number\n"))
-> >>>> 		return -ENXIO;
-> >>>> 	return ret;
-> >>>
-> >>>     My unmerged patch (https://marc.info/?l=linux-kernel&m=163623041902285) does this
-> >>> but returns -EINVAL instead.
-> >>
-> >> Thinking more about this, shouldn't this change go into platform_get_irq()
-> >> instead of platform_get_irq_optional() ?
-> > 
-> >     Why? platform_get_irq() currently just calls platform_get_irq_optional()...
-> > 
-> >> The way I see it, I think that the intended behavior for
-> >> platform_get_irq_optional() is:
-> >> 1) If have IRQ, return it, always > 0
-> >> 2) If no IRQ, return 0
-> > 
-> >     That does include the IRQ0 case, right?
+On Mon, Nov 29, 2021 at 07:11:48PM +0000, Cristian Marussi wrote:
+> Add a flag to let the transport signal to the core if its handling of sync
+> command implies that, after .send_message has returned successfully, the
+> requested command can be assumed to be fully and completely executed on
+> SCMI platform side so that any possible response value is already
+> immediately available to be retrieved by a .fetch_response: in other words
+> the polling phase can be skipped in such a case and the response values
+> accessed straight away.
 > 
-> IRQ 0 being invalid, I think that case should be dealt with internally within
-> platform_get_irq_optional() and warn/error return. IRQ 0 showing up would thus
-> be case (3), an error.
+> Note that all of the above applies only when polling mode of operation was
+> selected by the core: if instead a completion IRQ was found to be available
+> the normal response processing path based on completions will still be
+> followed.
 > 
-> > 
-> >> 3) If error, return < 0
-> >> no ?
-> > 
-> >    I completely agree, I (after thinking a bit) have no issues with that...
-> > 
-> >> And for platform_get_irq(), case (2) becomes an error.
-> >> Is this the intended semantic ?
-> > 
-> >     I don't see how it's different from the current behavior. But we can do 
-> > that as well, I just don't see whether it's really better...
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> v5 --> v6
+> - added polling_capable helper flag
+> v4 --> v5
+> - removed RFC tag
+> - consider sync_cmds_atomic_replies flag when deciding if polling is to be
+>   supported and .poll_done() is not provided.
+> - reviewed commit message
+> ---
+>  drivers/firmware/arm_scmi/common.h |  8 ++++++
+>  drivers/firmware/arm_scmi/driver.c | 43 +++++++++++++++++++++++-------
+>  2 files changed, 41 insertions(+), 10 deletions(-)
 > 
-> The problem I see is that the current behavior is unclear: what does
-> platform_get_irq_optional() returning 0 mean ? IRQ == 0 ? or "no IRQ" ? I think
-> it should be the latter rather than the former. Note that the function could
-> return ENOENT (or similar) for the "no IRQ" case. With that, case (2) goes away,
-> but then I do not see any difference between platform_get_irq_optional() and
-> platform_get_irq().
-> 
-> If the preferred API semantic is to allow returning IRQ 0 with a warning, then
-> the kdoc comments of platform_get_irq_optional() and platform_get_irq() are
-> totally broken, and the code for many drivers is probably wrong too.
+> diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
+> index 99b74f4d39b6..bf25f0e89c78 100644
+> --- a/drivers/firmware/arm_scmi/common.h
+> +++ b/drivers/firmware/arm_scmi/common.h
+> @@ -412,6 +412,13 @@ struct scmi_device *scmi_child_dev_find(struct device *parent,
+>   * @max_msg_size: Maximum size of data per message that can be handled.
+>   * @force_polling: Flag to force this whole transport to use SCMI core polling
+>   *		   mechanism instead of completion interrupts even if available.
+> + * @sync_cmds_atomic_replies: Flag to indicate that the transport assures
+> + *			      synchronous-command messages are atomically
+> + *			      completed on .send_message: no need to poll
+> + *			      actively waiting for a response.
 
-Yeah, what we need to do is that (roughly a roadmap):
- - revisit callers of platform_get_irq_optional() to be prepared for
-   new behaviour
- - rewrite platform_get_irq() to return -ENOENT
- - rewrite platform_get_irq_optional() to return 0 on -ENOENT
-
-This is how other similar (i.e. _optional) APIs do.
+Not sure if atomic is right term to use. It is atomic w.r.t OSPM though.
+Can we just say sync_cmd_complete_on_ret or something similar.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+Sudeep

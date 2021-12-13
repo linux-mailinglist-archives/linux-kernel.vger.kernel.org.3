@@ -2,199 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF4F4720FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41A84720FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 07:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbhLMGMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 01:12:43 -0500
-Received: from mga18.intel.com ([134.134.136.126]:55885 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232132AbhLMGMm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 01:12:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639375962; x=1670911962;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=wgbxU7JPJmVexmbY1zOGROhoQQlDa1/RSFmyiImMe9w=;
-  b=RgiiEF8VJ5gV0RrVGNBx6rOBARr6ljNsmXIy6nZz7ZTiem9bftwhKfJ5
-   IJ7u3uawCKnyu0inrIFyWYYlo5I469VrJWNR8JDAmv/9VUnFAnOm1WjSd
-   qjTEo/T9fYK0Tzkj1XHa4E6anE4ioCFWz7evdf8YrN1tu2dKttCl4sR6k
-   4hCGtbt69elYuWMVhMLRmWhmofEZAOglmP8Klx82YlJnlCQR44C7THC76
-   aeYYN4B65YDEZr1Hzr2k/scefqLpB6gO8aDMwxEZ9uWaJwHZJyXnY6BKd
-   de/aSv4rkvBzzGQdDApbcSqfJ6ENnaB/MbzwJEgDxf5wKTaBfesAp3bAF
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="225530021"
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="225530021"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 22:12:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="544665972"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga001.jf.intel.com with ESMTP; 12 Dec 2021 22:12:42 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 12 Dec 2021 22:12:41 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Sun, 12 Dec 2021 22:12:41 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.42) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Sun, 12 Dec 2021 22:12:41 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OI1PZK/wXHrMYtS89JPh0UFLuTSCMwYc7778Q1N1Nxn0zYfbT5XsCKA8Mr0se+ZaJvl5Pul70OPTz60DPMgMJd4qTLpAzQg80uCYWm/2UCy+DR7c0U4T0d9tQALaYCxDQQ0zMkjw2iCLe9R09TZ5WuAZPKx6M/Vjbq/kAcPs9Ll9pxk4/btCDjXJelYVpQjXYb57noCfIMOmw5oHVsyDwTk2vagOpUUeLOyBTWZjRiJ9KmLIMczGyzhNduagldsoEkQKS8DLewUfw9vL7Aj1L9RmTm7w78gYqpQTltRz2sD0rVLpbW/RLE1V0m+UZoxUlEh1GaYBCzs6eh3dXJb5VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IdaZS1RGc70s5XGP96bQ11W2akW4xXknPul5A4C9i1s=;
- b=HGNxjIecMkXcbwMkhlNwJb8S9XkeCXiFq3bSoJOSXfmoSZk8D6vfy6bCsnvDEH5j4HFomJFA59S9rzi8EKw/YGGrcQI69sr+i0dZMr4wPDYC4+idxAeyuRPR698fVHcdFwMWpT+pZK54H55/nmnd8sYUX4/i/dM6YM55Vc/BT7FvBDdVuRDG+xVcYMSsDXDA+lSfkqRXt7l/n4UVmqPul8gJELXw73Ng2wROiBmNzhHVUeA8w808bveV44KUP4u28pIKlrcTSmxdUs84HnKJ5cXLDIwKO3idM3hICgCAFQ/DBjJ/qW0G82eLi9TKlf+UaoWzy1m8Tebk//hYk0gzGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IdaZS1RGc70s5XGP96bQ11W2akW4xXknPul5A4C9i1s=;
- b=Y3NO4JmNu/BaVwGWrP33MTykxA50uwbGbbDZNDW6II8jL1zfxKHKTBphDdZxJer9/yyjzsrnvkaqZSwoRz20LdV+7DoT35FldTBfX7ETBEn0vB2M/yjdMsL2OsRr/Bkfn4OYK2hfaTbuJxqJW3NZTykxepEANsjf1wT/QlERHiw=
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM6PR11MB2649.namprd11.prod.outlook.com (2603:10b6:5:ce::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
- 2021 06:12:38 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::d0c1:77a5:72d:fb9f]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::d0c1:77a5:72d:fb9f%4]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 06:12:38 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "Xu, Yilun" <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Miaoqian Lin <linmq006@gmail.com>
-CC:     "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mdf@kernel.org" <mdf@kernel.org>
-Subject: RE: [PATCH v2] fpga: stratix10-soc: fix NULL vs IS_ERR() checking
-Thread-Topic: [PATCH v2] fpga: stratix10-soc: fix NULL vs IS_ERR() checking
-Thread-Index: AQHX7p5/xsSLfKUU10O4avfyee3PtawtYbKAgAJCegCAAEgu8A==
-Date:   Mon, 13 Dec 2021 06:12:38 +0000
-Message-ID: <DM6PR11MB3819B3918DA4D58E59228CAC85749@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <b1186cd9-c29c-397b-080b-dcfc6b02525f@redhat.com>
- <20211211145038.31612-1-linmq006@gmail.com>
- <97789bcc-0e5b-a822-854f-15d0fbe47844@redhat.com>
- <20211213012818.GC336280@yilunxu-OptiPlex-7050>
-In-Reply-To: <20211213012818.GC336280@yilunxu-OptiPlex-7050>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 41a4fe12-04a8-499f-0e2f-08d9bdff9036
-x-ms-traffictypediagnostic: DM6PR11MB2649:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <DM6PR11MB2649027798A7FB7E255AB33F85749@DM6PR11MB2649.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3631;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QWGl5rMDPURh38gwXYoKLUOUAdLEHCFEXmoUr0LypaSDGqTdK2D+ItIqN/NCZ40ukmWlPEMJzioOJ3kCMBWb+MtOs3SnYzcBlh99ZWM6SsG6zHZyJBpwhtbs3POXsepixWkkMsX2z9RX2PE0SXa089NqQZu3Jq70ecW9T6EvHGwjxihKc39AapfsmoMicD4XaCmHDYJeFO8mBkedr7M6j7DOYp2woCSumadmjOn0efynI905C/5c0JbVJrjck3danbDoxnjtflLwU2Xkc2vCCONYqW9ahxzxv1fCwsdhOAXbQfTSYgiNe3chpqy7MF+dX8XZAFpygw31/OsmUK28Ke9uVkDfZpeUkvOFWygPs/0XfC8m/HzfwZ3iOJ/9kVHKrnd1a4pKS/tsyDUR7s2Eqb2N2VXFxvxzd7ebQ2ECkE/wY3mdiqTYib0LDQRfQ6gD0rPoKi640XGqGS/9uRn0ym9yMr7NI9gEuQThcTYMk+KrElg1aW/Jm4yb4HzNbPGV1uIdSF4ZJcDDmkvPa8AFN4Z8irU6CEkRM0D46R1tZIWN08l2czXbfJJraL7IeWdj5apVOxUK7kRHVtX9K2q2sfrCu/FwrOs9TuefYNY6kGDumh1j5a6HdI/96xJjZflAzuSp2fsCrX6DCP75viRpofPxZFtQavrVc2gcK+Czy+HzIvxIpVdcK+8dhLbW9NA2XgZZmaDrDkPdv6ecTkGHvg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(82960400001)(316002)(2906002)(110136005)(64756008)(86362001)(186003)(55016003)(71200400001)(8676002)(9686003)(8936002)(76116006)(52536014)(54906003)(4326008)(53546011)(6506007)(7696005)(66476007)(122000001)(26005)(38100700002)(33656002)(83380400001)(508600001)(66556008)(66446008)(38070700005)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?d8x5e0ZONhWdH9Z8X4qEmchv0uw5a7wPmtKFE8lyfppsBxxQwYGhbSq3NcYk?=
- =?us-ascii?Q?j8Aj5ifUWlT3FZ4gEoQx6OpCrzxVrReoR4/f4BhCcw+yazn4JxElkUT4nF2s?=
- =?us-ascii?Q?s0fLyt4dTlfSWRxljQ6mNBRAmNsplNuMF7F8WzXYzBLDxytW2d4XSAebfqw9?=
- =?us-ascii?Q?ETDy3To+bmtfkmChfZ+Xnx8TxafWJKT002nwtreYZNEaTNgHgieBYejyh77t?=
- =?us-ascii?Q?krfpFTg/Qo9QJBnjJmOGu7K9lXThtnl9Jp2M6jtFhnIoZp/qxJe5veQRi+Fe?=
- =?us-ascii?Q?Eno8UfK7jpEUM76ySopBZL6ky1dq9gCWjVeCxTwf31H0TDBs5SC2h1yjJNOS?=
- =?us-ascii?Q?fyKxUTMr7fNw0fH2qlUPaEjtBx0zbmPOj1SS3XTEXlJuMKCtOAf+1OHz5foC?=
- =?us-ascii?Q?bXLOqEBbeqgYRSMbhwc3Bq1XMxV0Kc8H9UK4CQ9QRWA9HiPikcSdYYB658hO?=
- =?us-ascii?Q?bTOkgrKlWboS6YgRS4VfEczDuU9TPTGq7GOpfUHQmmSUkio8zkCZA5Y07igm?=
- =?us-ascii?Q?DY0d7/DCSD5V7QeA8EOYB2l6cXXiLnnwUl6X0KlwSioLeU3hImHuQut4aDrk?=
- =?us-ascii?Q?lptnegrKnuERh+358fx8wYn8oaudRWH2b0QTlGOd0xwjd76+mzYyYfXoOpAW?=
- =?us-ascii?Q?AjnPpDb+O0gCddzuVqqH7+EoLQYl07c1fB2S2gLpbK4Z+bEg2TBTF91CmPU6?=
- =?us-ascii?Q?KwXXAb427TWBNCfDy8IiYIm98pcctXvQ4bjwndTooIMlgrqsU+5E5zg02DIa?=
- =?us-ascii?Q?encBBR+mDW+KOboz+sZiZ59SqfQE3VEeQiILsrSbDHdNmOGUVxwItjHjC4Zh?=
- =?us-ascii?Q?iWXbS6lfuLzloYESrbCfFLIWrf6UFynu6AhxH2svHGCCduJI5+HreCSjRS2x?=
- =?us-ascii?Q?KV8q37opEzlBiFqkRiNPZu+DyFuzpPm10wlRnZxfshPJ41c62fIEXi8HyXra?=
- =?us-ascii?Q?Nl3Jq0gNBiAoibAwTooAEzZAkh9WvAC1m6oJ3vSz5P4cxjjLGqz2CIkrcQod?=
- =?us-ascii?Q?pKGN9ss4ePIs7H2E7c7aLV/JhULCffsxGxd9qXLv4CofR7gJfSqXIg1n23YC?=
- =?us-ascii?Q?GJ1JBfqs9vIWPUACN9763/tbL7k8tcmdT507CQOFvtJlDrEfKltf5JfJzYdv?=
- =?us-ascii?Q?VVvC+3WukrlIf8ctli12xvcejIMSUttMhL4WieH0IvrWMYvdl9kGjnQGGRMU?=
- =?us-ascii?Q?A/Tm+k5sP00tPQpuSBcjMzwfdTxKnNz36sDEACpwQi2xFGS2VDMD+bz3Zx9s?=
- =?us-ascii?Q?JTTScFR1S9QfHVEx6ru+Qg8u1+b6f5UV2poe9qKDvDA9/dvmee/juvUwm+43?=
- =?us-ascii?Q?W/j5Vucdiosh2OhO/CLqoSyBbwTGykHs95sfiEWEvOSuQ5CW+/yA+C1tH2y+?=
- =?us-ascii?Q?iFZnrSw9RDCGPQn+ZG/SL0ppn19RoRFGx76sYhpLknONtgkbqDd5S7+uA9f/?=
- =?us-ascii?Q?GhbxjPG9pEBBLLxOWPx2nsm1V+BCHlZWtFj5xJPlbDtLDp8M2uNPp6dvszLg?=
- =?us-ascii?Q?LuzuJlb+A14xOzkFGrMdpN28R1Tgj9QyPqG5Et9qpUpN3zZbPCdeTQGJHhVn?=
- =?us-ascii?Q?Vzg+oFnIeeWe3vaTCGQxVLNXB5qRvEGSHwoU2VW/TVcbK0VMFpd9omHAKlI/?=
- =?us-ascii?Q?VA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S232167AbhLMGNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 01:13:10 -0500
+Received: from smtpbg702.qq.com ([203.205.195.102]:45989 "EHLO
+        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232159AbhLMGNJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 01:13:09 -0500
+X-QQ-mid: bizesmtp36t1639375981tev0r65g
+Received: from localhost.localdomain (unknown [113.57.152.160])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Mon, 13 Dec 2021 14:12:47 +0800 (CST)
+X-QQ-SSF: B1400000002000B0F000B00B0000000
+X-QQ-FEAT: FXvDfBZI5O6hTKLegMa/dgoR5pHp+YxZ/8GMEzTYD98Idpmr4hKiSbXE3mf9R
+        fN9XEm2MRErCmU5qqOSalkS4ztfTOhaT+u0IiVHOveT19+LWZh3OMWs1rTBTTUHi7odWDPe
+        tPbNpCAsPhzWAvYjHoFRwYF6AcHW/NkGgMkrsTmzhey7KVPrF3uW7exhIrDr2fZ02UbYM1/
+        eo749S+BGlagIBWo2qZY+wMU1Aiv2tX6FW24L49L4nOBH0XMgcr81Jh0nAjp9ynzJpN/U6n
+        yTUkYdjcaFAHngvHFH9La/1VupWI9fp1XncgnxHAxkJyzksvk+oNHigbowlbx3sy7QdI7VO
+        jyc3hUrdfP6qjhqba+g6pg1uJh0zus4oyrYAuL7
+X-QQ-GoodBg: 2
+From:   lianzhi chang <changlianzhi@uniontech.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     dmitry.torokhov@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, andriy.shevchenko@linux.intel.com,
+        282827961@qq.com, lianzhi chang <changlianzhi@uniontech.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH v20] tty: Fix the keyboard led light display problem
+Date:   Mon, 13 Dec 2021 14:12:44 +0800
+Message-Id: <20211213061244.13732-1-changlianzhi@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41a4fe12-04a8-499f-0e2f-08d9bdff9036
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 06:12:38.2468
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ls7LOT+Bfgpm5SNlhhx6r71a9qCsUYhG6IOJNaDBtPEPu6GeWh+XgOUVxFuExjT4NR5GUT7Sp9qxL6e/HaxaDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2649
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > On 12/11/21 6:50 AM, Miaoqian Lin wrote:
-> > > The stratix10_svc_allocate_memory function does not return NULL. It
-> > > returns ERR_PTR(-ENOMEM). Use IS_ERR check the return value.
-> > >
+Use the "ctrl+alt+Fn" key combination to switch the system from tty to
+desktop or switch the system from desktop to tty. After the switch is
+completed, it is found that the state of the keyboard lock is
+inconsistent with the state of the keyboard Led light.The reasons are
+as follows:
 
-Please add "Fixes" tag, then
-Acked-by: Wu Hao <hao.wu@intel.com>
+* The desktop environment (Xorg and other services) is bound to a tty
+  (assuming it is tty1), and the kb->kbdmode attribute value of tty1
+  will be set to VC_OFF. According to the current code logic, in the
+  desktop environment, the values of ledstate and kb->ledflagstate
+  of tty1 will not be modified anymore, so they are always 0.
 
-Thanks for the patch.
-Hao
+* When switching between each tty, the final value of ledstate set by
+  the previous tty is compared with the kb->ledflagstate value of the
+  current tty to determine whether to set the state of the keyboard
+  light. The process of switching between desktop and tty is also the
+  process of switching between tty1 and other ttys. There are two
+  situations:
 
-> > > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> > > ---
-> > >   drivers/fpga/stratix10-soc.c | 4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-so=
-c.c
-> > > index 047fd7f23706..91212bab5871 100644
-> > > --- a/drivers/fpga/stratix10-soc.c
-> > > +++ b/drivers/fpga/stratix10-soc.c
-> > > @@ -213,9 +213,9 @@ static int s10_ops_write_init(struct fpga_manager
-> *mgr,
-> > >   	/* Allocate buffers from the service layer's pool. */
-> > >   	for (i =3D 0; i < NUM_SVC_BUFS; i++) {
-> > >   		kbuf =3D stratix10_svc_allocate_memory(priv->chan,
-> SVC_BUF_SIZE);
-> > > -		if (!kbuf) {
-> > > +		if (IS_ERR(kbuf)) {
-> > >   			s10_free_buffers(mgr);
-> > > -			ret =3D -ENOMEM;
-> > > +			ret =3D PTR_ERR(kbuf);
-> >
-> > Thanks!
-> >
-> > Reviewed-by: Tom Rix <trix@redhat.com>
->=20
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
->=20
-> Thanks,
-> Yilun
->=20
-> >
-> > >   			goto init_done;
-> > >   		}
+  - (1) In the desktop environment, tty1 will not set the ledstate,
+  which will cause when switching from the desktop to other ttys,
+  if the desktop lights up the keyboard's led, after the switch is
+  completed, the keyboard's led light will always be on;
+
+  - (2) When switching from another tty to the desktop, this
+  mechanism will trigger tty1 to set the led state. If other tty
+  lights up the led of the keyboard before switching to the desktop,
+  the led will be forcibly turned off. This situation should
+  be avoided.
+
+* Current patch explanation:When VT is switched,the keyboard LED
+  status will be set to the current tty saved value;the value of
+  kb->kbdledctl can be used to confirm whether the current VT
+  can change the status of the keyboard led light;kb->kbdledctl
+  is a new addition,you can use ioctl get or set.
+
+Signed-off-by: lianzhi chang <changlianzhi@uniontech.com>
+Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ 
+ v20:
+ New solution: kbd_struct adds a new "kbdledctl" attribute,
+ which can be obtained or changed through ioctl;
+ "kbdledctl" is used to determine whether the current VT
+ can set the keyboard led light;
+ 
+ drivers/tty/vt/keyboard.c | 58 +++++++++++++++++++++++++++++++++++++++
+ drivers/tty/vt/vt_ioctl.c | 12 ++++++++
+ include/linux/kbd_kern.h  |  4 +++
+ include/linux/vt_kern.h   |  2 ++
+ include/uapi/linux/kd.h   |  7 ++++-
+ 5 files changed, 82 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
+index c7fbbcdcc346..248c8d790d91 100644
+--- a/drivers/tty/vt/keyboard.c
++++ b/drivers/tty/vt/keyboard.c
+@@ -153,6 +153,7 @@ static int shift_state = 0;
+ 
+ static unsigned int ledstate = -1U;			/* undefined */
+ static unsigned char ledioctl;
++static bool vt_switch;
+ 
+ /*
+  * Notifier list for console keyboard events
+@@ -414,6 +415,12 @@ void vt_set_leds_compute_shiftstate(void)
+ {
+ 	unsigned long flags;
+ 
++	/*
++	 * When switching VT,according to the value of vt_switch,
++	 * judge whether it is necessary to force the keyboard light
++	 * state to be issued.
++	 */
++	vt_switch = true;
+ 	set_leds();
+ 
+ 	spin_lock_irqsave(&kbd_event_lock, flags);
+@@ -1247,14 +1254,24 @@ void vt_kbd_con_stop(unsigned int console)
+  */
+ static void kbd_bh(struct tasklet_struct *unused)
+ {
++	struct kbd_struct *kb;
+ 	unsigned int leds;
+ 	unsigned long flags;
+ 
++	kb = kbd_table + fg_console;
++	if (kb->kbdledctl == VC_LEDCTL_OFF)
++		return;
++
+ 	spin_lock_irqsave(&led_lock, flags);
+ 	leds = getleds();
+ 	leds |= (unsigned int)kbd->lockstate << 8;
+ 	spin_unlock_irqrestore(&led_lock, flags);
+ 
++	if (vt_switch) {
++		ledstate = ~leds;
++		vt_switch = false;
++	}
++
+ 	if (leds != ledstate) {
+ 		kbd_propagate_led_state(ledstate, leds);
+ 		ledstate = leds;
+@@ -1857,6 +1874,35 @@ int vt_do_kdskbmode(unsigned int console, unsigned int arg)
+ 	return ret;
+ }
+ 
++/**
++ *	vt_do_kdskbledctl
++ *	@console: the console to use
++ *	@arg: the requested mode
++ *
++ *	Whether to allow the current vt to change the
++ *	keyboard light
++ */
++int vt_do_kdskbledctl(unsigned int console, unsigned int arg)
++{
++	struct kbd_struct *kb = &kbd_table[console];
++	int ret = 0;
++	unsigned long flags;
++
++	spin_lock_irqsave(&kbd_event_lock, flags);
++	switch (arg) {
++	case K_LEDCTL_ON:
++		kb->kbdledctl = VC_LEDCTL_ON;
++		break;
++	case K_LEDCTL_OFF:
++		kb->kbdledctl = VC_LEDCTL_OFF;
++		break;
++	default:
++		ret = -EINVAL;
++	}
++	spin_unlock_irqrestore(&kbd_event_lock, flags);
++	return ret;
++}
++
+ /**
+  *	vt_do_kdskbmeta		-	set keyboard meta state
+  *	@console: the console to use
+@@ -2157,6 +2203,18 @@ int vt_do_kdgkbmode(unsigned int console)
+ 	}
+ }
+ 
++int vt_do_kdgkbledctl(unsigned int console)
++{
++	struct kbd_struct *kb = &kbd_table[console];
++	/* This is a spot read so needs no locking */
++	switch (kb->kbdledctl) {
++	case VC_LEDCTL_ON:
++		return K_LEDCTL_ON;
++	case VC_LEDCTL_OFF:
++		return K_LEDCTL_OFF;
++		}
++}
++
+ /**
+  *	vt_do_kdgkbmeta		-	report meta status
+  *	@console: console to report
+diff --git a/drivers/tty/vt/vt_ioctl.c b/drivers/tty/vt/vt_ioctl.c
+index 3639bb6dc372..c78bd452af55 100644
+--- a/drivers/tty/vt/vt_ioctl.c
++++ b/drivers/tty/vt/vt_ioctl.c
+@@ -405,6 +405,18 @@ static int vt_k_ioctl(struct tty_struct *tty, unsigned int cmd,
+ 	case KDGKBMODE:
+ 		return put_user(vt_do_kdgkbmode(console), (int __user *)arg);
+ 
++	case KDSKBLEDCTL:
++		if (!perm)
++			return -EPERM;
++		ret = vt_do_kdskbledctl(console, arg);
++		if (ret)
++			return ret;
++		tty_ldisc_flush(tty);
++		break;
++
++	case KDGKBLEDCTL:
++		return put_user(vt_do_kdgkbledctl(console), (int __user *)arg);
++
+ 	/* this could be folded into KDSKBMODE, but for compatibility
+ 	   reasons it is not so easy to fold KDGKBMETA into KDGKBMODE */
+ 	case KDSKBMETA:
+diff --git a/include/linux/kbd_kern.h b/include/linux/kbd_kern.h
+index c40811d79769..769b946c2cf9 100644
+--- a/include/linux/kbd_kern.h
++++ b/include/linux/kbd_kern.h
+@@ -32,6 +32,10 @@ struct kbd_struct {
+ #define VC_CTRLRLOCK	KG_CTRLR 	/* ctrlr lock mode */
+ 	unsigned char slockstate; 	/* for `sticky' Shift, Ctrl, etc. */
+ 
++	unsigned char kbdledctl:1； /*Whether to allow to control the led of the keyboard */
++#define VC_LEDCTL_ON  0	/* VT can set the keyboard light */
++#define VC_LEDCTL_OFF 1	/* Prohibit VT to set the keyboard light */
++
+ 	unsigned char ledmode:1;
+ #define LED_SHOW_FLAGS 0        /* traditional state */
+ #define LED_SHOW_IOCTL 1        /* only change leds upon ioctl */
+diff --git a/include/linux/vt_kern.h b/include/linux/vt_kern.h
+index b5ab452fca5b..67bdf3eddb5a 100644
+--- a/include/linux/vt_kern.h
++++ b/include/linux/vt_kern.h
+@@ -149,6 +149,7 @@ void hide_boot_cursor(bool hide);
+ /* keyboard  provided interfaces */
+ int vt_do_diacrit(unsigned int cmd, void __user *up, int eperm);
+ int vt_do_kdskbmode(unsigned int console, unsigned int arg);
++int vt_do_kdskbledctl(unsigned int console, unsigned int arg);
+ int vt_do_kdskbmeta(unsigned int console, unsigned int arg);
+ int vt_do_kbkeycode_ioctl(int cmd, struct kbkeycode __user *user_kbkc,
+ 			  int perm);
+@@ -157,6 +158,7 @@ int vt_do_kdsk_ioctl(int cmd, struct kbentry __user *user_kbe, int perm,
+ int vt_do_kdgkb_ioctl(int cmd, struct kbsentry __user *user_kdgkb, int perm);
+ int vt_do_kdskled(unsigned int console, int cmd, unsigned long arg, int perm);
+ int vt_do_kdgkbmode(unsigned int console);
++int vt_do_kdgkbledctl(unsigned int console);
+ int vt_do_kdgkbmeta(unsigned int console);
+ void vt_reset_unicode(unsigned int console);
+ int vt_get_shift_state(void);
+diff --git a/include/uapi/linux/kd.h b/include/uapi/linux/kd.h
+index ee929ece4112..138d636adf3e 100644
+--- a/include/uapi/linux/kd.h
++++ b/include/uapi/linux/kd.h
+@@ -86,6 +86,11 @@ struct unimapinit {
+ #define KDGKBMODE	0x4B44	/* gets current keyboard mode */
+ #define KDSKBMODE	0x4B45	/* sets current keyboard mode */
+ 
++#define K_LEDCTL_ON 0x00
++#define K_LEDCTL_OFF 0x01
++#define KDGKBLEDCTL  0x4B73  /* set whether to allow control of keyboard lights */
++#define KDSKBLEDCTL  0x4B74  /* get whether the keyboard light is currently allowed to be set */
++
+ #define		K_METABIT	0x03
+ #define		K_ESCPREFIX	0x04
+ #define KDGKBMETA	0x4B62	/* gets meta key handling mode */
+@@ -179,6 +184,6 @@ struct console_font {
+ 
+ /* note: 0x4B00-0x4B4E all have had a value at some time;
+    don't reuse for the time being */
+-/* note: 0x4B60-0x4B6D, 0x4B70-0x4B72 used above */
++/* note: 0x4B60-0x4B6D, 0x4B70-0x4B74 used above */
+ 
+ #endif /* _UAPI_LINUX_KD_H */
+-- 
+2.20.1
+
+
+

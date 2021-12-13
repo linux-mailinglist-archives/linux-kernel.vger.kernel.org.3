@@ -2,40 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 143694725FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79154723FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbhLMJrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:47:25 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:36822 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbhLMJnX (ORCPT
+        id S233951AbhLMJdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233855AbhLMJdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:43:23 -0500
+        Mon, 13 Dec 2021 04:33:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB65C06173F;
+        Mon, 13 Dec 2021 01:33:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C4CBDCE0E79;
-        Mon, 13 Dec 2021 09:43:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A99C341C5;
-        Mon, 13 Dec 2021 09:43:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22529B80E26;
+        Mon, 13 Dec 2021 09:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA6EC341C5;
+        Mon, 13 Dec 2021 09:32:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388599;
-        bh=uAiqZR3IvrFrXzJGBI0LYMHFB0Cq9UInD/O8AAugYSo=;
+        s=korg; t=1639387977;
+        bh=+BqtltrckDBCrIwhgxZdJy60JLi4NeUnum0BgYQnNfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zWwsdWmjMQ7VDeW48xESD5fENf2H8XqfrVWIBP5YYsL7goWAp38BAQwMv8Fgy3Cbk
-         W2p/9riXJymcPkLzGnPC+39YLiFvIq2tnWZEOwSDE7LyP2f31XxBf/RCQsfx/HeHu9
-         Hhcg+pJzZIk2P3/rA6L5/EJvj9YNUN9yAhcKjHq8=
+        b=1oKKdHZkMcPpq0IHRdLTysAl4dAi833xAM/ohlYoRFN8s2FY9jEak6i3enCCK6tK8
+         OhM5oGqKo0w37qe7w1xowVKzTHwmqYf1a1GJgnx4nHK8IwpPVMmUwGJsXGP5w00mAG
+         YdrfsW73wZ6Sfix+lFEKDiL5NTECRMfe4d9Wf/o8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 32/88] ALSA: pcm: oss: Handle missing errors in snd_pcm_oss_change_params*()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.4 24/37] net: altera: set a couple error code in probe()
 Date:   Mon, 13 Dec 2021 10:30:02 +0100
-Message-Id: <20211213092934.337895842@linuxfoundation.org>
+Message-Id: <20211213092926.158782570@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,41 +48,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 6665bb30a6b1a4a853d52557c05482ee50e71391 upstream.
+commit badd7857f5c933a3dc34942a2c11d67fdbdc24de upstream.
 
-A couple of calls in snd_pcm_oss_change_params_locked() ignore the
-possible errors.  Catch those errors and abort the operation for
-avoiding further problems.
+There are two error paths which accidentally return success instead of
+a negative error code.
 
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211201073606.11660-4-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: bbd2190ce96d ("Altera TSE: Add main and header file for Altera Ethernet Driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/oss/pcm_oss.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/altera/altera_tse_main.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/sound/core/oss/pcm_oss.c
-+++ b/sound/core/oss/pcm_oss.c
-@@ -884,8 +884,15 @@ static int snd_pcm_oss_change_params_loc
- 		err = -EINVAL;
- 		goto failure;
+--- a/drivers/net/ethernet/altera/altera_tse_main.c
++++ b/drivers/net/ethernet/altera/altera_tse_main.c
+@@ -1383,16 +1383,19 @@ static int altera_tse_probe(struct platf
+ 		priv->rxdescmem_busaddr = dma_res->start;
+ 
+ 	} else {
++		ret = -ENODEV;
+ 		goto err_free_netdev;
  	}
--	choose_rate(substream, sparams, runtime->oss.rate);
--	snd_pcm_hw_param_near(substream, sparams, SNDRV_PCM_HW_PARAM_CHANNELS, runtime->oss.channels, NULL);
-+
-+	err = choose_rate(substream, sparams, runtime->oss.rate);
-+	if (err < 0)
-+		goto failure;
-+	err = snd_pcm_hw_param_near(substream, sparams,
-+				    SNDRV_PCM_HW_PARAM_CHANNELS,
-+				    runtime->oss.channels, NULL);
-+	if (err < 0)
-+		goto failure;
  
- 	format = snd_pcm_oss_format_from(runtime->oss.format);
+-	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask)))
++	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask))) {
+ 		dma_set_coherent_mask(priv->device,
+ 				      DMA_BIT_MASK(priv->dmaops->dmamask));
+-	else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32)))
++	} else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32))) {
+ 		dma_set_coherent_mask(priv->device, DMA_BIT_MASK(32));
+-	else
++	} else {
++		ret = -EIO;
+ 		goto err_free_netdev;
++	}
  
+ 	/* MAC address space */
+ 	ret = request_and_map(pdev, "control_port", &control_port,
 
 

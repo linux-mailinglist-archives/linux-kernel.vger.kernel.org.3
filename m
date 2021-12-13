@@ -2,72 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C8C471F6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD010471F6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbhLMCqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 21:46:11 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:53030 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbhLMCqJ (ORCPT
+        id S231378AbhLMCtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 21:49:18 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:52122 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231293AbhLMCtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 21:46:09 -0500
-Received: by mail-io1-f70.google.com with SMTP id k12-20020a0566022a4c00b005ebe737d989so14340573iov.19
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 18:46:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=2NuGDG85AfS9y7yRsPV78T4aS8gdf/qTEMMTGPv30Uo=;
-        b=YZRyA2Qwo76RfOEdwR9FLiBHw7oUeOQtOv0+d01F33qS3/j/OgHsDj38IsTywTCE99
-         Bm7Nu9Q4vNcDwmZ+2uEXWxdMbN+SmOBeKY97+Pi03ehJ0e4JOBrCgh466Qg8XywihqTB
-         5KtJ1YevnhHiQv8iB9acKJ6HurMGWP9AB4hiplB0HzQqPKHKH4kAHjpKwFwae8X1aOWV
-         rAjonkAuNajHAfvszRqn5pNlV5/1UpT2G9jPPn0XMqfzrocvYnDwIRZIyFgfVRYbuIcX
-         pX5AdLyAqdGxZEiJBaH7W5Paw1cI12wdH15AMNtQ4N13He7KQbM6Cr9dSFU7A4WMMyAv
-         R7ww==
-X-Gm-Message-State: AOAM5306OsqmwxaXFvNhhhcRb2QY7SWJx0wBWWYJVWjPMc57+AHbXzZK
-        1jnIu1lC6vWTSZtdPjaoQbrWiLlgm0rjPl7a05EAjE3fiUFW
-X-Google-Smtp-Source: ABdhPJxmIIniwyRI+oGKfh384pqZnwOTrq/uMCOdu+0TQNm3dbrB4E/IT0pkWUrcZ6DzAviv5fB5LypbSmb2oXE+b+tp75tbjAS/
+        Sun, 12 Dec 2021 21:49:16 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3EF4D1F3B0;
+        Mon, 13 Dec 2021 02:49:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639363755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ARU1chUSDNNbEO0Gmuw+z4jcRaOzwHttZpVv4bXZVME=;
+        b=c+/6p2rTtmAaA+NWZr62ery+YWOgqmspY1w9O5n7qryWpA4hi1LkwmuPwcNYqcy86OpsVa
+        T9lQKdu0kurh6iIO7gkw18q1teD5Rok6yWovORBIY5gNtVuEACQ/rF0Nv1QQ6yFfhPAIDt
+        TqsZJ7Vn0ds4asvPPy4SdV9cXNCWFAY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639363755;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ARU1chUSDNNbEO0Gmuw+z4jcRaOzwHttZpVv4bXZVME=;
+        b=P2E/S3Ksotww5zAfG0rehTW0+xH/GdzUOwA2yBfwCVas0vGSzH7qIQQKwVJ1rVy8o6pfcv
+        GUw2ATTgU+5XdbBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB88913310;
+        Mon, 13 Dec 2021 02:49:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z7zYIKm0tmHgKwAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 13 Dec 2021 02:49:13 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b4a:: with SMTP id f10mr29103329ilu.281.1639363568731;
- Sun, 12 Dec 2021 18:46:08 -0800 (PST)
-Date:   Sun, 12 Dec 2021 18:46:08 -0800
-In-Reply-To: <00000000000033acbf05d1a969aa@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002c0bbf05d2fe1382@google.com>
-Subject: Re: [syzbot] WARNING: kmalloc bug in bpf
-From:   syzbot <syzbot+cecf5b7071a0dfb76530@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        jiri@nvidia.com, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, leonro@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+From:   "NeilBrown" <neilb@suse.de>
+To:     "OGAWA Hirofumi" <hirofumi@mail.parknet.co.jp>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        "Christoph Hellwig" <hch@infradead.org>
+Subject: Re: [PATCH v2] FAT: use schedule_timeout_uninterruptible() instead of
+ congestion_wait()
+In-reply-to: <875yrtql2s.fsf@mail.parknet.co.jp>
+References: <163712349419.13692.2859038330142282757@noble.neil.brown.name>,
+ <87ee79yiik.fsf@mail.parknet.co.jp>,
+ <163754226639.13692.10449616189734943162@noble.neil.brown.name>,
+ <874k84hi5q.fsf@mail.parknet.co.jp>,
+ <163911011670.9928.6438117555175130033@noble.neil.brown.name>,
+ <163911016975.9928.6568675782275129@noble.neil.brown.name>,
+ <87h7bfmtqc.fsf@mail.parknet.co.jp>,
+ <163936252397.22433.9103044991910658320@noble.neil.brown.name>,
+ <875yrtql2s.fsf@mail.parknet.co.jp>
+Date:   Mon, 13 Dec 2021 13:49:07 +1100
+Message-id: <163936374739.22433.3300471788473733689@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Mon, 13 Dec 2021, OGAWA Hirofumi wrote:
+> "NeilBrown" <neilb@suse.de> writes:
+>=20
+> > On Sat, 11 Dec 2021, OGAWA Hirofumi wrote:
+> >> "NeilBrown" <neilb@suse.de> writes:
+> >>=20
+> >> > congestion_wait() in this context is just a sleep - block devices do n=
+ot
+> >> > in general support congestion signalling any more.
+> >> >
+> >> > The goal here is to wait for any recently written data to get to
+> >> > storage.  blkdev_issue_flush() is thought to be too expensive, so
+> >> > replace congestion_wait() with an explicit timeout.
+> >>=20
+> >> If just replace, the following looks better
+> >>=20
+> >> 	set_current_state(TASK_UNINTERRUPTIBLE);
+> >> 	io_schedule_timeout(HZ/10);
+> >>=20
+> >> Otherwise,
+> >>=20
+> >> Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+> >
+> > Thanks.
+> > According to MAINTAINERS, I should send patches for this code to you,
+> > with the implication (I assumed) that you would forwarded them upstream
+> > if acceptable.
+> > But the fact that you have send mt an Acked-By seems to suggest that you
+> > won't be doing that.
+> > To whom should I send this patch with your acked-by?
+>=20
+> Ah, sorry. I have no repository. So FAT patches goes to linus tree via
+> akpm's help.
+>=20
+> So "Cc: Andrew Morton <akpm@linux-foundation.org>" and my Acked-by
+> should work (or I will Cc as reply if need).
 
-commit 22849b5ea5952d853547cc5e0651f34a246b2a4f
-Author: Leon Romanovsky <leonro@nvidia.com>
-Date:   Thu Oct 21 14:16:14 2021 +0000
+Will do, thanks.
 
-    devlink: Remove not-executed trap policer notifications
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1465b449b00000
-start commit:   ee60e626d536 netdevsim: don't overwrite read only ethtool ..
-git tree:       net
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1665b449b00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1265b449b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=221ffc09e39ebbd1
-dashboard link: https://syzkaller.appspot.com/bug?extid=cecf5b7071a0dfb76530
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a14b55b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13375f75b00000
-
-Reported-by: syzbot+cecf5b7071a0dfb76530@syzkaller.appspotmail.com
-Fixes: 22849b5ea595 ("devlink: Remove not-executed trap policer notifications")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+NeilBrown

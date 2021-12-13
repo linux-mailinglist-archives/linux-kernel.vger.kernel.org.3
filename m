@@ -2,138 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA16473642
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D1C473646
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243054AbhLMUq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:46:56 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:37182 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236136AbhLMUqz (ORCPT
+        id S238118AbhLMUwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:52:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233728AbhLMUwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:46:55 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B7241F3B9;
-        Mon, 13 Dec 2021 20:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639428414; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IDroOlXAdO810vX1XF/59TmTl0cShSH1xEbqsk7KJ7M=;
-        b=RPH26rMJzCkd02IPh9vazOqXJxpTXNto3h0uahP3kJ1Wro+LUP5eKrZ+Hh+b1hq9KKFCnn
-        MW7bIhSPHFrRW/9CzIkqZ2bI3bBt2eWnZbZzZ9HqTYX1zS2JkfC1o+6z+35DYsEj8h7lVP
-        4ynbQQoT7sjLqTGg281Vw2iAGWuJ+zA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C770C13EC0;
-        Mon, 13 Dec 2021 20:46:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Id4LLz2xt2EFNwAAMHmgww
-        (envelope-from <ailiop@suse.com>); Mon, 13 Dec 2021 20:46:53 +0000
-Date:   Mon, 13 Dec 2021 21:46:53 +0100
-From:   Anthony Iliopoulos <ailiop@suse.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH - regression] devtmpfs: reconfigure on each mount
-Message-ID: <YbexPXpuI8RdOb8q@technoir>
-References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>
- <20211213125906.ngqbjsywxwibvcuq@wittgenstein>
+        Mon, 13 Dec 2021 15:52:00 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FECC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:52:00 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id m9so20433218iop.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:52:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=IGse4qKU4JLBH1S45luocRcV6GpeECgK5A2GIqwAdmM=;
+        b=YOLUbH9G6Fg1c08Z/5jrq3DJKf94M99h3XNo5bsFdsPghWstq/H0quDCLXFtM1I3Yu
+         KupX7v0XcVRvzaQV5MyDQWTQS/LFtkTFoQ9nZGVZ/ecwZZtk8SFTBQz5ZlhVWuWmY8+g
+         hNV/vTDrQ+OKUBHTfmngDxFim93nXOHjytiaecgncLQUjVCUyyxplvJPCx6L9uoLexiH
+         wq0c6kqgXVVK007ovpdNfle1FuQ3ZiCCSyvl3IXtrg9QqvvLfmJCSnr78NsLFyCf1TX+
+         sYB97jjKB6T4eWzZwmR5qscA3sBA+Jwzzew+DnpimITjy8Vrcjlt3fmkNQY6e/l4je/Y
+         Mh/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=IGse4qKU4JLBH1S45luocRcV6GpeECgK5A2GIqwAdmM=;
+        b=uxnHHV/OBVH11tjvTmS48GOnmMIPUZZO2iCuXgLQAQxSLsGz8Au7wVOoH3s7KRWgxr
+         imwZj0nv1szwn9tkpOzXOkXcSsfV/qPs6U2VgzWKmh1Z+yqnYroB3+hefNeX0DVyUk5b
+         VUaYiAKu6NQE9GLRBOKkLPy7l0aNM/RJrWIR2B8rjCz4GxLE8wHJI6DvKOWt2h1KJNy4
+         GhhTIK97+XeEGEz5z1fnWOIG0+bRVRFMjmyYi7qiwnwBLTF52JxNkUYenYu7nySd35nd
+         mN8uSJvqyuT64BBSrJC5O1nBAJdoBhfDOHfyJuNw8na9c5YkDvTusJgJcUgPgdCmvhs9
+         Q5Eg==
+X-Gm-Message-State: AOAM533lJJfeBCD9UT1cpOeL7RZYNu8cbr/iQaH962OyYs81qtMxNd9H
+        VCgpS4srCbBAHMxSdXalJUhN//SYQaFRi3CFAoA=
+X-Google-Smtp-Source: ABdhPJyR64kE7lDZbGi5AzrC66c7fvMjbpop2q2OtnSgVAHFs+wgKLHoghogQrZ9vSH6VWqfESSgU/rSBHB+UCRAPpk=
+X-Received: by 2002:a05:6638:33a6:: with SMTP id h38mr393120jav.188.1639428720019;
+ Mon, 13 Dec 2021 12:52:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213125906.ngqbjsywxwibvcuq@wittgenstein>
+Received: by 2002:a92:dac7:0:0:0:0:0 with HTTP; Mon, 13 Dec 2021 12:51:59
+ -0800 (PST)
+Reply-To: sgtkayla2001@gmail.com
+From:   Kayla Manthey <mathildebatchassi0@gmail.com>
+Date:   Mon, 13 Dec 2021 20:51:59 +0000
+Message-ID: <CAM2YJmYO0A3fRtNXT1HsV5FC0SwsZ1-ugQC_M5LMsBhr=MZxvw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 01:59:06PM +0100, Christian Brauner wrote:
-> On Mon, Dec 13, 2021 at 12:12:26PM +1100, NeilBrown wrote:
-> > 
-> > Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
-> > mount options as "remount" options, updating the configuration of the
-> > single super_block on each mount.
-> > Since that was changed, the mount options used for devtmpfs are ignored.
-> > This is a regression which affects systemd - which mounts devtmpfs
-> > with "-o mode=755,size=4m,nr_inodes=1m".
-> > 
-> > This patch restores the "remount" effect by calling reconfigure_single()
-> > 
-> > Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mount_single()")
-> > Signed-off-by: NeilBrown <neilb@suse.de>
-> > ---
-> 
-> Hey Neil,
-> 
-> So far this hasn't been an issue for us in systemd upstream. Is there a
-> specific use-case where this is causing issues? I'm mostly asking
-> because this change is fairly old.
-
-This is standard init with systemd for SLE, where the systemd-provided
-mount params for devtmpfs are being effectively ignored due to this
-regression, so nr_inodes and size params are falling back to kernel
-defaults. It is also not specific to systemd, and can be easily
-reproduced by e.g. booting with devtmpfs.mount=0 and doing mount -t
-devtmpfs none /dev -o nr_inodes=1024.
-
-> What I actually find more odd is that there's no .reconfigure for
-> devtmpfs for non-vfs generic mount options it supports.
-
-There is a .reconfigure for devtmpfs, e.g. shmem_init_fs_context sets
-fc->ops to shmem_fs_context_ops, so everything goes through
-shmem_reconfigure.
-
-> So it's possible to change vfs generic stuff like
-> 
-> mount -o remount,ro,nosuid /dev
-> 
-> but none of the other mount options it supports and there's no word lost
-> anywhere about whether or not that's on purpose.
-
-That's not the case: even after d401727ea0d7 a remount can change any
-shmem-specific mount params.
-
-> It feels odd because it uses the fs parameters from shmem/ramfs
-> 
-> const struct fs_parameter_spec shmem_fs_parameters[] = {
-> 	fsparam_u32   ("gid",		Opt_gid),
-> 	fsparam_enum  ("huge",		Opt_huge,  shmem_param_enums_huge),
-> 	fsparam_u32oct("mode",		Opt_mode),
-> 	fsparam_string("mpol",		Opt_mpol),
-> 	fsparam_string("nr_blocks",	Opt_nr_blocks),
-> 	fsparam_string("nr_inodes",	Opt_nr_inodes),
-> 	fsparam_string("size",		Opt_size),
-> 	fsparam_u32   ("uid",		Opt_uid),
-> 	fsparam_flag  ("inode32",	Opt_inode32),
-> 	fsparam_flag  ("inode64",	Opt_inode64),
-> 	{}
-> }
-> 
-> but doesn't allow to actually change them neither with your fix or with
-> the old way of doing things. But afaict, all of them could be set via
-
-As per above, all those mount params are changeable via remount
-irrespective of the regression. What d401727ea0d7 regressed is that all
-those params are being ignored on new mounts only (and thus any init
-that mounts devtmpfs with params would be affected).
-
-> the "devtmpfs.mount" kernel command line option. So I could set gid=,
-> uid=, and mpol= for devtmpfs via devtmpfs.mount but wouldn't be able to
-> change it through remount or - in your case - with a mount with new
-> parameters?
-
-The devtmpfs.mount kernel boot param only controls if devtmpfs will be
-automatically mounted by the kernel during boot, and has nothing to do
-with the actual tmpfs mount params.
-
-Regards,
-Anthony
+0JzQvtC70Y8g0LLQuCwg0LHQuNGFINC40YHQutCw0Lsg0LTQsCDQt9C90LDQvCDQtNCw0LvQuCDR
+gdGC0LUg0L/QvtC70YPRh9C40LvQuCDQv9GA0LXQtNC40YjQvdC+0YLQviDQvNC4INGB0YrQvtCx
+0YnQtdC90LjQtSwNCtCx0LvQsNCz0L7QtNCw0YDRjyDQstC4Lg0K

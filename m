@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B4247262E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099184727A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbhLMJtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:49:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58402 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235494AbhLMJou (ORCPT
+        id S235187AbhLMKEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:04:05 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47238 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238299AbhLMJ6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:44:50 -0500
+        Mon, 13 Dec 2021 04:58:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAFDCB80E24;
-        Mon, 13 Dec 2021 09:44:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14FBC00446;
-        Mon, 13 Dec 2021 09:44:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6F4F2CE0F11;
+        Mon, 13 Dec 2021 09:58:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15AD5C34600;
+        Mon, 13 Dec 2021 09:58:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388687;
-        bh=TzRbTAmIN2O4nc2nTlH7ECyI3bJrKjXsUDTA/pyPUrc=;
+        s=korg; t=1639389517;
+        bh=p+Yc0az5B0pDFPfnrAmlLkxpQKwDcJx9CkpCLZ5zm1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nkn196UFJ3t2EuCK2wtFmx9u/+bfg9+AAfDTGG8+SciFVCQtSLQFcNzqHrqE+Ebdf
-         imFDEn9Cs/Sqe2Eu++3C3ngZlnIBaqt6EcitV7jQyn0IsUkL82efgle495Mpp5Tt0m
-         Wu+7FqERwiz4bw9uXCQyIcJfCBlCeLYU1Aa+2pkk=
+        b=JBIsgendOy3v7StJ6bxoOGyAA+qp4TnrEvN8mQM9TSFghb8pyuPn1FF7h84xQ/ZRX
+         YSlKM3k1TZZSXmYBJJ2GH5PyrzTTfMzj3B/8PiOI6HuTajL4SqBV7iT7vEG+m62pBx
+         D3YoEx0tfnFfKG0FSm3doRzlHNmLMDMEzOoAXKPo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 63/88] selftests/fib_tests: Rework fib_rp_filter_test()
+        stable@vger.kernel.org,
+        Grzegorz Szczurek <grzegorzx.szczurek@intel.com>,
+        Karen Sornek <karen.sornek@intel.com>,
+        Tony Brelinski <tony.brelinski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.15 118/171] i40e: Fix failed opcode appearing if handling messages from VF
 Date:   Mon, 13 Dec 2021 10:30:33 +0100
-Message-Id: <20211213092935.441206053@linuxfoundation.org>
+Message-Id: <20211213092949.031972376@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,167 +48,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Karen Sornek <karen.sornek@intel.com>
 
-commit f6071e5e3961eeb5300bd0901c9e128598730ae3 upstream.
+commit 61125b8be85dfbc7e9c7fe1cc6c6d631ab603516 upstream.
 
-Currently rp_filter tests in fib_tests.sh:fib_rp_filter_test() are
-failing.  ping sockets are bound to dummy1 using the "-I" option
-(SO_BINDTODEVICE), but socket lookup is failing when receiving ping
-replies, since the routing table thinks they belong to dummy0.
+Fix failed operation code appearing if handling messages from VF.
+Implemented by waiting for VF appropriate state if request starts
+handle while VF reset.
+Without this patch the message handling request while VF is in
+a reset state ends with error -5 (I40E_ERR_PARAM).
 
-For example, suppose ping is using a SOCK_RAW socket for ICMP messages.
-When receiving ping replies, in __raw_v4_lookup(), sk->sk_bound_dev_if
-is 3 (dummy1), but dif (skb_rtable(skb)->rt_iif) says 2 (dummy0), so the
-raw_sk_bound_dev_eq() check fails.  Similar things happen in
-ping_lookup() for SOCK_DGRAM sockets.
-
-These tests used to pass due to a bug [1] in iputils, where "ping -I"
-actually did not bind ICMP message sockets to device.  The bug has been
-fixed by iputils commit f455fee41c07 ("ping: also bind the ICMP socket
-to the specific device") in 2016, which is why our rp_filter tests
-started to fail.  See [2] .
-
-Fixing the tests while keeping everything in one netns turns out to be
-nontrivial.  Rework the tests and build the following topology:
-
- ┌─────────────────────────────┐    ┌─────────────────────────────┐
- │  network namespace 1 (ns1)  │    │  network namespace 2 (ns2)  │
- │                             │    │                             │
- │  ┌────┐     ┌─────┐         │    │  ┌─────┐            ┌────┐  │
- │  │ lo │<───>│veth1│<────────┼────┼─>│veth2│<──────────>│ lo │  │
- │  └────┘     ├─────┴──────┐  │    │  ├─────┴──────┐     └────┘  │
- │             │192.0.2.1/24│  │    │  │192.0.2.1/24│             │
- │             └────────────┘  │    │  └────────────┘             │
- └─────────────────────────────┘    └─────────────────────────────┘
-
-Consider sending an ICMP_ECHO packet A in ns2.  Both source and
-destination IP addresses are 192.0.2.1, and we use strict mode rp_filter
-in both ns1 and ns2:
-
-  1. A is routed to lo since its destination IP address is one of ns2's
-     local addresses (veth2);
-  2. A is redirected from lo's egress to veth2's egress using mirred;
-  3. A arrives at veth1's ingress in ns1;
-  4. A is redirected from veth1's ingress to lo's ingress, again, using
-     mirred;
-  5. In __fib_validate_source(), fib_info_nh_uses_dev() returns false,
-     since A was received on lo, but reverse path lookup says veth1;
-  6. However A is not dropped since we have relaxed this check for lo in
-     commit 66f8209547cc ("fib: relax source validation check for loopback
-     packets");
-
-Making sure A is not dropped here in this corner case is the whole point
-of having this test.
-
-  7. As A reaches the ICMP layer, an ICMP_ECHOREPLY packet, B, is
-     generated;
-  8. Similarly, B is redirected from lo's egress to veth1's egress (in
-     ns1), then redirected once again from veth2's ingress to lo's
-     ingress (in ns2), using mirred.
-
-Also test "ping 127.0.0.1" from ns2.  It does not trigger the relaxed
-check in __fib_validate_source(), but just to make sure the topology
-works with loopback addresses.
-
-Tested with ping from iputils 20210722-41-gf9fb573:
-
-$ ./fib_tests.sh -t rp_filter
-
-IPv4 rp_filter tests
-    TEST: rp_filter passes local packets		[ OK ]
-    TEST: rp_filter passes loopback packets		[ OK ]
-
-[1] https://github.com/iputils/iputils/issues/55
-[2] https://github.com/iputils/iputils/commit/f455fee41c077d4b700a473b2f5b3487b8febc1d
-
-Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-Fixes: adb701d6cfa4 ("selftests: add a test case for rp_filter")
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Acked-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20211201004720.6357-1-yepeilin.cs@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 5c3c48ac6bf5 ("i40e: implement virtual device interface")
+Signed-off-by: Grzegorz Szczurek <grzegorzx.szczurek@intel.com>
+Signed-off-by: Karen Sornek <karen.sornek@intel.com>
+Tested-by: Tony Brelinski <tony.brelinski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/fib_tests.sh |   59 +++++++++++++++++++++++++------
- 1 file changed, 49 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |   70 ++++++++++++++-------
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.h |    2 
+ 2 files changed, 50 insertions(+), 22 deletions(-)
 
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -444,24 +444,63 @@ fib_rp_filter_test()
- 	setup
+--- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
+@@ -1949,6 +1949,32 @@ static int i40e_vc_send_resp_to_vf(struc
+ }
  
- 	set -e
-+	ip netns add ns2
-+	ip netns set ns2 auto
+ /**
++ * i40e_sync_vf_state
++ * @vf: pointer to the VF info
++ * @state: VF state
++ *
++ * Called from a VF message to synchronize the service with a potential
++ * VF reset state
++ **/
++static bool i40e_sync_vf_state(struct i40e_vf *vf, enum i40e_vf_states state)
++{
++	int i;
 +
-+	ip -netns ns2 link set dev lo up
++	/* When handling some messages, it needs VF state to be set.
++	 * It is possible that this flag is cleared during VF reset,
++	 * so there is a need to wait until the end of the reset to
++	 * handle the request message correctly.
++	 */
++	for (i = 0; i < I40E_VF_STATE_WAIT_COUNT; i++) {
++		if (test_bit(state, &vf->vf_states))
++			return true;
++		usleep_range(10000, 20000);
++	}
 +
-+	$IP link add name veth1 type veth peer name veth2
-+	$IP link set dev veth2 netns ns2
-+	$IP address add 192.0.2.1/24 dev veth1
-+	ip -netns ns2 address add 192.0.2.1/24 dev veth2
-+	$IP link set dev veth1 up
-+	ip -netns ns2 link set dev veth2 up
++	return test_bit(state, &vf->vf_states);
++}
 +
- 	$IP link set dev lo address 52:54:00:6a:c7:5e
--	$IP link set dummy0 address 52:54:00:6a:c7:5e
--	$IP link add dummy1 type dummy
--	$IP link set dummy1 address 52:54:00:6a:c7:5e
--	$IP link set dev dummy1 up
-+	$IP link set dev veth1 address 52:54:00:6a:c7:5e
-+	ip -netns ns2 link set dev lo address 52:54:00:6a:c7:5e
-+	ip -netns ns2 link set dev veth2 address 52:54:00:6a:c7:5e
-+
-+	# 1. (ns2) redirect lo's egress to veth2's egress
-+	ip netns exec ns2 tc qdisc add dev lo parent root handle 1: fq_codel
-+	ip netns exec ns2 tc filter add dev lo parent 1: protocol arp basic \
-+		action mirred egress redirect dev veth2
-+	ip netns exec ns2 tc filter add dev lo parent 1: protocol ip basic \
-+		action mirred egress redirect dev veth2
-+
-+	# 2. (ns1) redirect veth1's ingress to lo's ingress
-+	$NS_EXEC tc qdisc add dev veth1 ingress
-+	$NS_EXEC tc filter add dev veth1 ingress protocol arp basic \
-+		action mirred ingress redirect dev lo
-+	$NS_EXEC tc filter add dev veth1 ingress protocol ip basic \
-+		action mirred ingress redirect dev lo
-+
-+	# 3. (ns1) redirect lo's egress to veth1's egress
-+	$NS_EXEC tc qdisc add dev lo parent root handle 1: fq_codel
-+	$NS_EXEC tc filter add dev lo parent 1: protocol arp basic \
-+		action mirred egress redirect dev veth1
-+	$NS_EXEC tc filter add dev lo parent 1: protocol ip basic \
-+		action mirred egress redirect dev veth1
-+
-+	# 4. (ns2) redirect veth2's ingress to lo's ingress
-+	ip netns exec ns2 tc qdisc add dev veth2 ingress
-+	ip netns exec ns2 tc filter add dev veth2 ingress protocol arp basic \
-+		action mirred ingress redirect dev lo
-+	ip netns exec ns2 tc filter add dev veth2 ingress protocol ip basic \
-+		action mirred ingress redirect dev lo
-+
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.rp_filter=1
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.accept_local=1
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.route_localnet=1
--
--	$NS_EXEC tc qd add dev dummy1 parent root handle 1: fq_codel
--	$NS_EXEC tc filter add dev dummy1 parent 1: protocol arp basic action mirred egress redirect dev lo
--	$NS_EXEC tc filter add dev dummy1 parent 1: protocol ip basic action mirred egress redirect dev lo
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=1
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.accept_local=1
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.route_localnet=1
- 	set +e
++/**
+  * i40e_vc_get_version_msg
+  * @vf: pointer to the VF info
+  * @msg: pointer to the msg buffer
+@@ -2008,7 +2034,7 @@ static int i40e_vc_get_vf_resources_msg(
+ 	size_t len = 0;
+ 	int ret;
  
--	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 198.51.100.1"
-+	run_cmd "ip netns exec ns2 ping -w1 -c1 192.0.2.1"
- 	log_test $? 0 "rp_filter passes local packets"
+-	if (!test_bit(I40E_VF_STATE_INIT, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_INIT)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -2131,7 +2157,7 @@ static int i40e_vc_config_promiscuous_mo
+ 	bool allmulti = false;
+ 	bool alluni = false;
  
--	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 127.0.0.1"
-+	run_cmd "ip netns exec ns2 ping -w1 -c1 127.0.0.1"
- 	log_test $? 0 "rp_filter passes loopback packets"
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err_out;
+ 	}
+@@ -2219,7 +2245,7 @@ static int i40e_vc_config_queues_msg(str
+ 	struct i40e_vsi *vsi;
+ 	u16 num_qps_all = 0;
  
- 	cleanup
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto error_param;
+ 	}
+@@ -2368,7 +2394,7 @@ static int i40e_vc_config_irq_map_msg(st
+ 	i40e_status aq_ret = 0;
+ 	int i;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto error_param;
+ 	}
+@@ -2540,7 +2566,7 @@ static int i40e_vc_disable_queues_msg(st
+ 	struct i40e_pf *pf = vf->pf;
+ 	i40e_status aq_ret = 0;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto error_param;
+ 	}
+@@ -2590,7 +2616,7 @@ static int i40e_vc_request_queues_msg(st
+ 	u8 cur_pairs = vf->num_queue_pairs;
+ 	struct i40e_pf *pf = vf->pf;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states))
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE))
+ 		return -EINVAL;
+ 
+ 	if (req_pairs > I40E_MAX_VF_QUEUES) {
+@@ -2635,7 +2661,7 @@ static int i40e_vc_get_stats_msg(struct
+ 
+ 	memset(&stats, 0, sizeof(struct i40e_eth_stats));
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto error_param;
+ 	}
+@@ -2752,7 +2778,7 @@ static int i40e_vc_add_mac_addr_msg(stru
+ 	i40e_status ret = 0;
+ 	int i;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states) ||
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE) ||
+ 	    !i40e_vc_isvalid_vsi_id(vf, al->vsi_id)) {
+ 		ret = I40E_ERR_PARAM;
+ 		goto error_param;
+@@ -2824,7 +2850,7 @@ static int i40e_vc_del_mac_addr_msg(stru
+ 	i40e_status ret = 0;
+ 	int i;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states) ||
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE) ||
+ 	    !i40e_vc_isvalid_vsi_id(vf, al->vsi_id)) {
+ 		ret = I40E_ERR_PARAM;
+ 		goto error_param;
+@@ -2968,7 +2994,7 @@ static int i40e_vc_remove_vlan_msg(struc
+ 	i40e_status aq_ret = 0;
+ 	int i;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states) ||
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE) ||
+ 	    !i40e_vc_isvalid_vsi_id(vf, vfl->vsi_id)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto error_param;
+@@ -3088,9 +3114,9 @@ static int i40e_vc_config_rss_key(struct
+ 	struct i40e_vsi *vsi = NULL;
+ 	i40e_status aq_ret = 0;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states) ||
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE) ||
+ 	    !i40e_vc_isvalid_vsi_id(vf, vrk->vsi_id) ||
+-	    (vrk->key_len != I40E_HKEY_ARRAY_SIZE)) {
++	    vrk->key_len != I40E_HKEY_ARRAY_SIZE) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3119,9 +3145,9 @@ static int i40e_vc_config_rss_lut(struct
+ 	i40e_status aq_ret = 0;
+ 	u16 i;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states) ||
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE) ||
+ 	    !i40e_vc_isvalid_vsi_id(vf, vrl->vsi_id) ||
+-	    (vrl->lut_entries != I40E_VF_HLUT_ARRAY_SIZE)) {
++	    vrl->lut_entries != I40E_VF_HLUT_ARRAY_SIZE) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3154,7 +3180,7 @@ static int i40e_vc_get_rss_hena(struct i
+ 	i40e_status aq_ret = 0;
+ 	int len = 0;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3190,7 +3216,7 @@ static int i40e_vc_set_rss_hena(struct i
+ 	struct i40e_hw *hw = &pf->hw;
+ 	i40e_status aq_ret = 0;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3215,7 +3241,7 @@ static int i40e_vc_enable_vlan_stripping
+ 	i40e_status aq_ret = 0;
+ 	struct i40e_vsi *vsi;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3241,7 +3267,7 @@ static int i40e_vc_disable_vlan_strippin
+ 	i40e_status aq_ret = 0;
+ 	struct i40e_vsi *vsi;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3468,7 +3494,7 @@ static int i40e_vc_del_cloud_filter(stru
+ 	i40e_status aq_ret = 0;
+ 	int i, ret;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3599,7 +3625,7 @@ static int i40e_vc_add_cloud_filter(stru
+ 	i40e_status aq_ret = 0;
+ 	int i, ret;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err_out;
+ 	}
+@@ -3708,7 +3734,7 @@ static int i40e_vc_add_qch_msg(struct i4
+ 	i40e_status aq_ret = 0;
+ 	u64 speed = 0;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+@@ -3824,7 +3850,7 @@ static int i40e_vc_del_qch_msg(struct i4
+ 	struct i40e_pf *pf = vf->pf;
+ 	i40e_status aq_ret = 0;
+ 
+-	if (!test_bit(I40E_VF_STATE_ACTIVE, &vf->vf_states)) {
++	if (!i40e_sync_vf_state(vf, I40E_VF_STATE_ACTIVE)) {
+ 		aq_ret = I40E_ERR_PARAM;
+ 		goto err;
+ 	}
+--- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.h
++++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.h
+@@ -18,6 +18,8 @@
+ 
+ #define I40E_MAX_VF_PROMISC_FLAGS	3
+ 
++#define I40E_VF_STATE_WAIT_COUNT	20
++
+ /* Various queue ctrls */
+ enum i40e_queue_ctrl {
+ 	I40E_QUEUE_CTRL_UNKNOWN = 0,
 
 

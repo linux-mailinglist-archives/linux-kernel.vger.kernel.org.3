@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5925472AF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F59B472AF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbhLMLLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:11:11 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:32425 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229836AbhLMLLK (ORCPT
+        id S234559AbhLMLMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:12:48 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45990
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234480AbhLMLMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:11:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639393870; x=1670929870;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=5YidXyIgQI0E20XN+ohYDbgdQ4PIMU4JJRYFHx89oE8=;
-  b=KDTObcZgeUBgX5pdS6MRxVHXoOGUCif3vFLXR8NStYXXpk39M5ryOOBI
-   bo0sAGQ8WXHVXvpbvXJk3ks3kpXsNIR5A+gS53tl7zowqPgvJ1+EjBYDq
-   TqVXQfjjduRSn/IYSgdSS/QWldQs+d0qX4tRPL+hx6uRch67l/jzuT1kK
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Dec 2021 03:11:09 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 03:11:01 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 13 Dec 2021 03:11:02 -0800
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 13 Dec
- 2021 03:10:59 -0800
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Subject: [PATCH] power_supply: Register cooling device outside of probe
-Date:   Mon, 13 Dec 2021 16:40:41 +0530
-Message-ID: <1639393841-17444-1-git-send-email-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 13 Dec 2021 06:12:47 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E23AF40192
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:12:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639393966;
+        bh=FMSEJMWB19MJ5un0naaJgLGMwQh7w2xxe+NRt2wvP6I=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=V5xvwzknfqO16mjVNGIblj8LxaFArR6SQFll08DHcUJtYbs6YY901oSZ3+bWoBIQi
+         qMHqX0+g5AOUuRHbeOH8HsOpT1MZwrwL9DrvmpVzbBGrEtWLR0YjC4P/Rql8+ZS3C9
+         JS75Xz7hmVIErAVhiZgXO+Uh6PMuJM9+doimYzOndqDiJs8n1trj8FNpxr97znBs+4
+         2Ql+A7gRA2PbTp7o71wWCrc+tkVBTregw/+iGgPRGlRovhmNU9kVuuarmKOVJCtNCV
+         iwMdi5NPxI2w64EJN7AemCjkjpvWYnOZE1QuDCRHXlXval2ta29qGiRW7v3hHyEE0/
+         CPd4q/1r8t1EA==
+Received: by mail-lf1-f72.google.com with SMTP id d2-20020a0565123d0200b0040370d0d2fbso7364394lfv.23
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:12:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FMSEJMWB19MJ5un0naaJgLGMwQh7w2xxe+NRt2wvP6I=;
+        b=hVHrcQDrbT464isXw+vMLAejapMDFYksDW79Rr5lx7bBVFC3CZ60G1+S9Zd30N2xg/
+         9k1UgD1cudObUd2Gb7ZxBiVTURcJIjhs65Qw4qdd40Xbxi+wvuNDjWBq+a/n0MAuGzs8
+         vtneV0XnMg78jZx1ewxNgQ9bpfHw868z0w6009XCQZXAy19DhMC1d6JKALZjE4JttMTD
+         vmj57S1qUAy3mFYlaUm6H17F6SwJv2RXLTdAWySMbigSFC4EbARBXbmnG7De3tYVW84q
+         WDvsyvaorUn0eaYmSlcY21aqLxz1oj58E2/SLzVuNLZ5digcptGBYRG/T2T0BopmbyDv
+         D3yw==
+X-Gm-Message-State: AOAM530WSUPXG9IEorNHv7BIPArEqnLpGmDRNxgQk6LRNf9s1KJLqsMG
+        0EftdMXL1vQNo+u8Le7WNtNwMY76OrSp7KxFN8mN2XLnLWj2Jp7GvPeQ0W2EEogQ5CLeuZRXKbl
+        FSUK2jM/6VCGChnhzRziEaCWaR76cncgoUJT1tF11HQ==
+X-Received: by 2002:a2e:9dcf:: with SMTP id x15mr29777723ljj.223.1639393965829;
+        Mon, 13 Dec 2021 03:12:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwEhn19N9dmWSefufj0sS+SE52ZpsFM6hnx/XdA1Kb8kvUIW90VKYiArQTWBmcr1sR0Y6R8xg==
+X-Received: by 2002:a2e:9dcf:: with SMTP id x15mr29777688ljj.223.1639393965543;
+        Mon, 13 Dec 2021 03:12:45 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id i11sm1387791lfu.141.2021.12.13.03.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 03:12:45 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
+Date:   Mon, 13 Dec 2021 12:12:41 +0100
+Message-Id: <163939390678.7492.14453883652552774452.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211204195757.8600-2-semen.protsenko@linaro.org>
+References: <20211204195757.8600-1-semen.protsenko@linaro.org> <20211204195757.8600-2-semen.protsenko@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Registering the cooling device from the probe can result in the
-execution of get_property() function before it gets initialized.
+On Sat, 4 Dec 2021 21:57:53 +0200, Sam Protsenko wrote:
+> Add constants for choosing USIv2 configuration mode in device tree.
+> Those are further used in USI driver to figure out which value to write
+> into SW_CONF register. Also document USIv2 IP-core bindings.
+> 
+> 
 
-To avoid this, register the cooling device from a workqueue
-instead of registering in the probe.
+Applied, thanks!
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
----
- drivers/power/supply/power_supply_core.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+[1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
+      commit: e522ae91b8ff7bf89d22d9322308aba1a6326996
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 10a357a..c306b9d 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
- }
- EXPORT_SYMBOL_GPL(power_supply_changed);
- 
-+static int psy_register_cooler(struct device *dev, struct power_supply *psy);
- /*
-  * Notify that power supply was registered after parent finished the probing.
-  *
-@@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
-  * calling power_supply_changed() directly from power_supply_register()
-  * would lead to execution of get_property() function provided by the driver
-  * too early - before the probe ends.
-+ * Also, registering cooling device from the probe will execute the
-+ * get_property() function. So register the cooling device after the probe.
-  *
-  * Avoid that by waiting on parent's mutex.
-  */
-@@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
- 	}
- 
- 	power_supply_changed(psy);
-+	psy_register_cooler(psy->dev.parent, psy);
- 
- 	if (psy->dev.parent)
- 		mutex_unlock(&psy->dev.parent->mutex);
-@@ -1257,10 +1261,6 @@ __power_supply_register(struct device *parent,
- 	if (rc)
- 		goto register_thermal_failed;
- 
--	rc = psy_register_cooler(psy);
--	if (rc)
--		goto register_cooler_failed;
--
- 	rc = power_supply_create_triggers(psy);
- 	if (rc)
- 		goto create_triggers_failed;
-@@ -1290,8 +1290,6 @@ __power_supply_register(struct device *parent,
- add_hwmon_sysfs_failed:
- 	power_supply_remove_triggers(psy);
- create_triggers_failed:
--	psy_unregister_cooler(psy);
--register_cooler_failed:
- 	psy_unregister_thermal(psy);
- register_thermal_failed:
- 	device_del(dev);
+Best regards,
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF99C4726C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6293D472403
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238732AbhLMJyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S233962AbhLMJd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236284AbhLMJtb (ORCPT
+        with ESMTP id S233924AbhLMJdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:49:31 -0500
+        Mon, 13 Dec 2021 04:33:15 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8550C08EA37;
-        Mon, 13 Dec 2021 01:43:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83FBC061A32;
+        Mon, 13 Dec 2021 01:33:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6365CB80E25;
-        Mon, 13 Dec 2021 09:43:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB874C341C8;
-        Mon, 13 Dec 2021 09:43:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F537B80E18;
+        Mon, 13 Dec 2021 09:33:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07CCC00446;
+        Mon, 13 Dec 2021 09:33:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388610;
-        bh=dHJcttHZuk/tKF67uUw6oVbo4Ssg9ADjOMzb29PqaRY=;
+        s=korg; t=1639387986;
+        bh=0/TqD2fLN/WfxHKsUjSXtWtrXwGmySEVT/iwwE4ZUVc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=026ZI+GO5hgXOi9926Ac+Eopafj+Gb0IZ7ruubYgXyuIh5kyeTTg8NbmT0mKFkGn6
-         TV2PPmoBoEZXb0IV6GYf/F9IbVIN1DAZvM59lFlwHmetbV/tu2KzPrSPD484ZsfaU5
-         KVcz9ghe7ztJsZi/8E0vZNc2KJ+MjcgW4f2NE+ZE=
+        b=k/t1daspQPtU+rE/WaA9LdmG/W3pM9cMxWJ7AJreH1t3Rb7ZEZMOXQFrp9BEwCThv
+         FItn7f1oo5NU61eEjHx1FTI8KKl3TAhaFQDV6f0AKTE+XAyntpLtZ2SGA631RBJEWm
+         aKN9Q8bxEOKwGyHsBBSqSVGw9I7LTdXdsmiyt4X0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        "J. Bruce Fields" <bfields@redhat.com>
-Subject: [PATCH 5.4 35/88] nfsd: Fix nsfd startup race (again)
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.4 27/37] net/qla3xxx: fix an error code in ql_adapter_up()
 Date:   Mon, 13 Dec 2021 10:30:05 +0100
-Message-Id: <20211213092934.449945325@linuxfoundation.org>
+Message-Id: <20211213092926.266581534@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,109 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit b10252c7ae9c9d7c90552f88b544a44ee773af64 upstream.
+commit d17b9737c2bc09b4ac6caf469826e5a7ce3ffab7 upstream.
 
-Commit bd5ae9288d64 ("nfsd: register pernet ops last, unregister first")
-has re-opened rpc_pipefs_event() race against nfsd_net_id registration
-(register_pernet_subsys()) which has been fixed by commit bb7ffbf29e76
-("nfsd: fix nsfd startup race triggering BUG_ON").
+The ql_wait_for_drvr_lock() fails and returns false, then this
+function should return an error code instead of returning success.
 
-Restore the order of register_pernet_subsys() vs register_cld_notifier().
-Add WARN_ON() to prevent a future regression.
+The other problem is that the success path prints an error message
+netdev_err(ndev, "Releasing driver lock\n");  Delete that and
+re-order the code a little to make it more clear.
 
-Crash info:
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000012
-CPU: 8 PID: 345 Comm: mount Not tainted 5.4.144-... #1
-pc : rpc_pipefs_event+0x54/0x120 [nfsd]
-lr : rpc_pipefs_event+0x48/0x120 [nfsd]
-Call trace:
- rpc_pipefs_event+0x54/0x120 [nfsd]
- blocking_notifier_call_chain
- rpc_fill_super
- get_tree_keyed
- rpc_fs_get_tree
- vfs_get_tree
- do_mount
- ksys_mount
- __arm64_sys_mount
- el0_svc_handler
- el0_svc
-
-Fixes: bd5ae9288d64 ("nfsd: register pernet ops last, unregister first")
-Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Signed-off-by: J. Bruce Fields <bfields@redhat.com>
+Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20211207082416.GA16110@kili
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs4recover.c |    1 +
- fs/nfsd/nfsctl.c      |   14 +++++++-------
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/qlogic/qla3xxx.c |   19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
---- a/fs/nfsd/nfs4recover.c
-+++ b/fs/nfsd/nfs4recover.c
-@@ -2177,6 +2177,7 @@ static struct notifier_block nfsd4_cld_b
- int
- register_cld_notifier(void)
- {
-+	WARN_ON(!nfsd_net_id);
- 	return rpc_pipefs_notifier_register(&nfsd4_cld_block);
- }
+--- a/drivers/net/ethernet/qlogic/qla3xxx.c
++++ b/drivers/net/ethernet/qlogic/qla3xxx.c
+@@ -3491,20 +3491,19 @@ static int ql_adapter_up(struct ql3_adap
  
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@ -1526,12 +1526,9 @@ static int __init init_nfsd(void)
- 	int retval;
- 	printk(KERN_INFO "Installing knfsd (copyright (C) 1996 okir@monad.swb.de).\n");
+ 	spin_lock_irqsave(&qdev->hw_lock, hw_flags);
  
--	retval = register_cld_notifier();
--	if (retval)
--		return retval;
- 	retval = nfsd4_init_slabs();
- 	if (retval)
--		goto out_unregister_notifier;
-+		return retval;
- 	retval = nfsd4_init_pnfs();
- 	if (retval)
- 		goto out_free_slabs;
-@@ -1549,9 +1546,14 @@ static int __init init_nfsd(void)
- 		goto out_free_exports;
- 	retval = register_pernet_subsys(&nfsd_net_ops);
- 	if (retval < 0)
-+		goto out_free_filesystem;
-+	retval = register_cld_notifier();
-+	if (retval)
- 		goto out_free_all;
- 	return 0;
- out_free_all:
-+	unregister_pernet_subsys(&nfsd_net_ops);
-+out_free_filesystem:
- 	unregister_filesystem(&nfsd_fs_type);
- out_free_exports:
- 	remove_proc_entry("fs/nfs/exports", NULL);
-@@ -1565,13 +1567,12 @@ out_free_stat:
- 	nfsd4_exit_pnfs();
- out_free_slabs:
- 	nfsd4_free_slabs();
--out_unregister_notifier:
--	unregister_cld_notifier();
- 	return retval;
- }
+-	err = ql_wait_for_drvr_lock(qdev);
+-	if (err) {
+-		err = ql_adapter_initialize(qdev);
+-		if (err) {
+-			netdev_err(ndev, "Unable to initialize adapter\n");
+-			goto err_init;
+-		}
+-		netdev_err(ndev, "Releasing driver lock\n");
+-		ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
+-	} else {
++	if (!ql_wait_for_drvr_lock(qdev)) {
+ 		netdev_err(ndev, "Could not acquire driver lock\n");
++		err = -ENODEV;
+ 		goto err_lock;
+ 	}
  
- static void __exit exit_nfsd(void)
- {
-+	unregister_cld_notifier();
- 	unregister_pernet_subsys(&nfsd_net_ops);
- 	nfsd_drc_slab_free();
- 	remove_proc_entry("fs/nfs/exports", NULL);
-@@ -1582,7 +1583,6 @@ static void __exit exit_nfsd(void)
- 	nfsd4_exit_pnfs();
- 	nfsd_fault_inject_cleanup();
- 	unregister_filesystem(&nfsd_fs_type);
--	unregister_cld_notifier();
- }
++	err = ql_adapter_initialize(qdev);
++	if (err) {
++		netdev_err(ndev, "Unable to initialize adapter\n");
++		goto err_init;
++	}
++	ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
++
+ 	spin_unlock_irqrestore(&qdev->hw_lock, hw_flags);
  
- MODULE_AUTHOR("Olaf Kirch <okir@monad.swb.de>");
+ 	set_bit(QL_ADAPTER_UP, &qdev->flags);
 
 

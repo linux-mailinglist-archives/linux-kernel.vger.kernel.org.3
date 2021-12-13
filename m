@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CD847265E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A69B47264F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbhLMJvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:51:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59986 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236195AbhLMJqN (ORCPT
+        id S237518AbhLMJuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232965AbhLMJqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:46:13 -0500
+        Mon, 13 Dec 2021 04:46:00 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9523C08EB30;
+        Mon, 13 Dec 2021 01:41:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2356DB80E12;
-        Mon, 13 Dec 2021 09:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6322DC341C5;
-        Mon, 13 Dec 2021 09:46:09 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 419B2CE0AE2;
+        Mon, 13 Dec 2021 09:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5EDFC00446;
+        Mon, 13 Dec 2021 09:41:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388769;
-        bh=WIWdys5//IC5POQNm2wp3TJhcElEgJF+rtvRr0nj37I=;
+        s=korg; t=1639388465;
+        bh=pbGKeqSyT3S8vgeYSj2aiYLj+pRwBYeHLrr1VfZCNvc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jFwF/9Zh8Ih3Ls4DMFWb3ooAVS/qq/PpPyPz6jcLzyFGNGZ5ItHiprG8FrqTBtnW2
-         28E+fnEwRpNI7jSK7o6NIC8yZPXnoIJo9OHmot9ecI54PLTw6XRS8O1N9o0Job1mzB
-         noi6dh/BqldyHZVnJVCOaPa35dZz3xD3LwUy/DaY=
+        b=N2Oz0iAzEjHX4oMtfC2U2T+JBeBMgjYkAQax9g2caFf117HNX6MANyGxsSjOUiaBm
+         Tkc8SfL9BmCggC8l7PaEz1kxxZX8TUUVKeTHkyf0GiaKifTWlfdqr32ZBYzzpEJEYg
+         MmQJHHHZWCmBosvf/qKsKK4+G1VASqfIAORkbrnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 58/88] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero
-Date:   Mon, 13 Dec 2021 10:30:28 +0100
-Message-Id: <20211213092935.261612169@linuxfoundation.org>
+        stable@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.19 58/74] iio: trigger: stm32-timer: fix MODULE_ALIAS
+Date:   Mon, 13 Dec 2021 10:30:29 +0100
+Message-Id: <20211213092932.737429494@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,70 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lee Jones <lee.jones@linaro.org>
+From: Alyssa Ross <hi@alyssa.is>
 
-commit 2be6d4d16a0849455a5c22490e3c5983495fed00 upstream.
+commit 893621e0606747c5bbefcaf2794d12c7aa6212b7 upstream.
 
-Currently, due to the sequential use of min_t() and clamp_t() macros,
-in cdc_ncm_check_tx_max(), if dwNtbOutMaxSize is not set, the logic
-sets tx_max to 0.  This is then used to allocate the data area of the
-SKB requested later in cdc_ncm_fill_tx_frame().
+modprobe can't handle spaces in aliases.
 
-This does not cause an issue presently because when memory is
-allocated during initialisation phase of SKB creation, more memory
-(512b) is allocated than is required for the SKB headers alone (320b),
-leaving some space (512b - 320b = 192b) for CDC data (172b).
-
-However, if more elements (for example 3 x u64 = [24b]) were added to
-one of the SKB header structs, say 'struct skb_shared_info',
-increasing its original size (320b [320b aligned]) to something larger
-(344b [384b aligned]), then suddenly the CDC data (172b) no longer
-fits in the spare SKB data area (512b - 384b = 128b).
-
-Consequently the SKB bounds checking semantics fails and panics:
-
-  skbuff: skb_over_panic: text:ffffffff830a5b5f len:184 put:172   \
-     head:ffff888119227c00 data:ffff888119227c00 tail:0xb8 end:0x80 dev:<NULL>
-
-  ------------[ cut here ]------------
-  kernel BUG at net/core/skbuff.c:110!
-  RIP: 0010:skb_panic+0x14f/0x160 net/core/skbuff.c:106
-  <snip>
-  Call Trace:
-   <IRQ>
-   skb_over_panic+0x2c/0x30 net/core/skbuff.c:115
-   skb_put+0x205/0x210 net/core/skbuff.c:1877
-   skb_put_zero include/linux/skbuff.h:2270 [inline]
-   cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1116 [inline]
-   cdc_ncm_fill_tx_frame+0x127f/0x3d50 drivers/net/usb/cdc_ncm.c:1293
-   cdc_ncm_tx_fixup+0x98/0xf0 drivers/net/usb/cdc_ncm.c:1514
-
-By overriding the max value with the default CDC_NCM_NTB_MAX_SIZE_TX
-when not offered through the system provided params, we ensure enough
-data space is allocated to handle the CDC data, meaning no crash will
-occur.
-
-Cc: Oliver Neukum <oliver@neukum.org>
-Fixes: 289507d3364f9 ("net: cdc_ncm: use sysfs for rx/tx aggregation tuning")
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Reviewed-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20211202143437.1411410-1-lee.jones@linaro.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 93fbe91b5521 ("iio: Add STM32 timer trigger driver")
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+Link: https://lore.kernel.org/r/20211125182850.2645424-1-hi@alyssa.is
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/cdc_ncm.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iio/trigger/stm32-timer-trigger.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -177,6 +177,8 @@ static u32 cdc_ncm_check_tx_max(struct u
- 	/* clamp new_tx to sane values */
- 	min = ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb_cdc_ncm_nth16);
- 	max = min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize));
-+	if (max == 0)
-+		max = CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
+--- a/drivers/iio/trigger/stm32-timer-trigger.c
++++ b/drivers/iio/trigger/stm32-timer-trigger.c
+@@ -884,6 +884,6 @@ static struct platform_driver stm32_time
+ };
+ module_platform_driver(stm32_timer_trigger_driver);
  
- 	/* some devices set dwNtbOutMaxSize too low for the above default */
- 	min = min(min, max);
+-MODULE_ALIAS("platform: stm32-timer-trigger");
++MODULE_ALIAS("platform:stm32-timer-trigger");
+ MODULE_DESCRIPTION("STMicroelectronics STM32 Timer Trigger driver");
+ MODULE_LICENSE("GPL v2");
 
 

@@ -2,155 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE708472B86
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC30472B8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbhLMLej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235966AbhLMLeh (ORCPT
+        id S236148AbhLMLfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:35:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44104 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232879AbhLMLfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:34:37 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9793CC061370;
-        Mon, 13 Dec 2021 03:34:36 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id e3so51686286edu.4;
-        Mon, 13 Dec 2021 03:34:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2e+UzRHJrxGPPbZbFl3bp02hL6qW3g/3CXhqDegQXgY=;
-        b=lH4bKcV/MYfbCayfl/Uz5ftNa5t2S1eJFIcB/ZAt0HfLIZVovbwizoyOdLSYqVkWr1
-         +JdNtbtLiNsqRZnFgTxKuj3KfXt7UABFNmO6ogqDJGkqcyL6D7Bu5Np3m4rzk5QOA+bA
-         2yndlT2MKmnryf6RacXKnVDdmp3AfSDVUZ43rlVvhksTxHfTnuIfZD9ZC7QwSFa1kiux
-         ZcG4dgeOsTjzjPdknhx1uLPI9CrHGgVCn7yUm8oYWFyTYwQkMpFJJAM5MDXkGxfzhoZB
-         DZUdeQzQKzC1jTmTs3snbIV5L2rdBhhu5uwedDZIHsjNX02nIzTbPnEcEgKqpAVbGPcr
-         R/Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2e+UzRHJrxGPPbZbFl3bp02hL6qW3g/3CXhqDegQXgY=;
-        b=AyZfgVcrdVWi4mfoF8pBG4DyEZK/IqEDZe9IDL2TCvAdIbMnQCSMD/qSNZfkn+T2uH
-         ANksM/VLDqKiuajuQeRlpqcfya1UI1q0rhNkHJDy8Oxlk9XpScTjcr7OcrSTgUNlFm6B
-         3lABLGdPYdMYAmb2/WKcuaqR8FumEG0y2y2l35QNTS/4SeWj8VCs/OqOIujnoyeD6+Da
-         FpcqKJ46takng8Lr8yU9dDNChhyz5X7OZmMlcG1tkk0+S4n7wHAeppRy0QZhdusBJ/6M
-         vo+BLY8qmQlFqQMC/ruKF5hksfUk9WZeg6KJp05+skeJeNtU0zrroYYXz0EjtMZLHF2D
-         456Q==
-X-Gm-Message-State: AOAM532URgedxTL+52tFkuHoPiQmCNWHKSVwbwNI2nE9CGqAcAeigleT
-        d2pA2ciOVPVJidjEAoqOaA4=
-X-Google-Smtp-Source: ABdhPJxQ75d60voASMmkeQXmRq5Wk8RM74ghwGmxeGWXH15Kc/F0Yv1JhPRcJGGlp8B7ljQdpgXQ7A==
-X-Received: by 2002:a50:9e0f:: with SMTP id z15mr63057251ede.278.1639395275080;
-        Mon, 13 Dec 2021 03:34:35 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id sc27sm6043432ejc.125.2021.12.13.03.34.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 03:34:34 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <0d893664-ff8d-83ed-e9be-441b45992f68@redhat.com>
-Date:   Mon, 13 Dec 2021 12:34:32 +0100
+        Mon, 13 Dec 2021 06:35:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00CE7B81071;
+        Mon, 13 Dec 2021 11:35:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23454C34604;
+        Mon, 13 Dec 2021 11:34:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639395298;
+        bh=tF7vAmUoMebaQ7l7tabIPUqZ3TeZCV4ZMKEWEWCvULk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g98NkDGLqnVqMw388Ak7V1i2xSv3di3+ZOct6RmffIsB2KRnWawnzRwU8slApd0Cl
+         JxWOJxn/PnpRI0dcXyeYa5cnqMsz/r5YoDQz8C0RHuVHQCMP9clcoTarkIRqVdm2Y/
+         x23LYlQb6nPO4Qkvs8zO2E2PeSHpJOH9iuBpOCq7potNaXGAuggJZ64Pk6dRibkKaW
+         jORqgByvfeIP4Pw3aq8GTFmlw0Qp+zzrdOJhZ1R65j+K0VjCdiZrMUGPY8/d9l6gdU
+         PZMq6Am5JuHK8yIhqZYTBa77g2nC4UFcLiNWqY3EFFjItTEEaUWhkFDXOruH6DOI3I
+         McDAcAoeJDl0w==
+Date:   Mon, 13 Dec 2021 12:34:55 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     paulmck@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, urezki@gmail.com,
+        boqun.feng@gmail.com
+Subject: Re: [PATCH] rcu/exp: Fix check for idle context in rcu_exp_handler
+Message-ID: <20211213113455.GB782195@lothringen>
+References: <20211213061024.24285-1-quic_neeraju@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 1/5] KVM: nSVM: deal with L1 hypervisor that intercepts
- interrupts but lets L2 control EFLAGS.IF
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joerg Roedel <joro@8bytes.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20211213104634.199141-1-mlevitsk@redhat.com>
- <20211213104634.199141-2-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211213104634.199141-2-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213061024.24285-1-quic_neeraju@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 11:46, Maxim Levitsky wrote:
-> Fix a corner case in which L1 hypervisor intercepts interrupts (INTERCEPT_INTR)
-> and either doesn't use virtual interrupt masking (V_INTR_MASKING) or
-> enters a nested guest with EFLAGS.IF disabled prior to the entry.
+On Mon, Dec 13, 2021 at 11:40:24AM +0530, Neeraj Upadhyay wrote:
+> For PREEMPT_RCU, the rcu_exp_handler() function checks
+> whether the current CPU is in idle, by calling
+> rcu_dynticks_curr_cpu_in_eqs(). However, rcu_exp_handler()
+> is called in IPI handler context. So, it should be checking
+> the idle context using rcu_is_cpu_rrupt_from_idle(). Fix this
+> by using rcu_is_cpu_rrupt_from_idle() instead of
+> rcu_dynticks_curr_cpu_in_eqs(). Non-preempt configuration
+> already uses the correct check.
 > 
-> In this case, despite the fact that L1 intercepts the interrupts,
-> KVM still needs to set up an interrupt window to wait before it
-> can deliver INTR vmexit.
-> 
-> Currently instead, the KVM enters an endless loop of 'req_immediate_exit'.
-> 
-> Note that on VMX this case is impossible as there is only
-> 'vmexit on external interrupts' execution control which either set,
-> in which case both host and guest's EFLAGS.IF
-> is ignored, or clear, in which case no VMexit is delivered.
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+
+
 > ---
->   arch/x86/kvm/svm/svm.c | 10 +++++++---
->   1 file changed, 7 insertions(+), 3 deletions(-)
+>  kernel/rcu/tree_exp.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index e57e6857e0630..c9668a3b51011 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3372,17 +3372,21 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
->   static int svm_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
->   {
->   	struct vcpu_svm *svm = to_svm(vcpu);
-> +	bool blocked;
-> +
->   	if (svm->nested.nested_run_pending)
->   		return -EBUSY;
->   
-> +	blocked = svm_interrupt_blocked(vcpu);
-> +
->   	/*
->   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
->   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
->   	 */
->   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
-> -		return -EBUSY;
-> -
-> -	return !svm_interrupt_blocked(vcpu);
-> +		return !blocked ? -EBUSY : 0;
-> +	else
-> +		return !blocked;
->   }
->   
->   static void svm_enable_irq_window(struct kvm_vcpu *vcpu)
+> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> index 237a79989aba..1568c8ef185b 100644
+> --- a/kernel/rcu/tree_exp.h
+> +++ b/kernel/rcu/tree_exp.h
+> @@ -656,7 +656,7 @@ static void rcu_exp_handler(void *unused)
+>  	 */
+>  	if (!depth) {
+>  		if (!(preempt_count() & (PREEMPT_MASK | SOFTIRQ_MASK)) ||
+> -		    rcu_dynticks_curr_cpu_in_eqs()) {
+> +		    rcu_is_cpu_rrupt_from_idle()) {
+>  			rcu_report_exp_rdp(rdp);
+>  		} else {
+>  			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
+> -- 
+> 2.17.1
 > 
-
-Right, another case is when CLGI is not trapped and the guest therefore
-runs with GIF=0.  I think that means that a similar change has to be
-done in all the *_allowed functions.
-
-I would write it as
-
-   	if (svm->nested.nested_run_pending)
-   		return -EBUSY;
-   
-	if (svm_interrupt_blocked(vcpu))
-		return 0;
-
-   	/*
-   	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
-   	 * e.g. if the IRQ arrived asynchronously after checking nested events.
-   	 */
-   	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(svm))
-		return -EBUSY;
-	return 1;
-
-Paolo

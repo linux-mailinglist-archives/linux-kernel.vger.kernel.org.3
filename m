@@ -2,166 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 906064733EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A2E4733EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237084AbhLMSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S241707AbhLMSZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:25:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbhLMSYP (ORCPT
+        with ESMTP id S231959AbhLMSZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:24:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C7CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:24:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BC50B811E4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F23C34602;
-        Mon, 13 Dec 2021 18:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639419852;
-        bh=wVdnHLDh7WlOdER9MCi8u65E4BnXbGUKu4PzTAiRfkE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CQg1UZSTCdOnsHZJU7d18k3QNTTRrWeHQAStt7Hjo1TpTXlTjesrCoqKnQ+l/1c5L
-         ANXRwAoXR+QsJE5nQqEw3ds5e66c7bRSntVznTjicMlgFGvcKh+EoYozOrfBbB9mV0
-         53zNbJG4pEO9ExfFpkywjFncRp1MRUjFoYX40xF6QOw+czl3ykhiu6sR0y3woFlo5z
-         0tqJhzyNu60aRfBaKfr1Ol6cmzZ8kmUTlvhRRKhZ8akB9qUOvIKHQ4/drESwYR48x8
-         6ZdJyBfQuB10p279T530yM2bGY1WLExSp96hDYalQ46iYUFKUreK3mrs+fmTv+IzUN
-         snbEcbuv3TKjg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 71683405D8; Mon, 13 Dec 2021 15:24:10 -0300 (-03)
-Date:   Mon, 13 Dec 2021 15:24:10 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Song Liu <songliubraving@fb.com>,
-        Changbin Du <changbin.du@gmail.com>
-Subject: Re: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency
- histogram (v1)
-Message-ID: <YbePytGwg9Kb7hT1@kernel.org>
-References: <20211129231830.1117781-1-namhyung@kernel.org>
+        Mon, 13 Dec 2021 13:25:06 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9515C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:25:05 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id r25so54589354edq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:25:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U9QkkvTopjVhiotJwEjgopR1B8bJ1qN8bAX4PSwUoSk=;
+        b=atSePMRG15KGEzzBKt+bDeg7v8T/67BK1osJkUil9a7Qf30KScMHB6aOot6RolXTRs
+         dw7GvYXV123uTbkSX4TdkD/x2izLgVvFyX5qdfsEjKmi9uOCu/CTZb9win5EV8h+Op5M
+         WfdG55arjO/Y50om/TeJ6q9SzFxe2LrOwXBXI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U9QkkvTopjVhiotJwEjgopR1B8bJ1qN8bAX4PSwUoSk=;
+        b=xxbaMGaOA95NFZtH3lTQDwcWQD7udDxQXqRDtLu1uBTgzunkZ1hYG2r32n7vUt8mh6
+         4Saz3lGfQYYUGXn32kw4vFNA6W0ZkkTM1Ea4Dg11cayG74EMlw0TCXKm26upI/AF44ab
+         TExVnrV1wlIaOqxeNrvSdyotNNIVg/y7xcFwdvFMx1KDghARFzak9FUNp04a5mGfWnQC
+         v7X3lnDxoQYvO+p1DuNpyWvu1sqtWt48CkB61K0Ndm+9Vj1a3h+VJ3UgEODHoFTrOxAw
+         F7QD2oqJbyZZCOfbOLvKpusBvT5Ao5jTSL7orcoUoQewYx4RVYSUKtpNJBrnElbPsRY6
+         eJyw==
+X-Gm-Message-State: AOAM5317NSGz1Dfn0IZ8yZzG7FZtG9n4K9mnGhlzxNU/Bj2DDFQz5Y2L
+        +Hd0KfYu00N8yB/dqLdTwhOUaNIZWLJMkxRM
+X-Google-Smtp-Source: ABdhPJywtGZgEIASkyayh/Wt4oJYvqc0x2rqP5uV/t7pmFh1PBUBaKcy5+j9uVXnvMfqnqp2FrkVHQ==
+X-Received: by 2002:a17:907:60cd:: with SMTP id hv13mr32719ejc.712.1639419904380;
+        Mon, 13 Dec 2021 10:25:04 -0800 (PST)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id o21sm406983ejy.181.2021.12.13.10.25.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 10:25:02 -0800 (PST)
+Received: by mail-wr1-f46.google.com with SMTP id k9so10794420wrd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:25:02 -0800 (PST)
+X-Received: by 2002:adf:e646:: with SMTP id b6mr199250wrn.442.1639419901892;
+ Mon, 13 Dec 2021 10:25:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129231830.1117781-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <20211210161618.645249719@infradead.org> <20211210162313.857673010@infradead.org>
+ <20211213164334.GY16608@worktop.programming.kicks-ass.net>
+ <CAHk-=wjc+mr_Rh++5pPDkNFuceyPwFxCtzp124AppBLgbVVV0A@mail.gmail.com> <YbeOjq20FCdzcK1Q@elver.google.com>
+In-Reply-To: <YbeOjq20FCdzcK1Q@elver.google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 13 Dec 2021 10:24:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wicxUkovFa7D0YyhSweMVbL47VDimr-nytxr93SbgV9oQ@mail.gmail.com>
+Message-ID: <CAHk-=wicxUkovFa7D0YyhSweMVbL47VDimr-nytxr93SbgV9oQ@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] atomic,x86: Alternative atomic_*_overflow() scheme
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Nov 29, 2021 at 03:18:25PM -0800, Namhyung Kim escreveu:
-> Hello,
-> 
-> I've implemented 'latency' subcommand in the perf ftrace command to
-> show a histogram of function latency.
+On Mon, Dec 13, 2021 at 10:19 AM Marco Elver <elver@google.com> wrote:
+>
+> I'm still genuinely worried about this:
+>
+> >       2. Yet another potentially larger issue is if some code
+> >          kmalloc()s some structs containing refcount_t, and relies on
+> >          GFP_ZERO (kzalloc()) to initialize their data assuming that a
+> >          freshly initialized refcount_t contains 0.
+>
+> Even with everything properly wrapped up in atomic_ref_t, it's not going
+> to prevent mis-initialization via kzalloc() and friends.
 
-This still applies cleanly, I'll test it later.
+I agree that it's an issue, but it's not a new issue. We've had the
+exact same thing with a lot of other core data structures.
 
-- Arnaldo
- 
-> To handle new subcommands, the existing functionality is moved to
-> 'trace' subcommand while preserving backward compatibility of not
-> having a subcommand at all (defaults to 'trace').
-> 
-> The latency subcommand accepts a target (kernel, for now) function
-> with -T option and shows a histogram like below:
-> 
->   $ sudo ./perf ftrace latency -a -T mutex_lock sleep 1
->   #   DURATION     |      COUNT | GRAPH                                          |
->        0 - 1    us |       2686 | ######################                         |
->        1 - 2    us |        976 | ########                                       |
->        2 - 4    us |        879 | #######                                        |
->        4 - 8    us |        481 | ####                                           |
->        8 - 16   us |        445 | ###                                            |
->       16 - 32   us |          1 |                                                |
->       32 - 64   us |          0 |                                                |
->       64 - 128  us |          0 |                                                |
->      128 - 256  us |          0 |                                                |
->      256 - 512  us |          0 |                                                |
->      512 - 1024 us |          0 |                                                |
->        1 - 2    ms |          0 |                                                |
->        2 - 4    ms |          0 |                                                |
->        4 - 8    ms |          0 |                                                |
->        8 - 16   ms |          0 |                                                |
->       16 - 32   ms |          0 |                                                |
->       32 - 64   ms |          0 |                                                |
->       64 - 128  ms |          0 |                                                |
->      128 - 256  ms |          0 |                                                |
->      256 - 512  ms |          0 |                                                |
->      512 - 1024 ms |          0 |                                                |
->        1 - ...   s |          0 |                                                |
->   
-> It basically use the function graph tracer to extract the duration of
-> the function.  But with -b/--use-bpf option, it can use BPF to save
-> the histogram in the kernel.  For the same function, it gets:
-> 
->   $ sudo ./perf ftrace latency -a -b -T mutex_lock sleep 1
->   #   DURATION     |      COUNT | GRAPH                                          |
->        0 - 1    us |       4682 | #############################################  |
->        1 - 2    us |         11 |                                                |
->        2 - 4    us |          0 |                                                |
->        4 - 8    us |          0 |                                                |
->        8 - 16   us |          7 |                                                |
->       16 - 32   us |          6 |                                                |
->       32 - 64   us |          0 |                                                |
->       64 - 128  us |          0 |                                                |
->      128 - 256  us |          0 |                                                |
->      256 - 512  us |          0 |                                                |
->      512 - 1024 us |          0 |                                                |
->        1 - 2    ms |          0 |                                                |
->        2 - 4    ms |          0 |                                                |
->        4 - 8    ms |          0 |                                                |
->        8 - 16   ms |          0 |                                                |
->       16 - 32   ms |          0 |                                                |
->       32 - 64   ms |          0 |                                                |
->       64 - 128  ms |          0 |                                                |
->      128 - 256  ms |          0 |                                                |
->      256 - 512  ms |          0 |                                                |
->      512 - 1024 ms |          0 |                                                |
->        1 - ...   s |          0 |                                                |
-> 
-> 
-> You can get the patches at 'perf/ftrace-latency-v1' branch on
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> 
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> Namhyung Kim (5):
->   perf ftrace: Add 'trace' subcommand
->   perf ftrace: Move out common code from __cmd_ftrace
->   perf ftrace: Add 'latency' subcommand
->   perf ftrace: Add -b/--use-bpf option for latency subcommand
->   perf ftrace: Implement cpu and task filters in BPF
-> 
->  tools/perf/Makefile.perf                    |   2 +-
->  tools/perf/builtin-ftrace.c                 | 443 +++++++++++++++++---
->  tools/perf/util/Build                       |   1 +
->  tools/perf/util/bpf_ftrace.c                | 154 +++++++
->  tools/perf/util/bpf_skel/func_latency.bpf.c | 113 +++++
->  tools/perf/util/ftrace.h                    |  81 ++++
->  6 files changed, 724 insertions(+), 70 deletions(-)
->  create mode 100644 tools/perf/util/bpf_ftrace.c
->  create mode 100644 tools/perf/util/bpf_skel/func_latency.bpf.c
->  create mode 100644 tools/perf/util/ftrace.h
-> 
-> 
-> base-commit: 8ab774587903771821b59471cc723bba6d893942
-> -- 
-> 2.34.0.rc2.393.gf8c9666880-goog
+And a ref-count of zero isn't valid _anyway_. When you allocate a
+structure, a zero ref-count by definition is wrong. You need to set
+the ref-count to the user that allocated it.
 
--- 
+So I don't actually think the "implicit zero" is an issue in practice,
+because it would be wrong in the first place. Code that relies on
+kzmalloc() to initialize a refcount cannot work right.
 
-- Arnaldo
+(And by "cannot" I obviously mean "can, if you do wrong things" - it's
+not like it's *impossible* to do an "atomic_inc_ref()" to change a 0
+refcount to a 1, but it's both wrong *AND* actively stupid, since an
+allocation does not need to set the refcount atomically).
+
+             Linus

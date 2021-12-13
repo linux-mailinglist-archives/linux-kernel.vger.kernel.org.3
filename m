@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A85C47241B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD3F47290B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbhLMJeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S244684AbhLMKRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbhLMJdn (ORCPT
+        with ESMTP id S234346AbhLMJtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:33:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D42DC061751;
-        Mon, 13 Dec 2021 01:33:43 -0800 (PST)
+        Mon, 13 Dec 2021 04:49:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9F7C08EC65;
+        Mon, 13 Dec 2021 01:43:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C5AC0CE0E70;
-        Mon, 13 Dec 2021 09:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF72C341CA;
-        Mon, 13 Dec 2021 09:33:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76662B80E2E;
+        Mon, 13 Dec 2021 09:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF889C00446;
+        Mon, 13 Dec 2021 09:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388021;
-        bh=Z43GWxX0jqGv5h5dJzgrGmbShbs7BwPByvST6wl32no=;
+        s=korg; t=1639388624;
+        bh=SDeZ92LDYBUi55JAtRjECof8i0m9qrk9xWrSNCuJHIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1osXXlpPM67oNSwDtGJeG8rYAsSI1zeoiUDIGgwJXfqZD0MprtMrEeT0iVwz+Mk8i
-         JdfrdSsG3ikPs7/Fq0s3KT8Un2iBBG8oKJrt8UjP130KHoMaSpqPzuMoXqTQab6bGm
-         OCCssVfL9cGHnSyE85n7tMibMO9Ej8GfnRj/OSlM=
+        b=XsNP4EN7n7FTAx0CSXUQVHCnmWT8iXM3H5ZrmYskw+Zjqye/w4tuQeOLLdkSS3ukD
+         ic1GG1eFklPj/ZIUCzy74dVx/b+vMY1qRbTNnjOEQtuD5LAfay/jOF92ksYAlgRwTn
+         oO5HEgsF55Vt3W9I6uL8N9ISA1AALmJ+J7PC+HcM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.4 32/37] iio: mma8452: Fix trigger reference couting
+        stable@vger.kernel.org,
+        Brian Silverman <brian.silverman@bluerivertech.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.4 40/88] can: m_can: Disable and ignore ELO interrupt
 Date:   Mon, 13 Dec 2021 10:30:10 +0100
-Message-Id: <20211213092926.428930075@linuxfoundation.org>
+Message-Id: <20211213092934.636898474@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
-References: <20211213092925.380184671@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,41 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Brian Silverman <brian.silverman@bluerivertech.com>
 
-commit cd0082235783f814241a1c9483fb89e405f4f892 upstream.
+commit f58ac1adc76b5beda43c64ef359056077df4d93a upstream.
 
-The mma8452 driver directly assigns a trigger to the struct iio_dev. The
-IIO core when done using this trigger will call `iio_trigger_put()` to drop
-the reference count by 1.
+With the design of this driver, this condition is often triggered.
+However, the counter that this interrupt indicates an overflow is never
+read either, so overflowing is harmless.
 
-Without the matching `iio_trigger_get()` in the driver the reference count
-can reach 0 too early, the trigger gets freed while still in use and a
-use-after-free occurs.
+On my system, when a CAN bus starts flapping up and down, this locks up
+the whole system with lots of interrupts and printks.
 
-Fix this by getting a reference to the trigger before assigning it to the
-IIO device.
+Specifically, this interrupt indicates the CEL field of ECR has
+overflowed. All reads of ECR mask out CEL.
 
-Fixes: ae6d9ce05691 ("iio: mma8452: Add support for interrupt driven triggers.")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024092700.6844-1-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
+Link: https://lore.kernel.org/all/20211129222628.7490-1-brian.silverman@bluerivertech.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/iio/accel/mma8452.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -1011,7 +1011,7 @@ static int mma8452_trigger_setup(struct
- 	if (ret)
- 		return ret;
+---
+ drivers/net/can/m_can/m_can.c |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -206,15 +206,15 @@ enum m_can_reg {
  
--	indio_dev->trig = trig;
-+	indio_dev->trig = iio_trigger_get(trig);
+ /* Interrupts for version 3.0.x */
+ #define IR_ERR_LEC_30X	(IR_STE	| IR_FOE | IR_ACKE | IR_BE | IR_CRCE)
+-#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_ELO | IR_BEU | \
+-			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
+-			 IR_RF1L | IR_RF0L)
++#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_BEU | IR_BEC | \
++			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
++			 IR_RF0L)
+ #define IR_ERR_ALL_30X	(IR_ERR_STATE | IR_ERR_BUS_30X)
+ /* Interrupts for version >= 3.1.x */
+ #define IR_ERR_LEC_31X	(IR_PED | IR_PEA)
+-#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_ELO | IR_BEU | \
+-			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
+-			 IR_RF1L | IR_RF0L)
++#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_BEU | IR_BEC | \
++			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
++			 IR_RF0L)
+ #define IR_ERR_ALL_31X	(IR_ERR_STATE | IR_ERR_BUS_31X)
  
- 	return 0;
- }
+ /* Interrupt Line Select (ILS) */
+@@ -751,8 +751,6 @@ static void m_can_handle_other_err(struc
+ {
+ 	if (irqstatus & IR_WDI)
+ 		netdev_err(dev, "Message RAM Watchdog event due to missing READY\n");
+-	if (irqstatus & IR_ELO)
+-		netdev_err(dev, "Error Logging Overflow\n");
+ 	if (irqstatus & IR_BEU)
+ 		netdev_err(dev, "Bit Error Uncorrected\n");
+ 	if (irqstatus & IR_BEC)
 
 

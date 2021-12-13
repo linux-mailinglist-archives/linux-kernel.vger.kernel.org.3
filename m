@@ -2,228 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4907D47367A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED96A47367D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243097AbhLMVSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:18:22 -0500
-Received: from mga12.intel.com ([192.55.52.136]:33672 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237803AbhLMVSV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:18:21 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="218848113"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="218848113"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 13:18:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="464803532"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 13:18:20 -0800
-Received: from arubio1-mobl.amr.corp.intel.com (unknown [10.212.243.203])
-        by linux.intel.com (Postfix) with ESMTP id 2492D580A85;
-        Mon, 13 Dec 2021 13:18:20 -0800 (PST)
-Message-ID: <9777e4a972f7ff9c0a5c3acff89e21a0579173e5.camel@linux.intel.com>
-Subject: Re: [PATCH V3 3/6] platform/x86/intel: Move intel_pmt from MFD to
- Auxiliary Bus
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, srinivas.pandruvada@intel.com,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Date:   Mon, 13 Dec 2021 13:18:19 -0800
-In-Reply-To: <YbeQpyIijHbPHktN@smile.fi.intel.com>
-References: <20211213175921.1897860-1-david.e.box@linux.intel.com>
-         <20211213175921.1897860-4-david.e.box@linux.intel.com>
-         <YbeQpyIijHbPHktN@smile.fi.intel.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S243101AbhLMVTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236959AbhLMVTK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 16:19:10 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9CEC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:19:09 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id m6so21506677lfu.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:19:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zUxwvp9vYwyJcQZmzhjmfM3rufvm3bxRQemKOq+WF8Q=;
+        b=BepgohHib2ilglMUKoAF4i0Q9de8231SPgv/vmLejAwIRYhRCHc1MRBhI2mBOVtely
+         xhZYEjEsNhFtz5WxStJrHyCJZPjIQO8FVHAp9m3vBtIDwMWLzETMOm8Q9ShsC5LktX/0
+         x4p5xyOkT2KlvcQHrwN9a9KE0KO0tsPKk9RvAKT4pt/F5o1elW9AxFMN9MdJgKVthKTl
+         F2TR09q0pXdsRtjJR+P9CgXFg5U9/MNmw67+mpcxuDLECZm/Wep4X6MbesxC9SEPs6IU
+         lJIgOzLBnvLtMOzhIsu+RwKOxLp364zpJ7bxGLp6AERqzdBXAasg6gF/kRUvRyuVlLZD
+         wT8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zUxwvp9vYwyJcQZmzhjmfM3rufvm3bxRQemKOq+WF8Q=;
+        b=BiOW37Z1ncKBDnLKgxBFUSCGuQJT5UHGiSeJQX/FUgGZCebW/t6Ov9d6d94fP7UNCa
+         47CqMIShJ0B6oDaDdKPui8q+eDWRsJ0ouHoZrUG4Q7awLh8aOo/XOt0mKbYPvPCWOQdR
+         h29NlfEZ6WMLzsetxC+UxgTpJzvtnpa0mtm4BLgPLyZSZJcaZWtD2J6Ce74im8vDuz/I
+         ltif9L8gDJy8aUdaiExIKlwwoxQxik4OtV5TfR+O6+kP+y7HRzN0KMUN74KFGE1hwFek
+         s3OfRh57FW5H68R9x6cH82hPtrq7/A/I3h0pO2yTiJDq1DeM7s2ls4XSAFcZdb325lAu
+         oW3Q==
+X-Gm-Message-State: AOAM5322QCyQ5AODgWzAr/LbD2ZhCme7sVEzswvSBee6yDpAbT9bdO1F
+        y2Iy+eDfJ0JatNrsjOAyv2LCDA==
+X-Google-Smtp-Source: ABdhPJw1q7FMK03KgySTCBv1JP8ARKdSQFa+PNCLG7CJSlWWm8Rm4MGVvbfvJnDdFOOgJ5lhfPLffg==
+X-Received: by 2002:a05:6512:12c8:: with SMTP id p8mr790416lfg.69.1639430347911;
+        Mon, 13 Dec 2021 13:19:07 -0800 (PST)
+Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id f35sm1567100lfv.98.2021.12.13.13.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 13:19:07 -0800 (PST)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH] arm64: dts: renesas: r8a77961: Add lvsd0 device node
+Date:   Tue, 14 Dec 2021 00:18:55 +0300
+Message-Id: <20211213211855.1052211-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-13 at 20:27 +0200, Andy Shevchenko wrote:
-> On Mon, Dec 13, 2021 at 09:59:18AM -0800, David E. Box wrote:
-> > Intel Platform Monitoring Technology (PMT) support is indicated by presence
-> > of an Intel defined PCIe Designated Vendor Specific Extended Capabilities
-> > (DVSEC) structure with a PMT specific ID. The current MFD implementation
-> > creates child devices for each PMT feature, currently telemetry, watcher,
-> > and crashlog. However DVSEC structures may also be used by Intel to
-> > indicate support for other features. The Out Of Band Management Services
-> > Module (OOBMSM) uses DVSEC to enumerate several features, including PMT.
-> > In order to support them it is necessary to modify the intel_pmt driver to
-> > handle the creation of the child devices more generically. To that end,
-> > modify the driver to create child devices for any VSEC/DVSEC features on
-> > supported devices (indicated by PCI ID).  Additionally, move the
-> > implementation from MFD to the Auxiliary bus.  VSEC/DVSEC features are
-> > really multifunctional PCI devices, not platform devices as MFD was
-> > designed for. Auxiliary bus gives more flexibility by allowing the
-> > definition of custom structures that can be shared between associated
-> > auxiliary devices and the parent device. Also, rename the driver from
-> > intel_pmt to intel_vsec to better reflect the purpose.
-> > 
-> > This series also removes the current runtime pm support which was not
-> > complete to begin with. None of the current devices require runtime pm.
-> > However the support will be replaced when a device is added that requires
-> > it.
-> 
-> ...
-> 
-> > +static bool intel_vsec_walk_dvsec(struct pci_dev *pdev, unsigned long
-> > quirks)
-> > +{
-> > +	bool have_devices = false;
-> > +	int pos = 0;
-> > +
-> > +	do {
-> > +		struct intel_vsec_header header;
-> > +		u32 table, hdr;
-> > +		u16 vid;
-> > +		int ret;
-> > +
-> > +		pos = pci_find_next_ext_capability(pdev, pos,
-> > PCI_EXT_CAP_ID_DVSEC);
-> > +		if (!pos)
-> > +			break;
-> > +
-> > +		pci_read_config_dword(pdev, pos + PCI_DVSEC_HEADER1, &hdr);
-> > +		vid = PCI_DVSEC_HEADER1_VID(hdr);
-> > +		if (vid != PCI_VENDOR_ID_INTEL)
-> > +			continue;
-> > +
-> > +		/* Support only revision 1 */
-> > +		header.rev = PCI_DVSEC_HEADER1_REV(hdr);
-> > +		if (header.rev != 1) {
-> > +			dev_info(&pdev->dev, "Unsupported DVSEC revision %d\n",
-> > header.rev);
-> > +			continue;
-> > +		}
-> > +
-> > +		header.length = PCI_DVSEC_HEADER1_LEN(hdr);
-> > +
-> > +		pci_read_config_byte(pdev, pos + INTEL_DVSEC_ENTRIES,
-> > &header.num_entries);
-> > +		pci_read_config_byte(pdev, pos + INTEL_DVSEC_SIZE,
-> > &header.entry_size);
-> > +		pci_read_config_dword(pdev, pos + INTEL_DVSEC_TABLE, &table);
-> > +
-> > +		header.tbir = INTEL_DVSEC_TABLE_BAR(table);
-> > +		header.offset = INTEL_DVSEC_TABLE_OFFSET(table);
-> > +
-> > +		pci_read_config_dword(pdev, pos + PCI_DVSEC_HEADER2, &hdr);
-> > +		header.id = PCI_DVSEC_HEADER2_ID(hdr);
-> > +
-> > +		ret = intel_vsec_add_dev(pdev, &header, quirks);
-> > +		if (ret)
-> > +			continue;
-> > +
-> > +		have_devices = true;
-> > +	} while (true);
-> > +
-> > +	return have_devices;
-> > +}
-> > +
-> > +static bool intel_vsec_walk_vsec(struct pci_dev *pdev, unsigned long
-> > quirks)
-> > +{
-> > +	bool have_devices = false;
-> > +	int pos = 0;
-> > +
-> > +	do {
-> > +		struct intel_vsec_header header;
-> > +		u32 table, hdr;
-> > +		int ret;
-> > +
-> > +		pos = pci_find_next_ext_capability(pdev, pos,
-> > PCI_EXT_CAP_ID_VNDR);
-> > +		if (!pos)
-> > +			break;
-> > +
-> > +		pci_read_config_dword(pdev, pos + PCI_VNDR_HEADER, &hdr);
-> > +
-> > +		/* Support only revision 1 */
-> > +		header.rev = PCI_VNDR_HEADER_REV(hdr);
-> > +		if (header.rev != 1) {
-> > +			dev_info(&pdev->dev, "Unsupported VSEC revision %d\n",
-> > header.rev);
-> > +			continue;
-> > +		}
-> > +
-> > +		header.id = PCI_VNDR_HEADER_ID(hdr);
-> > +		header.length = PCI_VNDR_HEADER_LEN(hdr);
-> > +
-> > +		/* entry, size, and table offset are the same as DVSEC */
-> > +		pci_read_config_byte(pdev, pos + INTEL_DVSEC_ENTRIES,
-> > &header.num_entries);
-> > +		pci_read_config_byte(pdev, pos + INTEL_DVSEC_SIZE,
-> > &header.entry_size);
-> > +		pci_read_config_dword(pdev, pos + INTEL_DVSEC_TABLE, &table);
-> > +
-> > +		header.tbir = INTEL_DVSEC_TABLE_BAR(table);
-> > +		header.offset = INTEL_DVSEC_TABLE_OFFSET(table);
-> > +
-> > +		ret = intel_vsec_add_dev(pdev, &header, quirks);
-> > +		if (ret)
-> > +			continue;
-> > +
-> > +		have_devices = true;
-> > +	} while (true);
-> > +
-> > +	return have_devices;
-> > +}
-> 
-> I'm wondering if it makes sense to refactor each of the above to something
-> like
-> 
-> int intel_vsec_extract_vsec(...)
-> {
-> 	...
-> }
-> 
-> static bool intel_vsec_walk_dvsec(struct pci_dev *pdev, unsigned long quirks)
-> {
-> 	bool have_devices = false;
-> 	int pos;
-> 
-> 	while ((pos = pci_find_next_ext_capability(pdev, pos,
-> PCI_EXT_CAP_ID_DVSEC))) {
-> 		if (intel_vsec_extract_vsec())
-> 			continue;
-> 
-> 		have_devices = true;
-> 	}
-> 
-> 	return have_devices;
-> }
+Add the missing lvds0 node for the R-Car M3-W+ SoC.
 
-Sure.
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+---
+ arch/arm64/boot/dts/renesas/r8a77961.dtsi | 27 +++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-> 
-> Either way, it may be worth to convert infinite loops to ones with the clear
-> exit condition.
-
-> 
-> ...
-> 
-> > +	/*
-> > +	 * Driver cleanup handled by intel_vsec_remove_aux() which is added
-> > +	 * to the pci device as a devm action
-> 
-> PCI
-> 
-> Grammatical period at the end.
-
-Ack
-
-Thanks
-
-> 
-> > +	 */
+diff --git a/arch/arm64/boot/dts/renesas/r8a77961.dtsi b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
+index 86d59e7e1a87..d324dfd0d1f7 100644
+--- a/arch/arm64/boot/dts/renesas/r8a77961.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
+@@ -2718,6 +2718,33 @@ du_out_hdmi0: endpoint {
+ 				port@2 {
+ 					reg = <2>;
+ 					du_out_lvds0: endpoint {
++						remote-endpoint = <&lvds0_in>;
++					};
++				};
++			};
++		};
++
++		lvds0: lvds@feb90000 {
++			compatible = "renesas,r8a7796-lvds";
++			reg = <0 0xfeb90000 0 0x14>;
++			clocks = <&cpg CPG_MOD 727>;
++			power-domains = <&sysc R8A77961_PD_ALWAYS_ON>;
++			resets = <&cpg 727>;
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++					lvds0_in: endpoint {
++						remote-endpoint = <&du_out_lvds0>;
++					};
++				};
++				port@1 {
++					reg = <1>;
++					lvds0_out: endpoint {
+ 					};
+ 				};
+ 			};
+-- 
+2.30.2
 

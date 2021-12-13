@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CEE47250A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642294729C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbhLMJki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:40:38 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34030 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234676AbhLMJjE (ORCPT
+        id S1344033AbhLMKYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244228AbhLMKQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:39:04 -0500
+        Mon, 13 Dec 2021 05:16:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E18C0497D6;
+        Mon, 13 Dec 2021 01:55:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A5C3FCE0E29;
-        Mon, 13 Dec 2021 09:39:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F831C341DC;
-        Mon, 13 Dec 2021 09:39:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 85068CE0E6B;
+        Mon, 13 Dec 2021 09:55:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329D4C34601;
+        Mon, 13 Dec 2021 09:55:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388340;
-        bh=sADD71pTzPBhbLdqJ/7BhSPOJT1D7QZhlqrCQln+H6s=;
+        s=korg; t=1639389355;
+        bh=YDb7F5W76h8DiV2NsWjBZctH5itXbCwvfBk7Vq9x9tg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFiaG1Eib+XV2zUF/fEYkwLB/FeT7rdJU9+w8aSypJ8NSu+ygeRgLiMlRtSq6Ate2
-         aqAv5+5Ity1lYSb7IFqX7EnpdvqS+nGbV5+8TYf5olLx9A4Wnp2rNkpXFbtfAaplLr
-         zXP93NM11bLQl5uyTqPLuuawL7IEcl+3bwlEyJAI=
+        b=twee9EmHNsWrT+Md04VdyJ0AQm1/9yf3K2beBnRTspPx44TcET+XnmZUPhLHXxtgX
+         qW0TBXFNG6ZAg26oTaAMF8EwELtAxk4CZ2LR789mf+2nnRw9tEdV8cpkG5n3uGdonl
+         CniGGLoHpWmpQt7bZdNUwUvhR2of56mzjI6GqjUU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 4.19 16/74] bpf: Fix the off-by-two error in range markings
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 072/171] btrfs: clear extent buffer uptodate when we fail to write it
 Date:   Mon, 13 Dec 2021 10:29:47 +0100
-Message-Id: <20211213092931.340363391@linuxfoundation.org>
+Message-Id: <20211213092947.493757571@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,63 +48,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Josef Bacik <josef@toxicpanda.com>
 
-commit 2fa7d94afc1afbb4d702760c058dc2d7ed30f226 upstream.
+commit c2e39305299f0118298c2201f6d6cc7d3485f29e upstream.
 
-The first commit cited below attempts to fix the off-by-one error that
-appeared in some comparisons with an open range. Due to this error,
-arithmetically equivalent pieces of code could get different verdicts
-from the verifier, for example (pseudocode):
+I got dmesg errors on generic/281 on our overnight fstests.  Looking at
+the history this happens occasionally, with errors like this
 
-  // 1. Passes the verifier:
-  if (data + 8 > data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
+  WARNING: CPU: 0 PID: 673217 at fs/btrfs/extent_io.c:6848 assert_eb_page_uptodate+0x3f/0x50
+  CPU: 0 PID: 673217 Comm: kworker/u4:13 Tainted: G        W         5.16.0-rc2+ #469
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-2.fc32 04/01/2014
+  Workqueue: btrfs-cache btrfs_work_helper
+  RIP: 0010:assert_eb_page_uptodate+0x3f/0x50
+  RSP: 0018:ffffae598230bc60 EFLAGS: 00010246
+  RAX: 0017ffffc0002112 RBX: ffffebaec4100900 RCX: 0000000000001000
+  RDX: ffffebaec45733c7 RSI: ffffebaec4100900 RDI: ffff9fd98919f340
+  RBP: 0000000000000d56 R08: ffff9fd98e300000 R09: 0000000000000000
+  R10: 0001207370a91c50 R11: 0000000000000000 R12: 00000000000007b0
+  R13: ffff9fd98919f340 R14: 0000000001500000 R15: 0000000001cb0000
+  FS:  0000000000000000(0000) GS:ffff9fd9fbc00000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00007f549fcf8940 CR3: 0000000114908004 CR4: 0000000000370ef0
+  Call Trace:
 
-  // 2. Rejected by the verifier (should still pass):
-  if (data + 7 >= data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
+   extent_buffer_test_bit+0x3f/0x70
+   free_space_test_bit+0xa6/0xc0
+   load_free_space_tree+0x1d6/0x430
+   caching_thread+0x454/0x630
+   ? rcu_read_lock_sched_held+0x12/0x60
+   ? rcu_read_lock_sched_held+0x12/0x60
+   ? rcu_read_lock_sched_held+0x12/0x60
+   ? lock_release+0x1f0/0x2d0
+   btrfs_work_helper+0xf2/0x3e0
+   ? lock_release+0x1f0/0x2d0
+   ? finish_task_switch.isra.0+0xf9/0x3a0
+   process_one_work+0x270/0x5a0
+   worker_thread+0x55/0x3c0
+   ? process_one_work+0x5a0/0x5a0
+   kthread+0x174/0x1a0
+   ? set_kthread_struct+0x40/0x40
+   ret_from_fork+0x1f/0x30
 
-The attempted fix, however, shifts the range by one in a wrong
-direction, so the bug not only remains, but also such piece of code
-starts failing in the verifier:
+This happens because we're trying to read from a extent buffer page that
+is !PageUptodate.  This happens because we will clear the page uptodate
+when we have an IO error, but we don't clear the extent buffer uptodate.
+If we do a read later and find this extent buffer we'll think its valid
+and not return an error, and then trip over this warning.
 
-  // 3. Rejected by the verifier, but the check is stricter than in #1.
-  if (data + 8 >= data_end)
-      return early
-  read *(u64 *)data, i.e. [data; data+7]
+Fix this by also clearing uptodate on the extent buffer when this
+happens, so that we get an error when we do a btrfs_search_slot() and
+find this block later.
 
-The change performed by that fix converted an off-by-one bug into
-off-by-two. The second commit cited below added the BPF selftests
-written to ensure than code chunks like #3 are rejected, however,
-they should be accepted.
-
-This commit fixes the off-by-two error by adjusting new_range in the
-right direction and fixes the tests by changing the range into the
-one that should actually fail.
-
-Fixes: fb2a311a31d3 ("bpf: fix off by one for range markings with L{T, E} patterns")
-Fixes: b37242c773b2 ("bpf: add test cases to bpf selftests to cover all access tests")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211130181607.593149-1-maximmi@nvidia.com
+CC: stable@vger.kernel.org # 5.4+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/verifier.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/extent_io.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3761,7 +3761,7 @@ static void find_good_pkt_pointers(struc
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -4285,6 +4285,12 @@ static void set_btree_ioerr(struct page
+ 		return;
  
- 	new_range = dst_reg->off;
- 	if (range_right_open)
--		new_range--;
-+		new_range++;
- 
- 	/* Examples for register markings:
- 	 *
+ 	/*
++	 * A read may stumble upon this buffer later, make sure that it gets an
++	 * error and knows there was an error.
++	 */
++	clear_bit(EXTENT_BUFFER_UPTODATE, &eb->bflags);
++
++	/*
+ 	 * If we error out, we should add back the dirty_metadata_bytes
+ 	 * to make it consistent.
+ 	 */
 
 

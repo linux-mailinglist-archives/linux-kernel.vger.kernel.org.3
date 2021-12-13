@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C47347340D
+	by mail.lfdr.de (Postfix) with ESMTP id A50FE47340E
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241890AbhLMScB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S241899AbhLMScC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:32:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:34028 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234465AbhLMScB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 13:32:01 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4262 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241892AbhLMSb7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:31:59 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JCVS90FSJz682w5;
-        Tue, 14 Dec 2021 02:30:33 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 19:31:56 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <airlied@linux.ie>, <kraxel@redhat.com>, <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        <stable@vger.kernel.org>,
-        <syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com>
-Subject: [PATCH] drm/virtio: Ensure that objs is not NULL in virtio_gpu_array_put_free()
-Date:   Mon, 13 Dec 2021 19:31:22 +0100
-Message-ID: <20211213183122.838119-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 613C66D;
+        Mon, 13 Dec 2021 10:32:00 -0800 (PST)
+Received: from [10.1.34.138] (e127744.cambridge.arm.com [10.1.34.138])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 494113F793;
+        Mon, 13 Dec 2021 10:31:57 -0800 (PST)
+Subject: Re: [PATCH v1 2/4] perf script: Add "struct machine" parameter to
+ process_event callback
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20211201123334.679131-1-german.gomez@arm.com>
+ <20211201123334.679131-3-german.gomez@arm.com>
+ <D6A3A8F3-9946-44FE-A70F-42977C6F38A1@linux.vnet.ibm.com>
+ <38fd4992-63ae-4871-ddfd-27d40b5c48d2@arm.com> <YbePfOMaiJjoDb3b@kernel.org>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <73ecfe08-f38b-1308-40b5-a1a778323bf5@arm.com>
+Date:   Mon, 13 Dec 2021 18:31:47 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+In-Reply-To: <YbePfOMaiJjoDb3b@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If virtio_gpu_object_shmem_init() fails (e.g. due to fault injection, as it
-happened in the bug report by syzbot), virtio_gpu_array_put_free() could be
-called with objs equal to NULL.
 
-Ensure that objs is not NULL in virtio_gpu_array_put_free(), or otherwise
-return from the function.
+On 13/12/2021 18:22, Arnaldo Carvalho de Melo wrote:
+> [...]
+>
+>> Thanks for the suggestion. It looks like we can skip this patch if we
+>> can get the arch value that way.
+> So the first one is already upstream, will you post a v2?
+>
+> - Arnaldo
 
-Cc: stable@vger.kernel.org # 5.13.x
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reported-by: syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com
-Fixes: 377f8331d0565 ("drm/virtio: fix possible leak/unlock virtio_gpu_object_array")
----
- drivers/gpu/drm/virtio/virtgpu_gem.c | 3 +++
- 1 file changed, 3 insertions(+)
+Hi Arnaldo,
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_gem.c b/drivers/gpu/drm/virtio/virtgpu_gem.c
-index 2de61b63ef91..48d3c9955f0d 100644
---- a/drivers/gpu/drm/virtio/virtgpu_gem.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_gem.c
-@@ -248,6 +248,9 @@ void virtio_gpu_array_put_free(struct virtio_gpu_object_array *objs)
- {
- 	u32 i;
- 
-+	if (!objs)
-+		return;
-+
- 	for (i = 0; i < objs->nents; i++)
- 		drm_gem_object_put(objs->objs[i]);
- 	virtio_gpu_array_free(objs);
--- 
-2.32.0
+I sent a v2 where this patch was removed. The upstreamed patch (1/4
+here) remained the same.
 
+https://lore.kernel.org/all/20211207180653.1147374-1-german.gomez@arm.com/

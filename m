@@ -2,179 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6512B472F8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B65472F93
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239610AbhLMOjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        id S239639AbhLMOkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239581AbhLMOjl (ORCPT
+        with ESMTP id S239601AbhLMOkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:39:41 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF619C061574;
-        Mon, 13 Dec 2021 06:39:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=uhXSvJxIfSiLhz6ER94oXeBAN14hDZk1W2orwDIFDJ8=; b=wTs6dZWb1Z8yzeeKu4je0rr93P
-        ieOVZ3WMTi/QlC4WbhA6d+nujVqpacZoBdl1/nXs+kLZ+MfbZShNVwSTsVISQhUwtIN1OY4hXpgo7
-        fNSSFy3iHWwoW7x1FidQBzZ+v1w7FE8RftnxtGj1p+5GAeg627P617nL0FeNJy/DaTYBVNlOSmLEX
-        ROYl9hz3taCMh8b7Xc3y/difEXhIZe4jiqBCTO1/ZblzjiPh3OGZ3aPiQGrBa4hLME/ql1aVvjDY+
-        5uCEFA6drR/jUHx3PU9curUuNTVGp4ynD9sfbfLLmj5DOxVFrzgdPT6BX+cbNzc0y+Q6oOwiY/fZ1
-        0pMGZr6g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwmUC-00CsXQ-Eb; Mon, 13 Dec 2021 14:39:28 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: [PATCH v3 3/3] vmcore: Convert read_from_oldmem() to take an iov_iter
-Date:   Mon, 13 Dec 2021 14:39:27 +0000
-Message-Id: <20211213143927.3069508-4-willy@infradead.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211213143927.3069508-1-willy@infradead.org>
-References: <20211213143927.3069508-1-willy@infradead.org>
+        Mon, 13 Dec 2021 09:40:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F18BC061574;
+        Mon, 13 Dec 2021 06:40:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78A6D61122;
+        Mon, 13 Dec 2021 14:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D67D1C34603;
+        Mon, 13 Dec 2021 14:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639406408;
+        bh=RPDqcfcKUnhDXD8xb6F15PCIowJnZcHYofXEFb1eH4Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CWtqLbO7uG5bRF0ZkGcPLS2rHAgRN5JY05N6YC0JeTQ7YANaRag7ZzC6JUBU9Uvnk
+         EJ+DhLRjFhVDpjDV6+O78DCBOK2DqDD+mikheNiq+7iz/sU4qqix0uI1WmpVM1Pz4j
+         KowXSP3/XAjI/fLoi1lfLKTDft6Iv3xdpnwt1ouc9eZ3Ov5dfxMu5aO2plS7nBggjM
+         cpuXRTLlvKJmw4poG8L8fF3JwhmCvypbeg/l1dosGwqUZs86bMELq7wnaCs1NSRk5F
+         GjnABVmwuit53gFrP184QEHUUov3baTIsjE1u3KSWjw7Ua4NOK7K4WiQu0Vh0P6/KM
+         9SfrBQ5QxHEag==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id BC66F6098C;
+        Mon, 13 Dec 2021 14:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: bcmgenet: Fix NULL vs IS_ERR() checking
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163940640876.17097.7671264988439271438.git-patchwork-notify@kernel.org>
+Date:   Mon, 13 Dec 2021 14:40:08 +0000
+References: <20211211140154.23613-1-linmq006@gmail.com>
+In-Reply-To: <20211211140154.23613-1-linmq006@gmail.com>
+To:     =?utf-8?b?5p6X5aaZ5YCpIDxsaW5tcTAwNkBnbWFpbC5jb20+?=@ci.codeaurora.org
+Cc:     opendmb@gmail.com, f.fainelli@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the read_from_oldmem() wrapper introduced earlier and convert
-all the remaining callers to pass an iov_iter.
+Hello:
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- arch/x86/kernel/crash_dump_64.c |  7 +++++-
- fs/proc/vmcore.c                | 40 +++++++++++++--------------------
- include/linux/crash_dump.h      | 10 ++++-----
- 3 files changed, 25 insertions(+), 32 deletions(-)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/arch/x86/kernel/crash_dump_64.c b/arch/x86/kernel/crash_dump_64.c
-index f922d51c9d1f..0fa87648e55c 100644
---- a/arch/x86/kernel/crash_dump_64.c
-+++ b/arch/x86/kernel/crash_dump_64.c
-@@ -55,6 +55,11 @@ ssize_t copy_oldmem_page_encrypted(struct iov_iter *iter, unsigned long pfn,
- 
- ssize_t elfcorehdr_read(char *buf, size_t count, u64 *ppos)
- {
--	return read_from_oldmem(buf, count, ppos, 0,
-+	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-+	struct iov_iter iter;
-+
-+	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-+
-+	return read_from_oldmem(&iter, count, ppos,
- 				cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
- }
-diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-index 7b25f568d20d..bee05b40196b 100644
---- a/fs/proc/vmcore.c
-+++ b/fs/proc/vmcore.c
-@@ -133,7 +133,7 @@ static int open_vmcore(struct inode *inode, struct file *file)
- }
- 
- /* Reads a page from the oldmem device from given offset. */
--static ssize_t read_from_oldmem_iter(struct iov_iter *iter, size_t count,
-+ssize_t read_from_oldmem(struct iov_iter *iter, size_t count,
- 			 u64 *ppos, bool encrypted)
- {
- 	unsigned long pfn, offset;
-@@ -181,27 +181,6 @@ static ssize_t read_from_oldmem_iter(struct iov_iter *iter, size_t count,
- 	return read;
- }
- 
--ssize_t read_from_oldmem(char *buf, size_t count,
--			 u64 *ppos, int userbuf,
--			 bool encrypted)
--{
--	struct iov_iter iter;
--	struct iovec iov;
--	struct kvec kvec;
--
--	if (userbuf) {
--		iov.iov_base = (__force void __user *)buf;
--		iov.iov_len = count;
--		iov_iter_init(&iter, READ, &iov, 1, count);
--	} else {
--		kvec.iov_base = buf;
--		kvec.iov_len = count;
--		iov_iter_kvec(&iter, READ, &kvec, 1, count);
--	}
--
--	return read_from_oldmem_iter(&iter, count, ppos, encrypted);
--}
--
- /*
-  * Architectures may override this function to allocate ELF header in 2nd kernel
-  */
-@@ -221,7 +200,12 @@ void __weak elfcorehdr_free(unsigned long long addr)
-  */
- ssize_t __weak elfcorehdr_read(char *buf, size_t count, u64 *ppos)
- {
--	return read_from_oldmem(buf, count, ppos, 0, false);
-+	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-+	struct iov_iter iter;
-+
-+	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-+
-+	return read_from_oldmem(&iter, count, ppos, false);
- }
- 
- /*
-@@ -229,7 +213,13 @@ ssize_t __weak elfcorehdr_read(char *buf, size_t count, u64 *ppos)
-  */
- ssize_t __weak elfcorehdr_read_notes(char *buf, size_t count, u64 *ppos)
- {
--	return read_from_oldmem(buf, count, ppos, 0, cc_platform_has(CC_ATTR_MEM_ENCRYPT));
-+	struct kvec kvec = { .iov_base = buf, .iov_len = count };
-+	struct iov_iter iter;
-+
-+	iov_iter_kvec(&iter, READ, &kvec, 1, count);
-+
-+	return read_from_oldmem(&iter, count, ppos,
-+			cc_platform_has(CC_ATTR_MEM_ENCRYPT));
- }
- 
- /*
-@@ -404,7 +394,7 @@ static ssize_t __read_vmcore(struct iov_iter *iter, loff_t *fpos)
- 					    m->offset + m->size - *fpos,
- 					    iter->count);
- 			start = m->paddr + *fpos - m->offset;
--			tmp = read_from_oldmem_iter(iter, tsz, &start,
-+			tmp = read_from_oldmem(iter, tsz, &start,
- 					cc_platform_has(CC_ATTR_MEM_ENCRYPT));
- 			if (tmp < 0)
- 				return tmp;
-diff --git a/include/linux/crash_dump.h b/include/linux/crash_dump.h
-index a1cf7d5c03c7..0f3a656293b0 100644
---- a/include/linux/crash_dump.h
-+++ b/include/linux/crash_dump.h
-@@ -134,13 +134,11 @@ static inline int vmcore_add_device_dump(struct vmcoredd_data *data)
- #endif /* CONFIG_PROC_VMCORE_DEVICE_DUMP */
- 
- #ifdef CONFIG_PROC_VMCORE
--ssize_t read_from_oldmem(char *buf, size_t count,
--			 u64 *ppos, int userbuf,
--			 bool encrypted);
-+ssize_t read_from_oldmem(struct iov_iter *iter, size_t count,
-+			 u64 *ppos, bool encrypted);
- #else
--static inline ssize_t read_from_oldmem(char *buf, size_t count,
--				       u64 *ppos, int userbuf,
--				       bool encrypted)
-+static inline ssize_t read_from_oldmem(struct iov_iter *iter, size_t count,
-+				       u64 *ppos, bool encrypted)
- {
- 	return -EOPNOTSUPP;
- }
+On Sat, 11 Dec 2021 14:01:53 +0000 you wrote:
+> The phy_attach() function does not return NULL. It returns error pointers.
+> 
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/net/ethernet/broadcom/genet/bcmmii.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+Here is the summary with links:
+  - net: bcmgenet: Fix NULL vs IS_ERR() checking
+    https://git.kernel.org/netdev/net/c/ab8eb798ddab
+
+You are awesome, thank you!
 -- 
-2.33.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D193472098
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBA847209D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbhLMFjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 00:39:40 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:49204 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230204AbhLMFjj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 00:39:39 -0500
-Received: from localhost.localdomain (unknown [124.16.138.122])
-        by APP-05 (Coremail) with SMTP id zQCowAA3PACC3LZhpLy_Ag--.14566S2;
-        Mon, 13 Dec 2021 13:39:14 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     airlied@redhat.com, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm/ast: potential dereference of null pointer
-Date:   Mon, 13 Dec 2021 13:39:12 +0800
-Message-Id: <20211213053912.2167066-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S231949AbhLMFoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 00:44:02 -0500
+Received: from muru.com ([72.249.23.125]:37822 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230204AbhLMFoB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 00:44:01 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 2C9D7809F;
+        Mon, 13 Dec 2021 05:44:42 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 07:43:58 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Jarkko Nikula <jarkko.nikula@bitmer.com>
+Cc:     linux-omap@vger.kernel.org,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] ARM: dts: Fix timer regression for beagleboard revision c
+Message-ID: <Ybbdnr96H58TkytD@atomide.com>
+References: <20211125144834.52457-1-tony@atomide.com>
+ <ef843afa-c99d-328d-853a-00ef293a47f2@bitmer.com>
+ <20211212190455.qbggbhmr5nquw7bw@bitmer.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAA3PACC3LZhpLy_Ag--.14566S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtryfuw15Zr1fZr1rXrb_yoWfuFc_Ga
-        1UWas5Gry7K34Du3W2v34Sgry0934DuFs5Xw1UtFZay3s8try7C3sIgr1Fgr4UuF47ZryD
-        Ja17tFy3Crn7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GrWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbDDG5UUUUU==
-X-Originating-IP: [124.16.138.122]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211212190455.qbggbhmr5nquw7bw@bitmer.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-he return value of kzalloc() needs to be checked.
-To avoid use of null pointer '&ast_state->base' in case of the
-failure of alloc.
+* Jarkko Nikula <jarkko.nikula@bitmer.com> [211212 19:05]:
+> On Sat, Dec 11, 2021 at 05:30:57PM +0200, Jarkko Nikula wrote:
+> This I used years before your patch and by some reason I confused to use
+> new omap3-beagle-ab4.dtb when testing your patch yesterday:
+> 
+> > cat arch/arm/boot/dts/omap3-beagle-ab4.dtb >>arch/arm/boot/zImage
+> 
+> without realizing my Beagle Board version is not between A to B4 but C2.
+> So when using the omap3-beagle.dtb your patch fixes the regression I
+> found.
+> 
+> Tested-by: Jarkko Nikula <jarkko.nikula@bitmer.com>
 
-Fixes: f0adbc382b8b ("drm/ast: Allocate initial CRTC state of the correct size")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpu/drm/ast/ast_mode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+OK good to hear omap3-beagle.dtb now works for beagles that don't have
+the A to B4 hardware timer issue :) And thanks for testing.
 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 36d9575aa27b..67f8e3f90ea2 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -1120,7 +1120,8 @@ static void ast_crtc_reset(struct drm_crtc *crtc)
- 	if (crtc->state)
- 		crtc->funcs->atomic_destroy_state(crtc, crtc->state);
- 
--	__drm_atomic_helper_crtc_reset(crtc, &ast_state->base);
-+	if (ast_state)
-+		__drm_atomic_helper_crtc_reset(crtc, &ast_state->base);
- }
- 
- static struct drm_crtc_state *
--- 
-2.25.1
+It seems the beagle revisions A to B4 are broken for any kind of power
+management as the clockevent timer for those boards is not always on.
+Probably not worth spending much effort on those. Maybe the PMIC could
+be reconfigured on the buggy revisions in addition to the timer quirks
+if somebody still cares for those board revisions.
 
+Regards,
+
+Tony

@@ -2,88 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7CD4734F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3264734FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242387AbhLMTaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:30:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41026 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240295AbhLMTaB (ORCPT
+        id S242187AbhLMTax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230154AbhLMTaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:30:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639423800;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l3/Ksz/+rMbZTa7dn+INhZ/hCEUhknY7SkJcQlX+fiQ=;
-        b=cu70exRGGvc8uczNnqZc9aqYKjpOHMQ5dkigHOp+2gvoWKpP8MqltGezWAtmuPrV9x452G
-        kPnEboof57mC66TMgQGDFirGOfKIhd/CiUi+Zqi90MCSALx1gkIQideJeWulfN390aejha
-        SLNshkyocwrhEJvjd3cqkAYtde41SjM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-542-I2mLPfDnPhWeQxlvw16c-w-1; Mon, 13 Dec 2021 14:29:57 -0500
-X-MC-Unique: I2mLPfDnPhWeQxlvw16c-w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 13 Dec 2021 14:30:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FE4C061574;
+        Mon, 13 Dec 2021 11:30:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C518164146;
-        Mon, 13 Dec 2021 19:29:55 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.17.223])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CD8E413AB3;
-        Mon, 13 Dec 2021 19:29:53 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-api <linux-api@vger.kernel.org>,
-        Jann Horn <jannh@google.com>,
-        libc-alpha <libc-alpha@sourceware.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        paulmck <paulmck@kernel.org>
-Subject: Re: rseq + membarrier programming model
-References: <87tufctk82.fsf@oldenburg.str.redhat.com>
-        <697825714.30478.1639423180784.JavaMail.zimbra@efficios.com>
-Date:   Mon, 13 Dec 2021 20:29:50 +0100
-In-Reply-To: <697825714.30478.1639423180784.JavaMail.zimbra@efficios.com>
-        (Mathieu Desnoyers's message of "Mon, 13 Dec 2021 14:19:40 -0500
-        (EST)")
-Message-ID: <87ilvstia9.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6282E611E0;
+        Mon, 13 Dec 2021 19:30:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A17C34600;
+        Mon, 13 Dec 2021 19:30:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639423850;
+        bh=YCIulPuC7rz/g+20RoE3fcDBtrYWE3Qufvo06cYhoUs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NzSBW4b4YioKli+ClrzJcc6U6jeGIiTCn5lSYpzRYJY/UC4hLUxHzuZiz8P6mx6Sx
+         gNrLTOJ9/UjQH0PYjuCkcwdGCqw1lkYu3EaL0KayS+7fsmsODlpG82MgC56cmK2Mql
+         kM2SNWYBQaLhXnFzljumqfj9BYYhELC//tEgFz32JZLdh/slGPz/HHyjfPbgoA2HPc
+         HUV/ohrsPGPyXS1o4RXN6PFqlqLvaXBUyg0DQuATmEj1vLSOnhrvc0rWQQLkmdRER9
+         SMBeXrMqirdXDf2LPsEcHSC+qSoyLU9UfxoAndKYECV4Ox7gQfza/ZhCev7gHVHUWH
+         zJiITef16s25g==
+Received: by mail-ed1-f46.google.com with SMTP id w1so55484998edc.6;
+        Mon, 13 Dec 2021 11:30:50 -0800 (PST)
+X-Gm-Message-State: AOAM532ETaKAMfLREdyUnqXpXeXabpEN9xybcLI5q9Jd7iiOlCDFJm61
+        7jRQjn3SJeACsermt6dD4K3vdGtDx+sch5IUFw==
+X-Google-Smtp-Source: ABdhPJy++oHUM39e5Ms27cPmoi1TEiua3mJxb9d2Rx+2TgB+kXwcivxSMb5bFNJbaNDO7q7u0b1xHbIR//4B6RpjTC8=
+X-Received: by 2002:a17:906:3b18:: with SMTP id g24mr357822ejf.27.1639423849162;
+ Mon, 13 Dec 2021 11:30:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <1638864419-17501-1-git-send-email-wellslutw@gmail.com>
+ <1638864419-17501-2-git-send-email-wellslutw@gmail.com> <YbPHxVf1vXZj9GOC@robh.at.kernel.org>
+ <CAFnkrsmXu9ceSQ7rzOAFy_kP6JMa7GvY7HCbT=_wfskH6wXuSw@mail.gmail.com>
+In-Reply-To: <CAFnkrsmXu9ceSQ7rzOAFy_kP6JMa7GvY7HCbT=_wfskH6wXuSw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 13 Dec 2021 13:30:36 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+5nM2L=p13CSq8FRZX0sMykbXdyBatDR7McUXkv5NXzA@mail.gmail.com>
+Message-ID: <CAL_Jsq+5nM2L=p13CSq8FRZX0sMykbXdyBatDR7McUXkv5NXzA@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 1/2] devicetree: bindings: net: Add bindings
+ doc for Sunplus SP7021.
+To:     =?UTF-8?B?5ZGC6Iqz6aiw?= <wellslutw@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wells Lu <wells.lu@sunplus.com>,
+        Vincent Shih <vincent.shih@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Mathieu Desnoyers:
-
->> Could it fall back to
->> MEMBARRIER_CMD_GLOBAL instead?
+On Sat, Dec 11, 2021 at 1:35 PM =E5=91=82=E8=8A=B3=E9=A8=B0 <wellslutw@gmai=
+l.com> wrote:
 >
-> No. CMD_GLOBAL does not issue the required rseq fence used by the
-> algorithm discussed. Also, CMD_GLOBAL has quite a few other shortcomings:
-> it takes a while to execute, and is incompatible with nohz_full kernels.
+> Hi Rob,
+>
+> Thank you very much for your review.
+> Please see my replies below:
+>
+> > Add bindings documentation for Sunplus SP7021.
+> >
+> [...]
+> > > +
+> > > +  interrupts:
+> > > +    description: |
+> > > +      Contains number and type of interrupt. Number should be 66.
+> >
+> > Drop. That's every 'interrupts' and the exact number is outside the
+> > scope of the binding.
+>
+> Yes, I'll drop the descriptions next patch.
+> interrupts property will be:
+>
+>   interrupts:
+>     maxItems: 1
+>
+>
+> [...]
+> > > +
+> > > +  mdio:
+> >
+> > Just need:
+> >
+> >        $ref: mdio.yaml#
+> >        unevaluatedProperties: false
+> >
+> > and drop the rest.
+>
+> Yes, I'll modify mdio node next patch.
+> mdio node will be:
+>
+>   mdio:
+>     $ref: mdio.yaml#
+>     unevaluatedProperties: false
+>
+>
+> > > +    type: object
+> > > +    description: external MDIO Bus
+> > > +
+> > > +    properties:
+> > > +      "#address-cells":
+> > > +        const: 1
+> > > +
+> > > +      "#size-cells":
+> > > +        const: 0
+> > > +
+> > > +    patternProperties:
+> > > +      "^ethernet-phy@[0-9a-f]+$":
+> > > +        type: object
+> > > +        description: external PHY node
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            minimum: 0
+> > > +            maximum: 30
+>
+> Can I limit value of 'reg' to no more than 30?
 
-What about using sched_setcpu to move the current thread to the same CPU
-(and move it back afterwards)?  Surely that implies the required sort of
-rseq barrier that MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ with
-MEMBARRIER_CMD_FLAG_CPU performs?
+Isn't that the limit for any MDIO bus? I guess normally 31 is also
+valid? I'm not really sure it is worth adding just for that 1 possible
+value. Within the range of valid addresses, we can't ever validate
+that a DT has the correct address.
 
-That is possible even without membarrier, so I wonder why registration
-of intent is needed for MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ.
-
-> In order to make sure the programming model is the same for expedited
-> private/global plain/sync-core/rseq membarrier commands, we require that
-> each process perform a registration beforehand.
-
-Hmm.  At least it's not possible to unregister again.
-
-But I think it would be really useful to have some of these barriers
-available without registration, possibly in a more expensive form.
-
-Thanks,
-Florian
-
+Rob

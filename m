@@ -2,136 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE13472CF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FAE472CF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbhLMNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbhLMNNs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:13:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D63CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:13:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5A930CE1020
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:13:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69352C34601;
-        Mon, 13 Dec 2021 13:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639401224;
-        bh=+H14nh2/sZ0LVCVrXezcSj2QeyM904bTsAn6bMsPTig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sb0dpr6TwSBZACfF6GkoHi3NqvetedwQqwpymVw11z35Kbo+1p2VXZWApQACXQx7e
-         bSCcOo7/ZEFmOu5nSTb4g5D7hggkaMlRZG9pjF+GvRqWYXAVCLFeMpWxeDr9cAx0Gr
-         DBEhLPr2dcQiZuDcYNuZCcMSivgJut/WpnRGVAM1WWelDMI53khcw87qz6Yf8TGmYW
-         ZrJMuNLI49w1oqhtLhrv+sx41KeNS3fF761/uROQqa+TkYz7ZIdQ9Yyu+bTwgyBMyn
-         RzBWyoyqz/gwrpz2Dnv7UzkycKUYUCSHNQaWtT8/dR5ZBdHYA5W8eEXaXWdWWzTBW+
-         tk06VB/II0RWg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E17C2405D8; Mon, 13 Dec 2021 10:13:42 -0300 (-03)
-Date:   Mon, 13 Dec 2021 10:13:42 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH 2/2] perf inject: Fix segfault due to perf_data__fd()
- without open
-Message-ID: <YbdHBhw7lk/6vKd5@kernel.org>
-References: <20211213084829.114772-1-adrian.hunter@intel.com>
- <20211213084829.114772-3-adrian.hunter@intel.com>
+        id S237253AbhLMNOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:14:05 -0500
+Received: from foss.arm.com ([217.140.110.172]:54580 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232266AbhLMNOE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 08:14:04 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA8881FB;
+        Mon, 13 Dec 2021 05:14:03 -0800 (PST)
+Received: from [10.57.7.82] (unknown [10.57.7.82])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 755A53F793;
+        Mon, 13 Dec 2021 05:14:01 -0800 (PST)
+Subject: Re: [PATCH] perf expr: Fix return value of ids__new
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <864ad02d-6afe-791c-f742-56582b633482@arm.com>
+ <20211213070956.15119-1-linmq006@gmail.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <d0fabb42-399f-2b72-412b-4f5ba6b9eea4@arm.com>
+Date:   Mon, 13 Dec 2021 13:13:47 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213084829.114772-3-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20211213070956.15119-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Dec 13, 2021 at 10:48:29AM +0200, Adrian Hunter escreveu:
-> The fixed commit attempts to get the output file descriptor even if the
-> file was never opened e.g.
-> 
->  $ perf record uname
->  Linux
->  [ perf record: Woken up 1 times to write data ]
->  [ perf record: Captured and wrote 0.002 MB perf.data (7 samples) ]
->  $ perf inject -i perf.data --vm-time-correlation=dry-run
->  Segmentation fault (core dumped)
->  $ gdb --quiet perf
->  Reading symbols from perf...
->  (gdb) r inject -i perf.data --vm-time-correlation=dry-run
->  Starting program: /home/ahunter/bin/perf inject -i perf.data --vm-time-correlation=dry-run
->  [Thread debugging using libthread_db enabled]
->  Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-> 
->  Program received signal SIGSEGV, Segmentation fault.
->  __GI___fileno (fp=0x0) at fileno.c:35
->  35      fileno.c: No such file or directory.
->  (gdb) bt
->  #0  __GI___fileno (fp=0x0) at fileno.c:35
->  #1  0x00005621e48dd987 in perf_data__fd (data=0x7fff4c68bd08) at util/data.h:72
->  #2  perf_data__fd (data=0x7fff4c68bd08) at util/data.h:69
->  #3  cmd_inject (argc=<optimized out>, argv=0x7fff4c69c1f0) at builtin-inject.c:1017
->  #4  0x00005621e4936783 in run_builtin (p=0x5621e4ee6878 <commands+600>, argc=4, argv=0x7fff4c69c1f0) at perf.c:313
->  #5  0x00005621e4897d5c in handle_internal_command (argv=<optimized out>, argc=<optimized out>) at perf.c:365
->  #6  run_argv (argcp=<optimized out>, argv=<optimized out>) at perf.c:409
->  #7  main (argc=4, argv=0x7fff4c69c1f0) at perf.c:539
->  (gdb)
+Hi Miaoqian,
 
-Thanks, applied.
+Fails to build due to missing import: "#import <linux/err.h>".
 
-- Arnaldo
+Could you please verify?
 
- 
-> Fixes: 0ae03893623d ("perf tools: Pass a fd to perf_file_header__read_pipe()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Other than that, it looks good to me. I shared the testing below:
+
+On 13/12/2021 07:09, Miaoqian Lin wrote:
+> callers of ids__new() function only do NULL checking for the return
+> value. ids__new() calles hashmap__new(), which may return
+> ERR_PTR(-ENOMEM). Instead of changing the checking one-by-one.
+> return NULL instead of ERR_PTR(-ENOMEM) to keep
+> consistent.
+>
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > ---
->  tools/perf/builtin-inject.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index af70f1c72052..409b721666cb 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -755,12 +755,16 @@ static int parse_vm_time_correlation(const struct option *opt, const char *str,
->  	return inject->itrace_synth_opts.vm_tm_corr_args ? 0 : -ENOMEM;
+>  tools/perf/util/expr.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+> index 1d532b9fed29..aabdc112300c 100644
+> --- a/tools/perf/util/expr.c
+> +++ b/tools/perf/util/expr.c
+> @@ -65,7 +65,13 @@ static bool key_equal(const void *key1, const void *key2,
+>  
+>  struct hashmap *ids__new(void)
+>  {
+> -	return hashmap__new(key_hash, key_equal, NULL);
+> +	struct hashmap *hash;
+> +
+> +	hash = hashmap__new(key_hash, key_equal, NULL);
+> +	if (IS_ERR(hash))
+> +		return NULL;
+> +	else
+> +		return hash;
 >  }
 >  
-> +static int output_fd(struct perf_inject *inject)
-> +{
-> +	return inject->in_place_update ? -1 : perf_data__fd(&inject->output);
-> +}
-> +
->  static int __cmd_inject(struct perf_inject *inject)
->  {
->  	int ret = -EINVAL;
->  	struct perf_session *session = inject->session;
-> -	struct perf_data *data_out = &inject->output;
-> -	int fd = inject->in_place_update ? -1 : perf_data__fd(data_out);
-> +	int fd = output_fd(inject);
->  	u64 output_data_offset;
->  
->  	signal(SIGINT, sig_handler);
-> @@ -1015,7 +1019,7 @@ int cmd_inject(int argc, const char **argv)
->  	}
->  
->  	inject.session = __perf_session__new(&data, repipe,
-> -					     perf_data__fd(&inject.output),
-> +					     output_fd(&inject),
->  					     &inject.tool);
->  	if (IS_ERR(inject.session)) {
->  		ret = PTR_ERR(inject.session);
-> -- 
-> 2.25.1
+>  void ids__free(struct hashmap *ids)
+Before this patch, perf-test was segfaulting instead of a graceful fail.
+I think this could have been an issue in the perf tool as well.
 
--- 
+(I forced hashmap__new in "tools/perf/util/hashmap.c" to always return
+the error for the purposes of the test).
 
-- Arnaldo
+  $ make DEBUG=1 NO_LIBBPF=1 # builds with tools/perf/util/hashmap.c
+  $ ./perf test 7 -v
+  Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
+   7: Simple expression parser                                        :
+  --- start ---
+  test child forked, pid 1953536
+  perf: Segmentation fault
+  Obtained 16 stack frames.
+  ./perf(dump_stack+0x31) [0x559222b3ae48]
+  ./perf(sighandler_dump_stack+0x33) [0x559222b3af30]
+  /lib/x86_64-linux-gnu/libc.so.6(+0x4620f) [0x7ff81df6220f]
+  ./perf(hashmap__size+0x23) [0x559222bf9f47]
+  ./perf(ids__union+0x5f) [0x559222be1f0e]
+  ./perf(+0x2d9ba8) [0x559222ac7ba8]
+  ./perf(+0x2da223) [0x559222ac8223]
+  ./perf(+0x2a5fe9) [0x559222a93fe9]
+  ./perf(+0x2a6119) [0x559222a94119]
+  ./perf(+0x2a6de7) [0x559222a94de7]
+  ./perf(cmd_test+0x25f) [0x559222a95686]
+  ./perf(+0x2e4d25) [0x559222ad2d25]
+  ./perf(+0x2e4faa) [0x559222ad2faa]
+  ./perf(+0x2e50fd) [0x559222ad30fd]
+  ./perf(main+0x29d) [0x559222ad3500]
+  /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf2) [0x7ff81df430b2]
+  test child interrupted
+  ---- end ----
+  Simple expression parser: FAILED!
+
+After the patch:
+
+  $ make DEBUG=1 NO_LIBBPF=1
+  $ ./perf test 7 -v
+  Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
+   7: Simple expression parser                                        :
+  --- start ---
+  test child forked, pid 1960026
+  FAILED tests/expr.c:16 ids__new
+  FAILED tests/expr.c:16 ids__new
+  FAILED tests/expr.c:73 ids_union (-1 != 0)
+  test child finished with -1
+  ---- end ----
+
+  Simple expression parser: FAILED!
+
+so with the missing import fixex:
+
+Tested-by: German Gomez <german.gomez@arm.com>
+Reviewed-by: German Gomez <german.gomez@arm.com>
+

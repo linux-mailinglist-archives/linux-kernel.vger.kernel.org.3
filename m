@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 703CC47259C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8E147259F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbhLMJon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S234325AbhLMJow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbhLMJkO (ORCPT
+        with ESMTP id S234505AbhLMJkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:40:14 -0500
+        Mon, 13 Dec 2021 04:40:24 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2747EC079797;
-        Mon, 13 Dec 2021 01:38:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279EC07E5C2;
+        Mon, 13 Dec 2021 01:38:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 730E5CE0E63;
-        Mon, 13 Dec 2021 09:38:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23104C00446;
-        Mon, 13 Dec 2021 09:38:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BAF64CE0E29;
+        Mon, 13 Dec 2021 09:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D94CC341C5;
+        Mon, 13 Dec 2021 09:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388311;
-        bh=rlPbh9gxhCyPgkPTHxnT1/0U3yNoE82moenTcsncODU=;
+        s=korg; t=1639388315;
+        bh=HcQ4cecorWhypCpny4v4Heqgm4qQL2DcblPszlVCKvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hxcMQg7I6ofhAqORQMCmAxUf+JW43aLjRzi2SyCyyoh8a9Wl1EDmKfX5bZ947b3dy
-         RYG3OzTIUyYcArYx30Y7hSx2Rg5hhDKqH+tnOcxFycQbX0dKKzBhKYxlhWt0MRJYbX
-         exywWVNXaxe6ahL3h2sDcipMn+h82d9GG+RC2XpQ=
+        b=2rANsKKxQ8Y8M1q+8k2h95+oZ4Wnt5nDukCXUY7J+MHsgW6IVqxD8gB2MVETuB/Tv
+         Wj4el+lqGom4NSvRQy4PZozQmErtI/hB8bZDFJKuakXy3f7tJXUeNR2wbSc4NJEIAb
+         1bve3l5Om7XsyJd97W+q+BHb+CCBBfsPAUo8AYew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        stable@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.14 39/53] iio: trigger: Fix reference counting
-Date:   Mon, 13 Dec 2021 10:30:18 +0100
-Message-Id: <20211213092929.656739376@linuxfoundation.org>
+Subject: [PATCH 4.14 40/53] iio: trigger: stm32-timer: fix MODULE_ALIAS
+Date:   Mon, 13 Dec 2021 10:30:19 +0100
+Message-Id: <20211213092929.695225562@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
 References: <20211213092928.349556070@linuxfoundation.org>
@@ -50,45 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Alyssa Ross <hi@alyssa.is>
 
-commit a827a4984664308f13599a0b26c77018176d0c7c upstream.
+commit 893621e0606747c5bbefcaf2794d12c7aa6212b7 upstream.
 
-In viio_trigger_alloc() device_initialize() is used to set the initial
-reference count of the trigger to 1. Then another get_device() is called on
-trigger. This sets the reference count to 2 before the trigger is returned.
+modprobe can't handle spaces in aliases.
 
-iio_trigger_free(), which is the matching API to viio_trigger_alloc(),
-calls put_device() which decreases the reference count by 1. But the second
-reference count acquired in viio_trigger_alloc() is never dropped.
-
-As a result the iio_trigger_release() function is never called and the
-memory associated with the trigger is never freed.
-
-Since there is no reason for the trigger to start its lifetime with two
-reference counts just remove the extra get_device() in
-viio_trigger_alloc().
-
-Fixes: 5f9c035cae18 ("staging:iio:triggers. Add a reference get to the core for triggers.")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Acked-by: Nuno Sá <nuno.sa@analog.com>
-Link: https://lore.kernel.org/r/20211024092700.6844-2-lars@metafoo.de
+Fixes: 93fbe91b5521 ("iio: Add STM32 timer trigger driver")
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+Link: https://lore.kernel.org/r/20211125182850.2645424-1-hi@alyssa.is
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/industrialio-trigger.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/iio/trigger/stm32-timer-trigger.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/industrialio-trigger.c
-+++ b/drivers/iio/industrialio-trigger.c
-@@ -549,7 +549,6 @@ static struct iio_trigger *viio_trigger_
- 		irq_modify_status(trig->subirq_base + i,
- 				  IRQ_NOREQUEST | IRQ_NOAUTOEN, IRQ_NOPROBE);
- 	}
--	get_device(&trig->dev);
+--- a/drivers/iio/trigger/stm32-timer-trigger.c
++++ b/drivers/iio/trigger/stm32-timer-trigger.c
+@@ -886,6 +886,6 @@ static struct platform_driver stm32_time
+ };
+ module_platform_driver(stm32_timer_trigger_driver);
  
- 	return trig;
- 
+-MODULE_ALIAS("platform: stm32-timer-trigger");
++MODULE_ALIAS("platform:stm32-timer-trigger");
+ MODULE_DESCRIPTION("STMicroelectronics STM32 Timer Trigger driver");
+ MODULE_LICENSE("GPL v2");
 
 

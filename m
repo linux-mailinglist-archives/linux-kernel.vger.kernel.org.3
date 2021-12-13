@@ -2,137 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6186547353C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851DB47353D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240939AbhLMTsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:48:04 -0500
-Received: from mga14.intel.com ([192.55.52.115]:36201 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240623AbhLMTsD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:48:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639424883; x=1670960883;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BXOlpb85cWRWIL2HuIS1h4sB0JpmQfhe0W8/DKIs/2A=;
-  b=UZgnueMNgj9jaN0KfdGlc/+wTFTwGqcH4xLmawDO8rZrWZqmh2m7wJp5
-   /jq12qffGxJYwCyVJRDyXLq4CLlKANsbNWPUOSYUyqb9ZNlB1PxMFXrti
-   WThooonjjfM28sx/NyCNS3HaZ83/SxpQFdrQ2uRSeR3gvJoGGUovL1TSd
-   x1LxTkDZMw4At7z7gsrU+k0WTVsrlLtgwXBgWOjFQeyFPfj5gsCPlXR7F
-   V6w10YoNfV1T6QVcMpGMNiEi595kUcKauJhlQwLwANJwYFnD2VS/iTrn9
-   vmFQfMPuSuKNSZxlFhaXWQ9JXaxCs+0+/iTWEJJNgrSMZe2zRwmo5ZohQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239038158"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="239038158"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 11:47:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="603838051"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Dec 2021 11:47:54 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwrIg-00070X-1R; Mon, 13 Dec 2021 19:47:54 +0000
-Date:   Tue, 14 Dec 2021 03:47:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Leo Yan <leo.yan@linaro.org>
-Subject: Re: [PATCH v2 2/4] coresight: etm4x: Don't use virtual contextID for
- non-root PID namespace
-Message-ID: <202112140333.58pdbVRp-lkp@intel.com>
-References: <20211213121323.1887180-3-leo.yan@linaro.org>
+        id S242518AbhLMTst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:48:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240623AbhLMTsr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 14:48:47 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07CDC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:48:47 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id 14so19939126ioe.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:48:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S6QuR33j2DsoUJNFFaRZPJl4fM7lAitWddXNO1xO6oI=;
+        b=UrQQ9TYvfsaiCZzyJbAzWYy4pJEp5qvdnZU9cbPL47O35QI/oD4/nn2w1kRYMFezNf
+         tZD0O4xHk77V+21gXGvEVm9cyh30XS8wiLmBI1yCmxy0NMHFWbjuZ7Ezb6qzDvHZOZAK
+         f1U3Eh66HmjCmnRc5NC8AQ6IksYWq7rlEMFTNZmAGv4tksGI4UYiIAB+KHE9YPHU1Gnm
+         jM3JhyCSYScvY1Wkc8dTSeGRqOKnSuRJAnmmXQ8X7i6+tdSExaxl9P0j4lFHYQ3CCdSR
+         /5VbqgroLzKFPeEiiyYjRK/8XegXp1n1WWnh1lXHFTiKuM1FM6nPe7vzrAVg3Kz0GpNX
+         ZPSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S6QuR33j2DsoUJNFFaRZPJl4fM7lAitWddXNO1xO6oI=;
+        b=ecvQ1Ro7jLoksYWvbi6GwAHF4r6wX3IewEVpCG0HYhRFuXBry5bahdMmE6vO0z3/VG
+         9vz1tZtFWczuZ+3V5RhSWQPGb7V3498pGgowr1Dla9dTmctRGFn9RcrW/PyRWna+eOSe
+         eiHs8zzFLOZaAfwpfefgPRoaKSBG0CwhkLMAs0V5ZSSntmI/zmFrxOj37K1uf9aGf1eg
+         Y/XcA3Zy1nRdYK6xiRIT3mNTev3tEb2RHikzExLtPL8zxIhOi2qDcW0K119G/S5Tmbr2
+         Qf5BbWZEsPbf7RlCN7wwxikQDT37J81S701qZMAIVN0cARj+8kcnyeJFxZeRl7+zc/FJ
+         MO0w==
+X-Gm-Message-State: AOAM533B68fh8D0dY5YKEOkCnmoPkTR/4sRvNusklxIaCchZdFNUJ5Sx
+        jVizGNeSUdbHvj118B3GwM2bEdO7zOyvVFFI4LrsbA==
+X-Google-Smtp-Source: ABdhPJyscPfItKuhVZr3PwGvaGNZCpkAA36mnR/7RE2hth99WAbWi+k1gcCtFhjgDtYtRedJjY7SsjsxKG4DaBIvPV4=
+X-Received: by 2002:a05:6602:3c2:: with SMTP id g2mr591936iov.65.1639424926915;
+ Mon, 13 Dec 2021 11:48:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213121323.1887180-3-leo.yan@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211209221545.2333249-1-pcc@google.com> <fce9898e392f42a0830892a1735deb3e@AcuMS.aculab.com>
+In-Reply-To: <fce9898e392f42a0830892a1735deb3e@AcuMS.aculab.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Mon, 13 Dec 2021 11:48:35 -0800
+Message-ID: <CAMn1gO5mBHR3-Wd2CyxQ8PYt8apTiWNOtFwKY4duwXvGwkZFWA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] kernel: introduce uaccess logging
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        David Hildenbrand <david@redhat.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Evgenii Stepanov <eugenis@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+On Sat, Dec 11, 2021 at 9:23 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Peter Collingbourne
+> > Sent: 09 December 2021 22:16
+> >
+> > This patch series introduces a kernel feature known as uaccess
+> > logging, which allows userspace programs to be made aware of the
+> > address and size of uaccesses performed by the kernel during
+> > the servicing of a syscall. More details on the motivation
+> > for and interface to this feature are available in the file
+> > Documentation/admin-guide/uaccess-logging.rst added by the final
+> > patch in the series.
+>
+> How does this work when get_user() and put_user() are used to
+> do optimised copies?
+>
+> While adding checks to copy_to/from_user() is going to have
+> a measurable performance impact - even if nothing is done,
+> adding them to get/put_user() (and friends) is going to
+> make some hot paths really slow.
+>
+> So maybe you could add it so KASAN test kernels, but you can't
+> sensibly enable it on a production kernel.
+>
+> Now, it might be that you could semi-sensibly log 'data' transfers.
+> But have you actually looked at all the transfers that happen
+> for something like sendmsg().
+> The 'user copy hardening' code already has a significant impact
+> on that code (in many places).
 
-I love your patch! Yet something to improve:
+Hi David,
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Yes, I realised after I sent out my patch (and while writing test
+cases for it) that it didn't cover get_user()/put_user(). I have a
+patch under development that will add this coverage. I used it to run
+my invalid syscall and uname benchmarks and the results were basically
+the same as without the coverage.
 
-url:    https://github.com/0day-ci/linux/commits/Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2585cf9dfaaddf00b069673f27bb3f8530e2039c
-config: arm64-randconfig-r034-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140333.58pdbVRp-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/3b7eceb25155c98432dea4821c4fc571b44d72e3
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
-        git checkout 3b7eceb25155c98432dea4821c4fc571b44d72e3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
+Are you aware of any benchmarks that cover sendmsg()? I can try to
+look at writing my own if not. I was also planning to write a
+benchmark that uses getresuid() as this was the simplest syscall that
+I could find that does multiple put_user() calls.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwtracing/coresight/coresight-etm4x-sysfs.c:2118:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
-           if (!task_is_in_init_pid_ns(current))
-                ^
-   drivers/hwtracing/coresight/coresight-etm4x-sysfs.c:2139:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
-           if (!task_is_in_init_pid_ns(current))
-                ^
-   drivers/hwtracing/coresight/coresight-etm4x-sysfs.c:2169:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
-           if (!task_is_in_init_pid_ns(current))
-                ^
-   drivers/hwtracing/coresight/coresight-etm4x-sysfs.c:2193:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
-           if (!task_is_in_init_pid_ns(current))
-                ^
-   4 errors generated.
-
-
-vim +/task_is_in_init_pid_ns +2118 drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-
-  2105	
-  2106	static ssize_t vmid_val_show(struct device *dev,
-  2107				     struct device_attribute *attr,
-  2108				     char *buf)
-  2109	{
-  2110		unsigned long val;
-  2111		struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
-  2112		struct etmv4_config *config = &drvdata->config;
-  2113	
-  2114		/*
-  2115		 * Don't use virtual contextID tracing if coming from a PID namespace.
-  2116		 * See comment in ctxid_pid_store().
-  2117		 */
-> 2118		if (!task_is_in_init_pid_ns(current))
-  2119			return -EINVAL;
-  2120	
-  2121		spin_lock(&drvdata->spinlock);
-  2122		val = (unsigned long)config->vmid_val[config->vmid_idx];
-  2123		spin_unlock(&drvdata->spinlock);
-  2124		return scnprintf(buf, PAGE_SIZE, "%#lx\n", val);
-  2125	}
-  2126	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Peter

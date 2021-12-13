@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA934723A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 889CD472390
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbhLMJUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S233612AbhLMJM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbhLMJUL (ORCPT
+        with ESMTP id S231224AbhLMJM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:20:11 -0500
-X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Dec 2021 01:20:10 PST
-Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBC32C06173F;
-        Mon, 13 Dec 2021 01:20:10 -0800 (PST)
-Received: from mail.dh-electronics.com (business-24-134-97-169.pool2.vodafone-ip.de [24.134.97.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx2.securetransport.de (Postfix) with ESMTPSA id 7A2985EA99;
-        Mon, 13 Dec 2021 10:11:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1639386697;
-        bh=ciWdTfVPU8qkvCxE3UE4jtPkgBe04AAxjcvNeUgFT2E=;
-        h=From:To:CC:Subject:Date:From;
-        b=GLXqO5oBx8VlihD7RVc4YuJU4N1Xbh8YJmNaG/eix6XBLqo24b4L4nPSJdj34oMd/
-         5LNyh273Hz21CbAh/bAokRG934y4BwDaTBGhnrlmWLU4M4ETY5SsQW8d9yDQuicTiK
-         tUAMHT734ZD/zwqJdWXU0ss3NK/ZI4009krPsdGDv+Y0Kx8KwJQ9hgQ0ro21BQ7CD4
-         OcpfTji4XG5Ie9dzbD6QNaWrZyMVGYFsyzUnwdiRX69jOn7XXI3xxhMJDN9z91ZXdl
-         f6UB7NatFIFBN5YoeWrqHPJ4SFZrUgOMfIpZuPeOR3RH+xD8q4w0pKt+bXspUD8s2D
-         SUy3cTDJPEJfQ==
-Received: from DHPWEX01.DH-ELECTRONICS.ORG (2001:470:76a7:2::30) by
- DHPWEX01.DH-ELECTRONICS.ORG (2001:470:76a7:2::30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 13 Dec 2021 10:11:25 +0100
-Received: from DHPWEX01.DH-ELECTRONICS.ORG ([fe80::6ced:fa7f:9a9c:e579]) by
- DHPWEX01.DH-ELECTRONICS.ORG ([fe80::6ced:fa7f:9a9c:e579%6]) with mapi id
- 15.02.0986.014; Mon, 13 Dec 2021 10:11:25 +0100
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Andrej Picej <andrej.picej@norik.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Support Opensource <Support.Opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: RE: [RFC PATCH] watchdog: da9062: Correct the timeout values
- [Klartext]
-Thread-Topic: [RFC PATCH] watchdog: da9062: Correct the timeout values
- [Klartext]
-Thread-Index: AdfwANztWgHN3oJ0TZqwlPeCV8dlmA==
-Date:   Mon, 13 Dec 2021 09:11:25 +0000
-Message-ID: <4254747d8cde4c5dbcbfdd00a3ecf701@dh-electronics.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.51.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 13 Dec 2021 04:12:28 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F68AC061574;
+        Mon, 13 Dec 2021 01:12:27 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id g14so48951681edb.8;
+        Mon, 13 Dec 2021 01:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jE23hOGGMXfQnw7eakglQriYDVVH915+aNMUdML9el8=;
+        b=U7LUj+XcvfWLiiWwwAnSmLyg36fvbssgMowsfmTzWUOTAaxcp/XKgqAxQuQZIVUTkj
+         Ozd5VlAwDQvY7OeYTsiycAiHNfukcV27U8d5jK1vLjz7yr0PYOYdUXf8FgB+YR5mJ9gR
+         l3Q0gwMYOJW2qPARh/v56hcmgKkF2Q9ugwaNBKYxSsBX4aVBdnznGkp6PZGXBKEKscoE
+         B+5PDlHJtLN0aChP4FzvM/bLfoObj2+gEOsj9+ZSpjMPuAzL+jVMUlttJTOBQF9Rkqap
+         5ql7ZKtLWOqsojnrF43Su9w6t+JB5x6nX83bl8mmORUMjgoZ5zvzYHffqXKXJfSnxrTp
+         zEtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jE23hOGGMXfQnw7eakglQriYDVVH915+aNMUdML9el8=;
+        b=ZxJWsmYFxvpvR2/9hPCVHowdmcfZlB/cjAyjBAHo49aMoK8fc/jvlseAUKlrG1a2JW
+         yN/ETFGQWa1CKD8wejYg1UBvmaPzx8YVarePFHfRQF29V5jBDaXkPUS+BeQuUA4YJ10a
+         DTH0V31PP2emLSwIllB+7v1fz1eeSnJArD0jsQW1ZJnV42jjVFT8T2zvfQnnV8+YnPkX
+         b+gHgHaCZ0jgVY7PcnTpbsq/k4e5oV5O694L4VMnfweN1FqaOhgz11ww/w0+NAv+kZL4
+         syFZT5E7iMQnZoVGdw+Op5v7sDqYGTuu3QEbVTArS6b1zznwe7fs6ruTCShI2pAC+HRq
+         YRLw==
+X-Gm-Message-State: AOAM532qx7t8oD4zngdtODYhdONt5iCmJR8YsAaU//nFNNGZJK2VCP/3
+        On0I/VkhGtDA0ST/6zZEJRs=
+X-Google-Smtp-Source: ABdhPJzPz1znjhAfgXCUgd9me7ue2LBb988VFI8w3zM4nE/5G3PIEC/9JmxIFOFM7qsaNRV7TVoYpA==
+X-Received: by 2002:a17:906:f43:: with SMTP id h3mr42878311ejj.414.1639386745942;
+        Mon, 13 Dec 2021 01:12:25 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:48f9:bea:a04c:3dfe? ([2001:b07:6468:f312:48f9:bea:a04c:3dfe])
+        by smtp.googlemail.com with ESMTPSA id ht7sm5646986ejc.27.2021.12.13.01.12.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 01:12:25 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <dae6cc09-2464-f1f5-c909-2374d33c75b5@redhat.com>
+Date:   Mon, 13 Dec 2021 10:12:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 02/19] x86/fpu: Prepare KVM for dynamically enabled states
+Content-Language: en-US
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-3-yang.zhong@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211208000359.2853257-3-yang.zhong@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UmVzZW5kIHdpdGggW0tsYXJ0ZXh0XSB0byB0dXJuIG9mZiBUTFMgZW5jcnlwdGlvbi4NCg0KRnJv
-bTogQWRhbSBUaG9tc29uDQpTZW50OiBNb25kYXksIERlY2VtYmVyIDYsIDIwMjEgNTozOCBQTQ0K
-Pj4gVGhhbmtzIGFueXdheSwgc28gbm93IEkga25vdyBpdCBtdXN0IGJlDQo+PiBwcm9ibGVtIHdp
-dGggbXkgREE5MDYxIGNoaXAuDQo+Pg0KPj4gQEFkYW0NCj4+IFdoZXJlIGNhbiBpdCBjb21lIGZy
-b20/DQo+PiBDYW4geW91IGdpdmUgd2UgYSBoaW50IHdoYXQgdG8gY2hlY2s/DQo+IA0KPiBJJ3Zl
-IHNwb2tlbiBpbnRlcm5hbGx5IGFuZCBoYXZlIGJlZW4gaW5mb3JtZWQgdGhhdCB0aGlzIGlzIGRv
-d24gdG8gdGhlIGZhY3QgdGhhdA0KPiBEQTkwNjEgcnVucyBvbmx5IGZyb20gYW4gaW50ZXJuYWwg
-b3NjaWxsYXRvciB3aGljaCBtYXkgYmUgc2xvd2VyLiBUaGUgaW5kaWNhdGlvbg0KPiBpcyB0aGF0
-IHRoZSB2YWx1ZXMgZm9yIFRXRFNDQUxFIGRlc2NyaWJlIHRoZSB3aW5kb3cgd2hlcmUgaWYgYSBr
-aWNrL3Bpbmcgb2NjdXJzDQo+IHdpdGhpbiB0aGF0IHBlcmlvZCB0aGVuIHRoZSB3YXRjaGRvZyBp
-cyBndWFyYW50ZWVkICpub3QqIHRvIHRpbWVvdXQuIFRoZSBhY3R1YWwNCj4gdGltZW91dCB3b3Vs
-ZCBiZSBhdCBzb21lIHBvaW50IGFmdGVyIHRoZSBzZWxlY3RlZCB0aW1lb3V0IHBlcmlvZCwgYXNz
-dW1pbmcgbm8NCj4gcGluZy9raWNrIG9jY3VycmVkLg0KPiANCj4gVGFibGUgOCBpbiB0aGUgZGF0
-YXNoZWV0IHNwZWNpZmllcyBhIG1pbmltdW0gd2F0Y2hkb2cgdGltZW91dCBvZiAyLjVzICh0V0RN
-QVgpDQo+IHVuZGVyIHNwZWNpZmljIG9wZXJhdGluZyBjb25kaXRpb25zLCBzbyBpZiB0aGUgbWlu
-aW11bSAycyB3aW5kb3cgd2FzIGNob3Nlbg0KPiAoVFdEU0NBTEUgPSAxKSB0aGVuIGVhcmxpZXN0
-IHRoZSB3YXRjaGRvZyB3b3VsZCBhY3R1YWxseSB0aW1lb3V0LCBmb2xsb3dpbmcgYQ0KPiBwaW5n
-LCBpcyAyLjVzLCBhc3N1bWluZyB0aGUgY29uZGl0aW9ucyBtYXRjaGVkIHRob3NlIGRlc2NyaWJl
-ZC4NCj4gDQo+IElmIHlvdSBoYXZlIGZ1cnRoZXIgcXVlc3Rpb25zIGl0IHByb2JhYmx5IG1ha2Vz
-IHNlbnNlIHRvIGNvbnRhY3QgRGlhbG9nL1JlbmVzYXMNCj4gc3VwcG9ydCBhcyB0aGV5IHdpbGwg
-YmUgYWJsZSB0byBwcm92aWRlIG1vcmUgZGV0YWlsZWQgaW5mbyBvbiB0aGlzLg0KDQpTbyBhIERB
-OTA2MSBydW5zIG9ubHkgZnJvbSBhbiBpbnRlcm5hbCBvc2NpbGxhdG9yLCB3aGVyZWFzIGEgREE5
-MDYyDQpjYW4gcnVuIG9uIGVpdGhlciBhbiBpbnRlcm5hbCBvciBhbiBleHRlcm5hbCBvc2NpbGxh
-dG9yLiBTbyB0aGlzDQptZWFucyB0aGF0IHRoZSBEQTkwNjEgdGltZW91dCB2YWx1ZXMgYXJlIGRp
-ZmZlciBmcm9tIHRoZSBEQTkwNjIgDQp3aXRoIGFuIGV4dGVybmFsIG9zY2lsbGF0b3Igbm90IG9u
-bHkgb24gbXkgZGV2aWNlIGJ1dCBvbiBhbGwgREE5MDYxDQpkZXZpY2VzLg0KDQpUaGlzIGFyZSB0
-aGUgdmFsdWVzIChpbiBzZWNvbmRzKSBpbiBjb21wYXJpc29uOg0KREE5MDYyIChmcm9tIGRyaXZl
-cik6IDAgIDIgIDQgICA4ICAxNiAgMzIgIDY1IDEzMQ0KREE5MDYxIChtZWFzdXJlZCk6ICAgIDAg
-IDMgIDYgIDEyICAyNSAgNTEgMTAyIDIwNA0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PQ0KRGlmZmVyZW5jZTogICAgICAgICAgIDAgKzEgKzIgICs0ICAr
-OSArMTkgKzM3ICs3Mw0KDQpJbiBteSBvcGluaW9uLCB0aGUgZGlmZmVyZW5jZXMgaW4gdGhlIGhp
-Z2hlciB2YWx1ZXMgYXJlIHZlcnkgaHVnZS4NCklmIEkgZXhwZWN0IHRoYXQgdGhlIHdhdGNoZG9n
-IHRyaWdnZXJzIGFuZCBJIGhhdmUgdG8gd2FpdCBtb3JlIHRoYW4NCmEgbWludXRlIGZvciB0aGF0
-IHRvIGhhcHBlbiBJIGFzayBteXNlbGYgaXMgdGhlcmUgc29tZXRoaW5nIHdyb25nLg0KDQpAQW5k
-cmVqDQpJIGd1ZXNzLCB5b3UgYXJlIHVzaW5nIGFuIGV4dGVybmFsIG9zY2lsbGF0b3IsIGFyZW4n
-dCB5b3U/DQoNCkBBZGFtDQpJcyB0aGVyZSBhIHdheSB0byBjaGVjayBpbiB0aGUgZHJpdmVyIHdo
-aWNoIG9zY2lsbGF0b3IgaXMgaW4gdXNlPw0KDQpATWFpbnRhaW5lcnMNCklzIGluIHRoZSBkcml2
-ZXIgYSBuZWVkIHRvIGRpc3Rpbmd1aXNoIGJldHdlZW4gYW4gZXh0ZXJuYWwgYW5kIGFuDQppbnRl
-cm5hbCBvc2NpbGxhdG9yIHRvIGdldCB0aGUgdGltZW91dCB2YWx1ZXMgbW9yZSBhY2N1cmF0ZT8N
-Cg0KDQpCZXN0IHJlZ2FyZHMNCkNocmlzdG9waA0K
+On 12/8/21 01:03, Yang Zhong wrote:
+>    - user_xfeatures
+> 
+>      Track which features are currently enabled for the vCPU
+
+Please rename to alloc_xfeatures
+
+>    - user_perm
+> 
+>      Copied from guest_perm of the group leader thread. The first
+>      vCPU which does the copy locks the guest_perm
+
+Please rename to perm_xfeatures.
+
+>    - realloc_request
+> 
+>      KVM sets this field to request dynamically-enabled features
+>      which require reallocation of @fpstate
+
+This field should be in vcpu->arch, and there is no need for 
+fpu_guest_realloc_fpstate.  Rename __xfd_enable_feature to 
+fpu_enable_xfd_feature and add it to the public API, then just do
+
+	if (unlikely(vcpu->arch.xfd_realloc_request)) {
+		u64 request = vcpu->arch.xfd_realloc_request;
+		ret = fpu_enable_xfd(request, enter_guest);
+	}
+
+to kvm_put_guest_fpu.
+
+Paolo

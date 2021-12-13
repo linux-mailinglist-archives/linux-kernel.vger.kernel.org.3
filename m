@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD47473719
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 380BA47371B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243449AbhLMV5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S243438AbhLMV53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243460AbhLMV5Q (ORCPT
+        with ESMTP id S243436AbhLMV52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:57:16 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449BFC0613F8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:57:16 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id y16so20633736ioc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:57:16 -0800 (PST)
+        Mon, 13 Dec 2021 16:57:28 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B2C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:57:28 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id p23so20633967iod.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:57:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SMKUwfdVnZa0OC/+PlApSfDHQCaCth1VpxrX4nAiO2A=;
-        b=ic0VaoHZRb6KjXHIJ3P+2qZGi8j7+ESfuWNH5jXxukMRB/UeYCBIULZCpgwxV/LTJA
-         +OuksLZgOljy73DZeiFIyo4CHIHPJRsot81EcZK0HMqGAeved3eeruKibnE1vQFk/QOM
-         0ZnHOgTJ/J9nu1/ENFbVzXnsXyI5ZDNR5tPOajcwg2HvmLbGbzJD9Y/C2GCOjShgtc1/
-         m8zmk8F0OOh7T1WzI6zzvRPEppf8y/gAimwGCHf4CxAOxCMk1DjdTCT25IAcxOu9QX03
-         aACzybsyQxehSm7g4oYLMqdRj6um078xfE58+gEo1TXQCQHiiwN5Dw5NVl3V5rSQJ0zM
-         gvpg==
+        bh=mm2UWj2YnKjrM1uYfSOmZBTk8qAIxqBQ9/EkHyLqgsc=;
+        b=WGDhTKgs1M19F5RLh/ghQTTXHLMg4GO+Va/ZCOqp75D4BcTBFmvAyFOp3iR+playrk
+         +T9Jlonuihe3sFoIQtfLQBUohu8R6MPWXzNZhaNBqBECrUwV/Na2RkobDZ+yJfyXhZxj
+         Zc1w7LmN3RES+diPh9vZmRrhO4M3O2RsLHNQMUlyr7GwrhegxFvYFO0D6HFmPm55kYk+
+         wqrpQ6kQbGTmo893E80CH350LCb6CSWf6u+8JN/zg81wfGaanF15fb4ydtKlCBifJ2nN
+         8Ump1PCSItp2r2u16Yqh96q6OGH6wrsF5rdnkfLm4GyeC89cjLQuxKAgQABGwCqzZCgh
+         Eu3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SMKUwfdVnZa0OC/+PlApSfDHQCaCth1VpxrX4nAiO2A=;
-        b=hzHvUGUiFh+ZHkF5tas90xEqXh0ehuzocYn4WU4wsKz1W8R9SLhx4OsU2LcjQKmrHN
-         6fUJVp67XRGRRwK4Y5BnurD1951Y1tibIq+s+qT8oRmdytJfbS4kqmQMwmZzNCXMZ+DL
-         uPgrYlC7q+WNV2/YFrYCywHNZSHaigxOeAFBkKDvurwikjAwcOgxvOsAirgXZXqHD2LU
-         SZsubgAIh9aIE6Z1DL//ylF7LpPUwT7V1fgtas6xppNTGXpe3caiX3u4jbSZsOBxqS3a
-         F3EkyFE7WQbpitJLe1N9Y4ZwLbgmD08wWvCQHayKTx6cK9lTuvARP0xCf3e+xLze1uZo
-         XeTg==
-X-Gm-Message-State: AOAM531JVkejPilcj80441s1VgvPnIQN9+21JMGlcp11To+kKEoxURMD
-        Fo1PN3XFhDMRRdiHN0qNeGgU8wNKwBSHo/KAnTY=
-X-Google-Smtp-Source: ABdhPJzEm7BmcDz3kvXaVml6MCEm0bMB1AEfgSyLQveI2p4I5q9R2vEr5vD0+TNs9r9GQeXSfrkedE+vghQ57a6w0dE=
-X-Received: by 2002:a05:6638:2608:: with SMTP id m8mr562528jat.57.1639432635722;
- Mon, 13 Dec 2021 13:57:15 -0800 (PST)
+        bh=mm2UWj2YnKjrM1uYfSOmZBTk8qAIxqBQ9/EkHyLqgsc=;
+        b=0JXB283t4M+ty8hpy4dYi96schI1MwsHr+Bp3z0NgWGuKMJCYIKAvqwRxX612z3IjY
+         rKCKb1CMEZqgOYte19GccTEMT8Ma1DmJR2P4m0YeVg3qWTn8IhDY+CSwV5p3R4wZbe0P
+         tjbcO1jrHjOZ9b+RONl6Bu7dB1RDnnxm+s0rtLmNpBIL4zp5bo4rnIGQTWRXqqP0JjcL
+         1E4CtQkk5T77jt3hT12ScWTVmLr6BgsY/uXSkqiQV2BN5wL10Ixwp+fSlJtCKfUKbQbO
+         Zv1C7kyn7/oMBUfFQzhGQlsb15JJF1i+b7Lc/BpmL3lRF/YvfdbTk2SZXrRSIw8Cy8rI
+         OMNA==
+X-Gm-Message-State: AOAM530obdu+r+1/IkaFVq8i9WnSdRkFkL+vOpgpb1JzIbdwt6VEOYiJ
+        Y1RgvkDGrBwXx3gtJmN5MAc4QANvpr+jTMwBs0k=
+X-Google-Smtp-Source: ABdhPJwxpZXrkYa1rZLbVNyZvefzi4hFv2hWb7lsOaLvHUX8W4V9XsbfXmUsLiMSfTJBF8neKVDX8kzVqC7kL2jCyRg=
+X-Received: by 2002:a02:830e:: with SMTP id v14mr555545jag.644.1639432647604;
+ Mon, 13 Dec 2021 13:57:27 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1638825394.git.andreyknvl@google.com> <cca947c05c4881cf5b7548614909f1625f47be61.1638825394.git.andreyknvl@google.com>
- <YbOS/jskofqqOc0y@arm.com>
-In-Reply-To: <YbOS/jskofqqOc0y@arm.com>
+References: <cover.1638825394.git.andreyknvl@google.com> <a1f0413493eb7db125c3f8086f5d8635b627fd2c.1638825394.git.andreyknvl@google.com>
+ <d082aa66-8b6b-2a32-bf7e-8256b9ec3cc4@arm.com>
+In-Reply-To: <d082aa66-8b6b-2a32-bf7e-8256b9ec3cc4@arm.com>
 From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 13 Dec 2021 22:57:05 +0100
-Message-ID: <CA+fCnZd7znwWCc11NS9g+6m7G3KT=1jq1cJi7crF6QXMCky7ag@mail.gmail.com>
-Subject: Re: [PATCH v2 08/34] kasan: only apply __GFP_ZEROTAGS when memory is zeroed
-To:     Catalin Marinas <catalin.marinas@arm.com>
+Date:   Mon, 13 Dec 2021 22:57:17 +0100
+Message-ID: <CA+fCnZcY+1xqiTMfwn_NwptsZdK_jW3HM71oL6yQ_3+LOK7Hyg@mail.gmail.com>
+Subject: Re: [PATCH v2 24/34] kasan, vmalloc, arm64: mark vmalloc mappings as pgprot_tagged
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
 Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Peter Collingbourne <pcc@google.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Andrey Ryabinin <ryabinin.a.a@gmail.com>,
@@ -73,48 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 6:48 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Mon, Dec 13, 2021 at 4:17 PM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
 >
-> On Mon, Dec 06, 2021 at 10:43:45PM +0100, andrey.konovalov@linux.dev wrote:
+> Hi Andrey,
+>
+> On 12/6/21 9:44 PM, andrey.konovalov@linux.dev wrote:
 > > From: Andrey Konovalov <andreyknvl@google.com>
 > >
-> > __GFP_ZEROTAGS should only be effective if memory is being zeroed.
-> > Currently, hardware tag-based KASAN violates this requirement.
+> > HW_TAGS KASAN relies on ARM Memory Tagging Extension (MTE). With MTE,
+> > a memory region must be mapped as MT_NORMAL_TAGGED to allow setting
+> > memory tags via MTE-specific instructions.
 > >
-> > Fix by including an initialization check along with checking for
-> > __GFP_ZEROTAGS.
+> > This change adds proper protection bits to vmalloc() allocations.
+>
+> Please avoid "this patch/this change" in patch description and use imperative
+> mode as if you are giving a command to the code base ([1] paragraph 2).
+
+Hi Vincenzo,
+
+Done in v3.
+
+> > These allocations are always backed by page_alloc pages, so the tags
+> > will actually be getting set on the corresponding physical memory.
 > >
 > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > Reviewed-by: Alexander Potapenko <glider@google.com>
-> > ---
-> >  mm/kasan/hw_tags.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-> > index 0b8225add2e4..c643740b8599 100644
-> > --- a/mm/kasan/hw_tags.c
-> > +++ b/mm/kasan/hw_tags.c
-> > @@ -199,11 +199,12 @@ void kasan_alloc_pages(struct page *page, unsigned int order, gfp_t flags)
-> >        * page_alloc.c.
-> >        */
-> >       bool init = !want_init_on_free() && want_init_on_alloc(flags);
-> > +     bool init_tags = init && (flags & __GFP_ZEROTAGS);
-> >
-> >       if (flags & __GFP_SKIP_KASAN_POISON)
-> >               SetPageSkipKASanPoison(page);
-> >
-> > -     if (flags & __GFP_ZEROTAGS) {
-> > +     if (init_tags) {
+> > Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 >
-> You can probably leave this unchanged but add a WARN_ON_ONCE() if !init.
-> AFAICT there's only a single place where __GFP_ZEROTAGS is passed.
-
-Yes, there's only one such place.
-
-In a later patch, I implement handling __GFP_ZEROTAGS in regardless of
-having __GFP_ZERO present or not, so adding WARN_ON() here and then
-removing it probably doesn't make much sense.
-
-As per what you said in the other message, I've left this unchanged.
+> With the change to the commit message:
+>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
 Thanks!

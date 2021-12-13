@@ -2,70 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59723473381
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CB547338B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236300AbhLMSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:05:39 -0500
-Received: from mga09.intel.com ([134.134.136.24]:52054 "EHLO mga09.intel.com"
+        id S238629AbhLMSHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:07:02 -0500
+Received: from mga12.intel.com ([192.55.52.136]:16786 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233197AbhLMSFh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:05:37 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="238605714"
+        id S241613AbhLMSG4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 13:06:56 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="218807443"
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="238605714"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 10:04:06 -0800
+   d="scan'208";a="218807443"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 10:05:31 -0800
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="582992664"
+   d="scan'208";a="613918383"
 Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 10:04:04 -0800
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 10:05:27 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.95)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mwpdB-005iN1-Sv;
-        Mon, 13 Dec 2021 20:00:57 +0200
-Date:   Mon, 13 Dec 2021 20:00:57 +0200
+        id 1mwpgc-005iPz-HI;
+        Mon, 13 Dec 2021 20:04:30 +0200
+Date:   Mon, 13 Dec 2021 20:04:30 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>
-Subject: Re: [PATCH v1 01/11] i2c: Introduce common module to instantiate
- CCGx UCSI
-Message-ID: <YbeKWScx1HwCYJTs@smile.fi.intel.com>
-References: <20211207192159.41383-1-andriy.shevchenko@linux.intel.com>
- <a0ac314f-9e9d-7749-6f22-fd3e44372288@linux.intel.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
+        gregkh@linuxfoundation.org, srinivas.pandruvada@intel.com,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH V3 2/6] driver core: auxiliary bus: Add driver data
+ helpers
+Message-ID: <YbeLLpu80EIQY3R5@smile.fi.intel.com>
+References: <20211213175921.1897860-1-david.e.box@linux.intel.com>
+ <20211213175921.1897860-3-david.e.box@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a0ac314f-9e9d-7749-6f22-fd3e44372288@linux.intel.com>
+In-Reply-To: <20211213175921.1897860-3-david.e.box@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:29:04PM +0200, Jarkko Nikula wrote:
-> On 12/7/21 21:21, Andy Shevchenko wrote:
-> > Introduce a common module to provide an API to instantiate UCSI device
-> > for Cypress CCGx Type-C controller. Individual bus drivers need to select
-> > this one on demand.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >   drivers/i2c/busses/Kconfig         |  7 +++++++
-> >   drivers/i2c/busses/Makefile        |  3 +++
-> >   drivers/i2c/busses/i2c-ccgx-ucsi.c | 27 +++++++++++++++++++++++++++
-> >   drivers/i2c/busses/i2c-ccgx-ucsi.h | 11 +++++++++++
-> >   4 files changed, 48 insertions(+)
-> >   create mode 100644 drivers/i2c/busses/i2c-ccgx-ucsi.c
-> >   create mode 100644 drivers/i2c/busses/i2c-ccgx-ucsi.h
-> > 
-> I've mixed feelings about this set. I'd either put patches 3-8 first since
-> e.g. 6/11 and 8/11 are fixing existing issues or even better to split CCGx
-> UCSI stuff into another set.
+On Mon, Dec 13, 2021 at 09:59:17AM -0800, David E. Box wrote:
+> Adds get/set driver data helpers for auxiliary devices.
 
-I have sent v2 with DesignWare patches only and no conversion part included.
+I though I gave you a tag... Hint: use `b4 am ...` against previous version and
+you won't lose the individual tags.
+
+Anyway,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> Reviewed-by: Mark Gross <markgross@kernel.org>
+> ---
+> V3
+>   - No changes
+> V2
+>   - No changes
+> 
+>  include/linux/auxiliary_bus.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/include/linux/auxiliary_bus.h b/include/linux/auxiliary_bus.h
+> index fc51d45f106b..a8338d456e81 100644
+> --- a/include/linux/auxiliary_bus.h
+> +++ b/include/linux/auxiliary_bus.h
+> @@ -28,6 +28,16 @@ struct auxiliary_driver {
+>  	const struct auxiliary_device_id *id_table;
+>  };
+>  
+> +static inline void *auxiliary_get_drvdata(struct auxiliary_device *auxdev)
+> +{
+> +	return dev_get_drvdata(&auxdev->dev);
+> +}
+> +
+> +static inline void auxiliary_set_drvdata(struct auxiliary_device *auxdev, void *data)
+> +{
+> +	dev_set_drvdata(&auxdev->dev, data);
+> +}
+> +
+>  static inline struct auxiliary_device *to_auxiliary_dev(struct device *dev)
+>  {
+>  	return container_of(dev, struct auxiliary_device, dev);
+> -- 
+> 2.25.1
+> 
 
 -- 
 With Best Regards,

@@ -2,80 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A054734F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7384F4734F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbhLMT1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S237274AbhLMT2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbhLMT1P (ORCPT
+        with ESMTP id S236101AbhLMT2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:27:15 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C87C061574;
-        Mon, 13 Dec 2021 11:27:14 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso14178995pjl.3;
-        Mon, 13 Dec 2021 11:27:14 -0800 (PST)
+        Mon, 13 Dec 2021 14:28:10 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D5CC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:28:09 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id l7so25234754lja.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:28:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Tkb2nbDXtPOec8/Noy7yyiSFcbbuYZLt8x46YEAcE80=;
-        b=qV/ClPQ9N3qauD6jekXldd4W9yCBqK/X09z27WBFoOIoGL3y7aQY2otAcLaPExw6+W
-         hzPGJEPsRfeCOyY8KOojTKQ7XFWtpt/y2AoPMz5VxeMu4kP9GI744HwWfKs5xquGzTGk
-         MWWsDsKPuGHVKk+lPj/GpgWdqQmVUmmhUWLIdcVSlNu5t8sTyw9oZzZH9PpS1auaSGr1
-         n8UnuAt+TlLznUb+wO6AKAcS7s3ym6qRhcezGwwBtxj1R8zS6P6Xlbo0/Pgpq4V2xsSW
-         NBL6nh70Vq0w4+YAw2bQHODDk8WDv/ZeX1x9VD1xbU4Ypx4Ri2r0VlY++xA9PgxM9UJB
-         Hudg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wuhs1uu3xd+DAtVvYo8LfoJq6FMmwCoLXFe+b3mQ9lk=;
+        b=nY0y16AgC9FhPUVjSZBirXeR/6JmySF+N7Y7VNIwzImpGwEqs9HTAgVslXfdAKbw7p
+         h5VDPnoBy218LhjZDpzpSrgOGo9Xt4p4YihSMqTQVdP4YrsaWYmoy9hERj1nCuhrU4JO
+         vH9NnzJm9SNXhfnTlWVWaMzGS6iAXl82NNy2Mz/5bg95gNmIllIjfB0cWaV/zaDmssUy
+         wOaxO1Sd6GAdpR1hgMBCrKl2N7TAIvKmJKr44TNy9YxuSEBHcu7SEYNzlRjaTDiU3Y61
+         PZ4lA26NMuPTxG/HJAzM1/oO2Ee2I+FXbotTMIiWRHzj+G9nv1FCirF/4FMqxPXFsRL+
+         W9ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Tkb2nbDXtPOec8/Noy7yyiSFcbbuYZLt8x46YEAcE80=;
-        b=jxqzG54BGVFA7zbF9iWR96wx1T+gl0XQM3+ahI772mg0CLgDKtc/ReemywwiQmmRdQ
-         kS+txGxAgC+puS5R6AIBcGpGebNXt9za079ahnf2bJ5sY7oFBY2j6+HP27Yaw0K3sEfM
-         QeX81/PS9jRgOyvR9q+X305HqGEJZJZJunX3OjpaYoOo4Xq/bLH+chNkEGqZQJzgdSXu
-         6gIMhw5wOUN42mPue6OVlyOBYQbhDBfXAjA5Sc095JAnQewfdhpfN053mSan956/oef4
-         HnctGRMHGqhTWmIh6MOwd0P1ZiJTtz5xxEITgVo4pYpT317YcRVfviXpkSflXbanATHm
-         0U5A==
-X-Gm-Message-State: AOAM532Yrkrqkf7SLc45eFxMYBgxRS9XK/ThryvPnGgk+zNpgKbmD+MZ
-        p+411bHoSLpQzRlJ8/nN3LA=
-X-Google-Smtp-Source: ABdhPJyoOVbeVmFZgOAB58FAnoLMNtwzPqBVNH9X+tpor56yuy+9+9y0WnnfsBQOMh1EhXQHRQLefQ==
-X-Received: by 2002:a17:902:8302:b0:143:6e5f:a4a0 with SMTP id bd2-20020a170902830200b001436e5fa4a0mr484495plb.20.1639423634330;
-        Mon, 13 Dec 2021 11:27:14 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id i10sm7811154pjd.3.2021.12.13.11.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:27:13 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Dec 2021 09:27:12 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup: return early if it is already on preloaded list
-Message-ID: <YbeekNeegXoP6F93@slm.duckdns.org>
-References: <20211211161729.10581-1-richard.weiyang@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wuhs1uu3xd+DAtVvYo8LfoJq6FMmwCoLXFe+b3mQ9lk=;
+        b=72Yhbr0hXEa/vjYrZTUp/oOh/2XHsu+7TZ6hHnGmVVQD8hg2JUkb/v+S3Sw4x/j9Q5
+         gDrSgoydL9CCo5IENmtNC6UHmsNFf1C2l4JQWN54DdOlvXyiuTXlhhoq+sariFFu8pdz
+         CehldXnzctBl3fKZ7uzxthDpU87/KQJxFYIuASNQyb1RmlfYyC3C+E0G5vhpCJZEuC3B
+         2kaEJBxQumB5YFX3bBQ7l0FCaeeHk2sb89sq8fMRFz1ef/e+Ess/HXlfMXFXOKlDMXsh
+         1mWKD2dI1T2Bpk9gXs4to7Fln4qdPL51Pm0uC1yi9/Gjwv5znKh7ogMAMmNz80S3xlAA
+         /Kkg==
+X-Gm-Message-State: AOAM530xThp05VVn9TjMsw0+YUyyuuhHdjHPAQ8qYm0QOsDvJg6NL95a
+        O9WB5B5I97hG2DCjlXr2ZIdb7u5mVVXPV+BJkQAlBg==
+X-Google-Smtp-Source: ABdhPJxqWHONSnBCMMMMigrcQTyIdrM1feHJHhhHJ+AuRFOFD/oPpUM/4g0Ux0zeJp2mf9xcOHyDILt1fheukMheXoQ=
+X-Received: by 2002:a05:651c:324:: with SMTP id b4mr493697ljp.188.1639423687564;
+ Mon, 13 Dec 2021 11:28:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211211161729.10581-1-richard.weiyang@gmail.com>
+References: <87tufctk82.fsf@oldenburg.str.redhat.com>
+In-Reply-To: <87tufctk82.fsf@oldenburg.str.redhat.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 13 Dec 2021 20:27:41 +0100
+Message-ID: <CAG48ez2oNKbSvNavKLEe2iYm1Cj+OaaaF45FA8cqkY+-7DuJTw@mail.gmail.com>
+Subject: Re: rseq + membarrier programming model
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-api@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 04:17:29PM +0000, Wei Yang wrote:
-> If it is already on preloaded list, this means we have already setup
-> this cset properly for migration.
-> 
-> Let's skip this cset on this condition.
+On Mon, Dec 13, 2021 at 7:48 PM Florian Weimer <fweimer@redhat.com> wrote:
+> I've been studying Jann Horn's biased locking example:
+>
+>   Re: [PATCH 0/4 POC] Allow executing code and syscalls in another address space
+>   <https://lore.kernel.org/linux-api/CAG48ez02UDn_yeLuLF4c=kX0=h2Qq8Fdb0cer1yN8atbXSNjkQ@mail.gmail.com/>
+>
+> It uses MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ as part of the biased lock
+> revocation.
+>
+> How does the this code know that the process has called
+> MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ?  Could it fall back to
+> MEMBARRIER_CMD_GLOBAL instead?
 
-The patch looks fine but I think description can be improved. Can you just
-say that it's just relocating the root cgrp lookup which isn't used anyway
-when the cset is already on the preloaded list?
+AFAIK no - MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ specifically
+forces targeted processes to go through an RSEQ preemption. That only
+happens when this special membarrier command is used and when an
+actual task switch happens; other membarrier flavors don't guarantee
+that.
 
-Thanks.
 
--- 
-tejun
+Also, MEMBARRIER_CMD_GLOBAL can take really long in terms of wall
+clock time - it's basically just synchronize_rcu(), and as the
+documentation at
+https://www.kernel.org/doc/html/latest/RCU/Design/Requirements/Requirements.html
+says:
+
+"The synchronize_rcu() grace-period-wait primitive is optimized for
+throughput. It may therefore incur several milliseconds of latency in
+addition to the duration of the longest RCU read-side critical
+section."
+
+
+You can see that synchronize_rcu() indeed takes quite long in terms of
+wall clock time (but not in terms of CPU time - as the documentation
+says, it's optimized for throughput in a parallel context) with a
+simple test program:
+
+jannh@laptop:~/test/rcu$ cat rcu_membarrier.c
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <linux/membarrier.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+#include <time.h>
+#include <err.h>
+
+int main(void) {
+  for (int i=0; i<20; i++) {
+    struct timespec ts1;
+    if (clock_gettime(CLOCK_MONOTONIC, &ts1))
+      err(1, "time");
+
+    if (syscall(__NR_membarrier, MEMBARRIER_CMD_GLOBAL, 0, 0))
+      err(1, "membarrier");
+
+    struct timespec ts2;
+    if (clock_gettime(CLOCK_MONOTONIC, &ts2))
+      err(1, "time");
+
+    unsigned long delta_ns = (ts2.tv_nsec - ts1.tv_nsec) +
+(1000UL*1000*1000) * (ts2.tv_sec - ts1.tv_sec);
+    printf("MEMBARRIER_CMD_GLOBAL took %lu nanoseconds\n", delta_ns);
+  }
+}
+jannh@laptop:~/test/rcu$ gcc -o rcu_membarrier rcu_membarrier.c -Wall
+jannh@laptop:~/test/rcu$ time ./rcu_membarrier
+MEMBARRIER_CMD_GLOBAL took 17155142 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 19207001 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 16087350 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 15963711 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 16336149 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 15931331 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 16020315 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 15873814 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 15945667 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 23815452 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 23626444 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 19911435 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 23967343 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 15943147 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 23914809 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 32498986 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 19450932 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 16281308 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 24045168 nanoseconds
+MEMBARRIER_CMD_GLOBAL took 15406698 nanoseconds
+
+real 0m0.458s
+user 0m0.058s
+sys 0m0.031s
+jannh@laptop:~/test/rcu$
+
+Every invocation of MEMBARRIER_CMD_GLOBAL on my laptop took >10 ms.

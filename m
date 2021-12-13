@@ -2,141 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7706647315C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CA7473163
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbhLMQOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:14:03 -0500
-Received: from mga06.intel.com ([134.134.136.31]:23403 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233692AbhLMQOC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:14:02 -0500
+        id S240587AbhLMQPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:15:06 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:25555 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238112AbhLMQPE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 11:15:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639412042; x=1670948042;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bwc/v2EAT1exqJQKRtyhv+kK3QsmQEtpMN0hzZWbS5Q=;
-  b=bZy39FfrrmCxNV4q6PFV9Tq7EZfI1HEv8P+0NH3oN/JtBp+rYJXQHYIt
-   WKs9URSun6qq2+VNwotQtKoyiIV8TJ7opn8D04os0Qa7C+JqqxWADoW0G
-   jT7Lw8DBUAj79yzVfWtwqxC8WB5usL+yTh04eABJ5cCgrjI13X+K1Mo4u
-   0Cui7WeXbPt8OyZ68WCtK5ov+lDgvZ9YlE8qDXJ5v+tzvc01ZNsKPHQdE
-   8paD7dp8aCAvgnRC3g9mDpoG/T1gjub2Janb1BArPscJJwsm0cy/xuOZv
-   dCzo6xn14jzFeBFYuVqhtpKFVRVVOqwxkdtzAod2ElAcOCBARyJYrcEyA
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639412105; x=1670948105;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Aj1jLscTd8hqfDx51zkQXy34te0g7lf175kTteg7blc=;
+  b=bZXBUF7PUmBib09vVuASqvT96MnDTRb4sYMMelgSZX/Mv9Fif/RfVgRS
+   XUM5hIRMg0bd2DbX5o40xjv6rBrtXu1087gO2Yabq2fxNQsROhUmfejFV
+   KEGguaP6UxCRsdUHtikWpw0Nfqwx4h3ESt5Deyl/lrVTBO8hT7DGFJUlU
+   GjWarIUzBOUDkqd7UB3y5ZJl/C2uHlSDG1VF5quhzicko1Jd6DQeduBQ2
+   jl3ZeSoJIH/7zDpb1LCP94sdfC4HqAJtnycP72bYqBl6Sd4epyyC2Tnzw
+   BuiHWZYM/1qRWyaWAfSKtnTUS+NAhMe2FKPVI0LtK7OeDKPTlh/mcrOyq
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="299548725"
+IronPort-SDR: 0LCS69UiOgr0BMxl1dXM1FA+3fj2H0o5gNufGfQR+iwt0AGMiZ+EOFSaxtaY9rWN4QZpGx5OPh
+ PkN7jGXryz1DFJRFQMB8baijW408PH8Gv+Rl7NZBZhFn17npCj4VvVHOgJtXmuDTXQEeOyozeL
+ MxHoq27AZmHbgsibxwWgAw050SDDDEBF7cqaUtCd9qZmsXY/boAaEg8+R4Y4Y11n2qa27MYb6M
+ DFY+BlPnZJrD2+R9WkSEZ9QRDw4y3WjO+nPgUl/otCwnmE5i+bzilhpRjG+oU9sBNTiye6l+GL
+ eWhPjvotAVHGIGewBdFdw3Cr
 X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="299548725"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 08:12:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="566734864"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Dec 2021 08:12:50 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwnwY-0006p0-1e; Mon, 13 Dec 2021 16:12:50 +0000
-Date:   Tue, 14 Dec 2021 00:12:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Collins <quic_collinsd@quicinc.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Subject: Re: [PATCH] power_supply: Register cooling device outside of probe
-Message-ID: <202112132307.mubGFyNy-lkp@intel.com>
-References: <1639393841-17444-1-git-send-email-quic_manafm@quicinc.com>
+   d="scan'208";a="146488750"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2021 09:15:04 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 13 Dec 2021 09:15:03 -0700
+Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 13 Dec 2021 09:15:01 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Hari Prasath <Hari.PrasathGE@microchip.com>
+Subject: [GIT PULL] ARM: at91: dt for 5.17
+Date:   Mon, 13 Dec 2021 17:14:51 +0100
+Message-ID: <20211213161451.90786-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639393841-17444-1-git-send-email-quic_manafm@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manaf,
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Thank you for the patch! Perhaps something to improve:
+Arnd, Olof,
 
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Here are the dt changes for 5.17.
+The QSPI nodes have their bindings translated to YAML and updated here:
+https://lore.kernel.org/lkml/20211209122939.339810-1-tudor.ambarus@microchip.com/
+They are not merged yet but I see no major push back as of today.
+Moreover, one of the low priority fix below remove one of the error highlighted
+during the conversion to YAML.
 
-url:    https://github.com/0day-ci/linux/commits/Manaf-Meethalavalappu-Pallikunhi/power_supply-Register-cooling-device-outside-of-probe/20211213-191238
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-config: i386-randconfig-s001-20211213 (https://download.01.org/0day-ci/archive/20211213/202112132307.mubGFyNy-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/e5930a7ed9ae1b121e0dde177184ff74abbf0371
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Manaf-Meethalavalappu-Pallikunhi/power_supply-Register-cooling-device-outside-of-probe/20211213-191238
-        git checkout e5930a7ed9ae1b121e0dde177184ff74abbf0371
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/power/supply/
+Thanks, best regards,
+  Nicolas
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-All warnings (new ones prefixed by >>):
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-   drivers/power/supply/power_supply_core.c:1086:12: error: conflicting types for 'psy_register_cooler'
-    1086 | static int psy_register_cooler(struct power_supply *psy)
-         |            ^~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/power_supply_core.c:129:12: note: previous declaration of 'psy_register_cooler' was here
-     129 | static int psy_register_cooler(struct device *dev, struct power_supply *psy);
-         |            ^~~~~~~~~~~~~~~~~~~
->> drivers/power/supply/power_supply_core.c:129:12: warning: 'psy_register_cooler' used but never defined
-   drivers/power/supply/power_supply_core.c:1086:12: warning: 'psy_register_cooler' defined but not used [-Wunused-function]
-    1086 | static int psy_register_cooler(struct power_supply *psy)
-         |            ^~~~~~~~~~~~~~~~~~~
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.17
 
-vim +/psy_register_cooler +129 drivers/power/supply/power_supply_core.c
+for you to fetch changes up to 078c2a0e8e60bb3fe78cf50b5da1620a4e13e0cd:
 
-   128	
- > 129	static int psy_register_cooler(struct device *dev, struct power_supply *psy);
-   130	/*
-   131	 * Notify that power supply was registered after parent finished the probing.
-   132	 *
-   133	 * Often power supply is registered from driver's probe function. However
-   134	 * calling power_supply_changed() directly from power_supply_register()
-   135	 * would lead to execution of get_property() function provided by the driver
-   136	 * too early - before the probe ends.
-   137	 * Also, registering cooling device from the probe will execute the
-   138	 * get_property() function. So register the cooling device after the probe.
-   139	 *
-   140	 * Avoid that by waiting on parent's mutex.
-   141	 */
-   142	static void power_supply_deferred_register_work(struct work_struct *work)
-   143	{
-   144		struct power_supply *psy = container_of(work, struct power_supply,
-   145							deferred_register_work.work);
-   146	
-   147		if (psy->dev.parent) {
-   148			while (!mutex_trylock(&psy->dev.parent->mutex)) {
-   149				if (psy->removing)
-   150					return;
-   151				msleep(10);
-   152			}
-   153		}
-   154	
-   155		power_supply_changed(psy);
-   156		psy_register_cooler(psy->dev.parent, psy);
-   157	
-   158		if (psy->dev.parent)
-   159			mutex_unlock(&psy->dev.parent->mutex);
-   160	}
-   161	
+  ARM: dts: at91: sama7g5ek: Add QSPI0 node (2021-12-13 14:48:04 +0100)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+----------------------------------------------------------------
+AT91 DT #1 for 5.17:
+
+- 2 low priority fixes about pin function for sama7g5 and better
+  tailored mmc interface on sama5d2 xplained
+- Addition of the Microchip EVB-KSZ9477: a Gigabit Ethernet
+  managed Switch Evaluation Board
+- QSPI: addition of sama5d2 clock name and nodes for new sama7g7 and its
+  associated Evaluation Kit
+
+----------------------------------------------------------------
+Hari Prasath (1):
+      ARM: dts: at91: update alternate function of signal PD20
+
+Mihai Sain (1):
+      ARM: dts: at91: sama5d2_xplained: remove PA11__SDMMC0_VDDSEL from pinctrl
+
+Oleksij Rempel (1):
+      ARM: dts: at91: add Microchip EVB-KSZ9477 board
+
+Tudor Ambarus (3):
+      ARM: dts: at91: sama5d2: Name the qspi clock
+      ARM: dts: at91: sama7g5: Add QSPI nodes
+      ARM: dts: at91: sama7g5ek: Add QSPI0 node
+
+ arch/arm/boot/dts/Makefile                     |   1 +
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts    |   5 +-
+ arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dts | 209 +++++++++++++++++++++++++
+ arch/arm/boot/dts/at91-sama7g5ek.dts           |  73 +++++++++
+ arch/arm/boot/dts/sama5d2.dtsi                 |   2 +
+ arch/arm/boot/dts/sama7g5-pinfunc.h            |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                 |  30 ++++
+ 7 files changed, 318 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm/boot/dts/at91-sama5d3_ksz9477_evb.dts
+
+-- 
+Nicolas Ferre

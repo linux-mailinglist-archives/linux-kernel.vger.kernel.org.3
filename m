@@ -2,182 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A26B5472BB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB05472BBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236368AbhLMLmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:42:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:52744 "EHLO foss.arm.com"
+        id S234236AbhLMLpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:45:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:52808 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231463AbhLMLmi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:42:38 -0500
+        id S231452AbhLMLpe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:45:34 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02C8C6D;
-        Mon, 13 Dec 2021 03:42:38 -0800 (PST)
-Received: from bogus (unknown [10.57.33.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F7573F793;
-        Mon, 13 Dec 2021 03:42:36 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:42:33 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH v7 12/16] firmware: arm_scmi: Add atomic mode support to
- smc transport
-Message-ID: <20211213114233.iwxllcmggkwhglvm@bogus>
-References: <20211129191156.29322-1-cristian.marussi@arm.com>
- <20211129191156.29322-13-cristian.marussi@arm.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2792E6D;
+        Mon, 13 Dec 2021 03:45:34 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 818D83F793;
+        Mon, 13 Dec 2021 03:45:32 -0800 (PST)
+Message-ID: <d3b93b6c-0f55-8c0f-0bd3-f6a090b358af@arm.com>
+Date:   Mon, 13 Dec 2021 11:45:27 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129191156.29322-13-cristian.marussi@arm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 1/2] mmc: sdhci-pci-gli: GL9755: Support for CD/WP
+ inversion on OF platforms
+Content-Language: en-GB
+To:     Hector Martin <marcan@marcan.st>,
+        Ben Chuang <benchuanggli@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211212070210.141664-1-marcan@marcan.st>
+ <20211212070210.141664-2-marcan@marcan.st>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20211212070210.141664-2-marcan@marcan.st>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:11:52PM +0000, Cristian Marussi wrote:
-> Add a Kernel configuration option to enable SCMI SMC transport atomic
-> mode operation for selected SCMI transactions and leave it as default
-> disabled.
+On 2021-12-12 07:02, Hector Martin wrote:
+> This is required on some Apple ARM64 laptops using this controller.
+> As is typical on DT platforms, pull these quirks from the device tree
+> using the standard mmc bindings.
 > 
-> Substitute mutex usages with busy-waiting and declare smc transport as
-> .atomic_enabled if such Kernel configuration option is enabled.
+> See Documentation/devicetree/bindings/mmc/mmc-controller.yaml
 > 
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
-> v5 --> v6
-> - remove usage of atomic_capable
-> - removed needless union
-> - reviewed Kconfig help
-> v4 --> v5
-> - removed RFC tag
-> - add CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE option
-> - add .atomic_enable support
-> - make atomic_capable dependent on
->   CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-> - make also usage of mutexes vs busy-waiting dependent on
->   CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-> ---
->  drivers/firmware/arm_scmi/Kconfig | 14 +++++++
->  drivers/firmware/arm_scmi/smc.c   | 66 ++++++++++++++++++++++++++++---
->  2 files changed, 74 insertions(+), 6 deletions(-)
+>   drivers/mmc/host/sdhci-pci-gli.c | 19 +++++++++++++++++--
+>   1 file changed, 17 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-> index 638ecec89ff1..d429326433d1 100644
-> --- a/drivers/firmware/arm_scmi/Kconfig
-> +++ b/drivers/firmware/arm_scmi/Kconfig
-> @@ -78,6 +78,20 @@ config ARM_SCMI_TRANSPORT_SMC
->  	  If you want the ARM SCMI PROTOCOL stack to include support for a
->  	  transport based on SMC, answer Y.
->  
-> +config ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-> +	bool "Enable atomic mode support for SCMI SMC transport"
-> +	depends on ARM_SCMI_TRANSPORT_SMC
-> +	help
-> +	  Enable support of atomic operation for SCMI SMC based transport.
-> +
-> +	  If you want the SCMI SMC based transport to operate in atomic
-> +	  mode, avoiding any kind of sleeping behaviour for selected
-> +	  transactions on the TX path, answer Y.
-> +	  Enabling atomic mode operations allows any SCMI driver using this
-> +	  transport to optionally ask for atomic SCMI transactions and operate
-> +	  in atomic context too, at the price of using a number of busy-waiting
-> +	  primitives all over instead. If unsure say N.
-> +
->  config ARM_SCMI_TRANSPORT_VIRTIO
->  	bool "SCMI transport based on VirtIO"
->  	depends on VIRTIO=y || VIRTIO=ARM_SCMI_PROTOCOL
-> diff --git a/drivers/firmware/arm_scmi/smc.c b/drivers/firmware/arm_scmi/smc.c
-> index b2f31d3feb10..0fc49cb49185 100644
-> --- a/drivers/firmware/arm_scmi/smc.c
-> +++ b/drivers/firmware/arm_scmi/smc.c
-> @@ -7,6 +7,7 @@
->   */
->  
->  #include <linux/arm-smccc.h>
-> +#include <linux/atomic.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/interrupt.h>
-> @@ -14,6 +15,9 @@
->  #include <linux/of.h>
->  #include <linux/of_address.h>
->  #include <linux/of_irq.h>
-> +#ifdef CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-> +#include <linux/processor.h>
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 4fd99c1e82ba..ad742743a494 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/pci.h>
+>   #include <linux/mmc/mmc.h>
+>   #include <linux/delay.h>
+> +#include <linux/of.h>
+>   #include "sdhci.h"
+>   #include "sdhci-pci.h"
+>   #include "cqhci.h"
+> @@ -114,8 +115,10 @@
+>   #define   GLI_9755_WT_EN_OFF    0x0
+>   
+>   #define PCI_GLI_9755_PECONF   0x44
+> -#define   PCI_GLI_9755_LFCLK    GENMASK(14, 12)
+> -#define   PCI_GLI_9755_DMACLK   BIT(29)
+> +#define   PCI_GLI_9755_LFCLK          GENMASK(14, 12)
+> +#define   PCI_GLI_9755_DMACLK         BIT(29)
+> +#define   PCI_GLI_9755_INVERT_CD      BIT(30)
+> +#define   PCI_GLI_9755_INVERT_WP      BIT(31)
+>   
+>   #define PCI_GLI_9755_CFG2          0x48
+>   #define   PCI_GLI_9755_CFG2_L1DLY    GENMASK(28, 24)
+> @@ -570,6 +573,18 @@ static void gl9755_hw_setting(struct sdhci_pci_slot *slot)
+>   	gl9755_wt_on(pdev);
+>   
+>   	pci_read_config_dword(pdev, PCI_GLI_9755_PECONF, &value);
+> +#ifdef CONFIG_OF
+> +	if (pdev->dev.of_node) {
+
+FWIW, of_property_read_bool() should handle a NULL node correctly, and 
+its stub be optimised away for !OF, so you don't really need the 
+explicit check or the #ifdef.
+
+Robin.
+
+> +		/*
+> +		 * Apple ARM64 platforms using these chips may have
+> +		 * inverted CD/WP detection.
+> +		 */
+> +		if (of_property_read_bool(pdev->dev.of_node, "cd-inverted"))
+> +			value |= PCI_GLI_9755_INVERT_CD;
+> +		if (of_property_read_bool(pdev->dev.of_node, "wp-inverted"))
+> +			value |= PCI_GLI_9755_INVERT_WP;
+> +	}
 > +#endif
->  #include <linux/slab.h>
->  
->  #include "common.h"
-> @@ -23,14 +27,23 @@
->   *
->   * @cinfo: SCMI channel info
->   * @shmem: Transmit/Receive shared memory area
-> - * @shmem_lock: Lock to protect access to Tx/Rx shared memory area
-> + * @shmem_lock: Lock to protect access to Tx/Rx shared memory area.
-> + *		Used when NOT operating in atomic mode.
-> + * @inflight: Atomic flag to protect access to Tx/Rx shared memory area.
-> + *	      Used when operating in atomic mode.
->   * @func_id: smc/hvc call function id
->   */
->  
->  struct scmi_smc {
->  	struct scmi_chan_info *cinfo;
->  	struct scmi_shared_mem __iomem *shmem;
-> +#ifndef CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-> +	/* Protect access to shmem area */
->  	struct mutex shmem_lock;
-
-Ditto here, do we really need to do this saving ? I would wait until someone
-really complains about space. It unnecessarily makes it hard to read.
-
-> +#else
-> +#define INFLIGHT_NONE	MSG_TOKEN_MAX
-> +	atomic_t inflight;
-> +#endif
->  	u32 func_id;
->  };
->  
-> @@ -54,6 +67,46 @@ static bool smc_chan_available(struct device *dev, int idx)
->  	return true;
->  }
->  
-> +static inline void smc_channel_lock_init(struct scmi_smc *scmi_info)
-> +{
-> +#ifndef CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-> +	mutex_init(&scmi_info->shmem_lock);
-> +#else
-> +	atomic_set(&scmi_info->inflight, INFLIGHT_NONE);
-
-You can do both if you remove conditional definition of struct.
-
-> +#endif
-> +}
-> +
-> +#ifdef CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-> +static bool smc_xfer_inflight(struct scmi_xfer *xfer, atomic_t *inflight)
-> +{
-> +	int ret;
-> +
-> +	ret = atomic_cmpxchg(inflight, INFLIGHT_NONE, xfer->hdr.seq);
-> +
-> +	return ret == INFLIGHT_NONE;
-> +}
-> +#endif
-> +
-> +static inline void
-> +smc_channel_lock_acquire(struct scmi_smc *scmi_info,
-> +			 struct scmi_xfer *xfer __maybe_unused)
-> +{
-> +#ifndef CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE
-
-If possible make it based some local variable or you can always do
-
-	if (IS_ENABLED(CONFIG_ARM_SCMI_TRANSPORT_SMC_ATOMIC_ENABLE))
-
--- 
-Regards,
-Sudeep
+>   	value &= ~PCI_GLI_9755_LFCLK;
+>   	value &= ~PCI_GLI_9755_DMACLK;
+>   	pci_write_config_dword(pdev, PCI_GLI_9755_PECONF, value);
+> 

@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B824472423
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B684726F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbhLMJeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:34:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47746 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbhLMJdw (ORCPT
+        id S229905AbhLMJ4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235364AbhLMJuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:33:52 -0500
+        Mon, 13 Dec 2021 04:50:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC68C08EC8C;
+        Mon, 13 Dec 2021 01:43:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01B6FB80E1A;
-        Mon, 13 Dec 2021 09:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065DBC00446;
-        Mon, 13 Dec 2021 09:33:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 87F2BCE0E29;
+        Mon, 13 Dec 2021 09:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B20C341C8;
+        Mon, 13 Dec 2021 09:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388029;
-        bh=gNe6G1PwecyhbVnVoeTY2X2BSaT1NS6nklPiHbVn5yc=;
+        s=korg; t=1639388632;
+        bh=AdfvKCsg3P1CsVMzOIOkZgRWTMNYqooe5UBSKFN83OE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WCC4cxA1TSx2CRWwRWGMSgKK6ipjYQRA8WTHz9eA24H9+FPbvIG9zvUw2YJQa6pGx
-         zJruBTOqNm/4B/mHd2iQQNEGQYpDGjIeQD6QnclbwxnnG6xn17dj1VL+DmN2clH4P5
-         E5GMJOl59J+BNZaM/JsfNdC5dGLJoEcZ+Zh3GI1Y=
+        b=2ij9sYizpVkij0oM6zjjBW+jEWOl1hbeJgf5TXRxxGbup/dgg0qTZYNVEGNktpTko
+         nYN7XEbCzuSaOSu+H/wDbzygLy+aSWlSEMTqerQAULGPHV2Kj9W1knerfy60uXdDXT
+         N2BjErl05wJn8jdv22gWcQPfkXrIbA/pHbuI79Lc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.4 35/37] iio: accel: kxcjk-1013: Fix possible memory leak in probe and remove
+        "linux-kernel@vger.kernel.org, Linus Torvalds" 
+        <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.4 43/88] wait: add wake_up_pollfree()
 Date:   Mon, 13 Dec 2021 10:30:13 +0100
-Message-Id: <20211213092926.529910919@linuxfoundation.org>
+Message-Id: <20211213092934.741877308@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
-References: <20211213092925.380184671@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,60 +50,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 70c9774e180d151abaab358108e3510a8e615215 upstream.
+commit 42288cb44c4b5fff7653bc392b583a2b8bd6a8c0 upstream.
 
-When ACPI type is ACPI_SMO8500, the data->dready_trig will not be set, the
-memory allocated by iio_triggered_buffer_setup() will not be freed, and cause
-memory leak as follows:
+Several ->poll() implementations are special in that they use a
+waitqueue whose lifetime is the current task, rather than the struct
+file as is normally the case.  This is okay for blocking polls, since a
+blocking poll occurs within one task; however, non-blocking polls
+require another solution.  This solution is for the queue to be cleared
+before it is freed, using 'wake_up_poll(wq, EPOLLHUP | POLLFREE);'.
 
-unreferenced object 0xffff888009551400 (size 512):
-  comm "i2c-SMO8500-125", pid 911, jiffies 4294911787 (age 83.852s)
-  hex dump (first 32 bytes):
-    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 20 e2 e5 c0 ff ff ff ff  ........ .......
-  backtrace:
-    [<0000000041ce75ee>] kmem_cache_alloc_trace+0x16d/0x360
-    [<000000000aeb17b0>] iio_kfifo_allocate+0x41/0x130 [kfifo_buf]
-    [<000000004b40c1f5>] iio_triggered_buffer_setup_ext+0x2c/0x210 [industrialio_triggered_buffer]
-    [<000000004375b15f>] kxcjk1013_probe+0x10c3/0x1d81 [kxcjk_1013]
+However, that has a bug: wake_up_poll() calls __wake_up() with
+nr_exclusive=1.  Therefore, if there are multiple "exclusive" waiters,
+and the wakeup function for the first one returns a positive value, only
+that one will be called.  That's *not* what's needed for POLLFREE;
+POLLFREE is special in that it really needs to wake up everyone.
 
-Fix it by remove data->dready_trig condition in probe and remove.
+Considering the three non-blocking poll systems:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: a25691c1f967 ("iio: accel: kxcjk1013: allow using an external trigger")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Cc: <Stable@vger.kernel.org>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20211025124159.2700301-1-yangyingliang@huawei.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+- io_uring poll doesn't handle POLLFREE at all, so it is broken anyway.
+
+- aio poll is unaffected, since it doesn't support exclusive waits.
+  However, that's fragile, as someone could add this feature later.
+
+- epoll doesn't appear to be broken by this, since its wakeup function
+  returns 0 when it sees POLLFREE.  But this is fragile.
+
+Although there is a workaround (see epoll), it's better to define a
+function which always sends POLLFREE to all waiters.  Add such a
+function.  Also make it verify that the queue really becomes empty after
+all waiters have been woken up.
+
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211209010455.42744-2-ebiggers@kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/kxcjk-1013.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ include/linux/wait.h |   26 ++++++++++++++++++++++++++
+ kernel/sched/wait.c  |    7 +++++++
+ 2 files changed, 33 insertions(+)
 
---- a/drivers/iio/accel/kxcjk-1013.c
-+++ b/drivers/iio/accel/kxcjk-1013.c
-@@ -1284,8 +1284,7 @@ static int kxcjk1013_probe(struct i2c_cl
- err_iio_unregister:
- 	iio_device_unregister(indio_dev);
- err_buffer_cleanup:
--	if (data->dready_trig)
--		iio_triggered_buffer_cleanup(indio_dev);
-+	iio_triggered_buffer_cleanup(indio_dev);
- err_trigger_unregister:
- 	if (data->dready_trig)
- 		iio_trigger_unregister(data->dready_trig);
-@@ -1308,8 +1307,8 @@ static int kxcjk1013_remove(struct i2c_c
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -204,6 +204,7 @@ void __wake_up_locked_key_bookmark(struc
+ void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
+ void __wake_up_locked(struct wait_queue_head *wq_head, unsigned int mode, int nr);
+ void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode, int nr);
++void __wake_up_pollfree(struct wait_queue_head *wq_head);
  
- 	iio_device_unregister(indio_dev);
+ #define wake_up(x)			__wake_up(x, TASK_NORMAL, 1, NULL)
+ #define wake_up_nr(x, nr)		__wake_up(x, TASK_NORMAL, nr, NULL)
+@@ -230,6 +231,31 @@ void __wake_up_sync(struct wait_queue_he
+ #define wake_up_interruptible_sync_poll(x, m)					\
+ 	__wake_up_sync_key((x), TASK_INTERRUPTIBLE, 1, poll_to_key(m))
  
-+	iio_triggered_buffer_cleanup(indio_dev);
- 	if (data->dready_trig) {
--		iio_triggered_buffer_cleanup(indio_dev);
- 		iio_trigger_unregister(data->dready_trig);
- 		iio_trigger_unregister(data->motion_trig);
- 	}
++/**
++ * wake_up_pollfree - signal that a polled waitqueue is going away
++ * @wq_head: the wait queue head
++ *
++ * In the very rare cases where a ->poll() implementation uses a waitqueue whose
++ * lifetime is tied to a task rather than to the 'struct file' being polled,
++ * this function must be called before the waitqueue is freed so that
++ * non-blocking polls (e.g. epoll) are notified that the queue is going away.
++ *
++ * The caller must also RCU-delay the freeing of the wait_queue_head, e.g. via
++ * an explicit synchronize_rcu() or call_rcu(), or via SLAB_TYPESAFE_BY_RCU.
++ */
++static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
++{
++	/*
++	 * For performance reasons, we don't always take the queue lock here.
++	 * Therefore, we might race with someone removing the last entry from
++	 * the queue, and proceed while they still hold the queue lock.
++	 * However, rcu_read_lock() is required to be held in such cases, so we
++	 * can safely proceed with an RCU-delayed free.
++	 */
++	if (waitqueue_active(wq_head))
++		__wake_up_pollfree(wq_head);
++}
++
+ #define ___wait_cond_timeout(condition)						\
+ ({										\
+ 	bool __cond = (condition);						\
+--- a/kernel/sched/wait.c
++++ b/kernel/sched/wait.c
+@@ -206,6 +206,13 @@ void __wake_up_sync(struct wait_queue_he
+ }
+ EXPORT_SYMBOL_GPL(__wake_up_sync);	/* For internal use only */
+ 
++void __wake_up_pollfree(struct wait_queue_head *wq_head)
++{
++	__wake_up(wq_head, TASK_NORMAL, 0, poll_to_key(EPOLLHUP | POLLFREE));
++	/* POLLFREE must have cleared the queue. */
++	WARN_ON_ONCE(waitqueue_active(wq_head));
++}
++
+ /*
+  * Note: we use "set_current_state()" _after_ the wait-queue add,
+  * because we need a memory barrier there on SMP, so that any
 
 

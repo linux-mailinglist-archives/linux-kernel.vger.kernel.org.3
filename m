@@ -2,137 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E8F472626
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 509CD4725FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237370AbhLMJtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:49:18 -0500
-Received: from mail-eopbgr1300117.outbound.protection.outlook.com ([40.107.130.117]:19251
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235484AbhLMJot (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:44:49 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZJA0bcHhRSZ5FGdRPDUEf+LWm5eMhOsNz8T/IxfpI05wEnJZRTa7ZAymBgvZ6bixD4pywDTEsj4ac4APYCa5lrtuXBK2Yivh/0c6aPgnZRTPwAwGzKNuCAv7VWmieovsh1BcW4xGowHDjwMddjYsQKNYLnJeeSHhs3TsRqEoLm1zWDj4z7DHQHkeCP63oyMzZHS+FA2RXW9VvHhZLtrzTdiKPfUFdI6QLe6GvYpARH+pwCKs4Tdn+azD2kP0E7s1UZg2fhusTb3YywD4IqQxWxgJ3N4jmhCgvvqtFYXBHXxxo+qnHy34sobE/RoJWvDtYKGFDO7Azf3eF7LtY7vr8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MkESgjVgETZNv8A78M/+7t4S638Il2orjfyHX+T9VXY=;
- b=gCpp139ToTSU5TnsWszx72RFmbiEMZycoadJkN21dU3kt2UD0/rX4gR4ox7pY4zsbo66w1jZN5cs+r9WDX/9A0lPkTpYuuOUquK2P4jWDxkopLr7qdAHB1R7TVb7ZJ6KmhrBSR4sqQctDNPCX7N0hZULEiYb6CsA8KT3p8u7JexdaqMBX/vk4dcjQhHbDKlSmaSjmlPsnOHLEcaIgl6bn88c5rJoaYCMqPOAEBJqTdNK7heXli26mWznNhSAOXFr997ismoodrZd4N+yYtM5bkXR5DH0qCDcfAXTKgbgZW28rIk3t78TmhhRQRNn/FVQFD8g3mV/Dn0XPUBC8HqiUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MkESgjVgETZNv8A78M/+7t4S638Il2orjfyHX+T9VXY=;
- b=QAfEUxzGH6tz5BRA0HeXZqV0ibT7WB9Zah/lEB9DAChnfWXd3vVT/UsJZIRmF+BrAq5wcoXSq8sW4WjFxUW6g//OXlbyp6dV9z7Wh6EPVbn2e2oOv7LEaf/pMI4rdFO4iiN3ycvjgavPNlu3VpN2eKQ6UzX18PPHZSkW0TzyXz0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SL2PR06MB3050.apcprd06.prod.outlook.com (2603:1096:100:39::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
- 2021 09:43:59 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 09:43:59 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] gpu: drm: mcde: add missing of_node_put before return
-Date:   Mon, 13 Dec 2021 01:43:49 -0800
-Message-Id: <1639388629-63851-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR03CA0052.apcprd03.prod.outlook.com
- (2603:1096:202:17::22) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        id S235496AbhLMJsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:48:39 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:58756
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234443AbhLMJoP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 04:44:15 -0500
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EA7D53F1FE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 09:44:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639388650;
+        bh=idfKXszTAq7jF3tCvMd5XR8JGhQDpTd0E5+Um0VFhrI=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=UAy1svR3zm3L9KWTLro7AdUqbbyO3Mys0T2Tq69ZbhBVxnHLlkY2bvNxb1lsZj5UB
+         ogxhgdqI9WZxYfYKZpCStEx0roEhkvuG/1Igp5cVdfHxf4yjrtgjAy3U45r14IEgZF
+         LKMc4zlW6HAEtXi2Wr5I9Ue43VIlbyUZ45Qu9awPlALWKYX9+nTPCDQG6F/pFvNXm2
+         uDfBFd0yfuXal/OVxRsqTyuubttSDPCoSI87WtiCKusGyF5EcPkvP+sv3C+60K09Or
+         lui3FuKlryfQMtNkiWmsVEsl4vVEjU7xl8ogWYWlyppfxHXRDowsHtIiStIDK0L0XN
+         n1kvVTj4x9q5A==
+Received: by mail-oo1-f70.google.com with SMTP id n18-20020a4ad132000000b002c64a9d89a4so10561471oor.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:44:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=idfKXszTAq7jF3tCvMd5XR8JGhQDpTd0E5+Um0VFhrI=;
+        b=CTkUTu6x0NitLHge2PSPcttXBgDWdsv+eB9gbvHgzUEfcL9tbwEF9F0xnjQ4QlEBUk
+         yXyK9D/0baH2IY/dgVOKG8aZ7r6h70CPaRJwiqmEHNDxJhPazE96m0z29QRpS5KxYoaO
+         ZR5BpjZryU4FzPoV9ljNiABkB4j5PnC7P6sG2vr7mzZ6qLJQyrRK6hj4avQt0ZlxsOot
+         guWyW3tti0xw1fqDcbnA1fIcyrovibBaPn0faG8qubHJdwIRfWmpB18feWrPjuBemEwF
+         2BGVd/vnOLtP5hHcIbkbCBtcy70vTE76nB4L/MTyj9UR05J40Ykphc02b2XcHU55DjY0
+         ea7w==
+X-Gm-Message-State: AOAM530GrMMEb8AlhoGrcxO/46qPASw9FZQyB4gw/ZRxXb3iMOs3b8n6
+        W1Q5kO4GlFamiHY/c/4XKTpvTrEUq8P3e9qeRKwECS/XTRJWRUpRgEse3sH1iTwksNocnKawmCX
+        B9V13QXhZJ3Qg0Qs8hHF2uM3e9P2oLEWJP8CXZkUVwg2/w67wpSkkvwYpRQ==
+X-Received: by 2002:a9d:292a:: with SMTP id d39mr12154715otb.11.1639388649548;
+        Mon, 13 Dec 2021 01:44:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx2HU5a13xThIsfUH6/rXuvAX4BSKgBEypPvFTKpPMPIQse7/YYQ8PcuiPmmI2FTdWr/PGaesC8ebqUEUZdCa8=
+X-Received: by 2002:a9d:292a:: with SMTP id d39mr12154677otb.11.1639388649001;
+ Mon, 13 Dec 2021 01:44:09 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 58dcdb05-fec0-42f3-35ec-08d9be1d1655
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3050:EE_
-X-Microsoft-Antispam-PRVS: <SL2PR06MB3050A78226423FBF13F69019BD749@SL2PR06MB3050.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1775;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xTjsg3tGgakfVDt9aXCVL9VL7pXR5ZWCWdAzfD6/97YzqclUIOTkUSXnq5wezbceINj3p2m0BDmcg/vt36RLTq2+mecS1+OUZn4a0HucjDyU1ZHMvzLPyt4iRADElT0zzAwA/qBFJWL3fEjrz2u+F59XOhBBKIbTkzAMt3cNm+4IrwYDnEIeIk5Vs+ZhWEHpw9SMehLzmBkpYTHiGTznTkt/RHdpnxmsWiES8hYMRgCA9V7vNVe0UktHE597cFObK5Trw1vVR1+s12rs6CbJ8fIv1Rsw0wtxjHvR+LpV1mi4ejKip+HVawPPb9pHzKxJw0WNJfIbcBAKZ3I1H2UXwEvL7h67z4/n7npz7yZW7m9HNB88LAOCqTCrEQecZqx2cs+7TvxtxY3SV7mniHOlXtxcK1imSOB4ifezlNKCrgzRPs67c6DY9SzUWRIK0DmZLmqA1zZ0XHKkRCbHIADXEJ/4As5tU01RgS5KDgu1kpPTf3qgRSa/levetEkGz5/pcPza15ICK+J2lUkjigEh4NpDvpv49x7qn79tR88trHeLQHQ9ef83FOgjVR9ReVr1IxdaANo3Yph8jd3OdOuZVMJdGdBfMVE/9IM/8f93ROnfdgf5rOTdo56O3cH+zBWwMGp+gWc+555hhaoK3/LpHJg+W82cZXaZZ8QBhl/7xg8vHYB8y9zKrVbdzHZmagsVrHurIDNgSMVHJzvvUlMS1mb6F7ptko6giKhoIctNLaI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(83380400001)(52116002)(6506007)(110136005)(2906002)(316002)(508600001)(26005)(186003)(66946007)(36756003)(107886003)(66476007)(2616005)(66556008)(8936002)(6512007)(8676002)(4326008)(5660300002)(6486002)(38100700002)(4744005)(38350700002)(6666004)(473944003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vCzlEpgNb6aZmXbIwXRUeMpzLq4NL1zXi610OrgykVK+etmVmwamB7qZu3b+?=
- =?us-ascii?Q?TDxhzaVqEfteCNd26JKDJYev1byEH6zoZ68uHz8LgcI8m1EA/PsMIsLjea5O?=
- =?us-ascii?Q?h2XSjTG6AXhuF4DkdwJbCPPnLKhJkI2sdI8Jk6S33ghZPgtXNZxgnrJnbpy5?=
- =?us-ascii?Q?zqu2QbRFDjWqzMXw4SWz8JhcP2REod8iQ5gg/CXdMwxsKYDwTzv47lSeBBi4?=
- =?us-ascii?Q?Iv9+6bh4UejDixXD2b4O3zrFxI37l1eaChqNdEQsBb8Jm4ZSOuvPx48Kp7FT?=
- =?us-ascii?Q?YpLXP/T4KuMznuzAFGtCQcfPGu8BF65P/1bghnikqRITzyCEmZN2xBiRvY/k?=
- =?us-ascii?Q?btaKpbmOF0Tz6dLhfTxmKW0GqfFau0C42bK+/W3qhn22QQhwOOabVKQsmA5A?=
- =?us-ascii?Q?2cmZpT5MvlZJKH1Gx2dkjt0xDo0yw9KzaDcWejS6p4+5/ckohCISQC7jOU8F?=
- =?us-ascii?Q?QihuWSb9py9g8rlxZ6rsN8eCJaJJ+06RJJrikT8zOxB6/115791txYra9fBy?=
- =?us-ascii?Q?Xw4ucFMuZP/h7/3b2SijOUYYFCHT8UDci8jzMHbL/ibc/Qd43gvLqECbCDcY?=
- =?us-ascii?Q?4DzFNoW4o3lv97meYTL179flKyw65zVIO84h00dD5FDrVwzBstiEjRMIkdKb?=
- =?us-ascii?Q?FPlRZXIU0+Xqf+3Q+RwIiFhLfHQ6RPcmefNqH/E2ydWnmZEZ8Zqy0QtVfMDV?=
- =?us-ascii?Q?pbopD1lKPrVzIPF1r1QBeZNL1d3eYWv0dGOAn0Ks9CYD9lq9cC4u1ZJ0h5DA?=
- =?us-ascii?Q?sePeiIf+XjjaqDMe2Q6qgDXEZ1/PTrCUclBjtkujScC805NwCBpMlDbTGVcT?=
- =?us-ascii?Q?/LOZVPJ2MPrasrcjY5XM3iW65cP9fsGg60dZvLTzt0bMpNvBvETJQEG5JM8O?=
- =?us-ascii?Q?LaMJozXXlKKHm3KzUacAlsR2w6XbLR5fXd/Kbxllk9ROoQEy3fdR39GR7GZZ?=
- =?us-ascii?Q?9gA/l0uip3w1M+pFtICI/Z5NLdC1VZqUASchA8p9+SAKADJRdSMejwWJdare?=
- =?us-ascii?Q?o2QM05XUw0cqBvf3eKc5NX1gOEGUP9W9j0v6qB4eV+dfwcInGdgKPAMeEp/e?=
- =?us-ascii?Q?siRHyQ76tNjGWR3SPrKV2OtsgLBAax4IP5ud2jcUrVvfe3YZ9Dcpfwv9kl8l?=
- =?us-ascii?Q?UitvDjKjA6cuDLLEcfGucL5TEvfCJPJBwD1JGaDrfxJ30G2OE42SQAR0+EOA?=
- =?us-ascii?Q?KTbjq0LFsL2vLU68JHUyxaZlctGdyd1lYNYeTbuApPV1mHKyU4iW2AbQt2vl?=
- =?us-ascii?Q?LRD5TE2nikdpqaGwjlDbo4pJjpKgkMJg71xxuK3egXSnoERTPis8eLa7pI9L?=
- =?us-ascii?Q?ubS+4YTm3c8mej28S2xuZA3EqNoawVdlImQbJOOzTW/bxI6nNfI+BPIF5TkT?=
- =?us-ascii?Q?f1nimAJEmUPC7APSidpzIOFq36J65mqbNJfBq/8wu0CH3RIxh8UZF8xNO/lx?=
- =?us-ascii?Q?ZXvP7Cj6exjw6pB52BCoXK/2+7PLF+rNaQQ/udpuLkgjqKjqJCEx+zBr94rj?=
- =?us-ascii?Q?OrEbXU2bUWDDu9MY/v3afQy3f80SK3QUfCSlX+cBMuM0oYJRtbA08JyN0nIh?=
- =?us-ascii?Q?zF6+FYhEmb9dkPICaTXac7tOhgIrcf+8Dg4A8gNAGKlyRi1u+o28MaIq/pw5?=
- =?us-ascii?Q?JWQ4HMtp50nMTrdq36cJ/Ug=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58dcdb05-fec0-42f3-35ec-08d9be1d1655
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 09:43:58.9876
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wvp5dsQ+Xozzr54MLrdqzXPA8qfAbUojjcAp9y6zj4NP8/5Ifpo3/zBir0HsTf3x3kzZ9kksB4G+huC/SiiFbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3050
+References: <20211210081659.4621-1-jhp@endlessos.org> <6b0fcc8cf3bd4a77ad190dc6f72eb66f@realtek.com>
+ <CAAd53p66HPH9v0_hzOaQAydberd8JA4HthNVwpQ86xb-dSuUEA@mail.gmail.com>
+ <CAPpJ_efvmPWsCFsff35GHV8Q52YvQcFr_Hs=q3RtvbfVohY+4Q@mail.gmail.com>
+ <617008e3be9c4b5aa37b26f97daf9354@realtek.com> <CAPpJ_ecqf+LqkN-Wb+zNGHbtJ3rKD8_kU3W0c2gTQGQqK1sUwg@mail.gmail.com>
+ <e78b81f3a73c45b59f4c4d9f5b414508@realtek.com>
+In-Reply-To: <e78b81f3a73c45b59f4c4d9f5b414508@realtek.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 13 Dec 2021 17:43:57 +0800
+Message-ID: <CAAd53p5A01DiQH24BnEb=tEPNGSo8tyziyb59boapsY2ofeGjg@mail.gmail.com>
+Subject: Re: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
+To:     Pkshih <pkshih@realtek.com>
+Cc:     Jian-Hong Pan <jhp@endlessos.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux@endlessos.org" <linux@endlessos.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+On Mon, Dec 13, 2021 at 5:00 PM Pkshih <pkshih@realtek.com> wrote:
+>
+>
+> > -----Original Message-----
+> > From: Jian-Hong Pan <jhp@endlessos.org>
+> > Sent: Monday, December 13, 2021 3:31 PM
+> > To: Pkshih <pkshih@realtek.com>
+> > Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>; Yan-Hsuan Chuang <tony=
+0620emma@gmail.com>; Kalle Valo
+> > <kvalo@codeaurora.org>; linux-wireless@vger.kernel.org; netdev@vger.ker=
+nel.org;
+> > linux-kernel@vger.kernel.org; linux@endlessos.org
+> > Subject: Re: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
+> >
+> > Pkshih <pkshih@realtek.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=8811=E6=97=
+=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=882:31=E5=AF=AB=E9=81=93=EF=BC=9A
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Jian-Hong Pan <jhp@endlessos.org>
+> > > > Sent: Friday, December 10, 2021 5:34 PM
+> > > > To: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > Cc: Pkshih <pkshih@realtek.com>; Yan-Hsuan Chuang <tony0620emma@gma=
+il.com>; Kalle Valo
+> > > > <kvalo@codeaurora.org>; linux-wireless@vger.kernel.org; netdev@vger=
+.kernel.org;
+> > > > linux-kernel@vger.kernel.org; linux@endlessos.org
+> > > > Subject: Re: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
+> > > >
+> > > > Kai-Heng Feng <kai.heng.feng@canonical.com> =E6=96=BC 2021=E5=B9=B4=
+12=E6=9C=8810=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:24=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+> > > >
+> > > > > Right now it seems like only Intel platforms are affected, so can=
+ I
+> > > > > propose a patch to disable ASPM when its upstream port is Intel?
+> > > >
+> > > > I only have laptops with Intel chip now.  So, I am not sure the sta=
+tus
+> > > > with AMD platforms.
+> > > > If this is true, then "disable ASPM when its upstream port is Intel=
+"
+> > > > might be a good idea.
+> > > >
+> > >
+> > > Jian-Hong, could you try Kai-Heng's workaround that only turn off ASP=
+M
+> > > during NAPI poll function. If it also works to you, I think it is oka=
+y
+> > > to apply this workaround to all Intel platform with RTL8821CE chipset=
+.
+> > > Because this workaround has little (almost no) impact of power consum=
+ption.
+> >
+> > According to Kai-Heng's hack patch [1] and the comment [2] mentioning
+> > checking "ref_cnt" by rtw_pci_link_ps(), I arrange the patch as
+> > following.
+>
+> I meant that move "ref_cnt" into rtw_pci_link_ps() by [2], but you remove
+> the "ref_cnt". This leads lower performance, because it must turn off
+> ASPM after napi_poll() when we have high traffic.
+>
+> In fact, Kai-Heng's patch is to leave ASPM before napi_poll(), and
+> "restore" ASPM setting. So, we still need "ref_cnt".
 
-Fix following coccicheck warning:
-WARNING: Function "for_each_available_child_of_node" 
-should have of_node_put() before return.
+I am working on the patch for proper upstream inclusion. Will send out soon=
+.
 
-Early exits from for_each_available_child_of_node should decrement the
-node reference counter.
+Kai-Heng
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/gpu/drm/mcde/mcde_dsi.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/mcde/mcde_dsi.c b/drivers/gpu/drm/mcde/mcde_dsi.c
-index 5651734ce..cac1bde
---- a/drivers/gpu/drm/mcde/mcde_dsi.c
-+++ b/drivers/gpu/drm/mcde/mcde_dsi.c
-@@ -1110,6 +1110,7 @@ static int mcde_dsi_bind(struct device *dev, struct device *master,
- 
- 			bridge = of_drm_find_bridge(child);
- 			if (!bridge) {
-+				of_node_put(child);
- 				dev_err(dev, "failed to find bridge\n");
- 				return -EINVAL;
- 			}
--- 
-2.7.4
-
+>
+>
+> > This patch only disables ASPM (if the hardware has the capability)
+> > when system gets into rtw_pci_napi_poll() and re-enables ASPM when it
+> > leaves rtw_pci_napi_poll().  It is as Ping-Ke mentioned "only turn off
+> > ASPM during NAPI poll function".
+> > The WiFi & BT work, and system is still alive after I use the internet
+> > awhile.  Besides, there is no more "pci bus timeout, check dma status"
+> > error.
+> >
+> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D215131#c11
+> > [2] https://bugzilla.kernel.org/show_bug.cgi?id=3D215131#c15
+> >
+> > Jian-Hong Pan
+> >
+> > diff --git a/drivers/net/wireless/realtek/rtw88/pci.c
+> > b/drivers/net/wireless/realtek/rtw88/pci.c
+> > index a7a6ebfaa203..a6fdddecd37d 100644
+> > --- a/drivers/net/wireless/realtek/rtw88/pci.c
+> > +++ b/drivers/net/wireless/realtek/rtw88/pci.c
+> > @@ -1658,6 +1658,7 @@ static int rtw_pci_napi_poll(struct napi_struct
+> > *napi, int budget)
+> >                                               priv);
+> >         int work_done =3D 0;
+> >
+> > +       rtw_pci_link_ps(rtwdev, false);
+> >         while (work_done < budget) {
+> >                 u32 work_done_once;
+> >
+> > @@ -1681,6 +1682,7 @@ static int rtw_pci_napi_poll(struct napi_struct
+> > *napi, int budget)
+> >                 if (rtw_pci_get_hw_rx_ring_nr(rtwdev, rtwpci))
+> >                         napi_schedule(napi);
+> >         }
+> > +       rtw_pci_link_ps(rtwdev, true);
+> >
+> >         return work_done;
+> >  }
+> >
+>
+> How about doing this thing only if 8821CE and Intel platform?
+> Could you help to add this?
+>
+> --
+> Ping-ke
+>
+>

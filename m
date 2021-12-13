@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F9E4730E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8227A4730FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240120AbhLMPs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:48:26 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:56880 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239266AbhLMPsZ (ORCPT
+        id S240120AbhLMP5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:57:54 -0500
+Received: from pmta31.teksavvy.com ([76.10.157.38]:26254 "EHLO
+        pmta31.teksavvy.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234603AbhLMP5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:48:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639410504; x=1670946504;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=XhWtFV7u63XPezj9PznQ9BhMGOrSptpvlb1wVN/lahw=;
-  b=nHslaDLXUBtcEQo5i0Fb5IE/QbvIt7xu6er4kkxyhV9Nz2C7mPJBL98M
-   QEBXez1qc3C2KDeYjaPTmTpfYKDn3YZbc1dxWrcMSdDIqL7UFHy8VbVfO
-   /sRPRbwc0H8IG4RQIEe9SbBseJB4IjG9jL4p7UU4f9Y922gMupqFK6hPN
-   dYosYBob3N5IfCxtvMRxtO6Iu+hPxrZ5W6+eFddl9GROS3HqD9y17mYdu
-   BB7IB+exFpT6u9in39RuBDTAhlGlI7A1CQQ7AmRF965L8zRcVjbmy4kgk
-   Cy1dSWJO3KHyiSPPe0x58Y82o/ZqheMz/OqmZXLnsZ1RTcoyO0BeLliHW
-   Q==;
-IronPort-SDR: AVUwnS3oZZh7vLD3iu65UD6twSY5iwrBrY6jLD2u2q5hGxQQpO2jPo9yiARUofFx8Ci4va1I92
- KIb8/2wf+cvDzZfwXpVBhV2GGLHRM9WPEpOo40z/7XEg6fpkIe5vDOUjJSp3ED6I+1gPqdPJ+F
- +d2yZ65Ay6gadn/XXr4CzjTH8ElSnQqNewRBT7jOaynBOLFoaF2Q3IaJg5jKaI18WoCjKIVM/b
- fD4D1QAomtoiO0GSS4Cq1H9wv519l0bFh20SLY/Azjya0gFy4rMjKPG8YyhLEPbyOmYoG4eaeq
- n60cRx6ohXCoyo9p33d5DEP5
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="79373756"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2021 08:48:23 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 13 Dec 2021 08:48:22 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 13 Dec 2021 08:48:21 -0700
-Subject: Re: [PATCH] ARM: dts: at91: enable watchdog for SAMA5D3 Xplained
-To:     Michael Opdenacker <michael.opdenacker@bootlin.com>,
-        <robh+dt@kernel.org>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211209154540.6391-1-michael.opdenacker@bootlin.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <9f01d0c7-b5c3-1353-8cc6-ed797e466706@microchip.com>
-Date:   Mon, 13 Dec 2021 16:48:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Mon, 13 Dec 2021 10:57:52 -0500
+X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 10:57:52 EST
+IronPort-SDR: //Q99cuBkl4O2aGK59yq8XsjPqqMbuiTyWf20w/119Ts44Zd8EwbWGMieZmtKr3EsMA+1aiLDr
+ lxZqnoeFiegA==
+IronPort-Data: =?us-ascii?q?A9a23=3Avr3N4qoBQ1pR7RUH0IYJzmhfNmheBmLtZBIvg?=
+ =?us-ascii?q?KrLsJaIsI4StFCztgarIBmOO/reNzPwf4t/Od608kxQ75PXz9dlTQJprCxkQ?=
+ =?us-ascii?q?yMX85acVYWSI27OZC7DdceroGCLTyk9hngsFC29J5Pljk/F3oPJ8D8shclke?=
+ =?us-ascii?q?pKmULSdY3ooHlc+IMscoUsLd9AR09YAbeeRXlvlVePa+6UzCXf9s9JGGjt8B?=
+ =?us-ascii?q?5Gr8nuDiM/PVAYw5TTSUxzrUGj2zBH5BLpHTU24wuCRroN8RoZWTM6bpF21E?=
+ =?us-ascii?q?/+wE77A17qYfrjHnk0iGtY+PCCkkHNaQJqIhR9B4Cc11KgmL/cVYk5LzTKTk?=
+ =?us-ascii?q?Lidyv0X6drqEF1vZPSR3r1BAnG0EAknVUFC0JXdKHS7vN3V9EbBb2fE0fhkF?=
+ =?us-ascii?q?khwNoodkgpyKTgRqKJJcWlSN3hvgMrzmtpXUNJEmsU8JcjDJ54EtzdswFnxF?=
+ =?us-ascii?q?fs8TIDrW6jQ6M8e1yVYrtxPAv/fT9EEcjcpZxPFCzVEPU0dBY4WmPiuwH/yb?=
+ =?us-ascii?q?1Vwql+PqK8mpXPB0SR62b7qNtvec9jMTsJQ9m6Yu2OA4G3/DTkRPdqYzzuO+?=
+ =?us-ascii?q?3bqjejK9QvkQ486CKCo+/Jti1qW3nEPBQcNE1C8pJGRiUe/X9tZJGQO9yMqs?=
+ =?us-ascii?q?aUxskesS7HVVBS9iHiJuVsOVt1WVeE3gCmWw6/VywKeAW4JCDBAAPQrsM4/S?=
+ =?us-ascii?q?TE010OOt9zsDD1r9raSTBq1/7OPpHa+NDYYKUcLYTQNCBMf5Nvuq511iQjAJ?=
+ =?us-ascii?q?v5nEaionpj5HjrY3T+Htm49iq8VgMpN0L+0lXjDgjSxtt3KQxQz6wH/QG2o9?=
+ =?us-ascii?q?EV6aZSjaoju7kLUhd5qNo+VSlSQ+kMPnNSCxPIDB4uE0ieKRY0w8BuBjxqeG?=
+ =?us-ascii?q?GeAxAQ2Rdx7rmnooiLyO4tZ6jVzYltkMd0NZyH4JkTUvGtsCFZoFCPCRcdKj?=
+ =?us-ascii?q?0iZUKzGFZTdKOk=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aj/jgFKCyaUX8lrXlHem155DYdb4zR+YMi2?=
+ =?us-ascii?q?TDGXoddfUzSL36qynAppsmPHPP4wr5O0tBpTn/Ase9qBrnnPZICOIqUYtKMj?=
+ =?us-ascii?q?ONhILRFuBf0bc=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2FoBADSardh/5XX1BhagRKBUIMPbGy?=
+ =?us-ascii?q?NS4hLAZwOgXwLAQEBAQEBAQEBCUEEAQGFAAQCgyYmNgcOAQIEAQEBEgEBAQU?=
+ =?us-ascii?q?BAQEBAQYEAgKBGIV1hwQBIAMjKSZvE4JxgxiyVoEBiBaBY4E6iSyFPYFVRIE?=
+ =?us-ascii?q?VgnpuikIEkneBDpgUAYxCnTQzB4NDgTsLnUgaM6dQliymSYFoAoIMMxojgzl?=
+ =?us-ascii?q?RGQ+OLBaOTCYwOAIGCwEBAwmQcAEB?=
+X-IPAS-Result: =?us-ascii?q?A2FoBADSardh/5XX1BhagRKBUIMPbGyNS4hLAZwOgXwLA?=
+ =?us-ascii?q?QEBAQEBAQEBCUEEAQGFAAQCgyYmNgcOAQIEAQEBEgEBAQUBAQEBAQYEAgKBG?=
+ =?us-ascii?q?IV1hwQBIAMjKSZvE4JxgxiyVoEBiBaBY4E6iSyFPYFVRIEVgnpuikIEkneBD?=
+ =?us-ascii?q?pgUAYxCnTQzB4NDgTsLnUgaM6dQliymSYFoAoIMMxojgzlRGQ+OLBaOTCYwO?=
+ =?us-ascii?q?AIGCwEBAwmQcAEB?=
+X-IronPort-AV: E=Sophos;i="5.88,202,1635220800"; 
+   d="scan'208";a="175691171"
+Received: from 24-212-215-149.cable.teksavvy.com (HELO BradsZBook.confuseacat.org) ([24.212.215.149])
+  by smtp13.teksavvy.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Dec 2021 10:50:42 -0500
+From:   Bradley Scott <Bradley.Scott@zebra.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Kailang Yang <kailang@realtek.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Sami Loone <sami@loone.fi>, Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bradley Scott <Bradley.Scott@zebra.com>
+Subject: [PATCH v2] ALSA: hda/realtek: Amp init fixup for HP ZBook 15 G6
+Date:   Mon, 13 Dec 2021 10:49:39 -0500
+Message-Id: <20211213154938.503201-1-Bradley.Scott@zebra.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211209154540.6391-1-michael.opdenacker@bootlin.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2021 at 16:45, Michael Opdenacker wrote:
-> Like on the SAMA5D2 and SAMA5D4 Xplained boards,
-> enable the watchdog device on the SAMA5D3 Xplained board.
-> 
-> As explained on drivers/watchdog/at91sam9_wdt.c,
-> for the watchdog driver to work in Linux, you need to make sure
-> that the bootstrap / bootloader doesn't disable the watchdog,
-> as the Watchdog Timer Mode Register can be only written to once.
-> 
-> Signed-off-by: Michael Opdenacker <michael.opdenacker@bootlin.com>
+HP ZBook 15 G6 (SSID 103c:860f) needs the same speaker amplifier
+initialization as used on several other HP laptops using ALC285.
 
-Hi Michael,
+Signed-off-by: Bradley Scott <Bradley.Scott@zebra.com>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for your patch.
-
-Even if I understand the need for alignment with other sama5 SoCs, I'm 
-not planning to take this patch to enable the watchdog by default.
-
-As you highlight, this older watchdog, compared to the ones on sama5d4 
-or sama5d2, cannot be re-enabled.
-On our usual prebuilt demos and configurations, that don't have watchdog 
-support by default, enabling it triggers the following errors:
-at91_wdt fffffe40.watchdog: watchdog is disabled
-at91_wdt: probe of fffffe40.watchdog failed with error -22
-
-I prefer to let the user enable the watchdog explicitly, on the whole 
-chain of components for its use-case and make sure to "pet" it correctly.
-
-Best regards,
-   Nicolas
-
-> ---
->   arch/arm/boot/dts/at91-sama5d3_xplained.dts | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/at91-sama5d3_xplained.dts b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
-> index d72c042f2850..440eccc9eb38 100644
-> --- a/arch/arm/boot/dts/at91-sama5d3_xplained.dts
-> +++ b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
-> @@ -79,6 +79,10 @@ timer1: timer@1 {
->                                  };
->                          };
-> 
-> +                       watchdog: watchdog@fffffe40 {
-> +                               status = "okay";
-> +                       };
-> +
->                          i2c0: i2c@f0014000 {
->                                  pinctrl-0 = <&pinctrl_i2c0_pu>;
->                                  status = "okay";
-> --
-> 2.25.1
-> 
-
-
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 3599f4c85ebf..d162662fe684 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8660,6 +8660,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x84da, "HP OMEN dc0019-ur", ALC295_FIXUP_HP_OMEN),
+ 	SND_PCI_QUIRK(0x103c, 0x84e7, "HP Pavilion 15", ALC269_FIXUP_HP_MUTE_LED_MIC3),
+ 	SND_PCI_QUIRK(0x103c, 0x8519, "HP Spectre x360 15-df0xxx", ALC285_FIXUP_HP_SPECTRE_X360),
++	SND_PCI_QUIRK(0x103c, 0x860f, "HP ZBook 15 G6", ALC285_FIXUP_HP_GPIO_AMP_INIT),
+ 	SND_PCI_QUIRK(0x103c, 0x861f, "HP Elite Dragonfly G1", ALC285_FIXUP_HP_GPIO_AMP_INIT),
+ 	SND_PCI_QUIRK(0x103c, 0x869d, "HP", ALC236_FIXUP_HP_MUTE_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x86c7, "HP Envy AiO 32", ALC274_FIXUP_HP_ENVY_GPIO),
 -- 
-Nicolas Ferre
+2.25.1
+

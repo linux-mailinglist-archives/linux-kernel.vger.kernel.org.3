@@ -2,142 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 244264736A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DB24736AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243141AbhLMVnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242947AbhLMVnW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:43:22 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F7BC061756
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:43:20 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id n66so24914398oia.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:43:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=TmGwTxtk1ApFzRT5JcuqotjuO1Eq6SC3X6wTg4aSOGc=;
-        b=eNaZByPA3A9BMSPWspOZQZYK28rssM3XgZvdRx5XCTDo+TI+Z8nG1+mtIgUfxDnjCQ
-         bTEdUbOAJjsIjMzHXemYzUBdwPs2m2wTR//V0+o7cw+D60ALBLxTHVQuUEx5jmat3Cjs
-         p1UaXu+fZVvCxOFZfcOs4V3KjhAoTqrodl634=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=TmGwTxtk1ApFzRT5JcuqotjuO1Eq6SC3X6wTg4aSOGc=;
-        b=JQoacq42YxiCum7FmvU3dJMr3UmphcuUts+FA3Yo9n4P6FE+9tXgZC/7b8KZmBdAN2
-         vobBlP2lJrT1/+EYJCYYRT1KTrWSyArIfbJRqYA0CcgT4M6fnfk/qETgas8/qwRB9NlL
-         A9V3Z4EWC2uZ1usaUGGflw4HLICoWEQ33sa8msSPApWn4fIenKGVpwHxcVQrpGsWhanO
-         pz1MadgeXiO8nJgxNyFThEl1pid1xhxpe7IH7GvQemGCI7rX/f0V5QdmpBdoYtb+EScX
-         bQLQuE2+hhcKQRv87gbMkIRQm4xjTO2G6Qr3p6dEKY9l6bbr5M6rS/XulfiKdl+X9EMI
-         Bm+w==
-X-Gm-Message-State: AOAM532ttOX83//guJslCEgBnD5QswpjCu91cv+MSZFMAn4r9Z0fTnlL
-        JGCvXSbbMtK2Ds/wwU4vHavf5xW4MTJ/g6mTeoR+1g==
-X-Google-Smtp-Source: ABdhPJwBmJUtITTggfiBEHtxlPNAqOaF12KYEh1ljweCao7w72Js/U/c7J5QINoBhIaZJpcXb7QiXAChzLKfd0d+7y0=
-X-Received: by 2002:a05:6808:211f:: with SMTP id r31mr1129616oiw.64.1639431800144;
- Mon, 13 Dec 2021 13:43:20 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 13 Dec 2021 13:43:19 -0800
+        id S239375AbhLMVp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:45:59 -0500
+Received: from mga07.intel.com ([134.134.136.100]:41564 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232880AbhLMVp6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 16:45:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639431958; x=1670967958;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jlyCv0m35Q1t6sjji4xO3aG4mshCzGilPnMN5itGqS8=;
+  b=gN/KMn8tJ8GF9/U+MTH8oOMGSt6se37gd9pSaQNhuUzY2HxB6oYUTjhz
+   CELvf763xoIFooU+/ghulH0smJtyQdd/xUsCvqGphz4CDZM8OelLgZgel
+   bwceeUVVLElnLEomUI3DpHx2gKN00eLBFgYMmFFSt8wMq3ibyIRuexxhe
+   KnpBK94mwHpfOXbgVuJAxwhY1vierrUO0eigI11adxBzMXCv0IfIoYLh5
+   OHmaubQgpm8UrDGj4EDO7By0OM9nwPtc20KA6IXu0CZtCHc3R5vZUq3Lg
+   0bDCeaWadiuPnotJgePdh6Lj5HjT4uKLfAyjrAUr2ldZBmNyofhQq1TOC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302217508"
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="302217508"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 13:45:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="464811765"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 13:45:57 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwt8u-00075t-AD; Mon, 13 Dec 2021 21:45:56 +0000
+Date:   Tue, 14 Dec 2021 05:45:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Pirko <jiri@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:linecards 55/109]
+ drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:366:33: warning:
+ variable 'linecards' set but not used
+Message-ID: <202112140518.H94LqdFM-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <Ya+mV/zuRVVIGVy1@phenom.ffwll.local>
-References: <20211202222732.2453851-1-swboyd@chromium.org> <Ya+mV/zuRVVIGVy1@phenom.ffwll.local>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Mon, 13 Dec 2021 13:43:19 -0800
-Message-ID: <CAE-0n53dnsAdjBUVmDMbcvrSJEE=RPu7PGX_zaWCZ_ZBUAythA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/34] component: Make into an aggregate bus
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emma Anholt <emma@anholt.net>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Inki Dae <inki.dae@samsung.com>,
-        James Qian Wang <james.qian.wang@arm.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joerg Roedel <joro@8bytes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Daniel Vetter (2021-12-07 10:22:15)
-> On Thu, Dec 02, 2021 at 02:26:58PM -0800, Stephen Boyd wrote:
-> > This series is from discussion we had on reordering the device lists for
-> > drm shutdown paths[1]. I've introduced an 'aggregate' bus that we put
-> > the aggregate device onto and then we probe the aggregate device once
-> > all the components are probed and call component_add(). The probe/remove
-> > hooks are where the bind/unbind calls go, and then a shutdown hook is
-> > added that can be used to shutdown the drm display pipeline at the right
-> > time.
-> >
-> > This works for me on my sc7180 board. I no longer get a warning from i2c
-> > at shutdown that we're trying to make an i2c transaction after the i2c
-> > bus has been shutdown. There's more work to do on the msm drm driver to
-> > extract component device resources like clks, regulators, etc. out of
-> > the component bind function into the driver probe but I wanted to move
-> > everything over now in other component drivers before tackling that
-> > problem.
-> >
-> > Tested-by tags would be appreciated, and Acked-by/Reviewed-by tags too.
->
-> Thanks for pushing this forward. Unfortunately I'm completely burried and
-> it's just not improving, so merge plan:
->
-> - please get Greg KH to ack the bus/driver core stuff
->
-> - please get one of the drm-misc committers we have from Google's Chromeos
->   team (there should be a few by now) to review&push this.
+tree:   https://github.com/jpirko/linux_mlxsw linecards
+head:   2399de99a931630e05915fbcb4f84ca21a8e000a
+commit: 8693f5ee04deacc07510585fee350a2e30f7d4fc [55/109] mlxsw: core_linecards: Add line card objects and implement provisioning
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20211214/202112140518.H94LqdFM-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/8693f5ee04deacc07510585fee350a2e30f7d4fc
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw linecards
+        git checkout 8693f5ee04deacc07510585fee350a2e30f7d4fc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
 
-Sounds like a plan. Thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> Otherwise I fear this might get stuck and I'd really like to avoid that.
->
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/mellanox/mlxsw/core_linecards.c: In function 'mlxsw_linecard_unprovision':
+>> drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:366:33: warning: variable 'linecards' set but not used [-Wunused-but-set-variable]
+     366 |         struct mlxsw_linecards *linecards;
+         |                                 ^~~~~~~~~
+
+
+vim +/linecards +366 drivers/net/ethernet/mellanox/mlxsw/core_linecards.c
+
+   359	
+   360	static int mlxsw_linecard_unprovision(struct devlink_linecard *devlink_linecard,
+   361					      void *priv,
+   362					      struct netlink_ext_ack *extack)
+   363	{
+   364		enum mlxsw_reg_mbct_fsm_state fsm_state;
+   365		struct mlxsw_linecard *linecard = priv;
+ > 366		struct mlxsw_linecards *linecards;
+   367		enum mlxsw_reg_mbct_status status;
+   368		unsigned int ini_wait_retries = 0;
+   369		struct mlxsw_core *mlxsw_core;
+   370		int err;
+   371	
+   372		mutex_lock(&linecard->lock);
+   373	
+   374		linecards = linecard->linecards;
+   375		mlxsw_core = linecard->linecards->mlxsw_core;
+   376	
+   377	query_ini_status:
+   378		err = mlxsw_linecard_query_status(linecard, &status,
+   379						  &fsm_state, extack);
+   380		if (err)
+   381			goto err_out;
+   382	
+   383		switch (fsm_state) {
+   384		case MLXSW_REG_MBCT_FSM_STATE_INI_IN_USE:
+   385			if (ini_wait_retries++ > MLXSW_LINECARD_INI_WAIT_RETRIES) {
+   386				NL_SET_ERR_MSG_MOD(extack, "Failed to wait for linecard INI to be not used");
+   387				goto err_out;
+   388			}
+   389			mdelay(MLXSW_LINECARD_INI_WAIT_MS);
+   390			goto query_ini_status;
+   391		default:
+   392			break;
+   393		}
+   394	
+   395		mlxsw_reg_mbct_pack(linecard->mbct_pl, linecard->slot_index,
+   396				    MLXSW_REG_MBCT_OP_ERASE_INI_IMAGE, 0,
+   397				    false, false, NULL);
+   398		err = mlxsw_reg_write(mlxsw_core, MLXSW_REG(mbct),
+   399				      linecard->mbct_pl);
+   400		if (err) {
+   401			NL_SET_ERR_MSG_MOD(extack, "Failed to erase linecard INI");
+   402			goto err_out;
+   403		}
+   404		mlxsw_reg_mbct_unpack(linecard->mbct_pl, NULL, &status, &fsm_state);
+   405		switch (status) {
+   406		case MLXSW_REG_MBCT_STATUS_ERASE_COMPLETE:
+   407			break;
+   408		default:
+   409			/* Should not happen */
+   410			fallthrough;
+   411		case MLXSW_REG_MBCT_STATUS_ERASE_FAILED:
+   412			NL_SET_ERR_MSG_MOD(extack, "Failed to erase linecard INI");
+   413			goto fix_fsm_err_out;
+   414		case MLXSW_REG_MBCT_STATUS_ERROR_INI_IN_USE:
+   415			NL_SET_ERR_MSG_MOD(extack, "Failed to erase linecard INI while being used");
+   416			goto fix_fsm_err_out;
+   417		}
+   418		goto out;
+   419	
+   420	fix_fsm_err_out:
+   421		mlxsw_linecard_fix_fsm_state(linecard, fsm_state);
+   422	err_out:
+   423		mlxsw_linecard_provision_fail(linecard);
+   424	out:
+   425		mutex_unlock(&linecard->lock);
+   426		return err;
+   427	}
+   428	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

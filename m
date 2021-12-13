@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74A74728FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B0D472674
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240495AbhLMKQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:16:48 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:46136 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239089AbhLMJ4t (ORCPT
+        id S237913AbhLMJwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233004AbhLMJq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:56:49 -0500
+        Mon, 13 Dec 2021 04:46:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2485C08EB4B;
+        Mon, 13 Dec 2021 01:41:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A3830CE0E85;
-        Mon, 13 Dec 2021 09:56:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DA1C34601;
-        Mon, 13 Dec 2021 09:56:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A562B80E23;
+        Mon, 13 Dec 2021 09:41:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 894A3C341C5;
+        Mon, 13 Dec 2021 09:41:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389404;
-        bh=q6kYNjuRyZxJiwplzh8MYrHB3szUhr1KWHr4N1NdtXA=;
+        s=korg; t=1639388480;
+        bh=C8gy0G98KFGsoXjGSHAbINoBm3zA1+daz2NB0fwNbdE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TwOFaJRHfhz9ZMsHBRbbh5kGdtq9C5ZCLlDsXYs8UZa9ZoPfDxKukGFLIPMwAydqp
-         6zLwDgOezLMr4yi8zfeqdbVyCSxm7eSibzprqWHpkSVvVsJJMVFfUhs92dPqzWoZDc
-         PdP2bYuFnetgCWPjLlAbIT4PspzMPQUH5xl6DQoE=
+        b=loKH2TzT7Z5yT/1filW/aR6IbWEgpswOjIDyPX9Vd9eCqz8c+rnOuJzvLVdbbGqew
+         twFm1RkiRdDudV0aJNGqntwKcSES3KF5B6WJWgJtHSrCG3NK/DQv3j6tsCklrT+AfS
+         sqe6K/Tem+6ddEt0QNEX+Z+RsRQ488WdmYwlnfR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [PATCH 5.15 087/171] selftests: KVM: avoid failures due to reserved HyperTransport region
+        stable@vger.kernel.org,
+        Brian Silverman <brian.silverman@bluerivertech.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 31/74] can: m_can: Disable and ignore ELO interrupt
 Date:   Mon, 13 Dec 2021 10:30:02 +0100
-Message-Id: <20211213092947.985461518@linuxfoundation.org>
+Message-Id: <20211213092931.851793274@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,141 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+From: Brian Silverman <brian.silverman@bluerivertech.com>
 
-commit c8cc43c1eae2910ac96daa4216e0fb3391ad0504 upstream.
+commit f58ac1adc76b5beda43c64ef359056077df4d93a upstream.
 
-AMD proceessors define an address range that is reserved by HyperTransport
-and causes a failure if used for guest physical addresses.  Avoid
-selftests failures by reserving those guest physical addresses; the
-rules are:
+With the design of this driver, this condition is often triggered.
+However, the counter that this interrupt indicates an overflow is never
+read either, so overflowing is harmless.
 
-- On parts with <40 bits, its fully hidden from software.
+On my system, when a CAN bus starts flapping up and down, this locks up
+the whole system with lots of interrupts and printks.
 
-- Before Fam17h, it was always 12G just below 1T, even if there was more
-RAM above this location.  In this case we just not use any RAM above 1T.
+Specifically, this interrupt indicates the CEL field of ECR has
+overflowed. All reads of ECR mask out CEL.
 
-- On Fam17h and later, it is variable based on SME, and is either just
-below 2^48 (no encryption) or 2^43 (encryption).
-
-Fixes: ef4c9f4f6546 ("KVM: selftests: Fix 32-bit truncation of vm_get_max_gfn()")
+Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
+Link: https://lore.kernel.org/all/20211129222628.7490-1-brian.silverman@bluerivertech.com
 Cc: stable@vger.kernel.org
-Cc: David Matlack <dmatlack@google.com>
-Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Message-Id: <20210805105423.412878-1-pbonzini@redhat.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Tested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- tools/testing/selftests/kvm/include/kvm_util.h     |    9 ++
- tools/testing/selftests/kvm/lib/kvm_util.c         |    2 
- tools/testing/selftests/kvm/lib/x86_64/processor.c |   68 +++++++++++++++++++++
- 3 files changed, 78 insertions(+), 1 deletion(-)
 
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -69,6 +69,15 @@ enum vm_guest_mode {
+---
+ drivers/net/can/m_can/m_can.c |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -233,15 +233,15 @@ enum m_can_mram_cfg {
  
- #endif
+ /* Interrupts for version 3.0.x */
+ #define IR_ERR_LEC_30X	(IR_STE	| IR_FOE | IR_ACKE | IR_BE | IR_CRCE)
+-#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_ELO | IR_BEU | \
+-			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
+-			 IR_RF1L | IR_RF0L)
++#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_BEU | IR_BEC | \
++			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
++			 IR_RF0L)
+ #define IR_ERR_ALL_30X	(IR_ERR_STATE | IR_ERR_BUS_30X)
+ /* Interrupts for version >= 3.1.x */
+ #define IR_ERR_LEC_31X	(IR_PED | IR_PEA)
+-#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_ELO | IR_BEU | \
+-			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
+-			 IR_RF1L | IR_RF0L)
++#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_BEU | IR_BEC | \
++			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
++			 IR_RF0L)
+ #define IR_ERR_ALL_31X	(IR_ERR_STATE | IR_ERR_BUS_31X)
  
-+#if defined(__x86_64__)
-+unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
-+#else
-+static inline unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
-+{
-+	return ((1ULL << vm->pa_bits) >> vm->page_shift) - 1;
-+}
-+#endif
-+
- #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
- #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
- 
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -307,7 +307,7 @@ struct kvm_vm *vm_create(enum vm_guest_m
- 		(1ULL << (vm->va_bits - 1)) >> vm->page_shift);
- 
- 	/* Limit physical addresses to PA-bits. */
--	vm->max_gfn = ((1ULL << vm->pa_bits) >> vm->page_shift) - 1;
-+	vm->max_gfn = vm_compute_max_gfn(vm);
- 
- 	/* Allocate and setup memory for guest. */
- 	vm->vpages_mapped = sparsebit_alloc();
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1433,3 +1433,71 @@ struct kvm_cpuid2 *vcpu_get_supported_hv
- 
- 	return cpuid;
- }
-+
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_ebx 0x68747541
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_ecx 0x444d4163
-+#define X86EMUL_CPUID_VENDOR_AuthenticAMD_edx 0x69746e65
-+
-+static inline unsigned x86_family(unsigned int eax)
-+{
-+        unsigned int x86;
-+
-+        x86 = (eax >> 8) & 0xf;
-+
-+        if (x86 == 0xf)
-+                x86 += (eax >> 20) & 0xff;
-+
-+        return x86;
-+}
-+
-+unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
-+{
-+	const unsigned long num_ht_pages = 12 << (30 - vm->page_shift); /* 12 GiB */
-+	unsigned long ht_gfn, max_gfn, max_pfn;
-+	uint32_t eax, ebx, ecx, edx, max_ext_leaf;
-+
-+	max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
-+
-+	/* Avoid reserved HyperTransport region on AMD processors.  */
-+	eax = ecx = 0;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	if (ebx != X86EMUL_CPUID_VENDOR_AuthenticAMD_ebx ||
-+	    ecx != X86EMUL_CPUID_VENDOR_AuthenticAMD_ecx ||
-+	    edx != X86EMUL_CPUID_VENDOR_AuthenticAMD_edx)
-+		return max_gfn;
-+
-+	/* On parts with <40 physical address bits, the area is fully hidden */
-+	if (vm->pa_bits < 40)
-+		return max_gfn;
-+
-+	/* Before family 17h, the HyperTransport area is just below 1T.  */
-+	ht_gfn = (1 << 28) - num_ht_pages;
-+	eax = 1;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	if (x86_family(eax) < 0x17)
-+		goto done;
-+
-+	/*
-+	 * Otherwise it's at the top of the physical address space, possibly
-+	 * reduced due to SME by bits 11:6 of CPUID[0x8000001f].EBX.  Use
-+	 * the old conservative value if MAXPHYADDR is not enumerated.
-+	 */
-+	eax = 0x80000000;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	max_ext_leaf = eax;
-+	if (max_ext_leaf < 0x80000008)
-+		goto done;
-+
-+	eax = 0x80000008;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	max_pfn = (1ULL << ((eax & 0xff) - vm->page_shift)) - 1;
-+	if (max_ext_leaf >= 0x8000001f) {
-+		eax = 0x8000001f;
-+		cpuid(&eax, &ebx, &ecx, &edx);
-+		max_pfn >>= (ebx >> 6) & 0x3f;
-+	}
-+
-+	ht_gfn = max_pfn - num_ht_pages;
-+done:
-+	return min(max_gfn, ht_gfn - 1);
-+}
+ /* Interrupt Line Select (ILS) */
+@@ -769,8 +769,6 @@ static void m_can_handle_other_err(struc
+ {
+ 	if (irqstatus & IR_WDI)
+ 		netdev_err(dev, "Message RAM Watchdog event due to missing READY\n");
+-	if (irqstatus & IR_ELO)
+-		netdev_err(dev, "Error Logging Overflow\n");
+ 	if (irqstatus & IR_BEU)
+ 		netdev_err(dev, "Bit Error Uncorrected\n");
+ 	if (irqstatus & IR_BEC)
 
 

@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E556472A4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C16C472A53
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243844AbhLMKiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S237234AbhLMKim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242714AbhLMKiD (ORCPT
+        with ESMTP id S243976AbhLMKiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:38:03 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449EFC03325B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:24:03 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id i63so22980751lji.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:24:03 -0800 (PST)
+        Mon, 13 Dec 2021 05:38:23 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08704C04C896;
+        Mon, 13 Dec 2021 02:24:56 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id o13so26085794wrs.12;
+        Mon, 13 Dec 2021 02:24:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=ut8m/pHjQ/juGIhmsdLwzZw5EmhQOWRBvf8EYOGONH4=;
-        b=HAQyv/tjCG5mRHKhpIOFK9wl9h2+bZ6gQ8cEV6v40WKZCm823BO9gkAogkN3wz0FDf
-         hiSSJ/pgU8R5s+d15YlWz+630rdg2TsHmDrwJhtKL2NG0gUXldFBYaunYjoWHiNyoDK/
-         aeVCIT3mm9ZMUuqenCGc824UG/HsIrJxYlRcv/pYxsXVXIZvtFGRyfFwRdHmTMq63zkn
-         OBEHF8akbPSP9CBZtg1we5g2xj1q6PXAvk6UsxBuFfMmgkLS2TrdU/DNl7OdFLwBMG9c
-         4PxWmp7G9yq1XDCRlgbIeU9/ijwDd3NRuuo9s6V+zM2HJ7DiRHVhidGkqtRYGoMa/s3g
-         w+GQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Lps8zlY0plffu89oo+ZuKtBVR2UFB4mYLL1XQcOR5SA=;
+        b=Za7I3FFfxdMWiq9GbGcKIbeq0brDgYen8LmJIsEVOpyPpHwYZbppF3xfqtlIfENdP1
+         jHzUFwVAP2of3Xe4rLtkWRMId6pLI74v5FjBEJhPFD2Qe3miPuN6o+ncw3dknYNTDqMQ
+         wi42NVQiYAJAWQuwYkLNh0hK3QsTiXETLvNGR0EhwzmqH4c74hCm5xpFWWJMJYXIQTGT
+         BYc3zFYCdPn8GMYWHCfq2KJLnwt2dEmjvKUfVgKQT2HwZ3pO9WkLRmLq19EdRyHkAMrM
+         fL4N8RW+umwAa887wcZi43Se2SgJtZuq1L7bW2zIXPKWZgkAjcr0R4miICMkPdiQ/sVh
+         cxTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ut8m/pHjQ/juGIhmsdLwzZw5EmhQOWRBvf8EYOGONH4=;
-        b=mcwYWp8gpIHxS0zIXRSUrguLC8C7ubYYiCNF+r+Ma6rga9IkNxcYaYeHpeV2tPbxNC
-         LGJcTGYRuOKHKCWwonVgz0hLmFBoXayB41BJAqW1orqrsArehUyQjYlwBRQRIznsoxwp
-         JwolfxAD/gkwKF80RmJ0vAZIeYPqLhQW8gICDAZjJDf77YIsaJEl53uSsV/rXrsXQx1Q
-         i15n9xBtf4WyxFRzFpNYmPVfrKZzuLBIaCDPSJ56FeMLcAHmb1V15c1IXF/enWCfHxhE
-         f7iVU4qz4N1cOAtAkrep9p5Q4PMdDWRmWp1WHGnctqRKt0WNgkt+OcVntUCJ9kxJD/KR
-         eCmA==
-X-Gm-Message-State: AOAM530im9z0XKALQjuqOH9IgB3R9lr25nWDGczrdluTJHAKv9JyoV/z
-        pAn9/vvQE9vjT2fVXinj9+i/QQ==
-X-Google-Smtp-Source: ABdhPJx/4K8Z4t6FEgQWd5ClisIx4aHYvKFbFIVbVb+MklUDPdcuGjpBcXB1nVsjDoEFR2A0EbdcuA==
-X-Received: by 2002:a05:651c:2123:: with SMTP id a35mr30019716ljq.174.1639391041082;
-        Mon, 13 Dec 2021 02:24:01 -0800 (PST)
-Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id f4sm1374617lfc.18.2021.12.13.02.24.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Lps8zlY0plffu89oo+ZuKtBVR2UFB4mYLL1XQcOR5SA=;
+        b=whCIDkFaj4gYg5jFIpKMmN/dS1Sx/G9OJj85S8El46UnnFGIiHLl59m6pDLi45oofD
+         tXEoRs4c+7nCVSdE6TpH+IPXngA+JSrP/JzzWIkdmwWikt2N/7cbzNokjmXsTUOqzZvx
+         bG2E+DUbDdAtQUlF9Kno22DO6UYodfJL0tHxebNXnkmfagGVFKgCiMP0ZUfuSalzVvI7
+         bQZoamgsJUh8aFQLD3tkKvgCJHtnFfXWXD08ydx8whQVMQ7Imt3LeZTLuENaE9B+4MlS
+         8jZWuAvxrxXCxWRu6lSFgQcL+IzhyQDOmNfkkm/lP2QG0+09LSaT3d09xvR1G2ytL2uY
+         pcTg==
+X-Gm-Message-State: AOAM531GWe77MkSSYFtxZYi9Q3NSC2SApsMqhLtIVNmlY+sdDTFCioTl
+        gSHJuxrLLLuT20RQTmwQZ3o=
+X-Google-Smtp-Source: ABdhPJwFcQlQB6qp/Z8EgEGC4clwRl8Lug9EUHupaG/P+GoEeE207ABb2BWX1xTZnxDob1Ye9DojIQ==
+X-Received: by 2002:a5d:5643:: with SMTP id j3mr31204212wrw.138.1639391094112;
+        Mon, 13 Dec 2021 02:24:54 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id o3sm7170098wms.10.2021.12.13.02.24.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 02:24:00 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:23:59 +0100
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     op-tee@lists.trustedfirmware.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] OP-TEE add async notifications for v5.17
-Message-ID: <20211213102359.GA1638682@jade>
+        Mon, 13 Dec 2021 02:24:53 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:24:50 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     digetx@gmail.com, jckuo@nvidia.com, jonathanh@nvidia.com,
+        kishon@ti.com, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
+        vkoul@kernel.org
+Subject: Re: [PATCH v2] phy: tegra: xusb: Fix return value of
+ tegra_xusb_find_port_node function
+Message-ID: <YbcfcpkwxCkeGP3f@orome>
+References: <942f943c-9ec8-9887-aa6d-4d133821beca@gmail.com>
+ <20211213020507.1458-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="W2swrXWGj6l4aaDV"
 Content-Disposition: inline
+In-Reply-To: <20211213020507.1458-1-linmq006@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
 
-Please pull these patches which adds support for asynchronous notifications
-from OP-TEE in secure world to the OP-TEE driver.
+--W2swrXWGj6l4aaDV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-An edge-triggered interrupt is used to notify the the driver.
+On Mon, Dec 13, 2021 at 02:05:07AM +0000, Miaoqian Lin wrote:
+> callers of tegra_xusb_find_port_node() function only do NULL checking for
+> the return value. return NULL instead of ERR_PTR(-ENOMEM) to keep
+> consistent.
+>=20
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/phy/tegra/xusb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-These patches has been in linux-next for a few weeks already.
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-Thanks,
-Jens
+--W2swrXWGj6l4aaDV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+-----BEGIN PGP SIGNATURE-----
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG3H3IACgkQ3SOs138+
+s6HJrw/+PwLmkXa7Ame0lq2zyamq1ugkXKFFAabK3ZHFV8Epsuyl4tT+FKNn2ShM
+y7Dy/Vqh6SVtb4CXBFc25tI4SyfoH1uRALMdFc8CqUyPGhN4HXOOIPRrikUyeWyg
+xROkHn5Fnjf3vdkBat3vwVEHZiu++AZTMz97GOsNP25lwMIEmw/sGw9KBFt+cCTV
+S8g/ihfq8fncGHOIO7soGncJyjZPQhWB/R7mur7A5eSelfj+OKW+BqeZUwhI167C
++yvONyxgtB8EZmNWGnw5jrV384n0hw6kOJGR9G4tsZRV9kVWGL7vTGcdiAZiDB/v
+GIZGGdzNiCKFSp9di9nj8lkvl28YGJrgQgg7VfT1MF5KfDZCW0dohgq+KrrBPw4N
+/IxAVEvF8rYmuESrL4UuPS8KVjAhjN0DlvtJvWoBumq3rhx0FsD5OpuZik1daN8c
+/eXWcxlvAZZZSYyyiNMIxTIPDixHxj3s2J9/9zTfDpNZYuShOBR2t43wYTiCUbfr
+HRIyaUO73BHbOU1wUeutEO4IS9pqL4YU2a2bnELG5GGG6HQ1/HmdIeMWVjgeebux
+LG1eqUqKSoV13LWt8ULgli4Xz3Ra+y6PJpbB1a1hsINgCmuv0PpDG2qkHS2ZKYbJ
+9XiWzxcgulRpx1OzLOFkdkcfbRt/zWCCiOK1bQiJIG5mwrI3NQo=
+=JIfE
+-----END PGP SIGNATURE-----
 
-are available in the Git repository at:
-
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-async-notif-for-v5.17
-
-for you to fetch changes up to b98aee466d194788bd651cb375b0e0f7e0e69865:
-
-  optee: Fix NULL but dereferenced coccicheck error (2021-11-29 22:02:25 +0100)
-
-----------------------------------------------------------------
-OP-TEE Asynchronous notifications from secure world
-
-Adds support in the SMC based OP-TEE driver to receive asynchronous
-notifications from secure world using an edge-triggered interrupt as
-delivery mechanism.
-
-----------------------------------------------------------------
-Jens Wiklander (6):
-      docs: staging/tee.rst: add a section on OP-TEE notifications
-      dt-bindings: arm: optee: add interrupt property
-      tee: fix put order in teedev_close_context()
-      tee: export teedev_open() and teedev_close_context()
-      optee: separate notification functions
-      optee: add asynchronous notifications
-
-Yang Li (1):
-      optee: Fix NULL but dereferenced coccicheck error
-
- .../bindings/arm/firmware/linaro,optee-tz.yaml     |   8 +
- Documentation/staging/tee.rst                      |  30 +++
- drivers/tee/optee/Makefile                         |   1 +
- drivers/tee/optee/core.c                           |   2 +-
- drivers/tee/optee/ffa_abi.c                        |   6 +-
- drivers/tee/optee/notif.c                          | 125 +++++++++++
- drivers/tee/optee/optee_msg.h                      |   9 +
- drivers/tee/optee/optee_private.h                  |  28 ++-
- drivers/tee/optee/optee_rpc_cmd.h                  |  31 +--
- drivers/tee/optee/optee_smc.h                      |  75 ++++++-
- drivers/tee/optee/rpc.c                            |  71 +-----
- drivers/tee/optee/smc_abi.c                        | 237 ++++++++++++++++++---
- drivers/tee/tee_core.c                             |  10 +-
- include/linux/tee_drv.h                            |  14 ++
- 14 files changed, 523 insertions(+), 124 deletions(-)
- create mode 100644 drivers/tee/optee/notif.c
+--W2swrXWGj6l4aaDV--

@@ -2,142 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C3A472365
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08AA472362
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbhLMJAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:00:12 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:49010 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbhLMJAL (ORCPT
+        id S233421AbhLMJAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:00:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58916 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231788AbhLMJAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:00:11 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BD8xuMvB029310, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BD8xuMvB029310
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 13 Dec 2021 16:59:56 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 16:59:56 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 16:59:55 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01]) by
- RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01%5]) with mapi id
- 15.01.2308.020; Mon, 13 Dec 2021 16:59:55 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     Jian-Hong Pan <jhp@endlessos.org>
-CC:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux@endlessos.org" <linux@endlessos.org>
-Subject: RE: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
-Thread-Topic: [PATCH] rtw88: 8821c: disable the ASPM of RTL8821CE
-Thread-Index: AQHX7Z6qoa2juW6HuEaQNtYEJNeW8KwrYzIg//+KwICAAAK8AIAB4vUwgAKxvgCAAJx1QA==
-Date:   Mon, 13 Dec 2021 08:59:55 +0000
-Message-ID: <e78b81f3a73c45b59f4c4d9f5b414508@realtek.com>
-References: <20211210081659.4621-1-jhp@endlessos.org>
- <6b0fcc8cf3bd4a77ad190dc6f72eb66f@realtek.com>
- <CAAd53p66HPH9v0_hzOaQAydberd8JA4HthNVwpQ86xb-dSuUEA@mail.gmail.com>
- <CAPpJ_efvmPWsCFsff35GHV8Q52YvQcFr_Hs=q3RtvbfVohY+4Q@mail.gmail.com>
- <617008e3be9c4b5aa37b26f97daf9354@realtek.com>
- <CAPpJ_ecqf+LqkN-Wb+zNGHbtJ3rKD8_kU3W0c2gTQGQqK1sUwg@mail.gmail.com>
-In-Reply-To: <CAPpJ_ecqf+LqkN-Wb+zNGHbtJ3rKD8_kU3W0c2gTQGQqK1sUwg@mail.gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzEyLzEzIOS4iuWNiCAwNjozODowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 13 Dec 2021 04:00:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11D11B80DCF;
+        Mon, 13 Dec 2021 09:00:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1284AC341C5;
+        Mon, 13 Dec 2021 09:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639386002;
+        bh=9++Y8nJdu20L/simihE/HqS4ABBR4aerAapeSMPYOGo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SzUo0SkJ0KSEzCje9uGr2oHpke1HoWUtJys+wrdWu190F+gE4CZk67IqNfkizAqzK
+         yH2JXvj3FBjtLFtGF4RlTyzsmghX1noHWamoscvu0DSH6bte7e9/t4Ugg68lS1EcXG
+         BAoxBJds+B/uoxzW31Yus/eB5R867pQyQ5iKqMbmqhGDMaVeir+lil6eAICrccycOx
+         WQYaHyX+KEvhSwxC9SSB4xsmjvyCFGMX/98xfyVwNnYnFiszCaJk+3pZPpMJpmRr0i
+         x373HnMR8C3qbaC5FTfFcnm9IFXvn6R7ZZeJ+CKYvLPzGIM9ag+Ol6b5tcVQSrSvbI
+         byPMHYFDCEriw==
+Date:   Mon, 13 Dec 2021 14:29:58 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Tudor.Ambarus@microchip.com
+Cc:     Ludovic.Desroches@microchip.com, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        mripard@kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 08/13] dmaengine: at_xdmac: Move the free desc to the
+ tail of the desc list
+Message-ID: <YbcLjrMF0YrCVgjc@matsya>
+References: <20211125090028.786832-1-tudor.ambarus@microchip.com>
+ <20211125090028.786832-9-tudor.ambarus@microchip.com>
+ <Ybb/PV5M1Gi59s7I@matsya>
+ <8523ca32-d36f-6e0b-0115-5e07553396f1@microchip.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8523ca32-d36f-6e0b-0115-5e07553396f1@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEppYW4tSG9uZyBQYW4gPGpo
-cEBlbmRsZXNzb3Mub3JnPg0KPiBTZW50OiBNb25kYXksIERlY2VtYmVyIDEzLCAyMDIxIDM6MzEg
-UE0NCj4gVG86IFBrc2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KPiBDYzogS2FpLUhlbmcgRmVu
-ZyA8a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPjsgWWFuLUhzdWFuIENodWFuZyA8dG9ueTA2
-MjBlbW1hQGdtYWlsLmNvbT47IEthbGxlIFZhbG8NCj4gPGt2YWxvQGNvZGVhdXJvcmEub3JnPjsg
-bGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOw0K
-PiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eEBlbmRsZXNzb3Mub3JnDQo+IFN1
-YmplY3Q6IFJlOiBbUEFUQ0hdIHJ0dzg4OiA4ODIxYzogZGlzYWJsZSB0aGUgQVNQTSBvZiBSVEw4
-ODIxQ0UNCj4gDQo+IFBrc2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPiDmlrwgMjAyMeW5tDEy5pyI
-MTHml6Ug6YCx5YWtIOS4i+WNiDI6MzHlr6vpgZPvvJoNCj4gPg0KPiA+DQo+ID4gPiAtLS0tLU9y
-aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogSmlhbi1Ib25nIFBhbiA8amhwQGVuZGxl
-c3Nvcy5vcmc+DQo+ID4gPiBTZW50OiBGcmlkYXksIERlY2VtYmVyIDEwLCAyMDIxIDU6MzQgUE0N
-Cj4gPiA+IFRvOiBLYWktSGVuZyBGZW5nIDxrYWkuaGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+DQo+
-ID4gPiBDYzogUGtzaGloIDxwa3NoaWhAcmVhbHRlay5jb20+OyBZYW4tSHN1YW4gQ2h1YW5nIDx0
-b255MDYyMGVtbWFAZ21haWwuY29tPjsgS2FsbGUgVmFsbw0KPiA+ID4gPGt2YWxvQGNvZGVhdXJv
-cmEub3JnPjsgbGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdlci5rZXJu
-ZWwub3JnOw0KPiA+ID4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXhAZW5kbGVz
-c29zLm9yZw0KPiA+ID4gU3ViamVjdDogUmU6IFtQQVRDSF0gcnR3ODg6IDg4MjFjOiBkaXNhYmxl
-IHRoZSBBU1BNIG9mIFJUTDg4MjFDRQ0KPiA+ID4NCj4gPiA+IEthaS1IZW5nIEZlbmcgPGthaS5o
-ZW5nLmZlbmdAY2Fub25pY2FsLmNvbT4g5pa8IDIwMjHlubQxMuaciDEw5pelIOmAseS6lCDkuIvl
-jYg1OjI05a+r6YGT77yaDQo+ID4gPg0KPiA+ID4gPiBSaWdodCBub3cgaXQgc2VlbXMgbGlrZSBv
-bmx5IEludGVsIHBsYXRmb3JtcyBhcmUgYWZmZWN0ZWQsIHNvIGNhbiBJDQo+ID4gPiA+IHByb3Bv
-c2UgYSBwYXRjaCB0byBkaXNhYmxlIEFTUE0gd2hlbiBpdHMgdXBzdHJlYW0gcG9ydCBpcyBJbnRl
-bD8NCj4gPiA+DQo+ID4gPiBJIG9ubHkgaGF2ZSBsYXB0b3BzIHdpdGggSW50ZWwgY2hpcCBub3cu
-ICBTbywgSSBhbSBub3Qgc3VyZSB0aGUgc3RhdHVzDQo+ID4gPiB3aXRoIEFNRCBwbGF0Zm9ybXMu
-DQo+ID4gPiBJZiB0aGlzIGlzIHRydWUsIHRoZW4gImRpc2FibGUgQVNQTSB3aGVuIGl0cyB1cHN0
-cmVhbSBwb3J0IGlzIEludGVsIg0KPiA+ID4gbWlnaHQgYmUgYSBnb29kIGlkZWEuDQo+ID4gPg0K
-PiA+DQo+ID4gSmlhbi1Ib25nLCBjb3VsZCB5b3UgdHJ5IEthaS1IZW5nJ3Mgd29ya2Fyb3VuZCB0
-aGF0IG9ubHkgdHVybiBvZmYgQVNQTQ0KPiA+IGR1cmluZyBOQVBJIHBvbGwgZnVuY3Rpb24uIElm
-IGl0IGFsc28gd29ya3MgdG8geW91LCBJIHRoaW5rIGl0IGlzIG9rYXkNCj4gPiB0byBhcHBseSB0
-aGlzIHdvcmthcm91bmQgdG8gYWxsIEludGVsIHBsYXRmb3JtIHdpdGggUlRMODgyMUNFIGNoaXBz
-ZXQuDQo+ID4gQmVjYXVzZSB0aGlzIHdvcmthcm91bmQgaGFzIGxpdHRsZSAoYWxtb3N0IG5vKSBp
-bXBhY3Qgb2YgcG93ZXIgY29uc3VtcHRpb24uDQo+IA0KPiBBY2NvcmRpbmcgdG8gS2FpLUhlbmcn
-cyBoYWNrIHBhdGNoIFsxXSBhbmQgdGhlIGNvbW1lbnQgWzJdIG1lbnRpb25pbmcNCj4gY2hlY2tp
-bmcgInJlZl9jbnQiIGJ5IHJ0d19wY2lfbGlua19wcygpLCBJIGFycmFuZ2UgdGhlIHBhdGNoIGFz
-DQo+IGZvbGxvd2luZy4NCg0KSSBtZWFudCB0aGF0IG1vdmUgInJlZl9jbnQiIGludG8gcnR3X3Bj
-aV9saW5rX3BzKCkgYnkgWzJdLCBidXQgeW91IHJlbW92ZQ0KdGhlICJyZWZfY250Ii4gVGhpcyBs
-ZWFkcyBsb3dlciBwZXJmb3JtYW5jZSwgYmVjYXVzZSBpdCBtdXN0IHR1cm4gb2ZmDQpBU1BNIGFm
-dGVyIG5hcGlfcG9sbCgpIHdoZW4gd2UgaGF2ZSBoaWdoIHRyYWZmaWMuDQoNCkluIGZhY3QsIEth
-aS1IZW5nJ3MgcGF0Y2ggaXMgdG8gbGVhdmUgQVNQTSBiZWZvcmUgbmFwaV9wb2xsKCksIGFuZA0K
-InJlc3RvcmUiIEFTUE0gc2V0dGluZy4gU28sIHdlIHN0aWxsIG5lZWQgInJlZl9jbnQiLg0KDQoN
-Cj4gVGhpcyBwYXRjaCBvbmx5IGRpc2FibGVzIEFTUE0gKGlmIHRoZSBoYXJkd2FyZSBoYXMgdGhl
-IGNhcGFiaWxpdHkpDQo+IHdoZW4gc3lzdGVtIGdldHMgaW50byBydHdfcGNpX25hcGlfcG9sbCgp
-IGFuZCByZS1lbmFibGVzIEFTUE0gd2hlbiBpdA0KPiBsZWF2ZXMgcnR3X3BjaV9uYXBpX3BvbGwo
-KS4gIEl0IGlzIGFzIFBpbmctS2UgbWVudGlvbmVkICJvbmx5IHR1cm4gb2ZmDQo+IEFTUE0gZHVy
-aW5nIE5BUEkgcG9sbCBmdW5jdGlvbiIuDQo+IFRoZSBXaUZpICYgQlQgd29yaywgYW5kIHN5c3Rl
-bSBpcyBzdGlsbCBhbGl2ZSBhZnRlciBJIHVzZSB0aGUgaW50ZXJuZXQNCj4gYXdoaWxlLiAgQmVz
-aWRlcywgdGhlcmUgaXMgbm8gbW9yZSAicGNpIGJ1cyB0aW1lb3V0LCBjaGVjayBkbWEgc3RhdHVz
-Ig0KPiBlcnJvci4NCj4gDQo+IFsxXSBodHRwczovL2J1Z3ppbGxhLmtlcm5lbC5vcmcvc2hvd19i
-dWcuY2dpP2lkPTIxNTEzMSNjMTENCj4gWzJdIGh0dHBzOi8vYnVnemlsbGEua2VybmVsLm9yZy9z
-aG93X2J1Zy5jZ2k/aWQ9MjE1MTMxI2MxNQ0KPiANCj4gSmlhbi1Ib25nIFBhbg0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcGNpLmMNCj4gYi9k
-cml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3BjaS5jDQo+IGluZGV4IGE3YTZlYmZh
-YTIwMy4uYTZmZGRkZWNkMzdkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9y
-ZWFsdGVrL3J0dzg4L3BjaS5jDQo+ICsrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsv
-cnR3ODgvcGNpLmMNCj4gQEAgLTE2NTgsNiArMTY1OCw3IEBAIHN0YXRpYyBpbnQgcnR3X3BjaV9u
-YXBpX3BvbGwoc3RydWN0IG5hcGlfc3RydWN0DQo+ICpuYXBpLCBpbnQgYnVkZ2V0KQ0KPiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcHJpdik7DQo+ICAgICAg
-ICAgaW50IHdvcmtfZG9uZSA9IDA7DQo+IA0KPiArICAgICAgIHJ0d19wY2lfbGlua19wcyhydHdk
-ZXYsIGZhbHNlKTsNCj4gICAgICAgICB3aGlsZSAod29ya19kb25lIDwgYnVkZ2V0KSB7DQo+ICAg
-ICAgICAgICAgICAgICB1MzIgd29ya19kb25lX29uY2U7DQo+IA0KPiBAQCAtMTY4MSw2ICsxNjgy
-LDcgQEAgc3RhdGljIGludCBydHdfcGNpX25hcGlfcG9sbChzdHJ1Y3QgbmFwaV9zdHJ1Y3QNCj4g
-Km5hcGksIGludCBidWRnZXQpDQo+ICAgICAgICAgICAgICAgICBpZiAocnR3X3BjaV9nZXRfaHdf
-cnhfcmluZ19ucihydHdkZXYsIHJ0d3BjaSkpDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIG5h
-cGlfc2NoZWR1bGUobmFwaSk7DQo+ICAgICAgICAgfQ0KPiArICAgICAgIHJ0d19wY2lfbGlua19w
-cyhydHdkZXYsIHRydWUpOw0KPiANCj4gICAgICAgICByZXR1cm4gd29ya19kb25lOw0KPiAgfQ0K
-PiANCg0KSG93IGFib3V0IGRvaW5nIHRoaXMgdGhpbmcgb25seSBpZiA4ODIxQ0UgYW5kIEludGVs
-IHBsYXRmb3JtPw0KQ291bGQgeW91IGhlbHAgdG8gYWRkIHRoaXM/DQoNCi0tDQpQaW5nLWtlDQoN
-Cg0K
+On 13-12-21, 08:51, Tudor.Ambarus@microchip.com wrote:
+> Hi, Vinod,
+> 
+> On 12/13/21 10:07 AM, Vinod Koul wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On 25-11-21, 11:00, Tudor Ambarus wrote:
+> >> So that we don't use the same desc over and over again.
+> > 
+> > Please use full para in the changelog and not a continuation of the
+> > patch title!
+> 
+> Ok, will add a better commit description. Here and in other patches where
+> your comment applies.
+
+Great!
+
+> > 
+> > and why is wrong with using same desc over and over? Any benefits of not
+> > doing so?
+> 
+> Not wrong, but if we move the free desc to the tail of the list, then the
+> sequence of descriptors is more track-able in case of debug. You would
+> know which descriptor should come next and you could easier catch
+> concurrency over descriptors for example. I saw virt-dma uses
+> list_splice_tail_init() as well, I found it a good idea, so I thought to
+> follow the core driver.
+
+Okay, I would be good to add this motivation in the change log. I am
+sure after few you would also wonder why you did this change :)
+
+-- 
+~Vinod

@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C45472B4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C7D472B56
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbhLML0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbhLML0j (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:26:39 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29210C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:26:39 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id i12so14039238qvh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:26:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eD6ckxYOFOb+e8Paz6iMpOBDcRBstNtUogT+wtDanIo=;
-        b=YVi7qSMIHAmqR1ziLS+oBD5WujjcwCE+4G3u70/XFkRKtNHL1rmXZEJ6FmKJIFdu02
-         G30X1MLGRJxf++u4dAJreJ13q94+xdZEYlYccDmaClkGWseDYg+fD8ts0JDIIZZviucL
-         HTEGgM4gQ9sUu8VL3lLv5/VSo1ZfHkDMvbT93gKgQ3pR7xt6x/KZENec/ExMhE0iQFJB
-         dwHUJjwa4xgINdLxvcqAJDMxWo1U3CHNleqylIUhodRUv3EH7OHwJQ1IY4STphC/7ly/
-         PmlpYT3LHnBODRFdhuqfX5iQhOFE/nphgwagOdAsYTHu7ewT0wzFaDV3M2h2sQVHCnOx
-         3RdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eD6ckxYOFOb+e8Paz6iMpOBDcRBstNtUogT+wtDanIo=;
-        b=uR9A2smKlu/UEbMguzP6YGL1yuWf+Df1lSvU2Mi0zLaHyPOHnxI8ynfiotNemkE3GM
-         /hh4EZ89G4Nk3s99F0k8xUiviwy6bTPpqdjJzOuoLYPbVnefvlg6xotoLZWCEJc9iMnu
-         gn8vvdsmW1RKtvXvLXTixLDrNb+jGFPTsJJ5IZOnEeyvJggL4+Cb5b2J4mnhCue8m80H
-         jpvhDmGPvDkkjxgLpnljethTuCt7Yu9JTOoLGAIJA+0Gu8Qkl03ZyYT00MBSdgYZhMwZ
-         8JuCK1yT/ofdlBe3asEvB7JhQUlZXytMjhyOfX5U/gkFNAJvr1lhCTd2VzJCwR/USpV+
-         2zeQ==
-X-Gm-Message-State: AOAM533H3wxziGjzqD8faqUD6NlnDXzyCQLAyHDQg08g7DE1Scaa8+01
-        wVmdNgEJa5JfbT35XYNbfuY=
-X-Google-Smtp-Source: ABdhPJyz8j/K09DZ5hzBHAp/+joA+v2M/C1JywjSTePQKxvwDTIJHTjCcK3ctzU6nAsJmW04ncaugA==
-X-Received: by 2002:a05:6214:5094:: with SMTP id kk20mr40535508qvb.71.1639394798344;
-        Mon, 13 Dec 2021 03:26:38 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i14sm5900465qko.9.2021.12.13.03.26.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 03:26:37 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     miquel.raynal@bootlin.com
-Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn, han.xu@nxp.com,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        richard@nod.at, vigneshr@ti.com, zealci@zte.com.cn
-Subject: [PATCH v3 nand-next] mtd: rawnand: gpmi: remove unneeded variable
-Date:   Mon, 13 Dec 2021 11:26:27 +0000
-Message-Id: <20211213112627.436745-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211213101519.25f4e2e1@xps13>
-References: <20211213101519.25f4e2e1@xps13>
+        id S235687AbhLML1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:27:33 -0500
+Received: from mga14.intel.com ([192.55.52.115]:55980 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234729AbhLML1c (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:27:32 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238937314"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="238937314"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 03:27:32 -0800
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="464593908"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 03:27:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mwjTV-005azv-Mv;
+        Mon, 13 Dec 2021 13:26:33 +0200
+Date:   Mon, 13 Dec 2021 13:26:33 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v1 1/2] ata: libahci_platform: Get rid of dup message
+ when IRQ can't be retrieved
+Message-ID: <Ybct6XoeJ1/9ai03@smile.fi.intel.com>
+References: <YbMwBFf5e7k2o6W5@smile.fi.intel.com>
+ <9e6b2e9a-e958-0c14-6570-135607041978@omp.ru>
+ <YbM7xkTazM76CVvD@smile.fi.intel.com>
+ <6c03ffef-b2e0-16ba-35f3-206af2a611d2@gmail.com>
+ <YbOVmGw7ys6U51z3@smile.fi.intel.com>
+ <9d688cd8-99e3-0265-06aa-d44597e7686c@omp.ru>
+ <YbOpu2whB5NaXbNa@smile.fi.intel.com>
+ <a0bf3377-21ed-7244-7c73-ebb50dbc44c4@omp.ru>
+ <448ce97b-699d-bdab-b4e9-c9439fd81a85@gmail.com>
+ <8ec4a971-29ba-77f7-7c48-ad88decea70f@omp.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ec4a971-29ba-77f7-7c48-ad88decea70f@omp.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Sat, Dec 11, 2021 at 01:13:52PM +0300, Sergey Shtylyov wrote:
+> On 10.12.2021 22:35, Sergei Shtylyov wrote:
 
-Return status directly from function called.
+...
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
-change since v1: mtd/nand:remove unneeded variable
-             v2: mtd: rawnand: gpmi: remove unneeded variable
-             v3: move the update log here
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+>    Also, your commit log is wrong in the description of how to handle the result:
+> 
+> <<
+> Now:
+> 	ret = platform_get_irq_optional(...);
+> 	if (ret != -ENXIO)
+> 		return ret; // respect deferred probe
+> 	if (ret > 0)
+> 		...we get an IRQ...
+> >>
+> 
+>    The (ret != -ENXIO) check also succeeds on the (positive) IRQ #s, so the
+> following code becomes unreachable. :-/
 
-diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-index 10cc71829dcb..ab9d1099bafa 100644
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -1425,7 +1425,6 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
- 	struct mtd_info *mtd = nand_to_mtd(chip);
- 	struct gpmi_nand_data *this = nand_get_controller_data(chip);
- 	struct bch_geometry *nfc_geo = &this->bch_geometry;
--	int ret;
- 
- 	dev_dbg(this->dev, "ecc write page.\n");
- 
-@@ -1445,9 +1444,7 @@ static int gpmi_ecc_write_page(struct nand_chip *chip, const uint8_t *buf,
- 				    this->auxiliary_virt);
- 	}
- 
--	ret = nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
--
--	return ret;
-+	return nand_prog_page_op(chip, page, 0, buf, nfc_geo->page_size);
- }
- 
- /*
+Indeed, thanks!
+
+Should be
+	if (ret < 0 && ret != -ENXIO)
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 

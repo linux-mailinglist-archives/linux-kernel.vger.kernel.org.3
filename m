@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2BC472CBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC573472CC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbhLMNCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:02:50 -0500
-Received: from mga14.intel.com ([192.55.52.115]:62212 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237123AbhLMNCt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:02:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639400569; x=1670936569;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+hkuBro1FIArmqCU4DnYmYNozBM1ig92k/dHzqugSr8=;
-  b=nsKEA65CIT0kIIS3UOkwgK5wjcI3WaMVs/N/s1wTAPg2xN4UgdN+lJb/
-   QSiTSCX14YqVczC3vWGvP7CbDIK6E3a7DBlh7oQzMggziNJTwN9unHzNr
-   yEoIkKMPVZnEQUml259DJM35c51HN3kEwbg+6RFyPdiMoU6SOZ5XYdg1o
-   cpmG6gxz96Jd5kCfGySm0hsZGZ1WsQ2F9i46rWQ90VSiSU2tYKXkNf06R
-   CMDuKlKIVeKYo3TvFicpg61DkDuD5WWwkhj21tsLFV8rbwhOM866inZdd
-   6NkSsBUk73GghmbsG3JLgn9NKYhj5kXVZkMFeYlGZUb1HBNeZbwBNqwhj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238949452"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="238949452"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 05:02:48 -0800
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="463371551"
-Received: from ttbuckle-mobl.ger.corp.intel.com (HELO [10.252.5.128]) ([10.252.5.128])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 05:02:46 -0800
-Message-ID: <e7cad6ca-d106-c529-6f22-93a7847cd7c0@intel.com>
-Date:   Mon, 13 Dec 2021 13:02:44 +0000
+        id S237133AbhLMNDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:03:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55508 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236001AbhLMNDL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 08:03:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42802B80EC5;
+        Mon, 13 Dec 2021 13:03:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C859C34602;
+        Mon, 13 Dec 2021 13:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639400588;
+        bh=nTxKyHF1jC9M+ChnTa2i7iJGpJ4/W7CueQKrDF9/29o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eYwrNKS94IVdZlgIRFgwmb08WdKYJBbbGOiryztgbiDvOblRq8IfXRwKTUKQCelU2
+         BmtqcAGNaNyotJwXMmr0L1CK1Zu+sTkN9AXrn86u8wzSPR8joYf9dHfNESrlxOPEnX
+         4OI/ijyfVKeLUxy+l49NTpUp78wI/G54GVaZjJqQBVO7b1YFN7rEB8zM33ea3TFr7F
+         vmzjntRqGuRNYqztKqj01CpzuoE/eUykTyTh7ZLSsJSD59QGVnx9F9qZxPFYK/MNVf
+         /FQaajoCZFvGWLXI+pYTZmj64EP0zTguJtpR0JRfZtMe35VGXdgvCDIqzNJtM2WL2h
+         f0ibZb2sFNT1g==
+Date:   Mon, 13 Dec 2021 21:02:58 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jianhe@ambarella.com" <jianhe@ambarella.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdnsp: Fix incorrect status for control request
+Message-ID: <20211213130258.GA5346@Peter>
+References: <20211207091838.39572-1-pawell@gli-login.cadence.com>
+ <20211209113408.GA5084@Peter>
+ <BYAPR07MB5381415E88BAAC945CB47A93DD709@BYAPR07MB5381.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] drm/i915/ttm: fix large buffer population trucation
-Content-Language: en-GB
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>, Oak Zeng <oak.zeng@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20211210195005.2582884-1-bob.beckett@collabora.com>
-From:   Matthew Auld <matthew.auld@intel.com>
-In-Reply-To: <20211210195005.2582884-1-bob.beckett@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR07MB5381415E88BAAC945CB47A93DD709@BYAPR07MB5381.namprd07.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 19:50, Robert Beckett wrote:
-> ttm->num_pages is uint32_t which was causing very large buffers to
-> only populate a truncated size.
+On 21-12-09 12:57:31, Pawel Laszczak wrote:
+> >> From: Pawel Laszczak <pawell@cadence.com>
+> >>
+> >> Patch fixes incorrect status for control request.
+> >> Without this fix all usb_request objects were returned to upper drivers
+> >> with usb_reqest->status field set to -EINPROGRESS.
+> >>
+> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> >> Reported-by: Ken (Jian) He <jianhe@ambarella.com>
+> >> cc: <stable@vger.kernel.org>
+> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> >> ---
+> >>  drivers/usb/cdns3/cdnsp-ring.c | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> >> index 1b1438457fb0..e8f5ecbb5c75 100644
+> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> >> @@ -1029,6 +1029,8 @@ static void cdnsp_process_ctrl_td(struct cdnsp_device *pdev,
+> >>  		return;
+> >>  	}
+> >>
+> >> +	*status = 0;
+> >> +
+> >>  	cdnsp_finish_td(pdev, td, event, pep, status);
+> >>  }
+> >>
+> >> --
+> >I think you may move *status = 0 at the beginning of
+> >cdnsp_process_ctrl_td in case you would like to handle some error
+> >conditions during this function.
 > 
-> This fixes gem_create@create-clear igt test on large memory systems.
-> 
-> Fixes: 7ae034590cea ("drm/i915/ttm: add tt shmem backend")
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> I don't predict any other status code for control request in this place.
+> I wanted to set this status only once after completion status stage. It was the reason why I put this
+> statement at the end of function.
 
-Nice catch,
-Reviewed-by: Matthew Auld <matthew.auld@intel.com>
+So, you always consider there is no error for control request handling?
 
-> ---
->   drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> index 218a9b3037c7..923cc7ad8d70 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> @@ -166,7 +166,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
->   	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
->   	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
->   	const unsigned int max_segment = i915_sg_segment_size();
-> -	const size_t size = ttm->num_pages << PAGE_SHIFT;
-> +	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
->   	struct file *filp = i915_tt->filp;
->   	struct sgt_iter sgt_iter;
->   	struct sg_table *st;
-> 
+-- 
+
+Thanks,
+Peter Chen
+

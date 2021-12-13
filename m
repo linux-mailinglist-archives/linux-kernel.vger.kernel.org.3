@@ -2,186 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C6647223E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DD0472240
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbhLMISi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:18:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbhLMISh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:18:37 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FE7C06173F;
-        Mon, 13 Dec 2021 00:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=U8pkhJ5nScbcgED8kG12igkAidYQl/E5bMAgaJ/P6t8=; b=eBzMn0IdWjCFiV8wxk3d3U96CP
-        tVGp6WxrGCga1X3+AXRlAc0VguWblOHpZhFC4hccKcS3fJy1yAPsHu0oZd/mngWpqNdBzdpmaM24+
-        P46Adw8YSY76jqogIIGiXb8A2F/2Z/l36fGUAUHIO6FOJQX9Liq/IEfAav6XO0oGohsu3FZASwCWY
-        AYHlKNxKyJMLRA6fXbCv3f+pl76zb4n8Ck2SOLXXgMoHbtv6FFJPNBy4cDoqgAmq+INMpwmsRI8Do
-        XbwlG/TKhj6WF7C4XVZzwDVuQQUgYUcs+1yL8pmBqAT6eYLCPdKW3RGwgansx+D32SzHMYhX4muwQ
-        ZZ7l3lnQ==;
-Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwgXH-008GxQ-Tu; Mon, 13 Dec 2021 08:18:16 +0000
-Message-ID: <6c184b9ffc5c641736d53bb7598f814d6b4c3fe0.camel@infradead.org>
-Subject: Re: [EXTERNAL] [PATCH v2] rcu/nocb: Handle concurrent nocb kthreads
- creation
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, paulmck@kernel.org,
-        frederic@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        urezki@gmail.com, boqun.feng@gmail.com
-Date:   Mon, 13 Dec 2021 08:18:11 +0000
-In-Reply-To: <20211211170139.27711-1-quic_neeraju@quicinc.com>
-References: <20211211170139.27711-1-quic_neeraju@quicinc.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-WcodL/RAUfxnppsGSZ6R"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S232816AbhLMITn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:19:43 -0500
+Received: from mga17.intel.com ([192.55.52.151]:3580 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232808AbhLMITm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 03:19:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639383582; x=1670919582;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DeywiFxxsk/ZyY6KtjoJKAnfXkLSOgyppPjYHTezEKg=;
+  b=kGVroz+ZWV2C+SxiRGknW8ZGh9is8qwe0xmVI5UcBW8HYTllVFS8sRXD
+   NG75eAoUpnuhY4FuoZJ1f0JFtD1AgHIc1+dW/wuHpNPg8mIXcnX51QOIv
+   +0NHQZTdP6EhmA7g6GCqcSi3Aoz9nr1TFg8ypo8zD+218XgGK/BN9V7/f
+   ts+lY+B8OCj/dABUw10XGLgyP1YIByNkS3R0Rjgl6aig8BpTa1Si+523w
+   xZnioQ2eYAH0qjLdtqPpUgKYTBC22yFYjxYHCtd0dgSerAObHvxV+4bnb
+   s/scsrIL4XESI3RAQ7gUKKqnV1i2LbFa+v6mQX5420MEsmt9zyxEmaBTw
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="219368219"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="219368219"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:19:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="464534114"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 00:19:41 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwgYe-0006SO-DQ; Mon, 13 Dec 2021 08:19:40 +0000
+Date:   Mon, 13 Dec 2021 16:18:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Jeffery <andrew@aj.id.au>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: drivers/mmc/host/sdhci-of-aspeed-test.c:47:1: warning: the frame
+ size of 1152 bytes is larger than 1024 bytes
+Message-ID: <202112131659.GRmtsTh2-lkp@intel.com>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrew,
 
---=-WcodL/RAUfxnppsGSZ6R
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+FYI, the error/warning still remains.
 
-On Sat, 2021-12-11 at 22:31 +0530, Neeraj Upadhyay wrote:
-> When multiple CPUs in the same nocb gp/cb group concurrently
-> come online, they might try to concurrently create the same
-> rcuog kthread. Fix this by using nocb gp CPU's spawn mutex to
-> provide mutual exclusion for the rcuog kthread creation code.
->=20
-> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> ---
-> Change in v2:
->  Fix missing mutex_unlock in nocb gp kthread creation err path.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2585cf9dfaaddf00b069673f27bb3f8530e2039c
+commit: 0bbcd22556ef203b29e39a6ce1bd7e9523b6032e mmc: sdhci-of-aspeed: Add KUnit tests for phase calculations
+date:   11 months ago
+config: arm-randconfig-r014-20211212 (https://download.01.org/0day-ci/archive/20211213/202112131659.GRmtsTh2-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0bbcd22556ef203b29e39a6ce1bd7e9523b6032e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0bbcd22556ef203b29e39a6ce1bd7e9523b6032e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/mmc/
 
-I think this ends up being not strictly necessary in the short term too
-because we aren't currently planning to run rcutree_prepare_cpu()
-concurrently anyway. But harmless and worth fixing in the longer term.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Although, if I've already added a mutex for adding the boost thread,
-could we manage to use the *same* mutex instead of adding another one?
+All warnings (new ones prefixed by >>):
 
-Acked-by: David Woodhouse <dwmw@amazon.co.uk>
-+                       mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
->                         return;
-> +               }
->                 WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
->         }
-> +        mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
->=20
->         /* Spawn the kthread for this CPU. */
-
-Some whitespace damage there.
-
---=-WcodL/RAUfxnppsGSZ6R
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
-ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
-OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
-RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
-cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
-uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
-Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
-Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
-xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
-YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
-nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
-PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
-7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
-Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
-MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
-NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
-AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
-/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
-0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
-vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
-ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
-ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
-CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
-BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
-aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
-bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
-bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
-LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
-CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
-W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
-vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
-gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
-RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
-jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
-b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
-AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
-BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
-+bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
-WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
-aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
-CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
-u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
-RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
-QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
-b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
-cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
-SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
-0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
-KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
-E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
-M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
-jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
-yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
-gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
-R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
-ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
-MjEzMDgxODExWjAvBgkqhkiG9w0BCQQxIgQgosNzreqIxuEwyTYMKnAnSXTjatJtRp2oNBbVHNUi
-tU0wgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
-TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
-PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
-aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBAJqkcR9YUeoOYiAOpwTuOPsQFLZg4GyXiF9hs7OwU1HxXDyYYAOtyydFTEY4zrPO
-CpKCSKa2phnHDVu4OUkxoGaUbZ3Ti00x0zfMEDfWfwG5bNK4cIa4+Uz4iaA7SHmyUKaYCh68RMfV
-vYzsjGkEUge0n0Ai4E7Ojc2cWKJhLef0Rhc0xWSJWzcLCPRdICkLDJaHoVDfRfdHpUkAPG1PsQG1
-9RsV5GylPeTOX2bFJGBHPaZflAKV7gPOWWA2d2+TIFoTb47lOQSOi5dz4WdJ7hp6hTEN2mIrQ4jY
-2HEyXRFclI/v6QwLY2YLm7j4mYBeuqqrJF+y6a4eP/P7WFUF/lIAAAAAAAA=
+   In file included from drivers/mmc/host/sdhci-of-aspeed.c:583:
+   drivers/mmc/host/sdhci-of-aspeed-test.c: In function 'aspeed_sdhci_phase_ddr52':
+>> drivers/mmc/host/sdhci-of-aspeed-test.c:47:1: warning: the frame size of 1152 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+      47 | }
+         | ^
+   drivers/mmc/host/sdhci-of-aspeed-test.c: In function 'aspeed_sdhci_phase_hs200':
+   drivers/mmc/host/sdhci-of-aspeed-test.c:86:1: warning: the frame size of 1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+      86 | }
+         | ^
 
 
---=-WcodL/RAUfxnppsGSZ6R--
+vim +47 drivers/mmc/host/sdhci-of-aspeed-test.c
 
+     5	
+     6	static void aspeed_sdhci_phase_ddr52(struct kunit *test)
+     7	{
+     8		int rate = 52000000;
+     9	
+    10		KUNIT_EXPECT_EQ(test, 0,
+    11				aspeed_sdhci_phase_to_tap(NULL, rate, 0));
+    12		KUNIT_EXPECT_EQ(test, 0,
+    13				aspeed_sdhci_phase_to_tap(NULL, rate, 1));
+    14		KUNIT_EXPECT_EQ(test, 1,
+    15				aspeed_sdhci_phase_to_tap(NULL, rate, 2));
+    16		KUNIT_EXPECT_EQ(test, 1,
+    17				aspeed_sdhci_phase_to_tap(NULL, rate, 3));
+    18		KUNIT_EXPECT_EQ(test, 2,
+    19				aspeed_sdhci_phase_to_tap(NULL, rate, 4));
+    20		KUNIT_EXPECT_EQ(test, 3,
+    21				aspeed_sdhci_phase_to_tap(NULL, rate, 5));
+    22		KUNIT_EXPECT_EQ(test, 14,
+    23				aspeed_sdhci_phase_to_tap(NULL, rate, 23));
+    24		KUNIT_EXPECT_EQ(test, 15,
+    25				aspeed_sdhci_phase_to_tap(NULL, rate, 24));
+    26		KUNIT_EXPECT_EQ(test, 15,
+    27				aspeed_sdhci_phase_to_tap(NULL, rate, 25));
+    28	
+    29		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 0,
+    30				aspeed_sdhci_phase_to_tap(NULL, rate, 180));
+    31		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 0,
+    32				aspeed_sdhci_phase_to_tap(NULL, rate, 181));
+    33		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
+    34				aspeed_sdhci_phase_to_tap(NULL, rate, 182));
+    35		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 1,
+    36				aspeed_sdhci_phase_to_tap(NULL, rate, 183));
+    37		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 2,
+    38				aspeed_sdhci_phase_to_tap(NULL, rate, 184));
+    39		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 3,
+    40				aspeed_sdhci_phase_to_tap(NULL, rate, 185));
+    41		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 14,
+    42				aspeed_sdhci_phase_to_tap(NULL, rate, 203));
+    43		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
+    44				aspeed_sdhci_phase_to_tap(NULL, rate, 204));
+    45		KUNIT_EXPECT_EQ(test, (int)ASPEED_SDHCI_TAP_PARAM_INVERT_CLK | 15,
+    46				aspeed_sdhci_phase_to_tap(NULL, rate, 205));
+  > 47	}
+    48	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E79154723FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3D74727E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbhLMJdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S237623AbhLMKFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233855AbhLMJdA (ORCPT
+        with ESMTP id S235685AbhLMKAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:33:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB65C06173F;
-        Mon, 13 Dec 2021 01:33:00 -0800 (PST)
+        Mon, 13 Dec 2021 05:00:46 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AAAC09B120;
+        Mon, 13 Dec 2021 01:48:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22529B80E26;
-        Mon, 13 Dec 2021 09:32:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA6EC341C5;
-        Mon, 13 Dec 2021 09:32:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4EE7ACE0E92;
+        Mon, 13 Dec 2021 09:48:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBFECC33A44;
+        Mon, 13 Dec 2021 09:48:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639387977;
-        bh=+BqtltrckDBCrIwhgxZdJy60JLi4NeUnum0BgYQnNfM=;
+        s=korg; t=1639388935;
+        bh=6kBPxSslbtJkTfjdNaA7EiZNeekOmRzTEIcOuJh+uZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1oKKdHZkMcPpq0IHRdLTysAl4dAi833xAM/ohlYoRFN8s2FY9jEak6i3enCCK6tK8
-         OhM5oGqKo0w37qe7w1xowVKzTHwmqYf1a1GJgnx4nHK8IwpPVMmUwGJsXGP5w00mAG
-         YdrfsW73wZ6Sfix+lFEKDiL5NTECRMfe4d9Wf/o8=
+        b=J5lsmFBaBw2O1DBQTJL3QMslMaa+7A3I1RmcR2Yob2/EXHzgp7psVoxSfvzunfEft
+         ZjtJVb137dXY77tyZiAk3GTr90JXg6zuYCTMPeGMZ3vbXobNnxkrkfgbjHVpb+Uvw/
+         ZwntQUmZtpYnDXg5UpWe5xeam3IG6cNuKBtVCWpo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.4 24/37] net: altera: set a couple error code in probe()
+        stable@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.10 061/132] can: pch_can: pch_can_rx_normal: fix use after free
 Date:   Mon, 13 Dec 2021 10:30:02 +0100
-Message-Id: <20211213092926.158782570@linuxfoundation.org>
+Message-Id: <20211213092941.218358729@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
-References: <20211213092925.380184671@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,45 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-commit badd7857f5c933a3dc34942a2c11d67fdbdc24de upstream.
+commit 94cddf1e9227a171b27292509d59691819c458db upstream.
 
-There are two error paths which accidentally return success instead of
-a negative error code.
+After calling netif_receive_skb(skb), dereferencing skb is unsafe.
+Especially, the can_frame cf which aliases skb memory is dereferenced
+just after the call netif_receive_skb(skb).
 
-Fixes: bbd2190ce96d ("Altera TSE: Add main and header file for Altera Ethernet Driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reordering the lines solves the issue.
+
+Fixes: b21d18b51b31 ("can: Topcliff: Add PCH_CAN driver.")
+Link: https://lore.kernel.org/all/20211123111654.621610-1-mailhol.vincent@wanadoo.fr
+Cc: stable@vger.kernel.org
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/ethernet/altera/altera_tse_main.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/altera/altera_tse_main.c
-+++ b/drivers/net/ethernet/altera/altera_tse_main.c
-@@ -1383,16 +1383,19 @@ static int altera_tse_probe(struct platf
- 		priv->rxdescmem_busaddr = dma_res->start;
+---
+ drivers/net/can/pch_can.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/net/can/pch_can.c
++++ b/drivers/net/can/pch_can.c
+@@ -692,11 +692,11 @@ static int pch_can_rx_normal(struct net_
+ 			cf->data[i + 1] = data_reg >> 8;
+ 		}
  
- 	} else {
-+		ret = -ENODEV;
- 		goto err_free_netdev;
- 	}
+-		netif_receive_skb(skb);
+ 		rcv_pkts++;
+ 		stats->rx_packets++;
+ 		quota--;
+ 		stats->rx_bytes += cf->can_dlc;
++		netif_receive_skb(skb);
  
--	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask)))
-+	if (!dma_set_mask(priv->device, DMA_BIT_MASK(priv->dmaops->dmamask))) {
- 		dma_set_coherent_mask(priv->device,
- 				      DMA_BIT_MASK(priv->dmaops->dmamask));
--	else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32)))
-+	} else if (!dma_set_mask(priv->device, DMA_BIT_MASK(32))) {
- 		dma_set_coherent_mask(priv->device, DMA_BIT_MASK(32));
--	else
-+	} else {
-+		ret = -EIO;
- 		goto err_free_netdev;
-+	}
- 
- 	/* MAC address space */
- 	ret = request_and_map(pdev, "control_port", &control_port,
+ 		pch_fifo_thresh(priv, obj_num);
+ 		obj_num++;
 
 

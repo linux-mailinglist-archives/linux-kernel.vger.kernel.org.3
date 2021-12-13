@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5C0473409
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E086473406
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241876AbhLMSbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:31:24 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:59894 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbhLMSbX (ORCPT
+        id S239059AbhLMSam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236094AbhLMSal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:31:23 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BDITweD032784;
-        Mon, 13 Dec 2021 12:29:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639420199;
-        bh=CIwJXsDVc6MpWMxloZbtRdlpLw1Ztan/9G2UzPwMY0E=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=aQr+rT7AbNmri1BYm4glcZYUB4D0/LtbXNn0eGzLe1Xq4LgTziMH/fZw9NMlUSxOJ
-         eUvgRnz/JUOtWmI/LUlydZmqlDtGvShVqc/335BSewifnzHFovUoMb7LUYizCR9g/k
-         /rYDbql0vQTQMlM2Nnxl+1kL4PPvB9mCQmf5UIQI=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BDITwlR038320
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Dec 2021 12:29:58 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 13
- Dec 2021 12:29:58 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 13 Dec 2021 12:29:58 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BDITwZX089938;
-        Mon, 13 Dec 2021 12:29:58 -0600
-Date:   Mon, 13 Dec 2021 12:29:58 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        <xen-devel@lists.xenproject.org>, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        <iommu@lists.linux-foundation.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
-Message-ID: <20211213182958.ytj4m6gsg35u77cv@detonator>
-References: <20211210221642.869015045@linutronix.de>
+        Mon, 13 Dec 2021 13:30:41 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953F3C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:30:40 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id v1so55525989edx.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:30:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g3YkPQNm8HT8uPOkwlxqDDosj5jXAidcs7NGVfMzGdQ=;
+        b=PLD5ugaoBxsfh13ItjXwt+RNxiwpsjiaasa4t/MUMpINo5uqktSh5tco4R6UweAQgK
+         MqvGKm8ztEc/M3G6KVIYytn8Bm8hkmzeOB2gUQZaSuMwlTEneVyDnM/nMi8JbKVOY81/
+         fPqWP04HenfQmN39e89XLHFapkLjIvDliA525SJI54yu4heczQ03Fqm7kOr6n2pB9RH6
+         R+RmokoP1evfSqPD0UuNQUA91Dlu16XEsYjmrT6yz4vwCg+N22NpseGGJICSklRu5wfl
+         5WNKXzYJEFBV6KR0sYPKce8YyOmalZV1OoydswBghAjVXZl65mgjUte03EmT7nopsyNU
+         FbZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g3YkPQNm8HT8uPOkwlxqDDosj5jXAidcs7NGVfMzGdQ=;
+        b=o2A8XY8N1KYuHAnWS/jMdstuQyzAoMXT9bTOIOloIZV3oWYT9ABSlmb5n1A39C1al8
+         o74tdk4BJh/Q6KbrpRTtZ/cn2t8tyPsSCNY5+WX4tCbtQU1n/TODXtbHFQ3SpS5EYGWs
+         1m9MtRkEkHnK1+22lzCVafjH9/lWS74+RI3fhyBPkJypbxpeKnyrqH2drEDulG8rImwi
+         n8FuQeGHWmYpJhb/qSSWiqgLc6T9rL+CjEKauYdBjyRsI/bFEex6BD66QsAm1iKrt3f7
+         xgCUeHFOQOpiazV7rB2ZSqIG0vvLqCsipR0pBQrGKnFObB7C0vkGTXNnHCMb0UVd0C8D
+         8ImA==
+X-Gm-Message-State: AOAM531T54CazYtELAndlz+EZyEdSzWd4/aBj0XYngUGzV/mYw9YWlm2
+        NwUbY2B6j3nNLYsc/SoPmdQPD/gY268/qTdsJMdTLvOs3vc=
+X-Google-Smtp-Source: ABdhPJyiubzERra+E8YaazWpZr091U7oC8cB59PSHrp6pM086prR5B207yEmyjou/vFhSLrfFhB+yjJkKc7RYvFcV9M=
+X-Received: by 2002:a17:907:6289:: with SMTP id nd9mr51979ejc.101.1639420239120;
+ Mon, 13 Dec 2021 10:30:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211210221642.869015045@linutronix.de>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20211213162625.18081-1-brgl@bgdev.pl> <Ybd3DT5e3fCP5JiS@smile.fi.intel.com>
+In-Reply-To: <Ybd3DT5e3fCP5JiS@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 13 Dec 2021 19:30:28 +0100
+Message-ID: <CAMRc=MdOeB_xFTodeAhNBK3E0OuDRceW9wFGK_iPB8=GjGoj_Q@mail.gmail.com>
+Subject: Re: [PATCH -next] selftests: gpio: gpio-sim: remove bashisms
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23:18-20211210, Thomas Gleixner wrote:
-[...]
+On Mon, Dec 13, 2021 at 5:39 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Dec 13, 2021 at 05:26:25PM +0100, Bartosz Golaszewski wrote:
+> > '==' is a bashisms and not understood by POSIX shell. Drop it from
+> > gpio-sim selftests.
+>
+> > -             if [ "$BANK" == "live" ] || [ "$BANK" == "dev_name" ]; then
+> > +             if [ "$BANK" = "live" ] || [ "$BANK" = "dev_name" ]; then
+>
+> While at it, no need to fork `test` twice, isn't it?
+>
+>                 if [ "$BANK" = "live" -o "$BANK" = "dev_name" ]; then
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-> 
-> It's also available from git:
-> 
->      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v3-part-2
+I'll send a follow-up for that, thanks for spotting it.
 
-[...]
-
-> ---
->  drivers/dma/ti/k3-udma-private.c                    |    6 
->  drivers/dma/ti/k3-udma.c                            |   14 -
->  drivers/irqchip/irq-ti-sci-inta.c                   |    2 
->  drivers/soc/ti/k3-ringacc.c                         |    6 
->  drivers/soc/ti/ti_sci_inta_msi.c                    |   22 --
->  include/linux/soc/ti/ti_sci_inta_msi.h              |    1 
-
-Also while testing on TI K3 platforms, I noticed:
-
-msi_device_data_release/msi_device_destroy_sysfs in am64xx-evm / j7200
-[1] https://gist.github.com/nmenon/36899c7819681026cfe1ef185fb95f33#file-am64xx-evm-txt-L1018
-[2] https://gist.github.com/nmenon/36899c7819681026cfe1ef185fb95f33#file-j7200-evm-txt-L1076
-
-Which is not present in vanilla v5.16-rc4
-
-v5.16-rc4:
-https://gist.github.com/nmenon/1aee3f0a7da47d5e9dcb7336b32a70cb
-
-msi-v3-part-2:
-https://gist.github.com/nmenon/36899c7819681026cfe1ef185fb95f33
-
-(.config https://gist.github.com/nmenon/ec6f95303828abf16a64022d8e3a269f)
-
-Vs:
-next-20211208:
-https://gist.github.com/nmenon/f5ca3558bd5c1fbe62dc5ceb420b536e
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Bart

@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D904733BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448CB4733C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241764AbhLMSOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S241772AbhLMSR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238474AbhLMSOi (ORCPT
+        with ESMTP id S241784AbhLMSRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:14:38 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A7AC061574;
-        Mon, 13 Dec 2021 10:14:38 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id r25so54497725edq.7;
-        Mon, 13 Dec 2021 10:14:38 -0800 (PST)
+        Mon, 13 Dec 2021 13:17:20 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145B8C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:17:20 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so13032027pjj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=50euq+cG/vcQRPIfg8teXOk2oPJ4jzE199hwQRYlI14=;
-        b=qUkxdzzVPemsxNwAeSQo41N6ibgK2KjmQj25TUS4Y/uYZxhCj0r+uZkOwSjxgypMYy
-         /GdvaRJnPId4zqzxQuZWlTELtkwSd3/RSTnRWXgXdrjhH6tsElXC28cQ9U60h1tDLikm
-         cM4GEcaRgpYUvwrXL/875+xZiQ6gK2iFBd74t7mHhPTRTbL3teP/bFbo5bml8Tg68DDQ
-         VIP2BNTGUZlR27lIT/2oOTbQw21bW6SeHR0sCpgk63gVVnTZYeTY0q+b9Ro8Z9v8QrTh
-         ng/0Ai0wMO6YlwDIkjNVqAiSbgVYst/7Y8/O7iyK8y78te/61PZZ4v+mGIBHm7KjaGHO
-         AfLw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F8sC5FdkIHoBVbPCAfYKXOlFiBXA/DjGmKoVu/p8um4=;
+        b=WKpsS7BCccTwE1d79oM3wlk6RJsntAUKBcIbMfpM8GPX6WFNkU2Rbsxq8X7D6cu0uT
+         maGbQAx/VsOk/OVSwMXbpgnd1c+A/IP/o6hmDqE0veUBZHOMP0sG2zzRFl5T6fjPeFKT
+         qZ2/1Jns+iZ+Fhe7JhfgAkGNr0EmNN+9SuPO2p2HxaZlb0PPt7GqJhtB84bOEM7I3FeN
+         +d4NidTgHTl/TG9Vc+WBHJ/lUBpzfamxrFZJmNRv57NYlU8071Z9TBiKYCNhTqNNR4lA
+         dZWilvcgK5+vqBUNVQengXwp2+HZ6jvK8ZHgMge6bmhSkhKAlVHuZwcbh0cwTp7uQ8ZM
+         2/yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=50euq+cG/vcQRPIfg8teXOk2oPJ4jzE199hwQRYlI14=;
-        b=mtEqWSig8caY/PIc6eZWhCqAqAjI/g2vVhW+9qrRuQMsBu1aWw27UefWQSuHlKRiTX
-         hVzM0uQM32BIekeEOjjpUAIpSEDQAAFe7T3d8AtyIhU+s2WIJ4QiaLqkODTSQK3+9oP9
-         NP4yaMPrPmbp70CQ1/HO1JDn5s4uoroncidoE8LrLMQcp9e7kVbwmPvROm9ZAlpIS4sJ
-         XqqEX3Hc7+CHxpI0nB/r7+nTmrshER0diNY+2Nd/KnR+SDCVanoq3b+jjOmTUJ+8t9cs
-         M4+/n8rEMYKKfRiOzBJaUedR5CdTMllsZzIjRvqm8Rx9kxayTxB6ZImPrfdHIcRqtCCY
-         fH0w==
-X-Gm-Message-State: AOAM532vhAU5PSqdX/JqluRXcvbU7cbpCIY0hp/+j1QVJ1vGILnC6ves
-        koWxkzJYjSd4hpeBFiGEHPk=
-X-Google-Smtp-Source: ABdhPJzbra1qn1rRVcfdx10qy2UGNdWw3/8qNkzlkGBmgv6ZnyBkQM1K5nXC1lIlnrYxi9YyQ76dzA==
-X-Received: by 2002:a17:906:478e:: with SMTP id cw14mr64247ejc.46.1639419276863;
-        Mon, 13 Dec 2021 10:14:36 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id cb20sm3077977edb.19.2021.12.13.10.14.35
+        bh=F8sC5FdkIHoBVbPCAfYKXOlFiBXA/DjGmKoVu/p8um4=;
+        b=mSUZ7tMyrNVGBmGk2F9x4aWBgoqmfQUY+nloxl9T9DU1YwK8/burBYBDWcOKLoGfLL
+         dSePuilGum9P1UdmkQklILvTXvOafgy8w7nd2p5yo7RjhkBaz3np5yJgK1LxAL2d5tIj
+         BD2UqXHpG+lMPFQw+SJ+TeRN403Q4CHbV8XS1u0rE6bYO6nbGSF5yXMdovDXeICiWz3m
+         bcWwauj4kpEynl/P4jhiVjHOALjnMFARP3Ga5nfT4ZqqFmClgDttgC0D3gLFTY8F//8J
+         IWA8guoZGEQo6H97U8HqGCaOXsvRb4Ch6ypWalRxfOKoSxskMUYy6LWXAlyl9sll7fDW
+         OkTw==
+X-Gm-Message-State: AOAM5322vqcMQ6VeL5+0dK0Hh5HZ1iz5rLQiCbRMDb/N+3S1sSh0Us+M
+        3bdTk2dKdUa9IARlWi2ZhLx7ug==
+X-Google-Smtp-Source: ABdhPJzGTZQvwgc4TUkEaYPWSzTALTXz9xvxlCOEFBKYWk78pzdOq2gg4NHj2nXmnop+zjQSs/bheQ==
+X-Received: by 2002:a17:903:283:b0:142:1243:d879 with SMTP id j3-20020a170903028300b001421243d879mr98970610plr.61.1639419439435;
+        Mon, 13 Dec 2021 10:17:19 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id md6sm7613577pjb.22.2021.12.13.10.17.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 10:14:36 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <0151dccd-d7a8-cf69-3f85-6474cb39d36b@redhat.com>
-Date:   Mon, 13 Dec 2021 19:14:34 +0100
+        Mon, 13 Dec 2021 10:17:19 -0800 (PST)
+Message-ID: <52a7fa5d-6fa0-a0df-2e88-bd4bf443a671@linaro.org>
+Date:   Mon, 13 Dec 2021 10:17:18 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: linux-next: manual merge of the kvm tree with the tip tree
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
 Content-Language: en-US
-To:     broonie@kernel.org, KVM <kvm@vger.kernel.org>
-Cc:     David Woodhouse <dwmw@amazon.co.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>
-References: <20211213174628.178270-1-broonie@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211213174628.178270-1-broonie@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net,
+        krzysztof.kozlowski@canonical.com
+References: <20211213092939.074326017@linuxfoundation.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 18:46, broonie@kernel.org wrote:
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+On 12/13/21 01:29, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.85 release.
+> There are 132 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> diff --cc arch/arm64/kvm/Makefile
-> index 0bcc378b79615,04a53f71a6b63..0000000000000
-> --- a/arch/arm64/kvm/Makefile
-> +++ b/arch/arm64/kvm/Makefile
-> @@@ -10,9 -10,7 +10,7 @@@ include $(srctree)/virt/kvm/Makefile.kv
->    obj-$(CONFIG_KVM) += kvm.o
->    obj-$(CONFIG_KVM) += hyp/
->    
-> - kvm-y := $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o $(KVM)/eventfd.o \
-> - 	 $(KVM)/vfio.o $(KVM)/irqchip.o $(KVM)/binary_stats.o \
-> - 	 arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
->   -kvm-y += arm.o mmu.o mmio.o psci.o perf.o hypercalls.o pvtime.o \
-> ++kvm-y := arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.85-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 
-This is mostly okay, but it needs to be "+=" instead of ":=".
+Hi,
+In this release cycle there were two similar nfc fixes:
 
-Paolo
+fd79a0cbf0b2 nfc: fix segfault in nfc_genl_dump_devices_done
+4cd8371a234d nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
+
+The list here only includes the second one. The first is still missing.
+The same applies to 5.15
+
+-- 
+Thanks,
+Tadeusz

@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4BD472AAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8183472ACE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhLMKuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:50:19 -0500
-Received: from first.geanix.com ([116.203.34.67]:37706 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229950AbhLMKuR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:50:17 -0500
-Received: from skn-laptop (unknown [195.24.41.109])
-        by first.geanix.com (Postfix) with ESMTPSA id 1C885E1D01;
-        Mon, 13 Dec 2021 10:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1639392614; bh=cGxFVdayz5jAaqQX0zPXjvkju3c6WvmCUgBcKAZPV0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=cS23gm/a38x3zfw858JVQzfU+NOG0lg1sHsfkkCjK/fcYFTCUqhwGmjNrrh/OW8nB
-         +s2p5caiTdXgujox/EVVWxX/h3VI3gBeiZQ/yKbfU9IeQkXP7mPHvXpS3rDTKppBUg
-         tssMieQEkBNXsqkW/9HidFUGXjoZM3CfOyq+BJcaFw3+qagPrUdJgG9pp29Iyp8DC4
-         YjD3jLzPc0dOckfQi1ds3Xr4f15Ian2wHijeYbMtlGi5h+qgLUTMkcfVYdasqCD5BK
-         IATqXq37qr8RqdEM2pxZE28eavvI+ZP+QD+7CbD/CDZBI258BspnT7t+Oqp1zFgQgG
-         oRNFHWZYya/MQ==
-Date:   Mon, 13 Dec 2021 12:50:12 +0200
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v5 3/4] mtd: core: protect access to MTD devices while in
- suspend
-Message-ID: <20211213105012.65jk4rylxzncqdfy@skn-laptop>
-References: <20211130132912.v6v45boce2zbnoy3@skn-laptop>
- <20211130143705.5d0404aa@collabora.com>
- <20211203143958.40645506@xps13>
- <20211209140721.6ki7gznvxwyn3cze@skn-laptop.hinnerup>
- <20211209152811.318bdf17@xps13>
- <20211210132535.gy7rqj5zblqlnz5y@skn-laptop.hadsten>
- <20211213101025.42c27b43@xps13>
- <20211213102801.569b50b1@collabora.com>
- <20211213103350.22590c13@xps13>
- <20211213105336.7be369b7@collabora.com>
+        id S232540AbhLMLAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:00:47 -0500
+Received: from out162-62-57-137.mail.qq.com ([162.62.57.137]:37579 "EHLO
+        out162-62-57-137.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232749AbhLMLAm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:00:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639393238;
+        bh=u1lc4/21RdKYP+fM/Qi93hsRzybEub1fMzz15gjnxfk=;
+        h=From:To:Cc:Subject:Date;
+        b=p+uttOmcZYoV/p6H+FPmYISAI5cMm0SzFm4A1t3O+8QdqdGgEaZ2EbBPuVma5Zxgt
+         r7XIl4YBS2S2lhfosFVfmcx5//f/5xFemKHac4AxkHGMOOBr/uqSu/UJZAnWP+fOWL
+         gSxLKaLym3DrNKcmtcQb8osDnnXjJch3WHQoIfuE=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrsza7.qq.com (NewEsmtp) with SMTP
+        id D3130477; Mon, 13 Dec 2021 18:52:49 +0800
+X-QQ-mid: xmsmtpt1639392769trvav6rqp
+Message-ID: <tencent_1E3950293AC22395ACFE99404C985D738309@qq.com>
+X-QQ-XMAILINFO: MmWQdRkIb8niVI+ZUP/cjeYl0mj3kIryaWYG8J1BmJSztV9ztwQoOc4xjAK1/s
+         W6if+2yi0jx1j1ZaDcJSg14N/vegmwvdAbefeLI7kd5zPkfBT1F8u7q4+LHDiwHcbJiQPvM7eP1b
+         SWhZ20rKiPi0gFqg/wNMXhy92ev3S9mO0+bG1YmSotrcHeBqz2pKidpTQSlcTavsAWy807sRKYcA
+         tWFJnvVldyAlIOrWfKCD+nFqF4OC0lkmT4DhN/Vb+wkn8Ae+u424O0wCJawuMRD/py+bhy/iriYX
+         egzN69m+p2OwUCRSlHoON3Ur+v82nqRJOGcc3p1jpUmwENL9GaZGu/9Uvb7yUj+P29WJdFOiVvq3
+         gp2i4+LHtshtyBK+DnY+zBek4bZLliIl6LDD6hM4QXYnJT8Jy0ksPmTkExUlnHh4Z7FJa3uXTJmX
+         8m1YTCCQkkioyNodguHq0wkMklgGXMChDr+9VeLbtufaA1P6xz0T0t7+9HqZR88PS/KoADVLrQR6
+         ZJCRdc4xTUZpSvbiO9ByorPI0vQS1O7g+53tp29xhDHaCt8Ut6U/2I7RuHH78OOzd6o8RQiuRt7S
+         nWFgx5eqc1IgMrwXZw5BS8Q+/L7aid4bKEeyu378yYkPPP4XyUuSAVY9wwI8XnLVEofDRBP/ySkD
+         m3qD5a0+iCCUdtsh0iOTZLaBk/1GHJO7y9WoTYpWyNRICxtjIXhZkfhP6bMgCovCvO4C0f4ZGrSq
+         GN0w1/+wg628GwPTHx4bjcajZcS5EFb5zAtUjDEwKl9Hm8kpXoM2A7GPv5xTFZ2YhuqsvxopB9z+
+         M1HblEGmW/aJY+fXHbtp/7FmJFMq8KT4EEb5i3LdwDOHg5Taifenq3BK9SWx9Ap2Qp6kvzS7x2VA
+         pcDpsyiiHL
+From:   Xiaoke Wang <xkernel.wang@foxmail.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v2] ALSA: sound/isa/gus: check the return value of kstrdup()
+Date:   Mon, 13 Dec 2021 18:52:32 +0800
+X-OQ-MSGID: <20211213105232.1052-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211213105336.7be369b7@collabora.com>
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on 13e2a5895688
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel and Boris,
+kstrdup() returns NULL when some internal memory errors happen, it is
+better to check the return value of it. Otherwise, we may not to be able
+to catch some memory errors in time.
 
-On Mon, Dec 13, 2021 at 10:53:36AM +0100, Boris Brezillon wrote:
-> On Mon, 13 Dec 2021 10:33:50 +0100
-> Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> 
-> > Hello,
-> > 
-> > boris.brezillon@collabora.com wrote on Mon, 13 Dec 2021 10:28:01 +0100:
-> > 
-> > > On Mon, 13 Dec 2021 10:10:25 +0100
-> > > Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> > >   
-> > > > Hi Sean,
-> > > > 
-> > > > sean@geanix.com wrote on Fri, 10 Dec 2021 14:25:35 +0100:
-> > > >     
-> > > > > On Thu, Dec 09, 2021 at 03:28:11PM +0100, Miquel Raynal wrote:      
-> > > > > > Hi Sean,
-> > > > > > 
-> > > > > > sean@geanix.com wrote on Thu, 9 Dec 2021 15:07:21 +0100:
-> > > > > >         
-> > > > > > > On Fri, Dec 03, 2021 at 02:39:58PM +0100, Miquel Raynal wrote:        
-> > > > > > > > Hello,
-> > > > > > > >           
-> > > > > > > > > > Fine by me, lets drop this series.          
-> > > > > > > > 
-> > > > > > > > FYI I've dropped the entire series from mtd/next. I'm waiting for the
-> > > > > > > > fix discussed below (without abusing the chip mutex ;-) ).          
-> > > > > > > 
-> > > > > > > Cool, looking forward to test a patch series :)        
-> > > > > > 
-> > > > > > Test? You mean "write"? :)
-> > > > > > 
-> > > > > > Cheers,
-> > > > > > Miquèl        
-> > > > > 
-> > > > > Hi Miquel,
-> > > > > 
-> > > > > Should we us a atomic for the suspended variable?      
-> > > > 
-> > > > I haven't thought about it extensively, an atomic variable sound fine
-> > > > but I am definitely not a locking expert...    
-> > > 
-> > > No need to use an atomic if the variable is already protected by a lock
-> > > when accessed, and this seems to be case.  
-> > 
-> > Maybe there was a confusion about this lock: I think Boris just do not
-> > want the core to take any lock during a suspend operation. But you can
-> > still use locks, as long as you release them before suspending.
-> > 
-> > And also, that chip lock might not be the one you want to take because
-> > it's been introduced for another purpose.
-> 
-> Access to the suspended field is already protected by the chip lock,
-> and I think it's just fine to keep it this way.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+Changes in v2:
+ - add the proper error handling.
+Thanks for the suggestions from Takashi Iwai. In the future, I'll pay 
+more attention to what he mentioned.
+---
+sound/isa/gus/gus_mem.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-I'm reading the suspended variable in wait_event() outside the lock :/
-
-/Sean
+diff --git a/sound/isa/gus/gus_mem.c b/sound/isa/gus/gus_mem.c
+index ff9480f..4c691db 100644
+--- a/sound/isa/gus/gus_mem.c
++++ b/sound/isa/gus/gus_mem.c
+@@ -199,6 +199,10 @@ struct snd_gf1_mem_block *snd_gf1_mem_alloc(struct snd_gf1_mem * alloc, int owne
+ 		memcpy(&block.share_id, share_id, sizeof(block.share_id));
+ 	block.owner = owner;
+ 	block.name = kstrdup(name, GFP_KERNEL);
++	if (block.name == NULL) {
++		snd_gf1_mem_lock(alloc, 1);
++		return NULL;
++	}
+ 	nblock = snd_gf1_mem_xalloc(alloc, &block);
+ 	snd_gf1_mem_lock(alloc, 1);
+ 	return nblock;
+@@ -237,13 +241,13 @@ int snd_gf1_mem_init(struct snd_gus_card * gus)
+ 		block.ptr = 0;
+ 		block.size = 1024;
+ 		block.name = kstrdup("InterWave LFOs", GFP_KERNEL);
+-		if (snd_gf1_mem_xalloc(alloc, &block) == NULL)
++		if (block.name == NULL || snd_gf1_mem_xalloc(alloc, &block) == NULL)
+ 			return -ENOMEM;
+ 	}
+ 	block.ptr = gus->gf1.default_voice_address;
+ 	block.size = 4;
+ 	block.name = kstrdup("Voice default (NULL's)", GFP_KERNEL);
+-	if (snd_gf1_mem_xalloc(alloc, &block) == NULL)
++	if (block.name == NULL || snd_gf1_mem_xalloc(alloc, &block) == NULL)
+ 		return -ENOMEM;
+ #ifdef CONFIG_SND_DEBUG
+ 	snd_card_ro_proc_new(gus->card, "gusmem", gus, snd_gf1_mem_info_read);
+-- 

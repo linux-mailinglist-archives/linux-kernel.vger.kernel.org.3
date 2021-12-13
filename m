@@ -2,139 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8084730CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C80DB4730CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240216AbhLMPps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:45:48 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55406 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231132AbhLMPpq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:45:46 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BDEvNn5016322;
-        Mon, 13 Dec 2021 15:45:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=efezFGCsVmMWMI6LOoOZsb+RpJlXl7CPy4/JkrqvAbg=;
- b=VadWO/0cj7w5VxIveTqkWu7I5YfB1TSolh6gMtxcHqPppe15/zdsZzVWr7pfhFsoE4Kn
- vo/ACYZN8nuhZZLhoWJfu9g1C405LbqgCxpjjv7clbE3lqrFa/c3JM5MfjwNTC9cpq2y
- 6bbqSe0do6UbHF5X3Ls0dLuVt015D8gVDD7vUCLAtxWjR0yk/v55h+k5ihNDEQcO0+YO
- IoM+n2u+QL6KmdxtjNPf5vbvRN7APzyQLGlfaMXJetpHV4Zp1/c9OFa/N012lz2Tz3/X
- RRmsp+ghTgzdCqMP0oCFjLT57CFwV+g9IhRZuKIo0t8IvQvZTHml5t7bWRdLX1JsCvYH 3g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx8d3s6md-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 15:45:45 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BDEwdmQ023643;
-        Mon, 13 Dec 2021 15:45:44 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx8d3s6kv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 15:45:44 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BDFiD7p011121;
-        Mon, 13 Dec 2021 15:45:43 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3cvkm96hjr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 15:45:43 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BDFidNP30671352
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Dec 2021 15:44:39 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 99390A4068;
-        Mon, 13 Dec 2021 15:44:39 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50342A4060;
-        Mon, 13 Dec 2021 15:44:39 +0000 (GMT)
-Received: from funtu.home (unknown [9.145.23.43])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Dec 2021 15:44:39 +0000 (GMT)
-Subject: Re: [RFC PATCH] s390: vfio-ap: Register the vfio_ap module for the
- "ap" parent bus
-To:     Thomas Huth <thuth@redhat.com>, linux-s390@vger.kernel.org,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20211201141110.94636-1-thuth@redhat.com>
-From:   Harald Freudenberger <freude@linux.ibm.com>
-Message-ID: <8512bb0a-a34a-09b0-65f3-781f3d092364@linux.ibm.com>
-Date:   Mon, 13 Dec 2021 16:44:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S240204AbhLMPpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:45:45 -0500
+Received: from mga07.intel.com ([134.134.136.100]:9316 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231132AbhLMPpo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 10:45:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639410344; x=1670946344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=21nKNVcV8KSqzdESBthYUCCZKtWtFQyHDWyeHHzae70=;
+  b=PlLPB4TJAQfDwbFZuwNDCA7uFA9LMFXmZ2QbUbch5Hex20UFGEHGYaMK
+   z4/hVvnd8evUSftdZOafrw0a25FFEXxEVOZxxno8KXK6+rjf49ilvFtke
+   klll0zGNhxP3SCW7LlVHPEmfEf/zxBCOjsWcA8mPwRyadlsqwZd8pg4d2
+   B3Sp5G9OkszuBOLEX5K1C7WuvtyQZJh3SCHlv5xgPFm6itY5wM3Ban6yY
+   lH0j8zXnOwxpdn+IQw97tlNbDS2A0GAZMjig079OtoiiotvDyEuCW2RnE
+   gdBZFYYcTZnjbCiydpkyhTD/1mT3bVkZXMHwMOHPWGz7F10/59cTe6Yz/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="302140086"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="302140086"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 07:45:44 -0800
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="463418510"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 07:45:43 -0800
+Date:   Mon, 13 Dec 2021 07:45:43 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org
+Subject: Re: [PATCH 1/7] drm/i915: Replace kmap() with kmap_local_page()
+Message-ID: <20211213154543.GM3538886@iweiny-DESK2.sc.intel.com>
+References: <20211210232404.4098157-1-ira.weiny@intel.com>
+ <20211210232404.4098157-2-ira.weiny@intel.com>
+ <Ybc/HwaG2vgbdkQr@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211201141110.94636-1-thuth@redhat.com>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Yhx-TFfzED5kzWwwjspyfmpUH91sQ3Ps
-X-Proofpoint-GUID: yQfUo_N4xiXNGeqnmOy3EFhHkuJMEoyy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-13_07,2021-12-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 bulkscore=0 phishscore=0 mlxscore=0 clxscore=1015
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 suspectscore=0
- impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112130099
+In-Reply-To: <Ybc/HwaG2vgbdkQr@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.12.21 15:11, Thomas Huth wrote:
-> The crypto devices that we can use with the vfio_ap module are sitting
-> on the "ap" bus, not on the "vfio_ap" bus that the module defines
-> itself. With this change, the vfio_ap module now gets automatically
-> loaded if a supported crypto adapter is available in the host.
->
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  Note: Marked as "RFC" since I'm not 100% sure about it ...
->        please review carefully!
->
->  drivers/s390/crypto/vfio_ap_drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
-> index 4d2556bc7fe5..5580e40608a4 100644
-> --- a/drivers/s390/crypto/vfio_ap_drv.c
-> +++ b/drivers/s390/crypto/vfio_ap_drv.c
-> @@ -39,7 +39,7 @@ static struct ap_device_id ap_queue_ids[] = {
->  	{ /* end of sibling */ },
->  };
->  
-> -MODULE_DEVICE_TABLE(vfio_ap, ap_queue_ids);
-> +MODULE_DEVICE_TABLE(ap, ap_queue_ids);
->  
->  /**
->   * vfio_ap_queue_dev_probe:
-I had a chance to check this now.
-First I have to apologize about the dispute with vfio devices appearing on the ap bus.
-That's not the case with this patch. As Connie states the MODULE_DEVICE_TABLE() does not
-change the parent of a device and vfio_ap_drv is a driver for ap devices and thus
-belongs to the ap bus anyway.
-So what's left is that with this change the vfio_ap kernel module is automatically loaded
-when an ap device type 10-13 is recognized by the ap bus. So the intention of the patch
-is fulfilled.
-Yet another kernel module which may occupy memory but will never get used by most customers.
-This may not be a problem but I had a glance at the list of kernel modules loaded on my
-LPAR with and without the patch and the difference is:
-...
-kvm                   512000  1 vfio_ap
-vfio_ap                28672  0
-...
-So the vfio_ap module has a dependency to the biggest kernel module ever - kvm.
-Do I need to say something more?
+On Mon, Dec 13, 2021 at 02:39:59PM +0200, Ville Syrj�l� wrote:
+> On Fri, Dec 10, 2021 at 03:23:58PM -0800, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > kmap() is being deprecated and these usages are all local to the thread
+> > so there is no reason kmap_local_page() can't be used.
+> > 
+> > Replace kmap() calls with kmap_local_page().
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > ---
+> >  drivers/gpu/drm/i915/gem/i915_gem_shmem.c          | 4 ++--
+> >  drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 8 ++++----
+> >  drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c       | 4 ++--
+> >  drivers/gpu/drm/i915/gt/shmem_utils.c              | 4 ++--
+> >  drivers/gpu/drm/i915/i915_gem.c                    | 8 ++++----
+> >  drivers/gpu/drm/i915/i915_gpu_error.c              | 4 ++--
+> >  6 files changed, 16 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> > index d77da59fae04..fa8b820e14aa 100644
+> > --- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> > +++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> > @@ -597,9 +597,9 @@ i915_gem_object_create_shmem_from_data(struct drm_i915_private *dev_priv,
+> >  		if (err < 0)
+> >  			goto fail;
+> >  
+> > -		vaddr = kmap(page);
+> > +		vaddr = kmap_local_page(page);
+> >  		memcpy(vaddr, data, len);
+> > -		kunmap(page);
+> > +		kunmap_local(vaddr);
+> >  
+> >  		err = pagecache_write_end(file, file->f_mapping,
+> >  					  offset, len, len,
+> > diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> > index 6d30cdfa80f3..e59e1725e29d 100644
+> > --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> > +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
+> > @@ -144,7 +144,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
+> >  	intel_gt_flush_ggtt_writes(&to_i915(obj->base.dev)->gt);
+> >  
+> >  	p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
+> > -	cpu = kmap(p) + offset_in_page(offset);
+> > +	cpu = kmap_local_page(p) + offset_in_page(offset);
+> 
+> Does kunmap_local() do some magic to make it work even when you
+> don't pass in the same value you got from kmap_local_page()?
 
-If this dependency is removed then I would not hesitate to accept this patch. However
-this is up to Tony as he is the maintainer of the vfio ap device driver.
+Yes.  It sounds like a patch like this would be nice to clarify?
 
+Ira
+
+diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
+index 0a0b2b09b1b8..fb2d3e033c01 100644
+--- a/include/linux/highmem-internal.h
++++ b/include/linux/highmem-internal.h
+@@ -246,6 +246,17 @@ do {                                                               \
+        __kunmap_atomic(__addr);                                \
+ } while (0)
+ 
++/**
++ * kunmap_local - Unmap a page mapped via kmap_local_page().
++ * @__addr: An address within the page mapped
++ *
++ * __addr is often an address returned from kmap_local_page().  However,
++ * this address can be any address within the mapped page.  It does not need to
++ * be the exact address returned from kmap_local_page()
++ *
++ * Unmapping should be done in the reverse order of the mapping.  See
++ * kmap_local_page() for details.
++ */
+ #define kunmap_local(__addr)                                   \
+ do {                                                           \
+        BUILD_BUG_ON(__same_type((__addr), struct page *));     \
 

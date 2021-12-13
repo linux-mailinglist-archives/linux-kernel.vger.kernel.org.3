@@ -2,81 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BB247223A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D009E472236
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbhLMIRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:17:04 -0500
-Received: from out162-62-58-211.mail.qq.com ([162.62.58.211]:38543 "EHLO
-        out162-62-58-211.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229483AbhLMIRD (ORCPT
+        id S232673AbhLMIQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:16:38 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:58586 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229483AbhLMIQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:17:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639383419;
-        bh=WGyFzZjUpaoyHy9VQmJZshDUhmGUMzPm0ir4zv3soA0=;
-        h=From:To:Cc:Subject:Date;
-        b=MaHX5FXEkX6QUhQ9wkfN3PFay8f/UI9VSUDEJOf7OCA8nEROKaNoJp5/ZLaQvPmIW
-         6RyeLqh02vlw+fjkWPJpqrbJGvLCrpfEK+GfWDi4861ubfELplYKsAeHi20csFU1NY
-         Uf6KQ0M4tg5bCekom8Sl4woPA+dP9o2HGHRmqj3E=
-Received: from localhost.localdomain ([43.227.138.48])
-        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
-        id 438110A2; Mon, 13 Dec 2021 16:16:56 +0800
-X-QQ-mid: xmsmtpt1639383416t1u3u6951
-Message-ID: <tencent_713C9C4229EF3F0CE48CF93A9794C3862205@qq.com>
-X-QQ-XMAILINFO: NS0ZUBiNXRl8//ewNrbkJlya9s+2WHjopqdKCYooRxUEWpBXYIn4oPigi+gRor
-         Et92LSzaXjm1rwlVMTEXgU38gn2XO/9KbNo+l3/yopeEM4+z8oRgbIsIsWq0pAoG7IKmdlpCNL1e
-         jRJaaux0B5weXYk5FqesMvXMBZ5GxPjgCKLlHeasr5u4OpvmW29dtL0FSQ33M/tTF6LCPO1Amdpo
-         3fEKRLIV5NlpT9O9Ss4BIvMfQsWtAKv6UxJt3JOFG5qeE+kH2HCbDYheOc7rSITSIwVQbhT98reg
-         qkYXrEBafTCMyUgA52qKAB6n0ueI0mbZYNHYzrAu0sfPwN+WJcxLODJUzFSkMcTrm6ndH+pd0J9N
-         ORCmF77qHb/ngad63y5iVTlKYIHyRfEQgkfkYDU6klifKGFg7ZV3pyURIp5vLxE2IAjTPbOTfOiF
-         39lbEWBx/OCO5I02wuLUnypd62NQ7imHP/KbNphyxVAx9kAPDJU3kWJSPVt1bz7v1wDlNi7DStWU
-         rYfvyxcT9DuMdG9Wg/IwnjRPh1YOmEXUnOJBC/hdIdwbSJUQmJeDW1iiyBmdPVN2ECxcpsH0+Goj
-         xk5pwcUDVlsEMIMwaqE8Ffes1UC3UYTFbDtBi0Sj5d8fDT4/aZJny5Q7aU3nMYoYMH9Q0G/6TsTl
-         CHqTvjZLMFpTdM1Gbx96HXz0+26qNVMw6kL3BYltz2HhXbcxTSZHMdS7xVeBk0u0ak7IgnPN2lnu
-         S4B0+1AhJCZPx5EYOf1qPA1HbK149FruYi8q3LJbowHFDbfy6sBTNDoum9/vSFhiNGzHh6CFqZsw
-         kygGfY/oLx5zxFqxOd2nT3TRM35xlCSA29m9yOeKg3huQCRztmARGptDYXUsvIwkxXIPvxGXwb1N
-         FSqvsecE2lxuX+sw1uei83aSAm4s6NTll/YntppW+v
-From:   Xiaoke Wang <xkernel.wang@foxmail.com>
-To:     keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: Re: [PATCH] pstore/platform: check the return value of kstrdup()
-Date:   Mon, 13 Dec 2021 16:16:31 +0800
-X-OQ-MSGID: <20211213081631.4423-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Mon, 13 Dec 2021 03:16:37 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AE9C2210FE;
+        Mon, 13 Dec 2021 08:16:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639383396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FLRLtv4IRxfHgr0wbdouUbBaPowwy6AH8eiPZToUe/Q=;
+        b=1bI4moOfQb2K9Aj0ZCEOPXWcYPGOstJtT/V8Lvo0SwLbzkwT4wGStTR+0pGXoZYJFwveKj
+        Mg901XsS4+tZKrVOe8Sdm3tVVlp7pJ2L1PUeYCb/R2jB1sT1N0pOVlJHplzxSRKGMc1EyI
+        kVz0H4fL9TToxalxEZ4CFZksZRUgSkA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639383396;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FLRLtv4IRxfHgr0wbdouUbBaPowwy6AH8eiPZToUe/Q=;
+        b=0uNUrJvtIjJiT/+OrGuhvitb/8c91gFQ0s5kvVZvy3kL6T+gZ+sW4dPMldjM7oCZlf8HpX
+        sbs1GTveLuYaKgAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7DD4713310;
+        Mon, 13 Dec 2021 08:16:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id K+6XHWQBt2EIAwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 13 Dec 2021 08:16:36 +0000
+Message-ID: <251204bb-18f6-36cb-377a-557135633318@suse.de>
+Date:   Mon, 13 Dec 2021 09:16:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
+ simplefb to of
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
+Cc:     devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+References: <20211212062407.138309-1-marcan@marcan.st>
+ <20211212062407.138309-2-marcan@marcan.st>
+ <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------PH0T7yAtYZIRqUago0AulNh3"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note: Compare with the last email, this one is using my full name.
-kstrdup() returns NULL when some internal memory errors happen, it is
-better to checkk the return value of it. Otherwise, some memory errors
-will not be catched in time and may also further result in wrong memory
-access.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------PH0T7yAtYZIRqUago0AulNh3
+Content-Type: multipart/mixed; boundary="------------8JKj2L3nlW7eEFLPxADymROa";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
+Cc: devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Javier Martinez Canillas <javier@dowhile0.org>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Message-ID: <251204bb-18f6-36cb-377a-557135633318@suse.de>
+Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
+ simplefb to of
+References: <20211212062407.138309-1-marcan@marcan.st>
+ <20211212062407.138309-2-marcan@marcan.st>
+ <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- fs/pstore/platform.c | 5 +++++
- 1 file changed, 5 insertions(+)
+--------------8JKj2L3nlW7eEFLPxADymROa
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
-index b9614db..f7c8732 100644
---- a/fs/pstore/platform.c
-+++ b/fs/pstore/platform.c
-@@ -620,6 +620,11 @@ int pstore_register(struct pstore_info *psi)
- 	 * through /sys/module/pstore/parameters/backend
- 	 */
- 	backend = kstrdup(psi->name, GFP_KERNEL);
-+	if (!backend) {
-+		pr_err("out of memory duplicating '%s'\n", psi->name);
-+		mutex_unlock(&psinfo_lock);
-+		return -ENOMEM;
-+	}
- 
- 	pr_info("Registered %s as persistent store backend\n", psi->name);
- 
--- 
+SGkNCg0KQW0gMTIuMTIuMjEgdW0gMjI6Mjkgc2NocmllYiBSb2IgSGVycmluZzoNCj4gT24g
+U3VuLCBEZWMgMTIsIDIwMjEgYXQgMTI6MjQgQU0gSGVjdG9yIE1hcnRpbiA8bWFyY2FuQG1h
+cmNhbi5zdD4gd3JvdGU6DQo+Pg0KPj4gVGhpcyBjb2RlIGlzIHJlcXVpcmVkIGZvciBib3Ro
+IHNpbXBsZWZiIGFuZCBzaW1wbGVkcm0sIHNvIGxldCdzIG1vdmUgaXQNCj4+IGludG8gdGhl
+IE9GIGNvcmUgaW5zdGVhZCBvZiBoYXZpbmcgaXQgYXMgYW4gYWQtaG9jIGluaXRjYWxsIGlu
+IHRoZQ0KPj4gZHJpdmVycy4NCj4+DQo+PiBBY2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4g
+PHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+PiBTaWduZWQtb2ZmLWJ5OiBIZWN0b3IgTWFydGlu
+IDxtYXJjYW5AbWFyY2FuLnN0Pg0KPj4gLS0tDQo+PiAgIGRyaXZlcnMvb2YvcGxhdGZvcm0u
+YyAgICAgICAgICB8ICA0ICsrKysNCj4+ICAgZHJpdmVycy92aWRlby9mYmRldi9zaW1wbGVm
+Yi5jIHwgMjEgKy0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+PiAgIDIgZmlsZXMgY2hhbmdlZCwg
+NSBpbnNlcnRpb25zKCspLCAyMCBkZWxldGlvbnMoLSkNCj4gDQo+IFJldmlld2VkLWJ5OiBS
+b2IgSGVycmluZyA8cm9iaEBrZXJuZWwub3JnPg0KPiANCg0KQ2FuIEkgbWVyZ2UgdGhpcyBw
+YXRjaCB0aHJvdWdoIERSTSB0cmVlcz8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KLS0g
+DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
+b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBO
+w7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6Rm
+dHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+
+--------------8JKj2L3nlW7eEFLPxADymROa--
+
+--------------PH0T7yAtYZIRqUago0AulNh3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG3AWMFAwAAAAAACgkQlh/E3EQov+By
+RQ/+JFh+782OTUmNJbLISJ9izCWVpP06NbUEH2w806+rRYv+wmEGnZ4oqoNt5S0EAOVJQUfuFQob
+41AzRDhI5oW5hcXBRYZ87GhslQRTv8Y8AkZ9x+IlBSwUh9H5Y9XYQb6FdxH4GP8GZ0lviIWYsBzM
+Hf8XwY6NJbMkNtiQJS5iE8O4THh1EhCy3ISFVMEdnfjgc+j+G4vvWy1MFfxOXEyz+DwYVvc09tW+
+26afW4P1MFPJP52Z3lPS6Qzch5Ky0Rw7MeiC2rb+OdR3zvaOYXsPbALEO4IdcM8pKr5c5U8vJGCA
+aHwETL1ZjbxRVFwhWifg2tTbJkaVz5K2+MeVOGp7BlJiKjwqsveTyS0pW5jY35lDVt6Mv1CGuB1B
+IC4Aukhp/bcTGUWEBDgT4RWk3VU9IWEGU4xZueVLlx46/WEEDd3ayy8cmfz3lbv1O3w34jkV1M0w
+Uit6BrTjLn7w26kflVUUW/JPBA57JT4Bv+vTVSVNcxbhnRcFjJjNyN3zPM5gnRaVFcexig/ZkoxB
+POs5LB0biAYnWJ/5qa48hshZWUHDiL0Ajn7bfd4bh8i2dqVI16axtIH3Ho3kpfr55y19Qw+klOXb
+nYXHwi0hIGHrngkjvGrQkEtKtYrqq6emH+Nurx1GC+hxRNunaTMpXca5+hQLf+m9UBhdURgDEick
+OT8=
+=pKie
+-----END PGP SIGNATURE-----
+
+--------------PH0T7yAtYZIRqUago0AulNh3--

@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5F947345E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 901B7473462
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbhLMSwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:52:47 -0500
-Received: from polaris.svanheule.net ([84.16.241.116]:50206 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbhLMSwr (ORCPT
+        id S238291AbhLMSyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233160AbhLMSyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:52:47 -0500
-Received: from [IPv6:2a02:a03f:eafe:c901:2a24:b9a0:7e22:e714] (unknown [IPv6:2a02:a03f:eafe:c901:2a24:b9a0:7e22:e714])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 13 Dec 2021 13:54:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4B5C061574;
+        Mon, 13 Dec 2021 10:54:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 5ED0C280909;
-        Mon, 13 Dec 2021 19:52:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1639421565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/dsibw+615Whdc7GrNO7E0QGD49G7+bxFYOLZ3kh5cs=;
-        b=IimVS9+t9nS+BbyVZcnMFjwYYOsUQOtmXvuC5yx8Qhf36K/ooDMU9odJUO3PLo+22Qp7Cw
-        OhU6U4JH/L+o/R2qJCYGl8+90JuHEEHs2edENI1igYqwwT9jzljNHLbIIYortIhTV20ZKN
-        UdOWn+xKxMN9jxFHIJgNf70ko6bZMikSKtXI4Xhup1EeLWDddtQj7jG6iv9ZGfKqP4GlhX
-        1HuTHkiIjQHsKatH8zhECXC0O48xYKF5rnv8gOQ62e+Zm/NxSpj3O7qO1JB459SYZasFol
-        2lOziYvY0CoJduNWxn8CWniBovgZX5VLGUTvbj432XkS0IYelwoQBawGsBscaA==
-Message-ID: <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
-Subject: Re: [PATCH 1/9] mips: drop selecting the non-existing config
- SYS_HAS_EARLY_PRINTK_8250
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Bert Vermeulen <bert@biot.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Date:   Mon, 13 Dec 2021 19:52:44 +0100
-In-Reply-To: <20211213111642.11317-2-lukas.bulwahn@gmail.com>
-References: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
-         <20211213111642.11317-2-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E2F7B81249;
+        Mon, 13 Dec 2021 18:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30A4C34604;
+        Mon, 13 Dec 2021 18:54:11 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 13:54:10 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
+Subject: Re: [PATCH v1 0/5] Implement livepatch on PPC32
+Message-ID: <20211213135410.12642d8f@gandalf.local.home>
+In-Reply-To: <fc3099b8-9f12-3e47-08a0-05abc37a0482@csgroup.eu>
+References: <cover.1635423081.git.christophe.leroy@csgroup.eu>
+        <20211028093547.48c69dfe@gandalf.local.home>
+        <6209682d-0caa-b779-8763-376a984d8ed8@csgroup.eu>
+        <20211213121536.25e5488d@gandalf.local.home>
+        <5511f43c-192a-622b-7c72-52e07f0032c2@csgroup.eu>
+        <20211213123338.65eda5a0@gandalf.local.home>
+        <fc3099b8-9f12-3e47-08a0-05abc37a0482@csgroup.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas,
+On Mon, 13 Dec 2021 17:50:52 +0000
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-Thanks for the patch!
+> @@ -958,6 +942,12 @@ unsigned long prepare_ftrace_return(unsigned long 
+> parent, unsigned long ip,
+>   out:
+>   	return parent;
+>   }
+> +
+> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> +		       struct ftrace_ops *op, struct ftrace_regs *fregs)
+> +{
+> +	prepare_ftrace_return(ip, kernel_stack_pointer(&fregs->regs), 0);
+> +}
 
-On Mon, 2021-12-13 at 12:16 +0100, Lukas Bulwahn wrote:
-> Commit 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic
-> MIPS system") introduces config MACH_REALTEK_RTL, which selects the
-> non-existing config SYS_HAS_EARLY_PRINTK_8250.
-> 
-> As the MACH_REALTEK_RTL config also selects SYS_HAS_EARLY_PRINTK and
-> USE_GENERIC_EARLY_PRINTK_8250, an early printk with 8250 should be covered.
-> Probably SYS_HAS_EARLY_PRINTK_8250 is just some left-over from an early
-> draft version of this commit.
-> 
-> Drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250.
-> 
-> Fixes: 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  arch/mips/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 00951bfdbab0..c89ce68d9580 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -640,7 +640,6 @@ config MACH_REALTEK_RTL
->         select SYS_SUPPORTS_MULTITHREADING
->         select SYS_SUPPORTS_VPE_LOADER
->         select SYS_HAS_EARLY_PRINTK
-> -       select SYS_HAS_EARLY_PRINTK_8250
->         select USE_GENERIC_EARLY_PRINTK_8250
->         select BOOT_RAW
->         select PINCTRL
-
-MACH_REALTEK_RTL doesn't actually call setup_8250_early_printk_port(). That means
-USE_GENERIC_EARLY_PRINTK_8250 is also not needed. Being MIPS_GENERIC, that additionaly
-means SYS_HAS_EARLY_PRINTK doesn't need to be selected. 
-
-I only recently found the MIPS_GENERIC "early" console therefore doesn't actually work,
-but we use the "ns16550a" earlycon console instead. So feel free to also drop the other
-two other EARLY_PRINTK symbols, if you think this is in-scope for this patch. Otherwise I
-can submit a separate patch later.
-
-In any case:
-Acked-by: Sander Vanheule <sander@svanheule.net>
+I have for powerpc prepare_ftrace_return as:
 
 
-Best,
-Sander
+unsigned long prepare_ftrace_return(unsigned long parent, unsigned long ip,
+                                                unsigned long sp)
+{
+        unsigned long return_hooker;
+
+        if (unlikely(ftrace_graph_is_dead()))
+                goto out;
+
+        if (unlikely(atomic_read(&current->tracing_graph_pause)))
+                goto out;
+
+        return_hooker = ppc_function_entry(return_to_handler);
+
+        if (!function_graph_enter(parent, ip, 0, (unsigned long *)sp))
+                parent = return_hooker;
+out:
+        return parent;
+}
+
+Which means you'll need different parameters to it than what x86 has, which
+has the prototype of:
+
+void prepare_ftrace_return(unsigned long ip, unsigned long *parent,
+			   unsigned long frame_pointer)
+
+and it does not use the frame_pointer for this case, which is why it is
+zero.
+
+For powerpc though, it uses the stack pointer, so you parameters are
+incorrect. Looks like it should be:
+
+	prepare_ftrace_return(parent_ip, ip, kernel_stack_pointer(&fregs->regs));
+
+And that will likely not be enough. I'll need to update the ctr register,
+as that is where the return address is saved. So you'll probably need it to be:
+
+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+		       struct ftrace_ops *op, struct ftrace_regs *fregs)
+{
+	unsigned long parent;
+
+	parent = prepare_ftrace_return(parent_ip, ip, kernel_stack_pointer(&fregs->regs));
+	fregs->regs.ctr = parent;
+}
+
+
+
+-- Steve

@@ -2,215 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5466472EB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0424E472EB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238349AbhLMOT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S238790AbhLMOT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbhLMOTU (ORCPT
+        with ESMTP id S232397AbhLMOT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:19:20 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1D8C061574;
-        Mon, 13 Dec 2021 06:19:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=yWA4c0QfBa3QlJ8hhOMcOaJySGUuMbjYLGgiVEU05J0=; b=G4TVTzRK18vM/62jcQS5SO7VgL
-        /Ms+ahnlCsJzB3lT3fWBUocIWYPmDbr9qspKPwfXl3FOzM60wO6+v1o3tHV8BTDJR8geqH5neqq0O
-        cLmnsponzynvu8ZQCC4+XcXXHfuyuhFIi2H6m046WOpsHcqT1QAq0JKtsA8rGyAxfqaFL+cpNjpyp
-        3OHUCHhywOPS6Qgd5XjfSrXBOUtDY/lRefFyMgs85Wj/ckqZA1Z/y4MSrtNEjzafaFbTPLb+hrWqs
-        pmWgQ3wNQkkuKmJaklVGubZJngcxEc4NxuKKNhn+3aV+CJZmnn/xXRQ44DQLlVyrlUQH9Z7qlv6Zj
-        AmM/6uzA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwmAZ-00CrEQ-T8; Mon, 13 Dec 2021 14:19:11 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2 3/3] iov-kaddr
-Date:   Mon, 13 Dec 2021 14:19:07 +0000
-Message-Id: <20211213141907.3064347-4-willy@infradead.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211213141907.3064347-1-willy@infradead.org>
-References: <20211213141907.3064347-1-willy@infradead.org>
+        Mon, 13 Dec 2021 09:19:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6996BC061574;
+        Mon, 13 Dec 2021 06:19:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E69306109A;
+        Mon, 13 Dec 2021 14:19:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DBE5C34603;
+        Mon, 13 Dec 2021 14:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639405197;
+        bh=cf6HQpghohc60PqvTuVp83j1DRDmqwoJZ/lY40Posr8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QIeQ4F1RysDTtveJXBSG8Oe+elN2NirLvNCNUWzoNc77bHNngr71mU8BgWYJeeC16
+         kbUdfHkcg8fZaN7QmyyH0sjhuxyMfLkHM4zFlZCGdfgUUIHAu2QhnDkF6Pymm+BdqD
+         WZhjZUtskwP1UtnV6Wmrq2F3D6HPS3yEgPerajQMYslz89fP1Yk9ViMXWf295p77ou
+         xCmaiXqczNSTcqTIiDXvAwKSYrARUsccXPOaWp3uJRTcGwD8lQR05xK0/WGfdRYdDh
+         7OCtEuKtxEH+LO6NpuwHHZaHiqLnSHSlbcmVzqfipdzot5ao8Jp6+9Xd+6UfnfoqFk
+         0BbhfxM0NUBng==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Hasegawa Hitomi <hasegawa-hitomi@fujitsu.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
+        Phil Auld <pauld@redhat.com>, Sasha Levin <sashal@kernel.org>,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Subject: [PATCH MANUALSEL 5.15 1/9] sched/cputime: Fix getrusage(RUSAGE_THREAD) with nohz_full
+Date:   Mon, 13 Dec 2021 09:19:34 -0500
+Message-Id: <20211213141944.352249-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----
- fs/9p/vfs_dir.c     |  5 +----
- fs/9p/xattr.c       |  6 ++----
- include/linux/uio.h |  9 +++++++++
- lib/iov_iter.c      | 32 ++++++++++++++++++++++++++++++++
- 4 files changed, 44 insertions(+), 8 deletions(-)
+From: Frederic Weisbecker <frederic@kernel.org>
 
-diff --git a/fs/9p/vfs_dir.c b/fs/9p/vfs_dir.c
-index 8c854d8cb0cd..cad6c24f9f0d 100644
---- a/fs/9p/vfs_dir.c
-+++ b/fs/9p/vfs_dir.c
-@@ -90,7 +90,6 @@ static int v9fs_dir_readdir(struct file *file, struct dir_context *ctx)
- 	struct p9_fid *fid;
- 	int buflen;
- 	struct p9_rdir *rdir;
--	struct kvec kvec;
+[ Upstream commit e7f2be115f0746b969c0df14c0d182f65f005ca5 ]
+
+getrusage(RUSAGE_THREAD) with nohz_full may return shorter utime/stime
+than the actual time.
+
+task_cputime_adjusted() snapshots utime and stime and then adjust their
+sum to match the scheduler maintained cputime.sum_exec_runtime.
+Unfortunately in nohz_full, sum_exec_runtime is only updated once per
+second in the worst case, causing a discrepancy against utime and stime
+that can be updated anytime by the reader using vtime.
+
+To fix this situation, perform an update of cputime.sum_exec_runtime
+when the cputime snapshot reports the task as actually running while
+the tick is disabled. The related overhead is then contained within the
+relevant situations.
+
+Reported-by: Hasegawa Hitomi <hasegawa-hitomi@fujitsu.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Hasegawa Hitomi <hasegawa-hitomi@fujitsu.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>
+Acked-by: Phil Auld <pauld@redhat.com>
+Link: https://lore.kernel.org/r/20211026141055.57358-3-frederic@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/linux/sched/cputime.h |  5 +++--
+ kernel/sched/cputime.c        | 12 +++++++++---
+ 2 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/sched/cputime.h b/include/linux/sched/cputime.h
+index 6c9f19a33865a..ce3c58286062c 100644
+--- a/include/linux/sched/cputime.h
++++ b/include/linux/sched/cputime.h
+@@ -18,15 +18,16 @@
+ #endif /* CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
  
- 	p9_debug(P9_DEBUG_VFS, "name %pD\n", file);
- 	fid = file->private_data;
-@@ -100,15 +99,13 @@ static int v9fs_dir_readdir(struct file *file, struct dir_context *ctx)
- 	rdir = v9fs_alloc_rdir_buf(file, buflen);
- 	if (!rdir)
- 		return -ENOMEM;
--	kvec.iov_base = rdir->buf;
--	kvec.iov_len = buflen;
- 
- 	while (1) {
- 		if (rdir->tail == rdir->head) {
- 			struct iov_iter to;
- 			int n;
- 
--			iov_iter_kvec(&to, READ, &kvec, 1, buflen);
-+			iov_iter_kaddr(&to, READ, rdir->buf, buflen);
- 			n = p9_client_read(file->private_data, ctx->pos, &to,
- 					   &err);
- 			if (err)
-diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
-index a824441b95a2..6fb0e7640605 100644
---- a/fs/9p/xattr.c
-+++ b/fs/9p/xattr.c
-@@ -20,11 +20,10 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
- 	ssize_t retval;
- 	u64 attr_size;
- 	struct p9_fid *attr_fid;
--	struct kvec kvec = {.iov_base = buffer, .iov_len = buffer_size};
- 	struct iov_iter to;
- 	int err;
- 
--	iov_iter_kvec(&to, READ, &kvec, 1, buffer_size);
-+	iov_iter_kaddr(&to, READ, buffer, buffer_size);
- 
- 	attr_fid = p9_client_xattrwalk(fid, name, &attr_size);
- 	if (IS_ERR(attr_fid)) {
-@@ -105,11 +104,10 @@ int v9fs_xattr_set(struct dentry *dentry, const char *name,
- int v9fs_fid_xattr_set(struct p9_fid *fid, const char *name,
- 		   const void *value, size_t value_len, int flags)
+ #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
+-extern void task_cputime(struct task_struct *t,
++extern bool task_cputime(struct task_struct *t,
+ 			 u64 *utime, u64 *stime);
+ extern u64 task_gtime(struct task_struct *t);
+ #else
+-static inline void task_cputime(struct task_struct *t,
++static inline bool task_cputime(struct task_struct *t,
+ 				u64 *utime, u64 *stime)
  {
--	struct kvec kvec = {.iov_base = (void *)value, .iov_len = value_len};
- 	struct iov_iter from;
- 	int retval, err;
+ 	*utime = t->utime;
+ 	*stime = t->stime;
++	return false;
+ }
  
--	iov_iter_kvec(&from, WRITE, &kvec, 1, value_len);
-+	iov_iter_kaddr(&from, WRITE, (void *)value, value_len);
- 
- 	p9_debug(P9_DEBUG_VFS, "name = %s value_len = %zu flags = %d\n",
- 		 name, value_len, flags);
-diff --git a/include/linux/uio.h b/include/linux/uio.h
-index 6350354f97e9..cedbc1ca5c15 100644
---- a/include/linux/uio.h
-+++ b/include/linux/uio.h
-@@ -23,6 +23,7 @@ enum iter_type {
- 	ITER_KVEC,
- 	ITER_BVEC,
- 	ITER_PIPE,
-+	ITER_KADDR,
- 	ITER_XARRAY,
- 	ITER_DISCARD,
- };
-@@ -43,6 +44,7 @@ struct iov_iter {
- 		const struct iovec *iov;
- 		const struct kvec *kvec;
- 		const struct bio_vec *bvec;
-+		void *kaddr;
- 		struct xarray *xarray;
- 		struct pipe_inode_info *pipe;
+ static inline u64 task_gtime(struct task_struct *t)
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 872e481d5098c..9392aea1804e5 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -615,7 +615,8 @@ void task_cputime_adjusted(struct task_struct *p, u64 *ut, u64 *st)
+ 		.sum_exec_runtime = p->se.sum_exec_runtime,
  	};
-@@ -79,6 +81,11 @@ static inline bool iov_iter_is_kvec(const struct iov_iter *i)
- 	return iov_iter_type(i) == ITER_KVEC;
- }
  
-+static inline bool iov_iter_is_kaddr(const struct iov_iter *i)
-+{
-+	return iov_iter_type(i) == ITER_KVEC;
-+}
-+
- static inline bool iov_iter_is_bvec(const struct iov_iter *i)
+-	task_cputime(p, &cputime.utime, &cputime.stime);
++	if (task_cputime(p, &cputime.utime, &cputime.stime))
++		cputime.sum_exec_runtime = task_sched_runtime(p);
+ 	cputime_adjust(&cputime, &p->prev_cputime, ut, st);
+ }
+ EXPORT_SYMBOL_GPL(task_cputime_adjusted);
+@@ -828,19 +829,21 @@ u64 task_gtime(struct task_struct *t)
+  * add up the pending nohz execution time since the last
+  * cputime snapshot.
+  */
+-void task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
++bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
  {
- 	return iov_iter_type(i) == ITER_BVEC;
-@@ -236,6 +243,8 @@ void iov_iter_init(struct iov_iter *i, unsigned int direction, const struct iove
- 			unsigned long nr_segs, size_t count);
- void iov_iter_kvec(struct iov_iter *i, unsigned int direction, const struct kvec *kvec,
- 			unsigned long nr_segs, size_t count);
-+void iov_iter_kaddr(struct iov_iter *i, unsigned int direction, void *kaddr,
-+			size_t count);
- void iov_iter_bvec(struct iov_iter *i, unsigned int direction, const struct bio_vec *bvec,
- 			unsigned long nr_segs, size_t count);
- void iov_iter_pipe(struct iov_iter *i, unsigned int direction, struct pipe_inode_info *pipe,
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 66a740e6e153..64e6bc33176a 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -38,6 +38,22 @@
- 	n = off;						\
+ 	struct vtime *vtime = &t->vtime;
+ 	unsigned int seq;
+ 	u64 delta;
++	int ret;
+ 
+ 	if (!vtime_accounting_enabled()) {
+ 		*utime = t->utime;
+ 		*stime = t->stime;
+-		return;
++		return false;
+ 	}
+ 
+ 	do {
++		ret = false;
+ 		seq = read_seqcount_begin(&vtime->seqcount);
+ 
+ 		*utime = t->utime;
+@@ -850,6 +853,7 @@ void task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
+ 		if (vtime->state < VTIME_SYS)
+ 			continue;
+ 
++		ret = true;
+ 		delta = vtime_delta(vtime);
+ 
+ 		/*
+@@ -861,6 +865,8 @@ void task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
+ 		else
+ 			*utime += vtime->utime + delta;
+ 	} while (read_seqcount_retry(&vtime->seqcount, seq));
++
++	return ret;
  }
  
-+#define iterate_kaddr(i, n, base, len, off, STEP) {		\
-+	void *base;						\
-+	size_t len;						\
-+	size_t off = 0;						\
-+	size_t skip = i->iov_offset;				\
-+	len = min(n, i->count - skip);				\
-+	if (likely(len)) {					\
-+		base = i->kaddr + skip;				\
-+		len -= (STEP);					\
-+		off += len;					\
-+		skip += len;					\
-+	}							\
-+	i->iov_offset = skip;					\
-+	n = off;						\
-+}
-+
- #define iterate_bvec(i, n, base, len, off, p, STEP) {		\
- 	size_t off = 0;						\
- 	unsigned skip = i->iov_offset;				\
-@@ -136,6 +152,8 @@ __out:								\
- 						kvec, (K))	\
- 			i->nr_segs -= kvec - i->kvec;		\
- 			i->kvec = kvec;				\
-+		} else if (iov_iter_is_kaddr(i)) {		\
-+			iterate_kaddr(i, n, base, len, off, (K)) \
- 		} else if (iov_iter_is_xarray(i)) {		\
- 			void *base;				\
- 			size_t len;				\
-@@ -1185,6 +1203,20 @@ void iov_iter_kvec(struct iov_iter *i, unsigned int direction,
- }
- EXPORT_SYMBOL(iov_iter_kvec);
- 
-+void iov_iter_kaddr(struct iov_iter *i, unsigned int direction,
-+			void *kaddr, size_t count)
-+{
-+	WARN_ON(direction & ~(READ | WRITE));
-+	*i = (struct iov_iter){
-+		.iter_type = ITER_KADDR,
-+		.data_source = direction,
-+		.kaddr = kaddr,
-+		.iov_offset = 0,
-+		.count = count
-+	};
-+}
-+EXPORT_SYMBOL(iov_iter_kaddr);
-+
- void iov_iter_bvec(struct iov_iter *i, unsigned int direction,
- 			const struct bio_vec *bvec, unsigned long nr_segs,
- 			size_t count)
+ static int vtime_state_fetch(struct vtime *vtime, int cpu)
 -- 
 2.33.0
 

@@ -2,67 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F03E473659
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69CA47365C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242471AbhLMVFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:05:41 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:56436 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbhLMVFk (ORCPT
+        id S243067AbhLMVFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243032AbhLMVFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:05:40 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 33057CE12BD
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:05:39 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BAD360EFF;
-        Mon, 13 Dec 2021 21:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1639429536;
-        bh=biOxBHYttmfLcu5XjgSOMwkLkRSOPguut1k6wAtMXN8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u1PQEIyQ9fEj+8m1vJaDpqw/RsoyQOUMXBQcRRSp9KJgbzaXKJ88IOpqo2doiJqhu
-         KoXEzh+f1z2M4o3QsR15cEN9pmDNzVBrTUHzH0UZnB15n8tXGtgmlM9wQpoaBMbhkc
-         X4AFHDwWEk8iFT8bbebxcTFroz8XJIi+PQP7BJhU=
-Date:   Mon, 13 Dec 2021 13:05:34 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, hch@lst.de,
-        cl@linux.com, John.p.donnelly@oracle.com, kexec@lists.infradead.org
-Subject: Re: [PATCH v3 0/5] Avoid requesting page from DMA zone when no
- managed pages
-Message-Id: <20211213130534.af47c7956c219797e6b56687@linux-foundation.org>
-In-Reply-To: <20211213122712.23805-1-bhe@redhat.com>
-References: <20211213122712.23805-1-bhe@redhat.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Mon, 13 Dec 2021 16:05:53 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF12C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:05:52 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id q74so41368841ybq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:05:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OYjNY84xxrPtnEGblOzPGQWS8v7Li5XOXn2Tp1iLBGY=;
+        b=cOQQaWK6nxqOwPzOEkcF+NLdghu46He4GyafQsnxU4kKmr0hWInEIeBcbv4R6HgJuz
+         OiPwq7pyhIMZPfD6OiQTXBDQOo1eMI0Q3IIM+6ee/PPR1dYyi2HZfv1rGTEIMcRTd78e
+         EtlpvdFuBAAq8hcw6z8iwdDjWK8bm9vvBE9fE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OYjNY84xxrPtnEGblOzPGQWS8v7Li5XOXn2Tp1iLBGY=;
+        b=ySwOMvJal6avuI9Q3jEaZRV3yxLU/E2FAqlJusMMD38iX8OAml1xb0epVZASIoGl5k
+         xbKg+JwG7YUBMboYtn/3rWZlKUGegN83+PPXnxiYaMM+8Ci/mHvsqslSOF1iZ6SacpIc
+         oWaL9LBRBQ43q0IoAsywhALKO+w1rQ80646n8weou3m9T39XgDk7M64iEcajL0fLxNyD
+         8tnz+iAzRQP6mqrcL5ryg5fWvYrB0/Nm8vfgzXcSGbvdlai+eureV6/4TixTsplBCMoi
+         wyMGJZ3kf4yeFDoxHJ6a8LQMB3EIOux91RpSB9MOrM06gGGAy5zH7dyWBg7YsxcI7yHJ
+         /zRA==
+X-Gm-Message-State: AOAM531Rc3kZpx1MYGbuj3E0Rbul4zConCRQKHKmaY+9gqa1sxQP0ENB
+        BgJh3CrdCrkfmJeywP5HfRrGvYUlzS1dHkxqTZiv
+X-Google-Smtp-Source: ABdhPJwv4zvaS/MXEq/62jU1x4Jh98JJGkhOxuqvK8SRBYpuk/KNwhnQ0QlAbQZppUF4cZbzcOpESNWMSQhiKTdVi8A=
+X-Received: by 2002:a5b:b92:: with SMTP id l18mr1124278ybq.10.1639429551777;
+ Mon, 13 Dec 2021 13:05:51 -0800 (PST)
+MIME-Version: 1.0
+References: <20211204002038.113653-1-atishp@atishpatra.org>
+ <20211204002038.113653-2-atishp@atishpatra.org> <CAAhSdy2YsrGSk4P41hneNkJJg6je9fMYV9-py6vim=ZEexigOQ@mail.gmail.com>
+In-Reply-To: <CAAhSdy2YsrGSk4P41hneNkJJg6je9fMYV9-py6vim=ZEexigOQ@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 13 Dec 2021 13:05:41 -0800
+Message-ID: <CAOnJCU+cgrC=uYJjVUQzpONeMJMxW06g5eoPKB_PfDRY5tPSNw@mail.gmail.com>
+Subject: Re: [RFC 1/6] RISC-V: Avoid using per cpu array for ordered booting
+To:     Anup Patel <anup@brainfault.org>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup.patel@wdc.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 20:27:07 +0800 Baoquan He <bhe@redhat.com> wrote:
+On Mon, Dec 13, 2021 at 4:49 AM Anup Patel <anup@brainfault.org> wrote:
+>
+> On Sat, Dec 4, 2021 at 5:50 AM Atish Patra <atishp@atishpatra.org> wrote:
+> >
+> > From: Atish Patra <atishp@rivosinc.com>
+> >
+> > Currently both order booting and spinwait approach uses a per cpu
+> > array to update stack & task pointer. This approach will not work for the
+> > following cases.
+> > 1. If NR_CPUs are configured to be less than highest hart id.
+> > 2. A platform has sparse hartid.
+> >
+> > This issue can be fixed for ordered booting as the booting cpu brings up
+> > one cpu at a time using SBI HSM extension which has opaque parameter
+> > that is unused until now.
+> >
+> > Introduce a common secondary boot data structure that can store the stack
+> > and task pointer. Secondary harts will use this data while booting up
+> > to setup the sp & tp.
+> >
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/cpu_ops_sbi.h | 28 ++++++++++++++++++++++++++++
+> >  arch/riscv/kernel/cpu_ops_sbi.c      | 23 ++++++++++++++++++++---
+> >  arch/riscv/kernel/head.S             | 19 ++++++++++---------
+> >  3 files changed, 58 insertions(+), 12 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/cpu_ops_sbi.h
+> >
+> > diff --git a/arch/riscv/include/asm/cpu_ops_sbi.h b/arch/riscv/include/asm/cpu_ops_sbi.h
+> > new file mode 100644
+> > index 000000000000..ccb9a6d30486
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/cpu_ops_sbi.h
+> > @@ -0,0 +1,28 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (c) 2021 by Rivos Inc.
+> > + */
+> > +#ifndef __ASM_CPU_OPS_SBI_H
+> > +#define __ASM_CPU_OPS_SBI_H
+> > +
+> > +#ifndef __ASSEMBLY__
+> > +#include <linux/init.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/threads.h>
+> > +
+> > +/**
+> > + * struct sbi_hart_boot_data - Hart specific boot used during booting and
+> > + *                            cpu hotplug.
+> > + * @task_ptr: A pointer to the hart specific tp
+> > + * @stack_ptr: A pointer to the hart specific sp
+> > + */
+> > +struct sbi_hart_boot_data {
+> > +       void *task_ptr;
+> > +       void *stack_ptr;
+> > +};
+> > +#endif
+> > +
+> > +#define SBI_HART_BOOT_TASK_PTR_OFFSET (0x00)
+> > +#define SBI_HART_BOOT_STACK_PTR_OFFSET RISCV_SZPTR
+>
+> Don't manually create these defines instead generate this
+> defines at compile time by adding entries in kernel/asm-offsets.c
+>
 
-> Background information can be checked in cover letter of v2 RESEND POST
-> as below:
-> https://lore.kernel.org/all/20211207030750.30824-1-bhe@redhat.com/T/#u
+Sure. I will fix this in the next version.
 
-Please include all relevant info right here, in the [0/n].  For a
-number of reasons, one of which is that the text is more likely to be
-up to date as the patchset evolves.
+> > +
+> > +#endif /* ifndef __ASM_CPU_OPS_H */
+> > diff --git a/arch/riscv/kernel/cpu_ops_sbi.c b/arch/riscv/kernel/cpu_ops_sbi.c
+> > index 685fae72b7f5..2e7a9dd9c2a7 100644
+> > --- a/arch/riscv/kernel/cpu_ops_sbi.c
+> > +++ b/arch/riscv/kernel/cpu_ops_sbi.c
+> > @@ -7,13 +7,22 @@
+> >
+> >  #include <linux/init.h>
+> >  #include <linux/mm.h>
+> > +#include <linux/sched/task_stack.h>
+> >  #include <asm/cpu_ops.h>
+> > +#include <asm/cpu_ops_sbi.h>
+> >  #include <asm/sbi.h>
+> >  #include <asm/smp.h>
+> >
+> >  extern char secondary_start_sbi[];
+> >  const struct cpu_operations cpu_ops_sbi;
+> >
+> > +/*
+> > + * Ordered booting via HSM brings one cpu at a time. However, cpu hotplug can
+> > + * be invoked from multiple threads in paralle. Define a per cpu data
+> > + * to handle that.
+> > + */
+> > +DEFINE_PER_CPU(struct sbi_hart_boot_data, boot_data);
+> > +
+> >  static int sbi_hsm_hart_start(unsigned long hartid, unsigned long saddr,
+> >                               unsigned long priv)
+> >  {
+> > @@ -58,9 +67,17 @@ static int sbi_cpu_start(unsigned int cpuid, struct task_struct *tidle)
+> >         int rc;
+> >         unsigned long boot_addr = __pa_symbol(secondary_start_sbi);
+> >         int hartid = cpuid_to_hartid_map(cpuid);
+> > -
+> > -       cpu_update_secondary_bootdata(cpuid, tidle);
+> > -       rc = sbi_hsm_hart_start(hartid, boot_addr, 0);
+> > +       unsigned long hsm_data;
+> > +       struct sbi_hart_boot_data *bdata = &per_cpu(boot_data, cpuid);
+> > +
+> > +       /* Make sure tidle is updated */
+> > +       smp_mb();
+> > +       bdata->task_ptr = tidle;
+> > +       bdata->stack_ptr = task_stack_page(tidle) + THREAD_SIZE;
+> > +       /* Make sure boot data is updated */
+> > +       smp_mb();
+> > +       hsm_data = __pa(bdata);
+> > +       rc = sbi_hsm_hart_start(hartid, boot_addr, hsm_data);
+> >
+> >         return rc;
+> >  }
+> > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> > index f52f01ecbeea..40d4c625513c 100644
+> > --- a/arch/riscv/kernel/head.S
+> > +++ b/arch/riscv/kernel/head.S
+> > @@ -11,6 +11,7 @@
+> >  #include <asm/page.h>
+> >  #include <asm/pgtable.h>
+> >  #include <asm/csr.h>
+> > +#include <asm/cpu_ops_sbi.h>
+> >  #include <asm/hwcap.h>
+> >  #include <asm/image.h>
+> >  #include "efi-header.S"
+> > @@ -167,15 +168,15 @@ secondary_start_sbi:
+> >         la a3, .Lsecondary_park
+> >         csrw CSR_TVEC, a3
+> >
+> > -       slli a3, a0, LGREG
+> > -       la a4, __cpu_up_stack_pointer
+> > -       XIP_FIXUP_OFFSET a4
+> > -       la a5, __cpu_up_task_pointer
+> > -       XIP_FIXUP_OFFSET a5
+> > -       add a4, a3, a4
+> > -       add a5, a3, a5
+> > -       REG_L sp, (a4)
+> > -       REG_L tp, (a5)
+> > +       /* a0 contains the hartid & a1 contains boot data */
+> > +       li a2, SBI_HART_BOOT_TASK_PTR_OFFSET
+> > +       XIP_FIXUP_OFFSET a2
+> > +       add a2, a2, a1
+> > +       REG_L tp, (a2)
+> > +       li a3, SBI_HART_BOOT_STACK_PTR_OFFSET
+> > +       XIP_FIXUP_OFFSET a3
+> > +       add a3, a3, a1
+> > +       REG_L sp, (a3)
+> >
+> >         .global secondary_start_common
+> >  secondary_start_common:
+> > --
+> > 2.33.1
+> >
+>
+> Regards,
+> Anup
 
-It's unusual that this patchset has two non-urgent patches and the
-final three patches are cc:stable.  It makes one worry that patches 3-5
-might have dependencies on 1-2.  Also, I'd expect to merge the three
--stable patches during 5.16-rcX which means I have to reorder things,
-redo changelogs, update links and blah blah.
 
-So can I ask that you redo all of this as two patch series?  A 3-patch
-series which is targeted at -stable, followed by a separate two-patch
-series which is targeted at 5.17-rc1.  Each series with its own fully
-prepared [0/n] cover.
 
-Thanks.
+-- 
+Regards,
+Atish

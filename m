@@ -2,117 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A7947355C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1632B47355E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242602AbhLMT4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S240931AbhLMT4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242598AbhLMT42 (ORCPT
+        with ESMTP id S237307AbhLMT4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:56:28 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4489AC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:56:28 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id n8so11954703plf.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:56:28 -0800 (PST)
+        Mon, 13 Dec 2021 14:56:48 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83390C061574;
+        Mon, 13 Dec 2021 11:56:48 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id r26so24609502oiw.5;
+        Mon, 13 Dec 2021 11:56:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=v/X0SnoPErHjRzX4+Xqq9PbpCrAW+7beI3BdzsbgarI=;
-        b=M5PV2hAZg8lxvFwKRkLt43Bv0pE1vD5jI49S+fRPC7608xlHtq167lymr3zL7D02Ok
-         qgwgTPWD0iEPc710uJkn9uuMmqLX+TIPA8ZD+PnGnKiJwANZtT/fz0T047kll2nDEyJE
-         1WWzqB9X5dRVth/FiKydFr+uXannKgE/n0Ppu2/eHM4QFyvzooxysSeG2UKB4UCLFtyQ
-         v3jjUuFRlslK09ZUOA1AtArNDgBtNoGg2LYHhtPcFpu+3Au1QoqLizo61lp4k5gdxngj
-         rr7yoAH2rdWLwXNnzNAD1vPO34lyCiECMtN5q+wjETJ4Meu1lvfZRQ+DfWUcccZnf94n
-         3J3A==
+        bh=7YGIp5I7VEviDx/z1uBwH7MU/NMziwskhWfGZge5r5M=;
+        b=Qs0ZHWuojXd8xK3kZMtCGfIu2axcJMMIWMNbKmou5u9aVvMblYBNtSG7+gKZx2/pmD
+         VrmYTfNW/icUoDhRa5FYdaaTcQmmg8sjaDlZ+azyq77ttVuhtiwm2mwfl4HgmIyK6Zae
+         CSZexTgUNneE7ho/oQYsoIXDNgZhGqBfWTQqlVsm/R/sPpsw2j157PSGDeyfFDsM+BwD
+         p8kCP4eCiSBtwH2sxRLgpxgB9N0S5BQSbCNuAijO0Rs4ub737hxemPmJSV4O+94N7Wca
+         tmXrlBE01jFU/T1Po6eHG4hGBXPfCeKr0l/OTDpn1vB9gRjYFlYeTvjM0SfhJuZ/EgZH
+         34IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=v/X0SnoPErHjRzX4+Xqq9PbpCrAW+7beI3BdzsbgarI=;
-        b=8AQ56cAv9eOdsmVN1y29en8qz8GlKjl8BlP7ldCzP2dxTYKh0THbHp/3GWKg+RymcZ
-         4DQByx5E8Fs4E3wvKDtCTg6JFteu+izLIpiFnTQOAGpVK89/7/GC731pdpUIAn5gq36x
-         C9Sa6ltEQ/vcmoVCgR3S3Gpwkw5p3YNC+jMUdXs+oIpFcoQZoIBEPbczqM2N6FiobhbD
-         KxQR1+kqrR8qZvyXZLL57Pt6VholCvBimSIrz4blPGFvqamLivCp2D45NMB+6zw5Qoda
-         LwXwZubBv7o2K93JTDe7ziy/jJG6pAFNULzKQ0lD41MVrDntW1zIzw996iDb+1+cRgJ2
-         kIyQ==
-X-Gm-Message-State: AOAM532thXFwyt2oBaECSNLNUsJG1YTO70zrUeoS5iWeBcjOgVplIOiG
-        Gha+3Cr90AL1GEEhhmAntIU=
-X-Google-Smtp-Source: ABdhPJwC8ApQP3XwfORCEcROX3Hr2x96ioDgTL/DF5vU2lpuCNbnh89lSbVeHVPlgDaGldyhKD1fKQ==
-X-Received: by 2002:a17:90a:d357:: with SMTP id i23mr442384pjx.3.1639425387633;
-        Mon, 13 Dec 2021 11:56:27 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id y190sm12932987pfg.153.2021.12.13.11.56.26
+        bh=7YGIp5I7VEviDx/z1uBwH7MU/NMziwskhWfGZge5r5M=;
+        b=wOIVnsZ8xYsy7/FQm0U87jHcej7iFvwF2GFTuV1nnD37J5GAUe6vlVYvCdVk3C5rtZ
+         AFRkp0jggzGH9Gkgb1aofOGqmyQ/pZbtScJCx3BzTTjN6W1JPaAEyVg7KuQ9+TbdDCBa
+         FWKKNtOfk1Y8fqnk7KEoc6R7GZ7NbR8BSXAgFjzgPmiJ1z3WC1ha2ogzB0GDZLBew9cz
+         tydEsRu0kdymOFA5BDKYMEWJi0aB2cPGRITI/DYs8C4AGjr/fJtYQKDzOztLKXBdkSS7
+         +5f4X3F3xNHyogKDWArfY38/yNxRb+DC9tWTET7d9F4wbZPXsaKhEnUMvT5B4WM9ekQ8
+         pSqQ==
+X-Gm-Message-State: AOAM531syhNw53yuwXV1Cqr4tlDx9bENynI0Pm9eYU5J59At4rQYu8uC
+        KDy3VS7zwKiTor+PLTYU4Ac=
+X-Google-Smtp-Source: ABdhPJyu+sOS4OEBF2+F8M5HkcOOML27K0JWnWeS+nVeI9WVv+XdQ8tKulNgD/ONaX0k9lP1jqYyQQ==
+X-Received: by 2002:aca:5b87:: with SMTP id p129mr703670oib.30.1639425407974;
+        Mon, 13 Dec 2021 11:56:47 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i16sm2845823oig.15.2021.12.13.11.56.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:56:27 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Dec 2021 09:56:26 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linuxfoundation.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Michal Koutny <mkoutny@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jim Newsome <jnewsome@torproject.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Jann Horn <jannh@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Security Officers <security@kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH 2/6] cgroup: Allocate cgroup_file_ctx for
- kernfs_open_file->priv
-Message-ID: <Ybelaqt8uiyN+DkW@slm.duckdns.org>
-References: <20211213191833.916632-1-tj@kernel.org>
- <20211213191833.916632-3-tj@kernel.org>
- <CAHk-=wgQQhQakEgKeCcDp==wk__pu32=k-1m63prWx+XjzyhHg@mail.gmail.com>
+        Mon, 13 Dec 2021 11:56:47 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 13 Dec 2021 11:56:46 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 000/171] 5.15.8-rc1 review
+Message-ID: <20211213195646.GG2950232@roeck-us.net>
+References: <20211213092945.091487407@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgQQhQakEgKeCcDp==wk__pu32=k-1m63prWx+XjzyhHg@mail.gmail.com>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Mon, Dec 13, 2021 at 11:29:36AM -0800, Linus Torvalds wrote:
-> Looking at the patch, I mostly like the end result, although it
-> highlights how odd that __cgroup_procs_start() thing is.
+On Mon, Dec 13, 2021 at 10:28:35AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.8 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I wonder if that 'started' flag could be removed, and the
-> css_task_iter_start() thing could be done at allocation time?
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
 > 
-> But I may just be confused. This is not a NAK, just a "that pattern
-> looks slightly odd to me".
 
-Yeah, it's a bit odd. So...
+Build results:
+	total: 154 pass: 154 fail: 0
+Qemu test results:
+	total: 480 pass: 480 fail: 0
 
-css_task_iters are stateful and a bit expensive to initialize, so we don't
-want to do it from generic open path. However, we can add an open method for
-cgroup_files and then do it from there.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-However, while these files don't allow random seeking, they do allow seeking
-to 0 to re-read the whole content, so the iteration start path needs to
-handle both the initial read and subsequent repeating reads. While this can
-be handled by starting iter on open and then always restarting it on
-seq_start, that isn't ideal given the prior point. So, if we want to handle
-it in the seq_start path, we need to distinguish the initial read and
-re-reads anyway.
-
-This may be neater if we start the iter from open and restart from seek so
-that the seq_start method doesn't have to distinguish the two. However,
-kernfs doesn't forward the seek event downwards (yet anyway).
-
-So, there's a bit of awkwardness but it at least isn't gratuitous given the
-surroundings.
-
-Thanks.
-
--- 
-tejun
+Guenter

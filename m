@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC694734CE
+	by mail.lfdr.de (Postfix) with ESMTP id 97A474734CF
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242232AbhLMTSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:18:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S242255AbhLMTSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235389AbhLMTSm (ORCPT
+        with ESMTP id S235389AbhLMTSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:18:42 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C41C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:42 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so14142150pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:42 -0800 (PST)
+        Mon, 13 Dec 2021 14:18:45 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22C2C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:44 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id u80so15787767pfc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=a8swiEXoojgR8fMVEpmKtUWFtMz5ImAG/VTZz39Zgtg=;
-        b=gz1vgU/Ih0LNIF1Otlge+zWADOuoKno2raWat3feJnxU12t6TBXL1PlnO62pCs+NvW
-         OAXzEe/0a48ZdoBxV6EG3mSrL7oYAQEdX0RUok4rUC7t8xfchXvpmrDv6a9sczmyHNvW
-         QjKj9VYe1LUwm2+fuHM1eOs/8B3uhVl9bDnUdP9lE6aXCwHC/wl0PCKdueiZ9HmoJTrr
-         W2CeMbR1If0QJsT5q5AUXo0U3VUx8RK1+Ck+sgvuLQ3tNbHQn5CNbrTfUgDD1TfOTueO
-         n4GFCgY02JOfhJ/gN3H7yxMj/7IFJyYmbPbEI0znwsARKg12jJuA/+ep2HijcbD5bMnL
-         Jn1Q==
+        bh=nS6KLB2wafE+xu7w3/sMdojH1TDZhD8mHEzNLFQI3Aw=;
+        b=SBmC/P7A+Ykw4xrpj3cTUxgJzCid4/11wfwg2E+rjFFfEHVYF3usPW/bGDTcuxb4qX
+         gq3/Kp7mbnwOaipjNa+68o4zPKpbRu2NAgzkMAFMFOWM4kDwdiFwQZbnLLH992fTRmKO
+         wae6/4qFYtNfifdjtGX8gZ4y6hndbhTMgvJ4BWWS+Yi0TUTufDsL5rDzxKB5lH+9Fazg
+         kHR9yVa7HW1+b0x+jez2WMHv7I/wMuarwL9LXS8CpF7K10H0iBfvnrC1rcFVd1U7Kfvq
+         EcNbve+JZvRXolBA1JzbaFqeRn/tj6DmJzZ+G1tzBBViYCqR2wFU2EY2WlcnTPgxeY+S
+         xYNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=a8swiEXoojgR8fMVEpmKtUWFtMz5ImAG/VTZz39Zgtg=;
-        b=jpITsLunv8hb/5+mjBiEahaHcCCTl51vESJprtN/SOeoPaCUS3QBD2izs5BhX3qV5p
-         CT6czb+SGoMerW6mnmKXD1GT7foBD965YGQxcgBTF4g3r4nkB60xPArmJKMkVXrMb7e1
-         Z0hMI1fSQs+8KCCpCCgHcTakXI3AS5bR+2W8Hzge1gfp0D3BqXqvL7vbI6OapHUyqJEq
-         FIF2T3mTY0O2Kkis95gPN7wGzIcdbmgekIZWVwTKNt2/PlibHAvVwxrIeHyQ5MVkOPXz
-         aAWpd2wJ+XYnYXyjD6akWWIk8jm8N8dVwFUhdc+Gcp1P72HIlzSOvs4FnlX1UfSn/9Tp
-         7Nfg==
-X-Gm-Message-State: AOAM531BvL5wBRLgxdRIpibB1An+CPmdiwGKEVpRjvUgFQ7GiuOtPuVR
-        H4LQF/I1JVNOiKhR0Mu4cPY=
-X-Google-Smtp-Source: ABdhPJy7FBJ2jKCmaCQMwQ0nH5QrwR7C20SIEffKMJoAYP06ERciNJdzlehz3O1W9Zo9Ltg6XNKrUw==
-X-Received: by 2002:a17:902:bd02:b0:142:728b:e475 with SMTP id p2-20020a170902bd0200b00142728be475mr85131880pls.15.1639423121756;
-        Mon, 13 Dec 2021 11:18:41 -0800 (PST)
+        bh=nS6KLB2wafE+xu7w3/sMdojH1TDZhD8mHEzNLFQI3Aw=;
+        b=7QQgHsojkcz49B/owVjSQByFBnBsQhkE+3HVmWX0czVRE1CgbC1ip0B9DW9oKS6cR9
+         RISSBEV/y9HOinycyVzRlsO/fxGS+u0kqyuRNhVsg+8rG9EvdJnaCIYhuj4U9ZcUoo4k
+         peBymlH9pgys9T9pXXJyQMynCJ8usvtPF5zpTjX8H8CU9WSmxBqWJ6ynBlgiDZvoHz82
+         NuPSVJIpXUn9xMMz8st//bbqSlTPLO5r0JOT2WSYoD6rCL4a8WH+OSMw/shbgY5TaGgf
+         Ymnr6ZHPZBSsjO3XYNTE7sjCbpTus0g8+ypZRm0bdvWAfbml+YQS2nvvjiyb/1jf3Vc1
+         lpvQ==
+X-Gm-Message-State: AOAM531ahdRvLOXNWjcRWwPJRXN41Ps1SyWFP7u82B/L8GkK4/+U7v8v
+        svyBiP2PR+3VqcCZMiEeBz0=
+X-Google-Smtp-Source: ABdhPJwrAaxkcmdbjjldKcmzQHPyVpQHxNfmMQvP5+7Jb+tjUFi5cM7kOEeeuQz1HHSfZiHGq+fDmw==
+X-Received: by 2002:a63:5518:: with SMTP id j24mr367700pgb.401.1639423124071;
+        Mon, 13 Dec 2021 11:18:44 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id m24sm11107048pgk.39.2021.12.13.11.18.40
+        by smtp.gmail.com with ESMTPSA id h22sm13197777pfv.25.2021.12.13.11.18.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:18:41 -0800 (PST)
+        Mon, 13 Dec 2021 11:18:43 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
@@ -56,88 +56,191 @@ To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
         jnewsome@torproject.org, legion@kernel.org, luto@amacapital.net,
         jannh@google.com
 Cc:     linux-kernel@vger.kernel.org, security@kernel.org,
-        kernel-team@fb.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 1/6] cgroup: Use open-time credentials for process migraton perm checks
-Date:   Mon, 13 Dec 2021 09:18:28 -1000
-Message-Id: <20211213191833.916632-2-tj@kernel.org>
+        kernel-team@fb.com, Tejun Heo <tj@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 2/6] cgroup: Allocate cgroup_file_ctx for kernfs_open_file->priv
+Date:   Mon, 13 Dec 2021 09:18:29 -1000
+Message-Id: <20211213191833.916632-3-tj@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213191833.916632-1-tj@kernel.org>
 References: <20211213191833.916632-1-tj@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgroup process migration permission checks are performed at write time as
-whether a given operation is allowed or not is dependent on the content of
-the write - the PID. This currently uses current's credentials which is a
-potential security weakness as it may allow scenarios where a less
-privileged process tricks a more privileged one into writing into a fd that
-it created.
+of->priv is currently used by each interface file implementation to store
+private information. This patch collects the current two private data usages
+into struct cgroup_file_ctx which is allocated and freed by the common path.
+This allows generic private data which applies to multiple files, which will
+be used to in the following patch.
 
-This patch makes both cgroup2 and cgroup1 process migration interfaces to
-use the credentials saved at the time of open (file->f_cred) instead of
-current's.
+Note that cgroup_procs iterator is now embedded as procs.iter in the new
+cgroup_file_ctx so that it doesn't need to be allocated and freed
+separately.
+
+v2: union dropped from cgroup_file_ctx and the procs iterator is embedded in
+    cgroup_file_ctx as suggested by Linus.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Reported-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
-Cc: Michal Koutný <mkoutny@suse.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- kernel/cgroup/cgroup-v1.c | 7 ++++---
- kernel/cgroup/cgroup.c    | 9 ++++++++-
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ kernel/cgroup/cgroup-internal.h | 11 +++++++
+ kernel/cgroup/cgroup.c          | 53 +++++++++++++++++++++------------
+ 2 files changed, 45 insertions(+), 19 deletions(-)
 
-diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
-index 81c9e0685948..0e7369103ba6 100644
---- a/kernel/cgroup/cgroup-v1.c
-+++ b/kernel/cgroup/cgroup-v1.c
-@@ -504,10 +504,11 @@ static ssize_t __cgroup1_procs_write(struct kernfs_open_file *of,
- 		goto out_unlock;
+diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-internal.h
+index bfbeabc17a9d..0ced1e04177f 100644
+--- a/kernel/cgroup/cgroup-internal.h
++++ b/kernel/cgroup/cgroup-internal.h
+@@ -65,6 +65,17 @@ static inline struct cgroup_fs_context *cgroup_fc2context(struct fs_context *fc)
+ 	return container_of(kfc, struct cgroup_fs_context, kfc);
+ }
  
- 	/*
--	 * Even if we're attaching all tasks in the thread group, we only
--	 * need to check permissions on one of them.
-+	 * Even if we're attaching all tasks in the thread group, we only need
-+	 * to check permissions on one of them. Check permissions using the
-+	 * credentials from file open to protect against inherited fd attacks.
- 	 */
--	cred = current_cred();
-+	cred = of->file->f_cred;
- 	tcred = get_task_cred(task);
- 	if (!uid_eq(cred->euid, GLOBAL_ROOT_UID) &&
- 	    !uid_eq(cred->euid, tcred->uid) &&
++struct cgroup_file_ctx {
++	struct {
++		bool			started;
++		struct css_task_iter	iter;
++	} procs;
++
++	struct {
++		void			*trigger;
++	} psi;
++};
++
+ /*
+  * A cgroup can be associated with multiple css_sets as different tasks may
+  * belong to different cgroups on different hierarchies.  In the other
 diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 919194de39c8..2632e46da1d4 100644
+index 2632e46da1d4..a84631d08d98 100644
 --- a/kernel/cgroup/cgroup.c
 +++ b/kernel/cgroup/cgroup.c
-@@ -4892,6 +4892,7 @@ static ssize_t __cgroup_procs_write(struct kernfs_open_file *of, char *buf,
+@@ -3630,6 +3630,7 @@ static int cgroup_cpu_pressure_show(struct seq_file *seq, void *v)
+ static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
+ 					  size_t nbytes, enum psi_res res)
  {
- 	struct cgroup *src_cgrp, *dst_cgrp;
- 	struct task_struct *task;
-+	const struct cred *saved_cred;
- 	ssize_t ret;
- 	bool locked;
++	struct cgroup_file_ctx *ctx = of->priv;
+ 	struct psi_trigger *new;
+ 	struct cgroup *cgrp;
+ 	struct psi_group *psi;
+@@ -3648,7 +3649,7 @@ static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
+ 		return PTR_ERR(new);
+ 	}
  
-@@ -4909,9 +4910,15 @@ static ssize_t __cgroup_procs_write(struct kernfs_open_file *of, char *buf,
- 	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
- 	spin_unlock_irq(&css_set_lock);
+-	psi_trigger_replace(&of->priv, new);
++	psi_trigger_replace(&ctx->psi.trigger, new);
  
--	/* process and thread migrations follow same delegation rule */
-+	/*
-+	 * Process and thread migrations follow same delegation rule. Check
-+	 * permissions using the credentials from file open to protect against
-+	 * inherited fd attacks.
-+	 */
-+	saved_cred = override_creds(of->file->f_cred);
- 	ret = cgroup_attach_permissions(src_cgrp, dst_cgrp,
- 					of->file->f_path.dentry->d_sb, threadgroup);
-+	revert_creds(saved_cred);
- 	if (ret)
- 		goto out_finish;
+ 	cgroup_put(cgrp);
  
+@@ -3679,12 +3680,16 @@ static ssize_t cgroup_cpu_pressure_write(struct kernfs_open_file *of,
+ static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
+ 					  poll_table *pt)
+ {
+-	return psi_trigger_poll(&of->priv, of->file, pt);
++	struct cgroup_file_ctx *ctx = of->priv;
++
++	return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
+ }
+ 
+ static void cgroup_pressure_release(struct kernfs_open_file *of)
+ {
+-	psi_trigger_replace(&of->priv, NULL);
++	struct cgroup_file_ctx *ctx = of->priv;
++
++	psi_trigger_replace(&ctx->psi.trigger, NULL);
+ }
+ 
+ bool cgroup_psi_enabled(void)
+@@ -3811,18 +3816,31 @@ static ssize_t cgroup_kill_write(struct kernfs_open_file *of, char *buf,
+ static int cgroup_file_open(struct kernfs_open_file *of)
+ {
+ 	struct cftype *cft = of_cft(of);
++	struct cgroup_file_ctx *ctx;
++	int ret;
+ 
+-	if (cft->open)
+-		return cft->open(of);
+-	return 0;
++	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++	of->priv = ctx;
++
++	if (!cft->open)
++		return 0;
++
++	ret = cft->open(of);
++	if (ret)
++		kfree(ctx);
++	return ret;
+ }
+ 
+ static void cgroup_file_release(struct kernfs_open_file *of)
+ {
+ 	struct cftype *cft = of_cft(of);
++	struct cgroup_file_ctx *ctx = of->priv;
+ 
+ 	if (cft->release)
+ 		cft->release(of);
++	kfree(ctx);
+ }
+ 
+ static ssize_t cgroup_file_write(struct kernfs_open_file *of, char *buf,
+@@ -4751,21 +4769,21 @@ void css_task_iter_end(struct css_task_iter *it)
+ 
+ static void cgroup_procs_release(struct kernfs_open_file *of)
+ {
+-	if (of->priv) {
+-		css_task_iter_end(of->priv);
+-		kfree(of->priv);
+-	}
++	struct cgroup_file_ctx *ctx = of->priv;
++
++	if (ctx->procs.started)
++		css_task_iter_end(&ctx->procs.iter);
+ }
+ 
+ static void *cgroup_procs_next(struct seq_file *s, void *v, loff_t *pos)
+ {
+ 	struct kernfs_open_file *of = s->private;
+-	struct css_task_iter *it = of->priv;
++	struct cgroup_file_ctx *ctx = of->priv;
+ 
+ 	if (pos)
+ 		(*pos)++;
+ 
+-	return css_task_iter_next(it);
++	return css_task_iter_next(&ctx->procs.iter);
+ }
+ 
+ static void *__cgroup_procs_start(struct seq_file *s, loff_t *pos,
+@@ -4773,21 +4791,18 @@ static void *__cgroup_procs_start(struct seq_file *s, loff_t *pos,
+ {
+ 	struct kernfs_open_file *of = s->private;
+ 	struct cgroup *cgrp = seq_css(s)->cgroup;
+-	struct css_task_iter *it = of->priv;
++	struct cgroup_file_ctx *ctx = of->priv;
++	struct css_task_iter *it = &ctx->procs.iter;
+ 
+ 	/*
+ 	 * When a seq_file is seeked, it's always traversed sequentially
+ 	 * from position 0, so we can simply keep iterating on !0 *pos.
+ 	 */
+-	if (!it) {
++	if (!ctx->procs.started) {
+ 		if (WARN_ON_ONCE((*pos)))
+ 			return ERR_PTR(-EINVAL);
+-
+-		it = kzalloc(sizeof(*it), GFP_KERNEL);
+-		if (!it)
+-			return ERR_PTR(-ENOMEM);
+-		of->priv = it;
+ 		css_task_iter_start(&cgrp->self, iter_flags, it);
++		ctx->procs.started = true;
+ 	} else if (!(*pos)) {
+ 		css_task_iter_end(it);
+ 		css_task_iter_start(&cgrp->self, iter_flags, it);
 -- 
 2.34.1
 

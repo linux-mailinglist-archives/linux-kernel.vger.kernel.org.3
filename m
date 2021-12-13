@@ -2,26 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF4D473709
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 026E747370D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243362AbhLMVzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:55:43 -0500
-Received: from out0.migadu.com ([94.23.1.103]:20397 "EHLO out0.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233924AbhLMVzn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:55:43 -0500
+        id S243392AbhLMVzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233924AbhLMVzq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 16:55:46 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52526C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:55:46 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639432542;
+        t=1639432544;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kHZOj5WZAaymd3SINeiupzKAuzG4dvu/muRorIs4Zec=;
-        b=n8IiezgrzN8zdTtIMuJrNXQ/ymRm8PgEfng+OeLdiDaaaCB0RJOQw4qGL0VEQWrTc4LMpA
-        BvARbDU4ohnR+GLRMKL6Rarr2sJmXUBhhe2b54sVZxC88N55B7OilLOVtEPXgaZx9FjmUC
-        QyuYlb3t4Dqm0VX6iEOv43wEP/wcmAQ=
+        bh=MJ6pLYFtDT6V9GeNlZDhdEu/zisyD2kMmUYDiskQejo=;
+        b=tG0tV54K2hXEfDU/1IuwB2qQLQRtc1QRu6SDAjbbbunUsjKNdbAShrGpeVvQjs7Aq8smQu
+        osGw4AZ0184yLn6Mqy8+1si3FgLDtDetI8zoR7GFaioRF8nhM/kBgrpHDCl13c84njgEcY
+        o6JUg/mJRcm4n4UCMKqUXaQVm96nLfo=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -39,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 33/38] kasan: simplify kasan_init_hw_tags
-Date:   Mon, 13 Dec 2021 22:55:35 +0100
-Message-Id: <8c59009047ebbb0a8ba3d8c30e2c4fe820fb0c78.1639432170.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 34/38] kasan: add kasan.vmalloc command line flag
+Date:   Mon, 13 Dec 2021 22:55:36 +0100
+Message-Id: <3b5a7874cb4028dbd918b26e41c13e24cb2d55fe.1639432170.git.andreyknvl@google.com>
 In-Reply-To: <cover.1639432170.git.andreyknvl@google.com>
 References: <cover.1639432170.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,64 +58,151 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Simplify kasan_init_hw_tags():
+Allow disabling vmalloc() tagging for HW_TAGS KASAN via a kasan.vmalloc
+command line switch.
 
-- Remove excessive comments in kasan_arg_mode switch.
-- Combine DEFAULT and ON cases in kasan_arg_stacktrace switch.
+This is a fail-safe switch intended for production systems that enable
+HW_TAGS KASAN. In case vmalloc() tagging ends up having an issue not
+detected during testing but that manifests in production, kasan.vmalloc
+allows to turn vmalloc() tagging off while leaving page_alloc/slab
+tagging on.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
 ---
 
 Changes v1->v2:
-- Add this patch.
+- Mark kasan_arg_stacktrace as __initdata instead of __ro_after_init.
+- Combine KASAN_ARG_VMALLOC_DEFAULT and KASAN_ARG_VMALLOC_ON switch
+  cases.
 ---
- mm/kasan/hw_tags.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ mm/kasan/hw_tags.c | 45 ++++++++++++++++++++++++++++++++++++++++++++-
+ mm/kasan/kasan.h   |  6 ++++++
+ 2 files changed, 50 insertions(+), 1 deletion(-)
 
 diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index fb08fe1a3cf7..6f7ed8e3180c 100644
+index 6f7ed8e3180c..a595f0d88f41 100644
 --- a/mm/kasan/hw_tags.c
 +++ b/mm/kasan/hw_tags.c
-@@ -159,20 +159,15 @@ void __init kasan_init_hw_tags(void)
+@@ -32,6 +32,12 @@ enum kasan_arg_mode {
+ 	KASAN_ARG_MODE_ASYMM,
+ };
  
- 	switch (kasan_arg_mode) {
- 	case KASAN_ARG_MODE_DEFAULT:
--		/*
--		 * Default to sync mode.
--		 */
-+		/* Default to sync mode. */
- 		fallthrough;
- 	case KASAN_ARG_MODE_SYNC:
--		/* Sync mode enabled. */
- 		kasan_mode = KASAN_MODE_SYNC;
- 		break;
- 	case KASAN_ARG_MODE_ASYNC:
--		/* Async mode enabled. */
- 		kasan_mode = KASAN_MODE_ASYNC;
- 		break;
- 	case KASAN_ARG_MODE_ASYMM:
--		/* Asymm mode enabled. */
- 		kasan_mode = KASAN_MODE_ASYMM;
++enum kasan_arg_vmalloc {
++	KASAN_ARG_VMALLOC_DEFAULT,
++	KASAN_ARG_VMALLOC_OFF,
++	KASAN_ARG_VMALLOC_ON,
++};
++
+ enum kasan_arg_stacktrace {
+ 	KASAN_ARG_STACKTRACE_DEFAULT,
+ 	KASAN_ARG_STACKTRACE_OFF,
+@@ -40,6 +46,7 @@ enum kasan_arg_stacktrace {
+ 
+ static enum kasan_arg kasan_arg __ro_after_init;
+ static enum kasan_arg_mode kasan_arg_mode __ro_after_init;
++static enum kasan_arg_vmalloc kasan_arg_vmalloc __initdata;
+ static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
+ 
+ /* Whether KASAN is enabled at all. */
+@@ -50,6 +57,9 @@ EXPORT_SYMBOL(kasan_flag_enabled);
+ enum kasan_mode kasan_mode __ro_after_init;
+ EXPORT_SYMBOL_GPL(kasan_mode);
+ 
++/* Whether to enable vmalloc tagging. */
++DEFINE_STATIC_KEY_FALSE(kasan_flag_vmalloc);
++
+ /* Whether to collect alloc/free stack traces. */
+ DEFINE_STATIC_KEY_FALSE(kasan_flag_stacktrace);
+ 
+@@ -89,6 +99,23 @@ static int __init early_kasan_mode(char *arg)
+ }
+ early_param("kasan.mode", early_kasan_mode);
+ 
++/* kasan.vmalloc=off/on */
++static int __init early_kasan_flag_vmalloc(char *arg)
++{
++	if (!arg)
++		return -EINVAL;
++
++	if (!strcmp(arg, "off"))
++		kasan_arg_vmalloc = KASAN_ARG_VMALLOC_OFF;
++	else if (!strcmp(arg, "on"))
++		kasan_arg_vmalloc = KASAN_ARG_VMALLOC_ON;
++	else
++		return -EINVAL;
++
++	return 0;
++}
++early_param("kasan.vmalloc", early_kasan_flag_vmalloc);
++
+ /* kasan.stacktrace=off/on */
+ static int __init early_kasan_flag_stacktrace(char *arg)
+ {
+@@ -172,6 +199,18 @@ void __init kasan_init_hw_tags(void)
  		break;
  	}
-@@ -180,14 +175,13 @@ void __init kasan_init_hw_tags(void)
+ 
++	switch (kasan_arg_vmalloc) {
++	case KASAN_ARG_VMALLOC_DEFAULT:
++		/* Default to enabling vmalloc tagging. */
++		fallthrough;
++	case KASAN_ARG_VMALLOC_ON:
++		static_branch_enable(&kasan_flag_vmalloc);
++		break;
++	case KASAN_ARG_VMALLOC_OFF:
++		/* Do nothing, kasan_flag_vmalloc keeps its default value. */
++		break;
++	}
++
  	switch (kasan_arg_stacktrace) {
  	case KASAN_ARG_STACKTRACE_DEFAULT:
  		/* Default to enabling stack trace collection. */
-+		fallthrough;
-+	case KASAN_ARG_STACKTRACE_ON:
- 		static_branch_enable(&kasan_flag_stacktrace);
+@@ -184,8 +223,9 @@ void __init kasan_init_hw_tags(void)
  		break;
- 	case KASAN_ARG_STACKTRACE_OFF:
- 		/* Do nothing, kasan_flag_stacktrace keeps its default value. */
- 		break;
--	case KASAN_ARG_STACKTRACE_ON:
--		static_branch_enable(&kasan_flag_stacktrace);
--		break;
  	}
  
- 	pr_info("KernelAddressSanitizer initialized (hw-tags, mode=%s, stacktrace=%s)\n",
+-	pr_info("KernelAddressSanitizer initialized (hw-tags, mode=%s, stacktrace=%s)\n",
++	pr_info("KernelAddressSanitizer initialized (hw-tags, mode=%s, vmalloc=%s, stacktrace=%s)\n",
+ 		kasan_mode_info(),
++		kasan_vmalloc_enabled() ? "on" : "off",
+ 		kasan_stack_collection_enabled() ? "on" : "off");
+ }
+ 
+@@ -218,6 +258,9 @@ void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
+ 	u8 tag;
+ 	unsigned long redzone_start, redzone_size;
+ 
++	if (!kasan_vmalloc_enabled())
++		return (void *)start;
++
+ 	if (!is_vmalloc_or_module_addr(start))
+ 		return (void *)start;
+ 
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index 020f3e57a03f..49a5d5e2e948 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -12,6 +12,7 @@
+ #include <linux/static_key.h>
+ #include "../slab.h"
+ 
++DECLARE_STATIC_KEY_FALSE(kasan_flag_vmalloc);
+ DECLARE_STATIC_KEY_FALSE(kasan_flag_stacktrace);
+ 
+ enum kasan_mode {
+@@ -22,6 +23,11 @@ enum kasan_mode {
+ 
+ extern enum kasan_mode kasan_mode __ro_after_init;
+ 
++static inline bool kasan_vmalloc_enabled(void)
++{
++	return static_branch_likely(&kasan_flag_vmalloc);
++}
++
+ static inline bool kasan_stack_collection_enabled(void)
+ {
+ 	return static_branch_unlikely(&kasan_flag_stacktrace);
 -- 
 2.25.1
 

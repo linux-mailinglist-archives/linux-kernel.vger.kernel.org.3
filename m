@@ -2,151 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 154CE472CB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3D8472CAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237014AbhLMM7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:59:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53720 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbhLMM7P (ORCPT
+        id S236835AbhLMM7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234631AbhLMM7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 07:59:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF03C061574;
+        Mon, 13 Dec 2021 04:59:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3326AB80EC1;
-        Mon, 13 Dec 2021 12:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D279C34602;
-        Mon, 13 Dec 2021 12:59:10 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 13:59:06 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH - regression] devtmpfs: reconfigure on each mount
-Message-ID: <20211213125906.ngqbjsywxwibvcuq@wittgenstein>
-References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>
+        by sin.source.kernel.org (Postfix) with ESMTPS id E91BDCE0FF7;
+        Mon, 13 Dec 2021 12:59:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD64C34601;
+        Mon, 13 Dec 2021 12:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639400351;
+        bh=qJhlNMK+UWhRz8sIHd9S207y7AHw4ZcsrcX5mlUBMLA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qP0UhRn3T8klszkTd3zr5EgUei4SajRGBoBjGn536TIsb4qsBbNLWJWEEgj5g01tO
+         ONnA+QbgrJFuRKkCmZqgsW9Qq71n4YY5JZ/Wi3nxOOLrAO5ud1Xah7fsF4Nx5bgGsH
+         4tDFQVfdvVRrtmPKefEDrsnoqXd+LUpZCVnnzMImWeZMDEefSfpvrew7maBdq2b1d3
+         RKZVMUVTXz+3M+IS7SNXvZ68sw2dyofHD6KouG0Q4WsMtuB+XywqEh5uSYwjIKpvC3
+         Br8x9DDJoGODAe/r7/IhBIDJAoHdehvgIWIgbw7dxGrZ2RVLYv3ySYaqXxChyJj2TQ
+         38Nvy6L7H1vBg==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mwkv7-00Bnbl-4B; Mon, 13 Dec 2021 12:59:09 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <163935794678.22433.16837658353666486857@noble.neil.brown.name>
+Date:   Mon, 13 Dec 2021 12:59:09 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup.patel@wdc.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Subject: Re: [RFC 3/6] RISC-V: Use __cpu_up_stack/task_pointer only for
+ spinwait method
+In-Reply-To: <20211204002038.113653-4-atishp@atishpatra.org>
+References: <20211204002038.113653-1-atishp@atishpatra.org>
+ <20211204002038.113653-4-atishp@atishpatra.org>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <48012a35c4f66340547ff50525792a29@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: atishp@atishpatra.org, linux-kernel@vger.kernel.org, atishp@rivosinc.com, alex@ghiti.fr, anup.patel@wdc.com, greentime.hu@sifive.com, guoren@linux.alibaba.com, xypron.glpk@gmx.de, mingo@kernel.org, jszhang@kernel.org, kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, linux-riscv@lists.infradead.org, sunnanyong@huawei.com, mick@ics.forth.gr, palmer@dabbelt.com, paul.walmsley@sifive.com, penberg@kernel.org, vincent.chen@sifive.com, vitaly.wool@konsulko.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 12:12:26PM +1100, NeilBrown wrote:
+On 2021-12-04 00:20, Atish Patra wrote:
+> From: Atish Patra <atishp@rivosinc.com>
 > 
-> Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
-> mount options as "remount" options, updating the configuration of the
-> single super_block on each mount.
-> Since that was changed, the mount options used for devtmpfs are ignored.
-> This is a regression which affects systemd - which mounts devtmpfs
-> with "-o mode=755,size=4m,nr_inodes=1m".
+> The __cpu_up_stack/task_pointer array is only used for spinwait method
+> now. The per cpu array based lookup is also fragile for platforms with
+> discontiguous/sparse hartids. The spinwait method is only used for
+> M-mode Linux or older firmwares without SBI HSM extension. For general
+> Linux systems, ordered booting method is preferred anyways to support
+> cpu hotplug and kexec.
 > 
-> This patch restores the "remount" effect by calling reconfigure_single()
+> Make sure that __cpu_up_stack/task_pointer is only used for spinwait
+> method. Take this opportunity to rename it to
+> __cpu_spinwait_stack/task_pointer to emphasize the purpose as well.
 > 
-> Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mount_single()")
-> Signed-off-by: NeilBrown <neilb@suse.de>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > ---
-
-Hey Neil,
-
-So far this hasn't been an issue for us in systemd upstream. Is there a
-specific use-case where this is causing issues? I'm mostly asking
-because this change is fairly old.
-
-What I actually find more odd is that there's no .reconfigure for
-devtmpfs for non-vfs generic mount options it supports.
-
-So it's possible to change vfs generic stuff like
-
-mount -o remount,ro,nosuid /dev
-
-but none of the other mount options it supports and there's no word lost
-anywhere about whether or not that's on purpose.
-
-It feels odd because it uses the fs parameters from shmem/ramfs
-
-const struct fs_parameter_spec shmem_fs_parameters[] = {
-	fsparam_u32   ("gid",		Opt_gid),
-	fsparam_enum  ("huge",		Opt_huge,  shmem_param_enums_huge),
-	fsparam_u32oct("mode",		Opt_mode),
-	fsparam_string("mpol",		Opt_mpol),
-	fsparam_string("nr_blocks",	Opt_nr_blocks),
-	fsparam_string("nr_inodes",	Opt_nr_inodes),
-	fsparam_string("size",		Opt_size),
-	fsparam_u32   ("uid",		Opt_uid),
-	fsparam_flag  ("inode32",	Opt_inode32),
-	fsparam_flag  ("inode64",	Opt_inode64),
-	{}
-}
-
-but doesn't allow to actually change them neither with your fix or with
-the old way of doing things. But afaict, all of them could be set via
-the "devtmpfs.mount" kernel command line option. So I could set gid=,
-uid=, and mpol= for devtmpfs via devtmpfs.mount but wouldn't be able to
-change it through remount or - in your case - with a mount with new
-parameters?
-
-Just wondering whether that's on purpose or an oversight.
-
->  drivers/base/devtmpfs.c    | 7 +++++++
->  fs/super.c                 | 4 ++--
->  include/linux/fs_context.h | 2 ++
->  3 files changed, 11 insertions(+), 2 deletions(-)
+>  arch/riscv/include/asm/cpu_ops.h     |  2 --
+>  arch/riscv/kernel/cpu_ops.c          | 16 ----------------
+>  arch/riscv/kernel/cpu_ops_spinwait.c | 27 ++++++++++++++++++++++++++-
+>  arch/riscv/kernel/head.S             |  4 ++--
+>  arch/riscv/kernel/head.h             |  4 ++--
+>  5 files changed, 30 insertions(+), 23 deletions(-)
 > 
-> diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
-> index 8be352ab4ddb..fa13ad49d211 100644
-> --- a/drivers/base/devtmpfs.c
-> +++ b/drivers/base/devtmpfs.c
-> @@ -59,8 +59,15 @@ static struct dentry *public_dev_mount(struct file_system_type *fs_type, int fla
->  		      const char *dev_name, void *data)
+> diff --git a/arch/riscv/include/asm/cpu_ops.h 
+> b/arch/riscv/include/asm/cpu_ops.h
+> index a8ec3c5c1bd2..134590f1b843 100644
+> --- a/arch/riscv/include/asm/cpu_ops.h
+> +++ b/arch/riscv/include/asm/cpu_ops.h
+> @@ -40,7 +40,5 @@ struct cpu_operations {
+> 
+>  extern const struct cpu_operations *cpu_ops[NR_CPUS];
+>  void __init cpu_set_ops(int cpu);
+> -void cpu_update_secondary_bootdata(unsigned int cpuid,
+> -				   struct task_struct *tidle);
+> 
+>  #endif /* ifndef __ASM_CPU_OPS_H */
+> diff --git a/arch/riscv/kernel/cpu_ops.c b/arch/riscv/kernel/cpu_ops.c
+> index 3f5a38b03044..c1e30f403c3b 100644
+> --- a/arch/riscv/kernel/cpu_ops.c
+> +++ b/arch/riscv/kernel/cpu_ops.c
+> @@ -8,31 +8,15 @@
+>  #include <linux/of.h>
+>  #include <linux/string.h>
+>  #include <linux/sched.h>
+> -#include <linux/sched/task_stack.h>
+>  #include <asm/cpu_ops.h>
+>  #include <asm/sbi.h>
+>  #include <asm/smp.h>
+> 
+>  const struct cpu_operations *cpu_ops[NR_CPUS] __ro_after_init;
+> 
+> -void *__cpu_up_stack_pointer[NR_CPUS] __section(".data");
+> -void *__cpu_up_task_pointer[NR_CPUS] __section(".data");
+> -
+>  extern const struct cpu_operations cpu_ops_sbi;
+>  extern const struct cpu_operations cpu_ops_spinwait;
+> 
+> -void cpu_update_secondary_bootdata(unsigned int cpuid,
+> -				   struct task_struct *tidle)
+> -{
+> -	int hartid = cpuid_to_hartid_map(cpuid);
+> -
+> -	/* Make sure tidle is updated */
+> -	smp_mb();
+> -	WRITE_ONCE(__cpu_up_stack_pointer[hartid],
+> -		   task_stack_page(tidle) + THREAD_SIZE);
+> -	WRITE_ONCE(__cpu_up_task_pointer[hartid], tidle);
+> -}
+> -
+>  void __init cpu_set_ops(int cpuid)
 >  {
->  	struct super_block *s = mnt->mnt_sb;
-> +	int err;
+>  #if IS_ENABLED(CONFIG_RISCV_SBI)
+> diff --git a/arch/riscv/kernel/cpu_ops_spinwait.c
+> b/arch/riscv/kernel/cpu_ops_spinwait.c
+> index b2c957bb68c1..9f398eb94f7a 100644
+> --- a/arch/riscv/kernel/cpu_ops_spinwait.c
+> +++ b/arch/riscv/kernel/cpu_ops_spinwait.c
+> @@ -6,11 +6,36 @@
+>  #include <linux/errno.h>
+>  #include <linux/of.h>
+>  #include <linux/string.h>
+> +#include <linux/sched/task_stack.h>
+>  #include <asm/cpu_ops.h>
+>  #include <asm/sbi.h>
+>  #include <asm/smp.h>
+> 
+>  const struct cpu_operations cpu_ops_spinwait;
+> +void *__cpu_spinwait_stack_pointer[NR_CPUS] __section(".data");
+> +void *__cpu_spinwait_task_pointer[NR_CPUS] __section(".data");
 > +
->  	atomic_inc(&s->s_active);
->  	down_write(&s->s_umount);
-> +	err = reconfigure_single(s, flags, data);
-> +	if (err < 0) {
-> +		deactivate_locked_super(s);
-> +		return ERR_PTR(err);
-> +	}
->  	return dget(s->s_root);
->  }
->  
-> diff --git a/fs/super.c b/fs/super.c
-> index 3bfc0f8fbd5b..a6405d44d4ca 100644
-> --- a/fs/super.c
-> +++ b/fs/super.c
-> @@ -1423,8 +1423,8 @@ struct dentry *mount_nodev(struct file_system_type *fs_type,
->  }
->  EXPORT_SYMBOL(mount_nodev);
->  
-> -static int reconfigure_single(struct super_block *s,
-> -			      int flags, void *data)
-> +int reconfigure_single(struct super_block *s,
-> +		       int flags, void *data)
->  {
->  	struct fs_context *fc;
->  	int ret;
-> diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
-> index 6b54982fc5f3..13fa6f3df8e4 100644
-> --- a/include/linux/fs_context.h
-> +++ b/include/linux/fs_context.h
-> @@ -142,6 +142,8 @@ extern void put_fs_context(struct fs_context *fc);
->  extern int vfs_parse_fs_param_source(struct fs_context *fc,
->  				     struct fs_parameter *param);
->  extern void fc_drop_locked(struct fs_context *fc);
-> +int reconfigure_single(struct super_block *s,
-> +		       int flags, void *data);
->  
->  /*
->   * sget() wrappers to be called from the ->get_tree() op.
-> -- 
-> 2.34.1
-> 
+> +static void cpu_update_secondary_bootdata(unsigned int cpuid,
+> +				   struct task_struct *tidle)
+> +{
+> +	int hartid = cpuid_to_hartid_map(cpuid);
+> +
+> +	/*
+> +	 * The hartid must be less than NR_CPUS to avoid out-of-bound access
+> +	 * errors for __cpu_spinwait_stack/task_pointer. That is not always 
+> possible
+> +	 * for platforms with discontiguous hartid numbering scheme. That's 
+> why
+> +	 * spinwait booting is not the recommended approach for any platforms
+> +	 * and will be removed in future.
+
+How can you do that? Yes, spinning schemes are terrible.
+However, once you started supporting them, you are stuck.
+
+Best case, you can have an allow-list and only allow some
+older platforms to use them. You can also make some features
+dependent on non-spin schemes (kexec being one).
+
+But dropping support isn't a valid option, I'm afraid.
+
+Thanks,
+
+          M.
+-- 
+Jazz is not dead. It just smells funny...

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F47472806
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D89147290D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242256AbhLMKHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239869AbhLMJ67 (ORCPT
+        id S244717AbhLMKR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:17:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34162 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235939AbhLMJsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:58:59 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8241C034023;
-        Mon, 13 Dec 2021 01:48:43 -0800 (PST)
+        Mon, 13 Dec 2021 04:48:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2C6E5CE0E85;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B24FB80E1C;
+        Mon, 13 Dec 2021 09:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E374C33A43;
         Mon, 13 Dec 2021 09:48:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63BFC33A40;
-        Mon, 13 Dec 2021 09:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388921;
-        bh=qb+5lM5z+aJhK+P8cmfet7OLLR2EUCfElUmFz86lW5M=;
+        s=korg; t=1639388924;
+        bh=NCVHjMxdMWY4u44MVkllThlRshNbiYBv81/J5IY5qPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cgDAlcj2R84GPG8raHKXFtpb85s2Mf7GoOPpZ4BAysFk8nMJFlvEM0U3xwrzEm0gX
-         D6Bcx0SBfC36znaupJm+QzFt+aFhPGVpy/7w7ER/iocD77/q5JNlazO0ae+d6rmDdl
-         W/WbD2kxwTeKSGmZab3kY6oPqOqzTnxOBXPdPAmw=
+        b=mUxJApdEiY3AGLHZbZss4U+KWD/uxylvOs6iAob4kAGL2tIisbJwuFiLgPR9+0MvO
+         tSUkXWnB57Irr3k0wq+lSSO5HJbzZl3sdQjbj9yGPFpGxniT2/34/xMSVK+0vxlw/r
+         xDNqUfh4D/5TR8hk8MMLdqzihLWiG/MOKw/MeM5Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        "J. Bruce Fields" <bfields@redhat.com>
-Subject: [PATCH 5.10 056/132] nfsd: Fix nsfd startup race (again)
-Date:   Mon, 13 Dec 2021 10:29:57 +0100
-Message-Id: <20211213092941.043389621@linuxfoundation.org>
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Yabin Cui <yabinc@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 5.10 057/132] tracefs: Have new files inherit the ownership of their parent
+Date:   Mon, 13 Dec 2021 10:29:58 +0100
+Message-Id: <20211213092941.075739622@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
 References: <20211213092939.074326017@linuxfoundation.org>
@@ -49,109 +52,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+From: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-commit b10252c7ae9c9d7c90552f88b544a44ee773af64 upstream.
+commit ee7f3666995d8537dec17b1d35425f28877671a9 upstream.
 
-Commit bd5ae9288d64 ("nfsd: register pernet ops last, unregister first")
-has re-opened rpc_pipefs_event() race against nfsd_net_id registration
-(register_pernet_subsys()) which has been fixed by commit bb7ffbf29e76
-("nfsd: fix nsfd startup race triggering BUG_ON").
+If directories in tracefs have their ownership changed, then any new files
+and directories that are created under those directories should inherit
+the ownership of the director they are created in.
 
-Restore the order of register_pernet_subsys() vs register_cld_notifier().
-Add WARN_ON() to prevent a future regression.
+Link: https://lkml.kernel.org/r/20211208075720.4855d180@gandalf.local.home
 
-Crash info:
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000012
-CPU: 8 PID: 345 Comm: mount Not tainted 5.4.144-... #1
-pc : rpc_pipefs_event+0x54/0x120 [nfsd]
-lr : rpc_pipefs_event+0x48/0x120 [nfsd]
-Call trace:
- rpc_pipefs_event+0x54/0x120 [nfsd]
- blocking_notifier_call_chain
- rpc_fill_super
- get_tree_keyed
- rpc_fs_get_tree
- vfs_get_tree
- do_mount
- ksys_mount
- __arm64_sys_mount
- el0_svc_handler
- el0_svc
-
-Fixes: bd5ae9288d64 ("nfsd: register pernet ops last, unregister first")
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yabin Cui <yabinc@google.com>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Signed-off-by: J. Bruce Fields <bfields@redhat.com>
+Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+Reported-by: Kalesh Singh <kaleshsingh@google.com>
+Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs4recover.c |    1 +
- fs/nfsd/nfsctl.c      |   14 +++++++-------
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ fs/tracefs/inode.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/nfsd/nfs4recover.c
-+++ b/fs/nfsd/nfs4recover.c
-@@ -2156,6 +2156,7 @@ static struct notifier_block nfsd4_cld_b
- int
- register_cld_notifier(void)
- {
-+	WARN_ON(!nfsd_net_id);
- 	return rpc_pipefs_notifier_register(&nfsd4_cld_block);
- }
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -412,6 +412,8 @@ struct dentry *tracefs_create_file(const
+ 	inode->i_mode = mode;
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
+ 	d_instantiate(dentry, inode);
+ 	fsnotify_create(dentry->d_parent->d_inode, dentry);
+ 	return end_creating(dentry);
+@@ -434,6 +436,8 @@ static struct dentry *__create_dir(const
+ 	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
+ 	inode->i_op = ops;
+ 	inode->i_fop = &simple_dir_operations;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
  
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@ -1525,12 +1525,9 @@ static int __init init_nfsd(void)
- 	int retval;
- 	printk(KERN_INFO "Installing knfsd (copyright (C) 1996 okir@monad.swb.de).\n");
- 
--	retval = register_cld_notifier();
--	if (retval)
--		return retval;
- 	retval = nfsd4_init_slabs();
- 	if (retval)
--		goto out_unregister_notifier;
-+		return retval;
- 	retval = nfsd4_init_pnfs();
- 	if (retval)
- 		goto out_free_slabs;
-@@ -1547,9 +1544,14 @@ static int __init init_nfsd(void)
- 		goto out_free_exports;
- 	retval = register_pernet_subsys(&nfsd_net_ops);
- 	if (retval < 0)
-+		goto out_free_filesystem;
-+	retval = register_cld_notifier();
-+	if (retval)
- 		goto out_free_all;
- 	return 0;
- out_free_all:
-+	unregister_pernet_subsys(&nfsd_net_ops);
-+out_free_filesystem:
- 	unregister_filesystem(&nfsd_fs_type);
- out_free_exports:
- 	remove_proc_entry("fs/nfs/exports", NULL);
-@@ -1562,13 +1564,12 @@ out_free_stat:
- 	nfsd4_exit_pnfs();
- out_free_slabs:
- 	nfsd4_free_slabs();
--out_unregister_notifier:
--	unregister_cld_notifier();
- 	return retval;
- }
- 
- static void __exit exit_nfsd(void)
- {
-+	unregister_cld_notifier();
- 	unregister_pernet_subsys(&nfsd_net_ops);
- 	nfsd_drc_slab_free();
- 	remove_proc_entry("fs/nfs/exports", NULL);
-@@ -1578,7 +1579,6 @@ static void __exit exit_nfsd(void)
- 	nfsd4_free_slabs();
- 	nfsd4_exit_pnfs();
- 	unregister_filesystem(&nfsd_fs_type);
--	unregister_cld_notifier();
- }
- 
- MODULE_AUTHOR("Olaf Kirch <okir@monad.swb.de>");
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
 
 

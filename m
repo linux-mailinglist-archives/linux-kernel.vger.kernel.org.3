@@ -2,150 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 756A4471F33
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 02:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F5B471F36
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 02:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbhLMBto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 20:49:44 -0500
-Received: from mail-psaapc01on2138.outbound.protection.outlook.com ([40.107.255.138]:15328
-        "EHLO APC01-PSA-obe.outbound.protection.outlook.com"
+        id S231222AbhLMB4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 20:56:42 -0500
+Received: from mail-co1nam11on2066.outbound.protection.outlook.com ([40.107.220.66]:58881
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231196AbhLMBtn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 20:49:43 -0500
+        id S230368AbhLMB4l (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 20:56:41 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C9PRS79GiNwKe2wIybMQWRQ+EjoWjSUYxbpmxMayoUnbNFRKv2jA+LoSW2w9P6Z9Oiczh3mpdmz5kUiiHTxwCrhQ0+Rbyh5pb8/kgK96pSV2uNkBGWI7F3NtT2+ffVFNLq3XFcTEU6sI+3ZuI9W7nhep+L3tcXcJgWwxWwpRS/Fu45yfSZnrnhQnP43mBpZqbJJValLl6Nap1SNVsCy0PouLK6vI2PPAOS92qscZRe+cuGCk4CdBvM8jbr7mxKKMxtDyN2+UweDOgw9swTjfrLc3vL/+TOcNEqLtRP7A9RY2CoCob56gHF8GlC1amTMR2ZjU+N+krVGsZz0/fnLrmQ==
+ b=fWFLipO+5SmPoAyHphvQc/IiBm41OZUdS5PSX/a+ssDMMGhlr5nba2oKdyX62clK734SEPA7BcWsTM5Fwu0J6FOQh38hYGuDFKfCW5dHDlXLNur4+I8tB/Q8kBW2SVaShf7a1iHIee6n3CqdVFmWnm8MvxItRMvY7XaCuFAe2xHYwhvAlIc3LO5o60RnQvD30KhFGZC9iQmXHcDCo0PQVBD2iih8GdzwaXHEN9GdyWqAjwX45NR1I+kCMxahO49fLOON1vitiTwSv9WxYIktLai7f5O0mrhpv6SS/W/x6lIwdei7Wt4mteKV41dvea7c4s0zBjmGGVlF8y5b6rv+ow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BQf2BnrfAoJPcww/lYHVV3QmyRKhVW3nmSq4F69areg=;
- b=c327++G7Cr6JE1ayAkNUb+OhKrmE73dezemeYIJdKM7egiFcU08HaG5wOp+KNETdgcoNh3IUFSy4aVa9S46qian49KdW/8ASZx0K8TDq8AFDzNvXGOAdYGaPsvedo7VR4UsC80zC3dTNXH/NCSFtdt3l8z5paV9reO0/dLLbGUO4TWvSNSXmo9svzjdZGVhxUnxMBzsz2V8uUNeUzeAk/s6z8i6eN/3H1relu0frXD5iDLLi3QuNKALRWl1y4VCx0V5ZJDQAQaLSKDNNbi530cLbs92JWmVMEO/zCE2aRqIC7r2xCobljlXDs4s8jd56sDJb4RT4m4ADFbVt8Va53w==
+ bh=pQqIA401AFzXdV6meYc1BkSJca7+VvXYVN+tx1GvfP0=;
+ b=H+pBbzhK4f6GBOfwn/6DVkCpSPfrW8xJWcqrpzv/a3G9+jR036/u2mwFq3HGbvqQtoLz3pjgBPBjV2ZcCTLiWVZBKR/nWqMyNFPRKNPI+rUxyyxl+FYbPvNUdxg1zUskFpUvC9SdwmnCToJ1Zqh5ZRz6rKiHE40gMLcB8wNm9BTYSXzVFnWNmYcUdtsQsfqbfZWcChptIZmK5FPxMYJdycraiZsZctuJ1Zqifg6YeLFQeLdNZtfGLQYCCxuoQ+N6NQKKpLajU+o1phJ6AOnLAAVkJOxDgj5RkLx1j/GdNS+9N++Ie0+uZkWb4l1gL+epVx1H1obxFP2rKrtq6f8lKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BQf2BnrfAoJPcww/lYHVV3QmyRKhVW3nmSq4F69areg=;
- b=1z6jvMANx9R4rRJicpmGLL/DUIrGE1EUcjxTaHnCeaSugVeaxM/zKYIEfIwcSQuH1EYO2x0wbY+MZ+Gn6X4mBr1l2Q7Lvq16L3t14z2+KHhDVkEeJsxhhVkFvnrKfj9N+MRgyj/6JBU3rTj0ej0E5/KtJ8qT+r9lT3O+n6ZwQAXfnSqlb0UmvSjymLeFIka3kDVTlAChGy8WvVE7RfdqnvKy9DyZgPWxCzAr23FxZ3ymQA0mf4HrUHQOqSg+9loYek7lVPtC1IKHzDs4gPQFEi8m1UQKCGPymRW/IUNDBW/0moMw5zkl/quNRBDpLaCrgCRnrc47Q7R9kMUUaHMr2A==
-Received: from HK0PR06MB3362.apcprd06.prod.outlook.com (2603:1096:203:8b::10)
- by HK0PR06MB2548.apcprd06.prod.outlook.com (2603:1096:203:6f::9) with
+ bh=pQqIA401AFzXdV6meYc1BkSJca7+VvXYVN+tx1GvfP0=;
+ b=ZEZqxaHqgH3BJ2vkJ2EbaTkEKpmCzyRWvMFsmSK5bDI5M3zx0NRNTWKYRN99+wc3W/h1YMo3RD2StwvZn9zi2MENT0pVIqvuGGbY2EYQ0ZVEnCD3qzP6YalxPDHIa2kpt2cPXCmqa9hwIReRTRiB0YwW8hid2nsiDYofsTUlVlDi6NhR9KQJQ1HeeZaDOtuOpXawVCgciRtj9frJffSEatftcciNbcLkxRH5qDdZ8exY39sILjOXd/MvGYY1rr3rl7F24W9Cx8JKDVN1XB3DUp9kBYYfBPvKvU7soN71O0g6NogH1FJKGPK9p8H+Q/8TnTxjMZclAzKRj+5PbPHm0w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by BY5PR12MB4306.namprd12.prod.outlook.com (2603:10b6:a03:206::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
- 2021 01:49:38 +0000
-Received: from HK0PR06MB3362.apcprd06.prod.outlook.com
- ([fe80::7941:2fad:3c82:52eb]) by HK0PR06MB3362.apcprd06.prod.outlook.com
- ([fe80::7941:2fad:3c82:52eb%3]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 01:49:38 +0000
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clk:aspeed:Fix reset driver probe from builtin_platform
- to core_initcal
-Thread-Topic: [PATCH] clk:aspeed:Fix reset driver probe from builtin_platform
- to core_initcal
-Thread-Index: AQHX78OvvR0AkHOyAUiNxiUKBKrwgg==
-Date:   Mon, 13 Dec 2021 01:49:38 +0000
-Message-ID: <E9DFB26F-F183-47D9-BE4E-6F739337F8CA@aspeedtech.com>
-References: <20211005064513.27655-1-ryan_chen@aspeedtech.com>
-In-Reply-To: <20211005064513.27655-1-ryan_chen@aspeedtech.com>
-Accept-Language: zh-TW, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13; Mon, 13 Dec
+ 2021 01:56:38 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8844:5a42:b1a6:c541]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8844:5a42:b1a6:c541%3]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 01:56:38 +0000
+Message-ID: <78b01f68-ffe7-378b-fcaf-0bd3140da088@nvidia.com>
+Date:   Sun, 12 Dec 2021 17:56:35 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC] mm: introduce page pinner
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cecf4d80-43e8-4194-337f-08d9bddad2a7
-x-ms-traffictypediagnostic: HK0PR06MB2548:EE_
-x-microsoft-antispam-prvs: <HK0PR06MB2548979C8C13580157BAECBE8B749@HK0PR06MB2548.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dZIUKM/disJSALo+9cqhsuvMrqv9IFCUEiZHK2xdCgCW8cfS0XwmkkX3F8BUGnnyn9pUn7SaoX3Lz1NE+aakl8/cQaukUaLQw1ZswMU/luCAzlieO7FBB1BMa3jBKL/BVV1p+1tHYLI96WsDsJbDG5UCSadmkUbZshq4Pv7/7liAwQWjqigCp1c1j5/Q1LamlbW4wPlvC/Za90M90G5oAp0bQr/sT+lQv08uSR2/Du19zChoApfXZe2/1Rx2LXltlflQP1+Fa5o1CCuD1/H8+3bTQJwT8Xfm+yhriWLwABSIJqx010f7D1zMTXpFgicBvDtAtoYke/wuRcS2Yurb8e/xeNa7e5VAGK61vh4sVjHlYANYCO1uRrIPaPwT2xH3bV6soMrvvdosYQXnsngvaphVTTG/4NXuFG4BP9Vl6APt7zGz0HZs2PxNrqzRlKkCbJ1v3PqB+HxzGNXbSbH2kIYv3UBXLGF2dLp/ztW90Yrez9UaXgTgHHbifZggVy0mwhCrvfhRdB/xlZdBdWoFjkS7EHJXUMJP7A0kCNOQnkUHROmoTdpd23gV2e0W5AMtf8kIhLyRcR2rPNAlKvFfjYx0gcXOrRwDOBi5rP9MjkUk3HJk/V9vueqsdMW0jmV8jByUw9vETBpCOK92E10PuVwxvFOuKEKXjIFSTO+P36M/lSpdHaaUr2/fXpH1XzuAx+vCTeGamCdD5I5CtAuMFUDwcwrOxQPcn9rVkBdQ2cFrPpQdZhTx4O47B5vfYIV+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3362.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66476007)(86362001)(36756003)(316002)(110136005)(5660300002)(66446008)(83380400001)(186003)(26005)(508600001)(8676002)(6506007)(2906002)(8936002)(64756008)(66946007)(76116006)(33656002)(2616005)(53546011)(66556008)(38070700005)(38100700002)(6512007)(6486002)(71200400001)(122000001)(4744005)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WU0va0MrN1JuR0k5TXdMUWcyamI1ZFcvVlZOV0ViUWR6WVVaRC9PanZTeFZZ?=
- =?utf-8?B?bGZWdllMSW1Ea0lqN01Qa0ZXUDFxMFBsWisvZnNlekdpZk12ZUVGRUg3NXNE?=
- =?utf-8?B?NzZ1aGhiNU9SY0w1S0tPdDgvWERUWWk5WitnRCtEcm5qM3NkUVRTbzlrNHl2?=
- =?utf-8?B?elc0NUczQlRpTElqSXNoSUVUMmcxUzExTU8vWTEvMEdLLy94d3hZTTZzM1F6?=
- =?utf-8?B?YzM2YkZZWi9LWklQdmFOdnhFSWo4eGRTRkZrRVF1bFZ0S05leW9LT3ByTXJr?=
- =?utf-8?B?dS94VHU1UXlxOFFkV1hSQnhRZG9hNHVPbjVEK0V6dDVwaUhJWTJNR0s2REtu?=
- =?utf-8?B?L2xOWC9MWDNPMU1lUXQ0NUlBL3RQNnBycjl4aTVTWXlxL2xRSy9GOWJQUmJ4?=
- =?utf-8?B?eldPcGRJb3ZvK3hOclNPWGxnN1ZmdUZjanJMMnN0Y0l1dVhNR1pwbmNSR2l4?=
- =?utf-8?B?VjhtNThZUXRDMEZEVzhpcTdMN3pjSmVxNVFmaENRdlZwRXBjY3pzdll3SWQy?=
- =?utf-8?B?cTIwWUpMZllXdFh4Z0lVOGg0WDJMMEs3dHhvNjNkbURMVFc4cUN0WEtzaFQ3?=
- =?utf-8?B?and5SHpqNG80UlFxOVVGSEpyejJCYnVhVUt0U3RoQjJMQjZHVnZ1TFhDczZp?=
- =?utf-8?B?S0N2NlR4RzlaZS8rb2s0RzJpaG9tSHAzdWRtUGFtRXpSNERRS2k5SmdaUkw3?=
- =?utf-8?B?Mk4xc2FodzBsWGM1WWFlZUlQVlBoc3hlTkM3d3hQbmRBU3NOSjVWNFhPVWdL?=
- =?utf-8?B?elJNS0trUHkrcnN4cGo3QjdzbjZ5Uld1VFRybkZqSE1rVXRWeERmYWxRR2hq?=
- =?utf-8?B?LzJvdFByUlJqNUczSnA2a3ZPeWxjdlZ0RFZ3UVNnSzVlS2cxb2tmTjFYbzF6?=
- =?utf-8?B?R2tFcFpsWnpZOGV2TEZMQ2xKU0Q4d2pqTHpGSGZXc0dNYkxoWVQ1NitYWDNt?=
- =?utf-8?B?ZWdhME9ud3doeWJxZ2d5QzNtT0RFYXUxR3NRam9DcXlIem5YZ29SbGlkU0xv?=
- =?utf-8?B?N3F5dnJPV3NSWjRMRTR2WVNJcmRjM0V2VWFsbktSS0luc0k4Uk5DekN3Mk1M?=
- =?utf-8?B?bHBNNjVZNlVCa1AzRlRaU1pTenUwTmpqYU5rcndBSk1EcjBpNHA3a1pJUWNv?=
- =?utf-8?B?QkJsVjIwRlBWZk5VZEhmS21mRFBEL3pBR1FlUnJXdWdlc1k0blBOUVg1dFhC?=
- =?utf-8?B?UEIrYkpmSzlSZ2JseW1uMGJieDZTSlowUExGeTZ5UVJMZEsyeHNUaGpabXo1?=
- =?utf-8?B?Tk41UUNhZkRDSmFSbjlCNnRGSW4rSjhmeS82MVBON0tmQTRkcWhGbUswdEhG?=
- =?utf-8?B?MXlNT005Ym9GQWVDbGtXU25JdndFdHlyWWxEUzlIR0NlNjRyekw2MXVqRHVR?=
- =?utf-8?B?Wk9CSVZsaGJERDlDcEZBemxvU3g5NTVlRDNuMlFIaDE0WU1hcCtkT3Z6NGlm?=
- =?utf-8?B?Z2ZpTjIyRm8xNTdDODczbWRZR2ZUYUF4VnBFNUhON0NEcXlSLzFzNGw5aXZC?=
- =?utf-8?B?dmZtbzFwL282UUh1UEtEYkFNeDN2ODVRdkN0VUFDSzBhUXhrczgxUlFqaGJT?=
- =?utf-8?B?Rnd3UEZWaFZIQlBOaGxoejJmR3hvRUJ3bTVPWlArQlErOUxlYys5K2IxMmVa?=
- =?utf-8?B?MmdmRlZqOVhtb29SLzdicDJ3OGIrSDI3NSswQkRmK3Fia1lsR3c5a0ZsMXVn?=
- =?utf-8?B?a1N5aWZQeElJOGVGV3Jvc2pWTmpJRXpzakN5RlYyWmN6NW1BOEQ0MXpPMDFL?=
- =?utf-8?B?OEpmcCtONEdqNVJ5M25Ld25zaVM5aVRPTmVwejdYc2FiNnFwcTNZZEpLVWtz?=
- =?utf-8?B?L0hNb09PMW45bUNIYVJTSTcvSzBhdVdyaVFrZHVxVk41NkNTUUtjZVhQblhn?=
- =?utf-8?B?WGFOZzFWWnZwdkRLUnlhcHh5SkdOcTNweVAybC9xR09oOHV6L0pUb1E4Mkhw?=
- =?utf-8?B?TFptTDlnNmpva1NDVjRSWFFVdnFLOUovZEdSbXhDN0FjTno0ZVV5OGtHb21T?=
- =?utf-8?B?bzNDS08xVG0xLzQxbysxU2dkTjJVdHpVOXBGcnk0ME8zNjdOMldVb1ZLbCtE?=
- =?utf-8?B?NWxyUGpZN2tuSjhPT3AxWXdYQlNHZ3hYNG0yK09pSmZpTGQ3UVFLRU9keFFo?=
- =?utf-8?B?Qm9FRXlRTTZualFmZXRXZHZldS9QRUVmclBNT3pkci9rVlpDZ08weUpkcmJQ?=
- =?utf-8?B?alNpS0pIbmVTemIvemNNSXdRUTk1Z1pNTVNOcjVBOUoxQURXa2grcTdGRXY0?=
- =?utf-8?Q?tOrmUdrkgaOpydWIZlos5kspJ+B5f5pPbRswINJNQw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4BE20F05F1B92042A2468AF0A9590980@apcprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        John Dias <joaodias@google.com>
+References: <20211206184730.858850-1-minchan@kernel.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20211206184730.858850-1-minchan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0221.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::16) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 50aa6239-af4f-451f-eb09-08d9bddbcc93
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4306:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB43063EC1462883F1DBFA8CA3A8749@BY5PR12MB4306.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: g2jHnQpkHOvBGgyvCHA3B9gBpCoKCLPODTK2FA+rtRTl29HqusJAcyN4euwz7fUJj9GwxPasxeQMO7szOs3KXafn6+cWMCLKFK8LKc559fCbkfjWSTixgCemcGC4Vet58bOZTAn1T0+0nzz1BNEfZqqIHfwSf4WR4YDs+ZbSijkwCY1ACqCdvp0u9VTS7wwUBH5ka1IXyyb6qFIsrQ2hpbamAXpWbY8ov1qKXJtcvDs3QVJPNwZREwTQlqy+xspmVdarC1UgYFqdXL6YoEy7bdQwlQBjdax1v6umHG4hYXhaJUb4Hbxxo2kEFSW8Fo/4vpKSkOGeeF31RwO2rDCFDM8DJlgimTUt7ZQpdqKTryLpk/VxJhQlaJ1jY8JgdUWPgayHmWctGPK0Ze+h/x/+knFS7xM8MuaTU4TYig39jTIYxCq6D+C6uvC04hHqSp03Fl5fAPD5UkZj3tZvQ/qiE40F8Nrda1NZVZ5NGdTX7zNfBBWlkA8pTe4UvIUQaiet2pdP+h28jHjinBmDeMl1mXp9+Wa6iTPiVOPdIJ958ql0V63POKoLIS94dKUxKIJIDvfiI65V8wz6cNae6YnVWGRiYlSRzoZdfZWsHZcwtT/JPAzGe8so69R9rxejXgHCsR/WZ7mD88K8ncIG1EvL5brVUB4HIo/tLb1DLht9R92/v3AQ4as3Is8NDSIpRL8+kdBIgZzl4lFqfsXDzk26bo5ZzYBupClf2wLam64ui0+eckl+MvBadaAUujKyE6nf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(6506007)(53546011)(30864003)(36756003)(66476007)(86362001)(6666004)(26005)(6486002)(508600001)(4326008)(38100700002)(66946007)(8936002)(31686004)(54906003)(110136005)(6512007)(2906002)(2616005)(5660300002)(31696002)(83380400001)(316002)(186003)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGV1N3BmdEczUXNhd2pOSTBTaDFKSTkraDkrTCs5RDkzVzBhUG9OM08wTlRs?=
+ =?utf-8?B?Nmp6ZE9KR0YwY3lpby8yWHB4bkRQcFdIMlJlS0lBWXlVZUQ1aVJieGp2U2U1?=
+ =?utf-8?B?RHBsV2w4cjEybkhINkRtOU1KRGJDV0w5RzNtWEVPUFRuVWhCaS9SYWNnOCsx?=
+ =?utf-8?B?dGdlSm1iRzkxSDBhNkxHN25RM0dGbGQ4YW9OZWp1T1RwNEd3d2ZwaWVzYk1M?=
+ =?utf-8?B?UkpTYmFnQzFzeExON1ZWa0c2UjZ0eHk5U0k4eEUzckd6dkVFTVd0WDFyRFZz?=
+ =?utf-8?B?THgweHYvYXFnWE1qNjl6SkNOR044bDIxeTE3T1BFRGdNV2IyWTlPRkRoS3Vt?=
+ =?utf-8?B?SUtzWmdyMFcxM2x1THRQWktEVkFDSk5Kb2lqYkowQVorZGI2TTVTakhtT0hV?=
+ =?utf-8?B?Mm8zZWxzUlp5MDZodjlkREpjelNZRmZBNXRzYTJDeHoxRlNGSjEraTh6Y1Zi?=
+ =?utf-8?B?ZU8rT2diVWE2bno3RzRPQzV5U0tMa1NrdjFDc0RwdHNZVDFIeUwwVUt0YVRt?=
+ =?utf-8?B?elhtNE5kSVBMN0d2L1BnbldPamJzWGlkR2w1Q2F3UmE2azhqVW1QbkxNdGVP?=
+ =?utf-8?B?WmNxVjFuWXAxKzZPUGQrR0lpMmdadjNtLzhXNW9PTFp0U085RzZuRE1TNUVV?=
+ =?utf-8?B?Tzdwc3BKVEx0cEpHY2JNQSs1VDZBN2VQVFhDWVJPVVVaT3pISU42UldrdnJi?=
+ =?utf-8?B?K1FLbGJXSlFVdFNna1lPZ1V6Nk9CaC8xRnkrUTNsQjcyTGliYmdrc1V5cDNi?=
+ =?utf-8?B?SFhaRXVUTUY1K0ZiR3VNNEllQWMwaDROVzJnRlpHeE1WelJIcUdsY1lRWHBv?=
+ =?utf-8?B?YkpCYWYyMlNpeFBQL2ltUXFuL0ZjZVRDQ3RPZUR1QzE3UUJrcE9kZUtjQlM1?=
+ =?utf-8?B?WXl2QXVKU0dSSnNoZHo2ZkFsWWkvc2lDeThZMmdzdjBuU3JET3QyeVk0eWd1?=
+ =?utf-8?B?Z2hNUEpTRGlmR09ZK1o1bTl5cHNZK0RwNTZQKysvNkQrelhaM1kxSEw1MVRj?=
+ =?utf-8?B?czY0WGFjZUVndllyM1JuODAvcHVTa1YxdHkvb0hRNnZINU9EUjVvanBqY2Qy?=
+ =?utf-8?B?WHBNcHJjYUlVdzdEQnZadmhqb3pkdzVyTlFSUFlQSGJvM1Mwa0FVWWhvVnJa?=
+ =?utf-8?B?VUpUd2djYXhUcXd6dTdmK2lXSWxqOXBVU3dxbllnN0xNYnE2NnVkMktERWlC?=
+ =?utf-8?B?TGx4YlNTWHVDYlRJVjZwb2NETDk0SlU3bTAwalJ3NXA3bHZib2huUzFDKzEy?=
+ =?utf-8?B?cHhLVk5YQmpvOUVpYjNMRWtiVndrOUh0QjZaR3VOczBmRFd2REVGaE5TdEJM?=
+ =?utf-8?B?UmU5cDhob0lVOUFEZjVXbGhUU09GbzhqSjJGSG11RnQrdlppSTFNTjRPSjRy?=
+ =?utf-8?B?elNZbElNUzVRSFNCM0huQWwreWhaNFI2STRqeEkwWWI1VnBib1creXJuRUE0?=
+ =?utf-8?B?NS93c2NUYUNVSXJyaUQ4Q2NCc3FpMkUyWCt4TlUrLytjTWMvZXFnWWYzWGpv?=
+ =?utf-8?B?NXBIbnhSYTBnVEx1QnJHV1VtdEkwRzRpeXY4Y09EL1RVV2d4VlVSK2dqelZN?=
+ =?utf-8?B?U3VHdEN2Y2RSZUdQVW11UzRER2pZS3hadXZia25IOXl5eU9WbGo5VW9UVVBp?=
+ =?utf-8?B?U1lDZitXcWFPbjNnTWRlV2RVazZXOHp3ODRoZEM3dzNVaVN5SzUvUUgxVXZu?=
+ =?utf-8?B?REJaajZTUVRodkFENk9nTFMzQzlTSkF5ZnVpNEliL3laQm9jV3JUWGhBbWhT?=
+ =?utf-8?B?S1VBZURXWDU1L1A1dUN3VG1XMDVkZWgxTzJZdXU0cDVvaEdkOHJuZGVlTW92?=
+ =?utf-8?B?TVZBaUNtZFA0c0NjWUV2VmpFUFk1bFMybE51MUo0SVFlcG9kVytwclRYZHhP?=
+ =?utf-8?B?djFHSk1sM20yVnh3ZSt1S2ZiS29wYXplUlh5dWwvRlh1cDZRb3gvYjRRMWFB?=
+ =?utf-8?B?cTBUVmhBYmdjT3JPd0tKTytjN0M3MFdleTlmYkpvTXNJeTdwREU4d1l0OGx1?=
+ =?utf-8?B?czFJbm9OeGFtVENmdGJsUm03cXY2Wi91QXBTOHh2YVY1bTN3UHRjU1pvYTFo?=
+ =?utf-8?B?NFF1SDU5Z2lXSTlvOHJHVWc4QUpqbGpmT0poMnExczNrRXZiYjRoaUQxL3k5?=
+ =?utf-8?B?VjRoZEQzY012Q0xkWVIwRTl2b3E4enRDN0g0dTE0QXNGZTNHK0tNTXY0YlRs?=
+ =?utf-8?Q?5AkCBLZn7jY2hpedN/37WiA=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50aa6239-af4f-451f-eb09-08d9bddbcc93
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3362.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cecf4d80-43e8-4194-337f-08d9bddad2a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 01:49:38.2540
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 01:56:38.0024
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kXtMSysjYUU1wDS3eGM2NqqjwwN+Sr+2DaOggWT5pNmdp2vjm+ttgiYZByESUGUpc+WdQ/5aE03UifvI2aRVlDaK03ayGUGnb860VGUN/VE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2548
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2U5aAx/wffRpLAucqP3Ux+DKLXpS36vGmS5dCnVDKD/POUG23j0/FgnTRlRLKzaQKaqu+42gcgkAcLAsl2cKYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4306
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjAyMS8xMC81LCAyOjQ1IFBNLCAiUnlhbiBDaGVuIiA8cnlhbl9jaGVuQGFzcGVlZHRlY2gu
-Y29tPiB3cm90ZToNCg0KICAgID4gICBDaGFuZ2UgdGhlIHJlc2V0IHByb2JlIHNlcXVlbmNlIGZy
-b20gYnVpbHRpbl9wbGF0Zm9ybSB0byBjb3JlX2luaXRjYWwuDQogICAgPiAgIEZvciBhdm9pZCBz
-b21lIGRyaXZlciBpcyBwcm9iZSBidXQgZmFpbGVkIGR1ZSB0byByZXNldCBkcml2ZXIgbm90IHBy
-b2JlLg0KDQogICAgPiAgIEZpeGVzOiBkM2QwNGY2YzMzMGEgKCJjbGs6IEFkZCBzdXBwb3J0IGZv
-ciBBU1QyNjAwIFNvQyIpDQogICAgPiAgIFNpZ25lZC1vZmYtYnk6IFJ5YW4gQ2hlbiA8cnlhbl9j
-aGVuQGFzcGVlZHRlY2guY29tPg0KDQpSZXZpZXdlZC1ieTogQmlsbHkgVHNhaSA8YmlsbHlfdHNh
-aUBhc3BlZWR0ZWNoLmNvbT4NCg0KICAgID4gICAtLS0NCiAgICA+ICAgIGRyaXZlcnMvY2xrL2Ns
-ay1hc3QyNjAwLmMgfCA4ICsrKysrKystDQogICAgPiAgICAxIGZpbGUgY2hhbmdlZCwgNyBpbnNl
-cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQogICAgIA0KICAgID4gICBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9jbGsvY2xrLWFzdDI2MDAuYyBiL2RyaXZlcnMvY2xrL2Nsay1hc3QyNjAwLmMNCiAgICA+
-ICAgaW5kZXggMDg1ZDBhMThiMmI2Li42MjkzZDhkMWE2YTggMTAwNjQ0DQogICAgPiAgIC0tLSBh
-L2RyaXZlcnMvY2xrL2Nsay1hc3QyNjAwLmMNCiAgICA+ICAgKysrIGIvZHJpdmVycy9jbGsvY2xr
-LWFzdDI2MDAuYw0KICAgID4gICBAQCAtNjg2LDcgKzY4NiwxMyBAQCBzdGF0aWMgc3RydWN0IHBs
-YXRmb3JtX2RyaXZlciBhc3BlZWRfZzZfY2xrX2RyaXZlciA9IHsNCiAgICA+ICAgIAkJLnN1cHBy
-ZXNzX2JpbmRfYXR0cnMgPSB0cnVlLA0KICAgID4gICAgCX0sDQogICAgPiAgICB9Ow0KICAgID4g
-ICAtYnVpbHRpbl9wbGF0Zm9ybV9kcml2ZXIoYXNwZWVkX2c2X2Nsa19kcml2ZXIpOw0KICAgID4g
-ICArDQogICAgPiAgICtzdGF0aWMgaW50IF9faW5pdCBhc3BlZWRfZzZfY2xrX2luaXQodm9pZCkN
-CiAgICA+ICAgK3sNCiAgICA+ICAgKwlyZXR1cm4gcGxhdGZvcm1fZHJpdmVyX3JlZ2lzdGVyKCZh
-c3BlZWRfZzZfY2xrX2RyaXZlcik7DQogICAgPiAgICt9DQogICAgPiAgICsNCiAgICA+ICAgK2Nv
-cmVfaW5pdGNhbGwoYXNwZWVkX2c2X2Nsa19pbml0KTsNCiAgICAgIA0KICAgID4gICAgc3RhdGlj
-IGNvbnN0IHUzMiBhc3QyNjAwX2EwX2F4aV9haGJfZGl2X3RhYmxlW10gPSB7DQogICAgPiAgICAJ
-MiwgMiwgMywgNSwNCiAgICA+ICAgLS0gDQogICAgPiAgIDIuMTcuMQ0KDQoNCg0K
+On 12/6/21 10:47, Minchan Kim wrote:
+> The contiguous memory allocation fails if one of the pages in
+> requested range has unexpected elevated reference count since
+> VM couldn't migrate the page out. It's very common pattern for
+> CMA allocation failure. The temporal elevated page refcount
+> could happen from various places and it's really hard to chase
+> who held the temporal page refcount at that time, which is the
+> vital information to debug the allocation failure.
+> 
+> This patch introduces page pinner to keep track of Page Pinner
+> who caused the CMA allocation failure. How page pinner work is
+> once VM found the non-migrated page after trying migration
+> during contiguos allocation, it marks the page and every page-put
+> operation on the page since then will have event trace. Since
+> page-put is always with page-get, the page-put event trace helps
+> to deduce where the pair page-get originated from.
+> 
+> The reason why the feature tracks page-put instead of page-get
+> indirectly is that since VM couldn't expect when page migration
+> fails, it should keep track of every page-get for migratable page
+> to dump information at failure. Considering backtrace as vitial
+> information as well as page's get/put is one of hottest path,
+> it's too heavy approach. Thus, to minimize runtime overhead,
+> this feature adds a new PAGE_EXT_PINNER flag under PAGE_EXT
+> debugging option to indicate migration-failed page and only
+> tracks every page-put operation for the page since the failure.
+
+Hi Minchan,
+
+This looks very useful, so I have a bunch of hopefully very
+easy-to-deal-with naming and documentation comments that are intended to
+tighten it up and get it ready for merging.
+
+Starting with the subject line and commit description: rather than
+nitpick on these, I've studied the patch and written up a proposed
+replacement for the subject line and the lines above this comment.
+Please see if you like it:
+
+
+mm: introduce page pin reporter
+
+A Contiguous Memory Allocator (CMA) allocation can fail if any page
+within the requested range has an elevated refcount (a pinned page).
+
+Debugging such failures is difficult, because the struct pages only show
+a combined refcount, and do not show the callstacks or backtraces of the
+code that acquired each refcount. So the source of the page pins remains
+a mystery, at the time of CMA failure.
+
+In order to solve this without adding too much overhead, just do nothing
+most of the time, which is pretty low overhead. :) However, once a CMA
+failure occurs, then mark the page (this requires a pointer's worth of
+space in struct page, but it uses page extensions to get that), and
+start tracing the subsequent put_page() calls. As the program finishes
+up, each page pin will be undone, and traced with a backtrace. The
+programmer reads the trace output and sees the list of all page pinning
+code paths.
+
+This will consume an additional 8 bytes per 4KB page, or an additional
+0.2% of RAM. In addition to the storage space, it will have some
+performance cost, due to increasing the size of struct page so that it
+is greater than the cacheline size (or multiples thereof) of popular
+(x86, ...) CPUs.
+
+
+> 
+> usage:
+> 
+> trace_dir="/sys/kernel/tracing"
+> echo 1 > $trace_dir/events/page_pinner/enable
+> echo 1 > $trace_dir/options/stacktrace
+> ..
+> run workload
+> ..
+> ..
+> 
+> cat $trace_dir/trace
+> 
+>             <...>-498     [006] .... 33306.301621: page_pinner_failure: pfn=0x9f0bb0 flags=uptodate|lru|swapbacked count=1 mapcount=0 mapping=00000000aec7812a mt=5
+>             <...>-498     [006] .... 33306.301625: <stack trace>
+>   => __page_pinner_failure
+>   => test_pages_isolated
+>   => alloc_contig_range
+>   => cma_alloc
+>   => cma_heap_allocate
+>   => dma_heap_ioctl
+>   => __arm64_sys_ioctl
+>   => el0_svc_common
+>   => do_el0_svc
+>   => el0_svc
+>   => el0_sync_handler
+>   => el0_sync
+>             <...>-24965   [001] .... 33306.392836: page_pinner_put: pfn=0x9f0bb0 flags=uptodate|lru|swapbacked count=0 mapcount=0 mapping=00000000aec7812a mt=5
+>             <...>-24965   [001] .... 33306.392846: <stack trace>
+>   => __page_pinner_put
+>   => release_pages
+>   => free_pages_and_swap_cache
+>   => tlb_flush_mmu_free
+>   => tlb_flush_mmu
+>   => zap_pte_range
+>   => unmap_page_range
+>   => unmap_vmas
+>   => exit_mmap
+>   => __mmput
+>   => mmput
+>   => exit_mm
+>   => do_exit
+>   => do_group_exit
+>   => get_signal
+>   => do_signal
+>   => do_notify_resume
+>   => work_pending
+> 
+> Signed-off-by: Minchan Kim <minchan@kernel.org>
+> ---
+> The PagePinner named after PageOwner since I wanted to keep track of
+> page refcount holder. Feel free to suggest better names.
+
+
+I understand how you arrived at the name, and it makes sense from that
+perspective. However, from an "I just read this code" perspective, it
+sounds like:
+
+a) This is a tool to pin pages, and
+
+b) It has a key API call to help report when it *fails* to pin pages.
+
+...both of which are completely wrong statements, of course. :)
+
+So, I'd recommend renaming:
+
+     page_pinner --> page_pin_owner (and all variations of the name)
+
+     page_pinner_failure --> report_page_pinners
+
+
+> Actually, I had alloc_contig_failure tracker as a candidate.
+> 
+>   include/linux/mm.h                 |  7 ++-
+>   include/linux/page_ext.h           |  3 +
+>   include/linux/page_pinner.h        | 47 ++++++++++++++++
+>   include/trace/events/page_pinner.h | 60 ++++++++++++++++++++
+>   mm/Kconfig.debug                   | 13 +++++
+>   mm/Makefile                        |  1 +
+>   mm/page_alloc.c                    |  3 +
+>   mm/page_ext.c                      |  4 ++
+>   mm/page_isolation.c                |  3 +
+>   mm/page_pinner.c                   | 90 ++++++++++++++++++++++++++++++
+>   10 files changed, 230 insertions(+), 1 deletion(-)
+>   create mode 100644 include/linux/page_pinner.h
+>   create mode 100644 include/trace/events/page_pinner.h
+>   create mode 100644 mm/page_pinner.c
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 73a52aba448f..a640cae593f9 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -26,6 +26,7 @@
+>   #include <linux/err.h>
+>   #include <linux/page-flags.h>
+>   #include <linux/page_ref.h>
+> +#include <linux/page_pinner.h>
+>   #include <linux/memremap.h>
+>   #include <linux/overflow.h>
+>   #include <linux/sizes.h>
+> @@ -744,8 +745,12 @@ struct inode;
+>    */
+>   static inline int put_page_testzero(struct page *page)
+>   {
+> +	int ret;
+> +
+>   	VM_BUG_ON_PAGE(page_ref_count(page) == 0, page);
+> -	return page_ref_dec_and_test(page);
+> +	ret = page_ref_dec_and_test(page);
+> +	page_pinner_put(page);
+> +	return ret;
+>   }
+>   
+>   /*
+> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+> index fabb2e1e087f..561d8458dc5a 100644
+> --- a/include/linux/page_ext.h
+> +++ b/include/linux/page_ext.h
+> @@ -23,6 +23,9 @@ enum page_ext_flags {
+>   	PAGE_EXT_YOUNG,
+>   	PAGE_EXT_IDLE,
+>   #endif
+> +#if defined(CONFIG_PAGE_PINNER)
+> +	PAGE_EXT_PINNER,
+> +#endif
+>   };
+>   
+>   /*
+> diff --git a/include/linux/page_pinner.h b/include/linux/page_pinner.h
+> new file mode 100644
+> index 000000000000..3f93a753b8e0
+> --- /dev/null
+> +++ b/include/linux/page_pinner.h
+> @@ -0,0 +1,47 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __LINUX_PAGE_PINNER_H
+> +#define __LINUX_PAGE_PINNER_H
+> +
+> +#include <linux/jump_label.h>
+> +
+> +#ifdef CONFIG_PAGE_PINNER
+> +extern struct static_key_false page_pinner_inited;
+> +extern struct page_ext_operations page_pinner_ops;
+> +
+> +void __page_pinner_failure(struct page *page);
+> +void __page_pinner_put(struct page *page);
+> +void __reset_page_pinner(struct page *page, unsigned int order);
+> +
+> +static inline void reset_page_pinner(struct page *page, unsigned int order)
+> +{
+> +	if (static_branch_unlikely(&page_pinner_inited))
+> +		__reset_page_pinner(page, order);
+> +}
+> +
+> +static inline void page_pinner_failure(struct page *page)
+> +{
+> +	if (!static_branch_unlikely(&page_pinner_inited))
+> +		return;
+> +
+> +	__page_pinner_failure(page);
+> +}
+> +
+> +static inline void page_pinner_put(struct page *page)
+> +{
+> +	if (!static_branch_unlikely(&page_pinner_inited))
+> +		return;
+> +
+> +	__page_pinner_put(page);
+> +}
+> +#else
+> +static inline void reset_page_pinner(struct page *page, unsigned int order)
+> +{
+> +}
+> +static inline void page_pinner_failure(struct page *page)
+> +{
+> +}
+> +static inline void page_pinner_put(struct page *page)
+> +{
+> +}
+> +#endif /* CONFIG_PAGE_PINNER */
+> +#endif /* __LINUX_PAGE_PINNER_H */
+> diff --git a/include/trace/events/page_pinner.h b/include/trace/events/page_pinner.h
+> new file mode 100644
+> index 000000000000..69ccd5c30f66
+> --- /dev/null
+> +++ b/include/trace/events/page_pinner.h
+> @@ -0,0 +1,60 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM page_pinner
+> +
+> +#if !defined(_TRACE_PAGE_PINNER_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_PAGE_PINNER_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/tracepoint.h>
+> +#include <trace/events/mmflags.h>
+> +
+> +DECLARE_EVENT_CLASS(page_pinner_template,
+> +
+> +	TP_PROTO(struct page *page),
+> +
+> +	TP_ARGS(page),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(unsigned long, pfn)
+> +		__field(unsigned long, flags)
+> +		__field(int, count)
+> +		__field(int, mapcount)
+> +		__field(void *, mapping)
+> +		__field(int, mt)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->pfn = page_to_pfn(page);
+> +		__entry->flags = page->flags;
+> +		__entry->count = page_ref_count(page);
+> +		__entry->mapcount = page_mapcount(page);
+> +		__entry->mapping = page->mapping;
+> +		__entry->mt = get_pageblock_migratetype(page);
+> +	),
+> +
+> +	TP_printk("pfn=0x%lx flags=%s count=%d mapcount=%d mapping=%p mt=%d",
+> +		__entry->pfn,
+> +		show_page_flags(__entry->flags & ((1UL << NR_PAGEFLAGS) - 1)),
+> +		__entry->count,
+> +		__entry->mapcount, __entry->mapping, __entry->mt)
+> +);
+> +
+> +DEFINE_EVENT(page_pinner_template, page_pinner_failure,
+> +
+> +	TP_PROTO(struct page *page),
+> +
+> +	TP_ARGS(page)
+> +);
+> +
+> +DEFINE_EVENT(page_pinner_template, page_pinner_put,
+> +
+> +	TP_PROTO(struct page *page),
+> +
+> +	TP_ARGS(page)
+> +);
+> +
+> +#endif /* _TRACE_PAGE_PINNER_H */
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
+> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+> index 1e73717802f8..0ad4a3b8f4eb 100644
+> --- a/mm/Kconfig.debug
+> +++ b/mm/Kconfig.debug
+> @@ -62,6 +62,19 @@ config PAGE_OWNER
+>   
+>   	  If unsure, say N.
+>   
+> +config PAGE_PINNER
+> +	bool "Track page pinner"
+> +	select PAGE_EXTENSION
+> +	depends on DEBUG_KERNEL && TRACEPOINTS
+> +	help
+> +	  This keeps track of what call chain is the pinner of a page, may
+> +	  help to find contiguos page allocation failure. Even if you include
+> +	  this feature in your build, it is disabled by default. You should
+> +	  pass "page_pinner=on" to boot parameter in order to enable it. Eats
+> +	  a fair amount of memory if enabled.
+
+
+We can do a *lot* better in documenting this, than "a fair bit of
+memory". How about something more like this (borrowing from the updated
+commit description):
+
+   This keeps track of what call chain is the pinner of a page. That may
+   help to debug Contiguous Memory Allocator (CMA) allocation failures.
+   Even if you include this feature in your build, it is disabled by
+   default. In order to enable the feature, you must pass
+   "page_pinner=on" as a boot parameter.
+
+   When enabled, this will consume an additional 8 bytes per 4KB page, or
+   an additional 0.2% of RAM. In addition to the storage space, it will
+   have some performance cost, due to increasing the size of struct page
+   so that it is greater than the cacheline size (or multiples thereof)
+   of popular (x86, ...) CPUs.
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA

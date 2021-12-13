@@ -2,43 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 150014726F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9AF4723E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238976AbhLMJ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:56:15 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41458 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237484AbhLMJuI (ORCPT
+        id S233803AbhLMJcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233758AbhLMJcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:50:08 -0500
+        Mon, 13 Dec 2021 04:32:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98606C061574;
+        Mon, 13 Dec 2021 01:32:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E3C61CE0E8C;
-        Mon, 13 Dec 2021 09:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFD8C00446;
-        Mon, 13 Dec 2021 09:50:03 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E1E68CE0B59;
+        Mon, 13 Dec 2021 09:32:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDCFC00446;
+        Mon, 13 Dec 2021 09:32:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389004;
-        bh=/0k9/J4TVvUWcWxNxah1yNR3pB44URDvTeV7rqKD0NA=;
+        s=korg; t=1639387949;
+        bh=hwFRtmyEf/mAFJdBB3fQiFSrTYHKvyvgW5eCodCTbH8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pbhyZYCns/AgPBLwDLtkeLpTl3K1me46/FsYda2ZVnS1cIm9uGOKfbResnIaDWmUJ
-         l1yZusQm2IPKcMid7O8amZ4vcPGP6yjIM/DsPjxpXJowWmH/RZGRU0QYvEaPQlKh2s
-         eUWa5hHiE2DlI6fihjHGgsTVawn/KNPbk7O10Xr4=
+        b=OfvMmvj0d+7P1H70PkxKJlAi7hMSFA+wQCj33HNe/rIQKWCl0qxyfTVDFfY5kY8jX
+         msvk2zNg0ktlMNzpwlLBLmX6YJyHlk9BxM7oYq/JOCsP2FvQ4Cz4CqWTRw8l1mZ3sM
+         F5rdjOjODUDs4fbkpaG1yAzwrowgMJz4JvE7T3AI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Rajan Shanmugavelu <rajan.shanmugavelu@oracle.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 051/132] scsi: qla2xxx: Format log strings only if needed
-Date:   Mon, 13 Dec 2021 10:29:52 +0100
-Message-Id: <20211213092940.872716772@linuxfoundation.org>
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Yabin Cui <yabinc@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 4.4 15/37] tracefs: Have new files inherit the ownership of their parent
+Date:   Mon, 13 Dec 2021 10:29:53 +0100
+Message-Id: <20211213092925.866810096@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,37 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Bolshakov <r.bolshakov@yadro.com>
+From: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-commit 69002c8ce914ef0ae22a6ea14b43bb30b9a9a6a8 upstream.
+commit ee7f3666995d8537dec17b1d35425f28877671a9 upstream.
 
-Commit 598a90f2002c ("scsi: qla2xxx: add ring buffer for tracing debug
-logs") introduced unconditional log string formatting to ql_dbg() even if
-ql_dbg_log event is disabled. It harms performance because some strings are
-formatted in fastpath and/or interrupt context.
+If directories in tracefs have their ownership changed, then any new files
+and directories that are created under those directories should inherit
+the ownership of the director they are created in.
 
-Link: https://lore.kernel.org/r/20211112145446.51210-1-r.bolshakov@yadro.com
-Fixes: 598a90f2002c ("scsi: qla2xxx: add ring buffer for tracing debug logs")
-Cc: Rajan Shanmugavelu <rajan.shanmugavelu@oracle.com>
+Link: https://lkml.kernel.org/r/20211208075720.4855d180@gandalf.local.home
+
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yabin Cui <yabinc@google.com>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 4282d60689d4f ("tracefs: Add new tracefs file system")
+Reported-by: Kalesh Singh <kaleshsingh@google.com>
+Reported: https://lore.kernel.org/all/CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com/
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_dbg.c |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/tracefs/inode.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/scsi/qla2xxx/qla_dbg.c
-+++ b/drivers/scsi/qla2xxx/qla_dbg.c
-@@ -2477,6 +2477,9 @@ ql_dbg(uint level, scsi_qla_host_t *vha,
- 	struct va_format vaf;
- 	char pbuf[64];
+--- a/fs/tracefs/inode.c
++++ b/fs/tracefs/inode.c
+@@ -411,6 +411,8 @@ struct dentry *tracefs_create_file(const
+ 	inode->i_mode = mode;
+ 	inode->i_fop = fops ? fops : &tracefs_file_operations;
+ 	inode->i_private = data;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
+ 	d_instantiate(dentry, inode);
+ 	fsnotify_create(dentry->d_parent->d_inode, dentry);
+ 	return end_creating(dentry);
+@@ -433,6 +435,8 @@ static struct dentry *__create_dir(const
+ 	inode->i_mode = S_IFDIR | S_IRWXU | S_IRUSR| S_IRGRP | S_IXUSR | S_IXGRP;
+ 	inode->i_op = ops;
+ 	inode->i_fop = &simple_dir_operations;
++	inode->i_uid = d_inode(dentry->d_parent)->i_uid;
++	inode->i_gid = d_inode(dentry->d_parent)->i_gid;
  
-+	if (!ql_mask_match(level) && !trace_ql_dbg_log_enabled())
-+		return;
-+
- 	va_start(va, fmt);
- 
- 	vaf.fmt = fmt;
+ 	/* directory inodes start off with i_nlink == 2 (for "." entry) */
+ 	inc_nlink(inode);
 
 

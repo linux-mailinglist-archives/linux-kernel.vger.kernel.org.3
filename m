@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E04472401
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D36C947290C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbhLMJdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:33:25 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58064 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233885AbhLMJdP (ORCPT
+        id S244701AbhLMKRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236526AbhLMJti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:33:15 -0500
+        Mon, 13 Dec 2021 04:49:38 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E72C07E5DF;
+        Mon, 13 Dec 2021 01:43:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B68F1CE0E6B;
-        Mon, 13 Dec 2021 09:33:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F77C00446;
-        Mon, 13 Dec 2021 09:33:11 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B172FCE0E29;
+        Mon, 13 Dec 2021 09:43:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CDB0C00446;
+        Mon, 13 Dec 2021 09:43:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639387991;
-        bh=3HWsN2RFtBrUxlWtXazhc9PegL69XzYtaKlCzUGCkd4=;
+        s=korg; t=1639388615;
+        bh=CDXo2h4vz+YwBBOpxTJoGDGKPvgQg9+CFfdB73paPyI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wbbhch3zhDEE/KiFVxOLgwO5vYAHAbsFF1nMhhnntZDmJ5H7LaQOmyCGyosmusgWl
-         Zn1lqAMY/k6JHTMbMoRyV07+1elB00f+PycHss4NHaBr1T1zA5r6hOSVBo7Af9fbge
-         MSStdPxcrbwenC+0837ftlSS6omOzdw3soyP6Hn0=
+        b=hFmglohbSJPV7vga2vXSUunCnEGwDhTgzj8o4ukI18SkV98nkzAuIQ1qZjF874ncg
+         nx8NLrmq1jHSwLBk6PSVx0H6A3QteF2iKybokwrintaUylVFGIDhfEfutrBbg6yAs2
+         vox5HH30nHutVrRNP98ivMHMmwkaszFt4mF/X6JQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
-Subject: [PATCH 4.4 29/37] USB: gadget: zero allocate endpoint 0 buffers
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH 5.4 37/88] clk: qcom: regmap-mux: fix parent clock lookup
 Date:   Mon, 13 Dec 2021 10:30:07 +0100
-Message-Id: <20211213092926.328618176@linuxfoundation.org>
+Message-Id: <20211213092934.520607073@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
-References: <20211213092925.380184671@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,43 +49,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-commit 86ebbc11bb3f60908a51f3e41a17e3f477c2eaa3 upstream.
+commit 9a61f813fcc8d56d85fcf9ca6119cf2b5ac91dd5 upstream.
 
-Under some conditions, USB gadget devices can show allocated buffer
-contents to a host.  Fix this up by zero-allocating them so that any
-extra data will all just be zeros.
+The function mux_get_parent() uses qcom_find_src_index() to find the
+parent clock index, which is incorrect: qcom_find_src_index() uses src
+enum for the lookup, while mux_get_parent() should use cfg field (which
+corresponds to the register value). Add qcom_find_cfg_index() function
+doing this kind of lookup and use it for mux parent lookup.
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Fixes: df964016490b ("clk: qcom: add parent map for regmap mux")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20211115233407.1046179-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c   |    2 +-
- drivers/usb/gadget/legacy/dbgp.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/clk-regmap-mux.c |    2 +-
+ drivers/clk/qcom/common.c         |   12 ++++++++++++
+ drivers/clk/qcom/common.h         |    2 ++
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2018,7 +2018,7 @@ int composite_dev_prepare(struct usb_com
- 	if (!cdev->req)
- 		return -ENOMEM;
+--- a/drivers/clk/qcom/clk-regmap-mux.c
++++ b/drivers/clk/qcom/clk-regmap-mux.c
+@@ -28,7 +28,7 @@ static u8 mux_get_parent(struct clk_hw *
+ 	val &= mask;
  
--	cdev->req->buf = kmalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
-+	cdev->req->buf = kzalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
- 	if (!cdev->req->buf)
- 		goto fail;
+ 	if (mux->parent_map)
+-		return qcom_find_src_index(hw, mux->parent_map, val);
++		return qcom_find_cfg_index(hw, mux->parent_map, val);
  
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -136,7 +136,7 @@ static int dbgp_enable_ep_req(struct usb
- 		goto fail_1;
- 	}
+ 	return val;
+ }
+--- a/drivers/clk/qcom/common.c
++++ b/drivers/clk/qcom/common.c
+@@ -69,6 +69,18 @@ int qcom_find_src_index(struct clk_hw *h
+ }
+ EXPORT_SYMBOL_GPL(qcom_find_src_index);
  
--	req->buf = kmalloc(DBGP_REQ_LEN, GFP_KERNEL);
-+	req->buf = kzalloc(DBGP_REQ_LEN, GFP_KERNEL);
- 	if (!req->buf) {
- 		err = -ENOMEM;
- 		stp = 2;
++int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map, u8 cfg)
++{
++	int i, num_parents = clk_hw_get_num_parents(hw);
++
++	for (i = 0; i < num_parents; i++)
++		if (cfg == map[i].cfg)
++			return i;
++
++	return -ENOENT;
++}
++EXPORT_SYMBOL_GPL(qcom_find_cfg_index);
++
+ struct regmap *
+ qcom_cc_map(struct platform_device *pdev, const struct qcom_cc_desc *desc)
+ {
+--- a/drivers/clk/qcom/common.h
++++ b/drivers/clk/qcom/common.h
+@@ -49,6 +49,8 @@ extern void
+ qcom_pll_set_fsm_mode(struct regmap *m, u32 reg, u8 bias_count, u8 lock_count);
+ extern int qcom_find_src_index(struct clk_hw *hw, const struct parent_map *map,
+ 			       u8 src);
++extern int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map,
++			       u8 cfg);
+ 
+ extern int qcom_cc_register_board_clk(struct device *dev, const char *path,
+ 				      const char *name, unsigned long rate);
 
 

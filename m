@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42877472193
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46783472192
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbhLMHR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:17:29 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:48907 "EHLO
+        id S232419AbhLMHR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:17:27 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:51747 "EHLO
         mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbhLMHR0 (ORCPT
+        with ESMTP id S231196AbhLMHRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:17:26 -0500
-Received: by mail-io1-f71.google.com with SMTP id g23-20020a6be617000000b005e245747fb4so14559051ioh.15
+        Mon, 13 Dec 2021 02:17:25 -0500
+Received: by mail-io1-f71.google.com with SMTP id s199-20020a6b2cd0000000b005ed3e776ad0so14546568ios.18
         for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 23:17:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=bWjIbtRzJIZ5b9CQz1lfE5idRoHZe5RLnYbqs3Bckk8=;
-        b=dwx3EDDGPn6UZ4+gQ7byaE/KhnDVmSi/BKnTwEk6NfUC2IyJxl1stxu7/AKgrKB+Rx
-         b0Tkosa64SfG1PfNEEcqe+Q+EsWhTat3EaC6EAcnZxzryj85G5ylkHJUKJsS8qPYiUtw
-         K6QrFDe4aa33Bu+zdCe3bBeP0Hw2h77ZJRxYVBdnchVc9/Oab0a9f9a25dnYiqT0Nwn4
-         011TV9Vl+OeUnyIBbpaOIrY8Ylv2eCN7jm6vVokJDuBOZNCg55jxeLZCs1V8tehiSW56
-         HIDZtTA94rDaeIxjN7lpWmGFbFKXNaScwtmZ/vMGreI5QsJtX+7R9bVbriLyWWlEMUTm
-         pncQ==
-X-Gm-Message-State: AOAM533HFQHuY9ecD/pnWaf5ZRJNReS5RfVAHUXuQqSkkhiDcaeH2S4s
-        frcl4xQwZNaIb2GHSJVMwVw/sebRQgIpDeK8SA45hnbWKfYT
-X-Google-Smtp-Source: ABdhPJxbLopa8WKkTPgJjZQd0Ia44Bzg6N5iMdoYQ+B8f4iitExonHK4mlIl4W8YVQA4ANsYtdTPLzsy7GUD2N8K/S8qEP0OcHMD
+        bh=zHiZFlIrM7wIAcI8lHR33E8wR1XxlzzFcwEQ45+HOGY=;
+        b=ZnOW1J7izrHKJE/J4k4qpPb77RxznNSXJ3KFv0/sCSxYkTD46MZRxD10XeQ6hWtSTc
+         7hRmroI25frm15rZycChQeV2AGLFhmTstX35UC8b6kWLxhd2FbRRpwt2xfXgm0t2VS7R
+         sSy3P+FtnMms9D8kLcawblm5ErvnIFRNScxwwpTQ8tyhGMV4rLh7FwZhkgBTL2hV12Wp
+         Yg3pavx2m5GS5LBGsPj+vCPNKo3oE0KYbIxfHc8C+ZnuPMEBgKDZOUSUNNX64h3ljS6w
+         a413SqMQ9TLi5asvjBXT0cl85DNUPMp5Jw4P9pSNoGwPNXEeCNVWJuCr3cSGxaqQsqD5
+         kvAQ==
+X-Gm-Message-State: AOAM532BxJOawnMQR2USZ/jJKm+nrD8KU2/RYzbE+aDF5qWMVS9kJ7TR
+        /KCyU92cgI5NhVVRBJbbZsllAzd4SAEqGsWmWexR/xG5ivSc
+X-Google-Smtp-Source: ABdhPJyOccnJaSOZhWgLu76wjFR2FIunCcoHxFYtpWAVaBiuwV4oXLP2fp3ahqXGItpVmDkeQTBF6Co/RuaFGAaDT1lpOI5RTenS
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr31554610iow.35.1639379845577;
+X-Received: by 2002:a05:6638:381b:: with SMTP id i27mr31102807jav.138.1639379845409;
  Sun, 12 Dec 2021 23:17:25 -0800 (PST)
 Date:   Sun, 12 Dec 2021 23:17:25 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005902e205d301dd7e@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in minix_statfs
-From:   syzbot <syzbot+5ad0824204c7bf9b67f2@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, christian.brauner@ubuntu.com,
-        gregkh@linuxfoundation.org, jack@suse.cz,
-        jamorris@linux.microsoft.com, linux-kernel@vger.kernel.org,
+Message-ID: <00000000000056758e05d301dd90@google.com>
+Subject: [syzbot] general protection fault in hci_inquiry_result_with_rssi_evt
+From:   syzbot <syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, luiz.von.dentz@intel.com,
+        marcel@holtmann.org, netdev@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -49,54 +50,96 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    b8a98b6bf66a Merge tag 'pci-v5.16-fixes-2' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1342c069b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=221ffc09e39ebbd1
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ad0824204c7bf9b67f2
+HEAD commit:    4eee8d0b64ec Add linux-next specific files for 20211208
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=130203e5b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20b74d9da4ce1ef1
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3cad3a4e3f03bc00562
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e8a551b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176da9b9b00000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101eb355b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b8f805b00000
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
+The issue was bisected to:
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17e8a7bdb00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1418a7bdb00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1018a7bdb00000
+commit 3e54c5890c87a30b1019a3de9dab968ff2b21e06
+Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Date:   Wed Dec 1 18:55:03 2021 +0000
+
+    Bluetooth: hci_event: Use of a function table to handle HCI events
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=150100bab00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=170100bab00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=130100bab00000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5ad0824204c7bf9b67f2@syzkaller.appspotmail.com
+Reported-by: syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com
+Fixes: 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events")
 
-loop0: detected capacity change from 0 to 272
-================================================================================
-UBSAN: shift-out-of-bounds in fs/minix/inode.c:380:57
-shift exponent 65510 is too large for 64-bit type 'long unsigned int'
-CPU: 0 PID: 3601 Comm: syz-executor657 Not tainted 5.16.0-rc4-syzkaller #0
+Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9
+Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4
+Bluetooth: hci0: unexpected cc 0x0c25 length: 249 > 3
+Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 6545 Comm: kworker/u5:1 Not tainted 5.16.0-rc4-next-20211208-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: hci0 hci_rx_work
+RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x970 net/bluetooth/hci_event.c:4520
+Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 88 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <0f> b6 04 02 4c 89 ea 83 e2 07 38 d0 7f 08 84 c0 0f 85 1b 07 00 00
+RSP: 0018:ffffc90001aafad0 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff88807e754000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff883588a8 RDI: ffff88807e754000
+RBP: ffff88807e754000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff88376f27 R11: 0000000000000000 R12: ffff88807015eb40
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffd653f7000 CR3: 0000000071f88000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x5a lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:330
- minix_statfs.cold+0x17/0x1c fs/minix/inode.c:380
- statfs_by_dentry+0x133/0x210 fs/statfs.c:66
- vfs_statfs fs/statfs.c:90 [inline]
- fd_statfs+0x66/0x100 fs/statfs.c:120
- __do_sys_fstatfs+0x7a/0xf0 fs/statfs.c:216
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f33e4f00e09
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffeedacabd8 EFLAGS: 00000246 ORIG_RAX: 000000000000008a
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f33e4f00e09
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
-RBP: 00007f33e4ec06a0 R08: 0000000000000000 R09: 0000000000000000
-R10: 00007ffeedacaa90 R11: 0000000000000246 R12: 00007f33e4ec0730
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ hci_event_func net/bluetooth/hci_event.c:6812 [inline]
+ hci_event_packet+0x817/0xe90 net/bluetooth/hci_event.c:6860
+ hci_rx_work+0x4fa/0xd30 net/bluetooth/hci_core.c:3817
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2318
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2465
+ kthread+0x405/0x4f0 kernel/kthread.c:345
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
  </TASK>
-================================================================================
+Modules linked in:
+---[ end trace 403a15c54e29c5c4 ]---
+RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x970 net/bluetooth/hci_event.c:4520
+Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 88 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <0f> b6 04 02 4c 89 ea 83 e2 07 38 d0 7f 08 84 c0 0f 85 1b 07 00 00
+RSP: 0018:ffffc90001aafad0 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff88807e754000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff883588a8 RDI: ffff88807e754000
+RBP: ffff88807e754000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff88376f27 R11: 0000000000000000 R12: ffff88807015eb40
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2bb803f018 CR3: 000000001d893000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 4 bytes skipped:
+   0:	48 c1 ea 03          	shr    $0x3,%rdx
+   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   8:	0f 85 88 07 00 00    	jne    0x796
+   e:	48 8b 04 24          	mov    (%rsp),%rax
+  12:	4c 8b 28             	mov    (%rax),%r13
+  15:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  1c:	fc ff df
+  1f:	4c 89 ea             	mov    %r13,%rdx
+  22:	48 c1 ea 03          	shr    $0x3,%rdx
+* 26:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2a:	4c 89 ea             	mov    %r13,%rdx
+  2d:	83 e2 07             	and    $0x7,%edx
+  30:	38 d0                	cmp    %dl,%al
+  32:	7f 08                	jg     0x3c
+  34:	84 c0                	test   %al,%al
+  36:	0f 85 1b 07 00 00    	jne    0x757
 
 
 ---

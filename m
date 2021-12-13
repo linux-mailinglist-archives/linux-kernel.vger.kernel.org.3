@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA3F472871
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8D94729E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238622AbhLMKNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S235697AbhLMK1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242778AbhLMKIu (ORCPT
+        with ESMTP id S1344252AbhLMKZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:08:50 -0500
+        Mon, 13 Dec 2021 05:25:02 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A603C08EA4D;
-        Mon, 13 Dec 2021 01:52:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6316DC018B71;
+        Mon, 13 Dec 2021 02:00:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C5FE1CE0E29;
-        Mon, 13 Dec 2021 09:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E3AC00446;
-        Mon, 13 Dec 2021 09:52:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AEFB5CE0EB0;
+        Mon, 13 Dec 2021 10:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21319C34600;
+        Mon, 13 Dec 2021 10:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389148;
-        bh=UwSDO8IZxWRsMCp0xnXpmJ0UXGnrmXOhCVIXuoXYIhU=;
+        s=korg; t=1639389613;
+        bh=lFru/eiJ+opmGuVoOgd6CAflirb7kLAfOtF6fZS+NaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I0MSOoJto8Kyk+Xn5CXC6b94qIh9T3SG+aPZMPBOggazOvGvRMt8k0pIXQc/KLaSd
-         p+qWqLxY06gNuIZQPzo47dXkYOV2lcWl7wlz2XVR46QEaxMvbXTfv2WlqudtTU7ZwN
-         mvjnJQaX5UJm7qPwbhiLwZZMgUR73sY0iwiLD+SM=
+        b=tDctggcPNZF8xsZM7qluBLpuBsn6+UJRen9V8T0Z4l4cT2WlNkiYFlWr8ZSNeRIoc
+         f1D2WD9dKSs1oTJMb70ay6HfRrS6lK8C0DIsCdlgdNTZNHs4CVzOCasUeVSzWuDlBv
+         dS4wv11N930XM0zSdDoYSeW+F2BNYBqYDQpOabsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 119/132] iio: ad7768-1: Call iio_trigger_notify_done() on error
-Date:   Mon, 13 Dec 2021 10:31:00 +0100
-Message-Id: <20211213092943.185529887@linuxfoundation.org>
+Subject: [PATCH 5.15 146/171] iio: stk3310: Dont return error code in interrupt handler
+Date:   Mon, 13 Dec 2021 10:31:01 +0100
+Message-Id: <20211213092949.931996406@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,37 +51,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit 6661146427cbbce6d1fe3dbb11ff1c487f55799a upstream.
+commit 8e1eeca5afa7ba84d885987165dbdc5decf15413 upstream.
 
-IIO trigger handlers must call iio_trigger_notify_done() when done. This
-must be done even when an error occurred. Otherwise the trigger will be
-seen as busy indefinitely and the trigger handler will never be called
-again.
+Interrupt handlers must return one of the irqreturn_t values. Returning a
+error code is not supported.
 
-The ad7768-1 driver neglects to call iio_trigger_notify_done() when there
-is an error reading the converter data. Fix this by making sure that
-iio_trigger_notify_done() is included in the error exit path.
+The stk3310 event interrupt handler returns an error code when reading the
+flags register fails.
 
-Fixes: a5f8c7da3dbe ("iio: adc: Add AD7768-1 ADC basic support")
+Fix the implementation to always return an irqreturn_t value.
+
+Fixes: 3dd477acbdd1 ("iio: light: Add threshold interrupt support for STK3310")
 Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211101144055.13858-2-lars@metafoo.de
+Link: https://lore.kernel.org/r/20211024171251.22896-3-lars@metafoo.de
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/ad7768-1.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/light/stk3310.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/iio/adc/ad7768-1.c
-+++ b/drivers/iio/adc/ad7768-1.c
-@@ -470,8 +470,8 @@ static irqreturn_t ad7768_trigger_handle
- 	iio_push_to_buffers_with_timestamp(indio_dev, &st->data.scan,
- 					   iio_get_time_ns(indio_dev));
- 
--	iio_trigger_notify_done(indio_dev->trig);
- err_unlock:
-+	iio_trigger_notify_done(indio_dev->trig);
- 	mutex_unlock(&st->lock);
+--- a/drivers/iio/light/stk3310.c
++++ b/drivers/iio/light/stk3310.c
+@@ -546,9 +546,8 @@ static irqreturn_t stk3310_irq_event_han
+ 	mutex_lock(&data->lock);
+ 	ret = regmap_field_read(data->reg_flag_nf, &dir);
+ 	if (ret < 0) {
+-		dev_err(&data->client->dev, "register read failed\n");
+-		mutex_unlock(&data->lock);
+-		return ret;
++		dev_err(&data->client->dev, "register read failed: %d\n", ret);
++		goto out;
+ 	}
+ 	event = IIO_UNMOD_EVENT_CODE(IIO_PROXIMITY, 1,
+ 				     IIO_EV_TYPE_THRESH,
+@@ -560,6 +559,7 @@ static irqreturn_t stk3310_irq_event_han
+ 	ret = regmap_field_write(data->reg_flag_psint, 0);
+ 	if (ret < 0)
+ 		dev_err(&data->client->dev, "failed to reset interrupts\n");
++out:
+ 	mutex_unlock(&data->lock);
  
  	return IRQ_HANDLED;
 

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 098B8472A12
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370E3472662
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239610AbhLMKaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238057AbhLMK17 (ORCPT
+        id S232889AbhLMJvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:51:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57222 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236005AbhLMJpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:27:59 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF25C01DF21;
-        Mon, 13 Dec 2021 02:01:41 -0800 (PST)
+        Mon, 13 Dec 2021 04:45:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 87C7FCE0F84;
-        Mon, 13 Dec 2021 10:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0832AC34602;
-        Mon, 13 Dec 2021 10:01:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48ECCB80E22;
+        Mon, 13 Dec 2021 09:45:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A787C341C8;
+        Mon, 13 Dec 2021 09:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389697;
-        bh=uswq6sDcrqByPTqp6nYMzvxhoFPfFdTZljh/1M5V6Lw=;
+        s=korg; t=1639388741;
+        bh=lujrZBCoAyyE7Zc4QDqaa8wcKuPXGjH4z1p1kBbQ8Ig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AtaeyeKN+lKV2xElYsLFObtfBQzE6hFQ7DDLqVOUVbQ2/vc38Rz7KPzejG+Fgmmhc
-         MUsSTYsBGbIhBM9PFFwkITUHqWw9s84LQtQuQiqqviVJ/JcQLAehjIKTxZcZIF038B
-         dM4+JhnumM8vqCvHs2yQkBpk5sVmydu/9DZNlDlI=
+        b=foWZ2UDO4jp0ipYfPVrboSya19YRDnpHrxCzcT8tvuEF0O2wh7YCAcMu8rEyQQDQt
+         WUN3KNETxU7GtX1lNx+aFrMNSlxuLrQooWpf6Wyw135cMhAApptPtwQVAVe/S6RdS0
+         Os5IweQXEMQVgubR19TLiFMTaW5jGtugN4H2t2Rg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 134/171] net/qla3xxx: fix an error code in ql_adapter_up()
-Date:   Mon, 13 Dec 2021 10:30:49 +0100
-Message-Id: <20211213092949.553182725@linuxfoundation.org>
+        stable@vger.kernel.org, Evgeny Boger <boger@wirenboard.com>,
+        Chen-Yu Tsai <wens@csie.org>, Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.4 80/88] iio: adc: axp20x_adc: fix charging current reporting on AXP22x
+Date:   Mon, 13 Dec 2021 10:30:50 +0100
+Message-Id: <20211213092935.979983603@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,57 +46,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Evgeny Boger <boger@wirenboard.com>
 
-commit d17b9737c2bc09b4ac6caf469826e5a7ce3ffab7 upstream.
+commit 92beafb76a31bdc02649eb44e93a8e4f4cfcdbe8 upstream.
 
-The ql_wait_for_drvr_lock() fails and returns false, then this
-function should return an error code instead of returning success.
+Both the charging and discharging currents on AXP22x are stored as
+12-bit integers, in accordance with the datasheet.
+It's also confirmed by vendor BSP (axp20x_adc.c:axp22_icharge_to_mA).
 
-The other problem is that the success path prints an error message
-netdev_err(ndev, "Releasing driver lock\n");  Delete that and
-re-order the code a little to make it more clear.
+The scale factor of 0.5 is never mentioned in datasheet, nor in the
+vendor source code. I think it was here to compensate for
+erroneous addition bit in register width.
 
-Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20211207082416.GA16110@kili
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Tested on custom A40i+AXP221s board with external ammeter as
+a reference.
+
+Fixes: 0e34d5de961d ("iio: adc: add support for X-Powers AXP20X and AXP22X PMICs ADCs")
+Signed-off-by: Evgeny Boger <boger@wirenboard.com>
+Acked-by: Chen-Yu Tsai <wens@csie.org>
+Link: https://lore.kernel.org/r/20211116213746.264378-1-boger@wirenboard.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/qlogic/qla3xxx.c |   19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/iio/adc/axp20x_adc.c |   18 +++---------------
+ 1 file changed, 3 insertions(+), 15 deletions(-)
 
---- a/drivers/net/ethernet/qlogic/qla3xxx.c
-+++ b/drivers/net/ethernet/qlogic/qla3xxx.c
-@@ -3478,20 +3478,19 @@ static int ql_adapter_up(struct ql3_adap
+--- a/drivers/iio/adc/axp20x_adc.c
++++ b/drivers/iio/adc/axp20x_adc.c
+@@ -251,19 +251,8 @@ static int axp22x_adc_raw(struct iio_dev
+ 			  struct iio_chan_spec const *chan, int *val)
+ {
+ 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+-	int size;
  
- 	spin_lock_irqsave(&qdev->hw_lock, hw_flags);
+-	/*
+-	 * N.B.: Unlike the Chinese datasheets tell, the charging current is
+-	 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+-	 * bits.
+-	 */
+-	if (chan->type == IIO_CURRENT && chan->channel == AXP22X_BATT_DISCHRG_I)
+-		size = 13;
+-	else
+-		size = 12;
+-
+-	*val = axp20x_read_variable_width(info->regmap, chan->address, size);
++	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
+ 	if (*val < 0)
+ 		return *val;
  
--	err = ql_wait_for_drvr_lock(qdev);
--	if (err) {
--		err = ql_adapter_initialize(qdev);
--		if (err) {
--			netdev_err(ndev, "Unable to initialize adapter\n");
--			goto err_init;
--		}
--		netdev_err(ndev, "Releasing driver lock\n");
--		ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
--	} else {
-+	if (!ql_wait_for_drvr_lock(qdev)) {
- 		netdev_err(ndev, "Could not acquire driver lock\n");
-+		err = -ENODEV;
- 		goto err_lock;
- 	}
+@@ -386,9 +375,8 @@ static int axp22x_adc_scale(struct iio_c
+ 		return IIO_VAL_INT_PLUS_MICRO;
  
-+	err = ql_adapter_initialize(qdev);
-+	if (err) {
-+		netdev_err(ndev, "Unable to initialize adapter\n");
-+		goto err_init;
-+	}
-+	ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
-+
- 	spin_unlock_irqrestore(&qdev->hw_lock, hw_flags);
+ 	case IIO_CURRENT:
+-		*val = 0;
+-		*val2 = 500000;
+-		return IIO_VAL_INT_PLUS_MICRO;
++		*val = 1;
++		return IIO_VAL_INT;
  
- 	set_bit(QL_ADAPTER_UP, &qdev->flags);
+ 	case IIO_TEMP:
+ 		*val = 100;
 
 

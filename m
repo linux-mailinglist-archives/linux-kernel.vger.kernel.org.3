@@ -2,333 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FA0473369
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F877473375
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241553AbhLMR7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 12:59:39 -0500
-Received: from mga02.intel.com ([134.134.136.20]:21833 "EHLO mga02.intel.com"
+        id S241607AbhLMSAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:00:42 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21961 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241405AbhLMR72 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 12:59:28 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226067281"
+        id S238569AbhLMSAe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 13:00:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226067531"
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="226067281"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 09:59:26 -0800
+   d="scan'208";a="226067531"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 10:00:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="613915243"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2021 09:59:26 -0800
-Received: from debox1-desk4.intel.com (unknown [10.212.243.203])
-        by linux.intel.com (Postfix) with ESMTP id 75A5D580C34;
-        Mon, 13 Dec 2021 09:59:26 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     lee.jones@linaro.org, hdegoede@redhat.com,
-        david.e.box@linux.intel.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, mgross@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH V3 6/6] selftests: sdsi: test sysfs setup
-Date:   Mon, 13 Dec 2021 09:59:21 -0800
-Message-Id: <20211213175921.1897860-7-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211213175921.1897860-1-david.e.box@linux.intel.com>
-References: <20211213175921.1897860-1-david.e.box@linux.intel.com>
+   d="scan'208";a="681722609"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 13 Dec 2021 10:00:29 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E14D5144; Mon, 13 Dec 2021 20:00:35 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 1/6] i2c: designware-pci: Use temporary variable for struct device
+Date:   Mon, 13 Dec 2021 20:00:29 +0200
+Message-Id: <20211213180034.30929-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests file configuration and error handling of the Intel Software
-Defined Silicon sysfs ABI.
+Use temporary variable for struct device to make code neater.
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-V3
-  - Add tests to check PCI device removal handling and to check for
-    driver memory leaks.
-V2
-  - new patch
+v2: dropped dev --> i_dev renaming (Jarkko)
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 52 +++++++++++-----------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/drivers/sdsi/sdsi.sh  |  18 ++
- .../selftests/drivers/sdsi/sdsi_test.py       | 226 ++++++++++++++++++
- 3 files changed, 245 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/sdsi/sdsi.sh
- create mode 100644 tools/testing/selftests/drivers/sdsi/sdsi_test.py
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 500b49e6958a..a0d550f5bfdc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9788,6 +9788,7 @@ M:	David E. Box <david.e.box@linux.intel.com>
- S:	Supported
- F:	drivers/platform/x86/intel/sdsi.c
- F:	tools/arch/x86/intel_sdsi/
-+F:	tools/testing/selftests/drivers/sdsi/
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 0f409a4c2da0..5f76010f7dfd 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -207,23 +207,23 @@ static struct dw_pci_controller dw_pci_controllers[] = {
+ };
  
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi.sh b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-new file mode 100755
-index 000000000000..8db71961d164
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Runs tests for the intel_sdsi driver
-+
-+if ! /sbin/modprobe -q -r intel_sdsi; then
-+	echo "drivers/sdsi: [SKIP]"
-+	exit 77
-+fi
-+
-+if /sbin/modprobe -q intel_sdsi; then
-+	python3 -m pytest sdsi_test.py
-+	/sbin/modprobe -q -r intel_sdsi
-+
-+	echo "drivers/sdsi: ok"
-+else
-+	echo "drivers/sdsi: [FAIL]"
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi_test.py b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-new file mode 100644
-index 000000000000..4922edfe461f
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-@@ -0,0 +1,226 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from struct import pack
-+from time import sleep
-+
-+import errno
-+import glob
-+import os
-+import subprocess
-+
-+try:
-+    import pytest
-+except ImportError:
-+    print("Unable to import pytest python module.")
-+    print("\nIf not already installed, you may do so with:")
-+    print("\t\tpip3 install pytest")
-+    exit(1)
-+
-+SOCKETS = glob.glob('/sys/bus/auxiliary/devices/intel_vsec.sdsi.*')
-+NUM_SOCKETS = len(SOCKETS)
-+
-+MODULE_NAME = 'sdsi'
-+DEV_PREFIX = 'intel_vsec.sdsi'
-+CLASS_DIR = '/sys/bus/auxiliary/devices'
-+GUID = "0x6dd191"
-+
-+def read_bin_file(file):
-+    with open(file, mode='rb') as f:
-+        content = f.read()
-+    return content
-+
-+def get_dev_file_path(socket, file):
-+    return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/' + file
-+
-+def kmemleak_enabled():
-+    kmemleak = "/sys/kernel/debug/kmemleak"
-+    return os.path.isfile(kmemleak)
-+
-+class TestSDSiDriver:
-+    def test_driver_loaded(self):
-+        lsmod_p = subprocess.Popen(('lsmod'), stdout=subprocess.PIPE)
-+        result = subprocess.check_output(('grep', '-q', MODULE_NAME), stdin=lsmod_p.stdout)
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiFilesClass:
-+
-+    def read_value(self, file):
-+        f = open(file, "r")
-+        value = f.read().strip("\n")
-+        return value
-+
-+    def get_dev_folder(self, socket):
-+        return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/'
-+
-+    def test_sysfs_files_exist(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        print (folder)
-+        assert os.path.isfile(folder + "guid") == True
-+        assert os.path.isfile(folder + "provision_akc") == True
-+        assert os.path.isfile(folder + "provision_cap") == True
-+        assert os.path.isfile(folder + "state_certificate") == True
-+        assert os.path.isfile(folder + "registers") == True
-+
-+    def test_sysfs_file_permissions(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        mode = os.stat(folder + "guid").st_mode & 0o777
-+        assert mode == 0o444    # Read all
-+        mode = os.stat(folder + "registers").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+        mode = os.stat(folder + "provision_akc").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "provision_cap").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "state_certificate").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+
-+    def test_sysfs_file_ownership(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        st = os.stat(folder + "guid")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "registers")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+    def test_sysfs_file_sizes(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        if self.read_value(folder + "guid") == GUID:
-+            st = os.stat(folder + "registers")
-+            assert st.st_size == 72
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_size == 4096
-+
-+    def test_no_seek_allowed(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(folder + "provision_cap", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+        f = open(folder + "provision_akc", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+    def test_registers_seek(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        # Check that the value read from an offset of the entire
-+        # file is none-zero and the same as the value read
-+        # from seeking to the same location
-+        f = open(folder + "registers", "rb")
-+        data = f.read()
-+        f.seek(64)
-+        id = f.read()
-+        assert id != bytes(0)
-+        assert data[64:] == id
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiMailboxCmdsClass:
-+    def test_provision_akc_eoverflow_1017_bytes(self, socket):
-+
-+        # The buffer for writes is 1k, of with 8 bytes must be
-+        # reserved for the command, leaving 1016 bytes max.
-+        # Check that we get an overflow error for 1017 bytes.
-+        node = get_dev_file_path(socket, "provision_akc")
-+        rand_file = bytes(os.urandom(1017))
-+
-+        f = open(node, 'wb', 0)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.EOVERFLOW
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSdsiDriverLocksClass:
-+    def test_enodev_when_pci_device_removed(self, socket):
-+        node = get_dev_file_path(socket, "provision_akc")
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(node, 'wb', 0)
-+        g = open(node, 'wb', 0)
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        with pytest.raises(OSError) as error:
-+            g.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        f.close()
-+        g.close()
-+
-+        # Short wait needed to allow file to close before pulling driver
-+        sleep(1)
-+
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_sdsi'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_vsec'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', 'intel_vsec'))
-+        p.wait()
-+
-+        # Short wait needed to allow driver time to get inserted
-+        # before continuing tests
-+        sleep(1)
-+
-+    def test_memory_leak(self, socket):
-+        if not kmemleak_enabled:
-+            pytest.skip("kmemleak not enabled in kernel")
-+
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        sleep(1)
-+
-+        subprocess.check_output(('modprobe', '-r', 'intel_sdsi'))
-+        subprocess.check_output(('modprobe', '-r', 'intel_vsec'))
-+
-+        with open('/sys/kernel/debug/kmemleak', 'w') as f:
-+            print('scan', file = f)
-+        sleep(5)
-+
-+        assert os.stat('/sys/kernel/debug/kmemleak').st_size == 0
-+
-+        subprocess.check_output(('modprobe', 'intel_vsec'))
-+        sleep(1)
+ #ifdef CONFIG_PM
+-static int i2c_dw_pci_suspend(struct device *dev)
++static int i2c_dw_pci_suspend(struct device *d)
+ {
+-	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
++	struct dw_i2c_dev *dev = dev_get_drvdata(d);
+ 
+-	i_dev->suspended = true;
+-	i_dev->disable(i_dev);
++	dev->suspended = true;
++	dev->disable(dev);
+ 
+ 	return 0;
+ }
+ 
+-static int i2c_dw_pci_resume(struct device *dev)
++static int i2c_dw_pci_resume(struct device *d)
+ {
+-	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
++	struct dw_i2c_dev *dev = dev_get_drvdata(d);
+ 	int ret;
+ 
+-	ret = i_dev->init(i_dev);
+-	i_dev->suspended = false;
++	ret = dev->init(dev);
++	dev->suspended = false;
+ 
+ 	return ret;
+ }
+@@ -235,6 +235,7 @@ static UNIVERSAL_DEV_PM_OPS(i2c_dw_pm_ops, i2c_dw_pci_suspend,
+ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 			    const struct pci_device_id *id)
+ {
++	struct device *d = &pdev->dev;
+ 	struct dw_i2c_dev *dev;
+ 	struct i2c_adapter *adap;
+ 	int r;
+@@ -242,8 +243,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 	struct dw_scl_sda_cfg *cfg;
+ 
+ 	if (id->driver_data >= ARRAY_SIZE(dw_pci_controllers)) {
+-		dev_err(&pdev->dev, "%s: invalid driver data %ld\n", __func__,
+-			id->driver_data);
++		dev_err(d, "%s: invalid driver data %ld\n", __func__, id->driver_data);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -251,8 +251,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 
+ 	r = pcim_enable_device(pdev);
+ 	if (r) {
+-		dev_err(&pdev->dev, "Failed to enable I2C PCI device (%d)\n",
+-			r);
++		dev_err(d, "Failed to enable I2C PCI device (%d)\n", r);
+ 		return r;
+ 	}
+ 
+@@ -260,11 +259,11 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 
+ 	r = pcim_iomap_regions(pdev, 1 << 0, pci_name(pdev));
+ 	if (r) {
+-		dev_err(&pdev->dev, "I/O memory remapping failed\n");
++		dev_err(d, "I/O memory remapping failed\n");
+ 		return r;
+ 	}
+ 
+-	dev = devm_kzalloc(&pdev->dev, sizeof(struct dw_i2c_dev), GFP_KERNEL);
++	dev = devm_kzalloc(d, sizeof(*dev), GFP_KERNEL);
+ 	if (!dev)
+ 		return -ENOMEM;
+ 
+@@ -275,7 +274,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 	dev->get_clk_rate_khz = controller->get_clk_rate_khz;
+ 	dev->timings.bus_freq_hz = I2C_MAX_FAST_MODE_FREQ;
+ 	dev->base = pcim_iomap_table(pdev)[0];
+-	dev->dev = &pdev->dev;
++	dev->dev = d;
+ 	dev->irq = pci_irq_vector(pdev, 0);
+ 	dev->flags |= controller->flags;
+ 
+@@ -291,8 +290,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 
+ 	i2c_dw_adjust_bus_speed(dev);
+ 
+-	if (has_acpi_companion(&pdev->dev))
+-		i2c_dw_acpi_configure(&pdev->dev);
++	if (has_acpi_companion(d))
++		i2c_dw_acpi_configure(d);
+ 
+ 	r = i2c_dw_validate_speed(dev);
+ 	if (r) {
+@@ -314,7 +313,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 	adap = &dev->adapter;
+ 	adap->owner = THIS_MODULE;
+ 	adap->class = 0;
+-	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
++	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(d));
+ 	adap->nr = controller->bus_num;
+ 
+ 	r = i2c_dw_probe(dev);
+@@ -326,15 +325,15 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
+ 		r = navi_amd_register_client(dev);
+ 		if (r) {
+-			dev_err(dev->dev, "register client failed with %d\n", r);
++			dev_err(d, "register client failed with %d\n", r);
+ 			return r;
+ 		}
+ 	}
+ 
+-	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
+-	pm_runtime_use_autosuspend(&pdev->dev);
+-	pm_runtime_put_autosuspend(&pdev->dev);
+-	pm_runtime_allow(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(d, 1000);
++	pm_runtime_use_autosuspend(d);
++	pm_runtime_put_autosuspend(d);
++	pm_runtime_allow(d);
+ 
+ 	return 0;
+ }
+@@ -342,13 +341,14 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ static void i2c_dw_pci_remove(struct pci_dev *pdev)
+ {
+ 	struct dw_i2c_dev *dev = pci_get_drvdata(pdev);
++	struct device *d = &pdev->dev;
+ 
+ 	dev->disable(dev);
+-	pm_runtime_forbid(&pdev->dev);
+-	pm_runtime_get_noresume(&pdev->dev);
++	pm_runtime_forbid(d);
++	pm_runtime_get_noresume(d);
+ 
+ 	i2c_del_adapter(&dev->adapter);
+-	devm_free_irq(&pdev->dev, dev->irq, dev);
++	devm_free_irq(d, dev->irq, dev);
+ 	pci_free_irq_vectors(pdev);
+ }
+ 
 -- 
-2.25.1
+2.33.0
 

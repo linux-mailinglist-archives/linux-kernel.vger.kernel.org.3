@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C60472445
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580FE4723E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbhLMJfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:35:23 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58982 "EHLO
+        id S233776AbhLMJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:32:30 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57498 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbhLMJeb (ORCPT
+        with ESMTP id S233749AbhLMJc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:31 -0500
+        Mon, 13 Dec 2021 04:32:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AA596CE0E70;
-        Mon, 13 Dec 2021 09:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DFFC00446;
-        Mon, 13 Dec 2021 09:34:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56EC8CE0E70;
+        Mon, 13 Dec 2021 09:32:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0943CC341C5;
+        Mon, 13 Dec 2021 09:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388066;
-        bh=I85WPLqAjuye+YmK+7kYqTG429PGU/eLUt+H85yI42s=;
+        s=korg; t=1639387943;
+        bh=JxDh5+dF5yuAZa4Kyw/coyL1JTx+vvOLIjUo3sieyVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bK5bxsueP8bm97mvdlk0DUgml3nP8xpwR+aWpLFjTd5EP97oSjzlma3h3rt3UFbOX
-         oKXt5f40KiPOWRmCMYxi45U+yYbz6RLkv7ZXnu15wk89CpS5l/wfJCOtJREviRhhdp
-         nPgWgQN3+inpzZYLmYYxZSrXNZqhNBgWquZxxGxs=
+        b=rxpw8JhUqq20zxYufZjGMa8vstUl/S8/rfSYy/i1EWgbg8XPZUtGwTHpFcdtQ13ce
+         vl74aNhxRMTE+tUIENsf3a35J6MU1sMGsVp0XG8Rf4acaVVQ4xmwnoJgOdJFlQc9jA
+         jtMfXRm8oMYgBJ923I1/BL+VotC0IaHvsxa/pyCY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 09/42] nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
+        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.4 13/37] ALSA: pcm: oss: Limit the period size to 16MB
 Date:   Mon, 13 Dec 2021 10:29:51 +0100
-Message-Id: <20211213092926.887689777@linuxfoundation.org>
+Message-Id: <20211213092925.803120967@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,37 +47,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 4cd8371a234d051f9c9557fcbb1f8c523b1c0d10 upstream.
+commit 8839c8c0f77ab8fc0463f4ab8b37fca3f70677c2 upstream.
 
-The done() netlink callback nfc_genl_dump_ses_done() should check if
-received argument is non-NULL, because its allocation could fail earlier
-in dumpit() (nfc_genl_dump_ses()).
+Set the practical limit to the period size (the fragment shift in OSS)
+instead of a full 31bit; a too large value could lead to the exhaust
+of memory as we allocate temporary buffers of the period size, too.
 
-Fixes: ac22ac466a65 ("NFC: Add a GET_SE netlink API")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20211209081307.57337-1-krzysztof.kozlowski@canonical.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+As of this patch, we set to 16MB limit, which should cover all use
+cases.
+
+Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
+Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
+Link: https://lore.kernel.org/r/20211201073606.11660-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/nfc/netlink.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ sound/core/oss/pcm_oss.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/nfc/netlink.c
-+++ b/net/nfc/netlink.c
-@@ -1403,8 +1403,10 @@ static int nfc_genl_dump_ses_done(struct
- {
- 	struct class_dev_iter *iter = (struct class_dev_iter *) cb->args[0];
- 
--	nfc_device_iter_exit(iter);
--	kfree(iter);
-+	if (iter) {
-+		nfc_device_iter_exit(iter);
-+		kfree(iter);
-+	}
- 
- 	return 0;
- }
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -2018,7 +2018,7 @@ static int snd_pcm_oss_set_fragment1(str
+ 	if (runtime->oss.subdivision || runtime->oss.fragshift)
+ 		return -EINVAL;
+ 	fragshift = val & 0xffff;
+-	if (fragshift >= 31)
++	if (fragshift >= 25) /* should be large enough */
+ 		return -EINVAL;
+ 	runtime->oss.fragshift = fragshift;
+ 	runtime->oss.maxfrags = (val >> 16) & 0xffff;
 
 

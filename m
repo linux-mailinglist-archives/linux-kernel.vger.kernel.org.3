@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4731472A0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3111472829
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240810AbhLMK3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344709AbhLMK1s (ORCPT
+        id S235535AbhLMKIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:08:19 -0500
+Received: from esa9.hc1455-7.c3s2.iphmx.com ([139.138.36.223]:23804 "EHLO
+        esa9.hc1455-7.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236050AbhLMKEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:27:48 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C30C01DF1D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:01:34 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso14311341pji.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 02:01:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xJNVCG0knDeDsaJRBAsMdg1APPcQKKogOd6G1MVemXg=;
-        b=DPcRvru3qJqvicpeOQ+vQB3I3IO5BXqCTF2H3ZKojA9g8ns45pUKT5oEYLKezSz9yZ
-         aSPAfYrKzi9M4CaT69Pf6aL2s3/Bk7ZJyhXBEF/c4bAGYRKxghqgcaSmXzB7357fY8UZ
-         uJG/1K3uHPZiVj7AqxEyo6estqXj/5d/uujqA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xJNVCG0knDeDsaJRBAsMdg1APPcQKKogOd6G1MVemXg=;
-        b=ENpld771KJDDX9f07t5WCMFck7dhA3gOGK1KHsS/G6i2jhFRWRpJI8cYm/mdkXs6Y6
-         l95d4d8CijZm00d+B86ZXazvzPsuWalBIR5S8a9H8WiaaT9oDm0oDSaIbgk9qAaff/B4
-         vftWbUaZ2yxwf7aVR5z9Fw+K3k7nmFtOfw6ekpX5ttWyh+0s1m2w0ulk4YclaULy5Ix0
-         Ljca1FxpPA1cvuQ41hqtq6WgEGxTuFbdH4mPXPSl89cOesMa3Bx5jeoKBdvFhVk1mxZI
-         n4NjbZmnJ9cRH1HKD9SZ+prMWuLIFR2qut/5jDsgFZPuOpKqK7nsCMFAgBIuSZ1PSNMe
-         DD6Q==
-X-Gm-Message-State: AOAM531tZdPEEuT8kFdJwmH9pk33knyA/3xeCJ2Wc3Rhew/l8R9YQLSq
-        Hoe71W9fUNjMcIrsPpaDII9E1g==
-X-Google-Smtp-Source: ABdhPJwwL/u3IPZJ00nFwwzVlwweo7HKtRHuaYR9nNRNYZ9QrFT8p+HpS+Yn/TJOApIRQiOzrP/OFA==
-X-Received: by 2002:a17:902:9694:b0:143:6f27:29ad with SMTP id n20-20020a170902969400b001436f2729admr95912342plp.46.1639389693777;
-        Mon, 13 Dec 2021 02:01:33 -0800 (PST)
-Received: from shiro.work (p864106-ipngn200510sizuokaden.shizuoka.ocn.ne.jp. [180.9.58.106])
-        by smtp.googlemail.com with ESMTPSA id d185sm9953767pgc.58.2021.12.13.02.01.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 02:01:33 -0800 (PST)
-From:   Daniel Palmer <daniel@0x0f.com>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, romain.perier@gmail.com,
-        Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH 3/3] ARM: dts: mstar: Add a dts for Miyoo Mini
-Date:   Mon, 13 Dec 2021 19:01:12 +0900
-Message-Id: <20211213100112.1791192-4-daniel@0x0f.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213100112.1791192-1-daniel@0x0f.com>
-References: <20211213100112.1791192-1-daniel@0x0f.com>
+        Mon, 13 Dec 2021 05:04:01 -0500
+IronPort-SDR: pqsqMBbRdvhRKYuNit9zU0HIwF/FrXMOVceh8H8WauYdpgAkw5UzbweygG+pjqjwbp3pUhn5ab
+ eNZ92pUsKQJmX2kbxyGnsKSI2RJyHDgDE9lgGfiET0VfWDPzMZfatskPRRE4VlE+Zi/g6xeUET
+ B35xSbi8Tq9ggI8BtZNIVbb//dhfeN8Hs7ImTgbVHF3ut+fyXwfu6P1urQ9vY84J2g7Q3qcouz
+ 0kN6lMfAYIn3OkQz0/XNaLZSCclSFXGm2o8B5Bm70w3CiBrZvvWDIvNgOXLK4S8FLE/6W9sg/d
+ zm889hU6hE2gmR9V8V338oHl
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="44130304"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635174000"; 
+   d="scan'208";a="44130304"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 13 Dec 2021 19:03:55 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 61FB3799E8;
+        Mon, 13 Dec 2021 19:03:54 +0900 (JST)
+Received: from oym-om3.fujitsu.com (oym-om3.o.css.fujitsu.com [10.85.58.163])
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id A67F511C46;
+        Mon, 13 Dec 2021 19:03:53 +0900 (JST)
+Received: from localhost.localdomain (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by oym-om3.fujitsu.com (Postfix) with ESMTP id 80386403F1347;
+        Mon, 13 Dec 2021 19:03:53 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v2 0/5] selftests/resctrl: Add resctrl_tests into kselftest set
+Date:   Mon, 13 Dec 2021 19:01:49 +0900
+Message-Id: <20211213100154.180599-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miyoo has released a portable retro games machine based
-on the SigmaStar SSD202D. Add the initial device tree
-for this machine. Just enough to get to an initramfs
-shell.
+Hello,
 
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-Link: http://linux-chenxing.org/infinity2/miyoomini/
----
- arch/arm/boot/dts/Makefile                    |  1 +
- .../mstar-infinity2m-ssd202d-miyoo-mini.dts   | 25 +++++++++++++++++++
- 2 files changed, 26 insertions(+)
- create mode 100644 arch/arm/boot/dts/mstar-infinity2m-ssd202d-miyoo-mini.dts
+The aim of this series is to make resctrl_tests run by using 
+kselftest framework.
+- I modify Makefile of resctrl_test and Makefile of selftest, to
+  build/run resctrl_tests by using kselftest framework.
+- I set the limited time for resctrl_tests to 120 seconds, to ensure the
+  resctrl_tests finish in limited time.
+- When resctrl file system is not supported or resctrl_tests is not run
+  as root, return skip code of kselftest.
+- If it is not finish in limited time, terminate resctrl_tests same as
+  executing ctrl+c.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0de64f237cd8..b270a4d8e0d6 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1468,6 +1468,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += \
- dtb-$(CONFIG_ARCH_MILBEAUT) += milbeaut-m10v-evb.dtb
- dtb-$(CONFIG_ARCH_MSTARV7) += \
- 	mstar-infinity-msc313-breadbee_crust.dtb \
-+	mstar-infinity2m-ssd202d-miyoo-mini.dtb \
- 	mstar-infinity2m-ssd202d-ssd201htv2.dtb \
- 	mstar-infinity2m-ssd202d-unitv2.dtb \
- 	mstar-infinity3-msc313e-breadbee.dtb \
-diff --git a/arch/arm/boot/dts/mstar-infinity2m-ssd202d-miyoo-mini.dts b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-miyoo-mini.dts
-new file mode 100644
-index 000000000000..1bbbf47132dc
---- /dev/null
-+++ b/arch/arm/boot/dts/mstar-infinity2m-ssd202d-miyoo-mini.dts
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2021 thingy.jp.
-+ * Author: Daniel Palmer <daniel@thingy.jp>
-+ */
-+
-+/dts-v1/;
-+#include "mstar-infinity2m-ssd202d.dtsi"
-+
-+/ {
-+	model = "Miyoo Mini";
-+	compatible = "miyoo,miyoo-mini", "mstar,infinity2m";
-+
-+	aliases {
-+		serial0 = &pm_uart;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&pm_uart {
-+	status = "okay";
-+};
+Difference from v1:
+- I change the order of patches according to Reinette's review.
+- "LDLIBS + = -lnuma" has no dependencies on this patch series, delete
+  it from [PATCH v2 2/5].
+- I separate the license info of Makefile into a new patch [PATCH v2
+  3/5].
+- I separate "limited time" into a new patch [PATCH v2 4/5].
+(There is no change in [PATCH v2 1/5] and [PATCH v2 5/5])
+In addition, I think 120s is not a problem since some tests have longer
+timeout (e.g. net test is 300s), please let me know if this is wrong
+
+Thanks,
+
+Shaopeng Tan (5):
+  selftests/resctrl: Kill the child process created by fork() when the
+    SIGTERM signal comes
+  selftests/resctrl: Make resctrl_tests run using kselftest framework
+  selftests/resctrl: Add license to resctrl_test Makefile
+  selftests/resctrl: Change default limited time to 120 seconds for
+    resctrl_tests
+  selftests/resctrl: Return KSFT_SKIP(4) if resctrlfile system is not
+    supported or resctrl is not run as root
+
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/resctrl/Makefile      | 20 +++++++------------
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 ++--
+ tools/testing/selftests/resctrl/resctrl_val.c |  1 +
+ tools/testing/selftests/resctrl/settings      |  1 +
+ 5 files changed, 12 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/resctrl/settings
+
 -- 
-2.34.1
+2.27.0
 

@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9278472B2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF9E472B2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbhLMLTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:19:35 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:50808 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbhLMLTe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:19:34 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1432A212B6;
-        Mon, 13 Dec 2021 11:19:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639394373; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ire/tjZ+0o47YsB/d9PyauJHzxOJtSQJIvqpR3Apzt0=;
-        b=sDGcWHfWM6aHjXn75M6zAANHID7akGsBt2d+ckoKJl6HkN29KFRZJTeBksHJd23xRHZEZ3
-        dwMc16bqrvoEhcFDpLeoaM+aFgQivmvayeq/z4OdisESzYKF2RUrfzqZuQri8H+L3N08uZ
-        gKOApVPPC4cLuGWh+UIgyrQCorNe2Ug=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3A1C9A3B81;
-        Mon, 13 Dec 2021 11:19:32 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 12:19:30 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Dan Schatzberg <schatzberg.dan@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <guro@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
-        <linux-mm@kvack.org>
-Subject: Re: [PATCH] mm: add group_oom_kill memory event
-Message-ID: <YbcsQhxKwpW4127B@dhcp22.suse.cz>
-References: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
+        id S235043AbhLMLUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:20:54 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:37646 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231296AbhLMLUx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:20:53 -0500
+Received: from p5b127e39.dip0.t-ipconnect.de ([91.18.126.57] helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1mwjNs-0001Dm-Q5; Mon, 13 Dec 2021 12:20:44 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
+Cc:     atishp@atishpatra.org, anup@brainfault.org, jszhang@kernel.org,
+        christoph.muellner@vrull.eu, philipp.tomsich@vrull.eu,
+        mick@ics.forth.gr, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH 1/2] riscv: prevent null-pointer dereference with sbi_remote_fence_i
+Date:   Mon, 13 Dec 2021 12:20:33 +0100
+Message-Id: <20211213112034.2896536-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 03-12-21 08:24:23, Dan Schatzberg wrote:
-> Our container agent wants to know when a container exits if it was OOM
-> killed or not to report to the user. We use memory.oom.group = 1 to
-> ensure that OOM kills within the container's cgroup kill
-> everything. Existing memory.events are insufficient for knowing if
-> this triggered:
+The callback used inside sbi_remote_fence_i is set at sbi probe time
+to the needed variant. Before that it is a NULL pointer.
 
-Yes our events reporting is not really friendly for this kind of usage.
-OOM_KILL is accounted to the memcg of the task so it will not be updated
-for inter nodes other than recursively (so never in local events).
-OOM event, even though it is reported to the memcg under oom, cannot be
-really used either because in some cases the oom killer is simply not
-invoked. So there indeed is no clear way to tell what is happening under
-the memcg hierarchy and what is happening for the whole hierarchy.
+The selection between using sbi_remote_fence_i or ipi_remote_fence_i
+right now is solely done on the presence of the RISCV_SBI config option.
+
+On a multiplatform kernel, SBI will probably always be built in, but
+in the future not all machines using that kernel may have SBI
+on them, so in some cases this setup can lead to NULL pointer dereferences.
+
+Also if in future one of the flush_icache_all / flush_icache_mm functions
+gets called earlier in the boot process - before sbi_init - this would
+trigger the issue.
+
+To prevent this, add a default __sbi_rfence_none returning an error code
+and adapt the callers to check for an error from the remote fence
+to then fall back to the other method.
+
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+---
+ arch/riscv/kernel/sbi.c    | 10 +++++++++-
+ arch/riscv/mm/cacheflush.c | 25 +++++++++++++++++--------
+ 2 files changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+index 7402a417f38e..69d0a96b97d0 100644
+--- a/arch/riscv/kernel/sbi.c
++++ b/arch/riscv/kernel/sbi.c
+@@ -14,11 +14,19 @@
+ unsigned long sbi_spec_version __ro_after_init = SBI_SPEC_VERSION_DEFAULT;
+ EXPORT_SYMBOL(sbi_spec_version);
  
-> 1) Our current approach reads memory.events oom_kill and reports the
-> container was killed if the value is non-zero. This is erroneous in
-> some cases where containers create their children cgroups with
-> memory.oom.group=1 as such OOM kills will get counted against the
-> container cgroup's oom_kill counter despite not actually OOM killing
-> the entire container.
-> 
-> 2) Reading memory.events.local will fail to identify OOM kills in leaf
-> cgroups (that don't set memory.oom.group) within the container cgroup.
-
-I am a bit confused by 2). local events by definition cannot tell you
-anything about children cgroups.
-
-> This patch adds a new oom_group_kill event when memory.oom.group
-> triggers to allow userspace to cleanly identify when an entire cgroup
-> is oom killed.
-
-New counter makes sense to me because it allows to tell oom events even
-on the middle nodes.
-
-> Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
-
-once the cgroup v1 interface part is dropped (as suggested by Johannes),
-feel free to add
-Acked-by: Michal Hocko <mhocko@suse.com>
-
-> ---
->  Documentation/admin-guide/cgroup-v2.rst | 4 ++++
->  include/linux/memcontrol.h              | 1 +
->  mm/memcontrol.c                         | 5 +++++
->  mm/oom_kill.c                           | 1 +
->  4 files changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 2aeb7ae8b393..eec830ce2068 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1268,6 +1268,10 @@ PAGE_SIZE multiple when read back.
->  		The number of processes belonging to this cgroup
->  		killed by any kind of OOM killer.
->  
-> +          oom_group_kill
-> +                The number of times all tasks in the cgroup were killed
-> +                due to memory.oom.group.
-
-This can be rather confusing for hierarchicaly reported values but the
-same applies for other counters as well. So be it.
-[...]
-> @@ -4390,6 +4390,9 @@ static int mem_cgroup_oom_control_read(struct seq_file *sf, void *v)
->  	seq_printf(sf, "under_oom %d\n", (bool)memcg->under_oom);
->  	seq_printf(sf, "oom_kill %lu\n",
->  		   atomic_long_read(&memcg->memory_events[MEMCG_OOM_KILL]));
-> +	seq_printf(sf, "oom_group_kill %lu\n",
-> +		   atomic_long_read(
-> +			&memcg->memory_events[MEMCG_OOM_GROUP_KILL]));
->  	return 0;
->  }
-
-This should be dropped.
++static int __sbi_rfence_none(int fid, const unsigned long *hart_mask,
++			     unsigned long start, unsigned long size,
++			     unsigned long arg4, unsigned long arg5)
++{
++	return -EOPNOTSUPP;
++}
++
+ static void (*__sbi_set_timer)(uint64_t stime) __ro_after_init;
+ static int (*__sbi_send_ipi)(const unsigned long *hart_mask) __ro_after_init;
+ static int (*__sbi_rfence)(int fid, const unsigned long *hart_mask,
+ 			   unsigned long start, unsigned long size,
+-			   unsigned long arg4, unsigned long arg5) __ro_after_init;
++			   unsigned long arg4, unsigned long arg5)
++			   __ro_after_init = __sbi_rfence_none;
+ 
+ struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
+ 			unsigned long arg1, unsigned long arg2,
+diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+index 89f81067e09e..128e23c094ea 100644
+--- a/arch/riscv/mm/cacheflush.c
++++ b/arch/riscv/mm/cacheflush.c
+@@ -16,11 +16,15 @@ static void ipi_remote_fence_i(void *info)
+ 
+ void flush_icache_all(void)
+ {
++	int ret = -EINVAL;
++
+ 	local_flush_icache_all();
+ 
+ 	if (IS_ENABLED(CONFIG_RISCV_SBI))
+-		sbi_remote_fence_i(NULL);
+-	else
++		ret = sbi_remote_fence_i(NULL);
++
++	/* fall back to ipi_remote_fence_i if sbi failed or not available */
++	if (ret)
+ 		on_each_cpu(ipi_remote_fence_i, NULL, 1);
+ }
+ EXPORT_SYMBOL(flush_icache_all);
+@@ -66,13 +70,18 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
+ 		 * with flush_icache_deferred().
+ 		 */
+ 		smp_mb();
+-	} else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
+-		cpumask_t hartid_mask;
+-
+-		riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
+-		sbi_remote_fence_i(cpumask_bits(&hartid_mask));
+ 	} else {
+-		on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
++		int ret = -EINVAL;
++
++		if (IS_ENABLED(CONFIG_RISCV_SBI)) {
++			cpumask_t hartid_mask;
++
++			riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
++			ret = sbi_remote_fence_i(cpumask_bits(&hartid_mask));
++		}
++
++		if (ret)
++			on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
+ 	}
+ 
+ 	preempt_enable();
 -- 
-Michal Hocko
-SUSE Labs
+2.30.2
+

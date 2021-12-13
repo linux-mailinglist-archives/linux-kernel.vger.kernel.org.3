@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 015D4472774
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A514729B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240398AbhLMKBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:01:09 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:43698 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237105AbhLMJzo (ORCPT
+        id S1343985AbhLMKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236844AbhLMJrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:55:44 -0500
+        Mon, 13 Dec 2021 04:47:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50798C07E5C3;
+        Mon, 13 Dec 2021 01:42:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 96974CE0DDE;
-        Mon, 13 Dec 2021 09:55:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42ACFC34600;
-        Mon, 13 Dec 2021 09:55:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9C65DCE0E29;
+        Mon, 13 Dec 2021 09:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45454C00446;
+        Mon, 13 Dec 2021 09:42:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389338;
-        bh=fUVGyH+XIPMZ1nlNIXBaTxUODMScq46yKspBYddh4gM=;
+        s=korg; t=1639388556;
+        bh=H99zzJKgIuTfh9Gf/Z5D/3+WmyU2Z5RWPwMMaGC3Ryo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xEZTc5nEhBpcPh9dzxhPDC5HQYIbuonHrSEncpi9422w9cmyVRrEvTt9Qh/lXysAo
-         Tlt4ILzBWdre1rjKQfbvb+F0G8huTHzWlx9ljEgYh2sT/obAadfxnBcKtdAZDaO639
-         lFxm6A/XX59rHvPZG862jmv0sMFWxApY0CQpEVlw=
+        b=1XkZNCygBo00oD1eL3ZgnbRDdTAagod66VQLG4vR1zReSHd9pbxtDFqeeN6pNZa/T
+         uomU9aRa7q83W0tGRBl9eMzykiM7V6Vazl24wm96Oz6el9q1r4TjERPHhLY4JpGXhl
+         aX2O/HLCDoKHV5op3Ogs+4QlX0jDYLV/paiJwsyc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 058/171] KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
-Date:   Mon, 13 Dec 2021 10:29:33 +0100
-Message-Id: <20211213092947.030664742@linuxfoundation.org>
+        stable@vger.kernel.org,
+        xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 5.4 04/88] HID: google: add eel USB id
+Date:   Mon, 13 Dec 2021 10:29:34 +0100
+Message-Id: <20211213092933.396116527@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,60 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
 
-commit 3244867af8c065e51969f1bffe732d3ebfd9a7d2 upstream.
+commit caff009098e6cf59fd6ac21c3a3befcc854978b4 upstream.
 
-Do not bail early if there are no bits set in the sparse banks for a
-non-sparse, a.k.a. "all CPUs", IPI request.  Per the Hyper-V spec, it is
-legal to have a variable length of '0', e.g. VP_SET's BankContents in
-this case, if the request can be serviced without the extra info.
+Add one additional hammer-like device.
 
-  It is possible that for a given invocation of a hypercall that does
-  accept variable sized input headers that all the header input fits
-  entirely within the fixed size header. In such cases the variable sized
-  input header is zero-sized and the corresponding bits in the hypercall
-  input should be set to zero.
-
-Bailing early results in KVM failing to send IPIs to all CPUs as expected
-by the guest.
-
-Fixes: 214ff83d4473 ("KVM: x86: hyperv: implement PV IPI send hypercalls")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20211207220926.718794-2-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211203030119.28612-1-xiazhengqiao@huaqin.corp-partner.google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/hyperv.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/hid/hid-google-hammer.c |    2 ++
+ drivers/hid/hid-ids.h           |    1 +
+ 2 files changed, 3 insertions(+)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1922,11 +1922,13 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+--- a/drivers/hid/hid-google-hammer.c
++++ b/drivers/hid/hid-google-hammer.c
+@@ -470,6 +470,8 @@ static const struct hid_device_id hammer
+ 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
+ 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_DON) },
+ 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
++		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
++	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
+ 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_HAMMER) },
+ 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
+ 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_MAGNEMITE) },
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -489,6 +489,7 @@
+ #define USB_DEVICE_ID_GOOGLE_MAGNEMITE	0x503d
+ #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
+ #define USB_DEVICE_ID_GOOGLE_DON	0x5050
++#define USB_DEVICE_ID_GOOGLE_EEL	0x5057
  
- 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
- 
-+		if (all_cpus)
-+			goto check_and_send_ipi;
-+
- 		if (!sparse_banks_len)
- 			goto ret_success;
- 
--		if (!all_cpus &&
--		    kvm_read_guest(kvm,
-+		if (kvm_read_guest(kvm,
- 				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
- 							vp_set.bank_contents),
- 				   sparse_banks,
-@@ -1934,6 +1936,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
- 	}
- 
-+check_and_send_ipi:
- 	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
- 		return HV_STATUS_INVALID_HYPERCALL_INPUT;
- 
+ #define USB_VENDOR_ID_GOTOP		0x08f2
+ #define USB_DEVICE_ID_SUPER_Q2		0x007f
 
 

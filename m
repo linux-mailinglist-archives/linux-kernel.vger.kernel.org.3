@@ -2,154 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAA2472593
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D5D4725D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235236AbhLMJo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:44:27 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:33898 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234980AbhLMJlu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:41:50 -0500
-X-UUID: 0d1a216fb7044af59d4c84f9825491c7-20211213
-X-UUID: 0d1a216fb7044af59d4c84f9825491c7-20211213
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1817603813; Mon, 13 Dec 2021 17:41:44 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 13 Dec 2021 17:41:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 13 Dec 2021 17:41:43 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <stable@vger.kernel.org>
-CC:     <rppt@kernel.org>, <akpm@linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux@armlinux.org.uk>, <rppt@linux.ibm.com>, <tony@atomide.com>,
-        <wangkefeng.wang@huawei.com>, <mark-pk.tsai@mediatek.com>,
-        <yj.chiang@mediatek.com>
-Subject: [PATCH 5.10 5/5] arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
-Date:   Mon, 13 Dec 2021 17:41:35 +0800
-Message-ID: <20211213094135.1798-6-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20211213094135.1798-1-mark-pk.tsai@mediatek.com>
-References: <20211213094135.1798-1-mark-pk.tsai@mediatek.com>
-MIME-Version: 1.0
+        id S234990AbhLMJqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:46:38 -0500
+Received: from mail-eopbgr1300132.outbound.protection.outlook.com ([40.107.130.132]:10560
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235757AbhLMJmT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 04:42:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XLD0RcJl1d7YU7YXVHFsmFZYeSLHvSo92DMQOpyPoccN/NbeFibhtSNby+bnGr5GDh6SqLj82MFrBTo3aTwbgB9tvBa4WGs9QJWVQ7jFDsqTs5UbCW9+s9vbLgJ+ouLDEjreeBzI8mb2VXmhiOtmtpZ4JvezAOPCHPK1CGSSgVJABGeiTXHN1rsEYLv3RbM64tRuZjW8Q0QA+pFTWPuro6+JdmmtdKMaznhvBHfgFxBlxEsOwWIfp2+s4kA9NM0geDH8l3CPdotjzQr3v6NxVCNXm6IrJ72mS8OubDRFQYiLaxgxufScird55MI5Hef6ng2kQBVzJSX5gdqoCpmK4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0l03FuRuXi2etRCWGNiYP9j3US71XeqfgbWYzFG2Wsg=;
+ b=XHuu26ia7SeDNtJ4r/Wwx5IhKwkHkyfnI7Z2SGVceeWHN8qX582aGMW2N0hRSccvlPUe+MPjTiJ//j3LMe30aSd6a4CBPIEaGshO7f/RYPTaXPFWCX/LOQdZQq+SKy8qPlrZRsHc1cPd8mQWgMhWEyUmwLFRVHeTv4bKlvbnXScwa9jN15E7x3aycEVMoxm0nBoknZf9OQtmU/1IHI+MPq1pnggpphCF/rdL5ReSiL3Qh77TJ2lGN0KzPkgF0R0cX0RjdKm8TZqQZVg3tF2ow9ERxOmZzPEZzKI0iTaVP6JSC0dG6OCVfGix9Nd30zCBE1Y/HNMEjbG3y8J2zFMZLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0l03FuRuXi2etRCWGNiYP9j3US71XeqfgbWYzFG2Wsg=;
+ b=IDytbaH07aqJyFCCfTaZaQfejHTYhyI+c/7uRhXGnQhmkpq5Vh+yZ0PVdJCX+9Nzelu7KMkyPc1dAzqYm6eo5tH7RjR7ll11dUO/0ZYyxeYlDB/VZSMyrQlymSrFT7gfXTleCXnfdsDfWLfsqdPMlpvsvx0bBZAbSl07zD5sXls=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by SL2PR06MB3179.apcprd06.prod.outlook.com (2603:1096:100:3a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
+ 2021 09:42:13 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 09:42:13 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] arm: mach-at91: add missing of_node_put
+Date:   Mon, 13 Dec 2021 01:41:56 -0800
+Message-Id: <1639388520-63567-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
 Content-Type: text/plain
-X-MTK:  N
+X-ClientProxiedBy: HK0PR03CA0108.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::24) To SL2PR06MB3082.apcprd06.prod.outlook.com
+ (2603:1096:100:37::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f5f8283a-9fb6-4d10-0d13-08d9be1cd72d
+X-MS-TrafficTypeDiagnostic: SL2PR06MB3179:EE_
+X-Microsoft-Antispam-PRVS: <SL2PR06MB3179CDBA875C06EF3BEB498EBD749@SL2PR06MB3179.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HfBZSxqL0JPj8KU+9Ybl9BCMaGa9px5AGuPWNQF4asRXcSkpWHyenWV/W/mzF0SWyxnqFxVP6hm+EXglqg0zrdNIV/3uNP9FEr7MhCi0g6bz1vCKA3+fIL+kMUjWwIOaEivxjmPxwV94wKbthPQfj8ouHlg+VL/GRof0xcfZMzAm2J6u3a69VQC2/CkwHLQagmZ9ohrWZEOpgCUG3ShsqKXMzFFJFBSynOL2G9y3rVSjdRhqV5LhhuDoUwslfDEqbSm5194Gg+FJr3VsuFVh+XXHdy5z1Yg9idiuxRuVy/+8SVCAggLxruoOrHi3P6UsDUvhd0rxwv13c6W/eutHYyQf3cC8znLzu7LjTG492pTDUoLNlkMsH84seKbVmK1bYctBB3yuipnFNenVsglrkBUxcV9cDSmWyypXuvzzRvMO9Pu9WPviNjFTEzm/ushg8zefpoeQhg5Nv3nA5hzyumqAKN/6phk9hvRhgZSV7S2UmnS5wwY9HTnjZz9K5iRL8XAvY0R2F2wuUt7/wES+Cvrh5DSgvO2V1Lpe9u2CoAVsWo6OfFvpMHVxZfqxeWg0wxAcYNg6C+VGxVTKAtjWJRMrzkHCYsjnwPiwvrbWmDBZgrxesgMgERZ2SLbTrorB3rjXi6Gm064fzk1o/UqBVoiJ5grWqEvVONK/zfDOcWdRHKJhrqLVL+zCR7pNXtqEX5vTolPwicg7EPT5ABROaw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(107886003)(6512007)(38350700002)(2906002)(110136005)(66556008)(66476007)(186003)(36756003)(86362001)(316002)(6486002)(5660300002)(8676002)(66946007)(508600001)(8936002)(2616005)(4326008)(83380400001)(52116002)(26005)(6666004)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?89HBHqy8TzHHyFapEnepMxYqJtHtYgh2sis34gz+DOlcz5QYNColRDiLG1Fo?=
+ =?us-ascii?Q?oo5v57UX61F2ET89ohUI+zXicpxXTXN7E1W4QDSRT7a7CJIIOXIUMlKPLEEd?=
+ =?us-ascii?Q?hIPo657UspnAEwpPYAySWvZi6Nmg6AdoIkl2wRQ3hoq3cOoXTBi7FmzDhoTO?=
+ =?us-ascii?Q?V+VtqvGTsLCuor8zwxS/C4NegNPEC6i0U004iZ9gu3oHBh/9Otij4r37y7Au?=
+ =?us-ascii?Q?Pjul/Kg4vATj7haKje2/HTB+f/qgy0S5q0FQhwRqjabkONBRUXVIF5ZgLFgC?=
+ =?us-ascii?Q?mVw4TeODzGM9PmomtOZB6Ix/MNm4MZ9W6PG3hEkLzBDlaEl9l+d+NkxGpZM+?=
+ =?us-ascii?Q?D1U1BGsEhzSsjz9s49ONCvwGFs7Hi97kQfzEctmS36XsfdtGJcGz86JioECQ?=
+ =?us-ascii?Q?7wuT5VjJVooaMtXee8l4nXW3L3uxLvgludTFGfAwUPYJOgp+QqNp+Gu9BSg1?=
+ =?us-ascii?Q?B/4fw9orrI/frpUbqJ0YKsCl1wx5Y1iYwhnpy/jWNASq/CTQmKm4KdvvKXRf?=
+ =?us-ascii?Q?Tac30X6eKJlwe9GrL1Jx0F52ZVRGEzjMUoQEe6ybL3n5Vti9o2hmO/292lUz?=
+ =?us-ascii?Q?oaL+rDnrRLRCehS6XCqkQflto34jvYhTW616fj+6kJMjrDuBRmHguW6hZIML?=
+ =?us-ascii?Q?eGbHA7OkEEZUHzjLehW0L3k2QIUZb7aCPr8xvRuBTyF+sMkazhBotZDxmqEH?=
+ =?us-ascii?Q?s3PFJllfl+Mx2mUiSodr+WLTeXp5b/jLEofd752J27p/wiEo8/spUFD96K/e?=
+ =?us-ascii?Q?jG0ngEuYkOSMK7ti1aDFDxoIQWhtZDByATjmSCBTwF9Lb3PemwBrMUZrWLV+?=
+ =?us-ascii?Q?9sXz0DR+wT8H/LrQJRLGTfZ/iAgcaQmQdjIpeW0i38+wT4v9vyRfLCs7mX/l?=
+ =?us-ascii?Q?zi2vQenZKEu6L3qo7bMKYxXlb1r4T1iBy2LiAQsaCZDVTCOdP2mLZwoynVxl?=
+ =?us-ascii?Q?r7/UtubcrIq/6PJkeDWaVgvc9ht7fNxxwSyCWRKCY8jEHMspPyU28Y2p5nCd?=
+ =?us-ascii?Q?4tkncs9uYJmNwAIaauT4KixOE47AkZQmxXiqaW3QaWpZlvbksuDLPGlRtY3h?=
+ =?us-ascii?Q?sUhAbiAqUSgojCl1ifdHGa5qENhETjbn30ZwcIWkQ7zTUtwrI8q+JW3T1Z2o?=
+ =?us-ascii?Q?oJ0ODUg4S+k9+4rX0gerxdAJRC+ElvfjUjxNam3IVGB3UpN33WUDGl2vnbwA?=
+ =?us-ascii?Q?qJyoop7xOYmi7hU+pbWxabkwJjtDjWsuSjrMFeqFKSEhcgduU5MAbyFlZxNK?=
+ =?us-ascii?Q?c5bMNwSGVoctF+Hw826wSm89TuXxVHt8rC4gAhcolanrWDZr9ATEis0OYBV4?=
+ =?us-ascii?Q?uc5XNJNcgUXfJVHwiyouUOtAMt9dHdXuHKe4Nt8r09C/S4RDcF/LzXUiwW9M?=
+ =?us-ascii?Q?2CRxTQCAu8modGUWJxgBv36UJaP95W1UJRPANuaKiWuLSkIvcWrbivkvz61k?=
+ =?us-ascii?Q?2N4TUpuvtej4c+nA82szc88PyMt5r2VF6iLEoRT54tsjk/K+zodxV06EY3DQ?=
+ =?us-ascii?Q?LGSmSPZtuqadTlEisStGeKgICKTkBYbpdaPfzo4sTLWYUyTL8HjIuJErrrBy?=
+ =?us-ascii?Q?WmIXcqZRJbYQ1gq+ERchmcdKFNt83iVBbmCrBxCA+UiB1TfWIfkQ8jkzskR7?=
+ =?us-ascii?Q?epM3K70P/TC71T+pM0+ZnxE=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5f8283a-9fb6-4d10-0d13-08d9be1cd72d
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 09:42:13.0799
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qCtBsUWwPd3EUf2Vk81359UkPs+SlaNDUBfRW5x0DVFlP4xOlOd54QVqYgs3g2NQTVUTAFD44Jdt0xtSjPTZgw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3179
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+From: Wang Qing <wangqing@vivo.com>
 
-commit 024591f9a6e0164ec23301784d1e6d8f6cacbe59 upstream.
-[ Upstream commit 024591f9a6e0164ec23301784d1e6d8f6cacbe59 ]
+Fix following coccicheck warning:
+WARNING: Function "for_each_matching_node_and_match" 
+should have of_node_put() before return.
 
-The semantics of pfn_valid() is to check presence of the memory map for a
-PFN and not whether a PFN is in RAM. The memory map may be present for a
-hole in the physical memory and if such hole corresponds to an MMIO range,
-__arm_ioremap_pfn_caller() will produce a WARN() and fail:
+Early exits from for_each_matching_node_and_match should decrement the
+node reference counter.
 
-[    2.863406] WARNING: CPU: 0 PID: 1 at arch/arm/mm/ioremap.c:287 __arm_ioremap_pfn_caller+0xf0/0x1dc
-[    2.864812] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.13.0-09882-ga180bd1d7e16 #1
-[    2.865263] Hardware name: Generic DT based system
-[    2.865711] Backtrace:
-[    2.866063] [<80b07e58>] (dump_backtrace) from [<80b080ac>] (show_stack+0x20/0x24)
-[    2.866633]  r7:00000009 r6:0000011f r5:60000153 r4:80ddd1c0
-[    2.866922] [<80b0808c>] (show_stack) from [<80b18df0>] (dump_stack_lvl+0x58/0x74)
-[    2.867117] [<80b18d98>] (dump_stack_lvl) from [<80b18e20>] (dump_stack+0x14/0x1c)
-[    2.867309]  r5:80118cac r4:80dc6774
-[    2.867404] [<80b18e0c>] (dump_stack) from [<80122fcc>] (__warn+0xe4/0x150)
-[    2.867583] [<80122ee8>] (__warn) from [<80b08850>] (warn_slowpath_fmt+0x88/0xc0)
-[    2.867774]  r7:0000011f r6:80dc6774 r5:00000000 r4:814c4000
-[    2.867917] [<80b087cc>] (warn_slowpath_fmt) from [<80118cac>] (__arm_ioremap_pfn_caller+0xf0/0x1dc)
-[    2.868158]  r9:00000001 r8:9ef00000 r7:80e8b0d4 r6:0009ef00 r5:00000000 r4:00100000
-[    2.868346] [<80118bbc>] (__arm_ioremap_pfn_caller) from [<80118df8>] (__arm_ioremap_caller+0x60/0x68)
-[    2.868581]  r9:9ef00000 r8:821b6dc0 r7:00100000 r6:00000000 r5:815d1010 r4:80118d98
-[    2.868761] [<80118d98>] (__arm_ioremap_caller) from [<80118fcc>] (ioremap+0x28/0x30)
-[    2.868958] [<80118fa4>] (ioremap) from [<8062871c>] (__devm_ioremap_resource+0x154/0x1c8)
-[    2.869169]  r5:815d1010 r4:814c5d2c
-[    2.869263] [<806285c8>] (__devm_ioremap_resource) from [<8062899c>] (devm_ioremap_resource+0x14/0x18)
-[    2.869495]  r9:9e9f57a0 r8:814c4000 r7:815d1000 r6:815d1010 r5:8177c078 r4:815cf400
-[    2.869676] [<80628988>] (devm_ioremap_resource) from [<8091c6e4>] (fsi_master_acf_probe+0x1a8/0x5d8)
-[    2.869909] [<8091c53c>] (fsi_master_acf_probe) from [<80723dbc>] (platform_probe+0x68/0xc8)
-[    2.870124]  r9:80e9dadc r8:00000000 r7:815d1010 r6:810c1000 r5:815d1010 r4:00000000
-[    2.870306] [<80723d54>] (platform_probe) from [<80721208>] (really_probe+0x1cc/0x470)
-[    2.870512]  r7:815d1010 r6:810c1000 r5:00000000 r4:815d1010
-[    2.870651] [<8072103c>] (really_probe) from [<807215cc>] (__driver_probe_device+0x120/0x1fc)
-[    2.870872]  r7:815d1010 r6:810c1000 r5:810c1000 r4:815d1010
-[    2.871013] [<807214ac>] (__driver_probe_device) from [<807216e8>] (driver_probe_device+0x40/0xd8)
-[    2.871244]  r9:80e9dadc r8:00000000 r7:815d1010 r6:810c1000 r5:812feaa0 r4:812fe994
-[    2.871428] [<807216a8>] (driver_probe_device) from [<80721a58>] (__driver_attach+0xa8/0x1d4)
-[    2.871647]  r9:80e9dadc r8:00000000 r7:00000000 r6:810c1000 r5:815d1054 r4:815d1010
-[    2.871830] [<807219b0>] (__driver_attach) from [<8071ee8c>] (bus_for_each_dev+0x88/0xc8)
-[    2.872040]  r7:00000000 r6:814c4000 r5:807219b0 r4:810c1000
-[    2.872194] [<8071ee04>] (bus_for_each_dev) from [<80722208>] (driver_attach+0x28/0x30)
-[    2.872418]  r7:810a2aa0 r6:00000000 r5:821b6000 r4:810c1000
-[    2.872570] [<807221e0>] (driver_attach) from [<8071f80c>] (bus_add_driver+0x114/0x200)
-[    2.872788] [<8071f6f8>] (bus_add_driver) from [<80722ec4>] (driver_register+0x98/0x128)
-[    2.873011]  r7:81011d0c r6:814c4000 r5:00000000 r4:810c1000
-[    2.873167] [<80722e2c>] (driver_register) from [<80725240>] (__platform_driver_register+0x2c/0x34)
-[    2.873408]  r5:814dcb80 r4:80f2a764
-[    2.873513] [<80725214>] (__platform_driver_register) from [<80f2a784>] (fsi_master_acf_init+0x20/0x28)
-[    2.873766] [<80f2a764>] (fsi_master_acf_init) from [<80f014a8>] (do_one_initcall+0x108/0x290)
-[    2.874007] [<80f013a0>] (do_one_initcall) from [<80f01840>] (kernel_init_freeable+0x1ac/0x230)
-[    2.874248]  r9:80e9dadc r8:80f3987c r7:80f3985c r6:00000007 r5:814dcb80 r4:80f627a4
-[    2.874456] [<80f01694>] (kernel_init_freeable) from [<80b19f44>] (kernel_init+0x20/0x138)
-[    2.874691]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:80b19f24
-[    2.874894]  r4:00000000
-[    2.874977] [<80b19f24>] (kernel_init) from [<80100170>] (ret_from_fork+0x14/0x24)
-[    2.875231] Exception stack(0x814c5fb0 to 0x814c5ff8)
-[    2.875535] 5fa0:                                     00000000 00000000 00000000 00000000
-[    2.875849] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    2.876133] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    2.876363]  r5:80b19f24 r4:00000000
-[    2.876683] ---[ end trace b2f74b8536829970 ]---
-[    2.876911] fsi-master-acf gpio-fsi: ioremap failed for resource [mem 0x9ef00000-0x9effffff]
-[    2.877492] fsi-master-acf gpio-fsi: Error -12 mapping coldfire memory
-[    2.877689] fsi-master-acf: probe of gpio-fsi failed with error -12
-
-Use memblock_is_map_memory() instead of pfn_valid() to check if a PFN is in
-RAM or not.
-
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: a4d5613c4dc6 ("arm: extend pfn_valid to take into account freed memory map alignment")
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/lkml/20210630071211.21011-1-rppt@kernel.org/
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Signed-off-by: Wang Qing <wangqing@vivo.com>
 ---
- arch/arm/mm/ioremap.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm/mach-at91/pm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
-index 000e8210000b..80fb5a4a5c05 100644
---- a/arch/arm/mm/ioremap.c
-+++ b/arch/arm/mm/ioremap.c
-@@ -27,6 +27,7 @@
- #include <linux/vmalloc.h>
- #include <linux/io.h>
- #include <linux/sizes.h>
-+#include <linux/memblock.h>
- 
- #include <asm/cp15.h>
- #include <asm/cputype.h>
-@@ -284,7 +285,8 @@ static void __iomem * __arm_ioremap_pfn_caller(unsigned long pfn,
- 	 * Don't allow RAM to be mapped with mismatched attributes - this
- 	 * causes problems with ARMv6+
- 	 */
--	if (WARN_ON(pfn_valid(pfn) && mtype != MT_MEMORY_RW))
-+	if (WARN_ON(memblock_is_map_memory(PFN_PHYS(pfn)) &&
-+		    mtype != MT_MEMORY_RW))
- 		return NULL;
- 
- 	area = get_vm_area_caller(size, VM_IOREMAP, caller);
+diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
+index 8711d68..ca313fe
+--- a/arch/arm/mach-at91/pm.c
++++ b/arch/arm/mach-at91/pm.c
+@@ -644,6 +644,7 @@ static __init int at91_dt_ramc(bool phy_mandatory)
+ 		soc_pm.data.ramc[idx] = of_iomap(np, 0);
+ 		if (!soc_pm.data.ramc[idx]) {
+ 			pr_err("unable to map ramc[%d] cpu registers\n", idx);
++			of_node_put(np);
+ 			ret = -ENOMEM;
+ 			goto unmap_ramc;
+ 		}
+@@ -669,6 +670,7 @@ static __init int at91_dt_ramc(bool phy_mandatory)
+ 		soc_pm.data.ramc_phy = of_iomap(np, 0);
+ 		if (!soc_pm.data.ramc_phy) {
+ 			pr_err("unable to map ramc phy cpu registers\n");
++			of_node_put(np);
+ 			ret = -ENOMEM;
+ 			goto unmap_ramc;
+ 		}
 -- 
-2.18.0
+2.7.4
 

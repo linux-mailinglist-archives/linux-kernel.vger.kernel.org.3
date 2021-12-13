@@ -2,89 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90018472FC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3325472FCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbhLMOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239739AbhLMOu5 (ORCPT
+        id S234495AbhLMOv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:51:29 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:52936 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231349AbhLMOv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:50:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11B9C061574;
-        Mon, 13 Dec 2021 06:50:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B791DB81113;
-        Mon, 13 Dec 2021 14:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71299C34606;
-        Mon, 13 Dec 2021 14:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639407054;
-        bh=rB04KlTnYTjNvX6bGvzpbKOreiTVBbB8v7GBGdsXRH4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pktXTE5Dw95b9A79kaUwiU6MqWyw8ifotpglfAa9bgn63TFdUcsS+rd+uMS3dLgjG
-         2iq43Q7SJpYQerWm5GFeHpscTZ0QobFancv22tl427cf+CVSU1BxvPQTWGPA+CAaMQ
-         vV0jw2C4/bSwi2CiE1dJlRaGWaMOwkPLNkGX/w5f4difTaoiBsiLMZ9QFJOxpP1p8w
-         vd5a1b1hoG0CtqweBvwim5LL4kAUCz0uO99nQOzFDEVRcrwHzb2+2VT9NPOVxhMekj
-         ZUjptU2Kx3WfAUrwQDpHKyRSY/yewsdn3pYmsSs3hXf0MlnlJEamb7Ca8yY4IR8zGM
-         Gx19otXO5oQXQ==
-Received: by mail-ed1-f49.google.com with SMTP id z5so53574321edd.3;
-        Mon, 13 Dec 2021 06:50:54 -0800 (PST)
-X-Gm-Message-State: AOAM532rMssiMQIzUxuaUiyQo4qnttrIm5xx78c+lX8t7yZAizVf4FRE
-        ssBYbSsYyOQgeBv8MX+KLDEGDrVnq7+44SuUNQ==
-X-Google-Smtp-Source: ABdhPJxuMWm3S7JoggtMzbpLVFQySOBI3xqLHwXO9iPRtHwEd/Xvusq53GXxW9i8hDwfKj8uU5iKsme2fJ01l2MfwJg=
-X-Received: by 2002:a17:907:75f0:: with SMTP id jz16mr45909802ejc.77.1639407048498;
- Mon, 13 Dec 2021 06:50:48 -0800 (PST)
+        Mon, 13 Dec 2021 09:51:27 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:45796)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mwmfk-007Cyd-Mm; Mon, 13 Dec 2021 07:51:24 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:40216 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mwmfj-00BB7w-LH; Mon, 13 Dec 2021 07:51:24 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211208202532.16409-1-ebiederm@xmission.com>
+        <YbY2CDkZbOFRBN0i@osiris>
+Date:   Mon, 13 Dec 2021 08:50:44 -0600
+In-Reply-To: <YbY2CDkZbOFRBN0i@osiris> (Heiko Carstens's message of "Sun, 12
+        Dec 2021 18:48:56 +0100")
+Message-ID: <87czm036ez.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20211212062407.138309-1-marcan@marcan.st> <20211212062407.138309-2-marcan@marcan.st>
- <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com> <251204bb-18f6-36cb-377a-557135633318@suse.de>
-In-Reply-To: <251204bb-18f6-36cb-377a-557135633318@suse.de>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 13 Dec 2021 08:50:35 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLpRgtZyzw4zT=vvcepd=0piJeSJUob=dLWujpO4m7O4g@mail.gmail.com>
-Message-ID: <CAL_JsqLpRgtZyzw4zT=vvcepd=0piJeSJUob=dLWujpO4m7O4g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Hector Martin <marcan@marcan.st>, devicetree@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1mwmfj-00BB7w-LH;;;mid=<87czm036ez.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18KAzcwgpDXJi2izmCoG3YxLtoPlPFwE2s=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Heiko Carstens <hca@linux.ibm.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 431 ms - load_scoreonly_sql: 0.12 (0.0%),
+        signal_user_changed: 12 (2.8%), b_tie_ro: 10 (2.4%), parse: 0.95
+        (0.2%), extract_message_metadata: 14 (3.3%), get_uri_detail_list: 1.69
+        (0.4%), tests_pri_-1000: 14 (3.3%), tests_pri_-950: 1.37 (0.3%),
+        tests_pri_-900: 1.08 (0.3%), tests_pri_-90: 57 (13.3%), check_bayes:
+        56 (13.0%), b_tokenize: 7 (1.6%), b_tok_get_all: 7 (1.7%),
+        b_comp_prob: 2.3 (0.5%), b_tok_touch_all: 36 (8.4%), b_finish: 0.87
+        (0.2%), tests_pri_0: 317 (73.7%), check_dkim_signature: 0.64 (0.1%),
+        check_dkim_adsp: 2.7 (0.6%), poll_dns_idle: 0.86 (0.2%), tests_pri_10:
+        2.1 (0.5%), tests_pri_500: 7 (1.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 01/10] exit/s390: Remove dead reference to do_exit from copy_thread
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 2:16 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
->
-> Hi
->
-> Am 12.12.21 um 22:29 schrieb Rob Herring:
-> > On Sun, Dec 12, 2021 at 12:24 AM Hector Martin <marcan@marcan.st> wrote:
-> >>
-> >> This code is required for both simplefb and simpledrm, so let's move it
-> >> into the OF core instead of having it as an ad-hoc initcall in the
-> >> drivers.
-> >>
-> >> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >> Signed-off-by: Hector Martin <marcan@marcan.st>
-> >> ---
-> >>   drivers/of/platform.c          |  4 ++++
-> >>   drivers/video/fbdev/simplefb.c | 21 +--------------------
-> >>   2 files changed, 5 insertions(+), 20 deletions(-)
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> >
->
-> Can I merge this patch through DRM trees?
+Heiko Carstens <hca@linux.ibm.com> writes:
 
-Yes.
+> On Wed, Dec 08, 2021 at 02:25:23PM -0600, Eric W. Biederman wrote:
+>> My s390 assembly is not particularly good so I have read the history
+>> of the reference to do_exit copy_thread and have been able to
+>> verify that do_exit is not used.
+>> 
+>> The general argument is that s390 has been changed to use the generic
+>> kernel_thread and kernel_execve and the generic versions do not call
+>> do_exit.  So it is strange to see a do_exit reference sitting there.
+>> 
+>> The history of the do_exit reference in s390's version of copy_thread
+>> seems conclusive that the do_exit reference is something that lingers
+>> and should have been removed several years ago.
+> ...
+>> Remove this dead reference to do_exit to make it clear that s390 is
+>> not doing anything with do_exit in copy_thread.
+>>
+>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> ---
+>>  arch/s390/kernel/process.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>
+> Applied to s390 tree. Just in case you want to apply this to your tree too:
+> Acked-by: Heiko Carstens <hca@linux.ibm.com>
 
-Rob
+Thank you for looking at this and confirming I had read that the code
+properly and that the do_exit reference was no longer used.
+
+I will probably take this through my tree as well just so I don't have
+that trailing do_exit reference.
+
+At this point I will give things a bit more for people to review or say
+something about the other changes and if there is no negative feedback
+I think I will just apply the lot.
+
+Eric
+

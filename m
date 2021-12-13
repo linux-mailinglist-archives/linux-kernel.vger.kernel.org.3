@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBD6473794
+	by mail.lfdr.de (Postfix) with ESMTP id 11F33473791
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240683AbhLMWeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S243649AbhLMWd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243673AbhLMWdt (ORCPT
+        with ESMTP id S243677AbhLMWdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:33:49 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03926C061D5E
+        Mon, 13 Dec 2021 17:33:50 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3EFC061D72
         for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:33:42 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id k26so16188295pfp.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:33:41 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p18so12175010plf.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:33:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YgyvWs4tutxnDqYTDwetVnj46UWWmfeOWxYILXaAup0=;
-        b=BRTae51MNdlzeOXGolcubKnnxqAyhmg5T0xoqLLnYhBfIze5+8aAhoroEF/XZj6XyB
-         R9iIX5oHU6zyfZydXe4CzbEhKJVu0dD3Z19NaSVafwfREWiRWFm8T4ZzwlTwbQ5DC/Tx
-         FWC3mT+F4zi+QoNHc6AEz35rthtOT/8NSK6Wg=
+        bh=I3eqcTIWiC+KHyQNr9D4gbvRaeijCgA+zD3SwshilTo=;
+        b=bSotBO1SifpAEcn65dx6taJwcyVfz70TuvaLmRPzGaoK9y1HTyzmxWlb/dtNfrgYEQ
+         8epiPZSD71JVyY8D/Nwlrsil5OLe5OWwJmyUOOCx+9P0CSr7rJHBN/vWbZq9dbLt/pXb
+         8iiXLz+CqQlt+qI4AGu7Dtxt9SHIHEV7m8T9I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YgyvWs4tutxnDqYTDwetVnj46UWWmfeOWxYILXaAup0=;
-        b=SINLPcCTuABrJUJ0jGnXrO/helnAAtELFuMfvB2fVr5NMGtQtYZ4yiDnCCEwqDRUdh
-         8WdqPOVMCZTuG+QsGzyT9DDeC7GZ4iIZ0XTWIdMYYhcjiByXhy24an+PNTiAUWdlKN6a
-         JarH2AGB00+zWfa4dOZCU1wCJyiwVaZBJNYhxMZgumb5XwMGoSP1fkIXQg5GBs6tSpEh
-         W6CP1znC5FeNT3QT5Vpf6v0iOrLnZLclsKv3ncYDUz0spW2OG8Cl+m21tZKyJxe/kXcj
-         ziQWm2dLPJ/vRRrBfrlON180TNWa2l6PK60/bQvYgmEManXZCTLYYnPch3P7Hna2afFb
-         RRmw==
-X-Gm-Message-State: AOAM530NG0eZ4otyHx9Aa1YhuJJq1c+AUUQWv0UTuB67Ca0t9t0qfeO+
-        5ORG3XxywiKUL3fuKgaxd9vFWQ==
-X-Google-Smtp-Source: ABdhPJxfs3G9SgBQOpvzNbbUSr07IB+8a2RoV0KOBCY/VV1CteSYlQSlFhfsGXdWAr8ufph1XIWCaA==
-X-Received: by 2002:a63:62c6:: with SMTP id w189mr999201pgb.343.1639434821587;
+        bh=I3eqcTIWiC+KHyQNr9D4gbvRaeijCgA+zD3SwshilTo=;
+        b=yJwo1ZuEvg+YhMcMWgtEVek2bRl3ruROnXn4Isg7gAbKy4ryx4o/w1v+F22zH1sbBH
+         /Q6w4RiwE796obZhwO3w1cHq5sESi+yOkM4z2Pe+X3yGT5vBOxesvb3B2cHLdZYeCarh
+         2v6sSHmkoNX/g2Crxxr0+kk2+ntSGhYXswgFnncMCsJ9mvEGcMCfN8dffKJc2nMnSZIR
+         ZLABwi6/BG9UOicMgyY4XN++HC0tk//i1x0+daAq5Z8i8Rwy6wvqVqVBNRAMjv0ATpuV
+         Vy4ugFoJcCMyNxLCoAo93x9JRKHgbPYKOp+hEm56QGHyCqmLF4M8oIt2PrdvfvhyA5XB
+         I2SA==
+X-Gm-Message-State: AOAM532DtcrSZjUpaNQ5VkFKOpttpPMQct7NzN/9MBvKXjmtMqp9cYsj
+        8avui90aDgq9+cJVlN/dGauSkw==
+X-Google-Smtp-Source: ABdhPJydJaUt968ItHIsV+C+S8DmxMrxQt/Lk2QzQLpgJNl2hHaYMZ8aIZwavexDYTU8q4oLhCgpOw==
+X-Received: by 2002:a17:90b:e83:: with SMTP id fv3mr1153098pjb.115.1639434821738;
         Mon, 13 Dec 2021 14:33:41 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z14sm14106178pfh.60.2021.12.13.14.33.38
+        by smtp.gmail.com with ESMTPSA id q17sm14966913pfu.117.2021.12.13.14.33.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 13 Dec 2021 14:33:40 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-hardening@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 11/17] dm integrity: Use struct_group() to zero struct journal_sector
-Date:   Mon, 13 Dec 2021 14:33:25 -0800
-Message-Id: <20211213223331.135412-12-keescook@chromium.org>
+        Potnuri Bharat Teja <bharat@chelsio.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 12/17] iw_cxgb4: Use memset_startat() for cpl_t5_pass_accept_rpl
+Date:   Mon, 13 Dec 2021 14:33:26 -0800
+Message-Id: <20211213223331.135412-13-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211213223331.135412-1-keescook@chromium.org>
 References: <20211213223331.135412-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1663; h=from:subject; bh=Rw8elaX7lzkqZjVeNdewcjpE1pz4Up9kM2UagQ4QfoI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o5l4H+ZB5qLvrKCuFHRRdblpiRo+kyACzvwRjU NJG7MUGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOQAKCRCJcvTf3G3AJqt0D/ 442RCWEfLc/vdJO62YkZXZbB86UYpqLs4jsfmJVAEkx1bNVEloZiAif7Bt2t0ZojDaapmU1VefQTo7 Nw8zpBk0JkOinnr7PMRoZFA+4ML3GD26IoHkkdmlHmazoirzWVZ3a0RWyjcvCzTcP2ui9K5q0alwjD E4lxTnUnuQD12YR4FgxJz5UR5WmfJT5cd4WTsMoxrSunwkZNA+D0OXTMq706Ppu4IEVAZ74udYWRHB dhhLIp1ijQnkGMm9KeGcSo7sOlPRFB5/43T5jOoB9GoEtHQzdbzFxY+0bSP1yXaUBrUOfih2VmW0Qb kalL/o7vrD84bAzd920phPCmSWnpHQlBvDSB7u5XYNp6Zs0EnRYIJV2z+g1o0zceEaNrVbhsjq1Loi Hv+9VoUrujn/5n5FHRvrUPgdnkf+HnvVKxc+8rnXSqdMsJoTXU7yz/doAH2x93ac2mLbiVRxA2rvQo GoFGSJ4zQeFfGlCSKOeQo17UKOZsAA5YF41J8GR54McDg3k3EetgUanJlz04P/YER31qTj7Hu1zClU btgXZRyAgJM0pkdxgfIlUnxeOtXqWGujlwnrUJbdXq+7mI8xxY66kN7E0EHcsVFzCFnUd0jduTxh5S ASm+fSppb3CWwxajeVgI9wPDZj68zHa20Mo3ugrQOBPXoL2jeZidn2EqzDBA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2404; h=from:subject; bh=NRZzV2Wm+qN1hLpw7oPDOvO2yOStk7XcopUutjYf66w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o5I5L7op6wxBNo8ZoE2HZhjRGQ3UxHlr8nNIus yAqJvR6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOQAKCRCJcvTf3G3AJp1zD/ 9jAFtNeIQm4EewUKA78ifdR6IkV6fNLr41dqbxD0xSgeQS7WokCTQXDEw8OfoPXzLUR0Jdi66DbXNg KG+CiCejrRqs6r08bnPj02LGJEyYzQ7ZwUShJC7B1rJ4Tn7NIVLWlKK29Wbi+eocXdHhSFKezYG3SQ 6Ltml+Nij5zu1T9ZZk09JiJg8zP3JekDyjIq7BGuZWAhddAU/l/C4eLIFQcFaF7huoImo3aXgVVVyI H19k9KJR9zQPTsr8wrHwCVVmlaQISb3Wy8DXFFBwFHz6K7L4mse4I3HxL64l/wJzZbpqVfJ4OXiyyU eIk2EekyUx8315bGoYkRryWNwIlFmiwOJsx9ZGX4HDKGqCGbrOFfAVUzn3rvJEjiBVCoqXxoU47qFq DW6AMqHa4Z2J5I+fsEdrarF+6Rs9MWFeOlPvt0KMsLCCDAgqiKiwK+RYNpR23zuSxXCUi5LjZbIySf OLs7o0i5LHW5129oVTW+uQELXJbUBN/EW9FJEd9GmR6USXdaFAK5+nbAJVZBuC33NIKnkwN09UcGMr LYIkrtghJWNmsCfcZXFJH/ZnAkh07XbcEjVILyAt2qfoTTD4zTJbBGjMdUumewIKLCurQoVF4LvpDL IJu5l+8Fr4zZRE80JbW+hvIlyij8sNL/K7c+cvFvR39dgMXtliIXLXRzui3g==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -69,44 +73,63 @@ In preparation for FORTIFY_SOURCE performing compile-time and run-time
 field bounds checking for memset(), avoid intentionally writing across
 neighboring fields.
 
-Add struct_group() to mark region of struct journal_sector that should be
-initialized to zero.
+Use memset_startat() so memset() doesn't get confused about writing
+beyond the destination member that is intended to be the starting point
+of zeroing through the end of the struct. Additionally, since everything
+appears to perform a roundup (including allocation), just change the
+size of the struct itself and add a build-time check to validate the
+expected size.
 
-Cc: Alasdair Kergon <agk@redhat.com>
-Cc: Mike Snitzer <snitzer@redhat.com>
-Cc: dm-devel@redhat.com
+Cc: Potnuri Bharat Teja <bharat@chelsio.com>
+Cc: Doug Ledford <dledford@redhat.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Raju Rangoju <rajur@chelsio.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: linux-rdma@vger.kernel.org
+Cc: netdev@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/md/dm-integrity.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/infiniband/hw/cxgb4/cm.c            | 5 +++--
+ drivers/net/ethernet/chelsio/cxgb4/t4_msg.h | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
-index 6319deccbe09..163c94ca4e5c 100644
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -121,8 +121,10 @@ struct journal_entry {
- #define JOURNAL_MAC_SIZE		(JOURNAL_MAC_PER_SECTOR * JOURNAL_BLOCK_SECTORS)
- 
- struct journal_sector {
--	__u8 entries[JOURNAL_SECTOR_DATA - JOURNAL_MAC_PER_SECTOR];
--	__u8 mac[JOURNAL_MAC_PER_SECTOR];
-+	struct_group(sectors,
-+		__u8 entries[JOURNAL_SECTOR_DATA - JOURNAL_MAC_PER_SECTOR];
-+		__u8 mac[JOURNAL_MAC_PER_SECTOR];
-+	);
- 	commit_id_t commit_id;
+diff --git a/drivers/infiniband/hw/cxgb4/cm.c b/drivers/infiniband/hw/cxgb4/cm.c
+index 913f39ee4416..c16017f6e8db 100644
+--- a/drivers/infiniband/hw/cxgb4/cm.c
++++ b/drivers/infiniband/hw/cxgb4/cm.c
+@@ -2471,7 +2471,8 @@ static int accept_cr(struct c4iw_ep *ep, struct sk_buff *skb,
+ 	skb_get(skb);
+ 	rpl = cplhdr(skb);
+ 	if (!is_t4(adapter_type)) {
+-		skb_trim(skb, roundup(sizeof(*rpl5), 16));
++		BUILD_BUG_ON(sizeof(*rpl5) != roundup(sizeof(*rpl5), 16));
++		skb_trim(skb, sizeof(*rpl5));
+ 		rpl5 = (void *)rpl;
+ 		INIT_TP_WR(rpl5, ep->hwtid);
+ 	} else {
+@@ -2487,7 +2488,7 @@ static int accept_cr(struct c4iw_ep *ep, struct sk_buff *skb,
+ 		opt2 |= CONG_CNTRL_V(CONG_ALG_TAHOE);
+ 		opt2 |= T5_ISS_F;
+ 		rpl5 = (void *)rpl;
+-		memset(&rpl5->iss, 0, roundup(sizeof(*rpl5)-sizeof(*rpl), 16));
++		memset_after(rpl5, 0, iss);
+ 		if (peer2peer)
+ 			isn += 4;
+ 		rpl5->iss = cpu_to_be32(isn);
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/t4_msg.h b/drivers/net/ethernet/chelsio/cxgb4/t4_msg.h
+index fed5f93bf620..26433a62d7f0 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/t4_msg.h
++++ b/drivers/net/ethernet/chelsio/cxgb4/t4_msg.h
+@@ -497,7 +497,7 @@ struct cpl_t5_pass_accept_rpl {
+ 	__be32 opt2;
+ 	__be64 opt0;
+ 	__be32 iss;
+-	__be32 rsvd;
++	__be32 rsvd[3];
  };
  
-@@ -2870,7 +2872,8 @@ static void init_journal(struct dm_integrity_c *ic, unsigned start_section,
- 		wraparound_section(ic, &i);
- 		for (j = 0; j < ic->journal_section_sectors; j++) {
- 			struct journal_sector *js = access_journal(ic, i, j);
--			memset(&js->entries, 0, JOURNAL_SECTOR_DATA);
-+			BUILD_BUG_ON(sizeof(js->sectors) != JOURNAL_SECTOR_DATA);
-+			memset(&js->sectors, 0, sizeof(js->sectors));
- 			js->commit_id = dm_integrity_commit_id(ic, i, j, commit_seq);
- 		}
- 		for (j = 0; j < ic->journal_section_entries; j++) {
+ struct cpl_act_open_req {
 -- 
 2.30.2
 

@@ -2,175 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCE647383E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574BE473840
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244095AbhLMXBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 18:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237229AbhLMXBC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 18:01:02 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CD0C061574;
-        Mon, 13 Dec 2021 15:01:02 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q3so29556449wru.5;
-        Mon, 13 Dec 2021 15:01:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ephq20rQt+MOngFtWVtlg58TGs+92rcxlnvsoir2Wzs=;
-        b=nPstnvqAz4ADugRknu1btzvImsrQCxQ7Pzz6SqBDP739cRCnOX9JpmB97V1i17T4d6
-         nroPOYJg5SXIamySda/Z3Rxs/+g/QjftOA8uZso7drWOScZqTrgFPNfgcv/nLpjiF5hR
-         z/gNDuUjviON9CrLzb2ZQuIdm61jXwlqYTvSrKpstW/4u9ngBtKcGq1Mz/fBqVVOiobS
-         rbcZKUn3cEMqOUeP8DNP9H0W6sdOhvCC237jThL3aVNQmpxUPgcP4E4r83w+9E468vgX
-         Ebno+MN8h6vsBorqmv/fwy6Bo2xgrAegyoJ0sLQ8L/ONimfiOkEPeWcFvBi7NQcBLlsJ
-         qfXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ephq20rQt+MOngFtWVtlg58TGs+92rcxlnvsoir2Wzs=;
-        b=vx/DvhoECRfmk3xyIrRgRV4m3k1cI+Jw3+tBdcmyKwQLWmsysI6UOICJHhFYb1a8lx
-         22QGXzQFaSPWDT0yC9Ur6ObB+VlGRBgf7kJDj4par+7+UvRYQgGEy6E9/j60fYiwBKDI
-         TKq5FWiEjvF1XADx6ZWU1HMLgLrrv+uweaZC2BJrX1E5j61fWlvswruwDMKzsOw7r5eZ
-         ZD55YL2wH9yxbw6hjgGQaQd+b1hRHAqYRnCA5fZPaLmH+eQOD7JWqOY5hyyzag3rXx4n
-         dXxwh9E2tJ6OMVlYkBQ5K4eWnCA4KK/OpJae0rdyntPdThXJTH1pf28Dx00id9ZNlnDx
-         ExJA==
-X-Gm-Message-State: AOAM533+SJND+ePSCFf1HcjIyQ8ytoS0s9075t67YT2PX5jDGZOHfuqC
-        7k9DpPhRJdskC0iTXe74V8U=
-X-Google-Smtp-Source: ABdhPJzfPUaWZPuCTRu1sm4F76wU/r8aqtJ7gNV47GaoyKf5G1YNNvGbWhnrJBIoGtrMkUw9gqI69w==
-X-Received: by 2002:adf:c5d1:: with SMTP id v17mr1498475wrg.571.1639436460592;
-        Mon, 13 Dec 2021 15:01:00 -0800 (PST)
-Received: from ubuntu-laptop.speedport.ip (p200300e94714d5665ac960fd9f7a69e0.dip0.t-ipconnect.de. [2003:e9:4714:d566:5ac9:60fd:9f7a:69e0])
-        by smtp.gmail.com with ESMTPSA id q26sm12025586wrc.39.2021.12.13.15.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 15:01:00 -0800 (PST)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] scsi: ufs: Fix deadlock issue in ufshcd_wait_for_doorbell_clr()
-Date:   Tue, 14 Dec 2021 00:00:45 +0100
-Message-Id: <20211213230045.492994-1-huobean@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S241222AbhLMXGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 18:06:32 -0500
+Received: from mail-co1nam11on2051.outbound.protection.outlook.com ([40.107.220.51]:9601
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234834AbhLMXGb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 18:06:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pgct3aovuRtI6Asf1im3W+ptIjEnY5/lb7G2+S+zcq0xg1F1KQr3pasRLtjQt6gIjwzGBDVNyzxIcNNv7s18dudHPCqLnYNiuX9DzhIrIxnOOWm8SXy3RAmrr6oZcdSS1KfsfCIYMa6l+Zua1JEA4FoIC9L8q98gGHOJLdPaePsoP1pRqZBa3vUP5IJKB8fD2aEqL//dYVzcWtfy5VT/brTx+3pz01d1FjuTrgl/XWjUV08b3L/POOLe9O+H2enoUVRWIP7ff2qquMn2gxGLmzLl9atINfb0dycWy6lV/Obd85ERwPJFIc3mcSRzO0O9Qh1Zb3EOUsYWCgcj89Ejzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Vo+ttj3pTUf33Xqjlx3UGFIwc4867IwXTDCQ68B2wI=;
+ b=Bc9sVx8M9i+JcX0cyinULX6m5OdZEL6Qr51FaB7fwf1mUOHb3eN9UOMWjdqMHW3NsVOBn5oDyEMUxAyQpEZ4xLJ8TLCb+d7CAuWswrpJtM4CKPSTAelyhhBhQt9MRdP6ETw7UyIL/cGftLa9yZVpIb5dGPhPuLGj3pCKyD1uVIOn9ji7L0+KdbSHpdWUyg0hZXygHvxKBSGzxm1FLKDuZHiLPfERG6jpkMefBiawhLvTUsP5Nc/G3/kpIYgx/LoMl+3fxhLJn2qyrnm2gO80Cy1/3iDC3jN/Fz9OoXSkF/Qr/hUsYG7WQcEMT+uJf+3npuC7oTwpmcaNqFGYOVpbvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Vo+ttj3pTUf33Xqjlx3UGFIwc4867IwXTDCQ68B2wI=;
+ b=KrKudTymIrMeUSPCXOLpmxnKraGgWANPFCzZ6Qg2eMmoTjFd3t+xTG0YlbPLjWzfajgaAGmRi17L9iaVOnEHKpopTjZSNJt+tkllYyqO9Q2Dvj1u6JmvHvJUuif/ePMG9/HDJgQwuJa/Ixq4slaRiQS1QMdQm23zXMv56efilCc3auHihhLWcujCEJMnHCLXWCp2T74zX89sJthhp8wetzh24lukDQBjdTmJ2pFWt+LwA2MFgXu8Ym/2NCRyvZTE53JlTBnfEEmqn8gHeqAh3Z7P+vIwbswRmdcVqEc7imHrjSyyJ72+0GTI9ZQEFZP3pk8+FXGrqGRQSACGmezsQw==
+Received: from BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22)
+ by BYAPR12MB3302.namprd12.prod.outlook.com (2603:10b6:a03:12f::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
+ 2021 23:06:26 +0000
+Received: from BY5PR12MB4209.namprd12.prod.outlook.com
+ ([fe80::940f:31b5:a2c:92f2]) by BY5PR12MB4209.namprd12.prod.outlook.com
+ ([fe80::940f:31b5:a2c:92f2%7]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 23:06:26 +0000
+From:   Saeed Mahameed <saeedm@nvidia.com>
+To:     Shay Drory <shayd@nvidia.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>
+CC:     Jiri Pirko <jiri@nvidia.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 0/7] net/mlx5: Memory optimizations
+Thread-Topic: [PATCH net-next v3 0/7] net/mlx5: Memory optimizations
+Thread-Index: AQHX7D5dD+adttVerk2gBbMZG9h/QKwxE52A
+Date:   Mon, 13 Dec 2021 23:06:26 +0000
+Message-ID: <160c22e7ee745e44b4f37d53003205d8f63b8016.camel@nvidia.com>
+References: <20211208141722.13646-1-shayd@nvidia.com>
+In-Reply-To: <20211208141722.13646-1-shayd@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1b6e0a44-0b7b-46ac-3123-08d9be8d307d
+x-ms-traffictypediagnostic: BYAPR12MB3302:EE_
+x-microsoft-antispam-prvs: <BYAPR12MB33027AF097D5EC79735328DFB3749@BYAPR12MB3302.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bjjBLpEt81fFdn72/WwZhyZWh1FJjmCmYz9J+ef0oBSBS9jEKujN5yEhVZLAZrgBduCvLIEDa14nOCtLOIfIehp8Y47O6RFMPvbOmOtvGSN8z+aWuH0Bj+rQXRayN55wpHovTENVd2TxTlhFp5f7rcKv3e09RbwpVjDA5TR8w7Y8pxTTIU2juG2ijDatoOSfDGioshzBogoHtJYKE+WBGjkjRCNF7uc3oke+TRiq/K3B8G+u0Rg5fYRmXp6IxveCSMykK54w3PPtX5/v4du7UUxPa90+IHOdBwgwYzVnS9VFL9X2XGksxA1cHtAhyvgzsd4WbD/zdiV+3rRZZ0lEyxpdiZVDyDszXcne0+qJdnYsKCi9qmfeAy5nowFpjvLQ6T1VJ97aM9285gf/lKduWtfquF0+77A8zX/eFO8zVThPljTPKifHxtHL4e/+DHWqsSchcFpgnoTaLD3KsX8SYXsz/GmUCb0vfuCyMRIe4vad/dMNAO8exEmeBa28HzdqdyYyI0iC0d0r+DyPKzEQZ50Da5nKrKB/v7FC8xupP67+Fw0aUDiCS+YKnMQ3Am6Aoal2Bn5DG5VPac+3IsTlX4R/uctg5UVFDb3wjbqfzzl0aNnD05cZj14tlaeXgGgiZqHNH2IgCO1OzLdseh8FKaIS2k5FSkailbjWm91YcX3eGON8TtRuTVpa2Ex31UK2bZaIG0wvIgY7pc5QH7VUrg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4209.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(5660300002)(38070700005)(8676002)(4326008)(316002)(38100700002)(4744005)(2616005)(122000001)(36756003)(54906003)(6512007)(186003)(110136005)(26005)(66556008)(64756008)(66446008)(66476007)(2906002)(6486002)(8936002)(66946007)(71200400001)(86362001)(6506007)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WXYwRmhRYkpyRXNYMTI0L09yNDNNZHRXZ0VJTEpJM0FsSENjVnBUR2h3NE92?=
+ =?utf-8?B?WWs0MnFtamU4bHdaajdNVWI5NFVCeFRtY1FYRGJCdGtmYmd0dFBXNDdyUnhL?=
+ =?utf-8?B?Sy9tK09LNS9UdjB2dXl4cjBYaUJRYnN0MitLWEF1M0xqbGtHd1M1Y1FIdkVH?=
+ =?utf-8?B?dG13K2dqMGpXeEd3NEFEam1mUDBZdWpET1hBZGx2aXh6dC9GNG9jaUdpemxj?=
+ =?utf-8?B?MWNWWWtNZEFNNWd0cktnVVJObEtkUjNIc2NObXVUbGc5dGZoMjB0VjZQcGE0?=
+ =?utf-8?B?VzdQQUp3SUhjUW1DQzRxRU5WdzNlWkpTc2YwZjJHQkRUdFQ5Wm5NbFRUMVNC?=
+ =?utf-8?B?MlV1aVA2TVZ5djRRcGVsdzI0enhqQ3luVjFDaklrdXJKVmhQR2FaVFZJUWdL?=
+ =?utf-8?B?WXN2ZXAvbVg1b1FvS05IbWVxZVVZN0kwOUl5NHZuM1paTVJCNEtvUFJJOSto?=
+ =?utf-8?B?ZDNsRE54bkM5K04zS1lLbnpNakVYQTh4Z1dqdFhyN0JmVEFERjUvUVFHclRV?=
+ =?utf-8?B?Mmh2R01EeDFUbURSTVRHZ0k4V3pPc3l1aUxqL2xKRVlob1pwUGdwYzZzYlBh?=
+ =?utf-8?B?bWxKTXovc2Y3WE13K2VkaTlwVld4ajI1bGd6M0UyWUc2QXM1R2dkYmQzaTdm?=
+ =?utf-8?B?NmNkSHhZRVZuTWt4M2RXQ3BaMDZUazFLSWwyaWFIMCtoU2pwUElZQ2lEUlBa?=
+ =?utf-8?B?VTMvbWRHS1hhRVVibHNWZGhEejdPMkpBT2MvdEVLbDRwTHdvOWdmSnp1cnBH?=
+ =?utf-8?B?SjZDZm1UZ20rTlAzRCtIbS9oYjl1b3VOOWlaODgvb0JaNUx0R29kNU5vckUx?=
+ =?utf-8?B?RVB3QXB3c28zOXFXR3V6ZEhoZk9qY0k2cHZiS1NOeXJ2b1RBNXJDRk40QUp3?=
+ =?utf-8?B?eWJ4bmpQdkIyUE9NaXZvNndNUTh4KzhSK29aODFlNGJCUWZxU29TNnNaNkFZ?=
+ =?utf-8?B?RGdCODNwN08vczdoSmlBTmV1SWV5cDVnaUJSeU5KcU1XRXZZaE10OTlUZW9z?=
+ =?utf-8?B?cFFXU1hCaGlWUGVRcXZUYXFzaXhzZnQ4WXRZSmNuUnN1VVlqNThJVlJnNVE2?=
+ =?utf-8?B?U04vN3Z1OThPTW9ZUGkrZzJmdXMyM0lkR2swaWNxQzNpS1loa0RUKzhUTDlx?=
+ =?utf-8?B?eDZpbDN1UnJzMmRLdy9tckw4NkszQkVpdzV1KzVEYUkrQkpoUVlFc0xicXM1?=
+ =?utf-8?B?NjE3RWlnZC8vYnJ2WjJJbWVhTXBPamNFemxpSC83TWdiUC83NEN2UXh1Q3cr?=
+ =?utf-8?B?N2FlaDg0UkpzT1I5dkpRT25pVlJ1Qm15ZHRjaW9JQWdpcDBKREQ3U2tiVlhw?=
+ =?utf-8?B?NXBBMGg5TDgvRUNETnlDRG5zRkdOMVpmZSt0dEkyajFTYXVqaVZxc3BMQzlB?=
+ =?utf-8?B?OXFGVUsvQmIyaDh6Mi9HTFVwME1ScGxSUTRUMzh6RHFpRGs4Zm9DQW1POFFl?=
+ =?utf-8?B?N0JmTmhHM1dlQzNxYzh0TlhFWlFDNGdHY3UrUHkrNlhVcFE1b3Nib0dZeE9V?=
+ =?utf-8?B?UEZSS2hoVU9XZmpHWG9OUTlsTEJNODRSWHVHVEN3QkRycDNwVTdOdThVbHVz?=
+ =?utf-8?B?NjRNOEpmZjMveXROY2llcDBJTFJ6azltc29DNmtjWjJQaE9xeWRVRlJpZ3hE?=
+ =?utf-8?B?cDgvb2VBNmN4aUovc0xGa1NPWEZKRG5Fd2VNZklNN2hVUzNISXdGSnAzRlBB?=
+ =?utf-8?B?bkhsODJWaGhoVXQ5RURVc29yTmJMVzAxNStCUjRyWHFpMlJPbDg1UEtaNk5D?=
+ =?utf-8?B?WEQ5YzFJYm4wcHl5aHFvNzFyb2NjV0RrMHlKTEtwTk5CdGRXYTMyeUl4UHM1?=
+ =?utf-8?B?TlU5K2QvWXgybWp1UWYxakpORCtON1NkYldVNDJrRlVIVW45TnhmRGcxVFla?=
+ =?utf-8?B?MitJYVdhQmNJUzFIanhpL3BwVFBSbitBcGUwRzFsaCtWaDRrZzNCdjJRU0xh?=
+ =?utf-8?B?VUpoYWM1dWdLSGx6ZTNhQUlZSENxQ3Y1WXlhL0wvLzR2bCtvUnVIcFZnejU0?=
+ =?utf-8?B?eVdodEdCSTNIMkwyYlZCdloxSHBpRy9qSHdpd2JjMnBKelFpTEtEMTlMcmZn?=
+ =?utf-8?B?Tlo1SXVCanNKd0luZ01taHgzcjVxSDhvV0V4Y1ExSFYzaTNNejZleG9YSllT?=
+ =?utf-8?B?UVhmZFR4QXc0dmpCaU83MDRCYThzTis3RUdiTDNHUmt2aUV6V0lYNGxDZXc4?=
+ =?utf-8?Q?Vi59m8jb4WjLeX81wcBW+eE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F1D84EC114A59E4C8C983024C5D6959F@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4209.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b6e0a44-0b7b-46ac-3123-08d9be8d307d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 23:06:26.1090
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Jun1+3/zE2X9LOxhNFnW6S2dM14gY7wqH6zFsfYg9f0N5xPX0YqANiw83UycxEVnMIbSZWqdOeiRHciPtYFWPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3302
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
-
-Call shost_for_each_device() with host->host_lock is held will cause
-a deadlock situation, which will cause the system to stall (the log
-as follow). Fix this issue by narrowing the scope of the lock.
-
-stalls on CPUs/tasks:
-all trace:
-__switch_to+0x120/0x170
-0xffff800011643998
-ask dump for CPU 5:
-ask:kworker/u16:2   state:R  running task     stack:    0 pid:   80 ppid:     2 flags:0x0000000a
-orkqueue: events_unbound async_run_entry_fn
-all trace:
-__switch_to+0x120/0x170
-0x0
-ask dump for CPU 6:
-ask:kworker/u16:6   state:R  running task     stack:    0 pid:  164 ppid:     2 flags:0x0000000a
-orkqueue: events_unbound async_run_entry_fn
-all trace:
-__switch_to+0x120/0x170
-0xffff54e7c4429f80
-ask dump for CPU 7:
-ask:kworker/u16:4   state:R  running task     stack:    0 pid:  153 ppid:     2 flags:0x0000000a
-orkqueue: events_unbound async_run_entry_fn
-all trace:
-__switch_to+0x120/0x170
-blk_mq_run_hw_queue+0x34/0x110
-blk_mq_sched_insert_request+0xb0/0x120
-blk_execute_rq_nowait+0x68/0x88
-blk_execute_rq+0x4c/0xd8
-__scsi_execute+0xec/0x1d0
-scsi_vpd_inquiry+0x84/0xf0
-scsi_get_vpd_buf+0x34/0xb8
-scsi_attach_vpd+0x34/0x140
-scsi_probe_and_add_lun+0xa6c/0xab8
-__scsi_scan_target+0x438/0x4f8
-scsi_scan_channel+0x6c/0xa8
-scsi_scan_host_selected+0xf0/0x150
-do_scsi_scan_host+0x88/0x90
-scsi_scan_host+0x1b4/0x1d0
-ufshcd_async_scan+0x248/0x310
-async_run_entry_fn+0x30/0x178
-process_one_work+0x1e8/0x368
-worker_thread+0x40/0x478
-kthread+0x174/0x180
-ret_from_fork+0x10/0x20
-
-Fixes: 8d077ede48c1 ("scsi: ufs: Optimize the command queueing code")
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/ufs/ufshcd.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 6dd517267f1b..15333a327b93 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1099,19 +1099,21 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
- 	ktime_t start;
- 
- 	ufshcd_hold(hba, false);
--	spin_lock_irqsave(hba->host->host_lock, flags);
- 	/*
- 	 * Wait for all the outstanding tasks/transfer requests.
- 	 * Verify by checking the doorbell registers are clear.
- 	 */
- 	start = ktime_get();
- 	do {
-+		spin_lock_irqsave(hba->host->host_lock, flags);
- 		if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL) {
- 			ret = -EBUSY;
-+			spin_unlock_irqrestore(hba->host->host_lock, flags);
- 			goto out;
- 		}
--
- 		tm_doorbell = ufshcd_readl(hba, REG_UTP_TASK_REQ_DOOR_BELL);
-+		spin_unlock_irqrestore(hba->host->host_lock, flags);
-+
- 		tr_pending = ufshcd_pending_cmds(hba);
- 		if (!tm_doorbell && !tr_pending) {
- 			timeout = false;
-@@ -1120,7 +1122,6 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
- 			break;
- 		}
- 
--		spin_unlock_irqrestore(hba->host->host_lock, flags);
- 		schedule();
- 		if (ktime_to_us(ktime_sub(ktime_get(), start)) >
- 		    wait_timeout_us) {
-@@ -1132,7 +1133,6 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
- 			 */
- 			do_last_check = true;
- 		}
--		spin_lock_irqsave(hba->host->host_lock, flags);
- 	} while (tm_doorbell || tr_pending);
- 
- 	if (timeout) {
-@@ -1142,7 +1142,6 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
- 		ret = -EBUSY;
- 	}
- out:
--	spin_unlock_irqrestore(hba->host->host_lock, flags);
- 	ufshcd_release(hba);
- 	return ret;
- }
--- 
-2.25.1
-
+T24gV2VkLCAyMDIxLTEyLTA4IGF0IDE2OjE3ICswMjAwLCBTaGF5IERyb3J5IHdyb3RlOg0KPiBU
+aGlzIHNlcmllcyBwcm92aWRlcyBrbm9icyB3aGljaCB3aWxsIGVuYWJsZSB1c2VycyB0bw0KPiBt
+aW5pbWl6ZSBtZW1vcnkgY29uc3VtcHRpb24gb2YgbWx4NSBGdW5jdGlvbnMgKFBGL1ZGL1NGKS4N
+Cj4gbWx4NSBleHBvc2VzIHR3byBuZXcgZ2VuZXJpYyBkZXZsaW5rIHBhcmFtcyBmb3IgRVEgc2l6
+ZQ0KPiBjb25maWd1cmF0aW9uIGFuZCB1c2VzIGRldmxpbmsgZ2VuZXJpYyBwYXJhbSBtYXhfbWFj
+cy4NCj4gDQo+IFBhdGNoZXMgc3VtbWFyeToNCj4gwqAtIFBhdGNoLTEgSW50cm9kdWNlIGxvZ19t
+YXhfY3VycmVudF91Y19saXN0X3dyX3N1cHBvcnRlZCBiaXQgDQo+IMKgLSBQYXRjaGVzLTItMyBQ
+cm92aWRlcyBJL08gRVEgc2l6ZSBwYXJhbSB3aGljaCBlbmFibGVzIHRvIHNhdmUNCj4gwqDCoCB1
+cCB0byAxMjhLQi4NCj4gwqAtIFBhdGNoZXMtNC01IFByb3ZpZGVzIGV2ZW50IEVRIHNpemUgcGFy
+YW0gd2hpY2ggZW5hYmxlcyB0byBzYXZlDQo+IMKgwqAgdXAgdG8gNTEyS0IuDQo+IMKgLSBQYXRj
+aC02IENsYXJpZnkgbWF4X21hY3MgcGFyYW0uDQo+IMKgLSBQYXRjaC03IFByb3ZpZGVzIG1heF9t
+YWNzIHBhcmFtIHdoaWNoIGVuYWJsZXMgdG8gc2F2ZSB1cCB0byA3MEtCDQo+IA0KPiBJbiB0b3Rh
+bCwgdGhpcyBzZXJpZXMgY2FuIHNhdmUgdXAgdG8gNzAwS0IgcGVyIEZ1bmN0aW9uLg0KPiANCj4g
+LS0tDQo+IGNoYW5nZWxvZzoNCj4gdjItPnYzOg0KPiAtIGNoYW5nZSB0eXBlIG9mIEVRIHNpemUg
+cGFyYW0gdG8gdTMyIHBlciBKaXJpIHN1Z2dlc3Rpb24uDQo+IC0gc2VwYXJhdGUgaWZjIGNoYW5n
+ZXMgdG8gbmV3IHBhdGNoDQo+IHYxLT52MjoNCj4gLSBjb252ZXJ0IGlvX2VxX3NpemUgYW5kIGV2
+ZW50X2VxX3NpemUgZnJvbSBkZXZsaW5rX3Jlc291cmNlcyB0bw0KPiDCoCBnZW5lcmljIGRldmxp
+bmtfcGFyYW1zDQoNCkpha3ViIGFyZSBvayB3aXRoIHRoaXMgdmVyc2lvbiA/DQpJIHdvdWxkIGxp
+a2UgdG8gdGFrZSBpdCB0byBteSB0cmVlcy4NCg0KDQo=

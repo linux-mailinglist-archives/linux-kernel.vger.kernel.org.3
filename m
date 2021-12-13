@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A70472795
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E1C47240D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240957AbhLMKCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:02:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S232357AbhLMJdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239416AbhLMJ5Q (ORCPT
+        with ESMTP id S233961AbhLMJd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:57:16 -0500
+        Mon, 13 Dec 2021 04:33:27 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89298C0698CD;
-        Mon, 13 Dec 2021 01:48:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCB7C061A72;
+        Mon, 13 Dec 2021 01:33:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D3BEDCE0E77;
-        Mon, 13 Dec 2021 09:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F360C341C5;
-        Mon, 13 Dec 2021 09:48:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4F5B6CE0E6B;
+        Mon, 13 Dec 2021 09:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C2B6C341C5;
+        Mon, 13 Dec 2021 09:33:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388887;
-        bh=odmEsfDm6TOHJpP7tZ6AaJP0+19wi3rkYp8kCQzl87Y=;
+        s=korg; t=1639388003;
+        bh=u2W6cyixXsLNkpvsnRYeGVTcZBqqVQfwTdOFWZ7Kn+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r5/Rtmz032H6C3zCHwki3nfA6mVxjr1RHuVjSpVsuCCdhgPgF8XD2fBIP58bx7v0E
-         cGfYoyqyTivaExIVLYpymdQivACKZlFYLe9tBQyaIjfwjkjF5aej6yx66RSO3Nnmrb
-         8wYpoWkDTVpTebOw10Eft6nZ7dp/rjxcalvC1nSY=
+        b=ieESoRfrmEhGT+B5oZGPkQ8T5Mp6uX0XnJLOqhxw/uGGVn5NIH/3ZIqlAu18+A6bI
+         rSXKSDX15sh/zT+R9kdjdQxude5VNfvGsykmP4wZaAnQq0xFlkLu8e+g1284vvZQob
+         QsfalNlYJDvXS/2f50EAFVE1tLjr4XxmQk941YKw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        "Mohit P. Tahiliani" <tahiliani@nitk.edu.in>,
-        "Sachin D. Patil" <sdp.sachin@gmail.com>,
-        "V. Saicharan" <vsaicharan1998@gmail.com>,
-        Mohit Bhasi <mohitbhasi1998@gmail.com>,
-        Leslie Monis <lesliemonis@gmail.com>,
-        Gautam Ramakrishnan <gautamramk@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 042/132] net/sched: fq_pie: prevent dismantle issue
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 4.4 05/37] HID: add USB_HID dependancy on some USB HID drivers
 Date:   Mon, 13 Dec 2021 10:29:43 +0100
-Message-Id: <20211213092940.564989416@linuxfoundation.org>
+Message-Id: <20211213092925.552892634@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,96 +48,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 61c2402665f1e10c5742033fce18392e369931d7 upstream.
+commit f237d9028f844a86955fc9da59d7ac4a5c55d7d5 upstream.
 
-For some reason, fq_pie_destroy() did not copy
-working code from pie_destroy() and other qdiscs,
-thus causing elusive bug.
+Some HID drivers are only for USB drivers, yet did not depend on
+CONFIG_USB_HID.  This was hidden by the fact that the USB functions were
+stubbed out in the past, but now that drivers are checking for USB
+devices properly, build errors can occur with some random
+configurations.
 
-Before calling del_timer_sync(&q->adapt_timer),
-we need to ensure timer will not rearm itself.
-
-rcu: INFO: rcu_preempt self-detected stall on CPU
-rcu:    0-....: (4416 ticks this GP) idle=60d/1/0x4000000000000000 softirq=10433/10434 fqs=2579
-        (t=10501 jiffies g=13085 q=3989)
-NMI backtrace for cpu 0
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.16.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
- trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
- rcu_dump_cpu_stacks+0x25e/0x3f0 kernel/rcu/tree_stall.h:343
- print_cpu_stall kernel/rcu/tree_stall.h:627 [inline]
- check_cpu_stall kernel/rcu/tree_stall.h:711 [inline]
- rcu_pending kernel/rcu/tree.c:3878 [inline]
- rcu_sched_clock_irq.cold+0x9d/0x746 kernel/rcu/tree.c:2597
- update_process_times+0x16d/0x200 kernel/time/timer.c:1785
- tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:226
- tick_sched_timer+0x1b0/0x2d0 kernel/time/tick-sched.c:1428
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x1c0/0xe50 kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline]
- __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1103
- sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
-RIP: 0010:write_comp_data kernel/kcov.c:221 [inline]
-RIP: 0010:__sanitizer_cov_trace_const_cmp1+0x1d/0x80 kernel/kcov.c:273
-Code: 54 c8 20 48 89 10 c3 66 0f 1f 44 00 00 53 41 89 fb 41 89 f1 bf 03 00 00 00 65 48 8b 0c 25 40 70 02 00 48 89 ce 4c 8b 54 24 08 <e8> 4e f7 ff ff 84 c0 74 51 48 8b 81 88 15 00 00 44 8b 81 84 15 00
-RSP: 0018:ffffc90000d27b28 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffff888064bf1bf0 RCX: ffff888011928000
-RDX: ffff888011928000 RSI: ffff888011928000 RDI: 0000000000000003
-RBP: ffff888064bf1c28 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff875d8295 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff8880783dd300 R14: 0000000000000000 R15: 0000000000000000
- pie_calculate_probability+0x405/0x7c0 net/sched/sch_pie.c:418
- fq_pie_timer+0x170/0x2a0 net/sched/sch_fq_pie.c:383
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
- expire_timers kernel/time/timer.c:1466 [inline]
- __run_timers.part.0+0x675/0xa20 kernel/time/timer.c:1734
- __run_timers kernel/time/timer.c:1715 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-Fixes: ec97ecf1ebe4 ("net: sched: add Flow Queue PIE packet scheduler")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Cc: Mohit P. Tahiliani <tahiliani@nitk.edu.in>
-Cc: Sachin D. Patil <sdp.sachin@gmail.com>
-Cc: V. Saicharan <vsaicharan1998@gmail.com>
-Cc: Mohit Bhasi <mohitbhasi1998@gmail.com>
-Cc: Leslie Monis <lesliemonis@gmail.com>
-Cc: Gautam Ramakrishnan <gautamramk@gmail.com>
-Link: https://lore.kernel.org/r/20211209084937.3500020-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211202114819.2511954-1-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/sch_fq_pie.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/hid/Kconfig |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/net/sched/sch_fq_pie.c
-+++ b/net/sched/sch_fq_pie.c
-@@ -531,6 +531,7 @@ static void fq_pie_destroy(struct Qdisc
- 	struct fq_pie_sched_data *q = qdisc_priv(sch);
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -173,7 +173,7 @@ config HID_CHICONY
  
- 	tcf_block_put(q->block);
-+	q->p_params.tupdate = 0;
- 	del_timer_sync(&q->adapt_timer);
- 	kvfree(q->flows);
- }
+ config HID_CORSAIR
+ 	tristate "Corsair devices"
+-	depends on HID && USB && LEDS_CLASS
++	depends on USB_HID && LEDS_CLASS
+ 	---help---
+ 	Support for Corsair devices that are not fully compliant with the
+ 	HID standard.
+@@ -389,7 +389,7 @@ config HID_LENOVO
+ 
+ config HID_LOGITECH
+ 	tristate "Logitech devices"
+-	depends on HID
++	depends on USB_HID
+ 	default !EXPERT
+ 	---help---
+ 	Support for Logitech devices that are not fully compliant with HID standard.
+@@ -693,7 +693,7 @@ config HID_SAITEK
+ 
+ config HID_SAMSUNG
+ 	tristate "Samsung InfraRed remote control or keyboards"
+-	depends on HID
++	depends on USB_HID
+ 	---help---
+ 	Support for Samsung InfraRed remote control or keyboards.
+ 
 
 

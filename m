@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B45AF47251C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6CD4725AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbhLMJlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbhLMJjT (ORCPT
+        id S235841AbhLMJp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:45:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54062 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235299AbhLMJky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:39:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB41BC061D76;
-        Mon, 13 Dec 2021 01:37:50 -0800 (PST)
+        Mon, 13 Dec 2021 04:40:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5D030CE0E83;
-        Mon, 13 Dec 2021 09:37:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0968FC341C5;
-        Mon, 13 Dec 2021 09:37:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1AEAB80E19;
+        Mon, 13 Dec 2021 09:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFFD1C341DA;
+        Mon, 13 Dec 2021 09:40:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388268;
-        bh=XCgCkaNWnfUAgYep8/K9yEqrJyH2P5wqGKVpAkqeNKE=;
+        s=korg; t=1639388451;
+        bh=ME6BtVGABkVjGGLvKCX1AXh33aBLl4rhb6Av3V127xc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OueJuKGjBRJr6doWuThZXN08av0ef+GQO47xvBz13X9xXkPwHi7gUrGKbqNclv7NF
-         8+Qjtc/iIU4HOEyONU6WeFbbfnjQlkS679+q/su8J0FJnSm9vOuOvEIyl3pqEne8Ud
-         dWR1B486h1hBykCJyyNiuZlKNLnD+bR1m98ROKhc=
+        b=JrBi1Ivk3MPNHIDBKfuOphoxSrlilnjexHjZ8oIEvc+0o3ZBG8tCaSmMhQ0fKyLO+
+         ODFqcvwoUBhKJkPMGkC/vYaQ4aRJ2NqOVy171qj0Nn/polnAKPaiuaLXnpkeSstUsc
+         f09cuwY04sqBHy9dcDkQrJuYCGIzztTBxKsgfwYM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.14 45/53] iio: itg3200: Call iio_trigger_notify_done() on error
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH 4.19 53/74] usb: core: config: fix validation of wMaxPacketValue entries
 Date:   Mon, 13 Dec 2021 10:30:24 +0100
-Message-Id: <20211213092929.860828979@linuxfoundation.org>
+Message-Id: <20211213092932.578179049@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,41 +45,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
 
-commit 67fe29583e72b2103abb661bb58036e3c1f00277 upstream.
+commit 1a3910c80966e4a76b25ce812f6bea0ef1b1d530 upstream.
 
-IIO trigger handlers must call iio_trigger_notify_done() when done. This
-must be done even when an error occurred. Otherwise the trigger will be
-seen as busy indefinitely and the trigger handler will never be called
-again.
+The checks performed by commit aed9d65ac327 ("USB: validate
+wMaxPacketValue entries in endpoint descriptors") require that initial
+value of the maxp variable contains both maximum packet size bits
+(10..0) and multiple-transactions bits (12..11). However, the existing
+code assings only the maximum packet size bits. This patch assigns all
+bits of wMaxPacketSize to the variable.
 
-The itg3200 driver neglects to call iio_trigger_notify_done() when there is
-an error reading the gyro data. Fix this by making sure that
-iio_trigger_notify_done() is included in the error exit path.
-
-Fixes: 9dbf091da080 ("iio: gyro: Add itg3200")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211101144055.13858-1-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: aed9d65ac327 ("USB: validate wMaxPacketValue entries in endpoint descriptors")
+Cc: stable <stable@vger.kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Link: https://lore.kernel.org/r/20211210085219.16796-1-pavel.hofman@ivitera.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/gyro/itg3200_buffer.c |    2 +-
+ drivers/usb/core/config.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/gyro/itg3200_buffer.c
-+++ b/drivers/iio/gyro/itg3200_buffer.c
-@@ -64,9 +64,9 @@ static irqreturn_t itg3200_trigger_handl
- 
- 	iio_push_to_buffers_with_timestamp(indio_dev, &scan, pf->timestamp);
- 
-+error_ret:
- 	iio_trigger_notify_done(indio_dev->trig);
- 
--error_ret:
- 	return IRQ_HANDLED;
- }
- 
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -409,7 +409,7 @@ static int usb_parse_endpoint(struct dev
+ 	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+ 	 * (see the end of section 5.6.3), so don't warn about them.
+ 	 */
+-	maxp = usb_endpoint_maxp(&endpoint->desc);
++	maxp = le16_to_cpu(endpoint->desc.wMaxPacketSize);
+ 	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+ 		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
+ 		    cfgno, inum, asnum, d->bEndpointAddress);
 
 

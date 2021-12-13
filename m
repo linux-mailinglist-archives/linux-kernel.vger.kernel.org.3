@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD6647279E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2FE4726C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241393AbhLMKDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237532AbhLMJ60 (ORCPT
+        id S237293AbhLMJyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:54:11 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40050 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234587AbhLMJsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:58:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9AFC08EB1F;
-        Mon, 13 Dec 2021 01:48:29 -0800 (PST)
+        Mon, 13 Dec 2021 04:48:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32121B80E26;
-        Mon, 13 Dec 2021 09:48:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75502C341CE;
-        Mon, 13 Dec 2021 09:48:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B6609CE0B20;
+        Mon, 13 Dec 2021 09:48:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4ABC00446;
+        Mon, 13 Dec 2021 09:48:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388907;
-        bh=+I1AANqHeYin+S5WleYA3KXnEk3L7lSrogsypINRZPk=;
+        s=korg; t=1639388909;
+        bh=qDXaSaxmEZateudXlrVulZq1YeE+yl3kbgOZBcV7Xho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WN2Z8saysGDEminAjK/TowHsCWXDkkK3I42FgUF0llP255hyEalWj3DqiTcBo55rT
-         7RkzKB4xiuTouC81Xlwh6OKi1UeTOyLJXVge4+toRnlC4ZrUCpCwTbZer6mm+mxt/h
-         UIbx/b2WVPdk//pLfIrOwFKHTE7EJ6Rl8PrnzoZc=
+        b=OixnI00TDOpsm+lKOll9pzBEVNBuZ9klu2nUl7O9Yo5RM6DHy+O1XaNvqMM11BM+h
+         kLvf22JhJ1fadnVv/II/vhS28NuQxxu3Xrd94bdb/JPyTq3BLFK9NVGvC1l854WPBH
+         laxuHPJEf3BgR8a72Og7Rzzp8zJeUrBHWxrmjG6o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.10 018/132] can: kvaser_pciefd: kvaser_pciefd_rx_error_frame(): increase correct stats->{rx,tx}_errors counter
-Date:   Mon, 13 Dec 2021 10:29:19 +0100
-Message-Id: <20211213092939.713588605@linuxfoundation.org>
+Subject: [PATCH 5.10 019/132] can: sja1000: fix use after free in ems_pcmcia_add_card()
+Date:   Mon, 13 Dec 2021 10:29:20 +0100
+Message-Id: <20211213092939.745279660@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
 References: <20211213092939.074326017@linuxfoundation.org>
@@ -48,46 +46,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jimmy Assarsson <extja@kvaser.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 36aea60fc892ce73f96d45dc7eb239c7c4c1fa69 upstream.
+commit 3ec6ca6b1a8e64389f0212b5a1b0f6fed1909e45 upstream.
 
-Check the direction bit in the error frame packet (EPACK) to determine
-which net_device_stats {rx,tx}_errors counter to increase.
+If the last channel is not available then "dev" is freed.  Fortunately,
+we can just use "pdev->irq" instead.
 
-Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
-Link: https://lore.kernel.org/all/20211208152122.250852-1-extja@kvaser.com
+Also we should check if at least one channel was set up.
+
+Fixes: fd734c6f25ae ("can/sja1000: add driver for EMS PCMCIA card")
+Link: https://lore.kernel.org/all/20211124145041.GB13656@kili
 Cc: stable@vger.kernel.org
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/kvaser_pciefd.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/net/can/sja1000/ems_pcmcia.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -248,6 +248,9 @@ MODULE_DESCRIPTION("CAN driver for Kvase
- #define KVASER_PCIEFD_SPACK_EWLR BIT(23)
- #define KVASER_PCIEFD_SPACK_EPLR BIT(24)
+--- a/drivers/net/can/sja1000/ems_pcmcia.c
++++ b/drivers/net/can/sja1000/ems_pcmcia.c
+@@ -235,7 +235,12 @@ static int ems_pcmcia_add_card(struct pc
+ 			free_sja1000dev(dev);
+ 	}
  
-+/* Kvaser KCAN_EPACK second word */
-+#define KVASER_PCIEFD_EPACK_DIR_TX BIT(0)
+-	err = request_irq(dev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
++	if (!card->channels) {
++		err = -ENODEV;
++		goto failure_cleanup;
++	}
 +
- struct kvaser_pciefd;
- 
- struct kvaser_pciefd_can {
-@@ -1285,7 +1288,10 @@ static int kvaser_pciefd_rx_error_frame(
- 
- 	can->err_rep_cnt++;
- 	can->can.can_stats.bus_error++;
--	stats->rx_errors++;
-+	if (p->header[1] & KVASER_PCIEFD_EPACK_DIR_TX)
-+		stats->tx_errors++;
-+	else
-+		stats->rx_errors++;
- 
- 	can->bec.txerr = bec.txerr;
- 	can->bec.rxerr = bec.rxerr;
++	err = request_irq(pdev->irq, &ems_pcmcia_interrupt, IRQF_SHARED,
+ 			  DRV_NAME, card);
+ 	if (!err)
+ 		return 0;
 
 

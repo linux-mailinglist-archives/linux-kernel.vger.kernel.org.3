@@ -2,126 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F38472EEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9874A472EF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbhLMOV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
+        id S239105AbhLMOWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:22:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239144AbhLMOVu (ORCPT
+        with ESMTP id S239144AbhLMOWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:21:50 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853C3C061751
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 06:21:49 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id g18so15060449pfk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 06:21:49 -0800 (PST)
+        Mon, 13 Dec 2021 09:22:10 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9FEC061A32;
+        Mon, 13 Dec 2021 06:22:08 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y12so51857915eda.12;
+        Mon, 13 Dec 2021 06:22:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=871CXj1aRpC+2TqhzLMbz3iHeb2GTGhF6RiqfqFyWOM=;
-        b=A26Vcu7LGR96dETcFTQz6G/P2Tn2GbitjgW9PNyOTyrshf8V39VQY8haNWeUWkdX32
-         MPv4i0lWk/Y4Kma+UvE8OmQX/yeeSqP6hlUqvHVgA4BC3M1vkxUjvDJVHpXB4axH4/wi
-         cs4z0bVuvivpTsBajslE6j59WaQtbCvnSRWeoNzXDSwBJia4FXLKBZmvqN5Tg3XG4FVj
-         RWltlxaXXJlgUydNU5ScKfpskxQ+VCOPQWaFucaXyvDGcrKxzStj3IDjXfk5AUfZfk6W
-         dvQDilPCRpLn96LKqIiqHKELyXZbN9eGQCTyLXjizdEXz8yV44GEBi7Emb/CV/iqDYZg
-         Npfg==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=laxE5jN2bHJG4Yo8WVS4mx5VPDFX4vkop6go8zl/3cQ=;
+        b=lzIwCzNJvV86Boup6xgN3osyOJCZ5s9f7wssi8eyqby4QFK6mgh5w3tsozKTsJ3T59
+         HVIqizJ9ZFY64dJp6KfX+cGRLOQJEUW1bzqXZGPlZkMjcWmDT+x4qJOaaQciaOAaqqaj
+         HJrg2wpVesDIDnNnXE47hF9u2zKK0yR9ZEIGagxI6LOf8wbifVoIpR3Fzosc7syqYuLg
+         JXWkIw+L3dFwO2b6bI896aMnKTfjnchtLGFfA5Q2ryaFoOBCw6IZ3EdA9NVzgftFprLF
+         ozWGX0Iit8K1FK6gIfGRc+GIN4B5+EySkEsCFz5L1EEVwZq4JtYAomtfuyIuiB/U9+tJ
+         P/7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=871CXj1aRpC+2TqhzLMbz3iHeb2GTGhF6RiqfqFyWOM=;
-        b=X4wpFa54Wny0jKzHd+TuhtRH+oqHyQ7JwRFBQLaA8biiof1ZIh7y98OwHK6MxxbAC4
-         J+IT/7a8Nic4JvuZfzV6cELQVAXh3UTY5jiQDvrCFhi9N/RLTewJs45nlYhb1hvjNmSn
-         ItUUDXguoQsFe9qYcg3DS/tGn7fqTEos2XeFVAVPuDUBdpjXHaeDyVCEbrT+Tq9D2aZR
-         /9SHqjZHrrjYklYWCo/c1e4aOZF/4ugD+0zyAgNIiIzP7lm+ETUeQuRHR4T55Q+lYoJ3
-         5j32SRLc93ziCA2+f/M7fPJpZ52oZPDAWlXCFV1evRzJwzPFCiYEks/zVDNVUwq1r2ui
-         tWWA==
-X-Gm-Message-State: AOAM53058KVhgeZf0Ew6HhDPeFwPAv0S8eFuATBwHyMvWFpQD4TDUj2q
-        ypLyuDGTpq/ScK0zER+Lp9E=
-X-Google-Smtp-Source: ABdhPJwVjLfgiq+ZliTNrHlm2zTYfK9/0mO1eOHrTYjGAPYAu1YJNn14CAau60+dVFzoc1OPkUd86A==
-X-Received: by 2002:a05:6a00:22ce:b0:4b1:39d2:bc7c with SMTP id f14-20020a056a0022ce00b004b139d2bc7cmr20556069pfj.27.1639405309025;
-        Mon, 13 Dec 2021 06:21:49 -0800 (PST)
-Received: from odroid ([114.29.23.242])
-        by smtp.gmail.com with ESMTPSA id rm1sm7425733pjb.3.2021.12.13.06.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 06:21:48 -0800 (PST)
-Date:   Mon, 13 Dec 2021 14:21:42 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Christoph Lameter <cl@gentwo.org>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
-        robin.murphy@arm.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, vbabka@suse.cz, m.szyprowski@samsung.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org
-Subject: Re: [PATCH RESEND v2 0/5] Avoid requesting page from DMA zone when
- no managed pages
-Message-ID: <20211213142142.GA999996@odroid>
-References: <20211207030750.30824-1-bhe@redhat.com>
- <alpine.DEB.2.22.394.2112070859420.201880@gentwo.de>
- <20211209080540.GA3050@MiWiFi-R3L-srv>
- <alpine.DEB.2.22.394.2112091355510.270348@gentwo.de>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=laxE5jN2bHJG4Yo8WVS4mx5VPDFX4vkop6go8zl/3cQ=;
+        b=7IiiVqeBS/ZVreZhSNvqqYo6G0cqrAe7nz07I4adOtYzRN69/VtWG71RqUPEJoyr35
+         4ZF6GSjXE5G5OU1LcyDtFvvBaKdjCfYnuXmXPzxD+6eD2KvLA2iNIeJ47THX/hWmq4nX
+         rf5vT+YFT/BmCStmoFCjyu8r3CO21hTN3V8iPKUXLg0i2YTKG0pIWJVEnHObywAql1ch
+         FsIcE6eNIhRkuNxyYnR3Jo6z2cBGM1UTjFEGNKV+v+SieS9d6jk/e4qIqRUcPZ3mxmLG
+         JmAyqG2JBR+4Can3Whz4iINBf9Z3ETPrLQAtSBdTERm7ZcFgxZRGIWECpYplDPon8KJa
+         1row==
+X-Gm-Message-State: AOAM530BJIZzKjfZmytkfgLLi1eJp0qb4gHXEn3+pPcwTc57teXSbHoc
+        pQirwkOVmJJt9x71x0bkNZo=
+X-Google-Smtp-Source: ABdhPJxNFRV6Oi2yANoqjyUMFO8hhvfktf+ywIKoyHutx2WmfJhwBnQg2syM5e7/uYTFHwNnzVsp7g==
+X-Received: by 2002:a50:d543:: with SMTP id f3mr62764539edj.56.1639405324197;
+        Mon, 13 Dec 2021 06:22:04 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id 12sm147884eja.187.2021.12.13.06.22.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 06:22:03 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <72a3fabf-bb1d-002f-caaf-2656559aa2a8@redhat.com>
+Date:   Mon, 13 Dec 2021 15:22:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2112091355510.270348@gentwo.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH MANUALSEL 5.10 3/4] KVM: selftests: Make sure
+ kvm_create_max_vcpus test won't hit RLIMIT_NOFILE
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, shuah@kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20211213142020.352376-1-sashal@kernel.org>
+ <20211213142020.352376-3-sashal@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211213142020.352376-3-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 01:59:58PM +0100, Christoph Lameter wrote:
-> On Thu, 9 Dec 2021, Baoquan He wrote:
+On 12/13/21 15:20, Sasha Levin wrote:
+> From: Vitaly Kuznetsov <vkuznets@redhat.com>
 > 
-> > > The slab allocators guarantee that all kmalloc allocations are DMA able
-> > > indepent of specifying ZONE_DMA/ZONE_DMA32
-> >
-> > Here you mean we guarantee dma-kmalloc will be DMA able independent of
-> > specifying ZONE_DMA/DMA32, or the whole sla/ub allocator?
+> [ Upstream commit 908fa88e420f30dde6d80f092795a18ec72ca6d3 ]
 > 
-> All memory obtained via kmalloc --independent of "dma-alloc", ZONE_DMA
-> etc-- must be dmaable.
+> With the elevated 'KVM_CAP_MAX_VCPUS' value kvm_create_max_vcpus test
+> may hit RLIMIT_NOFILE limits:
 > 
-> > With my understanding, isn't the reasonable sequence zone DMA firstly if
-> > GFP_DMA, then zone DMA32, finaly zone NORMAL. At least, on x86_64, I
-> > believe device driver developer prefer to see this because most of time,
-> > zone DMA and zone DMA32 are both used for dma buffer allocation, if
-> > IOMMU is not enabled. However, memory got from zone NORMAL when required
-> > with GFP_DMA, and it succeeds, does it mean that the developer doesn't
-> > take the GFP_DMA flag seriously, just try to get buffer for allocation?
+>   # ./kvm_create_max_vcpus
+>   KVM_CAP_MAX_VCPU_ID: 4096
+>   KVM_CAP_MAX_VCPUS: 1024
+>   Testing creating 1024 vCPUs, with IDs 0...1023.
+>   /dev/kvm not available (errno: 24), skipping test
 > 
-> ZONE_NORMAL is also used for DMA allocations. ZONE_DMA and ZONE_DMA32 are
-> only used if the physical range of memory supported by a device does not
-> include all of normal memory.
+> Adjust RLIMIT_NOFILE limits to make sure KVM_CAP_MAX_VCPUS fds can be
+> opened. Note, raising hard limit ('rlim_max') requires CAP_SYS_RESOURCE
+> capability which is generally not needed to run kvm selftests (but without
+> raising the limit the test is doomed to fail anyway).
 > 
-> > > The size of ZONE_DMA is traditionally depending on the platform. On some
-> > > it is 16MB, on some 1G and on some 4GB. ZONE32 is always 4GB and should
-> > > only be used if ZONE_DMA has already been used.
-> >
-> > As said at above, ia64 and riscv don't have ZONE_DMA at all, they just
-> > cover low 4G with ZONE_DMA32 alone.
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Message-Id: <20211123135953.667434-1-vkuznets@redhat.com>
+> [Skip the test if the hard limit can be raised. - Paolo]
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Tested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   .../selftests/kvm/kvm_create_max_vcpus.c      | 30 +++++++++++++++++++
+>   1 file changed, 30 insertions(+)
 > 
-> If you do not have devices that are crap and cannot address the full
-> memory then you dont need these special zones.
+> diff --git a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+> index 0299cd81b8ba2..aa3795cd7bd3d 100644
+> --- a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+> +++ b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+> @@ -12,6 +12,7 @@
+>   #include <stdio.h>
+>   #include <stdlib.h>
+>   #include <string.h>
+> +#include <sys/resource.h>
+>   
+>   #include "test_util.h"
+>   
+> @@ -40,10 +41,39 @@ int main(int argc, char *argv[])
+>   {
+>   	int kvm_max_vcpu_id = kvm_check_cap(KVM_CAP_MAX_VCPU_ID);
+>   	int kvm_max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
+> +	/*
+> +	 * Number of file descriptors reqired, KVM_CAP_MAX_VCPUS for vCPU fds +
+> +	 * an arbitrary number for everything else.
+> +	 */
+> +	int nr_fds_wanted = kvm_max_vcpus + 100;
+> +	struct rlimit rl;
+>   
+>   	pr_info("KVM_CAP_MAX_VCPU_ID: %d\n", kvm_max_vcpu_id);
+>   	pr_info("KVM_CAP_MAX_VCPUS: %d\n", kvm_max_vcpus);
+>   
+> +	/*
+> +	 * Check that we're allowed to open nr_fds_wanted file descriptors and
+> +	 * try raising the limits if needed.
+> +	 */
+> +	TEST_ASSERT(!getrlimit(RLIMIT_NOFILE, &rl), "getrlimit() failed!");
+> +
+> +	if (rl.rlim_cur < nr_fds_wanted) {
+> +		rl.rlim_cur = nr_fds_wanted;
+> +		if (rl.rlim_max < nr_fds_wanted) {
+> +			int old_rlim_max = rl.rlim_max;
+> +			rl.rlim_max = nr_fds_wanted;
+> +
+> +			int r = setrlimit(RLIMIT_NOFILE, &rl);
+> +			if (r < 0) {
+> +				printf("RLIMIT_NOFILE hard limit is too low (%d, wanted %d)\n",
+> +				       old_rlim_max, nr_fds_wanted);
+> +				exit(KSFT_SKIP);
+> +			}
+> +		} else {
+> +			TEST_ASSERT(!setrlimit(RLIMIT_NOFILE, &rl), "setrlimit() failed!");
+> +		}
+> +	}
+> +
+>   	/*
+>   	 * Upstream KVM prior to 4.8 does not support KVM_CAP_MAX_VCPU_ID.
+>   	 * Userspace is supposed to use KVM_CAP_MAX_VCPUS as the maximum ID
 > 
-> Sorry this subject has caused confusion multiple times over the years and
-> there are still arches that are not implementing this in a consistent way.
 
-Hello Baoquan and Christoph.
-
-I'm the confused one here too. :)
-
-So the point is that ZONE_NORMAL is also dma-able if the device can access
-normal memory. (which is false for ISA devices, ancient PCI devices,
-...etc.)
-
-Then if I understand right, I think the patch 5/5 (mm/slub: Avoid ...) should be removing
-GFP_DMA flag from the function sr_probe() -> get_capabilities, rather than
-copying copying normal kmalloc caches to dma kmalloc caches. (If the device does
-not have limitation in its address space.)
-
-Please let me know If I got it wrong :)
-
-Thanks,
-Hyeonggon.
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>

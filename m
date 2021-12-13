@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 268324724EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CE2472841
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234863AbhLMJji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:39:38 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:33454 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbhLMJiG (ORCPT
+        id S237549AbhLMKJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242504AbhLMKHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:38:06 -0500
+        Mon, 13 Dec 2021 05:07:39 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E05BC08EC3E;
+        Mon, 13 Dec 2021 01:51:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 85C23CE0E8C;
-        Mon, 13 Dec 2021 09:38:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FB1C00446;
-        Mon, 13 Dec 2021 09:38:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1240CCE0E82;
+        Mon, 13 Dec 2021 09:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D13C00446;
+        Mon, 13 Dec 2021 09:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388282;
-        bh=gYagyYNesN1+azpI4k5Dvmoq4mI/SFcMSxDVU8e70us=;
+        s=korg; t=1639389108;
+        bh=BsTAnJceb6nl69zlrAqXY2nKun49rSGHx6DmPhVI1xY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t+Lbwds/4xdKdXIVWX4T6jzZKrEnj8pmo2qIEIJXhEHzi3QqBeZibyhyO+J+pH8ps
-         f3bpWEj41bLCFARMrXwASt73FO0ftgQNihsojDvOq8T8+jW//ptjwXxT8sP8LMZ9rv
-         bn1A31C8FNpKV99AuqDfAdPvSqg76uJ82FebX0UE=
+        b=xLBg8sVcRjsKFJMZZVboVWr+AJ7FVjJ+qrZJnVPDD19SuSGSQK2K8EMG+oGnuzpYo
+         ook7EUC35oZNY/1dQ7RLAKdTy0bbDMOrK74Rj4F1yj/JW6HxAFfs76xXVRxfwp+Uew
+         iflrKYqEbGEzXTzJCwm6HVnQ+/p6o8WW75t/PyDk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 4.14 50/53] irqchip/armada-370-xp: Fix return value of armada_370_xp_msi_alloc()
+        Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>,
+        Norbert Zulinski <norbertx.zulinski@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Gurucharan G <gurucharanx.g@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 088/132] i40e: Fix NULL pointer dereference in i40e_dbg_dump_desc
 Date:   Mon, 13 Dec 2021 10:30:29 +0100
-Message-Id: <20211213092930.030173778@linuxfoundation.org>
+Message-Id: <20211213092942.134083484@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,33 +52,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Norbert Zulinski <norbertx.zulinski@intel.com>
 
-commit ce20eff57361e72878a772ef08b5239d3ae102b6 upstream.
+commit 23ec111bf3549aae37140330c31a16abfc172421 upstream.
 
-IRQ domain alloc function should return zero on success. Non-zero value
-indicates failure.
+When trying to dump VFs VSI RX/TX descriptors
+using debugfs there was a crash
+due to NULL pointer dereference in i40e_dbg_dump_desc.
+Added a check to i40e_dbg_dump_desc that checks if
+VSI type is correct for dumping RX/TX descriptors.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Fixes: fcc392d501bd ("irqchip/armada-370-xp: Use the generic MSI infrastructure")
-Cc: stable@vger.kernel.org
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211125130057.26705-1-pali@kernel.org
+Fixes: 02e9c290814c ("i40e: debugfs interface")
+Signed-off-by: Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
+Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-armada-370-xp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_debugfs.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/irqchip/irq-armada-370-xp.c
-+++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -250,7 +250,7 @@ static int armada_370_xp_msi_alloc(struc
- 				    NULL, NULL);
+--- a/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
+@@ -553,6 +553,14 @@ static void i40e_dbg_dump_desc(int cnt,
+ 		dev_info(&pf->pdev->dev, "vsi %d not found\n", vsi_seid);
+ 		return;
  	}
- 
--	return hwirq;
-+	return 0;
- }
- 
- static void armada_370_xp_msi_free(struct irq_domain *domain,
++	if (vsi->type != I40E_VSI_MAIN &&
++	    vsi->type != I40E_VSI_FDIR &&
++	    vsi->type != I40E_VSI_VMDQ2) {
++		dev_info(&pf->pdev->dev,
++			 "vsi %d type %d descriptor rings not available\n",
++			 vsi_seid, vsi->type);
++		return;
++	}
+ 	if (type == RING_TYPE_XDP && !i40e_enabled_xdp_vsi(vsi)) {
+ 		dev_info(&pf->pdev->dev, "XDP not enabled on VSI %d\n", vsi_seid);
+ 		return;
 
 

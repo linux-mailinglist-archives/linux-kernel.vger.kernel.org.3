@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA24447254B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F9947288B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbhLMJnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:43:16 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53686 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbhLMJkZ (ORCPT
+        id S235777AbhLMKOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:14:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240933AbhLMKCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:40:25 -0500
+        Mon, 13 Dec 2021 05:02:51 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AD3C07E5EE;
+        Mon, 13 Dec 2021 01:49:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C77FDB80E1B;
-        Mon, 13 Dec 2021 09:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3374C00446;
-        Mon, 13 Dec 2021 09:40:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CCDF4CE0E92;
+        Mon, 13 Dec 2021 09:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77111C341CE;
+        Mon, 13 Dec 2021 09:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388422;
-        bh=T3+PggkFjKXrWjxOXBvaketOY1gg4qvy6x+IMl/gL+Q=;
+        s=korg; t=1639388981;
+        bh=fMgUlj/beUfdjYidA1J9qCIA8KBnSkOcbIGRPgjrGRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sx6X8EzhqNRXws2orKOeX9+rOI7uidkCBoQPiNTTHS657zEKuEb9WH3j6gGR9XSB1
-         v0J0TDZxH6WRHFKDaZH1rRPAgAqspXhDsTS50sUbAUrdx+EDtL7vHzlSSEgeKOv/cv
-         5mcFQo1Hj0WN5adpr8bT53BtPwlKMlJ2M8a50Adk=
+        b=VGeTJ8xR/1QB1l07fs+shvGgI19LK//rCtx6wAKYeJpzso3Cgt763WYC8CerwCUey
+         qTWOnucn8adHd0hWHiuq0r4vbXx+JNnkRxIzZUy36uMz9wlNxXsK7tvPI/tPILdv+9
+         6m/xT7icbW5xNOEKFHaAsLXq6w/SxF0Mh7UzS3X8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 4.19 44/74] mtd: rawnand: fsmc: Take instruction delay into account
-Date:   Mon, 13 Dec 2021 10:30:15 +0100
-Message-Id: <20211213092932.289311083@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.10 075/132] PM: runtime: Fix pm_runtime_active() kerneldoc comment
+Date:   Mon, 13 Dec 2021 10:30:16 +0100
+Message-Id: <20211213092941.684110349@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,44 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herve Codina <herve.codina@bootlin.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-commit a4ca0c439f2d5ce9a3dc118d882f9f03449864c8 upstream.
+commit 444dd878e85fb33fcfb2682cfdab4c236f33ea3e upstream.
 
-The FSMC NAND controller should apply a delay after the
-instruction has been issued on the bus.
-The FSMC NAND controller driver did not handle this delay.
+The kerneldoc comment of pm_runtime_active() does not reflect the
+behavior of the function, so update it accordingly.
 
-Add this waiting delay in the FSMC NAND controller driver.
-
-Fixes: 4da712e70294 ("mtd: nand: fsmc: use ->exec_op()")
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211119150316.43080-4-herve.codina@bootlin.com
+Fixes: 403d2d116ec0 ("PM: runtime: Add kerneldoc comments to multiple helpers")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/fsmc_nand.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/pm_runtime.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/mtd/nand/raw/fsmc_nand.c
-+++ b/drivers/mtd/nand/raw/fsmc_nand.c
-@@ -18,6 +18,7 @@
- 
- #include <linux/clk.h>
- #include <linux/completion.h>
-+#include <linux/delay.h>
- #include <linux/dmaengine.h>
- #include <linux/dma-direction.h>
- #include <linux/dma-mapping.h>
-@@ -700,6 +701,9 @@ static int fsmc_exec_op(struct nand_chip
- 						instr->ctx.waitrdy.timeout_ms);
- 			break;
- 		}
-+
-+		if (instr->delay_ns)
-+			ndelay(instr->delay_ns);
- 	}
- 
- 	return ret;
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -127,7 +127,7 @@ static inline bool pm_runtime_suspended(
+  * pm_runtime_active - Check whether or not a device is runtime-active.
+  * @dev: Target device.
+  *
+- * Return %true if runtime PM is enabled for @dev and its runtime PM status is
++ * Return %true if runtime PM is disabled for @dev or its runtime PM status is
+  * %RPM_ACTIVE, or %false otherwise.
+  *
+  * Note that the return value of this function can only be trusted if it is
 
 

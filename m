@@ -2,123 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD51B4730FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D77473107
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240254AbhLMP6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbhLMP6w (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:58:52 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7D3C061574;
-        Mon, 13 Dec 2021 07:58:52 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id n66so23678494oia.9;
-        Mon, 13 Dec 2021 07:58:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yGfzyDYwTUBRIBWmk787nJHKxOhWCaJ2ogedCtBIFp0=;
-        b=dWBgYGE+1jy15pU/SA8uESGrurPXMg+geN1MMCYoc0j6kMP23Hn9RK2A3u4Tpnm73p
-         u3JxCPByl9oqKh+iIncJyQ9zdnU43V6bM9YI++TvIQgp8UMJtoPh2CCWGKBvnSiWb32X
-         gHfazgNz8J+9MK2/WzmdsGQelYrXeBi3dmj6bbjOfviSc1SYz5SP7mZcqxSeSVw+v5Is
-         qfMg+xiQZIIxa/eGmZerqWezZmYHINHKp+a+YKgd8hOCSoim2KtwA7GMo0bhZjHmIQZW
-         74SYZL6ibpW4UprvE7ibe/aMBOX2wsUMs+G7ivknL2T7Efr+ZEQNq1Ene11whY8lNhWs
-         hw1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yGfzyDYwTUBRIBWmk787nJHKxOhWCaJ2ogedCtBIFp0=;
-        b=PKvruxMFu/Do6L56Btpsp32A+NkRFHeLRmjqczNOb3Q6RqUsPgb2UUQDOk3qCwtFqC
-         OC6o+RD6+MkfrDzeGNvOd/mAlxmGCcvsOZF38C89kJVo7wEcFYULIiUofyDnQNJAECt+
-         iWMLrE0CSXzloGWIsS3VFbzOF3V2yIQJyemfLYbRG5/hijYhTgPdLsbbVg9Uld/P6xcS
-         VdhFWpgS3jMxJebRY8Ex8hJmQrFVVgYLnvRObRl7zGaJf/IksrcZS4/CmWkFxdSOHsWV
-         QUqTmI3qrVCIuU38PnRyuT7NdyG16ApwJoRNgU6IBKj/y6KtYSkXU6hfH8G5P2d8S7VB
-         GOSg==
-X-Gm-Message-State: AOAM532nF5AtKEJMzqCpp90c4Jy/rBvw+tPK4qozMpj5/afRhEYpVK6e
-        I6hJunDMjeWktkHIGMxzk8V2cI2qLGg=
-X-Google-Smtp-Source: ABdhPJxdEgNEluuOP+Mg+WGZz5WdDvYAl977/wITRh82fIbG32cqCCawD3aMXBeZ346805JYBy1fjA==
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr28062103oiw.154.1639411132077;
-        Mon, 13 Dec 2021 07:58:52 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id e14sm2306709oow.3.2021.12.13.07.58.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 07:58:51 -0800 (PST)
-Message-ID: <56ae3614-f666-4eed-cfee-e2dc7b7eb169@gmail.com>
-Date:   Mon, 13 Dec 2021 08:58:50 -0700
+        id S240302AbhLMQAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:00:10 -0500
+Received: from ip-15.mailobj.net ([213.182.54.15]:42254 "EHLO msg-4.mailo.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240293AbhLMQAI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 11:00:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+        t=1639411171; bh=E3kyiEeT5dBdXWhbp1IxPuCcvru4Lfbtt7wr9gZYQ2k=;
+        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+         MIME-Version:Content-Transfer-Encoding;
+        b=d3GqlFbWXAkuQMYjrVoutU1EGlIJOi1ljXLqLng5C1uUnT26uwl4jfe1qYyzN2y6f
+         3vtHb5C6Nm6zBWAM7xHz/a+f+Hcek39i22YXBnhXtOM4Dj6b7E1F9OYWWoFsw3TufG
+         K0qFVvsX3niu4rJLkBxjj3r/xd4ShmkZi5KYnByA=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via proxy.mailoo.org [213.182.55.207]
+        Mon, 13 Dec 2021 16:59:31 +0100 (CET)
+X-EA-Auth: wFsVhjkcT7DL+4gBttlWG8tX9AXPDvpJqJmfnzCnwvqZa0Pgv7B5tNpI1VmhAt5iIHMq7MY78Fq2Jy45N2iiWjWzYnxc9QJsAewSTKabX6s=
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     stephan@gerhold.net, obayerd@eurocomposant.fr,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+Subject: [PATCH 1/2] ASoC: dt-bindings: codecs: Add bindings for ak4375
+Date:   Mon, 13 Dec 2021 16:59:11 +0100
+Message-Id: <20211213155914.2558902-1-vincent.knecht@mailoo.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH v2] selftests: net: Correct case name
-Content-Language: en-US
-To:     "Zhou, Jie2X" <jie2x.zhou@intel.com>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Li, ZhijianX" <zhijianx.li@intel.com>,
-        "Li, Philip" <philip.li@intel.com>,
-        "Ma, XinjianX" <xinjianx.ma@intel.com>
-References: <20211202022841.23248-1-lizhijian@cn.fujitsu.com>
- <bbb91e78-018f-c09c-47db-119010c810c2@fujitsu.com>
- <41a78a37-6136-ba45-d8fa-c7af4ee772b9@gmail.com>
- <4d92af7d-5a84-4a5d-fd98-37f969ac4c23@fujitsu.com>
- <8e3bb197-3f56-a9a7-b75d-4a6343276ec7@gmail.com>
- <PH0PR11MB47925643B3A60192AAD18D7AC5749@PH0PR11MB4792.namprd11.prod.outlook.com>
- <65ca2349-5d11-93fb-d9d3-22ff87fe7533@gmail.com>
- <PH0PR11MB4792C379D6C64BE6BA0ECED8C5749@PH0PR11MB4792.namprd11.prod.outlook.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <PH0PR11MB4792C379D6C64BE6BA0ECED8C5749@PH0PR11MB4792.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 2:44 AM, Zhou, Jie2X wrote:
-> hi,
-> 
->> After the last round of patches all tests but 2 pass with the 5.16.0-rc3
->> kernel (net-next based) and ubuntu 20.04 OS.
->> The 2 failures are due local pings and to bugs in 'ping' - it removes
->> the device bind by calling setsockopt with an "" arg.
-> 
-> The failed testcase command is nettest not ping.
-> COMMAND: ip netns exec ns-A nettest -s -R -P icmp -l 172.16.1.1 -b
-> TEST: Raw socket bind to local address - ns-A IP                              [FAIL]
-> 
-> It failed because it return 0.
-> But the patch expected return 1.
-> 
-> May be the patch should expected 0 return value for  ${NSA_IP}.
-> And expected 1 return value for  ${VRF_IP}.
-> 
-> diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-> index dd7437dd2680b..4340477863d36 100755
-> --- a/tools/testing/selftests/net/fcnal-test.sh
-> +++ b/tools/testing/selftests/net/fcnal-test.sh
-> @@ -1810,8 +1810,9 @@ ipv4_addr_bind_vrf()
->         for a in ${NSA_IP} ${VRF_IP}
->         do
->                 log_start
-> +               show_hint "Socket not bound to VRF, but address is in VRF"
->                 run_cmd nettest -s -R -P icmp -l ${a} -b
-> -               log_test_addr ${a} $? 0 "Raw socket bind to local address"
-> +               log_test_addr ${a} $? 1 "Raw socket bind to local address"
-> 
->                 log_start
->                 run_cmd nettest -s -R -P icmp -l ${a} -I ${NSA_DEV} -b
-> 
+AK4375 is an audio DAC with headphones amplifier controlled via I2C.
+Add simple device tree bindings that describe how to set it up.
 
-apply *all* patches.
+Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+---
+ .../devicetree/bindings/sound/ak4375.yaml     | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/ak4375.yaml
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=0f108ae44520
+diff --git a/Documentation/devicetree/bindings/sound/ak4375.yaml b/Documentation/devicetree/bindings/sound/ak4375.yaml
+new file mode 100644
+index 000000000000..295972801872
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/ak4375.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/ak4375.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: AK4375 DAC and headphones amplifier Device Tree Bindings
++
++maintainers:
++  - Vincent Knecht <vincent.knecht@mailoo.org>
++
++properties:
++  compatible:
++    const: asahi-kasei,ak4375
++
++  reg:
++    maxItems: 1
++
++  '#sound-dai-cells':
++    const: 0
++
++  avdd-supply:
++    description: optional regulator phandle for the AVDD power supply.
++
++  tvdd-supply:
++    description: regulator phandle for the TVDD power supply.
++
++  pdn-gpios:
++    description: optional GPIO to set the PDN pin.
++
++required:
++  - compatible
++  - reg
++  - '#sound-dai-cells'
++  - tvdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      headphones: audio-codec@10 {
++        compatible = "asahi-kasei,ak4375";
++        reg = <0x10>;
++        avdd-supply = <&reg_headphones_avdd>;
++        tvdd-supply = <&pm8916_l6>;
++        pdn-gpios = <&msmgpio 114 GPIO_ACTIVE_HIGH>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&headphones_pdn_default>;
++        #sound-dai-cells = <0>;
++      };
++    };
+-- 
+2.31.1
+
+
 

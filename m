@@ -2,147 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC15472D34
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318BF472D1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbhLMNZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S237341AbhLMNW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237461AbhLMNZs (ORCPT
+        with ESMTP id S237327AbhLMNW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:25:48 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0392AC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:25:48 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id c4so26998519wrd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:25:47 -0800 (PST)
+        Mon, 13 Dec 2021 08:22:27 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F058AC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:22:26 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id u74so23072423oie.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:22:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=RGPKFGhr5F/E/uf8UwQ+T3hkhLoaT6Ka+qKxD0TAy+M=;
-        b=JRkDFvB8MdbonLD5orH08ZpszbX+Hsq3f2nwGXw96fpGnPaqFoDrqvRETDKF5sU6KK
-         xv3lQs9hvrmLFrUwoek0ZdOCHIuojptCQ1yWZHykSwAgLE/SK6SBW8pbq4FqAu6g9nWv
-         924DpmYSw9ztdMDswaJf/WeLEqNSOOnxXB79SMBeaPNt8+ZkHgAD3h7s6ihu2/KyXDHx
-         vg3QHBv5UPPh3eocemTtBBTTBzaqVjFJQV3N5wg3P+YsDm+0LqQNe1yuhHyH/jGmUPsq
-         Z9s8l5gopJr2ohzjBHONWx2A7IsPSOM+b/Ws8sScQj3jhDNEsgf+fPLbKBmk1rPPAI0D
-         0Evw==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Hp2wuf+GFIgPk2krY9oLPCwUDqecUtCiJ9IkJj6FAwY=;
+        b=Y2sKyeXEaBilgZYYZDDa6aPlYj3E1nHDvU0l13MgrTTmjcwK4NjtzSj+DeHt71aUP/
+         yQYv69xxDBR0bqxxAoK3RmBZUktm4e1pmAwjEjBM0gmrQ+AUROLO86WgBQx9pir0tDF+
+         h85MsGjRSW4br6jX05DkuZyPbo+x6QfDZb5a8YSP1WvSra4nZKW6ZgGCM5vwWdL3qn8r
+         z5NfpZsflcoYpLF8SLQ7vxoy5OKIkweTaQSgPjIYXlYJ5I6LAgjvO27DGbCbmSoSNhMR
+         lZEkrX6saWdyb2ismnZFCJx/QF5e4wLWrnoTFbEABKG4VZ4CMK3BZXSyNamrz2ZriaZl
+         yGIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=RGPKFGhr5F/E/uf8UwQ+T3hkhLoaT6Ka+qKxD0TAy+M=;
-        b=HtlQourgPS4rhJJkiO9RBBP8LcJoU8KTUXxiNH+UCa0F9a+x6Nz5WtEyDineeVY58i
-         FnN/3yXiHZTJ9B0kj4e6asUaJlrrNF3psB6NGXNZQA0qLzioR3jZGpxLJUhyFiki26e/
-         CP3DyJ/pfpRuk489r7kWD5VlhbJAIUbCYsS3txqzbZAWrfZaZpuXRNP85c76vHpFNHKj
-         seqi1IaYk1eh5k0gg1HClPhQCfrOjnVo6TrdJrTfJNDELilNNr7VHmoIMdi/pQwrXTC4
-         p02OBStcRHCDZArMuhGlQtVStC4zJtISSAC6oYtCYrC4MhvRZzka3zlhk3C4WpQKK9/4
-         qCFg==
-X-Gm-Message-State: AOAM533CNfvwFs/GNrqlza6Vl1xh63SRXhxjfw9hqdcuTdrwWB0b1rEE
-        KYnxNvSMvgMT//7qWoS6E6cT8w==
-X-Google-Smtp-Source: ABdhPJxzzui67Mz+e62UPdxoEnqUeAe7pmkET3SPW+dmE86hGQS6DQJSsCelC6Y5tYdI7kls55z4kg==
-X-Received: by 2002:adf:eb0f:: with SMTP id s15mr15577018wrn.690.1639401946598;
-        Mon, 13 Dec 2021 05:25:46 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id g198sm8086757wme.23.2021.12.13.05.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 05:25:46 -0800 (PST)
-References: <20211213070330.3351505-1-rong.chen@amlogic.com>
- <2021121319503910358221@amlogic.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     "rong.chen@amlogic.com" <rong.chen@amlogic.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        --to=1131046452 <--to=1131046452@qq.com>,
-        45581586 <45581586@qq.com>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mmc: meson: initial ocr available by default value
-Date:   Mon, 13 Dec 2021 14:22:25 +0100
-In-reply-to: <2021121319503910358221@amlogic.com>
-Message-ID: <1j7dc83acm.fsf@starbuckisacylon.baylibre.com>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=Hp2wuf+GFIgPk2krY9oLPCwUDqecUtCiJ9IkJj6FAwY=;
+        b=ZuJ88JEfpzk5Sqey/kR3b2fuxKIE/Egp7yoqJPc/Rkep2/impvYZOkSSUf39TfeAE1
+         +nsIeFCM+aaQtprsHqiRD7T2fuw+S+W1MA4coagDoPgirnhSDiH9g7nLNWHAiC+I0726
+         XgINHSlJcyEsmFoLOpINeGDxU7RWaVjOpj82mCQdFT/aht1/FiB8IZv4BfhMqLwhNr3X
+         T9/UBsdp9pfsvJ4XbCp/U6tWY1qnm5q+VQ21S6x98VjYXTOE+fpf74U/z3Z9XlBev/GS
+         QMG21e/Ftv/9SyWEy/+O8xVYJRraPTasKn18eyLigtJZ7QKA0NDZF9hrM0vBCfGgPz5c
+         1tXw==
+X-Gm-Message-State: AOAM533xwcdlOTo9Y2Ga45P9/G56z5x+bd8R1HqOaZ+ufItINBjeAQaY
+        WLoob4+TpzIu05pWjxB1oLVtKSnUOiqaYFsLFkc=
+X-Google-Smtp-Source: ABdhPJzpYOxTqsKnSiDaX/r5Hw1sceDgRXAHUy6cKxoyF27s6iWmlCzTtGMGTJjfmqZbLVY3tNxD2933WSscFyBSQ+Q=
+X-Received: by 2002:a05:6808:1202:: with SMTP id a2mr27646186oil.8.1639401746308;
+ Mon, 13 Dec 2021 05:22:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+Sender: blessmegod87@gmail.com
+Received: by 2002:a05:6838:9414:0:0:0:0 with HTTP; Mon, 13 Dec 2021 05:22:26
+ -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Mon, 13 Dec 2021 13:22:26 +0000
+X-Google-Sender-Auth: ArivTEpDXYPOPIjU9HGSCOoJNY4
+Message-ID: <CACOw96=G12yhjuxHi5V52BsFS529KxcCUC0dVD5e-f2NYNzNtA@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello my dear,
 
-On Mon 13 Dec 2021 at 19:50, "rong.chen@amlogic.com" <rong.chen@amlogic.com> wrote:
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account.. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-> Hello,
-> If 3.3V always-on power source for vmmc is supplied by hardware boards fixed, don't need regulator in software, so  .dts unnecessary the link between regulator
-> and MMC controller vmmc/vqmmc. 
+I'm waiting for your immediate reply..
 
-Controllable or not, your vmmc/vqmmc regulators should be described in
-DT.
-
-There are several examples of this in arch/arm64/boot/dts/amlogic/*.dts
-
-
->
-> ------------------------------------------------------------------------------------------------------------------------------------------------------
-> rong.chen@amlogic.com
->
->   
->  From: Martin Blumenstingl
->  Date: 2021-12-13 16:00
->  To: Rong Chen
->  CC: Ulf Hansson; Neil Armstrong; Kevin Hilman; Jerome Brunet; --to=1131046452; 45581586; linux-mmc; linux-arm-kernel; linux-amlogic; linux-kernel
->  Subject: Re: [PATCH] mmc: meson: initial ocr available by default value
->  [ EXTERNAL EMAIL ]
->   
->  Hello,
->   
->  On Mon, Dec 13, 2021 at 8:03 AM Rong Chen <rong.chen@amlogic.com> wrote:
->  >
->  > The patch will add a value of ocr supported by the controller,
->  > to specify some of voltage values are supported.
->  Can you please share some details on this topic?
->   
->  We already have many boards upstreamed which work fine without
->  manually setting ocr_avail in the driver.
->  In general there's two types of boards:
->  1) boards where the regulator can switch between different voltages.
->  One example is the Odroid-C2, see meson-gxbb-odroidc2.dts [0]
->  Here we specify:
->    vmmc-supply = <&tflash_vdd>;
->    vqmmc-supply = <&tf_io>;
->  &tflash_vdd is either turned off or at 3.3V when turned on.
->  &tf_io can be either turned off, 1.8V or 3.3V.
->   
->  2) boards where the voltages are fixed.
->  One example is Radxa Zero, see meson-g12a-radxa-zero.dts [1]
->  For the SD card the board uses:
->    vmmc-supply = <&vddao_3v3>;
->    vqmmc-supply = <&vddao_3v3>;
->  (meaning fixed 3.3V always-on power source for both VMMC and VQMMC)
->  and for eMMC the board uses:
->    vmmc-supply = <&vcc_3v3>;
->    vqmmc-supply = <&vcc_1v8>;
->  (meaning: 3.3V always-on power source for vmmc and 1.8V always-on
->  power source for VQMMC)
->   
->  With the information from the regulators the MMC core will
->  automatically detect ocr_avail in Linux.
->  Or in other words: your .dts may be missing the link between regulator
->  and MMC controller vmmc/vqmmc.
->  Can you please double-check this?
->   
->   
->  Best regards,
->  Martin
->   
->   
->  [0]
->  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dts?id=2585cf9dfaaddf00b069673f27bb3f8530e2039c#n354
->  
->  [1]
->  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts?id=2585cf9dfaaddf00b069673f27bb3f8530e2039c#n333
-
+May God Bless you,
+Mrs. Dina Howley Mckenna.

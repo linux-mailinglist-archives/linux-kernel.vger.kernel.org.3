@@ -2,185 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD3D473857
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2F147386B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244146AbhLMXSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 18:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S241517AbhLMXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 18:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243871AbhLMXSm (ORCPT
+        with ESMTP id S237209AbhLMXZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 18:18:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDB5C061574;
-        Mon, 13 Dec 2021 15:18:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66DE9B816E1;
-        Mon, 13 Dec 2021 23:18:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8922AC34600;
-        Mon, 13 Dec 2021 23:18:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639437519;
-        bh=Z80p1A+c7fVAB/CaA/qq8wArc2yUp77Z05L1Jot+bdE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=geQ8GJP7yM5QJRI/uDH+qvxlOz23r8gwJeWPPEXDoEUhgQ+FPbejV65NBdsvxsldl
-         tGnbSStsG4uxcYm0n8RDalA+r5YjYh+WTpNSffAT60QIiKqHxYPnwUZVAHzgG0ptMk
-         eNwN/IGHFd9rh6k0E3BBZOo9/U6O4PaoTC6JmP4mVmO0nwtn/y+CabTv7kS0jsdlCw
-         +q0vn2StlpwmkpVGvoVA1KQORDP88fhwdS+ri8jHGQKm6t3uGZfpg+WqlJDZuB8Smk
-         sMkEO+seRBnqLyWzvM2tiiBkfIYB0w4sYlNawBNP5b7h1Cg7oR+Jykuq3jiRUFDuT2
-         OC1hRArNQlo8g==
-Date:   Mon, 13 Dec 2021 17:24:16 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: Re: [PATCH] media: omap3isp: Use struct_group() for memcpy() region
-Message-ID: <20211213232416.GA60133@embeddedor>
-References: <20211118184352.1284792-1-keescook@chromium.org>
+        Mon, 13 Dec 2021 18:25:19 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7A3C061574;
+        Mon, 13 Dec 2021 15:25:19 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id k4so15871070pgb.8;
+        Mon, 13 Dec 2021 15:25:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YP+ffKrUJr8QXyiTZ9/kLIKAoLrfL8wsguznBx5B2CE=;
+        b=FTvwwio3LVWlE2HNchnhYWqGrbhWkezDizZqQEfCCD5IRum2S+yV5X6HAIwZ311g/e
+         byqo9trpSM0a6VdhvAKq4JLKiqk9vkqvS5jvc7EX8AXqAk5loR8QLi2/uFwdD04cLQkv
+         VUtdcYVD1cf88nMPnDuje/3RhuuzhYTiTxLyMJ/cX9jD7xKs+4HaIP4GY/xysOclVXjJ
+         3M/pWd1GVMCZ5b67cVU4kHAYgUwwqti7byLqBr0owllsxIQ/5lpBgHBeCkKcJKnhQbMU
+         avMvv65f1U9m9jWnrH1H0CrlUX40Tjtnc5VTiA1M5XlPxv/QKoCrFauyGZ+Lv2+3rBD7
+         CNnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YP+ffKrUJr8QXyiTZ9/kLIKAoLrfL8wsguznBx5B2CE=;
+        b=rck6Ai3haBwMOtCF5BZaj4KtwQO3GRuYe2EM8Y9vS8hVyjeMjfDw5P3lMlpT4/1Oyd
+         xTgbwiVEz4B0G9oYVq1lUJrTn+9VVySoKTjX4ZyyJrZZMlWI+N+i6s46y5pNy34YyBci
+         XlBHkr6ySsLC4DjSBNrkdKzLEvfy9Fkjn/tfCBnt9osfOJjsKcdTgNjhvstwR2vSsZrl
+         NzbqMMGDy+QF9kKQUsGdEqUEx2Xuz/QvByTmS8IeSieCGplUh9+AukB+7BwYitgzd1Sk
+         77Ld93i3U72tTuHqRwBIqmwoAB7qzJHvyqCT4u9GCDVO9Vp4FmT4YhFTzjlDbbELNcUt
+         ATxg==
+X-Gm-Message-State: AOAM533e3LJxVBdsI6FktFVfzkyP/953x+D5kmFHai1tj3lu8DT3vnzo
+        gE3impn0X8I9GmiACTVUPa8=
+X-Google-Smtp-Source: ABdhPJw5vESmcF3HpqofyBeME59yBVkiKN2+K1LMyY1qJg9eTtIGd9pEbUSLP/MoM/de9KqB8LPl0Q==
+X-Received: by 2002:aa7:9007:0:b0:4b1:40b9:7046 with SMTP id m7-20020aa79007000000b004b140b97046mr1181544pfo.48.1639437918708;
+        Mon, 13 Dec 2021 15:25:18 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d9sm430953pjs.2.2021.12.13.15.25.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 15:25:18 -0800 (PST)
+Subject: Re: [PATCH 6/6] dt-bindings: pci: Convert iProc PCIe to YAML
+To:     Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>,
+        devicetree@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20211213190221.355678-1-f.fainelli@gmail.com>
+ <20211213190221.355678-7-f.fainelli@gmail.com>
+ <1639437829.333710.1773610.nullmailer@robh.at.kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <91c2ad0d-491c-902a-4b12-d96f9cdbbab2@gmail.com>
+Date:   Mon, 13 Dec 2021 15:25:15 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211118184352.1284792-1-keescook@chromium.org>
+In-Reply-To: <1639437829.333710.1773610.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 10:43:52AM -0800, Kees Cook wrote:
-> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> field bounds checking for memcpy(), memmove(), and memset(), avoid
-> intentionally writing across neighboring fields. Wrap the target region
-> in struct_group(). This additionally fixes a theoretical misalignment
-> of the copy (since the size of "buf" changes between 64-bit and 32-bit,
-> but this is likely never built for 64-bit).
+On 12/13/21 3:23 PM, Rob Herring wrote:
+> On Mon, 13 Dec 2021 11:02:21 -0800, Florian Fainelli wrote:
+>> Conver the iProc PCIe controller Device Tree binding to YAML now that
+>> all DTS in arch/arm and arch/arm64 have been fixed to be compliant.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>  .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
+>>  .../bindings/pci/brcm,iproc-pcie.yaml         | 184 ++++++++++++++++++
+>>  2 files changed, 184 insertions(+), 133 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
+>>  create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+>>
 > 
-> FWIW, I think this code is totally broken on 64-bit (which appears to
-> not be a "real" build configuration): it would either always fail (with
-> an uninitialized data->buf_size) or would cause corruption in userspace
-> due to the copy_to_user() in the call path against an uninitialized
-> data->buf value:
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> omap3isp_stat_request_statistics_time32(...)
->     struct omap3isp_stat_data data64;
->     ...
->     omap3isp_stat_request_statistics(stat, &data64);
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml:97:34: [warning] too few spaces after comma (commas)
 > 
-> int omap3isp_stat_request_statistics(struct ispstat *stat,
->                                      struct omap3isp_stat_data *data)
->     ...
->     buf = isp_stat_buf_get(stat, data);
-> 
-> static struct ispstat_buffer *isp_stat_buf_get(struct ispstat *stat,
->                                                struct omap3isp_stat_data *data)
-> ...
->     if (buf->buf_size > data->buf_size) {
->             ...
->             return ERR_PTR(-EINVAL);
->     }
->     ...
->     rval = copy_to_user(data->buf,
->                         buf->virt_addr,
->                         buf->buf_size);
-> 
-> Regardless, additionally initialize data64 to be zero-filled to avoid
-> undefined behavior.
-> 
-> Fixes: 378e3f81cb56 ("media: omap3isp: support 64-bit version of omap3isp_stat_data")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/media/platform/omap3isp/ispstat.c |  5 +++--
->  include/uapi/linux/omap3isp.h             | 21 +++++++++++++--------
->  2 files changed, 16 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/media/platform/omap3isp/ispstat.c b/drivers/media/platform/omap3isp/ispstat.c
-> index 5b9b57f4d9bf..68cf68dbcace 100644
-> --- a/drivers/media/platform/omap3isp/ispstat.c
-> +++ b/drivers/media/platform/omap3isp/ispstat.c
-> @@ -512,7 +512,7 @@ int omap3isp_stat_request_statistics(struct ispstat *stat,
->  int omap3isp_stat_request_statistics_time32(struct ispstat *stat,
->  					struct omap3isp_stat_data_time32 *data)
->  {
-> -	struct omap3isp_stat_data data64;
-> +	struct omap3isp_stat_data data64 = { };
->  	int ret;
->  
->  	ret = omap3isp_stat_request_statistics(stat, &data64);
-> @@ -521,7 +521,8 @@ int omap3isp_stat_request_statistics_time32(struct ispstat *stat,
->  
->  	data->ts.tv_sec = data64.ts.tv_sec;
->  	data->ts.tv_usec = data64.ts.tv_usec;
-> -	memcpy(&data->buf, &data64.buf, sizeof(*data) - sizeof(data->ts));
-> +	data->buf = (uintptr_t)data64.buf;
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.example.dt.yaml: pcie@18012000: 'brcm' is a dependency of 'brcm,pcie-ob-axi-offset'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.example.dt.yaml: pcie@18012000: 'pcie-ob' is a dependency of 'brcm,pcie-ob-axi-offset'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
 
-Shouldn't this be
+OK, so the dependencies must be quoted, but not the properties
+declaration. Thanks!
 
-	data->buf = (uintptr_t)(void *)data64.buf;
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/1567483
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 
 
-instead?
 
---
-Gustavo
-
-> +	memcpy(&data->frame, &data64.frame, sizeof(data->frame));
->  
->  	return 0;
->  }
-> diff --git a/include/uapi/linux/omap3isp.h b/include/uapi/linux/omap3isp.h
-> index 87b55755f4ff..9a6b3ed11455 100644
-> --- a/include/uapi/linux/omap3isp.h
-> +++ b/include/uapi/linux/omap3isp.h
-> @@ -162,6 +162,7 @@ struct omap3isp_h3a_aewb_config {
->   * struct omap3isp_stat_data - Statistic data sent to or received from user
->   * @ts: Timestamp of returned framestats.
->   * @buf: Pointer to pass to user.
-> + * @buf_size: Size of buffer.
->   * @frame_number: Frame number of requested stats.
->   * @cur_frame: Current frame number being processed.
->   * @config_counter: Number of the configuration associated with the data.
-> @@ -176,10 +177,12 @@ struct omap3isp_stat_data {
->  	struct timeval ts;
->  #endif
->  	void __user *buf;
-> -	__u32 buf_size;
-> -	__u16 frame_number;
-> -	__u16 cur_frame;
-> -	__u16 config_counter;
-> +	__struct_group(/* no type */, frame, /* no attrs */,
-> +		__u32 buf_size;
-> +		__u16 frame_number;
-> +		__u16 cur_frame;
-> +		__u16 config_counter;
-> +	);
->  };
->  
->  #ifdef __KERNEL__
-> @@ -189,10 +192,12 @@ struct omap3isp_stat_data_time32 {
->  		__s32	tv_usec;
->  	} ts;
->  	__u32 buf;
-> -	__u32 buf_size;
-> -	__u16 frame_number;
-> -	__u16 cur_frame;
-> -	__u16 config_counter;
-> +	__struct_group(/* no type */, frame, /* no attrs */,
-> +		__u32 buf_size;
-> +		__u16 frame_number;
-> +		__u16 cur_frame;
-> +		__u16 config_counter;
-> +	);
->  };
->  #endif
->  
-> -- 
-> 2.30.2
-> 
-> 
-> 
-> 
+-- 
+Florian

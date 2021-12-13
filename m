@@ -2,217 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEDC4730A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3854730AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240175AbhLMPer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbhLMPeq (ORCPT
+        id S235147AbhLMPhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:37:19 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:42147 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232862AbhLMPhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:34:46 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E8AC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:34:45 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so17807988otj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9UxEcNSwKoN2mFJyfZRLVmjwVvQHZtyiCY9mygjt3b0=;
-        b=hT1cyNUIs/Cld053RUbQRay51RV52B4dNNPvh5M6K0oE9LtogP9309HzTGyNDfD65Z
-         Fm3Y9VnMX7sLl0MytXQHC2w05h/HfkaELfBLJkh2FSfu+BRaxZ2dRpx6eXP33TsOg0gJ
-         pQ7RZXVIDCg7wbvlZZmOWj7bUCVXNLKMCpM1CP/kVaGiytaiK6cYVu/0oEtMc9zLV6kc
-         ZIC/n08WmpDBMBvIP8WLbnBO3RAB0Hd2ktu1pgtpOD2PCRMmqDHYZrWymDpdebEMdK/P
-         yDYQKW9tSwyss7oWRjShhuRgke66Kj6RbH9nXIOkBNeJktjFv8C7kebjvc8zzPejvmEM
-         fQNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9UxEcNSwKoN2mFJyfZRLVmjwVvQHZtyiCY9mygjt3b0=;
-        b=hZEAmqvHk/yESxwS39WNEosTFnDyaRX+4fOj0cD/dNme+2NYNNI6cSllcku4wNwOF+
-         dd0/DgOO1Ik94F9AqYyQPLuJXlmyn6Lq+m9jels4O8rgjTTsItbyIjdqaV25U8BeARWh
-         oN1ulIRR9yfq/AI9Ap4VbCOhPdo5Roruy0TsrgDM2WQUNBG12TKuKxf1xGG2QyvhulLb
-         d8CdxQyWp60lvtB3GRs12+xn036meCuPMhx+arV6+lWjfLOjnrWNXqiHDXR5Puc+BzIG
-         Z/savnVhTtGdiggXetRtu5jvWKI9iwgoxuybiLoqg2B39ofK07B0iC/luQ5/D0gFr7if
-         sOBQ==
-X-Gm-Message-State: AOAM531q8B9bnfGYJhZaKAXugxXV9su7QlF9UBiCg4pV8NJ71JWhjnkL
-        EL+omYzoD7OEeG5yRilv6DW69Q==
-X-Google-Smtp-Source: ABdhPJx81QSenwwldv/3J3MLPwfG5VTKRajH0fC/WJKcz6OkMHMJkY3dRqn27AaWUvRHqQKD7PX9tw==
-X-Received: by 2002:a05:6830:3185:: with SMTP id p5mr26271701ots.222.1639409685194;
-        Mon, 13 Dec 2021 07:34:45 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a17sm2838627oiw.43.2021.12.13.07.34.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 07:34:44 -0800 (PST)
-Date:   Mon, 13 Dec 2021 07:36:03 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
-        jeyr@codeaurora.org, bkumar@qti.qualcomm.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] arm64: dts: qcom: add non-secure domain property
- to fastrpc nodes
-Message-ID: <YbdoY9PgvZO7AX1T@ripper>
-References: <20211209120626.26373-1-srinivas.kandagatla@linaro.org>
- <20211209120626.26373-9-srinivas.kandagatla@linaro.org>
+        Mon, 13 Dec 2021 10:37:18 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-58-a24iemFmMfm37i7mZ3Uxgw-1; Mon, 13 Dec 2021 15:37:16 +0000
+X-MC-Unique: a24iemFmMfm37i7mZ3Uxgw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Mon, 13 Dec 2021 15:37:15 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Mon, 13 Dec 2021 15:37:15 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Dave Hansen' <dave.hansen@intel.com>,
+        'Noah Goldstein' <goldstein.w.n@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "alexanderduyck@fb.com" <alexanderduyck@fb.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: RE: [PATCH] x86/lib: Remove the special case for odd-aligned buffers
+ in csum_partial.c
+Thread-Topic: [PATCH] x86/lib: Remove the special case for odd-aligned buffers
+ in csum_partial.c
+Thread-Index: AdfwL8CqMU0zbyVyQYmiKOZRxmZfsgAAq7MAAADny8A=
+Date:   Mon, 13 Dec 2021 15:37:15 +0000
+Message-ID: <96b6a476c4154da3bd04996139cd8a6d@AcuMS.aculab.com>
+References: <45d12aa0c95049a392d52ff239d42d83@AcuMS.aculab.com>
+ <52edd5fd-daa0-729b-4646-43450552d2ab@intel.com>
+In-Reply-To: <52edd5fd-daa0-729b-4646-43450552d2ab@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209120626.26373-9-srinivas.kandagatla@linaro.org>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 09 Dec 04:06 PST 2021, Srinivas Kandagatla wrote:
+RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMTMgRGVjZW1iZXIgMjAyMSAxNTowMg0KLmMNCj4g
+DQo+IE9uIDEyLzEzLzIxIDY6NDMgQU0sIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBUaGVyZSBp
+cyBubyBuZWVkIHRvIHNwZWNpYWwgY2FzZSB0aGUgdmVyeSB1bnVzdWFsIG9kZC1hbGlnbmVkIGJ1
+ZmZlcnMuDQo+ID4gVGhleSBhcmUgbm8gd29yc2UgdGhhbiA0bisyIGFsaWduZWQgYnVmZmVycy4N
+Cj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IERhdmlkIExhaWdodCA8ZGF2aWQubGFpZ2h0QGFjdWxh
+Yi5jb20+DQo+ID4gLS0tDQo+ID4NCj4gPiBPbiBhbiBpNy03NzAwIG1pc2FsaWduZWQgYnVmZmVy
+cyBhZGQgMiBvciAzIGNsb2NrcyAoaW4gMTE1KSB0byBhIDUxMiBieXRlDQo+ID4gICBjaGVja3N1
+bS4NCj4gPiBUaGF0IGlzIGp1c3QgbWVhc3VyaW5nIHRoZSBtYWluIGxvb3Agd2l0aCBhbiBsZmVu
+Y2UgcHJpb3IgdG8gcmRwbWMgdG8NCj4gPiByZWFkIFBFUkZfQ09VTlRfSFdfQ1BVX0NZQ0xFUy4N
+Cj4gDQo+IEknbSBhIGJpdCBjb25mdXNlZCBieSB0aGlzIGNoYW5nZWxvZy4NCj4gDQo+IEFyZSB5
+b3Ugc2F5aW5nIHRoYXQgdGhlIHBhdGNoIGNhdXNlcyBhIChzbWFsbCkgcGVyZm9ybWFuY2UgcmVn
+cmVzc2lvbj8NCj4gDQo+IEFyZSB5b3UgYWxzbyBzYXlpbmcgdGhhdCB0aGUgb3B0aW1pemF0aW9u
+IGhlcmUgaXMgbm90IHdvcnRoIGl0IGJlY2F1c2UNCj4gaXQgc2F2ZXMgMTUgbGluZXMgb2YgY29k
+ZT8gIE9yIHRoYXQgdGhlIG1pc2FsaWdubWVudCBjaGVja3MgdGhlbXNlbHZlcw0KPiBhZGQgMiBv
+ciAzIGN5Y2xlcywgYW5kIHRoaXMgaXMgYW4gKm9wdGltaXphdGlvbio/DQoNCkknbSBzYXlpbmcg
+dGhhdCBpdCBjYW4ndCBiZSB3b3J0aCBvcHRpbWlzaW5nIGZvciBhIG1pc2FsaWduZWQNCmJ1ZmZl
+ciBiZWNhdXNlIHRoZSBjb3N0IG9mIHRoZSBidWZmZXIgYmVpbmcgbWlzYWxpZ25lZCBpcyBzbyBz
+bWFsbC4NClNvIHRoZSB0ZXN0IGZvciBhIG1pc2FsaWduZWQgYnVmZmVyIGFyZSBnb2luZyB0byBj
+b3N0IG1vcmUgdGhhbg0KYW5kIHBsYXVzaWJsZSBnYWluLg0KDQpOb3Qgb25seSB0aGF0IHRoZSBi
+dWZmZXIgd2lsbCBuZXZlciBiZSBvZGQgYWxpZ25lZCBhdCBhbGwuDQoNClRoZSBjb2RlIGlzIGxl
+ZnQgaW4gZnJvbSBhIHByZXZpb3VzIHZlcnNpb24gdGhhdCBkaWQgZG8gYWxpZ25lZA0Kd29yZCBy
+ZWFkcyAtIHNvIGhhZCB0byBkbyBleHRyYSBmb3Igb2RkIGFsaWdubWVudC4NCg0KTm90ZSB0aGF0
+IGNvZGUgaXMgZG9pbmcgbWlzYWxpZ25lZCByZWFkcyBmb3IgdGhlIG1vcmUgbGlrZWx5IDRuKzIN
+CmFsaWduZWQgZXRoZXJuZXQgcmVjZWl2ZSBidWZmZXJzLg0KSSBkb3VidCB0aGF0IGV2ZW4gYSB0
+ZXN0IGZvciB0aGF0IHdvdWxkIGJlIHdvcnRod2hpbGUgZXZlbiBpZiB5b3UNCndlcmUgY2hlY2tz
+dW1taW5nIGZ1bGwgc2l6ZWQgZXRoZXJuZXQgcGFja2V0cy4NCg0KU28gdGhlIGNoYW5nZSBpcyBk
+ZWxldGluZyBjb2RlIHRoYXQgaXMgbmV2ZXIgYWN0dWFsbHkgZXhlY3V0ZWQNCmZyb20gdGhlIGhv
+dCBwYXRoLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
+bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
+YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-> From: Jeya R <jeyr@codeaurora.org>
-> 
-> FastRPC DSP domain would be set as secure if non-secure dsp property is not
-> added to the fastrpc DT node. Add this property to DT files of msm8916,
-> sdm845, sm8150, sm8250 and sm8350 so that nothing is broken after secure
-> domain patchset.
-> 
-> This patch is purely for backward compatibility reasons.
-> 
-> Signed-off-by: Jeya R <jeyr@codeaurora.org>
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/msm8916.dtsi | 1 +
->  arch/arm64/boot/dts/qcom/sdm845.dtsi  | 2 ++
->  arch/arm64/boot/dts/qcom/sm8150.dtsi  | 3 +++
->  arch/arm64/boot/dts/qcom/sm8250.dtsi  | 3 +++
->  arch/arm64/boot/dts/qcom/sm8350.dtsi  | 3 +++
->  5 files changed, 12 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> index c1c42f26b61e..137a479449d4 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> @@ -1365,6 +1365,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,smd-channels = "fastrpcsmd-apps-dsp";
->  					label = "adsp";
-> +					qcom,non-secure-domain;
-
-I was under the impression that the support for loading unsigned fastrpc
-applications was introduced in SM8150 or SM8250, can you confirm that
-this has been possible all along?
-
-Regards,
-Bjorn
-
->  
->  					#address-cells = <1>;
->  					#size-cells = <0>;
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 526087586ba4..4aebfed4ec00 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -838,6 +838,7 @@
->  				compatible = "qcom,fastrpc";
->  				qcom,glink-channels = "fastrpcglink-apps-dsp";
->  				label = "adsp";
-> +				qcom,non-secure-domain;
->  				#address-cells = <1>;
->  				#size-cells = <0>;
->  
-> @@ -888,6 +889,7 @@
->  				compatible = "qcom,fastrpc";
->  				qcom,glink-channels = "fastrpcglink-apps-dsp";
->  				label = "cdsp";
-> +				qcom,non-secure-domain;
->  				#address-cells = <1>;
->  				#size-cells = <0>;
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index 81b4ff2cc4cd..9ac213bb96b7 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -1751,6 +1751,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "sdsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> @@ -2994,6 +2995,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "cdsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> @@ -3439,6 +3441,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "adsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index f0d342aa662d..06be221ad5b6 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -2265,6 +2265,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "sdsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> @@ -2330,6 +2331,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "cdsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> @@ -4100,6 +4102,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "adsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index d134280e2939..80f753cbe91c 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -1278,6 +1278,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "sdsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> @@ -1347,6 +1348,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "cdsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> @@ -1643,6 +1645,7 @@
->  					compatible = "qcom,fastrpc";
->  					qcom,glink-channels = "fastrpcglink-apps-dsp";
->  					label = "adsp";
-> +					qcom,non-secure-domain;
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> -- 
-> 2.21.0
-> 

@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8227A4730FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FFE4730E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240120AbhLMP5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:57:54 -0500
-Received: from pmta31.teksavvy.com ([76.10.157.38]:26254 "EHLO
-        pmta31.teksavvy.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbhLMP5w (ORCPT
+        id S235373AbhLMPue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229752AbhLMPud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:57:52 -0500
-X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 10:57:52 EST
-IronPort-SDR: //Q99cuBkl4O2aGK59yq8XsjPqqMbuiTyWf20w/119Ts44Zd8EwbWGMieZmtKr3EsMA+1aiLDr
- lxZqnoeFiegA==
-IronPort-Data: =?us-ascii?q?A9a23=3Avr3N4qoBQ1pR7RUH0IYJzmhfNmheBmLtZBIvg?=
- =?us-ascii?q?KrLsJaIsI4StFCztgarIBmOO/reNzPwf4t/Od608kxQ75PXz9dlTQJprCxkQ?=
- =?us-ascii?q?yMX85acVYWSI27OZC7DdceroGCLTyk9hngsFC29J5Pljk/F3oPJ8D8shclke?=
- =?us-ascii?q?pKmULSdY3ooHlc+IMscoUsLd9AR09YAbeeRXlvlVePa+6UzCXf9s9JGGjt8B?=
- =?us-ascii?q?5Gr8nuDiM/PVAYw5TTSUxzrUGj2zBH5BLpHTU24wuCRroN8RoZWTM6bpF21E?=
- =?us-ascii?q?/+wE77A17qYfrjHnk0iGtY+PCCkkHNaQJqIhR9B4Cc11KgmL/cVYk5LzTKTk?=
- =?us-ascii?q?Lidyv0X6drqEF1vZPSR3r1BAnG0EAknVUFC0JXdKHS7vN3V9EbBb2fE0fhkF?=
- =?us-ascii?q?khwNoodkgpyKTgRqKJJcWlSN3hvgMrzmtpXUNJEmsU8JcjDJ54EtzdswFnxF?=
- =?us-ascii?q?fs8TIDrW6jQ6M8e1yVYrtxPAv/fT9EEcjcpZxPFCzVEPU0dBY4WmPiuwH/yb?=
- =?us-ascii?q?1Vwql+PqK8mpXPB0SR62b7qNtvec9jMTsJQ9m6Yu2OA4G3/DTkRPdqYzzuO+?=
- =?us-ascii?q?3bqjejK9QvkQ486CKCo+/Jti1qW3nEPBQcNE1C8pJGRiUe/X9tZJGQO9yMqs?=
- =?us-ascii?q?aUxskesS7HVVBS9iHiJuVsOVt1WVeE3gCmWw6/VywKeAW4JCDBAAPQrsM4/S?=
- =?us-ascii?q?TE010OOt9zsDD1r9raSTBq1/7OPpHa+NDYYKUcLYTQNCBMf5Nvuq511iQjAJ?=
- =?us-ascii?q?v5nEaionpj5HjrY3T+Htm49iq8VgMpN0L+0lXjDgjSxtt3KQxQz6wH/QG2o9?=
- =?us-ascii?q?EV6aZSjaoju7kLUhd5qNo+VSlSQ+kMPnNSCxPIDB4uE0ieKRY0w8BuBjxqeG?=
- =?us-ascii?q?GeAxAQ2Rdx7rmnooiLyO4tZ6jVzYltkMd0NZyH4JkTUvGtsCFZoFCPCRcdKj?=
- =?us-ascii?q?0iZUKzGFZTdKOk=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aj/jgFKCyaUX8lrXlHem155DYdb4zR+YMi2?=
- =?us-ascii?q?TDGXoddfUzSL36qynAppsmPHPP4wr5O0tBpTn/Ase9qBrnnPZICOIqUYtKMj?=
- =?us-ascii?q?ONhILRFuBf0bc=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2FoBADSardh/5XX1BhagRKBUIMPbGy?=
- =?us-ascii?q?NS4hLAZwOgXwLAQEBAQEBAQEBCUEEAQGFAAQCgyYmNgcOAQIEAQEBEgEBAQU?=
- =?us-ascii?q?BAQEBAQYEAgKBGIV1hwQBIAMjKSZvE4JxgxiyVoEBiBaBY4E6iSyFPYFVRIE?=
- =?us-ascii?q?VgnpuikIEkneBDpgUAYxCnTQzB4NDgTsLnUgaM6dQliymSYFoAoIMMxojgzl?=
- =?us-ascii?q?RGQ+OLBaOTCYwOAIGCwEBAwmQcAEB?=
-X-IPAS-Result: =?us-ascii?q?A2FoBADSardh/5XX1BhagRKBUIMPbGyNS4hLAZwOgXwLA?=
- =?us-ascii?q?QEBAQEBAQEBCUEEAQGFAAQCgyYmNgcOAQIEAQEBEgEBAQUBAQEBAQYEAgKBG?=
- =?us-ascii?q?IV1hwQBIAMjKSZvE4JxgxiyVoEBiBaBY4E6iSyFPYFVRIEVgnpuikIEkneBD?=
- =?us-ascii?q?pgUAYxCnTQzB4NDgTsLnUgaM6dQliymSYFoAoIMMxojgzlRGQ+OLBaOTCYwO?=
- =?us-ascii?q?AIGCwEBAwmQcAEB?=
-X-IronPort-AV: E=Sophos;i="5.88,202,1635220800"; 
-   d="scan'208";a="175691171"
-Received: from 24-212-215-149.cable.teksavvy.com (HELO BradsZBook.confuseacat.org) ([24.212.215.149])
-  by smtp13.teksavvy.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Dec 2021 10:50:42 -0500
-From:   Bradley Scott <Bradley.Scott@zebra.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Kailang Yang <kailang@realtek.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Sami Loone <sami@loone.fi>, Elia Devito <eliadevito@gmail.com>,
-        alsa-devel@alsa-project.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bradley Scott <Bradley.Scott@zebra.com>
-Subject: [PATCH v2] ALSA: hda/realtek: Amp init fixup for HP ZBook 15 G6
-Date:   Mon, 13 Dec 2021 10:49:39 -0500
-Message-Id: <20211213154938.503201-1-Bradley.Scott@zebra.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 13 Dec 2021 10:50:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A6DC061574;
+        Mon, 13 Dec 2021 07:50:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96B446115A;
+        Mon, 13 Dec 2021 15:50:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B359C34603;
+        Mon, 13 Dec 2021 15:50:26 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 16:50:20 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem
+ related variables into ima_namespace
+Message-ID: <20211213155020.pvadnomqnsub5vg2@wittgenstein>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+ <20211208221818.1519628-14-stefanb@linux.ibm.com>
+ <20211209191109.o3x7nynnm52zhygz@wittgenstein>
+ <0ab33fbc-8438-27b6-ff4c-0321bfc73855@linux.ibm.com>
+ <20211210113244.odv2ibrifz2jzft5@wittgenstein>
+ <dca4e7c9-87a7-9a9e-b1f2-df16f1a45019@linux.ibm.com>
+ <20211211095026.i2gvqjy4df3sxq42@wittgenstein>
+ <85b75c98-6452-9706-7549-10b416350b7d@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <85b75c98-6452-9706-7549-10b416350b7d@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HP ZBook 15 G6 (SSID 103c:860f) needs the same speaker amplifier
-initialization as used on several other HP laptops using ALC285.
+On Mon, Dec 13, 2021 at 10:33:40AM -0500, Stefan Berger wrote:
+> 
+> On 12/11/21 04:50, Christian Brauner wrote:
+> > On Fri, Dec 10, 2021 at 08:57:11AM -0500, Stefan Berger wrote:
+> > > 
+> > > 
+> > > there anything that would prevent us from setns()'ing to that target user
+> > > namespace so that we would now see that of a user namespace that we are not
+> > > allowed to see?
+> > If you're really worried about someone being able to access a securityfs
+> > instance whose userns doesn't match the userns the securityfs instance
+> > was mounted in there are multiple ways to fix it. The one that I tend to
+> > prefer is:
+> > 
+> >  From e0ff6a8dcc573763568e685dd70d1547efd68df9 Mon Sep 17 00:00:00 2001
+> > From: Christian Brauner <christian.brauner@ubuntu.com>
+> > Date: Fri, 10 Dec 2021 11:47:37 +0100
+> > Subject: !!!! HERE BE DRAGONS - COMPLETELY UNTESTED !!!!
+> > 
+> > securityfs: only allow access to securityfs from within same namespace
+> > 
+> > Limit opening of securityfs files to callers located in the same namespace.
+> > 
+> > ---
+> >   security/inode.c | 33 +++++++++++++++++++++++++++++++--
+> >   1 file changed, 31 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/security/inode.c b/security/inode.c
+> > index eaccba7017d9..9eaf757c08cb 100644
+> > --- a/security/inode.c
+> > +++ b/security/inode.c
+> > @@ -80,6 +80,35 @@ static struct file_system_type fs_type = {
+> >   	.fs_flags =	FS_USERNS_MOUNT,
+> >   };
+> > +static int securityfs_permission(struct user_namespace *mnt_userns,
+> > +				 struct inode *inode, int mask)
+> > +{
+> > +	int err;
+> > +
+> > +	err = generic_permission(&init_user_ns, inode, mask);
+> > +	if (!err) {
+> > +		if (inode->i_sb->s_user_ns != current_user_ns())
+> > +			err = -EACCES;
+> > +	}
+> > +
+> > +	return err;
+> > +}
+> > +
+> > +const struct inode_operations securityfs_dir_inode_operations = {
+> > +	.permission	= securityfs_permission,
+> > +	.lookup		= simple_lookup,
+> > +};
+> > +
+> > +const struct file_operations securityfs_dir_operations = {
+> > +	.permission	= securityfs_permission,
+> 
+> 
+> This interface function on file operations doesn't exist.
 
-Signed-off-by: Bradley Scott <Bradley.Scott@zebra.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+It's almost as if the subject line of this patch warned about its draft
+character. That was supposed for regular files.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 3599f4c85ebf..d162662fe684 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8660,6 +8660,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x84da, "HP OMEN dc0019-ur", ALC295_FIXUP_HP_OMEN),
- 	SND_PCI_QUIRK(0x103c, 0x84e7, "HP Pavilion 15", ALC269_FIXUP_HP_MUTE_LED_MIC3),
- 	SND_PCI_QUIRK(0x103c, 0x8519, "HP Spectre x360 15-df0xxx", ALC285_FIXUP_HP_SPECTRE_X360),
-+	SND_PCI_QUIRK(0x103c, 0x860f, "HP ZBook 15 G6", ALC285_FIXUP_HP_GPIO_AMP_INIT),
- 	SND_PCI_QUIRK(0x103c, 0x861f, "HP Elite Dragonfly G1", ALC285_FIXUP_HP_GPIO_AMP_INIT),
- 	SND_PCI_QUIRK(0x103c, 0x869d, "HP", ALC236_FIXUP_HP_MUTE_LED),
- 	SND_PCI_QUIRK(0x103c, 0x86c7, "HP Envy AiO 32", ALC274_FIXUP_HP_ENVY_GPIO),
--- 
-2.25.1
+> 
+> I'll use the inode_operations and also hook it to the root dentry of the
+> super_block. Then there's no need to have this check on symlinks and
+> files...
 
+Don't special case the inode_operations for the root inode!
+If a privileged process opens an fd refering to a struct file for the
+root inode and leaks it to an unprivileged process by accident the
+unprivileged process can open any file or directory beneath via openat()
+and friends.
+
+Symlinks don't need a .permission handler anyway because they just
+contain the name of another file and that is checked for .permission
+unless you have a separate .getlink handler where you want to restrict
+link contents further.
+
+But regular files need to have a .permission method see openat().

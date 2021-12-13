@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45309472C74
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 984F2472C76
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbhLMMla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:41:30 -0500
-Received: from relay027.a.hostedemail.com ([64.99.140.27]:51428 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230198AbhLMMl3 (ORCPT
+        id S236838AbhLMMmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233259AbhLMMmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:41:29 -0500
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id BBBFD8A2;
-        Mon, 13 Dec 2021 12:41:26 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id 16FB326;
-        Mon, 13 Dec 2021 12:41:20 +0000 (UTC)
-Message-ID: <97eb3c3f68042443aa71c10766f3bef364e8f90b.camel@perches.com>
-Subject: Re: [PATCH v20] tty: Fix the keyboard led light display problem
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        lianzhi chang <changlianzhi@uniontech.com>
-Cc:     linux-kernel@vger.kernel.org, dmitry.torokhov@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org, 282827961@qq.com,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Date:   Mon, 13 Dec 2021 04:41:24 -0800
-In-Reply-To: <Ybc5XPfd5f66L92i@smile.fi.intel.com>
-References: <20211213061244.13732-1-changlianzhi@uniontech.com>
-         <Ybc5XPfd5f66L92i@smile.fi.intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Mon, 13 Dec 2021 07:42:01 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18733C061574;
+        Mon, 13 Dec 2021 04:42:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 68149CE0FBC;
+        Mon, 13 Dec 2021 12:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38B6C34601;
+        Mon, 13 Dec 2021 12:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639399317;
+        bh=zfeR8W3r515UfkzI0HcenzOwI90h2TOBfLchmxtgYF4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lAWVRcPg0vQ6de64FcoYMdRzOaJfAzRExov8qo1xqFVSmhSHFieJru84gOHH56A2E
+         y5lMVfCD3nSY24mNy2ylsLfbtu/5UPP0LKfsWLQXeKZqYIxGuZoYwjEuLnDabLSmbw
+         iiw3zGtR0REvxMWQStfXFBek1+uIhS/2nISGXbuc7wQxgaA2qk1bpm3CgLLqBCiqJT
+         VygBmEAUcmx5gffflMg4YoOIx6T6ln4UTECtS42uMXHwJde1EF2Yy618qgoRfcUKII
+         OpCi/ywnMBL0tV6OX1P5xRvvSnlwlRInlHRQF48y5jNGUl35/gEEc5o8DBvgHe6nYZ
+         09b4etCvKNR0A==
+From:   broonie@kernel.org
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     "J . Bruce Fields" <bfields@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the cel tree with the origin tree
+Date:   Mon, 13 Dec 2021 12:41:51 +0000
+Message-Id: <20211213124151.2045975-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.37
-X-Stat-Signature: chw881zcpsmnn9bgfyxyxexu6wmj7q5r
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 16FB326
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19pJfXpE6U9kEdHLPF9l/n5IuA25lCRCDs=
-X-HE-Tag: 1639399280-989290
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-12-13 at 14:15 +0200, Andy Shevchenko wrote:
-> On Mon, Dec 13, 2021 at 02:12:44PM +0800, lianzhi chang wrote:
+Hi all,
 
-> > +	struct kbd_struct *kb = &kbd_table[console];
-> > +	int ret = 0;
-> > +	unsigned long flags;
-> 
-> Slightly better to read:
-> 
-> 	struct kbd_struct *kb = &kbd_table[console];
-> 	unsigned long flags;
-> 	int ret = 0;
+Today's linux-next merge of the cel tree got a conflict in:
 
-I don't think so.  Why do you?
+  fs/nfsd/nfs4state.c
 
+between commit:
+
+  2e3f00c5f29f0 ("nfsd: improve stateid access bitmask documentation")
+
+from the origin tree and commit:
+
+  98beab5dca06f ("nfsd: improve stateid access bitmask documentation")
+
+from the cel tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when yGour tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc fs/nfsd/nfs4state.c
+index f07fe7562d4dd,3214257767743..0000000000000
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c

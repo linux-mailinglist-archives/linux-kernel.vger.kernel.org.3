@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC96D4731D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6654731DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240868AbhLMQ3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:29:30 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:52313 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240853AbhLMQ33 (ORCPT
+        id S236523AbhLMQb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:31:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59692 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239936AbhLMQbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:29:29 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MjSsm-1mGZgr14Ze-00kwpa; Mon, 13 Dec 2021 17:29:27 +0100
-Received: by mail-wr1-f49.google.com with SMTP id d9so28056714wrw.4;
-        Mon, 13 Dec 2021 08:29:27 -0800 (PST)
-X-Gm-Message-State: AOAM531Ca8WbXmEC3X5+Gk6phsD8/fDdYRtWq+gv5+tt3wlW3QMMeJOJ
-        IiPNesHz+nwvuFThKO0TynJrP1XAY0anJH6biKo=
-X-Google-Smtp-Source: ABdhPJwG1WZRcYp8Ayblot4FmiUPU2o8ulqLJOd1oO3UWNGAmNWkt5SFVqDLLkyRFkJ8yFRh7CcmrgtDmB9Gegd1GTQ=
-X-Received: by 2002:a5d:6902:: with SMTP id t2mr32606385wru.317.1639412966819;
- Mon, 13 Dec 2021 08:29:26 -0800 (PST)
+        Mon, 13 Dec 2021 11:31:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639413111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MT4/b2QPfJ4jW4cPiNaQ4X6156JfED28RbUoF2jZNtA=;
+        b=bzv0FPjkfJf6R975MNyU7JRxih5NzngDexme8K/ZE0E5Je/fud2InfwWAiydQKr+XTj3ob
+        k4TFQA1ekkaY0ZoxNh7hI++ZXNxkBKzG9hTLRLx4ejv/KjpfRoczy0oTlJRuiWYzxVB+4L
+        QRqT57IPe/8j+vccFK0P38k62E6srYU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-201-GBD0qURQN5eGKu3jfMKAFg-1; Mon, 13 Dec 2021 11:31:47 -0500
+X-MC-Unique: GBD0qURQN5eGKu3jfMKAFg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 39715100F942;
+        Mon, 13 Dec 2021 16:31:46 +0000 (UTC)
+Received: from [10.22.18.158] (unknown [10.22.18.158])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 18798100164A;
+        Mon, 13 Dec 2021 16:31:45 +0000 (UTC)
+Message-ID: <383e4f24-8165-7aab-40af-52340c09de46@redhat.com>
+Date:   Mon, 13 Dec 2021 11:31:44 -0500
 MIME-Version: 1.0
-References: <20211202095255.165797-1-herve.codina@bootlin.com> <20211202095255.165797-6-herve.codina@bootlin.com>
-In-Reply-To: <20211202095255.165797-6-herve.codina@bootlin.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 13 Dec 2021 17:29:10 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3YGOS5Bp+vFCfsGOUsEfwgJoNxJAGVXZv=QQ73k6Eoqg@mail.gmail.com>
-Message-ID: <CAK8P3a3YGOS5Bp+vFCfsGOUsEfwgJoNxJAGVXZv=QQ73k6Eoqg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] irq: spear-shirq: Add support for IRQ 0..6
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:e3ERfVT4qvgVJEOlaq1pwRqLt4LMTejSVgO4fMysyj9rQGn+sNO
- kamvpalerDq0yXv3gJWm0jwSVP5/oUS4/0NME6tbd42ggJd88ApSOFXxNxpSaekfAPtrlsq
- Wzh1xDCCr6F1qB24lxfj7F7g9ETLPmyqvXMWdoSYExWnka2cVv1dftUTvQNfNq1qCASvogo
- jVHWwW/imPXuA6CKuFabg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:27OdtThCVsU=:K9RwuHi/utt0kMOq3qmu+2
- HMEUUZw78vmml7wtCKa7Zr15szYHhJjTM9tayjHTypaVi4hoIYwPHxVHOfz4zLnuG1neNbC8E
- GHC2AfW3rPaJIafG9C1QySFz4SB+0tkMhomU1dfD6JXTRAPDnA3OlMmGCdjeiQdEJQ47FkYdf
- p38zAIfpxltWJdfg2P76zJKfDg9xsCWKMOyCf63S3E7fXp1W4Acbq+1m9hZl+GY1ogn0SMqZG
- qAXeorzfUSC74Vl1/P9SgqZbU/Zk97HeoeKFI4miP4KF5hWj6uS23zvUGHSCzq7MNlfXrL32T
- p7Ve9D86b9DvUNaVRT2MkKSLUSeZkBOKN5WP78TcFkRdoM54sV4mnEsbxGbfTQNWJWi89SX5P
- +FvlBq0RVlcP31o9mb0VmF07bwclVNr4z68mvEIso47YXtxio8eKgkUp/AFQirq508+9EylAT
- csE4O+ISpJ0v3nNp/QM/+p/O+B+vXxbJuTShqIBPIEK/iXSP+O25D5LSFfmshPmti279PNzcg
- ur6/ViNm7kjTb0IVcr3DZEypP2paJI0Ij7OLXONmsafMilG8uMgGoi4q/CiT79TPRwC1BjcGE
- +Mq2q6VwxAeQSo5HGSIYye5gqZZ6kHrul2OtZrAiOZMkfDvdVR0pdbYIeL56cxp9TVrdF0YvW
- 7pC/kgGLa3zVvlnoF4TkvedaJaQjPqUOTne7mEXlWfUVja5AV0ePfRzNSePB5lHzYAJbAc/lx
- vLVBiHOhpUbpp4yH58uXgNpHpkICh0CueQkQOFzGqOG0QzVibD+eksSWDYLHZ3Dp3OE/KcW6p
- Ojs0P4nlPo7mrNfULExfVU9yQDUZaVgs5rlNFvYw7Ovewt5VnY=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH -next] lockdep: Use memset_startat() helper in
+ reinit_class()
+Content-Language: en-US
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
+Cc:     wangweiyang2@huawei.com, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, keescook@chromium.org
+References: <20211213132618.105737-1-xiujianfeng@huawei.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20211213132618.105737-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 10:52 AM Herve Codina <herve.codina@bootlin.com> wrote:
+On 12/13/21 08:26, Xiu Jianfeng wrote:
+> use memset_startat() helper to simplify the code, there is no functional
+> change in this patch.
 >
-> IRQ 0..7 are not supported by the driver for SPEAr320 SOC family.
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>   kernel/locking/lockdep.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
 >
-> IRQ 0 is not reserved in SPEAr320 SOC (assigned to GPIOINT).
-> Furthermore, in SPEAr320s SOC variant, IRQ 0..6 are assigned
-> as follow:
->   IRQ 6 - NGPIO_INTR: Combined status of edge programmable
->                       interrupts from GPIO ports
->   IRQ 5 - TX_OR_INTR: I2S interrupt on Transmit FIFO overrun
->   IRQ 4 - TX_EMP_INTR: I2S interrupt on Transmit FIFO empty
->   IRQ 3 - RX_OR_INTR: I2S interrupt on Receive FIFO overrun
->   IRQ 2 - RX_DA_INTR: I2S interrupt on data available in Receive FIFO
->   IRQ 1 - Reserved
->   IRQ 0 - GPIO_INTR: Legacy interrupt from GPIO ports
->
-> Add support for these IRQs in SPEAr320 SOC family.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index 4a882f83aeb9..89b3df51fd98 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -6011,13 +6011,10 @@ static void zap_class(struct pending_free *pf, struct lock_class *class)
+>   
+>   static void reinit_class(struct lock_class *class)
+>   {
+> -	void *const p = class;
+> -	const unsigned int offset = offsetof(struct lock_class, key);
+> -
+>   	WARN_ON_ONCE(!class->lock_entry.next);
+>   	WARN_ON_ONCE(!list_empty(&class->locks_after));
+>   	WARN_ON_ONCE(!list_empty(&class->locks_before));
+> -	memset(p + offset, 0, sizeof(*class) - offset);
+> +	memset_startat(class, 0, key);
+>   	WARN_ON_ONCE(!class->lock_entry.next);
+>   	WARN_ON_ONCE(!list_empty(&class->locks_after));
+>   	WARN_ON_ONCE(!list_empty(&class->locks_before));
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+LGTM
 
-I took patches 4 and 6 into the soc tree now.
+Acked-by: Waiman Long <longman@redhat.com>
 
-       Arnd

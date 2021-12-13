@@ -2,47 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8594726C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B71447243B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233804AbhLMJyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235541AbhLMJt2 (ORCPT
+        id S234209AbhLMJfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:35:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48076 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234046AbhLMJeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:49:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90F8C08E9BA;
-        Mon, 13 Dec 2021 01:43:29 -0800 (PST)
+        Mon, 13 Dec 2021 04:34:18 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1FEBB80E20;
-        Mon, 13 Dec 2021 09:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8979C00446;
-        Mon, 13 Dec 2021 09:43:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA963B80E18;
+        Mon, 13 Dec 2021 09:34:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB9FC00446;
+        Mon, 13 Dec 2021 09:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388607;
-        bh=H0FAacyZRZXXBxm2iWy3+HR1A0BKUuckAm6QSJ+DAkY=;
+        s=korg; t=1639388055;
+        bh=79G5Hb5JrOLbAK8UOK4nUp4oZX4ewHMC3bFakq46Fxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LHsa+nw8613Y6SsyEM4GLcNVSrGmy0WMt1x0TIAPzTvAX6vBZleUkD7GEIYCi4y5/
-         LoDH28asrmO5iSeeQQPcn0RqcD1dUWOJdI5WO8w4xzlcF2Hga1Am3dKG07c2OrcGe3
-         Un/JfYI5w2QsZYGYPVMhZSETQt/uC/dsimZM6tog=
+        b=JE4ImKelAG36juRhw2r3C+GxU9vN4UqhmQvB7P9WyGYY5X1NJ4WVt+93IuZZdodk9
+         4csPLfzflQ6lpUenM8+ucNmiaudq9F1jYsKaIBej+OGm7xnBHMRB8S8UUtcF7DGJY8
+         bccUTaMqLtnK49/8700XRIrlvqrx8mlTb0ss4OPM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Florian Westphal <fw@strlen.de>,
-        David Ahern <dsahern@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.4 17/88] vrf: dont run conntrack on vrf with !dflt qdisc
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 4.9 05/42] HID: add USB_HID dependancy on some USB HID drivers
 Date:   Mon, 13 Dec 2021 10:29:47 +0100
-Message-Id: <20211213092933.802352177@linuxfoundation.org>
+Message-Id: <20211213092926.748687063@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
+References: <20211213092926.578829548@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,133 +45,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit d43b75fbc23f0ac1ef9c14a5a166d3ccb761a451 upstream.
+commit f237d9028f844a86955fc9da59d7ac4a5c55d7d5 upstream.
 
-After the below patch, the conntrack attached to skb is set to "notrack" in
-the context of vrf device, for locally generated packets.
-But this is true only when the default qdisc is set to the vrf device. When
-changing the qdisc, notrack is not set anymore.
-In fact, there is a shortcut in the vrf driver, when the default qdisc is
-set, see commit dcdd43c41e60 ("net: vrf: performance improvements for
-IPv4") for more details.
+Some HID drivers are only for USB drivers, yet did not depend on
+CONFIG_USB_HID.  This was hidden by the fact that the USB functions were
+stubbed out in the past, but now that drivers are checking for USB
+devices properly, build errors can occur with some random
+configurations.
 
-This patch ensures that the behavior is always the same, whatever the qdisc
-is.
-
-To demonstrate the difference, a new test is added in conntrack_vrf.sh.
-
-Fixes: 8c9c296adfae ("vrf: run conntrack only in context of lower/physdev for locally generated packets")
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Acked-by: Florian Westphal <fw@strlen.de>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211202114819.2511954-1-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/vrf.c                                  |    8 ++---
- tools/testing/selftests/netfilter/conntrack_vrf.sh |   30 ++++++++++++++++++---
- 2 files changed, 30 insertions(+), 8 deletions(-)
+ drivers/hid/Kconfig |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -495,8 +495,6 @@ static struct sk_buff *vrf_ip6_out_direc
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -183,7 +183,7 @@ config HID_CHICONY
  
- 	skb->dev = vrf_dev;
+ config HID_CORSAIR
+ 	tristate "Corsair devices"
+-	depends on HID && USB && LEDS_CLASS
++	depends on USB_HID && LEDS_CLASS
+ 	---help---
+ 	Support for Corsair devices that are not fully compliant with the
+ 	HID standard.
+@@ -421,7 +421,7 @@ config HID_LENOVO
  
--	vrf_nf_set_untracked(skb);
--
- 	err = nf_hook(NFPROTO_IPV6, NF_INET_LOCAL_OUT, net, sk,
- 		      skb, NULL, vrf_dev, vrf_ip6_out_direct_finish);
+ config HID_LOGITECH
+ 	tristate "Logitech devices"
+-	depends on HID
++	depends on USB_HID
+ 	default !EXPERT
+ 	---help---
+ 	Support for Logitech devices that are not fully compliant with HID standard.
+@@ -730,7 +730,7 @@ config HID_SAITEK
  
-@@ -517,6 +515,8 @@ static struct sk_buff *vrf_ip6_out(struc
- 	if (rt6_need_strict(&ipv6_hdr(skb)->daddr))
- 		return skb;
+ config HID_SAMSUNG
+ 	tristate "Samsung InfraRed remote control or keyboards"
+-	depends on HID
++	depends on USB_HID
+ 	---help---
+ 	Support for Samsung InfraRed remote control or keyboards.
  
-+	vrf_nf_set_untracked(skb);
-+
- 	if (qdisc_tx_is_default(vrf_dev) ||
- 	    IP6CB(skb)->flags & IP6SKB_XFRM_TRANSFORMED)
- 		return vrf_ip6_out_direct(vrf_dev, sk, skb);
-@@ -732,8 +732,6 @@ static struct sk_buff *vrf_ip_out_direct
- 
- 	skb->dev = vrf_dev;
- 
--	vrf_nf_set_untracked(skb);
--
- 	err = nf_hook(NFPROTO_IPV4, NF_INET_LOCAL_OUT, net, sk,
- 		      skb, NULL, vrf_dev, vrf_ip_out_direct_finish);
- 
-@@ -755,6 +753,8 @@ static struct sk_buff *vrf_ip_out(struct
- 	    ipv4_is_lbcast(ip_hdr(skb)->daddr))
- 		return skb;
- 
-+	vrf_nf_set_untracked(skb);
-+
- 	if (qdisc_tx_is_default(vrf_dev) ||
- 	    IPCB(skb)->flags & IPSKB_XFRM_TRANSFORMED)
- 		return vrf_ip_out_direct(vrf_dev, sk, skb);
---- a/tools/testing/selftests/netfilter/conntrack_vrf.sh
-+++ b/tools/testing/selftests/netfilter/conntrack_vrf.sh
-@@ -150,11 +150,27 @@ EOF
- # oifname is the vrf device.
- test_masquerade_vrf()
- {
-+	local qdisc=$1
-+
-+	if [ "$qdisc" != "default" ]; then
-+		tc -net $ns0 qdisc add dev tvrf root $qdisc
-+	fi
-+
- 	ip netns exec $ns0 conntrack -F 2>/dev/null
- 
- ip netns exec $ns0 nft -f - <<EOF
- flush ruleset
- table ip nat {
-+	chain rawout {
-+		type filter hook output priority raw;
-+
-+		oif tvrf ct state untracked counter
-+	}
-+	chain postrouting2 {
-+		type filter hook postrouting priority mangle;
-+
-+		oif tvrf ct state untracked counter
-+	}
- 	chain postrouting {
- 		type nat hook postrouting priority 0;
- 		# NB: masquerade should always be combined with 'oif(name) bla',
-@@ -171,13 +187,18 @@ EOF
- 	fi
- 
- 	# must also check that nat table was evaluated on second (lower device) iteration.
--	ip netns exec $ns0 nft list table ip nat |grep -q 'counter packets 2'
-+	ip netns exec $ns0 nft list table ip nat |grep -q 'counter packets 2' &&
-+	ip netns exec $ns0 nft list table ip nat |grep -q 'untracked counter packets [1-9]'
- 	if [ $? -eq 0 ]; then
--		echo "PASS: iperf3 connect with masquerade + sport rewrite on vrf device"
-+		echo "PASS: iperf3 connect with masquerade + sport rewrite on vrf device ($qdisc qdisc)"
- 	else
--		echo "FAIL: vrf masq rule has unexpected counter value"
-+		echo "FAIL: vrf rules have unexpected counter value"
- 		ret=1
- 	fi
-+
-+	if [ "$qdisc" != "default" ]; then
-+		tc -net $ns0 qdisc del dev tvrf root
-+	fi
- }
- 
- # add masq rule that gets evaluated w. outif set to veth device.
-@@ -213,7 +234,8 @@ EOF
- }
- 
- test_ct_zone_in
--test_masquerade_vrf
-+test_masquerade_vrf "default"
-+test_masquerade_vrf "pfifo"
- test_masquerade_veth
- 
- exit $ret
 
 

@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B71447243B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3566247250D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbhLMJfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:35:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48076 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbhLMJeS (ORCPT
+        id S235250AbhLMJkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234691AbhLMJjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:18 -0500
+        Mon, 13 Dec 2021 04:39:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25722C061372;
+        Mon, 13 Dec 2021 01:37:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA963B80E18;
-        Mon, 13 Dec 2021 09:34:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB9FC00446;
-        Mon, 13 Dec 2021 09:34:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6D08ECE0E83;
+        Mon, 13 Dec 2021 09:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A599C00446;
+        Mon, 13 Dec 2021 09:37:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388055;
-        bh=79G5Hb5JrOLbAK8UOK4nUp4oZX4ewHMC3bFakq46Fxc=;
+        s=korg; t=1639388245;
+        bh=iov5NoUFnieE7nnGUzIju4copu3+6BiwBAfvAoQiVzU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JE4ImKelAG36juRhw2r3C+GxU9vN4UqhmQvB7P9WyGYY5X1NJ4WVt+93IuZZdodk9
-         4csPLfzflQ6lpUenM8+ucNmiaudq9F1jYsKaIBej+OGm7xnBHMRB8S8UUtcF7DGJY8
-         bccUTaMqLtnK49/8700XRIrlvqrx8mlTb0ss4OPM=
+        b=NzmRqEmTTg3LfXTNRCy3OItulAoKd6fYLwM6k9Kl41BZl2zavUQigAmL0HwQ+3Oi1
+         8DaaaGyH+qzVkqvJ/h5gXPnExpvEP0ZhXQuahLGXkfhngurvAS9qIHYD+1zvZF+NgM
+         yBpNKcKKqax0llbwA0fkxyuag+9zZE35hNdo8M5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 4.9 05/42] HID: add USB_HID dependancy on some USB HID drivers
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 08/53] nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
 Date:   Mon, 13 Dec 2021 10:29:47 +0100
-Message-Id: <20211213092926.748687063@linuxfoundation.org>
+Message-Id: <20211213092928.629889510@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,54 +49,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit f237d9028f844a86955fc9da59d7ac4a5c55d7d5 upstream.
+commit 4cd8371a234d051f9c9557fcbb1f8c523b1c0d10 upstream.
 
-Some HID drivers are only for USB drivers, yet did not depend on
-CONFIG_USB_HID.  This was hidden by the fact that the USB functions were
-stubbed out in the past, but now that drivers are checking for USB
-devices properly, build errors can occur with some random
-configurations.
+The done() netlink callback nfc_genl_dump_ses_done() should check if
+received argument is non-NULL, because its allocation could fail earlier
+in dumpit() (nfc_genl_dump_ses()).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20211202114819.2511954-1-gregkh@linuxfoundation.org
+Fixes: ac22ac466a65 ("NFC: Add a GET_SE netlink API")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20211209081307.57337-1-krzysztof.kozlowski@canonical.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/Kconfig |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/nfc/netlink.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -183,7 +183,7 @@ config HID_CHICONY
+--- a/net/nfc/netlink.c
++++ b/net/nfc/netlink.c
+@@ -1400,8 +1400,10 @@ static int nfc_genl_dump_ses_done(struct
+ {
+ 	struct class_dev_iter *iter = (struct class_dev_iter *) cb->args[0];
  
- config HID_CORSAIR
- 	tristate "Corsair devices"
--	depends on HID && USB && LEDS_CLASS
-+	depends on USB_HID && LEDS_CLASS
- 	---help---
- 	Support for Corsair devices that are not fully compliant with the
- 	HID standard.
-@@ -421,7 +421,7 @@ config HID_LENOVO
+-	nfc_device_iter_exit(iter);
+-	kfree(iter);
++	if (iter) {
++		nfc_device_iter_exit(iter);
++		kfree(iter);
++	}
  
- config HID_LOGITECH
- 	tristate "Logitech devices"
--	depends on HID
-+	depends on USB_HID
- 	default !EXPERT
- 	---help---
- 	Support for Logitech devices that are not fully compliant with HID standard.
-@@ -730,7 +730,7 @@ config HID_SAITEK
- 
- config HID_SAMSUNG
- 	tristate "Samsung InfraRed remote control or keyboards"
--	depends on HID
-+	depends on USB_HID
- 	---help---
- 	Support for Samsung InfraRed remote control or keyboards.
- 
+ 	return 0;
+ }
 
 

@@ -2,30 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E35AE4736CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5A14736CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243211AbhLMVw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243194AbhLMVw0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:52:26 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA625C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:52:25 -0800 (PST)
+        id S243222AbhLMVwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:52:30 -0500
+Received: from out2.migadu.com ([188.165.223.204]:35852 "EHLO out2.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243214AbhLMVw3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 16:52:29 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639432344;
+        t=1639432348;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gEwxHYhSfawbBtJvbiR6+iX2264JYoaXaLcYxmnXGuo=;
-        b=PG6mONirrYjof0VyY56DPXpFdOH5WaYPNOSbARHvT6w1b96bfe9viCXkUJSIxeuLkP1QgQ
-        3eonmYriZFBVIDx27bh2RnCHXb3/cIcjo4KL0Xdnf48KyZ4eZdnrGTmrOsk7uoYuEIc4jZ
-        iPNPnVC9yGtyCv8Wn6kGFVd+B1VXcIs=
+        bh=lLRehdStIsdn/AnAQZ01/ErmphlQVweFQPGIsWoJgns=;
+        b=QGQsUAkRXzv/O3TIDlDXOJJhlRZZ6zX2xxmvMYZ+lPhOqzd9XWhog6o+F0mCNvppyhEeCK
+        Ynsy0IZ/F3rEKbs8ySYi0uYVNQ/YPZJMBWuUWW/KD+SIUgZE11KV4E993L4t/hzO5AUoDy
+        wUhYSkZfflwhPN7WBcEcLWoD2j4o59k=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 05/38] kasan, page_alloc: init memory of skipped pages on free
-Date:   Mon, 13 Dec 2021 22:51:24 +0100
-Message-Id: <cbd251de84ae7bf1c1c2afa8778b3844abebbcbb.1639432170.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 06/38] kasan: drop skip_kasan_poison variable in free_pages_prepare
+Date:   Mon, 13 Dec 2021 22:51:25 +0100
+Message-Id: <a6739f787ac816cdbb191aea4f3bb4427bd3f0c9.1639432170.git.andreyknvl@google.com>
 In-Reply-To: <cover.1639432170.git.andreyknvl@google.com>
 References: <cover.1639432170.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,56 +54,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Since commit 7a3b83537188 ("kasan: use separate (un)poison implementation
-for integrated init"), when all init, kasan_has_integrated_init(), and
-skip_kasan_poison are true, free_pages_prepare() doesn't initialize
-the page. This is wrong.
-
-Fix it by remembering whether kasan_poison_pages() performed
-initialization, and call kernel_init_free_pages() if it didn't.
-
-Reordering kasan_poison_pages() and kernel_init_free_pages() is OK,
-since kernel_init_free_pages() can handle poisoned memory.
+skip_kasan_poison is only used in a single place.
+Call should_skip_kasan_poison() directly for simplicity.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Suggested-by: Marco Elver <elver@google.com>
 
 ---
-
-Changes v2->v3:
-- Drop Fixes tag, as the patch won't cleanly apply to older kernels
-  anyway. The commit is mentioned in the patch description.
 
 Changes v1->v2:
-- Reorder kasan_poison_pages() and free_pages_prepare() in this patch
-  instead of doing it in the previous one.
+- Add this patch.
 ---
- mm/page_alloc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ mm/page_alloc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index db8cecdd0aaa..114d6b010331 100644
+index 114d6b010331..73280222e0e8 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -1374,11 +1374,16 @@ static __always_inline bool free_pages_prepare(struct page *page,
+@@ -1300,7 +1300,6 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 			unsigned int order, bool check_free, fpi_t fpi_flags)
+ {
+ 	int bad = 0;
+-	bool skip_kasan_poison = should_skip_kasan_poison(page, fpi_flags);
+ 	bool init = want_init_on_free();
+ 
+ 	VM_BUG_ON_PAGE(PageTail(page), page);
+@@ -1374,7 +1373,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
  	 * With hardware tag-based KASAN, memory tags must be set before the
  	 * page becomes unavailable via debug_pagealloc or arch_free_page.
  	 */
--	if (init && !kasan_has_integrated_init())
--		kernel_init_free_pages(page, 1 << order);
--	if (!skip_kasan_poison)
-+	if (!skip_kasan_poison) {
+-	if (!skip_kasan_poison) {
++	if (!should_skip_kasan_poison(page, fpi_flags)) {
  		kasan_poison_pages(page, order, init);
  
-+		/* Memory is already initialized if KASAN did it internally. */
-+		if (kasan_has_integrated_init())
-+			init = false;
-+	}
-+	if (init)
-+		kernel_init_free_pages(page, 1 << order);
-+
- 	/*
- 	 * arch_free_page() can make the page's contents inaccessible.  s390
- 	 * does this.  So nothing which can access the page's contents should
+ 		/* Memory is already initialized if KASAN did it internally. */
 -- 
 2.25.1
 

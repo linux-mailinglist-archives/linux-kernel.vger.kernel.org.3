@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8F447246D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A3E47242B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234359AbhLMJgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S234266AbhLMJel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbhLMJfP (ORCPT
+        with ESMTP id S234126AbhLMJeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:35:15 -0500
+        Mon, 13 Dec 2021 04:34:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7852FC061756;
-        Mon, 13 Dec 2021 01:35:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A16C0698D3;
+        Mon, 13 Dec 2021 01:33:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40158B80DE8;
-        Mon, 13 Dec 2021 09:35:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F83CC341CA;
-        Mon, 13 Dec 2021 09:35:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF1B2B80E0B;
+        Mon, 13 Dec 2021 09:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4056EC341C8;
+        Mon, 13 Dec 2021 09:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388113;
-        bh=lFru/eiJ+opmGuVoOgd6CAflirb7kLAfOtF6fZS+NaQ=;
+        s=korg; t=1639388035;
+        bh=IEH0SgXW32ZJv2QeLrjSktkpfigNy0ReA7GV2QSSPMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BWwH6HgbJxQRjDjXcjkEzSZRhcd1RfumNYGPhy33SqNkjFfLmXWI7d7ekcw7UNBBR
-         UgcyS+0wrnoPIBzaH8FW1SwUtBlSovsmRMpiUUrMXkIPQrPZ5u60n5wJPr3bAPn3iW
-         WiFMKKO07vR+0lkX4eWFuUozxs5F+/VNL5DNT+fM=
+        b=J/bTtCPjfw43MmPCTGGfP/1l6ANBsNm2mL6H9CiPcjr2Jb0FJ3Ac9FpcRw/TCsyXE
+         Nb1I4WjdN3bVBMS5aw74z1Aa+nz+yxTw6iEiFrMV8NSHB6EfJXxjxJhtoCwtCzrrZn
+         0bhVbCldLfSjhCZOGi7Qs/HT4q8dXBH/RSjLg4w8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.9 33/42] iio: stk3310: Dont return error code in interrupt handler
+        stable@vger.kernel.org, Vladimir Murzin <vladimir.murzin@arm.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 4.4 37/37] irqchip: nvic: Fix offset for Interrupt Priority Offsets
 Date:   Mon, 13 Dec 2021 10:30:15 +0100
-Message-Id: <20211213092927.637859227@linuxfoundation.org>
+Message-Id: <20211213092926.590971008@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,49 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Vladimir Murzin <vladimir.murzin@arm.com>
 
-commit 8e1eeca5afa7ba84d885987165dbdc5decf15413 upstream.
+commit c5e0cbe2858d278a27d5b3fe31890aea5be064c4 upstream.
 
-Interrupt handlers must return one of the irqreturn_t values. Returning a
-error code is not supported.
+According to ARM(v7M) ARM Interrupt Priority Offsets located at
+0xE000E400-0xE000E5EC, while 0xE000E300-0xE000E33C covers read-only
+Interrupt Active Bit Registers
 
-The stk3310 event interrupt handler returns an error code when reading the
-flags register fails.
-
-Fix the implementation to always return an irqreturn_t value.
-
-Fixes: 3dd477acbdd1 ("iio: light: Add threshold interrupt support for STK3310")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024171251.22896-3-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 292ec080491d ("irqchip: Add support for ARMv7-M NVIC")
+Signed-off-by: Vladimir Murzin <vladimir.murzin@arm.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20211201110259.84857-1-vladimir.murzin@arm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/light/stk3310.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-nvic.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/light/stk3310.c
-+++ b/drivers/iio/light/stk3310.c
-@@ -546,9 +546,8 @@ static irqreturn_t stk3310_irq_event_han
- 	mutex_lock(&data->lock);
- 	ret = regmap_field_read(data->reg_flag_nf, &dir);
- 	if (ret < 0) {
--		dev_err(&data->client->dev, "register read failed\n");
--		mutex_unlock(&data->lock);
--		return ret;
-+		dev_err(&data->client->dev, "register read failed: %d\n", ret);
-+		goto out;
- 	}
- 	event = IIO_UNMOD_EVENT_CODE(IIO_PROXIMITY, 1,
- 				     IIO_EV_TYPE_THRESH,
-@@ -560,6 +559,7 @@ static irqreturn_t stk3310_irq_event_han
- 	ret = regmap_field_write(data->reg_flag_psint, 0);
- 	if (ret < 0)
- 		dev_err(&data->client->dev, "failed to reset interrupts\n");
-+out:
- 	mutex_unlock(&data->lock);
+--- a/drivers/irqchip/irq-nvic.c
++++ b/drivers/irqchip/irq-nvic.c
+@@ -29,7 +29,7 @@
  
- 	return IRQ_HANDLED;
+ #define NVIC_ISER		0x000
+ #define NVIC_ICER		0x080
+-#define NVIC_IPR		0x300
++#define NVIC_IPR		0x400
+ 
+ #define NVIC_MAX_BANKS		16
+ /*
 
 

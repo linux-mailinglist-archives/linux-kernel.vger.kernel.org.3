@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E8E473234
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8305547319E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbhLMQrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:47:12 -0500
-Received: from pmta31.teksavvy.com ([76.10.157.38]:30202 "EHLO
-        pmta31.teksavvy.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbhLMQrM (ORCPT
+        id S231789AbhLMQYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231150AbhLMQYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:47:12 -0500
-X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 11:47:11 EST
-IronPort-SDR: oFYPOYxaCIsiMyR1OxpvP8fRkZVPRS7459J7/Tv2bxiz01PuxDlVuXHW+GdHXTZ11O2OTFxfVG
- MFvbhNIY8CYg==
-IronPort-Data: =?us-ascii?q?A9a23=3A5KrxR6B8RWWATxVW/8Tiw5YqxClBgxIJ4kV8j?=
- =?us-ascii?q?S/XYbTApG5z1GABnDMZXjzVafaKYWD0ftsga4zl9UkH75/cytBiTANkpHpgZ?=
- =?us-ascii?q?kwRpJueD7x1DKtQ0wB+jyH7ocsOA/w2MrEsF+hpCC+MzvuRGuK59yAlj/jTH?=
- =?us-ascii?q?uGU5NPsY0ideyc1EE/Ntjo+w4bVsqYw6TSIK1vlVeHa+qUzC3f/s9JACV/43?=
- =?us-ascii?q?orYwP9ZUFQejxtD1rA2TagjUFYzDBD5BrpHTU26ByOQroW5godW7gsepYxV8?=
- =?us-ascii?q?F81/z91Yj+kupzhe0ERcJTVOgvIgX1QVbW5jxFJrzB01bw0XBYeQR0LzW/Qx?=
- =?us-ascii?q?ZYrkYgL7MDhIesqFvSkdOA1WQJTFD1iFbFL+6TOP2au98eUyiUqdlO1nKgwX?=
- =?us-ascii?q?R1rYt1wFuFfRDsmGeYjACwMcRmCr/mr27/9RuQErtwuNsT7FJsSoHxwizrLZ?=
- =?us-ascii?q?d46QI/KQo3R+MRVmjw3g6hmFvHEbccFQT5walLGbgEnElUaEp87jaGzlGTXe?=
- =?us-ascii?q?DRer1SUrqMzpWPUyWRZ0KXsdsXcfNOiTsxTmUCZrWvCuW/+B3kyK8eS4SaY4?=
- =?us-ascii?q?n+ggeTImDvmRI8ID/uz8fsCqF6ax2gaDhI+T1aypeW0iQi1XNc3A0cd/wIoo?=
- =?us-ascii?q?K935kGsSJ/xUnWQu3eBvzYYXN1WHqs06Wmlx67V6gqUGGkYSRZObdUnsIk9Q?=
- =?us-ascii?q?jlC/laNhNqsCTFxvbm9QHaG//KMtzSwNCMJa2gYakcsSQoD/smmrIY4pgzAQ?=
- =?us-ascii?q?8wlE6OviNDxXzbqzFiiqCk4mqVWjsMR0ai/1U7IjijqpZXTSAMxoALNUQqN5?=
- =?us-ascii?q?BhyY5K5T5Cl6kPS8+hRao2eSzG8UNIs8ySFxLpSSMvUzmnXGbhIRe34of2MO?=
- =?us-ascii?q?jnRx0JiHIIo6Sq8vXWkeOhtDPhFDB8BGq45lfXBOic/YT9s2aI=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AdPuVSq1+YobHrBNip5GsUAqjBKskLtp133?=
- =?us-ascii?q?Aq2lEZdPWaSKGlfqeV7ZcmPHDP5wr5NEtKpTniAsm9qA3nm6KdiLN5VYtKNz?=
- =?us-ascii?q?OLhILHFutfBPPZogHdJw=3D=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2FUBACJdrdh/5XX1BhaHgEBCxIMSYF?=
- =?us-ascii?q?FC4N7bI1LiEsBngoLAQEBAQEBAQEBCUEEAQGFAAQCgyYmNwYOAQIEAQEBEgE?=
- =?us-ascii?q?BAQUBAQEBAQYEAgKBGIV1hwQBIyMpJm8TgnGDGLJSgQGIFoFjgTqJLIVJgUl?=
- =?us-ascii?q?EgRWDaIpCBJJ3gQ+CLjqVKwGKMoIQnWeDSp8OTadPAZYspkmBd4F/MxoIGxW?=
- =?us-ascii?q?DJFEZD50OJjA4AgYLAQEDCZBwAQE?=
-X-IPAS-Result: =?us-ascii?q?A2FUBACJdrdh/5XX1BhaHgEBCxIMSYFFC4N7bI1LiEsBn?=
- =?us-ascii?q?goLAQEBAQEBAQEBCUEEAQGFAAQCgyYmNwYOAQIEAQEBEgEBAQUBAQEBAQYEA?=
- =?us-ascii?q?gKBGIV1hwQBIyMpJm8TgnGDGLJSgQGIFoFjgTqJLIVJgUlEgRWDaIpCBJJ3g?=
- =?us-ascii?q?Q+CLjqVKwGKMoIQnWeDSp8OTadPAZYspkmBd4F/MxoIGxWDJFEZD50OJjA4A?=
- =?us-ascii?q?gYLAQEDCZBwAQE?=
-X-IronPort-AV: E=Sophos;i="5.88,203,1635220800"; 
-   d="scan'208";a="175694578"
-Received: from 24-212-215-149.cable.teksavvy.com (HELO BradsZBook.confuseacat.org) ([24.212.215.149])
-  by smtp13.teksavvy.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Dec 2021 11:40:04 -0500
-From:   Bradley Scott <bscott@teksavvy.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Kailang Yang <kailang@realtek.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Sami Loone <sami@loone.fi>, Elia Devito <eliadevito@gmail.com>,
-        alsa-devel@alsa-project.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bradley Scott <bscott@teksavvy.com>
-Subject: [PATCH] ALSA: hda/realtek: Add new alc285-hp-amp-init model
-Date:   Mon, 13 Dec 2021 11:22:47 -0500
-Message-Id: <20211213162246.506838-1-bscott@teksavvy.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 13 Dec 2021 11:24:16 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A389AC061574;
+        Mon, 13 Dec 2021 08:24:16 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso13769616pjb.2;
+        Mon, 13 Dec 2021 08:24:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=yohP78D4atzOPK9Zw6Tkph8dapgndeH2XkAEwCLnI1U=;
+        b=Xll60V/m0S95rYuhVfojo9Nw7jbki/iv4FSXFFhY5VEgcQ9m72peACREIzDKbSbqVP
+         ywzeprVpIQrwcNSgxI7EN/ZPZN8SoNkMmrcn406bCmkJS1s/XWpLaP0K3NA47/f+meA1
+         FUHYw5pNqJoIMwVnOwILlU5gkVZt8y9/D62lKQuJYXGZSBZgXy1tCVDbM38Fvcs9K9xP
+         KJLpkP9ewa6wHdLZuUzs4Mo614BYipy2etpApuVHuIdusyYsvBfFqw4E2Y0cgDUUIBmu
+         aPnfnyZ9K9aBWD/UNPFMbtblp8qX3a7e7hMPVcLs3YBKCIqod3APWJ5vh9UrPYQOcTpp
+         XrSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yohP78D4atzOPK9Zw6Tkph8dapgndeH2XkAEwCLnI1U=;
+        b=oYIpeX+GDWGUqNlR/6vZQOPRGx9PvwvaHjILGEyp6r1u+xeUUZeZi97rj3MzV46gpq
+         rndJ3puHtYi1fKw8VtZ0/JZPClchgK7aH7jCZruIXgEs14ZBMFjo6qoR/x/065wrmoZr
+         mPWDADkn7fMouiZZGRoKaCxuNR3hQXHy0/EwcEVJixd5WdI+mYZRn+X/ni7afK3B8Q6B
+         KIdiKlWjtS5eHoonioUyUpMU0d7ZbXWkWAcKcwuuhOpbKb0I64NY6OBvOGvWWZIWjPBU
+         Eu/PNDXzBJHexEYpeZavNQuBqe412e6sbi862ZqpULSHrnZBwsRBa6bHjHZ5jdQ28Nx2
+         FXXg==
+X-Gm-Message-State: AOAM532xNlBH6dLzZ8EgNzWNQ+nSEZwa40ObtDnZe5AObrf5KrpRXaI6
+        BoeoADwgfK68IG2xh+4dzHw=
+X-Google-Smtp-Source: ABdhPJz1NtidICjKTR7YYbrVG7R82YdUQIJkchkYd22sLpaFVtbilpYb8BG/hYKGXyWfJ7EKgMnXCA==
+X-Received: by 2002:a17:90b:11c1:: with SMTP id gv1mr45294855pjb.208.1639412656189;
+        Mon, 13 Dec 2021 08:24:16 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id fs21sm6043868pjb.1.2021.12.13.08.24.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 08:24:15 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] perf expr: Fix return value of ids__new
+Date:   Mon, 13 Dec 2021 16:24:00 +0000
+Message-Id: <20211213162403.10970-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a new "alc285-hp-amp-init" model that can be used to apply the ALC285
-HP speaker amplifier initialization fixup to devices that are not already
-known by passing "hda_model=alc285-hp-amp-init" to the
-snd-sof-intel-hda-common module or "model=alc285-hp-amp-init" to the
-snd-hda-intel module, depending on which is being used.
+callers of ids__new() function only do NULL checking for the return
+value. ids__new() calles hashmap__new(), which may return
+ERR_PTR(-ENOMEM). Instead of changing the checking one-by-one.
+return NULL instead of ERR_PTR(-ENOMEM) to keep
+consistent.
 
-Signed-off-by: Bradley Scott <bscott@teksavvy.com>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- Documentation/sound/hd-audio/models.rst | 2 ++
- sound/pci/hda/patch_realtek.c           | 1 +
- 2 files changed, 3 insertions(+)
+ tools/perf/util/expr.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/sound/hd-audio/models.rst b/Documentation/sound/hd-audio/models.rst
-index 0ea967d34583..d25335993e55 100644
---- a/Documentation/sound/hd-audio/models.rst
-+++ b/Documentation/sound/hd-audio/models.rst
-@@ -326,6 +326,8 @@ usi-headset
-     Headset support on USI machines
- dual-codecs
-     Lenovo laptops with dual codecs
-+alc285-hp-amp-init
-+    HP laptops which require speaker amplifier initialization (ALC285)
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index 1d532b9fed29..aabdc112300c 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -65,7 +65,13 @@ static bool key_equal(const void *key1, const void *key2,
  
- ALC680
- ======
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index d162662fe684..fc41f3e8ddc3 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9124,6 +9124,7 @@ static const struct hda_model_fixup alc269_fixup_models[] = {
- 	{.id = ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP, .name = "alc287-ideapad-bass-spk-amp"},
- 	{.id = ALC623_FIXUP_LENOVO_THINKSTATION_P340, .name = "alc623-lenovo-thinkstation-p340"},
- 	{.id = ALC255_FIXUP_ACER_HEADPHONE_AND_MIC, .name = "alc255-acer-headphone-and-mic"},
-+	{.id = ALC285_FIXUP_HP_GPIO_AMP_INIT, .name = "alc285-hp-amp-init"},
- 	{}
- };
- #define ALC225_STANDARD_PINS \
+ struct hashmap *ids__new(void)
+ {
+-	return hashmap__new(key_hash, key_equal, NULL);
++	struct hashmap *hash;
++
++	hash = hashmap__new(key_hash, key_equal, NULL);
++	if (IS_ERR(hash))
++		return NULL;
++	else
++		return hash;
+ }
+ 
+ void ids__free(struct hashmap *ids)
 -- 
-2.25.1
+2.17.1
 

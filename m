@@ -2,43 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE76472520
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67514724BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbhLMJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:41:13 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34256 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbhLMJjY (ORCPT
+        id S229779AbhLMJiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234589AbhLMJgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:39:24 -0500
+        Mon, 13 Dec 2021 04:36:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A671C061201;
+        Mon, 13 Dec 2021 01:36:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 673F6CE0AE2;
-        Mon, 13 Dec 2021 09:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 168B2C341C8;
-        Mon, 13 Dec 2021 09:39:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 670B6B80E1A;
+        Mon, 13 Dec 2021 09:36:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81224C341C5;
+        Mon, 13 Dec 2021 09:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388360;
-        bh=tESRqraY7njCCJvL1Sa93IkRd6s8k7Bs7CmpJcCtZkc=;
+        s=korg; t=1639388162;
+        bh=PEW5JwRnVWEkYcLV4SbNhbgEEuIYDpogGayn3ZHK2N0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kFT1uBGI1OeikmtKtS72y+GScq0EMWSxbXnsViolIEEubYE/AE60UwvaCTHcbYEkB
-         oGLtMWDXuyLQ4+K2th9jnEE19J+jQu2d/wF2gU1IrRpFkt2mwU5wsC9g9r5vPjwJ65
-         c+rJ2cvwn7WfXpA+kADJD3VafcoMSgQfvRQlmb2E=
+        b=MP2qCzWgzwE1Owa5mJtsqlyyp1ni3bQgBn7HaBTeOhUFFkV5ftNC6MginMKiFhcLU
+         YJEVvhOXi/RiuqXj5ALrPWLjkAPcmch+S24HyycuLjWrQgzsd6jZmgXe8TriUOEHH6
+         jQPSjCFWKqg6yGU6AhAvRaZemgZyI9ibjO9h5W4Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 4.19 22/74] IB/hfi1: Correct guard on eager buffer deallocation
+        stable@vger.kernel.org, Manjong Lee <mj0123.lee@samsung.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Changheun Lee <nanich.lee@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        seunghwan.hyun@samsung.com, sookwan7.kim@samsung.com,
+        yt0928.kim@samsung.com, junho89.kim@samsung.com,
+        jisoo2146.oh@samsung.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.9 11/42] mm: bdi: initialize bdi_min_ratio when bdi is unregistered
 Date:   Mon, 13 Dec 2021 10:29:53 +0100
-Message-Id: <20211213092931.531985727@linuxfoundation.org>
+Message-Id: <20211213092926.950166266@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
+References: <20211213092926.578829548@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,35 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+From: Manjong Lee <mj0123.lee@samsung.com>
 
-commit 9292f8f9a2ac42eb320bced7153aa2e63d8cc13a upstream.
+commit 3c376dfafbf7a8ea0dea212d095ddd83e93280bb upstream.
 
-The code tests the dma address which legitimately can be 0.
+Initialize min_ratio if it is set during bdi unregistration.  This can
+prevent problems that may occur a when bdi is removed without resetting
+min_ratio.
 
-The code should test the kernel logical address to avoid leaking eager
-buffer allocations that happen to map to a dma address of 0.
+For example.
+1) insert external sdcard
+2) set external sdcard's min_ratio 70
+3) remove external sdcard without setting min_ratio 0
+4) insert external sdcard
+5) set external sdcard's min_ratio 70 << error occur(can't set)
 
-Fixes: 60368186fd85 ("IB/hfi1: Fix user-space buffers mapping with IOMMU enabled")
-Link: https://lore.kernel.org/r/20211129191952.101968.17137.stgit@awfm-01.cornelisnetworks.com
-Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Because when an sdcard is removed, the present bdi_min_ratio value will
+remain.  Currently, the only way to reset bdi_min_ratio is to reboot.
+
+[akpm@linux-foundation.org: tweak comment and coding style]
+
+Link: https://lkml.kernel.org/r/20211021161942.5983-1-mj0123.lee@samsung.com
+Signed-off-by: Manjong Lee <mj0123.lee@samsung.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Changheun Lee <nanich.lee@samsung.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: <seunghwan.hyun@samsung.com>
+Cc: <sookwan7.kim@samsung.com>
+Cc: <yt0928.kim@samsung.com>
+Cc: <junho89.kim@samsung.com>
+Cc: <jisoo2146.oh@samsung.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hfi1/init.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/backing-dev.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/infiniband/hw/hfi1/init.c
-+++ b/drivers/infiniband/hw/hfi1/init.c
-@@ -1146,7 +1146,7 @@ void hfi1_free_ctxtdata(struct hfi1_devd
- 	rcd->egrbufs.rcvtids = NULL;
+--- a/mm/backing-dev.c
++++ b/mm/backing-dev.c
+@@ -865,6 +865,13 @@ void bdi_unregister(struct backing_dev_i
+ 	wb_shutdown(&bdi->wb);
+ 	cgwb_bdi_destroy(bdi);
  
- 	for (e = 0; e < rcd->egrbufs.alloced; e++) {
--		if (rcd->egrbufs.buffers[e].dma)
-+		if (rcd->egrbufs.buffers[e].addr)
- 			dma_free_coherent(&dd->pcidev->dev,
- 					  rcd->egrbufs.buffers[e].len,
- 					  rcd->egrbufs.buffers[e].addr,
++	/*
++	 * If this BDI's min ratio has been set, use bdi_set_min_ratio() to
++	 * update the global bdi_min_ratio.
++	 */
++	if (bdi->min_ratio)
++		bdi_set_min_ratio(bdi, 0);
++
+ 	if (bdi->dev) {
+ 		bdi_debug_unregister(bdi);
+ 		device_unregister(bdi->dev);
 
 

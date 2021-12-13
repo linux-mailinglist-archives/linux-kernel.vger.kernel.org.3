@@ -2,252 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A61B472BE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DF8472BF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236379AbhLMMFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:05:21 -0500
-Received: from mail-eopbgr60077.outbound.protection.outlook.com ([40.107.6.77]:35308
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231585AbhLMMFQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:05:16 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ktEu+kj3OM22b99O2mgZ8WV3rL8Z/olQhF3mxtzSEUQtLlfBYvLNyq5raGx/5PywGCMyWx8JPphae0RUiRsMVkL+tD0hK5ZDxJgm3ef8Qu8NJTCYWLKI/st5g9oKepy/SrrIEue1TWxwdVwa/CY+AnGnHx0t4pLGN3aIWtPvq47BlxpEhKnJrKpfrgRjNc0jiLnn7Sn79D7VnW83C5/+KRBtciBxGDvG6B8kd4GKMO3aJJMVed3aGE/geF8irNskkIdEJcxFb7w5DN0LvcnLTxSGLh4329JEnBJOwYfakXdbmYViUU9blXAqUGis/ACtN1tXjNNmU4J7uQqGrokauA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/MMImjCflvRWW0qQ8q9+2d2EpYqtxf/o51w1lYHVRW0=;
- b=bTEMiZzFKhVRq7cq+goYaQDBmVSUPWTDGqCt4FBngXsKSDPLj3DfCmHLiczCQEk1ZqXB4s/s/OTypnm8tRWTXjEjXdn+7Vm/aursr4gh67uZ53ouRaH//j1pdj/zvhkz3wEu3UTAIun7uBxJNTUZidM+YaCWwdZ0YdjnPaepbcp3mXptQV7t8wP+OV5X6Cyr+B9ZS+KG7ET6vioinoFUP76yE0mhuE98L2gw6yHjBLCvP8dHHHgGgpHIcO2WEPk9af0nFk6EIxXAApbCpCkEIgTAEs4DbAQvIpFMHvuHiORvtYAuR6Pn53Tcm0v8S8R0MWUHv4bhHTlGmR3h/e5mGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.72) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/MMImjCflvRWW0qQ8q9+2d2EpYqtxf/o51w1lYHVRW0=;
- b=Y++kqUBXQVSPlFpR73RUbWWGfTXAqN//DzuMSpOXtrwQ67GzSf5KVZBcKLDqYmA0KPJOb9eIVVznw9ep625aDrYJnRcK7yYs6fPVCwGzvOh9EFf9uwh73os/u+HntfkCnOK+FGPRfo47QTQ/rQE/p2oRL5yTDl4MRiOBqmudIFVZDrfkCElEoKvj38BfWfLkl7h0A61+Y+9hQ0oddD3c8sbzqdux40R3RE53G5y/tIr/WcvvLLdF1nzNHx46dmwjuaWY7jDKjc/nj4Im4bvAxYTpKz7bjiOcKnoTWi6MDGBUM/3E/W+ZcVrBorNndGWr7e/76ZAKybSO9BuGW4tY1Q==
-Received: from DB6PR0501CA0046.eurprd05.prod.outlook.com (2603:10a6:4:67::32)
- by DB9PR10MB5233.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:33e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
- 2021 12:05:14 +0000
-Received: from DB5EUR01FT043.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:4:67:cafe::44) by DB6PR0501CA0046.outlook.office365.com
- (2603:10a6:4:67::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11 via Frontend
- Transport; Mon, 13 Dec 2021 12:05:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.72)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.72 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.72; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.72) by
- DB5EUR01FT043.mail.protection.outlook.com (10.152.5.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.12 via Frontend Transport; Mon, 13 Dec 2021 12:05:14 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SMA.ad011.siemens.net (194.138.21.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 13 Dec 2021 13:05:13 +0100
-Received: from md1za8fc.ad001.siemens.net (139.25.69.80) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 13 Dec 2021 13:05:13 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-CC:     Srikanth Krishnakar <skrishnakar@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        "Gerd Haeussler" <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Enrico Weigelt <lkml@metux.net>,
-        Michael Haener <michael.haener@siemens.com>
-Subject: [PATCH v5 4/4] platform/x86: pmc_atom: improve critclk_systems matching for Siemens PCs
-Date:   Mon, 13 Dec 2021 13:05:02 +0100
-Message-ID: <20211213120502.20661-5-henning.schild@siemens.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211213120502.20661-1-henning.schild@siemens.com>
-References: <20211213120502.20661-1-henning.schild@siemens.com>
+        id S236489AbhLMMGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:06:05 -0500
+Received: from smtpcmd0987.aruba.it ([62.149.156.87]:38775 "EHLO
+        smtpcmd0987.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236462AbhLMMGD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 07:06:03 -0500
+Received: from [192.168.50.18] ([146.241.138.59])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id wk5am7WkMq3qKwk5bmBUfV; Mon, 13 Dec 2021 13:06:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1639397160; bh=xOKp7misxXVpUzy4rGLYak0JzDJCmvaU2/IVRcEClpo=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=VGlt2kL5zPwsO6Mhw2xkDEeknN9Oy5ah2aGvF+AAZ4FAHb7KihFHJHQtG09OWEYDA
+         SW34+cVQI5wrzWW/02LVcMeP4aqnqBMAUybgr+8mEpQUODhEqx/E4LXOOHevVXbcIe
+         ZpgvmH72YzIYXcTjYneeJieYrlIB6CETeVy0v9ovBl/TxuDePWQsSKGDbOkmks2GnO
+         ateX5wogDf6V879QGjLYATjoHuLZsWMYiLR79A+No6E4HbH+jNR2/7m+gyyVtXfOB+
+         vn5bnzwyVAhtEYN4NnhyngtdN8jl+KCG6b66q7401DusO7C8P/ZZZ7aNA2a5m376OQ
+         3oyQjPgzKRu7A==
+Subject: Re: [PATCH v4 07/13] clk: imx: Add initial support for i.MXRT clock
+ driver
+To:     Abel Vesa <abel.vesa@nxp.com>,
+        Jesse Taube <mr.bossman075@gmail.com>
+Cc:     linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, ulf.hansson@linaro.org,
+        aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, linux@armlinux.org.uk, adrian.hunter@intel.com,
+        jirislaby@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
+ <20211204061042.1248028-8-Mr.Bossman075@gmail.com> <YbcuweQlw3inhye1@ryzen>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <bc7a718c-2cb7-1c23-a8fe-524b327fbcd5@benettiengineering.com>
+Date:   Mon, 13 Dec 2021 13:05:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [139.25.69.80]
-X-ClientProxiedBy: DEMCHDC89YA.ad011.siemens.net (139.25.226.104) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e4888c9a-a9be-4f8a-abd6-08d9be30d22c
-X-MS-TrafficTypeDiagnostic: DB9PR10MB5233:EE_
-X-Microsoft-Antispam-PRVS: <DB9PR10MB5233A8AA849D60CDF0DFB98E85749@DB9PR10MB5233.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:159;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qHF/x6fU4nE70XGgTCEhuMldbUPpESJ/rVhSkaiqrshejM3fJwBWjZmB2cBjkm2YrEaTynSAa2FUdqJsKidjVXyfCcYRzrQDednOtO0Ux4hj4tuuo33jaQcIVTgg3tWWgZELVxzalovbyjfvBT/NQ3wii1sj9Dx9jBgWEShT1eq3etOD1H04LD4VfRrHZEbe0SDORtbcaVsR/zg6jQmzAnUYNQVVmELU6a8mnnSmk9j7A7RvXybqbkNl9KFv3LV2SHViOci4/30JXcZ9JV4Z1z4dVoCUrXzJQMDkOPEeu4NtErr78bmEoBTSD3dExtpPDCEEpO4uRcRAqAK2m01e6gNe3pax+QIZzKMgf7CDQ6RxFc8+n00/pHFMcJyX5QizFgRet0HG3EvcfbjqCvPli+S06YPdtt48lcSvZLYJA2Z+BScy1dQqIH/lLxs3iOoT1UBpR8DD7p8dxRsqd6+NkKpPCh4Hhqbppznjg0yoN8IR1oxZzjo2o/olIMEbhFErfy4dlJCeeEHVt0HOj1Ag6v985Ghe8b2oUi+X+lXuv9oQLh7J9u2BHP5WuOHZNrcICmedoygyqRevgjcrWNZcdYx7o5W7rwF4xFnwZ5LPKDZe6sIjHmV9IhaUOPDrZePUs1PMQ5DXpFGjObAHiXPlS8Cna3DWlsgBslgOSl3D/E+YpAd7lsUC+9E8Phlys/TrkWExmrfRQGRiG2BswORkR/kHsuvqYnjucxX3Qo2LAPw=
-X-Forefront-Antispam-Report: CIP:194.138.21.72;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(1076003)(36756003)(26005)(316002)(82960400001)(8676002)(336012)(956004)(186003)(508600001)(8936002)(16526019)(4326008)(54906003)(107886003)(44832011)(6666004)(70586007)(82310400004)(70206006)(110136005)(81166007)(5660300002)(47076005)(2616005)(36860700001)(7416002)(86362001)(2906002)(83380400001)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 12:05:14.2782
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4888c9a-a9be-4f8a-abd6-08d9be30d22c
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.72];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT043.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB5233
+In-Reply-To: <YbcuweQlw3inhye1@ryzen>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfKcDzrMLUjK4xHDLd8mwQ0uL/Rj0b1LGOwjg+Qb1b5SL44wiAhF4i7Ay+HIQcyxRHHYGjafq1Tfy588c4YlOjZgLU9Qso9p9233O6WS4R0gv60dYWowe
+ N3USXfI7wpA+x9D9dlTcC6xi1vSUAZx/asm40WdDpzP//R6L3tHDzVALkFtC9eJhNjy5dXCV6Wg67V7R3B35EpL1aI9WbwqaeRj1qKnS8nxAHZeaOfSo04C7
+ bYFPzxaeUN/MNSb9zMfJ46G1ZA1FyyHfKR4Ex3c2WJji2qWwREc/eAJp+UWcQXyCHuh/b+aEiDGeJ/b387ogQR4DofkRiqc3dBMjZcKyBs0s+2P3rZVw11kj
+ HnphN2dppvEXboikwsUQv6kNllv0JNecZovuUex3l5u0lZrbE2IbUjd0mLEUzJqDiYhpRG2VVAL3IuCqC5oOLgOwQgIKcHYp7ZZQ7rBdWHDnDxbLhxor3+ms
+ cyStZ5CmKhpLtVXdqqeLb/dA9qvKjkQ9gEtp11YIs+XU3jDEIRi8hMI74g+BX/MjNjV6LIkOaXX5xtamcMIIrClEetmvIP/br0NMi1mqmE2+3VPFp5/4/fYp
+ ju/qnDUROKF7huNYOtB9beNYhcPRbpyyQmorjLvYFSrq+GvdOfVwyFmXVK9oAUmjVjLLLipv3bvmhhoDHT8EMkEeYgLNlY9gTneiSIC2M7XHhjn0JfYHCZMM
+ 4s3Z2ZjlNsQutC8JMjRweAgo0cdsXDySXpHdMDZ1nMY63et29zgy6TkUP5tl8KIiKiyxvTeLI6VcuNlvA94/Ay+pLirMSNkHzfi/tSNDBPSeMuDjl1IhMogi
+ 1dXpF6BDdxWmGYue2Ll01KKjA5Tdos2IYnR4ifahX4+WCdKurXLjnoOb+gxVYmtUlzZPLW5aAKkHKQIE8fuTvtODF61DDagordlOCONWZRBGKheeKJzh2Xh6
+ uzCJfQOHbEuOPI92johKymCrH+I6zliRfE0fZ9WIQ71wu7+pAYEJA7TP6gLhG8HoJcUUoGFdbqRXdtzplaYRh8kXELt2AZvdVilpG+hJ/B48jOGuE1rViKYY
+ XK8d4OhY/HbZb0H6gC9NTVjVXvhMq7DxD5W64ZoRvVePCKHZb97oA3qfovrFe23zbTNoi9PjV8MgCbbP1XSdHDd5t+x7oAHF4GU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Siemens industrial PCs unfortunately can not always be properly
-identified the way we used to. An earlier commit introduced code that
-allows proper identification without looking at DMI strings that could
-differ based on product branding.
-Switch over to that proper way and revert commits that used to collect
-the machines based on unstable strings.
+Hi Abel,
 
-Fixes: 648e921888ad ("clk: x86: Stop marking clocks as CLK_IS_CRITICAL")
-Fixes: e8796c6c69d1 ("platform/x86: pmc_atom: Add Siemens CONNECT ...")
-Fixes: f110d252ae79 ("platform/x86: pmc_atom: Add Siemens SIMATIC ...")
-Fixes: ad0d315b4d4e ("platform/x86: pmc_atom: Add Siemens SIMATIC ...")
-Tested-by: Michael Haener <michael.haener@siemens.com>
-Signed-off-by: Henning Schild <henning.schild@siemens.com>
----
- drivers/platform/x86/pmc_atom.c | 54 ++++++++++++++++++++-------------
- 1 file changed, 33 insertions(+), 21 deletions(-)
+On 13/12/21 12:30, Abel Vesa wrote:
+> On 21-12-04 01:10:36, Jesse Taube wrote:
+>> Add clock driver support for i.MXRT1***s starting with the i.MXRT1050.
+>>
+>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+>> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>> V1->V2:
+>> * Kconfig: Add new line
+>> * clk-imxrt.c: Remove unused const
+>> * clk-imxrt.c: Remove set parents
+>> * clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
+>> V2->V3:
+>> * Remove unused ANATOP_BASE_ADDR
+>> * Move to hw API
+>> * Add GPT's own clock
+>> * Add SEMC clocks to set muxing to CRITICAL
+>> V3->V4:
+>> * Rename clk-imxrt.c to clk-imxrt1050.c
+>> * Rename CONFIG_CLK_IMXRT to CONFIG_CLK_IMXRT1050
+>> * Make CONFIG_CLK_IMXRT1050 selectable
+>> ---
+>>   drivers/clk/imx/Kconfig         |   5 +
+>>   drivers/clk/imx/Makefile        |   1 +
+>>   drivers/clk/imx/clk-imxrt1050.c | 156 ++++++++++++++++++++++++++++++++
+>>   3 files changed, 162 insertions(+)
+>>   create mode 100644 drivers/clk/imx/clk-imxrt1050.c
+>>
+>> diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
+>> index c08edbd04d22..f697652ab19c 100644
+>> --- a/drivers/clk/imx/Kconfig
+>> +++ b/drivers/clk/imx/Kconfig
+>> @@ -105,3 +105,8 @@ config CLK_IMX8ULP
+>>   	select MXC_CLK
+>>   	help
+>>   	    Build the driver for i.MX8ULP CCM Clock Driver
+>> +
+>> +config CLK_IMXRT1050
+>> +	bool "IMXRT1050 CCM Clock Driver"
+>> +	depends on SOC_IMXRT
+>> +	select MXC_CLK
+>> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
+>> index b5e040026dfb..3d9a1e3b5fc6 100644
+>> --- a/drivers/clk/imx/Makefile
+>> +++ b/drivers/clk/imx/Makefile
+>> @@ -47,3 +47,4 @@ obj-$(CONFIG_CLK_IMX6UL) += clk-imx6ul.o
+>>   obj-$(CONFIG_CLK_IMX7D)  += clk-imx7d.o
+>>   obj-$(CONFIG_CLK_IMX7ULP) += clk-imx7ulp.o
+>>   obj-$(CONFIG_CLK_VF610)  += clk-vf610.o
+>> +obj-$(CONFIG_CLK_IMXRT1050)  += clk-imxrt1050.o
+>> diff --git a/drivers/clk/imx/clk-imxrt1050.c b/drivers/clk/imx/clk-imxrt1050.c
+>> new file mode 100644
+>> index 000000000000..85ba1a240335
+>> --- /dev/null
+>> +++ b/drivers/clk/imx/clk-imxrt1050.c
+>> @@ -0,0 +1,156 @@
+>> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+>> +/*
+>> + * Copyright (C) 2021
+>> + * Author(s):
+>> + * Jesse Taube <Mr.Bossman075@gmail.com>
+>> + * Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> + */
+>> +#include <linux/mm.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/io.h>
+>> +#include <linux/clkdev.h>
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/err.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_address.h>
+>> +#include <linux/of_irq.h>
+>> +#include <linux/sizes.h>
+>> +#include <soc/imx/revision.h>
+>> +#include <dt-bindings/clock/imxrt1050-clock.h>
+>> +
+>> +#include "clk.h"
+>> +
+>> +static const char * const pll_ref_sels[] = {"osc", "dummy", };
+>> +static const char * const per_sels[] = {"ipg_pdof", "osc", };
+>> +static const char * const pll1_bypass_sels[] = {"pll1_arm", "pll1_arm_ref_sel", };
+>> +static const char * const pll2_bypass_sels[] = {"pll2_sys", "pll2_sys_ref_sel", };
+>> +static const char * const pll3_bypass_sels[] = {"pll3_usb_otg", "pll3_usb_otg_ref_sel", };
+>> +static const char * const pll5_bypass_sels[] = {"pll5_video", "pll5_video_ref_sel", };
+>> +static const char *const pre_periph_sels[] = {
+>> +	"pll2_sys", "pll2_pfd2_396m", "pll2_pfd0_352m", "arm_podf", };
+>> +static const char *const periph_sels[] = { "pre_periph_sel", "todo", };
+>> +static const char *const usdhc_sels[] = { "pll2_pfd2_396m", "pll2_pfd0_352m", };
+>> +static const char *const lpuart_sels[] = { "pll3_80m", "osc", };
+>> +static const char *const lcdif_sels[] = {
+>> +	"pll2_sys", "pll3_pfd3_454_74m", "pll5_video", "pll2_pfd0_352m",
+>> +	"pll2_pfd1_594m", "pll3_pfd1_664_62m", };
+>> +static const char *const semc_alt_sels[] = { "pll2_pfd2_396m", "pll3_pfd1_664_62m", };
+>> +static const char *const semc_sels[] = { "periph_sel", "semc_alt_sel", };
+>> +
+>> +static struct clk_hw **hws;
+>> +static struct clk_hw_onecell_data *clk_hw_data;
+>> +
+>> +static void __init imxrt_clocks_common_init(void __iomem *base)
+>> +{
+>> +	/* Anatop clocks */
+>> +	hws[IMXRT1050_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0UL);
+>> +
+>> +	hws[IMXRT1050_CLK_PLL1_REF_SEL] = imx_clk_hw_mux("pll1_arm_ref_sel",
+>> +		base + 0x0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +	hws[IMXRT1050_CLK_PLL2_REF_SEL] = imx_clk_hw_mux("pll2_sys_ref_sel",
+>> +		base + 0x30, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +	hws[IMXRT1050_CLK_PLL3_REF_SEL] = imx_clk_hw_mux("pll3_usb_otg_ref_sel",
+>> +		base + 0x10, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +	hws[IMXRT1050_CLK_PLL5_REF_SEL] = imx_clk_hw_mux("pll5_video_ref_sel",
+>> +		base + 0xa0, 14, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
+>> +
+>> +	hws[IMXRT1050_CLK_PLL1_ARM] = imx_clk_hw_pllv3(IMX_PLLV3_SYS, "pll1_arm",
+>> +		"pll1_arm_ref_sel", base + 0x0, 0x7f);
+>> +	hws[IMXRT1050_CLK_PLL2_SYS] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2_sys",
+>> +		"pll2_sys_ref_sel", base + 0x30, 0x1);
+>> +	hws[IMXRT1050_CLK_PLL3_USB_OTG] = imx_clk_hw_pllv3(IMX_PLLV3_USB, "pll3_usb_otg",
+>> +		"pll3_usb_otg_ref_sel", base + 0x10, 0x1);
+>> +	hws[IMXRT1050_CLK_PLL5_VIDEO] = imx_clk_hw_pllv3(IMX_PLLV3_AV, "pll5_video",
+>> +		"pll5_video_ref_sel", base + 0xa0, 0x7f);
+>> +
+>> +	/* PLL bypass out */
+>> +	hws[IMXRT1050_CLK_PLL1_BYPASS] = imx_clk_hw_mux_flags("pll1_bypass", base + 0x0, 16, 1,
+>> +		pll1_bypass_sels, ARRAY_SIZE(pll1_bypass_sels), CLK_SET_RATE_PARENT);
+>> +	hws[IMXRT1050_CLK_PLL2_BYPASS] = imx_clk_hw_mux_flags("pll2_bypass", base + 0x30, 16, 1,
+>> +		pll2_bypass_sels, ARRAY_SIZE(pll2_bypass_sels), CLK_SET_RATE_PARENT);
+>> +	hws[IMXRT1050_CLK_PLL3_BYPASS] = imx_clk_hw_mux_flags("pll3_bypass", base + 0x10, 16, 1,
+>> +		pll3_bypass_sels, ARRAY_SIZE(pll3_bypass_sels), CLK_SET_RATE_PARENT);
+>> +	hws[IMXRT1050_CLK_PLL5_BYPASS] = imx_clk_hw_mux_flags("pll5_bypass", base + 0xa0, 16, 1,
+>> +		pll5_bypass_sels, ARRAY_SIZE(pll5_bypass_sels), CLK_SET_RATE_PARENT);
+>> +
+>> +	hws[IMXRT1050_CLK_VIDEO_POST_DIV_SEL] = imx_clk_hw_divider("video_post_div_sel",
+>> +		"pll5_video", base + 0xa0, 19, 2);
+>> +	hws[IMXRT1050_CLK_VIDEO_DIV] = imx_clk_hw_divider("video_div",
+>> +		"video_post_div_sel", base + 0x170, 30, 2);
+>> +
+>> +	hws[IMXRT1050_CLK_PLL3_80M] = imx_clk_hw_fixed_factor("pll3_80m",  "pll3_usb_otg", 1, 6);
+>> +
+>> +	hws[IMXRT1050_CLK_PLL2_PFD0_352M] = imx_clk_hw_pfd("pll2_pfd0_352m", "pll2_sys", base + 0x100, 0);
+>> +	hws[IMXRT1050_CLK_PLL2_PFD1_594M] = imx_clk_hw_pfd("pll2_pfd1_594m", "pll2_sys", base + 0x100, 1);
+>> +	hws[IMXRT1050_CLK_PLL2_PFD2_396M] = imx_clk_hw_pfd("pll2_pfd2_396m", "pll2_sys", base + 0x100, 2);
+>> +	hws[IMXRT1050_CLK_PLL3_PFD1_664_62M] = imx_clk_hw_pfd("pll3_pfd1_664_62m", "pll3_usb_otg", base + 0xf0, 1);
+>> +	hws[IMXRT1050_CLK_PLL3_PFD3_454_74M] = imx_clk_hw_pfd("pll3_pfd3_454_74m", "pll3_usb_otg", base + 0xf0, 3);
+>> +}
+>> +
+>> +static void __init imxrt1050_clocks_init(struct device_node *np)
+>> +{
+>> +	void __iomem *ccm_base;
+>> +	void __iomem *pll_base;
+>> +	struct device_node *anp;
+>> +
+>> +	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
+>> +					  IMXRT1050_CLK_END), GFP_KERNEL);
+>> +	if (WARN_ON(!clk_hw_data))
+>> +		return;
+>> +
+>> +	clk_hw_data->num = IMXRT1050_CLK_END;
+>> +	hws = clk_hw_data->hws;
+>> +
+>> +	hws[IMXRT1050_CLK_OSC] = __clk_get_hw(of_clk_get_by_name(np, "osc"));
+>> +
+>> +	anp = of_find_compatible_node(NULL, NULL, "fsl,imxrt-anatop");
+>> +	pll_base = of_iomap(anp, 0);
+>> +	WARN_ON(!pll_base);
+>> +	imxrt_clocks_common_init(pll_base);
+>> +	/* CCM clocks */
+>> +	ccm_base = of_iomap(np, 0);
+>> +	WARN_ON(!ccm_base);
+>> +
+>> +	hws[IMXRT1050_CLK_ARM_PODF] = imx_clk_hw_divider("arm_podf", "pll1_arm", ccm_base + 0x10, 0, 3);
+>> +	hws[IMXRT1050_CLK_PRE_PERIPH_SEL] = imx_clk_hw_mux("pre_periph_sel", ccm_base + 0x18, 18, 2,
+>> +		pre_periph_sels, ARRAY_SIZE(pre_periph_sels));
+>> +	hws[IMXRT1050_CLK_PERIPH_SEL] = imx_clk_hw_mux("periph_sel", ccm_base + 0x14, 25, 1,
+>> +		periph_sels, ARRAY_SIZE(periph_sels));
+>> +	hws[IMXRT1050_CLK_USDHC1_SEL] = imx_clk_hw_mux("usdhc1_sel", ccm_base + 0x1c, 16, 1,
+>> +		usdhc_sels, ARRAY_SIZE(usdhc_sels));
+>> +	hws[IMXRT1050_CLK_USDHC2_SEL] = imx_clk_hw_mux("usdhc2_sel", ccm_base + 0x1c, 17, 1,
+>> +		usdhc_sels, ARRAY_SIZE(usdhc_sels));
+>> +	hws[IMXRT1050_CLK_LPUART_SEL] = imx_clk_hw_mux("lpuart_sel", ccm_base + 0x24, 6, 1,
+>> +		lpuart_sels, ARRAY_SIZE(lpuart_sels));
+>> +	hws[IMXRT1050_CLK_LCDIF_SEL] = imx_clk_hw_mux("lcdif_sel", ccm_base + 0x38, 15, 3,
+>> +		lcdif_sels, ARRAY_SIZE(lcdif_sels));
+>> +	hws[IMXRT1050_CLK_PER_CLK_SEL] = imx_clk_hw_mux("per_sel", ccm_base + 0x1C, 6, 1,
+>> +		per_sels, ARRAY_SIZE(per_sels));
+>> +	hws[IMXRT1050_CLK_SEMC_ALT_SEL] = imx_clk_hw_mux("semc_alt_sel", ccm_base + 0x14, 7, 1,
+>> +		semc_alt_sels, ARRAY_SIZE(semc_alt_sels));
+>> +	hws[IMXRT1050_CLK_SEMC_SEL] = imx_clk_hw_mux_flags("semc_sel", ccm_base + 0x14, 6, 1,
+>> +		semc_sels, ARRAY_SIZE(semc_sels), CLK_IS_CRITICAL);
+>> +
+>> +	hws[IMXRT1050_CLK_AHB_PODF] = imx_clk_hw_divider("ahb", "periph_sel", ccm_base + 0x14, 10, 3);
+>> +	hws[IMXRT1050_CLK_IPG_PDOF] = imx_clk_hw_divider("ipg", "ahb", ccm_base + 0x14, 8, 2);
+>> +	hws[IMXRT1050_CLK_PER_PDOF] = imx_clk_hw_divider("per", "per_sel", ccm_base + 0x1C, 0, 5);
+>> +
+>> +	hws[IMXRT1050_CLK_USDHC1_PODF] = imx_clk_hw_divider("usdhc1_podf", "usdhc1_sel", ccm_base + 0x24, 11, 3);
+>> +	hws[IMXRT1050_CLK_USDHC2_PODF] = imx_clk_hw_divider("usdhc2_podf", "usdhc2_sel", ccm_base + 0x24, 16, 3);
+>> +	hws[IMXRT1050_CLK_LPUART_PODF] = imx_clk_hw_divider("lpuart_podf", "lpuart_sel", ccm_base + 0x24, 0, 6);
+>> +	hws[IMXRT1050_CLK_LCDIF_PRED] = imx_clk_hw_divider("lcdif_pred", "lcdif_sel", ccm_base + 0x38, 12, 3);
+>> +	hws[IMXRT1050_CLK_LCDIF_PODF] = imx_clk_hw_divider("lcdif_podf", "lcdif_pred", ccm_base + 0x18, 23, 3);
+>> +
+>> +	hws[IMXRT1050_CLK_USDHC1] = imx_clk_hw_gate2("usdhc1", "usdhc1_podf", ccm_base + 0x80, 2);
+>> +	hws[IMXRT1050_CLK_USDHC2] = imx_clk_hw_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
+>> +	hws[IMXRT1050_CLK_LPUART1] = imx_clk_hw_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
+>> +	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x74, 10);
+>> +	hws[IMXRT1050_CLK_DMA] = imx_clk_hw_gate("dma", "ipg", ccm_base + 0x7C, 6);
+>> +	hws[IMXRT1050_CLK_DMA_MUX] = imx_clk_hw_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
+>> +	hws[IMXRT1050_CLK_GPT] = imx_clk_hw_fixed_factor("gpt", "osc", 1, 8);
+>> +	imx_check_clk_hws(hws, IMXRT1050_CLK_END);
+>> +
+>> +	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
+>> +}
+>> +CLK_OF_DECLARE(imxrt_ccm, "fsl,imxrt1050-ccm", imxrt1050_clocks_init);
+> 
+> I would suggest module platform driver instead.
 
-diff --git a/drivers/platform/x86/pmc_atom.c b/drivers/platform/x86/pmc_atom.c
-index a9d2a4b98e57..a40fae6edc84 100644
---- a/drivers/platform/x86/pmc_atom.c
-+++ b/drivers/platform/x86/pmc_atom.c
-@@ -13,6 +13,7 @@
- #include <linux/io.h>
- #include <linux/platform_data/x86/clk-pmc-atom.h>
- #include <linux/platform_data/x86/pmc_atom.h>
-+#include <linux/platform_data/x86/simatic-ipc.h>
- #include <linux/platform_device.h>
- #include <linux/pci.h>
- #include <linux/seq_file.h>
-@@ -362,6 +363,30 @@ static void pmc_dbgfs_register(struct pmc_dev *pmc)
- }
- #endif /* CONFIG_DEBUG_FS */
- 
-+static bool pmc_clk_is_critical = true;
-+
-+static int dmi_callback(const struct dmi_system_id *d)
-+{
-+	pr_info("%s critclks quirk enabled\n", d->ident);
-+
-+	return 1;
-+}
-+
-+static int dmi_callback_siemens(const struct dmi_system_id *d)
-+{
-+	u32 st_id;
-+
-+	if (dmi_walk(simatic_ipc_find_dmi_entry_helper, &st_id))
-+		goto out;
-+
-+	if (st_id == SIMATIC_IPC_IPC227E || st_id == SIMATIC_IPC_IPC277E)
-+		return dmi_callback(d);
-+
-+out:
-+	pmc_clk_is_critical = false;
-+	return 1;
-+}
-+
- /*
-  * Some systems need one or more of their pmc_plt_clks to be
-  * marked as critical.
-@@ -370,6 +395,7 @@ static const struct dmi_system_id critclk_systems[] = {
- 	{
- 		/* pmc_plt_clk0 is used for an external HSIC USB HUB */
- 		.ident = "MPL CEC1x",
-+		.callback = dmi_callback,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "MPL AG"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "CEC10 Family"),
-@@ -378,6 +404,7 @@ static const struct dmi_system_id critclk_systems[] = {
- 	{
- 		/* pmc_plt_clk0 - 3 are used for the 4 ethernet controllers */
- 		.ident = "Lex 3I380D",
-+		.callback = dmi_callback,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Lex BayTrail"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "3I380D"),
-@@ -386,6 +413,7 @@ static const struct dmi_system_id critclk_systems[] = {
- 	{
- 		/* pmc_plt_clk* - are used for ethernet controllers */
- 		.ident = "Lex 2I385SW",
-+		.callback = dmi_callback,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Lex BayTrail"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "2I385SW"),
-@@ -394,30 +422,17 @@ static const struct dmi_system_id critclk_systems[] = {
- 	{
- 		/* pmc_plt_clk* - are used for ethernet controllers */
- 		.ident = "Beckhoff Baytrail",
-+		.callback = dmi_callback,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff Automation"),
- 			DMI_MATCH(DMI_PRODUCT_FAMILY, "CBxx63"),
- 		},
- 	},
- 	{
--		.ident = "SIMATIC IPC227E",
-+		.ident = "SIEMENS AG",
-+		.callback = dmi_callback_siemens,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
--			DMI_MATCH(DMI_PRODUCT_VERSION, "6ES7647-8B"),
--		},
--	},
--	{
--		.ident = "SIMATIC IPC277E",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
--			DMI_MATCH(DMI_PRODUCT_VERSION, "6AV7882-0"),
--		},
--	},
--	{
--		.ident = "CONNECT X300",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
--			DMI_MATCH(DMI_PRODUCT_VERSION, "A5E45074588"),
- 		},
- 	},
- 
-@@ -429,7 +444,6 @@ static int pmc_setup_clks(struct pci_dev *pdev, void __iomem *pmc_regmap,
- {
- 	struct platform_device *clkdev;
- 	struct pmc_clk_data *clk_data;
--	const struct dmi_system_id *d = dmi_first_match(critclk_systems);
- 
- 	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
- 	if (!clk_data)
-@@ -437,10 +451,8 @@ static int pmc_setup_clks(struct pci_dev *pdev, void __iomem *pmc_regmap,
- 
- 	clk_data->base = pmc_regmap; /* offset is added by client */
- 	clk_data->clks = pmc_data->clks;
--	if (d) {
--		clk_data->critical = true;
--		pr_info("%s critclks quirk enabled\n", d->ident);
--	}
-+	if (dmi_check_system(critclk_systems))
-+		clk_data->critical = pmc_clk_is_critical;
- 
- 	clkdev = platform_device_register_data(&pdev->dev, "clk-pmc-atom",
- 					       PLATFORM_DEVID_NONE,
+Can you please point us an example?
+
+> Sorry for the late review.
+
+No problem
+
+Thank you
+Best regards
 -- 
-2.32.0
-
+Giulio Benetti
+Benetti Engineering sas

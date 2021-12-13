@@ -2,175 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5405C4730F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FD34730F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240185AbhLMPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:55:36 -0500
-Received: from mail-dm3nam07on2067.outbound.protection.outlook.com ([40.107.95.67]:12288
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232606AbhLMPze (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:55:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=luiEGDTH9NGLVOcMV6YEQ0zcD1LPCrXN+MzBjchV0bDVTJyJSG1cptS3/ZR/r1Xk9p+QbldaWOwYe5lLnIbZpchF2rB4Gq/xHtyLvdk33jSvKmfBPH3yNbbykzmdQQRTLXReKrvqvJTRyqhIWm3tpD9SXV5hXFC3BOEOWFSrQtTqtyWc+Xe1E8yUzY4aZ2caBkL7vTFVgnIZLaFeJjUl9LE5oOlmJtmR7UO5vWBgz1xlJjB4hjAHx4vUIdnTxA8Q6alTjqAa7wnFbiPVIkjL2vaWvJGVV0KQ09u1mKPxAoGN56MYqSlZO768rthO/HYlBCg1oi36JjJ3vc6rO1ZnzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YxIVFxYZPdmVHJMWZMgMNB6CgcvCiHCJuuDMXfRVIlA=;
- b=IAj+XoXGfE0jb7RRcxQS1neRZNcdvdMczTmYg1VWpDPv5yUo1HsGG2LMXF/iCY8LmtzJ7Mlaj4ht5RVyGdgCAJG7tBdDu/E8kSVRr/bcE+cpu99MCsfSGMK4ycOXhFEC27eysqLBQJj7fE/12yBpRDo5Xv0M9CXx7zVB1iZP0VJ8SZuyDqwi3skqpkgLbHNDDboOVAj/2VFWN/cRZWJAhT6LjXVe0Q8U6nIm9hdWoEL6ozho1iqAaFkWTIlZ1wq2AcfU0m2AVBouiQM71VNJcC7idgImI1OfD7KgdNhBd1Dh+fsmwwvXEcsxZoQx00EFwWM2iVrEjhc4yLg/Im5U8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YxIVFxYZPdmVHJMWZMgMNB6CgcvCiHCJuuDMXfRVIlA=;
- b=oVEAJQ8m5Lf6t8ZpyLhKMHA+KWqZ86AUA3xXzjjsW70IPvHS5tfkn167g8Bl/WQmORXaKwpNSyExz2Gud2iwZEoXhpMFtM3uwAROY68maIpk5HMYQhZyQ670okb62WgktbilehDzqInry7RFSF3vRXntaMoxETDLxoMzPnsC888=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
- by SA0PR12MB4495.namprd12.prod.outlook.com (2603:10b6:806:70::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
- 2021 15:55:32 +0000
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::35:281:b7f8:ed4c]) by SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::35:281:b7f8:ed4c%6]) with mapi id 15.20.4778.018; Mon, 13 Dec 2021
- 15:55:32 +0000
-Cc:     brijesh.singh@amd.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 27/40] x86/boot: Add Confidential Computing type to
- setup_data
-To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-28-brijesh.singh@amd.com>
- <1fdaca61-884a-ac13-fb33-a47db198f050@intel.com>
- <ba485a09-9c35-4115-decc-1b9c25519358@amd.com>
- <2a5cfbd0-865c-2a8b-b70b-f8f64aba5575@intel.com>
- <f442ca7f-4530-1443-27eb-206d6ca0e7a4@amd.com>
- <48625a39-9e31-d7f2-dccf-74e9c27126f5@intel.com>
-From:   Brijesh Singh <brijesh.singh@amd.com>
-Message-ID: <3eef1d45-eafc-582e-8896-6aaf741d6726@amd.com>
-Date:   Mon, 13 Dec 2021 09:55:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <48625a39-9e31-d7f2-dccf-74e9c27126f5@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MN2PR11CA0021.namprd11.prod.outlook.com
- (2603:10b6:208:23b::26) To SN6PR12MB2718.namprd12.prod.outlook.com
- (2603:10b6:805:6f::22)
+        id S240231AbhLMP4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237582AbhLMP4d (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 10:56:33 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9C5C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:56:33 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id d10so39520936ybn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:56:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TJvT79EfcA7O0EY/8/ibhfo/O9cdo3pl3yfd1aNngOA=;
+        b=TmeDngSyR8aTmXx91HH/CW8JsF4ov1PSJRE8TgYYvD+FzXxvUQCtJkq3lPBmDRMwt2
+         SzdNYNa+tvX6Z+KN77/kqG9/aXuFXfTqKXmQcx0EbmgWkSPGMaJDy8XNa5lE/dp95n4M
+         pvXG6tVJqE69hSvjV45bmynX/IbKKgWuEJar6MApx+nvX1KQQU4iEnk18X87gNvPSso+
+         qojOfHej71CFMlOk7RheAe23e//oYCMJTb0GH+AO25NwEbILS3hRe2cqB2seOntW+X2i
+         1mh8z9Br5IjxUvVPiy96EOX7D6YyRnjVNgjVBX38V63b00E/tZn8Ejl9vX+VYlPfnM2u
+         JpAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TJvT79EfcA7O0EY/8/ibhfo/O9cdo3pl3yfd1aNngOA=;
+        b=0VqC8MiHQ78w1R2gZuAuPKfdOwPo/GGTki1FUXgX9w9rz6l0uj3MEYxkeIEJppPhyn
+         5dl2cv11lOVM5/n3PHDxni8Xr1135q+CMsJhLLtkOa0NSuF8qipaECLPNv6RMBLeUIkv
+         WKT1z7Pdcxv39pbw/a+q6WwJxG1A2TzdaooGU5wHJFy3//PbCPG4uCBvqws1yFulQEEi
+         MKRMNvGPlejiXVHAiOThjX0+KBhu8DTtXcyr5sPftaGOqNFeAYakQLpljygMMZIOLcMf
+         9kHMX32grKq0Gml2WQqzKmXV4Db3KB8JeUSG5sQ6RX025G08vuxG2mVn3Z5gRBxwgIJe
+         HLDg==
+X-Gm-Message-State: AOAM53369b4cCRGCntyOaAKDPe0aKJvx0n5RwT8TTcgmJAIR+e8hdurJ
+        +rKTtLC2aEfs+xQfmP3BNyQVCAsIXOUKY5DFdTgN9A==
+X-Google-Smtp-Source: ABdhPJxlK8jZHDGMWgi6JUell0daIec/wGzGFUvgQQWqotEzT3/6vJvJEXBx5S7k7Nm+v4Yjje3FKcYQK583wCVjouo=
+X-Received: by 2002:a25:9d82:: with SMTP id v2mr35214440ybp.383.1639410992399;
+ Mon, 13 Dec 2021 07:56:32 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2c2d969c-ccce-4399-ec0f-08d9be50fe5a
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4495:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB44954EA3A97B771E0C094B07E5749@SA0PR12MB4495.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u0UP3ps1BFLV8zEWIkRARA/alH8qIxDBpAxZPscVUqg+b4u0xKayUKA/eQURUFAOOYc3D8PhkCFrVfAulWeCoDsEcnpu9p9mGkZjJPSCqy8sHGuHrBGOcBsRD+oIchzvMbazfCfzAB+RNJku4F6weu9zHoNLg9B9n/0xYbXIUXvmDZhB6auoP2SOm3Ah5Yn7lDcaVynNfmGS4EDKcC12vl+TPrvUTDcQBY6VuuxI+7SzizESeqOZFVc5Wgj9ZaJbJmb06vzAZXDSE1mCzj/6AgVw9i7GRuscHZYRqo0l0BcvaSVV6uI01c6CmfPeYGmIJ6Wn6ir2rTdAngG+/GkpFr8u2L0Y61mmkKXEHzDFln40x7Is0FFgkcR1VPTl6g32RUUbdiNB9VmV1+d1ZbEUAeSlQcZtdIzI0IMgmgJ1IX3dhz0DSfATDgqbK6eVqIgUIDHl2EDDxhQv4x68V/9IsaT++ehharjoW28e5Ou9KlPWPsuaCHh1O9ukVd8bqc8v4a1y8pmrnnwtAMOUwccZRcfBUnWv+ba3TwuwbULjkybE08cLk3mUukOLoA5/cOU3M0Z/csD2BWLV/k8HwvkuF4wmlemEF0MJMRDc6DAvm4Kk/JP86IpY46yseJCeudm2tsgjegcmqnahEU6VzDgtD/I/rJCCFpdtAc0WhE91+OazG/m7YaBD4r9cZwrjKX4vVGBQhk5y0N6VkG+JnikZOwcNw7VCokyrQ9sFCdQXQsA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(53546011)(7416002)(508600001)(7406005)(6512007)(6506007)(186003)(26005)(2906002)(31686004)(6486002)(6666004)(8676002)(66946007)(38100700002)(54906003)(66476007)(66556008)(31696002)(86362001)(8936002)(5660300002)(36756003)(2616005)(4326008)(4744005)(44832011)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OTJvdEUyNVlCcTZZeDRYb1E4Z3BQOUFNUWJGeWVJLzgvYWlNZzhoenAwUGlZ?=
- =?utf-8?B?d0hDZ3k4eE1RbGtIQmJHWmNyTGJFNGFHcHdyODdQd2RQbGg0bFNOVUhNcS9m?=
- =?utf-8?B?aS9KOTRMZ3RjZi8zQi9BL2FnSnRuL1dDcHI0UmtVVE5Dci9wRnJwRVBSTkdl?=
- =?utf-8?B?dUpPR09VZ3luQWJzdjZ1TzdnOFVBQzhrTWZqeXIzN3pEWXBpU0hQbkZ5RlZE?=
- =?utf-8?B?djRuNmI1akd4TlNxU1ZoSVZRMEJXWWdHNjhkdTI3Vk9rVmt1OWNiZW1UOU15?=
- =?utf-8?B?VWFtVU5uOTdUMVdGT05BQ3ZqaGVWZ2pVRlppeS9BdWlkaVh4eS9OMzRUdmhn?=
- =?utf-8?B?MTNZck43eVliOXB3aFZuMkloRHdodERKbmtjUWlXVlozZHE4Q0ZsdW1aaXB5?=
- =?utf-8?B?OVM3d0xMZkhwMndpaWVDRFhxK2VKR0JLMXV4WmVSVHkxTmY2Z1g2MVl4ZVpJ?=
- =?utf-8?B?U0IyQS9ZMW9XSFhOSFoxV0pIQlRDanFCZnkrQWN1Tmk3bUxjNHJsdnB3b3dw?=
- =?utf-8?B?SVZtM2poOXo0NUhSQ3ZubFJJd0xpQTZYcUZyQW1xVWdpcXhIMW50SFg1bGlq?=
- =?utf-8?B?OUR0REF0N0tTSlA2K2ora1VPRnZpYUpvYlRUVkhQYjlpR1pjN3M2bXlMRldm?=
- =?utf-8?B?M3dXL2lReWY1S1hWd212T0NJYUN0Mzg4Vy8rYWNaVUY5MUhsdW96dnFVZ2cw?=
- =?utf-8?B?UStUTngrVktxYWdIeUZhR0kwMUNhQUt0bU9kQ2d6cTdmTU1wSm9pazU2aE9B?=
- =?utf-8?B?YkErcTE1TjNUc1JQVVhxc0EwYTViQnovZEJjNWdiT3hPYlozYllXc0NvSFdG?=
- =?utf-8?B?VmRhZGdlalIvL2dObitCT2w0Vzd3NDR1S1JheDJLaVBjVzJsYUt2L2hsNXVM?=
- =?utf-8?B?UlpQb3U4TWg4K3FLUDB6akpQK1FuU0F5L3RLVmllajgrODJuMVhzdFQrcmhw?=
- =?utf-8?B?QmR6bWtTMGtVM0hqQ1J6T2ZJbWdUV1V2dkZUcVJzQmZCS3VWd21XOTVvQUNk?=
- =?utf-8?B?ayswcDg1SzJyZ29vZGhDQlp6cEwyM1Ryb2UreFE0WkphWTJCNk1jMThNcUhr?=
- =?utf-8?B?YnpUUjhkeVBTUVA0aHNxeTNtYWxVRnoxZzk3QitZUUlNQnRFcmZQWm9UeU13?=
- =?utf-8?B?N3ZReDJvRnZtY2JucXlkUlB1RFpCdW5kOXY3RlFqdWpiMFhGVStDblRHNGJt?=
- =?utf-8?B?c3RKdkphTTJqOE92TWQ1ait6RVU4TjRic1ZUNEduSG9jYXI5ODhhNlpMbzlk?=
- =?utf-8?B?bUdRVTRVcys1OXdrclM5M2V1ekFyeG5MNjhNdW9aU0VNbGQ3U08yTHp6bnhw?=
- =?utf-8?B?dDROWlJCanVMbEc0YzUvWnBEUXFRY3pPN2pCeHlybTJ1ZTFCdW9Fems0V1kz?=
- =?utf-8?B?eWZSYko5QzJQa2xvK3IyUkFUekF6aDRXTnlTNXA0d093d1cvbVhPU3hIVklB?=
- =?utf-8?B?M0JVaCtHdU5ZUnJkN2ZlcUFlRHc0V01HaEp0Q2o0aHZ1YWNmTkZSNDhtaHNY?=
- =?utf-8?B?ekVIR01UcFVCdDdDbmpKRThxdzNxM25ENkNoYmQ3dzRadXlTZnZNbWtvMzJY?=
- =?utf-8?B?bnVUU3AxSzE4NW5ORmQ2aWZleXpUd1ozR1JMbWJrVXNBNVV2U2ZkaUxkK2NH?=
- =?utf-8?B?NTlUSWI3cEdEMjRuTDhSeS9zVDFKNE5OOS9RMlljdG0xVyt4MmFtUjk5MUJo?=
- =?utf-8?B?NGJneGdTRnE3T01ZV3RwdW1SWXlUUy9MbXdlWFRCU0o5OEJmT0ZIYkhOREhI?=
- =?utf-8?B?ekRNT1d5QzRvRU5lcUlTbjJ5MG5FWGVzZ3ZlaFYrWlhTS3NHdGNIc2RqaWpp?=
- =?utf-8?B?clBwMDZOU3c0YVNBbkVLc01LaTJkME14Z1pmMUExS1V6YVk4bkdva2h3UFhp?=
- =?utf-8?B?cThBSGZIMm12TTJtcDlBQWNXS2xsTFRmUTA3blkwcXluVmkxMHlHNGNqdWt3?=
- =?utf-8?B?Q2JSWm1zcjJsZVVteUZFdkZ5RXJYOTBCUzcxMG1pYjZzREtWbitPQnlHQzdq?=
- =?utf-8?B?c2xrSjRlVlc5Z2FoKytJOXlnNFo1NXhnOXFacThpa3BmcHVONXlhZjBUNFV5?=
- =?utf-8?B?OXAzRlhzOFJXWTA3Q1VzbXRKbit6a2NoVGR0YWN2WFZWMWJHc2Z2VmdEM201?=
- =?utf-8?B?UHUxS0ZZd1cyMUJmTDJ2bkFrZXNyYS9jUmdDK3VnaUdjVk9yRXZCbkFEOW8z?=
- =?utf-8?Q?5oZl+t9TdlehQ31BHGnxmKA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c2d969c-ccce-4399-ec0f-08d9be50fe5a
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 15:55:32.5047
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VrvSrBwfudm6492DkWhzemykR99h1ECMYR44ubBNUUCde/QTiRPD/VgOnpVwN+ETEHskVMzvQgueiPW8CVgBPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4495
+References: <45d12aa0c95049a392d52ff239d42d83@AcuMS.aculab.com>
+ <52edd5fd-daa0-729b-4646-43450552d2ab@intel.com> <96b6a476c4154da3bd04996139cd8a6d@AcuMS.aculab.com>
+In-Reply-To: <96b6a476c4154da3bd04996139cd8a6d@AcuMS.aculab.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 13 Dec 2021 07:56:20 -0800
+Message-ID: <CANn89i+4acJp8ohBMWU4sketLfitKCzmS8FQTvduxumYYketvw@mail.gmail.com>
+Subject: Re: [PATCH] x86/lib: Remove the special case for odd-aligned buffers
+ in csum_partial.c
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "alexanderduyck@fb.com" <alexanderduyck@fb.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 13, 2021 at 7:37 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Dave Hansen
+> > Sent: 13 December 2021 15:02
+> .c
+> >
+> > On 12/13/21 6:43 AM, David Laight wrote:
+> > > There is no need to special case the very unusual odd-aligned buffers.
+> > > They are no worse than 4n+2 aligned buffers.
+> > >
+> > > Signed-off-by: David Laight <david.laight@aculab.com>
+> > > ---
+> > >
+> > > On an i7-7700 misaligned buffers add 2 or 3 clocks (in 115) to a 512 byte
+> > >   checksum.
+> > > That is just measuring the main loop with an lfence prior to rdpmc to
+> > > read PERF_COUNT_HW_CPU_CYCLES.
+> >
+> > I'm a bit confused by this changelog.
+> >
+> > Are you saying that the patch causes a (small) performance regression?
+> >
+> > Are you also saying that the optimization here is not worth it because
+> > it saves 15 lines of code?  Or that the misalignment checks themselves
+> > add 2 or 3 cycles, and this is an *optimization*?
+>
+> I'm saying that it can't be worth optimising for a misaligned
+> buffer because the cost of the buffer being misaligned is so small.
+> So the test for a misaligned buffer are going to cost more than
+> and plausible gain.
+>
+> Not only that the buffer will never be odd aligned at all.
+>
+> The code is left in from a previous version that did do aligned
+> word reads - so had to do extra for odd alignment.
+>
+> Note that code is doing misaligned reads for the more likely 4n+2
+> aligned ethernet receive buffers.
+> I doubt that even a test for that would be worthwhile even if you
+> were checksumming full sized ethernet packets.
+>
+> So the change is deleting code that is never actually executed
+> from the hot path.
+>
 
+I think I left this code because I got confused with odd/even case,
+but this is handled by upper functions like csum_block_add()
 
-On 12/13/21 9:08 AM, Dave Hansen wrote:
-> On 12/13/21 6:49 AM, Brijesh Singh wrote:
->>> I was more concerned that this structure could change sizes if it were
->>> compiled on 32-bit versus 64-bit code.  For kernel ABIs, we try not to
->>> do that.
->>>
->>> Is this somehow OK when talking to firmware?  Or can a 32-bit OS and
->>> 64-bit firmware never interact?
->>
->> For SNP, both the firmware and OS need to be 64-bit. IIRC, both the
->> Linux and OVMF do not enable the memory encryption for the 32-bit.
-> 
-> Could you please make the structure's size invariant?  
+What matters is not if the start of a frag is odd/even, but what
+offset it is in the overall ' frame', if a frame is split into multiple
+areas (scatter/gather)
 
-Ack. I will make the required changes.
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-That's great if
-> there's no problem in today's implementation, but it's best no to leave
-> little land mines like this around.  Let's say someone copies your code
-> as an example of something that interacts with a firmware table a few
-> years or months down the road.
-> 
+Thanks !

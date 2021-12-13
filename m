@@ -2,119 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 782AD472031
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 05:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7431A472035
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbhLME7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 23:59:45 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55998 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbhLME7k (ORCPT
+        id S231811AbhLMFCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 00:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231761AbhLMFCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 23:59:40 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5DFB01F3B0;
-        Mon, 13 Dec 2021 04:59:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639371578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k2gChwyl/DClB5L/ZT8aeA5y8mUKecKjBiO/0QKY6kA=;
-        b=EjXT775p7Ib4onLWPFpQRGtiEyslALZ9bZI7hc8yXChzHyJHZ9EjymDPHRmWnb3wI3EY1s
-        vo9vutxlhmeMBMdUMMeEjbGVJWUQL5hb9PSTaFMoKMbuijj8cVdgI1cBNUzMjvcavizEkv
-        dgBUeJhGUr9ykPpecP8Sbrk2A5kwuig=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639371578;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k2gChwyl/DClB5L/ZT8aeA5y8mUKecKjBiO/0QKY6kA=;
-        b=hqsL0TIql1g+XAQIVqyCnbaG2whzR8D/uS62k89KHb57moD27i3si5uDxcmNGIU2IL6eAM
-        U8UcCBivlGAfW0AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 282D613AAF;
-        Mon, 13 Dec 2021 04:59:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id N0DzNDXTtmGJSQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 13 Dec 2021 04:59:33 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 13 Dec 2021 00:02:50 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A360C06173F;
+        Sun, 12 Dec 2021 21:02:50 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v23so10997195pjr.5;
+        Sun, 12 Dec 2021 21:02:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PKsKSjxqNb+wfoS23yK+YBdcKb7YgyYHFw7IzVI0ZEk=;
+        b=HsFhTamPiqukqZGR017NAEw6TUmQf2tG0rseMVBiY0ZZ6ckQfNgPtysKllVYu/P/23
+         Ws+yYfQ8TPRwDte3ixYGLWxa9ja0/CJORwlomGsaCZLstuPt/TENb4U1T6BXqdQ/jiV8
+         5N5iW20TBPCeYP9m7Kb5DP8nilJvuLYR03DdOk82QBnSLybzN1qNIPo6/8i41asfNgmz
+         EQt4oMCe1ZXR67F9JgOc5CiWs1MyHkCM7cpa9F9geB4EtTKwIWqgSbLShEzXDgQI8ZND
+         Qp19AgkzLBY6NNc3v+d1puOWdD+lNE1TkXTDNSmGH6gz23L+fBFPvXOaPW030hT72/hJ
+         tRnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PKsKSjxqNb+wfoS23yK+YBdcKb7YgyYHFw7IzVI0ZEk=;
+        b=x1ReQW6pbV6Ojf5BmXAfZdfk4zVNYgGPUXPlcj2jx0X/C8OS6wH0pXFivskFXCn7VY
+         xsZr3bAURPNP7rv42fAaIDoz9BTekkwa9eReOC6X3Screu+kKMAdMg1wLIRrrGM84Oo8
+         1y4Fpc8/7d2B1m6IsROSLan8JXKIxI9BmEtPYRTz2OL2r9vo1y9qkeqzwqQt/UMIgiNl
+         GhopJiEAPSbJl5+2cQ46/cF5QseB+2sIa0xGrzACuBDsWChjlZo9zirurYDDWS6aCOty
+         nn8RY2+vxfJwh1J9v4wcrws2oWW3BFrBu4kxIIj9De/rDKKgWK9a0lDCtPD4glWikWgx
+         lv1A==
+X-Gm-Message-State: AOAM533YS5k35/JniOIL27C0TKLg68R1PqzD5Db154Fkzhj3VkNxux2J
+        N2O/h/uc4zQycuLSCVd541qdAdU8Rpc=
+X-Google-Smtp-Source: ABdhPJwOI+1dDFGM9saqkBprZVmh3HbF4aGEL3U8UumR6qUqH+U+5hJFEqmVfeEdApUBayyhqPKyYw==
+X-Received: by 2002:a17:902:eec5:b0:143:982a:85c with SMTP id h5-20020a170902eec500b00143982a085cmr92514169plb.66.1639371769448;
+        Sun, 12 Dec 2021 21:02:49 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:e537:8856:7d40:7c6])
+        by smtp.gmail.com with ESMTPSA id p10sm10542891pff.173.2021.12.12.21.02.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 21:02:48 -0800 (PST)
+Date:   Sun, 12 Dec 2021 21:02:45 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Cc:     nick@shmanahar.org, rydberg@bitmath.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: atmel_mxt_ts - fix double free in
+ mxt_read_info_block
+Message-ID: <YbbT9fXEk3rMwF6Q@google.com>
+References: <20211212194257.68879-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Matthew Wilcox" <willy@infradead.org>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        "Philipp Reisner" <philipp.reisner@linbit.com>,
-        "Lars Ellenberg" <lars.ellenberg@linbit.com>,
-        "Jan Kara" <jack@suse.com>,
-        "Ryusuke Konishi" <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] Remove inode_congested()
-In-reply-to: <YbbKjjFzIzSBJWCn@casper.infradead.org>
-References: <163936868317.23860.5037433897004720387.stgit@noble.brown>,
- <163936886725.23860.2403757518009677424.stgit@noble.brown>,
- <YbbKjjFzIzSBJWCn@casper.infradead.org>
-Date:   Mon, 13 Dec 2021 15:59:30 +1100
-Message-id: <163937157093.22433.10907067066589299028@noble.neil.brown.name>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211212194257.68879-1-jose.exposito89@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021, Matthew Wilcox wrote:
-> On Mon, Dec 13, 2021 at 03:14:27PM +1100, NeilBrown wrote:
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index fb9584641ac7..540aa0ea67ff 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -989,17 +989,6 @@ static inline int is_page_cache_freeable(struct page=
- *page)
-> >  	return page_count(page) - page_has_private(page) =3D=3D 1 + page_cache_=
-pins;
-> >  }
-> > =20
-> > -static int may_write_to_inode(struct inode *inode)
-> > -{
-> > -	if (current->flags & PF_SWAPWRITE)
-> > -		return 1;
-> > -	if (!inode_write_congested(inode))
-> > -		return 1;
-> > -	if (inode_to_bdi(inode) =3D=3D current->backing_dev_info)
-> > -		return 1;
-> > -	return 0;
-> > -}
->=20
-> Why is it safe to get rid of the PF_SWAPWRITE and current->backing_dev_info
-> checks?
+On Sun, Dec 12, 2021 at 08:42:57PM +0100, José Expósito wrote:
+> The "id_buf" buffer is stored in "data->raw_info_block" and freed by
+> "mxt_free_object_table" in case of error.
+> 
+> Return instead of jumping to avoid a double free.
+> 
+> Addresses-Coverity-ID: 1474582 ("Double free")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 
-Ask George Bool.
-If inode_write_congested() returns False, then may_write_to_inode() will
-always return True.
+Applied, thank you.
 
-NeilBrown
-
-
->=20
-> > @@ -1158,8 +1147,6 @@ static pageout_t pageout(struct page *page, struct =
-address_space *mapping)
-> >  	}
-> >  	if (mapping->a_ops->writepage =3D=3D NULL)
-> >  		return PAGE_ACTIVATE;
-> > -	if (!may_write_to_inode(mapping->host))
-> > -		return PAGE_KEEP;
-> > =20
-> >  	if (clear_page_dirty_for_io(page)) {
-> >  		int res;
->=20
->=20
+-- 
+Dmitry

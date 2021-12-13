@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8FC472BE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A70472BEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbhLMMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:05:28 -0500
-Received: from mail-am6eur05on2045.outbound.protection.outlook.com ([40.107.22.45]:44448
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        id S236513AbhLMMFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:05:32 -0500
+Received: from mail-eopbgr60063.outbound.protection.outlook.com ([40.107.6.63]:64578
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232598AbhLMMFR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S232762AbhLMMFR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 07:05:17 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dyYAlrb45WwevGBS9qJCAV0xtL9MFvPSdFFbeSJ/kW4XjqoYJ1Kfj9UjmnzFjKX+C+l40ndLjZvU+DXn075iX0w7AoP/yF5X8Xm5R+fgJV7duRcg6dermjq4wqpfFjjQBUKXqh6wDyWHtjeosONJ1McG87St54tP0IssGkQjllhI1JJARJyWeJrh6eKPAtKvuhi2UEpeMQwcw9WqhC6kq9FxDULq9X6RuKd8Dnzk1bjDiq3Oc6n8zI31stp3DTDON0h+x/6mKEWwNJZrr517uuiFPDwrVX8TJKf40pzPQdtEKB3hmUtnnTpHe/Ddv5ayG9cQFL1HjfCz19DGfxGk5Q==
+ b=JdHp08Tl/OUUPgPYnga9rnP2Ab1jOUDa6o0L9kKFBvFfVXm/iH/wZ4Uqwxe0No5B5Cw4Lo9RiCkbRIc9Rb1tBKiijxAf5DAHlahBTZC0bJ0kQz7mpmwx2jeK8mlUnvaN7PxaqJs4TfV90I1BMq/odSwbYSoYgpvw4Rm48HBzOr8oDc/liPVuTCi0edoahtznuCd4AB3keciyRGGo7uEt9kworgClKjL8LR1wf12DO19Nek1oiIzAFoI4wwqYmmupUlhwA2Hc/9fzkUuCh+4Ok8oZRJWzT0F8xcZ372VuSnvOMtedYvLjCb9pE1DcE3ZlAkDZXhaM7umOURuEOVkMWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q2DD134lpTFwEvu4AJH5ciN6KtYuWuHGPSkmng8lTnE=;
- b=lrO25rjAqT4BY6bMdcuDjZsNMkT2IDM/PKUFObPkYqp/kQv6S0nIhDk3tTkcfLDa8MGSJ8wh5NhN0ZiiFWOvHg5SxRkM4WR4LZjqZUI0qYvAPXF88JdSAFLfqNnOyBExgLoEM+ZhDXDoWnXM7qMgRIFrggUy9BB3K5MkbqO2ABPDeeDO8L3TDzEFsLeNSTQKYFfVUEtpaulaYBsisuwf+DrnfDeitffaye7Z9ta7aclUtF7CNcLIZoWoY09A5TVyxQ+S8P3yExo3SO8sTS7wpiPaDZ7TLanjQOJXSjNYMyNKYLENmyGDFzaGvsmbTivrwI6UP/fIjjNeBNPGEm68lA==
+ bh=bpQ6fvDz9lVe6PiNcyGz6TuiPeWGlMMdUgY2zDKz72w=;
+ b=ZOK14X5s5fvHcmqdlmx1tBhq2bl5CIf29AunYmNyDS61Kjug5Guw16Iu/zXSj2uU0YYnPgmBAlEnyrcwbWsSmNrqEMb8XOHi9GRkbgb4f4KfD9FcyqXzMQfm9ONU9e5FzqohiuMuqI4PcQAjSq/6cuz8eE2U1CtZnAOw9QpAs+CZVOsCv9LFd1MJ7qy+MOBuRasvekYD8AYPkO8S+lVEyCn6w3WAHd9Oi4rDNfAkMVm1SMDLXaekWqb8zm0gfCsJyJomRO7u0r2SyKHdQxrayzLVMGu7tupkEK3k+pKwmsiSKtcCjjcInLHG1J/8DqBTL6HHtjEb72DAdQzpkyzL2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.70) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=siemens.com;
+ 194.138.21.73) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=siemens.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q2DD134lpTFwEvu4AJH5ciN6KtYuWuHGPSkmng8lTnE=;
- b=FD1dD+lKC+PQbIYopirGIkODbJmtZR5vv6QSqmuHaocUcRNoQv4dheAJtW54sGk+I55jrlocQEPreHzBo0AUoa0rENdto7LErs9yVnFZlH1TA6xa7b6bf8tzZ0WIS8ze7w2qvJm83+PxhdH7eq4Vy/bjkOqXp88jdVzPuFdPJPpoCbP5TLLfFMVUIiqy2qsPPQR07EOjyDS7Kz6Hi0LYUNf3+Ikww68nD8pRbT8A0dMgM8RlEJMdDdnPrgNE4Ho/kqfNBEFEJdgBRWiVCuC/OhzVXMSBY92AarPsmwVKcmwAI8+glmoO8MN3HS5rveh41SJyFJqQqvWM6EOxi/vsDA==
-Received: from DB6PR0601CA0043.eurprd06.prod.outlook.com (2603:10a6:4:17::29)
- by DB7PR10MB2524.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:50::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
- 2021 12:05:13 +0000
-Received: from DB5EUR01FT048.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:4:17:cafe::75) by DB6PR0601CA0043.outlook.office365.com
- (2603:10a6:4:17::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.15 via Frontend
- Transport; Mon, 13 Dec 2021 12:05:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.70)
+ bh=bpQ6fvDz9lVe6PiNcyGz6TuiPeWGlMMdUgY2zDKz72w=;
+ b=xqmcSppORVXO+qaJPryses24jIyyZyIjoOjO5JA1rd7Zjr+5Z69jVCkSIUH4TUPC0DxsefA9qZJckMH2FOXgpsfdE7GxoOSCGvN2u7d2rWqW22jn+Q3bzpKzLBzc9+jyGyTtR8E5tdZU9cfJqhVrDzH0I6eC2NzziVQjx5J5wt+gnAPMNzNEquAiDU97Fas2qTlF2bE/+xZ+kSrbKrVMHnpnlgQd2RcajhTdsFk+SEa8V9Yfp86F2HHPdAYdXvqSxpTx+ap9k077vFdzCaMShS5wdwQdWgCVprRZVd8sxov1u5r/5F/egHBr8jli/mu4nvsuVMRf9MR5KloFpWEShw==
+Received: from OL1P279CA0038.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:14::7) by
+ VI1PR10MB1552.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:802:31::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4755.21; Mon, 13 Dec 2021 12:05:14 +0000
+Received: from HE1EUR01FT018.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:e10:14:cafe::7a) by OL1P279CA0038.outlook.office365.com
+ (2603:10a6:e10:14::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17 via Frontend
+ Transport; Mon, 13 Dec 2021 12:05:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
  smtp.mailfrom=siemens.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=siemens.com;
 Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.70 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.70; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.70) by
- DB5EUR01FT048.mail.protection.outlook.com (10.152.5.166) with Microsoft SMTP
+ 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.73; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.73) by
+ HE1EUR01FT018.mail.protection.outlook.com (10.152.0.175) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.12 via Frontend Transport; Mon, 13 Dec 2021 12:05:13 +0000
+ 15.20.4778.12 via Frontend Transport; Mon, 13 Dec 2021 12:05:14 +0000
 Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SJA.ad011.siemens.net (194.138.21.70) with Microsoft SMTP Server
+ DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.17; Mon, 13 Dec 2021 13:05:13 +0100
 Received: from md1za8fc.ad001.siemens.net (139.25.69.80) by
@@ -71,9 +70,9 @@ CC:     Srikanth Krishnakar <skrishnakar@gmail.com>,
         Pavel Machek <pavel@ucw.cz>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Enrico Weigelt <lkml@metux.net>
-Subject: [PATCH v5 2/4] leds: simatic-ipc-leds: add new driver for Siemens Industial PCs
-Date:   Mon, 13 Dec 2021 13:05:00 +0100
-Message-ID: <20211213120502.20661-3-henning.schild@siemens.com>
+Subject: [PATCH v5 3/4] watchdog: simatic-ipc-wdt: add new driver for Siemens Industrial PCs
+Date:   Mon, 13 Dec 2021 13:05:01 +0100
+Message-ID: <20211213120502.20661-4-henning.schild@siemens.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211213120502.20661-1-henning.schild@siemens.com>
 References: <20211213120502.20661-1-henning.schild@siemens.com>
@@ -85,25 +84,25 @@ X-ClientProxiedBy: DEMCHDC89YA.ad011.siemens.net (139.25.226.104) To
  DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b46b062e-0659-4330-d343-08d9be30d1ed
-X-MS-TrafficTypeDiagnostic: DB7PR10MB2524:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR10MB2524017F65FFEF9BDBC12BA885749@DB7PR10MB2524.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:469;
+X-MS-Office365-Filtering-Correlation-Id: 2eb814d9-7688-43d1-dbfb-08d9be30d220
+X-MS-TrafficTypeDiagnostic: VI1PR10MB1552:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR10MB155266893B6A2FC8885F0CC785749@VI1PR10MB1552.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1417;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SK5an1SjApr0dkd3IDu98Q6JEqxrHvwsNrzzHji9hyLxlV/pMX4vGcauPeyQOxJGtY5pZoEgkApJbPuKuwLb/K9THAx+95Agw37LcvmJTpInzsssSpD77yWpfTc2ThHIlHtsQeT8T2YjXfablVeUWsPw40iruQIMoV5b1Y+hRQ9NzsIlAYYgU8nC1LP7SqJ+wkpX0UE7uUH7xu8rJndl/jwKRE45jGc+ZaoIK5nvRqdhuOAvvMjsAGjWxiNwakmRgaiFemvigFD64NCfBQ5N2/Jg1VVH+pA6qYWmYKglAc0epX6UD9NMMFT/pw+HS82Ppd+8WRb0LKyeeWPoVPxC+QaFRHBruA5iboK2yCWbXJQbH3EVeu4/Xk++lYBN1cxcpUnfZqBaAWrjmHuTk7l67L54ZY47EfjWAPGV6tQD2RDpppeUJGSplfWwdLGNdP9mA72mxh20CXGvTxDSx1fYIHqBVBjOSbFrFWGnQHxcYqVKTm0MPVBScEykGLxlA2h+v1ANlzZzrCJH9HrjKTOK2G6IQRi3mwK2WdMxta6BZ+03ZyZJZA+4AP1SoTE39DhlNyUcfpq3WyHrPhHjGYbhj5uH939jzuRAxpg3QVKfslEP+I+uOrNac+zfX62Cme8SnDuDPhmlyyigNG6/ThFOc8uK/HyTRHe/1jRL+Y4HvGQ9OdLoeYAzlPjOjLUqE3vKYL6xxVkdUUxLUKXa0byk9Q==
-X-Forefront-Antispam-Report: CIP:194.138.21.70;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(70206006)(336012)(86362001)(6666004)(1076003)(110136005)(47076005)(8936002)(16526019)(2906002)(186003)(956004)(26005)(36756003)(82960400001)(7416002)(36860700001)(70586007)(5660300002)(316002)(2616005)(44832011)(82310400004)(4326008)(83380400001)(8676002)(7596003)(7636003)(508600001)(356005)(54906003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tEEW6IK6BSUKPy/742Z+EpDebhaz13b69bEn8+v/xmr++UMwdHytgipF+x2OCGXV23zG4GCIIF1X2FEEFxg4LYL1ivKotpzMBZjtRYCgkcYPjNNyi2mZOIqBFsFmgONFo/W8/tQ2f3ukp/klGylA5US0P6605gHQP2YFMQIbY1Nj6IWq3snQQ/uManqwovE3Z9qVOrrkrVNbksT4d6dBOXI2tfo3LrYxKIc98dEQc+NCXlNkHNUzj7/5hv1Z00Xg/yeoiXBrG2R0i1S8bA6Vn/uTe2LXY/ACh5iPb0JNfzOSZT0WpOTcqHtP6s6PsoaHsd7923NjU1caPBt8HUtiNHNLgDHl+jfqjS9Mgs4SjlkKlaX9o5+EUTbOr2q5d41d0u/X/eJrhiigKc3Ua2D9OPpnpzkOuRS0RP6HTDc6EQ92P7ipZAOY7IufY7rOvGuOQkHEng7gp1YpDsmOU7tPV8klgYI6avlUPkb3TSOqXA83j3Xxfi2yGMNP5tqR8wFov0b8nxAuFrEnTntbLypKt04SfmtjLggDgrDjRILS6tKpnl6/8rcSIGPiKWkKzcNcQpKofQSlDKtumN6rjJnRjgqveV0iNNZkek2HvxzIcSbs5Lmg5plGo/HVyytlC9FlPWji3DiseuZTl866vwMARoOHa7yoGCLVCdm8V9FpniRHOcd9/H1xQ/X9iVpVNa/RtC2iENc6ILh+B+9FLhZGiFuPdjoLs5c37IRMQGhNUBs=
+X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(81166007)(186003)(16526019)(8936002)(4326008)(8676002)(26005)(956004)(44832011)(316002)(5660300002)(82310400004)(82960400001)(47076005)(2616005)(2906002)(70586007)(356005)(336012)(508600001)(70206006)(7416002)(83380400001)(86362001)(1076003)(6666004)(110136005)(54906003)(36756003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 12:05:13.8742
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 12:05:14.1931
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b46b062e-0659-4330-d343-08d9be30d1ed
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2eb814d9-7688-43d1-dbfb-08d9be30d220
 X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.70];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT048.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT018.eop-EUR01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR10MB2524
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB1552
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -111,277 +110,286 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 This driver adds initial support for several devices from Siemens. It is
 based on a platform driver introduced in an earlier commit.
 
-One of the supported machines has GPIO connected LEDs, here we poke GPIO
-memory directly because pinctrl does not come up.
+One of the supported machines does access a GPIO pin to enable the
+watchdog. Here we poke GPIO memory because pinctrl does not come up.
 
 Signed-off-by: Henning Schild <henning.schild@siemens.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/leds/Kconfig                   |   3 +
- drivers/leds/Makefile                  |   3 +
- drivers/leds/simple/Kconfig            |  11 ++
- drivers/leds/simple/Makefile           |   2 +
- drivers/leds/simple/simatic-ipc-leds.c | 202 +++++++++++++++++++++++++
- 5 files changed, 221 insertions(+)
- create mode 100644 drivers/leds/simple/Kconfig
- create mode 100644 drivers/leds/simple/Makefile
- create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
+ drivers/watchdog/Kconfig           |  11 ++
+ drivers/watchdog/Makefile          |   1 +
+ drivers/watchdog/simatic-ipc-wdt.c | 228 +++++++++++++++++++++++++++++
+ 3 files changed, 240 insertions(+)
+ create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
 
-diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-index ed800f5da7d8..ac6688d7a3f4 100644
---- a/drivers/leds/Kconfig
-+++ b/drivers/leds/Kconfig
-@@ -879,4 +879,7 @@ source "drivers/leds/flash/Kconfig"
- comment "LED Triggers"
- source "drivers/leds/trigger/Kconfig"
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 9d222ba17ec6..1dc86eb1361a 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1589,6 +1589,17 @@ config NIC7018_WDT
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called nic7018_wdt.
  
-+comment "Simple LED drivers"
-+source "drivers/leds/simple/Kconfig"
-+
- endif # NEW_LEDS
-diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-index c636ec069612..1a719caf14c0 100644
---- a/drivers/leds/Makefile
-+++ b/drivers/leds/Makefile
-@@ -105,3 +105,6 @@ obj-$(CONFIG_LEDS_TRIGGERS)		+= trigger/
- 
- # LED Blink
- obj-y					+= blink/
-+
-+# Simple LED drivers
-+obj-y					+= simple/
-diff --git a/drivers/leds/simple/Kconfig b/drivers/leds/simple/Kconfig
-new file mode 100644
-index 000000000000..9f6a68336659
---- /dev/null
-+++ b/drivers/leds/simple/Kconfig
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config LEDS_SIEMENS_SIMATIC_IPC
-+	tristate "LED driver for Siemens Simatic IPCs"
-+	depends on LEDS_CLASS
++config SIEMENS_SIMATIC_IPC_WDT
++	tristate "Siemens Simatic IPC Watchdog"
 +	depends on SIEMENS_SIMATIC_IPC
++	select WATCHDOG_CORE
 +	help
-+	  This option enables support for the LEDs of several Industrial PCs
-+	  from Siemens.
++	  This driver adds support for several watchdogs found in Industrial
++	  PCs from Siemens.
 +
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called simatic-ipc-leds.
-diff --git a/drivers/leds/simple/Makefile b/drivers/leds/simple/Makefile
++	  To compile this driver as a module, choose M here: the module will be
++	  called simatic-ipc-wdt.
++
+ # M68K Architecture
+ 
+ config M54xx_WATCHDOG
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 2ee97064145b..31b931846e32 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -143,6 +143,7 @@ obj-$(CONFIG_NI903X_WDT) += ni903x_wdt.o
+ obj-$(CONFIG_NIC7018_WDT) += nic7018_wdt.o
+ obj-$(CONFIG_MLX_WDT) += mlx_wdt.o
+ obj-$(CONFIG_KEEMBAY_WATCHDOG) += keembay_wdt.o
++obj-$(CONFIG_SIEMENS_SIMATIC_IPC_WDT) += simatic-ipc-wdt.o
+ 
+ # M68K Architecture
+ obj-$(CONFIG_M54xx_WATCHDOG) += m54xx_wdt.o
+diff --git a/drivers/watchdog/simatic-ipc-wdt.c b/drivers/watchdog/simatic-ipc-wdt.c
 new file mode 100644
-index 000000000000..8481f1e9e360
+index 000000000000..8bac793c63fb
 --- /dev/null
-+++ b/drivers/leds/simple/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds.o
-diff --git a/drivers/leds/simple/simatic-ipc-leds.c b/drivers/leds/simple/simatic-ipc-leds.c
-new file mode 100644
-index 000000000000..ff2c96e73241
---- /dev/null
-+++ b/drivers/leds/simple/simatic-ipc-leds.c
-@@ -0,0 +1,202 @@
++++ b/drivers/watchdog/simatic-ipc-wdt.c
+@@ -0,0 +1,228 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Siemens SIMATIC IPC driver for LEDs
++ * Siemens SIMATIC IPC driver for Watchdogs
 + *
-+ * Copyright (c) Siemens AG, 2018-2021
++ * Copyright (c) Siemens AG, 2020-2021
 + *
 + * Authors:
-+ *  Henning Schild <henning.schild@siemens.com>
-+ *  Jan Kiszka <jan.kiszka@siemens.com>
 + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
 + */
 +
++#include <linux/device.h>
++#include <linux/errno.h>
++#include <linux/init.h>
++#include <linux/io.h>
 +#include <linux/ioport.h>
 +#include <linux/kernel.h>
-+#include <linux/leds.h>
 +#include <linux/module.h>
 +#include <linux/pci.h>
 +#include <linux/platform_data/x86/simatic-ipc-base.h>
 +#include <linux/platform_device.h>
 +#include <linux/sizes.h>
-+#include <linux/spinlock.h>
++#include <linux/util_macros.h>
++#include <linux/watchdog.h>
 +
-+#define SIMATIC_IPC_LED_PORT_BASE	0x404E
++#define WD_ENABLE_IOADR			0x62
++#define WD_TRIGGER_IOADR		0x66
++#define GPIO_COMMUNITY0_PORT_ID		0xaf
++#define PAD_CFG_DW0_GPP_A_23		0x4b8
++#define SAFE_EN_N_427E			0x01
++#define SAFE_EN_N_227E			0x04
++#define WD_ENABLED			0x01
++#define WD_TRIGGERED			0x80
++#define WD_MACROMODE			0x02
 +
-+struct simatic_ipc_led {
-+	unsigned int value; /* mask for io and offset for mem */
-+	char *name;
-+	struct led_classdev cdev;
++#define TIMEOUT_MIN	2
++#define TIMEOUT_DEF	64
++#define TIMEOUT_MAX	64
++
++#define GP_STATUS_REG_227E	0x404D	/* IO PORT for SAFE_EN_N on 227E */
++
++static bool nowayout = WATCHDOG_NOWAYOUT;
++module_param(nowayout, bool, 0000);
++MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
++		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
++
++static struct resource gp_status_reg_227e_res =
++	DEFINE_RES_IO_NAMED(GP_STATUS_REG_227E, SZ_1, KBUILD_MODNAME);
++
++static struct resource io_resource_enable =
++	DEFINE_RES_IO_NAMED(WD_ENABLE_IOADR, SZ_1,
++			    KBUILD_MODNAME " WD_ENABLE_IOADR");
++
++static struct resource io_resource_trigger =
++	DEFINE_RES_IO_NAMED(WD_TRIGGER_IOADR, SZ_1,
++			    KBUILD_MODNAME " WD_TRIGGER_IOADR");
++
++/* the actual start will be discovered with pci, 0 is a placeholder */
++static struct resource mem_resource =
++	DEFINE_RES_MEM_NAMED(0, SZ_4, "WD_RESET_BASE_ADR");
++
++static u32 wd_timeout_table[] = {2, 4, 6, 8, 16, 32, 48, 64 };
++static void __iomem *wd_reset_base_addr;
++
++static int wd_start(struct watchdog_device *wdd)
++{
++	outb(inb(WD_ENABLE_IOADR) | WD_ENABLED, WD_ENABLE_IOADR);
++	return 0;
++}
++
++static int wd_stop(struct watchdog_device *wdd)
++{
++	outb(inb(WD_ENABLE_IOADR) & ~WD_ENABLED, WD_ENABLE_IOADR);
++	return 0;
++}
++
++static int wd_ping(struct watchdog_device *wdd)
++{
++	inb(WD_TRIGGER_IOADR);
++	return 0;
++}
++
++static int wd_set_timeout(struct watchdog_device *wdd, unsigned int t)
++{
++	int timeout_idx = find_closest(t, wd_timeout_table,
++				       ARRAY_SIZE(wd_timeout_table));
++
++	outb((inb(WD_ENABLE_IOADR) & 0xc7) | timeout_idx << 3, WD_ENABLE_IOADR);
++	wdd->timeout = wd_timeout_table[timeout_idx];
++	return 0;
++}
++
++static const struct watchdog_info wdt_ident = {
++	.options	= WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING |
++			  WDIOF_SETTIMEOUT,
++	.identity	= KBUILD_MODNAME,
 +};
 +
-+static struct simatic_ipc_led simatic_ipc_leds_io[] = {
-+	{1 << 15, "green:" LED_FUNCTION_STATUS "-1" },
-+	{1 << 7,  "yellow:" LED_FUNCTION_STATUS "-1" },
-+	{1 << 14, "red:" LED_FUNCTION_STATUS "-2" },
-+	{1 << 6,  "yellow:" LED_FUNCTION_STATUS "-2" },
-+	{1 << 13, "red:" LED_FUNCTION_STATUS "-3" },
-+	{1 << 5,  "yellow:" LED_FUNCTION_STATUS "-3" },
-+	{ }
++static const struct watchdog_ops wdt_ops = {
++	.owner		= THIS_MODULE,
++	.start		= wd_start,
++	.stop		= wd_stop,
++	.ping		= wd_ping,
++	.set_timeout	= wd_set_timeout,
 +};
 +
-+/* the actual start will be discovered with PCI, 0 is a placeholder */
-+struct resource simatic_ipc_led_mem_res = DEFINE_RES_MEM_NAMED(0, SZ_4K, KBUILD_MODNAME);
++static void wd_secondary_enable(u32 wdtmode)
++{
++	u16 resetbit;
 +
-+static void *simatic_ipc_led_memory;
++	/* set safe_en_n so we are not just WDIOF_ALARMONLY */
++	if (wdtmode == SIMATIC_IPC_DEVICE_227E) {
++		/* enable SAFE_EN_N on GP_STATUS_REG_227E */
++		resetbit = inb(GP_STATUS_REG_227E);
++		outb(resetbit & ~SAFE_EN_N_227E, GP_STATUS_REG_227E);
++	} else {
++		/* enable SAFE_EN_N on PCH D1600 */
++		resetbit = ioread16(wd_reset_base_addr);
++		iowrite16(resetbit & ~SAFE_EN_N_427E, wd_reset_base_addr);
++	}
++}
 +
-+static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
-+	{0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
-+	{0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
-+	{0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
-+	{0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
-+	{0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
-+	{0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
-+	{ }
++static int wd_setup(u32 wdtmode)
++{
++	unsigned int bootstatus = 0;
++	int timeout_idx;
++
++	timeout_idx = find_closest(TIMEOUT_DEF, wd_timeout_table,
++				   ARRAY_SIZE(wd_timeout_table));
++
++	if (inb(WD_ENABLE_IOADR) & WD_TRIGGERED)
++		bootstatus |= WDIOF_CARDRESET;
++
++	/* reset alarm bit, set macro mode, and set timeout */
++	outb(WD_TRIGGERED | WD_MACROMODE | timeout_idx << 3, WD_ENABLE_IOADR);
++
++	wd_secondary_enable(wdtmode);
++
++	return bootstatus;
++}
++
++static struct watchdog_device wdd_data = {
++	.info = &wdt_ident,
++	.ops = &wdt_ops,
++	.min_timeout = TIMEOUT_MIN,
++	.max_timeout = TIMEOUT_MAX
 +};
 +
-+static struct resource simatic_ipc_led_io_res =
-+	DEFINE_RES_IO_NAMED(SIMATIC_IPC_LED_PORT_BASE, SZ_2, KBUILD_MODNAME);
-+
-+static DEFINE_SPINLOCK(reg_lock);
-+
-+static inline struct simatic_ipc_led *cdev_to_led(struct led_classdev *led_cd)
++static int simatic_ipc_wdt_probe(struct platform_device *pdev)
 +{
-+	return container_of(led_cd, struct simatic_ipc_led, cdev);
-+}
-+
-+static void simatic_ipc_led_set_io(struct led_classdev *led_cd,
-+				   enum led_brightness brightness)
-+{
-+	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-+	unsigned long flags;
-+	unsigned int val;
-+
-+	spin_lock_irqsave(&reg_lock, flags);
-+
-+	val = inw(SIMATIC_IPC_LED_PORT_BASE);
-+	if (brightness == LED_OFF)
-+		outw(val | led->value, SIMATIC_IPC_LED_PORT_BASE);
-+	else
-+		outw(val & ~led->value, SIMATIC_IPC_LED_PORT_BASE);
-+
-+	spin_unlock_irqrestore(&reg_lock, flags);
-+}
-+
-+static enum led_brightness simatic_ipc_led_get_io(struct led_classdev *led_cd)
-+{
-+	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-+
-+	return inw(SIMATIC_IPC_LED_PORT_BASE) & led->value ? LED_OFF : led_cd->max_brightness;
-+}
-+
-+static void simatic_ipc_led_set_mem(struct led_classdev *led_cd,
-+				    enum led_brightness brightness)
-+{
-+	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-+
-+	u32 *p;
-+
-+	p = simatic_ipc_led_memory + led->value;
-+	*p = (*p & ~1) | (brightness == LED_OFF);
-+}
-+
-+static enum led_brightness simatic_ipc_led_get_mem(struct led_classdev *led_cd)
-+{
-+	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-+
-+	u32 *p;
-+
-+	p = simatic_ipc_led_memory + led->value;
-+	return (*p & 1) ? LED_OFF : led_cd->max_brightness;
-+}
-+
-+static int simatic_ipc_leds_probe(struct platform_device *pdev)
-+{
-+	const struct simatic_ipc_platform *plat = pdev->dev.platform_data;
++	struct simatic_ipc_platform *plat = pdev->dev.platform_data;
 +	struct device *dev = &pdev->dev;
-+	struct simatic_ipc_led *ipcled;
-+	struct led_classdev *cdev;
 +	struct resource *res;
-+	int err, type;
-+	u32 *p;
 +
 +	switch (plat->devmode) {
-+	case SIMATIC_IPC_DEVICE_227D:
-+	case SIMATIC_IPC_DEVICE_427E:
-+		res = &simatic_ipc_led_io_res;
-+		ipcled = simatic_ipc_leds_io;
-+		/* on 227D the two bytes work the other way araound */
-+		if (plat->devmode == SIMATIC_IPC_DEVICE_227D) {
-+			while (ipcled->value) {
-+				ipcled->value = swab16(ipcled->value);
-+				ipcled++;
-+			}
-+			ipcled = simatic_ipc_leds_io;
-+		}
-+		type = IORESOURCE_IO;
-+		if (!devm_request_region(dev, res->start, resource_size(res), KBUILD_MODNAME)) {
-+			dev_err(dev, "Unable to register IO resource at %pR\n", res);
++	case SIMATIC_IPC_DEVICE_227E:
++		if (!devm_request_region(dev, gp_status_reg_227e_res.start,
++					 resource_size(&gp_status_reg_227e_res),
++					 KBUILD_MODNAME)) {
++			dev_err(dev,
++				"Unable to register IO resource at %pR\n",
++				&gp_status_reg_227e_res);
 +			return -EBUSY;
 +		}
++		fallthrough;
++	case SIMATIC_IPC_DEVICE_427E:
++		wdd_data.parent = dev;
 +		break;
-+	case SIMATIC_IPC_DEVICE_127E:
-+		res = &simatic_ipc_led_mem_res;
-+		ipcled = simatic_ipc_leds_mem;
-+		type = IORESOURCE_MEM;
++	default:
++		return -EINVAL;
++	}
++
++	if (!devm_request_region(dev, io_resource_enable.start,
++				 resource_size(&io_resource_enable),
++				 io_resource_enable.name)) {
++		dev_err(dev,
++			"Unable to register IO resource at %#x\n",
++			WD_ENABLE_IOADR);
++		return -EBUSY;
++	}
++
++	if (!devm_request_region(dev, io_resource_trigger.start,
++				 resource_size(&io_resource_trigger),
++				 io_resource_trigger.name)) {
++		dev_err(dev,
++			"Unable to register IO resource at %#x\n",
++			WD_TRIGGER_IOADR);
++		return -EBUSY;
++	}
++
++	if (plat->devmode == SIMATIC_IPC_DEVICE_427E) {
++		res = &mem_resource;
 +
 +		/* get GPIO base from PCI */
-+		res->start = simatic_ipc_get_membase0(PCI_DEVFN(13, 0));
++		res->start = simatic_ipc_get_membase0(PCI_DEVFN(0x1f, 1));
 +		if (res->start == 0)
 +			return -ENODEV;
 +
 +		/* do the final address calculation */
-+		res->start = res->start + (0xC5 << 16);
++		res->start = res->start + (GPIO_COMMUNITY0_PORT_ID << 16) +
++			     PAD_CFG_DW0_GPP_A_23;
 +		res->end += res->start;
 +
-+		simatic_ipc_led_memory = devm_ioremap_resource(dev, res);
-+		if (IS_ERR(simatic_ipc_led_memory))
-+			return PTR_ERR(simatic_ipc_led_memory);
-+
-+		/* initialize power/watchdog LED */
-+		p = simatic_ipc_led_memory + 0x500 + 0x1D8; /* PM_WDT_OUT */
-+		*p = (*p & ~1);
-+		p = simatic_ipc_led_memory + 0x500 + 0x1C0; /* PM_BIOS_BOOT_N */
-+		*p = (*p | 1);
-+
-+		break;
-+	default:
-+		return -ENODEV;
++		wd_reset_base_addr = devm_ioremap_resource(dev, res);
++		if (IS_ERR(wd_reset_base_addr))
++			return PTR_ERR(wd_reset_base_addr);
 +	}
 +
-+	while (ipcled->value) {
-+		cdev = &ipcled->cdev;
-+		if (type == IORESOURCE_MEM) {
-+			cdev->brightness_set = simatic_ipc_led_set_mem;
-+			cdev->brightness_get = simatic_ipc_led_get_mem;
-+		} else {
-+			cdev->brightness_set = simatic_ipc_led_set_io;
-+			cdev->brightness_get = simatic_ipc_led_get_io;
-+		}
-+		cdev->max_brightness = LED_ON;
-+		cdev->name = ipcled->name;
++	wdd_data.bootstatus = wd_setup(plat->devmode);
++	if (wdd_data.bootstatus)
++		dev_warn(dev, "last reboot caused by watchdog reset\n");
 +
-+		err = devm_led_classdev_register(dev, cdev);
-+		if (err < 0)
-+			return err;
-+		ipcled++;
-+	}
-+
-+	return 0;
++	watchdog_set_nowayout(&wdd_data, nowayout);
++	watchdog_stop_on_reboot(&wdd_data);
++	return devm_watchdog_register_device(dev, &wdd_data);
 +}
 +
-+static struct platform_driver simatic_ipc_led_driver = {
-+	.probe = simatic_ipc_leds_probe,
++static struct platform_driver simatic_ipc_wdt_driver = {
++	.probe = simatic_ipc_wdt_probe,
 +	.driver = {
 +		.name = KBUILD_MODNAME,
-+	}
++	},
 +};
 +
-+module_platform_driver(simatic_ipc_led_driver);
++module_platform_driver(simatic_ipc_wdt_driver);
 +
 +MODULE_LICENSE("GPL v2");
 +MODULE_ALIAS("platform:" KBUILD_MODNAME);
-+MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
++MODULE_AUTHOR("Gerd Haeussler <gerd.haeussler.ext@siemens.com>");
 -- 
 2.32.0
 

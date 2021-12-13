@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 574BE47278F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95D34724FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240760AbhLMKCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S235113AbhLMJkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbhLMJ5O (ORCPT
+        with ESMTP id S233958AbhLMJi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:57:14 -0500
+        Mon, 13 Dec 2021 04:38:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BE7C0698CC;
-        Mon, 13 Dec 2021 01:48:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C73FC08E858;
+        Mon, 13 Dec 2021 01:37:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D3CDB80E19;
-        Mon, 13 Dec 2021 09:48:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2F3FC341C5;
-        Mon, 13 Dec 2021 09:48:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB878B80E15;
+        Mon, 13 Dec 2021 09:37:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C0EC00446;
+        Mon, 13 Dec 2021 09:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388884;
-        bh=/F+GAUK9vTy6+DQbl0Bk3L0NH0FEVhXl+hZix8DPgJY=;
+        s=korg; t=1639388228;
+        bh=eKseUwy4PituTUDkSxh5ZZP/kzzRau1QBapT5fEFCUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=prQqJ+6OATcFDUxBMldQE+YSYTdK8kJMbmPIIZKfy2aiIQN1++tkCyHaroyDS7Q+m
-         9k3oIxJREpyas58arHprngZGdKODx7ocPeId9B2qdeXsubiliFIFSZ7RDUxFc45oW3
-         13ZJtvdvNt3Uz/3C4GKhWOIYHLmRk0XzB4WsqF2E=
+        b=gQJVpHczYOHJtHr/4Zl07sBToywmH1Wd7Zu1gLUEXkNkMB3du23LLZFMn6Vc8WaPP
+         itBVlQuZhOMUie7CVHcJfLTCEmHXSg+9ixkJkGYmARjWTomdq6Znn5u9j3Lt4cAZjB
+         w48cghBczNSkzlIxg+TRaNzLo68G7mLPCOAX/x/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Moshe Shemesh <moshe@mellanox.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 041/132] devlink: fix netns refcount leak in devlink_nl_cmd_reload()
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 4.14 03/53] HID: add USB_HID dependancy to hid-chicony
 Date:   Mon, 13 Dec 2021 10:29:42 +0100
-Message-Id: <20211213092940.531921310@linuxfoundation.org>
+Message-Id: <20211213092928.466879264@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,63 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 4dbb0dad8e63fcd0b5a117c2861d2abe7ff5f186 upstream.
+commit d080811f27936f712f619f847389f403ac873b8f upstream.
 
-While preparing my patch series adding netns refcount tracking,
-I spotted bugs in devlink_nl_cmd_reload()
+The chicony HID driver only controls USB devices, yet did not have a
+dependancy on USB_HID.  This causes build errors on some configurations
+like sparc when building due to new changes to the chicony driver.
 
-Some error paths forgot to release a refcount on a netns.
-
-To fix this, we can reduce the scope of get_net()/put_net()
-section around the call to devlink_reload().
-
-Fixes: ccdf07219da6 ("devlink: Add reload action option to devlink reload command")
-Fixes: dc64cc7c6310 ("devlink: Add devlink reload limit option")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Moshe Shemesh <moshe@mellanox.com>
-Cc: Jacob Keller <jacob.e.keller@intel.com>
-Cc: Jiri Pirko <jiri@nvidia.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Link: https://lore.kernel.org/r/20211205192822.1741045-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: stable@vger.kernel.org
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211203075927.2829218-1-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/devlink.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/hid/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/core/devlink.c
-+++ b/net/core/devlink.c
-@@ -3265,14 +3265,6 @@ static int devlink_nl_cmd_reload(struct
- 		return err;
- 	}
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -191,7 +191,7 @@ config HID_CHERRY
  
--	if (info->attrs[DEVLINK_ATTR_NETNS_PID] ||
--	    info->attrs[DEVLINK_ATTR_NETNS_FD] ||
--	    info->attrs[DEVLINK_ATTR_NETNS_ID]) {
--		dest_net = devlink_netns_get(skb, info);
--		if (IS_ERR(dest_net))
--			return PTR_ERR(dest_net);
--	}
--
- 	if (info->attrs[DEVLINK_ATTR_RELOAD_ACTION])
- 		action = nla_get_u8(info->attrs[DEVLINK_ATTR_RELOAD_ACTION]);
- 	else
-@@ -3315,6 +3307,14 @@ static int devlink_nl_cmd_reload(struct
- 			return -EINVAL;
- 		}
- 	}
-+	if (info->attrs[DEVLINK_ATTR_NETNS_PID] ||
-+	    info->attrs[DEVLINK_ATTR_NETNS_FD] ||
-+	    info->attrs[DEVLINK_ATTR_NETNS_ID]) {
-+		dest_net = devlink_netns_get(skb, info);
-+		if (IS_ERR(dest_net))
-+			return PTR_ERR(dest_net);
-+	}
-+
- 	err = devlink_reload(devlink, dest_net, action, limit, &actions_performed, info->extack);
- 
- 	if (dest_net)
+ config HID_CHICONY
+ 	tristate "Chicony devices"
+-	depends on HID
++	depends on USB_HID
+ 	default !EXPERT
+ 	---help---
+ 	Support for Chicony Tactical pad and special keys on Chicony keyboards.
 
 

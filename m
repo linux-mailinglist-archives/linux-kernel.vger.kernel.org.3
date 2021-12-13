@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C567C472BA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340E4472BA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236285AbhLMLjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232499AbhLMLjK (ORCPT
+        id S236327AbhLMLjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:39:31 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:47080
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236292AbhLMLj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:39:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89735C061574;
-        Mon, 13 Dec 2021 03:39:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Dec 2021 06:39:28 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDCE7B80DBF;
-        Mon, 13 Dec 2021 11:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CEB9C34601;
-        Mon, 13 Dec 2021 11:39:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639395546;
-        bh=c3Ld5Zed1mPLfn+x846z5ghdQviWxfaGyoBdQ5Oni60=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oovF6hXgQDoN2rdP35jD/78rRn8LGIOGnQp0SDT/T5XQujXUvyCYIWvl0K4jTx5JZ
-         RK+/VytYvmE/wy2GAVmvzeyGpHHJp07xtXNFJOSWOD0I9ChDNqSe+LwOdipTQjlULt
-         jwXiNC40TurFRiGsn1f9bd4QdH/pEA82grVrIvVLRg7wOa29Q8kKZQ+0aIjqD8Nd7B
-         KvCT/cB3cOUETeak3sHZFAvZEW+VJ8Cw8pbY4vZBvMhbvUtyp65q+EVP3cedEmvgGB
-         kpyB2hysxsRHOsIQzrhFKDmX5aYprImBHyJLIAGi5+ZhxjsLUO6mJG+yn5j32SC4Ah
-         gsMs9mfnG5uxg==
-Received: by pali.im (Postfix)
-        id 435B47DA; Mon, 13 Dec 2021 12:39:03 +0100 (CET)
-Date:   Mon, 13 Dec 2021 12:39:03 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Adam Borowski <kilobyte@angband.pl>
-Cc:     Sean Young <sean@mess.org>, Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Incorrect handling of . and .. files
-Message-ID: <20211213113903.bkspqw2qlpct3uxr@pali>
-References: <20210927111948.GA16257@gofer.mess.org>
- <20211211020453.mkuzumgpnignsuri@pali>
- <YbbskNBJI8Ak1Vl/@angband.pl>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 05CE33F175
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639395567;
+        bh=KylFWhwXr7f8U5vfUNkHsHS6aLRbPvrnv2I4vw8dDyE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=AKFpYwgBcvU6JsRumaVsy4k3vawuGtr5PgxKkGdT/YENTdGrT98wkO+5rT/+TwmVI
+         1v/Vgn8LYR2YwL39CaGuPhX7RaoqVFABbrlZPue8uEU6jMUDzityVIf1NIHJsYDqXa
+         cBUrV0mDunp5tCdy2hDTwx/pWqrqqX9UGRytDvQk8hs6W/V1DCmqbHobEmv09oHnMy
+         INELTSBj0oX2Ahu8LVlnaiYKAGIpnkDze22GF+ihCOJylULcCUpRZWDmEoptlFD5wL
+         cjMFbs96TM9kljaHNmXfUSe5WNZLECBOKSTJ6V1eytDQK8TX/8w1i+8l3wePJ2JHNU
+         ALwjwS0Sg49Cw==
+Received: by mail-lf1-f70.google.com with SMTP id e5-20020ac25ca5000000b0041bf2d8f2e1so7376675lfq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:39:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KylFWhwXr7f8U5vfUNkHsHS6aLRbPvrnv2I4vw8dDyE=;
+        b=L6bojuZoLixw7Zs18ZbQzsmSVdxZ7iIrQJxgmNUcOZPZ4LxxPuS+p+wtqmsN4wFSZt
+         h7i6FlmsFn0VP8kYD/EvfLQO57rKkAxgxdJgD/n35iHaX/uw3gJq2/HkiWBf9mJ0IVtZ
+         mEgoTmtUvH3Qmmpa8dWnZ/mf4ApAT8QcelX4DCgdUKXFSIkAM/HpPXsb3fDBpywrQpm+
+         4iJrHXu1ZizYpQaKctHD1FGfRQxhWjWj/0LKlm/eIgLUaHQ3XeBIIAat7h4W0Sgh6RmR
+         ihQ0TEg+zInf99kT0b9FIkej1XCatwXRzbA9OshKWcy0kXVMk9TyQMsB37ShMZGASyuZ
+         sy7w==
+X-Gm-Message-State: AOAM532HPbXefLExFQdZmGpB8octfUEynHpjW77Pb9LWO7vy1MTD26z1
+        neJG4Nm4lYftzPwARCZTmK3uFPpd+b180IOmpc6fmXczF/ptXj2v9B+E3BffbgzXgpT7d8MCuBf
+        N0sLIBPp5AQq5iyX8MaoBV1K7ultLkJCYuX9rN2T5VA==
+X-Received: by 2002:a05:6512:3d09:: with SMTP id d9mr29704509lfv.481.1639395566535;
+        Mon, 13 Dec 2021 03:39:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyMDwS3UVx1tzJXGjwPvVGUvSyOkIaeaGrkDixoDzMSC898Xum7q6HTEqxsQYuAixVEDjnS9A==
+X-Received: by 2002:a05:6512:3d09:: with SMTP id d9mr29704491lfv.481.1639395566369;
+        Mon, 13 Dec 2021 03:39:26 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id v19sm1433603ljg.8.2021.12.13.03.39.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 03:39:25 -0800 (PST)
+Message-ID: <fbadbd75-ac68-fa06-9303-76892567d179@canonical.com>
+Date:   Mon, 13 Dec 2021 12:39:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YbbskNBJI8Ak1Vl/@angband.pl>
-User-Agent: NeoMutt/20180716
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 5/5] tty: serial: samsung: Fix console registration
+ from module
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20211204195757.8600-1-semen.protsenko@linaro.org>
+ <20211204195757.8600-6-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211204195757.8600-6-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 13 December 2021 07:47:44 Adam Borowski wrote:
-> On Sat, Dec 11, 2021 at 03:04:53AM +0100, Pali Rohár wrote:
-> > I tried to find some information what is allowed and what not.
-> > 
-> > On Monday 27 September 2021 12:19:48 Sean Young wrote:
-> > > Windows allows files and directories called "." and ".." to be created
-> > > using UNC paths, i.e. "\\?\D:\..". Now this is totally insane behaviour,
-> > > but when an exfat filesytem with such a file is mounted on Linux, those
-> > > files show up as another directory and its contents is inaccessible.
-> > > 
-> > > I can replicate this using exfat filesystems, but not ntfs.
-> > 
-> > Microsoft exFAT specification explicitly disallow "." and "..", see:
-> [...]
-> > On the other hand Microsoft FAT32 specification can be understood that
-> > file may have long name (vfat) set to "." or ".." but not short name.
-> [...]
-> > OSTA UDF 2.60 specification does not disallow "." and ".." entries, but
-> [...]
-> > So it means that "." and ".." entries could be stored on disk as valid
-> > file names.
+On 04/12/2021 20:57, Sam Protsenko wrote:
+> On modern Exynos SoCs (like Exynos850) the UART can be implemented as a
+> part of USI IP-core. In such case, USI driver is used to initialize USI
+> registers, and it also calls of_platform_populate() to instantiate all
+> sub-nodes (e.g. serial node) of USI node. When serial driver is
+> built-in, but USI driver is a module, and CONFIG_SERIAL_SAMSUNG_CONSOLE
+> is enabled, next call chain will happen when loading USI module from
+> user space:
 > 
-> It doesn't matter one whit what the specification says.  Anyone with a disk
-> editor can craft a filesystem containing filenames such as "." or "..", "/"
-> "foo/bar" or anything else we would like to ban.
-
-That is truth. But question is what should do fsck tools with such file
-names on filesystems where "." and ".." are permitted? Fully valid
-argument is "do not touch them" because there is nothing bad with these
-names.
-
-> > > So, in Linux cannot read "." or ".." (i.e., I can't see "Hello, World!"). I
-> > > don't know what the correct handling should be, but having two "." and two
-> > > ".." files does not seem right at all.
-> > 
-> > This is really a bug in Linux kernel. It should not export "." and ".."
-> > into VFS even when filesystem disk format supports such insane file
-> > names.
+>     usi_init
+>       v
+>     usi_probe
+>       v
+>     of_platform_populate
+>       v
+>     s3c24xx_serial_probe
+>       v
+>     uart_add_one_port
+>       v
+>     uart_configure_port
+>       v
+>     register_console
+>       v
+>     try_enable_new_console
+>       v
+>     s3c24xx_serial_console_setup
 > 
-> This.
+> But because the serial driver is built-in, and
+> s3c24xx_serial_console_setup() is marked with __init keyword, that
+> symbol will discarded and long gone by that time already, causing failed
+> paging request.
 > 
-> Otherwise, every filesystem driver would need to contain redundant code for
-> checking for such bad names.
+> That happens during the next config combination:
 > 
-> > So either Linux needs to completely hide these insane file names from
-> > VFS or translate them to something which do not conflict with other
-> > files in correct directory.
+>     EXYNOS_USI=m
+>     SERIAL_SAMSUNG=y
+>     SERIAL_SAMSUNG_CONSOLE=y
 > 
-> Escaping bad names has the problem of the escaped name also possibly
-> existing -- perhaps even recursively.  Plus, the filesystem might be using
-> hashed or tree indices which could go wrong if a name is altered.
-
-vfat has already own escaping scheme and it is documented in mount(8)
-manpage. Invalid characters are translated either to fixed char '?' or
-to ':'... esc sequence if uni_xlate mount option is used. But it looks
-like that that kernel vfat driver do not have these two entries "." and
-".." in its blacklist.
-
-And, another important thing about vfat is that it has two file names
-for each file. One short 8.3 and one long vfat. Short 8.3 do not allow
-"." or "..", so another possibility how to handle this issue for vfat is
-to show short 8.3 name in VFS when long is invalid.
-
-For UDF case, specification already says how to handle problematic
-file names, so I think that udf.ko could implement it according to
-specification.
-
-But for all other filesystems it is needed to do something ideally on
-VFS layer.
-
-What about generating some deterministic / predicable file names which
-will not conflict with other file names in current directory for these
-problematic files?
-
-> But then, I once proposed (and I'm pondering reviving) a ban for characters
-> \x01..\x1f and possibly others, and if banned, they can still legitimately
-> occur in old filesystems.
+> That config should be completely possible, so rather than limiting
+> SERIAL_SAMSUNG choice to "m" only when USI=m, remove __init keyword for
+> all affected functions.
 > 
-> > I guess that hiding them for exfat is valid thing as Microsoft
-> > specification explicitly disallow them. Probably fsck.exfat can be teach
-> > to rename these files and/or put them to lost+found directory.
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+> Changes in v3:
+>   - (none)
 > 
-> fsck fixing those is a good thing but we still need to handle them at
-> runtime.
-
-Namjae Jeon, would you be able to implement fixing of such filenames in
-fsck.exfat tool?
-
+> Changes in v2:
+>   - This patch is added in v2
 > 
-> Meow!
-> -- 
-> ⢀⣴⠾⠻⢶⣦⠀
-> ⣾⠁⢠⠒⠀⣿⡁ in the beginning was the boot and root floppies and they were good.
-> ⢿⡄⠘⠷⠚⠋⠀                                       -- <willmore> on #linux-sunxi
-> ⠈⠳⣄⠀⠀⠀⠀
+>  drivers/tty/serial/samsung_tty.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

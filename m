@@ -2,138 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D009E472236
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F61472238
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbhLMIQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:16:38 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:58586 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbhLMIQh (ORCPT
+        id S232696AbhLMIQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:16:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20722 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229483AbhLMIQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:16:37 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AE9C2210FE;
-        Mon, 13 Dec 2021 08:16:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639383396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 13 Dec 2021 03:16:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639383411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=FLRLtv4IRxfHgr0wbdouUbBaPowwy6AH8eiPZToUe/Q=;
-        b=1bI4moOfQb2K9Aj0ZCEOPXWcYPGOstJtT/V8Lvo0SwLbzkwT4wGStTR+0pGXoZYJFwveKj
-        Mg901XsS4+tZKrVOe8Sdm3tVVlp7pJ2L1PUeYCb/R2jB1sT1N0pOVlJHplzxSRKGMc1EyI
-        kVz0H4fL9TToxalxEZ4CFZksZRUgSkA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639383396;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FLRLtv4IRxfHgr0wbdouUbBaPowwy6AH8eiPZToUe/Q=;
-        b=0uNUrJvtIjJiT/+OrGuhvitb/8c91gFQ0s5kvVZvy3kL6T+gZ+sW4dPMldjM7oCZlf8HpX
-        sbs1GTveLuYaKgAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=+tHNmWsXHqcSXz+1QchJ4aeYMeCytpwxeNZBwI7ZNEo=;
+        b=BKS9EP/kQ/JhVeGh+PcwmaH6opleEUJXpBiilpB6K4ZSyOn6ox1fZJgIGvwPiah/G8ygXT
+        EC7+jJymd2orHGzqVtpLdmHuAz9mYt6AbYYzqEVrhPjH00adyYcHGQa04YHXYLYECKs707
+        mWrgT432EEIQCMYo7fziXbSvHNbsVa8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-216-asbEdHcYM4K4ceBLiPHPCA-1; Mon, 13 Dec 2021 03:16:48 -0500
+X-MC-Unique: asbEdHcYM4K4ceBLiPHPCA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7DD4713310;
-        Mon, 13 Dec 2021 08:16:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id K+6XHWQBt2EIAwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 13 Dec 2021 08:16:36 +0000
-Message-ID: <251204bb-18f6-36cb-377a-557135633318@suse.de>
-Date:   Mon, 13 Dec 2021 09:16:35 +0100
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 16627101F000;
+        Mon, 13 Dec 2021 08:16:46 +0000 (UTC)
+Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 511EA18032;
+        Mon, 13 Dec 2021 08:16:43 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 16:16:41 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, robin.murphy@arm.com, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        vbabka@suse.cz, m.szyprowski@samsung.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org
+Subject: Re: [PATCH RESEND v2 2/5] dma-pool: allow user to disable atomic pool
+Message-ID: <20211213081641.GB29905@MiWiFi-R3L-srv>
+References: <20211207030750.30824-1-bhe@redhat.com>
+ <20211207030750.30824-3-bhe@redhat.com>
+ <20211213074404.GA20758@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
-Cc:     devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20211212062407.138309-1-marcan@marcan.st>
- <20211212062407.138309-2-marcan@marcan.st>
- <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------PH0T7yAtYZIRqUago0AulNh3"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213074404.GA20758@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------PH0T7yAtYZIRqUago0AulNh3
-Content-Type: multipart/mixed; boundary="------------8JKj2L3nlW7eEFLPxADymROa";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>
-Cc: devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Hans de Goede <hdegoede@redhat.com>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- Javier Martinez Canillas <javier@dowhile0.org>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Message-ID: <251204bb-18f6-36cb-377a-557135633318@suse.de>
-Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-References: <20211212062407.138309-1-marcan@marcan.st>
- <20211212062407.138309-2-marcan@marcan.st>
- <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+0=3V7noGbK2-h+yXeCPZ4QMXVroWvTTL5u7i22ibc6w@mail.gmail.com>
+On 12/13/21 at 08:44am, Christoph Hellwig wrote:
+> On Tue, Dec 07, 2021 at 11:07:47AM +0800, Baoquan He wrote:
+> > In the current code, three atomic memory pools are always created,
+> > atomic_pool_kernel|dma|dma32, even though 'coherent_pool=0' is
+> > specified in kernel command line. In fact, atomic pool is only
+> > necessary when CONFIG_DMA_DIRECT_REMAP=y or mem_encrypt_active=y
+> > which are needed on few ARCHes.
+> 
+> And only these select the atomic pool, so it won't get created otherwise.
+> What problem are you trying to solve?
 
---------------8JKj2L3nlW7eEFLPxADymROa
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This tries to make "coherent_pool=0" behave normally. As you see,
+'coherent_pool=0' will behave like no 'coherent_pool' being specified.
+This is not consistent with other similar kernel parameter, e.g cma=.
 
-SGkNCg0KQW0gMTIuMTIuMjEgdW0gMjI6Mjkgc2NocmllYiBSb2IgSGVycmluZzoNCj4gT24g
-U3VuLCBEZWMgMTIsIDIwMjEgYXQgMTI6MjQgQU0gSGVjdG9yIE1hcnRpbiA8bWFyY2FuQG1h
-cmNhbi5zdD4gd3JvdGU6DQo+Pg0KPj4gVGhpcyBjb2RlIGlzIHJlcXVpcmVkIGZvciBib3Ro
-IHNpbXBsZWZiIGFuZCBzaW1wbGVkcm0sIHNvIGxldCdzIG1vdmUgaXQNCj4+IGludG8gdGhl
-IE9GIGNvcmUgaW5zdGVhZCBvZiBoYXZpbmcgaXQgYXMgYW4gYWQtaG9jIGluaXRjYWxsIGlu
-IHRoZQ0KPj4gZHJpdmVycy4NCj4+DQo+PiBBY2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4g
-PHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+PiBTaWduZWQtb2ZmLWJ5OiBIZWN0b3IgTWFydGlu
-IDxtYXJjYW5AbWFyY2FuLnN0Pg0KPj4gLS0tDQo+PiAgIGRyaXZlcnMvb2YvcGxhdGZvcm0u
-YyAgICAgICAgICB8ICA0ICsrKysNCj4+ICAgZHJpdmVycy92aWRlby9mYmRldi9zaW1wbGVm
-Yi5jIHwgMjEgKy0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+PiAgIDIgZmlsZXMgY2hhbmdlZCwg
-NSBpbnNlcnRpb25zKCspLCAyMCBkZWxldGlvbnMoLSkNCj4gDQo+IFJldmlld2VkLWJ5OiBS
-b2IgSGVycmluZyA8cm9iaEBrZXJuZWwub3JnPg0KPiANCg0KQ2FuIEkgbWVyZ2UgdGhpcyBw
-YXRjaCB0aHJvdWdoIERSTSB0cmVlcz8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KLS0g
-DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
-b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBO
-w7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6Rm
-dHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+At the beginning, I planned to add a knob to allow user to disable one
+or all atomic pool. Later I changed. However I think this patch makes
+sense on fixing the a little bizarre behaviour, 'coherent_pool=0' but
+still get atomic pool created.
 
---------------8JKj2L3nlW7eEFLPxADymROa--
+I can drop it if you think it's unnecessary.
 
---------------PH0T7yAtYZIRqUago0AulNh3
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG3AWMFAwAAAAAACgkQlh/E3EQov+By
-RQ/+JFh+782OTUmNJbLISJ9izCWVpP06NbUEH2w806+rRYv+wmEGnZ4oqoNt5S0EAOVJQUfuFQob
-41AzRDhI5oW5hcXBRYZ87GhslQRTv8Y8AkZ9x+IlBSwUh9H5Y9XYQb6FdxH4GP8GZ0lviIWYsBzM
-Hf8XwY6NJbMkNtiQJS5iE8O4THh1EhCy3ISFVMEdnfjgc+j+G4vvWy1MFfxOXEyz+DwYVvc09tW+
-26afW4P1MFPJP52Z3lPS6Qzch5Ky0Rw7MeiC2rb+OdR3zvaOYXsPbALEO4IdcM8pKr5c5U8vJGCA
-aHwETL1ZjbxRVFwhWifg2tTbJkaVz5K2+MeVOGp7BlJiKjwqsveTyS0pW5jY35lDVt6Mv1CGuB1B
-IC4Aukhp/bcTGUWEBDgT4RWk3VU9IWEGU4xZueVLlx46/WEEDd3ayy8cmfz3lbv1O3w34jkV1M0w
-Uit6BrTjLn7w26kflVUUW/JPBA57JT4Bv+vTVSVNcxbhnRcFjJjNyN3zPM5gnRaVFcexig/ZkoxB
-POs5LB0biAYnWJ/5qa48hshZWUHDiL0Ajn7bfd4bh8i2dqVI16axtIH3Ho3kpfr55y19Qw+klOXb
-nYXHwi0hIGHrngkjvGrQkEtKtYrqq6emH+Nurx1GC+hxRNunaTMpXca5+hQLf+m9UBhdURgDEick
-OT8=
-=pKie
------END PGP SIGNATURE-----
-
---------------PH0T7yAtYZIRqUago0AulNh3--

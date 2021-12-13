@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45256473628
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B29A47362F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243000AbhLMUk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
+        id S243013AbhLMUl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242303AbhLMUkZ (ORCPT
+        with ESMTP id S237707AbhLMUlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:40:25 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C03C061574;
-        Mon, 13 Dec 2021 12:40:25 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id x131so15940582pfc.12;
-        Mon, 13 Dec 2021 12:40:25 -0800 (PST)
+        Mon, 13 Dec 2021 15:41:25 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77508C061574;
+        Mon, 13 Dec 2021 12:41:25 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id z6so12027464plk.6;
+        Mon, 13 Dec 2021 12:41:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3JBisSlC8A8dHMAJp3+1oo1A3553PhksPDuIiS7h0ZI=;
-        b=E16o/cNRYQYx2zRYpqz9Jzo1DFZ/GU+E7nT9gldMgDfB9F1huOiM94PHzjpWXXc3cU
-         2UUXeafbxxJz/Jd//Pesl2Eg7EVvFDkCkAFC64u8ObXAuGQ8+JStDOkIhWHrfTnaKYP8
-         pt5yyGTzGJ6PMMkuNtPIIg2Fpe73Cw5zfbb9pYrZmWLYWUcLzi1+Mu2GW01a0YSZTzYB
-         uq7EKrnNWNudOv/lIvAEfVd2l/lq4SWdIbOvchKUtoUObZ7oJRumi0Xy7BxBIeIDkZQa
-         eM1dmO/t7m5VuIHFDfXG7Q4ivLDQDoLEdsMHcRMwwfUsPQkjug/OQRg0enfBVNQlZQsr
-         Lj6Q==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=14Dwn7cQaB5yg3QXXz3HOGmIXUCfHUTFsdjkk6DpI/c=;
+        b=HkXX2ZRDeFERmYakQz3KxfITmvUHxXbei6EVsg1xNl4SMDx7tdEX0sCbfY1vGo2MLx
+         DB0K2/jcwikKcwcqxysyKs5c5/lGgUAv6xj0WDjU8Vs0WaVla4CxoB44BAVRWoZSQV7+
+         7ZTFRBRx9WkLFtjaGKX5TMFC9obf/haau0n9Pwc7ymvBF5H3g1w/Eyh2ggT55jOuxJ94
+         4AP6ggzko6rlYfv/w9IUjj9vjzj3pxWTUgOMHcRH8ICyvsvSCgwgntn78RwLo92lZMso
+         /a5cJXMA1OIh0QVxvgQPxvB3CJNFlhbcUWIP6N8zCZBlhtbgNxy3m2DUjIiBr4qU95rU
+         VLZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3JBisSlC8A8dHMAJp3+1oo1A3553PhksPDuIiS7h0ZI=;
-        b=H7vBCLobipt6EzqnkxMDkoiRBhWupKhCju7acLoPbAWLpqau1TUJIUwbrD5m8XP3XY
-         YLqf0eZk14T+FZ5lSn0/NKRI5A7WnvMGaSQ9Ylau8c4HuoUd1QxfMyc3PoGYd2Nv5pYd
-         pbJi1jL49Q5Nh/2HBVb7P6zbCpb9i5XHQaVsOjGqTkojOVHevlj+LJaNCQbWKx8ImKr9
-         /0OYa5Nik/YHeppb4xZ9Hb+mp1H/iDgeSNljiBWjtC4rpvlZmdIPjvg97eC6R83S7GDC
-         OsylEqaz9CJRWgma4HrTpjLYrjJsEuvCIU9p2vu691jOs0aDgQ4ZmvarDF7bQv1PgGAl
-         gLhQ==
-X-Gm-Message-State: AOAM533yRWBGVywEZ//tPaa1Y2nV3mC1Q+gtbKZhvzpACWD9EEOLLsz5
-        ZyEu2R1rt9wwex++ljp+wh3l7q4b3VM=
-X-Google-Smtp-Source: ABdhPJyIin8oDE3HG9Jjmua1Q/HbDfCLSvXZmGPJMOcX1xXw6k6i3zZ2OKOhwdDpY4vThiaolf+tUg==
-X-Received: by 2002:a05:6a00:1412:b0:4a7:ec46:29d1 with SMTP id l18-20020a056a00141200b004a7ec4629d1mr531245pfu.16.1639428024530;
-        Mon, 13 Dec 2021 12:40:24 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k8sm13811924pfc.197.2021.12.13.12.40.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 12:40:23 -0800 (PST)
-Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20211213092939.074326017@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <9c04413d-79b9-4ff2-cb2e-2703fbb434e7@gmail.com>
-Date:   Mon, 13 Dec 2021 12:40:21 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=14Dwn7cQaB5yg3QXXz3HOGmIXUCfHUTFsdjkk6DpI/c=;
+        b=WpLdJtSRAQjoT9sdudZz94eJVxHRebN5qWLd6u12K7zys/VUsD46aHc6Oo0thVK/l3
+         lZQCyRHW5W5bF3EbpP+t0Y/ahSODD9/aXi7IPp4++dnI6oJjhAyplADuBFyUstcOaamL
+         BxNyF7AZEVjjD0zJFoPmcZHljktDHwrBirsQY7JFVCSm09hP8zUbAdEi5JrG2T6e57MP
+         djPygtuTK9EjkX2XfHn4KlgFY3Y25CZu9gIKvKRtMC+wpm0bAtSwnfLD/AephyBXXnwA
+         xj9t0I4xFK9D0qbt+qQp5z0cQBvXFIUlCMbCn4KDnk5Y49MjpbUgYHfPPoYldM0ZXhFA
+         ihnw==
+X-Gm-Message-State: AOAM532O0efa/j1BoqJLzC9BeeFzBj+bjHs2bmqF7glJ1stRBWSnO+X1
+        a/MqU5O2S10NPnsqQQanw/I=
+X-Google-Smtp-Source: ABdhPJy8K6EIplh8EZHrI+8BVeJCnrDh44AuB2PYcVwdhy1z5gnnuaZtDOTyVmxK5UMQ+pGeR0zO+g==
+X-Received: by 2002:a17:902:a40e:b0:143:ca72:be9d with SMTP id p14-20020a170902a40e00b00143ca72be9dmr795707plq.67.1639428084873;
+        Mon, 13 Dec 2021 12:41:24 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id m14sm11908643pfh.71.2021.12.13.12.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 12:41:24 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 13 Dec 2021 10:41:23 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v9 1/7] cgroup/cpuset: Don't let child cpusets restrict
+ parent in default hierarchy
+Message-ID: <Ybev80+h4JArgMDz@slm.duckdns.org>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-2-longman@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211205183220.818872-2-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 1:29 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.85 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, Dec 05, 2021 at 01:32:14PM -0500, Waiman Long wrote:
+> In validate_change(), there is a check since v2.6.12 to make sure that
+> each of the child cpusets must be a subset of a parent cpuset.  IOW, it
+> allows child cpusets to restrict what changes can be made to a parent's
+> "cpuset.cpus". This actually violates one of the core principles of the
+> default hierarchy where a cgroup higher up in the hierarchy should be
+> able to change configuration however it sees fit as deligation breaks
+> down otherwise.
 > 
-> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> Anything received after that time might be too late.
+> To address this issue, the check is now removed for the default hierarchy
+> to free parent cpusets from being restricted by child cpusets. The
+> check will still apply for legacy hierarchy.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.85-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Suggested-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Applied to cgroup/for-5.17.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Thanks.
+
 -- 
-Florian
+tejun

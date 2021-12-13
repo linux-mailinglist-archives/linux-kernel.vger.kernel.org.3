@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD607472803
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCA247267B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242078AbhLMKHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:07:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45350 "EHLO
+        id S238229AbhLMJwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:52:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58590 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbhLMJ7D (ORCPT
+        with ESMTP id S235687AbhLMJpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:59:03 -0500
+        Mon, 13 Dec 2021 04:45:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AE3FB80E19;
-        Mon, 13 Dec 2021 09:59:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45940C34600;
-        Mon, 13 Dec 2021 09:59:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B560B80E1B;
+        Mon, 13 Dec 2021 09:45:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D02C00446;
+        Mon, 13 Dec 2021 09:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389540;
-        bh=BsTAnJceb6nl69zlrAqXY2nKun49rSGHx6DmPhVI1xY=;
+        s=korg; t=1639388701;
+        bh=O1PGDriwSHEBuP3uf4Ecckevvwq7N6/cAK0xB98i31o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KMu7KgPzDwFyQSLDydMpkF6jJafHlFrSdOtA7vPI46rtUKz5cqc3WYUk/ZfmueWCI
-         KPKyfe81wwoc2LnY3iyQsjtO+4tqVVtbwWMS4i6xB4xHR+Y/Bj3RUNCcpEjPBgiwxR
-         OB2IXz8i5iaZoOWQD8xLLolq+zCzf9PUIGiR8HFA=
+        b=koGVWLttyRs+H9/fDqwwrtpGJooNjo9RaTShGusLN1hXMpdJ4NkKBG2CSaEr4pZrd
+         qx40B3uRFQfthKBqvD98Xgnnarxwbs2fasYEhPIxsX1AknovlzFxm5vhRkZRdde6vK
+         XGdhQmiXTwu5nJUJUKBat2q0NSZRvvvCSoe35vxk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>,
-        Norbert Zulinski <norbertx.zulinski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Gurucharan G <gurucharanx.g@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 123/171] i40e: Fix NULL pointer dereference in i40e_dbg_dump_desc
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH 5.4 68/88] usb: core: config: using bit mask instead of individual bits
 Date:   Mon, 13 Dec 2021 10:30:38 +0100
-Message-Id: <20211213092949.198364277@linuxfoundation.org>
+Message-Id: <20211213092935.608342009@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,43 +45,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Norbert Zulinski <norbertx.zulinski@intel.com>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
 
-commit 23ec111bf3549aae37140330c31a16abfc172421 upstream.
+commit ca5737396927afd4d57b133fd2874bbcf3421cdb upstream.
 
-When trying to dump VFs VSI RX/TX descriptors
-using debugfs there was a crash
-due to NULL pointer dereference in i40e_dbg_dump_desc.
-Added a check to i40e_dbg_dump_desc that checks if
-VSI type is correct for dumping RX/TX descriptors.
+Using standard USB_EP_MAXP_MULT_MASK instead of individual bits for
+extracting multiple-transactions bits from wMaxPacketSize value.
 
-Fixes: 02e9c290814c ("i40e: debugfs interface")
-Signed-off-by: Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
-Signed-off-by: Norbert Zulinski <norbertx.zulinski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Link: https://lore.kernel.org/r/20211210085219.16796-2-pavel.hofman@ivitera.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_debugfs.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/usb/core/config.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_debugfs.c
-@@ -553,6 +553,14 @@ static void i40e_dbg_dump_desc(int cnt,
- 		dev_info(&pf->pdev->dev, "vsi %d not found\n", vsi_seid);
- 		return;
- 	}
-+	if (vsi->type != I40E_VSI_MAIN &&
-+	    vsi->type != I40E_VSI_FDIR &&
-+	    vsi->type != I40E_VSI_VMDQ2) {
-+		dev_info(&pf->pdev->dev,
-+			 "vsi %d type %d descriptor rings not available\n",
-+			 vsi_seid, vsi->type);
-+		return;
-+	}
- 	if (type == RING_TYPE_XDP && !i40e_enabled_xdp_vsi(vsi)) {
- 		dev_info(&pf->pdev->dev, "XDP not enabled on VSI %d\n", vsi_seid);
- 		return;
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -425,9 +425,9 @@ static int usb_parse_endpoint(struct dev
+ 		maxpacket_maxes = full_speed_maxpacket_maxes;
+ 		break;
+ 	case USB_SPEED_HIGH:
+-		/* Bits 12..11 are allowed only for HS periodic endpoints */
++		/* Multiple-transactions bits are allowed only for HS periodic endpoints */
+ 		if (usb_endpoint_xfer_int(d) || usb_endpoint_xfer_isoc(d)) {
+-			i = maxp & (BIT(12) | BIT(11));
++			i = maxp & USB_EP_MAXP_MULT_MASK;
+ 			maxp &= ~i;
+ 		}
+ 		/* fallthrough */
 
 

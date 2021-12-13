@@ -2,175 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD7B472DA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7727472DAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237790AbhLMNn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:43:28 -0500
-Received: from mail-am6eur05on2071.outbound.protection.outlook.com ([40.107.22.71]:57924
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231224AbhLMNn1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:43:27 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eVAYBcrDMC8YYDFWSVGQ2K7zor+oIyFFBI+hQnTCTLbW5jkh4f4SNyCmWlMTFfrwRHu0YWfaXY5848Hon05icspts4zRsNi9PD7lvVtuQiR6/1U580JmI4kr73ebw4bWnXWRm2uMBvM1WsAczLs1eNb3kij7qtRLIxZVvFHK9mTLoExGEvuVo7AJ3B1a1fs7LAlxTWFA39WZFEmBQEdGC0PKI0GUhrNxLzPW7Ka4N7+lWxx+Vl8EHgdEGr/PTKRDNUpe/NBQNrcKfvAG+DjnqHJpUM7r7bdOA8USq6dgwH6TtR4DS8WfCthVsncMbzO4EIP1Wd0bEWo7c3tv2ZSd9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6fllGMTV2A8FzoBbgfb0wJ57Q+u0QlV80Ok4JUebmwY=;
- b=YdkPWOzd2xpeoI7yITmET6fmzAgT3VhqqSs8/e/rEa7kXRO1ktnQEUa89vxmN6ZbGFw9JhrtM8lOtBzymo4WgFUp3tGaYiLPZP52K7uFwaX2eQVxCEsvV3DMYmE2mJxZAKIODedo/rG70GIDBC6H/YVBc/x0RNtSdvlreBw+eBxH+V65vnISBWL/+p2f4y2dr5eirZV1HjIaASPEg75YzudL2mXZyz/HMChpmFJ/T4U+DYuurfCjiENrWt39PCJOQY6b6Cmkzn0wRGr3oHsSCWD0ppNYD/gi/Ba4lJAHl4EapnoczDthzj4RpXlrxuZJlq/sE/WBNCojgw2czeXz5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6fllGMTV2A8FzoBbgfb0wJ57Q+u0QlV80Ok4JUebmwY=;
- b=W2Rx1fy7r6ofKdjYkpmX6SdFAkTsSTYUZ//c1LcI8WKc+64BOrak8NbgJc2VcpZYlwhDNQ8jtKg8ltcoyCBAWXDqEf4X2k0FmpjjLEzBmlqV129N8ZgmNZKOMORRFLaALW6z7O7Heoc4UPZ97WOp32Z1zEG2Jcz6w7AgRdSuARQ=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VI1PR04MB4222.eurprd04.prod.outlook.com (2603:10a6:803:46::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
- 2021 13:43:20 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::c84:1f0b:cc79:9226]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::c84:1f0b:cc79:9226%3]) with mapi id 15.20.4755.028; Mon, 13 Dec 2021
- 13:43:20 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>
-Subject: Re: [PATCH net-next v3 6/6] net: lan966x: Add switchdev support
-Thread-Topic: [PATCH net-next v3 6/6] net: lan966x: Add switchdev support
-Thread-Index: AQHX7OGqma9W7JTLPke3A5iwt0gyh6wqKbcAgAA0OYCABd/MgIAAN0eA
-Date:   Mon, 13 Dec 2021 13:43:20 +0000
-Message-ID: <20211213134319.dp6b3or24pl3p4en@skbuf>
-References: <20211209094615.329379-1-horatiu.vultur@microchip.com>
- <20211209094615.329379-7-horatiu.vultur@microchip.com>
- <20211209133616.2kii2xfz5rioii4o@skbuf>
- <20211209164311.agnofh275znn5t5c@soft-dev3-1.localhost>
- <20211213102529.tzdvekwwngo4zgex@soft-dev3-1.localhost>
-In-Reply-To: <20211213102529.tzdvekwwngo4zgex@soft-dev3-1.localhost>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6b687a6e-5745-4194-7728-08d9be3e8690
-x-ms-traffictypediagnostic: VI1PR04MB4222:EE_
-x-microsoft-antispam-prvs: <VI1PR04MB4222345254A197F42A376142E0749@VI1PR04MB4222.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lhKQPQfAdCBk9J3+NZYY8C6lLiJ8S9axeRv04fj+lmSk32i0YYx/j1lf7dhFgHeUW+uIVlzSHQftQ63Zar/PxhuUjLeeZXieiICKAbHSCI4vd+LxErVKWROb3aCanKVMJ93VZ9d0lsTD/bC8IJ9SaljbG/jdRa9E2P+W9GUjqJDi5DC9p2rK2UDgOwMvaZY1TNwoeJ+gDyPFYRGzhYcpPRnJIpFNyEZRwx5jLHgoVrNOOTGw0DQfYeWesi74Y4C/kSnhcmKR0g5BDQzWWGjKtAUZqU2z2x6R3IQb/dNDQa3I86qJrUolAvIbZLUeacb2ameY3+6H1NnKET2DfkVp6Gm5geVJXj8Edj8v3DzS7nPB+u9PGwIv3GHw//O1lFJR9STNEPP4JSNxd9rXTVNGZFQ1dkZva0ex1IGKzx6jGTjDcMXAX33XFOS5Waxpeg5gplaNuClUbjaDI360lvo7X1xl295C7d9DaoAUO4SyQBGl+cT2iKAe6o0WOadWeqdEWfvHqyZuwTlwR5sTva6WorBnDLuP53eqG6v/b9WV9DH9wN1b3C1K53tb/7Rd4jOTYhfExYlL+YZ/3c2KrDUkvufWyPJaFTqYX+2fq1H5ElM4wb/kNQHpzDj9CZFffbJAzqWMDvpANk3YgT3ZyzBQWQ/3UL78GdsV5jsebrrB1TtFIrV0BsxM5UDaMG6uFc2p8DgsWVq8TEfO3QC+pU2Zog==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(6486002)(9686003)(26005)(4326008)(316002)(8676002)(7416002)(38070700005)(6512007)(1076003)(186003)(6916009)(508600001)(2906002)(83380400001)(33716001)(8936002)(44832011)(5660300002)(76116006)(122000001)(66476007)(91956017)(66946007)(71200400001)(54906003)(66556008)(6506007)(86362001)(64756008)(38100700002)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zW4cU+dct4q4uKZapO354cP2mI/j/WbPFcR+sbIHDO6lzaaDANeK0w+p6X9T?=
- =?us-ascii?Q?G1ZyKQkJKFW1yKVrzXHZCrUMr1CbnWZqb/8hz7+Bw8K7uFs46VMFqVZapxC7?=
- =?us-ascii?Q?embPpTdBhQi/LXPKjlxrTl7VJQsnScksIGXsTykHCBP+QNY0wjS5kXuE53mr?=
- =?us-ascii?Q?5MbWsOv2JagqoAF6PlwARcxxp00DcrAqg1t/RhxIE8fvMtbozZ8cTBb7QN9/?=
- =?us-ascii?Q?X+OlgqpgR0e80YJ9GA1cPbctx9yrdynKRqwprbqOMedciJ6ft/8LX3E4H5Yr?=
- =?us-ascii?Q?2EY7hqy34GOSXw/O68bneDHpa4blNiVkgbUF4LELmK+erGRKzMYP8GUyfqNg?=
- =?us-ascii?Q?F7ceBH23tAyN1+VUCdyQLL2fn6dXnRrSEXsFdHNRYS+go1d0GC/uuyuObS0Q?=
- =?us-ascii?Q?qsGSNM2Jn8iL4uzXZ/NusYdGuOfC314EHNtuCsPCbgzICD4HRi0mdZE9AtlX?=
- =?us-ascii?Q?HfEvgAcV55JHpE1QbbvpgDguGnWPoF7rIvla1o7wh69fkJd7bD4ZJ6oCpcpe?=
- =?us-ascii?Q?P0+A8mzy4QmzcqYO1inpKQNZSYaBTUfROiDSJxdxYEbToejCdAi8hwH73IkS?=
- =?us-ascii?Q?KZ0Vnp2tqs0qlQDWWeXIYkikWmMQT6iWaUj6DPXmE5epptEIYx7z3Bhkr1CT?=
- =?us-ascii?Q?Stuuzkm+y2Hb0wU69D3uafk5woJwsvv3w1katp0YVa1B1yp6ePb42wSS+tZ3?=
- =?us-ascii?Q?6FgGAfVC6nwkr0Uce5J6sKkB9VEROA60kbmOwfw2a8ogTvkPSopyWbyPizRk?=
- =?us-ascii?Q?jkuxyJtA1ZjV0BB6bbMrxDLX7lzruI6P/SvJCfp19DepqmWgj0imbQ3lX0VC?=
- =?us-ascii?Q?3RQv+vpcI2wRAZfB0jxLVwUxjMZ0tOutbrQWlRqG6KKtEUYpsCcMGeYq0fsL?=
- =?us-ascii?Q?1okQsK56DdyDrGfGNIxkC53CNoLSTzeNqjW8Y+QpRWH+cPJzV4+n2gSTChk8?=
- =?us-ascii?Q?OH+M56qvt8PzBlPR7JOA2iph2SPDK1EqzT6Ob/koxGYSs7owMN2zgo7Vjwf3?=
- =?us-ascii?Q?E6+iVD1XKSWyo3YGf42ck1K/CKBq1leJ6CuMAq8Dk1FC2V1xpWBsrbH65vNm?=
- =?us-ascii?Q?evYThYGdBKNG4WhyjHQtMdBp91ggd5+ODqPBTfQqL7CSzuHbacrm0t5iQHsj?=
- =?us-ascii?Q?rrOsO5Ys1Gpn4Sq4SfKcuerDmGQBGzJWkJATvSc94IP+sRcgUKzqoJ4YbVRs?=
- =?us-ascii?Q?S/qCyuQBxgvC06VXSyi07sqA1VfsvO6utUmFbS7uJQXTF73Re93imo58CZ1R?=
- =?us-ascii?Q?kX19ovKUA5dts7mNFNwwJspylnszSKY2eF0V0Uh5x7DKU63VH3YPOt35N/jM?=
- =?us-ascii?Q?6/arLK8SUZLZZOovca41JkiHfakwsv+GBCXbRQj4AVCHjqW3nyjE6F82PWF5?=
- =?us-ascii?Q?w86q6n71+W4845/dmpWZXPcczjk8pErZEMlGBOZ1qWUPGp8AJWKMHW6bid/o?=
- =?us-ascii?Q?Wpuvii3ragOdEInS8ZKxLgPf1WhuvyWNzSMSFOPoUh7AXhxNG2DEPKI/Tae0?=
- =?us-ascii?Q?qSvbzw4eAYLIjXoBjof6TS7G5cIJhcIS0a6f7lQjBOzWjbF9KBsvzKHAWDcm?=
- =?us-ascii?Q?ZyAcqe5qpxY478Bn97FLddC4Lbngwcb1CwZ/pgrr6asB9ipzW0gqYCbh5KCk?=
- =?us-ascii?Q?wvZqCT0VujmSjTQRjDOv+xY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <54F8B0CCE335CF4D896332986CAF404D@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S237841AbhLMNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233661AbhLMNoH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 08:44:07 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A3EC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:44:07 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id k21so18503541ioh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OoK814t0mZyo5uPR3FR5PU/fdoX0t0s6jYldodX1yd8=;
+        b=NYDfIAPPje62p+pTSMofVq3fOgVYtqdE0RSvLtq686Uaa7nKrUwrOAhJ4iF+Bj9cVo
+         Rooh1KqRZPOkn9YzfEogLpfu9sTOJmzdbREN9YsL6yzoqfs53Lt+T+ZMB9qUZL6XSeCZ
+         F9GQlfWUIEg5ySLiOrDNsciYJ3Q8EahunT4Ks=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OoK814t0mZyo5uPR3FR5PU/fdoX0t0s6jYldodX1yd8=;
+        b=5jhLPNhJ80ODDRcSCsJmPuTnCM5A0WCRz8Qdb6OELmFAo0m04a9bACjiSQWBGjQnx3
+         I15PA1q/BRWb6sokPyUh6k4otrdKFvxa8l2sUe4pZ1t8KC7DitN6p8zuMCpfGBtd4wGR
+         tvCvFMuHd84+UFsO8KaHmaPDjZlY4q3bswMP2/Zqb6oJWXctOaJ7JuGROcX4s0+qv5E2
+         kxDcrt1cuvNLm4/KrRoPOqq1B13mfzMuvWq5M0YDJm6yxJ5rF/HAShBXaSiEzn4CxPtE
+         U+UMT7asb4LkuCglUWkoNBJuxCMTb6I3f70YRIk5pR6FXk0tMLTi5gVV1cBDFmy++MMv
+         g+NA==
+X-Gm-Message-State: AOAM532+c0rJMf420MeGwJ8FgOukb+ucJH0x1r6lMJtNOYSlHQv45DQW
+        IAkFnid0mTz/xN/f4n7Fp7Tp98IYzoLXw4vbHHSJng==
+X-Google-Smtp-Source: ABdhPJwOpIKAWc/1RDhqRp35Miqinw+GNZbVy/Z/P6yo2rQI1QNYFYLVxkiex1sPzXGZOgowJ9EQZFobm/UHtexiYFg=
+X-Received: by 2002:a5e:8514:: with SMTP id i20mr32223236ioj.95.1639403046172;
+ Mon, 13 Dec 2021 05:44:06 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b687a6e-5745-4194-7728-08d9be3e8690
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 13:43:20.3562
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: k2dIjP/J8745CzkUljAcvd/DzzTDyRge0RsgAug+mWEi+awFZ3KqCFLTsn7XZ5QOzuAxNM5y7vHTPUvRu/u60Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4222
+References: <20211213112514.78552-1-pbonzini@redhat.com>
+In-Reply-To: <20211213112514.78552-1-pbonzini@redhat.com>
+From:   Ignat Korchagin <ignat@cloudflare.com>
+Date:   Mon, 13 Dec 2021 13:43:55 +0000
+Message-ID: <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] KVM: x86: Fix dangling page reference in TDP MMU
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>, bgardon@google.com,
+        dmatlack@google.com, stevensd@chromium.org,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:25:29AM +0100, Horatiu Vultur wrote:
-> The 12/09/2021 17:43, Horatiu Vultur wrote:
-> > > > +int lan966x_register_notifier_blocks(struct lan966x *lan966x)
-> > > > +{
-> > > > +     int err;
-> > > > +
-> > > > +     lan966x->netdevice_nb.notifier_call =3D lan966x_netdevice_eve=
-nt;
-> > > > +     err =3D register_netdevice_notifier(&lan966x->netdevice_nb);
-> > > > +     if (err)
-> > > > +             return err;
-> > > > +
-> > > > +     lan966x->switchdev_nb.notifier_call =3D lan966x_switchdev_eve=
-nt;
-> > > > +     err =3D register_switchdev_notifier(&lan966x->switchdev_nb);
-> > > > +     if (err)
-> > > > +             goto err_switchdev_nb;
-> > > > +
-> > > > +     lan966x->switchdev_blocking_nb.notifier_call =3D lan966x_swit=
-chdev_blocking_event;
-> > > > +     err =3D register_switchdev_blocking_notifier(&lan966x->switch=
-dev_blocking_nb);
-> > > > +     if (err)
-> > > > +             goto err_switchdev_blocking_nb;
-> > > > +
-> > > > +     lan966x_owq =3D alloc_ordered_workqueue("lan966x_order", 0);
-> > > > +     if (!lan966x_owq) {
-> > > > +             err =3D -ENOMEM;
-> > > > +             goto err_switchdev_blocking_nb;
-> > > > +     }
-> > >=20
-> > > These should be singleton objects, otherwise things get problematic i=
-f
-> > > you have more than one switch device instantiated in the system.
-> >=20
-> > Yes, I will update this.
->=20
-> Actually I think they need to be part of lan966x.
-> Because we want each lan966x instance to be independent of each other.
-> This is not seen in this version but is more clear in the next version
-> (v4).
+Unfortunately, this patchset does not fix the original issue reported in [1].
 
-They are independent of each other. You deduce the interface on which
-the notifier was emitted using switchdev_notifier_info_to_dev() and act
-upon it, if lan966x_netdevice_check() is true. The notifier handling
-code itself is stateless, all the state is per port / per switch.
-If you register one notifier handler per switch, lan966x_netdevice_check()
-would return true for each notifier handler instance, and you would
-handle each event twice, would you not? This is why I'm saying that the
-notifier handlers should be registered as singletons, like other drivers
-do.=
+Still got the following stacktrace on the 5th run of the visorg
+
+[   65.777066][ T2987] ------------[ cut here ]------------
+[   65.788832][ T2987] WARNING: CPU: 2 PID: 2987 at
+arch/x86/kvm/../../../virt/kvm/kvm_main.c:173
+kvm_is_zone_device_pfn.part.0+0x9e/0xd0
+[   65.813145][ T2987] Modules linked in:
+[   65.821414][ T2987] CPU: 2 PID: 2987 Comm: exe Not tainted 5.16.0-rc4+ #23
+[   65.835836][ T2987] Hardware name: QEMU Standard PC (Q35 + ICH9,
+2009), BIOS 0.0.0 02/06/2015
+[   65.854804][ T2987] RIP: 0010:kvm_is_zone_device_pfn.part.0+0x9e/0xd0
+[   65.867500][ T2987] Code: 00 00 00 00 fc ff df 48 c1 ea 03 0f b6 14
+02 48 89 e8 83 e0 07 83 c0 03 38 d0 7c 04 84 d2 75 0f 8b 43 34 85 c0
+74 03 5b 5d c3 <0f> 0b 5b 5d c3 48 89 ef e8 d5 36 9e 00 eb e7 e8 de 36
+9e 00 eb 9b
+[   65.909924][ T2987] RSP: 0018:ffff888113e47288 EFLAGS: 00010246
+[   65.923944][ T2987] RAX: 0000000000000000 RBX: ffffea0004969880
+RCX: ffffffff9087289e
+[   65.942453][ T2987] RDX: 0000000000000000 RSI: 0000000000000004
+RDI: ffffea00049698b4
+[   65.960703][ T2987] RBP: ffffea00049698b4 R08: 0000000000000000
+R09: ffffea00049698b7
+[   65.978929][ T2987] R10: fffff9400092d316 R11: 0000000008000000
+R12: ffff88827ffda000
+[   65.996858][ T2987] R13: 0600000125a62b77 R14: 0000000000000001
+R15: 0000000000000001
+[   66.014646][ T2987] FS:  0000000000000000(0000)
+GS:ffff88822d300000(0000) knlGS:0000000000000000
+[   66.035733][ T2987] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   66.050672][ T2987] CR2: 00007f40eae98008 CR3: 000000026c63e005
+CR4: 0000000000172ee0
+[   66.068551][ T2987] Call Trace:
+[   66.076686][ T2987]  <TASK>
+[   66.084543][ T2987]  kvm_set_pfn_dirty+0x120/0x1d0
+[   66.095423][ T2987]  __handle_changed_spte+0x9e7/0xed0
+[   66.107841][ T2987]  ? alloc_tdp_mmu_page+0x470/0x470
+[   66.121447][ T2987]  __handle_changed_spte+0x6d2/0xed0
+[   66.135648][ T2987]  ? alloc_tdp_mmu_page+0x470/0x470
+[   66.148376][ T2987]  __handle_changed_spte+0x6d2/0xed0
+[   66.160600][ T2987]  ? alloc_tdp_mmu_page+0x470/0x470
+[   66.172627][ T2987]  __handle_changed_spte+0x6d2/0xed0
+[   66.184815][ T2987]  ? alloc_tdp_mmu_page+0x470/0x470
+[   66.196732][ T2987]  ? lock_release+0x700/0x700
+[   66.208483][ T2987]  __tdp_mmu_set_spte+0x18c/0x9d0
+[   66.223852][ T2987]  ? tdp_iter_next+0x205/0x640
+[   66.235493][ T2987]  ? tdp_iter_start+0x26d/0x3f0
+[   66.246130][ T2987]  zap_gfn_range+0x8b5/0x990
+[   66.256505][ T2987]  ? zap_collapsible_spte_range+0x800/0x800
+[   66.269919][ T2987]  ? lock_release+0x3b7/0x700
+[   66.279630][ T2987]  ? kvm_tdp_mmu_put_root+0x1b6/0x2d0
+[   66.292582][ T2987]  ? rwlock_bug.part.0+0x90/0x90
+[   66.303611][ T2987]  kvm_tdp_mmu_put_root+0x1d1/0x2d0
+[   66.315943][ T2987]  mmu_free_root_page+0x219/0x2c0
+[   66.327581][ T2987]  ? ept_invlpg+0x740/0x740
+[   66.337448][ T2987]  ? kvm_vcpu_write_tsc_offset+0xfd/0x370
+[   66.350101][ T2987]  kvm_mmu_free_roots+0x275/0x490
+[   66.361490][ T2987]  ? mmu_free_root_page+0x2c0/0x2c0
+[   66.373656][ T2987]  ? do_raw_spin_unlock+0x54/0x220
+[   66.385622][ T2987]  ? _raw_spin_unlock+0x29/0x40
+[   66.396843][ T2987]  kvm_mmu_unload+0x1c/0xa0
+[   66.407419][ T2987]  kvm_arch_destroy_vm+0x1fe/0x5e0
+[   66.419178][ T2987]  ? mmu_notifier_unregister+0x276/0x330
+[   66.431782][ T2987]  kvm_put_kvm+0x3f9/0xa70
+[   66.442694][ T2987]  kvm_vcpu_release+0x4e/0x70
+[   66.453070][ T2987]  __fput+0x204/0x8d0
+[   66.462673][ T2987]  task_work_run+0xce/0x170
+[   66.473106][ T2987]  do_exit+0xa37/0x23e0
+[   66.482760][ T2987]  ? static_obj+0x61/0xc0
+[   66.492643][ T2987]  ? lock_release+0x3b7/0x700
+[   66.503069][ T2987]  ? mm_update_next_owner+0x6d0/0x6d0
+[   66.514934][ T2987]  ? lock_downgrade+0x6d0/0x6d0
+[   66.527491][ T2987]  ? do_raw_spin_lock+0x12b/0x270
+[   66.538734][ T2987]  ? rwlock_bug.part.0+0x90/0x90
+[   66.549815][ T2987]  do_group_exit+0xec/0x2a0
+[   66.560548][ T2987]  get_signal+0x3e8/0x1f50
+[   66.570826][ T2987]  arch_do_signal_or_restart+0x244/0x1820
+[   66.583863][ T2987]  ? migrate_enable+0x1d6/0x240
+[   66.594782][ T2987]  ? do_futex+0x229/0x340
+[   66.604801][ T2987]  ? get_sigframe_size+0x10/0x10
+[   66.616460][ T2987]  ? __seccomp_filter+0x19d/0xd90
+[   66.627524][ T2987]  ? __x64_sys_futex+0x181/0x420
+[   66.640458][ T2987]  ? do_futex+0x340/0x340
+[   66.650659][ T2987]  exit_to_user_mode_prepare+0x12c/0x1c0
+[   66.663419][ T2987]  syscall_exit_to_user_mode+0x19/0x50
+[   66.675965][ T2987]  do_syscall_64+0x4d/0x90
+[   66.685580][ T2987]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   66.699743][ T2987] RIP: 0033:0x474703
+[   66.708120][ T2987] Code: Unable to access opcode bytes at RIP 0x4746d9.
+[   66.721675][ T2987] RSP: 002b:000000c0002f3d28 EFLAGS: 00000286
+ORIG_RAX: 00000000000000ca
+[   66.737633][ T2987] RAX: fffffffffffffe00 RBX: 000000c000308c00
+RCX: 0000000000474703
+[   66.752382][ T2987] RDX: 0000000000000000 RSI: 0000000000000080
+RDI: 000000c000308d50
+[   66.767496][ T2987] RBP: 000000c0002f3d70 R08: 0000000000000000
+R09: 0000000000000000
+[   66.782643][ T2987] R10: 0000000000000000 R11: 0000000000000286
+R12: 0000000000000000
+[   66.797659][ T2987] R13: 0000000000000000 R14: ffffffffffffffff
+R15: 000000c00027b6c0
+[   66.813540][ T2987]  </TASK>
+[   66.819823][ T2987] irq event stamp: 17803
+[   66.827863][ T2987] hardirqs last  enabled at (17813):
+[<ffffffff90d26642>] __up_console_sem+0x52/0x60
+[   66.845094][ T2987] hardirqs last disabled at (17822):
+[<ffffffff90d26627>] __up_console_sem+0x37/0x60
+[   66.862747][ T2987] softirqs last  enabled at (17702):
+[<ffffffff90bd9903>] __irq_exit_rcu+0x113/0x170
+[   66.880146][ T2987] softirqs last disabled at (17697):
+[<ffffffff90bd9903>] __irq_exit_rcu+0x113/0x170
+[   66.897521][ T2987] ---[ end trace 552e9049bda0ba46 ]---
+[  442.873226][    C1] perf: interrupt took too long (4761 > 2500),
+lowering kernel.perf_event_max_sample_rate to 42000
+
+The only difference I noticed is the presence of __tdp_mmu_set_spte
+between zap_gfn_range and __handle_changed_spte, which is absent from
+the original stacktrace.
+
+[1]: https://marc.info/?l=kvm&m=163822397323141&w=2
+
+On Mon, Dec 13, 2021 at 11:25 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> kvm_tdp_mmu_zap_all is intended to visit all roots and zap their page
+> tables, which flushes the accessed and dirty bits out to the Linux
+> "struct page"s.  Missing some of the roots has catastrophic effects,
+> because kvm_tdp_mmu_zap_all is called when the MMU notifier is being
+> removed and any PTEs left behind might become dangling by the time
+> kvm-arch_destroy_vm tears down the roots for good.
+>
+> Unfortunately that is exactly what kvm_tdp_mmu_zap_all is doing: it
+> visits all roots via for_each_tdp_mmu_root_yield_safe, which in turn
+> uses kvm_tdp_mmu_get_root to skip invalid roots.  If the current root is
+> invalid at the time of kvm_tdp_mmu_zap_all, its page tables will remain
+> in place but will later be zapped during kvm_arch_destroy_vm.
+>
+> To fix this, ensure that kvm_tdp_mmu_zap_all goes over all
+> roots, including the invalid ones.  The easiest way to do so is for
+> kvm_tdp_mmu_zap_all to do the same as kvm_mmu_zap_all_fast: invalidate
+> all roots, and then zap the invalid roots.  The only difference is that
+> there is no need to go through tdp_mmu_zap_spte_atomic.
+>
+> Paolo
+>
+> Paolo Bonzini (2):
+>   KVM: x86: allow kvm_tdp_mmu_zap_invalidated_roots with write-locked
+>     mmu_lock
+>   KVM: x86: zap invalid roots in kvm_tdp_mmu_zap_all
+>
+>  arch/x86/kvm/mmu/mmu.c     |  2 +-
+>  arch/x86/kvm/mmu/tdp_mmu.c | 42 ++++++++++++++++++++------------------
+>  arch/x86/kvm/mmu/tdp_mmu.h |  2 +-
+>  3 files changed, 24 insertions(+), 22 deletions(-)
+>
+> --
+> 2.31.1
+>

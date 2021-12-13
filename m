@@ -2,125 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B26D24721ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BEC4721EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbhLMHtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:49:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22390 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232554AbhLMHtI (ORCPT
+        id S232607AbhLMHtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230053AbhLMHtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:49:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639381748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ajmFbDRx9BLe176bpdQggywBMmHI+LQFi36+JDBB49U=;
-        b=GubAAYSVly5HxpYNqmXDo1MSbZoNzceDDzp1yzTU4/gk1qsRtm74RZ3zHpsoWlh08nKhBj
-        szWKC0zqSIbNmN5g+ZJzIKjlUpS5IHsXl1B6vwcZsgkspQ+tpQMXpNZ6zX2osKGKNoxVjl
-        4C0uB1bJ4TMX5RQi4CmuoV9I2d/qtJU=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-100-NXHwBvE6NxiXPtSlQgkg0Q-1; Mon, 13 Dec 2021 02:49:06 -0500
-X-MC-Unique: NXHwBvE6NxiXPtSlQgkg0Q-1
-Received: by mail-lj1-f199.google.com with SMTP id w16-20020a05651c103000b00218c9d46faeso4202530ljm.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 23:49:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ajmFbDRx9BLe176bpdQggywBMmHI+LQFi36+JDBB49U=;
-        b=JRjxc2wYAeIX/2VKRyO6TekakhlbNpgrgETlf9wmE4909bEQOOEA613j158TMfBU0+
-         /UdsGvy8SSqckBW/SM+6DXp301dnYX7THijTCLs0nnehiXLw8NnXrHc81WR8SFq8E1JX
-         KwrsecabMWIJFGQvipRaiWBuI5K6qS6+gqSpNDqVqXRXLW6X83jRHjshfNXYjFuzNRPx
-         xGdeBvuoj1IObSnML5bK1rPUGiw2l0f6JpHf+/qj+5uirY/JdM1qU0GRTZf/Dw3lI9es
-         XIvHqu51/zTXmPrHYjU6HZHXb7SiR/QX3a8Qr3Pxu85H8JxJ4WlU4cKhxUZLvwhieeVa
-         i6fw==
-X-Gm-Message-State: AOAM530eJ0vCvHuDDXcpSSFShkUnHno4/TgCQ09MOpAMWzJKpK4cOpba
-        1JufDNlhK1zkEwiZzVra1fgqD/zpK4sAaHvuilzYYc+haKMygvso4z/GPHG59v0fhpPyGVmKJPF
-        HhesJ2fGVCTiTrynoc8MotD/I2Vd7vkNSYy6MjFHI
-X-Received: by 2002:a2e:b88d:: with SMTP id r13mr28041717ljp.362.1639381745242;
-        Sun, 12 Dec 2021 23:49:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6Kho2IY5dIkx4dw7D65wn0As3tEagQCBwgaJDxLSQvZQN2qrKmtB5zWAMksvRMGbAAVFtrQQetSAmODA5C8k=
-X-Received: by 2002:a2e:b88d:: with SMTP id r13mr28041706ljp.362.1639381745081;
- Sun, 12 Dec 2021 23:49:05 -0800 (PST)
+        Mon, 13 Dec 2021 02:49:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D07C06173F;
+        Sun, 12 Dec 2021 23:49:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E51FB80DC3;
+        Mon, 13 Dec 2021 07:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC39C00446;
+        Mon, 13 Dec 2021 07:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639381741;
+        bh=ZBr26fW8SEEPQKnMIuVCSbNTJr1TjALGEo+Idc+TQa8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JazxAMQsoyEjlMTZkBohd9hc98iewAPoNVNnzgN9CFwtvFpyOjHY5o/vbXlqn3IkB
+         L1DZMIsC3nmIVDF5deQUq1P8fXkcAtSJUvAeUMBnTOMQaNlulDCg4R4JRX/CPyOrBh
+         VG4B1FCCsj9LEC+uAU1Z9QEONRJrsaB/K03D7G+kFqM1WpnmKZpYP/XfvdaaFT5R1+
+         P5Arx9sTtLNx/gaXDYU/1BKTscLGIgqWkLC0tDvckA1h3gtfsobUh66bEOZWsmChOf
+         EiG7kbqlT7fueHtFa6O30budxcDSJAunkSzakPyF8fQcd1QYfJfUQiawgW9zBiNoLA
+         FArTvCMyyfsXA==
+Date:   Mon, 13 Dec 2021 13:18:56 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Alyssa Ross <hi@alyssa.is>
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Ludovic Barre <ludovic.barre@st.com>,
+        Peter Griffin <peter.griffin@linaro.org>,
+        "moderated list:ARM/STI ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM" 
+        <dmaengine@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dmaengine: st_fdma: fix MODULE_ALIAS
+Message-ID: <Ybb66JpLyJ884a5f@matsya>
+References: <20211125154441.2626214-1-hi@alyssa.is>
 MIME-Version: 1.0
-References: <20211213045012.12757-1-mengensun@tencent.com>
-In-Reply-To: <20211213045012.12757-1-mengensun@tencent.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 13 Dec 2021 15:48:53 +0800
-Message-ID: <CACGkMEtLso8QjvmjTQ=S_bbGxu11O_scRa8GT7z6MXfJbfzfRg@mail.gmail.com>
-Subject: Re: [PATCH] virtio-net: make copy len check in xdp_linearize_page
-To:     mengensun8801@gmail.com
-Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        mengensun <mengensun@tencent.com>,
-        MengLong Dong <imagedong@tencent.com>,
-        ZhengXiong Jiang <mungerjiang@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211125154441.2626214-1-hi@alyssa.is>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 12:50 PM <mengensun8801@gmail.com> wrote:
->
-> From: mengensun <mengensun@tencent.com>
->
-> xdp_linearize_page asume ring elem size is smaller then page size
-> when copy the first ring elem, but, there may be a elem size bigger
-> then page size.
->
-> add_recvbuf_mergeable may add a hole to ring elem, the hole size is
-> not sure, according EWMA.
+On 25-11-21, 15:44, Alyssa Ross wrote:
+> modprobe can't handle spaces in aliases.
 
-The logic is to try to avoid dropping packets in this case, so I
-wonder if it's better to "fix" the add_recvbuf_mergeable().
+Applied, thanks
 
-Or another idea is to switch to use XDP generic here where we can use
-skb_linearize() which should be more robust and we can drop the
-xdp_linearize_page() logic completely.
-
-Thanks
-
->
-> so, fix it by check copy len,if checked failed, just dropped the
-> whole frame, not make the memory dirty after the page.
->
-> Signed-off-by: mengensun <mengensun@tencent.com>
-> Reviewed-by: MengLong Dong <imagedong@tencent.com>
-> Reviewed-by: ZhengXiong Jiang <mungerjiang@tencent.com>
-> ---
->  drivers/net/virtio_net.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 36a4b7c195d5..844bdbd67ff7 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -662,8 +662,12 @@ static struct page *xdp_linearize_page(struct receive_queue *rq,
->                                        int page_off,
->                                        unsigned int *len)
->  {
-> -       struct page *page = alloc_page(GFP_ATOMIC);
-> +       struct page *page;
->
-> +       if (*len > PAGE_SIZE - page_off)
-> +               return NULL;
-> +
-> +       page = alloc_page(GFP_ATOMIC);
->         if (!page)
->                 return NULL;
->
-> --
-> 2.27.0
->
-
+-- 
+~Vinod

@@ -2,77 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0573447352A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846B447352C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242424AbhLMToQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S242473AbhLMTov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240557AbhLMToP (ORCPT
+        with ESMTP id S242466AbhLMTou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:44:15 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31224C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:44:14 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id u80so15849398pfc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:44:14 -0800 (PST)
+        Mon, 13 Dec 2021 14:44:50 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6B8C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:44:50 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z5so56389573edd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:44:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ME1prsBK5y2s/TuairpTrn8GnmoJtUSZrFIhH9W9WcY=;
-        b=ZwYwi5inxpKI9iCEmuqii70nhXQojehT5dYm1r5u45whCEe/NINA/vD/UlTFswkrb+
-         CSkBmBYfTYIApQiMVbj/mt3LalQyfjKaS0iShIU3Y8oDw+v39B1emW3y5PgKLiiWE0qA
-         b6STiQ5k/8u8BsEDngpBFTAoJAbNf9mmSuS43t52JwbWr9p7RLwo8zV20VHMqJv3WPXN
-         a4Xq95b3/UMg8qq4xfeGx3vrgGOaftNUKR8XirunkQBhO61dC0UGO0hGC4UuLvQYiNus
-         iqvk0gp7KYNJQ8Z2JjKJf3URZcUfWI+qpWFboi7c0SrCu5DxaKvqZuTT+rUMztgZbVa6
-         WCYQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h/bn2QA4sRokY+lW2mdsTbBERIo47tUeAt+yGqnl3lo=;
+        b=Sh0+xasBUXbS3UacsNmltTp0MkTV/oG+CZVOKrPRjJVjfnIicuuAMfk55RUBcNdHOJ
+         a0LPNIeZDwnZdOGVq4OgGQC4LYdsKQaraEp0aNMWame4VS7gnVm0YgzmNmP7p2NWPgb6
+         A2RmLpAuWMJW1dAopi867SmawQF/hfeeQk1/c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ME1prsBK5y2s/TuairpTrn8GnmoJtUSZrFIhH9W9WcY=;
-        b=SE2lKUNufOBSo2p1Vue323NaXCYz+nSmqHk4lSR9cRq7VymgLrLman796KC2Mp7oQw
-         ObofbTJ8hAalm0ON9QlI1TcJHCuZ7rJEl7NO+y2IO9V0oaDSDSZsIsG9tviWC4kiUJzk
-         7ZJRfhABmBxQp75EfcMiensXVqY/qZ/O66rGiKjx3LDk8vhbV/cLXc4wLlpvZrxQ4X1e
-         0eLzAoHnDy8ki6ZlPkoWHRheJUhJW+SSpihEE/i8b1eRmXIV2SwWXiIPVnxngVJSHW9C
-         oT4D3IBB2JOMOt0x4xKyvWeB4cu4yBUAIU4V2DHTa+bHdSFZimDbHUfFJJveXcDq7df5
-         hX1w==
-X-Gm-Message-State: AOAM531nWc1on9hesl4noe3ClYMfb2AB0I9OlTVG6Iiqm/j1c5lOPc6K
-        JDxMvgY/s8AIWlSIn+/A+i5few==
-X-Google-Smtp-Source: ABdhPJwnvqQ5c+YJfxrtRKuAgKIkvVSjuHwzczHzds1rPinaQwQcQyOgwZj0zbP55rAiNB5wrGmfnw==
-X-Received: by 2002:a63:d103:: with SMTP id k3mr512140pgg.6.1639424653551;
-        Mon, 13 Dec 2021 11:44:13 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a18sm12477587pfn.185.2021.12.13.11.44.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:44:12 -0800 (PST)
-Date:   Mon, 13 Dec 2021 19:44:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ignat Korchagin <ignat@cloudflare.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        bgardon@google.com, dmatlack@google.com, stevensd@chromium.org,
-        kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Fix dangling page reference in TDP MMU
-Message-ID: <YbeiiT9b350lYBiR@google.com>
-References: <20211213112514.78552-1-pbonzini@redhat.com>
- <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
- <Ybd5JJ/IZvcW/b2Y@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h/bn2QA4sRokY+lW2mdsTbBERIo47tUeAt+yGqnl3lo=;
+        b=1LJ7xg7d6ZoTgnj8Apit2qNX8qdykCc0IM3afPt81ziUUCRi5iLKAIomYwiahyY79H
+         Pn6bSCSGzUqselFlX8rN63PklGkZ7lNg1lWbuGWEGjpE0R26Rg0hGAegl5yXClNavJqb
+         Wa1rchfnx858YYpZWFHdqCDnUiPprGsytPeMItgLnKKpVy1VfhgodNHcb9KmYwAt3tvQ
+         sHePVPloreN2SCast0Fqrb1CNHP+TxfFXc6sq9YuANZ1k2ZaSp71z/d2pswsx/yHgUVk
+         5R9HZcH4qaiUq3Qe+dCBtJ0yhtnX0SGFGWsGJtA2dLwObLOC9IiEfI+YKspeX0caU9dP
+         gz5w==
+X-Gm-Message-State: AOAM531o7DJsca3UAKs4HuhSSJDKjQrxYHVdr9k4nlZSK1K8yDI+V4TG
+        9KwQf4VJThloQRrOibjh56DdPNr79qrOi4XH
+X-Google-Smtp-Source: ABdhPJzlhecMj2wzzBsphhiUmchwo2XsFfSqBiqa52DqZkvnE/l+9sOUhsC0Q+A5rjUQiPODMLGkIw==
+X-Received: by 2002:a05:6402:1d56:: with SMTP id dz22mr1047620edb.291.1639424688886;
+        Mon, 13 Dec 2021 11:44:48 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id sg17sm6085259ejc.72.2021.12.13.11.44.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 11:44:48 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id k9so11108125wrd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:44:47 -0800 (PST)
+X-Received: by 2002:adf:cc8d:: with SMTP id p13mr611346wrj.274.1639424687470;
+ Mon, 13 Dec 2021 11:44:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ybd5JJ/IZvcW/b2Y@google.com>
+References: <20211210053743.GA36420@xsang-OptiPlex-9020> <CAHk-=wgxd2DqzM3PAsFmzJDHFggxg7ODTQxfJoGCRDbjgMm8nA@mail.gmail.com>
+ <CAG48ez1pnatAB095dnbrn9LbuQe4+ENwh-WEW36pM40ozhpruw@mail.gmail.com>
+ <CAHk-=wg1uxUTmdEYgTcxWGQ-s6vb_V_Jux+Z+qwoAcVGkCTDYA@mail.gmail.com>
+ <CAHk-=wh5iFv1MOx6r8zyGYkYGfgfxqcPSrUDwfuOCdis+VR+BQ@mail.gmail.com>
+ <20211213083154.GA20853@linux.intel.com> <CAHk-=wjsTk2jym66RYkK9kuq8zOXTd2bWPiOq43-iCF6Qy-xQQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjsTk2jym66RYkK9kuq8zOXTd2bWPiOq43-iCF6Qy-xQQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 13 Dec 2021 11:44:31 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whoMGTAAyah0jH+rHyAXCLnxAHu8KffrR8PrAXGhTxRdA@mail.gmail.com>
+Message-ID: <CAHk-=whoMGTAAyah0jH+rHyAXCLnxAHu8KffrR8PrAXGhTxRdA@mail.gmail.com>
+Subject: Re: [LKP] Re: [fget] 054aa8d439: will-it-scale.per_thread_ops -5.7% regression
+To:     Carel Si <beibei.si@intel.com>
+Cc:     Jann Horn <jannh@google.com>, Miklos Szeredi <mszeredi@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>, fengwei.yin@intel.com,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021, Sean Christopherson wrote:
-> On Mon, Dec 13, 2021, Ignat Korchagin wrote:
-> > Unfortunately, this patchset does not fix the original issue reported in [1].
-> 
-> Can you provide your kernel config?  And any other version/config info that might
-> be relevant, e.g. anything in gvisor or runsc?
+On Mon, Dec 13, 2021 at 10:37 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> So I'll just apply the patch. Thanks for the report and the testing
 
-Scratch that, I've reproduced this, with luck I'll have a root cause by end of day.
+Done, it's commit e386dfc56f83 ("fget: clarify and improve
+__fget_files() implementation") in my tree now.
+
+I didn't mark it as "Fixes:" or for stable, because I can't imagine
+that it matters in real life.
+
+But then it  struck me that Greg has mentioned that he ends up getting
+a lot of performance regression reports for people testing stable and
+they can be distracting.
+
+So I'm adding a stable cc here just so people are aware of this as a
+"yeah, will-it-scale.poll2 performance regression has been reported,
+has a fix available if somebody cares".
+
+              Linus

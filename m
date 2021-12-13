@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0844728ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A7C4725AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238790AbhLMKQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:16:30 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:46660 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbhLMJ56 (ORCPT
+        id S235819AbhLMJpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:45:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53936 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234581AbhLMJkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:57:58 -0500
+        Mon, 13 Dec 2021 04:40:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E7669CE0E6B;
-        Mon, 13 Dec 2021 09:57:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8B1C34600;
-        Mon, 13 Dec 2021 09:57:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23AB7B80E1A;
+        Mon, 13 Dec 2021 09:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C1A4C00446;
+        Mon, 13 Dec 2021 09:40:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389475;
-        bh=qvUw/qOeM9w/+FkQuJ64USMcdCTF48/SgX73se+Uhr8=;
+        s=korg; t=1639388442;
+        bh=4QjI5x51C9LDZf2QjslVo85HxX18eR7ekmBR8vl3p9E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fckE3/70b18mUdb3/vU3hiKw7cGssI++v3c1wkCarmJQWK/nYQJZUvUlxmI26vErX
-         sgANPlWJ5uE9zxzdKXHRKEiJe4FCL4sVNwGyVLlpOQSJ3tijApB1ok0uqHtnOZl36R
-         lutHG3wInVPE0yfO/BnXc17jhOP/vkOIIBngXxw8=
+        b=UcQpoDoTvU3UhZXJpHESoPrycympvi2+iRd58UCRcWP8yEnldatfZD2n60HMS3U3/
+         xoV19sgGUs4Ki4T8MoTBzUcFFYSDK3U9y0bWFhmgT+wYNKXA+p2jocursQz18QOzYT
+         L6rirl0hC956/mDj+CvdA6uPujSIMY9zulLlC5dc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.15 107/171] PM: runtime: Fix pm_runtime_active() kerneldoc comment
+        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
+Subject: [PATCH 4.19 51/74] USB: gadget: detect too-big endpoint 0 requests
 Date:   Mon, 13 Dec 2021 10:30:22 +0100
-Message-Id: <20211213092948.648415539@linuxfoundation.org>
+Message-Id: <20211213092932.514825628@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,31 +44,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 444dd878e85fb33fcfb2682cfdab4c236f33ea3e upstream.
+commit 153a2d7e3350cc89d406ba2d35be8793a64c2038 upstream.
 
-The kerneldoc comment of pm_runtime_active() does not reflect the
-behavior of the function, so update it accordingly.
+Sometimes USB hosts can ask for buffers that are too large from endpoint
+0, which should not be allowed.  If this happens for OUT requests, stall
+the endpoint, but for IN requests, trim the request size to the endpoint
+buffer size.
 
-Fixes: 403d2d116ec0 ("PM: runtime: Add kerneldoc comments to multiple helpers")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Co-developed-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/pm_runtime.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/composite.c    |   12 ++++++++++++
+ drivers/usb/gadget/legacy/dbgp.c  |   13 +++++++++++++
+ drivers/usb/gadget/legacy/inode.c |   16 +++++++++++++++-
+ 3 files changed, 40 insertions(+), 1 deletion(-)
 
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -129,7 +129,7 @@ static inline bool pm_runtime_suspended(
-  * pm_runtime_active - Check whether or not a device is runtime-active.
-  * @dev: Target device.
-  *
-- * Return %true if runtime PM is enabled for @dev and its runtime PM status is
-+ * Return %true if runtime PM is disabled for @dev or its runtime PM status is
-  * %RPM_ACTIVE, or %false otherwise.
-  *
-  * Note that the return value of this function can only be trusted if it is
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1634,6 +1634,18 @@ composite_setup(struct usb_gadget *gadge
+ 	struct usb_function		*f = NULL;
+ 	u8				endp;
+ 
++	if (w_length > USB_COMP_EP0_BUFSIZ) {
++		if (ctrl->bRequestType == USB_DIR_OUT) {
++			goto done;
++		} else {
++			/* Cast away the const, we are going to overwrite on purpose. */
++			__le16 *temp = (__le16 *)&ctrl->wLength;
++
++			*temp = cpu_to_le16(USB_COMP_EP0_BUFSIZ);
++			w_length = USB_COMP_EP0_BUFSIZ;
++		}
++	}
++
+ 	/* partial re-init of the response message; the function or the
+ 	 * gadget might need to intercept e.g. a control-OUT completion
+ 	 * when we delegate to it.
+--- a/drivers/usb/gadget/legacy/dbgp.c
++++ b/drivers/usb/gadget/legacy/dbgp.c
+@@ -345,6 +345,19 @@ static int dbgp_setup(struct usb_gadget
+ 	void *data = NULL;
+ 	u16 len = 0;
+ 
++	if (length > DBGP_REQ_LEN) {
++		if (ctrl->bRequestType == USB_DIR_OUT) {
++			return err;
++		} else {
++			/* Cast away the const, we are going to overwrite on purpose. */
++			__le16 *temp = (__le16 *)&ctrl->wLength;
++
++			*temp = cpu_to_le16(DBGP_REQ_LEN);
++			length = DBGP_REQ_LEN;
++		}
++	}
++
++
+ 	if (request == USB_REQ_GET_DESCRIPTOR) {
+ 		switch (value>>8) {
+ 		case USB_DT_DEVICE:
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -109,6 +109,8 @@ enum ep0_state {
+ /* enough for the whole queue: most events invalidate others */
+ #define	N_EVENT			5
+ 
++#define RBUF_SIZE		256
++
+ struct dev_data {
+ 	spinlock_t			lock;
+ 	refcount_t			count;
+@@ -143,7 +145,7 @@ struct dev_data {
+ 	struct dentry			*dentry;
+ 
+ 	/* except this scratch i/o buffer for ep0 */
+-	u8				rbuf [256];
++	u8				rbuf[RBUF_SIZE];
+ };
+ 
+ static inline void get_dev (struct dev_data *data)
+@@ -1332,6 +1334,18 @@ gadgetfs_setup (struct usb_gadget *gadge
+ 	u16				w_value = le16_to_cpu(ctrl->wValue);
+ 	u16				w_length = le16_to_cpu(ctrl->wLength);
+ 
++	if (w_length > RBUF_SIZE) {
++		if (ctrl->bRequestType == USB_DIR_OUT) {
++			return value;
++		} else {
++			/* Cast away the const, we are going to overwrite on purpose. */
++			__le16 *temp = (__le16 *)&ctrl->wLength;
++
++			*temp = cpu_to_le16(RBUF_SIZE);
++			w_length = RBUF_SIZE;
++		}
++	}
++
+ 	spin_lock (&dev->lock);
+ 	dev->setup_abort = 0;
+ 	if (dev->state == STATE_DEV_UNCONNECTED) {
 
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 934F1472638
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084204725B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236503AbhLMJth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:49:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56838 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235806AbhLMJpS (ORCPT
+        id S236017AbhLMJpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:45:44 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:35860 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233226AbhLMJlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:45:18 -0500
+        Mon, 13 Dec 2021 04:41:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2FEEB80E18;
-        Mon, 13 Dec 2021 09:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1834C00446;
-        Mon, 13 Dec 2021 09:45:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0F912CE0E8B;
+        Mon, 13 Dec 2021 09:41:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3A4C341C5;
+        Mon, 13 Dec 2021 09:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388715;
-        bh=F85d8CnEHwkwiFEZuz/O8msa90o+9mBXZmkJBpSmwl8=;
+        s=korg; t=1639388497;
+        bh=g7TtM4lZrjv6vxgD9PUn+nEapo7Y78gLjwplUuzXz2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YbfHRVr8nxeGbonCraOKdS5AaAgNUrMJDP2Wds9ce3q/lp8IStPpeyVtIdX71viye
-         vCmfZztz2UlcP4ErDphtl3XMHQ1mzbndSuVqnhXbbOta4+NAH1fmBSgYAUbDe3D6xA
-         eU8UKX1t0drJLyeNxhGQizV5T/EGhpQckpPYoFe0=
+        b=LJEm1XBETptYfesoxmnqtUwsHaFivB4VulDOzIP8WYIfFWlBfI+gAu+nA7lRdO0i2
+         iEjFBeN+bERjatfVrg+uJ5Dw+3MJxooEqjQb9ePYNmg17IHSKahEZLfloTLs21jyzK
+         huV4hE9XWFlMIv4mUJ/fZWus9BbPYcmAfQo8e2go=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.4 72/88] iio: stk3310: Dont return error code in interrupt handler
+        stable@vger.kernel.org, Wudi Wang <wangwudi@hisilicon.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 4.19 71/74] irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
 Date:   Mon, 13 Dec 2021 10:30:42 +0100
-Message-Id: <20211213092935.731642387@linuxfoundation.org>
+Message-Id: <20211213092933.183337020@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,49 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lars-Peter Clausen <lars@metafoo.de>
+From: Wudi Wang <wangwudi@hisilicon.com>
 
-commit 8e1eeca5afa7ba84d885987165dbdc5decf15413 upstream.
+commit b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a upstream.
 
-Interrupt handlers must return one of the irqreturn_t values. Returning a
-error code is not supported.
+INVALL CMD specifies that the ITS must ensure any caching associated with
+the interrupt collection defined by ICID is consistent with the LPI
+configuration tables held in memory for all Redistributors. SYNC is
+required to ensure that INVALL is executed.
 
-The stk3310 event interrupt handler returns an error code when reading the
-flags register fails.
+Currently, LPI configuration data may be inconsistent with that in the
+memory within a short period of time after the INVALL command is executed.
 
-Fix the implementation to always return an irqreturn_t value.
-
-Fixes: 3dd477acbdd1 ("iio: light: Add threshold interrupt support for STK3310")
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Link: https://lore.kernel.org/r/20211024171251.22896-3-lars@metafoo.de
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
+Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/light/stk3310.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-gic-v3-its.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/light/stk3310.c
-+++ b/drivers/iio/light/stk3310.c
-@@ -544,9 +544,8 @@ static irqreturn_t stk3310_irq_event_han
- 	mutex_lock(&data->lock);
- 	ret = regmap_field_read(data->reg_flag_nf, &dir);
- 	if (ret < 0) {
--		dev_err(&data->client->dev, "register read failed\n");
--		mutex_unlock(&data->lock);
--		return ret;
-+		dev_err(&data->client->dev, "register read failed: %d\n", ret);
-+		goto out;
- 	}
- 	event = IIO_UNMOD_EVENT_CODE(IIO_PROXIMITY, 1,
- 				     IIO_EV_TYPE_THRESH,
-@@ -558,6 +557,7 @@ static irqreturn_t stk3310_irq_event_han
- 	ret = regmap_field_write(data->reg_flag_psint, 0);
- 	if (ret < 0)
- 		dev_err(&data->client->dev, "failed to reset interrupts\n");
-+out:
- 	mutex_unlock(&data->lock);
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -581,7 +581,7 @@ static struct its_collection *its_build_
  
- 	return IRQ_HANDLED;
+ 	its_fixup_cmd(cmd);
+ 
+-	return NULL;
++	return desc->its_invall_cmd.col;
+ }
+ 
+ static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
 
 

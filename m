@@ -2,561 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4433B47342F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE26473432
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239459AbhLMSjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S241890AbhLMSkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238819AbhLMSjA (ORCPT
+        with ESMTP id S230346AbhLMSkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:39:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D0AC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:39:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 244A9B81236
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:38:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4777C34600;
-        Mon, 13 Dec 2021 18:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639420737;
-        bh=XMKJbL5VM6VEVgXXAdXSQRfZ5MxnJaE1/LdBmmraKGM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YyZQ50vlpwz0CSyD54ZEbGiGJKcBsnsDH6dl+7vHdfJFuoTQ3WFPrkHQXp44NRnpP
-         N1oqTvNHdPl9dfMLifhl6Y/12LTvtjNszJesfix/GOP8meaWYevrnLXigcvXGV9DuK
-         7EI2cb3k52EsxchKDP60OMEdxEcy72h+ohsmbtMTVmUtTq44wvUC6OyerNSPhe0co3
-         LS6KAB1ezwbZ8nwBET9tmr3/12hxqWIyeOXjzkZKtI9SDcslQHIBQDjQYnNzEgoYOD
-         rfvaB9Dano6Fd/rYZio/IkxdOTF729JbXia9Sxf2L+HC5ZwzMPskdPq6w5cCvp5N4d
-         K+PkkWqFJZDIA==
-Date:   Mon, 13 Dec 2021 18:38:52 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Qi Liu <liuqi115@huawei.com>
-Cc:     catalin.marinas@arm.com, mhiramat@kernel.org,
-        linux-arm-kernel@lists.infradead.org, song.bao.hua@hisilicon.com,
-        prime.zeng@hisilicon.com, robin.murphy@arm.com,
-        linuxarm@huawei.com, linux-kernel@vger.kernel.org,
-        jianhua.ljh@gmail.com
-Subject: Re: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
-Message-ID: <20211213183851.GD12405@willie-the-truck>
-References: <20211207124002.59877-1-liuqi115@huawei.com>
+        Mon, 13 Dec 2021 13:40:01 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7283C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:40:00 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so15318095pja.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:40:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WFGpT3wiu5CVNcvYqgjAcE3S0aIPJxs+TGBSN+X1ruQ=;
+        b=uPgtM1UYCUhoR2uFrbRwhPc0hv/n18TfnKrPtruDqoBKr7PfZ98xMoGNDDsb7nICVb
+         1uI6B8Tq99RO7mffYIysmLUB2l3cI+hH+L03MCe6iO1kV9Cnfpcr9frnyfzshIUqkg5V
+         wNZuPcVmcQ/3kFyFRjikkR8uAtnhzyxi+8JKeuHzNwzwDX1F6AvKB4pYopaHqg76jDRF
+         LPuOgH5IPk54oOKMJf2TH2lGhphMRao2k1PNy9woxuK0wD3w9O3uZ0gqtWb80EQ46WOa
+         mgOtglNdvLvKVG55BUldvZnUNkWnewIdoOZjb5h98H43plFmnjS6Hw234GsizEJvH4mJ
+         Q28w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WFGpT3wiu5CVNcvYqgjAcE3S0aIPJxs+TGBSN+X1ruQ=;
+        b=49c89HRjrVapbrEgJiQ1ZRUQp8DfZkxkAoXdoRtz9vpBgBaXQrLb4HvP5cWz2bUCCS
+         M69uesSU1l55fmVPurovQAzzWdq4cNDi6ajusmyUOwDz7xb0p692NR3lBRM1IzfuMNZY
+         9Cy7WbptiiET4JZK0o63WNyFAlho4rMzS+/5rqTHcVIeACij+VfseC3QrXaURdzd2KW4
+         VdloX4s5eFAVFz4bmEJwATIfXSsU+dWD39MFlxcPVsz92MSgSdBPZvD37gnYHFyktCNR
+         wy2mXOvoX/RA+Vh8g5xORamB+a3H5NZzxMeiom00JaDH5SOUrAm/42f4feYfMqfVlWxc
+         7nqA==
+X-Gm-Message-State: AOAM531QAppvbxZceoI7fXujP3rtqT0LssHlXmPxpZ6aFMlJobHKm9Yx
+        5oComgWkNJnIj8FimarZFT1Mgw==
+X-Google-Smtp-Source: ABdhPJwvt4I+xp62YgTXHt3xUplDSubOEkd2gWsqy26Mqv60cqCrmXi5avhcDq/bUdHQn6V+Wi0RPA==
+X-Received: by 2002:a17:90a:880a:: with SMTP id s10mr27034pjn.214.1639420800300;
+        Mon, 13 Dec 2021 10:40:00 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id d15sm13856029pfl.126.2021.12.13.10.39.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 10:39:59 -0800 (PST)
+Date:   Mon, 13 Dec 2021 11:39:56 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ben Levinsky <ben.levinsky@xilinx.com>,
+        Bill Mills <bill.mills@linaro.org>,
+        Sergei Korneichuk <sergei.korneichuk@xilinx.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
+ driver
+Message-ID: <20211213183956.GA1398742@p14s>
+References: <20211123062050.1442712-1-tanmay.shah@xilinx.com>
+ <20211123062050.1442712-7-tanmay.shah@xilinx.com>
+ <20211203185518.GA942034@p14s>
+ <6debe673-8c88-53f1-badc-23f2dfc15350@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207124002.59877-1-liuqi115@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <6debe673-8c88-53f1-badc-23f2dfc15350@xilinx.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[...]
 
-[+Janet Liu]
+> > > +}
+> > > +
+> > > +static int zynqmp_r5_get_tcm_node(struct zynqmp_r5_cluster *cluster)
+> > > +{
+> > > +	int tcm_bank_count, tcm_node;
+> > > +	int i = 0, j;
+> > > +	struct zynqmp_r5_core *r5_core;
+> > > +	const struct mem_bank_data *tcm = zynqmp_tcm_banks;
+> > > +	struct device *dev = cluster->dev;
+> > > +
+> > > +	/* ToDo: Use predefined TCM address space values from driver until
+> > > +	 * system-dt spec is not final fot TCM
+> > > +	 */
+> > Multilined comment should be as follow:
+> > 
+> >          /*
+> >           * ToDo: Use predefined TCM address space values from driver until
+> > 	 * system-dt spec is not final fot TCM
+> >           */
+> > 
+> > s/"final fot TCM"/"final for TCM"
+> > 
+> > Any reason this can't be done with "reg" properties like TI did for K3?  It
+> > would be nice to have TCMs included in the yaml file example.
+> > 
+> R5 TCM on Xilinx platforms contains separate power-domains than RPU
+> power-domains. So, I believe they can be operated separately than RPU. That
+> is why I chose not to include as reg property. I believe we will include TCM
+> as sram property in future.
+> 
+> Now, explanation about why TCM is hardcode in driver:
+> 
+> When I started developing driver, system-dt spec was in progress, to avoid
+> extra maintenance effort I defined TCM information in driver instead of
+> defining them in YAML.
+> I agree with idea that there is no need to maintain two separate bindings
+> and until system-dt specs are maturing we can hardcode TCM related
+> information driver. This was discussed previously here: https://lore.kernel.org/all/CAL_JsqLGo380SRYska+xGgJhgF8NCRvY56ewafvSCU6c-LmhZw@mail.gmail.com/
+>
 
-On Tue, Dec 07, 2021 at 08:40:02PM +0800, Qi Liu wrote:
-> This patch introduce optprobe for ARM64. In optprobe, probed
-> instruction is replaced by a branch instruction to trampoline.
-> 
-> Performance of optprobe on Hip08 platform is test using kprobe
-> example module[1] to analyze the latency of a kernel function,
-> and here is the result:
-> 
-> common kprobe:
-> [280709.846380] do_empty returned 0 and took 1530 ns to execute
-> [280709.852057] do_empty returned 0 and took 550 ns to execute
-> [280709.857631] do_empty returned 0 and took 440 ns to execute
-> [280709.863215] do_empty returned 0 and took 380 ns to execute
-> [280709.868787] do_empty returned 0 and took 360 ns to execute
-> [280709.874362] do_empty returned 0 and took 340 ns to execute
-> [280709.879936] do_empty returned 0 and took 320 ns to execute
-> [280709.885505] do_empty returned 0 and took 300 ns to execute
-> [280709.891075] do_empty returned 0 and took 280 ns to execute
-> [280709.896646] do_empty returned 0 and took 290 ns to execute
-> 
-> optprobe:
-> [ 2965.964572] do_empty returned 0 and took 90 ns to execute
-> [ 2965.969952] do_empty returned 0 and took 80 ns to execute
-> [ 2965.975332] do_empty returned 0 and took 70 ns to execute
-> [ 2965.980714] do_empty returned 0 and took 60 ns to execute
-> [ 2965.986128] do_empty returned 0 and took 80 ns to execute
-> [ 2965.991507] do_empty returned 0 and took 70 ns to execute
-> [ 2965.996884] do_empty returned 0 and took 70 ns to execute
-> [ 2966.002262] do_empty returned 0 and took 80 ns to execute
-> [ 2966.007642] do_empty returned 0 and took 70 ns to execute
-> [ 2966.013020] do_empty returned 0 and took 70 ns to execute
-> [ 2966.018400] do_empty returned 0 and took 70 ns to execute
-> 
-> As the result shows, optprobe can greatly reduce the latency. Big
-> latency of common kprobe will significantly impact the real result
-> while doing performance analysis or debugging performance issues
-> in lab, so optprobe is useful in this scenario.
-> 
-> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> 
-> Note:
-> As branch instruction in Arm64 has a 128M range limitation, optprobe
-> could only used when offset between probe point and trampoline
-> is less than 128M, otherwise kernel will choose common kprobe
-> automaticly.
-> 
-> Limitation caused by branch isn't unique to Arm64, but also to
-> x86/arm/powerpc.
-> 
-> In fact, Module PLT has been tried to get rid of limiation, but
-> destination of PLT must be a fixed value, and we need to modify
-> the destination (as each optprobe has its own trampoline).
-> 
-> As discussed with Masami[2], we can start with core-kernel point
-> (within 128M) as the first step, like other architectures.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/kprobes/kretprobe_example.c
-> [2] https://lore.kernel.org/lkml/20211201105001.5164f98ba783e7207df1229c@kernel.org/
-> ---
->  arch/arm64/Kconfig                            |   1 +
->  arch/arm64/include/asm/kprobes.h              |  21 ++
->  arch/arm64/kernel/probes/Makefile             |   2 +
->  arch/arm64/kernel/probes/opt_arm64.c          | 199 ++++++++++++++++++
->  .../arm64/kernel/probes/optprobe_trampoline.S |  97 +++++++++
->  include/linux/kprobes.h                       |   2 +
->  kernel/kprobes.c                              |  22 ++
->  7 files changed, 344 insertions(+)
->  create mode 100644 arch/arm64/kernel/probes/opt_arm64.c
->  create mode 100644 arch/arm64/kernel/probes/optprobe_trampoline.S
+Thanks for the link. 
 
-I've not looked at these changes in detail, but it looks like there is an
-independent patch from Janet Liu trying to do the same thing:
-
-https://lore.kernel.org/r/1635858706-27320-1-git-send-email-jianhua.ljh@gmail.com
-
-The patch here from Qi Liu looks like it's a bit further along, but it
-would be good for Janet to at least test it out and confirm that it works
-for them.
-
-Cheers,
-
-Will
-
-[Kept diff inline for Janet]
-
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index c4207cf9bb17..6b68ec498e67 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -200,6 +200,7 @@ config ARM64
->  	select HAVE_STACKPROTECTOR
->  	select HAVE_SYSCALL_TRACEPOINTS
->  	select HAVE_KPROBES
-> +	select HAVE_OPTPROBES
->  	select HAVE_KRETPROBES
->  	select HAVE_GENERIC_VDSO
->  	select IOMMU_DMA if IOMMU_SUPPORT
-> diff --git a/arch/arm64/include/asm/kprobes.h b/arch/arm64/include/asm/kprobes.h
-> index 05cd82eeca13..3838e4317877 100644
-> --- a/arch/arm64/include/asm/kprobes.h
-> +++ b/arch/arm64/include/asm/kprobes.h
-> @@ -39,6 +39,27 @@ void arch_remove_kprobe(struct kprobe *);
->  int kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr);
->  int kprobe_exceptions_notify(struct notifier_block *self,
->  			     unsigned long val, void *data);
-> +
-> +struct arch_optimized_insn {
-> +	kprobe_opcode_t orig_insn[1];
-> +	kprobe_opcode_t *trampoline;
-> +};
-> +
-> +#define MAX_OPTIMIZED_LENGTH	sizeof(kprobe_opcode_t)
-> +#define MAX_OPTINSN_SIZE                                                       \
-> +	((unsigned long)optprobe_template_restore_end - (unsigned long)optprobe_template_entry)
-> +
-> +extern __visible kprobe_opcode_t optprobe_template_entry[];
-> +extern __visible kprobe_opcode_t optprobe_template_val[];
-> +extern __visible kprobe_opcode_t optprobe_template_common[];
-> +extern __visible kprobe_opcode_t optprobe_template_end[];
-> +extern __visible kprobe_opcode_t optprobe_template_restore_begin[];
-> +extern __visible kprobe_opcode_t optprobe_template_restore_orig_insn[];
-> +extern __visible kprobe_opcode_t optprobe_template_restore_end[];
-> +extern __visible kprobe_opcode_t optinsn_slot[];
-> +
-> +void optprobe_common(void);
-> +
->  void __kretprobe_trampoline(void);
->  void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
->  
-> diff --git a/arch/arm64/kernel/probes/Makefile b/arch/arm64/kernel/probes/Makefile
-> index 8e4be92e25b1..07105fd3261d 100644
-> --- a/arch/arm64/kernel/probes/Makefile
-> +++ b/arch/arm64/kernel/probes/Makefile
-> @@ -4,3 +4,5 @@ obj-$(CONFIG_KPROBES)		+= kprobes.o decode-insn.o	\
->  				   simulate-insn.o
->  obj-$(CONFIG_UPROBES)		+= uprobes.o decode-insn.o	\
->  				   simulate-insn.o
-> +obj-$(CONFIG_OPTPROBES)		+= opt_arm64.o			\
-> +				   optprobe_trampoline.o
-> diff --git a/arch/arm64/kernel/probes/opt_arm64.c b/arch/arm64/kernel/probes/opt_arm64.c
-> new file mode 100644
-> index 000000000000..1bad5cddcdf2
-> --- /dev/null
-> +++ b/arch/arm64/kernel/probes/opt_arm64.c
-> @@ -0,0 +1,199 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Code for Kernel probes Jump optimization.
-> + *
-> + * Copyright (C) 2021 Hisilicon Limited
-> + */
-> +
-> +#include <linux/jump_label.h>
-> +#include <linux/kprobes.h>
-> +
-> +#include <asm/cacheflush.h>
-> +#include <asm/compiler.h>
-> +#include <asm/insn.h>
-> +#include <asm/kprobes.h>
-> +#include <asm/patching.h>
-> +
-> +#define OPTPROBE_BATCH_SIZE 64
-> +#define GET_LO_VAL(val)		FIELD_GET(GENMASK(31, 0), val)
-> +#define GET_HI_VAL(val)		FIELD_GET(GENMASK(63, 32), val)
-> +
-> +#define TMPL_VAL_IDX \
-> +	(optprobe_template_val - optprobe_template_entry)
-> +#define TMPL_CALL_COMMON \
-> +	(optprobe_template_common - optprobe_template_entry)
-> +#define TMPL_RESTORE_ORIGN_INSN \
-> +	(optprobe_template_restore_orig_insn - optprobe_template_entry)
-> +#define TMPL_RESTORE_END \
-> +	(optprobe_template_restore_end - optprobe_template_entry)
-> +#define TMPL_END_IDX \
-> +	(optprobe_template_end - optprobe_template_entry)
-> +
-> +static bool insn_page_in_use;
-> +
-> +void *alloc_optinsn_page(void)
-> +{
-> +	if (insn_page_in_use)
-> +		return NULL;
-> +	insn_page_in_use = true;
-> +	return &optinsn_slot;
-> +}
-> +
-> +void free_optinsn_page(void *page)
-> +{
-> +	insn_page_in_use = false;
-> +}
-> +
-> +int arch_check_optimized_kprobe(struct optimized_kprobe *op)
-> +{
-> +	return 0;
-> +}
-> +
-> +int arch_prepared_optinsn(struct arch_optimized_insn *optinsn)
-> +{
-> +	return optinsn->trampoline != NULL;
-> +}
-> +
-> +int arch_within_optimized_kprobe(struct optimized_kprobe *op, kprobe_opcode_t *addr)
-> +{
-> +	return op->kp.addr == addr;
-> +}
-> +
-> +static void optprobe_set_pc_value(struct optimized_kprobe *op, struct pt_regs *regs)
-> +{
-> +	regs->pc = (unsigned long)op->kp.addr;
-> +}
-> +
-> +static int optprobe_check_branch_limit(unsigned long pc, unsigned long addr)
-> +{
-> +	long offset;
-> +
-> +	if ((pc & 0x3) || (addr & 0x3))
-> +		return -ERANGE;
-> +
-> +	offset = (long)addr - (long)pc;
-> +	if (offset < -SZ_128M || offset >= SZ_128M)
-> +		return -ERANGE;
-> +
-> +	return 0;
-> +}
-> +
-> +int arch_prepare_optimized_kprobe(struct optimized_kprobe *op, struct kprobe *orig)
-> +{
-> +	kprobe_opcode_t *code, *buf;
-> +	u32 insn;
-> +	int ret = -ENOMEM;
-> +	int i;
-> +
-> +	buf = kcalloc(MAX_OPTINSN_SIZE, sizeof(kprobe_opcode_t), GFP_KERNEL);
-> +	if (!buf)
-> +		return ret;
-> +
-> +	code = get_optinsn_slot();
-> +	if (!code)
-> +		goto out;
-> +
-> +	if (optprobe_check_branch_limit((unsigned long)code, (unsigned long)orig->addr + 8)) {
-> +		ret = -ERANGE;
-> +		goto error;
-> +	}
-> +
-> +	op->set_pc = optprobe_set_pc_value;
-> +	memcpy(buf, optprobe_template_entry, MAX_OPTINSN_SIZE * sizeof(kprobe_opcode_t));
-> +
-> +	insn = aarch64_insn_gen_branch_imm((unsigned long)&code[TMPL_CALL_COMMON],
-> +					   (unsigned long)&optprobe_common,
-> +					   AARCH64_INSN_BRANCH_LINK);
-> +	buf[TMPL_CALL_COMMON] = insn;
-> +
-> +	insn = aarch64_insn_gen_branch_imm((unsigned long)&code[TMPL_RESTORE_END],
-> +					   (unsigned long)op->kp.addr + 4,
-> +					   AARCH64_INSN_BRANCH_NOLINK);
-> +	buf[TMPL_RESTORE_END] = insn;
-> +
-> +	buf[TMPL_VAL_IDX] = cpu_to_le32(GET_LO_VAL((unsigned long)op));
-> +	buf[TMPL_VAL_IDX + 1] = cpu_to_le32(GET_HI_VAL((unsigned long)op));
-> +	buf[TMPL_RESTORE_ORIGN_INSN] = orig->opcode;
-> +
-> +	/* Setup template */
-> +	for (i = 0; i < MAX_OPTINSN_SIZE; i++)
-> +		aarch64_insn_patch_text_nosync(code + i, buf[i]);
-> +
-> +	flush_icache_range((unsigned long)code, (unsigned long)(&code[TMPL_VAL_IDX]));
-> +	/* Set op->optinsn.trampoline means prepared. */
-> +	op->optinsn.trampoline = code;
-> +
-> +out:
-> +	kfree(buf);
-> +	return ret;
-> +
-> +error:
-> +	free_optinsn_slot(code, 0);
-> +	goto out;
-> +}
-> +
-> +void arch_optimize_kprobes(struct list_head *oplist)
-> +{
-> +	struct optimized_kprobe *op, *tmp;
-> +	kprobe_opcode_t insns[OPTPROBE_BATCH_SIZE];
-> +	void *addrs[OPTPROBE_BATCH_SIZE];
-> +	int i = 0;
-> +
-> +	list_for_each_entry_safe(op, tmp, oplist, list) {
-> +		WARN_ON(kprobe_disabled(&op->kp));
-> +
-> +		/*
-> +		 * Backup instructions which will be replaced
-> +		 * by jump address
-> +		 */
-> +		memcpy(op->optinsn.orig_insn, op->kp.addr, AARCH64_INSN_SIZE);
-> +
-> +		addrs[i] = (void *)op->kp.addr;
-> +		insns[i] = aarch64_insn_gen_branch_imm((unsigned long)op->kp.addr,
-> +						       (unsigned long)op->optinsn.trampoline,
-> +						       AARCH64_INSN_BRANCH_NOLINK);
-> +
-> +		list_del_init(&op->list);
-> +		if (++i == OPTPROBE_BATCH_SIZE)
-> +			break;
-> +	}
-> +
-> +	aarch64_insn_patch_text(addrs, insns, i);
-> +}
-> +
-> +void arch_unoptimize_kprobe(struct optimized_kprobe *op)
-> +{
-> +	arch_arm_kprobe(&op->kp);
-> +}
-> +
-> +/*
-> + * Recover original instructions and breakpoints from relative jumps.
-> + * Caller must call with locking kprobe_mutex.
-> + */
-> +void arch_unoptimize_kprobes(struct list_head *oplist,
-> +			    struct list_head *done_list)
-> +{
-> +	struct optimized_kprobe *op, *tmp;
-> +	kprobe_opcode_t insns[OPTPROBE_BATCH_SIZE];
-> +	void *addrs[OPTPROBE_BATCH_SIZE];
-> +	int i = 0;
-> +
-> +	list_for_each_entry_safe(op, tmp, oplist, list) {
-> +		addrs[i] = (void *)op->kp.addr;
-> +		insns[i] = BRK64_OPCODE_KPROBES;
-> +		list_move(&op->list, done_list);
-> +
-> +		if (++i == OPTPROBE_BATCH_SIZE)
-> +			break;
-> +	}
-> +
-> +	aarch64_insn_patch_text(addrs, insns, i);
-> +}
-> +
-> +void arch_remove_optimized_kprobe(struct optimized_kprobe *op)
-> +{
-> +	if (op->optinsn.trampoline) {
-> +		free_optinsn_slot(op->optinsn.trampoline, 1);
-> +		op->optinsn.trampoline = NULL;
-> +	}
-> +}
-> diff --git a/arch/arm64/kernel/probes/optprobe_trampoline.S b/arch/arm64/kernel/probes/optprobe_trampoline.S
-> new file mode 100644
-> index 000000000000..1376daeae844
-> --- /dev/null
-> +++ b/arch/arm64/kernel/probes/optprobe_trampoline.S
-> @@ -0,0 +1,97 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * trampoline entry and return code for optprobes.
-> + */
-> +
-> +#include <linux/linkage.h>
-> +#include <asm/asm-offsets.h>
-> +#include <asm/assembler.h>
-> +
-> +#define        OPT_SLOT_SIZE   65536
-> +
-> +	.global optinsn_slot
-> +optinsn_slot:
-> +	.space  OPT_SLOT_SIZE
-> +
-> +SYM_CODE_START(optprobe_common)
-> +	stp x2, x3, [sp, #S_X2]
-> +	stp x4, x5, [sp, #S_X4]
-> +	stp x6, x7, [sp, #S_X6]
-> +	stp x8, x9, [sp, #S_X8]
-> +	stp x10, x11, [sp, #S_X10]
-> +	stp x12, x13, [sp, #S_X12]
-> +	stp x14, x15, [sp, #S_X14]
-> +	stp x16, x17, [sp, #S_X16]
-> +	stp x18, x19, [sp, #S_X18]
-> +	stp x20, x21, [sp, #S_X20]
-> +	stp x22, x23, [sp, #S_X22]
-> +	stp x24, x25, [sp, #S_X24]
-> +	stp x26, x27, [sp, #S_X26]
-> +	stp x28, x29, [sp, #S_X28]
-> +	add x2, sp, #PT_REGS_SIZE
-> +	str x2, [sp, #S_SP]
-> +	/* Construct a useful saved PSTATE */
-> +	mrs x2, nzcv
-> +	mrs x3, daif
-> +	orr x2, x2, x3
-> +	mrs x3, CurrentEL
-> +	orr x2, x2, x3
-> +	mrs x3, SPSel
-> +	orr x2, x2, x3
-> +	stp xzr, x2, [sp, #S_PC]
-> +
-> +	/* set the pt_regs address to x1 */
-> +	mov	x1, sp
-> +	/* store lr of optprobe_common temporary */
-> +	sub sp, sp, #0x10
-> +	str lr, [sp, #0x8]
-> +
-> +	bl optprobe_optimized_callback
-> +
-> +	ldr lr, [sp, #0x8]
-> +	add sp, sp, #0x10
-> +	ldr x0, [sp, #S_PSTATE]
-> +	and x0, x0, #(PSR_N_BIT | PSR_Z_BIT | PSR_C_BIT | PSR_V_BIT)
-> +	msr nzcv, x0
-> +	ldp x0, x1, [sp, #S_X0]
-> +	ldp x2, x3, [sp, #S_X2]
-> +	ldp x4, x5, [sp, #S_X4]
-> +	ldp x6, x7, [sp, #S_X6]
-> +	ldp x8, x9, [sp, #S_X8]
-> +	ldp x10, x11, [sp, #S_X10]
-> +	ldp x12, x13, [sp, #S_X12]
-> +	ldp x14, x15, [sp, #S_X14]
-> +	ldp x16, x17, [sp, #S_X16]
-> +	ldp x18, x19, [sp, #S_X18]
-> +	ldp x20, x21, [sp, #S_X20]
-> +	ldp x22, x23, [sp, #S_X22]
-> +	ldp x24, x25, [sp, #S_X24]
-> +	ldp x26, x27, [sp, #S_X26]
-> +	ldp x28, x29, [sp, #S_X28]
-> +	ret
-> +SYM_CODE_END(optprobe_common)
-> +
-> +	.global optprobe_template_entry
-> +optprobe_template_entry:
-> +	sub sp, sp, #PT_REGS_SIZE
-> +	str lr, [sp, #S_LR]
-> +	stp x0, x1, [sp, #S_X0]
-> +	/* Get parameters to optimized_callback() */
-> +	ldr x0, 1f
-> +	.global optprobe_template_common
-> +optprobe_template_common:
-> +	nop
-> +	ldr lr, [sp, #S_LR]
-> +       add sp, sp, #PT_REGS_SIZE
-> +	.global optprobe_template_restore_orig_insn
-> +optprobe_template_restore_orig_insn:
-> +	nop
-> +	.global optprobe_template_restore_end
-> +optprobe_template_restore_end:
-> +	nop
-> +	.global optprobe_template_val
-> +optprobe_template_val:
-> +	1:	.long 0
-> +		.long 0
-> +	.global optprobe_template_end
-> +optprobe_template_end:
-> diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-> index 8c8f7a4d93af..7be680155df7 100644
-> --- a/include/linux/kprobes.h
-> +++ b/include/linux/kprobes.h
-> @@ -329,6 +329,7 @@ struct optimized_kprobe {
->  	struct kprobe kp;
->  	struct list_head list;	/* list for optimizing queue */
->  	struct arch_optimized_insn optinsn;
-> +	void (*set_pc)(struct optimized_kprobe *op, struct pt_regs *regs);
->  };
->  
->  /* Architecture dependent functions for direct jump optimization */
-> @@ -345,6 +346,7 @@ extern int arch_within_optimized_kprobe(struct optimized_kprobe *op,
->  					kprobe_opcode_t *addr);
->  
->  extern void opt_pre_handler(struct kprobe *p, struct pt_regs *regs);
-> +extern void optprobe_optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs);
->  
->  DEFINE_INSN_CACHE_OPS(optinsn);
->  
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 21eccc961bba..d799e562a39a 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -430,6 +430,28 @@ void opt_pre_handler(struct kprobe *p, struct pt_regs *regs)
->  }
->  NOKPROBE_SYMBOL(opt_pre_handler);
->  
-> +void optprobe_optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs)
-> +{
-> +	if (kprobe_disabled(&op->kp))
-> +		return;
-> +
-> +	preempt_disable();
-> +
-> +	if (kprobe_running()) {
-> +		kprobes_inc_nmissed_count(&op->kp);
-> +	} else {
-> +		op->set_pc(op, regs);
-> +		__this_cpu_write(current_kprobe, &op->kp);
-> +		get_kprobe_ctlblk()->kprobe_status = KPROBE_HIT_ACTIVE;
-> +		opt_pre_handler(&op->kp, regs);
-> +		__this_cpu_write(current_kprobe, NULL);
-> +	}
-> +
-> +	preempt_enable();
-> +}
-> +NOKPROBE_SYMBOL(optprobe_optimized_callback)
-> +
-> +
->  /* Free optimized instructions and optimized_kprobe */
->  static void free_aggr_kprobe(struct kprobe *p)
->  {
-> -- 
-> 2.33.0
+> Patchwork link for the same: https://patchwork.kernel.org/project/linux-remoteproc/patch/1587749770-15082-5-git-send-email-ben.levinsky@xilinx.com/#23414963
+>
+> Also, I will sync with system-dt team about its current status and keep
+> updating about system-dt specs.
 > 
+> Please let me know your opinion / suggestion for any alternative approach.
+> 
+
+There is no point in burdening Rob any further than he already is - for the time
+being the current approach will work.
+
+> 
+> I agree with rest of the comments in this thread, and I will address them
+> all in next revision.
+> 
+> > > +	tcm_bank_count = ARRAY_SIZE(zynqmp_tcm_banks);
+> > > +
+> > > +	/* count per core tcm banks */
+> > > +	tcm_bank_count = tcm_bank_count / cluster->core_count;
+> > > +
+> > > +	/* r5 core 0 will use all of TCM banks in lockstep mode.
+> > > +	 * In split mode, r5 core0 will use 128k and r5 core1 will use another
+> > > +	 * 128k. Assign TCM banks to each core accordingly
+> > > +	 */
+> > > +	tcm_node = 0;
+> > > +	for (j = 0; j < cluster->core_count; j++) {
+> > > +		r5_core = &cluster->r5_cores[j];
+> > > +		r5_core->tcm_banks = devm_kzalloc(dev, sizeof(struct mem_bank_data) *
+> > > +						  tcm_bank_count, GFP_KERNEL);
+> > > +		if (IS_ERR_OR_NULL(r5_core->tcm_banks))
+> > > +			return -ENOMEM;
+> > > +
+> > > +		for (i = 0; i < tcm_bank_count; i++) {
+> > > +			/* Use pre-defined TCM reg values.
+> > > +			 * Eventually this should be replaced by values
+> > > +			 * parsed from dts.
+> > > +			 */
+> > > +			r5_core->tcm_banks[i].addr = tcm[tcm_node].addr;
+> > > +			r5_core->tcm_banks[i].size = tcm[tcm_node].size;
+> > > +			r5_core->tcm_banks[i].pm_domain_id = tcm[tcm_node].pm_domain_id;
+> > > +			r5_core->tcm_banks[i].bank_name = tcm[tcm_node].bank_name;
+> > > +			tcm_node++;
+> > > +		}
+> > > +
+> > > +		r5_core->tcm_bank_count = tcm_bank_count;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
+> > > +{
+> > > +	int res_mem_count, i;
+> > > +	struct device *dev;
+> > > +	struct device_node *np, *rmem_np;
+> > > +	struct reserved_mem *rmem;
+> > > +
+> > > +	dev = r5_core->dev;
+> > > +
+> > > +	np = r5_core->np;
+> > > +	if (IS_ERR_OR_NULL(np)) {
+> > > +		pr_err("invalid device node of r5 core\n");
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	res_mem_count = of_property_count_elems_of_size(np, "memory-region",
+> > > +							sizeof(phandle));
+> > > +	if (res_mem_count <= 0) {
+> > > +		dev_warn(dev, "failed to get memory-region property %d\n",
+> > > +			 res_mem_count);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	r5_core->res_mem = devm_kzalloc(dev,
+> > > +					res_mem_count * sizeof(struct reserved_mem),
+> > > +					GFP_KERNEL);
+> > > +	if (!r5_core->res_mem) {
+> > > +		dev_err(dev, "failed to allocate mem region memory\n");
+> > > +		return -ENOMEM;
+> > > +	}
+> > > +
+> > > +	for (i = 0; i < res_mem_count; i++) {
+> > > +		rmem_np = of_parse_phandle(np, "memory-region", i);
+> > > +		if (!rmem_np)
+> > > +			return -EINVAL;
+> > > +
+> > > +		rmem = of_reserved_mem_lookup(rmem_np);
+> > > +		if (!rmem) {
+> > > +			of_node_put(rmem_np);
+> > > +			return -EINVAL;
+> > > +		}
+> > > +
+> > > +		memcpy(&r5_core->res_mem[i], rmem,
+> > > +		       sizeof(struct reserved_mem));
+> > > +		of_node_put(rmem_np);
+> > > +	}
+> > > +
+> > > +	r5_core->res_mem_count = res_mem_count;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster)
+> > > +{
+> > > +	int ret, i;
+> > > +	struct zynqmp_r5_core *r5_core;
+> > > +	struct device *dev = cluster->dev;
+> > > +
+> > > +	ret = zynqmp_r5_get_tcm_node(cluster);
+> > > +	if (ret < 0) {
+> > > +		dev_err(dev, "can't get tcm node, err %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	for (i = 0; i < cluster->core_count; i++) {
+> > > +		r5_core = &cluster->r5_cores[i];
+> > > +		if (!r5_core) {
+> > > +			pr_err("invalid r5 core\n");
+> > > +			return -EINVAL;
+> > > +		}
+> > > +
+> > > +		ret = zynqmp_r5_get_mem_region_node(r5_core);
+> > > +		if (ret)
+> > > +			dev_warn(dev, "memory-region prop failed %d\n", ret);
+> > > +
+> > > +		ret = of_property_read_u32_index(r5_core->np, "power-domains",
+> > > +						 1, &r5_core->pm_domain_id);
+> > > +		if (ret) {
+> > > +			dev_err(dev, "failed to get power-domains property\n");
+> > > +			return ret;
+> > > +		}
+> > > +
+> > > +		ret = zynqmp_r5_set_mode(r5_core, cluster->mode);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +
+> > > +		ret = zynqmp_r5_add_rproc_core(r5_core);
+> > > +		if (ret) {
+> > > +			dev_err(dev, "failed to init r5 core %d\n", i);
+> > > +			return ret;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+> > > +{
+> > > +	struct device *dev = cluster->dev;
+> > > +	struct device_node *dev_node = dev_of_node(dev);
+> > > +	struct device_node *child;
+> > > +	struct platform_device *child_pdev;
+> > > +	int core_count = 0, ret, i;
+> > > +	enum zynqmp_r5_cluster_mode cluster_mode = LOCKSTEP_MODE;
+> > > +	struct zynqmp_r5_core *r5_cores;
+> > > +
+> > > +	ret = of_property_read_u32(dev_node, "xlnx,cluster-mode", &cluster_mode);
+> > > +
+> > > +	/* on success returns 0, if not defined then returns -EINVAL,
+> > > +	 * In that case, default is LOCKSTEP mode
+> > > +	 */
+> > > +	if (ret != -EINVAL && ret != 0) {
+> > > +		dev_err(dev, "Invalid xlnx,cluster-mode property\n");
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	if (cluster_mode == SINGLE_CPU_MODE) {
+> > > +		dev_err(dev, "driver does not support single cpu mode\n");
+> > > +		return -EINVAL;
+> > > +	} else if ((cluster_mode != SPLIT_MODE &&
+> > > +		   cluster_mode != LOCKSTEP_MODE)) {
+> > > +		dev_err(dev, "Invalid cluster mode\n");
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	core_count = of_get_available_child_count(dev_node);
+> > > +	if (core_count <= 0) {
+> > > +		dev_err(dev, "Invalid number of r5 cores %d", core_count);
+> > > +		return -EINVAL;
+> > > +	} else if (cluster_mode == SPLIT_MODE && core_count != 2) {
+> > > +		dev_err(dev, "Invalid number of r5 cores for split mode\n");
+> > > +		return -EINVAL;
+> > > +	} else if (cluster_mode == LOCKSTEP_MODE && core_count == 2) {
+> > > +		dev_warn(dev, "Only r5 core0 will be used\n");
+> > > +		core_count = 1;
+> > > +	}
+> > > +
+> > > +	r5_cores = devm_kzalloc(dev, sizeof(struct zynqmp_r5_core) *
+> > > +						 core_count, GFP_KERNEL);
+> > > +	if (IS_ERR_OR_NULL(r5_cores)) {
+> > > +		dev_err(dev, "can't allocate memory for cores\n");
+> > > +		return -ENOMEM;
+> > > +	}
+> > > +
+> > > +	i = 0;
+> > > +	for_each_available_child_of_node(dev_node, child) {
+> > > +		child_pdev = of_find_device_by_node(child);
+> > > +		if (!child_pdev)
+> > > +			return -ENODEV;
+> > > +
+> > > +		r5_cores[i].dev = &child_pdev->dev;
+> > > +		if (!r5_cores[i].dev) {
+> > > +			pr_err("can't get device for r5 core %d\n", i);
+> > > +			return -ENODEV;
+> > > +		}
+> > > +
+> > > +		r5_cores[i].np = dev_of_node(r5_cores[i].dev);
+> > > +		if (!r5_cores[i].np) {
+> > > +			pr_err("can't get device node for r5 core %d\n", i);
+> > > +			return -ENODEV;
+> > > +		}
+> > > +
+> > > +		i++;
+> > > +		if (i == core_count)
+> > > +			break;
+> > > +	}
+> > > +
+> > > +	cluster->mode = cluster_mode;
+> > > +	cluster->core_count = core_count;
+> > > +	cluster->r5_cores = r5_cores;
+> > > +
+> > > +	ret = zynqmp_r5_core_init(cluster);
+> > > +	if (ret < 0) {
+> > > +		dev_err(dev, "failed to init r5 core err %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	zynqmp_r5_print_dt_node_info(cluster);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static void zynqmp_r5_cluster_exit(void *data)
+> > > +{
+> > > +	struct platform_device *pdev = (struct platform_device *)data;
+> > > +
+> > > +	platform_set_drvdata(pdev, NULL);
+> > > +
+> > > +	pr_info("Exit r5f subsystem driver\n");
+> > > +}
+> > > +
+> > > +/*
+> > > + * zynqmp_r5_remoteproc_probe()
+> > > + *
+> > > + * @pdev: domain platform device for R5 cluster
+> > > + *
+> > > + * called when driver is probed, for each R5 core specified in DT,
+> > > + * setup as needed to do remoteproc-related operations
+> > > + *
+> > > + * Return: 0 for success, negative value for failure.
+> > > + */
+> > > +static int zynqmp_r5_remoteproc_probe(struct platform_device *pdev)
+> > > +{
+> > > +	int ret;
+> > > +	struct zynqmp_r5_cluster *cluster;
+> > > +	struct device *dev = &pdev->dev;
+> > > +
+> > > +	cluster = devm_kzalloc(dev, sizeof(*cluster), GFP_KERNEL);
+> > > +	if (IS_ERR_OR_NULL(cluster))
+> > > +		return -ENOMEM;
+> > Function devm_kzalloc() does not return an code on error, just NULL.  Please fix
+> > throughout the driver.
+> > 
+> > > +
+> > > +	cluster->dev = dev;
+> > > +
+> > > +	ret = devm_of_platform_populate(dev);
+> > > +	if (ret) {
+> > > +		dev_err(dev, "failed to populate platform dev %d\n", ret);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	/* wire in so each core can be cleaned up at driver remove */
+> > > +	platform_set_drvdata(pdev, cluster);
+> > > +
+> > > +	ret = devm_add_action_or_reset(dev, zynqmp_r5_cluster_exit, pdev);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	ret = zynqmp_r5_cluster_init(cluster);
+> > > +	if (ret) {
+> > > +		dev_err(dev, "Invalid r5f subsystem device tree\n");
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	dev_info(dev, "Xilinx r5f remoteproc driver probe success\n");
+> > Please remove this.
+> > 
+> > I am out of time for today and will continue on Monday.
+> > 
+> > Thanks,
+> > Mathieu
+> > 
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +/* Match table for OF platform binding */
+> > > +static const struct of_device_id zynqmp_r5_remoteproc_match[] = {
+> > > +	{ .compatible = "xlnx,zynqmp-r5fss", },
+> > > +	{ /* end of list */ },
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
+> > > +
+> > > +static struct platform_driver zynqmp_r5_remoteproc_driver = {
+> > > +	.probe = zynqmp_r5_remoteproc_probe,
+> > > +	.driver = {
+> > > +		.name = "zynqmp_r5_remoteproc",
+> > > +		.of_match_table = zynqmp_r5_remoteproc_match,
+> > > +	},
+> > > +};
+> > > +module_platform_driver(zynqmp_r5_remoteproc_driver);
+> > > +
+> > > +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
+> > > +MODULE_AUTHOR("Xilinx Inc.");
+> > > +MODULE_LICENSE("GPL v2");
+> > > -- 
+> > > 2.25.1
+> > > 

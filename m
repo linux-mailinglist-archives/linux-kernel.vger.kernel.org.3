@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40494473786
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE1E47379B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243665AbhLMWds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S243900AbhLMWeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:34:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243608AbhLMWdk (ORCPT
+        with ESMTP id S243611AbhLMWdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 17:33:40 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB7C0613FE
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1664C061370
         for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:33:39 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id z6so16191762pfe.7
+Received: by mail-pl1-x631.google.com with SMTP id o14so12201184plg.5
         for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:33:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ypAqfpDLyABO9VWd+7q/zjxqivhps6ZCyCGIhUJeNUo=;
-        b=HYmmpRXYw9np+KrjXksOTVvhJk0hzDZeScnf9C7zBXEwa5722xBZplzxqHkk8K+wM4
-         x22paAjEOeVuthEIWSgYEmtRdyL5TKg6eREa9ytfvORoA0AaohsVTGUhnh4EB8VyJeAC
-         pQT/0Unsm2FNNqR364Q9Q2aBpcGImYaZf1Y+Q=
+        bh=2QF7GtMPgeovGkn/Um2s+IAYrZXWu92GGIBGeTuNd0g=;
+        b=D+azZllfG6Hnp0tbGVmfDafUxIigk3rYUYjjqPQ2VSzfBBPhVdIQmsR7RDW6bHnoeu
+         oGkp8ZAXw9HssYxoaBs8VV/+9XVjNOqWzr8j3tRu8Eja6Jp1MR7ynC5HlHGrQUJG795M
+         1wsIddaY0RcyVwTTH1e8V0WT9SwTdhkcaldoU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ypAqfpDLyABO9VWd+7q/zjxqivhps6ZCyCGIhUJeNUo=;
-        b=gqXYt8bTT25lE6dv9BBEcYudlDyVs8QFQmommRp2sJbujMJnpGw9sI5r3nbfi2/u75
-         avQj/NB0YNOVv7phA1sQKi2tp+6kiEEnS84HMxXxkiQiG1SZ32xSeAejtRjlu+jQHesY
-         F5kVG4PmYLAAsbPgao1FIxWoI7vPzKvW2kG7bZO88xvtCvmfHB5YFio/A+WFBYSHxKt/
-         qjIjj3jXIVowFaldx3WrUFDp1Bb4Bv81FcctyUC1io0RI+J9whFqrqmezUc2+dm+vhI1
-         k1TerQ07czd5GGqM5Lfk/Z9wkKIziygeCSa6mbG24KB9fUCOnK99LVgy/AZpe7/0FjpA
-         EMtw==
-X-Gm-Message-State: AOAM532xZliZ8IFuxbmkijGVAZ3ncIzbEhfXF9ug685b35qXeHM71309
-        k8EIjjfqT3m1Qe9xUVaN6C/xaGK+6v5TmA==
-X-Google-Smtp-Source: ABdhPJzszKffG7hEVNrsqgjUaqXQV6JWoKj4r0PQL/u6NXJoP3YaNuhktq12bKwSnBSjLUJ1jff2Ig==
-X-Received: by 2002:a05:6a00:728:b0:4b0:b1c:6fd9 with SMTP id 8-20020a056a00072800b004b00b1c6fd9mr931373pfm.27.1639434819126;
+        bh=2QF7GtMPgeovGkn/Um2s+IAYrZXWu92GGIBGeTuNd0g=;
+        b=NPOhlrxRcr//FWH/kZXLaJtq3+R1PdsknPOdLgHlnNg/J7SRCkX/RN7g1bdeeZFntn
+         feTCjhqMUc2Pltp8/Fe2ghMZBV8betMndqlg5xPlSZR18TF7Bde/9CaJPw1kDmFbKVho
+         M1G74o1AAL9TJ7img3i5Nq2M5MWKOvoDb2eSeKLVs5VDBEVRp+FYuhnqLW3cp+m2pbZe
+         6y1C5Y4wdya+UgZ0vEQygAl65uUF7bx09dG0DBTtAqzp47Eg96wnpRTez7Hp5Ltgc2v5
+         C3zBWnnIZqGuBqT1pXrCX2OBnHCr8xSmbTBNuRi/xUmuNX80Yf1gPnxSQnBVRP7lJGnk
+         aInA==
+X-Gm-Message-State: AOAM532Eb0Xmy9V+olABrbCZ4tbmGPSG4gmbt94k2f3PBplXHvU0Tbo9
+        nvo4raGz2BOi3FgdGGLJ5/ixeQ==
+X-Google-Smtp-Source: ABdhPJw/heRlxL9p9MafpKPpU+aOX/8aQldq2ikYRg4gpnEqC+p3RlEcTY7uzjlt0iiAzHzPVVVY4A==
+X-Received: by 2002:a17:90b:34b:: with SMTP id fh11mr1299850pjb.14.1639434819283;
         Mon, 13 Dec 2021 14:33:39 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n6sm12607167pfa.28.2021.12.13.14.33.37
+        by smtp.gmail.com with ESMTPSA id m3sm10922153pgj.25.2021.12.13.14.33.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 13 Dec 2021 14:33:37 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-hardening@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 08/17] ath11k: Use memset_startat() for clearing queue descriptors
-Date:   Mon, 13 Dec 2021 14:33:22 -0800
-Message-Id: <20211213223331.135412-9-keescook@chromium.org>
+Subject: [PATCH 09/17] RDMA/mlx5: Use memset_after() to zero struct mlx5_ib_mr
+Date:   Mon, 13 Dec 2021 14:33:23 -0800
+Message-Id: <20211213223331.135412-10-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211213223331.135412-1-keescook@chromium.org>
 References: <20211213223331.135412-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3372; h=from:subject; bh=axAygS4thk+uvbzO1moZ1VRjcqDhXcfP4Vyjt/i9h9M=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o4MSeELfzO6H9fAjm8hu3Uuu54uiFqPasTWcda Tt84i++JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOAAKCRCJcvTf3G3AJg6UD/ 9gv7gsrwjC3trNa3bqE7ASZwIKkSV3jhOCULnnlAT6TpZapvVHloCauOe9Ak3kdSyLU2+YLoH6d9oP uQssQ49+Z90FyBh5emo/KJCJ4sMgBRpll+uOJfCswRp/CcqW9EylGTrhnIN30velUf4G3BYdw6ZKpE SVjvVrn6G9P2O5q7P/i9ylYPuylcQD8ON+n/NZHUTfqjJ1hFLVsMUv2j52yGA8dSQj4mAIDbao1EJc shIWDyhCXdTvlOBvAJRAkHm15rGNigJT7KwYk02RC5xnN6ScOurvW7G0IL+/UqWrAJ8lvkcyYvX10Y QBM6MbTZHh/4u6lVad/yxGEf5HdixHSLa3Pai8MhD69OVpm3IkVIKKwutpVcZ+xECf3pdjIGGx5omH r96QH6cu5J+ffvGzxCDEse2Gt3XA2Fp2UF2rm4a6gph4+0FYYrys8j0sRZkPpu3NpMHitpbyLcRz2l UfX2cxTiFr9Q+ERqtJga9+XGJlcNK/4ELfdNws/B63tcQ+bYP/Sf1Wzl+y3aHzNANidROlMbt6hiXq 9+WjpjvJD9QcPRJ97roicypuAOgGUGOUAKX6/0+YQa8nuQNBrJjG/UyhG5AMzXvvc6xOF1Hm1K8IeF bZfkQZJuNx7BPw1+ejSvtegHLr9aaclfNTDjDugQ+0gUU1C4y4EaostljlpA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1489; h=from:subject; bh=ci7qDUSQ7qxfbgt9mwXtWi+IdiOxq4CPa5QMzuuRbIM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o4c9gG5dEjAyZVb2YGUUu1WKghUR8yjX2IwA14 lNycyx+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOAAKCRCJcvTf3G3AJmCgD/ 94y/49uzwy2o4ceIgt9+LabsLgQ83nyWbVWzKF7S+FkPF2fdPgUnZo1u9AUKHX0NfCIEEUhu2QpFLt lD6tuJUJhfURZriu7JD241xMcFM+tk8XapHBoUEgDV5I6DuxCKANkWFsIcLgOkDbaUPkoG4D43qzBg CYWMgZmg/6c7JaDkP3M6vnTFxmh+X3HECy+9ucC46uKNwVm1jaz9L51AqtpYpXdM8s6ckqRLskpydz vh8Zvvu9c909q1aMS6twz0Y4QovPGZkcqBI9C4C289/ekn4BTrEOX84wXntPOMmVrdYSiuWY8D6DYP hrolXMIdtsk9pGuSWT5Hm6oKImFOUWVoxxtsciKQXkaCGe8H32gHQlH7FWBAQQ3f1cs4C7zgTi5lqb 74R6nJXU/yxFmXvHKIYhoid8VaogMVj+DKMOZtscumAjD3jY9XweYiCBvdu87kwtetw2Pk5qBBGQtf umEkP+SIFK3hQsPRUQUVjL5dH3JT3gFxmQMab9Iql8GfYGNAAQUPTnBbR7jIpOiFuewqgotfBhAQdq j0XwcevUQx/JF3i4DsLsVWTPD07eYKmRzsHZmRoFMkGrnMgVEHL04p3So0NNoHEXupSRfSfsgzca/8 npTJ0Rg2JkPh/NgMyrhGq+IYI7SL6gJr8j0vQxoX442T1P8h8uEzDWglsLUA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -71,75 +70,42 @@ In preparation for FORTIFY_SOURCE performing compile-time and run-time
 field bounds checking for memset(), avoid intentionally writing across
 neighboring fields.
 
-Use memset_startat() so memset() doesn't get confused about writing
-beyond the destination member that is intended to be the starting point
-of zeroing through the end of the struct. Additionally split up a later
-field-spanning memset() so that memset() can reason about the size.
+Use memset_after() to zero the end of struct mlx5_ib_mr that should
+be initialized.
 
-Cc: Kalle Valo <kvalo@codeaurora.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: ath11k@lists.infradead.org
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
+Cc: Doug Ledford <dledford@redhat.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-rdma@vger.kernel.org
+Acked-by: Leon Romanovsky <leonro@nvidia.com>
+Link: https://lore.kernel.org/lkml/YbByJSkBgLRp5S8V@unreal
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/wireless/ath/ath11k/hal_rx.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/infiniband/hw/mlx5/mlx5_ib.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/hal_rx.c b/drivers/net/wireless/ath/ath11k/hal_rx.c
-index 329c404cfa80..0e43e215c10a 100644
---- a/drivers/net/wireless/ath/ath11k/hal_rx.c
-+++ b/drivers/net/wireless/ath/ath11k/hal_rx.c
-@@ -29,8 +29,7 @@ static int ath11k_hal_reo_cmd_queue_stats(struct hal_tlv_hdr *tlv,
- 		  FIELD_PREP(HAL_TLV_HDR_LEN, sizeof(*desc));
+diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+index 4a7a56ed740b..ded10719b643 100644
+--- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
++++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+@@ -664,8 +664,8 @@ struct mlx5_ib_mr {
  
- 	desc = (struct hal_reo_get_queue_stats *)tlv->value;
--	memset(&desc->queue_addr_lo, 0,
--	       (sizeof(*desc) - sizeof(struct hal_reo_cmd_hdr)));
-+	memset_startat(desc, 0, queue_addr_lo);
+ 	/* User MR data */
+ 	struct mlx5_cache_ent *cache_ent;
++	/* Everything after cache_ent is zero'd when MR allocated */
  
- 	desc->cmd.info0 &= ~HAL_REO_CMD_HDR_INFO0_STATUS_REQUIRED;
- 	if (cmd->flag & HAL_REO_CMD_FLG_NEED_STATUS)
-@@ -62,8 +61,7 @@ static int ath11k_hal_reo_cmd_flush_cache(struct ath11k_hal *hal, struct hal_tlv
- 		  FIELD_PREP(HAL_TLV_HDR_LEN, sizeof(*desc));
+-	/* This is zero'd when the MR is allocated */
+ 	union {
+ 		/* Used only while the MR is in the cache */
+ 		struct {
+@@ -718,7 +718,7 @@ struct mlx5_ib_mr {
+ /* Zero the fields in the mr that are variant depending on usage */
+ static inline void mlx5_clear_mr(struct mlx5_ib_mr *mr)
+ {
+-	memset(mr->out, 0, sizeof(*mr) - offsetof(struct mlx5_ib_mr, out));
++	memset_after(mr, 0, cache_ent);
+ }
  
- 	desc = (struct hal_reo_flush_cache *)tlv->value;
--	memset(&desc->cache_addr_lo, 0,
--	       (sizeof(*desc) - sizeof(struct hal_reo_cmd_hdr)));
-+	memset_startat(desc, 0, cache_addr_lo);
- 
- 	desc->cmd.info0 &= ~HAL_REO_CMD_HDR_INFO0_STATUS_REQUIRED;
- 	if (cmd->flag & HAL_REO_CMD_FLG_NEED_STATUS)
-@@ -101,8 +99,7 @@ static int ath11k_hal_reo_cmd_update_rx_queue(struct hal_tlv_hdr *tlv,
- 		  FIELD_PREP(HAL_TLV_HDR_LEN, sizeof(*desc));
- 
- 	desc = (struct hal_reo_update_rx_queue *)tlv->value;
--	memset(&desc->queue_addr_lo, 0,
--	       (sizeof(*desc) - sizeof(struct hal_reo_cmd_hdr)));
-+	memset_startat(desc, 0, queue_addr_lo);
- 
- 	desc->cmd.info0 &= ~HAL_REO_CMD_HDR_INFO0_STATUS_REQUIRED;
- 	if (cmd->flag & HAL_REO_CMD_FLG_NEED_STATUS)
-@@ -764,15 +761,17 @@ void ath11k_hal_reo_qdesc_setup(void *vaddr, int tid, u32 ba_window_size,
- 	 * size changes and also send WMI message to FW to change the REO
- 	 * queue descriptor in Rx peer entry as part of dp_rx_tid_update.
- 	 */
--	memset(ext_desc, 0, 3 * sizeof(*ext_desc));
-+	memset(ext_desc, 0, sizeof(*ext_desc));
- 	ath11k_hal_reo_set_desc_hdr(&ext_desc->desc_hdr, HAL_DESC_REO_OWNED,
- 				    HAL_DESC_REO_QUEUE_EXT_DESC,
- 				    REO_QUEUE_DESC_MAGIC_DEBUG_PATTERN_1);
- 	ext_desc++;
-+	memset(ext_desc, 0, sizeof(*ext_desc));
- 	ath11k_hal_reo_set_desc_hdr(&ext_desc->desc_hdr, HAL_DESC_REO_OWNED,
- 				    HAL_DESC_REO_QUEUE_EXT_DESC,
- 				    REO_QUEUE_DESC_MAGIC_DEBUG_PATTERN_2);
- 	ext_desc++;
-+	memset(ext_desc, 0, sizeof(*ext_desc));
- 	ath11k_hal_reo_set_desc_hdr(&ext_desc->desc_hdr, HAL_DESC_REO_OWNED,
- 				    HAL_DESC_REO_QUEUE_EXT_DESC,
- 				    REO_QUEUE_DESC_MAGIC_DEBUG_PATTERN_3);
+ static inline bool is_odp_mr(struct mlx5_ib_mr *mr)
 -- 
 2.30.2
 

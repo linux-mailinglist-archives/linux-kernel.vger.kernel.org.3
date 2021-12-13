@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084204725B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E83A472808
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbhLMJpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:45:44 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:35860 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbhLMJlk (ORCPT
+        id S242307AbhLMKHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:07:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47726 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239445AbhLMKBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:41:40 -0500
+        Mon, 13 Dec 2021 05:01:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0F912CE0E8B;
-        Mon, 13 Dec 2021 09:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3A4C341C5;
-        Mon, 13 Dec 2021 09:41:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01A1BB80EAF;
+        Mon, 13 Dec 2021 10:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F4EC34601;
+        Mon, 13 Dec 2021 10:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388497;
-        bh=g7TtM4lZrjv6vxgD9PUn+nEapo7Y78gLjwplUuzXz2g=;
+        s=korg; t=1639389710;
+        bh=XY+5QjQkfAzoqtBLjsjFlqQGFCZdy4KKgQnncCaeXJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LJEm1XBETptYfesoxmnqtUwsHaFivB4VulDOzIP8WYIfFWlBfI+gAu+nA7lRdO0i2
-         iEjFBeN+bERjatfVrg+uJ5Dw+3MJxooEqjQb9ePYNmg17IHSKahEZLfloTLs21jyzK
-         huV4hE9XWFlMIv4mUJ/fZWus9BbPYcmAfQo8e2go=
+        b=x3t5qemKsh/tYE2hh8YHGDa8uuFYqa/L9KTACLD41UyrKq94zkWWytMxZlAo1FirJ
+         Q7YnP2bzrYk2eCllAnmAQLwZtDanhX+OD+Y7ybWBWUXl5GgL9Ea3LqmgviYcbNEoNw
+         wZUsotwyJDQqBBcUCopq1/nfJpJGFxrnd3GEiIgo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wudi Wang <wangwudi@hisilicon.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 4.19 71/74] irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
+        stable@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH 5.15 127/171] Documentation/locking/locktypes: Update migrate_disable() bits.
 Date:   Mon, 13 Dec 2021 10:30:42 +0100
-Message-Id: <20211213092933.183337020@linuxfoundation.org>
+Message-Id: <20211213092949.320735852@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,38 +46,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wudi Wang <wangwudi@hisilicon.com>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-commit b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a upstream.
+commit 6a631c0432dcccbcf45839016a07c015e335e9ae upstream.
 
-INVALL CMD specifies that the ITS must ensure any caching associated with
-the interrupt collection defined by ICID is consistent with the LPI
-configuration tables held in memory for all Redistributors. SYNC is
-required to ensure that INVALL is executed.
+The initial implementation of migrate_disable() for mainline was a
+wrapper around preempt_disable(). RT kernels substituted this with
+a real migrate disable implementation.
 
-Currently, LPI configuration data may be inconsistent with that in the
-memory within a short period of time after the INVALL command is executed.
+Later on mainline gained true migrate disable support, but the
+documentation was not updated.
 
-Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
-Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
-Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
+Update the documentation, remove the claims about migrate_disable()
+mapping to preempt_disable() on non-PREEMPT_RT kernels.
+
+Fixes: 74d862b682f51 ("sched: Make migrate_disable/enable() independent of RT")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211127163200.10466-2-bigeasy@linutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-gic-v3-its.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/locking/locktypes.rst |    9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -581,7 +581,7 @@ static struct its_collection *its_build_
+--- a/Documentation/locking/locktypes.rst
++++ b/Documentation/locking/locktypes.rst
+@@ -439,11 +439,9 @@ preemption. The following substitution w
+   spin_lock(&p->lock);
+   p->count += this_cpu_read(var2);
  
- 	its_fixup_cmd(cmd);
+-On a non-PREEMPT_RT kernel migrate_disable() maps to preempt_disable()
+-which makes the above code fully equivalent. On a PREEMPT_RT kernel
+ migrate_disable() ensures that the task is pinned on the current CPU which
+ in turn guarantees that the per-CPU access to var1 and var2 are staying on
+-the same CPU.
++the same CPU while the task remains preemptible.
  
--	return NULL;
-+	return desc->its_invall_cmd.col;
- }
+ The migrate_disable() substitution is not valid for the following
+ scenario::
+@@ -456,9 +454,8 @@ scenario::
+     p = this_cpu_ptr(&var1);
+     p->val = func2();
  
- static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
+-While correct on a non-PREEMPT_RT kernel, this breaks on PREEMPT_RT because
+-here migrate_disable() does not protect against reentrancy from a
+-preempting task. A correct substitution for this case is::
++This breaks because migrate_disable() does not protect against reentrancy from
++a preempting task. A correct substitution for this case is::
+ 
+   func()
+   {
 
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6468472528
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0096472651
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbhLMJla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        id S235430AbhLMJuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234883AbhLMJjj (ORCPT
+        with ESMTP id S236076AbhLMJp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:39:39 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0E6C0698DD;
-        Mon, 13 Dec 2021 01:38:02 -0800 (PST)
+        Mon, 13 Dec 2021 04:45:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1789FC08EB2C;
+        Mon, 13 Dec 2021 01:41:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B44EDCE0E39;
-        Mon, 13 Dec 2021 09:38:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FEBFC341C5;
-        Mon, 13 Dec 2021 09:37:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5EE0B80E1D;
+        Mon, 13 Dec 2021 09:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 286C9C00446;
+        Mon, 13 Dec 2021 09:41:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388279;
-        bh=EMXsWDEEBe/1M5XBOr7AJEtKoVJym7LRnp2sCEeC2kg=;
+        s=korg; t=1639388462;
+        bh=rlPbh9gxhCyPgkPTHxnT1/0U3yNoE82moenTcsncODU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lU8c7THCwNJ/cSemGeo5bU1rguIVFK2NP8yxxSzRC5nlzH6LS9Oq2Y2k+/r1K7paa
-         rCxsblAobJkPGW8+nL3V537BDoR0JqyCDgxigYLZoCVnAfh3PacGbKYaag3At5gxF2
-         HkHbibDjXbRMFERrE4Gg2W6GfIlzvFQMtT1SfXxU=
+        b=Qb5ZQDql2ZH0uC2s7I4BFzcNx835UMAAAdKsD71286nGVpP2ZLos5dlJmngnBXHu9
+         zvycFg0jlCICTlur1+UgbzEHOZukVdpCFzXrdnWM1rTBW6z5hug4D609rGUXh22S3n
+         Y80nRlpF2fPly8o5IuS6xTvSjrXpVtyeCQF/y0ko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.14 49/53] iio: accel: kxcjk-1013: Fix possible memory leak in probe and remove
+Subject: [PATCH 4.19 57/74] iio: trigger: Fix reference counting
 Date:   Mon, 13 Dec 2021 10:30:28 +0100
-Message-Id: <20211213092929.993372000@linuxfoundation.org>
+Message-Id: <20211213092932.707961851@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,60 +50,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit 70c9774e180d151abaab358108e3510a8e615215 upstream.
+commit a827a4984664308f13599a0b26c77018176d0c7c upstream.
 
-When ACPI type is ACPI_SMO8500, the data->dready_trig will not be set, the
-memory allocated by iio_triggered_buffer_setup() will not be freed, and cause
-memory leak as follows:
+In viio_trigger_alloc() device_initialize() is used to set the initial
+reference count of the trigger to 1. Then another get_device() is called on
+trigger. This sets the reference count to 2 before the trigger is returned.
 
-unreferenced object 0xffff888009551400 (size 512):
-  comm "i2c-SMO8500-125", pid 911, jiffies 4294911787 (age 83.852s)
-  hex dump (first 32 bytes):
-    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 20 e2 e5 c0 ff ff ff ff  ........ .......
-  backtrace:
-    [<0000000041ce75ee>] kmem_cache_alloc_trace+0x16d/0x360
-    [<000000000aeb17b0>] iio_kfifo_allocate+0x41/0x130 [kfifo_buf]
-    [<000000004b40c1f5>] iio_triggered_buffer_setup_ext+0x2c/0x210 [industrialio_triggered_buffer]
-    [<000000004375b15f>] kxcjk1013_probe+0x10c3/0x1d81 [kxcjk_1013]
+iio_trigger_free(), which is the matching API to viio_trigger_alloc(),
+calls put_device() which decreases the reference count by 1. But the second
+reference count acquired in viio_trigger_alloc() is never dropped.
 
-Fix it by remove data->dready_trig condition in probe and remove.
+As a result the iio_trigger_release() function is never called and the
+memory associated with the trigger is never freed.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: a25691c1f967 ("iio: accel: kxcjk1013: allow using an external trigger")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Since there is no reason for the trigger to start its lifetime with two
+reference counts just remove the extra get_device() in
+viio_trigger_alloc().
+
+Fixes: 5f9c035cae18 ("staging:iio:triggers. Add a reference get to the core for triggers.")
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Acked-by: Nuno Sá <nuno.sa@analog.com>
+Link: https://lore.kernel.org/r/20211024092700.6844-2-lars@metafoo.de
 Cc: <Stable@vger.kernel.org>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20211025124159.2700301-1-yangyingliang@huawei.com
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/kxcjk-1013.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/iio/industrialio-trigger.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/iio/accel/kxcjk-1013.c
-+++ b/drivers/iio/accel/kxcjk-1013.c
-@@ -1326,8 +1326,7 @@ static int kxcjk1013_probe(struct i2c_cl
- 	return 0;
- 
- err_buffer_cleanup:
--	if (data->dready_trig)
--		iio_triggered_buffer_cleanup(indio_dev);
-+	iio_triggered_buffer_cleanup(indio_dev);
- err_trigger_unregister:
- 	if (data->dready_trig)
- 		iio_trigger_unregister(data->dready_trig);
-@@ -1350,8 +1349,8 @@ static int kxcjk1013_remove(struct i2c_c
- 	pm_runtime_set_suspended(&client->dev);
- 	pm_runtime_put_noidle(&client->dev);
- 
-+	iio_triggered_buffer_cleanup(indio_dev);
- 	if (data->dready_trig) {
--		iio_triggered_buffer_cleanup(indio_dev);
- 		iio_trigger_unregister(data->dready_trig);
- 		iio_trigger_unregister(data->motion_trig);
+--- a/drivers/iio/industrialio-trigger.c
++++ b/drivers/iio/industrialio-trigger.c
+@@ -549,7 +549,6 @@ static struct iio_trigger *viio_trigger_
+ 		irq_modify_status(trig->subirq_base + i,
+ 				  IRQ_NOREQUEST | IRQ_NOAUTOEN, IRQ_NOPROBE);
  	}
+-	get_device(&trig->dev);
+ 
+ 	return trig;
+ 
 
 

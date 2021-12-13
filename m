@@ -2,75 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DED473123
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D3B47311D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240441AbhLMQDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:03:07 -0500
-Received: from mga07.intel.com ([134.134.136.100]:10837 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240386AbhLMQC4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:02:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639411376; x=1670947376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=980G/17/cPf9ib/kPiRwCuEEfBn5w1Rt8kaFq1oJ674=;
-  b=ct1d8MIPc4y/5nj7WEDT+vo98yenVnpUt1hYqoF3m7NigsTQzDOMXLMT
-   uoyVk9JBL/rcjVOIWwPxcogiHnxkwo38W3QMWv24yGTkK+35RIqjHVYCN
-   O9/+gtB2iSpTYKid6YjAD0tV/eLxjEuuM4sig9C+qzXEVgLWlqTR6SfIN
-   JcXiZwP+G6eGGZzpdw2dUT3f8LEIKk4fFYYjugOBG7l1kZjBHs/8fkIY3
-   1um7naHKrAZRzYnacW3rX4YQB22L0Ax+gOL1y7R1jsLPBp1mu4zg5zUUS
-   IVHZwFdhkY+8uUHoq7x6jSFoTV/Vy4oj/uCGl3of90aqkhwn3JV1lFyfd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="302143278"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="302143278"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 08:02:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="660894514"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 08:02:24 -0800
-Date:   Mon, 13 Dec 2021 08:02:23 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/7] drm/i915: Replace kmap() with kmap_local_page()
-Message-ID: <20211213160223.GN3538886@iweiny-DESK2.sc.intel.com>
-References: <20211210232404.4098157-1-ira.weiny@intel.com>
- <20211210232404.4098157-2-ira.weiny@intel.com>
- <YbcMhzfm31aL5fzx@infradead.org>
+        id S235720AbhLMQDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:03:00 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:61649 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240353AbhLMQCw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 11:02:52 -0500
+Received: from localhost.localdomain ([106.133.22.31])
+        by smtp.orange.fr with ESMTPA
+        id wnmbm1mzFk3HQwnmqmkNbY; Mon, 13 Dec 2021 17:02:51 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
+X-ME-Date: Mon, 13 Dec 2021 17:02:51 +0100
+X-ME-IP: 106.133.22.31
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v6 1/4] can: dev: replace can_priv::ctrlmode_static by can_get_static_ctrlmode()
+Date:   Tue, 14 Dec 2021 01:02:23 +0900
+Message-Id: <20211213160226.56219-2-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
+References: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbcMhzfm31aL5fzx@infradead.org>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 01:04:07AM -0800, Christoph Hellwig wrote:
-> On Fri, Dec 10, 2021 at 03:23:58PM -0800, ira.weiny@intel.com wrote:
-> > -		vaddr = kmap(page);
-> > +		vaddr = kmap_local_page(page);
-> >  		memcpy(vaddr, data, len);
-> > -		kunmap(page);
-> > +		kunmap_local(vaddr);
-> 
-> memcpy_to_page?
+The statically enabled features of a CAN controller can be retrieved
+using below formula:
 
-Opps!  Yea!
+| u32 ctrlmode_static = priv->ctrlmode & ~priv->ctrlmode_supported;
 
-David, Daniel,
+As such, there is no need to store this information. This patch remove
+the field ctrlmode_static of struct can_priv and provides, in
+replacement, the inline function can_get_static_ctrlmode() which
+returns the same value.
 
-Do you prefer me to resent the entire series or reply to this message with a
-V2?
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ drivers/net/can/dev/dev.c     | 5 +++--
+ drivers/net/can/dev/netlink.c | 2 +-
+ include/linux/can/dev.h       | 7 +++++--
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-Ira
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index e3d840b81357..59c79f92fccc 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -300,6 +300,7 @@ EXPORT_SYMBOL_GPL(free_candev);
+ int can_change_mtu(struct net_device *dev, int new_mtu)
+ {
+ 	struct can_priv *priv = netdev_priv(dev);
++	u32 ctrlmode_static = can_get_static_ctrlmode(priv);
+ 
+ 	/* Do not allow changing the MTU while running */
+ 	if (dev->flags & IFF_UP)
+@@ -309,7 +310,7 @@ int can_change_mtu(struct net_device *dev, int new_mtu)
+ 	switch (new_mtu) {
+ 	case CAN_MTU:
+ 		/* 'CANFD-only' controllers can not switch to CAN_MTU */
+-		if (priv->ctrlmode_static & CAN_CTRLMODE_FD)
++		if (ctrlmode_static & CAN_CTRLMODE_FD)
+ 			return -EINVAL;
+ 
+ 		priv->ctrlmode &= ~CAN_CTRLMODE_FD;
+@@ -318,7 +319,7 @@ int can_change_mtu(struct net_device *dev, int new_mtu)
+ 	case CANFD_MTU:
+ 		/* check for potential CANFD ability */
+ 		if (!(priv->ctrlmode_supported & CAN_CTRLMODE_FD) &&
+-		    !(priv->ctrlmode_static & CAN_CTRLMODE_FD))
++		    !(ctrlmode_static & CAN_CTRLMODE_FD))
+ 			return -EINVAL;
+ 
+ 		priv->ctrlmode |= CAN_CTRLMODE_FD;
+diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+index 95cca4e5251f..26c336808be5 100644
+--- a/drivers/net/can/dev/netlink.c
++++ b/drivers/net/can/dev/netlink.c
+@@ -211,7 +211,7 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 		if (dev->flags & IFF_UP)
+ 			return -EBUSY;
+ 		cm = nla_data(data[IFLA_CAN_CTRLMODE]);
+-		ctrlstatic = priv->ctrlmode_static;
++		ctrlstatic = can_get_static_ctrlmode(priv);
+ 		maskedflags = cm->flags & cm->mask;
+ 
+ 		/* check whether provided bits are allowed to be passed */
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 45f19d9db5ca..92e2d69462f0 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -69,7 +69,6 @@ struct can_priv {
+ 	/* CAN controller features - see include/uapi/linux/can/netlink.h */
+ 	u32 ctrlmode;		/* current options setting */
+ 	u32 ctrlmode_supported;	/* options that can be modified by netlink */
+-	u32 ctrlmode_static;	/* static enabled options for driver/hardware */
+ 
+ 	int restart_ms;
+ 	struct delayed_work restart_work;
+@@ -139,13 +138,17 @@ static inline void can_set_static_ctrlmode(struct net_device *dev,
+ 
+ 	/* alloc_candev() succeeded => netdev_priv() is valid at this point */
+ 	priv->ctrlmode = static_mode;
+-	priv->ctrlmode_static = static_mode;
+ 
+ 	/* override MTU which was set by default in can_setup()? */
+ 	if (static_mode & CAN_CTRLMODE_FD)
+ 		dev->mtu = CANFD_MTU;
+ }
+ 
++static inline u32 can_get_static_ctrlmode(struct can_priv *priv)
++{
++	return priv->ctrlmode & ~priv->ctrlmode_supported;
++}
++
+ void can_setup(struct net_device *dev);
+ 
+ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+-- 
+2.32.0
+

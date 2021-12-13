@@ -2,113 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6FD4733B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F373C4733B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241750AbhLMSL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S241723AbhLMSLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241748AbhLMSLt (ORCPT
+        with ESMTP id S241711AbhLMSLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:11:49 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838F9C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:11:48 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id y13so54523352edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:11:48 -0800 (PST)
+        Mon, 13 Dec 2021 13:11:41 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3F3C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:11:41 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so12166646wme.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:11:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4UW5j/DAkCc/GJX2BUX/yWktradTQUMy+BaoVEG+EJA=;
-        b=EsIDxTg9CzNw4fJQWE8yFlSW6OFoIiLaFGpckLNKFe2tqJdUO0ynkfmVVm93UsMh+c
-         HXfoCPxe1k5weQNgLDnjDECOV3RwiU4dqTI27KtEHSyTUY9HD5XG/PItS3PFYoSqdqXX
-         m9RvezfM6xyFjN8mDwIGPk60/0ELYdZqDrzFM=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iBIfrfnr3GLdb1qUMNUHlNu3PuJL3644gLoGb9X9DGQ=;
+        b=ebJJ52GfshhjdOeOLj4xc0X1TjsexXLbPjpxlTZN3+kZq9w+ZRup8HjxhqlWI9kC5j
+         6YvHc4n6xZzUVApWRKW0taYd/OB9Oa4JzHqffwc7y2bNqiwHo3/83leRNDFIC0uBTut9
+         MTnUunzTRDjzexMXRiLwrHqNpAmxEBH1T8hn/aPXASlVP8+DUNCV9nfYT6H55rYXtGje
+         VT/sIfrowy4gW8GEfTpObCVssF0tGXeo0uVaEM5aKyd+o2vcmcgHB+Mmz2AV0a/4rl4s
+         KfCwkBbZZrIPT0d9g8bvRDb1fNM4uGUz/N8Luwc5oVwuAVKPHvrciYNhh+IU0RB6SZk/
+         T8Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4UW5j/DAkCc/GJX2BUX/yWktradTQUMy+BaoVEG+EJA=;
-        b=Pxh6OSqMkSjMc2DHdDnlSMhhdYs9LTlngU0dROe750bAoqVVfHB3k0MpWxJlqBCUSV
-         mMU6Lhs60sNzA0vhvPyDAQYAaVoCVqqNHQMwoR7Tp91x3Nj2+/EWFs1Bg/Ryzfj49FxJ
-         gQU9c2cS3IArZmmhBMzsg0MDgRj82ExW8MAXWlgUhxtdB/EDpo+pxPMxeeySCjaGoP4K
-         aKH1zvF1EQ6lHYSnMQjRJyRgSnUfvXWuwqu4likToG8kCeQcN5XhcrBNYcURfuul1gFH
-         vsX0bqNNNtEKRiN9zPc6TJkKsJAXLho0vgHxPalwtLgzjNzbG0q/OwIN8NsaEi+wBQdW
-         Zo4A==
-X-Gm-Message-State: AOAM53057HxPD8VdKkyn9M8WdBlpnpvLPpaAcieKhtsyANdC8JsxE3n1
-        S59ZyJQtdGdqNl+oGNVCzyzq42Tz73sAREwq
-X-Google-Smtp-Source: ABdhPJxCgam30WJufAe/ye/ZUG9uVzHhuvpMkLsndQFvLh8Cfjet6O+NLi4+J38hqxwvPCXc68Ge2g==
-X-Received: by 2002:a17:907:3e14:: with SMTP id hp20mr10187ejc.576.1639419106510;
-        Mon, 13 Dec 2021 10:11:46 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id jy28sm5980430ejc.118.2021.12.13.10.11.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 10:11:45 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id a18so28528571wrn.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:11:45 -0800 (PST)
-X-Received: by 2002:adf:8b0e:: with SMTP id n14mr86021wra.281.1639419104933;
- Mon, 13 Dec 2021 10:11:44 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iBIfrfnr3GLdb1qUMNUHlNu3PuJL3644gLoGb9X9DGQ=;
+        b=yN6ne1IE9Ko+iLaMOPC7TtYiWAvV0969m5mWR8Deq0ePXcBLiLUVoVN4D4t+Qv7lxV
+         UHf3Q3YgPzyUKYBgar7+mR/PcLT6Ysl8/7nJfdJFEiZCJwJ7lhttjagTIDa15bDy1ixo
+         /V4PwAOr/F3CsqT+wUA3SEl4/CoW3HrjBXbiQ3gorg/gw2xk0we/ybsdJAX8NEiCMKj0
+         FpJfPP05G38Dyn2Y/ZSFSEvJPbcvdZWKynhvQn5H1jRYeV8xdJYPXfabmFu4qRrbfA78
+         /tSu3NXjXG7cfg+o1uejXqmLT4MJKZx/diLsNfjKVNB8zKZ+u9sGFPMnVzal7uUldVWz
+         WO3Q==
+X-Gm-Message-State: AOAM532CWyeCgoY1HwF3wJSuptly30ksv1MaeRwnPiKP5d94MUBkZFhR
+        peEZYmTFydTlHR1f3/yNMJk=
+X-Google-Smtp-Source: ABdhPJyfQFFdMLlstFu4ZT190nQFT3inzt1bjDzISqxrWE4zsWyirInch5YIHXakodSbJe0Ataqppg==
+X-Received: by 2002:a1c:f005:: with SMTP id a5mr41519157wmb.19.1639419099777;
+        Mon, 13 Dec 2021 10:11:39 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id t127sm8750956wma.9.2021.12.13.10.11.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 10:11:39 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     rodrigosiqueiramelo@gmail.com
+Cc:     melissa.srw@gmail.com, hamohammed.sa@gmail.com, daniel@ffwll.ch,
+        airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH 1/3] drm/vkms: refactor overlay plane creation
+Date:   Mon, 13 Dec 2021 19:11:29 +0100
+Message-Id: <20211213181131.17223-2-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211213181131.17223-1-jose.exposito89@gmail.com>
+References: <20211213181131.17223-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-References: <20211210161618.645249719@infradead.org> <20211210162313.857673010@infradead.org>
- <20211213164334.GY16608@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211213164334.GY16608@worktop.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Dec 2021 10:11:28 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjc+mr_Rh++5pPDkNFuceyPwFxCtzp124AppBLgbVVV0A@mail.gmail.com>
-Message-ID: <CAHk-=wjc+mr_Rh++5pPDkNFuceyPwFxCtzp124AppBLgbVVV0A@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] atomic,x86: Alternative atomic_*_overflow() scheme
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 8:43 AM Peter Zijlstra <peterz@infradead.org> wrote=
-:
->
-> So Marco was expressing doubt about this exact interface for the
-> atomic_*_overflow() functions, since it's extremely easy to get the
-> whole ATOMIC_OVERFLOW_OFFSET thing wrong.
+Move the logic to create an overlay plane to its own function.
+Refactor, no functional changes.
 
-I missed that discussion (maybe it was on irc? Or maybe I just get too
-much email).
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/gpu/drm/vkms/vkms_output.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-Anyway, my preferred solution would simply be to make the ref-counting
-atomics use a different type.
+diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
+index 04406bd3ff02..2e805b2d36ae 100644
+--- a/drivers/gpu/drm/vkms/vkms_output.c
++++ b/drivers/gpu/drm/vkms/vkms_output.c
+@@ -32,6 +32,21 @@ static const struct drm_connector_helper_funcs vkms_conn_helper_funcs = {
+ 	.get_modes    = vkms_conn_get_modes,
+ };
+ 
++static int vkms_add_overlay_plane(struct vkms_device *vkmsdev, int index,
++				  struct drm_crtc *crtc)
++{
++	struct vkms_plane *overlay;
++
++	overlay = vkms_plane_init(vkmsdev, DRM_PLANE_TYPE_OVERLAY, index);
++	if (IS_ERR(overlay))
++		return PTR_ERR(overlay);
++
++	if (!overlay->base.possible_crtcs)
++		overlay->base.possible_crtcs = drm_crtc_mask(crtc);
++
++	return 0;
++}
++
+ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ {
+ 	struct vkms_output *output = &vkmsdev->output;
+@@ -39,7 +54,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ 	struct drm_connector *connector = &output->connector;
+ 	struct drm_encoder *encoder = &output->encoder;
+ 	struct drm_crtc *crtc = &output->crtc;
+-	struct vkms_plane *primary, *cursor = NULL, *overlay = NULL;
++	struct vkms_plane *primary, *cursor = NULL;
+ 	int ret;
+ 	int writeback;
+ 
+@@ -48,12 +63,9 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ 		return PTR_ERR(primary);
+ 
+ 	if (vkmsdev->config->overlay) {
+-		overlay = vkms_plane_init(vkmsdev, DRM_PLANE_TYPE_OVERLAY, index);
+-		if (IS_ERR(overlay))
+-			return PTR_ERR(overlay);
+-
+-		if (!overlay->base.possible_crtcs)
+-			overlay->base.possible_crtcs = drm_crtc_mask(crtc);
++		ret = vkms_add_overlay_plane(vkmsdev, index, crtc);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	if (vkmsdev->config->cursor) {
+-- 
+2.25.1
 
-Voil=C3=A0, problem solved. You can't really misuse them by mistake,
-because you can't access it by mistake.
-
-Sure, it could be a wrapper around 'atomic_t' on architectures that
-end up using the generic fallback, so it might be as simple as
-
-   typedef atomic_t atomic_ref_t;
-
-in some asm-generic implementation, although I suspect that you'd want
-type safety even there, and do
-
-  typedef struct { atomic_t atomic_val; } atomic_ref_t;
-
-But then on x86 - and other architectures that might prefer to use
-that offset trick because they have flags - I'm not sure it even makes
-sense to have anything to do with 'atomic_t' at all, since there would
-basically be zero overlap with the regular atomic operations (partly
-due to the offset, but partly simply because the 'ref' operations are
-simply different).
-
-(Wrt naming: I do think this is more about the "ref" part than the
-"overflow" part - thus I'd suggest the "atomic_ref_t" rather than your
-ofl naming).
-
-            Linus

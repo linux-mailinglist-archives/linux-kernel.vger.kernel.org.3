@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 310854724CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0EF4724B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbhLMJif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:38:35 -0500
-Received: from mga05.intel.com ([192.55.52.43]:13602 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234830AbhLMJhE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:37:04 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="324966583"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="324966583"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 01:34:15 -0800
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="464555913"
-Received: from ppolasze-mobl.ger.corp.intel.com (HELO localhost) ([10.252.20.7])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 01:34:12 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH] drm/dp: Actually read Adjust Request Post Cursor2 register
-In-Reply-To: <202112100853.FDB294B86@keescook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20211203084354.3105253-1-keescook@chromium.org>
- <87o85r4a4f.fsf@intel.com> <202112082220.81ECDC63D@keescook>
- <2b7d760c-9ab8-b607-efc6-1ed276d67668@amd.com>
- <202112091539.6B349AC@keescook> <87a6h83hb7.fsf@intel.com>
- <202112100853.FDB294B86@keescook>
-Date:   Mon, 13 Dec 2021 11:34:09 +0200
-Message-ID: <87y24o7sry.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S230084AbhLMJh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:37:58 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:37690 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234376AbhLMJgf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 04:36:35 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 63981210E6;
+        Mon, 13 Dec 2021 09:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639388194; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pEji7qG1lTG6T1BGFdtW1A7Ap+VS97P266CofDR8fQ8=;
+        b=A+zJ5xJxX03S4bo/5eo+q0q17dJxAR8omRSL73uYL66E7GtZr5QegeqmsRIlIwzBO5Vlhe
+        YY5R4D3bdEdzPux+yX8TCxV8VyHCXjmL/89+n3QFI1eJumR9fro+yo/h9A+xDfV8SXrGNH
+        VDtmd41Z+YwYIFjWKf/Fb0Cymt8VOBo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639388194;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pEji7qG1lTG6T1BGFdtW1A7Ap+VS97P266CofDR8fQ8=;
+        b=auCY3scAiBCqb0omX8COw2CSytol3N654vmh13IKj5jR9/uAVphBDD/iZC2FOtNafX3qxr
+        WjWKZ/3LmTgUfRDg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 43A62A3B8B;
+        Mon, 13 Dec 2021 09:36:34 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 10:36:34 +0100
+Message-ID: <s5hlf0oeti5.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: drivers: opl3: Fix incorrect use of vp->state
+In-Reply-To: <20211212172025.470367-1-colin.i.king@gmail.com>
+References: <20211212172025.470367-1-colin.i.king@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021, Kees Cook <keescook@chromium.org> wrote:
-> On Fri, Dec 10, 2021 at 12:06:20PM +0200, Jani Nikula wrote:
->> Post Cursor2 was completely optional for the transmitter even before it
->> was deprecated.
->> 
->> And now we'd be adding 5 bytes extra to all link status reads. To fix
->> the only user of drm_dp_get_adjust_request_post_cursor() that apparently
->> has never worked as intended. I'm just not convinced.
->> 
->> I was trying to look through the implications of DP_LINK_STATUS_SIZE
->> increase, and at least drm_dp_dpcd_read_phy_link_status() comes across
->> as something probably needing attention.
->
-> Okay, it sounds like you'd prefer the "make it tegra-specific" patch I
-> proposed. I will work that up as a proper patch and send it.
+On Sun, 12 Dec 2021 18:20:25 +0100,
+Colin Ian King wrote:
+> 
+> Static analysis with scan-build has found an assignment to vp2 that is
+> never used. It seems that the check on vp->state > 0 should be actually
+> on vp2->state instead. Fix this.
+> 
+> This dates back to 2002, I found the offending commit from the git
+> history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
+> commit 91e39521bbf6 ("[PATCH] ALSA patch for 2.5.4")
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Yes. Of course, I'd like to hear Thierry's view as well.
-
-BR,
-Jani.
+Thanks, applied now with Cc-to-stable.
 
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Takashi

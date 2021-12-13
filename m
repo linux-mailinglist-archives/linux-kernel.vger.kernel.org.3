@@ -2,130 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDC0473393
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896F6473387
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241559AbhLMSIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:08:31 -0500
-Received: from mga01.intel.com ([192.55.52.88]:58801 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238767AbhLMSIa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:08:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639418909; x=1670954909;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=BMxbVWcG1eE/lrKsqkvEWOea0/U0f2jpSMP5jpF7Y7g=;
-  b=TIZJ0VLttGuPIohydHxZ8FUbWJqZZ3z05QBknf8LJA9ATZckZ+vS8UKj
-   oRruHNs5bOIDP7A3ulVZyWOoyZMEBE/cWcRo/LohaxiLqh1xqg2i9jbRF
-   s/cH7oyQjQ3i5cKTtO8NGTA5o2fJkrP/EGd49DWSAGoKL32uvoclF6IXf
-   mmTjfftFzn0H988rXBzadc2KZFeTE6RskRRn8DMZeUI9pK4ddo5AtuPAC
-   bCkQwkc8wwwJwZi3TnJzlt4gmZWB2NaYEKHSxYiH0YQcyy8EI2sWtl+ye
-   Y7AeX4N0ryHtiXzpZb/YRd0SLpcCbOlyfhLM8fyBWI4w3HDwWaDwIwNKo
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="262921506"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="262921506"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 10:05:46 -0800
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="752373207"
-Received: from chenb-mobl1.amr.corp.intel.com (HELO [10.212.210.237]) ([10.212.210.237])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 10:05:45 -0800
-Subject: Re: [PATCH] smp: Fix the comments of smp_call_function_many()
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Nadav Amit <namit@vmware.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20211213035755.73-1-thunder.leizhen@huawei.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <4493a665-23f9-0a39-6d9a-ec3bb97e7015@intel.com>
-Date:   Mon, 13 Dec 2021 10:05:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S238156AbhLMSGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:06:20 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48726 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231917AbhLMSGT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 13:06:19 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8C8D71F3B9;
+        Mon, 13 Dec 2021 18:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639418776; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qWxzseejwZyTZ++HZonSBD5ITvu3/IfjEy9A76Uqkn4=;
+        b=kB4bbvIeiQDG4KZp40WnqvXCnCB4Rdybk77ruhyUFtfVewTOhpuI63qYS6wtHGe+nqxkYI
+        JFDQ6oQ5AAy8Li6vYLF9EesA1ABUWHXpYq7rHXFyKAGhtskOjMduB4u+yNt71wlI3U6NkG
+        Zwg6iEuKykO5MGot2faYd2ZWE5HS4s4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639418776;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qWxzseejwZyTZ++HZonSBD5ITvu3/IfjEy9A76Uqkn4=;
+        b=PVFq5fsrpjsQQyZPIhYIBlk2Xjufl+SPQnSyz1lfIN9R31Lqt3c3GkwXpmJEm/Q6n7bWoW
+        SZ5fQfbtmxtxdeBA==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C4E98A3B84;
+        Mon, 13 Dec 2021 18:06:12 +0000 (UTC)
+Date:   Mon, 13 Dec 2021 19:06:11 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Philipp Rudo <prudo@redhat.com>
+Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] module: Move duplicate mod_check_sig users code
+ to mod_parse_sig
+Message-ID: <20211213180611.GU117207@kunlun.suse.cz>
+References: <cover.1637862358.git.msuchanek@suse.de>
+ <d464e1f45d21a29cbbe828dea412206cdc94866b.1637862358.git.msuchanek@suse.de>
+ <20211207171034.0b782d82@rhtmp>
 MIME-Version: 1.0
-In-Reply-To: <20211213035755.73-1-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207171034.0b782d82@rhtmp>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/21 7:57 PM, Zhen Lei wrote:
-> diff --git a/kernel/smp.c b/kernel/smp.c
-> index 01a7c1706a58b1d..6ec884f41b7506d 100644
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -861,6 +861,13 @@ EXPORT_SYMBOL_GPL(smp_call_function_any);
->  #define SCF_WAIT	(1U << 0)
->  #define SCF_RUN_LOCAL	(1U << 1)
->  
-> +/**
-> + * smp_call_function_many_cond(): Run a function on a set of CPUs.
-> + * @scf_flags: Bitmask that controls the operation. If %SCF_WAIT is set,
-> + *        wait (atomically) until function has completed on other CPUs. If
-> + *        %SCF_RUN_LOCAL is set, the function will also be run locally
-> + *        if the local CPU is set in the @cpumask.
-> + */
+Hello,
 
-Fixing up the smp_call_function_many() comment is a good idea.  But, the
-new smp_call_function_many_cond() comment duplicates these which are
-_just_ above it:
+On Tue, Dec 07, 2021 at 05:10:34PM +0100, Philipp Rudo wrote:
+> Hi Michal,
+> 
+> On Thu, 25 Nov 2021 19:02:44 +0100
+> Michal Suchanek <msuchanek@suse.de> wrote:
+> 
+> > Multiple users of mod_check_sig check for the marker, then call
+> > mod_check_sig, extract signature length, and remove the signature.
+> > 
+> > Put this code in one place together with mod_check_sig.
+> > 
+> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > ---
+> >  include/linux/module_signature.h    |  1 +
+> >  kernel/module_signature.c           | 56 ++++++++++++++++++++++++++++-
+> >  kernel/module_signing.c             | 26 +++-----------
+> >  security/integrity/ima/ima_modsig.c | 22 ++----------
+> >  4 files changed, 63 insertions(+), 42 deletions(-)
+> > 
+> > diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
+> > index 7eb4b00381ac..1343879b72b3 100644
+> > --- a/include/linux/module_signature.h
+> > +++ b/include/linux/module_signature.h
+> > @@ -42,5 +42,6 @@ struct module_signature {
+> >  
+> >  int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> >  		  const char *name);
+> > +int mod_parse_sig(const void *data, size_t *len, size_t *sig_len, const char *name);
+> >  
+> >  #endif /* _LINUX_MODULE_SIGNATURE_H */
+> > diff --git a/kernel/module_signature.c b/kernel/module_signature.c
+> > index 00132d12487c..784b40575ee4 100644
+> > --- a/kernel/module_signature.c
+> > +++ b/kernel/module_signature.c
+> > @@ -8,14 +8,36 @@
+> >  
+> >  #include <linux/errno.h>
+> >  #include <linux/printk.h>
+> > +#include <linux/string.h>
+> >  #include <linux/module_signature.h>
+> >  #include <asm/byteorder.h>
+> >  
+> > +/**
+> > + * mod_check_sig_marker - check that the given data has signature marker at the end
+> > + *
+> > + * @data:	Data with appended signature
+> > + * @len:	Length of data. Signature marker length is subtracted on success.
+> > + */
+> > +static inline int mod_check_sig_marker(const void *data, size_t *len)
+> 
+> I personally don't like it when a function has a "check" in it's name
+> as it doesn't describe what the function is checking for. For me
 
-> /*
->  * Flags to be used as scf_flags argument of smp_call_function_many_cond().
->  *
->  * %SCF_WAIT:           Wait until function execution is completed
->  * %SCF_RUN_LOCAL:      Run also locally if local cpu is set in cpumask
->  */
-> #define SCF_WAIT        (1U << 0)
-> #define SCF_RUN_LOCAL   (1U << 1)
+It is consistent with mod_check_sig
 
-Could we comment the bits in one place?
+> mod_has_sig_marker is much more precise. I would use that instead.
+
+It actually would not because it does more than that.
+
+Thanks
+
+Michal
+
+> 
+> Thanks
+> Philipp
+> 
+> > +{
+> > +	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> > +
+> > +	if (markerlen > *len)
+> > +		return -ENODATA;
+> > +
+> > +	if (memcmp(data + *len - markerlen, MODULE_SIG_STRING,
+> > +		   markerlen))
+> > +		return -ENODATA;
+> > +
+> > +	*len -= markerlen;
+> > +	return 0;
+> > +}
+> > +
+> >  /**
+> >   * mod_check_sig - check that the given signature is sane
+> >   *
+> >   * @ms:		Signature to check.
+> > - * @file_len:	Size of the file to which @ms is appended.
+> > + * @file_len:	Size of the file to which @ms is appended (without the marker).
+> >   * @name:	What is being checked. Used for error messages.
+> >   */
+> >  int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> > @@ -44,3 +66,35 @@ int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> >  
+> >  	return 0;
+> >  }
+> > +
+> > +/**
+> > + * mod_parse_sig - check that the given signature is sane and determine signature length
+> > + *
+> > + * @data:	Data with appended signature.
+> > + * @len:	Length of data. Signature and marker length is subtracted on success.
+> > + * @sig_len:	Length of signature. Filled on success.
+> > + * @name:	What is being checked. Used for error messages.
+> > + */
+> > +int mod_parse_sig(const void *data, size_t *len, size_t *sig_len, const char *name)
+> > +{
+> > +	const struct module_signature *sig;
+> > +	int rc;
+> > +
+> > +	rc = mod_check_sig_marker(data, len);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	if (*len < sizeof(*sig))
+> > +		return -ENODATA;
+> > +
+> > +	sig = (const struct module_signature *)(data + (*len - sizeof(*sig)));
+> > +
+> > +	rc = mod_check_sig(sig, *len, name);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	*sig_len = be32_to_cpu(sig->sig_len);
+> > +	*len -= *sig_len + sizeof(*sig);
+> > +
+> > +	return 0;
+> > +}
+> > diff --git a/kernel/module_signing.c b/kernel/module_signing.c
+> > index cef72a6f6b5d..02bbca90f467 100644
+> > --- a/kernel/module_signing.c
+> > +++ b/kernel/module_signing.c
+> > @@ -25,35 +25,17 @@ int verify_appended_signature(const void *data, size_t *len,
+> >  			      struct key *trusted_keys,
+> >  			      enum key_being_used_for purpose)
+> >  {
+> > -	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> >  	struct module_signature ms;
+> > -	size_t sig_len, modlen = *len;
+> > +	size_t sig_len;
+> >  	int ret;
+> >  
+> > -	pr_devel("==>%s %s(,%zu)\n", __func__, key_being_used_for[purpose], modlen);  
+> > +	pr_devel("==>%s %s(,%zu)\n", __func__, key_being_used_for[purpose], *len);
+> >  
+> > -	if (markerlen > modlen)
+> > -		return -ENODATA;
+> > -
+> > -	if (memcmp(data + modlen - markerlen, MODULE_SIG_STRING,
+> > -		   markerlen))
+> > -		return -ENODATA;
+> > -	modlen -= markerlen;
+> > -
+> > -	if (modlen <= sizeof(ms))
+> > -		return -EBADMSG;
+> > -
+> > -	memcpy(&ms, data + (modlen - sizeof(ms)), sizeof(ms));
+> > -
+> > -	ret = mod_check_sig(&ms, modlen, key_being_used_for[purpose]);
+> > +	ret = mod_parse_sig(data, len, &sig_len, key_being_used_for[purpose]);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	sig_len = be32_to_cpu(ms.sig_len);
+> > -	modlen -= sig_len + sizeof(ms);
+> > -	*len = modlen;
+> > -
+> > -	return verify_pkcs7_signature(data, modlen, data + modlen, sig_len,
+> > +	return verify_pkcs7_signature(data, *len, data + *len, sig_len,
+> >  				      trusted_keys,
+> >  				      purpose,
+> >  				      NULL, NULL);
+> > diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
+> > index fb25723c65bc..46917eb37fd8 100644
+> > --- a/security/integrity/ima/ima_modsig.c
+> > +++ b/security/integrity/ima/ima_modsig.c
+> > @@ -37,33 +37,17 @@ struct modsig {
+> >   *
+> >   * Return: 0 on success, error code otherwise.
+> >   */
+> > -int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
+> > +int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t len,
+> >  		    struct modsig **modsig)
+> >  {
+> > -	const size_t marker_len = strlen(MODULE_SIG_STRING);
+> > -	const struct module_signature *sig;
+> >  	struct modsig *hdr;
+> > -	size_t sig_len;
+> > -	const void *p;
+> > +	size_t sig_len, buf_len = len;
+> >  	int rc;
+> >  
+> > -	if (buf_len <= marker_len + sizeof(*sig))
+> > -		return -ENOENT;
+> > -
+> > -	p = buf + buf_len - marker_len;
+> > -	if (memcmp(p, MODULE_SIG_STRING, marker_len))
+> > -		return -ENOENT;
+> > -
+> > -	buf_len -= marker_len;
+> > -	sig = (const struct module_signature *)(p - sizeof(*sig));
+> > -
+> > -	rc = mod_check_sig(sig, buf_len, func_tokens[func]);
+> > +	rc = mod_parse_sig(buf, &buf_len, &sig_len, func_tokens[func]);
+> >  	if (rc)
+> >  		return rc;
+> >  
+> > -	sig_len = be32_to_cpu(sig->sig_len);
+> > -	buf_len -= sig_len + sizeof(*sig);
+> > -
+> >  	/* Allocate sig_len additional bytes to hold the raw PKCS#7 data. */
+> >  	hdr = kzalloc(sizeof(*hdr) + sig_len, GFP_KERNEL);
+> >  	if (!hdr)
+> 

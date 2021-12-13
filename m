@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2127C47274B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EDF47277B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237977AbhLMJ7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:59:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40242 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbhLMJyM (ORCPT
+        id S236150AbhLMKBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:01:32 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:44286 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238695AbhLMJyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:54:12 -0500
+        Mon, 13 Dec 2021 04:54:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 905E5B80E2E;
-        Mon, 13 Dec 2021 09:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A78C34601;
-        Mon, 13 Dec 2021 09:54:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 13111CE0EBE;
+        Mon, 13 Dec 2021 09:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE1EC3460D;
+        Mon, 13 Dec 2021 09:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389249;
-        bh=ADiA4tPO/g/nOY4CwybHN7weyje4VUFvWliB/DHJsgE=;
+        s=korg; t=1639389252;
+        bh=0lxbf4eIL5TiS/wDKjs66cU4M1CZ7EsdBWlig03swUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SH0SrO0/D/XkzYvxavyBE5fK6PmVZDJFlYqEXQ8lCButN68A2I3fjdQhXAjtETXO8
-         9x2wG/wR5kRPKkiSjJGcyIgP0c6dWk+agyqJ3yYxz2jcnPpaCus8r1dPLPVdUCX0C0
-         6FsSgJ+I3KKiVTfNsu5pw2PC6PnO8qfnsQLQ0Flo=
+        b=aqUX4N7pKo+7V/GQzwb/0ZgEGr88YjGt9V2OeXgcCZyNrSHZtpr/nThyIbLDzPz7K
+         UyhRfbvCoog6hVNxvaWpFU7bLJxm2WMvUxzHm3dAh1qsgQLQf+5k/GdDl5nd5OZv0a
+         Mt2U9W5Yu0zfei2bLT/ADAOHdSKluKFX3gzlwxVg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Florian Westphal <fw@strlen.de>,
-        David Ahern <dsahern@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.15 035/171] vrf: dont run conntrack on vrf with !dflt qdisc
-Date:   Mon, 13 Dec 2021 10:29:10 +0100
-Message-Id: <20211213092946.250729813@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH 5.15 036/171] bpf, x86: Fix "no previous prototype" warning
+Date:   Mon, 13 Dec 2021 10:29:11 +0100
+Message-Id: <20211213092946.282091371@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
 References: <20211213092945.091487407@linuxfoundation.org>
@@ -48,133 +46,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Björn Töpel <bjorn@kernel.org>
 
-commit d43b75fbc23f0ac1ef9c14a5a166d3ccb761a451 upstream.
+commit f45b2974cc0ae959a4c503a071e38a56bd64372f upstream.
 
-After the below patch, the conntrack attached to skb is set to "notrack" in
-the context of vrf device, for locally generated packets.
-But this is true only when the default qdisc is set to the vrf device. When
-changing the qdisc, notrack is not set anymore.
-In fact, there is a shortcut in the vrf driver, when the default qdisc is
-set, see commit dcdd43c41e60 ("net: vrf: performance improvements for
-IPv4") for more details.
+The arch_prepare_bpf_dispatcher function does not have a prototype, and
+yields the following warning when W=1 is enabled for the kernel build.
 
-This patch ensures that the behavior is always the same, whatever the qdisc
-is.
+  >> arch/x86/net/bpf_jit_comp.c:2188:5: warning: no previous \
+  prototype for 'arch_prepare_bpf_dispatcher' [-Wmissing-prototypes]
+        2188 | int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, \
+	int num_funcs)
+             |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To demonstrate the difference, a new test is added in conntrack_vrf.sh.
+Remove the warning by adding a function declaration to include/linux/bpf.h.
 
-Fixes: 8c9c296adfae ("vrf: run conntrack only in context of lower/physdev for locally generated packets")
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Acked-by: Florian Westphal <fw@strlen.de>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 75ccbef6369e ("bpf: Introduce BPF dispatcher")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Björn Töpel <bjorn@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211117125708.769168-1-bjorn@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/vrf.c                                  |    8 ++---
- tools/testing/selftests/netfilter/conntrack_vrf.sh |   30 ++++++++++++++++++---
- 2 files changed, 30 insertions(+), 8 deletions(-)
+ include/linux/bpf.h |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -770,8 +770,6 @@ static struct sk_buff *vrf_ip6_out_direc
- 
- 	skb->dev = vrf_dev;
- 
--	vrf_nf_set_untracked(skb);
--
- 	err = nf_hook(NFPROTO_IPV6, NF_INET_LOCAL_OUT, net, sk,
- 		      skb, NULL, vrf_dev, vrf_ip6_out_direct_finish);
- 
-@@ -792,6 +790,8 @@ static struct sk_buff *vrf_ip6_out(struc
- 	if (rt6_need_strict(&ipv6_hdr(skb)->daddr))
- 		return skb;
- 
-+	vrf_nf_set_untracked(skb);
-+
- 	if (qdisc_tx_is_default(vrf_dev) ||
- 	    IP6CB(skb)->flags & IP6SKB_XFRM_TRANSFORMED)
- 		return vrf_ip6_out_direct(vrf_dev, sk, skb);
-@@ -1000,8 +1000,6 @@ static struct sk_buff *vrf_ip_out_direct
- 
- 	skb->dev = vrf_dev;
- 
--	vrf_nf_set_untracked(skb);
--
- 	err = nf_hook(NFPROTO_IPV4, NF_INET_LOCAL_OUT, net, sk,
- 		      skb, NULL, vrf_dev, vrf_ip_out_direct_finish);
- 
-@@ -1023,6 +1021,8 @@ static struct sk_buff *vrf_ip_out(struct
- 	    ipv4_is_lbcast(ip_hdr(skb)->daddr))
- 		return skb;
- 
-+	vrf_nf_set_untracked(skb);
-+
- 	if (qdisc_tx_is_default(vrf_dev) ||
- 	    IPCB(skb)->flags & IPSKB_XFRM_TRANSFORMED)
- 		return vrf_ip_out_direct(vrf_dev, sk, skb);
---- a/tools/testing/selftests/netfilter/conntrack_vrf.sh
-+++ b/tools/testing/selftests/netfilter/conntrack_vrf.sh
-@@ -150,11 +150,27 @@ EOF
- # oifname is the vrf device.
- test_masquerade_vrf()
- {
-+	local qdisc=$1
-+
-+	if [ "$qdisc" != "default" ]; then
-+		tc -net $ns0 qdisc add dev tvrf root $qdisc
-+	fi
-+
- 	ip netns exec $ns0 conntrack -F 2>/dev/null
- 
- ip netns exec $ns0 nft -f - <<EOF
- flush ruleset
- table ip nat {
-+	chain rawout {
-+		type filter hook output priority raw;
-+
-+		oif tvrf ct state untracked counter
-+	}
-+	chain postrouting2 {
-+		type filter hook postrouting priority mangle;
-+
-+		oif tvrf ct state untracked counter
-+	}
- 	chain postrouting {
- 		type nat hook postrouting priority 0;
- 		# NB: masquerade should always be combined with 'oif(name) bla',
-@@ -171,13 +187,18 @@ EOF
- 	fi
- 
- 	# must also check that nat table was evaluated on second (lower device) iteration.
--	ip netns exec $ns0 nft list table ip nat |grep -q 'counter packets 2'
-+	ip netns exec $ns0 nft list table ip nat |grep -q 'counter packets 2' &&
-+	ip netns exec $ns0 nft list table ip nat |grep -q 'untracked counter packets [1-9]'
- 	if [ $? -eq 0 ]; then
--		echo "PASS: iperf3 connect with masquerade + sport rewrite on vrf device"
-+		echo "PASS: iperf3 connect with masquerade + sport rewrite on vrf device ($qdisc qdisc)"
- 	else
--		echo "FAIL: vrf masq rule has unexpected counter value"
-+		echo "FAIL: vrf rules have unexpected counter value"
- 		ret=1
- 	fi
-+
-+	if [ "$qdisc" != "default" ]; then
-+		tc -net $ns0 qdisc del dev tvrf root
-+	fi
- }
- 
- # add masq rule that gets evaluated w. outif set to veth device.
-@@ -213,7 +234,8 @@ EOF
- }
- 
- test_ct_zone_in
--test_masquerade_vrf
-+test_masquerade_vrf "default"
-+test_masquerade_vrf "pfifo"
- test_masquerade_veth
- 
- exit $ret
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -723,6 +723,7 @@ int bpf_trampoline_unlink_prog(struct bp
+ struct bpf_trampoline *bpf_trampoline_get(u64 key,
+ 					  struct bpf_attach_target_info *tgt_info);
+ void bpf_trampoline_put(struct bpf_trampoline *tr);
++int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
+ #define BPF_DISPATCHER_INIT(_name) {				\
+ 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
+ 	.func = &_name##_func,					\
 
 

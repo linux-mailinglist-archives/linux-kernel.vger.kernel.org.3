@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23134472B8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC88472B90
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233050AbhLMLfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:35:04 -0500
-Received: from foss.arm.com ([217.140.110.172]:52490 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236146AbhLMLfC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:35:02 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B31DC6D;
-        Mon, 13 Dec 2021 03:35:01 -0800 (PST)
-Received: from bogus (unknown [10.57.33.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EBF53F793;
-        Mon, 13 Dec 2021 03:34:59 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:34:56 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Igor Skalkin <igor.skalkin@opensynergy.com>,
-        Peter Hilber <peter.hilber@opensynergy.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v7 14/16] firmware: arm_scmi: Add atomic mode support to
- virtio transport
-Message-ID: <20211213113456.neztrurf3xxcraow@bogus>
-References: <20211129191156.29322-1-cristian.marussi@arm.com>
- <20211129191156.29322-15-cristian.marussi@arm.com>
+        id S236176AbhLMLfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:35:20 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35624
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233087AbhLMLfS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:35:18 -0500
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A92573F20E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639395317;
+        bh=XmQFfZI2fAYBuLxinQknZKp6zP+Jb9M2TJ1/zIaaukg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=hFToJ0egn6No8cyMxOJZoCfNmcvs4w7ltDErfwNsaqmDq7/z6xFysWULLCVQzXdn0
+         GFGNcM4ve+08mWgnTVIGsOlEUeTZfmsE0sOFiEjvcZwEV+Uqb1C4HmixC0OTwAJSW4
+         C3qtiYP6sc60X1h674xv6BrMuWVuVKP1YEYv+nMGaB5WVIEasb+UmqhXPu/uz8hl1t
+         z8TYjv46Tw4TpMc3RZY5tIG5ATVfUbBFP3V7RSTujyR4eJxl70jeO5JZ0ikxkV3Q3S
+         utxipmSH+ZBZLlbqFMdRkCk0ddJk2gEw+22tIKPTrzgG28ovaqpVlLlLczQUW6oFJq
+         o9yTCubQBwLqw==
+Received: by mail-lf1-f69.google.com with SMTP id m1-20020ac24281000000b004162863a2fcso7359806lfh.14
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:35:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XmQFfZI2fAYBuLxinQknZKp6zP+Jb9M2TJ1/zIaaukg=;
+        b=mg6cskC9OTmjV0iqDUDG2wohqFCGx/0s3ZmvjjfZs3iwjI3AEx6HyZHqleGAHRh6NN
+         nJUFOFEiAMw3vJspDsez2C/tZ6xnQXo5eJyVzxdGrN9JtMWbWcnPD/u9Y1Vgq/C/nnuI
+         rqO/zYFdwACZ2WVJEOqOCTCFcCxcGB6iZTrGQ6xUVEDnlfFgakelcdLxsX3TaJCaHHPz
+         MTMEwDywbyyv3wfAVB3JSzZRxDvh1JaCUiH8aBx9eYubt7fDOPzMw3TSktTwY96BKqDr
+         w6IUoylxb0TEjxv4CZHDJpn2hIA5SoIBgNcNNO2lZPUCp5xWrgtjPXHDJdmkEW7OtwEw
+         9VPQ==
+X-Gm-Message-State: AOAM530Wkce2pwFyjTbbAb5tTZl/+nFd6uQ0CQcC5/pjH3NO6Al7Yr0D
+        wI2IJQzanQ6dNKpE3SC4lfEKKkvk7PPVTqdYCSNvn4trO2XUs8uL8D5ejMs1tkAEk63qSYyyGta
+        Zwg/KJc2Lyl4glgUnmsQ4KFEJbH+1KJY3QnBm4590FA==
+X-Received: by 2002:ac2:442e:: with SMTP id w14mr28227334lfl.577.1639395317045;
+        Mon, 13 Dec 2021 03:35:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzyzWy5HL/QnWHO5qDxOL75aUaoSjf/KHJ7CmIOs1qs+h5a0PiJHTIHJuv0mVfGli6MhqmdLA==
+X-Received: by 2002:ac2:442e:: with SMTP id w14mr28227316lfl.577.1639395316898;
+        Mon, 13 Dec 2021 03:35:16 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id j5sm1386457lfe.219.2021.12.13.03.35.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 03:35:16 -0800 (PST)
+Message-ID: <ab15a97b-9351-4d50-f392-21cbfdec1289@canonical.com>
+Date:   Mon, 13 Dec 2021 12:35:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129191156.29322-15-cristian.marussi@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 3/5] tty: serial: samsung: Remove USI initialization
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20211204195757.8600-1-semen.protsenko@linaro.org>
+ <20211204195757.8600-4-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211204195757.8600-4-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:11:54PM +0000, Cristian Marussi wrote:
-> Add support for .mark_txdone and .poll_done transport operations to SCMI
-> VirtIO transport as pre-requisites to enable atomic operations.
+On 04/12/2021 20:57, Sam Protsenko wrote:
+> USI control is now extracted to the dedicated USI driver. Remove USI
+> related code from serial driver to avoid conflicts and code duplication.
 > 
-> Add a Kernel configuration option to enable SCMI VirtIO transport polling
-> and atomic mode for selected SCMI transactions while leaving it default
-> disabled.
-> 
-> Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> Cc: Igor Skalkin <igor.skalkin@opensynergy.com>
-> Cc: Peter Hilber <peter.hilber@opensynergy.com>
-> Cc: virtualization@lists.linux-foundation.org
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
-> V6 --> V7
-> - added a few comments about virtio polling internals
-> - fixed missing list_del on pending_cmds_list processing
-> - shrinked spinlocked areas in virtio_poll_done
-> - added proper spinlocking to scmi_vio_complete_cb while scanning list
->   of pending cmds
-> ---
->  drivers/firmware/arm_scmi/Kconfig  |  15 ++
->  drivers/firmware/arm_scmi/virtio.c | 241 +++++++++++++++++++++++++++--
->  2 files changed, 243 insertions(+), 13 deletions(-)
+> Changes in v3:
+>   - Spell check fixes in commit message
 > 
-> diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-> index d429326433d1..7794bd41eaa0 100644
-> --- a/drivers/firmware/arm_scmi/Kconfig
-> +++ b/drivers/firmware/arm_scmi/Kconfig
-> @@ -118,6 +118,21 @@ config ARM_SCMI_TRANSPORT_VIRTIO_VERSION1_COMPLIANCE
->  	  the ones implemented by kvmtool) and let the core Kernel VirtIO layer
->  	  take care of the needed conversions, say N.
->  
-> +config ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_ENABLE
-> +	bool "Enable atomic mode for SCMI VirtIO transport"
-> +	depends on ARM_SCMI_TRANSPORT_VIRTIO
-> +	help
-> +	  Enable support of atomic operation for SCMI VirtIO based transport.
-> +
-> +	  If you want the SCMI VirtIO based transport to operate in atomic
-> +	  mode, avoiding any kind of sleeping behaviour for selected
-> +	  transactions on the TX path, answer Y.
-> +
-> +	  Enabling atomic mode operations allows any SCMI driver using this
-> +	  transport to optionally ask for atomic SCMI transactions and operate
-> +	  in atomic context too, at the price of using a number of busy-waiting
-> +	  primitives all over instead. If unsure say N.
-> +
->  endif #ARM_SCMI_PROTOCOL
->  
->  config ARM_SCMI_POWER_DOMAIN
-> diff --git a/drivers/firmware/arm_scmi/virtio.c b/drivers/firmware/arm_scmi/virtio.c
-> index fd0f6f91fc0b..0598e185a786 100644
-> --- a/drivers/firmware/arm_scmi/virtio.c
-> +++ b/drivers/firmware/arm_scmi/virtio.c
-> @@ -38,6 +38,7 @@
->   * @vqueue: Associated virtqueue
->   * @cinfo: SCMI Tx or Rx channel
->   * @free_list: List of unused scmi_vio_msg, maintained for Tx channels only
-> + * @pending_cmds_list: List of pre-fetched commands queueud for later processing
->   * @is_rx: Whether channel is an Rx channel
->   * @ready: Whether transport user is ready to hear about channel
->   * @max_msg: Maximum number of pending messages for this channel.
-> @@ -49,6 +50,9 @@ struct scmi_vio_channel {
->  	struct virtqueue *vqueue;
->  	struct scmi_chan_info *cinfo;
->  	struct list_head free_list;
-> +#ifdef CONFIG_ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_ENABLE
-> +	struct list_head pending_cmds_list;
-> +#endif
->  	bool is_rx;
->  	bool ready;
->  	unsigned int max_msg;
-> @@ -65,12 +69,22 @@ struct scmi_vio_channel {
->   * @input: SDU used for (delayed) responses and notifications
->   * @list: List which scmi_vio_msg may be part of
->   * @rx_len: Input SDU size in bytes, once input has been received
-> + * @poll_idx: Last used index registered for polling purposes if this message
-> + *	      transaction reply was configured for polling.
-> + *	      Note that virtqueue used index is an unsigned 16-bit.
-> + * @poll_lock: Protect access to @poll_idx.
->   */
->  struct scmi_vio_msg {
->  	struct scmi_msg_payld *request;
->  	struct scmi_msg_payld *input;
->  	struct list_head list;
->  	unsigned int rx_len;
-> +#ifdef CONFIG_ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_ENABLE
+> Changes in v2:
+>   - (none)
+> 
+>  drivers/tty/serial/samsung_tty.c | 36 ++++----------------------------
+>  include/linux/serial_s3c.h       |  9 --------
+>  2 files changed, 4 insertions(+), 41 deletions(-)
+> 
 
-Do we really need the #ifdefery for struct definition ? TBH I don't like
-the way it is. I would avoid it as much as possible. I assume some are
-added to avoid build warnings ?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Doesn't __maybe_unused help to remove some of them like the functions
-mark_txdone and poll_done. I haven't tried but thought of checking.
+Greg,
+If you are fine with the changes, please take the serial driver changes
+via your tree.
 
--- 
-Regards,
-Sudeep
+Best regards,
+Krzysztof

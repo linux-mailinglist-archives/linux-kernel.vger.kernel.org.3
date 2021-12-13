@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 303BE47285D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B524472801
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240226AbhLMKLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242796AbhLMKIu (ORCPT
+        id S241999AbhLMKHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:07:01 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47128 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236325AbhLMKAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:08:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CBFC08EA72;
-        Mon, 13 Dec 2021 01:52:45 -0800 (PST)
+        Mon, 13 Dec 2021 05:00:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33500B80E12;
-        Mon, 13 Dec 2021 09:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A042C00446;
-        Mon, 13 Dec 2021 09:52:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8FD6DCE0EF8;
+        Mon, 13 Dec 2021 10:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A4E4C34601;
+        Mon, 13 Dec 2021 10:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389163;
-        bh=whCGHq9Jf7S43kKFy5mkFVyuu5pEgSFlTrb85xag2iY=;
+        s=korg; t=1639389635;
+        bh=FSu3AUO6nUxxKdLOSZ0hdx5HKORItOMZrktKX2NZuW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QngGKu6S+yyxXVWid7gmU29RsGmRw7UGj+DFoFK6cKCj1ANArVqyMMDjUiqovGAg/
-         ztj5OX+Chg0y2Lwms5LfOEYsbwPDyxn5oVFiXb6Wu1G7nt3pqKiQBt8czx5ny+joX+
-         ba2XI/wn0G/YiRZ+jpp92A5uy2cQ2frw5iCjxg78=
+        b=zEJMP/0XhkmacQ9vEbLF3wkpnJ99ynB3NKyk09sAWJLFtJAutd5Ta3EmF4VNzJ9mI
+         Xw/K/ABL7sMC34Q2b2G+3s4S6eW8w/+vGY4DUNcr2jax3E9AOfZF18nscx3sdzL9fR
+         s7KgSuabUMCs54NrJQQkRF1ZJbmCWlSCd9q18gf4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.10 124/132] irqchip/armada-370-xp: Fix support for Multi-MSI interrupts
-Date:   Mon, 13 Dec 2021 10:31:05 +0100
-Message-Id: <20211213092943.354156911@linuxfoundation.org>
+        stable@vger.kernel.org, Jack Andersen <jackoalan@gmail.com>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 151/171] iio: dln2-adc: Fix lockdep complaint
+Date:   Mon, 13 Dec 2021 10:31:06 +0100
+Message-Id: <20211213092950.090902372@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,59 +47,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Noralf Trønnes <noralf@tronnes.org>
 
-commit d0a553502efd545c1ce3fd08fc4d423f8e4ac3d6 upstream.
+commit 59f92868176f191eefde70d284bdfc1ed76a84bc upstream.
 
-irq-armada-370-xp driver already sets MSI_FLAG_MULTI_PCI_MSI flag into
-msi_domain_info structure. But allocated interrupt numbers for Multi-MSI
-needs to be properly aligned otherwise devices send MSI interrupt with
-wrong number.
+When reading the voltage:
 
-Fix this issue by using function bitmap_find_free_region() instead of
-bitmap_find_next_zero_area() to allocate aligned interrupt numbers.
+$ cat /sys/bus/iio/devices/iio\:device0/in_voltage0_raw
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Fixes: a71b9412c90c ("irqchip/armada-370-xp: Allow allocation of multiple MSIs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211125130057.26705-2-pali@kernel.org
+Lockdep complains:
+
+[  153.910616] ======================================================
+[  153.916918] WARNING: possible circular locking dependency detected
+[  153.923221] 5.14.0+ #5 Not tainted
+[  153.926692] ------------------------------------------------------
+[  153.932992] cat/717 is trying to acquire lock:
+[  153.937525] c2585358 (&indio_dev->mlock){+.+.}-{3:3}, at: iio_device_claim_direct_mode+0x28/0x44
+[  153.946541]
+               but task is already holding lock:
+[  153.952487] c2585860 (&dln2->mutex){+.+.}-{3:3}, at: dln2_adc_read_raw+0x94/0x2bc [dln2_adc]
+[  153.961152]
+               which lock already depends on the new lock.
+
+Fix this by not calling into the iio core underneath the dln2->mutex lock.
+
+Fixes: 7c0299e879dd ("iio: adc: Add support for DLN2 ADC")
+Cc: Jack Andersen <jackoalan@gmail.com>
+Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+Link: https://lore.kernel.org/r/20211018113731.25723-1-noralf@tronnes.org
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-armada-370-xp.c |   14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/iio/adc/dln2-adc.c |   15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
---- a/drivers/irqchip/irq-armada-370-xp.c
-+++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -232,16 +232,12 @@ static int armada_370_xp_msi_alloc(struc
- 	int hwirq, i;
+--- a/drivers/iio/adc/dln2-adc.c
++++ b/drivers/iio/adc/dln2-adc.c
+@@ -248,7 +248,6 @@ static int dln2_adc_set_chan_period(stru
+ static int dln2_adc_read(struct dln2_adc *dln2, unsigned int channel)
+ {
+ 	int ret, i;
+-	struct iio_dev *indio_dev = platform_get_drvdata(dln2->pdev);
+ 	u16 conflict;
+ 	__le16 value;
+ 	int olen = sizeof(value);
+@@ -257,13 +256,9 @@ static int dln2_adc_read(struct dln2_adc
+ 		.chan = channel,
+ 	};
  
- 	mutex_lock(&msi_used_lock);
-+	hwirq = bitmap_find_free_region(msi_used, PCI_MSI_DOORBELL_NR,
-+					order_base_2(nr_irqs));
-+	mutex_unlock(&msi_used_lock);
- 
--	hwirq = bitmap_find_next_zero_area(msi_used, PCI_MSI_DOORBELL_NR,
--					   0, nr_irqs, 0);
--	if (hwirq >= PCI_MSI_DOORBELL_NR) {
--		mutex_unlock(&msi_used_lock);
-+	if (hwirq < 0)
- 		return -ENOSPC;
--	}
+-	ret = iio_device_claim_direct_mode(indio_dev);
+-	if (ret < 0)
+-		return ret;
 -
--	bitmap_set(msi_used, hwirq, nr_irqs);
--	mutex_unlock(&msi_used_lock);
+ 	ret = dln2_adc_set_chan_enabled(dln2, channel, true);
+ 	if (ret < 0)
+-		goto release_direct;
++		return ret;
  
- 	for (i = 0; i < nr_irqs; i++) {
- 		irq_domain_set_info(domain, virq + i, hwirq + i,
-@@ -259,7 +255,7 @@ static void armada_370_xp_msi_free(struc
- 	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
+ 	ret = dln2_adc_set_port_enabled(dln2, true, &conflict);
+ 	if (ret < 0) {
+@@ -300,8 +295,6 @@ disable_port:
+ 	dln2_adc_set_port_enabled(dln2, false, NULL);
+ disable_chan:
+ 	dln2_adc_set_chan_enabled(dln2, channel, false);
+-release_direct:
+-	iio_device_release_direct_mode(indio_dev);
  
- 	mutex_lock(&msi_used_lock);
--	bitmap_clear(msi_used, d->hwirq, nr_irqs);
-+	bitmap_release_region(msi_used, d->hwirq, order_base_2(nr_irqs));
- 	mutex_unlock(&msi_used_lock);
+ 	return ret;
  }
+@@ -337,10 +330,16 @@ static int dln2_adc_read_raw(struct iio_
+ 
+ 	switch (mask) {
+ 	case IIO_CHAN_INFO_RAW:
++		ret = iio_device_claim_direct_mode(indio_dev);
++		if (ret < 0)
++			return ret;
++
+ 		mutex_lock(&dln2->mutex);
+ 		ret = dln2_adc_read(dln2, chan->channel);
+ 		mutex_unlock(&dln2->mutex);
+ 
++		iio_device_release_direct_mode(indio_dev);
++
+ 		if (ret < 0)
+ 			return ret;
  
 
 

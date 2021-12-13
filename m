@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CBE4738B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6D14738BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244252AbhLMXmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 18:42:55 -0500
-Received: from sonic315-27.consmr.mail.ne1.yahoo.com ([66.163.190.153]:42018
-        "EHLO sonic315-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244245AbhLMXmy (ORCPT
+        id S244260AbhLMXoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 18:44:04 -0500
+Received: from sonic306-28.consmr.mail.ne1.yahoo.com ([66.163.189.90]:39787
+        "EHLO sonic306-28.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237165AbhLMXoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 18:42:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1639438973; bh=mqrxP8YbMqpdwGpiKDP5pDA2udZP8b7nOi28pU94VwE=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=Lp6MPBRK09r/UyzC1eaotkHWeuR9T/ffRO5PlHxzKvbVsPsovBkrqOd40Pk8OqKpFORCGa58F3xxJAw2b3hGJ18EJfvME8njd4lc6ICYZoiBdDl8wKYFTUQ3d3w3yKRJLhHNNYNkIkZtH/iAPA6PtSKb+ziVOaHktnXzAoHnCmMP9GqDM7Gz24aHscDMda0JI8LPcbm/uZb3Dj3I0tUWaLGswv3RG4Rtu65ozGTimGTrtA18WCfjaOcyMUlaAQ1q1KC5m7g4myf1Fg1l04VLxt+SzjA+jI0Cp4aiSZnRjmfwLI1i+rU5GppbwZG0n3zY07zDC3evBtdDg1RAcVP+Og==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1639438973; bh=k98kOvNEk/eVdV4/w0cza7/aaRdFpn+41IFesbu52Nh=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=TYXx3lAfpaD4BYPCLCF9Or7CJk2/2dBNuUcOD3caQ+k+0vlvblXQsLCmXVtw8qu/DZbRQ+rQIaMPIM00R5byYpEJbhcWuJMdIh1Eq4BF3eDcwROzsMBl3a9nscOxdBfe3s6mmSU92Suxec/cEt9ZOqoTeARrR61fqtKoXmNmNQ6VbwErqr2BDkEUOk/4ls989FbYxh0dCDWqnXurc+d3QPYa1ukKSr8I/lU/I77JSYHpOflAtZ50lyTZZfqdIvkGIEB+Mz92t7DD9O9CU32cOx50BM97Ec3LB1yv9FgENv4Qsm5fDYaGaTWrfwzt6Sm0fsYh3HkLP9S4PO0WQtQSCA==
-X-YMail-OSG: 9ezkpLYVM1keYVEP4HGfbinZT1zilKc5zz0VMehl4tVEkq82O6inEfCTaGn9aaf
- OWN9hqMJqepdoEhP0zepAEwdpa7zbD3QWWHB7vbg2yBr9UDWdpjX9vJyNyHk7WZ1RQh_GT4RcIYY
- dGwUZ5_3_sjjEW0dB8teOqp8Lw6C22ErYDbhEONARGy28XahJSYlNtTNt250KR4wXvp2KnOcx1wo
- PEZQWB66JVAU9SGq3.6SIs87bjyhuyQopruKxZCGd7nFaP7U6ryygG7V5uWP_COyjODynMKXqL1J
- Tf_YABL.AIBapJMzq.I1J1.Sw3AINPPJd0THxalH1mw9vAlmwLKKeS2vTMwZYaWqd2_koaoP2Us7
- jgKtqFqVkBaAXY.n45T1k_EeOdCqxz43QbTMjizuJwKg_F4g6EMoLVQd2qW0uhcyznnJ_iU37zab
- Qdde9fdp8xUnmOQLhhHMAqVErBDhTxiUhvEBTxuAUWeocaA2ISHzgwiyCkFL43wZreLb2OJOk42V
- 6xswHIQYQc1Bhks_rWF17Ux9P3jEMS8KnxXQ9l1cqAVsME1IrKWuGW64hHog9NWcXyDB_TIz9tCQ
- UNJZdI9zYWlA3dEpzVQKlkaOqv2EPowydO0syqD9yAu8MybUVcFLQ4G75EnSvk_jl.ZXcrJTT3Qb
- RxMTR1xECQj1JyZs6pYLJTRh4TKDbN4WR.wQiScntC04csx_BqiYTOPwssyloAaFUZ6tKIyHpdtu
- WUxZGXs4GCeeXgEoRWLT5p.PULkkxEUDJQsVI590IPBEt3eixl89HFrWH7.pwDE2KyWt1GkqNyzJ
- u62MosH64WCgJ0N7gSGwLhMrbOKWCBqWjb8.ddZFin9eF9lz2j6aK0NHqiDLm9NjGJfD2K5XeklT
- t7xMUuU9HqATBAroyPsxeer_8AUH5DshEagdDDpA44Dq4oB3F1rZeSjp1WA9QWw2Dyoiy6d5BGlE
- bfMGTtBLWepK8bGNbdJ2poyuHoF9SKZ6dVrnxC79kVZ7f9rpBpVSjvH2PFkOLyVBmLGxxNWeCXnb
- neQ8TO1TpzOFpyIWIM2yAUV1xRjV90OeW3ON.WdgICfwwWrgm1oGEWlIuWv6BmmMv7.VR44HnBol
- ngb8Lt5N5rYWSyLUIt8SLZyxtuVRMb83gbsEl8xPigpWr3OLNW7k8bb92IMVHNwy8x1ASF3oIKNp
- uC6W7wg17ps4kEW.7g8xIFrAYNe5idX54ShwwOpoqYf2lVGCjnnBSWuCF.2B4CQ35DJAinT.5kfE
- bLDh823cpPfdgn34_M2nuapO7nMD5eiyeGMd32p8hajbwct9QoJKLOQJ0SOoENn9jZMOxBPWXw5z
- c0NP0F60CKINpFnAuwURJfAtokuNBIqe_y6Y7ZAwQ.hj7kfoaATKZ8PdiEF2z3jbykkGguDI5Idy
- hGHHsrbHPskB8oy3xO5XEJlYKGuFm0FGEXgIjg6k_j8MqeDQ3mtvZoZQpToWJ1JtHkS5puFEbf0T
- IVdZUdhReVppjy1tGWkVMXQgi.GTdfTp725mu88ffivNftF5R66XwZbIi2RyIiegAKS0pHKzybRg
- t9hgGo4vVh60epQTHDLA8L7uWUW1p97PghdXcSV3CKh1vDGeuwzc7qvlWA2wPTPQNRq27teOGSh6
- C45kbyT1mxddumxM2P9p7uf8IKkTbEmuB9DMWKwKF76t1gkr8MhytRKCc5OjljcILHCUnyjrFsfv
- PhipaRDH9x.3oe8Fca6Smo7AwaSlbDqtOwK_9Ort.EdsvYvKb9z5UqT_mTlWmJjl2D7hVxRSxxdY
- vV.Kvun4.HwZD9S0NSqNdFGFsxYphHCtD8unxNXikUXphcFOBYR0sn4WHynk5ew7MCGLJ5U5.qDp
- .Klr0NQbiibHPwNC3l5DgEwz6VNPaOkOfxL7TsvGRQwaWHytubn6eQnSYsd4zAR7yQ0OC8IHRGcE
- 6e4ryfk16H1VHl6U8Gv_IRba1_9fUpHZE20H8TgyEcblxTq5EaSix4nfsH4pTj7op58NKeXnz6k9
- ss1VBFulpcbafFhO_ahXKZx2K.MGFIkzpc.W1Y.xqwbLewf1eP4Qrp.5Oi.BLnxqtGoO.LcvmbHJ
- q8hcQ6ne57D479OpvZrKcNAtUCzdiEp.lzaxXk0.Qty6tS0FxbAy9EjHvJZ3L9mitkydUS3CzvlH
- 047Am5vYgWWdlmNlBwXEA3qVOSjBRWcqLVVZv1BDkd0ZfUy26ZD3F4H8fpaAr5bF4tJdG_XYXYet
- BJ_IbZYi70f6N51IYqEIV0GI2WLc2jkqAUQ07h81vdN8MiUbXDG.5oub3GI11lDZztXVX9K_7UaW
- 0imH9OeD6p5nQ
+        Mon, 13 Dec 2021 18:44:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1639439043; bh=GBT5V72X3FEDQZIJtllwUk+zoYaCYDm6hxxff8xT1Lo=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=bTowoWnNihHCCd+zTTwIJjyFwa3OzxFxRPDM2VhbbhWrCtzlVjY0kEQ+MgfMWd9W3iDuLp32J+NhC+xAWFZ/FNIiENA9JroEVTMDdg2q8h+WWsD7lH+6jS2OJnTEk+wfHcsrDbJvP7f5tz4bEDYN//rXfsIQOb2fEPt4gpYfrM4QKDljP9iKHgfTXEXghn0wLumRtMGnofgAokmBtpELPVFk1JHNZ5pmDSKeAc63KZzgKJB8QiVGqMc6mG5vJu9/hEg1P4PGxYnPaVy48zS2U0g/wIqk8ndi4un/wyxw4kM41Q8R0MkqZCXWWjf6piacP0KeHZSB8M/qcr/zsMoGqw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1639439043; bh=T52a35MF8f1OBHiZgYQ9GMsCpuMADDx0bBuo8CyDRYx=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=TYtlgYDXwwbxfDGeEwvaP26HNm8p55jPNZNlqRLNij/22lU4VeHOxbW/whJtWtAl16wFDZZH+KGr9ySCTSlEBB1TGHONx+mz7LsRKsN1qhK2Gk7OSi5vXvfatLVh6I+GfBgHY4m8sbznDDENyDBAWV6w/ZUvYRL1cuDPki7osJjIqSPbm6MBQa96Mv92myJGdX45cMe9Ab9Cqwu2x3DDfPgVxUSGgCwBUiMPlTbstNWFr7piAFgALgAYmO7BbvoA3E9f05b9ULEGilcc6qLylRNMHh6nulXCUuxstTNvBnyvt2MuLiq6rrbD7RwH15/tQ7KmF/AjyhlsBcBBjuCeoQ==
+X-YMail-OSG: QqnmgvQVM1l0cdj6Z9D9f4ZGtW1vR.AeSIV0231ZrO9fUhUh_hC2bsPRdNp25B9
+ NiJasf89SL3DESFG7EHuZH.m38SgBYvvtLCRf0cCbpUYpP6D1VpzkRH_WW5CTMsGKWgoH9NAIpjt
+ BsSVsWPJupOONC1AcCeaMs1OM_DEmUyUwfpPXFOwsKd67iDFNEjfL9qH.B8sI76D.kaKg03RdxBD
+ 0Kza9l3j5WomDaNysxlZaKHX8n_rkkR8cXSAeGKHjo.DhYSm7MXoD03OCi9uJmu11TL6_K0wasvi
+ RKcn4owhrGqKD5sAcrMWh6gLRdqKEX60ETh_GGbvrjBrBxw7hfCqLbPmNTbtt0nqZ3lZAtJs2iSj
+ trDuLAJjs1jOAY9fLuM6mml959wnjzQgdVdQYHdKDOBFklLUUyxrVBTpzoFWIC.da7hsI4O1__EH
+ bgXSg34FkXRmQGH7UdXPQ0LjouA.EtTjUs9d3EDWwMqxsPtvy42EJu8GWtnjTAv5eRv1Dpn2gOBr
+ TbdvPQEqwU2AqG9teM_rRHsZOcvIHK4L39femLfkBoLPCrvywaYu_3C1Ii_LZ8lVgAN9YGEL3l.o
+ jZBgH0mda76DqA3GXff3DEUmRJZ4ZUoauH1Gp6X7Sd_AlM0MIffGlGRP881Ku0c5LE7DjkAoM4Ax
+ GrnWZXZeR_T7IfCJXwejJO2osopRbnVLx0z1wxa3.RFWqN_sx0fsVLMp6RjYKifUN4GDswluWOaY
+ VAu5ewifWPuY3DNNnEYcGzfREqSOJ4BBz8oqY9vudCimaNtYb8CnPi8UFAilx2e_lzrTfMKy9yRa
+ dtgJrYXo4iYHaUrjrJvdm18C_piQ9wWWVaGXm3HYUXfwIRTTxn5v82jsU7F4vg1DwrTcmfpkz7zx
+ YJZTPZalQaRlNFHQn._gTvOCQiCE.mzP_BBqpXH3f00NCBZ4mUpAYQORz2e9NBxclGVj63bOIKiT
+ XQ.t44taKmMCIehXINOBexkmM_z0gqTMpeqK_Aw1VYm_dN5rqsv5G1unYxsAMpYG5qJOkj_wLggv
+ frXoEsh5Ip76c.OCiKIw73TuxcZ_z_UncdxSe0vsUjJMErZEj9YVgGo4wKdh4lk3DnmBOFzpGXfi
+ ONfhnkh2A9nCApDtO4TIWLmDZOiK26gdk6nnoBpXhKv3VmwzUsq_h.iRVxsoB7m3a9pV3FI9h4IH
+ uA6dshwsXyIdd7OEFZbEeMAS7NzQu98_VOM157sQwt6IboS_WytQthdzpybrvsGnJ5WVNas7UX65
+ mUe_Tqlw950Apxy1t1IHC9DvneoCfEjxDnTKteN4wp._L6vtMCYv91I4cLjzXZc7D2gbYvPmT7Q_
+ aOjEtvIXhdm47ukyDvweHeYCpaoF4bj1WRfm2h_bkt4BPf0n58nn5FIQkO5mk.nnbi7eD_M0R7RG
+ 9TYESRrgqe3fxpRnousT7cD5aaKP2Tx6fao8TJi0SVrSK8q3NV8fDgKuN.94B28C17x2UQXyW55u
+ faLoze555uoDDN2StOP6uPKztjwcK2DG.DRbZ2S0QzGxomPBIsMV3um.BdWgtctdEboqe3JIkY26
+ apxyCcoCkx0LxTzsMPOySRESs2JJeq8SEo4em_5kqE7yU9AzykACvkBrj.9bPYXRJT24REZKJC6s
+ Ok4u47oHvdajlu71SusyGoQo8Boa5of_Lsy7VeX9fWayOvdNG.6MBOs.iXrlvfaOrBGjvInFqAhc
+ HVcBPTafwCq.gBao15R5aNEwOgeCoDm5382kWqU7wmnhMISEll3SUk7gRW649Wx42lEuSqUJV8Or
+ y5u5SCV5XwwI4.LjzhuPn8FippbJurx7An.KkieX_ocKFwYN.AMFq0zZOsiXRAyu3zfbbLUuLmVZ
+ V8wveXp6Wu6UFiVj_jpBQTSw3986yXk5nU60PZ_bg_OFM2_Fg15cq61ggXNM_oEagEnhUR72Yfh4
+ KziRfCaWYGxmy3aDp3amed7gjF6HdaQJ5ftPHUYmYRbedlqyL_lkGKvfb3sW1UQhO6aJkGHJUOIP
+ Hxgj15T69tI9ZsqnBMyYBat.E5h7KAh2oarFjSYSx89Nv6.dyZbYMROUnUfQKaqKtaG9YfIsjzBt
+ _IV7jPHs.sIrQJxjZp60FgKyRLh8nIuEHZADora.IideFVPUAecQ7SieGnkq0fgLjq9wR88ddy76
+ ne7Ts8PdSNO07jtrsNRfSYnXkkgLZu8HF_vdF7Euw0h02DFI1kM2Z.TnZdvyww4aX7aTVKb.vsVo
+ 0VdSnNoo4Opcs5pUfi8fKSgtkRsAOkEUMXKnHJ_D6ufrErZeZLbXQWr8PjkoLucv0zBOZfAtr_mv
+ vWAISFTzAcv4-
 X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Mon, 13 Dec 2021 23:42:53 +0000
-Received: by kubenode521.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 04ef0a30041a093d247185d7c5827f84;
-          Mon, 13 Dec 2021 23:42:50 +0000 (UTC)
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Mon, 13 Dec 2021 23:44:03 +0000
+Received: by kubenode541.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 34e29d69d518fdba15d74db2a1d7e6fe;
+          Mon, 13 Dec 2021 23:43:58 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, linux-audit@redhat.com,
         keescook@chromium.org, john.johansen@canonical.com,
         penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        sds@tycho.nsa.gov, linux-kernel@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: [PATCH v31 02/28] LSM: Infrastructure management of the sock security
-Date:   Mon, 13 Dec 2021 15:40:08 -0800
-Message-Id: <20211213234034.111891-3-casey@schaufler-ca.com>
+        sds@tycho.nsa.gov, linux-kernel@vger.kernel.org
+Subject: [PATCH v31 03/28] LSM: Add the lsmblob data structure.
+Date:   Mon, 13 Dec 2021 15:40:09 -0800
+Message-Id: <20211213234034.111891-4-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211213234034.111891-1-casey@schaufler-ca.com>
 References: <20211213234034.111891-1-casey@schaufler-ca.com>
@@ -70,950 +69,858 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move management of the sock->sk_security blob out
-of the individual security modules and into the security
-infrastructure. Instead of allocating the blobs from within
-the modules the modules tell the infrastructure how much
-space is required, and the space is allocated there.
+When more than one security module is exporting data to
+audit and networking sub-systems a single 32 bit integer
+is no longer sufficient to represent the data. Add a
+structure to be used instead.
 
-Acked-by: Paul Moore <paul@paul-moore.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: John Johansen <john.johansen@canonical.com>
-Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+The lsmblob structure is currently an array of
+u32 "secids". There is an entry for each of the
+security modules built into the system that would
+use secids if active. The system assigns the module
+a "slot" when it registers hooks. If modules are
+compiled in but not registered there will be unused
+slots.
+
+A new lsm_id structure, which contains the name
+of the LSM and its slot number, is created. There
+is an instance for each LSM, which assigns the name
+and passes it to the infrastructure to set the slot.
+
+The audit rules data is expanded to use an array of
+security module data rather than a single instance.
+A new structure audit_lsm_rules is defined to avoid the
+confusion which commonly accompanies the use of
+void ** parameters.
+
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- include/linux/lsm_hooks.h         |  1 +
- security/apparmor/include/net.h   |  6 ++-
- security/apparmor/lsm.c           | 38 ++++-----------
- security/security.c               | 36 +++++++++++++-
- security/selinux/hooks.c          | 78 +++++++++++++++----------------
- security/selinux/include/objsec.h |  5 ++
- security/selinux/netlabel.c       | 23 ++++-----
- security/smack/smack.h            |  5 ++
- security/smack/smack_lsm.c        | 66 ++++++++++++--------------
- security/smack/smack_netfilter.c  |  4 +-
- 10 files changed, 143 insertions(+), 119 deletions(-)
+ include/linux/audit.h        | 10 ++++-
+ include/linux/lsm_hooks.h    | 12 +++++-
+ include/linux/security.h     | 74 +++++++++++++++++++++++++++++---
+ kernel/auditfilter.c         | 23 +++++-----
+ kernel/auditsc.c             | 17 +++-----
+ security/apparmor/lsm.c      |  7 ++-
+ security/bpf/hooks.c         | 12 +++++-
+ security/commoncap.c         |  7 ++-
+ security/landlock/cred.c     |  2 +-
+ security/landlock/fs.c       |  2 +-
+ security/landlock/ptrace.c   |  2 +-
+ security/landlock/setup.c    |  5 +++
+ security/landlock/setup.h    |  1 +
+ security/loadpin/loadpin.c   |  8 +++-
+ security/lockdown/lockdown.c |  7 ++-
+ security/safesetid/lsm.c     |  8 +++-
+ security/security.c          | 82 ++++++++++++++++++++++++++++++------
+ security/selinux/hooks.c     |  8 +++-
+ security/smack/smack_lsm.c   |  7 ++-
+ security/tomoyo/tomoyo.c     |  8 +++-
+ security/yama/yama_lsm.c     |  7 ++-
+ 21 files changed, 253 insertions(+), 56 deletions(-)
 
+diff --git a/include/linux/audit.h b/include/linux/audit.h
+index d06134ac6245..14849d5f84b4 100644
+--- a/include/linux/audit.h
++++ b/include/linux/audit.h
+@@ -11,6 +11,7 @@
+ 
+ #include <linux/sched.h>
+ #include <linux/ptrace.h>
++#include <linux/security.h>
+ #include <linux/audit_arch.h>
+ #include <uapi/linux/audit.h>
+ #include <uapi/linux/netfilter/nf_tables.h>
+@@ -59,6 +60,10 @@ struct audit_krule {
+ /* Flag to indicate legacy AUDIT_LOGINUID unset usage */
+ #define AUDIT_LOGINUID_LEGACY		0x1
+ 
++struct audit_lsm_rules {
++	void	*rule[LSMBLOB_ENTRIES];
++};
++
+ struct audit_field {
+ 	u32				type;
+ 	union {
+@@ -66,8 +71,9 @@ struct audit_field {
+ 		kuid_t			uid;
+ 		kgid_t			gid;
+ 		struct {
+-			char		*lsm_str;
+-			void		*lsm_rule;
++			bool			lsm_isset;
++			char			*lsm_str;
++			struct audit_lsm_rules	lsm_rules;
+ 		};
+ 	};
+ 	u32				op;
 diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index d45b6f6e27fd..89b8e40186f8 100644
+index 89b8e40186f8..490545f0db6d 100644
 --- a/include/linux/lsm_hooks.h
 +++ b/include/linux/lsm_hooks.h
-@@ -1604,6 +1604,7 @@ struct lsm_blob_sizes {
- 	int	lbs_cred;
- 	int	lbs_file;
- 	int	lbs_inode;
-+	int	lbs_sock;
- 	int	lbs_superblock;
- 	int	lbs_ipc;
- 	int	lbs_msg_msg;
-diff --git a/security/apparmor/include/net.h b/security/apparmor/include/net.h
-index aadb4b29fb66..fac8999ba7a3 100644
---- a/security/apparmor/include/net.h
-+++ b/security/apparmor/include/net.h
-@@ -51,7 +51,11 @@ struct aa_sk_ctx {
- 	struct aa_label *peer;
- };
+@@ -1586,6 +1586,14 @@ struct security_hook_heads {
+ 	#undef LSM_HOOK
+ } __randomize_layout;
  
--#define SK_CTX(X) ((X)->sk_security)
-+static inline struct aa_sk_ctx *aa_sock(const struct sock *sk)
++/*
++ * Information that identifies a security module.
++ */
++struct lsm_id {
++	const char	*lsm;	/* Name of the LSM */
++	int		slot;	/* Slot in lsmblob if one is allocated */
++};
++
+ /*
+  * Security module hook list structure.
+  * For use with generic list macros for common operations.
+@@ -1594,7 +1602,7 @@ struct security_hook_list {
+ 	struct hlist_node		list;
+ 	struct hlist_head		*head;
+ 	union security_list_options	hook;
+-	char				*lsm;
++	struct lsm_id			*lsmid;
+ } __randomize_layout;
+ 
+ /*
+@@ -1630,7 +1638,7 @@ extern struct security_hook_heads security_hook_heads;
+ extern char *lsm_names;
+ 
+ extern void security_add_hooks(struct security_hook_list *hooks, int count,
+-				char *lsm);
++			       struct lsm_id *lsmid);
+ 
+ #define LSM_FLAG_LEGACY_MAJOR	BIT(0)
+ #define LSM_FLAG_EXCLUSIVE	BIT(1)
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 71eac35bfa21..96afea94938f 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -39,6 +39,7 @@ struct kernel_siginfo;
+ struct sembuf;
+ struct kern_ipc_perm;
+ struct audit_context;
++struct audit_lsm_rules;
+ struct super_block;
+ struct inode;
+ struct dentry;
+@@ -134,6 +135,65 @@ enum lockdown_reason {
+ 
+ extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
+ 
++/*
++ * Data exported by the security modules
++ *
++ * Any LSM that provides secid or secctx based hooks must be included.
++ */
++#define LSMBLOB_ENTRIES ( \
++	(IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_APPARMOR) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0))
++
++struct lsmblob {
++	u32     secid[LSMBLOB_ENTRIES];
++};
++
++#define LSMBLOB_INVALID		-1	/* Not a valid LSM slot number */
++#define LSMBLOB_NEEDED		-2	/* Slot requested on initialization */
++#define LSMBLOB_NOT_NEEDED	-3	/* Slot not requested */
++
++/**
++ * lsmblob_init - initialize an lsmblob structure
++ * @blob: Pointer to the data to initialize
++ * @secid: The initial secid value
++ *
++ * Set all secid for all modules to the specified value.
++ */
++static inline void lsmblob_init(struct lsmblob *blob, u32 secid)
 +{
-+	return sk->sk_security + apparmor_blob_sizes.lbs_sock;
++	int i;
++
++	for (i = 0; i < LSMBLOB_ENTRIES; i++)
++		blob->secid[i] = secid;
 +}
 +
- #define SOCK_ctx(X) SOCK_INODE(X)->i_security
- #define DEFINE_AUDIT_NET(NAME, OP, SK, F, T, P)				  \
- 	struct lsm_network_audit NAME ## _net = { .sk = (SK),		  \
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 0d6585056f3d..343631e20c2b 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -775,33 +775,15 @@ static int apparmor_task_kill(struct task_struct *target, struct kernel_siginfo
- 	return error;
++/**
++ * lsmblob_is_set - report if there is an value in the lsmblob
++ * @blob: Pointer to the exported LSM data
++ *
++ * Returns true if there is a secid set, false otherwise
++ */
++static inline bool lsmblob_is_set(struct lsmblob *blob)
++{
++	struct lsmblob empty = {};
++
++	return !!memcmp(blob, &empty, sizeof(*blob));
++}
++
++/**
++ * lsmblob_equal - report if the two lsmblob's are equal
++ * @bloba: Pointer to one LSM data
++ * @blobb: Pointer to the other LSM data
++ *
++ * Returns true if all entries in the two are equal, false otherwise
++ */
++static inline bool lsmblob_equal(struct lsmblob *bloba, struct lsmblob *blobb)
++{
++	return !memcmp(bloba, blobb, sizeof(*bloba));
++}
++
+ /* These functions are in security/commoncap.c */
+ extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
+ 		       int cap, unsigned int opts);
+@@ -1887,15 +1947,17 @@ static inline int security_key_getsecurity(struct key *key, char **_buffer)
+ 
+ #ifdef CONFIG_AUDIT
+ #ifdef CONFIG_SECURITY
+-int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule);
++int security_audit_rule_init(u32 field, u32 op, char *rulestr,
++			     struct audit_lsm_rules *lsmrules);
+ int security_audit_rule_known(struct audit_krule *krule);
+-int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule);
+-void security_audit_rule_free(void *lsmrule);
++int security_audit_rule_match(u32 secid, u32 field, u32 op,
++			      struct audit_lsm_rules *lsmrules);
++void security_audit_rule_free(struct audit_lsm_rules *lsmrules);
+ 
+ #else
+ 
+ static inline int security_audit_rule_init(u32 field, u32 op, char *rulestr,
+-					   void **lsmrule)
++					   struct audit_lsm_rules *lsmrules)
+ {
+ 	return 0;
+ }
+@@ -1906,12 +1968,12 @@ static inline int security_audit_rule_known(struct audit_krule *krule)
  }
  
--/**
-- * apparmor_sk_alloc_security - allocate and attach the sk_security field
-- */
--static int apparmor_sk_alloc_security(struct sock *sk, int family, gfp_t flags)
--{
--	struct aa_sk_ctx *ctx;
--
--	ctx = kzalloc(sizeof(*ctx), flags);
--	if (!ctx)
--		return -ENOMEM;
--
--	SK_CTX(sk) = ctx;
--
--	return 0;
--}
--
- /**
-  * apparmor_sk_free_security - free the sk_security field
-  */
- static void apparmor_sk_free_security(struct sock *sk)
+ static inline int security_audit_rule_match(u32 secid, u32 field, u32 op,
+-					    void *lsmrule)
++					    struct audit_lsm_rules *lsmrules)
  {
--	struct aa_sk_ctx *ctx = SK_CTX(sk);
-+	struct aa_sk_ctx *ctx = aa_sock(sk);
- 
--	SK_CTX(sk) = NULL;
- 	aa_put_label(ctx->label);
- 	aa_put_label(ctx->peer);
--	kfree(ctx);
- }
- 
- /**
-@@ -810,8 +792,8 @@ static void apparmor_sk_free_security(struct sock *sk)
- static void apparmor_sk_clone_security(const struct sock *sk,
- 				       struct sock *newsk)
- {
--	struct aa_sk_ctx *ctx = SK_CTX(sk);
--	struct aa_sk_ctx *new = SK_CTX(newsk);
-+	struct aa_sk_ctx *ctx = aa_sock(sk);
-+	struct aa_sk_ctx *new = aa_sock(newsk);
- 
- 	if (new->label)
- 		aa_put_label(new->label);
-@@ -867,7 +849,7 @@ static int apparmor_socket_post_create(struct socket *sock, int family,
- 		label = aa_get_current_label();
- 
- 	if (sock->sk) {
--		struct aa_sk_ctx *ctx = SK_CTX(sock->sk);
-+		struct aa_sk_ctx *ctx = aa_sock(sock->sk);
- 
- 		aa_put_label(ctx->label);
- 		ctx->label = aa_get_label(label);
-@@ -1052,7 +1034,7 @@ static int apparmor_socket_shutdown(struct socket *sock, int how)
-  */
- static int apparmor_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
- {
--	struct aa_sk_ctx *ctx = SK_CTX(sk);
-+	struct aa_sk_ctx *ctx = aa_sock(sk);
- 
- 	if (!skb->secmark)
- 		return 0;
-@@ -1065,7 +1047,7 @@ static int apparmor_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
- 
- static struct aa_label *sk_peer_label(struct sock *sk)
- {
--	struct aa_sk_ctx *ctx = SK_CTX(sk);
-+	struct aa_sk_ctx *ctx = aa_sock(sk);
- 
- 	if (ctx->peer)
- 		return ctx->peer;
-@@ -1149,7 +1131,7 @@ static int apparmor_socket_getpeersec_dgram(struct socket *sock,
-  */
- static void apparmor_sock_graft(struct sock *sk, struct socket *parent)
- {
--	struct aa_sk_ctx *ctx = SK_CTX(sk);
-+	struct aa_sk_ctx *ctx = aa_sock(sk);
- 
- 	if (!ctx->label)
- 		ctx->label = aa_get_current_label();
-@@ -1159,7 +1141,7 @@ static void apparmor_sock_graft(struct sock *sk, struct socket *parent)
- static int apparmor_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- 				      struct request_sock *req)
- {
--	struct aa_sk_ctx *ctx = SK_CTX(sk);
-+	struct aa_sk_ctx *ctx = aa_sock(sk);
- 
- 	if (!skb->secmark)
- 		return 0;
-@@ -1176,6 +1158,7 @@ struct lsm_blob_sizes apparmor_blob_sizes __lsm_ro_after_init = {
- 	.lbs_cred = sizeof(struct aa_task_ctx *),
- 	.lbs_file = sizeof(struct aa_file_ctx),
- 	.lbs_task = sizeof(struct aa_task_ctx),
-+	.lbs_sock = sizeof(struct aa_sk_ctx),
- };
- 
- static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
-@@ -1212,7 +1195,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(getprocattr, apparmor_getprocattr),
- 	LSM_HOOK_INIT(setprocattr, apparmor_setprocattr),
- 
--	LSM_HOOK_INIT(sk_alloc_security, apparmor_sk_alloc_security),
- 	LSM_HOOK_INIT(sk_free_security, apparmor_sk_free_security),
- 	LSM_HOOK_INIT(sk_clone_security, apparmor_sk_clone_security),
- 
-@@ -1764,7 +1746,7 @@ static unsigned int apparmor_ip_postroute(void *priv,
- 	if (sk == NULL)
- 		return NF_ACCEPT;
- 
--	ctx = SK_CTX(sk);
-+	ctx = aa_sock(sk);
- 	if (!apparmor_secmark_check(ctx->label, OP_SENDMSG, AA_MAY_SEND,
- 				    skb->secmark, sk))
- 		return NF_ACCEPT;
-diff --git a/security/security.c b/security/security.c
-index 063c9cbbcea6..7f2bed1b2d6c 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -29,6 +29,7 @@
- #include <linux/string.h>
- #include <linux/msg.h>
- #include <net/flow.h>
-+#include <net/sock.h>
- 
- #define MAX_LSM_EVM_XATTR	2
- 
-@@ -204,6 +205,7 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
- 	lsm_set_blob_size(&needed->lbs_inode, &blob_sizes.lbs_inode);
- 	lsm_set_blob_size(&needed->lbs_ipc, &blob_sizes.lbs_ipc);
- 	lsm_set_blob_size(&needed->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
-+	lsm_set_blob_size(&needed->lbs_sock, &blob_sizes.lbs_sock);
- 	lsm_set_blob_size(&needed->lbs_superblock, &blob_sizes.lbs_superblock);
- 	lsm_set_blob_size(&needed->lbs_task, &blob_sizes.lbs_task);
- }
-@@ -340,6 +342,7 @@ static void __init ordered_lsm_init(void)
- 	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
- 	init_debug("ipc blob size        = %d\n", blob_sizes.lbs_ipc);
- 	init_debug("msg_msg blob size    = %d\n", blob_sizes.lbs_msg_msg);
-+	init_debug("sock blob size       = %d\n", blob_sizes.lbs_sock);
- 	init_debug("superblock blob size = %d\n", blob_sizes.lbs_superblock);
- 	init_debug("task blob size       = %d\n", blob_sizes.lbs_task);
- 
-@@ -659,6 +662,28 @@ static int lsm_msg_msg_alloc(struct msg_msg *mp)
  	return 0;
  }
  
-+/**
-+ * lsm_sock_alloc - allocate a composite sock blob
-+ * @sock: the sock that needs a blob
-+ * @priority: allocation mode
-+ *
-+ * Allocate the sock blob for all the modules
-+ *
-+ * Returns 0, or -ENOMEM if memory can't be allocated.
-+ */
-+static int lsm_sock_alloc(struct sock *sock, gfp_t priority)
-+{
-+	if (blob_sizes.lbs_sock == 0) {
-+		sock->sk_security = NULL;
-+		return 0;
-+	}
-+
-+	sock->sk_security = kzalloc(blob_sizes.lbs_sock, priority);
-+	if (sock->sk_security == NULL)
-+		return -ENOMEM;
-+	return 0;
-+}
-+
- /**
-  * lsm_early_task - during initialization allocate a composite task blob
-  * @task: the task that needs a blob
-@@ -2260,12 +2285,21 @@ EXPORT_SYMBOL(security_socket_getpeersec_dgram);
+-static inline void security_audit_rule_free(void *lsmrule)
++static inline void security_audit_rule_free(struct audit_lsm_rules *lsmrules)
+ { }
  
- int security_sk_alloc(struct sock *sk, int family, gfp_t priority)
- {
--	return call_int_hook(sk_alloc_security, 0, sk, family, priority);
-+	int rc = lsm_sock_alloc(sk, priority);
-+
-+	if (unlikely(rc))
-+		return rc;
-+	rc = call_int_hook(sk_alloc_security, 0, sk, family, priority);
-+	if (unlikely(rc))
-+		security_sk_free(sk);
-+	return rc;
+ #endif /* CONFIG_SECURITY */
+diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+index d75acb014ccd..c6b25bf0b323 100644
+--- a/kernel/auditfilter.c
++++ b/kernel/auditfilter.c
+@@ -76,7 +76,7 @@ static void audit_free_lsm_field(struct audit_field *f)
+ 	case AUDIT_OBJ_LEV_LOW:
+ 	case AUDIT_OBJ_LEV_HIGH:
+ 		kfree(f->lsm_str);
+-		security_audit_rule_free(f->lsm_rule);
++		security_audit_rule_free(&f->lsm_rules);
+ 	}
  }
  
- void security_sk_free(struct sock *sk)
- {
- 	call_void_hook(sk_free_security, sk);
-+	kfree(sk->sk_security);
-+	sk->sk_security = NULL;
+@@ -529,7 +529,7 @@ static struct audit_entry *audit_data_to_entry(struct audit_rule_data *data,
+ 			entry->rule.buflen += f_val;
+ 			f->lsm_str = str;
+ 			err = security_audit_rule_init(f->type, f->op, str,
+-						       (void **)&f->lsm_rule);
++						       &f->lsm_rules);
+ 			/* Keep currently invalid fields around in case they
+ 			 * become valid after a policy reload. */
+ 			if (err == -EINVAL) {
+@@ -782,7 +782,7 @@ static int audit_compare_rule(struct audit_krule *a, struct audit_krule *b)
+ 	return 0;
  }
  
- void security_sk_clone(const struct sock *sk, struct sock *newsk)
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 62d30c0a30c2..90a140ea439d 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -4629,7 +4629,7 @@ static int socket_sockcreate_sid(const struct task_security_struct *tsec,
+-/* Duplicate LSM field information.  The lsm_rule is opaque, so must be
++/* Duplicate LSM field information.  The lsm_rules is opaque, so must be
+  * re-initialized. */
+ static inline int audit_dupe_lsm_field(struct audit_field *df,
+ 					   struct audit_field *sf)
+@@ -796,9 +796,9 @@ static inline int audit_dupe_lsm_field(struct audit_field *df,
+ 		return -ENOMEM;
+ 	df->lsm_str = lsm_str;
  
- static int sock_has_perm(struct sock *sk, u32 perms)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	struct common_audit_data ad;
- 	struct lsm_network_audit net = {0,};
+-	/* our own (refreshed) copy of lsm_rule */
++	/* our own (refreshed) copy of lsm_rules */
+ 	ret = security_audit_rule_init(df->type, df->op, df->lsm_str,
+-				       (void **)&df->lsm_rule);
++				       &df->lsm_rules);
+ 	/* Keep currently invalid fields around in case they
+ 	 * become valid after a policy reload. */
+ 	if (ret == -EINVAL) {
+@@ -850,7 +850,7 @@ struct audit_entry *audit_dupe_rule(struct audit_krule *old)
+ 	new->tree = old->tree;
+ 	memcpy(new->fields, old->fields, sizeof(struct audit_field) * fcount);
  
-@@ -4686,7 +4686,7 @@ static int selinux_socket_post_create(struct socket *sock, int family,
- 	isec->initialized = LABEL_INITIALIZED;
+-	/* deep copy this information, updating the lsm_rule fields, because
++	/* deep copy this information, updating the lsm_rules fields, because
+ 	 * the originals will all be freed when the old rule is freed. */
+ 	for (i = 0; i < fcount; i++) {
+ 		switch (new->fields[i].type) {
+@@ -1367,11 +1367,12 @@ int audit_filter(int msgtype, unsigned int listtype)
+ 			case AUDIT_SUBJ_TYPE:
+ 			case AUDIT_SUBJ_SEN:
+ 			case AUDIT_SUBJ_CLR:
+-				if (f->lsm_rule) {
++				if (f->lsm_str) {
+ 					security_task_getsecid_subj(current,
+ 								    &sid);
+ 					result = security_audit_rule_match(sid,
+-						   f->type, f->op, f->lsm_rule);
++						   f->type, f->op,
++						   &f->lsm_rules);
+ 				}
+ 				break;
+ 			case AUDIT_EXE:
+@@ -1398,7 +1399,7 @@ int audit_filter(int msgtype, unsigned int listtype)
+ 	return ret;
+ }
  
- 	if (sock->sk) {
--		sksec = sock->sk->sk_security;
-+		sksec = selinux_sock(sock->sk);
- 		sksec->sclass = sclass;
- 		sksec->sid = sid;
- 		/* Allows detection of the first association on this socket */
-@@ -4702,8 +4702,8 @@ static int selinux_socket_post_create(struct socket *sock, int family,
- static int selinux_socket_socketpair(struct socket *socka,
- 				     struct socket *sockb)
+-static int update_lsm_rule(struct audit_krule *r)
++static int update_lsm_rules(struct audit_krule *r)
  {
--	struct sk_security_struct *sksec_a = socka->sk->sk_security;
--	struct sk_security_struct *sksec_b = sockb->sk->sk_security;
-+	struct sk_security_struct *sksec_a = selinux_sock(socka->sk);
-+	struct sk_security_struct *sksec_b = selinux_sock(sockb->sk);
- 
- 	sksec_a->peer_sid = sksec_b->sid;
- 	sksec_b->peer_sid = sksec_a->sid;
-@@ -4718,7 +4718,7 @@ static int selinux_socket_socketpair(struct socket *socka,
- static int selinux_socket_bind(struct socket *sock, struct sockaddr *address, int addrlen)
- {
- 	struct sock *sk = sock->sk;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	u16 family;
- 	int err;
- 
-@@ -4853,7 +4853,7 @@ static int selinux_socket_connect_helper(struct socket *sock,
- 					 struct sockaddr *address, int addrlen)
- {
- 	struct sock *sk = sock->sk;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	int err;
- 
- 	err = sock_has_perm(sk, SOCKET__CONNECT);
-@@ -5032,9 +5032,9 @@ static int selinux_socket_unix_stream_connect(struct sock *sock,
- 					      struct sock *other,
- 					      struct sock *newsk)
- {
--	struct sk_security_struct *sksec_sock = sock->sk_security;
--	struct sk_security_struct *sksec_other = other->sk_security;
--	struct sk_security_struct *sksec_new = newsk->sk_security;
-+	struct sk_security_struct *sksec_sock = selinux_sock(sock);
-+	struct sk_security_struct *sksec_other = selinux_sock(other);
-+	struct sk_security_struct *sksec_new = selinux_sock(newsk);
- 	struct common_audit_data ad;
- 	struct lsm_network_audit net = {0,};
- 	int err;
-@@ -5066,8 +5066,8 @@ static int selinux_socket_unix_stream_connect(struct sock *sock,
- static int selinux_socket_unix_may_send(struct socket *sock,
- 					struct socket *other)
- {
--	struct sk_security_struct *ssec = sock->sk->sk_security;
--	struct sk_security_struct *osec = other->sk->sk_security;
-+	struct sk_security_struct *ssec = selinux_sock(sock->sk);
-+	struct sk_security_struct *osec = selinux_sock(other->sk);
- 	struct common_audit_data ad;
- 	struct lsm_network_audit net = {0,};
- 
-@@ -5109,7 +5109,7 @@ static int selinux_sock_rcv_skb_compat(struct sock *sk, struct sk_buff *skb,
- 				       u16 family)
- {
- 	int err = 0;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	u32 sk_sid = sksec->sid;
- 	struct common_audit_data ad;
- 	struct lsm_network_audit net = {0,};
-@@ -5142,7 +5142,7 @@ static int selinux_sock_rcv_skb_compat(struct sock *sk, struct sk_buff *skb,
- static int selinux_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
- {
- 	int err;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	u16 family = sk->sk_family;
- 	u32 sk_sid = sksec->sid;
- 	struct common_audit_data ad;
-@@ -5210,13 +5210,15 @@ static int selinux_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
+ 	struct audit_entry *entry = container_of(r, struct audit_entry, rule);
+ 	struct audit_entry *nentry;
+@@ -1430,7 +1431,7 @@ static int update_lsm_rule(struct audit_krule *r)
  	return err;
  }
  
--static int selinux_socket_getpeersec_stream(struct socket *sock, char __user *optval,
--					    int __user *optlen, unsigned len)
-+static int selinux_socket_getpeersec_stream(struct socket *sock,
-+					    char __user *optval,
-+					    int __user *optlen,
-+					    unsigned int len)
- {
- 	int err = 0;
- 	char *scontext;
- 	u32 scontext_len;
--	struct sk_security_struct *sksec = sock->sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sock->sk);
- 	u32 peer_sid = SECSID_NULL;
+-/* This function will re-initialize the lsm_rule field of all applicable rules.
++/* This function will re-initialize the lsm_rules field of all applicable rules.
+  * It will traverse the filter lists serarching for rules that contain LSM
+  * specific filter fields.  When such a rule is found, it is copied, the
+  * LSM field is re-initialized, and the old rule is replaced with the
+@@ -1445,7 +1446,7 @@ int audit_update_lsm_rules(void)
  
- 	if (sksec->sclass == SECCLASS_UNIX_STREAM_SOCKET ||
-@@ -5276,34 +5278,27 @@ static int selinux_socket_getpeersec_dgram(struct socket *sock, struct sk_buff *
- 
- static int selinux_sk_alloc_security(struct sock *sk, int family, gfp_t priority)
- {
--	struct sk_security_struct *sksec;
--
--	sksec = kzalloc(sizeof(*sksec), priority);
--	if (!sksec)
--		return -ENOMEM;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 	sksec->peer_sid = SECINITSID_UNLABELED;
- 	sksec->sid = SECINITSID_UNLABELED;
- 	sksec->sclass = SECCLASS_SOCKET;
- 	selinux_netlbl_sk_security_reset(sksec);
--	sk->sk_security = sksec;
- 
- 	return 0;
- }
- 
- static void selinux_sk_free_security(struct sock *sk)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 
--	sk->sk_security = NULL;
- 	selinux_netlbl_sk_security_free(sksec);
--	kfree(sksec);
- }
- 
- static void selinux_sk_clone_security(const struct sock *sk, struct sock *newsk)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
--	struct sk_security_struct *newsksec = newsk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
-+	struct sk_security_struct *newsksec = selinux_sock(newsk);
- 
- 	newsksec->sid = sksec->sid;
- 	newsksec->peer_sid = sksec->peer_sid;
-@@ -5317,7 +5312,7 @@ static void selinux_sk_getsecid(struct sock *sk, u32 *secid)
- 	if (!sk)
- 		*secid = SECINITSID_ANY_SOCKET;
- 	else {
--		struct sk_security_struct *sksec = sk->sk_security;
-+		struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 		*secid = sksec->sid;
- 	}
-@@ -5327,7 +5322,7 @@ static void selinux_sock_graft(struct sock *sk, struct socket *parent)
- {
- 	struct inode_security_struct *isec =
- 		inode_security_novalidate(SOCK_INODE(parent));
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 	if (sk->sk_family == PF_INET || sk->sk_family == PF_INET6 ||
- 	    sk->sk_family == PF_UNIX)
-@@ -5342,7 +5337,7 @@ static void selinux_sock_graft(struct sock *sk, struct socket *parent)
- static int selinux_sctp_assoc_request(struct sctp_association *asoc,
- 				      struct sk_buff *skb)
- {
--	struct sk_security_struct *sksec = asoc->base.sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(asoc->base.sk);
- 	struct common_audit_data ad;
- 	struct lsm_network_audit net = {0,};
- 	u8 peerlbl_active;
-@@ -5493,8 +5488,8 @@ static int selinux_sctp_bind_connect(struct sock *sk, int optname,
- static void selinux_sctp_sk_clone(struct sctp_association *asoc, struct sock *sk,
- 				  struct sock *newsk)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
--	struct sk_security_struct *newsksec = newsk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
-+	struct sk_security_struct *newsksec = selinux_sock(newsk);
- 
- 	/* If policy does not support SECCLASS_SCTP_SOCKET then call
- 	 * the non-sctp clone version.
-@@ -5511,7 +5506,7 @@ static void selinux_sctp_sk_clone(struct sctp_association *asoc, struct sock *sk
- static int selinux_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- 				     struct request_sock *req)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	int err;
- 	u16 family = req->rsk_ops->family;
- 	u32 connsid;
-@@ -5532,7 +5527,7 @@ static int selinux_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- static void selinux_inet_csk_clone(struct sock *newsk,
- 				   const struct request_sock *req)
- {
--	struct sk_security_struct *newsksec = newsk->sk_security;
-+	struct sk_security_struct *newsksec = selinux_sock(newsk);
- 
- 	newsksec->sid = req->secid;
- 	newsksec->peer_sid = req->peer_secid;
-@@ -5549,7 +5544,7 @@ static void selinux_inet_csk_clone(struct sock *newsk,
- static void selinux_inet_conn_established(struct sock *sk, struct sk_buff *skb)
- {
- 	u16 family = sk->sk_family;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 	/* handle mapped IPv4 packets arriving via IPv6 sockets */
- 	if (family == PF_INET6 && skb->protocol == htons(ETH_P_IP))
-@@ -5633,7 +5628,7 @@ static int selinux_tun_dev_attach_queue(void *security)
- static int selinux_tun_dev_attach(struct sock *sk, void *security)
- {
- 	struct tun_security_struct *tunsec = security;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 	/* we don't currently perform any NetLabel based labeling here and it
- 	 * isn't clear that we would want to do so anyway; while we could apply
-@@ -5762,7 +5757,7 @@ static unsigned int selinux_ip_output(void *priv, struct sk_buff *skb,
- 			return NF_ACCEPT;
- 
- 		/* standard practice, label using the parent socket */
--		sksec = sk->sk_security;
-+		sksec = selinux_sock(sk);
- 		sid = sksec->sid;
- 	} else
- 		sid = SECINITSID_KERNEL;
-@@ -5785,7 +5780,7 @@ static unsigned int selinux_ip_postroute_compat(struct sk_buff *skb,
- 	sk = skb_to_full_sk(skb);
- 	if (sk == NULL)
- 		return NF_ACCEPT;
--	sksec = sk->sk_security;
-+	sksec = selinux_sock(sk);
- 
- 	ad.type = LSM_AUDIT_DATA_NET;
- 	ad.u.net = &net;
-@@ -5878,7 +5873,7 @@ static unsigned int selinux_ip_postroute(void *priv,
- 		u32 skb_sid;
- 		struct sk_security_struct *sksec;
- 
--		sksec = sk->sk_security;
-+		sksec = selinux_sock(sk);
- 		if (selinux_skb_peerlbl_sid(skb, family, &skb_sid))
- 			return NF_DROP;
- 		/* At this point, if the returned skb peerlbl is SECSID_NULL
-@@ -5907,7 +5902,7 @@ static unsigned int selinux_ip_postroute(void *priv,
- 	} else {
- 		/* Locally generated packet, fetch the security label from the
- 		 * associated socket. */
--		struct sk_security_struct *sksec = sk->sk_security;
-+		struct sk_security_struct *sksec = selinux_sock(sk);
- 		peer_sid = sksec->sid;
- 		secmark_perm = PACKET__SEND;
- 	}
-@@ -5956,7 +5951,7 @@ static int selinux_netlink_send(struct sock *sk, struct sk_buff *skb)
- 	unsigned int data_len = skb->len;
- 	unsigned char *data = skb->data;
- 	struct nlmsghdr *nlh;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	u16 sclass = sksec->sclass;
- 	u32 perm;
- 
-@@ -6956,6 +6951,7 @@ struct lsm_blob_sizes selinux_blob_sizes __lsm_ro_after_init = {
- 	.lbs_inode = sizeof(struct inode_security_struct),
- 	.lbs_ipc = sizeof(struct ipc_security_struct),
- 	.lbs_msg_msg = sizeof(struct msg_security_struct),
-+	.lbs_sock = sizeof(struct sk_security_struct),
- 	.lbs_superblock = sizeof(struct superblock_security_struct),
+ 	for (i = 0; i < AUDIT_NR_FILTERS; i++) {
+ 		list_for_each_entry_safe(r, n, &audit_rules_list[i], list) {
+-			int res = update_lsm_rule(r);
++			int res = update_lsm_rules(r);
+ 			if (!err)
+ 				err = res;
+ 		}
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index b517947bfa48..194a62d86578 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -664,14 +664,13 @@ static int audit_filter_rules(struct task_struct *tsk,
+ 			   match for now to avoid losing information that
+ 			   may be wanted.   An error message will also be
+ 			   logged upon error */
+-			if (f->lsm_rule) {
++			if (f->lsm_str) {
+ 				if (need_sid) {
+ 					security_task_getsecid_subj(tsk, &sid);
+ 					need_sid = 0;
+ 				}
+ 				result = security_audit_rule_match(sid, f->type,
+-								   f->op,
+-								   f->lsm_rule);
++							f->op, &f->lsm_rules);
+ 			}
+ 			break;
+ 		case AUDIT_OBJ_USER:
+@@ -681,21 +680,19 @@ static int audit_filter_rules(struct task_struct *tsk,
+ 		case AUDIT_OBJ_LEV_HIGH:
+ 			/* The above note for AUDIT_SUBJ_USER...AUDIT_SUBJ_CLR
+ 			   also applies here */
+-			if (f->lsm_rule) {
++			if (f->lsm_str) {
+ 				/* Find files that match */
+ 				if (name) {
+ 					result = security_audit_rule_match(
+ 								name->osid,
+ 								f->type,
+ 								f->op,
+-								f->lsm_rule);
++								&f->lsm_rules);
+ 				} else if (ctx) {
+ 					list_for_each_entry(n, &ctx->names_list, list) {
+ 						if (security_audit_rule_match(
+-								n->osid,
+-								f->type,
+-								f->op,
+-								f->lsm_rule)) {
++							n->osid, f->type, f->op,
++							&f->lsm_rules)) {
+ 							++result;
+ 							break;
+ 						}
+@@ -706,7 +703,7 @@ static int audit_filter_rules(struct task_struct *tsk,
+ 					break;
+ 				if (security_audit_rule_match(ctx->ipc.osid,
+ 							      f->type, f->op,
+-							      f->lsm_rule))
++							      &f->lsm_rules))
+ 					++result;
+ 			}
+ 			break;
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index 343631e20c2b..24241db8ec54 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -1161,6 +1161,11 @@ struct lsm_blob_sizes apparmor_blob_sizes __lsm_ro_after_init = {
+ 	.lbs_sock = sizeof(struct aa_sk_ctx),
  };
  
-diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
-index 2953132408bf..007d1ae7ee27 100644
---- a/security/selinux/include/objsec.h
-+++ b/security/selinux/include/objsec.h
-@@ -194,4 +194,9 @@ static inline struct superblock_security_struct *selinux_superblock(
- 	return superblock->s_security + selinux_blob_sizes.lbs_superblock;
- }
- 
-+static inline struct sk_security_struct *selinux_sock(const struct sock *sock)
-+{
-+	return sock->sk_security + selinux_blob_sizes.lbs_sock;
-+}
++static struct lsm_id apparmor_lsmid __lsm_ro_after_init = {
++	.lsm  = "apparmor",
++	.slot = LSMBLOB_NEEDED
++};
 +
- #endif /* _SELINUX_OBJSEC_H_ */
-diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
-index 1321f15799e2..800ab4b4239e 100644
---- a/security/selinux/netlabel.c
-+++ b/security/selinux/netlabel.c
-@@ -17,6 +17,7 @@
- #include <linux/gfp.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
-+#include <linux/lsm_hooks.h>
- #include <net/sock.h>
- #include <net/netlabel.h>
- #include <net/ip.h>
-@@ -68,7 +69,7 @@ static int selinux_netlbl_sidlookup_cached(struct sk_buff *skb,
- static struct netlbl_lsm_secattr *selinux_netlbl_sock_genattr(struct sock *sk)
- {
- 	int rc;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	struct netlbl_lsm_secattr *secattr;
- 
- 	if (sksec->nlbl_secattr != NULL)
-@@ -101,7 +102,7 @@ static struct netlbl_lsm_secattr *selinux_netlbl_sock_getattr(
- 							const struct sock *sk,
- 							u32 sid)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	struct netlbl_lsm_secattr *secattr = sksec->nlbl_secattr;
- 
- 	if (secattr == NULL)
-@@ -236,7 +237,7 @@ int selinux_netlbl_skbuff_setsid(struct sk_buff *skb,
- 	 * being labeled by it's parent socket, if it is just exit */
- 	sk = skb_to_full_sk(skb);
- 	if (sk != NULL) {
--		struct sk_security_struct *sksec = sk->sk_security;
-+		struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 		if (sksec->nlbl_state != NLBL_REQSKB)
- 			return 0;
-@@ -274,7 +275,7 @@ int selinux_netlbl_sctp_assoc_request(struct sctp_association *asoc,
- {
- 	int rc;
- 	struct netlbl_lsm_secattr secattr;
--	struct sk_security_struct *sksec = asoc->base.sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(asoc->base.sk);
- 	struct sockaddr_in addr4;
- 	struct sockaddr_in6 addr6;
- 
-@@ -355,7 +356,7 @@ int selinux_netlbl_inet_conn_request(struct request_sock *req, u16 family)
-  */
- void selinux_netlbl_inet_csk_clone(struct sock *sk, u16 family)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 	if (family == PF_INET)
- 		sksec->nlbl_state = NLBL_LABELED;
-@@ -373,8 +374,8 @@ void selinux_netlbl_inet_csk_clone(struct sock *sk, u16 family)
-  */
- void selinux_netlbl_sctp_sk_clone(struct sock *sk, struct sock *newsk)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
--	struct sk_security_struct *newsksec = newsk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
-+	struct sk_security_struct *newsksec = selinux_sock(newsk);
- 
- 	newsksec->nlbl_state = sksec->nlbl_state;
- }
-@@ -392,7 +393,7 @@ void selinux_netlbl_sctp_sk_clone(struct sock *sk, struct sock *newsk)
- int selinux_netlbl_socket_post_create(struct sock *sk, u16 family)
- {
- 	int rc;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	struct netlbl_lsm_secattr *secattr;
- 
- 	if (family != PF_INET && family != PF_INET6)
-@@ -507,7 +508,7 @@ int selinux_netlbl_socket_setsockopt(struct socket *sock,
- {
- 	int rc = 0;
- 	struct sock *sk = sock->sk;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	struct netlbl_lsm_secattr secattr;
- 
- 	if (selinux_netlbl_option(level, optname) &&
-@@ -545,7 +546,7 @@ static int selinux_netlbl_socket_connect_helper(struct sock *sk,
- 						struct sockaddr *addr)
- {
- 	int rc;
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 	struct netlbl_lsm_secattr *secattr;
- 
- 	/* connected sockets are allowed to disconnect when the address family
-@@ -584,7 +585,7 @@ static int selinux_netlbl_socket_connect_helper(struct sock *sk,
- int selinux_netlbl_socket_connect_locked(struct sock *sk,
- 					 struct sockaddr *addr)
- {
--	struct sk_security_struct *sksec = sk->sk_security;
-+	struct sk_security_struct *sksec = selinux_sock(sk);
- 
- 	if (sksec->nlbl_state != NLBL_REQSKB &&
- 	    sksec->nlbl_state != NLBL_CONNLABELED)
-diff --git a/security/smack/smack.h b/security/smack/smack.h
-index 99c3422596ab..66b813e15196 100644
---- a/security/smack/smack.h
-+++ b/security/smack/smack.h
-@@ -363,6 +363,11 @@ static inline struct superblock_smack *smack_superblock(
- 	return superblock->s_security + smack_blob_sizes.lbs_superblock;
- }
- 
-+static inline struct socket_smack *smack_sock(const struct sock *sock)
-+{
-+	return sock->sk_security + smack_blob_sizes.lbs_sock;
-+}
-+
- /*
-  * Is the directory transmuting?
-  */
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index efd35b07c7f8..db72debca070 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -1434,7 +1434,7 @@ static int smack_inode_getsecurity(struct user_namespace *mnt_userns,
- 		if (sock == NULL || sock->sk == NULL)
- 			return -EOPNOTSUPP;
- 
--		ssp = sock->sk->sk_security;
-+		ssp = smack_sock(sock->sk);
- 
- 		if (strcmp(name, XATTR_SMACK_IPIN) == 0)
- 			isp = ssp->smk_in;
-@@ -1817,7 +1817,7 @@ static int smack_file_receive(struct file *file)
- 
- 	if (inode->i_sb->s_magic == SOCKFS_MAGIC) {
- 		sock = SOCKET_I(inode);
--		ssp = sock->sk->sk_security;
-+		ssp = smack_sock(sock->sk);
- 		tsp = smack_cred(current_cred());
- 		/*
- 		 * If the receiving process can't write to the
-@@ -2238,11 +2238,7 @@ static void smack_task_to_inode(struct task_struct *p, struct inode *inode)
- static int smack_sk_alloc_security(struct sock *sk, int family, gfp_t gfp_flags)
- {
- 	struct smack_known *skp = smk_of_current();
--	struct socket_smack *ssp;
--
--	ssp = kzalloc(sizeof(struct socket_smack), gfp_flags);
--	if (ssp == NULL)
--		return -ENOMEM;
-+	struct socket_smack *ssp = smack_sock(sk);
- 
- 	/*
- 	 * Sockets created by kernel threads receive web label.
-@@ -2256,11 +2252,10 @@ static int smack_sk_alloc_security(struct sock *sk, int family, gfp_t gfp_flags)
+ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(ptrace_access_check, apparmor_ptrace_access_check),
+ 	LSM_HOOK_INIT(ptrace_traceme, apparmor_ptrace_traceme),
+@@ -1846,7 +1851,7 @@ static int __init apparmor_init(void)
+ 		goto buffers_out;
  	}
- 	ssp->smk_packet = NULL;
+ 	security_add_hooks(apparmor_hooks, ARRAY_SIZE(apparmor_hooks),
+-				"apparmor");
++				&apparmor_lsmid);
  
--	sk->sk_security = ssp;
--
+ 	/* Report that AppArmor successfully initialized */
+ 	apparmor_initialized = 1;
+diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+index e5971fa74fd7..7a58fe9ab8c4 100644
+--- a/security/bpf/hooks.c
++++ b/security/bpf/hooks.c
+@@ -15,9 +15,19 @@ static struct security_hook_list bpf_lsm_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(task_free, bpf_task_storage_free),
+ };
+ 
++/*
++ * slot has to be LSMBLOB_NEEDED because some of the hooks
++ * supplied by this module require a slot.
++ */
++struct lsm_id bpf_lsmid __lsm_ro_after_init = {
++	.lsm = "bpf",
++	.slot = LSMBLOB_NEEDED
++};
++
+ static int __init bpf_lsm_init(void)
+ {
+-	security_add_hooks(bpf_lsm_hooks, ARRAY_SIZE(bpf_lsm_hooks), "bpf");
++	security_add_hooks(bpf_lsm_hooks, ARRAY_SIZE(bpf_lsm_hooks),
++			   &bpf_lsmid);
+ 	pr_info("LSM support for eBPF active\n");
+ 	return 0;
+ }
+diff --git a/security/commoncap.c b/security/commoncap.c
+index 3f810d37b71b..628685cf20e3 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -1443,6 +1443,11 @@ int cap_mmap_file(struct file *file, unsigned long reqprot,
+ 
+ #ifdef CONFIG_SECURITY
+ 
++static struct lsm_id capability_lsmid __lsm_ro_after_init = {
++	.lsm  = "capability",
++	.slot = LSMBLOB_NOT_NEEDED
++};
++
+ static struct security_hook_list capability_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(capable, cap_capable),
+ 	LSM_HOOK_INIT(settime, cap_settime),
+@@ -1467,7 +1472,7 @@ static struct security_hook_list capability_hooks[] __lsm_ro_after_init = {
+ static int __init capability_init(void)
+ {
+ 	security_add_hooks(capability_hooks, ARRAY_SIZE(capability_hooks),
+-				"capability");
++			   &capability_lsmid);
  	return 0;
  }
  
-+#ifdef SMACK_IPV6_PORT_LABELING
- /**
-  * smack_sk_free_security - Free a socket blob
-  * @sk: the socket
-@@ -2269,7 +2264,6 @@ static int smack_sk_alloc_security(struct sock *sk, int family, gfp_t gfp_flags)
-  */
- static void smack_sk_free_security(struct sock *sk)
+diff --git a/security/landlock/cred.c b/security/landlock/cred.c
+index 6725af24c684..56b121d65436 100644
+--- a/security/landlock/cred.c
++++ b/security/landlock/cred.c
+@@ -42,5 +42,5 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+ __init void landlock_add_cred_hooks(void)
  {
--#ifdef SMACK_IPV6_PORT_LABELING
- 	struct smk_port_label *spp;
- 
- 	if (sk->sk_family == PF_INET6) {
-@@ -2282,9 +2276,8 @@ static void smack_sk_free_security(struct sock *sk)
- 		}
- 		rcu_read_unlock();
- 	}
--#endif
--	kfree(sk->sk_security);
+ 	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+-			LANDLOCK_NAME);
++			&landlock_lsmid);
  }
-+#endif
- 
- /**
- * smack_ipv4host_label - check host based restrictions
-@@ -2397,7 +2390,7 @@ static struct smack_known *smack_ipv6host_label(struct sockaddr_in6 *sip)
-  */
- static int smack_netlbl_add(struct sock *sk)
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index 97b8e421f617..319e90e9290c 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -688,5 +688,5 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+ __init void landlock_add_fs_hooks(void)
  {
--	struct socket_smack *ssp = sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sk);
- 	struct smack_known *skp = ssp->smk_out;
- 	int rc;
- 
-@@ -2429,7 +2422,7 @@ static int smack_netlbl_add(struct sock *sk)
-  */
- static void smack_netlbl_delete(struct sock *sk)
+ 	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+-			LANDLOCK_NAME);
++			&landlock_lsmid);
+ }
+diff --git a/security/landlock/ptrace.c b/security/landlock/ptrace.c
+index f55b82446de2..54ccf55a077a 100644
+--- a/security/landlock/ptrace.c
++++ b/security/landlock/ptrace.c
+@@ -116,5 +116,5 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+ __init void landlock_add_ptrace_hooks(void)
  {
--	struct socket_smack *ssp = sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sk);
+ 	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+-			LANDLOCK_NAME);
++			&landlock_lsmid);
+ }
+diff --git a/security/landlock/setup.c b/security/landlock/setup.c
+index f8e8e980454c..759e00b9436c 100644
+--- a/security/landlock/setup.c
++++ b/security/landlock/setup.c
+@@ -23,6 +23,11 @@ struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
+ 	.lbs_superblock = sizeof(struct landlock_superblock_security),
+ };
+ 
++struct lsm_id landlock_lsmid __lsm_ro_after_init = {
++	.lsm = LANDLOCK_NAME,
++	.slot = LSMBLOB_NOT_NEEDED,
++};
++
+ static int __init landlock_init(void)
+ {
+ 	landlock_add_cred_hooks();
+diff --git a/security/landlock/setup.h b/security/landlock/setup.h
+index 1daffab1ab4b..38bce5b172dc 100644
+--- a/security/landlock/setup.h
++++ b/security/landlock/setup.h
+@@ -14,5 +14,6 @@
+ extern bool landlock_initialized;
+ 
+ extern struct lsm_blob_sizes landlock_blob_sizes;
++extern struct lsm_id landlock_lsmid;
+ 
+ #endif /* _SECURITY_LANDLOCK_SETUP_H */
+diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+index b12f7d986b1e..b569f3bc170b 100644
+--- a/security/loadpin/loadpin.c
++++ b/security/loadpin/loadpin.c
+@@ -192,6 +192,11 @@ static int loadpin_load_data(enum kernel_load_data_id id, bool contents)
+ 	return loadpin_read_file(NULL, (enum kernel_read_file_id) id, contents);
+ }
+ 
++static struct lsm_id loadpin_lsmid __lsm_ro_after_init = {
++	.lsm  = "loadpin",
++	.slot = LSMBLOB_NOT_NEEDED
++};
++
+ static struct security_hook_list loadpin_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(sb_free_security, loadpin_sb_free_security),
+ 	LSM_HOOK_INIT(kernel_read_file, loadpin_read_file),
+@@ -239,7 +244,8 @@ static int __init loadpin_init(void)
+ 	pr_info("ready to pin (currently %senforcing)\n",
+ 		enforce ? "" : "not ");
+ 	parse_exclude();
+-	security_add_hooks(loadpin_hooks, ARRAY_SIZE(loadpin_hooks), "loadpin");
++	security_add_hooks(loadpin_hooks, ARRAY_SIZE(loadpin_hooks),
++			   &loadpin_lsmid);
+ 	return 0;
+ }
+ 
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 87cbdc64d272..4e24ea3f7b7e 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -75,6 +75,11 @@ static struct security_hook_list lockdown_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(locked_down, lockdown_is_locked_down),
+ };
+ 
++static struct lsm_id lockdown_lsmid __lsm_ro_after_init = {
++	.lsm = "lockdown",
++	.slot = LSMBLOB_NOT_NEEDED
++};
++
+ static int __init lockdown_lsm_init(void)
+ {
+ #if defined(CONFIG_LOCK_DOWN_KERNEL_FORCE_INTEGRITY)
+@@ -83,7 +88,7 @@ static int __init lockdown_lsm_init(void)
+ 	lock_kernel_down("Kernel configuration", LOCKDOWN_CONFIDENTIALITY_MAX);
+ #endif
+ 	security_add_hooks(lockdown_hooks, ARRAY_SIZE(lockdown_hooks),
+-			   "lockdown");
++			   &lockdown_lsmid);
+ 	return 0;
+ }
+ 
+diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
+index 963f4ad9cb66..0c368950dc14 100644
+--- a/security/safesetid/lsm.c
++++ b/security/safesetid/lsm.c
+@@ -241,6 +241,11 @@ static int safesetid_task_fix_setgid(struct cred *new,
+ 	return -EACCES;
+ }
+ 
++static struct lsm_id safesetid_lsmid __lsm_ro_after_init = {
++	.lsm  = "safesetid",
++	.slot = LSMBLOB_NOT_NEEDED
++};
++
+ static struct security_hook_list safesetid_security_hooks[] = {
+ 	LSM_HOOK_INIT(task_fix_setuid, safesetid_task_fix_setuid),
+ 	LSM_HOOK_INIT(task_fix_setgid, safesetid_task_fix_setgid),
+@@ -250,7 +255,8 @@ static struct security_hook_list safesetid_security_hooks[] = {
+ static int __init safesetid_security_init(void)
+ {
+ 	security_add_hooks(safesetid_security_hooks,
+-			   ARRAY_SIZE(safesetid_security_hooks), "safesetid");
++			   ARRAY_SIZE(safesetid_security_hooks),
++			   &safesetid_lsmid);
+ 
+ 	/* Report that SafeSetID successfully initialized */
+ 	safesetid_initialized = 1;
+diff --git a/security/security.c b/security/security.c
+index 7f2bed1b2d6c..f5acb607e251 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -345,6 +345,7 @@ static void __init ordered_lsm_init(void)
+ 	init_debug("sock blob size       = %d\n", blob_sizes.lbs_sock);
+ 	init_debug("superblock blob size = %d\n", blob_sizes.lbs_superblock);
+ 	init_debug("task blob size       = %d\n", blob_sizes.lbs_task);
++	init_debug("lsmblob size         = %zu\n", sizeof(struct lsmblob));
  
  	/*
- 	 * Take the label off the socket if one is set.
-@@ -2461,7 +2454,7 @@ static int smk_ipv4_check(struct sock *sk, struct sockaddr_in *sap)
- 	struct smack_known *skp;
- 	int rc = 0;
- 	struct smack_known *hkp;
--	struct socket_smack *ssp = sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sk);
- 	struct smk_audit_info ad;
+ 	 * Create any kmem_caches needed for blobs
+@@ -472,21 +473,38 @@ static int lsm_append(const char *new, char **result)
+ 	return 0;
+ }
  
- 	rcu_read_lock();
-@@ -2534,7 +2527,7 @@ static void smk_ipv6_port_label(struct socket *sock, struct sockaddr *address)
++/*
++ * Current index to use while initializing the lsmblob secid list.
++ */
++static int lsm_slot __lsm_ro_after_init;
++
+ /**
+  * security_add_hooks - Add a modules hooks to the hook lists.
+  * @hooks: the hooks to add
+  * @count: the number of hooks to add
+- * @lsm: the name of the security module
++ * @lsmid: the identification information for the security module
+  *
+  * Each LSM has to register its hooks with the infrastructure.
++ * If the LSM is using hooks that export secids allocate a slot
++ * for it in the lsmblob.
+  */
+ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+-				char *lsm)
++			       struct lsm_id *lsmid)
  {
- 	struct sock *sk = sock->sk;
- 	struct sockaddr_in6 *addr6;
--	struct socket_smack *ssp = sock->sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sock->sk);
- 	struct smk_port_label *spp;
- 	unsigned short port = 0;
+ 	int i;
  
-@@ -2622,7 +2615,7 @@ static int smk_ipv6_port_check(struct sock *sk, struct sockaddr_in6 *address,
- 				int act)
- {
- 	struct smk_port_label *spp;
--	struct socket_smack *ssp = sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sk);
- 	struct smack_known *skp = NULL;
- 	unsigned short port;
- 	struct smack_known *object;
-@@ -2716,7 +2709,7 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
- 	if (sock == NULL || sock->sk == NULL)
- 		return -EOPNOTSUPP;
- 
--	ssp = sock->sk->sk_security;
-+	ssp = smack_sock(sock->sk);
- 
- 	if (strcmp(name, XATTR_SMACK_IPIN) == 0)
- 		ssp->smk_in = skp;
-@@ -2764,7 +2757,7 @@ static int smack_socket_post_create(struct socket *sock, int family,
- 	 * Sockets created by kernel threads receive web label.
- 	 */
- 	if (unlikely(current->flags & PF_KTHREAD)) {
--		ssp = sock->sk->sk_security;
-+		ssp = smack_sock(sock->sk);
- 		ssp->smk_in = &smack_known_web;
- 		ssp->smk_out = &smack_known_web;
++	WARN_ON(!lsmid->slot || !lsmid->lsm);
++
++	if (lsmid->slot == LSMBLOB_NEEDED) {
++		if (lsm_slot >= LSMBLOB_ENTRIES)
++			panic("%s Too many LSMs registered.\n", __func__);
++		lsmid->slot = lsm_slot++;
++		init_debug("%s assigned lsmblob slot %d\n", lsmid->lsm,
++			   lsmid->slot);
++	}
++
+ 	for (i = 0; i < count; i++) {
+-		hooks[i].lsm = lsm;
++		hooks[i].lsmid = lsmid;
+ 		hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
  	}
-@@ -2789,8 +2782,8 @@ static int smack_socket_post_create(struct socket *sock, int family,
- static int smack_socket_socketpair(struct socket *socka,
- 		                   struct socket *sockb)
- {
--	struct socket_smack *asp = socka->sk->sk_security;
--	struct socket_smack *bsp = sockb->sk->sk_security;
-+	struct socket_smack *asp = smack_sock(socka->sk);
-+	struct socket_smack *bsp = smack_sock(sockb->sk);
  
- 	asp->smk_packet = bsp->smk_out;
- 	bsp->smk_packet = asp->smk_out;
-@@ -2853,7 +2846,7 @@ static int smack_socket_connect(struct socket *sock, struct sockaddr *sap,
- 		if (__is_defined(SMACK_IPV6_SECMARK_LABELING))
- 			rsp = smack_ipv6host_label(sip);
- 		if (rsp != NULL) {
--			struct socket_smack *ssp = sock->sk->sk_security;
-+			struct socket_smack *ssp = smack_sock(sock->sk);
+@@ -495,7 +513,7 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+ 	 * and fix this up afterwards.
+ 	 */
+ 	if (slab_is_available()) {
+-		if (lsm_append(lsm, &lsm_names) < 0)
++		if (lsm_append(lsmid->lsm, &lsm_names) < 0)
+ 			panic("%s - Cannot get early memory.\n", __func__);
+ 	}
+ }
+@@ -2072,7 +2090,7 @@ int security_getprocattr(struct task_struct *p, const char *lsm, char *name,
+ 	struct security_hook_list *hp;
  
- 			rc = smk_ipv6_check(ssp->smk_out, rsp, sip,
- 					    SMK_CONNECTING);
-@@ -3584,9 +3577,9 @@ static int smack_unix_stream_connect(struct sock *sock,
- {
- 	struct smack_known *skp;
- 	struct smack_known *okp;
--	struct socket_smack *ssp = sock->sk_security;
--	struct socket_smack *osp = other->sk_security;
--	struct socket_smack *nsp = newsk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sock);
-+	struct socket_smack *osp = smack_sock(other);
-+	struct socket_smack *nsp = smack_sock(newsk);
- 	struct smk_audit_info ad;
- 	int rc = 0;
+ 	hlist_for_each_entry(hp, &security_hook_heads.getprocattr, list) {
+-		if (lsm != NULL && strcmp(lsm, hp->lsm))
++		if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
+ 			continue;
+ 		return hp->hook.getprocattr(p, name, value);
+ 	}
+@@ -2085,7 +2103,7 @@ int security_setprocattr(const char *lsm, const char *name, void *value,
+ 	struct security_hook_list *hp;
+ 
+ 	hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
+-		if (lsm != NULL && strcmp(lsm, hp->lsm))
++		if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
+ 			continue;
+ 		return hp->hook.setprocattr(name, value, size);
+ 	}
+@@ -2576,9 +2594,27 @@ int security_key_getsecurity(struct key *key, char **_buffer)
+ 
  #ifdef CONFIG_AUDIT
-@@ -3632,8 +3625,8 @@ static int smack_unix_stream_connect(struct sock *sock,
-  */
- static int smack_unix_may_send(struct socket *sock, struct socket *other)
+ 
+-int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule)
++int security_audit_rule_init(u32 field, u32 op, char *rulestr,
++			     struct audit_lsm_rules *lsmrules)
  {
--	struct socket_smack *ssp = sock->sk->sk_security;
--	struct socket_smack *osp = other->sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sock->sk);
-+	struct socket_smack *osp = smack_sock(other->sk);
- 	struct smk_audit_info ad;
- 	int rc;
+-	return call_int_hook(audit_rule_init, 0, field, op, rulestr, lsmrule);
++	struct security_hook_list *hp;
++	bool one_is_good = false;
++	int rc = 0;
++	int trc;
++
++	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_init, list) {
++		if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
++			continue;
++		trc = hp->hook.audit_rule_init(field, op, rulestr,
++					&lsmrules->rule[hp->lsmid->slot]);
++		if (trc == 0)
++			one_is_good = true;
++		else
++			rc = trc;
++	}
++	if (one_is_good)
++		return 0;
++	return rc;
+ }
  
-@@ -3670,7 +3663,7 @@ static int smack_socket_sendmsg(struct socket *sock, struct msghdr *msg,
- 	struct sockaddr_in6 *sap = (struct sockaddr_in6 *) msg->msg_name;
- #endif
- #ifdef SMACK_IPV6_SECMARK_LABELING
--	struct socket_smack *ssp = sock->sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sock->sk);
- 	struct smack_known *rsp;
- #endif
- 	int rc = 0;
-@@ -3882,7 +3875,7 @@ static struct smack_known *smack_from_netlbl(const struct sock *sk, u16 family,
- 	netlbl_secattr_init(&secattr);
+ int security_audit_rule_known(struct audit_krule *krule)
+@@ -2586,14 +2622,36 @@ int security_audit_rule_known(struct audit_krule *krule)
+ 	return call_int_hook(audit_rule_known, 0, krule);
+ }
  
- 	if (sk)
--		ssp = sk->sk_security;
-+		ssp = smack_sock(sk);
- 
- 	if (netlbl_skbuff_getattr(skb, family, &secattr) == 0) {
- 		skp = smack_from_secattr(&secattr, ssp);
-@@ -3904,7 +3897,7 @@ static struct smack_known *smack_from_netlbl(const struct sock *sk, u16 family,
-  */
- static int smack_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
+-void security_audit_rule_free(void *lsmrule)
++void security_audit_rule_free(struct audit_lsm_rules *lsmrules)
  {
--	struct socket_smack *ssp = sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sk);
- 	struct smack_known *skp = NULL;
- 	int rc = 0;
- 	struct smk_audit_info ad;
-@@ -4008,7 +4001,7 @@ static int smack_socket_getpeersec_stream(struct socket *sock,
- 	int slen = 1;
- 	int rc = 0;
+-	call_void_hook(audit_rule_free, lsmrule);
++	struct security_hook_list *hp;
++
++	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_free, list) {
++		if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
++			continue;
++		if (lsmrules->rule[hp->lsmid->slot] == NULL)
++			continue;
++		hp->hook.audit_rule_free(lsmrules->rule[hp->lsmid->slot]);
++	}
+ }
  
--	ssp = sock->sk->sk_security;
-+	ssp = smack_sock(sock->sk);
- 	if (ssp->smk_packet != NULL) {
- 		rcp = ssp->smk_packet->smk_known;
- 		slen = strlen(rcp) + 1;
-@@ -4057,7 +4050,7 @@ static int smack_socket_getpeersec_dgram(struct socket *sock,
- 
- 	switch (family) {
- 	case PF_UNIX:
--		ssp = sock->sk->sk_security;
-+		ssp = smack_sock(sock->sk);
- 		s = ssp->smk_out->smk_secid;
- 		break;
- 	case PF_INET:
-@@ -4106,7 +4099,7 @@ static void smack_sock_graft(struct sock *sk, struct socket *parent)
- 	    (sk->sk_family != PF_INET && sk->sk_family != PF_INET6))
- 		return;
- 
--	ssp = sk->sk_security;
-+	ssp = smack_sock(sk);
- 	ssp->smk_in = skp;
- 	ssp->smk_out = skp;
- 	/* cssp->smk_packet is already set in smack_inet_csk_clone() */
-@@ -4126,7 +4119,7 @@ static int smack_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
+-int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
++int security_audit_rule_match(u32 secid, u32 field, u32 op,
++			      struct audit_lsm_rules *lsmrules)
  {
- 	u16 family = sk->sk_family;
- 	struct smack_known *skp;
--	struct socket_smack *ssp = sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sk);
- 	struct sockaddr_in addr;
- 	struct iphdr *hdr;
- 	struct smack_known *hskp;
-@@ -4212,7 +4205,7 @@ static int smack_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- static void smack_inet_csk_clone(struct sock *sk,
- 				 const struct request_sock *req)
- {
--	struct socket_smack *ssp = sk->sk_security;
-+	struct socket_smack *ssp = smack_sock(sk);
- 	struct smack_known *skp;
+-	return call_int_hook(audit_rule_match, 0, secid, field, op, lsmrule);
++	struct security_hook_list *hp;
++	int rc;
++
++	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_match, list) {
++		if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
++			continue;
++		if (lsmrules->rule[hp->lsmid->slot] == NULL)
++			continue;
++		rc = hp->hook.audit_rule_match(secid, field, op,
++					&lsmrules->rule[hp->lsmid->slot]);
++		if (rc)
++			return rc;
++	}
++	return 0;
+ }
+ #endif /* CONFIG_AUDIT */
  
- 	if (req->peer_secid != 0) {
-@@ -4748,6 +4741,7 @@ struct lsm_blob_sizes smack_blob_sizes __lsm_ro_after_init = {
- 	.lbs_inode = sizeof(struct inode_smack),
- 	.lbs_ipc = sizeof(struct smack_known *),
- 	.lbs_msg_msg = sizeof(struct smack_known *),
-+	.lbs_sock = sizeof(struct socket_smack),
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 90a140ea439d..c295b1035bc6 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -7045,6 +7045,11 @@ static int selinux_uring_sqpoll(void)
+ }
+ #endif /* CONFIG_IO_URING */
+ 
++static struct lsm_id selinux_lsmid __lsm_ro_after_init = {
++	.lsm  = "selinux",
++	.slot = LSMBLOB_NEEDED
++};
++
+ /*
+  * IMPORTANT NOTE: When adding new hooks, please be careful to keep this order:
+  * 1. any hooks that don't belong to (2.) or (3.) below,
+@@ -7361,7 +7366,8 @@ static __init int selinux_init(void)
+ 
+ 	hashtab_cache_init();
+ 
+-	security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hooks), "selinux");
++	security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hooks),
++			   &selinux_lsmid);
+ 
+ 	if (avc_add_callback(selinux_netcache_avc_callback, AVC_CALLBACK_RESET))
+ 		panic("SELinux: Unable to register AVC netcache callback\n");
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index db72debca070..9c44327d8ea7 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -4745,6 +4745,11 @@ struct lsm_blob_sizes smack_blob_sizes __lsm_ro_after_init = {
  	.lbs_superblock = sizeof(struct superblock_smack),
  };
  
-@@ -4858,7 +4852,9 @@ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(socket_getpeersec_stream, smack_socket_getpeersec_stream),
- 	LSM_HOOK_INIT(socket_getpeersec_dgram, smack_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sk_alloc_security, smack_sk_alloc_security),
-+#ifdef SMACK_IPV6_PORT_LABELING
- 	LSM_HOOK_INIT(sk_free_security, smack_sk_free_security),
-+#endif
- 	LSM_HOOK_INIT(sock_graft, smack_sock_graft),
- 	LSM_HOOK_INIT(inet_conn_request, smack_inet_conn_request),
- 	LSM_HOOK_INIT(inet_csk_clone, smack_inet_csk_clone),
-diff --git a/security/smack/smack_netfilter.c b/security/smack/smack_netfilter.c
-index b945c1d3a743..bad71b7e648d 100644
---- a/security/smack/smack_netfilter.c
-+++ b/security/smack/smack_netfilter.c
-@@ -26,8 +26,8 @@ static unsigned int smack_ip_output(void *priv,
- 	struct socket_smack *ssp;
- 	struct smack_known *skp;
++static struct lsm_id smack_lsmid __lsm_ro_after_init = {
++	.lsm  = "smack",
++	.slot = LSMBLOB_NEEDED
++};
++
+ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(ptrace_access_check, smack_ptrace_access_check),
+ 	LSM_HOOK_INIT(ptrace_traceme, smack_ptrace_traceme),
+@@ -4948,7 +4953,7 @@ static __init int smack_init(void)
+ 	/*
+ 	 * Register with LSM
+ 	 */
+-	security_add_hooks(smack_hooks, ARRAY_SIZE(smack_hooks), "smack");
++	security_add_hooks(smack_hooks, ARRAY_SIZE(smack_hooks), &smack_lsmid);
+ 	smack_enabled = 1;
  
--	if (sk && sk->sk_security) {
--		ssp = sk->sk_security;
-+	if (sk) {
-+		ssp = smack_sock(sk);
- 		skp = ssp->smk_out;
- 		skb->secmark = skp->smk_secid;
+ 	pr_info("Smack:  Initializing.\n");
+diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
+index b6a31901f289..e8f6bb9782c1 100644
+--- a/security/tomoyo/tomoyo.c
++++ b/security/tomoyo/tomoyo.c
+@@ -521,6 +521,11 @@ static void tomoyo_task_free(struct task_struct *task)
  	}
+ }
+ 
++static struct lsm_id tomoyo_lsmid __lsm_ro_after_init = {
++	.lsm  = "tomoyo",
++	.slot = LSMBLOB_NOT_NEEDED
++};
++
+ /*
+  * tomoyo_security_ops is a "struct security_operations" which is used for
+  * registering TOMOYO.
+@@ -573,7 +578,8 @@ static int __init tomoyo_init(void)
+ 	struct tomoyo_task *s = tomoyo_task(current);
+ 
+ 	/* register ourselves with the security framework */
+-	security_add_hooks(tomoyo_hooks, ARRAY_SIZE(tomoyo_hooks), "tomoyo");
++	security_add_hooks(tomoyo_hooks, ARRAY_SIZE(tomoyo_hooks),
++			   &tomoyo_lsmid);
+ 	pr_info("TOMOYO Linux initialized\n");
+ 	s->domain_info = &tomoyo_kernel_domain;
+ 	atomic_inc(&tomoyo_kernel_domain.users);
+diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+index 06e226166aab..a9639ea541f7 100644
+--- a/security/yama/yama_lsm.c
++++ b/security/yama/yama_lsm.c
+@@ -421,6 +421,11 @@ static int yama_ptrace_traceme(struct task_struct *parent)
+ 	return rc;
+ }
+ 
++static struct lsm_id yama_lsmid __lsm_ro_after_init = {
++	.lsm  = "yama",
++	.slot = LSMBLOB_NOT_NEEDED
++};
++
+ static struct security_hook_list yama_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(ptrace_access_check, yama_ptrace_access_check),
+ 	LSM_HOOK_INIT(ptrace_traceme, yama_ptrace_traceme),
+@@ -477,7 +482,7 @@ static inline void yama_init_sysctl(void) { }
+ static int __init yama_init(void)
+ {
+ 	pr_info("Yama: becoming mindful.\n");
+-	security_add_hooks(yama_hooks, ARRAY_SIZE(yama_hooks), "yama");
++	security_add_hooks(yama_hooks, ARRAY_SIZE(yama_hooks), &yama_lsmid);
+ 	yama_init_sysctl();
+ 	return 0;
+ }
 -- 
 2.31.1
 

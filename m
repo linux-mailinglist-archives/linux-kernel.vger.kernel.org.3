@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2120472251
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921C6472281
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232852AbhLMIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:23:22 -0500
-Received: from mga14.intel.com ([192.55.52.115]:42123 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231509AbhLMIXW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:23:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639383801; x=1670919801;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=BSS0BFttADobPAR2S7yKTcoOykNXel4/sP5xwcCf0xw=;
-  b=NShEPo0nKjC/1TNoB+plcMVgc5vkRT243nt7uwK1EjLeZPHVJOn1gI44
-   VV5IMusPoJPZ7C7Z+O+YQzDxTe13142B3qyefze6NtBzoXJAwuliEwLcc
-   +o3BePmZZU77bBMz9PudstRaiD1XmoJm6nTYP4csTndrBhGdyFRx/7h9N
-   OLIie2rUrH7lrXCXDJex8Ulm0+9P2PjTrDyBeAPIFG9kTXiF2zwAZ31lE
-   KhwwCjLc0t/JuSWoCC8WPocxLr1k4UU95Sh9disxpls7IjpXcc5nVjg2K
-   cxJ8qwkeauyfcs2RtPPBVPHtXXc+NvuEbScty3QZm/HPwTrFH0VYy8Bci
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238909050"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="238909050"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:23:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="613750000"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2021 00:23:21 -0800
-Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 00:23:19 -0800
-Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
- SHSMSX605.ccr.corp.intel.com (10.109.6.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 16:23:16 +0800
-Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
- SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
- Mon, 13 Dec 2021 16:23:16 +0800
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "seanjc@google.com" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>
-Subject: RE: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
-Thread-Topic: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
-Thread-Index: AQHX63yobhR7xaimuUSU4jknnLqQN6wraUsAgABf8YCABEZs0A==
-Date:   Mon, 13 Dec 2021 08:23:16 +0000
-Message-ID: <86d3c3a5d61649079800a2038370365b@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-17-yang.zhong@intel.com>
- <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
- <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
-In-Reply-To: <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S229873AbhLMI1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229839AbhLMI1M (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 03:27:12 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2076C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:11 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id t5so49029869edd.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9qNVJJUEkc7Dcqq+w3jXBP/JOAXOW45KnRjiowBHvGk=;
+        b=lGsG+RSK6fKMObsJQ7Iti5lpYgJ6YDHFJh2yVwO4XuHD8dveHSTYe/H5vctCR3EceI
+         XqKuogxu2fO0A5lqmYqIOpALu/ZAlwyN5MpiGyuxrhGT4dFdyWMvGpLMx8bvZsddP9hp
+         uygNMnJ/yqA/HLuo9RxL3P+UaNjwUw8FVJxoH5ME1qus3y9LosZQt6MPD+Go9ivr+x+I
+         5NBCzSlBofWA0sfijE46EUYppcRu4UKN9UbgQuwQlhr8/MVWSyaIoK6EGtTLTPMvbQQ1
+         YS5aqS6H4kpadwXpvOh44y1zf//CCrxgItwxZNG/CI17aEzqwFI/8ITqQJIsV4zBY6wg
+         c6OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9qNVJJUEkc7Dcqq+w3jXBP/JOAXOW45KnRjiowBHvGk=;
+        b=MkKvLW9GT4vFxAJSEZxrFCEI8cv1yalEJ20MIGbJYwCJa0qZ0TKERhSaV9kBHQvYtI
+         ftehwXEmZLdz+6PW6n5T6IEQn3ZuQcbBDZVLbTmNnQ/QnPe8YxF2ZogSstrf90LaVCYA
+         bpiDIIKiGksYxOb7oQ8wA927Ls9GfaMP0aTqK88mM9zXxRe3uDO1oHpJCJ6oSSlJ67kW
+         eUMQ7rk+FK/vXBLwsb+lBQ0tI7RA7wO4eQegTC+PT+/qT6qfQ2HGQtqQV20yalgfuRhD
+         NZ7lnPNyM175QQUTjgzlQ8XQ9O3osvVnxHP+pbMnPqGRdLOwizRKNkG9AI7GZn/UFhpg
+         aAhQ==
+X-Gm-Message-State: AOAM531wPW2Ccw5Pqhsg/nfHZZ12Sl7NGID7I2Zn3HjhOuc1HQlHZzTk
+        1yTCcVejKRjQTxIL0kqzd1gnfQ==
+X-Google-Smtp-Source: ABdhPJzJQzH9IbD0iKwzxP+OhiHo4OBp+NQ23YW0riJPC6Agdl1/DHF8upIV5V9+Kb8bNnWCgPyEyg==
+X-Received: by 2002:a17:907:608f:: with SMTP id ht15mr41645248ejc.300.1639384030231;
+        Mon, 13 Dec 2021 00:27:10 -0800 (PST)
+Received: from localhost.localdomain ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
+        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 00:27:09 -0800 (PST)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        de Goede <hdegoede@redhat.com>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Rob Herring <robh@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 00/10] dt-binding patches for sm6350
+Date:   Mon, 13 Dec 2021 09:26:01 +0100
+Message-Id: <20211213082614.22651-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0dXJkYXksIERlY2VtYmVyIDExLCAyMDIxIDY6MTMgQU0sIFBhb2xvIEJvbnppbmkgd3Jv
-dGU6DQo+IA0KPiBCeSB0aGUgd2F5LCBJIHRoaW5rIEtWTV9TRVRfWFNBVkUyIGlzIG5vdCBuZWVk
-ZWQuICBJbnN0ZWFkOg0KPiANCj4gLSBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUy
-KSBzaG91bGQgcmV0dXJuIHRoZSBzaXplIG9mIHRoZQ0KPiBidWZmZXIgdGhhdCBpcyBwYXNzZWQg
-dG8gS1ZNX0dFVF9YU0FWRTINCj4gDQo+IC0gS1ZNX0dFVF9YU0FWRTIgc2hvdWxkIGZpbGwgaW4g
-dGhlIGJ1ZmZlciBleHBlY3RpbmcgdGhhdCBpdHMgc2l6ZSBpcw0KPiB3aGF0ZXZlciBLVk1fQ0hF
-Q0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSBwYXNzZXMNCj4gDQo+IC0gS1ZNX1NFVF9YU0FW
-RSBjYW4ganVzdCBleHBlY3QgYSBidWZmZXIgdGhhdCBpcyBiaWdnZXIgdGhhbiA0ayBpZiB0aGUN
-Cj4gc2F2ZSBzdGF0ZXMgcmVjb3JkZWQgaW4gdGhlIGhlYWRlciBwb2ludCB0byBvZmZzZXRzIGxh
-cmdlciB0aGFuIDRrLg0KDQpJIHRoaW5rIG9uZSBpc3N1ZSBpcyB0aGF0IEtWTV9TRVRfWFNBVkUg
-d29ya3Mgd2l0aCAic3RydWN0IGt2bV94c2F2ZSIgKGhhcmRjb2RlZCA0S0IgYnVmZmVyKSwNCmlu
-Y2x1ZGluZyBrdm1fdmNwdV9pb2N0bF94ODZfc2V0X3hzYXZlLiBUaGUgc3RhdGVzIG9idGFpbmVk
-IHZpYSBLVk1fR0VUX1hTQVZFMiB3aWxsIGJlIG1hZGUNCnVzaW5nICJzdHJ1Y3Qga3ZtX3hzYXZl
-MiIuDQoNCkRpZCB5b3UgbWVhbiB0aGF0IHdlIGNvdWxkIGFkZCBhIG5ldyBjb2RlIHBhdGggdW5k
-ZXIgS1ZNX1NFVF9YU0FWRSB0byBtYWtlIGl0IHdvcmsgd2l0aA0KdGhlIG5ldyAic3RydWN0IGt2
-bV94c2F2ZTIiPw0KZS5nLjoNCg0KKHhzYXZlMl9lbmFibGVkIGJlbG93IGlzIHNldCB3aGVuIHVz
-ZXJzcGFjZSBjYWxscyB0byBnZXQgS1ZNX0NBUF9YU0FWRTIpDQppZiAoa3ZtLT54c2F2ZTJfZW5h
-YmxlZCkgew0KCW5ldyBpbXBsZW1lbnRhdGlvbiB1c2luZyAic3RydWN0IGt2bV94c2F2ZTIiDQp9
-IGVsc2Ugew0KCWN1cnJlbnQgaW1wbGVtZW50YXRpb24gdXNpbmcgInN0cnVjdCBrdm1feHNhdmUi
-DQp9DQoodGhpcyBzZWVtcyBsaWtlIGEgbmV3IGltcGxlbWVudGF0aW9uIHdoaWNoIG1pZ2h0IGRl
-c2VydmUgYSBuZXcgaW9jdGwpDQoNClRoYW5rcywNCldlaQ0KDQo=
+This series adds compatibles to the dt-bindings documentation where it
+was missed before.
+
+Finally, the last patch solves some further dtbs_check errors by
+modifying the sm6350.dtsi to match the binding docs more closely.
+
+Please note, that the first patch from Konrad is a resend that wasn't
+picked up when sent to the lists in August 2021.
+
+Konrad Dybcio (1):
+  dt-bindings: arm: msm: Add LLCC for SM6350
+
+Luca Weiss (9):
+  dt-bindings: firmware: scm: Add SM6350 compatible
+  dt-bindings: qcom,pdc: Add SM6350 compatible
+  dt-bindings: phy: qcom,qusb2: Add SM6350 compatible
+  dt-bindings: thermal: tsens: Add SM6350 compatible
+  dt-bindings: usb: qcom,dwc3: Add SM6350 compatible
+  dt-bindings: watchdog: Add SM6350 and SM8250 compatible
+  dt-bindings: arm: msm: Don't mark LLCC interrupt as required
+  dt-bindings: simple-framebuffer: allow standalone compatible
+  arm64: dts: qcom: sm6350: Fix validation errors
+
+ .../devicetree/bindings/arm/msm/qcom,llcc.yaml   |  2 +-
+ .../bindings/display/simple-framebuffer.yaml     | 12 +++++++-----
+ .../devicetree/bindings/firmware/qcom,scm.txt    |  1 +
+ .../bindings/interrupt-controller/qcom,pdc.txt   |  5 +++--
+ .../devicetree/bindings/phy/qcom,qusb2-phy.yaml  |  1 +
+ .../devicetree/bindings/thermal/qcom-tsens.yaml  |  1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml       |  1 +
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml   |  2 ++
+ arch/arm64/boot/dts/qcom/sm6350.dtsi             | 16 ++++++++--------
+ 9 files changed, 25 insertions(+), 16 deletions(-)
+
+-- 
+2.34.1
+

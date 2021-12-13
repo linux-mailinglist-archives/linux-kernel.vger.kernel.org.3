@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF63D472716
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A017047270D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235384AbhLMJ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:58:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37872 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238231AbhLMJws (ORCPT
+        id S239397AbhLMJ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:57:15 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:42842 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237765AbhLMJwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:52:48 -0500
+        Mon, 13 Dec 2021 04:52:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41518B80E0C;
-        Mon, 13 Dec 2021 09:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941A4C00446;
-        Mon, 13 Dec 2021 09:52:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2978BCE0E6B;
+        Mon, 13 Dec 2021 09:52:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40A7C00446;
+        Mon, 13 Dec 2021 09:52:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389166;
-        bh=oQj3SUKigFeUAZUTdmV3Gl6iVyTKg7mJ40nGDz3Ji1A=;
+        s=korg; t=1639389123;
+        bh=ENtvcfGoN/unKFhE/o6vEBmtoYNSaCbW9KlNes6X7Z0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6nZSoTykBrECGabVSkGw/INDTJgaJ4u5aLKUmqCMQC0p4wmLMZkbZKNo098VdCcd
-         CIsbO4A7SWMcd7yDn8FMpkRiqF43RrCtstIDPDUCHhOG3++vEVwsZ0qIti6twNte7U
-         M177hZGUJnYpIuWB2BKI+E6dm51FMo1k7lpC/MsY=
+        b=HUfA6OZtnk1A+Qzdaa3yM8ZZFZoAOA4LEHZWtgV9Y/pmfk4+AIMYwlGuct5TVjQMd
+         bJWwIDQO7e5CRQwzpeSH7lW5BsQAz5IL/fmZefly2Fq0AkuvPrA0sE3rHs5Q3kHkUS
+         QxcBZ4HToLT2xuuGntFq0Qh8R9kV27xoPno8B+w8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wudi Wang <wangwudi@hisilicon.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        stable@vger.kernel.org, Vladimir Murzin <vladimir.murzin@arm.com>,
         Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.10 125/132] irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
-Date:   Mon, 13 Dec 2021 10:31:06 +0100
-Message-Id: <20211213092943.392898055@linuxfoundation.org>
+Subject: [PATCH 5.10 126/132] irqchip: nvic: Fix offset for Interrupt Priority Offsets
+Date:   Mon, 13 Dec 2021 10:31:07 +0100
+Message-Id: <20211213092943.424122985@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
 References: <20211213092939.074326017@linuxfoundation.org>
@@ -46,38 +45,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wudi Wang <wangwudi@hisilicon.com>
+From: Vladimir Murzin <vladimir.murzin@arm.com>
 
-commit b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a upstream.
+commit c5e0cbe2858d278a27d5b3fe31890aea5be064c4 upstream.
 
-INVALL CMD specifies that the ITS must ensure any caching associated with
-the interrupt collection defined by ICID is consistent with the LPI
-configuration tables held in memory for all Redistributors. SYNC is
-required to ensure that INVALL is executed.
+According to ARM(v7M) ARM Interrupt Priority Offsets located at
+0xE000E400-0xE000E5EC, while 0xE000E300-0xE000E33C covers read-only
+Interrupt Active Bit Registers
 
-Currently, LPI configuration data may be inconsistent with that in the
-memory within a short period of time after the INVALL command is executed.
-
-Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
-Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Fixes: 292ec080491d ("irqchip: Add support for ARMv7-M NVIC")
+Signed-off-by: Vladimir Murzin <vladimir.murzin@arm.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
-Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
+Link: https://lore.kernel.org/r/20211201110259.84857-1-vladimir.murzin@arm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-gic-v3-its.c |    2 +-
+ drivers/irqchip/irq-nvic.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -742,7 +742,7 @@ static struct its_collection *its_build_
+--- a/drivers/irqchip/irq-nvic.c
++++ b/drivers/irqchip/irq-nvic.c
+@@ -26,7 +26,7 @@
  
- 	its_fixup_cmd(cmd);
+ #define NVIC_ISER		0x000
+ #define NVIC_ICER		0x080
+-#define NVIC_IPR		0x300
++#define NVIC_IPR		0x400
  
--	return NULL;
-+	return desc->its_invall_cmd.col;
- }
- 
- static struct its_vpe *its_build_vinvall_cmd(struct its_node *its,
+ #define NVIC_MAX_BANKS		16
+ /*
 
 

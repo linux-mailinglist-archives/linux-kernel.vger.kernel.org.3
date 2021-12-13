@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CD7472779
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098B8472A12
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238741AbhLMKB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
+        id S239610AbhLMKaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:30:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235643AbhLMJyX (ORCPT
+        with ESMTP id S238057AbhLMK17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:54:23 -0500
+        Mon, 13 Dec 2021 05:27:59 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7008C08E884;
-        Mon, 13 Dec 2021 01:45:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF25C01DF21;
+        Mon, 13 Dec 2021 02:01:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B3D7CE0E88;
-        Mon, 13 Dec 2021 09:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDEE8C00446;
-        Mon, 13 Dec 2021 09:45:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 87C7FCE0F84;
+        Mon, 13 Dec 2021 10:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0832AC34602;
+        Mon, 13 Dec 2021 10:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388735;
-        bh=dUaO4/DJrz+WGcQcNkfFfy6yxRldqkOdg8fZmxqtPmQ=;
+        s=korg; t=1639389697;
+        bh=uswq6sDcrqByPTqp6nYMzvxhoFPfFdTZljh/1M5V6Lw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fcXt3MNU4J3nK1nYpZA/v/PoLqAmf/LHA2FyjEXqIcXTdZzj0fKF8LRi8hFGdK7Yn
-         fE3AyPe0YB+vc9c3Gi/UPlqEuoFg1dNYXABYwvHg/nHC5PBd6dtqu+dHSzNJn/sPQ7
-         qOWiNwweK2Ri4dIWiwOhpJmev4GJ1xlk9Ewql4tg=
+        b=AtaeyeKN+lKV2xElYsLFObtfBQzE6hFQ7DDLqVOUVbQ2/vc38Rz7KPzejG+Fgmmhc
+         MUsSTYsBGbIhBM9PFFwkITUHqWw9s84LQtQuQiqqviVJ/JcQLAehjIKTxZcZIF038B
+         dM4+JhnumM8vqCvHs2yQkBpk5sVmydu/9DZNlDlI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.4 79/88] iio: at91-sama5d2: Fix incorrect sign extension
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 134/171] net/qla3xxx: fix an error code in ql_adapter_up()
 Date:   Mon, 13 Dec 2021 10:30:49 +0100
-Message-Id: <20211213092935.950270652@linuxfoundation.org>
+Message-Id: <20211213092949.553182725@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+References: <20211213092945.091487407@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,38 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gwendal Grignou <gwendal@chromium.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 652e7df485c6884d552085ae2c73efa6cfea3547 upstream.
+commit d17b9737c2bc09b4ac6caf469826e5a7ce3ffab7 upstream.
 
-Use scan_type when processing raw data which also fixes that the sign
-extension was from the wrong bit.
+The ql_wait_for_drvr_lock() fails and returns false, then this
+function should return an error code instead of returning success.
 
-Use channel definition as root of trust and replace constant
-when reading elements directly using the raw sysfs attributes.
+The other problem is that the success path prints an error message
+netdev_err(ndev, "Releasing driver lock\n");  Delete that and
+re-order the code a little to make it more clear.
 
-Fixes: 6794e23fa3fe ("iio: adc: at91-sama5d2_adc: add support for oversampling resolution")
-Signed-off-by: Gwendal Grignou <gwendal@chromium.org>
-Reviewed-by: Eugen Hristev <eugen.hristev@microchip.com>
-Cc: <Stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211104082413.3681212-9-gwendal@chromium.org
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20211207082416.GA16110@kili
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/at91-sama5d2_adc.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/qlogic/qla3xxx.c |   19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
---- a/drivers/iio/adc/at91-sama5d2_adc.c
-+++ b/drivers/iio/adc/at91-sama5d2_adc.c
-@@ -1369,7 +1369,8 @@ static int at91_adc_read_info_raw(struct
- 		*val = st->conversion_value;
- 		ret = at91_adc_adjust_val_osr(st, val);
- 		if (chan->scan_type.sign == 's')
--			*val = sign_extend32(*val, 11);
-+			*val = sign_extend32(*val,
-+					     chan->scan_type.realbits - 1);
- 		st->conversion_done = false;
+--- a/drivers/net/ethernet/qlogic/qla3xxx.c
++++ b/drivers/net/ethernet/qlogic/qla3xxx.c
+@@ -3478,20 +3478,19 @@ static int ql_adapter_up(struct ql3_adap
+ 
+ 	spin_lock_irqsave(&qdev->hw_lock, hw_flags);
+ 
+-	err = ql_wait_for_drvr_lock(qdev);
+-	if (err) {
+-		err = ql_adapter_initialize(qdev);
+-		if (err) {
+-			netdev_err(ndev, "Unable to initialize adapter\n");
+-			goto err_init;
+-		}
+-		netdev_err(ndev, "Releasing driver lock\n");
+-		ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
+-	} else {
++	if (!ql_wait_for_drvr_lock(qdev)) {
+ 		netdev_err(ndev, "Could not acquire driver lock\n");
++		err = -ENODEV;
+ 		goto err_lock;
  	}
  
++	err = ql_adapter_initialize(qdev);
++	if (err) {
++		netdev_err(ndev, "Unable to initialize adapter\n");
++		goto err_init;
++	}
++	ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
++
+ 	spin_unlock_irqrestore(&qdev->hw_lock, hw_flags);
+ 
+ 	set_bit(QL_ADAPTER_UP, &qdev->flags);
 
 

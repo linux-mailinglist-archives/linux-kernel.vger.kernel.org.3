@@ -2,98 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C02A4735DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14B14735E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242859AbhLMU1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:27:07 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42510 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234464AbhLMU1H (ORCPT
+        id S242869AbhLMU14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:27:56 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35794 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234464AbhLMU1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:27:07 -0500
-Received: from [IPv6:2a00:c281:1276:dc00:2d23:3482:5e76:1917] (unknown [IPv6:2a00:c281:1276:dc00:2d23:3482:5e76:1917])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Mon, 13 Dec 2021 15:27:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 125EA1F4441D;
-        Mon, 13 Dec 2021 20:27:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1639427225; bh=wB80XAQrujm7o6G/mYQfgxxJ4rJXLU1g58F+Re9c0m0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=WJ45my+s63TDKntL2k8ejSBu7AHluUCLHoOYsDdYYZkLUtsEnQuUHndPjMYO+AUcJ
-         G0RGZ+VNJ6IuqRC1mLohcviWtpec9jbWHk5kxbJamw6fyA9mmld8XPrrc9HtXpG9HT
-         lWBjueaggTvF05nbLUes68mKtkbFuSclLApD8R7MSh6d+nY16HBStFI2bMJZ7XkAs1
-         trIlnjni+intxxLNArC6oPXuwON7t/fKF9ei0DG1KMlGHCITU1MZ1JPaIQnTuvobsZ
-         YzVJOi1RW7TAeHPi2sZ+9TZ7pHiWobRRvh2v+xKh2twEhTW0KQ/N55k+2FeisWNbn9
-         HU+1rbYXDHAWw==
-Subject: Re: [PATCH v4 0/6] staging: media: wave5: add wave5 codec driver
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
-        <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        Robert Beckett <bob.beckett@collabora.com>,
-        kiril.bicevski@collabora.com,
-        Nas Chung <nas.chung@chipsnmedia.com>,
-        lafley.kim@chipsnmedia.com, scott.woo@chipsnmedia.com,
-        olivier.crete@collabora.com, dan.carpenter@oracle.com,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
- <CAFr9PXnvbqtx-SpxjyO2uvoBR3ueNBD9vSFnbqjbAHz_7Lh8VA@mail.gmail.com>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <02a9c780-49e0-7a61-4443-7825d6a1271e@collabora.com>
-Date:   Mon, 13 Dec 2021 22:27:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAFr9PXnvbqtx-SpxjyO2uvoBR3ueNBD9vSFnbqjbAHz_7Lh8VA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A1A61200;
+        Mon, 13 Dec 2021 20:27:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8317FC34600;
+        Mon, 13 Dec 2021 20:27:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639427274;
+        bh=Yjw6bg1gekwwsY/LqGhaG45DLxFWmxwnNpauqxNJ2GI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CozIpispgLfF/vhao3uquUXnKp+ovMaohJRekbMRNiKnYT8RFlndPSOss8Auz8yb2
+         WV1dIu9Rg13uiMCTzhVZfHaGcoXlPUzTKzmIvjVmSpqrx50+nwtBr1Mo4uQL2PfMhl
+         wyen6LzriOUrE/BtPi6egEJYyl1x581jnsl6jqLkoLY3BJb3MToE34jiKrJ209g2HG
+         AH1V8Zu3YMgC8QV+/wC99ShuVRqsET5qvEl9+tN9/q7SelveMSc8uUKZ+hcXU0fSRI
+         LBITFHCaYi8gB6SLSHYoKVYl6mqeGlehRTmqGjluXbdqBvxQWYna6RfQ2jrC6PDuDe
+         4TrE8dUvKxa3Q==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mwrvL-00Btju-T9; Mon, 13 Dec 2021 20:27:52 +0000
+Date:   Mon, 13 Dec 2021 20:27:51 +0000
+Message-ID: <87k0g8jlmg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel-team@android.com,
+        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sander Vanheule <sander@svanheule.net>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v2] of/irq: Add a quirk for controllers with their own definition of interrupt-map
+In-Reply-To: <20211213195958.rn56nnhobl4nlmxx@skbuf>
+References: <20211201114102.13446-1-maz@kernel.org>
+        <20211213195958.rn56nnhobl4nlmxx@skbuf>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: olteanv@gmail.com, robh@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kernel-team@android.com, john@phrozen.org, biwen.li@nxp.com, Zhiqiang.Hou@nxp.com, chris.brandt@renesas.com, geert+renesas@glider.be, sander@svanheule.net, kurt@linutronix.de, shawnguo@kernel.org, leoyang.li@nxp.com, linux@rasmusvillemoes.dk
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Vladimir,
 
+On Mon, 13 Dec 2021 19:59:58 +0000,
+Vladimir Oltean <olteanv@gmail.com> wrote:
 
-On 02.12.21 12:11, Daniel Palmer wrote:
-> Hi Dafna,
-> 
-> On Thu, 2 Dec 2021 at 02:56, Dafna Hirschfeld
-> <dafna.hirschfeld@collabora.com> wrote:
->> Testing on BeagleV shows buffer corruption that is currently attributed to a
->> known silicon issue in the SoC that makes the cache coherent interconnect not
->> so coherent.
-> 
-> Maybe it's mentioned somewhere else and I missed it but would it be
-> possible to tell me which version of the IP is in the BeagleV chip?
-> The reason I ask is I'm trying to get this going on the SigmaStar
-> SSD202D which seems to have the "Wave 511".
-> I can see the firmware binary get uploaded and it seems to do
-> something as the register that exposes the vcpu program counter is
-> doing something (and the addresses look the same as the addresses seem
-> when the working vendor kernel + binary .ko are running so I think
-> it's not just running garbage).
-> 
-> I'm wondering if the BeagleV is a different version and the driver
-> just won't work as is on mine or maybe the firmware I have has hacks
-> for the vendors version of the driver which I don't have source for.
+[...]
 
-Hi, thank you for trying this out. The versions I see on the Beaglv are 511 for the
-decoder and 521c for the encoder.
-This driver is also based on a vendor driver from cnm: https://gitlab.collabora.com/chipsnmedia/wave5-driver
-Also, a patch to add the firmware was also sent to linux-firmware ml https://lore.kernel.org/linux-firmware/20211126093014.1385752-1-nas.chung@chipsnmedia.com/T/
+>
+> I am a user of the ls-extirq driver which is responsible for 3 of the 7
+> compatible strings mentioned by you here. I have close to zero knowledge
+> of the irq subsystem, although I am looking forward to learn.
+
+Unfortunately, this has nothing to do with the IRQ subsystem, which
+doesn't really care about the firmware interfaces.
+
+> Could you please spend a few minutes to detail what you see as a possible
+> path forward for this driver?
+
+Define "path forward". My preference would be to travel back in time
+so that this driver doesn't make it into the tree, but it is an
+unlikely outcome. The only other solution is to leave it as is, but
+not to allow any further occurrence of the issue.
+
+> I am getting mixed impressions about what it's doing wrong.
+>
+> On one hand, it was requested by Rob during review that what used to be
+> called "fsl,extirq-map" should be named "interrupt-map" instead:
+> https://lore.kernel.org/lkml/20190928092331.GB1894@linutronix.de/
+
+I stand by my analysis that this is wrong, by the very letter of what
+an interrupt-map means. If the interrupt map points to an interrupt
+controller, that's the target for the interrupt. No ifs, no buts.
+
+> Then, you seem to suggest something's wrong with drivers privately using
+> that name and parsing a property which used to be ignored by the core,
+> due to your "silly-interrupt-map" comment:
+> https://lore.kernel.org/all/9c169aad-3c7b-2ffb-90a2-1ca791a3f411@phrozen.org/T/#ebae8f9231296dc936cb7c9791218fc6785a03390
+
+And I stand by this comment.
+
+> Then, Rob breaks the ls-extirq driver for platforms that have a GIC ITS*
+> defined in the device tree via commit 869f0ec048dc ("arm64: dts:
+> freescale: Fix 'interrupt-map' parent address cells") - this is also,
+> incidentally, the reason why I'm here.
+> * because the driver doesn't parse the "standard" format where the
+>   interrupt parent has a non-zero #address-cells - which the "arm,gic-v3"
+>   may have when there's a "arm,gic-v3-its" under it (although I don't
+>   necessarily see the relevance of the ITS being there to the needs of
+>   the ls-extirq - which are just a bijective mapping of IRQs - this
+>   driver simply drives a multi-channel logical inverter).
+
+And that's another reason why using interrupt-map is totally
+bonkers. You can't have your cake and eat it (in this case: use a
+standard property and yet attribute it some other semantics) -- at
+some point, these things break. And when they break, we're left with
+these stupid quirks to paper over the breakage.
+
+> So if I understand correctly, we keep ignoring the non-standard use of
+> the "interrupt-map" property in these abuser drivers, yet we patch their
+> device trees to have a more standard format in their non-standard use? :)
+
+I'm happy to drop support for these FSL/NXP machines immediately. Say
+the word, and I will merge the patch!
+
+Now, when it comes to Rob's patch, I think this was the logic thing to
+do, and that nobody realised how badly broken the whole thing was. I'm
+just as guilty to have merged some of these drivers without really
+checking what they were doing in their DT parsing (I tend to focus on
+the correctness of the runtime behaviour). Expect a lot more scrutiny
+for any new patch.
+
+> Since some breakage has already been introduced, for good or bad, I
+> think we can start discussing how things should have been done from the
+> beginning, and see if we can make those changes now.
+
+If using standard properties, this should have never been an
+interrupt-map. A whole collection of 'interrupts', maybe (we have some
+other issues with that, but nothing that cannot be fixed without
+changing the DT). Or the initially proposed fsl,blah. But if you are
+using a standard property, it is handled by the core code, and you
+have no business messing with it.
 
 Thanks,
-Dafna
 
-> 
-> Thanks,
-> 
-> Daniel
-> 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

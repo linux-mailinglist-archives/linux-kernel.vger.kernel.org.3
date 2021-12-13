@@ -2,82 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 200C1471F37
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 02:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCCE471F39
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 02:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbhLMB6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 20:58:01 -0500
-Received: from out162-62-57-64.mail.qq.com ([162.62.57.64]:34925 "EHLO
-        out162-62-57-64.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230368AbhLMB6A (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 20:58:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639360677;
-        bh=wzS2xWxHM5A13F3v6NonK+vEbuO0WWSCa0N4yWUEdjs=;
-        h=From:To:Cc:Subject:Date;
-        b=EC2WY+O2wdYklcPn6iQlsA9xBbG27avB0S4sHj0nhf/ewi0e2WpWnyRBDwTxj9E2r
-         UJeSlZdPr8PZpDc8i37W5jpbIbyf4bi8RVrJX6LgHo1NqLlypk2w7huaCGc15BTkkN
-         KPsyYBpT7ktbSLfhyezfu8vVdrby5cOIdhlKnXKI=
-X-QQ-FEAT: oHWrrGTW1dB69m49duS3mdhuyhfj4A9h
-X-QQ-SSF: 00000000000000F000000000000000Z
-X-QQ-XMAILINFO: NwIPvWX4YDagat/12IputSOyaxDs/aXfb8URbK/DtpGvQV74EVVAF2nwQYH53N
-         THujscHl/HKbOon3MEbX94+kIXbIVK/KDF7EMreHOghpuW8cY4GtCqQBLyEgDWRNWNFHzt3ohG1x9
-         a9EEu81s0VrmwRrJFaTzJHrVkkSkv+BSh3UhhAWTyL2ORlWepzf4zoe/Qoe7i6t8ofF2FC9ye5DrE
-         mtkxecfs88E+4ulp6bZQUOCHSoz0V9yqjLrj0h45Qk4yF1FStkzRbMPXf017Aarz/sfX5Kkn5C+7z
-         aUOMWwJJamjd/m3++isc5HVWp+W2bzJsX+9NW+9J+ggAvxfb4pnksEb+fiJlMJ4zWDRF3INYDP26h
-         7S6uka05Uz+g39Nh47UDjbaLx7IKgONHJAZtFp6Vf8WAIHYzzEfMboUPGwnfhrq7atPMYuTb2pZNb
-         pqQX0BGUkpIioHCPt/xf/TpAvsvegoRKW5Rm2obnMnTmDyio670szqwJrnGdP1SBmw/enAPWWdfJ4
-         1x2EQYTmRuFEkEqx4rdSQ7dJujV0x+h7hGF24VN9OlU570BmGLtxf+KNxfGlx8VoNEl9vgqCeAgG9
-         rq8F6efj+T86uLNSG6iVekSiNmD6/xCkwa/6IuLwkbOMRKsSbJTeXv3XoJUBCbM80HnvPtmna/2WB
-         rZHPaROqk6N9JZ+IvGCA8BVw9uXtFqqs9wXFuljFMmKrY3Pkt1zX0lmPpOCIw9bi6kt9pU9j1rr/N
-         r5grxPeBSUpoiaTm5PqJG4L3PxSjzR79LKQju+6w2czono18D82uVBNmUme1Z4Rx4B80aGZDNyIRL
-         TcyAWAX6xiVSAmTxdRiLfUi6RFrwt2OR6fOcT8N2IdySpQryCxVp1R8=
-X-HAS-ATTACH: no
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 223.75.155.17
-X-QQ-STYLE: 
-X-QQ-mid: webmail813t1639360609t9919530
-From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
-To:     "=?ISO-8859-1?B?QmFydCBWYW4gQXNzY2hl?=" <bvanassche@acm.org>,
-        "=?ISO-8859-1?B?amVqYg==?=" <jejb@linux.ibm.com>,
-        "=?ISO-8859-1?B?bWFydGluLnBldGVyc2Vu?=" <martin.petersen@oracle.com>
-Cc:     "=?ISO-8859-1?B?bGludXgtc2NzaQ==?=" <linux-scsi@vger.kernel.org>,
-        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
-        "=?ISO-8859-1?B?YWxpbS5ha2h0YXI=?=" <alim.akhtar@samsung.com>,
-        "=?ISO-8859-1?B?YXZyaS5hbHRtYW4=?=" <avri.altman@wdc.com>
-Subject: Re: [PATCH] scsi: ufs: ufshcd-pltfrm: check the return value of kstrdup()
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="ISO-8859-1"
-Content-Transfer-Encoding: base64
-Date:   Mon, 13 Dec 2021 09:56:49 +0800
-X-Priority: 3
-Message-ID: <tencent_29819C31A7E71A71105124840B2855FD970A@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
+        id S231239AbhLMB6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 20:58:50 -0500
+Received: from mga02.intel.com ([134.134.136.20]:49991 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229436AbhLMB6t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 20:58:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639360729; x=1670896729;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=BPIBQRh24j1r5R+LEj2YcwdDa2KSusG9g9vBSZKllJg=;
+  b=Slklm94ZdjClKqLWfLsKM12FGciSCs1pBjyPwdnfaK/w2sbt0+PuwmGr
+   Tt+23HHyI4XZDJo4zex2xqAoPmK9I2oWTXz38KPftLaogPsWNZ7MA5P9N
+   0eQ3xRopLLJsGEJm5kvHwYV2RnQVVtzJKrbi2V28Ooy2iyWCwa2Eku/ZU
+   bN09UZuX4V5HRiBJXfbRNKSirFc2ShbNwDOHC8uxJmEXR2Ul/fFaQkA4h
+   Xv+Ic4+zV/CO+gEkncPTDuz0icqbbzVmXMd+FZ7cFBFeK90TjNf4XRh7N
+   jwtVvA93oU8YrD2/i3/mSB7cwq8yW/uSyDQsWmemyMttdQnyfLL7RqX58
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="225923254"
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="225923254"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 17:58:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="681462946"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.159.50])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 17:58:46 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH -V2] numa balancing: move some document to make it
+ consistent with the code
+References: <20211209004442.999696-1-ying.huang@intel.com>
+        <8735n1anw9.mognet@arm.com>
+Date:   Mon, 13 Dec 2021 09:58:44 +0800
+In-Reply-To: <8735n1anw9.mognet@arm.com> (Valentin Schneider's message of
+        "Thu, 9 Dec 2021 13:49:58 +0000")
+Message-ID: <87bl1lw9ij.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIvMTIvMjEgMjI6MzIsIEJhcnQgVmFuIEFzc2NoZSB3cm90ZToKPiBJcyB4a2VybmVs
-IHRoZSBuYW1lIG9mIGEgcGVyc29uIG9yIHRoZSBuYW1lIG9mIGEgcm9ib3Q/IFBhdGNoZXMg
-c2hvdWxkIAo+IGJlIHNpZ25lZCBieSBhIHBlcnNvbiBldmVuIGlmIHRoZXNlIGhhdmUgYmVl
-biBnZW5lcmF0ZWQgYnkgYSByb2JvdC4KPgo+ID4gKwkJY2xraS0+bmFtZSA9IGtzdHJkdXAo
-bmFtZSwgR0ZQX0tFUk5FTCk7Cj4gPiArCQlpZiAoIWNsa2ktPm5hbWUpIHsKPiA+ICsJCQly
-ZXQgPSAtRU5PTUVNOwo+ID4gKwkJCWRldm1fa2ZyZWUoZGV2LCBjbGtpKTsKPiA+ICsJCQln
-b3RvIG91dDsKPiA+ICsJCX0KPgo+IElzIHRoZSBkZXZtX2tmcmVlKCkgY2FsbCBuZWNlc3Nh
-cnk/IElzIGl0IHVzZWZ1bD8KCk5vdGU6IHRoZSBsYXN0IG1haWwgc2VlbXMgZmFpbCBiZWNh
-dXNlIG9mIHRoZSBodG1sIGNvbnRlbnQuCgpTb3JyeSBhYm91dCB0aGF0LCB4a2VybmVsIGlz
-IG15IEVuZ2xpc2ggbmFtZSBJIG5hbWVkIG15c2VsZiwgbXkgZnVsbApuYW1lIGluIENoaW5l
-c2UgZm9ybWF0IGlzICJYaWFva2UgV2FuZyIuIFRoYW5rIHlvdSBmb3IgeW91cgpzdWdnZXN0
-aW9uLCBJIHdpbGwgY29uc2lkZXIgdXNpbmcgbXkgb2ZmaWNpYWwgbmFtZSBpbiB0aGUgZnV0
-dXJlLgoKY2xraSBpcyBhbGxvY2F0ZWQgb24gYWJvdmUgb2Yga3N0cmR1cCgpLCBsaW5lIDg2
-LTkwLCBhbmQgaWYgY2xraSBpcyBOVUxMCndpbGwgcmV0dXJuIC1FTk9NRU0gd2hpY2ggaXMg
-dGhlIHNhbWUgcmV0dXJuIHZhbHVlIHdpdGggdGhlIHBhdGNoLiBTbwpJIHRoaW5rIGNsa2kg
-c2hvdWxkIGJlIGZyZWVkIHRvIHByZXZlbnQgcG90ZW50aWFsIG1lbW9yeSBsZWFrOgo+CQlj
-bGtpID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9mKCpjbGtpKSwgR0ZQX0tFUk5FTCk7Cj4J
-CWlmICghY2xraSkgewo+CQkJcmV0ID0gLUVOT01FTTsKPgkJCWdvdG8gb3V0Owo+CQl9Cgp2
-cmVnIGlzIGluIHNpbWlsYXIgY2FzZS4=
+Valentin Schneider <valentin.schneider@arm.com> writes:
 
+> On 09/12/21 08:44, Huang Ying wrote:
+>> After commit 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to
+>> debugfs"), some NUMA balancing sysctls enclosed with SCHED_DEBUG has
+>> been moved to debugfs.  This patch move the document for these
+>> sysctls from
+>>
+>>   Documentation/admin-guide/sysctl/kernel.rst
+>>
+>> to
+>>
+>>   Documentation/scheduler/debug.txt
+>>
+>
+> AFAIA new documentation files should be written in reST, and the "source"
+> file is .rst so the new one should be too (as much as Peter hates it).
+>
+> Also, most files in there are named sched-*.rst, does that want to be
+> sched-debug.rst ?
+
+OK.  Will do that.
+
+>> to make the document consistent with the code.
+>>
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs")
+>> Cc: Mel Gorman <mgorman@techsingularity.net>
+>> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Valentin Schneider <valentin.schneider@arm.com>
+>> Cc: stable@vger.kernel.org # since v5.13
+>
+>> diff --git a/Documentation/scheduler/debug.txt b/Documentation/scheduler/debug.txt
+>> new file mode 100644
+>> index 000000000000..848d83c3123c
+>> --- /dev/null
+>> +++ b/Documentation/scheduler/debug.txt
+>> @@ -0,0 +1,48 @@
+>> +Scheduler debugfs
+>> +
+>
+> How about a small intro?
+>
+> ---
+> diff --git a/Documentation/scheduler/debug.txt b/Documentation/scheduler/debug.txt
+> index 848d83c3123c..08600de5b90e 100644
+> --- a/Documentation/scheduler/debug.txt
+> +++ b/Documentation/scheduler/debug.txt
+> @@ -1,4 +1,10 @@
+> +=================
+>  Scheduler debugfs
+> +=================
+> +
+> +Booting a kernel with CONFIG_SCHED_DEBUG=y will give access to scheduler
+> +-specific debug files under /sys/kernel/debug/sched. Some of those files are
+> +described below.
+>  
+>  numa_balancing
+>  --------------
+> ---
+>
+>> +numa_balancing
+>> +--------------
+>
+> I think you got the heading ordering wrong, see
+>   Documentation/doc-guide/sphinx.rst#Specific guidelines for the kernel documentation
+>
+> IIRC Sphinx/reST only requires heading ordering to be consistent within a
+> given file, but having consistency throughout the project simplifies
+> reviewing/contributing. In this case, headings with "=" must appear before
+> headings with "-".
+
+Thanks for reminding.  Will change it in the next version.
+
+Best Regards,
+Huang, Ying
+
+>> +
+>> +`numa_balancing` directory is used to hold files to control NUMA
+>> +balancing feature.  If the system overhead from the feature is too
+>> +high then the rate the kernel samples for NUMA hinting faults may be
+>> +controlled by the `scan_period_min_ms, scan_delay_ms,
+>> +scan_period_max_ms, scan_size_mb` files.
+>> +
+>> +
+>> +scan_period_min_ms, scan_delay_ms, scan_period_max_ms, scan_size_mb
+>> +===================================================================
+>> +
+>> +Automatic NUMA balancing scans tasks address space and unmaps pages to
+>> +detect if pages are properly placed or if the data should be migrated to a
+>> +memory node local to where the task is running.  Every "scan delay" the task
+>> +scans the next "scan size" number of pages in its address space. When the
+>> +end of the address space is reached the scanner restarts from the beginning.
+>> +
+>> +In combination, the "scan delay" and "scan size" determine the scan rate.
+>> +When "scan delay" decreases, the scan rate increases.  The scan delay and
+>> +hence the scan rate of every task is adaptive and depends on historical
+>> +behaviour. If pages are properly placed then the scan delay increases,
+>> +otherwise the scan delay decreases.  The "scan size" is not adaptive but
+>> +the higher the "scan size", the higher the scan rate.
+>> +
+>> +Higher scan rates incur higher system overhead as page faults must be
+>> +trapped and potentially data must be migrated. However, the higher the scan
+>> +rate, the more quickly a tasks memory is migrated to a local node if the
+>> +workload pattern changes and minimises performance impact due to remote
+>> +memory accesses. These files control the thresholds for scan delays and
+>> +the number of pages scanned.
+>> +
+>> +``scan_period_min_ms`` is the minimum time in milliseconds to scan a
+>> +tasks virtual memory. It effectively controls the maximum scanning
+>> +rate for each task.
+>> +
+>> +``scan_delay_ms`` is the starting "scan delay" used for a task when it
+>> +initially forks.
+>> +
+>> +``scan_period_max_ms`` is the maximum time in milliseconds to scan a
+>> +tasks virtual memory. It effectively controls the minimum scanning
+>> +rate for each task.
+>> +
+>> +``scan_size_mb`` is how many megabytes worth of pages are scanned for
+>> +a given scan.
+>> --
+>> 2.30.2

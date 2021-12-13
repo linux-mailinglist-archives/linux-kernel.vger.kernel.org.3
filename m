@@ -2,231 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D84247389A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C649B4738A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244217AbhLMXch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 18:32:37 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37458 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242230AbhLMXcf (ORCPT
+        id S244230AbhLMXgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 18:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244191AbhLMXgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 18:32:35 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BDMe050030634;
-        Mon, 13 Dec 2021 15:32:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=J6lEB4BG4le7k6GfxJRX4d57F5d7n1skjGNCmBSG++8=;
- b=i3Ss+2KakuoJwsPgC1wdBW4r87OwuCqEuno+vuiqU4blIb+so7Ll0syJ6SFF6cZMrpLW
- JEUVCs3I2Pbkin2eKyEl49q042qW3GZvPZi91q5yPWzcFGhA9SlMg6tUpPqLntuQmE5S
- 1hKAhp73n8sDZvRGY6Io+qr18SOQhoGYPCE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3cx9rku2tw-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 13 Dec 2021 15:32:33 -0800
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.230) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 13 Dec 2021 15:32:32 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cPNc18xc8axhSH+BJIOYi2tAaoDPLl3huIPKus7pUjcd4y6b/f9qK2e3BWHehqhUbwpoQnB4YQPV7aVsDOFpp+NIrxOlPqXMfk2tWyeX7shnqLN4fp+MdBhdnkQpHa7JM/YvaGLJ10sfRcACpdDMR0oarzKVQ88wyxd2/1aVyN90HfTQXJXmiHIpjMrpORFr99MLiVJHovg7gNH4WUqWVc4BYGW8mmPMSzX8HbORc3VGImicNe+FBbGiedrbJTGN2PgHPxRsFafb+Lwfq94xpeF18SKZRcWzm4u9FREGGdZLNngjcVH40CKyF+yM3YXF16/m1IIQ8fyfJGJVSLN4lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J6lEB4BG4le7k6GfxJRX4d57F5d7n1skjGNCmBSG++8=;
- b=m1ZRYXn1ppBpuz4Ls/TBcxXXnttzd/q4kUyBmRABP7GH1qGgTAaHtrFihJYLHAW4lVOuFCwI4cbHJFhamyUh2w3ic9Nb8YfbZU2+zA4qjSDOIiyK1k+bW446l7rNA9VbnSUhI/GU+BMSECMH8AnkeE/0xqL+dKQokzkOUO1SEy5NFI+4Lcv8tv8PGWSHZjkNPPwuklO36RH2/xpE75usq+T+vbPl1ZXiWoMK3dDWvi6qroE/XnI5Vxw21jinm1NLtqqchPef+K8mcbqFJMmTm7VXLgWZZnemrY2eaWmlOYmKcK35L/FWPIMFNY/LmYoUfyrYcX4m/9PFPAdkeWPboA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by SA1PR15MB5185.namprd15.prod.outlook.com (2603:10b6:806:235::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
- 2021 23:32:26 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::f826:e515:ee1a:a33]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::f826:e515:ee1a:a33%6]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 23:32:26 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     David Vernet <void@manifault.com>
-CC:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>, Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
-Thread-Topic: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
-Thread-Index: AQHX8FYl3jl3ooPws0ST1xMl/M/lM6ww2j4AgAAvAwCAAAlugA==
-Date:   Mon, 13 Dec 2021 23:32:25 +0000
-Message-ID: <C10BAA59-BBAA-4EF5-8819-72C9D65E85A9@fb.com>
-References: <20211213191734.3238783-1-void@manifault.com>
- <20211213201022.dhalhtc2bpey55gh@treble>
- <YbfQHjoUO5GTvImR@dev0025.ash9.facebook.com>
-In-Reply-To: <YbfQHjoUO5GTvImR@dev0025.ash9.facebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.20.0.1.32)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4dce28da-9f23-43b9-385d-08d9be90d238
-x-ms-traffictypediagnostic: SA1PR15MB5185:EE_
-x-microsoft-antispam-prvs: <SA1PR15MB518578003EA6357D76E5B351B3749@SA1PR15MB5185.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:2733;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8643dAkDXADzRHhwUnRnOo/iNzpgmOQAJt/Dr/d4sg0z1iE7eQgitJUkkwdfdQWvZw1II4HxmUHKxPF9E+8x1H57W6LRzTkW5Pksqx1xyGXqDNhMYw6dTM3I+KCB13xEjExnhDbcC5gTy7ooTepmEXqy1nA3a8Oa86sKLO8xU3irnh1dvXLyIznmIAnOzAWF+fDdwLSSUVNs6QL5cRf3NBQGxzCGtckQ+b51U1SCooe719LOMXcjGivbU51WtinzRW5NetpLJ0ST9lgL5N8GAhWQlkYVDZE4xHT9ctnljmDRJ3fwC1mG/3wTOveS9+L1KbT2pkM1OcAn7wm0Jls2CB0kExLT0js/3vT7Ahd99lCXMW7V26KV84mESNsb5bPs+m1WNnZ5gXKMwWcMh+4GyhFTZ2Phkxi9csvJLxEHdc8inDZzDh5QPP03oug4jLfWDroc6DaSILo3yfxLEQqt84MFPP3DzLYHF6rMmGg1WNfbf88j0gxTbhZxpOX70accSYyvktP4IrsfHzrBGh7JqVopmYNLBzFy3rq+2kl2z+TvIcdK5YWIErVl0ocCrHrjmsAq+l9drmn1d650zGMLGj39dJBPmdgk1zYOuUNHmaXiSLJAau1KAiuJJZzegJG2T3NU0BofEdBSU5oGoMwY6uz1i5qfgcA6PERM7TeVwfEtn2VHHDwrBrA1Rgjjys9m5r9xN2CrOWJDCwbNhoL6/D5AT+pRSL1vyA8TPHamoxAZZDk8w+bOixhIfr5Aeed4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(66946007)(508600001)(76116006)(91956017)(186003)(8936002)(5660300002)(6916009)(66556008)(66446008)(71200400001)(86362001)(64756008)(2616005)(6506007)(38100700002)(53546011)(83380400001)(2906002)(36756003)(122000001)(38070700005)(8676002)(6512007)(33656002)(54906003)(4326008)(7416002)(6486002)(316002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YoHSbgDMXQxvHCmIkxGzw+jvbmcHDAEMOJM9JCg6r7GYj49DbhPYZSUNG/PU?=
- =?us-ascii?Q?1K+eO3/2PoQGOo8KBrkynrwxIjSvwVGhh/heZ5QDsZLFx1epQG+TMnfBZJTg?=
- =?us-ascii?Q?6v6cqZBZE5nVupArOZXUwbeF9SkVqKVHwegI4bqJO3R7ppifp9+v6GngyY+T?=
- =?us-ascii?Q?J/iks30FrIODFn5WwugbniiHwEpwBgibYSJOFkr266nsstYVsC4TkxxuFMV+?=
- =?us-ascii?Q?hzXPCowZKXR4NeYJivt8em7qh9COHPo0yHQdStgHH2Zjtfz+SvlRg0Gz6vDN?=
- =?us-ascii?Q?KNaqo1TgebKiFUDklrNPHpz/USr3dNzFQ5D0yfaj3VIKS6qaXUjBcSnh9ctq?=
- =?us-ascii?Q?0BGWtRxKGs1osDH2KJFTz3EiVC+MDUUsXxxtnjyFxtsL8yWKJQZvOk33ZrCT?=
- =?us-ascii?Q?S3vosOlrT3adbFKTIi8XA6MrX55b0FEKBVHLSs18ZQ5tP8NfwOuBgAcEkHk4?=
- =?us-ascii?Q?SpJ7NjrdtXwkfGfx091/dddRRoAEOleQRL6cwq3X7nBlg/4EEWdUb1ibtpSr?=
- =?us-ascii?Q?73gUUNbFHKdeWzBl/tPAMNE6shdMzESUyNDmVKp/2mC2jI0bFxjDJRPWndEl?=
- =?us-ascii?Q?yC0cLtona42bWjdatPUNUUbcQvQw4vRX85eZKnB9YK+UhFt6yxjdfm507TfO?=
- =?us-ascii?Q?CpH1rtNskPgFextNC1qV8zgIEv3Cb2mqcbUIS0MzK1DOIS9Bb4rDK08vGETF?=
- =?us-ascii?Q?yx4V4Ibx3StsZymlAa6QeTqMChUWspUGep88NENyAFLVXs5EfwQMrNbGK/io?=
- =?us-ascii?Q?pj6n2yyfJegSnRmK/AHBNmbU76XdsXJhdg0ErGv5NILffYJCCLf7Zz+vOH44?=
- =?us-ascii?Q?DKUmXdqwLmO3DBcgFFXLUjQX2gNS1P18CmIV0sJrgEOD1SkdmtoX9Txb/KUi?=
- =?us-ascii?Q?hmDsnnnCGN3p8z8cLnua8iiE2cjJ07UuOCTULQNT5qAtfc036AQgByQY7iWn?=
- =?us-ascii?Q?6yisa4x1a6951gqsLj5HjWbs0OASRNiWkt0KuBfMEEBU5BNPeQiVASuO2/Xd?=
- =?us-ascii?Q?k/z2uetyo6BGGBL6qqYOGzTKTyPKyzv3sINhlXgH/G78DF2vS5vFRLlehrZw?=
- =?us-ascii?Q?aUM4ERePuhzZY22oip1MHdHV1XxTxwJ8+O3qQ5jZOqB1YyNNIh6S1SwkPmnj?=
- =?us-ascii?Q?QHPC5Uy/3E/v6xFiY8sgifkpTEgu8vkiRjJp4/FFzmTs37k5fzPNTUi318F2?=
- =?us-ascii?Q?AuvEsCIeZGAqf9g8p7fPZLyGjJXZhpQ/swjlKy1VDOVHwb1WjGfc9lHjUFuH?=
- =?us-ascii?Q?j86C+89dtYCWHWpmxw38pDohOpJF/5mwuzzjpli/nZ+Q3TCY17Hrx5L7+Enp?=
- =?us-ascii?Q?8t9P44M110kTAW5kQdC7AUIHplVxR4l2mz6iYLCKSLwpFxfCm5uDtfsFjEeK?=
- =?us-ascii?Q?wFe0rXri72rtMvfEMAYJc4Lss3W3KCAYlzEN29l8aVJeixV3nK0CN6jRrabk?=
- =?us-ascii?Q?vhOvayEzsAFYaP9T4bdelVhEXBTmud8PHIz9oNFvB8/3fjUq910JuIDEgZER?=
- =?us-ascii?Q?JfKNZP7NzRSDA1i/ydWX8cVvajF3d/npVKJzRSPhVMIg9qf4wVmp9ByhR4HK?=
- =?us-ascii?Q?pagdHsyfPWEBEXQk2zwNRxDEi3nAW+I5gmnOptDfuoZFMNqH5/Ar1aWqZBKc?=
- =?us-ascii?Q?aLSJ3kfISaGxghzLzFZYEdlaHzzx50ZnCrMCVGj4AzGMRzLfAhd8UBM8zscS?=
- =?us-ascii?Q?mK1gQQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <0C0B17A98AEE7840B59ABA73E1606EB9@namprd15.prod.outlook.com>
+        Mon, 13 Dec 2021 18:36:07 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73023C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 15:36:07 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id q25so25365929oiw.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 15:36:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+a3x2B0/KJq4wYj9GlAfLOlx8q2IrdZaa0L8o60yjpQ=;
+        b=CyPXEZj4OmJD6w0VFLbuReWQOdJvL0yD8dVJrw3fEec0pnFkuFmYxlYE6PaqtClEHj
+         cUdMUa3zhz+QQxpGqufH4Ijqe8D9OYoud+QbC+SGCiDARDJswbFqacnXrVJJ33J+6vx0
+         Pov8/uiYGPLVi3NeennAoNAmFjV/wDEScyBpbAo+UigpLpdRxgnzrxCxvMuSPYjjnFOF
+         1B+yImaAJjj4raNTocGH+PA0DDAhGaAzXQIS+CP6+yRISKj/XRYAv8DnlzfKEy/JJGQ9
+         bjWmH1Pcwr5qZ/XQC6eeZMtpZccSsCggHTEupri6UaH3opkglrXvCSLgdTNUCBqcu1FJ
+         /sIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+a3x2B0/KJq4wYj9GlAfLOlx8q2IrdZaa0L8o60yjpQ=;
+        b=AdR2swn/ozajn/meRbQ+XT4FX78LIKL/Zg4PeudJKhFffn96hNnTu+FcdPdZM/aVAC
+         VrP3HoSUObQDh+RfVitzCNfOTvFVfQcum9OQkyCSu31dK4IJWIuN4IQHIESZvzhkKpKk
+         lDNqGEx3KvY21a467SDwWCYI0KSpU2bAdiQZgHfuzNmfihmoURinb5i2tHrKFid4DpmE
+         YuGkZMt96hL+nXXOLvxmbNVxqmvQF5PJ1Ui76g9TSWMWGRsbQIQSyxDVx6a18g9xmCSV
+         W+5Jvxvugz7w3sOx0bPs4095UJbx0BaRBkXe+PSLmmb18XhS6OSZ1VnLSFDuqWrrKMLl
+         kRpQ==
+X-Gm-Message-State: AOAM533o6P3dKD/8PfrNBY6SqPYUaHNEAUjga6bqrvXNXMJ6w05cW78G
+        pPrLHX2x/LLzgvGdCj+A5SNoAg==
+X-Google-Smtp-Source: ABdhPJzyqzJhJzyQe1RP/N+WzeXsWVZ5q5ArRIMWjjmXc3GsVaMsUlvKG202LoJ7kjKWKOWqnscMVg==
+X-Received: by 2002:a05:6808:209b:: with SMTP id s27mr1489246oiw.43.1639438566662;
+        Mon, 13 Dec 2021 15:36:06 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id r23sm2447631ooj.37.2021.12.13.15.36.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 15:36:06 -0800 (PST)
+Date:   Mon, 13 Dec 2021 17:36:01 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
+        vkoul@kernel.org, agross@kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, quic_abhinavk@quicinc.com,
+        aravindh@codeaurora.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kishon@ti.com, p.zabel@pengutronix.de,
+        Kuogee Hsieh <khsieh@codeaurora.org>
+Subject: Re: [PATCH v7] phy: qcom-qmp: add display port v4 voltage and
+ pre-emphasis swing tables
+Message-ID: <YbfY4RKsUP8K6RWH@builder.lan>
+References: <1639070679-28348-1-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dce28da-9f23-43b9-385d-08d9be90d238
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 23:32:25.9879
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /HETddyUEkKFD/m6S5L2zQce4gmkVVT1ltHSoR5bjyeEHma5Aeb2Tptd0hK6zgaEOk+WYga1ERFhOS/0ldbA5Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB5185
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: KnlASLiR8XX7Bru76pN2V-fFxXfQUHqF
-X-Proofpoint-GUID: KnlASLiR8XX7Bru76pN2V-fFxXfQUHqF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-13_14,2021-12-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 adultscore=0
- malwarescore=0 mlxscore=0 clxscore=1011 suspectscore=0 priorityscore=1501
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112130137
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639070679-28348-1-git-send-email-quic_khsieh@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu 09 Dec 11:24 CST 2021, Kuogee Hsieh wrote:
 
+> From: Kuogee Hsieh <khsieh@codeaurora.org>
+> 
+> The previous patch from Fixes (aff188feb5e1) added functions to support V4
 
-> On Dec 13, 2021, at 2:58 PM, David Vernet <void@manifault.com> wrote:
-> 
-> Josh Poimboeuf <jpoimboe@redhat.com> wrote on Mon [2021-Dec-13 12:10:22 -0800]:
->> The patch description needs a few tweaks.  In the kernel we don't use
->> Markdown for patch descriptions.
->> 
->> A function can be postfixed with a trailing pair of parentheses, like
->> klp_enable_patch().
->> 
->> Other symbols can be enclosed with single quotes, like 'struct
->> klp_object'.
->> 
->> I'd also recommend avoiding the excessive use of "we", in favor of more
->> imperative-type language.
->> 
->> See Documentation/process/submitting-patches.rst for more details.  It's
->> also a good idea to look at some kernel commit logs to get a general
->> idea of the kernel patch description style.
-> 
-> Understood, I'll take a read through and re-submit the patch to honor the
-> norms for Linux kernel patches. My sincere apologies for the noise, and
-> thank you for the positive and constructive suggestions.
-> 
->> I don't think the fix will be quite that simple.  For example, if
->> klp_init_patch_early() fails, that means try_module_get() hasn't been
->> done, so klp_free_patch_finish() will wrongly do a module_put().
-> 
-> Ugh, good point and thank you for catching that. Another problem with the
-> current patch is that we'll call kobject_put() on the patch even if we
-> never call kobject_init on the patch due to patch->objs being NULL.
-> 
-> Perhaps we should pull try_module_get() and the NULL check for patch->objs
-> out of klp_init_patch_early()? It feels a bit more intuitive to me if
-> klp_init_patch_early() were only be responsible for initializing kobjects
-> for the patch and its objects / funcs anyways.
+The expected way to reference an existing commit is 'sha1 ("subject")'
+(including the ''), i.e. something like:
 
-Pulling those logic out of klp_init_patch_early() makes sense to me. 
-Alternatively, we may also have a cleanup section in klp_init_patch_early(), 
-like below. I am not sure which way will be cleaner. 
+'aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp phy")'
+added functions to support V4 of the PHY, but it did not...
+
+> phy. But it did not update voltage and pre-emphasis tables accordingly.
+> This patch add v4 voltage and pre-emphasis swing tables to complete v4
+> phy implementation. Both voltage and pre-emphasis swing level are set
+> during link training negotiation between host and sink. There are totally
+> four tables added.  A voltage swing table for both hbr and hbr1, a voltage
+> table for both hbr2 and hbr3, a pre-emphasis table for both hbr and hbr1
+> and a pre-emphasis table for both hbr2 and hbr3. In addition, write 0x0a
+> to TX_TX_POL_INV is added to complete the sequence of configure dp phy
+> base on HPG.
+
+The world doesn't know what a HPG is, so you need to spell this out or
+simply say "the hardware documentation".
 
 Thanks,
-Song
+Bjorn
 
-
-
-diff --git i/kernel/livepatch/core.c w/kernel/livepatch/core.c
-index 335d988bd811..20b959c82204 100644
---- i/kernel/livepatch/core.c
-+++ w/kernel/livepatch/core.c
-@@ -864,7 +864,7 @@ static void klp_init_object_early(struct klp_patch *patch,
-
- static int klp_init_patch_early(struct klp_patch *patch)
- {
--       struct klp_object *obj;
-+       struct klp_object *obj, *obj2;
-        struct klp_func *func;
-
-        if (!patch->objs)
-@@ -880,7 +880,7 @@ static int klp_init_patch_early(struct klp_patch *patch)
-
-        klp_for_each_object_static(patch, obj) {
-                if (!obj->funcs)
--                       return -EINVAL;
-+                       goto cleanup;
-
-                klp_init_object_early(patch, obj);
-
-@@ -890,9 +890,15 @@ static int klp_init_patch_early(struct klp_patch *patch)
-        }
-
-        if (!try_module_get(patch->mod))
--               return -ENODEV;
-+               goto cleanup;
-
-        return 0;
-+cleanup:
-+       klp_for_each_func_static(patch, obj2) {
-+               if (obj2 == obj)
-+                       break;  // done
-+               /* do clean up */
-+       }
- }
-
- static int klp_init_patch(struct klp_patch *patch)
+> 
+> Fixes: aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp phy")
+> Signed-off-by: Kuogee Hsieh <khsieh@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-qmp.c | 112 +++++++++++++++++++++++++-----------
+>  1 file changed, 77 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> index 456a59d..d41e30c 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> @@ -4255,40 +4255,50 @@ static void qcom_qmp_v3_phy_dp_aux_init(struct qmp_phy *qphy)
+>  	       qphy->pcs + QSERDES_V3_DP_PHY_AUX_INTERRUPT_MASK);
+>  }
+>  
+> -static const u8 qmp_dp_v3_pre_emphasis_hbr3_hbr2[4][4] = {
+> +#define MAX_SWING_LEVEL 4
+> +#define MAX_VOLTAGE_LEVEL 4
+> +#define MAX_EMPHASIS_LEVEL 4
+> +
+> +static const u8 qmp_dp_v3_pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
+>  	{ 0x00, 0x0c, 0x15, 0x1a },
+>  	{ 0x02, 0x0e, 0x16, 0xff },
+>  	{ 0x02, 0x11, 0xff, 0xff },
+>  	{ 0x04, 0xff, 0xff, 0xff }
+>  };
+>  
+> -static const u8 qmp_dp_v3_voltage_swing_hbr3_hbr2[4][4] = {
+> +static const u8 qmp_dp_v3_voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
+>  	{ 0x02, 0x12, 0x16, 0x1a },
+>  	{ 0x09, 0x19, 0x1f, 0xff },
+>  	{ 0x10, 0x1f, 0xff, 0xff },
+>  	{ 0x1f, 0xff, 0xff, 0xff }
+>  };
+>  
+> -static const u8 qmp_dp_v3_pre_emphasis_hbr_rbr[4][4] = {
+> +static const u8 qmp_dp_v3_pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
+>  	{ 0x00, 0x0c, 0x14, 0x19 },
+>  	{ 0x00, 0x0b, 0x12, 0xff },
+>  	{ 0x00, 0x0b, 0xff, 0xff },
+>  	{ 0x04, 0xff, 0xff, 0xff }
+>  };
+>  
+> -static const u8 qmp_dp_v3_voltage_swing_hbr_rbr[4][4] = {
+> +static const u8 qmp_dp_v3_voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
+>  	{ 0x08, 0x0f, 0x16, 0x1f },
+>  	{ 0x11, 0x1e, 0x1f, 0xff },
+>  	{ 0x19, 0x1f, 0xff, 0xff },
+>  	{ 0x1f, 0xff, 0xff, 0xff }
+>  };
+>  
+> -static int qcom_qmp_phy_configure_dp_swing(struct qmp_phy *qphy,
+> -		unsigned int drv_lvl_reg, unsigned int emp_post_reg)
+> +static int __qcom_qmp_phy_configure_dp_swing
+> +			(struct qmp_phy *qphy,
+> +			unsigned int drv_lvl_reg,
+> +			unsigned int emp_post_reg,
+> +			const u8 voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL],
+> +			const u8 pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL],
+> +			const u8 voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL],
+> +			const u8 pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL])
+>  {
+>  	const struct phy_configure_opts_dp *dp_opts = &qphy->dp_opts;
+>  	unsigned int v_level = 0, p_level = 0;
+> -	u8 voltage_swing_cfg, pre_emphasis_cfg;
+> +	u8 voltage, emphasis;
+>  	int i;
+>  
+>  	for (i = 0; i < dp_opts->lanes; i++) {
+> @@ -4297,26 +4307,25 @@ static int qcom_qmp_phy_configure_dp_swing(struct qmp_phy *qphy,
+>  	}
+>  
+>  	if (dp_opts->link_rate <= 2700) {
+> -		voltage_swing_cfg = qmp_dp_v3_voltage_swing_hbr_rbr[v_level][p_level];
+> -		pre_emphasis_cfg = qmp_dp_v3_pre_emphasis_hbr_rbr[v_level][p_level];
+> +		voltage = voltage_swing_hbr_rbr[v_level][p_level];
+> +		emphasis = pre_emphasis_hbr_rbr[v_level][p_level];
+>  	} else {
+> -		voltage_swing_cfg = qmp_dp_v3_voltage_swing_hbr3_hbr2[v_level][p_level];
+> -		pre_emphasis_cfg = qmp_dp_v3_pre_emphasis_hbr3_hbr2[v_level][p_level];
+> +		voltage = voltage_swing_hbr3_hbr2[v_level][p_level];
+> +		emphasis = pre_emphasis_hbr3_hbr2[v_level][p_level];
+>  	}
+>  
+>  	/* TODO: Move check to config check */
+> -	if (voltage_swing_cfg == 0xFF && pre_emphasis_cfg == 0xFF)
+> +	if (voltage == 0xFF && emphasis == 0xFF)
+>  		return -EINVAL;
+>  
+>  	/* Enable MUX to use Cursor values from these registers */
+> -	voltage_swing_cfg |= DP_PHY_TXn_TX_DRV_LVL_MUX_EN;
+> -	pre_emphasis_cfg |= DP_PHY_TXn_TX_EMP_POST1_LVL_MUX_EN;
+> -
+> -	writel(voltage_swing_cfg, qphy->tx + drv_lvl_reg);
+> -	writel(pre_emphasis_cfg, qphy->tx + emp_post_reg);
+> -	writel(voltage_swing_cfg, qphy->tx2 + drv_lvl_reg);
+> -	writel(pre_emphasis_cfg, qphy->tx2 + emp_post_reg);
+> +	voltage |= DP_PHY_TXn_TX_DRV_LVL_MUX_EN;
+> +	emphasis |= DP_PHY_TXn_TX_EMP_POST1_LVL_MUX_EN;
+>  
+> +	writel(voltage, qphy->tx + drv_lvl_reg);
+> +	writel(emphasis, qphy->tx + emp_post_reg);
+> +	writel(voltage, qphy->tx2 + drv_lvl_reg);
+> +	writel(emphasis, qphy->tx2 + emp_post_reg);
+>  	return 0;
+>  }
+>  
+> @@ -4325,9 +4334,14 @@ static void qcom_qmp_v3_phy_configure_dp_tx(struct qmp_phy *qphy)
+>  	const struct phy_configure_opts_dp *dp_opts = &qphy->dp_opts;
+>  	u32 bias_en, drvr_en;
+>  
+> -	if (qcom_qmp_phy_configure_dp_swing(qphy,
+> -				QSERDES_V3_TX_TX_DRV_LVL,
+> -				QSERDES_V3_TX_TX_EMP_POST1_LVL) < 0)
+> +	if (__qcom_qmp_phy_configure_dp_swing
+> +			(qphy,
+> +			QSERDES_V3_TX_TX_DRV_LVL,
+> +			QSERDES_V3_TX_TX_EMP_POST1_LVL,
+> +			qmp_dp_v3_voltage_swing_hbr_rbr,
+> +			qmp_dp_v3_pre_emphasis_hbr_rbr,
+> +			qmp_dp_v3_voltage_swing_hbr3_hbr2,
+> +			qmp_dp_v3_pre_emphasis_hbr3_hbr2) < 0)
+>  		return;
+>  
+>  	if (dp_opts->lanes == 1) {
+> @@ -4465,6 +4479,35 @@ static int qcom_qmp_v3_dp_phy_calibrate(struct qmp_phy *qphy)
+>  	return 0;
+>  }
+>  
+> +/* The values in these tables are given without MUX_EN (0x20) bit set */
+> +static const u8 qmp_dp_v4_pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
+> +	{ 0x00, 0x0c, 0x15, 0x1b },
+> +	{ 0x02, 0x0e, 0x16, 0xff },
+> +	{ 0x02, 0x11, 0xff, 0xff },
+> +	{ 0x04, 0xff, 0xff, 0xff }
+> +};
+> +
+> +static const u8 qmp_dp_v4_voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
+> +	{ 0x02, 0x12, 0x16, 0x1a },
+> +	{ 0x09, 0x19, 0x1f, 0xff },
+> +	{ 0x10, 0x1f, 0xff, 0xff },
+> +	{ 0x1f, 0xff, 0xff, 0xff }
+> +};
+> +
+> +static const u8 qmp_dp_v4_pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
+> +	{ 0x00, 0x0e, 0x15, 0x1b },
+> +	{ 0x00, 0x0e, 0x15, 0xff },
+> +	{ 0x00, 0x0e, 0xff, 0xff },
+> +	{ 0x04, 0xff, 0xff, 0xff }
+> +};
+> +
+> +static const u8 qmp_dp_v4_voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
+> +	{ 0x08, 0x0f, 0x16, 0x1f },
+> +	{ 0x11, 0x1e, 0x1f, 0xff },
+> +	{ 0x16, 0x1f, 0xff, 0xff },
+> +	{ 0x1f, 0xff, 0xff, 0xff }
+> +};
+> +
+>  static void qcom_qmp_v4_phy_dp_aux_init(struct qmp_phy *qphy)
+>  {
+>  	writel(DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_PSR_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
+> @@ -4494,16 +4537,14 @@ static void qcom_qmp_v4_phy_dp_aux_init(struct qmp_phy *qphy)
+>  
+>  static void qcom_qmp_v4_phy_configure_dp_tx(struct qmp_phy *qphy)
+>  {
+> -	/* Program default values before writing proper values */
+> -	writel(0x27, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
+> -	writel(0x27, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
+> -
+> -	writel(0x20, qphy->tx + QSERDES_V4_TX_TX_EMP_POST1_LVL);
+> -	writel(0x20, qphy->tx2 + QSERDES_V4_TX_TX_EMP_POST1_LVL);
+> -
+> -	qcom_qmp_phy_configure_dp_swing(qphy,
+> +	__qcom_qmp_phy_configure_dp_swing
+> +			(qphy,
+>  			QSERDES_V4_TX_TX_DRV_LVL,
+> -			QSERDES_V4_TX_TX_EMP_POST1_LVL);
+> +			QSERDES_V4_TX_TX_EMP_POST1_LVL,
+> +			qmp_dp_v4_voltage_swing_hbr_rbr,
+> +			qmp_dp_v4_pre_emphasis_hbr_rbr,
+> +			qmp_dp_v4_voltage_swing_hbr3_hbr2,
+> +			qmp_dp_v4_pre_emphasis_hbr3_hbr2);
+>  }
+>  
+>  static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
+> @@ -4622,6 +4663,9 @@ static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
+>  	writel(drvr1_en, qphy->tx2 + QSERDES_V4_TX_HIGHZ_DRVR_EN);
+>  	writel(bias1_en, qphy->tx2 + QSERDES_V4_TX_TRANSCEIVER_BIAS_EN);
+>  
+> +	writel(0x0a, qphy->tx + QSERDES_V4_TX_TX_POL_INV);
+> +	writel(0x0a, qphy->tx2 + QSERDES_V4_TX_TX_POL_INV);
+> +
+>  	writel(0x18, qphy->pcs + QSERDES_DP_PHY_CFG);
+>  	udelay(2000);
+>  	writel(0x19, qphy->pcs + QSERDES_DP_PHY_CFG);
+> @@ -4633,11 +4677,9 @@ static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
+>  			10000))
+>  		return -ETIMEDOUT;
+>  
+> -	writel(0x0a, qphy->tx + QSERDES_V4_TX_TX_POL_INV);
+> -	writel(0x0a, qphy->tx2 + QSERDES_V4_TX_TX_POL_INV);
+>  
+> -	writel(0x27, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
+> -	writel(0x27, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
+> +	writel(0x22, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
+> +	writel(0x22, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
+>  
+>  	writel(0x20, qphy->tx + QSERDES_V4_TX_TX_EMP_POST1_LVL);
+>  	writel(0x20, qphy->tx2 + QSERDES_V4_TX_TX_EMP_POST1_LVL);
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 

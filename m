@@ -2,93 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD98473861
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB68473864
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 00:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244180AbhLMXXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 18:23:52 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:33436 "EHLO
+        id S244191AbhLMXXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 18:23:55 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:35488 "EHLO
         mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237678AbhLMXXv (ORCPT
+        with ESMTP id S237678AbhLMXXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 18:23:51 -0500
-Received: by mail-ot1-f53.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso19213916otf.0;
-        Mon, 13 Dec 2021 15:23:51 -0800 (PST)
+        Mon, 13 Dec 2021 18:23:53 -0500
+Received: by mail-ot1-f53.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso19170357otr.2;
+        Mon, 13 Dec 2021 15:23:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=xh0Ia+KIQrUoGbHMEfnzPM6PyEcucK4RBRTve5vYfEs=;
-        b=DEVWe2z5npRYsSvzsAd4yKaa30njfWJFdTOrQ0ZE/UWEs2HqehKEpkruZweU19UgDd
-         u8ROkW4MG3wu8KoI3jfcG15gw+0s2HfRU719Z2iQtFL2WcYR+CP1CCQginJrPaBex6vr
-         L5dQcMvCJ8qSeqs0936NfCndsCLMbNjO8Lz+IB+t5HYgSaG2knhDhuif+FeUTlXpzbWr
-         UmW+e8478fAbTGojOlYzpp1JAFcZG8lFZoyp9v6r5s/r257gSqq5C0Tn3Lz/mvIx0vFt
-         dFCml/kPwzLaelCy+XbBM15mbK8lUi/FTcHBymHK31ejtuNvBQ1/Rs/jaWjlGLUaMSq7
-         ozdg==
-X-Gm-Message-State: AOAM5314E6LZPgUz3d8SVyjgNuE7hh2rtmHQ4HNA4XyC018Mr16dfyyT
-        SjIlhCYqMKsNC7pd7P3/XA==
-X-Google-Smtp-Source: ABdhPJxmXUhSaMbG0tAtg0CKpHFhMXfX10P0J1yjFavh5SniuuDF5GSwM8Aa068A5X6jOnKk51sLEQ==
-X-Received: by 2002:a9d:6d86:: with SMTP id x6mr1270938otp.263.1639437831105;
-        Mon, 13 Dec 2021 15:23:51 -0800 (PST)
+        bh=MN07U4V1fbFM28Uah7L22YfdYwHkREoQZ5ADmY6LxmE=;
+        b=rSIVAvCmRlEKecklB/83Nk5Zt2JVCJ2KYc2JG5Js++zZkyfZt0b1gXnZvhcjlMMWq7
+         1UgDvmtqynKTst6eEGjcPyWgEM0oD5rVQBu72pRVnnXD1z4MRxWrjwyoFNjpajFJeHmx
+         +BZRMBOJDI2ndfsEywAN0fKpsbTiDJRlkCfTIc3FMXLnhNEXt9X8Ijj1HZnadBFMIrkt
+         /D021ucbYg1B49fl4RyPN5cEIbqgKFlMp6e/pvjVVjWG47pQ3YjSX2TK5GOsM2OTnUCS
+         rsr6LRGerbk6IP6yygudk+zcSjFloxZTEgHw8iZLiliT67DDiyL+/xD+B8dxvLm4iRYd
+         sNjQ==
+X-Gm-Message-State: AOAM5312dwZJqGB6+yn/7adYo2vbhrS9XP8uWcvKVLAwNRJj5fZZaAEJ
+        xOLyu5R96dmZznEIKkCpm+gR/erfdQ==
+X-Google-Smtp-Source: ABdhPJygG9UxSLszfKCq3BJLXLaO6nhd2/v54vOpy5+rwpMfGis0qNScFE8ZLYHpZVfIYMEj9h8b8g==
+X-Received: by 2002:a9d:2085:: with SMTP id x5mr1371352ota.228.1639437832980;
+        Mon, 13 Dec 2021 15:23:52 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n6sm2458478otj.78.2021.12.13.15.23.49
+        by smtp.gmail.com with ESMTPSA id e16sm2431958ook.38.2021.12.13.15.23.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 15:23:50 -0800 (PST)
-Received: (nullmailer pid 1773611 invoked by uid 1000);
+        Mon, 13 Dec 2021 15:23:52 -0800 (PST)
+Received: (nullmailer pid 1773614 invoked by uid 1000);
         Mon, 13 Dec 2021 23:23:49 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>,
-        devicetree@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20211213190221.355678-7-f.fainelli@gmail.com>
-References: <20211213190221.355678-1-f.fainelli@gmail.com> <20211213190221.355678-7-f.fainelli@gmail.com>
-Subject: Re: [PATCH 6/6] dt-bindings: pci: Convert iProc PCIe to YAML
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Satya Priya <skakit@codeaurora.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+In-Reply-To: <20211213192946.111320-1-david@ixit.cz>
+References: <20211213192946.111320-1-david@ixit.cz>
+Subject: Re: [PATCH] dt-bindings: rtc: qcom-pm8xxx-rtc: update register numbers
 Date:   Mon, 13 Dec 2021 17:23:49 -0600
-Message-Id: <1639437829.333710.1773610.nullmailer@robh.at.kernel.org>
+Message-Id: <1639437829.348405.1773613.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 11:02:21 -0800, Florian Fainelli wrote:
-> Conver the iProc PCIe controller Device Tree binding to YAML now that
-> all DTS in arch/arm and arch/arm64 have been fixed to be compliant.
+On Mon, 13 Dec 2021 20:29:45 +0100, David Heidelberg wrote:
+> Extend registers up to 2, also document their names.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Also fixes warnings generated by `make qcom/sdm845-oneplus-fajita.dtb`:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: reg: [[24576], [24832]] is too long
+>         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: 'reg-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+>         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
->  .../bindings/pci/brcm,iproc-pcie.yaml         | 184 ++++++++++++++++++
->  2 files changed, 184 insertions(+), 133 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
->  create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+>  .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml:97:34: [warning] too few spaces after comma (commas)
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.example.dt.yaml: pcie@18012000: 'brcm' is a dependency of 'brcm,pcie-ob-axi-offset'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.example.dt.yaml: pcie@18012000: 'pcie-ob' is a dependency of 'brcm,pcie-ob-axi-offset'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+Full log is available here: https://patchwork.ozlabs.org/patch/1567467
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1567483
+rtc@11d: compatible: Additional items are not allowed ('qcom,pm8921-rtc' was unexpected)
+	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
+	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
 

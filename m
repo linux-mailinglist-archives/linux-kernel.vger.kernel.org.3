@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BFD4720AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9414720B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbhLMFq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 00:46:56 -0500
-Received: from mga06.intel.com ([134.134.136.31]:26980 "EHLO mga06.intel.com"
+        id S232049AbhLMFq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 00:46:59 -0500
+Received: from mga06.intel.com ([134.134.136.31]:26984 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232013AbhLMFqx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 00:46:53 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="299449498"
+        id S232011AbhLMFq4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 00:46:56 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="299449502"
 X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="299449498"
+   d="scan'208";a="299449502"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 21:46:53 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 21:46:56 -0800
 X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="517608148"
+   d="scan'208";a="517608156"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 21:46:50 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 21:46:53 -0800
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
@@ -27,9 +27,9 @@ Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
         srinivas.kandagatla@linaro.org,
         pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
         bard.liao@intel.com
-Subject: [PATCH 2/7] ASoC/soundwire: intel: simplify callbacks for params/hw_free
-Date:   Mon, 13 Dec 2021 13:46:29 +0800
-Message-Id: <20211213054634.30088-3-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 3/7] soundwire: intel: improve suspend flows
+Date:   Mon, 13 Dec 2021 13:46:30 +0800
+Message-Id: <20211213054634.30088-4-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211213054634.30088-1-yung-chuan.liao@linux.intel.com>
 References: <20211213054634.30088-1-yung-chuan.liao@linux.intel.com>
@@ -37,141 +37,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 
-We don't really need to pass a substream to the callback, we only need
-the direction. No functionality change, only simplification to enable
-improve suspend with paused streams.
+This patch provides both a simplification of the suspend flows and a
+better balanced operation during suspend/resume transition, as part of
+the transition of Sound Open Firmware (SOF) to dynamic pipelines: the
+DSP resources are only enabled when required instead of enabled on
+startup.
 
+The exiting code relies on a convoluted way of dealing with suspend
+signals. Since there is no .suspend DAI callback, we used the
+component .suspend and marked all the component DAI dmas as
+'suspended'. The information was used in the .prepare stage to
+differentiate resume operations from xrun handling, and only
+reinitialize SHIM registers and DMA in the former case.
+
+While this solution has been working reliably for about 2 years, there
+is a much better solution consisting in trapping the TRIGGER_SUSPEND
+in the .trigger DAI ops. The DMA is still marked in the same way for
+the .prepare op to run, but in addition the callbacks sent to DSP
+firmware are now balanced.
+
+Normal operation:
+hw_params -> intel_params_stream
+hw_free   -> intel_free_stream
+
+suspend    -> intel_free_stream
+prepare    -> intel_params_stream
+
+This balanced operation was not required with existing SOF firmware
+relying on static pipelines instantiated at every boot. With the
+on-going transition to dynamic pipelines, it's however a requirement
+to keep the use count for the DAI widget balanced across all
+transitions.
+
+The component suspend is not removed but instead modified to deal with
+a corner case: when a substream is PAUSED, the ALSA core does not
+throw the TRIGGER_SUSPEND. This is problematic since the refcount for
+all pipelines and widgets is not balanced, leading to issues on
+resume. The trigger callback keeps track of the 'paused' state with a
+new flag, which is tested during the component suspend called later to
+release the remaining DSP resources. These resources will be
+re-enabled in the .prepare step.
+
+The IPC used in the TRIGGER_SUSPEND to release DSP resources is not a
+problem since the BE dailink is already marked as non-atomic.
+
+Co-developed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@intel.com>
+Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/intel.c           | 14 +++++++-------
- include/linux/soundwire/sdw_intel.h |  4 ++--
- sound/soc/sof/intel/hda.c           |  6 ++----
- 3 files changed, 11 insertions(+), 13 deletions(-)
+ drivers/soundwire/cadence_master.h |   2 +
+ drivers/soundwire/intel.c          | 110 +++++++++++++++++++++++------
+ 2 files changed, 89 insertions(+), 23 deletions(-)
 
+diff --git a/drivers/soundwire/cadence_master.h b/drivers/soundwire/cadence_master.h
+index e587aede63bf..aa4b9b0eb2a8 100644
+--- a/drivers/soundwire/cadence_master.h
++++ b/drivers/soundwire/cadence_master.h
+@@ -86,6 +86,7 @@ struct sdw_cdns_stream_config {
+  * @link_id: Master link id
+  * @hw_params: hw_params to be applied in .prepare step
+  * @suspended: status set when suspended, to be used in .prepare
++ * @paused: status set in .trigger, to be used in suspend
+  */
+ struct sdw_cdns_dma_data {
+ 	char *name;
+@@ -96,6 +97,7 @@ struct sdw_cdns_dma_data {
+ 	int link_id;
+ 	struct snd_pcm_hw_params *hw_params;
+ 	bool suspended;
++	bool paused;
+ };
+ 
+ /**
 diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 78037ffdb09b..25c5f5b9f058 100644
+index 25c5f5b9f058..3d29f02ad5a6 100644
 --- a/drivers/soundwire/intel.c
 +++ b/drivers/soundwire/intel.c
-@@ -711,7 +711,7 @@ intel_pdi_alh_configure(struct sdw_intel *sdw, struct sdw_cdns_pdi *pdi)
- }
+@@ -871,6 +871,7 @@ static int intel_hw_params(struct snd_pcm_substream *substream,
+ 	sdw_cdns_config_stream(cdns, ch, dir, pdi);
  
- static int intel_params_stream(struct sdw_intel *sdw,
--			       struct snd_pcm_substream *substream,
-+			       int stream,
- 			       struct snd_soc_dai *dai,
- 			       struct snd_pcm_hw_params *hw_params,
- 			       int link_id, int alh_stream_id)
-@@ -719,7 +719,7 @@ static int intel_params_stream(struct sdw_intel *sdw,
- 	struct sdw_intel_link_res *res = sdw->link_res;
- 	struct sdw_intel_stream_params_data params_data;
- 
--	params_data.substream = substream;
-+	params_data.stream = stream; /* direction */
- 	params_data.dai = dai;
- 	params_data.hw_params = hw_params;
- 	params_data.link_id = link_id;
-@@ -732,14 +732,14 @@ static int intel_params_stream(struct sdw_intel *sdw,
- }
- 
- static int intel_free_stream(struct sdw_intel *sdw,
--			     struct snd_pcm_substream *substream,
-+			     int stream,
- 			     struct snd_soc_dai *dai,
- 			     int link_id)
- {
- 	struct sdw_intel_link_res *res = sdw->link_res;
- 	struct sdw_intel_stream_free_data free_data;
- 
--	free_data.substream = substream;
-+	free_data.stream = stream; /* direction */
- 	free_data.dai = dai;
- 	free_data.link_id = link_id;
- 
-@@ -876,7 +876,7 @@ static int intel_hw_params(struct snd_pcm_substream *substream,
+ 	/* store pdi and hw_params, may be needed in prepare step */
++	dma->paused = false;
+ 	dma->suspended = false;
+ 	dma->pdi = pdi;
  	dma->hw_params = params;
+@@ -1008,29 +1009,6 @@ static void intel_shutdown(struct snd_pcm_substream *substream,
+ 	pm_runtime_put_autosuspend(cdns->dev);
+ }
  
- 	/* Inform DSP about PDI stream number */
--	ret = intel_params_stream(sdw, substream, dai, params,
-+	ret = intel_params_stream(sdw, substream->stream, dai, params,
- 				  sdw->instance,
- 				  pdi->intel_alh_id);
- 	if (ret)
-@@ -953,7 +953,7 @@ static int intel_prepare(struct snd_pcm_substream *substream,
- 		sdw_cdns_config_stream(cdns, ch, dir, dma->pdi);
- 
- 		/* Inform DSP about PDI stream number */
--		ret = intel_params_stream(sdw, substream, dai,
-+		ret = intel_params_stream(sdw, substream->stream, dai,
- 					  dma->hw_params,
- 					  sdw->instance,
- 					  dma->pdi->intel_alh_id);
-@@ -987,7 +987,7 @@ intel_hw_free(struct snd_pcm_substream *substream, struct snd_soc_dai *dai)
- 		return ret;
- 	}
- 
--	ret = intel_free_stream(sdw, substream, dai, sdw->instance);
-+	ret = intel_free_stream(sdw, substream->stream, dai, sdw->instance);
- 	if (ret < 0) {
- 		dev_err(dai->dev, "intel_free_stream: failed %d\n", ret);
- 		return ret;
-diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
-index 8a463b8fc12a..67e0d3e750b5 100644
---- a/include/linux/soundwire/sdw_intel.h
-+++ b/include/linux/soundwire/sdw_intel.h
-@@ -92,7 +92,7 @@
-  * firmware.
-  */
- struct sdw_intel_stream_params_data {
--	struct snd_pcm_substream *substream;
-+	int stream;
- 	struct snd_soc_dai *dai;
- 	struct snd_pcm_hw_params *hw_params;
- 	int link_id;
-@@ -105,7 +105,7 @@ struct sdw_intel_stream_params_data {
-  * firmware.
-  */
- struct sdw_intel_stream_free_data {
--	struct snd_pcm_substream *substream;
-+	int stream;
- 	struct snd_soc_dai *dai;
- 	int link_id;
- };
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index 77b9cb551f4b..5f703ca884f9 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -185,12 +185,11 @@ static int sdw_dai_config_ipc(struct snd_sof_dev *sdev,
- static int sdw_params_stream(struct device *dev,
- 			     struct sdw_intel_stream_params_data *params_data)
+-static int intel_component_dais_suspend(struct snd_soc_component *component)
+-{
+-	struct sdw_cdns_dma_data *dma;
+-	struct snd_soc_dai *dai;
+-
+-	for_each_component_dais(component, dai) {
+-		/*
+-		 * we don't have a .suspend dai_ops, and we don't have access
+-		 * to the substream, so let's mark both capture and playback
+-		 * DMA contexts as suspended
+-		 */
+-		dma = dai->playback_dma_data;
+-		if (dma)
+-			dma->suspended = true;
+-
+-		dma = dai->capture_dma_data;
+-		if (dma)
+-			dma->suspended = true;
+-	}
+-
+-	return 0;
+-}
+-
+ static int intel_pcm_set_sdw_stream(struct snd_soc_dai *dai,
+ 				    void *stream, int direction)
  {
--	struct snd_pcm_substream *substream = params_data->substream;
- 	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
- 	struct snd_soc_dai *d = params_data->dai;
- 	struct snd_soc_dapm_widget *w;
+@@ -1059,11 +1037,97 @@ static void *intel_get_sdw_stream(struct snd_soc_dai *dai,
+ 	return dma->stream;
+ }
  
--	w = snd_soc_dai_get_widget(d, substream->stream);
-+	w = snd_soc_dai_get_widget(d, params_data->stream);
- 
- 	return sdw_dai_config_ipc(sdev, w, params_data->link_id, params_data->alh_stream_id,
- 				  d->id, true);
-@@ -199,12 +198,11 @@ static int sdw_params_stream(struct device *dev,
- static int sdw_free_stream(struct device *dev,
- 			   struct sdw_intel_stream_free_data *free_data)
- {
--	struct snd_pcm_substream *substream = free_data->substream;
- 	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
- 	struct snd_soc_dai *d = free_data->dai;
- 	struct snd_soc_dapm_widget *w;
- 
--	w = snd_soc_dai_get_widget(d, substream->stream);
-+	w = snd_soc_dai_get_widget(d, free_data->stream);
- 
- 	/* send invalid stream_id */
- 	return sdw_dai_config_ipc(sdev, w, free_data->link_id, 0xFFFF, d->id, false);
++static int intel_trigger(struct snd_pcm_substream *substream, int cmd, struct snd_soc_dai *dai)
++{
++	struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
++	struct sdw_intel *sdw = cdns_to_intel(cdns);
++	struct sdw_cdns_dma_data *dma;
++	int ret = 0;
++
++	dma = snd_soc_dai_get_dma_data(dai, substream);
++	if (!dma) {
++		dev_err(dai->dev, "failed to get dma data in %s\n",
++			__func__);
++		return -EIO;
++	}
++
++	switch (cmd) {
++	case SNDRV_PCM_TRIGGER_SUSPEND:
++
++		/*
++		 * The .prepare callback is used to deal with xruns and resume operations.
++		 * In the case of xruns, the DMAs and SHIM registers cannot be touched,
++		 * but for resume operations the DMAs and SHIM registers need to be initialized.
++		 * the .trigger callback is used to track the suspend case only.
++		 */
++
++		dma->suspended = true;
++
++		ret = intel_free_stream(sdw, substream->stream, dai, sdw->instance);
++		break;
++
++	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
++		dma->paused = true;
++		break;
++	case SNDRV_PCM_TRIGGER_STOP:
++	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
++		dma->paused = false;
++		break;
++	default:
++		break;
++	}
++
++	return ret;
++}
++
++static int intel_component_dais_suspend(struct snd_soc_component *component)
++{
++	struct snd_soc_dai *dai;
++
++	/*
++	 * In the corner case where a SUSPEND happens during a PAUSE, the ALSA core
++	 * does not throw the TRIGGER_SUSPEND. This leaves the DAIs in an unbalanced state.
++	 * Since the component suspend is called last, we can trap this corner case
++	 * and force the DAIs to release their resources.
++	 */
++	for_each_component_dais(component, dai) {
++		struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
++		struct sdw_intel *sdw = cdns_to_intel(cdns);
++		struct sdw_cdns_dma_data *dma;
++		int stream;
++		int ret;
++
++		dma = dai->playback_dma_data;
++		stream = SNDRV_PCM_STREAM_PLAYBACK;
++		if (!dma) {
++			dma = dai->capture_dma_data;
++			stream = SNDRV_PCM_STREAM_CAPTURE;
++		}
++
++		if (!dma)
++			continue;
++
++		if (dma->suspended)
++			continue;
++
++		if (dma->paused) {
++			dma->suspended = true;
++
++			ret = intel_free_stream(sdw, stream, dai, sdw->instance);
++			if (ret < 0)
++				return ret;
++		}
++	}
++
++	return 0;
++}
++
+ static const struct snd_soc_dai_ops intel_pcm_dai_ops = {
+ 	.startup = intel_startup,
+ 	.hw_params = intel_hw_params,
+ 	.prepare = intel_prepare,
+ 	.hw_free = intel_hw_free,
++	.trigger = intel_trigger,
+ 	.shutdown = intel_shutdown,
+ 	.set_sdw_stream = intel_pcm_set_sdw_stream,
+ 	.get_sdw_stream = intel_get_sdw_stream,
 -- 
 2.17.1
 

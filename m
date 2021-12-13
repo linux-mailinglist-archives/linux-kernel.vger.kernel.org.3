@@ -2,190 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EBA4721F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9296F4721FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbhLMHvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:51:36 -0500
-Received: from mga02.intel.com ([134.134.136.20]:35917 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231407AbhLMHve (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:51:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639381894; x=1670917894;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=06bL+LdkfNW7a7Gv5btDW3xq5bEDILrWgnjUSJeHkuo=;
-  b=jOUNluQWufWoRHs6lWmeCJ0tXI+FI2adhW/9RNC+q8h01OcB3b7Gmh3T
-   o2nNrMIHsJ/C4pWRrCLK/NwNCla1nNBmNUK5K7TxXzggTGkg0wJuNdUd7
-   taZgyjLTUKsftUEEoMjuDosKaIaht6m7MFWG8U8GZw+1yynAsTqKsyAlo
-   XsMS+yzhT9wNQUZjt4CmB4C6CvqVa/mvGRPOVgFzNSSjnl+jN3doxYRJ0
-   2w+TD8M2cRxT6nwBnNLrTnYwOPmwKDC2JH5458Do7kLH2T2MK4jDYpUiS
-   cSAQCCKtPvX6NcB9WSrKR2NXaq8TcfZkHKzMvM8vg8KJ8qNRWrnCyanHG
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="225957329"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="225957329"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 23:51:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="504800011"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga007.jf.intel.com with ESMTP; 12 Dec 2021 23:51:34 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 12 Dec 2021 23:51:33 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Sun, 12 Dec 2021 23:51:33 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Sun, 12 Dec 2021 23:51:33 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EhoOZFsCBxQEU3LFQiKA8oQz4/ZuXQKD/9iz7/4kXBJVyUYUaJVRkzAoszI/LWrzIFP9TZNd28aMRiGIDEYH3hd5/HDv+9feGBj8bvWERvXrC2dKCIUz9N3smo1vB+sct7qQHmwOZ32UpQ3WMfpe8EXWB7WiQAUyh+GWklzYZy0uJZ52diJFdhzDKHG3Ee+KPdtjesNBfylV3KwqhVhTWESTiqYpBSLlW3kKLDAUZLtdH6ZQKoLYOZVj/DzUUbpdi3BNHH4FTF1rjROYphPZJHU9hwqEBk2J9fli49iBkjYC7n5Nsx+i/5HvFqFo8yd4CKIxtfeOwJ4xtjzr1ozZ8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=06bL+LdkfNW7a7Gv5btDW3xq5bEDILrWgnjUSJeHkuo=;
- b=oEY1jqQ1QngPxi2GKWkkEp5xkL3pO0SIaxgX3jF4bRtoZ/y6+x3Aey4iO6nhD4FlL0VxUG9c9TzqcGFtayqe/JXpm+Drg15++jDdfaeVNtG3w33KDT204bkSu50hNfpVxUaK16JN7aAbJQKIP0RnUh/KHXHlq1Fe3xfrBOEJQ5BuziHKLkUhyeqjH6aaq6saaD4sV7wVkqHuKWvi/AdJvPGSffI3R23D/ZPQBXMmlWQrZFYcMKqn4b/27jA4KKvqej337K9rLFsAF3NURdWeVX4JULdghPiXdGPVojDqNanw28BAHSlL0vyj0zyGt8m360bWsimr6nLx1lSwKroXpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=06bL+LdkfNW7a7Gv5btDW3xq5bEDILrWgnjUSJeHkuo=;
- b=JdKCF7LM7HQuUYBIJnojH6EtIK8scR17Hi60b3urlRfkDbwcFgD3NwPKSaPLWbGxhO2NFI+s/+iu5S731L5AMXvXIPARpKnuriiVGj8tvapNt0IqmHyGKkwnSNoNIlyhRPekVrr0A4pIAFDWDHalNNPk6Qy5+JxU3kd9hp6+8VY=
-Received: from MWHPR11MB1245.namprd11.prod.outlook.com (2603:10b6:300:28::11)
- by MWHPR11MB1919.namprd11.prod.outlook.com (2603:10b6:300:106::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.14; Mon, 13 Dec
- 2021 07:51:27 +0000
-Received: from MWHPR11MB1245.namprd11.prod.outlook.com
- ([fe80::9dd3:f8f0:48a8:1506]) by MWHPR11MB1245.namprd11.prod.outlook.com
- ([fe80::9dd3:f8f0:48a8:1506%12]) with mapi id 15.20.4755.025; Mon, 13 Dec
- 2021 07:51:27 +0000
-From:   "Liu, Jing2" <jing2.liu@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>
-Subject: RE: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
-Thread-Topic: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
-Thread-Index: AQHX63yAx94sYKc+J0y0K5VRaG6gMawr58iAgAQoODA=
-Date:   Mon, 13 Dec 2021 07:51:27 +0000
-Message-ID: <MWHPR11MB1245F7730D9BF0DA251D302DA9749@MWHPR11MB1245.namprd11.prod.outlook.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-11-yang.zhong@intel.com>
- <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
-In-Reply-To: <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e381ab58-b5f0-450c-c5d9-08d9be0d5e73
-x-ms-traffictypediagnostic: MWHPR11MB1919:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MWHPR11MB19197372D7B5A9D800B7B1B5A9749@MWHPR11MB1919.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yyt5l4mYDY0YUUQd3QFeT64btZleITz5oXJ2RMrhbiuZS/PYTvegR7z823Zjhs4bv0N5qWVNmnsOxOHxzWsYeTanPVxk+fcPNIXsve5URt+r5ndhEvXYgzg93Hn3JdeMWEXgWF6DkB73t91/hqbTvZMcjg2eLwybt24dN4bNHaJm8poEYESMU7qc0PTMMJ3DUo9vF/jP0N4jMADSRnnoPJN8DT8kVW2lWeagmzzK+p5fCyYztDRN5b5c4RFL00pJZUxb3q6rmiVMztC3CVgDkNxwWOT3DsMiEBNBblCIPevaOxZQDDE97SSbmrhCl7+eUbeVP2XQReMqhS2KYQPqMdUZwK2yoZrHG0aXWbbW0FuHAUDt6oOyasv4NcWZHWgddRurr2ei56UbEGUe1omV5Ax6saUPR0geExlyhqGsDS2zvqTon6QnpOV7GxEOogmpsRa+elHPpA1SPiyuuF51SkohfiHLdfeBhdjrp7aXM9iWeaQ/She2FJt+HBnl6+5xhvLwi9L46JqoDF7KI6xylmtxcSi1kseTc1I+tvfboWl7gdV618+SUgQGCuJfAN0Ln1nkmTCy5GqaUKSwI+AZVPsbkP9PbsqGUo56BSZlKzwmn6CLEzjvuQQl09mVYU9bQAPehpSw0/L5C8iEGDxOGm83sqUjZPvDgVBwQoRf8uXPnC2XHHqFL0nOTfiWvXy2P4s+WhHxq9ILFv+02OzJQPTDAC8AwPPlr09IEv1znug=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1245.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(4744005)(110136005)(316002)(82960400001)(54906003)(122000001)(38100700002)(52536014)(53546011)(6506007)(7416002)(66446008)(66556008)(66476007)(66946007)(86362001)(4326008)(921005)(76116006)(64756008)(2906002)(8676002)(9686003)(33656002)(508600001)(8936002)(55016003)(38070700005)(186003)(26005)(7696005)(5660300002)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MFJncU1MZVhHUFNveUkzS3JMbXBlM2wrMkEyN0FlWUh4MmpETzdnYThQQVNU?=
- =?utf-8?B?RGwzcmxielJxeHZrMFJyWEhXOUxuZFExVW13N2FPNlM1d0NJSkdhTFVVTW0v?=
- =?utf-8?B?NmdJN2oybU9iN3hpbW1lR0dVMnI2MTl3K3dHQisvU0ZrNnRXRWZNd29ObU9p?=
- =?utf-8?B?ZzU3SG1hOHplTm1SQklpbmZGZHRiMW52L25DUXFleE9rNzFuRjY3L3dnRjRD?=
- =?utf-8?B?dGNLOFlBRVBqbmFsK25qd3hpME56MTFEMURhVzN0UjAwcDF2U0JvbHltUHlK?=
- =?utf-8?B?d3gxRXZpd2pUVnpSZzdiQU42cnQ0YmZKaXJudys2RjVONlJtTi9GYnhpb0Nk?=
- =?utf-8?B?VGk1Znp0VVN0RzJEQkduYzlPaHo4TFF0czd6bzhkTmRPb0x5Y3hyZElvbXEx?=
- =?utf-8?B?V2JDREd0a3NVcCtlbys4bkxJc3hBZXRXMGh5NDdqcG0wN3djcW9GSys5UCtH?=
- =?utf-8?B?cWYzNVh0dU5id0RBbGt2ZWNHTUltQWtqcVNRK0lHS3NMYnBHTHBWMFF5NVpB?=
- =?utf-8?B?MjZqczFxQ2gzRUdoME5WOTlGenEzQ2MydzNub0lqcnZ3TzNjLy85TzJ2NE5J?=
- =?utf-8?B?Mm1xb0R0M09sK2lzWXpjRXNKckFUcEEybjZieXNHVXNsRXRFaVFTeXNWMkdI?=
- =?utf-8?B?VVF4Y2JNYnBaek5RWncrVW1YajYvSkZ4b2dUYmw1dXRDM1BJTFpJbHBVMEdo?=
- =?utf-8?B?cDl1K295ZnZEamdVbktrNjFjV3FlUlV2RGZSUEV5Qkpsb05xZWJNcWhPWWFW?=
- =?utf-8?B?TnYyUVNjVFdNdkhCczF1OG8vc2tNaU1BV2VieEpBbFNHYlhqd1pIZDJjWHIv?=
- =?utf-8?B?dm1MVndmTFFZY1JZcTV6Ynd5dGdGWHROWnlROWE1OWJkUXJoTTlVSkpzaWxa?=
- =?utf-8?B?dWlUUUNEMU9yWXh6SnZVVkpBdm9TenlyeEVydzRXRStJaFFDb1R6UVY4WFRS?=
- =?utf-8?B?TmlUR25RZGxIWnFEeitPRUpULytnMVkyM2NqdWZobnh4cVV1cGpVZHVFRE01?=
- =?utf-8?B?eURnVU9Sa1NhTnZZd2tYV0FqK2pocndNYzJrZm1HL2tRUlcveU4xQmNrTWRk?=
- =?utf-8?B?Z2NlMHNlRFZ1UHZEM3ZYbTR6LzBRYW9Vc2NzZ2dlcGRBUXlydGg3TTVXSVI1?=
- =?utf-8?B?YlFUcis2LzN4dGRTVFdvc0hVTXU0c0g4RTVKNlY5aW1sUUc5SCtYRnQ1Kyt1?=
- =?utf-8?B?Z2lyMmFoZ1Fkb3RRakJsUURITE5HbTVKMEZkc09VQUtGRTBLMnlMeFNEVDlW?=
- =?utf-8?B?ZWc3Q2hmdEVaNFhqUk1OTU9vWk5VMUs5cmkvdTZhZWJ6cENUSEZPbUFaQlg1?=
- =?utf-8?B?ZFU0ZUkxdXIwd040RWgrSnNIK2tLSFZGU09BNVJadDBwVWNicjd6NnBZeFpy?=
- =?utf-8?B?dTdmUExvRnZGaE1YSElYcUZzdXZyaWRYSndoNE9VRlJmbThiVDdMTC9TYjN2?=
- =?utf-8?B?MzEzVWZzSWhSZ05TL29LODJSTDZZcU9zMkJiVWdEejUvSi9HdXcvZitLcGYy?=
- =?utf-8?B?RlNMYzFuZG9peFVsMnlkdVJyenJlc1dFOGhxYUE1UUZsU2F3QUxSRmg5REx3?=
- =?utf-8?B?UjBLczVWa0J4SDJqdjl3YkY1THlVaUhNeEZFbUhCZmU1eVZhazVQaUFEOFdD?=
- =?utf-8?B?dENYc0pVVVVYM0hRaWNZSVkySklCZ05Ja0w3ZkdRZStrSGpTcCtja0x0aVFr?=
- =?utf-8?B?V1dsanE4SGNDUStTY0kxcHY3bElocWRZbnkrL2Y4VWtLbW1XVDArRnFrSzZF?=
- =?utf-8?B?MFprRStkc2Q4OUtBUlozVEtuSFBpa2NiWTJydXpUR3pib3I1a0VpMER5VXNj?=
- =?utf-8?B?VkhFNWRiMUx6TENDMENmaGh2K241YXV3bXdEeFFGWnJLRFRJNzg0eUhpQ1Ez?=
- =?utf-8?B?ZDlvNW14ekhZVGVEaVh3cmx3azVudVA0SUtwSlZQZ20vdVI1U1dnS0kxNGRr?=
- =?utf-8?B?OG55bmh2RGpTSkIyU3B1TzJtcE0xWFREWHFPMXJZcjRpQ09XaHZsVmxaSXdG?=
- =?utf-8?B?MUdvVHNIQStnUjZ6d09oSXRJblNwb2ZyR1VrbTVYUEV4bkFhT0xJN2drcWc1?=
- =?utf-8?B?ZDVDMU9XeWV5bFBDTlRrN0pYNHRJV09xUHY4Q2ZvZTZyZ3JzNXVUS2JRaThz?=
- =?utf-8?B?UmgwZWloWVBwVy9CMWI1bitURngrY0dGbkppU3h0U2JtT3VGYUNjSWg2ZnRy?=
- =?utf-8?Q?O/SLBKH0ersrrMp1WOdYKN8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S232647AbhLMHxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231407AbhLMHxN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 02:53:13 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D22C061748;
+        Sun, 12 Dec 2021 23:53:13 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u17so10569454plg.9;
+        Sun, 12 Dec 2021 23:53:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=E7mXB7QgVV2bvYYxMKcO5csIxbT0JJKHqkP+7lZmOOY=;
+        b=KYNtAlBIYGNNQecVW5YOdzlyd2yPX3FGSJ2UA5D2ykToM6/S8tAGtvTAy1UmChltHp
+         eld4OOiQVin5UlsavS5EwBjv1YBt9yXG/2xY5aItl1QKVlZJFgw9L5W1ilbc3Nfh0QSC
+         MfXa6MgqrzinNZT+CiipwbsDvVz5mHPGYfKIRYm1D/V7nN5oehjU8iYTid6pvi9dpOCJ
+         5xxOpV9yt/K4a8hn6zrRPjRlSYeuk4qJJQSXXz2lMRKhJGGdQecurBont2k8SmQ3OW38
+         4oXl+uDFwv+5AO5bq5BdgLbK9xL74q1h5Dud0JbWj3VrB/UU0crOL8HyRNj4rIbR8MZl
+         0gpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=E7mXB7QgVV2bvYYxMKcO5csIxbT0JJKHqkP+7lZmOOY=;
+        b=tehpWfppHD/AFvZYV+npmrkICx6OmVMqBscTgLtQ0pETqbJfMiuQT7Cfy08Ir7w/D+
+         cSRR+mIvWHBiRdR3yAQo0JsY7411cePZFdUoyj8y1iNYRJCQCqrec+gOCWh3TyMv2b+f
+         XcGMGfU1WWkz7V4Catp3LgQJuQ3YQ20pU6zYRKAm39WxjYQH2IdvljElPSk2/CPhjTUJ
+         nV8WZ4GrNxELKRAGq0HZruW28RHL+eXH546SrU9UsYI2nZnxaVQM27b9XeEkhVQVkdZf
+         AIAu4hni/qu7Hx9DzgUFl5glDcRrxIWQuQfgWiOL3YZsHM6r5Ql8nnr/M1n4RKGQ6bSZ
+         wb3w==
+X-Gm-Message-State: AOAM533+sdbP5ocQtd2cAHDhFqEDQ7dOf9dQArguhYLsBB+KXG+O3rGE
+        89XElSoVpIhUa2pSK5QWNqA=
+X-Google-Smtp-Source: ABdhPJxwxkzO5B+pKxqKjYZjfrkOEtTrdSzYBUOZBO2p2yCvSJcgcVaY/nZS/UcLI//Jgu4yLeDiBQ==
+X-Received: by 2002:a17:903:1208:b0:143:e4e9:4ce3 with SMTP id l8-20020a170903120800b00143e4e94ce3mr93325766plh.21.1639381992088;
+        Sun, 12 Dec 2021 23:53:12 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id h20sm9373362pgh.13.2021.12.12.23.53.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Dec 2021 23:53:11 -0800 (PST)
+Subject: Re: [PATCH 0/3] docs: sphinx/kfigure.py: Improve conversion to PDF
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
+ <20211212113813.058e99fc@coco.lan>
+ <8840a859-ca57-c49a-f542-0a37401ccdfc@gmail.com>
+ <20211213073327.11191087@coco.lan>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <60d50d23-e236-1105-dc2c-d6daca70e326@gmail.com>
+Date:   Mon, 13 Dec 2021 16:53:07 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1245.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e381ab58-b5f0-450c-c5d9-08d9be0d5e73
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 07:51:27.5464
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0uRnuwQ8oFtoKhqL8DYqVA91zfdr2mJ9ro5CpNJy8GWmVERwRHOWMsNHVbxURhiEFfwHdnxHJgtvl75EcPC2WQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1919
-X-OriginatorOrg: intel.com
+In-Reply-To: <20211213073327.11191087@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIvMTEvMjAyMSAxMjowMiBBTSwgUGFvbG8gQm9uemluaSB3cm90ZToNCj4gDQo+IEFsc286
-DQo+IA0KPiBPbiAxMi84LzIxIDAxOjAzLCBZYW5nIFpob25nIHdyb3RlOg0KPiA+DQo+ID4gKwkJ
-aWYgKCFndWVzdF9jcHVpZF9oYXModmNwdSwgWDg2X0ZFQVRVUkVfWEZEKSkNCj4gPiArCQkJcmV0
-dXJuIDE7DQo+IA0KPiBUaGlzIHNob3VsZCBhbGxvdyBtc3ItPmhvc3RfaW5pdGlhdGVkIGFsd2F5
-cyAoZXZlbiBpZiBYRkQgaXMgbm90IHBhcnQgb2YNCj4gQ1BVSUQpLiANClRoYW5rcyBQYW9sby4N
-Cg0KbXNyLT5ob3N0X2luaXRpYXRlZCBoYW5kbGluZyB3b3VsZCBiZSBhZGRlZCBpbiBuZXh0IHZl
-cnNpb24uDQoNCkknZCBsaWtlIHRvIGFzayB3aHkgYWx3YXlzIGFsbG93IG1zci0+aG9zdF9pbml0
-aWF0ZWQgZXZlbiBpZiBYRkQgaXMgbm90IHBhcnQgb2YNCkNQVUlELCBhbHRob3VnaCBndWVzdCBk
-b2Vzbid0IGNhcmUgdGhhdCBNU1I/ICBXZSBmb3VuZCBzb21lIE1TUnMNCiAoZS5nLiBNU1JfQU1E
-NjRfT1NWV19TVEFUVVMgYW5kIE1TUl9BTUQ2NF9PU1ZXX0lEX0xFTkdUSCApIA0KYXJlIHNwZWNp
-YWxseSBoYW5kbGVkIHNvIHdvdWxkIGxpa2UgdG8ga25vdyB0aGUgY29uc2lkZXJhdGlvbiBvZiBh
-bGxvd2luZw0KbXNyLT5ob3N0X2luaXRpYXRlZC4NCg0KaWYgKCFtc3JfaW5mby0+aG9zdF9pbml0
-aWF0ZWQgJiYgIWd1ZXN0X2NwdWlkX2hhcyh2Y3B1LCBYODZfRkVBVFVSRV9YRkQpKQ0KICAgICAg
-ICByZXR1cm4gMTsNCg0KDQogSG93ZXZlciwgaWYgWEZEIGlzIG5vbnplcm8gYW5kIGt2bV9jaGVj
-a19ndWVzdF9yZWFsbG9jX2Zwc3RhdGUNCj4gcmV0dXJucyB0cnVlLCB0aGVuIGl0IHNob3VsZCBy
-ZXR1cm4gMS4NCj4gDQpJZiBYRkQgaXMgbm9uemVybywga3ZtX2NoZWNrX2d1ZXN0X3JlYWxsb2Nf
-ZnBzdGF0ZSgpIHdvbid0IHJldHVybiB0cnVlLiBTbw0KbWF5IG5vdCBuZWVkIHRoaXMgY2hlY2sg
-aGVyZT8NCg0KVGhhbmtzLA0KSmluZw0KDQo+IA0KPiBQYW9sbw0K
+On Mon, 13 Dec 2021 07:33:27 +0100, Mauro Carvalho Chehab wrote:
+> Em Sun, 12 Dec 2021 20:57:23 +0900
+> Akira Yokosawa <akiyks@gmail.com> escreveu:
+> 
+>> On Sun, 12 Dec 2021 11:38:13 +0100, Mauro Carvalho Chehab wrote:
+>>
+>> Hi Mauro,
+>>
+>> I didn't expect such a quick response.
+>> Thank you so much!
+>>
+>>> Em Sun, 12 Dec 2021 16:59:53 +0900
+>>> Akira Yokosawa <akiyks@gmail.com> escreveu:
+>>>   
+>>>> This patch set improves conversions of DOT -> PDF and SVG -> PDF
+>>>> for PDF docs.
+>>>>
+>>>> * DOT -> PDF conversion  
+>>>
+>>> First of all, package requirement for docs generation should be auto
+>>> discovered by:
+>>>
+>>> 	scripts/sphinx-pre-install  
+>>
+>> Please note that this update does not change any requirement.
+> 
+> Ok.
+> 
+>> I think you are worried by the possible degradation of DOT rendering
+>> without rsvg-convert.  Please see comments below.
+>>
+>>>
+>>> and should not break the ones detected by check_distros() and that
+>>> supports PDF generation.
+>>>   
+>>>>
+>>>> Current scheme uses "dot -Tpdf" (of graphviz).
+>>>>
+>>>> Cons:
+>>>>   - openSUSE's dot(1) does not support -Tpdf.  
+>>>
+>>> I'm sure I tested pdf generation in the past with openSUSE by the
+>>> time I wrote sphinx-pre-install script. Perhaps some change at either
+>>> openSUSE or at the docs makefile broke support for it.  
+>>
+>> dot -T? on openSUSE Tumbleweed says (long line folded):
+>>
+>> Format: "?" not recognized. Use one of: canon cmap cmapx cmapx_np dot dot
+>> _json eps fig gd gd2 gif gv imap imap_np ismap jpe jpeg jpg json json0 mp
+>>  pic plain plain-ext png pov ps ps2 svg svgz tk vml vmlz vrml wbmp xdot
+>>  xdot1.2 xdot1.4 xdot_json
+>>
+>> There is no "pdf" here.
+> 
+> Tumbleweed is a rolling distribution. Something could have changed since
+> when I added support for it. Anyway, the script could check the output of
+> it to enable/disable pdf via dot (not saying it is worth or not).
+
+I found a related message of yours in the lore archive:
+
+   https://lore.kernel.org/all/20170715162741.0e4f1298@vento.lan/
+
+It has no follow-up messages though.
+Do you remember something further about dot(1) on Tumbleweed?
+
+
+>>>   
+>>>>   - Other distro's dot(1) generates PDFs with unnecessarily wide
+>>>>     margins for inclusion into LaTeX docs.
+>>>>
+>>>> Patch 1/3 changes the route to two steps:
+>>>>
+>>>>   1. DOT -> SVG by "dot -Tsvg"
+>>>>   2. SVG -> PDF by "rsvg-convert -f pdf" with fallback to convert(1).  
+>>>
+>>> rsvg-convert is not present on Fedora (nor on RHEL and CentOS), as far
+>>> as I'm aware.  
+>>
+>> It is provided in the "librsvg2-tools" package, which is suggested by
+>> sphinx_pre_install.
+>> So once you have it installed on Fedora/RHEL/CentOS, this change won't
+>> cause any regression.
+>>
+>> Don't you agree?
+> 
+> Yeah, I missed that. Thanks for reminding me about that ;-)
+
+You are welcome.
+
+> 
+>>>   
+>>>> Pros:
+>>>>   - Improved portability across distros
+>>>>   - Less space for graphs in final PDF documents
+>>>>
+>>>> Con:
+>>>>   - On systems without rsvg-convert, generated PDF will be of raster
+>>>>     image.  
+>>>
+>>> Raster images are a very bad idea. Why don't keep use "dot -Tpdf" when
+>>> supported by the system? instead of falling back to raster images?  
+>>
+>> I suppose I am able to do so.  I just thought installing rsvg-convert
+>> wouldn't be that difficult.
+>> I can add a patch in v2 if you insist that is necessary.
+
+I'm working on a test of "dot -Tpdf".
+I'll post it as a follow-up of [PATCH 4/3] to this patch set when
+it's ready.
+It will be slightly different from your suggestion.
+"dot -Tpdf" will be used only when both of rsvg-convert(1) and inkscape(1)
+are unavailable, and "-Tpdf" is supported.
+I think this is sufficient for preventing regressions on existing
+systems.
+
+>>
+>>>   
+>>>> * SVG -> PDF conversion
+>>>>
+>>>> Current scheme uses convert(1) (of ImageMagick)
+>>>>
+>>>> Cons:
+>>>>   - Generated PDFs are of raster image.  Some of them look blurry.
+>>>>   - Raster image tends to be large in size.
+>>>>   - convert(1) delegates SVG decoding to rsvg-convert(1).
+>>>>     It doesn't cover full range of Inkscape specific SVG features
+>>>>     and fails to convert some of SVG figures properly.
+>>>>
+>>>> Failed conversions are observed with:
+>>>>   - Documentation/userspace-api/media/v4l/selection.svg
+>>>>   - Documentation/userspace-api/media/v4l/vbi_525.svg
+>>>>   - Documentation/userspace-api/media/v4l/vbi_625.svg  
+>>>
+>>> What do you mean by failed? With the current way, the VBI ones
+>>> seem OK to me:
+>>>
+>>> 	https://linuxtv.org/downloads/v4l-dvb-apis-new/pdf/media.pdf  
+>>
+>> By "fail", I meant "fail to render properly.
+>>
+>> selection.svg is rendered on page 810 in your PDF.
+>> I think the mask strap is lost in the figure.
+>> Well, selection.svg has Inkscape specific elements for the strap.
+>> So it is not rendered in a browser, either.
+> 
+> Ok, so we should fix selection.svg to address such issues. The same applies
+> to other images and graphs. That may include properly setting the margins.
+
+SVGs of the other images and graphs are rendered properly in a browser.
+So I don't think those need fixes.  I'd say it's defects of
+rsvg-convert, which the Gnome project might or might not be willing
+to fix.  Or might have been fixed in a later versions of librsvg.
+Why don't you open an issue at https://gitlab.gnome.org/GNOME/librsvg ?
+
+> 
+>> If you open it in Inkscape, I think you will see the difference.
+>> Actually speaking, I have edited selection.svg so that it can
+>> be rendered in a browser.  My plan is to send it as an independent
+>> patch once this patch set is accepted.
+> 
+> No matter if this is merged or not, if you find an issue at the images
+> at the media docs, please send them to linux-media@vger.org.
+
+OK. I'll compose a proper change log for it and post it later this
+week or next.
+(I'm not a type of person who is good at doing several things in
+parallel.)
+
+And the most easy fix is to install Inkscape on your system for
+the daily build.
+Then, convert(1) picks inkscape(1) for SVG rendering and you will
+see right ones (of raster images, though).
+
+You know, ImageMagick prefers inkscape over rsvg-convert.
+I think it is the right thing to do in kfigure.py as well.
+
+> 
+>>
+>> Figures 10, 11, and 12 on pages 1031 and 1032 don't look good
+>> either.  Do you see what I mean?
+>>
+>>>
+>>> (This is daily updated. On today's build the raw VBI ones are in
+>>> page 1031/1032)
+>>>
+>>> Do you mean that your changes caused a regression there?  
+>>
+>> Of course not!
+>>
+>>>   
+>>>> If you have Inkscape installed as well, convert(1) delegates SVG
+>>>> decoding to inkscape(1) and the above SVGs are rendered correctly.
+>>>>
+>>>> So if Inkscape is required for converting those SVGs, why not use it
+>>>> directly in the first place?  
+>>>
+>>> I remember that the main focus were to be able to generate PDF at the
+>>> major distros. It should be OK to use whatever tool, provided that it
+>>> won't cause regressions with such distros. Not that is should matter
+>>> much for the others, but my particular interest is that it shouldn't
+>>> cause regressions neither on Debian nor on Fedora, as those are the 
+>>> ones I use for PDF generation. Debian is used at linuxtv.org, where we
+>>> do automate builds for PDF, ePUB and HTML. Fedora is what I used locally,
+>>> in order to test and fix issues on media PDF document output.  
+>>
+>> I have tested this change on Debian and Fedora systems as well as
+>> openSUSE, Arch, and other distros.
+>> I'd say it works flawlessly.
+>>
+>> I'd appreciate if you could give a try on your systems.
+> 
+> I'll try to run some tests today.
+
+Thanks!
+
+> 
+>> Thanks for your feedback.
+>> I am willing to improve the quality of the PDF docs further.
+>>
+>>         Thanks, Akira
+>>
+>>>   
+>>>> Patch 2/3 adds a route of SVG -> PDF conversion by inkscape(1).
+>>>> Patch 3/3 hides warning messages from inkscape(1) which are harmless
+>>>> in command-line uses.
+>>>>
+>>>> Pros:
+>>>>   - Generated PDFs are of vector graphics.
+>>>>   - Vector graphics tends to be smaller in size and keeps looking nice
+>>>>     while zoomed in.
+>>>>   - SVGs drawn by Inkscape are fully supported.
+>>>>
+>>>> On systems without Inkscape, there won't be any change in behavior.
+>>>>
+>>>>         Thanks, Akira
+>>>> --
+>>>> Akira Yokosawa (3):
+>>>>   docs: sphinx/kfigure.py: Use rsvg-convert(1) for DOT -> PDF conversion
+>>>>   docs: sphinx/kfigure.py: Use inkscape(1) for SVG -> PDF conversion
+> 
+> 
+>>>>   docs: sphinx/kfigure.py: Redirect warnings from inkscape to /dev/null
+> 
+> It sounds too risky to redirect stderr to /dev/null. Yeah, here, the output
+> of inkscape is too crowd of warnings. Hacking it with a 
+> SPHINX_SHOW_INKSCAPE_WARN variable also seems a bad idea.
+
+Good points!
+
+> 
+> Not sure how this could be solved.
+
+We might be able to filter warning messages from inkscape and display
+only those we don't expect.
+
+I'm not sure maintaining such a list of harmless messages might
+be too much for us or not.
+
+Anyway, I'll give it a try.
+
+        Thanks, Akira
+
+> 
+> Thanks,
+> Mauro
+> 

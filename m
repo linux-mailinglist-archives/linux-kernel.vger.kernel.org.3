@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F8C472487
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103EC472A50
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbhLMJgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:36:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49348 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbhLMJfl (ORCPT
+        id S243994AbhLMKiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243882AbhLMKiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:35:41 -0500
+        Mon, 13 Dec 2021 05:38:13 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3174C0A8872;
+        Mon, 13 Dec 2021 01:50:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37819B80DE8;
-        Mon, 13 Dec 2021 09:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EACC00446;
-        Mon, 13 Dec 2021 09:35:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2BBF7CE0AE2;
+        Mon, 13 Dec 2021 09:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD4AC341C8;
+        Mon, 13 Dec 2021 09:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388139;
-        bh=KEwpGxzthSbeRbKlmHcAfEnwBqMBYTZVoND14SFo2j0=;
+        s=korg; t=1639389050;
+        bh=rtMG2C2eypS+jCdhY4ZDNuEnTr2zxKv+vDG4swO50f4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lXCAKmrl9CxK4igTJbfkEnYHq1zEE7Je+v9QTZ1kS6DOSl8J5+8IHGWiIzh1JeipB
-         HGhtrZfcHHFxr29msUJOO+BZt9Zv3X2WdBvkTsMVo9y94mtIFES60qZNJk10dRwByP
-         aHK1iNLmjA91Fxk0iW6PE3awzf2mXbCBa1i1Mlt4=
+        b=iTj6nIruMEb0M+LihOCHKyTDGs2KNxlRqP++ptLW2DH13Cf8T4rF/5oygmw/bdTCg
+         9KJpgK9CYk2ex0ffooVcQLxPJPA2OvAMnoyM/EN9T3jySpJhGl0RnsE5CHaXuHzrtB
+         SzYou5v5IdvTZAwkBw4nrPwYUeBBX7MmiwK2xOB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wudi Wang <wangwudi@hisilicon.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 4.9 41/42] irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
-Date:   Mon, 13 Dec 2021 10:30:23 +0100
-Message-Id: <20211213092927.893205161@linuxfoundation.org>
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Miles Chen <miles.chen@mediatek.com>
+Subject: [PATCH 5.10 083/132] clk: imx: use module_platform_driver
+Date:   Mon, 13 Dec 2021 10:30:24 +0100
+Message-Id: <20211213092941.969660619@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,38 +49,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wudi Wang <wangwudi@hisilicon.com>
+From: Miles Chen <miles.chen@mediatek.com>
 
-commit b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a upstream.
+commit eee377b8f44e7ac4f76bbf2440e5cbbc1d25c25f upstream.
 
-INVALL CMD specifies that the ITS must ensure any caching associated with
-the interrupt collection defined by ICID is consistent with the LPI
-configuration tables held in memory for all Redistributors. SYNC is
-required to ensure that INVALL is executed.
+Replace builtin_platform_driver_probe with module_platform_driver_probe
+because CONFIG_CLK_IMX8QXP can be set to =m (kernel module).
 
-Currently, LPI configuration data may be inconsistent with that in the
-memory within a short period of time after the INVALL command is executed.
-
-Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
-Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
-Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
+Fixes: e0d0d4d86c766 ("clk: imx8qxp: Support building i.MX8QXP clock driver as module")
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+Link: https://lore.kernel.org/r/20210904235418.2442-1-miles.chen@mediatek.com
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-gic-v3-its.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/imx/clk-imx8qxp-lpcg.c |    2 +-
+ drivers/clk/imx/clk-imx8qxp.c      |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -369,7 +369,7 @@ static struct its_collection *its_build_
+--- a/drivers/clk/imx/clk-imx8qxp-lpcg.c
++++ b/drivers/clk/imx/clk-imx8qxp-lpcg.c
+@@ -231,7 +231,7 @@ static struct platform_driver imx8qxp_lp
+ 	.probe = imx8qxp_lpcg_clk_probe,
+ };
  
- 	its_fixup_cmd(cmd);
+-builtin_platform_driver(imx8qxp_lpcg_clk_driver);
++module_platform_driver(imx8qxp_lpcg_clk_driver);
  
--	return NULL;
-+	return desc->its_invall_cmd.col;
- }
+ MODULE_AUTHOR("Aisheng Dong <aisheng.dong@nxp.com>");
+ MODULE_DESCRIPTION("NXP i.MX8QXP LPCG clock driver");
+--- a/drivers/clk/imx/clk-imx8qxp.c
++++ b/drivers/clk/imx/clk-imx8qxp.c
+@@ -151,7 +151,7 @@ static struct platform_driver imx8qxp_cl
+ 	},
+ 	.probe = imx8qxp_clk_probe,
+ };
+-builtin_platform_driver(imx8qxp_clk_driver);
++module_platform_driver(imx8qxp_clk_driver);
  
- static u64 its_cmd_ptr_to_offset(struct its_node *its,
+ MODULE_AUTHOR("Aisheng Dong <aisheng.dong@nxp.com>");
+ MODULE_DESCRIPTION("NXP i.MX8QXP clock driver");
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 772D94728DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D17D0472659
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241311AbhLMKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241106AbhLMKDB (ORCPT
+        id S234882AbhLMJug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:50:36 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38856 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234735AbhLMJqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:03:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBC0C034611;
-        Mon, 13 Dec 2021 01:49:54 -0800 (PST)
+        Mon, 13 Dec 2021 04:46:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5069BCE0B59;
-        Mon, 13 Dec 2021 09:49:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC856C341E1;
-        Mon, 13 Dec 2021 09:49:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6463BCE0E86;
+        Mon, 13 Dec 2021 09:46:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 153DBC341CA;
+        Mon, 13 Dec 2021 09:46:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388992;
-        bh=uIDncuiC/A7Ee30gu0hRPQ5UTY0Qqgw/rzlF2F3pE6E=;
+        s=korg; t=1639388775;
+        bh=klfqtqeaMhQ7wyke7z+dSEe1hT6Pf+9tQNk34ubxzd4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HB7JvArgvEdQqVwJa0mYGotkRH/gcGnIG/3xpJbZB3lm8oesYZg3cKxtttN6uRLjc
-         e5AYiyly/CnHrWHXPBazFG3dGwBSH92lpe3g/W6KPEjIsS4c16qevKZNbuex1aYKMo
-         nkEAMn55ARhL19Ls23BPycoXV+NkF6fk+C/VgB4c=
+        b=0TflFItbjusqBd3LUt17n6JSKAumjZmSysLJ4dPwEGu2LnYTI5rryDVWNQwDLGRzD
+         4dcHB+fnJ6i/4qmEWzO7FSexo7d35Ux6h8QDO4gXgGSUm+fJpsldgohX30eiqF58YX
+         L5GEgsNmpDzpMmG7EmqRNvhWONfXlc5PL4icAaQA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 079/132] ASoC: codecs: wcd934x: handle channel mappping list correctly
+        stable@vger.kernel.org, Manish Chopra <manishc@marvell.com>,
+        Alok Prasad <palok@marvell.com>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 50/88] qede: validate non LSO skb length
 Date:   Mon, 13 Dec 2021 10:30:20 +0100
-Message-Id: <20211213092941.835660859@linuxfoundation.org>
+Message-Id: <20211213092934.987376294@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
-References: <20211213092939.074326017@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,196 +48,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Manish Chopra <manishc@marvell.com>
 
-commit 23ba28616d3063bd4c4953598ed5e439ca891101 upstream.
+commit 8e227b198a55859bf790dc7f4b1e30c0859c6756 upstream.
 
-Currently each channel is added as list to dai channel list, however
-there is danger of adding same channel to multiple dai channel list
-which endups corrupting the other list where its already added.
+Although it is unlikely that stack could transmit a non LSO
+skb with length > MTU, however in some cases or environment such
+occurrences actually resulted into firmware asserts due to packet
+length being greater than the max supported by the device (~9700B).
 
-This patch ensures that the channel is actually free before adding to
-the dai channel list and also ensures that the channel is on the list
-before deleting it.
+This patch adds the safeguard for such odd cases to avoid firmware
+asserts.
 
-This check was missing previously, and we did not hit this issue as
-we were testing very simple usecases with sequence of amixer commands.
+v2: Added "Fixes" tag with one of the initial driver commit
+    which enabled the TX traffic actually (as this was probably
+    day1 issue which was discovered recently by some customer
+    environment)
 
-Fixes: a70d9245759a ("ASoC: wcd934x: add capture dapm widgets")
-Fixes: dd9eb19b5673 ("ASoC: wcd934x: add playback dapm widgets")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20211130160507.22180-2-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: a2ec6172d29c ("qede: Add support for link")
+Signed-off-by: Manish Chopra <manishc@marvell.com>
+Signed-off-by: Alok Prasad <palok@marvell.com>
+Signed-off-by: Prabhakar Kushwaha <pkushwaha@marvell.com>
+Signed-off-by: Ariel Elior <aelior@marvell.com>
+Link: https://lore.kernel.org/r/20211203174413.13090-1-manishc@marvell.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wcd934x.c |  119 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 88 insertions(+), 31 deletions(-)
+ drivers/net/ethernet/qlogic/qede/qede_fp.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -2540,6 +2540,31 @@ static int slim_rx_mux_get(struct snd_kc
- 	return 0;
- }
- 
-+static int slim_rx_mux_to_dai_id(int mux)
-+{
-+	int aif_id;
-+
-+	switch (mux) {
-+	case 1:
-+		aif_id = AIF1_PB;
-+		break;
-+	case 2:
-+		aif_id = AIF2_PB;
-+		break;
-+	case 3:
-+		aif_id = AIF3_PB;
-+		break;
-+	case 4:
-+		aif_id = AIF4_PB;
-+		break;
-+	default:
-+		aif_id = -1;
-+		break;
-+	}
-+
-+	return aif_id;
-+}
-+
- static int slim_rx_mux_put(struct snd_kcontrol *kc,
- 			   struct snd_ctl_elem_value *ucontrol)
- {
-@@ -2547,43 +2572,59 @@ static int slim_rx_mux_put(struct snd_kc
- 	struct wcd934x_codec *wcd = dev_get_drvdata(w->dapm->dev);
- 	struct soc_enum *e = (struct soc_enum *)kc->private_value;
- 	struct snd_soc_dapm_update *update = NULL;
-+	struct wcd934x_slim_ch *ch, *c;
- 	u32 port_id = w->shift;
-+	bool found = false;
-+	int mux_idx;
-+	int prev_mux_idx = wcd->rx_port_value[port_id];
-+	int aif_id;
- 
--	if (wcd->rx_port_value[port_id] == ucontrol->value.enumerated.item[0])
--		return 0;
-+	mux_idx = ucontrol->value.enumerated.item[0];
- 
--	wcd->rx_port_value[port_id] = ucontrol->value.enumerated.item[0];
-+	if (mux_idx == prev_mux_idx)
-+		return 0;
- 
--	switch (wcd->rx_port_value[port_id]) {
-+	switch(mux_idx) {
- 	case 0:
--		list_del_init(&wcd->rx_chs[port_id].list);
--		break;
--	case 1:
--		list_add_tail(&wcd->rx_chs[port_id].list,
--			      &wcd->dai[AIF1_PB].slim_ch_list);
--		break;
--	case 2:
--		list_add_tail(&wcd->rx_chs[port_id].list,
--			      &wcd->dai[AIF2_PB].slim_ch_list);
--		break;
--	case 3:
--		list_add_tail(&wcd->rx_chs[port_id].list,
--			      &wcd->dai[AIF3_PB].slim_ch_list);
-+		aif_id = slim_rx_mux_to_dai_id(prev_mux_idx);
-+		if (aif_id < 0)
-+			return 0;
-+
-+		list_for_each_entry_safe(ch, c, &wcd->dai[aif_id].slim_ch_list, list) {
-+			if (ch->port == port_id + WCD934X_RX_START) {
-+				found = true;
-+				list_del_init(&ch->list);
-+				break;
-+			}
+--- a/drivers/net/ethernet/qlogic/qede/qede_fp.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_fp.c
+@@ -1597,6 +1597,13 @@ netdev_tx_t qede_start_xmit(struct sk_bu
+ 			data_split = true;
+ 		}
+ 	} else {
++		if (unlikely(skb->len > ETH_TX_MAX_NON_LSO_PKT_LEN)) {
++			DP_ERR(edev, "Unexpected non LSO skb length = 0x%x\n", skb->len);
++			qede_free_failed_tx_pkt(txq, first_bd, 0, false);
++			qede_update_tx_producer(txq);
++			return NETDEV_TX_OK;
 +		}
-+		if (!found)
-+			return 0;
 +
- 		break;
--	case 4:
--		list_add_tail(&wcd->rx_chs[port_id].list,
--			      &wcd->dai[AIF4_PB].slim_ch_list);
-+	case 1 ... 4:
-+		aif_id = slim_rx_mux_to_dai_id(mux_idx);
-+		if (aif_id < 0)
-+			return 0;
-+
-+		if (list_empty(&wcd->rx_chs[port_id].list)) {
-+			list_add_tail(&wcd->rx_chs[port_id].list,
-+				      &wcd->dai[aif_id].slim_ch_list);
-+		} else {
-+			dev_err(wcd->dev ,"SLIM_RX%d PORT is busy\n", port_id);
-+			return 0;
-+		}
- 		break;
-+
- 	default:
--		dev_err(wcd->dev, "Unknown AIF %d\n",
--			wcd->rx_port_value[port_id]);
-+		dev_err(wcd->dev, "Unknown AIF %d\n", mux_idx);
- 		goto err;
+ 		val |= ((skb->len & ETH_TX_DATA_1ST_BD_PKT_LEN_MASK) <<
+ 			 ETH_TX_DATA_1ST_BD_PKT_LEN_SHIFT);
  	}
- 
-+	wcd->rx_port_value[port_id] = mux_idx;
- 	snd_soc_dapm_mux_update_power(w->dapm, kc, wcd->rx_port_value[port_id],
- 				      e, update);
- 
--	return 0;
-+	return 1;
- err:
- 	return -EINVAL;
- }
-@@ -3029,6 +3070,7 @@ static int slim_tx_mixer_put(struct snd_
- 	struct soc_mixer_control *mixer =
- 			(struct soc_mixer_control *)kc->private_value;
- 	int enable = ucontrol->value.integer.value[0];
-+	struct wcd934x_slim_ch *ch, *c;
- 	int dai_id = widget->shift;
- 	int port_id = mixer->shift;
- 
-@@ -3036,17 +3078,32 @@ static int slim_tx_mixer_put(struct snd_
- 	if (enable == wcd->tx_port_value[port_id])
- 		return 0;
- 
--	wcd->tx_port_value[port_id] = enable;
--
--	if (enable)
--		list_add_tail(&wcd->tx_chs[port_id].list,
--			      &wcd->dai[dai_id].slim_ch_list);
--	else
--		list_del_init(&wcd->tx_chs[port_id].list);
-+	if (enable) {
-+		if (list_empty(&wcd->tx_chs[port_id].list)) {
-+			list_add_tail(&wcd->tx_chs[port_id].list,
-+				      &wcd->dai[dai_id].slim_ch_list);
-+		} else {
-+			dev_err(wcd->dev ,"SLIM_TX%d PORT is busy\n", port_id);
-+			return 0;
-+		}
-+	 } else {
-+		bool found = false;
-+
-+		list_for_each_entry_safe(ch, c, &wcd->dai[dai_id].slim_ch_list, list) {
-+			if (ch->port == port_id) {
-+				found = true;
-+				list_del_init(&wcd->tx_chs[port_id].list);
-+				break;
-+			}
-+		}
-+		if (!found)
-+			return 0;
-+	 }
- 
-+	wcd->tx_port_value[port_id] = enable;
- 	snd_soc_dapm_mixer_update_power(widget->dapm, kc, enable, update);
- 
--	return 0;
-+	return 1;
- }
- 
- static const struct snd_kcontrol_new aif1_slim_cap_mixer[] = {
 
 

@@ -2,165 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1D54734BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CB64734BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236101AbhLMTQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S241698AbhLMTRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:17:00 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:40674 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234587AbhLMTQ6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 14:16:58 -0500
-Received: from mga01.intel.com ([192.55.52.88]:65225 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231878AbhLMTQ5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:16:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639423017; x=1670959017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bp3F5ril2o2hFHFGNs2ohZXce1AXnq3rH4wu9NdRWF4=;
-  b=PqzPwKnQO1KQ/Q3bkea+ZF29nKxmyhHbecenuQX+GCKrJCbEbcLqO8UJ
-   yCrZgMkZQBnyMH+rDVkp+0mAg/r9JPZz//YAnqHrR8NPGnRlfPJBkfDPf
-   Wve1OQuryQVdqiMs9wIk2GZoOXc9vQ+E8JoDO1ORnyUci/c6KFIf9Qnsg
-   DADC6lY/kTtBDijltgKSTl2s+0vHyzdG3akDmGL4R3FUuhQ+ItCwkOO0L
-   HSDa0jtzXstdstWRPpcHJgAkhrzLoTRgzjymnDLLpKyxc7iGPEOFAAFJS
-   2uydQpWs5m1ch1OG2zLv83jq4bfg9HQYRHBz3c4rCFo7M9/8GdvaURr9b
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="262940003"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="262940003"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 11:16:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="464762074"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 11:16:54 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwqof-0006yR-Bq; Mon, 13 Dec 2021 19:16:53 +0000
-Date:   Tue, 14 Dec 2021 03:16:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Leo Yan <leo.yan@linaro.org>
-Subject: Re: [PATCH v2 4/4] coresight: etm3x: Don't trace PID for non-root
- PID namespace
-Message-ID: <202112140344.viPmOWp6-lkp@intel.com>
-References: <20211213121323.1887180-5-leo.yan@linaro.org>
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id CD67D1C0B7A; Mon, 13 Dec 2021 20:16:56 +0100 (CET)
+Date:   Mon, 13 Dec 2021 20:16:48 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        chris.paterson2@renesas.com, alice.ferrazzi@miraclelinux.com
+Cc:     Pavel Machek <pavel@denx.de>, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
+Message-ID: <20211213191648.GA21320@amd>
+References: <20211213092939.074326017@linuxfoundation.org>
+ <20211213103536.GC17683@duo.ucw.cz>
+ <YbdAE9r9GXZlnyfr@kroah.com>
+ <YbdCag/DPOOrweZX@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="vkogqOf2sHV7VnPd"
 Content-Disposition: inline
-In-Reply-To: <20211213121323.1887180-5-leo.yan@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YbdCag/DPOOrweZX@kroah.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
 
-I love your patch! Yet something to improve:
+--vkogqOf2sHV7VnPd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Hi!
 
-url:    https://github.com/0day-ci/linux/commits/Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2585cf9dfaaddf00b069673f27bb3f8530e2039c
-config: arm-buildonly-randconfig-r003-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140344.viPmOWp6-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/81d5f47788c40d34c8159d64d4505eb485254e8f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
-        git checkout 81d5f47788c40d34c8159d64d4505eb485254e8f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwtracing/coresight/
+> > > I'm getting a lot of build failures -- missing gmp.h:
+> > >=20
+> > >   UPD     include/generated/utsrelease.h
+> > > 1317In file included from /builds/hVatwYBy/68/cip-project/cip-testing=
+/linux-stable-rc-ci/gcc/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc/a=
+rm-linux-gnueabi/8.1.0/plugin/include/gcc-plugin.h:28:0,
+> > > 1318                 from scripts/gcc-plugins/gcc-common.h:7,
+> > > 1319                 from scripts/gcc-plugins/arm_ssp_per_task_plugin=
+=2Ec:3:
+> > > 1320/builds/hVatwYBy/68/cip-project/cip-testing/linux-stable-rc-ci/gc=
+c/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc/arm-linux-gnueabi/8.1.0=
+/plugin/include/system.h:687:10: fatal error: gmp.h: No such file or direct=
+ory
+> > > 1321 #include <gmp.h>
+> > > 1322          ^~~~~~~
+> > > 1323compilation terminated.
+> > > 1324scripts/gcc-plugins/Makefile:47: recipe for target 'scripts/gcc-p=
+lugins/arm_ssp_per_task_plugin.so' failed
+> > > 1325
+> > >=20
+> > > https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/=
+linux-5.10.y
+> >=20
+> > What gcc plugins are you trying to build with?
+>=20
+> Also, kernelci seems normal for this release:
+> 	https://linux.kernelci.org/build/stable-rc/branch/linux-5.10.y/kernel/v5=
+=2E10.84-133-gf6a609e247c6/
+>=20
+> But your tests show problems:
+> 	https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipeline=
+s/428150268/failures
+> all for gcc plugins.
+>=20
+> I did take changes for the gcc plugins to get them to work for gcc 11,
+> maybe gcc8 is too old for them now?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Not sure. Maybe they never worked for us, but without test compile,
+they are now enabled and thus can break the build?
 
-All errors (new ones prefixed by >>):
+1e8600 gcc-plugins: simplify GCC plugin-dev capability test
 
->> drivers/hwtracing/coresight/coresight-etm3x-core.c:344:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
-           if (!task_is_in_init_pid_ns(current))
-                ^
-   1 error generated.
+Could be capable of doing that. Let me cc our people doing the
+testing and let me try to do some test compiles...
 
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-vim +/task_is_in_init_pid_ns +344 drivers/hwtracing/coresight/coresight-etm3x-core.c
+--vkogqOf2sHV7VnPd
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-   301	
-   302	#define ETM3X_SUPPORTED_OPTIONS (ETMCR_CYC_ACC | \
-   303					 ETMCR_TIMESTAMP_EN | \
-   304					 ETMCR_RETURN_STACK)
-   305	
-   306	static int etm_parse_event_config(struct etm_drvdata *drvdata,
-   307					  struct perf_event *event)
-   308	{
-   309		struct etm_config *config = &drvdata->config;
-   310		struct perf_event_attr *attr = &event->attr;
-   311	
-   312		if (!attr)
-   313			return -EINVAL;
-   314	
-   315		/* Clear configuration from previous run */
-   316		memset(config, 0, sizeof(struct etm_config));
-   317	
-   318		if (attr->exclude_kernel)
-   319			config->mode = ETM_MODE_EXCL_KERN;
-   320	
-   321		if (attr->exclude_user)
-   322			config->mode = ETM_MODE_EXCL_USER;
-   323	
-   324		/* Always start from the default config */
-   325		etm_set_default(config);
-   326	
-   327		/*
-   328		 * By default the tracers are configured to trace the whole address
-   329		 * range.  Narrow the field only if requested by user space.
-   330		 */
-   331		if (config->mode)
-   332			etm_config_trace_mode(config);
-   333	
-   334		/*
-   335		 * At this time only cycle accurate, return stack  and timestamp
-   336		 * options are available.
-   337		 */
-   338		if (attr->config & ~ETM3X_SUPPORTED_OPTIONS)
-   339			return -EINVAL;
-   340	
-   341		config->ctrl = attr->config;
-   342	
-   343		/* Don't trace contextID when runs in non-root PID namespace */
- > 344		if (!task_is_in_init_pid_ns(current))
-   345			config->ctrl &= ~ETMCR_CTXID_SIZE;
-   346	
-   347		/*
-   348		 * Possible to have cores with PTM (supports ret stack) and ETM
-   349		 * (never has ret stack) on the same SoC. So if we have a request
-   350		 * for return stack that can't be honoured on this core then
-   351		 * clear the bit - trace will still continue normally
-   352		 */
-   353		if ((config->ctrl & ETMCR_RETURN_STACK) &&
-   354		    !(drvdata->etmccer & ETMCCER_RETSTACK))
-   355			config->ctrl &= ~ETMCR_RETURN_STACK;
-   356	
-   357		return 0;
-   358	}
-   359	
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+iEYEARECAAYFAmG3nCAACgkQMOfwapXb+vLX1gCgrC0HM+8dR4y2d53f4Jb1kWV+
+M/MAn1myLKbua9D1EzkkTV4Izo8VdVR9
+=ugbA
+-----END PGP SIGNATURE-----
+
+--vkogqOf2sHV7VnPd--

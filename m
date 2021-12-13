@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB814729C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0579C472438
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242981AbhLMKYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S234184AbhLMJfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244206AbhLMKQt (ORCPT
+        with ESMTP id S230467AbhLMJeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:16:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF7CC0497D2;
-        Mon, 13 Dec 2021 01:55:55 -0800 (PST)
+        Mon, 13 Dec 2021 04:34:16 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23335C061A32;
+        Mon, 13 Dec 2021 01:34:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2582CB80E0B;
-        Mon, 13 Dec 2021 09:55:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596A8C34601;
-        Mon, 13 Dec 2021 09:55:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 67395CE0E6F;
+        Mon, 13 Dec 2021 09:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16F13C00446;
+        Mon, 13 Dec 2021 09:34:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389352;
-        bh=OOwzEBWooO4Xt9iEdMKQSRN7FM/QMo2QlJz1spvHOXw=;
+        s=korg; t=1639388052;
+        bh=J9caZIMXJBItJ0Xbq/grVZlfI9TUBcncDxDPE+oWjz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nspWftQOe/tTVII1K2ZiV5EirzsvZDF76G8IfVJSpUOGbUVUcTenHYXZpQhA731VQ
-         TYipFpv4LX8sl889exnEufEtTio8ugX4swRTe5RfGM9QEO9Q+CnktFzJOS1kcW1pR9
-         MKZKfXS9hdGX/Dkbw8CnGhfMKFbiF8aNhodRS29g=
+        b=Uw0OmNld5aErGGIoPnHJnavzbhznmFTyUYzNABcd/mK+gvW4gaiKGvNepuOQelBR/
+         wP4WriteB9xXfWPHl/hlgJYWCEm02JhunIBy7tIbjHoGK2Xv+AbkExFCsRzWEIqYgR
+         T43jp2xdRfkiV/+QMcVI0/nMxg2jjeKEFGGrR7RM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Rajan Shanmugavelu <rajan.shanmugavelu@oracle.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 071/171] scsi: qla2xxx: Format log strings only if needed
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 4.9 04/42] HID: add USB_HID dependancy to hid-chicony
 Date:   Mon, 13 Dec 2021 10:29:46 +0100
-Message-Id: <20211213092947.462131104@linuxfoundation.org>
+Message-Id: <20211213092926.719053162@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
+References: <20211213092926.578829548@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,37 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Bolshakov <r.bolshakov@yadro.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 69002c8ce914ef0ae22a6ea14b43bb30b9a9a6a8 upstream.
+commit d080811f27936f712f619f847389f403ac873b8f upstream.
 
-Commit 598a90f2002c ("scsi: qla2xxx: add ring buffer for tracing debug
-logs") introduced unconditional log string formatting to ql_dbg() even if
-ql_dbg_log event is disabled. It harms performance because some strings are
-formatted in fastpath and/or interrupt context.
+The chicony HID driver only controls USB devices, yet did not have a
+dependancy on USB_HID.  This causes build errors on some configurations
+like sparc when building due to new changes to the chicony driver.
 
-Link: https://lore.kernel.org/r/20211112145446.51210-1-r.bolshakov@yadro.com
-Fixes: 598a90f2002c ("scsi: qla2xxx: add ring buffer for tracing debug logs")
-Cc: Rajan Shanmugavelu <rajan.shanmugavelu@oracle.com>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Cc: stable@vger.kernel.org
-Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20211203075927.2829218-1-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_dbg.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hid/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/qla2xxx/qla_dbg.c
-+++ b/drivers/scsi/qla2xxx/qla_dbg.c
-@@ -2491,6 +2491,9 @@ ql_dbg(uint level, scsi_qla_host_t *vha,
- 	struct va_format vaf;
- 	char pbuf[64];
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -176,7 +176,7 @@ config HID_CHERRY
  
-+	if (!ql_mask_match(level) && !trace_ql_dbg_log_enabled())
-+		return;
-+
- 	va_start(va, fmt);
- 
- 	vaf.fmt = fmt;
+ config HID_CHICONY
+ 	tristate "Chicony devices"
+-	depends on HID
++	depends on USB_HID
+ 	default !EXPERT
+ 	---help---
+ 	Support for Chicony Tactical pad and special keys on Chicony keyboards.
 
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DCA473261
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F71A473264
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241154AbhLMQzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S241149AbhLMQz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241162AbhLMQzO (ORCPT
+        with ESMTP id S241146AbhLMQzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:55:14 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941ABC061370
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:55:10 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id m24so11574064pls.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:55:10 -0800 (PST)
+        Mon, 13 Dec 2021 11:55:19 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C770C061751
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:55:19 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id k26so15433038pfp.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:55:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=W7N2ct9tvwpvEjrUOuEEAnTDqNZXNpAiEvvqkroYr+g=;
-        b=SnwztWJ7xFUMNmygGqNDmrBzzgZGySDQeoE1xnmgxX82WQ7cGv7qEjcHpETH9UWJ1F
-         J2FC5J9G0YG9CU35Rbz3cu5D1HrCOjlJ4TEzMkHQ3oyKGQP21Us2/tVQv9j6nKYS9wVJ
-         YcJ3Lu3Efe+H8lknLKN+TfpR/mr6P9+41dt/AGqDeCVhJzA8Ig0Y2/X/KPHa+7ITRwma
-         kufaiF1F7TU2u3rjSHzifr4Pukk/m5H8f2n7oPkOM2pIrKMCT7Kuu8haEUcA49VTKVPJ
-         FavrxqZYCVRPA73aR5CEIl6phoFDmyWs9wgxxb2ykMGMrTcAyLZVV5ct31V+YBfo4XY9
-         hcCQ==
+        bh=y++panFifneasGq960GJtHjLst8uLUglPFxOcyVBRks=;
+        b=OAELoUPn0e2UKy8uB4Ti8gblSsVQK9d5ZuUx6hxXNe2aY1+nJvPQBx4biB9bBPZ/1N
+         Znx8nGswBi+htCmHDpp9a2fArHekN2A34lmat1UQvgcd054EdoejPvEWisrtLN3h4zC4
+         pyx39jjWwZjeQ9VPcA5poM8QuShRcVYBsktRMgfnOEneByMg4YAaMDE/OPM4hcgUkxkk
+         P/6ZRxBdCO3BaShHZaxNg1c6nrM7aUit6zUy8c6Z9B3MToxohP8mWF/jqr8j0F4UgSHn
+         mAmBaQBdNAGqOQtc2YW0o49lxGoxSbWVtJt8vvalTfQEiQrPFZT8XNAtyMh9tYhUYCbb
+         nLsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=W7N2ct9tvwpvEjrUOuEEAnTDqNZXNpAiEvvqkroYr+g=;
-        b=FXq6Ir7lNs78I6N7VCkIJViAA8Mx0AYMG6OI8HsLw7vSziVyLU38y4wLXureA+A+pC
-         asKg6DkszPvhcWEM7BsfSeEP4DaRfAo6ce56JjNpBsqwSdHj2ZW0nCVIW/yOJSmpc1AP
-         tGEFMqE6nxTCNVAzFf+fEsB8v9csHvqcGO6vFyJ/4tFf2C4DmBc1BgSXJn0kQdThrg0X
-         /PqS5d3BJQgMbpyFpXjiO70b2hlAwuTYrizc+MVreFChNXkESZ8t5Pw+5mPVKsXn47eP
-         LnPKreCYU8Rs+QjsILcTB7O4zJ68xiXDcsQT9FdzYpc0PmImsP6r0oTB/9GmcfPa5UeI
-         Y2NQ==
-X-Gm-Message-State: AOAM533Fx/lR40RyZZuR1RuS1ttv3yC0CPgux7+eu7sahGZIT+Ci6mwH
-        uwh4JIQMyxNNwjxB4gssDgy2dg==
-X-Google-Smtp-Source: ABdhPJyK6k7ASjqubPuJfdueNVHM095Icvkv39vZOanUHVtpwQBFbn+UV+uWkzwr8JX4AxJlBQf78A==
-X-Received: by 2002:a17:90b:4a81:: with SMTP id lp1mr45531174pjb.204.1639414510110;
-        Mon, 13 Dec 2021 08:55:10 -0800 (PST)
+        bh=y++panFifneasGq960GJtHjLst8uLUglPFxOcyVBRks=;
+        b=iUGxZ1bWCphZu1vC+rR8LJu+sKC+jcqFLz1aL8mGQLB58E+KJ7HpuAgQHzHy3EzWji
+         irV3yut1O/7Z3wohzl8LEd+mGAu49yqB2S+hE0SHKlsGLMkF4r3LpmyrOb0O1xiWNALi
+         JcUVeR0iwQ+cEknxQhOlgXmAg9LcgsGOr68pHAGpTBIXe3xYjCzWlnwzuXpqIUma6BoZ
+         Nwe7GFcr7mCHCXm/E9kOrFJ+gC5wfoEhj90/k0yjpTHm37JDn6Lktht67dWBskK0PbvI
+         tNfETRuty/5e7sdWkZhofV/CaSQHu5+JO5p9/WYypOZwUAufe9qWWLjx4qvR2lr9Lxht
+         uivg==
+X-Gm-Message-State: AOAM531Nu3Vg6SOAnp+PdO8KY6Yk16EMqGmTyl8UmdD2HG9dgrja2Crh
+        xEuQG1GcSsQXs4Q5Dt4F5QnDxQ==
+X-Google-Smtp-Source: ABdhPJzXKwhC//GX3betZXEuq2b5HgiXhLkYxb4+lBxmqy5uPKQWgZeojFHIFGpOxgz84RfZYBU1qw==
+X-Received: by 2002:a62:7952:0:b0:4ac:9a13:5563 with SMTP id u79-20020a627952000000b004ac9a135563mr35004435pfc.17.1639414519090;
+        Mon, 13 Dec 2021 08:55:19 -0800 (PST)
 Received: from localhost.localdomain ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id n11sm10430992pgp.15.2021.12.13.08.55.01
+        by smtp.gmail.com with ESMTPSA id n11sm10430992pgp.15.2021.12.13.08.55.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Dec 2021 08:55:09 -0800 (PST)
+        Mon, 13 Dec 2021 08:55:18 -0800 (PST)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     willy@infradead.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
         mhocko@kernel.org, vdavydov.dev@gmail.com, shakeelb@google.com,
@@ -60,9 +60,9 @@ Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         zhengqi.arch@bytedance.com, duanxiongchun@bytedance.com,
         fam.zheng@bytedance.com, smuchun@gmail.com,
         Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v4 06/17] nfs42: use a specific kmem_cache to allocate nfs4_xattr_entry
-Date:   Tue, 14 Dec 2021 00:53:31 +0800
-Message-Id: <20211213165342.74704-7-songmuchun@bytedance.com>
+Subject: [PATCH v4 07/17] mm: dcache: use kmem_cache_alloc_lru() to allocate dentry
+Date:   Tue, 14 Dec 2021 00:53:32 +0800
+Message-Id: <20211213165342.74704-8-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.21.0 (Apple Git-122)
 In-Reply-To: <20211213165342.74704-1-songmuchun@bytedance.com>
 References: <20211213165342.74704-1-songmuchun@bytedance.com>
@@ -72,184 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we want to add the allocated objects to its list_lru, we should use
-kmem_cache_alloc_lru() to allocate objects. So intruduce
-nfs4_xattr_entry_cachep which is used to allocate nfs4_xattr_entry.
+Like inode cache, the dentry will also be added to its memcg list_lru.
+So replace kmem_cache_alloc() with kmem_cache_alloc_lru() to allocate
+dentry.
 
 Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 ---
- fs/nfs/nfs42xattr.c | 95 ++++++++++++++++++++++++++---------------------------
- 1 file changed, 47 insertions(+), 48 deletions(-)
+ fs/dcache.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
-index 1c4d2a05b401..5b7af9080db0 100644
---- a/fs/nfs/nfs42xattr.c
-+++ b/fs/nfs/nfs42xattr.c
-@@ -81,7 +81,7 @@ struct nfs4_xattr_entry {
- 	struct hlist_node hnode;
- 	struct list_head lru;
- 	struct list_head dispose;
--	char *xattr_name;
-+	const char *xattr_name;
- 	void *xattr_value;
- 	size_t xattr_size;
- 	struct nfs4_xattr_bucket *bucket;
-@@ -98,6 +98,7 @@ static struct list_lru nfs4_xattr_entry_lru;
- static struct list_lru nfs4_xattr_large_entry_lru;
+diff --git a/fs/dcache.c b/fs/dcache.c
+index cf871a81f4fd..36d4806d7284 100644
+--- a/fs/dcache.c
++++ b/fs/dcache.c
+@@ -1741,7 +1741,8 @@ static struct dentry *__d_alloc(struct super_block *sb, const struct qstr *name)
+ 	char *dname;
+ 	int err;
  
- static struct kmem_cache *nfs4_xattr_cache_cachep;
-+static struct kmem_cache *nfs4_xattr_entry_cachep;
- 
- /*
-  * Hashing helper functions.
-@@ -177,49 +178,27 @@ nfs4_xattr_alloc_entry(const char *name, const void *value,
- {
- 	struct nfs4_xattr_entry *entry;
- 	void *valp;
--	char *namep;
--	size_t alloclen, slen;
--	char *buf;
--	uint32_t flags;
-+	const char *namep;
-+	uint32_t flags = len > PAGE_SIZE ? NFS4_XATTR_ENTRY_EXTVAL : 0;
-+	gfp_t gfp = GFP_KERNEL_ACCOUNT | GFP_NOFS;
-+	struct list_lru *lru;
- 
- 	BUILD_BUG_ON(sizeof(struct nfs4_xattr_entry) +
- 	    XATTR_NAME_MAX + 1 > PAGE_SIZE);
- 
--	alloclen = sizeof(struct nfs4_xattr_entry);
--	if (name != NULL) {
--		slen = strlen(name) + 1;
--		alloclen += slen;
--	} else
--		slen = 0;
--
--	if (alloclen + len <= PAGE_SIZE) {
--		alloclen += len;
--		flags = 0;
--	} else {
--		flags = NFS4_XATTR_ENTRY_EXTVAL;
--	}
--
--	buf = kmalloc(alloclen, GFP_KERNEL_ACCOUNT | GFP_NOFS);
--	if (buf == NULL)
-+	lru = flags & NFS4_XATTR_ENTRY_EXTVAL ? &nfs4_xattr_large_entry_lru :
-+	      &nfs4_xattr_entry_lru;
-+	entry = kmem_cache_alloc_lru(nfs4_xattr_entry_cachep, lru, gfp);
-+	if (!entry)
+-	dentry = kmem_cache_alloc(dentry_cache, GFP_KERNEL);
++	dentry = kmem_cache_alloc_lru(dentry_cache, &sb->s_dentry_lru,
++				      GFP_KERNEL);
+ 	if (!dentry)
  		return NULL;
--	entry = (struct nfs4_xattr_entry *)buf;
--
--	if (name != NULL) {
--		namep = buf + sizeof(struct nfs4_xattr_entry);
--		memcpy(namep, name, slen);
--	} else {
--		namep = NULL;
--	}
--
--
--	if (flags & NFS4_XATTR_ENTRY_EXTVAL) {
--		valp = kvmalloc(len, GFP_KERNEL_ACCOUNT | GFP_NOFS);
--		if (valp == NULL) {
--			kfree(buf);
--			return NULL;
--		}
--	} else if (len != 0) {
--		valp = buf + sizeof(struct nfs4_xattr_entry) + slen;
-+	namep = kstrdup_const(name, gfp);
-+	if (!namep && name)
-+		goto free_buf;
-+
-+	if (len != 0) {
-+		valp = kvmalloc(len, gfp);
-+		if (!valp)
-+			goto free_name;
- 	} else
- 		valp = NULL;
  
-@@ -232,23 +211,23 @@ nfs4_xattr_alloc_entry(const char *name, const void *value,
- 
- 	entry->flags = flags;
- 	entry->xattr_value = valp;
--	kref_init(&entry->ref);
- 	entry->xattr_name = namep;
- 	entry->xattr_size = len;
--	entry->bucket = NULL;
--	INIT_LIST_HEAD(&entry->lru);
--	INIT_LIST_HEAD(&entry->dispose);
--	INIT_HLIST_NODE(&entry->hnode);
- 
- 	return entry;
-+free_name:
-+	kfree_const(namep);
-+free_buf:
-+	kmem_cache_free(nfs4_xattr_entry_cachep, entry);
-+	return NULL;
- }
- 
- static void
- nfs4_xattr_free_entry(struct nfs4_xattr_entry *entry)
- {
--	if (entry->flags & NFS4_XATTR_ENTRY_EXTVAL)
--		kvfree(entry->xattr_value);
--	kfree(entry);
-+	kvfree(entry->xattr_value);
-+	kfree_const(entry->xattr_name);
-+	kmem_cache_free(nfs4_xattr_entry_cachep, entry);
- }
- 
- static void
-@@ -289,7 +268,7 @@ nfs4_xattr_alloc_cache(void)
- {
- 	struct nfs4_xattr_cache *cache;
- 
--	cache = kmem_cache_alloc(nfs4_xattr_cache_cachep,
-+	cache = kmem_cache_alloc_lru(nfs4_xattr_cache_cachep, &nfs4_xattr_cache_lru,
- 	    GFP_KERNEL_ACCOUNT | GFP_NOFS);
- 	if (cache == NULL)
- 		return NULL;
-@@ -992,6 +971,17 @@ static void nfs4_xattr_cache_init_once(void *p)
- 	INIT_LIST_HEAD(&cache->dispose);
- }
- 
-+static void nfs4_xattr_entry_init_once(void *p)
-+{
-+	struct nfs4_xattr_entry *entry = p;
-+
-+	kref_init(&entry->ref);
-+	entry->bucket = NULL;
-+	INIT_LIST_HEAD(&entry->lru);
-+	INIT_LIST_HEAD(&entry->dispose);
-+	INIT_HLIST_NODE(&entry->hnode);
-+}
-+
- int __init nfs4_xattr_cache_init(void)
- {
- 	int ret = 0;
-@@ -1003,6 +993,13 @@ int __init nfs4_xattr_cache_init(void)
- 	if (nfs4_xattr_cache_cachep == NULL)
- 		return -ENOMEM;
- 
-+	nfs4_xattr_entry_cachep = kmem_cache_create("nfs4_xattr_entry",
-+			sizeof(struct nfs4_xattr_entry), 0,
-+			(SLAB_RECLAIM_ACCOUNT | SLAB_MEM_SPREAD | SLAB_ACCOUNT),
-+			nfs4_xattr_entry_init_once);
-+	if (!nfs4_xattr_entry_cachep)
-+		goto out5;
-+
- 	ret = list_lru_init_memcg(&nfs4_xattr_large_entry_lru,
- 	    &nfs4_xattr_large_entry_shrinker);
- 	if (ret)
-@@ -1040,6 +1037,8 @@ int __init nfs4_xattr_cache_init(void)
- out3:
- 	list_lru_destroy(&nfs4_xattr_large_entry_lru);
- out4:
-+	kmem_cache_destroy(nfs4_xattr_entry_cachep);
-+out5:
- 	kmem_cache_destroy(nfs4_xattr_cache_cachep);
- 
- 	return ret;
 -- 
 2.11.0
 

@@ -2,181 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCCE471F39
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 02:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884FF471F3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhLMB6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 20:58:50 -0500
-Received: from mga02.intel.com ([134.134.136.20]:49991 "EHLO mga02.intel.com"
+        id S231246AbhLMCDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 21:03:37 -0500
+Received: from mga14.intel.com ([192.55.52.115]:63708 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229436AbhLMB6t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 20:58:49 -0500
+        id S229436AbhLMCDg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 21:03:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639360729; x=1670896729;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=BPIBQRh24j1r5R+LEj2YcwdDa2KSusG9g9vBSZKllJg=;
-  b=Slklm94ZdjClKqLWfLsKM12FGciSCs1pBjyPwdnfaK/w2sbt0+PuwmGr
-   Tt+23HHyI4XZDJo4zex2xqAoPmK9I2oWTXz38KPftLaogPsWNZ7MA5P9N
-   0eQ3xRopLLJsGEJm5kvHwYV2RnQVVtzJKrbi2V28Ooy2iyWCwa2Eku/ZU
-   bN09UZuX4V5HRiBJXfbRNKSirFc2ShbNwDOHC8uxJmEXR2Ul/fFaQkA4h
-   Xv+Ic4+zV/CO+gEkncPTDuz0icqbbzVmXMd+FZ7cFBFeK90TjNf4XRh7N
-   jwtVvA93oU8YrD2/i3/mSB7cwq8yW/uSyDQsWmemyMttdQnyfLL7RqX58
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="225923254"
+  t=1639361016; x=1670897016;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TVoA1VIScZ/2Idf6o7SLH4w3ccsFnd5hkPg8FCUkcKU=;
+  b=Egy4ACjVAi7cyq0hpBMvNnI7jPyGYQGrnrwwTqbaxrj6u6nDLNRULArA
+   QPVNvMqXtRQUBhdJHLt2zTNsz14d65L2X4h8GGI2hDAHFeRvCTO5qcuX1
+   +6fHMhdhpceVGaMzVoFUhYOxKjtR6DI2YfGmLj5nRhFndBf9df8DDjMFU
+   duhIGukT62mox/HtkHlUzo/75JpnFYTLAG7g0eep0D5p9h52CTbHFIcwo
+   5aJubN5G+6P4qIGqhaX9PMVHidL1xO1uiJGf9Q7YWFAwi/u36gHX1rRng
+   ffNOSL4aoOmuFaI8V/Aiq406nczP7W4zUbeQPHAI46ezaQ+97Ln+nZ0TL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238870867"
 X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="225923254"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 17:58:48 -0800
+   d="scan'208";a="238870867"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 18:03:36 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
-   d="scan'208";a="681462946"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.159.50])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 17:58:46 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH -V2] numa balancing: move some document to make it
- consistent with the code
-References: <20211209004442.999696-1-ying.huang@intel.com>
-        <8735n1anw9.mognet@arm.com>
-Date:   Mon, 13 Dec 2021 09:58:44 +0800
-In-Reply-To: <8735n1anw9.mognet@arm.com> (Valentin Schneider's message of
-        "Thu, 9 Dec 2021 13:49:58 +0000")
-Message-ID: <87bl1lw9ij.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="463220430"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 12 Dec 2021 18:03:34 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwagf-00069z-JU; Mon, 13 Dec 2021 02:03:33 +0000
+Date:   Mon, 13 Dec 2021 10:03:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [jpirko-mlxsw:combined_queue 1009/1044]
+ drivers/net/ethernet/mscc/ocelot_fdma.c:737:38: error: no member named
+ 'dma_addr' in 'struct ocelot_fdma_tx_buf'
+Message-ID: <202112130911.uKvnwPy0-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Valentin Schneider <valentin.schneider@arm.com> writes:
+tree:   https://github.com/jpirko/linux_mlxsw combined_queue
+head:   69ba5a4da9c5d6bbf903d21503643ca69492e34c
+commit: 753a026cfec1429c9e32e004ae4d4c2727cc0111 [1009/1044] net: ocelot: add FDMA support
+config: i386-randconfig-r013-20211212 (https://download.01.org/0day-ci/archive/20211213/202112130911.uKvnwPy0-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/753a026cfec1429c9e32e004ae4d4c2727cc0111
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw combined_queue
+        git checkout 753a026cfec1429c9e32e004ae4d4c2727cc0111
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/display/dc/dce/ drivers/gpu/drm/amd/display/dc/dcn201/ drivers/gpu/drm/amd/display/dc/dcn21/ drivers/gpu/drm/amd/display/dc/dcn30/ drivers/net/ethernet/mscc/
 
-> On 09/12/21 08:44, Huang Ying wrote:
->> After commit 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to
->> debugfs"), some NUMA balancing sysctls enclosed with SCHED_DEBUG has
->> been moved to debugfs.  This patch move the document for these
->> sysctls from
->>
->>   Documentation/admin-guide/sysctl/kernel.rst
->>
->> to
->>
->>   Documentation/scheduler/debug.txt
->>
->
-> AFAIA new documentation files should be written in reST, and the "source"
-> file is .rst so the new one should be too (as much as Peter hates it).
->
-> Also, most files in there are named sched-*.rst, does that want to be
-> sched-debug.rst ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-OK.  Will do that.
+All errors (new ones prefixed by >>):
 
->> to make the document consistent with the code.
->>
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs")
->> Cc: Mel Gorman <mgorman@techsingularity.net>
->> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Valentin Schneider <valentin.schneider@arm.com>
->> Cc: stable@vger.kernel.org # since v5.13
->
->> diff --git a/Documentation/scheduler/debug.txt b/Documentation/scheduler/debug.txt
->> new file mode 100644
->> index 000000000000..848d83c3123c
->> --- /dev/null
->> +++ b/Documentation/scheduler/debug.txt
->> @@ -0,0 +1,48 @@
->> +Scheduler debugfs
->> +
->
-> How about a small intro?
->
-> ---
-> diff --git a/Documentation/scheduler/debug.txt b/Documentation/scheduler/debug.txt
-> index 848d83c3123c..08600de5b90e 100644
-> --- a/Documentation/scheduler/debug.txt
-> +++ b/Documentation/scheduler/debug.txt
-> @@ -1,4 +1,10 @@
-> +=================
->  Scheduler debugfs
-> +=================
-> +
-> +Booting a kernel with CONFIG_SCHED_DEBUG=y will give access to scheduler
-> +-specific debug files under /sys/kernel/debug/sched. Some of those files are
-> +described below.
->  
->  numa_balancing
->  --------------
-> ---
->
->> +numa_balancing
->> +--------------
->
-> I think you got the heading ordering wrong, see
->   Documentation/doc-guide/sphinx.rst#Specific guidelines for the kernel documentation
->
-> IIRC Sphinx/reST only requires heading ordering to be consistent within a
-> given file, but having consistency throughout the project simplifies
-> reviewing/contributing. In this case, headings with "=" must appear before
-> headings with "-".
+>> drivers/net/ethernet/mscc/ocelot_fdma.c:737:38: error: no member named 'dma_addr' in 'struct ocelot_fdma_tx_buf'
+                   dma_unmap_single(ocelot->dev, txb->dma_addr, skb->len,
+                                                 ~~~  ^
+   include/linux/dma-mapping.h:407:64: note: expanded from macro 'dma_unmap_single'
+   #define dma_unmap_single(d, a, s, r) dma_unmap_single_attrs(d, a, s, r, 0)
+                                                                  ^
+   1 error generated.
 
-Thanks for reminding.  Will change it in the next version.
 
-Best Regards,
-Huang, Ying
+vim +737 drivers/net/ethernet/mscc/ocelot_fdma.c
 
->> +
->> +`numa_balancing` directory is used to hold files to control NUMA
->> +balancing feature.  If the system overhead from the feature is too
->> +high then the rate the kernel samples for NUMA hinting faults may be
->> +controlled by the `scan_period_min_ms, scan_delay_ms,
->> +scan_period_max_ms, scan_size_mb` files.
->> +
->> +
->> +scan_period_min_ms, scan_delay_ms, scan_period_max_ms, scan_size_mb
->> +===================================================================
->> +
->> +Automatic NUMA balancing scans tasks address space and unmaps pages to
->> +detect if pages are properly placed or if the data should be migrated to a
->> +memory node local to where the task is running.  Every "scan delay" the task
->> +scans the next "scan size" number of pages in its address space. When the
->> +end of the address space is reached the scanner restarts from the beginning.
->> +
->> +In combination, the "scan delay" and "scan size" determine the scan rate.
->> +When "scan delay" decreases, the scan rate increases.  The scan delay and
->> +hence the scan rate of every task is adaptive and depends on historical
->> +behaviour. If pages are properly placed then the scan delay increases,
->> +otherwise the scan delay decreases.  The "scan size" is not adaptive but
->> +the higher the "scan size", the higher the scan rate.
->> +
->> +Higher scan rates incur higher system overhead as page faults must be
->> +trapped and potentially data must be migrated. However, the higher the scan
->> +rate, the more quickly a tasks memory is migrated to a local node if the
->> +workload pattern changes and minimises performance impact due to remote
->> +memory accesses. These files control the thresholds for scan delays and
->> +the number of pages scanned.
->> +
->> +``scan_period_min_ms`` is the minimum time in milliseconds to scan a
->> +tasks virtual memory. It effectively controls the maximum scanning
->> +rate for each task.
->> +
->> +``scan_delay_ms`` is the starting "scan delay" used for a task when it
->> +initially forks.
->> +
->> +``scan_period_max_ms`` is the maximum time in milliseconds to scan a
->> +tasks virtual memory. It effectively controls the minimum scanning
->> +rate for each task.
->> +
->> +``scan_size_mb`` is how many megabytes worth of pages are scanned for
->> +a given scan.
->> --
->> 2.30.2
+   722	
+   723	static void ocelot_fdma_free_tx_ring(struct ocelot *ocelot)
+   724	{
+   725		struct ocelot_fdma *fdma = ocelot->fdma;
+   726		struct ocelot_fdma_tx_ring *tx_ring;
+   727		struct ocelot_fdma_tx_buf *txb;
+   728		struct sk_buff *skb;
+   729		u16 idx;
+   730	
+   731		tx_ring = &fdma->tx_ring;
+   732		idx = tx_ring->next_to_clean;
+   733	
+   734		while (idx != tx_ring->next_to_use) {
+   735			txb = &tx_ring->bufs[idx];
+   736			skb = txb->skb;
+ > 737			dma_unmap_single(ocelot->dev, txb->dma_addr, skb->len,
+   738					 DMA_TO_DEVICE);
+   739			dev_kfree_skb_any(skb);
+   740			idx = ocelot_fdma_idx_next(idx, OCELOT_FDMA_TX_RING_SIZE);
+   741		}
+   742	}
+   743	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

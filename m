@@ -2,86 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBCE47204E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4791A472057
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbhLMFPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 00:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S231863AbhLMFSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 00:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbhLMFPN (ORCPT
+        with ESMTP id S230008AbhLMFSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 00:15:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE69FC06173F;
-        Sun, 12 Dec 2021 21:15:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 27051CE0DE5;
-        Mon, 13 Dec 2021 05:15:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74EBFC341C5;
-        Mon, 13 Dec 2021 05:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639372509;
-        bh=twArdFoN7hptxwDxuCRLPZ8D1bdEpmpF3bPhs8kTAGw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l5Fm5uAniw55hjSdbzftitrFAWWz32Vx3VgWE+btKlO63m2/tFA3/bv1QYeZIG+LW
-         vUJdax7Yw6F/Ajk03jA6N9MxJNQFQPNdccFHfKQ4s7/7I4jY8J0ztiEoz3lwDMSrMj
-         Au+niCjhEXCCZiWnPCwZ+FSb9gwqJGQ9s4QAZQG78Tdq3X5hjrvbvRvVE9t2b/uMjy
-         2j0lKrOYwiYfKHJYq9myUv2AWh/KF9zOY6r3L9C4J/YMy2cBf6e8SdfVI0w4eYZVFM
-         ZP39KPOOIDsA+jVKZbJqEWZD1EDrG6T2dKX4uRjCOz2n42IAMyNd4ZGry200oP740A
-         5/0yla012xpJQ==
-Date:   Mon, 13 Dec 2021 10:45:05 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        dmaengine@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V3 34/35] soc: ti: ti_sci_inta_msi: Get rid of
- ti_sci_inta_msi_get_virq()
-Message-ID: <YbbW2Ui22OeohXKE@matsya>
-References: <20211210221642.869015045@linutronix.de>
- <20211210221815.269468319@linutronix.de>
+        Mon, 13 Dec 2021 00:18:39 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24289C06173F;
+        Sun, 12 Dec 2021 21:18:39 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id i12so13920241pfd.6;
+        Sun, 12 Dec 2021 21:18:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j8MT3bkEsh0Hca3gg9PSN0tPxl+LVN6OdoR1We+Kb3E=;
+        b=PQevY60HDuUMpqbCUiS8t3/oUgsxrNVbrW4+tFCt4+85ZXpCb1SR7MVuGQsGB3lNuA
+         HBfBOd7Q8s/X5ERSKwFrIFOEV8KjHUsyBzswne3IOPGYuAif5criPP4IWV51T0YISJPy
+         DULLdz+m+QHjMFZJvQxKbFCZs1PPEG2yMRufc0XDc69JLyDnp1kjBQ6JnkaeQoIWDV6G
+         +ib9csT6odujXcVGWE7CeGE8wvWofPkA1uA00wzN3KtYts+7OmX046mXVbInroPNCV2y
+         yyvezn+r5wKOMPnNvfU1G3W8/Fnz2QCpAnK8jmEHwL4xDEMamXjQ3ZYqZY4WIEfY4wyP
+         JRtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=j8MT3bkEsh0Hca3gg9PSN0tPxl+LVN6OdoR1We+Kb3E=;
+        b=KInB+xyMte9vJU8qUa1+DaObRZyz1mXQTLs1R/dbEzxpmUFK80SrgOwRjYy/qGSCGg
+         vfovt4qJDDJUIL25uSs2qWRY0NNVvXy+V3teu6rv7qiRYVoEvRZY7POgHrvkip6ZxArS
+         m2CCVJGDd6VsEgu9sAXQUhvZK6vfNxtLS2AW2chzD8AC8jgghtoMCMB5rqPbnHErSbFq
+         LGRqXDdfPclrUqqZakVW+PzAbzpLllFO1+nxfNiONk8x5X4K/GbH5Ra+kWT0qauDCWJa
+         ucL6KJNsUOdrCTcgQEaRpMmcpxNGcHoscDkQ0SUsy9735EVeUwcym7Fo1eLC9rfOhf2Y
+         cJwg==
+X-Gm-Message-State: AOAM533yk8Nr7s39GAxUPpg9t2eitidIPkAWN3/Jr2jT8IxECL3f/ZmC
+        VgF4CS3fGFKT9rBxVDJNL9hgBbrTrbQ=
+X-Google-Smtp-Source: ABdhPJzdoqYNUOW2Ajwunxy/+OPhMyJySyHhdWbsKjUsdKNZspShXhE0ez4Im8fwy+lJtIy4qWcfPQ==
+X-Received: by 2002:a63:8f09:: with SMTP id n9mr35034018pgd.38.1639372718566;
+        Sun, 12 Dec 2021 21:18:38 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:e537:8856:7d40:7c6])
+        by smtp.gmail.com with ESMTPSA id f10sm5529250pjm.52.2021.12.12.21.18.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 21:18:37 -0800 (PST)
+Date:   Sun, 12 Dec 2021 21:18:34 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     linux-kernel@vger.kernel.org, "Andrew F . Davis" <afd@ti.com>,
+        Felipe Balbi <balbi@ti.com>, Rachna Patil <rachna@ti.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-input@vger.kernel.org,
+        Jeff Lance <j-lance1@ti.com>,
+        Zubair Lutfullah <zubair.lutfullah@gmail.com>,
+        Vignesh R <vigneshr@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Brad Griffis <bgriffis@ti.com>
+Subject: Re: [RESEND PATCH 0/3] input: touchscreen: am335x: fix and
+ improvements
+Message-ID: <YbbXqhSzeOwX3vUn@google.com>
+References: <20211212125358.14416-1-dariobin@libero.it>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210221815.269468319@linutronix.de>
+In-Reply-To: <20211212125358.14416-1-dariobin@libero.it>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-12-21, 23:19, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+On Sun, Dec 12, 2021 at 01:53:55PM +0100, Dario Binacchi wrote:
 > 
-> Just use the core function msi_get_virq().
+> This series grew out of a touchscreen validation activity on a custom
+> board. Oscilloscope measurements and driver source analysis led to these
+> patches.
+> 
+> 
+> Dario Binacchi (3):
+>   input: ti_am335x_tsc: set ADCREFM for X configuration
+>   input: ti_am335x_tsc: fix STEPCONFIG setup for Z2
+>   input: ti_am335x_tsc: lower the X and Y sampling time
+> 
+>  drivers/input/touchscreen/ti_am335x_tsc.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+Applied the lot, thank you.
 
 -- 
-~Vinod
+Dmitry

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A20147229D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EBA47229C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbhLMI1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S231715AbhLMI1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:27:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbhLMI1T (ORCPT
+        with ESMTP id S231733AbhLMI1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:27:19 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07754C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:18 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id g14so48570860edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:17 -0800 (PST)
+        Mon, 13 Dec 2021 03:27:21 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A374C0617A2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:19 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id z5so50075110edd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oedXg2lxmGvWLjE8gS+GIHwgIjgA4Ou1mgFQP0pqkc4=;
-        b=XjxPGaI3AvVgGOYiAgXRlnyAJXWzgvlbPKjDzJim5hV0mBDX+ZAS14uZZscf0UP2Uy
-         M1YBbgcg1lI8wgKZsZwbpQQvPpspIpMzJyD3s5usV47RgEkyONh8x3MWBmP2XZbHXep2
-         rgT79mjWW1IdmAgKx9c9aQy8swbcZj8rS6+LE2I+2Vj2m4GvOiRG63Z5dHJPVg47awEz
-         MbQy8WGQDinSk3CWltw6YwyQCYFJ226oterGrPPBfdlGTNK59VOOSPJj1hWmPBFfCM4J
-         8Ba4pX2gXHa0FVcMe23nG44PhgDcix93UCGeNR7DTe/Rq/tYjWMMi+teiAeKYGNz74Gy
-         RG8g==
+        bh=V+6dBa0dpNiAQwBua/Vm565hJ98yro3E+rDoSxhzfnY=;
+        b=lTwIXlkDnyymIXPmnEgC/IaaolT+Iv2oiXW9XoVoG0OH8QD9MF97aPfEUbilbu2/r7
+         u299Wl6c/1wfuJttjTyGyeFtKhbYRWOsulOptrG+d/OpVVvIUInvv9R+PP4P91Q2Z4WG
+         0oh256cbj9wwM/F4L3AGUgJFxJatW8eKIpVgLaybiV1pJOA3Y/0t1IkpiltdGUIe7wN1
+         xp0V8wDNpkIXNimCNoQY7VeJodR8GaXJgK8PbCyaNoZLqKf0N5UbTuE11CPLpXDWq79l
+         WWwBOk8oQSe+ndLg9BYeUrzcOGAC2Ndd2y20nBY0q1GxyU0Up/KfityPdbX5BpPfgeTQ
+         V59A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oedXg2lxmGvWLjE8gS+GIHwgIjgA4Ou1mgFQP0pqkc4=;
-        b=P3wZfE3QH+OCEMwVjrTBoxac+JXjmndCaBj1ptrGWkwl2QwHtCZvgX+ECtGN2DbIul
-         SU/nZp3eQBg3Lmy7WU36ZgkF5b1y/xQGZydpCW4RZgS+h4ohudHsv060018v7Fd4mZH9
-         pbOQqzEI5rWz7qCOcl9irvqDUwiid4xdog9xMdw9na+uaEKPaKVuqp5Ini426wPWhpAO
-         CgP4ppYUJNOygHltzaELOnrE7Dcb1E5AqTszgEJh2/GwRLoVZdFmF6UNaUUZ94NjJ2g4
-         D8vffVAOJKLRuZKvn8/ud5SaTfNrcSNvuaemidAioZAO60oaVOUkb/F4hnMH3cS5lZzF
-         0X2A==
-X-Gm-Message-State: AOAM530pWsq1ZHxv9WUlDlQVhx2PNdqZk9e2xwZmGBWbmr6YT35X6DTM
-        E0QG0ZqpmCCjfIhDcKIhZoX74g==
-X-Google-Smtp-Source: ABdhPJyDFbDfxyri6g9cB3e6COym7Bqg0NSm5p0P65g+Yj35yXc+G1fpioiZga2hphDfON6gcI2hKw==
-X-Received: by 2002:a17:906:eda3:: with SMTP id sa3mr43271332ejb.51.1639384036677;
-        Mon, 13 Dec 2021 00:27:16 -0800 (PST)
+        bh=V+6dBa0dpNiAQwBua/Vm565hJ98yro3E+rDoSxhzfnY=;
+        b=ogry1IibfWOaVvmNzw/InncDDc8n+agA14aNfDKykmIHw38U7tTcllcyhlt5i4cOqY
+         cW6IvCbOTdbrxc6Lpz50ouTURyM2gJmpO8DU209t9iv0osqEJrl4uqg2BENMj/lhDVrH
+         M7Mu9+kvEhhn/zd8udttpgTtzpEEBSPz1U3xno6wEMXe1ICy6E0H7RzL4rguXveXT4Vx
+         Fgt8pG3qgXRcsjuumxPgYuYOi1vbldDNERhXXnc4nIJzal5ik/fcrqUazDpM610s2kJt
+         FfTzOL/l7ZkpS9AN1ypXuFrOdTLa1O5TJ5uulELM8W42iKixL7bv+XtD8FcIX4QKSBBV
+         qZlA==
+X-Gm-Message-State: AOAM532YkZIBvwp8ouceRYE/NrnIimMBOGCK7wbrDhBY3kWt8kf9yQaz
+        KTVXoDNAneY357bqMgbe2I3K6A==
+X-Google-Smtp-Source: ABdhPJwVXB+mq+ZXbgybllyImpIV7Dlkqt4dop/0/+ZeKlyxBj1li9xcYHbotGeBCDYeBklsH6KgXQ==
+X-Received: by 2002:a17:907:608b:: with SMTP id ht11mr41425453ejc.479.1639384037784;
+        Mon, 13 Dec 2021 00:27:17 -0800 (PST)
 Received: from localhost.localdomain ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
-        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.15
+        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 00:27:16 -0800 (PST)
+        Mon, 13 Dec 2021 00:27:17 -0800 (PST)
 From:   Luca Weiss <luca.weiss@fairphone.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -55,14 +55,15 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 06/10] dt-bindings: usb: qcom,dwc3: Add SM6350 compatible
-Date:   Mon, 13 Dec 2021 09:26:07 +0100
-Message-Id: <20211213082614.22651-7-luca.weiss@fairphone.com>
+Subject: [PATCH 07/10] dt-bindings: watchdog: Add SM6350 and SM8250 compatible
+Date:   Mon, 13 Dec 2021 09:26:08 +0100
+Message-Id: <20211213082614.22651-8-luca.weiss@fairphone.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213082614.22651-1-luca.weiss@fairphone.com>
 References: <20211213082614.22651-1-luca.weiss@fairphone.com>
@@ -72,26 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree compatible for dwc3 on SM6350 SoC.
+Add devicetree compatible for the watchdog on SM6350 and SM8250 SoC.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 2bdaba023c01..fb79ea518696 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -23,6 +23,7 @@ properties:
-           - qcom,sdx55-dwc3
-           - qcom,sm4250-dwc3
-           - qcom,sm6115-dwc3
-+          - qcom,sm6350-dwc3
-           - qcom,sm8150-dwc3
-           - qcom,sm8250-dwc3
-           - qcom,sm8350-dwc3
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index ba60bdf1fecc..16c6f82a13ca 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -20,7 +20,9 @@ properties:
+       - qcom,apss-wdt-sc7280
+       - qcom,apss-wdt-sdm845
+       - qcom,apss-wdt-sdx55
++      - qcom,apss-wdt-sm6350
+       - qcom,apss-wdt-sm8150
++      - qcom,apss-wdt-sm8250
+       - qcom,kpss-timer
+       - qcom,kpss-wdt
+       - qcom,kpss-wdt-apq8064
 -- 
 2.34.1
 

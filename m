@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E57147370E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD4F473710
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243403AbhLMVzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:55:49 -0500
-Received: from out0.migadu.com ([94.23.1.103]:20455 "EHLO out0.migadu.com"
+        id S243412AbhLMVzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:55:53 -0500
+Received: from out0.migadu.com ([94.23.1.103]:20485 "EHLO out0.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243393AbhLMVzs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:55:48 -0500
+        id S243401AbhLMVzu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 16:55:50 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639432547;
+        t=1639432549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XC1+Aytkcqzf1ileaTyJqJ/4yyuLy4mtp9hx3Zvq9co=;
-        b=obiHIW5B/YO92XbWE91Y4CoZ7h6HL1VpqB75Us0IuTuXzXKiqarcIGgNZxGlS6JoVfxNmh
-        lkbEdhNL1ABQTolxHJR/1ZUsd0m3fsGvUu4+NufcIw0pf0wt3o2xJrGnJZsgaQNmmveEJi
-        4LQ4TYV5/tIgTRMdG8VeOujrcX+Z2LM=
+        bh=iZXIY+Rf2d0lHK12UJvskCxlA4nRW5M9PkBwAVYILek=;
+        b=KjO/G7hNqA0iWGqJdeaO8XdQXa6pflP+0biNjvd7HCEiZnbl78zKnf6b2JzuhAU+Wj6D7A
+        nSWj5ilhSdzFPJmyFyYX6TiFvAZm7XqK6imrxZ4+2ywwpnTS2eGyAGqSPvKgzP9DN6rJ+d
+        dY9qXc0ihY9+CBm3DY4/GlqdNNv1LO0=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -39,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 35/38] kasan: allow enabling KASAN_VMALLOC and SW/HW_TAGS
-Date:   Mon, 13 Dec 2021 22:55:37 +0100
-Message-Id: <90635a81c52723268a9c9ebc683243dd88e4a4eb.1639432170.git.andreyknvl@google.com>
+Subject: [PATCH mm v3 36/38] arm64: select KASAN_VMALLOC for SW/HW_TAGS modes
+Date:   Mon, 13 Dec 2021 22:55:38 +0100
+Message-Id: <2a3e235be2015882c6e90e6810f4974a31e7ad42.1639432170.git.andreyknvl@google.com>
 In-Reply-To: <cover.1639432170.git.andreyknvl@google.com>
 References: <cover.1639432170.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,52 +54,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Allow enabling CONFIG_KASAN_VMALLOC with SW_TAGS and HW_TAGS KASAN
-modes.
+Generic KASAN already selects KASAN_VMALLOC to allow VMAP_STACK to be
+selected unconditionally, see commit acc3042d62cb9 ("arm64: Kconfig:
+select KASAN_VMALLOC if KANSAN_GENERIC is enabled").
 
-Also adjust CONFIG_KASAN_VMALLOC description:
+The same change is needed for SW_TAGS KASAN.
 
-- Mention HW_TAGS support.
-- Remove unneeded internal details: they have no place in Kconfig
-  description and are already explained in the documentation.
+HW_TAGS KASAN does not require enabling KASAN_VMALLOC for VMAP_STACK,
+they already work together as is. Still, selecting KASAN_VMALLOC still
+makes sense to make vmalloc() always protected. In case any bugs in
+KASAN's vmalloc() support are discovered, the command line kasan.vmalloc
+flag can be used to disable vmalloc() checking.
+
+Select KASAN_VMALLOC for all KASAN modes for arm64.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- lib/Kconfig.kasan | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index 879757b6dd14..1f3e620188a2 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -178,17 +178,17 @@ config KASAN_TAGS_IDENTIFY
- 	  memory consumption.
- 
- config KASAN_VMALLOC
--	bool "Back mappings in vmalloc space with real shadow memory"
--	depends on KASAN_GENERIC && HAVE_ARCH_KASAN_VMALLOC
-+	bool "Check accesses to vmalloc allocations"
-+	depends on HAVE_ARCH_KASAN_VMALLOC
- 	help
--	  By default, the shadow region for vmalloc space is the read-only
--	  zero page. This means that KASAN cannot detect errors involving
--	  vmalloc space.
--
--	  Enabling this option will hook in to vmap/vmalloc and back those
--	  mappings with real shadow memory allocated on demand. This allows
--	  for KASAN to detect more sorts of errors (and to support vmapped
--	  stacks), but at the cost of higher memory usage.
-+	  This mode makes KASAN check accesses to vmalloc allocations for
-+	  validity.
-+
-+	  With software KASAN modes, checking is done for all types of vmalloc
-+	  allocations. Enabling this option leads to higher memory usage.
-+
-+	  With hardware tag-based KASAN, only VM_ALLOC mappings are checked.
-+	  There is no additional memory usage.
- 
- config KASAN_KUNIT_TEST
- 	tristate "KUnit-compatible tests of KASAN bug detection capabilities" if !KUNIT_ALL_TESTS
+---
+
+Changes v2->v3:
+- Update patch description.
+
+Changes v1->v2:
+- Split out this patch.
+---
+ arch/arm64/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index e30b72208efc..29bda8b65b0b 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -203,7 +203,7 @@ config ARM64
+ 	select IOMMU_DMA if IOMMU_SUPPORT
+ 	select IRQ_DOMAIN
+ 	select IRQ_FORCED_THREADING
+-	select KASAN_VMALLOC if KASAN_GENERIC
++	select KASAN_VMALLOC if KASAN
+ 	select MODULES_USE_ELF_RELA
+ 	select NEED_DMA_MAP_STATE
+ 	select NEED_SG_DMA_LENGTH
 -- 
 2.25.1
 

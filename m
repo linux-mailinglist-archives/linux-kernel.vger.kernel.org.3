@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8579547244D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1A84723FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234249AbhLMJfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:35:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59092 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234258AbhLMJej (ORCPT
+        id S233905AbhLMJdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232227AbhLMJdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:39 -0500
+        Mon, 13 Dec 2021 04:33:04 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DC2C061751;
+        Mon, 13 Dec 2021 01:33:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B3E74CE0E79;
-        Mon, 13 Dec 2021 09:34:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BD7C00446;
-        Mon, 13 Dec 2021 09:34:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6D703CE0B59;
+        Mon, 13 Dec 2021 09:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196C9C00446;
+        Mon, 13 Dec 2021 09:32:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388075;
-        bh=vXPFzQLaBF29hV6jLFqudBEPSt3FP/nRi/7VK6MyRw0=;
+        s=korg; t=1639387980;
+        bh=JxgL68QbAyS6KU64jN5Q5vYV6e4DY9Yv8bGTPKM6VtA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BM5ppPvjnQI496K2+2QPqz2Vgshgg4fJ/Sa8a2l/QAMw+QeJqEJIqUaoMTRMpyhBY
-         XbqbcRmWDAhES7BGIE19Lx8w+fWLYpVCpI4SW9xwAzdzp7haDL2XFB/9exLvcLL6oD
-         uWvRpJbIai+d2Z5Dk5JTLunWHBHY3ZppNMfHOI+k=
+        b=NaWvNCK9P+rnjJl386lVn8ZHjIYQsJBEWC/37J1sWf38D1nNkUlxszNuweS92cYVI
+         0/ditNCgf2Mv53VevTRmTzETZ4LcwjSe4tR6tZrZm/Q/54Sai23sFUnWNL8lXUOX8k
+         14/Arz99516ojzTnl3i96p2XJP5KNKZWVpjPiqTs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org, Linus Torvalds" 
-        <torvalds@linux-foundation.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.9 21/42] signalfd: use wake_up_pollfree()
+        stable@vger.kernel.org, Russell King <rmk+kernel@arm.linux.org.uk>,
+        Nicolas Diaz <nicolas.diaz@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.4 25/37] net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
 Date:   Mon, 13 Dec 2021 10:30:03 +0100
-Message-Id: <20211213092927.267170805@linuxfoundation.org>
+Message-Id: <20211213092926.198346538@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,47 +50,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-commit 9537bae0da1f8d1e2361ab6d0479e8af7824e160 upstream.
+commit b5bd95d17102b6719e3531d627875b9690371383 upstream.
 
-wake_up_poll() uses nr_exclusive=1, so it's not guaranteed to wake up
-all exclusive waiters.  Yet, POLLFREE *must* wake up all waiters.  epoll
-and aio poll are fortunately not affected by this, but it's very
-fragile.  Thus, the new function wake_up_pollfree() has been introduced.
+Background:
+We have a customer is running a Profinet stack on the 8MM which receives and
+responds PNIO packets every 4ms and PNIO-CM packets every 40ms. However, from
+time to time the received PNIO-CM package is "stock" and is only handled when
+receiving a new PNIO-CM or DCERPC-Ping packet (tcpdump shows the PNIO-CM and
+the DCERPC-Ping packet at the same time but the PNIO-CM HW timestamp is from
+the expected 40 ms and not the 2s delay of the DCERPC-Ping).
 
-Convert signalfd to use wake_up_pollfree().
+After debugging, we noticed PNIO, PNIO-CM and DCERPC-Ping packets would
+be handled by different RX queues.
 
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Fixes: d80e731ecab4 ("epoll: introduce POLLFREE to flush ->signalfd_wqh before kfree()")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211209010455.42744-4-ebiggers@kernel.org
-Signed-off-by: Eric Biggers <ebiggers@google.com>
+The root cause should be driver ack all queues' interrupt when handle a
+specific queue in fec_enet_rx_queue(). The blamed patch is introduced to
+receive as much packets as possible once to avoid interrupt flooding.
+But it's unreasonable to clear other queues'interrupt when handling one
+queue, this patch tries to fix it.
+
+Fixes: ed63f1dcd578 (net: fec: clear receive interrupts before processing a packet)
+Cc: Russell King <rmk+kernel@arm.linux.org.uk>
+Reported-by: Nicolas Diaz <nicolas.diaz@nxp.com>
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+Link: https://lore.kernel.org/r/20211206135457.15946-1-qiangqing.zhang@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/signalfd.c |   12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ drivers/net/ethernet/freescale/fec.h      |    3 +++
+ drivers/net/ethernet/freescale/fec_main.c |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/fs/signalfd.c
-+++ b/fs/signalfd.c
-@@ -34,17 +34,7 @@
+--- a/drivers/net/ethernet/freescale/fec.h
++++ b/drivers/net/ethernet/freescale/fec.h
+@@ -360,6 +360,9 @@ struct bufdesc_ex {
+ #define FEC_ENET_WAKEUP	((uint)0x00020000)	/* Wakeup request */
+ #define FEC_ENET_TXF	(FEC_ENET_TXF_0 | FEC_ENET_TXF_1 | FEC_ENET_TXF_2)
+ #define FEC_ENET_RXF	(FEC_ENET_RXF_0 | FEC_ENET_RXF_1 | FEC_ENET_RXF_2)
++#define FEC_ENET_RXF_GET(X)	(((X) == 0) ? FEC_ENET_RXF_0 :	\
++				(((X) == 1) ? FEC_ENET_RXF_1 :	\
++				FEC_ENET_RXF_2))
+ #define FEC_ENET_TS_AVAIL       ((uint)0x00010000)
+ #define FEC_ENET_TS_TIMER       ((uint)0x00008000)
  
- void signalfd_cleanup(struct sighand_struct *sighand)
- {
--	wait_queue_head_t *wqh = &sighand->signalfd_wqh;
--	/*
--	 * The lockless check can race with remove_wait_queue() in progress,
--	 * but in this case its caller should run under rcu_read_lock() and
--	 * sighand_cachep is SLAB_DESTROY_BY_RCU, we can safely return.
--	 */
--	if (likely(!waitqueue_active(wqh)))
--		return;
--
--	/* wait_queue_t->func(POLLFREE) should do remove_wait_queue() */
--	wake_up_poll(wqh, POLLHUP | POLLFREE);
-+	wake_up_pollfree(&sighand->signalfd_wqh);
- }
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -1407,7 +1407,7 @@ fec_enet_rx_queue(struct net_device *nde
+ 		if ((status & BD_ENET_RX_LAST) == 0)
+ 			netdev_err(ndev, "rcv is not +last\n");
  
- struct signalfd_ctx {
+-		writel(FEC_ENET_RXF, fep->hwp + FEC_IEVENT);
++		writel(FEC_ENET_RXF_GET(queue_id), fep->hwp + FEC_IEVENT);
+ 
+ 		/* Check for errors. */
+ 		if (status & (BD_ENET_RX_LG | BD_ENET_RX_SH | BD_ENET_RX_NO |
 
 

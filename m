@@ -2,1009 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD754737A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7D54737AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240747AbhLMWgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241318AbhLMWgD (ORCPT
+        id S243616AbhLMWhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:37:33 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:35550 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237073AbhLMWhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:36:03 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8C1C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:36:02 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id b187so20760226iof.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:36:02 -0800 (PST)
+        Mon, 13 Dec 2021 17:37:31 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BDL6oFf021570;
+        Mon, 13 Dec 2021 22:36:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=0AYou5OgtH1XR67KRsP0ZUi3aHIdZqjatMNI4vLEycU=;
+ b=lS//FBR+YTLOIamjsix42RXzOcLXW++wZCRaCqP7IXT4Hd2vgVx8JQq2lfQrzcN6IlGH
+ A7n+TPOJzHkYt44WKamIkKogvJnfRrw1Bcy8sFOwTkRPiQDAycG4ofJyQyMbcvo/HGUj
+ +rBZwdDNiM9BobhNhuh5/lh/GQeLlYsk6yJ410aYkO3gLpRld0x6MvOZS9qbnCPPWXLY
+ 93KMnOm5YX31fefZXBccjOZQXPzD9/6q4hYnJ3O1bt6IrlT1OCtKDWQoyWgWl1ZarG6k
+ es6nIRLyFgSTu1eco54ZTVZAvQ2/3IPsQKZpGRl8Qx5XpVkC++Oa/JqogFaczkp87a8F dQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cx3uka4v2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Dec 2021 22:36:51 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BDMURtI049821;
+        Mon, 13 Dec 2021 22:36:50 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
+        by aserp3020.oracle.com with ESMTP id 3cvkt3mu9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Dec 2021 22:36:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NclVSF4vJe6fZHHrS6MNMM6HPV1hI9W39hHXjsJGjaf6uNP7XYdwbh8nU5rQr9s39DoppAdWrRuz4xIfu/TE2Q7NwfKCsG9l7QbCOhEEJpvm4pt8a1fqrf1gibKzXSgqZMBmLTqWB5DshGNNooeLVxPHqv9KohF52+xPAZNgUu02YzSqeBw1PwiQ+Mw4sbDo5UmngATgPAyqQWVegbLOj4B9n1ZgfOro0d+EFBSBpNb9wgtelkDDnB35fVT9gXZyg+wWGOiTJCxbbRe3fFNaowSjq83WEB+x3aDeHpCZcCGpyTBcQBJJwKVI5iXP2NpBGBYGbY206l5RSHD3VzDcBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0AYou5OgtH1XR67KRsP0ZUi3aHIdZqjatMNI4vLEycU=;
+ b=UjgouGyshm9hbqKAWBYsspvk4k40MO418UNobEeyKWSMag2xyf5Y9dpaOYaVz8YgjiJuhA9ZkCFOV8MZqwzyYIw6/0sHIhDzsjFxZjm2tMAdWa+xZnEbzldVivTT738lj/xoK7XXmnwt4dHR4gOAHbOcxr6reVhwm0DYXIheDgh/htrWPnRgAjlpCVsIdz4iL3tXTDyulsiuSt4el8ZSXQsbQwO1cqXk23AzSnGSC25M58If1NUyOVvvSUO2NJ4YYdYh2x1FOlzV8SStW53SnhDFkwUlHClJq6Y7emvnmX2C1IIiaMZT/k1hJa4ueyby6ETCoW4jhNVTVL+aL0S3Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2ngjjXz3TIHZZZ2iCrnx9unUg418Quz3uzOKb4Lu/tY=;
-        b=NgG9ONsFZSSx58FwI+b/y7fweiBh3tM0fPIPNxk0O87HzIioPuwgEHrjZIctpTKziy
-         H1c9z7sYq5+hxqjUZQEjMU4+Y0wX6Zrs4O4HFF7yFMPvWjQyw9EETAviNtZQ+8LPcfpD
-         rY7oImyxgp07jAiD2pw072QJUzHj2lIJyk4ME=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2ngjjXz3TIHZZZ2iCrnx9unUg418Quz3uzOKb4Lu/tY=;
-        b=bRjSfkJKODti50RKoGLymxJVShyycocx8ICs8ve9QHYZy7aLPTXld8ZMiXSK7ltuNq
-         2wcyvS6Ia1efk26AEqancxtWdrArfq8Y21JnuB3ATjVcB8cD5AaU19QbTG2uWvsc5XTw
-         M45kg6LaqxEjO3A+67ZOlEfqflSGhDF1Cb4uMXz84dc52vhMv+DA3DDDaqAlz+qJ6Ae0
-         PsK9X0NvNNIKG+yBRLaMEs7pAwNEVtzP03wlUCUm7AMZnkWy2o0hVjtzw8BYh9baniN5
-         hNSOGIJF43V02qp75dvVafDbzBj++YHcEqph+miN+zD8sy+tmQQGo4R8iGB31/SBqcnP
-         71ZA==
-X-Gm-Message-State: AOAM532kanZZt91m7SiDlAunCZ4/Ajqs6CA8Fz5NtViK2X/P7zQsGdaT
-        QUBqUgJx0iyYVO3ATAYPU8kMMw==
-X-Google-Smtp-Source: ABdhPJzA8rk3JgQshmwQo0FVJPD/zVBkl8waPtQLiHzi2r9XThqdbgYosLxOE4625fjLT6jqZ5vPLA==
-X-Received: by 2002:a05:6638:1395:: with SMTP id w21mr640771jad.125.1639434961976;
-        Mon, 13 Dec 2021 14:36:01 -0800 (PST)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id y6sm1877656ilu.71.2021.12.13.14.36.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 14:36:01 -0800 (PST)
-Message-ID: <cd1e6d81-7848-673e-bc73-bc52b176cddf@ieee.org>
-Date:   Mon, 13 Dec 2021 16:36:00 -0600
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0AYou5OgtH1XR67KRsP0ZUi3aHIdZqjatMNI4vLEycU=;
+ b=fwAqSE33blFHk6WnMqAc9UUZS0E52a3EtOcBU0jS9HDF1anwuJmSl+sJE2H7DizFBfvImxOWE9w8UrmLo1HzpivNSL8wMzyKipA53fG+NeyzME671zHKAJ63UcJMvcE4IuHGTL4OVoB+85UT8jLuCzDAOhmAnaz9nfFC/1E6HqI=
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com (2603:10b6:805:44::15)
+ by SN4PR10MB5622.namprd10.prod.outlook.com (2603:10b6:806:209::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11; Mon, 13 Dec
+ 2021 22:36:48 +0000
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412]) by SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412%5]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 22:36:48 +0000
+Date:   Mon, 13 Dec 2021 16:36:42 -0600
+From:   Venu Busireddy <venu.busireddy@oracle.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 02/40] x86/sev: detect/setup SEV/SME features earlier
+ in boot
+Message-ID: <YbfK+tQ40+z9BUo+@dt>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-3-brijesh.singh@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210154332.11526-3-brijesh.singh@amd.com>
+X-ClientProxiedBy: SN4PR0501CA0037.namprd05.prod.outlook.com
+ (2603:10b6:803:41::14) To SN6PR10MB2576.namprd10.prod.outlook.com
+ (2603:10b6:805:44::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH V6 2/7] soc: qcom: dcc:Add driver support for Data Capture
- and Compare unit(DCC)
-Content-Language: en-US
-To:     Souradeep Chowdhury <schowdhu@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>, vkoul@kernel.org
-References: <cover.1628617260.git.schowdhu@codeaurora.org>
- <fc69469f26983d373d5ad7dc2dc83df207967eda.1628617260.git.schowdhu@codeaurora.org>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <fc69469f26983d373d5ad7dc2dc83df207967eda.1628617260.git.schowdhu@codeaurora.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 89c99c1c-5368-4419-9a72-08d9be890c94
+X-MS-TrafficTypeDiagnostic: SN4PR10MB5622:EE_
+X-Microsoft-Antispam-PRVS: <SN4PR10MB5622407D6F515E1FB87F37B6E6749@SN4PR10MB5622.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dQY+trGQoTMzLCwkWHvCWP6GV0kfZieiqQvJop/sDfFRvYujZddK1Ad5NQ4QaWOND3ofsztalRaJNjg4OCHDMdG1V02rQbLx9JJQNrvTAPniXf7vdgD/poMEqLH/0zR8QLpkQj6QMTfgA3V1cZpWhJbcqwmVOpj1WJ/8YPWp83DPMj24oH2aEc8TGMVMVS6XTzm32gkoUL7PXQ1+S2SYBHOY4AgAaE48a2eDdCBEEhFhzHixjtXBNu3UQBh4yykAoLHClOHYWm0/MD31XzWQJwxdYMl9LhqSK5jNAjbjxnceAKIoUpvb1PNsGy9URuMRdPvLP8INuh0FwvFcT4iL1YvDrvAwJaxHEH9Smm8WrOQkVFX3ZYlWCpnIlXYQg9wjtjSoT1ADkBzsAw3R3zZp2KPwiBMX4/hfoengNZBE6z2RO30pN9Tzpb4uxVm6sfYjQ6ohz54M9bG2sYiZOYMaJeW3lSLvoY8YcS2qY7TJk0Whx3+1+gGK6XUDUelyeFKLsyub5dD/VHyLJAYe2mW1Sw1gU50vtvHP6mqGMmUmRO4rHdkCsIku8NfQSvRpZToHYn1xhUrwxzUmTi8whdm/Ex3XggaR1hkCcSRbycvnTxzL0J1M/x3xD2x6mAF2qtpwTu2pj8beVE53D+AWrRWN9Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(9686003)(53546011)(66476007)(6506007)(186003)(26005)(5660300002)(6916009)(44832011)(6666004)(2906002)(508600001)(316002)(66556008)(6512007)(54906003)(83380400001)(33716001)(66946007)(38100700002)(8676002)(7416002)(86362001)(7406005)(6486002)(4326008)(8936002)(4001150100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?K9jtdfCdA0obP1P6eDBTA9kZTdcdQBmsjCyUqzPUSV8UUJYf0kI9h/Ij297q?=
+ =?us-ascii?Q?hLs1k1E3Rtef5WuSK0WivAHh5mf2b4jfT0tkwc6O1oWKHOwJylvYDjZwnolP?=
+ =?us-ascii?Q?S/jxqKyApKnyz6ovR6V8Ucq133jzlcOVk41iIQM3f5lYBm3HS2E8S1HG0wi0?=
+ =?us-ascii?Q?mAZppz0yB9VUtHIulZUMBBpuoYcRVJUMpHcYZPvsRwodAgfZvPCXexshmr/u?=
+ =?us-ascii?Q?lYeRgFTgFM+2J+r1vsmdM6lMEeY2DHAPm52NPktf3d2YiyLY1b8nFtcYG8tT?=
+ =?us-ascii?Q?ELrh9Zbul6tEJzXGP8RinVghcJH/EGWSBY+e2e+sN4ee4ddzGxDceIzoyGVV?=
+ =?us-ascii?Q?JbNIQFtnvgj+966aAX+STjA0iJbBqxOX6P+hawLzK89QFdbEdoW6rw9mMacO?=
+ =?us-ascii?Q?6B2hwx6Cfv7D9jBg3L9o1MBiu90m06N700nK/u2p/zCvooe10IwWXKSWzfJ1?=
+ =?us-ascii?Q?RRSSUHJevOLbOMRfmD10LqbIwbnVpnLQOjAz66PX5HZC9qkdz3IYOq9zFcRV?=
+ =?us-ascii?Q?TpajVl4Pbw9c2qgyWbzSGIIhKkp0m3Mdzh8NiheNsmypYibq+Kv+XxYq746d?=
+ =?us-ascii?Q?RfJezHWjtr0F1zXMrVxPJtuxCCS0AIeam0grBmynvuwOkTTDyLMbY/Vv2+Y/?=
+ =?us-ascii?Q?nrlL01wZYHgJw6BrlOk7wY1diXUoWLeFOFnF1CkgCg2i6lQb3D96NyIPToDn?=
+ =?us-ascii?Q?HV1gR6YvTPehe6QfJqaUdKjvvkEyEMqdz3Ka9nbI3T7t6+Lg3YdvW/OTRhzC?=
+ =?us-ascii?Q?HQqEHU7oVqrKnIFrrZTLALGOn0FMeTqhJMawZW41DTHQbaOhXwdGIbkKUnNd?=
+ =?us-ascii?Q?2txKwWPsutyE3kExMKZQ6jO0ifsFuH2j3EGkVc4B6UraA9ZmyiuBwrv/8Qzx?=
+ =?us-ascii?Q?EmXFcwcC0V/xtJha2i4ufXg16xyZcBOuReCLNBLpddUdTlqfkrcQXZcdHhK0?=
+ =?us-ascii?Q?w3ak8uynpX4C48A1K8d6QGS9PZeY/fwRtGKiOlqe1x5z3/9zHMTSH0z2o5L3?=
+ =?us-ascii?Q?8ptrsUGjUTRVX7VqhqcjYHPY3hLOPIOD8eWxmqEOrUetf/bLcKDHjCwWAtni?=
+ =?us-ascii?Q?91iCtVmXRioocM10AgWS06MP4UWgXsMlmW+baCmvmPnmmvpr0xWdVr4Bfem9?=
+ =?us-ascii?Q?eaK5wdHIE7JVaznfQbAy9zlJ9AXNf9qL9SZUP95WP1nN8yqytFhO9arQA2pn?=
+ =?us-ascii?Q?0koxl35hFb9mmQ5s0FBgfpBjDUVz8OW4JwpTAULDytC6KCrD4u0ikdzw+qHK?=
+ =?us-ascii?Q?I9HBXTWU4Mng24uEoLwwAA0pNsyN8fsZz6RJ8eePUp/UTfFZTXMxXx8JeGsm?=
+ =?us-ascii?Q?E+nRgpIW2BFdIQWS1pIWe+McvvgdM63dTiC4A54iKfyBiZQFNrVrCPNuifp5?=
+ =?us-ascii?Q?WmWXFDb/bLLJC973RiS1ebRXdCC/nkKrYoU+3MOLu+YcKyTXyCb2MK2E9QZM?=
+ =?us-ascii?Q?WEOjzVxnl8+N0VKILwydzOXoNP2t3muzu6ZViiQCljgMedrIUlgQ1n3Mjoh9?=
+ =?us-ascii?Q?RJ3xkljRwU2v57kzLFgF5YO5hqA05Jf3+FfUP9nsDTurcTkbAwS3Oe1vlelh?=
+ =?us-ascii?Q?hRjdieIDJL+lQ70S8/DSbmuEmZR1SB84xMIENywuKIXdfTST6KJCUZWypM1x?=
+ =?us-ascii?Q?6SSfxC+xW8i047F4v3F0a+V8YgEm0YLVd/Wf3nWylWAFfUEM0O8gxrRTmoUW?=
+ =?us-ascii?Q?sltYmw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89c99c1c-5368-4419-9a72-08d9be890c94
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2576.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 22:36:48.2757
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xgsCMryQFDwzWKWLUYB+JPTNmA5WLUsXB+nUEHL0uUtRqeytqacgdkY8psdM5/v7SlEBaKl53MhyZ4JUulmokcIK0/a3vyuusx+JXmLm3uw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5622
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10197 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 malwarescore=0 bulkscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112130131
+X-Proofpoint-GUID: 1JTb1RxnfrutvmFwJK4cAjkkbwymTSC8
+X-Proofpoint-ORIG-GUID: 1JTb1RxnfrutvmFwJK4cAjkkbwymTSC8
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/21 12:54 PM, Souradeep Chowdhury wrote:
-> The DCC is a DMA Engine designed to capture and store data
-> during system crash or software triggers.The DCC operates
-> based on user inputs via the sysfs interface.The user gives
-> addresses as inputs and these addresses are stored in the
-> form of linkedlists.In case of a system crash or a manual
-> software trigger by the user through the sysfs interface,
-> the dcc captures and stores the values at these addresses.
-> This patch contains the driver which has all the methods
-> pertaining to the sysfs interface, auxiliary functions to
-> support all the four fundamental operations of dcc namely
-> read, write, first read then write and loop.The probe method
-> here instantiates all the resources necessary for dcc to
-> operate mainly the dedicated dcc sram where it stores the
-> values.The DCC driver can be used for debugging purposes
-> without going for a reboot since it can perform manual
-> triggers.
-
-I don't understand what you're trying to say with the last
-sentence above.
-
-> Also added the documentation for sysfs entries
-> and explained the functionalities of each sysfs file that
-> has been created for dcc.
-
-Could these files all land in debugfs, at least initially?
-I guess if you get it right it's fine in sysfs, but unlike
-sysfs, debugfs is not considered a stable user space API.
-
-> The following is the justification of using sysfs interface
-> over the other alternatives like ioctls
+On 2021-12-10 09:42:54 -0600, Brijesh Singh wrote:
+> From: Michael Roth <michael.roth@amd.com>
 > 
-> i) As can be seen from the sysfs attribute descriptions,
-> most of it does basic hardware manipulations like dcc_enable,
-> dcc_disable, config reset etc. As a result sysfs is preferred
-> over ioctl as we just need to enter a 0 or 1.
+> sme_enable() handles feature detection for both SEV and SME. Future
+> patches will also use it for SEV-SNP feature detection/setup, which
+> will need to be done immediately after the first #VC handler is set up.
+> Move it now in preparation.
 > 
-> ii) Existing similar debug hardwares are there for which drivers
-> have been written using sysfs interface.One such example is the
-> coresight-etm-trace driver.A closer analog can also be the watchdog
-> subsystems though it is ioctls based.
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 
-Even if it eventually becomes a sysfs interface, it might
-be better to initially land it in debugfs.  (Maybe others
-disagree.)
+Reviewed-by: Venu Busireddy <venu.busireddy@oracle.com>
 
-Generally, it looks to me like this always reads memory in
-32-bit units.  I might have missed it, but if that is not
-documented it should be.  Also, is it OK to provide an
-address that is not aligned on a 32-bit boundary?  I
-presume memory is interpreted as CPU endian; does that
-produce the most meaningful results if the offset isn't
-aligned?
-
-More comments, below.
-
-					-Alex
-
-> Signed-off-by: Souradeep Chowdhury <schowdhu@codeaurora.org>
 > ---
->   Documentation/ABI/testing/sysfs-driver-dcc |  114 ++
->   drivers/soc/qcom/Kconfig                   |    8 +
->   drivers/soc/qcom/Makefile                  |    1 +
->   drivers/soc/qcom/dcc.c                     | 1549 ++++++++++++++++++++++++++++
->   4 files changed, 1672 insertions(+)
->   create mode 100644 Documentation/ABI/testing/sysfs-driver-dcc
->   create mode 100644 drivers/soc/qcom/dcc.c
+>  arch/x86/kernel/head64.c  |  3 ---
+>  arch/x86/kernel/head_64.S | 13 +++++++++++++
+>  2 files changed, 13 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-dcc b/Documentation/ABI/testing/sysfs-driver-dcc
-> new file mode 100644
-> index 0000000..05d24f0
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-dcc
-
-Throughout this file, add a space or two after each period.
-
-> @@ -0,0 +1,114 @@
-> +What:           /sys/bus/platform/devices/.../trigger
-> +Date:           March 2021
-
-Probably update these dates when the code is close to
-getting accepted.
-
-> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +Description:
-> +		This is the sysfs interface for manual software
-
-Try to reword each of the descriptions so they don't
-talk about "this sysfs interface."  Each one of these
-*is* describing a sysfs interface file, so that can be
-omitted from the description.  For example:
-
-     This file is used to perform a manual trigger
-     operation, causing all lists of memory operations
-     to be executed.
-
-Or something along those lines.
-
-> +		triggers.The user can simply enter a 1 against
-> +		the sysfs file and enable a manual trigger.
-> +		Example:
-> +		echo  1 > /sys/bus/platform/devices/.../trigger
-> +
-> +What:           /sys/bus/platform/devices/.../enable
-> +Date:           March 2021
-> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +Description:
-> +		This sysfs interface is used for enabling the
-> +		the dcc hardware.Without this being set to 1,
-> +		the dcc hardware ceases to function.
-
-This could/should use a standard Boolean interface.  That is,
-parse the input in your code using kstrtobool() on the buffer
-passed to your store function.
-
-
-> +		Example:
-> +		echo  0 > /sys/bus/platform/devices/.../enable
-> +		(disable interface)
-> +		echo  1 > /sys/bus/platform/devices/.../enable
-> +		(enable interface)
-> +
-> +What:           /sys/bus/platform/devices/.../config
-> +Date:           March 2021
-> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +Description:
-> +		This is the most commonly used sysfs interface
-> +		file and this basically stores the addresses of
-
-It doesn't matter if this is the "most commonly used" file.
-Just describe what it does.
-
-If I understand it right, you write a memory offset and
-an (optional) number of consecutive memory addresses to
-be read.
-
-> +		the registers which needs to be read in case of
-> +		a hardware crash or manual software triggers.
-> +		Example:
-> +		echo  0x80000010 10 > /sys/bus/platform/devices/../config
-> +		This specifies that 10 words starting from address
-> +		0x80000010 is to be read.In case there are no words to be
-> +		specified we can simply enter the address.
-
-I don't know what "in case there are no words to be specified"
-means.  Does that just mean memory at exactly one offset is
-read is implied if a count is not specified?
-
-> +
-> +What:           /sys/bus/platform/devices/.../config_write
-> +Date:           March 2021
-> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +Description:
-> +		This file allows user to write a value to the register
-> +		address given as argument.The values are entered in the
-> +		form of <register_address> <value>.The reason for this
-> +		feature of dcc is that for accessing certain registers
-> +		it is necessary to set some bits of soe other register.
-> +		That is achievable by giving DCC this privelege.
-> +		Example:
-> +		echo 0x80000000 0xFF > /sys/bus/platform/devices/.../config_write
-> +
-> +What:           /sys/bus/platform/devices/.../config_reset
-> +Date:           March 2021
-> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +Description:
-> +		This file is used to reset the configuration of
-> +		a dcc driver to the default configuration.
-
-What does it mean to "reset the driver to the default"?
-Does that mean all lists of operations supplied previously
-are forgotten, and the lists become empty and disabled?
-
-> +		Example:
-> +		echo  1 > /sys/bus/platform/devices/.../config_reset
-> +
-> +What:           /sys/bus/platform/devices/.../loop
-> +Date:		March 2021
-> +Contact:        Souradeep Chowdhury <schowdhu@codeaurora.org>
-> +Description:
-
-Can looping be done for a write or read/modify/write operation,
-or is it only used for reads?
-
-Now skipping ahead to the code.
-
-> +		This file is used to enter the loop count as dcc
-> +		driver gives the option to loop multiple times on
-> +		the same register and store the values for each
-
-. . .
-
-> diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
-> new file mode 100644
-> index 0000000..daf4388
-> --- /dev/null
-> +++ b/drivers/soc/qcom/dcc.c
-> @@ -0,0 +1,1549 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bitops.h>
-> +#include <linux/cdev.h>
-> +#include <linux/delay.h>
-> +#include <linux/fs.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/uaccess.h>
-> +
-> +#define TIMEOUT_US		5000
-
-This timeout is only used when polling the STATUS register to
-determine when the DCC hardware is "ready".  Maybe the name
-could reflect that (STATUS_READY_TIMEOUT?).
-
-I think the next two might be better implemented as functions.
-It would allow the compiler to do some additional type checking.
-
-> +#define dcc_writel(drvdata, val, off)					\
-> +	writel((val), drvdata->base + dcc_offset_conv(drvdata, off))
-> +#define dcc_readl(drvdata, off)						\
-> +	readl(drvdata->base + dcc_offset_conv(drvdata, off))
-> +
-> +#define DCC_SRAM_NODE "dcc_sram"
-> +
-> +/* DCC registers */
-> +#define DCC_HW_INFO			0x04
-> +#define DCC_LL_NUM_INFO			0x10
-> +#define DCC_STATUS			0x1C
-> +#define DCC_LL_LOCK(m)			(0x34 + 0x80 * m)
-> +#define DCC_LL_CFG(m)			(0x38 + 0x80 * m)
-> +#define DCC_LL_BASE(m)			(0x3c + 0x80 * m)
-> +#define DCC_FD_BASE(m)			(0x40 + 0x80 * m)
-> +#define DCC_LL_TIMEOUT(m)		(0x44 + 0x80 * m)
-> +#define DCC_LL_INT_ENABLE(m)		(0x4C + 0x80 * m)
-> +#define DCC_LL_INT_STATUS(m)		(0x50 + 0x80 * m)
-> +#define DCC_LL_SW_TRIGGER(m)		(0x60 + 0x80 * m)
-> +#define DCC_LL_BUS_ACCESS_STATUS(m)	(0x64 + 0x80 * m)
-
-The MAP_LEVEL and MAP_OFFSET definitions below, together
-with the function dcc_offset_conv(), are a clever way to
-have the above set of offsets "work" by mapping them to
-(at least) three distinct "actual" addresses.  That is:
-
-     if (map_ver == 1)
-
-         if (0 <= offset < MAP_LEVEL_1)
-
-             actual_offset = offset
-
-         else if (MAP_LEVEL_1 <= offset < MAP_LEVEL_2)
-
-             actual_offset = offset - MAP_OFFSET_1
-
-         else if (MAP_LEVEL_2 <= offset < MAP_LEVEL_3)
-
-             actual_offset = offset - MAP_OFFSET_2
-
-         else
-
-             actual_offset = offset - MAP_OFFSET_3
-
-     else
-  if (map_ver == 2)
-         if (0 <= offset < MAP_LEVEL_1)
-
-             actual_offset = offset
-
-         else
-
-             actual_offset = offset - MAP_OFFSET_4
-
-     else
-             actual_offset = offset
-
-This is a bit messy, but other ways of doing it aren't
-likely to be any cleaner.  Regardless, this whole mapping
-process should be explained in comments.
-
-> +#define DCC_MAP_LEVEL1			0x18
-> +#define DCC_MAP_LEVEL2			0x34
-> +#define DCC_MAP_LEVEL3			0x4C
-> +
-> +#define DCC_MAP_OFFSET1			0x10
-> +#define DCC_MAP_OFFSET2			0x18
-> +#define DCC_MAP_OFFSET3			0x1C
-> +#define DCC_MAP_OFFSET4			0x8
-> +
-> +#define DCC_FIX_LOOP_OFFSET		16
-> +#define DCC_VER_INFO_BIT		9
-> +
-> +#define DCC_READ			0
-> +#define DCC_WRITE			1
-> +#define DCC_LOOP			2
-> +#define DCC_READ_WRITE			3
-> +
-> +#define MAX_DCC_OFFSET			GENMASK(9, 2)
-> +#define MAX_DCC_LEN			GENMASK(6, 0)
-> +#define MAX_LOOP_CNT			GENMASK(7, 0)
-> +
-> +#define DCC_ADDR_DESCRIPTOR		0x00
-> +#define DCC_ADDR_LIMIT			27
-> +#define DCC_ADDR_OFF_RANGE		8
-> +#define DCC_ADDR_RANGE			GENMASK(31, 4)
-> +#define DCC_LOOP_DESCRIPTOR		BIT(30)
-> +#define DCC_RD_MOD_WR_DESCRIPTOR	BIT(31)
-> +#define DCC_LINK_DESCRIPTOR		GENMASK(31, 30)
-> +
-> +#define DCC_READ_IND			0x00
-> +#define DCC_WRITE_IND			(BIT(28))
-> +
-> +#define DCC_AHB_IND			0x00
-> +#define DCC_APB_IND			BIT(29)
-> +
-> +#define DCC_MAX_LINK_LIST		8
-> +#define DCC_INVALID_LINK_LIST		GENMASK(7, 0)
-> +
-> +#define DCC_VER_MASK1			GENMASK(6, 0)
-> +#define DCC_VER_MASK2			GENMASK(5, 0)
-> +
-> +#define DCC_RD_MOD_WR_ADDR              0xC105E
-> +
-> +struct qcom_dcc_config {
-
-No need for "qcom_" in the type name here.
-
-> +	int dcc_ram_offset;
-> +};
-> +
-> +enum dcc_descriptor_type {
-> +	DCC_ADDR_TYPE,
-> +	DCC_LOOP_TYPE,
-> +	DCC_READ_WRITE_TYPE,
-> +	DCC_WRITE_TYPE
-> +};
-> +
-> +enum dcc_mem_map_ver {
-> +	DCC_MEM_MAP_VER1 = 1,
-> +	DCC_MEM_MAP_VER2 = 2,
-> +	DCC_MEM_MAP_VER3 = 3
-
-This enumerated type doesn't really add any value.  Just use 1, 2, and 3
-for your version numbers in the few places this is used in code.  If it
-gets more complicated than this one-to-one mapping in the future, add
-a type like this.
-
-> +};
-> +
-> +struct dcc_config_entry {
-
-. . .
-
-> +static bool dcc_ready(struct dcc_drvdata *drvdata)
-> +{
-> +	u32 val;
-> +
-> +	return !readl_poll_timeout((drvdata->base + dcc_offset_conv(drvdata, DCC_STATUS)),
-
-Use dcc_readl(drvdata, offset) here.
-
-> +				val, (FIELD_GET(GENMASK(1, 0), val) == 0), 1, TIMEOUT_US);
-
-Use !FIELD_GET(...) here.
-
-Is the 1 microsecond delay required?
-
-> +
-> +}
-> +
-> +static int dcc_read_status(struct dcc_drvdata *drvdata)
-> +{
-> +	int curr_list;
-> +	u32 bus_status;
-> +	u32 ll_cfg;
-> +	u32 tmp_ll_cfg;
-> +
-> +	for (curr_list = 0; curr_list < drvdata->nr_link_list; curr_list++) {
-> +		if (!drvdata->enable[curr_list])
-> +			continue;
-> +
-> +		bus_status = dcc_readl(drvdata, DCC_LL_BUS_ACCESS_STATUS(curr_list));
-> +
-> +		if (bus_status) {
-> +			dev_err(drvdata->dev,
-> +				"Read access error for list %d err: 0x%x.\n",
-> +				curr_list, bus_status);
-> +
-> +			ll_cfg = dcc_readl(drvdata, DCC_LL_CFG(curr_list));
-> +			tmp_ll_cfg = ll_cfg & ~BIT(9);
-> +			dcc_writel(drvdata, tmp_ll_cfg, DCC_LL_CFG(curr_list));
-> +			dcc_writel(drvdata, 0x3,
-> +				DCC_LL_BUS_ACCESS_STATUS(curr_list));
-
-What does writing 1 to the bottom two bits of the STATUS
-register do?  Can you represent that with a mask, which
-defines the register field?
-
-> +			dcc_writel(drvdata, ll_cfg, DCC_LL_CFG(curr_list));
-> +			return -ENODATA;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int dcc_sw_trigger(struct dcc_drvdata *drvdata)
-> +{
-> +	int ret;
-> +	int curr_list;
-> +	u32 ll_cfg;
-> +	u32 tmp_ll_cfg;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	for (curr_list = 0; curr_list < drvdata->nr_link_list; curr_list++) {
-> +		if (!drvdata->enable[curr_list])
-> +			continue;
-> +		ll_cfg = dcc_readl(drvdata, DCC_LL_CFG(curr_list));
-> +		tmp_ll_cfg = ll_cfg & ~BIT(9);
-
-What does bit 9 of this register represent?  Why is it turned
-off here?
-
-> +		dcc_writel(drvdata, tmp_ll_cfg, DCC_LL_CFG(curr_list));
-> +		dcc_writel(drvdata, 1, DCC_LL_SW_TRIGGER(curr_list));
-> +		dcc_writel(drvdata, ll_cfg, DCC_LL_CFG(curr_list));
-
-Does this assume that bit 9 of the register was originally set?
-
-> +	}
-> +
-> +	if (!dcc_ready(drvdata)) {
-> +		dev_err(drvdata->dev,
-> +			"DCC is busy after receiving sw tigger.\n");
-> +		ret = -EBUSY;
-> +		goto err;
-> +	}
-> +
-> +	ret = dcc_read_status(drvdata);
-> +
-> +err:
-> +	mutex_unlock(&drvdata->mutex);
-> +	return ret;
-> +}
-> +
-
-. . .
-
-> +static int __dcc_ll_cfg(struct dcc_drvdata *drvdata, int curr_list)
-> +{
-> +	int ret = 0;
-> +	u32 total_len, pos;
-> +	struct dcc_config_entry *entry;
-> +	struct dcc_cfg_attr cfg;
-> +	struct dcc_cfg_loop_attr cfg_loop;
-> +
-> +	memset(&cfg, 0, sizeof(cfg));
-> +	memset(&cfg_loop, 0, sizeof(cfg_loop));
-> +	cfg.sram_offset = drvdata->ram_cfg * 4;
-> +	total_len = 0;
-> +
-> +	list_for_each_entry(entry, &drvdata->cfg_head[curr_list], list) {
-> +		switch (entry->desc_type) {
-> +		case DCC_READ_WRITE_TYPE:
-> +			ret = _dcc_ll_cfg_read_write(drvdata, entry, &cfg);
-> +			if (ret)
-> +				goto overstep;
-> +			break;
-> +
-> +		case DCC_LOOP_TYPE:
-> +			ret = _dcc_ll_cfg_loop(drvdata, entry, &cfg, &cfg_loop, &total_len);
-> +			if (ret)
-> +				goto overstep;
-> +			break;
-> +
-> +		case DCC_WRITE_TYPE:
-> +			ret = _dcc_ll_cfg_write(drvdata, entry, &cfg, &total_len);
-> +			if (ret)
-> +				goto overstep;
-> +			break;
-> +
-> +		default:
-
-Use this instead of "default":
-		case DCC_ADDR_TYPE:
-
-> +			ret = _dcc_ll_cfg_default(drvdata, entry, &cfg, &pos, &total_len);
-> +			if (ret)
-> +				goto overstep;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (cfg.link) {
-> +		ret = dcc_sram_writel(drvdata, cfg.link, cfg.sram_offset);
-> +		if (ret)
-> +			goto overstep;
-> +		cfg.sram_offset += 4;
-> +	}
-
-. . .
-
-> +static ssize_t enable_show(struct device *dev,
-> +	struct device_attribute *attr, char *buf)
-> +{
-> +	int ret;
-> +	bool dcc_enable = false;
-> +	struct dcc_drvdata *drvdata = dev_get_drvdata(dev);
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +	if (drvdata->curr_list >= drvdata->nr_link_list) {
-> +		dev_err(dev, "Select link list to program using curr_list\n");
-
-Can this actually happen?  Isn't curr_list initially 0?
-And can't you constrain the store function for curr_list
-so it never exceeds nr_link_list?
-
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +
-> +	dcc_enable = is_dcc_enabled(drvdata);
-> +
-> +	ret = scnprintf(buf, PAGE_SIZE, "%u\n",
-> +				(unsigned int)dcc_enable > +err:
-> +	mutex_unlock(&drvdata->mutex);
-> +	return ret;
-> +}
-> +
-> +static ssize_t enable_store(struct device *dev,
-> +				struct device_attribute *attr,
-> +				const char *buf, size_t size)
-> +{
-> +	int ret = 0;
-> +	unsigned long val;
-> +	struct dcc_drvdata *drvdata = dev_get_drvdata(dev);
-> +
-> +	if (kstrtoul(buf, 16, &val))
-> +		return -EINVAL;
-
-I recommend using kstrtobool() here.
-
-> +
-> +	if (val)
-> +		ret = dcc_enable(drvdata);
-> +	else
-> +		dcc_disable(drvdata);
-> +
-> +	if (!ret)
-> +		ret = size;
-> +
-> +	return ret;
-> +
-> +}
-
-. . .
-
-> +static ssize_t config_write_store(struct device *dev,
-> +						struct device_attribute *attr,
-> +						const char *buf, size_t size)
-> +{
-> +	int ret;
-> +	int nval;
-> +	unsigned int addr, write_val;
-> +	int apb_bus = 0;
-> +	struct dcc_drvdata *drvdata = dev_get_drvdata(dev);
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	nval = sscanf(buf, "%x %x %d", &addr, &write_val, &apb_bus);
-
-You didn't document in the sysfs documentation the optional
-third argument here, which specify APB rather than AHB bus.
-
-> +	if (nval <= 1 || nval > 3) {
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +
-> +	if (drvdata->curr_list >= drvdata->nr_link_list) {
-> +		dev_err(dev, "Select link list to program using curr_list\n");
-
-Here again (and everywhere else), avoid this possible error
-condition by guaranteeing it will never be assigned a value
-that's larger than nr_link_list.
-
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +
-> +	if (nval == 3 && apb_bus != 0)
-> +		apb_bus = 1;
-> +
-> +	ret = dcc_add_write(drvdata, addr, write_val, apb_bus);
-> +	if (ret)
-> +		goto err;
-> +
-> +	mutex_unlock(&drvdata->mutex);
-> +	return size;
-> +err:
-> +	mutex_unlock(&drvdata->mutex);
-> +	return ret;
-> +}
-> +
-> +static DEVICE_ATTR_WO(config_write);
-> +
-> +static const struct device_attribute *dcc_attrs[] = {
-> +	&dev_attr_trigger,
-> +	&dev_attr_enable,
-> +	&dev_attr_config,
-> +	&dev_attr_config_reset,
-> +	&dev_attr_ready,
-> +	&dev_attr_interrupt_disable,
-> +	&dev_attr_loop,
-> +	&dev_attr_rd_mod_wr,
-> +	&dev_attr_curr_list,
-> +	&dev_attr_config_write,
-> +	NULL,
-> +};
-> +
-> +static int dcc_create_files(struct device *dev,
-> +					const struct device_attribute **attrs)
-> +{
-> +	int ret = 0, i;
-
-Cant these be initialized automatically as an attribute group
-or something?  Maybe I'm getting confused.
-
-> +	for (i = 0; attrs[i] != NULL; i++) {
-> +		ret = device_create_file(dev, attrs[i]);
-> +		if (ret) {
-> +			dev_err(dev, "DCC: Couldn't create sysfs attribute: %s\n",
-> +				attrs[i]->attr.name);
-> +			break;
-> +		}
-> +	}
-> +	return ret;
-> +}
-> +
-> +static int dcc_sram_open(struct inode *inode, struct file *file)
-> +{
-> +	struct dcc_drvdata *drvdata = container_of(inode->i_cdev,
-> +		struct dcc_drvdata,
-> +		sram_dev);
-> +	file->private_data = drvdata;
-> +
-> +	return	0;
-> +}
-> +
-> +static ssize_t dcc_sram_read(struct file *file, char __user *data,
-> +						size_t len, loff_t *ppos)
-> +{
-> +	unsigned char *buf;
-> +	struct dcc_drvdata *drvdata = file->private_data;
-> +
-> +	/* EOF check */
-> +	if (drvdata->ram_size <= *ppos)
-> +		return 0;
-> +
-> +	if ((*ppos + len) > drvdata->ram_size)
-> +		len = (drvdata->ram_size - *ppos);
-> +
-> +	buf = kzalloc(len, GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	memcpy_fromio(buf, drvdata->ram_base + *ppos, len);
-> +
-> +	if (copy_to_user(data, buf, len)) {
-> +		dev_err(drvdata->dev, "DCC: Couldn't copy all data to user\n");
-
-Don't allow user input (i.e., providing a bad buffer pointer
-in this case) lead to spamming the log.  The EFAULT error is
-enough to explain what the problem is.  In generaly, I don't
-think you should call dev_err() in these sysfs functions.
-
-> +		kfree(buf);
-> +		return -EFAULT;
-> +	}
-> +
-> +	*ppos += len;
-> +
-> +	kfree(buf);
-> +
-> +	return len;
-> +}
-> +
-> +static const struct file_operations dcc_sram_fops = {
-> +	.owner		= THIS_MODULE,
-> +	.open		= dcc_sram_open,
-> +	.read		= dcc_sram_read,
-> +	.llseek		= no_llseek,
-> +};
-
-
-Since dcc_sram_dev_init() does nothing but call this function,
-why not just incorporate one into the other?  Same thing goes
-for dcc_sram_dev_exit() and dcc_sram_dev_deregister().
-
-> +static int dcc_sram_dev_register(struct dcc_drvdata *drvdata)
-> +{
-> +	int ret;
-> +	struct device *device;
-> +	dev_t dev;
-> +
-> +	ret = alloc_chrdev_region(&dev, 0, 1, DCC_SRAM_NODE);
-> +	if (ret)
-> +		goto err_alloc;
-> +
-> +	cdev_init(&drvdata->sram_dev, &dcc_sram_fops);
-> +
-> +	drvdata->sram_dev.owner = THIS_MODULE;
-> +	ret = cdev_add(&drvdata->sram_dev, dev, 1);
-> +	if (ret)
-> +		goto err_cdev_add;
-> +
-> +	drvdata->sram_class = class_create(THIS_MODULE, DCC_SRAM_NODE);
-> +	if (IS_ERR(drvdata->sram_class)) {
-> +		ret = PTR_ERR(drvdata->sram_class);
-> +		goto err_class_create;
-> +	}
-> +
-> +	device = device_create(drvdata->sram_class, NULL,
-> +						drvdata->sram_dev.dev, drvdata,
-> +						DCC_SRAM_NODE);
-> +	if (IS_ERR(device)) {
-> +		ret = PTR_ERR(device);
-> +		goto err_dev_create;
-> +	}
-> +
-> +	return 0;
-> +err_dev_create:
-> +	class_destroy(drvdata->sram_class);
-> +err_class_create:
-> +	cdev_del(&drvdata->sram_dev);
-> +err_cdev_add:
-> +	unregister_chrdev_region(drvdata->sram_dev.dev, 1);
-> +err_alloc:
-> +	return ret;
-> +}
-> +
-> +static void dcc_sram_dev_deregister(struct dcc_drvdata *drvdata)
-> +{
-> +	device_destroy(drvdata->sram_class, drvdata->sram_dev.dev);
-> +	class_destroy(drvdata->sram_class);
-> +	cdev_del(&drvdata->sram_dev);
-> +	unregister_chrdev_region(drvdata->sram_dev.dev, 1);
-> +}
-> +
-> +static int dcc_sram_dev_init(struct dcc_drvdata *drvdata)
-> +{
-> +	int ret = 0;
-> +
-> +	ret = dcc_sram_dev_register(drvdata);
-> +	if (ret)
-> +		dev_err(drvdata->dev, "DCC: sram node not registered.\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static void dcc_sram_dev_exit(struct dcc_drvdata *drvdata)
-> +{
-> +	dcc_sram_dev_deregister(drvdata);
-> +}
-> +
-> +static int dcc_probe(struct platform_device *pdev)
-> +{
-> +	u32 val;
-> +	int ret = 0, i, enable_size, nr_config_size, cfg_head_size;
-> +	struct device *dev = &pdev->dev;
-> +	struct dcc_drvdata *dcc;
-> +	struct resource *res;
-> +	const struct qcom_dcc_config *cfg;
-> +
-> +	dcc = devm_kzalloc(dev, sizeof(*dcc), GFP_KERNEL);
-> +	if (!dcc)
-> +		return -ENOMEM;
-> +
-> +	dcc->dev = &pdev->dev;
-> +	platform_set_drvdata(pdev, dcc);
-> +
-> +	dcc->base = devm_platform_ioremap_resource(pdev, 0);
-
-I mentioned earlier, it might be nice to give these memory
-ranges a name more meaningful than 0 and 1.
-
-> +	if (IS_ERR(dcc->base))
-> +		return PTR_ERR(dcc->base);
-> +
-> +	dcc->ram_base = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
-> +	if (IS_ERR(dcc->ram_base))
-> +		return PTR_ERR(dcc->ram_base);
-> +
-> +	dcc->ram_size = resource_size(res);
-
-Did you already take care of remapping with the call just above?
-
-> +	dcc->ram_base = devm_ioremap(dev, res->start, resource_size(res));
-> +	if (!dcc->ram_base)
-> +		return -ENOMEM;
-
-In any case, I think this second memory region is more like
-memory space than I/O space.  If so, memremapping it might
-be the right thing to do.
-
-> +	cfg = of_device_get_match_data(&pdev->dev);
-> +	dcc->ram_offset = cfg->dcc_ram_offset;
-> +
-> +	val = dcc_readl(dcc, DCC_HW_INFO);
-
-Can you provide a short block of code that explains in English
-what the next set of if statements are doing, and why?
-
-> +	if (FIELD_GET(BIT(DCC_VER_INFO_BIT), val)) {
-> +		dcc->mem_map_ver = DCC_MEM_MAP_VER3;
-> +		dcc->nr_link_list = dcc_readl(dcc, DCC_LL_NUM_INFO);
-> +		if (dcc->nr_link_list == 0)
-> +			return	-EINVAL;
-> +	} else if ((val & DCC_VER_MASK2) == DCC_VER_MASK2) {
-> +		dcc->mem_map_ver = DCC_MEM_MAP_VER2;
-> +		dcc->nr_link_list = dcc_readl(dcc, DCC_LL_NUM_INFO);
-> +		if (dcc->nr_link_list == 0)
-> +			return	-EINVAL;
-> +	} else {
-> +		dcc->mem_map_ver = DCC_MEM_MAP_VER1;
-> +		dcc->nr_link_list = DCC_MAX_LINK_LIST;
-> +	}
-
-What does bit 6 in the HW_INFO register represent?
-
-> +	if ((val & BIT(6)) == BIT(6))
-
-	if (val & BIT(6))
-
-> +		dcc->loopoff = DCC_FIX_LOOP_OFFSET;
-> +	else
-> +		dcc->loopoff = get_bitmask_order((dcc->ram_size +
-> +				dcc->ram_offset) / 4 - 1);
-> +
-> +	mutex_init(&dcc->mutex);
-> +	/* Allocate space for all entries at once */
-> +	enable_size = dcc->nr_link_list * sizeof(bool);
-> +	nr_config_size = dcc->nr_link_list * sizeof(size_t);
-> +	cfg_head_size = dcc->nr_link_list * sizeof(struct list_head);
-> +
-> +	dcc->enable = devm_kzalloc(dev, enable_size + nr_config_size + cfg_head_size, GFP_KERNEL);
-> +	if (!dcc->enable)
-> +		return -ENOMEM;
-> +
-> +	dcc->nr_config  = (size_t *)(dcc->enable + dcc->nr_link_list);
-> +	dcc->cfg_head = (struct list_head *)(dcc->nr_config + dcc->nr_link_list);
-> +
-> +	for (i = 0; i < dcc->nr_link_list; i++)
-> +		INIT_LIST_HEAD(&dcc->cfg_head[i]);
-> +
-> +	dcc->curr_list = DCC_INVALID_LINK_LIST;
-> +	ret = dcc_sram_dev_init(dcc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return dcc_create_files(dev, dcc_attrs);
-
-If dcc_create_files() returns an error, you are not calling
-dcc_sram_dev_exit() to clean things up.
-
-> +}
-> +
-> +static int dcc_remove(struct platform_device *pdev)
-> +{
-> +	struct dcc_drvdata *drvdata = platform_get_drvdata(pdev);
-> +
-> +	dcc_sram_dev_exit(drvdata);
-> +
-> +	dcc_config_reset(drvdata);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct qcom_dcc_config sm8150_cfg = {
-> +	.dcc_ram_offset	= 0x5000,
-
-If you know you'll be adding more fields there's nothing
-wrong with this, but if the only thing you're storing is
-the RAM offset, there's no need to define that within a
-structure.  Just do something like:
-
-	{ .compatible = "qcom,sm8150-dcc", .data = (void *)0x5000 },
-
-> +};
-> +
-> +static const struct qcom_dcc_config sc7280_cfg = {
-> +	.dcc_ram_offset = 0x12000,
-> +};
-> +
-> +static const struct qcom_dcc_config sc7180_cfg = {
-> +	.dcc_ram_offset = 0x6000,
-> +};
-> +
-> +static const struct qcom_dcc_config sdm845_cfg = {
-> +	.dcc_ram_offset = 0x6000,
-> +};
-> +
-> +static const struct of_device_id dcc_match_table[] = {
-> +	{ .compatible = "qcom,sm8150-dcc", .data = &sm8150_cfg },
-> +	{ .compatible = "qcom,sc7280-dcc", .data = &sc7280_cfg },
-> +	{ .compatible = "qcom,sc7180-dcc", .data = &sc7180_cfg },
-> +	{ .compatible = "qcom,sdm845-dcc", .data = &sdm845_cfg },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, dcc_match_table);
-> +
-> +static struct platform_driver dcc_driver = {
-> +	.probe = dcc_probe,
-> +	.remove	= dcc_remove,
-> +	.driver	= {
-> +		.name = "qcom-dcc",
-> +		.of_match_table	= dcc_match_table,
-> +	},
-> +};
-> +
-> +module_platform_driver(dcc_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. DCC driver");
-> +
+> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> index 3be9dd213dad..b01f64e8389b 100644
+> --- a/arch/x86/kernel/head64.c
+> +++ b/arch/x86/kernel/head64.c
+> @@ -192,9 +192,6 @@ unsigned long __head __startup_64(unsigned long physaddr,
+>  	if (load_delta & ~PMD_PAGE_MASK)
+>  		for (;;);
+>  
+> -	/* Activate Secure Memory Encryption (SME) if supported and enabled */
+> -	sme_enable(bp);
+> -
+>  	/* Include the SME encryption mask in the fixup value */
+>  	load_delta += sme_get_me_mask();
+>  
+> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+> index d8b3ebd2bb85..99de8fd461e8 100644
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -69,6 +69,19 @@ SYM_CODE_START_NOALIGN(startup_64)
+>  	call	startup_64_setup_env
+>  	popq	%rsi
+>  
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +	/*
+> +	 * Activate SEV/SME memory encryption if supported/enabled. This needs to
+> +	 * be done now, since this also includes setup of the SEV-SNP CPUID table,
+> +	 * which needs to be done before any CPUID instructions are executed in
+> +	 * subsequent code.
+> +	 */
+> +	movq	%rsi, %rdi
+> +	pushq	%rsi
+> +	call	sme_enable
+> +	popq	%rsi
+> +#endif
+> +
+>  	/* Now switch to __KERNEL_CS so IRET works reliably */
+>  	pushq	$__KERNEL_CS
+>  	leaq	.Lon_kernel_cs(%rip), %rax
+> -- 
+> 2.25.1
 > 
-

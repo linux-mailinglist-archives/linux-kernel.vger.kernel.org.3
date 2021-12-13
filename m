@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE597472C17
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AA1472C20
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbhLMMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S236672AbhLMMPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:15:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236620AbhLMMOB (ORCPT
+        with ESMTP id S232853AbhLMMPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:14:01 -0500
+        Mon, 13 Dec 2021 07:15:03 -0500
 Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE5CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:14:00 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id g14so50546336edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:14:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F91C061574;
+        Mon, 13 Dec 2021 04:15:03 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id t5so51041409edd.0;
+        Mon, 13 Dec 2021 04:15:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CP130Joo5LnzHA5fd0JPgyy8qzQq4QiMmlbo4WSc/bc=;
-        b=PSS1H3WXFIMfkQxsIWTWwPkYK0wcqIk2+76oPkMNGMZ0qSS0iW+g1XjW6KXrKR+L62
-         VZEOcDtuRohjJWGX17jBc1X1QFF5D6QVXy/07L0sCzejVVBUVGun7Rdp3RacKI13kR+G
-         lnFNiTYewYD7lmVCYatZZ2L7DrabtOQEcTGNOeVyK1b3JHPBeBBD5Qqsb3I3H0eVDNfW
-         nHM6svD7D9x/YbKj3k4Yi9DfY+ceccgIxldW8uXVMXTfC3lKetcPIu8unIGmQo70yGvX
-         it9eh/YrirQGva1/nfhawMjYtC5hJ2btu4n/JGYDt9CK30DoC8JabmNh9qmyfMpoXleB
-         g3FA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=APONv3SOJu6jCNgkwpRGUa5SLi10GbfkrOQc9B4NjY8=;
+        b=pnT73e/Ftu4uEmb+E16AXdk5b6ca4DPxjdMjO8quZZKijpit8bPkMgIn+X6xOj3NKT
+         h4e19eBUv5LF+pjrK/eGrMS/xiCz6iSxTlHBC1hDlE+vFIW11dLfJPHw+ibiDBGpDzIB
+         ZLOprS+pTuporKHrxq7MEsOksS7mm2k2P4oezg0BuOSaezMZqAL3kWhXh0zA+rlmx19N
+         kqqzHtFdH79xHwI/zNe/Ye0Bu39MY4VWBiNj9v3onZo3tIAQkVTuceOBNwBN2wg3saNJ
+         WbBSImyM2PeZW3+dd/Y17EKHRVautWP9DJpwJzsPg83X+eNO7AXU+B55oEK7DGq1qnmp
+         h+MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CP130Joo5LnzHA5fd0JPgyy8qzQq4QiMmlbo4WSc/bc=;
-        b=mVW3KOOzSSPdX4DbR4yHh4LUYEMEePDFOkzYLzcPMfMqRYYfvwRbFcgLhgdE1txXZV
-         /sEyX4A7Q3iUM6wq3eRB/dpkvMnIjC+FeexfzmF172mw4tIwZIBl1zZ6RvRWP2OoofoQ
-         fP13IxYbEWobOxjkzyXIjr6PnTM3WpK5pvsT7dhHWslz64Dg5nGHVxbKX8eKEENUWkrO
-         9Mgd+frmSgitKHnwJSR596SFSGWv1LlCjEXjdPaKg1uByCcu7bbt2Np2q5VJdWukyI/c
-         8LuRCyAvKTQ+287zd2L1EAzSvxvlZGvAICp1sJl1Pnn9epM8YSHzzwkIFgUtCOfgqFLW
-         K1Uw==
-X-Gm-Message-State: AOAM531M9Yo6G2juAB7ETLzUwe7MtKwP7HVzBvdc88VgjFtqg71t1Zci
-        gvJua8sNg4a19Lid9zKVwGEF4g==
-X-Google-Smtp-Source: ABdhPJzEjrG8YHO4P2YfYwddzrc1l59/YSf3cTyU7Z/e8XhYhxdxpkf6MgfH65sMs/AbT7XDZH+LtA==
-X-Received: by 2002:a17:907:3c6:: with SMTP id su6mr46285599ejb.255.1639397638590;
-        Mon, 13 Dec 2021 04:13:58 -0800 (PST)
-Received: from localhost ([104.245.96.202])
-        by smtp.gmail.com with ESMTPSA id d19sm6273171edt.34.2021.12.13.04.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 04:13:58 -0800 (PST)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 4/4] coresight: etm3x: Don't trace PID for non-root PID namespace
-Date:   Mon, 13 Dec 2021 20:13:23 +0800
-Message-Id: <20211213121323.1887180-5-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211213121323.1887180-1-leo.yan@linaro.org>
-References: <20211213121323.1887180-1-leo.yan@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=APONv3SOJu6jCNgkwpRGUa5SLi10GbfkrOQc9B4NjY8=;
+        b=lWTSBlQ+WCSBgjzyWMcikwYJX2ScF4VuD/jxxuHxu9Vnq3l8aiY1u2AMrXMdOzLFC2
+         A8no0kTa40qdcIyQJwEm5SC55WoCse5IvCvEqhCloeUoI94knyBncRmQwc2Slhr0SmRY
+         W9SXBKGeIlPxjLgMo+7OlwXf/LEoEojGXKVLpJrtjwFQ9ainYJNF7AW9G8lzg7mZ7y3s
+         a3J7xJP7KV5wa6gddEh6zIGdGwMShVpCWeCPhq/eFk+yoI7Qpri3lE1rC13h+/BIaAiV
+         Z5HX8xEPP2nY+ikvEWuM3DGaF0H1NKxBmeOGhlvNOT+eaWjbthaSmyqIL6JJ8swAwLlm
+         Zcqw==
+X-Gm-Message-State: AOAM530EbYIS+pAdM6tvDU9lns5VVwC0Kex8dFPCW4sTDbwXCPP8QFUg
+        3ZsL/fhKAOkSyWk5YbDPYY7WAKMVm9jDDDKAJxA=
+X-Google-Smtp-Source: ABdhPJzIhAFiXAukZI7VpH2AcmByRzDMPngbJIecaJ7gymB6ARFyfskeqZxnSgWa4URc7fbRLHmlfOwb6iPmIjZkKBw=
+X-Received: by 2002:aa7:d495:: with SMTP id b21mr65090593edr.363.1639397701965;
+ Mon, 13 Dec 2021 04:15:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
+ <20211204061042.1248028-8-Mr.Bossman075@gmail.com> <YbcuweQlw3inhye1@ryzen> <bc7a718c-2cb7-1c23-a8fe-524b327fbcd5@benettiengineering.com>
+In-Reply-To: <bc7a718c-2cb7-1c23-a8fe-524b327fbcd5@benettiengineering.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 13 Dec 2021 09:14:50 -0300
+Message-ID: <CAOMZO5D9ytHBACojwk3mtaypdc4s5gWT7ctJQiUzmmP15hzGww@mail.gmail.com>
+Subject: Re: [PATCH v4 07/13] clk: imx: Add initial support for i.MXRT clock driver
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc:     Abel Vesa <abel.vesa@nxp.com>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ETMv3 driver enables PID tracing by directly using perf config from
-userspace, this means the tracer will capture PID packets from root
-namespace but the profiling session runs in non-root PID namespace.
-Finally, the recorded packets can mislead perf reporting with the
-mismatched PID values.
+Hi Giulio,
 
-This patch changes to only enable PID tracing for root PID namespace.
-Note, the hardware supports VMID tracing from ETMv3.5, but the driver
-never enables VMID trace, this patch doesn't handle VMID trace (bit 30
-in ETMCR register) particularly.
+On Mon, Dec 13, 2021 at 9:06 AM Giulio Benetti
+<giulio.benetti@benettiengineering.com> wrote:
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- drivers/hwtracing/coresight/coresight-etm3x-core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> > I would suggest module platform driver instead.
+>
+> Can you please point us an example?
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm3x-core.c b/drivers/hwtracing/coresight/coresight-etm3x-core.c
-index cf64ce73a741..7d413ba8b823 100644
---- a/drivers/hwtracing/coresight/coresight-etm3x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm3x-core.c
-@@ -340,6 +340,10 @@ static int etm_parse_event_config(struct etm_drvdata *drvdata,
- 
- 	config->ctrl = attr->config;
- 
-+	/* Don't trace contextID when runs in non-root PID namespace */
-+	if (!task_is_in_init_pid_ns(current))
-+		config->ctrl &= ~ETMCR_CTXID_SIZE;
-+
- 	/*
- 	 * Possible to have cores with PTM (supports ret stack) and ETM
- 	 * (never has ret stack) on the same SoC. So if we have a request
--- 
-2.25.1
-
+Here is an example of a commit that converts the imx8mm clk driver to
+platform driver:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v5.15.7&id=af7e7ee0e4280c29c41b6ec64b892bb53987a997

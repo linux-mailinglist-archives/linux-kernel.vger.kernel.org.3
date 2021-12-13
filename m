@@ -2,172 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4F4472E80
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 690D2472E8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238713AbhLMOGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:06:05 -0500
-Received: from mail-mw2nam08on2075.outbound.protection.outlook.com ([40.107.101.75]:46671
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236742AbhLMOGD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:06:03 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NNR0osBeJ/xnfcB9OdE/defjMSmy/SNoedJzUTAaPUM7u6z3AmcKSBdUl6tlCi2OY9eCxcv7RNNw5L63mDf+Zwop7FKETRi5Zb/4dHKadsxGgTEOXXrzaMi3vNW5uIWkHrJaK4PhBz0Z3wAOWwf/KeYg6rCWadVExI46xkgMc+0WCdKr/a+F1Ief9u4N+DOQ2QkDYgqdWsfrNM7WGz+75uhwBVMXUFTlWyh8TUEbv53Tg+l3oC9/EnSsNRXVlP0XQ+pUz/tQTFhNK55PcorBwxTCanmQqRT9lhxVuZRKbw/jWr+vHSaaWQL3txTJuXM8twuXNrKP9jz9CuOJ6gAw0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=proizXdp8kJN21h3QN2ScDg/8vSLfKY+CDRRljhwb5A=;
- b=W+A8usOy3nfr4+ek32xsh2ii4tdyTHNg0P3Utx/3T64x6GxTzafkpejUXQLmZOyDg1m6ZOiccOlU3TI0X5prBXb/usZ+mekH3x2UQ8Af+jcuy2h+K3zRjFgOxL0V/p1pRbvYzlsrWPx076zX5UcoEykFB7kkPMDaZeyBzlp51C1B9UmQF0eqd6t0QP5cUOa0QuH5r/Bl3ixM+dwElUQZDNtvlQz4vG/NA4eofpXVaIySa2QurudnCulcGEC329g45DwKumErldoGoLQguw+EpPco3UX7o+GFuFQl7N36ixO1SWjfCHvwaA7JTRYZbI0Sjxvqy7Nvha0dvbIN2N6t7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=proizXdp8kJN21h3QN2ScDg/8vSLfKY+CDRRljhwb5A=;
- b=PHggXsbSfVtiqgKOEV6AtutxsZY8qeSFdiXA+3/oibd+jnNOYfbDC0bJtvcfnVw/RPGjvse8RCr3jG08idOjRm8ajaJKxH7PJbwAE8dF+frWebgt/WVgoOvodbGahohjFPe8/cBxmAKEg+4cC2VCqQpc6poyA3dEGA6Hjg/aYSQ63ZYt96of1c4uyb/+guPLP7hhyZbzq7J3OLru2YjBeuSAZlE9HBvKkWjcjlGy/kST7gVlfBTScHpNmveIsoCU4ce9TIU4FhKG3r/K4/xFrDvN9ybs1N6FPodHS0dYtpQdwWPdtuPUlMFw1CWZjzA7pWxiG1zFQ5U1VAEF6zGRpw==
-Received: from BL1PR12MB5077.namprd12.prod.outlook.com (2603:10b6:208:310::17)
- by BL1PR12MB5063.namprd12.prod.outlook.com (2603:10b6:208:31a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
- 2021 14:06:02 +0000
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5077.namprd12.prod.outlook.com (2603:10b6:208:310::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.24; Mon, 13 Dec
- 2021 14:06:01 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 14:06:01 +0000
-Date:   Mon, 13 Dec 2021 10:05:59 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V3 25/35] powerpc/pseries/msi: Let core code check for
- contiguous entries
-Message-ID: <20211213140559.GA6385@nvidia.com>
-References: <20211210221642.869015045@linutronix.de>
- <20211210221814.720998720@linutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211210221814.720998720@linutronix.de>
-X-ClientProxiedBy: YT3PR01CA0054.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:82::25) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S237726AbhLMOJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:09:47 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37890 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231394AbhLMOJq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 09:09:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC3B761043;
+        Mon, 13 Dec 2021 14:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63CDBC34601;
+        Mon, 13 Dec 2021 14:09:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639404585;
+        bh=QrAGT1B3Yarjb7AwosvkB0JspOa/cD58mcxtYJAOAts=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=j+klMESi4uCfFEylZP6jh02UBFCAZJ6wIGdaIH93QSPIp5AZs7YgURWib4DABiLfq
+         OhvoxLarode+c+4kbKs5LSyG8JEr3rd39guP89VgNzTrhuVIYLwVflYS5B3vL19s2P
+         BlI6Kh0JDnGDLUZlniKEiEkpBQvfo6ToSs6GWU/lmy4h2hodIJWo1nU0C1mD+TV5Ej
+         qBvdf10NMdadXgtdUzsPbUFFedYguHjd2kwWspavdkbzdbqmoWs28KRJB45GD2Cbga
+         bihOV/FSDcLmXYW7u+Ic4khebyO6i9MFnAGsGycXsZhVXChrsNWH/67mn/OgVI4Wxj
+         tuCNtPp2a5q4g==
+Received: by mail-ot1-f41.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso17472406otf.12;
+        Mon, 13 Dec 2021 06:09:45 -0800 (PST)
+X-Gm-Message-State: AOAM533f2l48xlmgUbLc3LBwshuHNv4Lttgf2ke9dXy65g0qcvG4BPgk
+        UBGpO8LWvLWo0zbh4VKcavbKn+VYUz37mE0ekb4=
+X-Google-Smtp-Source: ABdhPJxzAenHXhObuJaIOMnjAJbhyD1itt71Ka+xu82CEa7c/Ct3re6PQ4aoYnNTLQsSuuwrJXjXj3CH92jtpJtFumg=
+X-Received: by 2002:a9d:364b:: with SMTP id w69mr25556807otb.18.1639404584560;
+ Mon, 13 Dec 2021 06:09:44 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: da0ded4b-8b89-45fe-905f-08d9be41b1ca
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5077:EE_|BL1PR12MB5063:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5077785CCBF529927B384CFBC2749@BL1PR12MB5077.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WJI2TZzOpNBRQYIWGw1WgTy4otpPQndYD+e00WIQIiIC09QJ6PrR+11VINVn2DO7uEPYGpTH1M6j7Lb7SCts6zR0D3E1f6DvK3AHyqBgfcfrdIKFj6RKPFMNgD3sQebyVfT+sKEk+ive1rxkOsgTPThybMq0mx/TlbqBnpTUHbV2nsTuA1ZBhJ5b30ZfNtuagXchhott9xWEyTR+zmWY75LitQLypyAfjwyqMq3lORypBrYtxgCC38qyfLjvY6EenMJB0jvOBxScJWho+PU45YO8bImF+l4Fw81ZfR699tVH+iwQZEpMmgmUH12YdqMBMor0MAigDmpBL2ZTu8YhLVt8PvOtxLJZ7heH6/K2VQH7qjDl+phbJsWC5xRzUhlddJ1LEKMxRF3qs+vv9IbFzmL69ci2nhcmNMW2Pz7OALSInj15DHKbEfeyoCokY4Tgt9j1H8a5bpRO9O+Ir6JC78W5eM/CWRD0OQS9dW6ohXdEGUk0xWQ2kuyR0EaeK1bjDjrENlLqyl0iq8wWKV9kjiubhGBh64CcgpbHJu1Kl97X5bH6hpxp24F0A9k86XdV+dFYDSKDz4VdwirSTMTPZkXEjROqFFvYiU8GoZiqsCpQfBjetfOqIgMH2aHhE/KU+m0ogmEsSnGaRq1kH5ZCKw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5077.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(38100700002)(83380400001)(186003)(54906003)(6512007)(2616005)(66946007)(4744005)(36756003)(508600001)(6486002)(316002)(86362001)(1076003)(66476007)(2906002)(66556008)(26005)(8936002)(6506007)(7406005)(8676002)(7416002)(6916009)(5660300002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WVBnS2Y4ZzczQmpMeGlUaXRzeGxjbGtQUXdMU1NEb3hVNm1JRElhT1lGZWEy?=
- =?utf-8?B?ck4rMFlLRjd2YVRnb3RNeDB0UnY1TmRza2tlM2R1TXVtdnpQSlRpK04zYlVq?=
- =?utf-8?B?S0x3OFlhUkUrV0JzenBVaVprUDBUY0ZYVkNScmc4bUU4ZDUxWkVsTFo4MXh0?=
- =?utf-8?B?ck93RWlhYTMxcXhSQjBOUmNZekRtU0pMeitoY2c2ZXBaaTJOSlA4R0lNNkxU?=
- =?utf-8?B?Nk81VUtxandkQ3FxNUVXYTluY3R0V1hUWFNtbFhIYUc2MGU3c0NXcFh3Ymk0?=
- =?utf-8?B?VUE1NW1kYTgremVlenhtMzY2akY2a1RMd0lsNmZrRWV0SmtHVWl4OE9CUjIv?=
- =?utf-8?B?eEszWHRmbXpVWVFnb0FOMmVlS1BqMXVNK2ltSHpHMkpLWWFCSU5XWENZRkM1?=
- =?utf-8?B?YitQdGNOek5vSUk2Y1ZpcGd1RllyNnpGRERFa3lkQjhqeHRHNTIxdVhMc1lT?=
- =?utf-8?B?QUpZVG9EZGZDU0J5Rm1raW0wUlJ2L3JCNUxRZmJ2YS9FT055VDB2aDVhRDZG?=
- =?utf-8?B?RnhUaG1uSzFTSGcyVzgvUXZNQTd4eVlqQmlxaTlsOFJsc1lZUjBGZDcvSmdS?=
- =?utf-8?B?WnZWamNzN3QvM0JVSFloRUhlbDFBNnk3ZktLd0ZjU1l0WEc2UnU1UmYrNGR3?=
- =?utf-8?B?WXVteHdTMVBHcVFscmpQdG5FSEJRdGVDSkNxNTZtK2hwdmwvYWV6VTM3bnlX?=
- =?utf-8?B?MlNHYnJvUzltWUoxQzZxcGtrN2lDL1B3RSttZjREdStjbHJPWGVoTDJEa1I2?=
- =?utf-8?B?ci9YSW5Zb1Y1NmFwTEtqS3k2VFU5UmdDcWhZTXhhZzV2N29xQlpicm14QlJ5?=
- =?utf-8?B?UDhGRzNlMUxtREx5b1VjMkJkSFNOZzlQZTdSNUVhY2xvNVBqaXpxUFlzN2lO?=
- =?utf-8?B?bDdtN21nTW5XWlV1U2JKeWxuMlAyQllBNnJNeG4vKzVDME0wRElLM3k5Y0xB?=
- =?utf-8?B?ODlQa3VYbHlIVlhmMm5PRVpQd3Q2MEVUbUlVZjVVT29PMFovb3IzdmxETVQx?=
- =?utf-8?B?UlZDZ2VEMmJDakVKWUtWS2xOUWp6aDNwTHJGc09uSE5XekIvdEdHQno0T3Vu?=
- =?utf-8?B?akU2TDRUS2ZmZXNPNW9rYUZrQm1CRHpDYUtydHN4V1h1eXkzWDFzbVZLbGNV?=
- =?utf-8?B?UTI1S0VMNXRmbytXU3ZQTldwQlZ4S0tnRWFWNTlKZkdDUmQ4blRIU05JdkhC?=
- =?utf-8?B?Y0ladHFZeWNZMXdwUnlUZnRnVnQvSmhoNmRNS1JZWURSajQ0WFJyUTZXYXdL?=
- =?utf-8?B?VGtiN1dWY29XQUhMc3pML1p3Q1k1R1JORVVPc3pjTHlrQk4wWkZpYkJSeWJZ?=
- =?utf-8?B?YzBnMXlRaUd0eit3S3o5eGhzS3VZbWdZaDcrOVBGaEhGWlBkVm0rTzB3WjhG?=
- =?utf-8?B?T2h3LzVOUnNrbkZ0YmgwWC9qYUc0Nk01bWJNaFJnQUxVL1M4cWVzakF5VG9l?=
- =?utf-8?B?cHpPWXNEcUdYV3p2WDVyeGY4cXlSZVI2d3VMTktzd0gyY2dvS2NYOWFGSHhi?=
- =?utf-8?B?RnJ5aWptaGRXcXRmTFVpbjVnWFJqYUdoNGdEMWZ6SWxRbWhGODNoSGxsRjN5?=
- =?utf-8?B?Q3dZT1NZalZ4anpVemR3eUpDdWl6UFlvLzlVWXYwM3lQRUNLZGcveVFTL3Vu?=
- =?utf-8?B?WXJUeFFCdWYvTlltak44b2JKTHhtbXdxMk93elIvNDI5cWVOV25pWGdYTEo2?=
- =?utf-8?B?RlNyWXZtRFlERjZCRHo1WXFCYmRidXpkV2pBQ3JSR2hsR0xpV2dDc2ZUQ2Rl?=
- =?utf-8?B?OEQrQldoVGtvWEhJelE2ZDVnY09ITlZxSmRlcXdlQndJbVRiM2RNZGxkeFlQ?=
- =?utf-8?B?UU92NFBBTkI0NjNXVmtmVzZiVFVsbTF5dW9PT1hZK0NZbG1TZW16Y1N2bHNi?=
- =?utf-8?B?dEJzaU5PWFpVOUhqeDRMUjVyZ1A1dHpjODNBZHRkaE5FR0xtMmJsRitOMWJv?=
- =?utf-8?B?U0RyRHA2TC9qUDZpMmJJSmVoSEZHN1ZKMEJlei9nMTA1MjJ4YXlzU0JBajJ0?=
- =?utf-8?B?UWZxaTBZVUw1QnpicEg4WEtDYkZDR0MxSzFybDI4RHVUYUZhQ2pDdU1YZzZT?=
- =?utf-8?B?bTdtSGtybkV4R2UydzZHdEg2N1JxbnlvaEF4WEhtcHF0UGVPUXNMMWMvZ0ln?=
- =?utf-8?Q?mV08=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da0ded4b-8b89-45fe-905f-08d9be41b1ca
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 14:06:01.6828
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 40bJpPqRRPF2i5X+mtFiS5EUePG3uz/PEf5FTcFgzDxKXFnevSYh2HV7vx0N1jKh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5063
+Received: by 2002:ac9:428a:0:0:0:0:0 with HTTP; Mon, 13 Dec 2021 06:09:44
+ -0800 (PST)
+In-Reply-To: <20211213113903.bkspqw2qlpct3uxr@pali>
+References: <20210927111948.GA16257@gofer.mess.org> <20211211020453.mkuzumgpnignsuri@pali>
+ <YbbskNBJI8Ak1Vl/@angband.pl> <20211213113903.bkspqw2qlpct3uxr@pali>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Mon, 13 Dec 2021 23:09:44 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd9fjSEsNDLMtqpWOcu9xWdFzr1gqLdC5aKJFmgK9MfHoA@mail.gmail.com>
+Message-ID: <CAKYAXd9fjSEsNDLMtqpWOcu9xWdFzr1gqLdC5aKJFmgK9MfHoA@mail.gmail.com>
+Subject: Re: Incorrect handling of . and .. files
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Adam Borowski <kilobyte@angband.pl>, Sean Young <sean@mess.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:19:22PM +0100, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Set the domain info flag and remove the check.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: "Cédric Le Goater" <clg@kaod.org>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> 
-> ---
-> V2: Remove it completely - Cedric
-> ---
->  arch/powerpc/platforms/pseries/msi.c |   33 ++++++++-------------------------
->  1 file changed, 8 insertions(+), 25 deletions(-)
+2021-12-13 20:39 GMT+09:00, Pali Roh=C3=A1r <pali@kernel.org>:
+> On Monday 13 December 2021 07:47:44 Adam Borowski wrote:
+>> On Sat, Dec 11, 2021 at 03:04:53AM +0100, Pali Roh=C3=A1r wrote:
+>> > I tried to find some information what is allowed and what not.
+>> >
+>> > On Monday 27 September 2021 12:19:48 Sean Young wrote:
+>> > > Windows allows files and directories called "." and ".." to be
+>> > > created
+>> > > using UNC paths, i.e. "\\?\D:\..". Now this is totally insane
+>> > > behaviour,
+>> > > but when an exfat filesytem with such a file is mounted on Linux,
+>> > > those
+>> > > files show up as another directory and its contents is inaccessible.
+>> > >
+>> > > I can replicate this using exfat filesystems, but not ntfs.
+>> >
+>> > Microsoft exFAT specification explicitly disallow "." and "..", see:
+>> [...]
+>> > On the other hand Microsoft FAT32 specification can be understood that
+>> > file may have long name (vfat) set to "." or ".." but not short name.
+>> [...]
+>> > OSTA UDF 2.60 specification does not disallow "." and ".." entries, bu=
+t
+>> [...]
+>> > So it means that "." and ".." entries could be stored on disk as valid
+>> > file names.
+>>
+>> It doesn't matter one whit what the specification says.  Anyone with a
+>> disk
+>> editor can craft a filesystem containing filenames such as "." or "..",
+>> "/"
+>> "foo/bar" or anything else we would like to ban.
+>
+> That is truth. But question is what should do fsck tools with such file
+> names on filesystems where "." and ".." are permitted? Fully valid
+> argument is "do not touch them" because there is nothing bad with these
+> names.
+>
+>> > > So, in Linux cannot read "." or ".." (i.e., I can't see "Hello,
+>> > > World!"). I
+>> > > don't know what the correct handling should be, but having two "." a=
+nd
+>> > > two
+>> > > ".." files does not seem right at all.
+>> >
+>> > This is really a bug in Linux kernel. It should not export "." and "..=
+"
+>> > into VFS even when filesystem disk format supports such insane file
+>> > names.
+>>
+>> This.
+>>
+>> Otherwise, every filesystem driver would need to contain redundant code
+>> for
+>> checking for such bad names.
+>>
+>> > So either Linux needs to completely hide these insane file names from
+>> > VFS or translate them to something which do not conflict with other
+>> > files in correct directory.
+>>
+>> Escaping bad names has the problem of the escaped name also possibly
+>> existing -- perhaps even recursively.  Plus, the filesystem might be
+>> using
+>> hashed or tree indices which could go wrong if a name is altered.
+>
+> vfat has already own escaping scheme and it is documented in mount(8)
+> manpage. Invalid characters are translated either to fixed char '?' or
+> to ':'... esc sequence if uni_xlate mount option is used. But it looks
+> like that that kernel vfat driver do not have these two entries "." and
+> ".." in its blacklist.
+>
+> And, another important thing about vfat is that it has two file names
+> for each file. One short 8.3 and one long vfat. Short 8.3 do not allow
+> "." or "..", so another possibility how to handle this issue for vfat is
+> to show short 8.3 name in VFS when long is invalid.
+>
+> For UDF case, specification already says how to handle problematic
+> file names, so I think that udf.ko could implement it according to
+> specification.
+>
+> But for all other filesystems it is needed to do something ideally on
+> VFS layer.
+>
+> What about generating some deterministic / predicable file names which
+> will not conflict with other file names in current directory for these
+> problematic files?
+>
+>> But then, I once proposed (and I'm pondering reviving) a ban for
+>> characters
+>> \x01..\x1f and possibly others, and if banned, they can still
+>> legitimately
+>> occur in old filesystems.
+>>
+>> > I guess that hiding them for exfat is valid thing as Microsoft
+>> > specification explicitly disallow them. Probably fsck.exfat can be
+>> > teach
+>> > to rename these files and/or put them to lost+found directory.
+>>
+>> fsck fixing those is a good thing but we still need to handle them at
+>> runtime.
+>
+> Namjae Jeon, would you be able to implement fixing of such filenames in
+> fsck.exfat tool?
+We've recently been finalizing the repair function in fsck.exfat. We
+will check it as soon as it is finished.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Jason
- 
+Thanks for your suggestion!
+>
+>>
+>> Meow!
+>> --
+>> =E2=A2=80=E2=A3=B4=E2=A0=BE=E2=A0=BB=E2=A2=B6=E2=A3=A6=E2=A0=80
+>> =E2=A3=BE=E2=A0=81=E2=A2=A0=E2=A0=92=E2=A0=80=E2=A3=BF=E2=A1=81 in the b=
+eginning was the boot and root floppies and they were
+>> good.
+>> =E2=A2=BF=E2=A1=84=E2=A0=98=E2=A0=B7=E2=A0=9A=E2=A0=8B=E2=A0=80         =
+                              -- <willmore> on
+>> #linux-sunxi
+>> =E2=A0=88=E2=A0=B3=E2=A3=84=E2=A0=80=E2=A0=80=E2=A0=80=E2=A0=80
+>

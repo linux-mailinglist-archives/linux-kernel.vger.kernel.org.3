@@ -2,130 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C7C472264
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2120472251
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 09:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbhLMIYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 03:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbhLMIYE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:24:04 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4F3C06115E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:24:03 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id x15so50165095edv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 00:24:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wJEEqyKISVmLwrKECRv9O+FIMtzdnCM3vrfkv5xHbbc=;
-        b=sEYiyL1t89Df2d2P9CNXHEX3r/4uu2WX6F+I0KEAC+I7PCIernl8hkV7r+MEwiKTRR
-         RqZS/NVJjvek2//+pd2bvuIxaaO99wbk7KF5DHUWLwEh5eWgy+ZV+u5ycLeF51OuJWxu
-         1zpWFPEOmFmaOq5I4y9FEcgpK9qEaDirikActt/MrVdhqXlT5qsPIdwwjaA2E3klstyq
-         5F6VxXlilh6cXL2MC8HFYnMtRJujRBqvp7aIqTMFkj6Rv09cSN7mF6sPVASZ35M3yZ+n
-         Epq13luQ+2oHZgtk5wml7yedMgZOfHm5xjB401+oZ2ptZxcsU4qNtDiJ8vr3G6825HIl
-         Me3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wJEEqyKISVmLwrKECRv9O+FIMtzdnCM3vrfkv5xHbbc=;
-        b=uXYB+XKSwHu9U72Ap3ZaQ6gK8QGs04ywHAwHJm8Dg/B5J6B5v5LsxcGlVVbbsqTeb5
-         /KH6S8nk/Za0Vq+3egtT0FYQ5ApmiwccPV9lR/+VMjv5FLiMVHVoOTGt5geKq1gKtsql
-         bHfMmtyNRnZ9I/T53PNdiuUce3j2ya2jV3J8oIshU0WFEoiS41c/xYUgpTsOv3c6G9bH
-         KNkYh4qiIQ4YWa3aFOjTtm9s71366gZOMzS5knasJm+LYfKYXWcnnywyrXj4gMpZIGWq
-         xXRcg9SbVrl/UZgxhBXh1UfwqDE5MEPlbjUsG8qte9tNkspc9sVikekHGZhhGBlB/blQ
-         P8wA==
-X-Gm-Message-State: AOAM531Y5TRXuknwpEt9B2hA9M2oDi3oCXrBKEGAzBnSXdHv6LOxSRGA
-        QebO+fWQx57qF9umHK+mFBq4wA==
-X-Google-Smtp-Source: ABdhPJxXH0Xjx9BHfJBCZNxrhpzIndXfY4yXe4yX22wm5K4vyrOQfvlwQcXd5uuh0zbYEkjW+Is7gQ==
-X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr42976858ejc.36.1639383842380;
-        Mon, 13 Dec 2021 00:24:02 -0800 (PST)
-Received: from localhost.localdomain ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
-        by smtp.gmail.com with ESMTPSA id nb17sm5535561ejc.7.2021.12.13.00.24.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 00:24:02 -0800 (PST)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] arm64: dts: qcom: sm7225-fairphone-fp4: Enable ADSP, CDSP & MPSS
-Date:   Mon, 13 Dec 2021 09:22:08 +0100
-Message-Id: <20211213082208.21492-9-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213082208.21492-1-luca.weiss@fairphone.com>
-References: <20211213082208.21492-1-luca.weiss@fairphone.com>
+        id S232852AbhLMIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 03:23:22 -0500
+Received: from mga14.intel.com ([192.55.52.115]:42123 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231509AbhLMIXW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 03:23:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639383801; x=1670919801;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=BSS0BFttADobPAR2S7yKTcoOykNXel4/sP5xwcCf0xw=;
+  b=NShEPo0nKjC/1TNoB+plcMVgc5vkRT243nt7uwK1EjLeZPHVJOn1gI44
+   VV5IMusPoJPZ7C7Z+O+YQzDxTe13142B3qyefze6NtBzoXJAwuliEwLcc
+   +o3BePmZZU77bBMz9PudstRaiD1XmoJm6nTYP4csTndrBhGdyFRx/7h9N
+   OLIie2rUrH7lrXCXDJex8Ulm0+9P2PjTrDyBeAPIFG9kTXiF2zwAZ31lE
+   KhwwCjLc0t/JuSWoCC8WPocxLr1k4UU95Sh9disxpls7IjpXcc5nVjg2K
+   cxJ8qwkeauyfcs2RtPPBVPHtXXc+NvuEbScty3QZm/HPwTrFH0VYy8Bci
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="238909050"
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="238909050"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 00:23:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="613750000"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2021 00:23:21 -0800
+Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 00:23:19 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ SHSMSX605.ccr.corp.intel.com (10.109.6.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 16:23:16 +0800
+Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
+ SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
+ Mon, 13 Dec 2021 16:23:16 +0800
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC:     "seanjc@google.com" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>
+Subject: RE: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
+Thread-Topic: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
+Thread-Index: AQHX63yobhR7xaimuUSU4jknnLqQN6wraUsAgABf8YCABEZs0A==
+Date:   Mon, 13 Dec 2021 08:23:16 +0000
+Message-ID: <86d3c3a5d61649079800a2038370365b@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-17-yang.zhong@intel.com>
+ <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
+ <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
+In-Reply-To: <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the remoteprocs found on the SoC and add a qcom,rmtfs-mem node.
-
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- .../boot/dts/qcom/sm7225-fairphone-fp4.dts    | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-index ff07b7e8d64f..1ce606e66474 100644
---- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-+++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-@@ -53,6 +53,27 @@ volume-up {
- 			gpios = <&pm6350_gpios 2 GPIO_ACTIVE_LOW>;
- 		};
- 	};
-+
-+	reserved-memory {
-+		/*
-+		 * The rmtfs memory region in downstream is 'dynamically allocated'
-+		 * but given the same address every time. Hard code it as this address is
-+		 * where the modem firmware expects it to be.
-+		 */
-+		memory@efe01000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0 0xefe01000 0 0x600000>;
-+			no-map;
-+
-+			qcom,client-id = <1>;
-+			qcom,vmid = <15>;
-+		};
-+	};
-+};
-+
-+&adsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm7225/fairphone4/adsp.mdt";
- };
- 
- &apps_rsc {
-@@ -269,6 +290,16 @@ vreg_bob: bob {
- 	};
- };
- 
-+&cdsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm7225/fairphone4/cdsp.mdt";
-+};
-+
-+&mpss {
-+	status = "okay";
-+	firmware-name = "qcom/sm7225/fairphone4/modem.mdt";
-+};
-+
- &pm6150l_wled {
- 	status = "okay";
- 
--- 
-2.34.1
-
+T24gU2F0dXJkYXksIERlY2VtYmVyIDExLCAyMDIxIDY6MTMgQU0sIFBhb2xvIEJvbnppbmkgd3Jv
+dGU6DQo+IA0KPiBCeSB0aGUgd2F5LCBJIHRoaW5rIEtWTV9TRVRfWFNBVkUyIGlzIG5vdCBuZWVk
+ZWQuICBJbnN0ZWFkOg0KPiANCj4gLSBLVk1fQ0hFQ0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUy
+KSBzaG91bGQgcmV0dXJuIHRoZSBzaXplIG9mIHRoZQ0KPiBidWZmZXIgdGhhdCBpcyBwYXNzZWQg
+dG8gS1ZNX0dFVF9YU0FWRTINCj4gDQo+IC0gS1ZNX0dFVF9YU0FWRTIgc2hvdWxkIGZpbGwgaW4g
+dGhlIGJ1ZmZlciBleHBlY3RpbmcgdGhhdCBpdHMgc2l6ZSBpcw0KPiB3aGF0ZXZlciBLVk1fQ0hF
+Q0tfRVhURU5TSU9OKEtWTV9DQVBfWFNBVkUyKSBwYXNzZXMNCj4gDQo+IC0gS1ZNX1NFVF9YU0FW
+RSBjYW4ganVzdCBleHBlY3QgYSBidWZmZXIgdGhhdCBpcyBiaWdnZXIgdGhhbiA0ayBpZiB0aGUN
+Cj4gc2F2ZSBzdGF0ZXMgcmVjb3JkZWQgaW4gdGhlIGhlYWRlciBwb2ludCB0byBvZmZzZXRzIGxh
+cmdlciB0aGFuIDRrLg0KDQpJIHRoaW5rIG9uZSBpc3N1ZSBpcyB0aGF0IEtWTV9TRVRfWFNBVkUg
+d29ya3Mgd2l0aCAic3RydWN0IGt2bV94c2F2ZSIgKGhhcmRjb2RlZCA0S0IgYnVmZmVyKSwNCmlu
+Y2x1ZGluZyBrdm1fdmNwdV9pb2N0bF94ODZfc2V0X3hzYXZlLiBUaGUgc3RhdGVzIG9idGFpbmVk
+IHZpYSBLVk1fR0VUX1hTQVZFMiB3aWxsIGJlIG1hZGUNCnVzaW5nICJzdHJ1Y3Qga3ZtX3hzYXZl
+MiIuDQoNCkRpZCB5b3UgbWVhbiB0aGF0IHdlIGNvdWxkIGFkZCBhIG5ldyBjb2RlIHBhdGggdW5k
+ZXIgS1ZNX1NFVF9YU0FWRSB0byBtYWtlIGl0IHdvcmsgd2l0aA0KdGhlIG5ldyAic3RydWN0IGt2
+bV94c2F2ZTIiPw0KZS5nLjoNCg0KKHhzYXZlMl9lbmFibGVkIGJlbG93IGlzIHNldCB3aGVuIHVz
+ZXJzcGFjZSBjYWxscyB0byBnZXQgS1ZNX0NBUF9YU0FWRTIpDQppZiAoa3ZtLT54c2F2ZTJfZW5h
+YmxlZCkgew0KCW5ldyBpbXBsZW1lbnRhdGlvbiB1c2luZyAic3RydWN0IGt2bV94c2F2ZTIiDQp9
+IGVsc2Ugew0KCWN1cnJlbnQgaW1wbGVtZW50YXRpb24gdXNpbmcgInN0cnVjdCBrdm1feHNhdmUi
+DQp9DQoodGhpcyBzZWVtcyBsaWtlIGEgbmV3IGltcGxlbWVudGF0aW9uIHdoaWNoIG1pZ2h0IGRl
+c2VydmUgYSBuZXcgaW9jdGwpDQoNClRoYW5rcywNCldlaQ0KDQo=

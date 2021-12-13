@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2000E4724D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3064723F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbhLMJjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234909AbhLMJhc (ORCPT
+        id S233857AbhLMJdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:33:01 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57804 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233889AbhLMJcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:37:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E08C08E6E1;
-        Mon, 13 Dec 2021 01:36:44 -0800 (PST)
+        Mon, 13 Dec 2021 04:32:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD9DCB80E1A;
-        Mon, 13 Dec 2021 09:36:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2EFC00446;
-        Mon, 13 Dec 2021 09:36:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 27234CE0E76;
+        Mon, 13 Dec 2021 09:32:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDE9C00446;
+        Mon, 13 Dec 2021 09:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388202;
-        bh=Bm5z76mNBslksp4fAACD1H87pWu4bKZSW6uZ3F/hUok=;
+        s=korg; t=1639387972;
+        bh=6lxXqNWseBnVtGFh0FJVIQIGP0qhOdZ31Hk4L439YdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ioan09f9WJ0hecNnOe1BI+KbhH8oHke4Fp+fUpFLCHu70TqEqpeGkLYIE9LAA8mfz
-         nPZ4fBQ7StGzXLOjzzNoPsGrywITWaAOYV33i2aVOPCAdNTJgDAKe6S3eJITSuaBla
-         Udehk0m8mgV9DfpVsGsV1VdPxA2UedVSyLCxIKTg=
+        b=a/Dh3LaqR1tlrjPq6xZWf3y5oAKQQ8qo7Y2d3pmjEuMMVe2RcqUVOFlhiRv5Hc1h8
+         YEQVPwYdZqOGJwBcXvDsri9g0gWQm9nlpugfksOvBYq0kjwEH1YMDjpg8swOtqqgUn
+         xQkVmyc8FMPSCVGUYW8QjB9oecE5z0p6X1DRRqDk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 4.14 21/53] x86/sme: Explicitly map new EFI memmap table as encrypted
+        stable@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 4.4 22/37] block: fix ioprio_get(IOPRIO_WHO_PGRP) vs setuid(2)
 Date:   Mon, 13 Dec 2021 10:30:00 +0100
-Message-Id: <20211213092929.068298312@linuxfoundation.org>
+Message-Id: <20211213092926.096197912@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,60 +45,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Lendacky <thomas.lendacky@amd.com>
+From: Davidlohr Bueso <dave@stgolabs.net>
 
-commit 1ff2fc02862d52e18fd3daabcfe840ec27e920a8 upstream.
+commit e6a59aac8a8713f335a37d762db0dbe80e7f6d38 upstream.
 
-Reserving memory using efi_mem_reserve() calls into the x86
-efi_arch_mem_reserve() function. This function will insert a new EFI
-memory descriptor into the EFI memory map representing the area of
-memory to be reserved and marking it as EFI runtime memory. As part
-of adding this new entry, a new EFI memory map is allocated and mapped.
-The mapping is where a problem can occur. This new memory map is mapped
-using early_memremap() and generally mapped encrypted, unless the new
-memory for the mapping happens to come from an area of memory that is
-marked as EFI_BOOT_SERVICES_DATA memory. In this case, the new memory will
-be mapped unencrypted. However, during replacement of the old memory map,
-efi_mem_type() is disabled, so the new memory map will now be long-term
-mapped encrypted (in efi.memmap), resulting in the map containing invalid
-data and causing the kernel boot to crash.
+do_each_pid_thread(PIDTYPE_PGID) can race with a concurrent
+change_pid(PIDTYPE_PGID) that can move the task from one hlist
+to another while iterating. Serialize ioprio_get to take
+the tasklist_lock in this case, just like it's set counterpart.
 
-Since it is known that the area will be mapped encrypted going forward,
-explicitly map the new memory map as encrypted using early_memremap_prot().
-
-Cc: <stable@vger.kernel.org> # 4.14.x
-Fixes: 8f716c9b5feb ("x86/mm: Add support to access boot related data in the clear")
-Link: https://lore.kernel.org/all/ebf1eb2940405438a09d51d121ec0d02c8755558.1634752931.git.thomas.lendacky@amd.com/
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-[ardb: incorporate Kconfig fix by Arnd]
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Fixes: d69b78ba1de (ioprio: grab rcu_read_lock in sys_ioprio_{set,get}())
+Acked-by: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
+Link: https://lore.kernel.org/r/20211210182058.43417-1-dave@stgolabs.net
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/Kconfig               |    1 +
- arch/x86/platform/efi/quirks.c |    3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ block/ioprio.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1903,6 +1903,7 @@ config EFI
- 	depends on ACPI
- 	select UCS2_STRING
- 	select EFI_RUNTIME_WRAPPERS
-+	select ARCH_USE_MEMREMAP_PROT
- 	---help---
- 	  This enables the kernel to use EFI runtime services that are
- 	  available (such as the EFI variable services).
---- a/arch/x86/platform/efi/quirks.c
-+++ b/arch/x86/platform/efi/quirks.c
-@@ -276,7 +276,8 @@ void __init efi_arch_mem_reserve(phys_ad
- 		return;
- 	}
- 
--	new = early_memremap(new_phys, new_size);
-+	new = early_memremap_prot(new_phys, new_size,
-+				  pgprot_val(pgprot_encrypted(FIXMAP_PAGE_NORMAL)));
- 	if (!new) {
- 		pr_err("Failed to map new boot services memmap\n");
- 		return;
+--- a/block/ioprio.c
++++ b/block/ioprio.c
+@@ -202,6 +202,7 @@ SYSCALL_DEFINE2(ioprio_get, int, which,
+ 				pgrp = task_pgrp(current);
+ 			else
+ 				pgrp = find_vpid(who);
++			read_lock(&tasklist_lock);
+ 			do_each_pid_thread(pgrp, PIDTYPE_PGID, p) {
+ 				tmpio = get_task_ioprio(p);
+ 				if (tmpio < 0)
+@@ -211,6 +212,8 @@ SYSCALL_DEFINE2(ioprio_get, int, which,
+ 				else
+ 					ret = ioprio_best(ret, tmpio);
+ 			} while_each_pid_thread(pgrp, PIDTYPE_PGID, p);
++			read_unlock(&tasklist_lock);
++
+ 			break;
+ 		case IOPRIO_WHO_USER:
+ 			uid = make_kuid(current_user_ns(), who);
 
 

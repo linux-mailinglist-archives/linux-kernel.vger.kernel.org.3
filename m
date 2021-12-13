@@ -2,131 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5668E472E1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A71A472E24
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238349AbhLMNyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:54:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:55602 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233777AbhLMNyi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:54:38 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B5EF1FB;
-        Mon, 13 Dec 2021 05:54:38 -0800 (PST)
-Received: from [10.57.34.21] (unknown [10.57.34.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 203BD3F73B;
-        Mon, 13 Dec 2021 05:54:35 -0800 (PST)
-Subject: Re: [PATCH v1 2/2] perf evlist: Don't run perf in non-root PID
- namespace when launch workload
-To:     Leo Yan <leo.yan@linaro.org>
-References: <20211212134721.1721245-1-leo.yan@linaro.org>
- <20211212134721.1721245-3-leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Yonatan Goldschmidt <yonatan.goldschmidt@granulate.io>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-From:   James Clark <james.clark@arm.com>
-Message-ID: <6cad0a2e-c4b8-9788-fa0d-05405453a0dd@arm.com>
-Date:   Mon, 13 Dec 2021 13:54:33 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20211212134721.1721245-3-leo.yan@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S238367AbhLMNzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233777AbhLMNzM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 08:55:12 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1623BC061574;
+        Mon, 13 Dec 2021 05:55:12 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h24so11933064pjq.2;
+        Mon, 13 Dec 2021 05:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=YzGxu20MakeDEnN9f5JcG8wOVkG33rDENjBSMh7QoGw=;
+        b=M2OdVeC/LKjenUQYOkPjzxW7OA0Y0qiUAcrNC6esAPGnuO5+sJ7Gx/W6wgSoAAurmJ
+         XwxEznarK+/Fyim5dLCNxoYENL8iQcIwrNRCSFxCxlEi2VVGphRPnw2buWG2ybUJsQWK
+         9W+voLzbJLbyoDikBMnWFw6jO/VlfpV4qNv45DYisueq3L6RS0bhgnSCfZd90F/seLtT
+         1Gl9aOS8pXsxVKxcuin9kXKMPPHZ4qLlWh/79AdGgyyuNjuHpmbxMSlExAIA+JlW8en2
+         lcNqicgAuZHyJ88jeEY4mNhRCeCVKx6NZ6Ng9lIIM80GJT/6k6uTWeuaTvAk13PizZ7t
+         07fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=YzGxu20MakeDEnN9f5JcG8wOVkG33rDENjBSMh7QoGw=;
+        b=rwH37uNGWx8m8Ihq74KOCjtrsuEU5sbK4PrHeqcRYsdAHWfZsML0Ad6UYz2AcsILEH
+         0qUygUl1jJ+sg+3ppkOWrInXvDClUHO2xXMc1CA73OmC/1CyhZmw+yfgESXsO/nr6meE
+         VRL+/y6xovcSvuTfgkd9bZJaSaONRj7MdZppRcvf5AvFuHtHxX61UoaDHx4Upt0HdpaJ
+         qUvt7Z46zzfaAwmS+6G9wYB2wcjQDFIPvlM5dhsUj+aKdlHvFTDyWltd5q4XVt7tqp7A
+         YrkxGbYAyhDzfHllvEo6Ys2RYYpG5NbI/RnG1MVbvKcsEL325yslUmfdEHJHD80OkxVV
+         v/CQ==
+X-Gm-Message-State: AOAM530sjfsVC4FTQV9qz7cxuF6oZf8feOme39jBkJAyq6zPYE3D4LK1
+        jn4oVcIyqrUdJl6akbU3gNHK3FvuHNfCgd9eaNM=
+X-Google-Smtp-Source: ABdhPJwEL79UKNj6qw26G5N6j30WWRgaxCwrLdqOx2zAIaKZlvvC0+8jpeXm2AI+i3w9D517f1vzRQ==
+X-Received: by 2002:a17:902:bd88:b0:143:d318:76e6 with SMTP id q8-20020a170902bd8800b00143d31876e6mr96652800pls.66.1639403710822;
+        Mon, 13 Dec 2021 05:55:10 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
+        by smtp.gmail.com with ESMTPSA id a6sm7218514pjd.40.2021.12.13.05.55.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 05:55:10 -0800 (PST)
+Message-ID: <61b750be.1c69fb81.a81bb.2deb@mx.google.com>
+Date:   Mon, 13 Dec 2021 05:55:10 -0800 (PST)
+X-Google-Original-Date: Mon, 13 Dec 2021 13:55:04 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 000/171] 5.15.8-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/12/2021 13:47, Leo Yan wrote:
-> In function evlist__prepare_workload(), after perf forks a child process
-> and launches a workload in the created process, it needs to retrieve
-> process and namespace related info via '/proc/$PID/' node.
+On Mon, 13 Dec 2021 10:28:35 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.8 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> The process folders under 'proc' file system use the PID number from the
-> root PID namespace, when perf tool runs in non-root PID namespace and
-> creates new process for profiled program, this leads to the perf tool
-> wrongly gather process info since it uses PID from non-root namespace to
-> access nodes under '/proc'.
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
 > 
-> Let's see an example:
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.8-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
->   unshare --fork --pid perf record -e cs_etm//u -a -- test_program
+> thanks,
 > 
-> This command runs perf tool and the profiled program 'test_program' in
-> the non-root PID namespace.  When perf tool launches 'test_program',
-> e.g. the forked PID number is 2, perf tool retrieves process info for
-> 'test_program' from the folder '/proc/2'.  But '/proc/2' is actually for
-> a kernel thread so perf tool wrongly gather info for 'test_program'.
+> greg k-h
+> 
 
-Hi Leo,
+5.15.8-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-Which features aren't working exactly when you run in a non root namespace?
-
-I did "perf record -- ls" and it seemed to be working for me. At least kernel
-sampling would be working in a namespace, even if there was something wrong
-with userspace.
-
-I think causing a failure might be too restrictive and would prevent people
-from using perf in a container. Maybe we could show a warning instead, but
-I'm not sure exactly what's not working because I thought perf looked up stuff
-based on the path of the process not the pid.
-
-James
-
-> 
-> To fix this issue, we don't allow perf tool runs in non-root PID
-> namespace when it launches workload and reports error in this
-> case.  This can notify users to run the perf tool in root PID namespace
-> to gather correct info for profiled program.
-> 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
->  tools/perf/util/evlist.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 5f92319ce258..bdf79a97db66 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -11,6 +11,7 @@
->  #include <poll.h>
->  #include "cpumap.h"
->  #include "util/mmap.h"
-> +#include "util/namespaces.h"
->  #include "thread_map.h"
->  #include "target.h"
->  #include "evlist.h"
-> @@ -1364,6 +1365,12 @@ int evlist__prepare_workload(struct evlist *evlist, struct target *target, const
->  	int child_ready_pipe[2], go_pipe[2];
->  	char bf;
->  
-> +	if (!nsinfo__is_in_root_namespace()) {
-> +		pr_err("Perf runs in non-root PID namespace; please run perf tool ");
-> +		pr_err("in the root PID namespace for gathering process info.\n");
-> +		return -EPERM;
-> +	}
-> +
->  	if (pipe(child_ready_pipe) < 0) {
->  		perror("failed to create 'ready' pipe");
->  		return -1;
-> 

@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C413473703
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1682C473706
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243372AbhLMVzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243344AbhLMVzG (ORCPT
+        id S243384AbhLMVzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:55:15 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:33262 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240574AbhLMVzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:55:06 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B69C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:55:05 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1639432504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vluHY+VQM1dpG6ccvF7RpbMooJaXSsDFIpBMIGK6fR8=;
-        b=JnDImSkLaZ6d7uJJAqpBoqYBBE7J0wOFYTvyehFxEy4bRBF1E6C15fV9dW58vlWcg0OVqc
-        kh1HsWxG4piAmnn1hi6+5dpNyhk8/q769Q+GniE5V6LHtL+PYs3URK4pXqeABGEwpPt8av
-        RLMbS14ILb02u/kXoRiu8Q15pzow6KU=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v3 32/38] kasan: mark kasan_arg_stacktrace as __initdata
-Date:   Mon, 13 Dec 2021 22:54:28 +0100
-Message-Id: <7825a5fecec3626441ed3fe734090e9e3ab9a0f9.1639432170.git.andreyknvl@google.com>
-In-Reply-To: <cover.1639432170.git.andreyknvl@google.com>
-References: <cover.1639432170.git.andreyknvl@google.com>
+        Mon, 13 Dec 2021 16:55:09 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id BEE631C0B79; Mon, 13 Dec 2021 22:55:07 +0100 (CET)
+Date:   Mon, 13 Dec 2021 22:55:00 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        chris.paterson2@renesas.com, alice.ferrazzi@miraclelinux.com,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
+Message-ID: <20211213215500.GA18010@duo.ucw.cz>
+References: <20211213092939.074326017@linuxfoundation.org>
+ <20211213103536.GC17683@duo.ucw.cz>
+ <YbdAE9r9GXZlnyfr@kroah.com>
+ <YbdCag/DPOOrweZX@kroah.com>
+ <20211213191648.GA21320@amd>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: andrey.konovalov@linux.dev
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
+Content-Disposition: inline
+In-Reply-To: <20211213191648.GA21320@amd>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
 
-As kasan_arg_stacktrace is only used in __init functions, mark it as
-__initdata instead of __ro_after_init to allow it be freed after boot.
+--VbJkn9YxBvnuCH5J
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The other enums for KASAN args are used in kasan_init_hw_tags_cpu(),
-which is not marked as __init as a CPU can be hot-plugged after boot.
-Clarify this in a comment.
+Hi!
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Suggested-by: Marco Elver <elver@google.com>
+> > > > I'm getting a lot of build failures -- missing gmp.h:
+> > > >=20
+> > > >   UPD     include/generated/utsrelease.h
+> > > > 1317In file included from /builds/hVatwYBy/68/cip-project/cip-testi=
+ng/linux-stable-rc-ci/gcc/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc=
+/arm-linux-gnueabi/8.1.0/plugin/include/gcc-plugin.h:28:0,
+> > > > 1318                 from scripts/gcc-plugins/gcc-common.h:7,
+> > > > 1319                 from scripts/gcc-plugins/arm_ssp_per_task_plug=
+in.c:3:
+> > > > 1320/builds/hVatwYBy/68/cip-project/cip-testing/linux-stable-rc-ci/=
+gcc/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc/arm-linux-gnueabi/8.1=
+=2E0/plugin/include/system.h:687:10: fatal error: gmp.h: No such file or di=
+rectory
+> > > > 1321 #include <gmp.h>
+> > > > 1322          ^~~~~~~
+> > > > 1323compilation terminated.
+> > > > 1324scripts/gcc-plugins/Makefile:47: recipe for target 'scripts/gcc=
+-plugins/arm_ssp_per_task_plugin.so' failed
+> > > > 1325
+> > > >=20
+> > > > https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tre=
+e/linux-5.10.y
+> > >=20
+> > > What gcc plugins are you trying to build with?
+> >=20
+> > Also, kernelci seems normal for this release:
+> > 	https://linux.kernelci.org/build/stable-rc/branch/linux-5.10.y/kernel/=
+v5.10.84-133-gf6a609e247c6/
+> >=20
+> > But your tests show problems:
+> > 	https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipeli=
+nes/428150268/failures
+> > all for gcc plugins.
+> >=20
+> > I did take changes for the gcc plugins to get them to work for gcc 11,
+> > maybe gcc8 is too old for them now?
+>=20
+> Not sure. Maybe they never worked for us, but without test compile,
+> they are now enabled and thus can break the build?
+>=20
+> 1e8600 gcc-plugins: simplify GCC plugin-dev capability test
+>=20
+> Could be capable of doing that. Let me cc our people doing the
+> testing and let me try to do some test compiles...
 
----
+Ok, so if I revert 1e8600 things start working again:
 
-Changes v1->v2:
-- Add this patch.
----
- mm/kasan/hw_tags.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+https://gitlab.com/cip-project/cip-kernel/linux-cip/-/pipelines/428666243
 
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index bbcf6f914490..fb08fe1a3cf7 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -40,7 +40,7 @@ enum kasan_arg_stacktrace {
- 
- static enum kasan_arg kasan_arg __ro_after_init;
- static enum kasan_arg_mode kasan_arg_mode __ro_after_init;
--static enum kasan_arg_stacktrace kasan_arg_stacktrace __ro_after_init;
-+static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
- 
- /* Whether KASAN is enabled at all. */
- DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
-@@ -116,7 +116,10 @@ static inline const char *kasan_mode_info(void)
- 		return "sync";
- }
- 
--/* kasan_init_hw_tags_cpu() is called for each CPU. */
-+/*
-+ * kasan_init_hw_tags_cpu() is called for each CPU.
-+ * Not marked as __init as a CPU can be hot-plugged after boot.
-+ */
- void kasan_init_hw_tags_cpu(void)
- {
- 	/*
--- 
-2.25.1
+as that is only speedup and apparently not needed for following
+patches, that might be the easiest solution?
 
+Best regards,
+								Pavel
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--VbJkn9YxBvnuCH5J
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYbfBNAAKCRAw5/Bqldv6
+8shiAKCfhs89DPuerxpXfN2bcYU+APy17ACfbUm4zg0hW2sXMuIWJ4o75x34NDs=
+=JEK4
+-----END PGP SIGNATURE-----
+
+--VbJkn9YxBvnuCH5J--

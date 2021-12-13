@@ -2,75 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDC0471F74
+	by mail.lfdr.de (Postfix) with ESMTP id CD8B6471F76
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbhLMDB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 22:01:27 -0500
-Received: from out203-205-221-236.mail.qq.com ([203.205.221.236]:60027 "EHLO
-        out203-205-221-236.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231293AbhLMDBZ (ORCPT
+        id S231405AbhLMDC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 22:02:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41444 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231393AbhLMDCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 22:01:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1639364483;
-        bh=Ar1vgOHRn0VRMXJEhuwhOOAsfBXHxoULE7+XbXJ3ITM=;
-        h=From:To:Cc:Subject:Date;
-        b=RISMWbDW/EGkHG+Z50MEbIzSkHCOQRk0GxzrGhOxnZDfSU845/LK/+80QUhTBapHo
-         EFrNXUii4Vf9AgeY0xHKwetfg8xciRGxC/8SMhx2toUcGqgAVZU0EtyV6Y+1tbxXJe
-         HWN7P4GViSp07+SpjKR+gEjqHezo/3kaeBBmr2kk=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza28.qq.com (NewEsmtp) with SMTP
-        id 54A9094; Mon, 13 Dec 2021 11:01:20 +0800
-X-QQ-mid: xmsmtpt1639364480t0hujvqhn
-Message-ID: <tencent_CE0F8701456CB89F92C73F28480EF3552E06@qq.com>
-X-QQ-XMAILINFO: OLsBWtCIHsg6PDuys+IkkJCwl3Stpg1fXpt1oJ/Vsn4i9W1K4jGFv973ljl0by
-         b8e6uIJgO30EKPq1pjEcYQ3RSvMqX5Bo4RwsG1yUSiUqNMxhr9Gust5U9kkihLk1A/2GD+WikDbi
-         K3vPhWZNtkBPFTLxk1v5a19GOpSJm6i+mUUKoY029JE0d7EkblixnQ0qfnQIyL9z1L8B5JN++IEO
-         m/sEC1yTtmx5kJy/Axcv/X6Nj6yEvWq9QWSLZNf5OPJokMzJ/7sRWkhp1aJzkNY58n1egAlZzgk8
-         sa1iV48MDgEyrgao2yCH8Lw5WL95UqCuM7/O7PRFf9NJCIMzDaIwaCoXCvWpqRIAZe+G98xMdbab
-         fmuF3c5fHM0/Ns7nOFuR9hawd/vdJeQTc1RfXj1JVMoSGMAxBXIcWjLonat9uE1uOPz1mQe8FsUR
-         y73f9Mz1V5EBddYEu+O1bHrR82pNnBFBAF2502BwxEYLPYPdDrs6uVaCeCnCe8t4wBk3DSDq0zjI
-         R866RB+1y6+NkEzSY/9g4Rbzrb0Ctia2GiSM1W6gXkHOWRT5Bxd1CNOwZLrM9k/7uOt6IW9SLajy
-         mVaiXJLHbdpeAe4g+9i9jwl8ASbCQReQRsAUKPg0+pUK7d+nsu/UA0OcGCbbcNbHPpQXVjieU0dq
-         hunfZQCPK7aMeaTyl7Ldew8WKJ1sBTTllJYfjNICZb2XA6w+9ozFj/mPDnJG7ISh9msdtuh/jTSr
-         3QYK4jRUwbQzFGNJDs9PNtnIABr3PNkEK3YgkwNOlicq9H8mc4LFM4S4GTRxiUxDNXVZaWlOpyTY
-         MbV6IP+Ul8wCwPVR5XqRbJ1XoObzu0ralrCksVc9+xbmVJAVboYwZI6O8kPcPq3zaLifV2apzHI0
-         Kovt9SyE8Gee+VJfpbmA4/DVphUDhqu5mBHfaHGCnj1mxgetavLdbHHFJAHwdpFw==
-From:   Xiaoke Wang <xkernel.wang@foxmail.com>
-To:     trond.myklebust@hammerspace.com, anna.schumaker@netapp.com
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] nfs: nfs4clinet: check the return value of kstrdup()
-Date:   Mon, 13 Dec 2021 11:00:10 +0800
-X-OQ-MSGID: <20211213030010.3498-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Sun, 12 Dec 2021 22:02:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639364573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nxOabwkEindQZF6MGwQBuVfsE6zoaQZTzHZYhX63BQo=;
+        b=GOpgqNfXTutkdm88/h2FItW2pNLUyU6nPNUSaJ5SMFxKiRSb2oXuZSXFsYBfJkUBDccM6d
+        j6quUTcQWAUfDF6bq/r4aiJES4Pu7C9y07+PmsoHu87MJaVrZmilRRu6arAr8wfjKj953C
+        Re1z2Sq3AbqEwz/yqbNLxSI2ku1oHDQ=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-xmJn-DptOIOuJ2pHEp1LCQ-1; Sun, 12 Dec 2021 22:02:52 -0500
+X-MC-Unique: xmJn-DptOIOuJ2pHEp1LCQ-1
+Received: by mail-lf1-f72.google.com with SMTP id k17-20020a05651239d100b0041c32e98751so6899070lfu.10
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 19:02:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nxOabwkEindQZF6MGwQBuVfsE6zoaQZTzHZYhX63BQo=;
+        b=Jo4z1edPbC9qGyD37Y9AVs6oj2wq9uXN4A5vlmMah0AqMo/MKtLbZFbKBb94TeVHsH
+         vFfOUJXLjlKfl+yMoCkpu3/OWHOQZhaKJsnwgV8oiZkUpvS6RWdvHxQKOG5NXgHvLOb8
+         n7Qqw12XD2GFyn4lReC/VKOETCzoLLkbWmwDcp8oPZnnQCbos7OkBjfBHcXnqpMQEUpm
+         TVBcJNt4kbptVzuyrirYUYtxZLEess1RkiF+2LdSBAEzJeftyTkXJkCIXjMrl3dEimsN
+         EsKIiC8+DtpjhzzLi544dtyj7nBJAl2ZmXVygtNzrosC+he0QKgQUR+148l6WR+3DEI5
+         ZVJQ==
+X-Gm-Message-State: AOAM533PLXmS+SB6ChfS44ck2EVPWRSgmdpvfLySRfJyGq9ZVWh5y4S6
+        hwPYZ6YLtiVcTiFo4TCc2wWorMuM444kGhB4DLWIHWYgd9W1luCTqxaaOul12TBgVaNEzfSPxpH
+        5pRDDkrFnOMLwxKV7OR2Ss0ggmXIpQXsaZDHuHsy4
+X-Received: by 2002:a05:6512:685:: with SMTP id t5mr26856504lfe.84.1639364570807;
+        Sun, 12 Dec 2021 19:02:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx5YjAaU+iCN3crQtYXKFT1QFcD9uiG0DVl+ekuAMuR8f5VXyCMPs5sUjKsAPXinXqyC3IjWG913Ka1GX6K2p4=
+X-Received: by 2002:a05:6512:685:: with SMTP id t5mr26856481lfe.84.1639364570566;
+ Sun, 12 Dec 2021 19:02:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <fae0bae7-e4cd-a3aa-57fe-d707df99b634@redhat.com>
+ <20210223082536-mutt-send-email-mst@kernel.org> <3ff5fd23-1db0-2f95-4cf9-711ef403fb62@oracle.com>
+ <20210224000057-mutt-send-email-mst@kernel.org> <52836a63-4e00-ff58-50fb-9f450ce968d7@oracle.com>
+ <20210228163031-mutt-send-email-mst@kernel.org> <2cb51a6d-afa0-7cd1-d6f2-6b153186eaca@redhat.com>
+ <20210302043419-mutt-send-email-mst@kernel.org> <178f8ea7-cebd-0e81-3dc7-10a058d22c07@redhat.com>
+ <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com> <20211212042311-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20211212042311-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 13 Dec 2021 11:02:39 +0800
+Message-ID: <CACGkMEtwWcBNj62Yn_ZSq33N42ZG5yhCcZf=eQZ_AdVgJhEjEA@mail.gmail.com>
+Subject: Re: vdpa legacy guest support (was Re: [PATCH] vdpa/mlx5:
+ set_features should allow reset to zero)
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Si-Wei Liu <si-wei.liu@oracle.com>, Eli Cohen <elic@nvidia.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kstrdup() returns NULL when some internal memory errors happen, it is
-better to check the return value of it so to catch the memory error in
-time.
+On Sun, Dec 12, 2021 at 5:26 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Fri, Dec 10, 2021 at 05:44:15PM -0800, Si-Wei Liu wrote:
+> > Sorry for reviving this ancient thread. I was kinda lost for the conclu=
+sion
+> > it ended up with. I have the following questions,
+> >
+> > 1. legacy guest support: from the past conversations it doesn't seem th=
+e
+> > support will be completely dropped from the table, is my understanding
+> > correct? Actually we're interested in supporting virtio v0.95 guest for=
+ x86,
+> > which is backed by the spec at
+> > https://ozlabs.org/~rusty/virtio-spec/virtio-0.9.5.pdf. Though I'm not =
+sure
+> > if there's request/need to support wilder legacy virtio versions earlie=
+r
+> > beyond.
+>
+> I personally feel it's less work to add in kernel than try to
+> work around it in userspace. Jason feels differently.
+> Maybe post the patches and this will prove to Jason it's not
+> too terrible?
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- fs/nfs/nfs4client.c | 3 +++
- 1 file changed, 3 insertions(+)
+That's one way, other than the config access before setting features,
+we need to deal with other stuffs:
 
-diff --git a/fs/nfs/nfs4client.c b/fs/nfs/nfs4client.c
-index af57332..89f13e0 100644
---- a/fs/nfs/nfs4client.c
-+++ b/fs/nfs/nfs4client.c
-@@ -1372,5 +1372,8 @@ int nfs4_update_server(struct nfs_server *server, const char *hostname,
- 		server->nfs_client->cl_hostname = kstrdup(hostname, GFP_KERNEL);
- 	nfs_server_insert_lists(server);
- 
-+	if (server->nfs_client->cl_hostname == NULL)
-+		return -ENOMEM;
-+
- 	return nfs_probe_destination(server);
- }
--- 
+1) VIRTIO_F_ORDER_PLATFORM
+2) there could be a parent device that only support 1.0 device
+
+And a lot of other stuff summarized in spec 7.4 which seems not an
+easy task. Various vDPA parent drivers were written under the
+assumption that only modern devices are supported.
+
+Thanks
+
+>
+> > 2. suppose some form of legacy guest support needs to be there, how do =
+we
+> > deal with the bogus assumption below in vdpa_get_config() in the short =
+term?
+> > It looks one of the intuitive fix is to move the vdpa_set_features call=
+ out
+> > of vdpa_get_config() to vdpa_set_config().
+> >
+> >         /*
+> >          * Config accesses aren't supposed to trigger before features a=
+re
+> > set.
+> >          * If it does happen we assume a legacy guest.
+> >          */
+> >         if (!vdev->features_valid)
+> >                 vdpa_set_features(vdev, 0);
+> >         ops->get_config(vdev, offset, buf, len);
+> >
+> > I can post a patch to fix 2) if there's consensus already reached.
+> >
+> > Thanks,
+> > -Siwei
+>
+> I'm not sure how important it is to change that.
+> In any case it only affects transitional devices, right?
+> Legacy only should not care ...
+>
+>
+> > On 3/2/2021 2:53 AM, Jason Wang wrote:
+> > >
+> > > On 2021/3/2 5:47 =E4=B8=8B=E5=8D=88, Michael S. Tsirkin wrote:
+> > > > On Mon, Mar 01, 2021 at 11:56:50AM +0800, Jason Wang wrote:
+> > > > > On 2021/3/1 5:34 =E4=B8=8A=E5=8D=88, Michael S. Tsirkin wrote:
+> > > > > > On Wed, Feb 24, 2021 at 10:24:41AM -0800, Si-Wei Liu wrote:
+> > > > > > > > Detecting it isn't enough though, we will need a new ioctl =
+to notify
+> > > > > > > > the kernel that it's a legacy guest. Ugh :(
+> > > > > > > Well, although I think adding an ioctl is doable, may I
+> > > > > > > know what the use
+> > > > > > > case there will be for kernel to leverage such info
+> > > > > > > directly? Is there a
+> > > > > > > case QEMU can't do with dedicate ioctls later if there's inde=
+ed
+> > > > > > > differentiation (legacy v.s. modern) needed?
+> > > > > > BTW a good API could be
+> > > > > >
+> > > > > > #define VHOST_SET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > #define VHOST_GET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > >
+> > > > > > we did it per vring but maybe that was a mistake ...
+> > > > >
+> > > > > Actually, I wonder whether it's good time to just not support
+> > > > > legacy driver
+> > > > > for vDPA. Consider:
+> > > > >
+> > > > > 1) It's definition is no-normative
+> > > > > 2) A lot of budren of codes
+> > > > >
+> > > > > So qemu can still present the legacy device since the config
+> > > > > space or other
+> > > > > stuffs that is presented by vhost-vDPA is not expected to be
+> > > > > accessed by
+> > > > > guest directly. Qemu can do the endian conversion when necessary
+> > > > > in this
+> > > > > case?
+> > > > >
+> > > > > Thanks
+> > > > >
+> > > > Overall I would be fine with this approach but we need to avoid bre=
+aking
+> > > > working userspace, qemu releases with vdpa support are out there an=
+d
+> > > > seem to work for people. Any changes need to take that into account
+> > > > and document compatibility concerns.
+> > >
+> > >
+> > > Agree, let me check.
+> > >
+> > >
+> > > >   I note that any hardware
+> > > > implementation is already broken for legacy except on platforms wit=
+h
+> > > > strong ordering which might be helpful in reducing the scope.
+> > >
+> > >
+> > > Yes.
+> > >
+> > > Thanks
+> > >
+> > >
+> > > >
+> > > >
+> > >
+>
+

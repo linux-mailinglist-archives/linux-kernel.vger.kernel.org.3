@@ -2,122 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3A6472A23
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F274472A66
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237997AbhLMKc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:32:57 -0500
-Received: from mga18.intel.com ([134.134.136.126]:60373 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241236AbhLMKb5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:31:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639391517; x=1670927517;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/bresTOG99ijwwXpFOUmK7KcLKJVfaL4ajFyHRcfS2U=;
-  b=ALzgFWoPlqnxAYSd9Yj4ktRMifi2ZWxAfiZS3JkmzJZJomOXAUHmJNvQ
-   5BsjwKpWYbnAEB+dOV+chAZWrQS02UzjNaKToISuyQRPdAkiud+P0x6b6
-   aIYp561oilYnMitbxNYlznLk0664Pvw3vVvK81tEwIstcu6srpWoqdzS6
-   vpR9YslRhhcP+ENMDZVqt18zVSDBR0k3JflZXT5qgiU8AWF23r4tIXhrE
-   I0F/VvwKvap33n7sztoHNvSk/6kM3HgBlXiYnoyk2OhNgFDMugbz+OTc2
-   wnGDYS/BtLFMC8HLKLbnQ5+vjrEiQ5iK436jXU9Qgz2Tv2ujMXwKQ5Yz2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="225566644"
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="225566644"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 02:31:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="517693382"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Dec 2021 02:31:43 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwicQ-0006Z0-I5; Mon, 13 Dec 2021 10:31:42 +0000
-Date:   Mon, 13 Dec 2021 18:30:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-parisc:5.16-vdso-3-timefunctions 7/7] gcc: error:
- unrecognized command-line option '-mno-space-regs'
-Message-ID: <202112131813.XDWpo2SE-lkp@intel.com>
+        id S240783AbhLMKkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240026AbhLMKkX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 05:40:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1238AC053AF0;
+        Mon, 13 Dec 2021 02:31:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1CB7B8104D;
+        Mon, 13 Dec 2021 10:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C450BC34601;
+        Mon, 13 Dec 2021 10:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639391475;
+        bh=YqTqbD22bE3nbM3gT9uMbugvqLUIVy1xvqjX4jOnawo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VnSTRR8x0Qi3FwpeicOeUIzpUGuXMcdl8//Eixs5/LlOJ42Wqsf1Bpxiw1/v5DvvQ
+         u9XyrnMcbnZa8ldqRHNNy/FpFgHA3PYJy6yVkDyb8n5wlS3zjAB6BdZNmpIBJI0j+w
+         hZ/Ht2+Mws4JlRQU7vWC/istzB7AQXvey27yhFKb2faxntxTKGBXcJSMjLUYP75HL1
+         sze5PsU/Db9Qk8XqWQrKyomukom+2bdWtlTC+B112b8kTJbrprUY8wFdNdTZy1bzGa
+         ktK6VcMq2zCJ2HEPuDIEUyd+DnuI1CmKH5G7CsVBS9XwR0ep1k6FqUsEUBlUvPAEAs
+         yD6oHRRyRj0bQ==
+Date:   Mon, 13 Dec 2021 12:31:05 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Cc:     stable@vger.kernel.org, akpm@linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux@armlinux.org.uk, rppt@linux.ibm.com,
+        tony@atomide.com, wangkefeng.wang@huawei.com,
+        yj.chiang@mediatek.com
+Subject: Re: [PATCH 5.4 1/5] memblock: free_unused_memmap: use pageblock
+ units instead of MAX_ORDER
+Message-ID: <Ybcg6ZmQCSLbsy17@kernel.org>
+References: <20211213085710.28962-1-mark-pk.tsai@mediatek.com>
+ <20211213085710.28962-2-mark-pk.tsai@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211213085710.28962-2-mark-pk.tsai@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git 5.16-vdso-3-timefunctions
-head:   d5efc9bf61d8eeab6aa9e84ed00bc84229253238
-commit: d5efc9bf61d8eeab6aa9e84ed00bc84229253238 [7/7] parisc: Implement time functions in vDSO
-config: parisc-randconfig-r012-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131813.XDWpo2SE-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/commit/?id=d5efc9bf61d8eeab6aa9e84ed00bc84229253238
-        git remote add deller-parisc https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git
-        git fetch --no-tags deller-parisc 5.16-vdso-3-timefunctions
-        git checkout d5efc9bf61d8eeab6aa9e84ed00bc84229253238
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc prepare
+On Mon, Dec 13, 2021 at 04:57:06PM +0800, Mark-PK Tsai wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Subject: [PATCH 5.4 1/5] memblock: free_unused_memmap: use pageblock units instead of MAX_ORDER
 
-All errors (new ones prefixed by >>):
+I'd replace memblock: with arm: in the subject. I believe it's clearer this
+way.
 
-   arch/parisc/kernel/vdso64/Makefile:30: FORCE prerequisite is missing
->> gcc: error: unrecognized command-line option '-mno-space-regs'
-   arch/parisc/kernel/vdso32/restart_syscall.S: Assembler messages:
-   arch/parisc/kernel/vdso32/restart_syscall.S:15: Error: bad or irreducible absolute expression
-   arch/parisc/kernel/vdso32/restart_syscall.S:15: Error: junk at end of line, first unrecognized character is `:'
-   arch/parisc/kernel/vdso32/restart_syscall.S:25: Error: no such instruction: `ldw 0(%sp),%r31'
-   arch/parisc/kernel/vdso32/restart_syscall.S:28: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/restart_syscall.S:29: Error: no such instruction: `ldi 0,%r20'
-   arch/parisc/kernel/vdso32/restart_syscall.S:31: Error: no such instruction: `ldi 1,%r25'
-   arch/parisc/kernel/vdso32/restart_syscall.S:32: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/restart_syscall.S:33: Error: no such instruction: `ldi 173,%r20'
-   arch/parisc/kernel/vdso32/restart_syscall.S:35: Error: .cfi_endproc without corresponding .cfi_startproc
->> gcc: error: unrecognized command-line option '-mdisable-fpregs'
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:36: arch/parisc/kernel/vdso32/restart_syscall.o] Error 1
->> gcc: error: unrecognized command-line option '-mschedule=8000'
-   arch/parisc/kernel/vdso32/sigtramp.S: Assembler messages:
-   arch/parisc/kernel/vdso32/sigtramp.S:16: Error: bad or irreducible absolute expression
-   arch/parisc/kernel/vdso32/sigtramp.S:16: Error: junk at end of line, first unrecognized character is `:'
-   arch/parisc/kernel/vdso32/sigtramp.S:19: Error: no such instruction: `ldi 0,%r25'
-   arch/parisc/kernel/vdso32/sigtramp.S:20: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/sigtramp.S:21: Error: no such instruction: `ldi 173,%r20'
-   arch/parisc/kernel/vdso32/sigtramp.S:23: Error: no such instruction: `ldi 1,%r25'
-   arch/parisc/kernel/vdso32/sigtramp.S:24: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/sigtramp.S:25: Error: no such instruction: `ldi 173,%r20'
-   arch/parisc/kernel/vdso32/sigtramp.S:28: Error: .cfi_endproc without corresponding .cfi_startproc
-   arch/parisc/kernel/vdso32/datapage.S: Assembler messages:
-   arch/parisc/kernel/vdso32/datapage.S:18: Error: bad or irreducible absolute expression
-   arch/parisc/kernel/vdso32/datapage.S:18: Error: junk at end of line, first unrecognized character is `:'
-   arch/parisc/kernel/vdso32/datapage.S:23: Error: no such instruction: `bl 1f,%r1'
-   arch/parisc/kernel/vdso32/datapage.S:24: Error: no such instruction: `depi 0,31,12,%r1'
-   arch/parisc/kernel/vdso32/datapage.S:25: Error: no such instruction: `bv %r0(%r2)'
-   arch/parisc/kernel/vdso32/datapage.S:26: Error: no such instruction: `ldw 0(%r1),%r28'
-   arch/parisc/kernel/vdso32/datapage.S:28: Error: .cfi_endproc without corresponding .cfi_startproc
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:36: arch/parisc/kernel/vdso32/sigtramp.o] Error 1
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:36: arch/parisc/kernel/vdso32/datapage.o] Error 1
->> gcc: error: unrecognized command-line option '-mno-fast-indirect-calls'; did you mean '-mno-force-indirect-call'?
->> gcc: error: unrecognized command-line option '-mno-long-calls'
->> gcc: error: unrecognized command-line option '-mlong-calls'
->> gcc: error: unrecognized command-line option '-mno-fast-indirect-calls'; did you mean '-mno-force-indirect-call'?
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:39: arch/parisc/kernel/vdso32/vdso32_generic.o] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/parisc/Makefile:186: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+The same applies for the second patch in the series and for 5.10 posting.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> commit e2a86800d58639b3acde7eaeb9eb393dca066e08 upstream.
+> 
+> The code that frees unused memory map uses rounds start and end of the
+> holes that are freed to MAX_ORDER_NR_PAGES to preserve continuity of the
+> memory map for MAX_ORDER regions.
+> 
+> Lots of core memory management functionality relies on homogeneity of the
+> memory map within each pageblock which size may differ from MAX_ORDER in
+> certain configurations.
+> 
+> Although currently, for the architectures that use free_unused_memmap(),
+> pageblock_order and MAX_ORDER are equivalent, it is cleaner to have common
+> notation thought mm code.
+> 
+> Replace MAX_ORDER_NR_PAGES with pageblock_nr_pages and update the comments
+> to make it more clear why the alignment to pageblock boundaries is
+> required.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
+> Link: https://lore.kernel.org/lkml/20210630071211.21011-1-rppt@kernel.org/
+> [backport upstream modification in mm/memblock.c to arch/arm/mm/init.c]
+> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> ---
+>  arch/arm/mm/init.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
+> index 7ea4d3b43444..6905dd8bc03f 100644
+> --- a/arch/arm/mm/init.c
+> +++ b/arch/arm/mm/init.c
+> @@ -381,11 +381,11 @@ static void __init free_unused_memmap(void)
+>  				 ALIGN(prev_end, PAGES_PER_SECTION));
+>  #else
+>  		/*
+> -		 * Align down here since the VM subsystem insists that the
+> -		 * memmap entries are valid from the bank start aligned to
+> -		 * MAX_ORDER_NR_PAGES.
+> +		 * Align down here since many operations in VM subsystem
+> +		 * presume that there are no holes in the memory map inside
+> +		 * a pageblock
+>  		 */
+> -		start = round_down(start, MAX_ORDER_NR_PAGES);
+> +		start = round_down(start, pageblock_nr_pages);
+>  #endif
+>  		/*
+>  		 * If we had a previous bank, and there is a space
+> @@ -395,12 +395,12 @@ static void __init free_unused_memmap(void)
+>  			free_memmap(prev_end, start);
+>  
+>  		/*
+> -		 * Align up here since the VM subsystem insists that the
+> -		 * memmap entries are valid from the bank end aligned to
+> -		 * MAX_ORDER_NR_PAGES.
+> +		 * Align up here since many operations in VM subsystem
+> +		 * presume that there are no holes in the memory map inside
+> +		 * a pageblock
+>  		 */
+>  		prev_end = ALIGN(memblock_region_memory_end_pfn(reg),
+> -				 MAX_ORDER_NR_PAGES);
+> +				 pageblock_nr_pages);
+>  	}
+>  
+>  #ifdef CONFIG_SPARSEMEM
+> -- 
+> 2.18.0
+> 
+
+-- 
+Sincerely yours,
+Mike.

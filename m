@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65449472955
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5304725D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237462AbhLMKTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238787AbhLMKQa (ORCPT
+        id S234970AbhLMJqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:46:42 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36262 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235885AbhLMJm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:16:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026C2C0497C8;
-        Mon, 13 Dec 2021 01:55:47 -0800 (PST)
+        Mon, 13 Dec 2021 04:42:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEB2FB80E20;
-        Mon, 13 Dec 2021 09:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2794C34603;
-        Mon, 13 Dec 2021 09:55:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 505CBCE0E77;
+        Mon, 13 Dec 2021 09:42:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B22C00446;
+        Mon, 13 Dec 2021 09:42:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389344;
-        bh=JZokK1IX38ZQX0xQOH972lDk/0kw0DYe0LPRBfNa570=;
+        s=korg; t=1639388545;
+        bh=L1Iz62N+kfGeDpVH1h4YWouDvutslpeN1GBzsJEQ8oI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uchl/IHwFU0JkwAQcAKAZUr56ZpBQrxroNIvlJdmnS5oRhcz03Z4yJ6gdJq4eudWJ
-         PTIYgINcOTHBnT2fB05/vpBKkLqe3M0cMJAYHo9MW1QGfEu/Mu4BFdGbm3N2ND7Qfa
-         GS2aBBiM7MQaO2DLngnhTeU9+KAilzDFePnAB4/E=
+        b=E2ScArfZXYCQD2ZNJV4o/KRPEFN7Mu4fC+SDMa6mJyE+0wIOlYInn2AXypO3naynC
+         k19MMF9pdPpc205XkppRqWKeEuoKLSCExZV2/5VjerBvbYLqqQTKE9C7dM0m3jmBVb
+         ofDIJXdhEI8R5IvlkfOdamJpvWldm9sScjA+5f4I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
-        Bixuan Cui <cuibixuan@linux.alibaba.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 068/171] ALSA: pcm: oss: Limit the period size to 16MB
+        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.4 13/88] can: kvaser_pciefd: kvaser_pciefd_rx_error_frame(): increase correct stats->{rx,tx}_errors counter
 Date:   Mon, 13 Dec 2021 10:29:43 +0100
-Message-Id: <20211213092947.363252054@linuxfoundation.org>
+Message-Id: <20211213092933.679950632@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,38 +45,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Jimmy Assarsson <extja@kvaser.com>
 
-commit 8839c8c0f77ab8fc0463f4ab8b37fca3f70677c2 upstream.
+commit 36aea60fc892ce73f96d45dc7eb239c7c4c1fa69 upstream.
 
-Set the practical limit to the period size (the fragment shift in OSS)
-instead of a full 31bit; a too large value could lead to the exhaust
-of memory as we allocate temporary buffers of the period size, too.
+Check the direction bit in the error frame packet (EPACK) to determine
+which net_device_stats {rx,tx}_errors counter to increase.
 
-As of this patch, we set to 16MB limit, which should cover all use
-cases.
-
-Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
-Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
-Link: https://lore.kernel.org/r/20211201073606.11660-3-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
+Link: https://lore.kernel.org/all/20211208152122.250852-1-extja@kvaser.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/oss/pcm_oss.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/kvaser_pciefd.c |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/sound/core/oss/pcm_oss.c
-+++ b/sound/core/oss/pcm_oss.c
-@@ -1962,7 +1962,7 @@ static int snd_pcm_oss_set_fragment1(str
- 	if (runtime->oss.subdivision || runtime->oss.fragshift)
- 		return -EINVAL;
- 	fragshift = val & 0xffff;
--	if (fragshift >= 31)
-+	if (fragshift >= 25) /* should be large enough */
- 		return -EINVAL;
- 	runtime->oss.fragshift = fragshift;
- 	runtime->oss.maxfrags = (val >> 16) & 0xffff;
+--- a/drivers/net/can/kvaser_pciefd.c
++++ b/drivers/net/can/kvaser_pciefd.c
+@@ -248,6 +248,9 @@ MODULE_DESCRIPTION("CAN driver for Kvase
+ #define KVASER_PCIEFD_SPACK_EWLR BIT(23)
+ #define KVASER_PCIEFD_SPACK_EPLR BIT(24)
+ 
++/* Kvaser KCAN_EPACK second word */
++#define KVASER_PCIEFD_EPACK_DIR_TX BIT(0)
++
+ struct kvaser_pciefd;
+ 
+ struct kvaser_pciefd_can {
+@@ -1283,7 +1286,10 @@ static int kvaser_pciefd_rx_error_frame(
+ 
+ 	can->err_rep_cnt++;
+ 	can->can.can_stats.bus_error++;
+-	stats->rx_errors++;
++	if (p->header[1] & KVASER_PCIEFD_EPACK_DIR_TX)
++		stats->tx_errors++;
++	else
++		stats->rx_errors++;
+ 
+ 	can->bec.txerr = bec.txerr;
+ 	can->bec.rxerr = bec.rxerr;
 
 

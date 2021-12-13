@@ -2,131 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3410D472B68
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FADF472B6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235940AbhLMLaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbhLMLap (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:30:45 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32984C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:30:45 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id s9so14010014qvk.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:30:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZPqukJKw+aJBcf7sVwYgzPRYDwCX4VM/xhe1xZEheMA=;
-        b=K6HqxFk42efNCxNHGO4jUvpFZ0y56TPdzOc+msGLHuukwbiqUHG1l5tW2GM2TtrTj6
-         +5wuhZdV2b1XhGuPHlMvDznWfOGT1V6vZGfbeszPDpWxhVMvXYctFlWrgD1hyrDqAysx
-         gkOLd0l3Pp3A/stwcdgKJ5Yc0vDHfwmyTgvjUjszuVj2FP542IuVZ+X1FMvLnGF1c4/G
-         7sPk5O4GWGuuS7GwO/WIzlMZ7HpY2iN53bv41590J+YgEXGsY0gLBRSt/Ns8PY7SBGUI
-         mX2WxqNLpu06xIuNtLNGgFGZEI/3nL+J6PUOHHYSZC8296DM9VWp8BgmVn6ViMfq8xIp
-         QgzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZPqukJKw+aJBcf7sVwYgzPRYDwCX4VM/xhe1xZEheMA=;
-        b=RQdw2tb/ABZf6yVfr782fDLhThMDfuHCkgHn39Qb0OMZI4CpWSi3Jui15/fzULWPv/
-         5L2H/BiEotc/OLrDey9RjbKbX0UhkDXVqtv71Oq7KqkrB/GNyvSL8jKNmzJNHdEE91Ay
-         rRh+oJsPl/qaUnqdNKW8dtBG9B/Lu+ldAN7dHq+tC500kIxKved5L+KPJlNYcDppB86a
-         I16j6DpMl3UF+qqkzJTLl3l9PZnD0s/0cJqAdLtF7JUApYaQCcWrqYSUyhSG4EYXwUyx
-         rh81lD39961FHvHO1M1b81poPF2togAqgOaw/GUaxUgZPktnnladMRDEPyshkDzbJ6lH
-         v2Xw==
-X-Gm-Message-State: AOAM531f3xKBgC/DSB14NsPpCM56egYgImPLsz9Mv11gaCTf4Od4WwiW
-        RBHMCdgr6w5KRWIdWqw+yuJ+OAxOhmAntRo5NgHBiA==
-X-Google-Smtp-Source: ABdhPJx1aXzbU2HxJNyzGovz3AXrpAZQOQ6O5RVdez48MO4SqNz2fgsb0bWhAFSkk7gge8JddcEQuC3EGfOap3RH2eI=
-X-Received: by 2002:a05:6214:410e:: with SMTP id kc14mr42995139qvb.73.1639395044220;
- Mon, 13 Dec 2021 03:30:44 -0800 (PST)
+        id S235986AbhLMLcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:32:20 -0500
+Received: from mail-mw2nam08on2079.outbound.protection.outlook.com ([40.107.101.79]:52705
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232749AbhLMLcS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 06:32:18 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VV2l2Lepu5XIsabAxa5HYOSYp2BJYmdIRbquTFamM4ckrmawLu0/yr7hija2LanqXD/l2Bl6qgeYvO8yY09MoPbI4a3IPPrnkExfdnUb18sF4FUwEOWrjjlbslZrgMlkpgyn0mMxqwhUvnxrDrTXkPW7ptgs+87y5sC50rvITMp/6gEDS8d5svQkAyAMyZR8WWQXz2x6Gz2fja2Y+Qrr8ltLZKDjZnZkUMgduvb3/cXCo+fEYfrOtv/s8boVGhuC7mgPnwwXSdEuW5VgJM9Mt7/DyNsOEFDf2izLbaqq2keMJySuSgkbfQpZ/xGY57XFMAXgORotKB95aryrM6Ta3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2TwO+zIaGMKRh9ZF95gwdAPRUqHELfD2NDIk+oFHDZE=;
+ b=fOqnlNCFgOl5ekqQdfT40iBQ4Y3gsvXXDD8AuTTFo1RanDX33j4TkxMwjDB0AZTSOhlgQ69GrO32yqO/YcS9G+LFTqv6y7PWSSYqCVpMe9y2yEM3ir4XqeekoN267zGFGpqBb5RnFkJRPbFBUTeqw/9OTA1pjCyvp996T7gcCXNM7qy1n/zKcTcQXI1o6kt2NujHZVBYC2xnn3dvBHDFbWjV0KWAmQELhhoGJYmpD3QhK/x60SrRN110OkkfcyAqi0T1QSaqbA2f9PXkh0u3uh9sjkFzUObK+GMGIruutOHUjaxEbCrSUrbjBe16t3MQuuth8sY6bn2osEIRUtFAbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2TwO+zIaGMKRh9ZF95gwdAPRUqHELfD2NDIk+oFHDZE=;
+ b=kAVRav1aE7FK8+5VhySoLoJBJ50OgjDOQgc3mPezmF3RbyYFh+av2fOnEE71mJ2Rh66pjuJub8DZgs7eb3nMh260J9hnlLavgWlBx+lxezhbm9onbW/95frFXmT/ZWI/rzYD97ERZcCmjecG4n5D0YBP+AneAwe9vHth9Wzqork=
+Received: from DS7PR05CA0049.namprd05.prod.outlook.com (2603:10b6:8:2f::27) by
+ DM6PR12MB3930.namprd12.prod.outlook.com (2603:10b6:5:1c9::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.13; Mon, 13 Dec 2021 11:32:16 +0000
+Received: from DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2f:cafe::4f) by DS7PR05CA0049.outlook.office365.com
+ (2603:10b6:8:2f::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.12 via Frontend
+ Transport; Mon, 13 Dec 2021 11:32:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT040.mail.protection.outlook.com (10.13.173.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4778.13 via Frontend Transport; Mon, 13 Dec 2021 11:32:16 +0000
+Received: from sos-ubuntu2004-quartz01.amd.com (10.180.168.240) by
+ SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 13 Dec 2021 05:32:15 -0600
+From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <x86@kernel.org>
+CC:     <pbonzini@redhat.com>, <joro@8bytes.org>, <seanjc@google.com>,
+        <mlevitsk@redhat.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <peterz@infradead.org>, <hpa@zytor.com>,
+        <thomas.lendacky@amd.com>, <jon.grimm@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Subject: [PATCH v3 0/3] svm: avic: Allow AVIC support on system w/ physical APIC ID > 255
+Date:   Mon, 13 Dec 2021 05:31:07 -0600
+Message-ID: <20211213113110.12143-1-suravee.suthikulpanit@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211212062407.138309-1-marcan@marcan.st> <20211212062407.138309-2-marcan@marcan.st>
- <CABxcv=m4fu8h=FwY7R=thuvd13_ZbFqB9rNNN07QOAd__jdYSQ@mail.gmail.com> <63334964-d63d-7625-e46f-a6e6ec19e908@marcan.st>
-In-Reply-To: <63334964-d63d-7625-e46f-a6e6ec19e908@marcan.st>
-From:   Javier Martinez Canillas <javier@dowhile0.org>
-Date:   Mon, 13 Dec 2021 12:30:33 +0100
-Message-ID: <CABxcv=kbR5GX3yEfqchKJPkCqpWp_oKWjG=pu7LikBwoSX8W3A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        devicetree@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
+ (10.181.40.144)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: efcc6290-26bb-465c-0062-08d9be2c3746
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3930:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB39306F75ED1CC0ED350273CCF3749@DM6PR12MB3930.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZsRP2h2RjpmHOiEiBiMLCzvLvgDqqOjG9bxxuGPhUBdgDN+QH1+8hsTQe35DcPon5zLbYR63nTG3SHDqeHzosVqFkQxT2rrMxBYlyTk5yHaxotwp4BBl4Jl6wV/FYc/ti9uaCBcmFoWBrMPx11U9b/sF26/Yhf5M+mpwbykKdW+3S97NBpNYdo1bHFrGqABKdCzVzdkGs+Pbkx0+s1w2QJOQq1c0GhWFjY6jxUUueYyn9Kgt20Pjdpqry26Oa4mycdr8+OyOzM0tye2SiOkZeaLRt7p07xWOxKAqWvkes+gkiLhdT++vn/CxsJMWA3uTwqdWCCgyv/I7OPlbossFNqgyh7X6yGldAA9QFY1uV8FdPWQgExYHfJp+E1SPoDSRcDzosO89hbn9523EIScejEwrOXj7CBDpSrBiqQ+BV6uXWn7LGDKAhgsX0mGvVQViAR0swQEmOA4QnCiayXcx6J7mjMirhALzZ3boPyGmN6/0BfTJkwCo6bMLweLYhGU7Rz7E/EoTDRut6BU2v68fj88BBDHFDCmfbAaAvAff5XrUEzreK0KLVacZEeUQdECZ5Ba/4Cu25KnElNb7855hrNfqZUYMWklC9s0oogotb+dd/rk/cLOhWp1eIlc7AaVS7mCVFxWdY4UOI2zZPc+rdtGJp8NEQIfqlCKo1Tg7ek43vQQ1oBU6O+9GmjOpqX4qQGLvZC0YGiaUULYm3uIjr1oKxd2IPUIxrstVkZbnXJxBGVH39yKpgc/7a+22djkjVEH3TNiy5j5XnmrxbRXNRLfcxxxCwkU0EQJJTNHW435NmysPBGKb5rcNA10bpa+LTjz2OVeeJ98LbIjEy5vkxmTO/lBVt25/Y+jV0UdBJ1peeQyGzNvVSm844pGBlTVt
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(110136005)(26005)(54906003)(86362001)(36756003)(2906002)(36860700001)(4326008)(47076005)(316002)(8676002)(5660300002)(508600001)(356005)(44832011)(336012)(7696005)(70206006)(83380400001)(70586007)(2616005)(16526019)(8936002)(6666004)(1076003)(186003)(82310400004)(40460700001)(426003)(81166007)(7416002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 11:32:16.4015
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: efcc6290-26bb-465c-0062-08d9be2c3746
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3930
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:46 AM Hector Martin <marcan@marcan.st> wrote:
->
-> On 13/12/2021 17.44, Javier Martinez Canillas wrote:
-> > Hello Hector,
-> >
-> > On Sun, Dec 12, 2021 at 7:24 AM Hector Martin <marcan@marcan.st> wrote:
-> >>
-> >> This code is required for both simplefb and simpledrm, so let's move it
-> >> into the OF core instead of having it as an ad-hoc initcall in the
-> >> drivers.
-> >>
-> >> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >> Signed-off-by: Hector Martin <marcan@marcan.st>
-> >> ---
-> >>   drivers/of/platform.c          |  4 ++++
-> >>   drivers/video/fbdev/simplefb.c | 21 +--------------------
-> >>   2 files changed, 5 insertions(+), 20 deletions(-)
-> >>
-> >
-> > This is indeed a much better approach than what I suggested. I just
-> > have one comment.
-> >
-> >> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> >> index b3faf89744aa..793350028906 100644
-> >> --- a/drivers/of/platform.c
-> >> +++ b/drivers/of/platform.c
-> >> @@ -540,6 +540,10 @@ static int __init of_platform_default_populate_init(void)
-> >>                  of_node_put(node);
-> >>          }
-> >>
-> >> +       node = of_get_compatible_child(of_chosen, "simple-framebuffer");
-> >
-> > You have to check if the node variable is NULL here.
-> >
-> >> +       of_platform_device_create(node, NULL, NULL);
-> >
-> > Otherwise this could lead to a NULL pointer dereference if debug
-> > output is enabled (the node->full_name is printed).
->
-> Where is it printed? I thought I might need a NULL check, but this code
+Originally, AMD SVM AVIC supports 8-bit host physical APIC ID.
+However, newer AMD systems can have physical APIC ID larger than 255,
+and AVIC hardware has been extended to support upto the maximum physical
+APIC ID available in the system.
 
-Sorry, I misread of_amba_device_create() as
-of_platform_device_create(), which uses the "%pOF" printk format
-specifier [0] to print the node's full name as a debug output [1].
+This series introduces a helper function in the APIC subsystem to get
+the maximum physical APIC ID allowing the SVM AVIC driver to calculate
+the number of bits to program the host physical APIC ID in the AVIC
+physical APIC ID table entry.
 
-[0]: https://elixir.bootlin.com/linux/v5.16-rc5/source/Documentation/core-api/printk-formats.rst#L462
-[1]: https://elixir.bootlin.com/linux/v5.16-rc5/source/drivers/of/platform.c#L233
+Regards,
+Suravee Suthikulpanit
 
-> was suggested verbatim by Rob in v2 without the NULL check and digging
-> through I found that the NULL codepath is safe.
->
+Changes from V2 (https://www.spinics.net/lists/kvm/msg261351.html)
 
-You are right that passing NULL is a safe code path for now due the
-of_device_is_available(node) check, but that seems fragile to me since
-just adding a similar debug output to of_platform_device_create()
-could trigger the NULL pointer dereference.
+ * Use global variable npt_enabled instead (patch 1/3)
 
-Best regards,
-Javier
+ * Use BIT_ULL() instead of BIT() since avic_host_physical_id_mask
+   is 64-bit value (patch 3/3)
+
+Suravee Suthikulpanit (3):
+  KVM: SVM: Refactor AVIC hardware setup logic into helper function
+  x86/apic: Add helper function to get maximum physical APIC ID
+  KVM: SVM: Extend host physical APIC ID field to support more than
+    8-bit
+
+ arch/x86/include/asm/apic.h |  1 +
+ arch/x86/kernel/apic/apic.c |  6 ++++++
+ arch/x86/kvm/svm/avic.c     | 38 +++++++++++++++++++++++++++++--------
+ arch/x86/kvm/svm/svm.c      |  8 +-------
+ arch/x86/kvm/svm/svm.h      |  2 +-
+ 5 files changed, 39 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
+

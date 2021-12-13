@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C576472C4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41406472C4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236535AbhLMMaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:30:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40702 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbhLMMaL (ORCPT
+        id S236751AbhLMMas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:30:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20516 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231502AbhLMMar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:30:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CBF8B80D95;
-        Mon, 13 Dec 2021 12:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60A48C34603;
-        Mon, 13 Dec 2021 12:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639398609;
-        bh=9eGLtXiu5M4VNtcNibnrFxohOc50ULA+g7RYgEmpgXc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=q8mvooINToLmsou5RUA1XWJAxG/rQZQ4RvnuNdqiy7VJuty+Bo3SU+ivTRf/+IuFX
-         Ncf4gA7k7hBhstYM325rqs4vYa9fJI7HVaH/gSFabuFwQXu9bnZDjl4UGwdRto+3ka
-         KE884T4GsM4Y4Pebk9b1U3I/AOTbf8xRTXJJqGqw/OheWZ5cRV+i3/O23KyGeySszL
-         EP5mdT0atCq2uk4t8nIBaFDqQyzPWYoKQ3mT94igAjJztPKGpPEaIjMcNA5pHjcdN2
-         w2DZr78xJF/SUUPSDv3EhyOw9F6vswzB+nFETUguZs8Fwks+8K9iIbVyNa3eY7ZJLO
-         DcdG+7oi9uoaw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 42E6D609D6;
-        Mon, 13 Dec 2021 12:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 13 Dec 2021 07:30:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639398647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rFseXIPz1IYUI6GVR/tsU1fEMIKeguRcL2+NPoTLos8=;
+        b=VsbmMurj7dzHviwr4YruXDYIaW3y9A6wYOTx5VyhtjbYzZewo2TbKNmWKPjowaO47BI9KX
+        F7x9P26EnyqMXR+AlXkKGtu8wTa2AXxnPTDa+qYhLpfPRVimBjdTChe9v8JjLXi0n8Eqzl
+        Iqo6+BtxmjID8r/8Vs1K0pIq8KXy1Vg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-96-IvsLE_xTPBCQHqLircDzMA-1; Mon, 13 Dec 2021 07:30:46 -0500
+X-MC-Unique: IvsLE_xTPBCQHqLircDzMA-1
+Received: by mail-wm1-f72.google.com with SMTP id o17-20020a05600c511100b00343141e2a16so3522842wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 04:30:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rFseXIPz1IYUI6GVR/tsU1fEMIKeguRcL2+NPoTLos8=;
+        b=dedIq7jGHBsKDtmnzf/pvGm7Wwel88JTN4W40nIZAjuT4NR5TNr7vKw8e7Jpu0mJZM
+         KxHLORgE60+zcWhfMrp+Wizrt1aX3iFCYppw8ilDZFte7yZEOVly1K+8gVpzGxN21/iX
+         34lEoMT26FVpf89VAXO1z6+xPPGudftOOYqnZdqXCcabQ0L/5F5rgJyG6xcVirSA4dQM
+         5qBJQ8x7Bx8jJpsjNBTMJhB93loNDRGOxw/XJ7v52w2NAH1Gm5mcoVkEsBFCpkNK4OJ0
+         XGqwRnlIbLPdPIor++lQv8mHWPfbKG5GJI/lsWImyUR48WUOyqpGUTitpcznzIIgRcPH
+         EVtg==
+X-Gm-Message-State: AOAM530akWlWknMA2H2j8BByD821WarA7g9hoq5f8ctOB8IFxlzQND/Q
+        PeF1xz+xPWsTgw0Q+VV6R5nOVHTawErbUi4I0ttO3yoZdli7M2v9EcjyXEqptYvxcB2rkIlMlX+
+        hzMQNW0onPbaLd3OHXGyeJMbo
+X-Received: by 2002:adf:c843:: with SMTP id e3mr12588546wrh.38.1639398644928;
+        Mon, 13 Dec 2021 04:30:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyugIvHuLr1KneHTcenhUSGA0C2rTtCv2LMRa36IG+SIi8kKvVUdU6tJv9lHJIKxXCnmgndXQ==
+X-Received: by 2002:adf:c843:: with SMTP id e3mr12588530wrh.38.1639398644768;
+        Mon, 13 Dec 2021 04:30:44 -0800 (PST)
+Received: from vian.redhat.com ([2a0c:5a80:3c10:3400:3c70:6643:6e71:7eae])
+        by smtp.gmail.com with ESMTPSA id h16sm12520056wrm.27.2021.12.13.04.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 04:30:44 -0800 (PST)
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/3] bcm2835-dt-next-2021-12-13
+Date:   Mon, 13 Dec 2021 13:30:38 +0100
+Message-Id: <20211213123040.184359-1-nsaenzju@redhat.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: stmmac: bump tc when get underflow error from
- DMA descriptor
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163939860926.21128.12756625004904393893.git-patchwork-notify@kernel.org>
-Date:   Mon, 13 Dec 2021 12:30:09 +0000
-References: <20211208100651.19369-1-xiaoliang.yang_1@nxp.com>
-In-Reply-To: <20211208100651.19369-1-xiaoliang.yang_1@nxp.com>
-To:     Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kuba@kernel.org,
-        qiangqing.zhang@nxp.com, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        yannick.vignon@nxp.com, boon.leong.ong@intel.com,
-        Jose.Abreu@synopsys.com, mst@redhat.com, sonic.zhang@analog.com,
-        Joao.Pinto@synopsys.com, mingkai.hu@nxp.com, leoyang.li@nxp.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Florian,
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-On Wed,  8 Dec 2021 18:06:51 +0800 you wrote:
-> In DMA threshold mode, frame underflow errors may sometimes occur when
-> the TC(threshold control) value is not enough. The TC value need to be
-> bumped up in this case.
-> 
-> There is no underflow interrupt bit on DMA_CH(#i)_Status of dwmac4, so
-> the DMA threshold cannot be bumped up in stmmac_dma_interrupt(). The
-> i.mx8mp board observed an underflow error while running NFS boot, the
-> NFS rootfs could not be mounted.
-> 
-> [...]
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-Here is the summary with links:
-  - [net-next] net: stmmac: bump tc when get underflow error from DMA descriptor
-    https://git.kernel.org/netdev/net-next/c/3a6c12a0c6c3
+are available in the Git repository at:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git tags/bcm2835-dt-next-2021-12-13
 
+for you to fetch changes up to 5e8c1bf1a0a5c728cee2b6c2162348a9dfddf1bf:
+
+  ARM: dts: bcm2711-rpi-4-b: Add gpio offsets to line name array (2021-12-13 13:08:04 +0100)
+
+----------------------------------------------------------------
+Uwe Kleine-König adds offsets to GPIO line names array for better
+readability.
+
+----------------------------------------------------------------
+Uwe Kleine-König (1):
+      ARM: dts: bcm2711-rpi-4-b: Add gpio offsets to line name array
+
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 

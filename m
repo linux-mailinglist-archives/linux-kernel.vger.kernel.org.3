@@ -2,197 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF68472E30
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A5D472E35
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238448AbhLMNz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S238465AbhLMN4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238436AbhLMNz5 (ORCPT
+        with ESMTP id S234036AbhLMN4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:55:57 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E02C06173F;
-        Mon, 13 Dec 2021 05:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4YexKwKozra0oKxp5TjVv7Mz5v1wkSE+AXkRaZfsdCY=; b=XGrSt7YgvuxHZvE4rUc4wzSaTP
-        1jKn3r4Xi2+n6XJWgt7w48lxMT3sl626v7DNC2p9SKfXz/1o0UFQq9hBailB611xyIvzJIYlINOfd
-        MzWPzLBA7uWU4EULoABp6HyOA/uiroEuEzniayjVsPB7p92SKM3HcdPjKQ1y2u/N7GrDrjihqYNIR
-        Caq9ZRviHUXRhYvISA5G6OSnFcDNcDu6MJHqVKrIxGw1pIS+WBWQXt9XUjBbYUUCdiDXJxpKQQCR9
-        dOB+ECGIToBO2r6rwSrIxLZZt+U/tA70eTzQrAnOrM1aY5rRomAZFmNFWc5xovx9sD4brlhVFdrWZ
-        Hws/rhGw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwlnr-00CqGo-Ny; Mon, 13 Dec 2021 13:55:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 61B54300056;
-        Mon, 13 Dec 2021 14:55:42 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 40D682CB62AC3; Mon, 13 Dec 2021 14:55:42 +0100 (CET)
-Date:   Mon, 13 Dec 2021 14:55:42 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@posk.io>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-api@vger.kernel.org, Paul Turner <pjt@google.com>,
-        Ben Segall <bsegall@google.com>,
-        Peter Oskolkov <posk@google.com>,
-        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Subject: Re: [PATCH v0.9.1 3/6] sched/umcg: implement UMCG syscalls
-Message-ID: <YbdQ3tmke53kdHHY@hirez.programming.kicks-ass.net>
-References: <20211122211327.5931-4-posk@google.com>
- <20211124200822.GF721624@worktop.programming.kicks-ass.net>
- <CAFTs51Uka8VRCHuGidw7mRwATufp87U6S8SWUVod_kU-h6T3ew@mail.gmail.com>
- <YaEUts3RbOLyvAjl@hirez.programming.kicks-ass.net>
- <CAFTs51XnN+N74i1XHvRUAUWd04-Fs9uV6ouXo=CQSQs8MaEM5A@mail.gmail.com>
- <YaUCoe07Wl9Stlch@hirez.programming.kicks-ass.net>
- <CAFTs51UzR=m6+vcjTCNOGwGu3ZwB5GMrg+cSQy2ecvCWxhZvEQ@mail.gmail.com>
- <20211129210841.GO721624@worktop.programming.kicks-ass.net>
- <CAFTs51XyGDNj89+FCn4HZqMHuenjQu2wqTOW8ow4hSUbdGrGhw@mail.gmail.com>
- <Ya30xsrQnwyT/R92@hirez.programming.kicks-ass.net>
+        Mon, 13 Dec 2021 08:56:23 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF08FC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:56:22 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id y13so51932763edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zrtRpR8eA02n90RUwfo1A3PioW6t9aLRijcZi5AYw44=;
+        b=Gr/l8gjmasnhOeyi4byACXdu1YfG5jl2KSTRaw5qc2izpQ4Ojz71h7I1rmOXQmK27R
+         97zOBvJZL/2Rd6XJTZOAmihFqO0gNx2kvVoKZkI4+Wqq1HVhybjtwkd84yTUWDRSf7mR
+         ZrLl/MUwAexAV8V1+UZ/zprNEKooaryECmfhpwNYDBPjaXJ7WdPdcM1J9sq3/EjnlzEV
+         N6EnBSPlgu5cpLhc0/Sb5QDJZs0TQkfIqQU2kYk4sBaDCI8RYtmvG0BYFC/qCMG2vK7j
+         KeDzTQidnMTl77ctP6WQ47yaa2Kl/O1cBsv2RP43UrlXeF7c03u2ZeRwxKDc1hfAOcsv
+         nWKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zrtRpR8eA02n90RUwfo1A3PioW6t9aLRijcZi5AYw44=;
+        b=g9ET3vSnuGFKN0VIUnWHc3L4OQSmsoh58mibiWrfd7DrUo0WkNWFIYy5NU713zUea1
+         W9uJPmqLwFDMGwyfxci995y4slMmlU0PlFXJ4MZ9A9HtV/VGW0OFRGksm+hjrYxbJXXr
+         eZaLYm2lXD6h13nfj6Z4+tB1LdmFA7wnFwjLBl5Q0CoEeCobfXo1Ebk0DKoWa7LBOfGo
+         994LJzwiiV7f+ToP9Kh9dDAt2ApC6hcoGOcFtlZd12+VYHDI2OqjQ7blbYveULjHUK6f
+         Pjm1K8SZHg0csyj2yfphRkZxGBiXJWwqWPeilXfpUbT3mt+e6X3kzIZnPDLDo2Nscj84
+         ewmA==
+X-Gm-Message-State: AOAM533y08rHeYP5cEdUXukSHjnnoIx6Tg71FcoVRSImyMyGYrItiWek
+        7+ORjn5fX43z1Xy+AbvZzyhO9m5bhmjP7PDg47L+7W/09YAfggVH
+X-Google-Smtp-Source: ABdhPJzu6Sy0E4ASvjWdK04f3wVR79VFUqLTwERbCTzG1yv15MbFMEi1BYmN3V3vffxNAKrnuq7q+wxehLaP0obMRJ4=
+X-Received: by 2002:aa7:c415:: with SMTP id j21mr65957272edq.357.1639403781408;
+ Mon, 13 Dec 2021 05:56:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya30xsrQnwyT/R92@hirez.programming.kicks-ass.net>
+References: <1638619795-71451-1-git-send-email-wang.yong12@zte.com.cn>
+ <Yax01zjuzmNyyJK/@balbir-desktop> <CAOH5QeDhjyjAkS1bUju2cv67KFukUr0ov8uG+z3bM6Oa=iFrMA@mail.gmail.com>
+ <Ya7uQingLC3fMJlt@balbir-desktop> <CAOH5QeC+0xDrgO+t3zwN4o48F9Q2CiTnzQDO78kuJLfyNJwoLA@mail.gmail.com>
+In-Reply-To: <CAOH5QeC+0xDrgO+t3zwN4o48F9Q2CiTnzQDO78kuJLfyNJwoLA@mail.gmail.com>
+From:   yong w <yongw.pur@gmail.com>
+Date:   Mon, 13 Dec 2021 21:56:08 +0800
+Message-ID: <CAOH5QeCO_EZzkU=B3L1=1OPiZa7XxnWZK87GbwXNOQXxZqYcoQ@mail.gmail.com>
+Subject: Re: [PATCH v2 linux-next] delayacct: track delays from memory compact
+To:     Balbir Singh <bsingharora@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, mingo@kernel.org
+Cc:     LKML <linux-kernel@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        yang.yang29@zte.com.cn, wang.yong12@zte.com.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 12:32:22PM +0100, Peter Zijlstra wrote:
-> 
-> Sorry, I haven't been feeling too well and as such procastinated on this
-> because thinking is required :/ Trying to pick up the bits.
+Hello,  is this patch OK?
 
-*sigh* and yet another week gone... someone was unhappy about refcount_t.
+Thanks.
 
-
-> No, the failure case is different; umcg_notify_resume() will simply
-> block A until someone sets A::state == RUNNING and kicks it, which will
-> be no-one.
-> 
-> Now, the above situation is actually simple to fix, but it gets more
-> interesting when we're using sys_umcg_wait() to build wait primitives.
-> Because in that case we get stuff like:
-> 
-> 	for (;;) {
-> 		self->state = RUNNABLE;
-> 		smp_mb();
-> 		if (cond)
-> 			break;
-> 		sys_umcg_wait();
-> 	}
-> 	self->state = RUNNING;
-> 
-> And we really need to not block and also not do sys_umcg_wait() early.
-> 
-> So yes, I agree that we need a special case here that ensures
-> umcg_notify_resume() doesn't block. Let me ponder naming and comments.
-> Either a TF_COND_WAIT or a whole new state. I can't decide yet.
-> 
-> Now, obviously if you do a random syscall anywhere around here, you get
-> to keep the pieces :-)
-
-Something like so I suppose..
-
---- a/include/uapi/linux/umcg.h
-+++ b/include/uapi/linux/umcg.h
-@@ -42,6 +42,32 @@
-  *
-  */
- #define UMCG_TF_PREEMPT			0x0100U
-+/*
-+ * UMCG_TF_COND_WAIT: indicate the task *will* call sys_umcg_wait()
-+ *
-+ * Enables server loops like (vs umcg_sys_exit()):
-+ *
-+ *   for(;;) {
-+ *	self->status = UMCG_TASK_RUNNABLE | UMCG_TF_COND_WAIT;
-+ *	// smp_mb() implied by xchg()
-+ *
-+ *	runnable_ptr = xchg(self->runnable_workers_ptr, NULL);
-+ *	while (runnable_ptr) {
-+ *		next = runnable_ptr->runnable_workers_ptr;
-+ *
-+ *		umcg_server_add_runnable(self, runnable_ptr);
-+ *
-+ *		runnable_ptr = next;
-+ *	}
-+ *
-+ *	self->next = umcg_server_pick_next(self);
-+ *	sys_umcg_wait(0, 0);
-+ *   }
-+ *
-+ * without a signal or interrupt in between setting umcg_task::state and
-+ * sys_umcg_wait() resulting in an infinite wait in umcg_notify_resume().
-+ */
-+#define UMCG_TF_COND_WAIT		0x0200U
- 
- #define UMCG_TF_MASK			0xff00U
- 
---- a/kernel/sched/umcg.c
-+++ b/kernel/sched/umcg.c
-@@ -180,7 +180,7 @@ void umcg_worker_exit(void)
- /*
-  * Do a state transition, @from -> @to, and possible read @next after that.
-  *
-- * Will clear UMCG_TF_PREEMPT.
-+ * Will clear UMCG_TF_PREEMPT, UMCG_TF_COND_WAIT.
-  *
-  * When @to == {BLOCKED,RUNNABLE}, update timestamps.
-  *
-@@ -216,7 +216,8 @@ static int umcg_update_state(struct task
- 		if ((old & UMCG_TASK_MASK) != from)
- 			goto fail;
- 
--		new = old & ~(UMCG_TASK_MASK | UMCG_TF_PREEMPT);
-+		new = old & ~(UMCG_TASK_MASK |
-+			      UMCG_TF_PREEMPT | UMCG_TF_COND_WAIT);
- 		new |= to & UMCG_TASK_MASK;
- 
- 	} while (!unsafe_try_cmpxchg_user(&self->state, &old, new, Efault));
-@@ -567,11 +568,13 @@ void umcg_notify_resume(struct pt_regs *
- 	if (state == UMCG_TASK_RUNNING)
- 		goto done;
- 
--	// XXX can get here when:
--	//
--	// self->state = RUNNABLE
--	// <signal>
--	// sys_umcg_wait();
-+	/*
-+	 * See comment at UMCG_TF_COND_WAIT; TL;DR: user *will* call
-+	 * sys_umcg_wait() and signals/interrupts shouldn't block
-+	 * return-to-user.
-+	 */
-+	if (state == UMCG_TASK_RUNNABLE | UMCG_TF_COND_WAIT)
-+		goto done;
- 
- 	if (state & UMCG_TF_PREEMPT) {
- 		if (umcg_pin_pages())
-@@ -658,6 +661,13 @@ SYSCALL_DEFINE2(umcg_wait, u32, flags, u
- 	if (ret)
- 		goto unblock;
- 
-+	/*
-+	 * Clear UMCG_TF_COND_WAIT *and* check state == RUNNABLE.
-+	 */
-+	ret = umcg_update_state(self, tsk, UMCG_TASK_RUNNABLE, UMCG_TASK_RUNNABLE);
-+	if (ret)
-+		goto unpin;
-+
- 	if (worker) {
- 		ret = umcg_enqueue_runnable(tsk);
- 		if (ret)
+yong w <yongw.pur@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=888=E6=97=A5=E5=
+=91=A8=E4=B8=89 00:50=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=887=
+=E6=97=A5=E5=91=A8=E4=BA=8C 13:16=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > On Sun, Dec 05, 2021 at 07:08:02PM +0800, yong w wrote:
+> > > Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=
+=885=E6=97=A5=E5=91=A8=E6=97=A5 16:17=E5=86=99=E9=81=93=EF=BC=9A
+> > > >
+> > > > On Sat, Dec 04, 2021 at 04:09:55AM -0800, yongw.pur@gmail.com wrote=
+:
+> > > > > From: wangyong <wang.yong12@zte.com.cn>
+> > > > >
+> > > > > Delay accounting does not track the delay of memory compact.
+> > > > > When there is not enough free memory, tasks can spend
+> > > > > a amount of their time waiting for compact.
+> > > > >
+> > > > > To get the impact of tasks in direct memory compact, measure
+> > > > > the delay when allocating memory through memory compact.
+> > > > >
+> > > >
+> > > > Should we call this DIRECT_COMPACT and through documentation
+> > > > or name change imply that this won't work for kcompactd the
+> > > > kernel thread - based on my reading of the patches.
+> > > >
+> > > Using DIRECT_COMPACT is a little redundant=EF=BC=8Cbecause the
+> > > delayacct stats of delay accounting is specific to tasks, it has
+> > > nothing to do with kcompactd, which is similar to the RECLAIM field.
+> > >
+> >
+> > What would we expect when we call delayacct -p <pidof kcompactd>
+> > to be output?
+> If the slow path of memory allocation is invoked in the kcompacd process,
+> there may be delays being recorded.
+>
+> > Don't feel to strongly, but it can be confusing that kcompactd
+> > has spent no time in compact'ing? Not that delayacct is used for
+> > kernel threads, but I am not sure if that use case exists today.
+> Yes, delayacct does not restrict the process of obtaining information=EF=
+=BC=8C
+> but kcompactd is used for  compaction,  the compact delay of
+> kcompatd is not actually a delay.Maybe it can be added to the
+> document later to make it clearer.
+>
+> Thanks for your reply!

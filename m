@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B0D472674
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D0B47249C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237913AbhLMJwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:52:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbhLMJq3 (ORCPT
+        id S234486AbhLMJhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:37:15 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:60148 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234481AbhLMJgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:46:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2485C08EB4B;
-        Mon, 13 Dec 2021 01:41:21 -0800 (PST)
+        Mon, 13 Dec 2021 04:36:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A562B80E23;
-        Mon, 13 Dec 2021 09:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 894A3C341C5;
-        Mon, 13 Dec 2021 09:41:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AA9D5CE0E79;
+        Mon, 13 Dec 2021 09:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53624C341C5;
+        Mon, 13 Dec 2021 09:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388480;
-        bh=C8gy0G98KFGsoXjGSHAbINoBm3zA1+daz2NB0fwNbdE=;
+        s=korg; t=1639388158;
+        bh=rL/lp714uv9WSyeOsvL2X/QdccsZx2rm/eVD2yB2QFo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=loKH2TzT7Z5yT/1filW/aR6IbWEgpswOjIDyPX9Vd9eCqz8c+rnOuJzvLVdbbGqew
-         twFm1RkiRdDudV0aJNGqntwKcSES3KF5B6WJWgJtHSrCG3NK/DQv3j6tsCklrT+AfS
-         sqe6K/Tem+6ddEt0QNEX+Z+RsRQ488WdmYwlnfR0=
+        b=ryhj1bROuMdb4ZWrpcCrWG98dcBbOXR25p4DM/RLPtFUkUGd4rGO23YTM5Nbsjqex
+         GcOTXoor3c6FEARRViUGPaVGlxbB40zumsNYJnFePOTsHQSPz21xf5N2zTHBrDAu7b
+         0/bygXgHvGKfWLv0XBYkrFTGZ1uLoR4fUZCvEFlA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Brian Silverman <brian.silverman@bluerivertech.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.19 31/74] can: m_can: Disable and ignore ELO interrupt
+        "linux-kernel@vger.kernel.org, Linus Torvalds" 
+        <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.9 20/42] binder: use wake_up_pollfree()
 Date:   Mon, 13 Dec 2021 10:30:02 +0100
-Message-Id: <20211213092931.851793274@linuxfoundation.org>
+Message-Id: <20211213092927.234096819@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
+References: <20211213092926.578829548@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,63 +47,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Silverman <brian.silverman@bluerivertech.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit f58ac1adc76b5beda43c64ef359056077df4d93a upstream.
+commit a880b28a71e39013e357fd3adccd1d8a31bc69a8 upstream.
 
-With the design of this driver, this condition is often triggered.
-However, the counter that this interrupt indicates an overflow is never
-read either, so overflowing is harmless.
+wake_up_poll() uses nr_exclusive=1, so it's not guaranteed to wake up
+all exclusive waiters.  Yet, POLLFREE *must* wake up all waiters.  epoll
+and aio poll are fortunately not affected by this, but it's very
+fragile.  Thus, the new function wake_up_pollfree() has been introduced.
 
-On my system, when a CAN bus starts flapping up and down, this locks up
-the whole system with lots of interrupts and printks.
+Convert binder to use wake_up_pollfree().
 
-Specifically, this interrupt indicates the CEL field of ECR has
-overflowed. All reads of ECR mask out CEL.
-
-Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
-Link: https://lore.kernel.org/all/20211129222628.7490-1-brian.silverman@bluerivertech.com
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: f5cb779ba163 ("ANDROID: binder: remove waitqueue when thread exits.")
 Cc: stable@vger.kernel.org
-Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Link: https://lore.kernel.org/r/20211209010455.42744-3-ebiggers@kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
 ---
- drivers/net/can/m_can/m_can.c |   14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/android/binder.c |   21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -233,15 +233,15 @@ enum m_can_mram_cfg {
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -2641,21 +2641,18 @@ static int binder_free_thread(struct bin
+ 	}
  
- /* Interrupts for version 3.0.x */
- #define IR_ERR_LEC_30X	(IR_STE	| IR_FOE | IR_ACKE | IR_BE | IR_CRCE)
--#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_ELO | IR_BEU | \
--			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
--			 IR_RF1L | IR_RF0L)
-+#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_BEU | IR_BEC | \
-+			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
-+			 IR_RF0L)
- #define IR_ERR_ALL_30X	(IR_ERR_STATE | IR_ERR_BUS_30X)
- /* Interrupts for version >= 3.1.x */
- #define IR_ERR_LEC_31X	(IR_PED | IR_PEA)
--#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_ELO | IR_BEU | \
--			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
--			 IR_RF1L | IR_RF0L)
-+#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_BEU | IR_BEC | \
-+			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
-+			 IR_RF0L)
- #define IR_ERR_ALL_31X	(IR_ERR_STATE | IR_ERR_BUS_31X)
+ 	/*
+-	 * If this thread used poll, make sure we remove the waitqueue
+-	 * from any epoll data structures holding it with POLLFREE.
+-	 * waitqueue_active() is safe to use here because we're holding
+-	 * the global lock.
++	 * If this thread used poll, make sure we remove the waitqueue from any
++	 * poll data structures holding it.
+ 	 */
+-	if ((thread->looper & BINDER_LOOPER_STATE_POLL) &&
+-	    waitqueue_active(&thread->wait)) {
+-		wake_up_poll(&thread->wait, POLLHUP | POLLFREE);
+-	}
++	if (thread->looper & BINDER_LOOPER_STATE_POLL)
++		wake_up_pollfree(&thread->wait);
  
- /* Interrupt Line Select (ILS) */
-@@ -769,8 +769,6 @@ static void m_can_handle_other_err(struc
- {
- 	if (irqstatus & IR_WDI)
- 		netdev_err(dev, "Message RAM Watchdog event due to missing READY\n");
--	if (irqstatus & IR_ELO)
--		netdev_err(dev, "Error Logging Overflow\n");
- 	if (irqstatus & IR_BEU)
- 		netdev_err(dev, "Bit Error Uncorrected\n");
- 	if (irqstatus & IR_BEC)
+ 	/*
+-	 * This is needed to avoid races between wake_up_poll() above and
+-	 * and ep_remove_waitqueue() called for other reasons (eg the epoll file
+-	 * descriptor being closed); ep_remove_waitqueue() holds an RCU read
+-	 * lock, so we can be sure it's done after calling synchronize_rcu().
++	 * This is needed to avoid races between wake_up_pollfree() above and
++	 * someone else removing the last entry from the queue for other reasons
++	 * (e.g. ep_remove_wait_queue() being called due to an epoll file
++	 * descriptor being closed).  Such other users hold an RCU read lock, so
++	 * we can be sure they're done after we call synchronize_rcu().
+ 	 */
+ 	if (thread->looper & BINDER_LOOPER_STATE_POLL)
+ 		synchronize_rcu();
 
 

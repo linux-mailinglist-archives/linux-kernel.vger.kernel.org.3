@@ -2,153 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1C647328E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310CC47324D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241334AbhLMQ5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241313AbhLMQ44 (ORCPT
+        id S241056AbhLMQy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:54:26 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:34643 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241055AbhLMQyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:56:56 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187B5C061751
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:56:54 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so13813841pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:56:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=m98RC8bY9ry625Z8i2nXVNyOqqfMLEW5ul5yLfq7Yzk=;
-        b=hR6fGZqCqI8yFwwU5LToWe8M1UCp5xIdyt8/AVOUEJ/WBqoxOqIpJsNjjVEgdYI7jp
-         PwVPRjbkz/8KsoV+eb6BeHYNBF6ZdUKrRFwh1uk+LiFLg7yubTp8nkoyzbCnrclWW28m
-         2ZY5czGQCEghFBQaUd4jvRpWoZlhdOmShL8OTDBnlp0TyrE1R9bEHqS9TlhoVRfL/pbd
-         GyTQEhIU30vJpxh8f2vlBgAC9fvBHsQWyRjcfp6pHARd0jKlSMptuxtj0rwXaGpV5/OB
-         0omsd2/p1eEkMHfceqVmgwvKngpT8ObD87J/CEjplAzO5GuLhX1JlEvEhf59cOlq9uPf
-         QPsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=m98RC8bY9ry625Z8i2nXVNyOqqfMLEW5ul5yLfq7Yzk=;
-        b=bPHoJj8H7ZhFbEXXPbIijbrGuRg5AwceZo4Fgub0pxd3t+O+hU3wTusYnXZvNrVX4q
-         PC5X/PaY0WWwK6YgvuhW26JqoDDtGTcEsby5DfPFX9RXC9iW3UiW3vzkx5pI8wLeRx+A
-         rXGx4IIsdR9rXaJ/1GvSVWGGmqUGgyPTHxw93IPcljL8l8kIjGU2zsQpEnd+Uur4PfC3
-         1T2mnMN1f+C5ZxCca0B6HIBZ9DpPrCIkAtncQVjgu48xMryodwi4v60DEuLeYKLvVokd
-         88DZfscHhIclCxLk1OI1Jt8uoUWZml3z0Ip3GnUZpv08lhDQe505U7cwKYy87wH4BYRN
-         p9dQ==
-X-Gm-Message-State: AOAM531pzWwAw44bsWYWBD/DayL+fsTky1u71kXZF7Y3FgEyqNXqzcXL
-        Ak1uJ3Ueqh2UtWfGYVMidx2hpw==
-X-Google-Smtp-Source: ABdhPJzqSJg9VWLkIG3uPnAi/6ZEdCkfsvwI9s4dHakptKaLRcr2lvcthKwpEtEYSIlgy7Onx7sgvg==
-X-Received: by 2002:a17:902:ee95:b0:141:f28f:7296 with SMTP id a21-20020a170902ee9500b00141f28f7296mr97113270pld.50.1639414613627;
-        Mon, 13 Dec 2021 08:56:53 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id n11sm10430992pgp.15.2021.12.13.08.56.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Dec 2021 08:56:53 -0800 (PST)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     willy@infradead.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        mhocko@kernel.org, vdavydov.dev@gmail.com, shakeelb@google.com,
-        guro@fb.com, shy828301@gmail.com, alexs@kernel.org,
-        richard.weiyang@gmail.com, david@fromorbit.com,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org, kari.argillander@gmail.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        zhengqi.arch@bytedance.com, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, smuchun@gmail.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v4 17/17] mm: memcontrol: rename memcg_cache_id to memcg_kmem_id
-Date:   Tue, 14 Dec 2021 00:53:42 +0800
-Message-Id: <20211213165342.74704-18-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.21.0 (Apple Git-122)
-In-Reply-To: <20211213165342.74704-1-songmuchun@bytedance.com>
-References: <20211213165342.74704-1-songmuchun@bytedance.com>
+        Mon, 13 Dec 2021 11:54:24 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2761D5801DF;
+        Mon, 13 Dec 2021 11:54:24 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 13 Dec 2021 11:54:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=5QiXVE5U69Mg35ZnXupLr9UQK/P
+        btYmTEolYnD06NLQ=; b=Wo0vGCLKL8TnuTpXGT6aMvo+mVKt398ERba+hPmKEpD
+        gOePnZzc1ep1dbKyuY+Lfwjm6wv2bnuOXdY2DxQrTnXblLzMA1aW/ZZlgWKCinex
+        qLYAiCk4VBc9hBNJymRlHd6Av8CH7Mg4ewH1ilB/4oZV7s/04CDnUFqsVQMcl7X9
+        PBeTW1MVMrUoDUVPm17s+YBkvyjUyb3TpAwFoZd0cvJM2coh067tGxyR0qgysVTH
+        uk0QSjkvQNo/sOPyqdI+PxHIsYSBr0g7G0t8auXAXn3XKF0KNvxB9iNZydMYdFU7
+        o8GVqr0u+VoU3lK1LgE+0SaW8yUAvfRsUDaOwis3BqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=5QiXVE
+        5U69Mg35ZnXupLr9UQK/PbtYmTEolYnD06NLQ=; b=ZCDCuoiG2EevFdkafU9Se9
+        B/mFoXSFNhWwJJaJgDYnpWVKqMZ9JTtBCJ6dKh+Ch/pmqSuFbd5JyDoNgLMx9aFP
+        DxEHJ44FL68CaQKrglWZozAZYYlRoLVBLoanNcLHH1LY0B4C1cgxBNGxt36VCByg
+        8+ldqgMa8Z06/9ft5Bzy5AFuWu6VJkR5HlvUUcfnTF5Z/3fCOuN6/IAHjCpjnYPY
+        U3RBcccw0SN1784eiorhY/+lE9U5Y/Rmhk0vHmhhuqfQmo0GTRPSVrWH8E+na9Tf
+        8Y1ol1NvLSmVmX4/S3RfGaxSvU9FkskliyOMF/Py7aAhuYhp62JuFOPMkVemcWwg
+        ==
+X-ME-Sender: <xms:v3q3YXa_-t7aZl7Gfmo_XFzhI2zw37moXstAZ5Ex16CyoonePGsaGg>
+    <xme:v3q3YWalhVXN6BQm3cmstHqi7P_ud8qw_7Eyr5tEbh-1Bg54z5NShJYE_1MH5Pwea
+    TBHYOq75W7Vl9veY00>
+X-ME-Received: <xmr:v3q3YZ9o6WGGBnz2DZHaY0s8cky-25B2oYS1tbSVeHfyNSbYDdrTeIHBIMiMwh0N0PvCB8jtLvbPdEnfVdzOW0OCiZW3VZyDWy9bCtt4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkeekgdelgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleffgfej
+    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:v3q3YdrR1_0X47QzI8HtSWViN8YdIAAz7gIoJ3DXKPm5GBtA6WlWag>
+    <xmx:v3q3YSr6qbi-Xeeb3nGqObgm3jwRDz6n0WCD7Rg0_P8jppohH12OMQ>
+    <xmx:v3q3YTTcv-LNTaCVeLMLNvv5iTtXdhJHr8E0RzFSqIBOCY-cPJ4Rzg>
+    <xmx:wHq3YYhKI9VF7Vso7A04DMP4uHx4rfWnn9XTjjzbcyARRzY2PTxK9w>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Dec 2021 11:54:23 -0500 (EST)
+Date:   Mon, 13 Dec 2021 17:54:22 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Guillaume Ranquet <granquet@baylibre.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
+Message-ID: <20211213165422.54n3oh72tjcb3a67@houat>
+References: <20211110130623.20553-1-granquet@baylibre.com>
+ <20211110130623.20553-8-granquet@baylibre.com>
+ <20211115101129.lyxxmb6i7paaonwi@gilmour>
+ <CABnWg9tNPGZSi1RLqF5+Qs1GHtynyVoOzAyw+i9mPRYEoByk8g@mail.gmail.com>
+ <20211116145112.xyoxzfll6exysnvt@gilmour>
+ <CABnWg9uhuchdWyBeTacR6Cy0A9OHziUi051BQ5wsZVU0ajYjyA@mail.gmail.com>
+ <20211125143034.tzikvlxxl6fdhsif@gilmour>
+ <CABnWg9tcWdfPQwNtFhqVZxCriT848fy42VHoQZs3X2UmL4LYSA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ylwd6onewg73wtcp"
+Content-Disposition: inline
+In-Reply-To: <CABnWg9tcWdfPQwNtFhqVZxCriT848fy42VHoQZs3X2UmL4LYSA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memcg_cache_id() introduced by commit 2633d7a02823 ("slab/slub:
-consider a memcg parameter in kmem_create_cache") is used to index
-in the kmem_cache->memcg_params->memcg_caches array. Since
-kmem_cache->memcg_params.memcg_caches has been removed by commit
-9855609bde03 ("mm: memcg/slab: use a single set of kmem_caches for
-all accounted allocations"). So the name does not need to reflect
-cache related. Just rename it to memcg_kmem_id. And it can reflect
-kmem related.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- include/linux/memcontrol.h | 4 ++--
- mm/list_lru.c              | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+--ylwd6onewg73wtcp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 7b472f805d77..94ed3a124191 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1735,7 +1735,7 @@ static inline void memcg_kmem_uncharge_page(struct page *page, int order)
-  * A helper for accessing memcg's kmem_id, used for getting
-  * corresponding LRU lists.
-  */
--static inline int memcg_cache_id(struct mem_cgroup *memcg)
-+static inline int memcg_kmem_id(struct mem_cgroup *memcg)
- {
- 	return memcg ? memcg->kmemcg_id : -1;
- }
-@@ -1773,7 +1773,7 @@ static inline bool memcg_kmem_enabled(void)
- 	return false;
- }
- 
--static inline int memcg_cache_id(struct mem_cgroup *memcg)
-+static inline int memcg_kmem_id(struct mem_cgroup *memcg)
- {
- 	return -1;
- }
-diff --git a/mm/list_lru.c b/mm/list_lru.c
-index 589146fd3770..9c0682ed9dda 100644
---- a/mm/list_lru.c
-+++ b/mm/list_lru.c
-@@ -74,7 +74,7 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
- 	if (!memcg)
- 		goto out;
- 
--	l = list_lru_from_memcg_idx(lru, nid, memcg_cache_id(memcg));
-+	l = list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(memcg));
- out:
- 	if (memcg_ptr)
- 		*memcg_ptr = memcg;
-@@ -181,7 +181,7 @@ unsigned long list_lru_count_one(struct list_lru *lru,
- 	long count;
- 
- 	rcu_read_lock();
--	l = list_lru_from_memcg_idx(lru, nid, memcg_cache_id(memcg));
-+	l = list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(memcg));
- 	count = l ? READ_ONCE(l->nr_items) : 0;
- 	rcu_read_unlock();
- 
-@@ -272,7 +272,7 @@ list_lru_walk_one(struct list_lru *lru, int nid, struct mem_cgroup *memcg,
- 	unsigned long ret;
- 
- 	spin_lock(&nlru->lock);
--	ret = __list_lru_walk_one(lru, nid, memcg_cache_id(memcg), isolate,
-+	ret = __list_lru_walk_one(lru, nid, memcg_kmem_id(memcg), isolate,
- 				  cb_arg, nr_to_walk);
- 	spin_unlock(&nlru->lock);
- 	return ret;
-@@ -288,7 +288,7 @@ list_lru_walk_one_irq(struct list_lru *lru, int nid, struct mem_cgroup *memcg,
- 	unsigned long ret;
- 
- 	spin_lock_irq(&nlru->lock);
--	ret = __list_lru_walk_one(lru, nid, memcg_cache_id(memcg), isolate,
-+	ret = __list_lru_walk_one(lru, nid, memcg_kmem_id(memcg), isolate,
- 				  cb_arg, nr_to_walk);
- 	spin_unlock_irq(&nlru->lock);
- 	return ret;
--- 
-2.11.0
+On Thu, Dec 02, 2021 at 06:48:12AM -0800, Guillaume Ranquet wrote:
+> Hi,
+>=20
+> Quoting Maxime Ripard (2021-11-25 15:30:34)
+> > On Wed, Nov 24, 2021 at 01:45:21PM +0000, Guillaume Ranquet wrote:
+> > > Hi,
+> > > Thanks for all your input, really appreciated.
+> > >
+> > > Quoting Maxime Ripard (2021-11-16 15:51:12)
+> > > > Hi,
+> > > >
+> > > > On Mon, Nov 15, 2021 at 09:33:52AM -0500, Guillaume Ranquet wrote:
+> > > > > Quoting Maxime Ripard (2021-11-15 11:11:29)
+> > > > > > > The driver creates a child device for the phy. The child devi=
+ce will
+> > > > > > > never exist without the parent being active. As they are shar=
+ing a
+> > > > > > > register range, the parent passes a regmap pointer to the chi=
+ld so that
+> > > > > > > both can work with the same register range. The phy driver se=
+ts device
+> > > > > > > data that is read by the parent to get the phy device that ca=
+n be used
+> > > > > > > to control the phy properties.
+> > > > > >
+> > > > > > If the PHY is in the same register space than the DP controller=
+, why do
+> > > > > > you need a separate PHY driver in the first place?
+> > > > >
+> > > > > This has been asked by Chun-Kuang Hu in a previous revision of th=
+e series:
+> > > > >
+> > > > > https://lore.kernel.org/linux-mediatek/CAAOTY_-+T-wRCH2yw2XSm=3DZ=
+baBbqBQ4EqpU2P0TF90gAWQeRsg@mail.gmail.com/
+> > > >
+> > > > It's a bit of a circular argument though :)
+> > > >
+> > > > It's a separate phy driver because it needs to go through another
+> > > > maintainer's tree, but it needs to go through another maintainer's =
+tree
+> > > > because it's a separate phy driver.
+> > > >
+> > > > It doesn't explain why it needs to be a separate phy driver? Why ca=
+n't
+> > > > the phy setup be done directly in the DP driver, if it's essentiall=
+y a
+> > > > single device?
+> > > >
+> > > > That being said, usually what those kind of questions mean is that
+> > > > you're missing a comment or something in the commit log to provide =
+that
+> > > > context in the first place, so it would be great to add that context
+> > > > here.
+> > > >
+> > > > And it will avoid the situation we're now in where multiple reviewe=
+rs
+> > > > ask the same questions over and over again :)
+> > > >
+> > > At first I didn't understand your reply, then I realized I gave you
+> > > the wrong link...
+> > > my bad! I'm struggling a bit with mail reviews, but I'll get there ev=
+entually.
+> > >
+> > > The driver and phy were a single driver until v2 of this patch series
+> > > and the phy setup
+> > > was done directly in the driver (single driver, single C file).
+> > > Here's the relevant link to the discussion between Chun-Kuang and Mar=
+kus
+> > >
+> > > https://lore.kernel.org/linux-mediatek/CAAOTY__cJMqcAieEraJ2sz4gi0Zs-=
+aiNXz38_x7dPQea6HvYEg@mail.gmail.com/#t
+> > >
+> > > I'll try to find a way to make it clearer for v7.
+> >
+> > OK, it makes sense then :)
+> >
+> > There's something weird though: the devices definitely look like they're
+> > in a separate register range, yet you mention a regmap to handle the
+> > shared register range. That range doesn't seem described anywhere in the
+> > device tree though? What is it for?
+>
+> My understanding is that 0x1000 to 0x1fff controls the phy
+> functionalities and 0x2000 to 0x4fff controls "non-phy"
+> functionalities. And you are right, there's no description of that in
+> the device tree whatsoever. The ranges are in the same actual device
+> and thus it has been decided to not have dt-bindings for the phy
+> device.
 
+Sure, that last part makes sense, but then I'm not sure why you don't
+have the full register range in the device node you have in the DT?
+
+> The phy driver is a child of the DP driver that we register using
+> platform_device_register_data() and we pass along the same regmap as
+> the DP driver in its platform data.
+
+Especially if it's used by something, it should be described in the DT
+somewhere.
+
+Maxime
+
+--ylwd6onewg73wtcp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYbd6vgAKCRDj7w1vZxhR
+xT/XAP4gcBznOdZEodDfrTWXsySCTdZkPIjixaXYaZygMv/DvAEAzYR8zGWt+4Lo
+KRYSF1p0RUF9kFGbzn1FJomiL38MuwI=
+=Rzng
+-----END PGP SIGNATURE-----
+
+--ylwd6onewg73wtcp--

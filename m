@@ -2,46 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5935B4724DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143694725FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbhLMJjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234919AbhLMJhn (ORCPT
+        id S236699AbhLMJrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:47:25 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36822 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234589AbhLMJnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:37:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9982CC08E845;
-        Mon, 13 Dec 2021 01:36:50 -0800 (PST)
+        Mon, 13 Dec 2021 04:43:23 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67550B80E1B;
-        Mon, 13 Dec 2021 09:36:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC4DC00446;
-        Mon, 13 Dec 2021 09:36:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C4CBDCE0E79;
+        Mon, 13 Dec 2021 09:43:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A99C341C5;
+        Mon, 13 Dec 2021 09:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388208;
-        bh=9SPsXd41ysnasDV6ceYcTpGazbS8wZywQmLQPewnt9U=;
+        s=korg; t=1639388599;
+        bh=uAiqZR3IvrFrXzJGBI0LYMHFB0Cq9UInD/O8AAugYSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BVcZif0AUcanYinc5XWMjODCoueJDOxfrLatXfjaqmcfhoV7S40WbSKgDfP4/eBu1
-         DzWoZssGcGxKSEdJE4SZy7Ua0lX32d4a10FEQmpxxBR1fmjdDwuFJcp1UQKsw+cdkq
-         Z/I25Hp6AQLE26RUKDFGHzM/rtmcqaAp4eEmnvKg=
+        b=zWwsdWmjMQ7VDeW48xESD5fENf2H8XqfrVWIBP5YYsL7goWAp38BAQwMv8Fgy3Cbk
+         W2p/9riXJymcPkLzGnPC+39YLiFvIq2tnWZEOwSDE7LyP2f31XxBf/RCQsfx/HeHu9
+         Hhcg+pJzZIk2P3/rA6L5/EJvj9YNUN9yAhcKjHq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org, Linus Torvalds" 
-        <torvalds@linux-foundation.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.14 23/53] wait: add wake_up_pollfree()
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 32/88] ALSA: pcm: oss: Handle missing errors in snd_pcm_oss_change_params*()
 Date:   Mon, 13 Dec 2021 10:30:02 +0100
-Message-Id: <20211213092929.134830871@linuxfoundation.org>
+Message-Id: <20211213092934.337895842@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,113 +44,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 42288cb44c4b5fff7653bc392b583a2b8bd6a8c0 upstream.
+commit 6665bb30a6b1a4a853d52557c05482ee50e71391 upstream.
 
-Several ->poll() implementations are special in that they use a
-waitqueue whose lifetime is the current task, rather than the struct
-file as is normally the case.  This is okay for blocking polls, since a
-blocking poll occurs within one task; however, non-blocking polls
-require another solution.  This solution is for the queue to be cleared
-before it is freed, using 'wake_up_poll(wq, EPOLLHUP | POLLFREE);'.
+A couple of calls in snd_pcm_oss_change_params_locked() ignore the
+possible errors.  Catch those errors and abort the operation for
+avoiding further problems.
 
-However, that has a bug: wake_up_poll() calls __wake_up() with
-nr_exclusive=1.  Therefore, if there are multiple "exclusive" waiters,
-and the wakeup function for the first one returns a positive value, only
-that one will be called.  That's *not* what's needed for POLLFREE;
-POLLFREE is special in that it really needs to wake up everyone.
-
-Considering the three non-blocking poll systems:
-
-- io_uring poll doesn't handle POLLFREE at all, so it is broken anyway.
-
-- aio poll is unaffected, since it doesn't support exclusive waits.
-  However, that's fragile, as someone could add this feature later.
-
-- epoll doesn't appear to be broken by this, since its wakeup function
-  returns 0 when it sees POLLFREE.  But this is fragile.
-
-Although there is a workaround (see epoll), it's better to define a
-function which always sends POLLFREE to all waiters.  Add such a
-function.  Also make it verify that the queue really becomes empty after
-all waiters have been woken up.
-
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211209010455.42744-2-ebiggers@kernel.org
-Signed-off-by: Eric Biggers <ebiggers@google.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211201073606.11660-4-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/wait.h |   26 ++++++++++++++++++++++++++
- kernel/sched/wait.c  |    8 ++++++++
- 2 files changed, 34 insertions(+)
+ sound/core/oss/pcm_oss.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -191,6 +191,7 @@ void __wake_up_locked_key_bookmark(struc
- void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
- void __wake_up_locked(struct wait_queue_head *wq_head, unsigned int mode, int nr);
- void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode, int nr);
-+void __wake_up_pollfree(struct wait_queue_head *wq_head);
- 
- #define wake_up(x)			__wake_up(x, TASK_NORMAL, 1, NULL)
- #define wake_up_nr(x, nr)		__wake_up(x, TASK_NORMAL, nr, NULL)
-@@ -215,6 +216,31 @@ void __wake_up_sync(struct wait_queue_he
- #define wake_up_interruptible_sync_poll(x, m)					\
- 	__wake_up_sync_key((x), TASK_INTERRUPTIBLE, 1, (void *) (m))
- 
-+/**
-+ * wake_up_pollfree - signal that a polled waitqueue is going away
-+ * @wq_head: the wait queue head
-+ *
-+ * In the very rare cases where a ->poll() implementation uses a waitqueue whose
-+ * lifetime is tied to a task rather than to the 'struct file' being polled,
-+ * this function must be called before the waitqueue is freed so that
-+ * non-blocking polls (e.g. epoll) are notified that the queue is going away.
-+ *
-+ * The caller must also RCU-delay the freeing of the wait_queue_head, e.g. via
-+ * an explicit synchronize_rcu() or call_rcu(), or via SLAB_TYPESAFE_BY_RCU.
-+ */
-+static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
-+{
-+	/*
-+	 * For performance reasons, we don't always take the queue lock here.
-+	 * Therefore, we might race with someone removing the last entry from
-+	 * the queue, and proceed while they still hold the queue lock.
-+	 * However, rcu_read_lock() is required to be held in such cases, so we
-+	 * can safely proceed with an RCU-delayed free.
-+	 */
-+	if (waitqueue_active(wq_head))
-+		__wake_up_pollfree(wq_head);
-+}
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -884,8 +884,15 @@ static int snd_pcm_oss_change_params_loc
+ 		err = -EINVAL;
+ 		goto failure;
+ 	}
+-	choose_rate(substream, sparams, runtime->oss.rate);
+-	snd_pcm_hw_param_near(substream, sparams, SNDRV_PCM_HW_PARAM_CHANNELS, runtime->oss.channels, NULL);
 +
- #define ___wait_cond_timeout(condition)						\
- ({										\
- 	bool __cond = (condition);						\
---- a/kernel/sched/wait.c
-+++ b/kernel/sched/wait.c
-@@ -11,6 +11,7 @@
- #include <linux/wait.h>
- #include <linux/hash.h>
- #include <linux/kthread.h>
-+#include <linux/poll.h>
++	err = choose_rate(substream, sparams, runtime->oss.rate);
++	if (err < 0)
++		goto failure;
++	err = snd_pcm_hw_param_near(substream, sparams,
++				    SNDRV_PCM_HW_PARAM_CHANNELS,
++				    runtime->oss.channels, NULL);
++	if (err < 0)
++		goto failure;
  
- void __init_waitqueue_head(struct wait_queue_head *wq_head, const char *name, struct lock_class_key *key)
- {
-@@ -213,6 +214,13 @@ void __wake_up_sync(struct wait_queue_he
- }
- EXPORT_SYMBOL_GPL(__wake_up_sync);	/* For internal use only */
+ 	format = snd_pcm_oss_format_from(runtime->oss.format);
  
-+void __wake_up_pollfree(struct wait_queue_head *wq_head)
-+{
-+	__wake_up(wq_head, TASK_NORMAL, 0, (void *)(POLLHUP | POLLFREE));
-+	/* POLLFREE must have cleared the queue. */
-+	WARN_ON_ONCE(waitqueue_active(wq_head));
-+}
-+
- /*
-  * Note: we use "set_current_state()" _after_ the wait-queue add,
-  * because we need a memory barrier there on SMP, so that any
 
 

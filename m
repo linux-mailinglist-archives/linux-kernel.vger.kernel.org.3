@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACD6472464
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218414724ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbhLMJgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233923AbhLMJfH (ORCPT
+        id S233167AbhLMJjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:39:41 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:33482 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233034AbhLMJiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:35:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BE0C061201;
-        Mon, 13 Dec 2021 01:35:06 -0800 (PST)
+        Mon, 13 Dec 2021 04:38:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E934B80E1B;
-        Mon, 13 Dec 2021 09:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7EF9C341C8;
-        Mon, 13 Dec 2021 09:35:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6ECCCCE0E7D;
+        Mon, 13 Dec 2021 09:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D12C00446;
+        Mon, 13 Dec 2021 09:38:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388101;
-        bh=GApYLK2DZbQrXZ99Rr+yJydvqE1BWEM2Rib7gQzizJs=;
+        s=korg; t=1639388285;
+        bh=IgI7V+rJHEBCgtv5IffGcg8HDrt4Y5DOlbM8kwCl3T4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ACECkxs3DqSBoAKH8cVdZqpvlBakyIIb83ij2+Q2wKjazYocoiKfdoZ/TZyJWEErN
-         Bdv2CU4xuOtQExv5kY6DnfR7zuujNqgx9kwhl6XLyiqZBWl/sN7gD7OXe5o+KJGOwv
-         Cy6p50DMMxUzVoIlrjc91gMeUgDkfGsRAEKaBgP0=
+        b=uFbLwzHWZNzoX85Qucdpu6r12hWhrIPL7wx8I2wv8IhbdHGJn9WqAwDqV1Ooy7cb9
+         6Oq7VQthHjapV1HD476VidWcchwnJNB+QZaU0Bkx1p6YB3YtHtPZARHxHlHf6Sue87
+         eczCkMQFUE4l1E88zsGBknFLc6wWO0fr1caSs9qk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Szymon Heidrich <szymon.heidrich@gmail.com>
-Subject: [PATCH 4.9 30/42] USB: gadget: zero allocate endpoint 0 buffers
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 33/53] net/qla3xxx: fix an error code in ql_adapter_up()
 Date:   Mon, 13 Dec 2021 10:30:12 +0100
-Message-Id: <20211213092927.548865564@linuxfoundation.org>
+Message-Id: <20211213092929.457955885@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +45,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 86ebbc11bb3f60908a51f3e41a17e3f477c2eaa3 upstream.
+commit d17b9737c2bc09b4ac6caf469826e5a7ce3ffab7 upstream.
 
-Under some conditions, USB gadget devices can show allocated buffer
-contents to a host.  Fix this up by zero-allocating them so that any
-extra data will all just be zeros.
+The ql_wait_for_drvr_lock() fails and returns false, then this
+function should return an error code instead of returning success.
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+The other problem is that the success path prints an error message
+netdev_err(ndev, "Releasing driver lock\n");  Delete that and
+re-order the code a little to make it more clear.
+
+Fixes: 5a4faa873782 ("[PATCH] qla3xxx NIC driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20211207082416.GA16110@kili
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c   |    2 +-
- drivers/usb/gadget/legacy/dbgp.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/qlogic/qla3xxx.c |   19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -2183,7 +2183,7 @@ int composite_dev_prepare(struct usb_com
- 	if (!cdev->req)
- 		return -ENOMEM;
+--- a/drivers/net/ethernet/qlogic/qla3xxx.c
++++ b/drivers/net/ethernet/qlogic/qla3xxx.c
+@@ -3495,20 +3495,19 @@ static int ql_adapter_up(struct ql3_adap
  
--	cdev->req->buf = kmalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
-+	cdev->req->buf = kzalloc(USB_COMP_EP0_BUFSIZ, GFP_KERNEL);
- 	if (!cdev->req->buf)
- 		goto fail;
+ 	spin_lock_irqsave(&qdev->hw_lock, hw_flags);
  
---- a/drivers/usb/gadget/legacy/dbgp.c
-+++ b/drivers/usb/gadget/legacy/dbgp.c
-@@ -136,7 +136,7 @@ static int dbgp_enable_ep_req(struct usb
- 		goto fail_1;
+-	err = ql_wait_for_drvr_lock(qdev);
+-	if (err) {
+-		err = ql_adapter_initialize(qdev);
+-		if (err) {
+-			netdev_err(ndev, "Unable to initialize adapter\n");
+-			goto err_init;
+-		}
+-		netdev_err(ndev, "Releasing driver lock\n");
+-		ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
+-	} else {
++	if (!ql_wait_for_drvr_lock(qdev)) {
+ 		netdev_err(ndev, "Could not acquire driver lock\n");
++		err = -ENODEV;
+ 		goto err_lock;
  	}
  
--	req->buf = kmalloc(DBGP_REQ_LEN, GFP_KERNEL);
-+	req->buf = kzalloc(DBGP_REQ_LEN, GFP_KERNEL);
- 	if (!req->buf) {
- 		err = -ENOMEM;
- 		stp = 2;
++	err = ql_adapter_initialize(qdev);
++	if (err) {
++		netdev_err(ndev, "Unable to initialize adapter\n");
++		goto err_init;
++	}
++	ql_sem_unlock(qdev, QL_DRVR_SEM_MASK);
++
+ 	spin_unlock_irqrestore(&qdev->hw_lock, hw_flags);
+ 
+ 	set_bit(QL_ADAPTER_UP, &qdev->flags);
 
 

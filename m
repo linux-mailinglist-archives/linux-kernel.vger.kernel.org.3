@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5905647364E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EDE473655
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243059AbhLMUzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S238624AbhLMVAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243032AbhLMUy7 (ORCPT
+        with ESMTP id S233931AbhLMVAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:54:59 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA725C061751
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:54:59 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id r26so24793037oiw.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:54:59 -0800 (PST)
+        Mon, 13 Dec 2021 16:00:19 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68499C061574;
+        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id q17so12034203plr.11;
+        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=jguWMiGl6ZGi+BO1IebD5fWZun+vWwss72hQqPIFu5I=;
-        b=Opmh49RT26HjFCsKMvJlWpHjFxLA8ox38iEp02a9sdd63FM9VjoxEBuUor++TAND4c
-         GsggUST7S009eJOKj+d/TUjQrhPG1f3cpnATtz6cFK05iT6Yom5jIHgrNojUqIV6SeBb
-         iFZSI3nUtKr3hK1BP6UgJlefajIWVuJnauVhRKwx5G6mTTEfr6339lBeWWXo7RcDfY3M
-         DzM/OHkKzDRkUO6YUgGmRXPPdyrp7TAyr75DJRjuvXUgP6ORXLUHBPZvNJjubi8PdbHe
-         29bfgIRhydPNta0lAy2+ZUMMjIf3SLA6usGjGiWLxeEGA4Ks4XI+wUtlo4l+phfvlwSC
-         ILUQ==
+        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
+        b=f9xizRMo/j3PXqOZs5juMJcQ37RJ5hWQLM+DY21WpJeu9oIwrszgkESzp+5lzfcPu/
+         S1xClURBIc1R5ZVu5ZUI/+iUkArHUMLGwuCCKqUaRzYwg5Avh7YpSAokVvTPS2Fl4yej
+         QEpPj8HkBkveAgjGp1Uwvd74RkiIpvriZ0fL7nvbYk0KnZrMlg7CSDEyu3KP1tz1BuDs
+         QfTGyB7tn/01WVnR0Fwv8cm0i1q2j9i7t0OAAPsgRMy/+EsZTeFoyqT/4Xo1TuvOAomL
+         rtOobYElaG+HmdQnvhuS2kPRXEJ534YqBFGguvlzK1LZO2run0kelOEKRf4Yj3qIeeoE
+         ar2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jguWMiGl6ZGi+BO1IebD5fWZun+vWwss72hQqPIFu5I=;
-        b=LMrGoa4OCCnmOGRK5JLFubjSL7GwAW3uFlTUMeQ+9nkkwsWo3Zo5LaT5ib5pPxnJfs
-         V6qhPKZQY1fAh9trj3KpRmSYjCw9Pp5RYApp++vJ38+ccsW5ubqvKObVSSVErYc3bytB
-         BorTSyDZduYjLMgHFWecmlkpyYiSvU3eqf6lCG4gUW6A+R0R3pT/U5LXL0A7zYZIZrmG
-         eQgdwaZmtxI1RXEgyPysfOZ1F3YQ9qTf7ixHLnEeUKx/9W1TGvztZ1pP0khf2K9y25J5
-         EOj0nj9Zi7Fk6TOr0b7wSH122HZxjPSF01aZMlza8fbvPjqHGVOa1uqf8hB/MRHKIYrH
-         9Z2w==
-X-Gm-Message-State: AOAM533ggpr42TXJtGWh5oZkUiNQiuOZlukyhLYFwaKJIE/TVNEDxj8w
-        Zl3eFg7oZ+K6R7NI/pkZTBVswA==
-X-Google-Smtp-Source: ABdhPJxsuFYML0R2VTHGQUbcR534UCDJetQulo6sC0GB0fdTX8iM2g+AUUisWK/E7vMRyPdGND9Aog==
-X-Received: by 2002:a05:6808:1802:: with SMTP id bh2mr920360oib.142.1639428898635;
-        Mon, 13 Dec 2021 12:54:58 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id j187sm2822648oih.5.2021.12.13.12.54.57
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
+        b=rLqvmML42zYIc28M9XqybmOXqbLcZaJ2cwnE7KpKMp7TkZkVTFIIQuj7MdPuAg834P
+         O4QXtXJLpdIHdtdPV6VfW4yVRFYiNOOZohcDjfACVrfoZeCtvlIgWJWesOEqafY0yFtz
+         FgOpVyPmTPdAqvT54SEtevub+Sex6pdFETEPd+dbBLJmSy9p79C3WZM6tO1GeHPaqvFK
+         UyQ7u35kp80hIVa93CKIzjw2fTOTLDn0aqi+fD81j5wFC0zK2J1wfN78VFdAb7eVn9Sf
+         tZERx/rQpHBfZpT344yekkzEagXcjlbXj7ScN08UvyB2WlWXymE4Np7UfKFTxYDHofwR
+         /FGA==
+X-Gm-Message-State: AOAM531g4rQ3Xe736AgMrafvK5YGlYoJdzB2eW2rvsgGgmqNokC0jafh
+        daca8DO93wgv+FXfDM1b75I=
+X-Google-Smtp-Source: ABdhPJz081wudgrw0mrWIs2FAxS1rWp5wOiKfQbqpkYviU3rS8iu9dWtDsDEnN9Q6qUkBrtVzexdhQ==
+X-Received: by 2002:a17:902:b110:b0:142:7621:aecb with SMTP id q16-20020a170902b11000b001427621aecbmr481454plr.55.1639429218693;
+        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id ot1sm36852pjb.6.2021.12.13.13.00.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 12:54:58 -0800 (PST)
-Date:   Mon, 13 Dec 2021 12:56:15 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Caleb Connolly <caleb@connolly.tech>,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: improve QCOM compatible parsing
- for modern chips
-Message-ID: <YbezbxxFvfDQqaEB@ripper>
-References: <20211213203710.122708-1-david@ixit.cz>
+        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 13 Dec 2021 11:00:17 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213203710.122708-1-david@ixit.cz>
+In-Reply-To: <20211205183220.818872-7-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 13 Dec 12:37 PST 2021, David Heidelberg wrote:
+Hello,
 
-> Parse compatible as expected for modern QCOMs.
-> 
-> Fixes warnings as:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
->         From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
->         From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> 
+On Sun, Dec 05, 2021 at 01:32:19PM -0500, Waiman Long wrote:
+> +	In the case of an invalid partition root, a descriptive string on
+> +	why the partition is invalid is included within parentheses.
+> +
+> +	Almost all possible state transitions among "member", valid
+> +	and invalid partition roots are allowed except from "member"
+> +	to invalid partition root.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+So, this part still bothers me for the following two reasons that I brought
+up earlier:
 
-Regards,
-Bjorn
+* When a valid partition turns invalid, now we have a reliable way of
+  discovering what exactly caused the transition. However, when a user now
+  fails to turn a member into partition, all they get is -EINVAL and there's
+  no way to discover why it failed and the failure conditions that -EINVAL
+  represents aren't simple.
 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../bindings/watchdog/qcom-wdt.yaml           | 33 +++++++++++--------
->  1 file changed, 19 insertions(+), 14 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index ba60bdf1fecc..71cd392d298b 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -14,20 +14,25 @@ allOf:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - qcom,apss-wdt-qcs404
-> -      - qcom,apss-wdt-sc7180
-> -      - qcom,apss-wdt-sc7280
-> -      - qcom,apss-wdt-sdm845
-> -      - qcom,apss-wdt-sdx55
-> -      - qcom,apss-wdt-sm8150
-> -      - qcom,kpss-timer
-> -      - qcom,kpss-wdt
-> -      - qcom,kpss-wdt-apq8064
-> -      - qcom,kpss-wdt-ipq4019
-> -      - qcom,kpss-wdt-ipq8064
-> -      - qcom,kpss-wdt-msm8960
-> -      - qcom,scss-timer
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - qcom,apss-wdt-qcs404
-> +              - qcom,apss-wdt-sc7180
-> +              - qcom,apss-wdt-sc7280
-> +              - qcom,apss-wdt-sdm845
-> +              - qcom,apss-wdt-sdx55
-> +              - qcom,apss-wdt-sm8150
-> +          - const: qcom,kpss-wdt
-> +      - items:
-> +          - enum:
-> +              - qcom,kpss-wdt
-> +              - qcom,kpss-timer
-> +              - qcom,kpss-wdt-apq8064
-> +              - qcom,kpss-wdt-ipq4019
-> +              - qcom,kpss-wdt-ipq8064
-> +              - qcom,kpss-wdt-msm8960
-> +              - qcom,scss-timer
->  
->    reg:
->      maxItems: 1
-> -- 
-> 2.33.0
-> 
+* In an automated configuration scenarios, this operation mode may be
+  difficult to make reliable and lead to sporadic failures which can be
+  tricky to track down. The core problem is that whether a given operation
+  succeeds or not may depend on external states (CPU on/offline) which may
+  change asynchronously in a way that the configuring entity doesn't have
+  any control over.
+
+It's true that both are existing problems with the current partition
+interface and given that this is a pretty spcialized feature, this can be
+okay. Michal, what are your thoughts?
+
+Thanks.
+
+-- 
+tejun

@@ -2,46 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B2147255D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231EF47268F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234136AbhLMJnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:43:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:35060 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235170AbhLMJk3 (ORCPT
+        id S238440AbhLMJxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:53:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56286 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235034AbhLMJoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:40:29 -0500
+        Mon, 13 Dec 2021 04:44:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 41AC5CE0E95;
-        Mon, 13 Dec 2021 09:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2949C00446;
-        Mon, 13 Dec 2021 09:40:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D63EEB80E12;
+        Mon, 13 Dec 2021 09:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DB8C00446;
+        Mon, 13 Dec 2021 09:44:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388425;
-        bh=W3WD8vaDZZ/P5MRvqkwL6oHKFOb+QA+NL51+V+9favY=;
+        s=korg; t=1639388644;
+        bh=au2pduAmKqyTz2XhT/I030Buape0yWo/q6cfEnyHLWQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mSFdZPQ5rIG65XID+YRn3krjtx3jy0QPwTGG65jGAwnrEHrVmfdAfl9J7Opj6t7Bv
-         uNlaHWUf985zoMLu8i/cduku71wp3p2V4K9zvCoaxJ/EyxmREBTb9jJinOVyDpmg3x
-         n3b+TIAsCnTOQ2n0JvDOzQOQ9i65t8FG+H6h+0jA=
+        b=MqPfhHEGgZjset5oRwcjYWiLKmsWW0axsNRlgxL5NGsM0gy4DMfu07QwJhdEbOJdX
+         T4sX0orqg6AdLYCTRUnNgirz2k6U0i1udNGry1eUYfw9FFgWJIcx9nAeH8XhhM4Oye
+         pCx0pSRoK8rIrLTEgmweibGyNh/Ny0q0TIAKx8OA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>,
-        =?UTF-8?q?Jaroslav=20=C5=A0karvada?= <jskarvad@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 4.19 45/74] tools build: Remove needless libpython-version feature check that breaks test-all fast path
+        Eric Biggers <ebiggers@google.com>
+Subject: [PATCH 5.4 46/88] aio: keep poll requests on waitqueue until completed
 Date:   Mon, 13 Dec 2021 10:30:16 +0100
-Message-Id: <20211213092932.320515173@linuxfoundation.org>
+Message-Id: <20211213092934.843980134@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,180 +44,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 3d1d57debee2d342a47615707588b96658fabb85 upstream.
+commit 363bee27e25804d8981dd1c025b4ad49dc39c530 upstream.
 
-Since 66dfdff03d196e51 ("perf tools: Add Python 3 support") we don't use
-the tools/build/feature/test-libpython-version.c version in any Makefile
-feature check:
+Currently, aio_poll_wake() will always remove the poll request from the
+waitqueue.  Then, if aio_poll_complete_work() sees that none of the
+polled events are ready and the request isn't cancelled, it re-adds the
+request to the waitqueue.  (This can easily happen when polling a file
+that doesn't pass an event mask when waking up its waitqueue.)
 
-  $ find tools/ -type f | xargs grep feature-libpython-version
-  $
+This is fundamentally broken for two reasons:
 
-The only place where this was used was removed in 66dfdff03d196e51:
+  1. If a wakeup occurs between vfs_poll() and the request being
+     re-added to the waitqueue, it will be missed because the request
+     wasn't on the waitqueue at the time.  Therefore, IOCB_CMD_POLL
+     might never complete even if the polled file is ready.
 
-  -        ifneq ($(feature-libpython-version), 1)
-  -          $(warning Python 3 is not yet supported; please set)
-  -          $(warning PYTHON and/or PYTHON_CONFIG appropriately.)
-  -          $(warning If you also have Python 2 installed, then)
-  -          $(warning try something like:)
-  -          $(warning $(and ,))
-  -          $(warning $(and ,)  make PYTHON=python2)
-  -          $(warning $(and ,))
-  -          $(warning Otherwise, disable Python support entirely:)
-  -          $(warning $(and ,))
-  -          $(warning $(and ,)  make NO_LIBPYTHON=1)
-  -          $(warning $(and ,))
-  -          $(error   $(and ,))
-  -        else
-  -          LDFLAGS += $(PYTHON_EMBED_LDFLAGS)
-  -          EXTLIBS += $(PYTHON_EMBED_LIBADD)
-  -          LANG_BINDINGS += $(obj-perf)python/perf.so
-  -          $(call detected,CONFIG_LIBPYTHON)
-  -        endif
+  2. When the request isn't on the waitqueue, there is no way to be
+     notified that the waitqueue is being freed (which happens when its
+     lifetime is shorter than the struct file's).  This is supposed to
+     happen via the waitqueue entries being woken up with POLLFREE.
 
-And nowadays we either build with PYTHON=python3 or just install the
-python3 devel packages and perf will build against it.
+Therefore, leave the requests on the waitqueue until they are actually
+completed (or cancelled).  To keep track of when aio_poll_complete_work
+needs to be scheduled, use new fields in struct poll_iocb.  Remove the
+'done' field which is now redundant.
 
-But the leftover feature-libpython-version check made the fast path
-feature detection to break in all cases except when python2 devel files
-were installed:
+Note that this is consistent with how sys_poll() and eventpoll work;
+their wakeup functions do *not* remove the waitqueue entries.
 
-  $ rpm -qa | grep python.*devel
-  python3-devel-3.9.7-1.fc34.x86_64
-  $ rm -rf /tmp/build/perf ; mkdir -p /tmp/build/perf ;
-  $ make -C tools/perf O=/tmp/build/perf install-bin
-  make: Entering directory '/var/home/acme/git/perf/tools/perf'
-    BUILD:   Doing 'make -j32' parallel build
-    HOSTCC  /tmp/build/perf/fixdep.o
-  <SNIP>
-  $ cat /tmp/build/perf/feature/test-all.make.output
-  In file included from test-all.c:18:
-  test-libpython-version.c:5:10: error: #error
-      5 |         #error
-        |          ^~~~~
-  $ ldd ~/bin/perf | grep python
-	libpython3.9.so.1.0 => /lib64/libpython3.9.so.1.0 (0x00007fda6dbcf000)
-  $
-
-As python3 is the norm these days, fix this by just removing the unused
-feature-libpython-version feature check, making the test-all fast path
-to work with the common case.
-
-With this:
-
-  $ rm -rf /tmp/build/perf ; mkdir -p /tmp/build/perf ;
-  $ make -C tools/perf O=/tmp/build/perf install-bin |& head
-  make: Entering directory '/var/home/acme/git/perf/tools/perf'
-    BUILD:   Doing 'make -j32' parallel build
-    HOSTCC  /tmp/build/perf/fixdep.o
-    HOSTLD  /tmp/build/perf/fixdep-in.o
-    LINK    /tmp/build/perf/fixdep
-
-  Auto-detecting system features:
-  ...                         dwarf: [ on  ]
-  ...            dwarf_getlocations: [ on  ]
-  ...                         glibc: [ on  ]
-  $ ldd ~/bin/perf | grep python
-	libpython3.9.so.1.0 => /lib64/libpython3.9.so.1.0 (0x00007f58800b0000)
-  $ cat /tmp/build/perf/feature/test-all.make.output
-  $
-
-Reviewed-by: James Clark <james.clark@arm.com>
-Fixes: 66dfdff03d196e51 ("perf tools: Add Python 3 support")
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jaroslav Škarvada <jskarvad@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Link: https://lore.kernel.org/lkml/YaYmeeC6CS2b8OSz@kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 2c14fa838cbe ("aio: implement IOCB_CMD_POLL")
+Cc: <stable@vger.kernel.org> # v4.18+
+Link: https://lore.kernel.org/r/20211209010455.42744-5-ebiggers@kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/build/Makefile.feature                 |    1 -
- tools/build/feature/Makefile                 |    4 ----
- tools/build/feature/test-all.c               |    5 -----
- tools/build/feature/test-libpython-version.c |   11 -----------
- tools/perf/Makefile.config                   |    2 --
- 5 files changed, 23 deletions(-)
- delete mode 100644 tools/build/feature/test-libpython-version.c
+ fs/aio.c |   83 +++++++++++++++++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 63 insertions(+), 20 deletions(-)
 
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -50,7 +50,6 @@ FEATURE_TESTS_BASIC :=
-         numa_num_possible_cpus          \
-         libperl                         \
-         libpython                       \
--        libpython-version               \
-         libslang                        \
-         libcrypto                       \
-         libunwind                       \
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -29,7 +29,6 @@ FILES=
-          test-numa_num_possible_cpus.bin        \
-          test-libperl.bin                       \
-          test-libpython.bin                     \
--         test-libpython-version.bin             \
-          test-libslang.bin                      \
-          test-libcrypto.bin                     \
-          test-libunwind.bin                     \
-@@ -203,9 +202,6 @@ $(OUTPUT)test-libperl.bin:
- $(OUTPUT)test-libpython.bin:
- 	$(BUILD) $(FLAGS_PYTHON_EMBED)
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -183,8 +183,9 @@ struct poll_iocb {
+ 	struct file		*file;
+ 	struct wait_queue_head	*head;
+ 	__poll_t		events;
+-	bool			done;
+ 	bool			cancelled;
++	bool			work_scheduled;
++	bool			work_need_resched;
+ 	struct wait_queue_entry	wait;
+ 	struct work_struct	work;
+ };
+@@ -1645,14 +1646,26 @@ static void aio_poll_complete_work(struc
+ 	 * avoid further branches in the fast path.
+ 	 */
+ 	spin_lock_irq(&ctx->ctx_lock);
++	spin_lock(&req->head->lock);
+ 	if (!mask && !READ_ONCE(req->cancelled)) {
+-		add_wait_queue(req->head, &req->wait);
++		/*
++		 * The request isn't actually ready to be completed yet.
++		 * Reschedule completion if another wakeup came in.
++		 */
++		if (req->work_need_resched) {
++			schedule_work(&req->work);
++			req->work_need_resched = false;
++		} else {
++			req->work_scheduled = false;
++		}
++		spin_unlock(&req->head->lock);
+ 		spin_unlock_irq(&ctx->ctx_lock);
+ 		return;
+ 	}
++	list_del_init(&req->wait.entry);
++	spin_unlock(&req->head->lock);
+ 	list_del_init(&iocb->ki_list);
+ 	iocb->ki_res.res = mangle_poll(mask);
+-	req->done = true;
+ 	spin_unlock_irq(&ctx->ctx_lock);
  
--$(OUTPUT)test-libpython-version.bin:
--	$(BUILD)
+ 	iocb_put(iocb);
+@@ -1666,9 +1679,9 @@ static int aio_poll_cancel(struct kiocb
+ 
+ 	spin_lock(&req->head->lock);
+ 	WRITE_ONCE(req->cancelled, true);
+-	if (!list_empty(&req->wait.entry)) {
+-		list_del_init(&req->wait.entry);
++	if (!req->work_scheduled) {
+ 		schedule_work(&aiocb->poll.work);
++		req->work_scheduled = true;
+ 	}
+ 	spin_unlock(&req->head->lock);
+ 
+@@ -1687,20 +1700,26 @@ static int aio_poll_wake(struct wait_que
+ 	if (mask && !(mask & req->events))
+ 		return 0;
+ 
+-	list_del_init(&req->wait.entry);
 -
- $(OUTPUT)test-libbfd.bin:
- 	$(BUILD) -DPACKAGE='"perf"' -lbfd -ldl
+-	if (mask && spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
++	/*
++	 * Complete the request inline if possible.  This requires that three
++	 * conditions be met:
++	 *   1. An event mask must have been passed.  If a plain wakeup was done
++	 *	instead, then mask == 0 and we have to call vfs_poll() to get
++	 *	the events, so inline completion isn't possible.
++	 *   2. The completion work must not have already been scheduled.
++	 *   3. ctx_lock must not be busy.  We have to use trylock because we
++	 *	already hold the waitqueue lock, so this inverts the normal
++	 *	locking order.  Use irqsave/irqrestore because not all
++	 *	filesystems (e.g. fuse) call this function with IRQs disabled,
++	 *	yet IRQs have to be disabled before ctx_lock is obtained.
++	 */
++	if (mask && !req->work_scheduled &&
++	    spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
+ 		struct kioctx *ctx = iocb->ki_ctx;
  
---- a/tools/build/feature/test-all.c
-+++ b/tools/build/feature/test-all.c
-@@ -14,10 +14,6 @@
- # include "test-libpython.c"
- #undef main
+-		/*
+-		 * Try to complete the iocb inline if we can. Use
+-		 * irqsave/irqrestore because not all filesystems (e.g. fuse)
+-		 * call this function with IRQs disabled and because IRQs
+-		 * have to be disabled before ctx_lock is obtained.
+-		 */
++		list_del_init(&req->wait.entry);
+ 		list_del(&iocb->ki_list);
+ 		iocb->ki_res.res = mangle_poll(mask);
+-		req->done = true;
+ 		if (iocb->ki_eventfd && eventfd_signal_count()) {
+ 			iocb = NULL;
+ 			INIT_WORK(&req->work, aio_poll_put_work);
+@@ -1710,7 +1729,20 @@ static int aio_poll_wake(struct wait_que
+ 		if (iocb)
+ 			iocb_put(iocb);
+ 	} else {
+-		schedule_work(&req->work);
++		/*
++		 * Schedule the completion work if needed.  If it was already
++		 * scheduled, record that another wakeup came in.
++		 *
++		 * Don't remove the request from the waitqueue here, as it might
++		 * not actually be complete yet (we won't know until vfs_poll()
++		 * is called), and we must not miss any wakeups.
++		 */
++		if (req->work_scheduled) {
++			req->work_need_resched = true;
++		} else {
++			schedule_work(&req->work);
++			req->work_scheduled = true;
++		}
+ 	}
+ 	return 1;
+ }
+@@ -1757,8 +1789,9 @@ static int aio_poll(struct aio_kiocb *ai
+ 	req->events = demangle_poll(iocb->aio_buf) | EPOLLERR | EPOLLHUP;
  
--#define main main_test_libpython_version
--# include "test-libpython-version.c"
--#undef main
--
- #define main main_test_libperl
- # include "test-libperl.c"
- #undef main
-@@ -181,7 +177,6 @@
- int main(int argc, char *argv[])
- {
- 	main_test_libpython();
--	main_test_libpython_version();
- 	main_test_libperl();
- 	main_test_hello();
- 	main_test_libelf();
---- a/tools/build/feature/test-libpython-version.c
-+++ /dev/null
-@@ -1,11 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <Python.h>
--
--#if PY_VERSION_HEX >= 0x03000000
--	#error
--#endif
--
--int main(void)
--{
--	return 0;
--}
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -224,8 +224,6 @@ endif
+ 	req->head = NULL;
+-	req->done = false;
+ 	req->cancelled = false;
++	req->work_scheduled = false;
++	req->work_need_resched = false;
  
- FEATURE_CHECK_CFLAGS-libpython := $(PYTHON_EMBED_CCOPTS)
- FEATURE_CHECK_LDFLAGS-libpython := $(PYTHON_EMBED_LDOPTS)
--FEATURE_CHECK_CFLAGS-libpython-version := $(PYTHON_EMBED_CCOPTS)
--FEATURE_CHECK_LDFLAGS-libpython-version := $(PYTHON_EMBED_LDOPTS)
- 
- CFLAGS += -fno-omit-frame-pointer
- CFLAGS += -ggdb3
+ 	apt.pt._qproc = aio_poll_queue_proc;
+ 	apt.pt._key = req->events;
+@@ -1773,17 +1806,27 @@ static int aio_poll(struct aio_kiocb *ai
+ 	spin_lock_irq(&ctx->ctx_lock);
+ 	if (likely(req->head)) {
+ 		spin_lock(&req->head->lock);
+-		if (unlikely(list_empty(&req->wait.entry))) {
+-			if (apt.error)
++		if (list_empty(&req->wait.entry) || req->work_scheduled) {
++			/*
++			 * aio_poll_wake() already either scheduled the async
++			 * completion work, or completed the request inline.
++			 */
++			if (apt.error) /* unsupported case: multiple queues */
+ 				cancel = true;
+ 			apt.error = 0;
+ 			mask = 0;
+ 		}
+ 		if (mask || apt.error) {
++			/* Steal to complete synchronously. */
+ 			list_del_init(&req->wait.entry);
+ 		} else if (cancel) {
++			/* Cancel if possible (may be too late though). */
+ 			WRITE_ONCE(req->cancelled, true);
+-		} else if (!req->done) { /* actually waiting for an event */
++		} else if (!list_empty(&req->wait.entry)) {
++			/*
++			 * Actually waiting for an event, so add the request to
++			 * active_reqs so that it can be cancelled if needed.
++			 */
+ 			list_add_tail(&aiocb->ki_list, &ctx->active_reqs);
+ 			aiocb->ki_cancel = aio_poll_cancel;
+ 		}
 
 

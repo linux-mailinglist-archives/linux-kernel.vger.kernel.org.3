@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C98A472FEC
+	by mail.lfdr.de (Postfix) with ESMTP id BBA0F472FEE
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239774AbhLMPAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbhLMPAL (ORCPT
+        id S239792AbhLMPAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:00:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54040 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239777AbhLMPAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:00:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB65C061574;
-        Mon, 13 Dec 2021 07:00:11 -0800 (PST)
+        Mon, 13 Dec 2021 10:00:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8867E6113E;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10DF4B81138;
+        Mon, 13 Dec 2021 15:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C48A5C34603;
         Mon, 13 Dec 2021 15:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7772C34604;
-        Mon, 13 Dec 2021 15:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639407609;
-        bh=zNTp3B/zl8CgRafLCfcZNfF/r+AwkWd6CpV9rHcp+Qc=;
+        s=k20201202; t=1639407610;
+        bh=eaxkQGC9ZBux4iZAcgboLwXqjRhTIRmt8X+ONlu9f70=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uRsMSEI37sEGrwUG1qljsWaB4iRWFUpYqZWD+Mld00mrCrQ40tg6lxmb2ZMlbNqhU
-         upPXjmb2rYtueHR+X50emu5EkYrrJ2yzxapiC3Veqba6vepO9Ym9IcNfOzxYk6pId+
-         aY8rIrJAgrumurIUadpXG6ncJy3AASJqONvS0GmViKyxlZt62WVbxa13MBMa58PH60
-         1WMeu0UUz8ThNg78Dq89rrP0YJ1qyjiO8YG6eOv0xjOhkcG8I3bc99dk8Y9Af66/eK
-         LERyKRYWKbV9mB2Bp7idhUoNsNxrOGbXaFNdAQAZuHQfsX0m9gBy1EWU/frtfi9Ciw
-         rzRPBmSX3eYkQ==
+        b=tOLwnaoqduC5Lyn6afMoiGrm7E9aGXbJx1QnpSuOgjTPPQ4rRo8/Gfg1rBhxaXvRC
+         406VEUa+TaFYbtM97B0IQcCDYGcay6vZsIu1qKWHf4tLtNkcbbhzqG19BT5l20Celb
+         6NABDWyW0RSj4jW7+oIreVUgOSKqtCSyPnRd/8Mg+OyujsB1YnZvii9BA09rYT1QaM
+         PA/LHqDCw9ea6Wj9Dd6De2Hi7n3po/CxQtXieMSCmnGIhEg81MMPGM9AbCvTFZq9T3
+         9iB/qlOQi+G3rRxuhkoLxD+Kmaczqjx5H8xzpMnL6V4DuMp5bEh5KHtvKfQEuMLFwT
+         a2xrAnGUuskgQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id BFF0860A3C;
-        Mon, 13 Dec 2021 15:00:09 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B0246609F5;
+        Mon, 13 Dec 2021 15:00:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ethernet: ti: add missing of_node_put before return
+Subject: Re: [PATCH net-next] net: ocelot: use dma_unmap_addr to get tx buffer
+ dma_addr
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163940760978.26947.303902787430229511.git-patchwork-notify@kernel.org>
-Date:   Mon, 13 Dec 2021 15:00:09 +0000
-References: <1639388676-63990-1-git-send-email-wangqing@vivo.com>
-In-Reply-To: <1639388676-63990-1-git-send-email-wangqing@vivo.com>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Message-Id: <163940761071.26947.514912105891386246.git-patchwork-notify@kernel.org>
+Date:   Mon, 13 Dec 2021 15:00:10 +0000
+References: <20211213082651.443577-1-clement.leger@bootlin.com>
+In-Reply-To: <20211213082651.443577-1-clement.leger@bootlin.com>
+To:     =?utf-8?b?Q2zDqW1lbnQgTMOpZ2VyIDxjbGVtZW50LmxlZ2VyQGJvb3RsaW4uY29tPg==?=@ci.codeaurora.org
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, f.fainelli@gmail.com, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        dkirjanov@suse.de, jwi@linux.ibm.com, lkp@intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Mon, 13 Dec 2021 01:44:36 -0800 you wrote:
-> From: Wang Qing <wangqing@vivo.com>
+On Mon, 13 Dec 2021 09:26:51 +0100 you wrote:
+> dma_addr was declared using DEFINE_DMA_UNMAP_ADDR() which requires to
+> use dma_unmap_addr() to access it.
 > 
-> Fix following coccicheck warning:
-> WARNING: Function "for_each_child_of_node"
-> should have of_node_put() before return.
-> 
-> Early exits from for_each_child_of_node should decrement the
-> node reference counter.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - net: ethernet: ti: add missing of_node_put before return
-    https://git.kernel.org/netdev/net/c/be565ec71d1d
+  - [net-next] net: ocelot: use dma_unmap_addr to get tx buffer dma_addr
+    https://git.kernel.org/netdev/net-next/c/3cfcda2aee94
 
 You are awesome, thank you!
 -- 

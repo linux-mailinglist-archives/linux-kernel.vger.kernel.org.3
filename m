@@ -2,77 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FB5473241
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E690473245
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240646AbhLMQwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:52:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46334 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbhLMQwJ (ORCPT
+        id S241025AbhLMQxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:53:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29966 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231563AbhLMQxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:52:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCC2F61184;
-        Mon, 13 Dec 2021 16:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1929C34603;
-        Mon, 13 Dec 2021 16:52:07 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 11:52:06 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] tracing: check the return value of kstrdup()
-Message-ID: <20211213115206.5a7b9f0c@gandalf.local.home>
-In-Reply-To: <tencent_B595FC0780AC301FE5EE719C50FC8553280A@qq.com>
-References: <tencent_B595FC0780AC301FE5EE719C50FC8553280A@qq.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 13 Dec 2021 11:53:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639414394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DR00qm4+umClllZ9CSbjkDci9NLaK9U/TcJkdgDx9Og=;
+        b=iy+0fWpDHvJF1oUGqB+4PMQRQJ+rGJU2yslqeFBK0cgc3Ib6T5yzBdrX6Loe10bM1trDNc
+        uAWEbEOpKHrlh1/e6uc0hEB8jQNmb1x4az/lVeekXIEuc7lHGgofCXJVdUMI6ausSWEWw6
+        zfEsbqpuScWNDvTSfU36KpOr93k/Rac=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-490-MnLxmh9TPIGIEsr_SQA1bA-1; Mon, 13 Dec 2021 11:53:12 -0500
+X-MC-Unique: MnLxmh9TPIGIEsr_SQA1bA-1
+Received: by mail-wr1-f70.google.com with SMTP id u4-20020a5d4684000000b0017c8c1de97dso4052806wrq.16
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:53:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=DR00qm4+umClllZ9CSbjkDci9NLaK9U/TcJkdgDx9Og=;
+        b=HMsiQqTxLcXOKblWPgZWjzqaJQUy1eVaAAH+mMTqVIVOjklw0eVM8XL2765Sn98neN
+         hmaC61Z8ckayVBV9uocc3MMq//U1djUArpk7CBiE3zwrOCrJmEmfSg2vs+C5rcEtj9y+
+         HqEymcFYTz7DboyDQ+MAMbUD3+L5X09EA2UzkQUw+HruUu+2LBOw3XBb9pTSBUsCtOfU
+         UQAOb0BrDVcUV8qPCp4jezkfRi/eyVvSa5I0fHycDq9Kyn3eQQfAKlIsUhMpSxrKP8o+
+         xSTYtdPK2v2MJfxOg8VmvYPXKDaWdg2O+HDMfultNiNloonW1bA1cJESMjlAWWD8taHt
+         fclg==
+X-Gm-Message-State: AOAM533g8aIafXzFOYJIbUo8dm9FB5PnUOD4zVkGpstdTlpm8itfUjpC
+        6n4p4sXxDvVGkpmzxNYtuqirRoLzToA2UfCQ0ZdQN6ULUJNGasOMZNPgBT06whlBClnUYkGfjwx
+        jhX9PllLwwzeNJpGtuttJ03xe
+X-Received: by 2002:a7b:c256:: with SMTP id b22mr38675475wmj.176.1639414391472;
+        Mon, 13 Dec 2021 08:53:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy9Whyxn3/Nyu4vyyaWULQGY99yFCS5IGAccxzJM+sLywPnUZSW7c/PeU4WYzU/6rHILKdcSg==
+X-Received: by 2002:a7b:c256:: with SMTP id b22mr38675451wmj.176.1639414391282;
+        Mon, 13 Dec 2021 08:53:11 -0800 (PST)
+Received: from fedora (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id g16sm9196894wmq.20.2021.12.13.08.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 08:53:10 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>
+Subject: Re: [PATCH] KVM: x86: Inject #UD on "unsupported" hypercall if
+ patching fails
+In-Reply-To: <20211210222903.3417968-1-seanjc@google.com>
+References: <20211210222903.3417968-1-seanjc@google.com>
+Date:   Mon, 13 Dec 2021 17:53:04 +0100
+Message-ID: <87wnk8v43z.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 15:59:04 +0800
-Xiaoke Wang <xkernel.wang@foxmail.com> wrote:
+Sean Christopherson <seanjc@google.com> writes:
 
-> Note: Compare with the last email, this one is using my full name.
-> And I am sorry that yesterday I did not notice the bugs in trace_boot.c had been
-> already patched.
-> kstrdup() returns NULL when some internal memory errors happen, it is
-> better to check the return value of it.
+> Ideally, KVM wouldn't patch at all; it's the guest's responsibility to
+> identify and use the correct hypercall instruction (VMCALL vs. VMMCALL).
+> Sadly, older Linux kernels prior to commit c1118b3602c2 ("x86: kvm: use
+> alternatives for VMCALL vs. VMMCALL if kernel text is read-only") do the
+> wrong thing and blindly use VMCALL, i.e. removing the patching would
+> break running VMs with older kernels.
+>
 
-Can you please resend this as a normal patch, and not a reply to this email
-thread.
+FWIW, we also use hypercall patching for Hyper-V emulation (when
+HV_X64_MSR_HYPERCALL is written) and this complies with TLFS, we can't
+get rid of this. It's a different 'patching' though...
 
-Thank you,
-
--- Steve
-
-
-> 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> ---
->  kernel/trace/trace_uprobe.c | 5 +++++
->  1 files changed, 5 insertions(+)
-> 
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index 225ce56..173ff0f 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -1618,6 +1618,11 @@ create_local_trace_uprobe(char *name, unsigned long offs,
->  	tu->path = path;
->  	tu->ref_ctr_offset = ref_ctr_offset;
->  	tu->filename = kstrdup(name, GFP_KERNEL);
-> +	if (!tu->filename) {
-> +		ret = -ENOMEM;
-> +		goto error;
-> +	}
-> +
->  	init_trace_event_call(tu);
->  
->  	ptype = is_ret_probe(tu) ? PROBE_PRINT_RETURN : PROBE_PRINT_NORMAL;
+-- 
+Vitaly
 

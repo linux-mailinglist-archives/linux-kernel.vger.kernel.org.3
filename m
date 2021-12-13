@@ -2,117 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF694473690
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A95473691
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 22:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243118AbhLMV1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 16:27:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
+        id S240025AbhLMV3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 16:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234055AbhLMV1d (ORCPT
+        with ESMTP id S234055AbhLMV3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:27:33 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2887C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:27:32 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id v138so41595415ybb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:27:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tS/h42aoWNvC9F09YRt3IPscSl6Go2TabGZNpFMjr1Q=;
-        b=SqJqF6KfjAHG+SeRMuPoCEqf0e/o/Y+PV6/bBLvnCli36DmKOoeFeyh6z46zS/SaE9
-         BRRHa/3ViRSvPyYD/GxN0Ze6zMSmy0gkyS8R9ezmn/5L+88Cc8V+c2hb8Rr+y3XFKa20
-         qhUqUlPVqlyvZv4YvFxzWzKGuZjj4iwQBmFoo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tS/h42aoWNvC9F09YRt3IPscSl6Go2TabGZNpFMjr1Q=;
-        b=6ehW62wXIhKya1kn0HBYvbMk8X6r2MoaHt/wAs4eBWv4r2FYqQQmpHYP8jsPGPY9kL
-         glswzIlW2O/RvxcnUUJK/3eCgkf9MSoiImJ9eS16I4Ayyr56muyALdh2YyJcyBzxeXnx
-         vE3Yg68DUoV7rqYecSnqGnBmTiry5XdVz+nowKCptKyg76o6/XgxRCkWPm58GsAxK6RS
-         bwiUMhnvbDn15U4m4YufGD+qqcAQ8m2SvsFtc/ZTiGWhoQjwrLQA7ZOMyLfgOCBQ5yGP
-         yQtfiPd8JKRhxZ4WXHsuxZw64pEmBC53GQTTlsaioet2XszOn5evZstQicEetRIDIwjk
-         Qu+Q==
-X-Gm-Message-State: AOAM530NolJDzT6sSiFri1DYOCgBqqZMtXGNLH6FoRB/UZgHlizUC1NH
-        BIwJBUPn2DbDoOVkxGZJa5iKxisKarYOcj+dmdWi
-X-Google-Smtp-Source: ABdhPJzslT8/6oXCsZUd9W7eJu9fAn0X/Rv9oKsdYACWvB/fLMbHtNl1F6uZ+CVQ9FJUh+Dwghg2dQVRfT2vBmV5zUg=
-X-Received: by 2002:a25:bf8d:: with SMTP id l13mr1136880ybk.713.1639430852154;
- Mon, 13 Dec 2021 13:27:32 -0800 (PST)
+        Mon, 13 Dec 2021 16:29:37 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7196EC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:29:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NzKc+52kOTNB/nvRY8AH90XtwVx4tAfEtt2Kgck45jc=; b=ejQecJ8GtMjvJ3nrhp30ZpRx67
+        rVD1A891gm3PqdTVV4VN336Wbvb45pSjMzjCn5KKR5LrUuu7m/7+P8cHnasa74d27Hn2LVsLNGpeg
+        gn25D4NsjbsfFwgQ+YbqSlM1oeLaRtslP/h4WqBAMDMTzo9tbyXWtw8E1YkozPW3ykZoK8jBSVOPj
+        7iHq3UsTah2Dhc739egkIwp4SupIH2xias3op/MMoeRkdmSAJxTo93isy/XQsFPKdEZw6lYqLGZwo
+        /koU4mkRzqbVsjr9vZNO/nFB/83oyJ0UvWgJxefRdeY0/BEunF3HiPQJA2gXTL+fLgX6YBodyVKXX
+        44qYeifA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwst0-00BTLp-IB; Mon, 13 Dec 2021 21:29:30 +0000
+Date:   Mon, 13 Dec 2021 13:29:30 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        keescook@chromium.org, jlayton@kernel.org, bfields@fieldses.org,
+        yzaikin@google.com, wangle6@huawei.com,
+        Joe Perches <joe@perches.com>
+Subject: Re: [PATCH] sysctl: Add a group of macro functions to initcall the
+ sysctl table of each feature
+Message-ID: <Ybe7Ot8b/N4yy3TM@bombadil.infradead.org>
+References: <20211207011320.100102-1-nixiaoming@huawei.com>
+ <20211206173842.72c76379adbf8005bfa66e26@linux-foundation.org>
+ <Ya/BnndSXKHiUpGm@bombadil.infradead.org>
+ <875ys0azt8.fsf@email.froward.int.ebiederm.org>
+ <Ya/iv33Ud+KRt9E9@bombadil.infradead.org>
+ <87mtl4ze1r.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20211204002038.113653-1-atishp@atishpatra.org> <Ya4sDX974/dVEOQw@robh.at.kernel.org>
-In-Reply-To: <Ya4sDX974/dVEOQw@robh.at.kernel.org>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 13 Dec 2021 13:27:21 -0800
-Message-ID: <CAOnJCUKcYeWaDXY6OxQPrNwKV=4t9zbpSjfQLsL70P+3GE7F7A@mail.gmail.com>
-Subject: Re: [RFC 0/6] Sparse HART id support
-To:     Rob Herring <robh@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Anup Patel <anup.patel@wdc.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mtl4ze1r.fsf@email.froward.int.ebiederm.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 7:28 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Dec 03, 2021 at 04:20:32PM -0800, Atish Patra wrote:
-> > Currently, sparse hartid is not supported for Linux RISC-V for the following
-> > reasons.
-> > 1. Both spinwait and ordered booting method uses __cpu_up_stack/task_pointer
-> >    which is an array size of NR_CPUs.
-> > 2. During early booting, any hartid greater than NR_CPUs are not booted at all.
-> > 3. riscv_cpuid_to_hartid_mask uses struct cpumask for generating hartid bitmap.
-> > 4. SBI v0.2 implementation uses NR_CPUs as the maximum hartid number while
-> >    generating hartmask.
-> >
-> > In order to support sparse hartid, the hartid & NR_CPUS needs to be disassociated
-> > which was logically incorrect anyways. NR_CPUs represent the maximum logical|
-> > CPU id configured in the kernel while the hartid represent the physical hartid
-> > stored in mhartid CSR defined by the privilege specification. Thus, hartid
-> > can have much greater value than logical cpuid.
->
-> We already have a couple of architectures with logical to physical CPU
-> id maps. See cpu_logical_map. Can we make that common and use it here?
+On Mon, Dec 13, 2021 at 10:04:48AM -0600, Eric W. Biederman wrote:
+> If you look at __register_sysctl_table the core registration function
+> you will see that all directory entries get reduced to simply a path
+> component.  So they have nothing but their names as input into
+> the sysctl subsystem.
+> 
+> Further __register_sysctl_table goes in a loop through the path
+> and does get_subdir to find or create the directory.
+> 
+> Which means that if two places were to register sysctls in
+> the "fs" directory they would both use the safe "fs" directory
+> and whoever can first would create it.
+> 
+> Which should mean that worrying about ordering is completely
+> unnecessary.
+> 
+> What am I missing?
 
-Yes. We can move the cpu_logical_map(which is a macro) &
-__cpu_logical_map(actual array with NR_CPUS size)
-to common code so that all the architecture can use it instead of
-defining it separately.
+I was being too cautious, sorry for not having dug enough.
+Then this makes things much easier. Thanks!
 
-> That would also possibly allow for common populating the map from DT.
->
-
-I didn't understand this part. The mapping is populated at run time
-[1] as the boot cpu can be any hart in RISC-V.
-That booting hart will be mapped to cpu 0. All others will be mapped
-based on how the cpu node is laid out in the DT.
-Do you mean we can move the 2nd part to common code as well ?
-
-[1] RISC-V: https://elixir.bootlin.com/linux/v5.16-rc5/source/arch/riscv/kernel/smpboot.c#L102
-
-> Rob
-
-
-
--- 
-Regards,
-Atish
+  Luis

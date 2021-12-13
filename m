@@ -2,33 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8864724B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38F7472465
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbhLMJhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234638AbhLMJgb (ORCPT
+        id S234328AbhLMJgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:36:08 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:59438 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234321AbhLMJfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:36:31 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA3EC0617A2;
-        Mon, 13 Dec 2021 01:36:28 -0800 (PST)
+        Mon, 13 Dec 2021 04:35:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8A07CE0E82;
-        Mon, 13 Dec 2021 09:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BA2C00446;
-        Mon, 13 Dec 2021 09:36:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D2A8ECE0E7F;
+        Mon, 13 Dec 2021 09:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 825F2C341DA;
+        Mon, 13 Dec 2021 09:35:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388184;
-        bh=+PfCJkbJZsskR/GCh/m+ZdAW7iA2MMayYcLX+c/hYpk=;
+        s=korg; t=1639388104;
+        bh=VI8xP7ZuvldA6Iec36rX9eA/AtZCIL+Lvw7PCXDDm8k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OKupRid35xfXOsWUpIG0ZtqtShyTlGo/HjAdVvRUz4Wxfg36BGCbWDATOilRYNw4L
-         /JxHnHIryLyqXAmdxdpZvq/D7QNUBP6q/vnSN0VhxAo534cn8LS91lcVfx/XGLbKhh
-         xQy22kJaBiz/nvcq+JjIV56oDEX6+aCOERLNokS0=
+        b=KvdfIVdriLMpb9hE+40gLVFbbvWDHmJ9TE3Dh3zB+kaxeslGYi42i+YjODteHzZjo
+         QYsf5PRNd53cA7FCQeIkUciMLP62qeKgKuwfFWxT6A7cAQ8sSwhBq7YRwjTmavGpHw
+         3gEQE316rIu80rx0jcG9MM1V+io2Tvr5D995o1fU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com,
         Bixuan Cui <cuibixuan@linux.alibaba.com>,
         Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 16/53] ALSA: pcm: oss: Limit the period size to 16MB
+Subject: [PATCH 4.9 13/42] ALSA: pcm: oss: Fix negative period/buffer sizes
 Date:   Mon, 13 Dec 2021 10:29:55 +0100
-Message-Id: <20211213092928.901248256@linuxfoundation.org>
+Message-Id: <20211213092927.010408221@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
+References: <20211213092926.578829548@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,36 +49,94 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Takashi Iwai <tiwai@suse.de>
 
-commit 8839c8c0f77ab8fc0463f4ab8b37fca3f70677c2 upstream.
+commit 9d2479c960875ca1239bcb899f386970c13d9cfe upstream.
 
-Set the practical limit to the period size (the fragment shift in OSS)
-instead of a full 31bit; a too large value could lead to the exhaust
-of memory as we allocate temporary buffers of the period size, too.
+The period size calculation in OSS layer may receive a negative value
+as an error, but the code there assumes only the positive values and
+handle them with size_t.  Due to that, a too big value may be passed
+to the lower layers.
 
-As of this patch, we set to 16MB limit, which should cover all use
-cases.
+This patch changes the code to handle with ssize_t and adds the proper
+error checks appropriately.
 
 Reported-by: syzbot+bb348e9f9a954d42746f@syzkaller.appspotmail.com
 Reported-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
 Cc: <stable@vger.kernel.org>
 Link: https://lore.kernel.org/r/1638270978-42412-1-git-send-email-cuibixuan@linux.alibaba.com
-Link: https://lore.kernel.org/r/20211201073606.11660-3-tiwai@suse.de
+Link: https://lore.kernel.org/r/20211201073606.11660-2-tiwai@suse.de
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/oss/pcm_oss.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/oss/pcm_oss.c |   24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
 --- a/sound/core/oss/pcm_oss.c
 +++ b/sound/core/oss/pcm_oss.c
-@@ -1967,7 +1967,7 @@ static int snd_pcm_oss_set_fragment1(str
- 	if (runtime->oss.subdivision || runtime->oss.fragshift)
+@@ -173,7 +173,7 @@ snd_pcm_hw_param_value_min(const struct
+  *
+  * Return the maximum value for field PAR.
+  */
+-static unsigned int
++static int
+ snd_pcm_hw_param_value_max(const struct snd_pcm_hw_params *params,
+ 			   snd_pcm_hw_param_t var, int *dir)
+ {
+@@ -708,18 +708,24 @@ static int snd_pcm_oss_period_size(struc
+ 				   struct snd_pcm_hw_params *oss_params,
+ 				   struct snd_pcm_hw_params *slave_params)
+ {
+-	size_t s;
+-	size_t oss_buffer_size, oss_period_size, oss_periods;
+-	size_t min_period_size, max_period_size;
++	ssize_t s;
++	ssize_t oss_buffer_size;
++	ssize_t oss_period_size, oss_periods;
++	ssize_t min_period_size, max_period_size;
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	size_t oss_frame_size;
+ 
+ 	oss_frame_size = snd_pcm_format_physical_width(params_format(oss_params)) *
+ 			 params_channels(oss_params) / 8;
+ 
++	oss_buffer_size = snd_pcm_hw_param_value_max(slave_params,
++						     SNDRV_PCM_HW_PARAM_BUFFER_SIZE,
++						     NULL);
++	if (oss_buffer_size <= 0)
++		return -EINVAL;
+ 	oss_buffer_size = snd_pcm_plug_client_size(substream,
+-						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_BUFFER_SIZE, NULL)) * oss_frame_size;
+-	if (!oss_buffer_size)
++						   oss_buffer_size * oss_frame_size);
++	if (oss_buffer_size <= 0)
  		return -EINVAL;
- 	fragshift = val & 0xffff;
--	if (fragshift >= 31)
-+	if (fragshift >= 25) /* should be large enough */
- 		return -EINVAL;
- 	runtime->oss.fragshift = fragshift;
- 	runtime->oss.maxfrags = (val >> 16) & 0xffff;
+ 	oss_buffer_size = rounddown_pow_of_two(oss_buffer_size);
+ 	if (atomic_read(&substream->mmap_count)) {
+@@ -756,7 +762,7 @@ static int snd_pcm_oss_period_size(struc
+ 
+ 	min_period_size = snd_pcm_plug_client_size(substream,
+ 						   snd_pcm_hw_param_value_min(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
+-	if (min_period_size) {
++	if (min_period_size > 0) {
+ 		min_period_size *= oss_frame_size;
+ 		min_period_size = roundup_pow_of_two(min_period_size);
+ 		if (oss_period_size < min_period_size)
+@@ -765,7 +771,7 @@ static int snd_pcm_oss_period_size(struc
+ 
+ 	max_period_size = snd_pcm_plug_client_size(substream,
+ 						   snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, NULL));
+-	if (max_period_size) {
++	if (max_period_size > 0) {
+ 		max_period_size *= oss_frame_size;
+ 		max_period_size = rounddown_pow_of_two(max_period_size);
+ 		if (oss_period_size > max_period_size)
+@@ -778,7 +784,7 @@ static int snd_pcm_oss_period_size(struc
+ 		oss_periods = substream->oss.setup.periods;
+ 
+ 	s = snd_pcm_hw_param_value_max(slave_params, SNDRV_PCM_HW_PARAM_PERIODS, NULL);
+-	if (runtime->oss.maxfrags && s > runtime->oss.maxfrags)
++	if (s > 0 && runtime->oss.maxfrags && s > runtime->oss.maxfrags)
+ 		s = runtime->oss.maxfrags;
+ 	if (oss_periods > s)
+ 		oss_periods = s;
 
 

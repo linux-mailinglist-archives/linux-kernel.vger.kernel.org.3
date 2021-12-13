@@ -2,137 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B922472F1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E84F472F21
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbhLMOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:24:57 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:11339 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbhLMOYz (ORCPT
+        id S237223AbhLMO0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:26:04 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44310 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232951AbhLMO0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:24:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639405495; x=1670941495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xVjIPdWu7m5dnX0mH30EyhJ46ijDhYrSTTC6UkEG31U=;
-  b=EmYETNZO97TBzz1dxFjVOTK0rLyCNjtSLsIyNJougLD0bdaHOEYhfVVK
-   WERuxLQDu+WRJgfoFugmVRd/asNzfigQ7O1J6bi5Ex9XM9Tbt19I6w5vq
-   JQrZxXCkTD9uitQiJn20m2kfuvw5TpX17GifoC/zREu/T9URRVa/SFnVz
-   LiSpdVo0TgmxrMp9zoC5h2oTNTpuyDo5KmUP8aBqlqvaF/1+NDAnQ8sZT
-   T+HjrhUYyoV4oTTBYFptbGbta/gOUQREU1oPrJ/+U0/2Ul3lF+AemknVd
-   Hy0eqoKc3Dsx4nYEyYmrM7enrWHlMvYtFaRQ0li9hXmLb5xSDLICqxDQ+
-   g==;
-IronPort-SDR: dwhRaJU1O2YJCBekBOdiq8tkz9JLwQGAFlLweYm1rz9MNBA3twFJ0vrhFbTo1n4+/iaSQIuMWQ
- JJdmlDeTFXj0Xc3CkCMQB23kLwhXaEwDaGQK4XVlPCPFwTHIqRG0T9gxDYIdvAdv9udib6+rOm
- MVK8DpC0KSlKp4XDRwvVlX5Sepy3bKV1H/uxn1ItvzdIjkCTlh2oGHxKhYnwCufxYSx+2BOwXT
- WRWw7cOF8WHlgZeIW27sF+uxllLUywj9q6DziNdWi6fwWrP2YbAV1EKpEoHd1M2myN1xA5gvZD
- UIUwTTu4gEQuFNb9LQ41eX9s
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="139575822"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2021 07:24:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 13 Dec 2021 07:24:54 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 13 Dec 2021 07:24:54 -0700
-Date:   Mon, 13 Dec 2021 15:26:56 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>
-Subject: Re: [PATCH net-next v3 6/6] net: lan966x: Add switchdev support
-Message-ID: <20211213142656.tfonhcmmtkelszvf@soft-dev3-1.localhost>
-References: <20211209094615.329379-1-horatiu.vultur@microchip.com>
- <20211209094615.329379-7-horatiu.vultur@microchip.com>
- <20211209133616.2kii2xfz5rioii4o@skbuf>
- <20211209164311.agnofh275znn5t5c@soft-dev3-1.localhost>
- <20211213102529.tzdvekwwngo4zgex@soft-dev3-1.localhost>
- <20211213134319.dp6b3or24pl3p4en@skbuf>
+        Mon, 13 Dec 2021 09:26:02 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BDCsVKM025467;
+        Mon, 13 Dec 2021 14:26:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=kibr89ov/HcgTKiY9mPYgwz1IUarjRNnXOw00C1Q+xA=;
+ b=MlZgTPY7Y1bxDR90LEiG0I1r1RQWhGHrUUqIbYkb3XeNXrO9HEppMDSCILY4ISA+Bjn3
+ k2pqyh6k+tpU8B+EsYDLEDFcQCXwhJ9nq+xF94gPR3v0P4lONr0UVHiC0+/5O4lj2QWJ
+ trNq/lhdQ1qDHWWRwyZ+mithSxwwf26EBqB7mr58vmPZymMY1nwCJxOvVoonjZ07QXRW
+ KTKDR/8eAiXkjQPB67Yv6pjRld2keOjlT+7hgCHkD1FG8YvS2O9qPO8F6QvgEWp6h8qn
+ t+axD3n3ujRpYTOtrY4t9/1+0mer5Ysly196uVexdFiOlMhNW28LGbilC8eO17ZLRzS4 Rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx5cqc02x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Dec 2021 14:26:00 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BDDqt7n030375;
+        Mon, 13 Dec 2021 14:26:00 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx5cqc02g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Dec 2021 14:26:00 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BDEOBb9019782;
+        Mon, 13 Dec 2021 14:25:58 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3cvkm8n154-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Dec 2021 14:25:58 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BDEI0UM46793122
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Dec 2021 14:18:00 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27D3F11C050;
+        Mon, 13 Dec 2021 14:25:55 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 64B1211C054;
+        Mon, 13 Dec 2021 14:25:54 +0000 (GMT)
+Received: from [9.171.24.181] (unknown [9.171.24.181])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Dec 2021 14:25:54 +0000 (GMT)
+Message-ID: <fbc46b35-10af-2c7e-6e47-e4987070ad83@linux.ibm.com>
+Date:   Mon, 13 Dec 2021 15:26:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20211213134319.dp6b3or24pl3p4en@skbuf>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v5 1/1] s390x: KVM: accept STSI for CPU topology
+ information
+Content-Language: en-US
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
+        frankja@linux.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, gor@linux.ibm.com
+References: <20211122131443.66632-1-pmorel@linux.ibm.com>
+ <20211122131443.66632-2-pmorel@linux.ibm.com>
+ <20211209133616.650491fd@p-imbrenda> <YbImqX/NEus71tZ1@osiris>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <YbImqX/NEus71tZ1@osiris>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qsGjA7Ow13OHSb7NkX6iHBncsZ6Zj-9P
+X-Proofpoint-ORIG-GUID: ZBLa6J2wrQVR7ETyp8rRyXt89foSjxM-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-13_06,2021-12-13_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
+ priorityscore=1501 phishscore=0 clxscore=1015 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112130090
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 12/13/2021 13:43, Vladimir Oltean wrote:
+
+
+On 12/9/21 16:54, Heiko Carstens wrote:
+> On Thu, Dec 09, 2021 at 01:36:16PM +0100, Claudio Imbrenda wrote:
+>> On Mon, 22 Nov 2021 14:14:43 +0100
+>> Pierre Morel <pmorel@linux.ibm.com> wrote:
+>>
+>>> We let the userland hypervisor know if the machine support the CPU
+>>> topology facility using a new KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
+>>>
+>>> The PTF instruction will report a topology change if there is any change
+>>> with a previous STSI_15_1_2 SYSIB.
+>>> Changes inside a STSI_15_1_2 SYSIB occur if CPU bits are set or clear
+>>> inside the CPU Topology List Entry CPU mask field, which happens with
+>>> changes in CPU polarization, dedication, CPU types and adding or
+>>> removing CPUs in a socket.
+>>>
+>>> The reporting to the guest is done using the Multiprocessor
+>>> Topology-Change-Report (MTCR) bit of the utility entry of the guest's
+>>> SCA which will be cleared during the interpretation of PTF.
+>>>
+>>> To check if the topology has been modified we use a new field of the
+>>> arch vCPU to save the previous real CPU ID at the end of a schedule
+>>> and verify on next schedule that the CPU used is in the same socket.
+>>>
+>>> We assume in this patch:
+>>> - no polarization change: only horizontal polarization is currently
+>>>    used in linux.
 > 
-> On Mon, Dec 13, 2021 at 11:25:29AM +0100, Horatiu Vultur wrote:
-> > The 12/09/2021 17:43, Horatiu Vultur wrote:
-> > > > > +int lan966x_register_notifier_blocks(struct lan966x *lan966x)
-> > > > > +{
-> > > > > +     int err;
-> > > > > +
-> > > > > +     lan966x->netdevice_nb.notifier_call = lan966x_netdevice_event;
-> > > > > +     err = register_netdevice_notifier(&lan966x->netdevice_nb);
-> > > > > +     if (err)
-> > > > > +             return err;
-> > > > > +
-> > > > > +     lan966x->switchdev_nb.notifier_call = lan966x_switchdev_event;
-> > > > > +     err = register_switchdev_notifier(&lan966x->switchdev_nb);
-> > > > > +     if (err)
-> > > > > +             goto err_switchdev_nb;
-> > > > > +
-> > > > > +     lan966x->switchdev_blocking_nb.notifier_call = lan966x_switchdev_blocking_event;
-> > > > > +     err = register_switchdev_blocking_notifier(&lan966x->switchdev_blocking_nb);
-> > > > > +     if (err)
-> > > > > +             goto err_switchdev_blocking_nb;
-> > > > > +
-> > > > > +     lan966x_owq = alloc_ordered_workqueue("lan966x_order", 0);
-> > > > > +     if (!lan966x_owq) {
-> > > > > +             err = -ENOMEM;
-> > > > > +             goto err_switchdev_blocking_nb;
-> > > > > +     }
-> > > >
-> > > > These should be singleton objects, otherwise things get problematic if
-> > > > you have more than one switch device instantiated in the system.
-> > >
-> > > Yes, I will update this.
-> >
-> > Actually I think they need to be part of lan966x.
-> > Because we want each lan966x instance to be independent of each other.
-> > This is not seen in this version but is more clear in the next version
-> > (v4).
+> Why is this assumption necessary? The statement that Linux runs only
+> with horizontal polarization is not true.
 > 
-> They are independent of each other. You deduce the interface on which
-> the notifier was emitted using switchdev_notifier_info_to_dev() and act
-> upon it, if lan966x_netdevice_check() is true. The notifier handling
-> code itself is stateless, all the state is per port / per switch.
-> If you register one notifier handler per switch, lan966x_netdevice_check()
-> would return true for each notifier handler instance, and you would
-> handle each event twice, would you not?
 
-That is correct, I will get the event twice which is a problem in the
-lan966x. The function lan966x_netdevice_check should be per instance, in
-this way each instance can filter the events.
-The reason why I am putting the notifier_block inside lan966x is to be
-able to get to the instance of lan966x even if I get a event that is not
-for lan966x port.
+Right, I will rephrase this as:
 
-> notifier handlers should be registered as singletons, like other drivers
-> do.
+"Polarization change is not taken into account, QEMU intercepts queries 
+for polarization change (PTF) and only provides horizontal polarization 
+indication to Guest's Linux."
 
-It looks like not all the other driver register them as singletone. For
-example: prestera, mlx5, sparx5. (I just have done a git grep for
-register_switchdev_notifier, I have not looked in details at the
-implementation).
+@Heiko, I did not find any usage of the polarization in the kernel other 
+than an indication in the sysfs. Is there currently other use of the 
+polarization that I did not see?
+
 
 
 -- 
-/Horatiu
+Pierre Morel
+IBM Lab Boeblingen

@@ -2,225 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B154B4723B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD7A4723B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbhLMJXl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Dec 2021 04:23:41 -0500
-Received: from mail-vk1-f179.google.com ([209.85.221.179]:38527 "EHLO
-        mail-vk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbhLMJXh (ORCPT
+        id S233683AbhLMJYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:24:05 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16368 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232011AbhLMJYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:23:37 -0500
-Received: by mail-vk1-f179.google.com with SMTP id s17so9966812vka.5;
-        Mon, 13 Dec 2021 01:23:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7JQ6xhDuC8UGs/jm3YR6x8QoCCs8KyehtdxluDCRZKo=;
-        b=s1vr4fKxoqXExk3EECIfYm4XnjnYCI9FntQ4nfRSKG1qDpqNF9Ln+oyQ+8AlkOmNZY
-         4VKiBsJuu+BAAMm6QtPPMfTP8l403QFB9Uc1hR/hLkkeUmz4NOq9DyGh796m9mNutLIJ
-         9dmGJIbRxcCMcWHcqcjslDyjrICWEIGHiLxUaU8S5YF6QkMz/C+jXeqnTPmQjjJqG5dJ
-         DmyRVHmFe1uRt/Nbgr8f/fqhsR3JckM0CbT/qJL8nxByU6P2aCObAAE9k9LrHm8V4BZI
-         O4fstT3MvC/FSeM0K6PLkHUslGnIIUAADonm70KDKHyXKuxJLmFh91rJ3HnUgrPDo6BS
-         4mKQ==
-X-Gm-Message-State: AOAM5329nOcx31Hc48LnBiGEsDoJpYJbc+mLykjJXH6bvW5Y9lmtzdhi
-        W+mLuBR5yt3KD2Q9Z9wXEnGVb9ZOGT4H6g==
-X-Google-Smtp-Source: ABdhPJy36iwzFCGQ3/LfaGF4Odlhfj2OLNrCWA4IlVb15gm8DIeNRZjtFj9sldbBl2GYTgKVUkSP6A==
-X-Received: by 2002:a05:6122:20a7:: with SMTP id i39mr29371339vkd.15.1639387415861;
-        Mon, 13 Dec 2021 01:23:35 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id t20sm3875484vsj.27.2021.12.13.01.23.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 01:23:35 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id ay21so27952890uab.12;
-        Mon, 13 Dec 2021 01:23:34 -0800 (PST)
-X-Received: by 2002:a67:c106:: with SMTP id d6mr26074577vsj.77.1639387403608;
- Mon, 13 Dec 2021 01:23:23 -0800 (PST)
+        Mon, 13 Dec 2021 04:24:04 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JCGJl0wF2z923W;
+        Mon, 13 Dec 2021 17:23:19 +0800 (CST)
+Received: from dggpemm500004.china.huawei.com (7.185.36.219) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 17:24:01 +0800
+Received: from [10.174.177.69] (10.174.177.69) by
+ dggpemm500004.china.huawei.com (7.185.36.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 17:24:01 +0800
+Message-ID: <03964258-10ff-7f19-10cb-ca4eccf72848@huawei.com>
+Date:   Mon, 13 Dec 2021 17:24:00 +0800
 MIME-Version: 1.0
-References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-6-digetx@gmail.com>
- <YaLNOJTM+lVq+YNS@qmqm.qmqm.pl> <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
- <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl> <091321ea-4919-0579-88a8-23d05871575d@gmail.com>
- <CAJZ5v0jMvdhfBqjY+V9h_Z6EH1ohuJH+KjuGiOw_Jor1Tnp7vg@mail.gmail.com>
- <45025b2d-4be1-f694-be61-31903795cf5d@gmail.com> <CAJZ5v0ieTwnBVjW8R_VTdPFH3yr5AwLc+ZEG5N3KrpTH+j8qZw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ieTwnBVjW8R_VTdPFH3yr5AwLc+ZEG5N3KrpTH+j8qZw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 13 Dec 2021 10:23:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXW1bCLkJhC1Jnf2rkS1rBnXsMX=4LMVdXDvMV5HOzrLw@mail.gmail.com>
-Message-ID: <CAMuHMdXW1bCLkJhC1Jnf2rkS1rBnXsMX=4LMVdXDvMV5HOzrLw@mail.gmail.com>
-Subject: Re: [PATCH v4 05/25] reboot: Warn if restart handler has duplicated priority
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH -next] blk-throttle: Set BIO_THROTTLED when bio has been
+ throttled
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+CC:     <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211118131551.810931-1-qiulaibin@huawei.com>
+ <YaUZExR6v8IdZUeM@slm.duckdns.org>
+From:   QiuLaibin <qiulaibin@huawei.com>
+In-Reply-To: <YaUZExR6v8IdZUeM@slm.duckdns.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.69]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500004.china.huawei.com (7.185.36.219)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 8:14 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Fri, Dec 10, 2021 at 8:04 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> > 10.12.2021 21:27, Rafael J. Wysocki пишет:
-> > > On Mon, Nov 29, 2021 at 12:34 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> > >> 29.11.2021 03:26, Michał Mirosław пишет:
-> > >>> On Mon, Nov 29, 2021 at 12:06:19AM +0300, Dmitry Osipenko wrote:
-> > >>>> 28.11.2021 03:28, Michał Mirosław пишет:
-> > >>>>> On Fri, Nov 26, 2021 at 09:00:41PM +0300, Dmitry Osipenko wrote:
-> > >>>>>> Add sanity check which ensures that there are no two restart handlers
-> > >>>>>> registered with the same priority. Normally it's a direct sign of a
-> > >>>>>> problem if two handlers use the same priority.
-> > >>>>>
-> > >>>>> The patch doesn't ensure the property that there are no duplicated-priority
-> > >>>>> entries on the chain.
-> > >>>>
-> > >>>> It's not the exact point of this patch.
-> > >>>>
-> > >>>>> I'd rather see a atomic_notifier_chain_register_unique() that returns
-> > >>>>> -EBUSY or something istead of adding an entry with duplicate priority.
-> > >>>>> That way it would need only one list traversal unless you want to
-> > >>>>> register the duplicate anyway (then you would call the older
-> > >>>>> atomic_notifier_chain_register() after reporting the error).
-> > >>>>
-> > >>>> The point of this patch is to warn developers about the problem that
-> > >>>> needs to be fixed. We already have such troubling drivers in mainline.
-> > >>>>
-> > >>>> It's not critical to register different handlers with a duplicated
-> > >>>> priorities, but such cases really need to be corrected. We shouldn't
-> > >>>> break users' machines during transition to the new API, meanwhile
-> > >>>> developers should take action of fixing theirs drivers.
-> > >>>>
-> > >>>>> (Or you could return > 0 when a duplicate is registered in
-> > >>>>> atomic_notifier_chain_register() if the callers are prepared
-> > >>>>> for that. I don't really like this way, though.)
-> > >>>>
-> > >>>> I had a similar thought at some point before and decided that I'm not in
-> > >>>> favor of this approach. It's nicer to have a dedicated function that
-> > >>>> verifies the uniqueness, IMO.
-> > >>>
-> > >>> I don't like the part that it traverses the list second time to check
-> > >>> the uniqueness. But actually you could avoid that if
-> > >>> notifier_chain_register() would always add equal-priority entries in
-> > >>> reverse order:
-> > >>>
-> > >>>  static int notifier_chain_register(struct notifier_block **nl,
-> > >>>               struct notifier_block *n)
-> > >>>  {
-> > >>>       while ((*nl) != NULL) {
-> > >>>               if (unlikely((*nl) == n)) {
-> > >>>                       WARN(1, "double register detected");
-> > >>>                       return 0;
-> > >>>               }
-> > >>> -             if (n->priority > (*nl)->priority)
-> > >>> +             if (n->priority >= (*nl)->priority)
-> > >>>                       break;
-> > >>>               nl = &((*nl)->next);
-> > >>>       }
-> > >>>       n->next = *nl;
-> > >>>       rcu_assign_pointer(*nl, n);
-> > >>>       return 0;
-> > >>>  }
-> > >>>
-> > >>> Then the check for uniqueness after adding would be:
-> > >>>
-> > >>>  WARN(nb->next && nb->priority == nb->next->priority);
-> > >>
-> > >> We can't just change the registration order because invocation order of
-> > >> the call chain depends on the registration order
-> > >
-> > > It doesn't if unique priorities are required and isn't that what you want?
-> > >
-> > >> and some of current
-> > >> users may rely on that order. I'm pretty sure that changing the order
-> > >> will have unfortunate consequences.
-> > >
-> > > Well, the WARN() doesn't help much then.
-> > >
-> > > Either you can make all of the users register with unique priorities,
-> > > and then you can make the registration reject non-unique ones, or you
-> > > cannot assume them to be unique.
-> >
-> > There is no strong requirement for priorities to be unique, the reboot.c
-> > code will work properly.
->
-> In which case adding the WARN() is not appropriate IMV.
->
-> Also I've looked at the existing code and at least in some cases the
-> order in which the notifiers run doesn't matter.  I'm not sure what
-> the purpose of this patch is TBH.
->
-> > The potential problem is on the user's side and the warning is intended
-> > to aid the user.
->
-> Unless somebody has the panic_on_warn mentioned previously set and
-> really the user need not understand what the WARN() is about.  IOW,
-> WARN() helps developers, not users.
+Hi Tejun:
 
-Do panic_on_warn and reboot_on_panic play well with having a WARN()
-in the reboot notifier handling?
+Thanks for your reply.
+And the following is the stack of this problem:
 
-Gr{oetje,eeting}s,
+[112105.756554] BUG: KASAN: use-after-free in blk_throtl_bio+0x12f0/0x2c70
 
-                        Geert
+[112105.763367] Call Trace:
+[112105.763889]  dump_stack+0x9b/0xce
+[112105.766343]  print_address_description.constprop.6+0x3e/0x60
+[112105.778343]  kasan_report.cold.9+0x22/0x3a
+[112105.780984]  blk_throtl_bio+0x12f0/0x2c70
+[112105.782759]  submit_bio_checks+0x701/0x1550
+[112105.803063]  submit_bio_noacct+0x83/0xc80
+[112105.807930]  submit_bio+0xa7/0x330
+[112105.808649]  mpage_readahead+0x380/0x500
+[112105.812982]  read_pages+0x1c1/0xbf0
+[112105.817575]  page_cache_ra_unbounded+0x471/0x6f0
+[112105.820014]  do_page_cache_ra+0xda/0x110
+[112105.824801]  ondemand_readahead+0x442/0xae0
+[112105.825631]  page_cache_async_ra+0x210/0x300
+[112105.826487]  generic_file_buffered_read+0x4d9/0x2130
+[112105.829308]  generic_file_read_iter+0x315/0x490
+[112105.831073]  blkdev_read_iter+0x113/0x1b0
+[112105.831885]  aio_read+0x2ad/0x450
+[112105.867371]  io_submit_one+0xc8e/0x1d60
+[112105.873391]  __se_sys_io_submit+0x125/0x350
+[112105.893371]  do_syscall_64+0x2d/0x40
+[112105.894072]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[112105.925135] Allocated by task 26380:
+[112105.925866]  kasan_save_stack+0x19/0x40
+[112105.926666]  __kasan_kmalloc.constprop.2+0xc1/0xd0
+[112105.927644]  kmem_cache_alloc+0x146/0x440
+[112105.928704]  mempool_alloc+0x125/0x2f0
+[112105.929464]  bio_alloc_bioset+0x353/0x590
+[112105.930227]  mpage_alloc+0x3b/0x240
+[112105.932013]  do_mpage_readpage+0xddf/0x1ef0
+[112105.933302]  mpage_readahead+0x264/0x500
+[112105.934092]  read_pages+0x1c1/0xbf0
+[112105.934786]  page_cache_ra_unbounded+0x471/0x6f0
+[112105.935731]  do_page_cache_ra+0xda/0x110
+[112105.936542]  ondemand_readahead+0x442/0xae0
+[112105.937391]  page_cache_async_ra+0x210/0x300
+[112105.938269]  generic_file_buffered_read+0x4d9/0x2130
+[112105.939542]  generic_file_read_iter+0x315/0x490
+[112105.940539]  blkdev_read_iter+0x113/0x1b0
+[112105.941368]  aio_read+0x2ad/0x450
+[112105.942129]  io_submit_one+0xc8e/0x1d60
+[112105.942895]  __se_sys_io_submit+0x125/0x350
+[112105.943713]  do_syscall_64+0x2d/0x40
+[112105.948600]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+[112105.951025] Freed by task 0:
+[112105.951575]  kasan_save_stack+0x19/0x40
+[112105.952293]  kasan_set_track+0x1c/0x30
+[112105.952998]  kasan_set_free_info+0x1b/0x30
+[112105.953792]  __kasan_slab_free+0x111/0x160
+[112105.955805]  kmem_cache_free+0x94/0x460
+[112105.956724]  mempool_free+0xd6/0x320
+[112105.957667]  bio_free+0xe0/0x130
+[112105.958299]  bio_put+0xab/0xe0
+[112105.958901]  bio_endio+0x3a6/0x5d0
+[112105.959577]  blk_update_request+0x590/0x1370
+[112105.964202]  scsi_end_request+0x7d/0x400
+[112105.967260]  scsi_io_completion+0x1aa/0xe50
+[112105.968064]  scsi_softirq_done+0x11b/0x240
+[112105.968835]  blk_mq_complete_request+0xd4/0x120
+[112105.969734]  scsi_mq_done+0xf0/0x200
+[112105.974126]  virtscsi_vq_done+0xbc/0x150
+[112105.974904]  vring_interrupt+0x179/0x390
+[112105.975718]  __handle_irq_event_percpu+0xf7/0x490
+[112105.976630]  handle_irq_event_percpu+0x7b/0x160
+[112105.990310]  handle_irq_event+0xcc/0x170
+[112105.993845]  handle_edge_irq+0x215/0xb20
+[112105.994610]  common_interrupt+0x60/0x120
+[112106.006560]  asm_common_interrupt+0x1e/0x40
+
+On 2021/11/30 2:16, Tejun Heo wrote:
+> Hello,
+> 
+> On Thu, Nov 18, 2021 at 09:15:51PM +0800, Laibin Qiu wrote:
+>> 1.In current process, all bio will set the BIO_THROTTLED flag
+>> after __blk_throtl_bio().
+>>
+>> 2.If bio needs to be throttled, it will start the timer and
+>> stop submit bio directly. Bio will submit in blk_throtl_dispatch_work_fn()
+>> when the timer expires. But in the current process, if bio is throttled.
+>> The BIO_THROTTLED will be set to bio after timer start. If the bio
+>> has been completed, it may cause use-after-free.
+>>
+>> Fix this by move BIO_THROTTLED set before timer set.
+> 
+> Have you tried reproducing and confirming the above in any way?
+> 
+>> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+>> index 39bb6e68a9a2..ddfbff4465d5 100644
+>> --- a/block/blk-throttle.c
+>> +++ b/block/blk-throttle.c
+>> @@ -2149,6 +2149,7 @@ bool __blk_throtl_bio(struct bio *bio)
+>>   	td->nr_queued[rw]++;
+>>   	throtl_add_bio_tg(bio, qn, tg);
+>>   	throttled = true;
+>> +	bio_set_flag(bio, BIO_THROTTLED);
+>>   
+>>   	/*
+>>   	 * Update @tg's dispatch time and force schedule dispatch if @tg
+>> @@ -2163,7 +2164,6 @@ bool __blk_throtl_bio(struct bio *bio)
+>>   
+>>   out_unlock:
+>>   	spin_unlock_irq(&q->queue_lock);
+>> -	bio_set_flag(bio, BIO_THROTTLED);
+> 
+> Because it seems wrong in two ways:
+> 
+> * This function is called synchronously on the issue path. The bio isn't
+>    seen by the queue and device driver yet and nothing can race to issue it
+>    before this function returns.
+> 
+
+The bio is under throttle here, this submit_bio return directly. And
+current process will queue a dispatch work by 
+throtl_schedule_pending_timer() to submit this bio before BIO_THROTTLED 
+flag set. If the bio is completed quickly after the dispatch work is 
+queued, UAF of bio will happen.
+
+> * Now we're not setting BIO_THROTTLED when we're taking a different return
+>    path through the out_unlock label and risks calling back into blk_throtl
+>    again on the same bio.
+> 
+
+In my opinion, This flag can prevent the request from being throttled 
+multiple times. If the request itself does not need to be throttled, the 
+result of repeated entry will be the same.
+If necessary, I think we can use other methods to achieve this effect 
+for request does not need to be throttled.
+> In general, if you think you spotted an issue, please try to trigger it in
+> however way possible to confirm that the issue is real.
+> 
+> Thanks.
+> 
+
+Best regards

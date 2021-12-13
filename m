@@ -2,219 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 290DD47381E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88818473821
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244065AbhLMWzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:55:02 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:41916 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244059AbhLMWy4 (ORCPT
+        id S244045AbhLMWz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240451AbhLMWzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:54:56 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:51374)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwuDf-0081Y4-Rt; Mon, 13 Dec 2021 15:54:55 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:60446 helo=localhost.localdomain)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwuDe-007pqT-Gh; Mon, 13 Dec 2021 15:54:55 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Mon, 13 Dec 2021 16:53:50 -0600
-Message-Id: <20211213225350.27481-8-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        Mon, 13 Dec 2021 17:55:47 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AA8C0617A1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:55:47 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id t5so56924776edd.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:55:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/nvhxeMTi05OGmz1DsmtB7RmMc0RwaHnCA/LhMCRmZs=;
+        b=HrJDI8IX0mMlJsutIPoMjb+Oc6sUOW4+n6t8+j0m7VBiYBUYJzZllbSW2pZyEEpsT9
+         rTGVg4xUaLUsYajEll9J6CRYLXMG5ephiRE/Y697Quu56dy1kJUEh1PCpGjQd1SEtuIO
+         jyFid9OUZE87cBCbgQFFu0713nbb0y9ssTyyb9FEjhzu/lC8D8nAjCtKjeHwW8N+t7rL
+         nOM0Okjaaf4oA14Rrr8g2bHgVBnUeRFX8EpMH5hHaeqNjEJE7mcFHHTKAAIvbCY05fap
+         YVG6TU6NuMHdYO949vw5cwp1LGCnyA98gIGuDUqiXRC4g/O+cZRV0GRVYfBdf/PA1E6W
+         KedA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/nvhxeMTi05OGmz1DsmtB7RmMc0RwaHnCA/LhMCRmZs=;
+        b=SWX3qF29nww80r9NcEbL+4sYKzz7jsL1yuqJksgEYVDQGpWYesbtfXYsjU+2L//0ZO
+         wzSDyLUDhFWVS8v++dOOtT8RQko7b7BZgWzSaWJ7W/zaSbjdrYsS7q8HZb6u/T7LQL5D
+         qBTe5fGdgmzFo7Fwa3r9IZB3SfMkd+IGrF9035IYkKgZuOOjmNC1qzrDRdz5+IeEXOqu
+         pcDUbtnKOBIy0TAh3s9BCIUKvRW5uQbByE59Ew4e9O4VA8rUYAmFuh/ogOwXSv/Gea+b
+         RvYuQQfSDHUyqrv8IHXpENGBVq+wXQ8GQmVjzUvOSVmTWOjaVm7bcn+puKL5xEO5Zgg+
+         cTOQ==
+X-Gm-Message-State: AOAM532rxSWWrWmKIlbCLuWCtMOPyHHY8WcLJjDgStui9pr2kJJOJ67D
+        ncFzLbsoKBoMENv+38hoNMZ9ABfmnqFE4Q==
+X-Google-Smtp-Source: ABdhPJyOuKQfGjttoEpTXUX47uqhRj3Qnn0Z9g70ETG9oc780+wOIHeV4mG3irsYY0uFJAP8XiurHA==
+X-Received: by 2002:a17:907:d89:: with SMTP id go9mr1516948ejc.330.1639436145433;
+        Mon, 13 Dec 2021 14:55:45 -0800 (PST)
+Received: from [192.168.1.15] (hst-221-97.medicom.bg. [84.238.221.97])
+        by smtp.googlemail.com with ESMTPSA id a13sm6882861edk.29.2021.12.13.14.55.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 14:55:45 -0800 (PST)
+Subject: Re: [PATCH v2] media: venus: Synchronize probe() between venus_core
+ and enc/dec
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     John Stultz <john.stultz@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211029214833.2615274-1-tadeusz.struk@linaro.org>
+ <YZ2x+xuvnHC48MHg@ripper>
+ <CALAqxLV7YzuHLzNFSWawjpoJGb3WwO4bgnMN_5mWoHmB582kZw@mail.gmail.com>
+ <CALAqxLWjK4h-ghF5s8qV6Q3Wp3K1N816dTfiLNatBTms6NDe3A@mail.gmail.com>
+ <fee96315-28cb-58a1-7f2d-eb82d9ecb56a@linaro.org>
+Message-ID: <906cfb55-3f9a-e7ab-355c-ba4f02029f93@linaro.org>
+Date:   Tue, 14 Dec 2021 00:55:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1mwuDe-007pqT-Gh;;;mid=<20211213225350.27481-8-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/Lbs+tHYdygWWUhu2vBsg3lNOGTPj2TtE=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TooManySym_01,XMNoVowels,XM_Body_Dirty_Words
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  1.0 XM_Body_Dirty_Words Contains a dirty word
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 496 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (2.5%), b_tie_ro: 11 (2.1%), parse: 0.99
-        (0.2%), extract_message_metadata: 11 (2.3%), get_uri_detail_list: 2.2
-        (0.4%), tests_pri_-1000: 13 (2.7%), tests_pri_-950: 1.38 (0.3%),
-        tests_pri_-900: 1.25 (0.3%), tests_pri_-90: 56 (11.3%), check_bayes:
-        55 (11.0%), b_tokenize: 9 (1.9%), b_tok_get_all: 9 (1.9%),
-        b_comp_prob: 2.4 (0.5%), b_tok_touch_all: 30 (6.0%), b_finish: 1.00
-        (0.2%), tests_pri_0: 383 (77.1%), check_dkim_signature: 0.55 (0.1%),
-        check_dkim_adsp: 2.9 (0.6%), poll_dns_idle: 1.24 (0.2%), tests_pri_10:
-        3.4 (0.7%), tests_pri_500: 10 (2.0%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 8/8] signal: Remove the helper signal_group_exit
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+In-Reply-To: <fee96315-28cb-58a1-7f2d-eb82d9ecb56a@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This helper is misleading.  It tests for an ongoing exec as well as
-the process having received a fatal signal.
 
-Sometimes it is appropriate to treat an on-going exec differently than
-a process that is shutting down due to a fatal signal.  In particular
-taking the fast path out of exit_signals instead of retargeting
-signals is not appropriate during exec, and not changing the the exit
-code in do_group_exit during exec.
 
-Removing the helper so that both cases must be coded for explicitly
-makes it more obvious what is going on as both cases must be coded for
-explicitly.
+On 12/14/21 12:50 AM, Stanimir Varbanov wrote:
+> From 9bfb69026374fa010d36680554e2634d5d435681 Mon Sep 17 00:00:00 2001
+> From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> Date: Tue, 14 Dec 2021 00:45:18 +0200
+> Subject: [PATCH] venus: WIP: Rework and reorder firmware load
+> 
+> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> ---
+>  drivers/media/platform/qcom/venus/core.c     |  8 +++----
+>  drivers/media/platform/qcom/venus/core.h     |  2 ++
+>  drivers/media/platform/qcom/venus/firmware.c | 22 +++++++++++++++++++-
+>  drivers/media/platform/qcom/venus/vdec.c     |  3 ++-
+>  drivers/media/platform/qcom/venus/venc.c     |  3 ++-
+>  5 files changed, 31 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/core.c
+> b/drivers/media/platform/qcom/venus/core.c
+> index 877eca125803..7f65b08b2bac 100644
+> --- a/drivers/media/platform/qcom/venus/core.c
+> +++ b/drivers/media/platform/qcom/venus/core.c
+> @@ -344,10 +344,6 @@ static int venus_probe(struct platform_device *pdev)
+>  	if (ret < 0)
+>  		goto err_runtime_disable;
+> 
+> -	ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
+> -	if (ret)
+> -		goto err_runtime_disable;
+> -
+>  	ret = venus_firmware_init(core);
+>  	if (ret)
+>  		goto err_of_depopulate;
+> @@ -372,6 +368,10 @@ static int venus_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err_venus_shutdown;
+> 
+> +	ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
+> +	if (ret)
+> +		goto err_venus_shutdown;
+> +
+>  	ret = pm_runtime_put_sync(dev);
+>  	if (ret) {
+>  		pm_runtime_get_noresume(dev);
+> diff --git a/drivers/media/platform/qcom/venus/core.h
+> b/drivers/media/platform/qcom/venus/core.h
+> index 7c3bac01cd49..6455efb35168 100644
+> --- a/drivers/media/platform/qcom/venus/core.h
+> +++ b/drivers/media/platform/qcom/venus/core.h
+> @@ -182,6 +182,8 @@ struct venus_core {
+>  	atomic_t insts_count;
+>  	unsigned int state;
+>  	struct completion done;
+> +	struct completion fwload_done;
+> +	bool fwload_success;
+>  	unsigned int error;
+>  	unsigned long sys_error;
+>  	wait_queue_head_t sys_err_done;
+> diff --git a/drivers/media/platform/qcom/venus/firmware.c
+> b/drivers/media/platform/qcom/venus/firmware.c
+> index 14b6f1d05991..d523fbeb9d56 100644
+> --- a/drivers/media/platform/qcom/venus/firmware.c
+> +++ b/drivers/media/platform/qcom/venus/firmware.c
+> @@ -76,6 +76,14 @@ int venus_set_hw_state(struct venus_core *core, bool
+> resume)
+>  	return 0;
+>  }
+> 
+> +static void firmware_async_load(const struct firmware *fw, void *context)
+> +{
+> +	struct venus_core *core = context;
+> +
+> +	core->fwload_success = true;
 
-While removing the helper fix the two cases where I have observed
-using signal_group_helper resulted in the wrong result.
+this should be
 
-For the unset exit_code in do_group_exit during an exec I use 0 as I
-think that is what group_exit_code has been set to most of the time.
-During a thread group stop group_exit_code is set to the stop signal
-and when the thread group receives SIGCONT group_exit_code is reset to
-0.
+	if (fw)
+		core->fwload_success = true;
 
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- fs/coredump.c                | 5 +++--
- fs/exec.c                    | 2 +-
- include/linux/sched/signal.h | 7 -------
- kernel/exit.c                | 8 ++++++--
- kernel/signal.c              | 8 +++++---
- 5 files changed, 15 insertions(+), 15 deletions(-)
+> +	complete(&core->fwload_done);
+> +}
+> +
+>  static int venus_load_fw(struct venus_core *core, const char *fwname,
+>  			 phys_addr_t *mem_phys, size_t *mem_size)
+>  {
+> @@ -101,10 +109,22 @@ static int venus_load_fw(struct venus_core *core,
+> const char *fwname,
+>  	if (ret)
+>  		goto err_put_node;
+> 
+> -	ret = request_firmware(&mdt, fwname, dev);
+> +	init_completion(&core->fwload_done);
+> +	core->fwload_success = false;
+> +
+> +	ret = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, fwname,
+> +				      dev, GFP_KERNEL, core,
+> +				      firmware_async_load);
+>  	if (ret < 0)
+>  		goto err_put_node;
+> 
+> +	wait_for_completion(&core->fwload_done);
+> +
+> +	if (!core->fwload_success) {
+> +		ret = -ENOENT;
+> +		goto err_put_node;
+> +	}
+> +
+>  	fw_size = qcom_mdt_get_size(mdt);
+>  	if (fw_size < 0) {
+>  		ret = fw_size;
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c
+> b/drivers/media/platform/qcom/venus/vdec.c
+> index 91da3f509724..0e718d24a3b3 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -1718,6 +1718,8 @@ static int vdec_probe(struct platform_device *pdev)
+>  	if (!vdev)
+>  		return -ENOMEM;
+> 
+> +	core->dev_dec = dev;
+> +
+>  	strscpy(vdev->name, "qcom-venus-decoder", sizeof(vdev->name));
+>  	vdev->release = video_device_release;
+>  	vdev->fops = &vdec_fops;
+> @@ -1731,7 +1733,6 @@ static int vdec_probe(struct platform_device *pdev)
+>  		goto err_vdev_release;
+> 
+>  	core->vdev_dec = vdev;
+> -	core->dev_dec = dev;
+> 
+>  	video_set_drvdata(vdev, core);
+>  	pm_runtime_set_autosuspend_delay(dev, 2000);
+> diff --git a/drivers/media/platform/qcom/venus/venc.c
+> b/drivers/media/platform/qcom/venus/venc.c
+> index 84bafc3118cc..1b3fb927eb16 100644
+> --- a/drivers/media/platform/qcom/venus/venc.c
+> +++ b/drivers/media/platform/qcom/venus/venc.c
+> @@ -1448,6 +1448,8 @@ static int venc_probe(struct platform_device *pdev)
+>  	if (!vdev)
+>  		return -ENOMEM;
+> 
+> +	core->dev_enc = dev;
+> +
+>  	strscpy(vdev->name, "qcom-venus-encoder", sizeof(vdev->name));
+>  	vdev->release = video_device_release;
+>  	vdev->fops = &venc_fops;
+> @@ -1461,7 +1463,6 @@ static int venc_probe(struct platform_device *pdev)
+>  		goto err_vdev_release;
+> 
+>  	core->vdev_enc = vdev;
+> -	core->dev_enc = dev;
+> 
+>  	video_set_drvdata(vdev, core);
+>  	pm_runtime_set_autosuspend_delay(dev, 2000);
+> -- 2.25.1
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index ef56595a0d87..09302a6a0d80 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -372,11 +372,12 @@ static int zap_process(struct task_struct *start, int exit_code)
- static int zap_threads(struct task_struct *tsk,
- 			struct core_state *core_state, int exit_code)
- {
-+	struct signal_struct *signal = tsk->signal;
- 	int nr = -EAGAIN;
- 
- 	spin_lock_irq(&tsk->sighand->siglock);
--	if (!signal_group_exit(tsk->signal)) {
--		tsk->signal->core_state = core_state;
-+	if (!(signal->flags & SIGNAL_GROUP_EXIT) && !signal->group_exec_task) {
-+		signal->core_state = core_state;
- 		nr = zap_process(tsk, exit_code);
- 		clear_tsk_thread_flag(tsk, TIF_SIGPENDING);
- 		tsk->flags |= PF_DUMPCORE;
-diff --git a/fs/exec.c b/fs/exec.c
-index 9d2925811011..82db656ca709 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1045,7 +1045,7 @@ static int de_thread(struct task_struct *tsk)
- 	 * Kill all other threads in the thread group.
- 	 */
- 	spin_lock_irq(lock);
--	if (signal_group_exit(sig)) {
-+	if ((sig->flags & SIGNAL_GROUP_EXIT) || sig->group_exec_task) {
- 		/*
- 		 * Another group action in progress, just
- 		 * return so that the signal is processed.
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index d3248aba5183..b6ecb9fc4cd2 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -271,13 +271,6 @@ static inline void signal_set_stop_flags(struct signal_struct *sig,
- 	sig->flags = (sig->flags & ~SIGNAL_STOP_MASK) | flags;
- }
- 
--/* If true, all threads except ->group_exec_task have pending SIGKILL */
--static inline int signal_group_exit(const struct signal_struct *sig)
--{
--	return	(sig->flags & SIGNAL_GROUP_EXIT) ||
--		(sig->group_exec_task != NULL);
--}
--
- extern void flush_signals(struct task_struct *);
- extern void ignore_signals(struct task_struct *);
- extern void flush_signal_handlers(struct task_struct *, int force_default);
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 527c5e4430ae..e7104f803be0 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -907,15 +907,19 @@ do_group_exit(int exit_code)
- 
- 	BUG_ON(exit_code & 0x80); /* core dumps don't get here */
- 
--	if (signal_group_exit(sig))
-+	if (sig->flags & SIGNAL_GROUP_EXIT)
- 		exit_code = sig->group_exit_code;
-+	else if (sig->group_exec_task)
-+		exit_code = 0;
- 	else if (!thread_group_empty(current)) {
- 		struct sighand_struct *const sighand = current->sighand;
- 
- 		spin_lock_irq(&sighand->siglock);
--		if (signal_group_exit(sig))
-+		if (sig->flags & SIGNAL_GROUP_EXIT)
- 			/* Another thread got here before we took the lock.  */
- 			exit_code = sig->group_exit_code;
-+		else if (sig->group_exec_task)
-+			exit_code = 0;
- 		else {
- 			sig->group_exit_code = exit_code;
- 			sig->flags = SIGNAL_GROUP_EXIT;
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 9eb3e2c1f9f7..860d844542b2 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2392,7 +2392,8 @@ static bool do_signal_stop(int signr)
- 		WARN_ON_ONCE(signr & ~JOBCTL_STOP_SIGMASK);
- 
- 		if (!likely(current->jobctl & JOBCTL_STOP_DEQUEUED) ||
--		    unlikely(signal_group_exit(sig)))
-+		    unlikely(sig->flags & SIGNAL_GROUP_EXIT) ||
-+		    unlikely(sig->group_exec_task))
- 			return false;
- 		/*
- 		 * There is no group stop already in progress.  We must
-@@ -2699,7 +2700,8 @@ bool get_signal(struct ksignal *ksig)
- 		enum pid_type type;
- 
- 		/* Has this task already been marked for death? */
--		if (signal_group_exit(signal)) {
-+		if ((signal->flags & SIGNAL_GROUP_EXIT) ||
-+		     signal->group_exec_task) {
- 			ksig->info.si_signo = signr = SIGKILL;
- 			sigdelset(&current->pending.signal, SIGKILL);
- 			trace_signal_deliver(SIGKILL, SEND_SIG_NOINFO,
-@@ -2955,7 +2957,7 @@ void exit_signals(struct task_struct *tsk)
- 	 */
- 	cgroup_threadgroup_change_begin(tsk);
- 
--	if (thread_group_empty(tsk) || signal_group_exit(tsk->signal)) {
-+	if (thread_group_empty(tsk) || (tsk->signal->flags & SIGNAL_GROUP_EXIT)) {
- 		tsk->flags |= PF_EXITING;
- 		cgroup_threadgroup_change_end(tsk);
- 		return;
 -- 
-2.29.2
-
+regards,
+Stan

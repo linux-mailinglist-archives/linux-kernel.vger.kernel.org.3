@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E44AD47203A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEAC4720C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 06:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbhLMFGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 00:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbhLMFGk (ORCPT
+        id S230054AbhLMFup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 00:50:45 -0500
+Received: from mail108.syd.optusnet.com.au ([211.29.132.59]:48359 "EHLO
+        mail108.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229502AbhLMFuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 00:06:40 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0679C06173F;
-        Sun, 12 Dec 2021 21:06:39 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id u17so24999089wrt.3;
-        Sun, 12 Dec 2021 21:06:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=P5IB4pdkNu0+WWQCnSEEv2bjVlyIR8GRL9kcHTX2Dy8=;
-        b=VPcfPUAFexAi2NUwhJHQIjV495Wl0xje6BFJXDCmxPvZXx16RcpSkEO/7z32mxoua+
-         WdFVBxyA+NGBymuW5TCFmFa0fqt3CJt6NlcO5T2mGoGj+Oh/B0VcxqXGxPaQrJWG8YOq
-         bI6Ia/8uc89w4n1prnK+pS7pZ+Z+6GT4H+d5QtjiAoom2pP0SVr5MyqczNMkpV/H3Tkc
-         gWuwMB6xGLNiQbEro2+w5+y4PE+2DOLvP0F72Jp1STAla7qiZoBOK92tyektWLNXrVNi
-         Ot29vTzttsTrEj/VmlVH4zsFcKnwcI0SAzcKIkbjE3lyZvk0+SuOAhuSgjA81ybbhqx8
-         Qhkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=P5IB4pdkNu0+WWQCnSEEv2bjVlyIR8GRL9kcHTX2Dy8=;
-        b=VLv7v70x2ok3cmqYCHzGvwT7ejkkkJsuWuAT4RYrb5HpSWiPPYv33TZ0WiFceiw4UZ
-         HlNjByGMvyS9FCzY8VePKze2BECmWPhQGu9XS5TkJrlSoOteuzaBbU+kiSbSmT0bCgBN
-         paGEr/IPt0exUDyUc3XSJ6ooqnNZdCq3yN52pH+FyEPeiNhaMVpjhkuaef6hohDGkK4O
-         D65usD1oaoYcckKbg7fPmz1KA/02dmWA0hzm174pZ5VkW0wVOkIBkJKTHjW+Ez9Aq5Yg
-         8f5p75ZIhPlMLRnMUd2iyRbng0wMQNnTcplQSwhNIy4pM+kulAtONVUlryVV50fobTyJ
-         N5qA==
-X-Gm-Message-State: AOAM531OKNtfptGyQHCYkwE2gLKMlwctiXPoONE6pSAa8HmqgOzEpPo5
-        eGMOpdN8RipcnY+5nnk/3uI=
-X-Google-Smtp-Source: ABdhPJyr0IBZ9f9fVK0bhPfLL90TngBvgJZc0HechMmfF6K2EqSld22TZIqynA8WBGj1hbJ9+9+MDQ==
-X-Received: by 2002:a05:6000:1a48:: with SMTP id t8mr29317414wry.66.1639371998508;
-        Sun, 12 Dec 2021 21:06:38 -0800 (PST)
-Received: from ?IPv6:2003:c7:8f4e:655:5f1d:2efa:3e7e:1e2c? (p200300c78f4e06555f1d2efa3e7e1e2c.dip0.t-ipconnect.de. [2003:c7:8f4e:655:5f1d:2efa:3e7e:1e2c])
-        by smtp.gmail.com with ESMTPSA id m20sm6195621wmq.11.2021.12.12.21.06.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Dec 2021 21:06:38 -0800 (PST)
-Subject: Re: [PATCH v3 1/5] Docs: usb: update usb_bulk_msg receiving example
-To:     Oliver Neukum <oneukum@suse.com>, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-References: <cover.1638771720.git.philipp.g.hortmann@gmail.com>
- <3b794ef1936eb410b60cb536e47a0a00e36611d4.1638771720.git.philipp.g.hortmann@gmail.com>
- <ec1a30b7-941c-331a-fbc1-02b907cb5788@suse.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Message-ID: <8c11aa29-d935-94e4-9812-2c882d9e8c19@gmail.com>
-Date:   Mon, 13 Dec 2021 06:06:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 13 Dec 2021 00:50:44 -0500
+Received: from dread.disaster.area (pa49-181-243-119.pa.nsw.optusnet.com.au [49.181.243.119])
+        by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id 8243C58B7A0;
+        Mon, 13 Dec 2021 16:50:40 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1mwdYm-002S6K-Gx; Mon, 13 Dec 2021 16:07:36 +1100
+Date:   Mon, 13 Dec 2021 16:07:36 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Jan Kara <jack@suse.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] Remove bdi_congested() and wb_congested() and
+ related functions
+Message-ID: <20211213050736.GS449541@dread.disaster.area>
+References: <163936868317.23860.5037433897004720387.stgit@noble.brown>
+ <163936886727.23860.5245364396572576756.stgit@noble.brown>
 MIME-Version: 1.0
-In-Reply-To: <ec1a30b7-941c-331a-fbc1-02b907cb5788@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <163936886727.23860.5245364396572576756.stgit@noble.brown>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=61b6df32
+        a=BEa52nrBdFykVEm6RU8P4g==:117 a=BEa52nrBdFykVEm6RU8P4g==:17
+        a=kj9zAlcOel0A:10 a=IOMw9HtfNCkA:10 a=7-415B0cAAAA:8
+        a=HeSqFrNRAXltMStoDEkA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/21 9:55 AM, Oliver Neukum wrote:
+On Mon, Dec 13, 2021 at 03:14:27PM +1100, NeilBrown wrote:
+> These functions are no longer useful as the only bdis that report
+> congestion are in ceph, fuse, and nfs.  None of those bdis can be the
+> target of the calls in drbd, ext2, nilfs2, or xfs.
 > 
-> On 06.12.21 21:57, Philipp Hortmann wrote:
->>   The :c:func:`usb_bulk_msg` function can be very useful for doing single reads
->>   or writes to a device; however, if you need to read or write constantly to
->>   a device, it is recommended to set up your own urbs and submit them to
->> -the USB subsystem.
->> +the USB subsystem. The template uses urbs for read and write.
+> Removing the test on bdi_write_contested() in current_may_throttle()
+> could cause a small change in behaviour, but only when PF_LOCAL_THROTTLE
+> is set.
 > 
-> Hi,
+> So replace the calls by 'false' and simplify the code - and remove the
+> functions.
 > 
-> now that I read this, shouldn't we tell the reader why exactly the use
-> of URBs is a good idea at that place?
-> 
->      Regards
->          Oliver
-> 
+> Signed-off-by: NeilBrown <neilb@suse.de>
+....
+> diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
+> index 631c5a61d89b..22f73b3e888e 100644
+> --- a/fs/xfs/xfs_buf.c
+> +++ b/fs/xfs/xfs_buf.c
+> @@ -843,9 +843,6 @@ xfs_buf_readahead_map(
+>  {
+>  	struct xfs_buf		*bp;
+>  
+> -	if (bdi_read_congested(target->bt_bdev->bd_disk->bdi))
+> -		return;
 
-The Documentation/driver-api/usb/URB.rst does describe this well. We 
-could think about a link to it.
+Ok, but this isn't a "throttle writeback" test here - it's trying to
+avoid having speculative readahead blocking on a full request queue
+instead of just skipping the readahead IO. i.e. prevent readahead
+thrashing and/or adding unnecessary read load when we already have a
+full read queue...
 
-Regards
-Philipp
+So what is the replacement for that? We want to skip the entire
+buffer lookup/setup/read overhead if we're likely to block on IO
+submission - is there anything we can use to do this these days?
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

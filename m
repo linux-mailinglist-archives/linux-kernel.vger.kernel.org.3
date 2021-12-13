@@ -2,208 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D27714734D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8644734D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242334AbhLMTS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242310AbhLMTSw (ORCPT
+        id S238685AbhLMTTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:19:43 -0500
+Received: from mail.efficios.com ([167.114.26.124]:47906 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234461AbhLMTTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:18:52 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17576C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:52 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id m15so15385795pgu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:18:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kvO/0VEuuxkojdAmWD1zwzv62heBh3EH8sTvAtB1w9o=;
-        b=byTIIFdvMhr3kIynk99d8lqZdSySoSP2rOFc417J50MHi95ieNc6zFmytfnfKE26Dj
-         KyYL8daTI+lp1as+GLam+aIEQHZcjzNCxO17I/RL6AgTRyd//7IzrWlV+FjrZfz25E70
-         vITwNMM0x+Vh+vSp90IgY5S8jpE0B8sjQv/ysqNEpDCjoryqmDSq/itONHoW4gwW2B1n
-         fFNN+aEYJYCYZ5rl1En5JUsDVa4G3nwk51nKquK/hcw+UyKbblviL5h2XUMV7oSLU6CF
-         g9gX5RQ2v+OgBpHusEcfQcuKPFePLz/vTBI0GlOqT/+uqSpD0dmnEXbAFXt+4cFJ1ntI
-         d/Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=kvO/0VEuuxkojdAmWD1zwzv62heBh3EH8sTvAtB1w9o=;
-        b=jpUoDxdUA8MD680rbHMTx9Sgma64VwK/OEGPw/8qoqjLhRqWiSCE6qna0mS61pLTaY
-         V4eQpYKjoUh7i2f7lKSsAKJePS3gGxogBiaIRW6+kpfl03iTB9dDMhxeJnuah9JdLps6
-         ZKxXtTTAK1jlYmz+hGK+sIk/oiwZc2q18m3NFk6uVfIfFKitMsd+SQkm1mVxhwGzPu2q
-         EIjmrSkF16ng8O/dkx+O3Cj7s4qoKEdE393yv12UROCOSOpZOX90yf+FzFZoT1qbbEOo
-         yEOZM0u4QgSCcNC6/77lbOv4uQSkzCt+GPHCNIIX895rY1R5A5MZY7r9lHiMKqKQ4TZt
-         SfdA==
-X-Gm-Message-State: AOAM532wrkKM03h0lVwQxkG64aVU2+ssbK312PYkqUJbqcMQf83LLgm2
-        vJQz9OMok9C8PDHUGBCalsE=
-X-Google-Smtp-Source: ABdhPJxzl8iBtAKzo4b3W7aNAW6sB2Kps0scHYPhZBeZ0ak29Jw3wkqDaV+9WX2VNqOxwZrTv5PfpA==
-X-Received: by 2002:a63:6cc2:: with SMTP id h185mr433211pgc.306.1639423131470;
-        Mon, 13 Dec 2021 11:18:51 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id d4sm12908920pfj.78.2021.12.13.11.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:18:51 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-From:   Tejun Heo <tj@kernel.org>
-To:     torvalds@linuxfoundation.org, ebiederm@xmission.com,
-        mkoutny@suse.com, axboe@kernel.dk, keescook@chromium.org,
-        oleg@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-        jnewsome@torproject.org, legion@kernel.org, luto@amacapital.net,
-        jannh@google.com
-Cc:     linux-kernel@vger.kernel.org, security@kernel.org,
-        kernel-team@fb.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 6/6] selftests: cgroup: Test open-time cgroup namespace usage for migration checks
-Date:   Mon, 13 Dec 2021 09:18:33 -1000
-Message-Id: <20211213191833.916632-7-tj@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213191833.916632-1-tj@kernel.org>
-References: <20211213191833.916632-1-tj@kernel.org>
+        Mon, 13 Dec 2021 14:19:42 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id C5D8931CEC2;
+        Mon, 13 Dec 2021 14:19:41 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id batosGk9nsmz; Mon, 13 Dec 2021 14:19:41 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 0331B31CF38;
+        Mon, 13 Dec 2021 14:19:41 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0331B31CF38
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1639423181;
+        bh=6IJ768Q+9Et3bA7CRGWla9iClFZ1ud4C606P/yp0cMQ=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=E7EIcnzHexB40Oyf/Hdh4Y9EJRqZaGx1l8tKcCVe7Yw4xragAeBvn91oPBmjma+xA
+         2Tf3znBAfXv2wBbaS2R07c8HVll6oMhuhEDbPRbHLPcE9CRVW6skR0DtUNWPwBJ3h/
+         VNKfRwtOaJPfVGYV3MYLezON+hF69nHOh7ZV5Eg/tvkPFXjg+DdSwKhBiMR/VUq2Py
+         kSwLhp5+68j1IR2jvCcJinO2kqJ/GwMxXEvpQ3QHH4JMLY0UMUoYWEYZK7wYgwDACi
+         L8NNvggWN6NernQyRsRMAgZxeS5R9FfO6+CPxvwicfqwYwy/6qcUJ2nGEbBxE2FcDs
+         k7Dfp5yy4JpqA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id MZIzfRKoEqo1; Mon, 13 Dec 2021 14:19:40 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id E57DA31CD70;
+        Mon, 13 Dec 2021 14:19:40 -0500 (EST)
+Date:   Mon, 13 Dec 2021 14:19:40 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-api <linux-api@vger.kernel.org>,
+        Jann Horn <jannh@google.com>,
+        libc-alpha <libc-alpha@sourceware.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        paulmck <paulmck@kernel.org>
+Message-ID: <697825714.30478.1639423180784.JavaMail.zimbra@efficios.com>
+In-Reply-To: <87tufctk82.fsf@oldenburg.str.redhat.com>
+References: <87tufctk82.fsf@oldenburg.str.redhat.com>
+Subject: Re: rseq + membarrier programming model
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4173 (ZimbraWebClient - FF94 (Linux)/8.8.15_GA_4177)
+Thread-Topic: rseq + membarrier programming model
+Thread-Index: Jeg44R6PVmLUvL/g/E9uUG22JuKmYg==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a task is writing to an fd opened by a different task, the perm check
-should use the cgroup namespace of the latter task. Add a test for it.
+----- On Dec 13, 2021, at 1:47 PM, Florian Weimer fweimer@redhat.com wrote:
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
----
- tools/testing/selftests/cgroup/test_core.c | 97 ++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+> I've been studying Jann Horn's biased locking example:
+> 
+>  Re: [PATCH 0/4 POC] Allow executing code and syscalls in another address space
+>  <https://lore.kernel.org/linux-api/CAG48ez02UDn_yeLuLF4c=kX0=h2Qq8Fdb0cer1yN8atbXSNjkQ@mail.gmail.com/>
+> 
+> It uses MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ as part of the biased lock
+> revocation.
+> 
+> How does the this code know that the process has called
+> MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ?
 
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index 01b766506973..600123503063 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -1,11 +1,14 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- 
-+#define _GNU_SOURCE
- #include <linux/limits.h>
-+#include <linux/sched.h>
- #include <sys/types.h>
- #include <sys/mman.h>
- #include <sys/wait.h>
- #include <unistd.h>
- #include <fcntl.h>
-+#include <sched.h>
- #include <stdio.h>
- #include <errno.h>
- #include <signal.h>
-@@ -741,6 +744,99 @@ static int test_cgcore_lesser_euid_open(const char *root)
- 	return ret;
- }
- 
-+struct lesser_ns_open_thread_arg {
-+	const char	*path;
-+	int		fd;
-+	int		err;
-+};
-+
-+static int lesser_ns_open_thread_fn(void *arg)
-+{
-+	struct lesser_ns_open_thread_arg *targ = arg;
-+
-+	targ->fd = open(targ->path, O_RDWR);
-+	targ->err = errno;
-+	return 0;
-+}
-+
-+/*
-+ * cgroup migration permission check should be performed based on the cgroup
-+ * namespace at the time of open instead of write.
-+ */
-+static int test_cgcore_lesser_ns_open(const char *root)
-+{
-+	static char stack[65536];
-+	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
-+	int ret = KSFT_FAIL;
-+	char *cg_test_a = NULL, *cg_test_b = NULL;
-+	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
-+	int cg_test_b_procs_fd = -1;
-+	struct lesser_ns_open_thread_arg targ = { .fd = -1 };
-+	pid_t pid;
-+	int status;
-+
-+	cg_test_a = cg_name(root, "cg_test_a");
-+	cg_test_b = cg_name(root, "cg_test_b");
-+
-+	if (!cg_test_a || !cg_test_b)
-+		goto cleanup;
-+
-+	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
-+	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
-+
-+	if (!cg_test_a_procs || !cg_test_b_procs)
-+		goto cleanup;
-+
-+	if (cg_create(cg_test_a) || cg_create(cg_test_b))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_test_b))
-+		goto cleanup;
-+
-+	if (chown(cg_test_a_procs, test_euid, -1) ||
-+	    chown(cg_test_b_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	targ.path = cg_test_b_procs;
-+	pid = clone(lesser_ns_open_thread_fn, stack + sizeof(stack),
-+		    CLONE_NEWCGROUP | CLONE_FILES | CLONE_VM | SIGCHLD,
-+		    &targ);
-+	if (pid < 0)
-+		goto cleanup;
-+
-+	if (waitpid(pid, &status, 0) < 0)
-+		goto cleanup;
-+
-+	if (!WIFEXITED(status))
-+		goto cleanup;
-+
-+	cg_test_b_procs_fd = targ.fd;
-+	if (cg_test_b_procs_fd < 0)
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_test_a))
-+		goto cleanup;
-+
-+	if ((status = write(cg_test_b_procs_fd, "0", 1)) >= 0 || errno != ENOENT)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	if (cg_test_b_procs_fd >= 0)
-+		close(cg_test_b_procs_fd);
-+	if (cg_test_b)
-+		cg_destroy(cg_test_b);
-+	if (cg_test_a)
-+		cg_destroy(cg_test_a);
-+	free(cg_test_b_procs);
-+	free(cg_test_a_procs);
-+	free(cg_test_b);
-+	free(cg_test_a);
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct corecg_test {
- 	int (*fn)(const char *root);
-@@ -757,6 +853,7 @@ struct corecg_test {
- 	T(test_cgcore_thread_migration),
- 	T(test_cgcore_destroy),
- 	T(test_cgcore_lesser_euid_open),
-+	T(test_cgcore_lesser_ns_open),
- };
- #undef T
- 
+I won't speak for this code snippet in particular, but in general
+issuing MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ from a thread which
+belongs to a process which has not performed
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ will result in
+membarrier returning -EPERM. If the kernel is built without CONFIG_RSEQ
+support, it will return -EINVAL:
+
+membarrier_private_expedited():
+
+        } else if (flags == MEMBARRIER_FLAG_RSEQ) {
+                if (!IS_ENABLED(CONFIG_RSEQ))
+                        return -EINVAL;
+                if (!(atomic_read(&mm->membarrier_state) &
+                      MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ_READY))
+                        return -EPERM;
+
+If you want to create code which optionally depends on availability
+of EXPEDITED_RSEQ membarrier, I suspect you will want to perform
+registration from a library constructor, and keep track of registration
+success/failure in a static variable within the library.
+
+> Could it fall back to
+> MEMBARRIER_CMD_GLOBAL instead?
+
+No. CMD_GLOBAL does not issue the required rseq fence used by the
+algorithm discussed. Also, CMD_GLOBAL has quite a few other shortcomings:
+it takes a while to execute, and is incompatible with nohz_full kernels.
+
+> Why is it that MEMBARRIER_CMD_GLOBAL
+> does not require registration (the broader/more expensive barrier), but
+> the more restricted versions do?
+
+The more restricted versions (which require explicit registration) have a
+close integration with the Linux scheduler, and in some cases require
+additional code to be executed when scheduling between threads which
+belong to different processes, for instance the for "SYNC_CORE" membarrier,
+which is useful for JITs:
+
+static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
+{
+        if (current->mm != mm)
+                return;
+        if (likely(!(atomic_read(&mm->membarrier_state) &
+                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE)))
+                return;
+        sync_core_before_usermode();
+}
+
+Also, for the "global-expedited" commands, these can generate IPIs which will
+interrupt the flow of threads running on behalf of a registered process.
+Therefore, in order to make sure we do not add delays to real-time sensitive
+applications, we made this registration "opt-in".
+
+In order to make sure the programming model is the same for expedited
+private/global plain/sync-core/rseq membarrier commands, we require that
+each process perform a registration beforehand.
+
+> 
+> Or put differently, why wouldn't we request
+> MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ unconditionally at
+> process start in glibc, once we start biased locking in a few places?
+
+The registration of membarrier expedited can be either performed immediately
+when the process starts, or later, possibly when there are other threads
+running concurrently. Note however that the registration scheme has been
+optimized for the scenario where it is called when a single thread is
+running in the process (see sync_runqueues_membarrier_state()). Otherwise
+we need to use the more heavyweight synchronize_rcu(). So my advice would
+be to perform the membarrier expedited registration while the process
+is still single-threaded if possible, rather than postpone this and
+do it entirely lazily on first use, which may happen while other
+threads are already running.
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks,
+> Florian
+
 -- 
-2.34.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

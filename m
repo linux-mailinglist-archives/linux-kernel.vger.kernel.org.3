@@ -2,106 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D66A472EA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A2E472EAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 15:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238752AbhLMOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 09:18:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34218 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbhLMOSR (ORCPT
+        id S238766AbhLMOTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 09:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233226AbhLMOTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:18:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B18CEB81062;
-        Mon, 13 Dec 2021 14:18:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CBEC34602;
-        Mon, 13 Dec 2021 14:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639405094;
-        bh=NtWdzlEjft5tnQeFaBXUVrmubHd8T7HRkrRLfS+HxKc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ef4dtFt35n0BNeZHb5cwHF2nWR84NPJ4B4Ej+DcAmvR7/HzogwktH/W/meMnZnx1/
-         Xg3O6A+RredIYQtKTQ5Xmko6sTk52Ckx/QDevDNiQkd9m6eeVOhNiVRfdPIU5wthcz
-         kslBCgGFDpF4EoLzXiuVfEO/wBb1eXc3RIOJDVQs=
-Date:   Mon, 13 Dec 2021 15:18:11 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Yuwen Ng <yuwen.ng@mediatek.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: mtu3: add memory barrier before set GPD's HWO
-Message-ID: <YbdWI5PD3e6uFz8U@kroah.com>
-References: <20211209031424.17842-1-chunfeng.yun@mediatek.com>
- <20211209031424.17842-2-chunfeng.yun@mediatek.com>
+        Mon, 13 Dec 2021 09:19:17 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF47C061574;
+        Mon, 13 Dec 2021 06:19:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=5vnU8e5AS4nStISRD6IYeCDVX2BtnznV8f0BSShzTvE=; b=W7qzKXSnP8lJ/4+OiSulB5utLp
+        xee8A5lvQVuNPRSjLct1uqexXjS6E9xhBv9Hbrn6qBTGBz7F3wziPABrVelsAWeylVUGiGUu79TkJ
+        UVx/8SIy/G94eK5XBzmWSm4pvIxkvCFChlfe86sA0CDUWYuWqlSALruMsDDG9+ozTxXY9JN9HNbOH
+        AS9LxyXLoQbFlyEERQ+I2P8vWnH9FrUvIcA6J30ZTD83Zu7ENpucmr8PIdoT25YTUzFtgZtYasiTK
+        rqnGAcNEwoiystVvKU+HQ0TAuAqytH27ljeFhFA3bVjU8jJYJaHUjLNzy3PTC/sPOyFN/iGPbaPLc
+        XcgimdOg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwmAX-00CrBg-Cq; Mon, 13 Dec 2021 14:19:09 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>, kexec@lists.infradead.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-kernel@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
+Subject: [PATCH v2 0/3] Convert vmcore to use an iov_iter
+Date:   Mon, 13 Dec 2021 14:19:04 +0000
+Message-Id: <20211213141907.3064347-1-willy@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209031424.17842-2-chunfeng.yun@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 11:14:23AM +0800, Chunfeng Yun wrote:
-> There is a seldom issue that the controller access invalid address
-> and trigger devapc or emimpu violation. That is due to memory access
-> is out of order and cause gpd data is not correct.
-> Make sure GPD is fully written before giving it to HW by setting its
-> HWO.
-> 
-> Fixes: 48e0d3735aa5 ("usb: mtu3: supports new QMU format")
-> Cc: stable@vger.kernel.org
-> Reported-by: Eddie Hung <eddie.hung@mediatek.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
->  drivers/usb/mtu3/mtu3_qmu.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_qmu.c b/drivers/usb/mtu3/mtu3_qmu.c
-> index 3f414f91b589..34bb5ac67efe 100644
-> --- a/drivers/usb/mtu3/mtu3_qmu.c
-> +++ b/drivers/usb/mtu3/mtu3_qmu.c
-> @@ -273,6 +273,8 @@ static int mtu3_prepare_tx_gpd(struct mtu3_ep *mep, struct mtu3_request *mreq)
->  			gpd->dw3_info |= cpu_to_le32(GPD_EXT_FLAG_ZLP);
->  	}
->  
-> +	/* make sure GPD is fully written before giving it to HW */
-> +	mb();
+For some reason several people have been sending bad patches to fix
+compiler warnings in vmcore recently.  Here's how it should be done.
+Compile-tested only on x86.  As noted in the first patch, s390 should
+take this conversion a bit further, but I'm not inclined to do that
+work myself.
 
-So this means you are using mmio for this structure?  If so, shouldn't
-you be using normal io memory read/write calls as well and not just
-"raw" pointers like this:
+v2:
+ - Removed unnecessary kernel-doc
+ - Included uio.h to fix compilation problems
+ - Made read_from_oldmem_iter static to avoid compile warnings during the
+   conversion
+ - Use iov_iter_truncate() (Christoph)
 
->  	gpd->dw0_info |= cpu_to_le32(GPD_FLAGS_IOC | GPD_FLAGS_HWO);
+Matthew Wilcox (Oracle) (3):
+  vmcore: Convert __read_vmcore to use an iov_iter
+  vmcore: Convert read_from_oldmem() to take an iov_iter
+  iov-kaddr
 
-Are you sure this is ok?
+ arch/x86/kernel/crash_dump_64.c |   7 +-
+ fs/9p/vfs_dir.c                 |   5 +-
+ fs/9p/xattr.c                   |   6 +-
+ fs/proc/vmcore.c                | 119 ++++++++++++--------------------
+ include/linux/crash_dump.h      |  10 ++-
+ include/linux/uio.h             |   9 +++
+ lib/iov_iter.c                  |  32 +++++++++
+ 7 files changed, 97 insertions(+), 91 deletions(-)
 
-Sprinkling around mb() calls is almost never the correct solution.
+-- 
+2.33.0
 
-If you need to ensure that a write succeeds, shouldn't you do a read
-from it afterward?  Many busses require this, doesn't yours?
-
-
-
->  
->  	mreq->gpd = gpd;
-> @@ -306,6 +308,8 @@ static int mtu3_prepare_rx_gpd(struct mtu3_ep *mep, struct mtu3_request *mreq)
->  	gpd->next_gpd = cpu_to_le32(lower_32_bits(enq_dma));
->  	ext_addr |= GPD_EXT_NGP(mtu, upper_32_bits(enq_dma));
->  	gpd->dw3_info = cpu_to_le32(ext_addr);
-> +	/* make sure GPD is fully written before giving it to HW */
-> +	mb();
-
-Again, mb(); does not ensure that memory-mapped i/o actually hits the
-HW.  Or if it does on your platform, how?
-
-mb() is a compiler barrier, not a memory write to a bus barrier.  Please
-read Documentation/memory-barriers.txt for more details.
-
-thanks,
-
-greg k-h

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8963947289B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CAB4728F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240446AbhLMKOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        id S243165AbhLMKQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235967AbhLMJ4u (ORCPT
+        with ESMTP id S235301AbhLMJ4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:56:50 -0500
+        Mon, 13 Dec 2021 04:56:51 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985FCC061D72;
-        Mon, 13 Dec 2021 01:46:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5025BC08EAFF;
+        Mon, 13 Dec 2021 01:46:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E5358CE0E99;
-        Mon, 13 Dec 2021 09:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9276BC00446;
-        Mon, 13 Dec 2021 09:46:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C8594CE0E63;
+        Mon, 13 Dec 2021 09:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7259FC00446;
+        Mon, 13 Dec 2021 09:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388804;
-        bh=6amkUwpgz8wWI6K4R6BPHbJK1Aq9AVhrM9vRnF3KMR8=;
+        s=korg; t=1639388807;
+        bh=BL8UCNDsToxhgqdU3WZVvx6uh+7CR4dOf+rqlEMrwS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UE68t3QE3C8nVwmbdOYOPN7yEAHM/oTd2Ok8NTbHQCtOOeN9+hjZCpVh5ZoS3mgXr
-         wgvoAzXOgxmKoT2tlHiRrL4a5GsVSRJbMSWtWNMT6AqHU68e/pHcdhUMCp2Fz8Bl7A
-         ux7bRVLpVUd7G4fPPmKHYfjUszV4+zef8sZ3xK0U=
+        b=YOVDNS3dQ2+kpTVaEgsq3C8FGmfJ6OA4y6V6ayQxvPVMlybXcaYPSvpHPIZMc9yf2
+         OabHo5Jkgn3QvFW4qPFxq0JBpO+cL6ej62C4Sx7BF6g/8YJqOaQAt4pUIja5ZkxEhA
+         tIlWarsnippIQTySz/E89ID/sJ4B3m7vzc5SrUoE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
         Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 5.10 007/132] HID: add USB_HID dependancy to hid-prodikeys
-Date:   Mon, 13 Dec 2021 10:29:08 +0100
-Message-Id: <20211213092939.322399054@linuxfoundation.org>
+Subject: [PATCH 5.10 008/132] HID: add USB_HID dependancy to hid-chicony
+Date:   Mon, 13 Dec 2021 10:29:09 +0100
+Message-Id: <20211213092939.363415972@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
 References: <20211213092939.074326017@linuxfoundation.org>
@@ -51,19 +51,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit 30cb3c2ad24b66fb7639a6d1f4390c74d6e68f94 upstream.
+commit d080811f27936f712f619f847389f403ac873b8f upstream.
 
-The prodikeys HID driver only controls USB devices, yet did not have a
+The chicony HID driver only controls USB devices, yet did not have a
 dependancy on USB_HID.  This causes build errors on some configurations
-like nios2 when building due to new changes to the prodikeys driver.
+like sparc when building due to new changes to the chicony driver.
 
-Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Cc: stable@vger.kernel.org
 Cc: Jiri Kosina <jikos@kernel.org>
 Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20211203081231.2856936-1-gregkh@linuxfoundation.org
+Link: https://lore.kernel.org/r/20211203075927.2829218-1-gregkh@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
  drivers/hid/Kconfig |    2 +-
@@ -71,14 +71,14 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -245,7 +245,7 @@ config HID_MACALLY
+@@ -207,7 +207,7 @@ config HID_CHERRY
  
- config HID_PRODIKEYS
- 	tristate "Prodikeys PC-MIDI Keyboard support"
--	depends on HID && SND
-+	depends on USB_HID && SND
- 	select SND_RAWMIDI
+ config HID_CHICONY
+ 	tristate "Chicony devices"
+-	depends on HID
++	depends on USB_HID
+ 	default !EXPERT
  	help
- 	Support for Prodikeys PC-MIDI Keyboard device support.
+ 	Support for Chicony Tactical pad and special keys on Chicony keyboards.
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3272472479
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4A847284E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbhLMJgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:36:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S236909AbhLMKKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbhLMJfi (ORCPT
+        with ESMTP id S239385AbhLMKI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:35:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF081C0698D4;
-        Mon, 13 Dec 2021 01:35:36 -0800 (PST)
+        Mon, 13 Dec 2021 05:08:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CBBC08EA47;
+        Mon, 13 Dec 2021 01:51:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3754ECE0E39;
-        Mon, 13 Dec 2021 09:35:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D86C341C8;
-        Mon, 13 Dec 2021 09:35:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B67EB80E24;
+        Mon, 13 Dec 2021 09:51:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAB0C00446;
+        Mon, 13 Dec 2021 09:51:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388133;
-        bh=gB0CWU6QgUXxzxy+8gmtOmk2I9BAS/AKaXNLRBQGIoo=;
+        s=korg; t=1639389117;
+        bh=0Qv702sFT4JtxDvwEbI3P0dHKNtqAv/4/sHU9ykVqBM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yt3v+1GoKVcoT8ewTUYvYHKajc0m7tmZwJIBHur7ra0y2+gEPp2LQqINCnokZiNhi
-         3Uug11OE50LFH7S8M68o+HGukYEFO9n6OFM9VjOxAKFDO80mW/xI60HnV0RO0yaXIS
-         Xn6JmFJAn/xyxVi8uPidWKmKeRNWLVVvYNk7aj7Y=
+        b=bPvnBul5NCyQb3YqxLpLi/1UFzllummo6BA9pMUyhzMPq36GnsTI/CkxeBrlyeOVN
+         o/KuhdSePBzerY3iXz6NIYrJXBqthn8ggIabhGElSmqZJybHZkVq5j5j1/z3DAQpks
+         j/4iIM6fwLMRDmt20JiGwWNltKp26EmfSUkA4R94=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 4.9 40/42] irqchip/armada-370-xp: Fix support for Multi-MSI interrupts
+        stable@vger.kernel.org, Yangyang Li <liyangyang20@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.10 081/132] RDMA/hns: Do not halt commands during reset until later
 Date:   Mon, 13 Dec 2021 10:30:22 +0100
-Message-Id: <20211213092927.861099668@linuxfoundation.org>
+Message-Id: <20211213092941.907202500@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,59 +49,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Yangyang Li <liyangyang20@huawei.com>
 
-commit d0a553502efd545c1ce3fd08fc4d423f8e4ac3d6 upstream.
+commit 52414e27d6b568120b087d1fbafbb4482b0ccaab upstream.
 
-irq-armada-370-xp driver already sets MSI_FLAG_MULTI_PCI_MSI flag into
-msi_domain_info structure. But allocated interrupt numbers for Multi-MSI
-needs to be properly aligned otherwise devices send MSI interrupt with
-wrong number.
+is_reset is used to indicate whether the hardware starts to reset. When
+hns_roce_hw_v2_reset_notify_down() is called, the hardware has not yet
+started to reset. If is_reset is set at this time, all mailbox operations
+of resource destroy actions will be intercepted by driver. When the driver
+cleans up resources, but the hardware is still accessed, the following
+errors will appear:
 
-Fix this issue by using function bitmap_find_free_region() instead of
-bitmap_find_next_zero_area() to allocate aligned interrupt numbers.
+  arm-smmu-v3 arm-smmu-v3.2.auto: event 0x10 received:
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000350100000010
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x000002088000003f
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x00000000a50e0800
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000000000000000
+  arm-smmu-v3 arm-smmu-v3.2.auto: event 0x10 received:
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000350100000010
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x000002088000043e
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x00000000a50a0800
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000000000000000
+  arm-smmu-v3 arm-smmu-v3.2.auto: event 0x10 received:
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000350100000010
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000020880000436
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x00000000a50a0880
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000000000000000
+  arm-smmu-v3 arm-smmu-v3.2.auto: event 0x10 received:
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000350100000010
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x000002088000043a
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x00000000a50e0840
+  hns3 0000:35:00.0: INT status: CMDQ(0x0) HW errors(0x0) other(0x0)
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000000000000000
+  hns3 0000:35:00.0: received unknown or unhandled event of vector0
+  arm-smmu-v3 arm-smmu-v3.2.auto: event 0x10 received:
+  arm-smmu-v3 arm-smmu-v3.2.auto: 	0x0000350100000010
+  {34}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 7
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Fixes: a71b9412c90c ("irqchip/armada-370-xp: Allow allocation of multiple MSIs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211125130057.26705-2-pali@kernel.org
+is_reset will be set correctly in check_aedev_reset_status(), so the
+setting in hns_roce_hw_v2_reset_notify_down() should be deleted.
+
+Fixes: 726be12f5ca0 ("RDMA/hns: Set reset flag when hw resetting")
+Link: https://lore.kernel.org/r/20211123084809.37318-1-liangwenpeng@huawei.com
+Signed-off-by: Yangyang Li <liyangyang20@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-armada-370-xp.c |   14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/irqchip/irq-armada-370-xp.c
-+++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -153,16 +153,12 @@ static int armada_370_xp_msi_alloc(struc
- 	int hwirq, i;
+--- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
++++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+@@ -6342,10 +6342,8 @@ static int hns_roce_hw_v2_reset_notify_d
+ 	if (!hr_dev)
+ 		return 0;
  
- 	mutex_lock(&msi_used_lock);
-+	hwirq = bitmap_find_free_region(msi_used, PCI_MSI_DOORBELL_NR,
-+					order_base_2(nr_irqs));
-+	mutex_unlock(&msi_used_lock);
- 
--	hwirq = bitmap_find_next_zero_area(msi_used, PCI_MSI_DOORBELL_NR,
--					   0, nr_irqs, 0);
--	if (hwirq >= PCI_MSI_DOORBELL_NR) {
--		mutex_unlock(&msi_used_lock);
-+	if (hwirq < 0)
- 		return -ENOSPC;
--	}
+-	hr_dev->is_reset = true;
+ 	hr_dev->active = false;
+ 	hr_dev->dis_db = true;
 -
--	bitmap_set(msi_used, hwirq, nr_irqs);
--	mutex_unlock(&msi_used_lock);
+ 	hr_dev->state = HNS_ROCE_DEVICE_STATE_RST_DOWN;
  
- 	for (i = 0; i < nr_irqs; i++) {
- 		irq_domain_set_info(domain, virq + i, hwirq + i,
-@@ -180,7 +176,7 @@ static void armada_370_xp_msi_free(struc
- 	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
- 
- 	mutex_lock(&msi_used_lock);
--	bitmap_clear(msi_used, d->hwirq, nr_irqs);
-+	bitmap_release_region(msi_used, d->hwirq, order_base_2(nr_irqs));
- 	mutex_unlock(&msi_used_lock);
- }
- 
+ 	return 0;
 
 

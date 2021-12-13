@@ -2,153 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46783472192
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016B9472196
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbhLMHR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:17:27 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:51747 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbhLMHRZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:17:25 -0500
-Received: by mail-io1-f71.google.com with SMTP id s199-20020a6b2cd0000000b005ed3e776ad0so14546568ios.18
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Dec 2021 23:17:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=zHiZFlIrM7wIAcI8lHR33E8wR1XxlzzFcwEQ45+HOGY=;
-        b=ZnOW1J7izrHKJE/J4k4qpPb77RxznNSXJ3KFv0/sCSxYkTD46MZRxD10XeQ6hWtSTc
-         7hRmroI25frm15rZycChQeV2AGLFhmTstX35UC8b6kWLxhd2FbRRpwt2xfXgm0t2VS7R
-         sSy3P+FtnMms9D8kLcawblm5ErvnIFRNScxwwpTQ8tyhGMV4rLh7FwZhkgBTL2hV12Wp
-         Yg3pavx2m5GS5LBGsPj+vCPNKo3oE0KYbIxfHc8C+ZnuPMEBgKDZOUSUNNX64h3ljS6w
-         a413SqMQ9TLi5asvjBXT0cl85DNUPMp5Jw4P9pSNoGwPNXEeCNVWJuCr3cSGxaqQsqD5
-         kvAQ==
-X-Gm-Message-State: AOAM532BxJOawnMQR2USZ/jJKm+nrD8KU2/RYzbE+aDF5qWMVS9kJ7TR
-        /KCyU92cgI5NhVVRBJbbZsllAzd4SAEqGsWmWexR/xG5ivSc
-X-Google-Smtp-Source: ABdhPJyOccnJaSOZhWgLu76wjFR2FIunCcoHxFYtpWAVaBiuwV4oXLP2fp3ahqXGItpVmDkeQTBF6Co/RuaFGAaDT1lpOI5RTenS
+        id S232469AbhLMHSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:18:41 -0500
+Received: from mga05.intel.com ([192.55.52.43]:3461 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232453AbhLMHSl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 02:18:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639379921; x=1670915921;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AIbbmzNZcgzxQKEzVLn/5Cw5O8pw129BW14If9H5KUY=;
+  b=aatBznFdS/ue8zCU+wrj+4bI8KFRyd+xkh3gYr9OSXaaogzcv8KK5GCa
+   p49nHz6uT4ebW3STXxjn/Y1wfgwFL5xT3tYLsPazOlqcT+BEKIx4AMUxm
+   qU0R85zGD09n9DEhJXKZWleqQtpSth6DMYNIn1NRZnmjnsxCN5yrQPlAq
+   SW5Yy3/gfXRfW9MghpRNLGTY/yMVlV5nYwNGn72JKpB+v4VGSk/oxLqcu
+   D8HFk/TnfJhhavqnL1826Lu4ww9bpkZj78cMqGI5ioDnDG82viYjse1EI
+   aHZgFnD6FvfncXKUN4vS39fnqwXtexsYXTa8iUSAGp24Xhq2u/6Csb7bF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="324945400"
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="324945400"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 23:18:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="608908851"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Dec 2021 23:18:39 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwfbb-0006Qd-8E; Mon, 13 Dec 2021 07:18:39 +0000
+Date:   Mon, 13 Dec 2021 15:18:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [asahilinux:asahi-soc/pmgr 1/2] ERROR: modpost:
+ "of_phandle_iterator_args" [drivers/soc/apple/apple-pmgr-pwrstate.ko]
+ undefined!
+Message-ID: <202112131521.YW7Lbttb-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:381b:: with SMTP id i27mr31102807jav.138.1639379845409;
- Sun, 12 Dec 2021 23:17:25 -0800 (PST)
-Date:   Sun, 12 Dec 2021 23:17:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000056758e05d301dd90@google.com>
-Subject: [syzbot] general protection fault in hci_inquiry_result_with_rssi_evt
-From:   syzbot <syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.dentz@gmail.com, luiz.von.dentz@intel.com,
-        marcel@holtmann.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/AsahiLinux/linux asahi-soc/pmgr
+head:   cc1fe1e54ba565aaec0006796db65b7c3b1ccd69
+commit: 6df9d38f9146e83b473f0c9e57fb5fdf3fcc93e2 [1/2] soc: apple: Add driver for Apple PMGR power state controls
+config: arm64-randconfig-r006-20211213 (https://download.01.org/0day-ci/archive/20211213/202112131521.YW7Lbttb-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 097a1cb1d5ebb3a0ec4bcaed8ba3ff6a8e33c00a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/6df9d38f9146e83b473f0c9e57fb5fdf3fcc93e2
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux asahi-soc/pmgr
+        git checkout 6df9d38f9146e83b473f0c9e57fb5fdf3fcc93e2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-HEAD commit:    4eee8d0b64ec Add linux-next specific files for 20211208
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=130203e5b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20b74d9da4ce1ef1
-dashboard link: https://syzkaller.appspot.com/bug?extid=e3cad3a4e3f03bc00562
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101eb355b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b8f805b00000
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-The issue was bisected to:
-
-commit 3e54c5890c87a30b1019a3de9dab968ff2b21e06
-Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Date:   Wed Dec 1 18:55:03 2021 +0000
-
-    Bluetooth: hci_event: Use of a function table to handle HCI events
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=150100bab00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=170100bab00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=130100bab00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com
-Fixes: 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events")
-
-Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9
-Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4
-Bluetooth: hci0: unexpected cc 0x0c25 length: 249 > 3
-Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 6545 Comm: kworker/u5:1 Not tainted 5.16.0-rc4-next-20211208-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: hci0 hci_rx_work
-RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x970 net/bluetooth/hci_event.c:4520
-Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 88 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <0f> b6 04 02 4c 89 ea 83 e2 07 38 d0 7f 08 84 c0 0f 85 1b 07 00 00
-RSP: 0018:ffffc90001aafad0 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffff88807e754000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff883588a8 RDI: ffff88807e754000
-RBP: ffff88807e754000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff88376f27 R11: 0000000000000000 R12: ffff88807015eb40
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd653f7000 CR3: 0000000071f88000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- hci_event_func net/bluetooth/hci_event.c:6812 [inline]
- hci_event_packet+0x817/0xe90 net/bluetooth/hci_event.c:6860
- hci_rx_work+0x4fa/0xd30 net/bluetooth/hci_core.c:3817
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2318
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2465
- kthread+0x405/0x4f0 kernel/kthread.c:345
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 403a15c54e29c5c4 ]---
-RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x970 net/bluetooth/hci_event.c:4520
-Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 88 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <0f> b6 04 02 4c 89 ea 83 e2 07 38 d0 7f 08 84 c0 0f 85 1b 07 00 00
-RSP: 0018:ffffc90001aafad0 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffff88807e754000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff883588a8 RDI: ffff88807e754000
-RBP: ffff88807e754000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff88376f27 R11: 0000000000000000 R12: ffff88807015eb40
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2bb803f018 CR3: 000000001d893000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 4 bytes skipped:
-   0:	48 c1 ea 03          	shr    $0x3,%rdx
-   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   8:	0f 85 88 07 00 00    	jne    0x796
-   e:	48 8b 04 24          	mov    (%rsp),%rax
-  12:	4c 8b 28             	mov    (%rax),%r13
-  15:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1c:	fc ff df
-  1f:	4c 89 ea             	mov    %r13,%rdx
-  22:	48 c1 ea 03          	shr    $0x3,%rdx
-* 26:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2a:	4c 89 ea             	mov    %r13,%rdx
-  2d:	83 e2 07             	and    $0x7,%edx
-  30:	38 d0                	cmp    %dl,%al
-  32:	7f 08                	jg     0x3c
-  34:	84 c0                	test   %al,%al
-  36:	0f 85 1b 07 00 00    	jne    0x757
-
+>> ERROR: modpost: "of_phandle_iterator_args" [drivers/soc/apple/apple-pmgr-pwrstate.ko] undefined!
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

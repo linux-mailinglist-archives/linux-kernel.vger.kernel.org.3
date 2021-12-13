@@ -2,148 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A60AC472CD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C239472D29
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 14:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236871AbhLMNIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 08:08:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58138 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbhLMNIb (ORCPT
+        id S237396AbhLMNYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 08:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229744AbhLMNYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:08:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D36FBB80D78
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC33C34607
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 13:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639400908;
-        bh=9ydNHDYKsiCtb2ZflappRnVfHZy3RsZlLzo1HG0qTQ8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QltArIYaie93S6C5AMwxAjh3W4jCgoXKgmk8VWFWm3IvsJ7W9sEg4tGTWdI2fKqPU
-         +4DWsXNRb5Ruxd7HJySCpwFEfq6luwBPS38TuOmvwW2fd2h840wTW6bkNgyEXA2w5J
-         BDi9rZKBpme8UmtF1cE0YlrrEuugLKajdTnIXgJXk/R5RxKaOB3xyIInNtNSYb2s1y
-         q5DcgN0sw7DICyY1QhX4CouZS0B8AbPFLJ7IPgze3RdH052fuCj/kxgcygJ04TYSoL
-         hx8wGPzsMYcGql/b4g3TvWNzOQ2+EGlLD8vgSBNm7PHxVCdc7K+paLRF32PrE2NB+7
-         4HX7yqmNrc6hA==
-Received: by mail-ed1-f46.google.com with SMTP id v1so52302522edx.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 05:08:28 -0800 (PST)
-X-Gm-Message-State: AOAM533/VzYdOIFMO6DyKRVYtFItdP2XN13fqinpmW6BVra1zbEuuSp6
-        oUYCpK3YIvgu6Xd1lmR2Xgmg4PhxqQ+GMwdJGQ==
-X-Google-Smtp-Source: ABdhPJyYH9M8ZF1ALPPysi0+E5P/GHohfR0mv1DVIz4G6JHoIMRL1u/arPHp4YYjl7O+tsaAU4Q6wDrSLDSQCkFycpk=
-X-Received: by 2002:a50:d883:: with SMTP id p3mr63843811edj.94.1639400906772;
- Mon, 13 Dec 2021 05:08:26 -0800 (PST)
+        Mon, 13 Dec 2021 08:24:43 -0500
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540FAC061574;
+        Mon, 13 Dec 2021 05:24:42 -0800 (PST)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Mon, 13 Dec 2021 14:24:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1639401880; bh=rpBcTbI89fdBl8Id1HhmqKBB4mdlBjF/nWszlx5+mX0=;
+        h=Resent-From:Resent-Date:Resent-To:Date:From:To:Cc:Subject:
+         References:In-Reply-To:From;
+        b=eVg07f0shr+WDqgkJ7l7NHO/styfyiQfmPflL+xw3ljwG3ndimOpoT50WkpOuLfzB
+         mrkDCTcbWFJBSuiJAa4atPJvKWEo7BrGdziww4bCmM3zPfJTGtZDlIyhZjEUTIVzYz
+         LICv/Yj+VZHcA+tgObYV5giG6dg8TJs7w9kwTHM8=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id 56C568048E;
+        Mon, 13 Dec 2021 14:24:40 +0100 (CET)
+Received: from mail.avm.de ([212.42.244.120])
+          by mail-notes.avm.de (HCL Domino Release 11.0.1FP4)
+          with ESMTP id 2021121314082259-9123 ;
+          Mon, 13 Dec 2021 14:08:22 +0100 
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail.avm.de (Postfix) with ESMTP
+        for <n.schier@avm.de>; Mon, 13 Dec 2021 14:08:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1639400902; bh=rpBcTbI89fdBl8Id1HhmqKBB4mdlBjF/nWszlx5+mX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eKDie9yId/tqCAmheDRidUDbXA3WZH2/aNOr9r+2WBv9Rjevrpw2bsrlQ7luSb039
+         9ys5KSTOyBLZ7s7wQiltoF9a4Ejv2OdBMxotk/lApz7tFi+IR5m9zIjc0zpwow3HqD
+         OpKTQApV2Vacoe5MjL3jvuzWGXBhVLRlIyWl5mMs=
+Received: by buildd.core.avm.de (Postfix, from userid 1000)
+        id 39FDF18176D; Mon, 13 Dec 2021 14:08:22 +0100 (CET)
+Date:   Mon, 13 Dec 2021 14:08:22 +0100
+From:   Nicolas Schier <n.schier@avm.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>
+Subject: Re: [PATCH 04/10] certs: refactor file cleaning
+Message-ID: <YbdFxjAH1bhsgY2n@buildd.core.avm.de>
+References: <20211212192941.1149247-1-masahiroy@kernel.org>
+ <20211212192941.1149247-5-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <20211028074311.57842-1-angelogioacchino.delregno@collabora.com> <000ba19e-0220-f5c3-0efd-abb8338bb8f2@collabora.com>
-In-Reply-To: <000ba19e-0220-f5c3-0efd-abb8338bb8f2@collabora.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 13 Dec 2021 21:08:15 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_87ugiuo+nz2D1upTX+oO8r3yHHLsU3r07qkpvu3UESDQ@mail.gmail.com>
-Message-ID: <CAAOTY_87ugiuo+nz2D1upTX+oO8r3yHHLsU3r07qkpvu3UESDQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: hdmi: Perform NULL pointer check for mtk_hdmi_conf
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211212192941.1149247-5-masahiroy@kernel.org>
+X-MIMETrack: Itemize by SMTP Server on ANIS1/AVM(Release 11.0.1FP4|October 01,
+ 2021) at 13.12.2021 14:08:22,  Serialize by http on ANIS1/AVM(Release
+ 11.0.1FP4|October 01, 2021) at 13.12.2021 14:09:57,    Serialize complete at
+ 13.12.2021 14:09:57
+X-TNEFEvaluated: 1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Notes-UNID: F5EE2750E2920655303506B402BE995B
+X-purgate-ID: 149429::1639401880-00001F4B-58A04AD6/0/0
+X-purgate-type: clean
+X-purgate-size: 2957
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Hi, Angelo:
+On Mon, Dec 13, 2021 at 04:29:35AM +0900, Masahiro Yamada wrote:
+> 'make clean' removes files listed in 'targets'. It is redundant to
+> specify both 'targets' and 'clean-files'.
+> 
+> Move 'targets' assignments out of the ifeq-conditionals so
+> scripts/Makefile.clean can see them.
+> 
+> One effective change is that certs/certs/signing_key.x509 is now
+> deleted by 'make clean' instead of 'make mrproper. This certificate
+> is embedded in the kernel. It is not used in any way by external
+> module builds.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
-=BC
-2021=E5=B9=B412=E6=9C=8813=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:=
-02=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Il 28/10/21 09:43, AngeloGioacchino Del Regno ha scritto:
-> > In commit 41ca9caaae0b ("drm/mediatek: hdmi: Add check for CEA modes on=
-ly")
-> > a check for CEA modes was added to function mtk_hdmi_bridge_mode_valid(=
-)
-> > in order to address possible issues on MT8167; moreover, with commit
-> > c91026a938c2 ("drm/mediatek: hdmi: Add optional limit on maximal HDMI m=
-ode clock")
-> > another similar check was introduced.
-> >
-> > Unfortunately though, at the time of writing, MT8173 does not provide
-> > any mtk_hdmi_conf structure and this is crashing the kernel with NULL
-> > pointer upon entering mtk_hdmi_bridge_mode_valid(), which happens as
-> > soon as a HDMI cable gets plugged in.
-> >
-> > To fix this regression, add a NULL pointer check for hdmi->conf in the
-> > said function, restoring HDMI functionality and avoiding NULL pointer
-> > kernel panics.
-> >
-> > Fixes: 41ca9caaae0b ("drm/mediatek: hdmi: Add check for CEA modes only"=
-)
-> > Fixes: c91026a938c2 ("drm/mediatek: hdmi: Add optional limit on maximal=
- HDMI mode clock")
-> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
-llabora.com>
-> > ---
-> >   drivers/gpu/drm/mediatek/mtk_hdmi.c | 12 +++++++-----
-> >   1 file changed, 7 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/medi=
-atek/mtk_hdmi.c
-> > index 5838c44cbf6f..3196189429bc 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
-> > @@ -1224,12 +1224,14 @@ static int mtk_hdmi_bridge_mode_valid(struct dr=
-m_bridge *bridge,
-> >                       return MODE_BAD;
-> >       }
-> >
-> > -     if (hdmi->conf->cea_modes_only && !drm_match_cea_mode(mode))
-> > -             return MODE_BAD;
-> > +     if (hdmi->conf) {
-> > +             if (hdmi->conf->cea_modes_only && !drm_match_cea_mode(mod=
-e))
-> > +                     return MODE_BAD;
-> >
-> > -     if (hdmi->conf->max_mode_clock &&
-> > -         mode->clock > hdmi->conf->max_mode_clock)
-> > -             return MODE_CLOCK_HIGH;
-> > +             if (hdmi->conf->max_mode_clock &&
-> > +                 mode->clock > hdmi->conf->max_mode_clock)
-> > +                     return MODE_CLOCK_HIGH;
-> > +     }
-> >
-> >       if (mode->clock < 27000)
-> >               return MODE_CLOCK_LOW;
-> >
->
-> Hello, friendly ping!
->
-> Can I please get a review (or merge) of this commit?
->
-> This is an important fix for a null pointer KP and restores HDMI function=
-ality.
-
-Applied to mediatek-drm-fixes [1], thanks.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-fixes
-
-Regards,
-Chun-Kuang.
-
->
-> Thanks,
-> - Angelo
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
+> 
+>  Makefile       | 2 +-
+>  certs/Makefile | 9 +++++----
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 0a6ecc8bb2d2..4e8ac0730f51 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1503,7 +1503,7 @@ MRPROPER_FILES += include/config include/generated          \
+>  		  debian snap tar-install \
+>  		  .config .config.old .version \
+>  		  Module.symvers \
+> -		  certs/signing_key.pem certs/signing_key.x509 \
+> +		  certs/signing_key.pem \
+>  		  certs/x509.genkey \
+>  		  vmlinux-gdb.py \
+>  		  *.spec
+> diff --git a/certs/Makefile b/certs/Makefile
+> index e7d6ee183496..0dc523e8ca7c 100644
+> --- a/certs/Makefile
+> +++ b/certs/Makefile
+> @@ -22,12 +22,11 @@ $(eval $(call config_filename,SYSTEM_TRUSTED_KEYS))
+>  # GCC doesn't include .incbin files in -MD generated dependencies (PR#66871)
+>  $(obj)/system_certificates.o: $(obj)/x509_certificate_list
+>  
+> -targets += x509_certificate_list
+>  $(obj)/x509_certificate_list: scripts/extract-cert $(SYSTEM_TRUSTED_KEYS_SRCPREFIX)$(SYSTEM_TRUSTED_KEYS_FILENAME) FORCE
+>  	$(call if_changed,extract_certs,$(SYSTEM_TRUSTED_KEYS_SRCPREFIX)$(CONFIG_SYSTEM_TRUSTED_KEYS))
+>  endif # CONFIG_SYSTEM_TRUSTED_KEYRING
+>  
+> -clean-files := x509_certificate_list .x509.list x509_revocation_list
+> +targets += x509_certificate_list
+>  
+>  ifeq ($(CONFIG_MODULE_SIG),y)
+>  	SIGN_KEY = y
+> @@ -84,18 +83,20 @@ endif
+>  # GCC PR#66871 again.
+>  $(obj)/system_certificates.o: $(obj)/signing_key.x509
+>  
+> -targets += signing_key.x509
+>  $(obj)/signing_key.x509: scripts/extract-cert $(X509_DEP) FORCE
+>  	$(call if_changed,extract_certs,$(MODULE_SIG_KEY_SRCPREFIX)$(CONFIG_MODULE_SIG_KEY))
+>  endif # CONFIG_MODULE_SIG
+>  
+> +targets += signing_key.x509
+> +
+>  ifeq ($(CONFIG_SYSTEM_REVOCATION_LIST),y)
+>  
+>  $(eval $(call config_filename,SYSTEM_REVOCATION_KEYS))
+>  
+>  $(obj)/revocation_certificates.o: $(obj)/x509_revocation_list
+>  
+> -targets += x509_revocation_list
+>  $(obj)/x509_revocation_list: scripts/extract-cert $(SYSTEM_REVOCATION_KEYS_SRCPREFIX)$(SYSTEM_REVOCATION_KEYS_FILENAME) FORCE
+>  	$(call if_changed,extract_certs,$(SYSTEM_REVOCATION_KEYS_SRCPREFIX)$(CONFIG_SYSTEM_REVOCATION_KEYS))
+>  endif
+> +
+> +targets += x509_revocation_list
+> -- 
+> 2.32.0
+> 

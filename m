@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C714726FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C484726F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239258AbhLMJ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236345AbhLMJvz (ORCPT
+        id S238327AbhLMJ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:56:28 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41600 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235383AbhLMJuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:51:55 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E00C08E857;
-        Mon, 13 Dec 2021 01:44:34 -0800 (PST)
+        Mon, 13 Dec 2021 04:50:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5092ACE0E29;
-        Mon, 13 Dec 2021 09:44:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE75FC00446;
-        Mon, 13 Dec 2021 09:44:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9A791CE0E7A;
+        Mon, 13 Dec 2021 09:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C326C341C5;
+        Mon, 13 Dec 2021 09:50:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388670;
-        bh=hiA75hrDbvhs9K9HBmABCcwv89YXozl550sSAsakBsk=;
+        s=korg; t=1639389012;
+        bh=T/BiCObvvFI+lM3daIrVjCm/eLx18KrlFu81miRfABM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oOHelFuKgWqay78kr0xALrPfgat5BBm4jLuHvptjDOWiDRk79UwNEMQWgLcoS7Pdi
-         nX15Kj27/yk3uftkYD9hXv8bsLHb1XeWCKlmgOgcuhXMu+AHTW+ljpuidb2/ywrpzW
-         6RZ+r1tCA82iPpfcs3c26AnVp0sJVX3GNSOpC0a4=
+        b=SEt3atTiYSFFSpF/3n+9fAlZthyTa2T9wrX1OyN+qXBxTqBvm+a80av2VlKp03J+D
+         bsuvYuWX/EXHjGL8/GyADbOKegHhmg51s9H7cKPhnyIXnX1oFEoJ+o13F8KvcCMJW7
+         PSSxP4J0mwbsRKNQzMce6XilLMV1ZJ17+j47naPs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mitch Williams <mitch.a.williams@intel.com>,
-        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.4 24/88] iavf: restore MSI state on reset
-Date:   Mon, 13 Dec 2021 10:29:54 +0100
-Message-Id: <20211213092934.055192410@linuxfoundation.org>
+        Markus Hochholdinger <markus@hochholdinger.net>,
+        Xiao Ni <xni@redhat.com>, Song Liu <songliubraving@fb.com>
+Subject: [PATCH 5.10 054/132] md: fix update super 1.0 on rdev size change
+Date:   Mon, 13 Dec 2021 10:29:55 +0100
+Message-Id: <20211213092940.980646075@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092939.074326017@linuxfoundation.org>
+References: <20211213092939.074326017@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,37 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mitch Williams <mitch.a.williams@intel.com>
+From: Markus Hochholdinger <markus@hochholdinger.net>
 
-commit 7e4dcc13965c57869684d57a1dc6dd7be589488c upstream.
+commit 55df1ce0d4e086e05a8ab20619c73c729350f965 upstream.
 
-If the PF experiences an FLR, the VF's MSI and MSI-X configuration will
-be conveniently and silently removed in the process. When this happens,
-reset recovery will appear to complete normally but no traffic will
-pass. The netdev watchdog will helpfully notify everyone of this issue.
+The superblock of version 1.0 doesn't get moved to the new position on a
+device size change. This leads to a rdev without a superblock on a known
+position, the raid can't be re-assembled.
 
-To prevent such public embarrassment, restore MSI configuration at every
-reset. For normal resets, this will do no harm, but for VF resets
-resulting from a PF FLR, this will keep the VF working.
+The line was removed by mistake and is re-added by this patch.
 
-Fixes: 5eae00c57f5e ("i40evf: main driver core")
-Signed-off-by: Mitch Williams <mitch.a.williams@intel.com>
-Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: d9c0fa509eaf ("md: fix max sectors calculation for super 1.0")
+Cc: stable@vger.kernel.org
+Signed-off-by: Markus Hochholdinger <markus@hochholdinger.net>
+Reviewed-by: Xiao Ni <xni@redhat.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c |    1 +
+ drivers/md/md.c |    1 +
  1 file changed, 1 insertion(+)
 
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2151,6 +2151,7 @@ static void iavf_reset_task(struct work_
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -2252,6 +2252,7 @@ super_1_rdev_size_change(struct md_rdev
+ 
+ 		if (!num_sectors || num_sectors > max_sectors)
+ 			num_sectors = max_sectors;
++		rdev->sb_start = sb_start;
  	}
- 
- 	pci_set_master(adapter->pdev);
-+	pci_restore_msi_state(adapter->pdev);
- 
- 	if (i == IAVF_RESET_WAIT_COUNT) {
- 		dev_err(&adapter->pdev->dev, "Reset never finished (%x)\n",
+ 	sb = page_address(rdev->sb_page);
+ 	sb->data_size = cpu_to_le64(num_sectors);
 
 

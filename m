@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B157947215B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD065472162
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbhLMHKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S232387AbhLMHKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbhLMHKE (ORCPT
+        with ESMTP id S230516AbhLMHKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:10:04 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5A9C06173F;
-        Sun, 12 Dec 2021 23:10:04 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id u17so10502630plg.9;
-        Sun, 12 Dec 2021 23:10:04 -0800 (PST)
+        Mon, 13 Dec 2021 02:10:07 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC32CC06173F;
+        Sun, 12 Dec 2021 23:10:06 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id u80so14102686pfc.9;
+        Sun, 12 Dec 2021 23:10:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yohP78D4atzOPK9Zw6Tkph8dapgndeH2XkAEwCLnI1U=;
-        b=p9Em6pnsstx60gGKlIgJdxmMa5vXilRhxGQaNMhrOngb6Dil/sU8dopn08Q0cXY9de
-         fPZy/d2r7CMR3JxaGPGM6WKWAelUjG2QGmIotEeqi4U0NFtc9ZoIWciRazflzBAulH3l
-         O02IAD9bm8LtbwjSFnJGW3Gb1oM0bbuveWQlSUZKvY119vEE3L6rKTjJOnScMQa7STaJ
-         Cu4wXXtJyOENNUAqQKcXQe+g5nC36YgHwWa1cx94KBDztnK/vFDXXPWwWgScgLyMIEl2
-         u+l+N0z8U++/CwGY7n98XwQVv/79tkf0vtxa7N3AJhFP2tDSqtEWE3A32vjPKF1X1ML5
-         ClfQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=DbYjXsVsDnXf9MOGkA15Ub6YmWn6ZhOqh6fUQBEWTkQ=;
+        b=dgM5jZrmjTluHCJALfo6f+Q76t7Hnuy6KZIe7jIfPmOeOKzh0NDYXXBl2Zd/UXobqZ
+         kSZWkrrhVOQAHM6hRxceuvj4BnYy6xGbiXTqZ7kmRLumGx5fO+8fdMx9i+25X5s66Ngf
+         RJ0jOLYsLQD0oJziodsCalG0sHfEqfHnXrbieg6GRMpe+oWwR3v36smznQ+v+ltuJMdp
+         zf6sgO5xLCT69y/bOv6tPbPp++YvS7qCfBwcb+k56a6+MTKhLhU8U7Sve6T/qgJBnjU7
+         Z7a0tdwSxejSAV144xTTQzS1gdjGg5hqJYrUzvuFVXgCPLKPY3+geZB834raPZLwT83x
+         o/SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=yohP78D4atzOPK9Zw6Tkph8dapgndeH2XkAEwCLnI1U=;
-        b=45smfwxLv785fLBObQ5X/NVvn4IQoiHvO7Pwn37S1l9MBSbB51wCeWhSt+Fp7KueVV
-         fu0xwNf8r1BmAINmfgGv7W6mNR5aRCmLyHcZIis0jgzHKqdQNq9mO+cmXlfNEtlDxeG4
-         MbwyD0VBF3IUb3+UiQjFnOfy8k+rT+Phlt8ou4KBJl0aOfqsTJz45SfsZ6vvxXZv40Im
-         VayDwb1yaEfU2hZiBEBt4mMZsOZj+VILlIEULYWrj9i4x4hHXrCOsIbwHxDKALWhrWg9
-         Sz9vPodtvbIsHRhYyavNct+5VxPw7QKtKAaHfynMlUyZGVadu6aTCiOmnJ0NaosMzuyq
-         nFOA==
-X-Gm-Message-State: AOAM532NELuaRoh78JEgQFJ+rVzgteHUTbTcmDwOu0nk3yWIbsBdutD7
-        IkXxCzORsI9WWw6aW7JyoFk=
-X-Google-Smtp-Source: ABdhPJwzH/0NYxOyiHQwoJ/QV7LDvG/vfPms2iwsyO6Hn6nlajNJfX3LAO7q3f7pFWzyTzlqeIW4hA==
-X-Received: by 2002:a17:90b:4ace:: with SMTP id mh14mr42540020pjb.164.1639379403048;
-        Sun, 12 Dec 2021 23:10:03 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id qe12sm6057681pjb.29.2021.12.12.23.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Dec 2021 23:10:02 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf expr: Fix return value of ids__new
-Date:   Mon, 13 Dec 2021 07:09:53 +0000
-Message-Id: <20211213070956.15119-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <864ad02d-6afe-791c-f742-56582b633482@arm.com>
-References: <864ad02d-6afe-791c-f742-56582b633482@arm.com>
-To:     unlisted-recipients:; (no To-header on input)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=DbYjXsVsDnXf9MOGkA15Ub6YmWn6ZhOqh6fUQBEWTkQ=;
+        b=lFCY1z582tr2oaOkTm8LqnJss/bRO+5QcWK2iHUcQFPJVoZ0AbUwnfGPaYy5JRLTnU
+         Vr684IGaFmxJLTvKBdwk9xwO/hCArNX6mKIUgiGE7N1IbPkq/FKMY94izyhTnfzhW5+9
+         eI8GyAKTuiy5+rouBRjWh9skwu11T004M5NXhKzlQ9fkMfXwgyzhA4Qzf9NXHuYBLRRs
+         tNeZ20nkPHT2+aj4Ij8+CqX0v5NLd4yr/HrubbjYpxvNZJ1yv1dDjMSURBLIj6hCyh7r
+         XLpPcf8GnyRbueQEp8V8UP2nS8SgjVKwvcmpg3qcMcMg1LB/cl6qDpUsV1p0nB4lOT+G
+         L4JA==
+X-Gm-Message-State: AOAM532zYSn/hQ9eZ977f37Yib1qclBIsCUHghATejs2XCHn7nbRj+UM
+        2nESwuwicnpA7EyoCY8aX5E=
+X-Google-Smtp-Source: ABdhPJzpwBBJFZunMdShxanDdF5UXtKTmueKU4k5E3tKqH/2iBGT0C+ZdprB0EwtWC/2MbgmYGZURQ==
+X-Received: by 2002:a63:a50c:: with SMTP id n12mr18393607pgf.558.1639379406513;
+        Sun, 12 Dec 2021 23:10:06 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id x16sm10601848pfo.165.2021.12.12.23.10.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 12 Dec 2021 23:10:06 -0800 (PST)
+From:   Hammer Hsieh <hammerh0314@gmail.com>
+X-Google-Original-From: Hammer Hsieh <hammer.hsieh@sunplus.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
+        p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, Hammer Hsieh <hammer.hsieh@sunplus.com>
+Subject: [PATCH v5 0/2] Add UART driver for Suplus SP7021 SoC
+Date:   Mon, 13 Dec 2021 15:10:05 +0800
+Message-Id: <1639379407-28607-1-git-send-email-hammer.hsieh@sunplus.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-callers of ids__new() function only do NULL checking for the return
-value. ids__new() calles hashmap__new(), which may return
-ERR_PTR(-ENOMEM). Instead of changing the checking one-by-one.
-return NULL instead of ERR_PTR(-ENOMEM) to keep
-consistent.
+This is a patch series for UART driver for Suplus SP7021 SoC.
 
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- tools/perf/util/expr.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART. I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-index 1d532b9fed29..aabdc112300c 100644
---- a/tools/perf/util/expr.c
-+++ b/tools/perf/util/expr.c
-@@ -65,7 +65,13 @@ static bool key_equal(const void *key1, const void *key2,
- 
- struct hashmap *ids__new(void)
- {
--	return hashmap__new(key_hash, key_equal, NULL);
-+	struct hashmap *hash;
-+
-+	hash = hashmap__new(key_hash, key_equal, NULL);
-+	if (IS_ERR(hash))
-+		return NULL;
-+	else
-+		return hash;
- }
- 
- void ids__free(struct hashmap *ids)
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
+
+Hammer Hsieh (2):
+  dt-bindings:serial:Add bindings doc for Sunplus SoC UART Driver
+  serial:sunplus-uart:Add Sunplus SoC UART Driver
+
+ .../bindings/serial/sunplus,sp7021-uart.yaml       |  56 ++
+ MAINTAINERS                                        |   6 +
+ drivers/tty/serial/Kconfig                         |  25 +
+ drivers/tty/serial/Makefile                        |   1 +
+ drivers/tty/serial/sunplus-uart.c                  | 782 +++++++++++++++++++++
+ include/uapi/linux/serial_core.h                   |   3 +
+ 6 files changed, 873 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+ create mode 100644 drivers/tty/serial/sunplus-uart.c
+
 -- 
-2.17.1
+2.7.4
 
